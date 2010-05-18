@@ -270,16 +270,17 @@ function save_wiki() {
 	// NOTE: visibility, visibility_disc and ratinglock_disc changes are not made here, but through the interce buttons
 
 	// cleaning the variables
-	$_clean['page_id']=Database::escape_string($_POST['page_id']);
-	$_clean['reflink']=Database::escape_string(Security::remove_XSS($_POST['reflink']));
-	$_clean['title']=Database::escape_string(Security::remove_XSS($_POST['title']));
-	$_clean['content']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['content'])),COURSEMANAGERLOWSECURITY));
-	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());
-	$_clean['assignment']=Database::escape_string($_POST['assignment']);
-    $_clean['comment']=Database::escape_string(Security::remove_XSS($_POST['comment']));
-    $_clean['progress']=Database::escape_string($_POST['progress']);
-	$_clean['version']=Database::escape_string($_POST['version'])+1;
-	$_clean['linksto'] = links_to($_clean['content']); //and check links content
+	$_clean['page_id']		= Database::escape_string($_POST['page_id']);
+	$_clean['reflink']		= Database::escape_string($_POST['reflink']);
+	$_clean['title']		= Database::escape_string($_POST['title']);
+	$_clean['content']		= Database::escape_string($_POST['content']);
+	$_clean['user_id']		= api_get_user_id();
+	$_clean['assignment']	= Database::escape_string($_POST['assignment']);
+    $_clean['comment']		= Database::escape_string($_POST['comment']);
+    $_clean['progress']		= Database::escape_string($_POST['progress']);
+	$_clean['version']		= intval($_POST['version']) + 1 ;
+	$_clean['linksto'] 		= links_to($_clean['content']); //and check links content
+	
 	$dtime = date( "Y-m-d H:i:s" );
 	$session_id = api_get_session_id();
 
@@ -296,56 +297,55 @@ function save_wiki() {
 
 	if(!empty($_POST['task']))
 	{
-		$_clean['task']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['task'])),COURSEMANAGERLOWSECURITY));
+		$_clean['task']= Database::escape_string($_POST['task']);
 	}
-	if(!empty($_POST['feedback1']) || !empty($_POST['feedback2']) || !empty($_POST['feedback3']))
-	{
-		$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));
-		$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
-		$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
-		$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));
-		$_clean['fprogress2']=Database::escape_string(Security::remove_XSS($_POST['fprogress2']));
-		$_clean['fprogress3']=Database::escape_string(Security::remove_XSS($_POST['fprogress3']));
+	if(!empty($_POST['feedback1']) || !empty($_POST['feedback2']) || !empty($_POST['feedback3'])) {
+		$_clean['feedback1']=Database::escape_string($_POST['feedback1']);
+		$_clean['feedback2']=Database::escape_string($_POST['feedback2']);
+		$_clean['feedback3']=Database::escape_string($_POST['feedback3']);
+		$_clean['fprogress1']=Database::escape_string($_POST['fprogress1']);
+		$_clean['fprogress2']=Database::escape_string($_POST['fprogress2']);
+		$_clean['fprogress3']=Database::escape_string($_POST['fprogress3']);
 	}
 
 	if(Security::remove_XSS($_POST['initstartdate']==1))
 	{
-		$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('startdate_assig')));
+		$_clean['startdate_assig']=Database::escape_string(get_date_from_select('startdate_assig'));
 	}
 	else
 	{
-		$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS($_POST['startdate_assig']));
+		$_clean['startdate_assig']=Database::escape_string($_POST['startdate_assig']);
 	}
 
 	if(Security::remove_XSS($_POST['initenddate']==1))
 	{
-		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));
+		$_clean['enddate_assig']=Database::escape_string(get_date_from_select('enddate_assig'));
 	}
 	else
 	{
-		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS($_POST['enddate_assig']));
+		$_clean['enddate_assig']=Database::escape_string($_POST['enddate_assig']);
 	}
 
-	$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
+	$_clean['delayedsubmit']=Database::escape_string($_POST['delayedsubmit']);
 
 	if(!empty($_POST['max_text']) || !empty($_POST['max_version']))
 	{
-		$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
-		$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));
+		$_clean['max_text']	=Database::escape_string($_POST['max_text']);
+		$_clean['max_version']=Database::escape_string($_POST['max_version']);
 	}
 
-	$sql = "INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip, session_id) VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."', '".Database::escape_string($session_id)."')";
+	$sql = "INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip, session_id)
+			VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."', '".Database::escape_string($session_id)."')";
 
-	$result=Database::query($sql);
-    $Id = Database::insert_id();
+	$result	= Database::query($sql);
+    $Id 	= Database::insert_id();
 
 	if ($Id > 0) {
 		//insert into item_property
 		api_item_property_update(api_get_course_info(), TOOL_WIKI, $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
 	}
 
-	if ($_clean['page_id']	==0)
-	{
+	if ($_clean['page_id']	==0) {
 		$sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';
 		Database::query($sql);
 	}
@@ -354,7 +354,8 @@ function save_wiki() {
 
 	if ($_clean['reflink']=='index' && $_clean['version']==1)
 	{
-		$sql="INSERT INTO ".$tbl_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
+		$sql="INSERT INTO ".$tbl_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit)
+			  VALUES ('".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
 	}
 	else
 	{
@@ -435,13 +436,13 @@ function save_new_wiki() {
 	$session_id = api_get_session_id();
 
 	if($_clean['assignment']==2 || $_clean['assignment']==1) {// Unlike ordinary pages of pages of assignments. Allow create a ordinary page although there is a assignment with the same name
-		$_clean['reflink']=Database::escape_string(Security::remove_XSS(str_replace(' ','_',$_POST['title']."_uass".$assig_user_id)));
+		$_clean['reflink']=Database::escape_string(str_replace(' ','_',$_POST['title']."_uass".$assig_user_id));
     } else {
-	 	$_clean['reflink']=Database::escape_string(Security::remove_XSS(str_replace(' ','_',$_POST['title'])));
+	 	$_clean['reflink']=Database::escape_string(str_replace(' ','_',$_POST['title']));
 	}
 
-	$_clean['title']=Database::escape_string(Security::remove_XSS($_POST['title']));
-	$_clean['content']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['content'])),COURSEMANAGERLOWSECURITY));
+	$_clean['title']=Database::escape_string($_POST['title']);
+	$_clean['content']= Database::escape_string($_POST['content']);
 
 	if($_clean['assignment']==2)  {//config by default for individual assignment (students)
 
@@ -452,7 +453,7 @@ function save_new_wiki() {
 		$_clean['ratinglock_disc']=0;
 
 	} else {
-	 	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());
+	 	$_clean['user_id']=api_get_user_id();
 
 		$_clean['visibility']=1;
 		$_clean['visibility_disc']=1;
@@ -460,7 +461,7 @@ function save_new_wiki() {
 
 	}
 
-	$_clean['comment']=Database::escape_string(Security::remove_XSS($_POST['comment']));
+	$_clean['comment']=Database::escape_string($_POST['comment']);
 	$_clean['progress']=Database::escape_string($_POST['progress']);
 	$_clean['version']=1;
 
@@ -476,44 +477,36 @@ function save_new_wiki() {
 	$_clean['linksto'] = links_to($_clean['content']);	//check wikilinks
 
 	//cleaning config variables
-	$_clean['task']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['task'])),COURSEMANAGERLOWSECURITY));
-	$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));
-	$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
-	$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
-	$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));
-	$_clean['fprogress2']=Database::escape_string(Security::remove_XSS($_POST['fprogress2']));
-	$_clean['fprogress3']=Database::escape_string(Security::remove_XSS($_POST['fprogress3']));
+	$_clean['task']= Database::escape_string($_POST['task']);
+	$_clean['feedback1']=Database::escape_string($_POST['feedback1']);
+	$_clean['feedback2']=Database::escape_string($_POST['feedback2']);
+	$_clean['feedback3']=Database::escape_string($_POST['feedback3']);
+	$_clean['fprogress1']=Database::escape_string($_POST['fprogress1']);
+	$_clean['fprogress2']=Database::escape_string($_POST['fprogress2']);
+	$_clean['fprogress3']=Database::escape_string($_POST['fprogress3']);
 
-	if(Security::remove_XSS($_POST['initstartdate']==1))
-	{
-		$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('startdate_assig')));
-	}
-	else
-	{
-		$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS($_POST['startdate_assig']));
+	if(Security::remove_XSS($_POST['initstartdate']==1)) {
+		$_clean['startdate_assig']=Database::escape_string(get_date_from_select('startdate_assig'));
+	} else {
+		$_clean['startdate_assig']=Database::escape_string($_POST['startdate_assig']);
 	}
 
-	if(Security::remove_XSS($_POST['initenddate']==1))
-	{
-		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));
-	}
-	else
-	{
-		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS($_POST['enddate_assig']));
+	if(Security::remove_XSS($_POST['initenddate']==1)) {
+		$_clean['enddate_assig']=Database::escape_string(get_date_from_select('enddate_assig'));
+	} else {
+		$_clean['enddate_assig']=Database::escape_string($_POST['enddate_assig']);
 	}
 
-	$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
-	$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
-	$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));
+	$_clean['delayedsubmit']=Database::escape_string($_POST['delayedsubmit']);
+	$_clean['max_text']=Database::escape_string($_POST['max_text']);
+	$_clean['max_version']=Database::escape_string($_POST['max_version']);
 
 	//filter no _uass
 	if (api_eregi('_uass', $_POST['title']) || (api_strtoupper(trim($_POST['title'])) == 'INDEX' || api_strtoupper(trim(api_htmlentities($_POST['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset)))) {
 		$message= get_lang('GoAndEditMainPage');
 		Display::display_warning_message($message,false);
 	} else {
-
 		$var=$_clean['reflink'];
-
 		$group_id=Security::remove_XSS($_GET['group_id']);
 		if(!checktitle($var)) {
 		   return get_lang('WikiPageTitleExist').'<a href="index.php?action=edit&amp;title='.$var.'&group_id='.$group_id.'">'.$_POST['title'].'</a>';
@@ -2084,7 +2077,7 @@ function make_select($name,$values,$checked='') {
  *
  */
 function get_date_from_select($prefix) {
-				return $_POST[$prefix.'_year'].'-'.two_digits($_POST[$prefix.'_month']).'-'.two_digits($_POST[$prefix.'_day']).' '.two_digits($_POST[$prefix.'_hour']).':'.two_digits($_POST[$prefix.'_minute']).':00';
+	return $_POST[$prefix.'_year'].'-'.two_digits($_POST[$prefix.'_month']).'-'.two_digits($_POST[$prefix.'_day']).' '.two_digits($_POST[$prefix.'_hour']).':'.two_digits($_POST[$prefix.'_minute']).':00';
 }
 
 /**

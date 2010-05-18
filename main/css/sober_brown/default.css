@@ -766,7 +766,7 @@ input.liteoption {
 	width: 12%;
 	text-align: left;
 	vertical-align: top;
-	border: 1px solid #264269;
+	border: 1px solid #ccc;
 	border-collapse: collapse;
 	background-color: #f5f5f5;
 }
@@ -775,7 +775,7 @@ input.liteoption {
 	width: 12%;
 	text-align: left;
 	vertical-align: top;
-	border: 1px solid #264269;
+	border: 1px solid #ccc;
 	border-collapse: collapse;
 	background-color: #e6e6e6;
 }
@@ -784,37 +784,17 @@ input.liteoption {
 	width: 12%;
 	text-align: left;
 	vertical-align: top;
-	border: 1px solid #264269;
+	border: 1px solid #ccc;
 	border-collapse: collapse;
-	background-color: #FFCA8D;
-	color: #CC3300;
-	font-weight: bold;
+	background-color: #FFFFC0;	
 }
-/* text in the cells: display of agenda items (visible)*/
-#agenda_list .data {
-	background-color: #eee;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: bold;
-	border: 0px solid #dcdcdc;
-	border-collapse: collapse;
+
+#agenda_list th {
+	background-color:#E5EDF9;
+	border:1px solid gray;
+	padding-right:12px;
 }
-#agenda_list .datanotbold {
-	background-color: #eee;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: normal;
-	border: 0px solid #dcdcdc;
-	border-collapse: collapse;
-}
-#agenda_list .text {
-	background-color: #fff;
-	text-align: left;
-	padding: 2px 10px;
-	font-weight: normal;
-	border: 0px solid #dcdcdc;
-	border-collapse: collapse;
-}
+
 /*text in the cells: display of agenda items (invisible)*/
 #agenda_list .data_hidden {
 	background-color: #eee;

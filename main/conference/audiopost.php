@@ -1,8 +1,10 @@
 <?php
+/* See license terms in /license.txt */
+
 //file_put_contents("result.txt", print_r($_POST, true));
 //file_put_contents("result3.txt", print_r($_FILES, true));
 //file_put_contents("result2.txt", print_r($_GET, true));
-require('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // check the request comes from our red5 server
 $ips = gethostbynamel(api_get_setting('service_visio','visio_host'));

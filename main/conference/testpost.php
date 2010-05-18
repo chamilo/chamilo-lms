@@ -1,4 +1,6 @@
 <?php
+/* See license terms in /license.txt */
+
 //file_put_contents("result.txt", print_r($_POST, true));
 //file_put_contents("result3.txt", print_r($_FILES, true));
 //file_put_contents("result2.txt", print_r($_GET, true));

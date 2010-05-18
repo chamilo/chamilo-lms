@@ -485,13 +485,13 @@ function save_new_wiki() {
 	$_clean['fprogress2']=Database::escape_string($_POST['fprogress2']);
 	$_clean['fprogress3']=Database::escape_string($_POST['fprogress3']);
 
-	if(Security::remove_XSS($_POST['initstartdate']==1)) {
+	if($_POST['initstartdate']==1) {
 		$_clean['startdate_assig']=Database::escape_string(get_date_from_select('startdate_assig'));
 	} else {
 		$_clean['startdate_assig']=Database::escape_string($_POST['startdate_assig']);
 	}
 
-	if(Security::remove_XSS($_POST['initenddate']==1)) {
+	if($_POST['initenddate']==1) {
 		$_clean['enddate_assig']=Database::escape_string(get_date_from_select('enddate_assig'));
 	} else {
 		$_clean['enddate_assig']=Database::escape_string($_POST['enddate_assig']);

@@ -49,8 +49,7 @@ $jscript2run = '';
  * @param	integer	Score to save inside the tracking tables (HP and learnpath)
  * @return	void
  */
-function save_scores($file, $score)
-{
+function save_scores($file, $score) {
 	global $_configuration, $origin,
 		$_user, $_cid,
 		$TABLETRACK_HOTPOTATOES;
@@ -70,41 +69,36 @@ function save_scores($file, $score)
 		$user_id = "NULL";
 	}
 	$sql = "INSERT INTO $TABLETRACK_HOTPOTATOES ".
-	"(exe_name, exe_user_id, exe_date,exe_cours_id,exe_result,exe_weighting)" .
-	"VALUES" .
-	"(
-	'".Database::escape_string($file)."',
-	'".Database::escape_string($user_id)."',
-	'".Database::escape_string($date)."',
-	'".Database::escape_string($_cid)."',
-	'".Database::escape_string($score)."',
-	'".Database::escape_string($weighting)."')";
+			"(exe_name, exe_user_id, exe_date,exe_cours_id,exe_result,exe_weighting)" .
+			"VALUES" .
+			"(
+			'".Database::escape_string($file)."',
+			'".Database::escape_string($user_id)."',
+			'".Database::escape_string($date)."',
+			'".Database::escape_string($_cid)."',
+			'".Database::escape_string($score)."',
+			'".Database::escape_string($weighting)."')";
 	$res = Database::query($sql);
 
-	if ($origin == 'learnpath')
-	{
+	if ($origin == 'learnpath') {
 		//if we are in a learning path, save the score in the corresponding
 		//table to get tracking in there as well
 	    global $jscript2run;
 		//record the results in the learning path, using the SCORM interface (API)
 	    $jscript2run .= '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$score.','.$weighting.');</script>';
 	}
-
 }
 
 // Save the Scores
 save_scores($test, $score);
 
 // Back
-if ($origin != 'learnpath')
-{
+if ($origin != 'learnpath') {
 	// $url = "Hpdownload.php?doc_url=".$test."&cid=".$cid; // back to the test
 	$url = "exercice.php"; // back to exercices
 	$jscript2run .= '<script language="javascript" type="text/javascript">'."window.open('$url', '_top', '')".'</script>';
 	echo $jscript2run;
-}
-else
-{
+} else {
 ?>
 <html>
 <head>

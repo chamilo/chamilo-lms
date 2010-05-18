@@ -3,7 +3,7 @@
 
 /**
 *	Saving the scores.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author
 * 	@version $Id: savescores.php 15602 2008-06-18 08:52:24Z pcool $
 */
@@ -11,8 +11,7 @@
 // name of the language file that needs to be included
 $language_file = 'learnpath';
 
-if($_GET['origin']=='learnpath')
-{
+if($_GET['origin']=='learnpath') {
 	require_once ('../newscorm/learnpath.class.php');
 	require_once ('../newscorm/learnpathItem.class.php');
 	require_once ('../newscorm/scorm.class.php');
@@ -21,17 +20,15 @@ if($_GET['origin']=='learnpath')
 	require_once ('../newscorm/aiccItem.class.php');
 }
 
-include ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
-include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $full_file_path = $documentPath.$test;
 
 my_delete($full_file_path.$_user['user_id'].".t.html");
-
-
 
 $TABLETRACK_HOTPOTATOES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 $tbl_learnpath_user 	= Database::get_course_table(TABLE_LEARNPATH_USER);
@@ -62,17 +59,14 @@ function save_scores($file, $score)
 	$reallyNow = time();
 	$date = date("Y-m-d H:i:s", $reallyNow);
 
-	if (!$_configuration['tracking_enabled'])
-	{
+	if (!$_configuration['tracking_enabled']) {
 		return 0;
 	}
 
-	if ($_user['user_id'])
-	{
-		$user_id = "'".$_user['user_id']."'";
-	}
-	else // anonymous
-		{
+	if ($_user['user_id']) {
+		$user_id = $_user['user_id'];
+	} else {
+		// anonymous
 		$user_id = "NULL";
 	}
 	$sql = "INSERT INTO $TABLETRACK_HOTPOTATOES ".

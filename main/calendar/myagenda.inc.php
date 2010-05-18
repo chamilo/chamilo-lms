@@ -688,19 +688,17 @@ function get_personal_agenda_item($id) {
  * these items in one list (ordered by date and grouped by month (the month_bar)
  */
 function show_personal_agenda() {
-	global $MonthsLong, $charset;
-	global $_user;
+	global $MonthsLong, $charset;	
 	
 	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 	
 	// The SQL statement that retrieves all the personal agenda items of this user
-	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' ORDER BY date DESC";
+	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".api_get_user_id()."' ORDER BY date DESC";
 	$result = Database::query($sql);
 	// variable initialisation
 	$month_bar = "";
 	// setting the default day, month and year
-	if (!$_GET['day'] AND !$_GET['month'] AND !$_GET['year'])
-	{
+	if (!$_GET['day'] AND !$_GET['month'] AND !$_GET['year']) {
 		$today = getdate();
 		$year = $today['year'];
 		$month = $today['mon'];
@@ -711,32 +709,33 @@ function show_personal_agenda() {
 	$export_icon_high = 'export_high_fade.png';
 
 	// starting the table output
-	echo "<table class=\"data_table\">";
+	echo '<table class="data_table">';
 
-	if (Database::num_rows($result) > 0)
-	{
-		while ($myrow = Database::fetch_array($result))
-		{
-			/*--------------------------------------------------
-					display: the month bar
-			  --------------------------------------------------*/
-			if ($month_bar != date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"])))
-			{
+	if (Database::num_rows($result) > 0) {
+		while ($myrow = Database::fetch_array($result)) {
+			/* 	display: the month bar		*/
+			if ($month_bar != date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]))) {
 				$month_bar = date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]));
 				echo "<tr><th class=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."</th></tr>";
 			}
 			// highlight: if a date in the small calendar is clicked we highlight the relevant items
 			$db_date = (int) date("d", strtotime($myrow["date"])).date("n", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]));
-			if ($_GET["day"].$_GET["month"].$_GET["year"] <> $db_date)
-			{
+			if ($_GET["day"].$_GET["month"].$_GET["year"] <> $db_date) {
 				$style = "data";
 				$text_style = "text";
-			}
-			else
-			{
+			} else {
 				$style = "datanow";
 				$text_style = "text";
 			}
+			
+			/*	display: the title	*/
+			
+			echo "<tr>";
+			echo '<td class="'.$style.'" colspan="2">';
+			echo $myrow['title'];
+			echo "</td>";
+			echo "</tr>";
+			
 			/*--------------------------------------------------
 			 			display: date and time
 			  --------------------------------------------------*/
@@ -754,14 +753,7 @@ function show_personal_agenda() {
 			//echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a>';
 			//echo "</td>";
 			echo "</tr>";
-			/*--------------------------------------------------
-			 			display: the title
-			  --------------------------------------------------*/
-			echo "<tr>";
-			echo '<td class="'.$style.'" colspan="2">';
-			echo $myrow['title'];
-			echo "</td>";
-			echo "</tr>";
+
 			/*--------------------------------------------------
 			 			display: the content
 			  --------------------------------------------------*/

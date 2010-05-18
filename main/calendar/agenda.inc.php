@@ -731,17 +731,16 @@ function plus_ical() {
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return javascript code
 */
-function user_group_filter_javascript()
-{
-return "<script language=\"JavaScript\" type=\"text/JavaScript\">
-<!--
-function MM_jumpMenu(targ,selObj,restore){
-  eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");
-  if (restore) selObj.selectedIndex=0;
-}
-//-->
-</script>
-";
+function user_group_filter_javascript() {
+	return "<script language=\"JavaScript\" type=\"text/JavaScript\">
+	<!--
+	function MM_jumpMenu(targ,selObj,restore){
+	  eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");
+	  if (restore) selObj.selectedIndex=0;
+	}
+	//-->
+	</script>
+	";
 }
 
 
@@ -1457,10 +1456,9 @@ function change_visibility($tool,$id,$visibility)
 function display_courseadmin_links() {
 	//echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
 	  echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
-	if (empty ($_SESSION['toolgroup']))
-	{
+	if (empty ($_SESSION['toolgroup'])) {
 		echo get_lang('UserGroupFilter');
-		echo "<form name=\"filter\" style=\"display:inline;\">";
+		echo "&nbsp;&nbsp;<form name=\"filter\" style=\"display:inline;\">";
 		show_user_group_filter_form();
 		echo "</form> ";
 	}
@@ -2065,16 +2063,19 @@ function display_agenda_items($select_month, $select_year) {
     	// we add the groups icon
     	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
     	if ($myrow['calendar_type'] != 'personal') {
-    		echo '<div style="padding-left:5px; font-size:130%; float:left;">';    		
-    		Display::display_icon('agenda.gif', get_lang('Agenda'));
+    		  		
+    		Display::display_icon('agenda.gif', get_lang('Agenda'));    		  
     		if ($myrow['to_group_id']!=='0') {
     			echo Display::return_icon('group.gif', get_lang('ItemForUserSelection'));
     		}    		
+    		echo '<span style="padding-left:5px; font-size:130%; ">';
     		echo $myrow['title'];
-    		echo '</div>';
+    		echo '</span>';
     	} else {
-    		Display::display_icon('calendar_personal.gif', get_lang('Personal'));    		
-    		echo $myrow['title'];    		
+    		Display::display_icon('calendar_personal.gif', get_lang('Personal'));
+    		echo '<span style="padding-left:5px; font-size:130%; ">';    		
+    		echo $myrow['title'];
+    		echo '</span>';    		
     	}    	
     	echo '</th>';
     	
@@ -2089,12 +2090,14 @@ function display_agenda_items($select_month, $select_year) {
 			echo '<th>'.get_lang('Personal').'</th>';	
 		}
 		
-    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
+    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) && $myrow['calendar_type'] != 'personal' ) {
     		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) ) { 
     			// a coach can only delete an element belonging to his session
 	    		echo '<th>'.get_lang('Modify');
 	    		echo '</th></tr>';
 			}
+    	} else {
+    		echo '<th></th></tr>';
     	}
 
         /*	display: the title	*/

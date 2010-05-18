@@ -224,18 +224,18 @@ function deletelinkcategory($type) {
 	}
 
 	if ($type == 'category') {
-
 		global $id;
+		if (isset($_GET['id']) && !empty($_GET['id'])) {
+			// First we delete the category itself and afterwards all the links of this category.
+			$sql = "DELETE FROM ".$tbl_categories." WHERE id='".intval($_GET['id'])."'";
+			Database::query($sql);
+			$sql = "DELETE FROM ".$tbl_link." WHERE category_id='".intval($_GET['id'])."'";
+			$catlinkstatus = get_lang('CategoryDeleted');
+			unset ($id);
+			Database::query($sql);
 
-		// First we delete the category itself and afterwards all the links of this category.
-		$sql = "DELETE FROM ".$tbl_categories." WHERE id='".Database::escape_string(Security::remove_XSS($_GET['id']))."'";
-		Database::query($sql);
-		$sql = "DELETE FROM ".$tbl_link." WHERE category_id='".Database::escape_string(Security::remove_XSS($_GET['id']))."'";
-		$catlinkstatus = get_lang('CategoryDeleted');
-		unset ($id);
-		Database::query($sql);
-
-		Display::display_confirmation_message(get_lang('CategoryDeleted'));
+			Display::display_confirmation_message(get_lang('CategoryDeleted'));
+		}
 	}
 }
 
@@ -328,7 +328,7 @@ function editlinkcategory($type) {
 			}
 
 			// Finding the old category_id
-			$sql = "SELECT * FROM ".$tbl_link." WHERE id='".Database::escape_string(Security::remove_XSS($_POST['id']))."'";
+			$sql = "SELECT * FROM ".$tbl_link." WHERE id='".intval($_POST['id'])."'";
 			$result = Database::query($sql);
 			$row = Database::fetch_array($result);
 			$category_id = $row['category_id'];
@@ -342,7 +342,14 @@ function editlinkcategory($type) {
 				$max_display_order = $row['display_order'];
 			}
 
-			$sql = "UPDATE ".$tbl_link." set url='".Database::escape_string(Security::remove_XSS($_POST['urllink']))."', title='".Database::escape_string(Security::remove_XSS($_POST['title']))."', description='".Database::escape_string(Security::remove_XSS($_POST['description']))."', category_id='".Database::escape_string(Security::remove_XSS($_POST['selectcategory']))."', display_order='".$max_display_order."', on_homepage='".Database::escape_string(Security::remove_XSS($onhomepage))." ' $mytarget WHERE id='".Database::escape_string(Security::remove_XSS($_POST['id']))."'";
+			$sql = "UPDATE ".$tbl_link." SET " .
+					"url='".Database::escape_string($_POST['urllink'])."', " .
+					"title='".Database::escape_string($_POST['title'])."', " .
+					"description='".Database::escape_string($_POST['description'])."', " .
+					"category_id='".Database::escape_string($_POST['selectcategory'])."', " .
+					"display_order='".$max_display_order."', " .
+					"on_homepage='".Database::escape_string($onhomepage)." ' $mytarget " .
+					" WHERE id='".Database::escape_string($_POST['id'])."'";
 			Database::query($sql);
 
             // Update search enchine and its values table if enabled
@@ -453,7 +460,7 @@ function editlinkcategory($type) {
 
 		// This is used to put the modified info of the category-form into the database
 		if ($submit_category) {
-			$sql = "UPDATE ".$tbl_categories." set category_title='".Database::escape_string(Security::remove_XSS($_POST['category_title']))."', description='".Database::escape_string(Security::remove_XSS($_POST['description']))."' WHERE id='".Database::escape_string(Security::remove_XSS($_POST['id']))."'";
+			$sql = "UPDATE ".$tbl_categories." set category_title='".Database::escape_string($_POST['category_title'])."', description='".Database::escape_string($_POST['description'])."' WHERE id='".Database::escape_string($_POST['id'])."'";
 			Database::query($sql);
 			Display::display_confirmation_message(get_lang('CategoryModded'));
 		}

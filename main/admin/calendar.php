@@ -23,14 +23,6 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-//$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
-
-// Database Table Definitions
-//	$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-//	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-//	$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-//	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-//	$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
 $tool_name= get_lang('SubscribeCoursesToSession');
@@ -47,23 +39,18 @@ if(!api_is_platform_admin())
 	}
 }
 /*
------------------------------------------------------------
 	Libraries
------------------------------------------------------------
 */
 // containing the functions for the agenda tool
-include "calendar.lib.php";
-// some debug functions
-include($includePath."/lib/debug.lib.inc.php");
+require_once 'calendar.lib.php';
 
-
-/*==============================================================================
+/*
   			TREATING THE PARAMETERS
 			1. viewing month only or everything
 			2. sort ascending or descending
 			3. showing or hiding the send-to-specific-groups-or-users form
 			4. filter user or group
-  ============================================================================== */
+ */
 // 1. show all or show current month?
 if (!$_SESSION['show'])
 {
@@ -133,9 +120,9 @@ else
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$clarolineRepositoryWeb."css/default.css\"/>";
 }*/
 
-/* ==============================================================================
+/* 
   			SETTING SOME VARIABLES
-============================================================================== */
+*/
 // Variable definitions
 // Defining the shorts for the days. We use camelcase because these are arrays of language variables
 $DaysShort = api_get_week_days_short();
@@ -151,29 +138,18 @@ $tbl_user       		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_courseUser 		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_group      		= Database::get_course_table(TABLE_GROUP);
 $tbl_groupUser  		= Database::get_course_table(TABLE_GROUP_USER);
-$tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-
-
-/* ==============================================================================
+/* 
   			ACCESS RIGHTS
-============================================================================== */
+*/
 // permission stuff - also used by loading from global in agenda.inc.php
 $is_allowed_to_edit = is_allowed_to_edit() OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
-
-// Displaying the title of the tool
-// api_display_tool_title($nameTools);
-
-// tool introduction
-//Display::display_introduction_section(TOOL_CALENDAR_EVENT);
 
 // insert an anchor (top) so one can jump back to the top of the page
 echo "<a name=\"top\"></a>";
 
 /*
-==============================================================================
 		MAIN SECTION
-==============================================================================
 */
 
 //setting the default year and month
@@ -207,10 +183,8 @@ echo '</div><br /><br />';
 echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">'
 		. '<tr>';
 
-
 // THE LEFT PART
-if (empty($_GET['origin']) or $_GET['origin']!='learnpath')
-{
+if (empty($_GET['origin']) or $_GET['origin']!='learnpath') {
 	echo '<td width="220" height="19" valign="top">';
 	// the small calendar
 	$MonthName = $MonthsLong[$select_month -1];
@@ -382,15 +356,10 @@ if (!$_GET['action'] OR $_GET['action']=="showall"  OR $_GET['action']=="showcur
 echo "&nbsp;</td></tr></table>";
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 // The footer is displayed only if we are not in the learnpath
-if ($_GET['origin'] != 'learnpath')
-{
-
+if ($_GET['origin'] != 'learnpath') {
 	Display::display_footer();
-
 }
 ?>

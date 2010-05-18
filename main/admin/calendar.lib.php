@@ -4,6 +4,8 @@
 *	@package chamilo.admin
 *	@author Carlos Vargas
 *	This file is the calendar/agenda.inc.php
+*
+*  	@todo This file should not exist since redeclares many of the functions in calendar/agenda.inc.php J.M
 */
 
 /*
@@ -40,8 +42,7 @@ $MonthsLong = api_get_months_long();
 * @return html code
 * @todo refactor this so that $monthName is no longer needed as a parameter
 */
-function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
-{
+function display_minimonthcalendar($agendaitems, $month, $year, $monthName) {
 	global $DaysShort;
 	//Handle leap year
 	$numberofdays = array (0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -119,10 +120,9 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return javascript code
 */
-function to_javascript()
-{
-$Send2All=get_lang("Send2All");
-return "<script type=\"text/javascript\" language=\"JavaScript\">
+function to_javascript() {
+	$Send2All=get_lang("Send2All");
+	return "<script type=\"text/javascript\" language=\"JavaScript\">
 <!-- Begin javascript menu swapper
 
 function move(fbox,	tbox)
@@ -287,21 +287,19 @@ function validate_date()
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return javascript code
 */
-function user_group_filter_javascript()
-{
-return "<script language=\"JavaScript\" type=\"text/JavaScript\">
-<!--
-function MM_jumpMenu(targ,selObj,restore){
-  eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");
-  if (restore) selObj.selectedIndex=0;
-}
-//-->
-</script>
-";
+function user_group_filter_javascript() {
+	return "<script language=\"JavaScript\" type=\"text/JavaScript\">
+	<!--
+	function MM_jumpMenu(targ,selObj,restore){
+	  eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");
+	  if (restore) selObj.selectedIndex=0;
+	}
+	//-->
+	</script>
+	";
 }
 
-function display_monthcalendar($month, $year)
-{
+function display_monthcalendar($month, $year) {
 	global $MonthsLong;
 	global $DaysShort;
 	global $origin;
@@ -333,16 +331,14 @@ function display_monthcalendar($month, $year)
 
 	echo "<tr>\n";
 
-	for ($ii=1;$ii<8; $ii++)
-	{
-	echo "<td class=\"weekdays\" width=\"14%\">",$DaysShort[$ii%7],"</td>\n";
-  }
+	for ($ii=1;$ii<8; $ii++) {
+		echo "<td class=\"weekdays\" width=\"14%\">",$DaysShort[$ii%7],"</td>\n";
+  	}
 
 	echo "</tr>\n";
 	$curday = -1;
 	$today = getdate();
-	while ($curday <=$numberofdays[$month])
-  	{
+	while ($curday <=$numberofdays[$month]) {
 	echo "<tr>\n";
     	for ($ii=0; $ii<7; $ii++)
 	  	{
@@ -401,9 +397,7 @@ echo "</table>";
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return integer the id of the last added agenda item
 */
-function store_new_agenda_item()
-{
-	global $_user /*, $_course*/;
+function store_new_agenda_item() {	
 	
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
     //$t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
@@ -486,23 +480,16 @@ function display_courseadmin_links() {
 	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_personal_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
 
 }
-function display_student_links()
-{
-	global $show;
-	if ($_SESSION['sort'] == 'DESC')
-	{
-		echo "<a href='".api_get_self()."?sort=asc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a>";
+
+function display_student_links() {	
+	if ($_SESSION['sort'] == 'DESC') {
+		echo "<a href='".api_get_self()."?sort=asc&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a>";
+	} else {
+		echo "<a href='".api_get_self()."?sort=desc&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a>";
 	}
-	else
-	{
-		echo "<a href='".api_get_self()."?sort=desc&amp;origin=".$_GET['origin']."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a>";
-	}
-	if ($_SESSION['view'] <> 'month')
-	{
+	if ($_SESSION['view'] <> 'month') {
 		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" border=\"0\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a>\n";
-	}
-	else
-	{
+	} else {
 		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=list\"><img src=\"../img/calendar_select.gif\" border=\"0\" alt=\"".get_lang('ListView')."\" /> ".get_lang('ListView')."</a>\n";
 	}
 }
@@ -512,8 +499,7 @@ function display_student_links()
 * @param integer the id of the agenda item we are getting all the information of
 * @return an associative array that contains all the information of the agenda item. The keys are the database fields
 */
-function get_agenda_item($id)
-{
+function get_agenda_item($id) {
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
     //$t_agenda_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
     $item = array();
@@ -532,12 +518,9 @@ function get_agenda_item($id)
 	$item['end_date']		= $entry_to_edit["end_date"];
 	$item['to']				== "everyone";
 	// if the item has been sent to everybody then we show the compact to form
-	if ($item['to']=="everyone")
-	{
+	if ($item['to']=="everyone") {
 		$_SESSION['allow_individual_calendar']="hide";
-	}
-	else
-	{
+	} else {
 		$_SESSION['allow_individual_calendar']="show";
 	}
 
@@ -550,8 +533,7 @@ function get_agenda_item($id)
 * 3. modify the attachments (if needed)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_edited_agenda_item()
-{
+function store_edited_agenda_item() {
 
 	// STEP 1: editing the calendar_event table
 	// 1.a.  some filtering of the input data
@@ -626,8 +608,7 @@ function delete_agenda_item($id)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @param integer id the id of the agenda item we are changing the visibility of
 */
-function showhide_agenda_item($id)
-{
+function showhide_agenda_item($id) {
 	global $nameTools;
 	/*==================================================
 				SHOW / HIDE A CALENDAR ITEM

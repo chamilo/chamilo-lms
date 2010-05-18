@@ -17,7 +17,6 @@ require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'access_url_edit_courses_to_url_functions.lib.php');
 
 $xajax = new xajax();
-//$xajax->debugOn();
 $xajax -> registerFunction (array('search_courses', 'Accessurleditcoursestourl', 'search_courses'));
 
 

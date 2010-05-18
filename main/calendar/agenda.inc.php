@@ -374,7 +374,7 @@ function display_monthcalendar($month, $year) {
 
 	// Grabbing all the calendar items for this year and storing it in a array + my personal calendar events if exist and if enabled 
 	$data = get_calendar_items($month,$year);
-
+		
 	//Handle leap year
 	$numberofdays = array(0,31,28,31,30,31,30,31,31,30,31,30,31);
 	if (($year%400 == 0) or ($year%4==0 and $year%100<>0)) $numberofdays[2] = 29;
@@ -387,7 +387,7 @@ function display_monthcalendar($month, $year) {
 	$backwardsURL = api_get_self()."?".api_get_cidreq()."&amp;origin=$origin&amp;month=".($month==1 ? 12 : $month-1)."&amp;year=".($month==1 ? $year-1 : $year);
 	$forewardsURL = api_get_self()."?".api_get_cidreq()."&amp;origin=$origin&amp;month=".($month==12 ? 1 : $month+1)."&amp;year=".($month==12 ? $year+1 : $year);
 
-	   $maand_array_maandnummer=$month-1;
+	$maand_array_maandnummer=$month-1;
 
 	echo '<table id="agenda_list">';
 	echo '<tr>';
@@ -418,32 +418,38 @@ function display_monthcalendar($month, $year) {
 					$bgcolor = $ii<5 ? 'class="row_odd"' : 'class="row_even"';
 					$dayheader = "$curday";
 					
-					if (key_exists($curday, $data)) {					
-						foreach ($data[$curday] as $key=>$agenda_item) {						
-							foreach ($agenda_item as $key=>$value) {						
-								$month_start_date = (int)substr($value['start_date'],5,2);	
-								$start_time = api_convert_and_format_date($value['start_date']);												
+					if (key_exists($curday, $data)) {			
+						foreach ($data[$curday] as $key=>$agenda_item) {
+							$dayheader ="<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";					
+							foreach ($agenda_item as $key=>$value) {		
+								
+								$month_start_date = (int)substr($value['start_date'],5,2);									
+								$start_time = api_convert_and_format_date($value['start_date']);
+								
+																				
 								if ($month == $month_start_date) {
 									
 									$start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
 									$end_time 	= api_convert_and_format_date($value['end_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
 									
 									//Setting a personal event to green
-									$personal_start =  $personal_end = '';
-									
+									$personal_start =  $personal_end = '';									
 									if ($value['calendar_type'] == 'personal') {
 										$personal_start = '<div style="color:green;">';
 										$personal_end	= '</div>';	
-									}
-									$dayheader = $personal_start;
-									$dayheader.="<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
+									}									
+									$dayheader.= $personal_start;									
 									
 									if ($value['end_date']=='0000-00-00 00:00:00') {										
 										$dayheader .= '<br />'.get_lang('Work').'<br />';
 										$dayheader .= $value['title'];
 										$dayheader .= '<br/>';
 									} else {
-										$dayheader .= '<br />'.get_lang('StartTimeWindow').'&nbsp;<i>'.$start_time.'</i>&nbsp;-&nbsp;'.get_lang('EndTimeWindow').'&nbsp;<i>'.$end_time.'&nbsp;</i>';
+										if ($value['calendar_type'] == 'personal') {
+											$dayheader .= '<br />'.get_lang('StartTimeWindow').'&nbsp;<i>'.$start_time.'</i>&nbsp;</i>';
+										} else {
+											$dayheader .= '<br />'.get_lang('StartTimeWindow').'&nbsp;<i>'.$start_time.'</i>&nbsp;-&nbsp;'.get_lang('EndTimeWindow').'&nbsp;<i>'.$end_time.'&nbsp;</i>';
+										}
 										$dayheader .= '<br />';
 										$dayheader .= $value['title'];
 										$dayheader .= '<br/>';
@@ -452,11 +458,10 @@ function display_monthcalendar($month, $year) {
 								} else {
 									//$dayheader=$curday;
 								}
-								//$agendaitems = get_global_agenda_items($agendaitems, $curday, $month, $year, $startdayofweek, "month_view");
-								//echo $agendaitems['title'];
-							}
+							}							
 						}
 					}
+					//var_dump($dayheader);
 					
 					if (($curday==$today['mday']) && ($year ==$today['year'])&&($month == $today['mon'])) {
 						echo '<td class="days_today"'.$bgcolor.'" style="width:10%">'.$dayheader;
@@ -2062,8 +2067,7 @@ function display_agenda_items($select_month, $select_year) {
     	// the icons. If the message is sent to one or more specific users/groups
     	// we add the groups icon
     	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
-    	if ($myrow['calendar_type'] != 'personal') {
-    		  		
+    	if ($myrow['calendar_type'] != 'personal') {    		  		
     		Display::display_icon('agenda.gif', get_lang('Agenda'));    		  
     		if ($myrow['to_group_id']!=='0') {
     			echo Display::return_icon('group.gif', get_lang('ItemForUserSelection'));
@@ -2107,9 +2111,11 @@ function display_agenda_items($select_month, $select_year) {
     	echo '</td>';
     	echo '<td>';
     	
-    	if ($myrow['end_date']<>'0000-00-00 00:00:00') {
-    		echo get_lang('EndTimeWindow').": ";
-    		echo api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get());
+    	if ($myrow['calendar_type'] != 'personal') {
+    		if ($myrow['end_date']<>'0000-00-00 00:00:00') {
+    			echo get_lang('EndTimeWindow').": ";
+    			echo api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get());
+    		}
     	}
     	echo '</td>';
 

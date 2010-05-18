@@ -123,7 +123,6 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 			$items[$agendaday][$item['start_date']] .= '<br />'."<a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br /> ";
 			$items[$agendaday][$item['start_date']] .= '<br/>';
 		}
-
 	}
 	// sorting by hour for every day
 	$agendaitems = array ();
@@ -136,6 +135,8 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 			$agendaitems[$agendaday] .= $val;
 		}
 	}
+	
+	
 	//print_r($agendaitems);
 	return $agendaitems;
 }
@@ -162,19 +163,18 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
-	echo "<table class=\"data_table\">\n", "<tr>\n", "<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>";
-	echo "<th width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>\n", "<th width=\"10%\"><a href=\"", $forewardsURL, "\">".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>", "</tr>";
+	echo "<table class=\"data_table\">", "<tr>", "<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>";
+	echo "<th width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>", "<th width=\"10%\"><a href=\"", $forewardsURL, "\">".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>", "</tr>";
 
-	echo "<tr>\n";
-	for ($ii = 1; $ii < 8; $ii ++)
-	{
-		echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>\n";
+	echo "<tr>";
+	for ($ii = 1; $ii < 8; $ii ++) {
+		echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>";
 	}
-	echo "</tr>\n";
+	echo "</tr>";
 	$curday = -1;
 	$today = getdate();
 	while ($curday <= $numberofdays[$month]) {
-		echo "<tr>\n";
+		echo "<tr>";
 		for ($ii = 0; $ii < 7; $ii ++) {
 			if (($curday == -1) && ($ii == $startdayofweek)) {
 				$curday = 1;
@@ -183,22 +183,22 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 				$bgcolor = $ii < 5 ? $class = "class=\"days_week\" style=\"width:10%;\"" : $class = "class=\"days_weekend\" style=\"width:10%;\"";
 				$dayheader = "<b>$curday</b><br />";
 				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
-					$dayheader = "<b>$curday - ".get_lang("Today")."</b><br />";
+					$dayheader = "<b>$curday - ".get_lang('Today')."</b><br />";
 					$class = "class=\"days_today\" style=\"width:10%;\"";
 				}
 				echo "<td ".$class.">", "".$dayheader;
 				if (!empty($agendaitems[$curday])) {
 					echo "<span class=\"agendaitem\">".$agendaitems[$curday]."</span>";
 				}
-				echo "</td>\n";
+				echo "</td>";
 				$curday ++;
 			} else {
-				echo "<td>&nbsp;</td>\n";
+				echo "<td>&nbsp;</td>";
 			}
 		}
-		echo "</tr>\n";
+		echo "</tr>";
 	}
-	echo "</table>\n";
+	echo "</table>";
 }
 /**
  * Show the mini calender of the given month
@@ -217,20 +217,20 @@ function display_myminimonthcalendar($agendaitems, $month, $year, $monthName) {
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
-	echo "<table class=\"data_table\">\n", "<tr>\n", "<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>";
-	echo "<th width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>\n", "<th width=\"10%\"><a href=\"", $forewardsURL, "\">".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>", "</tr>";
+	echo "<table class=\"data_table\">", "<tr>", "<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>";
+	echo "<th width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>", "<th width=\"10%\"><a href=\"", $forewardsURL, "\">".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>", "</tr>";
 
-	echo "<tr>\n";
+	echo "<tr>";
 	for ($ii = 1; $ii < 8; $ii ++)
 	{
-		echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>\n";
+		echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>";
 	}
-	echo "</tr>\n";
+	echo "</tr>";
 	$curday = -1;
 	$today = getdate();
 	while ($curday <= $numberofdays[$month])
 	{
-		echo "<tr>\n";
+		echo "<tr>";
 		for ($ii = 0; $ii < 7; $ii ++) {
 			if (($curday == -1) && ($ii == $startdayofweek))
 			{
@@ -245,7 +245,7 @@ function display_myminimonthcalendar($agendaitems, $month, $year, $monthName) {
 					$dayheader = "$curday";
 					$class = "class=\"days_today\"";
 				}
-				echo "\t<td ".$class.">";
+				echo "<td ".$class.">";
 				if (!empty($agendaitems[$curday]))
 				{
 					echo "<a href=\"".api_get_self()."?action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."\">".$dayheader."</a>";
@@ -254,18 +254,18 @@ function display_myminimonthcalendar($agendaitems, $month, $year, $monthName) {
 				{
 					echo $dayheader;
 				}
-				// "a".$dayheader." <span class=\"agendaitem\">".$agendaitems[$curday]."</span>\n";
-				echo "</td>\n";
+				// "a".$dayheader." <span class=\"agendaitem\">".$agendaitems[$curday]."</span>";
+				echo "</td>";
 				$curday ++;
 			}
 			else
 			{
-				echo "<td>&nbsp;</td>\n";
+				echo "<td>&nbsp;</td>";
 			}
 		}
-		echo "</tr>\n";
+		echo "</tr>";
 	}
-	echo "</table>\n";
+	echo "</table>";
 }
 
 /**
@@ -612,12 +612,11 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 			$root_url = $url['url'];
 		}
 	}
-
+	
 	$result = Database::query($sql);
-	while ($item = Database::fetch_array($result))
-	{
+	while ($item = Database::fetch_array($result)) {
 		// we break the date field in the database into a date and a time part
-		$agenda_db_date = explode(" ", $item[date]);
+		$agenda_db_date = explode(" ", $item['date']);
 		$date = $agenda_db_date[0];
 		$time = $agenda_db_date[1];
 		// we divide the date part into a day, a month and a year
@@ -631,31 +630,29 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 		$minute = $agendatime[1];
 		$second = $agendatime[2];
 		// if the student has specified a course we a add a link to that course
-		if ($item['course'] <> "")
-		{
+		if ($item['course'] <> "") {
 			$url = $root_url."main/calendar/agenda.php?cidReq=".urlencode($item['course'])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$course_link = "<a href=\"$url\" title=\"".$item['course']."\">".$item['course']."</a>";
-		}
-		else
-		{
+		} else {
 			$course_link = "";
 		}
 		// Creating the array that will be returned. If we have week or month view we have an array with the date as the key
 		// if we have a day_view we use a half hour as index => key 33 = 16h30
-		if ($type !== "day_view") // This is the array construction for the WEEK or MONTH view
-		{
+		if ($type !== "day_view") {
+			// This is the array construction for the WEEK or MONTH view
+			
 			//Display events in agenda
 			$agendaitems[$day] .= "<div><i>$hour:$minute</i> $course_link  <a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div><br />";
-		}
-		else // this is the array construction for the DAY view
-			{
+			
+		} else {
+			// this is the array construction for the DAY view
 			$halfhour = 2 * $agendatime['0'];
-			if ($agendatime['1'] >= '30')
-			{
+			if ($agendatime['1'] >= '30') {
 				$halfhour = $halfhour +1;
 			}
 			//Display events by list
 			$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> $course_link  <a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
+			
 		}
 	}
 	//print_r($agendaitems);
@@ -711,7 +708,7 @@ function show_personal_agenda() {
 	$export_icon_high = 'export_high_fade.png';
 
 	// starting the table output
-	echo "<table class=\"data_table\">\n";
+	echo "<table class=\"data_table\">";
 
 	if (Database::num_rows($result) > 0)
 	{
@@ -723,7 +720,7 @@ function show_personal_agenda() {
 			if ($month_bar != date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"])))
 			{
 				$month_bar = date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]));
-				echo "<tr><th class=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."</th></tr>\n";
+				echo "<tr><th class=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."</th></tr>";
 			}
 			// highlight: if a date in the small calendar is clicked we highlight the relevant items
 			$db_date = (int) date("d", strtotime($myrow["date"])).date("n", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]));
@@ -740,7 +737,7 @@ function show_personal_agenda() {
 			/*--------------------------------------------------
 			 			display: date and time
 			  --------------------------------------------------*/
-			echo "\t<tr>\n\t\t";
+			echo "<tr>";
 			echo '<td class="'.$style.'">';
 			// adding an internal anchor
 			echo "<a name=\"".$myrow["id"]."\"></a>";
@@ -752,7 +749,7 @@ function show_personal_agenda() {
 			//echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a>';
 			//echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a>';
 			//echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a>';
-			//echo "\n\t\t</td>\n\t";
+			//echo "</td>";
 			echo "</tr>";
 			/*--------------------------------------------------
 			 			display: the title
@@ -760,21 +757,21 @@ function show_personal_agenda() {
 			echo "<tr>";
 			echo '<td class="'.$style.'" colspan="2">';
 			echo $myrow['title'];
-			echo "\n\t\t</td>\n\t";
-			echo "</tr>\n";
+			echo "</td>";
+			echo "</tr>";
 			/*--------------------------------------------------
 			 			display: the content
 			  --------------------------------------------------*/
 			$content = $myrow['text'];
 			$content = make_clickable($content);
 			$content = text_filter($content);
-			echo "\t<tr>\n\t\t<td class=\"".$text_style."\" colspan='2'>";
+			echo "<tr><td class=\"".$text_style."\" colspan='2'>";
 			echo $content;
 			echo "</td></tr>";
 			/*--------------------------------------------------
 			 			display: the edit / delete icons
 			  --------------------------------------------------*/
-			echo "\t<tr>\n\t\t<td class=\"".$text_style."\" colspan='2'>";
+			echo "<tr><td class=\"".$text_style."\" colspan='2'>";
 			echo "<a href=\"myagenda.php?action=edit_personal_agenda_item&amp;id=".$myrow['id']."\">".Display::return_icon('edit.gif', get_lang('Edit'))."</a>";
 			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
 			echo "</td></tr>";
@@ -784,7 +781,7 @@ function show_personal_agenda() {
 	{
 		echo '<tr><td colspan="2">'.get_lang('NoAgendaItems').'</td></tr>';
 	}
-	echo "</table>\n";
+	echo "</table>";
 }
 
 /**

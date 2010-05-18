@@ -93,6 +93,10 @@ event_access_tool(TOOL_WIKI);
 HEADER & TITLE
 */
 // If it is a group wiki then the breadcrumbs will be different.
+
+//Setting variable
+$_clean['group_id'] = 0;
+
 if ($_SESSION['_gid'] OR $_GET['group_id']) {
 
 	if (isset($_SESSION['_gid'])) {
@@ -111,10 +115,10 @@ if ($_SESSION['_gid'] OR $_GET['group_id']) {
 
 	//ensure this tool in groups whe it's private or deactivated
 	if 	($group_properties['wiki_state']==0) {
-		echo api_not_allowed();
+		api_not_allowed();
 	} elseif ($group_properties['wiki_state']==2) {
  		if (!api_is_allowed_to_edit(false,true) and !GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid'])) {
-			echo api_not_allowed();
+			api_not_allowed();
 		}
 	}
 } else {
@@ -1626,7 +1630,7 @@ if ($_GET['action']=='edit')
 				</select> %';
 				echo '<br/><br/>';
 				echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post
-				echo '<button class="save" type="submit" name="SaveWikiChange">'.get_lang('langSave').'</button>';//for save button Don't change name (see fckeditor/editor/plugins/customizations/fckplugin_compressed.js and fckplugin.js
+				echo '<button class="save" type="submit" name="SaveWikiChange">'.get_lang('Save').'</button>';//for save button Don't change name (see fckeditor/editor/plugins/customizations/fckplugin_compressed.js and fckplugin.js
 				echo '</div>';
 				echo '</form>';
 			}

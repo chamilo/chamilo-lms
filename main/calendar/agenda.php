@@ -198,16 +198,13 @@ echo '<a name="top"></a>';
 //setting the default year and month
 $select_year = '';
 $select_month = '';
-if(!empty($_GET['year']))
-{
+if(!empty($_GET['year'])) {
 	$select_year = (int)$_GET['year'];
 }
-if(!empty($_GET['month']))
-{
+if(!empty($_GET['month'])) {
 	$select_month = (int)$_GET['month'];
 }
-if (empty($select_year) && empty($select_month))
-{
+if (empty($select_year) && empty($select_month)) {
 	$today = getdate();
 	$select_year = $today['year'];
 	$select_month = $today['mon'];
@@ -384,7 +381,7 @@ if (!$_GET['action'] || $_GET['action']=="showall"  || $_GET['action']=="showcur
 	if ($_GET['origin'] != 'learnpath') {
 		if (!$_SESSION['view'] || $_SESSION['view'] <> 'month') {
             if(!empty($_GET['agenda_id'])) {
-                display_one_agenda_item((int)$_GET['agenda_id']);
+                display_one_agenda_item($_GET['agenda_id']);
             } else {
 			   display_agenda_items();
             }

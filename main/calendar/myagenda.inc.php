@@ -163,14 +163,17 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
-	echo "<table class=\"data_table\">", "<tr>", "<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>";
-	echo "<th width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>", "<th width=\"10%\"><a href=\"", $forewardsURL, "\">".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>", "</tr>";
+	echo '<table id="agenda_list">'.'<tr>';
+	echo '<th width="10%"><a href="'.$backwardsURL.'">'.Display::return_icon('action_prev.png',get_lang('Previous')).'</a></th>';
+	echo '<th width="80%" colspan="5">'.$monthName." ".$year.'</th>';
+	echo '<th width="10%"><a href="'.$forewardsURL.'">'.Display::return_icon('action_next.png',get_lang('Next')).'</a></th>';
+	echo '</tr>';
 
-	echo "<tr>";
+	echo '<tr>';
 	for ($ii = 1; $ii < 8; $ii ++) {
-		echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>";
+		echo '<td class="weekdays">'.$DaysShort[$ii % 7].'</td>';
 	}
-	echo "</tr>";
+	echo '</tr>';
 	$curday = -1;
 	$today = getdate();
 	while ($curday <= $numberofdays[$month]) {

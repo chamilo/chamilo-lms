@@ -62,7 +62,7 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
 					$userinfo = Database::get_user_info_from_id(substr($folder_titles[$folder], 8));
 					$folder_titles[$folder] = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 				}
-
+				$folder_titles[$folder] = cut($folder_titles[$folder], 80);
 				$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$folder_titles[$folder];
 				$parent_select -> addOption($label, $folder);
 				if ($selected != '') {
@@ -78,8 +78,9 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
 				$label = '/ ('.get_lang('HomeDirectory').')';
 			} else {
 				$path_parts = explode('/', str_replace($group_dir, '', $folder));
+				$label = cut($label, 80);
 				$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
-			}
+			}			
 			$parent_select -> addOption($label, $folder);
 			if ($selected != '') {
 				$parent_select->setSelected($folder);

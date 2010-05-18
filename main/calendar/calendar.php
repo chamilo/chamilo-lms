@@ -1,4 +1,4 @@
-<?php //$Id: calendar.php 21101 2009-05-30 14:56:54Z iflorespaz $
+<?php
 /* For licensing terms, see /license.txt */
 
 $language_file = 'agenda';

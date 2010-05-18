@@ -52,78 +52,65 @@ if (!empty($_GET['view'])) {
 }
 
 /*
------------------------------------------------------------
 	Libraries
------------------------------------------------------------
 */
 // containing the functions for the agenda tool
-include "agenda.inc.php";
+require_once 'agenda.inc.php';
 // some debug functions
-include($includePath."/lib/debug.lib.inc.php");
+require_once $includePath."/lib/debug.lib.inc.php";
 
-/*==============================================================================
+/*
   			TREATING THE PARAMETERS
 			1. viewing month only or everything
 			2. sort ascending or descending
 			3. showing or hiding the send-to-specific-groups-or-users form
 			4. filter user or group
-  ============================================================================== */
+*/
 // 1. show all or show current month?
-if (!$_SESSION['show'])
-{
+if (!$_SESSION['show']) {
 	$_SESSION['show']="showall";
 }
-if (!empty($_GET['action']) and $_GET['action']=="showcurrent")
-{
+if (!empty($_GET['action']) and $_GET['action']=="showcurrent") {
 	$_SESSION['show']="showcurrent";
 }
-if (!empty($_GET['action']) and $_GET['action']=="showall")
-{
+if (!empty($_GET['action']) and $_GET['action']=="showall") {
 	$_SESSION['show']="showall";
 }
 //echo $_SESSION['show'];
 
 // 2. sorting order (ASC or DESC)
-if (empty($_GET['sort']) and empty($_SESSION['sort']))
-{
+if (empty($_GET['sort']) and empty($_SESSION['sort'])) {
 	$_SESSION['sort']="DESC";
 }
-if (!empty($_GET['sort']) and $_GET['sort']=="asc")
-{
+if (!empty($_GET['sort']) and $_GET['sort']=="asc") {
 	$_SESSION['sort']="ASC";
 }
-if (!empty($_GET['sort']) and $_GET['sort']=="desc")
-{
+if (!empty($_GET['sort']) and $_GET['sort']=="desc") {
 	$_SESSION['sort']="DESC";
 }
 
 // 3. showing or hiding the send-to-specific-groups-or-users form
 $setting_allow_individual_calendar=true;
-if (empty($_POST['To']) and empty($_SESSION['allow_individual_calendar']))
-{
+if (empty($_POST['To']) and empty($_SESSION['allow_individual_calendar'])) {
 	$_SESSION['allow_individual_calendar']="hide";
 }
 $allow_individual_calendar_status=$_SESSION['allow_individual_calendar'];
-if (!empty($_POST['To']) and ($allow_individual_calendar_status=="hide"))
-{
+if (!empty($_POST['To']) and ($allow_individual_calendar_status=="hide")) {
 	$_SESSION['allow_individual_calendar']="show";
 }
-if (!empty($_GET['sort']) and ($allow_individual_calendar_status=="show"))
-{
+if (!empty($_GET['sort']) and ($allow_individual_calendar_status=="show")) {
 	$_SESSION['allow_individual_calendar']="hide";
 }
 
 // 4. filter user or group
-if (!empty($_GET['user']) or !empty($_GET['group']))
-{
+if (!empty($_GET['user']) or !empty($_GET['group'])) {
 	$_SESSION['user']=(int)$_GET['user'];
 	$_SESSION['group']=(int)$_GET['group'];
 }
-if ((!empty($_GET['user']) and $_GET['user']=="none") or (!empty($_GET['group']) and $_GET['group']=="none"))
-{
+if ((!empty($_GET['user']) and $_GET['user']=="none") or (!empty($_GET['group']) and $_GET['group']=="none")) {
 	api_session_unregister("user");
 	api_session_unregister("group");
-	}
+}
 if (!$is_courseAdmin){
 	if (!empty($_GET['toolgroup'])){
 		//$_SESSION['toolgroup']=$_GET['toolgroup'];
@@ -132,8 +119,7 @@ if (!$is_courseAdmin){
 	}
 }
 	//It comes from the group tools. If it's define it overwrites $_SESSION['group']
-if (!empty($_GET['isStudentView']) and $_GET['isStudentView']=="false")
-{
+if (!empty($_GET['isStudentView']) and $_GET['isStudentView']=="false") {
 	api_session_unregister("user");
 	api_session_unregister("group");
 }
@@ -314,8 +300,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	}
 }
 
-echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">'
-		. '<tr>';
+echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  	<tr>';
 
 // THE LEFT PART
 if (empty($_GET['origin']) or $_GET['origin']!='learnpath') {
@@ -323,8 +309,7 @@ if (empty($_GET['origin']) or $_GET['origin']!='learnpath') {
 	// the small calendar
 	$MonthName = $MonthsLong[$select_month -1];
 	$agenda_items=get_calendar_items($select_month,$select_year);
-	if (api_get_setting('display_mini_month_calendar') == 'true')
-	{
+	if (api_get_setting('display_mini_month_calendar') == 'true') {
 		display_minimonthcalendar($agenda_items, $select_month,$select_year, $MonthName);
 	}
 	echo '<br />';
@@ -357,34 +342,34 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		    }
 		    break;
 		case 'add' :
+			if ($_POST['submit_event']) {
+				display_agenda_items();
+			} else {
+				show_add_form();
+			}
+			break;
+		case 'edit' :
+			if ( !(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
 				if ($_POST['submit_event']) {
 					display_agenda_items();
 				} else {
-					show_add_form();
+					$id=(int)$_GET['id'];
+					show_add_form($id);
 				}
-				break;
-		case 'edit' :
-				if ( !(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
-					if ($_POST['submit_event']) {
-						display_agenda_items();
-					} else {
-						$id=(int)$_GET['id'];
-						show_add_form($id);
-					}
-				} else {
-					display_agenda_items();
-				}
-				break;
-		case 'delete':
+			} else {
 				display_agenda_items();
-				break;
+			}
+			break;
+		case 'delete':
+			display_agenda_items();
+			break;
 		case 'showhide':
-				if(!empty($_GET['agenda_id'])) {
-					 display_one_agenda_item((int)$_GET['agenda_id']);
-				} else {
-					display_agenda_items();
-				}
-				break;
+			if(!empty($_GET['agenda_id'])) {
+				 display_one_agenda_item((int)$_GET['agenda_id']);
+			} else {
+				display_agenda_items();
+			}
+			break;
 		case 'announce': 		
 			display_agenda_items();
 			break;
@@ -413,9 +398,7 @@ if (!$_GET['action'] || $_GET['action']=="showall"  || $_GET['action']=="showcur
 echo '&nbsp;</td></tr></table>';
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 // The footer is displayed only if we are not in the learnpath
 if ($_GET['origin'] != 'learnpath')

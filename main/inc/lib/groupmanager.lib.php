@@ -1292,15 +1292,14 @@ class GroupManager {
 		$user_id = Database::escape_string($user_id);
 
 		$sql = "SELECT tutor_id FROM ".$course_user_table."
-		             WHERE `user_id`='".$user_id."'
-		             AND `course_code`='".$_course['sysCode']."'"."AND tutor_id=1";
+		        WHERE user_id='".$user_id."' AND course_code='".$_course['sysCode']."'"."AND tutor_id=1";
 		$db_result = Database::query($sql);
 		$result = (Database::num_rows($db_result) > 0);
 		return $result;
 	}
 
 	/**
-	 * Get all group's from a given course in which a given user is ubscribed
+	 * Get all group's from a given course in which a given user is unsubscribed
 	 * @author  Patrick Cool
 	 * @param	 string $course_db: the database of the course you want to
 	 * retrieve the groups for
@@ -1308,22 +1307,21 @@ class GroupManager {
 	 * group memberships
 	 */
 	public static function get_group_ids ($course_db,$user_id) {
-	$groups = array();
-	$tbl_group = Database::get_course_table(TABLE_GROUP_USER,$course_db);
-	$user_id = Database::escape_string($user_id);
-	$sql = "SELECT group_id FROM $tbl_group WHERE user_id = '$user_id'";
-	$groupres = Database::query($sql);
-
-	// uncommenting causes a bug in Agenda AND announcements because there we check if the return value of this function is an array or not
-	//$groups=array();
-
-	if($groupres)
-	{
-		while ($myrow= Database::fetch_array($groupres))
-			$groups[]=$myrow['group_id'];
-	}
-
-	return $groups;
+		$groups = array();
+		$tbl_group = Database::get_course_table(TABLE_GROUP_USER,$course_db);
+		$user_id = Database::escape_string($user_id);
+		$sql = "SELECT group_id FROM $tbl_group WHERE user_id = '$user_id'";
+		$groupres = Database::query($sql);
+	
+		// uncommenting causes a bug in Agenda AND announcements because there we check if the return value of this function is an array or not
+		//$groups=array();
+	
+		if($groupres) {
+			while ($myrow= Database::fetch_array($groupres))
+				$groups[]=$myrow['group_id'];
+		}
+	
+		return $groups;
 	}
 	/*
 	-----------------------------------------------------------

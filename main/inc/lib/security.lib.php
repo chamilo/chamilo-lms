@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-* This is the security library for Dokeos.
+* This is the security library for Chamilo.
 *
 * This library is based on recommendations found in the PHP5 Certification
 * Guide published at PHP|Architect, and other recommendations found on
 * http://www.phpsec.org/
-* The principles here are that all data is tainted (most scripts of Dokeos are
+* The principles here are that all data is tainted (most scripts of Chamilo are
 * open to the public or at least to a certain public that could be malicious
 * under specific circumstances). We use the white list approach, where as we
 * consider that data can only be used in the database or in a file if it has

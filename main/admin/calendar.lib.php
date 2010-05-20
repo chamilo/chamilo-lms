@@ -55,22 +55,22 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName) {
 	$backwardsURL = api_get_self()."?".api_get_cidreq()."&amp;coursePath=".(empty($_GET['coursePath'])?'':$_GET['coursePath'])."&amp;courseCode=".(empty($_GET['courseCode'])?'':$_GET['courseCode'])."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
 	$forewardsURL = api_get_self()."?".api_get_cidreq()."&amp;coursePath=".(empty($_GET['coursePath'])?'':$_GET['coursePath'])."&amp;courseCode=".(empty($_GET['courseCode'])?'':$_GET['courseCode'])."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
-	echo 	"<table class=\"data_table\">\n",
-			"<tr>\n",
-			"<th width=\"10%\"><a href=\"", $backwardsURL, "\"> ".Display::return_icon('action_prev.png',get_lang('Previous'))." </a></th>\n",
-			"<th width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>\n",
-			"<th  width=\"10%\"><a href=\"", $forewardsURL, "\"> ".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>\n", "</tr>\n";
-	echo "<tr>\n";
+	echo 	"<table class=\"data_table\">",
+			"<tr>",
+			"<th width=\"10%\"><a href=\"", $backwardsURL, "\"> ".Display::return_icon('action_prev.png',get_lang('Previous'))." </a></th>",
+			"<th width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>",
+			"<th  width=\"10%\"><a href=\"", $forewardsURL, "\"> ".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>", "</tr>";
+	echo "<tr>";
 	for ($ii = 1; $ii < 8; $ii ++)
 	{
-		echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>\n";
+		echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>";
 	}
-	echo "</tr>\n";
+	echo "</tr>";
 	$curday = -1;
 	$today = getdate();
 	while ($curday <= $numberofdays[$month])
 	{
-		echo "<tr>\n";
+		echo "<tr>";
 		for ($ii = 0; $ii < 7; $ii ++)
 		{
 			if (($curday == -1) && ($ii == $startdayofweek))
@@ -86,7 +86,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName) {
 					$dayheader = "$curday";
 					$class = "class=\"days_today\"";
 				}
-				echo "\t<td ".$class.">";
+				echo "<td ".$class.">";
 				if (!empty($agendaitems[$curday]))
 				{
 					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."\">".$dayheader."</a>";
@@ -95,18 +95,18 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName) {
 				{
 					echo $dayheader;
 				}
-				// "a".$dayheader." <span class=\"agendaitem\">".$agendaitems[$curday]."</span>\n";
-				echo "</td>\n";
+				// "a".$dayheader." <span class=\"agendaitem\">".$agendaitems[$curday]."</span>";
+				echo "</td>";
 				$curday ++;
 			}
 			else
 			{
-				echo "<td>&nbsp;</td>\n";
+				echo "<td>&nbsp;</td>";
 			}
 		}
-		echo "</tr>\n";
+		echo "</tr>";
 	}
-	echo "</table>\n";
+	echo "</table>";
 }
 /**
 * show the calender of the given month
@@ -322,24 +322,24 @@ function display_monthcalendar($month, $year) {
 
 	   $maand_array_maandnummer=$month-1;
 
-	echo "<table class=\"data_table\">\n",
-		"<tr>\n",
-		"<th width=\"10%\"><a href=\"",$backwardsURL,"\"> ".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>\n",
-		"<th width=\"80%\" colspan=\"5\">",$MonthsLong[$maand_array_maandnummer]," ",$year,"</th>\n",
-		"<th width=\"10%\"><a href=\"",$forewardsURL,"\"> ".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>\n",
-		"</tr>\n";
+	echo "<table class=\"data_table\">",
+		"<tr>",
+		"<th width=\"10%\"><a href=\"",$backwardsURL,"\"> ".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>",
+		"<th width=\"80%\" colspan=\"5\">",$MonthsLong[$maand_array_maandnummer]," ",$year,"</th>",
+		"<th width=\"10%\"><a href=\"",$forewardsURL,"\"> ".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>",
+		"</tr>";
 
-	echo "<tr>\n";
+	echo "<tr>";
 
 	for ($ii=1;$ii<8; $ii++) {
-		echo "<td class=\"weekdays\" width=\"14%\">",$DaysShort[$ii%7],"</td>\n";
+		echo "<td class=\"weekdays\" width=\"14%\">",$DaysShort[$ii%7],"</td>";
   	}
 
-	echo "</tr>\n";
+	echo "</tr>";
 	$curday = -1;
 	$today = getdate();
 	while ($curday <=$numberofdays[$month]) {
-	echo "<tr>\n";
+	echo "<tr>";
     	for ($ii=0; $ii<7; $ii++)
 	  	{
 	  		if (($curday == -1)&&($ii==$startdayofweek))
@@ -367,13 +367,13 @@ function display_monthcalendar($month, $year) {
 
 				if (($curday==$today['mday'])&&($year ==$today['year'])&&($month == $today['mon']))
 				{
-			echo "<td id=\"today\" ",$bgcolor,"\">".$dayheader." \n";
+			echo "<td id=\"today\" ",$bgcolor,"\">".$dayheader." ";
       }
 				else
 				{
-			echo "<td id=\"days\" ",$bgcolor,"\">".$dayheader." \n";
+			echo "<td id=\"days\" ",$bgcolor,"\">".$dayheader." ";
 				}
-			echo "</td>\n";
+			echo "</td>";
 
 	      		$curday++;
 	    }
@@ -488,9 +488,9 @@ function display_student_links() {
 		echo "<a href='".api_get_self()."?sort=desc&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a>";
 	}
 	if ($_SESSION['view'] <> 'month') {
-		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" border=\"0\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a>\n";
+		echo "<a href=\"".api_get_self()."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" border=\"0\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a>";
 	} else {
-		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=list\"><img src=\"../img/calendar_select.gif\" border=\"0\" alt=\"".get_lang('ListView')."\" /> ".get_lang('ListView')."</a>\n";
+		echo "<a href=\"".api_get_self()."?action=view&amp;view=list\"><img src=\"../img/calendar_select.gif\" border=\"0\" alt=\"".get_lang('ListView')."\" /> ".get_lang('ListView')."</a>";
 	}
 }
 /**
@@ -712,7 +712,7 @@ function display_agenda_items()
     while($myrow=Database::fetch_array($result))
     {
     	$is_repeated = !empty($myrow['parent_event_id']);
-	    echo '<table class="data_table">',"\n";
+	    echo '<table class="data_table">',"";
         /*--------------------------------------------------
         		display: the month bar
          --------------------------------------------------*/
@@ -721,9 +721,9 @@ function display_agenda_items()
         if ($month_bar != api_format_date($myrow["start_date"], "%m%Y"))
 		{
             $month_bar = api_format_date($myrow["start_date"], "%m%Y");
-			echo "\t<tr>\n\t\t<td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
+			echo "<tr><td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
 			api_format_date($myrow["start_date"], "%B %Y").
-			"</td>\n\t</tr>\n";
+			"</td></tr>";
 		}
 
         /*--------------------------------------------------
@@ -756,9 +756,9 @@ function display_agenda_items()
     		$text_style="textnow";
     	}
 
-    	echo "\t\t<th>\n";
+    	echo "<th>";
     	// adding an internal anchor
-    	echo "\t\t\t<a name=\"".(int)date("d",strtotime($myrow["start_date"]))."\"></a>";
+    	echo "<a name=\"".(int)date("d",strtotime($myrow["start_date"]))."\"></a>";
     	// the icons. If the message is sent to one or more specific users/groups
     	// we add the groups icon
     	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
@@ -767,11 +767,11 @@ function display_agenda_items()
     	{
     		echo Display::return_icon('group.gif', get_lang('AllUsersOfThePlatform'));
     	}
-    	echo " ".$myrow['title']."\n";
-    	echo "\t\t</th>\n";
+    	echo " ".$myrow['title']."";
+    	echo "</th>";
 
     	// the message has been sent to
-    	echo "\t\t<th>".get_lang("SentTo").": ".get_lang('AllUsersOfThePlatform');
+    	echo "<th>".get_lang("SentTo").": ".get_lang('AllUsersOfThePlatform');
     	//$sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
     	//$sent_to_form=sent_to_form($sent_to);
     //	echo $sent_to_form;
@@ -790,16 +790,16 @@ function display_agenda_items()
      			display: the title
          --------------------------------------------------*/
     	echo "<tr class='row_odd'>";
-    	echo "\t\t<td>".get_lang("StartTimeWindow").": ";
+    	echo "<td>".get_lang("StartTimeWindow").": ";
     	echo api_format_date($myrow["start_date"]);
-    	echo "</td>\n";
-    	echo "\t\t<td>";
+    	echo "</td>";
+    	echo "<td>";
     	if ($myrow["end_date"]<>"0000-00-00 00:00:00")
     	{
     		echo get_lang("EndTimeWindow").": ";
     		echo api_convert_and_format_date($myrow["end_date"], null, date_default_timezone_get());
     	}
-    	echo "</td>\n";
+    	echo "</td>";
 
     	// attachment list
 	    	//$attachment_list=get_attachment($myrow['id']);
@@ -976,12 +976,12 @@ function display_one_agenda_item($agenda_id)
 	/*--------------------------------------------------
 			DISPLAY: THE ITEMS
 	  --------------------------------------------------*/
-	echo "<table id=\"data_table\">\n";
+	echo "<table id=\"data_table\">";
 
 	/*--------------------------------------------------
 	 DISPLAY : the icon, title, destinees of the item
 	  --------------------------------------------------*/
-	echo "\t<tr>\n";
+	echo "<tr>";
 
 	// highlight: if a date in the small calendar is clicked we highlight the relevant items
 	$myrow["start_date"] = api_get_local_time($myrow["start_date"], null, date_default_timezone_get());
@@ -1009,10 +1009,10 @@ function display_one_agenda_item($agenda_id)
 	}
 
 
-	echo "\t\t<td class=\"".$style."\">\n";
+	echo "<td class=\"".$style."\">";
 
 	// adding an internal anchor
-	echo "\t\t\t<a name=\"".(int)date("d",strtotime($myrow["start_date"]))."\"></a>";
+	echo "<a name=\"".(int)date("d",strtotime($myrow["start_date"]))."\"></a>";
 
 	// the icons. If the message is sent to one or more specific users/groups
 	// we add the groups icon
@@ -1022,27 +1022,27 @@ function display_one_agenda_item($agenda_id)
 	{
 		echo Display::return_icon('group.gif');
 	}
-	echo " ".$myrow['title']."\n";
-	echo "\t\t</td>\n";
+	echo " ".$myrow['title']."";
+	echo "</td>";
 
 	// the message has been sent to
-	echo "\t\t<td class=\"".$stylenotbold."\">".get_lang("SentTo").": ".get_lang('AllUsersOfThePlatform');
+	echo "<td class=\"".$stylenotbold."\">".get_lang("SentTo").": ".get_lang('AllUsersOfThePlatform');
 	//$sent_to = sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
 	//sent_to_form=sent_to_form($sent_to);
 	//echo $sent_to_form;
-	echo "</td>\n\t</tr>\n";
+	echo "</td></tr>";
 
 	/*--------------------------------------------------
 	 			DISPLAY: the title
 	  --------------------------------------------------*/
-	echo "\t<tr class=\"".$stylenotbold."\">\n";
-	echo "\t\t<td>".get_lang("StartTime").": ";
+	echo "<tr class=\"".$stylenotbold."\">";
+	echo "<td>".get_lang("StartTime").": ";
 	echo api_format_date($myrow["start_date"]);
-	echo "</td>\n";
-	echo "\t\t<td>".get_lang("EndTime").": ";
+	echo "</td>";
+	echo "<td>".get_lang("EndTime").": ";
 	echo api_convert_and_format_date($myrow["end_date"], null, date_default_timezone_get());
-	echo "</td>\n";
-	echo "\n\t</tr>\n";
+	echo "</td>";
+	echo "</tr>";
 
 	/*--------------------------------------------------
 	 			DISPLAY: the content
@@ -1054,7 +1054,7 @@ function display_one_agenda_item($agenda_id)
 	$content = $myrow['content'];
 	$content = make_clickable($content);
 	$content = text_filter($content);
-	//echo "\t<tr>\n\t\t<td class=\"".$text_style."\" colspan='2'>";
+	//echo "<tr><td class=\"".$text_style."\" colspan='2'>";
 	//echo $content;
 	//echo "</td></tr>";
     echo "<tr class='row_even'>";
@@ -1162,32 +1162,32 @@ echo "</select>";
 function show_user_group_filter_form()
 {
 	/** @todo this select missing to implement */
-	echo "\n<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
-	echo "\n\t<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
+	echo "<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
+	echo "<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
 
 	// Groups
-	echo "\n\t<optgroup label=\"".get_lang("Groups")."\">";
+	echo "<optgroup label=\"".get_lang("Groups")."\">";
 	//$group_list=get_course_groups();
 /*	foreach($group_list as $this_group)
 	{
 		// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
-		echo "\n\t\t<option value=\"agenda.php?group=".$this_group['id']."\" ";
+		echo "<option value=\"agenda.php?group=".$this_group['id']."\" ";
 		echo ($this_group['id']==$_SESSION['group'])? " selected":"" ;
 		echo ">".$this_group['name']."</option>";
 	}*/
-	echo "\n\t</optgroup>";
+	echo "</optgroup>";
 
 	// Users
-	echo "\n\t<optgroup label=\"".get_lang("Users")."\">";
+	echo "<optgroup label=\"".get_lang("Users")."\">";
 	//$user_list=get_course_users();
 /*	foreach($user_list as $this_user)
 		{
 		// echo "<option value=\"agenda.php?isStudentView=true&amp;user=".$this_user['uid']."\">".$this_user['lastName']." ".$this_user['firstName']."</option>";
-		echo "\n\t\t<option value=\"agenda.php?user=".$this_user['uid']."\" ";
+		echo "<option value=\"agenda.php?user=".$this_user['uid']."\" ";
 		echo ($this_user['uid']==$_SESSION['user'])? " selected":"" ;
 		echo ">".$this_user['lastName']." ".$this_user['firstName']."</option>";
 		}*/
-	echo "\n\t</optgroup>";
+	echo "</optgroup>";
 	echo "</select>";
 }
 
@@ -1313,14 +1313,13 @@ function show_add_form($id = '')
 				</td></tr>
 				<td width="10%">
 					<!-- date: 1 -> 31 -->
-					<nobr><?php echo get_lang('StartDate').": \n"; ?></nobr>
+					<nobr><?php echo get_lang('StartDate').": "; ?></nobr>
 				</td>
 				<td width="35%">
 					<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
 							<?php
 							// small loop for filling all the dates
 							// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-							echo "\n";
 							foreach (range(1, 31) as $i)
 											{
 											// values have to have double digits
@@ -1328,11 +1327,11 @@ function show_add_form($id = '')
 											// the current day is indicated with [] around the date
 											if ($value==$day)
 											{
-												echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";
+												echo " <option value=\"".$value."\" selected> ".$i." </option>";
 											}
 											else
 											{
-												echo "\t\t\t\t<option value=\"$value\">$i</option>\n";
+												echo "<option value=\"$value\">$i</option>";
 											}
 										}
 										 ?>
@@ -1340,7 +1339,6 @@ function show_add_form($id = '')
 					<!-- month: january -> december -->
 					<select name="fmonth" onchange="javascript:document.new_calendar_item.end_fmonth.value=this.value;">
 					<?php
-											echo "\n";
 											for ($i=1; $i<=12; $i++)
 											{
 												// values have to have double digits
@@ -1354,11 +1352,11 @@ function show_add_form($id = '')
 												}
 												if ($value==$month)
 												{
-													echo "\t\t\t\t <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n";
+													echo " <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n";
 												}
 												else
 												{
-													echo "\t\t\t\t <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n";
+													echo " <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n";
 												}
 											} ?>
 					</select>
@@ -1370,7 +1368,7 @@ function show_add_form($id = '')
 												for ($i=1; $i<=5; $i++)
 												{
 													$value=$year+$i;
-													echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+													echo "<option value=\"$value\">$value</option>\n";
 												} ?>
 					</select>
 					<a href="javascript:openCalendar('new_calendar_item','f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
@@ -1390,11 +1388,11 @@ function show_add_form($id = '')
 									// the current hour is indicated with [] around the hour
 									if ($hours==$value)
 									{
-										echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n";
+										echo "<option value=\"".$value."\" selected> ".$value." </option>\n";
 									}
 									else
 									{
-										echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+										echo "<option value=\"$value\">$value</option>\n";
 									}
 								} ?>
 						</select>
@@ -1407,7 +1405,7 @@ function show_add_form($id = '')
 								{
 									// values have to have double digits
 									$value = ($i <= 9 ? '0'.$i : $i );
-									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+									echo "<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
 					</td>
@@ -1434,9 +1432,9 @@ function show_add_form($id = '')
 									$value = ($i <= 9 ? '0'.$i : $i );
 									// the current day is indicated with [] around the date
 									if ($value==$end_day)
-										{ echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";}
+										{ echo " <option value=\"".$value."\" selected> ".$i." </option>\n";}
 									else
-										{ echo "\t\t\t\t <option value=\"".$value."\">".$i."</option>\n"; }
+										{ echo " <option value=\"".$value."\">".$i."</option>\n"; }
 									}?>
 						</select>
 							<!-- month: january -> december -->
@@ -1448,9 +1446,9 @@ function show_add_form($id = '')
 									// values have to have double digits
 									$value = ($i <= 9 ? '0'.$i : $i );
 									if ($value==$end_month)
-										{ echo "\t\t\t\t <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n"; }
+										{ echo " <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n"; }
 									else
-										{ echo "\t\t\t\t <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n"; }
+										{ echo " <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n"; }
 									}?>
 						</select>
 						<select name="end_fyear">
@@ -1461,7 +1459,7 @@ function show_add_form($id = '')
 								for ($i=1; $i<=5; $i++)
 								{
 									$value=$end_year+$i;
-									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+									echo "<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
 						<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif',get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
@@ -1480,9 +1478,9 @@ function show_add_form($id = '')
 									$value = ($i <= 9 ? '0'.$i : $i );
 									// the current hour is indicated with [] around the hour
 									if ($end_hours==$value)
-										{ echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n"; }
+										{ echo "<option value=\"".$value."\" selected> ".$value." </option>\n"; }
 									else
-										{ echo "\t\t\t\t<option value=\"".$value."\"> ".$value." </option>\n"; }
+										{ echo "<option value=\"".$value."\"> ".$value." </option>\n"; }
 								} ?>
 						</select>
 
@@ -1494,7 +1492,7 @@ function show_add_form($id = '')
 								{
 									// values have to have double digits
 									$value = ($i <= 9 ? '0'.$i : $i );
-									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+									echo "<option value=\"$value\">$value</option>\n";
 								} ?>
 						</select>
 						<br>
@@ -1545,11 +1543,11 @@ function show_add_form($id = '')
 	</tr>-->
 	<?php
 	   //if ($_SESSION['addedresource'])
-	   echo "\t<tr>\n";
-	   echo "\t\t<td colspan=\"4\">\n";
+	   echo "<tr>\n";
+	   echo "<td colspan=\"4\">\n";
 	   //echo display_resources(0);//--------------------------------------------------------
 	   $test=$_SESSION['addedresource'];
-	   echo "\t\t</td>\n\t</tr>\n";
+	   echo "</td>\n</tr>\n";
 	   /* END ADDED BY UGENT, Patrick Cool, march 2004 */
     if(empty($id)) //only show repeat fields when adding the first time
     {
@@ -1785,7 +1783,7 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 			$class = "class=\"row_odd\"";
 		}
 		echo "<tr $class>\n";
-		echo "\t";
+		echo "";
 		if ($i % 2 == 0)
 		{
 			echo ("<td valign=\"top\" width=\"75\">". (($i) / 2)." ".get_lang("HourShort")." 00</td>\n");
@@ -1794,7 +1792,7 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 		{
 			echo ("<td valign=\"top\" width=\"75\">". ((($i) / 2) - (1 / 2))." ".get_lang("HourShort")." 30</td>\n");
 		}
-		echo "\t<td $class valign=\"top\" colspan=\"2\">\n";
+		echo "<td $class valign=\"top\" colspan=\"2\">\n";
 		if (is_array($agendaitems[$i]))
 		{
 			foreach ($agendaitems[$i] as $key => $value)
@@ -1806,7 +1804,7 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 		{
 			echo $agendaitems[$i];
 		}
-		echo "\t</td>\n";
+		echo "</td>\n";
 		echo "</tr>\n";
 	}
 	echo "</table>\n";
@@ -1856,7 +1854,7 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	for ($ii = 1; $ii < 8; $ii ++)
 	{
 		$is_today = ($ii == $thisday_of_the_week AND (!isset($_GET['week']) OR $_GET['week']==$thisweek_number));
-		echo "\t<td class=\"weekdays\">";
+		echo "<td class=\"weekdays\">";
 		if ($is_today)
 		{
 			echo "<font color=#CC3300>";
@@ -1890,7 +1888,7 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 			$class = "class=\"days_today\"";
 		}
 
-		echo "\t<td ".$class.">";
+		echo "<td ".$class.">";
 		echo "<span class=\"agendaitem\">".$agendaitems[date('j', $value)]."&nbsp;</span> ";
 		echo "</td>\n";
 		$counter ++;

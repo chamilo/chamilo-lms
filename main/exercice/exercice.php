@@ -130,12 +130,12 @@ if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !emp
 }
 
 if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid']== strval(intval($_GET['exeid']))) {
-	$id = $_GET['exeid']; //filtered by post-condition
-	$emailid = $_GET['emailid'];
-	$test = $_GET['test'];
-	$from = $_SESSION['_user']['mail'];
-	$from_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
-	$url = api_get_path(WEB_CODE_PATH) . 'exercice/exercice.php?' . api_get_cidreq() . '&show=result';
+	$id 		= $_GET['exeid']; //filtered by post-condition
+	$emailid 	= $_GET['emailid'];
+	$test 		= $_GET['test'];
+	$from 		= $_SESSION['_user']['mail'];
+	$from_name  = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
+	$url		= api_get_path(WEB_CODE_PATH) . 'exercice/exercice.php?' . api_get_cidreq() . '&show=result';
 	$TBL_RECORDING = Database :: get_statistic_table('track_e_attempt_recording');
 	$total_weighting = $_REQUEST['totalWeighting'];
 
@@ -157,10 +157,12 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	} else {
 		$array_content_id_exe=$post_content_id;
 	}
+	
 
 	for ($i=0;$i<$loop_in_track;$i++) {
 
 		$my_marks=Database::escape_string($_POST['marks_'.$array_content_id_exe[$i]]);
+	
 		$contain_comments=Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
 
 		if (isset($contain_comments)) {
@@ -168,38 +170,40 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 		} else {
 			$my_comments='';
 		}
-			$my_questionid=$array_content_id_exe[$i];
-			$sql = "SELECT question from $TBL_QUESTIONS WHERE id = '$my_questionid'";
-			$result =Database::query($sql);
-			$ques_name = Database::result($result,0,"question");
+		$my_questionid=$array_content_id_exe[$i];
+		$sql = "SELECT question from $TBL_QUESTIONS WHERE id = '$my_questionid'";
+		$result =Database::query($sql);
+		$ques_name = Database::result($result,0,"question");
 
-			$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks',teacher_comment = '$my_comments'
-					  WHERE question_id = '".$my_questionid."'
-					  AND exe_id='".$id."'";
-			Database::query($query);
+		$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks',teacher_comment = '$my_comments'
+				  WHERE question_id = '".$my_questionid."'
+				  AND exe_id='".$id."'";
+				  
+		Database::query($query);
 
 
-			$qry = 'SELECT sum(marks) as tot
-					FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.intval($id).'
-					GROUP BY question_id';
+		$qry = 'SELECT sum(marks) as tot
+				FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.intval($id).'
+				GROUP BY question_id';
 
-			$res = Database::query($qry);
-			$tot = Database::result($res,0,'tot');
-			//updating also the total weight
-			$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".Database::escape_string($tot)."', exe_weighting = '".Database::escape_string($total_weighting)."'
-						 WHERE exe_Id='".Database::escape_string($id)."'";
-			Database::query($totquery);
-			$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
-					'(exe_id,
-					question_id,
-					marks,
-					insert_date,
-					author,
-					teacher_comment)
-					VALUES
-					('."'$id','".$my_questionid."','$my_marks','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".',"'.$my_comments.'")';
-			Database::query($recording_changes);
+		$res = Database::query($qry);
+		$tot = Database::result($res,0,'tot');
+		//updating also the total weight
+		$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".Database::escape_string($tot)."', exe_weighting = '".Database::escape_string($total_weighting)."'
+					 WHERE exe_Id='".Database::escape_string($id)."'";
+		Database::query($totquery);
+		$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
+				'(exe_id,
+				question_id,
+				marks,
+				insert_date,
+				author,
+				teacher_comment)
+				VALUES
+				('."'$id','".$my_questionid."','$my_marks','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".',"'.$my_comments.'")';
+		Database::query($recording_changes);
 	}
+
 	$post_content_id=array();
 	$array_content_id_exe=array();
 	/*foreach ($_POST as $key => $v) {
@@ -273,7 +277,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	//search items
 	if (isset($_POST['my_exe_exo_id']) && isset($_POST['student_id'])) {
 		$sql_lp='SELECT li.id as lp_item_id,li.lp_id,li.item_type,li.path,liv.id AS lp_view_id,liv.user_id,max(liv.view_count) AS view_count FROM '.$TBL_LP_ITEM.' li
-		INNER JOIN '.$TBL_LP_VIEW.' liv ON li.lp_id=liv.lp_id WHERE li.path="'.Database::escape_string(Security::remove_XSS($_POST['my_exe_exo_id'])).'" AND li.item_type="quiz" AND user_id="'.Database::escape_string(Security::remove_XSS($_POST['student_id'])).'" ';
+		INNER JOIN '.$TBL_LP_VIEW.' liv ON li.lp_id=liv.lp_id WHERE li.path="'.Database::escape_string(Security::remove_XSS($_POST['my_exe_exo_id'])).'" AND li.item_type="quiz" AND user_id="'.Database::escape_string($_POST['student_id']).'" ';
 		$rs_lp=Database::query($sql_lp);
 		if (!($rs_lp===false)) {
 			$row_lp=Database::fetch_array($rs_lp);
@@ -348,33 +352,63 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 			$totalWeighting = $_POST['totalWeighting'];
 
 			if ($lp_item_id == strval(intval($lp_item_id)) && $lp_item_view_id == strval(intval($lp_item_view_id)) && $student_id == strval(intval($student_id))) {
-				$score = Database :: escape_string($_POST['total_score']);
+			
+				$score = Database :: escape_string($_POST['total_score']); //This is the new note
 				$total_time = Database :: escape_string($_POST['total_time']);
+				
+				//I need the lp_item_view_id in order to update the record
+				 
+				//@todo add the lp_item_view_id in the track_exercise table in order to have a real match between the lp_item_view and the track_exercise
+				
+				//$my_real_lp_item_view_id = Database :: escape_string($_POST['real_lp_item_view_id']);
+				
 				$lp_item_id = Database :: escape_string($lp_item_id);
 				$lp_item_view_id = Database :: escape_string($lp_item_view_id);
 				$student_id = Database :: escape_string($student_id);
 				$totalWeighting = Database :: escape_string($totalWeighting);
-				// get max view_count from lp_item_view
-				/*$sql = "SELECT MAX(view_count) FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
-				    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "')";
+				
+				/*
+				$sql = "SELECT (view_count) FROM $TBL_LP_ITEM_VIEW
+						WHERE lp_item_id = '" . (int) $lp_item_view_id . "' AND lp_view_id = $my_real_lp_item_view_id ORDER BY id DESC LIMIT 1";
+				$res_view_count = Database::query($sql);
+				$res_view_count = Database :: fetch_row($res_view_count);
+				$my_view_count =  intval($res_view_count[0]);
+				*/
+				
+				//Checking if this is the lastest attempt
+				$sql = "SELECT exe_id FROM $TBL_TRACK_EXERCICES
+						WHERE exe_user_id = '" . Database :: escape_string($_POST['student_id']) . "' AND exe_cours_id = '" . api_get_course_id() . "' AND orig_lp_id = '$lp_item_id' AND orig_lp_item_id =  '$lp_item_view_id'  AND session_id =  '" . api_get_session_id() . "' AND status = ''
+						ORDER BY exe_id DESC LIMIT 1 ";
+				$res_view_count = Database::query($sql);
+				$res_view_count = Database :: fetch_row($res_view_count);
+				$my_view_count =  intval($res_view_count[0]);				
+										
+				//Update lp_item_view if this attempts is the latest	
+				$sql = "SELECT MAX(view_count) FROM $TBL_LP_ITEM_VIEW
+						WHERE lp_item_id = '" . (int) $lp_item_view_id . "' AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "')";
 				$res_max_view_count = Database::query($sql);
 				$row_max_view_count = Database :: fetch_row($res_max_view_count);
-				$max_view_count = (int) $row_max_view_count[0];
-
-				// update score and total_time from last attempt when you qualify the exercise in Learning path detail
-				$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . (float) $score . "',total_time = '" . (int) $total_time . "' WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
-				    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "') AND view_count = '$max_view_count'";
-				Database::query($sql_update_score);
-
+				$max_view_count =  intval($row_max_view_count[0]);
+				
+				//Only update if is the last attempt			
+				if ($my_view_count == $_GET['exeid']) {									
+					// update score and total_time from last attempt when you qualify the exercise in Learning path detail
+					$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . intval($tot) . "', total_time = '" . (int) $total_time . "' WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
+					    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "') AND view_count = '$max_view_count'";
+					Database::query($sql_update_score);
+				} 
+	
+				/*
+				/*
 				// update score and total_time from last attempt when you qualify the exercise in Learning path detail
 				$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . (float) $score . "',total_time = '" . (int) $total_time . "' WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
 				    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "') AND view_count = '$max_view_count'";
 				Database::query($sql_update_score);*/
 
 				// update max_score from a exercise in lp
-				$sql_update_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '" . (float) $totalWeighting . "'  WHERE id = '" . (int) $lp_item_view_id . "'";
+				//$sql_update_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '" . (float) $totalWeighting . "'  WHERE id = '" . (int) $lp_item_view_id . "'";
 
-				Database::query($sql_update_max_score);
+				//Database::query($sql_update_max_score);
 
 			}
 		}

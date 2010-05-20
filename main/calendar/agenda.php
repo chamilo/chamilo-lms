@@ -76,7 +76,6 @@ if (!empty($_GET['action']) and $_GET['action']=="showcurrent") {
 if (!empty($_GET['action']) and $_GET['action']=="showall") {
 	$_SESSION['show']="showall";
 }
-//echo $_SESSION['show'];
 
 // 2. sorting order (ASC or DESC)
 if (empty($_GET['sort']) and empty($_SESSION['sort'])) {

@@ -653,7 +653,7 @@ function display_agenda_items()
     $stop = 0;
 	// this is to make a difference between showing everything (all months) or only the current month)
 	// $show_all_current is a part of the sql statement
-	if ($_SESSION['show']!=="showall")
+	if ($_SESSION['show_all_admin']!=="showall")
 	{
 		$show_all_current=" AND MONTH(start_date)=$select_month AND year(start_date)=$select_year";
         $start = mktime(0,0,0,$select_month,1,$select_year);
@@ -762,11 +762,10 @@ function display_agenda_items()
     	// the icons. If the message is sent to one or more specific users/groups
     	// we add the groups icon
     	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
-    	Display::display_icon('agenda.gif', get_lang('Agenda'));
-    	if ($myrow['to_group_id']!=='0')
-    	{
+    	Display::display_icon('calendar_global.png', get_lang('Agenda'));
+    	/*if ($myrow['to_group_id']!=='0') {
     		echo Display::return_icon('group.gif', get_lang('AllUsersOfThePlatform'));
-    	}
+    	}*/
     	echo " ".$myrow['title']."";
     	echo "</th>";
 
@@ -1666,9 +1665,8 @@ function get_agendaitems($month, $year)
 	return $agendaitems;
 }
 
-function display_upcoming_events()
-{
-	echo '<b>'.get_lang('UpcomingEvent').'</b><br />';
+function display_upcoming_events() {
+	echo '<br /><b>'.get_lang('UpcomingEvent').'</b><br />';
 	$number_of_items_to_show = (int)api_get_setting('number_of_upcoming_events');
 
 	//databases of the courses

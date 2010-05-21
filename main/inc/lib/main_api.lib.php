@@ -1436,12 +1436,21 @@ class api_failure {
 /*	CONFIGURATION SETTINGS */
 
 /**
- * Gets the current Chamilo (not PHP/cookie) session ID, if active
+ * Gets the current Chamilo (not PHP/cookie) session ID
  * @return  int     O if no active session, the session ID otherwise
  */
 function api_get_session_id() {
-	return empty($_SESSION['id_session']) ? 0 : (int)$_SESSION['id_session'];
+	return empty($_SESSION['id_session']) ? 0 : intval($_SESSION['id_session']);
 }
+
+/**
+ * Gets the current Chamilo (not social network) group ID
+ * @return  int     O if no active session, the session ID otherwise
+ */
+function api_get_group_id() {
+	return empty($_SESSION['_gid']) ? 0 : intval($_SESSION['_gid']);	
+}
+
 
 /**
  * Gets the current or given session name

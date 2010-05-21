@@ -10,26 +10,22 @@ $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATT
 		DISPLAY FUNCTIONS
 */
 /**
-* displays one specific announcement
+* Displays one specific announcement
 * @param $announcement_id, the id of the announcement you want to display
-* @todo remove globals
-* @todo more security checking
 */
-function display_announcement($announcement_id) {
-	global $_user, $dateFormatLong;
+function display_announcement($announcement_id) {	
 	if ($announcement_id != strval(intval($announcement_id))) { return false; } // potencial sql injection
 
 	$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
 	$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-	if ($_user['user_id'])
-	{
+	if (api_get_user_id() != 0) {
 		$sql_query = "	SELECT announcement.*, toolitemproperties.*
 						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 						WHERE announcement.id = toolitemproperties.ref
 						AND announcement.id = '$announcement_id'
 						AND toolitemproperties.tool='announcement'
-						AND (toolitemproperties.to_user_id='".intval($_user['user_id'])."' OR toolitemproperties.to_group_id='0')
+						AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id='0')
 						AND toolitemproperties.visibility='1'
 						ORDER BY display_order DESC";
 
@@ -43,7 +39,7 @@ function display_announcement($announcement_id) {
 						AND toolitemproperties.visibility='1'";
 	}
 	$sql_result = Database::query($sql_query);
-	$result = Database::fetch_array($sql_result);
+	$result		= Database::fetch_array($sql_result);
 
 	if ($result !== false) { // A sanity check.
 		$title		 = $result['title'];
@@ -62,7 +58,7 @@ function display_announcement($announcement_id) {
 }
 
 /*
-	          SHOW_TO_FORM
+	SHOW_TO_FORM
 */
 /**
 * this function shows the form for sending a message to a specific group or user.
@@ -165,8 +161,7 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 /**
 * this function shows the form for sending a message to a specific group or user.
 */
-function construct_selected_select_form($group_list=null, $user_list=null,$to_already_selected)
-{
+function construct_selected_select_form($group_list=null, $user_list=null,$to_already_selected) {
 	// we separate the $to_already_selected array (containing groups AND users into
 	// two separate arrays
 	$groupuser = array();
@@ -329,16 +324,14 @@ function get_course_groups()
 * This tools loads all the users and all the groups who have received
 * a specific item (in this case an announcement item)
 */
-function load_edit_users($tool, $id)
-{
-	global $_course;
+function load_edit_users($tool, $id) {	
 	global $tbl_item_property;
 
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
 
 	$sql = "SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
-	$result = Database::query($sql) or die(Database::error());
+	$result = Database::query($sql);
 	while ($row = Database::fetch_array($result))
 	{
 		$to_group=$row['to_group_id'];
@@ -736,18 +729,15 @@ function change_visibility_announcement($tool,$id)
 
 	$sql = "SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 
-	$result = Database::query($sql) or die(Database::error());
+	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 
-	if ($row['visibility']=='1')
-	{
+	if ($row['visibility']=='1') {
 		$sql_visibility="UPDATE $tbl_item_property SET visibility='0' WHERE tool='$tool' AND ref='$id'";
-	}
-	else
-	{
+	} else {
 		$sql_visibility="UPDATE $tbl_item_property SET visibility='1' WHERE tool='$tool' AND ref='$id'";
 	}
-    $result=Database::query($sql_visibility);
+    $result = Database::query($sql_visibility);
     if ($result === false) {
         return false;
     }
@@ -778,7 +768,7 @@ function store_advalvas_item($emailTitle, $newContent, $order, $to, $file = arra
 	$order = intval($order);
 
 	// store in the table announcement
-	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
+	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".api_get_session_id();
 	$result = Database::query($sql);
 	if ($result === false) {
 		return false;
@@ -834,8 +824,8 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 	$order = intval($order);
 
 	// store in the table announcement
-	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
-	$result = Database::query($sql) or die(Database::error());
+	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".api_get_session_id();
+	$result = Database::query($sql);
 	if ($result === false) {
 		return false;
 	}
@@ -884,8 +874,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 * This function stores the announcement Item in the table announcement
 * and updates the item_property also
 */
-function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $file_comment='')
-{
+function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $file_comment='') {
 
 	global $_course;
 	global $nameTools;
@@ -900,7 +889,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $fi
 
 	// store the modifications in the table announcement
  	$sql = "UPDATE $tbl_announcement SET content='$newContent', title = '$emailTitle' WHERE id='$id'";
-	$result = Database::query($sql) or die(Database::error());
+	$result = Database::query($sql);
 
 	// save attachment file
 	$row_attach = get_attachment($id);
@@ -916,7 +905,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $fi
 
 	// we remove everything from item_property for this
 	$sql_delete="DELETE FROM $tbl_item_property WHERE ref='$id' AND tool='announcement'";
-	$result = Database::query($sql_delete) or die(Database::error());
+	$result = Database::query($sql_delete);
 
 	// store in item_property (first the groups, then the users
 	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
@@ -972,10 +961,8 @@ function send_announcement_email($user_list, $course_code, $_course, $mail_title
 	}
 }
 
-function update_mail_sent($insert_id)
-{
-	global $_course;
-	global $tbl_announcement;
+function update_mail_sent($insert_id) {
+	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 	if ($insert_id != strval(intval($insert_id))) { return false; }
 	$insert_id = Database::escape_string($insert_id);
 	// store the modifications in the table tbl_annoucement
@@ -989,8 +976,7 @@ function update_mail_sent($insert_id)
  * @param	int user id
  * @return	array html with the content and count of announcements or false otherwise
  */
-function get_all_annoucement_by_user_course($course_db, $user_id)
-{
+function get_all_annoucement_by_user_course($course_db, $user_id) {
 	if (empty($course_db) || empty($user_id)) {
 		return false;
 	}
@@ -1031,9 +1017,7 @@ function get_all_annoucement_by_user_course($course_db, $user_id)
 }
 
 /*
-==============================================================================
 		ATTACHMENT FUNCTIONS
-==============================================================================
 */
 
 /**
@@ -1155,7 +1139,6 @@ function edit_announcement_attachment_file($id_attach, $file, $file_comment) {
  *
  */
 function delete_announcement_attachment_file($id) {
-
 	global $_course;
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 	$id=Database::escape_string($id);

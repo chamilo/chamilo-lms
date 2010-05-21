@@ -3,10 +3,11 @@
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: code cleaning
+ * @author Julio MMontoya <gugli100@gmail.com>, MORE code cleaning
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
  *			 Announcements tool and also add the resource linker here. The database also needed refactoring
  *			 as there was no title field (the title was merged into the content field)
- * @package dokeos.announcements
+ * @package chamilo.announcements
  * @todo make AWACS out of the configuration settings
  * @todo this file is 1200+ lines without any functions -> needs to be split into
  * multiple functions
@@ -15,9 +16,7 @@
 		INIT SECTION
 */
 // name of the language file that needs to be included
-$language_file[] = 'announcements';
-$language_file[] = 'group';
-$language_file[] = 'survey';
+$language_file[] = array('announcements', 'group', 'survey');
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -25,9 +24,7 @@ $use_anonymous = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
-
 $nameTools = get_lang('ToolAnnouncement');
-
 
 //session
 if(isset($_GET['id_session'])) {
@@ -92,9 +89,7 @@ if (!empty($_POST['addresources'])) // When the "Add Resource" button is clicked
 	{
 		header("Location: ../resourcelinker/resourcelinker.php?source_id=7&action=$action&id=$id&originalresource=no&publish_survey=$surveyid&db_name=$db_name&cidReq=$cidReq");
 		exit;
-	}
-	else
-	{
+	} else {
 		header("Location: ../resourcelinker/resourcelinker.php?source_id=7&action=$action&id=$id&originalresource=no");
 		exit;
 	}
@@ -500,7 +495,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			if ($ctok == $_POST['sec_token']) {
 
 				if (!$surveyid) {
-					$result = Database::query("SELECT MAX(display_order) FROM $tbl_announcement WHERE session_id=".intval($_SESSION['id_session'])." OR session_id=0");
+					$result = Database::query("SELECT MAX(display_order) FROM $tbl_announcement WHERE session_id=".api_get_session_id()." OR session_id=0");
 					list($orderMax) = Database::fetch_row($result);
 					$order = $orderMax + 1;
 					$file = $_FILES['user_upload'];
@@ -625,7 +620,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 										 INNER JOIN $tbl_session_course_user
 										 	ON $tbl_user.user_id = $tbl_session_course_user.id_user
 											AND $tbl_session_course_user.course_code = '".$_course['id']."'
-											AND $tbl_session_course_user.id_session = ".intval($_SESSION['id_session']);
+											AND $tbl_session_course_user.id_session = ".api_get_session();
 
 			    		}
 			    	}
@@ -981,7 +976,7 @@ if ($display_form == true) {
 			// we want to remind inactive users. The $_GET['since'] parameter determines which users have to be warned (i.e the users who have been inactive for x days or more
 			$since = isset($_GET['since']) ? intval($_GET['since']) : 6;
 			// getting the users who have to be reminded
-			$to = Tracking :: get_inactives_students_in_course($_course['id'],$since, $_SESSION['id_session']);
+			$to = Tracking :: get_inactives_students_in_course($_course['id'],$since, api_get_session_id());
 			// setting the variables for the form elements: the users who need to receive the message
 			foreach($to as &$user) {
 				$user = 'USER:'.$user;
@@ -1272,7 +1267,7 @@ if ($display_announcement_list && !$surveyid) {
 						$cond_user_id
 						$condition_session
 						AND ip.visibility='1'
-						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+						AND announcement.session_id IN(0,".api_get_session_id().")
 						ORDER BY display_order DESC";
 				} else {
 
@@ -1290,7 +1285,7 @@ if ($display_announcement_list && !$surveyid) {
 						$cond_user_id
 						$condition_session
 						AND ip.visibility='1'
-						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")";
+						AND announcement.session_id IN(0,".api_get_session_id().")";
 				}
 			}
 

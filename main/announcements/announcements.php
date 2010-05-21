@@ -64,8 +64,9 @@ $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 /*
 	Resource linker
 */
+
 $_SESSION['source_type']="Ad_Valvas";
-include '../resourcelinker/resourcelinker.inc.php';
+require_once '../resourcelinker/resourcelinker.inc.php';
 
 if (!empty($_POST['addresources'])) {
 	// When the "Add Resource" button is clicked we store all the form data into a session
@@ -73,19 +74,17 @@ if (!empty($_POST['addresources'])) {
     $form_elements= array ('emailTitle'=>Security::remove_XSS($emailTitle), 'newContent'=>Security::remove_XSS($newContent), 'id'=>$id, 'to'=>$selectedform, 'emailoption'=>$email_ann);
     $_SESSION['formelements']=$form_elements;
 
-    if($id) // this is to correctly handle edits
-	{
-		  $action="edit";
-    }else
-    {
-		  $action="add";
+    if($id) {
+    	// this is to correctly handle edits
+		$action="edit";
+    } else {
+		$action="add";
     }
 
 	// ============== //
 	// 7 = Ad_Valvas	//
 	// ============== //
-	if($surveyid)
-	{
+	if($surveyid) {
 		header("Location: ../resourcelinker/resourcelinker.php?source_id=7&action=$action&id=$id&originalresource=no&publish_survey=$surveyid&db_name=$db_name&cidReq=$cidReq");
 		exit;
 	} else {
@@ -95,15 +94,12 @@ if (!empty($_POST['addresources'])) {
 	exit;
 }
 
-/*
-	Tracking
-*/
+/*	Tracking	*/
 event_access_tool(TOOL_ANNOUNCEMENT);
 
 
-/*
-	Libraries
-*/
+/*	Libraries	*/
+
 $lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
 require_once $lib.'groupmanager.lib.php';
 require_once $lib.'mail.lib.inc.php';
@@ -112,21 +108,18 @@ require_once $lib.'tracking.lib.php';
 require_once $lib.'fckeditor/fckeditor.php';
 require_once $lib.'fileUpload.lib.php';
 require_once 'announcements.inc.php';
-/*
-	POST TO
-*/
+/*	POST TO	*/
 
 $safe_emailTitle = $_POST['emailTitle'];
 $safe_newContent = $_POST['newContent'];
 
-if (!empty($_POST['To']))
-{
+if (!empty($_POST['To'])) {
 	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 		api_not_allowed();
 	}
 	$display_form = true;
 
-	$form_elements = array ('emailTitle'=>$safe_emailTitle, 'newContent'=>$safe_newContent, 'id'=>Security::remove_XSS($_POST['id']), 'emailoption'=>Security::remove_XSS($_POST['email_ann']));
+	$form_elements = array ('emailTitle'=>$safe_emailTitle, 'newContent'=>$safe_newContent, 'id'=>$_POST['id'], 'emailoption'=>$_POST['email_ann']);
     $_SESSION['formelements'] = $form_elements;
 
     $form_elements            	= $_SESSION['formelements'];
@@ -140,17 +133,14 @@ if (!empty($_POST['To']))
 */
 
 $setting_select_groupusers = true;
-if (empty($_POST['To']) and !$_SESSION['select_groupusers'])
-{
+if (empty($_POST['To']) and !$_SESSION['select_groupusers']) {
 	$_SESSION['select_groupusers'] = "hide";
 }
 $select_groupusers_status=$_SESSION['select_groupusers'];
-if (!empty($_POST['To']) and ($select_groupusers_status=="hide"))
-{
+if (!empty($_POST['To']) and ($select_groupusers_status=="hide")) {
 	$_SESSION['select_groupusers'] = "show";
 }
-if (!empty($_POST['To']) and ($select_groupusers_status=="show"))
-{
+if (!empty($_POST['To']) and ($select_groupusers_status=="show")) {
 	$_SESSION['select_groupusers'] = "hide";
 }
 
@@ -198,7 +188,7 @@ if(!empty($_GET['toolgroup'])){
 	if($_GET['toolgroup'] == strval(intval($_GET['toolgroup']))){ //check is integer
 		$toolgroup = $_GET['toolgroup'];
 		$_SESSION['select_groupusers'] = 'hide';
-	}else{
+	} else {
 		$toolgroup = 0;
 	}
 	api_session_register("toolgroup");
@@ -212,15 +202,13 @@ if(!empty($_GET['toolgroup'])){
 $ctok = $_SESSION['sec_token'];
 $stok = Security::get_token();
 
-if (!empty($_SESSION['formelements']) and !empty($_GET['originalresource']) and $_GET['originalresource'] == 'no')
-{
+if (!empty($_SESSION['formelements']) and !empty($_GET['originalresource']) and $_GET['originalresource'] == 'no') {
 	$form_elements			= $_SESSION['formelements'];
 	$title_to_modify		= $form_elements['emailTitle'];
 	$content_to_modify		= $form_elements['newContent'];
 	$announcement_to_modify	= $form_elements['id'];
 	$to						= $form_elements['to'];
 	//load_edit_users('announcement',$announcement_to_modify);
-
 	$email_ann				= $form_elements['emailoption'];
 }
 if(!empty($_GET['remind_inactive'])) {
@@ -235,7 +223,7 @@ if(!empty($_REQUEST['publish_survey'])) {
 }
 
 //@todo fix those request values 
-$cidReq=Database::escape_string($_REQUEST['cidReq']);
+$cidReq = Database::escape_string($_REQUEST['cidReq']);
 if($surveyid) {
 	$db_name=Database::escape_string($_REQUEST['db_name']);
 	$sql_temp = "SELECT * FROM $db_name.survey WHERE survey_id='$surveyid'";
@@ -267,10 +255,9 @@ if (!empty($_SESSION['toolgroup'])){
 // showing the header if we are not in the learning path, if we are in
 // the learning path, we do not include the banner so we have to explicitly
 // include the stylesheet, which is normally done in the header
-if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
-{
+if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 	//we are not in the learning path
-	Display::Display_header($nameTools,"Announcements");
+	Display::display_header($nameTools,get_lang('Announcements'));
 } else {
 	//we are in the learning path, only display central data and change css
 	$display_title_list = false;
@@ -278,8 +265,6 @@ if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 	$display_specific_announcement = true;
 	$announcement_id = $_REQUEST['ann_id'];
 	?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.$my_style; ?>/default.css">
-	<!-- css file for announcements -->
-	<link href="../css/<?php echo $my_style; ?>/announcements.css" rel="stylesheet" type="text/css">
 	<?php
 }
 
@@ -302,12 +287,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 				api_not_allowed();
 			}
-
-			$id=intval($_GET['id']);
-			if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
+			if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])) {
 				if ($ctok == $_GET['sec_token']) {
-					change_visibility_announcement(TOOL_ANNOUNCEMENT,$id);
-					$message = get_lang("VisibilityChanged");
+					change_visibility_announcement($_GET['id']);
+					$message = get_lang('VisibilityChanged');
 				}
 			}
 		}
@@ -316,9 +299,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	/*
 		Delete announcement
 	*/
-	if (!empty($_GET['action']) AND $_GET['action']=='delete' AND isset($_GET['id'])) {
+	if (!empty($_GET['action']) && $_GET['action']=='delete' && isset($_GET['id'])) {
 		//Database::query("DELETE FROM  $tbl_announcement WHERE id='$delete'");
-		$id=intval(addslashes($_GET['id']));
+		$id=intval($_GET['id']);
 		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
@@ -326,16 +309,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
 
 			// tooledit : visibility = 2 : only visibile for platform administrator
-			if ($ctok == $_GET['sec_token']) {
-				Database::query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."' and ref='".$id."'");
-
+			if ($ctok == $_GET['sec_token']) {				
+				delete_announcement($_course, $id);
 				delete_added_resource("Ad_Valvas", $delete);
 
 				$id = null;
 				$emailTitle = null;
 				$newContent = null;
-
-				$message = get_lang("AnnouncementDeleted");
+				$message = get_lang('AnnouncementDeleted');
 			}
 		}
 	}
@@ -344,8 +325,6 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		Delete all announcements
 	*/
 	if (!empty($_GET['action']) and $_GET['action']=='delete_all') {
-
-		//Database::query("DELETE FROM $tbl_announcement");
 		if (api_is_allowed_to_edit()) {
 			Database::query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."'");
 			delete_all_resources_type("Ad_Valvas");
@@ -353,7 +332,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			$emailTitle = null;
 			$newContent = null;
 
-			$message = get_lang("AnnouncementDeletedAll");
+			$message = get_lang('AnnouncementDeletedAll');
 		}
 	}
 
@@ -1207,7 +1186,7 @@ if ($display_announcement_list && !$surveyid) {
 			}
 		}
 	} else {
-	//STUDENT
+		//STUDENT
 			if (is_array($group_memberships) && count($group_memberships)>0) {
 
 				if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
@@ -1452,7 +1431,9 @@ if ($display_announcement_list && !$surveyid) {
 }	// end: if ($displayAnnoucementList)
 
 echo "</table>";
-if (!empty($display_specific_announcement)) display_announcement($announcement_id);
+if (!empty($display_specific_announcement)) {
+	display_announcement($announcement_id);
+}
 
 /*		FOOTER		*/
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {

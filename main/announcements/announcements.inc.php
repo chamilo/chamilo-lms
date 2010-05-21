@@ -941,31 +941,20 @@ function sent_to($tool, $id) {
 * @param    int     ID of the element of the corresponding type
 * @return   bool    False on failure, True on success
 */
-function change_visibility_announcement($tool, $id) {
-	global $_course;	
-	$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-	$tool	= Database::escape_string($tool);
-	$id 	= Database::escape_string($id);
-
-	$sql = "SELECT visibility FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
-
-	$result = Database::query($sql);
-	$row 	= Database::fetch_array($result, 'ASSOC');
-	//Adding the AnnouncementUpdated when modifying the visibility 
-	api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id());
-
-	if ($row['visibility']=='1') {
-		$sql_visibility="UPDATE $tbl_item_property SET visibility='0' WHERE tool='$tool' AND ref='$id'";
+function change_visibility_announcement($id) {
+	global $_course;
+	$item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $id);
+	if ($item_visibility == '1') {
+		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'invisible', api_get_user_id());
 	} else {
-		$sql_visibility="UPDATE $tbl_item_property SET visibility='1' WHERE tool='$tool' AND ref='$id'";
-	}
-    $result = Database::query($sql_visibility);
-    if ($result === false) {
-        return false;
-    }
+		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'visible', api_get_user_id());
+	}	
     return true;
 }
 
+function delete_announcement($_course, $id) {	
+	api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'delete', api_get_user_id());
+}
 
 /*
 		ATTACHMENT FUNCTIONS

@@ -930,9 +930,9 @@ function sent_to($tool, $id) {
 }
 
 
-/*===================================================
+/*
 	           CHANGE_VISIBILITY($tool,$id)
-  =================================================*/
+*/
 /**
 * This functions swithes the visibility a course resource
 * using the visibility field in 'item_property'
@@ -941,16 +941,18 @@ function sent_to($tool, $id) {
 * @param    int     ID of the element of the corresponding type
 * @return   bool    False on failure, True on success
 */
-function change_visibility_announcement($tool,$id) {
+function change_visibility_announcement($tool, $id) {
 	global $_course;	
 	$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-	$tool = Database::escape_string($tool);
-	$id = Database::escape_string($id);
+	$tool	= Database::escape_string($tool);
+	$id 	= Database::escape_string($id);
 
-	$sql = "SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
+	$sql = "SELECT visibility FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 
 	$result = Database::query($sql);
-	$row = Database::fetch_array($result);
+	$row 	= Database::fetch_array($result, 'ASSOC');
+	//Adding the AnnouncementUpdated when modifying the visibility 
+	api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id());
 
 	if ($row['visibility']=='1') {
 		$sql_visibility="UPDATE $tbl_item_property SET visibility='0' WHERE tool='$tool' AND ref='$id'";

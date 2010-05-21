@@ -1,42 +1,16 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Patrick Cool (patrick.cool@ugent.be)
-	Copyright (c) Denes Nagy
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * @author Patrick Cool, original code
 * @author Denes Nagy - many bugfixes and improvements, adjusted for learning path
 * @author Roan Embrechts - refactoring, code cleaning
 * @package dokeos.resourcelinker
 * @todo reorganise code,
 * use Database API instead of creating table names locally.
-==============================================================================
 */
 
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 // name of the language file that needs to be included
 //$language_file = 'resourcelinker';// TODO: Repeated deleting and moving the rest of this lang file to trad4all
@@ -1037,11 +1011,7 @@ if ($showresources)
 echo "</td></tr></table>";
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
-
 Display :: display_footer();
 ?>
-

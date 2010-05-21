@@ -41,9 +41,10 @@ function store_advalvas_item($emailTitle, $newContent, $order, $to, $file = arra
 		}
 	
 		// store in item_property (first the groups, then the users
+		
 		if (!is_null($to)) {
 			 // !is_null($to): when no user is selected we send it to everyone			 
-			$send_to=separate_users_groups($to);
+			$send_to = separate_users_groups($to);
 			// storing the selected groups
 			if (is_array($send_to['groups'])) {
 				foreach ($send_to['groups'] as $group) {
@@ -72,10 +73,9 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 	global $_course;	
 
 	// database definitions
-	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+	$tbl_announcement  = Database::get_course_table(TABLE_ANNOUNCEMENT);
 	$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-	$newContent=stripslashes($newContent);
+	
 	$emailTitle = Database::escape_string($emailTitle);
 	$newContent = Database::escape_string($newContent);
 	$order = intval($order);
@@ -92,7 +92,6 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 	if (empty($file)) {
 		$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $file);
 	}
-
 
 	// store in item_property (first the groups, then the users
 	if (!isset($to_users)) // !isset($to): when no user is selected we send it to everyone
@@ -123,7 +122,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 
 
 /*
-	           EDIT ANNOUNCEMENT 
+	EDIT ANNOUNCEMENT 
 */
 /**
 * This function stores the announcement item in the announcement table 
@@ -137,7 +136,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 * @param string file comment
 * 
 */
-function edit_advalvas_item($id, $emailTitle,$newContent,$to,$file = array(), $file_comment='') {	
+function edit_advalvas_item($id, $emailTitle, $newContent, $to, $file = array(), $file_comment='') {	
 	global $_course;	
 	$tbl_item_property  = Database::get_course_table(TABLE_ITEM_PROPERTY);	
 	$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -167,10 +166,12 @@ function edit_advalvas_item($id, $emailTitle,$newContent,$to,$file = array(), $f
 	$result = Database::query($sql_delete);
 
 	// store in item_property (first the groups, then the users
+
 	if (!is_null($to)) {
 		// !is_null($to): when no user is selected we send it to everyone
 		
-		$send_to=separate_users_groups($to);
+		$send_to = separate_users_groups($to);
+
 		// storing the selected groups
 		if (is_array($send_to['groups'])) {
 			foreach ($send_to['groups'] as $group) {
@@ -180,7 +181,7 @@ function edit_advalvas_item($id, $emailTitle,$newContent,$to,$file = array(), $f
 		// storing the selected users
 		if (is_array($send_to['users'])) {
 			foreach ($send_to['users'] as $user) {
-					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), 0, $user);
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), 0, $user);
 			}
 		}
 	} else {
@@ -325,39 +326,31 @@ function display_announcement($announcement_id) {
 /**
 * this function shows the form for sending a message to a specific group or user.
 */
-function show_to_form($to_already_selected) {
-	$user_list=get_course_users();
-	$group_list=get_course_groups();
+function show_to_form($to_already_selected) {	
+	
+	$user_list	= get_course_users();
+	$group_list = get_course_groups();
 
-	if ($to_already_selected == "")
-          $to_already_selected = array();
+	if ($to_already_selected == '' || $to_already_selected == 'everyone')  {
+		$to_already_selected = array();
+	}
 
 	echo "<table id=\"recipient_list\" style=\"display: none;\">";
-	echo "\t<tr>";
+	echo '<tr>';
 
 	// the form containing all the groups and all the users of the course
-	echo "<td>";
+	echo '<td>';
 	echo "<strong>".get_lang('Users')."</strong><br />";
 	construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
 	echo "</td>";
 
 	// the buttons for adding or removing groups/users
 	echo "<td valign=\"middle\">";
-	/*echo "<input	type=\"button\"	",
-				"onClick=\"javascript: move(this.form.elements[0],this.form.elements[3])\" ",// 7 & 4 : fonts
-				"value=\"   >>   \">",
-
-				"<p>&nbsp;</p>",
-
-				"<input	type=\"button\"",
-				"onClick=\"javascript: move(this.form.elements[3],this.form.elements[0])\" ",
-				"value=\"   <<   \">";*/
-
-?>
-<button class="arrowr" type="button" onClick="javascript: move(this.form.elements[0], this.form.elements[3])" onClick="javascript: move(this.form.elements[0], this.form.elements[3])"></button>
-<br /> <br />
-<button class="arrowl" type="button" onClick="javascript: move(this.form.elements[3], this.form.elements[0])" onClick="javascript: move(this.form.elements[3], this.form.elements[0])"></button>
-<?php
+	?>
+	<button class="arrowr" type="button" onClick="javascript: move(this.form.elements[0], this.form.elements[3])" onClick="javascript: move(this.form.elements[0], this.form.elements[3])"></button>
+	<br /> <br />
+	<button class="arrowl" type="button" onClick="javascript: move(this.form.elements[3], this.form.elements[0])" onClick="javascript: move(this.form.elements[3], this.form.elements[0])"></button>
+	<?php
 	echo "</td>";
 	echo "<td>";
 
@@ -376,15 +369,12 @@ function show_to_form($to_already_selected) {
 /**
 * this function shows the form for sending a message to a specific group or user.
 */
-function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected)
-{
+function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected) {
 
 	echo "<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>";
 	// adding the groups to the select form
-	if ($group_list)
-	{
-		foreach($group_list as $this_group)
-		{
+	if ($group_list){
+		foreach($group_list as $this_group) {
 			if (is_array($to_already_selected))
 			{
 				if (!in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
@@ -427,8 +417,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 	// we separate the $to_already_selected array (containing groups AND users into
 	// two separate arrays
 	$groupuser = array();
-	if (is_array($to_already_selected))
-	{
+	if (is_array($to_already_selected)) {
 		$groupuser=separate_users_groups($to_already_selected);
 	}
 	$groups_to_already_selected=$groupuser['groups'];

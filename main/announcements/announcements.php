@@ -893,8 +893,8 @@ if (!$surveyid) {
 
 if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath') {
 	echo "\n\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
-	echo "\t<tr>\n";
-	echo "\t\t<td width=\"20%\" valign=\"top\">\n";
+	echo "<tr>\n";
+	echo "<td width=\"20%\" valign=\"top\">\n";
 }
 
 /*
@@ -902,12 +902,12 @@ if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath') {
 */
 if (!$surveyid) {
 	if ($display_title_list == true) {
-		echo "\t\t\t<table>\n";
+		echo "<table>\n";
 		while ($myrow = Database::fetch_array($result)) {
 			$title = $myrow['title'];
 			$title = Security::remove_XSS($title);
-			echo "\t\t\t\t<tr>\n";
-			echo "\t\t\t\t\t<td width=\"15%\">\n";
+			echo "<tr>\n";
+			echo "<td width=\"15%\">\n";
 			if ($myrow['visibility']==0) {
 				$class="class=\"invisible\"";
 			} else {
@@ -916,18 +916,18 @@ if (!$surveyid) {
 			//validation when belongs to a session
 			$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
 
-			echo "\t\t\t\t\t\t".Display::return_icon('lp_announcement.png', api_convert_and_format_date($myrow['end_date'], DATE_FORMAT_LONG), array('align' => 'absmiddle', 'Width' => '10', 'Height' => '10'))."  <a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title, $length) . "</a>\n" . $session_img;
-			echo "\t\t\t\t\t</td>\n\t\t\t\t</tr>\n";
+			echo Display::return_icon('lp_announcement.png', api_convert_and_format_date($myrow['end_date'], DATE_FORMAT_LONG), array('align' => 'absmiddle', 'Width' => '10', 'Height' => '10'))."  <a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title, $length) . "</a>\n" . $session_img;
+			echo "</td>\n</tr>\n";
 		}
-		echo "\t\t\t</table>\n";
+		echo "</table>\n";
 	} // end $display_title_list == true
 }
 
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
-	echo   "\t\t</td>\n";
-	echo "\t\t<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>\n";
+	echo   "</td>\n";
+	echo "<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>\n";
 	// START RIGHT PART
-	echo	"\t\t<td valign=\"top\">\n";
+	echo	"<td valign=\"top\">\n";
 }
 
 /*
@@ -1310,7 +1310,7 @@ if ($display_announcement_list && !$surveyid) {
 	$iterator = 1;
 	$bottomAnnouncement = $announcement_number;
 
-	echo "\t\t\t<table width=\"100%\" class=\"data_table\">\n";
+	echo "<table width=\"100%\" class=\"data_table\">\n";
 
 	$displayed=array();
 
@@ -1339,46 +1339,46 @@ if ($display_announcement_list && !$surveyid) {
 				$style = '';
 			}
 
-			echo	"\t\t\t\t<tr class=\"".$style."\">";
+			echo	"<tr class=\"".$style."\">";
 
 			/* THE ICONS */
 
-			echo "\t\t\t\t\t<th>\n";
+			echo "<th>\n";
 			// anchoring
 			echo "<a name=\"".(int)($myrow["id"])."\"></a>\n";
 			// User or group icon
 			if ($myrow['to_group_id']!== '0' and $myrow['to_group_id']!== 'NULL') {
-				echo "\t\t\t\t\t\t".Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'))."\n";
+				echo Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'))."\n";
 			}
 			// the email icon
 			if ($myrow['email_sent'] == '1') {
-				echo "\t\t\t\t\t\t".Display::return_icon('email.gif', get_lang('AnnounceSentByEmail'))."\n";
+				echo Display::return_icon('email.gif', get_lang('AnnounceSentByEmail'))."\n";
 			}
-			echo "\t\t\t\t\t</th>\n";
+			echo "</th>\n";
 
 			/* TITLE */
 
-			echo "\t\t\t\t\t<th>".Security::remove_XSS($title)."</th>\n";
-			echo "\t\t\t\t\t<th>" . get_lang("SentTo") . " : &nbsp; ";
+			echo "<th>".Security::remove_XSS($title)."</th>\n";
+			echo "<th>" . get_lang("SentTo") . " : &nbsp; ";
 
 			$sent_to=sent_to("announcement", $myrow['id']);
 			$sent_to_form=sent_to_form($sent_to);
 			$user_info=api_get_user_info($myrow['insert_user_id']);
 
 			echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.str_replace(' ', '&nbsp;', api_get_person_name($user_info['firstName'], $user_info['lastName']));
-			echo "\t\t\t\t\t</th>\n","\t\t\t\t</tr>\n";
-			echo "\t\t\t\t<tr class='row_odd'>\n\t\t\t\t\t<td class=\"announcements_datum\" colspan=\"3\">";
+			echo "</th></tr>";
+			echo "<tr class='row_odd'>\n<td class=\"announcements_datum\" colspan=\"3\">";
 			echo get_lang('AnnouncementPublishedOn')," : ", api_convert_and_format_date($last_post_datetime, DATE_FORMAT_LONG, date_default_timezone_get());
-			echo "</td>\n\t\t\t\t</tr>\n";
+			echo "</td>\n</tr>\n";
 
 			/* CONTENT */
 
-			echo "\t\t\t\t<tr class=\"$text_style\">\n\t\t\t\t\t<td colspan=\"3\">\n";
-			echo $content."\t\t\t\t\t</td>\n\t\t\t\t</tr>\n";
+			echo "<tr class=\"$text_style\">\n<td colspan=\"3\">\n";
+			echo $content."</td>\n</tr>";
 
 			/* RESOURCES */
 
-			echo "<tr class='row_odd'>\n<td colspan=\"3\">\n";
+			echo "<tr class='row_odd'><td colspan=\"3\">";
 
 			if (check_added_resources("Ad_Valvas", $myrow["id"])) {
 				echo "<i>".get_lang('AddedResources')."</i><br />";
@@ -1448,7 +1448,7 @@ if ($display_announcement_list && !$surveyid) {
 				}
 
 
-				echo "</td>\n</tr>\n";
+				echo "</td></tr>";
 
 				$iterator ++;
 			} else { // end of is_allowed_to_edit

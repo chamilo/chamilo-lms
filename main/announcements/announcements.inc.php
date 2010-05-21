@@ -1,18 +1,13 @@
-<?php //$Id: announcements.inc.php 21903 2009-07-08 17:28:02Z juliomontoya $
+<?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * Include file with functions for the announcements module.
-* @package dokeos.announcements
-==============================================================================
+* @package chamilo.announcements
 */
 
 $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-
 /*
-==============================================================================
 		DISPLAY FUNCTIONS
-==============================================================================
 */
 /**
 * displays one specific announcement
@@ -20,10 +15,8 @@ $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATT
 * @todo remove globals
 * @todo more security checking
 */
-function display_announcement($announcement_id)
-{
+function display_announcement($announcement_id) {
 	global $_user, $dateFormatLong;
-
 	if ($announcement_id != strval(intval($announcement_id))) { return false; } // potencial sql injection
 
 	$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -61,45 +54,44 @@ function display_announcement($announcement_id)
 		list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
 	}
 
-	echo "<table height=\"100\" width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">\n";
-	echo "<tr class=\"data\"><td>" . $title . "</td></tr>\n";
-	echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()) . "</td></tr>\n";
-	echo "<tr class=\"text\"><td>$content</td></tr>\n";
+	echo "<table height=\"100\" width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">";
+	echo "<tr class=\"data\"><td>" . $title . "</td></tr>";
+	echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()) . "</td></tr>";
+	echo "<tr class=\"text\"><td>$content</td></tr>";
 	echo "</table>";
 }
 
-/*======================================
+/*
 	          SHOW_TO_FORM
-======================================*/
+*/
 /**
 * this function shows the form for sending a message to a specific group or user.
 */
-function show_to_form($to_already_selected)
-{
+function show_to_form($to_already_selected) {
 	$user_list=get_course_users();
 	$group_list=get_course_groups();
 
 	if ($to_already_selected == "")
           $to_already_selected = array();
 
-	echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
-	echo "\t<tr>\n";
+	echo "<table id=\"recipient_list\" style=\"display: none;\">";
+	echo "\t<tr>";
 
 	// the form containing all the groups and all the users of the course
-	echo "\t\t<td>\n";
+	echo "<td>";
 	echo "<strong>".get_lang('Users')."</strong><br />";
 	construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
-	echo "\t\t</td>\n";
+	echo "</td>";
 
 	// the buttons for adding or removing groups/users
-	echo "\n\t\t<td valign=\"middle\">\n";
-	/*echo "\t\t<input	type=\"button\"	",
+	echo "<td valign=\"middle\">";
+	/*echo "<input	type=\"button\"	",
 				"onClick=\"javascript: move(this.form.elements[0],this.form.elements[3])\" ",// 7 & 4 : fonts
 				"value=\"   >>   \">",
 
-				"\n\t\t<p>&nbsp;</p>",
+				"<p>&nbsp;</p>",
 
-				"\n\t\t<input	type=\"button\"",
+				"<input	type=\"button\"",
 				"onClick=\"javascript: move(this.form.elements[3],this.form.elements[0])\" ",
 				"value=\"   <<   \">";*/
 
@@ -108,28 +100,28 @@ function show_to_form($to_already_selected)
 <br /> <br />
 <button class="arrowl" type="button" onClick="javascript: move(this.form.elements[3], this.form.elements[0])" onClick="javascript: move(this.form.elements[3], this.form.elements[0])"></button>
 <?php
-	echo "\t\t</td>\n";
-	echo "\n\t\t<td>\n";
+	echo "</td>";
+	echo "<td>";
 
 	// the form containing the selected groups and users
 	echo "<strong>".get_lang('DestinationUsers')."</strong><br />";
 	construct_selected_select_form($group_list,$user_list,$to_already_selected);
-	echo "\t\t</td>\n";
-	echo "\t</tr>\n";
+	echo "</td>";
+	echo "</tr>";
 	echo "</table>";
 }
 
 
-/*===========================================
+/*
 	  CONSTRUCT_NOT_SELECT_SELECT_FORM
-===========================================*/
+*/
 /**
 * this function shows the form for sending a message to a specific group or user.
 */
 function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected)
 {
 
-	echo "\t\t<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>\n";
+	echo "<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>";
 	// adding the groups to the select form
 	if ($group_list)
 	{
@@ -139,14 +131,14 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 			{
 				if (!in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
 				{
-					echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+					echo	"<option value=\"GROUP:".$this_group['id']."\">",
 					"G: ",$this_group['name']," - " . $this_group['userNb'] . " " . get_lang('Users') .
-					"</option>\n";
+					"</option>";
 				}
 			}
 		}
 		// a divider
-		echo	"\t\t<option value=\"\">---------------------------------------------------------</option>\n";
+		echo	"<option value=\"\">---------------------------------------------------------</option>";
 	}
 	// adding the individual users to the select form
 	if ($user_list) {
@@ -155,21 +147,21 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 			if (is_array($to_already_selected)) {
 				if (!in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 				{
-					echo	"\t\t<option value=\"USER:".$this_user['user_id']."\">",
+					echo	"<option value=\"USER:".$this_user['user_id']."\">",
 						"", api_get_person_name($this_user['firstname'], $this_user['lastname']),
-						"</option>\n";
+						"</option>";
 				}
 			}
 		}
 	}
-	echo "\t\t</select>\n";
+	echo "</select>";
 }
 
 
 
-/*==========================================
+/*
 	   CONSTRUCT_SELECTED_SELECT_FORM
-==========================================*/
+*/
 /**
 * this function shows the form for sending a message to a specific group or user.
 */
@@ -190,20 +182,20 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 	$ref_array_users=get_course_users();
 
 	// we construct the form of the already selected groups / users
-	echo "\t\t<select name=\"selectedform[]\" size=\"5\" multiple style=\"width:200px\" width=\"200px\">";
+	echo "<select name=\"selectedform[]\" size=\"5\" multiple style=\"width:200px\" width=\"200px\">";
 	if (is_array($to_already_selected)) {
 		foreach($to_already_selected as $groupuser)
 		{
 			list($type,$id)=explode(":",$groupuser);
 			if ($type=="GROUP")
 			{
-				echo "\t\t<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
+				echo "<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
 			}
 			else
 			{
 				foreach($ref_array_users as $key=>$value){
 					if($value['user_id']==$id){
-						echo "\t\t<option value=\"".$groupuser."\">".api_get_person_name($value['firstname'], $value['lastname'])."</option>";
+						echo "<option value=\"".$groupuser."\">".api_get_person_name($value['firstname'], $value['lastname'])."</option>";
 						break;
 					}
 				}
@@ -219,9 +211,9 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 					//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
 					if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
 					{
-						echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+						echo	"<option value=\"GROUP:".$this_group['id']."\">",
 							"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
-							"</option>\n";
+							"</option>";
 					}
 				}
 			}
@@ -230,14 +222,14 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 			{
 				if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 				{
-					echo	"\t\t<option value=\"USER:",$this_user['user_id'],"\">",
+					echo	"<option value=\"USER:",$this_user['user_id'],"\">",
 						"", api_get_person_name($this_user['firstname'], $this_user['lastname']),
-						"</option>\n";
+						"</option>";
 				}
 			}
 		}
 	}
-	echo "</select>\n";
+	echo "</select>";
 }
 
 
@@ -247,29 +239,29 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 function show_to_form_group($group_id)
 {
 
-	echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
-	echo "\t<tr>\n";
+	echo "<table id=\"recipient_list\" style=\"display: none;\">";
+	echo "<tr>";
 
-	echo "\t\t<td>\n";
+	echo "<td>";
 
-	echo "\t\t<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>\n";
+	echo "<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>";
 	$group_users = GroupManager::get_subscribed_users($group_id);
 	foreach ($group_users as $user){
 		echo '<option value="'.$user['user_id'].'">'.api_get_person_name($user['firstname'], $user['lastname']).'</option>';
 	}
 	echo '</select>';
 
-	echo "\t\t</td>\n";
+	echo "</td>";
 
 	// the buttons for adding or removing groups/users
-	echo "\n\t\t<td valign=\"middle\">\n";
-	/*echo "\t\t<input	type=\"button\"	",
+	echo "<td valign=\"middle\">";
+	/*echo "<input	type=\"button\"	",
 				"onClick=\"move(this.form.elements[1],this.form.elements[4])\" ",// 7 & 4 : fonts
 				"value=\"   >>   \">",
 
-				"\n\t\t<p>&nbsp;</p>",
+				"<p>&nbsp;</p>",
 
-				"\n\t\t<input	type=\"button\"",
+				"<input	type=\"button\"",
 				"onClick=\"move(this.form.elements[4],this.form.elements[1])\" ",
 				"value=\"   <<   \">";*/
 
@@ -278,22 +270,20 @@ function show_to_form_group($group_id)
 <br /> <br />
 <button class="arrowl" type="button" onClick="javascript: move(this.form.elements[4], this.form.elements[1])" onClick="javascript: move(this.form.elements[4], this.form.elements[1])"></button>
 <?php
-	echo "\t\t</td>\n";
-	echo "\n\t\t<td>\n";
+	echo "</td>";
+	echo "<td>";
 
-	echo "\t\t<select name=\"selectedform[]\" size=5 style=\"width:200px\" multiple>\n";
+	echo "<select name=\"selectedform[]\" size=5 style=\"width:200px\" multiple>";
 	echo '</select>';
 
-	echo "\t\t</td>\n";
-	echo "\t</tr>\n";
+	echo "</td>";
+	echo "</tr>";
 	echo "</table>";
 }
 
 
 /*
-==============================================================================
 		DATA FUNCTIONS
-==============================================================================
 */
 
 /**
@@ -331,9 +321,10 @@ function get_course_groups()
 	return $new_group_list;
 }
 
-/*======================================
+/*
+ * 
 	          LOAD_EDIT_USERS
-======================================*/
+*/
 /**
 * This tools loads all the users and all the groups who have received
 * a specific item (in this case an announcement item)
@@ -371,9 +362,9 @@ function load_edit_users($tool, $id)
 
 
 
-/*======================================
+/*
 	 USER_GROUP_FILTER_JAVASCRIPT
-======================================*/
+*/
 /**
 * returns the javascript for setting a filter
 * this goes into the $htmlHeadXtra[] array
@@ -393,9 +384,9 @@ function user_group_filter_javascript()
 }
 
 
-/*======================================
+/*
 	         TO_JAVASCRIPT
-========================================*/
+*/
 /**
 * returns all the javascript that is required for easily
 * setting the target people/groups
@@ -552,9 +543,9 @@ function plus_attachment() {
 }
 
 
-/*======================================
+/*
 			SENT_TO_FORM
-======================================*/
+*/
 /**
 * constructs the form to display all the groups and users the message has been sent to
 * input: 	$sent_to_array is a 2 dimensional array containing the groups and the users
@@ -593,14 +584,14 @@ function sent_to_form($sent_to_array)
 	// starting the form if there is more than one user/group
 	if ($total_numbers >1)
 	{
-		$output="<select name=\"sent to\">\n";
+		$output="<select name=\"sent to\">";
 		$output.="<option>".get_lang("SentTo")."</option>";
 		// outputting the name of the groups
 		if (is_array($sent_to_array['groups']))
 		{
 			foreach ($sent_to_array['groups'] as $group_id)
 			{
-				$output.="\t<option value=\"\">G: ".$group_names[$group_id]['name']."</option>\n";
+				$output.="<option value=\"\">G: ".$group_names[$group_id]['name']."</option>";
 			}
 		}
 
@@ -611,13 +602,13 @@ function sent_to_form($sent_to_array)
 				foreach ($sent_to_array['users'] as $user_id)
 				{
 					$user_info = api_get_user_info($user_id);
-					$output.="\t<option value=\"\">".api_get_person_name($user_info['firstname'], $user_info['lastname'])."</option>\n";
+					$output.="<option value=\"\">".api_get_person_name($user_info['firstname'], $user_info['lastname'])."</option>";
 				}
 			}
 		}
 
 		// ending the form
-		$output.="</select>\n";
+		$output.="</select>";
 	}
 	else // there is only one user/group
 	{
@@ -643,9 +634,9 @@ function sent_to_form($sent_to_array)
 }
 
 
-/*======================================
+/*
 			SEPARATE_USERS_GROUPS
-	======================================*/
+*/
 /**
 * This function separates the users from the groups
 * users have a value USER:XXX (with XXX the dokeos id
@@ -674,9 +665,9 @@ function separate_users_groups($to)
 
 
 
-/*======================================
+/*
 	 			SENT_TO()
-  ======================================*/
+*/
 /**
 * Returns all the users and all the groups a specific announcement item
 * has been sent to
@@ -776,8 +767,7 @@ function change_visibility_announcement($tool,$id)
 function store_advalvas_item($emailTitle, $newContent, $order, $to, $file = array(), $file_comment='') {
 
 	global $_course;
-	global $nameTools;
-	global $_user;
+	global $nameTools;	
 
 	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 	$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -809,7 +799,7 @@ function store_advalvas_item($emailTitle, $newContent, $order, $to, $file = arra
 		{
 			foreach ($send_to['groups'] as $group)
 			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], $group);
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), $group);
 			}
 		}
 
@@ -818,23 +808,21 @@ function store_advalvas_item($emailTitle, $newContent, $order, $to, $file = arra
 		{
 			foreach ($send_to['users'] as $user)
 			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], '', $user);
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '', $user);
 			}
 		}
 	}
 	else // the message is sent to everyone, so we set the group to 0
 	{
-		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], '0');
+		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '0');
 	}
 	return $last_id;
 }
 
 
-function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_users, $file = array(), $file_comment='')
-{
+function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_users, $file = array(), $file_comment='') {
 	global $_course;
 	global $nameTools;
-	global $_user;
 
 	// database definitions
 	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -868,7 +856,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 		{
 			foreach ($send_to['groups'] as $group)
 			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], $group);
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), $group);
 			}
 		}
 	}
@@ -879,7 +867,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 		{
 			foreach ($to_users as $user)
 			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], '', $user);
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '', $user);
 			}
 		}
 	}
@@ -901,8 +889,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $fi
 
 	global $_course;
 	global $nameTools;
-	global $_user;
-
+	
 	global $tbl_announcement;
 	global $tbl_item_property;
 
@@ -940,7 +927,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $fi
 		{
 			foreach ($send_to['groups'] as $group)
 			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_user['user_id'], $group);
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), $group);
 			}
 		}
 		// storing the selected users
@@ -948,21 +935,19 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $fi
 		{
 			foreach ($send_to['users'] as $user)
 			{
-					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_user['user_id'], 0, $user);
+					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), 0, $user);
 			}
 		}
 	}
 	else // the message is sent to everyone, so we set the group to 0
 	{
-		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_user['user_id'], '0');
+		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), '0');
 	}
 }
 
 
 /*
-==============================================================================
 		MAIL FUNCTIONS
-==============================================================================
 */
 
 /**

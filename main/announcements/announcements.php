@@ -3,7 +3,7 @@
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: code cleaning
- * @author Julio MMontoya <gugli100@gmail.com>, MORE code cleaning
+ * @author Julio Montoya <gugli100@gmail.com>, MORE code cleaning
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
  *			 Announcements tool and also add the resource linker here. The database also needed refactoring
  *			 as there was no title field (the title was merged into the content field)
@@ -67,11 +67,10 @@ $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 $_SESSION['source_type']="Ad_Valvas";
 include '../resourcelinker/resourcelinker.inc.php';
 
-if (!empty($_POST['addresources'])) // When the "Add Resource" button is clicked we store all the form data into a session
-{
-	include('announcements.inc.php');
-
-    $form_elements= array ('emailTitle'=>stripslashes($emailTitle), 'newContent'=>stripslashes($newContent), 'id'=>$id, 'to'=>$selectedform, 'emailoption'=>$email_ann);
+if (!empty($_POST['addresources'])) {
+	// When the "Add Resource" button is clicked we store all the form data into a session
+	require_once 'announcements.inc.php';
+    $form_elements= array ('emailTitle'=>Security::remove_XSS($emailTitle), 'newContent'=>Security::remove_XSS($newContent), 'id'=>$id, 'to'=>$selectedform, 'emailoption'=>$email_ann);
     $_SESSION['formelements']=$form_elements;
 
     if($id) // this is to correctly handle edits
@@ -314,9 +313,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		}
 	}
 
-/*
-	Delete announcement
-*/
+	/*
+		Delete announcement
+	*/
 	if (!empty($_GET['action']) AND $_GET['action']=='delete' AND isset($_GET['id'])) {
 		//Database::query("DELETE FROM  $tbl_announcement WHERE id='$delete'");
 		$id=intval(addslashes($_GET['id']));
@@ -341,17 +340,15 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		}
 	}
 
-/*
-	Delete all announcements
-*/
+	/*
+		Delete all announcements
+	*/
 	if (!empty($_GET['action']) and $_GET['action']=='delete_all') {
 
 		//Database::query("DELETE FROM $tbl_announcement");
 		if (api_is_allowed_to_edit()) {
 			Database::query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."'");
-
 			delete_all_resources_type("Ad_Valvas");
-
 			$id = null;
 			$emailTitle = null;
 			$newContent = null;
@@ -360,9 +357,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		}
 	}
 
-/*
-	Modify announcement
-*/
+	/*
+		Modify announcement
+	*/
 	if (!empty($_GET['action']) and $_GET['action']=='modify' AND isset($_GET['id'])) {
 		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
@@ -402,9 +399,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 	}
 
-/*
-	Move announcement up/down
-*/
+	/*
+		Move announcement up/down
+	*/
+	
 	if ($ctok == $_GET['sec_token']) {
 		if (!empty($_GET['down'])) {
 			$thisAnnouncementId = intval($_GET['down']);
@@ -458,9 +456,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		$message = get_lang('AnnouncementMoved');
 	}
 
-/*
-	Submit announcement
-*/
+	/*
+		Submit announcement
+	*/
 	//if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 
 	$emailTitle=(!empty($_POST['emailTitle'])?$safe_emailTitle:'');
@@ -483,7 +481,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			if ($ctok == $_POST['sec_token']) {
 				$file_comment = $_POST['file_comment'];
 				$file = $_FILES['user_upload'];
-				$edit_id = edit_advalvas_item($id,$emailTitle,$newContent,$_POST['selectedform'],$file,$file_comment);
+				$edit_id = edit_advalvas_item($id,	$emailTitle, $newContent, $_POST['selectedform'], $file, $file_comment);
 				if (!$delete) {
 				    update_added_resources("Ad_Valvas", $id);
 				}
@@ -500,18 +498,17 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					$file = $_FILES['user_upload'];
 					$file_comment = $_POST['file_comment'];
 					if (!empty($_SESSION['toolgroup'])) {
-						$insert_id=store_advalvas_group_item($safe_emailTitle,$safe_newContent,$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform'],$file,$file_comment);
+						$insert_id = store_advalvas_group_item($safe_emailTitle,$safe_newContent,$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform'],$file,$file_comment);
 					} else {
-						$insert_id=store_advalvas_item($safe_emailTitle,$safe_newContent,$order,$_POST['selectedform'],$file,$file_comment);
+						
+						$insert_id = store_advalvas_item($safe_emailTitle, $safe_newContent, $order, $_POST['selectedform'], $file, $file_comment);
 					}
 				    store_resources($_SESSION['source_type'],$insert_id);
 				    $_SESSION['select_groupusers']="hide";
 				    $message = get_lang('AnnouncementAdded');
 				}
 
-/*
-		MAIL WHEN USER COMES FROM SURVEY
-*/
+				/*		MAIL WHEN USER COMES FROM SURVEY	*/
 
 				if ($_POST['emailsAdd']) {
 
@@ -569,9 +566,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					}
 				}
 
-/*
-		MAIL FUNCTION
-*/
+				/*		MAIL FUNCTION	*/
 
 				if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
 
@@ -581,16 +576,11 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 			        // groepen omzetten in users
 			        if ($grouplist) {
-
 						$grouplist = "'".implode("', '",$grouplist)."'";	//protect individual elements with surrounding quotes
 						$sql = "SELECT user_id
 								FROM $tbl_groupUser gu
 								WHERE gu.group_id IN (".$grouplist.")";
-
-
 						$groupMemberResult = Database::query($sql);
-
-
 						if ($groupMemberResult) {
 							while ($u = Database::fetch_array($groupMemberResult)) {
 								$userlist [] = $u ['user_id']; // complete the user id list ...
@@ -598,48 +588,39 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 						}
 					}
 
-
 				    if (is_array($userlist)) {
 				    	$userlist = "'".implode("', '", array_unique($userlist) )."'";
 
 				    	// send to the created 'userlist'
 					    $sqlmail = "SELECT user_id, lastname, firstname, email
-						       					 FROM $tbl_user
-						       					 WHERE user_id IN (".$userlist.")";
+									FROM $tbl_user
+						       		WHERE user_id IN (".$userlist.")";
 				    } else if (empty($_POST['not_selected_form'])) {
 			    		if(empty($_SESSION['id_session']) || api_get_setting('use_session_mode')=='false') {
 				    		// send to everybody
 				    		$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
-					                     FROM $tbl_course_user, $tbl_user
-					                     WHERE course_code='".Database::escape_string($_course['sysCode'])."'
-					                     AND course_rel_user.user_id = user.user_id AND relation_type <>".COURSE_RELATION_TYPE_RRHH." ";
+					                    FROM $tbl_course_user, $tbl_user
+					                    WHERE course_code='".Database::escape_string($_course['sysCode'])."'
+					                    AND course_rel_user.user_id = user.user_id AND relation_type <>".COURSE_RELATION_TYPE_RRHH." ";
 			    		} else {
 			    			$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
-					                     FROM $tbl_user
-										 INNER JOIN $tbl_session_course_user
-										 	ON $tbl_user.user_id = $tbl_session_course_user.id_user
-											AND $tbl_session_course_user.course_code = '".$_course['id']."'
-											AND $tbl_session_course_user.id_session = ".api_get_session();
+					                    FROM $tbl_user
+										INNER JOIN $tbl_session_course_user
+										ON $tbl_user.user_id = $tbl_session_course_user.id_user
+										AND $tbl_session_course_user.course_code = '".$_course['id']."'
+										AND $tbl_session_course_user.id_session = ".api_get_session();
 
 			    		}
 			    	}
 
 					if ($sqlmail != '') {
 						$rs_mail = Database::query($sqlmail);
-				    	/*=================================================================================
-							    				send email one by one to avoid antispam
-					    =================================================================================*/
+						
+				    	/*	Send email one by one to avoid antispam */
+				    	
 						$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);
 						while ($myrow = Database::fetch_array($rs_mail)) {
-							/*    Header : Bericht van uw lesgever - GES ($_cid)
-
-								  Body :   John Doe (prenom + nom) <john_doe@hotmail.com> (email)
-
-								  		   Morgen geen les!! (emailTitle)
-
-								  		   Morgen is er geen les, de les wordt geschrapt wegens vergadering (newContent)
-						    */
-
+							
 							$emailSubject = "[" . $_course['official_code'] . "] " . $emailTitle;
 
 	                        if ($surveyid) {
@@ -652,39 +633,38 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	                			$message=stripslashes($newContentsix);
 							    $sender_name = api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
 							    $email = $_SESSION['_user']['mail'];
-								$headers="From:$sender_name\r\nReply-to: $email";
-								//@mail($myrow["email"],stripslashes($emailTitle),$message,$headers);
+								$headers="From:$sender_name\r\nReply-to: $email";							
 								@api_mail('',$myrow["email"],stripslashes($emailTitle),$message,$sender_name,$email);
 	                        } else {
 	                            // intro of the email: receiver name and subject
-                                    $mail_body = api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS)."<br />\n".stripslashes($emailTitle)."<br />";
+                                $mail_body = api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS)."<br />\n".stripslashes($emailTitle)."<br />";
 
-	                            // main part of the email
+	                            // Main part of the email
 	                            $mail_body .= trim(stripslashes($newContent));
-                                    // signature of email: sender name and course URL after -- line
+                                // Signature of email: sender name and course URL after -- line
 	                            $mail_body .= "<br />-- <br />";
 	                            $mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)." \n";
 	                            $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq()."\">";
 	                            $mail_body .= $_course['official_code'].' '.$_course['name'] . "</a>";
 
-                                    $recipient_name	= api_get_person_name($myrow["firstname"], $myrow["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
-                                    $mailid = $myrow["email"];
+                                $recipient_name	= api_get_person_name($myrow["firstname"], $myrow["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
+                                $mailid = $myrow["email"];
 
-                                    $sender_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
-                                    $sender_email = $_SESSION['_user']['mail'];
+                                $sender_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
+                                $sender_email = $_SESSION['_user']['mail'];
 
-                                    // send attachment file
-                                    $data_file = array();
-                                    $sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.' WHERE announcement_id = "'.$insert_id.'"';
-                                    $rs_attach = Database::query($sql);
-                                    if (Database::num_rows($rs_attach) > 0) {
-                                            $row_attach  = Database::fetch_array($rs_attach);
-                                            $path_attach = api_get_path(SYS_COURSE_PATH).$_course['path'].'/upload/announcements/'.$row_attach['path'];
-                                            $filename_attach = $row_attach['filename'];
-                                            $data_file = array('path' => $path_attach,'filename' => $filename_attach);
-                                    }
+                                // send attachment file
+                                $data_file = array();
+                                $sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.' WHERE announcement_id = "'.$insert_id.'"';
+                                $rs_attach = Database::query($sql);
+                                if (Database::num_rows($rs_attach) > 0) {
+                                        $row_attach  = Database::fetch_array($rs_attach);
+                                        $path_attach = api_get_path(SYS_COURSE_PATH).$_course['path'].'/upload/announcements/'.$row_attach['path'];
+                                        $filename_attach = $row_attach['filename'];
+                                        $data_file = array('path' => $path_attach,'filename' => $filename_attach);
+                                }
 
-                                    @api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file, true);
+                                @api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file, true);
 	                        }
 
 							$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";
@@ -717,7 +697,6 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 						update_mail_sent($insert_id);
 						$message = $added_and_sent;
 					}
-
 				} // $email_ann*/
 			} // end condition token
 		}	// isset

@@ -1,9 +1,10 @@
-<?php //$Id: announcements.php 2009-11-13 18:56:45Z aportugal $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: code cleaning
  * @author Julio Montoya <gugli100@gmail.com>, MORE code cleaning
+ * 
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
  *			 Announcements tool and also add the resource linker here. The database also needed refactoring
  *			 as there was no title field (the title was merged into the content field)
@@ -61,6 +62,18 @@ $tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
+
+/*	Libraries	*/
+
+$lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
+require_once $lib.'groupmanager.lib.php';
+require_once $lib.'mail.lib.inc.php';
+require_once $lib.'debug.lib.inc.php';
+require_once $lib.'tracking.lib.php';
+require_once $lib.'fckeditor/fckeditor.php';
+require_once $lib.'fileUpload.lib.php';
+require_once 'announcements.inc.php';
+
 /*
 	Resource linker
 */
@@ -69,11 +82,9 @@ $_SESSION['source_type']="Ad_Valvas";
 require_once '../resourcelinker/resourcelinker.inc.php';
 
 if (!empty($_POST['addresources'])) {
-	// When the "Add Resource" button is clicked we store all the form data into a session
-	require_once 'announcements.inc.php';
+	// When the "Add Resource" button is clicked we store all the form data into a session	
     $form_elements= array ('emailTitle'=>Security::remove_XSS($emailTitle), 'newContent'=>Security::remove_XSS($newContent), 'id'=>$id, 'to'=>$selectedform, 'emailoption'=>$email_ann);
     $_SESSION['formelements']=$form_elements;
-
     if($id) {
     	// this is to correctly handle edits
 		$action="edit";
@@ -98,16 +109,7 @@ if (!empty($_POST['addresources'])) {
 event_access_tool(TOOL_ANNOUNCEMENT);
 
 
-/*	Libraries	*/
 
-$lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
-require_once $lib.'groupmanager.lib.php';
-require_once $lib.'mail.lib.inc.php';
-require_once $lib.'debug.lib.inc.php';
-require_once $lib.'tracking.lib.php';
-require_once $lib.'fckeditor/fckeditor.php';
-require_once $lib.'fileUpload.lib.php';
-require_once 'announcements.inc.php';
 /*	POST TO	*/
 
 $safe_emailTitle = $_POST['emailTitle'];
@@ -289,7 +291,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			}
 			if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])) {
 				if ($ctok == $_GET['sec_token']) {
-					change_visibility_announcement($_GET['id']);
+					AnnouncementManager::change_visibility_announcement($_course, $_GET['id']);
 					$message = get_lang('VisibilityChanged');
 				}
 			}
@@ -310,7 +312,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 			// tooledit : visibility = 2 : only visibile for platform administrator
 			if ($ctok == $_GET['sec_token']) {				
-				delete_announcement($_course, $id);
+				AnnouncementManager::delete_announcement($_course, $id);
 				delete_added_resource("Ad_Valvas", $delete);
 
 				$id = null;
@@ -325,13 +327,11 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		Delete all announcements
 	*/
 	if (!empty($_GET['action']) and $_GET['action']=='delete_all') {
-		if (api_is_allowed_to_edit()) {
-			Database::query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."'");
-			delete_all_resources_type("Ad_Valvas");
+		if (api_is_allowed_to_edit()) {			
+			AnnouncementManager::delete_all_announcements($_course);
 			$id = null;
 			$emailTitle = null;
 			$newContent = null;
-
 			$message = get_lang('AnnouncementDeletedAll');
 		}
 	}
@@ -587,7 +587,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 										INNER JOIN $tbl_session_course_user
 										ON $tbl_user.user_id = $tbl_session_course_user.id_user
 										AND $tbl_session_course_user.course_code = '".$_course['id']."'
-										AND $tbl_session_course_user.id_session = ".api_get_session();
+										AND $tbl_session_course_user.id_session = ".api_get_session_id();
 
 			    		}
 			    	}
@@ -730,13 +730,20 @@ $condition_session = api_get_session_condition($session_id);
 if(api_is_allowed_to_edit(false,true))  {
  	// check teacher status
   	if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
-
+  		
+  		if (api_get_group_id() == 0) {
+			$group_condition = "";
+		} else {
+			$group_condition = "AND (ip.to_group_id='".api_get_group_id()."' OR ip.to_group_id = 0)";
+		}
+		
 		$sql="SELECT
 				announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 				FROM $tbl_announcement announcement, $tbl_item_property ip
 				WHERE announcement.id = ip.ref
 				AND ip.tool='announcement'
 				AND ip.visibility<>'2'
+				$group_condition
 				$condition_session
 				GROUP BY ip.ref
 				ORDER BY display_order DESC
@@ -745,18 +752,28 @@ if(api_is_allowed_to_edit(false,true))  {
 } else {
 	// students only get to see the visible announcements
 
-
 		if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 			$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 
 			if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-				$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".$_user['user_id']."'" .
+				
+				if (api_get_group_id() == 0) {
+					$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".$_user['user_id']."'" .
 						"OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
+				} else {
+					$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."'  
+					OR ip.to_group_id IN (0, ".api_get_group_id()."))";
+				}
 			} else {
-				$cond_user_id = " AND ( ip.to_user_id='".$_user['user_id']."'" .
-						"OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
+				if (api_get_group_id() == 0) {
+						$cond_user_id = " AND ( ip.to_user_id='".$_user['user_id']."'" .
+							"OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
+					} else {
+						$cond_user_id = " AND ( ip.to_user_id='".$_user['user_id']."'" .
+							"OR ip.to_group_id IN (0, ".api_get_group_id().")) ";
+					}
 			}
-
+			
 			// the user is member of several groups => display personal announcements AND his group announcements AND the general announcements
 			if (is_array($group_memberships) && count($group_memberships)>0) {
 				$sql="SELECT
@@ -836,11 +853,13 @@ if (!$surveyid) {
 	}
 
 	if (api_is_allowed_to_edit() && $announcement_number > 1) {
-		if (!$show_actions)
-			echo '<div class="actions">';
-		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('valvesdelete.gif',get_lang('AnnouncementDeleteAll')).get_lang('AnnouncementDeleteAll')."</a>\n";	}	// if announcementNumber > 1
-	if ($show_actions)
-		echo '</div>';
+		if (api_get_group_id() == 0 ) {
+			if (!$show_actions)
+				echo '<div class="actions">';
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('valvesdelete.gif',get_lang('AnnouncementDeleteAll')).get_lang('AnnouncementDeleteAll')."</a>\n";	}	// if announcementNumber > 1			
+		}
+		if ($show_actions)
+				echo '</div>';
 }
 
 if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath') {
@@ -927,8 +946,8 @@ if ($display_form == true) {
 		} elseif (isset($_GET['remind_inactive'])) {
 			$email_ann = '1';
 			$_SESSION['select_groupusers']="show";
-			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'), 7);
-			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));
+			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'), api_get_setting('siteName'), 7);
+			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'));
 		} elseif (isset($_GET['remindallinactives']) && $_GET['remindallinactives']=='true') {
 			// we want to remind inactive users. The $_GET['since'] parameter determines which users have to be warned (i.e the users who have been inactive for x days or more
 			$since = isset($_GET['since']) ? intval($_GET['since']) : 6;
@@ -1018,7 +1037,6 @@ if ($display_form == true) {
 					<span class="form_required">*</span> '.get_lang('EmailTitle').'
 				</div>
 				<div class="formw">
-
 					<input type="text" id="emailTitle" name="emailTitle" value="'.Security::remove_XSS($title_to_modify).'" size="60">
 				</div>
 			</div>';
@@ -1101,24 +1119,28 @@ if ($display_form == true) {
 		DISPLAY ANNOUNCEMENT LIST
 */
 
-
 if ($display_announcement_list && !$surveyid) {
 	// by default we use the id of the current user. The course administrator can see the announcement of other users by using the user / group filter
-	$user_id=$_user['user_id'];
+	//$user_id=$_user['user_id'];	
 	if (isset($_SESSION['user'])) {
-		$user_id=$_SESSION['user'];
+		//$user_id=$_SESSION['user'];
 	}
+	$user_id = api_get_user_id();
+	
 	if (isset($_SESSION['group'])) {
-		$group_id=$_SESSION['group'];
+		//$group_id=$_SESSION['group'];
 	}
+	$group_id = api_get_group_id();
 
 	//$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
-	$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
-
+	
+	$group_memberships = GroupManager::get_group_ids($_course['dbName'],api_get_user_id());
+			
 	if (api_is_allowed_to_edit(false,true)) {
 		// A.1. you are a course admin with a USER filter
 		// => see only the messages of this specific user + the messages of the group (s)he is member of.
-		if (isset($_SESSION['user'])) {
+		if (!empty($_SESSION['user'])) {
+			
 			if (is_array($group_memberships) && count($group_memberships)>0) {
 				$sql="SELECT
 					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
@@ -1141,15 +1163,15 @@ if ($display_announcement_list && !$surveyid) {
 					ORDER BY display_order DESC";
 
 			}
-		} elseif (isset($_SESSION['group'])) {
+		} elseif (api_get_group_id() !=0 ) {			
 			// A.2. you are a course admin with a GROUP filter
 			// => see only the messages of this specific group
-
 			$sql="SELECT
 				announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 				FROM $tbl_announcement announcement, $tbl_item_property ip
 				WHERE announcement.id = ip.ref
 				AND ip.tool='announcement'
+				AND ip.visibility<>'2'
 				AND (ip.to_group_id=$group_id OR ip.to_group_id='0')
 				$condition_session
 				GROUP BY ip.ref
@@ -1160,7 +1182,6 @@ if ($display_announcement_list && !$surveyid) {
 			// => see all the messages of all the users and groups without editing possibilities
 
 			if (isset($isStudentView) and $isStudentView=="true") {
-
 				$sql="SELECT
 					announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 					FROM $tbl_announcement announcement, $tbl_item_property ip
@@ -1182,17 +1203,30 @@ if ($display_announcement_list && !$surveyid) {
 					$condition_session
 					GROUP BY ip.ref
 					ORDER BY display_order DESC";
-
 			}
 		}
 	} else {
 		//STUDENT
 			if (is_array($group_memberships) && count($group_memberships)>0) {
-
+				
 				if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-					$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )) ";
+					
+					if (api_get_group_id() == 0) {
+						//No group
+						$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".$_user['user_id']."'" .
+										"OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
+					} else {
+						$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."'  
+						OR ip.to_group_id IN (0, ".api_get_group_id()."))";
+					}						
+					//$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )) ";
+					
 				} else {
-					$cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
+					if (api_get_group_id() == 0) {
+						$cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
+					} else {
+						$cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".api_get_group_id()."))";
+					}					
 				}
 
 				$sql="SELECT
@@ -1204,6 +1238,7 @@ if ($display_announcement_list && !$surveyid) {
 					$condition_session
 					AND ip.visibility='1'
 					ORDER BY display_order DESC";
+				
 			} else {
 
 				if ($_user['user_id']) {
@@ -1245,9 +1280,9 @@ if ($display_announcement_list && !$surveyid) {
 			}
 
 	}
-
-	$result = Database::query($sql);
-	$num_rows = Database::num_rows($result);
+	
+	$result		= Database::query($sql);
+	$num_rows 	= Database::num_rows($result);
 
 /*
 		DISPLAY: NO ITEMS
@@ -1311,10 +1346,11 @@ if ($display_announcement_list && !$surveyid) {
 			echo "<th>".Security::remove_XSS($title)."</th>\n";
 			echo "<th>" . get_lang("SentTo") . " : &nbsp; ";
 
-			$sent_to=sent_to("announcement", $myrow['id']);
-			$sent_to_form=sent_to_form($sent_to);
-			$user_info=api_get_user_info($myrow['insert_user_id']);
-
+			$sent_to		= sent_to('announcement', $myrow['id']);
+						
+			$sent_to_form	= sent_to_form($sent_to);
+			$user_info		= api_get_user_info($myrow['insert_user_id']);
+			
 			echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.str_replace(' ', '&nbsp;', api_get_person_name($user_info['firstName'], $user_info['lastName']));
 			echo "</th></tr>";
 			echo "<tr class='row_odd'>\n<td class=\"announcements_datum\" colspan=\"3\">";
@@ -1432,7 +1468,7 @@ if ($display_announcement_list && !$surveyid) {
 
 echo "</table>";
 if (!empty($display_specific_announcement)) {
-	display_announcement($announcement_id);
+	AnnouncementManager::display_announcement($announcement_id);
 }
 
 /*		FOOTER		*/

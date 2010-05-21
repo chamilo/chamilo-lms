@@ -5,7 +5,138 @@
 * @package chamilo.announcements
 */
 
-$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+class AnnouncementManager  {
+	
+	private function __construct() {
+	}	
+		
+	/**
+	 * Gets all announcements from a course 
+	 * @param	string course db
+	 * @param	int session id
+	 * @return	array html with the content and count of announcements or false otherwise
+	 */
+	public static function get_all_annoucement_by_course($course_db, $session = 0) {
+		if (empty($course_db)) {
+			return false;
+		}
+		$tbl_announcement	= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db['db_name']);
+		$tbl_item_property  = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
+		/*
+		if (empty($group_id)) {
+			$group_condition = "AND (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id is null)";
+		} else {
+			$group_condition = "AND (toolitemproperties.to_group_id='$group_id')";
+		}
+		$group_condition
+		*/
+			
+		$sql="SELECT DISTINCT announcement.id, announcement.title, announcement.content
+				FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+				WHERE announcement.id = toolitemproperties.ref
+				AND toolitemproperties.tool='announcement'				
+				AND announcement.session_id  = '$session'
+				ORDER BY display_order DESC";
+		$rs = Database::query($sql);
+		$num_rows = Database::num_rows($rs);
+		$result = array();
+		if ($num_rows>0) {
+			$list = array();
+			while ($row = Database::fetch_array($rs)) {
+				$list[] = $row;		
+			}		
+			return $list;
+		}		
+		return false;
+	}
+		
+		
+	/**
+	* This functions swithes the visibility a course resource
+	* using the visibility field in 'item_property'
+	* @param    array	the course array
+	* @param    int     ID of the element of the corresponding type
+	* @return   bool    False on failure, True on success
+	*/
+	public static function change_visibility_announcement($_course, $id) {
+		$item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $id);
+		if ($item_visibility == '1') {
+			api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'invisible', api_get_user_id());
+		} else {
+			api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'visible', api_get_user_id());
+		}	
+	    return true;
+	}
+		
+	/**
+	 * Deletes an announcement
+	 * @param array the course array
+	 * @param int 	the announcement id
+	 */	
+	public static function delete_announcement($_course, $id) {	
+		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'delete', api_get_user_id());
+	}
+	
+	/**
+	 * Deletes all announcements by course
+	 * @param array the course array
+	 */
+	public static function delete_all_announcements($_course) {	
+		$announcements = self::get_all_annoucement_by_course($_course, api_get_session_id());
+		
+		foreach ($announcements  as $annon) {
+			api_item_property_update($_course, TOOL_ANNOUNCEMENT, $annon['id'], 'delete', api_get_user_id());	
+		}	
+	}
+	
+	/**
+	* Displays one specific announcement
+	* @param $announcement_id, the id of the announcement you want to display
+	*/
+	public static function display_announcement($announcement_id) {	
+		if ($announcement_id != strval(intval($announcement_id))) { return false; } // potencial sql injection
+	
+		$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
+		$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+	
+		if (api_get_user_id() != 0) {
+			$sql_query = "	SELECT announcement.*, toolitemproperties.*
+							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+							WHERE announcement.id = toolitemproperties.ref
+							AND announcement.id = '$announcement_id'
+							AND toolitemproperties.tool='announcement'
+							AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id='0')
+							AND toolitemproperties.visibility='1'
+							ORDER BY display_order DESC";
+	
+		} else {
+			$sql_query = "	SELECT announcement.*, toolitemproperties.*
+							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+							WHERE announcement.id = toolitemproperties.ref
+							AND announcement.id = '$announcement_id'
+							AND toolitemproperties.tool='announcement'
+							AND toolitemproperties.to_group_id='0'
+							AND toolitemproperties.visibility='1'";
+		}
+		$sql_result = Database::query($sql_query);
+		$result		= Database::fetch_array($sql_result);
+	
+		if ($result !== false) { // A sanity check.
+			$title		 = $result['title'];
+			$content	 = $result['content'];
+			$content     = make_clickable($content);
+			$content     = text_filter($content);
+			$last_post_datetime = $result['insert_date'];// post time format  datetime de mysql
+			list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
+		}
+	
+		echo "<table height=\"100\" width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">";
+		echo "<tr class=\"data\"><td>" . $title . "</td></tr>";
+		echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()) . "</td></tr>";
+		echo "<tr class=\"text\"><td>$content</td></tr>";
+		echo "</table>";
+	}	
+}
 
 /**
  * Store an announcement in the database (including its attached file if any)
@@ -252,12 +383,8 @@ function get_all_annoucement_by_user_course($course_db, $user_id) {
 		$result = array();
 		if ($num_rows>0) {
 			while ($myrow = Database::fetch_array($rs)) {
-				//if ($i<=4) {
 					$content.= '<strong>'.$myrow['title'].'</strong><br /><br />';
 					$content.= $myrow['content'];
-				/*} else {
-					break;
-				}*/
 				$i++;
 			}
 			$result['content'] = $content;
@@ -269,56 +396,6 @@ function get_all_annoucement_by_user_course($course_db, $user_id) {
 	return false;
 }
 
-/*
-		DISPLAY FUNCTIONS
-*/
-/**
-* Displays one specific announcement
-* @param $announcement_id, the id of the announcement you want to display
-*/
-function display_announcement($announcement_id) {	
-	if ($announcement_id != strval(intval($announcement_id))) { return false; } // potencial sql injection
-
-	$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
-	$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-	if (api_get_user_id() != 0) {
-		$sql_query = "	SELECT announcement.*, toolitemproperties.*
-						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-						WHERE announcement.id = toolitemproperties.ref
-						AND announcement.id = '$announcement_id'
-						AND toolitemproperties.tool='announcement'
-						AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id='0')
-						AND toolitemproperties.visibility='1'
-						ORDER BY display_order DESC";
-
-	} else {
-		$sql_query = "	SELECT announcement.*, toolitemproperties.*
-						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-						WHERE announcement.id = toolitemproperties.ref
-						AND announcement.id = '$announcement_id'
-						AND toolitemproperties.tool='announcement'
-						AND toolitemproperties.to_group_id='0'
-						AND toolitemproperties.visibility='1'";
-	}
-	$sql_result = Database::query($sql_query);
-	$result		= Database::fetch_array($sql_result);
-
-	if ($result !== false) { // A sanity check.
-		$title		 = $result['title'];
-		$content	 = $result['content'];
-		$content     = make_clickable($content);
-		$content     = text_filter($content);
-		$last_post_datetime = $result['insert_date'];// post time format  datetime de mysql
-		list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
-	}
-
-	echo "<table height=\"100\" width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">";
-	echo "<tr class=\"data\"><td>" . $title . "</td></tr>";
-	echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()) . "</td></tr>";
-	echo "<tr class=\"text\"><td>$content</td></tr>";
-	echo "</table>";
-}
 
 /*
 	SHOW_TO_FORM
@@ -532,8 +609,7 @@ function show_to_form_group($group_id) {
 * this function gets all the users of the course,
 * including users from linked courses
 */
-function get_course_users()
-{
+function get_course_users() {
 	//this would return only the users from real courses:
 	//$user_list = CourseManager::get_user_list_from_course_code(api_get_course_id());
 	$session_id = api_get_session_id();
@@ -551,10 +627,8 @@ function get_course_users()
 * this function gets all the groups of the course,
 * not including linked courses
 */
-function get_course_groups()
-{	
-	$session_id = api_get_session_id();
-	
+function get_course_groups() {	
+	$session_id = api_get_session_id();	
 	if ($session_id != 0) {
 		$new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), intval($session_id));
 	} else {	
@@ -810,6 +884,7 @@ function sent_to_form($sent_to_array) {
 	$total_numbers=$number_users+$number_groups;
 
 	// starting the form if there is more than one user/group
+	
 	if ($total_numbers >1) {
 		$output="<select name=\"sent to\">";
 		$output.="<option>".get_lang("SentTo")."</option>";
@@ -836,14 +911,14 @@ function sent_to_form($sent_to_array) {
 			$user_info = api_get_user_info($sent_to_array['users'][0]);
 			echo api_get_person_name($user_info['firstname'], $user_info['lastname']);
 		}
-		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0) {
+		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and isset($sent_to_array['groups'][0]) and $sent_to_array['groups'][0]!==0) {
 			$group_id=$sent_to_array['groups'][0];
-			echo $group_names[$group_id]['name'];
+			echo "&nbsp;".$group_names[$group_id]['name'];
 		}
-		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]==0) {
-			echo get_lang('Everybody');
+		if (empty($sent_to_array['groups']) and empty($sent_to_array['users'])) {
+			echo "&nbsp;".get_lang('Everybody');
 		}
-	}
+	}	
 	if(!empty($output))
 	{
 		echo $output;
@@ -933,32 +1008,8 @@ function sent_to($tool, $id) {
 /*
 	           CHANGE_VISIBILITY($tool,$id)
 */
-/**
-* This functions swithes the visibility a course resource
-* using the visibility field in 'item_property'
-* values: 0 = invisibility for
-* @param    string  The tool (announcement, agenda, ...)
-* @param    int     ID of the element of the corresponding type
-* @return   bool    False on failure, True on success
-*/
-function change_visibility_announcement($id) {
-	global $_course;
-	$item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $id);
-	if ($item_visibility == '1') {
-		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'invisible', api_get_user_id());
-	} else {
-		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'visible', api_get_user_id());
-	}	
-    return true;
-}
 
-function delete_announcement($_course, $id) {	
-	api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'delete', api_get_user_id());
-}
-
-/*
-		ATTACHMENT FUNCTIONS
-*/
+/*		ATTACHMENT FUNCTIONS	*/
 
 /**
  * Show a list with all the attachments according to the post's id

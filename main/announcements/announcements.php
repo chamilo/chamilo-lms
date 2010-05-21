@@ -16,7 +16,7 @@
 		INIT SECTION
 */
 // name of the language file that needs to be included
-$language_file[] = array('announcements', 'group', 'survey');
+$language_file = array('announcements', 'group', 'survey');
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -224,21 +224,20 @@ if (!empty($_SESSION['formelements']) and !empty($_GET['originalresource']) and 
 
 	$email_ann				= $form_elements['emailoption'];
 }
-if(!empty($_GET['remind_inactive']))
-{
+if(!empty($_GET['remind_inactive'])) {
 	$to[] = 'USER:'.intval($_GET['remind_inactive']);
 }
 /*
 	Survey
 */
 $surveyid = 0;
-if(!empty($_REQUEST['publish_survey']))
-{
-	$surveyid=Database::escape_string(Security::remove_XSS($_REQUEST['publish_survey']));
+if(!empty($_REQUEST['publish_survey'])) {
+	$surveyid=intval($_REQUEST['publish_survey']);
 }
+
+//@todo fix those request values 
 $cidReq=Database::escape_string($_REQUEST['cidReq']);
-if($surveyid)
-{
+if($surveyid) {
 	$db_name=Database::escape_string($_REQUEST['db_name']);
 	$sql_temp = "SELECT * FROM $db_name.survey WHERE survey_id='$surveyid'";
 	$res_temp = Database::query($sql_temp);
@@ -1140,8 +1139,6 @@ if ($display_form == true) {
 
 } // displayform
 
-
-
 /*
 		DISPLAY ANNOUNCEMENT LIST
 */
@@ -1478,10 +1475,7 @@ if ($display_announcement_list && !$surveyid) {
 echo "</table>";
 if (!empty($display_specific_announcement)) display_announcement($announcement_id);
 
-
-/*
-		FOOTER
-*/
+/*		FOOTER		*/
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();

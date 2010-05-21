@@ -6,6 +6,268 @@
 */
 
 $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+
+/**
+ * Store an announcement in the database (including its attached file if any)
+ * @param string    Announcement title (pure text)
+ * @param string    Content of the announcement (can be HTML)
+ * @param int       Display order in the list of announcements
+ * @param array     Array of users and groups to send the announcement to
+ * @param array	    uploaded file $_FILES
+ * @param string    Comment describing the attachment
+ * @return int      false on failure, ID of the announcement on success
+ */
+function store_advalvas_item($emailTitle, $newContent, $order, $to, $file = array(), $file_comment='') {
+	global $_course;	
+
+	$tbl_announcement  = Database::get_course_table(TABLE_ANNOUNCEMENT);
+	$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+	// filter data
+	$emailTitle = Database::escape_string($emailTitle);
+	$newContent = Database::escape_string($newContent);
+	$order = intval($order);
+
+	// store in the table announcement
+	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".api_get_session_id();
+	$result = Database::query($sql);
+	if ($result === false) {
+		return false;
+	} else {
+		//Store the attach file
+		$last_id = Database::insert_id();
+		if (!empty($file)) {
+			$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
+		}
+	
+		// store in item_property (first the groups, then the users
+		if (!is_null($to)) {
+			 // !is_null($to): when no user is selected we send it to everyone			 
+			$send_to=separate_users_groups($to);
+			// storing the selected groups
+			if (is_array($send_to['groups'])) {
+				foreach ($send_to['groups'] as $group) {
+					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), $group);
+				}
+			}
+	
+			// storing the selected users
+			if (is_array($send_to['users'])) {
+				foreach ($send_to['users'] as $user) {
+					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '', $user);
+				}
+			}
+		} else {
+			// the message is sent to everyone, so we set the group to 0
+			api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '0');
+		}
+		return $last_id;
+	}
+}
+
+/*
+	   STORE ANNOUNCEMENT  GROUP ITEM
+*/
+function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_users, $file = array(), $file_comment='') {
+	global $_course;	
+
+	// database definitions
+	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+	$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+	$newContent=stripslashes($newContent);
+	$emailTitle = Database::escape_string($emailTitle);
+	$newContent = Database::escape_string($newContent);
+	$order = intval($order);
+
+	// store in the table announcement
+	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".api_get_session_id();
+	$result = Database::query($sql);
+	if ($result === false) {
+		return false;
+	}
+
+	//store the attach file
+	$last_id = Database::insert_id();
+	if (empty($file)) {
+		$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $file);
+	}
+
+
+	// store in item_property (first the groups, then the users
+	if (!isset($to_users)) // !isset($to): when no user is selected we send it to everyone
+	{
+		$send_to=separate_users_groups($to);
+		// storing the selected groups
+		if (is_array($send_to['groups']))
+		{
+			foreach ($send_to['groups'] as $group)
+			{
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), $group);
+			}
+		}
+	}
+	else // the message is sent to everyone, so we set the group to 0
+	{
+		// storing the selected users
+		if (is_array($to_users))
+		{
+			foreach ($to_users as $user)
+			{
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '', $user);
+			}
+		}
+	}
+	return $last_id;
+}
+
+
+/*
+	           EDIT ANNOUNCEMENT 
+*/
+/**
+* This function stores the announcement item in the announcement table 
+* and updates the item_property table
+* 
+* @param int 	id of the announcement
+* @param string email 
+* @param string content
+* @param array 	users that will receive the announcement
+* @param mixed 	attachment 
+* @param string file comment
+* 
+*/
+function edit_advalvas_item($id, $emailTitle,$newContent,$to,$file = array(), $file_comment='') {	
+	global $_course;	
+	$tbl_item_property  = Database::get_course_table(TABLE_ITEM_PROPERTY);	
+	$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
+
+	$emailTitle = Database::escape_string($emailTitle);
+	$newContent = Database::escape_string($newContent);
+	$id = intval($id);
+	
+	// store the modifications in the table announcement
+ 	$sql = "UPDATE $tbl_announcement SET content='$newContent', title = '$emailTitle' WHERE id='$id'";
+	$result = Database::query($sql);
+
+	// save attachment file
+	$row_attach = get_attachment($id);
+	$id_attach = intval($row_attach['id']);
+
+	if (!empty($file)) {
+		if (empty($id_attach)) {
+			add_announcement_attachment_file($id,$file_comment,$file);
+		} else {
+			edit_announcement_attachment_file($id_attach,$file,$file_comment);
+		}
+	}
+
+	// we remove everything from item_property for this
+	$sql_delete="DELETE FROM $tbl_item_property WHERE ref='$id' AND tool='announcement'";
+	$result = Database::query($sql_delete);
+
+	// store in item_property (first the groups, then the users
+	if (!is_null($to)) {
+		// !is_null($to): when no user is selected we send it to everyone
+		
+		$send_to=separate_users_groups($to);
+		// storing the selected groups
+		if (is_array($send_to['groups'])) {
+			foreach ($send_to['groups'] as $group) {
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), $group);
+			}
+		}
+		// storing the selected users
+		if (is_array($send_to['users'])) {
+			foreach ($send_to['users'] as $user) {
+					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), 0, $user);
+			}
+		}
+	} else {
+		// the message is sent to everyone, so we set the group to 0
+		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), '0');
+	}
+}
+
+
+/*
+		MAIL FUNCTIONS
+*/
+
+/**
+* Sends an announcement by email to a list of users.
+* Emails are sent one by one to try to avoid antispam.
+*/
+function send_announcement_email($user_list, $course_code, $_course, $mail_title, $mail_content) {
+	global $_user;
+	foreach ($user_list as $this_user) {
+		
+		$mail_subject = get_lang('professorMessage').' - '.$_course['official_code'].' - '.$mail_title;
+		$mail_body = '['.$_course['official_code'].'] - ['.$_course['name']."]\n";
+		$mail_body .= api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$this_user["email"]."> \n\n".stripslashes($mail_title)."\n\n".trim(stripslashes(api_html_entity_decode(strip_tags(str_replace(array('<p>','</p>','<br />'),array('',"\n","\n"),$mail_content)), ENT_QUOTES, api_get_system_encoding())))." \n\n-- \n";
+		$mail_body .= api_get_person_name($_user['firstname'], $_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' ';
+		$mail_body .= '<'.$_user['mail'].">\n";
+		$mail_body .= $_course['official_code'].' '.$_course['name'];
+
+		@api_mail(api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $this_user['email'], $mail_subject, $mail_body, api_get_person_name($_SESSION['_user']['firstname'], $_SESSION['_user']['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
+	}
+}
+
+function update_mail_sent($insert_id) {
+	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+	if ($insert_id != strval(intval($insert_id))) { return false; }
+	$insert_id = Database::escape_string($insert_id);
+	// store the modifications in the table tbl_annoucement
+	$sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE id='$insert_id'";
+	Database::query($sql);
+}
+
+/**
+ * Gets all announcements from a user by course
+ * @param	string course db
+ * @param	int user id
+ * @return	array html with the content and count of announcements or false otherwise
+ */
+function get_all_annoucement_by_user_course($course_db, $user_id) {
+	if (empty($course_db) || empty($user_id)) {
+		return false;
+	}
+	$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db);
+	$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
+	if (!empty($user_id) && is_numeric($user_id)) {
+		$user_id = intval($user_id);
+		$sql="SELECT DISTINCT announcement.title, announcement.content
+						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+						WHERE announcement.id = toolitemproperties.ref
+						AND toolitemproperties.tool='announcement'
+						AND (toolitemproperties.insert_user_id='$user_id' AND (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id is null))
+						AND toolitemproperties.visibility='1'
+						AND announcement.session_id  = 0
+						ORDER BY display_order DESC";
+		$rs = Database::query($sql);
+		$num_rows = Database::num_rows($rs);
+		$content = '';
+		$i=0;
+		$result = array();
+		if ($num_rows>0) {
+			while ($myrow = Database::fetch_array($rs)) {
+				//if ($i<=4) {
+					$content.= '<strong>'.$myrow['title'].'</strong><br /><br />';
+					$content.= $myrow['content'];
+				/*} else {
+					break;
+				}*/
+				$i++;
+			}
+			$result['content'] = $content;
+			$result['count'] = $i;
+			return $result;
+		}
+		return false;
+	}
+	return false;
+}
+
 /*
 		DISPLAY FUNCTIONS
 */
@@ -231,14 +493,10 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 /**
 * this function shows the form for sending a message to a specific group or user.
 */
-function show_to_form_group($group_id)
-{
-
+function show_to_form_group($group_id) {
 	echo "<table id=\"recipient_list\" style=\"display: none;\">";
 	echo "<tr>";
-
 	echo "<td>";
-
 	echo "<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>";
 	$group_users = GroupManager::get_subscribed_users($group_id);
 	foreach ($group_users as $user){
@@ -324,19 +582,17 @@ function get_course_groups()
 * This tools loads all the users and all the groups who have received
 * a specific item (in this case an announcement item)
 */
-function load_edit_users($tool, $id) {	
-	global $tbl_item_property;
+function load_edit_users($tool, $id) {
+	$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
 
 	$sql = "SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 	$result = Database::query($sql);
-	while ($row = Database::fetch_array($result))
-	{
+	while ($row = Database::fetch_array($result)) {
 		$to_group=$row['to_group_id'];
-		switch ($to_group)
-		{
+		switch ($to_group) {
 			// it was send to one specific user
 			case null:
 				$to[]="USER:".$row['to_user_id'];
@@ -362,8 +618,7 @@ function load_edit_users($tool, $id) {
 * returns the javascript for setting a filter
 * this goes into the $htmlHeadXtra[] array
 */
-function user_group_filter_javascript()
-{
+function user_group_filter_javascript() {
 	return "<script language=\"JavaScript\" type=\"text/JavaScript\">
 	<!--
 	function jumpMenu(targ,selObj,restore)
@@ -385,8 +640,7 @@ function user_group_filter_javascript()
 * setting the target people/groups
 * this goes into the $htmlHeadXtra[] array
 */
-function to_javascript()
-{
+function to_javascript() {
 	return "<script type=\"text/javascript\" language=\"JavaScript\">
 
 	<!-- Begin javascript menu swapper
@@ -548,76 +802,57 @@ function plus_attachment() {
 *			containing all the id's of the groups (resp. users) who have received this message.
 * @author Patrick Cool <patrick.cool@>
 */
-function sent_to_form($sent_to_array)
-{
+function sent_to_form($sent_to_array) {
 	// we find all the names of the groups
 	$group_names=get_course_groups();
-
 	count($sent_to_array);
 
 	// we count the number of users and the number of groups
-	if (isset($sent_to_array['users']))
-	{
+	if (isset($sent_to_array['users'])) {
 		$number_users=count($sent_to_array['users']);
-	}
-	else
-	{
+	} else {
 		$number_users=0;
 	}
-	if (isset($sent_to_array['groups']))
-	{
+	if (isset($sent_to_array['groups'])) {
 		$number_groups=count($sent_to_array['groups']);
-	}
-	else
-	{
+	} else {
 			$number_groups=0;
 	}
 	$total_numbers=$number_users+$number_groups;
 
 	// starting the form if there is more than one user/group
-	if ($total_numbers >1)
-	{
+	if ($total_numbers >1) {
 		$output="<select name=\"sent to\">";
 		$output.="<option>".get_lang("SentTo")."</option>";
 		// outputting the name of the groups
-		if (is_array($sent_to_array['groups']))
-		{
-			foreach ($sent_to_array['groups'] as $group_id)
-			{
+		if (is_array($sent_to_array['groups'])) {
+			foreach ($sent_to_array['groups'] as $group_id) {
 				$output.="<option value=\"\">G: ".$group_names[$group_id]['name']."</option>";
 			}
 		}
 
-		if (isset($sent_to_array['users']))
-		{
-			if (is_array($sent_to_array['users']))
-			{
-				foreach ($sent_to_array['users'] as $user_id)
-				{
+		if (isset($sent_to_array['users'])) {
+			if (is_array($sent_to_array['users'])) {
+				foreach ($sent_to_array['users'] as $user_id) {
 					$user_info = api_get_user_info($user_id);
 					$output.="<option value=\"\">".api_get_person_name($user_info['firstname'], $user_info['lastname'])."</option>";
 				}
 			}
 		}
-
 		// ending the form
 		$output.="</select>";
-	}
-	else // there is only one user/group
-	{
-		if (isset($sent_to_array['users']) and is_array($sent_to_array['users']))
-		{
+	} else {
+		// there is only one user/group
+		if (isset($sent_to_array['users']) and is_array($sent_to_array['users'])) {
 			$user_info = api_get_user_info($sent_to_array['users'][0]);
 			echo api_get_person_name($user_info['firstname'], $user_info['lastname']);
 		}
-		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0)
-		{
+		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0) {
 			$group_id=$sent_to_array['groups'][0];
 			echo $group_names[$group_id]['name'];
 		}
-		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]==0)
-		{
-			echo get_lang("Everybody");
+		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]==0) {
+			echo get_lang('Everybody');
 		}
 	}
 	if(!empty($output))
@@ -637,8 +872,7 @@ function sent_to_form($sent_to_array)
 * @param    array   Array of strings that define the type and id of each destination
 * @return   array   Array of groups and users (each an array of IDs)
 */
-function separate_users_groups($to)
-{
+function separate_users_groups($to) {
 	foreach($to as $to_item) {
 		list($type, $id) = explode(':', $to_item);
 		switch($type) {
@@ -659,7 +893,7 @@ function separate_users_groups($to)
 
 
 /*
-	 			SENT_TO()
+	 SENT_TO()
 */
 /**
 * Returns all the users and all the groups a specific announcement item
@@ -668,8 +902,7 @@ function separate_users_groups($to)
 * @param    int     ID of the element of the corresponding type
 * @return   array   Array of users and groups to whom the element has been sent
 */
-function sent_to($tool, $id)
-{
+function sent_to($tool, $id) {
 	global $_course;
 	global $tbl_item_property;
 
@@ -719,11 +952,9 @@ function sent_to($tool, $id)
 * @param    int     ID of the element of the corresponding type
 * @return   bool    False on failure, True on success
 */
-function change_visibility_announcement($tool,$id)
-{
-	global $_course;
-	global $tbl_item_property;
-
+function change_visibility_announcement($tool,$id) {
+	global $_course;	
+	$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
 
@@ -744,277 +975,6 @@ function change_visibility_announcement($tool,$id)
     return true;
 }
 
-/**
- * Store an announcement in the database (including its attached file if any)
- * @param string    Announcement title (pure text)
- * @param string    Content of the announcement (can be HTML)
- * @param int       Display order in the list of announcements
- * @param array     Array of users and groups to send the announcement to
- * @param array	    uploaded file $_FILES
- * @param string    Comment describing the attachment
- * @return int      false on failure, ID of the announcement on success
- */
-function store_advalvas_item($emailTitle, $newContent, $order, $to, $file = array(), $file_comment='') {
-
-	global $_course;
-	global $nameTools;	
-
-	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-	$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-	// filter data
-	$emailTitle = Database::escape_string($emailTitle);
-	$newContent = Database::escape_string($newContent);
-	$order = intval($order);
-
-	// store in the table announcement
-	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".api_get_session_id();
-	$result = Database::query($sql);
-	if ($result === false) {
-		return false;
-	}
-
-	//store the attach file
-	$last_id = Database::insert_id();
-	if (!empty($file)) {
-		$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
-	}
-
-	// store in item_property (first the groups, then the users
-	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
-	{
-		$send_to=separate_users_groups($to);
-		// storing the selected groups
-		if (is_array($send_to['groups']))
-		{
-			foreach ($send_to['groups'] as $group)
-			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), $group);
-			}
-		}
-
-		// storing the selected users
-		if (is_array($send_to['users']))
-		{
-			foreach ($send_to['users'] as $user)
-			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '', $user);
-			}
-		}
-	}
-	else // the message is sent to everyone, so we set the group to 0
-	{
-		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '0');
-	}
-	return $last_id;
-}
-
-
-function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_users, $file = array(), $file_comment='') {
-	global $_course;
-	global $nameTools;
-
-	// database definitions
-	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-	$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-	$newContent=stripslashes($newContent);
-	$emailTitle = Database::escape_string($emailTitle);
-	$newContent = Database::escape_string($newContent);
-	$order = intval($order);
-
-	// store in the table announcement
-	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".api_get_session_id();
-	$result = Database::query($sql);
-	if ($result === false) {
-		return false;
-	}
-
-	//store the attach file
-	$last_id = Database::insert_id();
-	if (empty($file)) {
-		$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $file);
-	}
-
-
-	// store in item_property (first the groups, then the users
-	if (!isset($to_users)) // !isset($to): when no user is selected we send it to everyone
-	{
-		$send_to=separate_users_groups($to);
-		// storing the selected groups
-		if (is_array($send_to['groups']))
-		{
-			foreach ($send_to['groups'] as $group)
-			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), $group);
-			}
-		}
-	}
-	else // the message is sent to everyone, so we set the group to 0
-	{
-		// storing the selected users
-		if (is_array($to_users))
-		{
-			foreach ($to_users as $user)
-			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '', $user);
-			}
-		}
-	}
-
-	return $last_id;
-
-}
-
-
-/*==================================================
-	           EDIT_VALVAS_ITEM
-==================================================*/
-/**
-* This function stores the announcement Item in the table announcement
-* and updates the item_property also
-*/
-function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $file_comment='') {
-
-	global $_course;
-	global $nameTools;
-	
-	global $tbl_announcement;
-	global $tbl_item_property;
-
-	$newContent=stripslashes($newContent);
-	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
-	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGERLOWSECURITY));
-	$order = intval($order);
-
-	// store the modifications in the table announcement
- 	$sql = "UPDATE $tbl_announcement SET content='$newContent', title = '$emailTitle' WHERE id='$id'";
-	$result = Database::query($sql);
-
-	// save attachment file
-	$row_attach = get_attachment($id);
-	$id_attach = intval($row_attach['id']);
-
-	if (!empty($file)) {
-		if (empty($id_attach)) {
-		add_announcement_attachment_file($id,$file_comment,$file);
-		} else {
-			edit_announcement_attachment_file($id_attach,$file,$file_comment);
-		}
-	}
-
-	// we remove everything from item_property for this
-	$sql_delete="DELETE FROM $tbl_item_property WHERE ref='$id' AND tool='announcement'";
-	$result = Database::query($sql_delete);
-
-	// store in item_property (first the groups, then the users
-	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
-	{
-		$send_to=separate_users_groups($to);
-		// storing the selected groups
-		if (is_array($send_to['groups']))
-		{
-			foreach ($send_to['groups'] as $group)
-			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), $group);
-			}
-		}
-		// storing the selected users
-		if (is_array($send_to['users']))
-		{
-			foreach ($send_to['users'] as $user)
-			{
-					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), 0, $user);
-			}
-		}
-	}
-	else // the message is sent to everyone, so we set the group to 0
-	{
-		api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), '0');
-	}
-}
-
-
-/*
-		MAIL FUNCTIONS
-*/
-
-/**
-* Sends an announcement by email to a list of users.
-* Emails are sent one by one to try to avoid antispam.
-*/
-function send_announcement_email($user_list, $course_code, $_course, $mail_title, $mail_content)
-{
-	global $_user;
-
-	foreach ($user_list as $this_user) {
-
-		$mail_subject = get_lang('professorMessage').' - '.$_course['official_code'].' - '.$mail_title;
-
-		$mail_body = '['.$_course['official_code'].'] - ['.$_course['name']."]\n";
-		$mail_body .= api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$this_user["email"]."> \n\n".stripslashes($mail_title)."\n\n".trim(stripslashes(api_html_entity_decode(strip_tags(str_replace(array('<p>','</p>','<br />'),array('',"\n","\n"),$mail_content)), ENT_QUOTES, api_get_system_encoding())))." \n\n-- \n";
-		$mail_body .= api_get_person_name($_user['firstname'], $_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' ';
-		$mail_body .= '<'.$_user['mail'].">\n";
-		$mail_body .= $_course['official_code'].' '.$_course['name'];
-
-		@api_mail(api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $this_user['email'], $mail_subject, $mail_body, api_get_person_name($_SESSION['_user']['firstname'], $_SESSION['_user']['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
-	}
-}
-
-function update_mail_sent($insert_id) {
-	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-	if ($insert_id != strval(intval($insert_id))) { return false; }
-	$insert_id = Database::escape_string($insert_id);
-	// store the modifications in the table tbl_annoucement
-	$sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE id='$insert_id'";
-	Database::query($sql);
-}
-
-/**
- * Gets all announcements from a user by course
- * @param	string course db
- * @param	int user id
- * @return	array html with the content and count of announcements or false otherwise
- */
-function get_all_annoucement_by_user_course($course_db, $user_id) {
-	if (empty($course_db) || empty($user_id)) {
-		return false;
-	}
-	$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db);
-	$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
-	if (!empty($user_id) && is_numeric($user_id)) {
-		$user_id = intval($user_id);
-		$sql="SELECT DISTINCT announcement.title, announcement.content
-						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-						WHERE announcement.id = toolitemproperties.ref
-						AND toolitemproperties.tool='announcement'
-						AND (toolitemproperties.insert_user_id='$user_id' AND (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id is null))
-						AND toolitemproperties.visibility='1'
-						AND announcement.session_id  = 0
-						ORDER BY display_order DESC";
-		$rs = Database::query($sql);
-		$num_rows = Database::num_rows($rs);
-		$content = '';
-		$i=0;
-		$result = array();
-		if ($num_rows>0) {
-			while ($myrow = Database::fetch_array($rs)) {
-				//if ($i<=4) {
-					$content.= '<strong>'.$myrow['title'].'</strong><br /><br />';
-					$content.= $myrow['content'];
-				/*} else {
-					break;
-				}*/
-				$i++;
-			}
-			$result['content'] = $content;
-			$result['count'] = $i;
-			return $result;
-		}
-		return false;
-	}
-	return false;
-}
 
 /*
 		ATTACHMENT FUNCTIONS
@@ -1029,14 +989,13 @@ function get_all_annoucement_by_user_course($course_db, $user_id) {
  */
 
 function get_attachment($announcement_id) {
-
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 	$announcement_id=Database::escape_string($announcement_id);
 	$row=array();
 	$sql = 'SELECT id,path, filename,comment FROM '. $tbl_announcement_attachment.' WHERE announcement_id = '.(int)$announcement_id.'';
 	$result=Database::query($sql);
 	if (Database::num_rows($result)!=0) {
-		$row=Database::fetch_array($result,ASSOC);
+		$row = Database::fetch_array($result,'ASSOC');
 	}
 	return $row;
 }
@@ -1050,8 +1009,7 @@ function get_attachment($announcement_id) {
  */
 
 function add_announcement_attachment_file($announcement_id, $file_comment, $file) {
-
-	global $_course;
+	global $_course;	
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 	$return = 0;
 	$announcement_id = intval($announcement_id);

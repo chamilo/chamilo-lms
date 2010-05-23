@@ -958,12 +958,12 @@ function word_count($document) {
   	# strip all html tags
   	$wc = strip_tags($document);
 
+	//remove words and remove one letter words commented temporarily because of problems with utf8 support
   	# remove 'words' that don't consist of alphanumerical characters or punctuation
-  	$pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]+#";
-  	$wc = trim(preg_replace($pattern, " ", $wc));
-
+  	//$pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]+#";
+  	//$wc = trim(preg_replace($pattern, " ", $wc));
   	# remove one-letter 'words' that consist only of punctuation
-  	$wc = trim(preg_replace("#\s*[(\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]\s*#", " ", $wc));
+  	//$wc = trim(preg_replace("#\s*[(\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]\s*#", " ", $wc)); //
 
   	# remove superfluous whitespace
   	$wc = preg_replace("/\s\s+/", " ", $wc);

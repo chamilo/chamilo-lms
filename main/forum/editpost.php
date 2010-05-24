@@ -34,41 +34,34 @@
  */
 
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array (
-	'forum',
-	'group'
-);
+$language_file = array ('forum','group');
 
 // including the global dokeos file
-require ('../inc/global.inc.php');
-require_once('../gradebook/lib/gradebook_functions.inc.php');
-require_once('../gradebook/lib/be/gradebookitem.class.php');
-require_once('../gradebook/lib/be/evaluation.class.php');
-require_once('../gradebook/lib/be/abstractlink.class.php');
-require_once('../gradebook/lib/gradebook_functions.inc.php');
+require_once '../inc/global.inc.php';
+require_once '../gradebook/lib/gradebook_functions.inc.php';
+require_once '../gradebook/lib/be/gradebookitem.class.php';
+require_once '../gradebook/lib/be/evaluation.class.php';
+require_once '../gradebook/lib/be/abstractlink.class.php';
+require_once '../gradebook/lib/gradebook_functions.inc.php';
 // the section (tabs)
 $this_section=SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
 // including additional library scripts
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $nameTools=get_lang('ToolForum');
 
 /*
------------------------------------------------------------
 	Including necessary files
------------------------------------------------------------
 */
-include('forumconfig.inc.php');
-include('forumfunction.inc.php');
+include 'forumconfig.inc.php';
+include 'forumfunction.inc.php';
 
 // javascript
 $htmlHeadXtra[] = '<script>
@@ -86,14 +79,10 @@ $htmlHeadXtra[] = '<script>
 </script>';
 
 /*
-==============================================================================
 		MAIN DISPLAY SECTION
-==============================================================================
 */
 /*
------------------------------------------------------------
 	Retrieving forum and forum categorie information
------------------------------------------------------------
 */
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
@@ -103,9 +92,7 @@ $current_forum=get_forum_information($_GET['forum']); // note: this has to be va
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 $current_post=get_post_information($_GET['post']);
 /*
------------------------------------------------------------
 	Header and Breadcrumbs
------------------------------------------------------------
 */
 if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
@@ -136,9 +123,7 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[]=array("url" => "javascript: void (0);","name" => get_lang('EditPost'));
 }
 /*
------------------------------------------------------------
 	Resource Linker
------------------------------------------------------------
 */
 if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resources')) {
 	$_SESSION['formelements']=$_POST;
@@ -148,9 +133,7 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resour
 }
 $table_link 			= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 /*
------------------------------------------------------------
 	Header
------------------------------------------------------------
 */
 //are we in a lp ?
 $origin = '';
@@ -166,9 +149,7 @@ if ($origin=='learnpath') {
 }
 //echo '<link href="forumstyles.css" rel="stylesheet" type="text/css" />';
 /*
------------------------------------------------------------
 	Is the user allowed here?
------------------------------------------------------------
 */
 // the user is not allowed here if
 // 1. the forumcategory, forum or thread is invisible (visibility==0)
@@ -214,9 +195,7 @@ if ($origin!='learnpath') {
 }
 
 /*
------------------------------------------------------------
 	Display Forum Category and the Forum information
------------------------------------------------------------
 */
 echo "<table class=\"data_table\" width='100%'>\n";
 // the forum category
@@ -249,7 +228,6 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
 			}
 
 	}
-
 }
 // footer
 if ($origin!='learnpath') {

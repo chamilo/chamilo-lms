@@ -1,29 +1,25 @@
-<?php // $Id: download.php 12218 2007-05-01 18:27:14Z yannoo $
+<?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This file is responsible for  passing requested documents to the browser.
 *	Html files are parsed to fix a few problems with URLs,
 *	but this code will hopefully be replaced soon by an Apache URL
 *	rewrite mechanism.
 *
-*	@package dokeos.document
-==============================================================================
+*	@package chamilo.document
 */
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 session_cache_limiter('public');
 
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
-include(api_get_path(LIBRARY_PATH).'document.lib.php');
-require_once('forumconfig.inc.php');
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once 'forumconfig.inc.php';
 
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
@@ -40,16 +36,14 @@ $doc_url = str_replace('///', '&', $doc_url);
 $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
 
-if (! isset($_course))
-{
+if (! isset($_course)) {
 	api_not_allowed(true);
 }
 
 $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/'.$doc_url;
 
 //if the rewrite rule asks for a directory, we redirect to the document explorer
-if (is_dir($full_file_name))
-{
+if (is_dir($full_file_name)) {
 	//remove last slash if present
 	//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url;
 	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
@@ -75,8 +69,7 @@ $row= Database::fetch_array($result);
 $forum_thread_visibility=api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM_THREAD,$row['thread_id']);
 $forum_forum_visibility=api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM,$row['forum_id']);
 
-if ($forum_thread_visibility==1 && $forum_forum_visibility==1)
-{
+if ($forum_thread_visibility==1 && $forum_forum_visibility==1) {
 	DocumentManager::file_send_for_download($full_file_name,TRUE, $row['filename']);
 }
 exit;

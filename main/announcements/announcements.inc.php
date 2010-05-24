@@ -175,7 +175,7 @@ class AnnouncementManager  {
 			
 			if (!is_null($to)) {
 				 // !is_null($to): when no user is selected we send it to everyone			 
-				$send_to = separate_users_groups($to);
+				$send_to = self::separate_users_groups($to);
 				// storing the selected groups
 				if (is_array($send_to['groups'])) {
 					foreach ($send_to['groups'] as $group) {

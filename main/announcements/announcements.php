@@ -75,12 +75,9 @@ require_once $lib.'fileUpload.lib.php';
 require_once 'announcements.inc.php';
 
 /*
-	Resource linker
-*/
-
+ 	Resource linker 
 $_SESSION['source_type']="Ad_Valvas";
 require_once '../resourcelinker/resourcelinker.inc.php';
-
 if (!empty($_POST['addresources'])) {
 	// When the "Add Resource" button is clicked we store all the form data into a session	
     $form_elements= array ('emailTitle'=>Security::remove_XSS($emailTitle), 'newContent'=>Security::remove_XSS($newContent), 'id'=>$id, 'to'=>$selectedform, 'emailoption'=>$email_ann);
@@ -104,7 +101,7 @@ if (!empty($_POST['addresources'])) {
 	}
 	exit;
 }
-
+*/
 /*	Tracking	*/
 event_access_tool(TOOL_ANNOUNCEMENT);
 
@@ -160,8 +157,7 @@ if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] ==
 }
 
 // clear all resources
-if ((empty($originalresource) || ($originalresource!=='no')) and (!empty($action) && $action=='add'))
-{
+if ((empty($originalresource) || ($originalresource!=='no')) and (!empty($action) && $action=='add')) {
 	$_SESSION['formelements']=null;
 	//unset($_SESSION['formelements']);
 	unset_session_resources();
@@ -216,9 +212,10 @@ if (!empty($_SESSION['formelements']) and !empty($_GET['originalresource']) and 
 if(!empty($_GET['remind_inactive'])) {
 	$to[] = 'USER:'.intval($_GET['remind_inactive']);
 }
+
 /*
-	Survey
-*/
+//Survey
+
 $surveyid = 0;
 if(!empty($_REQUEST['publish_survey'])) {
 	$surveyid=intval($_REQUEST['publish_survey']);
@@ -233,13 +230,14 @@ if($surveyid) {
 	$obj=@Database::fetch_object($res_temp);
 	$template=$obj->template;
 }
-
+*/
 if (!empty($_SESSION['toolgroup'])){
 	$_clean_toolgroup=intval($_SESSION['toolgroup']);
 	$group_properties  = GroupManager :: get_group_properties($_clean_toolgroup);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_clean_toolgroup, "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 } else {
+	/*
 	if($surveyid) {
 		$interbreadcrumb[] = array ("url" => "../survey/survey_list.php?cidReq=$cidReq", "name" => get_lang('ToolSurvey'));
 		$nameTools = get_lang('PublishSurvey');
@@ -247,6 +245,7 @@ if (!empty($_SESSION['toolgroup'])){
 		$nameTools = get_lang('ToolAnnouncement');
 		$nameTools12 = get_lang('PublishSurvey');
 	}
+	*/
 }
 
 
@@ -313,7 +312,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			// tooledit : visibility = 2 : only visibile for platform administrator
 			if ($ctok == $_GET['sec_token']) {				
 				AnnouncementManager::delete_announcement($_course, $id);
-				delete_added_resource("Ad_Valvas", $delete);
+				//delete_added_resource("Ad_Valvas", $delete);
 
 				$id = null;
 				$emailTitle = null;
@@ -362,7 +361,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 				if ($originalresource!=="no")  {
 					//unset_session_resources();
-					edit_added_resources("Ad_Valvas", $announcement_to_modify);
+					//edit_added_resources("Ad_Valvas", $announcement_to_modify);
 					$to=load_edit_users("announcement", $announcement_to_modify);
 				}
 
@@ -460,37 +459,37 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			if ($ctok == $_POST['sec_token']) {
 				$file_comment = $_POST['file_comment'];
 				$file = $_FILES['user_upload'];
-				$edit_id = edit_advalvas_item($id,	$emailTitle, $newContent, $_POST['selectedform'], $file, $file_comment);
+				$edit_id = AnnouncementManager::edit_announcement($id,	$emailTitle, $newContent, $_POST['selectedform'], $file, $file_comment);
+				/*
 				if (!$delete) {
 				    update_added_resources("Ad_Valvas", $id);
-				}
+				}*/
 				$message = get_lang('AnnouncementModified');
 			}
 		} else {
 			//insert mode
 			if ($ctok == $_POST['sec_token']) {
 
-				if (!$surveyid) {
+				//if (!$surveyid) {
 					$result = Database::query("SELECT MAX(display_order) FROM $tbl_announcement WHERE session_id=".api_get_session_id()." OR session_id=0");
 					list($orderMax) = Database::fetch_row($result);
 					$order = $orderMax + 1;
 					$file = $_FILES['user_upload'];
 					$file_comment = $_POST['file_comment'];
 					if (!empty($_SESSION['toolgroup'])) {
-						$insert_id = store_advalvas_group_item($safe_emailTitle,$safe_newContent,$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform'],$file,$file_comment);
+						$insert_id = AnnouncementManager::add_group_announcement($safe_emailTitle,$safe_newContent,$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform'],$file,$file_comment);
 					} else {
 						
-						$insert_id = store_advalvas_item($safe_emailTitle, $safe_newContent, $order, $_POST['selectedform'], $file, $file_comment);
+						$insert_id = AnnouncementManager::add_announcement($safe_emailTitle, $safe_newContent, $order, $_POST['selectedform'], $file, $file_comment);
 					}
-				    store_resources($_SESSION['source_type'],$insert_id);
+				    //store_resources($_SESSION['source_type'],$insert_id);
 				    $_SESSION['select_groupusers']="hide";
 				    $message = get_lang('AnnouncementAdded');
-				}
+				//}
 
 				/*		MAIL WHEN USER COMES FROM SURVEY	*/
-
-				if ($_POST['emailsAdd']) {
-
+				/*
+				if ($_POST['emailsAdd']) {	
 					$to_email_address =$_POST['emailsAdd'];
 					$to_email_to = explode(',', $to_email_address);
 					$to_email = array_unique($to_email_to);
@@ -544,6 +543,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 						}
 					}
 				}
+				*/
 
 				/*		MAIL FUNCTION	*/
 
@@ -602,7 +602,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 							
 							$emailSubject = "[" . $_course['official_code'] . "] " . $emailTitle;
 
-	                        if ($surveyid) {
+	                       /* if ($surveyid) {
 	                        	$newContentone=str_replace("#page#","choose_language.php",$newContent);
 								$newContenttwo=str_replace("#temp#",$template,$newContentone);
 								$newContentthree=str_replace("#sid#",$surveyid,$newContenttwo);
@@ -614,7 +614,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 							    $email = $_SESSION['_user']['mail'];
 								$headers="From:$sender_name\r\nReply-to: $email";							
 								@api_mail('',$myrow["email"],stripslashes($emailTitle),$message,$sender_name,$email);
-	                        } else {
+	                        } else {*/
+	                        	
 	                            // intro of the email: receiver name and subject
                                 $mail_body = api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS)."<br />\n".stripslashes($emailTitle)."<br />";
 
@@ -644,14 +645,15 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                                 }
 
                                 @api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file, true);
-	                        }
+	                        //}
 
-							$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";
+							/*$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";
 							$res_date=Database::query($sql_date);
 							$obj_date=Database::fetch_object($res_date);
 							$end_date=$obj_date->avail_till;
 							$table_reminder = Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
-
+							*/
+							
 							if ($_REQUEST['reminder']=="1") {
 								$time=getdate();
 								$time = $time['yday'];
@@ -664,7 +666,6 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								$time = $time+14;
 								$sql="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$mailid','".addslashes($emailSubject)."','".addslashes($mail_body)."','1','$time','$end_date')";
 								Database::query($sql);
-
 							} else if ($_REQUEST['reminder']=="3") {
 								$time=getdate();
 								$time = $time['yday'];
@@ -673,7 +674,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								Database::query($sql);
 							}
 						}
-						update_mail_sent($insert_id);
+						AnnouncementManager::update_mail_sent($insert_id);
 						$message = $added_and_sent;
 					}
 				} // $email_ann*/
@@ -681,7 +682,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		}	// isset
 
 		// UNSET VARIABLES
-		unset_session_resources();
+//		unset_session_resources();
 		unset($form_elements);
 		$_SESSION['formelements']=null;
 
@@ -693,7 +694,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		unset($content_to_modify);
 		unset($title_to_modify);
 
-		if($_REQUEST['publish_survey']) {
+		/*if($_REQUEST['publish_survey']) {
 
 		 $surveyid=$_REQUEST['surveyid'];
 		 $cidReq = $_REQUEST['cidReq'];
@@ -702,7 +703,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			window.location.href="../survey/survey_list.php?<?php echo  api_get_cidreq(); ?>&published=published&surveyid=<?php echo Security::remove_XSS($_REQUEST['publish_survey']); ?>";
 		</script>
 		<?php
-		}
+		}*/
 	}	// if $submit Announcement
 }
 
@@ -797,8 +798,6 @@ if(api_is_allowed_to_edit(false,true))  {
 					} else {
 						$cond_user_id = " AND ( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0') ";
 					}
-
-
 					$sql="SELECT
 						announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 						FROM $tbl_announcement announcement, $tbl_item_property ip
@@ -844,7 +843,7 @@ $announcement_number = Database::num_rows($result);
 		ADD ANNOUNCEMENT / DELETE ALL
 */
 
-if (!$surveyid) {
+//if (!$surveyid) {
 	$show_actions = false;
 	if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
 		echo '<div class="actions">';
@@ -860,7 +859,7 @@ if (!$surveyid) {
 		}
 		if ($show_actions)
 				echo '</div>';
-}
+//}
 
 if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath') {
 	echo "\n\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
@@ -871,7 +870,7 @@ if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath') {
 /*
 		ANNOUNCEMENTS LIST
 */
-if (!$surveyid) {
+//if (!$surveyid) {
 	if ($display_title_list == true) {
 		echo "<table>\n";
 		while ($myrow = Database::fetch_array($result)) {
@@ -892,7 +891,7 @@ if (!$surveyid) {
 		}
 		echo "</table>\n";
 	} // end $display_title_list == true
-}
+//}
 
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 	echo   "</td>\n";
@@ -1010,7 +1009,7 @@ if ($display_form == true) {
 		}
 
 	}
-
+/*
 	if ($surveyid) {
 		echo '	<div class="row">
 					<div class="label">
@@ -1029,7 +1028,7 @@ if ($display_form == true) {
 					</div>
 				</div>';
 	}
-
+*/
 	// the announcement title
 	echo '	<div class="row">
 				<div id="msg_error" style="display:none;color:red;margin-left:20%"></div>
@@ -1050,14 +1049,13 @@ if ($display_form == true) {
 
 	echo '<input type="hidden" name="id" value="'.$announcement_to_modify.'" />';
 
-	if ($surveyid) {
+	/*if ($surveyid) {
 	$content_to_modify='<br /><a href="'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name">'.get_lang('ClickHereToOpenSurvey').'</a><br />
 									'.get_lang('OrCopyPasteUrl').' <br />
 									'.api_get_path(WEB_CODE_PATH).'/survey/#page#?temp=#temp#&surveyid=#sid#&uid=#uid#&mail=#mail#&db_name=#db_name&nbsp;';
-	}
+	}*/
 
     $oFCKeditor = new FCKeditor('newContent') ;
-
 	$oFCKeditor->Width		= '100%';
 	$oFCKeditor->Height		= '300';
 
@@ -1365,12 +1363,12 @@ if ($display_announcement_list && !$surveyid) {
 			/* RESOURCES */
 
 			echo "<tr class='row_odd'><td colspan=\"3\">";
-
+			/*
 			if (check_added_resources("Ad_Valvas", $myrow["id"])) {
 				echo "<i>".get_lang('AddedResources')."</i><br />";
 				display_added_resources("Ad_Valvas", $myrow["id"]);
 			}
-
+			*/
 			// we can edit if : we are the teacher OR the element belongs to the session we are coaching OR the option to allow users to edit is on
 			if (api_is_allowed_to_edit() OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id'])) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 

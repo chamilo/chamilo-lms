@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
+*  @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
 * 	@package chamilo.forum
 */
 // name of the language file that needs to be included
@@ -33,14 +34,10 @@ if (isset($_GET['origin'])) {
 
 
 /*
-==============================================================================
 		MAIN DISPLAY SECTION
-==============================================================================
 */
 /*
------------------------------------------------------------
 	Retrieving forum and forum categorie information
------------------------------------------------------------
 */
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
@@ -216,17 +213,15 @@ if ($my_message<>'PostDeletedSpecial') {
 	}
 
 	/*
-	-----------------------------------------------------------
 		Display Forum Category and the Forum information
-	-----------------------------------------------------------
 	*/
 	// we are getting all the information about the current forum and forum category.
 	// note pcool: I tried to use only one sql statement (and function) for this
 	// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-	echo "<table class=\"data_table\" width='100%'>\n";
+	echo "<table class=\"data_table\" width='100%'>";
 
 	// the thread
-	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
+	echo "<tr><th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
 	echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
 
 	if ($origin!='learnpath') {
@@ -234,8 +229,8 @@ if ($my_message<>'PostDeletedSpecial') {
 	}
 
 	echo prepare4display($current_forum['forum_title']).'<br />';
-	echo "</th>\n";
-	echo "\t</tr>\n";
+	echo "</th>";
+	echo "</tr>";
 	echo '<span>'.prepare4display(isset($current_thread['thread_comment'])?$current_thread['thread_comment']:'').'</span>';
 	echo "</table>";
 
@@ -256,9 +251,7 @@ if ($my_message<>'PostDeletedSpecial') {
 } // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 if ($origin!='learnpath') {
 	Display :: display_footer();

@@ -19,19 +19,8 @@
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
 *
-* 	@package dokeos.forum
+* 	@package chamilo.forum
 */
-
-/**
- **************************************************************************
- *						IMPORTANT NOTICE
- * Please do not change anything is this code yet because there are still
- * some significant code that need to happen and I do not have the time to
- * merge files and test it all over again. So for the moment, please do not
- * touch the code
- * 							-- Patrick Cool <patrick.cool@UGent.be>
- **************************************************************************
- */
 
 /*
 		INIT SECTION

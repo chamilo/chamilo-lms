@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
 *	These files are a complete rework of the forum. The database structure is
@@ -54,9 +34,7 @@
  */
 
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 /*
 -----------------------------------------------------------
@@ -132,9 +110,7 @@ if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR 
 }
 
 /*
------------------------------------------------------------
 	Display Forum Category and the Forum information
------------------------------------------------------------
 */
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
@@ -146,10 +122,10 @@ $sql="SELECT * FROM $table_posts posts, $table_users users
 		ORDER BY posts.post_id ASC";
 $result=Database::query($sql);
 
-echo "<table width=\"100%\" cellspacing=\"5\" border=\"0\">\n";
+echo "<table width=\"100%\" cellspacing=\"5\" border=\"0\">";
 while ($row=Database::fetch_array($result)) {
-	echo "\t<tr>\n";
-	echo "\t\t<td rowspan=\"2\" class=\"forum_message_left\">";
+	echo "<tr>";
+	echo "<td rowspan=\"2\" class=\"forum_message_left\">";
 	if ($row['user_id']=='0') {
 		$name=$row['poster_name'];
 	} else {
@@ -158,13 +134,13 @@ while ($row=Database::fetch_array($result)) {
 	echo $name.'<br />';
 	echo $row['post_date'].'<br /><br />';
 
-	echo "</td>\n";
-	echo "\t\t<td class=\"forum_message_post_title\">".Security::remove_XSS($row['post_title'])."</td>\n";
-	echo "\t</tr>\n";
+	echo "</td>";
+	echo "<td class=\"forum_message_post_title\">".Security::remove_XSS($row['post_title'])."</td>";
+	echo "</tr>";
 
-	echo "\t<tr>\n";
-	echo "\t\t<td class=\"forum_message_post_text\">".Security::remove_XSS($row['post_text'],STUDENT)."</td>\n";
-	echo "\t</tr>\n";
+	echo "<tr>";
+	echo "<td class=\"forum_message_post_text\">".Security::remove_XSS($row['post_text'],STUDENT)."</td>";
+	echo "</tr>";
 }
 echo "</table>";
 

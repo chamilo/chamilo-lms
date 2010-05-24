@@ -54,7 +54,6 @@
 
 <h3>Debugging</h3>
 <ul>
-  <li>Security: fixed several possible SQL injections in links edition</li>
   <li>Fixed major course copy drawback by which exercise contents were keeping links to the old course (thanks to Ludovic Gasc and SANTEXCEL - BT#658)</li>
   <li>Some PHP short tags fixed. Reported by Sicabol, see <a href="http://www.chamilo.org/node/114" target="_blank">http://www.chamilo.org/node/114</a> (Feature #347)</li>
   <li>Student publications deleted when an user is unsubscribed of a course. Reported and fixed by André Boivin</li>
@@ -107,10 +106,17 @@
 <ul>
   <li>Timezone functionality is not available in the most recent versions of PHP available for CentOS/RHEL ( 5.1.6-23.2.el5_3 ) (see http://www.php.net/manual/en/function.timezone-identifiers-list.php). Chamilo now requires PHP 5.1 or superior and <b>highly</b> recommends PHP 5.2.</li>
   <li>When the user publishes an event as announcement, this same announce can be repeat many times</li>
+  <li>FCKEditor FLV Videos: If you already insert a FLV video you should re-embed it. The SWFObject was replaced with object tags.</li>
 </ul>
 <h3>Deprecated files</h3>
 <ul>
-  <li>Online editor: The plugins "Flash" (obsolete) and "placeholder" (non-relevant to the finished product) have been removed. (Feature #347)</li>
+  <li>Online editor: The plugins "Flash" (obsolete) and "placeholder" (non-relevant to the finished product) have been removed. (Feature #347)</li>  
+</ul>
+<h3>Security</h3>
+<ul>
+  <li>HTMLPurifier updated to version 4.1.0</li>
+  <li>FLV FCKEditor Plugin modified. SWFObject replaced with "object" and embed tags. Avoids the execution of javascript. See CT#1297</li>
+  <li>Security: fixed several possible SQL injections in links edition</li>  
 </ul>
 <br />
 

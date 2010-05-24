@@ -30,9 +30,7 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.
 get_notifications_of_user();
 
 /*
------------------------------------------------------------
 	Javascript
------------------------------------------------------------
 */
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
@@ -345,7 +343,7 @@ function show_add_forum_form($inputvalues=array()) {
 		}
 	} else {   // the default values when editing = the data in the table
 		$defaults['forum_id']=isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
-		$defaults['forum_title']=prepare4display(api_html_entity_decode(isset($inputvalues['forum_title']) ? $inputvalues['forum_title'] : null,ENT_QUOTES,$charset));
+		$defaults['forum_title']=prepare4display(isset($inputvalues['forum_title']) ? $inputvalues['forum_title'] : null);
 		$defaults['forum_comment']=prepare4display(isset($inputvalues['forum_comment'])?$inputvalues['forum_comment']:null);
 		$defaults['forum_category']=isset($inputvalues['forum_category']) ? $inputvalues['forum_category'] : null;
 		$defaults['allow_anonymous_group']['allow_anonymous']=isset($inputvalues['allow_anonymous']) ? $inputvalues['allow_anonymous'] :null;
@@ -430,7 +428,7 @@ function show_edit_forumcategory_form($inputvalues=array()) {
 	global $charset;
 	// setting the default values
 	$defaultvalues['forum_category_id']=$inputvalues['cat_id'];
-	$defaultvalues['forum_category_title']=prepare4display(api_html_entity_decode($inputvalues['cat_title'],ENT_QUOTES,$charset));
+	$defaultvalues['forum_category_title']=prepare4display($inputvalues['cat_title']);
 	$defaultvalues['forum_category_comment']=prepare4display($inputvalues['cat_comment']);
 	$form->setDefaults($defaultvalues);
 
@@ -1986,10 +1984,10 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	$form->add_real_progress_bar('DocumentUpload','user_upload');
 
 	if ( !empty($form_values) ) {
-		$defaults['post_title']=prepare4display(Security::remove_XSS($form_values['post_title']));
-		$defaults['post_text']=prepare4display(Security::remove_XSS($form_values['post_text']));
-		$defaults['post_notification']=Security::remove_XSS($form_values['post_notification']);
-		$defaults['thread_sticky']=Security::remove_XSS($form_values['thread_sticky']);
+		$defaults['post_title']=prepare4display($form_values['post_title']);
+		$defaults['post_text']=prepare4display($form_values['post_text']);
+		$defaults['post_notification']=prepare4display($form_values['post_notification']);
+		$defaults['thread_sticky']=prepare4display($form_values['thread_sticky']);
 	}
 
 	// if we are quoting a message we have to retrieve the information of the post we are quoting so that
@@ -2427,7 +2425,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	$form->addElement('style_submit_button', 'SubmitPost', get_lang('ModifyThread'), 'class="save"');
 	global $charset;
 	// setting the default values for the form elements
-	$defaults['post_title']=prepare4display(api_html_entity_decode($current_post['post_title'],ENT_QUOTES,$charset));
+	$defaults['post_title']=prepare4display($current_post['post_title']);
 	$defaults['post_text']=prepare4display($current_post['post_text']);
 	if ( $current_post['post_notification']==1 ) {
 		$defaults['post_notification']=true;
@@ -3178,11 +3176,12 @@ function prepare4display($input='') {
 			}
 			$counter = 0;
 			foreach ($search_terms as $key=>$search_term) {
-				$input = str_replace(trim(api_html_entity_decode($search_term)),'<span style="background-color: '.$highlightcolors[$counter].'">'.trim(api_html_entity_decode($search_term)).'</span>',$input);
+				$input = str_replace(trim($search_term),'<span style="background-color: '.$highlightcolors[$counter].'">'.trim($search_term).'</span>',$input);
 				$counter++;
 			}
 		}
-		return api_html_entity_decode(stripslashes($input));
+		//return api_html_entity_decode(stripslashes($input));
+		return Security::remove_XSS($input, STUDENT);
 	} else {
 		$returnarray=array_walk($input, 'api_html_entity_decode');
 		$returnarray=array_walk($input, 'stripslashes');

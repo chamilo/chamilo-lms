@@ -472,7 +472,7 @@ Media.prototype.getInnerHTML = function ( objectId )
 
 	var s = "" ;	
 
-	//Replacing the creation of the SWFObject to the use of the object tag in order to reproduce videos
+	//Replacing the creation of the SWFObject to the use of the object tag in order to avoid HTMLPurifier conflicts see CT#1297 
 	
 	s+= '<div id="player' + randomnumber + '-parent" style="text-align:	center;' + cssfloat + '">\n';
 	s+= '<div style="border-style: none; height: ' + thisHeight + 'px; width:' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220,	220); background-image: url(' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/flvPlayer.gif); background-repeat:no-repeat;	background-position:center;' + cssalign + '">';
@@ -500,22 +500,6 @@ Media.prototype.getInnerHTML = function ( objectId )
 	s+= '<p><a href="http://get.adobe.com/flashplayer">Get Flash</a> to see	this player.</p>';
 //	s+= '</object>';
 	s+= '</object>';
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

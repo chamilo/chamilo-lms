@@ -1,7 +1,8 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Script managing the learnpath upload. To best treat the uploaded file, make sure we can identify it.
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**

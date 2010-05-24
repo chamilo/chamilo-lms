@@ -3,7 +3,7 @@
 
 /**
  * Script that handles the saving of item status
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 

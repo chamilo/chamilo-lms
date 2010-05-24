@@ -18,9 +18,11 @@ TODO:
 if (version_compare(PHP_VERSION, '5.2', '<')) exit('PHP 5.2+ required.');
 error_reporting(E_ALL | E_STRICT);
 
+chdir(dirname(__FILE__));
+
 // load dual-libraries
-require_once dirname(__FILE__) . '/../extras/HTMLPurifierExtras.auto.php';
-require_once dirname(__FILE__) . '/../library/HTMLPurifier.auto.php';
+require_once '../extras/HTMLPurifierExtras.auto.php';
+require_once '../library/HTMLPurifier.auto.php';
 
 // setup HTML Purifier singleton
 HTMLPurifier::getInstance(array(
@@ -35,7 +37,7 @@ if (file_exists($loader)) include $loader;
 $interchange->validate();
 
 $style = 'plain'; // use $_GET in the future, careful to validate!
-$configdoc_xml = dirname(__FILE__) . '/configdoc.xml';
+$configdoc_xml = 'configdoc.xml';
 
 $xml_builder = new HTMLPurifier_ConfigSchema_Builder_Xml();
 $xml_builder->openURI($configdoc_xml);
@@ -52,13 +54,11 @@ if (!$output) {
 }
 
 // write out
-file_put_contents(dirname(__FILE__) . "/$style.html", $output);
+file_put_contents("$style.html", $output);
 
 if (php_sapi_name() != 'cli') {
     // output (instant feedback if it's a browser)
     echo $output;
 } else {
-    echo "Files generated successfully.\n";
+    echo 'Files generated successfully.';
 }
-
-// vim: et sw=4 sts=4

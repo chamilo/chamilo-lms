@@ -261,12 +261,12 @@ foreach ($courses as $enreg) {
 
 				} else {
 
-					echo "	<tr>
-								<td colspan='4'>
-									".get_lang('NoLearnpath')."
+					echo '	<tr>
+								<td colspan="4" align="center">
+									'.get_lang('NoLearnpath').'
 								</td>
 							</tr>
-						 ";
+						 ';
 				}
 			?>
 			<tr>
@@ -361,7 +361,7 @@ foreach ($courses as $enreg) {
 							echo '</tr>';
 						}
 					} else {
-						echo '<tr><td colspan="4">'.get_lang('NoEx').'</td></tr>';
+						echo '<tr><td colspan="4" align="center">'.get_lang('NoEx').'</td></tr>';
 					}
 				/*} else {
 					echo '<tr><td colspan="4">'.get_lang('NoEx').'</td></tr>';

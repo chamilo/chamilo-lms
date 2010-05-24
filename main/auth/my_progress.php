@@ -139,7 +139,12 @@ foreach ($courses as $enreg) {
 			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
+			$tbl_course_lp_view         = Database :: get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
+			$tbl_course_lp_view_item    = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
+			$tbl_course_lp              = Database :: get_course_table(TABLE_LP_MAIN, $course_info['db_name']);
+			$tbl_course_lp_item         = Database :: get_course_table(TABLE_LP_ITEM, $course_info['db_name']);
+            $tbl_course_quiz            = Database :: get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);
+			
 			$sql = 'SELECT id_session
 					FROM '.$tbl_session_course_user.' session_course_user
 					WHERE session_course_user.id_user = '.intval($_user['user_id']).'
@@ -200,7 +205,7 @@ foreach ($courses as $enreg) {
 			  <th class="head" style="color:#000"><?php echo get_lang('LastConnexion'); ?></th>
 			</tr>
 			<?php
-				$sql_learnpath = "SELECT lp.name,lp.id FROM ".$course_info['db_name'].".".$tbl_course_lp." AS lp";
+				$sql_learnpath = "SELECT lp.name,lp.id FROM ".$tbl_course_lp." AS lp";
 				$result_learnpath = Database::query($sql_learnpath);
 				if (Database::num_rows($result_learnpath) > 0) {
 					while($learnpath = Database::fetch_array($result_learnpath)) {
@@ -208,8 +213,8 @@ foreach ($courses as $enreg) {
 
 						// calculates last connection time
 						$sql = 'SELECT MAX(start_time)
-									FROM '.$course_info['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
-									INNER JOIN '.$course_info['db_name'].'.'.$tbl_course_lp_view.' AS view
+									FROM '.$tbl_course_lp_view_item.' AS item_view
+									INNER JOIN '.$tbl_course_lp_view.' AS view
 										ON item_view.lp_view_id = view.id
 										AND view.lp_id = '.$learnpath['id'].'
 										AND view.user_id = '.$_user['user_id'];
@@ -218,8 +223,8 @@ foreach ($courses as $enreg) {
 
 						// calculates time
 						$sql = 'SELECT SUM(total_time)
-									FROM '.$course_info['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
-									INNER JOIN '.$course_info['db_name'].'.'.$tbl_course_lp_view.' AS view
+									FROM '.$tbl_course_lp_view_item.' AS item_view
+									INNER JOIN '.$tbl_course_lp_view.' AS view
 										ON item_view.lp_view_id = view.id
 										AND view.lp_id = '.$learnpath['id'].'
 										AND view.user_id = '.$_user['user_id'];
@@ -256,12 +261,12 @@ foreach ($courses as $enreg) {
 
 				} else {
 
-					echo "	<tr>
-								<td colspan='4'>
-									".get_lang('NoLearnpath')."
+					echo '	<tr>
+								<td colspan="4" align="center">
+									'.get_lang('NoLearnpath').'
 								</td>
 							</tr>
-						 ";
+						 ';
 				}
 			?>
 			<tr>
@@ -278,7 +283,7 @@ foreach ($courses as $enreg) {
 
 				if (Database::result($result_visibility_tests, 0, 'visibility') == 1) {*/
 					$sql_exercices = "	SELECT quiz.title,id, results_disabled
-									FROM ".$course_info['db_name'].".".$tbl_course_quiz." AS quiz
+									FROM ".$tbl_course_quiz." AS quiz
 									WHERE active='1'";
 
 					$result_exercices = Database::query($sql_exercices);
@@ -356,7 +361,7 @@ foreach ($courses as $enreg) {
 							echo '</tr>';
 						}
 					} else {
-						echo '<tr><td colspan="4">'.get_lang('NoEx').'</td></tr>';
+						echo '<tr><td colspan="4" align="center">'.get_lang('NoEx').'</td></tr>';
 					}
 				/*} else {
 					echo '<tr><td colspan="4">'.get_lang('NoEx').'</td></tr>';

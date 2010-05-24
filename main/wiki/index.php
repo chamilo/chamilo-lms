@@ -452,6 +452,13 @@ if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recen
 	echo '</div>';
 }
 
+
+//In new pages go to new page
+if (isset($_POST['SaveWikiNew']))
+{
+	display_wiki_entry(Security::remove_XSS($_POST['reflink']));
+}
+
 /////////////////////// more options /////////////////////// Juan Carlos Raña Trabado
 
 //more for export to course document area. See display_wiki_entry
@@ -2344,12 +2351,6 @@ if ($_GET['action']=='discuss')
 			Display::display_normal_message(get_lang('DiscussNotAvailable'));
 
 	}
-}
-
-///in new pages go to new page
-if ($_POST['SaveWikiNew'])
-{
-	display_wiki_entry(Security::remove_XSS($_POST['reflink']));
 }
 
 echo "</div>"; // echo "<div id='mainwiki'>";

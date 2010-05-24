@@ -1655,7 +1655,7 @@ class Tracking {
 					$lp_view_id = intval(Database::result($rs_last_lp_view_id,0,'id'));
 
 					$sql_list_view='SELECT li.max_score,lv.user_id,liw.score,((liw.score/li.max_score)*100) as sum_data FROM '.$lp_item_table.' li INNER JOIN '.$lp_view_table.' lv
-					ON li.lp_id=lv.lp_id INNER JOIN '.$lp_item_view_table.' liw ON liw.lp_item_id=li.id WHERE lv.user_id="'.$user_id.'" AND li.item_type="sco" AND liw.lp_view_id="'.$lp_view_id.'"';
+					ON li.lp_id=lv.lp_id INNER JOIN '.$lp_item_view_table.' liw ON liw.lp_item_id=li.id WHERE lv.user_id="'.$user_id.'" AND (li.item_type="sco" OR li.item_type="quiz") AND liw.lp_view_id="'.$lp_view_id.'"';
 					$tot=0;
 					$sum=0;
 

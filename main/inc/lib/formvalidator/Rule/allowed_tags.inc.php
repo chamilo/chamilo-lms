@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * This page defines all HTML-tages and their attributes that are allowed in
  * Dokeos. 2 arrays are defined, one contains the allowed HTML for students and
@@ -32,10 +12,7 @@
  *    $allowed_tags_XXXX['tagname']['attributename'] = array();
  * - please keep the content of this file alphabetically structured
  */
-//============================================================
 // INIT GLOBAL ARRAYS
-//============================================================
-
 
 global $tag_student,$attribute_student,$tag_teacher,$attribute_teacher,$tag_anonymous,$attribute_anonymous;
 
@@ -51,9 +28,8 @@ $attribute_teacher=array();
 $tag_anonymous=array();
 $attribute_anonymous=array();
 
-//============================================================
 // ALLOWED HTML FOR STUDENTS
-//============================================================
+
 // ADDRESS
 $allowed_tags_student['address'] =  array();
 // APPLET
@@ -149,10 +125,16 @@ $allowed_tags_student['em'] =  array();
 // EMBED
 $allowed_tags_student['embed'] =  array();
 $allowed_tags_student['embed']['height'] =  array();
+$allowed_tags_student['embed']['width'] =  array();
 $allowed_tags_student['embed']['type'] =  array();
 $allowed_tags_student['embed']['quality'] =  array();
 $allowed_tags_student['embed']['src'] =  array();
-$allowed_tags_student['embed']['width'] =  array();
+
+$allowed_tags_student['embed']['flashvars'] =  array();
+$allowed_tags_student['embed']['allowscriptaccess'] =  array();
+$allowed_tags_student['embed']['allowfullscreen'] =  array();
+$allowed_tags_student['embed']['bgcolor'] =  array();
+$allowed_tags_student['embed']['pluginspage'] =  array();
 
 // FIELDSET
 $allowed_tags_student['fieldset'] =  array();
@@ -462,9 +444,9 @@ $allowed_tags_student['u'] =  array();
 $allowed_tags_student['ul'] =  array();
 // VAR
 $allowed_tags_student['var'] =  array();
-//============================================================
+
 // ALLOWED HTML FOR TEACHERS
-//============================================================
+
 // Allow all HTML allowed for students
 $allowed_tags_teacher = $allowed_tags_student;
 // NOSCRIPT
@@ -489,9 +471,9 @@ $allowed_tags_teacher['body']['text'] =  array();
 $allowed_tags_teacher['body']['vlink'] =  array();
 
 
-//============================================================
 // ALLOWED HTML FOR TEACHERS FOR HTMLPURIFIER
-//============================================================
+
+
 // NOSCRIPT
 $allowed_tags_teachers['noscript'] =  array();
 // SCRIPT

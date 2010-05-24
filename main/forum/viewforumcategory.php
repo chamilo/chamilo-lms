@@ -214,13 +214,13 @@ if ($action_forums!='add') {
 		Display Forum Categories and the Forums in it
 	-----------------------------------------------------------
 	*/
-	echo "<table class=\"data_table\" width='100%'>\n";
+	echo "<table class=\"data_table\" width='100%'>";
 	$my_session=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : null;
 	$forum_categories_list='';
-	echo "\t<tr>\n\t\t<th align=\"left\" ".(api_is_allowed_to_edit(null,true)?"colspan='5'":"colspan='6'").">";
+	echo "<tr><th align=\"left\" ".(api_is_allowed_to_edit(null,true)?"colspan='5'":"colspan='6'").">";
 	echo '<span class="forum_title">'.prepare4display($forum_category['cat_title']).'</span><br />';
 	echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
-	echo "</th>\n";
+	echo "</th>";
 	if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($my_session)!=0)) {
 		echo '<th style="vertical-align: top;" align="center" >';
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forumcategory&amp;id=".$forum_category['cat_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
@@ -228,18 +228,18 @@ if ($action_forums!='add') {
 		display_visible_invisible_icon('forumcategory', $forum_category['cat_id'], $forum_category['visibility'], array("forumcategory"=>$_GET['forumcategory']));
 		display_lock_unlock_icon('forumcategory',$forum_category['cat_id'], $forum_category['locked'], array("forumcategory"=>$_GET['forumcategory']));
 		display_up_down_icon('forumcategory',$forum_category['cat_id'], $forum_categories_list);
-		echo "</th>\n";
+		echo "</th>";
 	}
-	echo "\t</tr>\n";
+	echo "</tr>";
 
 	// step 3: the interim headers (for the forum)
-	echo "\t<tr class=\"forum_header\">\n";
-	echo "\t\t<td colspan='2'>".get_lang('Forum')."</td>\n";
-	echo "\t\t<td>".get_lang('Topics')."</td>\n";
-	echo "\t\t<td>".get_lang('Posts')."</td>\n";
-	echo "\t\t<td>".get_lang('LastPosts')."</td>\n";
-	echo "\t\t<td>".get_lang('Actions')."</td>\n";
-	echo "\t</tr>\n";
+	echo "<tr class=\"forum_header\">";
+	echo "<td colspan='2'>".get_lang('Forum')."</td>";
+	echo "<td>".get_lang('Topics')."</td>";
+	echo "<td>".get_lang('Posts')."</td>";
+	echo "<td>".get_lang('LastPosts')."</td>";
+	echo "<td>".get_lang('Actions')."</td>";
+	echo "</tr>";
 
 	// the forums in this category
 	$forums_in_category=get_forums_in_category($forum_category['cat_id']);
@@ -295,8 +295,8 @@ if ($action_forums!='add') {
 			$form_count=isset($form_count)?$form_count:0;
 			if ($show_forum === true) {
 				$form_count++;
-				echo "\t<tr class=\"forum\">\n";
-				echo "\t\t<td width=\"20\">";
+				echo "<tr class=\"forum\">";
+				echo "<td width=\"20\">";
 				$my_whatsnew_post_info=isset($whatsnew_post_info[$forum['forum_id']])?$whatsnew_post_info[$forum['forum_id']]:null;
 				if ($forum['forum_of_group']!=='0') {
 					if (is_array($my_whatsnew_post_info) and !empty($my_whatsnew_post_info)) {
@@ -311,7 +311,7 @@ if ($action_forums!='add') {
 						echo icon('../img/forum.gif');
 					}
 				}
-				echo "</td>\n";
+				echo "</td>";
 
 				if ($forum['forum_of_group']<>'0')
 				{
@@ -331,14 +331,14 @@ if ($action_forums!='add') {
 				} else {
 					$session_displayed = '';
 				}
-				echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
+				echo "<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>";
 
 				//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 				// the number of topics and posts
 				$my_number_threads=isset($forum['number_of_threads']) ? $forum['number_of_threads'] : '';
 				$my_number_posts=isset($forum['number_of_posts']) ? $forum['number_of_posts'] : '';
-				echo "\t\t<td>".$my_number_threads."</td>\n";
-				echo "\t\t<td>".$my_number_posts."</td>\n";
+				echo "<td>".$my_number_threads."</td>";
+				echo "<td>".$my_number_posts."</td>";
 				// the last post in the forum
 				if ($forum['last_poster_name']<>'') {
 					$name=$forum['last_poster_name'];
@@ -347,12 +347,12 @@ if ($action_forums!='add') {
 					$name=api_get_person_name($forum['last_poster_firstname'], $forum['last_poster_lastname']);
 					$poster_id=$forum['last_poster_id'];
 				}
-				echo "\t\t<td>";
+				echo "<td>";
 				if (!empty($forum['last_post_id'])) {
 					echo $forum['last_post_date']." ".get_lang('By').' '.display_user_link($poster_id, $name);
 				}
-				echo "</td>\n";
-				echo "\t\t<td NOWRAP align='center'>";
+				echo "</td>";
+				echo "<td NOWRAP align='center'>";
 				
 				if (api_is_allowed_to_edit(false,true) && !($forum['session_id']==0 && intval(isset($_SESSION['id_session'])?$_SESSION['id_session']:null)!=0)) {
 					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
@@ -371,21 +371,19 @@ if ($action_forums!='add') {
 				if (!api_is_anonymous()) {
 					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=notify&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
 				}
-				echo "</td>\n";
-				echo "\t</tr>";
+				echo "</td>";
+				echo "</tr>";
 			}
 		}
 	}
 	if (count($forum_list) == 0) {
-		echo "\t<tr><td>".get_lang('NoForumInThisCategory')."</td></tr>\n";
+		echo "<tr><td>".get_lang('NoForumInThisCategory')."</td></tr>";
 	}
 
-	echo "</table>\n";
+	echo "</table>";
 }
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 // footer
 if ($origin!='learnpath') {

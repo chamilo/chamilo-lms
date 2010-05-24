@@ -17,7 +17,6 @@
 *
 *	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 *	@copyright Ghent University
-*	@copyright Patrick Cool
 *
 * 	@package chamilo.forum
 */
@@ -25,15 +24,15 @@
 		INIT SECTION
 */
 /*
------------------------------------------------------------
 	Language Initialisation
------------------------------------------------------------
 */
 // name of the language file that needs to be included
 $language_file = 'forum';
 //$this_section=SECTION_COURSES;
 require_once '../inc/global.inc.php';
+
 /* ------------	ACCESS RIGHTS ------------ */
+
 // notice for unauthorized people.
 api_protect_course_script(true);
 

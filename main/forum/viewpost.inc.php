@@ -28,7 +28,7 @@ if(isset($rows)){
 			echo "<div style=\"border: 1px solid #000000; padding: 4px 0px 0px 4px; margin-top:5px;\" > <h3> $name </h3> </div>";
 			$sw = false;
 		}
-		echo "<div ".$style."><table width=\"100%\" class=\"post\" cellspacing=\"5\" border=\"0\" >\n";
+		echo "<div ".$style."><table width=\"100%\" class=\"post\" cellspacing=\"5\" border=\"0\" >";
 		// the style depends on the status of the message: approved or not
 		//echo 'dd'.$row['status'];
 
@@ -43,8 +43,8 @@ if(isset($rows)){
 			$leftclass='forum_message_left';
 		}
 
-		echo "\t<tr>\n";
-		echo "\t\t<td rowspan=\"3\" class=\"$leftclass\">";
+		echo "<tr>";
+		echo "<td rowspan=\"3\" class=\"$leftclass\">";
 
 		echo '<br /><b>'.$row['post_date'].'</b><br />';
 
@@ -52,16 +52,16 @@ if(isset($rows)){
 			echo $url_post;
 		}
 
-		echo "</td>\n";
+		echo "</td>";
 
 		// The post title
-		echo "\t\t<td class=\"$titleclass\">".prepare4display($row['post_title'])."</td>\n";
-		echo "\t</tr>\n";
+		echo "<td class=\"$titleclass\">".prepare4display($row['post_title'])."</td>";
+		echo "</tr>";
 
 		// The post message
-		echo "\t<tr >\n";
-		echo "\t\t<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>\n";
-		echo "\t</tr>\n";
+		echo "<tr >";
+		echo "<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>";
+		echo "</tr>";
 
 		// The check if there is an attachment
 		$attachment_list=get_attachment($row['post_id']);

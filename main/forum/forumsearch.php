@@ -15,11 +15,10 @@
 * 	- new view option: nested view
 * 	- quoting a message
 *
-*	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*	@Copyright Ghent University
-*	@Copyright Patrick Cool
+*	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+*	@copyright Ghent University
 *
-* 	@package dokeos.forum
+* 	@package chamilo.forum
 */
 
 // name of the language file that needs to be included

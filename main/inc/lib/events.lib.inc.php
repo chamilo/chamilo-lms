@@ -1,4 +1,4 @@
-<?php // $Id: events.lib.inc.php 22205 2009-07-17 21:11:52Z cfasanando $
+<?php
 /* See license terms in /license.txt */
 /**
 * EVENTS LIBRARY
@@ -178,7 +178,8 @@ function event_access_tool($tool, $id_session=0)
 	global $_course;
 	global $TABLETRACK_LASTACCESS; //for "what's new" notification
 	
-	$id_session = api_get_session_id();	
+	$id_session = api_get_session_id();
+	$tool = Database::escape_string($tool);	
 	$reallyNow = time();
 	$user_id = $_user['user_id'] ? "'".$_user['user_id']."'" : "0"; // no one
 	// record information
@@ -201,7 +202,7 @@ function event_access_tool($tool, $id_session=0)
 				VALUES
 					(".$user_id.",".// Don't add ' ' around value, it's already done.
 					"'".$_cid."' ,
-					'".htmlspecialchars($tool, ENT_QUOTES)."',
+					'".$tool."',
 					FROM_UNIXTIME(".$reallyNow."), 
 					'".$id_session."')";
 		$res = Database::query($sql);
@@ -209,14 +210,11 @@ function event_access_tool($tool, $id_session=0)
 	// "what's new" notification
 	$sql = "UPDATE $TABLETRACK_LASTACCESS
 			SET access_date = FROM_UNIXTIME($reallyNow)
-			WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool = '".htmlspecialchars($tool, ENT_QUOTES)."' AND access_session_id=".$id_session;
+			WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool = '".$tool."' AND access_session_id=".$id_session;
 	$res = Database::query($sql);
-	if (Database::affected_rows() == 0)
-	{
-		$sql = "INSERT INTO $TABLETRACK_LASTACCESS
-					(access_user_id,access_cours_code,access_tool, access_date, access_session_id)
-				VALUES
-					(".$user_id.", '".$_cid."' , '".htmlspecialchars($tool, ENT_QUOTES)."', FROM_UNIXTIME($reallyNow), $id_session)";
+	if (Database::affected_rows() == 0) {
+		$sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id,access_cours_code,access_tool, access_date, access_session_id)
+				VALUES (".$user_id.", '".$_cid."' , '".$tool."', FROM_UNIXTIME($reallyNow), $id_session)";
 		$res = Database::query($sql);
 	}
 	return 1;

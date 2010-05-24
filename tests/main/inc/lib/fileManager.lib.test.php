@@ -191,6 +191,7 @@ class TestFileManager extends UnitTestCase {
 	}
 
 	public function testMkdirs(){
+		//This function is deprecated
 		$path='/var/www/path/ruta';
 		$res = $this->fmanager->mkdirs($path);
 		$this->assertFalse($res);

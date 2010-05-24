@@ -14,7 +14,7 @@ if (isset($current_thread['thread_id'])){
 	$rows=get_posts($current_thread['thread_id']);
 	$increment=0;
 	foreach ($rows as $row) {
-		echo "<table width=\"100%\" class=\"post\" cellspacing=\"5\" border=\"0\">\n";
+		echo "<table width=\"100%\" class=\"post\" cellspacing=\"5\" border=\"0\">";
 		// the style depends on the status of the message: approved or not
 		if ($row['visible']=='0') {
 			$titleclass='forum_message_post_title_2_be_approved';
@@ -26,8 +26,8 @@ if (isset($current_thread['thread_id'])){
 			$leftclass='forum_message_left';
 		}
 	
-		echo "\t<tr>\n";
-		echo "\t\t<td rowspan=\"3\" class=\"$leftclass\">";
+		echo "<tr>";
+		echo "<td rowspan=\"3\" class=\"$leftclass\">";
 		if ($row['user_id']=='0') {
 			$name=prepare4display($row['poster_name']);
 		} else {
@@ -49,16 +49,16 @@ if (isset($current_thread['thread_id'])){
 		// The course admin him/herself can do this off course always
 		if (($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
 			if (api_is_allowed_to_session_edit(false,true))
-				echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$row['post_id']."&origin=".$origin."&edit=edition&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
+				echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$row['post_id']."&origin=".$origin."&edit=edition&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 		}
 	
 		if ($origin != 'learnpath') {
 			if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=delete&amp;content=post&amp;id=".$row['post_id']."&origin=".$origin."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>\n";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=delete&amp;content=post&amp;id=".$row['post_id']."&origin=".$origin."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('post', $row['post_id'], $row['visible'],array('forum'=>Security::remove_XSS($_GET['forum']),'thread'=>Security::remove_XSS($_GET['thread']), 'origin'=>$origin ));
-				echo "\n";
+				echo "";
 				if ($increment>0) {
-					echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;post=".$row['post_id']."&origin=".$origin."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>\n";
+					echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;post=".$row['post_id']."&origin=".$origin."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>";
 				}
 			}
 		}
@@ -70,11 +70,11 @@ if (isset($current_thread['thread_id'])){
 			if( isset($_GET['gradebook'])){
 				if ($increment>0 && $user_status!=1 ) {
 					$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-					echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".Security::remove_XSS($_GET['gradebook'])."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";
+					echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".Security::remove_XSS($_GET['gradebook'])."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>";
 				 }
 			} else {
 				if ($increment>0 && $user_status!=1 ) {
-					echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";
+					echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>";
 				}
 			}
 		}
@@ -82,8 +82,8 @@ if (isset($current_thread['thread_id'])){
 		if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
 			if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
 				if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
-					echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$row['post_id'].'&amp;action=replymessage&origin='.$origin.'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>\n";
-					echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$row['post_id'].'&amp;action=quote&origin='.$origin.'">'.Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>\n";
+					echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$row['post_id'].'&amp;action=replymessage&origin='.$origin.'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>";
+					echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$row['post_id'].'&amp;action=quote&origin='.$origin.'">'.Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>";
 				}
 			}
 		} else {
@@ -97,7 +97,7 @@ if (isset($current_thread['thread_id'])){
 				echo get_lang('ThreadLocked').'<br />';
 			}
 		}
-		echo "</td>\n";
+		echo "</td>";
 		// show the
 		if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) and !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']])) {
 			$post_image=icon('../img/forumpostnew.gif');
@@ -108,13 +108,13 @@ if (isset($current_thread['thread_id'])){
 			$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 		}
 		// The post title
-		echo "\t\t<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($row['post_title'], STUDENT))."</td>\n";
-		echo "\t</tr>\n";
+		echo "<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($row['post_title'], STUDENT))."</td>";
+		echo "</tr>";
 		
 		// The post message
-		echo "\t<tr>\n";
-		echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($row['post_text'], STUDENT))."</td>\n";
-		echo "\t</tr>\n";
+		echo "<tr>";
+		echo "<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($row['post_text'], STUDENT))."</td>";
+		echo "</tr>";
 	
 		// The check if there is an attachment
 		 

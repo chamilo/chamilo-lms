@@ -1,5 +1,5 @@
 <?php
-/* See license terms in /dokeos_license.txt */
+/* See license terms in /license.txt */
 
 /* FIX for IE cache when using https */
 session_cache_limiter("none");

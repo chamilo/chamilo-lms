@@ -302,8 +302,9 @@ function get_printable_data($users,$alleval, $alllinks) {
 	$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
 	$offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 	$count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : 10;
-	$header_names = $datagen->get_header_names($offset, $count);
-	$data_array = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true);
+	$header_names = $datagen->get_header_names($offset, $count, true);
+	$data_array = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true,true);
+	
 	$newarray = array();
 	foreach ($data_array as $data) {
 		$newarray[] = array_slice($data, 1);

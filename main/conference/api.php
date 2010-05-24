@@ -1,14 +1,13 @@
 <?php
-/* See license terms in /dokeos_license.txt */
+/* See license terms in /license.txt */
 
 /* FIX for IE cache when using https */
 session_cache_limiter("none");
 
 /**
-==============================================================================
-*	This is an interface between Dokeos and Videoconference application
+*	This is an interface between Chamilo and Videoconference application
 *
-==============================================================================
+
 */
 /*==== DEBUG ====*/
 $debug=0;
@@ -42,7 +41,7 @@ if ($_SERVER['HTTP_USER_AGENT'] == 'Shockwave Flash') {
 } */
 
 /*==== INCLUDE ====*/
-require_once ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 require_once (api_get_path(LIBRARY_PATH)."course.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."document.lib.php");

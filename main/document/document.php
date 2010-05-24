@@ -278,7 +278,7 @@ $image_files_only = '';
 if ($is_certificate_mode) {
 	$interbreadcrumb[]= array('url' => '../gradebook/index.php', 'name' => get_lang('Gradebook'));
 } else {
-	$interbreadcrumb[]= array('url' => '', 'name' => get_lang('Document'));
+	$interbreadcrumb[]= array('url' => '', 'name' => get_lang('Documents'));
 }
 
 // Interbreadcrumb for the current directory root path
@@ -305,10 +305,15 @@ for ($i = 0; $i < $array_len; $i++) {
 	}
 
 	$url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
+	
+	//Max char 80
+	$url_to_who = cut($dir_array[$i],80);
+	
 	if ($is_certificate_mode) {
-		$interbreadcrumb[] = array('url' => $url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $dir_array[$i]);
+		$interbreadcrumb[] = array('url' => $url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
 	} else {
-		$interbreadcrumb[] = array('url' => $url_dir, 'name' => $dir_array[$i]);
+		
+		$interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
 	}
 
 	$dir_acum .= $dir_array[$i].'/';

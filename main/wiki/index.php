@@ -93,6 +93,10 @@ event_access_tool(TOOL_WIKI);
 HEADER & TITLE
 */
 // If it is a group wiki then the breadcrumbs will be different.
+
+//Setting variable
+$_clean['group_id'] = 0;
+
 if ($_SESSION['_gid'] OR $_GET['group_id']) {
 
 	if (isset($_SESSION['_gid'])) {
@@ -111,10 +115,10 @@ if ($_SESSION['_gid'] OR $_GET['group_id']) {
 
 	//ensure this tool in groups whe it's private or deactivated
 	if 	($group_properties['wiki_state']==0) {
-		echo api_not_allowed();
+		api_not_allowed();
 	} elseif ($group_properties['wiki_state']==2) {
  		if (!api_is_allowed_to_edit(false,true) and !GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid'])) {
-			echo api_not_allowed();
+			api_not_allowed();
 		}
 	}
 } else {
@@ -446,6 +450,13 @@ if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recen
 		echo '<a href="index.php?action=delete&amp;title='.$page.'"'.is_active_navigation_tab('delete').'>'.Display::display_icon('delete.gif',get_lang('DeleteThisPage')).' '.get_lang('Delete').'</a>';
 	}
 	echo '</div>';
+}
+
+
+//In new pages go to new page
+if (isset($_POST['SaveWikiNew']))
+{
+	display_wiki_entry(Security::remove_XSS($_POST['reflink']));
 }
 
 /////////////////////// more options /////////////////////// Juan Carlos Raña Trabado
@@ -1626,7 +1637,7 @@ if ($_GET['action']=='edit')
 				</select> %';
 				echo '<br/><br/>';
 				echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post
-				echo '<button class="save" type="submit" name="SaveWikiChange">'.get_lang('langSave').'</button>';//for save button Don't change name (see fckeditor/editor/plugins/customizations/fckplugin_compressed.js and fckplugin.js
+				echo '<button class="save" type="submit" name="SaveWikiChange">'.get_lang('Save').'</button>';//for save button Don't change name (see fckeditor/editor/plugins/customizations/fckplugin_compressed.js and fckplugin.js
 				echo '</div>';
 				echo '</form>';
 			}
@@ -1839,18 +1850,14 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 //rss feed. TODO:
 //
 
-if ($_GET['action']=='recentchanges')
-{
+if ($_GET['action']=='recentchanges') {
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
 	if ( api_is_allowed_to_session_edit(false,true) ) {
-		if (check_notify_all()==1)
-		{
+		if (check_notify_all()==1) {
 			$notify_all= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('FullNotifyByEmail').'" alt="'.get_lang('FullNotifyByEmail').'" style="vertical-align:middle;" />'.get_lang('NotNotifyChanges');
 			$lock_unlock_notify_all='unlocknotifyall';
-		}
-		else
-		{
+		} else {
 			$notify_all= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('FullCancelNotifyByEmail').'" alt="'.get_lang('FullCancelNotifyByEmail').'"  style="vertical-align:middle;"/>'.get_lang('NotifyChanges');
 			$lock_unlock_notify_all='locknotifyall';
 		}
@@ -1869,14 +1876,12 @@ if ($_GET['action']=='recentchanges')
 
 		$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.$condition_session.' ORDER BY dtime DESC'; // new version
 
-	}
-	else
-	{
+	} else	{
 		$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.$condition_session.' AND visibility=1 ORDER BY dtime DESC';	// old version TODO: Replace by the bottom line
 
 		//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND visibility=1 AND '.$tbl_wiki.'.'.$groupfilter.' ORDER BY dtime DESC'; // new version
 	}
-
+	
 	$allpages=Database::query($sql);
 
 	//show table
@@ -2346,12 +2351,6 @@ if ($_GET['action']=='discuss')
 			Display::display_normal_message(get_lang('DiscussNotAvailable'));
 
 	}
-}
-
-///in new pages go to new page
-if ($_POST['SaveWikiNew'])
-{
-	display_wiki_entry(Security::remove_XSS($_POST['reflink']));
 }
 
 echo "</div>"; // echo "<div id='mainwiki'>";

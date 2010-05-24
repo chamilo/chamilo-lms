@@ -196,6 +196,7 @@ class TestFileManager extends UnitTestCase {
 	}
 
 	public function testMkdirs(){
+		//This function is deprecated
 		$path=api_get_path(SYS_COURSE_PATH).'document';
 		$res = $this->fmanager->mkdirs($path);
 		$this->assertFalse($res);

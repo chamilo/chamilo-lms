@@ -633,7 +633,7 @@ class learnpath {
 				"default_encoding,display_order,content_maker," .
 				"content_local,js_lib,session_id) " .
 				"VALUES ($type,'$name','$description','','embedded'," .
-				"'UTF-8','$dsp','Dokeos'," .
+				"'UTF-8','$dsp','Chamilo'," .
 				"'local','','".Database::escape_string($session_id)."')";
 				//if($this->debug>2){error_log('New LP - Inserting new lp '.$sql_insert,0);}
 				$res_insert = Database::query($sql_insert);
@@ -4710,12 +4710,17 @@ class learnpath {
 		if (is_numeric($item_id)) {
 			$tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 			$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-			$sql = "SELECT lp.*
-								FROM " . $tbl_lp_item . " as lp
-								WHERE lp.id = " . Database :: escape_string($item_id);
+			$sql = "SELECT lp.* FROM " . $tbl_lp_item . " as lp
+					WHERE lp.id = " . Database :: escape_string($item_id);
 			$result = Database::query($sql);
-			while ($row = Database :: fetch_array($result)) {
+			while ($row = Database :: fetch_array($result)) {				
 				$_SESSION['parent_item_id'] = ($row['item_type'] == 'dokeos_chapter' || $row['item_type'] == 'dokeos_module' || $row['item_type'] == 'dir') ? $item_id : 0;
+				
+				//Prevents wrong parent selection for document see Bug#1251 
+				if ($row['item_type'] != 'dokeos_chapter' || $row['item_type'] != 'dokeos_module') {
+					$_SESSION['parent_item_id'] = $row['parent_item_id'];					
+				}
+				
 				$return .= $this->display_manipulate($item_id, $row['item_type']);
 				$return .= '<div style="padding:10px;">';
 				if ($msg != '')
@@ -5032,10 +5037,10 @@ class learnpath {
 			reset($arrLP);
 		}
 
-		$return .= "\t\t\t\t" . '</select>';
-		$return .= "\t\t\t" . '</td>' . "\n";
-		$return .= "\t\t" . '</tr>' . "\n";
-		$return .= "\t\t" . '<tr>' . "\n";
+		$return .= '</select>';
+		$return .= '</td>';
+		$return .= '</tr>';
+		$return .= '<tr>';
 
 		$return .= "\t\t\t" . '<td class="label"><label for="idPosition">' . get_lang('Position') . '</label></td>' . "\n";
 		$return .= "\t\t\t" . '<td class="input">' . "\n";
@@ -5991,14 +5996,12 @@ class learnpath {
 				$path_parts = pathinfo($extra_info['path']);
 				$item_title = stripslashes($path_parts['filename']);
 			}
-		}
-		elseif (is_numeric($extra_info)) {
-			$sql_doc = "SELECT path, title
-									FROM " . $tbl_doc . "
-									WHERE id = " . Database :: escape_string($extra_info);
+		} elseif (is_numeric($extra_info)) {
+			$sql_doc = "SELECT path, title FROM " . $tbl_doc . "
+						WHERE id = " . Database :: escape_string($extra_info);
 
 			$result = Database::query($sql_doc);
-			$row = Database :: fetch_array($result);
+			$row 	= Database :: fetch_array($result);
 
 			$explode = explode('.', $row['title']);
 
@@ -6028,32 +6031,26 @@ class learnpath {
 		else
 			$parent = 0;
 
-		$sql = "
-						SELECT *
-						FROM " . $tbl_lp_item . "
-						WHERE
-							lp_id = " . $this->lp_id;
-
+		$sql = "SELECT * FROM " . $tbl_lp_item . "
+				WHERE lp_id = " . $this->lp_id;
 		$result = Database::query($sql);
-
 		$arrLP = array ();
-
 		while ($row = Database :: fetch_array($result)) {
 			$arrLP[] = array (
-				'id' => $row['id'],
-				'item_type' => $row['item_type'],
-				'title' => $row['title'],
-				'path' => $row['path'],
-				'description' => $row['description'],
-				'parent_item_id' => $row['parent_item_id'],
-				'previous_item_id' => $row['previous_item_id'],
-				'next_item_id' => $row['next_item_id'],
-				'display_order' => $row['display_order'],
-				'max_score' => $row['max_score'],
-				'min_score' => $row['min_score'],
-				'mastery_score' => $row['mastery_score'],
-				'prerequisite' => $row['prerequisite']
-			);
+				'id' 				=> $row['id'],
+				'item_type' 		=> $row['item_type'],
+				'title' 			=> $row['title'],
+				'path' 				=> $row['path'],
+				'description' 		=> $row['description'],
+				'parent_item_id' 	=> $row['parent_item_id'],
+				'previous_item_id'	=> $row['previous_item_id'],
+				'next_item_id' 		=> $row['next_item_id'],
+				'display_order' 	=> $row['display_order'],
+				'max_score' 		=> $row['max_score'],
+				'min_score' 		=> $row['min_score'],
+				'mastery_score' 	=> $row['mastery_score'],
+				'prerequisite' 		=> $row['prerequisite']
+			);			
 		}
 
 		$this->tree_array($arrLP);
@@ -6069,8 +6066,8 @@ class learnpath {
 			$return .= get_lang("EditTheCurrentDocument") . "\n";
 		}
 
-		$return .= '	</div>
-								</div>';
+		$return .= '</div>
+						</div>';
 
 		if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
 			$return .= Display :: return_warning_message('<strong>' . get_lang("Warning") . ' !</strong><br />' . get_lang("WarningEditingDocument"), false);
@@ -6112,6 +6109,7 @@ class learnpath {
 				}
 			}
 		}
+		
 		$parent_select = & $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" style="width:40%;" onchange="load_cbo(this.value);"');
 		$my_count=0;
 		foreach ($arrHide as $key => $value) {
@@ -6125,13 +6123,15 @@ class learnpath {
 			}
 			$my_count++;
 		}
-
+		
 		if (!empty ($id)) {
 			$parent_select->setSelected($parent);
-		} else {
+		} else {			
 			$parent_item_id = $_SESSION['parent_item_id'];
 			$parent_select->setSelected($parent_item_id);
 		}
+		
+		
 
 		if (is_array($arrLP)) {
 			reset($arrLP);

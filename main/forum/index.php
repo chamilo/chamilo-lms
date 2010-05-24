@@ -1,28 +1,5 @@
-<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 
 /**
 *	These files are a complete rework of the forum. The database structure is
@@ -42,14 +19,14 @@
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
 *
-* 	@package dokeos.forum
+* 	@package chamilo.forum
 */
 
 // name of the language file that needs to be included
 $language_file = 'forum';
 
 // including the global dokeos file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 	$(document).ready(function(){ $(\'.hide-me\').slideUp() });
@@ -74,29 +51,22 @@ $this_section=SECTION_COURSES;
 api_protect_course_script(true);
 
 // including additional library scripts
-require_once(api_get_path(LIBRARY_PATH).'/text.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'/text.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 $nameTools=get_lang('Forums');
 
 /*
------------------------------------------------------------
 	Including necessary files
------------------------------------------------------------
 */
-require 'forumconfig.inc.php';
+require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
-
 /*
-==============================================================================
 		MAIN DISPLAY SECTION
-==============================================================================
 */
 /*
------------------------------------------------------------
 	Header
------------------------------------------------------------
 */
 
 if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
@@ -138,9 +108,7 @@ $form_count=0;
 
 
 /*
-------------------------------------------------------------------------------------------------------
 	ACTIONS
-------------------------------------------------------------------------------------------------------
 */
 $get_actions=isset($_GET['action']) ? $_GET['action'] : '';
 if (api_is_allowed_to_edit(false,true)) {
@@ -160,17 +128,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 	$whatsnew_post_info = array();
 	$whatsnew_post_info = $_SESSION['whatsnew_post_info'];
 
-	/*
-	-----------------------------------------------------------
+	/*	
 	  			TRACKING
-	-----------------------------------------------------------
 	*/
 	event_access_tool(TOOL_FORUM);
 
 	/*
-	------------------------------------------------------------------------------------------------------
-		RETRIEVING ALL THE FORUM CATEGORIES AND FORUMS
-	------------------------------------------------------------------------------------------------------
+			RETRIEVING ALL THE FORUM CATEGORIES AND FORUMS
 	note: we do this here just after het handling of the actions to be sure that we already incorporate the
 	latest changes
 	*/
@@ -183,9 +147,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 	$forum_list=get_forums();
 
 	/*
-	------------------------------------------------------------------------------------------------------
-		RETRIEVING ALL GROUPS AND THOSE OF THE USER
-	------------------------------------------------------------------------------------------------------
+			RETRIEVING ALL GROUPS AND THOSE OF THE USER
+
 	*/
 	// the groups of the user
 	$groups_of_user=array();
@@ -200,20 +163,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 		}
 	}
 
-	/*
-	------------------------------------------------------------------------------------------------------
-		CLEAN GROUP ID FOR AJAXFILEMANAGER
-	------------------------------------------------------------------------------------------------------
+	/*	
+		CLEAN GROUP ID FOR AJAXFILEMANAGER	
 	*/
-	if(isset($_SESSION['_gid']))
-	{
+	if(isset($_SESSION['_gid'])) {
 		unset($_SESSION['_gid']);
     }
 
-	/*
-	------------------------------------------------------------------------------------------------------
-		ACTION LINKS
-	------------------------------------------------------------------------------------------------------
+	/*	
+		ACTION LINKS	
 	*/
 		$session_id=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : false;
 		//if (api_is_allowed_to_edit() and !$_GET['action'])
@@ -228,12 +186,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 		}
 		echo '</div>';
 
-	/*
-	------------------------------------------------------------------------------------------------------
-		Display Forum Categories and the Forums in it
-	------------------------------------------------------------------------------------------------------
+	/*	
+		Display Forum Categories and the Forums in it	
 	*/ 
-	echo '<table class="data_table">'."\n";
+	echo '<table class="data_table">';
 	// Step 3: we display the forum_categories first
 	if(is_array($forum_categories_list)) {
 		foreach ($forum_categories_list as $forum_category_key => $forum_category) {
@@ -247,13 +203,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 				$session_displayed = '';
 			}
 
-			echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";
+			echo "<tr><th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";			
 			echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display(Security::remove_XSS($forum_category['cat_id'])).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display(Security::remove_XSS($forum_category['cat_title'])).$session_displayed.'</a>'. $session_img .'<br />';
 			
-			if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;') {  
-				echo '<span class="forum_description">'.prepare4display(Security::remove_XSS($forum_category['cat_comment'],STUDENT)).'</span>';
+			if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;') {				  
+				echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 			}
-			echo "</th>\n";
+			echo '</th>';
 
 			echo '<th style="vertical-align: top;" align="center" >';
 			if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($session_id)!=0)) {
@@ -264,19 +220,19 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 				display_up_down_icon('forumcategory',prepare4display($forum_category['cat_id']), $forum_categories_list);
 			}
 			echo '</th>';
-			echo "\t</tr>\n";
+			echo "</tr>";
 
 			// step 4: the interim headers (for the forum)
-			echo "\t<tr class=\"forum_header\">\n";
-			echo "\t\t<td colspan=\"2\">".get_lang('Forum')."</td>\n";
-			echo "\t\t<td>".get_lang('Topics')."</td>\n";
-			echo "\t\t<td>".get_lang('Posts')."</td>\n";
-			echo "\t\t<td>".get_lang('LastPosts')."</td>\n";
-			echo "\t\t<td>".get_lang('Actions')."</td>\n";
-			echo "\t</tr>\n";
+			echo "<tr class=\"forum_header\">";
+			echo "<td colspan=\"2\">".get_lang('Forum')."</td>";
+			echo "<td>".get_lang('Topics')."</td>";
+			echo "<td>".get_lang('Posts')."</td>";
+			echo "<td>".get_lang('LastPosts')."</td>";
+			echo "<td>".get_lang('Actions')."</td>";
+			echo "</tr>";
 
 			// the forums in this category
-		$forums_in_category=get_forums_in_category($forum_category['cat_id']);
+			$forums_in_category=get_forums_in_category($forum_category['cat_id']);
 
 			// step 5: we display all the forums in this category.
 			$forum_count=0;
@@ -348,7 +304,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						if ($show_forum) {
 						$form_count++;
 						$mywhatsnew_post_info=isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']]: null;
-						echo "\t<tr class=\"forum\">\n";
+						echo "<tr class=\"forum\">";
 
 						// Showing the image
 						if(!empty($forum['forum_image'])) {
@@ -365,8 +321,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 								echo "<img src=\"$image_path\" $img_attributes>";
 							}
 						}
-						echo "</td>\n";
-						echo "\t\t<td width=\"20\">";
+						echo "</td>";
+						echo "<td width=\"20\">";
 
 						if ($forum['forum_of_group']!=='0') {
 							if (is_array($mywhatsnew_post_info) and !empty($mywhatsnew_post_info)) {
@@ -383,7 +339,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 								}
 
 						}
-						echo "</td>\n";
+						echo "</td>";
 					
 						//validacion when belongs to a session
 						$session_img = api_get_session_image($forum['session_id'], $_user['status']);
@@ -404,13 +360,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						}
 						$forum['forum_of_group']==0?$groupid='':$groupid=$forum['forum_of_group'];
 						
-						echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&gidReq=".Security::remove_XSS($groupid)."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display(Security::remove_XSS($forum['forum_title'])).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display(Security::remove_XSS($forum['forum_comment'],STUDENT))."</td>\n";
+						echo "<td><a href=\"viewforum.php?".api_get_cidreq()."&gidReq=".Security::remove_XSS($groupid)."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display(Security::remove_XSS($forum['forum_title'])).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display(Security::remove_XSS($forum['forum_comment'],STUDENT))."</td>";
 						//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 						// the number of topics and posts
 						$number_threads=isset($forum['number_of_threads']) ? $forum['number_of_threads'] : null;
 						$number_posts  =isset($forum['number_of_posts']) ? $forum['number_of_posts'] : null;
-						echo "\t\t<td>".$number_threads."</td>\n";
-						echo "\t\t<td>".$number_posts."</td>\n";
+						echo "<td>".$number_threads."</td>";
+						echo "<td>".$number_posts."</td>";
 						// the last post in the forum
 						if ($forum['last_poster_name']<>'') {
 							$name=$forum['last_poster_name'];
@@ -419,13 +375,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 							$name = api_get_person_name($forum['last_poster_firstname'], $forum['last_poster_lastname']);
 							$poster_id=$forum['last_poster_id'];
 						}
-						echo "\t\t<td nowrap=\"nowrap\">";
+						echo "<td nowrap=\"nowrap\">";
 
 						if (!empty($forum['last_post_id'])) {
 							echo api_convert_and_format_date($forum['last_post_date'], null, date_default_timezone_get())."<br /> ".get_lang('By').' '.display_user_link($poster_id, $name);
 						}
-						echo "</td>\n";
-						echo "\t\t<td nowrap=\"nowrap\" align=\"center\">";
+						echo "</td>";
+						echo "<td nowrap=\"nowrap\" align=\"center\">";
 						if (api_is_allowed_to_edit(false,true) && !($forum['session_id']==0 && intval($session_id)!=0)) {
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
@@ -444,22 +400,20 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						if (!api_is_anonymous()  && api_is_allowed_to_session_edit(false,true) ) {		
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=notify&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
 						}
-						echo "</td>\n";
-						echo "\t</tr>";
+						echo "</td>";
+						echo "</tr>";
 					} 
 				}
 			}
 
 			if (count($forum_list)==0) {
-				echo "\t<tr><td>".get_lang('NoForumInThisCategory')."</td>".(api_is_allowed_to_edit(false,true)?'<td colspan="6"></td>':'<td colspan="6"></td>')."</tr>\n";
+				echo "<tr><td>".get_lang('NoForumInThisCategory')."</td>".(api_is_allowed_to_edit(false,true)?'<td colspan="6"></td>':'<td colspan="6"></td>')."</tr>";
 			}
 		}
 	} 
-	echo "</table>\n";
+	echo "</table>";
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display :: display_footer();

@@ -142,7 +142,7 @@ if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 	}
 } else {
 	$interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
-	$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('MessageList'));
+	$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('GroupList'));
 }
 
 Display :: display_header($tool_name, 'Groups');
@@ -431,21 +431,37 @@ if ($group_id != 0 ) {
 			}
 		}
 
+
+		
 		// display groups (newest, mygroups, pop)
 		echo '<div class="social-box-main1">';
 		   	if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 		   		$view_group = $_GET['view'];
+		   		
 		   		switch ($view_group) {
 		   			case 'mygroups' :
 		        		if (count($grid_my_groups) > 0) {
 		        			echo '<div class="social-groups-text3">'.api_strtoupper(get_lang('MyGroups')).'</div>';
-		        			Display::display_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
+		        			Display::display_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));		        			
 		        		}
+		        		
+		       			if (api_is_platform_admin() || api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
+							if (empty($grid_my_groups)) {
+								echo '<a href="group_add.php">'.get_lang('YouShouldCreateAGroup').'</a>';
+							}
+						}
+				
 		        		break;
 		        	case 'newest' :
 		        		if (count($grid_newest_groups) > 0) {
 							echo '<div class="social-groups-text3">'.api_strtoupper(get_lang('Newest')).'</div>';
 							Display::display_sortable_grid('newest', array(), $grid_newest_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
+						}
+						
+						if (api_is_platform_admin() || api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
+							if (empty($grid_newest_groups)) {
+								echo '<a href="group_add.php">'.get_lang('YouShouldCreateAGroup').'</a>';
+							}
 						}
 		        		break;
 		        	default :
@@ -453,9 +469,16 @@ if ($group_id != 0 ) {
 							echo '<div class="social-groups-text3">'.api_strtoupper(get_lang('Popular')).'</div>';
 							Display::display_sortable_grid('popular', array(), $grid_pop_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 						}
+						
+						if (api_is_platform_admin() || api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
+							if (empty($grid_pop_groups)) {
+								echo '<a href="group_add.php">'.get_lang('YouShouldCreateAGroup').'</a>';
+							}
+						}
+						
 		        		break;
 		   		}
-		   	} else {
+		   	} else {		   		
 		        if (count($grid_my_groups) > 0) {
 		        	echo '<div class="social-groups-text3">'.api_strtoupper(get_lang('MyGroups')).'</div>';
 		        	Display::display_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
@@ -468,6 +491,13 @@ if ($group_id != 0 ) {
 					echo '<div class="social-groups-text3">'.api_strtoupper(get_lang('Popular')).'</div>';
 					Display::display_sortable_grid('popular', array(), $grid_pop_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 				}
+				
+				if (api_is_platform_admin() || api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
+						if (empty($grid_my_groups)  && empty($grid_newest_groups)  && empty($grid_pop_groups) ) {
+							echo '<a href="group_add.php">'.get_lang('YouShouldCreateAGroup').'</a>';
+						}
+				}
+				
 		   	}
 
 		echo '</div>';

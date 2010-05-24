@@ -402,38 +402,25 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 			'name' => get_lang('ToolGradebook')
 		);
 		Display :: display_header(get_lang('FlatView'));
-	}
-	elseif (isset ($_GET['search'])) {
-			
+	} elseif (isset ($_GET['search'])) {		
 		if ($_SESSION['gradebook_dest'] == 'index.php') {
 			$gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']).'?cidReq='.Security::remove_XSS($_GET['course']).'&amp;';	
 		} else {
 			$gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']);
 		}	
 		
-		$interbreadcrumb[]= array (
-			'url' => $gradebook_dest,
-			'name' => get_lang('Gradebook')
-		);	
-			
+		$interbreadcrumb[]= array ('url' => $gradebook_dest,'name' => get_lang('Gradebook'));
 
-		if ((isset($_GET['selectcat']) && $_GET['selectcat']>0)) {
-			
+		if ((isset($_GET['selectcat']) && $_GET['selectcat']>0)) {			
 			if (!empty($_GET['course'])) {
-				$interbreadcrumb[]= array (
-					'url' => $gradebook_dest.'selectcat='.Security::remove_XSS($_GET['selectcat']),
-					'name' => get_lang('Details')
-				);	
+				$interbreadcrumb[]= array ('url' => $gradebook_dest.'selectcat='.Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Details'));	
 			} else {
-				$interbreadcrumb[]= array (
-				'url' => $_SESSION['gradebook_dest'].'?selectcat=0',
-				'name' => get_lang('Details')
-				);
-			}
-	
-		}
-		
-	 Display :: display_header('');
+				$interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=0','name' => get_lang('Details'));
+			}	
+		}		
+	 	Display :: display_header('');
+	} else { 
+		Display :: display_header(''); 
 	}
 }
 

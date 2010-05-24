@@ -90,6 +90,7 @@ if (!empty($course)) {
 
 	$user_id = $enreg['user_id'];
 	require 'header_frame.inc.php';
+	
 	?>
 	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="data_table">
 	<tr><th colspan="2"><?php echo get_lang('Connected'); ?></th></tr>

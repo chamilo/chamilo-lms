@@ -782,7 +782,7 @@ input.liteoption {
 	width: 12%;
 	text-align: left;
 	vertical-align: top;
-	border: 1px solid #264269;
+	border: 1px solid #ccc;
 	border-collapse: collapse;
 	background-color: #f5f5f5;
 }
@@ -791,7 +791,7 @@ input.liteoption {
 	width: 12%;
 	text-align: left;
 	vertical-align: top;
-	border: 1px solid #264269;
+	border: 1px solid #ccc;
 	border-collapse: collapse;
 	background-color: #e6e6e6;
 }
@@ -800,12 +800,17 @@ input.liteoption {
 	width: 12%;
 	text-align: left;
 	vertical-align: top;
-	border: 1px solid #264269;
+	border: 1px solid #ccc;
 	border-collapse: collapse;
-	background-color: #FFCA8D;
-	color: #CC3300;
-	font-weight: bold;
+	background-color: #FFFFC0;	
 }
+
+#agenda_list th {
+	background-color:#E5EDF9;
+	border:1px solid gray;
+	padding-right:12px;
+}
+
 /* text in the cells: display of agenda items (visible)*/
 #agenda_list .data {
 	background-color: #eee;

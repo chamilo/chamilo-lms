@@ -5,6 +5,8 @@ define('SCORE_DIV',1);
 define('SCORE_PERCENT',2);
 define('SCORE_DIV_PERCENT',3);
 define('SCORE_AVERAGE',4);
+
+define('SCORE_DECIMAL',5);
 define('SCORE_IGNORE_SPLIT', 8);
 define('SCORE_BOTH',1);
 define('SCORE_ONLY_DEFAULT',2);
@@ -233,11 +235,14 @@ class ScoreDisplay
 	 * @param int $what one of the following constants: SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
 	 * (only taken into account if custom score display is enabled and for course/platform admin)
 	 */
-	public function display_score($score,$type,$what = SCORE_BOTH) {
-		$type2 = $type & 7;	// removes the 'SCORE_IGNORE_SPLIT' bit
+	public function display_score($score,$type, $what = SCORE_BOTH) {
+		
+		$type2 = $type & 7;	// removes the 'SCORE_IGNORE_SPLIT' bit		
 		$split_enabled = ($type2 == $type);
+		
 		$my_score=($score==0) ? 1 : $score;
-		if ($this->custom_enabled && isset($this->custom_display_conv)) {
+		
+		if ($this->custom_enabled && isset($this->custom_display_conv)) {			
 				// students only see the custom display
 				if (!api_is_allowed_to_create_course()) {
 					$display = $this->display_custom($my_score);
@@ -254,8 +259,8 @@ class ScoreDisplay
 						$display.= ' ('.$this->display_custom ($my_score).')';
 			}
 
-		} else {
-		// if no custom display set, use default display
+		} else {			
+			// if no custom display set, use default display			
 			$display = $this->display_default ($my_score, $type2);
 		}
 		return (($split_enabled ? $this->get_color_display_start_tag($my_score) : '')
@@ -278,9 +283,17 @@ class ScoreDisplay
 
 			case SCORE_AVERAGE :		// XX %
 				return $this->display_as_percent($score);
+			
+			case SCORE_DECIMAL :       // 0.50  (X/Y) 	
+				return $this->display_as_decimal($score);
+			
 		}
 	}
-
+	
+	private function display_as_decimal($score) {
+		$score_denom=($score[1]==0) ? 1 : $score[1];
+		return round(($score[0]/ $score_denom),2);
+	}
 	private function display_as_percent ($score) {
 		$score_denom=($score[1]==0) ? 1 : $score[1];
 		return round(($score[0] / $score_denom) * 100,2) . ' %';

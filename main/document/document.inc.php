@@ -62,7 +62,7 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
 					$userinfo = Database::get_user_info_from_id(substr($folder_titles[$folder], 8));
 					$folder_titles[$folder] = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 				}
-
+				$folder_titles[$folder] = cut($folder_titles[$folder], 80);
 				$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$folder_titles[$folder];
 				$parent_select -> addOption($label, $folder);
 				if ($selected != '') {
@@ -78,8 +78,9 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
 				$label = '/ ('.get_lang('HomeDirectory').')';
 			} else {
 				$path_parts = explode('/', str_replace($group_dir, '', $folder));
+				$label = cut($label, 80);
 				$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
-			}
+			}			
 			$parent_select -> addOption($label, $folder);
 			if ($selected != '') {
 				$parent_select->setSelected($folder);
@@ -129,7 +130,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		$ext = explode('.', $path);
 		$ext = strtolower($ext[sizeof($ext) - 1]);
 		// "htmlfiles" are shown in a frameset
-		if ($ext == 'htm' || $ext == 'html' || $ext == 'gif' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png') {
+		if ($ext == 'htm' || $ext == 'html' || $ext == 'gif' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'pdf' || $ext == 'swf' || $ext == 'mp3') {
 			$url = 'showinframes.php?'.api_get_cidreq().'&amp;file='.$url_path.$req_gid;
 		} else {
 			// url-encode for problematic characters (we may not call them dangerous characters...)

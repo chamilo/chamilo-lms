@@ -15,6 +15,8 @@ require_once 'course.lib.php';
 require_once 'tablesort.lib.php';
 require_once 'fileManage.lib.php';
 require_once 'fileUpload.lib.php';
+require_once 'document.lib.php';
+
 /**
  * infinite
  */
@@ -207,17 +209,14 @@ class GroupManager {
 				calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', forum_state = '".$category['forum_state']."', wiki_state = '".$category['wiki_state']."', chat_state = '".$category['chat_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."', session_id='".Database::escape_string($my_id_session)."'";
 		Database::query($sql);
 		$lastId = Database::insert_id();
-		/*$secret_directory = uniqid("")."_team_".$lastId;
-		while (is_dir(api_get_path(SYS_COURSE_PATH).$currentCourseRepository."/group/$secret_directory"))
-		{
-			$secret_directory = uniqid("")."_team_".$lastId;
-		}
-		FileManager :: mkdirs(api_get_path(SYS_COURSE_PATH).$currentCourseRepository."/group/".$secret_directory, api_get_permissions_for_new_directories());
-		*/
+
 		$desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
-		$dir_name = create_unexisting_directory($_course,$_user['user_id'],$lastId,NULL,api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document',$desired_dir_name);
+		
+		$my_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document';
+		$unique_name = create_unexisting_directory($_course,$_user['user_id'],$lastId,NULL,$my_path, $desired_dir_name);
 		/* Stores the directory path into the group table */
-		$sql = "UPDATE ".$table_group." SET   name = '".Database::escape_string($name)."', secret_directory = '".$dir_name."' WHERE id ='".$lastId."'";
+		$sql = "UPDATE ".$table_group." SET   name = '".Database::escape_string($name)."', secret_directory = '".$unique_name."' WHERE id ='".$lastId."'";
+		
 		Database::query($sql);
 
 		// create a forum if needed
@@ -356,14 +355,11 @@ class GroupManager {
 	 */
 	public static function delete_groups ($group_ids, $course_code = null) {
 		$course_db = '';
-		if ($course_code != null)
-		{
+		if ($course_code != null) {
 			$course = Database :: get_course_info($course_code);
 			$course['path'] = $course['directory'];
 			$course_db = $course['database'];
-		}
-		else
-		{
+		} else {
 			$course = api_get_course_info();
 		}
 
@@ -393,25 +389,43 @@ class GroupManager {
 
 
 		// define repository for deleted element
-		$group_garbage = api_get_path(SYS_ARCHIVE_PATH).$course['path']."/group/";
+		
+		/* Useless code
+		$group_garbage = api_get_path(SYS_ARCHIVE_PATH).$course['path']."/group";		
+		var_dump($group_garbage);
 		if (!file_exists($group_garbage))
 			FileManager :: mkdirs($group_garbage, api_get_permissions_for_new_directories());
+		*/
 		// Unsubscribe all users
 		self :: unsubscribe_all_users($group_ids);
 		$sql = 'SELECT id, secret_directory, session_id FROM '.$group_table.' WHERE id IN ('.implode(' , ', $group_ids).')';
 		$db_result = Database::query($sql);
 		$forum_ids = array ();
-		while ($group = Database::fetch_object($db_result))
-		{
+		
+		while ($group = Database::fetch_object($db_result)) {
 			// move group-documents to garbage
-			$source_directory = api_get_path(SYS_COURSE_PATH).$course['path']."/group/".$group->secret_directory;
-			$destination_directory = $group_garbage.$group->secret_directory;
-			if (file_exists($source_directory))
-			{
-				rename($source_directory, $destination_directory);
+			//$source_directory = api_get_path(SYS_COURSE_PATH).$course['path']."/group/".$group->secret_directory;
+			$source_directory = api_get_path(SYS_COURSE_PATH).$course['path']."/document".$group->secret_directory;
+			//File to renamed
+			$destination_dir = api_get_path(SYS_COURSE_PATH).$course['path']."/document".$group->secret_directory.'_DELETED_'.$group->id;
+
+			if (!empty($group->secret_directory)) {
+				//Deleting from document tool 
+				DocumentManager::delete_document($course, $group->secret_directory, $source_directory);
+				
+				if (file_exists($source_directory)) {				
+					if (api_get_setting('permanently_remove_deleted_files') == 'true') {
+						//Delete
+						 my_delete($source_directory);
+					} else {
+						//Rename				
+						rename($source_directory, $destination_dir);
+					}
+				}		
 			}
 			//$forum_ids[] = $group->forum_id;
 		}
+		
 		// delete the groups
 		$sql = "DELETE FROM ".$group_table." WHERE id IN ('".implode("' , '", $group_ids)."')";
 		Database::query($sql);
@@ -1278,15 +1292,14 @@ class GroupManager {
 		$user_id = Database::escape_string($user_id);
 
 		$sql = "SELECT tutor_id FROM ".$course_user_table."
-		             WHERE `user_id`='".$user_id."'
-		             AND `course_code`='".$_course['sysCode']."'"."AND tutor_id=1";
+		        WHERE user_id='".$user_id."' AND course_code='".$_course['sysCode']."'"."AND tutor_id=1";
 		$db_result = Database::query($sql);
 		$result = (Database::num_rows($db_result) > 0);
 		return $result;
 	}
 
 	/**
-	 * Get all group's from a given course in which a given user is ubscribed
+	 * Get all group's from a given course in which a given user is unsubscribed
 	 * @author  Patrick Cool
 	 * @param	 string $course_db: the database of the course you want to
 	 * retrieve the groups for
@@ -1294,22 +1307,21 @@ class GroupManager {
 	 * group memberships
 	 */
 	public static function get_group_ids ($course_db,$user_id) {
-	$groups = array();
-	$tbl_group = Database::get_course_table(TABLE_GROUP_USER,$course_db);
-	$user_id = Database::escape_string($user_id);
-	$sql = "SELECT group_id FROM $tbl_group WHERE user_id = '$user_id'";
-	$groupres = Database::query($sql);
-
-	// uncommenting causes a bug in Agenda AND announcements because there we check if the return value of this function is an array or not
-	//$groups=array();
-
-	if($groupres)
-	{
-		while ($myrow= Database::fetch_array($groupres))
-			$groups[]=$myrow['group_id'];
-	}
-
-	return $groups;
+		$groups = array();
+		$tbl_group = Database::get_course_table(TABLE_GROUP_USER,$course_db);
+		$user_id = Database::escape_string($user_id);
+		$sql = "SELECT group_id FROM $tbl_group WHERE user_id = '$user_id'";
+		$groupres = Database::query($sql);
+	
+		// uncommenting causes a bug in Agenda AND announcements because there we check if the return value of this function is an array or not
+		//$groups=array();
+	
+		if($groupres) {
+			while ($myrow= Database::fetch_array($groupres))
+				$groups[]=$myrow['group_id'];
+		}
+	
+		return $groups;
 	}
 	/*
 	-----------------------------------------------------------

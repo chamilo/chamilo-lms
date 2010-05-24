@@ -391,6 +391,20 @@ window.onload = function() {
 	document.body.style.overflow = 'hidden';
 	updateContentHeight();
 	viewportheight = window.innerHeight;
+	//Fixing IE compatibility of window.innerHeight
+
+	var viewportheight = 0;
+	if( typeof( window.innerHeight ) == 'number' ) {
+	    //Non-IE
+		viewportheight = window.innerHeight;
+	} else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+    	//IE 6+ in 'standards compliant mode'
+	    viewportheight = document.documentElement.clientHeight;
+ 	} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+	    //IE 4 compatible
+	    viewportheight = document.body.clientHeight;
+ 	}
+
 	document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
 
 }
@@ -584,7 +598,21 @@ window.onload = function() {
 	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
 	document.body.style.overflow = 'hidden';
 	updateContentHeight();
-	viewportheight = window.innerHeight;
+	
+	//Fixing IE compatibility of window.innerHeight
+
+	var viewportheight = 0;
+	if( typeof( window.innerHeight ) == 'number' ) {
+	    //Non-IE
+		viewportheight = window.innerHeight;
+	} else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+    	//IE 6+ in 'standards compliant mode'
+	    viewportheight = document.documentElement.clientHeight;
+ 	} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+	    //IE 4 compatible
+	    viewportheight = document.body.clientHeight;
+ 	}
+
 	document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
 
 

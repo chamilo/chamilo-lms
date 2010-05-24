@@ -1,5 +1,5 @@
 <?php
-/* See license terms in /chamilo_license.txt */
+/* See license terms in /license.txt */
 /**
  * Library for language translation from Chamilo language files to XML for videoconference
  * @uses main_api.lib.php for api_get_path()

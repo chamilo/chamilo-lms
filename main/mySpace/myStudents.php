@@ -189,6 +189,7 @@ $tbl_stats_exercices_attempts 		= Database :: get_statistic_table(TABLE_STATISTI
 //$course_quiz_answer = 'quiz_answer';
 //$course_student_publication = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
+
 if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 	$user_id = intval($_GET['user_id']);
 } else {
@@ -196,9 +197,57 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 }
 
 $session_id = intval($_GET['id_session']);
-if (!empty ($_GET['student'])) {
+$student_id = intval($_GET['student']);
 
-	$student_id = intval($_GET['student']);
+// Action behaviour
+$check= Security::check_token('get');
+
+	if ($check) {
+		switch ($_GET['action']) {
+			case 'reset_lp' :
+			
+				$origin		= isset($_GET['origin'])	?Security::remove_XSS($_GET['origin']):"";
+				$details	= isset($_GET['details'])	?Security::remove_XSS($_GET['details']):"";  
+				$course		= isset($_GET['course'])	?$_GET['course']:"";
+				$lp_id		= isset($_GET['lp_id'])		?intval($_GET['lp_id']):"";				
+				$session_id	= isset($_GET['session_id'])?intval($_GET['session_id']):0;
+				$lp_reset = 0;
+				
+				if(api_is_platform_admin(true) && !empty($course) && !empty($lp_id) && !empty($student_id)) {
+					   
+					$course_info 	= api_get_course_info($course);
+					$lp_view_table 	= Database::get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
+					$lp_item_view_table 	= Database::get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
+					//make sure we have the exact lp_view_id
+					$sqlview = "SELECT id FROM $lp_view_table WHERE user_id = $student_id AND lp_id = $lp_id AND session_id= $session_id";					
+					$resultview = Database::query($sqlview);
+					$view = Database::fetch_array($resultview, 'ASSOC');
+					$lp_view_id =  $view['id'] ;
+					
+					
+					$sql_delete = "DELETE FROM $lp_item_view_table  WHERE lp_view_id = $view_id ";
+					$result = Database::query($sql_delete);
+						
+					$sql_delete = "DELETE FROM $lp_view_table  WHERE user_id = $student_id AND lp_id= $lp_id AND session_id= $session_id ";
+					$result = Database::query($sql_delete);
+					
+					//@todo delete the stats.track_e_exercices records. First implement this http://support.chamilo.org/issues/1334					
+					Display::display_confirmation_message('LPWasReset');
+				}				
+			break;
+			
+			default:
+				break;
+			
+		}
+		Security::clear_token();	
+	}	
+
+	
+	
+	
+	
+if (!empty ($_GET['student'])) {
 
 	// infos about user
 	$info_user = UserManager :: get_user_info_by_id($student_id);
@@ -222,6 +271,7 @@ if (!empty ($_GET['student'])) {
 		echo '<a href="access_details.php?student=' . Security :: remove_XSS($_GET['student']) . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">' . Display :: return_icon('statistics.gif', get_lang('AccessDetails')) . ' ' . get_lang('AccessDetails') . '</a>';
 	}
 	echo '</div>';
+	
 
 	// is the user online ?
 	$student_online = Security :: remove_XSS($_GET['student']);
@@ -540,7 +590,7 @@ if ($timezone !== null) {
 ?>
 						</th>
 				<?php		
-					echo '<th>'.get_lang('ResetLP').'</th>'; 
+					echo '<th>'.get_lang('Detail').'</th>'; 
 					if (api_is_platform_admin(true)) {
 						echo '<th>'.get_lang('ResetLP').'</th>';
 					}
@@ -571,7 +621,8 @@ if ($timezone !== null) {
 
 		$sql_lp = "	SELECT lp.name, lp.id FROM $t_lp lp WHERE lp.session_id = $session_id ORDER BY lp.name ASC";
 		$rs_lp = Database::query($sql_lp);
-
+		$token = Security::get_token();
+		
 		if (Database :: num_rows($rs_lp) > 0) {
 			$i = 0;
 			while ($learnpath = Database :: fetch_array($rs_lp)) {
@@ -664,10 +715,10 @@ if ($timezone !== null) {
 				}
 				echo '</td>';
 				
-				if (api_is_platform_admin(true)) {
+				if (api_is_platform_admin(true)) {					
 					echo '<td align="center">';							
-						if($any_result === true) {
-							echo '<a href="reset_lp.php?course='.Security::remove_XSS($_GET['course']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$a_learnpath['id'].'&student_id='.$a_infosUser['user_id'].'&details=true&id_session='.Security::remove_XSS($_GET['id_session']).'#infosStudent">';
+						if($any_result === true) {											
+							echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student='.$info_user['user_id'].'&details=true&id_session='.Security::remove_XSS($_GET['id_session']).'">';
 							echo '<img src="../img/delete_data.gif" border="0" />';
 							echo '</a>';
 						}					

@@ -15,23 +15,11 @@
 * 	- new view option: nested view
 * 	- quoting a message
 *
-*	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*	@Copyright Ghent University
-*	@Copyright Patrick Cool
+*	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+*	@author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
 *
-* 	@package dokeos.forum
+* 	@package chamilo.forum
 */
-
-/**
- **************************************************************************
- *						IMPORTANT NOTICE
- * Please do not change anything is this code yet because there are still
- * some significant code that need to happen and I do not have the time to
- * merge files and test it all over again. So for the moment, please do not
- * touch the code
- * 							-- Patrick Cool <patrick.cool@UGent.be>
- **************************************************************************
- */
 
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
@@ -81,7 +69,7 @@ foreach ($rows as $post) {
 	$thread_structure.= $post_image;
 	if ($_GET['post']==$post['post_id'] OR ($counter==1 AND !isset($_GET['post'])))
 	{
-		$thread_structure.='<strong>'.prepare4display(Security::remove_XSS($post['post_title'],STUDENT)).'</strong></div>';
+		$thread_structure.='<strong>'.prepare4display($post['post_title']).'</strong></div>';
 		$prev_next_array[]=$post['post_id'];
 	}
 	else
@@ -95,7 +83,7 @@ foreach ($rows as $post) {
 			$class='';
 		}
 		$count_loop=($count==0)?'&id=1' : '';
-		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display(Security::remove_XSS($post['post_title'],STUDENT))."</a></div>";
+		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display($post['post_title'])."</a></div>";
 		$prev_next_array[]=$post['post_id'];
 	}
 	$count++;
@@ -173,16 +161,14 @@ else
 	$leftclass='forum_message_left';
 }
 
-// --------------------------------------
 // 		Displaying the message
-// --------------------------------------
 
 // we mark the image we are displaying as set
 unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$rows[$display_post_id]['post_id']]);
 
 echo "<table width=\"100%\"  class=\"post\"  cellspacing=\"5\" border=\"0\">";
-echo "\t<tr>";
-echo "\t\t<td rowspan=\"3\" class=\"$leftclass\">";
+echo "<tr>";
+echo "<td rowspan=\"3\" class=\"$leftclass\">";
 if ($rows[$display_post_id]['user_id']=='0') {
 	$name=prepare4display($rows[$display_post_id]['poster_name']);
 } else {
@@ -278,13 +264,13 @@ if ($rows[$display_post_id]['post_notification']=='1' AND $rows[$display_post_id
 	$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 }
 // The post title
-echo "\t\t<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_title'], STUDENT))."</td>";
-echo "\t</tr>";
+echo "<td class=\"$titleclass\">".prepare4display($rows[$display_post_id]['post_title'])."</td>";
+echo "</tr>";
 
 // The post message
-echo "\t<tr>";
-echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_text'], STUDENT))."</td>";
-echo "\t</tr>";
+echo "<tr>";
+echo "<td class=\"$messageclass\">".prepare4display($rows[$display_post_id]['post_text'])."</td>";
+echo "</tr>";
 
 // The check if there is an attachment
 $attachment_list = get_attachment($display_post_id);
@@ -312,8 +298,6 @@ unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id
 unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
 echo "</table>";
 
-// --------------------------------------
 // 		Displaying the thread (structure)
-// --------------------------------------
 
 echo $thread_structure;

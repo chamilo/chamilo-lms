@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This script manages the display of forum threads in flat view 
+ * This script manages the display of forum threads in flat view
+ * @copyright Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes 
  * @package chamilo.forum
  */
 //delete attachment file
@@ -14,7 +15,7 @@ if (isset($current_thread['thread_id'])){
 	$rows=get_posts($current_thread['thread_id']);
 	$increment=0;
 	foreach ($rows as $row) {
-		echo "<table width=\"100%\" class=\"post\" cellspacing=\"5\" border=\"0\">";
+		echo '<table width="100%" class="post" cellspacing="5" border="0">';
 		// the style depends on the status of the message: approved or not
 		if ($row['visible']=='0') {
 			$titleclass='forum_message_post_title_2_be_approved';
@@ -108,12 +109,12 @@ if (isset($current_thread['thread_id'])){
 			$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 		}
 		// The post title
-		echo "<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($row['post_title'], STUDENT))."</td>";
+		echo "<td class=\"$titleclass\">".prepare4display($row['post_title'])."</td>";
 		echo "</tr>";
 		
 		// The post message
 		echo "<tr>";
-		echo "<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($row['post_text'], STUDENT))."</td>";
+		echo "<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>";
 		echo "</tr>";
 	
 		// The check if there is an attachment

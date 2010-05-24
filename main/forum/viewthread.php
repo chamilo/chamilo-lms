@@ -73,8 +73,8 @@ if (!empty($_SESSION['toolgroup'])) {
 	$group_properties	= GroupManager :: get_group_properties($session_toolgroup);
 	$interbreadcrumb[] 	= array("url"=>"../group/group.php", "name" => get_lang('Groups'));
 	$interbreadcrumb[] 	= array("url"=>"../group/group_space.php?gidReq=".$session_toolgroup, "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
-	$interbreadcrumb[] 	= array("url"=>"viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;gidReq=".$session_toolgroup."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
-	$interbreadcrumb[] 	= array("url"=>"viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&gradebook=".$gradebook."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+	$interbreadcrumb[] 	= array("url"=>"viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;gidReq=".$session_toolgroup."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => Security::remove_XSS($current_forum['forum_title']));
+	$interbreadcrumb[] 	= array("url"=>"viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&gradebook=".$gradebook."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => Security::remove_XSS($current_thread['thread_title']));
 
 	Display :: display_header('');
 	api_display_tool_title($nameTools);
@@ -87,8 +87,8 @@ if (!empty($_SESSION['toolgroup'])) {
 		require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 	} else {
 		$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&search=".Security::remove_XSS(urlencode($my_search)),"name" => $nameTools);
-		$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
-		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
+		$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => Security::remove_XSS($current_forum_category['cat_title']));
+		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => Security::remove_XSS($current_forum['forum_title']));
 		$message = isset($message) ? $message : '';
 		// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
 		Display :: display_header('');

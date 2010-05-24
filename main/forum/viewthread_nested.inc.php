@@ -2,19 +2,17 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*	@Copyright Ghent University
-*	@Copyright Patrick Cool
-*
-* 	@package dokeos.forum
+*	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+*	@author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
+*	@copyright Ghent University
+*	@package chamilo.forum
 */
 
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
 //are we in a lp ?
 $origin = '';
-if(isset($_GET['origin']))
-{
+if(isset($_GET['origin'])) {
     $origin =  Security::remove_XSS($_GET['origin']);
 }
 
@@ -41,8 +39,8 @@ foreach ($rows as $post) {
 	$indent=$post['indent_cnt']*'20';
 	echo "<div style=\"margin-left: ".$indent."px;\">";
 	echo "<table width=\"100%\"  class=\"post\" cellspacing=\"5\" border=\"0\">";
-	echo "\t<tr>";
-	echo "\t\t<td rowspan=\"3\" class=\"$leftclass\">";
+	echo "<tr>";
+	echo "<td rowspan=\"3\" class=\"$leftclass\">";
 	if ($post['user_id']=='0') {
 		$name=$post['poster_name'];
 	} else {
@@ -108,13 +106,13 @@ foreach ($rows as $post) {
 		$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 	}
 	// The post title
-	echo "\t\t<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($post['post_title'], STUDENT))."</td>";
-	echo "\t</tr>";
+	echo "<td class=\"$titleclass\">".prepare4display($post['post_title'])."</td>";
+	echo "</tr>";
 
 	// The post message		
-	echo "\t<tr>";
-	echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($post['post_text'], STUDENT))."</td>";
-	echo "\t</tr>";
+	echo "<tr>";
+	echo "<td class=\"$messageclass\">".prepare4display($post['post_text'])."</td>";
+	echo "</tr>";
 
 
 	// The check if there is an attachment

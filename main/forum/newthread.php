@@ -202,19 +202,19 @@ echo '</div>';
 echo "<table class=\"data_table\" width='100%'>\n";
 
 if ($origin != 'learnpath') {
-	echo "\t<tr>\n\t\t<th align=\"left\"  colspan=\"2\">";
+	echo "<tr>\n<th align=\"left\"  colspan=\"2\">";
 
-	echo '<span class="forum_title">'.prepare4display(Security::remove_XSS($current_forum['forum_title'])).'</span>';
+	echo '<span class="forum_title">'.prepare4display($current_forum['forum_title']).'</span>';
 
 	if (!empty ($current_forum['forum_comment'])) {
-		echo '<br><span class="forum_description">'.prepare4display(Security::remove_XSS($current_forum['forum_comment'],STUDENT)).'</span>';
+		echo '<br><span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';
 	}
 
 	if (!empty ($current_forum_category['cat_title'])) {
-		echo '<br /><span class="forum_low_description">'.prepare4display(Security::remove_XSS($current_forum_category['cat_title']))."</span><br />";
+		echo '<br /><span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])."</span><br />";
 	}
 	echo "</th>\n";
-	echo "\t</tr>\n";
+	echo "</tr>\n";
 }
 echo '</table>';
 
@@ -226,9 +226,7 @@ if (!empty($values) and isset($values['SubmitPost'])) {
 }
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 if ($origin!='learnpath') {
 	Display :: display_footer();

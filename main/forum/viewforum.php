@@ -127,13 +127,13 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 	//$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($my_search),"name" => $nameTools);
 	//$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
-	$interbreadcrumb[]=array("url" => "#","name" => prepare4display(Security::remove_XSS($current_forum['forum_title'])));
+	$interbreadcrumb[]=array("url" => "#","name" => Security::remove_XSS($current_forum['forum_title']));
 	//viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&amp;search=".Security::remove_XSS(urlencode($my_search)),
 
 } else {
 	$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&search=".Security::remove_XSS($my_search),"name" => $nameTools);
-	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display(Security::remove_XSS($current_forum_category['cat_title'])));
-	$interbreadcrumb[]=array("url" => "#","name" => prepare4display(Security::remove_XSS($current_forum['forum_title'])));
+	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
+	$interbreadcrumb[]=array("url" => "#","name" => Security::remove_XSS($current_forum['forum_title']));
 	//viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search))
 }
 
@@ -260,9 +260,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 
 
 /*
------------------------------------------------------------
 	Is the user allowed here?
------------------------------------------------------------
 */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
@@ -325,37 +323,37 @@ if ($origin!='learnpath') {
 					Display
 -----------------------------------------------------------
 */
-echo "<table class=\"data_table\" >\n";
+echo "<table class=\"data_table\" >";
 
 // the current forum
 if ($origin != 'learnpath') {
-	echo "\t<tr>\n\t\t<th align=\"left\" colspan=\"7\">";
-	echo '<span class="forum_title">'.prepare4display(Security::remove_XSS($current_forum['forum_title'])).'</span>';
+	echo "<tr><th align=\"left\" colspan=\"7\">";
+	echo '<span class="forum_title">'.prepare4display($current_forum['forum_title']).'</span>';
 
 	if (!empty ($current_forum['forum_comment'])) {
-		echo '<br><span class="forum_description">'.prepare4display(Security::remove_XSS($current_forum['forum_comment'],STUDENT)).'</span>';
+		echo '<br><span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';
 	}
 
 	if (!empty ($current_forum_category['cat_title'])) {
-		echo '<br /><span class="forum_low_description">'.prepare4display(Security::remove_XSS($current_forum_category['cat_title']))."</span><br />";
+		echo '<br /><span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])."</span><br />";
 	}
-	echo "</th>\n";
-	echo "\t</tr>\n";
+	echo "</th>";
+	echo "</tr>";
 }
 
-echo "</th>\n";
-echo "\t</tr>\n";
+echo "</th>";
+echo "</tr>";
 
 // The column headers (to do: make this sortable)
-echo "\t<tr class=\"forum_threadheader\">\n";
-echo "\t\t<td></td>\n";
-echo "\t\t<td>".get_lang('Title')."</td>\n";
-echo "\t\t<td>".get_lang('Replies')."</td>\n";
-echo "\t\t<td>".get_lang('Views')."</td>\n";
-echo "\t\t<td>".get_lang('Author')."</td>\n";
-echo "\t\t<td>".get_lang('LastPost')."</td>\n";
-echo "\t\t<td>".get_lang('Actions')."</td>\n";
-echo "\t</tr>\n";
+echo "<tr class=\"forum_threadheader\">";
+echo "<td></td>";
+echo "<td>".get_lang('Title')."</td>";
+echo "<td>".get_lang('Replies')."</td>";
+echo "<td>".get_lang('Views')."</td>";
+echo "<td>".get_lang('Author')."</td>";
+echo "<td>".get_lang('LastPost')."</td>";
+echo "<td>".get_lang('Actions')."</td>";
+echo "</tr>";
 
 // getting al the threads
 $threads=get_threads($my_forum); // note: this has to be cleaned first
@@ -372,8 +370,8 @@ if(is_array($threads)) {
 			} else {
 				$class="row_even";
 			}
-			echo "\t<tr class=\"$class\">\n";
-			echo "\t\t<td>";
+			echo "<tr class=\"$class\">";
+			echo "<td>";
 			$my_whatsnew_post_info=isset($whatsnew_post_info[$my_forum][$row['thread_id']])?$whatsnew_post_info[$my_forum][$row['thread_id']]:null;
 			if (is_array($my_whatsnew_post_info) and !empty($my_whatsnew_post_info)) {
 				echo icon('../img/forumthread.gif');
@@ -384,16 +382,16 @@ if(is_array($threads)) {
 			if ($row['thread_sticky']==1) {
 				echo icon('../img/exclamation.gif');
 			}
-			echo "</td>\n";
-			echo "\t\t<td>";
-			echo "<a href=\"viewthread.php?".api_get_cidreq()."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS(urlencode($my_search))."\" ".class_visible_invisible($row['visibility']).">".prepare4display(Security::remove_XSS($row['thread_title']))."</a></td>\n";
-			echo "\t\t<td>".$row['thread_replies']."</td>\n";
+			echo "</td>";
+			echo "<td>";
+			echo "<a href=\"viewthread.php?".api_get_cidreq()."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS(urlencode($my_search))."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>";
+			echo "<td>".$row['thread_replies']."</td>";
 			if ($row['user_id']=='0') {
 				$name=prepare4display($row['thread_poster_name']);
 			} else {
 				$name=api_get_person_name($row['firstname'], $row['lastname']);
 			}
-			echo "\t\t<td>".$row['thread_views']."</td>\n";
+			echo "<td>".$row['thread_views']."</td>";
 			if ($row['last_poster_user_id']=='0') {
 				$name=$row['poster_name'];
 			} else {
@@ -401,9 +399,9 @@ if(is_array($threads)) {
 			}
 
 			if($origin != 'learnpath') {
-				echo "\t\t<td>".display_user_link($row['user_id'], api_get_person_name($row['firstname'], $row['lastname']))."</td>\n";
+				echo "<td>".display_user_link($row['user_id'], api_get_person_name($row['firstname'], $row['lastname']))."</td>";
 			} else {
-				echo "\t\t<td>".api_get_person_name($row['firstname'], $row['lastname'])."</td>\n";
+				echo "<td>".api_get_person_name($row['firstname'], $row['lastname'])."</td>";
 			}
 
 			// if the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread
@@ -423,8 +421,8 @@ if(is_array($threads)) {
 				$last_post=api_convert_and_format_date($last_post_row['post_date'], null, date_default_timezone_get())." ".get_lang('By').' '.$name;
 			}
 
-			echo "\t\t<td>".$last_post."</td>\n";
-			echo "\t\t<td>";
+			echo "<td>".$last_post."</td>";
+			echo "<td>";
 			// get attach id
 			$attachment_list=get_attachment($row['post_id']);
 			$id_attach = !empty($attachment_list)?$attachment_list['id']:'';
@@ -435,7 +433,7 @@ if(is_array($threads)) {
 
 			if ($origin != 'learnpath') {
 				if (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
-					echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($row['thread_id'])."&amp;post=".$row_post_id['post_id']."&amp;gidReq=".$_SESSION['toolgroup']."&origin=".$origin."&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
+					echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($row['thread_id'])."&amp;post=".$row_post_id['post_id']."&amp;gidReq=".$_SESSION['toolgroup']."&origin=".$origin."&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;action=delete&amp;content=thread&amp;gidReq=".$_SESSION['toolgroup']."&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 					display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$my_forum,'origin'=>$origin,"gidReq"=>$_SESSION['toolgroup']));
 					display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$my_forum,'origin'=>$origin,"gidReq"=>$_SESSION['toolgroup']));
@@ -456,8 +454,8 @@ if(is_array($threads)) {
 			if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath') {
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&origin='.$origin.'&amp;action=liststd&amp;content=thread&amp;gidReq='.$_SESSION['toolgroup'].'&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';
 			}
-			echo "</td>\n";
-			echo "\t</tr>\n";
+			echo "</td>";
+			echo "</tr>";
 		}
 		$counter++;
 
@@ -467,9 +465,7 @@ if(is_array($threads)) {
 echo "</table>";
 echo isset($table_list)?$table_list:'';
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 if ($origin != 'learnpath') {
 	Display :: display_footer();

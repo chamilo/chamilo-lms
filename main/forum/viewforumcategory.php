@@ -218,8 +218,8 @@ if ($action_forums!='add') {
 	$my_session=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : null;
 	$forum_categories_list='';
 	echo "\t<tr>\n\t\t<th align=\"left\" ".(api_is_allowed_to_edit(null,true)?"colspan='5'":"colspan='6'").">";
-	echo '<span class="forum_title">'.prepare4display(Security::remove_XSS($forum_category['cat_title'])).'</span><br />';
-	echo '<span class="forum_description">'.prepare4display(Security::remove_XSS($forum_category['cat_comment'],STUDENT)).'</span>';
+	echo '<span class="forum_title">'.prepare4display($forum_category['cat_title']).'</span><br />';
+	echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 	echo "</th>\n";
 	if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($my_session)!=0)) {
 		echo '<th style="vertical-align: top;" align="center" >';
@@ -331,7 +331,7 @@ if ($action_forums!='add') {
 				} else {
 					$session_displayed = '';
 				}
-				echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display(Security::remove_XSS($forum['forum_title'])).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display(Security::remove_XSS($forum['forum_comment'],STUDENT))."</td>\n";
+				echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
 
 				//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 				// the number of topics and posts

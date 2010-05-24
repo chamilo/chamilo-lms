@@ -204,7 +204,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 			}
 
 			echo "<tr><th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";			
-			echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display(Security::remove_XSS($forum_category['cat_id'])).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display(Security::remove_XSS($forum_category['cat_title'])).$session_displayed.'</a>'. $session_img .'<br />';
+			echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display(Security::remove_XSS($forum_category['cat_title'])).$session_displayed.'</a>'. $session_img .'<br />';
 			
 			if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;') {				  
 				echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
@@ -213,8 +213,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 
 			echo '<th style="vertical-align: top;" align="center" >';
 			if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($session_id)!=0)) {
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=edit&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=delete&amp;content=forumcategory&amp;id=".prepare4display($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=edit&amp;content=forumcategory&amp;id=".intval($forum_category['cat_id'])."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=delete&amp;content=forumcategory&amp;id=".intval($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 				display_visible_invisible_icon('forumcategory', prepare4display($forum_category['cat_id']), prepare4display($forum_category['visibility']));
 				display_lock_unlock_icon('forumcategory',prepare4display($forum_category['cat_id']), prepare4display($forum_category['locked']));
 				display_up_down_icon('forumcategory',prepare4display($forum_category['cat_id']), $forum_categories_list);
@@ -360,7 +360,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						}
 						$forum['forum_of_group']==0?$groupid='':$groupid=$forum['forum_of_group'];
 						
-						echo "<td><a href=\"viewforum.php?".api_get_cidreq()."&gidReq=".Security::remove_XSS($groupid)."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display(Security::remove_XSS($forum['forum_title'])).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display(Security::remove_XSS($forum['forum_comment'],STUDENT))."</td>";
+						echo "<td><a href=\"viewforum.php?".api_get_cidreq()."&gidReq=".Security::remove_XSS($groupid)."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display(Security::remove_XSS($forum['forum_comment'],STUDENT))."</td>";
 						//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 						// the number of topics and posts
 						$number_threads=isset($forum['number_of_threads']) ? $forum['number_of_threads'] : null;

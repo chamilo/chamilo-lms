@@ -152,10 +152,10 @@ echo "<table class=\"data_table\" width='100%'>\n";
 
 // the forum category
 echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">";
-echo '<span class="forum_title">'.prepare4display(Security::remove_XSS($current_thread['thread_title'])).'</span><br />';
+echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
 
 if (!empty ($current_forum_category['cat_title'])) {
-	echo '<span class="forum_low_description">'.prepare4display(Security::remove_XSS($current_forum_category['cat_title']))." - </span>";
+	echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])." - </span>";
 }
 echo "</th>\n";
 echo "\t</tr>\n";

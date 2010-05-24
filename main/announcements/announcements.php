@@ -160,14 +160,14 @@ if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] ==
 if ((empty($originalresource) || ($originalresource!=='no')) and (!empty($action) && $action=='add')) {
 	$_SESSION['formelements']=null;
 	//unset($_SESSION['formelements']);
-	unset_session_resources();
+	//unset_session_resources();
 }
 
 /*
 	Javascript
 */
 
-$htmlHeadXtra[] = to_javascript();
+$htmlHeadXtra[] = AnnouncementManager::to_javascript();
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
@@ -350,10 +350,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 		if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
 			$sql="SELECT * FROM  $tbl_announcement WHERE id='$id'";
-			$rs = Database::query($sql);
-			$myrow = Database::fetch_array($rs);
+			$rs 	= Database::query($sql);
+			$myrow  = Database::fetch_array($rs);
 			$last_id = $id;
-			$edit_attachment = edit_announcement_attachment_file($last_id, $_FILES['user_upload'], $file_comment);
+			$edit_attachment = AnnouncementManager::edit_announcement_attachment_file($last_id, $_FILES['user_upload'], $file_comment);
 			if ($myrow) {
 				$announcement_to_modify 	= $myrow['id'];
 				$content_to_modify 			= $myrow['content'];
@@ -362,9 +362,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 				if ($originalresource!=="no")  {
 					//unset_session_resources();
 					//edit_added_resources("Ad_Valvas", $announcement_to_modify);
-					$to=load_edit_users("announcement", $announcement_to_modify);
+					$to=AnnouncementManager::load_edit_users("announcement", $announcement_to_modify);
 				}
-
 				$display_announcement_list = false;
 			}
 
@@ -549,7 +548,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 				if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
 
-				  	$sent_to=sent_to("announcement", $insert_id);
+				  	$sent_to	= AnnouncementManager::sent_to("announcement", $insert_id);
 				    $userlist   = $sent_to['users'];
 				    $grouplist  = $sent_to['groups'];
 
@@ -974,8 +973,7 @@ if ($display_form == true) {
 		} else {
 			echo get_lang('Everybody');
 		}
-
-		show_to_form($to);
+		AnnouncementManager::show_to_form($to);
 		echo '		</div>
 					</div>';
 
@@ -1004,7 +1002,7 @@ if ($display_form == true) {
 				  </div>
 				  <div class="formw">'.
 					get_lang('EmailOption').': '.get_lang('MyGroup').'&nbsp;&nbsp;<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('ModifyRecipientList').'</a>';
-			show_to_form_group($_SESSION['toolgroup']);
+			AnnouncementManager::show_to_form_group($_SESSION['toolgroup']);
 			echo '</div></div>';
 		}
 
@@ -1344,9 +1342,8 @@ if ($display_announcement_list && !$surveyid) {
 			echo "<th>".Security::remove_XSS($title)."</th>\n";
 			echo "<th>" . get_lang("SentTo") . " : &nbsp; ";
 
-			$sent_to		= sent_to('announcement', $myrow['id']);
-						
-			$sent_to_form	= sent_to_form($sent_to);
+			$sent_to		= AnnouncementManager::sent_to('announcement', $myrow['id']);						
+			$sent_to_form	= AnnouncementManager::sent_to_form($sent_to);
 			$user_info		= api_get_user_info($myrow['insert_user_id']);
 			
 			echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.str_replace(' ', '&nbsp;', api_get_person_name($user_info['firstName'], $user_info['lastName']));
@@ -1408,12 +1405,12 @@ if ($display_announcement_list && !$surveyid) {
 				//delete attachment file
 				if($_GET['action'] == 'delete') {
 					$id = $_GET['id_attach'];
-					delete_announcement_attachment_file($id);
+					AnnouncementManager::delete_announcement_attachment_file($id);
 				}
 
 				// show attachment list
 				$attachment_list = array();
-				$attachment_list = get_attachment($myrow['id']);
+				$attachment_list = AnnouncementManager::get_attachment($myrow['id']);
 
 				if (count($attachment_list)>0) {
 					$realname=$attachment_list['path'];
@@ -1439,7 +1436,7 @@ if ($display_announcement_list && !$surveyid) {
 				//students view
 				// show attachment list
 				$attachment_list = array();
-				$attachment_list = get_attachment($myrow['id']);
+				$attachment_list = AnnouncementManager::get_attachment($myrow['id']);
 
 				if (count($attachment_list)>0) {
 					$realname=$attachment_list['path'];

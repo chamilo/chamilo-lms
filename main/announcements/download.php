@@ -18,7 +18,6 @@ session_cache_limiter('public');
 require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-require_once 'announcements.inc.php';
 
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
@@ -41,8 +40,7 @@ if (!isset($_course)) {
 
 $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/announcements/'.$doc_url;
 //if the rewrite rule asks for a directory, we redirect to the document explorer
-if (is_dir($full_file_name))
-{
+if (is_dir($full_file_name)) {
 	//remove last slash if present
 	//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url;
 	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
@@ -53,7 +51,7 @@ if (is_dir($full_file_name))
 	header('Location: '.$document_explorer);
 }
 
-$tbl_announcement_attachment 	= Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 
 // launch event
 event_download($doc_url);

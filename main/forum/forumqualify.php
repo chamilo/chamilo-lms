@@ -1,29 +1,12 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+/* For licensing terms, see /license.txt */
 
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 108 rue du Corbeau, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
 /**
-* 	@package dokeos.forum
+* 	@package chamilo.forum
 */
 // name of the language file that needs to be included
 $language_file=array('admin','forum');
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 $nameTools = get_lang('ToolForum');
@@ -34,6 +17,7 @@ if (!$allowed_to_edit) {
 	api_not_allowed(true);
 }
 
+//are we in a lp ?
 $origin = '';
 $origin_string='';
 if (isset($_GET['origin'])) {
@@ -47,9 +31,7 @@ include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 $nameTools=get_lang('ToolForum');
 
 /*
------------------------------------------------------------
 	Including necessary files
------------------------------------------------------------
 */
 
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
@@ -57,21 +39,11 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 										$(document).ready(function(){ $(\'.hide-me\').slideUp() });
 									function hidecontent(content){ $(content).slideToggle(\'normal\'); }
 									</script>';
-
-//are we in a lp ?
-$origin = '';
-if (isset($_GET['origin'])) {
-	$origin =  Security::remove_XSS($_GET['origin']);
-}
 /*
-==============================================================================
 		MAIN DISPLAY SECTION
-==============================================================================
 */
 /*
------------------------------------------------------------
 	Retrieving forum and forum categorie information
------------------------------------------------------------
 */
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
@@ -138,9 +110,7 @@ if ($origin=='learnpath') {
 }
 
 /*
------------------------------------------------------------
 	Is the user allowed here?
------------------------------------------------------------
 */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
@@ -153,9 +123,7 @@ if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR 
 
 
 /*
------------------------------------------------------------
 	Actions
------------------------------------------------------------
 */
 if ($_GET['action']=='delete' && isset($_GET['content']) && isset($_GET['id']) && api_is_allowed_to_edit(false,true)) {
 	$message=delete_post($_GET['id']); // note: this has to be cleaned first
@@ -168,9 +136,7 @@ if ($_GET['action']=='move' and isset($_GET['post'])) {
 }
 
 /*
------------------------------------------------------------
 	Display the action messages
------------------------------------------------------------
 */
 if (!empty($message)) {
 	Display :: display_confirmation_message(get_lang($message));
@@ -181,9 +147,7 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 	increase_thread_view($_GET['thread']);
 
 	/*
-	-----------------------------------------------------------
 		Action Links
-	-----------------------------------------------------------
 	*/
 /*	echo '<div style="float:right;">';
 	$my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($_GET['search']));
@@ -214,10 +178,8 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 	// note: this is to prevent that some browsers display the links over the table (FF does it but Opera doesn't)
 	echo '&nbsp;';
 
-	/*
-	-----------------------------------------------------------
-		Display Forum Category and the Forum information
-	-----------------------------------------------------------
+	/*	
+		Display Forum Category and the Forum information	
 	*/
 	if (!$_SESSION['view']) {
 		$viewmode=$current_forum['default_view'];
@@ -234,18 +196,16 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 		$viewmode = 'flat';
 	}
 
-	/*
-	-----------------------------------------------------------
-		Display Forum Category and the Forum information
-	-----------------------------------------------------------
+	/*	
+		Display Forum Category and the Forum information	
 	*/
 	// we are getting all the information about the current forum and forum category.
 	// note pcool: I tried to use only one sql statement (and function) for this
 	// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-	echo "<table class=\"data_table\" width=\"100%\">\n";
+	echo "<table class=\"data_table\" width=\"100%\">";
 
 	// the thread
-	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
+	echo "<tr><th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
 	echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
 
 	if ($origin!='learnpath') {
@@ -253,8 +213,8 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 	}
 
 	echo prepare4display($current_forum['forum_title']).'<br />';
-	echo "</th>\n";
-	echo "\t</tr>\n";
+	echo "</th>";
+	echo "</tr>";
 	echo '<span>'.prepare4display($current_thread['thread_comment']).'</span>';
 	echo "</table>";
 
@@ -332,9 +292,7 @@ if ($allowed_to_edit) {
 }
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 if ($origin!='learnpath') {
 	Display :: display_footer();

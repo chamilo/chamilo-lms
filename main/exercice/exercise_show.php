@@ -1,13 +1,11 @@
 <?php //$id: $
 /* For licensing terms, see /license.txt */
 /**
-*
-*	@package chamilo.exercise
+**	@package chamilo.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
 * 	@version $Id: exercise_show.php 22256 2009-07-20 17:40:20Z ivantcholakov $
 *	@package chamilo.exercise
 * 	@todo remove the debug code and use the general debug library
-* 	@todo use the Database:: functions
 * 	@todo small letters for table variables
 */
 
@@ -228,16 +226,8 @@ function getFCK(vals,marksid)
 </script>
 <?php
 
-
-
-
-
-
-
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 // Email configuration settings
@@ -330,14 +320,14 @@ if ($show_results == true ) {
 			<td style="font-weight:bold" width="10%"><div class="actions-message"><?php echo '&nbsp;'.get_lang('User')?> : </div></td>
 			<td><div class="actions-message" width="90%"><?php
 			if (isset($_GET['cidReq'])) {
-				$course_code=Security::remove_XSS($_GET['cidReq']);
+				$course_code = Security::remove_XSS($_GET['cidReq']);
 			} else {
-				$course_code=api_get_course_id();
+				$course_code = api_get_course_id();
 			}
 			if (isset($_GET['student'])) {
-				$user_id=Security::remove_XSS($_GET['student']);
+				$user_id	= Security::remove_XSS($_GET['student']);
 			}else {
-				$user_id=api_get_user_id();
+				$user_id	= api_get_user_id();
 			}
 
 			$status_info=CourseManager::get_user_in_course_status($user_id,$course_code);

@@ -19,17 +19,14 @@
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
 *
-* 	@package dokeos.forum
+* 	@package chamilo.forum
 */
 
 // name of the language file that needs to be included
-$language_file = array (
-	'forum',
-	'group'
-);
+$language_file = array ('forum','group');
 
 // including the global dokeos file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // notice for unauthorized people.
 api_protect_course_script(true);
@@ -38,8 +35,8 @@ api_protect_course_script(true);
 $this_section=SECTION_COURSES;
 
 // including additional library scripts
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 $nameTools=get_lang('ToolForum');
 
 
@@ -52,9 +49,7 @@ if (isset($_GET['origin'])) {
 }
 
 /*
------------------------------------------------------------
 	Including necessary files
------------------------------------------------------------
 */
 require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
@@ -63,16 +58,12 @@ $userid=api_get_user_id();
 $userinf=api_get_user_info($userid);
 
 /*
-==============================================================================
 		MAIN DISPLAY SECTION
-==============================================================================
 */
 
 
 /*
------------------------------------------------------------
 	Retrieving forum and forum categorie information
------------------------------------------------------------
 */
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
@@ -97,9 +88,7 @@ if(!empty($my_forum_group)){
 
 
 /*
------------------------------------------------------------
 	Header and Breadcrumbs
------------------------------------------------------------
 */
 $my_search=isset($_GET['search'])?$_GET['search']:'';
 $my_action=isset($_GET['action'])?$_GET['action']:'';
@@ -146,9 +135,7 @@ if ($origin=='learnpath') {
 }
 
 /*
------------------------------------------------------------
 	Actions
------------------------------------------------------------
 */
 $table_link 			= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 // Change visibility of a forum or a forum category
@@ -163,7 +150,7 @@ if (($my_action=='lock' OR $my_action=='unlock') AND isset($_GET['content']) AND
 if ($my_action=='delete'  AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true) && api_is_allowed_to_session_edit(false,true)) {
 	$message=delete_forum_forumcategory_thread($_GET['content'],$_GET['id']); // note: this has to be cleaned first
 	//delete link
-	$sql_link='DELETE FROM '.$table_link.' WHERE ref_id='.Database::escape_string(Security::remove_XSS($_GET['id'])).' and type=5 and course_code="'.api_get_course_id().'";';
+	$sql_link='DELETE FROM '.$table_link.' WHERE ref_id='.intval($_GET['id']).' and type=5 and course_code="'.api_get_course_id().'";';
 	Database::query($sql_link);
 }
 // moving
@@ -276,9 +263,7 @@ if ($origin == 'learnpath') {
 }
 
 /*
------------------------------------------------------------
 	Display the action messages
------------------------------------------------------------
 */
 if (!empty($message)) {
 	Display :: display_confirmation_message($message);
@@ -286,9 +271,7 @@ if (!empty($message)) {
 
 
 /*
------------------------------------------------------------
 	Action Links
------------------------------------------------------------
 */
 if ($origin!='learnpath') {
 	echo '<div class="actions">';
@@ -319,9 +302,7 @@ if ($origin!='learnpath') {
 }
 
 /*
------------------------------------------------------------
 					Display
------------------------------------------------------------
 */
 echo "<table class=\"data_table\" >";
 
@@ -458,8 +439,6 @@ if(is_array($threads)) {
 			echo "</tr>";
 		}
 		$counter++;
-
-
 	}
 }
 echo "</table>";

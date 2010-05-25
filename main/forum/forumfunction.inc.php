@@ -475,16 +475,16 @@ function store_forumcategory($values) {
 	$new_max=$row['sort_max']+1;
 	$session_id = api_get_session_id();
 
-	$clean_cat_title=Database::escape_string(Security::remove_XSS($values['forum_category_title']));
+	$clean_cat_title=Database::escape_string($values['forum_category_title']);
 
 	if (isset($values['forum_category_id'])) { // storing an edit
-		$sql="UPDATE ".$table_categories." SET cat_title='".$clean_cat_title."', cat_comment='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_category_comment'])),COURSEMANAGERLOWSECURITY))."' WHERE cat_id='".Database::escape_string($values['forum_category_id'])."'";
+		$sql="UPDATE ".$table_categories." SET cat_title='".$clean_cat_title."', cat_comment='".Database::escape_string($values['forum_category_comment'])."' WHERE cat_id='".Database::escape_string($values['forum_category_id'])."'";
 		Database::query($sql);
 		$last_id=Database::insert_id();
 		api_item_property_update(api_get_course_info(), TOOL_FORUM_CATEGORY, $values['forum_category_id'], 'ForumCategoryUpdated', api_get_user_id());
 		$return_message=get_lang('ForumCategoryEdited');
 	} else {
-		$sql = "INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order, session_id) VALUES ('".$clean_cat_title."','".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_category_comment'])),COURSEMANAGERLOWSECURITY))."','".Database::escape_string($new_max)."','".Database::escape_string($session_id)."')";
+		$sql = "INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order, session_id) VALUES ('".$clean_cat_title."','".Database::escape_string($values['forum_category_comment'])."','".Database::escape_string($new_max)."','".Database::escape_string($session_id)."')";
 		Database::query($sql);
 		$last_id = Database::insert_id();
 		if ($last_id > 0) {
@@ -521,7 +521,7 @@ function store_forum($values) {
 	}
 
 	$session_id = api_get_session_id();
-	$clean_title = Database::escape_string(Security::remove_XSS($values['forum_title']));
+	$clean_title = Database::escape_string($values['forum_title']);
 
 	// forum images
 	$image_moved=false;
@@ -1759,7 +1759,7 @@ function store_thread($values) {
 			$visible=1;
 		}
 
-		$clean_post_title=Database::escape_string(Security::remove_XSS($values['post_title']));
+		$clean_post_title=Database::escape_string($values['post_title']);
 
 		// We first store an entry in the forum_thread table because the thread_id is used in the forum_post table
 		$sql="INSERT INTO $table_threads (thread_title, forum_id, thread_poster_id, thread_poster_name, thread_date, thread_sticky,thread_title_qualify,thread_qualify_max,thread_weight,session_id)
@@ -1806,7 +1806,7 @@ function store_thread($values) {
 		// We now store the content in the table_post table
 		$sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id, poster_name, post_date, post_notification, post_parent_id, visible)
 				VALUES ('".$clean_post_title."',
-				'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGERLOWSECURITY))."',
+				'".Database::escape_string($values['post_text'])."',
 				'".Database::escape_string($last_thread_id)."',
 				'".Database::escape_string($values['forum_id'])."',
 				'".Database::escape_string($_user['user_id'])."',
@@ -2485,8 +2485,8 @@ function store_edit_post($values) {
 		Database::query($sql);
 	//}
 	// update the post_title and the post_text
-	$sql="UPDATE $table_posts SET post_title='".Database::escape_string(Security::remove_XSS($values['post_title']))."',
-				post_text='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGERLOWSECURITY))."',
+	$sql="UPDATE $table_posts SET post_title='".Database::escape_string($values['post_title'])."',
+				post_text='".Database::escape_string($values['post_text'])."',
 				post_notification='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
 				WHERE post_id='".Database::escape_string($values['post_id'])."'";
 	Database::query($sql);

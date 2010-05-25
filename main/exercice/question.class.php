@@ -587,8 +587,8 @@ abstract class Question
 		// question already exists
 		if(!empty($id)) {
 			$sql="UPDATE $TBL_QUESTIONS SET
-					question 	='".Database::escape_string(Security::remove_XSS($question))."',
-					description	='".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY))."',
+					question 	='".Database::escape_string($question)."',
+					description	='".Database::escape_string($description)."',
 					ponderation	='".Database::escape_string($weighting)."',
 					position	='".Database::escape_string($position)."',
 					type		='".Database::escape_string($type)."',
@@ -619,8 +619,8 @@ abstract class Question
 			$position = $this -> position;
 
 			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture,level) VALUES(
-					'".Database::escape_string(Security::remove_XSS($question))."',
-					'".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY))."',
+					'".Database::escape_string($question)."',
+					'".Database::escape_string($description)."',
 					'".Database::escape_string($weighting)."',
 					'".Database::escape_string($position)."',
 					'".Database::escape_string($type)."',

@@ -255,9 +255,9 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {
 
 if (isset($_POST['newComment'])) {
 	// Fixing the path if it is wrong
-	$commentPath = str_replace('//', '/', Database::escape_string(Security::remove_XSS($_POST['commentPath'])));
-	$newComment = trim(Database::escape_string(Security::remove_XSS($_POST['newComment']))); // Remove spaces
-	$newTitle = trim(Database::escape_string(Security::remove_XSS($_POST['newTitle']))); // Remove spaces
+	$commentPath 	= str_replace('//', '/', Database::escape_string(Security::remove_XSS($_POST['commentPath'])));
+	$newComment 	= trim(Database::escape_string($_POST['newComment'])); // Remove spaces
+	$newTitle 		= trim(Database::escape_string($_POST['newTitle'])); // Remove spaces
 	// Check whether there is already a database record for this file
 	$result = Database::query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'");
 	while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -267,9 +267,8 @@ if (isset($_POST['newComment'])) {
 	// Determine the correct query to the DB,
 	// new code always keeps document in database
 	$query = "UPDATE $dbTable
-		SET comment='".$newComment."', title='".$newTitle."'
-		WHERE path
-		LIKE BINARY '".$commentPath."'";
+				SET comment='".$newComment."', title='".$newTitle."'
+				WHERE path	LIKE BINARY '".$commentPath."'";
 	Database::query($query);
 	$oldComment = $newComment;
 	$oldTitle = $newTitle;

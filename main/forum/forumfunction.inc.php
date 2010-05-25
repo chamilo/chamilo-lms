@@ -580,7 +580,7 @@ function store_forum($values) {
 		$sql="UPDATE ".$table_forums." SET
 				forum_title='".$clean_title."',
 				".$sql_image."
-				forum_comment='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_comment'])),COURSEMANAGERLOWSECURITY))."',
+				forum_comment='".Database::escape_string($values['forum_comment'])."',
 				forum_category='".Database::escape_string($values['forum_category'])."',
 				allow_anonymous='".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
 				allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',

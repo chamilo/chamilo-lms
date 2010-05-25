@@ -274,7 +274,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	//search items
 	if (isset($_POST['my_exe_exo_id']) && isset($_POST['student_id'])) {
 		$sql_lp='SELECT li.id as lp_item_id,li.lp_id,li.item_type,li.path,liv.id AS lp_view_id,liv.user_id,max(liv.view_count) AS view_count FROM '.$TBL_LP_ITEM.' li
-		INNER JOIN '.$TBL_LP_VIEW.' liv ON li.lp_id=liv.lp_id WHERE li.path="'.Database::escape_string(Security::remove_XSS($_POST['my_exe_exo_id'])).'" AND li.item_type="quiz" AND user_id="'.Database::escape_string($_POST['student_id']).'" ';
+		INNER JOIN '.$TBL_LP_VIEW.' liv ON li.lp_id=liv.lp_id WHERE li.path="'.Database::escape_string($_POST['my_exe_exo_id']).'" AND li.item_type="quiz" AND user_id="'.Database::escape_string($_POST['student_id']).'" ';
 		$rs_lp=Database::query($sql_lp);
 		if (!($rs_lp===false)) {
 			$row_lp=Database::fetch_array($rs_lp);

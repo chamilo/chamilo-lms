@@ -339,22 +339,22 @@ function store_addcategory() {
 	if (!$_POST['edit_id']) {
 		$session_id = api_get_session_id();
 		// step 3a, we check if the category doesn't already exist
-		$sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE user_id='".$_user['user_id']."' AND cat_name='".Database::escape_string(Security::remove_XSS($_POST['category_name']))."' AND received='".$received."' AND sent='$sent' AND session_id='$session_id'";
+		$sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE user_id='".$_user['user_id']."' AND cat_name='".Database::escape_string($_POST['category_name'])."' AND received='".$received."' AND sent='$sent' AND session_id='$session_id'";
 		$result = Database::query($sql);
 
 		// step 3b, we add the category if it does not exist yet.
 		if (Database::num_rows($result) == 0) {
 			$sql = "INSERT INTO ".$dropbox_cnf['tbl_category']." (cat_name, received, sent, user_id, session_id)
-					VALUES ('".Database::escape_string(Security::remove_XSS($_POST['category_name']))."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', '".Database::escape_string($_user['user_id'])."',$session_id)";
+					VALUES ('".Database::escape_string($_POST['category_name'])."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', '".Database::escape_string($_user['user_id'])."',$session_id)";
 			Database::query($sql);
 			return array('type' => 'confirmation', 'message' => get_lang('CategoryStored'));
 		} else {
 			return array('type' => 'error', 'message' => get_lang('CategoryAlreadyExistsEditIt'));
 		}
 	} else {
-		$sql = "UPDATE ".$dropbox_cnf['tbl_category']." SET cat_name='".Database::escape_string(Security::remove_XSS($_POST['category_name']))."', received='".Database::escape_string($received)."' , sent='".Database::escape_string($sent)."'
+		$sql = "UPDATE ".$dropbox_cnf['tbl_category']." SET cat_name='".Database::escape_string($_POST['category_name'])."', received='".Database::escape_string($received)."' , sent='".Database::escape_string($sent)."'
 				WHERE user_id='".Database::escape_string($_user['user_id'])."'
-				AND cat_id='".Database::escape_string(Security::remove_XSS($_POST['edit_id']))."'";
+				AND cat_id='".Database::escape_string($_POST['edit_id'])."'";
 		Database::query($sql);
 		return array('type' => 'confirmation', 'message' => get_lang('CategoryModified'));
 	}

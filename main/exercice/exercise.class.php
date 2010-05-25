@@ -571,10 +571,7 @@ class Exercise
         
 		// exercise already exists
 		if($id) {
-		/*
-		title='".Database::escape_string(Security::remove_XSS($exercise))."',
-		description='".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY))."'";
-		*/
+
 			$sql="UPDATE $TBL_EXERCICES SET
 						title='".Database::escape_string($exercise)."',
 						description='".Database::escape_string($description)."'";

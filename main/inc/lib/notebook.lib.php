@@ -109,8 +109,8 @@ class NotebookManager
 					user_id = '".Database::escape_string(api_get_user_id())."',
 					course = '".Database::escape_string(api_get_course_id())."',
 					session_id = '".Database::escape_string($_SESSION['id_session'])."',
-					title = '".Database::escape_string(Security::remove_XSS($values['note_title']))."',
-					description = '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['note_comment'])),COURSEMANAGERLOWSECURITY))."',
+					title = '".Database::escape_string($values['note_title'])."',
+					description = '".Database::escape_string($values['note_comment'])."',
 					update_date = '".Database::escape_string(date('Y-m-d H:i:s'))."'
 				WHERE notebook_id = '".Database::escape_string($values['notebook_id'])."'";
 		$result = Database::query($sql);

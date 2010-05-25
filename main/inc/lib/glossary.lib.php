@@ -98,8 +98,8 @@ class GlossaryManager {
 		} else {
 			$sql = "INSERT INTO $t_glossary (name, description, display_order, session_id)
 					VALUES(
-						'".Database::escape_string(Security::remove_XSS($values['glossary_title']))."',
-						'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGERLOWSECURITY))."',
+						'".Database::escape_string($values['glossary_title'])."',
+						'".Database::escape_string($values['glossary_comment'])."',
 						'".(int)($max_glossary_item + 1)."',
 						'".Database::escape_string($session_id)."'
 						)";
@@ -135,8 +135,8 @@ class GlossaryManager {
 			return false;
 		} else {
 			$sql = "UPDATE $t_glossary SET
-							name 		= '".Database::escape_string(Security::remove_XSS($values['glossary_title']))."',
-							description	= '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGERLOWSECURITY))."'
+							name 		= '".Database::escape_string($values['glossary_title'])."',
+							description	= '".Database::escape_string($values['glossary_comment'])."'
 					WHERE glossary_id = ".Database::escape_string($values['glossary_id']);
 			$result = Database::query($sql);
 			if ($result === false) { return false; }

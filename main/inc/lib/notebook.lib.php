@@ -56,8 +56,8 @@ class NotebookManager
 					'".Database::escape_string(api_get_user_id())."',
 					'".Database::escape_string(api_get_course_id())."',
 					'".Database::escape_string($_SESSION['id_session'])."',
-					'".Database::escape_string(Security::remove_XSS($values['note_title']))."',
-					'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['note_comment'])),COURSEMANAGERLOWSECURITY))."',
+					'".Database::escape_string($values['note_title'])."',
+					'".Database::escape_string($values['note_comment'])."',
 					'".Database::escape_string(date('Y-m-d H:i:s'))."',
 					'".Database::escape_string(date('Y-m-d H:i:s'))."',
 					'0')";

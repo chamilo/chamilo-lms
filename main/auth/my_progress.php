@@ -123,11 +123,8 @@ foreach ($courses as $enreg) {
 <br /><br />
 <?php
 /*
- * **********************************************************************************************
- *
  * 	Details for one course
  *
- * **********************************************************************************************
  */
 	if (isset($_GET['course'])) {
 		$course = Database::escape_string($_GET['course']);
@@ -269,23 +266,26 @@ foreach ($courses as $enreg) {
 						 ';
 				}
 			?>
-			<tr>
-			  <th class="head" style="color:#000"><?php echo get_lang('Exercices'); ?></th>
-			  <th class="head" style="color:#000"><?php echo get_lang('Score'); ?></th>
-			  <th class="head" style="color:#000"><?php echo get_lang('Attempts'); ?></th>
-			  <th class="head" style="color:#000"><?php echo get_lang('Details'); ?></th>
-			</tr>
+		
 
 			<?php
 
-				/*$sql = 'SELECT visibility FROM '.$course_info['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
+				$sql = 'SELECT visibility FROM '.$course_info['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
 				$result_visibility_tests = Database::query($sql);
 
-				if (Database::result($result_visibility_tests, 0, 'visibility') == 1) {*/
+				if (Database::result($result_visibility_tests, 0, 'visibility') == 1) {
 					$sql_exercices = "	SELECT quiz.title,id, results_disabled
 									FROM ".$tbl_course_quiz." AS quiz
-									WHERE active='1'";
-
+									WHERE active='1'";				
+					
+						echo '<tr>
+			  				<th class="head" style="color:#000">'.get_lang('Exercices').'</th>
+			  				<th class="head" style="color:#000">'.get_lang('Score').'</th>
+			  				<th class="head" style="color:#000">'.get_lang('Attempts').'</th>
+			  				<th class="head" style="color:#000">'.get_lang('Details').'</th>
+							</tr>';
+			
+			
 					$result_exercices = Database::query($sql_exercices);
 					if (Database::num_rows($result_exercices) > 0) {
 						while ($exercices = Database::fetch_array($result_exercices)) {
@@ -363,9 +363,9 @@ foreach ($courses as $enreg) {
 					} else {
 						echo '<tr><td colspan="4" align="center">'.get_lang('NoEx').'</td></tr>';
 					}
-				/*} else {
+				} else {
 					echo '<tr><td colspan="4">'.get_lang('NoEx').'</td></tr>';
-				}*/
+				}
 			?>
 		</table>
 		<?php

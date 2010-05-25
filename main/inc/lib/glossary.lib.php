@@ -277,8 +277,7 @@ class GlossaryManager {
 			echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.Display::return_icon('view_table.gif',get_lang('TableView')).get_lang('TableView').'</a>';
 		}
 		echo '</div>';
-		if (!$_SESSION['glossary_view'] OR $_SESSION['glossary_view'] == 'table')
-		{
+		if (!$_SESSION['glossary_view'] OR $_SESSION['glossary_view'] == 'table') {
 			$table = new SortableTable('glossary', array('GlossaryManager','get_number_glossary_terms'), array('GlossaryManager','get_glossary_data'),0);
 			$table->set_header(0, get_lang('DisplayOrder'), true);
 			$table->set_header(1, get_lang('TermName'), true);
@@ -286,13 +285,12 @@ class GlossaryManager {
 			$table->set_header(3, get_lang('CreationDate'), false);
 			$table->set_header(4, get_lang('UpdateDate'), false);
 			if (api_is_allowed_to_edit(null,true)) {
-				$table->set_header(5, get_lang('Actions'), false);
+				$table->set_header(5, get_lang('Actions'), false, 'width=80px');
 				$table->set_column_filter(5, array('GlossaryManager','actions_filter'));
 			}
 			$table->display();
 		}
-		if ($_SESSION['glossary_view'] == 'list')
-		{
+		if ($_SESSION['glossary_view'] == 'list') {
 			GlossaryManager::display_glossary_list();
 		}
 	}
@@ -305,8 +303,7 @@ class GlossaryManager {
 	 */
 	function display_glossary_list() {
 		$glossary_data = GlossaryManager::get_glossary_data(0,1000,0,ASC);
-		foreach($glossary_data as $key=>$glossary_item)
-		{
+		foreach($glossary_data as $key=>$glossary_item) {
 			echo '<div class="sectiontitle">'.$glossary_item[1].'</div>';
 			echo '<div class="sectioncomment">'.$glossary_item[2].'</div>';
 			if (api_is_allowed_to_edit(null,true)) {

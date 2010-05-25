@@ -12,7 +12,7 @@ $language_file = array('glossary');
 // including the global dokeos file
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
-require_once(api_get_path(LIBRARY_PATH).'glossary.lib.php');
+require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
@@ -21,7 +21,7 @@ $this_section=SECTION_COURSES;
 api_protect_course_script(true);
 
 // including additional libraries
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // additional javascript
 $htmlHeadXtra[] = GlossaryManager::javascript_glossary();
@@ -137,7 +137,5 @@ if (api_is_allowed_to_edit(null,true)) {
 } else {
 	GlossaryManager::display_glossary();
 }
-
-
 // footer
 Display::display_footer();

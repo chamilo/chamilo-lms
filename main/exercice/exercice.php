@@ -38,9 +38,7 @@ require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
 
 /*
------------------------------------------------------------
 	Constants and variables
------------------------------------------------------------
 */
 $is_allowedToEdit 			= api_is_allowed_to_edit(null,true);
 $is_tutor 					= api_is_allowed_to_edit(true);
@@ -130,7 +128,7 @@ if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !emp
 }
 
 if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid']== strval(intval($_GET['exeid']))) {
-	$id 		= $_GET['exeid']; //filtered by post-condition
+	$id 		= intval($_GET['exeid']); //filtered by post-condition
 	$emailid 	= $_GET['emailid'];
 	$test 		= $_GET['test'];
 	$from 		= $_SESSION['_user']['mail'];
@@ -181,16 +179,15 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 				  
 		Database::query($query);
 
-
 		$qry = 'SELECT sum(marks) as tot
-				FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.intval($id).'
+				FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$id.'
 				GROUP BY question_id';
 
 		$res = Database::query($qry);
 		$tot = Database::result($res,0,'tot');
 		//updating also the total weight
 		$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".Database::escape_string($tot)."', exe_weighting = '".Database::escape_string($total_weighting)."'
-					 WHERE exe_Id='".Database::escape_string($id)."'";
+					 WHERE exe_Id='".$id."'";
 		Database::query($totquery);
 		$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
 				'(exe_id,
@@ -341,10 +338,8 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	//mail($emailid, $subject, $mess,$headers);
 
 	@api_mail_html($emailid, $emailid, $subject, $mess, $from_name, $from);
-	if (in_array($origin, array (
-			'tracking_course',
-			'user_course'
-		))) {
+	if (in_array($origin, array ('tracking_course','user_course'))) {
+		
 		if (isset ($_POST['lp_item_id']) && isset ($_POST['lp_item_view_id']) && isset ($_POST['student_id']) && isset ($_POST['total_score']) && isset ($_POST['total_time']) && isset ($_POST['totalWeighting'])) {
 			$lp_item_id = $_POST['lp_item_id'];
 			$lp_item_view_id = $_POST['lp_item_view_id'];
@@ -362,10 +357,10 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 				
 				//$my_real_lp_item_view_id = Database :: escape_string($_POST['real_lp_item_view_id']);
 				
-				$lp_item_id = Database :: escape_string($lp_item_id);
+				$lp_item_id 	 = Database :: escape_string($lp_item_id);
 				$lp_item_view_id = Database :: escape_string($lp_item_view_id);
-				$student_id = Database :: escape_string($student_id);
-				$totalWeighting = Database :: escape_string($totalWeighting);
+				$student_id		 = Database :: escape_string($student_id);
+				$totalWeighting  = Database :: escape_string($totalWeighting);
 				
 				/*
 				$sql = "SELECT (view_count) FROM $TBL_LP_ITEM_VIEW
@@ -984,13 +979,12 @@ if ($show == 'test') {
 	      		<a href="exercice.php?<?php echo api_get_cidreq() ?>&choice=enable&sec_token=<?php echo$token; ?>&amp;page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/invisible.gif" border="0"  title="<?php echo get_lang('Activate'); ?>" alt="<?php echo api_htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
 	      		
 	    		<?php
-				}
-				
+				}				
 				// export qti ...
 				echo '<a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a>';
 				
 				echo "</td>";
-				echo "</tr>\n";
+				echo "</tr>";
 			} else { // student only
 ?>
 	          <tr>
@@ -1043,10 +1037,7 @@ if ($show == 'test') {
 				} else {
 					echo get_lang('CantShowResults');
 				}
-?></td>
-  </tr>
-  <?php
-
+				echo '</td></tr>';
 			}
 			// skips the last exercise, that is only used to know if we have or not to create a link "Next page"
 			if ($i == $limitExPage) {
@@ -1105,7 +1096,6 @@ if ($show == 'test') {
 				}
 				// prof only
 				if ($is_allowedToEdit) {
-					/************/
 ?>
 
     <tr>
@@ -1151,9 +1141,6 @@ if ($show == 'test') {
 
 					}
 				}
-?>
-  <?php
-
 				if ($ind == $limitExPage) {
 					break;
 				}
@@ -1168,15 +1155,10 @@ if ($show == 'test') {
 		}
 
 	} //end if ($origin != 'learnpath') {
-?>
-</table>
-<?php
-
+echo '</table>';
 }
 
-/*****************************************/
 /* Exercise Results (uses tracking tool) */
-/*****************************************/
 
 // if tracking is enabled
 if ($_configuration['tracking_enabled'] && ($show == 'result')) {

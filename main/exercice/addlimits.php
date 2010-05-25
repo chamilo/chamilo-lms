@@ -46,11 +46,11 @@ api_protect_course_script();
 	Table definitions
 	@todo: use the Database :: get_course_table functions
 */
-$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES          = Database::get_course_table('quiz_answer');
-$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
+$TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCICES        	= Database::get_course_table(TABLE_QUIZ_TEST);
+$TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_REPONSES          	= Database::get_course_table('quiz_answer');
+$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -123,13 +123,10 @@ $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices')
 Display::display_header($nameTools,"Exercise");
 
 /*
------------------------------------------------------------
 	Action handling
------------------------------------------------------------
 */
-include('../inc/global.inc.php');
-if (isset($_POST['ok']))
-{
+require_once '../inc/global.inc.php';
+if (isset($_POST['ok'])) {
 	$message = get_lang('TestLimitsAdded');
 	Display::display_normal_message($message);
 }

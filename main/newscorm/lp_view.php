@@ -20,29 +20,22 @@
 $_SESSION['whereami'] = 'lp/view';
 $this_section=SECTION_COURSES;
 
-if($lp_controller_touched!=1){
+if ($lp_controller_touched != 1){
 	header('location: lp_controller.php?action=view&item_id='.$_REQUEST['item_id']);
 	exit;
 }
 
 /*
------------------------------------------------------------
 	Libraries
------------------------------------------------------------
 */
-require_once('back_compat.inc.php');
+require_once 'back_compat.inc.php';
 //require_once('../learnpath/learnpath_functions.inc.php');
-require_once('scorm.lib.php');
-require_once('learnpath.class.php');
-require_once('learnpathItem.class.php');
+require_once 'scorm.lib.php';
+require_once 'learnpath.class.php';
+require_once 'learnpathItem.class.php';
 //require_once('lp_comm.common.php'); //xajax functions
 
 if ($is_allowed_in_course == false) api_not_allowed();
-/*
------------------------------------------------------------
-	Variables
------------------------------------------------------------
-*/
 
 // we set the encoding of the lp
 if (!empty($_SESSION['oLP']->encoding)) {
@@ -51,11 +44,11 @@ if (!empty($_SESSION['oLP']->encoding)) {
 	$charset = api_get_system_encoding();
 }
 
-$oLearnpath = false;
-$course_code = api_get_course_id();
-$user_id = api_get_user_id();
+$oLearnpath		= false;
+$course_code 	= api_get_course_id();
+$user_id 		= api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); 	// plataform's css
-$my_style=$platform_theme;
+$my_style		= $platform_theme;
 //escape external variables
 
 /* 	Header  */
@@ -81,7 +74,7 @@ $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 
 
 $_SESSION['oLP']->error = '';
-$lp_type = $_SESSION['oLP']->get_type();
+$lp_type 	= $_SESSION['oLP']->get_type();
 $lp_item_id = $_SESSION['oLP']->get_current_item_id();
 //$lp_item_id = learnpath::escape_string($_GET['item_id']);
 //$_SESSION['oLP']->set_current_item($lp_item_id); // already done by lp_controller.php
@@ -99,8 +92,6 @@ unset($_SESSION['questionList']);
 /**
  * Get a link to the corresponding document
  */
-
-
 if (!isset($src)) {
  	$src = '';
 	switch($lp_type) {
@@ -221,7 +212,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	$htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
 }
 	//not fullscreen mode
-	include_once('../inc/reduced_header.inc.php');
+	require_once '../inc/reduced_header.inc.php';
 	//$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
 	//check if audio recorder needs to be in studentview
 	$course_id=$_SESSION["_course"]["id"];
@@ -293,9 +284,9 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 							$lp_theme_css = $my_style;
 						}
 
-						$progress_bar = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
+						$progress_bar 	= $_SESSION['oLP']->get_progress_bar('', -1, '', true);
 						$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-						$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);
+						$mediaplayer 	= $_SESSION['oLP']->get_mediaplayer($autostart);
 
 						$tbl_lp_item	= Database::get_course_table(TABLE_LP_ITEM);
 						$show_audioplayer = false;
@@ -319,7 +310,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	   </div>
 	   <!-- end image preview Layout -->
 		<div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
-			<?php echo $_SESSION['oLP']->get_author() ?>
+			<?php echo $_SESSION['oLP']->get_author(); ?>
 		</div>
 
 		<!-- media player layaout -->
@@ -334,10 +325,10 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 		<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;height:60%;width:100%">
 		-->
 		<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;width:100%">
-
 			<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
 
-    	<?php if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
+    	<?php if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log    			
+    	?>
 	        <!-- log message layout -->
 			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
 				<div id="log_content"></div>
@@ -357,8 +348,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 		// hub 26-05-2010 Fullscreen or not fullscreen
 		if($_SESSION['oLP']->mode == 'fullscreen') {
 			echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:600px" ></iframe>';
-		}
-		else {
+		} else {
 			echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>';
 		}
 	?>
@@ -367,7 +357,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 </div>
 <script language="JavaScript" type="text/javascript">
 	// Need to be called after the <head> to be sure window.oxajax is defined
-	var dokeos_xajax_handler = window.oxajax;
+	//var dokeos_xajax_handler = window.oxajax;
 </script>
 <script language="JavaScript" type="text/javascript">
 	// resize right and left pane to full height (HUB 20-05-2010)
@@ -383,8 +373,10 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 		if (document.getElementById('actions_lp')) hauteurAction = document.getElementById('actions_lp').offsetHeight;
 		var hauteurHaut = hauteurHeader+hauteurAuthorImg+hauteurAuthorName+hauteurMedia+hauteurTitre+hauteurAction;
 		var innerHauteur = (IE) ? document.body.clientHeight : window.innerHeight ;
+		var debugsize = 0;
 		// -40 is a static adjustement for margin, spaces on the page
-		document.getElementById('inner_lp_toc').style.height = innerHauteur - hauteurHaut - 40 + "px";
+		<?php if (!empty($_SESSION['oLP']->scorm_debug)) echo 'debugsize = 150;' ?>
+		document.getElementById('inner_lp_toc').style.height = innerHauteur - hauteurHaut - 40 - debugsize + "px";
 		if (document.getElementById('content_id')) {
 			document.getElementById('content_id').style.height = innerHauteur + 'px';
 		}
@@ -427,12 +419,5 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 </script>
 </body>
 <?php
-	/*
-	==============================================================================
-	  FOOTER
-	==============================================================================
-	*/
-	//Display::display_footer();
-//}
 //restore global setting
 $_setting['show_navigation_menu'] = $save_setting;

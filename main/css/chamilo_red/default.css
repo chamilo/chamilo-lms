@@ -594,7 +594,7 @@ margin-top:0;
 }
 #footer .copyright {
 	float: right;
-	padding-top:53px;
+	padding-top:60px;
 	margin-right:5%;
 	background-color: #a90a0e;
 	background-image: url(images/bg-footer.gif);
@@ -633,6 +633,12 @@ margin-top:0;
 ==============================================================================
 */
 
+
+#menu-wrapper {
+	width:200px;
+	float: right;	
+}
+	
 #menu {
 	-moz-border-radius: 10px; border: 1px solid #f4b0b2;
 	-webkit-border-radius: 10px; border: 1px solid #f4b0b2;

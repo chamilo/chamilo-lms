@@ -190,7 +190,7 @@ function hide_icon_edit(element_html)  {
 }
 
 </script>';
-
+$nametool = get_lang('Social');
 if (isset($_GET['shared'])) {
 	$my_link='../social/profile.php';
 	$link_shared='shared='.Security::remove_XSS($_GET['shared']);
@@ -204,6 +204,7 @@ $interbreadcrumb[]= array ('url' => 'profile.php?u='.api_get_user_id(), 'name' =
 if (isset($_GET['u']) && is_numeric($_GET['u']) && $_GET['u'] != api_get_user_id()) {
 	$info_user=api_get_user_info($_GET['u']);
 	$interbreadcrumb[]= array ('url' => '#','name' => api_get_person_name($info_user['firstName'], $info_user['lastName']));
+	$nametool = '';
 }
 if (isset($_GET['u'])) {
 	$param_user='u='.Security::remove_XSS($_GET['u']);
@@ -216,7 +217,7 @@ $_SESSION['social_user_id'] = intval($user_id);
 /**
  * Display
  */
-Display :: display_header(get_lang('Social'));
+Display :: display_header($nametool);
 
 // Added by Ivan Tcholakov, 03-APR-2009.
 if (USE_JQUERY_CORNERS_SCRIPT) {
@@ -570,6 +571,7 @@ echo '<div id="social-content-right">';
 
 	//--Productions
 	$production_list =  UserManager::build_production_list($user_id);
+	
 	// Images uploaded by course
 	$file_list = '';
 	if (is_array($course_list_code) && count($course_list_code)>0) {
@@ -581,7 +583,7 @@ echo '<div id="social-content-right">';
 	$count_pending_invitations = 0;
 	if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
 		$pending_invitations = SocialManager::get_list_invitation_of_friends_by_user_id(api_get_user_id());
-		$list_get_path_web=SocialManager::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
+		$list_get_path_web	 = SocialManager::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
 		$count_pending_invitations = count($pending_invitations);
 	}
 
@@ -596,14 +598,19 @@ echo '<div id="social-content-right">';
 							echo '<div class="social-box-content1">';
 							echo '<div><h3>'.get_lang('PendingInvitations').'</h3></div>';
 							for ($i=0;$i<$count_pending_invitations;$i++) {
-									echo '<div id="dpending_'.$pending_invitations[$i]['user_sender_id'].'" class="friend_invitations">';
+									$user_invitation_id = $pending_invitations[$i]['user_sender_id'];
+									echo '<div id="dpending_'.$user_invitation_id.'" class="friend_invitations">';
 									echo '<div style="float:left;width:60px;" >';
 										echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
 									echo '</div>';
+									
 									echo '<div style="padding-left:70px;">';
+											$user_info = api_get_user_info($user_invitation_id);									
+											echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_invitation_id.'">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</a>';
+											echo '<br />';											
 											echo ' '.(substr($pending_invitations[$i]['content'],0,50));
 										echo '<br />';
-										echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
+										echo '<a id="btn_accepted_'.$user_invitation_id.'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
 										echo '<div id="id_response">&nbsp;</div>';
 									echo '</div>';
 								echo '</div>';

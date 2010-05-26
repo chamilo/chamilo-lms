@@ -161,9 +161,10 @@ if(api_is_platform_admin()) {
 	  <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
 	  <?php } ?>
 	  <?php
-	  if(!empty($_configuration['multiple_access_urls']))
-	  {
-	    echo '<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
+		if(!empty($_configuration['multiple_access_urls'])) {
+			if (api_is_global_platform_admin()) { 
+	    		echo '<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
+			}
 	  }
 
 	  if (api_get_setting('allow_reservation')=='true') {

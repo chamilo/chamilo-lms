@@ -4483,3 +4483,43 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
 	$mail->ClearAddresses();
 	return 1;
 }
+
+
+/**
+ * Function used to protect a "global" admin script.
+ * The function blocks access when the user has no global platform admin rights.
+ * Global admins are the admins that are registered in the main.admin table AND the users who have access to the "principal" portal. 
+ * That means that there is a record in the main.access_url_rel_user table with his user id and the access_url_id=1 
+ *
+ * @author Julio Montoya
+ */
+function api_is_global_platform_admin() {
+	if (api_is_platform_admin()) {
+		// This user is subscribed in these sites => $my_url_list
+        $my_url_list = api_get_access_url_from_user(api_get_user_id());
+		if (in_array(1, $my_url_list)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	return false;
+}
+
+
+/**
+ * Function used to protect a global admin script.
+ * The function blocks access when the user has no global platform admin rights.
+ * See also the api_is_global_platform_admin() function wich defines who's a "global" admin
+ *
+ * @author Julio Montoya
+ */
+function api_protect_global_admin_script() {
+	if (!api_is_global_platform_admin()) {
+		include api_get_path(INCLUDE_PATH).'header.inc.php';
+		api_not_allowed();
+		return false;
+	}
+	return true;
+}
+

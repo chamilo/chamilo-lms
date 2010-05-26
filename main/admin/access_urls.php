@@ -12,7 +12,9 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+//api_protect_admin_script();
+api_protect_global_admin_script();
+
 if (!$_configuration['multiple_access_urls']) {
 	header('Location: index.php');
 	exit;

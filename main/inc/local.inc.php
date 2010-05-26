@@ -272,7 +272,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	            		if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
 	            			global $_configuration;
 	            			
-	            			if ($_configuration['multiple_access_urls'] == true) {
+	            			if ($_configuration['multiple_access_urls'] == true) { 
 								$admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 								
 	            				//Check if user is an admin 
@@ -284,13 +284,15 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 							    if (Database::num_rows($result) > 0) {
 									$my_user_is_admin = true;
 							    }
+							    
+								// This user is subscribed in these sites => $my_url_list
+					            $my_url_list = api_get_access_url_from_user($uData['user_id']);
 					            
-					            if ($my_user_is_admin === false) {
-									//Check the access_url configuration setting if the user is registered in the access_url_rel_user table
-									//Getting the current access_url_id of the platform
-	                				$current_access_url_id = api_get_current_access_url_id();
-	                				// my user is subscribed in these sites => $my_url_list
-	                				$my_url_list = api_get_access_url_from_user($uData['user_id']);
+					            //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
+								//Getting the current access_url_id of the platform
+	                			$current_access_url_id = api_get_current_access_url_id();
+					            
+					            if ($my_user_is_admin === false) {									                				
 	
 	                				if (is_array($my_url_list) && count($my_url_list)>0 ){
 	                					// the user have the permissions to enter at this site
@@ -310,11 +312,25 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 										header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
 										exit;
 	                				}
-					            } else {
-					            	//All admins can login in any multiple URL
-				            		$_user['user_id'] = $uData['user_id'];
-									api_session_register('_user');
-									event_login();				            	
+					            } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
+					            	//var_dump($current_access_url_id, $my_url_list); exit;
+					            	if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
+					            		$_user['user_id'] = $uData['user_id'];
+										api_session_register('_user');
+										event_login();				            	
+					            	} else {
+					            		//This means a secondary admin wants to login so we check as he's a normal user
+					            		if (in_array($current_access_url_id, $my_url_list)) {
+	                						$_user['user_id'] = $uData['user_id'];
+											api_session_register('_user');
+											event_login();
+	                					} else {
+		                					$loginFailed = true;
+											api_session_unregister('_uid');
+											header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+											exit;
+	                					}
+					            	}
 					            }
 	            			} else {
 	            				$_user['user_id'] = $uData['user_id'];
@@ -469,6 +485,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		                        	// check if the expiration date has not been reached
 									if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
 		                            	global $_configuration;
+		                            	//If Multiple URL is enabled
 										if ($_configuration['multiple_access_urls'] == true) {
 		                                  	$admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 											//Check if user is an admin 
@@ -478,15 +495,17 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 										    $my_user_is_admin = false;							
 										    if (Database::num_rows($result) > 0) {
 												$my_user_is_admin = true;
-										    }							            
-								            if ($my_user_is_admin === false) {						            	
-			                                      //check the access_url configuration setting if the user is registered in the access_url_rel_user table
-			                                      //getting the current access_url_id of the platform
-			                                      $current_access_url_id = api_get_current_access_url_id();
-			                                      // my user is subscribed in these sites => $my_url_list
-			                                      $my_url_list = api_get_access_url_from_user($uData['user_id']);
-			
-			                                      if (is_array($my_url_list) && count($my_url_list)>0 ) {
+										    }
+										    		
+										    //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
+											//Getting the current access_url_id of the platform
+		                                    $current_access_url_id = api_get_current_access_url_id();			                                      
+		                                      					            
+										    // my user is subscribed in these sites => $my_url_list
+			                                $my_url_list = api_get_access_url_from_user($uData['user_id']);
+			                                      
+											if ($my_user_is_admin === false) {
+			                                	if (is_array($my_url_list) && count($my_url_list)>0 ) {
 			                                          if (in_array($current_access_url_id, $my_url_list)) {
 			                                              // the user has permission to enter at this site
 			                                              $_user['user_id'] = $uData['user_id'];
@@ -503,21 +522,34 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 			                                              header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
 			                                              exit;
 			                                          }
-			                                      } else {
+												} else {
 			                                          // there is no URL in the multiple urls list for this user
 			                                          $loginFailed = true;
 			                                          api_session_unregister('_uid');
 			                                          header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
 			                                          exit;
-			                                      }
-								            } else {
-								            	//User is an admin, he can login wherever he wants
-												$_user['user_id'] = $uData['user_id'];
-		                                        api_session_register('_user');
-		                                        event_login();						            	
-								            }
+												}
+											} else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
+										    	if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal portal
+										        	$_user['user_id'] = $uData['user_id'];
+													api_session_register('_user');
+													event_login();				            	
+										        } else {
+										        	//This means a secondary admin wants to login so we check as a normal user
+										        	if (in_array($current_access_url_id, $my_url_list)) {
+						                				$_user['user_id'] = $uData['user_id'];
+														api_session_register('_user');
+														event_login();
+						                			} else {
+							                			$loginFailed = true;
+														api_session_unregister('_uid');
+														header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+														exit;
+						                			}
+												}
+											}
 										} else {
-											//Single URL access
+											//Single URL access (Only 1 portal)
 		                                    $_user['user_id'] = $uData['user_id'];
 		                                    api_session_register('_user');
 		                                    event_login();
@@ -533,35 +565,35 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		                                exit;
 									}
 								} else {
-								    //user not active
+								    //User not active
 								    $loginFailed = true;
 								    api_session_unregister('_uid');
 								    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
 								    exit;
 								}
 							} else {
-							  //sha1 of password is wrong
+							  //SHA1 of password is wrong
 							  $loginFailed = true;
 							  api_session_unregister('_uid');
 							  header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
 							  exit;
 							}
 	                    } else {
-	                        //auth_source is wrong
+	                        //Auth_source is wrong
 	                        $loginFailed = true;
 	                        api_session_unregister('_uid');
 	                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
 	                        exit;
 	                    }
 	                } else {
-	                    //no user by that login
+	                    //No user by that login
 	                    $loginFailed = true;
 	                    api_session_unregister('_uid');
 	                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
 	                    exit;
 	                }
 	            } else {
-	                //request comes from unknown source
+	                //Request comes from unknown source
 	                $loginFailed = true;
 	                api_session_unregister('_uid');
 	                header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');

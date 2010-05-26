@@ -1,11 +1,9 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
-*	@package dokeos.admin
+*	@package chamilo.admin
 * 	@todo use formvalidator for the form
-==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -13,12 +11,13 @@ $language_file='admin';
 
 $cidReset=true;
 
-// including the global Dokeos file
-require_once('../inc/global.inc.php');
+// including the global Chamilo file
+require_once '../inc/global.inc.php';
 
 // including additional libraries
-require_once(api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
-require_once ('../inc/lib/xajax/xajax.inc.php');
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+require_once '../inc/lib/xajax/xajax.inc.php';
+
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_coachs');
@@ -38,15 +37,13 @@ $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('Session
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 
-function search_coachs($needle)
-{
+function search_coachs($needle) {
 	global $tbl_user;
 
 	$xajax_response = new XajaxResponse();
 	$return = '';
 
-	if(!empty($needle))
-	{
+	if(!empty($needle)) {
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');

@@ -140,12 +140,12 @@ class FlatViewDataGenerator
 		if ($ignore_score_color) {
 			$displaytype |= SCORE_IGNORE_SPLIT;
 		}
-
+		
 		foreach ($selected_users as $user) {
 			$row = array ();
 			$row[] = $user[0];	// user id
-			$row[] = $user[1];	// last name
-			$row[] = $user[2];	// first name
+			$row[] = $user[2];	// last name
+			$row[] = $user[3];	// first name
 
 			$item_value=0;
 			$item_total=0;

@@ -175,9 +175,9 @@ $tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_stats_access 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$tbl_stats_access 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 $tbl_stats_exercices 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$tbl_stats_exercices_attempts 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$tbl_stats_exercices_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 //$tbl_course_lp_view = 'lp_view';
 //$tbl_course_lp_view_item = 'lp_item_view';
@@ -619,7 +619,7 @@ if ($timezone !== null) {
 			get_lang('LastConnexion', '')
 		);
 
-		$sql_lp = "	SELECT lp.name, lp.id FROM $t_lp lp WHERE lp.session_id = $session_id ORDER BY lp.name ASC";
+		$sql_lp = "	SELECT lp.name, lp.id FROM $t_lp lp WHERE lp.session_id = $session_id ORDER BY lp.display_order";
 		$rs_lp = Database::query($sql_lp);
 		$token = Security::get_token();
 		

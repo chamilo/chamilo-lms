@@ -202,7 +202,7 @@ foreach ($courses as $enreg) {
 			  <th class="head" style="color:#000"><?php echo get_lang('LastConnexion'); ?></th>
 			</tr>
 			<?php
-				$sql_learnpath = "SELECT lp.name,lp.id FROM ".$tbl_course_lp." AS lp";
+				$sql_learnpath = "SELECT lp.name,lp.id FROM ".$tbl_course_lp." AS lp ORDER BY lp.display_order";
 				$result_learnpath = Database::query($sql_learnpath);
 				if (Database::num_rows($result_learnpath) > 0) {
 					while($learnpath = Database::fetch_array($result_learnpath)) {

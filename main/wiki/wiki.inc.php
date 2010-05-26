@@ -185,13 +185,11 @@ function make_wiki_link_clickable($input)
 {
 	global $_course;
 
-	if (isset($_SESSION['_gid']))
-	{
-		$_clean['group_id']=(int)$_SESSION['_gid'];
+	if (isset($_SESSION['_gid'])) {
+		$_clean['group_id']=intval($_SESSION['_gid']);
 	}
-	if (isset($_GET['group_id']))
-	{
-		$_clean['group_id']=(int)Security::remove_XSS($_GET['group_id']);
+	if (isset($_GET['group_id'])) {
+		$_clean['group_id']=intval($_GET['group_id']);
 	}
 
 

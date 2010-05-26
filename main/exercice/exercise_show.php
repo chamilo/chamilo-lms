@@ -1024,7 +1024,7 @@ if (is_array($arrid) && is_array($arrmarks)) {
 if ($is_allowedToEdit) {
 	if (in_array($origin, array('tracking_course','user_course'))) {
 
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.urlencode($test).'&emailid='.$emailId.'&origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].$fromlink.'" method="post">';
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.urlencode($test).'&emailid='.$emailId.'&origin='.$origin.'&student='.Security::remove_XSS($_GET['student']).'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';
 		if (isset($_GET['myid']) && isset($_GET['my_lp_id']) && isset($_GET['student'])) {
 			?>

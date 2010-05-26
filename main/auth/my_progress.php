@@ -269,11 +269,14 @@ foreach ($courses as $enreg) {
 		
 
 			<?php
-
-				$sql = 'SELECT visibility FROM '.$course_info['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
+			
+				// This code was commented on purpose see BT#924
+				
+				/*$sql = 'SELECT visibility FROM '.$course_info['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
 				$result_visibility_tests = Database::query($sql);
 
-				if (Database::result($result_visibility_tests, 0, 'visibility') == 1) {
+				if (Database::result($result_visibility_tests, 0, 'visibility') == 1) {*/
+				
 					$sql_exercices = "	SELECT quiz.title,id, results_disabled
 									FROM ".$tbl_course_quiz." AS quiz
 									WHERE active='1'";				
@@ -363,9 +366,9 @@ foreach ($courses as $enreg) {
 					} else {
 						echo '<tr><td colspan="4" align="center">'.get_lang('NoEx').'</td></tr>';
 					}
-				} else {
+				/*} else {
 					echo '<tr><td colspan="4">'.get_lang('NoEx').'</td></tr>';
-				}
+				}*/
 			?>
 		</table>
 		<?php

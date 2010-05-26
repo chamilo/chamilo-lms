@@ -385,7 +385,7 @@ if($is_allowedToEdit)
 		//echo $sql;
 		$exerciseId=0;
 	}
-
+	
 	$result=Database::query($sql);
 	$nbrQuestions=Database::num_rows($result);
 
@@ -398,9 +398,9 @@ if($is_allowedToEdit)
 	 '<td align="right">';
 
 	if(!empty($page)) {
-	   echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page-1),'">&lt;&lt; ',get_lang('PreviousPage'),'</a> | ';
+		echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page-1),'">&lt;&lt; ',get_lang('PreviousPage'),'</a> | ';
 	} elseif($nbrQuestions > $limitQuestPage) {
-	   echo '&lt;&lt; ',get_lang('PreviousPage'),' | ';
+		echo '&lt;&lt; ',get_lang('PreviousPage'),' | ';
 	}
 
 	if($nbrQuestions > $limitQuestPage) {
@@ -416,8 +416,10 @@ if($is_allowedToEdit)
 <tr bgcolor="#e6e6e6">';
 
 	if(!empty($fromExercise)) {
-        echo '<th width="4%"> </th>',
-            '<th>',get_lang('Question'),'</th>',
+		if (api_get_session_id() == 0 ){
+        	echo '<th width="4%"> </th>';
+		}
+        echo '<th>',get_lang('Question'),'</th>',
             '<th>',get_lang('Level'),'</th>',
             '<th>',get_lang('Reuse'),'</th>';
 	} else {
@@ -427,11 +429,10 @@ if($is_allowedToEdit)
 	}
     echo '</tr>';
 	$i=1;
-	echo '<pre>';
 
-	echo '</pre>';
 	$session_id  = api_get_session_id();
 	while ($row = Database::fetch_array($result)) {
+		
 		// if we come from the exercise administration to get a question,
         // don't show the questions already used by that exercise
 
@@ -445,7 +446,9 @@ if($is_allowedToEdit)
       //if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (!$objExercise->isInList($row['id'])))
 		if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (is_array($objExercise->questionList)) ) {
             echo '<tr ',($i%2==0?'class="row_odd"':'class="row_even"'),'>';
-            echo '<td align="center"> <input type="checkbox" value="'.$row['id'].'" name="recup[]"/></td>';
+            if (api_get_session_id() == 0 ){
+            	echo '<td align="center"> <input type="checkbox" value="'.$row['id'].'" name="recup[]"/></td>';
+            }
             echo '  <td><a href="admin.php?',api_get_cidreq(),'&editQuestion=',$row['id'],'&fromExercise=',$fromExercise,'">',$row['question'],'</a></td>';
             echo '  <td align="center" >';
 			if (empty($fromExercise)) {
@@ -484,9 +487,12 @@ if($is_allowedToEdit)
             '</tr>';
 	}
     echo '</table>';
-    echo '<div style="width:100%; border-top:1px dotted #4171B5;">
-    	  <button class="save" type="submit">'.get_lang('Reuse').'</button>
-    	  </div></form>';
+    
+    if (api_get_session_id() == 0 ){
+    	echo '<div style="width:100%; border-top:1px dotted #4171B5;">
+    		  <button class="save" type="submit">'.get_lang('Reuse').'</button>
+    	  	</div></form>';
+    }
 	Display::display_footer();
 } else {
 	// if not admin of course

@@ -388,7 +388,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 				//Only update if is the last attempt			
 				if ($my_view_count == $_GET['exeid']) {									
 					// update score and total_time from last attempt when you qualify the exercise in Learning path detail
-					$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . intval($tot) . "', total_time = '" . (int) $total_time . "' WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
+					$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . intval($tot) . "' WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
 					    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "') AND view_count = '$max_view_count'";
 					Database::query($sql_update_score);
 				} 

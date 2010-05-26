@@ -2576,14 +2576,14 @@ class learnpath {
 		//echo $this->current;
 		//$parent = $this->items[$this->current]->get_parent();
 		//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
-		$html = '<div class="scorm_title"><div class="scorm_title_text">' . Security::remove_XSS(api_convert_encoding($this->get_name(), $this->encoding, $charset)) . '</div></div>';
+		$html = '<div id="scorm_title" class="scorm_title"><div class="scorm_title_text">' . Security::remove_XSS(api_convert_encoding($this->get_name(), $this->encoding, $charset)) . '</div></div>';
 		// build, display
 		if ($is_allowed_to_edit) {
 			$gradebook = Security :: remove_XSS($_GET['gradebook']);
 
 			//var_dump($this->get_lp_session_id());
 			if ($this->get_lp_session_id()==api_get_session_id()) {
-				$html .= '<div class="actions_lp">';
+				$html .= '<div id="actions_lp" class="actions_lp">';
 				if ($display_action_links_with_icons) {
 					$html .= '<div style = "text-align:center;">';
 					$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . Display :: return_icon('learnpath_build.gif', get_lang('Build')) . ' ' . get_lang('Build') . "</a>";

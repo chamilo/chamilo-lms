@@ -219,202 +219,7 @@ $lp_theme_css=$_SESSION['oLP']->get_theme(); //sets the css theme of the LP this
 
 if($_SESSION['oLP']->mode == 'fullscreen') {
 	$htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
-	include_once('../inc/reduced_header.inc.php');
-
-	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
-	$_SESSION['loaded_lp_view'] = true;
-    ?>
-<body>
-<div id="learning_path_main"  style="width:100%;height:100%;" >
-	<div id="learning_path_left_zone" style="float:left;width:280px;height:100%">
-		<!-- header -->
-		<div id="header">
-            <div id="learning_path_header" style="font-size:14px;">
-	            <table>
-	                <tr>
-	                    <td>
-	                        <a href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">
-	                        <img src="../img/lp_arrow.gif" />
-	                        </a>
-	                    </td>
-	                    <td>
-	                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">
-	                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
-	                    </td>
-	                </tr>
-	            </table>
-	        </div>
-		</div>
-		<!-- end header -->
-
-        <!-- Image preview Layout -->
-        <div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px">
-		<?php $image = '../img/lp_author_background.gif'; ?>
-			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
-		       	<div style="width:100; float:left;height:105;margin:5px">
-		       		<span>
-			        <?php
-			        if ($_SESSION['oLP']->get_preview_image()!='') {
-			            echo '<img width="115px" height="100px" src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'">';
-			        } else {
-                        echo Display :: display_icon('unknown_250_100.jpg', ' ');
-			        }; ?>
-					</span>
-		       	</div>
-
-				<div id="nav_id" name="nav_name" class="lp_nav" style="margin-left:105;height:90">
-			        <?php
-						$display_mode = $_SESSION['oLP']->mode;
-						$scorm_css_header = true;
-						$lp_theme_css = $_SESSION['oLP']->get_theme();
-
-						//Setting up the CSS theme if exists
-
-						if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
-							global $lp_theme_css;
-						} else {
-							$lp_theme_css = $my_style;
-						}
-
-						$progress_bar = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
-						$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-						$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);
-
-						$tbl_lp_item	= Database::get_course_table(TABLE_LP_ITEM);
-						$show_audioplayer = false;
-						// getting all the information about the item
-						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
-						$res_media= Database::query($sql);
-
-						if (Database::num_rows($res_media) > 0) {
-							while ($row_media= Database::fetch_array($res_media)) {
-							     if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
-							}
-						}
-					?>
-
-					<div id="lp_navigation_elem" class="lp_navigation_elem" style="padding-left:130px;margin-top:9px;">
-						<div style="padding-top:20px;padding-bottom:50px;" ><?php echo $navigation_bar; ?></div>
-						<div style="height:20px"><?php echo $progress_bar; ?></div>
-					</div>
-				</div>
-		</div>
-
-	</div>
-	<!-- end image preview Layout -->
-	<div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
-		<?php echo $_SESSION['oLP']->get_author() ?>
-	</div>
-
-	<!-- media player layaout -->
-	<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"':'style="height:15px"'); ?>
-	<div id="media"  <?php echo $style_media ?>>
-		<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
-	</div>
-	<!-- end media player layaout -->
-
-	<!-- toc layout -->
-	<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;height:60%;width:100%">
-
-		<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
-			<!-- log message layout -->
-
-			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
-				<div id="log_content"></div>
-				<div id="log_content_cleaner" style="color: white;">.</div>
-			</div>
-    		<!-- end log message layout -->
-        </div>
-	</div>
-	<!-- end toc layout -->
-</div>
-<!-- end left Zone -->
-
-<!-- right Zone -->
-<div id="learning_path_right_zone" style="margin-left:282px;border : 0pt solid blue;height:100%">
-    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
-</div>
-<!-- end right Zone -->
-
-</div>
-
-<script language="JavaScript" type="text/javascript">
-<!--
-var leftZoneHeightOccupied = 0;
-var rightZoneHeightOccupied = 0;
-var initialLeftZoneHeight = 0;
-var initialRightZoneHeight = 0;
-
-var updateContentHeight = function() {
-	winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
-	newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
-	newRightZoneHeight = winHeight - rightZoneHeightOccupied;
-	if (newLeftZoneHeight <= initialLeftZoneHeight) {
-		newLeftZoneHeight = initialLeftZoneHeight;
-		newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
-	}
-	if (newRightZoneHeight <= initialRightZoneHeight) {
-		newRightZoneHeight = initialRightZoneHeight;
-		newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
-	}
-	document.getElementById('learning_path_toc').style.height = newLeftZoneHeight + 'px';
-	document.getElementById('learning_path_right_zone').style.height = newRightZoneHeight + 'px';
-	document.getElementById('content_id_blank').style.height = newRightZoneHeight + 'px';
-	if (document.body.clientHeight > winHeight) {
-		document.body.style.overflow = 'auto';
-	} else {
-		document.body.style.overflow = 'hidden';
-	}
-};
-
-window.onload = function() {
-
-	screen_height = screen.height;
-	screen_width = screen.height;
-
-	document.getElementById('learning_path_left_zone').style.height = "100%";
-	document.getElementById('learning_path_toc').style.height = "60%";
-	document.getElementById('learning_path_toc').style.width = "100%";
-	document.getElementById('learning_path_right_zone').style.height = "100%"
-	document.getElementById('content_id').style.height = "100%" ;
-
-	if (screen_height <= 600) {
-		document.getElementById('inner_lp_toc').style.height = "100px" ;
-		document.getElementById('learning_path_left_zone').style.height = "415px";
-	}
-
-	initialLeftZoneHeight = document.getElementById('learning_path_toc').offsetHeight;
-	initialRightZoneHeight = document.getElementById('learning_path_right_zone').offsetHeight;
-	docHeight = document.body.clientHeight;
-	leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
-	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
-	document.body.style.overflow = 'hidden';
-	updateContentHeight();
-	viewportheight = window.innerHeight;
-	//Fixing IE compatibility of window.innerHeight
-
-	var viewportheight = 0;
-	if( typeof( window.innerHeight ) == 'number' ) {
-	    //Non-IE
-		viewportheight = window.innerHeight;
-	} else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-    	//IE 6+ in 'standards compliant mode'
-	    viewportheight = document.documentElement.clientHeight;
- 	} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
-	    //IE 4 compatible
-	    viewportheight = document.body.clientHeight;
- 	}
-
-	document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
-
 }
-
-window.onresize = updateContentHeight;
--->
-</script>
-</body>
-<?php
-} else {
 	//not fullscreen mode
 	include_once('../inc/reduced_header.inc.php');
 	//$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
@@ -451,7 +256,10 @@ window.onresize = updateContentHeight;
 		<!-- end header -->
 
         <!-- Image preview Layout -->
+        <!-- hub 26-50-2010 for lp toc height
         <div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px;">
+        -->
+        <div id="author_image" name="author_image" class="lp_author_image" style="width:100%;margin-left:5px;">
 		    <?php $image = '../img/lp_author_background.gif'; ?>
 			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
 		       	<div style="width:100; float:left;height:105;margin:5px">
@@ -522,7 +330,10 @@ window.onresize = updateContentHeight;
 		<!-- end media player layaout -->
 
 		<!-- toc layout -->
+		<!-- hub 26-05-2010 remove height for lp toc height resizable
 		<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;height:60%;width:100%">
+		-->
+		<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;width:100%">
 
 			<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
 
@@ -542,79 +353,41 @@ window.onresize = updateContentHeight;
 
     <!-- right Zone -->    
 	<div id="learning_path_right_zone" style="margin-left:282px;height:100%">
-		<iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
+	<?php
+		// hub 26-05-2010 Fullscreen or not fullscreen
+		if($_SESSION['oLP']->mode == 'fullscreen') {
+			echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:600px" ></iframe>';
+		}
+		else {
+			echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>';
+		}
+	?>
 	</div>
     <!-- end right Zone -->
 </div>
 <script language="JavaScript" type="text/javascript">
-<!--
-var leftZoneHeightOccupied = 0;
-var rightZoneHeightOccupied = 0;
-var initialLeftZoneHeight = 0;
-var initialRightZoneHeight = 0;
-
-var updateContentHeight = function() {
-	winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
-	newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
-	newRightZoneHeight = winHeight - rightZoneHeightOccupied;
-	if (newLeftZoneHeight <= initialLeftZoneHeight) {
-		newLeftZoneHeight = initialLeftZoneHeight;
-		newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
-	}
-	if (newRightZoneHeight <= initialRightZoneHeight) {
-		newRightZoneHeight = initialRightZoneHeight;
-		newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
-	}
-	document.getElementById('learning_path_toc').style.height = newLeftZoneHeight + 'px';
-	document.getElementById('learning_path_right_zone').style.height = newRightZoneHeight + 'px';
-	document.getElementById('content_id').style.height = newRightZoneHeight + 'px';
-	if (document.body.clientHeight > winHeight) {
-		document.body.style.overflow = 'auto';
-	} else {
+	// Need to be called after the <head> to be sure window.oxajax is defined
+	var dokeos_xajax_handler = window.oxajax;
+</script>
+<script language="JavaScript" type="text/javascript">
+	// resize right and left pane to full height (HUB 20-05-2010)
+	function updateContentHeight() {
 		document.body.style.overflow = 'hidden';
-	}
-};
-
-window.onload = function() {
-
-	screen_height = screen.height;
-	screen_width = screen.height;
-
-	document.getElementById('learning_path_left_zone').style.height = "100%";
-	document.getElementById('learning_path_toc').style.height = "60%";
-	document.getElementById('learning_path_toc').style.width = "100%";
-	document.getElementById('learning_path_right_zone').style.height = "100%"
-	document.getElementById('content_id').style.height = "100%" ;
-
-	if (screen_height <= 600) {
-		document.getElementById('inner_lp_toc').style.height = "100px" ;
-		document.getElementById('learning_path_left_zone').style.height = "415px";
-	}
-
-	initialLeftZoneHeight = document.getElementById('learning_path_toc').offsetHeight;
-	initialRightZoneHeight = document.getElementById('learning_path_right_zone').offsetHeight;
-	docHeight = document.body.clientHeight;
-	leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
-	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
-	document.body.style.overflow = 'hidden';
-	updateContentHeight();
-	
-	//Fixing IE compatibility of window.innerHeight
-
-	var viewportheight = 0;
-	if( typeof( window.innerHeight ) == 'number' ) {
-	    //Non-IE
-		viewportheight = window.innerHeight;
-	} else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-    	//IE 6+ in 'standards compliant mode'
-	    viewportheight = document.documentElement.clientHeight;
- 	} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
-	    //IE 4 compatible
-	    viewportheight = document.body.clientHeight;
- 	}
-
-	document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
-
+		var IE = window.navigator.appName.match(/microsoft/i);
+		var hauteurHeader = document.getElementById('header').offsetHeight;
+		var hauteurAuthorImg = document.getElementById('author_image').offsetHeight;
+		var hauteurAuthorName = document.getElementById('author_name').offsetHeight;
+		var hauteurMedia = document.getElementById('media').offsetHeight;
+		var hauteurTitre = document.getElementById('scorm_title').offsetHeight;
+		var hauteurAction = 0;
+		if (document.getElementById('actions_lp')) hauteurAction = document.getElementById('actions_lp').offsetHeight;
+		var hauteurHaut = hauteurHeader+hauteurAuthorImg+hauteurAuthorName+hauteurMedia+hauteurTitre+hauteurAction;
+		var innerHauteur = (IE) ? document.body.clientHeight : window.innerHeight ;
+		// -40 is a static adjustement for margin, spaces on the page
+		document.getElementById('inner_lp_toc').style.height = innerHauteur - hauteurHaut - 40 + "px";
+		if (document.getElementById('content_id')) {
+			document.getElementById('content_id').style.height = innerHauteur + 'px';
+		}
 
 	//loads the glossary library
 	<?php
@@ -647,8 +420,9 @@ window.onload = function() {
 	  }
 	  ?>
 }
+	window.onload = updateContentHeight;
+	window.onresize = updateContentHeight;
 
-window.onresize = updateContentHeight;
 -->
 </script>
 </body>
@@ -659,6 +433,6 @@ window.onresize = updateContentHeight;
 	==============================================================================
 	*/
 	//Display::display_footer();
-}
+//}
 //restore global setting
 $_setting['show_navigation_menu'] = $save_setting;

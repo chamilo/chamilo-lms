@@ -275,7 +275,8 @@ class Attendance
 	}
 
 	/**
-	 * get registered users inside current course
+	 * Get registered users inside current course
+	 * @todo Is really bad idea to call this function get_users_rel_course. This should be change. Julio Montoya
 	 * @param 	int	   attendance id for showing attendance result field (optional)
 	 * @return 	array  users data
 	 */
@@ -289,20 +290,22 @@ class Attendance
 		}
 		// get registered users inside current course
 		$a_users = array();
-
+		//$is_api_is_anonymous = api_is_anonymous();
 		foreach ($a_course_users as $key =>  $value) {
-			$uid = intval($value['user_id']);
+			//$value	= array();
+			$uid 	= $value['user_id'];
 			$status = $value['status'];
-
-			$user_status_in_course = CourseManager::get_user_in_course_status($uid, $current_course_id);			
-
+			$user_status_in_course = CourseManager::get_user_in_course_status($uid, $current_course_id);
+						
+			//Not taking into account DRH or COURSEMANAGER
 			if ($uid <= 1 || $status == DRH || $user_status_in_course == COURSEMANAGER) continue;
 
 			if (!empty($attendance_id)) {
 				$attendance_id = intval($attendance_id);
 				$user_faults = $this->get_faults_of_user($uid, $attendance_id);
+				
 				$value['attendance_result'] = $user_faults['faults'].'/'.$user_faults['total'].' ('.$user_faults['faults_porcent'].'%)';
-				$value['result_color_bar'] = $user_faults['color_bar'];
+				$value['result_color_bar'] 	= $user_faults['color_bar'];
 			}
 
 			// user's picture
@@ -317,7 +320,11 @@ class Attendance
 			} else {
 				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($value['firstname'], $value['lastname']).'" title="'.api_get_person_name($value['firstname'], $value['lastname']).'" /></center>';
 			}
-			$value['photo'] = $photo;
+			$value['photo'] 	= $photo;
+			/*$value['firstname'] = $value['firstname'];
+			$value['lastname']	= $user_data['lastname'];
+*/
+			//var_dump($value); Sending only 5 items in the array instead of 60 
 			$a_users[$key] = $value;
 		}
 		return $a_users;
@@ -477,12 +484,14 @@ class Attendance
 		$results['total']			= $total_done_attendance;
 		$results['faults_porcent'] 	= $faults_porcent;
 		$color_bar = '';
+		
 		if ($faults_porcent > 25  ) {
 			$color_bar = '#F11';
 		} else if ($faults_porcent > 10) {
 			$color_bar = '#F90';
 		}
 		$results['color_bar'] = $color_bar;
+
 		return $results;
 	}
 	

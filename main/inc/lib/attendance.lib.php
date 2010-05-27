@@ -499,7 +499,8 @@ class Attendance
 	public function get_faults_average_inside_courses($user_id) {
 		
 		// get all courses of current user
-		$courses = CourseManager::get_courses_list_by_user_id($user_id, true);		
+		$courses = CourseManager::get_courses_list_by_user_id($user_id, true);	
+			
 		$user_id = intval($user_id);		
 		$results = array();
 		$total_faults = $total_weight = $porcent = 0;
@@ -507,13 +508,13 @@ class Attendance
 			//$course_code = $course['code'];
 			//$course_info = api_get_course_info($course_code);
 			$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT, $course['db_name']);
+			
 			$attendances_by_course = $this->get_attendances_list($course['db_name']);
 												
-			foreach ($attendances_by_course as $attendance) {					
-				// get total faults and total weight											
-				$attendance_id = $attendance['id'];				
+			foreach ($attendances_by_course as $attendance) {									
+				// get total faults and total weight
 				$total_done_attendance 	= $attendance['attendance_qualify_max'];				
-				$sql = "SELECT score FROM $tbl_attendance_result WHERE user_id='$user_id' AND attendance_id='$attendance_id'";
+				$sql = "SELECT score FROM $tbl_attendance_result WHERE user_id=$user_id AND attendance_id=".$attendance['id'];
 				$rs = Database::query($sql);
 				$score = 0;
 				if (Database::num_rows($rs) > 0) {
@@ -553,10 +554,9 @@ class Attendance
 		$attendances_by_course = $this->get_attendances_list($course_info['dbName'], $session_id);						
 		
 		foreach ($attendances_by_course as $attendance) {					
-			// get total faults and total weight											
-			$attendance_id = $attendance['id'];				
+			// Get total faults and total weight
 			$total_done_attendance 	= $attendance['attendance_qualify_max'];				
-			$sql = "SELECT score FROM $tbl_attendance_result WHERE user_id='$user_id' AND attendance_id='$attendance_id'";
+			$sql = "SELECT score FROM $tbl_attendance_result WHERE user_id=$user_id AND attendance_id=".$attendance['id'];
 			$rs = Database::query($sql);
 			$score = 0;
 			if (Database::num_rows($rs) > 0) {
@@ -587,8 +587,7 @@ class Attendance
 		global $dateTimeFormatLong;
 		$tbl_attendance_sheet 	= Database::get_course_table(TABLE_ATTENDANCE_SHEET);
 		$tbl_attendance_calendar= Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-		$attendance_id = intval($attendance_id);
-
+		
 		$attendance_calendar = $this->get_attendance_calendar($attendance_id);
 		$calendar_ids = array();
 		// get all dates from calendar by current attendance

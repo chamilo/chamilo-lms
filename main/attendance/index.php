@@ -5,6 +5,8 @@
 * Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action  
 * @author Christian Fasanando <christian1827@gmail.com>
 * @author Carlos Vargas (link to attendance tool )<litox84@gmail.com> 
+* @author Julio Montoya <gugli100@gmail.com> Bug fixing, sql improvements
+* 
 * @package chamilo.attendance
 */
 
@@ -179,25 +181,33 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance_delete_select') {
 
 // distpacher actions to controller
 switch ($action) {	
-	case 'attendance_list'			:	$attendance_controller->attendance_list();
-										break;
-	case 'attendance_add'			:	$attendance_controller->attendance_add();
-										break;
-	case 'attendance_edit'			:	$attendance_controller->attendance_edit($attendance_id);
-										break;
-	case 'attendance_delete'		:	$attendance_controller->attendance_delete($attendance_id);
-										break;									
-	case 'attendance_sheet_list'	:	$attendance_controller->attendance_sheet($action, $attendance_id, $student_id);
-										break;
-	case 'attendance_sheet_add' 	:	$attendance_controller->attendance_sheet($action, $attendance_id);
-										break;	
-	case 'calendar_list' 			:	
-	case 'calendar_add'  			:
-	case 'calendar_edit' 			:
-	case 'calendar_all_delete' 		:
-	case 'calendar_delete' 			:	$attendance_controller->attendance_calendar($action, $attendance_id, $calendar_id);
-										break;
-	default		  					:	$attendance_controller->attendance_list();
+	case 'attendance_list'	: 
+		$attendance_controller->attendance_list();
+		break;
+	case 'attendance_add'	:	
+		$attendance_controller->attendance_add();
+		break;
+	case 'attendance_edit'	:	
+		$attendance_controller->attendance_edit($attendance_id);
+		break;
+	case 'attendance_delete':	
+		$attendance_controller->attendance_delete($attendance_id);
+		break;									
+	case 'attendance_sheet_list':	
+		$attendance_controller->attendance_sheet($action, $attendance_id, $student_id);
+		break;
+	case 'attendance_sheet_add' :	
+		$attendance_controller->attendance_sheet($action, $attendance_id);
+		break;	
+	case 'calendar_list' 	:	
+	case 'calendar_add'  	:
+	case 'calendar_edit' 	:
+	case 'calendar_all_delete':
+	case 'calendar_delete' 	:	
+		$attendance_controller->attendance_calendar($action, $attendance_id, $calendar_id);
+		break;
+	default		  				:	
+		$attendance_controller->attendance_list();
 }
 
 ?>

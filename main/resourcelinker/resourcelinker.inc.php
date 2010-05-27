@@ -7,7 +7,8 @@
 *	@package chamilo.resourcelinker
 *   @todo use the constants for the tools
 * 	@todo use Database API instead of creating table names locally.
-*   @this is still use?
+* 
+*   @todo This class is used?
 
 */
 

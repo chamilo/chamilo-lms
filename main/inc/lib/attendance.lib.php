@@ -290,10 +290,10 @@ class Attendance
 		}
 		// get registered users inside current course
 		$a_users = array();		
-		foreach ($a_course_users as $key =>  $value) {
-			//$value	= array();
-			$uid 	= $value['user_id'];
-			$status = $value['status'];
+		foreach ($a_course_users as $key =>$user_data) {
+			$value	= array();
+			$uid 	= $user_data['user_id'];
+			$status = $user_data['status'];
 			$user_status_in_course = CourseManager::get_user_in_course_status($uid, $current_course_id);
 						
 			//Not taking into account DRH or COURSEMANAGER
@@ -312,16 +312,16 @@ class Attendance
 			$user_profile 	= UserManager::get_picture_user($uid, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 			
 			if (!empty($image_path['file'])) {
-				$photo = '<center><a class="thickbox" href="'.$image_path['dir'].$image_path['file'].'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($value['firstname'], $value['lastname']).'"  title="'.api_get_person_name($value['firstname'], $value['lastname']).'" /></a></center>';
+				$photo = '<center><a class="thickbox" href="'.$image_path['dir'].$image_path['file'].'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></a></center>';
 			} else {
-				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($value['firstname'], $value['lastname']).'"  title="'.api_get_person_name($value['firstname'], $value['lastname']).'" /></center>';
+				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></center>';
 			}
 			
 			$value['photo'] 	= $photo;
-			/*$value['firstname'] = $value['firstname'];
+			$value['firstname'] = $user_data['firstname'];
 			$value['lastname']	= $user_data['lastname'];
-*/
-			//var_dump($value); Sending only 5 items in the array instead of 60 
+
+			//Sending only 5 items in the array instead of 60 
 			$a_users[$key] = $value;
 		}
 		return $a_users;

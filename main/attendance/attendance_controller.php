@@ -141,10 +141,10 @@
 		} else {
 			
 			// default values
-			$attendance_data = $attendance->get_attendance_by_id($attendance_id);
-			$data['attendance_id'] = $attendance_data['id'];
-			$data['title'] = $attendance_data['name'];
-			$data['description'] = $attendance_data['description'];
+			$attendance_data 		= $attendance->get_attendance_by_id($attendance_id);
+			$data['attendance_id'] 	= $attendance_data['id'];
+			$data['title'] 			= $attendance_data['name'];
+			$data['description'] 	= $attendance_data['description'];
 			$data['attendance_qualify_title'] = $attendance_data['attendance_qualify_title'];
 			$data['attendance_weight'] = $attendance_data['attendance_weight'];
 
@@ -182,8 +182,9 @@
 	public function attendance_sheet($action, $attendance_id, $student_id = 0) {		
 		$attendance = new Attendance();				        
 		$data = array();
-		$data['attendance_id'] = $attendance_id;
+		$data['attendance_id'] = $attendance_id;		
 		$data['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
+		
 		$data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id);
 
 		if (api_is_allowed_to_edit(null, true)) {
@@ -213,9 +214,9 @@
 				}
 			}
 
-			$data['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
-			$data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id);
-			$data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
+			$data['users_in_course'] 			 = $attendance->get_users_rel_course($attendance_id);
+			$data['attendant_calendar'] 		 = $attendance->get_attendance_calendar($attendance_id);
+			$data['users_presence'] 			 = $attendance->get_users_attendance_sheet($attendance_id);
 			$data['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);			
 		}
 		

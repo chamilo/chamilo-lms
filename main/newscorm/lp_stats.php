@@ -185,7 +185,7 @@ if (is_array($list) && count($list) > 0) {
 			" AND v.user_id = " . $user_id . " " .
 			" ORDER BY iv.view_count $qry_order ";
 		}
-		$sql.'<br/>';
+		//$sql.'<br/>';
 		$result = Database::query($sql);
 		$num = Database :: num_rows($result);
 		$time_for_total = 'NaN';
@@ -486,7 +486,9 @@ if (is_array($list) && count($list) > 0) {
 						} else {
 							$score = 0;
 							$subtotal_time =  0;
+							
 						}
+						//echo $subtotal_time ;
 						//$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
 						// selecting the max score from an attempt
 						$sql = "SELECT SUM(t.ponderation) as maxscore from ( SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at " .
@@ -501,8 +503,9 @@ if (is_array($list) && count($list) > 0) {
 				}
 			}
 			$time_for_total = $subtotal_time;
-			$subtotal_time.' - ';
+			//$subtotal_time.' - ';
 			$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
+			//var_dump($time );
 			if (empty ($title)) {
 				$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
 			}

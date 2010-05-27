@@ -299,8 +299,7 @@ class Attendance
 			//Not taking into account DRH or COURSEMANAGER
 			if ($uid <= 1 || $status == DRH || $user_status_in_course == COURSEMANAGER) continue;
 
-			if (!empty($attendance_id)) {
-				$attendance_id = intval($attendance_id);
+			if (!empty($attendance_id)) {				
 				$user_faults = $this->get_faults_of_user($uid, $attendance_id);
 				
 				$value['attendance_result'] = $user_faults['faults'].'/'.$user_faults['total'].' ('.$user_faults['faults_porcent'].'%)';
@@ -466,8 +465,8 @@ class Attendance
 		
 		// initializing database table and variables
 		$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT);				
-		$user_id = intval($user_id);
-		$attendance_id = intval($attendance_id);
+		$user_id 		= intval($user_id);
+		$attendance_id 	= intval($attendance_id);
 		$results = array();
 		$attendance_data 		= $this->get_attendance_by_id($attendance_id);
 		$total_done_attendance 	= $attendance_data['attendance_qualify_max'];

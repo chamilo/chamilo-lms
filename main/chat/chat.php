@@ -51,6 +51,11 @@ if (!empty($mycourseid) && $mycourseid != -1) {
 
 $cidreq = Security::remove_XSS($_GET['cidReq']);
 
+$toolgroup = Security::remove_XSS($_GET['toolgroup']); //for change from chat group by vertical or horizontal menu to chat course
+if (empty($toolgroup)){
+	unset($_SESSION['_gid']);
+}
+
 ?>
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"

@@ -1852,7 +1852,7 @@ class TrackingCourseLog {
 			$sql .= " AND (user.username LIKE '%".$keyword."%' OR lastedit_type LIKE '%".$keyword."%' OR tool LIKE '%".$keyword."%') ";
 		}
 
-		$sql .= " AND tool IN ('document', 'learnpath', 'quiz', 'glossary', 'link', 'course_description')";
+		$sql .= " AND tool IN ('document', 'learnpath', 'quiz', 'glossary', 'link', 'course_description', 'announcement')";
 
 		if ($column == 0) { $column = '0'; }
 		if ($column != '' && $direction != '') {
@@ -1864,21 +1864,22 @@ class TrackingCourseLog {
 		}
 
 		$sql .=	" LIMIT $from, $number_of_items ";
-
-		$res = Database::query($sql) or die(Database::error());
+		//echo $sql;
+		$res = Database::query($sql);
 		$resources = array ();
 
 		while ($row = Database::fetch_array($res)) {
 			$ref = $row['ref'];
 			$table_name = TrackingCourseLog::get_tool_name_table($row['col0']);
 			$table_tool = Database :: get_course_table($table_name['table_name']);
+			//var_dump($table_name);var_dump($table_tool);
 			$id = $table_name['id_tool'];
 			$query = "SELECT session.id, session.name, user.username FROM $table_tool tool, $table_session session, $table_user user" .
 						" WHERE tool.session_id = session.id AND session.id_coach = user.user_id AND tool.$id = $ref";
+			//echo $query.'<br /><br />';
 			$recorset = Database::query($query);
 
 			if (!empty($recorset)) {
-
 				$obj = Database::fetch_object($recorset);
 
 				$name_session = '';
@@ -1896,19 +1897,57 @@ class TrackingCourseLog {
 				} else {
 					$row[0] = api_ucfirst($row['col0']);
 				}
-
 				$row[1] = get_lang($row[1]);
-
 				$row[5] = api_convert_and_format_date($row['col5'], null, date_default_timezone_get());
 
 				$row[4] = '';
-				if ($table_name['table_name'] == 'document') {
-					$condition = 'tool.title as title';
-					$query_document = "SELECT $condition FROM $table_tool tool" .
-										" WHERE id = $ref";
-					$rs_document = Database::query($query_document) or die(Database::error());
-					$obj_document = Database::fetch_object($rs_document);
-					$row[4] = $obj_document->title;
+				//var_dump($table_name['table_name']);
+				switch ($table_name['table_name']) {
+					case 'document' :
+						$query_document = "SELECT tool.title as title FROM $table_tool tool" .
+											" WHERE id = $ref";
+						$rs_document = Database::query($query_document);
+						$obj_document = Database::fetch_object($rs_document);
+						$row[4] = $obj_document->title;
+					break;
+					case 'announcement':						
+						$query_document = "SELECT title FROM $table_tool " .
+											" WHERE id = $ref"; 
+						$rs_document = Database::query($query_document);
+						$obj_document = Database::fetch_object($rs_document);
+						$row[4] = $obj_document->title;
+					break;
+					case 'glossary':
+						$query_document = "SELECT name FROM $table_tool " .
+												" WHERE glossary_id = $ref"; 
+						$rs_document = Database::query($query_document);
+						$obj_document = Database::fetch_object($rs_document);
+						$row[4] = $obj_document->name;
+					break;
+					case 'lp':
+						$query_document = "SELECT name FROM $table_tool " .
+												" WHERE id = $ref"; 
+						$rs_document = Database::query($query_document);
+						$obj_document = Database::fetch_object($rs_document);
+						$row[4] = $obj_document->name;
+					break;
+					case 'quiz':
+						$query_document = "SELECT title FROM $table_tool " .
+												" WHERE id = $ref"; 
+						$rs_document = Database::query($query_document);
+						$obj_document = Database::fetch_object($rs_document);
+						$row[4] = $obj_document->title;
+					break;
+					
+					case 'course_description':
+						$query_document = "SELECT title FROM $table_tool " .
+												" WHERE id = $ref"; 
+						$rs_document = Database::query($query_document);
+						$obj_document = Database::fetch_object($rs_document);
+						$row[4] = $obj_document->title;
+					break;					
+					default:
+					break;
 				}
 
 				$row2 = $name_session;
@@ -1957,13 +1996,16 @@ class TrackingCourseLog {
 				$link_tool = 'course_description/';
 				$id_tool = 'id';
 				break;
+			case 'announcement':
+				$table_name = TABLE_ANNOUNCEMENT;
+				$link_tool = 'announcements/announcements.php';
+				$id_tool = 'id';
+				break;				
 			default:
 				$table_name = $tool;
 				break;
 		}
-		return array('table_name' => $table_name,
-					 'link_tool' => $link_tool,
-					 'id_tool' => $id_tool);
+		return array('table_name' => $table_name,'link_tool' => $link_tool,'id_tool' => $id_tool);
 	}
 	function display_additional_profile_fields() {
 		// getting all the extra profile fields that are defined by the platform administrator
@@ -2019,8 +2061,7 @@ class TrackingCourseLog {
 			WHERE user.user_id = field.user_id
 			AND field.field_id='".intval($field_id)."'";
 		$result = api_sql_query($sql);
-		while($row = Database::fetch_array($result))
-		{
+		while($row = Database::fetch_array($result)) {
 			$return[$row['user_id']][] = $row['field_value'];
 		}
 		return $return;

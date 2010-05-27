@@ -289,8 +289,7 @@ class Attendance
 			$a_course_users = CourseManager :: get_user_list_from_course_code($current_course_id, false, 0, '','lastname');
 		}
 		// get registered users inside current course
-		$a_users = array();
-		//$is_api_is_anonymous = api_is_anonymous();
+		$a_users = array();		
 		foreach ($a_course_users as $key =>  $value) {
 			//$value	= array();
 			$uid 	= $value['user_id'];
@@ -309,17 +308,15 @@ class Attendance
 			}
 
 			// user's picture
-			$image_path = UserManager::get_user_picture_path_by_id($uid, 'web', false);
-			$user_profile = UserManager::get_picture_user($uid, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
-			if (!api_is_anonymous()) {
-				if (!empty($image_path['file'])) {
-					$photo = '<center><a class="thickbox" href="'.$image_path['dir'].$image_path['file'].'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($value['firstname'], $value['lastname']).'"  title="'.api_get_person_name($value['firstname'], $value['lastname']).'" /></a></center>';
-				} else {
-					$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($value['firstname'], $value['lastname']).'"  title="'.api_get_person_name($value['firstname'], $value['lastname']).'" /></center>';
-				}
+			$image_path 	= UserManager::get_user_picture_path_by_id($uid, 'web', false);
+			$user_profile 	= UserManager::get_picture_user($uid, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
+			
+			if (!empty($image_path['file'])) {
+				$photo = '<center><a class="thickbox" href="'.$image_path['dir'].$image_path['file'].'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($value['firstname'], $value['lastname']).'"  title="'.api_get_person_name($value['firstname'], $value['lastname']).'" /></a></center>';
 			} else {
-				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($value['firstname'], $value['lastname']).'" title="'.api_get_person_name($value['firstname'], $value['lastname']).'" /></center>';
+				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($value['firstname'], $value['lastname']).'"  title="'.api_get_person_name($value['firstname'], $value['lastname']).'" /></center>';
 			}
+			
 			$value['photo'] 	= $photo;
 			/*$value['firstname'] = $value['firstname'];
 			$value['lastname']	= $user_data['lastname'];

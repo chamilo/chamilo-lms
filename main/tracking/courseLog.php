@@ -146,9 +146,7 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 }
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 echo '<div class="actions">';
@@ -572,7 +570,7 @@ if ($_GET['studentlist'] == 'false') {
 	$table->set_header(2, get_lang('Session'), false);
 	$table->set_header(3, get_lang('UserName'));
 	$table->set_header(4, get_lang('Document'), false);
-	$table->set_header(5, get_lang('Date'));
+	$table->set_header(5, get_lang('Date'), true, 'width=160px');
 	$table->display();
 
 }

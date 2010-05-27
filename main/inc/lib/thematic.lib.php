@@ -144,7 +144,7 @@ class Thematic
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id);
 		
-		$sql = "SELECT * FROM $tbl_thematic WHERE active = 1 $condition_session ORDER BY display_order $sortorder";
+		$sql = "SELECT id, display_order FROM $tbl_thematic WHERE active = 1 $condition_session ORDER BY display_order $sortorder";
 		$res = Database::query($sql);
 		$found = false;
 		

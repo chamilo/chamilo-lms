@@ -1,9 +1,9 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
  * This library provides methods for using views with MVC pattern
- * @package dokeos.library
+ * @package chamilo.library
  * @author Christian Fasanando <christian1827@gmail.com>
  */
 

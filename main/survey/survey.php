@@ -14,7 +14,7 @@
 $language_file = 'survey';
 
 // Including the global initialization file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 

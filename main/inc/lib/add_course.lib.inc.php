@@ -5,7 +5,7 @@
  * This is the course creation library for Chamilo.
  * Include/require it in your code for using its functionality.
  *
- * @package dokeos.library
+ * @package chamilo.library
  * @todo clean up horrible structure, script is unwieldy, for example easier way to deal with
  * different tool visibility settings: ALL_TOOLS_INVISIBLE, ALL_TOOLS_VISIBLE, CORE_TOOLS_VISIBLE...
  */
@@ -14,9 +14,7 @@ require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 /*
-==============================================================================
 		FUNCTIONS
-==============================================================================
 */
 
 /**
@@ -32,12 +30,10 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 * @param	integer	Expiration delay in unix timestamp
 * @return true if the course creation was succesful, false otherwise.
 */
-function create_course($wanted_code, $title, $tutor_name, $category_code, $course_language, $course_admin_id, $db_prefix, $firstExpirationDelay)
-{
+function create_course($wanted_code, $title, $tutor_name, $category_code, $course_language, $course_admin_id, $db_prefix, $firstExpirationDelay) {
 	$keys = define_course_keys($wanted_code, "", $db_prefix);
 
-	if(sizeof($keys))
-	{
+	if(sizeof($keys)) {
 		$visual_code = $keys["currentCourseCode"];
 		$code = $keys["currentCourseId"];
 		$db_name = $keys["currentCourseDbName"];

@@ -4,7 +4,7 @@
 /**
  * This file contains class used like library, provides functions for thematic option inside attendance tool. It's also used like model to thematic_controller (MVC pattern)
  * @author Christian Fasanando <christian1827@gmail.com>
- * @author Julio Montoya 	<gugli100@gmail.com> SQL fixes
+ * @author Julio Montoya 	<gugli100@gmail.com> SQL fixes + improvements
  * @package chamilo.attendance
  */
 
@@ -646,12 +646,11 @@ class Thematic
 			}
 		}
 		
-		// update done thematic for others advances (done_advance = 0)
-		if (!empty($a_thematic_advance_ids)) {
+		// Update done thematic for others advances (done_advance = 0)		
+		if (!empty($a_thematic_advance_ids) && count($a_thematic_advance_ids) > 0) {
 			$upd = "UPDATE $tbl_thematic_advance set done_advance = 0 WHERE id NOT IN(".implode(',',$a_thematic_advance_ids).") ";
 			Database::query($upd);
 		}
-
 		return $affected_rows;
 				
 	}

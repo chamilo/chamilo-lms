@@ -558,68 +558,74 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					$display_edit_form = true;
 
 					if ($form_folder -> validate()) {
-						$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
-						if ($there_is_a_end_date || $there_is_a_expire_date) {
-							if ($row['view_properties'] == '1') {
-								$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-								Database::query($sql_add_publication);
-								$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? get_date_from_group('expires') : '0000-00-00 00:00:00')."'".',';
-								$ends_query =    ' ends_on = '."'".($there_is_a_end_date ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
-								Database::query('UPDATE '.$work_assigment.$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
-							} elseif ($row['view_properties'] == '0') {
-								if ($_POST['enableExpiryDate'] == '1') {
-									$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? get_date_from_group('expires') : '0000-00-00 00:00:00')."'";
-									//$ends_query =    ' ends_on = '."'".($there_is_a_end_date ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
-									Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'");
-									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-									Database::query($sql_add_publication);
-								}
-								if ($_POST['enableEndDate'] == '1') {
-									//$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? get_date_from_group('expires') : '0000-00-00 00:00:00')."'".',';
-									$ends_query =    ' SET ends_on = '."'".($there_is_a_end_date ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
-									Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
-									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-									Database::query($sql_add_publication);
-								}
-							}
-						}
-						//if($_POST['qualification']['qualification']!='')
-						Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
-						Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'');
-
-					    //we are changing the current work and we want add them into gradebook
-						if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1) {
-							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
-							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-
-							$resource_name = $_POST['dir_name'];
-							add_resource_to_course_gradebook(api_get_course_id(), 3, $row['id'], Database::escape_string($resource_name), (float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], Database::escape_string($_POST['description']), time(), 1, api_get_session_id());
-						}
-						Display::display_confirmation_message(get_lang('FolderEdited'));
-
 						$values = $form_folder -> exportValues();
 						$values = $values['my_group'];
 						$dir_name = replace_dangerous_char($values['dir_name']);
 						$dir_name = disable_dangerous_file($dir_name);
-						update_dir_name($mydir, $dir_name);
-						$mydir = $my_sub_dir.$dir_name;
-						$dir = $dir_name;
-						$display_edit_form = false;
-
-						// gets calendar_id from student_publication_assigment
-						$sql = "SELECT add_to_calendar FROM $work_assigment WHERE publication_id ='".$row['id']."'";
-						$res = Database::query($sql);
-						$calendar_id = Database::fetch_row($res);
-						// update from agenda if it exists
-						if (!empty($calendar_id[0])) {
-							$sql = "UPDATE ".$TABLEAGENDA."
-								SET title='".$dir_name."',
-									content = '".$dir_name."',
-									end_date='".get_date_from_group('ends')."'
-								WHERE id='".$calendar_id[0]."'";
-							Database::query($sql);
+						if (is_work_exist_by_url('/'.$dir_name) == false) {
+						
+							$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
+							if ($there_is_a_end_date || $there_is_a_expire_date) {
+								if ($row['view_properties'] == '1') {
+									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+									Database::query($sql_add_publication);
+									$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? get_date_from_group('expires') : '0000-00-00 00:00:00')."'".',';
+									$ends_query =    ' ends_on = '."'".($there_is_a_end_date ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
+									Database::query('UPDATE '.$work_assigment.$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
+								} elseif ($row['view_properties'] == '0') {
+									if ($_POST['enableExpiryDate'] == '1') {
+										$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? get_date_from_group('expires') : '0000-00-00 00:00:00')."'";
+										//$ends_query =    ' ends_on = '."'".($there_is_a_end_date ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
+										Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'");
+										$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+										Database::query($sql_add_publication);
+									}
+									if ($_POST['enableEndDate'] == '1') {
+										//$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? get_date_from_group('expires') : '0000-00-00 00:00:00')."'".',';
+										$ends_query =    ' SET ends_on = '."'".($there_is_a_end_date ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
+										Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
+										$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+										Database::query($sql_add_publication);
+									}
+								}
+							}
+							//if($_POST['qualification']['qualification']!='')
+							Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
+							Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'');
+	
+						    //we are changing the current work and we want add them into gradebook
+							if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1) {
+								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
+								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
+								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
+								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+	
+								$resource_name = $_POST['dir_name'];
+								add_resource_to_course_gradebook(api_get_course_id(), 3, $row['id'], Database::escape_string($resource_name), (float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], Database::escape_string($_POST['description']), time(), 1, api_get_session_id());
+							}
+						
+							update_dir_name($mydir, $dir_name);
+							$mydir = $my_sub_dir.$dir_name;
+							$dir = $dir_name;
+							$display_edit_form = false;
+	
+							// gets calendar_id from student_publication_assigment
+							$sql = "SELECT add_to_calendar FROM $work_assigment WHERE publication_id ='".$row['id']."'";
+							$res = Database::query($sql);
+							$calendar_id = Database::fetch_row($res);
+							// update from agenda if it exists
+							if (!empty($calendar_id[0])) {
+								$sql = "UPDATE ".$TABLEAGENDA."
+										SET title='".$dir_name."',
+											content = '".$dir_name."',
+											end_date='".get_date_from_group('ends')."'
+										WHERE id='".$calendar_id[0]."'";
+								Database::query($sql);
+							}							
+							Display::display_confirmation_message(get_lang('FolderEdited'));
+						
+						} else {
+							Display::display_confirmation_message(get_lang('FileExists'));
 						}
 					}
 				}
@@ -1560,5 +1566,22 @@ function send_email_on_homework_creation($course_id) {
 			$emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
 			@api_mail($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name($currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS), $currentUser["mail"]);
 		}
+	}
+}
+
+function is_work_exist_by_url($url) {
+	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+	$url = Database::escape_string($url);
+	$sql = "SELECT id FROM $work_table WHERE url='$url'";
+	$result = Database::query($sql);
+	if (Database::num_rows($result)> 0) {
+		$row = Database::fetch_row($result);
+		if (empty($row)) {
+			return false;
+		} else {
+			return true;
+		}
+	} else {
+		return false;
 	}
 }

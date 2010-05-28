@@ -557,7 +557,7 @@ class SortableTable extends HTML_Table {
 	 * should contain.
 	 */
 	public function get_page_select_form () {
-		$total_number_of_items = $this->get_total_number_of_items();
+		$total_number_of_items = $this->get_total_number_of_items();		
 		if ($total_number_of_items <= $this->default_items_per_page) {
 			return '';
 		}
@@ -565,7 +565,11 @@ class SortableTable extends HTML_Table {
 		$param[$this->param_prefix.'direction'] = $this->direction;
 		$param[$this->param_prefix.'page_nr'] = $this->page_nr;
 		$param[$this->param_prefix.'column'] = $this->column;
-		$param = array_merge($param, $this->additional_parameters);
+		
+		if (is_array($this->additional_parameters)) {
+			$param = array_merge($param, $this->additional_parameters);
+		}
+		
 		foreach ($param as $key => & $value) {
 			$result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
 		}

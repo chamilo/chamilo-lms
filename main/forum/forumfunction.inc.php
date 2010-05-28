@@ -14,7 +14,7 @@
 *	- sticky messages
 * 	- new view option: nested view
 * 	- quoting a message
-*
+*	
 * 	@package chamilo.forum
 *
 * @todo several functions have to be moved to the itemmanager library
@@ -3804,7 +3804,7 @@ function count_number_of_post_for_user_thread($thread_id, $user_id) {
 	$table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
 
 	$sql = "SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."'
-																			AND poster_id = '".Database::escape_string($user_id)."' ";
+			AND poster_id = '".Database::escape_string($user_id)."' ";
 	$result = Database::query($sql);
 	return count(Database::store_result($result));
 }
@@ -3835,9 +3835,9 @@ function count_number_of_user_in_course($course_id) {
 */
 function get_statistical_information($thread_id, $user_id, $course_id) {
 	$stadistic = array();
-	$stadistic['user_course'] = count_number_of_user_in_course($course_id);
-	$stadistic['post'] = count_number_of_post_in_thread($thread_id);
-	$stadistic['user_post'] = count_number_of_post_for_user_thread($thread_id, $user_id);
+	$stadistic['user_course']	= count_number_of_user_in_course($course_id);
+	$stadistic['post'] 			= count_number_of_post_in_thread($thread_id);
+	$stadistic['user_post'] 	= count_number_of_post_for_user_thread($thread_id, $user_id);
 
 	//$stadistic['average'] = get_average_of_thread_post_user();
 	return $stadistic;
@@ -3889,10 +3889,9 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
  * return String
  * @author Christian Fasanando
  */
- function get_name_user_by_id($user_id) {
+ function get_name_user_by_id($user_id) { 	
 	$t_users = Database :: get_main_table(TABLE_MAIN_USER);
-
-	$sql = "SELECT firstname, lastname FROM ".$t_users." WHERE user_id = '".$user_id."' ";
+	$sql = "SELECT firstname, lastname FROM ".$t_users." WHERE user_id = '".intval($user_id)."' ";
 	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 	return api_get_person_name($row[0], $row[1]);
@@ -3902,10 +3901,11 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
  * @param int thread_id
  * @return String
  * @author Christian Fasanando
+ * @author Julio Montoya <gugli100@gmail.com> Adding security
  **/
  function get_name_thread_by_id($thread_id) {
-	$t_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD,'');
-	$sql ="SELECT thread_title FROM ".$t_forum_thread." WHERE thread_id = '".$thread_id."' ";
+	$t_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD,'');	
+	$sql ="SELECT thread_title FROM ".$t_forum_thread." WHERE thread_id = '".intval($thread_id)."' ";
 	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 	return $row[0];
@@ -3959,7 +3959,7 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
 				$forum_results .='<div id="social-forum">';
  				$forum_results .='<div class="clear"></div><br />';
  				$forum_results .='<div id="social-forum-title">'.
- 									Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.$forum['forum_title'].
+ 									Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum['forum_title'], STUDENT).
 									'<div style="float:right;margin-top:-35px"><a href="../forum/viewforum.php?cidReq='.$my_course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a></div></div>';
  				$forum_results .='<br / >';
  				if ($post_counter > 0 ) {

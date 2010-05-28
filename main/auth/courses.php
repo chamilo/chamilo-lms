@@ -742,8 +742,8 @@ function move_category($direction, $category2move) {
 	} // foreach ($user_courses as $key => $course)
 
 	if (count($target_category) > 0 && count($source_category) > 0) {
-		$sql_update1="UPDATE $table_user_defined_category SET sort='".$target_category['sort']."' WHERE id='".$source_category['id']."' AND user_id='".$_user['user_id']."'";
-		$sql_update2="UPDATE $table_user_defined_category SET sort='".$source_category['sort']."' WHERE id='".$target_category['id']."' AND user_id='".$_user['user_id']."'";
+		$sql_update1="UPDATE $table_user_defined_category SET sort='".Database::escape_string($target_category['sort'])."' WHERE id='".intval($source_category['id'])."' AND user_id='".$_user['user_id']."'";
+		$sql_update2="UPDATE $table_user_defined_category SET sort='".Database::escape_string($source_category['sort'])."' WHERE id='".intval($target_category['id'])."' AND user_id='".$_user['user_id']."'";
 		Database::query($sql_update2);
 		Database::query($sql_update1);
 		return get_lang('CategorySortingDone');

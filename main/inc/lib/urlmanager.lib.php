@@ -27,7 +27,7 @@ class UrlManager
                 SET url 	= '".Database::escape_string($url)."',
                 description = '".Database::escape_string($description)."',
                 active 		= '".Database::escape_string($active)."',
-                created_by 	= '".Database::escape_string(api_get_user_id())."',
+                created_by 	= '".api_get_user_id()."',
                 tms = FROM_UNIXTIME(".$tms.")";
 		$result = Database::query($sql);
 		return $result;
@@ -52,7 +52,7 @@ class UrlManager
                 SET url 	= '".Database::escape_string($url)."',
                 description = '".Database::escape_string($description)."',
                 active 		= '".Database::escape_string($active)."',
-                created_by 	= '".Database::escape_string(api_get_user_id())."',
+                created_by 	= '".api_get_user_id()."',
                 tms 		= FROM_UNIXTIME(".$tms.")
                 WHERE id = '$url_id'";
 		$result = Database::query($sql);

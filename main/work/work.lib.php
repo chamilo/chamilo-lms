@@ -2,12 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	@package dokeos.work
+*	@package chamilo.work
 * 	@author Thomas, Hugues, Christophe - original version
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University - ability for course admins to specify wether uploaded documents are visible or invisible by default.
 * 	@author Roan Embrechts, code refactoring and virtual course support
 * 	@author Frederic Vauthier, directories management
 * 	@version $Id: work.lib.php 22357 2009-07-24 17:44:17Z juliomontoya $
+* 	@todo 	this lib should be convert in a static class and moved to main/inc/lib
 */
 
 /**

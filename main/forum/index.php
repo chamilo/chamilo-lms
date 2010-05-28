@@ -269,7 +269,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 					if (api_is_allowed_to_edit(false,true)) {
 						//echo 'teacher';
 						$show_forum=true;
-					} else {// you are not a teacher
+					} else {
+						// you are not a teacher
 						//echo 'student';
 						// it is not a group forum => show forum (invisible forums are already left out see get_forums function)
 						if ($forum['forum_of_group']=='0') {
@@ -300,12 +301,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						}
 					}
 
-
-					//echo '<hr>';
-						if ($show_forum) {
+					if ($show_forum) {
 						$form_count++;
 						$mywhatsnew_post_info=isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']]: null;
-						echo "<tr class=\"forum\">";
+						echo '<tr class="forum">';
 
 						// Showing the image
 						if(!empty($forum['forum_image'])) {
@@ -332,13 +331,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 								echo icon('../img/forumgroup.gif', get_lang('GroupForum'));
 							}
 						} else {
-
-								if (is_array($mywhatsnew_post_info) and !empty($mywhatsnew_post_info)) {
-									echo icon('../img/forum.gif', get_lang('Forum'));
-								} else {
-									echo icon('../img/forum.gif');
-								}
-
+							if (is_array($mywhatsnew_post_info) and !empty($mywhatsnew_post_info)) {
+								echo icon('../img/forum.gif', get_lang('Forum'));
+							} else {
+								echo icon('../img/forum.gif');
+							}
 						}
 						echo "</td>";
 					
@@ -361,7 +358,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						}
 						$forum['forum_of_group']==0?$groupid='':$groupid=$forum['forum_of_group'];
 						
-						echo "<td><a href=\"viewforum.php?".api_get_cidreq()."&gidReq=".Security::remove_XSS($groupid)."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>";
+						
+						echo "<td><a href=\"viewforum.php?".api_get_cidreq()."&gidReq=".intval($groupid)."&forum=".intval($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">";
+						//Forum title
+						
+						echo prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment']);
+						echo '</td>';
 						//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 						// the number of topics and posts
 						$number_threads=isset($forum['number_of_threads']) ? $forum['number_of_threads'] : null;

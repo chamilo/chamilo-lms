@@ -522,7 +522,7 @@ function store_forum($values) {
 
 	$session_id = api_get_session_id();
 	$clean_title = Database::escape_string($values['forum_title']);
-
+		
 	// forum images
 	$image_moved=false;
 	if (!empty($_FILES['picture']['name'])) {
@@ -580,16 +580,16 @@ function store_forum($values) {
 		$sql="UPDATE ".$table_forums." SET
 				forum_title='".$clean_title."',
 				".$sql_image."
-				forum_comment='".Database::escape_string($values['forum_comment'])."',
-				forum_category='".Database::escape_string($values['forum_category'])."',
-				allow_anonymous='".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
-				allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
+				forum_comment='".	Database::escape_string($values['forum_comment'])."',
+				forum_category='".	Database::escape_string($values['forum_category'])."',
+				allow_anonymous='".	Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
+				allow_edit='".		Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
 				approval_direct_post='".Database::escape_string(isset($values['approval_direct_group']['approval_direct'])?$values['approval_direct_group']['approval_direct']:null)."',
 				allow_attachments='".Database::escape_string(isset($values['allow_attachments_group']['allow_attachments'])?$values['allow_attachments_group']['allow_attachments']:null)."',
 				allow_new_threads='".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
 				forum_group_public_private='".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
-				default_view='".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
-				forum_of_group='".Database::escape_string($values['group_forum'])."'
+				default_view='".	Database::escape_string($values['default_view_type_group']['default_view_type'])."',
+				forum_of_group='".	Database::escape_string($values['group_forum'])."'
 			WHERE forum_id='".Database::escape_string($values['forum_id'])."'";
 			Database::query($sql);
 			api_item_property_update($_course, TOOL_FORUM, Database::escape_string($values['forum_id']), 'ForumUpdated', api_get_user_id());
@@ -604,9 +604,9 @@ function store_forum($values) {
 
 		$sql="INSERT INTO ".$table_forums."
 			(forum_title, forum_image, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
-			VALUES ('".Security::remove_XSS($clean_title)."',
+			VALUES ('".$clean_title."',
 				".$sql_image."
-				'".Database::escape_string(isset($values['forum_comment'])?Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_comment'])),COURSEMANAGERLOWSECURITY):null)."',
+				'".Database::escape_string(isset($values['forum_comment'])?$values['forum_comment']:null)."',
 				'".Database::escape_string(isset($values['forum_category'])?$values['forum_category']:null)."',
 				'".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
 				'".Database::escape_string(isset($values['students_can_edit_group']['students_can_edit'])?$values['students_can_edit_group']['students_can_edit']:null)."',
@@ -618,7 +618,9 @@ function store_forum($values) {
 				'".Database::escape_string(isset($values['public_private_group_forum_group']['public_private_group_forum'])?$values['public_private_group_forum_group']['public_private_group_forum']:null)."',
 				'".Database::escape_string(isset($new_max)?$new_max:null)."',
 				".intval($session_id).")";
+		
 		Database::query($sql);
+		
 		$last_id = Database::insert_id();
 		if ($last_id > 0) {
 			api_item_property_update($_course, TOOL_FORUM, $last_id, 'ForumAdded', api_get_user_id());

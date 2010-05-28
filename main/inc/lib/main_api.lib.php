@@ -58,7 +58,7 @@ define('UNSUBSCRIBE_NOT_ALLOWED', 0);
 /*
 When you add a new tool you must add it into function api_get_tools_lists() too
  */
-define('TOOL_DOCUMENT', 'document');
+define('TOOL_DOCUMENT','document');
 define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
@@ -2731,7 +2731,8 @@ function api_return_html_area($name, $content = '', $height = '', $width = '100%
  */
 function api_max_sort_value($user_course_category, $user_id) {
 	$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-	$sql_max = "SELECT max(sort) as max_sort FROM $tbl_course_user WHERE user_id='".$user_id."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND user_course_cat='".$user_course_category."'";
+	
+	$sql_max = "SELECT max(sort) as max_sort FROM $tbl_course_user WHERE user_id='".intval($user_id)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND user_course_cat='".Database::escape_string($user_course_category)."'";
 	$result_max = Database::query($sql_max);
 	if (Database::num_rows($result_max) == 1) {
 		$row_max = Database::fetch_array($result_max);

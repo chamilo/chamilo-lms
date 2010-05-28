@@ -107,7 +107,7 @@ class NotebookManager
 
 		$sql = "UPDATE $t_notebook SET
 					user_id = '".api_get_user_id()."',
-					course = '".api_get_course_id()."',
+					course = '".Database::escape_string(api_get_course_id())."',
 					session_id = '".Database::escape_string($_SESSION['id_session'])."',
 					title = '".Database::escape_string($values['note_title'])."',
 					description = '".Database::escape_string($values['note_comment'])."',

@@ -190,7 +190,7 @@ function reset_password($secret, $id, $by_username = false) {
 	$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 	$id = intval($id);
 	$sql = "SELECT user_id AS uid, lastname AS lastName, firstname AS firstName, username AS loginName, password, email FROM ".$tbl_user." WHERE user_id=$id";
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	$num_rows = Database::num_rows($result);
 
 	if ($result && $num_rows > 0) {
@@ -204,7 +204,7 @@ function reset_password($secret, $id, $by_username = false) {
 		$crypted = $user['password'];
 		$crypted = api_get_encrypted_password($crypted);
 		$sql = "UPDATE ".$tbl_user." SET password='$crypted' WHERE user_id=$id";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return send_password_to_user($user, $by_username);
 	} else {
 		return 'Not allowed.'; // TODO: This message has to be translated.

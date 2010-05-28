@@ -157,7 +157,7 @@ function get_agenda_items_by_course_list($course_list, $month, $year, $session_i
 						AND item_property.visibility='1' $session_condition
 						GROUP BY agenda.id
 						ORDER BY start_date ";		
-		$result = Database::query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery);
 		while ($item = Database::fetch_array($result,'ASSOC')) {
 			//var_dump($item);
 			//taking the day

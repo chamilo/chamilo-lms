@@ -400,7 +400,7 @@ function parse_xml_data($file) {
   	if (!UserManager::is_user_certified($cat_id,$user_id)) {
   		$sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"  
 			 WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
-		$rs=Database::query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql);
   	}
   }
   
@@ -416,7 +416,7 @@ function parse_xml_data($file) {
   	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
   	$sql_exist='SELECT COUNT(*) as count FROM '.$table_certificate.' gc 
 				WHERE gc.cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
-	$rs_exist=Database::query($sql_exist,__FILE__,__LINE__);
+	$rs_exist=Database::query($sql_exist);
 	$row=Database::fetch_array($rs_exist);
 	if ($row['count']==0) {
 		$sql='INSERT INTO '.$table_certificate.' (cat_id,user_id,score_certificate,created_at)
@@ -434,7 +434,7 @@ function parse_xml_data($file) {
   function get_certificate_date_by_user_id ($cat_id,$user_id) {
     	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
     	$sql_get_date='SELECT created_at FROM '.$table_certificate.' WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'"';
-    	$rs_get_date=Database::query($sql_get_date,__FILE__,__LINE__);
+    	$rs_get_date=Database::query($sql_get_date);
     	$row_get_date=Database::fetch_array($rs_get_date,'ASSOC');
     	return $row_get_date['created_at'];
   }
@@ -453,7 +453,7 @@ function parse_xml_data($file) {
   		$sql.=' WHERE cat_id='.Database::escape_string($cat_id);
   	}
   	$sql.=' ORDER BY u.firstname';  	
-	$rs=Database::query($sql,__FILE__,__LINE__);
+	$rs=Database::query($sql);
 	$list_users=array();
 	while ($row=Database::fetch_array($rs)) {
 		$list_users[]=$row;
@@ -475,7 +475,7 @@ function parse_xml_data($file) {
   		$sql.=' AND cat_id='.Database::escape_string($cat_id);
   	}
 
-  	$rs = Database::query($sql,__FILE__,__LINE__);
+  	$rs = Database::query($sql);
   	$list_certificate=array();
   	while ($row=Database::fetch_array($rs)) {
   		$list_certificate[]=$row;
@@ -492,7 +492,7 @@ function parse_xml_data($file) {
   	
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE); 		
   	$sql_verified='SELECT count(*) AS count,path_certificate as path,user_id FROM '.$table_certificate.' gc WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" GROUP BY user_id,cat_id';
-  	$rs_verified=Database::query($sql_verified,__FILE__,__LINE__);
+  	$rs_verified=Database::query($sql_verified);
   	$path=Database::result($rs_verified,0,'path');
   	$user_id=Database::result($rs_verified,0,'user_id');
   	if (!is_null($path) || $path!='' || strlen($path)) {
@@ -508,7 +508,7 @@ function parse_xml_data($file) {
 			}
 	  	if (Database::result($rs_verified,0,'count')==1 && $delete_db===true) {
 	  		$sql_delete='DELETE FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
-	  		$rs_delete=Database::query($sql_delete,__FILE__,__LINE__);
+	  		$rs_delete=Database::query($sql_delete);
 	  		return true;
 	  	} else {
 	  		return false;
@@ -516,7 +516,7 @@ function parse_xml_data($file) {
   	} else {
   		//path is not generate delete only the DB record
   		$sql_delete='DELETE FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
-	  	$rs_delete=Database::query($sql_delete,__FILE__,__LINE__);
+	  	$rs_delete=Database::query($sql_delete);
 	  	return true;
   	}
   }

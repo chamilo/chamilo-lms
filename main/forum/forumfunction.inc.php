@@ -3364,13 +3364,14 @@ function add_forum_attachment_file($file_comment,$last_id) {
 				$new_file_name = uniqid('');
 				$new_path=$updir.'/'.$new_file_name;
 				$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-				$safe_file_comment= Database::escape_string($file_comment);
-				$safe_file_name = Database::escape_string($file_name);
+				$safe_file_comment	= Database::escape_string($file_comment);
+				$safe_file_name		= Database::escape_string($file_name);
 				$safe_new_file_name = Database::escape_string($new_file_name);
+				$last_id = intval($last_id);
 				// Storing the attachments if any
 				if ($result) {
-					$sql="INSERT INTO $agenda_forum_attachment(filename,comment, path,post_id,size)
-						  VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$last_id', '".$_FILES['user_upload']['size']."' )";
+					$sql="INSERT INTO $agenda_forum_attachment(filename, comment, path, post_id, size)
+						  VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$last_id', '".intval($_FILES['user_upload']['size'])."' )";
 					$result=Database::query($sql);
 					$message.=' / '.get_lang('FileUploadSucces').'<br />';
 
@@ -3585,11 +3586,11 @@ function get_forums_of_group($group_id) {
 	// finding the last post information (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
 	if (is_array($forum_list)) {
 		foreach ($forum_list as $key=>$value) {
-			$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit());
-			$forum_list[$key]['last_post_id']=$last_post_info_of_forum['last_post_id'];
-			$forum_list[$key]['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
-			$forum_list[$key]['last_post_date']=$last_post_info_of_forum['last_post_date'];
-			$forum_list[$key]['last_poster_name']=$last_post_info_of_forum['last_poster_name'];
+			$last_post_info_of_forum		 		= get_last_post_information($key,is_allowed_to_edit());
+			$forum_list[$key]['last_post_id']		= $last_post_info_of_forum['last_post_id'];
+			$forum_list[$key]['last_poster_id']		= $last_post_info_of_forum['last_poster_id'];
+			$forum_list[$key]['last_post_date']		= $last_post_info_of_forum['last_post_date'];
+			$forum_list[$key]['last_poster_name']	= $last_post_info_of_forum['last_poster_name'];
 			$forum_list[$key]['last_poster_lastname']=$last_post_info_of_forum['last_poster_lastname'];
 			$forum_list[$key]['last_poster_firstname']=$last_post_info_of_forum['last_poster_firstname'];
 		}

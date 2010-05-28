@@ -301,6 +301,7 @@ function get_table_type_course($type,$course) {
 function get_printable_data($users,$alleval, $alllinks) {
 	$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
 	$offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
+	$offset = intval($offset);
 	$count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : 10;
 	$header_names = $datagen->get_header_names($offset, $count, true);
 	$data_array = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true,true);
@@ -420,7 +421,7 @@ function parse_xml_data($file) {
 	if ($row['count']==0) {
 		$sql='INSERT INTO '.$table_certificate.' (cat_id,user_id,score_certificate,created_at)
 			  VALUES("'.intval($cat_id).'","'.intval($user_id).'","'.Database::escape_string($score_certificate).'","'.Database::escape_string($date_certificate).'")';
-		$rs=Database::query($sql,__FILE__,__LINE__);  
+		$rs=Database::query($sql);  
 	}
 	
   }

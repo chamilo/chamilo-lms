@@ -894,7 +894,13 @@ if ($show == 'test') {
 	  <?php
 	}
 	$i = 1;
-	// while list exercises
+	
+	/* 
+	 * 
+	 * Listing exercises
+	 * 
+	 */
+	
 	if ($origin != 'learnpath') {
 		//avoid sending empty parameters
 		$myorigin = (empty ($origin) ? '' : '&origin=' . $origin);
@@ -913,15 +919,25 @@ if ($show == 'test') {
 				$s_class = "row_even";
 			// prof only
 			if ($is_allowedToEdit) {
-				echo '<tr class="' . $s_class . '">' . "\n";
-?>
-			<td width="30" align="left"><?php Display::display_icon('quiz.gif', get_lang('Exercice'))?></td>
-			<td width="15" valign="left"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
-				<?php $row['title']=api_parse_tex($row['title']); ?>
-			<td>
-				<a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&amp;exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a><?php echo $session_img; ?>
-			</td>
-			<td align="center"> <?php
+				echo '<tr class="' . $s_class . '">';
+
+				echo '<td width="30" align="left">'.Display::return_icon('quiz.gif', get_lang('Exercice')).'</td>';
+				echo '<td width="15" valign="left">'.($i+($page*$limitExPage)).'.'.'</td>';
+			
+				//Showing exercise title
+				$row['title']=api_parse_tex($row['title']);
+				
+				echo '<td>';
+				$class_invisible = '';
+				if (!$row['active']) {
+					$class_invisible = 'class="invisible"';
+				}
+				echo '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&amp;exerciseId='.$row['id'].'" '.$class_invisible.'>';
+				echo Security::remove_XSS($row['title']);
+				echo '</a>';
+				echo $session_img;
+				echo '</td>';
+				echo '<td align="center">';			 
 
 				$exid = $row['id'];
 				//count number exercice - teacher
@@ -940,8 +956,7 @@ if ($show == 'test') {
 				}
 ?>
 		    <td>
-		    <a href="admin.php?<?php echo api_get_cidreq()?>&amp;exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" /></a>
-		    
+		    <a href="admin.php?<?php echo api_get_cidreq()?>&amp;exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" /></a>		    
 		    <a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=copy_exercise&amp;sec_token=<?php echo $token; ?>&amp;exerciseId=<?php echo $row['id']; ?>"  onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"><img width="16" src="../img/cd.gif" border="0" title="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" /></a>		    
 		    <a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=clean_results&amp;sec_token=<?php echo $token; ?>&amp;exerciseId=<?php echo $row['id']; ?>"  onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;" ><img width="16" src="../img/clean_group.gif" border="0" title="<?php echo api_htmlentities(get_lang('CleanStudentResults'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CleanStudentResults'),ENT_QUOTES,$charset); ?>" /></a>
 		    
@@ -980,7 +995,8 @@ if ($show == 'test') {
 	      		
 	    		<?php
 				}				
-				// export qti ...
+				
+				// Export qti ...
 				echo '<a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a>';
 				
 				echo "</td>";
@@ -1007,9 +1023,8 @@ if ($show == 'test') {
 					//show results student
 					echo $rowi . ' ' . api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question')));
 				}
-?> </td>
-  <td align="center"><?php
-
+				echo '</td>';
+				echo '<td align="center">';
 				$eid = $row['id'];
 				$uid = api_get_user_id();
 				//this query might be improved later on by ordering by the new "tms" field rather than by exe_id
@@ -1060,16 +1075,14 @@ if ($show == 'test') {
 
 		if ($is_allowedToEdit) {
 			$sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
-							FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-										WHERE   d.id = ip.ref AND ip.tool = '" . TOOL_DOCUMENT . "' AND
-										 (d.path LIKE '%htm%')
-										AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' LIMIT " . (int) $from . "," . (int) $to; // only .htm or .html files listed
+					FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
+					WHERE   d.id = ip.ref AND ip.tool = '" . TOOL_DOCUMENT . "' AND (d.path LIKE '%htm%')
+					AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' LIMIT " . (int) $from . "," . (int) $to; // only .htm or .html files listed
 		} else {
 			$sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
-							FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-											WHERE d.id = ip.ref AND ip.tool = '" . TOOL_DOCUMENT . "' AND
-											 (d.path LIKE '%htm%')
-											AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' AND ip.visibility='1' LIMIT " . (int) $from . "," . (int) $to;
+					FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
+					WHERE d.id = ip.ref AND ip.tool = '" . TOOL_DOCUMENT . "' AND (d.path LIKE '%htm%')
+					AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' AND ip.visibility='1' LIMIT " . (int) $from . "," . (int) $to;
 		}
 
 		$result = Database::query($sql);
@@ -1446,7 +1459,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 	Display :: display_footer();
 } else {
 ?>
-	<link rel="stylesheet" type="text/css" href="<?php echo $clarolineRepositoryWeb ?>css/default.css" />
-	<?php
+<link rel="stylesheet" type="text/css" href="<?php echo $clarolineRepositoryWeb ?>css/default.css" />
+<?php
 }
 ?>

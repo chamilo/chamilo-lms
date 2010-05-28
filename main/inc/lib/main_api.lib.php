@@ -990,7 +990,7 @@ function api_get_course_info($course_code = null) {
 			$_course['subscribe_allowed']    = $cData['subscribe'       ];
 			$_course['unubscribe_allowed']   = $cData['unsubscribe'     ];
 			
-			//the real_id is a integer is mandatory for feature implementations
+			//The real_id is an integer. Is mandatory for future implementations
 			$_course['real_id'     ]         = $cData['id']; 
 		}
 		return $_course;
@@ -1539,8 +1539,9 @@ function api_get_session_visibility($session_id) {
 function api_get_session_visibility_by_user($session_id, $course_code, $user_id) {
 	$visibility = 0; // Means that the session is still available.
 	if (!empty($session_id) && !empty($user_id)){
-		$sesion_id = intval(Database::escape_string($session_id));
-		$user_id = intval(Database::escape_string($user_id));
+		$sesion_id 		= intval(Database::escape_string($session_id));		
+		$user_id 		= intval(Database::escape_string($user_id));
+		$course_code	= Database::escape_string($course_code);
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION_REL_COURSE_REL_USER);
 		$sql = "SELECT visibility FROM $tbl_session
 				WHERE id_session = $session_id AND id_user = $user_id AND course_code = '$course_code'"; // session old

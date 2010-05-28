@@ -2987,17 +2987,17 @@ function move_thread_form() {
 			<span class="form_required">*</span>'.get_lang('MoveTo').'
 		</div>
 		<div class="formw">';
-	$htmlcontent .= "<SELECT NAME='forum'>\n";
+	$htmlcontent .= "<SELECT NAME='forum'>";
 	foreach ($forum_categories as $key=>$category) {
-		$htmlcontent.="\t<OPTGROUP LABEL=\"".$category['cat_title']."\">\n";
+		$htmlcontent.="<OPTGROUP LABEL=\"".$category['cat_title']."\">";
 		foreach ($forums as $key=>$forum) {
 			if ($forum['forum_category']==$category['cat_id']) {
-				$htmlcontent.="\t\t<OPTION VALUE='".$forum['forum_id']."'>".$forum['forum_title']."</OPTION>\n";
+				$htmlcontent.="<OPTION VALUE='".$forum['forum_id']."'>".$forum['forum_title']."</OPTION>";
 			}
 		}
-		$htmlcontent.="\t</OPTGROUP>\n";
+		$htmlcontent.="</OPTGROUP>";
 	}
-	$htmlcontent.="</SELECT>\n";
+	$htmlcontent.="</SELECT>";
 	$htmlcontent .= '	</div>
 					</div>';
 

@@ -38,20 +38,16 @@ if(api_is_platform_admin()) {
 		Display::display_normal_message(get_lang('InstallDirAccessibleSecurityThreat'));
 	}
 	/*
-	==============================================================================
-			ACTION HANDLING
-	==============================================================================
-	*/
+				ACTION HANDLING
+		*/
 	if (!empty($_POST['Register']))
 	{
 		register_site();
 		Display :: display_confirmation_message(get_lang('VersionCheckEnabled'));
 	}
 
-	/*
-	==============================================================================
-			MAIN SECTION
-	==============================================================================
+	/*	
+			MAIN SECTION	
 	*/
 	$keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']));
 }
@@ -90,9 +86,7 @@ if (api_is_platform_admin()) {
 		</ul>
 		</div>
 <?php
-}
-else
-{
+} else {
 	?>
 	<div class="admin_section">
 	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo api_ucfirst(get_lang('Users')); ?></h4>
@@ -189,12 +183,11 @@ if(api_is_platform_admin()) {
 	<?php
 }
 
-if(api_get_setting('use_session_mode')=='true')
-{
+if(api_get_setting('use_session_mode')=='true') {
 ?>
 
 <div class="admin_section">
- <h4><?php Display::display_icon('agenda.gif', get_lang('Sessions')); ?> <?php echo get_lang('Sessions') ?></h4>
+ <h4><?php Display::display_icon('blackboard_blue.png', get_lang('Sessions'), array('width'=>'22px')); ?> <?php echo get_lang('Sessions') ?></h4>
  <div style="list-style-type:none"><form method="POST" action="session_list.php">
 	<input type="text" name="keyword_name" value="<?php echo $keyword_url; ?>"/>
 	<button class="search" type="submit"> <?php echo get_lang('Search');?>
@@ -223,15 +216,12 @@ if(api_get_setting('use_session_mode')=='true')
   </div>
 
 <?php
-}
-else if(api_is_platform_admin())
-{
+} else if(api_is_platform_admin()) {
 ?>
 
 <div class="admin_section">
 <h4><?php Display::display_icon('group.gif', get_lang('AdminClasses')); ?> <?php echo api_ucfirst(get_lang('AdminClasses')); ?></h4>
 <div style="list-style-type:none"><form method="get" action="class_list.php">
-
 	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 	<input class="search" type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form>
@@ -249,7 +239,7 @@ else if(api_is_platform_admin())
 <?php
 }
 
-if(api_is_platform_admin()){
+if (api_is_platform_admin()) {
 ?>
 
 <div class="admin_section">
@@ -310,8 +300,7 @@ if(api_is_platform_admin()){
  * @version august 2006
  * @todo have a 6monthly re-registration
  */
-function version_check()
-{
+function version_check() {
 	$tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$sql = 'SELECT selected_value FROM  '.$tbl_settings.' WHERE variable="registered" ';
 	$result = Database::query($sql);
@@ -328,9 +317,7 @@ function version_check()
 		$return .= '<input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicDokeosPlatformsList');
 		$return .= '<button type="submit" class="save" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" />'.get_lang('EnableVersionCheck').'</button>';
 		$return .= '</form>';
-	}
-	else
-	{
+	} else {
 		// The site has been registered already but is seriously out of date (registration date + 15552000 seconds)
 		/*
 		if ((api_get_setting('registered') + 15552000) > mktime())
@@ -484,9 +471,7 @@ function check_system_version()
 	return $output;
 }
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display::display_footer();
 ?>

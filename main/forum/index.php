@@ -143,8 +143,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 	$forum_categories_list=get_forum_categories();
 
 	// step 2: we find all the forums (only the visible ones if it is a student)
-	$forum_list=array();
-	$forum_list=get_forums();
+	$forum_list	= array();
+	$forum_list	= get_forums();
+	
 
 	/*
 			RETRIEVING ALL GROUPS AND THOSE OF THE USER
@@ -252,7 +253,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 				}
 
 				// note: this can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
-				if (prepare4display($forum['forum_category'])==prepare4display($forum_category['cat_id'])) {
+				if ($forum['forum_category'] == $forum_category['cat_id']) {
 				// the forum has to be showed if
 					// 1.v it is a not a group forum (teacher and student)
 					// 2.v it is a group forum and it is public (teacher and student)

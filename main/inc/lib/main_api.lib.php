@@ -3013,7 +3013,8 @@ function copy_folder_course_session($pathname, $base_path_document,$session_id,$
 		$path .= DIRECTORY_SEPARATOR.$folder;
 
 		if (!file_exists($new_pathname)) {
-
+			$path = Database::escape_string($path);
+			
 			$sql = "SELECT * FROM $table WHERE path = '$path' AND filetype = 'folder' AND session_id = '$session_id'";
 			$rs1  = Database::query($sql);
 			$num_rows = Database::num_rows($rs1);
@@ -4497,8 +4498,8 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
  */
 function api_is_global_platform_admin() {
 	if (api_is_platform_admin()) {
-		// This user is subscribed in these sites => $my_url_list
         $my_url_list = api_get_access_url_from_user(api_get_user_id());
+		// The admin is registered in the first "main" site with access_url_id = 1
 		if (in_array(1, $my_url_list)) {
 			return true;
 		} else {

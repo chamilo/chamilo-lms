@@ -24,6 +24,10 @@ require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once 'agenda.inc.php';
 require_once 'myagenda.inc.php';
 
+//This code is not yet stable
+//Blocking the access
+api_not_allowed();
+
 api_block_anonymous_users();
 
 // setting the name of the tool

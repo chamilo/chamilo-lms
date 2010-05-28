@@ -625,7 +625,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 							Display::display_confirmation_message(get_lang('FolderEdited'));
 						
 						} else {
-							Display::display_confirmation_message(get_lang('FileExists'));
+							Display::display_warning_message(get_lang('FileExists'));
 						}
 					}
 				}

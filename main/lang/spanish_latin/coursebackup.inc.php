@@ -43,4 +43,9 @@ $langBackup = "Copia de seguridad";
 $langImportBackupInfo = "Usted puede  subir una copia de seguridad desde su ordenador o usar una copia de seguridad disponible en el servidor";
 $langCreateBackupInfo = "Puede seleccionar los contenidos del curso que constituirán la copia de seguridad";
 $ToolIntro = "Introducción de herramienta";
+$UploadError = "No se pudo subir archivo, por favor revise el límite de tamaño máximo de archivo y los derechos de directorio.";
+$DocumentsWillBeAddedToo = "Los documentos serán añadidos también";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si quiere exportar un curso conteniendo un examen, debe asegurarse que los exámenes correspondientes están incluidos  en la exportación, así usted tiene que seleccionarlos de la lista de exámenes.";
+$ArchivesDirectoryNotWriteableContactAdmin = "El directorio de archivos, utilizado por esta herramienta, no permite la escritura. Por favor póngase en contacto con el administrador de la plataforma.";
+$DestinationCourse = "Curso destino";
 ?>

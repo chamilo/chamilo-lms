@@ -1224,4 +1224,5 @@ $AssignedCoursesListToHumanResourcesManager = "Lista de usuarios asignados ao ad
 $ThereAreNotCreatedCourses = "Non hai cursos creados";
 $HomepageViewVerticalActivity = "Ver a adtividade en forma vertical";
 $CoursesInformation = "Información de cursos";
+$SpecialExportsIntroduction = "A característica especial de exportación intenta axudar ao deseñador instruccional para exportar todos os documentos de cursos nun só paso. Outra opción déixache escoller os cursos que queres exportar, e exportará tamén os documentos que haxa nas sesións deses cursos. Esta operación é moi pesada, e non recomendamos que a comeces durante as horas normais de uso do teu portal. Faino nun momento de baixa actividade. Se non necesitas todos os contidos á vez, trata de exportar os documentos de cursos directamente dende a ferramenta de mantemento de curso dentro do propio curso.";
 ?>

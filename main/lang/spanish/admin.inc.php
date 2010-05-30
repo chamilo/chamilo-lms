@@ -1251,4 +1251,16 @@ $minimum = "mínimo";
 $webserver = "Webserver";
 $mysql = "mysql";
 $Social = "Social";
+$BackupCreated = "Copia de seguridad generada";
+$NotInserted = "No insertado";
+$phone = "Teléfono";
+$ResetLP = "Reestablecer ruta de aprendizaje";
+$LPWasReset = "La ruta de aprendizaje fue reestablecida para el estudiante";
+$AnnouncementVisible = "Anuncio visible";
+$AnnouncementInvisible = "Anuncio invisible";
+$GlossaryDeleted = "Glosario borrado";
+$CourseDescriptionUpdated = "Descripción de curso actualizada";
+$SessionReadOnly = "Lectura sólo";
+$SessionAccessible = "Accesible";
+$SessionNotAccessible = "No accesible";
 ?>

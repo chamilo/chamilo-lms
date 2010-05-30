@@ -1248,4 +1248,17 @@ NON USARE in una piatta forma di erogazione, in quanto i dati sono effettivament
 Usarla SOLO in fase di sviluppo o test.";
 $UsersFillingReport = "Report sul riempimento di dati";
 $AllUsersAreAutomaticallyRegistered = "Le registrazioni sono accettate automaticamente";
+$AssignCoach = "Assegna un Tutor";
+$chamilo = "chamilo";
+$php = "php";
+$Off = "Off";
+$minimum = "minimo";
+$webserver = "Web Server";
+$mysql = "MySQL";
+$Social = "Sociale";
+$BackupCreated = "Backup effettuato";
+$NotInserted = "Non inserito";
+$phone = "Telefono";
+$ResetLP = "Reinizializza il modulo";
+$LPWasReset = "Il modulo è stato reinizializzato";
 ?>

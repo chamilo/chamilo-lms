@@ -31,7 +31,7 @@ $langDelImage = "Remove picture";
 $langCode = "Training code";
 $langUp = "Up";
 $Down = "down";
-$Up = "up";
+$Up = "Up";
 $Theme = "Graphical theme";
 $TheListIsEmpty = "Empty";
 $langUniqueSelect = "Multiple choice";
@@ -941,4 +941,5 @@ $DateUnLock = "Unlock date";
 $GoToStudentDetails = "Go to student details";
 $RepeatDate = "Repeat date";
 $ToAttend = "To attend";
+$HaveFun = "Have fun,";
 ?>

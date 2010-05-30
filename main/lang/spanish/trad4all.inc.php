@@ -942,4 +942,5 @@ $DateUnLock = "Desbloquear fecha";
 $GoToStudentDetails = "Ver detalles del estudiante";
 $RepeatDate = "Repetir día";
 $ToAttend = "Por asistir";
+$HaveFun = "Diviértase,";
 ?>

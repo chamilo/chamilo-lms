@@ -183,7 +183,7 @@ $langShowAll = "Afficher tout";
 $langPage = "Page";
 $englishLangName = "Anglais";
 $Home = "Accueil";
-$langAreYouSureToDelete = "Êtes vous sûr de vouloir supprimer";
+$langAreYouSureToDelete = "Êtes-vous sûr de vouloir supprimer";
 $SelectAll = "Tout sélectionner";
 $UnSelectAll = "annuler toutes les sélections";
 $WithSelected = "avec les sélections";
@@ -281,11 +281,11 @@ $langMyPersonalOpenArea = "Mon espace personnel";
 $langMyTeach = "Mes compétences professionnelles";
 $Agenda = "Agenda";
 $HourShort = "h";
-$PleaseTryAgain = "Veuillez réessayer svp!";
+$PleaseTryAgain = "Veuillez réessayer svp !";
 $UplNoFileUploaded = "Aucun fichier n'a été envoyé";
 $UplSelectFileFirst = "Veuillez choisir un fichier avant d'appuyer sur le bouton d'envoi";
 $UplNotAZip = "Le fichier que vous avez sélectionné n'était pas un fichier zip.";
-$UplUploadSucceeded = "Envoi du fichier réussi!";
+$UplUploadSucceeded = "Envoi du fichier réussi !";
 $ExportAsCSV = "Export CSV";
 $ExportAsXLS = "Export Excel";
 $langOpenarea = "Espace perso";
@@ -371,7 +371,7 @@ $ComposeMessage = "Composer message";
 $Other = "Autre";
 $AddRight = "Ajouter";
 $CampusHomepage = "Page d'accueil";
-$YouHaveNewMessage = "Vous avez un message!";
+$YouHaveNewMessage = "Vous avez un nouveau message !";
 $myActiveSessions = "Mes sessions actives";
 $myInactiveSessions = "Mes sessions inactives";
 $FileUpload = "Envoi de fichier";
@@ -450,7 +450,7 @@ $SessionPast = "Passée";
 $SessionActive = "Active";
 $SessionFuture = "A venir";
 $DateFormatLongWithoutDay = "%d %B %Y";
-$InvalidDirectoryPleaseCreateAnImagesFolder = "Répertoire invalide: Veuillez créer un répertoire nommé \"images\" dans votre outil documents pour que les images puissent y être envoyées";
+$InvalidDirectoryPleaseCreateAnImagesFolder = "Répertoire invalide : veuillez créer un répertoire nommé \"images\" dans votre outil \"Documents\" pour que les images puissent y être envoyées";
 $UsersConnectedToMySessions = "Voir les utilisateurs connectés à mes sessions";
 $Category = "Catégorie";
 $DearUser = "Cher utilisateur";
@@ -932,10 +932,12 @@ $ContactInformationDescription = "Cher utilisateur,<br />
 Vous êtes sur le point de commencer à utiliser l'une des meilleures plateformes e-learning de logiciel libre du marché. Comme beaucoup d'autres projets de logiciel libre, celui-ci est supporté par une grande communauté d'étudiants, d'enseignants, de développeurs et de créateurs de contenu qui aimeraient pouvoir promouvoir le projet dans les meilleures conditions.<br /><br />
 Au travers d'une meilleure connaissance de notre public et de l'un de nos plus importants utilisateurs, vous, qui gèrerez ce système e-learning, nous pourrons nous assurer de faire savoir au plus grand nombre que notre logiciel est utilisé, et nous pourrons vous informer directement sur les évènements importants à vos yeux.<br /><br />
 En remplissant ce formulaire, vous acceptez que l'association Chamilo ou ses membres puissent vous envoyer des informations par e-mail au sujet d'évènements importants ou de mises à jours du software ou de la communauté. Ceci aidera la communauté à grandir comme une entité organisée au sein de laquelle l'information se propage, au travers d'un respect permanent de votre temps et de votre privacité.<br /><br />
-Veuillez prendre en considération que vous n'êtes <b>pas obligé</b> à remplir ce formulaire. Si vous désirez rester anonyme, nous perdrons la possibilité de vous offrir les privilèges d'être un administrateur de portail enregistré, mais nous respecterons votre décision. Laissez simplement ce formulaire vide et cliquez sur \"Suivant\". De la même façon, une fois l'envoi de l'information du formulaire ci-dessous confirmé, vous devrez cliquer sur \"Suivant\".";
+Veuillez prendre en considération que vous n'êtes <b>pas obligé</b> de remplir ce formulaire. Si vous désirez rester anonyme, nous perdrons la possibilité de vous offrir les privilèges d'être un administrateur de portail enregistré, mais nous respecterons votre décision. Laissez simplement ce formulaire vide et cliquez sur \"Suivant\". De la même façon, une fois l'envoi de l'information du formulaire ci-dessous confirmé, vous devrez cliquer sur \"Suivant\".";
 $CompanyActivity = "Activité de votre entreprise";
 $DateLock = "Bloquer date";
 $DateUnLock = "Débloquer date";
 $GoToStudentDetails = "Voir les détails de l'apprenant";
 $RepeatDate = "Répéter la date";
+$ToAttend = "Assister";
+$HaveFun = "amusez-vous,";
 ?>

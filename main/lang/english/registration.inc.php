@@ -177,4 +177,8 @@ $EnterEmailUserAndWellSendYouPassword = "Enter the username or the email address
 $NoUserAccountWithThisEmailAddress = "There is no account with this user and/or e-mail address";
 $WithTheFollowingSettings = "with the following settings:";
 $CouldNotResetPassword = "Could not reset password";
+$HaveFun = "Have fun,";
+$YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Your account on %s has just been approved by one of our administrators.";
+$YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "You can now login at %s using the login and the password you have provided.";
+$AreYouSureToEditTheUserStatus = "Are you sure to edit the user status?";
 ?>

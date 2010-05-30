@@ -244,7 +244,9 @@ if (!empty($course) && !empty($_user['user_id'])) {
 	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tr>
         <td width="320" valign="middle">
-        <textarea name="message" style="width: 500px; height: 35px" onkeydown="send_message(event);" onclick="javascript: insert_smile(this);"></textarea>
+           
+		<?php $talkboxsize=(api_get_course_setting('allow_open_chat_window')) ? 'width: 350px; height: 35px' : 'width: 450px; height: 35px'; ?>           
+        <textarea name="message" style=" <?php echo $talkboxsize; ?>" onkeydown="send_message(event);" onclick="javascript: insert_smile(this);"></textarea>
         </td>
         <td>
         <button type="submit" value="<?php echo get_lang('Send'); ?>" class="background_submit"><?php echo get_lang('Send'); ?></button>

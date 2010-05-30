@@ -131,6 +131,8 @@ class ImsAssessmentItem
         {
             $head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>' . "\n";
         }
+	//TODO understand why answer might be a non-object sometimes
+	if (!is_object($this->answer)) { return $head; }
         $res = $head
                . $this->start_item()
                  .$this->answer->imsExportResponsesDeclaration($this->questionIdent)

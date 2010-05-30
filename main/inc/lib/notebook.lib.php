@@ -53,7 +53,7 @@ class NotebookManager
 
 		$sql = "INSERT INTO $t_notebook (user_id, course, session_id, title, description, creation_date,update_date,status)
 				VALUES(
-					'".Database::escape_string(api_get_user_id())."',
+					'".api_get_user_id()."',
 					'".Database::escape_string(api_get_course_id())."',
 					'".Database::escape_string($_SESSION['id_session'])."',
 					'".Database::escape_string($values['note_title'])."',
@@ -106,8 +106,8 @@ class NotebookManager
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 
 		$sql = "UPDATE $t_notebook SET
-					user_id = '".Database::escape_string(api_get_user_id())."',
-					course = '".Database::escape_string(api_get_course_id())."',
+					user_id = '".api_get_user_id()."',
+					course = '".api_get_course_id()."',
 					session_id = '".Database::escape_string($_SESSION['id_session'])."',
 					title = '".Database::escape_string($values['note_title'])."',
 					description = '".Database::escape_string($values['note_comment'])."',
@@ -116,7 +116,7 @@ class NotebookManager
 		$result = Database::query($sql);
 
 		//update item_property (update)
-		api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, Database::escape_string($values['notebook_id']), 'NotebookUpdated', api_get_user_id());
+		api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, $values['notebook_id'], 'NotebookUpdated', api_get_user_id());
 		$affected_rows = Database::affected_rows();
 		if (!empty($affected_rows)){
 			return true;
@@ -128,7 +128,7 @@ class NotebookManager
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 
-		$sql = "DELETE FROM $t_notebook WHERE notebook_id='".intval($notebook_id)."' AND user_id = '".Database::escape_string(api_get_user_id())."'";
+		$sql = "DELETE FROM $t_notebook WHERE notebook_id='".intval($notebook_id)."' AND user_id = '".api_get_user_id()."'";
 		$result = Database::query($sql);
         $affected_rows = Database::affected_rows();
         if ($affected_rows != 1){
@@ -199,7 +199,7 @@ class NotebookManager
 
 		$cond_extra = ($_SESSION['notebook_view']== 'update_date')?" AND update_date <> '0000-00-00 00:00:00'":" ";
 
-		$sql = "SELECT * FROM $t_notebook WHERE user_id = '".Database::escape_string(api_get_user_id())."' $condition_session $cond_extra $order_by";
+		$sql = "SELECT * FROM $t_notebook WHERE user_id = '".api_get_user_id()."' $condition_session $cond_extra $order_by";
 		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			//validacion when belongs to a session

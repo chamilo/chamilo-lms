@@ -65,9 +65,9 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$form->add_textfield('keyword_lastname', get_lang('LastName'), false);
 	$status_options = array();
 	$status_options['%'] = get_lang('All');
-	$status_options[SESSION_VISIBLE_READ_ONLY] = get_lang('ReadOnly');
-	$status_options[SESSION_VISIBLE] = get_lang('Visible');
-	$status_options[SESSION_INVISIBLE] = get_lang('Invisible');
+	$status_options[SESSION_VISIBLE_READ_ONLY] 	= get_lang('SessionReadOnly');
+	$status_options[SESSION_VISIBLE] 			= get_lang('SessionAccessible');
+	$status_options[SESSION_INVISIBLE] 			= get_lang('SessionNotAccessible');
 	$form->addElement('select','keyword_visibility',get_lang('Status'),$status_options);
 	$active_group = array();
 	$active_group[] = $form->createElement('checkbox','active','',get_lang('Active'));

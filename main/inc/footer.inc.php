@@ -31,31 +31,19 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 
 <div id="footer"> <!-- start of #footer section -->
 <div id="bottom_corner"></div>
-<div class="copyright">
 <?php
 global $_configuration;
-
-if (api_get_setting('show_administrator_data') == 'true') {
-	// Platform manager
-	echo '<div align="right">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))).'</div>';
-}
-
-echo get_lang('Platform'), ' <a href="', $_configuration['software_url'], '" target="_blank">', $_configuration['software_name'], ' ', $_configuration['system_version'], '</a> &copy; ', date('Y');
-
-// Server mode indicator.
-if (api_is_platform_admin()) {
-	if (api_get_setting('server_type') == 'test') {
-		echo ' <a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#server_type">';
-		echo '<span style="background-color: white; color: red; border: 1px solid red;">&nbsp;Test&nbsp;server&nbsp;mode&nbsp;</span></a>';
+echo '<div class="copyright">';
+	if (api_get_setting('show_administrator_data') == 'true') {
+		// Platform manager
+		echo '<div align="right">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))).'</div>';
 	}
-}
-?>
-</div>
 
-<?php
-
+	echo get_lang('Platform'), ' <a href="', $_configuration['software_url'], '" target="_blank">', $_configuration['software_name'], ' ', $_configuration['system_version'], '</a> &copy; ', date('Y');
+echo '</div>'; //copyright div
 
 echo '<div class="footer_emails">';
+
 /*	Plugins for footer section */
 
 echo '<div id="plugin-footer">';
@@ -127,8 +115,39 @@ if (api_get_setting('show_teacher_data') == 'true') {
 	}
 }
 echo '</div>';
+echo '</div> <!-- end of #footer -->';
 
-?>&nbsp;
-</div> <!-- end of #footer -->
+// Server mode indicator.
+if (api_is_platform_admin()) {
+	if (api_get_setting('server_type') == 'test') {
+		echo ' <a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#server_type">';
+		echo '<span style="background-color: white; color: red; border: 1px solid red;"><br/>&nbsp;Test&nbsp;server&nbsp;mode&nbsp;</span></a>';
+		/*
+		//@todo page execution time
+		$mtime = microtime();
+		$mtime = explode(" ",$mtime);
+		$mtime = $mtime[1] + $mtime[0];
+		$endtime = $mtime;
+		$starttime = $_SESSION['page_start_time_execution'];
+		$totaltime = ($endtime - $starttime);
+		$starttime = null; unset($_SESSION['page_start_time_execution']); 
+		$_SESSION['page_start_time_execution']=0;
+		$totaltime = round($totaltime, 6);
+	    echo "<h2>Page execution time was  ".$totaltime." seconds</h2>";
+	    unset($_SESSION['page_start_time_execution']);
+	    */
+	    /*
+	    global $_user, $_course;	    
+	    if (!empty($_user)) {
+		    echo "<h2>Current user info</h2>";
+		    var_dump($_user);
+	    }
+	    if (!empty($_course)) {
+	    	echo "<h2>Current course info</h2>";
+	    	var_dump($_course);
+	    }*/
+	}
+}
+?>
 </body>
 </html>

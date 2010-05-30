@@ -27,7 +27,7 @@ class UrlManager
                 SET url 	= '".Database::escape_string($url)."',
                 description = '".Database::escape_string($description)."',
                 active 		= '".Database::escape_string($active)."',
-                created_by 	= '".Database::escape_string(api_get_user_id())."',
+                created_by 	= '".api_get_user_id()."',
                 tms = FROM_UNIXTIME(".$tms.")";
 		$result = Database::query($sql);
 		return $result;
@@ -52,7 +52,7 @@ class UrlManager
                 SET url 	= '".Database::escape_string($url)."',
                 description = '".Database::escape_string($description)."',
                 active 		= '".Database::escape_string($active)."',
-                created_by 	= '".Database::escape_string(api_get_user_id())."',
+                created_by 	= '".api_get_user_id()."',
                 tms 		= FROM_UNIXTIME(".$tms.")
                 WHERE id = '$url_id'";
 		$result = Database::query($sql);
@@ -285,12 +285,13 @@ class UrlManager
 	* @param int url id
 	* @return boolean true if success
 	* */
-	public static function relation_url_session_exist($session_id, $url_id)
-	{
-		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+	public static function relation_url_session_exist($session_id, $url_id) {
+		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);		
+		$session_id = intval($session_id);
+		$url_id		= intval($url_id);		
 		$sql= "SELECT session_id FROM $table_url_rel_session WHERE access_url_id = ".Database::escape_string($url_id)." AND session_id = ".Database::escape_string($session_id);
-		$result = Database::query($sql);
-		$num = Database::num_rows($result);
+		$result 	= Database::query($sql);
+		$num 		= Database::num_rows($result);
 		return $num;
 	}
 
@@ -301,8 +302,7 @@ class UrlManager
 	 * @param  array of user_ids
 	 * @param  array of url_ids
 	 * */
-	public static function add_users_to_urls($user_list, $url_list)
-	{
+	public static function add_users_to_urls($user_list, $url_list) {
 		$table_url_rel_user= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$result_array=array();
 
@@ -372,6 +372,7 @@ class UrlManager
 			foreach ($url_list as $url_id) {
 				foreach ($session_list as $session_id) {
 					$count = UrlManager::relation_url_session_exist($session_id,$url_id);
+					
 					if ($count==0) {
 						$sql = "INSERT INTO $table_url_rel_session
 		               			SET session_id = ".Database::escape_string($session_id).", access_url_id = ".Database::escape_string($url_id);
@@ -423,12 +424,15 @@ class UrlManager
 	}
 
 
-	public static function add_session_to_url($session_id, $url_id=1)
+	public static function add_session_to_url($session_id, $url_id = 1)
 	{
 		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 		if (empty($url_id)) $url_id=1;
+		
 		$count = UrlManager::relation_url_session_exist($session_id,$url_id);
-		if (empty($count)) {
+		$session_id	= intval($session_id);
+		if (empty($count) && !empty($session_id)) {			
+			$url_id = intval($url_id);
 			$sql = "INSERT INTO $table_url_rel_session
            			SET session_id = ".Database::escape_string($session_id).", access_url_id = ".Database::escape_string($url_id);
 			$result = Database::query($sql);
@@ -557,8 +561,7 @@ class UrlManager
 	 * @param array user list
 	 * @param int access_url_id
 	 * */
-	public static function update_urls_rel_session($session_list,$access_url_id)
-	{
+	public static function update_urls_rel_session($session_list,$access_url_id) {
 		$table_session	= Database :: get_main_table(TABLE_MAIN_SESSION);
 		$table_url_rel_session	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
@@ -573,14 +576,18 @@ class UrlManager
 		//adding users
 		foreach($session_list as $session) {
 			if(!in_array($session, $existing_sessions)) {
-				UrlManager::add_session_to_url($session,$access_url_id);
+				if (!empty($session) && !empty($access_url_id)) {
+					UrlManager::add_session_to_url($session, $access_url_id);
+				}	
 			}
 		}
 
 		//deleting old users
 		foreach($existing_sessions as $existing_session) {
 			if(!in_array($existing_session, $session_list)) {
-				UrlManager::delete_url_rel_session($existing_session,$access_url_id);
+				if (!empty($existing_session) && !empty($access_url_id)) {
+					UrlManager::delete_url_rel_session($existing_session,$access_url_id);
+				}
 			}
 		}
 	}

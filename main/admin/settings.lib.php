@@ -76,36 +76,36 @@ function handle_plugins()
 		$plugin_info['author']='Patrick Cool'; // The author of the plugin
 	*/
 	echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.$_GET['category'].'">';
-	echo "<table class=\"data_table\">\n";
-	echo "\t<tr>\n";
-	echo "\t\t<th>\n";
+	echo "<table class=\"data_table\">";
+	echo "<tr>";
+	echo "<th>";
 	echo get_lang('Plugin');
-	echo "\t\t</th>\n";
-	echo "\t\t<th>\n";
+	echo "</th>";
+	echo "<th>";
 	echo get_lang('LoginPageMainArea');
-	echo "\t\t</th>\n";
-	echo "\t\t<th>\n";
+	echo "</th>";
+	echo "<th>";
 	echo get_lang('LoginPageMenu');
-	echo "\t\t</th>\n";
-	echo "\t\t<th>\n";
+	echo "</th>";
+	echo "<th>";
 	echo get_lang('CampusHomepageMainArea');
-	echo "\t\t</th>\n";
-	echo "\t\t<th>\n";
+	echo "</th>";
+	echo "<th>";
 	echo get_lang('CampusHomepageMenu');
-	echo "\t\t</th>\n";
-	echo "\t\t<th>\n";
+	echo "</th>";
+	echo "<th>";
 	echo get_lang('MyCoursesMainArea');
-	echo "\t\t</th>\n";
-	echo "\t\t<th>\n";
+	echo "</th>";
+	echo "<th>";
 	echo get_lang('MyCoursesMenu');
-	echo "\t\t</th>\n";
-	echo "\t\t<th>\n";
+	echo "</th>";
+	echo "<th>";
 	echo get_lang('Header');
-	echo "\t\t</th>\n";
-	echo "\t\t<th>\n";
+	echo "</th>";
+	echo "<th>";
 	echo get_lang('Footer');
-	echo "\t\t</th>\n";
-	echo "\t</tr>\n";
+	echo "</th>";
+	echo "</tr>";
 
 	/* We retrieve all the active plugins. */
 	//$sql = "SELECT * FROM $table_settings_current WHERE category='Plugins'";
@@ -126,8 +126,8 @@ function handle_plugins()
 			$plugin_info = array();
 			include ($plugin_info_file);
 
-			echo "\t<tr>\n";
-			echo "\t\t<td>\n";
+			echo "<tr>";
+			echo "<td>";
 			foreach ($plugin_info as $key => $value)
 			{
 				if ($key <> 'location')
@@ -143,7 +143,7 @@ function handle_plugins()
 			{
 				echo "<a href='".api_get_path(WEB_PLUGIN_PATH).$testplugin."/readme.txt'>readme.txt</a>";
 			}
-			echo "\t\t</td>\n";
+			echo "</td>";
 
 			// column: LoginPageMainArea
 			if(empty($usedplugins))
@@ -158,7 +158,7 @@ function handle_plugins()
 			display_plugin_cell('mycourses_menu', $plugin_info, $testplugin, $usedplugins);
 			display_plugin_cell('header', $plugin_info, $testplugin, $usedplugins);
 			display_plugin_cell('footer', $plugin_info, $testplugin, $usedplugins);
-			echo "\t</tr>\n";
+			echo "</tr>";
 				}
 				}
 	echo '</table>';
@@ -170,7 +170,7 @@ function handle_plugins()
 
 function display_plugin_cell($location, $plugin_info, $current_plugin, $active_plugins)
 {
-	echo "\t\t<td align=\"center\">\n";
+	echo "<td align=\"center\">";
 	if (in_array($location, $plugin_info['location']))
 	{
 		if (isset($active_plugins[$location]) && is_array($active_plugins[$location])
@@ -184,7 +184,7 @@ function display_plugin_cell($location, $plugin_info, $current_plugin, $active_p
 		}
 		echo '<input type="checkbox" name="'.$current_plugin.'-'.$location.'" value="true" '.$checked.'/>';
 	}
-	echo "\t\t</td>\n";
+	echo "</td>";
 }
 
 /**
@@ -310,7 +310,7 @@ function handle_stylesheets()
 					} else {
 						echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
 					}
-					echo "<br />\n";
+					echo "<br />";
 					$counter++;
 				}
 			}
@@ -526,9 +526,9 @@ function handle_search() {
 function handle_templates()
 {
 	if ($_GET['action'] != 'add') {
-		echo "\n<div class=\"actions\" style=\"margin-left:1px\" >";
+		echo "<div class=\"actions\" style=\"margin-left:1px\" >";
 		echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('template_add.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
-		echo "\n</div>";
+		echo "</div>";
 	}
 
 	if ($_GET['action'] == 'add' OR ( $_GET['action'] == 'edit' AND is_numeric($_GET['id']))) {

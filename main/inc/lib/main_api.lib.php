@@ -58,7 +58,7 @@ define('UNSUBSCRIBE_NOT_ALLOWED', 0);
 /*
 When you add a new tool you must add it into function api_get_tools_lists() too
  */
-define('TOOL_DOCUMENT', 'document');
+define('TOOL_DOCUMENT','document');
 define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
@@ -990,7 +990,7 @@ function api_get_course_info($course_code = null) {
 			$_course['subscribe_allowed']    = $cData['subscribe'       ];
 			$_course['unubscribe_allowed']   = $cData['unsubscribe'     ];
 			
-			//the real_id is a integer is mandatory for feature implementations
+			//The real_id is an integer. Is mandatory for future implementations
 			$_course['real_id'     ]         = $cData['id']; 
 		}
 		return $_course;
@@ -1539,8 +1539,9 @@ function api_get_session_visibility($session_id) {
 function api_get_session_visibility_by_user($session_id, $course_code, $user_id) {
 	$visibility = 0; // Means that the session is still available.
 	if (!empty($session_id) && !empty($user_id)){
-		$sesion_id = intval(Database::escape_string($session_id));
-		$user_id = intval(Database::escape_string($user_id));
+		$sesion_id 		= intval(Database::escape_string($session_id));		
+		$user_id 		= intval(Database::escape_string($user_id));
+		$course_code	= Database::escape_string($course_code);
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION_REL_COURSE_REL_USER);
 		$sql = "SELECT visibility FROM $tbl_session
 				WHERE id_session = $session_id AND id_user = $user_id AND course_code = '$course_code'"; // session old
@@ -2731,7 +2732,8 @@ function api_return_html_area($name, $content = '', $height = '', $width = '100%
  */
 function api_max_sort_value($user_course_category, $user_id) {
 	$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-	$sql_max = "SELECT max(sort) as max_sort FROM $tbl_course_user WHERE user_id='".$user_id."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND user_course_cat='".$user_course_category."'";
+	
+	$sql_max = "SELECT max(sort) as max_sort FROM $tbl_course_user WHERE user_id='".intval($user_id)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND user_course_cat='".Database::escape_string($user_course_category)."'";
 	$result_max = Database::query($sql_max);
 	if (Database::num_rows($result_max) == 1) {
 		$row_max = Database::fetch_array($result_max);
@@ -3011,7 +3013,8 @@ function copy_folder_course_session($pathname, $base_path_document,$session_id,$
 		$path .= DIRECTORY_SEPARATOR.$folder;
 
 		if (!file_exists($new_pathname)) {
-
+			$path = Database::escape_string($path);
+			
 			$sql = "SELECT * FROM $table WHERE path = '$path' AND filetype = 'folder' AND session_id = '$session_id'";
 			$rs1  = Database::query($sql);
 			$num_rows = Database::num_rows($rs1);
@@ -4495,8 +4498,8 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
  */
 function api_is_global_platform_admin() {
 	if (api_is_platform_admin()) {
-		// This user is subscribed in these sites => $my_url_list
         $my_url_list = api_get_access_url_from_user(api_get_user_id());
+		// The admin is registered in the first "main" site with access_url_id = 1
 		if (in_array(1, $my_url_list)) {
 			return true;
 		} else {

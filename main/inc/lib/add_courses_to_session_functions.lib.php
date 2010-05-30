@@ -5,10 +5,9 @@ require_once (api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php');
 //require_once (api_get_path(SYS_CODE_PATH).'admin/add_courses_to_session.php');
 
 
-class AddCourseToSession{
+class AddCourseToSession {
 
-	public function search_courses($needle,$type)
-	{
+	public function search_courses($needle,$type) {
 		global $tbl_course, $tbl_session_rel_course, $id_session;
 
 		$xajax_response = new XajaxResponse();

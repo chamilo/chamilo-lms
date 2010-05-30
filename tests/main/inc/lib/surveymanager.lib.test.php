@@ -1,6 +1,7 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'surveymanager.lib.php');
-
+require_once api_get_path(LIBRARY_PATH).'surveymanager.lib.php';
+//This class is deprecated
+/*
 class TestSurveyManager extends UnitTestCase {
 
 		function testcreate_survey() {
@@ -284,7 +285,7 @@ class TestSurveyManager extends UnitTestCase {
 		//var_dump($res);
 	}
 }
-
+*/
 class TestSurveyTree extends UnitTestCase {
 
 	var $surveylist;

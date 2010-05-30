@@ -92,7 +92,7 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])){
 
 // Now we check if the invitationcode is valid
 $sql = "SELECT * FROM $table_survey_invitation WHERE invitation_code = '" . Database :: escape_string($invitationcode) . "'";
-$result = Database::query($sql, __FILE__, false); // false = suppress errors
+$result = Database::query($sql); // false = suppress errors
 if (Database::num_rows($result) < 1) {
 	Display :: display_error_message(get_lang('WrongInvitationCode'), false);
 	Display :: display_footer();

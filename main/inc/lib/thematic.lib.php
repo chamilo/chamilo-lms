@@ -4,6 +4,7 @@
 /**
  * This file contains class used like library, provides functions for thematic option inside attendance tool. It's also used like model to thematic_controller (MVC pattern)
  * @author Christian Fasanando <christian1827@gmail.com>
+ * @author Julio Montoya 	<gugli100@gmail.com> SQL fixes + improvements
  * @package chamilo.attendance
  */
 
@@ -12,8 +13,7 @@
  * @package chamilo.attendance
  */
 class Thematic
-{
-	
+{	
 	private $session_id;
 	private $thematic_id;
 	private $thematic_title;
@@ -144,9 +144,14 @@ class Thematic
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id);
 		
-		$sql = "SELECT * FROM $tbl_thematic WHERE active = 1 $condition_session ORDER BY display_order $sortorder";
+		$sql = "SELECT id, display_order FROM $tbl_thematic WHERE active = 1 $condition_session ORDER BY display_order $sortorder";
 		$res = Database::query($sql);
 		$found = false;
+		
+		//Variable definition 
+		$current_id = 0;
+		$next_id 	= 0;
+		
 		while ($row = Database::fetch_array($res)) {
 			if ($found == true && empty($next_id)) {
 				$next_id = intval($row['id']);
@@ -163,10 +168,14 @@ class Thematic
 		// get last done thematic advance before move thematic list
 		$last_done_thematic_advance = $this->get_last_done_thematic_advance();
 		
-		$sql = "UPDATE $tbl_thematic SET display_order = $next_display_order WHERE id = $current_id ";
-		Database::query($sql);
-		$sql = "UPDATE $tbl_thematic SET display_order = $current_display_order WHERE id = $next_id ";
-		Database::query($sql);
+		if (!empty($next_display_order) && !empty($current_id)) {
+			$sql = "UPDATE $tbl_thematic SET display_order = $next_display_order WHERE id = $current_id ";
+			Database::query($sql);
+		}
+		if (!empty($current_display_order) && !empty($next_id)) {
+			$sql = "UPDATE $tbl_thematic SET display_order = $current_display_order WHERE id = $next_id ";
+			Database::query($sql);
+		}
 		
 		// update done advances with de current thematic list
 		$update_done_advances = $this->update_done_thematic_advances($last_done_thematic_advance);
@@ -637,12 +646,11 @@ class Thematic
 			}
 		}
 		
-		// update done thematic for others advances (done_advance = 0)
-		if (!empty($a_thematic_advance_ids)) {
+		// Update done thematic for others advances (done_advance = 0)		
+		if (!empty($a_thematic_advance_ids) && count($a_thematic_advance_ids) > 0) {
 			$upd = "UPDATE $tbl_thematic_advance set done_advance = 0 WHERE id NOT IN(".implode(',',$a_thematic_advance_ids).") ";
 			Database::query($upd);
 		}
-
 		return $affected_rows;
 				
 	}

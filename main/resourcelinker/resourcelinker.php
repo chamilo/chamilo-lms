@@ -5,8 +5,9 @@
 * @author Denes Nagy - many bugfixes and improvements, adjusted for learning path
 * @author Roan Embrechts - refactoring, code cleaning
 * @package dokeos.resourcelinker
-* @todo reorganise code,
+* @todo reorganise code - This class is used?
 * use Database API instead of creating table names locally.
+* 
 */
 
 /*

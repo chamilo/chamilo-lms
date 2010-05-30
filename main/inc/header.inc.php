@@ -12,6 +12,18 @@
 /*
  * HTTP HEADER
  */
+ 
+// Server mode indicator.
+/* @todo page execution time
+if (api_is_platform_admin()) {
+	if (api_get_setting('server_type') == 'test') {
+   		$mtime = microtime();
+		$mtime = explode(" ",$mtime);
+		$mtime = $mtime[1] + $mtime[0];
+		$starttime = $mtime;
+		$_SESSION['page_start_time_execution'] = $starttime;
+	}
+}*/
 
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 

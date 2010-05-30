@@ -40,9 +40,9 @@ class CourseDescription
 			if ($description['description_type'] == THEMATIC_ADVANCE) {
 				$description['progress_icon'] = $this->get_progress_porcent();
 			}
-			$data['descriptions'][$description['description_type']] = $description;
+			$data['descriptions'][$description['description_type']] = Security::remove_XSS($description, STUDENT);
 			//reload titles to ensure we have the last version (after edition)
-			$data['default_description_titles'][$description['description_type']] = $description['title'];
+			$data['default_description_titles'][$description['description_type']] = Security::remove_XSS($description['title'], STUDENT);
 		}
 		return $data;
 	}

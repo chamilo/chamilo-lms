@@ -33,6 +33,8 @@ function tempdir($dir, $prefix = 'tmp', $mode = 0777) {
  */
 
 function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
+	
+	
 	global $_course, $_user;
 	//Check if the file is valid (not to big and exists)
 	if (!isset ($_FILES['userFile']) || !is_uploaded_file($_FILES['userFile']['tmp_name'])) {
@@ -42,15 +44,17 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
 
 	//1- Unzip folder in a new repository
 	require_once api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php';
-	if (preg_match('/.zip$/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 10000000, 1)) {
-		if (!function_exists('gzopen')) {
-			claro_delete_file($uploadPath);
+	$max_filled_space = DocumentManager::get_course_quota();
+	
+	if (preg_match('/.zip$/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, $max_filled_space , 1)) {
+		if (!function_exists('gzopen')) {			
+			//claro_delete_file($uploadPath);
 			return false;
 		}
 		// upload successfull
 		return true;
 	} else {
-		claro_delete_file($uploadPath);
+		//claro_delete_file($uploadPath);
 		return false;
 	}
 }
@@ -128,9 +132,7 @@ function import_exercise($file) {
 		return false;
 	}
 
-	//---------------------
 	//add exercise in tool
-	//---------------------
 
 	//1.create exercise
 	$exercise = new Exercise();

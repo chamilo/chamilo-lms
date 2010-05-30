@@ -7,7 +7,7 @@
  * editing,... of a blog
  *
  * @version 1.0
- * @package dokeos.blogs
+ * @package chamilo.blogs
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
  *
@@ -22,15 +22,13 @@ class Blog {
 	 * @return String Blog Title
 	 */
 	public static function get_blog_title ($blog_id) {
-		if(is_numeric($blog_id))
-		{
+		if(is_numeric($blog_id)) {
 			// init
 			$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 
-			$sql = "
-				SELECT blog_name
-				FROM " . $tbl_blogs . "
-				WHERE blog_id = " . Database::escape_string((int)$blog_id);
+			$sql = "SELECT blog_name
+					FROM " . $tbl_blogs . "
+					WHERE blog_id = " . intval($blog_id);
 
 			$result = Database::query($sql);
 			$blog = Database::fetch_array($result);
@@ -50,10 +48,9 @@ class Blog {
 	public static function get_blog_subtitle ($blog_id) {
 		// init
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
-		$sql = "SELECT blog_subtitle FROM $tbl_blogs WHERE blog_id ='".Database::escape_string((int)$blog_id)."'";
+		$sql = "SELECT blog_subtitle FROM $tbl_blogs WHERE blog_id ='".intval($blog_id)."'";
 		$result = Database::query($sql);
 		$blog = Database::fetch_array($result);
-
 		return stripslashes($blog['blog_subtitle']);
 	}
 
@@ -73,8 +70,7 @@ class Blog {
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 
 		// Get blog members
-		$sql = "
-			SELECT
+		$sql = "SELECT
 				user.user_id,
 				user.firstname,
 				user.lastname
@@ -82,11 +78,8 @@ class Blog {
 			INNER JOIN " . $tbl_users . " user ON blogs_rel_user.user_id = user.user_id
 			WHERE blogs_rel_user.blog_id = '" . Database::escape_string((int)$blog_id)."'";
 		$result = Database::query($sql);
-
 		$blog_members = array ();
-
-		while($user = Database::fetch_array($result))
-		{
+		while($user = Database::fetch_array($result)) {
 			$blog_members[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 		}
 

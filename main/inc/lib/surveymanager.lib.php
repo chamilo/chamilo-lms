@@ -1,42 +1,20 @@
-<?php // $Id: usermanager.lib.php,v 1.9.2.3 2005/10/28 14:31:45 bmol Exp $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This library provides functions for user management.
 *	Include/require it in your code to use its functionality.
 *
 *	@author Bart Mollet, main author
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
+
 */
+//@todo This class is deprecated
+/*
 class SurveyManager {
 	private function __construct() {
 
 	}
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
 	function get_survey_author($authorid)
 	{
 			$user_table = Database :: get_main_table(TABLE_MAIN_USER);
@@ -47,9 +25,7 @@ class SurveyManager {
 			return $firstname;
 	}
 
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
 	function get_author($db_name,$survey_id)
 	{
 	    //$table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -59,9 +35,7 @@ class SurveyManager {
 		$author=@Database::result($res,0,'author');
 		return $author;
 	}
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
 	function get_surveyid($db_name,$group_id)
 	{
 	    //$group_table = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
@@ -81,9 +55,7 @@ class SurveyManager {
 		return($code);
 	}
 
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
 	function insert_into_group ($survey_id,$group_title,$introduction,$tb) {
 		$survey_id = Database::escape_string($survey_id);
 		$group_title = Database::escape_string($group_title);
@@ -93,9 +65,7 @@ class SurveyManager {
 		$result=Database::query($sql);
 		return Database::insert_id();
 	}
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
 	function get_survey_code ($table_survey,$survey_code)
 	{
 		$survey_code = Database::escape_string($survey_code);
@@ -107,9 +77,7 @@ class SurveyManager {
 		//echo $code;exit;
 		return($code);
 	}
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
 	function get_survey_list()
 	{
 		$survey_table = Database :: get_course_table(TABLE_SURVEY);
@@ -123,9 +91,7 @@ class SurveyManager {
 		}
 		echo "</select>";
 	}
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
 	function create_survey ($surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $table_survey, $table_group)
 		{
 			//$table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -137,12 +103,8 @@ class SurveyManager {
 			$result = Database::query($sql2);
 			return $survey_id;
 		}
-	/**
-	 * Possible  deprecated method
-	 */
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
+	//Possible  deprecated method
 	function create_survey_attach($surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $table_survey, $table_group)
 	{
 			//$table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -151,25 +113,25 @@ class SurveyManager {
 			$survey_id = Database::insert_id();
 			return $survey_id;
 	}
-	/**
-	 * Possible  deprecated method
-	 */
-	function update_survey($surveyid,$surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $cidReq,$table_course)
-	{
+	
+	//Possible  deprecated method
+
+	function update_survey($surveyid,$surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $cidReq,$table_course) {	  
+          
           $sql_course = "SELECT * FROM $table_course WHERE code = '$cidReq'";
           $res_course = Database::query($sql_course);
           $obj_course=@Database::fetch_object($res_course);
-          $curr_dbname = $obj_course->db_name ;
-          $surveyid = Database::escape_string($surveyid);
+          $curr_dbname = $obj_course->db_name ;         
+          
 		  $sql = "UPDATE $curr_dbname.survey SET code='$surveycode', title='$surveytitle', subtitle='$surveysubtitle', lang='$survey_language',   avail_from='$availablefrom', avail_till='$availabletill', is_shared='$isshare', template='$surveytemplate', intro='$surveyintroduction',surveythanks='$surveythanks'
 		  		  WHERE survey_id='$surveyid'";
 		  Database::query($sql);
 		  return $curr_dbname;
 	}
 
-	/**
-	 * Possible  deprecated method
-	 */
+	
+	// Possible  deprecated method
+	 
 	function update_question($qid,$qtype,$caption,$alignment,$answers,$open_ans,$curr_dbname)
 	{
       	for($i=0;$i<10;$i++)
@@ -183,10 +145,10 @@ class SurveyManager {
 		$result = Database::query($sql);
 		return Database::insert_id();
 	}
-
-	/**
-	 * Possible  deprecated method
-	 */
+	
+	
+	//Possible  deprecated method
+	 
 	 function get_question_type($questionid)
 	 {
 	  $table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
@@ -197,9 +159,8 @@ class SurveyManager {
 			return($code);
 	 }
 
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
+	 
 	 function no_of_question($db_name,$gid)
 	 {
 	  //$table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
@@ -210,9 +171,9 @@ class SurveyManager {
 			return($code);
 	 }
 
-	/**
-	 * Possible  deprecated method
-	 */
+	
+	 //Possible  deprecated method
+	 
 	function get_data($id, $field)
 	{
 		global $_course;
@@ -222,9 +183,9 @@ class SurveyManager {
 		return($code);
 
 	}
-	/**
-	 * Possible  deprecated method
-	 */
+	
+	//Possible  deprecated method
+	 
 	function get_all_datas($id)
 	{
 		global $_course;
@@ -232,9 +193,7 @@ class SurveyManager {
 		$res=Database::query($sql);
 		return Database::fetch_object($res);
 	}
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
 	function get_surveyname($db_name,$sid)
 	{
 			//$surveytable=Database:: get_course_table(TABLE_SURVEY);
@@ -244,9 +203,7 @@ class SurveyManager {
 			$code=@Database::result($res,0,'title');
 			return($code);
 	}
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
 	function get_surveyname_display($sid)
 	{
 			$sid = Database::escape_string($sid);
@@ -257,9 +214,7 @@ class SurveyManager {
 			return($code);
 	}
 
-	/**
-	 * Possible  deprecated method
-	 */
+	//Possible  deprecated method
 	function import_questions($import_type, $ids)
 	{
 			//$groupname=surveymanager::get_groupname($gid_arr[$index]);
@@ -294,15 +249,14 @@ class SurveyManager {
 			echo $groupids;
 	}
 
-	/**
-	 * This function deletes a survey and all the groups and question belonging to it.
-	 *
-	 * @param unknown_type $survey_id
-	 *
-	 * @author unknown
-	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, cleanup and refactoring
-	 *
-	 */
+	
+	 // This function deletes a survey and all the groups and question belonging to it.
+	 //* @param unknown_type $survey_id
+	 
+	 // @author unknown
+	 // @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, cleanup and refactoring
+	 
+	 
 	public static function delete_survey($survey_id)
 	{
 		$table_survey 	= Database :: get_course_table(TABLE_SURVEY);
@@ -330,19 +284,11 @@ class SurveyManager {
 		return true;
 	}
 
-	/**
-	 *  Possible  deprecated method
-	 * This function deletes a
-	 * @param unknown_type $group_id
-	 * @param unknown_type $curr_dbname
-	 *
-	 * @author unknown
-	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, refactoring: using correct database calls and removing useless second parameter
-	 */
+
 	function delete_group($group_id)
 	{
 		// Database table definitions
-		/** @todo use database constants for the survey tables */
+		// @todo use database constants for the survey tables 
 		$table_question 	= Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 		$table_survey_group = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 
@@ -351,9 +297,9 @@ class SurveyManager {
 		$sql = "DELETE FROM $table_survey_group WHERE group_id='".$group_id."'";
 		Database::query($sql);
 	}
-	/**
-	 *  Possible  deprecated method
-	 */
+	
+	 // Possible  deprecated method
+
 	function select_group_list($survey_id, $seleced_groupid='', $extra_script='')
 	{
 		$group_table = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
@@ -382,9 +328,8 @@ class SurveyManager {
 	}
 
 
-	/**
-	 *  Possible  deprecated method
-	 */
+	 //Possible  deprecated method
+
 	function display_imported_group($sid,$table_group,$table_question)
 	{
 
@@ -420,9 +365,9 @@ class SurveyManager {
 			Display :: display_sortable_table($table_header, $displays, array (), array (), $parameters);
 	}
 
-	/**
-	 *  Possible  deprecated method
-	 */
+	
+	//   Possible  deprecated method
+	 
 	function attach_survey($surveyid,$newsurveyid,$db_name,$curr_dbname)
 	//For attaching the whole survey with its groups and questions
 	  {
@@ -475,18 +420,18 @@ class SurveyManager {
      }
    }
 
-	/**
-	 *  Possible  deprecated method
-	 */
+	
+	// Possible  deprecated method
+	 
    function update_group($groupid,$surveyid,$groupnamme,$introduction,$curr_dbname)
 	{
 		$sql = "UPDATE $curr_dbname.survey_group SET group_id='$groupid', survey_id='$surveyid', groupname='$groupnamme', introduction='$introduction' WHERE group_id='$groupid'";
 		Database::query($sql);
 	}
 
-	/**
-	 *  Possible  deprecated method
-	 */
+	
+	 //  Possible  deprecated method
+	 
 	function create_course_survey_rel($cidReq,$survey_id,$table_course,$table_course_survey_rel)
 	{
 	 $sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
@@ -499,9 +444,9 @@ class SurveyManager {
 	 return $db_name;
 	}
 
-	/**
-	 *  Possible  deprecated method
-	 */
+	
+	//  Possible  deprecated method
+	 
 	function pick_surveyname($sid)
 	{
 		$surveytable=Database:: get_course_table(TABLE_SURVEY);
@@ -510,9 +455,9 @@ class SurveyManager {
 		$code=@Database::result($res,0,'title');
 		return($code);
 	}
-	/**
-	 *  Possible  deprecated method
-	 */
+
+	 // Possible  deprecated method
+	 
 	function pick_author($survey_id)
 	{
 	    $survey_table = Database :: get_course_table(TABLE_SURVEY);
@@ -521,13 +466,7 @@ class SurveyManager {
 		$author=@Database::result($res,0,'author');
 		return $author;
 	}
-	/**
-	 * Possible  deprecated method
-	 * Enter description here...
-	 *
-	 * @return unknown
-	 * @todo remove this function because this is of no use and should not be used.
-	 */
+
 	function get_status()
 	{
 		global $_user;
@@ -540,7 +479,7 @@ class SurveyManager {
 		return $ss;
 	}
 }
-
+*/
 
 /**
  *

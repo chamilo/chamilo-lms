@@ -30,6 +30,7 @@ function update_db_info($action, $old_path, $new_path = '') {
         	$query = "DELETE FROM `$dbTable`
     		WHERE path='".$old_path."' OR path LIKE '".$old_path."/%'";
         */
+        $old_path = Database::escape_string($old_path);
         $to_delete = "WHERE path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%'";
         $query = "DELETE FROM $dbTable " . $to_delete;
 
@@ -65,6 +66,7 @@ function update_db_info($action, $old_path, $new_path = '') {
 		//WHERE path = '".$old_path."' OR path LIKE '".$old_path."/%'";
 
 		// Attempt to update	- tested & working for root	dir
+		$new_path = Database::escape_string($new_path);
 		$query = "UPDATE $dbTable
 		SET path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
 		WHERE path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%'";

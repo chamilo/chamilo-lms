@@ -67,14 +67,14 @@ class MySpace {
 		$course_code = Database::escape_string($course_code);
 		$session_id  = intval($session_id);
 
-	    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.$course_code.'";';
+	    /*$sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.$course_code.'"';
 	    $result = Database::query($sql_query);
 	    $row_query = Database::fetch_array($result, 'ASSOC');
-	    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
+	    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;*/
 
 	    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
 	    	WHERE user_id = '.$user_id.'
-	    	AND course_code="'.$course_true.'" AND session_id = '.$session_id.' ORDER BY login_course_date ASC';
+	    	AND course_code="'.$course_code.'" AND session_id = '.$session_id.' ORDER BY login_course_date ASC';
 
 	    $rs = Database::query($sql);
 	    $connections = array();
@@ -110,14 +110,14 @@ class MySpace {
 	    $tbl_track_course 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 	    $tbl_main				= Database :: get_main_table(TABLE_MAIN_COURSE);
 
-	    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database :: escape_string($course_code).'";';
+	    /*$sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database :: escape_string($course_code).'";';
 	    $result = Database::query($sql_query);
 	    $row_query = Database::fetch_array($result,'ASSOC');
-	    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
+	    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;*/
 
 	    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
 	    				WHERE user_id = ' . intval($user_id) . '
-	    				AND course_code="' . Database::escape_string($course_true) . '"
+	    				AND course_code="' . Database::escape_string($course_code) . '"
 	    				ORDER BY login_course_date DESC';
 
 	    $rs = Database::query($sql);

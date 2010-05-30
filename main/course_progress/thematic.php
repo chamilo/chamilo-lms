@@ -4,6 +4,7 @@
 /**
 * View (MVC patter) for thematic control 
 * @author Christian Fasanando <christian1827@gmail.com>
+* @author Julio Montoya <gugli100@gmail.com> Bug fixing
 * @package chamilo.course_progress
 */
 
@@ -40,6 +41,8 @@ if (api_is_allowed_to_edit(null, true)) {
 if ($action == 'thematic_list') {
 	
 	$table = new SortableTable('thematic_list', array('Thematic', 'get_number_of_thematics'), array('Thematic', 'get_thematic_data'));
+	
+	$parameters['action'] = $action;
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false, array('style'=>'width:20px;'));
 	$table->set_header(1, get_lang('Title'), false );	

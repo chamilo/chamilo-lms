@@ -382,8 +382,8 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
   <td width="40%"><?php echo get_lang('SessionVisibility') ?></td>
   <td width="60%">
   	<select name="session_visibility" style="width:250px;">
-		<?php
-		$visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('ReadOnly'), SESSION_VISIBLE=>get_lang('Visible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('Invisible')));
+		<?php		
+		$visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('SessionReadOnly'), SESSION_VISIBLE=>get_lang('SessionAccessible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('SessionNotAccessible')));
 		foreach($visibility_list as $key=>$item): ?>
 		<option value="<?php echo $key; ?>" <?php if($item == $visibility_id) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
 		<?php endforeach; ?>

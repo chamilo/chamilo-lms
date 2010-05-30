@@ -275,7 +275,8 @@ class Attendance
 	}
 
 	/**
-	 * get registered users inside current course
+	 * Get registered users inside current course
+	 * @todo Is really bad idea to call this function get_users_rel_course. This should be change. Julio Montoya
 	 * @param 	int	   attendance id for showing attendance result field (optional)
 	 * @return 	array  users data
 	 */
@@ -288,36 +289,38 @@ class Attendance
 			$a_course_users = CourseManager :: get_user_list_from_course_code($current_course_id, false, 0, '','lastname');
 		}
 		// get registered users inside current course
-		$a_users = array();
-
-		foreach ($a_course_users as $key =>  $value) {
-			$uid = intval($value['user_id']);
-			$status = $value['status'];
-
-			$user_status_in_course = CourseManager::get_user_in_course_status($uid, $current_course_id);			
-
+		$a_users = array();		
+		foreach ($a_course_users as $key =>$user_data) {
+			$value	= array();
+			$uid 	= $user_data['user_id'];
+			$status = $user_data['status'];
+			$user_status_in_course = CourseManager::get_user_in_course_status($uid, $current_course_id);
+						
+			//Not taking into account DRH or COURSEMANAGER
 			if ($uid <= 1 || $status == DRH || $user_status_in_course == COURSEMANAGER) continue;
 
-			if (!empty($attendance_id)) {
-				$attendance_id = intval($attendance_id);
+			if (!empty($attendance_id)) {				
 				$user_faults = $this->get_faults_of_user($uid, $attendance_id);
+				
 				$value['attendance_result'] = $user_faults['faults'].'/'.$user_faults['total'].' ('.$user_faults['faults_porcent'].'%)';
-				$value['result_color_bar'] = $user_faults['color_bar'];
+				$value['result_color_bar'] 	= $user_faults['color_bar'];
 			}
 
 			// user's picture
-			$image_path = UserManager::get_user_picture_path_by_id($uid, 'web', false);
-			$user_profile = UserManager::get_picture_user($uid, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
-			if (!api_is_anonymous()) {
-				if (!empty($image_path['file'])) {
-					$photo = '<center><a class="thickbox" href="'.$image_path['dir'].$image_path['file'].'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($value['firstname'], $value['lastname']).'"  title="'.api_get_person_name($value['firstname'], $value['lastname']).'" /></a></center>';
-				} else {
-					$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($value['firstname'], $value['lastname']).'"  title="'.api_get_person_name($value['firstname'], $value['lastname']).'" /></center>';
-				}
+			$image_path 	= UserManager::get_user_picture_path_by_id($uid, 'web', false);
+			$user_profile 	= UserManager::get_picture_user($uid, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
+			
+			if (!empty($image_path['file'])) {
+				$photo = '<center><a class="thickbox" href="'.$image_path['dir'].$image_path['file'].'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></a></center>';
 			} else {
-				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($value['firstname'], $value['lastname']).'" title="'.api_get_person_name($value['firstname'], $value['lastname']).'" /></center>';
+				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></center>';
 			}
-			$value['photo'] = $photo;
+			
+			$value['photo'] 	= $photo;
+			$value['firstname'] = $user_data['firstname'];
+			$value['lastname']	= $user_data['lastname'];
+
+			//Sending only 5 items in the array instead of 60 
 			$a_users[$key] = $value;
 		}
 		return $a_users;
@@ -462,8 +465,8 @@ class Attendance
 		
 		// initializing database table and variables
 		$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT);				
-		$user_id = intval($user_id);
-		$attendance_id = intval($attendance_id);
+		$user_id 		= intval($user_id);
+		$attendance_id 	= intval($attendance_id);
 		$results = array();
 		$attendance_data 		= $this->get_attendance_by_id($attendance_id);
 		$total_done_attendance 	= $attendance_data['attendance_qualify_max'];
@@ -477,12 +480,14 @@ class Attendance
 		$results['total']			= $total_done_attendance;
 		$results['faults_porcent'] 	= $faults_porcent;
 		$color_bar = '';
+		
 		if ($faults_porcent > 25  ) {
 			$color_bar = '#F11';
 		} else if ($faults_porcent > 10) {
 			$color_bar = '#F90';
 		}
 		$results['color_bar'] = $color_bar;
+
 		return $results;
 	}
 	
@@ -494,7 +499,8 @@ class Attendance
 	public function get_faults_average_inside_courses($user_id) {
 		
 		// get all courses of current user
-		$courses = CourseManager::get_courses_list_by_user_id($user_id, true);		
+		$courses = CourseManager::get_courses_list_by_user_id($user_id, true);	
+			
 		$user_id = intval($user_id);		
 		$results = array();
 		$total_faults = $total_weight = $porcent = 0;
@@ -502,13 +508,13 @@ class Attendance
 			//$course_code = $course['code'];
 			//$course_info = api_get_course_info($course_code);
 			$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT, $course['db_name']);
+			
 			$attendances_by_course = $this->get_attendances_list($course['db_name']);
 												
-			foreach ($attendances_by_course as $attendance) {					
-				// get total faults and total weight											
-				$attendance_id = $attendance['id'];				
+			foreach ($attendances_by_course as $attendance) {									
+				// get total faults and total weight
 				$total_done_attendance 	= $attendance['attendance_qualify_max'];				
-				$sql = "SELECT score FROM $tbl_attendance_result WHERE user_id='$user_id' AND attendance_id='$attendance_id'";
+				$sql = "SELECT score FROM $tbl_attendance_result WHERE user_id=$user_id AND attendance_id=".$attendance['id'];
 				$rs = Database::query($sql);
 				$score = 0;
 				if (Database::num_rows($rs) > 0) {
@@ -548,10 +554,9 @@ class Attendance
 		$attendances_by_course = $this->get_attendances_list($course_info['dbName'], $session_id);						
 		
 		foreach ($attendances_by_course as $attendance) {					
-			// get total faults and total weight											
-			$attendance_id = $attendance['id'];				
+			// Get total faults and total weight
 			$total_done_attendance 	= $attendance['attendance_qualify_max'];				
-			$sql = "SELECT score FROM $tbl_attendance_result WHERE user_id='$user_id' AND attendance_id='$attendance_id'";
+			$sql = "SELECT score FROM $tbl_attendance_result WHERE user_id=$user_id AND attendance_id=".$attendance['id'];
 			$rs = Database::query($sql);
 			$score = 0;
 			if (Database::num_rows($rs) > 0) {
@@ -582,8 +587,7 @@ class Attendance
 		global $dateTimeFormatLong;
 		$tbl_attendance_sheet 	= Database::get_course_table(TABLE_ATTENDANCE_SHEET);
 		$tbl_attendance_calendar= Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-		$attendance_id = intval($attendance_id);
-
+		
 		$attendance_calendar = $this->get_attendance_calendar($attendance_id);
 		$calendar_ids = array();
 		// get all dates from calendar by current attendance

@@ -14,7 +14,7 @@
 *	- sticky messages
 * 	- new view option: nested view
 * 	- quoting a message
-*
+*	
 * 	@package chamilo.forum
 *
 * @todo several functions have to be moved to the itemmanager library
@@ -522,7 +522,7 @@ function store_forum($values) {
 
 	$session_id = api_get_session_id();
 	$clean_title = Database::escape_string($values['forum_title']);
-
+		
 	// forum images
 	$image_moved=false;
 	if (!empty($_FILES['picture']['name'])) {
@@ -580,16 +580,16 @@ function store_forum($values) {
 		$sql="UPDATE ".$table_forums." SET
 				forum_title='".$clean_title."',
 				".$sql_image."
-				forum_comment='".Database::escape_string($values['forum_comment'])."',
-				forum_category='".Database::escape_string($values['forum_category'])."',
-				allow_anonymous='".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
-				allow_edit='".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
+				forum_comment='".	Database::escape_string($values['forum_comment'])."',
+				forum_category='".	Database::escape_string($values['forum_category'])."',
+				allow_anonymous='".	Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
+				allow_edit='".		Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
 				approval_direct_post='".Database::escape_string(isset($values['approval_direct_group']['approval_direct'])?$values['approval_direct_group']['approval_direct']:null)."',
 				allow_attachments='".Database::escape_string(isset($values['allow_attachments_group']['allow_attachments'])?$values['allow_attachments_group']['allow_attachments']:null)."',
 				allow_new_threads='".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
 				forum_group_public_private='".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
-				default_view='".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
-				forum_of_group='".Database::escape_string($values['group_forum'])."'
+				default_view='".	Database::escape_string($values['default_view_type_group']['default_view_type'])."',
+				forum_of_group='".	Database::escape_string($values['group_forum'])."'
 			WHERE forum_id='".Database::escape_string($values['forum_id'])."'";
 			Database::query($sql);
 			api_item_property_update($_course, TOOL_FORUM, Database::escape_string($values['forum_id']), 'ForumUpdated', api_get_user_id());
@@ -604,9 +604,9 @@ function store_forum($values) {
 
 		$sql="INSERT INTO ".$table_forums."
 			(forum_title, forum_image, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
-			VALUES ('".Security::remove_XSS($clean_title)."',
+			VALUES ('".$clean_title."',
 				".$sql_image."
-				'".Database::escape_string(isset($values['forum_comment'])?Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_comment'])),COURSEMANAGERLOWSECURITY):null)."',
+				'".Database::escape_string(isset($values['forum_comment'])?$values['forum_comment']:null)."',
 				'".Database::escape_string(isset($values['forum_category'])?$values['forum_category']:null)."',
 				'".Database::escape_string(isset($values['allow_anonymous_group']['allow_anonymous'])?$values['allow_anonymous_group']['allow_anonymous']:null)."',
 				'".Database::escape_string(isset($values['students_can_edit_group']['students_can_edit'])?$values['students_can_edit_group']['students_can_edit']:null)."',
@@ -618,7 +618,9 @@ function store_forum($values) {
 				'".Database::escape_string(isset($values['public_private_group_forum_group']['public_private_group_forum'])?$values['public_private_group_forum_group']['public_private_group_forum']:null)."',
 				'".Database::escape_string(isset($new_max)?$new_max:null)."',
 				".intval($session_id).")";
+		
 		Database::query($sql);
+		
 		$last_id = Database::insert_id();
 		if ($last_id > 0) {
 			api_item_property_update($_course, TOOL_FORUM, $last_id, 'ForumAdded', api_get_user_id());
@@ -2985,17 +2987,17 @@ function move_thread_form() {
 			<span class="form_required">*</span>'.get_lang('MoveTo').'
 		</div>
 		<div class="formw">';
-	$htmlcontent .= "<SELECT NAME='forum'>\n";
+	$htmlcontent .= "<SELECT NAME='forum'>";
 	foreach ($forum_categories as $key=>$category) {
-		$htmlcontent.="\t<OPTGROUP LABEL=\"".$category['cat_title']."\">\n";
+		$htmlcontent.="<OPTGROUP LABEL=\"".$category['cat_title']."\">";
 		foreach ($forums as $key=>$forum) {
 			if ($forum['forum_category']==$category['cat_id']) {
-				$htmlcontent.="\t\t<OPTION VALUE='".$forum['forum_id']."'>".$forum['forum_title']."</OPTION>\n";
+				$htmlcontent.="<OPTION VALUE='".$forum['forum_id']."'>".$forum['forum_title']."</OPTION>";
 			}
 		}
-		$htmlcontent.="\t</OPTGROUP>\n";
+		$htmlcontent.="</OPTGROUP>";
 	}
-	$htmlcontent.="</SELECT>\n";
+	$htmlcontent.="</SELECT>";
 	$htmlcontent .= '	</div>
 					</div>';
 
@@ -3362,13 +3364,14 @@ function add_forum_attachment_file($file_comment,$last_id) {
 				$new_file_name = uniqid('');
 				$new_path=$updir.'/'.$new_file_name;
 				$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-				$safe_file_comment= Database::escape_string($file_comment);
-				$safe_file_name = Database::escape_string($file_name);
+				$safe_file_comment	= Database::escape_string($file_comment);
+				$safe_file_name		= Database::escape_string($file_name);
 				$safe_new_file_name = Database::escape_string($new_file_name);
+				$last_id = intval($last_id);
 				// Storing the attachments if any
 				if ($result) {
-					$sql="INSERT INTO $agenda_forum_attachment(filename,comment, path,post_id,size)
-						  VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$last_id', '".$_FILES['user_upload']['size']."' )";
+					$sql="INSERT INTO $agenda_forum_attachment(filename, comment, path, post_id, size)
+						  VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$last_id', '".intval($_FILES['user_upload']['size'])."' )";
 					$result=Database::query($sql);
 					$message.=' / '.get_lang('FileUploadSucces').'<br />';
 
@@ -3583,11 +3586,11 @@ function get_forums_of_group($group_id) {
 	// finding the last post information (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
 	if (is_array($forum_list)) {
 		foreach ($forum_list as $key=>$value) {
-			$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit());
-			$forum_list[$key]['last_post_id']=$last_post_info_of_forum['last_post_id'];
-			$forum_list[$key]['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
-			$forum_list[$key]['last_post_date']=$last_post_info_of_forum['last_post_date'];
-			$forum_list[$key]['last_poster_name']=$last_post_info_of_forum['last_poster_name'];
+			$last_post_info_of_forum		 		= get_last_post_information($key,is_allowed_to_edit());
+			$forum_list[$key]['last_post_id']		= $last_post_info_of_forum['last_post_id'];
+			$forum_list[$key]['last_poster_id']		= $last_post_info_of_forum['last_poster_id'];
+			$forum_list[$key]['last_post_date']		= $last_post_info_of_forum['last_post_date'];
+			$forum_list[$key]['last_poster_name']	= $last_post_info_of_forum['last_poster_name'];
 			$forum_list[$key]['last_poster_lastname']=$last_post_info_of_forum['last_poster_lastname'];
 			$forum_list[$key]['last_poster_firstname']=$last_post_info_of_forum['last_poster_firstname'];
 		}
@@ -3802,7 +3805,7 @@ function count_number_of_post_for_user_thread($thread_id, $user_id) {
 	$table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
 
 	$sql = "SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."'
-																			AND poster_id = '".Database::escape_string($user_id)."' ";
+			AND poster_id = '".Database::escape_string($user_id)."' ";
 	$result = Database::query($sql);
 	return count(Database::store_result($result));
 }
@@ -3833,9 +3836,9 @@ function count_number_of_user_in_course($course_id) {
 */
 function get_statistical_information($thread_id, $user_id, $course_id) {
 	$stadistic = array();
-	$stadistic['user_course'] = count_number_of_user_in_course($course_id);
-	$stadistic['post'] = count_number_of_post_in_thread($thread_id);
-	$stadistic['user_post'] = count_number_of_post_for_user_thread($thread_id, $user_id);
+	$stadistic['user_course']	= count_number_of_user_in_course($course_id);
+	$stadistic['post'] 			= count_number_of_post_in_thread($thread_id);
+	$stadistic['user_post'] 	= count_number_of_post_for_user_thread($thread_id, $user_id);
 
 	//$stadistic['average'] = get_average_of_thread_post_user();
 	return $stadistic;
@@ -3887,10 +3890,9 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
  * return String
  * @author Christian Fasanando
  */
- function get_name_user_by_id($user_id) {
+ function get_name_user_by_id($user_id) { 	
 	$t_users = Database :: get_main_table(TABLE_MAIN_USER);
-
-	$sql = "SELECT firstname, lastname FROM ".$t_users." WHERE user_id = '".$user_id."' ";
+	$sql = "SELECT firstname, lastname FROM ".$t_users." WHERE user_id = '".intval($user_id)."' ";
 	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 	return api_get_person_name($row[0], $row[1]);
@@ -3900,10 +3902,11 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
  * @param int thread_id
  * @return String
  * @author Christian Fasanando
+ * @author Julio Montoya <gugli100@gmail.com> Adding security
  **/
  function get_name_thread_by_id($thread_id) {
-	$t_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD,'');
-	$sql ="SELECT thread_title FROM ".$t_forum_thread." WHERE thread_id = '".$thread_id."' ";
+	$t_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD,'');	
+	$sql ="SELECT thread_title FROM ".$t_forum_thread." WHERE thread_id = '".intval($thread_id)."' ";
 	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 	return $row[0];
@@ -3957,7 +3960,7 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
 				$forum_results .='<div id="social-forum">';
  				$forum_results .='<div class="clear"></div><br />';
  				$forum_results .='<div id="social-forum-title">'.
- 									Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.$forum['forum_title'].
+ 									Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum['forum_title'], STUDENT).
 									'<div style="float:right;margin-top:-35px"><a href="../forum/viewforum.php?cidReq='.$my_course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a></div></div>';
  				$forum_results .='<br / >';
  				if ($post_counter > 0 ) {

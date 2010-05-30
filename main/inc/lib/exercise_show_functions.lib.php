@@ -1,7 +1,6 @@
 <?php
 /* See license terms in /license.txt */
 /**
-==============================================================================
 * EVENTS LIBRARY
 *
 * This is the events library for Chamilo.
@@ -11,7 +10,6 @@
 *
 * @package chamilo.library
 * @todo convert queries to use Database API
-==============================================================================
 */
 
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);

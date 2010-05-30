@@ -39,9 +39,7 @@
 */
 
 /*
-==============================================================================
 	   Variables
-==============================================================================
 */
 
 // regroup table names for maintenance purpose
@@ -171,11 +169,11 @@ function decodeOpenInfos() {
     ignore_user_abort($ignore);
 }
 
-/***************************************************************************
+/*
  *
  *		Utils
  *
- ***************************************************************************/
+ */
 
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
@@ -187,6 +185,7 @@ function decodeOpenInfos() {
  */
 function cleanProcessedRecords( $limit ) {
     global $TABLETRACK_OPEN;
+    $limit = Database::escape_string($limit);
     $sql = "UPDATE `".$TABLETRACK_OPEN."`
                             SET open_remote_host = '',
                                     open_agent = '',
@@ -196,11 +195,10 @@ function cleanProcessedRecords( $limit ) {
     Database::query("OPTIMIZE TABLE $TABLETRACK_OPEN");
 }
 
-/***************************************************************************
+/**
+ * 	Provider
  *
- *		Provider
- *
- ***************************************************************************/
+ **/
 
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>

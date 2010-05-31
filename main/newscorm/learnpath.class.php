@@ -7301,7 +7301,7 @@ class learnpath {
 			$return .= '<div class="lp_resource_element">';
 			//display quizhotpotatoes
 			$return .= '<img alt="" src="../img/jqz.gif" style="margin-right:5px;" title="" />';
-			$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">' . ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : $row_hot['title']) . '</a>';
+			$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">' . ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security :: remove_XSS($row_hot['title'])) . '</a>';
 			//$return .= $row_quiz['title'];
 			$return .= '</div>';
 		}
@@ -7309,7 +7309,7 @@ class learnpath {
 		while ($row_quiz = Database :: fetch_array($res_quiz)) {
 			$return .= '<div class="lp_resource_element">';
 			$return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
-			$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_quiz['title'] . '</a>';
+			$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' . Security :: remove_XSS($row_quiz['title']) . '</a>';
 			//$return .= $row_quiz['title'];
 			$return .= '</div>';
 		}
@@ -7419,13 +7419,13 @@ class learnpath {
 			if (!empty($forum['forum_id'])) {
 			$return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a style="cursor:hand" onclick="toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle"><img src="' . api_get_path(WEB_IMG_PATH) . 'add.gif" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" /></a>
-									<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . $forum['forum_title'] . '</a><ul style="display:none" id="forum_' . $forum['forum_id'] . '_content">';
+									<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . Security :: remove_XSS($forum['forum_title']) . '</a><ul style="display:none" id="forum_' . $forum['forum_id'] . '_content">';
 			}
 
 			$a_threads = get_threads($forum['forum_id']);
 			if (is_array($a_threads)) {
 				foreach ($a_threads as $thread) {
-					$return .= '<li><a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . $thread['thread_title'] . '</a></li>';
+					$return .= '<li><a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' . Security :: remove_XSS($thread['thread_title']) . '</a></li>';
 				}
 			}
 			$return .= '</ul></div>';

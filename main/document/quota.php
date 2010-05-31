@@ -41,10 +41,15 @@ Display::display_header($nameTools,'Doc');
 function display_quota($course_quota, $already_consumed_space) {
 	$course_quota_m = round($course_quota / 1000000);
 	$already_consumed_space_m = round($already_consumed_space / 1000000);
-	$message = get_lang('CourseCurrentlyUses') . ' <strong>' . $already_consumed_space_m . ' megabyte</strong>.<br />'. get_lang('MaximumAllowedQuota') . ' <strong>'.$course_quota_m.' megabyte</strong>.<br />';
-
+	
+	
+	$message = get_lang('MaximumAllowedQuota') . ' <strong>'.$course_quota_m.' megabyte</strong>.<br />';
+	$message .= get_lang('CourseCurrentlyUses') . ' <strong>' . $already_consumed_space_m . ' megabyte</strong>.<br />';	
+	
+	
 	$percentage = $already_consumed_space / $course_quota * 100;
-	$percentage = round($percentage);
+	
+	$percentage = round($percentage, 1);	
 
 	$other_percentage = $percentage < 100 ? 100 - $percentage : 0;
 

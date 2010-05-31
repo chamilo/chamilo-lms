@@ -197,8 +197,6 @@ if ($is_drh || $_GET['display'] == 'yourstudents') {
 // Actions menu
 $nb_menu_items = count($menu_items);
 
-
-
 if ($nb_teacher_courses > 0 ) {
 	echo '<div class="actions-title" style ="font-size:10pt;">';	
 	if ($nb_menu_items > 1) {
@@ -215,11 +213,11 @@ if ($nb_teacher_courses > 0 ) {
 	} else {
 		echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '' : '<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 	}
-	echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/statistics.gif">&nbsp;'.get_lang('MyStats').'</a> ';
+	echo '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/statistics.gif">&nbsp;'.get_lang('MyStats').'</a> ';
 	echo '</div>';	
 } else {
 	echo '<div class="actions-title" style ="font-size:10pt;">';
-	echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/reporting.gif">&nbsp;'.get_lang('MyStats').'</a> ';
+	echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/statistics.gif">&nbsp;'.get_lang('MyStats').'</a> ';
 	
 	echo '</div>';
 	Display::display_warning_message(get_lang('HaveNoCourse'));

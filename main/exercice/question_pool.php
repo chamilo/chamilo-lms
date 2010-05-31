@@ -40,11 +40,12 @@ if(isset($_GET['exerciseId'])){
 	$exerciseId = intval($_GET['exerciseId']);
 }
 if(isset($_GET['exerciseLevel'])){
-	$exerciseLevel = intval($_GET['exerciseLevel']);
+	$exerciseLevel = intval($_REQUEST['exerciseLevel']);
 }
 if(isset($_GET['answerType'])){
-	$answerType = intval($_GET['answerType']);
+	$answerType = intval($_REQUEST['answerType']);
 }
+$page = 0;
 if(!empty($_GET['page'])){
 	$page = intval($_GET['page']);
 }
@@ -136,8 +137,7 @@ if($is_allowedToEdit) {
 		// destruction of the Question object
 		unset($objQuestionTmp);
 
-        if(!$objExcercise instanceOf Exercise)
-        {
+        if(!$objExcercise instanceOf Exercise) {
         	$objExercise = new Exercise();
             $objExercise->read($fromExercise);
         }
@@ -176,7 +176,7 @@ if (isset($_SESSION['gradebook'])){
 
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
 			'name' => get_lang('ToolGradebook')
 		);
 }
@@ -186,35 +186,25 @@ $nameTools=get_lang('QuestionPool');
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 
 // if admin of course
-if($is_allowedToEdit)
-{
-	Display::display_header($nameTools,"Exercise");
-?>
-
-<h3><?php echo $nameTools; ?></h3>
-
-<div class="actions">
-	
-	<?php
-	
+if($is_allowedToEdit) {
+	Display::display_header($nameTools,'Exercise');
+	echo '<h3>'.$nameTools.'</h3>';
+	echo '<div class="actions">';
 	if (isset($type)) {
 		$url = api_get_self().'?type=1';
 	} else {
 		$url = api_get_self();
 	}
-	?>
-
-	<form method="get" action="<?php echo $url; ?>" style="display:inline;">
-	<?php
+	echo '<form method="GET" action="'.$url.'" style="display:inline;">';
+	 
 	if (isset($type)) {
 		echo '<input type="hidden" name="type" value="1">';
 	}
+	echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
+	echo get_lang('Exercice').' :';	
+	echo '<select name="exerciseId">';	
+	echo '<option value="0">'.get_lang('AllExercises').'</option>';
 	?>
-	<input type="hidden" name="fromExercise" value="<?php echo $fromExercise; ?>">
-
-	<?php echo get_lang('Exercice'); ?> :
-	<select name="exerciseId">
-	<option value="0"><?php echo get_lang('AllExercises'); ?></option>
 	<option value="-1" <?php if($exerciseId == -1) echo 'selected="selected"'; ?>><?php echo get_lang('OrphanQuestions'); ?></option>
 	<?php
 	$sql="SELECT id,title FROM $TBL_EXERCICES WHERE id<>'".Database::escape_string($fromExercise)."' AND active<>'-1' ORDER BY id";
@@ -260,7 +250,7 @@ if($is_allowedToEdit)
 				$selected ='';
 				if ($answer_type!=0) {
 					if ($answerType == $answer_type)
-					$selected = ' selected="selected" ';
+						$selected = ' selected="selected" ';
 					if ($answer_type==-1) {echo '<option value="-1" '.$selected.'>'.get_lang('Any').'</option>'; } // check 0 or -1
 					elseif ($answer_type==1) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('UniqueAnswer').'</option>'; }
 					elseif ($answer_type==2) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('MultipleAnswer').'</option>'; }
@@ -379,8 +369,9 @@ if($is_allowedToEdit)
 		if (isset($answerType) && $answerType != -1) {
 			$filter .= ' AND qu.type='.$answerType.' ';
 		}
-
-		$sql="SELECT qu.id, question, qu.type, level, q.session_id FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q WHERE q.id=qt.exercice_id AND qu.id=qt.question_id AND qt.exercice_id<>".$fromExercise." $filter ORDER BY session_id ASC";
+		$new_limit_page = $limitQuestPage + 1;
+		$sql="SELECT qu.id, question, qu.type, level, q.session_id FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q
+			  WHERE q.id=qt.exercice_id AND qu.id=qt.question_id AND qt.exercice_id<>".$fromExercise." $filter ORDER BY session_id ASC LIMIT $from, $new_limit_page";
 		// forces the value to 0
 		//echo $sql;
 		$exerciseId=0;
@@ -398,15 +389,23 @@ if($is_allowedToEdit)
 	 '<td align="right">';
 
 	if(!empty($page)) {
-		echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page-1),'">&lt;&lt; ',get_lang('PreviousPage'),'</a> | ';
+		echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page-1),'&answerType=',$answerType,'&exerciseLevel='.$exerciseLevel.'">';
+		echo Display::return_icon('action_prev.png');
+		echo '&nbsp;'.get_lang('PreviousPage'),'</a> | ';
+		
 	} elseif($nbrQuestions > $limitQuestPage) {
-		echo '&lt;&lt; ',get_lang('PreviousPage'),' | ';
+		echo Display::return_icon('action_prev_na.png');
+		echo '&nbsp;'.get_lang('PreviousPage'),' | ';
 	}
 
 	if($nbrQuestions > $limitQuestPage) {
-    	echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page+1),'">',get_lang('NextPage'),' &gt;&gt;</a>';
+    	echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page+1),'&answerType=',$answerType,'&exerciseLevel='.$exerciseLevel.'">',get_lang('NextPage').'&nbsp;';
+    	echo Display::return_icon('action_next.png');
+    	echo '</a>';
+    	
 	} elseif($page) {
-	   echo '  ',get_lang('NextPage'),' &gt;&gt;';
+	   echo get_lang('NextPage');
+	   echo '&nbsp;'.Display::return_icon('action_next_na.png');
 	}
     echo '</td>
 	</tr>
@@ -476,7 +475,6 @@ if($is_allowedToEdit)
 			if($i == $limitQuestPage) {
 				break;
 			}
-
 			$i++;
 		}
 	}
@@ -498,5 +496,4 @@ if($is_allowedToEdit)
 	// if not admin of course
 	api_not_allowed(true);
 }
-
 ?>

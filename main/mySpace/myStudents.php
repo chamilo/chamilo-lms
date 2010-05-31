@@ -590,7 +590,7 @@ if ($timezone !== null) {
 ?>
 						</th>
 				<?php		
-					echo '<th>'.get_lang('Detail').'</th>'; 
+					echo '<th>'.get_lang('Details').'</th>'; 
 					if (api_is_platform_admin(true)) {
 						echo '<th>'.get_lang('ResetLP').'</th>';
 					}

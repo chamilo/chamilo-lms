@@ -98,7 +98,7 @@ if ($form->validate()) {
 }
 ?>
 <script>
-var ddlObj1=$("#questiontypes").finalselect({id:"test",viewWidth:'260px', viewHeight:'150px', selectText:'<?php echo Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle; cursor:hand'))."&nbsp;&nbsp;".get_lang('SelectQuestionType');?>',selectImage:'<?php echo api_get_path(WEB_IMG_PATH); ?>select.png', viewMouseoverColor: '#EFEFEF'});
+var ddlObj1=$("#questiontypes").finalselect({id:"test",viewWidth:'260px', viewHeight:'150px', selectText:'<?php echo Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle; cursor:hand'))."&nbsp;&nbsp;<a href=\"#\"> ".get_lang('SelectQuestionType'); echo "</a>"; ?>',selectImage:'<?php echo api_get_path(WEB_IMG_PATH); ?>select.png', viewMouseoverColor: '#EFEFEF'});
 $("#test-select").bind('click',function(){
 	$("#question_type_hidden").val(ddlObj1.getText());
 });
@@ -114,7 +114,7 @@ $pictures_question_types[9] = 'mcmac.gif';
 
 foreach (Question::$questionTypes as $key=>$value) {
 	?>
-	ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],addslashes(get_lang($value[1])),array('height'=>'40px;', 'style' => 'vertical-align:top; cursor:hand;')); ?></td><td><span class="thistext" style="cursor:hand"><?php echo addslashes(get_lang($value[1])); ?></span><br/><sub><?php /*echo addslashes(get_lang($value[1].'Comment'));*/ ?></sub></td></tr></table>','');
+	ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],addslashes(get_lang($value[1])),array('height'=>'40px;', 'style' => 'vertical-align:top; cursor:hand;')); ?></td><td><span class="thistext" style="cursor:hand"><?php echo '<a href="#">'.addslashes(get_lang($value[1])).'</a>'; ?></span><br/><sub><?php /*echo addslashes(get_lang($value[1].'Comment'));*/ ?></sub></td></tr></table>','');
 	<?php
 }
 ?>

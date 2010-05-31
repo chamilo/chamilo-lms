@@ -138,6 +138,13 @@ function who_is_online($valid, $friends = false) {
 		//$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'
 		$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." e INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' ORDER BY picture_uri DESC";		
 	}
+	
+	/*
+	//This query will show all registered users. Only for dev purposes.
+		$query = "SELECT DISTINCT u.user_id as login_user_id, login_date 
+		FROM ".$track_online_table ."  e , $table_user u 
+		GROUP by u.user_id  ORDER BY picture_uri DESC";
+	}*/
 
 	global $_configuration;
 	if ($_configuration['multiple_access_urls']==true) {

@@ -99,29 +99,29 @@ class HTMLPurifier
 			//non initialize object htmlpurifier
 			$this->my_user_status=COURSEMANAGERLOWSECURITY;
 		} else {
-		$config = HTMLPurifier_Config::createDefault();
-		$config->set('Core.Encoding',$charset);
-		$config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
-
-		if ($user_status==STUDENT) {
-			global $tag_student,$attribute_student;//$tag_student
-	   		$config->set('HTML.SafeEmbed',true);
-	   		$config->set('HTML.SafeObject',true);
-			$config->set('Filter.YouTube', true);
-	   		$config->set('HTML.AllowedElements',$tag_student);
-			$config->set('HTML.AllowedAttributes',$attribute_student);
-		} elseif ($user_status==COURSEMANAGER) {
-			//activate in configuration setting
-			global $tag_teacher,$attribute_teacher;
-	   		$config->set('HTML.SafeEmbed',true);
-			$config->set('Filter.YouTube', true);
-	   		$config->set('HTML.AllowedElements',$tag_teacher);
-			$config->set('HTML.AllowedAttributes', $attribute_teacher);
-		} else {
-			global $tag_anonymous,$attribute_anonymous;
-	   		$config->set('HTML.AllowedElements', $tag_anonymous);
-			$config->set('HTML.AllowedAttributes',$attribute_anonymous);
-		}
+			$config = HTMLPurifier_Config::createDefault();
+			$config->set('Core.Encoding',$charset);
+			$config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
+	
+			if ($user_status==STUDENT) {
+				global $tag_student,$attribute_student;//$tag_student
+		   		$config->set('HTML.SafeEmbed',true);
+		   		$config->set('HTML.SafeObject',true);
+				$config->set('Filter.YouTube', true);
+		   		$config->set('HTML.AllowedElements',$tag_student);
+				$config->set('HTML.AllowedAttributes',$attribute_student);
+			} elseif ($user_status==COURSEMANAGER) {
+				//activate in configuration setting
+				global $tag_teacher,$attribute_teacher;
+		   		$config->set('HTML.SafeEmbed',true);
+				$config->set('Filter.YouTube', true);
+		   		$config->set('HTML.AllowedElements',$tag_teacher);
+				$config->set('HTML.AllowedAttributes', $attribute_teacher);
+			} else {
+				global $tag_anonymous,$attribute_anonymous;
+		   		$config->set('HTML.AllowedElements', $tag_anonymous);
+				$config->set('HTML.AllowedAttributes',$attribute_anonymous);
+			}
 			$config->set('HTML.TidyLevel', 'light');
         	$this->config = HTMLPurifier_Config::create($config);
         	$this->strategy     = new HTMLPurifier_Strategy_Core();

@@ -119,7 +119,7 @@ if (!empty($_POST['old_version'])) {
 }
 
 $new_version = '1.8.7';
-$new_version_stable = false;
+$new_version_stable = true;
 $new_version_major = true;
 $software_name = 'Chamilo';
 $software_url = 'http://www.chamilo.org/';
@@ -693,7 +693,7 @@ if ($_POST['step2']) {
 		$perm = api_get_permissions_for_new_directories();
 		$perm_file = api_get_permissions_for_new_files();
 
-		if (empty($my_old_version)) { $my_old_version = '1.8.6'; } //we guess
+		if (empty($my_old_version)) { $my_old_version = '1.8.6.2'; } //we guess
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
         error_log('Starting migration process from '.$my_old_version.' ('.time().')', 0);

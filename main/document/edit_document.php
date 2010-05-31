@@ -448,7 +448,7 @@ if (file_exists($filepath.$doc)) {
 /*	Display user interface */
 
 // Display the header
-$nameTools = get_lang('EditDocument') . ': '.$file_name;
+$nameTools = get_lang('EditDocument') . ': '.$oldTitle;
 Display::display_header($nameTools, 'Doc');
 
 // Display the tool title
@@ -541,7 +541,8 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 			$checked->setChecked(true);
 		}
 	}
-		if ($is_certificate_mode)
+	
+	if ($is_certificate_mode)
 		$form->addElement('style_submit_button', 'submit', get_lang('SaveCertificate'), 'class="save"');
 	else
 		$form->addElement('style_submit_button','submit',get_lang('SaveDocument'), 'class="save"');
@@ -562,7 +563,7 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 	/*
 	$form->addElement('html', '<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
 	*/
-if (isset($_REQUEST['curdirpath']) && $_GET['curdirpath']=='/certificates') {
+	if (isset($_REQUEST['curdirpath']) && $_GET['curdirpath']=='/certificates') {
 		$all_information_by_create_certificate=DocumentManager::get_all_info_to_certificate();
 		$str_info='';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
@@ -571,6 +572,7 @@ if (isset($_REQUEST['curdirpath']) && $_GET['curdirpath']=='/certificates') {
 		$create_certificate=get_lang('CreateCertificateWithTags');
 		Display::display_normal_message($create_certificate.': <br /><br />'.$str_info,false);
 	}
+	
 	if ($is_certificate_mode) {
 		echo '<div class="actions">';
 				echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview').'</a>';
@@ -582,6 +584,7 @@ if (isset($_REQUEST['curdirpath']) && $_GET['curdirpath']=='/certificates') {
 			nav_to_slideshow($slide_id);
 		}
 	}
+	
 	$form->display();
 	//Display::display_error_message(get_lang('ReadOnlyFile'));
 }

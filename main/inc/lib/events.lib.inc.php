@@ -300,7 +300,7 @@ function event_upload($doc_id)
 				  upload_cours_id,
 				  upload_work_id,
 				  upload_date,
-				  updload_session_id
+				  upload_session_id
 				)
 				VALUES (
 				 ".$user_id.",

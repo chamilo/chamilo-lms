@@ -5,22 +5,22 @@
  *	This file will show documents in a separate frame.
  *	We don't like frames, but it was the best of two bad things.
  *
- *	display html files within Dokeos - html files have the Dokeos header.
+ *	display html files within Chamilo - html files have the Chamilo header.
  *
  *	--- advantages ---
- *	users "feel" like they are in Dokeos,
+ *	users "feel" like they are in Chamilo,
  *	and they can use the navigation context provided by the header.
  *
  *	--- design ---
  *	a file gets a parameter (an html file)
  *	and shows
- *	- dokeos header
+ *	- chamilo header
  *	- html file from parameter
- *	- (removed) dokeos footer
+ *	- (removed) chamilo footer
  *
  *	@version 0.6
  *	@author Roan Embrechts (roan.embrechts@vub.ac.be)
- *	@package dokeos.document
+ *	@package chamilo.document
  */
 
 /*   INITIALIZATION */

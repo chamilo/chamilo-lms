@@ -1264,4 +1264,5 @@ $CourseDescriptionUpdated = "Description de cours mise à jour";
 $SessionReadOnly = "Lecture seule";
 $SessionAccessible = "Accessible";
 $SessionNotAccessible = "Non accessible";
+$GroupAdded = "Groupe ajouté.";
 ?>

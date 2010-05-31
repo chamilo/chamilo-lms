@@ -300,7 +300,7 @@ $EditNotice = "Edit notice";
 $General = "general";
 $LostPassword = "Lost password";
 $Registration = "Registration";
-$Password = "password";
+$Password = "Password";
 $InsertLink = "Add a page (CMS)";
 $EditNews = "Edit News";
 $EditCategories = "Edit training categories";
@@ -1263,4 +1263,6 @@ $CourseDescriptionUpdated = "Course description updated";
 $SessionReadOnly = "Read only";
 $SessionAccessible = "Accessible";
 $SessionNotAccessible = "Not accessible";
+$GroupAdded = "Group added";
+$AddUsersToGroup = "Add users to group";
 ?>

@@ -1260,7 +1260,9 @@ $AnnouncementVisible = "Anuncio visible";
 $AnnouncementInvisible = "Anuncio invisible";
 $GlossaryDeleted = "Glosario borrado";
 $CourseDescriptionUpdated = "Descripción de curso actualizada";
-$SessionReadOnly = "Lectura sólo";
+$SessionReadOnly = "Sólo lectura";
 $SessionAccessible = "Accesible";
 $SessionNotAccessible = "No accesible";
+$GroupAdded = "Grupo añadido";
+$AddUsersToGroup = "Añadir usuarios al grupo";
 ?>

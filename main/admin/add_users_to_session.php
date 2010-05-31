@@ -58,8 +58,8 @@ if (!api_is_platform_admin()) {
 }
 
 //checking for extra field with filter on
-include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 $extra_field_list= UserManager::get_extra_fields();
 $new_field_list = array();
 if (is_array($extra_field_list)) {

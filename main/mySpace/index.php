@@ -1,4 +1,4 @@
-<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * @todo use constant for $this_section
@@ -53,9 +53,9 @@ $tbl_admin					= Database :: get_main_table(TABLE_MAIN_ADMIN);
 $tbl_track_cours_access 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
 
-/********************
+/*
  * FUNCTIONS
- ********************/
+ */
 
 function count_teacher_courses() {
 	global $nb_teacher_courses;
@@ -98,21 +98,21 @@ function rsort_sessions($a, $b) {
 	}
 }
 
-/**************************
+/*
  * MAIN CODE
- ***************************/
+ */
 
-$is_coach = api_is_coach();
-$is_platform_admin = api_is_platform_admin();
-$is_drh = api_is_drh();
-$is_session_admin = api_is_session_admin();
+$is_coach 			= api_is_coach();
+$is_platform_admin 	= api_is_platform_admin();
+$is_drh 			= api_is_drh();
+$is_session_admin 	= api_is_session_admin();
 
 if ($is_session_admin) {
 	header('location:session.php');
 	exit;
 }
 
-// get views
+// Get views
 $views = array('admin', 'teacher', 'coach', 'drh');
 $view = 'teacher';
 if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
@@ -194,25 +194,31 @@ if ($is_drh || $_GET['display'] == 'yourstudents') {
 	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
 }
 
-// actions menu
-echo '<div class="actions-title" style ="font-size:10pt;">';
+// Actions menu
 $nb_menu_items = count($menu_items);
-if ($nb_menu_items > 1) {
-	foreach ($menu_items as $key => $item) {
-		echo $item;
-		if ($key != $nb_menu_items - 1) {
-			echo '&nbsp;|&nbsp;';
+
+
+if ($nb_teacher_courses > 0 ) {
+	echo '<div class="actions-title" style ="font-size:10pt;">';
+	if ($nb_menu_items > 1) {
+		foreach ($menu_items as $key => $item) {
+			echo $item;
+			if ($key != $nb_menu_items - 1) {
+				echo '&nbsp;|&nbsp;';
+			}
 		}
+	}	
+	echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
+	if ($view == 'admin') {
+		echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '<a href="'.api_get_self().'?display=useroverview&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>' : '';
+	} else {
+		echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '' : '<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 	}
+	echo '</div>';
+} else {
+	Display::display_warning_message(get_lang('HaveNoCourse'));
 }
 
-echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
-if ($view == 'admin') {
-	echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '<a href="'.api_get_self().'?display=useroverview&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>' : '';
-} else {
-	echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '' : '<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
-}
-echo '</div>';
 echo '<h4>'.$title.'</h4>';
 
 if (($is_drh && $view == 'drh') || $_GET['display'] == 'yourstudents') {
@@ -383,9 +389,9 @@ if ($view == 'coach' || $view == 'drh') {
 }
 
 if ($view == 'coach') {
-	/****************************************
+	/**
 	 * Infos about sessions of the coach
-	 ****************************************/
+	 **/
 	$sessions = Tracking :: get_sessions_coached_by_user($_user['user_id']);
 	$nb_sessions = count($sessions);
 	$nb_sessions_past = $nb_sessions_future = $nb_sessions_current = 0;

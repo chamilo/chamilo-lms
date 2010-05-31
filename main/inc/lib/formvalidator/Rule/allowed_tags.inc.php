@@ -33,17 +33,22 @@ $attribute_anonymous=array();
 // ADDRESS
 $allowed_tags_student['address'] =  array();
 // APPLET
+/*
 $allowed_tags_student['applet'] =  array();
 $allowed_tags_student['applet']['codebase'] =  array();
 $allowed_tags_student['applet']['code'] =  array();
 $allowed_tags_student['applet']['name'] =  array();
 $allowed_tags_student['applet']['alt'] =  array();
+*/
+
 // AREA
+/*
 $allowed_tags_student['area'] =  array();
 $allowed_tags_student['area']['shape'] =  array();
 $allowed_tags_student['area']['coords'] =  array();
 $allowed_tags_student['area']['href'] =  array();
 $allowed_tags_student['area']['alt'] =  array();
+*/
 // A
 $allowed_tags_student['a'] =  array();
 $allowed_tags_student['a']['class'] =  array();

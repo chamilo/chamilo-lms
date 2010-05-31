@@ -55,7 +55,7 @@ if (isset($extra_lang_file)) include(api_get_path(INCLUDE_PATH)."../lang/".$lang
 -----------------------------------------------------------
 */
 
-include_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
+require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 
 /*
 -----------------------------------------------------------

@@ -1,9 +1,7 @@
 <?php // $Id: user_fields_add.php 20845 2009-05-19 17:27:22Z cfasanando $
 /* For licensing terms, see /dokeos_license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
 // name of the language file that needs to be included
 $language_file = array('admin','registration');
@@ -12,8 +10,8 @@ $cidReset = true;
 // including necessary libraries
 require ('../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
-include_once ($libpath.'usermanager.lib.php');
-require_once ($libpath.'formvalidator/FormValidator.class.php');
+require_once $libpath.'usermanager.lib.php';
+require_once $libpath.'formvalidator/FormValidator.class.php';
 
 // section for the tabs
 $this_section=SECTION_PLATFORM_ADMIN;

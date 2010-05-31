@@ -2,21 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@author Patrick Cool
- *   @author Julio Montoya Lots of improvements, cleaning, adding security
- *	@package dokeos.document
- */
-
-/*
-Developped by Patrick Cool
-patrick.cool@UGent.be
-Ghent University
-Mai 2004
-http://icto.UGent.be
-
-Improved by Juan Carlos Raña Trabado
-herodoto@telefonica.net
-January 2008
+ *  @author Julio Montoya Lots of improvements, cleaning, adding security	
+ *	@author Patrick Cool patrick.cool@UGent.be Ghent University Mai 2004 
+ *	@author Juan Carlos Raña Trabado herodoto@telefonica.net	January 2008
+ *	@package chamilo.document
 */
 
 // Language files that need to be included
@@ -154,7 +143,7 @@ for ($k = 0; $k < $number_iteration; $k++) {
 	echo '<tr height="'.$thumbnail_height.'">';
 	for ($i = 0; $i < $number_image; $i++) {
 		if (!is_null($image_tag[$p])) {
-			echo '<td  style="border:1px solid; border-color: #CCCCCC #666666 #666666 #CCCCCC;">';
+			echo '<td>';
 			echo '<div align="center"><a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.' ">'.$image_tag[$p].'</a>';
 			echo '</div></td>';
 		}
@@ -209,7 +198,7 @@ if ($slide_id != 'all') {
 		echo '</td>';
 		echo '</tr>';
 		echo '<tr>';
-		echo '<td style="border:1px solid; border-color: #CCCCCC">';
+		echo '<td>';
 		echo $row['comment'];
 		echo '</td>';
 		echo '</tr>';

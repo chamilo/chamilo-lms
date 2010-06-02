@@ -803,12 +803,7 @@ if ($_GET['action']=='wanted')
 	{
 		//$row['linksto']= str_replace("\n".$row["reflink"]."\n", "\n", $row["linksto"]); //remove self reference. TODO: check
 		$rf = explode(" ", trim($row["linksto"]));//wanted pages without /n only blank " "
-		$refs = array_merge($refs, $rf);
-		if ($n++ > 299)
-		{
-			$refs = array_unique($refs);
-			$n=0;
-		} // (clean-up only every 300th loop). Thanks to Erfurt Wiki
+		$refs = array_unique($rf);
 	}
 
 	//sort linksto. Find linksto into reflink. If not found ->page is wanted

@@ -83,8 +83,8 @@ function links_to($input)
 			}
 		    else
 			{
-				$link=$value;
-				$title=$value;
+				$link=trim($value);
+				$title=trim($value);
 	        }
 
 			unset($input_array[$key-1]);

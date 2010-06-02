@@ -225,8 +225,8 @@ function make_wiki_link_clickable($input)
 		      }
 		      else
 			  {
-				$link=$value;
-				$title=$value;
+				$link=trim($value);
+				$title=trim($value);
 	          }
 
 			//if wikilink is homepage

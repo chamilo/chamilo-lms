@@ -269,8 +269,8 @@ function save_wiki() {
 
 	// cleaning the variables
 	$_clean['page_id']		= Database::escape_string($_POST['page_id']);
-	$_clean['reflink']		= Database::escape_string($_POST['reflink']);
-	$_clean['title']		= Database::escape_string($_POST['title']);
+	$_clean['reflink']		= Database::escape_string(trim($_POST['reflink']));
+	$_clean['title']		= Database::escape_string(trim($_POST['title']));
 	$_clean['content']		= Database::escape_string($_POST['content']);
 	$_clean['user_id']		= api_get_user_id();
 	$_clean['assignment']	= Database::escape_string($_POST['assignment']);
@@ -434,12 +434,12 @@ function save_new_wiki() {
 	$session_id = api_get_session_id();
 
 	if($_clean['assignment']==2 || $_clean['assignment']==1) {// Unlike ordinary pages of pages of assignments. Allow create a ordinary page although there is a assignment with the same name
-		$_clean['reflink']=Database::escape_string(str_replace(' ','_',$_POST['title']."_uass".$assig_user_id));
+		$_clean['reflink']=Database::escape_string(str_replace(' ','_',trim($_POST['title'])."_uass".$assig_user_id));
     } else {
-	 	$_clean['reflink']=Database::escape_string(str_replace(' ','_',$_POST['title']));
+	 	$_clean['reflink']=Database::escape_string(str_replace(' ','_',trim($_POST['title'])));
 	}
 
-	$_clean['title']=Database::escape_string($_POST['title']);
+	$_clean['title']=Database::escape_string(trim($_POST['title']));
 	$_clean['content']= Database::escape_string($_POST['content']);
 
 	if($_clean['assignment']==2)  {//config by default for individual assignment (students)

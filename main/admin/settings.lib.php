@@ -368,7 +368,7 @@ function upload_stylesheet($values,$picture)
 				}
 			}
 			if($valid == false) {
-				Display::display_error_message(get_lang('ErrorFileExtensionInsideZip'));
+				Display::display_error_message(get_lang('ErrorStylesheetFilesExtensionsInsideZip'));
 			} else {
 				// Extract zip file
 				$zip->extractTo(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/');

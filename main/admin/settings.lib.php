@@ -221,7 +221,7 @@ function handle_stylesheets()
 	$form->addElement('text','name_stylesheet',get_lang('NameStylesheet'),array('size' => '40', 'maxlength' => '40'));
 	$form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
-	$allowed_file_types = array ('css');
+	$allowed_file_types = array ('css', 'zip', 'jpeg', 'jpg', 'png', 'gif');
 	$form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
 	$form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Ok'), array('class'=>'save'));
@@ -350,9 +350,38 @@ function upload_stylesheet($values,$picture)
 	{
 		mkdir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/', api_get_permissions_for_new_directories());
 	}
-
-	// move the file in the folder
-	move_uploaded_file($picture['tmp_name'], api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'.$picture['name']);
+	
+	$info = pathinfo($picture['name']);
+	if($info['extension'] == 'zip') {
+		// Try to open the file and extract it in the theme
+		$zip = new ZipArchive();
+		if($zip->open($picture['tmp_name'])) {
+			// Make sure all files inside the zip are images or css
+			$numFiles = $zip->numFiles;
+			$valid = true;
+			
+			for($i =0; $i < $numFiles; $i++) {
+				$file = $zip->statIndex($i);
+				$path_parts = pathinfo($file['name']);
+				if(!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css'))) {
+					$valid = false;
+				}
+			}
+			if($valid == false) {
+				Display::display_error_message(get_lang('ErrorFileExtensionInsideZip'));
+			} else {
+				// Extract zip file
+				$zip->extractTo(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/');
+			}
+			$zip->close();
+				
+		} else {
+			Display::display_error_message(get_lang('ErrorReadingZip'));
+		}
+	} else {
+		// Simply move the file
+		move_uploaded_file($picture['tmp_name'], api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'.$picture['name']);
+	}
 }
 
 /**

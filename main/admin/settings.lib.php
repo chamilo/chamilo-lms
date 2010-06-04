@@ -391,7 +391,10 @@ function upload_stylesheet($values,$picture)
 						$entry_without_first_dir = substr($entry, $pos_slash + 1);
 						// If there is still a slash, we need to make sure the directories are created
 						if(strpos($entry_without_first_dir, '/') !== false) {
-							mkdir($extraction_path.dirname($entry_without_first_dir), $mode = 0777, true);
+							if(!is_dir($extraction_path.dirname($entry_without_first_dir))) {
+								// Create it
+								@mkdir($extraction_path.dirname($entry_without_first_dir), $mode = 0777, true);
+							}
 						}
 						
 						$fp = $zip->getStream($entry);

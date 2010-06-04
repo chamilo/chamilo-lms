@@ -362,9 +362,12 @@ function upload_stylesheet($values,$picture)
 			
 			for($i =0; $i < $numFiles; $i++) {
 				$file = $zip->statIndex($i);
-				$path_parts = pathinfo($file['name']);
-				if(!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css'))) {
-					$valid = false;
+				if(strpos($file, "/") === false) {
+					var_dump($file);
+					$path_parts = pathinfo($file['name']);
+					if(!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css'))) {
+						$valid = false;
+					}
 				}
 			}
 			if($valid == false) {

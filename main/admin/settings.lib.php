@@ -359,21 +359,52 @@ function upload_stylesheet($values,$picture)
 			// Make sure all files inside the zip are images or css
 			$numFiles = $zip->numFiles;
 			$valid = true;
+			$single_directory = true;
 			
 			for($i =0; $i < $numFiles; $i++) {
 				$file = $zip->statIndex($i);
-				if(substr($file['name'], -1) != "/" && substr($file['name'], -1) != "\\") {
+				if(substr($file['name'], -1) != "/") {
 					$path_parts = pathinfo($file['name']);
 					if(!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css'))) {
 						$valid = false;
 					}
 				}
+				
+				if(strpos($file['name'], "/") === false) {
+					$single_directory = false;
+				}
 			}
 			if($valid == false) {
 				Display::display_error_message(get_lang('ErrorStylesheetFilesExtensionsInsideZip'));
 			} else {
-				// Extract zip file
-				$zip->extractTo(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/');
+				// If the zip does not contain a single directory, extract it
+				if($single_directory == false) {
+					// Extract zip file
+					$zip->extractTo(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/');
+				} else {
+					$extraction_path = api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/';
+					for($i = 0; $i < $numFiles; $i++) {
+						$entry = $zip->getNameIndex($i);
+						if ( substr($entry, -1) == '/') continue;
+						
+						$pos_slash = strpos($entry, '/');
+						$entry_without_first_dir = substr($entry, $pos_slash + 1);
+						// If there is still a slash, we need to make sure the directories are created
+						if(strpos($entry_without_first_dir, '/') !== false) {
+							mkdir($extraction_path.dirname($entry_without_first_dir), $mode = 0777, true);
+						}
+						
+						$fp = $zip->getStream($entry);
+						$ofp = fopen( $extraction_path. dirname($entry_without_first_dir).'/'.basename($entry), 'w');
+						
+						while ( ! feof($fp)) {
+							fwrite($ofp, fread($fp, 8192));
+						}
+						
+						fclose($fp);
+						fclose($ofp);
+					}
+				}
 			}
 			$zip->close();
 				

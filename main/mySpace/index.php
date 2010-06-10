@@ -34,9 +34,17 @@ api_block_anonymous_users();
 if (!$export_csv) {
 	Display :: display_header($nameTools);
 } else {
-	if ($_GET['view'] == 'admin' AND $_GET['display'] == 'useroverview') {
-		MySpace::export_tracking_user_overview();
-		exit;
+	if ($_GET['view'] == 'admin') {
+		if($_GET['display'] == 'useroverview') {
+			MySpace::export_tracking_user_overview();
+			exit;
+		} else if($_GET['display'] == 'sessionoverview') {
+			MySpace::export_tracking_session_overview();
+			exit;
+		} else if($_GET['display'] == 'courseoverview') {
+			MySpace::export_tracking_course_overview();
+			exit;
+		}
 	}
 }
 
@@ -208,10 +216,8 @@ if ($nb_teacher_courses > 0 ) {
 		}
 	}	
 	echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
-	if ($view == 'admin') {
-		echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '<a href="'.api_get_self().'?display=useroverview&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>' : '';
-	} else {
-		echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '' : '<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+	if (isset($_GET['display']) && ($_GET['display'] == 'useroverview' || $_GET['display'] == 'sessionoverview' || $_GET['display'] == 'courseoverview')) {
+		echo '<a href="'.api_get_self().'?display='.$_GET['display'].'&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 	}
 	echo '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/statistics.gif">&nbsp;'.get_lang('MyStats').'</a> ';
 	echo '</div>';	
@@ -581,9 +587,15 @@ if ($is_platform_admin && $view == 'admin' && $_GET['display'] != 'yourstudents'
 	if ($_GET['display'] == 'useroverview') {
 		echo ' | <a href="'.api_get_self().'?view=admin&amp;display=useroverview&amp;export=options">'.get_lang('ExportUserOverviewOptions').'</a>';
 	}
+	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=sessionoverview">'.get_lang('DisplaySessionOverview').'</a>';
+	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=courseoverview">'.get_lang('DisplayCourseOverview').'</a>';
 	echo '<br /><br />';
 	if ($_GET['display'] === 'useroverview') {
 		MySpace::display_tracking_user_overview();
+	} else if($_GET['display'] == 'sessionoverview') {
+		MySpace::display_tracking_session_overview();
+	} else if($_GET['display'] == 'courseoverview') {
+		MySpace::display_tracking_course_overview();
 	} else {
 		if ($export_csv) {
 			$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);

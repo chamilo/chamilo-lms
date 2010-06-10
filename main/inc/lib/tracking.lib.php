@@ -181,7 +181,7 @@ class Tracking {
 	 * @param	int			Session id (optional, default=0)
 	 * @return	string|bool	Date with format long without day or false if there is no date
 	 */
-	public static function get_first_connection_date_on_the_course($student_id, $course_code, $session_id = 0) {
+	public static function get_first_connection_date_on_the_course($student_id, $course_code, $session_id = 0, $convert_date = true) {
 
 		// protect data
 		$student_id  = intval($student_id);
@@ -197,7 +197,11 @@ class Tracking {
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs)>0) {
 			if ($first_login_date = Database::result($rs, 0, 0)) {
-				return api_convert_and_format_date($first_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
+				if($convert_date == true) {
+					return api_convert_and_format_date($first_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
+				} else {
+					return $first_login_date;
+				}
 			}
 		}
 		return false;
@@ -386,9 +390,10 @@ class Tracking {
      * @param   string		Course code
      * @param 	array 		Limit average to listed lp ids
      * @param	int			Session id (optional), if parameter $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
+     * @param	bool		Will return an array of the type: [sum_of_progresses, number] if it is set to true 
      * @return double		Average progress of the user in this course
      */
-	public static function get_avg_student_progress($student_id, $course_code, $lp_ids = array(), $session_id = null) {
+	public static function get_avg_student_progress($student_id, $course_code, $lp_ids = array(), $session_id = null, $return_array = false) {
 
 		// get the informations of the course
 		$a_course = CourseManager :: get_course_information($course_code);
@@ -450,8 +455,12 @@ class Tracking {
                 }
                 // average progress = total sum divided by the number of views
                 // summed up.
-                $avg_progress = round($sum / $number_items, 1);
-                return $avg_progress;
+                if($return_array == false) {
+					$avg_progress = round($sum / $number_items, 1);
+					return $avg_progress;
+				} else {
+					return array($sum, $number_items);
+				}
 			}
 		}
 		return null;
@@ -469,9 +478,10 @@ class Tracking {
 	 * @param 	string 		Course code
 	 * @param 	array 		Limit average to listed lp ids
 	 * @param 	int			Session id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
+	 * @param	bool		Returns an array of the type [sum_score, num_score] if set to true
 	 * @return 	string 		Value (number %) Which represents a round integer explain in got in 3.
 	 */
-	public static function get_avg_student_score($student_id, $course_code, $lp_ids=array(), $session_id = null) {
+	public static function get_avg_student_score($student_id, $course_code, $lp_ids=array(), $session_id = null, $return_array = false) {
 		
 		// get global tables names
 		$course_table				= Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -684,8 +694,12 @@ class Tracking {
 				//var_dump($lp_with_quiz);	
 				if ($lp_with_quiz != 0 ) {
 					
-					$score_of_scorm_calculate = round(($global_result/$lp_with_quiz),2);				
-	                return $score_of_scorm_calculate;
+					if($return_array == false) {
+						$score_of_scorm_calculate = round(($global_result/$lp_with_quiz),2);				
+						return $score_of_scorm_calculate;
+					} else {
+						return array($global_result, $lp_with_quiz);
+					}
 	                
 				} else {
 					return '-';

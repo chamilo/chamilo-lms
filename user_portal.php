@@ -46,6 +46,7 @@ $cidReset = true; /* Flag forcing the 'current course' reset,
 /*
 	Included libraries
 */
+
 require_once './main/inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'course.lib.php';

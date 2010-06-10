@@ -451,7 +451,7 @@ class MySpace {
 		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 		// getting all the courses of the user
-		$sql = "SELECT * FROM $tbl_user AS u INNER JOIN $tbl_course_rel_user AS cu ON cu.user_id = u.user_id WHERE cu.course_code = '".$course_code."' AND IS_NULL(cu.role);";
+		$sql = "SELECT * FROM $tbl_user AS u INNER JOIN $tbl_course_rel_user AS cu ON cu.user_id = u.user_id WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
 		$result = Database::query($sql);
 		$time_spent = 0;
 		$progress = 0;
@@ -595,7 +595,7 @@ class MySpace {
 			$csv_row[] = $course_title;
 			
 			// getting all the courses of the session
-			$sql = "SELECT * FROM $tbl_user AS u INNER JOIN $tbl_course_rel_user AS cu ON cu.user_id = u.user_id WHERE cu.course_code = '".$course_code."' AND IS_NULL(cu.role);";
+			$sql = "SELECT * FROM $tbl_user AS u INNER JOIN $tbl_course_rel_user AS cu ON cu.user_id = u.user_id WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
 			$result = Database::query($sql);
 			$time_spent = 0;
 			$progress = 0;

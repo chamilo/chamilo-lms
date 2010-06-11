@@ -214,7 +214,7 @@ class Tracking {
 	 * @param	int			Session id (optional, default=0)
 	 * @return	string|bool	Date with format long without day or false if there is no date
 	 */
-	public static function get_last_connection_date_on_the_course($student_id, $course_code, $session_id = 0) {
+	public static function get_last_connection_date_on_the_course($student_id, $course_code, $session_id = 0, $convert_date = true) {
 
 		// protect data
 		$student_id  = intval($student_id);
@@ -237,9 +237,17 @@ class Tracking {
 				//If the last connection is > than 7 days, the text is red
 				//345600 = 7 days in seconds
 				if ($currentTimestamp - $timestamp > 604800) {
-					return '<span style="color: #F00;">' . api_format_date($last_login_date, DATE_FORMAT_SHORT) . (api_is_allowed_to_edit()?' <a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /></a>':'').'</span>';
+					if($convert_date == true) {
+						return '<span style="color: #F00;">' . api_format_date($last_login_date, DATE_FORMAT_SHORT) . (api_is_allowed_to_edit()?' <a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /></a>':'').'</span>';
+					} else {
+						return $last_login_date;
+					}
 				} else {
-					return api_format_date($last_login_date, DATE_FORMAT_SHORT);
+					if($convert_date == true) {
+						return api_format_date($last_login_date, DATE_FORMAT_SHORT);
+					} else {
+						return $last_login_date;
+					}
 				}
 			}
 		}

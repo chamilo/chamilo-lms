@@ -520,7 +520,7 @@ class MySpace {
 		}
 		$return .= '<tr>';
 		// time spent in the course
-		$return .= '	<td style="width:164px;"><'.api_time_to_hms($time_spent).'</td>';
+		$return .= '	<td style="width:164px;">'.api_time_to_hms($time_spent).'</td>';
 		// student progress in course
 		$return .= '	<td>'.$avg_progress.'</td>';
 		// student score

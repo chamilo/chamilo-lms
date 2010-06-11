@@ -465,7 +465,6 @@ class MySpace {
 		$total_score_possible = 0;
 		$total_questions_answered = 0;
 		while ($row = Database::fetch_object($result)) {
-			$return .= '<tr>';
 			// get time spent in the course and session
 			$time_spent += Tracking::get_time_spent_on_the_course($row->user_id, $course_code);
 			$progress_tmp = Tracking::get_avg_student_progress($row->user_id, $course_code, array(), null, true);
@@ -519,22 +518,23 @@ class MySpace {
 		} else {
 			$total_score = '-';
 		}
+		$return .= '<tr>';
 		// time spent in the course
-		$return .= '	<td><div>'.api_time_to_hms($time_spent).'</div></td>';
+		$return .= '	<td style="width:164px;"><'.api_time_to_hms($time_spent).'</td>';
 		// student progress in course
-		$return .= '	<td><div>'.$avg_progress.'</div></td>';
+		$return .= '	<td>'.$avg_progress.'</td>';
 		// student score
-		$return .= '	<td><div>'.$avg_score.'</div></td>';
+		$return .= '	<td>'.$avg_score.'</td>';
 		// student messages
-		$return .= '	<td><div>'.$nb_messages.'</div></td>';
+		$return .= '	<td>'.$nb_messages.'</td>';
 		// student assignments
-		$return .= '	<td><div>'.$nb_assignments.'</div></td>';
+		$return .= '	<td>'.$nb_assignments.'</td>';
 		// student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
 		$return .= '<td width="105px;">'.$total_score.'</td>';
 		$return .= '<td>'.$total_questions_answered.'</td>';
 		// last connection
-		$return .= '	<td><div>'.$last_login_date.'</div></td>';
-		$return .= '<tr>';
+		$return .= '	<td>'.$last_login_date.'</td>';
+		$return .= '</tr>';
 		$return .= '</table>';
 		return $return;
 	}

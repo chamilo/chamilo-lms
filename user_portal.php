@@ -46,7 +46,6 @@ $cidReset = true; /* Flag forcing the 'current course' reset,
 /*
 	Included libraries
 */
-
 require_once './main/inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'course.lib.php';
@@ -416,13 +415,18 @@ function display_courses($user_id) {
  *  @return void
  */
 function display_courses_in_category($user_category_id) {
-	global $_user;
+	
+
+	global $_user, $_configuration;
 	// table definitions
-	$TABLECOURS						= Database::get_main_table(TABLE_MAIN_COURSE);
-	$TABLECOURSUSER					= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-	$TABLE_USER_COURSE_CATEGORY 	= Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	$TABLECOURS						= Database :: get_main_table(TABLE_MAIN_COURSE);
+	$TABLECOURSUSER					= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$TABLE_USER_COURSE_CATEGORY 	= Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$TABLE_COURSE_FIELD 			= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
 	$TABLE_COURSE_FIELD_VALUE		= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+	$TABLE_ACCESS_URL_REL_COURSE    = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+	$current_url_id = api_get_current_access_url_id();
+	
 
 	// get course list auto-register
 	$sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
@@ -439,17 +443,21 @@ function display_courses_in_category($user_category_id) {
 	if (!empty($special_course_list)) {
 		$without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
 	}
-	
+
 	$sql_select_courses = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
-								course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
-								course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course.visibility
-		                        FROM    $TABLECOURS       course,
-										$TABLECOURSUSER  course_rel_user
-		                        WHERE course.code = course_rel_user.course_code
-		                        AND   course_rel_user.user_id = '".$_user['user_id']."'
-		                        AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-		                        AND course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses
-		                        ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
+									course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
+									course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course.visibility
+			                        FROM    $TABLECOURS       course,
+											$TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
+			                        WHERE course.code = course_rel_user.course_code
+			                        AND   course_rel_user.user_id = '".$_user['user_id']."'
+			                        AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+			                        AND course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses ";
+											
+    if ($_configuration['multiple_access_urls'] == true && $current_url_id!=-1){
+		$sql_select_courses .= " AND url.course_code=course.code AND access_url_id='".$current_url_id."'";
+    }
+    $sql_select_courses .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
 	$result = Database::query($sql_select_courses);
 	$number_of_courses = Database::num_rows($result);
 	$key = 0;

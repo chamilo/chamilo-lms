@@ -2460,7 +2460,7 @@ function string2binary($variable)
  * @param array		Optional array of teachers' user ID
  * @return	int		0
  */
-function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "", $teachers=array())
+function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = "", $teachers=array(), $visibility = null)
 {
 	global $defaultVisibilityForANewCourse, $error_msg;
 	$TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -2505,6 +2505,16 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 	} else {
 		$expiration_date = "FROM_UNIXTIME(".$expiration_date . ")";
 	}
+	
+	if($visibility === null) {
+		$visibility = $defaultVisibilityForANewCourse;
+	} else {
+		if($visibility < 0 || $visibility > 3) {
+			$error_msg[] = "visibility is invalid";
+			$okForRegisterCourse = false;
+		}
+	}
+	
 	if ($okForRegisterCourse) {
 		$titular=addslashes($titular);
 		// here we must add 2 fields
@@ -2516,7 +2526,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					title = '".Database :: escape_string($title) . "',
 					description = '".lang2db(get_lang('CourseDescription')) . "',
 					category_code = '".Database :: escape_string($category) . "',
-					visibility = '".$defaultVisibilityForANewCourse . "',
+					visibility = '".$visibility . "',
 					show_score = '',
 					disk_quota = '".api_get_setting('default_document_quotum') . "',
 					creation_date = now(),

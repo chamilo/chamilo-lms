@@ -2039,6 +2039,10 @@ function DokeosWSCreateCourse($params) {
 		$original_course_id_name = $course_param['original_course_id_name'];
 		$original_course_id_value = $course_param['original_course_id_value'];
 		$orig_course_id_value[] = $course_param['original_course_id_value'];
+		$visibility = null;
+		if($course_param['visibility'] && $course_param['visibility'] >= 0 && $course_param['visibility'] <= 3) {
+			$visibility = $course_param['visibility'];
+		}
 		$extra_list = $course_param['extra'];
 
 		// Check whether exits $x_course_code into user_field_values table.
@@ -2056,9 +2060,11 @@ function DokeosWSCreateCourse($params) {
 									title='".Database::escape_string($title)."',
 									category_code='".Database::escape_string($category_code)."',
 									tutor_name='".Database::escape_string($tutor_name)."',
-									visual_code='".Database::escape_string($wanted_code)."',
-									visibility = '3'
-						WHERE code='".Database::escape_string($r_check_course[0])."'";
+									visual_code='".Database::escape_string($wanted_code)."'";
+				if($visibility !== null) {
+					$sql .= ", visibility = '$visibility' ";
+				}
+				$sql .= " WHERE code='".Database::escape_string($r_check_course[0])."'";
 				Database::query($sql);
 				if (is_array($extra_list) && count($extra_list) > 0) {
 					foreach ($extra_list as $extra) {
@@ -2112,7 +2118,7 @@ function DokeosWSCreateCourse($params) {
 				update_Db_course($db_name);
 				$pictures_array = fill_course_repository($directory);
 				fill_Db_course($db_name, $directory, $course_language, $pictures_array);
-				$return = register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
+				$return = register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date, array(), $visibility);
 
 				// Save new fieldlabel into course_field table.
 				$field_id = CourseManager::create_course_extra_field($original_course_id_name, 1, $original_course_id_name);

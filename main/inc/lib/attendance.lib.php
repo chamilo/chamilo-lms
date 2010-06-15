@@ -276,7 +276,6 @@ class Attendance
 
 	/**
 	 * Get registered users inside current course
-	 * @todo Is really bad idea to call this function get_users_rel_course. This should be change. Julio Montoya
 	 * @param 	int	   attendance id for showing attendance result field (optional)
 	 * @return 	array  users data
 	 */
@@ -317,8 +316,9 @@ class Attendance
 			}
 			
 			$value['photo'] 	= $photo;
-			$value['firstname'] = $user_data['firstname'];
+			$value['firstname']     = $user_data['firstname'];
 			$value['lastname']	= $user_data['lastname'];
+                        $value['user_id']       = $uid;
 
 			//Sending only 5 items in the array instead of 60 
 			$a_users[$key] = $value;

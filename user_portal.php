@@ -449,11 +449,11 @@ function display_courses_in_category($user_category_id) {
 									course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course.visibility
 			                        FROM    $TABLECOURS       course,
 											$TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
-			                        WHERE course.code = course_rel_user.course_code
+			                        WHERE course.code = course_rel_user.course_code AND url.course_code = course.code
 			                        AND   course_rel_user.user_id = '".$_user['user_id']."'
 			                        AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 			                        AND course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses ";
-											
+
     if ($_configuration['multiple_access_urls'] == true && $current_url_id!=-1){
 		$sql_select_courses .= " AND url.course_code=course.code AND access_url_id='".$current_url_id."'";
     }

@@ -37,11 +37,11 @@ if (api_is_allowed_to_edit(null, true)) {
 		<div class="attendance-users-table" style="width:40%;float:left;margin:0px;padding:0px;">
 			<table class="data_table" width="100%">
 				<tr class="row_odd" >	
-					<th height="65px" width="35px" ><?php echo get_lang('DisplayOrder')?></th>
-					<th width="45px" ><?php echo get_lang('Photo')?></th>
+					<th height="65px" width="25px" ><?php echo get_lang('DisplayOrder')?></th>
+					<th width="30px" ><?php echo get_lang('Photo')?></th>
 					<th><?php echo get_lang('LastName')?></th>
 					<th><?php echo get_lang('FirstName')?></th>
-					<th width="90px"><?php echo get_lang('AttendancesFaults')?></th>
+					<th width="100px"><?php echo get_lang('AttendancesFaults')?></th>
 				</tr>				
 				<?php 
 				$i = 1;

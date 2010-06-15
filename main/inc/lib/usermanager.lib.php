@@ -1335,7 +1335,7 @@ class UserManager
 	 * @param	boolean	Whether to split multiple-selection fields or not
 	 * @return	array	Array of fields => value for the given user
 	 */
-	public static function get_extra_user_data($user_id, $prefix = false, $all_visibility = true, $splitmultiple = false) {
+	public static function get_extra_user_data($user_id, $prefix = false, $all_visibility = true, $splitmultiple = false, $field_filter = null) {
 		// A sanity check.
 		if (empty($user_id)) {
 			$user_id = 0;
@@ -1347,9 +1347,21 @@ class UserManager
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$user_id = Database::escape_string($user_id);
 		$sql = "SELECT f.id as id, f.field_variable as fvar, f.field_type as type FROM $t_uf f ";
-		if ($all_visibility == false) {
-			$sql .= " WHERE f.field_visible = 1 ";
-		}
+                $filter_cond = '';
+
+                if ($all_visibility == false) {
+                        if (isset($field_filter)) {
+                            $field_filter = intval($field_filter);
+                            $filter_cond .= " AND field_filter = $field_filter ";
+                        }
+			$sql .= " WHERE f.field_visible = 1 $filter_cond ";
+		} else {                    
+                    if (isset($field_filter)) {
+                        $field_filter = intval($field_filter);
+                        $sql .= " WHERE field_filter = $field_filter ";
+                    }                    
+                }
+
 		$sql .= " ORDER BY f.field_order";
 		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
@@ -1571,8 +1583,7 @@ class UserManager
 	 * @param string	field variable
 	 * @return array	data
 	 */
-	public static function get_extra_user_data_by_field_variable($field_variable) {
-		
+	public static function get_extra_user_data_by_field_variable($field_variable) {		
 		$tbl_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$extra_information_by_variable = self::get_extra_field_information_by_name($field_variable);
 		$field_id = intval($extra_information_by_variable['id']);

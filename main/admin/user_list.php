@@ -73,6 +73,30 @@ function clear_course_list (div_course) {
 	$("div#"+div_course).html("&nbsp;");
 	$("div#"+div_course).hide("");
 }
+
+function display_advanced_search_form () {
+        if ($("#advanced_search_form").css("display") == "none") {
+                $("#advanced_search_form").css("display","block");
+                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+        } else {
+                $("#advanced_search_form").css("display","none");
+                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+        }
+}
+
+$(document).ready(function() {
+
+    var select_val = $("#input_select_extra_data").val();
+
+    if (select_val != 0) {
+        document.getElementById(\'extra_data_text\').style.display="block";
+        document.getElementById(\'input_extra_text\').value = "";
+    } else {
+        document.getElementById(\'extra_data_text\').style.display="none";
+    }
+
+});
+
 </script>';
 $htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
 .blackboard_show {
@@ -385,6 +409,15 @@ function get_user_data($from, $number_of_items, $column, $direction)
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }
 
+        if (isset($_GET['keyword_extra_data'])) {
+            $keyword_extra_data = Database::escape_string($_GET['keyword_extra_data']);
+            if (!empty($keyword_extra_data)) {
+                $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
+                $field_id = $extra_info['id'];
+                $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
+            }
+        }
+
 	if (isset ($_GET['keyword'])) {
 		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%' OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%' OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%' )";
@@ -395,6 +428,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		$keyword_officialcode = Database::escape_string($_GET['keyword_officialcode']);
 		$keyword_username = Database::escape_string($_GET['keyword_username']);
 		$keyword_status = Database::escape_string($_GET['keyword_status']);
+
 		$query_admin_table = '';
 		$keyword_admin = '';
 
@@ -403,6 +437,15 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			$query_admin_table = " , $admin_table a ";
 			$keyword_admin = ' AND a.user_id = u.user_id ';
 		}
+                
+                $keyword_extra_value = '';
+                if (isset($_GET['keyword_extra_data'])) {
+                    if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
+                        $keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
+                        $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
+                    }
+                }
+
 		$keyword_active = isset($_GET['keyword_active']);
 		$keyword_inactive = isset($_GET['keyword_inactive']);
 		$sql .= $query_admin_table." WHERE (u.firstname LIKE '%".$keyword_firstname."%' " .
@@ -411,7 +454,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				"AND u.email LIKE '%".$keyword_email."%'   " .
 				"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
 				"AND u.status LIKE '".$keyword_status."'" .
-				$keyword_admin;
+				$keyword_admin.$keyword_extra_value;
 
 		if ($keyword_active && !$keyword_inactive) {
 			$sql .= " AND u.active='1'";
@@ -677,43 +720,14 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 	login_user($login_as_user_id);
 }
 
-if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
-{
-	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-	$interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
-	$tool_name = get_lang('SearchAUser');
-	Display :: display_header($tool_name);
-	//api_display_tool_title($tool_name);
-	$form = new FormValidator('advanced_search','get');
-	$form->addElement('header', '', $tool_name);
-	$form->add_textfield('keyword_firstname',get_lang('FirstName'),false);
-	$form->add_textfield('keyword_lastname',get_lang('LastName'),false);
-	$form->add_textfield('keyword_username',get_lang('LoginName'),false);
-	$form->add_textfield('keyword_email',get_lang('Email'),false);
-	$form->add_textfield('keyword_officialcode',get_lang('OfficialCode'),false);
-	$status_options = array();
-	$status_options['%'] = get_lang('All');
-	$status_options[STUDENT] = get_lang('Student');
-	$status_options[COURSEMANAGER] = get_lang('Teacher');
-	$status_options[DRH] = get_lang('Drh');
-	$status_options[SESSIONADMIN] = get_lang('Administrator');//
-	$form->addElement('select','keyword_status',get_lang('Status'),$status_options);
-	$active_group = array();
-	$active_group[] = $form->createElement('checkbox','keyword_active','',get_lang('Active'));
-	$active_group[] = $form->createElement('checkbox','keyword_inactive','',get_lang('Inactive'));
-	$form->addGroup($active_group,'',get_lang('ActiveAccount'),'<br/>',false);
-	$form->addElement('style_submit_button', 'submit',get_lang('SearchUsers'),'class="search"');
-	$defaults['keyword_active'] = 1;
-	$defaults['keyword_inactive'] = 1;
-	$form->setDefaults($defaults);
-	$form->display();
-}
-else
-{
+//if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
+//{}
+//else
+//{
 	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 	$tool_name = get_lang('UserList');
 	Display :: display_header($tool_name, "");
-
+	
 	//api_display_tool_title($tool_name);
 	if (isset ($_GET['action'])) {
 		$check = Security::check_token('get');
@@ -796,7 +810,10 @@ else
 	$renderer->setElementTemplate('<span>{element}</span> ');
 	$form->addElement('text','keyword',get_lang('keyword'));
 	$form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="search"');
-	$form->addElement('static','search_advanced_link',null,'<a href="user_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
+	//$form->addElement('static','search_advanced_link',null,'<a href="user_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
+
+        $form->addElement('static','search_advanced_link',null,'<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'</span></a>');
+
 	echo '<div class="actions" style="width:100%;">';
 	if (api_is_platform_admin()) {
 		echo '<span style="float:right; padding-top:7px;">'.
@@ -836,6 +853,86 @@ else
 		$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></center>';
 	}
 
+        
+        // display advaced search form
+        $form = new FormValidator('advanced_search','get');
+
+        $form->addElement('html','<div id="advanced_search_form" style="display:none;">');
+
+	$form->addElement('header', '', get_lang('AdvancedSearch'));
+
+        //$form->addElement('html', '<strong>'.get_lang('SearchAUser').'</strong>');
+
+        $form->addElement('html', '<table>');
+
+        $form->addElement('html', '<tr><td>');
+	$form->add_textfield('keyword_firstname',get_lang('FirstName'),false,array('style'=>'margin-left:17px'));
+	$form->addElement('html', '</td><td width="200px;">');
+        $form->add_textfield('keyword_lastname',get_lang('LastName'),false,array('style'=>'margin-left:17px'));
+	$form->addElement('html', '</td></tr>');
+
+        $form->addElement('html', '<tr><td>');
+        $form->add_textfield('keyword_username',get_lang('LoginName'),false,array('style'=>'margin-left:17px'));
+	$form->addElement('html', '</td>');
+        $form->addElement('html', '<td>');
+        $form->add_textfield('keyword_email',get_lang('Email'),false,array('style'=>'margin-left:17px'));
+	$form->addElement('html', '</td></tr>');
+
+        $form->addElement('html', '<tr><td>');
+        $form->add_textfield('keyword_officialcode',get_lang('OfficialCode'),false,array('style'=>'margin-left:17px'));
+	$form->addElement('html', '</td><td>');        
+
+        $status_options = array();
+	$status_options['%'] = get_lang('All');
+	$status_options[STUDENT] = get_lang('Student');
+	$status_options[COURSEMANAGER] = get_lang('Teacher');
+	$status_options[DRH] = get_lang('Drh');
+        $status_options[SESSIONADMIN] = get_lang('Administrator');
+        $form->addElement('select','keyword_status',get_lang('Status'),$status_options, array('style'=>'margin-left:17px'));
+        $form->addElement('html', '</td></tr>');
+
+
+        	
+        $form->addElement('html', '<tr><td>');
+        $active_group = array();
+	$active_group[] = $form->createElement('checkbox','keyword_active','',get_lang('Active'), array('style'=>'margin-left:17px'));
+	$active_group[] = $form->createElement('checkbox','keyword_inactive','',get_lang('Inactive'),array('style'=>'margin-left:17px'));
+	$form->addGroup($active_group,'',get_lang('ActiveAccount'),'<br/>',false);
+	$form->addElement('html', '</td><td>');
+
+        $extra_data = UserManager::get_extra_user_data($user_id, false, true, false, 1);
+        $extra_options = array();
+        if (!empty($extra_data)) {
+            $extra_options[0] = get_lang('All');
+            // get information about extra data for adding to input select
+            foreach ($extra_data as $field_variable => $field_value) {
+                $extra = UserManager::get_extra_field_information_by_name($field_variable);
+                $extra_options[$field_variable] = $extra['field_display_text'];
+            }
+
+            $form->addElement('select', 'keyword_extra_data', get_lang('ExtraData'), $extra_options, array('id'=>'input_select_extra_data', 'style'=>'margin-left:17px', 'onchange'=>'if(this.value!=0){document.getElementById(\'extra_data_text\').style.display=\'block\';document.getElementById(\'input_extra_text\').value = "";}else{document.getElementById(\'extra_data_text\').style.display=\'none\';}'));
+            $form->addElement('html', '<div id="extra_data_text" style="display:none;">');
+            $form->add_textfield('keyword_extra_data_text', '', false, array('style'=>'margin-left:17px', 'id'=>'input_extra_text'));
+            $form->addElement('html', '</div>');
+        }
+
+
+        $form->addElement('html', '</td></tr>');
+
+        $form->addElement('html', '<tr><td>');
+        $form->addElement('style_submit_button', 'submit',get_lang('SearchUsers'),'class="search"');
+        $form->addElement('html', '</td></tr>');
+
+        $form->addElement('html', '</table>');
+
+        $defaults['keyword_active'] = 1;
+	$defaults['keyword_inactive'] = 1;
+	$form->setDefaults($defaults);
+        $form -> addElement('html','</div>');
+
+
+	$form->display();
+
 	$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false, 'width="18px"');
@@ -864,7 +961,7 @@ else
 	if (api_is_platform_admin())
 		$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
 	$table->display();
-}
+//}
 /*
 ==============================================================================
 		FOOTER

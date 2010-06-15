@@ -4809,6 +4809,95 @@ function DokeosWSUnsuscribeCoursesFromSession($params) {
 	return $output;
 }
 
+/** WSListCourses **/
+
+$server->wsdl->addComplexType(
+'course',
+'complexType',
+'struct',
+'all',
+'',
+array(
+		'id' => array('name' => 'id', 'type' => 'xsd:int'),
+		'code' => array('name' => 'code', 'type' => 'xsd:string'),
+		'external_course_id' => array('name' => 'external_course_id', 'type' => 'xsd:string'),
+		'title' => array('name' => 'title', 'type' => 'xsd:string'),
+		'language' => array('name' => 'language', 'type' => 'xsd:string'),
+		'category_name' => array('name' => 'category_name', 'type' => 'xsd:string'),
+		'visibility' => array('name' => 'visibility', 'type' => 'xsd:int'),
+		'number_students' => array('name' => 'number_students', 'type' => 'xsd:int')
+     )
+);
+
+$server->wsdl->addComplexType(
+'courses',
+'complexType',
+'array',
+'',
+'SOAP-ENC:Array',
+array(),
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course[]')),
+'tns:course'
+);
+
+
+// Register the method to expose
+$server->register('WSListCourses',				// method name
+	array('secret_key' => 'xsd:string'),	// input parameters
+	array('return' => 'tns:courses'),		// output parameters
+	'urn:WSRegistration',									// namespace
+	'urn:WSRegistration#WSListCourses',			// soapaction
+	'rpc',													// style
+	'encoded',												// use
+	'This service list courses available on the system'	// documentation
+);
+
+// define the method WSListCourses
+function WSListCourses($secret_key) {
+	global $_configuration;
+
+	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	if (!api_is_valid_secret_key($secret_key, $security_key)) {
+		return -1; // The secret key is incorrect.
+	}
+	
+	$courses_result = array();
+	$category_names = array();
+	
+	$courses = CourseManager::get_courses_list();
+	foreach($courses as $course) {
+		$course_tmp = array();
+		$course_tmp['id'] = $course['id'];
+		$course_tmp['code'] = $course['code'];
+		$course_tmp['title'] = $course['title'];
+		$course_tmp['language'] = $course['language'];
+		$course_tmp['visibility'] = $course['visibility'];
+		
+		// Determining category name
+		if($category_names[$course['category_code']]) {
+			$course_tmp['category_name'] = $category_names[$course['category_code']];
+		} else {
+			$category = CourseManager::get_course_category($course['category_code']);
+			$category_names[$course['category_code']] = $category['name'];
+			$course_tmp['category_name'] = $category['name'];
+		}
+		
+		// Determining number of students registered in course
+		$user_list = CourseManager::get_user_list_from_course_code($course['code'], false);
+		$course_tmp['number_students'] = count($user_list);
+		
+		// TODO: Determining external course id
+		$course_tmp['external_course_id'] = 'test';
+		
+		
+		$courses_result[] = $course_tmp;
+	}
+	
+	return $courses_result;
+	
+}
+
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 $server->service($HTTP_RAW_POST_DATA);

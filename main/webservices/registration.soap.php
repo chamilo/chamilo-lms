@@ -29,7 +29,7 @@ $server = new soap_server();
 $server->configureWSDL('WSRegistration', 'urn:WSRegistration');
 
 
-/* Register DokeosWSCreateUsers function */
+/* Register WSCreateUsers function */
 // Register the data structures used by the service
 
 
@@ -124,19 +124,19 @@ array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createUs
 );
 
 // Register the method to expose
-$server->register('DokeosWSCreateUsers',			// method name
+$server->register('WSCreateUsers',			// method name
 	array('createUsers' => 'tns:createUsers'),		// input parameters
 	array('return' => 'tns:results_createUsers'),	// output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWSCreateUsers',		// soapaction
+	'urn:WSRegistration#WSCreateUsers',		// soapaction
 	'rpc',											// style
 	'encoded',										// use
 	'This service adds a user'						// documentation
 );
 
 
-// Define the method DokeosWSCreateUsers
-function DokeosWSCreateUsers($params) {
+// Define the method WSCreateUsers
+function WSCreateUsers($params) {
 
 	global $_user, $userPasswordCrypted;
 	
@@ -308,7 +308,7 @@ function DokeosWSCreateUsers($params) {
 	return $output;
 }
 
-/* Register DokeosWSCreateUser function */
+/* Register WSCreateUser function */
 // Register the data structures used by the service
 
 
@@ -337,19 +337,19 @@ $server->wsdl->addComplexType(
 
 
 // Register the method to expose
-$server->register('DokeosWSCreateUser',				// method name
+$server->register('WSCreateUser',				// method name
 	array('createUser' => 'tns:createUser'),		// input parameters
 	array('return' => 'xsd:string'),	            // output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWSCreateUser',		// soapaction
+	'urn:WSRegistration#WSCreateUser',		// soapaction
 	'rpc',											// style
 	'encoded',										// use
 	'This service adds a user'						// documentation
 );
 
 
-// Define the method DokeosWSCreateUser
-function DokeosWSCreateUser($params) {
+// Define the method WSCreateUser
+function WSCreateUser($params) {
 
 	global $_user, $userPasswordCrypted;
 
@@ -500,7 +500,7 @@ function DokeosWSCreateUser($params) {
 	return  $return;
 }
 
-/* Register DokeosWSCreateUsersPasswordCrypted function */
+/* Register WSCreateUsersPasswordCrypted function */
 // Register the data structures used by the service
 
 // Prepare input params.
@@ -580,18 +580,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_creat
 );
 
 // Register the method to expose
-$server->register('DokeosWSCreateUsersPasswordCrypted',						    // method name
+$server->register('WSCreateUsersPasswordCrypted',						    // method name
 	array('createUsersPasswordCrypted' => 'tns:createUsersPasswordCrypted'),	// input parameters
 	array('return' => 'tns:results_createUsersPassEncrypt'),					// output parameters
 	'urn:WSRegistration',													    // namespace
-	'urn:WSRegistration#DokeosWSCreateUsersPasswordCrypted',					// soapaction
+	'urn:WSRegistration#WSCreateUsersPasswordCrypted',					// soapaction
 	'rpc',																	    // style
 	'encoded',																    // use
-	'This service adds users to dokeos'									        // documentation
+	'This service adds users to the system'									        // documentation
 );
 
-// Define the method DokeosWSCreateUsersPasswordCrypted
-function DokeosWSCreateUsersPasswordCrypted($params) {
+// Define the method WSCreateUsersPasswordCrypted
+function WSCreateUsersPasswordCrypted($params) {
 
 	global $_user, $userPasswordCrypted;
 
@@ -645,7 +645,7 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 				continue;
 			}
 		} else {
-			$msg = "This encryption $encrypt_method is not configured into dokeos ";
+			$msg = "This encryption $encrypt_method is not configured";
 			$results[] = $msg;
 			continue;
 		}
@@ -794,7 +794,7 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 	return $output;
 }
 
-/* Register DokeosWSCreateUserPasswordCrypted function */
+/* Register WSCreateUserPasswordCrypted function */
 // Register the data structures used by the service
 
 //prepare input params
@@ -825,18 +825,18 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWSCreateUserPasswordCrypted',						// method name
+$server->register('WSCreateUserPasswordCrypted',						// method name
 	array('createUserPasswordCrypted' => 'tns:createUserPasswordCrypted'),	// input parameters
 	array('return' => 'xsd:string'),								        // output parameters
 	'urn:WSRegistration',													// namespace
-	'urn:WSRegistration#DokeosWSCreateUserPasswordCrypted',					// soapaction
+	'urn:WSRegistration#WSCreateUserPasswordCrypted',					// soapaction
 	'rpc',																	// style
 	'encoded',																// use
-	'This service adds users to dokeos'									    // documentation
+	'This service adds users'									    // documentation
 );
 
-// Define the method DokeosWSCreateUserPasswordCrypted
-function DokeosWSCreateUserPasswordCrypted($params) {
+// Define the method WSCreateUserPasswordCrypted
+function WSCreateUserPasswordCrypted($params) {
 
 	global $_user, $userPasswordCrypted;
 
@@ -884,7 +884,7 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 			return $msg;
 		}
 	} else {
-		$msg = "This encryption $encrypt_method is not configured into dokeos ";
+		$msg = "This encryption $encrypt_method is not configured";
 		return $msg;
 	}
 
@@ -1009,7 +1009,7 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 	return $return;
 }
 
-/* Register DokeosWSEditUsers function */
+/* Register WSEditUsers function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'editUsersParams',
@@ -1080,18 +1080,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editU
 );
 
 // Register the method to expose
-$server->register('DokeosWSEditUsers',				// method name
+$server->register('WSEditUsers',				// method name
 	array('editUsers' => 'tns:editUsers'),			// input parameters
 	array('return' => 'tns:results_editUsers'),		// output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWSEditUsers',			// soapaction
+	'urn:WSRegistration#WSEditUsers',			// soapaction
 	'rpc',											// style
 	'encoded',										// use
 	'This service edits a user from wiener'			// documentation
 );
 
-// Define the method DokeosWSEditUsers
-function DokeosWSEditUsers($params) {
+// Define the method WSEditUsers
+function WSEditUsers($params) {
 	global $userPasswordCrypted;
 
 	if(!WSHelperVerifyKey($params)) {
@@ -1209,7 +1209,7 @@ function DokeosWSEditUsers($params) {
 	return $output;
 }
 
-/* Register DokeosWSEditUser function */
+/* Register WSEditUser function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'editUser',
@@ -1234,18 +1234,18 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWSEditUser',		        // method name
+$server->register('WSEditUser',		        // method name
 	array('editUser' => 'tns:editUser'),			// input parameters
 	array('return' => 'xsd:string'),                // output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWSEditUser',          // soapaction
+	'urn:WSRegistration#WSEditUser',          // soapaction
 	'rpc',											// style
 	'encoded',										// use
 	'This service edits a user from wiener'			// documentation
 );
 
-// Define the method DokeosWSEditUser
-function DokeosWSEditUser($params) {
+// Define the method WSEditUser
+function WSEditUser($params) {
 	global $userPasswordCrypted;
 
 	if(!WSHelperVerifyKey($params)) {
@@ -1343,7 +1343,7 @@ function DokeosWSEditUser($params) {
 	return  $return;
 }
 
-/* Register DokeosWSEditUsersPasswordCrypted function */
+/* Register WSEditUsersPasswordCrypted function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'editUsersPasswordCryptedParams',
@@ -1415,18 +1415,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editU
 );
 
 // Register the method to expose
-$server->register('DokeosWSEditUsersPasswordCrypted',					// method name
+$server->register('WSEditUsersPasswordCrypted',					// method name
 	array('editUsersPasswordCrypted' => 'tns:editUsersPasswordCrypted'),	// input parameters
 	array('return' => 'tns:results_editUsersPasswordCrypted'),			// output parameters
 	'urn:WSRegistration',												// namespace
-	'urn:WSRegistration#DokeosWSEditUsersPasswordCrypted',				// soapaction
+	'urn:WSRegistration#WSEditUsersPasswordCrypted',				// soapaction
 	'rpc',																// style
 	'encoded',															// use
 	'This service edits a user'											// documentation
 );
 
-// Define the method DokeosWSEditUsersPasswordCrypted
-function DokeosWSEditUsersPasswordCrypted($params) {
+// Define the method WSEditUsersPasswordCrypted
+function WSEditUsersPasswordCrypted($params) {
 	global $userPasswordCrypted, $userPasswordCrypted;
 
 	if(!WSHelperVerifyKey($params)) {
@@ -1480,7 +1480,7 @@ function DokeosWSEditUsersPasswordCrypted($params) {
 					continue;
 				}
 			} else {
-				$msg = "This encryption $encrypt_method is not configured into dokeos ";
+				$msg = "This encryption $encrypt_method is not configured";
 				$results[] = $msg;
 				continue;
 			}
@@ -1570,7 +1570,7 @@ function DokeosWSEditUsersPasswordCrypted($params) {
 	return $output;
 }
 
-/* Register DokeosWSEditUserPasswordCrypted function */
+/* Register WSEditUserPasswordCrypted function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'editUserPasswordCrypted',
@@ -1596,18 +1596,18 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWSEditUserPasswordCrypted',					// method name
+$server->register('WSEditUserPasswordCrypted',					// method name
 	array('editUserPasswordCrypted' => 'tns:editUserPasswordCrypted'),	// input parameters
 	array('return' => 'xsd:string'),									// output parameters
 	'urn:WSRegistration',												// namespace
-	'urn:WSRegistration#DokeosWSEditUserPasswordCrypted',				// soapaction
+	'urn:WSRegistration#WSEditUserPasswordCrypted',				// soapaction
 	'rpc',																// style
 	'encoded',															// use
 	'This service edits a user'											// documentation
 );
 
-// Define the method DokeosWSEditUserPasswordCrypted
-function DokeosWSEditUserPasswordCrypted($params) {
+// Define the method WSEditUserPasswordCrypted
+function WSEditUserPasswordCrypted($params) {
 	global $userPasswordCrypted, $userPasswordCrypted;
 
 	if(!WSHelperVerifyKey($params)) {
@@ -1650,7 +1650,7 @@ function DokeosWSEditUserPasswordCrypted($params) {
 				return $msg;
 			}
 		} else {
-			$msg = "This encryption $encrypt_method is not configured into dokeos ";
+			$msg = "This encryption $encrypt_method is not configured";
 			return $msg;
 		}
 	} elseif (!empty($params['password']) && empty($params['encrypt_method'])) {
@@ -1803,7 +1803,7 @@ function WSEnableUsers($params) {
 }
 
 
-/* Register DokeosWSCreateCourse function */
+/* Register WSCreateCourse function */
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
@@ -1872,18 +1872,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_creat
 );
 
 // Register the method to expose
-$server->register('DokeosWSCreateCourse',			// method name
+$server->register('WSCreateCourse',			// method name
 	array('createCourse' => 'tns:createCourse'),	// input parameters
 	array('return' => 'tns:results_createCourse'),	// output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWSCreateCourse',		// soapaction
+	'urn:WSRegistration#WSCreateCourse',		// soapaction
 	'rpc',											// style
 	'encoded',										// use
-	'This service adds a course into dokeos  '		// documentation
+	'This service adds a course'		// documentation
 );
 
-// Define the method DokeosWSCreateCourse
-function DokeosWSCreateCourse($params) {
+// Define the method WSCreateCourse
+function WSCreateCourse($params) {
 
 	global $firstExpirationDelay;
 
@@ -2026,7 +2026,7 @@ function DokeosWSCreateCourse($params) {
 	return $output;
 }
 
-/* Register DokeosWSCreateCourseByTitle function */
+/* Register WSCreateCourseByTitle function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'createCourseByTitleParams',
@@ -2093,18 +2093,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_creat
 
 
 // Register the method to expose
-$server->register('DokeosWSCreateCourseByTitle',					// method name
+$server->register('WSCreateCourseByTitle',					// method name
 	array('createCourseByTitle' => 'tns:createCourseByTitle'),		// input parameters
 	array('return' => 'tns:results_createCourseByTitle'),			// output parameters
 	'urn:WSRegistration',											// namespace
-	'urn:WSRegistration#DokeosWSCreateCourseByTitle',				// soapaction
+	'urn:WSRegistration#WSCreateCourseByTitle',				// soapaction
 	'rpc',															// style
 	'encoded',														// use
-	'This service adds a course by title into dokeos '				// documentation
+	'This service adds a course by title'				// documentation
 );
 
-// Define the method DokeosWSCreateCourseByTitle
-function DokeosWSCreateCourseByTitle($params) {
+// Define the method WSCreateCourseByTitle
+function WSCreateCourseByTitle($params) {
 
 	global $firstExpirationDelay;
 
@@ -2238,7 +2238,7 @@ function DokeosWSCreateCourseByTitle($params) {
 	return $output;
 }
 
-/* Register DokeosWSEditCourse function */
+/* Register WSEditCourse function */
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
@@ -2312,18 +2312,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editC
 );
 
 // Register the method to expose
-$server->register('DokeosWSEditCourse',			// method name
+$server->register('WSEditCourse',			// method name
 	array('editCourse' => 'tns:editCourse'),	// input parameters
 	array('return' => 'tns:results_editCourse'),			// output parameters
 	'urn:WSRegistration',						// namespace
-	'urn:WSRegistration#DokeosWSEditCourse',	// soapaction
+	'urn:WSRegistration#WSEditCourse',	// soapaction
 	'rpc',										// style
 	'encoded',									// use
-	'This service edits a course into dokeos'	// documentation
+	'This service edits a course'	// documentation
 );
 
-// Define the method DokeosWSEditCourse
-function DokeosWSEditCourse($params){
+// Define the method WSEditCourse
+function WSEditCourse($params){
 
 	if(!WSHelperVerifyKey($params)) {
 		return -1;
@@ -2424,7 +2424,7 @@ function DokeosWSEditCourse($params){
 	return $output;
 }
 
-/* Register DokeosWSCourseDescription function */
+/* Register WSCourseDescription function */
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
@@ -2468,18 +2468,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:fields_cours
 
 
 // Register the method to expose
-$server->register('DokeosWSCourseDescription',				// method name
+$server->register('WSCourseDescription',				// method name
 	array('courseDescription' => 'tns:courseDescription'),	// input parameters
 	array('return' => 'tns:fields_course_desc_list'),		// output parameters
 	'urn:WSRegistration',									// namespace
-	'urn:WSRegistration#DokeosWSCourseDescription',			// soapaction
+	'urn:WSRegistration#WSCourseDescription',			// soapaction
 	'rpc',													// style
 	'encoded',												// use
-	'This service edits a course description into dokeos'	// documentation
+	'This service edits a course description'	// documentation
 );
 
-// Define the method DokeosWSCourseDescription
-function DokeosWSCourseDescription($params) {
+// Define the method WSCourseDescription
+function WSCourseDescription($params) {
 
 	global $_course;
 
@@ -2567,7 +2567,7 @@ function DokeosWSCourseDescription($params) {
 	return $output;
 }
 
-/* Register DokeosWSEditCourseDescription function */
+/* Register WSEditCourseDescription function */
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
@@ -2635,18 +2635,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editC
 
 
 // Register the method to expose
-$server->register('DokeosWSEditCourseDescription',			// method name
+$server->register('WSEditCourseDescription',			// method name
 	array('editCourseDescription' => 'tns:editCourseDescription'),				// input parameters
 	array('return' => 'tns:results_editCourseDescription'),						// output parameters
 	'urn:WSRegistration',									// namespace
-	'urn:WSRegistration#DokeosWSEditCourseDescription',		// soapaction
+	'urn:WSRegistration#WSEditCourseDescription',		// soapaction
 	'rpc',													// style
 	'encoded',												// use
-	'This service edits a course description into dokeos'	// documentation
+	'This service edits a course description'	// documentation
 );
 
-// Define the method DokeosWSEditCourseDescription
-function DokeosWSEditCourseDescription($params) {
+// Define the method WSEditCourseDescription
+function WSEditCourseDescription($params) {
 
 	global $_course;
 
@@ -2731,7 +2731,7 @@ function DokeosWSEditCourseDescription($params) {
 	return $output;
 }
 
-/* Register DokeosWSDeleteCourse function */
+/* Register WSDeleteCourse function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'deleteCourseParams',
@@ -2793,19 +2793,19 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_delet
 'tns:result_deleteCourse'
 );
 
-$server->register('DokeosWSDeleteCourse',			// method name
+$server->register('WSDeleteCourse',			// method name
 	array('deleteCourse' => 'tns:deleteCourse'),	// input parameters
 	array('return' => 'tns:results_deleteCourse'),	// output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWSDeleteCourse',		// soapaction
+	'urn:WSRegistration#WSDeleteCourse',		// soapaction
 	'rpc',											// style
 	'encoded',										// use
 	'This service deletes a course '				// documentation
 );
 
 
-// Define the method DokeosWSDeleteCourse
-function DokeosWSDeleteCourse($params) {
+// Define the method WSDeleteCourse
+function WSDeleteCourse($params) {
 
 	if(!WSHelperVerifyKey($params)) {
 		return -1;
@@ -2858,7 +2858,7 @@ function DokeosWSDeleteCourse($params) {
 	return $output;
 }
 
-/* Register DokeosWSCreateSession function */
+/* Register WSCreateSession function */
 // Register data structures used by the service.
 $server->wsdl->addComplexType(
 	'createSessionParam',
@@ -2933,19 +2933,19 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_creat
 );
 
 // Register the method to expose
-$server->register('DokeosWSCreateSession',			// method name
+$server->register('WSCreateSession',			// method name
 	array('createSession' => 'tns:createSession'),	// input parameters
 	array('return' => 'tns:results_createSession'),	// output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWSCreateSession',		// soapaction
+	'urn:WSRegistration#WSCreateSession',		// soapaction
 	'rpc',											// style
 	'encoded',										// use
 	'This service edits a session'					// documentation
 );
 
 
-// define the method DokeosWSCreateSession
-function DokeosWSCreateSession($params) {
+// define the method WSCreateSession
+function WSCreateSession($params) {
 
 	global $_user;
 
@@ -3048,7 +3048,7 @@ function DokeosWSCreateSession($params) {
 	return $output;
 }
 
-/* Register DokeosWSEditSession function */
+/* Register WSEditSession function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'editSessionParams',
@@ -3123,18 +3123,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editS
 
 
 // Register the method to expose
-$server->register('DokeosWSEditSession',		// method name
+$server->register('WSEditSession',		// method name
 	array('editSession' => 'tns:editSession'),	// input parameters
 	array('return' => 'tns:results_editSession'),				// output parameters
 	'urn:WSRegistration',						// namespace
-	'urn:WSRegistration#DokeosWSEditSession',	// soapaction
+	'urn:WSRegistration#WSEditSession',	// soapaction
 	'rpc',										// style
 	'encoded',									// use
 	'This service edits a session'				// documentation
 );
 
-// define the method DokeosWSEditSession
-function DokeosWSEditSession($params) {
+// define the method WSEditSession
+function WSEditSession($params) {
 
 	global $_user;
 
@@ -3237,7 +3237,7 @@ function DokeosWSEditSession($params) {
 	return $output;
 }
 
-/* Register DokeosWSDeleteSession function */
+/* Register WSDeleteSession function */
 $server->wsdl->addComplexType(
 	'deleteSessionParams',
 	'complexType',
@@ -3298,18 +3298,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_delet
 'tns:result_deleteSession'
 );
 
-$server->register('DokeosWSDeleteSession',			// method name
+$server->register('WSDeleteSession',			// method name
 	array('deleteSession' => 'tns:deleteSession'),	// input parameters
 	array('return' => 'tns:results_deleteSession'),	// output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWSDeleteSession',		// soapaction
+	'urn:WSRegistration#WSDeleteSession',		// soapaction
 	'rpc',											// style
 	'encoded',										// use
 	'This service deletes a session '				// documentation
 );
 
-// define the method DokeosWSDeleteSession
-function DokeosWSDeleteSession($params) {
+// define the method WSDeleteSession
+function WSDeleteSession($params) {
 
 	if(!WSHelperVerifyKey($params)) {
 		return -1;
@@ -3402,7 +3402,7 @@ function DokeosWSDeleteSession($params) {
 
 
 
-/* Register DokeosWSSubscribeUserToCourse function */
+/* Register WSSubscribeUserToCourse function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 'originalUsersList',
@@ -3478,18 +3478,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subsc
 
 
 // Register the method to expose
-$server->register('DokeosWSSubscribeUserToCourse',					// method name
+$server->register('WSSubscribeUserToCourse',					// method name
 	array('subscribeUserToCourse' => 'tns:subscribeUserToCourse'),	// input parameters
 	array('return' => 'tns:results_subscribeUserToCourse'),			// output parameters
 	'urn:WSRegistration',											// namespace
-	'urn:WSRegistration#DokeosWSSubscribeUserToCourse',				// soapaction
+	'urn:WSRegistration#WSSubscribeUserToCourse',				// soapaction
 	'rpc',															// style
 	'encoded',														// use
 	'This service subscribes a user to a course' 					// documentation
 );
 
-// define the method DokeosWSSubscribeUserToCourse
-function DokeosWSSubscribeUserToCourse($params) {
+// define the method WSSubscribeUserToCourse
+function WSSubscribeUserToCourse($params) {
 
     if(!WSHelperVerifyKey($params)) {
 		return -1;
@@ -3615,7 +3615,7 @@ function DokeosWSSubscribeUserToCourse($params) {
 	return $output;
 }
 
-/* Register DokeosWSUnsubscribeUserFromCourse function */
+/* Register WSUnsubscribeUserFromCourse function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'unsuscribeUserFromCourseParams',
@@ -3680,18 +3680,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_unsus
 );
 
 // Register the method to expose
-$server->register('DokeosWSUnsubscribeUserFromCourse',					// method name
+$server->register('WSUnsubscribeUserFromCourse',					// method name
 	array('unsuscribeUserFromCourse' => 'tns:unsuscribeUserFromCourse'),// input parameters
 	array('return' => 'tns:results_unsuscribeUserFromCourse'),			// output parameters
 	'urn:WSRegistration',												// namespace
-	'urn:WSRegistration#DokeosWSUnsubscribeUserFromCourse',				// soapaction
+	'urn:WSRegistration#WSUnsubscribeUserFromCourse',				// soapaction
 	'rpc',																// style
 	'encoded',															// use
 	'This service unsubscribes a user from a course' 					// documentation
 );
 
-// define the method DokeosWSUnsubscribeUserFromCourse
-function DokeosWSUnsubscribeUserFromCourse($params) {
+// define the method WSUnsubscribeUserFromCourse
+function WSUnsubscribeUserFromCourse($params) {
 	if(!WSHelperVerifyKey($params)) {
 		return -1;
 	}
@@ -3783,7 +3783,7 @@ function DokeosWSUnsubscribeUserFromCourse($params) {
 	return $output;
 }
 
-/* Register DokeosWSSuscribeUsersToSession function */
+/* Register WSSuscribeUsersToSession function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'subscribeUsersToSessionParams',
@@ -3848,18 +3848,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subsc
 );
 
 // Register the method to expose
-$server->register('DokeosWSSuscribeUsersToSession',						// method name
+$server->register('WSSuscribeUsersToSession',						// method name
 	array('subscribeUsersToSession' => 'tns:subscribeUsersToSession'),	// input parameters
 	array('return' => 'tns:results_subscribeUsersToSession'),			// output parameters
 	'urn:WSRegistration',												// namespace
-	'urn:WSRegistration#DokeosWSSuscribeUsersToSession',				// soapaction
+	'urn:WSRegistration#WSSuscribeUsersToSession',				// soapaction
 	'rpc',																// style
 	'encoded',															// use
 	'This service subscribes a user to a session' 						// documentation
 );
 
-// define the method DokeosWSSuscribeUsersToSession
-function DokeosWSSuscribeUsersToSession($params){
+// define the method WSSuscribeUsersToSession
+function WSSuscribeUsersToSession($params){
 
  	if(!WSHelperVerifyKey($params)) {
 		return -1;
@@ -3993,7 +3993,7 @@ function DokeosWSSuscribeUsersToSession($params){
 	return $output;
 }
 
-/* Register DokeosWSUnsuscribeUsersFromSession function */
+/* Register WSUnsuscribeUsersFromSession function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'unsubscribeUsersFromSessionParams',
@@ -4058,18 +4058,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_unsub
 );
 
 // Register the method to expose
-$server->register('DokeosWSUnsuscribeUsersFromSession',							// method name
+$server->register('WSUnsuscribeUsersFromSession',							// method name
 	array('unsubscribeUsersFromSession' => 'tns:unsubscribeUsersFromSession'),	// input parameters
 	array('return' => 'tns:results_unsubscribeUsersFromSession'),				// output parameters
 	'urn:WSRegistration',														// namespace
-	'urn:WSRegistration#DokeosWSUnsuscribeUsersFromSession',					// soapaction
+	'urn:WSRegistration#WSUnsuscribeUsersFromSession',					// soapaction
 	'rpc',																		// style
 	'encoded',																	// use
 	'This service unsubscribes a user to a session' 							// documentation
 );
 
-// define the method DokeosWSUnsuscribeUsersFromSession
-function DokeosWSUnsuscribeUsersFromSession($params) {
+// define the method WSUnsuscribeUsersFromSession
+function WSUnsuscribeUsersFromSession($params) {
 
  	if(!WSHelperVerifyKey($params)) {
 		return -1;
@@ -4211,7 +4211,7 @@ function DokeosWSUnsuscribeUsersFromSession($params) {
 	return $output;
 }
 
-/* Register DokeosWSSuscribeCoursesToSession function */
+/* Register WSSuscribeCoursesToSession function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 'originalCoursesList',
@@ -4288,18 +4288,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subsc
 
 
 // Register the method to expose
-$server->register('DokeosWSSuscribeCoursesToSession',						// method name
+$server->register('WSSuscribeCoursesToSession',						// method name
 	array('subscribeCoursesToSession' => 'tns:subscribeCoursesToSession'),	// input parameters
 	array('return' => 'tns:results_subscribeCoursesToSession'),				// output parameters
 	'urn:WSRegistration',													// namespace
-	'urn:WSRegistration#DokeosWSSuscribeCoursesToSession',					// soapaction
+	'urn:WSRegistration#WSSuscribeCoursesToSession',					// soapaction
 	'rpc',																	// style
 	'encoded',																// use
 	'This service subscribes a course to a session' 						// documentation
 );
 
-// Define the method DokeosWSSuscribeCoursesToSession
-function DokeosWSSuscribeCoursesToSession($params) {
+// Define the method WSSuscribeCoursesToSession
+function WSSuscribeCoursesToSession($params) {
 
 	if(!WSHelperVerifyKey($params)) {
 		return -1;
@@ -4444,7 +4444,7 @@ function DokeosWSSuscribeCoursesToSession($params) {
 	return $output;
 }
 
-/* Register DokeosWSUnsuscribeCoursesFromSession function */
+/* Register WSUnsuscribeCoursesFromSession function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
 	'unsubscribeCoursesFromSessionParams',
@@ -4510,18 +4510,18 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_unsub
 
 
 // Register the method to expose
-$server->register('DokeosWSUnsuscribeCoursesFromSession',							// method name
+$server->register('WSUnsuscribeCoursesFromSession',							// method name
 	array('unsubscribeCoursesFromSession' => 'tns:unsubscribeCoursesFromSession'),	// input parameters
 	array('return' => 'tns:results_unsubscribeCoursesFromSession'),					// output parameters
 	'urn:WSRegistration',															// namespace
-	'urn:WSRegistration#DokeosWSUnsuscribeCoursesFromSession',						// soapaction
+	'urn:WSRegistration#WSUnsuscribeCoursesFromSession',						// soapaction
 	'rpc',																			// style
 	'encoded',																		// use
 	'This service subscribes a course to a session' 								// documentation
 );
 
-// define the method DokeosWSUnsuscribeCoursesFromSession
-function DokeosWSUnsuscribeCoursesFromSession($params) {
+// define the method WSUnsuscribeCoursesFromSession
+function WSUnsuscribeCoursesFromSession($params) {
 
 	if(!WSHelperVerifyKey($params)) {
 		return -1;

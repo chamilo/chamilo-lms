@@ -426,6 +426,44 @@ class CourseManager {
 
 		return (bool)$result;
 	}
+	
+	/**
+	 * Get the course id based on the original id and field name in the extra fields. Returns 0 if course was not found
+	 * 
+	 * @param string Original course id
+	 * @param string Original field name
+	 * @return int Course id
+	 */
+	public static function get_course_id_from_original_id($original_course_id_value, $original_course_id_name) {
+		$t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+		$table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+		$sql_course = "SELECT id FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+		$res = Database::query($sql_course);
+		$row = Database::fetch_object($res_course);
+		if($row != false) {
+			return $row->id;
+		} else {
+			return 0;
+		}
+	}
+	
+	/**
+	 * Gets the course code from the course id. Returns null if course id was not found
+	 * 
+	 * @param int Course id
+	 * @return string Course code
+	 */
+	public static function get_course_code_from_course_id($id) {
+		$table = Database::get_main_table(TABLE_MAIN_COURSE);
+		$sql = "SELECT code FROM course WHERE id = '$id';";
+		$res = Database::query($sql);
+		$row = Database::fetch_object($res);
+		if($row != false) {
+			return $row->code;
+		} else {
+			return null;
+		}
+	}
 
 	/**
 	 * Subscribe a user $user_id to a course $course_code.
@@ -2054,12 +2092,12 @@ class CourseManager {
 		$tbl_course_field_value	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 		$sql_field = "SELECT id, field_type, field_variable, field_display_text, field_default_value
 			FROM $tbl_course_field  WHERE field_visible = '1' ";
-		$res_field = api_sql_query($sql_field);
+		$res_field = Database::query($sql_field);
 		$extra_fields = array();
 		while($rowcf = Database::fetch_array($res_field)) {
 			$extra_field_id = $rowcf['id'];
 			$sql_field_value = "SELECT field_value FROM $tbl_course_field_value WHERE course_code = '$code' AND field_id = '$extra_field_id' ";
-			$res_field_value = api_sql_query($sql_field_value);
+			$res_field_value = Database::query($sql_field_value);
 			if(Database::num_rows($res_field_value) > 0 ) {
 				$r_field_value = Database::fetch_row($res_field_value);
 				$rowcf['extra_field_value'] = $r_field_value[0];
@@ -2067,6 +2105,33 @@ class CourseManager {
 			$extra_fields[] = $rowcf;
 		}
 		return $extra_fields;
+	}
+	
+	/**
+	 * Gets the value of a course extra field. Returns null if it was not found
+	 * 
+	 * @param string Name of the extra field
+	 * @param string Course code
+	 * @return string Value
+	 */
+	public static function get_course_extra_field_value($field_name, $code) {
+		$tbl_course_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+		$tbl_course_field_value	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+		$sql = "SELECT id FROM $tbl_course_field WHERE field_visible = '1' AND field_variable = '$field_name';";
+		$res = Database::query($sql);
+		$row = Database::fetch_object($res);
+		if(!$row) {
+			return null;
+		} else {
+			$sql_field_value = "SELECT field_value FROM $tbl_course_field_value WHERE course_code = '$code' AND field_id = '{$row->id}';";
+			$res_field_value = Database::query($sql_field_value);
+			$row_field_value = Database::fetch_object($res_field_value);
+			if(!$row_field_value) {
+				return null;
+			} else {
+				return $row_field_value['field_value'];
+			}
+		}
 	}
 
 

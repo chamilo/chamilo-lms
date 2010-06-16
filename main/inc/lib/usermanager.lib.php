@@ -393,7 +393,7 @@ class UserManager
 	/**
 	 * Returns the user's id based on the original id and field name in the extra fields. Returns 0 if no user was found
 	 * 
-	 * @param int Original user id
+	 * @param string Original user id
 	 * @param string Original field name
 	 * @return int User id
 	 */
@@ -402,9 +402,9 @@ class UserManager
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$sql = "SELECT user_id	FROM $t_uf uf INNER JOIN $t_ufv ufv ON ufv.field_id=uf.id WHERE field_variable='$original_user_id_name' AND field_value='$original_user_id_value';";
 		$res = Database::query($sql);
-		$row = Database::fetch_row($res);
+		$row = Database::fetch_object($res);
 		if($row != false) {
-			return $row['user_id'];
+			return $row->user_id;
 		} else {
 			return 0;
 		}

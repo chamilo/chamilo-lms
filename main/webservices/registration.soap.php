@@ -1797,6 +1797,18 @@ function WSEnableUsers($params) {
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
+	'course_id',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
+		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')
+	)
+);
+
+$server->wsdl->addComplexType(
 	'createCourseParams',
 	'complexType',
 	'struct',
@@ -1907,13 +1919,10 @@ function WSCreateCourse($params) {
 		$extra_list = $course_param['extra'];
 
 		// Check whether exits $x_course_code into user_field_values table.
-		$sql = "SELECT field_value,course_code FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-		$res = Database::query($sql);
-		$row = Database::fetch_row($res);
-
-		if (!empty($row[0])) {
-			// Check whether user is not active.
-			$sql = "SELECT code FROM $table_course WHERE code ='".$row[1]."' AND visibility= '0'";
+		$course_id = CourseManager::get_course_id_from_original_id($original_course_id['original_course_id_value'], $original_course_id['original_course_id_name']);
+		if($course_id > 0) {
+			// Check whether course is not active.
+			$sql = "SELECT code FROM $table_course WHERE id ='$course_id' AND visibility= '0'";
 			$resu = Database::query($sql);
 			$r_check_course = Database::fetch_row($resu);
 			if (!empty($r_check_course[0])) {
@@ -3392,58 +3401,37 @@ function WSDeleteSession($params) {
 
 
 
-/* Register WSSubscribeUserToCourse function */
+/** WSSubscribeUsersToCourse **/
 // Register the data structures used by the service
-$server->wsdl->addComplexType(
-'originalUsersList',
-'complexType',
-'array',
-'',
-'SOAP-ENC:Array',
-array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'string[]')),'xsd:string'
-);
 
 $server->wsdl->addComplexType(
-	'subscribeUserToCourseParams',
+	'user_course_status',
 	'complexType',
 	'struct',
 	'all',
 	'',
 	array(
-		'original_user_id_values' => array('name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'),
-		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
-		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
-		'original_course_id_name' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')
+		'course_id' => array('name' => 'course_id', 'type' => 'tns:course_id'),
+		'user_id' => array('name' => 'user_id', 'type' => 'tns:user_id'),
+		'status' => array('name' => 'status', 'type' => 'xsd:int')
 	)
 );
 
 $server->wsdl->addComplexType(
-'subscribeUserToCourseParamsList',
-'complexType',
-'array',
-'',
-'SOAP-ENC:Array',
-array(),
-array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:subscribeUserToCourseParams[]')),
-'tns:subscribeUserToCourseParams'
-);
-
-$server->wsdl->addComplexType(
-	'subscribeUserToCourse',
+	'subscribeUserToCourse_arg',
 	'complexType',
 	'struct',
 	'all',
 	'',
 	array(
-		'userscourses' => array('name' => 'userscourses', 'type' => 'tns:subscribeUserToCourseParamsList'),
+		'userscourses' => array('name' => 'userscourses', 'type' => 'tns:user_course_status[]'),
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
 // Prepare output params, in this case will return an array
 $server->wsdl->addComplexType(
-'result_subscribeUserToCourse',
+'subscribeUserToCourse_return',
 'complexType',
 'struct',
 'all',
@@ -3451,26 +3439,15 @@ $server->wsdl->addComplexType(
 array(
 		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
 		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
-		'result' => array('name' => 'result', 'type' => 'xsd:string')
+		'result' => array('name' => 'result', 'type' => 'xsd:int')
      )
-);
-
-$server->wsdl->addComplexType(
-'results_subscribeUserToCourse',
-'complexType',
-'array',
-'',
-'SOAP-ENC:Array',
-array(),
-array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subscribeUserToCourse[]')),
-'tns:result_subscribeUserToCourse'
 );
 
 
 // Register the method to expose
 $server->register('WSSubscribeUserToCourse',					// method name
-	array('subscribeUserToCourse' => 'tns:subscribeUserToCourse'),	// input parameters
-	array('return' => 'tns:results_subscribeUserToCourse'),			// output parameters
+	array('subscribeUserToCourse' => 'tns:subscribeUserToCourse_arg'),	// input parameters
+	array('return' => 'tns:subscribeUserToCourse_return[]'),			// output parameters
 	'urn:WSRegistration',											// namespace
 	'urn:WSRegistration#WSSubscribeUserToCourse',				// soapaction
 	'rpc',															// style
@@ -3478,128 +3455,52 @@ $server->register('WSSubscribeUserToCourse',					// method name
 	'This service subscribes a user to a course' 					// documentation
 );
 
-// define the method WSSubscribeUserToCourse
-function WSSubscribeUserToCourse($params) {
+// define the method WSSubscribeUsersToCourse
+function WSSubscribeUsersToCourse($params) {
 
     if(!WSHelperVerifyKey($params)) {
 		return -1;
 	}
-
-    $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-	$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$location_table = Database :: get_main_table(MAIN_LOCATION_TABLE);
-	$user_role_table = Database :: get_main_table(MAIN_USER_ROLE_TABLE);
-	$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-	$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-
-    $userscourses_params = $params['userscourses'];
+	
 	$results = array();
-	$orig_user_id_value = array();
-	$orig_course_id_value = array();
-	foreach ($userscourses_params as $usercourse_param) {
-
-		$original_user_id_values = $usercourse_param['original_user_id_values'];
-	    $original_user_id_name = $usercourse_param['original_user_id_name'];
-	    $original_course_id_value = $usercourse_param['original_course_id_value'];
-	    $original_course_id_name = $usercourse_param['original_course_id_name'];
-	    $orig_course_id_value[] = $original_course_id_value;
-
+	
+	$userscourses = $params['userscourses'];
+	foreach($userscourses as $usercourse) {
+		$original_course_id = $usercourse['course_id'];
+		$original_user_id = $usercourse['user_id'];
 		$status = STUDENT;
-
-	    // Get user id from original user id
-	    $usersList = array();
-	    foreach ($original_user_id_values as $row_original_user_list) {
-	 		$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
-	 		if ($user_id == 0) {
-		    	continue; // user_id doesn't exist.
-		    } else {
-				$sql = "SELECT user_id FROM $user_table WHERE user_id ='".$row_user[0]."' AND active= '0'";
-				$resu = Database::query($sql);
-				$r_check_user = Database::fetch_row($resu);
-				if (!empty($r_check_user[0])) {
-					continue; // user_id is not active.
-				}
-		    }
-		    $usersList[] = $row_user[0];
-	 	}
-
-	    $orig_user_id_value[] = implode(',', $usersList);
-	    // Get course code from original course id
-
-		$sql_course = "SELECT course_code FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-		$res_course = Database::query($sql_course);
-		$row_course = Database::fetch_row($res_course);
-
-		$course_code = $row_course[0];
-
-		if (empty($course_code)) {
-			$results[] = 0; // original_course_id_value doesn't exist
-			continue;
+		if($usercourse['status']) {
+			$status = $usercourse['status'];
+		}
+		
+		$result = array(
+			'original_user_id_value' => $original_user_id['original_user_id_value'],
+			'original_course_id_value' => $original_course_id['original_course_id_value'],
+			'result' => 1);
+		
+		// Get user id
+		$user_id = UserManager::get_user_id_from_original_id($original_user_id['original_user_id_value'], $original_user_id['original_user_id_name']);
+		if($user_id == 0) {
+			// If user was not found, there was a problem
+			$result['result'] = 0;
 		} else {
-			$sql = "SELECT code FROM $course_table WHERE code ='$course_code' AND visibility = '0'";
-			$resc = Database::query($sql);
-			$r_check_code = Database::fetch_row($resc);
-			if (!empty($r_check_code[0])) {
-				$results[] = 0; // this code is not active
-				continue;
+			// User was found
+			$course_id = CourseManager::get_course_id_from_original_id($original_course_id['original_course_id_value'], $original_course_id['original_course_id_name']);
+			if($course_id == 0) {
+				// Course was not found
+				$result['result'] = 0;
+			} else {
+				$course_code = CourseManager::get_course_code_from_course_id($course_id);
+				if(CourseManager::add_user_to_course($user_id, $course_code, $status) == false) {
+					$result['result'] = 0;
+				}
 			}
 		}
-
-		$status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
-		$role_id = ($status == COURSEMANAGER) ? COURSE_ADMIN : NORMAL_COURSE_MEMBER;
-	        $course_code = Database::escape_string($course_code);
-
-		if (empty ($usersList) || empty ($course_code)) {
-			$results[] = 0;
-			continue;
-		} else {
-
-			foreach($usersList as $user_id) {
-				// previously check if the user are already registered on the platform
-					$handle = @Database::query("SELECT status FROM ".$user_table."
-															WHERE user_id = '$user_id' ");
-				if (Database::num_rows($handle) == 0){
-					//$results[] = 7; // the user isn't registered to the platform
-					continue;
-				} else {
-					//check if user isn't already subscribed to the course
-					$handle = @Database::query("SELECT * FROM ".$course_user_table."
-																		WHERE user_id = '$user_id'
-																		AND course_code ='$course_code'");
-					if (Database::num_rows($handle) > 0) {
-						//$results[] = 8; // the user is already subscribed to the course
-						continue;
-					} else {
-
-						$course_sort = CourseManager :: userCourseSort($user_id,$course_code);
-						$add_course_user_entry_sql = "INSERT INTO ".$course_user_table."
-											SET course_code = '$course_code',
-											user_id    = '$user_id',
-											status    = '".$status."',
-											sort  =   '". ($course_sort)."'";
-						$result = @Database::query($add_course_user_entry_sql);
-
-					}
-				}
-			} // end foreach usersList
-		}
-		$results[] = 1;
-		continue;
-	} // end principal foreach
-
-    $count_results = count($results);
-	$output = array();
-	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_value' => $orig_user_id_value[$i], 'original_course_id_value' => $orig_course_id_value[$i], 'result' => $results[$i]);
+		$results[] = $result;
 	}
+	return $results;
 
-	return $output;
+    
 }
 
 /* Register WSUnsubscribeUserFromCourse function */
@@ -4635,7 +4536,7 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course[]')),
 
 // Register the method to expose
 $server->register('WSListCourses',				// method name
-	array('secret_key' => 'xsd:string'),	// input parameters
+	array('secret_key' => 'xsd:string', 'original_course_id_name' => 'xsd:string'),	// input parameters
 	array('return' => 'tns:courses'),		// output parameters
 	'urn:WSRegistration',									// namespace
 	'urn:WSRegistration#WSListCourses',			// soapaction
@@ -4645,10 +4546,12 @@ $server->register('WSListCourses',				// method name
 );
 
 // define the method WSListCourses
-function WSListCourses($secret_key) {
-	if(!WSHelperVerifyKey($secret_key)) {
+function WSListCourses($params) {
+	if(!WSHelperVerifyKey($params)) {
 		return -1;
 	}
+	
+	$course_field_name = $params['original_course_id_name'];
 	
 	$courses_result = array();
 	$category_names = array();
@@ -4675,8 +4578,8 @@ function WSListCourses($secret_key) {
 		$user_list = CourseManager::get_user_list_from_course_code($course['code'], false);
 		$course_tmp['number_students'] = count($user_list);
 		
-		// TODO: Determining external course id
-		$course_tmp['external_course_id'] = 'test';
+		// Determining external course id
+		$course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_field_name, $course['code']);
 		
 		
 		$courses_result[] = $course_tmp;

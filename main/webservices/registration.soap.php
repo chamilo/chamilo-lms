@@ -10,6 +10,19 @@ require_once $libpath.'add_course.lib.inc.php';
 require_once $libpath.'course.lib.php';
 require_once $libpath.'sessionmanager.lib.php';
 
+function WSHelperVerifyKey($params) {
+	global $_configuration;
+	
+	if(is_array($params)) {
+		$secret_key = $params['secret_key'];
+	} else {
+		$secret_key = $params;
+	}
+	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
+
+	return api_is_valid_secret_key($secret_key, $security_key);
+}
+
 // Create the server instance
 $server = new soap_server();
 // Initialize WSDL support
@@ -125,13 +138,10 @@ $server->register('DokeosWSCreateUsers',			// method name
 // Define the method DokeosWSCreateUsers
 function DokeosWSCreateUsers($params) {
 
-	global $_user, $userPasswordCrypted, $_configuration;
-
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	global $_user, $userPasswordCrypted;
+	
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	// database table definition
@@ -341,13 +351,10 @@ $server->register('DokeosWSCreateUser',				// method name
 // Define the method DokeosWSCreateUser
 function DokeosWSCreateUser($params) {
 
-	global $_user, $userPasswordCrypted, $_configuration;
+	global $_user, $userPasswordCrypted;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	// database table definition
@@ -586,13 +593,10 @@ $server->register('DokeosWSCreateUsersPasswordCrypted',						    // method name
 // Define the method DokeosWSCreateUsersPasswordCrypted
 function DokeosWSCreateUsersPasswordCrypted($params) {
 
-	global $_user, $userPasswordCrypted, $_configuration;
+	global $_user, $userPasswordCrypted;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	// database table definition
@@ -834,13 +838,10 @@ $server->register('DokeosWSCreateUserPasswordCrypted',						// method name
 // Define the method DokeosWSCreateUserPasswordCrypted
 function DokeosWSCreateUserPasswordCrypted($params) {
 
-	global $_user, $userPasswordCrypted, $_configuration;
+	global $_user, $userPasswordCrypted;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // Secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	// Database table definition.
@@ -1091,13 +1092,10 @@ $server->register('DokeosWSEditUsers',				// method name
 
 // Define the method DokeosWSEditUsers
 function DokeosWSEditUsers($params) {
-	global $userPasswordCrypted,$_configuration;
+	global $userPasswordCrypted;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1248,13 +1246,10 @@ $server->register('DokeosWSEditUser',		        // method name
 
 // Define the method DokeosWSEditUser
 function DokeosWSEditUser($params) {
-	global $userPasswordCrypted, $_configuration;
+	global $userPasswordCrypted;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1432,13 +1427,10 @@ $server->register('DokeosWSEditUsersPasswordCrypted',					// method name
 
 // Define the method DokeosWSEditUsersPasswordCrypted
 function DokeosWSEditUsersPasswordCrypted($params) {
-	global $userPasswordCrypted, $_configuration, $userPasswordCrypted;
+	global $userPasswordCrypted, $userPasswordCrypted;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; //secret key is incorrect
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	// get user id from id of remote system
@@ -1616,13 +1608,10 @@ $server->register('DokeosWSEditUserPasswordCrypted',					// method name
 
 // Define the method DokeosWSEditUserPasswordCrypted
 function DokeosWSEditUserPasswordCrypted($params) {
-	global $userPasswordCrypted,$_configuration, $userPasswordCrypted;
+	global $userPasswordCrypted, $userPasswordCrypted;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1735,198 +1724,84 @@ function DokeosWSEditUserPasswordCrypted($params) {
 	return $return;
 }
 
-/* Register DokeosWSDeleteUsers function */
+/** WSDeleteUsers **/
 $server->wsdl->addComplexType(
-	'deleteUsersParam',
+	'user_ids',
 	'complexType',
 	'struct',
 	'all',
 	'',
 	array(
-		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string')
-	)
-);
-
-$server->wsdl->addComplexType(
-'deleteUsersParamList',
-'complexType',
-'array',
-'',
-'SOAP-ENC:Array',
-array(),
-array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:deleteUsersParam[]')),
-'tns:deleteUsersParam'
-);
-
-// Register the data structures used by the service
-$server->wsdl->addComplexType(
-	'deleteUsers',
-	'complexType',
-	'struct',
-	'all',
-	'',
-	array(
-		'users' => array('name' => 'users', 'type' => 'tns:deleteUsersParamList'),
+		'ids' => array('name' => 'user_ids', 'type' => 'xsd:int[]'),
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
-// Prepare output params, in this case will return an array
-$server->wsdl->addComplexType(
-'result_deleteUsers',
-'complexType',
-'struct',
-'all',
-'',
-array(
-		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-		'result' => array('name' => 'result', 'type' => 'xsd:string')
-     )
-);
-
-$server->wsdl->addComplexType(
-'results_deleteUsers',
-'complexType',
-'array',
-'',
-'SOAP-ENC:Array',
-array(),
-array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_deleteUsers[]')),
-'tns:result_deleteUsers'
-);
-
-$server->register('DokeosWSDeleteUsers',			// method name
-	array('deleteUsers'=>'tns:deleteUsers'),		// input parameters
-	array('return' => 'tns:results_deleteUsers'),	// output parameters
+$server->register('WSDeleteUsers',			// method name
+	array('user_ids' => 'tns:user_ids'),	// input parameters
+	array(),	// output parameters
 	'urn:WSRegistration',							// namespace
-	'urn:WSRegistration#DokeosWSDeleteUsers',		// soapaction
+	'urn:WSRegistration#WSDeleteUsers',		// soapaction
 	'rpc',											// style
 	'encoded',										// use
-	'This service deletes a user  '					// documentation
+	'Deletes users provided as parameters from the system'		// documentation
 );
 
-// Define the method DokeosWSDeleteUsers
-function DokeosWSDeleteUsers($params) {
-	global $_configuration;
-
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+function WSDeleteUsers($params) {
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
-
-	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
-	$users_params = $params['users'];
-	$results = array();
-	$orig_user_id_value = array();
-
-	foreach ($users_params as $user_param) {
-
-		$original_user_id_name = $user_param['original_user_id_name'];
-	   	$original_user_id_value = $user_param['original_user_id_value'];
-	   	$orig_user_id_value[] = $user_param['original_user_id_value'];
-		$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
-		$res = Database::query($sql);
-		$row = Database::fetch_row($res);
-		$user_id = $row[0];
-
-		if (empty($user_id)) {
-			$results[] = 0;
-			continue;
-		} else {
-			$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
-			$resu = Database::query($sql);
-			$r_check_user = Database::fetch_row($resu);
-			if (!empty($r_check_user[0])) {
-				$results[] = 0;
-				continue;
-			}
-		}
-
-		// Update active to 0
-		$sql = "UPDATE $table_user SET active='0' WHERE user_id = '$user_id'";
-		$res = Database::query($sql);
-		$results[] = 1;
-		continue;
+	
+	$user_ids = $params['ids'];
+	foreach($user_ids as $user_id) {
+		UserManager::delete_user($user_id);
 	}
-
-   	$count_results = count($results);
-	$output = array();
-	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_value' => $orig_user_id_value[$i], 'result' => $results[$i]);
-	}
-
-	return $output;
 }
 
-/* Register DokeosWSDeleteUser function */
-$server->wsdl->addComplexType(
-	'deleteUser',
-	'complexType',
-	'struct',
-	'all',
-	'',
-	array(
-		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
-	)
+/** WSDisableUsers **/
+$server->register('WSDisableUsers',			// method name
+	array('user_ids' => 'tns:user_ids'),	// input parameters
+	array(),	// output parameters
+	'urn:WSRegistration',							// namespace
+	'urn:WSRegistration#WSDisableUsers',		// soapaction
+	'rpc',											// style
+	'encoded',										// use
+	'Disables users provided as parameters from the system'		// documentation
 );
 
-
-$server->register('DokeosWSDeleteUser',			// method name
-	array('deleteUser'=>'tns:deleteUser'),		// input parameters
-	array('return' => 'xsd:string'),			// output parameters
-	'urn:WSRegistration',						// namespace
-	'urn:WSRegistration#DokeosWSDeleteUser',	// soapaction
-	'rpc',										// style
-	'encoded',									// use
-	'This service deletes a user  '				// documentation
-);
-
-// Define the method DokeosWSDeleteUser
-function DokeosWSDeleteUser($params) {
-	global $_configuration;
-
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // Secret key is incorrect.
+function WSDisableUsers($params) {
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
-
-	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
-	$original_user_id_name = $params['original_user_id_name'];
-   	$original_user_id_value = $params['original_user_id_value'];
-	$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
-	$res = Database::query($sql);
-	$row = Database::fetch_row($res);
-	$user_id = $row[0];
-
-	if (empty($user_id)) {
-		return 0;
-	} else {
-		$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
-		$resu = Database::query($sql);
-		$r_check_user = Database::fetch_row($resu);
-		if (!empty($r_check_user[0])) {
-			return 0;
-		}
+	
+	$user_ids = $params['ids'];
+	foreach($user_ids as $user_id) {
+		UserManager::disable($user_id);
 	}
-
-	// Update active to 0
-	$sql = "UPDATE $table_user SET active='0' WHERE user_id = '$user_id'";
-	$res = Database::query($sql);
-	return 1;
 }
+
+/** WSEnableUsers **/
+$server->register('WSEnableUsers',			// method name
+	array('user_ids' => 'tns:user_ids'),	// input parameters
+	array(),	// output parameters
+	'urn:WSRegistration',							// namespace
+	'urn:WSRegistration#WSEnableUsers',		// soapaction
+	'rpc',											// style
+	'encoded',										// use
+	'Enables users provided as parameters'		// documentation
+);
+
+function WSEnableUsers($params) {
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
+	}
+	
+	$user_ids = $params['ids'];
+	foreach($user_ids as $user_id) {
+		UserManager::enable($user_id);
+	}
+}
+
 
 /* Register DokeosWSCreateCourse function */
 // Register the data structures used by the service
@@ -2010,14 +1885,10 @@ $server->register('DokeosWSCreateCourse',			// method name
 // Define the method DokeosWSCreateCourse
 function DokeosWSCreateCourse($params) {
 
-	global $firstExpirationDelay, $_configuration;
+	global $firstExpirationDelay;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	//return $secret_key;
-	if (!api_is_valid_secret_key($secret_key,$security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -2235,13 +2106,10 @@ $server->register('DokeosWSCreateCourseByTitle',					// method name
 // Define the method DokeosWSCreateCourseByTitle
 function DokeosWSCreateCourseByTitle($params) {
 
-	global $firstExpirationDelay, $_configuration;
+	global $firstExpirationDelay;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$t_cfv 					= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -2457,13 +2325,8 @@ $server->register('DokeosWSEditCourse',			// method name
 // Define the method DokeosWSEditCourse
 function DokeosWSEditCourse($params){
 
-	global $_configuration;
-
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -2618,13 +2481,10 @@ $server->register('DokeosWSCourseDescription',				// method name
 // Define the method DokeosWSCourseDescription
 function DokeosWSCourseDescription($params) {
 
-	global $_configuration, $_course;
+	global $_course;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -2788,13 +2648,10 @@ $server->register('DokeosWSEditCourseDescription',			// method name
 // Define the method DokeosWSEditCourseDescription
 function DokeosWSEditCourseDescription($params) {
 
-	global $_configuration, $_course;
+	global $_course;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -2950,13 +2807,8 @@ $server->register('DokeosWSDeleteCourse',			// method name
 // Define the method DokeosWSDeleteCourse
 function DokeosWSDeleteCourse($params) {
 
-	global $_configuration;
-
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -3095,13 +2947,10 @@ $server->register('DokeosWSCreateSession',			// method name
 // define the method DokeosWSCreateSession
 function DokeosWSCreateSession($params) {
 
-	global $_user,$_configuration;
+	global $_user;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key,$security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
@@ -3287,13 +3136,10 @@ $server->register('DokeosWSEditSession',		// method name
 // define the method DokeosWSEditSession
 function DokeosWSEditSession($params) {
 
-	global $_user, $_configuration;
+	global $_user;
 
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key,$security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
@@ -3465,13 +3311,8 @@ $server->register('DokeosWSDeleteSession',			// method name
 // define the method DokeosWSDeleteSession
 function DokeosWSDeleteSession($params) {
 
-	global $_configuration;
-
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
@@ -3650,13 +3491,8 @@ $server->register('DokeosWSSubscribeUserToCourse',					// method name
 // define the method DokeosWSSubscribeUserToCourse
 function DokeosWSSubscribeUserToCourse($params) {
 
-    global $_configuration;
-
-    $secret_key = $params['secret_key'];
-    $security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+    if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
     $user_table = Database :: get_main_table(TABLE_MAIN_USER);
@@ -3856,12 +3692,8 @@ $server->register('DokeosWSUnsubscribeUserFromCourse',					// method name
 
 // define the method DokeosWSUnsubscribeUserFromCourse
 function DokeosWSUnsubscribeUserFromCourse($params) {
-	global $_configuration;
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -4029,13 +3861,8 @@ $server->register('DokeosWSSuscribeUsersToSession',						// method name
 // define the method DokeosWSSuscribeUsersToSession
 function DokeosWSSuscribeUsersToSession($params){
 
- 	global $_configuration;
-
- 	$secret_key = $params['secret_key'];
- 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+ 	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -4244,13 +4071,8 @@ $server->register('DokeosWSUnsuscribeUsersFromSession',							// method name
 // define the method DokeosWSUnsuscribeUsersFromSession
 function DokeosWSUnsuscribeUsersFromSession($params) {
 
- 	global $_configuration;
-
- 	$secret_key = $params['secret_key'];
- 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+ 	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -4479,13 +4301,8 @@ $server->register('DokeosWSSuscribeCoursesToSession',						// method name
 // Define the method DokeosWSSuscribeCoursesToSession
 function DokeosWSSuscribeCoursesToSession($params) {
 
-	global $_configuration;
-
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
    	// initialisation
@@ -4706,13 +4523,8 @@ $server->register('DokeosWSUnsuscribeCoursesFromSession',							// method name
 // define the method DokeosWSUnsuscribeCoursesFromSession
 function DokeosWSUnsuscribeCoursesFromSession($params) {
 
-	global $_configuration;
-
-	$secret_key = $params['secret_key'];
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
 	}
 
    	// Initialisation
@@ -4854,12 +4666,8 @@ $server->register('WSListCourses',				// method name
 
 // define the method WSListCourses
 function WSListCourses($secret_key) {
-	global $_configuration;
-
-	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-
-	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; // The secret key is incorrect.
+	if(!WSHelperVerifyKey($secret_key)) {
+		return -1;
 	}
 	
 	$courses_result = array();

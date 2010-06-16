@@ -14,6 +14,6 @@ $secret_key = sha1($ip_address.$security_key);
 
 $client = new SoapClient($_configuration['root_web'].'main/webservices/registration.soap.php?wsdl');
 
-$answer = $client->WSListCourses($secret_key);
-var_dump($answer);
+$params = array('secret_key' => $secret_key, 'ids' => array(3));
+$client->WSEnableUsers($params);
 

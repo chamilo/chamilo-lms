@@ -358,6 +358,37 @@ class UserManager
 		}
 		return $return;
 	}
+	
+	/**
+	 * Disables or enables a user
+	 * 
+	 * @param int user_id
+	 * @param int Enable or disable
+	 */
+	private static function change_active_state($user_id, $active) {
+		$user_id = (int)$user_id;
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+		$sql = "UPDATE $table_user SET active = '$active' WHERE user_id = '$user_id';";
+		Database::query($sql);
+	}
+	
+	/**
+	 * Disables a user
+	 * 
+	 * @param int User id
+	 */
+	public static function disable($user_id) {
+		self::change_active_state($user_id, 0);
+	}
+	
+	/**
+	 * Enable a user
+	 * 
+	 * @param int User id
+	 */
+	public static function enable($user_id) {
+		self::change_active_state($user_id, 1);
+	}
 
 	/**
 	 * Check if a username is available

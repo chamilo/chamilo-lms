@@ -179,13 +179,10 @@ function WSCreateUsers($params) {
 		if (!empty($user_param['expiration_date'])) { $expiration_date = $user_param['expiration_date'];}
 
 		// Check if exits x_user_id into user_field_values table.
-		$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
-		$res = Database::query($sql);
-		$row = Database::fetch_row($res);
-		$count_row = Database::num_rows($res);
-		if ($count_row > 0) {
+		$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+		if ($user_id > 0) {
 			// Check if user is not active.
-			$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$row[1]."' AND active= '0'";
+			$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$user_id."' AND active= '0'";
 			$resu = Database::query($sql);
 			$r_check_user = Database::fetch_row($resu);
 			$count_user_id = Database::num_rows($resu);
@@ -385,13 +382,10 @@ function WSCreateUser($params) {
 	if (!empty($params['expiration_date'])) { $expiration_date = $params['expiration_date'];}
 
 	// check if exits x_user_id into user_field_values table
-	$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
-	$res = Database::query($sql);
-	$row = Database::fetch_row($res);
-	$count_row = Database::num_rows($res);
-	if ($count_row > 0) {
+	$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+	if ($user_id > 0) {
 		// Check whether user is not active.
-		$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$row[1]."' AND active= '0'";
+		$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$user_id."' AND active= '0'";
 		$resu = Database::query($sql);
 		$r_check_user = Database::fetch_row($resu);
 		$count_user_id = Database::num_rows($resu);
@@ -893,13 +887,10 @@ function WSCreateUserPasswordCrypted($params) {
 	if (!empty($params['expiration_date'])) { $expiration_date = $params['expiration_date'];}
 
 	// Check whether x_user_id exists into user_field_values table.
-	$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
-	$res = Database::query($sql);
-	$row = Database::fetch_row($res);
-	$count_row = Database::num_rows($res);
-	if ($count_row > 0) {
+	$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+	if ($user_id > 0) {
 		// Check whether user is not active.
-		$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$row[1]."' AND active= '0'";
+		$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$user_id."' AND active= '0'";
 		$resu = Database::query($sql);
 		$r_check_user = Database::fetch_row($resu);
 		$count_check_user = Database::num_rows($resu);
@@ -1132,12 +1123,9 @@ function WSEditUsers($params) {
 
 		// Get user id from id wiener
 
-		$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
-		$res = Database::query($sql);
-		$row = Database::fetch_row($res);
-		$user_id = $row[0];
+		$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
 
-		if (empty($user_id)) {
+		if ($user_id == 0) {
 			$results[] = 0; // Original_user_id_value doesn't exist.
 			continue;
 		} else {
@@ -1279,12 +1267,9 @@ function WSEditUser($params) {
 
 	// Get user id from id wiener
 
-	$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
-	$res = Database::query($sql);
-	$row = Database::fetch_row($res);
-	$user_id = $row[0];
+	$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
 
-	if (empty($user_id)) {
+	if ($user_id == 0) {
 		return 0;
 	} else {
 		$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
@@ -1494,12 +1479,9 @@ function WSEditUsersPasswordCrypted($params) {
 			continue;
 		}
 
-		$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
-		$res = Database::query($sql);
-		$row = Database::fetch_row($res);
-		$user_id = $row[0];
+		$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
 
-		if (empty($user_id)) {
+		if ($user_id == 0) {
 			$results[] = 0; // Original_user_id_value doesn't exist.
 			continue;
 		} else {
@@ -1660,13 +1642,10 @@ function WSEditUserPasswordCrypted($params) {
 		$msg = "If encrypt_method is not empty the password param is required ";
 		return $msg;
 	}
+	
+	$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
 
-	$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
-	$res = Database::query($sql);
-	$row = Database::fetch_row($res);
-	$user_id = $row[0];
-
-	if (empty($user_id)) {
+	if ($user_id == 0) {
 		return 0;
 	} else {
 		$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
@@ -1726,16 +1705,48 @@ function WSEditUserPasswordCrypted($params) {
 
 /** WSDeleteUsers **/
 $server->wsdl->addComplexType(
+	'user_id',
+	'complexType',
+	'struct', 
+	'all',
+	'',
+	array(
+		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string')
+	)
+);
+
+$server->wsdl->addComplexType(
 	'user_ids',
 	'complexType',
 	'struct',
 	'all',
 	'',
 	array(
-		'ids' => array('name' => 'user_ids', 'type' => 'xsd:int[]'),
+		'ids' => array('name' => 'user_ids', 'type' => 'tns:user_id[]'),
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
+
+function WSHelperActionOnUsers($params, $type) {
+	if(!WSHelperVerifyKey($params)) {
+		return -1;
+	}
+	
+	$original_user_ids = $params['ids'];
+	foreach($original_user_ids as $original_user_id) {
+		$user_id = UserManager::get_user_id_from_original_id($original_user_id['original_user_id_value'], $original_user_id['original_user_id_name']);
+		if($user_id > 0) {
+			if($type == "delete") {
+				UserManager::delete_user($user_id);
+			} else if($type == "disable") {
+				UserManager::disable($user_id);
+			} else if($type == "enable") {
+				UserManager::enable($user_id);
+			}
+		}
+	}
+}
 
 $server->register('WSDeleteUsers',			// method name
 	array('user_ids' => 'tns:user_ids'),	// input parameters
@@ -1748,14 +1759,7 @@ $server->register('WSDeleteUsers',			// method name
 );
 
 function WSDeleteUsers($params) {
-	if(!WSHelperVerifyKey($params)) {
-		return -1;
-	}
-	
-	$user_ids = $params['ids'];
-	foreach($user_ids as $user_id) {
-		UserManager::delete_user($user_id);
-	}
+	WSHelperActionOnUsers($params, "delete");
 }
 
 /** WSDisableUsers **/
@@ -1770,14 +1774,7 @@ $server->register('WSDisableUsers',			// method name
 );
 
 function WSDisableUsers($params) {
-	if(!WSHelperVerifyKey($params)) {
-		return -1;
-	}
-	
-	$user_ids = $params['ids'];
-	foreach($user_ids as $user_id) {
-		UserManager::disable($user_id);
-	}
+	WSHelperActionOnUsers($params, "disable");
 }
 
 /** WSEnableUsers **/
@@ -1792,14 +1789,7 @@ $server->register('WSEnableUsers',			// method name
 );
 
 function WSEnableUsers($params) {
-	if(!WSHelperVerifyKey($params)) {
-		return -1;
-	}
-	
-	$user_ids = $params['ids'];
-	foreach($user_ids as $user_id) {
-		UserManager::enable($user_id);
-	}
+	WSHelperActionOnUsers($params, "enable");
 }
 
 
@@ -3525,11 +3515,8 @@ function WSSubscribeUserToCourse($params) {
 	    // Get user id from original user id
 	    $usersList = array();
 	    foreach ($original_user_id_values as $row_original_user_list) {
-	 		$sql_user = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value = '$row_original_user_list'";
-	 		// return $sql_user;
-	 		$res_user = Database::query($sql_user);
-	 		$row_user = Database::fetch_row($res_user);
-	 		if (empty($row_user[0])) {
+	 		$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+	 		if ($user_id == 0) {
 		    	continue; // user_id doesn't exist.
 		    } else {
 				$sql = "SELECT user_id FROM $user_table WHERE user_id ='".$row_user[0]."' AND active= '0'";
@@ -3719,11 +3706,8 @@ function WSUnsubscribeUserFromCourse($params) {
 		// Get user id from original user id
 	    $usersList = array();
 	    foreach ($original_user_id_values as $row_original_user_list) {
-	 		$sql_user = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value = '$row_original_user_list'";
-	 		//return $sql_user;
-	 		$res_user = Database::query($sql_user);
-	 		$row_user = Database::fetch_row($res_user);
-	 		if (empty($row_user[0])) {
+			$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+	 		if ($user_id == 0) {
 		    	continue; // user_id doesn't exist.
 		    } else {
 				$sql = "SELECT user_id FROM $user_table WHERE user_id ='".$row_user[0]."' AND active= '0'";
@@ -3900,10 +3884,8 @@ function WSSuscribeUsersToSession($params){
 
 	 	$usersList = array();
 	 	foreach ($original_user_id_values as $row_original_user_list) {
-	 		$sql_user = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value = '$row_original_user_list'";
-	 		$res_user = Database::query($sql_user);
-	 		$row_user = Database::fetch_row($res_user);
-	 		if (empty($row_user[0])) {
+	 		$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+	 		if ($user_id == 0) {
 		    	continue; // user_id doesn't exist.
 		    } else {
 				$sql = "SELECT user_id FROM $user_table WHERE user_id ='".$row_user[0]."' AND active= '0'";
@@ -4111,10 +4093,8 @@ function WSUnsuscribeUsersFromSession($params) {
 
 	 	$usersList = array();
 	 	foreach ($original_user_id_values as $row_original_user_list) {
-	 		$sql_user = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value = '$row_original_user_list'";
-	 		$res_user = Database::query($sql_user);
-	 		$row_user = Database::fetch_row($res_user);
-	 		if (empty($row_user[0])) {
+	 		$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+	 		if ($user_id == 0) {
 		    	continue; // user_id doesn't exist.
 		    } else {
 				$sql = "SELECT user_id FROM $user_table WHERE user_id ='".$row_user[0]."' AND active= '0'";

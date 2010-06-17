@@ -76,7 +76,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 	
 	$default['start_date_type'] = 1;	
-	$default['custom_start_date'] = date('d-F-Y 00:00');
+	$default['custom_start_date'] = date('d-F-Y H:i',api_strtotime(api_get_local_time()));
 	if (!empty($thematic_advance_data)) {
 
 		// set default values

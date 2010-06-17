@@ -61,15 +61,16 @@ class UserManager
 	  * @param	string	Authentication source	(optional, defaults to 'platform', dependind on constant)
 	  * @param	string	Account expiration date (optional, defaults to '0000-00-00 00:00:00')
 	  * @param	int		Whether the account is enabled or disabled by default
- 	  * @param	int		The user ID of the person who registered this user (optional, defaults to null)
  	  * @param	int		The department of HR in which the user is registered (optional, defaults to 0)
+ 	  * @param 	array	Extra fields
+ 	  * @param	string	Encrypt method used if password is given encrypted. Set to an empty string by default
 	  * @return mixed   new user id - if the new user creation succeeds, false otherwise
 	  *
 	  * @desc The function tries to retrieve $_user['user_id'] from the global space.
 	  * if it exists, $_user['user_id'] is the creator id. If a problem arises,
 	  * it stores the error message in global $api_failureList
 	  */
-	public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null) {
+	public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '') {
 		global $_user, $userPasswordCrypted;
 
 		$firstName = Security::remove_XSS($firstName);
@@ -94,7 +95,19 @@ class UserManager
 			return api_set_failure('login-pass already taken');
 		}
 		//$password = "PLACEHOLDER";
-		$password = api_get_encrypted_password($password);
+		if($encrypt_method == '') {
+			$password = api_get_encrypted_password($password);
+		} else {
+			if ($userPasswordCrypted === $encrypt_method ) {
+				if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
+					return api_set_failure('encrypt_method invalid');
+				} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
+					return api_set_failure('encrypt_method invalid');
+				}
+			} else {
+				return api_set_failure('encrypt_method invalid');
+			}
+		}
 		//$password = ($userPasswordCrypted ? md5($password) : $password);
 		$current_date = date('Y-m-d H:i:s', time());
 		$sql = "INSERT INTO $table_user
@@ -144,7 +157,7 @@ class UserManager
 		if (is_array($extra) && count($extra) > 0) {
 			$res = true;
 			foreach($extra as $fname => $fvalue) {
-				$res = $res && self::update_extra_field($return, $fname, $fvalue);
+				$res = $res && self::update_extra_field_value($return, $fname, $fvalue);
 			}
 		}
 		return $return;
@@ -499,6 +512,25 @@ class UserManager
 		// 1. Applying the shallow purifier.
 		// 2. Length limitation.
 		return substr(preg_replace(USERNAME_PURIFIER_SHALLOW, '', $username), 0, USERNAME_MAX_LENGTH);
+	}
+	
+	/**
+	 * Checks whether the user id exists in the database
+	 * 
+	 * @param int User id
+	 * @return bool True if user id was found, false otherwise
+	 */
+	public static function is_user_id_valid($user_id) {
+		$user_id = (int)$user_id;
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+		$sql = "SELECT user_id FROM $table_user WHERE user_id = '".$user_id."'";
+		$res = Database::query($sql);
+		$num_rows = Database::num_rows($res);
+		if($num_rows == 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**

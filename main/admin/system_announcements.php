@@ -103,7 +103,7 @@ if (isset ($_POST['action']) && $_POST['action'] == 'delete_selected') {
 if (isset ($_GET['action']) && $_GET['action'] == 'add') {
 	$values['action'] = 'add';
 	// Set default time window: NOW -> NEXT WEEK
-	$values['start'] = date('Y-m-d H:i:s');
+	$values['start'] = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()));
 	$values['end'] = date('Y-m-d H:i:s',time() + (7 * 24 * 60 * 60));
 	$action_todo = true;
 }

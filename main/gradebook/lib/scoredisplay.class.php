@@ -84,9 +84,11 @@ class ScoreDisplay
     	}
     	$this->custom_enabled = $this->load_bool_setting('gradebook_score_display_custom', 0);
     	if ($this->custom_enabled) {
-    		$this->upperlimit_included = $this->load_bool_setting('gradebook_score_display_upperlimit', 0);
-    		$this->custom_display = $this->get_custom_displays();
-    		$this->custom_display_conv = $this->convert_displays($this->custom_display);
+            $this->custom_display = $this->get_custom_displays();
+            if (count($this->custom_display)>0) {
+    		  $this->upperlimit_included = $this->load_bool_setting('gradebook_score_display_upperlimit', 0);
+    		  $this->custom_display_conv = $this->convert_displays($this->custom_display);
+            }
     	}
     }
 	/**

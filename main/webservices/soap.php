@@ -10,37 +10,62 @@ require_once $libpath.'nusoap/nusoap.php';
  */
 class WSSoapErrorHandler implements WSErrorHandler {
 	/**
-	 * SOAP server
-	 * 
-	 * @var soap_server
-	 */
-	protected $_server;
-	
-	/**
-	 * Constructor
-	 */
-	public function __construct($server) {
-		$this->_server = $server;
-	}
-	
-	/**
 	 * Handles the error by sending a SOAP fault through the server
 	 * 
 	 * @param WSError Error to handle
 	 */
 	public function handle($error) {
-		$this->_server->fault(strval($error->code), $error->message);
+		$server = WSSoapServer::singleton();
+		$server->fault(strval($error->code), $error->message);
 	}
 }
 
+/**
+ * SOAP server wrapper implementing a Singleton
+ */
+class WSSoapServer {
+	/**
+	 * SOAP server instance
+	 * 
+	 * @var soap_server
+	 */
+	private static $_instance;
+	
+	/**
+	 * Private constructor
+	 */
+	private function __construct() {
+	}
+	
+	/**
+	 * Singleton method
+	 */
+	public static function singleton() {
+		if(!isset(self::$_instance)) {
+			self::$_instance = new soap_server();
+			// Set the error handler
+			WSError::setErrorHandler(new WSSoapErrorHandler());
+			// Configure the service
+			self::$_instance->configureWSDL('WSService', 'urn:WSService');
+		}
+		
+		return self::$_instance;
+	}
+}
+			
+$s = WSSoapServer::singleton();
 
-$s = new soap_server();
-
-$error_handler = new WSSoapErrorHandler($s);
-WSError::setErrorHandler($error_handler);
-
-// Initialize WSDL support
-$s->configureWSDL('WSService', 'urn:WSService');
+$s->wsdl->addComplexType(
+	'result',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'code' => array('name' => 'code', 'type' => 'xsd:int'),
+		'message' => array('name' => 'message', 'type' => 'xsd:string')
+	)
+);
 
 $s->register(
 	'WS.test',
@@ -48,54 +73,7 @@ $s->register(
 	array('return' => 'xsd:string')
 );
 
-$s->register(
-	'WS.DisableUser',
-	array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_field_value' => 'xsd:string')
-);
-
-$s->register(
-	'WS.EnableUser',
-	array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_field_value' => 'xsd:string')
-);
-
-$s->register(
-	'WS.DeleteUser',
-	array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_field_value' => 'xsd:string')
-);
-
-$s->wsdl->addComplexType(
-	'extra_field',
-	'complexType',
-	'struct',
-	'all',
-	'',
-	array(
-		'field_name' => array('name' => 'field_name', 'type' => 'xsd:string'),
-		'field_value' => array('name' => 'field_value', 'type' => 'xsd:string')
-	)
-);
-
-$s->register(
-	'WS.CreateUser',
-	array(
-		'secret_key' => 'xsd:string',
-		'firstname' => 'xsd:string',
-		'lastname' => 'xsd:string',
-		'status' => 'xsd:int',
-		'loginname' => 'xsd:string',
-		'password' => 'xsd:string',
-		'encrypt_method' => 'xsd:string',
-		'user_id_field_name' => 'xsd:string',
-		'user_id_value' => 'xsd:string',
-		'visibility' => 'xsd:int',
-		'email' => 'xsd:string',
-		'language' => 'xsd:string',
-		'phone' => 'xsd:string',
-		'expiration_date' => 'xsd:string',
-		'extras' => 'tns:extra_field[]'
-	),
-	array('return' => 'xsd:int')
-);
+require_once(dirname(__FILE__).'/soap_user.php');
 
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';

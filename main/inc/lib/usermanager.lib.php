@@ -331,7 +331,7 @@ class UserManager
 	 * @param	array	A series of additional fields to add to this user as extra fields (optional, defaults to null)
 	 * @return boolean true if the user information was updated
 	 */
-	public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english') {
+	public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english', $encrypt_method = '') {
 		global $userPasswordCrypted;
 		if ($user_id != strval(intval($user_id))) return false;
 		if ($user_id === false) return false;
@@ -343,7 +343,19 @@ class UserManager
 				language='".Database::escape_string($language)."',";
 		if (!is_null($password)) {
 			//$password = $userPasswordCrypted ? md5($password) : $password;
-			$password = api_get_encrypted_password($password);
+			if($encrypt_method == '') {
+				$password = api_get_encrypted_password($password);
+			} else {
+				if ($userPasswordCrypted === $encrypt_method ) {
+					if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
+						return api_set_failure('encrypt_method invalid');
+					} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
+						return api_set_failure('encrypt_method invalid');
+					}
+				} else {
+					return api_set_failure('encrypt_method invalid');
+				}
+			}
 			$sql .= " password='".Database::escape_string($password)."',";
 		}
 		if (!is_null($auth_source)) {
@@ -366,7 +378,7 @@ class UserManager
 		if (is_array($extra) && count($extra) > 0) {
 			$res = true;
 			foreach($extra as $fname => $fvalue) {
-				$res = $res && self::update_extra_field($user_id,$fname,$fvalue);
+				$res = $res && self::update_extra_field_value($user_id,$fname,$fvalue);
 			}
 		}
 		return $return;

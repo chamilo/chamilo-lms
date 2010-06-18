@@ -1989,6 +1989,47 @@ class CourseManager {
 
 		return Database::insert_id();
 	}
+	
+	/**
+	 * Updates course attribute. Note that you need to check that your attribute is valid before you use this function
+	 * 
+	 * @param int Course id
+	 * @param string Attribute name
+	 * @param string Attribute value
+	 * @return bool True if attribute was successfully updated, false if course was not found or attribute name is invalid
+	 */
+	public static function update_attribute($id, $name, $value) {
+		$id = (int)$id;
+		$table = Database::get_main_table(TABLE_MAIN_COURSE);
+		$sql = "UPDATE $table SET $name = '".Database::escape_string($value)."' WHERE id = '$id';";
+		return Database::query($sql);
+	}
+	
+	/**
+	 * Update course attributes. Will only update attributes with a non-empty value. Note that you NEED to check that your attributes are valid before using this function
+	 * 
+	 * @param int Course id
+	 * @param array Associative array with field names as keys and field values as values
+	 * @return bool True if update was successful, false otherwise
+	 */
+	public static function update_attributes($id, $attributes) {
+		$id = (int)$id;
+		$table = Database::get_main_table(TABLE_MAIN_COURSE);
+		$sql = "UPDATE $table SET ";
+		$i = 0;
+		foreach($attributes as $name => $value) {
+			if(!empty($value)) {
+				if($i > 0) {
+					$sql .= ", ";
+				}
+				$sql .= " $name = '".Database::escape_string($value)."'";
+				$i++;
+			}
+		}
+		$sql .= " WHERE id = '$id';";
+		return Database::query($sql);
+	}
+		
 
 	/**
 	 * Update an extra field value for a given course

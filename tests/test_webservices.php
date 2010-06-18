@@ -58,7 +58,7 @@ class TestSoapWebService extends UnitTestCase {
 	public function testInvalidKey() {
 		$secret_key = 'invalid';
 		try {
-			$this->soapCall('WS.DisableUser', array('secret_key' => $secret_key, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => 3));
+			$this->soapCall('WSUser.DisableUser', array('secret_key' => $secret_key, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => 3));
 			$this->fail('Exception was expected');
 		} catch(SOAPFault $f) {
 			$this->pass();
@@ -67,10 +67,10 @@ class TestSoapWebService extends UnitTestCase {
 	
 	public function testCreateUser() {
 		$user = $this->getUserArray();
-		$result = $this->soapCall('WS.CreateUser', array_merge(array('secret_key' => $this->_secret_key), $user));
+		$result = $this->soapCall('WSUser.CreateUser', array_merge(array('secret_key' => $this->_secret_key), $user));
 		$this->assertIsA($result, 'int');
 		//Delete user created
-		$this->soapCall('WS.DeleteUser', array('secret_key' => $this->_secret_key, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => $result));
+		$this->soapCall('WSUser.DeleteUser', array('secret_key' => $this->_secret_key, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => $result));
 	}
 	
 	public function testCreateUserEncrypted() {
@@ -82,10 +82,10 @@ class TestSoapWebService extends UnitTestCase {
 			$user['password'] = sha1('guillaume');
 		}
 		$user['extras'] = array(array('field_name' => 'salt', 'field_value' => '1234'));
-		$result = $this->soapCall('WS.CreateUser', array_merge(array('secret_key' => $this->_secret_key), $user));
+		$result = $this->soapCall('WSUser.CreateUser', array_merge(array('secret_key' => $this->_secret_key), $user));
 		$this->assertIsA($result, 'int');
 		//Delete user created
-		$this->soapCall('WS.DeleteUser', array('secret_key' => $this->_secret_key, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => $result));
+		$this->soapCall('WSUser.DeleteUser', array('secret_key' => $this->_secret_key, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => $result));
 	}
 }
 

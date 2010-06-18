@@ -28,7 +28,7 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 * @param	integer Course admin ID
 * @param	string	DB prefix
 * @param	integer	Expiration delay in unix timestamp
-* @return true if the course creation was succesful, false otherwise.
+* @return	mixed Course code if course was successfully created, false otherwise
 */
 function create_course($wanted_code, $title, $tutor_name, $category_code, $course_language, $course_admin_id, $db_prefix, $firstExpirationDelay) {
 	$keys = define_course_keys($wanted_code, "", $db_prefix);
@@ -46,7 +46,7 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
 		fill_Db_course($db_name, $directory, $course_language);
 		register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $course_admin_id, $expiration_date);
 
-		return true;
+		return $code;
 	}
 	else
 		return false;

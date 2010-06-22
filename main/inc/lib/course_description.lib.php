@@ -6,6 +6,8 @@
  * @author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.course_description
  */
+require_once(dirname(__FILE__).'/course.lib.php');
+require_once(dirname(__FILE__).'/database.lib.php');
 
 /**
  * CourseDescription can be used to instanciate objects or as a library to manage course descriptions
@@ -24,6 +26,36 @@ class CourseDescription
 	 * Constructor
 	 */
 	public function __construct() {}
+	
+	/**
+	 * Returns an array of objects of type CourseDescription corresponding to a specific course, without session ids (session id = 0)
+	 * 
+	 * @param int Course id
+	 * @return array Array of CourseDescriptions
+	 */
+	public static function get_descriptions($course_id) {
+		// Get course code
+		$course_id = (int)$course_id;
+		$course_code = CourseManager::get_course_code_from_course_id($course_id);
+		// Get course info
+		$course_info = CourseManager::get_course_information($course_code);
+		$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_info['dbName']);
+		$sql = "SELECT * FROM $t_course_desc WHERE session_id = '0';";
+		$sql_result = Database::query($sql);
+		$results = array();
+		while($row = Database::fetch_array($sql_result)) {
+			$desc_tmp = new CourseDescription();
+			$desc_tmp->set_id($row['id']);
+			$desc_tmp->set_title($row['title']);
+			$desc_tmp->set_content($row['content']);
+			$desc_tmp->set_session_id($row['session_id']);
+			$desc_tmp->set_description_type($row['description_type']);
+			$desc_tmp->set_progress($row['progress']);
+			$results[] = $desc_tmp;
+		}
+		return $results;
+	}
+		
 
     /**
      * Get all data of course description by session id,
@@ -125,8 +157,12 @@ class CourseDescription
      * first you must set description_type, title, content, progress and session_id properties with the object CourseDescription
      * @return  int  affected rows
      */
-	public function insert() {
-		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+	public function insert($course_db = null) {
+		if($course_db === null) {
+			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+		} else {
+			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_db);
+		}
 		$sql = "INSERT IGNORE INTO $tbl_course_description SET description_type='".intval($this->description_type)."', title = '".Database::escape_string($this->title)."', content = '".Database::escape_string($this->content)."', progress = '".intval($this->progress)."', session_id = '".intval($this->session_id)."' ";
 		Database::query($sql);
 		$last_id = Database::insert_id();
@@ -170,8 +206,12 @@ class CourseDescription
      * and session_id properties with the object CourseDescription
      * @return int	affected rows
      */
-	public function update() {
-		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+	public function update($course_db = null) {
+		if($course_db === null) {
+			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+		} else {
+			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_db);
+		}
 		$sql = "UPDATE $tbl_course_description SET  title = '".Database::escape_string($this->title)."', content = '".Database::escape_string($this->content)."', progress = '".$this->progress."' WHERE description_type='".intval($this->description_type)."' AND session_id = '".$this->session_id."'";
 		Database::query($sql);
 		$affected_rows = Database::affected_rows();
@@ -187,8 +227,12 @@ class CourseDescription
      * Delete a description, first you must set description_type and session_id properties with the object CourseDescription
      * @return int	affected rows
      */
-	public function delete() {
-		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+	public function delete($course_db = null) {
+		if($course_db === null) {
+			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+		} else {
+			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_db);
+		}
 		$description_id = $this->get_id_by_description_type($this->description_type);
 		$sql = "DELETE FROM $tbl_course_description WHERE description_type = '".intval($this->description_type)."' AND session_id = '".intval($this->session_id)."'";
 		Database::query($sql);

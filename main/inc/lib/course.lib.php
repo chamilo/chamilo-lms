@@ -434,14 +434,14 @@ class CourseManager {
 	 * @param string Original field name
 	 * @return int Course id
 	 */
-	public static function get_course_id_from_original_id($original_course_id_value, $original_course_id_name) {
+	public static function get_course_code_from_original_id($original_course_id_value, $original_course_id_name) {
 		$t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 		$table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-		$sql_course = "SELECT id FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+		$sql_course = "SELECT course_code FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res = Database::query($sql_course);
 		$row = Database::fetch_object($res_course);
 		if($row != false) {
-			return $row->id;
+			return $row->course_code;
 		} else {
 			return 0;
 		}

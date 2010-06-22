@@ -65,17 +65,21 @@ class SessionManager {
 		$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 
-		$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($coach_username).'"';
-		$rs = Database::query($sql);
-		$id_coach = Database::result($rs,0,'user_id');
+		if(is_int($coach_username)) {
+			$id_coach = $coach_username;
+		} else {
+			$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($coach_username).'"';
+			$rs = Database::query($sql);
+			$id_coach = Database::result($rs,0,'user_id');
+		}
 
 		if (empty($nolimit)) {
 			$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
 			$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
 		} else {
 			$id_visibility = 1; // by default is read only
-			$date_start="000-00-00";
-			$date_end="000-00-00";
+			$date_start="0000-00-00";
+			$date_end="0000-00-00";
 		}
 		if (empty($name)) {
 			$msg=get_lang('SessionNameIsRequired');
@@ -1084,5 +1088,25 @@ class SessionManager {
 			}
 		}
 		return $courses;
+	}
+	
+	/**
+	 * Get the session id based on the original id and field name in the extra fields. Returns 0 if session was not found
+	 * 
+	 * @param string Original session id
+	 * @param string Original field name
+	 * @return int Session id
+	 */
+	public static function get_session_id_from_original_id($original_session_id_value, $original_session_id_name) {
+		$t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+		$table_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+		$sql_session = "SELECT session_id FROM $table_field sf INNER JOIN $t_sfv sfv ON sfv.field_id=sf.id WHERE field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
+		$res_session = Database::query($sql_session);
+		$row = Database::fetch_object($res_session);
+		if($row != false) {
+			return $row->session_id;
+		} else {
+			return 0;
+		}
 	}
 }

@@ -32,6 +32,17 @@ $s->wsdl->addComplexType(
 	)
 );
 
+$s->wsdl->addComplexType(
+	'user_result_array',
+	'complexType',
+	'array',
+	'',
+	'SOAP-ENC:Array',
+	array(),
+	array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:user_result[]')),
+	'tns:user_result'
+);
+
 $s->register(
 	'WSUser.DisableUser',
 	array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string')
@@ -40,7 +51,7 @@ $s->register(
 $s->register(
 	'WSUser.DisableUsers',
 	array('secret_key' => 'xsd:string', 'users' => 'tns:user_id[]'),
-	array('return' => 'tns:user_result[]')
+	array('return' => 'tns:user_result_array')
 );
 
 $s->register(
@@ -51,7 +62,7 @@ $s->register(
 $s->register(
 	'WSUser.EnableUsers',
 	array('secret_key' => 'xsd:string', 'users' => 'tns:user_id[]'),
-	array('return' => 'tns:user_result[]')
+	array('return' => 'tns:user_result_array')
 );
 
 $s->register(
@@ -62,7 +73,7 @@ $s->register(
 $s->register(
 	'WSUser.DeleteUsers',
 	array('secret_key' => 'xsd:string', 'users' => 'tns:user_id[]'),
-	array('return' => 'tns:user_result[]')
+	array('return' => 'tns:user_result_array')
 );
 
 $s->register(
@@ -124,13 +135,24 @@ $s->wsdl->addComplexType(
 	)
 );
 
+$s->wsdl->addComplexType(
+	'user_create_result_array',
+	'complexType',
+	'array',
+	'',
+	'SOAP-ENC:Array',
+	array(),
+	array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:user_create_result[]')),
+	'tns:user_create_result'
+);
+
 $s->register(
 	'WSUser.CreateUsers',
 	array(
 		'secret_key' => 'xsd:string',
 		'users' => 'tns:user_create[]'
 	),
-	array('return' => 'tns:user_create_result[]')
+	array('return' => 'tns:user_create_result_array')
 );
 
 $s->register(
@@ -188,11 +210,22 @@ $s->wsdl->addComplexType(
 	)
 );
 
+$s->wsdl->addComplexType(
+	'user_edit_result_array',
+	'complexType',
+	'array',
+	'',
+	'SOAP-ENC:Array',
+	array(),
+	array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:user_edit_result[]')),
+	'tns:user_edit_result'
+);
+
 $s->register(
 	'WSUser.EditUsers',
 	array(
 		'secret_key' => 'xsd:string',
 		'users' => 'tns:user_edit[]'
 	),
-	array('return' => 'tns:user_edit_result[]')
+	array('return' => 'tns:user_edit_result_array')
 );

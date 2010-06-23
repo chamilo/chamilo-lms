@@ -24,11 +24,8 @@ class WSCourse extends WS {
 			return $course_id;
 		} else {
 			$course_code = CourseManager::get_course_code_from_course_id($course_id);
-			if(!CourseManager::delete_course($course_code)) {
-				return new WSError(201, "There was a problem while deleting this course");
-			} else {
-				return true;
-			}
+			CourseManager::delete_course($course_code);
+			return true;
 		}
 	}
 	
@@ -112,7 +109,7 @@ class WSCourse extends WS {
 		if($wanted_code == '') {
 			$wanted_code = generate_course_code($title);
 		}
-		$result = create_course($wanted_code, $title, $tutor_name, $category_code, $course_admin_id, $this->_configuration['db_prefix'], 0);
+		$result = create_course($wanted_code, $title, $tutor_name, $category_code, $language, $course_admin_id, $this->_configuration['db_prefix'], 0);
 		if($result == false) {
 			return new WSError(202, 'There was an error creating the course');
 		} else {
@@ -308,7 +305,7 @@ class WSCourse extends WS {
 				$course_tmp['id'] = $course['id'];
 				$course_tmp['code'] = $course['code'];
 				$course_tmp['title'] = $course['title'];
-				$course_tmp['language'] = $course['language'];
+				$course_tmp['language'] = $course['course_language'];
 				$course_tmp['visibility'] = $course['visibility'];
 				
 				// Determining category name
@@ -483,9 +480,9 @@ class WSCourse extends WS {
 				}
 				if($exists == false) {
 					$cd->set_progress(0);
-					$cd->insert($course_info['dbName']);
+					$cd->insert($course_info['db_name']);
 				} else {
-					$cd->update($course_info['dbName']);
+					$cd->update($course_info['db_name']);
 				}
 			}
 		}

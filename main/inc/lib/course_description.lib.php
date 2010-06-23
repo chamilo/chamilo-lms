@@ -39,7 +39,7 @@ class CourseDescription
 		$course_code = CourseManager::get_course_code_from_course_id($course_id);
 		// Get course info
 		$course_info = CourseManager::get_course_information($course_code);
-		$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_info['dbName']);
+		$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_info['db_name']);
 		$sql = "SELECT * FROM $t_course_desc WHERE session_id = '0';";
 		$sql_result = Database::query($sql);
 		$results = array();

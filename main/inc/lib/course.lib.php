@@ -2230,7 +2230,7 @@ class CourseManager {
 	public static function get_course_category($code) {
 		$table_categories = Database::get_main_table(TABLE_MAIN_CATEGORY);
 		$sql = "SELECT * FROM $table_categories WHERE code = '$code';";
-		return Database::store_result(Database::query($sql));
+		return Database::fetch_array(Database::query($sql));
 	}
 
 	/*

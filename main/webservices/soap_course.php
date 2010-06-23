@@ -32,6 +32,17 @@ $s->wsdl->addComplexType(
 	)
 );
 
+$s->wsdl->addComplexType(
+	'course_result_array',
+	'complexType',
+	'array',
+	'',
+	'SOAP-ENC:Array',
+	array(),
+	array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_result[]')),
+	'tns:course_result'
+);
+
 $s->register(
 	'WSCourse.DeleteCourse',
 	array('secret_key' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string')
@@ -40,7 +51,7 @@ $s->register(
 $s->register(
 	'WSCourse.DeleteCourses',
 	array('secret_key' => 'xsd:string', 'courses' => 'tns:course_id[]'),
-	array('return' => 'tns:course_result[]')
+	array('return' => 'tns:course_result_array')
 );
 
 $s->register(
@@ -94,13 +105,24 @@ $s->wsdl->addComplexType(
 	)
 );
 
+$s->wsdl->addComplexType(
+	'course_create_result_array',
+	'complexType',
+	'array',
+	'',
+	'SOAP-ENC:Array',
+	array(),
+	array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_create_result[]')),
+	'tns:course_create_result'
+);
+
 $s->register(
 	'WSCourse.CreateCourses',
 	array(
 		'secret_key' => 'xsd:string',
 		'courses' => 'tns:course_create[]'
 	),
-	array('return' => 'tns:course_create_result[]')
+	array('return' => 'tns:course_create_result_array')
 );
 
 $s->register(
@@ -140,13 +162,24 @@ $s->wsdl->addComplexType(
 	)
 );
 
+$s->wsdl->addComplexType(
+	'course_array',
+	'complexType',
+	'array',
+	'',
+	'SOAP-ENC:Array',
+	array(),
+	array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course[]')),
+	'tns:course'
+);
+
 $s->register(
 	'WSCourse.ListCourses',
 	array(
 		'secret_key' => 'xsd:string',
 		'course_id_field_name' => 'xsd:string'
 	),
-	array('return' => 'tns:course[]')
+	array('return' => 'tns:course_array')
 );
 
 $s->register(
@@ -185,6 +218,17 @@ $s->wsdl->addComplexType(
 	)
 );
 
+$s->wsdl->addComplexType(
+	'course_description_array',
+	'complexType',
+	'array',
+	'',
+	'SOAP-ENC:Array',
+	array(),
+	array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_description[]')),
+	'tns:course_description'
+);
+
 $s->register(
 	'WSCourse.GetCourseDescriptions',
 	array(
@@ -192,7 +236,7 @@ $s->register(
 		'course_id_field_name' => 'xsd:string',
 		'course_id_value' => 'xsd:string'
 	),
-	array('return' => 'tns:course_description[]')
+	array('return' => 'tns:course_description_array')
 );
 
 $s->register(

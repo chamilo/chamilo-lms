@@ -190,17 +190,6 @@ class TestFileManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testMkdirs(){
-		//This function is deprecated
-		$path='/var/www/path/ruta';
-		$res = $this->fmanager->mkdirs($path);
-		$this->assertFalse($res);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res === false);
-		//var_dump($res);
-
-	}
-
 }
 
 

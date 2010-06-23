@@ -194,15 +194,5 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-
-	public function testMkdirs(){
-		//This function is deprecated
-		$path=api_get_path(SYS_COURSE_PATH).'document';
-		$res = $this->fmanager->mkdirs($path);
-		$this->assertFalse($res);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res === false);
-		//var_dump($res);
-	}
 }
 ?>

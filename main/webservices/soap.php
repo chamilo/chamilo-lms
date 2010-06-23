@@ -67,6 +67,18 @@ $s->wsdl->addComplexType(
 	)
 );
 
+$s->wsdl->addComplexType(
+	'extra_field',
+	'complexType',
+	'struct',
+	'all',
+	'',
+	array(
+		'field_name' => array('name' => 'field_name', 'type' => 'xsd:string'),
+		'field_value' => array('name' => 'field_value', 'type' => 'xsd:string')
+	)
+);
+
 $s->register(
 	'WS.test',
 	array(),
@@ -74,6 +86,8 @@ $s->register(
 );
 
 require_once(dirname(__FILE__).'/soap_user.php');
+require_once(dirname(__FILE__).'/soap_course.php');
+require_once(dirname(__FILE__).'/soap_session.php');
 
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';

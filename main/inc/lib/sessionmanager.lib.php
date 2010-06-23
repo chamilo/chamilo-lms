@@ -8,6 +8,7 @@
 
 /* LIBRARIES */
 require_once 'display.lib.php';
+require_once(dirname(__FILE__).'/course.lib.php');
 
 /**
 *	This class provides methods for sessions management.
@@ -449,6 +450,49 @@ class SessionManager {
 		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
 		Database::query($update_sql);
 	}
+	
+	/**
+	 * Unsubscribe user from session
+	 * 
+	 * @param int Session id
+	 * @param int User id
+	 * @return bool True in case of success, false in case of error
+	 */
+	public static function unsubscribe_user_from_session($session_id, $user_id) {
+		$session_id = (int)$session_id;
+		$user_id = (int)$user_id;
+		
+		$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+		
+		// Get the list of courses related to this session
+		$course_list = SessionManager::get_course_list_by_session_id($session_id);
+		if(empty($course_list)) {
+			return false;
+		}
+		foreach($course_list as $course) {
+			$course_code = $course['code'];
+			// Delete user from course
+			Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$session_id' AND course_code='$course_code' AND id_user='$user_id'");
+			if(Database::affected_rows()) {
+				// Update number of users in this relation
+				Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users - 1 WHERE id_session='$session_id' AND course_code='$course_code'");
+			}
+		}
+		
+		$delete_sql = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$session_id' AND id_user ='$user_id' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+		Database::query($delete_sql);
+		$return = Database::affected_rows();
+		
+		// Update number of users
+		$update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users - $return WHERE id='$session_id' ";
+		Database::query($update_sql);
+		
+		return true;
+		
+	}
 
 	 /** Subscribes courses to the given session and optionally (default) unsubscribes previous users
 	 * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
@@ -529,6 +573,43 @@ class SessionManager {
 		}
 		Database::query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'");
      }
+
+	/**
+	 * Unsubscribe course from a session
+	 * 
+	 * @param int Session id
+	 * @param int Course id
+	 * @return bool True in case of success, false otherwise
+	 */
+	public static function unsubscribe_course_from_session($session_id, $course_id) {
+		$session_id = (int)$session_id;
+		$course_id = (int)$course_id;
+		
+		$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+		
+		// Get course code
+		$course_code = CourseManager::get_course_code_from_course_id($course_id);
+		if($course_code == 0) {
+			return false;
+		}
+		
+		// Unsubscribe course
+	    Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='$course_code' AND id_session='$session_id'");
+	    $nb_affected = Database::affected_rows();
+
+	    Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='$course_code' AND id_session='$session_id'");
+	    if($nb_affected > 0) {
+			// Update number of courses in the session
+			Database::query("UPDATE $tbl_session SET nbr_courses= nbr_courses + $nb_affected WHERE id='$session_id' ");
+			return true;
+		} else {
+			return false;
+		}
+	}
+	    
+	    
 
   /**
   * Creates a new extra field for a given session

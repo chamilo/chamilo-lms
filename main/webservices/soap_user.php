@@ -65,18 +65,6 @@ $s->register(
 	array('return' => 'tns:user_result[]')
 );
 
-$s->wsdl->addComplexType(
-	'user_extra_field',
-	'complexType',
-	'struct',
-	'all',
-	'',
-	array(
-		'field_name' => array('name' => 'field_name', 'type' => 'xsd:string'),
-		'field_value' => array('name' => 'field_value', 'type' => 'xsd:string')
-	)
-);
-
 $s->register(
 	'WSUser.CreateUser',
 	array(
@@ -94,7 +82,7 @@ $s->register(
 		'language' => 'xsd:string',
 		'phone' => 'xsd:string',
 		'expiration_date' => 'xsd:string',
-		'extras' => 'tns:user_extra_field[]'
+		'extras' => 'tns:extra_field[]'
 	),
 	array('return' => 'xsd:int')
 );
@@ -119,7 +107,7 @@ $s->wsdl->addComplexType(
 		'language' => array('name' => 'language', 'type' => 'xsd:string'),
 		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
-		'extras' => array('name' => 'extras', 'type' => 'tns:user_extra_field[]')
+		'extras' => array('name' => 'extras', 'type' => 'tns:extra_field[]')
 	)
 );
 
@@ -131,7 +119,7 @@ $s->wsdl->addComplexType(
 	'',
 	array(
 		'user_id_value' => array('name' => 'user_id_value', 'type' => 'xsd:string'),
-		'user_id_generated' => array('name' => 'user_id_generated', 'type' => 'xsd:string'),
+		'user_id_generated' => array('name' => 'user_id_generated', 'type' => 'xsd:int'),
 		'result' => array('name' => 'result', 'type' => 'tns:result')
 	)
 );
@@ -161,7 +149,7 @@ $s->register(
 		'language' => 'xsd:string',
 		'phone' => 'xsd:string',
 		'expiration_date' => 'xsd:string',
-		'extras' => 'tns:user_extra_field[]'
+		'extras' => 'tns:extra_field[]'
 	)
 );
 
@@ -184,7 +172,7 @@ $s->wsdl->addComplexType(
 		'language' => array('name' => 'language', 'type' => 'xsd:string'),
 		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
-		'extras' => array('name' => 'extras', 'type' => 'tns:user_extra_field[]')
+		'extras' => array('name' => 'extras', 'type' => 'tns:extra_field[]')
 	)
 );
 

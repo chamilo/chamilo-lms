@@ -618,6 +618,7 @@ class Tracking {
 									$max_score = 100;
 								}
 								$lp_scorm_result_score_total += ($score/$max_score);
+								$lp_partial_total  += ($score/$max_score);
 								$current_value = $score/$max_score;
                             } else {
                             	// Case of a TOOL_QUIZ element

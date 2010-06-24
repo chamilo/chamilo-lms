@@ -3,6 +3,7 @@
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
 require_once($libpath.'sessionmanager.lib.php');
+require_once($libpath.'course.lib.php');
 require_once(dirname(__FILE__).'/webservice.php');
 
 /**
@@ -237,7 +238,7 @@ class WSSession extends WS {
 				return $user_id;
 			} else {
 				if($state  == 1) {
-					SessionManager::subscribe_users_to_session($session_id, array($user_id));
+					SessionManager::suscribe_users_to_session($session_id, array($user_id));
 				} else {
 					$result = SessionManager::unsubscribe_user_from_session($session_id, $user_id);
 					if($result == false) {
@@ -311,14 +312,15 @@ class WSSession extends WS {
 				return $course_id;
 			} else {
 				if($state  == 1) {
-					SessionManager::add_courses_to_session($session_id, array($course_id));
+					$course_code = CourseManager::get_course_code_from_course_id($course_id);
+					SessionManager::add_courses_to_session($session_id, array($course_code));
 					return true;
 				} else {
 					$result = SessionManager::unsubscribe_course_from_session($session_id, $course_id);
 					if($result == true) {
 						return true;
 					} else {
-						return new WSError(304, 'Error subscribing course to session');
+						return new WSError(304, 'Error unsubscribing course from session');
 					}
 				}
 				return true;

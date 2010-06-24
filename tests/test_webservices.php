@@ -61,6 +61,25 @@ class TestSoapWebService extends UnitTestCase {
 		return $course;
 	}
 	
+	protected function getSessionArray() {
+		$end_date = date('Y') + 1;
+		$end_date .= '-'.date('m-d');
+		$session = array(
+			'name' => 'My session',
+			'start_date' => date('Y-m-d'),
+			'end_date' => $end_date,
+			'nb_days_access_before' => 0,
+			'nb_days_access_after' => 0,
+			'nolimit' => 0,
+			'visibility' => 1,
+			'user_id_field_name' => 'chamilo_user_id',
+			'user_id_value' => '1',
+			'session_id_field_name' => 'chamilo_session_id', 
+			'session_id_value' => '',
+			'extras' => array());
+		return $session;
+	}
+	
 	protected function soapCall($method, $arguments) {
 		return $this->_client->__soapCall($method, $arguments);
 	}
@@ -115,13 +134,13 @@ class TestSoapWebService extends UnitTestCase {
 		$this->soapCall('WSUser.DeleteUser', array('secret_key' => $this->_secret_key, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => $result));
 	}
 	
-	/*public function testCourseCreation() {
+	public function testCourseCreation() {
 		$course = $this->getCourseArray();
 		$result = $this->soapCall('WSCourse.CreateCourse', array_merge(array('secret_key' => $this->_secret_key), $course));
 		$this->assertIsA($result, 'int');
 		// Delete course created
 		$this->soapCall('WSCourse.DeleteCourse', array('secret_key' => $this->_secret_key, 'course_id_field_name' => 'chamilo_course_id', 'course_id_value' => $result));
-	}*/
+	}
 	
 	/*public function testCourseSubscriptionAndUnsubscription() {
 		//$course_id = $this->createCourse();
@@ -138,6 +157,20 @@ class TestSoapWebService extends UnitTestCase {
 		$result = $this->soapCall('WSCourse.ListCourses', array('secret_key' => $this->_secret_key, 'course_id_field_name' => 'chamilo_course_id'));
 		var_dump($result);
 	}*/
+	
+	public function testSessionCreation() {
+		$session = $this->getSessionArray();
+		$result = $this->soapCall('WSSession.CreateSession', array_merge(array('secret_key' => $this->_secret_key), $session));
+		$this->assertIsA($result, 'int');
+		$this->soapCall('WSSession.DeleteSession', array('secret_key' => $this->_secret_key, 'session_id_field_name' => 'chamilo_session_id', 'session_id_value' => $result));
+	}
+	
+	/*public function testUserSessionSubscriptionAndUnsubscription() {
+		$this->soapCall('WSSession.UnsubscribeCourseFromSession', array('secret_key' => $this->_secret_key, 'course_id_field_name' => 'chamilo_course_id', 'course_id_value' => 8, 'session_id_field_name' => 'chamilo_session_id', 'session_id_value' => 3));
+		//$this->soapCall('WSSession.UnsubscribeUserFromSession', array('secret_key' => $this->_secret_key, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => 38, 'session_id_field_name' => 'chamilo_session_id', 'session_id_value' => 3));
+	}*/
+	
+	
 }
 
 

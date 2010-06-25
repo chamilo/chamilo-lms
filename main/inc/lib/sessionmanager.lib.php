@@ -467,21 +467,6 @@ class SessionManager {
 		$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 		
-		// Get the list of courses related to this session
-		$course_list = SessionManager::get_course_list_by_session_id($session_id);
-		if(empty($course_list)) {
-			return false;
-		}
-		foreach($course_list as $course) {
-			$course_code = $course['code'];
-			// Delete user from course
-			Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$session_id' AND course_code='$course_code' AND id_user='$user_id'");
-			if(Database::affected_rows()) {
-				// Update number of users in this relation
-				Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users - 1 WHERE id_session='$session_id' AND course_code='$course_code'");
-			}
-		}
-		
 		$delete_sql = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$session_id' AND id_user ='$user_id' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
 		Database::query($delete_sql);
 		$return = Database::affected_rows();
@@ -489,6 +474,20 @@ class SessionManager {
 		// Update number of users
 		$update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users - $return WHERE id='$session_id' ";
 		Database::query($update_sql);
+		
+		// Get the list of courses related to this session
+		$course_list = SessionManager::get_course_list_by_session_id($session_id);
+		if(!empty($course_list)) {
+			foreach($course_list as $course) {
+				$course_code = $course['code'];
+				// Delete user from course
+				Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$session_id' AND course_code='$course_code' AND id_user='$user_id'");
+				if(Database::affected_rows()) {
+					// Update number of users in this relation
+					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users - 1 WHERE id_session='$session_id' AND course_code='$course_code'");
+				}
+			}
+		}
 		
 		return true;
 		
@@ -1155,11 +1154,7 @@ class SessionManager {
 		$tbl_course				= Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		// select the courses
-		$sql = "SELECT id, code, title,visual_code, nbr_users, db_name
-				FROM $tbl_course,$tbl_session_rel_course
-				WHERE course_code = code
-				AND	id_session='$session_id'
-				ORDER BY title";
+		$sql = "SELECT * FROM $tbl_course c INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code WHERE src.id_session = '$session_id' ORDER BY title;";
 		$result 	= Database::query($sql);
 		$num_rows 	= Database::num_rows($result);
 		$courses = array();

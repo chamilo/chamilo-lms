@@ -120,9 +120,10 @@ echo '</div> <!-- end of #footer -->';
 // Server mode indicator.
 if (api_is_platform_admin()) {
 	if (api_get_setting('server_type') == 'test') {
+		
 		echo ' <a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#server_type">';
-		echo '<span style="background-color: white; color: red; border: 1px solid red;"><br/>&nbsp;Test&nbsp;server&nbsp;mode&nbsp;</span></a>';
-		/*
+		echo '<span style="background-color: white; color: red; border: 1px solid red;"><br/>&nbsp;'.get_lang('TestServerMode').'&nbsp;</span></a>';
+		
 		//@todo page execution time
 		$mtime = microtime();
 		$mtime = explode(" ",$mtime);
@@ -130,13 +131,21 @@ if (api_is_platform_admin()) {
 		$endtime = $mtime;
 		$starttime = $_SESSION['page_start_time_execution'];
 		$totaltime = ($endtime - $starttime);
-		$starttime = null; unset($_SESSION['page_start_time_execution']); 
-		$_SESSION['page_start_time_execution']=0;
-		$totaltime = round($totaltime, 6);
-	    echo "<h2>Page execution time was  ".$totaltime." seconds</h2>";
+		
+		$starttime = null; 
+		unset($_SESSION['page_start_time_execution']); 
+		
+		$totaltime = number_format(($totaltime), 4, '.', '');
+	    echo '<h2>'.get_lang('PageExecutionTimeWas').' '.$totaltime.''.get_lang('Seconds').'</h2>';
 	    unset($_SESSION['page_start_time_execution']);
-	    */
-	    /*
+
+	    
+	    //Memory usage
+	    echo get_lang('MemoryUsage').': '.number_format((memory_get_usage()/1048576), 3, '.', '') .'Mb' ;
+		echo '<br />';
+		echo get_lang('MemoryUsagePeak').': '.number_format((memory_get_peak_usage()/1048576), 3, '.', '').'Mb';	
+		
+		/*
 	    global $_user, $_course;	    
 	    if (!empty($_user)) {
 		    echo "<h2>Current user info</h2>";
@@ -146,7 +155,7 @@ if (api_is_platform_admin()) {
 	    	echo "<h2>Current course info</h2>";
 	    	var_dump($_course);
 	    }*/
-	}
+	}	 
 }
 ?>
 </body>

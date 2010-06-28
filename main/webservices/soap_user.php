@@ -32,6 +32,17 @@ $s->wsdl->addComplexType(
 	)
 );
 
+$s->wsdl->addComplexType(
+	'user_result_array',
+	'complexType',
+	'array',
+	'',
+	'SOAP-ENC:Array',
+	array(),
+	array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:user_result[]')),
+	'tns:user_result'
+);
+
 $s->register(
 	'WSUser.DisableUser',
 	array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string')
@@ -40,7 +51,7 @@ $s->register(
 $s->register(
 	'WSUser.DisableUsers',
 	array('secret_key' => 'xsd:string', 'users' => 'tns:user_id[]'),
-	array('return' => 'tns:user_result[]')
+	array('return' => 'tns:user_result_array')
 );
 
 $s->register(
@@ -51,7 +62,7 @@ $s->register(
 $s->register(
 	'WSUser.EnableUsers',
 	array('secret_key' => 'xsd:string', 'users' => 'tns:user_id[]'),
-	array('return' => 'tns:user_result[]')
+	array('return' => 'tns:user_result_array')
 );
 
 $s->register(
@@ -62,19 +73,7 @@ $s->register(
 $s->register(
 	'WSUser.DeleteUsers',
 	array('secret_key' => 'xsd:string', 'users' => 'tns:user_id[]'),
-	array('return' => 'tns:user_result[]')
-);
-
-$s->wsdl->addComplexType(
-	'user_extra_field',
-	'complexType',
-	'struct',
-	'all',
-	'',
-	array(
-		'field_name' => array('name' => 'field_name', 'type' => 'xsd:string'),
-		'field_value' => array('name' => 'field_value', 'type' => 'xsd:string')
-	)
+	array('return' => 'tns:user_result_array')
 );
 
 $s->register(
@@ -94,7 +93,7 @@ $s->register(
 		'language' => 'xsd:string',
 		'phone' => 'xsd:string',
 		'expiration_date' => 'xsd:string',
-		'extras' => 'tns:user_extra_field[]'
+		'extras' => 'tns:extra_field[]'
 	),
 	array('return' => 'xsd:int')
 );
@@ -119,7 +118,7 @@ $s->wsdl->addComplexType(
 		'language' => array('name' => 'language', 'type' => 'xsd:string'),
 		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
-		'extras' => array('name' => 'extras', 'type' => 'tns:user_extra_field[]')
+		'extras' => array('name' => 'extras', 'type' => 'tns:extra_field[]')
 	)
 );
 
@@ -131,9 +130,20 @@ $s->wsdl->addComplexType(
 	'',
 	array(
 		'user_id_value' => array('name' => 'user_id_value', 'type' => 'xsd:string'),
-		'user_id_generated' => array('name' => 'user_id_generated', 'type' => 'xsd:string'),
+		'user_id_generated' => array('name' => 'user_id_generated', 'type' => 'xsd:int'),
 		'result' => array('name' => 'result', 'type' => 'tns:result')
 	)
+);
+
+$s->wsdl->addComplexType(
+	'user_create_result_array',
+	'complexType',
+	'array',
+	'',
+	'SOAP-ENC:Array',
+	array(),
+	array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:user_create_result[]')),
+	'tns:user_create_result'
 );
 
 $s->register(
@@ -142,7 +152,7 @@ $s->register(
 		'secret_key' => 'xsd:string',
 		'users' => 'tns:user_create[]'
 	),
-	array('return' => 'tns:user_create_result[]')
+	array('return' => 'tns:user_create_result_array')
 );
 
 $s->register(
@@ -161,7 +171,7 @@ $s->register(
 		'language' => 'xsd:string',
 		'phone' => 'xsd:string',
 		'expiration_date' => 'xsd:string',
-		'extras' => 'tns:user_extra_field[]'
+		'extras' => 'tns:extra_field[]'
 	)
 );
 
@@ -184,7 +194,7 @@ $s->wsdl->addComplexType(
 		'language' => array('name' => 'language', 'type' => 'xsd:string'),
 		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
-		'extras' => array('name' => 'extras', 'type' => 'tns:user_extra_field[]')
+		'extras' => array('name' => 'extras', 'type' => 'tns:extra_field[]')
 	)
 );
 
@@ -200,11 +210,22 @@ $s->wsdl->addComplexType(
 	)
 );
 
+$s->wsdl->addComplexType(
+	'user_edit_result_array',
+	'complexType',
+	'array',
+	'',
+	'SOAP-ENC:Array',
+	array(),
+	array(array('ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:user_edit_result[]')),
+	'tns:user_edit_result'
+);
+
 $s->register(
 	'WSUser.EditUsers',
 	array(
 		'secret_key' => 'xsd:string',
 		'users' => 'tns:user_edit[]'
 	),
-	array('return' => 'tns:user_edit_result[]')
+	array('return' => 'tns:user_edit_result_array')
 );

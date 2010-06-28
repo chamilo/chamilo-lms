@@ -221,7 +221,7 @@ if ($intro_dispDefault) {
 	//$intro_content = make_clickable($intro_content); // make url in text clickable
 	$intro_content = text_filter($intro_content); // parse [tex] codes
 	if (!empty($intro_content) || !empty($thematic_description_html))	{
-		echo "<table><tr><td>$intro_content</td></tr></table>";
+		echo "<table align=\"center\"><tr><td>$intro_content</td></tr></table>";
 	}
 }
 

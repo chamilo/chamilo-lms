@@ -124,8 +124,7 @@ $xajax->processRequests();
  * @param   int     User ID
  * @return  resource    XAJAX response
  */
-function courses_of_user($arg)
-{
+function courses_of_user($arg) {
 	// do some stuff based on $arg like query data from a database and
 	// put it into a variable like $newContent
     //$newContent = 'werkt het? en met een beetje meer text, wordt dat goed opgelost? ';
@@ -328,6 +327,15 @@ function get_number_of_users()
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }
 
+        if (isset($_GET['keyword_extra_data'])) {
+            $keyword_extra_data = Database::escape_string($_GET['keyword_extra_data']);
+            if (!empty($keyword_extra_data)) {
+                $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
+                $field_id = $extra_info['id'];
+                $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
+            }
+        }
+
 	if ( isset ($_GET['keyword'])) {
 		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%'  OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' OR u.username LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%') ";
@@ -346,6 +354,15 @@ function get_number_of_users()
 			$query_admin_table = " , $admin_table a ";
 			$keyword_admin = ' AND a.user_id = u.user_id ';
 		}
+
+                $keyword_extra_value = '';
+                if (isset($_GET['keyword_extra_data'])) {
+                    if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
+                        $keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
+                        $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
+                    }
+                }
+
 		$keyword_active = isset($_GET['keyword_active']);
 		$keyword_inactive = isset($_GET['keyword_inactive']);
 		$sql .= $query_admin_table .
@@ -353,9 +370,9 @@ function get_number_of_users()
 				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
 				"AND u.username LIKE '%".$keyword_username."%'  " .
 				"AND u.email LIKE '%".$keyword_email."%'   " .
-				"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
+				"AND u.official_code LIKE '%".$keyword_officialcode."%'" .
 				"AND u.status LIKE '".$keyword_status."'" .
-				$keyword_admin;
+				$keyword_admin.$keyword_extra_value;
 		if($keyword_active && !$keyword_inactive) {
 			$sql .= " AND u.active='1'";
 		} elseif($keyword_inactive && !$keyword_active) {
@@ -724,8 +741,16 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 //{}
 //else
 //{
-	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-	$tool_name = get_lang('UserList');
+        if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
+            $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+            $interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
+            $tool_name = get_lang('SearchUsers');
+        } else {
+            $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+            $tool_name = get_lang('UserList');
+        }
+
+	
 	Display :: display_header($tool_name, "");
 	
 	//api_display_tool_title($tool_name);

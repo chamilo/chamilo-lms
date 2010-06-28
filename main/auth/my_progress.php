@@ -129,19 +129,19 @@ foreach ($courses as $enreg) {
 	if (isset($_GET['course'])) {
 		$course = Database::escape_string($_GET['course']);
 		$course_info = CourseManager::get_course_information($course);
+        $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_course_lp_view         = Database :: get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
+        $tbl_course_lp_view_item    = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
+        $tbl_course_lp              = Database :: get_course_table(TABLE_LP_MAIN, $course_info['db_name']);
+        $tbl_course_lp_item         = Database :: get_course_table(TABLE_LP_ITEM, $course_info['db_name']);
+        $tbl_course_quiz            = Database :: get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);
 
 		//get coach and session_name if there is one and if session_mode is activated
 		if (api_get_setting('use_session_mode') == 'true') {
-			$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-			$tbl_course_lp_view         = Database :: get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
-			$tbl_course_lp_view_item    = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
-			$tbl_course_lp              = Database :: get_course_table(TABLE_LP_MAIN, $course_info['db_name']);
-			$tbl_course_lp_item         = Database :: get_course_table(TABLE_LP_ITEM, $course_info['db_name']);
-            $tbl_course_quiz            = Database :: get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);
-			
+
 			$sql = 'SELECT id_session
 					FROM '.$tbl_session_course_user.' session_course_user
 					WHERE session_course_user.id_user = '.intval($_user['user_id']).'
@@ -244,8 +244,8 @@ foreach ($courses as $enreg) {
 						echo "	</td>
 								<td align='center' width=180px >
 							 ";
-							 
-						$last_connection_in_lp = Tracking::get_last_connection_time_in_lp($_user['user_id'], $course, $learnpath['id']);													 
+
+						$last_connection_in_lp = Tracking::get_last_connection_time_in_lp($_user['user_id'], $course, $learnpath['id']);
 						if (!empty($last_connection_in_lp)) {
 							echo date('Y-m-d h:i:s', $last_connection_in_lp);
 						} else {
@@ -266,29 +266,29 @@ foreach ($courses as $enreg) {
 						 ';
 				}
 			?>
-		
+
 
 			<?php
-			
+
 				// This code was commented on purpose see BT#924
-				
+
 				/*$sql = 'SELECT visibility FROM '.$course_info['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
 				$result_visibility_tests = Database::query($sql);
 
 				if (Database::result($result_visibility_tests, 0, 'visibility') == 1) {*/
-				
+
 					$sql_exercices = "	SELECT quiz.title,id, results_disabled
 									FROM ".$tbl_course_quiz." AS quiz
-									WHERE active='1'";				
-					
+									WHERE active='1'";
+
 						echo '<tr>
 			  				<th class="head" style="color:#000">'.get_lang('Exercices').'</th>
 			  				<th class="head" style="color:#000">'.get_lang('Score').'</th>
 			  				<th class="head" style="color:#000">'.get_lang('Attempts').'</th>
 			  				<th class="head" style="color:#000">'.get_lang('Details').'</th>
 							</tr>';
-			
-			
+
+
 					$result_exercices = Database::query($sql_exercices);
 					if (Database::num_rows($result_exercices) > 0) {
 						while ($exercices = Database::fetch_array($result_exercices)) {

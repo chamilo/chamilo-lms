@@ -1,4 +1,413 @@
 ===========================
+mPDF v4.6   (07/06/2010)
+===========================
+
+Improvements
+------------
+Added Windows BMP image support [4.5.011]
+
+Improved support and bug fixes for SVG images [4.5.010]
+- improved recognition of lineargradients/radialgradients referenced by xlink:href
+- does not die if empty text string
+- support for many text properties as style="" as well as currently as attributes (bold, fill etc)
+- if using MB font, was respecting "Times" and "Courier" from the SVG file but using as ANSI not utf-8
+
+JPG image files with "Exif" header now recognised and supported [4.5.001]
+
+
+Configuration variable added (config.php):
+----------------------------
+$this->tableMinSizePriority [4.5.006]
+Default value false
+Use: When page-break-inside:avoid set on table but cannot fit on full page without
+exceeding autosize; setting this value to true will force respsect for the autosize,
+and disable the page-break-inside:avoid
+
+
+Bug fixes
+---------
+- Apache crashing when writing complex heading with multiple ToC entries + index entry [4.5.015]
+- Error message appeared after printing in Adobe Reader [4.5.014]
+- Error in Text wrapping in table cells [4.5.012]
+- Incorrect error message(!) using embedded font subsets if .dat fontfile not found (".char.dat") [4.5.008]
+- Errors when using page-break-inside:avoid, with text elements and images incorrectly moved [4.5.007]
+- Triggering unnecessary page break, or entering endless loop when using table with page-break-inside:avoid [4.5.004, 4.5.005]
+- Utility "makefonts" moving newly created files to wrong directory [4.5.003]
+- Error using embedded font subsets when magic_quotes_runtime set On [4.5.002]
+
+
+Files changed
+-------------
+mpdf.php
+config.php
+makefonts/makefonts.php
+class/t1asm.php
+class/svg.php
+
+
+===========================
+mPDF v4.5   (21/04/2010)
+===========================
+
+New Features
+------------
+The main change in 4.5 is the improved class for importing SVG images. (See details below)
+
+Font files
+----------
+Some bugs in the "makefonts" utility caused some errors in the files produced for embedding font subsets.
+Surprisingly these are not easily detectable (I have yet to find one!).
+All the font files used for embedding font subsets (the .dat and .dat.php files in /unifont/ folder)
+have been re-generated. Download them if you are having problems with any fonts - otherwise, you probably
+don't need to bother.
+
+Minor Enhancements
+------------------
+If keepColumns = true (i.e. disable readjustment of column length), mPDF will now reproduce
+table header/footer rows in each column [4.4.015]
+
+A number of changes to improve processing time [4.4.012]
+[Thanks to carlholmberg http://mpdf.bpm1.com/forum/comments.php?DiscussionID=274&page=1#Item_3]
+
+JPG files with header marked as "progressive DCT-based JPEG" are now supported [4.4.004]
+
+Configurable variable (config.php) $dpi can be set to vary size interpreted from "px" values in HTML/CSS
+NB Recommended that $dpi should always be set the same as $img_dpi
+
+Support added for "ex" as a size value (approximates "ex" as half of font height)
+
+Configurable variable (config.php) $watermarkImgAlphaBlend will determine how watermark images
+will blend with underlying objects.
+
+
+Bug fixes
+---------
+- Make-fonts utility : makefonts/makefonts.php [4.4.016]
+	(All font files have been updated)
+- Table header of only one column width - not printing right border [4.4.014]
+- WMF and SVG images not rotating correctly to 90 or -90 degrees [4.4.013]
+- Using templates, error if imported doc contains templates itself [4.4.001]
+
+
+Updated Files
+-------------
+mpdf.php
+config.php
+classes/svg.php
+makefonts/makefonts.php
+ALL subset font files (/unifont/ .dat and .dat.php files), and all garuda and norasi files
+
+New files
+---------
+None
+
+New config variables
+--------------------
+$this->watermarkImgAlphaBlend
+$this->dpi
+
+BACKWARD COMPATIBILITY
+----------------------
+All but one changes in mPDF 4.5 are fully backwards compatible.
+The configurable variable $this->watermarkImgBehind was introduced in v4.4 and was unintentionally set to TRUE
+In v4.5 this is set to FALSE in the config.php file.
+
+
+SVG Images
+----------
+[svg.php CHANGED]
+- Text stroke-width default changed to 1 [4.4.011]
+- Text stroke - line-join type changed [4.4.010]
+- Default value for fill changed to "black" [4.4.008]
+- Bug fixes:
+  * to correct calculation of text-length (and therefore alignment R and C) [4.4.009]
+  * Corrected errors in path implementation esp. quadratic Bezier curves
+  * rounded corners to rectangles - error corrected
+  * Recognition of font-family improved
+  * remove \n (and other non-printable chars) from text
+  * zero length shapes are not output e.g. zero-width rectangle, zero-length line, zero-radius circle
+- Support added for:
+  * gradient stop offsets and gradientUnits="userSpaceOnUse" [4.4.007]
+	In mpdf.php enabled define inner radius for radial gradients - only used internally by SVG at present
+  * user defined <ENTITY /> cf. 'render-elems-03-t.svg' in SVG Test Suite [4.4.006]
+  * "color" attribute and "currentColor" value for fill and stroke [4.4.005]
+  * fill:url(#...) in a style as well as attribute
+  * xlink:href for gradients
+  * 1.3002e-005 in svg path
+  * text-style changes (e.g. text-anchor) set on <g> element - not just on <text>
+  * fill-rule=evenodd|nozero
+  * dashed lines / stroke-dasharray & stroke-dashoffset
+  * gradientUnits=userSpaceOnUse;
+  * units e.g. 3mm or 14pt in Rectangle, Circle, Ellipse, Line and Text position
+  * transform on <text> element
+  * stroke as well as fill on text
+
+NB The following are still NOT supported for SVG
+- filters
+- <marker>
+- images
+- DOM
+- <pattern>
+- textlength; lengthadjust; tspan, tref, toap, textPath;
+- <use ../>
+- gradient on stroke/text;
+- <clipPath>
+- text-underline and strikethrough
+- text opacity
+- colors as rgb(87%, 56%, 25%)
+- rect using units for dimensions
+- Only uses default spreadMethod = "pad" for gradients
+
+
+
+
+
+===========================
+mPDF v4.4   (24/03/2010)
+===========================
+
+New Features
+------------
+- Support SVG image files (partial)
+- Rotate images or graphs (by multiples of 90 degrees)
+- Set opacity (transparency) for background images
+- Control resizing of background images
+- Set whether to print watermark images behind or in front of page contents
+- Reduced memory usage when printing tables (partly configurable)
+- Option to set path to folder for temporary files
+- Improved compliance for CSS text-align justify
+- Increased support for CSS "media"
+- Improved performance when accessing local image files
+
+
+Minor Enhancements
+------------------
+- Allows space in output file name e.g. $mpdf->Output('t est.pdf','D'); [4.3.007B]
+- Header changed in Output to improve compatability with IE6 (affects 'D' and 'I') [4.3.012B]
+- background-images do not show noimage.jpg if missing [4.3.012D]
+- simpleTables (which improves performance) now also allows: background-color, -gradient and -image, padding
+	and rotated text to be set for each cell. Only borders are not supported cell-by-cell. [4.3.006]
+
+
+Bug fixes
+---------
+- Page width not correctly reset when defining default page margins (L/R) by @page [4.3.007C]
+- Table row <TR> with a background-color, paints the whole row, including the spaces between cells [4.3.005]
+	NB This should have been fixed in [4.2.028] but got left out!
+- UseSubstitutionsMB causes errors inside <textarea> and <select> so now disabled in these 2 situations [4.3.004]
+- CSS background: 'none' did not cancel background-image/background-color if it comes later [4.3.002, 4.3.011]
+- Warning message 'depracated' (as of PHP 5.3) when using Templates [4.3.007]
+- AutoFont incorrectly altering multibyte characters ending in \xa0 [4.3.012C]
+- "Initial" default value for border-width changed from 1px to 'medium' e.g. border-top: solid #000000; [4.3.010]
+- WMF image sometimes inverted [4.3.016]
+
+Updated Files
+-------------
+mpdf.php
+config.php
+changelog.txt
+
+
+New files
+---------
+classes/svg.php
+
+
+New config variables
+--------------------
+$this->justifyB4br=false;
+$this->CSSselectMedia='print';
+$this->watermarkImgBehind = false;
+
+BACKWARD COMPATIBILITY
+----------------------
+All changes are backwards compatible except the handling of some background-images - please see notes below.
+
+
+Watermark Image z-order
+-----------------------
+By default mPDF prints watermarks on top of the page contents to ensure that they are not hidden by backgrounds
+(especially table cells).
+You can specify watermark images to be printed behind page contents by setting a configurable variable:
+$this->watermarkImgBehind = true;  // default=false
+[4.3.018]
+
+
+Rotating Images and Graphs
+--------------------------
+Images or graphs can be rotated (by multiples of 90 degrees) using a custom HTML attribute e.g.
+<img rotate="90|-90|180" ... />
+<jpgraph rotate="90" ... />
+Valid options are: 90|-90|180.
+Positive values are clockwise.
+If width is specified e.g. width="3cm" this is applied to the rotated image i.e. will be width 3cm after rotating
+[4.3.016]
+
+
+Background Image Opacity
+------------------------
+A custom CSS property "background-image-opacity": is now supported on BODY, DIV+ (block elements) and TD
+Takes values between 0 and 1.0
+
+
+Resizing Background Images
+--------------------------
+A custom CSS property "background-image-resize": is now supported on BODY, DIV+ (block elements) and TD
+0 - No resizing (default)
+1 - Shrink-to-fit w (keep aspect ratio)
+2 - Shrink-to-fit h (keep aspect ratio)
+3 - Shrink-to-fit w and/or h (keep aspect ratio)
+4 - Resize-to-fit w (keep aspect ratio)
+5 - Resize-to-fit h (keep aspect ratio)
+6 - Resize-to-fit w and h
+
+N.B. Prior to v4.4 background-images were incorrectly constrained to maximum width of the containing block.
+The default is now to do NO resizing on background-images. Setting "background-image-resize:3" should be used
+for backwards compatibility.
+[4.3.015, 4.3.012D]
+
+
+SVG Image files
+---------------
+SVG image files are now partially supported (but as for WMF - not as background-images).
+viewBox (preserveAspectRatio is not supported)  viewBox="0 0 400 200"  width="400" height="200"
+Takes viewBox in preference to width/height if present on <svg>
+If neither present, will size to width of page (square) as the containing box.
+Units are interpreted as pixels if undefined.
+Doesn't recognise internal CSS <style> elements
+Gradients only take 2 colours which are taken as stop-offset 0% and 100%
+[4.3.013 & 4.3.017]
+
+
+Reduced Memory Usage printing Tables
+------------------------------------
+mPDF uses a lot of memory when processing large tables. Parts of the script have been rewritten to
+reduce memory consumption when writing tables which use collapsed borders (10-25% saving).
+
+Memory usage can be reduced further by setting a configurable variable:
+$this->packTableData = true;  // default=false
+but note that this causes a significant increase in processing time.
+[4.3.008, 4.3.019, 4.3.014]
+
+
+
+User-defined path to Temporary folder
+-------------------------------------
+mPDF uses a folder to write and store temporary files when processing images. By default this is the
+[your_path_to_mpdf]/tmp/
+This is now user-definable by defining the constant _MPDF_TEMP_PATH before including mpdf.php script.
+
+
+Text Justification
+------------------
+In a justified text block, an inline image, textarea, input, or select causing a new line will now force
+the previous line to be justified. HR and BR do NOT force justification (as in browsers).
+For optional compliance of MS Word behaviour, there is a new configurable variable:
+$this->justifyB4br = false;	// Change to true to force justification before a <BR> (as in MS Word)
+[4.3.003]
+
+
+CSS support for @media
+----------------------
+Now supports media-dependent CSS styles e.g.
+@media print {
+	p { color: red; }
+}
+as well as
+<style media="...">...</style> and
+<link rel="stylesheet" media="print" href="..." />
+Proper matching of CSS media to select using configurable variable:
+$this->CSSselectMedia='print';	//  default="print" set in config.php : screen, print, or any other CSS @media type (not "all")
+N.B. $this->disablePrintCSS in now depracated
+[4.3.001]
+
+
+
+
+===========================
+mPDF v4.3   (28/02/2010)
+===========================
+
+NEW FEATURES
+------------
+- Page (sheet) size can be reset within document (http://mpdf1.com/manual/index.php?tid=436) [4.2.024, 4.2.025]
+- PDF/A1-b compliant files (http://mpdf1.com/manual/index.php?tid=420)
+- Improve performance using simpleTables (http://mpdf1.com/manual/index.php?tid=430)
+- mPDFI incorporated into main mPDF class (http://mpdf1.com/manual/index.php?tid=432)
+- <dottab> added as custom HTML tag: inserts dots to the following text, which is right-aligned [4.2.031]
+
+See Example files 38 and 39 for PDFA compliant file and <dottab>
+
+BACKWARD COMPATIBILITY
+----------------------
+All changes are backwards compatible except the use of mPDFI. You will need to make minor changes to your scripts.
+See the manual http://mpdf1.com/manual/index.php?tid=432 for details.
+
+BUG FIXES
+---------
+- When using Table of Contents and not resetting page numbers: HTML headers/footers showed incorrect page number [4.2.020]
+- Table of Contents: last page not printing page background-color [4.2.023]
+- Image file with space " " in the file name failing [4.2.016]
+- Image file path unnecessarily resolved to full URI - changed to use relative path if possible [4.2.029] ***
+- Table - not calculating height of cell correctly [4.2.015, 4.2.012, 4.2.011, 4.2.009]
+- Table row breaking after/during cell when image in cell taller than font-height [4.2.008]
+- When Table row(cell) greater height than the page-height but requiring resizing greater than allowed by autosize - not resizing [4.2.005]
+- Table cell border not resized correctly [4.2.002]
+- Table row <TR> with a background-color, paints the whole row, including the spaces between cells [4.2.028] ****
+- Background-image in HTMLFooter not correctly setting 0,0 origin [4.2.014]
+- Background-image set as an in-line style not working [4.2.013]
+- Background-image set in CSS @page or <body> was being constrained to less than page size [4.2.032]
+- Imported Templates overwriting Headers (with images or gradients) [4.2.004]
+- When using imports/templates, HTML header with background-image causing page to disappear [4.2.001]
+- block-style element breaking over more than 2 pages incorrectly adjusting L/R margins [4.2.022]
+- CSS @page property "size" set on :left :right or :first pseudo-selectors - disabled [4.2.022]
+- Annotations default colour incorrectly set in PDF as [100 100 0] corrected to [1 1 0] (seemed to work ok?) [4.2.026]
+- Overwrite() now parses input file more tolerantly recognising more source files [4.2.030]
+
+**** Bug fix 4.2.028 never got into the release of v4.3  Included in next release [4.3.005]
+**** Bug fix 4.2.029 never not fully implmented in v4.3  Included in next release [4.3.012]
+
+Changed files
+-------------
+mpdf.php
+compress.php
+config.php
+classes/t1asm.php
+includes/functions.php
+mpdfi/fpdi_pdf_parser.php
+Added files/folder: /mpdfi/filters/*.*
+Added file/folder: /iccprofiles/sRGB_IEC61966-2-1.icc
+mpdfi/mpdfi.php (no longer required)
+
+New Configuration variables
+---------------------------
+[config.php]
+$this->enableImports
+$this->simpleTables
+$this->PDFA
+$this->ICCProfile
+$this->PDFAauto
+
+
+Minor changes
+-------------
+Increased PDF file compatibility with spec 1.4
+- PDF version changed to 1.4
+- A binary file marker (a comment line with 4 characters > 127 ASCII) is added just after the first line
+- %%EOF no longer has line break after it [4.2.010]
+- /ID object is added to trailer object when not encrypted [4.2.010]
+
+When using progress bars, one of the JS scripts is now referenced as an external file
+ to allow it to be cached by user's browser and improve performance for end-user [4.2.007]
+
+Importing external PDF files: LZW encoded PDF files are now supported
+
+When adding an annotation, the popup window can be set be either open or closed when the document is opened [4.2.027]
+- size and position of the popup can also be specified
+
+
+
+===========================
 mPDF v4.2   (27/01/2010)
 ===========================
 
@@ -28,7 +437,6 @@ Bug fixes
 - CJK in tables when not using CJK (utf-8-s) autosized very small as characters did not word-wrap
 - parsing stylesheets: background image not recognised if containbed uppercase characters in file name
 - "double" border on table used white between the lines instead of current background colour
-- mPDFI: template documents overwriting HTML headers
 - $this->shrink_tables_to_fit = 0 or false caused fatal errors
 - background color or images not printing correctly when breaking across pages
 - background not printed for List inside a block element
@@ -38,9 +446,10 @@ Bug fixes
 - margin-collapse at top of page not working if bookmark/annotation/indexentry/toc
 - column break triggered by HR triggering a second column break
 - an empty 'position:fixed' element with no/auto width or height caused fatal error
+- mPDFI: template documents were overwriting HTML headers
 - mPDFI: function Overwrite (to change text in existing PDF) - fatal error if using with encrypted file
 
-Bug - not fixed - see below
+Bug - not fixed
 - WriteHTML('',2) with '2' parameter not recognising 'margin-collapse:collapse' for DIVs or 'line-height' set in default CSS 'BODY'
 
 
@@ -48,14 +457,14 @@ Bug - not fixed - see below
 New or Updated Files
 --------------------
 mpdf.php
-classes/gif.php
-classes/indic.php
 compress.php
 config.php
 config_cp.php
 config_fonts.php
 mpdf.css
-includes/sub_core.php
+classes/gif.php
+classes/indic.php
+includes/subs_core.php
 mpdfi/mpdfi.php
 unifont/ar_k_001.uni2gn.php
 All files in new folder: /progress/*.*
@@ -174,7 +583,7 @@ Bug fixes
 - Graceful support for block elements inside list items e.g. <li><p>... (not supported, but tolerated)
 - Index: Created dividing letters separately for Uppercase and lowercase
 - Incorrectly changing input character set when encountering e.g. charset=iso-8859-1 in the text of the document
-	- Changed so only detects it if within <head>...</head> 
+	- Changed so only detects it if within <head>...</head>
 - If Keep-with-table (i.e. H1-6 before table and use_kwt true), if pagebreak forced anyway, borders did not print on previous page
 - Background-image used in HTML footer not appearing (correctly)
 - RTL tables: nested tables will not automatically transpose L->R
@@ -205,7 +614,7 @@ CSS style height now partially supported on block elements DIV, P, H1 etc. --IF-
 	- will not force a pagebreak (max. at bottom of page)
 	- % is interpreted as % of printable page height (inside margins)
 <TFOOT> now supported (placed at start as in HTML spec) displays at end of table, and repeats as a footer
-Background-image and background-gradient now supported in TD and TH (works in all cases except: background-image is not rotated or 
+Background-image and background-gradient now supported in TD and TH (works in all cases except: background-image is not rotated or
 	positioned correctly if table is rotated)
 NB Background images and background-gradients do not work if Columns are being used, or if $use_kwt is TRUE (keep-with-table),
 	 or if page-break-inside:avoid is active.
@@ -269,7 +678,7 @@ $arr = array();
 if ($arr['index'] == 5 ) {...}
 
 To prevent this, lines were added at the start of the mpdf.php script to turn error notices OFF.
-In a move towards making mPDF able to run with full error_reporting on, a large amount of the script has been altered 
+In a move towards making mPDF able to run with full error_reporting on, a large amount of the script has been altered
 e.g. the line above would be changed to:
 if (isset($arr['index'] && $arr['index'] == 5 ) {...}
 
@@ -356,7 +765,7 @@ htmltoolkit.php
 
 Developers only
 ---------------
-- Background-color handling in CSS changed so only inherited/cascaded when Columns active or Keep-block-together 
+- Background-color handling in CSS changed so only inherited/cascaded when Columns active or Keep-block-together
       - otherwise would overwrite background image with inherited color
 - all %.2f used in sprintf() changed to %.3f in htmltoolkit.php and mpdf.php to increase accuracy of div border lines in columns etc.
 - variable $use_embeddedfonts_1252 renamed to $useOnlyCoreFonts as more precise: depracated but still supported.
@@ -596,7 +1005,7 @@ CSS changes
 Numbered Lists
 --------------
 Variables set at the top of mpdf.php can be set to change:
-- text alignment of numbers in numbered lists (default Right) 
+- text alignment of numbers in numbered lists (default Right)
 	var $list_align_style = 'R';
 - content to follow a numbered list marker e.g. '.' gives 1. or IV. whereas ')' gives 1) or a)
 	var $list_number_suffix = '.';
@@ -627,12 +1036,12 @@ This has been changed so that it only overrides when the rotate angle is between
 =========
 Bug fixes
 =========
-- List - list starting after "<div>Then some text not in a block element<ol>" incorrectly output 
+- List - list starting after "<div>Then some text not in a block element<ol>" incorrectly output
 - Tables - if cell font-size set smaller than default for the table, does not shrink the cell height
 - Columns (tables) - columns breaking across rows e.g. in the middle of a table cell
 - Tables - if table width set to e.g. 100% but cols are less, was not making up to set width
 - Watermark - was not printing if using HTMLFooter
-- Lists - not aligning numbering correctly if different font sizes used for bullet & text etc. 
+- Lists - not aligning numbering correctly if different font sizes used for bullet & text etc.
 - Lists - indent of text did not correctly allow for Maximum number in <ol> list
 - Table does not always move correctly to a new page
 - Table cell incorrectly calculated height causing text to overflow cell when printed
@@ -733,7 +1142,7 @@ DL did not close block correctly
 Transparent not recognised as color/background-color
 (Attempted a fix by setting to ignore it! - fn. convertcolor in htmltoolkit.php)
 
-Zero (0) not displaying if only thing in table cell or tags e.g. <td>0</td> <p>0</p> 
+Zero (0) not displaying if only thing in table cell or tags e.g. <td>0</td> <p>0</p>
 (Fixed - fn.WriteHTML)
 
 Page Headers/Footers - Simple Headers or Footers defined as e.g. '|{PAGENO}|' were not split into 3 components, but output |6| in the outer margin.
@@ -765,10 +1174,10 @@ See the web page example - this stops the CSS stylesheets specifically marked fo
 Table borders (in collapsed model) incorrectly calculated which border had dominance (mPDF <=1.3 determined the overriding border by its color)
 (Fixed to follow CSS 2.1 specifications: width >> CSS dominance (cell>table) >> T & L > B & R)
 In the border-collapse=collapse mode, the following rules determine which border style "wins" in case of a conflict:
-1. Borders with the 'border-style' of 'hidden' take precedence over all other conflicting borders. 
+1. Borders with the 'border-style' of 'hidden' take precedence over all other conflicting borders.
 2. narrow borders are discarded in favor of wider ones.
 3. styles are preferred in this order: 'double', 'solid', 'dashed', 'dotted', 'ridge', 'outset', 'groove', and the lowest: 'inset'.
-4. If border styles differ only in color, then a style set on a cell wins over one on a table. 
+4. If border styles differ only in color, then a style set on a cell wins over one on a table.
 5. When two elements of the same type conflict, then the one further to the left or top wins out.
 
 Parsing CSS, a missed level would not be picked up i.e. CSS = div.refstr1 p {...} would not pick up:
@@ -856,7 +1265,7 @@ $mpdf->WriteHTML($stylesheet,1);
 $mpdf->WriteHTML($html);	// this one cleared the array $this->cascadeCSS; conatining cascaded CSS information from stylesheets
 You were meant to call:
 $mpdf->WriteHTML($html,2);	// which doesn't re-parse the CSS information
-v2.0 changed so that 
+v2.0 changed so that
 $mpdf->WriteHTML($html); no longers clears the array $this->cascadeCSS and so can be used repeatedly;
 
 
@@ -931,7 +1340,7 @@ EAN barcode
 An EAN barcode can be generated
 function writeBarcode($code, $showisbn=1, $x='', $y='', $size=1, $border=0, $paddingL=1, $paddingR=1, $paddingT=2, $paddingB=2) {
 It accepts 12 or 13 digits with or without - hyphens as $code e.g.
-$mpdf->writeBarcode('978-1234-567-890', 1, $mpdf->x, $mpdf->y); 
+$mpdf->writeBarcode('978-1234-567-890', 1, $mpdf->x, $mpdf->y);
 NB - IMPORTANT***
 A new font - OCR-B font/unifont is required, and needs to be added to the config.php file
 cf. http://www.gs1uk.org/downloads/bar_code/Bar coding getting it right.pdf
@@ -995,7 +1404,7 @@ function AddExtGState() edited to check if graphics state already exists before 
 
 ASCII-proof code
 ================
-"»¤¬" used as a special identifier in the program changed to "\xbb\xa4\xac" to make the mpdf.php script file immune from someone saving it as a utf-8 encoded file
+"ï¿½ï¿½ï¿½" used as a special identifier in the program changed to "\xbb\xa4\xac" to make the mpdf.php script file immune from someone saving it as a utf-8 encoded file
 
 Images
 ======
@@ -1147,7 +1556,7 @@ fn. OpenTag() [LI] $this->blockjustfinished=false to prevents newline after firs
 
 Uses of mb_ereg_replace removed, and mb_split changed - requires regex_encoding (regex_encoding only used as UTF-8)
 
-fn. WriteHTML: attributes are trimmed with trim() to allow correct handling of e.g. class="bpmBook " 
+fn. WriteHTML: attributes are trimmed with trim() to allow correct handling of e.g. class="bpmBook "
 
 fn. printbuffer() and fn. openTag() to ensure
  <div><div><p> outputs top margins/padding for both 1st and 2nd div

@@ -162,7 +162,20 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 	if (!$show_as_icon) {
 		if ($filetype == 'folder') {
 			if (api_is_allowed_to_edit() || api_is_platform_admin() || api_get_setting('students_download_folders') == 'true') {
-				$force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array('height'=>'16', 'width' => '16')).'</a>';
+				
+				//filter when I am into shared folder, I can show for donwload only my shared folder
+				if(is_shared_folder($_GET['curdirpath']))
+				{							
+					$my_preg_folder="/shared_folder\/sf_user_".api_get_user_id()."$/";
+					if (preg_match($my_preg_folder, urldecode($forcedownload_link))|| api_is_allowed_to_edit() || api_is_platform_admin())
+					{			
+					  $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array('height'=>'16', 'width' => '16')).'</a>';
+					}
+				}
+				elseif(!preg_match('/shared_folder/', urldecode($forcedownload_link)) || api_is_allowed_to_edit() || api_is_platform_admin())
+				{
+					$force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array('height'=>'16', 'width' => '16')).'</a>';
+				}
 			}
 		} else {
 			$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array('height'=>'16', 'width' => '16')).'</a>';
@@ -468,9 +481,26 @@ function create_dir_form() {
 	return $new_folder_text;
 }
 
+
+/**
+ * Checks whether the user is in shared folder
+ * @return return bool Return true when user is in shared folder
+ */
+function is_shared_folder($curdirpath) {
+	return Security::remove_XSS($curdirpath) == '/shared_folder';
+}
+
+/**
+ * Checks whether the user is in any user shared folder
+ * @return return bool Return true when user is in any user shared folder
+ */
+function is_any_user_shared_folder($path) {
+	return preg_match('/shared_folder\/sf_user_/', Security::remove_XSS($path));	
+}	
+
 /**
  * Checks whether the user is in his/her shared folder
- * @return return bool Return true when user is in his shared folder
+ * @return return bool Return true when user is in his user shared folder
  */
 function is_my_shared_folder($user_id, $path) {
 	return Security::remove_XSS($path) == '/shared_folder/sf_user_'.$user_id;

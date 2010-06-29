@@ -166,7 +166,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 				//filter when I am into shared folder, I can show for donwload only my shared folder
 				if(is_shared_folder($_GET['curdirpath']))
 				{							
-					$my_preg_folder="/shared_folder\/sf_user_".api_get_user_id()."/";
+					$my_preg_folder="/shared_folder\/sf_user_".api_get_user_id()."$/";
 					if (preg_match($my_preg_folder, urldecode($forcedownload_link))|| api_is_allowed_to_edit() || api_is_platform_admin())
 					{			
 					  $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array('height'=>'16', 'width' => '16')).'</a>';

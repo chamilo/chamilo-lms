@@ -15,8 +15,8 @@ api_block_anonymous_users();
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 require_once _MPDF_PATH.'mpdf.php';
 
-$content_pdf = stripslashes(api_html_entity_decode($_POST['contentPDF'], ENT_QUOTES, api_get_system_encoding()));
-$title_pdf = stripslashes(api_html_entity_decode($_POST['titlePDF'], ENT_QUOTES, api_get_system_encoding()));
+$content_pdf = api_html_entity_decode($_POST['contentPDF'], ENT_QUOTES, api_get_system_encoding());
+$title_pdf = api_html_entity_decode($_POST['titlePDF'], ENT_QUOTES, api_get_system_encoding());
 
 $html = '
 <page backtop="10mm" backbottom="10mm" footer="page">

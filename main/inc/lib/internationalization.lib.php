@@ -1119,6 +1119,14 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
 	if (!api_is_utf8($encoding) && _api_html_entity_supports($encoding)) {
 		return htmlentities($string, $quote_style, $encoding);
 	}
+    switch($quote_style) {
+		case ENT_COMPAT:
+			$string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
+			break;
+		case ENT_QUOTES:
+			$string = str_replace(array('&', '\'', '"', '<', '>'), array('&amp;', '&#039;', '&quot;', '&lt;', '&gt;'), $string);
+			break;
+	}
 	if (_api_mb_supports($encoding)) {
 		if (!api_is_utf8($encoding)) {
 			$string = api_utf8_encode($string, $encoding);
@@ -1137,18 +1145,7 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
 			$string = _api_convert_encoding($string, $encoding, 'UTF-8');
 		}
 	}
-	else {
-		// Here the function gives up.
-		return $string;
-	}
-	switch($quote_style) {
-		case ENT_COMPAT:
-			$string = str_replace('"', '&quot;', $string);
-			break;
-		case ENT_QUOTES:
-			$string = str_replace(array('\'', '"'), array('&#039;', '&quot;'), $string);
-			break;
-	}
+
 	return $string;
 }
 

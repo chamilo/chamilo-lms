@@ -275,9 +275,24 @@ if (isset($_GET['action']) && $_GET['action'] == 'download') {
 	exit;
 }
 
-// Download of an completed folder
-if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
-	require 'downloadfolder.inc.php';
+
+// Download a folder
+if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && $curdirpath!='/' && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
+	
+	//filter when I am into shared folder, I can donwload only my shared folder
+	
+	if(is_any_user_shared_folder($_GET['path']))
+	{
+		if(is_my_shared_folder($_user['user_id'], $_GET['path']) || api_is_allowed_to_edit() || api_is_platform_admin())
+		{
+		  require 'downloadfolder.inc.php';
+		}
+	}
+	else
+	{
+		require 'downloadfolder.inc.php';
+	}
+	
 }
 
 // Slideshow inititalisation
@@ -772,13 +787,16 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 
 if (!is_null($docs_and_folders)) {
 
-	// Download zipped folder
+	// Show download zipped folder icon
 	global $total_size;
 	if (!$is_certificate_mode && $total_size != 0 && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
-?>
-	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&action=downloadfolder&path=<?php echo $curdirpathurl; ?>">
-		<?php Display::display_icon('zip_save.gif', get_lang('Save').' (ZIP)'); echo get_lang('Save').' (ZIP)'; ?></a>&nbsp;
-<?php
+		
+		//don't show icon into shared folder, and don´t show into main path (root)
+		if (!is_shared_folder($curdirpath) && $curdirpath!='/' || api_is_allowed_to_edit() || api_is_platform_admin())
+		{
+	    	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&path='.$curdirpathurl.'">'.Display::display_icon('zip_save.gif', get_lang('Save').' (ZIP)'). get_lang('Save').' (ZIP)</a>&nbsp';
+		}
+
 	}
 }
 

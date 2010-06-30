@@ -56,6 +56,10 @@ $config['ToolbarSets']['Maximized'] = array(
 // Possible values: true , false
 //$config['BlockCopyPaste'] = false;
 
+// A setting for force paste as plain text.
+// Possible values: true , false
+$config['ForcePasteAsPlainText'] = true;
+
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...
 //$config['Width'] = '100%';

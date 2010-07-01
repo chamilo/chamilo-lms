@@ -14,6 +14,10 @@ if (isset($current_thread['thread_id'])){
 
 	$rows=get_posts($current_thread['thread_id']);
 	$increment=0;
+		
+	$clean_forum_id  = intval($_GET['forum']);
+	$clean_thread_id = intval($_GET['thread']);
+	
 	foreach ($rows as $row) {
 		echo '<table width="100%" class="post" cellspacing="5" border="0">';
 		// the style depends on the status of the message: approved or not
@@ -50,16 +54,16 @@ if (isset($current_thread['thread_id'])){
 		// The course admin him/herself can do this off course always
 		if (($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
 			if (api_is_allowed_to_session_edit(false,true))
-				echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$row['post_id']."&origin=".$origin."&edit=edition&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
+				echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;post=".$row['post_id']."&origin=".$origin."&edit=edition&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 		}
 	
 		if ($origin != 'learnpath') {
 			if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=delete&amp;content=post&amp;id=".$row['post_id']."&origin=".$origin."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
-				display_visible_invisible_icon('post', $row['post_id'], $row['visible'],array('forum'=>Security::remove_XSS($_GET['forum']),'thread'=>Security::remove_XSS($_GET['thread']), 'origin'=>$origin ));
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=delete&amp;content=post&amp;id=".$row['post_id']."&origin=".$origin."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+				display_visible_invisible_icon('post', $row['post_id'], $row['visible'],array('forum'=>$clean_forum_id,'thread'=>$clean_thread_id, 'origin'=>$origin ));
 				echo "";
 				if ($increment>0) {
-					echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;post=".$row['post_id']."&origin=".$origin."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>";
+					echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=move&amp;post=".$row['post_id']."&origin=".$origin."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>";
 				}
 			}
 		}
@@ -70,12 +74,12 @@ if (isset($current_thread['thread_id'])){
 		if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath') {
 			if( isset($_GET['gradebook'])){
 				if ($increment>0 && $user_status!=1 ) {
-					$info_thread=get_thread_information(Security::remove_XSS($_GET['thread']));
-					echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".Security::remove_XSS($_GET['gradebook'])."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>";
+					$info_thread=get_thread_information($clean_thread_id);
+					echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."&gradebook=".Security::remove_XSS($_GET['gradebook'])."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>";
 				 }
 			} else {
 				if ($increment>0 && $user_status!=1 ) {
-					echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>";
+					echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>";
 				}
 			}
 		}
@@ -83,8 +87,8 @@ if (isset($current_thread['thread_id'])){
 		if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
 			if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
 				if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
-					echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$row['post_id'].'&amp;action=replymessage&origin='.$origin.'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>";
-					echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$row['post_id'].'&amp;action=quote&origin='.$origin.'">'.Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>";
+					echo '<a href="reply.php?'.api_get_cidreq().'&forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$row['post_id'].'&amp;action=replymessage&origin='.$origin.'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>";
+					echo '<a href="reply.php?'.api_get_cidreq().'&forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$row['post_id'].'&amp;action=quote&origin='.$origin.'">'.Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>";
 				}
 			}
 		} else {
@@ -131,7 +135,7 @@ if (isset($current_thread['thread_id'])){
 			echo ' "> '.$user_filename.' </a>';
 			echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
 			if (($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
-			echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
+			echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
 			}
 			echo '</td></tr>';
 		}

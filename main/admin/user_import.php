@@ -1,11 +1,9 @@
-<?php // $Id: user_import.php 21895 2009-07-08 15:51:31Z juliomontoya $
+<?php
 /* For licensing terms, see /dokeos_license.txt */
 /**
-==============================================================================
 * This tool allows platform admins to add users by uploading a CSV or XML file
 * @todo Add some langvars to DLTT
-* @package dokeos.admin
-==============================================================================
+* @package chamilo.admin
 */
 
 /**

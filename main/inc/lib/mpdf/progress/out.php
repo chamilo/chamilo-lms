@@ -3,9 +3,9 @@
 $tempfilename = $_REQUEST['filename'].'.pdf';
 $opname = $_REQUEST['opname'];
 $dest = $_REQUEST['dest'];
-	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	// Modified by Ivan Tcholakov, 28-JUN-2010.
 	//if ($tempfilename && file_exists('../tmp/'.$tempfilename)) {
-	if ($tempfilename && file_exists(_MPDF_TMP_PATH.$tempfilename)) {
+	if ($tempfilename && file_exists(_MPDF_TEMP_PATH.$tempfilename)) {
 	//
 		header("Pragma: ");
 		header("Cache-Control: private");
@@ -34,20 +34,20 @@ $dest = $_REQUEST['dest'];
 			}
 			header('Content-disposition: attachment; filename='.$opname);
 		}
-		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		// Modified by Ivan Tcholakov, 28-JUN-2010.
 		//$filesize = filesize('../tmp/'.$tempfilename);
-		$filesize = filesize(_MPDF_TMP_PATH.$tempfilename);
+		$filesize = filesize(_MPDF_TEMP_PATH.$tempfilename);
 		//
 		header("Content-length:".$filesize);
-		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		// Modified by Ivan Tcholakov, 28-JUN-2010.
 		//$fd=fopen('../tmp/'.$tempfilename,'r');
-		$fd=fopen(_MPDF_TMP_PATH.$tempfilename,'r');
+		$fd=fopen(_MPDF_TEMP_PATH.$tempfilename,'r');
 		//
 		fpassthru($fd);
 		fclose($fd);
-		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		// Modified by Ivan Tcholakov, 28-JUN-2010.
 		//unlink('../tmp/'.$tempfilename);
-		unlink(_MPDF_TMP_PATH.$tempfilename);
+		unlink(_MPDF_TEMP_PATH.$tempfilename);
 		//
 		// ====================== DELETE OLD FILES FIRST - Housekeeping =========================================
 		// Clear any files in directory that are >24 hrs old
@@ -61,10 +61,10 @@ $dest = $_REQUEST['dest'];
 		//   }
 		//   closedir($handle);
 		//}
-		if ($handle = opendir(_MPDF_TMP_PATH)) {
+		if ($handle = opendir(_MPDF_TEMP_PATH)) {
 		   while (false !== ($file = readdir($handle))) {
-			if (((filemtime(_MPDF_TMP_PATH.$file)+$interval) < time()) && ($file != "..") && ($file != ".")) {
-				unlink(_MPDF_TMP_PATH.$file);
+			if (((filemtime(_MPDF_TEMP_PATH.$file)+$interval) < time()) && ($file != "..") && ($file != ".")) {
+				unlink(_MPDF_TEMP_PATH.$file);
 			}
 		   }
 		   closedir($handle);

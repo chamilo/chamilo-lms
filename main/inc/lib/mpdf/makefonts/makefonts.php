@@ -1,16 +1,18 @@
 <?php
+
 ############################
-set_time_limit(600);
+set_time_limit(1200);
 ini_set("memory_limit","128M");
 ############################
 
 $cpages = array('win-1252','win-1251','iso-8859-2','iso-8859-4','iso-8859-7','iso-8859-9');
 $map_path = '../maps/';
 
-$step = $_REQUEST['step'];
+if (isset($_REQUEST['step'])) { $step = $_REQUEST['step']; }
+else $step = '';
 echo '<html><body>';
-if ($_REQUEST['movefonts']==1) { movefonts(); }
-if ($_REQUEST['moveunifonts']==1) { moveunifonts(); }
+if (isset($_REQUEST['movefonts']) && $_REQUEST['movefonts']==1) { movefonts(); }
+if (isset($_REQUEST['moveunifonts']) && $_REQUEST['moveunifonts']==1) { moveunifonts(); }
 
 
 // INITIAL INSTRUCTIONS
@@ -30,14 +32,14 @@ if (!$step) {
 
 }
 
-// STEP 1 - 
+// STEP 1 -
 else if ($step==1) {
 	echo '<h3>Step 1 - Unibyte (codepage) font files - A</h3>';
 	echo '<p>The next step will create and execute a file "makefonts.bat" in the current directory</p>';
 	echo '<p><a href="makefonts.php?step=2">Execute</a> and go to Step 2</p>';
 }
 
-// STEP 2 - 
+// STEP 2 -
 else if ($step==2) {
 	makebatlist('C');
 	exec('makefonts.bat');
@@ -66,7 +68,7 @@ else if ($step==2) {
 	echo '<p>Execute <a href="makefonts.php?step=3">Step 3</a></p>';
 }
 
-// STEP 3 - 
+// STEP 3 -
 else if ($step==3) {
 	$ff = scandir('./');
 	foreach($ff AS $f) {
@@ -106,11 +108,11 @@ else if ($step==3) {
 
 }
 
-// STEP 4 - 
+// STEP 4 -
 else if ($step==4) {
 	echo '<h3>Step 4 - Unibyte (codepage) font files - D</h3>';
 	echo '<p>Copy all of the .php and .z files to the folder [path to mpdf]/mpdf/fonts/</p>';
-	echo '<p>(This <a href="makefonts.php?step=4&movefonts=1">link</a> may do the job for you)</p>';
+	echo '<p>(This <a href="makefonts.php?step=4&movefonts=1">link</a> may do the job for you. <b>Note:</b> This will not overwrite files, so you may need to delete files first from the [path to mpdf]/mpdf/fonts/ folder)</p>';
 	echo '<p>Add the font names to config_fonts.php (and if appropriate to config_cp.php)</p>';
 
 	echo '<p>You have now completed font file generation for the codepage Type 1 font files.</p>';
@@ -125,7 +127,7 @@ else if ($step==4) {
 
 }
 
-// STEP 5 - 
+// STEP 5 -
 else if ($step==5) {
 
 	// First get rid of any .php and .z files left
@@ -135,7 +137,7 @@ else if ($step==5) {
 		$file = substr($f,0,(strlen($f)-4));
 		foreach($cpages AS $cpage) {
 		  if ($cpage =='win-1252') {
-			@unlink($file .'.z'); @unlink($file .'.php'); 
+			@unlink($file .'.z'); @unlink($file .'.php');
 		  }
 		  else {
 			@unlink($file .'-'.$cpage.'.z'); @unlink($file .'-'.$cpage.'.php');
@@ -146,7 +148,7 @@ else if ($step==5) {
 	makebatlist('U');
 	exec('makefonts.bat');
 	echo '<h3>Step 5 - Unicode TrueType font files - A</h3>';
-	echo '<p>Check that the following files have been created in the surrent directory (for each of your original .ttf files):</p>';
+	echo '<p>Check that the following files have been created in the current directory (for each of your original .ttf files):</p>';
 	echo '<ul><li>fontname.t1a</li>';
 	echo '<li>fontname.ufm</li>';
 	echo '<li>fontname.afm</li></ul>';
@@ -168,7 +170,7 @@ else if ($step==5) {
 
 
 
-// STEP 6 - 
+// STEP 6 -
 else if ($step==6) {
 	$ff = scandir('./');
 	foreach($ff AS $f) {
@@ -187,7 +189,7 @@ else if ($step==6) {
 	echo '<p>NB The .afm files have been deleted (but .t1a and .ufm should remain).</p>';
 
 	echo '<p>The next step will generate the additional files for embedded subsets</p>';
-	echo '<p><a href="makefonts.php?step=7">Execute</a> Step 7</p>';
+	echo '<p><a href="makefonts.php?step=7">Execute</a> Step 7 (NB This may take several minutes for large font files; you may need to increase the time-limit or memory-limits - see the top of the /makefont/makefonts.php file)</p>';
 
 }
 
@@ -302,74 +304,138 @@ else if ($step==7) {
 		$pdf_diffstr = '';	// String of /Diffs for PDF file
 		$of_encodingstr = '';
 		$useChars = array();
-	
+
 		//echo "Processing font: ".$file."... <br />\n";
 
-		$file_ip = $file.'.t1a';
-		$fi = file_get_contents($file_ip);
-		$fi = preg_replace("/\r\n/","\n",$fi);
 		$subrs='';
 		$CharStrings='';
 		$Encoding='';
 
+		$file_ip = $file.'.t1a';
+
+		$ifh = fopen($file_ip, "rb");
+		$target = false;
+		$rem = '';
 		// Header
-		list($if_header,$rem) = preg_split('/\/Encoding /s', $fi, 2);
-		$fi = '/Encoding '.$rem;	// restore
+		$if_header = '';
+		while(!$target && !feof($ifh)) {
+			$x = fread($ifh, 2048);
+			$x = preg_replace("/\r/","",$x);
+			$if_header .= $x;
+			if (preg_match('/(.*?)\/Encoding (.*)/s', $if_header , $m)) {
+				$if_header = $m[1];
+				$rem = '/Encoding '.$m[2];
+				$target = true;
+			}
+		}
+		if (feof($ifh)) { die("Error parsing ".$file_ip ); }
 
+		// Discard
+		$target = false;
+		if (preg_match('/(.*?)currentfile eexec(.*)/s', $rem, $m)) {
+			$rem = $m[2];
+			$target = true;
+		}
 
-		// Encodings
-		list($Encoding,$rem) = preg_split('/currentfile eexec/s', $fi, 2);
-		$fi = $rem;	// restore
-		unset($Encoding);	// Not needed
+		$discard = '';
+		while(!$target && !feof($ifh)) {
+			$x = fread($ifh, 2048);
+			$x = preg_replace("/\r/","",$x);
+			$discard .= $x;
+			if (preg_match('/(.*?)currentfile eexec(.*)/s', $discard , $m)) {
+				//$discard = $m[1];
+				$rem = $m[2];
+				$target = true;
+			}
+		}
+		if (feof($ifh)) { die("Error parsing ".$file_ip ); }
+
 
 		// eexec_start
-		list($if_eexec_start,$rem) = preg_split('/\/Subrs /s', $fi, 2);
-		$fi = '/Subrs '.$rem;	// restore
-		if (preg_match('/\/lenIV\s+(\d+)/',$if_eexec_start,$t)) {
-			$lenIV = $t[1];
+		$target = false;
+		if (preg_match('/(.*?)\/Subrs (.*)/s', $rem, $m)) {
+			$if_eexec_start = $m[1];
+			$rem = $m[2];
+			$target = true;
 		}
-		/* locate the name of the charstring start command  - probably /RD */
-		if (preg_match('/\/([a-zA-Z]*)\s*\{string currentfile.*?readstring/',$if_eexec_start,$t)) { 
-			$cs_start = $t[1];
-		}
+		else { $if_eexec_start = $rem; }
 
-		// Subroutines
-		$sr = '';
-		list($subrs,$rem) = preg_split('/\/CharStrings /s', $fi, 2);
-		$fi = '/CharStrings '.$rem;	// restore
-		preg_match_all('/dup\s+(\d+)\s+\{(.*?)\}\s+NP/s',$subrs, $m);
-		for($i=0;$i<count($m[0]);$i++) {
-			if ($i < 5) {
-				$sr .= "dup ".$m[1][$i]." ";
-				$sr .= parse_charstring($m[2][$i]);	
-				$sr .= " NP\n";
-			}
-			// Save the rest without the return
-			else {
-				$if_Subrs[$m[1][$i]] = preg_replace('/\s+return/', '', $m[2][$i]);
+		while(!$target && !feof($ifh)) {
+			$x = fread($ifh, 2048);
+			$x = preg_replace("/\r/","",$x);
+			$if_eexec_start .= $x;
+			if (preg_match('/(.*?)\/Subrs (.*)/s', $if_eexec_start , $m)) {
+				$if_eexec_start = $m[1];
+				$rem = $m[2];
+				$target = true;
 			}
 		}
-		$offset = 0;
+		if (feof($ifh)) { die("Error parsing ".$file_ip ); }
+
+
 		// WRITE if_header to .dat
-		$fh = fopen($file.'.dat', "w");
+		$offset = 0;
+		$fh = fopen($file.'.dat', "wb");
 
 		_fwriteint($fh, strlen($if_header));
 		fwrite($fh, $if_header);
 		$offset += strlen($if_header) + 4;
 
+		// WRITE if_eexec_start to .dat
 		_fwriteint($fh, strlen($if_eexec_start));
 		fwrite($fh, $if_eexec_start);
 		$offset += strlen($if_eexec_start) + 4;
 
 		unset($if_header );
 		unset($if_eexec_start );
-		unset($subrs);
 
-		// CharStrings
-		list($CharStrings,$rem) = preg_split('/mark currentfile closefile/s', $fi, 2);
-		$fi = 'mark currentfile closefile'.$rem;	// restore
-		preg_match_all('/\/([a-zA-Z0-9._]+)\s+\{(.*?endchar\s+)\}\s+ND/s',$CharStrings, $m);
+
+		// SUBROUTINES
+		$if_Subrs = array();
+		$target = false;
+		if (preg_match('/(.*?)\/CharStrings (.*)/s', $rem, $m)) {
+		$subrs = $m[1];
+			$rem = $m[2];
+			$target = true;
+		}
+		else { $subrs = $rem; }
+
+		preg_match_all('/dup\s+(\d+)\s+\{(.*?)\}\s+NP/s',$subrs, $mm);
+		for($i=0;$i<count($mm[0]);$i++) {
+			if ($mm[1][$i] > 4) { $if_Subrs[$mm[1][$i]] = preg_replace('/\s+return/', '', $mm[2][$i]); }	// mPDF 4.4.016
+		}
+		preg_match('/(.*}\s+NP)(.*)/s', $subrs, $mm);
+		if(isset($mm[2])) { $subrs = $mm[2]; }	// mPDF 4.4.016
+
+		while(!$target && !feof($ifh)) {
+			$x = fread($ifh, 8192);
+			$x = preg_replace("/\r/","",$x);
+			$subrs .= $x;
+			if (preg_match('/(.*?)\/CharStrings (.*)/s', $subrs , $m)) {
+				$subrs = $m[1];
+				$rem = $m[2];
+				$target = true;
+			}
+			$subrs = preg_replace("/\r\n/","\n",$subrs);
+			preg_match_all('/dup\s+(\d+)\s+\{(.*?)\}\s+NP/s',$subrs, $mm);
+			for($i=0;$i<count($mm[0]);$i++) {
+				if ($mm[1][$i] > 4) { $if_Subrs[$mm[1][$i]] = preg_replace('/\s+return/', '', $mm[2][$i]); }	// mPDF 4.4.016
+			}
+			preg_match('/(.*}\s+NP)(.*)/s', $subrs, $mm);
+			if(isset($mm[2])) { $subrs = $mm[2]; }	// mPDF 4.5.003
+		}
+		if (feof($ifh)) { die("Error parsing ".$file_ip ); }
+
+		// CHARSTRINGS
 		$offs = array();
+		$target = false;
+		if (preg_match('/(.*?)mark currentfile closefile/s', $rem, $m)) {
+			$CharStrings = $m[1];
+			$target = true;
+		}
+		else { $CharStrings = $rem; }
+
+		preg_match_all('/\/([a-zA-Z0-9._]+)\s+\{(.*?endchar\s+)\}\s+ND/s',$CharStrings, $m);
 		for($i=0;$i<count($m[0]);$i++) {
 			$cp = $m[1][$i];
 			$cs = $m[2][$i];
@@ -382,11 +448,40 @@ else if ($step==7) {
 			fwrite($fh, $cb);
 			$offset += strlen($cb) + 4;
 		}
+		preg_match('/(.*}\s+ND)(.*)/s', $CharStrings, $mm);
+		if(isset($mm[2])) { $CharStrings = $mm[2]; }	// mPDF 4.4.016
+
+		while(!$target && !feof($ifh)) {
+			$x = fread($ifh, 8192);
+			$x = preg_replace("/\r/","",$x);
+			$CharStrings .= $x;
+			if (preg_match('/(.*?)mark currentfile closefile(.*)/s', $CharStrings , $m)) {
+				$CharStrings = $m[1];
+				$target = true;
+			}
+			preg_match_all('/\/([a-zA-Z0-9._]+)\s+\{(.*?endchar\s+)\}\s+ND/s',$CharStrings, $m);
+			for($i=0;$i<count($m[0]);$i++) {
+				$cp = $m[1][$i];
+				$cs = $m[2][$i];
+				$cs = preg_replace('/(\d+) 4 (callgsubr|callothersubr|callsubr)/e', '" ".$if_Subrs[\\1]." "', $cs);
+				$cs = preg_replace('/\s+/',' ',$cs);
+				$cb = parse_charstring($cs);
+				$offs[$cp] = $offset;
+				// WRITE $cb to .dat AND save position in file
+				_fwriteint($fh, strlen($cb));
+				fwrite($fh, $cb);
+				$offset += strlen($cb) + 4;
+			}
+			preg_match('/(.*}\s+ND)(.*)/s', $CharStrings, $mm);
+			if(isset($mm[2])) { $CharStrings = $mm[2]; }	// mPDF 4.4.016
+		}
+
+		fclose($ifh);
 		fclose($fh);
 		unset($if_Subrs);
 		unset($CharStrings);
 		unset($fi);
-		// WRITE if_eexec_start to .dat
+		// WRITE offsets to .dat.php
 		$fh = fopen($file.'.dat.php', "w");
 		$s = '<?php $offs = '.var_export($offs, true).'; ?>';
 		fwrite($fh, $s);
@@ -412,11 +507,11 @@ else if ($step==7) {
 
 
 
-// STEP 8 - 
+// STEP 8 -
 else if ($step==8) {
 	echo '<p>Copy all of the following files to the folder [path to mpdf]/mpdf/unifont/</p>';
 	echo '<p>(6 for each font/style)</p>';
-	echo '<p>(This <a href="makefonts.php?step=8&moveunifonts=1">link</a> should do the job for you)</p>';
+	echo '<p>(This <a href="makefonts.php?step=8&moveunifonts=1">link</a> should do the job for you. <b>Note:</b> This will not overwrite files, so you may need to delete files first from the [path to mpdf]/mpdf/unifont/ folder).</p>';
 
 	echo '<ul><li>fontname.z</li>';
 	echo '<li>fontname.ctg.z</li>';
@@ -433,7 +528,7 @@ else if ($step==8) {
 }
 
 
-// STEP 9 - 
+// STEP 9 -
 else if ($step==9) {
 	$ff = scandir('./');
 	foreach($ff AS $f) {
@@ -451,7 +546,7 @@ else if ($step==9) {
 		@unlink('makefonts.bat');
 		foreach($cpages AS $cpage) {
 		  if ($cpage =='win-1252') {
-			@unlink($file .'.z'); @unlink($file .'.php'); 
+			@unlink($file .'.z'); @unlink($file .'.php');
 		  }
 		  else {
 			@unlink($file .'-'.$cpage.'.z'); @unlink($file .'-'.$cpage.'.php');
@@ -585,12 +680,12 @@ function movefonts() {
 		$file = substr($f,0,(strlen($f)-4));
 		foreach($cpages AS $cpage) {
 		  if ($cpage =='win-1252') {
-			@rename($file .'.php', '../font/'.$file .'.php');
-			@rename($file .'.z', '../font/'.$file .'.z');
+			rename($file .'.php', '../font/'.$file .'.php');
+			rename($file .'.z', '../font/'.$file .'.z');
 		  }
 		  else {
-			@rename($file .'-'.$cpage.'.php', '../font/'.$file .'-'.$cpage.'.php');
-			@rename($file .'-'.$cpage.'.z', '../font/'.$file .'-'.$cpage.'.z');
+			rename($file .'-'.$cpage.'.php', '../font/'.$file .'-'.$cpage.'.php');
+			rename($file .'-'.$cpage.'.z', '../font/'.$file .'-'.$cpage.'.z');
 		  }
 		}
 	   }
@@ -603,12 +698,12 @@ function moveunifonts() {
 	foreach($ff AS $f) {
 	   if (substr($f,-4,4)=='.ttf') {
 		$file = substr($f,0,(strlen($f)-4));
-		@rename($file .'.dat', '../unifont/'.$file .'.dat');
-		@rename($file .'.dat.php', '../unifont/'.$file .'.dat.php');
-		@rename($file .'.php', '../unifont/'.$file .'.php');
-		@rename($file .'.z', '../unifont/'.$file .'.z');
-		@rename($file .'.ctg.z', '../unifont/'.$file .'.ctg.z');
-		@rename($file .'.uni2gn.php', '../unifont/'.$file .'.uni2gn.php');
+		rename($file .'.dat', '../unifont/'.$file .'.dat');
+		rename($file .'.dat.php', '../unifont/'.$file .'.dat.php');
+		rename($file .'.php', '../unifont/'.$file .'.php');
+		rename($file .'.z', '../unifont/'.$file .'.z');
+		rename($file .'.ctg.z', '../unifont/'.$file .'.ctg.z');
+		rename($file .'.uni2gn.php', '../unifont/'.$file .'.uni2gn.php');
 	   }
 	}
 }
@@ -746,7 +841,7 @@ function ReadAFM($file,&$map)
 	//Read a font metric file
 	$a=file($file);
 	if(empty($a))
-		die('File not found');
+		die('File not found (ReadAFM) - '.$file);
 	$widths=array();
 	$fm=array();
 	$fix=array('Edot'=>'Edotaccent','edot'=>'edotaccent','Idot'=>'Idotaccent','Zdot'=>'Zdotaccent','zdot'=>'zdotaccent',
@@ -1062,11 +1157,11 @@ function ReadUFM($file, &$cidtogidmap)
 {
   //Prepare empty CIDToGIDMap
   $cidtogidmap = str_pad('', 256*256*2, "\x00");
-  
+
   //Read a font metric file
   $a=file($file);
   if(empty($a))
-    die('File not found');
+    die('File not found (ReadUFM) - '.$file);
   $widths=array();
   $fm=array();
   foreach($a as $l)
@@ -1086,17 +1181,18 @@ function ReadUFM($file, &$cidtogidmap)
         $w = $e[4];
         $glyph = $e[10];
         $widths[$cc] = $w;
-        if($cc == ord('X'))
-          $fm['CapXHeight'] = $e[13];
-          
+ //       if($cc == ord('X'))				// mPDF 4.4.01
+ //         $fm['CapXHeight'] = $e[13];		// Height is not set in ttf2ufm
+
         // Set GID
         if ($cc >= 0 && $cc < 0xFFFF && $glyph) {
           $cidtogidmap{$cc*2} = chr($glyph >> 8);
           $cidtogidmap{$cc*2 + 1} = chr($glyph & 0xFF);
-        }        
+        }
+	  // mPDF 4.5.003
+	  if($gn=='.notdef' && !isset($fm['MissingWidth']))
+          $fm['MissingWidth']=$w;
       }
-      if($gn=='.notdef' && !isset($fm['MissingWidth']))
-        $fm['MissingWidth']=$w;
     }
     elseif($code=='FontName')
       $fm['FontName']=$param;
@@ -1128,7 +1224,7 @@ function ReadUFM($file, &$cidtogidmap)
     die('FontName not found');
 
   $fm['Widths']=$widths;
-  
+
   return $fm;
 }
 
@@ -1260,14 +1356,14 @@ function MakeFontTTF($fontfile,$ufmfile)
 
       $cmp=$basename.'.ctg.z';
       SaveToFile($cmp,gzcompress($cidtogidmap),'b');
-      //echo 'CIDToGIDMap created and compressed ('.$cmp.')<BR>';     
+      //echo 'CIDToGIDMap created and compressed ('.$cmp.')<BR>';
       $s.='$ctg=\''.$cmp."';\n";
     }
     else
     {
       $s.='$file=\''.basename($fontfile)."';\n";
       echo '<B>Notice:</B> font file could not be compressed (gzcompress not available)<BR>';
-      
+
       $cmp=$basename.'.ctg';
       $f = fopen($cmp, 'wb');
       fwrite($f, $cidtogidmap);

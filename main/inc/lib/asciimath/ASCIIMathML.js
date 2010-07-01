@@ -116,9 +116,19 @@ function init(){
 }
 
 function checkMathML(){
-  if (navigator.appName.slice(0,8)=="Netscape")
-    if (navigator.appVersion.slice(0,1)>="5") noMathML = null;
-    else noMathML = true;
+	if (navigator.product && navigator.product=='Gecko') {
+	   var rv = navigator.userAgent.toLowerCase().match(/rv:\s*([\d\.]+)/);
+	   if (rv!=null) {
+		rv = rv[1].split('.');
+		if (rv.length<3) { rv[2] = 0;}
+		if (rv.length<2) { rv[1] = 0;}
+	   }
+	   if (rv!=null && 10000*rv[0]+100*rv[1]+1*rv[2]>=10100) {
+		   noMathML = null;
+	   } else {
+		   noMathML = true;
+	   }
+    }
   else if (navigator.appName.slice(0,9)=="Microsoft")
     try {
         var ActiveX = new ActiveXObject("MathPlayer.Factory.1");

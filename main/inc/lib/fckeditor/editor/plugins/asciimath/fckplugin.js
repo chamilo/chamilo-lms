@@ -22,7 +22,7 @@ translateASCIIMath = false ;
 mathfontsize = "1.1em";
 
 // Registering the related command.
-FCKCommands.RegisterCommand( 'asciimath', new FCKDialogCommand( FCKLang['DlgAsciiMath'], FCKLang['DlgAsciiMath'], FCKConfig.PluginsPath + 'asciimath/fck_asciimath.html', 800, 550 ) ) ;
+FCKCommands.RegisterCommand( 'asciimath', new FCKDialogCommand( FCKLang['DlgAsciiMath'], FCKLang['DlgAsciiMath'], FCKConfig.PluginsPath + 'asciimath/fck_asciimath.html', 800, 620 ) ) ;
 
 // Create the "asciimath" toolbar button.
 var oAsciiMathItem = new FCKToolbarButton( 'asciimath', FCKLang['DlgAsciiMath'] ) ;

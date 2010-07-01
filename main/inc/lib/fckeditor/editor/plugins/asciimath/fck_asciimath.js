@@ -141,7 +141,7 @@ function Preview()
 	{
 		var str = GetE( 'inputText' ).value ;
 		var outnode = GetE( 'outputNode' ) ;
-		var newnode = AMcreateElementXHTML( 'div' ) ;
+		var newnode = createElementXHTML( 'div' ) ;
 		newnode.setAttribute( 'id', 'outputNode' ) ;
 		outnode.parentNode.replaceChild( newnode, outnode ) ;
 		outnode = GetE( 'outputNode' ) ;

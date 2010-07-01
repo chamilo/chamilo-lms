@@ -203,9 +203,36 @@ function createMmlNode(t,frag) {
 }
 
 // character lists for Mozilla/Netscape fonts
-var AMcal = [0xEF35,0x212C,0xEF36,0xEF37,0x2130,0x2131,0xEF38,0x210B,0x2110,0xEF39,0xEF3A,0x2112,0x2133,0xEF3B,0xEF3C,0xEF3D,0xEF3E,0x211B,0xEF3F,0xEF40,0xEF41,0xEF42,0xEF43,0xEF44,0xEF45,0xEF46];
-var AMfrk = [0xEF5D,0xEF5E,0x212D,0xEF5F,0xEF60,0xEF61,0xEF62,0x210C,0x2111,0xEF63,0xEF64,0xEF65,0xEF66,0xEF67,0xEF68,0xEF69,0xEF6A,0x211C,0xEF6B,0xEF6C,0xEF6D,0xEF6E,0xEF6F,0xEF70,0xEF71,0x2128];
-var AMbbb = [0xEF8C,0xEF8D,0x2102,0xEF8E,0xEF8F,0xEF90,0xEF91,0x210D,0xEF92,0xEF93,0xEF94,0xEF95,0xEF96,0x2115,0xEF97,0x2119,0x211A,0x211D,0xEF98,0xEF99,0xEF9A,0xEF9B,0xEF9C,0xEF9D,0xEF9E,0x2124];
+var AMcal = [
+		'\uD835\uDC9C', '\u212C', '\uD835\uDC9E', //abc
+		'\uD835\uDC9F', '\u2130', '\u2131', //def
+		'\uD835\uDCA2', '\u210B', '\u2110', //ghi
+		'\uD835\uDCA5', '\uD835\uDCA6', '\u2112', //jkl
+		'\u2133', '\uD835\uDCA9', '\uD835\uDCAA', //mno
+		'\uD835\uDCAB', '\uD835\uDCAC', '\u211B', //pqr
+		'\uD835\uDCAE', '\uD835\uDCAF', '\uD835\uDCB0', //stu
+		'\uD835\uDCB1', '\uD835\uDCB2', '\uD835\uDCB3', //vwx
+		'\uD835\uDCB4', '\uD835\uDCB5' ]; //yz
+var AMfrk = [
+		'\uD835\uDD04', '\uD835\uDD05', '\u212D', //abc
+		'\uD835\uDD07', '\uD835\uDD08', '\uD835\uDD09', //def
+		'\uD835\uDD0A', '\u210C', '\u2111', //ghi
+		'\uD835\uDD0D', '\uD835\uDD0E', '\uD835\uDD0F', //jkl
+		'\uD835\uDD10', '\uD835\uDD11', '\uD835\uDD12', //mno
+		'\uD835\uDD13', '\uD835\uDD14', '\u211C', //pqr
+		'\uD835\uDD16', '\uD835\uDD17', '\uD835\uDD18', //stu
+		'\uD835\uDD19', '\uD835\uDD1A', '\uD835\uDD1B', //vwx
+		'\uD835\uDD1C', '\u2128' ]; //yz
+var AMbbb = [
+		'\uD835\uDD38', '\uD835\uDD39', '\u2102', //abc
+		'\uD835\uDD3B', '\uD835\uDD3C', '\uD835\uDD3D', //def
+		'\uD835\uDD3E', '\u210D', '\uD835\uDD40', //ghi
+		'\uD835\uDD41', '\uD835\uDD42', '\uD835\uDD43', //jkl
+		'\uD835\uDD44', '\u2115', '\uD835\uDD46', //mno
+		'\u2119', '\u211A', '\u211D', //pqr
+		'\uD835\uDD4A', '\uD835\uDD4B', '\uD835\uDD4C', //stu
+		'\uD835\uDD4D', '\uD835\uDD4E', '\uD835\uDD4F', //vwx
+		'\uD835\uDD50', '\u2124', ];
 
 var CONST = 0, UNARY = 1, BINARY = 2, INFIX = 3, LEFTBRACKET = 4,
     RIGHTBRACKET = 5, SPACE = 6, UNDEROVER = 7, DEFINITION = 8,
@@ -670,7 +697,7 @@ function AMparseSexpr(str) { //parses str and returns [node,tailstr]
               var newst = [];
               for (var j=0; j<st.length; j++)
                 if (st.charCodeAt(j)>64 && st.charCodeAt(j)<91) newst = newst +
-                  String.fromCharCode(symbol.codes[st.charCodeAt(j)-65]);
+                  symbol.codes[st.charCodeAt(j)-65];
                 else newst = newst + st.charAt(j);
               if (result[0].nodeName=="mi")
                 result[0]=createMmlNode("mo").
@@ -1789,7 +1816,7 @@ function LMparseSexpr(str) { //parses str and returns [node,tailstr,(node)tag]
               var newst = [];
               for (var j=0; j<st.length; j++)
                 if (st.charCodeAt(j)>64 && st.charCodeAt(j)<91) newst = newst +
-                  String.fromCharCode(symbol.codes[st.charCodeAt(j)-65]);
+                  symbol.codes[st.charCodeAt(j)-65];
                 else newst = newst + st.charAt(j);
               if (result[0].nodeName=="mi")
                 result[0]=createMmlNode("mo").

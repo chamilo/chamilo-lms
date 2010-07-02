@@ -237,7 +237,7 @@ var AMbbb = [
 var CONST = 0, UNARY = 1, BINARY = 2, INFIX = 3, LEFTBRACKET = 4,
     RIGHTBRACKET = 5, SPACE = 6, UNDEROVER = 7, DEFINITION = 8,
     LEFTRIGHT = 9, TEXT = 10, BIG = 11, LONG = 12, STRETCHY = 13,
-    MATRIX = 14;; // token types
+    MATRIX = 14; // token types
 
 var AMquote = {input:"\"",   tag:"mtext", output:"mbox", tex:null, ttype:TEXT};
 

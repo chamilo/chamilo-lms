@@ -1,6 +1,15 @@
 /*
-ASCIIMathML.js
+ASCIIMathML2wMnGFallback.js
 ==============
+ver 0.1 - RegEx errors in Opera need to be fixed (apparently OK in 9.5)
+
+This version of ASCIIMathML has been modified with TeX conversion for
+IMG fallback June 11, 2008 (c) David Lippman http://www.pierce.ctc.edu/dlippman
+This this version, if browser supports MathML, it is used.  Otherwise, image-
+based math rendering is used (set AMTcgiloc for renderer).  Also provides
+IMG fallback for editor-produced graphs (does not attempt img fallback for
+other graphs)
+
 This file contains JavaScript functions to convert ASCII math notation
 and LaTeX to Presentation MathML. Simple graphics commands are also
 translated to SVG images. The conversion is done while the (X)HTML
@@ -35,6 +44,10 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 (at http://www.gnu.org/licences/lgpl.html) for more details.
 */
 
+var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi"; //path to CGI script that
+						     //can render a TeX string
+var AScgiloc = 'http://www.imathas.com/imathas/filter/graph/svgimg.php'; //path to CGI script
+						//for editor graphs IMG fallback
 var mathcolor = "blue";        // change it to "" (to inherit) or another color
 // Modified by Ivan Tcholakov, 01-JUL-2010.
 //var mathfontsize = "1em";      // change to e.g. 1.2em for larger math
@@ -43,17 +56,11 @@ var mathfontsize = "1.2em";
 var mathfontfamily = "serif";  // change to "" to inherit (works in IE)
                                // or another family (e.g. "arial")
 var automathrecognize = false; // writing "amath" on page makes this true
-//Modified by Ivan Tcholakov, 01-JUL-2010.
-//var checkForMathML = true;     // check if browser can display MathML
-var checkForMathML = false;
-//
-//Modified by Ivan Tcholakov, 01-JUL-2010.
-//var notifyIfNoMathML = true;   // display note at top if no MathML capability
-var notifyIfNoMathML = false;
-//
+var checkForMathML = true;     // check if browser can display MathML
+var notifyIfNoMathML = false;   // display note at top if no MathML capability
 var alertIfNoMathML = false;   // show alert box if no MathML capability
 var translateOnLoad = true;    // set to false to do call translators from js
-var translateLaTeX = true;     // false to preserve $..$, $$..$$
+var translateLaTeX = false;     // false to preserve $..$, $$..$$
 var translateLaTeXformatting = true; // false to preserve \emph,\begin{},\end{}
 var translateASCIIMath = true; // false to preserve `..`
 var translateASCIIsvg = true;  // false to preserve agraph.., \begin{graph}..
@@ -111,7 +118,7 @@ function init(){
 	if (checkForMathML && (msg = checkMathML())) warnings.push(msg);
 	if (checkIfSVGavailable && (msg = checkSVG())) warnings.push(msg);
 	if (warnings.length>0) displayWarnings(warnings);
-	if (!noMathML) initSymbols();
+	initSymbols();
 	return true;
 }
 
@@ -473,7 +480,7 @@ var AMnames = []; //list of input symbols
 function initSymbols() {
   var texsymbols = [], i;
   for (i=0; i<AMsymbols.length; i++)
-    if (AMsymbols[i].tex)
+    if (AMsymbols[i].tex && !(typeof AMsymbols[i].notexcopy == "boolean" && AMsymbols[i].notexcopy))
       texsymbols[texsymbols.length] = {input:AMsymbols[i].tex,
         tag:AMsymbols[i].tag, output:AMsymbols[i].output, ttype:AMsymbols[i].ttype};
   AMsymbols = AMsymbols.concat(texsymbols);
@@ -581,9 +588,9 @@ function AMgetSymbol(str) {
   }
   if (st=="-" && AMpreviousSymbol==INFIX) {
     AMcurrentSymbol = INFIX;  //trick "/" into recognizing "-" on second parse
-    return {input:st, tag:tagst, output:st, ttype:UNARY, func:true};
+    return {input:st, tag:tagst, output:st, ttype:UNARY, func:true, val:true};
   }
-  return {input:st, tag:tagst, output:st, ttype:CONST};
+  return {input:st, tag:tagst, output:st, ttype:CONST, val:true};
 }
 
 function AMremoveBrackets(node) {
@@ -598,6 +605,27 @@ function AMremoveBrackets(node) {
   }
 }
 
+//TeX conversion version
+function AMTremoveBrackets(node) {
+
+  var st;
+  if (node.charAt(0)=='{' && node.charAt(node.length-1)=='}') {
+
+    st = node.charAt(1);
+    if (st=="(" || st=="[") node = '{'+node.substr(2);
+    st = node.substr(1,6);
+    if (st=="\\left(" || st=="\\left[" || st=="\\left{") node = '{'+node.substr(7);
+    st = node.substr(1,12);
+    if (st=="\\left\\lbrace" || st=="\\left\\langle") node = '{'+node.substr(13);
+    st = node.charAt(node.length-2);
+    if (st==")" || st=="]") node = node.substr(0,node.length-8)+'}';
+    st = node.substr(node.length-8,7)
+    if (st=="\\rbrace" || st=="\\rangle") node = node.substr(0,node.length-14) + '}';
+
+  }
+  return node;
+}
+
 /*Parsing ASCII math expressions with the following grammar
 v ::= [A-Za-z] | greek letters | numbers | other constant symbols
 u ::= sqrt | text | bb | other unary symbols for font commands
@@ -610,6 +638,315 @@ E ::= IE | I/I                       Expression
 Each terminal symbol is translated into a corresponding mathml node.*/
 
 var AMnestingDepth,AMpreviousSymbol,AMcurrentSymbol;
+
+
+function AMTgetTeXsymbol(symb) {
+	if (typeof symb.val == "boolean" && symb.val) {
+		pre = '';
+	} else {
+		pre = '\\';
+	}
+	if (symb.tex==null) {
+		return (pre+symb.input);
+	} else {
+		return (pre+symb.tex);
+	}
+}
+function AMTgetTeXbracket(symb) {
+	if (symb.tex==null) {
+		return (symb.input);
+	} else {
+		return ('\\'+symb.tex);
+	}
+}
+
+function AMTparseSexpr(str) { //parses str and returns [node,tailstr]
+  var symbol, node, result, i, st,// rightvert = false,
+    newFrag = '';
+  str = AMremoveCharsAndBlanks(str,0);
+  symbol = AMgetSymbol(str);             //either a token or a bracket or empty
+  if (symbol == null || symbol.ttype == RIGHTBRACKET && AMnestingDepth > 0) {
+    return [null,str];
+  }
+  if (symbol.ttype == DEFINITION) {
+    str = symbol.output+AMremoveCharsAndBlanks(str,symbol.input.length);
+    symbol = AMgetSymbol(str);
+  }
+  switch (symbol.ttype) {
+  case UNDEROVER:
+  case CONST:
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
+     var texsymbol = AMTgetTeXsymbol(symbol);
+     if (texsymbol.charAt(0)=="\\" || symbol.tag=="mo") return [texsymbol,str];
+     else return ['{'+texsymbol+'}',str];
+
+  case LEFTBRACKET:   //read (expr+)
+    AMnestingDepth++;
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
+
+    result = AMTparseExpr(str,true);
+    AMnestingDepth--;
+    if (typeof symbol.invisible == "boolean" && symbol.invisible)
+    	node = '{\\left.'+result[0]+'}';
+    else {
+	    node = '{\\left'+AMTgetTeXbracket(symbol) + result[0]+'}';
+    }
+    return [node,result[1]];
+  case TEXT:
+      if (symbol!=AMquote) str = AMremoveCharsAndBlanks(str,symbol.input.length);
+      if (str.charAt(0)=="{") i=str.indexOf("}");
+      else if (str.charAt(0)=="(") i=str.indexOf(")");
+      else if (str.charAt(0)=="[") i=str.indexOf("]");
+      else if (symbol==AMquote) i=str.slice(1).indexOf("\"")+1;
+      else i = 0;
+      if (i==-1) i = str.length;
+      st = str.slice(1,i);
+      if (st.charAt(0) == " ") {
+	      newFrag = '\\ ';
+      }
+     newFrag += '\\text{'+st+'}';
+      if (st.charAt(st.length-1) == " ") {
+	      newFrag += '\\ ';
+      }
+      str = AMremoveCharsAndBlanks(str,i+1);
+      return [newFrag,str];
+  case UNARY:
+      str = AMremoveCharsAndBlanks(str,symbol.input.length);
+      result = AMTparseSexpr(str);
+      if (result[0]==null) return ['{'+AMTgetTeXsymbol(symbol)+'}',str];
+      if (typeof symbol.func == "boolean" && symbol.func) { // functions hack
+        st = str.charAt(0);
+        if (st=="^" || st=="_" || st=="/" || st=="|" || st==",") {
+          return ['{'+AMTgetTeXsymbol(symbol)+'}',str];
+        } else {
+		node = '{'+AMTgetTeXsymbol(symbol)+'{'+result[0]+'}}';
+		return [node,result[1]];
+        }
+      }
+      result[0] = AMTremoveBrackets(result[0]);
+      if (symbol.input == "sqrt") {           // sqrt
+	      return ['\\sqrt{'+result[0]+'}',result[1]];
+      } else if (typeof symbol.acc == "boolean" && symbol.acc) {   // accent
+	      return ['{'+AMTgetTeXsymbol(symbol)+'{'+result[0]+'}}',result[1]];
+      } else {                        // font change command
+	    return ['{'+AMTgetTeXsymbol(symbol)+'{'+result[0]+'}}',result[1]];
+      }
+  case BINARY:
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
+    result = AMTparseSexpr(str);
+    if (result[0]==null) return ['{'+AMTgetTeXsymbol(symbol)+'}',str];
+    result[0] = AMTremoveBrackets(result[0]);
+    var result2 = AMTparseSexpr(result[1]);
+    if (result2[0]==null) return ['{'+AMTgetTeXsymbol(symbol)+'}',str];
+    result2[0] = AMTremoveBrackets(result2[0]);
+    if (symbol.input=="root" || symbol.input=="stackrel") {
+	    if (symbol.input=="root") {
+		    newFrag = '{\\sqrt['+result[0]+']{'+result2[0]+'}}';
+	    } else {
+		    newFrag = '{'+AMTgetTeXsymbol(symbol)+'{'+result[0]+'}{'+result2[0]+'}}';
+	    }
+    }
+    if (symbol.input=="frac") {
+	    newFrag = '{\\frac{'+result[0]+'}{'+result2[0]+'}}';
+    }
+    return [newFrag,result2[1]];
+  case INFIX:
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
+    return [symbol.output,str];
+  case SPACE:
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
+    return ['{\\quad\\text{'+symbol.input+'}\\quad}',str];
+  case LEFTRIGHT:
+//    if (rightvert) return [null,str]; else rightvert = true;
+    AMnestingDepth++;
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
+    result = AMTparseExpr(str,false);
+    AMnestingDepth--;
+    var st = "";
+    st = result[0].charAt(result[0].length -1);
+//alert(result[0].lastChild+"***"+st);
+    if (st == "|") { // its an absolute value subterm
+	    node = '{\\left|'+result[0]+'}';
+      return [node,result[1]];
+    } else { // the "|" is a \mid
+      node = '{\\mid}';
+      return [node,str];
+    }
+
+  default:
+//alert("default");
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
+    return ['{'+AMTgetTeXsymbol(symbol)+'}',str];
+  }
+}
+
+function AMTparseIexpr(str) {
+  var symbol, sym1, sym2, node, result, underover;
+  str = AMremoveCharsAndBlanks(str,0);
+  sym1 = AMgetSymbol(str);
+  result = AMTparseSexpr(str);
+  node = result[0];
+  str = result[1];
+  symbol = AMgetSymbol(str);
+  if (symbol.ttype == INFIX && symbol.input != "/") {
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
+   // if (symbol.input == "/") result = AMTparseIexpr(str); else
+    result = AMTparseSexpr(str);
+    if (result[0] == null) // show box in place of missing argument
+	    result[0] = '{}';
+    else result[0] = AMTremoveBrackets(result[0]);
+    str = result[1];
+//    if (symbol.input == "/") AMTremoveBrackets(node);
+    if (symbol.input == "_") {
+      sym2 = AMgetSymbol(str);
+      underover = (sym1.ttype == UNDEROVER);
+      if (sym2.input == "^") {
+        str = AMremoveCharsAndBlanks(str,sym2.input.length);
+        var res2 = AMTparseSexpr(str);
+        res2[0] = AMTremoveBrackets(res2[0]);
+        str = res2[1];
+        node = '{' + node;
+       	node += '_{'+result[0]+'}';
+	node += '^{'+res2[0]+'}';
+        node += '}';
+      } else {
+        node += '_{'+result[0]+'}';
+      }
+    } else { //must be ^
+      node = '{'+node+'}^{'+result[0]+'}';
+    }
+  }
+
+  return [node,str];
+}
+
+function AMTparseExpr(str,rightbracket) {
+  var symbol, node, result, i, nodeList = [],
+  newFrag = '';
+  var addedright = false;
+  do {
+    str = AMremoveCharsAndBlanks(str,0);
+    result = AMTparseIexpr(str);
+    node = result[0];
+    str = result[1];
+    symbol = AMgetSymbol(str);
+    if (symbol.ttype == INFIX && symbol.input == "/") {
+      str = AMremoveCharsAndBlanks(str,symbol.input.length);
+      result = AMTparseIexpr(str);
+
+      if (result[0] == null) // show box in place of missing argument
+	      result[0] = '{}';
+      else result[0] = AMTremoveBrackets(result[0]);
+      str = result[1];
+      node = AMTremoveBrackets(node);
+      node = '\\frac' + '{'+ node + '}';
+      node += '{'+result[0]+'}';
+      newFrag += node;
+      symbol = AMgetSymbol(str);
+    }  else if (node!=undefined) newFrag += node;
+  } while ((symbol.ttype != RIGHTBRACKET &&
+           (symbol.ttype != LEFTRIGHT || rightbracket)
+           || AMnestingDepth == 0) && symbol!=null && symbol.output!="");
+  if (symbol.ttype == RIGHTBRACKET || symbol.ttype == LEFTRIGHT) {
+//    if (AMnestingDepth > 0) AMnestingDepth--;
+	var len = newFrag.length;
+	if (len>2 && newFrag.charAt(0)=='{' && newFrag.indexOf(',')>0) { //could be matrix (total rewrite from .js)
+		var right = newFrag.charAt(len - 2);
+		if (right==')' || right==']') {
+			var left = newFrag.charAt(6);
+			if ((left=='(' && right==')' && symbol.output != '}') || (left=='[' && right==']')) {
+				var mxout = '\\matrix{';
+				var pos = new Array(); //position of commas
+				pos.push(0);
+				var matrix = true;
+				var mxnestingd = 0;
+				for (i=1; i<len-1; i++) {
+					if (newFrag.charAt(i)==left) mxnestingd++;
+					if (newFrag.charAt(i)==right) {
+						mxnestingd--;
+						if (mxnestingd==0 && newFrag.charAt(i+2)==',' && newFrag.charAt(i+3)=='{') pos.push(i+2);
+					}
+				}
+				pos.push(len);
+				var lastmxsubcnt = -1;
+				if (mxnestingd==0 && pos.length>0) {
+					for (i=0;i<pos.length-1;i++) {
+						if (i>0) mxout += '\\\\';
+						if (i==0) {
+							var subarr = newFrag.substr(pos[i]+7,pos[i+1]-pos[i]-15).split(',');
+						} else {
+							var subarr = newFrag.substr(pos[i]+8,pos[i+1]-pos[i]-16).split(',');
+						}
+						if (lastmxsubcnt>0 && subarr.length!=lastmxsubcnt) {
+							matrix = false;
+						} else if (lastmxsubcnt==-1) {
+							lastmxsubcnt=subarr.length;
+						}
+						mxout += subarr.join('&');
+					}
+				}
+				mxout += '}';
+				if (matrix) { newFrag = mxout;}
+			}
+		}
+	}
+
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
+    if (typeof symbol.invisible != "boolean" || !symbol.invisible) {
+      node = '\\right'+AMTgetTeXbracket(symbol); //AMcreateMmlNode("mo",document.createTextNode(symbol.output));
+      newFrag += node;
+      addedright = true;
+    } else {
+	    newFrag += '\\right.';
+	    addedright = true;
+    }
+
+  }
+  if(AMnestingDepth>0 && !addedright) {
+	  newFrag += '\\right.'; //adjust for non-matching left brackets
+	  //todo: adjust for non-matching right brackets
+  }
+
+  return [newFrag,str];
+}
+
+function AMTparseAMtoTeX(str) {
+	//DLMOD to remove &nbsp;, which editor adds on multiple spaces
+  AMnestingDepth = 0;
+  str = str.replace(/&nbsp;/g,"");
+  str = str.replace(/&gt;/g,">");
+  str = str.replace(/&lt;/g,"<");
+  return AMTparseExpr(str.replace(/^\s+/g,""),false)[0];
+}
+
+function AMTparseMath(str,istex) {
+	if (istex) {
+		var texstring = str;
+	} else {
+		var texstring = AMTparseAMtoTeX(str);
+	}
+	//alert(texstring);
+  if (mathcolor!="") {
+	  texstring = "\\"+mathcolor + texstring;
+  }
+  if (displaystyle) {
+	  texstring = "\\displaystyle" + texstring;
+  } else {
+	  texstring = "\\textstyle" + texstring;
+  }
+  var node = createElementXHTML("img");
+  if (typeof encodeURIComponent == "function") {
+	  texstring = encodeURIComponent(texstring);
+  } else {
+	  texstring = escape(texstring);
+  }
+  node.src = AMTcgiloc + '?' + texstring;
+  node.style.verticalAlign = "middle";
+  if (showasciiformulaonhover)                      //fixed by djhsu so newline
+    node.setAttribute("title",str.replace(/\s+/g," "));//does not show in Gecko
+
+  return node;
+}
 
 function AMparseSexpr(str) { //parses str and returns [node,tailstr]
   var symbol, node, result, i, st,// rightvert = false,
@@ -920,7 +1257,8 @@ function strarr2docFrag(arr, linebreaks, latex) {
   var newFrag=document.createDocumentFragment();
   var expr = false;
   for (var i=0; i<arr.length; i++) {
-    if (expr) newFrag.appendChild(parseMath(arr[i],latex));
+    if (expr && noMathML) newFrag.appendChild(AMTparseMath(arr[i],latex));
+    else if (expr && !noMathML) newFrag.appendChild(parseMath(arr[i],latex));
     else {
       var arri = (linebreaks ? arr[i].split("\n\n") : [arr[i]]);
       newFrag.appendChild(createElementXHTML("span").
@@ -1005,12 +1343,12 @@ function processNodeR(n, linebreaks,latex) {
         arr[i]=arr[i].replace(/AMescape1/g,AMdelimiter1);
       }
       if (arr.length>1 || mtch) {
-        if (!noMathML) {
+        //if (!noMathML) {
           frg = strarr2docFrag(arr,n.nodeType==8,latex);
           var len = frg.childNodes.length;
           n.parentNode.replaceChild(frg,n);
           return len-1;
-        } else return 0;
+        //} else return 0;
       }
     }
    } else return 0;
@@ -1031,7 +1369,7 @@ function AMprocessNode(n, linebreaks, spanclassAM) {
   } else {
     try {
       st = n.innerHTML; // look for AMdelimiter on page
-     } catch(err) {}
+    } catch(err) {}
 //alert(st)
     // Corrected by Ivan Tcholakov, 01-JUL-2010.
     //if (st==null || /amath\b|\\begin{a?math}/i.test(st) ||
@@ -3358,6 +3696,109 @@ function clearTextArea(){
   document.getElementById('in').focus();
 }
 
+function ASpreprocess() {
+	 var ASbody = document.getElementsByTagName("body")[0];
+	 pictures = ASbody.getElementsByTagName("embed");
+	 //pictures = getElementsByClass(ASbody,"embed","ASCIIsvg");
+	 var len = pictures.length;
+
+	 for (var i=len-1; i>=0; i--) {
+		picture = pictures[i];
+		var sscr = picture.getAttribute("sscr");
+		if (sscr!='')  {
+			if (noSVG) {
+				n = document.createElement('img');
+				n.setAttribute("style",picture.getAttribute("style"));
+				n.setAttribute("src",AScgiloc+'?sscr='+encodeURIComponent(picture.getAttribute("sscr")));
+				pn = picture.parentNode;
+				pn.replaceChild(n,picture);
+			} else {
+				com = parseShortScript(sscr);
+				picture.setAttribute("script",com);
+				picture.className = "ASCIIsvg";
+			}
+		}
+	 }
+}
+
+//ShortScript format:
+//xmin,xmax,ymin,ymax,xscl,yscl,labels,xgscl,ygscl,width,height plotcommands(see blow)
+//plotcommands: type,eq1,eq2,startmaker,endmarker,xmin,xmax,color,strokewidth,strokedash
+function parseShortScript(sscript,gw,gh) {
+	var sa= sscript.split(",");
+
+	if (gw && gh) {
+		sa[9] = gw;
+		sa[10] = gh;
+		sscript = sa.join(",");
+	}
+
+	if (sa.length > 10) {
+		commands = 'setBorder(5);';
+		commands += 'width=' +sa[9] + '; height=' +sa[10] + ';';
+		commands += 'initPicture(' + sa[0] +','+ sa[1] +','+ sa[2] +','+ sa[3] + ');';
+		commands += 'axes(' + sa[4] +','+ sa[5] +','+ sa[6] +','+ sa[7] +','+ sa[8]+ ');';
+
+		var inx = 11;
+		var eqnlist = 'Graphs: ';
+
+		while (sa.length > inx+9) {
+		   commands += 'stroke="' + sa[inx+7] + '";';
+		   commands += 'strokewidth="' + sa[inx+8] + '";'
+		   //commands += 'strokedasharray="' + sa[inx+9] + '";'
+		   if (sa[inx+9] != "") {
+			   commands += 'strokedasharray="' + sa[inx+9].replace(/\s+/g,',') + '";';
+		   }
+		   if (sa[inx]=="slope") {
+			   eqnlist += "dy/dx="+sa[inx+1] + "; ";
+			commands += 'slopefield("' + sa[inx+1] + '",' + sa[inx+2] + ',' + sa[inx+2] + ');';
+		   } else {
+			if (sa[inx]=="func") {
+				eqnlist += "y="+sa[inx+1] + "; ";
+				eqn = '"' + sa[inx+1] + '"';
+			} else if (sa[inx] == "polar") {
+				eqnlist += "r="+sa[inx+1] + "; ";
+				eqn = '["cos(t)*(' + sa[inx+1] + ')","sin(t)*(' + sa[inx+1] + ')"]';
+			} else if (sa[inx] == "param") {
+				eqnlist += "[x,y]=["+sa[inx+1] + "," + sa[inx+2] + "]; ";
+				eqn = '["' + sa[inx+1] + '","'+ sa[inx+2] + '"]';
+			}
+
+			if (sa[inx+3] == 0) {
+				ep = '--';
+			} else if (sa[inx+3] == 1) {
+				ep = '<-';
+			} else if (sa[inx+3] == 2) {
+				ep = 'o-';
+			} else if (sa[inx+3] == 3) {
+				ep = '*-';
+			}
+			if (sa[inx+4] == 0) {
+				ep += '--';
+			} else if (sa[inx+4] == 1) {
+				ep += '->';
+			} else if (sa[inx+4] == 2) {
+				ep += '-o';
+			} else if (sa[inx+4] == 3) {
+				ep += '-*';
+			}
+			if (typeof eval(sa[inx+5]) == "number") {
+		//	if ((sa[inx+5]!='null')&&(sa[inx+5].length>0)) {
+				//commands += 'myplot(' + eqn +',"' + sa[inx+3] +  '","' + sa[inx+4]+'",' + sa[inx+5] + ',' + sa[inx+6]  +');';
+				commands += 'plot(' + eqn +',' + sa[inx+5] + ',' + sa[inx+6] +',null,null,"' + ep +'");';
+
+			} else {
+				commands += 'plot(' + eqn +',null,null,null,null,"' + ep +'");';
+			}
+		   }
+		   inx += 10;
+		}
+
+		return commands;
+	}
+}
+
+
 var calcstr = "<table align=\"center\">\n<tr><th>\nASCIIMath Scientific Calculator\n</th></tr>\n<tr><td>\nClick in the box to use your keyboard or use the buttons\n</td></tr>\n<tr><td>\n<textarea id=\"in\" rows=\"3\" cols=\"40\" onkeyup=\"calculate('in','out')\"></textarea></td></tr>\n<tr><td height=\"50\">Result: &nbsp; &nbsp; <span id=\"out\"></span></td></tr>\n</table>\n<table align=\"center\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody align=\"center\">\n<tr>\n<td colspan=\"4\">\n<button onclick=\"append('sin^-1(')\"><font size=2>`sin^-1`</font></button><button onclick=\"append('cos^-1(')\"><font size=2>`cos^-1`</font></button><button onclick=\"append('tan^-1(')\"><font size=2>`tan^-1`</font></button></td>\n<td><button onclick=\"clearTextArea()\">&nbsp;`C`&nbsp;</button></td>\n\n</tr>\n<tr>\n<td><button onclick=\"append('pi')\">&nbsp;`pi` &nbsp;</button></td>\n<td><button onclick=\"append('sin(')\">&nbsp;`sin`</button></td>\n<td><button onclick=\"append('cos(')\">&nbsp;`cos`</button></td>\n<td><button onclick=\"append('tan(')\">&nbsp;`tan`</button></td>\n<td><button onclick=\"append('^')\">`x^y`</button></td>\n</tr>\n<tr>\n<td><button onclick=\"append('!')\">&nbsp; `!` &nbsp;</button></td>\n\n<td><button onclick=\"append('(')\"><font size=2>&nbsp;&nbsp;`(`&nbsp;&nbsp;</font></button></td>\n<td><button onclick=\"append(')')\"><font size=2>&nbsp;&nbsp;`)`&nbsp;&nbsp;</font></button></td>\n<td><button onclick=\"append('sqrt(')\"><font size=2>`sqrt({::}^\ )`</font></button></td>\n<td><button onclick=\"append('/')\">&nbsp;`-:\ `</button></td>\n</tr>\n<tr>\n<td><button onclick=\"append('log(')\">`log`</button></td>\n<td><button onclick=\"append('7')\">&nbsp; `7` &nbsp;</button></td>\n<td><button onclick=\"append('8')\">&nbsp; `8` &nbsp;</button></td>\n\n<td><button onclick=\"append('9')\">&nbsp; `9` &nbsp;</button></td>\n<td><button onclick=\"append('*')\">&nbsp;`times`&nbsp;</button></td>\n</tr>\n<tr>\n<td><button onclick=\"append('ln(')\">&nbsp;`ln`&nbsp;</button></td>\n<td><button onclick=\"append('4')\">&nbsp; `4` &nbsp;</button></td>\n<td><button onclick=\"append('5')\">&nbsp; `5` &nbsp;</button></td>\n<td><button onclick=\"append('6')\">&nbsp; `6` &nbsp;</button></td>\n\n<td><button onclick=\"append('-')\">&nbsp;`-{::}`&nbsp;</button></td>\n</tr>\n<tr>\n<td><button onclick=\"append('e')\">&nbsp; `e` &nbsp;</button></td>\n<td><button onclick=\"append('1')\">&nbsp;&nbsp;`1` &nbsp;</button></td>\n<td><button onclick=\"append('2')\">&nbsp; `2` &nbsp;</button></td>\n<td><button onclick=\"append('3')\">&nbsp; `3` &nbsp;</button></td>\n<td><button onclick=\"append('+')\">&nbsp;`+{::}`&nbsp;</button></td>\n\n</tr>\n<tr>\n<td> <!--button onclick=\"append('pi')\">&nbsp;`pi` &nbsp;</button--></td>\n<td><button onclick=\"append('0')\">&nbsp; `0` &nbsp;</button></td>\n<td><button onclick=\"append('.')\">&nbsp; `.` &nbsp;</button></td>\n<td><button onclick=\"append('\\n')\">&nbsp;`\"ent\"`</button></td>\n</tr>\n</tbody>\n</table>";
 
 // GO1.1 Generic onload by Brothercake
@@ -3371,6 +3812,7 @@ function generic()
     if (nd!=null) dsvglocation = nd.className;
     if (nd!=null || !checkforprocessasciimathinmoodle) {
       translate();
+      if (translateASCIIsvg) { ASpreprocess(); };
       if (!noSVG && translateASCIIsvg) drawPictures();
     }
     var li = getElementsByClass(document,"div","ASCIIMathCalculator");

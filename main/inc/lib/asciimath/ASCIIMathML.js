@@ -44,8 +44,44 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 (at http://www.gnu.org/licences/lgpl.html) for more details.
 */
 
-var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi?"; //path to CGI script that
-						     //can render a TeX string
+// Modified by Ivan Tcholakov, 02-JUL-2010.
+//var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi?"; //path to CGI script that
+//						     //can render a TeX string
+//
+// You should pick up and install on your server software for TeX rendering as:
+//
+// mimeTeX - http://www.forkosh.dreamhost.com/source_mimetex.html
+// mathTeX - http://www.forkosh.com/mathtex.html
+//
+// or you may try to use some public services as:
+//
+// MathTran - http://www.mathtran.org/
+// Google Chart Tools - http://code.google.com/apis/charttools/
+//
+// You have to set here the path to the script for TeX rendering
+// and query parameters, if any.
+//
+// Examples:
+//
+// var AMTcgiloc = "/cgi-bin/mimetex.cgi?";
+// var AMTcgiloc = "http://my_server.net/cgi-bin/mimetex.cgi?";
+//
+// Some examples for testing purposes:
+//
+//var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi?";
+//var AMTcgiloc = "http://schmoodle.alaskapolicy.net/cgi-bin/mimetex.cgi?";
+//
+//var AMTcgiloc = "http://korpelainen.net/cgi-bin/mathtex.cgi?\\gammacorrection{1.4}";
+//var AMTcgiloc = "http://www.forkosh.com/cgi-bin/mathtex.cgi?\\gammacorrection{1.4}";
+//
+//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=1;tex=\\displaystyle ";
+//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=2;tex=\\displaystyle ";
+//
+//var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chf=bg,s,FFFFFF00&chco=000000&chl=";
+//
+var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chf=bg,s,FFFFFF00&chco=000000&chl=";
+//
+
 var AScgiloc = 'http://www.imathas.com/imathas/filter/graph/svgimg.php'; //path to CGI script
 						//for editor graphs IMG fallback
 var mathcolor = "blue";        // change it to "" (to inherit) or another color

@@ -44,7 +44,7 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 (at http://www.gnu.org/licences/lgpl.html) for more details.
 */
 
-var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi"; //path to CGI script that
+var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi?"; //path to CGI script that
 						     //can render a TeX string
 var AScgiloc = 'http://www.imathas.com/imathas/filter/graph/svgimg.php'; //path to CGI script
 						//for editor graphs IMG fallback
@@ -940,7 +940,7 @@ function AMTparseMath(str,istex) {
   } else {
 	  texstring = escape(texstring);
   }
-  node.src = AMTcgiloc + '?' + texstring;
+  node.src = AMTcgiloc + texstring;
   node.style.verticalAlign = "middle";
   if (showasciiformulaonhover)                      //fixed by djhsu so newline
     node.setAttribute("title",str.replace(/\s+/g," "));//does not show in Gecko

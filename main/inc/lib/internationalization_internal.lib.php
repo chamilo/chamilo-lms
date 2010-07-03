@@ -595,7 +595,7 @@ function _api_utf8_chr($codepoint) {
  * Note about a difference with the original funtion ord(): ord('') returns 0.
  */
 function _api_utf8_ord($utf8_character) {
-	if (empty($utf8_character)) {
+	if ($utf8_character == '') {
 		return 0xFFFD;
 	}
 	$codepoints = _api_utf8_to_unicode($utf8_character);

@@ -1487,8 +1487,14 @@ FCK.IsRealImage = function ( tag )
 		&& !tag.getAttribute( '_fckmp3' )
 		&& !tag.getAttribute( '_fckvideo' )
 		&& !tag.getAttribute( 'MapNumber' )
-		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( '/cgi-bin/mimetex' ) >= 0 )
-		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( '/cgi-bin/mathtex' ) >= 0 )
+		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mimetex?' ) >= 0 )
+		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mimetex.cgi?' ) >= 0 )
+		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mimetex.exe?' ) >= 0 )
+		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mathtex?' ) >= 0 )
+		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mathtex.cgi?' ) >= 0 )
+		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mathtex.exe?' ) >= 0 )
+		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mathtran?' ) >= 0 )
+		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'google.com/chart?' ) >= 0 )
 		) ? true : false ;
 } ;
 

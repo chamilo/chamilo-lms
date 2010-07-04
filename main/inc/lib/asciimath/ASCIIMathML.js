@@ -96,8 +96,11 @@ var mathcolor = "blue";        // change it to "" (to inherit) or another color
 //var mathfontsize = "1em";      // change to e.g. 1.2em for larger math
 var mathfontsize = "1.5em";
 //
-var mathfontfamily = "serif";  // change to "" to inherit (works in IE)
-                               // or another family (e.g. "arial")
+// Modified by Ivan Tcholakov, 05-JUL-2010.
+//var mathfontfamily = "serif";  // change to "" to inherit (works in IE)
+//                               // or another family (e.g. "arial")
+var mathfontfamily = 'STIXGeneral,Arial Unicode MS,"Lucida Sans Unicode","Lucida Grande",Garuda,sans-serif';
+//
 var automathrecognize = false; // writing "amath" on page makes this true
 var checkForMathML = true;     // check if browser can display MathML
 var notifyIfNoMathML = false;   // display note at top if no MathML capability

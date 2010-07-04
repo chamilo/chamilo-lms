@@ -35,12 +35,16 @@ FCKLang['DlgAsciiMathInstallMathPlayer'] = FCKLang['DlgAsciiMathInstallMathPlaye
 FCKLang['DlgAsciiMathOldMathPlayer'] = FCKLang['DlgAsciiMathOldMathPlayer'] ? FCKLang['DlgAsciiMathOldMathPlayer'] : 'Your browser is not able to show mathematical formulas. You need to upgrade the MathPlayer plugin for Internet Explorer to version 2. Please, see %s for more information.' ;
 FCKLang['DlgAsciiMathOldMathPlayer'] = FCKLang['DlgAsciiMathOldMathPlayer'].replace( '%s', '<a href="http://www.dessci.com/en/products/mathplayer/" onclick="javascript: window.open(this.href,\'_blank\');return false;">http://www.dessci.com/en/products/mathplayer/</a>' ) ;
 
+// Settings for ASCIIMathML.js
+// Suppressing the built-in notification messages when the browser is incompatible.
+var notifyIfNoMathML = false ;
+var alertIfNoMathML = false;
+var notifyIfNoSVG = false;
+var alertIfNoSVG = false;
+// Formula tooltips are implemented in the dialog
 var showasciiformulaonhover = false;
-
-// Suppressing the built-in notification message when the browser is incompatible.
-notifyIfNoMathML = false ;
-//Small font is used in the dialog.
-mathfontsize = "1.1em";
+// Small font is used in the dialog.
+var mathfontsize = "1.1em";
 
 // oSpanAM: The actual selected span element in the editor that contains the formula.
 var oSpanAM = FCKAsciiMath.FindFormulaContainer( FCKAsciiMath.GetSearchElementFromSelection() ) ;
@@ -111,7 +115,7 @@ window.onload = function()
 	inputField.focus() ;
 }
 
-function Set ( string )
+function Set( string )
 {
 	var inputField = GetE( 'inputText' ) ;
 	inputField.value += string ;
@@ -255,6 +259,7 @@ function ShowMathML()
 
 function CheckBrowserCompatibility( show_message )
 {
+	/*
 	if ( FCKBrowserInfo.IsGecko )
 	{
 		// The browser is compatible, it is genuine Gecko - Firefox, etc.
@@ -314,6 +319,8 @@ function CheckBrowserCompatibility( show_message )
 		document.write( '<span style="color:red;">' + FCKLang['DlgAsciiIncompatibleBrowser'] + '</span>' ) ;
 	}
 	return false ;
+	*/
+	return true ;
 }
 
 // Returns true if MathPlayer is installed.

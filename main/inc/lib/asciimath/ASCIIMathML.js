@@ -1279,12 +1279,16 @@ function AMTparseSexpr(str) { //parses str and returns [node,tailstr]
     var result2 = AMTparseSexpr(result[1]);
     if (result2[0]==null) return ['{'+AMTgetTeXsymbol(symbol)+'}',str];
     result2[0] = AMTremoveBrackets(result2[0]);
-    if (symbol.input=="root" || symbol.input=="stackrel") {
-	    if (symbol.input=="root") {
-		    newFrag = '{\\sqrt['+result[0]+']{'+result2[0]+'}}';
-	    } else {
-		    newFrag = '{'+AMTgetTeXsymbol(symbol)+'{'+result[0]+'}{'+result2[0]+'}}';
-	    }
+    if (symbol.input=="density") {
+        newFrag = '{\\density{'+result[0]+'}{'+result2[0]+'}}';
+        newFrag = newFrag.replace(/{{{/g,"{");
+        newFrag = newFrag.replace(/}}}/g,"}");
+    }
+	if (symbol.input=="root") {
+		newFrag = '{\\sqrt['+result[0]+']{'+result2[0]+'}}';
+    }
+    if (symbol.input=="stackrel") {
+		newFrag = '{'+AMTgetTeXsymbol(symbol)+'{'+result[0]+'}{'+result2[0]+'}}';
     }
     if (symbol.input=="frac") {
 	    newFrag = '{\\frac{'+result[0]+'}{'+result2[0]+'}}';
@@ -1396,6 +1400,7 @@ function AMTparseExpr(str,rightbracket) {
 			var left = newFrag.charAt(6);
 			if ((left=='(' && right==')' && symbol.output != '}') || (left=='[' && right==']')) {
 				var mxout = '\\matrix{';
+				//var mxout = '\\begin{array}{cc}';
 				var pos = new Array(); //position of commas
 				pos.push(0);
 				var matrix = true;
@@ -1426,6 +1431,7 @@ function AMTparseExpr(str,rightbracket) {
 					}
 				}
 				mxout += '}';
+				//mxout += '\\end{array}';
 				if (matrix) { newFrag = mxout;}
 			}
 		}
@@ -1456,6 +1462,7 @@ function AMTparseAMtoTeX(str) {
   str = str.replace(/&nbsp;/g,"");
   str = str.replace(/&gt;/g,">");
   str = str.replace(/&lt;/g,"<");
+  str = str.replace(/ /g," ");
   return AMTparseExpr(str.replace(/^\s+/g,""),false)[0];
 }
 
@@ -1474,11 +1481,52 @@ function AMTparseMath(str,istex) {
   } else {
 	  texstring = "\\textstyle" + texstring;
   }
+  if (AMTcgiloc.match(/google/)) {
+    var tclr = mathcolor;
+    if (tclr!="") {
+      if(IsColorName.test(tclr.toLowerCase())) {
+        tclr=LaTeXColor[tclr.toLowerCase()];
+      }
+    } else {
+      tclr = "000000";
+    }
+    var bclr = "FFFFFF00";
+    if (texstring.match(/colorbox/)) {
+      bclr = texstring.match(/\{\s*([#\w]+)\s*\}/); //get's color from beginning of str
+      texstring = texstring.replace(/\{\s*[#\w]+\s*\}/,"");
+      texstring = texstring.replace(/\\colorbox/g,"");
+      if(bclr!=null) {
+        if(IsColorName.test(bclr[1].toLowerCase())) {
+          bclr=LaTeXColor[bclr[1].toLowerCase()];
+          bclr=bclr.replace(/\#/,"");
+        } else {
+          bclr=bclr[1]; // no checking for valid color!!
+          bclr=bclr.replace(/\#/,"");
+        }
+      }
+    }
+    if (texstring.match(/textcolor/)) {
+      tclr = texstring.match(/\{\s*([#\w]+)\s*\}/); //get's color from beginning of str
+      texstring = texstring.replace(/\{\s*[#\w]+\s*\}/,"");
+      texstring = texstring.replace(/\\textcolor/g,"");
+      if(tclr!=null) {
+        if(IsColorName.test(tclr[1].toLowerCase())) {
+          tclr=LaTeXColor[tclr[1].toLowerCase()];
+        } else {
+          tclr=tclr[1]; // no checking for valid color!!
+        }
+      }
+    }
+    tclr=tclr.replace(/\#/,"");
+  }
   var node = createElementXHTML("img");
   if (typeof encodeURIComponent == "function") {
 	  texstring = encodeURIComponent(texstring);
   } else {
 	  texstring = escape(texstring);
+  }
+  if (AMTcgiloc.match(/google/)) {
+    texstring = texstring + "&chf=bg,s," + bclr + "&chco=" + tclr;
   }
   node.src = AMTcgiloc + texstring;
   node.style.verticalAlign = "middle";
@@ -1598,6 +1646,21 @@ function AMparseSexpr(str) { //parses str and returns [node,tailstr]
     if (result2[0]==null) return [createMmlNode("mo",
                            document.createTextNode(symbol.input)),str];
     AMremoveBrackets(result2[0]);
+    if (symbol.input=="density") {
+      var tclrf = str.match(/\{\s*([#\w]+)\s*\}/); //get's size from beginning of str
+      str = str.replace(/\{\s*[#\w]+\s*\}/,"");
+      if(tclrf!=null) {
+        if(tclrf[1]>1000) {
+          tclrf=1000+'%';
+        } else {
+          tclrf=tclrf[1]+'%';
+        }
+        node = createMmlNode("mstyle");
+        node.setAttribute(symbol.atval,tclrf);
+        node.appendChild(result2[0]);
+        return [node,result2[1],symbol.tag];
+      }
+    }
     if (symbol.input=="root" || symbol.input=="stackrel")
       newFrag.appendChild(result2[0]);
     newFrag.appendChild(result[0]);
@@ -2631,6 +2694,79 @@ var LMsymbols = [
 ];
 
 var LMnames = []; //list of input symbols
+var LMmathml = "http://www.w3.org/1998/Math/MathML";
+var LMpreviousSymbol,LMcurrentSymbol;
+var LaTeXColor = [];
+LaTeXColor["greenyellow"] = "#D9FF4F";
+LaTeXColor["yellow"] = "#FFFF00";
+LaTeXColor["goldenrod"] = "#FFE529";
+LaTeXColor["dandelion"] = "#FFB529";
+LaTeXColor["apricot"] = "#FFAD7A";
+LaTeXColor["peach"] = "#FF804D";
+LaTeXColor["melon"] = "#FF8A80";
+LaTeXColor["yelloworange"] = "#FF9400";
+LaTeXColor["orange"] = "#FF6321";
+LaTeXColor["burntorange"] = "#FF7D00";
+LaTeXColor["bittersweet"] = "#C20300";
+LaTeXColor["redorange"] = "#FF3B21";
+LaTeXColor["mahogany"] = "#A60000";
+LaTeXColor["maroon"] = "#AD0000";
+LaTeXColor["brickred"] = "#B80000";
+LaTeXColor["red"] = "#FF0000";
+LaTeXColor["orangered"] = "#FF0080";
+LaTeXColor["rubinered"] = "#FF00DE";
+LaTeXColor["wildstrawberry"] = "#FF0A9C";
+LaTeXColor["salmon"] = "#FF789E";
+LaTeXColor["carnationpink"] = "#FF5EFF";
+LaTeXColor["magenta"] = "#FF00FF";
+LaTeXColor["violetred"] = "#FF30FF";
+LaTeXColor["rhodamine"] = "#FF2EFF";
+LaTeXColor["mulberry"] = "#A314FA";
+LaTeXColor["redviolet"] = "#9600A8";
+LaTeXColor["fuchsia"] = "#7303EB";
+LaTeXColor["lavender"] = "#FF85FF";
+LaTeXColor["thistle"] = "#E069FF";
+LaTeXColor["orchid"] = "#AD5CFF";
+LaTeXColor["darkorchid"] = "#9933CC";
+LaTeXColor["purple"] = "#8C24FF";
+LaTeXColor["plum"] = "#8000FF";
+LaTeXColor["violet"] = "#361FFF";
+LaTeXColor["royalpurple"] = "#401AFF";
+LaTeXColor["blueviolet"] = "#1A0DF5";
+LaTeXColor["periwinkle"] = "#6E73FF";
+LaTeXColor["cadetblue"] = "#616EC4";
+LaTeXColor["cornflowerblue"] = "#59DEFF";
+LaTeXColor["midnightblue"] = "#007091";
+LaTeXColor["navyblue"] = "#0F75FF";
+LaTeXColor["royalblue"] = "#0080FF";
+LaTeXColor["blue"] = "#0000FF";
+LaTeXColor["cerulean"] = "#0FE3FF";
+LaTeXColor["cyan"] = "#00FFFF";
+LaTeXColor["processblue"] = "#0AFFFF";
+LaTeXColor["skyblue"] = "#61FFE0";
+LaTeXColor["turquoise"] = "#26FFCC";
+LaTeXColor["tealblue"] = "#1FFAA3";
+LaTeXColor["aquamarine"] = "#2EFFB2";
+LaTeXColor["bluegreen"] = "#26FFAB";
+LaTeXColor["emerald"] = "#00FF80";
+LaTeXColor["junglegreen"] = "#03FF7A";
+LaTeXColor["seagreen"] = "#4FFF80";
+LaTeXColor["green"] = "#00FF00";
+LaTeXColor["forestgreen"] = "#00E000";
+LaTeXColor["pinegreen"] = "#00BF29";
+LaTeXColor["limegreen"] = "#80FF00";
+LaTeXColor["yellowgreen"] = "#8FFF42";
+LaTeXColor["springgreen"] = "#BDFF3D";
+LaTeXColor["olivegreen"] = "#009900";
+LaTeXColor["rawsienna"] = "#8C0000";
+LaTeXColor["sepia"] = "#4D0000";
+LaTeXColor["brown"] = "#660000";
+LaTeXColor["tan"] = "#DB9470";
+LaTeXColor["gray"] = "#808080";
+LaTeXColor["grey"] = "#808080";
+LaTeXColor["black"] = "#000000";
+LaTeXColor["white"] = "#FFFFFF";
+var IsColorName = /^(?:greenyellow|yellow|goldenrod|dandelion|apricot|peach|melon|yelloworange|orange|burntorange|bittersweet|redorange|mahogany|maroon|brickred|red|orangered|rubinered|wildstrawberry|salmon|carnationpink|magenta|violetred|rhodamine|mulberry|redviolet|fuchsia|lavender|thistle|orchid|darkorchid|purple|plum|violet|royalpurple|blueviolet|periwinkle|cadetblue|cornflowerblue|midnightblue|navyblue|royalblue|blue|cerulean|cyan|processblue|skyblue|turquoise|tealblue|aquamarine|bluegreen|emerald|junglegreen|seagreen|green|forestgreen|pinegreen|limegreen|yellowgreen|springgreen|olivegreen|rawsienna|sepia|brown|tan|gray|grey|black|white)$/;
 
 function LMremoveCharsAndBlanks(str,n) {
 //remove n characters and any following blanks
@@ -2979,6 +3115,36 @@ function LMparseSexpr(str) { //parses str and returns [node,tailstr,(node)tag]
     result2 = LMparseSexpr(result[1]);
     if (result2[0]==null) return [createMmlNode("mo",
 			   document.createTextNode(symbol.input)),str,null];
+    if (symbol.input=="\\textcolor" || symbol.input=="\\colorbox") {
+        var tclr = str.match(/\{\s*([#\w]+)\s*\}/); //get's color from beginning of str
+        str = str.replace(/\{\s*[#\w]+\s*\}/,"");
+        if(tclr!=null) {
+            if(IsColorName.test(tclr[1].toLowerCase())) {
+                tclr=LaTeXColor[tclr[1].toLowerCase()];
+            } else {
+                tclr=tclr[1]; // no checking for valid color!!
+            }
+            node = createMmlNode("mstyle");
+            node.setAttribute(symbol.atval,tclr);
+            node.appendChild(result2[0]);
+            return [node,result2[1],symbol.tag];
+        }
+    }
+    if (symbol.input=="\\density") {
+      var tclrf = str.match(/\{\s*([#\w]+)\s*\}/); //get's size from beginning of str
+      str = str.replace(/\{\s*[#\w]+\s*\}/,"");
+      if(tclrf!=null) {
+        if(tclrf[1]>1000) {
+          tclrf=1000+'%';
+        } else {
+          tclrf=tclrf[1]+'%';
+        }
+        node = createMmlNode("mstyle");
+        node.setAttribute(symbol.atval,tclrf);
+        node.appendChild(result2[0]);
+        return [node,result2[1],symbol.tag];
+      }
+    }
     if (symbol.input=="\\root" || symbol.input=="\\stackrel")
       newFrag.appendChild(result2[0]);
     newFrag.appendChild(result[0]);
@@ -3174,7 +3340,7 @@ function LMprocessNode(n) {
   var frag,st;
   try {
     st = n.innerHTML;
-  } catch(err) {}
+  } catch(err) {};
   var am = /amath\b|graph/i.test(st);
   if ((st==null || st.indexOf("\$ ")!=-1 || st.indexOf("\$<")!=-1 ||
        st.indexOf("\\begin")!=-1 || am || st.slice(-1)=="$" ||

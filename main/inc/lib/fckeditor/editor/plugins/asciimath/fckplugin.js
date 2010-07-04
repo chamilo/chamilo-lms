@@ -109,7 +109,7 @@ FCKAsciiMath.FindFormulaContainer = function( node )
 
 FCKAsciiMath.IsParsed = function( node )
 {
-	return node.getElementsByTagName( 'math' )[0] ? true : false ;
+	return ( node.getElementsByTagName( 'math' )[0] || node.getElementsByTagName( 'img' )[0] ) ? true : false ;
 }
 
 FCKAsciiMath.GetFormula = function( node )

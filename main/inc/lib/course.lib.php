@@ -273,11 +273,11 @@ class CourseManager {
 				WHERE user_id IN (".$user_ids.")");
 		Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER, $course->db_name)."
 				WHERE user_id IN (".$user_ids.")");
-		
-		//Deleting users in forum_notification and mailqueue course tables 
-		$sql_delete_forum_notification = "DELETE FROM  ".Database::get_course_table(TABLE_FORUM_NOTIFICATION, $course->db_name)." WHERE user_id IN (".$user_ids.")";		
+
+		//Deleting users in forum_notification and mailqueue course tables
+		$sql_delete_forum_notification = "DELETE FROM  ".Database::get_course_table(TABLE_FORUM_NOTIFICATION, $course->db_name)." WHERE user_id IN (".$user_ids.")";
 		Database::query($sql_delete_forum_notification);
-		
+
 		$sql_delete_mail_queue = "DELETE FROM ".Database::get_course_table(TABLE_FORUM_MAIL_QUEUE, $course->db_name)." WHERE user_id IN (".$user_ids.")";
 		Database::query($sql_delete_mail_queue);
 
@@ -310,8 +310,8 @@ class CourseManager {
 			$count = $row[0]; // number of users by session
 			$result = Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = '$count'
 					WHERE id = '".$my_session_id."'");
-			
-			// Update the table session_rel_course 
+
+			// Update the table session_rel_course
 			$row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session = '$my_session_id' AND course_code = '$course_code' AND status<>2" ));
 			$count = $row[0]; // number of users by session and course
 			$result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '$my_session_id' AND course_code = '$course_code' ");
@@ -402,12 +402,12 @@ class CourseManager {
 			$row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)." WHERE id_session = '".$_SESSION['id_session']."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH.""));
 			$count = $row[0]; // number of users by session
 			$result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = '$count' WHERE id = '".$_SESSION['id_session']."'");
-			
-			// Update the table session_rel_course 
+
+			// Update the table session_rel_course
 			$row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session = '".$_SESSION['id_session']."' AND course_code = '$course_code' AND status<>2" ));
 			$count = $row[0]; // number of users by session
 			$result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '".$_SESSION['id_session']."' AND course_code = '$course_code' ");
-			
+
 
 		} else {
 
@@ -426,10 +426,10 @@ class CourseManager {
 
 		return (bool)$result;
 	}
-	
+
 	/**
 	 * Get the course id based on the original id and field name in the extra fields. Returns 0 if course was not found
-	 * 
+	 *
 	 * @param string Original course id
 	 * @param string Original field name
 	 * @return int Course id
@@ -446,10 +446,10 @@ class CourseManager {
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Gets the course code from the course id. Returns null if course id was not found
-	 * 
+	 *
 	 * @param int Course id
 	 * @return string Course code
 	 */
@@ -575,7 +575,7 @@ class CourseManager {
 	/**
 	 * Returns an array with the course info of the real courses of which
 	 * the current user is course admin
-	 * @return array   A list of courses details for courses to which the user is subscribed as course admin (status = 1)   
+	 * @return array   A list of courses details for courses to which the user is subscribed as course admin (status = 1)
 	 */
 	public static function get_real_course_list_of_user_as_course_admin($user_id) {
 		$result_array = array();
@@ -602,17 +602,17 @@ class CourseManager {
 	 */
 	public static function get_course_list_of_user_as_course_admin($user_id) {
 		global $_configuration;
-		
+
 		if ($user_id != strval(intval($user_id))) {
 			return array();
 		}
-		
+
 		// Definitions database tables and variables
 		$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 		$user_id = intval($user_id);
 		$data = array();
-		
+
 		$sql_nb_cours = "SELECT course_rel_user.course_code, course.title
 			FROM $tbl_course_user as course_rel_user
 			INNER JOIN $tbl_course as course
@@ -634,7 +634,7 @@ class CourseManager {
 				  	ORDER BY course.title";
 			}
 		}
-		
+
 		$result_nb_cours = Database::query($sql_nb_cours);
 		if (Database::num_rows($result_nb_cours) > 0) {
 			while ($row = Database::fetch_array($result_nb_cours)) {
@@ -840,19 +840,19 @@ class CourseManager {
 	 * Check if user is subscribed inside a course
 	 * @param 	int		User id
 	 * @param	string	Course code, if this parameter is null, it'll check for all courses
-	 * @param	bool	True for checking inside sessions too, by default is not checked 
+	 * @param	bool	True for checking inside sessions too, by default is not checked
 	 * @return 	bool 	true if the user is registered in the course, false otherwise
 	 */
 	public static function is_user_subscribed_in_course($user_id, $course_code = null, $in_a_session = false) {
-		
+
 		$user_id = intval($user_id);
-		
+
 		$condition_course = '';
 		if (isset($course_code)) {
 			$course_code = Database::escape_string($course_code);
 			$condition_course = ' AND course_code = "'.$course_code.'" ';
 		}
-		
+
 		$result = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
 				WHERE user_id = $user_id AND relation_type<>".COURSE_RELATION_TYPE_RRHH." $condition_course "));
 		if (!empty($result)) {
@@ -1229,7 +1229,7 @@ class CourseManager {
 				$session_condition
 				GROUP BY g.id
 				ORDER BY g.name";
-				
+
 				//var_dump($sql);
 				//exit();
 		$result = Database::query($sql);
@@ -1786,7 +1786,7 @@ class CourseManager {
 		$tbl_user_course_category   = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
 		// get course list auto-register
-		$sql = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
+		$sql = "SELECT DISTINCT(course_code) FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
 				" tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
 
 		$special_course_result = Database::query($sql);
@@ -1803,7 +1803,7 @@ class CourseManager {
 		}
 
 		if (!empty($with_special_courses)) {
-			$sql = "SELECT course.code, course.db_name db_name, course.title
+			$sql = "SELECT DISTINCT(course.code), course.db_name db_name, course.title
 												FROM    ".$tbl_course_user." course_rel_user
 												LEFT JOIN ".$tbl_course." course
 												ON course.code = course_rel_user.course_code
@@ -1822,8 +1822,9 @@ class CourseManager {
 			}
 		}
 
-		// get course list not auto-register
-		$sql = "SELECT course.code,course.db_name,course.title
+		// get course list not auto-register. Use Distinct to avoid multiple
+		// entries when a course is assigned to a HRD (DRH) as watcher
+		$sql = "SELECT DISTINCT(course.code),course.db_name,course.title
 				FROM $tbl_course course
 				INNER JOIN $tbl_course_user cru
 				ON course.code=cru.course_code
@@ -1837,9 +1838,10 @@ class CourseManager {
 				$codes[] = $row['code'];
 			}
 		}
+        error_log(print_r($codes,1));
 
 		if ($include_sessions === true) {
-			$r = Database::query("SELECT distinct(c.code),c.db_name,c.title
+			$r = Database::query("SELECT DISTINCT(c.code),c.db_name,c.title
 					FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." s, ".Database::get_main_table(TABLE_MAIN_COURSE)." c
 					WHERE id_user = $user_id AND s.course_code=c.code");
 			while ($row = Database::fetch_array($r, 'ASSOC')) {
@@ -1989,10 +1991,10 @@ class CourseManager {
 
 		return Database::insert_id();
 	}
-	
+
 	/**
 	 * Updates course attribute. Note that you need to check that your attribute is valid before you use this function
-	 * 
+	 *
 	 * @param int Course id
 	 * @param string Attribute name
 	 * @param string Attribute value
@@ -2004,10 +2006,10 @@ class CourseManager {
 		$sql = "UPDATE $table SET $name = '".Database::escape_string($value)."' WHERE id = '$id';";
 		return Database::query($sql);
 	}
-	
+
 	/**
 	 * Update course attributes. Will only update attributes with a non-empty value. Note that you NEED to check that your attributes are valid before using this function
-	 * 
+	 *
 	 * @param int Course id
 	 * @param array Associative array with field names as keys and field values as values
 	 * @return bool True if update was successful, false otherwise
@@ -2029,7 +2031,7 @@ class CourseManager {
 		$sql .= " WHERE id = '$id';";
 		return Database::query($sql);
 	}
-		
+
 
 	/**
 	 * Update an extra field value for a given course
@@ -2147,10 +2149,10 @@ class CourseManager {
 		}
 		return $extra_fields;
 	}
-	
+
 	/**
 	 * Gets the value of a course extra field. Returns null if it was not found
-	 * 
+	 *
 	 * @param string Name of the extra field
 	 * @param string Course code
 	 * @return string Value
@@ -2220,10 +2222,10 @@ class CourseManager {
 
 		return $data;
 	}
-	
+
 	/**
 	 * Returns the details of a course category
-	 * 
+	 *
 	 * @param string Category code
 	 * @return array Course category
 	 */

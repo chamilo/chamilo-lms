@@ -1838,7 +1838,6 @@ class CourseManager {
 				$codes[] = $row['code'];
 			}
 		}
-        error_log(print_r($codes,1));
 
 		if ($include_sessions === true) {
 			$r = Database::query("SELECT DISTINCT(c.code),c.db_name,c.title

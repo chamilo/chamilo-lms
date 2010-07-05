@@ -104,6 +104,9 @@ $dir = Security::remove_XSS($_GET['curdirpath']);
 //I'm in the certification module?
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
+//Call from
+$call_from_tool = Security::remove_XSS($_GET['origin']);
+$slide_id = Security::remove_XSS($_GET['origin_opt']);
 
 //echo('dir: '.$dir.'<br />');
 $file_name = $doc;
@@ -461,8 +464,8 @@ if (isset($msgError)) {
 if (isset($info_message)) {
 	Display::display_confirmation_message($info_message);
 	if (isset($_POST['origin'])) {
-		$slide_id = $_POST['origin_opt'];
-		nav_to_slideshow($slide_id);
+		$slide_id = $_POST['origin_opt'];	
+		$call_from_tool = $_POST['origin'];
 	}
 }
 
@@ -573,29 +576,28 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 		Display::display_normal_message($create_certificate.': <br /><br />'.$str_info,false);
 	}
 	
-	if ($is_certificate_mode) {
-		echo '<div class="actions">';
-				echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview').'</a>';
-		echo '</div>';
-	} else {
-		$origin=Security::remove_XSS($_GET['origin']);
-		if ($origin=='slideshow') {
-			$slide_id=$_GET['origin_opt'];
-			nav_to_slideshow($slide_id);
-		}
-	}
-	
+	show_return($call_from_tool, $slide_id, $is_certificate_mode);
+
 	$form->display();
 	//Display::display_error_message(get_lang('ReadOnlyFile'));
 }
 
-// For better navigation when a slide is been commented
-function nav_to_slideshow($slide_id) {
+
+//return button back to
+function show_return($call_from_tool='', $slide_id=0, $is_certificate_mode=false) {
 	$path = Security::remove_XSS($_GET['curdirpath']);
 	$pathurl = urlencode($path);
 	echo '<div class="actions">';
-	//echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>&nbsp;';
-	echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ViewSlideshow')).get_lang('BackTo').' '.get_lang('ViewSlideshow').'</a>';
+	if ($is_certificate_mode)
+	{
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview').'</a>';
+	}
+	elseif($call_from_tool=='slideshow'){
+		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>&nbsp;';
+	}
+	else{
+		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ViewSlideshow')).get_lang('BackTo').' '.get_lang('ViewSlideshow').'</a>';
+	}
 	echo '</div>';
 }
 

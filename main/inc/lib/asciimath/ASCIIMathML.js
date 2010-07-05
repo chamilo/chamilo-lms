@@ -125,9 +125,14 @@ var isIE = document.createElementNS==null;
 var noMathML = false, translated = false;
 
 if (isIE) { // avoid adding MathPlayer info explicitly to each webpage
-  document.write("<object id=\"mathplayer\"\
-  classid=\"clsid:32F66A20-7614-11D4-BD11-00104BD3F987\"></object>");
-  document.write("<?import namespace=\"m\" implementation=\"#mathplayer\"?>");
+  if (navigator.appName.slice(0,9)=="Microsoft")
+    try {
+        var ActiveX = new ActiveXObject("MathPlayer.Factory.1");
+        ActiveX = null;
+        document.write("<object id=\"mathplayer\"\
+        classid=\"clsid:32F66A20-7614-11D4-BD11-00104BD3F987\"></object>");
+        document.write("<?import namespace=\"m\" implementation=\"#mathplayer\"?>");
+    } catch (e) { }
 }
 
 // Add a stylesheet, replacing any previous custom stylesheet (adapted from TW)

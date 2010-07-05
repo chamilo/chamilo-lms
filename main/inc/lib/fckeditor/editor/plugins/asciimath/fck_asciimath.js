@@ -41,9 +41,9 @@ var notifyIfNoMathML = false ;
 var alertIfNoMathML = false;
 var notifyIfNoSVG = false;
 var alertIfNoSVG = false;
-// Formula tooltips are implemented in the dialog
+// Formula tooltips are hard-coded in this dialog, there is no need they to be generated.
 var showasciiformulaonhover = false;
-// Small font is used in the dialog.
+// Font size of the formulas in this dialog.
 var mathfontsize = "1.1em";
 
 // oSpanAM: The actual selected span element in the editor that contains the formula.

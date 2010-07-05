@@ -99,7 +99,7 @@ var mathfontsize = "1.5em";
 // Modified by Ivan Tcholakov, 05-JUL-2010.
 //var mathfontfamily = "serif";  // change to "" to inherit (works in IE)
 //                               // or another family (e.g. "arial")
-var mathfontfamily = 'STIXGeneral,Arial Unicode MS,"Lucida Sans Unicode","Lucida Grande",Garuda,sans-serif';
+var mathfontfamily = 'STIXGeneral,Arial Unicode MS,Lucida Sans Unicode,Lucida Grande,Garuda,sans-serif,serif';
 //
 var automathrecognize = false; // writing "amath" on page makes this true
 var checkForMathML = true;     // check if browser can display MathML

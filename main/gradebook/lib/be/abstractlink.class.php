@@ -180,7 +180,7 @@ abstract class AbstractLink implements GradebookItem {
 			$link->set_user_id($data['user_id']);
 			$link->set_course_code($data['course_code']);
 			$link->set_category_id($data['category_id']);
-			$link->set_date(api_get_local_time());
+			$link->set_date($data['created_at']);
 			$link->set_weight($data['weight']);
 			$link->set_visible($data['visible']);
 			$links[]=$link;

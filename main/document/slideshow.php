@@ -17,6 +17,20 @@ $noPHP_SELF = true;
 $path = Security::remove_XSS($_GET['curdirpath']);
 $pathurl = urlencode($path);
 $slide_id = Security::remove_XSS($_GET['slide_id']);
+
+if(empty($slide_id))
+{
+	$edit_slide_id = 1;
+}
+else
+{
+	$edit_slide_id = $slide_id;
+}
+
+
+
+
+
 if ($path != '/') {
 	$folder = $path.'/';
 } else {
@@ -264,7 +278,7 @@ if ($slide_id != 'all') {
 		if (api_is_allowed_to_edit(null, true)) {
 			echo '<tr>';
 			echo '<td align="center">';
-			echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$pathurl.'&amp;origin=slideshow&amp;origin_opt='.$slide_id.'&amp;file='.urlencode($path).'/'.$image_files_only[$slide].'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
+			echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$pathurl.'&amp;origin=slideshow&amp;origin_opt='.$edit_slide_id.'&amp;file='.urlencode($path).'/'.$image_files_only[$slide].'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
 			$aux = explode('.', htmlspecialchars($image_files_only[$slide]));
 			$ext = $aux[count($aux) - 1];
 			echo $image_files_only[$slide].' <br />';

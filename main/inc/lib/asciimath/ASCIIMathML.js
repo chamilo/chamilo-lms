@@ -3341,7 +3341,7 @@ function ASCIIandgraphformatting(st) {
   st = st.replace(/(?:\\begin{a?graph}|\bagraph|\(:graph\s)((.|\n)*?)(?:\\end{a?graph}|enda?graph|:\))/g,function(s,t){return "<table><tr><td><div class=\"ASCIIsvg\"><embed class=\"ASCIIsvg\" src=\""+dsvglocation+"d.svg\" wmode=\"transparent\" script=\'"+t.replace(/<\/?(br|p|pre)\s?\/?>/gi,"\n")+"\'/></div></td></tr></table>"});
   st = st.replace(/insertASCIIMathCalculator/g,"<div class=\"ASCIIMathCalculator\"></div>");
 //alert(dsvglocation)
-  return st
+  return st;
 }
 
 function LMprocessNode(n) {
@@ -3405,9 +3405,9 @@ var alertIfNoSVG = false;
 var noSVG = false;
 
 // global defaults used if not specified by graph (you can change these)
-var defaultwidth = 300; defaultheight = 200;   // in pixels
-var defaultxmin = -5.5; defaultxmax = 5.5;     // in usercoords
-var defaultborder = 0; border = defaultborder; // in pixel
+var defaultwidth = 300; var defaultheight = 200;   // in pixels
+var defaultxmin = -5.5; var defaultxmax = 5.5;     // in usercoords
+var defaultborder = 0; var border = defaultborder; // in pixel
 var defaultstrokewidth = "1"; // default line width in pixel
 var defaultstroke = "blue";   // default line color
 var defaultstrokeopacity = 1; // transparent = 0, solid =1
@@ -3456,7 +3456,6 @@ var strokewidth, strokedasharray, stroke, fill, strokeopacity, fillopacity;
 var fontstyle, fontfamily, fontsize, fontweight, fontstroke, fontfill;
 var marker, endpoints, dynamic = {};
 var picture, svgpicture, doc, width, height;
-var isIE = document.createElementNS==null;
 
 var cpi = "\u03C0", ctheta = "\u03B8";      // character for pi, theta
 var log = function(x) { return ln(x)/ln(10) };
@@ -3480,9 +3479,6 @@ var coth = function(x) { return 1/tanh(x) };
 var arcsinh = function(x) { return ln(x+Math.sqrt(x*x+1)) };
 var arccosh = function(x) { return ln(x+Math.sqrt(x*x-1)) };
 var arctanh = function(x) { return ln((1+x)/(1-x))/2 };
-var sech = function(x) { return 1/cosh(x) };
-var csch = function(x) { return 1/sinh(x) };
-var coth = function(x) { return 1/tanh(x) };
 var arcsech = function(x) { return arccosh(1/x) };
 var arccsch = function(x) { return arcsinh(1/x) };
 var arccoth = function(x) { return arctanh(1/x) };
@@ -4551,6 +4547,7 @@ function plot(fun,x_min,x_max,points,id,endpts) {
   else name = id;
   var min = (x_min==null?xmin:x_min);
   var max = (x_max==null?xmax:x_max);
+  if (max <= min) { return null; }
   var inc = max-min-0.000001*(max-min);
   inc = (points==null?inc/200:inc/points);
   var gt;

@@ -360,6 +360,7 @@ function upload_stylesheet($values,$picture)
 			$numFiles = $zip->numFiles;
 			$valid = true;
 			$single_directory = true;
+			$invalid_files = array();
 			
 			for($i =0; $i < $numFiles; $i++) {
 				$file = $zip->statIndex($i);
@@ -367,6 +368,7 @@ function upload_stylesheet($values,$picture)
 					$path_parts = pathinfo($file['name']);
 					if(!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css'))) {
 						$valid = false;
+						$invalid_files[] = $file['name'];
 					}
 				}
 				
@@ -375,7 +377,12 @@ function upload_stylesheet($values,$picture)
 				}
 			}
 			if($valid == false) {
-				Display::display_error_message(get_lang('ErrorStylesheetFilesExtensionsInsideZip'));
+				$error_string = '<ul>';
+				foreach($invalid_files as $invalid_file) {
+					$error_string .= '<li>'.$invalid_file.'</li>';
+				}
+				$error_string .= '</ul>';
+				Display::display_error_message(get_lang('ErrorStylesheetFilesExtensionsInsideZip').$error_string, false);
 			} else {
 				// If the zip does not contain a single directory, extract it
 				if($single_directory == false) {

@@ -270,7 +270,7 @@ function CheckBrowserCompatibility( show_message )
 		// Internet Explorer.
 		if ( FCKBrowserInfo.IsIE6 )
 		{
-			if ( IsMathPlayerInstalled() )
+			if ( isMathPlayerAvailable )
 			{
 				var start = navigator.appVersion.indexOf( 'MathPlayer' ) ;
 				if ( start != -1 )
@@ -321,18 +321,4 @@ function CheckBrowserCompatibility( show_message )
 	return false ;
 	*/
 	return true ;
-}
-
-// Returns true if MathPlayer is installed.
-function IsMathPlayerInstalled()
-{
-	try
-	{
-		var oMP = new ActiveXObject( 'MathPlayer.Factory.1' ) ;
-		return true ;
-	}
-	catch(e)
-	{
-		return false ;
-	}
 }

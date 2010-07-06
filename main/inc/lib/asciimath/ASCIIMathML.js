@@ -121,18 +121,30 @@ var dsvglocation = ""; // path to d.svg (blank if same as ASCIIMathML.js loc)
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-var isIE = document.createElementNS==null;
-var noMathML = false, translated = false;
+// Modified by Ivan Tcholakov, 06-JUL-2010.
+//var isIE = document.createElementNS==null;
+var isIE = (/msie/).test(navigator.userAgent.toLowerCase());
+//
+var noMathML = false;
+var translated = false;
 
-if (isIE) { // avoid adding MathPlayer info explicitly to each webpage
-  if (navigator.appName.slice(0,9)=="Microsoft")
+// Returns true if MathPlayer add-on has been installed and enabled.
+function checkMathPlayer() {
+  if (isIE && window.ActiveXObject) {
     try {
-        var ActiveX = new ActiveXObject("MathPlayer.Factory.1");
-        ActiveX = null;
-        document.write("<object id=\"mathplayer\"\
-        classid=\"clsid:32F66A20-7614-11D4-BD11-00104BD3F987\"></object>");
-        document.write("<?import namespace=\"m\" implementation=\"#mathplayer\"?>");
-    } catch (e) { }
+      var ActiveX = new ActiveXObject("MathPlayer.Factory.1");
+      return true;
+    } catch(e) { };
+  }
+  return false;
+}
+
+var isMathPlayerAvailable = checkMathPlayer();
+
+if (isMathPlayerAvailable) { // Avoid adding MathPlayer info explicitly to each webpage.
+  document.write("<object id=\"mathplayer\"\
+  classid=\"clsid:32F66A20-7614-11D4-BD11-00104BD3F987\"></object>");
+  document.write("<?import namespace=\"m\" implementation=\"#mathplayer\"?>");
 }
 
 // Add a stylesheet, replacing any previous custom stylesheet (adapted from TW)
@@ -174,34 +186,31 @@ function init(){
 }
 
 function checkMathML(){
-	if (navigator.product && navigator.product=='Gecko') {
-	   var rv = navigator.userAgent.toLowerCase().match(/rv:\s*([\d\.]+)/);
-	   if (rv!=null) {
-		rv = rv[1].split('.');
-		if (rv.length<3) { rv[2] = 0;}
-		if (rv.length<2) { rv[1] = 0;}
-	   }
-	   if (rv!=null && 10000*rv[0]+100*rv[1]+1*rv[2]>=10100) {
-		   noMathML = null;
-	   } else {
-		   noMathML = true;
-	   }
+  if (navigator.product && navigator.product=='Gecko') {
+    var rv = navigator.userAgent.toLowerCase().match(/rv:\s*([\d\.]+)/);
+    if (rv!=null) {
+      rv = rv[1].split('.');
+      if (rv.length<3) { rv[2] = 0;}
+      if (rv.length<2) { rv[1] = 0;}
     }
-  else if (navigator.appName.slice(0,9)=="Microsoft")
-    try {
-        var ActiveX = new ActiveXObject("MathPlayer.Factory.1");
-        noMathML = null;
-    } catch (e) {
-        noMathML = true;
+    if (rv!=null && 10000*rv[0]+100*rv[1]+1*rv[2]>=10100) {
+      noMathML = null;
+    } else {
+      noMathML = true;
     }
-  else if (navigator.appName.slice(0,5)=="Opera")
-    if (navigator.appVersion.slice(0,3)>="9.5") noMathML = null;
+  }
+  else if (isIE) {
+    noMathML = isMathPlayerAvailable ?  null : true;
+  }
+  else if (navigator.appName.slice(0,5)=="Opera") {
+    noMathML = (navigator.appVersion.slice(0,3)>="9.5") ?  null : true;
+  }
   else noMathML = true;
 //noMathML = true; //uncomment to check
   if (noMathML && notifyIfNoMathML) {
     var msg = "To view the ASCIIMathML notation use Internet Explorer + MathPlayer or Mozilla Firefox 2.0 or later.";
     if (alertIfNoMathML)
-       alert(msg);
+      alert(msg);
     else return msg;
   }
 }
@@ -1447,7 +1456,7 @@ function AMTparseExpr(str,rightbracket) {
 
     str = AMremoveCharsAndBlanks(str,symbol.input.length);
     if (typeof symbol.invisible != "boolean" || !symbol.invisible) {
-      node = '\\right'+AMTgetTeXbracket(symbol); //AMcreateMmlNode("mo",document.createTextNode(symbol.output));
+      node = '\\right'+AMTgetTeXbracket(symbol); //createMmlNode("mo",document.createTextNode(symbol.output));
       newFrag += node;
       addedright = true;
     } else {

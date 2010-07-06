@@ -46,30 +46,30 @@ fieldset { padding: 0px 10px 5px 5px; }
       margin-top: 10px;
 }
 
-	#outputNode,#inputText,#mathml {
-		padding:5px;
-		background-color:white;
-		width:98%;
-		height:130px;
-		font-size:1.3em;
-		border: 1px solid darkgrey;
-		overflow:auto;
-	}
-	#clickInput {
-		width:100%;
-		border-collapse:collapse;
-		background-color: white;
-		text-align:center;
-	}
-	#clickInput td {
-		border: thin solid gray;
-		cursor:pointer;
-		font-size:1.1em;
+#outputNode,#inputText,#mathml {
+	padding:5px;
+	background-color:white;
+	width:98%;
+	height:130px;
+	font-size:1.3em;
+	border: 1px solid darkgrey;
+	overflow:auto;
+}
+#clickInput {
+	width:100%;
+	border-collapse:collapse;
+	background-color: white;
+	text-align:center;
+}
+#clickInput td {
+	border: thin solid gray;
+	cursor:pointer;
+	font-size:1.1em;
+}
 
-	}
-	h3 {
-		font-size:1.6em;
-	}
+h3 {
+	font-size:1.6em;
+}
   </style>
 
 	</head>
@@ -189,8 +189,8 @@ Original Author - Bernhard Pfeifer novocaine@gmx.net
 <td class="character" title="CC" onclick="javascript: Set('CC');">`CC`</td>
 <td class="character" title="bbA" onclick="javascript: Set('bb');">`bbA`</td>
 <td class="character" title="bbbA" onclick="javascript: Set('bbb');">`bbbA`</td>
-<td class="character" title="ccA" onclick="javascript: Set('cc');">`ccA`</td>
-<td class="character" title="frA" onclick="javascript: Set('fr');">`frA`</td>
+<td id="ccA" class="character" title="ccA" onclick="javascript: Set('cc');">`ccA`</td>
+<td id="frA" class="character" title="frA" onclick="javascript: Set('fr');">`frA`</td>
 <td class="character" title="sfA" onclick="javascript: Set('sf');">`sfA`</td>
 <td class="character" title="ttA" onclick="javascript: Set('tt');">`ttA`</td>
 <td colspan="4" class="character" title="stackrel(-&gt;)(+)" onclick="javascript: Set('stackrel(-&gt;)(+)');">`stackrel(-&gt;)(+)`</td>

@@ -102,6 +102,8 @@ function Ok()
 
 window.onload = function()
 {
+	geckoFontWorkaround() ;
+
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage( document ) ;
 
@@ -332,4 +334,12 @@ function CheckBrowserCompatibility( show_message )
 	return false ;
 	*/
 	return true ;
+}
+
+// Excludig from the table some characters with buggy fonts (wrong height).
+function geckoFontWorkaround() {
+	if ( FCKBrowserInfo.IsGecko ) {
+		GetE( 'ccA' ).innerHTML = GetE( 'ccA' ).innerHTML.replace( /`/g, '' ) ;
+		GetE( 'frA' ).innerHTML = GetE( 'frA' ).innerHTML.replace( /`/g, '' ) ;
+	}
 }

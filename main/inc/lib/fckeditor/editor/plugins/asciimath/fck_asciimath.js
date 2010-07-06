@@ -38,13 +38,15 @@ FCKLang['DlgAsciiMathOldMathPlayer'] = FCKLang['DlgAsciiMathOldMathPlayer'].repl
 // Settings for ASCIIMathML.js
 // Suppressing the built-in notification messages when the browser is incompatible.
 var notifyIfNoMathML = false ;
-var alertIfNoMathML = false;
-var notifyIfNoSVG = false;
-var alertIfNoSVG = false;
+var alertIfNoMathML = false ;
+var notifyIfNoSVG = false ;
+var alertIfNoSVG = false ;
+// Formula translation will be called explicitly in this dialog after it loads.
+var translateOnLoad = false ;
 // Formula tooltips are hard-coded in this dialog, there is no need they to be generated.
-var showasciiformulaonhover = false;
+var showasciiformulaonhover = false ;
 // Font size of the formulas in this dialog.
-var mathfontsize = "1.1em";
+var mathfontsize = "1.1em" ;
 
 // oSpanAM: The actual selected span element in the editor that contains the formula.
 var oSpanAM = FCKAsciiMath.FindFormulaContainer( FCKAsciiMath.GetSearchElementFromSelection() ) ;
@@ -103,10 +105,19 @@ window.onload = function()
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage( document ) ;
 
+	// Translate the formulas.
+	translateOnLoad = true ;
+	generic() ;
+
 	// Load the selected element information (if any).
 	LoadSelection() ;
 
 	dialog.SetAutoSize( true ) ;
+
+	// When MathML is available show the button "Show MathML code".
+	if ( !noMathML ) {
+		GetE( 'show_mathml' ).style.display = '' ;
+	}
 
 	// Activate the "OK" button.
 	dialog.SetOkButton( true ) ;

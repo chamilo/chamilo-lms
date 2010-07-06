@@ -574,7 +574,5 @@ if ($_GET['studentlist'] == 'false') {
 	$table->display();
 
 }
-?>
-</table>
-<?php
+
 Display::display_footer();

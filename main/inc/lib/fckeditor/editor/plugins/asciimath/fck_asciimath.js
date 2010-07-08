@@ -107,13 +107,15 @@ window.onload = function()
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage( document ) ;
 
+	// Check whether native MathML is supported by the browser.
+	checkMathML() ;
+
 	// Load the selected element information (if any).
 	LoadSelection() ;
 
 	dialog.SetAutoSize( true ) ;
 
 	// When MathML is available show the button "Show MathML code".
-	checkMathML() ;
 	if ( !noMathML ) {
 		GetE( 'show_mathml' ).style.display = '' ;
 	}

@@ -36,6 +36,8 @@ FCKLang['DlgAsciiMathOldMathPlayer'] = FCKLang['DlgAsciiMathOldMathPlayer'] ? FC
 FCKLang['DlgAsciiMathOldMathPlayer'] = FCKLang['DlgAsciiMathOldMathPlayer'].replace( '%s', '<a href="http://www.dessci.com/en/products/mathplayer/" onclick="javascript: window.open(this.href,\'_blank\');return false;">http://www.dessci.com/en/products/mathplayer/</a>' ) ;
 
 // Settings for ASCIIMathML.js
+// Checking for native MathML support, it is always needed for this dialog.
+var checkForMathML = true;
 // Suppressing the built-in notification messages when the browser is incompatible.
 var notifyIfNoMathML = false ;
 var alertIfNoMathML = false ;
@@ -102,14 +104,8 @@ function Ok()
 
 window.onload = function()
 {
-	geckoFontWorkaround() ;
-
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage( document ) ;
-
-	// Translate the formulas.
-	translateOnLoad = true ;
-	generic() ;
 
 	// Load the selected element information (if any).
 	LoadSelection() ;
@@ -117,6 +113,7 @@ window.onload = function()
 	dialog.SetAutoSize( true ) ;
 
 	// When MathML is available show the button "Show MathML code".
+	checkMathML() ;
 	if ( !noMathML ) {
 		GetE( 'show_mathml' ).style.display = '' ;
 	}
@@ -334,12 +331,4 @@ function CheckBrowserCompatibility( show_message )
 	return false ;
 	*/
 	return true ;
-}
-
-// Excludig from the table some characters with buggy fonts (wrong height).
-function geckoFontWorkaround() {
-	if ( FCKBrowserInfo.IsGecko ) {
-		GetE( 'ccA' ).innerHTML = GetE( 'ccA' ).innerHTML.replace( /`/g, '' ) ;
-		GetE( 'frA' ).innerHTML = GetE( 'frA' ).innerHTML.replace( /`/g, '' ) ;
-	}
 }

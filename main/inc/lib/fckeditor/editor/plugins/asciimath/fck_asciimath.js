@@ -107,8 +107,8 @@ window.onload = function()
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage( document ) ;
 
-	// Check whether native MathML is supported by the browser.
-	checkMathML() ;
+	// Initialization of the script ASCIIMathML.js.
+	init() ;
 
 	// Load the selected element information (if any).
 	LoadSelection() ;

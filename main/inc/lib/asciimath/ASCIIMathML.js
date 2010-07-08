@@ -172,7 +172,15 @@ function setStylesheet(s) {
 
 setStylesheet("#AMMLcloseDiv \{font-size:0.8em; padding-top:1em; color:#014\}\n#AMMLwarningBox \{position:absolute; width:100%; top:0; left:0; z-index:200; text-align:center; font-size:1em; font-weight:bold; padding:0.5em 0 0.5em 0; color:#ffc; background:#c30\}");
 
+// Added by Ivan Tcholakov, 08-JUL-2010.
+// Prevention from multiple calls of the initialization function.
+var AMinitialized = false;
+//
+
 function init(){
+	// Added by Ivan Tcholakov, 08-JUL-2010.
+	if (AMinitialized) { return true; }
+	//
 	var msg, warnings = new Array();
 	if (document.getElementById==null){
 		alert("This webpage requires a recent browser such as Mozilla Firefox/Netscape 7+ or Internet Explorer 6+ with MathPlayer and Adobe SVGviewer");
@@ -182,6 +190,9 @@ function init(){
 	if (checkIfSVGavailable && (msg = checkSVG())) warnings.push(msg);
 	if (warnings.length>0) displayWarnings(warnings);
 	initSymbols();
+	// Added by Ivan Tcholakov, 08-JUL-2010.
+	AMinitialized = true;
+	//
 	return true;
 }
 

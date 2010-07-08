@@ -80,12 +80,13 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 //
 //var AMTcgiloc = "http://korpelainen.net/cgi-bin/mathtex.cgi?\\gammacorrection{1.4}";
 //
-//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=1;tex=\\displaystyle ";
-//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=2;tex=\\displaystyle ";
+//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=1;tex=\\displaystyle";
+//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=2;tex=\\displaystyle";
 //
-//var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chf=bg,s,FFFFFF00&chco=000000&chl=";
+//var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
+//var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chl=";
 //
-var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chf=bg,s,FFFFFF00&chco=000000&chl=";
+var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
 //
 
 var AScgiloc = 'http://www.imathas.com/imathas/filter/graph/svgimg.php'; //path to CGI script

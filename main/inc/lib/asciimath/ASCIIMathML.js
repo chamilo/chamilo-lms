@@ -79,7 +79,6 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 //var AMTcgiloc = "http://schmoodle.alaskapolicy.net/cgi-bin/mimetex.cgi?";
 //
 //var AMTcgiloc = "http://korpelainen.net/cgi-bin/mathtex.cgi?\\gammacorrection{1.4}";
-//var AMTcgiloc = "http://www.forkosh.com/cgi-bin/mathtex.cgi?\\gammacorrection{1.4}";
 //
 //var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=1;tex=\\displaystyle ";
 //var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=2;tex=\\displaystyle ";

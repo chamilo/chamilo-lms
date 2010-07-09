@@ -27,46 +27,34 @@ document.write( FCKTools.GetStyleHtml( GetCommonDialogCss() ) ) ;
 		</script>
 
 		<style type="text/css">
-			body, td, input, textarea, select, label { font-family: Arial, Verdana, Geneva, helvetica, sans-serif; font-size: 11px; }
-		</style>
 
-  <style type="text/css">
-
+body, td, input, textarea, select, label, button { font-family: Arial, Verdana, Geneva, helvetica, sans-serif; font-size: 11px; }
 form { padding: 0px; margin: 0px; }
 form p { margin-top: 5px; margin-bottom: 5px; }
-table { font: 11px Tahoma,Verdana,sans-serif; }
-select, input, button { font: 11px Tahoma,Verdana,sans-serif; }
-table .label { text-align: right; width: 8em; }
-.fl { width: 9em; float: left; padding: 2px 5px; text-align: right; }
-.fr { width: 7em; float: left; padding: 2px 5px; text-align: right; }
-fieldset { padding: 0px 10px 5px 5px; }
-.space { padding: 2px; }
 
-#outputNode,#inputText,#mathml {
-	padding:5px;
-	background-color:white;
-	width:98%;
-	height:130px;
-	font-size:1.3em;
-	border: 1px solid darkgrey;
-	overflow:auto;
-}
 #clickInput {
-	width:100%;
-	border-collapse:collapse;
+	width: 100%;
+	border-collapse: collapse;
 	background-color: white;
-	text-align:center;
+	text-align: center;
 }
 #clickInput td {
 	border: 1px solid gray;
-	cursor:pointer;
-	font-size:1.1em;
+	cursor: pointer;
+	font-size: 1.1em;
 }
 
-h3 {
-	font-size:1.6em;
+#inputText, #outputNode {
+	padding: 5px;
+	background-color: white;
+	width: 98%;
+	height: 130px;
+	font-size: 1.3em;
+	border: 1px solid darkgrey;
+	overflow: auto;
 }
-  </style>
+
+		</style>
 
 	</head>
 <body scroll="no" style="overflow: hidden;">
@@ -250,6 +238,5 @@ Original Author - Bernhard Pfeifer novocaine@gmx.net
   <span fckLang="DlgAsciiMathForMoreInfo">For more information on AsciiMathML visit this page: </span><a href="http://www1.chapman.edu/~jipsen/mathml/asciimath.html" onclick="javascript: window.open(this.href,'_blank','');return false;">http://www1.chapman.edu/~jipsen/mathml/asciimath.html</a></td></tr>
 </table>
 </form>
-
 </body>
 </html>

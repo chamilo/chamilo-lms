@@ -309,8 +309,11 @@ var FCKDialog = ( function()
 				TopWindow : topWindow
 			} ;
 
+			// Disabled by Ivan Tcholakov, 09-JUL-2010.
+			// Makes a problem on IE (see task #541).
 			//FCK.ToolbarSet.CurrentInstance.Selection.Save();
-			FCK.ToolbarSet.CurrentInstance.Selection.Save( true ) ;
+			//FCK.ToolbarSet.CurrentInstance.Selection.Save( true ) ;
+			//
 
 			var viewSize = FCKTools.GetViewPaneSize( topWindow ) ;
 			var scrollPosition = { 'X': 0, 'Y': 0 } ;

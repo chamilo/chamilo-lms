@@ -268,3 +268,15 @@ function ShowMathML()
 		Preview() ;
 	}
 }
+
+// Highlighting formulas.
+
+function over(td)
+{
+	td.className = 'LightBackground Hand' ;
+}
+
+function out(td)
+{
+	td.className = 'Hand' ;
+}

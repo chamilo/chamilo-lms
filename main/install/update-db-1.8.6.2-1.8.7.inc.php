@@ -102,20 +102,20 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
                 $tables = Database::get_tables($dbNameForm);
                 foreach ($tables as $table) {
-            	    $query = Database::query("ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+            	    $query = "ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                     $res = Database::query($query);
                     if ($res === false) {
                          error_log('Error in '.$query.': '.Database::error());
                     }
                 }
-            	$query = Database::query("ALTER DATABASE `".$dbNameForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;");
+            	$query = "ALTER DATABASE `".$dbNameForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                 $res = Database::query($query);
                 if ($res === false) {
                      error_log('Error in '.$query.': '.Database::error());
                 }
             }
         }
-        
+
         // Converting dates and times to UTC using the default timezone of PHP
         // Converting gradebook dates and times
         $timezone = date_default_timezone_get();
@@ -139,7 +139,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 
         $timeOffsetString .= "$timeOffsetHours";
         $timeOffsetString .= ":00";
-		
+
 	// Executing the queries to convert everything
         $queries[] = "UPDATE gradebook_certificate 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
         $queries[] = "UPDATE gradebook_evaluation 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
@@ -147,7 +147,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         $queries[] = "UPDATE gradebook_linkeval_log SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
         $queries[] = "UPDATE gradebook_result 		SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
         $queries[] = "UPDATE gradebook_result_log 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-        
+
         foreach ($queries as $query) {
             Database::query($query);
 	}
@@ -237,7 +237,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
             }
         }
-         
+
         // Get the stats queries list (s_q_list)
         $s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');
         if (count($s_q_list) > 0) {
@@ -252,7 +252,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 error_log('Database '.$dbStatsForm.' was not found, skipping', 0);
             } else {
                 Database::select_db($dbStatsForm);
-                
+
                 foreach ($s_q_list as $query) {
                     if ($only_test) {
                         error_log("Database::query($dbStatsForm,$query)", 0);
@@ -268,38 +268,38 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
                 $tables = Database::get_tables($dbStatsForm);
                 foreach ($tables as $table) {
-            	    $query = Database::query("ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+            	    $query = "ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                     $res = Database::query($query);
                     if ($res === false) {
                          error_log('Error in '.$query.': '.Database::error());
                     }
                 }
-                $query = Database::query("ALTER DATABASE `".$dbStatsForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;");
+                $query = "ALTER DATABASE `".$dbStatsForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                 $res = Database::query($query);
                 if ($res === false) {
                      error_log('Error in '.$query.': '.Database::error());
                 }
-                
-                
+
+
                 // chamilo_stat.track_e_attempt table update changing id by id_auto
-               
+
       			$sql = "SELECT exe_id, question_id, course_code, answer FROM $dbStatsForm.track_e_attempt";
                 $result = Database::query($sql);
                 if (Database::num_rows($result) > 0) {
                 	while ($row = Database::fetch_array($result)) {
                 		$course_code  	= $row['course_code'];
                 		$course_info 	= api_get_course_info($course_code);
-						$my_course_db 	= $course_info['dbName'];  
+						$my_course_db 	= $course_info['dbName'];
  						$question_id  	= $row['question_id'];
 						$answer			= $row['answer'];
-						$exe_id			= $row['exe_id'];		
+						$exe_id			= $row['exe_id'];
 
 						//getting the type question id
-                		$sql_question = "SELECT type FROM $my_course_db.quiz_question where id = $question_id";                		
+                		$sql_question = "SELECT type FROM $my_course_db.quiz_question where id = $question_id";
                 		$res_question = Database::query($sql_question);
-                		$row  = Database::fetch_array($res_question);	
+                		$row  = Database::fetch_array($res_question);
                  		$type = $row['type'];
-                
+
                 		require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
                 		//this type of questions produce problems in the track_e_attempt table
                 		if (in_array($type, array(UNIQUE_ANSWER, MULTIPLE_ANSWER, MATCHING, MULTIPLE_ANSWER_COMBINATION))) {
@@ -311,15 +311,15 @@ if (defined('SYSTEM_INSTALLATION')) {
 	                			$sql = "UPDATE $dbStatsForm.track_e_attempt SET answer = '$id_auto' WHERE exe_id = $exe_id AND question_id = $question_id AND course_code = '$course_code' and answer = $answer ";
 	                			Database::query($sql);
 		            		}
-                		}	
-                	}	
+                		}
+                	}
                 }
-                 
-                
+
+
             }
         }
-        
-        
+
+
 
         // Get the user queries list (u_q_list)
         $u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
@@ -348,13 +348,13 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
                 $tables = Database::get_tables($dbUserForm);
                 foreach ($tables as $table) {
-            	    $query = Database::query("ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+            	    $query = "ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                     $res = Database::query($query);
                     if ($res === false) {
                          error_log('Error in '.$query.': '.Database::error());
                     }
                 }
-                $query = Database::query("ALTER DATABASE `".$dbUserForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;");
+                $query = "ALTER DATABASE `".$dbUserForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                 $res = Database::query($query);
                 if ($res === false) {
                      error_log('Error in '.$query.': '.Database::error());
@@ -417,11 +417,11 @@ if (defined('SYSTEM_INSTALLATION')) {
                             }
                         }
                     }
-                    
+
                     if (!$singleDbForm) {
                         $tables = Database::get_tables($row_course['db_name']);
                         foreach ($tables as $table) {
-            	            $query = Database::query("ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+            	            $query = "ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                             $res = Database::query($query);
                             if ($res === false) {
                                 error_log('Error in '.$query.': '.Database::error());
@@ -435,16 +435,16 @@ if (defined('SYSTEM_INSTALLATION')) {
                     }
                     $t_student_publication = $row_course['db_name'].".student_publication";
                     $t_item_property = $row_course['db_name'].".item_property";
-                    
+
                     if ($singleDbForm) {
                         $t_student_publication = "$prefix{$row_course['db_name']}_student_publication";
                         $t_item_property = "$prefix{$row_course['db_name']}_item_property";
                     }
-                               
+
                     $sql_insert_user = "SELECT ref, insert_user_id FROM $t_item_property WHERE tool='work'";
-                    
+
                     $rs_insert_user = Database::query($sql_insert_user);
-                    
+
                     if ($rs_insert_user === false) {
 				    	error_log('Could not query insert_user_id table: '.Database::error());
 					} else {
@@ -457,44 +457,44 @@ if (defined('SYSTEM_INSTALLATION')) {
 							}
 						}
 					}
-					
+
 					//updating parent_id of the student_publication table
-			        $sql = 'SELECT id, url, parent_id FROM '.$t_student_publication; 
+			        $sql = 'SELECT id, url, parent_id FROM '.$t_student_publication;
 					$result = Database::query($sql);
 					if (Database::num_rows($result) > 0) {
 						$items = api_store_result($result);
 						$directory_list = $file_list=array();
-						
+
 						foreach($items as $item) {
 							$student_slash = substr($item['url'], 0, 1);
-							//means this is a directory 
+							//means this is a directory
 							if ($student_slash == '/') {
-								$directory_list[$item['id']]= $item['url'];					
+								$directory_list[$item['id']]= $item['url'];
 							} else {
 							// this is a file with no parents
 								if ($item['parent_id'] == 0)
 									$file_list []= $item;
-							}				
+							}
 						}
-						
+
 						if (is_array($file_list) && count($file_list) > 0) {
 							foreach ($file_list as $file) {
 								$parent_id = 0;
 								if (is_array($directory_list) && count($directory_list) > 0) {
-									foreach($directory_list as $id => $dir) {					
-										$pos = strpos($file['url'], $dir.'/');					
+									foreach($directory_list as $id => $dir) {
+										$pos = strpos($file['url'], $dir.'/');
 										if ($pos !== false) {
 											$parent_id = $id;
 											break;
 										}
 									}
 								}
-								
+
 								if ($parent_id != 0 ) {
 									$sql = 'UPDATE '.$t_student_publication.' SET parent_id = '.$parent_id.' WHERE id = '.$file['id'].'';
-									Database::query($sql);								
+									Database::query($sql);
 								}
-							}	
+							}
 						}
                 	}
 
@@ -555,8 +555,8 @@ if (defined('SYSTEM_INSTALLATION')) {
             }
         }
     }
-    
-    
+
+
 } else {
 
     echo 'You are not allowed here !';

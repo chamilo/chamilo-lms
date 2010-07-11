@@ -94,7 +94,7 @@ var AScgiloc = 'http://www.imathas.com/imathas/filter/graph/svgimg.php'; //path 
 var mathcolor = "blue";        // change it to "" (to inherit) or another color
 // Modified by Ivan Tcholakov, 01-JUL-2010.
 //var mathfontsize = "1em";      // change to e.g. 1.2em for larger math
-var mathfontsize = "1.5em";
+var mathfontsize = "1.2em";
 //
 // Modified by Ivan Tcholakov, 05-JUL-2010.
 //var mathfontfamily = "serif";  // change to "" to inherit (works in IE)

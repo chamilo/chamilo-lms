@@ -80,8 +80,8 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 //
 //var AMTcgiloc = "http://korpelainen.net/cgi-bin/mathtex.cgi?\\gammacorrection{1.4}";
 //
-//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=1;tex=\\displaystyle";
-//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=2;tex=\\displaystyle";
+//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=1;tex=";
+//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=2;tex=";
 //
 //var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
 //var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chl=";
@@ -1497,19 +1497,23 @@ function AMTparseAMtoTeX(str) {
 }
 
 function AMTparseMath(str,istex) {
-	if (istex) {
-		var texstring = str;
-	} else {
-		var texstring = AMTparseAMtoTeX(str);
-	}
-	//alert(texstring);
+  if (istex) {
+    var texstring = str;
+  } else {
+    var texstring = AMTparseAMtoTeX(str);
+  }
+  //alert(texstring);
   if (mathcolor!="") {
-	  texstring = "\\"+mathcolor + texstring;
+    if (AMTcgiloc.match(/mathtex/)) {
+      texstring = "\\usepackage{color}\\color\{" + mathcolor + "\}" + texstring;
+    } else {
+      texstring = "\\" + mathcolor + texstring;
+    }
   }
   if (displaystyle) {
-	  texstring = "\\displaystyle" + texstring;
+    texstring = "\\displaystyle" + texstring;
   } else {
-	  texstring = "\\textstyle" + texstring;
+    texstring = "\\textstyle" + texstring;
   }
   if (AMTcgiloc.match(/google/)) {
     var tclr = mathcolor;

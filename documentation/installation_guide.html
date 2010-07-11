@@ -44,6 +44,7 @@
   <li><a href="#5._Administration_section">Administration section</a></li>
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
   <li><a href="#7._Mathematical_formulas">Mathematical formulas with LaTeX</a></li>
+  <li><a href="#8._ASCIIMathML_mathematical_formulas">Mathematical formulas with ASCIIMathML</a></li>
 </ol>
 
 <br />
@@ -254,7 +255,7 @@ date.timezone = 'America/New_York'
   <li>php-mysql The mysql shared extension for php</li>
   <li>php-pcre The pcre shared extension for php</li>
   <li>php-session The session shared extension for php</li>
-  <li>php-zlib The zlib shared extension for php</li>    
+  <li>php-zlib The zlib shared extension for php</li>
   <li>(optional) php-ldap if you want to be able to use LDAP authentication</li>
 </ul>
 
@@ -263,7 +264,7 @@ date.timezone = 'America/New_York'
 	<li>php-ctype</li>
 	<li>php-gd</li>
 	<li>php-iconv</li>
-	<li>php-json</li> 
+	<li>php-json</li>
 	<li>php-mbstring</li>
 </ul>
 <p><a href="http://dev.mysql.com/doc/mysql/en/index.html"></a><br /></p>
@@ -634,6 +635,59 @@ copy mimetex.exe (for windows) or mimetex.cgi (for linux) from <i>chamilo/main/i
 to insert mathematical formulas into your documents.<br />
 
 
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="8._ASCIIMathML_mathematical_formulas"></a>8. Mathematical formulas with ASCIIMathML</h2>
+
+<p>Mathematical formulas may be rendered on web-pages using the script ASCIIMathML.js (a customized version for Chamilo). For more information about this script
+and about the ASCIIMath formula syntax see <a href="http://www1.chapman.edu/~jipsen/mathml/asciimath.html">http://www1.chapman.edu/~jipsen/mathml/asciimath.html</a>
+and <a href="http://dlippman.imathas.com/asciimathtex/AMT.html">http://dlippman.imathas.com/asciimathtex/AMT.html</a>.</p>
+
+<p>For writing ASCIIMath formulas in documents, a correspondent plugin for the online editor should be activated. For doing this,
+see the platform administration section and open the page "Administration &gt; Configuration settings &gt; WYSIWYG Editor".
+Enable the setting <strong>"ASCIIMathML mathematical editor"</strong>.</p>
+
+<p>Inside documents, the script ASCIIMathML.js renders mathematical formulas in two altrnative ways:</p>
+<ul>
+	<li>By translation ASCIIMath formula notation into MathML code. MathML standard currently is supported by the following browsers:
+		<ul>
+			<li>Mozilla Firefox, you may consider installing STIX fonts (<a href="http://www.stixfonts.org">http://www.stixfonts.org</a>) on your client machines for nice looking formulas</li>
+			<li>Internet Explorer 6 or higher with the add-on MathPlayer 2.0 or higher (<a href="http://www.dessci.com/en/products/mathplayer">http://www.dessci.com/en/products/mathplayer</a>)</li>
+			<li>Opera 9.5 or higher</li>
+		</ul>
+	</li>
+	<li>For browser that do not support MathML - by translation ASCIIMath formula notation into TeX notation and passing it to
+	an external service. The external service produces and returns an image that contains the formula. This way is so called
+	"image-based fallback".
+	</li>
+</ul>
+
+<p>For providing <strong>image-based fallback</strong> in a production system, you should pick up and install on your server software for TeX rendering, such as:
+<ul>
+	<li>mimeTeX - <a href="http://www.forkosh.dreamhost.com/source_mimetex.html">http://www.forkosh.dreamhost.com/source_mimetex.html</a>.
+	See <a href="#7._Mathematical_formulas">"7. Mathematical formulas with LaTeX"</a> on how to install the mimetex executable file on your server</li>
+	<li>mathTeX - <a href="http://www.forkosh.com/mathtex.html">http://www.forkosh.com/mathtex.html</a>. Browse the site for installation instructions</li>
+</ul>
+
+<p>As an alternative, you may try to use some public services for TeX rendering, such as:</p>
+<ul>
+	<li>MathTran - <a href="http://www.mathtran.org">http://www.mathtran.org</a></li>
+	<li>Google Chart Tools - <a href="http://code.google.com/apis/charttools">http://code.google.com/apis/charttools</a></li>
+</ul>
+
+<p>Open with a text editor the file <strong>.../chamilo/main/inc/lib/asciimath/ASCIIMathML.js</strong>.
+Find somewhere at the beginning the line that initializes the variable <strong>AMTcgiloc</strong>.
+You may need to alter the setting to be for example:</p>
+<ul>
+	<li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mimetex.cgi";</div></li>
+	<li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mathtex.cgi";</div></li>
+	<li><div class="code">var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?tex=";</div></li>
+	<li><div class="code">var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";</div></li>
+	<li>... or something else</li>
+</ul>
+<p>For testing how the variable <strong>AMTcgiloc</strong> may be set, there are some examples (as comments) inside the script.</p>
+
+<p>
+  <hr style="width: 100%; height: 2px;" />
   <br />
   <br />
   Contact address<br />

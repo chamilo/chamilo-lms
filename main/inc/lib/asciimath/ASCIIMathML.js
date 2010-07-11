@@ -52,10 +52,10 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 */
 
 // Modified by Ivan Tcholakov, 02-JUL-2010.
-//var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi?"; //path to CGI script that
+//var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi"; //path to CGI script that
 //						     //can render a TeX string
 //
-// You should pick up and install on your server software for TeX rendering as:
+// You should pick up and install on your server software for TeX rendering, such as:
 //
 // mimeTeX - http://www.forkosh.dreamhost.com/source_mimetex.html
 // mathTeX - http://www.forkosh.com/mathtex.html
@@ -66,25 +66,21 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 // Google Chart Tools - http://code.google.com/apis/charttools/
 //
 // You have to set here the path to the script for TeX rendering
-// and query parameters, if any.
-//
-// Examples:
-//
-// var AMTcgiloc = "/cgi-bin/mimetex.cgi?";
-// var AMTcgiloc = "http://my_server.net/cgi-bin/mimetex.cgi?";
+// and specific query parameters, if any.
 //
 // Some examples for testing purposes:
 //
-//var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi?";
-//var AMTcgiloc = "http://schmoodle.alaskapolicy.net/cgi-bin/mimetex.cgi?";
+//var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi";
+//var AMTcgiloc = "http://schmoodle.alaskapolicy.net/cgi-bin/mimetex.cgi";
 //
-//var AMTcgiloc = "http://korpelainen.net/cgi-bin/mathtex.cgi?\\gammacorrection{1.4}";
+//var AMTcgiloc = "http://korpelainen.net/cgi-bin/mathtex.cgi";
 //
+//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?tex=";
 //var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=1;tex=";
 //var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=2;tex=";
 //
-//var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
 //var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chl=";
+//var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
 //
 var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
 //
@@ -1505,8 +1501,8 @@ function AMTparseMath(str,istex) {
   //alert(texstring);
   if (mathcolor!="") {
     if (AMTcgiloc.match(/mathtex/)) {
-      texstring = "\\usepackage{color}\\color\{" + mathcolor + "\}" + texstring;
-    } else {
+      texstring = "\\gammacorrection{1.4}\\usepackage{color}\\color\{" + mathcolor + "\}" + texstring;
+    } else if (AMTcgiloc.match(/mimetex/)) {
       texstring = "\\" + mathcolor + texstring;
     }
   }
@@ -1561,6 +1557,9 @@ function AMTparseMath(str,istex) {
   }
   if (AMTcgiloc.match(/google/)) {
     texstring = texstring + "&chf=bg,s," + bclr + "&chco=" + tclr;
+  }
+  if (AMTcgiloc.indexOf('?') == -1) {
+	  AMTcgiloc = AMTcgiloc + '?';
   }
   node.src = AMTcgiloc + texstring;
   node.style.verticalAlign = "middle";

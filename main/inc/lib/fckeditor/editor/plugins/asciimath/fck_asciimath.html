@@ -23,6 +23,13 @@ document.write( '<scr' + 'ipt type="text/javascript" src="' + window.parent.fram
 		<script src="fck_asciimath.js" type="text/javascript"></script>
 
 		<script type="text/javascript">
+// ASCIIMathML.js inserts &nbsp; and next to it insers style definitions for warning messages.
+// This &nbsp is to be removed for preserving visual appearance of this dialog on Internet Explorer.
+var n = document.getElementById( 'AMMLcustomStyleSheet' ) ;
+if ( n && n.previousSibling && n.previousSibling.nodeType ) {
+	n = n.previousSibling ;
+	if ( n.nodeType == 3 ) n.parentNode.removeChild( n ) ;
+}
 document.write( FCKTools.GetStyleHtml( GetCommonDialogCss() ) ) ;
 		</script>
 
@@ -126,7 +133,7 @@ Original Author - Bernhard Pfeifer novocaine@gmx.net
 <td class="Hand" title="and" onclick="javascript: Set('and');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/text_and.png" /></td>
 <td class="Hand" title="or" onclick="javascript: Set('or');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/text_or.png" /></td>
 <td class="Hand" title="not" onclick="javascript: Set('not');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/not.png" /></td>
-<td class="Hand" title="=&gt;" onclick="javascript: Set('==&gt;');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/rightarrow.png" /></td>
+<td class="Hand" title="=&gt;" onclick="javascript: Set('=&gt;');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/rightarrow.png" /></td>
 <td class="Hand" title="if" onclick="javascript: Set('if');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/if.png" /></td>
 <td class="Hand" title="&lt;=&gt;" onclick="javascript: Set('&lt;=&gt;');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/leftrightarrow.png" /></td>
 <td class="Hand" title="AA" onclick="javascript: Set('AA');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/forall.png" /></td>

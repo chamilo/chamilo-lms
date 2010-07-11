@@ -23,13 +23,6 @@ document.write( '<scr' + 'ipt type="text/javascript" src="' + window.parent.fram
 		<script src="fck_asciimath.js" type="text/javascript"></script>
 
 		<script type="text/javascript">
-// ASCIIMathML.js inserts &nbsp; and next to it insers style definitions for warning messages.
-// This &nbsp is to be removed for preserving visual appearance of this dialog on Internet Explorer.
-var n = document.getElementById( 'AMMLcustomStyleSheet' ) ;
-if ( n && n.previousSibling && n.previousSibling.nodeType ) {
-	n = n.previousSibling ;
-	if ( n.nodeType == 3 ) n.parentNode.removeChild( n ) ;
-}
 document.write( FCKTools.GetStyleHtml( GetCommonDialogCss() ) ) ;
 		</script>
 

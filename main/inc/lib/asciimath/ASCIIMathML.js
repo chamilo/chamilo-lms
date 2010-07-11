@@ -170,7 +170,10 @@ function setStylesheet(s) {
 	}
 }
 
-setStylesheet("#AMMLcloseDiv \{font-size:0.8em; padding-top:1em; color:#014\}\n#AMMLwarningBox \{position:absolute; width:100%; top:0; left:0; z-index:200; text-align:center; font-size:1em; font-weight:bold; padding:0.5em 0 0.5em 0; color:#ffc; background:#c30\}");
+// Disabled by Ivan Tcholakov, 11-JUL-2010.
+// On Internet Explorer the inserted &nbsp; character breaks visual appearance of the online editor.
+//setStylesheet("#AMMLcloseDiv \{font-size:0.8em; padding-top:1em; color:#014\}\n#AMMLwarningBox \{position:absolute; width:100%; top:0; left:0; z-index:200; text-align:center; font-size:1em; font-weight:bold; padding:0.5em 0 0.5em 0; color:#ffc; background:#c30\}");
+//
 
 // Added by Ivan Tcholakov, 08-JUL-2010.
 // Prevention from multiple calls of the initialization function.

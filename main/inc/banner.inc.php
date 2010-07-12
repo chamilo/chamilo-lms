@@ -403,6 +403,19 @@ if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
 		$sep = (strrchr($breadcrumb_step['url'], '?') ? '&amp;' : '?');
 		$navigation_item['url'] = $breadcrumb_step['url'].$sep.api_get_cidreq();
 		$navigation_item['title'] = $breadcrumb_step['name'];
+		// titles for shared folders
+		if ($breadcrumb_step['name'] == 'shared_folder') {
+			$navigation_item['title'] = get_lang('SharedFolder');
+		}			
+		elseif(strstr($breadcrumb_step['name'], 'shared_folder_session_')) {
+		
+			$navigation_item['title'] = get_lang('SharedFolder');
+		}
+		elseif(strstr($breadcrumb_step['name'], 'sf_user_')) {			
+			$userinfo = Database::get_user_info_from_id(substr($breadcrumb_step['name'], 8));
+			$navigation_item['title'] = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);	
+		}
+		
 		$navigation[] = $navigation_item;
 	}
 }

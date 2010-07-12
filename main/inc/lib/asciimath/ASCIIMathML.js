@@ -3416,11 +3416,8 @@ General Public License (at http://www.gnu.org/license/lgpl.html)
 for more details.*/
 
 // you can change these
+var checkIfSVGavailable = true;
 // Modified by Ivan Tcholakov, 01-JUL-2010.
-//var checkIfSVGavailable = true;
-var checkIfSVGavailable = false;
-//
-//Modified by Ivan Tcholakov, 01-JUL-2010.
 //var notifyIfNoSVG = true;
 var notifyIfNoSVG = false;
 //
@@ -4701,7 +4698,7 @@ function ASpreprocess() {
 	 for (var i=len-1; i>=0; i--) {
 		picture = pictures[i];
 		var sscr = picture.getAttribute("sscr");
-		if (sscr!='')  {
+		if (sscr && sscr!='')  {
 			if (noSVG) {
 				n = document.createElement('img');
 				n.setAttribute("style",picture.getAttribute("style"));
@@ -4711,8 +4708,11 @@ function ASpreprocess() {
 			} else {
 				com = parseShortScript(sscr);
 				picture.setAttribute("script",com);
-				picture.className = "ASCIIsvg";
+				//picture.className = "ASCIIsvg";
 			}
+		}
+		if (!noSVG) {
+			picture.className = "ASCIIsvg";
 		}
 	 }
 }

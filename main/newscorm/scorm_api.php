@@ -41,7 +41,6 @@ if (!is_object($oItem)) {
 	exit;
 }
 $autocomplete_when_80pct = 0;
-
 /*
  * JavaScript Functions
  */

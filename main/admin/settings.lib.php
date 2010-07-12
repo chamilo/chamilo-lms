@@ -395,7 +395,7 @@ function upload_stylesheet($values,$picture)
 						if ( substr($entry, -1) == '/') continue;
 						
 						$pos_slash = strpos($entry, '/');
-						$entry_without_first_dir = substr($entry, $pos_slash + 1);
+						$entry_without_first_dir = substr($entry, $pos_slash + 1);				
 						// If there is still a slash, we need to make sure the directories are created
 						if(strpos($entry_without_first_dir, '/') !== false) {
 							if(!is_dir($extraction_path.dirname($entry_without_first_dir))) {
@@ -419,11 +419,11 @@ function upload_stylesheet($values,$picture)
 			$zip->close();
 				
 		} else {
-			Display::display_error_message(get_lang('ErrorReadingZip'));
+			Display::display_error_message(get_lang('ErrorReadingZip').$info['extension'], false);
 		}
 	} else {
 		// Simply move the file
-		move_uploaded_file($picture['tmp_name'], api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'.$picture['name']);
+		move_uploaded_file($picture['tmp_name'], api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'.$picture['name']);	
 	}
 }
 

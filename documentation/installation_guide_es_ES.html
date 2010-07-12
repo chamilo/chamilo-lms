@@ -724,12 +724,12 @@ Linux usando el siguiente comando:</i>
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="8._ASCIIMathML_mathematical_formulas"></a>8. Fórmulas matemáticas con ASCIIMathML</h2>
 
-<p>Fórmulas matemáticas pueden ser renderizadas en páginas web usando el script ASCIIMathML.js (en su versión modificada para Chamilo). Para más información acerca de este script y acerca de la sintaxis de fórmulas de ASCIIMath, ver <a href="http://www1.chapman.edu/~jipsen/mathml/asciimath.html">http://www1.chapman.edu/~jipsen/mathml/asciimath.html</a> y <a href="http://dlippman.imathas.com/asciimathtex/AMT.html">http://dlippman.imathas.com/asciimathtex/AMT.html</a>.</p>
+<p>Las fórmulas matemáticas pueden ser renderizadas en páginas web usando el script ASCIIMathML.js (en su versión modificada para Chamilo). Para más información sobre este script y sobre la sintaxis de fórmulas de ASCIIMath, ver <a href="http://www1.chapman.edu/~jipsen/mathml/asciimath.html">http://www1.chapman.edu/~jipsen/mathml/asciimath.html</a> y <a href="http://dlippman.imathas.com/asciimathtex/AMT.html">http://dlippman.imathas.com/asciimathtex/AMT.html</a>.</p>
 
-<p>Para escribir fórmulas ASCIIMath en documentos, un plugin correspondiente para el editor en línea debe ser activado. Para hacerlo, ver la sección de administración de la plataforma, "Administración &gt; Parámetros de configuración  &gt; &gt; Editor WYSIWYG".
+<p>Para escribir fórmulas ASCIIMath en documentos, es necesario activar el plugin correspondiente del editor en línea. Para hacerlo, ver la sección de administración de la plataforma, "Administración &gt; Parámetros de configuración  &gt; &gt; Editor WYSIWYG".
 Activar el parámetro <strong>"Editor matemático ASCIIMathML"</strong>.</p>
 
-<p>Dentro de documentos, el script ASCIIMathML.js enseña fórmulas matemáticas en dos alternativas:</p>
+<p>El script ASCIIMathML.js puede mostrar fórmulas matemáticas en los documentos de dos formas:</p>
 <ul>
         <li>Traduciendo las fórmulas en notación ASCIIMath en código MathML. El estándar MathML está soportado actualmente sobre tres navegadores:
                 <ul>
@@ -737,8 +737,8 @@ Activar el parámetro <strong>"Editor matemático ASCIIMathML"</strong>.</p>
                         <li>Internet Explorer 6 o superior, con el add-on MathPlayer 2.0 o superior (<a href="http://www.dessci.com/en/products/mathplayer">http://www.dessci.com/en/products/mathplayer</a>)</li>
                         <li>Opera 9.5 o superior</li>
                 </ul>
-        </li>
-        <li>Para navegadores que no soportan MathML, por traducción de notación de fórmulas ASCIIMath en notación TeX y pasandolo a un servicio externo. El servicio externo produce y devuelve un imagen que contiene la fórmula. Esta técnica se llama "image-based fallback".
+      </li>
+        <li>Traduciendo la notación de fórmulas ASCIIMath en notación TeX y pasándolo a un servicio externo. Se debe usar en el caso de navegadores que no soporten MathML.  El servicio externo produce y devuelve un imagen que contiene la fórmula. Esta técnica se llama "image-based fallback".
         </li>
 </ul>
 <p>Para proveer <strong>image-based fallback</strong> en un sistema en producción, debería seleccionar e instalar en su servidor algun software de renderización TeX, como:

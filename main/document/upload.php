@@ -198,7 +198,7 @@ if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') { // If the group id is
 	} else {
 		api_not_allowed(true);
 	}
-} elseif ($is_allowed_to_edit || is_my_shared_folder($_user['user_id'], $path)) { // Admin for "regular" upload, no group documents. And check if is my shared folder
+} elseif ($is_allowed_to_edit || is_my_shared_folder($_user['user_id'], $path,api_get_session_id())) { // Admin for "regular" upload, no group documents. And check if is my shared folder
 	$to_group_id = 0;
 	$req_gid = '';
 } else { // No course admin and no group member...
@@ -488,7 +488,7 @@ if ($is_certificate_mode) {
 }
 
 // Link to create a folder
-if (!isset($_GET['createdir']) && !is_my_shared_folder($_user['user_id'], $path) && !$is_certificate_mode) {
+if (!isset($_GET['createdir']) && !is_my_shared_folder($_user['user_id'], $path, api_get_session_id()) && !$is_certificate_mode) {
 	echo '<a href="'.api_get_self().'?path='.$path.'&amp;createdir=1">'.Display::return_icon('folder_new.gif', get_lang('CreateDir')).get_lang('CreateDir').'</a>';
 }
 echo '</div>';

@@ -33,7 +33,14 @@ function GetFolders( $resourceType, $currentFolder )
 	$oCurrentFolder = @opendir( $sServerDir ) ;
 
 	$in_group = api_is_in_group();
-	$in_shared_folder = $currentFolder == '/shared_folder/';
+	if($currentFolder=='/shared_folder/' || $currentFolder =='/shared_folder_session_'.api_get_session_id().'/')
+	{
+		$in_shared_folder=true;
+	}
+	else
+	{
+		$in_shared_folder=false;
+	}	
 	$user_id = api_get_user_id();
 
 	if ($oCurrentFolder !== false)
@@ -79,7 +86,16 @@ function GetFoldersAndFiles( $resourceType, $currentFolder )
 	$oCurrentFolder = @opendir( $sServerDir ) ;
 
 	$in_group = api_is_in_group();
-	$in_shared_folder = $currentFolder == '/shared_folder/';
+	
+	if($currentFolder=='/shared_folder/' || $currentFolder =='/shared_folder_session_'.api_get_session_id().'/')
+	{
+		$in_shared_folder=true;
+	}
+	else
+	{
+		$in_shared_folder=false;
+	}	
+	
 	$user_id = api_get_user_id();
 
 	if ($oCurrentFolder !== false)

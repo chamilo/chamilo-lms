@@ -49,8 +49,16 @@ if (api_is_in_course()) {
 		if (api_is_allowed_to_edit()) {
 			$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
 		} else {
-			// 1.2. Student
-			$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+			// 1.2. Student	
+			$current_session_id = api_get_session_id();
+			if($current_session_id==0)
+			{
+				$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+			}
+			else
+			{
+				$Config['UserFilesPath'] = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';		
+			}
 		}
 	} else {
 		// 2. Inside a course and inside a group.

@@ -21,6 +21,14 @@ if (($path != '/') && (!DocumentManager::get_document_id($_course, $path))) {
 	$path = '/';
 }
 
+//a student should not be able to download a root shared directory
+if (($path == '/shared_folder' || $path=='/shared_folder_session_'.api_get_session_id()) && (!api_is_allowed_to_edit() || !api_is_platform_admin())){		
+	echo '<div align="center">';
+	Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', false);
+	echo '</div>';
+	exit;
+}
+
 //zip library for creation of the zipfile
 include api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 

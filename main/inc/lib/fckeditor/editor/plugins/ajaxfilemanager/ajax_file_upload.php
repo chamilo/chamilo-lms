@@ -85,7 +85,15 @@
 									{
 										if(!api_is_allowed_to_edit())
 										{
-											$dokeosFolder='/shared_folder/sf_user_'.api_get_user_id().$dokeosFolder;
+											$current_session_id = api_get_session_id();
+											if($current_session_id==0)
+											{											
+												$dokeosFolder='/shared_folder/sf_user_'.api_get_user_id().$dokeosFolder;
+											}
+											else
+											{
+												$dokeosFolder='/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().$dokeosFolder;
+											}
 										}
 									}
 

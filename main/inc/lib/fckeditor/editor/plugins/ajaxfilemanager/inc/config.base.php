@@ -101,7 +101,15 @@
 			}
 			else
 			{
-				$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+				$current_session_id = api_get_session_id();
+				if($current_session_id==0)
+				{
+					$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+				}
+				else
+				{
+					$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
+				}				
 			}
 		}
 	}

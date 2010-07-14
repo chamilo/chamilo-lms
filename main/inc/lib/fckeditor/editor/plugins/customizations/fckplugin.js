@@ -904,7 +904,7 @@ FCKFitWindow.prototype.Execute = function()
 var FCKImageCommand = function( name )
 {
 	this.Name = name ;
-	this.ImageProperties = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
+	this.ImageProperties = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 455 ) ;
 	this.ImageManager = null ;
 	if ( FCK.Plugins.IsLoaded( 'ImageManager' ) )
 	{
@@ -1403,7 +1403,7 @@ FCK.RegisterDoubleClickHandler(
 		{
 			if ( FCK.IsRealImage( tag ) )
 			{
-				var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
+				var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 455 ) ;
 				command.Execute() ;
 			}
 		}, 'IMG'

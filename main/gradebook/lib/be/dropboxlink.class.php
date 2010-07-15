@@ -70,4 +70,9 @@ class DropboxLink extends EvalLink
     	}
    		return $this->dropbox_table;
     }
+
+    public function get_icon_name() {
+		return 'dropbox';
+	}
+
 }

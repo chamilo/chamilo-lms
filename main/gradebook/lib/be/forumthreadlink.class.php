@@ -253,4 +253,8 @@ class ForumThreadLink extends AbstractLink
     	return $this->exercise_data;
     }
 
+    public function get_icon_name() {
+		return 'forum';
+	}
+
 }

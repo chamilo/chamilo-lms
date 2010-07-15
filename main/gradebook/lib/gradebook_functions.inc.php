@@ -34,7 +34,7 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
     define('LINK_WORK',6);
     */
     $category = 0;
-    require_once (api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php');
+    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
     $link= LinkFactory :: create($resource_type);
     $link->set_user_id(api_get_user_id());
     $link->set_course_code($course_code);
@@ -139,19 +139,46 @@ function build_type_icon_tag($kind) {
  * @param string $type value returned by a gradebookitem's get_icon_name()
  */
 function get_icon_file_name ($type) {
-	if ($type == 'cat') {
-		return api_get_path(WEB_CODE_PATH) . 'img/gradebook.gif';
-	} elseif ($type == 'evalempty') {
-		return api_get_path(WEB_CODE_PATH) . 'img/empty.gif';
-	} elseif ($type == 'evalnotempty') {
-		return api_get_path(WEB_CODE_PATH) . 'img/gradebook_eval_not_empty.gif';
-	} elseif ($type == 'link') {
-		return api_get_path(WEB_CODE_PATH) . 'img/link.gif';
-	} else {
-		return null;
+	switch ($type) {
+		case 'cat':
+			$icon = 'gradebook.gif';
+			break;
+		case 'evalempty':
+			$icon = 'empty.gif';
+			break;
+		case 'evalnotempty':
+			$icon = 'gradebook_eval_not_empty.gif';
+			break;
+		case 'exercise':
+			$icon = 'quiz.gif';
+			break;
+		case 'learnpath':
+			$icon = 'scorm.gif';
+			break;
+		case 'studentpublication':
+			$icon = 'works.gif';
+			break;
+		case 'link':
+			$icon = 'link.gif';
+			break;
+		case 'forum':
+			$icon = 'forum.gif';
+			break;
+		case 'attendance':
+			$icon = 'attendance.gif';
+			break;
+		case 'survey':
+			$icon = 'survey.gif';
+			break;
+		case 'dropbox':
+			$icon = 'dropbox.gif';
+			break;
+		default:
+			$icon = 'link.gif';
+			break;
 	}
+	return api_get_path(WEB_IMG_PATH).$icon;
 }
-
 
 
 /**
@@ -239,7 +266,7 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
     require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
     require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
 	require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
-	
+
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -305,7 +332,7 @@ function get_printable_data($users,$alleval, $alllinks) {
 	$count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : 10;
 	$header_names = $datagen->get_header_names($offset, $count, true);
 	$data_array = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true,true);
-	
+
 	$newarray = array();
 	foreach ($data_array as $data) {
 		$newarray[] = array_slice($data, 1);
@@ -317,7 +344,7 @@ function get_printable_data($users,$alleval, $alllinks) {
 /**
  * XML-parser: handle character data
  */
- 
+
 function character_data($parser, $data) {
 	global $current_value;
 	$current_value= $data;
@@ -326,7 +353,7 @@ function character_data($parser, $data) {
 /**
  * XML-parser: handle end of element
  */
- 
+
 function element_end($parser, $data) {
 	global $user;
 	global $users;
@@ -344,7 +371,7 @@ function element_end($parser, $data) {
 /**
  * XML-parser: handle start of element
  */
- 
+
 function element_start($parser, $data) {
 	global $user;
 	global $current_tag;
@@ -373,7 +400,7 @@ function overwritescore($resid, $importscore, $eval_max) {
  * @param string $file Path to the XML-file
  * @return array All userinformation read from the file
  */
- 
+
 function parse_xml_data($file) {
 	global $current_tag;
 	global $current_value;
@@ -393,44 +420,44 @@ function parse_xml_data($file) {
   * @param int The category id
   * @param int The user id
   * @param string the path name of the certificate
-  * @return void() 
+  * @return void()
   */
   function update_user_info_about_certificate ($cat_id,$user_id,$path_certificate) {
   	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
   	if (!UserManager::is_user_certified($cat_id,$user_id)) {
-  		$sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"  
+  		$sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"
 			 WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
 		$rs=Database::query($sql);
   	}
   }
-  
+
   /**
   * register user info about certificate
   * @param int The category id
   * @param int The user id
   * @param float The score obtained for certified
-  * @param Datetime The date when you obtained the certificate  
-  * @return void() 
+  * @param Datetime The date when you obtained the certificate
+  * @return void()
   */
   function register_user_info_about_certificate ($cat_id,$user_id,$score_certificate, $date_certificate) {
   	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-  	$sql_exist='SELECT COUNT(*) as count FROM '.$table_certificate.' gc 
+  	$sql_exist='SELECT COUNT(*) as count FROM '.$table_certificate.' gc
 				WHERE gc.cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
 	$rs_exist=Database::query($sql_exist);
 	$row=Database::fetch_array($rs_exist);
 	if ($row['count']==0) {
 		$sql='INSERT INTO '.$table_certificate.' (cat_id,user_id,score_certificate,created_at)
 			  VALUES("'.intval($cat_id).'","'.intval($user_id).'","'.Database::escape_string($score_certificate).'","'.Database::escape_string($date_certificate).'")';
-		$rs=Database::query($sql);  
+		$rs=Database::query($sql);
 	}
-	
+
   }
   /**
   * Get date of user certificate
   * @param int The category id
   * @param int The user id
-  * @return Datetime The date when you obtained the certificate   
-  */  
+  * @return Datetime The date when you obtained the certificate
+  */
   function get_certificate_date_by_user_id ($cat_id,$user_id) {
     	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
     	$sql_get_date='SELECT created_at FROM '.$table_certificate.' WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'"';
@@ -438,21 +465,21 @@ function parse_xml_data($file) {
     	$row_get_date=Database::fetch_array($rs_get_date,'ASSOC');
     	return $row_get_date['created_at'];
   }
-  
+
   /**
   * Get list of users certificates
   * @param int The category id
   * @return array
   */
   function get_list_users_certificates ($cat_id=null) {
-    $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE); 	
+    $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-  	$sql='SELECT DISTINCT u.user_id,u.lastname,u.firstname,u.username FROM '.$table_user.' u INNER JOIN '.$table_certificate.' gc 
+  	$sql='SELECT DISTINCT u.user_id,u.lastname,u.firstname,u.username FROM '.$table_user.' u INNER JOIN '.$table_certificate.' gc
 			ON u.user_id=gc.user_id ';
 	if (!is_null($cat_id) && $cat_id>0) {
   		$sql.=' WHERE cat_id='.Database::escape_string($cat_id);
   	}
-  	$sql.=' ORDER BY u.firstname';  	
+  	$sql.=' ORDER BY u.firstname';
 	$rs=Database::query($sql);
 	$list_users=array();
 	while ($row=Database::fetch_array($rs)) {
@@ -468,8 +495,8 @@ function parse_xml_data($file) {
   *@retun array
   */
   function get_list_gradebook_certificates_by_user_id ($user_id,$cat_id=null) {
-  	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE); 	
-  	$sql='SELECT gc.score_certificate,gc.created_at,gc.path_certificate,gc.cat_id,gc.user_id FROM  '.$table_certificate.' gc 
+  	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+  	$sql='SELECT gc.score_certificate,gc.created_at,gc.path_certificate,gc.cat_id,gc.user_id FROM  '.$table_certificate.' gc
 		  WHERE gc.user_id="'.Database::escape_string($user_id).'" ';
 	if (!is_null($cat_id) && $cat_id>0) {
   		$sql.=' AND cat_id='.Database::escape_string($cat_id);
@@ -489,8 +516,8 @@ function parse_xml_data($file) {
   * @return boolean
   */
   function delete_certificate ($cat_id,$user_id) {
-  	
-    $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE); 		
+
+    $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
   	$sql_verified='SELECT count(*) AS count,path_certificate as path,user_id FROM '.$table_certificate.' gc WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" GROUP BY user_id,cat_id';
   	$rs_verified=Database::query($sql_verified);
   	$path=Database::result($rs_verified,0,'path');

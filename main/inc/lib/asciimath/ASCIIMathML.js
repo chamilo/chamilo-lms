@@ -82,6 +82,9 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 //var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chl=";
 //var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
 //
+//var AMTcgiloc = "http://codecogs.izyba.com/gif.latex";
+//var AMTcgiloc = "http://codecogs.izyba.com/png.latex";
+//
 var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
 //
 
@@ -1504,6 +1507,8 @@ function AMTparseMath(str,istex) {
       texstring = "\\gammacorrection{1.4}\\usepackage{color}\\color\{" + mathcolor + "\}" + texstring;
     } else if (AMTcgiloc.match(/mimetex/)) {
       texstring = "\\" + mathcolor + texstring;
+    } else if (AMTcgiloc.match(/.latex/)) {
+      texstring = texstring = "\\color\{" + mathcolor + "\}" + texstring;
     }
   }
   if (displaystyle) {
@@ -1944,7 +1949,7 @@ function AMautomathrec(str) {
 function processNodeR(n, linebreaks,latex) {
   var mtch, str, arr, frg, i;
   if (n.childNodes.length == 0) {
-   if ((n.nodeType!=8 || linebreaks) &&
+   if ((n.nodeType!=8 || linebreaks) && n.parentNode &&
     n.parentNode.nodeName!="form" && n.parentNode.nodeName!="FORM" &&
     n.parentNode.nodeName!="textarea" && n.parentNode.nodeName!="TEXTAREA" /*&&
     n.parentNode.nodeName!="pre" && n.parentNode.nodeName!="PRE"*/) {
@@ -3416,11 +3421,8 @@ General Public License (at http://www.gnu.org/license/lgpl.html)
 for more details.*/
 
 // you can change these
+var checkIfSVGavailable = true;
 // Modified by Ivan Tcholakov, 01-JUL-2010.
-//var checkIfSVGavailable = true;
-var checkIfSVGavailable = false;
-//
-//Modified by Ivan Tcholakov, 01-JUL-2010.
 //var notifyIfNoSVG = true;
 var notifyIfNoSVG = false;
 //
@@ -4701,7 +4703,7 @@ function ASpreprocess() {
 	 for (var i=len-1; i>=0; i--) {
 		picture = pictures[i];
 		var sscr = picture.getAttribute("sscr");
-		if (sscr!='')  {
+		if (sscr && sscr!='')  {
 			if (noSVG) {
 				n = document.createElement('img');
 				n.setAttribute("style",picture.getAttribute("style"));
@@ -4711,8 +4713,11 @@ function ASpreprocess() {
 			} else {
 				com = parseShortScript(sscr);
 				picture.setAttribute("script",com);
-				picture.className = "ASCIIsvg";
+				//picture.className = "ASCIIsvg";
 			}
+		}
+		if (!noSVG) {
+			picture.className = "ASCIIsvg";
 		}
 	 }
 }

@@ -99,44 +99,40 @@ if (api_is_platform_admin()) {
 <?php
 }
 
+//Advance search link moved
+/* <li><a href="course_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li> */
 
 if(api_is_platform_admin()) {
 ?>
 	<div class="admin_section">
-<h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo api_ucfirst(get_lang('Courses')); ?></h4>
-		<div style="list-style-type:none"><form method="get" action="course_list.php">
-		<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
-		<button class="search" type="submit"> <?php echo get_lang('Search');?>
-			</button>
-		</form></div>
-
-
-		<ul>
-		<li>
-		<!-- <a href="course_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a> -->
-
-	</li>
-	<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
-	<li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
-	<li><a href="course_export.php"><?php echo get_lang('ExportCourses'); ?></a></li>
-	<li><a href="course_import.php"><?php echo get_lang('ImportCourses'); ?></a></li>
-	<!--<li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses') ?></a></li>-->
-	<li><a href="course_category.php"><?php echo get_lang('AdminCategories'); ?></a></li>
-	<li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
-	<li><a href="course_user_import.php"><?php echo get_lang('ImportUsersToACourse'); ?></a></li>
-	<?php if (api_get_setting('search_enabled')=='true') { ?>
-	  <li><a href="specific_fields.php"><?php echo get_lang('SpecificSearchFields'); ?></a></li>
-	<?php } ?>
-	<?php
-		if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
-		?>
-		<!-- dynamic ldap code -->
-		<li><a href="ldap_import_students.php"><?php echo get_lang('ImportLDAPUsersIntoCourse');?></a></li>
-		<!-- dynamic ldap code -->
+		<h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo api_ucfirst(get_lang('Courses')); ?></h4>
+		<div style="list-style-type:none">
+			<form method="get" action="course_list.php">
+				<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
+				<button class="search" type="submit"> <?php echo get_lang('Search');?></button>
+			</form>
+		</div>
+	<ul>		
+		<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
+		<li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
+		<li><a href="course_export.php"><?php echo get_lang('ExportCourses'); ?></a></li>
+		<li><a href="course_import.php"><?php echo get_lang('ImportCourses'); ?></a></li>
+		<!-- <li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses') ?></a></li> -->
+		<li><a href="course_category.php"><?php echo get_lang('AdminCategories'); ?></a></li>
+		<li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
+		<li><a href="course_user_import.php"><?php echo get_lang('ImportUsersToACourse'); ?></a></li>
+		<?php if (api_get_setting('search_enabled')=='true') { ?>
+		  <li><a href="specific_fields.php"><?php echo get_lang('SpecificSearchFields'); ?></a></li>
+		<?php } ?>
 		<?php
-		}
-	?>
-
+			if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
+			?>
+			<!-- dynamic ldap code -->
+			<li><a href="ldap_import_students.php"><?php echo get_lang('ImportLDAPUsersIntoCourse');?></a></li>
+			<!-- dynamic ldap code -->
+			<?php
+			}
+		?>
 	</ul>
 	</div>
 

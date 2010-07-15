@@ -269,4 +269,9 @@ class StudentPublicationLink extends AbstractLink
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
     }
+
+    public function get_icon_name() {
+		return 'studentpublication';
+	}
+
 }

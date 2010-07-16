@@ -16,7 +16,7 @@ define('SCORE_ONLY_CUSTOM',3);
 /**
  * Class to display scores according to the settings made by the platform admin.
  * This class works as a singleton: call instance() to retrieve an object.
- * @author Bert Stepp�
+ * @author Bert Steppé
  * @package dokeos.gradebook
  */
 class ScoreDisplay
@@ -66,7 +66,7 @@ class ScoreDisplay
 	private $custom_enabled;
 	private $upperlimit_included;
 	private $custom_display;
-	private $custom_display_conv;        
+	private $custom_display_conv;
 
 	/**
 	 * Protected constructor - call instance() to instantiate
@@ -238,13 +238,13 @@ class ScoreDisplay
 	 * (only taken into account if custom score display is enabled and for course/platform admin)
 	 */
 	public function display_score($score,$type, $what = SCORE_BOTH) {
-		
-		$type2 = $type & 7;	// removes the 'SCORE_IGNORE_SPLIT' bit		
+
+		$type2 = $type & 7;	// removes the 'SCORE_IGNORE_SPLIT' bit
 		$split_enabled = ($type2 == $type);
-		
+
 		$my_score=($score==0) ? 1 : $score;
-		
-		if ($this->custom_enabled && isset($this->custom_display_conv)) {			
+
+		if ($this->custom_enabled && isset($this->custom_display_conv)) {
 				// students only see the custom display
 				if (!api_is_allowed_to_create_course()) {
 					$display = $this->display_custom($my_score);
@@ -261,8 +261,8 @@ class ScoreDisplay
 						$display.= ' ('.$this->display_custom ($my_score).')';
 			}
 
-		} else {			
-			// if no custom display set, use default display			
+		} else {
+			// if no custom display set, use default display
 			$display = $this->display_default ($my_score, $type2);
 		}
 		return (($split_enabled ? $this->get_color_display_start_tag($my_score) : '')
@@ -285,13 +285,13 @@ class ScoreDisplay
 
 			case SCORE_AVERAGE :		// XX %
 				return $this->display_as_percent($score);
-			
-			case SCORE_DECIMAL :       // 0.50  (X/Y) 	
+
+			case SCORE_DECIMAL :       // 0.50  (X/Y)
 				return $this->display_as_decimal($score);
-			
+
 		}
 	}
-	
+
 	private function display_as_decimal($score) {
 		$score_denom=($score[1]==0) ? 1 : $score[1];
 		return round(($score[0]/ $score_denom),2);

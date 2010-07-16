@@ -7,7 +7,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.ph
 /**
  * Form for the score display dialog
  * @author Stijn Konings
- * @author Bert Stepp�
+ * @author Bert Steppé
  * @package dokeos.gradebook
  */
 class ScoreDisplayForm extends FormValidator

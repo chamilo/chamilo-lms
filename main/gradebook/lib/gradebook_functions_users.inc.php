@@ -92,7 +92,7 @@ function get_all_users ($evals = array(), $links = array()) {
 
 /**
  * Search students matching a given last name and/or first name
- * @author Bert Stepp�
+ * @author Bert Steppé
  */
 function find_students($mask= '') {
 	// students shouldn't be here // don't search if mask empty
@@ -100,7 +100,7 @@ function find_students($mask= '') {
 		return null;
 	}
 	$mask = Database::escape_string($mask);
-	 
+
 	$tbl_user= Database :: get_main_table(TABLE_MAIN_USER);
 	$tbl_cru= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql= 'SELECT DISTINCT user.user_id, user.lastname, user.firstname, user.email' . ' FROM ' . $tbl_user . ' user';

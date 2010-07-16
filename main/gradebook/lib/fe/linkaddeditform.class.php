@@ -9,7 +9,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.ph
 /**
  * Form used to add or edit links
  * @author Stijn Konings
- * @author Bert Stepp�
+ * @author Bert Steppé
  */
 class LinkAddEditForm extends FormValidator
 {

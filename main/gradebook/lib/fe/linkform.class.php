@@ -9,7 +9,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.ph
 /**
  * Forms related to links
  * @author Stijn Konings
- * @author Bert Stepp� (made more generic)
+ * @author Bert Steppé (made more generic)
  * @package dokeos.gradebook
  */
 class LinkForm extends FormValidator

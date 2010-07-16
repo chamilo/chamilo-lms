@@ -736,9 +736,9 @@ if (($is_allowedToEdit) and ($origin != 'learnpath')) {
 	if ($_GET['show'] != 'result') {
 		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_test.gif', get_lang('NewEx')) . get_lang('NewEx') . '</a>';
 		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('question_add.gif', get_lang('AddQuestionToExercise')) . get_lang('AddQuestionToExercise') . '</a>';
-		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('jqz.gif', get_lang('ImportHotPotatoesQuiz')) . get_lang('ImportHotPotatoesQuiz') . '</a>';
+		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_db.png', get_lang('ImportHotPotatoesQuiz')) . get_lang('ImportHotPotatoesQuiz') . '</a>';
 		// link to import qti2 ... 
-		echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('jqz.gif', get_lang('ImportQtiQuiz')) . get_lang('ImportQtiQuiz') . '</a>';
+		echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_db.png', get_lang('ImportQtiQuiz')) . get_lang('ImportQtiQuiz') . '</a>';
 		echo '<a href="exercice.php?' . api_get_cidreq() . '&show=result">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
 	}
 
@@ -994,7 +994,7 @@ if ($show == 'test') {
 				}				
 				
 				// Export qti ...
-				echo '<a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a>';
+				echo '<a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export_db.png" border="0" title="IMS/QTI" /></a>';
 				
 				echo "</td>";
 				echo "</tr>";
@@ -1109,7 +1109,7 @@ if ($show == 'test') {
 ?>
 
     <tr>
-      <td><img src="../img/jqz.gif" alt="HotPotatoes" /></td>
+      <td><img src="../img/import_db.png" alt="HotPotatoes" /></td>
 	   <td><?php echo ($ind+($page*$limitExPage)).'.'; ?></td>
        <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>
   <td></td>

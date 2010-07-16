@@ -1076,7 +1076,7 @@ if (isset($exerciseId) && !empty($exerciseId)) {
 // I'm in a preview mode
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';    
-    echo '<a href="exercice.php?show=test">' . Display :: return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
+    echo '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
     if ($show_quiz_edition) {
     	echo Display :: return_icon('edit.gif', get_lang('ModifyExercise')) . '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">' . get_lang('ModifyExercise') . '</a>';
     } else {

@@ -254,6 +254,36 @@ class Tracking {
 		return false;
 	}
 
+        /**
+	 * Get count connections on the course
+         * @param   string  Course code
+         * @param   int     Session id (optional)
+	 * @param   int     number of month (optional)
+	 * @return  int     count connections
+	 */
+	public static function get_count_connections_on_the_course($course_code, $session_id = 0, $month = null) {
+
+		// protect data
+                $month_filter = '';
+                if (isset($month)) {
+                    $month = intval($month);
+                    $month_filter = " AND MONTH(login_course_date)= $month ";
+                }
+
+		$course_code = Database::escape_string($course_code);
+		$session_id  = intval($session_id);
+                $count = 0;
+
+		$tbl_track_e_course_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+		$sql = "SELECT count(*) as count_connections FROM $tbl_track_e_course_access WHERE course_code = '$course_code' AND session_id = $session_id $month_filter";
+		$rs = Database::query($sql);
+		if (Database::num_rows($rs)>0) {
+                    $row = Database::fetch_object($rs);
+                    $count = $row->count_connections;
+		}
+		return $count;
+	}
+
 	/**
 	 * Get count courses per student
 	 * @param 	int		Student id
@@ -1847,7 +1877,7 @@ class TrackingCourseLog {
 			$sql .= " AND (user.username LIKE '%".$keyword."%' OR lastedit_type LIKE '%".$keyword."%' OR tool LIKE '%".$keyword."%')";
 		}
 
-		$sql .= " AND tool IN ('document', 'learnpath', 'quiz', 'glossary', 'link', 'course_description')";
+		$sql .= " AND tool IN ('document', 'learnpath', 'quiz', 'glossary', 'link', 'course_description', 'announcement', 'thematic', 'thematic_advance', 'thematic_plan')";
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
@@ -1875,7 +1905,7 @@ class TrackingCourseLog {
 			$sql .= " AND (user.username LIKE '%".$keyword."%' OR lastedit_type LIKE '%".$keyword."%' OR tool LIKE '%".$keyword."%') ";
 		}
 
-		$sql .= " AND tool IN ('document', 'learnpath', 'quiz', 'glossary', 'link', 'course_description', 'announcement')";
+		$sql .= " AND tool IN ('document', 'learnpath', 'quiz', 'glossary', 'link', 'course_description', 'announcement', 'thematic', 'thematic_advance', 'thematic_plan')";
 
 		if ($column == 0) { $column = '0'; }
 		if ($column != '' && $direction != '') {
@@ -1887,19 +1917,31 @@ class TrackingCourseLog {
 		}
 
 		$sql .=	" LIMIT $from, $number_of_items ";
-		//echo $sql;
+
 		$res = Database::query($sql);
 		$resources = array ();
-
+                $thematic_tools = array('thematic', 'thematic_advance', 'thematic_plan');
 		while ($row = Database::fetch_array($res)) {
 			$ref = $row['ref'];
 			$table_name = TrackingCourseLog::get_tool_name_table($row['col0']);
 			$table_tool = Database :: get_course_table($table_name['table_name']);
-			//var_dump($table_name);var_dump($table_tool);
+
 			$id = $table_name['id_tool'];
-			$query = "SELECT session.id, session.name, user.username FROM $table_tool tool, $table_session session, $table_user user" .
+                        if ($row['col0'] == 'thematic_plan' || $row['col0'] == 'thematic_advance') {
+                            $tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
+                            $rs_thematic = Database::query("SELECT thematic_id FROM $table_tool WHERE id=$ref");
+                            $row_thematic = Database::fetch_array($rs_thematic);
+                            $thematic_id = $row_thematic['thematic_id'];
+
+                            $query = "SELECT session.id, session.name, user.username FROM $tbl_thematic t, $table_session session, $table_user user" .
+						" WHERE t.session_id = session.id AND session.id_coach = user.user_id AND t.id = $thematic_id";
+
+                        } else {
+                            $query = "SELECT session.id, session.name, user.username FROM $table_tool tool, $table_session session, $table_user user" .
 						" WHERE tool.session_id = session.id AND session.id_coach = user.user_id AND tool.$id = $ref";
-			//echo $query.'<br /><br />';
+                        }
+
+			
 			$recorset = Database::query($query);
 
 			if (!empty($recorset)) {
@@ -1913,10 +1955,24 @@ class TrackingCourseLog {
 				}
 
 				$url_tool = api_get_path(WEB_CODE_PATH).$table_name['link_tool'];
-
 				$row[0] = '';
-				if ($row['col6'] != 2) {
-					$row[0] = '<a href="'.$url_tool.'?'.api_get_cidreq().'&'.$obj->id.'">'.get_lang('Tool'.api_ucfirst($row['col0'])).'</a>';
+				if ($row['col6'] != 2) {                                        
+                                        if (in_array($row['col0'], $thematic_tools)) {
+
+                                            $exp_thematic_tool = explode('_', $row['col0']);
+                                            $thematic_tool_title = '';
+                                            if (is_array($exp_thematic_tool)) {
+                                                foreach ($exp_thematic_tool as $exp) {
+                                                    $thematic_tool_title .= api_ucfirst($exp);
+                                                }
+                                            } else {
+                                                $thematic_tool_title = api_ucfirst($row['col0']);
+                                            }
+
+                                            $row[0] = '<a href="'.$url_tool.'?'.api_get_cidreq().'&action=thematic_details">'.get_lang($thematic_tool_title).'</a>';
+                                        } else {
+                                            $row[0] = '<a href="'.$url_tool.'?'.api_get_cidreq().'&'.$obj->id.'">'.get_lang('Tool'.api_ucfirst($row['col0'])).'</a>';
+                                        }
 				} else {
 					$row[0] = api_ucfirst($row['col0']);
 				}
@@ -1924,7 +1980,6 @@ class TrackingCourseLog {
 				$row[5] = api_convert_and_format_date($row['col5'], null, date_default_timezone_get());
 
 				$row[4] = '';
-				//var_dump($table_name['table_name']);
 				switch ($table_name['table_name']) {
 					case 'document' :
 						$query_document = "SELECT tool.title as title FROM $table_tool tool" .
@@ -1968,7 +2023,30 @@ class TrackingCourseLog {
 						$rs_document = Database::query($query_document);
 						$obj_document = Database::fetch_object($rs_document);
 						$row[4] = $obj_document->title;
-					break;					
+					break;
+
+                                        case 'thematic':
+                                                $rs = Database::query("SELECT title FROM $table_tool WHERE id = $ref");
+                                                if (Database::num_rows($rs) > 0) {
+                                                    $obj = Database::fetch_object($rs);
+                                                    $row[4] = $obj->title;
+                                                }
+                                                break;
+                                        case 'thematic_advance':
+                                                $rs = Database::query("SELECT content FROM $table_tool WHERE id = $ref");
+                                                if (Database::num_rows($rs) > 0) {
+                                                    $obj = Database::fetch_object($rs);
+                                                    $row[4] = $obj->content;
+                                                }
+                                                break;
+                                        case 'thematic_plan':
+                                                $rs = Database::query("SELECT title FROM $table_tool WHERE id = $ref");
+                                                if (Database::num_rows($rs) > 0) {
+                                                    $obj = Database::fetch_object($rs);
+                                                    $row[4] = $obj->title;
+                                                }
+                                                break;
+
 					default:
 					break;
 				}
@@ -1981,7 +2059,6 @@ class TrackingCourseLog {
 
 				$resources[] = $row;
 			}
-
 		}
 
 		return $resources;
@@ -2023,13 +2100,29 @@ class TrackingCourseLog {
 				$table_name = TABLE_ANNOUNCEMENT;
 				$link_tool = 'announcements/announcements.php';
 				$id_tool = 'id';
-				break;				
+				break;
+                        case 'thematic':
+				$table_name = TABLE_THEMATIC;
+				$link_tool = 'course_progress/index.php';
+				$id_tool = 'id';
+				break;
+                        case 'thematic_advance':
+				$table_name = TABLE_THEMATIC_ADVANCE;
+				$link_tool = 'course_progress/index.php';
+				$id_tool = 'id';
+				break;
+                        case 'thematic_plan':
+				$table_name = TABLE_THEMATIC_PLAN;
+				$link_tool = 'course_progress/index.php';
+				$id_tool = 'id';
+				break;
 			default:
 				$table_name = $tool;
 				break;
 		}
 		return array('table_name' => $table_name,'link_tool' => $link_tool,'id_tool' => $id_tool);
 	}
+
 	function display_additional_profile_fields() {
 		// getting all the extra profile fields that are defined by the platform administrator
 		$extra_fields = UserManager :: get_extra_fields(0,50,5,'ASC');

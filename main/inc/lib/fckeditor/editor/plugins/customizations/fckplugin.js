@@ -309,8 +309,11 @@ var FCKDialog = ( function()
 				TopWindow : topWindow
 			} ;
 
+			// Disabled by Ivan Tcholakov, 09-JUL-2010.
+			// Makes a problem on IE (see task #541).
 			//FCK.ToolbarSet.CurrentInstance.Selection.Save();
-			FCK.ToolbarSet.CurrentInstance.Selection.Save( true ) ;
+			//FCK.ToolbarSet.CurrentInstance.Selection.Save( true ) ;
+			//
 
 			var viewSize = FCKTools.GetViewPaneSize( topWindow ) ;
 			var scrollPosition = { 'X': 0, 'Y': 0 } ;
@@ -901,7 +904,7 @@ FCKFitWindow.prototype.Execute = function()
 var FCKImageCommand = function( name )
 {
 	this.Name = name ;
-	this.ImageProperties = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
+	this.ImageProperties = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 455 ) ;
 	this.ImageManager = null ;
 	if ( FCK.Plugins.IsLoaded( 'ImageManager' ) )
 	{
@@ -1400,7 +1403,7 @@ FCK.RegisterDoubleClickHandler(
 		{
 			if ( FCK.IsRealImage( tag ) )
 			{
-				var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
+				var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 455 ) ;
 				command.Execute() ;
 			}
 		}, 'IMG'
@@ -1481,21 +1484,39 @@ FCK.IsRealImage = function ( tag )
 		return false ;
 	}
 
-	return ( tag.nodeName.IEquals( 'img' )
-		&& !tag.getAttribute( '_fckfakelement' )
-		&& !tag.getAttribute( '_fckflash' )
-		&& !tag.getAttribute( '_fckmp3' )
-		&& !tag.getAttribute( '_fckvideo' )
-		&& !tag.getAttribute( 'MapNumber' )
-		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mimetex?' ) >= 0 )
-		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mimetex.cgi?' ) >= 0 )
-		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mimetex.exe?' ) >= 0 )
-		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mathtex?' ) >= 0 )
-		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mathtex.cgi?' ) >= 0 )
-		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mathtex.exe?' ) >= 0 )
-		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'mathtran?' ) >= 0 )
-		&& !( tag.getAttribute( 'src' ) && tag.getAttribute( 'src' ).toString().indexOf( 'google.com/chart?' ) >= 0 )
-		) ? true : false ;
+	if ( tag.nodeName.IEquals( 'img' ) )
+	{
+		if ( tag.getAttribute( '_fckfakelement' )
+			|| tag.getAttribute( '_fckflash' )
+			|| tag.getAttribute( '_fckmp3' )
+			|| tag.getAttribute( '_fckvideo' )
+			|| tag.getAttribute( 'MapNumber' )
+			)
+		{
+			return false ;
+		}
+
+		if ( tag.getAttribute( 'src' ) )
+		{
+			var src = tag.getAttribute( 'src' ).toString() ;
+			return ( src.indexOf( 'mimetex?' ) == -1
+					&& src.indexOf( 'mimetex.cgi?' ) == -1
+					&& src.indexOf( 'mimetex.exe?' ) == -1
+					&& src.indexOf( 'mathtex?' ) == -1
+					&& src.indexOf( 'mathtex.cgi?' ) == -1
+					&& src.indexOf( 'mathtex.exe?' ) == -1
+					&& src.indexOf( 'mathtran?' ) == -1
+					&& src.indexOf( 'google.com/chart?' ) == -1
+					&& src.indexOf( 'latex?' ) == -1
+				) ? true : false ;
+		}
+		else
+		{
+			return true ;
+		}
+	}
+
+	return false ;
 } ;
 
 // Checking for audio file reference which is to be used by a flash player.

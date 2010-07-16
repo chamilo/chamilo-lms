@@ -5,7 +5,7 @@
 *
 * @author Julio Montoya <gugli100@gmail.com>
 * @author Guillaume Viguier <guillaume@viguierjust.com>
-* 
+*
 * @since Chamilo 1.8.7
 * @package chamilo.admin
 */
@@ -282,10 +282,10 @@ function handle_stylesheets()
 <?php
 	echo '<form name="stylesheets" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
 	echo '<br /><select name="style" onChange="load_preview(this)" >';
-	
+
 	$list_of_styles = array();
 	$list_of_names  = array();
-	
+
 	if ($handle = @opendir(api_get_path(SYS_PATH).'main/css/')) {
 		$counter=1;
 		while (false !== ($style_dir = readdir($handle))) {
@@ -304,7 +304,7 @@ function handle_stylesheets()
 
 					if ($is_style_changeable) {
 						$list_of_styles[$style_dir] = "<option  value=\"".$style_dir."\" ".$selected." /> $show_name </option>";
-						$list_of_names[$style_dir]  = $show_name;						
+						$list_of_names[$style_dir]  = $show_name;
 						//echo "<input type=\"radio\" name=\"style\" value=\"".$style_dir."\" ".$selected." onClick=\"parent.preview.location='style_preview.php?style=".$style_dir."';\"/>";
 						//echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
 					} else {
@@ -318,12 +318,13 @@ function handle_stylesheets()
 		@closedir($handle);
 	}
 	//Sort styles in alphabetical order
-	asort($list_of_names);	
+	asort($list_of_names);
 	foreach($list_of_names as $style_dir=>$item) {
 		echo $list_of_styles[$style_dir];
 	}
-	
-	echo '</select><br />';
+
+	//echo '</select><br />';
+	echo '</select>&nbsp;&nbsp;';
 	//var_dump($list_of_names);
 	if ($is_style_changeable){
 		echo '<button class="save" type="submit" name="submit_stylesheets"> '.get_lang('SaveSettings').' </button></form>';
@@ -350,7 +351,7 @@ function upload_stylesheet($values,$picture)
 	{
 		mkdir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/', api_get_permissions_for_new_directories());
 	}
-	
+
 	$info = pathinfo($picture['name']);
 	if($info['extension'] == 'zip') {
 		// Try to open the file and extract it in the theme
@@ -361,7 +362,7 @@ function upload_stylesheet($values,$picture)
 			$valid = true;
 			$single_directory = true;
 			$invalid_files = array();
-			
+
 			for($i =0; $i < $numFiles; $i++) {
 				$file = $zip->statIndex($i);
 				if(substr($file['name'], -1) != "/") {
@@ -371,7 +372,7 @@ function upload_stylesheet($values,$picture)
 						$invalid_files[] = $file['name'];
 					}
 				}
-				
+
 				if(strpos($file['name'], "/") === false) {
 					$single_directory = false;
 				}
@@ -393,7 +394,7 @@ function upload_stylesheet($values,$picture)
 					for($i = 0; $i < $numFiles; $i++) {
 						$entry = $zip->getNameIndex($i);
 						if ( substr($entry, -1) == '/') continue;
-						
+
 						$pos_slash = strpos($entry, '/');
 						$entry_without_first_dir = substr($entry, $pos_slash + 1);				
 						// If there is still a slash, we need to make sure the directories are created
@@ -403,21 +404,21 @@ function upload_stylesheet($values,$picture)
 								@mkdir($extraction_path.dirname($entry_without_first_dir), $mode = 0777, true);
 							}
 						}
-						
+
 						$fp = $zip->getStream($entry);
 						$ofp = fopen( $extraction_path. dirname($entry_without_first_dir).'/'.basename($entry), 'w');
-						
+
 						while ( ! feof($fp)) {
 							fwrite($ofp, fread($fp, 8192));
 						}
-						
+
 						fclose($fp);
 						fclose($ofp);
 					}
 				}
 			}
 			$zip->close();
-				
+
 		} else {
 			Display::display_error_message(get_lang('ErrorReadingZip').$info['extension'], false);
 		}
@@ -949,9 +950,9 @@ function select_timezone_value() {
 
 /**
  * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
- * 
+ *
  * @return array List of gradebook_number_decimals options
- * 
+ *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function select_gradebook_number_decimals() {
@@ -961,9 +962,9 @@ function select_gradebook_number_decimals() {
 /**
  * Updates the gradebook score custom values using the scoredisplay class of the
  * gradebook module
- * 
+ *
  * @param array List of gradebook score custom values
- * 
+ *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function update_gradebook_score_display_custom_values($values) {

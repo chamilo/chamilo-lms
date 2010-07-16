@@ -5,12 +5,12 @@
  * This file contains class used like library, provides functions for thematic option inside attendance tool. It's also used like model to thematic_controller (MVC pattern)
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya 	<gugli100@gmail.com> SQL fixes + improvements
- * @package chamilo.attendance
+ * @package chamilo.course_progress
  */
 
 /**
  * Thematic class can be used to instanciate objects or as a library for thematic control
- * @package chamilo.attendance
+ * @package chamilo.course_progress
  */
 class Thematic
 {	
@@ -254,7 +254,7 @@ class Thematic
 			if (Database::affected_rows()) {
 				// save inside item property table
 				$last_id = Database::insert_id();
-				api_item_property_update($_course, TOOL_COURSE_PROGRESS, $last_id,"CourseProgressAdded", $user_id);
+				api_item_property_update($_course, 'thematic', $last_id,"ThematicAdded", $user_id);
 			}			
 		} else {
 			// update
@@ -263,8 +263,7 @@ class Thematic
 			$last_id = $id;
 			if (Database::affected_rows()) {
 				// save inside item property table
-				$last_id = Database::insert_id();
-				api_item_property_update($_course, TOOL_COURSE_PROGRESS, $last_id,"CourseProgressUpdated", $user_id);
+				api_item_property_update($_course, 'thematic', $last_id,"ThematicUpdated", $user_id);
 			}
 		}		
 		return $last_id;			
@@ -288,7 +287,8 @@ class Thematic
 				$affected_rows += Database::affected_rows();
 				if (!empty($affected_rows)) {
 					// update row item property table
-					api_item_property_update($_course, TOOL_COURSE_PROGRESS, $id,"delete", $user_id);
+                                        api_item_property_update($_course, 'thematic', $id,"ThematicDeleted", $user_id);
+					//api_item_property_update($_course, TOOL_COURSE_PROGRESS, $id,"delete", $user_id);
 				}
 			}
 		} else  {
@@ -298,7 +298,8 @@ class Thematic
 			$affected_rows = Database::affected_rows();
 			if (!empty($affected_rows)) {
 				// update row item property table
-				api_item_property_update($_course, TOOL_COURSE_PROGRESS, $thematic_id,"delete", $user_id);
+				//api_item_property_update($_course, TOOL_COURSE_PROGRESS, $thematic_id,"delete", $user_id);
+                                api_item_property_update($_course, 'thematic', $thematic_id,"ThematicDeleted", $user_id);
 			}
 		}
 		return $affected_rows;				
@@ -438,7 +439,9 @@ class Thematic
 	 * @return int last thematic advance id
 	 */
 	public function thematic_advance_save() {
-		
+
+                global $_course;
+
 		// definition database table		
 		$tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
 		
@@ -449,17 +452,25 @@ class Thematic
 		$content = Database::escape_string($this->thematic_advance_content);
 		$start_date = Database::escape_string($this->start_date);
 		$duration	= intval($this->duration);
+                $user_id = api_get_user_id();
 
 		if (empty($id)) {			
 			// insert
 			$sql = "INSERT INTO $tbl_thematic_advance (thematic_id, attendance_id, content, start_date, duration) VALUES ($tematic_id, $attendance_id, '$content', '".api_get_utc_datetime($start_date)."', $duration) ";
 			Database::query($sql);
 			$last_id = Database::insert_id();
+                        if (Database::affected_rows()) {
+                            api_item_property_update($_course, 'thematic_advance', $last_id,"ThematicAdvanceAdded", $user_id);
+                        }
+
 		} else {
 			// update
 			$sql = "UPDATE $tbl_thematic_advance SET thematic_id = $tematic_id, attendance_id = $attendance_id, content = '$content', start_date = '".api_get_utc_datetime($start_date)."', duration = $duration WHERE id = $id ";
 			Database::query($sql);
 			$last_id = $id;
+                        if (Database::affected_rows()) {
+                            api_item_property_update($_course, 'thematic_advance', $last_id,"ThematicAdvanceUpdated", $user_id);
+                        }
 		}
 		
 		return $last_id;
@@ -472,14 +483,21 @@ class Thematic
 	 * @return	int		Affected rows
 	 */
 	public function thematic_advance_destroy($thematic_advance_id) {
-		
+		global $_course;
+
 		// definition database table		
-		$tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);		
+		$tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
+
 		// protect data
-		$thematic_advance_id = intval($thematic_advance_id);				
+		$thematic_advance_id = intval($thematic_advance_id);
+                $user_id = api_get_user_id();
+
 		$sql = "DELETE FROM $tbl_thematic_advance WHERE id = $thematic_advance_id ";
 		Database::query($sql);
 		$affected_rows = Database::affected_rows();
+                if ($affected_rows) {
+                    api_item_property_update($_course, 'thematic_advance', $thematic_advance_id,"ThematicAdvanceDeleted", $user_id);
+                }
 		
 		return $affected_rows;
 	}
@@ -531,7 +549,9 @@ class Thematic
 	 * @return int affected rows
 	 */
 	public function thematic_plan_save() {
-		
+                
+                global $_course;
+
 		// definition database table		
 		$tbl_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
 		
@@ -539,7 +559,8 @@ class Thematic
 		$thematic_id = intval($this->thematic_id);
 		$title 		 = Database::escape_string($this->thematic_plan_title);
 		$description = Database::escape_string($this->thematic_plan_description);
-		$description_type = intval($this->thematic_plan_description_type);		
+		$description_type = intval($this->thematic_plan_description_type);
+                $user_id = api_get_user_id();
 		
 		// check thematic plan type already exists
 		$sql = "SELECT id FROM $tbl_thematic_plan WHERE thematic_id = $thematic_id AND description_type = $description_type ";
@@ -547,15 +568,24 @@ class Thematic
 		
 		$affected_rows = 0;
 		if (Database::num_rows($rs) > 0) {
+                        $row_thematic_plan = Database::fetch_array($rs);
+                        $thematic_plan_id = $row_thematic_plan['id'];
 			// update
 			$upd = "UPDATE $tbl_thematic_plan SET title = '$title', description = '$description' WHERE thematic_id = $thematic_id AND description_type = $description_type ";
 			Database::query($upd);
 			$affected_rows = Database::affected_rows();
+                        if ($affected_rows) {
+                            api_item_property_update($_course, 'thematic_plan', $thematic_plan_id,"ThematicPlanUpdated", $user_id);
+                        }
 		} else {
 			// insert
 			$ins = "INSERT INTO $tbl_thematic_plan(thematic_id, title, description, description_type) VALUES($thematic_id, '$title', '$description', $description_type) ";
 			Database::query($ins);
+                        $last_id = Database::insert_id();
 			$affected_rows = Database::affected_rows();
+                        if ($affected_rows) {
+                            api_item_property_update($_course, 'thematic_plan', $last_id,"ThematicPlanAdded", $user_id);
+                        }
 		} 
 				
 		return $affected_rows;			
@@ -575,11 +605,20 @@ class Thematic
 		// protect data
 		$thematic_id = intval($thematic_id);		
 		$description_type = intval($description_type);
-		
+                $user_id = api_get_user_id();
+               
+                // get thematic plan id
+                $thematic_plan_data = $this->get_thematic_plan_data($thematic_id, $description_type);
+                $thematic_plan_id = $thematic_plan_data[0]['id'];
+
+                // delete
 		$sql = "DELETE FROM $tbl_thematic_plan WHERE thematic_id = $thematic_id AND description_type = $description_type ";
 		Database::query($sql);
 		$affected_rows = Database::affected_rows();
-		
+                if ($affected_rows) {                    
+                    api_item_property_update($_course, 'thematic_plan', $thematic_plan_id,"ThematicPlanDeleted", $user_id);
+                }
+
 		return $affected_rows;
 	}
 	
@@ -621,11 +660,13 @@ class Thematic
 	 * @return	int		Affected rows
 	 */
 	public function update_done_thematic_advances ($thematic_advance_id) {
-		
+		global $_course;
 		$thematic_data = $this->get_thematic_list();
 		$thematic_advance_data = $this->get_thematic_advance_list();
 		$tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
+
 		$affected_rows = 0;
+                $user_id = api_get_user_id();
 		
 		$a_thematic_advance_ids = array();
 		if (!empty($thematic_data)) {
@@ -637,7 +678,10 @@ class Thematic
 						// update done thematic for previous advances ((done_advance = 1))
 						$upd = "UPDATE $tbl_thematic_advance set done_advance = 1 WHERE id = ".$thematic_advance['id']." ";
 						Database::query($upd);
-						$affected_rows += Database::affected_rows();			
+						$affected_rows += Database::affected_rows();
+                                                if (Database::affected_rows()) {
+                                                    api_item_property_update($_course, 'thematic_advance', $thematic_advance['id'],"ThematicAdvanceDone", $user_id);
+                                                }
 						if ($thematic_advance['id'] == $thematic_advance_id) {
 							break 2;
 						}				
@@ -649,7 +693,19 @@ class Thematic
 		// Update done thematic for others advances (done_advance = 0)		
 		if (!empty($a_thematic_advance_ids) && count($a_thematic_advance_ids) > 0) {
 			$upd = "UPDATE $tbl_thematic_advance set done_advance = 0 WHERE id NOT IN(".implode(',',$a_thematic_advance_ids).") ";
-			Database::query($upd);
+                        Database::query($upd);
+                        // update item_property
+                        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+                        // get all thematic advance done
+                        $rs_thematic_done = Database::query("SELECT ref FROM $tbl_item_property WHERE tool='thematic_advance' AND lastedit_type='ThematicAdvanceDone'");
+                        if (Database::num_rows($rs_thematic_done) > 0) {
+                            while ($row_thematic_done = Database::fetch_array($rs_thematic_done)) {
+                                $ref = $row_thematic_done['ref'];                                
+                                if (in_array($ref, $a_thematic_advance_ids)) { continue; }
+                                // update items
+                                Database::query("UPDATE $tbl_item_property SET lastedit_date='".date('Y-m-d H:i:s', time())."', lastedit_type='ThematicAdvanceUpdated', lastedit_user_id = $user_id WHERE tool='thematic_advance' AND ref=$ref");
+                            }
+                        }			
 		}
 		return $affected_rows;
 				
@@ -912,6 +968,6 @@ class Thematic
 		}
 		return $datetime;
 	}
-	
+
 }
 ?>

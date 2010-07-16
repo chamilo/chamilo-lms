@@ -2,6 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$MailingSend = "确定";
+$Ok = "确定";
+$Unknown = "未知";
+$SentOn = "在";
+$SentTo = "发送到";
+$SentBy = "发送人";
 $ReceivedFiles = "收到的文件";
 $SentFiles = "已发出的文件";
 $ReceivedTitle = "主题";
@@ -18,10 +24,4 @@ $FilesMoved = "被选的文件已被移动。";
 $AddNewCategory = "添加新的文件夹";
 $EditCategory = "修改类别";
 $CategoryName = "文件夹名称";
-$SentBy = "发送人";
-$SentTo = "发送到";
-$SentOn = "在";
-$Unknown = "未知";
-$Ok = "确定";
-$MailingSend = "确定";
 ?>

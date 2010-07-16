@@ -255,4 +255,9 @@ class LearnpathLink extends AbstractLink
     	}
     	return $this->learnpath_data;
     }
+
+    public function get_icon_name() {
+		return 'learnpath';
+	}
+
 }

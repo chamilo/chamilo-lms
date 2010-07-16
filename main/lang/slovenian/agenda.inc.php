@@ -75,4 +75,6 @@ $AgendaSortChronologicallyDown = "Razvrsti zapise agende kronološko (padajoče)
 $ItemForUserSelection = "Izbira uporabnikov";
 $IsNotiCalFormatFile = "Datoteka ni v iCal obliki";
 $RepeatEvent = "Ponovi dogodek";
+$RepeatDate = "Ponovi datum";
+$EndDateMustBeMoreThanStartDate = "Končni datum mora biti kasnejši od začetnega datuma";
 ?>

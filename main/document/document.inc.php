@@ -55,13 +55,6 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
 			foreach ($folders as & $folder) {
 				$selected = ($curdirpath == $folder) ? ' selected="selected"' : '';
 				$path_parts = explode('/', $folder);
-
-				if ($folder_titles[$folder] == 'shared_folder') {
-					$folder_titles[$folder] = get_lang('SharedFolder');
-				} elseif (strstr($folder_titles[$folder], 'sf_user_')) {
-					$userinfo = Database::get_user_info_from_id(substr($folder_titles[$folder], 8));
-					$folder_titles[$folder] = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
-				}
 				$folder_titles[$folder] = cut($folder_titles[$folder], 80);
 				$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$folder_titles[$folder];
 				$parent_select -> addOption($label, $folder);
@@ -149,25 +142,26 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 	//$tooltip_title = str_replace('?cidReq='.$_GET['cidReq'], '', basename($path));
 	$tooltip_title = explode('?', basename($path));
 	$tooltip_title = $tooltip_title[0];
-
+	
+	$tooltip_title_alt = $tooltip_title;
 	if ($tooltip_title == 'shared_folder') {
 		$tooltip_title_alt = get_lang('SharedFolder');
-	} elseif(strstr($tooltip_title, 'sf_user_')) {
+	}elseif(strstr($tooltip_title, 'shared_folder_session_')) {
+		$tooltip_title_alt = get_lang('SharedFolder').' ('.api_get_session_name($current_session_id).')';
+	}elseif(strstr($tooltip_title, 'sf_user_')) {
 		$userinfo = Database::get_user_info_from_id(substr($tooltip_title, 8));
-		$tooltip_title_alt = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
-	} else {
-		$tooltip_title_alt = $tooltip_title;
+		$tooltip_title_alt = get_lang('SharedFolder').' ('.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).')';
 	}
+
 
 	if (!$show_as_icon) {
 		if ($filetype == 'folder') {
 			if (api_is_allowed_to_edit() || api_is_platform_admin() || api_get_setting('students_download_folders') == 'true') {
-				
 				//filter when I am into shared folder, I can show for donwload only my shared folder
-				if(is_shared_folder($_GET['curdirpath']))
-				{							
-					$my_preg_folder="/shared_folder\/sf_user_".api_get_user_id()."$/";
-					if (preg_match($my_preg_folder, urldecode($forcedownload_link))|| api_is_allowed_to_edit() || api_is_platform_admin())
+				$current_session_id=api_get_session_id();
+				if(is_shared_folder($_GET['curdirpath'],$current_session_id))
+				{		
+					if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link))|| preg_match('/shared_folder_session_'.$current_session_id.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) || api_is_allowed_to_edit() || api_is_platform_admin())
 					{			
 					  $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array('height'=>'16', 'width' => '16')).'</a>';
 					}
@@ -182,7 +176,13 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		}
 		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html;
 	} else {
+		if(preg_match('/shared_folder/', urldecode($url)) && preg_match('/shared_folder$/', urldecode($url))==false){
+			return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).build_document_icon_tag($filetype, $tooltip_title).'</a>';
+		}
+		else
+		{		
 		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $tooltip_title).'</a>';
+		}
 	}
 }
 
@@ -208,7 +208,14 @@ function build_document_icon_tag($type, $path) {
 			} else {
 				$basename = get_lang('SharedFolder');
 			}
-		} elseif(strstr($basename, 'sf_user_')) {
+		}elseif(strstr($basename, 'shared_folder_session_')) {
+			if ($is_allowed_to_edit) {
+				$basename = '***('.api_get_session_name($current_session_id).')*** '.get_lang('HelpSharedFolder');
+			} else {
+				$basename = get_lang('SharedFolder').' ('.api_get_session_name($current_session_id).')';
+			}			
+			$icon = 'shared_folder.gif';
+		}elseif(strstr($basename, 'sf_user_')) {
 			$userinfo = Database::get_user_info_from_id(substr($basename, 8));
 			$image_path = UserManager::get_user_picture_path_by_id(substr($basename, 8), 'web', false, true);
 
@@ -217,7 +224,9 @@ function build_document_icon_tag($type, $path) {
 			} else {
 				$icon = '../upload/users/'.substr($basename, 8).'/'.$image_path['file'];
 			}
-			$basename = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+		
+			$basename = get_lang('SharedFolder').' ('.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).')';
+
 		} else {
 			if (($basename =='audio' || $basename =='flash' || $basename =='images' || $basename =='video') && api_is_allowed_to_edit()) {
 				$basename = get_lang('HelpDefaultDirDocuments');
@@ -484,24 +493,52 @@ function create_dir_form() {
 
 /**
  * Checks whether the user is in shared folder
- * @return return bool Return true when user is in shared folder
+ * @return return bool Return true when user is into shared folder
  */
-function is_shared_folder($curdirpath) {
-	return Security::remove_XSS($curdirpath) == '/shared_folder';
+function is_shared_folder($curdirpath, $current_session_id) {
+	$clean_curdirpath = Security::remove_XSS($curdirpath);
+	if($clean_curdirpath== '/shared_folder'){	
+		return true;
+	}
+	elseif($clean_curdirpath== '/shared_folder_session_'.$current_session_id){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 /**
- * Checks whether the user is in any user shared folder
+ * Checks whether the user is into any user shared folder
  * @return return bool Return true when user is in any user shared folder
  */
-function is_any_user_shared_folder($path) {
-	return preg_match('/shared_folder\/sf_user_/', Security::remove_XSS($path));	
+function is_any_user_shared_folder($path, $current_session_id) {
+	$clean_path = Security::remove_XSS($path);	
+	if(strpos($clean_path,'shared_folder/sf_user_')){
+		return true;
+	}
+	elseif(strpos($clean_path, 'shared_folder_session_'.$current_session_id.'/sf_user_')){
+		return true;
+	}
+	else{		
+		return false;
+	}	
 }	
 
 /**
- * Checks whether the user is in his/her shared folder
+ * Checks whether the user is into his shared folder
  * @return return bool Return true when user is in his user shared folder
  */
-function is_my_shared_folder($user_id, $path) {
-	return Security::remove_XSS($path) == '/shared_folder/sf_user_'.$user_id;
+function is_my_shared_folder($user_id, $path, $current_session_id) {
+	$clean_path = Security::remove_XSS($path);
+	if($clean_path == '/shared_folder/sf_user_'.$user_id){
+		return true;
+	}
+	elseif($clean_path == '/shared_folder_session_'.$current_session_id.'/sf_user_'.$user_id){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
+?>

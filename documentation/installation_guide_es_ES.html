@@ -52,6 +52,7 @@ no son requeridos para usar Chamilo LMS. &nbsp;Por favor, lea completamente este
   <li><a href="#5._Administration_section">Sección de administración</a></li>
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
   <li><a href="#7._Mathematical_formulas">Fórmulas Matemáticas con LaTeX</a></li>
+  <li><a href="#8._ASCIIMathML_mathematical_formulas">Fórmulas Matemáticas con ASCIIMathML</a></li>
 </ol>
 
 
@@ -720,9 +721,52 @@ Linux usando el siguiente comando:</i>
 <p>&nbsp;</p>
 <p>Este procedimiento creará un nuevo icono en su editor en línea de Chamilo, el cual hará posible la inserción de fórmulas matemáticas en sus documentos.<br />
   <br />
+<hr style="width: 100%; height: 2px;" />
+<h2><a name="8._ASCIIMathML_mathematical_formulas"></a>8. Fórmulas matemáticas con ASCIIMathML</h2>
 
+<p>Las fórmulas matemáticas pueden ser renderizadas en páginas web usando el script ASCIIMathML.js (en su versión modificada para Chamilo). Para más información sobre este script y sobre la sintaxis de fórmulas de ASCIIMath, ver <a href="http://www1.chapman.edu/~jipsen/mathml/asciimath.html">http://www1.chapman.edu/~jipsen/mathml/asciimath.html</a> y <a href="http://dlippman.imathas.com/asciimathtex/AMT.html">http://dlippman.imathas.com/asciimathtex/AMT.html</a>.</p>
 
+<p>Para escribir fórmulas ASCIIMath en documentos, es necesario activar el plugin correspondiente del editor en línea. Para hacerlo, ver la sección de administración de la plataforma, "Administración &gt; Parámetros de configuración  &gt; &gt; Editor WYSIWYG".
+Activar el parámetro <strong>"Editor matemático ASCIIMathML"</strong>.</p>
 
+<p>El script ASCIIMathML.js puede mostrar fórmulas matemáticas en los documentos de dos formas:</p>
+<ul>
+        <li>Traduciendo las fórmulas en notación ASCIIMath en código MathML. El estándar MathML está soportado actualmente sobre tres navegadores:
+                <ul>
+                        <li>Mozilla Firefox: debería considerar la instalación de las fuentes de carácter STIX (<a href="http://www.stixfonts.org">http://www.stixfonts.org</a>) en sus máquinas cliente para tener fórmulas bonitas</li>
+                        <li>Internet Explorer 6 o superior, con el add-on MathPlayer 2.0 o superior (<a href="http://www.dessci.com/en/products/mathplayer">http://www.dessci.com/en/products/mathplayer</a>)</li>
+                        <li>Opera 9.5 o superior</li>
+                </ul>
+      </li>
+        <li>Traduciendo la notación de fórmulas ASCIIMath en notación TeX y pasándolo a un servicio externo. Se debe usar en el caso de navegadores que no soporten MathML.  El servicio externo produce y devuelve un imagen que contiene la fórmula. Esta técnica se llama "image-based fallback".
+        </li>
+</ul>
+<p>Para proveer <strong>image-based fallback</strong> en un sistema en producción, debería seleccionar e instalar en su servidor algun software de renderización TeX, como:
+<ul>
+        <li>mimeTeX - <a href="http://www.forkosh.dreamhost.com/source_mimetex.html">http://www.forkosh.dreamhost.com/source_mimetex.html</a>.
+        Ver <a href="#7._Mathematical_formulas">"7. Fórmulas matemáticas con LaTeX"</a> para instalar el ejecutable mimetex en su servidor</li>
+        <li>mathTeX - <a href="http://www.forkosh.com/mathtex.html">http://www.forkosh.com/mathtex.html</a>. Ver el sitio para instrucciones de instalación</li>
+</ul>
+
+<p>Y como alternativa, puede intentar servicios públicos, como:</p>
+<ul>
+        <li>MathTran - <a href="http://www.mathtran.org">http://www.mathtran.org</a></li>
+        <li>Google Chart Tools - <a href="http://code.google.com/apis/charttools">http://code.google.com/apis/charttools</a></li>
+</ul>
+<p>Abrir el fichero <strong>.../chamilo/main/inc/lib/asciimath/ASCIIMathML.js</strong> con un editor de texto.
+Encuentre un lugar al inicio de la línea que inicializa la variable <strong>AMTcgiloc</strong>.
+Podría necesitar modificar el ejemplo para tener algo como:</p>
+<ul>
+        <li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mimetex.cgi";</div></li>
+        <li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mathtex.cgi";</div></li>
+        <li><div class="code">var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?tex=";</div></li>
+        <li><div class="code">var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";</div></li>
+        <li>... o algo similar</li>
+</ul>
+<p>Para formas de probar como la variable <strong>AMTcgiloc</strong> tiene que ser configurada, existen unos ejemplos (en comentario) dentro del script.</p>
+
+<p>
+  <hr style="width: 100%; height: 2px;" />
   <br />
   <br />
 

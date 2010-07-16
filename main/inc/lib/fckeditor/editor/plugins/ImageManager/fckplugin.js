@@ -83,7 +83,7 @@
 			// Checking whether the selected object is a real image.
 			if ( FCK.IsRealImage( image ) )
 			{
-				var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 450 ) ;
+				var command = new FCKDialogCommand( 'Image', FCKLang.DlgImgTitle, 'dialog/fck_image.html', 600, 455 ) ;
 				command.Execute() ;
 				return ;
 			}

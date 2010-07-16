@@ -1267,4 +1267,5 @@ $GroupAdded = "Group added";
 $AddUsersToGroup = "Add users to group";
 $ErrorReadingZip = "Error reading ZIP file";
 $ErrorStylesheetFilesExtensionsInsideZip = "The only accepted extensions in the ZIP file are jpg, jpeg, png, gif and css.";
+$MyTextHere = "Enter your text here...";
 ?>

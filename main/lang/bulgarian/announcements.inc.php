@@ -56,4 +56,5 @@ $AnnounceSentToUserSelection = "Обявата е изпратена до изб
 $SendAnnouncement = "Изпращане на обявата";
 $ModifyAnnouncement = "Редактиране на обявата";
 $ButtonPublishAnnouncement = "Изпращане на обявата";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Уважаеми господине / Уважаема госпожо, профилът ви в системата е активиран. Можете да влезете с потребителското си име и парола. Приятно участие в курсовете.";
 ?>

@@ -146,12 +146,12 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	
 	//Get list sessions
 	$sort = ($sort != "name_category")?  's.'.$sort : 'category_name';
-	$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name, s.visibility
-			 FROM $tbl_session s
-			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id 
-			 $where
-			 ORDER BY $sort ";
+	$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name, s.visibility ".
+			" FROM $tbl_session s ".
+			 	" LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id ".
+			 	" INNER JOIN $tbl_user u ON s.id_coach = u.user_id ".
+			 $where.
+			 " ORDER BY $sort LIMIT $from,".($limit+1);
 	//query which allows me to get a record without taking into account the page
 	$query_rows = "SELECT count(*) as total_rows
 			 FROM $tbl_session s

@@ -25,7 +25,7 @@ var alertIfNoSVG = false;
 var translateASCIIMath = false ;
 
 // Registering the related command.
-FCKCommands.RegisterCommand( 'asciimath', new FCKDialogCommand( FCKLang['DlgAsciiMath'], FCKLang['DlgAsciiMath'], FCKConfig.PluginsPath + 'asciimath/fck_asciimath.html', 800, 630 ) ) ;
+FCKCommands.RegisterCommand( 'asciimath', new FCKDialogCommand( FCKLang['DlgAsciiMath'], FCKLang['DlgAsciiMath'], FCKConfig.PluginsPath + 'asciimath/fck_asciimath.html', 800, 610 ) ) ;
 
 // Create the "asciimath" toolbar button.
 var oAsciiMathItem = new FCKToolbarButton( 'asciimath', FCKLang['DlgAsciiMath'] ) ;

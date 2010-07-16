@@ -175,6 +175,10 @@ $User = "Потребител";
 $LostPass = "Забравена парола?";
 $EnterEmailUserAndWellSendYouPassword = "Въведете своето потребителско име или своя e-mail адрес, за да бъде изпратена вашата парола.";
 $NoUserAccountWithThisEmailAddress = "Не съществува регистрация с даденото потребителско име или e-mail адрес.";
-$WithTheFollowingSettings = "със следните настройки:";
 $CouldNotResetPassword = "Паролата не може да бъде анулирана.";
+$WithTheFollowingSettings = "със следните настройки:";
+$YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Вашият акаунт за %s е одобрен от администратор.";
+$HaveFun = "Приятна работа.";
+$YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Можете да влезете в %s използвайки Вашите потребителско име и парола.";
+$AreYouSureToEditTheUserStatus = "Сигурни ли сте, че искате да промените статуса на потребителя?";
 ?>

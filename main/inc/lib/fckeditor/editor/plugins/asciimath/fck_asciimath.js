@@ -36,6 +36,8 @@ FCKLang['DlgAsciiMathOldMathPlayer'] = FCKLang['DlgAsciiMathOldMathPlayer'] ? FC
 FCKLang['DlgAsciiMathOldMathPlayer'] = FCKLang['DlgAsciiMathOldMathPlayer'].replace( '%s', '<a href="http://www.dessci.com/en/products/mathplayer/" onclick="javascript: window.open(this.href,\'_blank\');return false;">http://www.dessci.com/en/products/mathplayer/</a>' ) ;
 
 // Settings for ASCIIMathML.js
+// Checking for native MathML support, it is always needed for this dialog.
+var checkForMathML = true;
 // Suppressing the built-in notification messages when the browser is incompatible.
 var notifyIfNoMathML = false ;
 var alertIfNoMathML = false ;
@@ -102,14 +104,11 @@ function Ok()
 
 window.onload = function()
 {
-	geckoFontWorkaround() ;
-
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage( document ) ;
 
-	// Translate the formulas.
-	translateOnLoad = true ;
-	generic() ;
+	// Initialization of the script ASCIIMathML.js.
+	init() ;
 
 	// Load the selected element information (if any).
 	LoadSelection() ;
@@ -270,76 +269,14 @@ function ShowMathML()
 	}
 }
 
-function CheckBrowserCompatibility( show_message )
-{
-	/*
-	if ( FCKBrowserInfo.IsGecko )
-	{
-		// The browser is compatible, it is genuine Gecko - Firefox, etc.
-		return true ;
-	}
-	else if ( FCKBrowserInfo.IsIE )
-	{
-		// Internet Explorer.
-		if ( FCKBrowserInfo.IsIE6 )
-		{
-			if ( isMathPlayerAvailable )
-			{
-				var start = navigator.appVersion.indexOf( 'MathPlayer' ) ;
-				if ( start != -1 )
-				{
-					// The browser is Internet Explorer 6.0+ with properly set up plugin MathPalyer 2.
-					return true ;
-				}
-				else
-				{
-					// Notify reader they need to upgrade to MathPlayer 2.
-					if ( show_message )
-					{
-						document.write( '<span style="color:red;">' + FCKLang['DlgAsciiMathOldMathPlayer'] + '</span>' ) ;
-					}
-					return false ;
-				}
-			}
-			else
-			{
-				// Direct reader to MathPlayer page.
-				if ( show_message )
-				{
-					document.write( '<span style="color:red;">' + FCKLang['DlgAsciiMathInstallMathPlayer'] + '</span>' ) ;
-				}
-				return false ;
-			}
-		}
-		else
-		{
-			// The browser is a very old version of Internet Explorer, it have to be upgraded.
-			if ( show_message )
-			{
-				document.write( '<span style="color:red;">' + FCKLang['DlgAsciiMathOldIE'] + '</span>' ) ;
-			}
-			return false ;
-		}
-	}
-	else if ( FCKBrowserInfo.IsOpera && parseFloat( navigator.appVersion, 10 ) >= 9.5 )
-	{
-		return true ;
-	}
+// Highlighting formulas.
 
-	// The browser is not compatible.
-	if ( show_message )
-	{
-		document.write( '<span style="color:red;">' + FCKLang['DlgAsciiIncompatibleBrowser'] + '</span>' ) ;
-	}
-	return false ;
-	*/
-	return true ;
+function over(td)
+{
+	td.className = 'LightBackground Hand' ;
 }
 
-// Excludig from the table some characters with buggy fonts (wrong height).
-function geckoFontWorkaround() {
-	if ( FCKBrowserInfo.IsGecko ) {
-		GetE( 'ccA' ).innerHTML = GetE( 'ccA' ).innerHTML.replace( /`/g, '' ) ;
-		GetE( 'frA' ).innerHTML = GetE( 'frA' ).innerHTML.replace( /`/g, '' ) ;
-	}
+function out(td)
+{
+	td.className = 'Hand' ;
 }

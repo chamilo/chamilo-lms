@@ -732,6 +732,54 @@ if ($show == 'test') {
 	echo '</span>';
 }
 
+if (($is_allowedToEdit) and ($origin != 'learnpath')) {
+	if ($_GET['show'] != 'result') {
+		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_test.gif', get_lang('NewEx')) . get_lang('NewEx') . '</a>';
+		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('question_add.gif', get_lang('AddQuestionToExercise')) . get_lang('AddQuestionToExercise') . '</a>';
+		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_db.png', get_lang('ImportHotPotatoesQuiz')) . get_lang('ImportHotPotatoesQuiz') . '</a>';
+		// link to import qti2 ... 
+		echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_db.png', get_lang('ImportQtiQuiz')) . get_lang('ImportQtiQuiz') . '</a>';
+		echo '<a href="exercice.php?' . api_get_cidreq() . '&show=result">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
+	}
+
+	// the actions for the statistics
+	if ($show == 'result') {
+		// the form
+		if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
+			if ($_SESSION['export_user_fields'] == true) {
+				$alt = get_lang('ExportWithUserFields');
+				$extra_user_fields = '<input type="hidden" name="export_user_fields" value="export_user_fields">';
+			} else {
+				$alt = get_lang('ExportWithoutUserFields');
+				$extra_user_fields = '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
+			}
+			echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
+			echo '<a href="javascript: void(0);" onclick="javascript: document.form1a.submit();">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
+			echo '<a href="javascript: void(0);" onclick="javascript: document.form1b.submit();">' . Display :: return_icon('excel.gif', get_lang('ExportAsXLS')) . get_lang('ExportAsXLS') . '</a>';
+			//echo '<a href="javascript: void(0);" onclick="javascript: document.form1c.submit();">'.Display::return_icon('synthese_view.gif',$alt).$alt.'</a>';
+			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';
+			echo '<input type="hidden" name="export_report" value="export_report">';
+			echo '<input type="hidden" name="export_format" value="csv">';
+			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
+			echo '</form>';
+			echo '<form id="form1b" name="form1b" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';
+			echo '<input type="hidden" name="export_report" value="export_report">';
+			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
+			echo '<input type="hidden" name="export_format" value="xls">';
+			echo '</form>';
+			//echo '<form id="form1c" name="form1c" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
+			//echo $extra_user_fields;
+			//echo '</form>';
+		}
+	}
+} else {
+	//the student view
+	if ($show == 'result') {
+		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
+	} else {
+		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=result') . '">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
+	}
+}
 if ($_configuration['tracking_enabled']) {
 	if ($show == 'result') {
 		/*if (!function_exists('make_select'))
@@ -809,56 +857,6 @@ if ($_configuration['tracking_enabled']) {
 		}
 	}	*/
 }
-
-if (($is_allowedToEdit) and ($origin != 'learnpath')) {
-	if ($_GET['show'] != 'result') {
-		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_test.gif', get_lang('NewEx')) . get_lang('NewEx') . '</a>';
-		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('question_add.gif', get_lang('AddQuestionToExercise')) . get_lang('AddQuestionToExercise') . '</a>';
-		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('jqz.gif', get_lang('ImportHotPotatoesQuiz')) . get_lang('ImportHotPotatoesQuiz') . '</a>';
-		// link to import qti2 ... 
-		echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('jqz.gif', get_lang('ImportQtiQuiz')) . get_lang('ImportQtiQuiz') . '</a>';
-		echo '<a href="exercice.php?' . api_get_cidreq() . '&show=result">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
-	}
-
-	// the actions for the statistics
-	if ($show == 'result') {
-		// the form
-		if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-			if ($_SESSION['export_user_fields'] == true) {
-				$alt = get_lang('ExportWithUserFields');
-				$extra_user_fields = '<input type="hidden" name="export_user_fields" value="export_user_fields">';
-			} else {
-				$alt = get_lang('ExportWithoutUserFields');
-				$extra_user_fields = '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
-			}
-			echo '<a href="javascript: void(0);" onclick="javascript: document.form1a.submit();">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
-			echo '<a href="javascript: void(0);" onclick="javascript: document.form1b.submit();">' . Display :: return_icon('excel.gif', get_lang('ExportAsXLS')) . get_lang('ExportAsXLS') . '</a>';
-			//echo '<a href="javascript: void(0);" onclick="javascript: document.form1c.submit();">'.Display::return_icon('synthese_view.gif',$alt).$alt.'</a>';
-			echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
-			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '">';
-			echo '<input type="hidden" name="export_report" value="export_report">';
-			echo '<input type="hidden" name="export_format" value="csv">';
-			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
-			echo '</form>';
-			echo '<form id="form1b" name="form1b" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '">';
-			echo '<input type="hidden" name="export_report" value="export_report">';
-			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
-			echo '<input type="hidden" name="export_format" value="xls">';
-			echo '</form>';
-			//echo '<form id="form1c" name="form1c" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
-			//echo $extra_user_fields;
-			//echo '</form>';
-		}
-	}
-} else {
-	//the student view
-	if ($show == 'result') {
-		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
-	} else {
-		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=result') . '">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
-	}
-}
-
 echo '</div>'; // closing the actions div
 
 if ($show == 'test') {
@@ -996,7 +994,7 @@ if ($show == 'test') {
 				}				
 				
 				// Export qti ...
-				echo '<a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a>';
+				echo '<a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export_db.png" border="0" title="IMS/QTI" /></a>';
 				
 				echo "</td>";
 				echo "</tr>";
@@ -1111,7 +1109,7 @@ if ($show == 'test') {
 ?>
 
     <tr>
-      <td><img src="../img/jqz.gif" alt="HotPotatoes" /></td>
+      <td><img src="../img/import_db.png" alt="HotPotatoes" /></td>
 	   <td><?php echo ($ind+($page*$limitExPage)).'.'; ?></td>
        <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>
   <td></td>

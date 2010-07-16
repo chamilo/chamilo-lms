@@ -255,7 +255,7 @@ if (!empty($action)) {
 			case 'insert_link':
 			case 'edit_link':
 				$link_index = intval($_POST['link_index']);
-				
+
 				$insert_where = intval($_POST['insert_where']);
 				$link_name = trim(stripslashes($_POST['link_name']));
 				$link_url = trim(stripslashes($_POST['link_url']));
@@ -279,7 +279,7 @@ if (!empty($action)) {
 				} elseif (empty($link_name)) {
 					$errorMsg = get_lang('PleaseEnterLinkName');
 				} else {
-					
+
 					// New links are added as new files in the home/ directory
 					if ($action == 'insert_link' || $action == 'insert_tabs' || empty($filename) || strstr($filename, '/') || !strstr($filename, '.html')) {
 						$filename = replace_dangerous_char($link_name, 'strict').'.html';
@@ -296,14 +296,20 @@ if (!empty($action)) {
 					// Get the contents of home_menu_en.html (or active menu language
 					// version) into $home_menu as an array of one entry per line
 					$home_menu = file($homep.$menuf.'_'.$lang.$ext);
+					$home_menu = implode("\n", $home_menu);
+					$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+					$home_menu = explode("\n", $home_menu);
+					$home_menu = array_values(array_filter(array_map('trim', $home_menu), 'strlen'));
 					// Prepare place to insert the new link into (default is end of file)
 					if ($insert_where < -1 || $insert_where > (sizeof($home_menu) - 1)) {
 						$insert_where = sizeof($home_menu) - 1;
 					}
+					//
 					// For each line of the file, remove trailing spaces and special chars
-					foreach ($home_menu as $key => $enreg) {
-						$home_menu[$key] = trim($enreg);
-					}
+					//foreach ($home_menu as $key => $enreg) {
+					//	$home_menu[$key] = trim($enreg);
+					//}
+					//
 					// If the given link url is empty, then replace the link url by a link to the link file created
 					if (empty($link_url)) {
 						$link_url = api_get_path(WEB_PATH).'index.php?include='.urlencode($filename);
@@ -474,6 +480,7 @@ if (!empty($action)) {
 					$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 					$home_menu = explode("\n", $home_menu);
 				}
+				$home_menu = array_values(array_filter(array_map('trim', $home_menu), 'strlen'));
 				break;
 			case 'insert_tabs':
 				// This request is the preparation for the addition of an item in home_menu
@@ -493,6 +500,7 @@ if (!empty($action)) {
 					$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 					$home_menu = explode("\n", $home_menu);
 				}
+				$home_menu = array_values(array_filter(array_map('trim', $home_menu), 'strlen'));
 				break;
 			case 'edit_tabs':
 			case 'edit_link':
@@ -512,27 +520,30 @@ if (!empty($action)) {
 				if (!empty($home_menu)) {
 					$home_menu = implode("\n", $home_menu);
 					$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
-					$home_menu = explode("\n", $home_menu);					
+					$home_menu = explode("\n", $home_menu);
 				}
 
 				$link_index = intval($_GET['link_index']);
-				
+
 				$target_blank = false;
 				$link_name = '';
 				$link_url = '';
-				
-				$home_menu_new = array();
-				
-				//Cleaning array 
-				foreach ($home_menu as $item) {
-					if(!empty($item)) {
-						$home_menu_new[] = $item;						
-					}	
-				}
-				$home_menu = $home_menu_new;
-				
+
+				//$home_menu_new = array();
+				//
+				//Cleaning array
+				//foreach ($home_menu as $item) {
+				//	if(!empty($item)) {
+				//		$home_menu_new[] = $item;
+				//	}
+				//}
+				//$home_menu = $home_menu_new;
+
+				// Cleaning the array
+				$home_menu = array_values(array_filter(array_map('trim', $home_menu), 'strlen'));
+
 				// For each line of the home_menu file
-				foreach ($home_menu as $key => $enreg) {					
+				foreach ($home_menu as $key => $enreg) {
 					// Check if the current item is the one we want to update
 					if ($key == $link_index) {
 						// This is the link we want to update
@@ -659,7 +670,9 @@ switch ($action) {
 			$form->addElement('html', '<td><select name="insert_where"><option value="-1">'.get_lang('FirstPlace').'</option>');
 			if (is_array($home_menu)){
 				foreach ($home_menu as $key => $enreg) {
-					$form->addElement('html', '<option value="'.$key.'" '.($formSent && $insert_where == $key ? 'selected="selected"' : '').' >'.get_lang('After').' &quot;'.trim(strip_tags($enreg)).'&quot;</option>');
+					if (strlen($enreg = trim(strip_tags($enreg))) > 0) {
+						$form->addElement('html', '<option value="'.$key.'" '.($formSent && $insert_where == $key ? 'selected="selected"' : '').' >'.get_lang('After').' &quot;'.$enreg.'&quot;</option>');
+					}
 				}
 			}
 			$form->addElement('html', '</select></td></tr>');
@@ -886,7 +899,7 @@ switch ($action) {
 							$delete_link = '<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 							echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', '<br />'.$edit_link.' '.$delete_link.'</li>'), $enreg);
 							$i++;
-						}						
+						}
 					}
 				?>
 				</ul>

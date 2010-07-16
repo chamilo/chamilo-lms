@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $Title = "Título";
 $By = "Publicado por";
 $UsersOnline = "Usuarios en línea";
@@ -729,6 +730,17 @@ $Until = "Hasta";
 $FirstPage = "Primera página";
 $LastPage = "Última página";
 $Coachs = "Tutores";
+$ThereAreNoRegisteredDatetimeYet = "Aún no hay registrada ninguna fecha/hora";
+$CalendarList = "Fechas de la lista de asistencia";
+$AttendanceCalendarDescription = "El calendario de asistencia le permite especificar las fechas que aparecerán en la lista de asistencia.";
+$CleanCalendar = "Limpiar calendario";
+$AddDateAndTime = "Agregar fecha y hora";
+$AttendanceSheet = "Lista de asistencia";
+$GoToAttendanceCalendar = "Ir al calendario de asistencia";
+$AttendanceCalendar = "Calendario de asistencia";
+$QualifyAttendanceGradebook = "Calificar la lista de asistencia";
+$CreateANewAttendance = "Crear una lista de asistencia";
+$Attendance = "Asistencia";
 $langNameOfLang['bosnian'] = "bosnio";
 $langNameOfLang['czech'] = "checo";
 $langNameOfLang['dari'] = "dari";
@@ -803,17 +815,6 @@ $AssignUsers = "Asignar usuarios";
 $AssignCourses = "Asignar cursos";
 $AssignSessions = "Asignar sesiones de formación";
 $Timezone = "Zona horaria";
-$Attendance = "Asistencia";
-$CreateANewAttendance = "Crear una lista de asistencia";
-$QualifyAttendanceGradebook = "Calificar la lista de asistencia";
-$AttendanceCalendar = "Calendario de asistencia";
-$GoToAttendanceCalendar = "Ir al calendario de asistencia";
-$AttendanceSheet = "Lista de asistencia";
-$AddDateAndTime = "Agregar fecha y hora";
-$CleanCalendar = "Limpiar calendario";
-$AttendanceCalendarDescription = "El calendario de asistencia le permite especificar las fechas que aparecerán en la lista de asistencia.";
-$CalendarList = "Fechas de la lista de asistencia";
-$ThereAreNoRegisteredDatetimeYet = "Aún no hay registrada ninguna fecha/hora";
 $DashboardPluginsHaveBeenUpdatedSucesslly = "Los plugins del panel de control han sido actualizados correctamente";
 $LoginEnter = "Entrar";
 $AttendanceSheetDescription = "Las listas de asistencia permiten detectar las faltas de los estudiantes a las clases. Por ejemplo, puede que desee tomar asistencias a clases teóricas por separado de las asistencias a las clases prácticas. En cada una se listan todos los estudiantes de";
@@ -844,7 +845,6 @@ $ToolCourseSetting = "Configuración del curso";
 $ToolCourseMaintenance = "Mantenimiento del curso";
 $AreYouSureToDeleteAllDates = "¿Confirma que desea borrar todas las fechas?";
 $AddADateTime = "Añadir fecha";
-$DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $ThematicControl = "Control temático";
 $ThematicDetails = "Lista detallada";
 $ThematicList = "Gestión temática";
@@ -880,8 +880,8 @@ $ThereIsNoAThematicAdvance = "No existe un avance temático";
 $StillDoNotHaveAThematicPlan = "Aún no tiene un plan temático";
 $NewThematicAdvance = "Nuevo avance temático";
 $DurationInHoursMustBeNumeric = "La duración en horas debe ser un número";
-$EditThematicSection = "Editar sección temática";
 $CreateAThematicSection = "Crear una sección temática";
+$EditThematicSection = "Editar sección temática";
 $ToolCourseProgress = "Avance temático";
 $SelectAnAttendance = "Seleccionar hoja de asistencia";
 $ResultsHiddenByExerciseSetting = "Resultados ocultos por la configuración del ejercicio";
@@ -937,10 +937,11 @@ Llenar este formulario, implica la aceptación de que la asociación Chamilo o s
 
 Tenga en cuenta que no está obligado a llenar este formulario. Si desea permanecer en el anonimato, perderemos la oportunidad de ofrecerle todos los privilegios de ser un administrador del portal registrado, pero nosotros respetaremos su decisión. Basta con dejar vacío este formulario y hacer clic en \"Siguiente\".";
 $CompanyActivity = "Actividad de la compañia";
-$DateLock = "Bloquear fecha";
 $DateUnLock = "Desbloquear fecha";
+$DateLock = "Bloquear fecha";
 $GoToStudentDetails = "Ver detalles del estudiante";
 $RepeatDate = "Repetir día";
 $ToAttend = "Por asistir";
 $HaveFun = "Diviértase,";
+$ClearSearchResults = "Reiniciar los resultados de búsqueda";
 ?>

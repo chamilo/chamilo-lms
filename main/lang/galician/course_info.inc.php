@@ -117,4 +117,8 @@ $AllowUserViewUserList = "Permitir ao usuario a lista de usuarios";
 $AllowUserViewUserListActivate = "Activar o permiso ao usuario para ver a lista de usuarios";
 $AllowUserViewUserListDeactivate = "Desactivar o permiso ao usuario para ver a lista de usuarios";
 $DoNotDisplayAnyAdvance = "Non amosar ningún avance";
+$NewHomeworkEmailAlert = "Mandar un correo aos usuarios cando haxa novas tarefas";
+$NewHomeworkEmailAlertEnable = "Enviar aviso aos usuarios cando envíen a tarefa";
+$NewHomeworkEmailAlertDisable = "Desactivar aviso aos usuarios cando envíen unha tarefa";
+$DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Amosar o último paso aberto e o próximo paso sen finalizar";
 ?>

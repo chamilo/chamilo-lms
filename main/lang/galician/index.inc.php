@@ -66,4 +66,10 @@ $FolderCreated = "Creouse un novo directorio";
 $LinkAdded = "Enlace engadido";
 $AnnouncementAdded = "Engadíuse o anuncio";
 $AgendaAdded = "Engadíuse un evento da axenda";
+$LoginEnter = "Login";
+$Messages = "Mesaxes";
+$Inbox = "Entrada";
+$Comppose = "Redactar";
+$PendingInvitations = "Invitacións pendentes";
+$YouDoNotHaveAnySessionInItsHistory = "Non tes ningunha sesión formativa previa";
 ?>

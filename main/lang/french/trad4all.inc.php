@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DeleteAllAttendances = "Supprimer toutes les présences créées";
 $Title = "Titre";
 $By = "Par";
 $UsersOnline = "Utilisateurs en ligne";
@@ -729,6 +730,17 @@ $Until = "Jusqu'au";
 $FirstPage = "Première page";
 $LastPage = "Dernière page";
 $Coachs = "Formateurs";
+$ThereAreNoRegisteredDatetimeYet = "Il n'y a aucune date/heure enregistrée pour le moment";
+$CalendarList = "Liste calendrier des assistances";
+$AttendanceCalendarDescription = "Le calendrier de présences vous permet d'enregistrer des listes de présences (une par session présentielle à laquelle les apprenants doivent assister). Ajoutez de nouvelles listes de présences ici.";
+$CleanCalendar = "Nettoyer le calendrier de toutes les listes de présences";
+$AddDateAndTime = "Ajouter une date/heure";
+$AttendanceSheet = "Feuille de présences";
+$GoToAttendanceCalendar = "Aller au calendrier de présences";
+$AttendanceCalendar = "Calendrier de présences";
+$QualifyAttendanceGradebook = "Coter les présences dans les évaluations";
+$CreateANewAttendance = "Créer un nouveau répertoire de feuilles de présences";
+$Attendance = "Présence";
 $langNameOfLang['bosnian'] = "bosnien";
 $langNameOfLang['czech'] = "tchèque";
 $langNameOfLang['dari'] = "dari";
@@ -803,17 +815,6 @@ $AssignUsers = "Assigner des utilisateurs";
 $AssignCourses = "Assigner des formations";
 $AssignSessions = "Assigner des sessions";
 $Timezone = "Zones horaires";
-$Attendance = "Présence";
-$CreateANewAttendance = "Créer un nouveau répertoire de feuilles de présences";
-$QualifyAttendanceGradebook = "Coter les présences dans les évaluations";
-$AttendanceCalendar = "Calendrier de présences";
-$GoToAttendanceCalendar = "Aller au calendrier de présences";
-$AttendanceSheet = "Feuille de présences";
-$AddDateAndTime = "Ajouter une date/heure";
-$CleanCalendar = "Nettoyer le calendrier de toutes les listes de présences";
-$AttendanceCalendarDescription = "Le calendrier de présences vous permet d'enregistrer des listes de présences (une par session présentielle à laquelle les apprenants doivent assister). Ajoutez de nouvelles listes de présences ici.";
-$CalendarList = "Liste calendrier des assistances";
-$ThereAreNoRegisteredDatetimeYet = "Il n'y a aucune date/heure enregistrée pour le moment";
 $DashboardPluginsHaveBeenUpdatedSucesslly = "Les plugins du panneau de contrôle ont été mis à jour";
 $LoginEnter = "S'identifier";
 $AttendanceSheetDescription = "Les feuilles de présences vous permettent de spécifier une liste de dates auxquelles vous rapporterez les présences à vos formations";
@@ -844,7 +845,6 @@ $ToolCourseSetting = "Paramètres";
 $ToolCourseMaintenance = "Maintenance";
 $AreYouSureToDeleteAllDates = "Êtes-vous certain de vouloir supprimer toutes les dates?";
 $AddADateTime = "Ajouter une date/heure";
-$DeleteAllAttendances = "Supprimer toutes les présences créées";
 $ThematicControl = "Contrôle thématique";
 $ThematicDetails = "Vue thématique détaillée";
 $ThematicList = "Vue thématique en liste";
@@ -880,8 +880,8 @@ $ThereIsNoAThematicAdvance = "Aucun avancement thématique";
 $StillDoNotHaveAThematicPlan = "Il n'y a pas encore de plan thématique";
 $NewThematicAdvance = "Nouvel avancement thématique";
 $DurationInHoursMustBeNumeric = "La durée en heures doit être numérique";
-$EditThematicSection = "Éditer la section thématique";
 $CreateAThematicSection = "Créer une section thématique";
+$EditThematicSection = "Éditer la section thématique";
 $ToolCourseProgress = "Progrès du cours";
 $SelectAnAttendance = "Sélectionner une feuille de présences";
 $ResultsHiddenByExerciseSetting = "Résultats cachés selon les paramètres de l'exercice";
@@ -934,10 +934,11 @@ Au travers d'une meilleure connaissance de notre public et de l'un de nos plus i
 En remplissant ce formulaire, vous acceptez que l'association Chamilo ou ses membres puissent vous envoyer des informations par e-mail au sujet d'évènements importants ou de mises à jours du software ou de la communauté. Ceci aidera la communauté à grandir comme une entité organisée au sein de laquelle l'information se propage, au travers d'un respect permanent de votre temps et de votre privacité.<br /><br />
 Veuillez prendre en considération que vous n'êtes <b>pas obligé</b> de remplir ce formulaire. Si vous désirez rester anonyme, nous perdrons la possibilité de vous offrir les privilèges d'être un administrateur de portail enregistré, mais nous respecterons votre décision. Laissez simplement ce formulaire vide et cliquez sur \"Suivant\". De la même façon, une fois l'envoi de l'information du formulaire ci-dessous confirmé, vous devrez cliquer sur \"Suivant\".";
 $CompanyActivity = "Activité de votre entreprise";
-$DateLock = "Bloquer date";
 $DateUnLock = "Débloquer date";
+$DateLock = "Bloquer date";
 $GoToStudentDetails = "Voir les détails de l'apprenant";
 $RepeatDate = "Répéter la date";
 $ToAttend = "Assister";
 $HaveFun = "amusez-vous,";
+$ClearSearchResults = "Remise à zéro des résultats";
 ?>

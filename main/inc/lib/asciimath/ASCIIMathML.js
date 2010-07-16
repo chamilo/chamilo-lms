@@ -52,10 +52,10 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 */
 
 // Modified by Ivan Tcholakov, 02-JUL-2010.
-//var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi?"; //path to CGI script that
+//var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi"; //path to CGI script that
 //						     //can render a TeX string
 //
-// You should pick up and install on your server software for TeX rendering as:
+// You should pick up and install on your server software for TeX rendering, such as:
 //
 // mimeTeX - http://www.forkosh.dreamhost.com/source_mimetex.html
 // mathTeX - http://www.forkosh.com/mathtex.html
@@ -66,27 +66,26 @@ FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 // Google Chart Tools - http://code.google.com/apis/charttools/
 //
 // You have to set here the path to the script for TeX rendering
-// and query parameters, if any.
-//
-// Examples:
-//
-// var AMTcgiloc = "/cgi-bin/mimetex.cgi?";
-// var AMTcgiloc = "http://my_server.net/cgi-bin/mimetex.cgi?";
+// and specific query parameters, if any.
 //
 // Some examples for testing purposes:
 //
-//var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi?";
-//var AMTcgiloc = "http://schmoodle.alaskapolicy.net/cgi-bin/mimetex.cgi?";
+//var AMTcgiloc = "http://www.imathas.com/cgi-bin/mimetex.cgi";
+//var AMTcgiloc = "http://schmoodle.alaskapolicy.net/cgi-bin/mimetex.cgi";
 //
-//var AMTcgiloc = "http://korpelainen.net/cgi-bin/mathtex.cgi?\\gammacorrection{1.4}";
-//var AMTcgiloc = "http://www.forkosh.com/cgi-bin/mathtex.cgi?\\gammacorrection{1.4}";
+//var AMTcgiloc = "http://korpelainen.net/cgi-bin/mathtex.cgi";
 //
-//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=1;tex=\\displaystyle ";
-//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=2;tex=\\displaystyle ";
+//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?tex=";
+//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=1;tex=";
+//var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?D=2;tex=";
 //
-//var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chf=bg,s,FFFFFF00&chco=000000&chl=";
+//var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chl=";
+//var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
 //
-var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chf=bg,s,FFFFFF00&chco=000000&chl=";
+//var AMTcgiloc = "http://codecogs.izyba.com/gif.latex";
+//var AMTcgiloc = "http://codecogs.izyba.com/png.latex";
+//
+var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";
 //
 
 var AScgiloc = 'http://www.imathas.com/imathas/filter/graph/svgimg.php'; //path to CGI script
@@ -94,7 +93,7 @@ var AScgiloc = 'http://www.imathas.com/imathas/filter/graph/svgimg.php'; //path 
 var mathcolor = "blue";        // change it to "" (to inherit) or another color
 // Modified by Ivan Tcholakov, 01-JUL-2010.
 //var mathfontsize = "1em";      // change to e.g. 1.2em for larger math
-var mathfontsize = "1.5em";
+var mathfontsize = "1.2em";
 //
 // Modified by Ivan Tcholakov, 05-JUL-2010.
 //var mathfontfamily = "serif";  // change to "" to inherit (works in IE)
@@ -170,9 +169,20 @@ function setStylesheet(s) {
 	}
 }
 
-setStylesheet("#AMMLcloseDiv \{font-size:0.8em; padding-top:1em; color:#014\}\n#AMMLwarningBox \{position:absolute; width:100%; top:0; left:0; z-index:200; text-align:center; font-size:1em; font-weight:bold; padding:0.5em 0 0.5em 0; color:#ffc; background:#c30\}");
+// Disabled by Ivan Tcholakov, 11-JUL-2010.
+// On Internet Explorer the inserted &nbsp; character breaks visual appearance of the online editor.
+//setStylesheet("#AMMLcloseDiv \{font-size:0.8em; padding-top:1em; color:#014\}\n#AMMLwarningBox \{position:absolute; width:100%; top:0; left:0; z-index:200; text-align:center; font-size:1em; font-weight:bold; padding:0.5em 0 0.5em 0; color:#ffc; background:#c30\}");
+//
+
+// Added by Ivan Tcholakov, 08-JUL-2010.
+// Prevention from multiple calls of the initialization function.
+var AMinitialized = false;
+//
 
 function init(){
+	// Added by Ivan Tcholakov, 08-JUL-2010.
+	if (AMinitialized) { return true; }
+	//
 	var msg, warnings = new Array();
 	if (document.getElementById==null){
 		alert("This webpage requires a recent browser such as Mozilla Firefox/Netscape 7+ or Internet Explorer 6+ with MathPlayer and Adobe SVGviewer");
@@ -182,6 +192,9 @@ function init(){
 	if (checkIfSVGavailable && (msg = checkSVG())) warnings.push(msg);
 	if (warnings.length>0) displayWarnings(warnings);
 	initSymbols();
+	// Added by Ivan Tcholakov, 08-JUL-2010.
+	AMinitialized = true;
+	//
 	return true;
 }
 
@@ -542,7 +555,6 @@ AMquote,
 {input:"&", tag:"mo", output:"\u0026", tex:null, ttype:CONST},
 {input:"^", tag:"msup", output:"^", tex:null, ttype:INFIX},
 {input:"~=", tag:"mo", output:"\u2245", tex:"cong", ttype:CONST},
-{input:"aa", tag:"mo", output:"\u00E5", tex:null, ttype:CONST},
 {input:"abs", tag:"mo", output:"abs", tex:null, ttype:UNARY, func:true},
 {input:"acute", tag:"mover", output:"\u00B4", tex:null, ttype:UNARY, acc:true},
 {input:"AE", tag:"mo", output:"\u00C6", tex:null, ttype:CONST},
@@ -1416,8 +1428,8 @@ function AMTparseExpr(str,rightbracket) {
 		if (right==')' || right==']') {
 			var left = newFrag.charAt(6);
 			if ((left=='(' && right==')' && symbol.output != '}') || (left=='[' && right==']')) {
-				var mxout = '\\matrix{';
-				//var mxout = '\\begin{array}{cc}';
+				//var mxout = '\\matrix{';
+				var mxout = '\\begin{array}{cc}';
 				var pos = new Array(); //position of commas
 				pos.push(0);
 				var matrix = true;
@@ -1447,8 +1459,8 @@ function AMTparseExpr(str,rightbracket) {
 						mxout += subarr.join('&');
 					}
 				}
-				mxout += '}';
-				//mxout += '\\end{array}';
+				//mxout += '}';
+				mxout += '\\end{array}';
 				if (matrix) { newFrag = mxout;}
 			}
 		}
@@ -1484,19 +1496,25 @@ function AMTparseAMtoTeX(str) {
 }
 
 function AMTparseMath(str,istex) {
-	if (istex) {
-		var texstring = str;
-	} else {
-		var texstring = AMTparseAMtoTeX(str);
-	}
-	//alert(texstring);
+  if (istex) {
+    var texstring = str;
+  } else {
+    var texstring = AMTparseAMtoTeX(str);
+  }
+  //alert(texstring);
   if (mathcolor!="") {
-	  texstring = "\\"+mathcolor + texstring;
+    if (AMTcgiloc.match(/mathtex/)) {
+      texstring = "\\gammacorrection{1.4}\\usepackage{color}\\color\{" + mathcolor + "\}" + texstring;
+    } else if (AMTcgiloc.match(/mimetex/)) {
+      texstring = "\\" + mathcolor + texstring;
+    } else if (AMTcgiloc.match(/.latex/)) {
+      texstring = texstring = "\\color\{" + mathcolor + "\}" + texstring;
+    }
   }
   if (displaystyle) {
-	  texstring = "\\displaystyle" + texstring;
+    texstring = "\\displaystyle" + texstring;
   } else {
-	  texstring = "\\textstyle" + texstring;
+    texstring = "\\textstyle" + texstring;
   }
   if (AMTcgiloc.match(/google/)) {
     var tclr = mathcolor;
@@ -1544,6 +1562,9 @@ function AMTparseMath(str,istex) {
   }
   if (AMTcgiloc.match(/google/)) {
     texstring = texstring + "&chf=bg,s," + bclr + "&chco=" + tclr;
+  }
+  if (AMTcgiloc.indexOf('?') == -1) {
+	  AMTcgiloc = AMTcgiloc + '?';
   }
   node.src = AMTcgiloc + texstring;
   node.style.verticalAlign = "middle";
@@ -1928,7 +1949,7 @@ function AMautomathrec(str) {
 function processNodeR(n, linebreaks,latex) {
   var mtch, str, arr, frg, i;
   if (n.childNodes.length == 0) {
-   if ((n.nodeType!=8 || linebreaks) &&
+   if ((n.nodeType!=8 || linebreaks) && n.parentNode &&
     n.parentNode.nodeName!="form" && n.parentNode.nodeName!="FORM" &&
     n.parentNode.nodeName!="textarea" && n.parentNode.nodeName!="TEXTAREA" /*&&
     n.parentNode.nodeName!="pre" && n.parentNode.nodeName!="PRE"*/) {
@@ -2455,8 +2476,6 @@ var LMsymbols = [
 {input:"\\#", tag:"mo", output:"\u0023", ttype:CONST},
 {input:"\\%", tag:"mo", output:"\u0025", ttype:CONST},
 {input:"\\&", tag:"mo", output:"\u0026", ttype:CONST},
-{input:"\\AA", tag:"mo", output:"\u00C5", ttype:CONST},
-{input:"\\aa", tag:"mo", output:"\u00E5", ttype:CONST},
 {input:"\\AE", tag:"mo", output:"\u00C6", ttype:CONST},
 {input:"\\ae", tag:"mo", output:"\u00E6", ttype:CONST},
 {input:"\\approxeq", tag:"mo", output:"\u224A", ttype:CONST},
@@ -3402,11 +3421,8 @@ General Public License (at http://www.gnu.org/license/lgpl.html)
 for more details.*/
 
 // you can change these
+var checkIfSVGavailable = true;
 // Modified by Ivan Tcholakov, 01-JUL-2010.
-//var checkIfSVGavailable = true;
-var checkIfSVGavailable = false;
-//
-//Modified by Ivan Tcholakov, 01-JUL-2010.
 //var notifyIfNoSVG = true;
 var notifyIfNoSVG = false;
 //
@@ -4687,7 +4703,7 @@ function ASpreprocess() {
 	 for (var i=len-1; i>=0; i--) {
 		picture = pictures[i];
 		var sscr = picture.getAttribute("sscr");
-		if (sscr!='')  {
+		if (sscr && sscr!='')  {
 			if (noSVG) {
 				n = document.createElement('img');
 				n.setAttribute("style",picture.getAttribute("style"));
@@ -4697,8 +4713,11 @@ function ASpreprocess() {
 			} else {
 				com = parseShortScript(sscr);
 				picture.setAttribute("script",com);
-				picture.className = "ASCIIsvg";
+				//picture.className = "ASCIIsvg";
 			}
+		}
+		if (!noSVG) {
+			picture.className = "ASCIIsvg";
 		}
 	 }
 }

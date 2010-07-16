@@ -246,5 +246,9 @@ class AttendanceLink extends AbstractLink
     	return $this->attendance_data;
     }
 
+    public function get_icon_name() {
+		return 'attendance';
+	}
+
 }
 ?>

@@ -21,4 +21,5 @@ $exeFinished = "Identificáronse todas as respostas. Agora pode reasignar as sú
 $nextAnswer = "Agora faga clic en: &done=done";
 $delineation = "Delimitación";
 $labelDelineationMenu = "Cerrar delimitación";
+$oar = "Area en perigo";
 ?>

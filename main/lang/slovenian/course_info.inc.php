@@ -113,4 +113,12 @@ $NewUserEmailAlert = "Opozori preko e-pošte učitelja tečaja v primeru samodej
 $NewUserEmailAlertEnable = "Omogoči opozorilo učitelju tečaja preko e-pošte v primeru samodejnega vpisa novega uporabnika v tečaj";
 $NewUserEmailAlertToTeacharAndTutor = "Omogoči opozorilo učitelju in tutorjem tečaja v primeru samodejnega vpisa novega uporabnika v tečaj";
 $NewUserEmailAlertDisable = "Onemogoči opozorilo v primeru vpisa novega uporabnika v tečaj";
+$AllowUserViewUserList = "Omogoči uporabnikom vpogled v seznam uporabnikov";
+$AllowUserViewUserListActivate = "Omogoči seznam uporabnikov";
+$AllowUserViewUserListDeactivate = "Onemogoči seznam uporabnikov";
+$DoNotDisplayAnyAdvance = "Ne prikaži napredka";
+$NewHomeworkEmailAlert = "E-poštno obveščanje uporabnikov ob objavi naloge";
+$NewHomeworkEmailAlertEnable = "Omogoči e-poštno obveščanje uporabnikov ob objavi naloge";
+$NewHomeworkEmailAlertDisable = "Onemogoči e-poštno obveščanje ob objavi naloge";
+$DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Prikaži zadnji izvedeni korak in prvega nedokončanega";
 ?>

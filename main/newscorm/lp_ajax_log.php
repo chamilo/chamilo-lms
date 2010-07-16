@@ -24,7 +24,10 @@ function lp_ajax_log($msg, $level) {
     $debug = 0;
     $return = '';
     if ($debug>0) {error_log('In log('.$msg.')',0);}
-    if ($level == 0) {error_log('Logging level too low, not writing files in '.__FILE__); return $return;}
+    if ($level == 0) {
+	//error_log('Logging level too low, not writing files in '.__FILE__); 
+	return $return;
+    }
     $msg = str_replace('<br />',"\r\n", $msg);
     $file = sys_get_temp_dir().DIRECTORY_SEPARATOR.session_id().'.'.date('Ymd').'-'.api_get_user_id().'.scorm.log';
     $fh = @fopen($file,'a');

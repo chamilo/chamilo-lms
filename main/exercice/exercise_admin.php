@@ -184,7 +184,7 @@ if ($form -> validate()) {
 	Display::display_header($nameTools,get_lang('Exercise'));
 	
 	echo '<div class="actions">';
-	echo '<a href="exercice.php?show=test">' . Display :: return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
+	echo '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
 	echo '</div>';	
 	
 	if ($objExercise->feedbacktype==1)

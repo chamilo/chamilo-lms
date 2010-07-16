@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AssignSessionsTo = "Assign sessions to";
 $langToolName = "Import Blackboard courses";
 $TrackingDisabled = "Reporting has been disabled by system administrator.";
 $InactivesStudents = "Inactive users";
@@ -249,7 +250,6 @@ $DashboardBlocks = "Dashboard blocks";
 $DashboardList = "Dashboard list";
 $YouHaveNotEnabledBlocks = "You haven't enabled any block";
 $BlocksHaveBeenUpdatedSuccessfully = "The blocks have been updated";
-$AssignSessionsTo = "Assign sessions to";
 $AttendanceSheetDescription = "Attendance sheets allow you to gather all your courses attendances by groups. For example, you might want to take attendances to theory lessons separately from attendances to practical lessons. Each of them will show all students as attending by default. It is up to you to register the missing students by clicking the corresponding checkbox.";
 $AttendanceSheetReport = "Report of attendance sheets";
 $YouDoNotHaveDoneAttendances = "You do not have attendances";
@@ -269,4 +269,8 @@ $LinkInvisible = "Link made invisible";
 $LinkAdded = "Link added";
 $Minutes = "Minutes";
 $BackupCreated = "Backup created";
+$DisplayCourseOverview = "Courses overview";
+$DisplaySessionOverview = "Sessions overview";
+$TotalNumberOfMessages = "Total number of messages";
+$TotalNumberOfAssignments = "Total number of assignments";
 ?>

@@ -48,4 +48,9 @@ $langSaveLink = "Shrani povezavo";
 $langSaveCategory = "Shrani kategorijo";
 $BackToLinksOverview = "Nazaj na pregled povezav";
 $AddTargetOfLinkOnHomepage = "Izberite 'cilj', ki predstavlja povezavo na domači strani tečaja";
+$Url = "URL";
+$LinkOpenSelf = "Open self";
+$LinkOpenBlank = "Open blank";
+$LinkOpenParent = "Open parent";
+$LinkOpenTop = "Odpri na vrhu (open top)";
 ?>

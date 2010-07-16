@@ -75,4 +75,6 @@ $AgendaSortChronologicallyDown = "Ordenar eventos (recentes / antigos)";
 $ItemForUserSelection = "Evento dirixido ós usuarios seleccionados";
 $IsNotiCalFormatFile = "Non é un arquivo de formato iCal";
 $RepeatEvent = "Repetir evento";
+$RepeatDate = "Repetir data";
+$EndDateMustBeMoreThanStartDate = "A data final ten que ser maior que a de inicio";
 ?>

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AssignSessionsTo = "Assegna sessioni a";
 $langToolName = "Importa corsi Blackboard";
 $TrackingDisabled = "Le statistiche sono state disabilitate dall'Amministratore";
 $InactivesStudents = "Corsisti inattivi";
@@ -249,7 +250,6 @@ $DashboardBlocks = "Blocchi del pannello";
 $DashboardList = "Elenco pannelli di controllo";
 $YouHaveNotEnabledBlocks = "Non hai abilitato alcun blocco";
 $BlocksHaveBeenUpdatedSuccessfully = "I blocchi sono stati aggiornati";
-$AssignSessionsTo = "Assegna sessioni a";
 $AttendanceSheetDescription = "I fogli di presenza ti consentono di raggruppare le presenze ai corsi: ad esempio puoi separare le presenze relative alle lezioni teoriche da quelle relative alle lezioni pratiche. 
 Per default tutti i corsisti sono considerati presenti, dovrai spuntare dall'elenco i corsisti assenti.";
 $AttendanceSheetReport = "Report dai fogli di presenza";

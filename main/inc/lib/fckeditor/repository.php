@@ -51,25 +51,49 @@ if (api_is_platform_admin()) {
 		@mkdir($homepage_folder, $permissions_for_new_directories);
 	}
 }
-$current_session_id = api_get_session_id();
-// Creation in the course document repository of a shared folder if it does not exist.
-if (api_is_in_course()) {
-	$course_shared_folder = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/';
-	if (!file_exists($course_shared_folder)) {
-		@mkdir($course_shared_folder, $permissions_for_new_directories);
-		$doc_id = add_document($_course, '/shared_folder', 'folder', 0, 'shared_folder');
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(),null,null,null,null,$current_session_id);
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),null,null,null,null,$current_session_id);
-	}
 
-	// Added by Ivan Tcholakov.
-	// When the current user is inside a course, his/her own hidden folder is created (if it does not exist) under shared_folder.
-	if (!file_exists($course_shared_folder.'sf_user_'.api_get_user_id())) {
-		//@todo call the create_unexisting_directory function and replace this code Julio Montoya
-		$new_user_dir = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/sf_user_'.api_get_user_id().'/';
-		@mkdir($new_user_dir, $permissions_for_new_directories);
-		$doc_id = add_document($_course, '/shared_folder/sf_user_'.api_get_user_id(), 'folder', 0, api_get_person_name($_user['firstName'], $_user['lastName']));
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(),null,null,null,null,$current_session_id);
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),null,null,null,null,$current_session_id);
+
+// Create course shared folders
+if (api_is_in_course()) {	
+	$course_dir      = $_course['path'].'/document';
+	$sys_course_path = api_get_path(SYS_COURSE_PATH);
+	$base_work_dir   = $sys_course_path.$course_dir;
+	$current_session_id = api_get_session_id();
+	
+	if($current_session_id==0){
+		//Create shared folder. Necessary for courses recycled. Allways session_id should be zero. Allway should be created from a base course, never from a session.
+		if (!file_exists($base_work_dir.'/shared_folder')) {
+			$usf_dir_title = get_lang('SharedFolder');
+			$usf_dir_name = '/shared_folder';
+			$to_group_id = 0;
+			$visibility = 0;
+			create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);	
+		}
+		// Create dynamic user shared folder
+		if (!file_exists($base_work_dir.'/shared_folder/sf_user_'.api_get_user_id())) {
+				$usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']);
+				$usf_dir_name = '/shared_folder/sf_user_'.api_get_user_id();
+				$to_group_id = 0;
+				$visibility = 1;
+				create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
+		}
+	}
+	else{	
+			//Create shared folder session
+			if (!file_exists($base_work_dir.'/shared_folder_session_'.$current_session_id)) {
+				$usf_dir_title = get_lang('SharedFolder').' ('.api_get_session_name($current_session_id).')';
+				$usf_dir_name = '/shared_folder_session_'.$current_session_id;			
+				$to_group_id = 0;
+				$visibility = 0;
+				create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
+			}
+			//Create dynamic user shared folder into a shared folder session
+			if (!file_exists($base_work_dir.'/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id())) {
+				$usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).' ('.api_get_session_name($current_session_id).')';
+				$usf_dir_name = '/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id();			
+				$to_group_id = 0;
+				$visibility = 1;
+				create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
+			}
 	}
 }

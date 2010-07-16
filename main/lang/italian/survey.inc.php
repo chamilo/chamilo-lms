@@ -203,4 +203,5 @@ $UpdateInformation = "Aggiorna informazione";
 $PleaseFillSurvey = "Riempi il questionario, grazie.";
 $ReportingOverview = "Report di sintesi";
 $ThereAreNotQuestionsForthisSurvey = "Non ci sono domande nel questionario";
+$Multipleresponse = "Risposta multipla";
 ?>

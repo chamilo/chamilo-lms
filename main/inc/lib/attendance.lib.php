@@ -53,19 +53,12 @@ class Attendance
 		$data = array();
 		
 		if (!empty($course_db_name)) {
-			//$course_info = api_get_course_info($course_code);
 			$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE, $course_db_name);
 		}
-		
-		$condition_session = '';
-		if (isset($session_id)) {
-			$session_id = intval($session_id);
-			$condition_session = ' WHERE session_id = '.$session_id;
-		} else {
-			$session_id = api_get_session_id();
-			$condition_session = api_get_session_condition($session_id);
-		}
-				
+
+                $session_id = isset($session_id)?intval($session_id):api_get_session_id();
+                $condition_session = api_get_session_condition($session_id);
+
 		// Get attendance data
 		$sql = "SELECT id, name, attendance_qualify_max FROM $tbl_attendance WHERE active = 1 $condition_session ";
 		$rs  = Database::query($sql);

@@ -150,27 +150,34 @@ function get_icon_file_name ($type) {
 			$icon = 'gradebook_eval_not_empty.gif';
 			break;
 		case 'exercise':
+		case LINK_EXERCISE:
 			$icon = 'quiz.gif';
 			break;
 		case 'learnpath':
+		case LINK_LEARNPATH:
 			$icon = 'scorm.gif';
 			break;
 		case 'studentpublication':
+		case LINK_STUDENTPUBLICATION:
 			$icon = 'works.gif';
 			break;
 		case 'link':
 			$icon = 'link.gif';
 			break;
 		case 'forum':
+		case LINK_FORUM_THREAD:
 			$icon = 'forum.gif';
 			break;
 		case 'attendance':
+		case LINK_ATTENDANCE:
 			$icon = 'attendance.gif';
 			break;
 		case 'survey':
+		case LINK_SURVEY:
 			$icon = 'survey.gif';
 			break;
 		case 'dropbox':
+		case LINK_DROPBOX:
 			$icon = 'dropbox.gif';
 			break;
 		default:

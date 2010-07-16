@@ -74,12 +74,13 @@ define('LINK_STUDENTPUBLICATION',3);
 define('LINK_LEARNPATH',4);
 define('LINK_FORUM_THREAD',5);
 */
-$table_evaluated[1] = array(TABLE_QUIZ_TEST, 'title', 'id', get_lang('Exercise'));
-$table_evaluated[2] = array(TABLE_DROPBOX_FILE, 'name','id', get_lang('Dropbox'));
-$table_evaluated[3] = array(TABLE_STUDENT_PUBLICATION, 'url','id', get_lang('Student_publication'));
-$table_evaluated[4] = array(TABLE_LP_MAIN, 'name','id', get_lang('Learnpath'));
-$table_evaluated[5] = array(TABLE_FORUM_THREAD, 'thread_title_qualify', 'thread_id', get_lang('Forum'));
-$table_evaluated[7] = array(TABLE_ATTENDANCE, 'attendance_title_qualify', 'id', get_lang('Attendance'));
+$table_evaluated[LINK_EXERCISE]           = array(TABLE_QUIZ_TEST, 'title', 'id', get_lang('Exercise'));
+$table_evaluated[LINK_DROPBOX]            = array(TABLE_DROPBOX_FILE, 'name','id', get_lang('Dropbox'));
+$table_evaluated[LINK_STUDENTPUBLICATION] = array(TABLE_STUDENT_PUBLICATION, 'url','id', get_lang('Student_publication'));
+$table_evaluated[LINK_LEARNPATH]          = array(TABLE_LP_MAIN, 'name','id', get_lang('Learnpath'));
+$table_evaluated[LINK_FORUM_THREAD]       = array(TABLE_FORUM_THREAD, 'thread_title_qualify', 'thread_id', get_lang('Forum'));
+$table_evaluated[LINK_ATTENDANCE]         = array(TABLE_ATTENDANCE, 'attendance_title_qualify', 'id', get_lang('Attendance'));
+$table_evaluated[LINK_SURVEY]             = array(TABLE_SURVEY, 'code', 'survey_id', get_lang('Survey'));
 
 $submitted=isset($_POST['submitted'])?$_POST['submitted']:'';
 if($submitted==1) {
@@ -132,7 +133,7 @@ $result = Database::query($sql);
 		} else {
 			$resource_name=$resource_name[1];
 		}
-		$output.= '<tr><td> [ '.$table_evaluated[$row['type']][3].' ] '.$resource_name.'</td><td><input type="hidden" name="link_'.$row['id'].'" value="'.$resource_name.'" /><input size="10" type="text" name="link['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';
+		$output.= '<tr><td>'.build_type_icon_tag($row['type']).'</td><td> [ '.$table_evaluated[$row['type']][3].' ] '.$resource_name.'</td><td><input type="hidden" name="link_'.$row['id'].'" value="'.$resource_name.'" /><input size="10" type="text" name="link['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';
 	}
 
 	$sql = Database::query('SELECT * FROM '.$table_evaluation.' WHERE category_id = '.$category_id);
@@ -145,7 +146,7 @@ $result = Database::query($sql);
 			$row['weight'] = trim($_POST['evaluation'][$row['id']]);
 		}
 	$type_evaluated = isset($row['type']) ? $table_evaluated[$type_evaluated][3] : null;
-	$output.= '<tr><td> [ '.get_lang('Evaluation').$type_evaluated.' ] '.$row['name'].'</td><td><input type="hidden" name="eval_'.$row['id'].'" value="'.$row['name'].'" /><input type="text" size="10" name="evaluation['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';
+	$output.= '<tr><td>'.build_type_icon_tag('evalnotempty').'</td><td> [ '.get_lang('Evaluation').$type_evaluated.' ] '.$row['name'].'</td><td><input type="hidden" name="eval_'.$row['id'].'" value="'.$row['name'].'" /><input type="text" size="10" name="evaluation['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';
 }
 //by iflorespaz
 $my_category=array();
@@ -162,12 +163,14 @@ if ($my_api_cidreq=='') {
 <form method="post" action="gradebook_edit_all.php?id_session=<?php echo $_SESSION['id_session'].'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id?>">
 <table class="data_table">
 		 <tr class="row_odd">
+		  <th style="width: 35px;"><?php echo get_lang('Type'); ?></th>
 		  <th><?php echo get_lang('Resource'); ?></th>
 		  <th><?php echo get_lang('Weight'); ?></th>
 		 </tr>
-		 <?php echo $output ?>
+		 <?php echo $output; ?>
  </table>
  <input type="hidden" name="submitted" value="1" />
+ <br />
  <button class="save" type="submit" name="name" value="<?php echo get_lang('Save') ?>"><?php echo get_lang('SaveScoringRules') ?></button>
 </form>
 <?php

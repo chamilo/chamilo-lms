@@ -13,6 +13,7 @@ define('LINK_LEARNPATH',			4);
 define('LINK_FORUM_THREAD',			5);
 //define('LINK_WORK',6);
 define('LINK_ATTENDANCE',			7);
+define('LINK_SURVEY',				8);
 
 require_once 'gradebookitem.class.php';
 require_once 'abstractlink.class.php';
@@ -74,21 +75,21 @@ class LinkFactory
 	 * @param $type link type
 	 */
 	public function create ($type) {
-		if ($type == LINK_EXERCISE ) {
-			return new ExerciseLink();
-		} elseif ($type == LINK_DROPBOX ) {
-			return new DropboxLink();
-		} elseif ($type == LINK_STUDENTPUBLICATION ) {
-			return new StudentPublicationLink();
-		} elseif ($type == LINK_LEARNPATH ) {
-			 return new LearnpathLink();
-		} elseif ($type == LINK_FORUM_THREAD ) {
-			 return new ForumThreadLink();
-		} elseif ($type == LINK_ATTENDANCE ) {
-			 return new AttendanceLink();
-		} else {
-			 return null;
+		switch ($type) {
+			case LINK_EXERCISE:
+				return new ExerciseLink();
+			case LINK_DROPBOX:
+				return new DropboxLink();
+			case LINK_STUDENTPUBLICATION:
+				return new StudentPublicationLink();
+			case LINK_LEARNPATH:
+				return new LearnpathLink();
+			case LINK_FORUM_THREAD:
+				return new ForumThreadLink();
+			case LINK_ATTENDANCE:
+				return new AttendanceLink();
 		}
+		return null;
 	}
 
 	/**

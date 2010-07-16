@@ -256,7 +256,7 @@ if (api_get_setting('profile', 'language') !== 'true') {
 
 //	EXTENDED PROFILE  this make the page very slow!
 if (api_get_setting('extended_profile') == 'true') {
-	if ($_GET['type'] == 'extended') {
+	if (!isset($_GET['type']) || (isset($_GET['type']) && $_GET['type'] == 'extended')) {
 		//$form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
 		$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
 		//	MY COMPETENCES
@@ -823,10 +823,10 @@ if (api_get_setting('allow_social_tool') == 'true') {
 			echo '<div id="social-content-online">';
 				if (api_get_setting('extended_profile') == 'true') {
 					$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
-					if (isset($_GET['type']) && $_GET['type'] == 'extended') {
-						echo '<a href="profile.php?type=reduced'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</span></a>';
+					if (isset($_GET['type']) && $_GET['type'] == 'reduced') {
+						echo '<a href="profile.php?type=extended '.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</span></a>';
 					} else {
-						echo '<a href="profile.php?type=extended'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</span></a>';
+						echo '<a href="profile.php?type=reduced'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</span></a>';
 					}
 				}
 			echo '</div>';

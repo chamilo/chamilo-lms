@@ -175,6 +175,10 @@ $User = "Utente";
 $LostPass = "Password dimenticata?";
 $EnterEmailUserAndWellSendYouPassword = "Immetti il nome utente e l'indirizzo email con cui ti sei registrata/o e ti verrà reinviata la password";
 $NoUserAccountWithThisEmailAddress = "Non ci sono registrazioni collegate al nome utente e all'indirizzo e-mail";
-$WithTheFollowingSettings = "con i seguenti parametri:";
 $CouldNotResetPassword = "La password non può essere resettata";
+$WithTheFollowingSettings = "con i seguenti parametri:";
+$YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "La tua iscrizione a %s è stata accettata";
+$HaveFun = "Buon lavoro,";
+$YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Ora puoi accedere a %s usando il nome utente e la password da te indicata";
+$AreYouSureToEditTheUserStatus = "Sei sicuro di modificare lo stato dell'utente?";
 ?>

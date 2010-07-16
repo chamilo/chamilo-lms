@@ -2,10 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DeleteAllAttendances = "Elimina totes les assistències creades";
 $Title = "Títol";
 $By = "Publicat per";
 $UsersOnline = "Usuaris connectats";
-$Remove = "Esborrar";
+$Remove = "Esborra";
 $langEnter = "Retorna a la llista dels meus cursos";
 $Description = "Descripció";
 $Links = "Enllaços";
@@ -138,7 +139,7 @@ $langModifyProfile = "Modifica el meu perfil";
 $langMyStats = "Veure les meves estadístiques";
 $langLogout = "Sortir";
 $langMyAgenda = "Agenda personal";
-$langCourseHomepage = "Pàgina inicial del curs";
+$langCourseHomepage = "Pàgina principal del curs";
 $langCourseManagerview = "Vista del professor";
 $langStudentView = "Vista de l'estudiant";
 $AddResource = "Afegir";
@@ -729,6 +730,35 @@ $Until = "Fins";
 $FirstPage = "Primera pàgina";
 $LastPage = "Última pàgina";
 $Coachs = "Tutors";
+$ThereAreNoRegisteredDatetimeYet = "Encara no hi ha registrada cap data/hora";
+$CalendarList = "Dates de la llista d'assistència";
+$AttendanceCalendarDescription = "El calendari d'assistència li permet especificar les dates que apareixeran a la llista d'assistència.";
+$CleanCalendar = "Neteja el calendari";
+$AddDateAndTime = "Afegeix una data i una hora";
+$AttendanceSheet = "Llista d'assistència";
+$GoToAttendanceCalendar = "Vés al calendari d'assistència";
+$AttendanceCalendar = "Calendari d'assistència";
+$QualifyAttendanceGradebook = "Qualifica la llista d'assistència";
+$CreateANewAttendance = "Crea una llista d'assistència";
+$Attendance = "Assistència";
+$langNameOfLang['bosnian'] = "Bosnià";
+$langNameOfLang['czech'] = "Txec";
+$langNameOfLang['dari'] = "Dari";
+$langNameOfLang['dutch_corporate'] = "Holandès corporatiu";
+$langNameOfLang['english_org'] = "Anglès per a organitzacions";
+$langNameOfLang['friulian'] = "friülès";
+$langNameOfLang['georgian'] = "georgià";
+$langNameOfLang['hebrew'] = "hebreu";
+$langNameOfLang['korean'] = "coreà";
+$langNameOfLang['latvian'] = "letó";
+$langNameOfLang['lithuanian'] = "lituà";
+$langNameOfLang['macedonian'] = "macedoni";
+$langNameOfLang['norwegian'] = "noruec";
+$langNameOfLang['pashto'] = "paixtu";
+$langNameOfLang['persian'] = "persa";
+$langNameOfLang['quechua_cusco'] = "quítxua de Cusco";
+$langNameOfLang['romanian'] = "rumanès";
 $TitleColumnGradebook = "Títol de la columna en l'Informe d'Avaluació";
 $QualifyWeight = "Pes de la qualificació";
+$Homepage = "Pàgina principal";
 ?>

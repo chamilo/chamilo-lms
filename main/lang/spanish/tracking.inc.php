@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AssignSessionsTo = "Asignar sesiones a";
 $langToolName = "Importar cursos de Blackboard";
 $TrackingDisabled = "El seguimiento ha sido deshabilitado por el administrador del sistema.";
 $InactivesStudents = "Alumnos inactivos";
@@ -249,7 +250,6 @@ $DashboardBlocks = "Bloques del panel de control";
 $DashboardList = "Lista del panel de control";
 $YouHaveNotEnabledBlocks = "No ha habilitado ningún bloque";
 $BlocksHaveBeenUpdatedSuccessfully = "Los bloques han sido actualizados";
-$AssignSessionsTo = "Asignar sesiones a";
 $AttendanceSheetDescription = "Las hojas de asistencia le permite reunir las asistencias de sus cursos por grupos. Por ejemplo, podría querer tomar las asistencias de las clases teóricas de manera separada de las de las clases prácticas. En cada entrada mostrarán todos los estudiantes como asistentes por defecto. Es su responsabilidad registrar a los estudiantes que han faltado, haciendo clic en la casilla correspondiente.";
 $AttendanceSheetReport = "Reporte de hojas de asistencias";
 $YouDoNotHaveDoneAttendances = "No tiene asistencias";
@@ -269,4 +269,8 @@ $LinkInvisible = "Enlace hecho invisible";
 $LinkAdded = "Enlace añadido";
 $Minutes = "Minutos";
 $BackupCreated = "Exporte creado";
+$DisplayCourseOverview = "Resumen de los cursos";
+$DisplaySessionOverview = "Resumen de las sesiones";
+$TotalNumberOfMessages = "Número total de mensajes";
+$TotalNumberOfAssignments = "Número total de tareas";
 ?>

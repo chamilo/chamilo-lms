@@ -251,4 +251,11 @@ $GoToAttendanceCalendarList = "Към календара за присъстви
 $AddADateTime = "Добавяне на час и дата";
 $AreYouSureToDeleteAllDates = "Сигерни ли сте, че искате да изтриете всички дати?";
 $TimeSpentLastWeek = "Прекарано време през последната седмица";
+$FolderCreated = "Създадена е нова папка.";
+$LinkAdded = "Добавена е връзка.";
+$Minutes = "Резюме";
+$DisplayCourseOverview = "Преглед на курсовете";
+$DisplaySessionOverview = "Преглед на сесиите";
+$TotalNumberOfMessages = "Общ брой съобщения";
+$TotalNumberOfAssignments = "Общ брой задачи";
 ?>

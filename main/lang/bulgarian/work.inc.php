@@ -87,4 +87,7 @@ $ViewUsersWithTask = "Получени задачи";
 $ReminderMessage = "Изпращане на напомнително съобщение";
 $DateSent = "Дата на изпращане";
 $ViewUsersWithoutTask = "Преглед за липсващи работи";
+$HomeworkCreated = "Създадена е задача.";
+$HomeworkHasBeenCreatedForTheCourse = "Създадена е задача за курса";
+$PleaseCheckHomeworkPage = "Моля, вижте началната страница със задачите.";
 ?>

@@ -66,13 +66,13 @@ $FolderCreated = "Nuova cartella creata";
 $LinkAdded = "Collegamento aggiunto";
 $AnnouncementAdded = "L'avviso è stato aggiunto";
 $AgendaAdded = "Voce nell'agenda aggiunta";
+$LoginEnter = "Accedi";
 $Messages = "Messaggi";
 $Inbox = "Posta in entrata";
 $Comppose = "Componi";
 $PendingInvitations = "Inviti in attesa";
 $YouDoNotHaveAnySessionInItsHistory = "Non ci sono tue sessioni nello storico";
 $PortalHomepageDefaultIntroduction = "<p>&nbsp;</p>\r\n<p><span class=\"Apple-style-span\" style=\"font-family: arial, verdana, helvetica, sans-serif; \">\r\n<h2 style=\"font-size: 18px; \">Congratulazioni! Hai installato con successo il tuo portale per l'e-learning!</h2>\r\n<p style=\"font-size: 12px; \">";
-$LoginEnter = "Accedi";
 $Username = "Nome utente";
 $Profile = "Profilo";
 ?>

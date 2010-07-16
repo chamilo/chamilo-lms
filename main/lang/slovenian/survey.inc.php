@@ -203,4 +203,5 @@ $UpdateInformation = "Ažuriraj informacije";
 $PleaseFillSurvey = "Prosim, izpolnite vprašalnik";
 $ReportingOverview = "Poročila - pregled";
 $ThereAreNotQuestionsForthisSurvey = "V tem vprašalniku trenutno ni vprašanj";
+$Multipleresponse = "Večkraten odgovor";
 ?>

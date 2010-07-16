@@ -247,4 +247,6 @@ $SaveAudioAndOrganization = "Shrani zvok in organizacijo";
 $UploadOnlyMp3Files = "Prosim, naložite zgolj MP3 datoteke";
 $ModifyHotPotatoes = "Spremeni hotpotatoes";
 $SaveHotpotatoes = "Shrani hotpotatoes";
+$ReturnToLPList = "Povratek na seznam";
+$LpPrerequisiteDescription = "Izbira druge učne poti za predzahtevo trenutne učne poti skrije vse obstoječe predzahteve dokler ta ne bo popolnoma (100%) izpolnjena";
 ?>

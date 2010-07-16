@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DeleteAllAttendances = "Elimina tutte le presenze registrate";
 $Title = "Titolo";
 $By = "Da";
 $UsersOnline = "Utenti collegati";
@@ -729,6 +730,17 @@ $Until = "Fino a";
 $FirstPage = "Prima pagina";
 $LastPage = "Ultima pagina";
 $Coachs = "Tutor";
+$ThereAreNoRegisteredDatetimeYet = "Non ci sono ancora indicazioni sulla data e l'ora";
+$CalendarList = "Calendario delle presenze";
+$AttendanceCalendarDescription = "Il calendario delle presenze ti permette di registrare le presenze per le sessioni che i corsisti devono frequentare. Crea qui un nuovo calendario.";
+$CleanCalendar = "Cancella il calendario per tutti gli elenchi";
+$AddDateAndTime = "Aggiungi data e ora";
+$AttendanceSheet = "Foglio di presenza";
+$GoToAttendanceCalendar = "Vai ad un altro calendario delle presenza";
+$AttendanceCalendar = "Calendario delle presenze";
+$QualifyAttendanceGradebook = "Attribuisci un valore alle presenze nel registro";
+$CreateANewAttendance = "Crea un nuovo elenco delle presenze";
+$Attendance = "Presenze";
 $langNameOfLang['bosnian'] = "Bosniaco";
 $langNameOfLang['czech'] = "Ceco";
 $langNameOfLang['dari'] = "Dari (Farsi)";
@@ -803,17 +815,6 @@ $AssignUsers = "Assegna utenti";
 $AssignCourses = "Assegna corsi";
 $AssignSessions = "Assegna sessioni";
 $Timezone = "Fuso orario";
-$Attendance = "Presenze";
-$CreateANewAttendance = "Crea un nuovo elenco delle presenze";
-$QualifyAttendanceGradebook = "Attribuisci un valore alle presenze nel registro";
-$AttendanceCalendar = "Calendario delle presenze";
-$GoToAttendanceCalendar = "Vai ad un altro calendario delle presenza";
-$AttendanceSheet = "Foglio di presenza";
-$AddDateAndTime = "Aggiungi data e ora";
-$CleanCalendar = "Cancella il calendario per tutti gli elenchi";
-$AttendanceCalendarDescription = "Il calendario delle presenze ti permette di registrare le presenze per le sessioni che i corsisti devono frequentare. Crea qui un nuovo calendario.";
-$CalendarList = "Calendario delle presenze";
-$ThereAreNoRegisteredDatetimeYet = "Non ci sono ancora indicazioni sulla data e l'ora";
 $DashboardPluginsHaveBeenUpdatedSucesslly = "Il plugin pannello di controllo è stato aggiornato";
 $LoginEnter = "Accesso";
 $AttendanceSheetDescription = "I fogli di presenza ti permettono di specificare un insieme di date in cui verificherai la presenza dei corsisti";
@@ -844,7 +845,6 @@ $ToolCourseSetting = "Configurazione";
 $ToolCourseMaintenance = "Manutenzione";
 $AreYouSureToDeleteAllDates = "Sei sicura/o di voler cancellare tutte le date?";
 $AddADateTime = "Aggiungi data e ora";
-$DeleteAllAttendances = "Elimina tutte le presenze registrate";
 $ThematicControl = "Avanzamento corso";
 $ThematicDetails = "Vista argomenti in dettaglio";
 $ThematicList = "Vista elenco argomenti";
@@ -880,8 +880,8 @@ $ThereIsNoAThematicAdvance = "Non è stato definito un piano di avanzamento dell
 $StillDoNotHaveAThematicPlan = "Non è stato definito lo sviluppo dell'argomento";
 $NewThematicAdvance = "Nuove tappe di avanzamento per l'argomento";
 $DurationInHoursMustBeNumeric = "La durata dev'essere indicata come numero";
-$EditThematicSection = "Modifica la sezione Argomenti";
 $CreateAThematicSection = "Crea una sezione Argomenti";
+$EditThematicSection = "Modifica la sezione Argomenti";
 $ToolCourseProgress = "Avanzamento Corso";
 $SelectAnAttendance = "Seleziona un foglio di presenza";
 $ResultsHiddenByExerciseSetting = "Nascondi i risultati per l'esercizio";
@@ -941,9 +941,11 @@ Nota che la compilazione del modulo non è obbligatoria.
 Se vuoi mantenere l'anonimato potrai perdere le opportunità riservate agli amministratori registrati, ma rispettiamo appieno la Tua scelta.
 In questo caso lascia il modulo non compilato e prosegui normalmente.";
 $CompanyActivity = "Settore della tua organizzazione";
-$DateLock = "Blocca la data";
 $DateUnLock = "Sblocca la data";
+$DateLock = "Blocca la data";
 $GoToStudentDetails = "Vai alle informazioni sui corsisti";
 $RepeatDate = "Ripeti la data";
 $ToAttend = "Da frequentare";
+$HaveFun = "Buon lavoro,";
+$ClearSearchResults = "Cancella i risultati della ricerca";
 ?>

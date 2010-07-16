@@ -56,4 +56,5 @@ $AnnounceSentToUserSelection = "Anuncio enviado a unha selección de usuarios";
 $SendAnnouncement = "Enviar anuncio";
 $ModifyAnnouncement = "Modificar anuncio";
 $ButtonPublishAnnouncement = "Enviar anuncio";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Estimado usuario, a súa conta foi activada na plataforma. Por favor, entre e disfrute dos seus cursos.";
 ?>

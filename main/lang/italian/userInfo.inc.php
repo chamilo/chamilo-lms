@@ -193,4 +193,5 @@ $DenyEntry = "Nega l'ingresso";
 $YouNeedToHaveFriendsInYourSocialNetwork = "Nel social network devi avere degli amici";
 $SeeAllMyGroups = "Mostra i miei gruppi";
 $YouAlreadyInviteAllYourContacts = "Hai già mandato un invito a tutti i tuoi contatti";
+$YouShouldCreateAGroup = "Devi prima creare un gruppo";
 ?>

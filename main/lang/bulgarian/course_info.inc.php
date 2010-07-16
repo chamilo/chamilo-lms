@@ -117,4 +117,8 @@ $AllowUserViewUserList = "Разрешанаве на курситите да в
 $AllowUserViewUserListActivate = "Разрешаване";
 $AllowUserViewUserListDeactivate = "Забрана";
 $DoNotDisplayAnyAdvance = "Да не се показва напредъка";
+$NewHomeworkEmailAlert = "Да се уведомят потребителите с e-mail, когато се създаде нова домашна работа";
+$NewHomeworkEmailAlertEnable = "Да се уведомят потребителите с e-mail, когато се представи домашна работа";
+$NewHomeworkEmailAlertDisable = "Да не се уведомяват потребителите, когато се представи домашна работа";
+$DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Да се показва последната изпълнена стъпка и следващата неизпълнена стъпка";
 ?>

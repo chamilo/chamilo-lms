@@ -49,4 +49,8 @@ $langSaveCategory = "Запис на категорията";
 $BackToLinksOverview = "Обратно към прегледа на връзките";
 $AddTargetOfLinkOnHomepage = "Изберете дали връзката да се показва в началната страница на курса.";
 $Url = "URL (адрес)";
+$LinkOpenSelf = "_self";
+$LinkOpenBlank = "_blank";
+$LinkOpenParent = "_parent";
+$LinkOpenTop = "_top";
 ?>

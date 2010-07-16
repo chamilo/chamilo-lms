@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DeleteAllAttendances = "Delete all created attendances";
 $Title = "Title";
 $By = "By";
 $UsersOnline = "Users online";
@@ -729,6 +730,17 @@ $Until = "Until";
 $FirstPage = "First page";
 $LastPage = "Last page";
 $Coachs = "Coachs";
+$ThereAreNoRegisteredDatetimeYet = "There is no date/time registered yet";
+$CalendarList = "Calendar list of attendances";
+$AttendanceCalendarDescription = "The attendance calendar allows you to register attendance lists (one per real session the students need to attend). Add new attendance lists here.";
+$CleanCalendar = "Clean the calendar of all lists";
+$AddDateAndTime = "Add a date and time";
+$AttendanceSheet = "Attendance sheet";
+$GoToAttendanceCalendar = "Go tho the attendance calendar";
+$AttendanceCalendar = "Attendance calendar";
+$QualifyAttendanceGradebook = "Qualify the attendance list in the gradebook";
+$CreateANewAttendance = "Create a new attendance list";
+$Attendance = "Attendance";
 $langNameOfLang['bosnian'] = "bosnian";
 $langNameOfLang['czech'] = "czech";
 $langNameOfLang['dari'] = "dari";
@@ -803,17 +815,6 @@ $AssignUsers = "Assign users";
 $AssignCourses = "Assign courses";
 $AssignSessions = "Assign sessions";
 $Timezone = "Timezone";
-$Attendance = "Attendance";
-$CreateANewAttendance = "Create a new attendance list";
-$QualifyAttendanceGradebook = "Qualify the attendance list in the gradebook";
-$AttendanceCalendar = "Attendance calendar";
-$GoToAttendanceCalendar = "Go tho the attendance calendar";
-$AttendanceSheet = "Attendance sheet";
-$AddDateAndTime = "Add a date and time";
-$CleanCalendar = "Clean the calendar of all lists";
-$AttendanceCalendarDescription = "The attendance calendar allows you to register attendance lists (one per real session the students need to attend). Add new attendance lists here.";
-$CalendarList = "Calendar list of attendances";
-$ThereAreNoRegisteredDatetimeYet = "There is no date/time registered yet";
 $DashboardPluginsHaveBeenUpdatedSucesslly = "Dashboard plugins have been updated sucessfully";
 $LoginEnter = "Login";
 $AttendanceSheetDescription = "The attendance sheets allow you to specify a list of dates in which you will report attendance to your courses";
@@ -844,7 +845,6 @@ $ToolCourseSetting = "Settings";
 $ToolCourseMaintenance = "Backup";
 $AreYouSureToDeleteAllDates = "Are you sure you want to delete all dates?";
 $AddADateTime = "Add a date time";
-$DeleteAllAttendances = "Delete all created attendances";
 $ThematicControl = "Thematic control";
 $ThematicDetails = "Thematic view with details";
 $ThematicList = "Thematic view as list";
@@ -880,8 +880,8 @@ $ThereIsNoAThematicAdvance = "There is no thematic advance";
 $StillDoNotHaveAThematicPlan = "There is no thematic plan for now";
 $NewThematicAdvance = "New thematic advance";
 $DurationInHoursMustBeNumeric = "Duration must be numeric";
-$EditThematicSection = "Edit thematic section";
 $CreateAThematicSection = "Create a thematic section";
+$EditThematicSection = "Edit thematic section";
 $ToolCourseProgress = "Course progress";
 $SelectAnAttendance = "Select an attendance";
 $ResultsHiddenByExerciseSetting = "Results hidden by the exercise setting";
@@ -936,10 +936,11 @@ By filling this form, you accept that the Chamilo association or its members mig
 <br />
 Please note that you are <b>not required</b> to fill this form. If you want to remain anonymous, we will loose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click \"Next\".<br /><br />";
 $CompanyActivity = "Your company's activity";
-$DateLock = "Lock date";
 $DateUnLock = "Unlock date";
+$DateLock = "Lock date";
 $GoToStudentDetails = "Go to student details";
 $RepeatDate = "Repeat date";
 $ToAttend = "To attend";
 $HaveFun = "Have fun,";
+$ClearSearchResults = "Clear search results";
 ?>

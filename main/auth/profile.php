@@ -294,7 +294,6 @@ if (is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
 
 // EXTRA FIELDS
 $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
-
 $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
 foreach ($extra as $id => $field_details) {
 	if ($field_details[6] == 0) {

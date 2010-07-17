@@ -254,7 +254,7 @@ function build_edit_icons_link($link, $selectcat) {
 		//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movelink=' . $link->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblelink=' . $link->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' "><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="" /></a>';
 		$modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink=' . $link->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$link->get_course_code().'"><img src="../img/file_txt_small.gif" border="0" title="' . get_lang('GradebookQualifyLog') . '" alt="" /></a>';
-		//if (api_is_course_admin() == true) {
+		//if (api_is_course_admin()) {
 			//$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . '"><img src="../img/file_txt_small.gif" border="0" title="' . get_lang('GradebookQualifyLog') . '" alt="" /></a>';
 		//}
 		return $modify_icons;

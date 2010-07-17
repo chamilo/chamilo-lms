@@ -70,18 +70,18 @@ class ResultsDataGenerator
 			$user = array();
 			$info = get_user_info_from_id($result->get_user_id());
 			$user['id'] = $result->get_user_id();
-			if ($pdf == true){
+			if ($pdf){
 				$user['username'] = $info['username'];
 			}
 			$user['result_id'] = $result->get_id();
 			$user['lastname'] = $info['lastname'];
 			$user['firstname'] = $info['firstname'];
-			if ($pdf == true){
+			if ($pdf){
 				$user['score'] = $result->get_score();
 			} else {
-				$user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);	
+				$user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);
 			}
-			if ($pdf == true and $number_decimals == null){
+			if ($pdf && $number_decimals == null){
 				$user['scoreletter'] = $result->get_score();
 			}
 			if ($scoredisplay->is_custom())

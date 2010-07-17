@@ -38,20 +38,20 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
      * @type string
      */
     var $Host = "";
-    
+
     /**
      * Holds the change log.
      * @private
      * @type string array
      */
     var $ChangeLog = array();
-    
+
      /**
      * Holds the note log.
      * @private
      * @type string array
      */
-    var $NoteLog = array();   
+    var $NoteLog = array();
 
     /**
      * Run before each test is started.
@@ -97,14 +97,14 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
             $this->Mail->Mailer = "mail";
             $this->Sender = "unit_test@phpmailer.sf.net";
         }
-        
+
         if (array_key_exists('mail_to', $_REQUEST)) {
 	        $this->SetAddress($_REQUEST['mail_to'], 'Test User', 'to');
 	    }
         if (array_key_exists('mail_cc', $_REQUEST) and strlen($_REQUEST['mail_cc']) > 0) {
 	        $this->SetAddress($_REQUEST['mail_cc'], 'Carbon User', 'cc');
 	    }
-    }     
+    }
 
     /**
      * Run after each test is completed.
@@ -124,8 +124,8 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
      */
     function BuildBody() {
         $this->CheckChanges();
-        
-        // Determine line endings for message        
+
+        // Determine line endings for message
         if($this->Mail->ContentType == "text/html" || strlen($this->Mail->AltBody) > 0)
         {
             $eol = "<br/>";
@@ -140,18 +140,18 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
             $bullet_start = "";
             $bullet_end = "";
         }
-        
+
         $ReportBody = "";
-        
+
         $ReportBody .= "---------------------" . $eol;
         $ReportBody .= "Unit Test Information" . $eol;
         $ReportBody .= "---------------------" . $eol;
         $ReportBody .= "phpmailer version: " . PHPMailer::VERSION . $eol;
         $ReportBody .= "Content Type: " . $this->Mail->ContentType . $eol;
-        
+
         if(strlen($this->Mail->Host) > 0)
             $ReportBody .= "Host: " . $this->Mail->Host . $eol;
-        
+
         // If attachments then create an attachment list
         $attachments = $this->Mail->GetAttachments();
         if(count($attachments) > 0)
@@ -165,7 +165,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
             }
             $ReportBody .= $bullet_end . $eol;
         }
-        
+
         // If there are changes then list them
         if(count($this->ChangeLog) > 0)
         {
@@ -175,12 +175,12 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
             $ReportBody .= $bullet_start;
             for($i = 0; $i < count($this->ChangeLog); $i++)
             {
-                $ReportBody .= $bullet . $this->ChangeLog[$i][0] . " was changed to [" . 
+                $ReportBody .= $bullet . $this->ChangeLog[$i][0] . " was changed to [" .
                                $this->ChangeLog[$i][1] . "]" . $eol;
             }
             $ReportBody .= $bullet_end . $eol . $eol;
         }
-        
+
         // If there are notes then list them
         if(count($this->NoteLog) > 0)
         {
@@ -194,11 +194,11 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
             }
             $ReportBody .= $bullet_end;
         }
-        
+
         // Re-attach the original body
         $this->Mail->Body .= $eol . $eol . $ReportBody;
     }
-    
+
     /**
      * Check which default settings have been changed for the report.
      * @private
@@ -224,7 +224,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
         if($this->Mail->SMTPAuth)
             $this->AddChange("SMTPAuth", "true");
     }
-    
+
     /**
      * Adds a change entry.
      * @private
@@ -235,7 +235,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
         $this->ChangeLog[$cur][0] = $sName;
         $this->ChangeLog[$cur][1] = $sNewValue;
     }
-    
+
     /**
      * Adds a simple note to the message.
      * @public
@@ -289,7 +289,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
      * Try a plain message.
      */
     function test_Low_Priority() {
-    
+
         $this->Mail->Priority = 5;
         $this->Mail->Body = "Here is the main body.  There should be " .
                             "a reply to address in this message.";
@@ -331,11 +331,11 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
 
         $this->Mail->Body = "Here is the text body";
         $this->Mail->Subject .= ": Plain + StringAttachment";
-        
+
         $sAttachment = "These characters are the content of the " .
                        "string attachment.\nThis might be taken from a ".
                        "database or some other such thing. ";
-        
+
         $this->Mail->AddStringAttachment($sAttachment, "string_attach.txt");
 
         $this->BuildBody();
@@ -365,11 +365,11 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
      * Try a plain message.
      */
     function test_Html() {
-    
+
         $this->Mail->IsHTML(true);
         $this->Mail->Subject .= ": HTML only";
-        
-        $this->Mail->Body = "This is a <b>test message</b> written in HTML. </br>" .
+
+        $this->Mail->Body = "This is a <b>test message</b> written in HTML. <br />" .
                             "Go to <a href=\"http://phpmailer.sourceforge.net/\">" .
                             "http://phpmailer.sourceforge.net/</a> for new versions of " .
                             "phpmailer.  <p/> Thank you!";
@@ -386,7 +386,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
         $this->Mail->Body = "This is the <b>HTML</b> part of the email.";
         $this->Mail->Subject .= ": HTML + Attachment";
         $this->Mail->IsHTML(true);
-        
+
         if(!$this->Mail->AddAttachment(__FILE__, "test_attach.txt"))
         {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
@@ -406,7 +406,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
                      "Here is an image!</a>";
         $this->Mail->Subject .= ": Embedded Image";
         $this->Mail->IsHTML(true);
-        
+
         if(!$this->Mail->AddEmbeddedImage("test.png", "my-attach", "test.png",
                                           "base64", "image/png"))
         {
@@ -431,7 +431,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
                      "Here is an image!</a>";
         $this->Mail->Subject .= ": Embedded Image + Attachment";
         $this->Mail->IsHTML(true);
-        
+
         if(!$this->Mail->AddEmbeddedImage("test.png", "my-attach", "test.png",
                                           "base64", "image/png"))
         {
@@ -444,7 +444,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
             return;
         }
-        
+
         $this->BuildBody();
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
@@ -475,7 +475,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
         $this->Mail->AltBody = "This is the text part of the email.";
         $this->Mail->Subject .= ": AltBody + Attachment";
         $this->Mail->IsHTML(true);
-        
+
         if(!$this->Mail->AddAttachment(__FILE__, "test_attach.txt"))
         {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
@@ -489,7 +489,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
         } else {
             $this->assertTrue(false, 'Could not write local file - check permissions');
         }
-    }    
+    }
 
     function test_MultipleSend() {
         $this->Mail->Body = "Sending two messages without keepalive";
@@ -498,7 +498,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
 
         $this->Mail->Subject = $subject . ": SMTP 1";
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
-        
+
         $this->Mail->Subject = $subject . ": SMTP 2";
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
@@ -531,26 +531,26 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
         $this->Mail->SMTPKeepAlive = true;
         $this->Mail->Subject = $subject . ": SMTP keep-alive 1";
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
-        
+
         $this->Mail->Subject = $subject . ": SMTP keep-alive 2";
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
         $this->Mail->SmtpClose();
     }
-    
+
     /**
-     * Tests this denial of service attack: 
+     * Tests this denial of service attack:
      *    http://www.cybsec.com/vuln/PHPMailer-DOS.pdf
      */
     function test_DenialOfServiceAttack() {
         $this->Mail->Body = "This should no longer cause a denial of service.";
         $this->BuildBody();
-       
+
         $this->Mail->Subject = str_repeat("A", 998);
         $this->assertTrue($this->Mail->Send(), $this->Mail->ErrorInfo);
     }
-    
+
 	function test_Error() {
-		$this->Mail->Subject .= ": This should be sent"; 
+		$this->Mail->Subject .= ": This should be sent";
 		$this->BuildBody();
 		$this->Mail->ClearAllRecipients(); // no addresses should cause an error
 		$this->assertTrue($this->Mail->IsError() == false, "Error found");
@@ -560,7 +560,7 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
 		$this->Mail->AddAddress($_REQUEST['mail_to']);
 		$this->assertTrue($this->Mail->Send(), "Send failed");
 	}
-	
+
 	function test_Addressing() {
 		$this->assertFalse($this->Mail->AddAddress('a@example..com'), 'Invalid address accepted');
 		$this->assertTrue($this->Mail->AddAddress('a@example.com'), 'Addressing failed');
@@ -607,11 +607,11 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
 	*/
 	function test_Encodings() {
 	    $this->Mail->Charset = 'iso-8859-1';
-	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('¡Hola! Señor!', 'text'), 'Q Encoding (text) failed');
-	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('¡Hola! Señor!', 'comment'), 'Q Encoding (comment) failed');
-	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('¡Hola! Señor!', 'phrase'), 'Q Encoding (phrase) failed');
+	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('ï¿½Hola! Seï¿½or!', 'text'), 'Q Encoding (text) failed');
+	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('ï¿½Hola! Seï¿½or!', 'comment'), 'Q Encoding (comment) failed');
+	    $this->assertEquals('=A1Hola!_Se=F1or!', $this->Mail->EncodeQ('ï¿½Hola! Seï¿½or!', 'phrase'), 'Q Encoding (phrase) failed');
 	}
-	
+
 	/**
 	* Signing tests
 	*/
@@ -639,8 +639,8 @@ class phpmailerTest extends PHPUnit_Framework_TestCase {
 	    $this->assertTrue($this->Mail->set('Timeout', 11), 'Valid property set failed');
 	    $this->Mail->getFile(__FILE__);
 	}
-}  
- 
+}
+
 /**
 * This is a sample form for setting appropriate test values through a browser
 * These values can also be set using a file called testbootstrap.php (not in svn) in the same folder as this script

@@ -275,7 +275,7 @@ function save_wiki() {
     $_clean['progress']		= Database::escape_string($_POST['progress']);
 	$_clean['version']		= intval($_POST['version']) + 1 ;
 	$_clean['linksto'] 		= links_to($_clean['content']); //and check links content
-	
+
 	$dtime = date( "Y-m-d H:i:s" );
 	$session_id = api_get_session_id();
 
@@ -1832,9 +1832,9 @@ function auto_add_page_users($assignment_type)
 	$link2teacher=$_POST['title']= $title_orig."_uass".api_get_user_id();
 
 	//first: teacher name, photo, and assignment description (original content)
-   // $content_orig_A='<div align="center" style="background-color: #F5F8FB;  border:double">'.$photo.'</br>'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</br>('.get_lang('Teacher').')</div><br/><div>';
+   // $content_orig_A='<div align="center" style="background-color: #F5F8FB;  border:double">'.$photo.'<br />'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'<br />('.get_lang('Teacher').')</div><br/><div>';
 
-	$content_orig_A='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6"><table border="0"><tr><td style="font-size:24px">'.get_lang('AssignmentDesc').'</td></tr><tr><td>'.$photo.'</br>'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</td></tr></table></div>';
+	$content_orig_A='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6"><table border="0"><tr><td style="font-size:24px">'.get_lang('AssignmentDesc').'</td></tr><tr><td>'.$photo.'<br />'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</td></tr></table></div>';
 
 	$content_orig_B='<br/><div align="center" style="font-size:24px">'.get_lang('AssignmentDescription').': '.$title_orig.'</div><br/>'.$_POST['content'];
 
@@ -1877,7 +1877,7 @@ function auto_add_page_users($assignment_type)
 			{
 				$_POST['title']= $title_orig;
 				$_POST['comment']=get_lang('AssignmentFirstComToStudent');
-				$_POST['content']='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6"><table border="0"><tr><td style="font-size:24px">'.get_lang('AssignmentWork').'</td></tr><tr><td>'.$photo.'</br>'.$name.'</td></tr></table></div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '; //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
+				$_POST['content']='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6"><table border="0"><tr><td style="font-size:24px">'.get_lang('AssignmentWork').'</td></tr><tr><td>'.$photo.'<br />'.$name.'</td></tr></table></div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '; //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
 
 				//AssignmentLinktoTeacherPage
 			 	$all_students_pages[] = '<li>'.strtoupper($o_user_to_add['lastname']).', '.$o_user_to_add['firstname'].' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>'; //don't change this line without guaranteeing that users will be ordered by last names in the following format (surname, name)

@@ -3,7 +3,7 @@
 require_once '../inc/global.inc.php';
 
 if (isset($_GET['style']) AND $_GET['style']<>'') {
-	$style=Security::remove_XSS($_GET['style']);	
+	$style=Security::remove_XSS($_GET['style']);
 	$all_styles = api_get_themes();
 	if (in_array($style, $all_styles[0])) {
 		echo '<link href="../css/'.$style.'/default.css" rel="stylesheet" type="text/css">';
@@ -121,7 +121,7 @@ require_once api_get_path(INCLUDE_PATH).'banner.inc.php';
             <tr>
               <th style="width:100px"><a href="#">Firstname</a>&nbsp;&#8595; </th>
               <th style="width:100px"><a href="#">Lastname</a></th>
-            </tr>           
+            </tr>
             <tr class="row_odd">
               <td>Julio</td>
               <td>Montoya</td>
@@ -142,11 +142,11 @@ require_once api_get_path(INCLUDE_PATH).'banner.inc.php';
     </table>
   </div>
   <div class="menu" style="width:200px">
-    <form action="#" method="post" id="loginform" name="loginform"></br>
-      <label>Username</label></br>
-      <input type="text" name="login" id="login" size="15" value="" /></br>
-      <label>Password</label></br>
-      <input type="password" name="password" id="password" size="15" /></br>
+    <form action="#" method="post" id="loginform" name="loginform"><br />
+      <label>Username</label><br />
+      <input type="text" name="login" id="login" size="15" value="" /><br />
+      <label>Password</label><br />
+      <input type="password" name="password" id="password" size="15" /><br />
   	  <button class="login" type="submit" name="submitAuth"disabled="disabled" >Enter</button>
     </form>
     <div class="menusection"><span class="menusectioncaption">User</span>

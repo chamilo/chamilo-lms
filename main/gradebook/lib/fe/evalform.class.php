@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once (dirname(__FILE__).'/../../../inc/global.inc.php');
-require_once (dirname(__FILE__).'/../be.inc.php');
-require_once (dirname(__FILE__).'/../gradebook_functions.inc.php');
-require_once (api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
+require_once dirname(__FILE__).'/../../../inc/global.inc.php';
+require_once dirname(__FILE__).'/../be.inc.php';
+require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
 /**
  * Extends formvalidator with add&edit forms for evaluations
  * @author Stijn Konings
@@ -20,8 +20,8 @@ $(document).ready(function () {
   setFocus();
 });
 </script>';
- 
- 
+
+
 class EvalForm extends FormValidator
 {
 	const TYPE_ADD= 1;

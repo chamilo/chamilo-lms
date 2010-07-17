@@ -2,21 +2,21 @@
 /* For licensing terms, see /license.txt */
 $language_file[] = 'gradebook';
 //$cidReset= true;
-require_once ('../inc/global.inc.php');
-require_once ('lib/be.inc.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/displaygradebook.php');
-require_once ('lib/fe/evalform.class.php');
-require_once ('lib/fe/dataform.class.php');
-require_once (api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
-require_once (api_get_path(LIBRARY_PATH) . 'export.lib.inc.php');
-require_once (api_get_path(LIBRARY_PATH) . 'import.lib.php');
-require_once (api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
-require_once ('lib/results_data_generator.class.php');
-require_once ('lib/fe/resulttable.class.php');
-require_once ('lib/fe/exportgradebook.php');
-require_once ('lib/scoredisplay.class.php');
-require_once (api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php');
+require_once '../inc/global.inc.php';
+require_once 'lib/be.inc.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/displaygradebook.php';
+require_once 'lib/fe/evalform.class.php';
+require_once 'lib/fe/dataform.class.php';
+require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'import.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
+require_once 'lib/results_data_generator.class.php';
+require_once 'lib/fe/resulttable.class.php';
+require_once 'lib/fe/exportgradebook.php';
+require_once 'lib/scoredisplay.class.php';
+require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 api_block_anonymous_users();
@@ -94,9 +94,9 @@ if (isset ($_GET['import'])) {
 			}
 
 			$nr_results_added= 0;
-			foreach ($results as $index => $importedresult) {												
+			foreach ($results as $index => $importedresult) {
 				//check username & score
-				$importedresult['user_id'] = UserManager::get_user_id_from_username($importedresult['username']);		
+				$importedresult['user_id'] = UserManager::get_user_id_from_username($importedresult['username']);
 				$added= '0';
 				foreach ($allresults as $allresult) {
 					if (($importedresult['user_id'] == $allresult->get_user_id())) {
@@ -113,7 +113,7 @@ if (isset ($_GET['import'])) {
 						} else {
 							$added= '1';
 						}
-	
+
 					}
 
 				}
@@ -190,15 +190,15 @@ if ($export_result_form->validate()) {
 			'date'
 		);
 	}
-	
+
 	// export results to pdf file
 	if ($file_type == 'pdf') {
 		$number_decimals = api_get_setting('gradebook_number_decimals');
 		$datagen = new ResultsDataGenerator ($eval[0],$allresults);
-		
+
 		// set headers pdf
 		!empty($_user['official_code'])? $officialcode=$_user['official_code'].' - ':'';
-		
+
 		$h1 = array(get_lang('Teacher'),$officialcode.$_user['firstName'].', '.$_user['lastName']);
 		$h2 = array(get_lang('Score'),$eval[0]->get_max());
 		$h3 = array(get_lang('Course'),$_course['name']);
@@ -207,23 +207,23 @@ if ($export_result_form->validate()) {
 		$date = date('d-m-Y H:i:s', time());
 		$h6 = array(get_lang('DateTime'),api_convert_and_format_date($date, "%d/%m/%Y %H:%M"));
 		$header_pdf = array($h1, $h2, $h3, $h4, $h5, $h6);
-		
+
 		// set footer pdf
 		$f1 = '<hr />'.get_lang('Drh');
 		$f2 = '<hr />'.get_lang('Teacher');
-		$f3 = '<hr />'.get_lang('Date');		
+		$f3 = '<hr />'.get_lang('Date');
 		$footer_pdf = array($f1, $f2, $f3);
-		
+
 		// set title pdf
 		$title_pdf = $eval[0]->get_name();
-		
+
 		// set headers data table
 		$head_ape_name = '';
 		if (!api_is_western_name_order()) {
-			$head_ape_name = get_lang('FirstName').' '.get_lang('LastName');			
+			$head_ape_name = get_lang('FirstName').' '.get_lang('LastName');
 		} else {
 			$head_ape_name = get_lang('LastName').' '.get_lang('FirstName');
-		}		
+		}
 		$head_display_score = '';
 		$scoredisplay = ScoreDisplay :: instance();
 		if ($scoredisplay->is_custom()) {
@@ -233,27 +233,27 @@ if ($export_result_form->validate()) {
 			$head_letter = get_lang('Letters');
 		}
 		$head_table = array(
-							array(get_lang('Item'),5), 
-							array(get_lang('Code'),15), 
+							array(get_lang('Item'),5),
+							array(get_lang('Code'),15),
 							array($head_ape_name, 50),
-							array(get_lang('Score'),15), 
+							array(get_lang('Score'),15),
 							array($head_letter,15),
 							array($head_display_score,15)
 						);
-		
+
 		// get data table
 		if (api_sort_by_first_name()) {
 			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true, true);
 		} else {
 			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null, true, true);
 		}
-		$data_table = array();		
+		$data_table = array();
 		foreach ($data_array as $data) {
 			$result = array();
 			$user_info = api_get_user_info($data['id']);
 			$result[] = $user_info['username'];
 			if (!api_is_western_name_order()) {
-				$result[] = $user_info['firstname'].', '.$user_info['lastname'];			
+				$result[] = $user_info['firstname'].', '.$user_info['lastname'];
 			} else {
 				$result[] = $user_info['lastname'].', '.$user_info['firstname'];
 			}
@@ -264,9 +264,9 @@ if ($export_result_form->validate()) {
 			if ($scoredisplay->is_custom()) {
 				$result[] = $data['display'];
 			}
-			$data_table[] = $result;			
-		}					
-		export_pdf_with_html($head_table, $data_table, $header_pdf, $footer_pdf, $title_pdf);		
+			$data_table[] = $result;
+		}
+		export_pdf_with_html($head_table, $data_table, $header_pdf, $footer_pdf, $title_pdf);
 	}
 
 	// export results to xml or csv file
@@ -280,7 +280,7 @@ if ($export_result_form->validate()) {
 		$data['date'] = api_format_date($result->get_date(), "%d/%m/%Y %R");
 		$alldata[]= $data;
 	}
-	
+
 	switch ($file_type) {
 		case 'xml' :
 			Export :: export_table_xml($alldata, $filename, 'Result', 'XMLResults');
@@ -344,7 +344,7 @@ if (isset ($_GET['print'])) {
 	foreach ($data_array as $data) {
 		$newarray[] = array_slice($data, 2);
 	}
-	
+
 	echo print_table($newarray, $header_names,get_lang('ViewResult'), $eval[0]->get_name());
 	exit;
 } else

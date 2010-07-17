@@ -236,10 +236,10 @@ class GradeBookResult
 	public function exportCompleteReportXLS($data) {
 	   	$filename = 'gradebook_results_user_'.gmdate('YmdGis').'.xls';
 		//build the results
-		require_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php');
+		require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 		$workbook = new Spreadsheet_Excel_Writer();
 		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
-		
+
 		$workbook->send($filename);
 		$worksheet =& $workbook->addWorksheet('Report '.gmdate('YmdGis'));
 		$line = 0;

@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see license.txt */
 
-require_once (dirname(__FILE__).'/../../../inc/global.inc.php');
-require_once (dirname(__FILE__).'/../be.inc.php');
+require_once dirname(__FILE__).'/../../../inc/global.inc.php';
+require_once dirname(__FILE__).'/../be.inc.php';
 
 /**
  * Table to display categories, evaluations and links
  * @author Stijn Konings
  * @author Bert Steppé (refactored, optimised)
- * 
+ *
  */
 class GradebookTable extends SortableTable
 {
@@ -117,11 +117,11 @@ class GradebookTable extends SortableTable
 		$course_code=api_get_course_id();
 		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
 		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
-				
+
 		// generate the data to display
 		$sortable_data = array();
-		$weight_total_links = 0;		
-		
+		$weight_total_links = 0;
+
 		foreach ($data_array as $data) {
 			$row = array ();
 			$item = $data[0];
@@ -167,22 +167,22 @@ class GradebookTable extends SortableTable
 					$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
 					$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
 					$row[] = $item_value;
-					
+
 				} else {
 			   		$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
 			   	}
 			}
 				$row[] = $invisibility_span_open . str_replace(' ','&nbsp;',$data[4]) . $invisibility_span_close;
-			
+
 			//admins get an edit column
 			if (api_is_allowed_to_edit(null, true)) {
 				$cat=new Category();
-				$show_message=$cat->show_message_resource_delete($item->get_course_code());				
+				$show_message=$cat->show_message_resource_delete($item->get_course_code());
 				if ($show_message===false) {
 					$row[] = $this->build_edit_column ($item);
 				}
-			} else {				
-				//students get the results and certificates columns				
+			} else {
+				//students get the results and certificates columns
 				if (count($this->evals_links)>0 && $status_user!=1 ) {
 					$value_data=isset($data[5]) ? $data[5] : null;
 					if (!is_null($value_data)) {
@@ -191,105 +191,105 @@ class GradebookTable extends SortableTable
 				}
 				//variables load in index.php
 				global $my_score_in_gradebook, $certificate_min_score, $item_value, $certificate_min_score;
-				
+
 				if (empty($_GET['selectcat'])) {
-					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {						
+					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
 						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$id.'" target="_blank">
 										 <img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display;
-						
+
 						//register gradebook certificate
-						$current_user_id=api_get_user_id();								
-						register_user_info_about_certificate($id,$current_user_id,$my_score_in_gradebook,api_get_utc_datetime()); 	
-					
+						$current_user_id=api_get_user_id();
+						register_user_info_about_certificate($id,$current_user_id,$my_score_in_gradebook,api_get_utc_datetime());
+
 					} else {
 						$certificates = '-';
 					}
 					//show certificate date
 					$get_date=get_certificate_date_by_user_id($id,$current_user_id);
-					if ($get_date=='' || is_null($get_date)) {					
-							$row[4]='-';					
-					} else {					
-							$row[4] = api_convert_and_format_date($get_date);						
-					}				
+					if ($get_date=='' || is_null($get_date)) {
+							$row[4]='-';
+					} else {
+							$row[4] = api_convert_and_format_date($get_date);
+					}
 					$row[] = $certificates;
 				} else {
-					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {		
+					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
 						//register gradebook certificate
 						$current_user_id=api_get_user_id();
 						register_user_info_about_certificate($_GET['selectcat'],$current_user_id,$my_score_in_gradebook,api_get_utc_datetime());
-					} 
-					
+					}
+
 				}
 			}
 			$sortable_data[] = $row;
-		}	
-		
-		// warning messages		
-		
-		if (api_is_allowed_to_edit()) {						
-			if (isset($_GET['selectcat']) && $_GET['selectcat'] > 0 && $_GET['view'] <> 'presence') {		
-				$id_cat = intval($_GET['selectcat']);			
+		}
+
+		// warning messages
+
+		if (api_is_allowed_to_edit()) {
+			if (isset($_GET['selectcat']) && $_GET['selectcat'] > 0 && $_GET['view'] <> 'presence') {
+				$id_cat = intval($_GET['selectcat']);
 				$category = Category :: load($id_cat);
 				$weight_category = intval($this->build_weight($category[0]));
 				$course_code = $this->build_course_code($category[0]);
-														
+
 				if ($weight_total_links > $weight_category) {
 					$warning_message = get_lang('TotalWeightMustNotBeMoreThan').'&nbsp;'.$weight_category;
-					Display::display_warning_message($warning_message,false);				
+					Display::display_warning_message($warning_message,false);
 				}
-							
-				$content_html=DocumentManager::replace_user_info_into_html($course_code);	
-					
+
+				$content_html=DocumentManager::replace_user_info_into_html($course_code);
+
 				$new_content=explode('</head>',$content_html);
-							
+
 				if (empty($new_content[0])) {
 					$warning_message = get_lang('ThereIsNotACertificateAvailableByDefault');
-					Display::display_warning_message($warning_message);				
+					Display::display_warning_message($warning_message);
 				}
-								
+
 			}
-			
+
 			if (empty($_GET['selectcat'])) {
-				
+
 				$categories = Category :: load();
 				$weight_categories = $certificate_min_scores = $course_codes = array();
 
 				foreach ($categories as $category) {
-					$course_code_category = $this->build_course_code($category);													
-					if (!empty($course_code)) {						
-						if ($course_code_category == $course_code) {						
+					$course_code_category = $this->build_course_code($category);
+					if (!empty($course_code)) {
+						if ($course_code_category == $course_code) {
 							$weight_categories[] = intval($this->build_weight($category));
 							$certificate_min_scores[] = intval($this->build_certificate_min_score($category));
 							$course_codes[] = $course_code;
 							break;
-						}													
+						}
 					} else {
 						$weight_categories[] = intval($this->build_weight($category));
 						$certificate_min_scores[] = intval($this->build_certificate_min_score($category));
-						$course_codes[] = $course_code_category;	
-					}										
-				}												
+						$course_codes[] = $course_code_category;
+					}
+				}
 
-				if (is_array($weight_categories) && is_array($certificate_min_scores) && is_array($course_codes)) {					
+				if (is_array($weight_categories) && is_array($certificate_min_scores) && is_array($course_codes)) {
 					$warning_message = '';
-					for ($x = 0; $x<count($weight_categories);$x++) {						
+					for ($x = 0; $x<count($weight_categories);$x++) {
 						$weight_category = intval($weight_categories[$x]);
 						$certificate_min_score = intval($certificate_min_scores[$x]);
 						$course_code = $course_codes[$x];
-						
+
 						if (empty($certificate_min_score) || ($certificate_min_score > $weight_category)) {
-							$warning_message .= $course_code .'&nbsp;-&nbsp;'.get_lang('CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan').'&nbsp;'.$weight_category.'<br />';											
+							$warning_message .= $course_code .'&nbsp;-&nbsp;'.get_lang('CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan').'&nbsp;'.$weight_category.'<br />';
 						}
 
 					}
-					
+
 					if (!empty($warning_message)) {
 						Display::display_warning_message($warning_message,false);
 					}
-					
-					
-				}				
-			}			
+
+
+				}
+			}
 		}
 
 		return $sortable_data;
@@ -333,7 +333,7 @@ private function build_id_column ($item) {
 			// category
 			case 'C' :
 				$prms_uri='?selectcat=' . $item->get_id() . '&amp;view='.Security::remove_XSS($_GET['view']);
-				
+
 				if (isset($_GET['isStudentView'])) {
 					if ( isset($is_student) || ( isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
 						$prms_uri=$prms_uri.'&amp;isStudentView='.Security::remove_XSS($_GET['isStudentView']);
@@ -359,23 +359,23 @@ private function build_id_column ($item) {
 				// course/platform admin can go to the view_results page
 
 				if (api_is_allowed_to_create_course() && $show_message===false) {
-		
+
 					if ($item->get_type() == 'presence')
 					{
 						return '&nbsp;'
 							. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
 							. $item->get_name()
-							. '</a>';						
+							. '</a>';
 						/*return '&nbsp;'
 							. '<a href="gradebook_add_result.php?selectcat'.Security::remove_XSS($_GET['selectcat']).'&amp;selecteval=' . $item->get_id() . '">'
 							. $item->get_name()
 							. '</a>';
 							*/
 					}
-					else 
+					else
 					{
-					
-					
+
+
 						return '&nbsp;'
 							. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
 							. $item->get_name()

@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 $language_file = 'gradebook';
 //$cidReset = true;
-require_once ('../inc/global.inc.php');
-require_once ('lib/be.inc.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/catform.class.php');
+require_once '../inc/global.inc.php';
+require_once 'lib/be.inc.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/catform.class.php';
 api_block_anonymous_users();
 block_students();
 $edit_cat= isset($_GET['editcat']) ? $_GET['editcat'] : '';

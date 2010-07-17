@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once (dirname(__FILE__).'/../../../inc/global.inc.php');
-require_once (dirname(__FILE__).'/../be.inc.php');
+require_once dirname(__FILE__).'/../../../inc/global.inc.php';
+require_once dirname(__FILE__).'/../be.inc.php';
 set_time_limit(0);
 define ('LIMIT',10);
 

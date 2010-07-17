@@ -9,11 +9,11 @@
  * @author Bert Steppé
  */
 
-require_once ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 $this_section=SECTION_COURSES;
 
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 $course_code = api_get_course_id();
 $course_info = Database::get_course_info($course_code);

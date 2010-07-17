@@ -8,7 +8,7 @@
 * @author Julio Montoya <gugli100@gmail.com> adding security functions
 * @version april 2007
 */
-require_once ('gradebook_functions_users.inc.php');
+require_once 'gradebook_functions_users.inc.php';
 
 /**
  * Adds a resource to the unique gradebook of a given course
@@ -103,7 +103,7 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
 
 function block_students() {
 	if (!api_is_allowed_to_create_course()) {
-		require_once (api_get_path(INCLUDE_PATH)."header.inc.php");
+		require_once api_get_path(INCLUDE_PATH).'header.inc.php';
 		api_not_allowed();
 	}
 }
@@ -305,7 +305,7 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
  */
 function remove_resource_from_course_gradebook($link_id) {
     if ( empty($link_id) ) { return false; }
-    require_once (api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php');
+    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
     $sql = "DELETE FROM $l WHERE id = ".(int)$link_id;

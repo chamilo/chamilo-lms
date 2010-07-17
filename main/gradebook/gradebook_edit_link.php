@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 $language_file = array('gradebook','link');
 //$cidReset = true;
-require_once ('../inc/global.inc.php');
-require_once ('lib/be.inc.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/linkform.class.php');
-require_once ('lib/fe/linkaddeditform.class.php');
+require_once '../inc/global.inc.php';
+require_once 'lib/be.inc.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/linkform.class.php';
+require_once 'lib/fe/linkaddeditform.class.php';
 api_block_anonymous_users();
 block_students();
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);

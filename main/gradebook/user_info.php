@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 $language_file = 'gradebook';
 //$cidReset = true;
-require_once ('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
-require_once (api_get_path(LIBRARY_PATH) . 'export.lib.inc.php');
-require_once (api_get_path(LIBRARY_PATH) . 'import.lib.php');
-require_once (api_get_path(LIBRARY_PATH). 'usermanager.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'import.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
 api_block_anonymous_users();
 
 if (isset($_GET['userid'])) {
@@ -19,9 +19,9 @@ if (isset($_GET['userid'])) {
 	api_not_allowed();
 }
 
-require_once ('lib/be.inc.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/userform.class.php');
+require_once 'lib/be.inc.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/userform.class.php';
 block_students();
 
 $form = new UserForm(UserForm :: TYPE_USER_INFO, $user, 'user_info_form', null, api_get_self() . '?userid=' . $user_id . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));

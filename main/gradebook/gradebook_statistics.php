@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 $language_file= 'gradebook';
 //$cidReset= true;
-require_once ('../inc/global.inc.php');
-require_once ('lib/be.inc.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/dataform.class.php');
-require_once ('lib/scoredisplay.class.php');
-require_once ('lib/fe/displaygradebook.php');
+require_once '../inc/global.inc.php';
+require_once 'lib/be.inc.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/dataform.class.php';
+require_once 'lib/scoredisplay.class.php';
+require_once 'lib/fe/displaygradebook.php';
 api_block_anonymous_users();
 $eval= Evaluation :: load($_GET['selecteval']);
 if ($eval[0]->get_category_id() < 0) {
@@ -68,13 +68,13 @@ if (!$displayscore->is_custom()) {
 	$stattable= '<br><table class="data_table" cellspacing="0" cellpadding="3">';
 	$stattable .= '<tr><th colspan="4">' . get_lang('Statistics') . '</th></tr>';
 	$counter=0;
-	foreach ($keys as $key) {				
+	foreach ($keys as $key) {
 		$bar = ($highest_ratio > 0?($nr_items[$key] / $highest_ratio) * 100:0);
 		$stattable .= '<tr class="row_' . ($counter % 2 == 0 ? 'odd' : 'even') . '">';
 		$stattable .= '<td width="150">' . $key . '</td>';
 		$stattable .= '<td width="550"><img src="../img/bar_1u.gif" width="' . $bar . '%" height="10"/></td>';
 		$stattable .= '<td align="right">' . $nr_items[$key] . '</td>';
-		$stattable .= '<td align="right"> ' . ($resultcount > 0 ?round(($nr_items[$key] / $resultcount) * 100,2):0) . '%</td>';		
+		$stattable .= '<td align="right"> ' . ($resultcount > 0 ?round(($nr_items[$key] / $resultcount) * 100,2):0) . '%</td>';
 		$counter++;
 	}
 	$stattable .= '</tr></table>';

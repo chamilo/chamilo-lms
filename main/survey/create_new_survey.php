@@ -284,8 +284,8 @@ if ($form->validate()) {
 		// Displaying a feedback message
    		Display::display_confirmation_message($return['message'], false);
 	} else {
-   		// Redirecting to the survey page (whilst showing the return message
-   		header('location:survey.php?survey_id='.$return['id'].'&message='.$return['message']);
+   		// Redirecting to the survey page (whilst showing the return message)
+   		@header('location:survey.php?survey_id='.$return['id'].'&message='.$return['message']);
 	}
 } else {
 	// Displaying the header

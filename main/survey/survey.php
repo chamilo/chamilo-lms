@@ -116,7 +116,7 @@ if (isset($_GET['action'])) {
 if (isset($_GET['message'])) {
 	// We have created the survey or updated the survey
 	if (in_array($_GET['message'], array('SurveyUpdatedSuccesfully','SurveyCreatedSuccesfully'))) {
-		Display::display_confirmation_message(get_lang($message_information).','.PHP_EOL.api_strtolower(get_lang('YouCanNowAddQuestionToYourSurvey')));
+		Display::display_confirmation_message(get_lang($message_information).', '.PHP_EOL.api_strtolower(get_lang('YouCanNowAddQuestionToYourSurvey')));
 	}
 	// We have added a question
 	if (in_array($_GET['message'], array('QuestionAdded', 'QuestionUpdated'))) {

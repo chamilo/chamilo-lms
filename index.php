@@ -419,7 +419,7 @@ function display_anonymous_right_menu() {
 		}
 
 		// Deleting the myprofile link
-		if (api_get_setting('allow_social_tool') == true) {
+		if (api_get_setting('allow_social_tool') == 'true') {
 			unset($menu_navigation['myprofile']);
 		}
 
@@ -699,11 +699,11 @@ function display_anonymous_course_list() {
 			$courses_list_string .= "<hr size=\"1\" noshade=\"noshade\">\n";
 		}
 		$courses_list_string .= '<h4 style="margin-top: 0px;">'.get_lang('CourseList')."</h4>\n<ul>\n";
-		
+
 		if (api_get_user_id()) {
 			$courses_of_user = get_courses_of_user(api_get_user_id());
 		}
-		
+
 		foreach ($course_list as $course) {
 			// $setting_show_also_closed_courses
 

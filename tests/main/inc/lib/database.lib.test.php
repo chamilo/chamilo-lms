@@ -6,7 +6,7 @@ class TestDatabase extends UnitTestCase {
 
 	 public $dbase;
 	 public function TestDatabase() {
-	 	$this->UnitTestCase('Database library tests');
+	 	$this->UnitTestCase('Database library - main/inc/lib/database.lib.test.php');
 	 }
 
 	 public function setUp() {

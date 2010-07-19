@@ -6,7 +6,7 @@ require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 class TestAddCourse extends UnitTestCase {
 
 	function TestAddCourse() {
-        $this->UnitTestCase('Courses creation tests');
+        $this->UnitTestCase('Courses creation - main/inc/lib/add_course.lib.inc.test.php');
     }
 
 
@@ -26,9 +26,9 @@ class TestAddCourse extends UnitTestCase {
 							 $course_datos['tutor_name'], $course_datos['category_code'],
 							 $course_datos['course_language'],$course_datos['course_admin_id'],
 							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
-		$this->assertTrue(is_bool($res));
-
-	}
+		//should be code string if succeeded (false if failed)
+		$this->assertTrue(is_string($res));
+    }
 
     function testRegisterCourse() {
 	    global $_configuration;

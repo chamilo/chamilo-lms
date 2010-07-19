@@ -17,7 +17,7 @@ class TestCourse extends UnitTestCase{
 	public $tcourse;
 	public function TestCourse(){
 
-		$this->UnitTestCase('Courses library tests');
+		$this->UnitTestCase('Courses library - main/inc/lib/course.lib.test.php');
 	}
 
 	public function setUp(){
@@ -213,20 +213,13 @@ class TestCourse extends UnitTestCase{
 	public function testGetRealCourseListOfUserAsCourseAdmin(){
 		$user_id = 1;
 		$res = $this->tcourse->get_real_course_list_of_user_as_course_admin($user_id);
-        $this->assertTrue(is_array($res));
+        	$this->assertTrue(is_array($res));
 	}
 
 	public function testGetCourseListOfUserAsCourseAdmin(){
 		$user_id = 1;
 		$res = $this->tcourse->get_course_list_of_user_as_course_admin($user_id);
-		if(is_array($res)){
-		$this->assertTrue($res);
 		$this->assertTrue(is_array($res));
-		} else {
-			$this->assertTrue(is_null($res));
-			$this->assertNull($res);
-		}
-		//var_dump($res);
 	}
 
 	public function testDetermineCourseTitleFromCourseInfo(){

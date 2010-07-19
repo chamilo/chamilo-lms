@@ -112,7 +112,7 @@ class TestMainApi extends UnitTestCase {
 
     function testApiGetCoursePathReturnFalseWhenOutOfCoursePathContext(){
     	$res = api_get_course_path();
-    	$this->assertNotEmpty($res);
+    	$this->assertFalse(empty($res));
     }
 
     function testApiGetCourseSettingReturnFalseWhenOutOfCourseSeetingContext(){
@@ -381,7 +381,7 @@ class TestMainApi extends UnitTestCase {
 		api_display_tool_view_option();
 		$res = ob_get_contents();
 		ob_end_clean();
-		$this->assertNotEmpty($res);
+		$this->assertFalse(empty($res));
 	}
 
 	function testApiDisplayArray(){

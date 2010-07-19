@@ -191,7 +191,8 @@ if (isset ($_GET['exportpdf']))	{
 		$subject_pdf = api_utf8_encode(get_lang('FlatView'));
 		$keywods_pdf = api_utf8_encode($course_code);
 
-		$pdf = new mPDF('UTF-8', 'A4', '', '', 32, 25, 27, 25, 16, 13, $export['orientation']);
+		$page_format = $export['orientation'] == 'landscape' ? 'A4-L' : 'A4';
+		$pdf = new mPDF('UTF-8', $page_format, '', '', 32, 25, 27, 25, 16, 13, $export['orientation']);
 		$pdf->directionality = api_get_text_direction();
 		$pdf->useOnlyCoreFonts = true;
 
@@ -262,7 +263,7 @@ if (!empty($_POST['export_report']) && $_POST['export_report'] == 'export_report
 
 		require_once 'gradebook_result.class.php';
 		$printable_data = get_printable_data($users, $alleval, $alllinks);
-		
+
 		//exit;
 
 		switch($_POST['export_format']) {

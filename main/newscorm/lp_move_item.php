@@ -1,53 +1,24 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Patrick Cool
-	Copyright (c) Denes Nagy
-	Copyright (c) Yannick Warnier
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
 *
 * @author Patrick Cool
 * @author Denes Nagy
 * @author Roan Embrechts, refactoring and code cleaning
 * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
-* @package dokeos.learnpath
-==============================================================================
+* @package chamilo.learnpath
 */
 
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 $this_section=SECTION_COURSES;
 
 api_protect_course_script();
 
 /*
------------------------------------------------------------
 	Libraries
------------------------------------------------------------
 */
 //the main_api.lib.php, database.lib.php and display.lib.php
 //libraries are included by default
@@ -60,15 +31,11 @@ include('resourcelinker.inc.php');
 $language_file = "learnpath";
 
 /*
------------------------------------------------------------
 	Header and action code
------------------------------------------------------------
 */
 $htmlHeadXtra[] = $_SESSION['oLP']->create_js();
 /*
------------------------------------------------------------
 	Constants and variables
------------------------------------------------------------
 */
 $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
@@ -93,9 +60,7 @@ $prereq         = $_REQUEST['prereq'];
 $type           = $_REQUEST['type'];
 */
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 // using the resource linker as a tool for adding resources to the learning path
 if ($action=="add" and $type=="learnpathitem")
@@ -115,20 +80,18 @@ $therow=Database::fetch_array($result);
 
 //$admin_output = '';
 /*
------------------------------------------------------------
 	Course admin section
 	- all the functions not available for students - always available in this case (page only shown to admin)
------------------------------------------------------------
 */
-/*==================================================
+/*
 			SHOWING THE ADMIN TOOLS
- ==================================================*/
+ */
 
 
 
-/*==================================================
+/*
 	prerequisites setting end
- ==================================================*/
+ */
 if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
@@ -181,9 +144,7 @@ function confirmation(name)
 //echo $admin_output;
 
 /*
------------------------------------------------------------
 	DISPLAY SECTION
------------------------------------------------------------
 */
 echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
@@ -208,9 +169,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 echo '</table>';
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display::display_footer();
 ?>

@@ -2188,7 +2188,7 @@ class UserManager
     /**
      * @param   int     user ID (defaults to the results of api_get_user_id())
      * @param   string	API key's internal ID
-     * @return  int		row ID, not return a boolean
+     * @return  int	row ID, not return a boolean
      */
     public static function get_api_key_id($user_id, $api_service) {
     	if ($user_id != strval(intval($user_id))) return false;

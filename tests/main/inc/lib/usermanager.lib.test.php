@@ -1,50 +1,30 @@
-<?php //$id$
+<?php
 //require_once('../../../simpletest/autorun.php');
 require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 
-class TestUserManager extends UnitTestCase
-
-{
-/*
-    function testCreateUserReturnsInt() {
-		$user = array('username' => 'ywarnier',
-	   				  'pass' => 'ywarnier',
-	  				  'firstname' => 'Yannick',
-	    			  'lastname' => 'Warnier',
-	  				  'auth_source' => 'platform',
-	  				  'email' => 'yannick.warnier@testdokeos.com',
-	  				  'status' => 6,
-	  				  'creator_id' => 1,
-	   				  'active' => 1,
-					 );
-    	$res = UserManager::create_user($user['firstname'],$user['lastname'],$user['status'],$user['email'],$user['username'],$user['pass'],null,null,null,null,$user['auth_source'],null,$user['active']);
-    	//var_dump($res);
-    	$this->assertTrue(is_bool($res));
-        $res = UserManager::delete_user($res);
-    }
-*/
-
-    function testCreateUser() {
-    	$firstName='test_first';
-    	$lastName='test_last';
-    	$status='1';
-    	$email='test@chamilo.org';
-    	$loginName='testlogin';
-    	$password='testlogin';
-    	$official_code='testcode';
-    	$language='english';
-    	$phone = '';
-    	$picture_uri ='';
-    	global $_user, $userPasswordCrypted;
-    	ob_start();
-    	$res= ob_get_contents();
-    	UserManager::create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code, $language, $phone, $picture_uri);
-    	ob_end_clean();
-        //var_dump($res);
-        $this->assertTrue(is_string($res));
-    }
-
+class TestUserManager extends UnitTestCase {
+        public function __construct() {
+            $this->UnitTestCase('User Manager library - main/inc/lib/usermanager.lib.test.php');
+        }
+    	public function testCreateUser() {
+	    	$firstName='test_first';
+	    	$lastName='test_last';
+	    	$status='1';
+	    	$email='test@chamilo.org';
+	    	$loginName='testlogin';
+	    	$password='testlogin';
+    		$official_code='testcode';
+    		$language='english';
+    		$phone = '';
+    		$picture_uri ='';
+    		global $_user, $userPasswordCrypted;
+    		ob_start();
+    		$res= ob_get_contents();
+    		UserManager::create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code, $language, $phone, $picture_uri);
+    		ob_end_clean();
+        	$this->assertTrue(is_string($res));
+    	}
 /*
     function testDeleteUserReturnsTrue() {
         $user = array('username' => 'ywarnier',
@@ -147,19 +127,13 @@ class TestUserManager extends UnitTestCase
 	}
 
 	function testGetApiKeyId() {
-		$api_service= '';
-		$res=UserManager::get_api_key_id(1,$api_service);
-		if(!$res === NULL) {
-			$this->assertTrue(is_bool($res));
-		} else {
-			$this->assertTrue(is_null($res));
-			$this->assertFalse($res);
-		}
+		$api_service = '';
+		$res = UserManager::get_api_key_id(1,$api_service);
+		$this->assertTrue(is_int($res));
 	}
 
 	function testGetApiKeys() {
 		$res=UserManager::get_api_keys();
-		//var_dump($res);
 		$this->assertTrue(is_bool($res));
 	}
 

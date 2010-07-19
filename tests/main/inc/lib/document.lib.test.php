@@ -233,12 +233,9 @@ class TestDocumentManager extends UnitTestCase {
 		$filename = $name;
 		$len = strlen($full_string);
 		if (!headers_sent()) {	
-			$res=DocumentManager::string_send_for_download($full_string,
-														   $forced,
-														   $name
-														  );
+			$res=DocumentManager::string_send_for_download($full_string, $forced, $name);
 		}
-		$this->assertTrue(is_null($res));
+		$this->assertTrue($res);
 	}
 
 	/**

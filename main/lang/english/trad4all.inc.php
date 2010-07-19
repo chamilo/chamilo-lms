@@ -943,4 +943,10 @@ $RepeatDate = "Repeat date";
 $ToAttend = "To attend";
 $HaveFun = "Have fun,";
 $ClearSearchResults = "Clear search results";
+$TestServerMode = "Test server mode";
+$PageExecutionTimeWas = "Page execution time was";
+$MemoryUsage = "Memory usage";
+$MemoryUsagePeak = "Memory usage peak";
+$Seconds = "seconds";
+$QualifyInGradebook = "Qualify in the gradebook";
 ?>

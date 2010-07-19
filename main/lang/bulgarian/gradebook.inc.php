@@ -132,6 +132,7 @@ $CannotChangeTheMaxNote = "Максималният резултат не мож
 $GradebookWeightUpdated = "Теглото е редактирано.";
 $ChooseItem = "Изберете учебна дейност за оценяване";
 $AverageResultsVsResource = "Средни резултати по ресурси";
+$ToViewGraphScoreRuleMustBeEnabled = "За да видите графика, системата за оценяване трябва да е активирана.";
 $GradebookPreviousWeight = "Предишно тегро на ресурса";
 $AddAssessment = "Добавяне на тази учебна дейност за оценяване";
 $FolderView = "Начална страница на оценяванията";

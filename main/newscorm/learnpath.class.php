@@ -5406,12 +5406,8 @@ class learnpath {
 		else
 			$parent = 0;
 
-		$sql = "
-						SELECT *
-						FROM " . $tbl_lp_item . "
-						WHERE
-							lp_id = " . $this->lp_id;
-
+		$sql = "SELECT * FROM " . $tbl_lp_item . "
+				WHERE lp_id = " . $this->lp_id;
 		$result = Database::query($sql);
 
 		$arrLP = array ();
@@ -5441,8 +5437,7 @@ class learnpath {
 		if ($action == 'add')
 			$return .= get_lang("CreateTheForum") . '&nbsp;:' . "\n";
 		elseif ($action == 'move') $return .= get_lang("MoveTheCurrentForum") . '&nbsp;:' . "\n";
-		else
-			$return .= get_lang("EditCurrentForum") . '&nbsp;:' . "\n";
+		else   $return .= get_lang("EditCurrentForum") . '&nbsp;:' . "\n";
 
 		$return .= '	</div>
 								</div>';
@@ -5482,7 +5477,7 @@ class learnpath {
 		if (is_array($arrLP)) {
 			reset($arrLP);
 		}
-
+		
 		$return .= "\t\t\t\t" . '</select>';
 		$return .= "\t\t\t" . '</td>' . "\n";
 		$return .= "\t\t" . '</tr>' . "\n";
@@ -5556,6 +5551,7 @@ class learnpath {
 		$return .= "\t" . '<input name="post_time" type="hidden" value="' . time() . '" />' . "\n";
 		$return .= '</form>' . "\n";
 		$return .= '</div>' . "\n";
+		
 		return $return;
 	}
 
@@ -5784,8 +5780,8 @@ class learnpath {
 	 * @return	string 	HTML form
 	 */
 	function display_item_form($item_type, $title = '', $action = 'add', $id = 0, $extra_info = 'new') {
-		global $_course;
-		global $charset;
+		global $_course, $charset;
+		//$parent_item_id = $_SESSION['parent_item_id'];
 
 		$tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
@@ -5892,6 +5888,7 @@ class learnpath {
 			}
 			$parent_select->setSelected($s_selected_parent);
 		}
+		
 		if (is_array($arrLP)) {
 			reset($arrLP);
 		}
@@ -6112,6 +6109,7 @@ class learnpath {
 		
 		$parent_select = & $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" style="width:40%;" onchange="load_cbo(this.value);"');
 		$my_count=0;
+		
 		foreach ($arrHide as $key => $value) {
 			if ($my_count!=0) {
 				// the LP name is also the first section and is not in the same charset like the other sections
@@ -6138,8 +6136,9 @@ class learnpath {
 		}
 
 		$arrHide = array ();
-
+		$parent_item_id = $_SESSION['parent_item_id'];
 		//POSITION
+		
 		for ($i = 0; $i < count($arrLP); $i++) {
 			if ($arrLP[$i]['parent_item_id'] == $parent_item_id && $arrLP[$i]['id'] != $id) {
 				if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
@@ -6964,13 +6963,12 @@ class learnpath {
 				case TOOL_STUDENTPUBLICATION :
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_student_publication_form('move', $item_id, $row);
-					break;
+					break; 
 				case TOOL_FORUM :
-					$return .= $this->display_manipulate($item_id, $row['item_type']);
-					$return .= $this->display_forum_form('move', $item_id, $row);
 				case TOOL_THREAD :
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
-					$return .= $this->display_forum_form('move', $item_id, $row);
+					$return .= $this->display_forum_form('move', $item_id, $row);					
+				break;
 			}
 		}
 

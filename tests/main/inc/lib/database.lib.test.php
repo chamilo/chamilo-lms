@@ -239,20 +239,19 @@ class TestDatabase extends UnitTestCase {
 		$this->assertTrue($res);
 	}
 
-	function testGetUserInfoFromIdOne() {
+	function testGetUserInfoFromIdOneIsArray() {
 		$res=$this->dbase->get_user_info_from_id(1);
 		$this->assertTrue(is_array($res));
 	}
-	function testGetUserInfoFromIdNull() {
+	function testGetUserInfoFromIdNullIsFalse() {
 		// should be returning GLOBALS[_user] (=null) if param is null (in testing context)
         	$res=$this->dbase->get_user_info_from_id(null);
-	        $this->assertTrue(is_array($res));
+	        $this->assertFalse($res);
 	}
-	function testGetUserInfoFromIdHighValue() {
+	function testGetUserInfoFromIdHighValueIsArray() {
         	// should be returning array with empty values if user doesn't exist
 	        $res=$this->dbase->get_user_info_from_id(5000000);
         	$this->assertTrue(is_array($res));
-	        $this->assertNull($res['mail']);
 	}
 
 	function testGetUserPersonalDatabase() {

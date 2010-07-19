@@ -2188,7 +2188,7 @@ class UserManager
     /**
      * @param   int     user ID (defaults to the results of api_get_user_id())
      * @param   string	API key's internal ID
-     * @return  int	row ID, not return a boolean
+     * @return  int	row ID, or return false if not found
      */
     public static function get_api_key_id($user_id, $api_service) {
     	if ($user_id != strval(intval($user_id))) return false;
@@ -2198,6 +2198,9 @@ class UserManager
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $sql = "SELECT id FROM $t_api WHERE user_id=".$user_id." AND api_service='".$api_service."'";
         $res = Database::query($sql);
+	if (Database::num_rows($res)<1) {
+		return false;
+	}
         $row = Database::fetch_array($res, 'ASSOC');
         return $row['id'];
     }

@@ -5,7 +5,7 @@ class TestDocumentManager extends UnitTestCase {
 		
 
     public function __construct() {
-        $this->UnitTestCase('Document Manager library tests');
+        $this->UnitTestCase('Document Manager library - main/inc/lib/document.lib.test.php');
     }
     	
     /**
@@ -153,7 +153,7 @@ class TestDocumentManager extends UnitTestCase {
 	}
 
 	/**
-	* @return the document folder quuta of the current course, in bytes
+	* @return the document folder quota of the current course, in bytes
 	*/
 	function testget_course_quota() {
 		global $_course, $maxFilledSpace;

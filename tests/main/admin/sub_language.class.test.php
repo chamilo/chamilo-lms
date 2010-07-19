@@ -6,6 +6,9 @@ class TestSubLanguageManager extends UnitTestCase {
 
 	public $clean = array();
 
+        public function __construct() {
+            $this->UnitTestCase('Sublanguage Manager library - main/admin/sub_language.class.test.php');
+        }
 	/**
 	 *	Testing who get all data of dokeos folder
 	 *  @param String to url path folder
@@ -33,8 +36,7 @@ class TestSubLanguageManager extends UnitTestCase {
 
 	}
 
-    /**
-	 *
+    	/**
 	 *
 	 */
 	public function testget_all_information_of_language(){
@@ -42,34 +44,26 @@ class TestSubLanguageManager extends UnitTestCase {
 		$res = SubLanguageManager::get_all_information_of_language($parent_id);
 		$this->assertTrue($res);
 		$this->assertTrue(is_array($res));
-		// var_dump($res);
-
 	}
 
 	/**
-	 *
-	 *
+	 * Get variables within a language file
 	 */
 	public function testget_all_language_variable_in_file(){
-	  $system_path_folder = api_get_path(SYS_LANG_PATH);
-	  $system_path_file = $system_path_folder.'spanish/link.inc.php';
-	  $res = SubLanguageManager::get_all_language_variable_in_file($system_path_file);
-	  if(is_array($res)) {
-	  		$this->assertTrue($res);
-	  }
-	  $this->assertFalse($res);
-	  //var_dump($res);
-	 }
+	    $system_path_folder = api_get_path(SYS_LANG_PATH);
+	    $system_path_file = $system_path_folder.'spanish/link.inc.php';
+	    $res = SubLanguageManager::get_all_language_variable_in_file($system_path_file);
+	    $this->assertTrue(is_array($res));
+	}
 
 	/**
-	 *
 	 *
 	 */
 	public function testadd_file_in_language_directory(){
 		$dirname = api_get_path(SYS_LANG_PATH);
 		$perm_dir = substr(sprintf('%o', fileperms($dirname)), -4);
 		if ($perm_dir != '0777') {
-			$msg = "Error";
+			$msg = 'Error';
 			$this->assertTrue(is_string($msg));
 		} else {
 			$system_path_file = $dirname.'spanish.inc.php';

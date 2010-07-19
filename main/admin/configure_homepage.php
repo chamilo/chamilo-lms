@@ -315,8 +315,8 @@ if (!empty($action)) {
 						$link_url = api_get_path(WEB_PATH).'index.php?include='.urlencode($filename);
 						// If the file doesn't exist, then create it and
 						// fill it with default text
-						if (!file_exists(api_get_path(SYS_PATH).'home/'.$filename)) {
-							$fp = @fopen(api_get_path(SYS_PATH).'home/'.$filename, 'w');
+						if (!file_exists($homep.$filename)) {
+							$fp = @fopen($homep.$filename, 'w');
 							if ($fp) {
 								fputs($fp, get_lang('MyTextHere'));
 								fclose($fp);
@@ -326,7 +326,7 @@ if (!empty($action)) {
 					// If the requested action is to edit a link, open the file and
 					// write to it (if the file doesn't exist, create it)
 					if ($action == 'edit_link' && !empty($link_html)) {
-						$fp = @fopen(api_get_path(SYS_PATH).'home/'.$filename, 'w');
+						$fp = @fopen($homep.$filename, 'w');
 						if ($fp) {
 							fputs($fp, $link_html);
 							fclose($fp);
@@ -569,7 +569,7 @@ if (!empty($action)) {
 
 							if (!strstr($filename, '/') && strstr($filename, '.html')) {
 								// Get oonly the contents of the link file
-								$link_html = @file(api_get_path(SYS_PATH).'home/'.$filename);
+								$link_html = @file($homep.$filename);
 								$link_html = implode('', $link_html);
 								$link_url = '';
 							} else {

@@ -179,18 +179,16 @@ class TestDatabase extends UnitTestCase {
 	}
 
 	function testGetCurrentCourseGluedDatabase() {
-		$res=$this->dbase->get_current_course_glued_database();
-		if (empty($GLOBALS['_course']['dbName'])) {
-		    $this->assertFalse($res);
-		} else {
-			$this->assertTrue(is_string($res));
-		}
-        $res=$this->dbase->get_current_course_glued_database('___');
-        $this->assertFalse($res);
+	    global $_course;
+	    $res=$this->dbase->get_current_course_glued_database();
+	    if (empty($_course['dbNameGlu'])) {
+	        $this->assertFalse($res);
+	    } else {
+	        $this->assertTrue(is_string($res));
+	    }
 	}
 
-	function testGetDatabaseGlue()
-	{
+	function testGetDatabaseGlue() {
 		global $_configuration;
 		$res=$this->dbase->get_database_glue($_configuration);
 		$this->assertTrue(is_string($res));
@@ -241,16 +239,20 @@ class TestDatabase extends UnitTestCase {
 		$this->assertTrue($res);
 	}
 
-	function testGetUserInfoFromId() {
+	function testGetUserInfoFromIdOne() {
 		$res=$this->dbase->get_user_info_from_id(1);
 		$this->assertTrue(is_array($res));
+	}
+	function testGetUserInfoFromIdNull() {
 		// should be returning GLOBALS[_user] (=null) if param is null (in testing context)
-        $res=$this->dbase->get_user_info_from_id(null);
-        $this->assertNull($res);
-        // should be returning array with empty values if user doesn't exist
-        $res=$this->dbase->get_user_info_from_id(5000000);
-        $this->assertTrue(is_array($res));
-        $this->assertNull($res['mail']);
+        	$res=$this->dbase->get_user_info_from_id(null);
+	        $this->assertTrue(is_array($res));
+	}
+	function testGetUserInfoFromIdHighValue() {
+        	// should be returning array with empty values if user doesn't exist
+	        $res=$this->dbase->get_user_info_from_id(5000000);
+        	$this->assertTrue(is_array($res));
+	        $this->assertNull($res['mail']);
 	}
 
 	function testGetUserPersonalDatabase() {

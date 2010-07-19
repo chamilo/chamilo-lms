@@ -4,7 +4,7 @@ require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 class TestMainApi extends UnitTestCase {
 
 	function TestMainApi() {
-        $this->UnitTestCase('Main API tests');
+        	$this->UnitTestCase('Main API library - main/inc/lib/main_api.lib.test.php');
 	}
 /*
 	function testApiProtectCourseScript(){
@@ -112,55 +112,50 @@ class TestMainApi extends UnitTestCase {
 
     function testApiGetCoursePathReturnFalseWhenOutOfCoursePathContext(){
     	$res = api_get_course_path();
-    	if(!is_null($res)) :
-    	$this->assertTrue(is_string($res));
-    	endif;
-    	//var_dump($res);
+    	$this->assertNotEmpty($res);
     }
 
-	function testApiGetCourseSettingReturnFalseWhenOutOfCourseSeetingContext(){
-		global $_course;
-		$course_code = $_course;
-		$setting_name = 1;
-		$res = api_get_course_setting($setting_name, $course_code);
-		$this->assertTrue($res);
-	}
+    function testApiGetCourseSettingReturnFalseWhenOutOfCourseSeetingContext(){
+	global $_course;
+	$course_code = $_course;
+	$setting_name = 1;
+	$res = api_get_course_setting($setting_name, $course_code);
+	$this->assertTrue($res);
+    }
 
-	function testApiGetAnonymousId(){
-		$res = api_get_anonymous_id();
-		$this->assertTrue(is_numeric($res));
-	}
+    function testApiGetAnonymousId(){
+	$res = api_get_anonymous_id();
+	$this->assertTrue(is_numeric($res));
+    }
 
-	function testApiGetCidreq(){
-		$res=api_get_cidreq();
-		$this->assertTrue($res);
-	}
+    function testApiGetCidreq(){
+	$res=api_get_cidreq();
+	$this->assertTrue(is_string($res));
+    }
 
-	function testApiGetCourseInfo(){
-		ob_start();
-		$res=api_get_course_info();
-		$this->assertTrue($res);
-		ob_end_clean();
-	}
+    function testApiGetCourseInfo(){
+	ob_start();
+	$res=api_get_course_info();
+	$this->assertTrue($res);
+	ob_end_clean();
+    }
 
-	function testApiSessionStart(){
-		if (!headers_sent()) {
+    function testApiSessionStart(){
+	if (!headers_sent()) {
 		$res = api_session_start($already_sintalled=true);
-		}
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
 	}
+	$this->assertTrue(is_null($res));
+    }
 
-	function testApiSessionRegister(){
-		$$variable[session_register]=false;
-		global $$variable;
-		if (!headers_sent()) {
+    function testApiSessionRegister(){
+	$$variable[session_register]=false;
+	global $$variable;
+	if (!headers_sent()) {
 		$res=api_session_register($$variable);
-		}
-		$this->assertTrue(is_null($res));
-		$this->assertTrue(is_null($variable[session_register]));
-		//var_dump($variable);
 	}
+	$this->assertTrue(is_null($res));
+	$this->assertTrue(is_null($variable[session_register]));
+    }
 
 	function testApiSessionUnregister() {
 		$variable=strval($variable);
@@ -385,8 +380,8 @@ class TestMainApi extends UnitTestCase {
 		ob_start();
 		api_display_tool_view_option();
 		$res = ob_get_contents();
-		$this->assertNotEqual($res,'');
 		ob_end_clean();
+		$this->assertNotEmpty($res);
 	}
 
 	function testApiDisplayArray(){
@@ -636,7 +631,7 @@ class TestMainApi extends UnitTestCase {
 	function testApiStatusKey(){
 		$status = 'user';
 		$res = api_status_key($status);
-		$this->assertTrue(is_numeric($res));
+		$this->assertTrue($res);
 	}
 
 	function testApiGetStatusLangvars(){

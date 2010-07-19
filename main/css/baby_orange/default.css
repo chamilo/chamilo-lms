@@ -19,7 +19,7 @@ body {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -10em;
+	margin: 0 auto -26em;
 }
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
@@ -77,8 +77,8 @@ input[type=button], input[type=submit] {
 }
 /* header 2 styles */
 #header2 {
-	float: right;
-	clear: right;
+	/*float: right;
+	clear: right;*/
 }
 #header2 a {
 	text-decoration: none;

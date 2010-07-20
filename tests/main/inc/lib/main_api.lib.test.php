@@ -107,7 +107,7 @@ class TestMainApi extends UnitTestCase {
 
     function testApiGetCourseIdReturnFalseWhenOutOfCourseIdContext(){
     	$res = api_get_course_id();
-    	$this->assertEqual($res,-1);
+    	$this->assertNull($res);
     }
 
     function testApiGetCoursePathReturnFalseWhenOutOfCoursePathContext(){
@@ -381,7 +381,7 @@ class TestMainApi extends UnitTestCase {
 		api_display_tool_view_option();
 		$res = ob_get_contents();
 		ob_end_clean();
-		$this->assertFalse(empty($res));
+		$this->assertTrue(empty($res));
 	}
 
 	function testApiDisplayArray(){
@@ -628,7 +628,7 @@ class TestMainApi extends UnitTestCase {
 	function testApiStatusKey(){
 		$status = 'user';
 		$res = api_status_key($status);
-		$this->assertTrue($res);
+		$this->assertEqual($res,STUDENT);
 	}
 
 	function testApiGetStatusLangvars(){

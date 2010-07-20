@@ -882,18 +882,18 @@ $table->set_additional_parameters($query_vars);
 $column = 0;
 
 if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
-	$table->set_header($column++, '', false);
+	$table->set_header($column++, '', false,array ('style' => 'width:30px;'));
 }
 $table->set_header($column++, get_lang('Type'),true,array ('style' => 'width:30px;'));
 
 $table->set_header($column++, get_lang('Name'));
 
 //$column_header[] = array(get_lang('Comment'), true); // Display comment under the document name
-$table->set_header($column++, get_lang('Size'));
-$table->set_header($column++, get_lang('Date'));
+$table->set_header($column++, get_lang('Size'),true,array ('style' => 'width:50px;'));
+$table->set_header($column++, get_lang('Date'),true,array ('style' => 'width:150px;'));
 // Admins get an edit column
 if ($is_allowed_to_edit || $group_member_with_upload_rights) {
-	$table->set_header($column++, get_lang('Modify'), false);
+	$table->set_header($column++, get_lang('Modify'), false,array ('style' => 'width:100px;'));
 }
 
 // Actions on multiple selected documents

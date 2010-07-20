@@ -20,28 +20,28 @@ define('FREE_ANSWER', 		5);
 define('HOTSPOT',			6);
 
 class TestQti2 extends UnitTestCase {
-	
+
 	public $qIms2Question;
 	public $qImsAnswerFillInBlanks;
 	public $qImsAnswerFree;
 	public $qImsAnswerHotspot;
 	public $qImsAnswerMatching;
 	public $qImsAnswerMultipleChoice;
-	
-	public function TestQti2() {
-	$this->UnitTestCase('');
+
+	public function __construct() {
+        $this->UnitTestCase('QTI2 library - main/exercice/export/qti2/qti2_classes.test.php');
 	}
-	
-	public function setUp() {		
-		$this->qIms2Question = new Ims2Question();		
+
+	public function setUp() {
+		$this->qIms2Question = new Ims2Question();
 		$this->qImsAnswerFillInBlanks = new ImsAnswerFillInBlanks(1);
 		$this->qImsAnswerFree = new ImsAnswerFree(1);
-		$this->qImsAnswerHotspot = new ImsAnswerHotspot(1);			
+		$this->qImsAnswerHotspot = new ImsAnswerHotspot(1);
 		$this->qImsAnswerMatching = new ImsAnswerMatching(1);
 		$this->qImsAnswerMultipleChoice = new ImsAnswerMultipleChoice(1);
 	}
-	
-	public function tearDown() {		
+
+	public function tearDown() {
 		$this-> qIms2Question = null;
 		$this-> qImsAnswerFillInBlanks = null;
 		$this-> qImsAnswerFree = null;
@@ -49,12 +49,12 @@ class TestQti2 extends UnitTestCase {
 		$this-> qImsAnswerMatching = null;
 		$this-> qImsAnswerMultipleChoice = null;
 	}
-	
+
 //Class qIms2Question
 	 /**
      * Include the correct answer class and create answer
      */
-     
+
 	function testsetAnswer() {
 		$res=Ims2Question::setAnswer();
 		if(!is_null){
@@ -62,14 +62,14 @@ class TestQti2 extends UnitTestCase {
 		}
 		//var_dump($res);
 	}
-	
+
 	function testcreateAnswersForm() {
 		$form = array(1);
 		$res=Ims2Question::createAnswersForm($form);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testprocessAnswersCreation() {
 		$form = array(1);
 		$res=Ims2Question::processAnswersCreation($form);
@@ -94,7 +94,7 @@ class TestQti2 extends UnitTestCase {
 			}
 		//var_dump($res);
 	}
-	
+
 	function testimsExportResponsesDeclaration() {
 		$questionIdent = array(1);
 		$res=$this->qImsAnswerFillInBlanks->imsExportResponsesDeclaration($questionIdent);
@@ -110,7 +110,7 @@ class TestQti2 extends UnitTestCase {
      * TODO implement
      * Export the question part as a matrix-choice, with only one possible answer per line.
      */
-     
+
 	function testImsExportResponsesqImsAnswerFree() {
 		$questionIdent = array('');
 		$questionStatment = array('');
@@ -118,22 +118,22 @@ class TestQti2 extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function testImsExportResponsesDeclarationqImsAnswerFree() {
 		$questionIdent = array(1);
 		$res=$this->qImsAnswerFree->imsExportResponsesDeclaration($questionIdent);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
-	
+
+
 //Class qImsAnswerHotspot
 
 	/**
      * TODO update this to match hotspots instead of copying matching
      * Export the question part as a matrix-choice, with only one possible answer per line.
      */
-     
+
 	function testimsExportResponsesqImsAnswerHotspot() {
 		$questionIdent = array(1);
 		$questionStatment = array(1);
@@ -141,7 +141,7 @@ class TestQti2 extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 
 	function testimsExportResponsesDeclarationqImsAnswerHotspot() {
 		$questionIdent = array(1);
@@ -149,13 +149,13 @@ class TestQti2 extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 //Class qImsAnswerMatching
 
     /**
      * Export the question part as a matrix-choice, with only one possible answer per line.
      */
-     
+
 	function testimsExportResponsesqImsAnswerMatching() {
 		$questionIdent = array(1);
 		$questionStatment = array(1);
@@ -163,7 +163,7 @@ class TestQti2 extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 
 	function testimsExportResponsesDeclarationqImsAnswerMatching() {
 		$questionIdent = array(1);
@@ -178,7 +178,7 @@ class TestQti2 extends UnitTestCase {
      * Return the XML flow for the possible answers.
      *
      */
-     
+
 	function testimsExportResponsesqImsAnswerMultipleChoice() {
 		$questionIdent = array(1);
 		$questionStatment = array(1);
@@ -186,7 +186,7 @@ class TestQti2 extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 
 	function testimsExportResponsesDeclarationqImsAnswerMultipleChoice() {
 		$questionIdent = array(1);

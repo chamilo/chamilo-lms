@@ -4,6 +4,9 @@ require_once(api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 
 class TestDebug extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('Debug helper library - main/inc/lib/debug.lib.inc.test.php');
+    }
 	function testDebugFunction() {
 		$variable='br';
 		ob_start();

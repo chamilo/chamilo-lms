@@ -4,6 +4,10 @@ require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestUserInfoLib extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('User info library - main/user/userInfoLib.test.php');
+    }
+
 	/**
  	* clean the content of a bloc for information category
  	*/
@@ -162,13 +166,13 @@ class TestUserInfoLib extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	/**
  * This functon only is added to the end of the test and the end of the files in the all test.
  */
 	/*public function testDeleteCourse() {
-		global $cidReq;			
-		$resu = CourseManager::delete_course($cidReq);				
+		global $cidReq;
+		$resu = CourseManager::delete_course($cidReq);
 	}*/
 }
 ?>

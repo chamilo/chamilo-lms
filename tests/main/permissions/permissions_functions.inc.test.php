@@ -3,7 +3,11 @@ require_once api_get_path(SYS_CODE_PATH).'permissions/permissions_functions.inc.
 //require_once dirname(__FILE__).'/../main/permissions/permissions_functions.inc.php';
 
 class TestPermissions extends UnitTestCase {
-	/**
+
+    public function __construct() {
+        $this->UnitTestCase('Permissions library - main/permissions/permissions_functions.inc.test.php');
+    }
+    /**
 	* This function is called when we assign a role to a user or a group
 	* @param string
 	* @param string
@@ -18,14 +22,14 @@ class TestPermissions extends UnitTestCase {
 		$role_id=1;
 		$scope='course';
 		$res = assign_role($content, $action, $id, $role_id, $scope);
-		$this->assertTrue(is_string($res)); 
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	This function displays a checked or unchecked checkbox. The checkbox will be checked if the
 	* user, group or role has the permission for the given tool, unchecked if the user, group or role
-	* does not have the right 
+	* does not have the right
 	* @param array
 	* @param string
 	* @param string
@@ -39,7 +43,7 @@ class TestPermissions extends UnitTestCase {
 		$permission=1;
 		$inherited_permissions=array();
 		$res = display_checkbox_matrix($permission_array, $tool, $permission, $inherited_permissions);
-		$this->assertTrue(is_null($res)); 
+		$this->assertTrue(is_null($res));
 		ob_end_clean();
 		//var_dump($res);
 	}
@@ -60,7 +64,7 @@ class TestPermissions extends UnitTestCase {
 		$course_admin=false;
 		$editable=true;
 		$res = display_image_matrix($permission_array, $tool, $permission,$inherited_permissions, $course_admin, $editable);
-		$this->assertTrue(is_null($res)); 
+		$this->assertTrue(is_null($res));
 		//ob_end_clean();
 		//var_dump($res);
 	}
@@ -74,7 +78,7 @@ class TestPermissions extends UnitTestCase {
 	* @param string
 	* @param array
 	* @param bool
-	*/	
+	*/
 	function testDisplayImageMatrixForBlogs(){
 		$permission_array=array();
 		$user_id=1;
@@ -84,13 +88,13 @@ class TestPermissions extends UnitTestCase {
 		$course_admin=false;
 		$editable=true;
 		$res = display_image_matrix_for_blogs($permission_array, $user_id, $tool, $permission,$inherited_permissions, $course_admin, $editable);
-		$this->assertTrue(is_null($res)); 
+		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 	/**
 	* This function displays a list off all the roles of the course (and those defined by the platform admin)
-	* @param 
-	* @param 
+	* @param
+	* @param
 	*/
 	function testDisplayRoleList(){
 		$current_course_roles='';
@@ -109,8 +113,8 @@ class TestPermissions extends UnitTestCase {
 		$res = get_all_roles($content);
 		if (!is_null($res)){
 			$this->assertTrue(is_array($res));
-		} 
-		//var_dump($res);		
+		}
+		//var_dump($res);
 	}
 	/**
 	* This function retrieves the existing permissions of a user, group or role.
@@ -122,7 +126,7 @@ class TestPermissions extends UnitTestCase {
 		$id=1;
 		$res = get_permissions($content, $id);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);		
+		//var_dump($res);
 	}
 	/**
 	* This function gets all the current roles of the user or group
@@ -136,7 +140,7 @@ class TestPermissions extends UnitTestCase {
 		$scope='course';
 		$res = get_roles($content, $id, $scope);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);		
+		//var_dump($res);
 	}
 	/**
 	* This function gets all the roles that are defined
@@ -153,7 +157,7 @@ class TestPermissions extends UnitTestCase {
 		if (!is_null($res)){
 			$this->assertTrue(is_array($res));
 		}
-		//var_dump($res);		
+		//var_dump($res);
 	}
 	/**
 	* the array that contains the current permission a user, group or role has will now be changed depending on
@@ -170,18 +174,18 @@ class TestPermissions extends UnitTestCase {
 		if (!is_null($res)){
 			$this->assertTrue(is_array($res));
 		}
-		//var_dump($res);		
+		//var_dump($res);
 	}
-	
+
 	function testMyPrintR(){
 		ob_start();
 		$array='';
 		$res = my_print_r($array);
-		$this->assertTrue(is_null($res)); 
+		$this->assertTrue(is_null($res));
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	* This function merges permission arrays. Each permission array has the following structure
 	* a permission array has a tool contanst as a key and an array as a value. This value array consists of all the permissions that are granted in that tool.
@@ -191,7 +195,7 @@ class TestPermissions extends UnitTestCase {
 		$array2=array();
 		$res = permission_array_merge($array1, $array2);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);		
+		//var_dump($res);
 	}
 	/**
 	* This function stores one permission in the correct table.
@@ -208,7 +212,7 @@ class TestPermissions extends UnitTestCase {
 		} else {
 			$this->assertNull($res);
 		}
-		//var_dump($res);		
+		//var_dump($res);
 	}
 	/**
 	* This function stores the permissions in the correct table.
@@ -225,7 +229,7 @@ class TestPermissions extends UnitTestCase {
 		$id=1;
 		$res = store_permissions($content, $id);
 		$this->assertTrue(is_string($res));
-		//var_dump($res);		
+		//var_dump($res);
 	}
 }
 ?>

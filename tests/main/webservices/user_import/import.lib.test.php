@@ -8,6 +8,10 @@ require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestImpor extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('User import WS library - main/webservices/user_import/import.lib.test.php');
+    }
+
 	function testcomplete_missing_data(){
 		$user='admin';
 		$res=complete_missing_data($user);
@@ -32,7 +36,7 @@ class TestImpor extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 		function testparse_csv_data() {
 		$file= '/tmp/';
 		$res=parse_csv_data($file);
@@ -43,8 +47,8 @@ class TestImpor extends UnitTestCase {
  * This functon only is added to the end of the test and the end of the files in the all test.
  */
 	/*public function testDeleteCourse() {
-		global $cidReq;			
-		$resu = CourseManager::delete_course($cidReq);				
+		global $cidReq;
+		$resu = CourseManager::delete_course($cidReq);
 	}*/
 }
 ?>

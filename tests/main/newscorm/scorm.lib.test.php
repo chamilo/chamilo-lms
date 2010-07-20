@@ -3,6 +3,10 @@ require_once(api_get_path(SYS_CODE_PATH).'newscorm/scorm.lib.php');
 
 class TestScormLib extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('SCORM library - main/newscorm/scorm.lib.test.php');
+    }
+
 /**
  * This public function gets a list of scorm paths located in a given directory
  * @param	string	Base directory path

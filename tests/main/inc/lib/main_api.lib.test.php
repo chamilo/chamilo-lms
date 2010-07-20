@@ -603,17 +603,14 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiChmod_R(){
+		// We know, it does not work for Windows.
+		if (IS_WINDOWS_OS) { return true; }
 		$dirname = api_get_path(SYS_LANG_PATH);
 		$perm_dir = substr(sprintf('%o', fileperms($dirname)), -4);
-		if ($perm_dir != '0777') {
-			// haha! This one is too good to remove... (for now)
-			$msg = "Error";
-			$this->assertTrue(is_string($msg));
-		} else {
-			$filemode = '0777';
-			$res = api_chmod_R($dirname, $filemode);
-			$this->assertTrue($res || IS_WINDOWS_OS); // We know, it does not work for Windows.
-		}
+		$this->assertEqual($perm_dir,'0777');
+		$new_filemode = '0775';
+		$res = api_chmod_R($dirname, $new_filemode);
+		$this->assertTrue($res);
 	}
 
 	function testApiGetVersion(){

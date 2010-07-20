@@ -115,9 +115,9 @@ class TestUserManager extends UnitTestCase {
     	$this->assertTrue(is_bool($res));
     }
 
-    function testBuildProductionList() {
-    	$res=UserManager::build_production_list(1, false, false);
-    	$this->assertTrue(is_string($res));
+    function testBuildProductionListIsFalse() {
+    	$res = UserManager::build_production_list(1, false, false);
+    	$this->assertFalse($res);
     }
 
 	function testDeleteApiKey() {

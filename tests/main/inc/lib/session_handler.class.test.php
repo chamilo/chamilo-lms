@@ -9,6 +9,9 @@ class TestSessionHandler extends UnitTestCase {
 	var $session_name;
 
 
+	public function TestSessionHandler(){
+		$this->UnitTestCase('Session handler library - main/inc/lib/session_handler.class.test.php');
+	}
 	function testClose() {
 		$instancia = new session_handler();
 		$res=$instancia->close();

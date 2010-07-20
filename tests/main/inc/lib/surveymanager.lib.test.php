@@ -4,6 +4,9 @@ require_once api_get_path(LIBRARY_PATH).'surveymanager.lib.php';
 /*
 class TestSurveyManager extends UnitTestCase {
 
+	public function TestSurveyManager(){
+		$this->UnitTestCase('Surveys library - main/inc/lib/surveymanager.lib.test.php');
+	}
 		function testcreate_survey() {
 		$surveycode='';
 		$surveytitle='';
@@ -291,6 +294,9 @@ class TestSurveyTree extends UnitTestCase {
 	var $surveylist;
 	var $plainsurveylist;
 	var $numbersurveys;
+	public function TestSurveTree(){
+		$this->UnitTestCase('Survey trees library - main/inc/lib/surveymanager.lib.test.php');
+	}
 	function testgetParentId() {
 		$id='';
 		$res=SurveyTree::getParentId($id);

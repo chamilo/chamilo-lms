@@ -9,6 +9,9 @@ require_once(api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
 class TestCalendar extends UnitTestCase {
 
 	
+	public function TestCalendar(){
+		$this->UnitTestCase('Calendar library - main/admin/calendar.inc.test.php');
+	}
 	public function testToJavascript(){
  		$res = to_javascript();
  		$this->assertTrue($res);

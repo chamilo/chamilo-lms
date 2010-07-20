@@ -2,15 +2,14 @@
 
 class Testcdocu extends UnitTestCase{
 
-	public function Testcdocu(){
-		$this->UnitTestCase('Determine the course of document function tests');
+    public function __construct(){
+        $this->UnitTestCase('Course documents display library - main/inc/course_document.inc.test.php');
+    }
 
-	}
-	
 	public function testGetlist(){
 		global $is_allowed_in_course;
 		$is_allowed_in_course = true;
-		$directory = api_get_path(SYS_COURSE_PATH).'/document/audio/';				
+		$directory = api_get_path(SYS_COURSE_PATH).'/document/audio/';
 		$res = getlist($directory);
 		if (is_bool($res)){
 			$this->assertTrue(is_bool($res));
@@ -18,10 +17,10 @@ class Testcdocu extends UnitTestCase{
 		} else{
 			$this->assertTrue(is_null($res));
 		}
-		
-	
+
+
 	}
-	
+
 	public function testCheckAndCreateResourceDirectory(){
 		global $_course, $_user;
 		global $group_properties, $to_group_id;
@@ -33,7 +32,7 @@ class Testcdocu extends UnitTestCase{
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === true || $res === false);
 	}
-	
+
 }
 
 

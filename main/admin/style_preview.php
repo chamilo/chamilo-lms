@@ -1,8 +1,11 @@
 <?php
 /* For licensing terms, see /chamilo_license.txt */
+
+$language_file = array('create_course', 'courses', 'admin');
+
 require_once '../inc/global.inc.php';
 
-if (isset($_GET['style']) AND $_GET['style']<>'') {
+if (isset($_GET['style']) && $_GET['style'] != '') {
 	$style=Security::remove_XSS($_GET['style']);
 	$all_styles = api_get_themes();
 	if (in_array($style, $all_styles[0])) {
@@ -13,43 +16,45 @@ if (isset($_GET['style']) AND $_GET['style']<>'') {
 	echo '<link href="../css/'.$currentstyle.'/default.css" rel="stylesheet" type="text/css">';
 }
 
+$_setting['student_view_enabled'] = 'false'; // Hiding the link "Teacher/Student view", it is not needed to be shown here.
+$week_days_short = api_get_week_days_short();
+$months_long = api_get_months_long();
+
 //Display::display_header($tool_name);
 require_once api_get_path(INCLUDE_PATH).'banner.inc.php';
 
 ?>
-<!-- start of #main wrapper for #content and #menu divs -->
-  <!--   Begin Of script Output   -->
-  <div class="maincontent">
-    <h3>Tool title</h3>
+  <div class="maincontent" id="content">
+    <h3><?php echo get_lang('Title'); ?></h3>
     <div id="courseintro">
-      <p>This is the introduction text.
+      <p><?php echo get_lang('IntroductionText'); ?></p>
     </div>
     <div id="courseintro_icons">
     <a href="#"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a><a href="#"><?php Display::display_icon('delete.gif', get_lang('Delete')); ?></a></div>
-    <div class="normal-message"> Normal Message </div>
-    <div class="confirmation-message"> Confirmation Message </div>
-    <div class="warning-message"> Warning Message </div>
-    <div class="error-message"> Error Message </div>
+    <div class="normal-message">Normal Message</div>
+    <div class="confirmation-message">Confirmation Message</div>
+    <div class="warning-message">Warning Message</div>
+    <div class="error-message">Error Message</div>
     <table width="750">
       <tr>
         <td>
         <table>
             <tr>
               <td width="220">
-              <table id="smallcalendar">
+              <table id="smallcalendar" class="data_table">
                   <tr id="title">
-                    <td width="10%"><a href="#"><<</a></td>
-                    <td width="80%" colspan="5" align="center"> 2006</td>
-                    <td width="10%"><a href="#">>></a></td>
+                    <td width="10%"><a href="#"><?php Display::display_icon('action_prev.png'); ?></a></td>
+                    <td width="80%" colspan="5" align="center"><?php echo $months_long[6]; ?> 2010</td>
+                    <td width="10%"><a href="#"><?php Display::display_icon('action_next.png'); ?></a></td>
                   </tr>
                   <tr>
-                    <td class="weekdays">Mon</td>
-                    <td class="weekdays">Tue</td>
-                    <td class="weekdays">Wed</td>
-                    <td class="weekdays">Thu</td>
-                    <td class="weekdays">Fri</td>
-                    <td class="weekdays">Sat</td>
-                    <td class="weekdays">Sun</td>
+                    <td class="weekdays"><?php echo $week_days_short[1]; ?></td>
+                    <td class="weekdays"><?php echo $week_days_short[2]; ?></td>
+                    <td class="weekdays"><?php echo $week_days_short[3]; ?></td>
+                    <td class="weekdays"><?php echo $week_days_short[4]; ?></td>
+                    <td class="weekdays"><?php echo $week_days_short[5]; ?></td>
+                    <td class="weekdays"><?php echo $week_days_short[6]; ?></td>
+                    <td class="weekdays"><?php echo $week_days_short[0]; ?></td>
                   </tr>
                   <tr>
                     <td>&nbsp;</td>
@@ -119,8 +124,8 @@ require_once api_get_path(INCLUDE_PATH).'banner.inc.php';
           </table>
           <table class="data_table" width="100%">
             <tr>
-              <th style="width:100px"><a href="#">Firstname</a>&nbsp;&#8595; </th>
-              <th style="width:100px"><a href="#">Lastname</a></th>
+              <th style="width: 50%;"><a href="#"><?php echo get_lang('FirstName'); ?></a>&nbsp;&#8595; </th>
+              <th style="width: 50%;"><a href="#"><?php echo get_lang('LastName'); ?></a></th>
             </tr>
             <tr class="row_odd">
               <td>Julio</td>
@@ -141,18 +146,21 @@ require_once api_get_path(INCLUDE_PATH).'banner.inc.php';
       </tr>
     </table>
   </div>
-  <div class="menu" style="width:200px">
-    <form action="#" method="post" id="loginform" name="loginform"><br />
-      <label>Username</label><br />
+  <div class="menu" id="menu">
+    <form action="#" method="post" id="formLogin" name="formLogin"><br />
+      <label><?php echo get_lang('UserName'); ?></label><br />
       <input type="text" name="login" id="login" size="15" value="" /><br />
-      <label>Password</label><br />
+      <label><?php echo get_lang('Password'); ?></label><br />
       <input type="password" name="password" id="password" size="15" /><br />
-  	  <button class="login" type="submit" name="submitAuth"disabled="disabled" >Enter</button>
+  	  <button class="login" type="submit" name="submitAuth"disabled="disabled" ><?php echo get_lang('LoginEnter'); ?></button>
+  	  <div class="clear">
+        &nbsp;
+  	  </div>
     </form>
-    <div class="menusection"><span class="menusectioncaption">User</span>
+    <div class="menusection"><span class="menusectioncaption"><?php echo get_lang('User'); ?></span>
       <ul class="menulist">
-        <li><a href="#">Course Management</a></li>
-        <li><a href="#">Create Course</a></li>
+        <li><a href="#"><?php echo get_lang('CourseManagement'); ?></a></li>
+        <li><a href="#"><?php echo get_lang('CourseCreate'); ?></a></li>
       </ul>
     </div>
     <div class="note"><b>Example notice</b><br />

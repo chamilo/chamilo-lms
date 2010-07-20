@@ -5,7 +5,7 @@ require_once(api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
 class TestSessionManager extends UnitTestCase {
 
 	public function TestSessionManager(){
-		$this->UnitTestCase('Sessions library - main/inc/lib/sessionmanager.lib.test.php');
+		$this->UnitTestCase('Sessions manager library - main/inc/lib/sessionmanager.lib.test.php');
 	}
 	function testadd_courses_to_session() {
 		$id_session='';

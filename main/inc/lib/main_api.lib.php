@@ -3219,9 +3219,12 @@ function api_status_exists($status_asked) {
 }
 
 /**
- * Checks whether status given in parameter exists in the platform
- * @param mixed the status (can be either int either string)
- * @return true if the status exists, else returns false
+ * Checks whether status given in parameter exists in the platform. The function
+ * returns the status ID or false if it does not exist, but given the fact there
+ * is no "0" status, the return value can be checked against
+ * if(api_status_key()) to know if it exists.
+ * @param   mixed   The status (can be either int or string)
+ * @return  mixed   Status ID if exists, false otherwise
  */
 function api_status_key($status) {
 	global $_status_list;

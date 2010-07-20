@@ -42,7 +42,9 @@ class TestDocumentManager extends UnitTestCase {
 		global $_course;
 		$path='';
 		$base_work_dir='';
+		ob_start();
 		$res=DocumentManager::delete_document($_course, $path, $base_work_dir);
+		ob_end_clean();
 		$this->assertTrue(is_bool($res));
 	}
 
@@ -224,9 +226,9 @@ class TestDocumentManager extends UnitTestCase {
 													  );
 		$this->assertTrue(is_bool($res));
 	}
- //this function shows some exceptions by causes of the same simpletest, because
- //this funcion that would be testing, contains headers
-	function teststring_send_for_download() {
+ //The following function throws exceptions because of SimpleTest, because
+ // it declares uncapturable headers
+/*	function teststring_send_for_download() {
 		$full_string='';
 		$forced = false;
 		$name = '';
@@ -237,7 +239,7 @@ class TestDocumentManager extends UnitTestCase {
 		}
 		$this->assertTrue(empty($res));
 	}
-
+*/
 	/**
 	 * Unset a document as template
 	 *

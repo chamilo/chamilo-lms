@@ -126,10 +126,15 @@ class TestUserManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 	}
 
-	function testGetApiKeyId() {
+	function testGetApiKeyIdEmptyServiceReturnsFalse() {
 		$api_service = '';
 		$res = UserManager::get_api_key_id(1,$api_service);
-		$this->assertTrue(is_int($res));
+		$this->assertFalse($res);
+	}
+	function testGetApiKeyIdNonEmptyServiceWithExtremeUserIdReturnsFalse() {
+		$api_service = '';
+		$res = UserManager::get_api_key_id(5000000,$api_service);
+		$this->assertFalse($res);
 	}
 
 	function testGetApiKeys() {

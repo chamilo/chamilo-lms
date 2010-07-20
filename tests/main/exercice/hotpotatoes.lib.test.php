@@ -3,6 +3,10 @@ require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 
 class TestHotpotatoes extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('Hotpotatoes exercises library - main/exercice/hotpotatoes.lib.test.php');
+    }
+
 	function testCheckImageName() {
 		$imgparams=array();
 		$string='';

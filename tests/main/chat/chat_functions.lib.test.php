@@ -4,6 +4,10 @@ require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestChatFunctions extends UnitTestCase {
 
+    public function __construct(){
+        $this->UnitTestCase('Chat library - main/chat/chat_functions.lib.test.php');
+    }
+
 	public function setUp() {
 		$this->tcourse = new CourseManager();
 	}

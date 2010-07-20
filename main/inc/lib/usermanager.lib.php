@@ -2193,9 +2193,9 @@ class UserManager
     public static function get_api_key_id($user_id, $api_service) {
     	if ($user_id != strval(intval($user_id))) return false;
     	if ($user_id === false) return false;
-        $service_name = Database::escape_string($api_service);
-        if (is_string($service_name) === false) { return false; }
+	if (empty($api_service)) return false;
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
+        $service_name = Database::escape_string($api_service);
         $sql = "SELECT id FROM $t_api WHERE user_id=".$user_id." AND api_service='".$api_service."'";
         $res = Database::query($sql);
 	if (Database::num_rows($res)<1) {

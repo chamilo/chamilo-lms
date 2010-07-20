@@ -76,7 +76,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 |
 */
 .maincontent {
-	width: 65%;
+	width: 60%;
 	float: left;	
 	 padding: 0 20px 0 20px; 
 	//padding: 0px;
@@ -3582,7 +3582,9 @@ div.image-social-content center.friend {
 #social-content-right {
 	height:auto;
 	overflow:hidden;	
-	width:79%;
+	width:72%;
+	float:left;
+	overflow:hidden;
 }
 
 .social-content-image {
@@ -3591,14 +3593,16 @@ div.image-social-content center.friend {
 	overflow:hidden;
 }
 
-#social-content-left {
+#social-content-left  {
+	display:block;
 	float:left;
 	height:auto;
-	min-height:300px;
-	width:175px;
 	margin-right:10px;
-	overflow:hidden;	
+	min-height:300px;
+	overflow:hidden;
+	width:175px;
 }
+
 .social-content-description {
 	background:#ECE9D8;
 }

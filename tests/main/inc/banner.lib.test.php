@@ -3,11 +3,9 @@
 class TestBanner extends UnitTestCase{
 
 	public function TestBanner(){
+		$this->UnitTestCase('Tabs library - main/inc/banner.lib.test.php');
+    }
 
-		$this->UnitTestCase('Determine the tabs function tests');
-
-	}
-	
 	public function testGetTabs(){
 		global $_course, $rootAdminWeb, $_user;
     	$res = get_tabs();

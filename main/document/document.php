@@ -44,7 +44,7 @@ require_once $lib_path.'usermanager.lib.php';
 require_once $lib_path.'document.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
 require_once $lib_path.'sortabletable.class.php';
-
+require_once $lib_path.'formvalidator/FormValidator.class.php';
 
 api_protect_course_script(true);
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
@@ -646,8 +646,12 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
 
 
 /*	GET ALL DOCUMENT DATA FOR CURDIRPATH */
+if(isset($_GET['keyword']) && !empty($_GET['keyword'])){
+$docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=true);
+}else{
+$docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=false);
+}
 
-$docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights);
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
 if ($folders === false) {
 	$folders = array();
@@ -655,6 +659,16 @@ if ($folders === false) {
 
 echo '<div class="actions">';
 
+/* BUILD SEARCH FORM */
+	echo '<span style="display:inline-block;">';
+	$form = new FormValidator('search_document', 'get', '', '', null, false);
+	$renderer = & $form->defaultRenderer();
+	$renderer->setElementTemplate('<span>{element}</span> ');
+	$form->add_textfield('keyword', '', false);
+	$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+	$form->display();
+	echo '</span>';
+	
 /* GO TO PARENT DIRECTORY */
 
 if ($curdirpath!= '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
@@ -748,7 +762,10 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
 		$row[] = $last_edit_date;
 		$row[] = $size;
 		$total_size = $total_size + $size;
-		$sortable_data[] = $row;
+		
+		if ((isset ($_GET['keyword']) && search_keyword($document_name, $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
+			$sortable_data[] = $row;
+		}
 	}
 } else {
 	$sortable_data = '';
@@ -850,13 +867,18 @@ $default_column = $is_allowed_to_edit ? 2 : 1;
 $tablename = $is_allowed_to_edit ? 'teacher_table' : 'student_table';
 $table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tablename, $column_show, $column_order, 'ASC');
 
-$query_vars['curdirpath'] = $curdirpath;
+if(isset($_GET['keyword'])){
+	$query_vars['keyword'] = Security::remove_XSS($_GET['keyword']);
+}else{
+	$query_vars['curdirpath'] = $curdirpath;
+}
 
 if (isset($_SESSION['_gid'])) {
 	$query_vars['gidReq'] = $_SESSION['_gid'];
 }
 $query_vars['cidReq'] = api_get_course_id();
 $table->set_additional_parameters($query_vars);
+
 $column = 0;
 
 if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {

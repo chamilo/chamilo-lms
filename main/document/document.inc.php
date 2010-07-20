@@ -541,4 +541,16 @@ function is_my_shared_folder($user_id, $path, $current_session_id) {
 		return false;
 	}
 }
+
+/**
+ * Check if the file name or folder searched exist
+ * @return return bool Return true when exist
+ */
+function search_keyword($document_name, $keyword) {
+	if (api_strripos($document_name, $keyword) !== false){
+		return true;
+	} else {
+		return false;
+	}
+}
 ?>

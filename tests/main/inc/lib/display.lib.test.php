@@ -1,9 +1,10 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'display.lib.php');
 
-
 class TestDisplay extends UnitTestCase {
-
+    public function __construct(){
+        $this->UnitTestCase('Display library - main/inc/display.lib.test.php');
+    }
 	public function testdisplay_introduction_section() {
 		$tool=api_get_tools_lists($my_tool=null);
 		ob_start();
@@ -86,7 +87,7 @@ class TestDisplay extends UnitTestCase {
 		ob_start();
 		$res=Display::display_table_footer();
 		ob_end_clean();
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 
@@ -97,7 +98,6 @@ class TestDisplay extends UnitTestCase {
 		ob_start();
 		$res=Display::display_sortable_table($header, $content);
 		ob_end_clean();
-		$this->assertTrue(is_null($res));
 		$this->assertNull($res);
 		//var_dump($res);
 	}
@@ -121,7 +121,7 @@ class TestDisplay extends UnitTestCase {
 		ob_start();
 		$res=Display::display_sortable_config_table($header, $content);
 		ob_end_clean();
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 
@@ -140,7 +140,7 @@ class TestDisplay extends UnitTestCase {
 		ob_start();
 		$res=Display::display_normal_message($message);
 		ob_end_clean();
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 
@@ -155,7 +155,7 @@ class TestDisplay extends UnitTestCase {
 		ob_start();
 		$res=Display::display_reduced_header();
 		ob_end_clean();
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 */
@@ -204,7 +204,7 @@ class TestDisplay extends UnitTestCase {
 		ob_start();
 		$res=Display::display_footer();
 		ob_end_clean();
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 
@@ -225,7 +225,7 @@ class TestDisplay extends UnitTestCase {
 		ob_start();
 		$res=Display::display_header($tool_name, $help);
 		ob_end_clean();
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 */
@@ -241,7 +241,7 @@ class TestDisplay extends UnitTestCase {
 		ob_start();
 		$res=Display::display_icon($image);
 		ob_end_clean();
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 
@@ -258,7 +258,7 @@ class TestDisplay extends UnitTestCase {
 		ob_start();
 		$res=Display::display_warning_message($message);
 		ob_end_clean();
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 
@@ -342,7 +342,7 @@ class TestDisplay extends UnitTestCase {
 		ob_start();
 		$res=Display::show_course_navigation_menu();
 		ob_end_clean();
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 

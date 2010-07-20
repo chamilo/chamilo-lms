@@ -105,7 +105,7 @@ class TestInternationalization extends UnitTestCase {
 	);
 
 	function TestInternationalization() {
-        $this->UnitTestCase('Internationalization Tests');
+        $this->UnitTestCase('Internationalization library - main/inc/lib/internationalization.lib.test.php');
 	}
 
 

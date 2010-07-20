@@ -2,20 +2,20 @@
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 
 class TestDocumentManager extends UnitTestCase {
-		
+
 
     public function __construct() {
         $this->UnitTestCase('Document Manager library - main/inc/lib/document.lib.test.php');
     }
-    	
+
     /**
-	 * This checks if a document has the readonly property checked, then see if 
+	 * This checks if a document has the readonly property checked, then see if
 	 * the user is the owner of this file, if all this is true then return true.
 	 *
 	 * @param array  $_course
 	 * @param int    $user_id id of the current user
 	 * @param string $file path stored in the database
-	 * @param int    $document_id in case you dont have the file path ,insert the 
+	 * @param int    $document_id in case you dont have the file path ,insert the
 	 * id of the file here and leave $file in blank ''
 	 * @return boolean true/false
 	 **/
@@ -27,7 +27,7 @@ class TestDocumentManager extends UnitTestCase {
 	}
 
 	/**
-	 * This deletes a document by changing visibility to 2, renaming it to 
+	 * This deletes a document by changing visibility to 2, renaming it to
 	 * filename_DELETED_#id
 	 * Files/folders that are inside a deleted folder get visibility 2
 	 *
@@ -35,7 +35,7 @@ class TestDocumentManager extends UnitTestCase {
 	 * @param string $path, path stored in the database
 	 * @param string ,$base_work_dir, path to the documents folder
 	 * @return boolean true/false
-	 * @todo now only files/folders in a folder get visibility 2, we should 
+	 * @todo now only files/folders in a folder get visibility 2, we should
 	 * rename them too.
 	 */
 	function testdelete_document() {
@@ -58,7 +58,7 @@ class TestDocumentManager extends UnitTestCase {
 		$course_id = $cidReq;
 		$document_id='';
 		$res=DocumentManager::delete_document_from_search_engine($course_id, $document_id);
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 	}
 
 	/**
@@ -92,16 +92,16 @@ class TestDocumentManager extends UnitTestCase {
 	}
 
 	/**
-	*   @todo ??not only check if a file is visible, but also check if the user 
+	*   @todo ??not only check if a file is visible, but also check if the user
 	* 	is allowed to see the file??
-	*   @return true if the user is allowed to see the document, false otherwise 
+	*   @return true if the user is allowed to see the document, false otherwise
 	* 	(bool)
 	*/
 	function testfile_visible_to_user() {
 		global $_course,$tbl_document;
 		$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 		$this_course= $_course['dbName'].'.';
-		$dirurl = api_get_path(WEB_COURSE_PATH);	
+		$dirurl = api_get_path(WEB_COURSE_PATH);
 		$doc_url= $dirurl.'COURSETEST/document/video/painting.mpg?cidReq=COURSETEST';
 		$res=DocumentManager::file_visible_to_user($this_course, $doc_url);
 		$this->assertTrue(is_bool($res));
@@ -123,7 +123,7 @@ class TestDocumentManager extends UnitTestCase {
 		$to_group_id = 0;
 		$to_user_id = NULL;
 		$can_see_invisible = false;
-		$res=DocumentManager::get_all_document_data($_course, $path, 
+		$res=DocumentManager::get_all_document_data($_course, $path,
 		$to_group_id, $to_user_id, $can_see_invisible);
 		if (empty($_course['dbName'])) {
             $this->assertFalse($res);
@@ -200,7 +200,7 @@ class TestDocumentManager extends UnitTestCase {
 	}
 
 	/**
-	 * Allow to set a specific document as a new template for FCKEditor for a 
+	 * Allow to set a specific document as a new template for FCKEditor for a
 	 * particular user in a particular course
 	 *
 	 * @param string $title
@@ -217,9 +217,9 @@ class TestDocumentManager extends UnitTestCase {
 		$couse_code=$_course;
 		$user_id=$_user;
 		$image='';
-		$res=DocumentManager::set_document_as_template($title, $description, 
+		$res=DocumentManager::set_document_as_template($title, $description,
 													   $document_id_for_template,
-													   $couse_code, $user_id, 
+													   $couse_code, $user_id,
 													   $image
 													  );
 		$this->assertTrue(is_bool($res));
@@ -228,11 +228,11 @@ class TestDocumentManager extends UnitTestCase {
  //this funcion that would be testing, contains headers
 	function teststring_send_for_download() {
 		$full_string='';
-		$forced = false; 
+		$forced = false;
 		$name = '';
 		$filename = $name;
 		$len = strlen($full_string);
-		if (!headers_sent()) {	
+		if (!headers_sent()) {
 			$res=DocumentManager::string_send_for_download($full_string, $forced, $name);
 		}
 		$this->assertTrue(empty($res));
@@ -250,31 +250,31 @@ class TestDocumentManager extends UnitTestCase {
 		$document_id=Database::escape_string($document_id);
 		$course_code=Database::escape_string($course_code);
 		$user_id=Database::escape_string($user_id);
-		$res=DocumentManager::unset_document_as_template($document_id, 
-														 $course_code, 
+		$res=DocumentManager::unset_document_as_template($document_id,
+														 $course_code,
 														 $user_id
 														);
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 	/*
 	public function testdeleteCourseInDocument(){
 		$this->dmanager = null;
 		global $_course;
-	 	$code = $_course;				
-		$res = CourseManager::delete_course($code);			
-		$path = api_get_path(SYS_PATH).'archive';		
+	 	$code = $_course;
+		$res = CourseManager::delete_course($code);
+		$path = api_get_path(SYS_PATH).'archive';
 		if ($handle = opendir($path)) {
-			while (false !== ($file = readdir($handle))) {				
-				if (strpos($file,$code)!==false) {										
-					if (is_dir($path.'/'.$file)) {						
-						rmdirr($path.'/'.$file);						
-					}				
-				}				
+			while (false !== ($file = readdir($handle))) {
+				if (strpos($file,$code)!==false) {
+					if (is_dir($path.'/'.$file)) {
+						rmdirr($path.'/'.$file);
+					}
+				}
 			}
 			closedir($handle);
-		}	
+		}
 
-	}*/	
+	}*/
 }
 ?>

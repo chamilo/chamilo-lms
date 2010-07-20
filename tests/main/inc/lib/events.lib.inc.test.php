@@ -3,6 +3,10 @@ require_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
 class TestEvents extends UnitTestCase {
 
+    public function __construct(){
+        $this->UnitTestCase('Events library - main/inc/events.lib.inc.test.php');
+    }
+
 	function testCreateEventExercice() {
 		global $_user, $_cid, $_configuration;
 		$exo_id='';
@@ -63,7 +67,7 @@ class TestEvents extends UnitTestCase {
 		global $_user;
 		global $TABLETRACK_LOGIN;
 		$res=event_login();
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 

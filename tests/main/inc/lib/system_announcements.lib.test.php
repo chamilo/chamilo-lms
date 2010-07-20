@@ -5,6 +5,9 @@ require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 class TestSystemAnnouncementManager extends UnitTestCase {
 
+    public function __construct(){
+        $this->UnitTestCase('System announcements library - main/inc/lib/system_announcements.lib.test.php');
+    }
 	function testadd_announcement() {
 		$title='Anuncio';
 		$content='Contenido del anuncio';

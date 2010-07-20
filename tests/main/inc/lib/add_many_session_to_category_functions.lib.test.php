@@ -4,17 +4,17 @@ require_once (api_get_path(LIBRARY_PATH).'add_many_session_to_category_functions
 
 class TestAddManySessionToCategoryFunctions extends UnitTestCase {
 
-	public function TestAddManySessionToCategoryFunctions() {
-        $this->UnitTestCase('testing the file about add many session to category');
+    public function __construct(){
+        $this->UnitTestCase('Sessions to category library - main/inc/lib/add_many_session_to_category_functions.lib.test.php');
     }
 
 	public function setUp(){
 		$this-> AddManySessionToCategory = new AddManySessionToCategoryFunctions();
 	}
-	
+
 	public function tearDown(){
 		$this-> AddManySessionToCategory = null;
-		
+
 	}
 	public function Testsearchcourses(){
 		global $_courses, $tbl_course, $tbl_session, $id_session;

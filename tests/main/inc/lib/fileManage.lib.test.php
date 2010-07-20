@@ -1,24 +1,17 @@
 <?php
 //require_once(api_get_path(LIBRARY_PATH).'classManager.lib.php');
-
-
 class TestFileManager extends UnitTestCase {
 
 	public $fmanager;
 	public function TestFileManager(){
-
-		$this->UnitTestCase ('File Display Manage');
-
-
+		$this->UnitTestCase ('File Manager library - main/inc/lib/fileManage.lib.test.php');
 	}
 
 	public function setUp(){
-
 		$this->fmanager = new FileManager();
 	}
 
 	public function tearDown(){
-
 		$this->fmanager = null;
 	}
 
@@ -45,7 +38,7 @@ class TestFileManager extends UnitTestCase {
 		$action ='';
 		$oldPath ='';
 		$res = update_db_info($action, $oldPath, $newPath="");
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 
@@ -119,7 +112,7 @@ class TestFileManager extends UnitTestCase {
 		if(!is_bool($res)) {
 			$this->assertTrue($res);
 			$this->assertTrue(is_array($res));
-		} 
+		}
 		//var_dump($res);
 	}
 
@@ -189,9 +182,9 @@ class TestFileManager extends UnitTestCase {
 		global $_course, $_configuration;
 		$upload_path=api_get_path(SYS_COURSE_PATH);
 		$filename='index.html';
-		$glue_table = $_course['dbName'].'.document';		
+		$glue_table = $_course['dbName'].'.document';
 		$res = $this->fmanager->set_default_settings($upload_path, $filename, $filetype="file", $glue_table, $default_visibility='v');
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 }

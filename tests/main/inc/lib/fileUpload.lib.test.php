@@ -5,11 +5,13 @@ require_once(api_get_path(LIBRARY_PATH).'/pclzip/pclzip.lib.php');
 
 class TestFileUpload extends UnitTestCase {
 
-
-/*		
+    public function __construct(){
+        $this->UnitTestCase('File upload library - main/inc/lib/fileUpload.lib.test.php');
+    }
+/*
  		//Deprecated
  		//settings
-		
+
 		function testset_default_settings() {
 			global $dbTable,$_configuration;
 			global $default_visibility;
@@ -21,7 +23,7 @@ class TestFileUpload extends UnitTestCase {
 		}
 */
 		//Creating
-		
+
 		function testCreateUnexistingDirectory()  {
 			global $_course, $user_id;
 			$to_group_id = 1;
@@ -29,10 +31,10 @@ class TestFileUpload extends UnitTestCase {
 			$base_work_dir = api_get_path(SYS_COURSE_PATH).'document/';
 			$desired_dir_name = 'images';
 			$res= create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,$base_work_dir,$desired_dir_name);
-			
+
 			if(!is_null($res)) {
 				$this->assertTrue(is_bool($res));
-				$this->assertFalse($res);	
+				$this->assertFalse($res);
 			}
 		}
 
@@ -54,7 +56,7 @@ class TestFileUpload extends UnitTestCase {
 				 $this->assertTrue($res);
 			}
 		}
-		
+
 		/**
 		 * This recursive function can be used during the upgrade process form older versions of Dokeos
 		 * It crawls the given directory, checks if the file is in the DB and adds it if it's not
@@ -92,7 +94,7 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_string($res));
 			//var_dump($res);
 		}
-		
+
 		//build
 
 		function testBuildMissingFilesForm() {
@@ -114,7 +116,7 @@ class TestFileUpload extends UnitTestCase {
 		}
 
 		//space
-		
+
 		function testdocuments_total_space() {
 			$to_group_id='0';
 			$res= documents_total_space($to_group_id);
@@ -140,7 +142,7 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_bool($res));
 			//var_dump($res);
 		}
-		
+
 		function testDirTotalSpace() {
 			$dirPath= api_get_path(SYS_COURSE_PATH).'document/';
 			$res= dir_total_space($dirPath);
@@ -148,15 +150,15 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_numeric($res));
 			}
 		}
-		
+
 		//filter
-		
+
 		function testfilter_extension() {
 			$filename='index.php';
 			$res= filter_extension($filename);
-			$this->assertTrue(is_numeric($res));			
+			$this->assertTrue(is_numeric($res));
 		}
-		
+
 		//get
 
 		function testget_document_title() {
@@ -183,7 +185,7 @@ class TestFileUpload extends UnitTestCase {
 		}
 
 		//moving
-		
+
 		function testmove_uploaded_file_collection_into_directory() {
 			global $_course;
 			$uploaded_file_collection=array();
@@ -197,9 +199,9 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_null($res));
 			//var_dump($res);
 		}
-		
+
 		//php?
-		
+
 		function testphp2phps () {
 			$fileName = 'index.php';
 			$res= php2phps($fileName);
@@ -220,9 +222,9 @@ class TestFileUpload extends UnitTestCase {
 			}
 			//var_dump($res);
 		}
-		
+
 		//uploading
-		
+
 		function testprocess_uploaded_file() {
 			$uploaded_file='';
 			ob_start();
@@ -230,7 +232,7 @@ class TestFileUpload extends UnitTestCase {
 			ob_end_clean();
 			$this->assertTrue(is_bool($res));
 		}
-		
+
 		function testtreat_uploaded_file() {
 			$uploadedFile['name']=stripslashes($uploadedFile['name']);
 			$uploadedFile='';
@@ -242,7 +244,7 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_bool($res));
 			//var_dump($res);
 		}
-		
+
 		function testhandle_uploaded_document() {
 			global $_course;
 			$uploaded_file='';
@@ -267,9 +269,9 @@ class TestFileUpload extends UnitTestCase {
 			ob_end_clean();
 			//var_dump($res);
 		}
-	
+
 		//updating
-		
+
 		function testupdate_existing_document() {
 			$_course='';
 			$document_id='';
@@ -278,7 +280,7 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_bool($res));
 			//var_dump($res);
 		}
-		
+
 		function testitem_property_update_on_folder() {
 			global $_course, $user_id;
 			$path=api_get_path(SYS_COURSE_PATH).'document/license.txt';
@@ -286,9 +288,9 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_null($res));
 			//var_dump($res);
 		}
-		
+
 		//unique name
-		
+
 		function testunique_name() {
 			$path='';
 			$name='';
@@ -296,7 +298,7 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_string($res));
 			//var_dump($res);
 		}
-		
+
 		//unzipping
 
 		function testunzip_uploaded_document() {
@@ -317,7 +319,7 @@ class TestFileUpload extends UnitTestCase {
 		}
 
 		function testunzip_uploaded_file() {
-			global $_course;	
+			global $_course;
 			$uploadedFile   = 'README.txt';
 			$uploadPath     = api_get_path(SYS_PATH).$_course.'/document';
 			$baseWorkDir    = api_get_path(SYS_PATH);
@@ -326,7 +328,7 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_bool($res));
 			//var_dump($res);
 		}
-		
+
 		//disable
 
 		function testDisableDangerousFile() {
@@ -335,7 +337,7 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_string($res));
 			//var_dump($res);
 		}
-		
+
 		//replace
 
 		function testreplace_img_path_in_html_file() {
@@ -347,7 +349,7 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_null($res));
 			//var_dump($res);
 		}
-		
+
 		function testApiReplaceLinksInHtml() {
 			$base_work_dir=api_get_path(SYS_COURSE_PATH);
 			$upload_path=$base_work_dir.'upload/blog';
@@ -385,10 +387,10 @@ class TestFileUpload extends UnitTestCase {
 			$this->assertTrue(is_string($res));
 			//var_dump($res);
 		}
-		
+
 		//clenaning
 
-		
+
 		function testCleanUpFilesInZip() {
 			$p_event='';
 			$p_header['filename']='';
@@ -399,7 +401,7 @@ class TestFileUpload extends UnitTestCase {
 
 		function testCleanUpPath() {
 			$base_work_dir=api_get_path(SYS_COURSE_PATH);
-			$path = $base_work_dir.'upload/blog';			
+			$path = $base_work_dir.'upload/blog';
 			$res = clean_up_path($path);
 			$this->assertTrue(is_numeric($res));
 

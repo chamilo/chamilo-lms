@@ -3,10 +3,8 @@ require_once(api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 class TestFileDisplay extends UnitTestCase {
 
 	public function TestFileDisplay(){
-		$this->UnitTestCase('File Display tests');
-
+		$this->UnitTestCase('File display library - main/inc/lib/fileDisplay.lib.test.php');
 	}
-
 	//todo public function testArraySearch()
 	//todo public function testChooseImage()
 	//todo public function testFormatFileSize()
@@ -18,8 +16,8 @@ class TestFileDisplay extends UnitTestCase {
 
 	public function testChooseImage(){
 		global $_course;
-		
-		static $type, $image;		
+
+		static $type, $image;
 		$file_name = '';
 		$res = choose_image($file_name);
 		$this->assertEqual($res,'defaut.gif');
@@ -52,7 +50,7 @@ class TestFileDisplay extends UnitTestCase {
 		//var_dump($res);
 
 	}
-	 
+
 	public function testRecentModifiedFileTime(){
 		$dir_name = '';
 		$$do_recursive =true;

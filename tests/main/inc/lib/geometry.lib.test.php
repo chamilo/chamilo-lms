@@ -2,7 +2,7 @@
 class TestGeometry extends UnitTestCase {
 
 	public function TestGeometry(){
-		$this->UnitTestCase('calculate and return the area of an irregular polygon');
+		$this->UnitTestCase('Geometry library - main/inc/lib/geometry.lib.test.php');
 	}
 
 	public function testCalculateArea(){
@@ -25,7 +25,7 @@ class TestGeometry extends UnitTestCase {
 		$line1 = array(1,2);
 		$line2 = array(3,4);
 		$res = lines_intersect($line1,$line2);
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
@@ -114,7 +114,7 @@ class TestGeometry extends UnitTestCase {
 		$uxs=array(5,6,7);
 		$uys=array(8,9,10);
 		$res = get_intersection_polygon($rxs, $rys, $uxs, $uys);
-		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		$this->assertTrue($res === null);
 		$this->assertFalse($res);
 		//var_dump($res);
@@ -158,7 +158,6 @@ class TestGeometry extends UnitTestCase {
 		$point=1;
 		$polygon= array(12,12);
 		$res = _get_right_point($point, $polygon);
-		$this->assertTrue(is_null($res));
 		$this->assertNull($res);
 		$this->assertFalse($res);
 		//var_dump($res);
@@ -168,7 +167,6 @@ class TestGeometry extends UnitTestCase {
 		$point = 1;
 		$polygon= array(12,12);
 		$res = _get_left_point($point, $polygon);
-		$this->assertTrue(is_null($res));
 		$this->assertNull($res);
 		$this->assertFalse($res);
 		//var_dump($res);

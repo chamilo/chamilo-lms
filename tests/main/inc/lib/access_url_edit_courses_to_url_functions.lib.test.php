@@ -5,15 +5,14 @@ require_once(api_get_path(LIBRARY_PATH).'access_url_edit_courses_to_url_function
 
 class TestAccessUrlEditCoursesToUrlFunctions extends UnitTestCase{
 
-	public function TestAccessUrlEditCoursesToUrl(){
-		$this->UnitTestCase('this File test the provides some function for Access Url Edit Courses To Url');
-		
-	}
-	
+    public function __construct(){
+        $this->UnitTestCase('Access URL courses library - main/inc/lib/access_url_edit_courses_to_url_functions.lib.test.php');
+    }
+
 	public function setUp(){
 		$this->AccessUrlEditCoursesToUrl = new Accessurleditcoursestourl();
 	}
-	
+
 	public function tearDown(){
 		$this->AccessUrlEditCoursesToUrl = null;
 	}
@@ -26,10 +25,10 @@ class TestAccessUrlEditCoursesToUrlFunctions extends UnitTestCase{
 		$this->assertTrue($res);
 		$this->assertTrue(is_object($res));
 		$this->assertFalse(is_null($res));
-		//var_dump($res);	
+		//var_dump($res);
 	}
-	
-	
+
+
 
 }
 

@@ -11,19 +11,19 @@ require_once(api_get_path(LIBRARY_PATH).'tablesort.lib.php');
 class TestGroupManager extends UnitTestCase {
 
     public function __construct() {
-        $this->UnitTestCase('Group manager library tests');
+        $this->UnitTestCase('Group manager library - main/inc/lib/groupmanager.lib.test.php');
         TestManager::create_test_course('COURSEGROUP');
     }
-    
+
     public function __destruct() {
         TestManager::delete_test_course('COURSEGROUP');
     }
-	
+
 	/**
 	 *  Tests about groupmanager csv using many class database, class manager,
 	 * file manager, course manager and table sort.
 	 * @author Ricardo Rodriguez Salazar
-	 */ 
+	 */
 	public function testGetGroupList(){
 		global $_user;
 		$res = GroupManager::get_group_list();
@@ -163,7 +163,7 @@ class TestGroupManager extends UnitTestCase {
 		'maximum_number_of_students'=> 2,
 		'groups_per_user'=>4);
 		$res = GroupManager::create_category($categ['title'], $categ['description'],
-		$categ['doc_state'], $categ['work_state'], $categ['calendar_state'], 
+		$categ['doc_state'], $categ['work_state'], $categ['calendar_state'],
 		$categ['announcements_state'], $categ['forum_state'],$categ['wiki_state'],
 		$categ['chat_state'],$categ['self_registration_allowed'],$categ['self_unregistration_allowed'],
 		$categ['maximum_number_of_students'],$categ['groups_per_user']);
@@ -409,7 +409,7 @@ class TestGroupManager extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	public function testFilterUsersAlreadyInGroup(){
 		global $_course;
 		$user_array_in = array();
@@ -443,22 +443,22 @@ class TestGroupManager extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-/*	
-	public function TestDeleteCourse(){				
-		$code = 'COURSETEST';				
-		$res = CourseManager::delete_course($code);			
-		$path = api_get_path(SYS_PATH).'archive';		
+/*
+	public function TestDeleteCourse(){
+		$code = 'COURSETEST';
+		$res = CourseManager::delete_course($code);
+		$path = api_get_path(SYS_PATH).'archive';
 		if ($handle = opendir($path)) {
-			while (false !== ($file = readdir($handle))) {				
-				if (strpos($file,$code)!==false) {										
-					if (is_dir($path.'/'.$file)) {						
-						rmdirr($path.'/'.$file);						
-					}				
-				}				
+			while (false !== ($file = readdir($handle))) {
+				if (strpos($file,$code)!==false) {
+					if (is_dir($path.'/'.$file)) {
+						rmdirr($path.'/'.$file);
+					}
+				}
 			}
 			closedir($handle);
 		}
-	}	
+	}
 */
 }
 ?>

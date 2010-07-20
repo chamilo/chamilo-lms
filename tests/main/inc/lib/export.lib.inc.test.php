@@ -4,16 +4,16 @@ require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 
 /** Test about export csv using class document manager
  * @author Arthur portugal
- * To can test and show the var_dump is necesary comment inside the class 
- * DocumentManager in the file document.lib.php the word "exit()", because 
+ * To can test and show the var_dump is necesary comment inside the class
+ * DocumentManager in the file document.lib.php the word "exit()", because
  * "exit" not permit show the result.
  */
 class TestExport extends UnitTestCase {
- 
+
     public function __construct() {
-        $this->UnitTestCase('Export library tests');
+        $this->UnitTestCase('Export library - main/inc/lib/export.lib.inc.test.php');
     }
-     
+
     /**
      * Checks the export_table_csv method.
      * @todo check that a new file is created in api_get_path(SYS_ARCHIVE_PATH)
@@ -26,7 +26,7 @@ class TestExport extends UnitTestCase {
 		$this->assertFalse($res);
 		ob_end_clean();
     }
-    
+
 
  	function testExportTableXls() {
 		$data = array();
@@ -49,7 +49,7 @@ class TestExport extends UnitTestCase {
         $this->assertFalse($res);
         ob_end_clean();
  	}
- 
+
  	function testExportComplexTableXml() {
 		$data = array();
 		$filename = 'export';
@@ -70,7 +70,7 @@ class TestExport extends UnitTestCase {
         $this->assertTrue(is_string($res));
         ob_end_clean();
   	}
- 	
+
  	function testBackupDatabase() {
  		$link='';
  		$db_name='';
@@ -96,9 +96,9 @@ class TestExport extends UnitTestCase {
  	}*/
 
  	function testmakeTheBackup() {
- 		global $error_msg, $error_no, $db, $archiveRepositorySys, 
+ 		global $error_msg, $error_no, $db, $archiveRepositorySys,
  		       $archiveRepositoryWeb, $appendCourse, $appendMainDb, $archiveName,
- 			   $_configuration, $_course, $TABLEUSER, $TABLECOURSUSER, 
+ 			   $_configuration, $_course, $TABLEUSER, $TABLECOURSUSER,
  			   $TABLECOURS, $TABLEANNOUNCEMENT;
 		$exportedCourseId='';
 		$res=makeTheBackup($exportedCourseId);

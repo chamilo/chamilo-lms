@@ -6,6 +6,10 @@ class TestSecurity extends UnitTestCase {
 
 	public $clean = array();
 
+    public function __construct() {
+        $this->UnitTestCase('Security library - main/inc/lib/security.lib.test.php');
+    }
+
 	function testcheck_abs_path() {
 			$abs_path='';
 			$checker_path='';

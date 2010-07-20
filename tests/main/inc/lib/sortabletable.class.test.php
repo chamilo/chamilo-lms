@@ -4,6 +4,9 @@ require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 class TestSortableTable extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('Sortabletable library - main/inc/lib/sortabletable.class.test.php');
+    }
 
 	function testdisplay() {
 		$instancia = new SortableTable();

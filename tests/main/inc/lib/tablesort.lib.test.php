@@ -1,15 +1,12 @@
 <?php
-
 define('SORT_DATE', 3);
 define('SORT_IMAGE',4);
-
 
 class TestTablesort extends UnitTestCase{
 
 	//public $table;
-	public function TestTablesort(){
-
-		$this->UnitTestCase('Tablesort library tests');
+	public function __construct(){
+		$this->UnitTestCase('Tablesort library - main/inc/lib/tablesort.lib.test.php');
 	}
 	/*
 	public function setUp(){

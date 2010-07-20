@@ -2,6 +2,10 @@
 require_once(api_get_path(LIBRARY_PATH).'stats.lib.inc.php');
 class TestStats extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('System stats library - main/inc/lib/stats.lib.test.php');
+    }
+
 	function testaddBrowser() {
 		$browser='';
 		$browsers_array=array();
@@ -51,8 +55,8 @@ class TestStats extends UnitTestCase {
 
 	function testdecodeOpenInfos() {  // 3 excepciones
     	//ob_start();
-    	global $_course, $TABLETRACK_OPEN, $_configuration;	
-    	$TABLETRACK_OPEN        = $_configuration['statistics_database']."`.`track_e_open";	
+    	global $_course, $TABLETRACK_OPEN, $_configuration;
+    	$TABLETRACK_OPEN        = $_configuration['statistics_database']."`.`track_e_open";
     	$ignore = ignore_user_abort();
       	$res=decodeOpenInfos();
     	//ob_end_clean();
@@ -60,10 +64,10 @@ class TestStats extends UnitTestCase {
 	    	$this->assertTrue(is_null($res));
 	    	$this->assertTrue(is_numeric($ignore));
 	    	//var_dump($res);
-    	}    
+    	}
  	}
 
-	function testextractAgent() { 
+	function testextractAgent() {
 		$user_agent=$_SERVER['HTTP_USER_AGENT'];
 		$list_browsers=array();
 		$list_os=array();

@@ -6,6 +6,10 @@ require_once(api_get_path(LIBRARY_PATH).'online.inc.php');
 
 class TestOnline extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('Online (chat) library - main/inc/lib/online.inc.test.php');
+    }
+
 	function testchatcall() {
 		global $_user, $_cid;
 		$webpath=api_get_path(WEB_CODE_PATH);
@@ -93,7 +97,7 @@ class TestOnline extends UnitTestCase {
 		$valid='';
 		$res=who_is_online($valid);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);	
+		//var_dump($res);
 	}
 }
 ?>

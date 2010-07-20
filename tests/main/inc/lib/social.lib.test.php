@@ -4,13 +4,12 @@ require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'main_api.lib.php');
 
 class TestSocial extends UnitTestCase{
-	/*
-	public $social;
-	public function TestSocial(){
+    //public $social;
 
-		$this->UnitTestCase('All main social function tests');
-	}
-
+    public function __construct() {
+        $this->UnitTestCase('Social network library - main/inc/lib/social.lib.test.php');
+    }
+/*
 	public function setUp(){
 		$this->social = new SocialManager();
 	}
@@ -19,31 +18,7 @@ class TestSocial extends UnitTestCase{
 		$this->social = null;
 	}
 	*/
-	//@todo this function was moved to usermanager
 
-	/**
-	 * this function has been eliminated of this file, this functionality has been implemented in other file
-	 */
-/* DEPRECATED
-	public function testRegisterFriend(){
-		$friend_id=4;
-		$my_user_id=1;
-		$relation_type=2;
-		$res= SocialManager::register_friend ($friend_id,$my_user_id,$relation_type);
-		$this->assertTrue(is_null($res));
-		$this->assertNull($res);
-		//var_dump($res);
-	}
-	
-	
-//Remove or deprecate
- 	public function testRemovedFriend(){
-		$friend_id=4;
-		$res = SocialManager::removed_friend($friend_id);
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}
-*/ 
 	public function testShowListTypeFriends(){
 		$res =SocialManager::show_list_type_friends();
 		$this->assertTrue($res);
@@ -58,7 +33,7 @@ class TestSocial extends UnitTestCase{
 		{
 			$this->assertNull($res);
 			$this->assertTrue(is_null($res));
-		} else 
+		} else
 		  {
 			$this->assertTrue(is_numeric($res));
 			$this->assertTrue($res);
@@ -74,27 +49,14 @@ class TestSocial extends UnitTestCase{
 			$this->assertFalse($res);
 			$this->assertTrue(is_numeric($res));
 		} else
-		  {	
+		  {
 			$this->assertTrue(is_string($res));
 			$this->assertTrue($res);
 		  }
 		//var_dump($res);
 
 	}
-/**
- * This function has been DEPRECATED AND REMOVED
- */
-/*	DEPRECATED
-	public function testGetListIdFriendsByUserId (){
-		$user_id = 1;
-		$id_group=3;
-		$search_name='group';
-		$res = SocialManager::get_friends_id($user_id,$id_group,$search_name);
-		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
-*/
-	 
+
 	public function testGetListPathWebByUserId(){
 		$user_id=1;
 		$id_group=null;
@@ -186,22 +148,5 @@ class TestSocial extends UnitTestCase{
 		}
 		//var_dump($res);
 	}
-/*	
-	public function TestDeleteCourse(){				
-		$code = 'COURSETEST';				
-		$res = CourseManager::delete_course($code);			
-		$path = api_get_path(SYS_PATH).'archive';		
-		if ($handle = opendir($path)) {
-			while (false !== ($file = readdir($handle))) {				
-				if (strpos($file,$code)!==false) {										
-					if (is_dir($path.'/'.$file)) {						
-						rmdirr($path.'/'.$file);						
-					}				
-				}				
-			}
-			closedir($handle);
-		}
-	}
-*/
 }
 ?>

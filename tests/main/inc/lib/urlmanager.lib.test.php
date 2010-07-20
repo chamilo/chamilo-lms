@@ -3,6 +3,10 @@ require_once(api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 
 class TestUrlManager extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('URL manager library - main/inc/lib/urlmanager.lib.test.php');
+    }
+
 	function testadd() {
 		$url='';
 		$description='';
@@ -127,7 +131,7 @@ class TestUrlManager extends UnitTestCase {
 	}
 
 	function testrelation_url_course_exist() {
-		$course_id = 'COURSETEST'; 
+		$course_id = 'COURSETEST';
 		$url_id=1;
 		$resu=UrlManager::relation_url_course_exist($course_id, $url_id);
 		if(!is_numeric($resu)){

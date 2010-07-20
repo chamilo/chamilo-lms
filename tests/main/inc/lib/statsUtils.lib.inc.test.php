@@ -4,6 +4,10 @@ require_once(api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php');
 
 class TestStatsUtils extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('Stats utilities library - main/inc/lib/statsUtil.lib.inc.test.php');
+    }
+
 	function testbuildTab2col() {
 		$array_of_results=array();
 		$title1='';

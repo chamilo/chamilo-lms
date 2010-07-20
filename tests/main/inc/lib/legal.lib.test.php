@@ -3,9 +3,8 @@ require_once(api_get_path(LIBRARY_PATH).'legal.lib.php');
 
 class TestLegal extends UnitTestCase{
 
-	public function TestLegal(){
-
-		$this->UnitTestCase('');
+	public function __construct() {
+		$this->UnitTestCase('Legal terms library - main/inc/lib/legal.lib.test.php');
 	}
 
 	public function testAdd(){

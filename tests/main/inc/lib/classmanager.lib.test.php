@@ -3,7 +3,7 @@ require_once(api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 
 class TestClassManager extends UnitTestCase {
 
-	public function TestClassManager(){
+	public function __construct(){
 		$this->UnitTestCase('Class (students) manager library - main/inc/lib/classmanager.lib.test.php');
 	}
 	function testAddUser() {

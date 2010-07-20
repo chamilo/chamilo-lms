@@ -3,6 +3,10 @@ require_once(api_get_path(LIBRARY_PATH).'message.lib.php');
 
 class TestMessage extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('Messages library - main/inc/lib/message.lib.test.php');
+    }
+
 	function testGetNumberOfMessagesMask() {
 		$res=get_number_of_messages_mask();
 		$this->assertTrue(is_string($res));

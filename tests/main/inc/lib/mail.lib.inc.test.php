@@ -3,6 +3,10 @@ require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 class TestMail extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('Mailing library - main/inc/lib/mail.lib.inc.test.php');
+    }
+
 	function testApiMail() {
 		ob_start();
  		$recipient_name='';

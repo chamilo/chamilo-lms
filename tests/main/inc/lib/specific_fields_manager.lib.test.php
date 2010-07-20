@@ -3,6 +3,10 @@ require_once(api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php');
 
 class TestSpecificFieldsManager extends UnitTestCase {
 
+    public function __construct() {
+        $this->UnitTestCase('Specific (extra) fields library - main/inc/lib/specific_fields_manager.lib.test.php');
+    }
+
 	function testadd_specific_field() {
 		$name='';
 		$res=add_specific_field($name);

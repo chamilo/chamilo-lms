@@ -1,5 +1,4 @@
 <?php
-
 require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 //require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
@@ -8,18 +7,18 @@ require_once(api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
 
 class TestCalendar extends UnitTestCase {
 
-	
+
 	public function TestCalendar(){
-		$this->UnitTestCase('Calendar library - main/admin/calendar.inc.test.php');
+		$this->UnitTestCase('Admin calendar library - main/admin/calendar.inc.test.php');
 	}
 	public function testToJavascript(){
- 		$res = to_javascript();
- 		$this->assertTrue($res);
- 		$this->assertTrue(is_string($res));
- 		//var_dump($res);
- 	}
- 	
- 	/**
+		$res = to_javascript();
+		$this->assertTrue($res);
+		$this->assertTrue(is_string($res));
+		//var_dump($res);
+	}
+
+	/**
 	 * Adds an agenda item in the database. Similar to store_new_agenda_item() except it takes parameters
 	 * @param   array   Course info
 	 * @param   string  Event title
@@ -30,31 +29,31 @@ class TestCalendar extends UnitTestCase {
 	 * @param   int     Parent id (optional)
 	 * @return  int     The new item's DB ID
 	 */
- 	public function testAgendaAddItem(){
- 		global $_course;
- 		$course_code=$_course;
- 		$course_info = '';
- 		$title='test';
- 		$content='test function';
- 		$db_start_date='07/11/2009';
- 		$db_end_date='07/20/2009';
- 		$res = agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date, $to=array(), $parent_id=null); 
- 		$this->assertTrue(is_numeric($res));
- 		//var_dump($res);
- 	}
- 	
- 	public function testStoreNewAgendaItem(){
- 		global $_user;
- 		$res_store = store_new_agenda_item();
- 		$this->assertTrue(is_numeric($res_store));
- 
- 		//delete the new agenda item in the database		
- 		if (is_numeric($res_store)) {
- 			$res_delete = delete_agenda_item($res_store);
- 			$this->assertTrue(is_numeric($res_store));			 				
- 		}
- 	}
- 	
+	public function testAgendaAddItem(){
+		global $_course;
+		$course_code=$_course;
+		$course_info = '';
+		$title='test';
+		$content='test function';
+		$db_start_date='07/11/2009';
+		$db_end_date='07/20/2009';
+		$res = agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date, $to=array(), $parent_id=null);
+		$this->assertTrue(is_numeric($res));
+		//var_dump($res);
+	}
+
+	public function testStoreNewAgendaItem(){
+		global $_user;
+		$res_store = store_new_agenda_item();
+		$this->assertTrue(is_numeric($res_store));
+
+		//delete the new agenda item in the database
+		if (is_numeric($res_store)) {
+			$res_delete = delete_agenda_item($res_store);
+			$this->assertTrue(is_numeric($res_store));
+		}
+	}
+
  	 public function testShowAddForm(){
  		ob_start();
  		global $MonthsLong;
@@ -64,7 +63,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_null($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testAddWeek(){
  		$timestamp=12;
  		$num=1;
@@ -88,7 +87,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_numeric($res));
  		//var_dump($res);
  	}
- 	
+
 
 /**
  * Adds a repetitive item to the database
@@ -103,7 +102,7 @@ class TestCalendar extends UnitTestCase {
  	public function testAgendaAddRepeatItem(){
  		//this function is not used or deprecated
  	}
- 	
+
  	public function testGetCalendarItems(){
  		global $_course;
  		$month=01;
@@ -112,10 +111,10 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_array($res));
  		//var_dump($res);
  	}
- 	
+
  	//This funtion need a path where will copy to the other folder.
 /*
- 	public function testAgendaImportIcal() { 
+ 	public function testAgendaImportIcal() {
  		global $_course;
  		$course_info = $_course;
  		$file = api_get_path(SYS_PATH).'tests/main/admin/icals/test.ics';
@@ -154,7 +153,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_bool($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testCalculateStartEndOfWeek(){
  		$week_number=4;
  		$year=2011;
@@ -163,19 +162,19 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue($res);
  		//var_dump($res);
  	}
- 	
+
  	/**
 	* Displays all the agenda items
-	*/ 
- 	public function testDisplayAgendaItems() { 	
- 		global $is_courseAdmin;		
- 		ob_start(); 		
+	*/
+ 	public function testDisplayAgendaItems() {
+ 		global $is_courseAdmin;
+ 		ob_start();
  		$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
  		$res = display_agenda_items();
  		ob_end_clean();
- 		$this->assertTrue(is_null($res));	
+ 		$this->assertTrue(is_null($res));
  	}
- 	
+
  	 	public function testDisplayDaycalendar(){
  		ob_start();
  		$agendaitems='';
@@ -221,14 +220,14 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_array($res));
  	}
 
- 	public function testGetRepeatedEventsDayView(){	
+ 	public function testGetRepeatedEventsDayView(){
  			global $_course;
  			$start = 0;
  			$end = 0;
  			$params = array();
-			$course_code = 'COURSETEST';			
-			$course_info = api_get_course_info($course_code);			
-			$resul = get_repeated_events_day_view($course_info,$start,$end,$params);		
+			$course_code = 'COURSETEST';
+			$course_info = api_get_course_info($course_code);
+			$resul = get_repeated_events_day_view($course_info,$start,$end,$params);
 	 		$this->assertTrue(is_array($resul));
  	}
 
@@ -253,7 +252,7 @@ class TestCalendar extends UnitTestCase {
 		$this->assertTrue(is_array($resul));
 		//var_dump($resul);
 	}
- 	
+
 	public function testDeleteAgendaItem(){
 		$id=1;
 		$res = delete_agenda_item($id);
@@ -311,14 +310,14 @@ class TestCalendar extends UnitTestCase {
  	}
 
  	public function testGetAgendaItem(){
- 		$id=4; 		
- 		$res = get_agenda_item($id); 		
+ 		$id=4;
+ 		$res = get_agenda_item($id);
  		if(is_array($res)) {
  			$this->assertTrue(is_array($res));
- 		} 
+ 		}
  	}
 
- 	
+
 	/**
 	* Makes an agenda item visible or invisible for a student
 	* @param integer id the id of the agenda item we are changing the visibility of
@@ -333,25 +332,25 @@ class TestCalendar extends UnitTestCase {
  		ob_end_clean();
  		if(!empty($res)){
  			$this->assertTrue($res);
- 			$this->assertTrue($real_show);	
+ 			$this->assertTrue($real_show);
  		} else {
  			$this->assertNull($res);
  		}
- 		//var_dump($res);	
+ 		//var_dump($res);
  	}
- 	 	
+
  	/**
 	* Displays only 1 agenda item. This is used when an agenda item is added to the learning path.
 	*/
  	public function testDisplayOneAgendaItem(){
- 		ob_start();				
+ 		ob_start();
 		$agenda_id=1;
 		$res = display_one_agenda_item($agenda_id);
 		ob_end_clean();
- 		$this->assertTrue(is_null($res));	
+ 		$this->assertTrue(is_null($res));
 
   	}
-  	
+
 	/**
 	* Show the form for adding a new agenda item. This is the same function that is used whenever we are editing an
 	* agenda item. When the id parameter is empty (default behaviour), then we show an empty form, else we are editing and
@@ -360,17 +359,17 @@ class TestCalendar extends UnitTestCase {
  	public function testShowGroupFilterForm(){
  		ob_start();
  		$res = show_group_filter_form();
- 		ob_end_clean(); 	
+ 		ob_end_clean();
  		$this->assertTrue(is_null($res));
  	}
 
  	public function testShowUserFilterForm(){
 		ob_start();
  		$res = show_user_filter_form();
- 		ob_end_clean(); 
+ 		ob_end_clean();
  		$this->assertTrue(is_null($res));
  	}
- 	
+
  	public function testGetAgendaitems(){
  		global $_user;
 		global $_configuration;
@@ -379,17 +378,17 @@ class TestCalendar extends UnitTestCase {
  		$res = get_agendaitems($month, $year);
  		if(is_array($res)) {
  			$this->assertTrue(is_array($res));
- 		} 
- 		
+ 		}
+
  	}
 
  	public function testDisplayUpcomingEvents(){
  		 ob_start();
 		 $res = display_upcoming_events();
 		 ob_end_clean();
-		 $this->assertNull($res); 
+		 $this->assertNull($res);
  	}
- 	
+
  	public function testIsRepeatedEvent() {
 	//This is deprecated or not used
  	}

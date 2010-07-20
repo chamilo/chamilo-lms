@@ -97,19 +97,19 @@ class CourseHome {
 		}
 
 		foreach ($all_tools as & $tool) {
-			
-			if ($tool['image'] == 'scormbuilder.gif') {					
+
+			if ($tool['image'] == 'scormbuilder.gif') {
 				// display links to lp only for current session
 				if (api_get_session_id() != $tool['session_id']) {
 					continue;
-				}					
+				}
 				// check if the published learnpath is visible for student
 				$published_lp_id = self::get_published_lp_id_from_link($tool['link']);
 			    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id,api_get_user_id())) {
 			    	continue;
 			    }
 			}
-			
+
 			if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
 				continue;
 			}
@@ -297,19 +297,19 @@ class CourseHome {
 		if (isset($all_tools_list)) {
 			$lnk = array();
 			foreach ($all_tools_list as & $tool) {
-												
-				if ($tool['image'] == 'scormbuilder.gif') {					
+
+				if ($tool['image'] == 'scormbuilder.gif') {
 					// display links to lp only for current session
 					if (api_get_session_id() != $tool['session_id']) {
 						continue;
-					}						
+					}
 					// check if the published learnpath is visible for student
 					$published_lp_id = self::get_published_lp_id_from_link($tool['link']);
 				    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id,api_get_user_id())) {
 				    	continue;
-				    }				
+				    }
 				}
-				
+
 				if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
 					continue;
 				}
@@ -573,32 +573,32 @@ class CourseHome {
 		}
 		return $all_tools_list;
 	}
-	
+
 	/**
 	 * Displays the tools of a certain category.
 	 * @param array List of tools as returned by get_tools_category()
 	 * @return void
 	 */
-
 	public static function show_tools_category($all_tools_list, $theme = 'activity') {
-		
-		if ($theme == 'vertical_activity') {
+        global $_user;
+	    if ($theme == 'vertical_activity') {
 			//ordering by get_lang name
 			$order_tool_list = array();
-			foreach($all_tools_list as $key=>$new_tool) {
-				$tool_name = self::translate_tool_name($new_tool);
-				$order_tool_list [$key]= $tool_name;
-			}		
-			natsort($order_tool_list);		
-			$my_temp_tool_array = array();
-			foreach($order_tool_list as $key=>$new_tool) {
-				$my_temp_tool_array[] = $all_tools_list[$key];
+			if (is_array($all_tools_list) && count($all_tools_list)>0) {
+    			foreach($all_tools_list as $key=>$new_tool) {
+    				$tool_name = self::translate_tool_name($new_tool);
+    				$order_tool_list [$key]= $tool_name;
+    			}
+                natsort($order_tool_list);
+                $my_temp_tool_array = array();
+                foreach($order_tool_list as $key=>$new_tool) {
+                	$my_temp_tool_array[] = $all_tools_list[$key];
+                }
+                $all_tools_list = $my_temp_tool_array;
+			} else {
+			    $all_tools_list = array();
 			}
-			$all_tools_list = $my_temp_tool_array;
 		}
-		
-		
-		global $_user;
 		$web_code_path = api_get_path(WEB_CODE_PATH);
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 		$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -609,19 +609,19 @@ class CourseHome {
 			$lnk = '';
 			if ($theme == 'vertical_activity') echo '<ul>';
 			foreach ($all_tools_list as & $tool) {
-				
-				if ($tool['image'] == 'scormbuilder.gif') {					
+
+				if ($tool['image'] == 'scormbuilder.gif') {
 					// display links to lp only for current session
 					if (api_get_session_id() != $tool['session_id']) {
 						continue;
-					}										
+					}
 					// check if the published learnpath is visible for student
 					$published_lp_id = self::get_published_lp_id_from_link($tool['link']);
 				    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id,api_get_user_id())) {
 				    	continue;
 				    }
 				}
-				
+
 				if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
 					continue;
 				}
@@ -636,11 +636,11 @@ class CourseHome {
 				// This part displays the links to hide or remove a tool.
 				// These links are only visible by the course manager.
 				unset($lnk);
-				
+
 				if ($theme == 'activity') {
 					echo '<td width="50%">'."\n";
 				}
-				
+
 				if ($is_allowed_to_edit && !api_is_coach()) {
 
 					if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
@@ -725,13 +725,13 @@ class CourseHome {
 				echo '</a> ';
 				echo $my_tool_link;
 				echo "{$tool_name}$session_img";
-				
+
 				echo '</a>';
 				if ($theme == 'activity') {
 					echo '</td>';
 					if ($i % 2) {
 						echo '</tr>';
-					}			
+					}
 				} elseif($theme == 'vertical_activity') {
 					echo '</li>';
 				}
@@ -745,7 +745,7 @@ class CourseHome {
 		} elseif($theme == 'vertical_activity') {
 			echo '</ul>';
 		}
-		
+
 	}
 
 	/**
@@ -829,7 +829,7 @@ class CourseHome {
 
 		return $tool_name;
 	}
-	
+
 	/**
 	 * Get published learning path id from link inside course home
 	 * @param 	string	Link to published lp
@@ -837,14 +837,14 @@ class CourseHome {
 	 */
 	public static function get_published_lp_id_from_link($published_lp_link) {
 		$lp_id = 0;
-		$param_lp_id = strstr($published_lp_link, 'lp_id=');		
+		$param_lp_id = strstr($published_lp_link, 'lp_id=');
 		if (!empty($param_lp_id)) {
 			$a_param_lp_id = explode('=',$param_lp_id);
 			if (isset($a_param_lp_id[1])) {
 				$lp_id = intval($a_param_lp_id[1]);
 			}
 		}
-		return $lp_id;		
-	} 
-	
+		return $lp_id;
+	}
+
 }

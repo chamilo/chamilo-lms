@@ -36,12 +36,12 @@ class DocumentManager {
 	}
 
 	/**
-	 * @return the document folder quuta of the current course, in bytes
+	 * @return the document folder quota for the current course, in bytes, or the default quota
 	 * @todo eliminate globals
 	 */
 	public static function get_course_quota() {
 		global $_course, $maxFilledSpace;
-
+		if (empty($_course['sysCode'])) { return DEFAULT_DOCUMENT_QUOTA; }
 		$course_code = Database::escape_string($_course['sysCode']);
 		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 

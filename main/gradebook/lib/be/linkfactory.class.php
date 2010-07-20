@@ -24,6 +24,7 @@ require_once 'studentpublicationlink.class.php';
 require_once 'learnpathlink.class.php';
 require_once 'forumthreadlink.class.php';
 require_once 'attendancelink.class.php';
+require_once 'surveylink.class.php';
 
 /**
  * Factory for link objects
@@ -88,6 +89,8 @@ class LinkFactory
 				return new ForumThreadLink();
 			case LINK_ATTENDANCE:
 				return new AttendanceLink();
+			case LINK_SURVEY:
+				return new SurveyLink();
 		}
 		return null;
 	}
@@ -102,7 +105,8 @@ class LinkFactory
 					  LINK_STUDENTPUBLICATION,
 					  LINK_LEARNPATH,
                       LINK_FORUM_THREAD,
-                      LINK_ATTENDANCE
+                      LINK_ATTENDANCE,
+                      LINK_SURVEY
 					  );
 	}
 

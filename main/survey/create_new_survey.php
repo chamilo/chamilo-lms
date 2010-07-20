@@ -31,6 +31,7 @@ require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
@@ -57,6 +58,7 @@ $table_survey 				= Database :: get_course_table(TABLE_SURVEY);
 $table_user 				= Database :: get_main_table(TABLE_MAIN_USER);
 $table_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
+$table_gradebook_link 		= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 // If user is not teacher or if he's a coach trying to access an element out of his session
@@ -72,6 +74,11 @@ if (!api_is_allowed_to_edit()) {
 // Getting the survey information
 $survey_id = Security::remove_XSS($_GET['survey_id']);
 $survey_data = survey_manager::get_survey($survey_id);
+
+// Additional information
+$course_id = api_get_course_id();
+$session_id = api_get_session_id();
+$gradebook_link_type = 8; // LINK_SURVEY
 
 $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
@@ -95,6 +102,14 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 	$defaults = $survey_data;
 	$defaults['survey_id'] = $survey_id;
 	$defaults['anonymous'] = $survey_data['anonymous'];
+
+	$gradebook_link_id = is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
+	if ($gradebook_link_id) {
+		if ($sql_result_array = Database::fetch_array(Database::query('SELECT weight FROM '.$table_gradebook_link.' WHERE id='.$gradebook_link_id))) {
+			$defaults['survey_qualify_gradebook'] = $gradebook_link_id;
+			$defaults['survey_weight'] = number_format($sql_result_array['weight'], 2, '.', '');
+		}
+	}
 } else {
 	$defaults['survey_language'] = $_course['language'];
 	$defaults['start_date'] = date('d-F-Y H:i');
@@ -151,14 +166,25 @@ $form->addElement('checkbox', 'anonymous', get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
-/*
 // Aditional Parameters
-$form -> addElement('html','<div class="row">
-<div class="label">&nbsp;</div>
-<div class="formw">
-	<a href="javascript://" onclick="javascript: if(document.getElementById(\'options\').style.display == \'none\'){document.getElementById(\'options\').style.display = \'block\';}else{document.getElementById(\'options\').style.display = \'none\';}"><img src="../img/add_na.gif" alt="" />'.get_lang('AdvancedParameters').'</a>
-</div>
-</div>');*/
+$form->addElement('html', '
+<div class="row">
+	<div class="label">
+		<a href="javascript: void(0);" onclick="javascript: advanced_parameters();" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',null,array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+	</div>
+	<div class="formw">
+		&nbsp;
+	</div>
+</div>');
+
+$form -> addElement('html', '<div id="options" style="display: none;">');
+
+// An option: Qualify the fact that survey has been answered in the gradebook
+$form->addElement('checkbox', 'survey_qualify_gradebook', '', get_lang('QualifyInGradebook'), 'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"');
+$form->addElement('html', '<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>');
+$form->addElement('text', 'survey_weight', get_lang('QualifyWeight'), 'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"');
+$form->applyFilter('survey_weight', 'html_filter');
+$form->addElement('html', '</div>');
 
 // Personality/Conditional Test Options
 $surveytypes[0] = get_lang('Normal');
@@ -166,7 +192,6 @@ $surveytypes[1] = get_lang('Conditional');
 
 if ($_GET['action'] == 'add') {
 	$form->addElement('hidden', 'survey_type', 0);
-    $form -> addElement('html', '<div id="options" style="display: none;">');
 	require_once api_get_path(LIBRARY_PATH).'surveymanager.lib.php';
 	$survey_tree = new SurveyTree();
 	$list_surveys = $survey_tree->createList($survey_tree->surveylist);
@@ -183,17 +208,6 @@ if ($survey_data['survey_type'] == 1 || $_GET['action'] == 'add') {
 if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id)) {
 	if ($survey_data['anonymous'] == 0) {
 
-		// Aditional Parameters
-		$form -> addElement('html','<div class="row">
-		<div class="label">
-			<a href="javascript: void(0);" onclick="javascript: advanced_parameters();" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',null,array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>
-		</div>
-		<div class="formw">
-			&nbsp;
-		</div>
-		</div>');
-
-		$form->addElement('html', '<div id="options" style="display:none">');
 		$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'), '', 'onclick="javascript: if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 
 		if ($survey_data['show_form_profile'] == 1) {
@@ -225,12 +239,12 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id))
 				}
 			}
 		}
-		$form->addElement('html', '</div></div>');
+
+		$form->addElement('html', '</div>');
 	}
 }
-if ($_GET['action'] == 'add') {
-	$form -> addElement('html', '</div><br />');
-}
+
+$form -> addElement('html', '</div><br />');
 
 if (isset($_GET['survey_id']) && $_GET['action'] == 'edit') {
 	$class = 'save';
@@ -271,6 +285,7 @@ if ($form->validate()) {
 	}
 	*/
 	if ($return['type'] == 'error') {
+
 		// Displaying the header
 		Display::display_header($tool_name);
 
@@ -279,6 +294,29 @@ if ($form->validate()) {
 
 		// Display the form
 		$form->display();
+
+	} else {
+
+		$gradebook_option = $values['survey_qualify_gradebook'] > 0;
+		if ($gradebook_option) {
+			$survey_id = intval($return['id']);
+			if ($survey_id > 0) {
+
+				$title_gradebook = ''; // Not needed here.
+				$description_gradebook = ''; // Not needed here.
+				$survey_weight = floatval($_POST['survey_weight']);
+				$max_score = 1;
+				$date = time(); // TODO: Maybe time zones implementation is needed here.
+				$visible = 1;	// 1 = visible
+
+				$gradebook_link_id = is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
+				if (!$gradebook_link_id) {
+					add_resource_to_course_gradebook($course_id, $gradebook_link_type, $survey_id, $title_gradebook, $survey_weight, $max_score, $description_gradebook, time(), 1, $session_id);
+				} else {
+					Database::query('UPDATE '.$table_gradebook_link.' SET weight='.$survey_weight.' WHERE id='.$gradebook_link_id);
+				}
+			}
+		}
 	}
 	if ($config['survey']['debug']) {
 		// Displaying a feedback message

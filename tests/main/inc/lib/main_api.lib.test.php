@@ -70,7 +70,7 @@ class TestMainApi extends UnitTestCase {
 		CONFIGURATION_PATH => 'inc/conf/',
 		WEB_LIBRARY_PATH => 'inc/lib/',
 		WEB_AJAX_PATH => 'inc/ajax/'
-	);;
+	);
 		$res=api_get_path($path_type, $path);
 	 	$this->assertTrue(is_null($res));
 	 	//var_dump($res);
@@ -80,7 +80,6 @@ class TestMainApi extends UnitTestCase {
 		$res= api_get_user_id();
 		$this->assertPattern('/\d/',$res);
 	}
-
     function testApiGetUserCoursesReturnTrueWhenOutOfCoursesContext(){
     	global $tbl_user;
     	$userid=1;
@@ -98,27 +97,19 @@ class TestMainApi extends UnitTestCase {
    		$this->assertTrue(is_array($res));
    		//var_dump($res);
     }
-
     function testApiGetUserInfoUsernameReturnTrueWhenOutOfUserInfoUsernameContext(){
     	$res=api_get_user_info_from_username();
     	$this->assertTrue(is_bool($res));
     	//var_dump($res);
     }
-
     function testApiGetCourseIdReturnFalseWhenOutOfCourseIdContext(){
-    	global $_course;
-    	$_course = null;
         $res = api_get_course_id();
     	$this->assertEqual($res,-1);
     }
-
     function testApiGetCoursePathReturnFalseWhenOutOfCoursePathContext(){
-        global $_course;
-        $_course = null;
         $res = api_get_course_path();
     	$this->assertTrue(empty($res));
     }
-
     function testApiGetCourseSettingReturnFalseWhenOutOfCourseSeetingContext(){
 	global $_course;
 	$course_code = $_course;
@@ -332,9 +323,8 @@ class TestMainApi extends UnitTestCase {
 		if($_SESSION['is_courseAdmin'] === 1) {
 			$this->assertTrue($res);
 		} else {
-			$this->assertFalse(is_bool($res));
+			$this->assertFalse($res);
 		}
-		//var_dump($res);
    	}
 
     function testApiIsCourseCoach() {

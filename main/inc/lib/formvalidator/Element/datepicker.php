@@ -9,7 +9,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 	/**
 	 * Constructor
 	 */
-	function HTML_QuickForm_datepicker($elementName = null, $elementLabel = null, $attributes = null)
+	function HTML_QuickForm_datepicker($elementName = null, $elementLabel = null, $attributes = null, $optionIncrement = null)
 	{
 		$js_form_name = $attributes['form_name'];
 		unset($attributes['form_name']);
@@ -38,6 +38,10 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 		//$this->_options['addEmptyOption'] = true;
 		//$this->_options['emptyOptionValue'] = 0;
 		//$this->_options['emptyOptionText'] = ' -- ';
+		if (isset($optionIncrement)) {
+        $this->_options['optionIncrement']['i'] = intval($optionIncrement);
+        }
+		
 	}
 	/**
 	 * HTML code to display this datepicker

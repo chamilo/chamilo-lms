@@ -2375,7 +2375,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		-----------------------------------------------------------
 		*/
 
-		$intro_text='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="middle" align="left"><img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="mr. Dokeos" title="mr. Dokeos" /></td><td valign="middle" align="left">'.lang2db(get_lang('IntroductionText')).'</td></tr></table>';
+		$intro_text='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="middle" align="left"><img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" /></td><td valign="middle" align="left">'.lang2db(get_lang('IntroductionText')).'</td></tr></table>';
 		Database::query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_COURSE_HOMEPAGE . "','".$intro_text. "', 0)");
 		Database::query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_STUDENTPUBLICATION . "','".lang2db(get_lang('IntroductionTwo')) . "', 0)");
 
@@ -2393,7 +2393,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '3', '1', '".lang2db(get_lang('Force')) . "', '1', '".lang2db(get_lang('Indeed')) . "', '5', '3','','','','')");
 		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '4', '1', '".lang2db(get_lang('Contradiction')) . "', '1', '".lang2db(get_lang('NotFalse')) . "', '5', '4','','','','')");
 		$html=Database::escape_string('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'</td></tr></table>');
-		
+
 		Database::query('INSERT INTO `'.$TABLEQUIZ . '` (title, description, type, random, random_answers, active, results_disabled ) VALUES ("'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "1", "0", "0", "1", "0")');
 		Database::query("INSERT INTO `".$TABLEQUIZQUESTIONLIST . "` (id, question, description, ponderation, position, type, picture, level) VALUES ( '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','',1)");
 		Database::query("INSERT INTO `".$TABLEQUIZQUESTION . "` (question_id, exercice_id, question_order) VALUES (1,1,1)");
@@ -2505,7 +2505,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 	} else {
 		$expiration_date = "FROM_UNIXTIME(".$expiration_date . ")";
 	}
-	
+
 	if($visibility === null) {
 		$visibility = $defaultVisibilityForANewCourse;
 	} else {
@@ -2514,7 +2514,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 			$okForRegisterCourse = false;
 		}
 	}
-	
+
 	if ($okForRegisterCourse) {
 		$titular=addslashes($titular);
 		// here we must add 2 fields

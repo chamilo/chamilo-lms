@@ -5,23 +5,24 @@ $language_file = array('create_course', 'courses', 'admin');
 
 require_once '../inc/global.inc.php';
 
+// Setting the section (for the tabs).
+$this_section = SECTION_PLATFORM_ADMIN;
+
+// Access restriction.
+api_protect_admin_script();
+
+// Manipulation of the platform-wide css setting.
 if (isset($_GET['style']) && $_GET['style'] != '') {
-	$style=Security::remove_XSS($_GET['style']);
-	$all_styles = api_get_themes();
-	if (in_array($style, $all_styles[0])) {
-		echo '<link href="../css/'.$style.'/default.css" rel="stylesheet" type="text/css">';
-	}
-} else {
-	$currentstyle = api_get_setting('stylesheets');
-	echo '<link href="../css/'.$currentstyle.'/default.css" rel="stylesheet" type="text/css">';
+	$_setting['stylesheets'] = Security::remove_XSS($_GET['style']);
 }
 
-$_setting['student_view_enabled'] = 'false'; // Hiding the link "Teacher/Student view", it is not needed to be shown here.
+// Hiding the link "Teacher/Student view", it is not needed to be shown here.
+$_setting['student_view_enabled'] = 'false';
+
+require_once api_get_path(INCLUDE_PATH).'header.inc.php';
+
 $week_days_short = api_get_week_days_short();
 $months_long = api_get_months_long();
-
-//Display::display_header($tool_name);
-require_once api_get_path(INCLUDE_PATH).'banner.inc.php';
 
 ?>
   <div class="maincontent" id="content">
@@ -122,10 +123,10 @@ require_once api_get_path(INCLUDE_PATH).'banner.inc.php';
               <td align="right"></td>
             </tr>
           </table>
-          <table class="data_table" width="100%">
+          <table class="data_table" style="width: 250px;">
             <tr>
               <th style="width: 50%;"><a href="#"><?php echo get_lang('FirstName'); ?></a>&nbsp;&#8595; </th>
-              <th style="width: 50%;"><a href="#"><?php echo get_lang('LastName'); ?></a></th>
+              <th><a href="#"><?php echo get_lang('LastName'); ?></a></th>
             </tr>
             <tr class="row_odd">
               <td>Julio</td>

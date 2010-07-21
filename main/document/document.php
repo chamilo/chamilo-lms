@@ -830,7 +830,7 @@ if (!is_null($docs_and_folders)) {
 
 // Slideshow by Patrick Cool, May 2004
 require 'document_slideshow.inc.php';
-if ($image_present) {
+if ($image_present && !isset($_GET['keyword'])  ) {
 	echo '<a href="slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl.'"><img src="../img/images_gallery.gif" border="0" title="'.get_lang('ViewSlideshow').'"/>'.get_lang('ViewSlideshow').'</a>';
 }
 echo '</div>';

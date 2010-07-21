@@ -576,7 +576,7 @@ echo '<div id="social-content-right">';
 	$file_list = '';
 	if (is_array($course_list_code) && count($course_list_code)>0) {
 		foreach ($course_list_code as $course) {
-			$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code']);
+			$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code'],$resourcetype='images');
 		}
 	}
 

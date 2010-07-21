@@ -450,7 +450,7 @@ class DocumentManager {
 	 * @param boolean $can_see_invisible
 	 * @return array with all document data
 	 */
-	public static function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false) {
+	public static function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false, $search =false) {
 		$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		$TABLE_COURSE = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -484,7 +484,17 @@ class DocumentManager {
 		//condition for the session
 		$current_session_id = api_get_session_id();
 		$condition_session = " AND (id_session = '$current_session_id' OR id_session = '0')";
-		$sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.lastedit_date, last.visibility
+		
+		//condition for search (get ALL folders and documents)
+		if($search){
+			$sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.lastedit_date, last.visibility
+						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
+						WHERE docs.id = last.ref
+						AND last.tool = '".TOOL_DOCUMENT."'
+						AND ".$to_field." = ".$to_value."
+						AND last.visibility".$visibility_bit . $condition_session;
+		}else{
+			$sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.lastedit_date, last.visibility
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
 						AND docs.path LIKE '".$path.$added_slash."%'
@@ -492,7 +502,7 @@ class DocumentManager {
 						AND last.tool = '".TOOL_DOCUMENT."'
 						AND ".$to_field." = ".$to_value."
 						AND last.visibility".$visibility_bit . $condition_session;
-
+		}
 		$result = Database::query($sql);
 
 		if ($result!==false && Database::num_rows($result) != 0) {

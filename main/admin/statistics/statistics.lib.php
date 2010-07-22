@@ -43,14 +43,15 @@ class Statistics {
 		$obj = Database::fetch_object($res);
 		return $obj->number;
 	}
+	
 	/**
 	 * Count users
-	 * @param int $status COURSEMANAGER or STUDENT
-	 * @param string $category_code  Code of a course category. Default: count
-	 * all users.
+	 * @param int 	 optional, user status (COURSEMANAGER or STUDENT), if it's not setted it'll count all users.
+	 * @param string optional, code of a course category. Default: count only users without filtering category
+	 * @todo count invisible courses
 	 * @return int Number of users counted
 	 */
-	function count_users($status, $category_code = NULL, $count_invisible_courses = true) {
+	function count_users($status = null, $category_code = null, $count_invisible_courses = true) {
 		
 		global $_configuration;
 		// Database table definitions
@@ -59,17 +60,24 @@ class Statistics {
 		$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 		$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$current_url_id = api_get_current_access_url_id();
+		
 		if ($_configuration['multiple_access_urls'] == true){
-			$sql = "SELECT COUNT(DISTINCT(u.user_id)) AS number FROM $user_table as u, $access_url_rel_user_table as url WHERE status = ".intval(Database::escape_string($status))." AND u.user_id=url.user_id AND access_url_id='".$current_url_id."'";
+			
+			$status_filter = isset($status)?' AND status = '.intval($status):'';			
+			$sql = "SELECT COUNT(DISTINCT(u.user_id)) AS number FROM $user_table as u, $access_url_rel_user_table as url WHERE u.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter ";			
 			if (isset ($category_code)) {
-				$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."'";
+				$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter ";
 			}
-		} else {
-			$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(Database::escape_string($status))." ";
+			
+		} else {			
+			$status_filter = isset($status)?' WHERE status = '.intval($status):'';			
+			$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table $status_filter ";			
 			if (isset ($category_code)) {
-				$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'  ";
-			}			
+				$status_filter = isset($status)?' AND status = '.intval($status):'';
+				$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' $status_filter ";
+			}						
 		}
+		
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->number;

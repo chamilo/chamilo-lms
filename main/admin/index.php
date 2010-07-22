@@ -14,6 +14,9 @@ $cidReset=true;
 // including some necessary chamilo files
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'security.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
+require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -360,6 +363,7 @@ function register_site()
 	// reload the settings
 }
 
+
 /**
 * Check if the current installation is up to date
 * The code is borrowed from phpBB and slighlty modified
@@ -376,18 +380,24 @@ function check_system_version2()
 	if (ini_get('allow_url_fopen')==1)
 	{
 		// the number of courses
-		$sql="SELECT count(code) FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
+		
+	/*	$sql="SELECT count(code) FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
 		$result=Database::query($sql);
 		$row = Database::fetch_array($result);
 		$number_of_courses = $row[0];
+	*/  $number_of_courses = statistics::count_courses();
 
 		// the number of users
-		$sql="SELECT count(user_id) FROM ".Database::get_main_table(TABLE_MAIN_USER);
+		
+    /*  $sql="SELECT count(user_id) FROM ".Database::get_main_table(TABLE_MAIN_USER);
 		$result=Database::query($sql);
 		$row = Database::fetch_array($result);
 		$number_of_users = $row[0];
-
+	*/
+		$number_of_users = statistics::count_users();		
 		$version_url= 'http://version.chamilo.org/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(api_get_setting('emailAdministrator')).'&version='.urlencode($system_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.api_get_setting('donotlistcampus').'&organisation='.urlencode(api_get_setting('Institution')).'&adminname='.urlencode(api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
+		die($version_url);
+		
 		$handle=@fopen($version_url,'r');
 		if ($handle !== false) {
 			$version_info=trim(@fread($handle, 1024));

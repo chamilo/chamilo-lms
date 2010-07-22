@@ -2807,8 +2807,8 @@ class learnpath {
 			}
 			
 			
-			//Fixed issue BT#1272 - If the item type is a Chamilo Quiz, then force it to load the link as a normal Chamilo LP not a SCO
-			if ($lp_item_type == 'quiz') {
+			//Fixed issue BT#1272 - If the item type is a Chamilo Item (quiz, link, etc), then change the lp type to thread it as a normal Chamilo LP not a SCO.
+			if (in_array($lp_item_type, array('quiz', 'document', 'link', 'forum', 'thread', 'student_publication'))) {
 				$lp_type = 1;
 			}
 			//Now go through the specific cases to get the end of the path

@@ -380,21 +380,11 @@ function check_system_version2()
 	if (ini_get('allow_url_fopen')==1)
 	{
 		// the number of courses
-		
-	/*	$sql="SELECT count(code) FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
-		$result=Database::query($sql);
-		$row = Database::fetch_array($result);
-		$number_of_courses = $row[0];
-	*/  $number_of_courses = statistics::count_courses();
+	    $number_of_courses = statistics::count_courses();
 
 		// the number of users
-		
-    /*  $sql="SELECT count(user_id) FROM ".Database::get_main_table(TABLE_MAIN_USER);
-		$result=Database::query($sql);
-		$row = Database::fetch_array($result);
-		$number_of_users = $row[0];
-	*/
-		$number_of_users = statistics::count_users();		
+	   	$number_of_users = statistics::count_users();		
+	
 		$version_url= 'http://version.chamilo.org/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(api_get_setting('emailAdministrator')).'&version='.urlencode($system_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.api_get_setting('donotlistcampus').'&organisation='.urlencode(api_get_setting('Institution')).'&adminname='.urlencode(api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
 				
 		$handle=@fopen($version_url,'r');

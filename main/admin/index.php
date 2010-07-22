@@ -396,8 +396,7 @@ function check_system_version2()
 	*/
 		$number_of_users = statistics::count_users();		
 		$version_url= 'http://version.chamilo.org/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(api_get_setting('emailAdministrator')).'&version='.urlencode($system_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.api_get_setting('donotlistcampus').'&organisation='.urlencode(api_get_setting('Institution')).'&adminname='.urlencode(api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
-		die($version_url);
-		
+				
 		$handle=@fopen($version_url,'r');
 		if ($handle !== false) {
 			$version_info=trim(@fread($handle, 1024));

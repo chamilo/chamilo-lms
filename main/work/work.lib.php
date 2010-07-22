@@ -51,7 +51,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;display_tool_options=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('acces_tool.gif', get_lang('EditToolOptions')).' '.get_lang('EditToolOptions').'</a>';
 	}
 
-	if (!$always_show_upload_form && api_is_allowed_to_session_edit(false, true)) {
+	if (!$always_show_upload_form && api_is_allowed_to_session_edit(false, true) && (isset($_GET['curdirpath']) && (!empty($_GET['curdirpath']) && $_GET['curdirpath'] != '.') )) {
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;display_upload_form=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('submit_file.gif', get_lang('UploadADocument')).' '.get_lang('UploadADocument').'</a>';
 	}
 

@@ -364,7 +364,7 @@ elseif ($displayMode == "viewContentEdit") {
 					"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
 						"<td align=\"left\">", get_lang('Name'), "</td>\n",
 						"<td width=\"100px\" align=\"left\">", get_lang('Description'), "</td>\n";
-
+			
                 if ($current_session_id) {
                     if ($user_info_viewed['status'] == COURSEMANAGER) {
                         echo "<td>", get_lang('Tutor'), "</td>\n";
@@ -389,13 +389,14 @@ elseif ($displayMode == "viewContentEdit") {
                         }
                     } else {
                         if ($user_info_viewed['status'] == STUDENT) {
-                            echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
+                            echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " />" . ' ' . Display::return_icon('synthese_view.gif',get_lang('TheTutorOnlCanyKeepTrackOfStudentsRegisteredInTheCourse')),$checked,"</td>";
                         } else {
-                            echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteCourseAdmin\" value=\"1\"", $courseAdminChecked, " /></td>\n";
+                            echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteCourseAdmin\" value=\"1\"", $courseAdminChecked, " />" . ' ' . Display::return_icon('synthese_view.gif',get_lang('TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse')),$checked,"</td>\n";
                         }
                     }			
 		} else {
 			echo "<td>", get_lang('CourseManager'), "</td>\n";
+			
 
 		}
 

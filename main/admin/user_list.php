@@ -32,18 +32,18 @@ function load_course_list (div_course,my_user_id) {
 		}
 	});
 }
-		
+
 function active_user(element_div) {
 	id_image=$(element_div).attr("id");
 	image_clicked=$(element_div).attr("src");
 	image_clicked_info = image_clicked.split("/");
-	image_real_clicked = image_clicked_info[image_clicked_info.length-1];	
-	var status = 1;							
+	image_real_clicked = image_clicked_info[image_clicked_info.length-1];
+	var status = 1;
 	if (image_real_clicked == "right.gif") {
 		status = 0;
-	}		
+	}
 	user_id=id_image.split("_");
-	ident="#img_"+user_id[1]; 
+	ident="#img_"+user_id[1];
 	if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
@@ -53,22 +53,22 @@ function active_user(element_div) {
 			url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",
 			data: "user_id="+user_id[1]+"&status="+status,
 			success: function(datos) {
-				
-				if (status == 1) {					
+
+				if (status == 1) {
 					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'right.gif'.'");
 					$(ident).attr("title","'.get_lang('Lock').'");
-					
+
 				} else {
 					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'wrong.gif'.'");
 					$(ident).attr("title","'.get_lang('Unlock').'");
-					
+
 				}
 			}
 		});
 	}
 }
-	
-	
+
+
 function clear_course_list (div_course) {
 	$("div#"+div_course).html("&nbsp;");
 	$("div#"+div_course).hide("");
@@ -322,7 +322,7 @@ function get_number_of_users()
 
 	// adding the filter to see the user's only of the current access_url
     global $_configuration;
-    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }
@@ -382,7 +382,7 @@ function get_number_of_users()
 	}
 
     // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
     }
 
@@ -421,7 +421,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             " FROM $user_table u ";
 
     // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }
@@ -454,7 +454,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			$query_admin_table = " , $admin_table a ";
 			$keyword_admin = ' AND a.user_id = u.user_id ';
 		}
-                
+
                 $keyword_extra_value = '';
                 if (isset($_GET['keyword_extra_data'])) {
                     if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
@@ -482,7 +482,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	}
 
     // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
     }
 
@@ -530,7 +530,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 */
 function email_filter($email)
 {
-	return Display :: encrypted_mailto_link($email, $email);	
+	return Display :: encrypted_mailto_link($email, $email);
 }
 
 /**
@@ -538,9 +538,9 @@ function email_filter($email)
 * @param string $email An email-address
 * @return string HTML-code with a mailto-link
 */
-function user_filter($name, $params, $row) {	
-	return '<a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$row[0].'">'.$name.'</a>';	
-	
+function user_filter($name, $params, $row) {
+	return '<a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$row[0].'">'.$name.'</a>';
+
 }
 
 /**
@@ -601,11 +601,11 @@ function modify_filter($user_id,$url_params,$row)
 				$result .= Display::return_icon('edit_na.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
 		}
 
-		if ($row[0]<>$_user['user_id'] && $user_is_anonymous == false) {
-			
+		if ($row[0] != $_user['user_id'] && !$user_is_anonymous) {
+
 			// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 			$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-			
+
 		} else {
 			$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
 		}
@@ -616,17 +616,17 @@ function modify_filter($user_id,$url_params,$row)
 	} else {
 		$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));
 	}
-	
+
 	// actions for assigning sessions, courses or users
 	if (api_is_session_admin()) {
-		/*if ($row[0] == api_get_user_id()) {			
+		/*if ($row[0] == api_get_user_id()) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}*/
 	} else {
 		if ($row['7'] == $statusname[DRH] || UserManager::is_admin($row[0])) {
 			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers')).'</a>&nbsp;&nbsp;';
 			$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
-			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';	
+			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		} else if ($row['7'] == $statusname[SESSIONADMIN]) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}
@@ -649,7 +649,7 @@ function active_filter($active, $url_params, $row) {
 	global $_user;
 
 	if ($active=='1') {
-		$action='Lock';		
+		$action='Lock';
 		$image='right';
 	} elseif ($active=='-1') {
     	$action='edit';
@@ -657,15 +657,15 @@ function active_filter($active, $url_params, $row) {
     } elseif ($active=='0') {
 		$action='Unlock';
 		$image='wrong';
-		
+
 	}
 
     if ($action=='edit') {
         $result = Display::return_icon($image.'.gif', get_lang('AccountExpired'));
-    } elseif ($row['0']<>$_user['user_id']) { 
+    } elseif ($row['0']<>$_user['user_id']) {
     	// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 		//$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon($image.'.gif', get_lang(ucfirst($action))).'</a>';
-		//$result = '<a href="'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?action=active_user&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'">';		
+		//$result = '<a href="'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?action=active_user&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'">';
 		$result .=Display::return_icon($image.'.gif', get_lang(ucfirst($action)), array('onclick'=>'active_user(this);', 'id'=>'img_'.$row['0'])).'</a>';
 		//$result .= '<div>';
 	}
@@ -750,9 +750,9 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
             $tool_name = get_lang('UserList');
         }
 
-	
+
 	Display :: display_header($tool_name, "");
-	
+
 	//api_display_tool_title($tool_name);
 	if (isset ($_GET['action'])) {
 		$check = Security::check_token('get');
@@ -878,7 +878,7 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 		$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></center>';
 	}
 
-        
+
         // display advaced search form
         $form = new FormValidator('advanced_search','get');
 
@@ -905,7 +905,7 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 
         $form->addElement('html', '<tr><td>');
         $form->add_textfield('keyword_officialcode',get_lang('OfficialCode'),false,array('style'=>'margin-left:17px'));
-	$form->addElement('html', '</td><td>');        
+	$form->addElement('html', '</td><td>');
 
         $status_options = array();
 	$status_options['%'] = get_lang('All');
@@ -917,7 +917,7 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
         $form->addElement('html', '</td></tr>');
 
 
-        	
+
         $form->addElement('html', '<tr><td>');
         $active_group = array();
 	$active_group[] = $form->createElement('checkbox','keyword_active','',get_lang('Active'), array('style'=>'margin-left:17px'));
@@ -975,10 +975,10 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 	$table->set_header(7, get_lang('Status'));
 	$table->set_header(8, get_lang('Active'),true, 'width="15px"');
 	$table->set_header(9, get_lang('Action'), false,'width="220px"');
-	
+
 	$table->set_column_filter(3, 'user_filter');
 	$table->set_column_filter(4, 'user_filter');
-	
+
 	$table->set_column_filter(6, 'email_filter');
 	$table->set_column_filter(7, 'status_filter');
 	$table->set_column_filter(8, 'active_filter');

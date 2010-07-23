@@ -241,7 +241,7 @@ class FCKeditor
 
 		foreach ( $this->Config as $sKey => $sValue )
 		{
-			if ( $bFirst == false ) {
+			if ( !$bFirst ) {
 				$sParams .= '&amp;' ;
 			} else {
 				$bFirst = false ;
@@ -494,7 +494,7 @@ class FCKeditor
 					$current_session_id = api_get_session_id();
 					if($current_session_id==0)
 					{
-						
+
 						$config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 						$config['CreateDocumentDir'] = $relative_path_prefix.'courses/'.api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 						$config['BaseHref'] = $script_path;

@@ -135,9 +135,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	$default_values = array();
 	foreach($settings as $row) {
 		// Settings to avoid
-		$rows_to_avoid = array('search_enabled', 'gradebook_enable');		
+		$rows_to_avoid = array('search_enabled', 'gradebook_enable');
 		if (in_array($row['variable'], $rows_to_avoid)) { continue; }
-		
+
 		$anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
 		$form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
 
@@ -147,12 +147,12 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 			$form->addElement('style_submit_button', null,get_lang('SaveSettings'), 'class="save"');
 			$form->addElement('html','</div>');
 		}
-		
+
 		$i++;
 
 		$form->addElement('header', null, get_lang($row['title']));
 
-		if ($row['access_url_changeable']=='1' && $_configuration['multiple_access_urls']==true) {
+		if ($row['access_url_changeable'] == '1' && $_configuration['multiple_access_urls']) {
 			$form->addElement('html', '<div style="float:right;">'.Display::return_icon('shared_setting.png',get_lang('SharedSettingIconComment')).'</div>');
 		}
 
@@ -253,7 +253,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
  					if (api_get_setting('allow_social_tool') == 'true') {
  						if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_profile') {continue;}
  					}
- 					
+
  					//hiding the gradebook option
  					if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_gradebook') {continue;}
 

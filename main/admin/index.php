@@ -14,6 +14,9 @@ $cidReset=true;
 // including some necessary chamilo files
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'security.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
+require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -46,8 +49,8 @@ if(api_is_platform_admin()) {
 		Display :: display_confirmation_message(get_lang('VersionCheckEnabled'));
 	}
 
-	/*	
-			MAIN SECTION	
+	/*
+			MAIN SECTION
 	*/
 	$keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']));
 }
@@ -112,7 +115,7 @@ if(api_is_platform_admin()) {
 				<button class="search" type="submit"> <?php echo get_lang('Search');?></button>
 			</form>
 		</div>
-	<ul>		
+	<ul>
 		<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
 		<li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
 		<li><a href="course_export.php"><?php echo get_lang('ExportCourses'); ?></a></li>
@@ -152,7 +155,7 @@ if(api_is_platform_admin()) {
 	  <?php } ?>
 	  <?php
 		if(!empty($_configuration['multiple_access_urls'])) {
-			if (api_is_global_platform_admin()) { 
+			if (api_is_global_platform_admin()) {
 	    		echo '<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
 			}
 	  }
@@ -164,7 +167,7 @@ if(api_is_platform_admin()) {
   	  if (api_get_setting('allow_terms_conditions')=='true') {
 		  	echo '<li><a href="legal_add.php">'.get_lang('TermsAndConditions').'</a></li>';
 	  }
-	  
+
 	  //@todo Translations needed in order to see a better explanation of issues
 	  echo '<li><a href="system_status.php">'.get_lang('SystemStatus').'</a></li>';
 
@@ -285,7 +288,7 @@ if (api_is_platform_admin()) {
   ?>
  </ul>
 </div>
-<?php 
+<?php
 }
 
 /**
@@ -360,6 +363,7 @@ function register_site()
 	// reload the settings
 }
 
+
 /**
 * Check if the current installation is up to date
 * The code is borrowed from phpBB and slighlty modified
@@ -376,18 +380,13 @@ function check_system_version2()
 	if (ini_get('allow_url_fopen')==1)
 	{
 		// the number of courses
-		$sql="SELECT count(code) FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
-		$result=Database::query($sql);
-		$row = Database::fetch_array($result);
-		$number_of_courses = $row[0];
+	    $number_of_courses = statistics::count_courses();
 
 		// the number of users
-		$sql="SELECT count(user_id) FROM ".Database::get_main_table(TABLE_MAIN_USER);
-		$result=Database::query($sql);
-		$row = Database::fetch_array($result);
-		$number_of_users = $row[0];
+	   	$number_of_users = statistics::count_users();
 
 		$version_url= 'http://version.chamilo.org/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(api_get_setting('emailAdministrator')).'&version='.urlencode($system_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.api_get_setting('donotlistcampus').'&organisation='.urlencode(api_get_setting('Institution')).'&adminname='.urlencode(api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
+
 		$handle=@fopen($version_url,'r');
 		if ($handle !== false) {
 			$version_info=trim(@fread($handle, 1024));

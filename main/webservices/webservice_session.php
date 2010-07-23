@@ -13,7 +13,7 @@ class WSSession extends WS {
 
 	/**
 	 * Creates a session (helper method)
-	 * 
+	 *
 	 * @param string Name of the session
 	 * @param string Start date, use the 'YYYY-MM-DD' format
 	 * @param string End date, use the 'YYYY-MM-DD' format
@@ -64,10 +64,10 @@ class WSSession extends WS {
 			return $session_id;
 		}
 	}
-	
+
 	/**
 	 * Creates a session
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Name of the session
 	 * @param string Start date, use the 'YYYY-MM-DD' format
@@ -96,10 +96,10 @@ class WSSession extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Deletes a session (helper method)
-	 * 
+	 *
 	 * @param string Session id field name
 	 * @param string Session id value
 	 * @return mixed True in case of success, WSError otherwise
@@ -113,10 +113,10 @@ class WSSession extends WS {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Deletes a session
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Session id field name
 	 * @param string Session id value
@@ -132,10 +132,10 @@ class WSSession extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Edits a session (helper method)
-	 * 
+	 *
 	 * @param string Name of the session
 	 * @param string Start date, use the 'YYYY-MM-DD' format
 	 * @param string End date, use the 'YYYY-MM-DD' format
@@ -188,10 +188,10 @@ class WSSession extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Edits a session
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Name of the session
 	 * @param string Start date, use the 'YYYY-MM-DD' format
@@ -217,10 +217,10 @@ class WSSession extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Change user subscription (helper method)
-	 * 
+	 *
 	 * @param string User id field name
 	 * @param string User id value
 	 * @param string Session id field name
@@ -241,18 +241,18 @@ class WSSession extends WS {
 					SessionManager::suscribe_users_to_session($session_id, array($user_id));
 				} else {
 					$result = SessionManager::unsubscribe_user_from_session($session_id, $user_id);
-					if($result == false) {
+					if (!$result) {
 						return new WSError(303, 'There was an error unsubscribing this user from the session');
 					}
 				}
 				return true;
 			}
-		}		
+		}
 	}
-	
+
 	/**
 	 * Subscribe user to a session
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string User id field name
 	 * @param string User id value
@@ -270,10 +270,10 @@ class WSSession extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Subscribe user to a session
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string User id field name
 	 * @param string User id value
@@ -291,10 +291,10 @@ class WSSession extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Change course subscription
-	 * 
+	 *
 	 * @param string Course id field name
 	 * @param string Course id value
 	 * @param string Session id field name
@@ -317,7 +317,7 @@ class WSSession extends WS {
 					return true;
 				} else {
 					$result = SessionManager::unsubscribe_course_from_session($session_id, $course_id);
-					if($result == true) {
+					if ($result) {
 						return true;
 					} else {
 						return new WSError(304, 'Error unsubscribing course from session');
@@ -327,10 +327,10 @@ class WSSession extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Subscribe course to session
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Course id field name
 	 * @param string Course id value
@@ -348,10 +348,10 @@ class WSSession extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Unsubscribe course from session
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Course id field name
 	 * @param string Course id value
@@ -369,5 +369,5 @@ class WSSession extends WS {
 			}
 		}
 	}
-	
+
 }

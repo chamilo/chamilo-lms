@@ -164,7 +164,7 @@ class GlossaryManager {
 			return 0;
 		}
 		$row = Database::fetch_array($res_max);
-		if (!empty($row[0])) { 
+		if (!empty($row[0])) {
 			return $row[0];
 		}
 		return 0;
@@ -218,8 +218,8 @@ class GlossaryManager {
 				   FROM $t_glossary g
 				   WHERE g.glossary_id = '".intval($glossary_id)."' ";
 		$result = Database::query($sql);
-		if ($result === false || Database::num_rows($result) != 1) { 
-			return false; 
+		if ($result === false || Database::num_rows($result) != 1) {
+			return false;
 		}
 		return Database::fetch_array($result);
 	}
@@ -251,7 +251,7 @@ class GlossaryManager {
 	}
 
 	/**
-	 * This is the main function that displays the list or the table with all 
+	 * This is the main function that displays the list or the table with all
 	 * the glossary terms
 	 * @param  string  View ('table' or 'list'). Optional parameter. Defaults to 'table' and prefers glossary_view from the session by default.
 	 * @return void
@@ -259,10 +259,10 @@ class GlossaryManager {
 	 * @version januari 2009, dokeos 1.8.6
 	 */
 	function display_glossary($view = 'table') {
-		// This function should always be called with the corresponding 
+		// This function should always be called with the corresponding
 		// parameter for view type. Meanwhile, use this cheap trick.
-		if (empty ($_SESSION['glossary_view'])) { 
-			$_SESSION['glossary_view'] = $view; 
+		if (empty ($_SESSION['glossary_view'])) {
+			$_SESSION['glossary_view'] = $view;
 		}
 		// action links
 		echo '<div class="actions" style="margin-bottom:10px">';
@@ -326,7 +326,7 @@ class GlossaryManager {
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 		$session_id = intval($session_id);
 		$sql_filter = api_get_session_condition($session_id);
-		$sql = "SELECT count(glossary_id) as total FROM $t_glossary ". 
+		$sql = "SELECT count(glossary_id) as total FROM $t_glossary ".
 		          " WHERE 1=1 $sql_filter";
 		$res = Database::query($sql);
 		if ($res === false) { return 0; }
@@ -400,7 +400,7 @@ class GlossaryManager {
 			if (api_is_allowed_to_edit(null,true)) {
 				$array[5] = $data[5];
 			}
-			
+
 			// Date treatment for timezones
 			$array[3] = api_get_local_time($array[3], null, date_default_timezone_get());
 			$array[4] = api_get_local_time($array[4], null, date_default_timezone_get());
@@ -521,7 +521,7 @@ class GlossaryManager {
 		$res = Database::query($sql);
 		$found = false;
 		while ($row = Database::fetch_array($res)) {
-			if ($found == true and empty($next_id))	{
+			if ($found && empty($next_id))	{
 				$next_id = $row['glossary_id'];
 				$next_display_order = $row['display_order'];
 			}

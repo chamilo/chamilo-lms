@@ -73,7 +73,7 @@ if ($_POST['formSent'] )
 					ON $tbl_user.user_id = $tbl_session.id_coach ORDER BY id";
 
 		global $_configuration;
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
@@ -279,7 +279,7 @@ Display::display_header($tool_name);
 //select of sessions
 $sql = "SELECT id, name FROM $tbl_session ORDER BY name";
 global $_configuration;
-if ($_configuration['multiple_access_urls']==true) {
+if ($_configuration['multiple_access_urls']) {
 	$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1){

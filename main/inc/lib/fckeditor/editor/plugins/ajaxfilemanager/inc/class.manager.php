@@ -202,7 +202,7 @@ class manager
 
 						}
 
-						if(ereg($deleted_by_dokeos_folder, $path)|| ereg($css_folder_dokeos, $path) || ereg($hotpotatoes_folder_dokeos, $path) || ereg($chat_files_dokeos, $path) || $hide_doc_group==true || $file[0]=='.')
+						if(ereg($deleted_by_dokeos_folder, $path)|| ereg($css_folder_dokeos, $path) || ereg($hotpotatoes_folder_dokeos, $path) || ereg($chat_files_dokeos, $path) || $hide_doc_group || $file[0]=='.')
 						{
 							$this->currentFolderInfo['subdir']=$this->currentFolderInfo['subdir']-1;
 						}

@@ -87,10 +87,10 @@ if (!empty($msg)) {
 <br />
 <?php if (!empty($course_list)) { ?>
 <div>
-<input id="all-courses" class="checkbox" type="radio" value="1" name="select_type" <?php if(!$formSent || ($formSent && $select_type == 1)) echo 'checked="checked"'; ?> onclick="if(this.checked==true){document.getElementById('div-course-list').style.display='none';}"/>
+<input id="all-courses" class="checkbox" type="radio" value="1" name="select_type" <?php if(!$formSent || ($formSent && $select_type == 1)) echo 'checked="checked"'; ?> onclick="javascript: if(this.checked){document.getElementById('div-course-list').style.display='none';}"/>
 <label for="all-courses"><?php echo get_lang('ExportAllCoursesList')?></label>
 <br/>
-<input id="select-courses" class="checkbox" type="radio" value="2" name="select_type" <?php if($formSent && $select_type == 2) echo 'checked="checked"'; ?> onclick="if(this.checked==true){document.getElementById('div-course-list').style.display='block';}"/>
+<input id="select-courses" class="checkbox" type="radio" value="2" name="select_type" <?php if($formSent && $select_type == 2) echo 'checked="checked"'; ?> onclick="javascript: if(this.checked){document.getElementById('div-course-list').style.display='block';}"/>
 <label for="select-courses"><?php echo get_lang('ExportSelectedCoursesFromCoursesList')?></label>
 </div>
 <br />

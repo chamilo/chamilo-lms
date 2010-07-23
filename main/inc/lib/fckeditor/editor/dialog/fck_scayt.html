@@ -325,13 +325,12 @@
 									var that = get.wrap(this);
 									var isCheck = that.getAttr("checked");
 									//console.info(isCheck)
-		                            if ( isCheck == false ) {
-
-										//that.setAttr("checked",false);
-										options[ this.name ] = 0;
-		                            }else{
-		                                //that.setAttr("checked",true);
+		                            if ( isCheck ) {
+		                                //that.setAttr("checked", true);
 										options[ this.name ] = 1;
+		                            } else {
+										//that.setAttr("checked", false);
+										options[ this.name ] = 0;
 		                            }
 									//console.info(options)
 		                        });

@@ -174,67 +174,67 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	if (isset($_user['user_id'])) {
 		unset($_user['user_id']);
 	}
-	
+
 	//$_SESSION['info_current_user'][1] is user name
 	//$_SESSION['info_current_user'][2] is current password encrypted
 	//$_SESSION['update_term_and_condition'][1] is current user id, of user in session
 	if (api_get_setting('allow_terms_conditions')=='true') {
 		if (isset($_POST['login']) && isset($_POST['password']) && isset($_SESSION['update_term_and_condition'][1])) {
-	
+
 		 	$user_id=$_SESSION['update_term_and_condition'][1];	// user id
 			// update the terms & conditions
-	
+
 			//verify type of terms and conditions
 			$info_legal = explode(':',$_POST['legal_info']);
 			$legal_type=LegalManager::get_type_of_terms_and_conditions($info_legal[0],$info_legal[1]);
-	
+
 			//is necessary verify check
 			if ($legal_type==1) {
 				if ((isset($_POST['legal_accept']) && $_POST['legal_accept']=='1')) {
 					$legal_option=true;
 				} else {
 					$legal_option=false;
-	
+
 				}
 			}
 			//no is check option
 			if ($legal_type==0) {
 				$legal_option=true;
 			}
-	
+
 			if (isset($_POST['legal_accept_type']) && $legal_option===true) {
 				$cond_array = explode(':',$_POST['legal_accept_type']);
 				if (!empty($cond_array[0]) && !empty($cond_array[1])){
 					$time = time();
 					$condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
 					UserManager::update_extra_field_value($user_id,'legal_accept',$condition_to_save);
-	
+
 				}
 			}
 		}
 	}
-	
+
 	if ((isset($_POST['login']) && isset($_POST['password']))) {
 		// $login && $password are given to log in
 		$login = $_POST['login'];
 		$password = $_POST['password'];
-	
+
 	    //lookup the user in the main database
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	    $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
 	            FROM $user_table
 	            WHERE username = '".trim(addslashes($login))."'";
 	    $result = Database::query($sql);
-	
+
 		if (Database::num_rows($result) > 0) {
 	        $uData = Database::fetch_array($result);
-	
+
 	        if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
 	            //the authentification of this user is managed by Chamilo itself
 	            $password = trim(stripslashes($password));
 	            // determine if the password needs to be encrypted before checking
 	            // $userPasswordCrypted is set in an external configuration file
-	
+
 	            /*if ($userPasswordCrypted) {
 	            	$password = md5($password);
 	            } */
@@ -260,10 +260,10 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 							unset($_SESSION['update_term_and_condition']);
 							unset($_SESSION['info_current_user']);
 						}
-	
+
 					}
 				}
-	
+
 	           // Check the user's password
 	            if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
 	            	// Check if the account is active (not locked)
@@ -271,29 +271,29 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	            		// Check if the expiration date has not been reached
 	            		if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
 	            			global $_configuration;
-	            			
-	            			if ($_configuration['multiple_access_urls'] == true) { 
+
+	            			if ($_configuration['multiple_access_urls']) {
 								$admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-								
-	            				//Check if user is an admin 
+
+	            				//Check if user is an admin
 								$sql = "SELECT user_id FROM $admin_table
 							            WHERE user_id = '".trim(addslashes($uData['user_id']))."' LIMIT 1";
 							    $result = Database::query($sql);
-							    
-							    $my_user_is_admin = false;							
+
+							    $my_user_is_admin = false;
 							    if (Database::num_rows($result) > 0) {
 									$my_user_is_admin = true;
 							    }
-							    
+
 								// This user is subscribed in these sites => $my_url_list
 					            $my_url_list = api_get_access_url_from_user($uData['user_id']);
-					            
+
 					            //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
 								//Getting the current access_url_id of the platform
 	                			$current_access_url_id = api_get_current_access_url_id();
-					            
-					            if ($my_user_is_admin === false) {									                				
-	
+
+					            if ($my_user_is_admin === false) {
+
 	                				if (is_array($my_url_list) && count($my_url_list)>0 ){
 	                					// the user have the permissions to enter at this site
 	                					if (in_array($current_access_url_id, $my_url_list)) {
@@ -317,7 +317,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 					            	if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
 					            		$_user['user_id'] = $uData['user_id'];
 										api_session_register('_user');
-										event_login();				            	
+										event_login();
 					            	} else {
 					            		//This means a secondary admin wants to login so we check as he's a normal user
 					            		if (in_array($current_access_url_id, $my_url_list)) {
@@ -356,7 +356,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	                header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
 	                exit;
 	            }
-	
+
 	            if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id']) {
 	                //first login for a not self registred
 	                //e.g. registered by a teacher
@@ -374,7 +374,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 				// see configuration.php to define these
 	            include_once($extAuthSource[$key]['login']);
 	            /* >>>>>>>> External authentication modules <<<<<<<<< */
-	        } else { // no standard Chamilo login - try external authentification        
+	        } else { // no standard Chamilo login - try external authentification
 	        	//huh... nothing to do... we shouldn't get here
 	        	error_log('Chamilo Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
 	        }
@@ -394,7 +394,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	    	// login failed, Database::num_rows($result) <= 0
 	        $loginFailed = true;  // Default initialisation. It could
 	                              // change after the external authentication
-	
+
 	        /*
 	         * In this section:
 	         * there is no entry for the $login user in the Chamilo
@@ -411,7 +411,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 	         * responsability of the external login script
 	         * to provide this $_user['user_id'].
 	         */
-	
+
 	        if (isset($extAuthSource) && is_array($extAuthSource)) {
 	            foreach($extAuthSource as $thisAuthSource) {
 	            	if (!empty($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
@@ -466,9 +466,9 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		            $user_table = Database::get_main_table(TABLE_MAIN_USER);
 		            $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
 		                    FROM $user_table
-		                    WHERE username = '".trim(addslashes($sso['username']))."'";	
+		                    WHERE username = '".trim(addslashes($sso['username']))."'";
 		            $result = Database::query($sql);
-		
+
 					if (Database::num_rows($result) > 0) {
 						$uData = Database::fetch_array($result);
 						//Check the user's password
@@ -486,24 +486,24 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 									if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
 		                            	global $_configuration;
 		                            	//If Multiple URL is enabled
-										if ($_configuration['multiple_access_urls'] == true) {
+										if ($_configuration['multiple_access_urls']) {
 		                                  	$admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-											//Check if user is an admin 
+											//Check if user is an admin
 											$sql = "SELECT user_id FROM $admin_table
 										            WHERE user_id = '".trim(addslashes($uData['user_id']))."' LIMIT 1";
-										    $result = Database::query($sql);									    
-										    $my_user_is_admin = false;							
+										    $result = Database::query($sql);
+										    $my_user_is_admin = false;
 										    if (Database::num_rows($result) > 0) {
 												$my_user_is_admin = true;
 										    }
-										    		
+
 										    //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
 											//Getting the current access_url_id of the platform
-		                                    $current_access_url_id = api_get_current_access_url_id();			                                      
-		                                      					            
+		                                    $current_access_url_id = api_get_current_access_url_id();
+
 										    // my user is subscribed in these sites => $my_url_list
 			                                $my_url_list = api_get_access_url_from_user($uData['user_id']);
-			                                      
+
 											if ($my_user_is_admin === false) {
 			                                	if (is_array($my_url_list) && count($my_url_list)>0 ) {
 			                                          if (in_array($current_access_url_id, $my_url_list)) {
@@ -511,7 +511,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 			                                              $_user['user_id'] = $uData['user_id'];
 			                                              api_session_register('_user');
 			                                              event_login();
-			
+
 			                                              // Redirect to homepage
 			                                              $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
 			                                              header('Location: '. $sso_target);
@@ -533,7 +533,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 										    	if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal portal
 										        	$_user['user_id'] = $uData['user_id'];
 													api_session_register('_user');
-													event_login();				            	
+													event_login();
 										        } else {
 										        	//This means a secondary admin wants to login so we check as a normal user
 										        	if (in_array($current_access_url_id, $my_url_list)) {
@@ -626,10 +626,10 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		        	if (Database::num_rows($result)>0) {
 		        		//$row = Database::fetch_array($res);
 			            $uData = Database::fetch_array($result);
-	
+
 			            if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
 			                //the authentification of this user is managed by Chamilo itself
-	
+
 		                	// check if the account is active (not locked)
 		                	if ($uData['active']=='1') {
 		                		// check if the expiration date has not been reached
@@ -668,16 +668,16 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 			}
 		}
 	}
-	
+
 	//    else {} => continue as anonymous user
 	$uidReset = true;
-	
+
 	//    $cidReset = true;
 	//    $gidReset = true;
 } // end else
 
 //Now check for anonymous user mode
-if (isset($use_anonymous) && $use_anonymous == true) {
+if ($use_anonymous) {
 	//if anonymous mode is set, then try to set the current user as anonymous
 	//if he doesn't have a login yet
 	api_set_anonymous();
@@ -691,7 +691,7 @@ if (isset($use_anonymous) && $use_anonymous == true) {
 if (!empty($cDir)) {
 	require_once api_get_path(LIBRARY_PATH).'course.lib.php';
     $c = CourseManager::get_course_id_from_path($cDir);
-    if ($c != false) { $cidReq = $c; }
+    if ($c) { $cidReq = $c; }
 }
 
 // if the requested course is different from the course in session
@@ -816,7 +816,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
             api_session_register('_course');
             //@TODO real_cid should be cid, for working with numeric course id
             api_session_register('_real_cid');
-            
+
             // if a session id has been given in url, we store the session
 			if (api_get_setting('use_session_mode')=='true') {
 				// Database Table Definitions
@@ -835,15 +835,15 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 					api_session_unregister('id_session');
 				}
 			}
-			
+
 			if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
 	            //We add a new record in the course tracking table
 	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 				$time = api_get_datetime();
 		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
-					 "VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1', ".api_get_session_id().")";				
+					 "VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1', ".api_get_session_id().")";
 				Database::query($sql);
-			}			
+			}
         } else {
             //exit("WARNING UNDEFINED CID !! ");
             header('location:'.api_get_path(WEB_PATH));
@@ -872,7 +872,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 		}
 
 		if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
-			
+
 			$course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
    			if (isset($_configuration['session_lifetime'])) {
    				$session_lifetime	= $_configuration['session_lifetime'];
@@ -880,25 +880,25 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 				$session_lifetime	= 3600;
   			}
 
-			$course_code=$_course['sysCode'];			
-			$time = api_get_datetime();			
-			
-			//We select the last record for the current course in the course tracking table			
-			// But only if the login date is < thant now + max_life_time		
-			
-			$sql="SELECT course_access_id FROM $course_tracking_table 		
-			
+			$course_code=$_course['sysCode'];
+			$time = api_get_datetime();
+
+			//We select the last record for the current course in the course tracking table
+			// But only if the login date is < thant now + max_life_time
+
+			$sql="SELECT course_access_id FROM $course_tracking_table
+
 				WHERE user_id=".intval($_user ['user_id'])."
-						AND course_code='$course_code'					
-						AND login_course_date > now() - INTERVAL $session_lifetime SECOND 
+						AND course_code='$course_code'
+						AND login_course_date > now() - INTERVAL $session_lifetime SECOND
 						ORDER BY login_course_date DESC LIMIT 0,1";
 				$result=Database::query($sql,__FILE__,__LINE__);
-						
-			if (Database::num_rows($result)>0) {			
-							
+
+			if (Database::num_rows($result)>0) {
+
 				$i_course_access_id = Database::result($result,0,0);
-				//We update the course tracking table	
-			
+				//We update the course tracking table
+
 				$sql="UPDATE $course_tracking_table " .
 						"SET logout_course_date = '$time', " .
 						"counter = counter+1 " .
@@ -910,7 +910,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 					"VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1')";
 				Database::query($sql,__FILE__,__LINE__);
 			}
-   	 	}   
+   	 	}
 	}
 }
 

@@ -772,7 +772,7 @@ this.areas[id].style.borderStyle="solid";
 this.areas[id].style.borderColor=this.config.CL_NORM_SHAPE;
 }else{
 if(this.areas[id].shape=="circle"||this.areas[id].shape=="polygon"){
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[id].style.borderWidth="1px";
 this.areas[id].style.borderStyle="solid";
 this.areas[id].style.borderColor=this.config.CL_NORM_BOX;
@@ -852,7 +852,7 @@ if(!this.areas[id].label){
 return;
 }
 try{
-if(this.config.label==""||this.config.label==false){
+if(this.config.label=="" || !this.config.label){
 this.areas[id].label.innerHTML="";
 this.areas[id].label.style.display="none";
 }else{
@@ -874,7 +874,7 @@ this.log("Error putting label",1);
 };
 imgmap.prototype._puthint=function(id){
 try{
-if(this.config.hint==""||this.config.hint==false){
+if(this.config.hint=="" || !this.config.hint){
 this.areas[id].title="";
 this.areas[id].alt="";
 }else{
@@ -1411,7 +1411,7 @@ this.is_drawing=this.DM_POLYGON_DRAW;
 this.statusMessage(this.strings["POLYGON_DRAW"]);
 this.areas[this.currentid].style.left=x+"px";
 this.areas[this.currentid].style.top=y+"px";
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[this.currentid].style.borderWidth="1px";
 this.areas[this.currentid].style.borderStyle="dotted";
 this.areas[this.currentid].style.borderColor=this.config.CL_DRAW_BOX;
@@ -1439,7 +1439,7 @@ this.is_drawing=this.DM_SQUARE_DRAW;
 this.statusMessage(this.strings["SQUARE_DRAW"]);
 this.areas[this.currentid].style.left=x+"px";
 this.areas[this.currentid].style.top=y+"px";
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[this.currentid].style.borderWidth="1px";
 this.areas[this.currentid].style.borderStyle="dotted";
 this.areas[this.currentid].style.borderColor=this.config.CL_DRAW_BOX;
@@ -1472,7 +1472,7 @@ this.areas[id].style.borderStyle="solid";
 this.areas[id].style.borderColor=this.config.CL_HIGHLIGHT_SHAPE;
 }else{
 if(this.areas[id].shape=="circle"||this.areas[id].shape=="polygon"){
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[id].style.borderWidth="1px";
 this.areas[id].style.borderStyle="solid";
 this.areas[id].style.borderColor=this.config.CL_HIGHLIGHT_BOX;
@@ -1503,7 +1503,7 @@ this.areas[id].style.borderStyle="solid";
 this.areas[id].style.borderColor=this.config.CL_NORM_SHAPE;
 }else{
 if(this.areas[id].shape=="circle"||this.areas[id].shape=="polygon"){
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[id].style.borderWidth="1px";
 this.areas[id].style.borderStyle="solid";
 this.areas[id].style.borderColor=this.config.CL_NORM_BOX;
@@ -1652,7 +1652,7 @@ if(_9e<6&&_9f>6){
 if(this.areas[this.currentid].shape=="circle"){
 this.is_drawing=this.DM_SQUARE_RESIZE_LEFT;
 this.statusMessage(this.strings["SQUARE_RESIZE_LEFT"]);
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[this.currentid].style.borderColor=this.config.CL_DRAW_BOX;
 }
 }else{
@@ -1667,7 +1667,7 @@ if(_9e>parseInt(this.areas[this.currentid].style.width)-6&&_9f>6){
 if(this.areas[this.currentid].shape=="circle"){
 this.is_drawing=this.DM_SQUARE_RESIZE_RIGHT;
 this.statusMessage(this.strings["SQUARE_RESIZE_RIGHT"]);
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[this.currentid].style.borderColor=this.config.CL_DRAW_BOX;
 }
 }else{
@@ -1682,7 +1682,7 @@ if(_9e>6&&_9f<6){
 if(this.areas[this.currentid].shape=="circle"){
 this.is_drawing=this.DM_SQUARE_RESIZE_TOP;
 this.statusMessage(this.strings["SQUARE_RESIZE_TOP"]);
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[this.currentid].style.borderColor=this.config.CL_DRAW_BOX;
 }
 }else{
@@ -1697,7 +1697,7 @@ if(_9f>parseInt(this.areas[this.currentid].style.height)-6&&_9e>6){
 if(this.areas[this.currentid].shape=="circle"){
 this.is_drawing=this.DM_SQUARE_RESIZE_BOTTOM;
 this.statusMessage(this.strings["SQUARE_RESIZE_BOTTOM"]);
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[this.currentid].style.borderColor=this.config.CL_DRAW_BOX;
 }
 }else{
@@ -1711,7 +1711,7 @@ this.areas[this.currentid].style.borderColor=this.config.CL_DRAW_SHAPE;
 if(this.areas[this.currentid].shape=="circle"){
 this.is_drawing=this.DM_SQUARE_MOVE;
 this.statusMessage(this.strings["SQUARE_MOVE"]);
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[this.currentid].style.borderColor=this.config.CL_DRAW_BOX;
 }
 this.memory[this.currentid].rdownx=_9e;
@@ -1731,7 +1731,7 @@ this.memory[this.currentid].ypoints[i]=this.areas[this.currentid].ypoints[i];
 }
 this.is_drawing=this.DM_POLYGON_MOVE;
 this.statusMessage(this.strings["POLYGON_MOVE"]);
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[this.currentid].style.borderColor=this.config.CL_DRAW_BOX;
 }
 this.memory[this.currentid].rdownx=_9e;
@@ -1752,7 +1752,7 @@ this.areas[this.currentid].style.borderWidth="1px";
 this.areas[this.currentid].style.borderStyle="dotted";
 }else{
 if(this.areas[this.currentid].shape=="circle"||this.areas[this.currentid].shape=="polygon"){
-if(this.config.bounding_box==true){
+if(this.config.bounding_box){
 this.areas[this.currentid].style.borderWidth="1px";
 this.areas[this.currentid].style.borderStyle="dotted";
 }

@@ -326,7 +326,7 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') { //Sends the 
     </script>";
 }
 
-if ($_configuration['live_exercise_tracking'] == true && $exerciseType == ONE_PER_PAGE && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+if ($_configuration['live_exercise_tracking'] && $exerciseType == ONE_PER_PAGE && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
     $query = 'SELECT * FROM ' . $stat_table . $condition;
     $result_select = Database::query($query);
     if (Database :: num_rows($result_select) > 0) {
@@ -398,7 +398,7 @@ if ($formSent) {
                 $exerciseResult[$key] = $choice[$key];
 
                 //saving each question
-                if ($_configuration['live_exercise_tracking'] == true && $exerciseType == ONE_PER_PAGE && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if ($_configuration['live_exercise_tracking'] && $exerciseType == ONE_PER_PAGE && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
 
                     $nro_question = $questionNum; // - 1;
 
@@ -542,7 +542,7 @@ if ($formSent) {
                                     $correct_tags = array ();
                                     $real_text = array ();
                                     // the loop will stop at the end of the text
-                                    while (1) { 
+                                    while (1) {
                                         // quits the loop if there are no more blanks (detect '[')
                                         if (($pos = api_strpos($temp, '[')) === false) {
                                             // adds the end of the text
@@ -585,7 +585,7 @@ if ($formSent) {
 
                                         if (!$switchable_answer_set) {
                                         	//needed to parse ' and " characters
-                                        	$user_tags[$i] = stripslashes($user_tags[$i]);                                        	
+                                        	$user_tags[$i] = stripslashes($user_tags[$i]);
                                             if ($correct_tags[$i] == $user_tags[$i]) {
                                                 // gives the related weighting to the student
                                                 $questionScore += $answerWeighting[$i];
@@ -1067,7 +1067,7 @@ if (isset($exerciseId) && !empty($exerciseId)) {
 	$sql="SELECT max_score FROM $TBL_LP_ITEM
 		  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
 	$result = Database::query($sql);
-	if (Database::num_rows($result) > 0) {		
+	if (Database::num_rows($result) > 0) {
 		$show_quiz_edition = false;
 	}
 }
@@ -1075,14 +1075,14 @@ if (isset($exerciseId) && !empty($exerciseId)) {
 
 // I'm in a preview mode
 if (api_is_course_admin() && $origin != 'learnpath') {
-    echo '<div class="actions">';    
+    echo '<div class="actions">';
     echo '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
     if ($show_quiz_edition) {
     	echo Display :: return_icon('edit.gif', get_lang('ModifyExercise')) . '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">' . get_lang('ModifyExercise') . '</a>';
     } else {
     	echo Display::return_icon('edit_na.gif', get_lang('ModifyExercise')).'<a href="#">'.get_lang('ModifyExercise').'</a>';
     }
-    
+
     echo '</div>';
 }
 
@@ -1139,14 +1139,14 @@ if ($limit_time_exists) {
     $permission_to_start = (($time_now - $exercise_start_time) > 0) ? true : false;
     if ($_SERVER['REQUEST_METHOD'] != 'POST')
         $exercise_timeover = (($time_now - $exercise_end_time) > 0) ? true : false;
-    if ($permission_to_start == false || $exercise_timeover == true) { //
+    if (!$permission_to_start || $exercise_timeover) { //
         if (!api_is_allowed_to_edit(null,true)) {
-            $message_warning = ($permission_to_start == false) ? get_lang('ExerciseNoStartedYet') : get_lang('ReachedTimeLimit');
+            $message_warning = $permission_to_start ? get_lang('ReachedTimeLimit') : get_lang('ExerciseNoStartedYet');
             Display :: display_warning_message(sprintf($message_warning, $exerciseTitle, $exerciseAttempts));
             Display :: display_footer();
             exit;
         } else {
-            $message_warning = ($permission_to_start == false) ? get_lang('ExerciseNoStartedAdmin') : get_lang('ReachedTimeLimitAdmin');
+            $message_warning = $permission_to_start ? get_lang('ReachedTimeLimitAdmin') : get_lang('ExerciseNoStartedAdmin');
             Display :: display_warning_message(sprintf($message_warning, $exerciseTitle, $exerciseAttempts));
         }
     }
@@ -1294,7 +1294,7 @@ if (!empty ($error)) {
 }
 
 
-if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+if ($_configuration['live_exercise_tracking'] && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
 
     if ($table_recorded_not_exist) { //$table_recorded_not_exist
         if ($exercise_row['expired_time'] != 0) {

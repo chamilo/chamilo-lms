@@ -14,7 +14,7 @@ $dbg_local = 0;
 
 api_protect_course_script();
 
-// answer types	
+// answer types
 define('UNIQUE_ANSWER',			1);
 define('MULTIPLE_ANSWER',		2);
 define('FILL_IN_BLANKS',		3);
@@ -349,7 +349,7 @@ if (!empty($choice_value))
                             $poly_answer_compiled = poly_compile($poly_answer,$max_coord);
                             $overlap = poly_touch($poly_user_compiled, $poly_answer_compiled,$max_coord);
 
-                            if ($overlap == false) {
+                            if (!$overlap) {
                             	//all good, no overlap
                                 $next = 1;
                                 continue;

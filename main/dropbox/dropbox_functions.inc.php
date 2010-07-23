@@ -620,9 +620,9 @@ function getUserNameFromId($id) {
 			FROM " . $dropbox_cnf['tbl_user'] . "
 			WHERE user_id='$id'";
     $result = Database::query($sql);
-    $res = Database::fetch_array( $result);
+    $res = Database::fetch_array($result);
 
-    if ( $res == false) return false;
+    if (!$res) return false;
     return stripslashes($res['name']);
 }
 

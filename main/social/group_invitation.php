@@ -125,7 +125,7 @@ function search_users($needle,$type) {
 		}
 
 		global $_configuration;
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
@@ -266,7 +266,7 @@ if ($ajax_search) {
 				ON (gu.user_id = u.user_id) WHERE gu.group_id = $group_id ".
 			$order_clause;
 
-	if ($_configuration['multiple_access_urls']==true) {
+	if ($_configuration['multiple_access_urls']) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1){

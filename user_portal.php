@@ -454,7 +454,7 @@ function display_courses_in_category($user_category_id) {
 			                        AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 			                        AND course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses ";
 
-    if ($_configuration['multiple_access_urls'] == true && $current_url_id!=-1){
+    if ($_configuration['multiple_access_urls'] && $current_url_id != -1){
 		$sql_select_courses .= " AND url.course_code=course.code AND access_url_id='".$current_url_id."'";
     }
     $sql_select_courses .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
@@ -1642,8 +1642,8 @@ echo '<div class="clear"></div>';
 echo '<div id="social_widget">';
 
 echo '  <div id="social_widget_image">';
-if (api_get_setting('allow_social_tool')=='true') {
-	if ($no_image == false) {
+if (api_get_setting('allow_social_tool') == 'true') {
+	if (!$no_image) {
 	    echo '<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
 	} else {
 	    echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';

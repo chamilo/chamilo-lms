@@ -75,7 +75,7 @@ function InnerDialogLoaded()
 
 	function check_for_title()
 	{
-		if(temp==true){
+		if(temp){
 			// This functions shows that you can interact directly with the editor area
 			// DOM. In this way you have the freedom to do anything you want with it.
 

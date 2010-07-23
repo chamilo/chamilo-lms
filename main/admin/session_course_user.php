@@ -153,7 +153,7 @@ $sql_all="SELECT code, title, visual_code, src.id_session " .
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
 	*/
 /*global $_configuration;
-if ($_configuration['multiple_access_urls']==true) {
+if ($_configuration['multiple_access_urls']) {
 	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1){

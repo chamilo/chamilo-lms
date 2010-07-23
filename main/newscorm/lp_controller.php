@@ -71,7 +71,7 @@ if($debug>0) error_log('New LP - Included aiccItem',0);
 require_once('back_compat.inc.php');
 if($debug>0) error_log('New LP - Included back_compat',0);
 
-if ($is_allowed_in_course == false){
+if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
 
@@ -115,9 +115,9 @@ if(isset($_SESSION['lpobject']))
 	}
 }
 
-if($debug>0) error_log('New LP - Passed data remains check',0);
+if ($debug>0) error_log('New LP - Passed data remains check',0);
 
-if($lp_found == false || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
+if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
 	if($debug>0) error_log('New LP - oLP is not object, has changed or refresh been asked, getting new',0);
 	//regenerate a new lp object? Not always as some pages don't need the object (like upload?)
 	if(!empty($_REQUEST['lp_id']) || !empty($myrefresh_id)){
@@ -436,7 +436,7 @@ switch($action)
 		else {
 			$_SESSION['refresh'] = 1;
 
-			if (isset($_POST['submit_button'])) { 
+			if (isset($_POST['submit_button'])) {
 				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'] , $_POST['description'] );
 				$is_success = true;
 			}
@@ -447,7 +447,7 @@ switch($action)
 				//avoids weird behaviours see CT#967
 				$check = Security::check_token('get');
 				if ($check) {
-					$_SESSION['oLP']->move_item($_GET['id'], $_GET['direction']);					
+					$_SESSION['oLP']->move_item($_GET['id'], $_GET['direction']);
 				}
 				Security::clear_token();
 				require('lp_admin_view.php');

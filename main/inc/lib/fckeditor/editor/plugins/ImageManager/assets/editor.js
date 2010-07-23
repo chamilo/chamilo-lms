@@ -19,7 +19,7 @@
 			{
 				editor.window.document.getElementById("imgCanvas").style.display = "block";
 				editor.window.document.getElementById("background").style.display = "none";
-				if (editor.window.watermarkingEnabled == true)
+				if (editor.window.watermarkingEnabled)
 				{
 					editor.window.dd.elements.floater.hide();
 				}
@@ -55,7 +55,7 @@
 				{
 					editor.window.document.getElementById("imgCanvas").style.display = "none";
 					editor.window.document.getElementById("background").style.display = "block";
-					if (editor.window.watermarkingEnabled == true)
+					if (editor.window.watermarkingEnabled)
 					{
 					editor.window.dd.elements.floater.show();
 					editor.window.dd.elements.floater.moveTo(0, 0);

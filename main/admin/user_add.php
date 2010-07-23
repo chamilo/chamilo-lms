@@ -57,7 +57,7 @@ function display_drh_list(){
 	else if (document.getElementById("status_select").value=='.COURSEMANAGER.')
 	{
 		document.getElementById("drh_list").style.display="none";
-		document.getElementById("id_platform_admin").style.display="block";	
+		document.getElementById("id_platform_admin").style.display="block";
 	}
 	else
 	{
@@ -368,7 +368,7 @@ if( $form->validate()) {
 			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 			$email_admin = api_get_setting('emailAdministrator');
 
-			if ($_configuration['multiple_access_urls'] == true) {
+			if ($_configuration['multiple_access_urls']) {
 				$access_url_id = api_get_current_access_url_id();
 				if ($access_url_id != -1) {
 					$url = api_get_access_url($access_url_id);
@@ -384,7 +384,7 @@ if( $form->validate()) {
 		if (isset($user['submit_plus'])) {
 			//we want to add more. Prepare report message and redirect to the same page (to clean the form)
 			$tok = Security::get_token();
-			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded')).'&sec_token='.$tok);			
+			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded')).'&sec_token='.$tok);
 			exit ();
 		} else {
 			$tok = Security::get_token();

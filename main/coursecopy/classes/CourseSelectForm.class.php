@@ -16,7 +16,7 @@ class CourseSelectForm
 	 * @param array $hidden_fiels Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
-	function display_form($course, $hidden_fields = null, $avoid_serialize=false) {		
+	function display_form($course, $hidden_fields = null, $avoid_serialize=false) {
 		$resource_titles[RESOURCE_EVENT] 				= get_lang('Events');
 		$resource_titles[RESOURCE_ANNOUNCEMENT] 		= get_lang('Announcements');
 		$resource_titles[RESOURCE_DOCUMENT] 			= get_lang('Documents');
@@ -61,7 +61,7 @@ class CourseSelectForm
  					if (d.elements[i].type == "checkbox") {
 						var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
  						if( name.indexOf('learnpath') > 0){
- 							if(d.elements[i].checked == true){
+ 							if(d.elements[i].checked){
 	 							setCheckbox('document',true);
 	 							alert(message);
 	 							break;
@@ -92,7 +92,7 @@ class CourseSelectForm
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 
 		if (!empty($hidden_fields['destination_course']) && !empty($hidden_fields['origin_course']) && !empty($hidden_fields['destination_session']) && !empty($hidden_fields['origin_session']) ) {
-			echo '<input type="hidden" name="destination_course" 	value="'.$hidden_fields['destination_course'].'"/>';		
+			echo '<input type="hidden" name="destination_course" 	value="'.$hidden_fields['destination_course'].'"/>';
 			echo '<input type="hidden" name="origin_course" 		value="'.$hidden_fields['origin_course'].'"/>';
 			echo '<input type="hidden" name="destination_session" 	value="'.$hidden_fields['destination_session'].'"/>';
 			echo '<input type="hidden" name="origin_session" 		value="'.$hidden_fields['origin_session'].'"/>';
@@ -110,20 +110,20 @@ class CourseSelectForm
 					case RESOURCE_SURVEYINVITATION:
 					case RESOURCE_SCORM:
 						break;
-					default :					
+					default :
 						echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript: exp('."'$type'".');" />';
 						echo '<b  onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
 						echo '<div id="div_'.$type.'">';
 						echo '<blockquote>';
 						echo "[<a href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a> | <a href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>]";
 						echo '<br />';
-						
+
 						foreach ($resources as $id => $resource) {
 							echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
 							echo ' <label for="resource['.$type.']['.$id.']">';
 							$resource->show();
 							echo '</label>';
-							echo '<br />';							
+							echo '<br />';
 						}
 						echo '</blockquote>';
 						echo '</div>';
@@ -131,7 +131,7 @@ class CourseSelectForm
 				}
 			}
 		}
-		
+
 		if ($avoid_serialize) {
 			//Documents are avoided due the huge amount of memory that the serialize php function "eats" (when there are directories with hundred/thousand of files)
 			// this is a known issue of serialize
@@ -141,7 +141,7 @@ class CourseSelectForm
 		echo '<input type="hidden" name="course" value="'.base64_encode(serialize($course)).'"/>';
 
 		if (is_array($hidden_fields)) {
-			foreach ($hidden_fields as $key => $value) {				
+			foreach ($hidden_fields as $key => $value) {
 				echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
 			}
 		}
@@ -200,7 +200,7 @@ class CourseSelectForm
 	 */
 	function get_posted_course($from='', $session_id = 0, $course_code = '') {
 		$course = unserialize(base64_decode($_POST['course']));
-		
+
 		//Create the resource DOCUMENT objects
 		//Loading the results from the checkboxes of the javascript
 		$resource = $_POST['resource'][RESOURCE_DOCUMENT];
@@ -215,7 +215,7 @@ class CourseSelectForm
 		}
 
 		// Searching the documents resource that have been set to null because $avoid_serialize is true in the display_form() function
-		
+
 		if ($from == 'copy_course') {
 			if (is_array($resource)) {
 				$resource = array_keys($resource);
@@ -357,7 +357,7 @@ class CourseSelectForm
  					if (d.elements[i].type == "checkbox") {
 						var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
  						if( name.indexOf('learnpath') > 0){
- 							if(d.elements[i].checked == true){
+ 							if(d.elements[i].checked){
 	 							setCheckbox('document',true);
 	 							alert(message);
 	 							break;

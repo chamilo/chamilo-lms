@@ -440,7 +440,7 @@ class CourseManager {
 		$sql_course = "SELECT course_code FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res = Database::query($sql_course);
 		$row = Database::fetch_object($res_course);
-		if($row != false) {
+		if ($row) {
 			return $row->course_code;
 		} else {
 			return 0;
@@ -458,7 +458,7 @@ class CourseManager {
 		$sql = "SELECT code FROM course WHERE id = '$id';";
 		$res = Database::query($sql);
 		$row = Database::fetch_object($res);
-		if($row != false) {
+		if ($row) {
 			return $row->code;
 		} else {
 			return null;
@@ -620,7 +620,7 @@ class CourseManager {
 			WHERE course_rel_user.user_id='$user_id' AND course_rel_user.status='1'
 			ORDER BY course.title";
 
-		if ($_configuration['multiple_access_urls'] == true) {
+		if ($_configuration['multiple_access_urls']) {
 			$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
@@ -1502,7 +1502,7 @@ class CourseManager {
 		}
 
 		global $_configuration;
-		if ($_configuration['multiple_access_urls'] == true) {
+		if ($_configuration['multiple_access_urls']) {
 			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 			$url_id = 1;
 			if (api_get_current_access_url_id() != -1) {
@@ -2199,7 +2199,7 @@ class CourseManager {
 			$data = '';
 			foreach ($descriptions as $id => $description) {
 				$data .= '<div class="sectiontitle">';
-				if (api_is_allowed_to_edit() && $action_show == true) {
+				if (api_is_allowed_to_edit() && $action_show) {
 					//delete
 					$data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;">';
 					$data .= Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'));

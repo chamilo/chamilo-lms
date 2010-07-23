@@ -108,7 +108,7 @@ function search_users($needle,$type)
 			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
 					WHERE (username LIKE "'.$needle.'%"
 					OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"   AND user.status<>'.DRH.''. 
+				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"   AND user.status<>'.DRH.''.
 				$order_clause.
 				' LIMIT 11';
 		} else {
@@ -118,7 +118,7 @@ function search_users($needle,$type)
 		}
 
 		global $_configuration;
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
@@ -238,7 +238,7 @@ if($_POST['form_sent']) {
 		SessionManager::suscribe_users_to_session($id_session,$UserList,true,true);
 
 		//adding the session to the access_url_rel_session table
-		
+
 		//if(empty($_GET['add']))
 			//header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
 		//else
@@ -268,7 +268,7 @@ if ($ajax_search) {
 				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
 			    WHERE status<>".DRH." $order_clause";
 
-	if ($_configuration['multiple_access_urls']==true) {
+	if ($_configuration['multiple_access_urls']) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1){
@@ -318,7 +318,7 @@ if ($ajax_search) {
 			}
 
 			$where_filter ='';
-			if ($_configuration['multiple_access_urls']==true) {
+			if ($_configuration['multiple_access_urls']) {
 				if (is_array($final_result) && count($final_result)>0) {
 					$where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
 				} else {
@@ -351,7 +351,7 @@ if ($ajax_search) {
 				WHERE u.status<>".DRH."
 			$order_clause";
 		}
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
@@ -385,7 +385,7 @@ if ($ajax_search) {
 			ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 			WHERE u.status<>".DRH." $order_clause";
 
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){

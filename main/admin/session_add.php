@@ -60,7 +60,7 @@ function search_coachs($needle) {
 				' LIMIT 10';
 
 		global $_configuration;
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
@@ -116,10 +116,10 @@ if ($_POST['formSent']) {
 	$id_session_category = $_POST['session_category'];
 	$id_visibility = $_POST['session_visibility'];
 	$return = SessionManager::create_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility);
-	
+
 	global $_configuration;
 		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			UrlManager::add_session_to_url($return,$access_url_id);
@@ -127,8 +127,8 @@ if ($_POST['formSent']) {
 			// we are filling by default the access_url_rel_session table
 			UrlManager::add_session_to_url($return,1);
 		}
-	
-	
+
+
 	if ($return == strval(intval($return))) {
 		// integer => no error on session creation
 		header('Location: add_courses_to_session.php?id_session='.$return.'&add=true&msg=');
@@ -178,7 +178,7 @@ if (intval($count_users)<50) {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 	$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 	global $_configuration;
-	if ($_configuration['multiple_access_urls']==true) {
+	if ($_configuration['multiple_access_urls']) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1){
@@ -197,7 +197,7 @@ if (intval($count_users)<50) {
 		<option value="<?php echo $enreg['username']; ?>" <?php if($sent && $enreg['user_id'] == $id_coach) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 		<?php endforeach; ?>
 	</select>
-	
+
 	<?php
 	echo Display::return_icon('synthese_view.gif',get_lang('ActivityCoach'));
 } else {
@@ -382,7 +382,7 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
   <td width="40%"><?php echo get_lang('SessionVisibility') ?></td>
   <td width="60%">
   	<select name="session_visibility" style="width:250px;">
-		<?php		
+		<?php
 		$visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('SessionReadOnly'), SESSION_VISIBLE=>get_lang('SessionAccessible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('SessionNotAccessible')));
 		foreach($visibility_list as $key=>$item): ?>
 		<option value="<?php echo $key; ?>" <?php if($item == $visibility_id) echo 'selected="selected"'; ?>><?php echo $item; ?></option>

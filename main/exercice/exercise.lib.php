@@ -211,7 +211,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				// set $debug_mark_answer to true at function start to
 				// show the correct answer with a suffix '-x'
 				$help = $selected = '';
-				if ($debug_mark_answer==true) {
+				if ($debug_mark_answer) {
 					if ($answerCorrect) {
 						$help = 'x-';
 						$selected = 'checked="checked"';
@@ -232,7 +232,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				// set $debug_mark_answer to true at function start to
 				// show the correct answer with a suffix '-x'
 				$help = $selected = '';
-				if ($debug_mark_answer==true) {
+				if ($debug_mark_answer) {
 					if ($answerCorrect) {
 						$help = 'x-';
 						$selected = 'checked="checked"';
@@ -253,7 +253,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				// set $debug_mark_answer to true at function start to
 				// show the correct answer with a suffix '-x'
 				$help = $selected = '';
-				if ($debug_mark_answer==true) {
+				if ($debug_mark_answer) {
 					if ($answerCorrect) {
 						$help = 'x-';
 						$selected = 'checked="checked"';
@@ -291,7 +291,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 						// set $debug_mark_answer to true at function start to
 						// show the correct answer with a suffix '-x'
 						$help = $selected = '';
-						if ($debug_mark_answer==true) {
+						if ($debug_mark_answer) {
 							if ($val['id'] == $answerCorrect) {
 								$help = '-x';
 								$selected = 'selected="selected"';

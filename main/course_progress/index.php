@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action  
+* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.course_progress
 */
@@ -10,7 +10,7 @@
 // name of the language file that needs to be included
 $language_file = array ('course_description', 'pedaSuggest', 'userInfo', 'admin');
 
-// including files 
+// including files
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
@@ -34,8 +34,8 @@ api_protect_course_script(true);
 define('ADD_THEMATIC_PLAN', 6);
 
 // get actions
-$actions = array('thematic_details', 'thematic_list', 'thematic_add', 'thematic_edit', 'thematic_delete', 'moveup', 'movedown', 
-				 'thematic_plan_list', 'thematic_plan_add', 'thematic_plan_edit', 'thematic_plan_delete', 
+$actions = array('thematic_details', 'thematic_list', 'thematic_add', 'thematic_edit', 'thematic_delete', 'moveup', 'movedown',
+				 'thematic_plan_list', 'thematic_plan_add', 'thematic_plan_edit', 'thematic_plan_delete',
 				 'thematic_advance_list', 'thematic_advance_add', 'thematic_advance_edit', 'thematic_advance_delete');
 
 $action  = 'thematic_details';
@@ -83,7 +83,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqu
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
 $htmlHeadXtra[] = '<script language="javascript">
-		
+
 		function datetime_by_attendance(selected_value) {
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
@@ -96,7 +96,7 @@ $htmlHeadXtra[] = '<script language="javascript">
 				}
 			});
 		}
-		
+
 		function update_done_thematic_advance(selected_value) {
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
@@ -108,42 +108,42 @@ $htmlHeadXtra[] = '<script language="javascript">
 				 $("#div_result").html(datos);
 				}
 			});
-			
+
 			// clean all radios
 			for (var i=0; i<$("input[@name=\'done_thematic\']").length;i++) {
-				var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;								
-				$("#td_"+id_radio_thematic).css({"background-color":"#FFF"});				
+				var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;
+				$("#td_"+id_radio_thematic).css({"background-color":"#FFF"});
 			}
-			
-			// set background to previous radios 
+
+			// set background to previous radios
 			for (var i=0; i<$("input[@name=\'done_thematic\']").length;i++) {
-				var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;								
+				var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;
 				$("#td_"+id_radio_thematic).css({"background-color":"#E5EDF9"});
 				if ($("input[@name=\'done_thematic\']").get(i).value == selected_value) {
 					break;
 				}
-			}		
+			}
 
 		}
-				
-		function check_per_attendance(obj) {	
-			if (obj.checked == true) {
+
+		function check_per_attendance(obj) {
+			if (obj.checked) {
 				document.getElementById(\'div_datetime_by_attendance\').style.display=\'block\';
 				document.getElementById(\'div_custom_datetime\').style.display=\'none\';
 			} else {
 				document.getElementById(\'div_datetime_by_attendance\').style.display=\'none\';
 				document.getElementById(\'div_custom_datetime\').style.display=\'block\';
-			}			
+			}
 		}
 
 		function check_per_custom_date(obj) {
-			if (obj.checked == true) {
+			if (obj.checked) {
 				document.getElementById(\'div_custom_datetime\').style.display=\'block\';
 				document.getElementById(\'div_datetime_by_attendance\').style.display=\'none\';
 			} else {
 				document.getElementById(\'div_custom_datetime\').style.display=\'none\';
 				document.getElementById(\'div_datetime_by_attendance\').style.display=\'block\';
-			}			
+			}
 		}
 
 		</script>';
@@ -159,26 +159,26 @@ if ($action == 'thematic_list') {
 }
 if ($action == 'thematic_add') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicSection'));	
+	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicSection'));
 }
 if ($action == 'thematic_edit') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditThematicSection'));	
+	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditThematicSection'));
 }
 if ($action == 'thematic_details') {
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));	
-} 
-if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {	
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));	
-	$interbreadcrumb[] = array ('url' => '#', 'name' => $thematic_data['title'].':'.get_lang('ThematicPlan'));	
+	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));
+}
+if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
+	$interbreadcrumb[] = array ('url' => '#', 'name' => $thematic_data['title'].':'.get_lang('ThematicPlan'));
 }
 if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => $thematic_data['title'].':'.get_lang('ThematicPlan'));	
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => $thematic_data['title'].':'.get_lang('ThematicPlan'));
 	if ($description_type >= ADD_THEMATIC_PLAN) {
 		$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewBloc'));
 	} else {
-		$interbreadcrumb[] = array ('url' => '#', 'name' => $default_thematic_plan_title[$description_type]);	
+		$interbreadcrumb[] = array ('url' => '#', 'name' => $default_thematic_plan_title[$description_type]);
 	}
 }
 if ($action == 'thematic_advance_list' || $action == 'thematic_advance_delete') {
@@ -192,10 +192,10 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 }
 
 // distpacher actions to controller
-switch ($action) {		
+switch ($action) {
 	case 'thematic_add'				:
 	case 'thematic_edit'			:
-	case 'thematic_delete'			:	
+	case 'thematic_delete'			:
 	case 'thematic_delete_select'	:
 	case 'thematic_details'			:
 	case 'moveup'					:
@@ -204,7 +204,7 @@ switch ($action) {
 										break;
 	case 'thematic_plan_list'		:
 	case 'thematic_plan_add'		:
-	case 'thematic_plan_edit'		:	
+	case 'thematic_plan_edit'		:
 	case 'thematic_plan_delete'		:	$thematic_controller->thematic_plan($action);
 										break;
 	case 'thematic_advance_list'	:

@@ -34,7 +34,7 @@ function get_number_of_groups()
 	// adding the filter to see the user's only of the current access_url
 	/*
     global $_configuration;
-    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }
@@ -46,7 +46,7 @@ function get_number_of_groups()
 
     // adding the filter to see the user's only of the current access_url
     /*
-	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
     }*/
 
@@ -76,7 +76,7 @@ function get_group_data($from, $number_of_items, $column, $direction)
 
     // adding the filter to see the user's only of the current access_url
     /*global $_configuration;
-    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }*/
@@ -87,7 +87,7 @@ function get_group_data($from, $number_of_items, $column, $direction)
 	}
 	/*
     // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
     }*/
 
@@ -134,7 +134,7 @@ function get_recent_group_data($from =0 , $number_of_items = 5, $column, $direct
 
     // adding the filter to see the user's only of the current access_url
     /*global $_configuration;
-    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }*/
@@ -145,7 +145,7 @@ function get_recent_group_data($from =0 , $number_of_items = 5, $column, $direct
 	}
 	/*
     // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
     }*/
 

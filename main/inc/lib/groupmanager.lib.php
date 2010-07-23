@@ -211,12 +211,12 @@ class GroupManager {
 		$lastId = Database::insert_id();
 
 		$desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
-		
+
 		$my_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document';
 		$unique_name = create_unexisting_directory($_course,$_user['user_id'],$lastId,NULL,$my_path, $desired_dir_name);
 		/* Stores the directory path into the group table */
 		$sql = "UPDATE ".$table_group." SET   name = '".Database::escape_string($name)."', secret_directory = '".$unique_name."' WHERE id ='".$lastId."'";
-		
+
 		Database::query($sql);
 
 		// create a forum if needed
@@ -389,9 +389,9 @@ class GroupManager {
 
 
 		// define repository for deleted element
-		
+
 		/* Useless code
-		$group_garbage = api_get_path(SYS_ARCHIVE_PATH).$course['path']."/group";		
+		$group_garbage = api_get_path(SYS_ARCHIVE_PATH).$course['path']."/group";
 		var_dump($group_garbage);
 		if (!file_exists($group_garbage))
 			FileManager :: mkdirs($group_garbage, api_get_permissions_for_new_directories());
@@ -401,7 +401,7 @@ class GroupManager {
 		$sql = 'SELECT id, secret_directory, session_id FROM '.$group_table.' WHERE id IN ('.implode(' , ', $group_ids).')';
 		$db_result = Database::query($sql);
 		$forum_ids = array ();
-		
+
 		while ($group = Database::fetch_object($db_result)) {
 			// move group-documents to garbage
 			//$source_directory = api_get_path(SYS_COURSE_PATH).$course['path']."/group/".$group->secret_directory;
@@ -410,22 +410,22 @@ class GroupManager {
 			$destination_dir = api_get_path(SYS_COURSE_PATH).$course['path']."/document".$group->secret_directory.'_DELETED_'.$group->id;
 
 			if (!empty($group->secret_directory)) {
-				//Deleting from document tool 
+				//Deleting from document tool
 				DocumentManager::delete_document($course, $group->secret_directory, $source_directory);
-				
-				if (file_exists($source_directory)) {				
+
+				if (file_exists($source_directory)) {
 					if (api_get_setting('permanently_remove_deleted_files') == 'true') {
 						//Delete
 						 my_delete($source_directory);
 					} else {
-						//Rename				
+						//Rename
 						rename($source_directory, $destination_dir);
 					}
-				}		
+				}
 			}
 			//$forum_ids[] = $group->forum_id;
 		}
-		
+
 		// delete the groups
 		$sql = "DELETE FROM ".$group_table." WHERE id IN ('".implode("' , '", $group_ids)."')";
 		Database::query($sql);
@@ -1082,7 +1082,7 @@ class GroupManager {
 		$users = array ();
 		while ($user = Database::fetch_object($db_result))
 		{
-			if ($id_only==false)
+			if (!$id_only)
 			{
 				$member['user_id'] = $user->user_id;
 				$member['firstname'] = $user->firstname;
@@ -1312,15 +1312,15 @@ class GroupManager {
 		$user_id = Database::escape_string($user_id);
 		$sql = "SELECT group_id FROM $tbl_group WHERE user_id = '$user_id'";
 		$groupres = Database::query($sql);
-	
+
 		// uncommenting causes a bug in Agenda AND announcements because there we check if the return value of this function is an array or not
 		//$groups=array();
-	
+
 		if($groupres) {
 			while ($myrow= Database::fetch_array($groupres))
 				$groups[]=$myrow['group_id'];
 		}
-	
+
 		return $groups;
 	}
 	/*

@@ -160,7 +160,7 @@
 	// save message
 	var message = i18n('File saved.');
 <?php
-	if ($editor->forcedNewName != false)
+	if ($editor->forcedNewName)
 	{
 ?>
 	message += '\n' + i18n('File name was changed into ') +  '<?php echo $editor->forcedNewName; ?>';
@@ -273,10 +273,10 @@
 <script type="text/javascript">
 // <![CDATA[
 
-	if (watermarkingEnabled == true)
+	if (watermarkingEnabled)
 	{
 		SET_DHTML("background"+NO_DRAG, "floater"+CURSOR_MOVE);
-		if (window.firstWatermarkItemUnavailable == true)
+		if (window.firstWatermarkItemUnavailable)
 		{
 			dd.elements.floater.swapImage(eval("window." + watermarkBox.options[0].value + "Preload.src"));
 		}

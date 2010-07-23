@@ -96,15 +96,15 @@ if(is_object($objQuestion)) {
 
 	// question form elements
 	$objQuestion -> createForm ($form,array('Height'=>150));
-	
+
 	// answer form elements
 	$objQuestion -> createAnswersForm ($form);
-	
+
 	// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
-	if ($show_quiz_edition == false) {
+	if (!$show_quiz_edition) {
 		$form->freeze();
 	}
-	
+
 	// submit button is implemented in every question type
 
 	//$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
@@ -116,7 +116,7 @@ if(is_object($objQuestion)) {
 	 * FORM VALIDATION
 	 **********************/
 	if(isset($_POST['submitQuestion']) && $form->validate()) {
-	
+
 		// question
 	    $objQuestion -> processCreation($form,$objExercise);
 	    // answers

@@ -51,7 +51,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;display_tool_options=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('acces_tool.gif', get_lang('EditToolOptions')).' '.get_lang('EditToolOptions').'</a>';
 	}
 
-	if (!$always_show_upload_form && api_is_allowed_to_session_edit(false, true)) {
+	if (!$always_show_upload_form && api_is_allowed_to_session_edit(false, true) && (isset($_GET['curdirpath']) && (!empty($_GET['curdirpath']) && $_GET['curdirpath'] != '.') )) {
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;display_upload_form=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('submit_file.gif', get_lang('UploadADocument')).' '.get_lang('UploadADocument').'</a>';
 	}
 
@@ -245,22 +245,22 @@ function two_digits($number) {
 /**
 * converts 2008-10-06 12:45:00 to -> array($data'year'=>2008,$data'month'=>10 etc...)
 */
-function convert_date_to_array($date, $group) { 
+function convert_date_to_array($date, $group) {
 	$parts = split(' ', $date);
 	$date_parts = split('-', $parts[0]);
-	$date_parts_tmp = array(); 
+	$date_parts_tmp = array();
 	foreach ($date_parts as $item) {
 		$date_parts_tmp[] = intval($item);
 	}
-	
+
 	$time_parts = split(':', $parts[1]);
-	$time_parts_tmp = array(); 
+	$time_parts_tmp = array();
 	foreach ($time_parts as $item) {
 		$time_parts_tmp[] = intval($item);
 	}
-	
-	
-	
+
+
+
 	list($data[$group.'[year]'], $data[$group.'[month]'], $data[$group.'[day]']) = $date_parts_tmp;
 	list($data[$group.'[hour]'], $data[$group.'[minute]']) = $time_parts_tmp;
 	return $data;
@@ -369,7 +369,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 	}
 //	echo $sql_get_publications_list;
-	
+
 	$sql_result = Database::query($sql_get_publications_list);
 	$sql_result_num = Database::query($sql_get_publications_num);
 
@@ -461,7 +461,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 					$group_name[] = FormValidator :: createElement('text', 'dir_name');
 					$form_folder -> addGroup($group_name, 'my_group', get_lang('Title'));
-					
+
 					$form_folder -> addGroupRule('my_group', get_lang('ThisFieldIsRequired'), 'required');
 					$defaults = array('my_group[dir_name]' => html_entity_decode($dir), 'description' => api_html_entity_decode($row['description']));
 
@@ -477,7 +477,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					}
 
 					$there_is_a_end_date = false;
-					
+
 					if ($row['view_properties'] == '1') {
 						if ($homework['expires_on'] != '0000-00-00 00:00:00') {
 							$there_is_a_expire_date = true;
@@ -509,17 +509,17 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 						list($d_year, $d_month, $d_day) = split('-', $parts[0]);
 						list($d_hour, $d_minute) = split(':', $parts[1]);
 						if ((int)$row['weight'] == 0) {
-							$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked==true){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
+							$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
 							$form_folder -> addElement('html', '<div id=\'option3\' style="display:none">');
 							$weight_input2[] = FormValidator :: createElement('text', 'weight');
 							$form_folder -> addGroup($weight_input2, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
 							$form_folder -> addElement('html', '</div>');
 						}
-						
+
 						if ($homework['expires_on'] == '0000-00-00 00:00:00') {
 							$homework['expires_on'] = date('Y-m-d H:i:s');
 							$there_is_a_expire_date = true;
-							$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked==true){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
+							$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
 							$form_folder -> addElement('html', '<div id=\'option1\' style="display:none">');
 							$form_folder -> addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
 							$form_folder -> addElement('html', '</div>');
@@ -527,7 +527,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 						if ($homework['ends_on'] == '0000-00-00 00:00:00') {
 							$homework['ends_on'] = date('Y-m-d H:i:s');
 							$there_is_a_end_date = true;
-							$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked==true){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
+							$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
 							$form_folder -> addElement('html', '<div id=\'option2\' style="display:none">');
 							$form_folder -> addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
 							$form_folder -> addElement('html', '</div>');
@@ -540,13 +540,13 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 					$form_folder -> addElement('style_submit_button', 'submit', get_lang('ModifyDirectory'), 'class="save"');
 					if ($there_is_a_end_date) {
-						$end_date_array = convert_date_to_array($homework['ends_on'], 'ends');										
+						$end_date_array = convert_date_to_array($homework['ends_on'], 'ends');
 						$defaults = array_merge($defaults, $end_date_array);
 					}
-					if ($there_is_a_expire_date) {					
+					if ($there_is_a_expire_date) {
 						$expires_date_array = convert_date_to_array($homework['expires_on'], 'expires');
 						$defaults = array_merge($defaults, $expires_date_array);
-						
+
 					}
 					if (!empty($row['qualification'])) {
 						$defaults = array_merge($defaults, array('qualification[qualification]' => $row['qualification']));
@@ -562,8 +562,8 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 						$values = $values['my_group'];
 						$dir_name = replace_dangerous_char($values['dir_name']);
 						$dir_name = disable_dangerous_file($dir_name);
-						if (is_work_exist_by_url('/'.$dir_name) == false) {
-						
+						if (!is_work_exist_by_url('/'.$dir_name)) {
+
 							$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
 							if ($there_is_a_end_date || $there_is_a_expire_date) {
 								if ($row['view_properties'] == '1') {
@@ -592,23 +592,23 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 							//if($_POST['qualification']['qualification']!='')
 							Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
 							Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'');
-	
+
 						    //we are changing the current work and we want add them into gradebook
 							if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1) {
 								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
 								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
 								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
 								require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-	
+
 								$resource_name = $_POST['dir_name'];
 								add_resource_to_course_gradebook(api_get_course_id(), 3, $row['id'], Database::escape_string($resource_name), (float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], Database::escape_string($_POST['description']), time(), 1, api_get_session_id());
 							}
-						
+
 							update_dir_name($mydir, $dir_name);
 							$mydir = $my_sub_dir.$dir_name;
 							$dir = $dir_name;
 							$display_edit_form = false;
-	
+
 							// gets calendar_id from student_publication_assigment
 							$sql = "SELECT add_to_calendar FROM $work_assigment WHERE publication_id ='".$row['id']."'";
 							$res = Database::query($sql);
@@ -621,9 +621,9 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 											end_date='".get_date_from_group('ends')."'
 										WHERE id='".$calendar_id[0]."'";
 								Database::query($sql);
-							}							
+							}
 							Display::display_confirmation_message(get_lang('FolderEdited'));
-						
+
 						} else {
 							Display::display_warning_message(get_lang('FileExists'));
 						}
@@ -1372,18 +1372,18 @@ function to_javascript_work() {
 					msg_id1.innerHTML="'.get_lang('FieldRequired', '').'";
 					msg_id2.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";
 				}
-				else if(document.form1.type1.checked==true && document.form1.type2.checked==true && expires_date > ends_date) {
+				else if(document.form1.type1.checked && document.form1.type2.checked && expires_date > ends_date) {
 						msg_id2.style.display ="block";
 						msg_id2.innerHTML="'.get_lang('EndDateCannotBeBeforeTheExpireDate', '').'";
 						msg_id1.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";
 				}
-				else if (checkDate(expires_month,expires_day,expires_year) == false)
+				else if (!checkDate(expires_month,expires_day,expires_year))
 				{
 					msg_id3.style.display ="block";
 					msg_id3.innerHTML="'.get_lang('InvalidDate', '').'";
 					msg_id1.innerHTML="";msg_id2.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";
 				}
-				else if (checkDate(ends_month,ends_day,ends_year) == false)
+				else if (!checkDate(ends_month,ends_day,ends_year))
 				{
 
 					msg_id4.style.display ="block";
@@ -1393,7 +1393,7 @@ function to_javascript_work() {
 				else
 				{
 
-					if (document.form1.make_calification.checked == true)
+					if (document.form1.make_calification.checked)
 				 	{
 					 	var weight = document.form1.weight.value;
 						 	if(weight==""){
@@ -1546,9 +1546,9 @@ function send_reminder_users_without_publication($task_id) {
 
 /**
  * Sends an email to the students of a course when a homework is created
- * 
+ *
  * @param string course_id
- * 
+ *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function send_email_on_homework_creation($course_id) {

@@ -118,7 +118,7 @@ class Exercise
             //load questions only for exercises of type 'one question per page'
             //this is needed only is there is no questions
             //
-            if($this->type == 2 && $_configuration['live_exercise_tracking']==true && $_SERVER['REQUEST_METHOD']!='POST' && defined('QUESTION_LIST_ALREADY_LOGGED'))
+            if ($this->type == 2 && $_configuration['live_exercise_tracking'] && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED'))
 	        {
             	//if(empty($_SESSION['questionList']))
             	$this->questionList = $questionList;
@@ -568,7 +568,7 @@ class Exercise
 		}
         $start_time = Database::escape_string($this->start_time);
         $end_time = Database::escape_string($this->end_time);
-        
+
 		// exercise already exists
 		if($id) {
 
@@ -1365,84 +1365,84 @@ class Exercise
 	}
 
 	/**
-	* Cleans the student's results only for the Exercise tool. 
+	* Cleans the student's results only for the Exercise tool.
 	* The LP results are NOT deleted
 	* Works with exercises in sessions
-	* @return int quantity of user's exercises deleted  
+	* @return int quantity of user's exercises deleted
 	*/
 	function clean_results() {
 		$table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		$table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);	
-		
+		$table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
 		$sql_select = "SELECT exe_id FROM $table_track_e_exercises
 					   WHERE exe_cours_id = '".api_get_course_id()."' AND exe_exo_id = ".$this->id." AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id = ".api_get_session_id()."";
-						
+
 		$result   = Database::query($sql_select);
 		$exe_list = Database::store_result($result);
-		
+
 		//deleting TRACK_E_ATTEMPT table
 		$i = 0;
 		if (is_array($exe_list) && count($exe_list) > 0) {
 			foreach($exe_list as $item) {
-				$sql = "DELETE FROM $table_track_e_attempt WHERE exe_id = '".$item['exe_id']."'";				
+				$sql = "DELETE FROM $table_track_e_attempt WHERE exe_id = '".$item['exe_id']."'";
 				Database::query($sql);
-				$i++; 
+				$i++;
 			}
 		}
-		
+
 		//delete TRACK_E_EXERCICES table
 		$sql = "DELETE FROM $table_track_e_exercises
 				WHERE exe_cours_id = '".api_get_course_id()."' AND exe_exo_id = ".$this->id." AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id = ".api_get_session_id()."";
-		Database::query($sql); 
-		return $i;	
+		Database::query($sql);
+		return $i;
 	}
-	
+
 	/**
 	 * Copies an exercise (duplicate all questions and answers)
 	*/
-	
+
 	public function copy_exercise() {
 		$exercise_obj= new Exercise();
 		$exercise_obj = $this;
-		
+
 	    $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     	$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
-	    
+
 	    // force the creation of a new exercise
 		$exercise_obj->updateTitle($exercise_obj->selectTitle().' - '.get_lang('Copy'));
 		//Hides the new exercise
 		$exercise_obj->updateStatus(false);
 		$exercise_obj->updateId(0);
 		$exercise_obj->save();
-		
-		$new_exercise_id = $exercise_obj->selectId();		
+
+		$new_exercise_id = $exercise_obj->selectId();
 		$question_list 	 = $exercise_obj->selectQuestionList();
-	
-		//Question creation 		
-		foreach ($question_list as $old_question_id) {			
+
+		//Question creation
+		foreach ($question_list as $old_question_id) {
 			$old_question_obj = Question::read($old_question_id);
 			$new_id = $old_question_obj->duplicate();
-			
+
 			$new_question_obj = Question::read($new_id);
-			
-			$new_question_obj->addToList($new_exercise_id);		
-			// This should be moved to the duplicate function				
+
+			$new_question_obj->addToList($new_exercise_id);
+			// This should be moved to the duplicate function
 			$new_answer_obj = new Answer($old_question_id);
 			$new_answer_obj->read();
-			$new_answer_obj->duplicate($new_id);			
+			$new_answer_obj->duplicate($new_id);
 		}
 	}
-		
+
 	/**
 	 * Changes the exercise id
 	 *
 	 * @param - in $id - exercise id
 	 */
-	private function updateId($id) {	
+	private function updateId($id) {
 		$this->id = $id;
 	}
-	
+
 	/**
 	 * Changes the exercise status
 	 *

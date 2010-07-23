@@ -1131,7 +1131,7 @@ function getRootPath() {
    
     if ( $old_x >= 0 && $old_x < $src_x
          && $old_y >= 0 && $old_y < $src_y ) {
-      if ($bicubic == true) {
+      if ($bicubic) {
         $sY  = $old_y + 1;
         $siY  = $old_y;
         $siY2 = $old_y - 1;

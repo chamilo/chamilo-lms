@@ -1590,7 +1590,7 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
 	$session_id = intval($session_id);
 	//condition to show resources by session
 	$condition_session = '';
-	$condition_add = $and == false ? " WHERE " : " AND ";
+	$condition_add = $and ? " AND " : " WHERE ";
 
 	if ($with_base_content) {
 		$condition_session = $condition_add." (session_id = $session_id OR session_id = 0) ";
@@ -1979,12 +1979,12 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 	$is_allowed_coach_to_edit = api_is_coach();
 	$session_visibility = api_get_session_visibility($my_session_id);
 	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
-	if (!$is_courseAdmin && $tutor == true) {	// If we also want to check if the user is a tutor...
+	if (!$is_courseAdmin && $tutor) {	// If we also want to check if the user is a tutor...
 		$is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
 	}
-	if (!$is_courseAdmin && $coach == true) {	// If we also want to check if the user is a coach...';
+	if (!$is_courseAdmin && $coach) {	// If we also want to check if the user is a coach...';
 		// Check if session visibility is read only for coachs
-		if ($session_visibility==SESSION_VISIBLE_READ_ONLY) {
+		if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
 			$is_allowed_coach_to_edit = false;
 		}
 
@@ -1995,7 +1995,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 		}
 
 	}
-	if (!$is_courseAdmin && $session_coach == true) {
+	if (!$is_courseAdmin && $session_coach) {
 		$is_courseAdmin = $is_courseAdmin || api_is_coach();
 	}
 

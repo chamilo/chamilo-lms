@@ -1346,7 +1346,7 @@ function display_license_agreement() {
 				<td align="center">
 					<button type="submit" class="back" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
 					<input type="hidden" name="is_executable" id="is_executable" value="-" />
-					<button type="submit" class="next" name="step3" onclick="javascript:if(document.getElementById('accept_licence').checked == false) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" ><?php echo get_lang('Next'); ?></button>
+					<button type="submit" class="next" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" ><?php echo get_lang('Next'); ?></button>
 				</td>
 			</tr>
                         </table>

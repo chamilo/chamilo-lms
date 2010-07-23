@@ -285,7 +285,7 @@ else
  * Show the URL in which this user is subscribed
  */
 global $_configuration;
-if ($_configuration['multiple_access_urls']==true) {
+if ($_configuration['multiple_access_urls']) {
 	require_once(api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 	$url_list= UrlManager::get_access_url_from_user($user['user_id']);
 	if (count($url_list) > 0) {

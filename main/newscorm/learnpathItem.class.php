@@ -65,7 +65,7 @@ class learnpathItem {
      * @param	integer	User ID
      * @return	boolean	True on success, false on failure
      */
-    function learnpathItem($db_id, $user_id) { 
+    function learnpathItem($db_id, $user_id) {
     	//get items table
     	if(self::debug>0){error_log('New LP - In learnpathItem constructor: '.$db_id.','.$user_id,0);}
     	$items_table = Database::get_course_table(TABLE_LP_ITEM);
@@ -1016,7 +1016,7 @@ class learnpathItem {
     		$res = Database::query($sql);
     		if (Database::num_rows($res)==1) {
     			$row = Database::fetch_array($res);
-    			if($update_local==true){
+    			if ($update_local) {
     				$this->set_status($row['status']);
     			}
 	    		if(self::debug>2){error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'],0);}
@@ -1108,7 +1108,7 @@ class learnpathItem {
     	if (empty($this->title)) {return '';}
     	return $this->title;
     }
-    
+
     /**
      * Returns the total time used to see that item
      * @return	integer	Total time
@@ -1233,7 +1233,7 @@ class learnpathItem {
     		}*/
     		// if we don't init start time here, the time is sometimes calculated from the las start time
     		$this->current_start_time = time();
-    		
+
     		//error_log('New LP - reinit blocked by setting',0);
     	}
     }
@@ -1260,7 +1260,7 @@ class learnpathItem {
 	 * @param	integer	The user ID. In some cases like Dokeos quizzes, it's necessary to have the user ID to query other tables (like the results of quizzes)
      * @return	boolean	True if the list of prerequisites given is entirely satisfied, false otherwise
      */
-    function parse_prereq($prereqs_string, $items, $refs_list,$user_id){    	
+    function parse_prereq($prereqs_string, $items, $refs_list,$user_id){
 		if(self::debug>0){error_log('New LP - In learnpathItem::parse_prereq() for learnpath '.$this->lp_id.' with string '.$prereqs_string,0);}
     	//deal with &, |, ~, =, <>, {}, ,, X*, () in reverse order
 		$this->prereq_alert = '';
@@ -1287,9 +1287,9 @@ class learnpathItem {
 				}
 			}
 		}
-	
+
 		//parenthesis removed, now look for ORs as it is the lesser-priority binary operator (= always uses one text operand)
-		if (strpos($prereqs_string,"|")===false) { 	
+		if (strpos($prereqs_string,"|")===false) {
     		if(self::debug>1){error_log('New LP - Didnt find any OR, looking for AND',0);}
 	    	if(strpos($prereqs_string,"&")!==false){
 	    		$list = split("&",$prereqs_string);
@@ -1297,7 +1297,7 @@ class learnpathItem {
 					$andstatus = true;
 					foreach($list as $condition){
 	    				$andstatus = $andstatus && $this->parse_prereq($condition,$items,$refs_list,$user_id);
-	    				if($andstatus==false){
+	    				if (!$andstatus) {
 							if(self::debug>1){error_log('New LP - One condition in AND was false, short-circuit',0);}
 							break;
 	    				}
@@ -1306,7 +1306,7 @@ class learnpathItem {
     					$this->prereq_alert = get_lang('_prereq_not_complete');
     				}
 					return $andstatus;
-	    		} else {	    			
+	    		} else {
 	    			if(isset($items[$refs_list[$list[0]]])){
 	    				$status = $items[$refs_list[$list[0]]]->get_status(true);
 		    			$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
@@ -1450,38 +1450,38 @@ class learnpathItem {
 					    	} else {
 
 					    		//Nothing found there either. Now return the value of the corresponding resource completion status
-				    			if(self::debug>1){error_log('New LP - Didnt find any group, returning value for '.$prereqs_string,0);}				
-				    			
+				    			if(self::debug>1){error_log('New LP - Didnt find any group, returning value for '.$prereqs_string,0);}
+
 				    			if (isset($items[$refs_list[$prereqs_string]])) {
 				    				if ($items[$refs_list[$prereqs_string]]->type == 'quiz') {
-				    					
-				    					//1. Checking the status in current items	
+
+				    					//1. Checking the status in current items
 				    					$status = $items[$refs_list[$prereqs_string]]->get_status(true);
-				    					//error_log('hello '.$status);				    					
+				    					//error_log('hello '.$status);
 				    					$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
-				    					
+
 								    	if(!$returnstatus) {
 								    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
 								    	} else {
 								    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
 								    	}
-								    									    	
-				    					//for one attempt LPs					    			
-				    					if ($this->prevent_reinit == 1) { 
 
-				    						//2. If is completed we check the results in the DB of the quiz							    	
-					    					if ($returnstatus) {		    					
+				    					//for one attempt LPs
+				    					if ($this->prevent_reinit == 1) {
+
+				    						//2. If is completed we check the results in the DB of the quiz
+					    					if ($returnstatus) {
 												//AND origin_lp_item_id = '.$user_id.'
 						    					$sql = 'SELECT exe_result, exe_weighting
 														FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
 														WHERE 	exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.'
 																AND exe_user_id = '.$user_id.'
-																AND orig_lp_id = '.$this->lp_id.' AND orig_lp_item_id = '.$prereqs_string.' 
+																AND orig_lp_id = '.$this->lp_id.' AND orig_lp_item_id = '.$prereqs_string.'
 																AND status <> "incomplete"
 														ORDER BY exe_date DESC
 														LIMIT 0, 1';
 												//error_log('results :'.$items[$refs_list[$prereqs_string]]->path. ':'.$user_id);
-											
+
 												$rs_quiz = Database::query($sql);
 												if($quiz = Database :: fetch_array($rs_quiz)) {
 													if($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
@@ -1493,19 +1493,19 @@ class learnpathItem {
 												} else {
 													$this->prereq_alert = get_lang('_prereq_not_complete');
 													$returnstatus = false;
-												}																						
-					    					} 
-					    					
+												}
+					    					}
+
 				    					} else {
 				    						//2. for multiple attempts we check that there are minimun 1 item completed
-				    						
+
 			    							//checking in the database
 			    							$sql = 'SELECT exe_result, exe_weighting
 													FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
 													WHERE	exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.'
 															AND exe_user_id = '.$user_id.' AND orig_lp_id = '.$this->lp_id.' AND orig_lp_item_id = '.$prereqs_string.' ';
 											//error_log('results 2:'.$items[$refs_list[$prereqs_string]]->path. ':'.$user_id);
-											
+
 											$rs_quiz = Database::query($sql);
 											if (Database::num_rows($rs_quiz) > 0 ) {
 												while ($quiz = Database :: fetch_array($rs_quiz)) {
@@ -1521,11 +1521,11 @@ class learnpathItem {
 												$this->prereq_alert = get_lang('_prereq_not_complete');
 												$returnstatus = false;
 											}
-			    					
-				    					}		    					
+
+				    					}
 										return $returnstatus;
 				    				} else {
-				    					
+
 				    					$status = $items[$refs_list[$prereqs_string]]->get_status(false);
 				    					$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 
@@ -1537,23 +1537,23 @@ class learnpathItem {
 								    	//error_log('status of document'.$status);
 								    	//var_dump($returnstatus);
 								    	//$returnstatus = true;
-				    					if ($returnstatus  && $this->prevent_reinit == 1 ) {				    						
+				    					if ($returnstatus  && $this->prevent_reinit == 1 ) {
 					    					// i would prefer check in the database
 					    					$lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 					    					$lp_view = Database::get_course_table(TABLE_LP_VIEW);
-					    					
+
 				    						$sql = 'SELECT id FROM '.$lp_view.'
 													WHERE user_id = '.$user_id.'  AND lp_id = '.$this->lp_id.' LIMIT 0, 1';
 											$rs_lp = Database::query($sql);
 					    					$lp_id = Database :: fetch_row($rs_lp);
 					    					$my_lp_id = $lp_id[0];
-					    					
+
 					    					$sql = 'SELECT status FROM '.$lp_item_view.'
 													WHERE lp_view_id = '.$my_lp_id.' AND lp_item_id = '.$refs_list[$prereqs_string].' LIMIT 0, 1';
 											$rs_lp = Database::query($sql);
 					    					$status_array = Database :: fetch_row($rs_lp);
 					    					$status	= $status_array[0];
-					    					 
+
 					    					//var_dump($status);
 						    				$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 									    	if (!$returnstatus && empty($this->prereq_alert)){
@@ -1565,7 +1565,7 @@ class learnpathItem {
 									    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
 									    	}
 				    					}
-				    					
+
 										//error_log('results :'.$items[$refs_list[$prereqs_string]]->path. ':'.$user_id);
 										/*$rs_quiz = Database::query($sql);
 										if($quiz = Database :: fetch_array($rs_quiz))
@@ -1585,12 +1585,12 @@ class learnpathItem {
 											$this->prereq_alert = get_lang('_prereq_not_complete');
 											$returnstatus = false;
 										}*/
-										 
+
 				    					/*
 					    				$status = $items[$refs_list[$prereqs_string]]->get_status(true);
 					    				//error_log(print_r($items,1));
 					    				//error_log($refs_list[$prereqs_string]);
-					    				
+
 						    			$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 								    	if(!$returnstatus && empty($this->prereq_alert)){
 								    		$this->prereq_alert = get_lang('_prereq_not_complete');
@@ -1601,7 +1601,7 @@ class learnpathItem {
 								    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
 								    	}
 								    	*/
-								    	
+
 								    	//$returnstatus =false;
 						    			return $returnstatus;
 				    				}
@@ -1621,7 +1621,7 @@ class learnpathItem {
 				foreach($list as $condition){
 					if(self::debug>1){error_log('New LP - Found OR, adding it ('.$condition.')',0);}
     				$orstatus = $orstatus || $this->parse_prereq($condition,$items,$refs_list,$user_id);
-    				if($orstatus == true){
+    				if ($orstatus) {
     					//shortcircuit OR
 						if(self::debug>1){error_log('New LP - One condition in OR was true, short-circuit',0);}
     					break;
@@ -1711,7 +1711,7 @@ class learnpathItem {
 			}else{
 			  if(self::debug>1){error_log('New LP - In learnpathItem::save() - SCORM save request received',0);}
 			  //get all new settings from the URL
-				if($from_outside==true){
+				if ($from_outside) {
 				  if(self::debug>1){error_log('New LP - In learnpathItem::save() - Getting item data from outside',0);}
 		     	  foreach($_GET as $param => $value)
 		     	  {
@@ -1778,7 +1778,7 @@ class learnpathItem {
 				}
 			}
 		}else{ //if not SCO, such messages should not be expected
-			$type = strtolower($this->type);		
+			$type = strtolower($this->type);
 			switch($type){
 				case 'asset':
 		 			if($prereqs_complete)
@@ -1877,7 +1877,7 @@ class learnpathItem {
     {
 		if(self::debug>0){error_log('New LP - In learnpathItem::set_lp_view('.$lp_view_id.')',0);}
     	if(!empty($lp_view_id) and $lp_view_id = intval(strval($lp_view_id)))
-     	{	
+     	{
      		$this->view_id = $lp_view_id;
 	     	$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 	     	//get the lp_item_view with the highest view_count
@@ -2304,7 +2304,7 @@ class learnpathItem {
 	     	//depending on what we want (really), we'll update or insert a new row
 	     	//now save into DB
 	     	$res = 0;
-	     	if( $inserted==false && Database::num_rows($check_res)<1){
+	     	if (!$inserted && Database::num_rows($check_res) < 1) {
                 /*$my_status = '';
 	     		if ($this->type!=TOOL_QUIZ) {
 	     				$my_status = $this->get_status(false);

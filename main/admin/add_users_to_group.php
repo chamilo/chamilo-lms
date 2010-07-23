@@ -119,7 +119,7 @@ function search_users($needle,$type,$relation_type) {
 				$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 						WHERE (username LIKE '$needle%' OR firstname LIKE '$needle%' OR lastname LIKE '$needle%')
 						AND user_id<>'$user_anonymous' $without_user_id $order_clause LIMIT 11";
-				if ($_configuration['multiple_access_urls']==true) {
+				if ($_configuration['multiple_access_urls']) {
 					$access_url_id = api_get_current_access_url_id();
 					if ($access_url_id != -1) {
 						$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user
@@ -150,7 +150,7 @@ function search_users($needle,$type,$relation_type) {
 			if (!empty($group_id) && !empty($relation_type)) {
 				$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 					WHERE ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND user_id<>'$user_anonymous' $without_user_id $order_clause ";
-				if ($_configuration['multiple_access_urls']==true) {
+				if ($_configuration['multiple_access_urls']) {
 					$access_url_id = api_get_current_access_url_id();
 					if ($access_url_id != -1) {
 						$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user
@@ -290,7 +290,7 @@ if ($ajax_search) {
 	$many_users = false;
 	$sql = "SELECT count(user_id) FROM $tbl_user user
 			WHERE ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND user_id<>'$user_anonymous' $without_user_id ";
-	if ($_configuration['multiple_access_urls']==true) {
+	if ($_configuration['multiple_access_urls']) {
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
 			$sql = "SELECT count(user.user_id) FROM $tbl_user user
@@ -325,7 +325,7 @@ if ($ajax_search) {
 
 		$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 				WHERE ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND user_id<>'$user_anonymous' $without_user_id $order_clause ";
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
 				$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user

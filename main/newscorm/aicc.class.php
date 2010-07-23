@@ -450,7 +450,7 @@ class aicc extends learnpath {
 			}
 		}
 
-		if($package_type== '' OR $mandatory!=true)
+		if ($package_type == '' || !$mandatory)
 		 // && defined('CHECK_FOR_AICC') && CHECK_FOR_AICC)
 		{
 			return api_failure::set_failure('not_aicc_content');

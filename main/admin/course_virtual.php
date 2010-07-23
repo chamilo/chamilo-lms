@@ -355,7 +355,7 @@ function attempt_create_virtual_course($real_course_code, $course_title, $wanted
 
 	$creation_success = CourseManager::create_virtual_course( $real_course_code, $course_title, $wanted_course_code, $course_language, $course_category );
 
-	if ($creation_success == true)
+	if ($creation_success)
 	{
 		Display::display_normal_message( $course_title . " - " . get_lang('CourseCreationSucceeded') );
 		return true;
@@ -393,7 +393,7 @@ if ( isset($attempt_create_virtual_course) && $attempt_create_virtual_course )
 
 	$creation_success = CourseManager::attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category);
 
-	if ($creation_success == true)
+	if ($creation_success)
 	{
 		Display::display_normal_message( $course_title . " - " . get_lang('CourseCreationSucceeded') );
 	}

@@ -3,13 +3,13 @@
 
 /**
  *  Clean URls for the Social Network
- * 
+ *
  *  The idea is to access to the user info more easily:
  *  http://campus.chamilo.org/admin instead of http://campus.chamilo.org/main/social/profile.php?1
  *  To use this you should rename the htaccess to .htaccess and check your virtualhost configuration
- * 
+ *
  *  More improvements will come in the next version of Chamilo maybe in the 1.8.8
- *   
+ *
  */
 
 
@@ -26,12 +26,12 @@ api_block_anonymous_users();
 $array_keys = array_keys($_GET);
 
 if (!empty($array_keys)) {
-	$username 	= substr($array_keys[0],0,20); // max len of an username	
+	$username 	= substr($array_keys[0],0,20); // max len of an username
 	$friend_id 	= UserManager::get_user_id_from_username($username);
-			
-	if ($friend_id != false) {
+
+	if ($friend_id) {
 		SocialManager::display_individual_user($friend_id);
-		/*	
+		/*
 		if (api_get_setting('allow_social_tool') =='true') {
 			header('Location: main/social/profile.php?u='.$friend_id.'');
 			exit;

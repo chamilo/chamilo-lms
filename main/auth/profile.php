@@ -578,7 +578,7 @@ if (!empty($_SESSION['change_email'])) {
 	}
 	$form->removeElement('productions_list');
 	$file_deleted = true;
-} 
+}
 
 if ($form->validate()) {
 
@@ -601,7 +601,7 @@ if ($form->validate()) {
 		$_SESSION['is_not_password'] = 'success';
 	}
 
-	if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && ($wrong_current_password==false)) {
+	if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && !$wrong_current_password) {
 		$changeemail = $user_data['email'];
 	}
 

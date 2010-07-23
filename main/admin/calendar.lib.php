@@ -259,11 +259,11 @@ function validate_date()
 			msg_err1.style.display =\"block\";
 			msg_err1.innerHTML=\"".get_lang('EndDateCannotBeBeforeTheStartDate')."\";
 			msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} else if (checkDate(start_month,start_day,start_year) == false) {
+		} else if (!checkDate(start_month,start_day,start_year)) {
 			msg_err2.style.display =\"block\";
 			msg_err2.innerHTML=\"".get_lang('InvalidDate')."\";
 			msg_err1.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} else if (checkDate(ends_month,ends_day,ends_year) == false) {
+		} else if (!checkDate(ends_month,ends_day,ends_year)) {
 			msg_err3.style.display =\"block\";
 			msg_err3.innerHTML=\"".get_lang('InvalidDate')."\";
 			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";
@@ -397,8 +397,8 @@ echo "</table>";
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return integer the id of the last added agenda item
 */
-function store_new_agenda_item() {	
-	
+function store_new_agenda_item() {
+
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
     //$t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
 
@@ -481,7 +481,7 @@ function display_courseadmin_links() {
 
 }
 
-function display_student_links() {	
+function display_student_links() {
 	if ($_SESSION['sort'] == 'DESC') {
 		echo "<a href='".api_get_self()."?sort=asc&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a>";
 	} else {
@@ -558,7 +558,7 @@ function store_edited_agenda_item() {
 function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 {
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-	
+
 	$id=Database::escape_string($id);
 	$title=Database::escape_string($title);
 	$content=Database::escape_string($content);
@@ -636,7 +636,7 @@ function display_agenda_items()
 	global $DaysShort, $DaysLong, $MonthsLong;
 	global $is_courseAdmin;
 	global $dateFormatLong, $timeNoSecFormat,$charset, $_user, $_course;
-	
+
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 
 	// getting the group memberships
@@ -934,10 +934,10 @@ function display_one_agenda_item($agenda_id)
 	global $is_courseAdmin;
 	global $dateFormatLong, $timeNoSecFormat, $charset;
 	global $_user;
-	
+
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	
+
 	$agenda_id=Database::escape_string($agenda_id);
 	//echo "displaying agenda items";
 
@@ -1193,7 +1193,7 @@ function show_user_group_filter_form()
 function show_add_form($id = '')
 {
 	global $MonthsLong;
-	
+
 	$htmlHeadXtra[] = to_javascript();
 	// the default values for the forms
 	if ($_GET['originalresource'] !== 'no')
@@ -1634,7 +1634,7 @@ function get_agendaitems($month, $year)
 
 	//$mycourse = api_get_course_info();
 	$portal_url = $_configuration['root_web'];
-	if ($_configuration['multiple_access_urls']==true) {
+	if ($_configuration['multiple_access_urls']) {
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1 ){
 			$url = api_get_access_url($access_url_id);
@@ -1954,7 +1954,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		//echo $sqlquery;
 		$result = Database::query($sqlquery);
 		$portal_url = $_configuration['root_web'];
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1 ){
 				$url = api_get_access_url($access_url_id);
@@ -2016,7 +2016,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 	global $_user;
 	global $_configuration;
 	global $setting_agenda_link;
-	
+
 	$TABLEAGENDA = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 
 	$items = array ();
@@ -2068,7 +2068,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		$result = Database::query($sqlquery);
 
 		$portal_url = $_configuration['root_web'];
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1 ){
 				$url = api_get_access_url($access_url_id);
@@ -3038,7 +3038,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
  */
 
 function agenda_import_ical($course_info,$file) {
-	
+
 	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
     $charset = api_get_setting('platform_charset');
     $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];

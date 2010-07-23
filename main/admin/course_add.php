@@ -35,7 +35,7 @@ $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' O
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status=1".$order_clause;
 //filtering teachers when creating a course
-if ($_configuration['multiple_access_urls']==true){
+if ($_configuration['multiple_access_urls']) {
 	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$sql = "SELECT u.user_id,lastname,firstname FROM $table_user as u
 			INNER JOIN $access_url_rel_user_table url_rel_user

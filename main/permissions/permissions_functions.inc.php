@@ -247,7 +247,7 @@ function display_checkbox_matrix($permission_array, $tool, $permission, $inherit
 */
 function display_image_matrix($permission_array, $tool, $permission,$inherited_permissions=array(), $course_admin=false, $editable=true)
 {
-	if($course_admin==true)
+	if ($course_admin)
 	{
 		echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
 	}
@@ -331,7 +331,7 @@ function display_image_matrix($permission_array, $tool, $permission,$inherited_p
 function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $permission,$inherited_permissions=array(), $course_admin=false, $editable=true)
 {
 
-	if($course_admin==true)
+	if ($course_admin)
 	{
 		echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
 	}

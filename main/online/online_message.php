@@ -118,7 +118,7 @@ include('header_frame.inc.php');
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
   <td width="90%"><input type="text" name="message" size="50" value="" style="width: 100%;"></td>
-  <td width="9%" nowrap="nowrap"><?php echo get_lang('Question'); ?>&nbsp;<input type="checkbox" name="question" value="1" style="vertical-align: middle;" onclick="javascript:if(this.checked == true && !confirm('<?php echo addslashes(api_htmlentities(get_lang('OnlyCheckForImportantQuestion'),ENT_QUOTES,$charset)); ?>')) this.checked=false; document.formMessage.message.focus();"></td>
+  <td width="9%" nowrap="nowrap"><?php echo get_lang('Question'); ?>&nbsp;<input type="checkbox" name="question" value="1" style="vertical-align: middle;" onclick="javascript: if(this.checked && !confirm('<?php echo addslashes(api_htmlentities(get_lang('OnlyCheckForImportantQuestion'),ENT_QUOTES,$charset)); ?>')) this.checked=false; document.formMessage.message.focus();"></td>
   <td width="1%"><input type="submit" value="OK" style="width: 30px;"></td>
 </tr>
 </table>

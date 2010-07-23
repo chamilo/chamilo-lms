@@ -137,7 +137,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
                         "'".Database::escape_string($row['learnpath_description'])."',$dsp_ord,'Dokeos')";
         $ins_lp_res = Database::query($ins_lp_sql);
         $in_id = Database::insert_id();
-        if (empty($in_id) or $in_id == false) die('Could not insert lp: '.$ins_lp_sql);
+        if (!$in_id) die('Could not insert lp: '.$ins_lp_sql);
         $lp_ids[$row['learnpath_id']] = $in_id;
         $dsp_ord++;
         $max_dsp_lp = $dsp_ord;
@@ -181,7 +181,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
         $ins_res = Database::query($ins_lp_sql);
         $in_id = Database::insert_id();
         //echo "&nbsp;&nbsp;Inserted item $in_id<br />\n";
-        if (empty($in_id) OR $in_id == false) die('Could not insert lp: '.$ins_sql);
+        if (!$in_id) die('Could not insert lp: '.$ins_sql);
         $parent_chaps[$row['id']] = $row['parent_chapter_id'];
         $lp_chap_items[$row['id']] = $in_id;
         $parent_lps[$row['id']] = $row['learnpath_id'];
@@ -330,7 +330,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
             $ins_res = Database::query($ins_lp_sql);
             $in_id = Database::insert_id();
             //echo "&nbsp;&nbsp;Inserted item $in_id (".$row['title'].")<br />\n";
-            if (empty($in_id) OR $in_id == false) die('Could not insert lp_item: '.$ins_sql);
+            if (!$in_id) die('Could not insert lp_item: '.$ins_sql);
             $lp_items[$parent_lps[$row['chapter_id']]][$row['id']] = $in_id;
             $lp_ordered_items[$parent_lps[$row['chapter_id']]][$row['chapter_id']][] = $in_id;
         }
@@ -973,7 +973,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
         if ($loglevel > 1) { error_log("$sql_ins", 0); }
         $sql_res = Database::query($sql_ins);
         $in_id = Database::insert_id();
-        if (empty($in_id) or $in_id == false) die('Could not insert scorm lp: '.$sql_ins);
+        if (!$in_id) die('Could not insert scorm lp: '.$sql_ins);
         //echo "&nbsp;&nbsp;Inserted item $in_id<br />\n";
         $lp_ids[$my_content_id] = $in_id; //contains the old LP ID => the new LP ID
         $lp_course[$my_content_id] = $courses_id_list[$my_course_code]; // Contains the old learnpath ID => the course DB name

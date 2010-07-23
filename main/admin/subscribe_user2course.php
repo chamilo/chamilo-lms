@@ -202,7 +202,7 @@ if ($use_extra_fields) {
 	}
 
 	$where_filter ='';
-	if ($_configuration['multiple_access_urls']==true) {
+	if ($_configuration['multiple_access_urls']) {
 		if (is_array($final_result) && count($final_result)>0) {
 			$where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
 		} else {
@@ -226,7 +226,7 @@ $sql = "SELECT user_id,lastname,firstname,username
 		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
 
 global $_configuration;
-if ($_configuration['multiple_access_urls']==true) {
+if ($_configuration['multiple_access_urls']) {
 	$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1){
@@ -244,7 +244,7 @@ unset($result);
 
 $sql = "SELECT code,visual_code,title FROM $tbl_course WHERE visual_code LIKE '".$first_letter_course."%' ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
 
-if ($_configuration['multiple_access_urls']==true) {
+if ($_configuration['multiple_access_urls']) {
 	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1){
@@ -260,7 +260,7 @@ $result = Database::query($sql);
 $db_courses = Database::store_result($result);
 unset($result);
 
-if ($_configuration['multiple_access_urls']==true) {
+if ($_configuration['multiple_access_urls']) {
 	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1){

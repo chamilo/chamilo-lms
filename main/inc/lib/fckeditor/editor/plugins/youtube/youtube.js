@@ -118,7 +118,7 @@ function Ok()
 	}
 
 	// Check security
-	if ( checkCode( GetE( 'txtUrl' ).value ) == false )
+	if ( !checkCode( GetE( 'txtUrl' ).value ) )
 	{
 		alert( oEditor.FCKLang.DlgYouTubeSecurity ) ;
 		return false ;
@@ -197,6 +197,8 @@ function checkCode( code )
 	{
 		return false ;
 	}
+
+	return true ;
 }
 
 function GetOriginalYoutubeUrl ( url )

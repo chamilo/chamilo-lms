@@ -113,7 +113,7 @@ class Dropbox_Work {
 				WHERE filename = '".Database::escape_string($this->filename)."'";
         $result = Database::query($sql);
 		$res = Database::fetch_array($result);
-		if ($res != false) {
+		if ($res) {
 			$this->isOldWork = true;
 		}
 		// Insert or update the dropbox_file table and set the id property

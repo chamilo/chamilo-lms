@@ -70,7 +70,7 @@ if( $form->validate()) {
 							$language = api_get_language_id($my_lang);
 							$term_preview = LegalManager::get_last_condition($language);
 							$defaults = $term_preview;
-							if ($term_preview==false) {
+							if (!$term_preview) {
 								// there are not terms and conditions
 								$term_preview['type']=-1;
 								$defaults['type']=0;
@@ -87,7 +87,7 @@ if( $form->validate()) {
 		$language = api_get_language_id($language);
 		$term_preview = LegalManager::get_last_condition($language);
 		$defaults['type']=$term_preview['type'];
-		if ($term_preview==false) {
+		if (!$term_preview) {
 			// there are not terms and conditions
 			$term_preview['type']=-1;
 			$defaults['type']=0;

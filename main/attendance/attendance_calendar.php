@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for attendance calendar (list, edit, add) 
+* View (MVC patter) for attendance calendar (list, edit, add)
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.attendance
 */
@@ -20,7 +20,7 @@ if ($action == 'calendar_add') {
 	echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_up.gif',get_lang('AttendanceCalendarList')).' '.get_lang('GoToAttendanceCalendarList').'</a>';
 } else {
 	echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_add.png',get_lang('AddDateAndTime')).' '.get_lang('AddDateAndTime').'</a>';
-	echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDeleteAllDates').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_delete.png',get_lang('CleanCalendar')).' '.get_lang('CleanCalendar').'</a>';	
+	echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDeleteAllDates').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_delete.png',get_lang('CleanCalendar')).' '.get_lang('CleanCalendar').'</a>';
 }
 echo '</div>';
 
@@ -53,7 +53,7 @@ if (isset($action) && $action == 'calendar_add') {
 
                 $form->addElement('html','<br /><br />');
 
-                $form->addElement('html', '<div id="repeat_check">&nbsp;'. get_lang('RepeatDate').'<input type="checkbox" name="repeat" '.($repeat?'checked="checked"':'').' onclick="if(this.checked==true){document.getElementById(\'repeat-date-attendance\').style.display=\'block\';}else{document.getElementById(\'repeat-date-attendance\').style.display=\'none\';}"/>');
+                $form->addElement('html', '<div id="repeat_check">&nbsp;'. get_lang('RepeatDate').'<input type="checkbox" name="repeat" '.($repeat?'checked="checked"':'').' onclick="javascript: if(this.checked){document.getElementById(\'repeat-date-attendance\').style.display=\'block\';}else{document.getElementById(\'repeat-date-attendance\').style.display=\'none\';}"/>');
                 if ($repeat) {
                     $form->addElement('html', '<div id="repeat-date-attendance" style="display:block">');
                 } else {
@@ -70,8 +70,8 @@ if (isset($action) && $action == 'calendar_add') {
                 $defaults['end_date_time'] = date('Y-m-d 12:00:00');
                 $form->addElement('html', '</td></tr>');
                 $form->addElement('html', '</table>');
-                
-                
+
+
                 $form->addElement('html', '</div>');
                 $form->addElement('html', '</div>');
                 $form->addElement('html','<br /><br />');
@@ -85,32 +85,32 @@ if (isset($action) && $action == 'calendar_add') {
 	// calendar list
 	echo '<div class="attendance-calendar-list">';
 	echo '<h4>'.get_lang('CalendarList').'</h4>';
-	if (!empty($attendance_calendar)) {	
-		foreach ($attendance_calendar as $calendar) {	
-			echo '<div class="attendance-calendar-row">';				
+	if (!empty($attendance_calendar)) {
+		foreach ($attendance_calendar as $calendar) {
+			echo '<div class="attendance-calendar-row">';
 				if ((isset($action) && $action == 'calendar_edit') && (isset($calendar_id) && $calendar_id == $calendar['id'])) {
-					// calendar edit form				
-					echo '<div class="attendance-calendar-edit">';				
-						$form = new FormValidator('attendance_calendar_edit','POST','index.php?action=calendar_edit&attendance_id='.$attendance_id.'&calendar_id='.$calendar_id.'&'.api_get_cidreq().$param_gradebook,'');					
+					// calendar edit form
+					echo '<div class="attendance-calendar-edit">';
+						$form = new FormValidator('attendance_calendar_edit','POST','index.php?action=calendar_edit&attendance_id='.$attendance_id.'&calendar_id='.$calendar_id.'&'.api_get_cidreq().$param_gradebook,'');
 						$form->addElement('datepicker', 'date_time', '', array('form_name'=>'attendance_calendar_edit'));
 						$defaults['date_time'] = $calendar['date_time'];
 						$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 						$form->addElement('style_submit_button', 'cancel', get_lang('Cancel'), 'class="cancel"');
 						$form->setDefaults($defaults);
 						$form->display();
-					echo '</div>';								
+					echo '</div>';
 				} else {
 					echo Display::return_icon('lp_calendar_event.png',get_lang('DateTime')).' '.$calendar['date_time'].'&nbsp;';
 					echo '<span style="margin-left:20px;">';
 					echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('style'=>'vertical-align:middle')).'</a>&nbsp;';
 					echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().$param_gradebook.'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.Display::return_icon('delete.gif', get_lang('Delete'), array('style'=>'vertical-align:middle')).'</a>';
-					echo '</span>';	
-				}	
+					echo '</span>';
+				}
 			echo '</div>';
 		}
 	} else {
 		echo '<div style="padding:5px;">'.get_lang('ThereAreNoRegisteredDatetimeYet').'</div>';
 	}
-	echo '</div>';			
+	echo '</div>';
 }
 ?>

@@ -156,7 +156,7 @@ class FlatViewDataGenerator
 				$divide=( ($score[1])==0 ) ? 1 : $score[1];
 				$item_value+=round($score[0]/$divide*$item->get_weight(),2);
 				$item_total+=$item->get_weight();
-				if ($show_all == false) {
+				if (!$show_all) {
 					$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
 				} else {
 					$row[] = $scoredisplay->display_score($score, SCORE_DECIMAL);
@@ -165,7 +165,7 @@ class FlatViewDataGenerator
 			}
 
 			$total_score=array($item_value,$item_total);
-			if ($show_all == false) {
+			if (!$show_all) {
 				$row[] = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);
 			} else {
 				$row[] = $scoredisplay->display_score($total_score,SCORE_DECIMAL);

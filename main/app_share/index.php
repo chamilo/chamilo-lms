@@ -22,12 +22,12 @@ $app_base_file = api_get_path(SYS_CODE_PATH).'app_share/DokeosAppShare.exe';
 $app_share_app_file = $app_share_tmp_dir.'/DokeosAppShare.exe';
 
 $specialCode='';
-if (file_exists($app_share_app_file) == FALSE) {
+if (!file_exists($app_share_app_file)) {
 
 	//mkdir ($app_share_tmp_dir, 0700);
 	mkdir ($app_share_tmp_dir, api_get_permissions_for_new_directories());
 
-	if (file_exists($app_base_file) == FALSE) {
+	if (!file_exists($app_base_file)) {
 		echo('FATAL ERROR: file <strong>'.$app_base_file.'</strong> not found.<br />');
 	} else {
 		$source = fopen($app_base_file, "r");

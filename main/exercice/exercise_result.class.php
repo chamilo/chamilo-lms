@@ -122,7 +122,7 @@ class ExerciseResult
 					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
 
 
-		} else { 
+		} else {
 			// get only this user's results
 			$sql="SELECT '', ce.title, te.exe_result ,
 						 te.exe_weighting, te.exe_date, te.exe_id
@@ -137,7 +137,7 @@ class ExerciseResult
 					ORDER BY exe_cours_id ASC, exe_date DESC";
 
 		}
-		
+
 		$results	= getManyResultsXCol($sql,8);
 		$hpresults	= getManyResultsXCol($hpsql,7);
 
@@ -168,8 +168,8 @@ class ExerciseResult
 				$query = Database::query($sql_exe);
 
 				if (Database :: num_rows($query) > 0) $revised = true;
-				if ($filter_by_not_revised && $revised == true) continue;
-				if ($filter_by_revised && $revised == false) continue;
+				if ($filter_by_not_revised && $revised) continue;
+				if ($filter_by_revised && !$revised) continue;
 
 				$return[$i] = array();
 				$id = $results[$i][5];
@@ -182,7 +182,7 @@ class ExerciseResult
 					$return[$i]['user'] = $user;
 					$return[$i]['user_id'] = $results[$i][7];
 				}
-				$return[$i]['title'] = $test;				
+				$return[$i]['title'] = $test;
 				$return[$i]['time'] = api_convert_and_format_date($results[$i][4], null, date_default_timezone_get());
 				$return[$i]['result'] = $res;
 				$return[$i]['max'] = $results[$i][3];
@@ -317,7 +317,7 @@ class ExerciseResult
 		require_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php');
 		$workbook = new Spreadsheet_Excel_Writer();
 		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
-		
+
 		$workbook->send($filename);
 		$worksheet =& $workbook->addWorksheet('Report '.date('YmdGis'));
 		$line = 0;

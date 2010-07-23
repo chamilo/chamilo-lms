@@ -210,7 +210,7 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
 			$description="";
 			$session_id=api_get_session_id();
 			$link_id=is_resource_in_course_gradebook(api_get_course_id(),5,$id,$session_id);
-			if ($link_id==false) {
+			if (!$link_id) {
 				add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,api_get_session_id());
 			} else {
 				Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');

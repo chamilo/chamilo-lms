@@ -103,7 +103,7 @@ if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 			else
 			{
 				/* deprecated code
-				if ($enableDocumentParsing==true)
+				if ($enableDocumentParsing)
 				{ $enableDocumentParsing=false;
 				$oke=1;}
 				else { $oke = 0; }
@@ -204,7 +204,7 @@ if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 	}
 
 	Display::display_header($nameTools,get_lang('Exercise'));
-	
+
 	echo '<div class="actions">';
 	echo '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
 	echo '</div>';

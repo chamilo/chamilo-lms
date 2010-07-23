@@ -123,7 +123,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 <?php
 }
 
-if($export == true && $name != false) {
+if ($export && $name) {
 	Display::display_confirmation_message(get_lang('BackupCreated').'<br /><br /><a class="bottom-link" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.urlencode($name).'&session=true">'.$name.'</a>', false);
 	echo '<p><a class="bottom-link"  href="'.api_get_path(WEB_CODE_PATH).'admin/index.php">&nbsp;'.get_lang('MainMenu').'</a></p>';
 } else{

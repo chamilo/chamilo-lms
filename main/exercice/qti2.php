@@ -69,12 +69,12 @@ function ch_qti2_import_file($array_file) {
 		// if it's a zip, allow zip upload
 		$unzip = 1;
 	}
-	if ($process == true && $unzip == 1) {
+	if ($process && $unzip == 1) {
 		$main_path = api_get_path(SYS_CODE_PATH);
 		require_once $main_path.'exercice/export/exercise_import.inc.php';
         require_once $main_path.'exercice/export/qti2/qti2_classes.php';
         $imported = import_exercise($array_file['name']);
-        if ($imported == true) {
+        if ($imported) {
         	header('Location: exercice.php?' . Security::remove_XSS(api_get_cidreq()) .'');
         } else {
             Display::display_error_message(get_lang('The import was not performed'));

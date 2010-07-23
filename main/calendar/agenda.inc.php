@@ -476,7 +476,7 @@ function display_monthcalendar($month, $year) {
 								}
 							}
 							//Do not show links with no content
-							if ($some_content == false) {
+							if (!$some_content) {
 								$dayheader = $curday;
 							}
 
@@ -684,11 +684,11 @@ function selectAll(cbList,bSelect,showwarning)
 			msg_err1.style.display =\"block\";
 			msg_err1.innerHTML=\"".get_lang('EndDateCannotBeBeforeTheStartDate')."\";
 			msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} else if (checkDate(start_month,start_day,start_year) == false) {
+		} else if (!checkDate(start_month,start_day,start_year)) {
 			msg_err2.style.display =\"block\";
 			msg_err2.innerHTML=\"".get_lang('InvalidDate')."\";
 			msg_err1.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} else if (checkDate(ends_month,ends_day,ends_year) == false) {
+		} else if (!checkDate(ends_month,ends_day,ends_year)) {
 			msg_err3.style.display =\"block\";
 			msg_err3.innerHTML=\"".get_lang('InvalidDate')."\";
 			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";
@@ -4629,12 +4629,12 @@ function agenda_import_ical($course_info,$file) {
 
 
     $ts 	 = $ve->getProperty('dtend');
-    if ($ts != false) {
+    if ($ts) {
     	$end_date_string = $ts['year'].'-'.$ts['month'].'-'.$ts['day'].' '.$ts['hour'].':'.$ts['min'].':'.$ts['sec'];
     } else {
     	//Check duration if dtend does not exist
     	$duration 	  = $ve->getProperty('duration');
-    	if ($duration != false) {
+    	if ($duration) {
     		$duration = $ve->getProperty('duration');
     		$duration_string = $duration['year'].'-'.$duration['month'].'-'.$duration['day'].' '.$duration['hour'].':'.$duration['min'].':'.$duration['sec'];
     		$start_date_tms = mktime(intval($start_date['hour']), intval($start_date['min']), intval($start_date['sec']), intval($start_date['month']), intval($start_date['day']), intval($start_date['year']));

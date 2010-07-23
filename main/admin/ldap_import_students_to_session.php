@@ -185,7 +185,7 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 					id_user="'.intval($user_id).'",
 					id_session = "'.intval($id_session).'"';
 			$res_user = Database::query($sql);
-			if($res_user != false)
+			if ($res_user)
 			{
 				$num++;
 			}

@@ -57,7 +57,7 @@ class CourseRestorer
 	{
 		$this->file_option = $option;
 	}
-	
+
 	/**
 	 * Restore a course.
 	 * @param string $destination_course_code The code of the Dokeos-course in
@@ -95,7 +95,7 @@ class CourseRestorer
 		$this->course->to_system_encoding();
 
 		if (!empty($session_id)) {
-			
+
 			$this->restore_documents($session_id, $destination_course_code);
 			$this->restore_quizzes($session_id);
 			$this->restore_glossary($session_id);
@@ -184,25 +184,25 @@ class CourseRestorer
 	 * Restore documents
 	 */
 	function restore_documents($session_id = 0, $destination_course_code = '') {
-		
+
 		$perm = api_get_permissions_for_new_directories();
-		
+
 		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
-			
+
 			$table = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
 			$destination_course['dbName']= $this->course->destination_db;
-						
+
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 				$dirs = explode('/', dirname($document->path));
-			    
+
 				//if (count($dirs)==1) {
-				
+
 		    	if ($document->file_type==FOLDER) {
 		    		$visibility = $document->item_properties[0]['visibility'];
 		    		$new = substr($document->path, 8);
-		    		
+
 		    		if (!is_dir($path.'document/'.$new)) {
 						$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document',$new,basename($new),$visibility);
 		    		}
@@ -237,10 +237,10 @@ class CourseRestorer
 				echo 'filetype:'.$document->file_type ;
 				echo '<br>';
 				*/
-				
-				if ($document->file_type == DOCUMENT) {					
-					if (file_exists($path.$document->path)) {						
-						
+
+				if ($document->file_type == DOCUMENT) {
+					if (file_exists($path.$document->path)) {
+
 						switch ($this->file_option) {
 							case FILE_OVERWRITE :
 								$origin_path = $this->course->backup_path.'/'.$document->path;
@@ -261,7 +261,7 @@ class CourseRestorer
 								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
 								break;
 							case FILE_RENAME :
-							
+
 								$i = 1;
 								$ext = explode('.', basename($document->path));
 								if (count($ext) > 1) {
@@ -287,7 +287,7 @@ class CourseRestorer
 									$course_path = $path;								// "/var/www/wiener/courses/"
 									$orig_base_folder = $document_path[1];
 									$orig_base_path   = $course_path.$document_path[0].'/'.$document_path[1];
-									
+
 									if (is_dir($orig_base_path)) {
 
 										$new_base_foldername = $orig_base_folder;	// e.g: "carpeta1"
@@ -350,10 +350,10 @@ class CourseRestorer
 									break;
 
 						} // end switch
-					} else { // end if file exists					
+					} else { // end if file exists
 						//make sure the source file actually exists
 						if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path))) {
-								
+
 							copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
 							$sql = "INSERT INTO ".$table." SET path = '/".substr($document->path, 9)."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
 							Database::query($sql);
@@ -371,7 +371,7 @@ class CourseRestorer
 						}
 					} // end file doesn't exist
 				} else {
-					
+
 					/*$sql = "SELECT id FROM ".$table." WHERE path = '/".Database::escape_string(substr($document->path, 9))."'";
 					$res = Database::query($sql);
 					if( Database::num_rows($res)> 0)
@@ -401,10 +401,10 @@ class CourseRestorer
 	function restore_scorm_documents()
 	{
 		$perm = api_get_permissions_for_new_directories();
-		
+
 		if ($this->course->has_resources(RESOURCE_SCORM)) {
 			$resources = $this->course->resources;
-			
+
 			foreach ($resources[RESOURCE_SCORM] as $id => $document) {
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
@@ -712,42 +712,42 @@ class CourseRestorer
 				Database::query($sql);
 				$new_event_id = Database::insert_id();
 				$this->course->resources[RESOURCE_EVENT][$id]->destination_id = $new_event_id;
-				
+
 				//copy event attachment
-								
-				$origin_path = $this->course->backup_path.'/upload/calendar/';				
+
+				$origin_path = $this->course->backup_path.'/upload/calendar/';
 				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/calendar/';
-				
+
 				if (!empty($this->course->orig)) {
-						
+
 					$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->orig);
 					$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE agenda_id = '.$id;
 					$attachment_event = Database::query($sql);
 					$attachment_event = Database::fetch_object($attachment_event);
-	
+
 					if (file_exists($origin_path.$attachment_event->path) && !is_dir($origin_path.$attachment_event->path) ) {
-						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php	
+						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
 						$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
 						//$copy_result = true;
-						if ($copy_result == true) {		
-							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->destination_db);			
+						if ($copy_result) {
+							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->destination_db);
 							$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($attachment_event->comment)."', size = '".$attachment_event->size."', filename = '".$attachment_event->filename."' , agenda_id = '".$new_event_id."' ";
 							Database::query($sql);
-						}				
-					}					
-				} else {					
-					// get the info of the file					
+						}
+					}
+				} else {
+					// get the info of the file
 					if(!empty($event->attachment_path) && is_file($origin_path.$event->attachment_path) && is_readable($origin_path.$event->attachment_path)) {
 						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
-						$copy_result = copy($origin_path.$event->attachment_path, $destination_path.$new_filename);						 
-						if ($copy_result == true) {	 							
-							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->destination_db);			
+						$copy_result = copy($origin_path.$event->attachment_path, $destination_path.$new_filename);
+						if ($copy_result) {
+							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->destination_db);
 							$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($event->attachment_comment)."', size = '".$event->attachment_size."', filename = '".$event->attachment_filename."' , agenda_id = '".$new_event_id."' ";
 							Database::query($sql);
 						}
-					}					
-				}	
-			}	
+					}
+				}
+			}
 		}
 	}
 	/**
@@ -805,39 +805,39 @@ class CourseRestorer
 				Database::query($sql);
 				$new_announcement_id = Database::insert_id();
 				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = $new_announcement_id;
-				
-								
-				$origin_path = $this->course->backup_path.'/upload/announcements/';				
+
+
+				$origin_path = $this->course->backup_path.'/upload/announcements/';
 				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/announcements/';
-				
-				//Copy announcement attachment file					
+
+				//Copy announcement attachment file
 				if (!empty($this->course->orig)) {
-												
+
 					$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->orig);
-					
+
 					$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE announcement_id = '.$id;
 					$attachment_event = Database::query($sql);
 					$attachment_event = Database::fetch_object($attachment_event);
-	 				 
+
 					if (file_exists($origin_path.$attachment_event->path) && !is_dir($origin_path.$attachment_event->path) ) {
-						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php	
+						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
 						$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
 						//error_log($destination_path.$new_filename); error_log($copy_result);
 						//$copy_result = true;
-						if ($copy_result == true) {		
-							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->destination_db);			
+						if ($copy_result) {
+							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->destination_db);
 							$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($attachment_event->comment)."', size = '".$attachment_event->size."', filename = '".$attachment_event->filename."' , announcement_id = '".$new_announcement_id."' ";
 							Database::query($sql);
-						}				
+						}
 					}
-				} else {					
+				} else {
 					// get the info of the file
 					if(!empty($announcement->attachment_path) && is_file($origin_path.$announcement->attachment_path) && is_readable($origin_path.$announcement->attachment_path)) {
 						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
 						$copy_result = copy($origin_path.$announcement->attachment_path, $destination_path.$new_filename);
-																			 
-						if ($copy_result == true) {	 							
-							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->destination_db);			
+
+						if ($copy_result) {
+							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->destination_db);
 							$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($announcement->attachment_comment)."', size = '".$announcement->attachment_size."', filename = '".$announcement->attachment_filename."' , announcement_id = '".$new_announcement_id."' ";
 							Database::query($sql);
 						}
@@ -1211,9 +1211,9 @@ class CourseRestorer
 			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST, $this->course->destination_db);
 
 			$resources = $this->course->resources;
-			
-							
-			$origin_path = $this->course->backup_path.'/upload/learning_path/images/';				
+
+
+			$origin_path = $this->course->backup_path.'/upload/learning_path/images/';
 			$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
 
 			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
@@ -1223,19 +1223,19 @@ class CourseRestorer
 					$session_id = intval($session_id);
 					$condition_session = " , session_id = '$session_id' ";
 				}
-				
+
 				//Adding the author's image
 				if (!empty($lp->preview_image)) {
-					$new_filename = uniqid('').$new_filename.substr($lp->preview_image,strlen($lp->preview_image)-7, strlen($lp->preview_image));	
+					$new_filename = uniqid('').$new_filename.substr($lp->preview_image,strlen($lp->preview_image)-7, strlen($lp->preview_image));
 					if (file_exists($origin_path.$lp->preview_image) && !is_dir($origin_path.$lp->preview_image)) {
 						$copy_result = copy($origin_path.$lp->preview_image, $destination_path.$new_filename);
 						//$copy_result = true;
-						if ($copy_result === true) {
+						if ($copy_result) {
 							$lp->preview_image = $new_filename;
 						} else {
 							$lp->preview_image ='';
 						}
-					}			
+					}
 				}
 
 				$sql = "INSERT INTO ".$table_main." SET " .
@@ -1256,9 +1256,9 @@ class CourseRestorer
 						"author= '".Database::escape_string($lp->author)."', " .
 						"preview_image= '".Database::escape_string($lp->preview_image)."', " .
 						"debug= '".Database::escape_string($lp->debug)."' $condition_session ";
-							
-				Database::query($sql);		
-				
+
+				Database::query($sql);
+
 				$new_lp_id = Database::insert_id();
 
 				if($lp->visibility) {

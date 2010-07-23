@@ -14,7 +14,7 @@
 *	- sticky messages
 * 	- new view option: nested view
 * 	- quoting a message
-*	
+*
 * 	@package chamilo.forum
 *
 * @todo several functions have to be moved to the itemmanager library
@@ -522,7 +522,7 @@ function store_forum($values) {
 
 	$session_id = api_get_session_id();
 	$clean_title = Database::escape_string($values['forum_title']);
-		
+
 	// forum images
 	$image_moved=false;
 	if (!empty($_FILES['picture']['name'])) {
@@ -618,9 +618,9 @@ function store_forum($values) {
 				'".Database::escape_string(isset($values['public_private_group_forum_group']['public_private_group_forum'])?$values['public_private_group_forum_group']['public_private_group_forum']:null)."',
 				'".Database::escape_string(isset($new_max)?$new_max:null)."',
 				".intval($session_id).")";
-		
+
 		Database::query($sql);
-		
+
 		$last_id = Database::insert_id();
 		if ($last_id > 0) {
 			api_item_property_update($_course, TOOL_FORUM, $last_id, 'ForumAdded', api_get_user_id());
@@ -738,7 +738,7 @@ function delete_post($post_id) {
         api_sql_query($sql);
         return 'PostDeleted';
     }
-    if ($last_post_of_thread==false) {
+    if (!$last_post_of_thread) {
         // we deleted the very single post of the thread so we need to delete the entry in the thread table also.
         $sql="DELETE FROM $table_threads WHERE thread_id='".intval($_GET['thread'])."'";
         api_sql_query($sql);
@@ -1026,7 +1026,7 @@ function move_up_down($content, $direction, $id) {
 	$found=false;
 	while ($row=Database::fetch_array($result)) {
 		//echo $row[$id_column].'-';
-		if ($found==true) {
+		if ($found) {
 			$next_id=$row[$id_column];
 			$next_sort=$row[$sort_column];
 			$found=false;
@@ -1359,7 +1359,7 @@ function get_last_post_information($forum_id, $show_invisibles=false, $course_db
 				ORDER BY post.post_id DESC";
 	$result=Database::query($sql);
 
-	if ($show_invisibles==true) {
+	if ($show_invisibles) {
 		$row=Database::fetch_array($result);
 		$return_array['last_post_id']=$row['post_id'];
 		$return_array['last_poster_id']=$row['poster_id'];
@@ -1948,12 +1948,12 @@ function show_add_post_form($action='', $id='', $form_values='') {
 		// thread qualify
 		$form->addElement('static','Group', '<br /><strong>'.get_lang('AlterQualifyThread').'</strong>');
 		$form->applyFilter('numeric_calification', 'html_filter');
-		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 		$form -> addElement('html','<div id="options_field" style="display:none">');
 		$form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'),'Style="width:40px"');
 		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
 		$form->applyFilter('calification_notebook_title', 'html_filter');
-		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="this.select();"');
+		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="javascript: this.select();"');
 		$form->applyFilter('weight_calification', 'html_filter');
 		$form->addElement('html','</div>');
 	}
@@ -2376,7 +2376,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	if (!isset($_GET['edit'])) {
 		$form->addElement('static','Group','<strong>'.get_lang('AlterQualifyThread').'</strong>');
 		$form->applyFilter('numeric_calification', 'html_filter');
-		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 		$defaults['thread_qualify_gradebook']=is_resource_in_course_gradebook(api_get_course_id(),5,$_GET['thread'],api_get_session_id());
 
 		if (!empty($defaults['thread_qualify_gradebook'])) {
@@ -2823,7 +2823,7 @@ function send_notification_mails($thread_id, $reply_info) {
 	}
 
 	// the forum category, the forum, the thread and the reply are visible to the user
-	if ($send_mails == true) {
+	if ($send_mails) {
 		send_notifications($current_thread['forum_id'],$thread_id);
 		/*
 		$table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
@@ -2855,7 +2855,7 @@ function send_notification_mails($thread_id, $reply_info) {
 
 /**
 * This function is called whenever something is made visible because there might
-* be new posts and the user might have indicated that (s)he wanted to be 
+* be new posts and the user might have indicated that (s)he wanted to be
 * informed about the new posts by mail.
 *
 * @param    string  Content type (post, thread, forum, forum_category)
@@ -2870,15 +2870,15 @@ function handle_mail_cue($content, $id) {
 	$table_threads 		= Database :: get_course_table(TABLE_FORUM_THREAD);
 	$table_posts 		= Database :: get_course_table(TABLE_FORUM_POST);
 	$table_users 		= Database :: get_main_table(TABLE_MAIN_USER);
-        	
+
 	// if the post is made visible we only have to send mails to the people who indicated that they wanted to be informed for that thread.
 	if ($content=='post') {
 		// getting the information about the post (need the thread_id)
 		$post_info = get_post_information($id);
 		$thread_id = Database::escape_string($post_info['thread_id']);
-        
+
 		// sending the mail to all the users that wanted to be informed for replies on this thread.
-		$sql="SELECT users.firstname, users.lastname, users.user_id, users.email 
+		$sql="SELECT users.firstname, users.lastname, users.user_id, users.email
 		        FROM $table_mailcue mailcue, $table_posts posts, $table_users users
 				WHERE posts.thread_id='$thread_id'
 				AND posts.post_notification='1'
@@ -2886,15 +2886,15 @@ function handle_mail_cue($content, $id) {
 				AND users.user_id=posts.poster_id
 				AND users.active=1
 				GROUP BY users.email";
-				
+
 		$result=Database::query($sql);
-		while ($row=Database::fetch_array($result)) {			
+		while ($row=Database::fetch_array($result)) {
 			send_mail($row, get_thread_information($post_info['thread_id']));
 		}
 
 		// deleting the relevant entries from the mailcue
-		$sql_delete_mailcue="DELETE FROM $table_mailcue 
-		        WHERE post_id='".Database::escape_string($id)."' 
+		$sql_delete_mailcue="DELETE FROM $table_mailcue
+		        WHERE post_id='".Database::escape_string($id)."'
 		        AND thread_id='".Database::escape_string($post_info['thread_id'])."'";
 		//$result=Database::query($sql_delete_mailcue);
 	} elseif ($content=='thread') {
@@ -3282,7 +3282,7 @@ function display_forum_search_results($search_term) {
 			$display_result = true;
 		}
 
-		if ($display_result == true) {
+		if ($display_result) {
 			$search_results_item = '<li><a href="viewforumcategory.php?forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'&origin='.$origin.'&amp;search='.urlencode($search_term).'">'.$forum_categories_list[$row['forum_id']['forum_category']]['cat_title'].'</a> > ';
 			$search_results_item .= '<a href="viewforum.php?forum='.$row['forum_id'].'&amp;origin='.$origin.'&amp;search='.urlencode($search_term).'">'.$forum_list[$row['forum_id']]['forum_title'].'</a> > ';
 			//$search_results_item .= '<a href="">THREAD</a> > ';
@@ -3890,7 +3890,7 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
  * return String
  * @author Christian Fasanando
  */
- function get_name_user_by_id($user_id) { 	
+ function get_name_user_by_id($user_id) {
 	$t_users = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT firstname, lastname FROM ".$t_users." WHERE user_id = '".intval($user_id)."' ";
 	$result = Database::query($sql);
@@ -3905,7 +3905,7 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
  * @author Julio Montoya <gugli100@gmail.com> Adding security
  **/
  function get_name_thread_by_id($thread_id) {
-	$t_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD,'');	
+	$t_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD,'');
 	$sql ="SELECT thread_title FROM ".$t_forum_thread." WHERE thread_id = '".intval($thread_id)."' ";
 	$result = Database::query($sql);
 	$row = Database::fetch_array($result);

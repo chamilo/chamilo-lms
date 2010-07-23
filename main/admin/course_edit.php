@@ -294,7 +294,7 @@ if ($form->validate()) {
 
 	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE,$course_db_name);
 	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."'";
-	if ($visual_code_is_used == true) {
+	if ($visual_code_is_used) {
 	    header('Location: course_list.php?action=show_msg&warn='.urlencode($warn));
 	} else {
         header('Location: course_list.php');

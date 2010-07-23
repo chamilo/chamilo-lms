@@ -24,11 +24,11 @@ if (get_setting('allow_terms_conditions') == 'true') {
 			$language = api_get_interface_language();
 			$language = api_get_language_id($language);
 			$term_preview = LegalManager::get_last_condition($language);
-			if ($term_preview == false) {
+			if (!$term_preview) {
 				//look for the default language
 				$language = api_get_setting('platformLanguage');
 				$language = api_get_language_id($language);
-				$term_preview= LegalManager::get_last_condition($language);
+				$term_preview = LegalManager::get_last_condition($language);
 			}
 			$tool_name = get_lang('TermsAndConditions');
 			Display :: display_header('');

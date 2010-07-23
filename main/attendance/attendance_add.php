@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for adding a attendance 
+* View (MVC patter) for adding a attendance
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.attendance
 */
@@ -11,8 +11,8 @@
 api_protect_course_script(true);
 
 // error messages
-if ($error) {	
-	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);	
+if ($error) {
+	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
 }
 
 $param_gradebook = '';
@@ -38,11 +38,11 @@ $form->addElement('html', '<div class="formw"><br /><a href="javascript://" clas
 $form->addElement('html','<div id="id_qualify" style="display:none">');
 
 // Qualify Attendance for gradebook option
-$form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+$form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 $form -> addElement('html','<div id="options_field" style="display:none">');
 $form->addElement('text', 'attendance_qualify_title', get_lang('TitleColumnGradebook'));
 $form->applyFilter('attendance_qualify_title', 'html_filter');
-$form->addElement('text', 'attendance_weight', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="this.select();"');
+$form->addElement('text', 'attendance_weight', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="javascript: this.select();"');
 $form->applyFilter('attendance_weight', 'html_filter');
 $form->addElement('html','</div>');
 

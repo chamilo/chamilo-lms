@@ -287,7 +287,7 @@ if (Database::num_rows($result)>0 && isset($id)) {
 			}
 		}
 	}
-	if ($show_results == true) {
+	if ($show_results) {
 		$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($_user['user_id'])." ";
 		$query = "SELECT attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as attempts
 						INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id
@@ -309,7 +309,7 @@ if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 	$show_results = false;
 }
 
-if ($show_results == true ) {
+if ($show_results) {
 	?>
 	<table width="100%">
 		<tr>
@@ -387,7 +387,7 @@ if ($show_results) {
 
 		// destruction of the Question object
 		unset($objQuestionTmp);
-		
+
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
 			$colspan=2;
 		}
@@ -626,7 +626,7 @@ if ($show_results) {
 					$switchable_answer_set=true;
 				}
 
-				$answer = $pre_array[0];			
+				$answer = $pre_array[0];
 
 				// splits weightings that are joined with a comma
 				$answerWeighting = explode(',',$is_set_switchable[0]);
@@ -664,19 +664,19 @@ if ($show_results) {
 						if (($pos = api_strpos($temp,']')) === false) {
 							break;
 						}
-	
+
 						$queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' AND question_id= '".Database::escape_string($questionId)."'";
 						$resfill = Database::query($queryfill);
 						$str = Database::result($resfill,0,'answer');
-						
+
 						preg_match_all('#\[([^[]*)\]#', $str, $arr);
 						$str = str_replace('\r\n', '', $str);
 						$choice = $arr[1];
-						
+
 						$tmp=strrpos($choice[$j],' / ');
 						$choice[$j]=substr($choice[$j],0,$tmp);
 						$choice[$j]=trim($choice[$j]);
-			
+
 						//Needed to let characters ' and " to work as part of an answer
 						$choice[$j] = stripslashes($choice[$j]);
 
@@ -694,7 +694,7 @@ if ($show_results) {
 						$temp=api_substr($temp,$pos+1);
 						$i=$i+1;
 					}
-					$answer = stripslashes($str);					
+					$answer = stripslashes($str);
 
 				} else {
 					//multiple fill in blank
@@ -774,7 +774,7 @@ if ($show_results) {
 			$resq	= Database::query($query);
 			$choice = Database::result($resq,0,'answer');
 			$choice = str_replace('\r\n', '', $choice);
-			$choice = stripslashes($choice);			
+			$choice = stripslashes($choice);
 
 			$questionScore = Database::result($resq,0,"marks");
 			if ($questionScore==-1) {
@@ -803,10 +803,10 @@ if ($show_results) {
 			while ($real_answer = Database::fetch_array($res_answer)) {
 				$real_list[$real_answer['id']]= $real_answer['answer'];
 			}
-	
+
 			$sql_select_answer = 'SELECT id, answer, correct, id_auto FROM '.$table_ans.'
 								  WHERE question_id="'.Database::escape_string($questionId).'" AND correct <> 0 ORDER BY id_auto';
-								  
+
 			$res_answers = Database::query($sql_select_answer);
 
 			echo '<table width="100%" height="71" border="0" cellspacing="3" cellpadding="3" >';
@@ -828,7 +828,7 @@ if ($show_results) {
 
 				$sql_user_answer = "SELECT answer FROM $TBL_TRACK_ATTEMPT
 									WHERE exe_id = '$id' AND question_id = '$questionId' AND position='$i_answer_id_auto'";
-				
+
 				$res_user_answer = Database::query($sql_user_answer);
 
 				if (Database::num_rows($res_user_answer)>0 ) {
@@ -1003,7 +1003,7 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 	//Database::query($query);
 	if ($show_results) {
 		echo '<div id="question_score">'.get_lang('YourTotalScore')." ";
-		if($dsp_percent == true) {
+		if ($dsp_percent) {
 			$my_result = number_format(($totalScore/$totalWeighting)*100,1,'.','');
 			$my_result = float_format($my_result,1);
 			echo $my_result."%";

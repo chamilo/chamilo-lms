@@ -259,11 +259,11 @@ function validate_date()
 			msg_err1.style.display =\"block\";
 			msg_err1.innerHTML=\"".get_lang('EndDateCannotBeBeforeTheStartDate')."\";
 			msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} else if (checkDate(start_month,start_day,start_year) == false) {
+		} else if (!checkDate(start_month,start_day,start_year)) {
 			msg_err2.style.display =\"block\";
 			msg_err2.innerHTML=\"".get_lang('InvalidDate')."\";
 			msg_err1.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} else if (checkDate(ends_month,ends_day,ends_year) == false) {
+		} else if (!checkDate(ends_month,ends_day,ends_year)) {
 			msg_err3.style.display =\"block\";
 			msg_err3.innerHTML=\"".get_lang('InvalidDate')."\";
 			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";

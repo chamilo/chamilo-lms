@@ -74,7 +74,7 @@ $my_forum=isset($_GET['forum'])?$_GET['forum']:'';
 $val=GroupManager::user_has_access($userid,$my_forum_group,GROUP_TOOL_FORUM);
 
 if(!empty($my_forum_group)){
-		if (api_is_allowed_to_edit(false,true) || $val==true) {
+		if (api_is_allowed_to_edit(false, true) || $val) {
 			$current_forum=get_forum_information($my_forum); // note: this has to be validated that it is an existing forum.
 			$current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 		}

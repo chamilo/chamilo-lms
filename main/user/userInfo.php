@@ -389,7 +389,7 @@ elseif ($displayMode == "viewContentEdit") {
                         }
                     } else {
                         if ($user_info_viewed['status'] == STUDENT) {
-                            echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " />" . ' ' . Display::return_icon('synthese_view.gif',get_lang('TheTutorOnlCanyKeepTrackOfStudentsRegisteredInTheCourse')),$checked,"</td>";
+                            echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " />" . ' ' . Display::return_icon('synthese_view.gif',get_lang('TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse')),$checked,"</td>";
                         } else {
                             echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteCourseAdmin\" value=\"1\"", $courseAdminChecked, " />" . ' ' . Display::return_icon('synthese_view.gif',get_lang('TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse')),$checked,"</td>\n";
                         }

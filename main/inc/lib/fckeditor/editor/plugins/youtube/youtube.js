@@ -197,6 +197,8 @@ function checkCode( code )
 	{
 		return false ;
 	}
+
+	return true ;
 }
 
 function GetOriginalYoutubeUrl ( url )

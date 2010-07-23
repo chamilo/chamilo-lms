@@ -574,7 +574,7 @@ function display_anonymous_course_list() {
 
 	//showing only the courses of the current access_url_id
 	global $_configuration;
-	if ($_configuration['multiple_access_urls'] == true) {
+	if ($_configuration['multiple_access_urls']) {
 		$url_access_id = api_get_current_access_url_id();
 		if ($url_access_id != -1) {
 			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);

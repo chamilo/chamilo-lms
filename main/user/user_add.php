@@ -183,7 +183,7 @@ if($register) {
 	    $email_admin = api_get_setting('emailAdministrator');
 
 		$portal_url = $_configuration['root_web'];
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1 ){
 				$url = api_get_access_url($access_url_id);

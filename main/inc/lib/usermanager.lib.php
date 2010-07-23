@@ -36,7 +36,7 @@ define('USER_RELATION_TYPE_FRIEND',		3);
 define('USER_RELATION_TYPE_GOODFRIEND',	4); // should be deprecated is useless
 define('USER_RELATION_TYPE_ENEMY',		5); // should be deprecated is useless
 define('USER_RELATION_TYPE_DELETED',	6);
-define('USER_RELATION_TYPE_RRHH',		7); 
+define('USER_RELATION_TYPE_RRHH',		7);
 
 class UserManager
 {
@@ -133,7 +133,7 @@ class UserManager
 			$return = Database::insert_id();
 			global $_configuration;
 			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-			if ($_configuration['multiple_access_urls'] == true) {
+			if ($_configuration['multiple_access_urls']) {
 				if (api_get_current_access_url_id() != -1) {
 					UrlManager::add_user_to_url($return, api_get_current_access_url_id());
 				} else {
@@ -270,8 +270,8 @@ class UserManager
 		$sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
 		$resv = Database::query($sqlv);
 
-		require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';		
-		if ($_configuration['multiple_access_urls']) {			
+		require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
+		if ($_configuration['multiple_access_urls']) {
 			$url_id = 1;
 			if (api_get_current_access_url_id() != -1) {
 				$url_id = api_get_current_access_url_id();
@@ -383,10 +383,10 @@ class UserManager
 		}
 		return $return;
 	}
-	
+
 	/**
 	 * Disables or enables a user
-	 * 
+	 *
 	 * @param int user_id
 	 * @param int Enable or disable
 	 */
@@ -396,28 +396,28 @@ class UserManager
 		$sql = "UPDATE $table_user SET active = '$active' WHERE user_id = '$user_id';";
 		Database::query($sql);
 	}
-	
+
 	/**
 	 * Disables a user
-	 * 
+	 *
 	 * @param int User id
 	 */
 	public static function disable($user_id) {
 		self::change_active_state($user_id, 0);
 	}
-	
+
 	/**
 	 * Enable a user
-	 * 
+	 *
 	 * @param int User id
 	 */
 	public static function enable($user_id) {
 		self::change_active_state($user_id, 1);
 	}
-	
+
 	/**
 	 * Returns the user's id based on the original id and field name in the extra fields. Returns 0 if no user was found
-	 * 
+	 *
 	 * @param string Original user id
 	 * @param string Original field name
 	 * @return int User id
@@ -428,7 +428,7 @@ class UserManager
 		$sql = "SELECT user_id	FROM $t_uf uf INNER JOIN $t_ufv ufv ON ufv.field_id=uf.id WHERE field_variable='$original_user_id_name' AND field_value='$original_user_id_value';";
 		$res = Database::query($sql);
 		$row = Database::fetch_object($res);
-		if($row != false) {
+		if ($row != false) {
 			return $row->user_id;
 		} else {
 			return 0;
@@ -525,10 +525,10 @@ class UserManager
 		// 2. Length limitation.
 		return substr(preg_replace(USERNAME_PURIFIER_SHALLOW, '', $username), 0, USERNAME_MAX_LENGTH);
 	}
-	
+
 	/**
 	 * Checks whether the user id exists in the database
-	 * 
+	 *
 	 * @param int User id
 	 * @return bool True if user id was found, false otherwise
 	 */
@@ -1096,7 +1096,7 @@ class UserManager
 						// Otherwise update it
 						$sql_query = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
 					}
-					
+
 					$resu = Database::query($sql_query);
 					return($resu ? true : false);
 				}
@@ -1450,11 +1450,11 @@ class UserManager
                             $filter_cond .= " AND field_filter = $field_filter ";
                         }
 			$sql .= " WHERE f.field_visible = 1 $filter_cond ";
-		} else {                    
+		} else {
                     if (isset($field_filter)) {
                         $field_filter = intval($field_filter);
                         $sql .= " WHERE field_filter = $field_filter ";
-                    }                    
+                    }
                 }
 
 		$sql .= " ORDER BY f.field_order";
@@ -1672,13 +1672,13 @@ class UserManager
 		}
 		return $result_data;
 	}
-	
+
 	/**
 	 * Get extra user data by field variable
 	 * @param string	field variable
 	 * @return array	data
 	 */
-	public static function get_extra_user_data_by_field_variable($field_variable) {		
+	public static function get_extra_user_data_by_field_variable($field_variable) {
 		$tbl_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$extra_information_by_variable = self::get_extra_field_information_by_name($field_variable);
 		$field_id = intval($extra_information_by_variable['id']);
@@ -1718,7 +1718,7 @@ class UserManager
 		//we filter the courses from the URL
 		$join_access_url=$where_access_url='';
 		global $_configuration;
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
 			if($access_url_id!=-1) {
 				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -1807,8 +1807,8 @@ class UserManager
 
 		//we filter the courses from the URL
 		$join_access_url = $where_access_url = '';
-		
-		if ($_configuration['multiple_access_urls'] == true) {
+
+		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
 				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -1819,7 +1819,7 @@ class UserManager
 
 		// variable initialisation
 		$personal_course_list_sql = '';
-		
+
 		//Courses in which we suscribed out of any session
 		/*$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
 											course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort,
@@ -1983,7 +1983,7 @@ class UserManager
 		//we filter the courses from the URL
 		$join_access_url=$where_access_url='';
 		global $_configuration;
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
 			if($access_url_id!=-1) {
 				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -2087,9 +2087,9 @@ class UserManager
 					$return .= '<ul>';
 				}
 				foreach ($file_list as $file) {
-					
-					
-					
+
+
+
 					if($resourcetype=="all")
 					{
 						$return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
@@ -2097,7 +2097,7 @@ class UserManager
 					elseif($resourcetype=="images")
 					{
 						//get extension
-						$ext = explode('.', $file);						
+						$ext = explode('.', $file);
 						if($ext[1]=='jpg' || $ext[1]=='jpeg'|| $ext[1]=='png' || $ext[1]=='gif' || $ext[1]=='bmp' || $ext[1]=='tif')
 						{
 						$return .= '<li style="display:inline;"><a href="'.$web_path.urlencode($file).'" target="_blank"><img src="'.$web_path.urlencode($file).'" width="80" height="60"></a>';
@@ -2726,7 +2726,7 @@ class UserManager
 		$keyword = $tag;
 		$sql = "SELECT u.user_id, u.username, firstname, lastname, email, picture_uri FROM $user_table u";
 		global $_configuration;
-		if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+		if ($_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
 			$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
 		}
@@ -2746,7 +2746,7 @@ class UserManager
 		$sql .= " AND u.status <> 6 ";
 
 	    // adding the filter to see the user's only of the current access_url
-		if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+		if ($_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
 	    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
 	    }
 		$direction = 'ASC';
@@ -2814,7 +2814,7 @@ class UserManager
 
 		    // adding the filter to see the user's only of the current access_url
 		    global $_configuration;
-		    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+		    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
 		    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
 		    }
@@ -2831,7 +2831,7 @@ class UserManager
 			}
 
 		    // adding the filter to see the user's only of the current access_url
-			if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+			if ($_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
 		    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
 		    }
 
@@ -2894,7 +2894,7 @@ class UserManager
 		//we filter the courses from the URL
 		$join_access_url=$where_access_url='';
 		global $_configuration;
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
 			if($access_url_id!=-1) {
 				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -3026,7 +3026,7 @@ class UserManager
 			}
 		}
 	}
-		
+
 	/**
 	 * get users folloewd by human resource manager
 	 * @param int  		hr_dept id
@@ -3038,26 +3038,26 @@ class UserManager
 		// Database Table Definitions
 		$tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-		
-		$hr_dept_id = intval($hr_dept_id);		
+
+		$hr_dept_id = intval($hr_dept_id);
 		$assigned_users_to_hrm = array();
 
 		$condition_status = '';
 		if (!empty($user_status)) {
-			$status = intval($status);			
+			$status = intval($status);
 			$condition_status = ' AND u.status = '.$user_status;
 		}
-		
+
 		$sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
 				 INNER JOIN $tbl_user_rel_user uru ON uru.user_id = u.user_id AND friend_user_id = '$hr_dept_id' AND relation_type = '".USER_RELATION_TYPE_RRHH."' $condition_status";
 		$rs_assigned_users = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($rs_assigned_users) > 0) {
 			while ($row_assigned_users = Database::fetch_array($rs_assigned_users))	{
-				$assigned_users_to_hrm[$row_assigned_users['user_id']] = $row_assigned_users; 
+				$assigned_users_to_hrm[$row_assigned_users['user_id']] = $row_assigned_users;
 			}
-		}		
+		}
 		return $assigned_users_to_hrm;
-		
+
 	}
 
 	/**
@@ -3073,16 +3073,16 @@ class UserManager
 		$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 
 		$hr_dept_id = intval($hr_dept_id);
-		$affected_rows = 0;			
-		//Deleting assigned users to hrm_id			
+		$affected_rows = 0;
+		//Deleting assigned users to hrm_id
 	   	$sql = "SELECT user_id FROM $tbl_user_rel_user WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
 		$result = Database::query($sql,__FILE__,__LINE__);
-		
+
 		if (Database::num_rows($result) > 0) {
 			$sql = "DELETE FROM $tbl_user_rel_user WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
-			Database::query($sql,__FILE__,__LINE__);					
+			Database::query($sql,__FILE__,__LINE__);
 		}
-		
+
 		// inserting new user list
 		if (is_array($users_id)) {
 			foreach ($users_id as $user_id) {
@@ -3090,35 +3090,35 @@ class UserManager
 				$insert_sql = "INSERT IGNORE INTO $tbl_user_rel_user(user_id, friend_user_id, relation_type) VALUES('$user_id', $hr_dept_id, '".USER_RELATION_TYPE_RRHH."')";
 				Database::query($insert_sql,__FILE__,__LINE__);
 				$affected_rows = Database::affected_rows();
-			}			
+			}
 		}
 		return $affected_rows;
 
 	}
-	
-	
+
+
 	/**
 	 * This function check if an user is followed by human resources manager
-	 * @param 	int 	User id 
+	 * @param 	int 	User id
 	 * @param	int		Human resources manager
 	 * @return	bool
 	 */
 	public static function is_user_followed_by_drh($user_id, $hr_dept_id) {
-		
-		// Database table and variables Definitions		
+
+		// Database table and variables Definitions
 		$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 		$user_id 	= intval($user_id);
-		$hr_dept_id = intval($hr_dept_id);			
+		$hr_dept_id = intval($hr_dept_id);
 		$result = false;
-		
+
 		$sql = "SELECT user_id FROM $tbl_user_rel_user WHERE user_id='$user_id' AND friend_user_id='$hr_dept_id' AND relation_type=".USER_RELATION_TYPE_RRHH." ";
 		$rs  = Database::query($sql);
 		if (Database::num_rows($rs) > 0) {
-			$result = true;	
+			$result = true;
 		}
-		
+
 		return $result;
-		
+
 	}
 	/**
 	 * get user id of teacher or session administrator
@@ -3129,7 +3129,7 @@ class UserManager
 	 	$session=api_get_session_id();
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-		$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);	 			 	
+		$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	 	if ($session==0 || is_null($session)) {
 	 		$sql='SELECT u.user_id FROM '.$table_user.' u
 					INNER JOIN '.$table_course_user.' ru ON ru.user_id=u.user_id
@@ -3143,23 +3143,23 @@ class UserManager
 				$my_num_rows=$num_rows;
 				$my_user_id=Database::result($rs,$my_num_rows-1,'user_id');
 				return $my_user_id;
-			}		
+			}
 		} elseif ($session>0) {
 			$sql='SELECT u.user_id FROM '.$table_user.' u
 				INNER JOIN '.$table_session_course_user.' sru
 				ON sru.id_user=u.user_id WHERE sru.course_code="'.Database::escape_string($course_id).'" ';
 			$rs=Database::query($sql,__FILE__,__LINE__);
 			$row=Database::fetch_array($rs);
-			
+
 			return $row['user_id'];
 		 	}
 		 }
-	 
+
   /**
    * Determines if a user is a gradebook certified
    * @param int The category id of gradebook
    * @param int The user id
-   * @return boolean 
+   * @return boolean
    */
 	public function is_user_certified($cat_id,$user_id) {
 		$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
@@ -3174,10 +3174,10 @@ class UserManager
 	}
 
    /**
-   * Gets the info about a gradebook certificate for a user by course 
+   * Gets the info about a gradebook certificate for a user by course
    * @param string The course code
    * @param int The user id
-   * @return array  if there is not information return false 
+   * @return array  if there is not information return false
    */
 	public function get_info_gradebook_certificate($course_code,$user_id) {
 	  	$tbl_grade_certificate 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
@@ -3185,9 +3185,9 @@ class UserManager
 	  	$sql='SELECT * FROM '.$tbl_grade_certificate.' WHERE cat_id= (SELECT id FROM '.$tbl_grade_category.' WHERE course_code = "'.Database::escape_string($course_code).'" ) AND user_id="'.Database::escape_string($user_id).'" ';
 	  	$rs = Database::query($sql,__FILE__,__LINE__);
 	  	$row= Database::fetch_array($rs);
-	  	if (Database::num_rows($rs) > 0) 
-	  		return $row;  		
-	  	else 
+	  	if (Database::num_rows($rs) > 0)
+	  		return $row;
+	  	else
 	  		return false;
 	}
 
@@ -3200,7 +3200,7 @@ class UserManager
 	 	$my_certificate = array();
 		$table_certificate 			= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 		$table_gradebook_category 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-			 	
+
 	 	$session_id = api_get_session_id();
 	 	$user_id = intval($user_id);
 	 	if ($session_id==0 || is_null($session_id)) {
@@ -3210,9 +3210,9 @@ class UserManager
 	 	} else {
 	 		$sql_session='';
 	 	}
-	 	$sql= "SELECT tc.path_certificate,tc.cat_id,tgc.course_code,tgc.name FROM $table_certificate tc, $table_gradebook_category tgc 
-			   WHERE tgc.id = tc.cat_id AND tc.user_id='$user_id'  ORDER BY tc.date_certificate DESC limit 5";		
-	
+	 	$sql= "SELECT tc.path_certificate,tc.cat_id,tgc.course_code,tgc.name FROM $table_certificate tc, $table_gradebook_category tgc
+			   WHERE tgc.id = tc.cat_id AND tc.user_id='$user_id'  ORDER BY tc.date_certificate DESC limit 5";
+
 	 	$rs=Database::query($sql,__FILE__,__LINE__);
 	 	while ($row=Database::fetch_array($rs)) {
 	 		$my_certificate[]=$row;
@@ -3229,21 +3229,21 @@ class UserManager
 	  * @return bool    True if the user is a coach
 	  *
 	  */
-	public function is_session_course_coach($user_id, $course_code, $session_id) {	
-		$tbl_session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);	
+	public function is_session_course_coach($user_id, $course_code, $session_id) {
+		$tbl_session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	    // Protect data
 		$user_id = intval($user_id);
 		$course_code = Database::escape_string($course_code);
 		$session_id = intval($session_id);
 		$result = false;
-	
+
 		$sql = "SELECT id_session FROM $tbl_session_course_rel_user WHERE id_session=$session_id AND course_code='$course_code' AND id_user = $user_id AND status=2 ";
 	    $res = Database::query($sql);
-	
+
 	    if (Database::num_rows($res) > 0) {
 	    	$result = true;
-	    }	
-	    return $result;	
+	    }
+	    return $result;
 	}
 
 }

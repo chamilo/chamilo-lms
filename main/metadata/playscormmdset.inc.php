@@ -193,7 +193,7 @@ else
     }
     ?>
     </head>
-    <body dir="<?php echo  $text_dir ?>"
+    <body dir="<?php echo $text_dir; ?>">
     <!-- #outerframe container to control some general layout of all pages -->
     <div id="outerframe">
     <?php

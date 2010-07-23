@@ -12,7 +12,7 @@ require_once $libpath.'sessionmanager.lib.php';
 
 function WSHelperVerifyKey($params) {
 	global $_configuration;
-	
+
 	if(is_array($params)) {
 		$secret_key = $params['secret_key'];
 	} else {
@@ -139,7 +139,7 @@ $server->register('WSCreateUsers',			// method name
 function WSCreateUsers($params) {
 
 	global $_user, $userPasswordCrypted;
-	
+
 	if(!WSHelperVerifyKey($params)) {
 		return -1;
 	}
@@ -261,7 +261,7 @@ function WSCreateUsers($params) {
 			//echo "id returned";
 			$return = Database::insert_id();
 			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-			if ($_configuration['multiple_access_urls'] == true) {
+			if ($_configuration['multiple_access_urls']) {
 				if (api_get_current_access_url_id() != -1) {
 					UrlManager::add_user_to_url($return, api_get_current_access_url_id());
 				} else {
@@ -461,7 +461,7 @@ function WSCreateUser($params) {
 		//echo "id returned";
 		$return = Database::insert_id();
 		require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-		if ($_configuration['multiple_access_urls'] == true) {
+		if ($_configuration['multiple_access_urls']) {
 			if (api_get_current_access_url_id() != -1) {
 				UrlManager::add_user_to_url($return, api_get_current_access_url_id());
 			} else {
@@ -746,7 +746,7 @@ function WSCreateUsersPasswordCrypted($params) {
 			//echo "id returned";
 			$return = Database::insert_id();
 			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-			if ($_configuration['multiple_access_urls'] == true) {
+			if ($_configuration['multiple_access_urls']) {
 				if (api_get_current_access_url_id() != -1) {
 					UrlManager::add_user_to_url($return, api_get_current_access_url_id());
 				} else {
@@ -969,7 +969,7 @@ function WSCreateUserPasswordCrypted($params) {
 		//echo "id returned";
 		$return = Database::insert_id();
 		require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-		if ($_configuration['multiple_access_urls'] == true) {
+		if ($_configuration['multiple_access_urls']) {
 			if (api_get_current_access_url_id() != -1) {
 				UrlManager::add_user_to_url($return, api_get_current_access_url_id());
 			} else {
@@ -1642,7 +1642,7 @@ function WSEditUserPasswordCrypted($params) {
 		$msg = "If encrypt_method is not empty the password param is required ";
 		return $msg;
 	}
-	
+
 	$user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
 
 	if ($user_id == 0) {
@@ -1707,7 +1707,7 @@ function WSEditUserPasswordCrypted($params) {
 $server->wsdl->addComplexType(
 	'user_id',
 	'complexType',
-	'struct', 
+	'struct',
 	'all',
 	'',
 	array(
@@ -1732,7 +1732,7 @@ function WSHelperActionOnUsers($params, $type) {
 	if(!WSHelperVerifyKey($params)) {
 		return -1;
 	}
-	
+
 	$original_user_ids = $params['ids'];
 	foreach($original_user_ids as $original_user_id) {
 		$user_id = UserManager::get_user_id_from_original_id($original_user_id['original_user_id_value'], $original_user_id['original_user_id_name']);
@@ -3461,9 +3461,9 @@ function WSSubscribeUsersToCourse($params) {
     if(!WSHelperVerifyKey($params)) {
 		return -1;
 	}
-	
+
 	$results = array();
-	
+
 	$userscourses = $params['userscourses'];
 	foreach($userscourses as $usercourse) {
 		$original_course_id = $usercourse['course_id'];
@@ -3472,12 +3472,12 @@ function WSSubscribeUsersToCourse($params) {
 		if($usercourse['status']) {
 			$status = $usercourse['status'];
 		}
-		
+
 		$result = array(
 			'original_user_id_value' => $original_user_id['original_user_id_value'],
 			'original_course_id_value' => $original_course_id['original_course_id_value'],
 			'result' => 1);
-		
+
 		// Get user id
 		$user_id = UserManager::get_user_id_from_original_id($original_user_id['original_user_id_value'], $original_user_id['original_user_id_name']);
 		if($user_id == 0) {
@@ -3500,7 +3500,7 @@ function WSSubscribeUsersToCourse($params) {
 	}
 	return $results;
 
-    
+
 }
 
 /* Register WSUnsubscribeUserFromCourse function */
@@ -4550,12 +4550,12 @@ function WSListCourses($params) {
 	if(!WSHelperVerifyKey($params)) {
 		return -1;
 	}
-	
+
 	$course_field_name = $params['original_course_id_name'];
-	
+
 	$courses_result = array();
 	$category_names = array();
-	
+
 	$courses = CourseManager::get_courses_list();
 	foreach($courses as $course) {
 		$course_tmp = array();
@@ -4564,7 +4564,7 @@ function WSListCourses($params) {
 		$course_tmp['title'] = $course['title'];
 		$course_tmp['language'] = $course['language'];
 		$course_tmp['visibility'] = $course['visibility'];
-		
+
 		// Determining category name
 		if($category_names[$course['category_code']]) {
 			$course_tmp['category_name'] = $category_names[$course['category_code']];
@@ -4573,20 +4573,20 @@ function WSListCourses($params) {
 			$category_names[$course['category_code']] = $category['name'];
 			$course_tmp['category_name'] = $category['name'];
 		}
-		
+
 		// Determining number of students registered in course
 		$user_list = CourseManager::get_user_list_from_course_code($course['code'], false);
 		$course_tmp['number_students'] = count($user_list);
-		
+
 		// Determining external course id
 		$course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_field_name, $course['code']);
-		
-		
+
+
 		$courses_result[] = $course_tmp;
 	}
-	
+
 	return $courses_result;
-	
+
 }
 
 // Use the request to (try to) invoke the service

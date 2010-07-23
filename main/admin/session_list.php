@@ -138,12 +138,12 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		$where.= ' session_category_id = "'.$id_category.'" ';
 		$cond_url.= '&amp;id_category='.$id_category;
 	}
-	
+
 	$user_id= $_user['user_id'];
 	if (api_is_session_admin()==true) {
 		$where.=" AND s.session_admin_id = $user_id ";
 	}
-	
+
 	//Get list sessions
 	$sort = ($sort != "name_category")?  's.'.$sort : 'category_name';
 	$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name, s.visibility ".
@@ -156,11 +156,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$query_rows = "SELECT count(*) as total_rows
 			 FROM $tbl_session s
 			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id 
+			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id
 			 $where ";
-			 
+
 //filtering the session list by access_url
-	if ($_configuration['multiple_access_urls'] == true){
+	if ($_configuration['multiple_access_urls']) {
 		$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
@@ -181,7 +181,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			 $where ";
 		}
 	}
-	
+
 
 	$result_rows = Database::query($query_rows);
 	$recorset = Database::fetch_array($result_rows);
@@ -206,7 +206,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		if (!isset($_GET['id_category'])) {
 			echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>';
 		}
-		
+
 		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php?id_category='.intval($_GET['id_category']).'">'.Display::return_icon('view_more_stats.gif',get_lang('AddSessionsInCategories')).get_lang('AddSessionsInCategories').'</a>';
 		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder_document.gif',get_lang('ListSessionCategory')).get_lang('ListSessionCategory').'</a>';
 	echo '</div>';

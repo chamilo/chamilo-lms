@@ -2569,7 +2569,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		//adding the course to an URL
 		global $_configuration;
 		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
-		if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls']) {
 			$url_id=1;
 			if (api_get_current_access_url_id()!=-1) {
 				$url_id=api_get_current_access_url_id();

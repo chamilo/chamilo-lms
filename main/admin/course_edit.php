@@ -50,13 +50,13 @@ while ($obj = Database::fetch_object($res)) {
 }
 
 // Get all possible teachers without the course teachers
-if ($_configuration['multiple_access_urls']==true){
+if ($_configuration['multiple_access_urls']) {
 	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$sql = "SELECT u.user_id,lastname,firstname FROM $table_user as u
 			INNER JOIN $access_url_rel_user_table url_rel_user
 			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 } else {
-	$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;	
+	$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;
 }
 
 $res = Database::query($sql);
@@ -82,7 +82,7 @@ if (count($course_teachers)==0) {
 	$sql='SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
 	$res = Database::query($sql);
 	$tutor_name=Database::result($res,0,0);
-	$course['tutor_name']=array_search($tutor_name,$platform_teachers);	
+	$course['tutor_name']=array_search($tutor_name,$platform_teachers);
 }
 
 // Build the form
@@ -166,7 +166,7 @@ foreach ($list_course_extra_field as $extra_field) {
 			$form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
 			$field_display_text=$extra_field['field_display_text'];
 			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'],get_lang('SpecialCourse') , get_lang($extra_field['field_default_value']).' '.Display::return_icon('synthese_view.gif',get_lang('AllUsersAreAutomaticallyRegistered')), $checked);
-			
+
 			break;
 		/* case USER_FIELD_TYPE_SELECT_MULTIPLE:
 		case USER_FIELD_TYPE_DATE:

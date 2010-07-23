@@ -27,7 +27,7 @@ function get_number_of_courses() {
 	$sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table";
 
 	global $_configuration;
-    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     	$sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
     }
@@ -50,7 +50,7 @@ function get_number_of_courses() {
 	}
 
 	 // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     		$sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
     }
 
@@ -69,7 +69,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, tutor_name as col7, code AS col8, visibility AS col9,directory as col10 FROM $course_table";
 	//$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9, visibility AS col10,directory as col11 FROM $course_table";
 	global $_configuration;
-    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     	$sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
     }
@@ -92,7 +92,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	}
 
 	 // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
     		$sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
     }
 

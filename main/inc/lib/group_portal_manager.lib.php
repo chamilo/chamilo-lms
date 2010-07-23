@@ -293,11 +293,11 @@ class GroupPortalManager
 	 * Gets the group's members
 	 * @param int group id
 	 * @param bool show image or not of the group
-	 * @param array list of relation type use constants  
+	 * @param array list of relation type use constants
 	 * @param int from value
-	 * @param int limit 
+	 * @param int limit
 	 * @param array image configuration, i.e array('height'=>'20px', 'size'=> '20px')
-	 * @return array list of users in a group 
+	 * @return array list of users in a group
 	 */
 	public static function get_users_by_group($group_id, $with_image = false, $relation_type = array(), $from = 0, $limit = 15, $image_conf = array('size'=>USER_IMAGE_SIZE_MEDIUM,'height'=>80))
 	{
@@ -335,7 +335,7 @@ class GroupPortalManager
 		$sql="SELECT picture_uri as image, u.user_id, u.firstname, u.lastname, relation_type FROM $tbl_user u
 			INNER JOIN $table_group_rel_user gu
 			ON (gu.user_id = u.user_id) WHERE gu.group_id= $group_id $where_relation_condition ORDER BY relation_type, firstname LIMIT $from, $limit";
-		
+
 		$result=Database::query($sql);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -557,7 +557,7 @@ class GroupPortalManager
 
 		/*
 		global $_configuration;
-		if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+		if ($_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
 			$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
 		}*/

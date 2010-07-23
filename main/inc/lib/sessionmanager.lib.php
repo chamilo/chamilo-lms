@@ -380,7 +380,7 @@ class SessionManager {
 					    $emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
 					    $emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
 
-					    if ($_configuration['multiple_access_urls']==true) {
+					    if ($_configuration['multiple_access_urls']) {
 				            $access_url_id = api_get_current_access_url_id();
 				            if ($access_url_id != -1 ){
 				            	$url 		= api_get_access_url($access_url_id);
@@ -444,16 +444,16 @@ class SessionManager {
 			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')";
 			Database::query($insert_sql);
 		}
-		
+
 		// update number of users in the session
 		$nbr_users = count($user_list);
 		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
 		Database::query($update_sql);
 	}
-	
+
 	/**
 	 * Unsubscribe user from session
-	 * 
+	 *
 	 * @param int Session id
 	 * @param int User id
 	 * @return bool True in case of success, false in case of error
@@ -461,20 +461,20 @@ class SessionManager {
 	public static function unsubscribe_user_from_session($session_id, $user_id) {
 		$session_id = (int)$session_id;
 		$user_id = (int)$user_id;
-		
+
 		$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-		
+
 		$delete_sql = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$session_id' AND id_user ='$user_id' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
 		Database::query($delete_sql);
 		$return = Database::affected_rows();
-		
+
 		// Update number of users
 		$update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users - $return WHERE id='$session_id' ";
 		Database::query($update_sql);
-		
+
 		// Get the list of courses related to this session
 		$course_list = SessionManager::get_course_list_by_session_id($session_id);
 		if(!empty($course_list)) {
@@ -488,9 +488,9 @@ class SessionManager {
 				}
 			}
 		}
-		
+
 		return true;
-		
+
 	}
 
 	 /** Subscribes courses to the given session and optionally (default) unsubscribes previous users
@@ -575,7 +575,7 @@ class SessionManager {
 
 	/**
 	 * Unsubscribe course from a session
-	 * 
+	 *
 	 * @param int Session id
 	 * @param int Course id
 	 * @return bool True in case of success, false otherwise
@@ -583,17 +583,17 @@ class SessionManager {
 	public static function unsubscribe_course_from_session($session_id, $course_id) {
 		$session_id = (int)$session_id;
 		$course_id = (int)$course_id;
-		
+
 		$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-		
+
 		// Get course code
 		$course_code = CourseManager::get_course_code_from_course_id($course_id);
 		if($course_code == 0) {
 			return false;
 		}
-		
+
 		// Unsubscribe course
 	    Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='$course_code' AND id_session='$session_id'");
 	    $nb_affected = Database::affected_rows();
@@ -607,8 +607,8 @@ class SessionManager {
 			return false;
 		}
 	}
-	    
-	    
+
+
 
   /**
   * Creates a new extra field for a given session
@@ -890,7 +890,7 @@ class SessionManager {
 		$result = @Database::query($sql);
 		while ($rows = Database::fetch_array($result)) {
 			$session_id = $rows['id'];
-			if($delete_session == true){
+			if ($delete_session == true){
 				if ($from_ws) {
 					SessionManager::delete_session($session_id,true);
 				} else {
@@ -1105,7 +1105,7 @@ class SessionManager {
 			Database::query($sql);
 		}
 		*/
-						
+
 		// inserting new sessions list
 		if (is_array($sessions_list)) {
 			foreach ($sessions_list as $session_id) {
@@ -1144,11 +1144,11 @@ class SessionManager {
 		}
 		return $assigned_sessions_to_hrm;
 	}
-	
+
 	/**
 	 * Gets the list of courses by session
 	 * @param int session id
-	 * @return array list of courses  
+	 * @return array list of courses
 	 */
 	public static function get_course_list_by_session_id ($session_id) {
 		$tbl_course				= Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1165,10 +1165,10 @@ class SessionManager {
 		}
 		return $courses;
 	}
-	
+
 	/**
 	 * Get the session id based on the original id and field name in the extra fields. Returns 0 if session was not found
-	 * 
+	 *
 	 * @param string Original session id
 	 * @param string Original field name
 	 * @return int Session id
@@ -1179,7 +1179,7 @@ class SessionManager {
 		$sql_session = "SELECT session_id FROM $table_field sf INNER JOIN $t_sfv sfv ON sfv.field_id=sf.id WHERE field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
 		$res_session = Database::query($sql_session);
 		$row = Database::fetch_object($res_session);
-		if($row != false) {
+		if ($row != false) {
 			return $row->session_id;
 		} else {
 			return 0;

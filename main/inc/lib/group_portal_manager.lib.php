@@ -165,7 +165,7 @@ class GroupPortalManager
 			}
 		}
 
-		if ($show_tag_links == true) {
+		if ($show_tag_links) {
 			if (is_array($tags) && count($tags)>0) {
 				foreach ($tags as $tag) {
 					$tag_tmp[] = '<a href="'.api_get_path(WEB_PATH).'main/social/search.php?q='.$tag['tag'].'">'.$tag['tag'].'</a>';
@@ -208,7 +208,7 @@ class GroupPortalManager
 		$array = array();
 		if (Database::num_rows($result) > 0) {
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
-					if ($with_image == true) {
+					if ($with_image) {
 						$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
 						$img = '<img src="'.$picture['file'].'" />';
 						$row['picture_uri'] = $img;
@@ -245,7 +245,7 @@ class GroupPortalManager
 		$result=Database::query($sql);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
-			if ($with_image == true) {
+			if ($with_image) {
 				$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
 				$img = '<img src="'.$picture['file'].'" />';
 				$row['picture_uri'] = $img;
@@ -279,7 +279,7 @@ class GroupPortalManager
 		$result=Database::query($sql);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
-			if ($with_image == true) {
+			if ($with_image) {
 				$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
 				$img = '<img src="'.$picture['file'].'" />';
 				$row['picture_uri'] = $img;
@@ -339,7 +339,7 @@ class GroupPortalManager
 		$result=Database::query($sql);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
-			if ($with_image == true) {
+			if ($with_image) {
 				$image_path = UserManager::get_user_picture_path_by_id($row['user_id'], 'web', false, true);
 				$picture = UserManager::get_picture_user($row['user_id'], $image_path['file'],$image_conf['height'],$image_conf['size']);
 				$row['image'] = '<img src="'.$picture['file'].'"  '.$picture['style'].'  />';

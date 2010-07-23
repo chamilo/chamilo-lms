@@ -488,7 +488,7 @@
        $giftype = ($write) ? ' Create Support' : ' Read Support';
         $support = strtoupper($extension) . ($extension == 'gif' ? $giftype : ' Support');
 
-        if (!isset($this->gdInfo[$support]) || $this->gdInfo[$support] == false) {
+        if (!isset($this->gdInfo[$support]) || !$this->gdInfo[$support]) {
             $request = ($write) ? 'saving' : 'reading';
             $this->_debug("Support for $request the file type '$extension' cannot be found.");
             return false;

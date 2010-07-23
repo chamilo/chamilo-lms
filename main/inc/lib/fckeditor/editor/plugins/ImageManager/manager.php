@@ -153,7 +153,7 @@ body {
 <?php } ?>
 	</select>
 	<a href="javascript: void(0);" onclick="javascript: goUpDir();" title="Directory Up"><img src="img/btnFolderUp.gif" height="15" width="15" alt="Directory Up" />&nbsp;<span>Directory Up</span></a>
-<?php if($IMConfig['safe_mode'] == false && $IMConfig['allow_new_dir']) { ?>
+<?php if (!$IMConfig['safe_mode'] && $IMConfig['allow_new_dir']) { ?>
 	<a href="javascript: void(0);" onclick="newFolder();" title="New Folder"><img src="img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
 <?php } ?>
 	<div id="messages" style="display: none;"><span id="message"></span><img SRC="img/dots.gif" width="22" height="12" alt="..." /></div>
@@ -182,7 +182,7 @@ body {
 			<td><input type="text" id="f_horiz" class="smallWidth" value="" /></td>
 		</tr>
 		<tr>
-<?php if($IMConfig['allow_upload'] == true) { ?>
+<?php if ($IMConfig['allow_upload']) { ?>
 			<td align="right"><label for="upload">Upload</label></td>
 			<td>
 				<table cellpadding="0" cellspacing="0" border="0">

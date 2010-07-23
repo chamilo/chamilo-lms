@@ -864,7 +864,7 @@ function getRootPath() {
 				}
 			}
 
-			if(!ereg($deleted_by_dokeos, $folderName) && !ereg($css_folder_dokeos, $folderName) && !ereg($hotpotatoes_folder_dokeos, $folderName) && !ereg($chat_files_dokeos, $folderName) && !ereg($thumbs_folder, $folderName) && $show_doc_group==true)
+			if(!ereg($deleted_by_dokeos, $folderName) && !ereg($css_folder_dokeos, $folderName) && !ereg($hotpotatoes_folder_dokeos, $folderName) && !ereg($chat_files_dokeos, $folderName) && !ereg($thumbs_folder, $folderName) && $show_doc_group)
 			{
 				return substr($folderName,strpos($folderName, '-'),strlen($folderName)); //hide the firsts numbers
 			}
@@ -1169,7 +1169,7 @@ function getRootPath() {
 
     if ( $old_x >= 0 && $old_x < $src_x
          && $old_y >= 0 && $old_y < $src_y ) {
-      if ($bicubic == true) {
+      if ($bicubic) {
         $sY  = $old_y + 1;
         $siY  = $old_y;
         $siY2 = $old_y - 1;

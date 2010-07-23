@@ -237,7 +237,7 @@ class ImageEditor
 					$newSaveFile = $this->makeRelative($relative, $saveFile);
 					$oldSaveFile = $newSaveFile;
 
-					if ($this->manager->config['allow_newFileName'] && $this->manager->config['allow_overwrite'] == false)
+					if ($this->manager->config['allow_newFileName'] && !$this->manager->config['allow_overwrite'])
 					{
 						// check whether a file already exist and if there is, create a variant of the filename
 						$newName = $this->getUniqueFilename($newSaveFile);

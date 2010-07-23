@@ -197,7 +197,7 @@ class Tracking {
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs)>0) {
 			if ($first_login_date = Database::result($rs, 0, 0)) {
-				if ($convert_date == true) {
+				if ($convert_date) {
 					return api_convert_and_format_date($first_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
 				} else {
 					return $first_login_date;
@@ -237,13 +237,13 @@ class Tracking {
 				//If the last connection is > than 7 days, the text is red
 				//345600 = 7 days in seconds
 				if ($currentTimestamp - $timestamp > 604800) {
-					if ($convert_date == true) {
+					if ($convert_date) {
 						return '<span style="color: #F00;">' . api_format_date($last_login_date, DATE_FORMAT_SHORT) . (api_is_allowed_to_edit()?' <a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /></a>':'').'</span>';
 					} else {
 						return $last_login_date;
 					}
 				} else {
-					if ($convert_date == true) {
+					if ($convert_date) {
 						return api_format_date($last_login_date, DATE_FORMAT_SHORT);
 					} else {
 						return $last_login_date;
@@ -493,7 +493,7 @@ class Tracking {
                 }
                 // average progress = total sum divided by the number of views
                 // summed up.
-                if ($return_array == false) {
+                if (!$return_array) {
 					$avg_progress = round($sum / $number_items, 1);
 					return $avg_progress;
 				} else {
@@ -733,7 +733,7 @@ class Tracking {
 				//var_dump($lp_with_quiz);
 				if ($lp_with_quiz != 0 ) {
 
-					if ($return_array == false) {
+					if (!$return_array) {
 						$score_of_scorm_calculate = round(($global_result/$lp_with_quiz),2);
 						return $score_of_scorm_calculate;
 					} else {

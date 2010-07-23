@@ -360,7 +360,7 @@ class SessionManager {
 		}
 
 
-		if ($send_email == true) {
+		if ($send_email) {
 		    global $_configuration;
 			//sending emails only
 			if(is_array($user_list) && count($user_list)>0) {
@@ -890,7 +890,7 @@ class SessionManager {
 		$result = @Database::query($sql);
 		while ($rows = Database::fetch_array($result)) {
 			$session_id = $rows['id'];
-			if ($delete_session == true){
+			if ($delete_session) {
 				if ($from_ws) {
 					SessionManager::delete_session($session_id,true);
 				} else {
@@ -1179,7 +1179,7 @@ class SessionManager {
 		$sql_session = "SELECT session_id FROM $table_field sf INNER JOIN $t_sfv sfv ON sfv.field_id=sf.id WHERE field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
 		$res_session = Database::query($sql_session);
 		$row = Database::fetch_object($res_session);
-		if ($row != false) {
+		if ($row) {
 			return $row->session_id;
 		} else {
 			return 0;

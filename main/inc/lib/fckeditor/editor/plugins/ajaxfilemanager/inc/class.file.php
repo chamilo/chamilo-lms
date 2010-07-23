@@ -366,7 +366,7 @@
  * @param boolean $empty
  * @return boolean
  */
- function __recursive_remove_directory($directory, $empty=FALSE)
+ function __recursive_remove_directory($directory, $empty = FALSE)
  {
      // if the path has a slash at the end we remove it here
      if(substr($directory,-1) == '/')
@@ -418,7 +418,7 @@
          @closedir($handle);
 
         // if the option to empty is not set to true
-         if($empty == FALSE)
+         if (!$empty)
          {
              // try to delete the now empty directory
              if(!@rmdir($directory))

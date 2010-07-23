@@ -677,7 +677,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 } // end else
 
 //Now check for anonymous user mode
-if (isset($use_anonymous) && $use_anonymous == true) {
+if ($use_anonymous) {
 	//if anonymous mode is set, then try to set the current user as anonymous
 	//if he doesn't have a login yet
 	api_set_anonymous();
@@ -691,7 +691,7 @@ if (isset($use_anonymous) && $use_anonymous == true) {
 if (!empty($cDir)) {
 	require_once api_get_path(LIBRARY_PATH).'course.lib.php';
     $c = CourseManager::get_course_id_from_path($cDir);
-    if ($c != false) { $cidReq = $c; }
+    if ($c) { $cidReq = $c; }
 }
 
 // if the requested course is different from the course in session

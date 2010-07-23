@@ -220,7 +220,7 @@ function LoadSelection()
 function Ok()
 {
 	var rbFileTypeVal = "single" ;
-	if ( GetE( 'rbFileType' ).checked == false )
+	if ( !GetE( 'rbFileType' ).checked )
 	{
 		rbFileTypeVal = "list" ;
 	}
@@ -449,7 +449,7 @@ Media.prototype.getInnerHTML = function ( objectId )
 	var thisHeight = this.height ;
 
 	var thisMediaType = "single" ;
-	if ( GetE( 'rbFileType' ).checked == false )
+	if ( !GetE( 'rbFileType' ).checked )
 	{
 		thisMediaType = "mpl" ;
 	}
@@ -470,10 +470,10 @@ Media.prototype.getInnerHTML = function ( objectId )
 		cssfloat = 'float: left;' ;
 	}
 
-	var s = "" ;	
+	var s = "" ;
 
-	//Replacing the creation of the SWFObject to the use of the object tag in order to avoid HTMLPurifier conflicts see CT#1297 
-	
+	//Replacing the creation of the SWFObject to the use of the object tag in order to avoid HTMLPurifier conflicts see CT#1297
+
 	s+= '<div id="player' + randomnumber + '-parent" style="text-align:	center;' + cssfloat + '">\n';
 	s+= '<div style="border-style: none; height: ' + thisHeight + 'px; width:' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220,	220); background-image: url(' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/flvPlayer.gif); background-repeat:no-repeat;	background-position:center;' + cssalign + '">';
 	s+= '<script src="' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/swfobject.js" type="text/javascript"></script>\n';
@@ -500,9 +500,9 @@ Media.prototype.getInnerHTML = function ( objectId )
 	s+= '<p><a href="http://get.adobe.com/flashplayer">Get Flash</a> to see	this player.</p>';
 //	s+= '</object>';
 	s+= '</object>';
-	
-	
-	
+
+
+
 	/*
 	s += '\n' ;
 	s += '<div id="player' + randomnumber + '-parent" style="text-align: center;">\n'; //'<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
@@ -617,7 +617,7 @@ Media.prototype.getInnerHTML = function ( objectId )
 		}
 
 		s += '	s1.addVariable("shuffle","false");\n' ;
-		if (this.loop == true)
+		if (this.loop)
 		{
 			s += '	s1.addVariable("repeat","list");\n' ;
 		}

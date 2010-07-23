@@ -72,7 +72,7 @@ function clearSuggestions() {
 
 function enableUndo() {
 	if( this.undoButton ) {
-		if( this.undoButton.disabled == true ) {
+		if( this.undoButton.disabled ) {
 			this.undoButton.disabled = false;
 		}
 	}
@@ -80,7 +80,7 @@ function enableUndo() {
 
 function disableUndo() {
 	if( this.undoButton ) {
-		if( this.undoButton.disabled == false ) {
+		if( !this.undoButton.disabled ) {
 			this.undoButton.disabled = true;
 		}
 	}

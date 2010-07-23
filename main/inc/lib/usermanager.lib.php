@@ -428,7 +428,7 @@ class UserManager
 		$sql = "SELECT user_id	FROM $t_uf uf INNER JOIN $t_ufv ufv ON ufv.field_id=uf.id WHERE field_variable='$original_user_id_name' AND field_value='$original_user_id_value';";
 		$res = Database::query($sql);
 		$row = Database::fetch_object($res);
-		if ($row != false) {
+		if ($row) {
 			return $row->user_id;
 		} else {
 			return 0;
@@ -1052,7 +1052,7 @@ class UserManager
 								break;
 							}
 						}
-						if ($check == false) {
+						if (!$check) {
 							return false; //option value not found
 						}
 					} else {
@@ -1133,7 +1133,7 @@ class UserManager
 			$sort_direction = strtoupper($direction);
 		}
 		$sqlf = "SELECT * FROM $t_uf ";
-		if ($all_visibility == false) {
+		if (!$all_visibility) {
 			$sqlf .= " WHERE field_visible = 1 ";
 		}
 		$sqlf .= " ORDER BY ".$columns[$column]." $sort_direction " ;
@@ -1205,7 +1205,7 @@ class UserManager
 	public static function get_number_of_extra_fields($all_visibility = true) {
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
 		$sqlf = "SELECT * FROM $t_uf ";
-		if ($all_visibility == false) {
+		if (!$all_visibility) {
 			$sqlf .= " WHERE field_visible = 1 ";
 		}
 		$sqlf .= " ORDER BY field_order";
@@ -1444,7 +1444,7 @@ class UserManager
 		$sql = "SELECT f.id as id, f.field_variable as fvar, f.field_type as type FROM $t_uf f ";
                 $filter_cond = '';
 
-                if ($all_visibility == false) {
+                if (!$all_visibility) {
                         if (isset($field_filter)) {
                             $field_filter = intval($field_filter);
                             $filter_cond .= " AND field_filter = $field_filter ";
@@ -1528,7 +1528,7 @@ class UserManager
 
 		$sql .= " WHERE f.field_variable = '$field_variable' ";
 
-		if ($all_visibility == false) {
+		if (!$all_visibility) {
 			$sql .= " AND f.field_visible = 1 ";
 		}
 
@@ -1658,7 +1658,7 @@ class UserManager
 					ON (user_field.id = user_field_values.field_id)
 				WHERE $where";
 
-		if ($all_visibility == true) {
+		if ($all_visibility) {
 			$sql .= " AND user_field.field_visible = 1 ";
 		} else {
 			$sql .= " AND user_field.field_visible = 0 ";
@@ -2991,7 +2991,7 @@ class UserManager
 		$tbl_my_message = Database :: get_main_table(TABLE_MAIN_MESSAGE);
 		$friend_id = intval($friend_id);
 
-		if ($real_removed == true) {
+		if ($real_removed) {
 			//Delete user friend
 			/*
 			$sql_delete_relationship1 = 'UPDATE ' . $tbl_my_friend .'  SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE friend_user_id='.$friend_id;

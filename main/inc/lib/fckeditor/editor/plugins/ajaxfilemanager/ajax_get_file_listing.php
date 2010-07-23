@@ -115,7 +115,7 @@
 
 			}
 
-			if((!ereg($deleted_by_dokeos_file, $file['name']) || !ereg($deleted_by_dokeos_folder, $file['path'])) || ereg($css_folder_dokeos, $file['path']) || ereg($hotpotatoes_folder_dokeos, $file['path']) || ereg($chat_files_dokeos, $file['path']) || $hide_doc_group==true || $file['name'][0]=='.')//Dokeos fix for hidden items.
+			if((!ereg($deleted_by_dokeos_file, $file['name']) || !ereg($deleted_by_dokeos_folder, $file['path'])) || ereg($css_folder_dokeos, $file['path']) || ereg($hotpotatoes_folder_dokeos, $file['path']) || ereg($chat_files_dokeos, $file['path']) || $hide_doc_group || $file['name'][0]=='.')//Dokeos fix for hidden items.
 			{
 
 				$count_hideItem=$count_hideItem+1;

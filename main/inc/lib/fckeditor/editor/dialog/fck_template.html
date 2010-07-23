@@ -86,9 +86,9 @@ window.onload = function()
 	//window.parent.SetAutoSize( true ) ;
 	LoadTemplatesXml() ;
 
-	// select first by default (Chamilo customization)
-	if(window.top.load_default_template==true)
-		SelectTemplate(0);
+	// Select first by default (Chamilo customization)
+	if ( window.top.load_default_template )
+		SelectTemplate( 0 ) ;
 }
 
 function LoadTemplatesXml()

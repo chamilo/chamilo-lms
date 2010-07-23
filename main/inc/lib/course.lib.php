@@ -440,7 +440,7 @@ class CourseManager {
 		$sql_course = "SELECT course_code FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res = Database::query($sql_course);
 		$row = Database::fetch_object($res_course);
-		if($row != false) {
+		if ($row) {
 			return $row->course_code;
 		} else {
 			return 0;
@@ -458,7 +458,7 @@ class CourseManager {
 		$sql = "SELECT code FROM course WHERE id = '$id';";
 		$res = Database::query($sql);
 		$row = Database::fetch_object($res);
-		if($row != false) {
+		if ($row) {
 			return $row->code;
 		} else {
 			return null;
@@ -2199,7 +2199,7 @@ class CourseManager {
 			$data = '';
 			foreach ($descriptions as $id => $description) {
 				$data .= '<div class="sectiontitle">';
-				if (api_is_allowed_to_edit() && $action_show == true) {
+				if (api_is_allowed_to_edit() && $action_show) {
 					//delete
 					$data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;">';
 					$data .= Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'));

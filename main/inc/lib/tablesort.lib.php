@@ -187,7 +187,7 @@ class TableSort {
 				$check_date = strtotime(strip_tags($row[$column]));
 				// strtotime Returns a timestamp on success, FALSE otherwise.
 				// Previous to PHP 5.1.0, this function would return -1 on failure.
-				$is_date &= ($check_date != -1 && $check_date != false);
+				$is_date &= ($check_date != -1 && $check_date);
 			} else {
 				$is_date &= false;
 			}

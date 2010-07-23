@@ -226,7 +226,7 @@ oIcons.GetIcon = function( fileName )
 			break ;
 	}
 
-	if ( this.AvailableIcons[ sExtension ] == true )
+	if ( this.AvailableIcons[ sExtension ] )
 		return sExtension ;
 	else
 		return 'default.icon' ;

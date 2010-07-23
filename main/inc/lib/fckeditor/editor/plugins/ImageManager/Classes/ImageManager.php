@@ -103,7 +103,7 @@ class ImageManager
 		$base = Files::fixPath($base);
 		$dirs = array();
 
-		if($this->isValidBase() == false)
+		if (!$this->isValidBase())
 			return $dirs;
 
 		$d = @dir($base);
@@ -128,7 +128,7 @@ class ImageManager
 				&& strpos($entry, 'css') === false
 				&& strpos($entry, 'HotPotatoes_files') === false
 				&& ($in_group || (!$in_group && strpos($entry, '_groupdocs') === false))
-				&& $this->isThumbDir($entry) == false)
+				&& !$this->isThumbDir($entry))
 			{
 				$relative = Files::fixPath($path.$entry);
 				$fullpath = Files::fixPath($base.$entry);
@@ -186,7 +186,7 @@ class ImageManager
 		$files = array();
 		$dirs = array();
 
-		if($this->isValidBase() == false)
+		if (!$this->isValidBase())
 			return array($files,$dirs);
 
 		$path = Files::fixPath($path);
@@ -249,7 +249,7 @@ class ImageManager
 					*/
 				}
 
-				if($is_dir && $this->isThumbDir($entry) == false) {
+				if ($is_dir && !$this->isThumbDir($entry)) {
 				    global $_course;
 					if (isset($_course['dbName']) && $_course<>'-1') {
 						//checking visibility
@@ -270,7 +270,7 @@ class ImageManager
 					$count = $this->countFiles($full);
 					$dirs[$relative] = array('fullpath'=>$full,'entry'=>$entry,'count'=>$count);
 				}
-				else if(is_file($fullpath.$entry) && $this->isThumb($entry)==false && $this->isTmpFile($entry) == false)
+				else if(is_file($fullpath.$entry) && !$this->isThumb($entry) && !$this->isTmpFile($entry))
 				{
 					$img = $this->getImageInfo($fullpath.$entry);
 
@@ -323,11 +323,11 @@ class ImageManager
 
 			while (false !== ($entry = $d->read()))
 			{
-				//echo $entry."<br>";
-				if(substr($entry,0,1) != '.'
-					&& $this->isThumbDir($entry) == false
-					&& $this->isTmpFile($entry) == false
-					&& $this->isThumb($entry) == false)
+				//echo $entry."<br />";
+				if (substr($entry, 0, 1) != '.'
+					&& !$this->isThumbDir($entry)
+					&& !$this->isTmpFile($entry)
+					&& !$this->isThumb($entry))
 				{
 					$total++;
 				}
@@ -369,7 +369,7 @@ class ImageManager
 	 */
 	function isThumbDir($entry)
 	{
-		if($this->config['thumbnail_dir'] == false
+		if (!$this->config['thumbnail_dir']
 			|| strlen(trim($this->config['thumbnail_dir'])) == 0)
 			Return false;
 		else
@@ -402,7 +402,7 @@ class ImageManager
 
 		$thumbnail = $this->config['thumbnail_prefix'].$path_parts['basename'];
 
-		if($this->config['safe_mode'] == true
+		if ($this->config['safe_mode']
 			|| strlen(trim($this->config['thumbnail_dir'])) == 0)
 		{
 			Return Files::makeFile($path_parts['dirname'],$thumbnail);
@@ -436,7 +436,7 @@ class ImageManager
 		$thumbnail = $this->config['thumbnail_prefix'].$path_parts['basename'];
 		if($path_parts['dirname']=='\\') $path_parts['dirname']='/';
 
-		if($this->config['safe_mode'] == true
+		if ($this->config['safe_mode']
 			|| strlen(trim($this->config['thumbnail_dir'])) == 0)
 		{
 			$path = Files::fixPath($path_parts['dirname']);
@@ -494,7 +494,7 @@ class ImageManager
 	 */
 	function processUploads()
 	{
-		if($this->isValidBase() == false)
+		if (!$this->isValidBase())
 			return;
 
 		$relative = null;
@@ -571,7 +571,7 @@ class ImageManager
 		}
 
 		// Checking for a valid image by reading binary file (partially in most cases).
-		if($this->config['validate_images'] == true)
+		if ($this->config['validate_images'])
 		{
 			$imgInfo = @getImageSize($file['tmp_name']);
 			if(!is_array($imgInfo))
@@ -756,7 +756,7 @@ class ImageManager
 	{
 		$fullpath = Files::makeFile($this->getBaseDir(),$relative);
 		//check that the file is an image
-		if($this->config['validate_images'] == true)
+		if ($this->config['validate_images'])
 		{
 			if(!is_array($this->getImageInfo($fullpath)))
 				return false; //hmmm not an Image!!???
@@ -821,7 +821,7 @@ class ImageManager
 	 */
 	function processNewDir()
 	{
-		if($this->config['safe_mode'] == true)
+		if ($this->config['safe_mode'])
 			Return false;
 
 		if(isset($_GET['newDir']) && isset($_GET['dir']))

@@ -104,14 +104,14 @@ class SocialManager extends UserManager {
 			$sql.=' AND friend_user_id IN (SELECT user_id FROM '.$tbl_my_user.' WHERE firstName LIKE "%'.Database::escape_string($search_name).'%" OR lastName LIKE "%'.Database::escape_string($search_name).'%"   OR    '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' like concat("%","'.Database::escape_string($search_name).'","%")    ) ';
 		}
 
-		$res=Database::query($sql);
-		while ($row=Database::fetch_array($res,'ASSOC')) {
-			if ($load_extra_info == true) {
+		$res = Database::query($sql);
+		while ($row = Database::fetch_array($res, 'ASSOC')) {
+			if ($load_extra_info) {
 				$path = UserManager::get_user_picture_path_by_id($row['friend_user_id'],'web',false,true);
-				$my_user_info=api_get_user_info($row['friend_user_id']);
-				$list_ids_friends[]=array('friend_user_id'=>$row['friend_user_id'],'firstName'=>$my_user_info['firstName'] , 'lastName'=>$my_user_info['lastName'], 'username'=>$my_user_info['username'], 'image'=>$path['file']);
+				$my_user_info = api_get_user_info($row['friend_user_id']);
+				$list_ids_friends[] = array('friend_user_id'=>$row['friend_user_id'],'firstName'=>$my_user_info['firstName'] , 'lastName'=>$my_user_info['lastName'], 'username'=>$my_user_info['username'], 'image'=>$path['file']);
 			} else {
-				$list_ids_friends[]=$row;
+				$list_ids_friends[] = $row;
 			}
 		}
 		return $list_ids_friends;
@@ -790,7 +790,7 @@ class SocialManager extends UserManager {
 				$extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
 				$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
 			}
-			
+
 			foreach ($user_list as $user) {
 				$uid = $user[0];
 				$user_info = api_get_user_info($uid);
@@ -801,7 +801,7 @@ class SocialManager extends UserManager {
 						$url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
 					} else {
 						$url = '?id='.$uid.$course_url;
-					} 
+					}
 				} else {
 					$url = '#';
 				}
@@ -826,7 +826,7 @@ class SocialManager extends UserManager {
 
 			if (api_get_setting('show_email_addresses') == 'true') {
 				$table_header[] = array(get_lang('Email'), true);
-			}			
+			}
 			Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 25), $extra_params, array(),'grid');
 		}
 	}
@@ -839,7 +839,7 @@ class SocialManager extends UserManager {
 		$safe_user_id = Database::escape_string($user_id);
 
 		// to prevent a hacking attempt: http://www.dokeos.com/forum/viewtopic.php?t=5363
-		$user_table = Database::get_main_table(TABLE_MAIN_USER);		
+		$user_table = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT * FROM $user_table WHERE user_id='".intval($safe_user_id)."'";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) == 1) {
@@ -853,7 +853,7 @@ class SocialManager extends UserManager {
 			echo $alt;
 			echo '</div><br />';
 			echo '<div>';
-			
+
 			echo '<div style="margin:0 auto; width:350px; border:1px;">';
 				echo '<div id="whoisonline-user-image" style="float:left; padding:5px;">';
 				if (strlen(trim($user_object->picture_uri)) > 0) {
@@ -881,17 +881,17 @@ class SocialManager extends UserManager {
 				}
 				echo '<div style="text-align:center;padding-top:5px;">'.$status.'</div>';
 				echo '</div>';
-				
+
 				echo '<div id="whoisonline-user-info" style="float:left; padding-left:15px;">';
-				
-				
-	
+
+
+
 				global $user_anonymous;
-				if (api_get_setting('allow_social_tool') == 'true' && api_get_user_id() <> $user_anonymous && api_get_user_id() <> 0) {					
-					echo '<p><a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$safe_user_id.'">'.Display :: return_icon('my_shared_profile.png', get_lang('SocialInvitationToFriends'),array('height'=>'18px')).get_lang('ViewSharedProfile').'</a></p>';					
-	
+				if (api_get_setting('allow_social_tool') == 'true' && api_get_user_id() <> $user_anonymous && api_get_user_id() <> 0) {
+					echo '<p><a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$safe_user_id.'">'.Display :: return_icon('my_shared_profile.png', get_lang('SocialInvitationToFriends'),array('height'=>'18px')).get_lang('ViewSharedProfile').'</a></p>';
+
 					$user_anonymous = api_get_anonymous_id();
-	
+
 					if ($safe_user_id != api_get_user_id() && !api_is_anonymous($safe_user_id)) {
 						$user_relation = SocialManager::get_relation_between_contacts(api_get_user_id(), $safe_user_id);
 						if ($user_relation == 0 || $user_relation == 6) {

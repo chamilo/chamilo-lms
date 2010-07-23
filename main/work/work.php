@@ -478,7 +478,7 @@ if (!empty($make_visible)) {
 	}
 	if (isset($make_visible) && $make_visible == 'all') {
 		$sql = "ALTER TABLE  " . $work_table . " CHANGE accepted accepted TINYINT(1) DEFAULT '1'";
-		Database::query($sql);		
+		Database::query($sql);
 		$sql = "UPDATE  " . $work_table . " SET accepted = 1";
 		Database::query($sql);
 		Display::display_confirmation_message(get_lang('AllFilesVisible'));
@@ -538,7 +538,7 @@ if (!empty($_REQUEST['new_dir'])) {
 				require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 				$course = isset($course_info) ? $course_info : null;
 				$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.substr(Security::remove_XSS($dir_name_sql), 1).'" >'.$_POST['new_dir'].'</a> - '.$_POST['description'];
-				
+
 				$agenda_id = agenda_add_item($course, $_POST['new_dir'], $content, date('Y-m-d H:i:s'), date('Y-m-d H:i:s'), array('GROUP:'.$toolgroup), 0);
 			}
 			$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
@@ -560,7 +560,7 @@ if (!empty($_REQUEST['new_dir'])) {
 									   user_id = '".$user_id."'";
 
 			Database::query($sql_add_publication);
-			
+
 			// add the directory
 			$id = Database::insert_id();
 			//Folder created
@@ -616,7 +616,7 @@ if (!empty($_REQUEST['new_dir'])) {
 			}
 
 			// end features
-			
+
 			if(api_get_course_setting('email_alert_students_on_new_homework') == 1) {
 				send_email_on_homework_creation(api_get_course_id());
 			}
@@ -678,8 +678,8 @@ if (!empty($_REQUEST['delete2'])) {
 if (!empty ($_REQUEST['move'])) {
 	$folders = array();
 	$session_id = api_get_session_id();
-	$session_id == 0 ? $withsession = " AND session_id = 0 " : $withsession = " AND session_id='".$session_id."'";	
-	
+	$session_id == 0 ? $withsession = " AND session_id = 0 " : $withsession = " AND session_id='".$session_id."'";
+
 	$sql = "SELECT id, url FROM $work_table  WHERE url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:intval($_SESSION['toolgroup']))."'".$withsession;
 	$res = Database::query($sql);
 	while($folder = Database::fetch_array($res)) {
@@ -694,7 +694,7 @@ if (isset ($_POST['move_to']) && isset ($_POST['move_file'])) {
 	require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 	$move_to = $_POST['move_to'];
 	$move_to_path = get_work_path($move_to);
-		
+
 	if ($move_to_path==-1) {
 		$move_to_path = '/';
 	} elseif (substr($move_to_path, -1, 1) != '/') {
@@ -706,7 +706,7 @@ if (isset ($_POST['move_to']) && isset ($_POST['move_file'])) {
 		//Display::display_normal_message('We want to move '.$_POST['move_file'].' to '.$_POST['move_to']);
 		if (move($course_dir . '/' . $path, $base_work_dir . $move_to_path)) {
 			//update db
-			
+
 			update_work_url($move_file_id, 'work' . $move_to_path, $move_to);
 			//set the current path
 			$cur_dir_path = $move_to_path;
@@ -885,7 +885,7 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 				$parent_id = '';
 				$active = '';
 				$user_id = api_get_user_id();
-				
+
 				$sql = Database::query('SELECT id FROM '.Database::get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE url = '."'/".Database::escape_string($_GET['curdirpath'])."' AND filetype='folder' LIMIT 1");
 				if (Database::num_rows($sql) > 0) {
 					$dir_row = Database::fetch_array($sql);
@@ -1132,8 +1132,8 @@ if ($is_special > 0) {
 		if ($homework['ends_on'] != '0000-00-00 00:00:00' && $difference2 < 0) {
 			$has_ended = true;
 		}
-		if ($homework['expires_on'] == '0000-00-00 00:00:00') { 
-			$has_expiry_date = false; 
+		if ($homework['expires_on'] == '0000-00-00 00:00:00') {
+			$has_expiry_date = false;
 		}
 		if (!$has_expiry_date) {
 			//@todo fix me
@@ -1312,15 +1312,15 @@ if ($is_course_member) {
 									'.get_lang('Description').'
 								</div>
 								<div class="formw">';
-									
+
 				$oFCKeditor = new FCKeditor('description') ;
 				$oFCKeditor->ToolbarSet = 'profile';
 				$oFCKeditor->Width		= '80%';
 				$oFCKeditor->Height		= '130';
-				$oFCKeditor->Value		= $message;				
-				$return =	$oFCKeditor->CreateHtml();	
+				$oFCKeditor->Value		= $message;
+				$return =	$oFCKeditor->CreateHtml();
 				$new_folder_text .= $return;
-									
+
 		$new_folder_text .= '</div>
 							</div>';
 
@@ -1331,7 +1331,7 @@ if ($is_course_member) {
 		$addtext .= '<table cellspacing="0" cellpading="0" border="0"><tr>';
 		$addtext .= '<td colspan="2">&nbsp;&nbsp;'.get_lang('QualificationNumeric').'&nbsp;';
 		$addtext .= '<input type="text" name="qualification_value" value="" size="5"/></td><tr><td colspan="2">';
-		$addtext .= '<input type="checkbox" value="1" name="make_calification" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>'.get_lang('MakeQualifiable').'</td></tr><tr>';
+		$addtext .= '<input type="checkbox" value="1" name="make_calification" onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>'.get_lang('MakeQualifiable').'</td></tr><tr>';
 		$addtext .= '<td colspan="2"><div id="option1" style="display:none">';
 		$addtext .= '<div id="msg_error_weight" style="display:none;color:red"></div>';
 		$addtext .=	'&nbsp;&nbsp;'.get_lang('WeightInTheGradebook').'&nbsp;';
@@ -1339,12 +1339,12 @@ if ($is_course_member) {
 		$addtext .= '</tr></table>';
 		$addtext .= '<br />';
 		$addtext .= '<b>'.get_lang('DatesAvailables').'</b><br />';
-		$addtext .= '<input type="checkbox" value="1" name="type1" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>'.get_lang('EnableExpiryDate').'';
+		$addtext .= '<input type="checkbox" value="1" name="type1" onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>'.get_lang('EnableExpiryDate').'';
 		$addtext .= '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
 		$addtext .= '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
 		$addtext .= '<div id="option2" style="padding:4px;display:none">&nbsp;&nbsp;';
 		$addtext .= draw_date_picker('expires').'</div>';
-		$addtext .= '<br /><input type="checkbox" value="1" name="type2" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>'.get_lang('EnableEndDate').'';
+		$addtext .= '<br /><input type="checkbox" value="1" name="type2" onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>'.get_lang('EnableEndDate').'';
 		$addtext .= '<div id="option3" style="padding:4px;display:none">';
 		$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error4" style="display:none;color:red"></div>';
 		$addtext .= draw_date_picker('ends').'<br />';
@@ -1397,7 +1397,7 @@ if ($cur_dir_path == '/') {
 	$my_cur_dir_path = $cur_dir_path;
 }
 
-//If no upload form is showed and if NO tooloptions 
+//If no upload form is showed and if NO tooloptions
 
 if (!$display_upload_form && !$display_tool_options) {
 	$add_query = '';

@@ -98,7 +98,7 @@ function ErrorHandler()
 		if(errCode == _NotImplementedError)
 		{
 			var errDescription = "The LMS doesn't support this feature";
-			if(_debug == true)
+			if(_debug)
 			{
 				errDescription += "\n";
 				errDescription += api.LMSGetDiagnostic(null);
@@ -108,7 +108,7 @@ function ErrorHandler()
 		else
 		{
 			var errDescription = API.LMSGetErrorString(errCode);
-			if(_debug == true)
+			if(_debug)
 			{
 				errDescription += "\n";
 				errDescription += api.LMSGetDiagnostic(null);
@@ -278,7 +278,7 @@ var exitPageStatus;
 function loadPage()
 {
 	var result = doLMSInitialize();
-	if(result != false)
+	if(result)
 	{
 		var status = doLMSGetValue("cmi.core.lesson_status");
 		if(status == "not attempted")
@@ -407,7 +407,7 @@ function doQuit()
  */
 function unloadPage(status)
 {
-    if (exitPageStatus != true)
+    if (!exitPageStatus)
     {
            // doQuit( status );
     }
@@ -445,7 +445,7 @@ function checkAnswers(interrupted)
 				{
 					var idAnswer = questions_answers[idQuestion][j];
 					var answer = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
-					if(answer.checked == true)
+					if(answer.checked)
 					{
 						interactionAnswers += idAnswer+'__|';// changed by isaac flores
 						myScore +=questions_answers_ponderation[idQuestion][idAnswer];
@@ -482,7 +482,7 @@ function checkAnswers(interrupted)
 				{
 					var idAnswer = questions_answers[idQuestion][j];
 					var answer = document.getElementById('question_'+(idQuestion)+'_unique_'+(idAnswer));
-					if(answer.checked == true)
+					if(answer.checked)
 					{
 						interactionAnswers += idAnswer;
 						if(questions_answers_correct[idQuestion] == idAnswer)
@@ -511,7 +511,7 @@ function checkAnswers(interrupted)
 				{
 					var idAnswer = questions_answers[idQuestion][j];
 					var answer = document.getElementById('question_'+(idQuestion)+'_tf_'+(idAnswer));
-					if(answer.checked.value == true)
+					if(answer.checked.value)
 					{
 						interactionAnswers += idAnswer;
 						for(k=0;k<questions_answers_correct[idQuestion].length;k++)
@@ -628,16 +628,16 @@ function checkAnswers(interrupted)
 			} else if(type == 'exact') {
 				var interactionType = 'exact';
 				interactionScore = 0;
-				// not yet implemented see scorm_classes.php ScormAnswerMultipleChoice::export() function 
+				// not yet implemented see scorm_classes.php ScormAnswerMultipleChoice::export() function
 				/*
-			
+
 				var myScore = 0;
 				var real_answers = new Array();
 
 				for(var j=0; j<questions_answers[idQuestion].length;j++) {
 					var idAnswer = questions_answers[idQuestion][j];
 					var answer   = document.getElementById('question_'+(idQuestion)+'_multiple_'+(idAnswer));
-					if (answer.checked == true) {
+					if (answer.checked) {
 						if(questions_answers_ponderation[idQuestion][idAnswer] != 0 ) {
 							real_answers[j] = true;
 						} else {
@@ -654,17 +654,17 @@ function checkAnswers(interrupted)
 				}
 
 				var final_answer = true;
-				for(var z=0; z<real_answers.length ;z++) {		
-		 			if (real_answers[z] == false) {
+				for(var z=0; z<real_answers.length ;z++) {
+		 			if (!real_answers[z]) {
 			 			final_answer = false;
-			 		}		 	
+			 		}
 			 	}
 
-			 	if (final_answer == true) {
-			 		//getting only the first score where we save the weight of all the question 
+			 	if (final_answer) {
+			 		//getting only the first score where we save the weight of all the question
 					myScore += questions_answers_ponderation[idQuestion][1];
 				}
-			
+
 				interactionScore = myScore;
 				//correct responses work by pattern, see SCORM Runtime Env Doc
 				//for(k=0;k<questions_answers_correct[idQuestion].length;k++)
@@ -709,7 +709,7 @@ function checkAnswers(interrupted)
 	}
 	doLMSSetValue('cmi.core.lesson_status',status);
 
-	if((interrupted==true) && (status != 'completed') && (status != 'passed'))
+	if (interrupted && (status != 'completed') && (status != 'passed'))
 	{
 		doLMSSetValue('cmi.core.exit','suspended');
 	}

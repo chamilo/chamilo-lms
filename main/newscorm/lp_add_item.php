@@ -50,7 +50,7 @@ function FCKeditor_OnComplete( editorInstance ) {
 }
 
 function check_for_title() {
-		if (temp==true) {
+		if (temp) {
 			// This functions shows that you can interact directly with the editor area
 			// DOM. In this way you have the freedom to do anything you want with it.
 
@@ -119,7 +119,7 @@ function InnerDialogLoaded() {
 $htmlHeadXtra[] = $_SESSION['oLP']->create_js();
 /*
 	Constants and variables
-*/ 
+*/
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 

@@ -3,10 +3,10 @@
 /**
  * This (abstract?) class defines the parent attributes and methods for the dokeos learnpaths and scorm
  * learnpaths. It is used by the scorm class.
- * 
+ *
  * @package chamilo.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
- * @author	Julio Montoya   <gugli100@gmail.com> Improvements 
+ * @author	Julio Montoya   <gugli100@gmail.com> Improvements
  * @license	GNU/GPL - See license in root directory for details
  */
 /**
@@ -69,7 +69,7 @@ class learnpath {
 	var $lp_session_id =0;
 
 	var $prerequisite = 0;
-	
+
 	/**
 	 * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
 	 * Also builds the list of items into $this->items.
@@ -712,7 +712,7 @@ class learnpath {
 						}
 					}
 				}
-				if ($completed == true) { //if all the children were completed
+				if ($completed) { //if all the children were completed
 					$parent->set_status('completed');
 					$parent->save(false, $this->prerequisites_match($parent->get_id()));
 					$this->update_queue[$parent->get_id()] = $parent->get_status();
@@ -1416,7 +1416,7 @@ class learnpath {
 		return $current;
 	}
 
-	/** 
+	/**
 	 * Force to get the first learnpath item id
 	 * @return	integer	The current learnpath item id
 	 */
@@ -1469,7 +1469,7 @@ class learnpath {
 		if (count($this->ordered_items) == 0) {
 			$this->index = 0;
 		}
-		if (!empty ($this->last_item_seen) && !empty ($this->items[$this->last_item_seen]) && $this->items[$this->last_item_seen]->get_type() != 'dir' && $this->items[$this->last_item_seen]->get_type() != 'dokeos_chapter' && $this->items[$this->last_item_seen]->is_done() != true) {
+		if (!empty ($this->last_item_seen) && !empty ($this->items[$this->last_item_seen]) && $this->items[$this->last_item_seen]->get_type() != 'dir' && $this->items[$this->last_item_seen]->get_type() != 'dokeos_chapter' && !$this->items[$this->last_item_seen]->is_done()) {
 			if ($this->debug > 2) {
 				error_log('New LP - In learnpath::first() - Last item seen is ' . $this->last_item_seen . ' of type ' . $this->items[$this->last_item_seen]->get_type(), 0);
 			}
@@ -1751,7 +1751,7 @@ class learnpath {
 					$package_type = 'scorm';
 					break; //exit the foreach loop
 				}
-				elseif (preg_match('/aicc\//i', $thisContent['filename']) != false) {
+				elseif (preg_match('/aicc\//i', $thisContent['filename'])) {
 					//if found an aicc directory... (!= false means it cannot be false (error) or 0 (no match))
 					$package_type = 'aicc';
 					//break;//don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC
@@ -1941,7 +1941,7 @@ class learnpath {
 	function is_lp_visible_for_student($lp_id, $student_id) {
 
 		$tbl_learnpath = Database :: get_course_table(TABLE_LP_MAIN);
-		
+
 		// get current prerequisite
 		$sql = "SELECT prerequisite FROM $tbl_learnpath WHERE id = $lp_id";
 		$rs  = Database::query($sql);
@@ -1949,17 +1949,17 @@ class learnpath {
 		$prerequisite = $row['prerequisite'];
 		$is_visible = true;
 		$progress = 0;
-				
+
 		if (!empty($prerequisite)) {
 			$progress = self::get_db_progress($prerequisite,$student_id,'%');
-			$progress = intval($progress);			
+			$progress = intval($progress);
 			if ($progress < 100) {
-				$is_visible = false;	
-			}			
+				$is_visible = false;
+			}
 		}
-		
+
 		return $is_visible;
-		
+
 	}
 
 	/**
@@ -2509,7 +2509,7 @@ class learnpath {
 			}
 		}
 		if ($this->debug > 2) {
-			error_log('New LP - In learnpath::get_type() - Returning ' . ($res == false ? 'false' : $res), 0);
+			error_log('New LP - In learnpath::get_type() - Returning ' . ($res ? $res : 'false'), 0);
 		}
 		return $res;
 	}
@@ -2805,15 +2805,15 @@ class learnpath {
 			} else {
 				$course_path = $sys_course_path; //system path
 			}
-			
-			
+
+
 			//Fixed issue BT#1272 - If the item type is a Chamilo Item (quiz, link, etc), then change the lp type to thread it as a normal Chamilo LP not a SCO.
 			if (in_array($lp_item_type, array('quiz', 'document', 'link', 'forum', 'thread', 'student_publication'))) {
 				$lp_type = 1;
 			}
 			//Now go through the specific cases to get the end of the path
-					
-			//@todo use constants instead of int values	
+
+			//@todo use constants instead of int values
 			switch ($lp_type) {
 				case 1 :
 					if ($lp_item_type == 'dokeos_chapter') {
@@ -3892,7 +3892,7 @@ class learnpath {
 		$res = Database::query($sql);
 		return true;
 	}
-	
+
 	/**
 	* Sets the prerequisite of a LP (and save)
 	* @param	int		integer giving the new prerequisite of this learnpath
@@ -4330,7 +4330,7 @@ class learnpath {
 
 		if ($is_allowed_to_edit) {
 			$token = Security::get_token();
-			
+
 			$gradebook = Security :: remove_XSS($_GET['gradebook']);
 			$return .= '<div class="actions">';
 			$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=build&amp;lp_id=' . $this->lp_id . '" title="' . get_lang("Build") . '">' . Display :: return_icon('learnpath_build.gif', get_lang('Build')) . ' ' . get_lang('Build') . '</a>';
@@ -4721,14 +4721,14 @@ class learnpath {
 			$sql = "SELECT lp.* FROM " . $tbl_lp_item . " as lp
 					WHERE lp.id = " . Database :: escape_string($item_id);
 			$result = Database::query($sql);
-			while ($row = Database :: fetch_array($result)) {				
+			while ($row = Database :: fetch_array($result)) {
 				$_SESSION['parent_item_id'] = ($row['item_type'] == 'dokeos_chapter' || $row['item_type'] == 'dokeos_module' || $row['item_type'] == 'dir') ? $item_id : 0;
-				
-				//Prevents wrong parent selection for document see Bug#1251 
+
+				//Prevents wrong parent selection for document see Bug#1251
 				if ($row['item_type'] != 'dokeos_chapter' || $row['item_type'] != 'dokeos_module') {
-					$_SESSION['parent_item_id'] = $row['parent_item_id'];					
+					$_SESSION['parent_item_id'] = $row['parent_item_id'];
 				}
-				
+
 				$return .= $this->display_manipulate($item_id, $row['item_type']);
 				$return .= '<div style="padding:10px;">';
 				if ($msg != '')
@@ -6058,7 +6058,7 @@ class learnpath {
 				'min_score' 		=> $row['min_score'],
 				'mastery_score' 	=> $row['mastery_score'],
 				'prerequisite' 		=> $row['prerequisite']
-			);			
+			);
 		}
 
 		$this->tree_array($arrLP);
@@ -6117,7 +6117,7 @@ class learnpath {
 				}
 			}
 		}
-		
+
 		$parent_select = & $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" style="width:40%;" onchange="load_cbo(this.value);"');
 		$my_count=0;
 		foreach ($arrHide as $key => $value) {
@@ -6131,15 +6131,15 @@ class learnpath {
 			}
 			$my_count++;
 		}
-		
+
 		if (!empty ($id)) {
 			$parent_select->setSelected($parent);
-		} else {			
+		} else {
 			$parent_item_id = $_SESSION['parent_item_id'];
 			$parent_select->setSelected($parent_item_id);
 		}
-		
-		
+
+
 
 		if (is_array($arrLP)) {
 			reset($arrLP);
@@ -7151,7 +7151,7 @@ class learnpath {
 		global $charset;
 		$lp_id = $this->lp_id;
 		$tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
-	
+
 		// get current prerequisite
 		$sql = "SELECT * FROM $tbl_lp WHERE id = $lp_id ";
 		$result = Database::query($sql);
@@ -7159,18 +7159,18 @@ class learnpath {
 		$preq_id = $row['prerequisite'];
 		$session_id = api_get_session_id();
 		$session_condition = api_get_session_condition($session_id, false);
-		$sql 	= "SELECT * FROM $tbl_lp $session_condition ORDER BY display_order ";		
+		$sql 	= "SELECT * FROM $tbl_lp $session_condition ORDER BY display_order ";
 		$rs = Database::query($sql);
 		$return = '';
 		$return .= '<select name="prerequisites" >';
-		$return .= '<option value="0">'.get_lang('None').'</option>';		
-		if (Database::num_rows($rs) > 0) {					
+		$return .= '<option value="0">'.get_lang('None').'</option>';
+		if (Database::num_rows($rs) > 0) {
 			while ($row = Database::fetch_array($rs)) {
 				if ($row['id'] == $lp_id) {
-					continue;	
-				}					
-				$return .= '<option value="'.$row['id'].'" '.(($row['id']==$preq_id)?' selected ' : '').'>'.$row['name'].'</option>';							
-			}			
+					continue;
+				}
+				$return .= '<option value="'.$row['id'].'" '.(($row['id']==$preq_id)?' selected ' : '').'>'.$row['name'].'</option>';
+			}
 		}
 		$return .= '</select>';
 		return $return;
@@ -7250,21 +7250,21 @@ class learnpath {
 	 */
 	function write_resources_tree($resources_sorted, $num = 0) {
 
-		require_once (api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php');		
+		require_once (api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php');
 		if (count($resources_sorted) > 0) {
 			foreach ($resources_sorted as $key => $resource) {
-				if (is_int($resource['id'])) { 
+				if (is_int($resource['id'])) {
 					// it's a folder
 					$return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_' . $resource["id"] . '" onclick="testResources(\'' . $resource["id"] . '\',\'img_' . $resource["id"] . '\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onclick="testResources(\'' . $resource["id"] . '\',\'img_' . $resource["id"] . '\')" style="cursor: pointer;" >' . $key . '</span></div><div style="display: none;" id="' . $resource['id'] . '">';
 					$return .= $this->write_resources_tree($resource['files'], $num +1);
 					$return .= '</div></div>';
 				} else {
 					if (!is_array($resource)) {
-						// it's a file				
+						// it's a file
 						$icon		= choose_image($resource);
 						$position 	= strrpos($icon, '.');
-						$icon 		= substr($icon, 0, $position) . '_small.gif';					
-						$file_info	= explode('/', $resource);						
+						$icon 		= substr($icon, 0, $position) . '_small.gif';
+						$file_info	= explode('/', $resource);
           				$my_file_title = $file_info[0];
           				$my_file_name  = $file_info[1];
 						//$return .= '<div><div style="margin-left:' . (($num +1) * 15) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img alt="" src="../img/' . $icon . '" title="" />&nbsp;' . $resource .'</a></div></div>';

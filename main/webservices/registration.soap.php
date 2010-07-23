@@ -3491,7 +3491,7 @@ function WSSubscribeUsersToCourse($params) {
 				$result['result'] = 0;
 			} else {
 				$course_code = CourseManager::get_course_code_from_course_id($course_id);
-				if(CourseManager::add_user_to_course($user_id, $course_code, $status) == false) {
+				if (!CourseManager::add_user_to_course($user_id, $course_code, $status)) {
 					$result['result'] = 0;
 				}
 			}

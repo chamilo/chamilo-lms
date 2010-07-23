@@ -115,7 +115,7 @@ function remove_cat_def($id, $force = false)
 		return false;
 	}
 	$sqlCondition = " WHERE id = '$id'";
-	if ($force == false)
+	if (!$force)
 	{
 		$sql = "SELECT * FROM $TBL_USERINFO_CONTENT $sqlCondition";
 		$result = Database::query($sql);

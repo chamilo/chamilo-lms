@@ -92,7 +92,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
 		if ($check) {
 	   		$values = $form->exportValues();
 	   		$res = NotebookManager::save_note($values);
-	   		if ($res == true){
+	   		if ($res) {
 	   			Display::display_confirmation_message(get_lang('NoteAdded'));
 	   		}
 		}

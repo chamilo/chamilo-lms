@@ -630,7 +630,7 @@ if ($_GET['action']=='usercontrib')
 
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&view='.$obj->id.'&group_id='.api_htmlentities(urlencode($_GET['group_id'])).'">'.api_htmlentities($obj->title).'</a>';
 			$row[] =Security::remove_XSS($obj->version);
-			$row[] =Security::remove_XSS($obj->comment);			
+			$row[] =Security::remove_XSS($obj->comment);
 			//$row[] = api_strlen($obj->comment)>30 ? Security::remove_XSS(api_substr($obj->comment,0,30)).'...' : Security::remove_XSS($obj->comment);
 			$row[] =Security::remove_XSS($obj->progress).' %';
 			$row[] =Security::remove_XSS($obj->score);
@@ -1457,7 +1457,7 @@ if ($_GET['action']=='edit')
 					echo '<div id="options" style="display:none; margin: 20px;" >';
 
 					//task
-					echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checktask" onclick="if(this.checked==true){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" title="'.get_lang('DefineTask').'" alt="'.get_lang('DefineTask').'"/>'.get_lang('DescriptionOfTheTask').'';
+					echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checktask" onclick="javascript: if(this.checked){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" title="'.get_lang('DefineTask').'" alt="'.get_lang('DefineTask').'"/>'.get_lang('DescriptionOfTheTask').'';
 					echo '&nbsp;&nbsp;&nbsp;<span id="msg_error4" style="display:none;color:red"></span>';
 					echo '<div id="option4" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 
@@ -1472,7 +1472,7 @@ if ($_GET['action']=='edit')
 					echo '</div>';
 
 					//feedback
-					echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkfeedback" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;'.get_lang('AddFeedback').'';
+					echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkfeedback" onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;'.get_lang('AddFeedback').'';
 					echo '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
 					echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 
@@ -1535,7 +1535,7 @@ if ($_GET['action']=='edit')
 					echo '</div>';
 
 					//time limit
-					echo  '<div>&nbsp;</div><input type="checkbox" value="1" name="checktimelimit" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\'; $pepe=\'a\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;'.get_lang('PutATimeLimit').'';
+					echo  '<div>&nbsp;</div><input type="checkbox" value="1" name="checktimelimit" onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display=\'block\'; $pepe=\'a\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;'.get_lang('PutATimeLimit').'';
 					echo  '&nbsp;&nbsp;&nbsp;<span id="msg_error1" style="display:none;color:red"></span>';
 					echo  '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 					echo '<table width="100%" border="0" style="font-weight:normal">';
@@ -1578,7 +1578,7 @@ if ($_GET['action']=='edit')
 					echo '</div>';
 
 					//other limit
-					echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkotherlimit" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;'.get_lang('OtherSettings').'';
+					echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkotherlimit" onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;'.get_lang('OtherSettings').'';
 					echo '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
 					echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 					echo '<div style="font-weight:normal"; align="center">'.get_lang('NMaxWords').':&nbsp;<input type="text" name="max_text" size="3" value="'.$row['max_text'].'">&nbsp;&nbsp;'.get_lang('NMaxVersion').':&nbsp;<input type="text" name="max_version" size="3" value="'.$row['max_version'].'"></div>';
@@ -1872,7 +1872,7 @@ if ($_GET['action']=='recentchanges') {
 
 		//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND visibility=1 AND '.$tbl_wiki.'.'.$groupfilter.' ORDER BY dtime DESC'; // new version
 	}
-	
+
 	$allpages=Database::query($sql);
 
 	//show table

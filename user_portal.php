@@ -1643,7 +1643,7 @@ echo '<div id="social_widget">';
 
 echo '  <div id="social_widget_image">';
 if (api_get_setting('allow_social_tool') == 'true') {
-	if ($no_image == false) {
+	if (!$no_image) {
 	    echo '<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
 	} else {
 	    echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';

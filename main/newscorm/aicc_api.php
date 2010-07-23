@@ -312,10 +312,10 @@ function LMSCommit(val) {
 	return('true');
 }
 function LMSFinish(val) {
-	if (( commit == false )) {
+	if ( !commit ) {
 		logit_scorm('LMSFinish() (no LMSCommit())',1);
 	}
-	if ( commit == true ) {
+	if ( commit ) {
 		logit_scorm('LMSFinish() called',1);
 		savedata('finish');
 	}

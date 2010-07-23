@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* For licensing terms, see /license.txt */
 /**
 * This file was originally the copy of document.php, but many modifications happened since then ;
@@ -35,7 +35,7 @@ require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 //require_once('lp_comm.common.php'); //xajax functions
 
-if ($is_allowed_in_course == false) api_not_allowed();
+if (!$is_allowed_in_course) api_not_allowed();
 
 // we set the encoding of the lp
 if (!empty($_SESSION['oLP']->encoding)) {
@@ -100,12 +100,12 @@ if (!isset($src)) {
 			$htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
 			$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
 			if($prereq_check === true){
-				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);			
+				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
 				//Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
-				$file_info = pathinfo($src);					
+				$file_info = pathinfo($src);
 				if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
 					$src = 'lp_view_item.php?src='.$src;
-				}				
+				}
 				$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
 			} else {
 				$src = 'blank.php?error=prerequisites';
@@ -327,7 +327,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 		<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;width:100%">
 			<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
 
-    	<?php if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log    			
+    	<?php if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log
     	?>
 	        <!-- log message layout -->
 			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
@@ -342,7 +342,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	</div>
     <!-- end left Zone -->
 
-    <!-- right Zone -->    
+    <!-- right Zone -->
 	<div id="learning_path_right_zone" style="margin-left:282px;height:100%">
 	<?php
 		// hub 26-05-2010 Fullscreen or not fullscreen

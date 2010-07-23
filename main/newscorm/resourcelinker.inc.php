@@ -1705,7 +1705,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 
 	// styling the link of the added resource
 	if ($style <> '') $styling = ' class="'.$style.'"';
-	if($new_window == true){ $target = ' target = "_blank" ';}else{$target = ' target = "_self" ';}
+	if ($new_window) { $target = ' target = "_blank" '; } else { $target = ' target = "_self" '; }
 
 	$output = '';
 

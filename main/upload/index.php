@@ -33,7 +33,7 @@ $htmlHeadXtra[] =
 "<script type=\"text/javascript\">
 <!-- //
 function check_unzip() {
-	if(document.upload.unzip.checked==true){
+	if(document.upload.unzip.checked){
 	document.upload.if_exists[0].disabled=true;
 	document.upload.if_exists[1].checked=true;
 	document.upload.if_exists[2].disabled=true;

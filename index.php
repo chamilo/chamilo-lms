@@ -707,7 +707,7 @@ function display_anonymous_course_list() {
 		foreach ($course_list as $course) {
 			// $setting_show_also_closed_courses
 
-			if ($setting_show_also_closed_courses == false) {
+			if (!$setting_show_also_closed_courses) {
 				// If we do not show the closed courses
 				// we only show the courses that are open to the world (to everybody)
 				// and the courses that are open to the platform (if the current user is a registered user

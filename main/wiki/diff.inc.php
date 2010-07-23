@@ -95,7 +95,7 @@
 
             }
             // line unchanged
-            elseif ( $show_equals == true )
+            elseif ( $show_equals )
             {
                 $output .= $format_line_function( $i, DIFF_EQUAL, $newArr[$i] );
 

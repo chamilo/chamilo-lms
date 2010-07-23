@@ -9,10 +9,10 @@ require_once(dirname(__FILE__).'/webservice.php');
  * Web services available for the User module. This class extends the WS class
  */
 class WSUser extends WS {
-	
+
 	/**
 	 * Enables or disables a user
-	 * 
+	 *
 	 * @param string User id field name
 	 * @param string User id value
 	 * @param int Set to 1 to enable and to 0 to disable
@@ -29,10 +29,10 @@ class WSUser extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Enables or disables multiple users
-	 * 
+	 *
 	 * @param array Users
 	 * @param int Set to 1 to enable and to 0 to disable
 	 * @return array Array of results
@@ -53,10 +53,10 @@ class WSUser extends WS {
 		}
 		return $results;
 	}
-	
+
 	/**
 	 * Disables a user
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string User id field name. Use "chamilo_user_id" as the field name if you want to use the internal user_id
 	 * @param string User id value
@@ -73,10 +73,10 @@ class WSUser extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Disables multiple users
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param array Array of users with elements of the form array('user_id_field_name' => 'name_of_field', 'user_id_value' => 'value')
 	 * @return array Array with elements like array('user_id_value' => 'value', 'result' => array('code' => 0, 'message' => 'Operation was successful')). Note that if the result array contains a code different
@@ -91,10 +91,10 @@ class WSUser extends WS {
 			return $this->changeUsersActiveState($users, 0);
 		}
 	}
-	
+
 	/**
 	 * Enables a user
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string User id field name. Use "chamilo_user_id" as the field name if you want to use the internal user_id
 	 * @param string User id value
@@ -110,10 +110,10 @@ class WSUser extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Enables multiple users
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param array Array of users with elements of the form array('user_id_field_name' => 'name_of_field', 'user_id_value' => 'value')
 	 * @return array Array with elements like array('user_id_value' => 'value', 'result' => array('code' => 0, 'message' => 'Operation was successful')). Note that if the result array contains a code different
@@ -128,10 +128,10 @@ class WSUser extends WS {
 			return $this->changeUsersActiveState($users, 1);
 		}
 	}
-	
+
 	/**
 	 * Deletes a user (helper method)
-	 * 
+	 *
 	 * @param string User id field name. Use "chamilo_user_id" as the field name if you want to use the internal user_id
 	 * @param string User id value
 	 * @return mixed True if user was successfully deleted, WSError otherwise
@@ -148,10 +148,10 @@ class WSUser extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Deletes a user
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string User id field name. Use "chamilo_user_id" as the field name if you want to use the internal user_id
 	 * @param string User id value
@@ -167,10 +167,10 @@ class WSUser extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Deletes multiple users
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param array Array of users with elements of the form array('user_id_field_name' => 'name_of_field', 'user_id_value' => 'value')
 	 * @return array Array with elements like array('user_id_value' => 'value', 'result' => array('code' => 0, 'message' => 'Operation was successful')). Note that if the result array contains a code different
@@ -197,16 +197,16 @@ class WSUser extends WS {
 			return $results;
 		}
 	}
-	
+
 	/**
 	 * Creates a user (helper method)
-	 * 
+	 *
 	 * @param string User first name
 	 * @param string User last name
 	 * @param int User status
 	 * @param string Login name
 	 * @param string Password (encrypted or not)
-	 * @param string Encrypt method. Leave blank if you are passing the password in clear text, set to the encrypt method used to encrypt the password otherwise. Remember 
+	 * @param string Encrypt method. Leave blank if you are passing the password in clear text, set to the encrypt method used to encrypt the password otherwise. Remember
 	 * to include the salt in the extra fields if you are encrypting the password
 	 * @param string User id field name. Use "chamilo_user_id" as the field name if you want to use the internal user_id
 	 * @param string User id value. Leave blank if you are using the internal user_id
@@ -228,7 +228,7 @@ class WSUser extends WS {
 			$extras_associative[$extra['field_name']] = $extra['field_value'];
 		}
 		$result = UserManager::create_user($firstname, $lastname, $status, $email, $login, $password, '', $language, $phone, '', PLATFORM_AUTH_SOURCE, $expiration_date, $visibility, 0, $extras_associative, $encrypt_method);
-		if($result == false) {
+		if (!$result) {
 			$failure = $api_failureList[0];
 			if($failure == 'login-pass already taken') {
 				return new WSError(102, 'This username is already taken');
@@ -241,17 +241,17 @@ class WSUser extends WS {
 			return $result;
 		}
 	}
-	
+
 	/**
 	 * Creates a user
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string User first name
 	 * @param string User last name
 	 * @param int User status
 	 * @param string Login name
 	 * @param string Password (encrypted or not)
-	 * @param string Encrypt method. Leave blank if you are passing the password in clear text, set to the encrypt method used to encrypt the password otherwise. Remember 
+	 * @param string Encrypt method. Leave blank if you are passing the password in clear text, set to the encrypt method used to encrypt the password otherwise. Remember
 	 * to include the salt in the extra fields if you are encrypting the password
 	 * @param string User id field name. Use "chamilo_user_id" as the field name if you want to use the internal user_id
 	 * @param string User id value. Leave blank if you are using the internal user_id
@@ -277,10 +277,10 @@ class WSUser extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Creates multiple users
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param array Users array. Each member of this array must follow the structure imposed by the CreateUser method
 	 * @return array Array with elements of the form array('user_id_value' => 'original value sent', 'user_id_generated' => 'value_generated', 'result' => array('code' => 0, 'message' => 'Operation was successful'))
@@ -309,10 +309,10 @@ class WSUser extends WS {
 			return $results;
 		}
 	}
-	
+
 	/**
 	 * Edits user info (helper method)
-	 * 
+	 *
 	 * @param string User id field name. Use "chamilo_user_id" in order to use internal system id
 	 * @param string User id value
 	 * @param string First name
@@ -341,7 +341,7 @@ class WSUser extends WS {
 				$extras = null;
 			}
 			$result = UserManager::update_user($user_id, $firstname, $lastname, $loginname, $password, PLATFORM_AUTH_SOURCE, $email, $status, '', $phone, $user_info['picture_uri'], $expiration_date, $user_info['active'], null, $user_info['hr_dept_id'], $extras, $encrypt_method);
-			if($result == false) {
+			if (!$result) {
 				$failure = $api_failureList[0];
 				if($failure == 'encrypt_method invalid') {
 					return new WSError(103, 'The encryption of the password is invalid');
@@ -353,10 +353,10 @@ class WSUser extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Edits user info
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string User id field name. Use "chamilo_user_id" in order to use internal system id
 	 * @param string User id value
@@ -384,10 +384,10 @@ class WSUser extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Edits multiple users
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param array Users array. Each member of this array must follow the structure imposed by the EditUser method
 	 * @return array Array with elements like array('user_id_value' => 'value', 'result' => array('code' => 0, 'message' => 'Operation was successful')). Note that if the result array contains a code different

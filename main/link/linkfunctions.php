@@ -53,7 +53,7 @@ function addlinkcategory($type) {
 		$description = trim($description);
 
 		// If title is empty, an error occurs
-		if (filter_var($urllink, FILTER_VALIDATE_URL) == false) {
+		if (!filter_var($urllink, FILTER_VALIDATE_URL)) {
 			$msgErr = get_lang('GiveURL');
 			Display::display_error_message(get_lang('GiveURL'));
 			$ok = false;

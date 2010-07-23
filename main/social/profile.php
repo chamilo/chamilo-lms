@@ -27,7 +27,7 @@ if (isset($_GET['u'])) {
 	if (api_get_user_id() != $user_id) {
 		$user_info	= UserManager::get_user_info_by_id($user_id);
 		$show_full_profile = false;
-		if ($user_info==false) {
+		if (!$user_info) {
 			// user does no exist !!
 			api_not_allowed();
 		} else {
@@ -517,7 +517,7 @@ echo '<div id="social-content-right">';
 		}
 
 		// COURSES LIST
-		
+
 		if ($show_full_profile) {
 			if ( is_array($list) ) {
 				echo '<div class="social-box-main1">';
@@ -571,7 +571,7 @@ echo '<div id="social-content-right">';
 
 	//--Productions
 	$production_list =  UserManager::build_production_list($user_id);
-	
+
 	// Images uploaded by course
 	$file_list = '';
 	if (is_array($course_list_code) && count($course_list_code)>0) {
@@ -603,11 +603,11 @@ echo '<div id="social-content-right">';
 									echo '<div style="float:left;width:60px;" >';
 										echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
 									echo '</div>';
-									
+
 									echo '<div style="padding-left:70px;">';
-											$user_info = api_get_user_info($user_invitation_id);									
+											$user_info = api_get_user_info($user_invitation_id);
 											echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_invitation_id.'">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</a>';
-											echo '<br />';											
+											echo '<br />';
 											echo ' '.(substr($pending_invitations[$i]['content'],0,50));
 										echo '<br />';
 										echo '<a id="btn_accepted_'.$user_invitation_id.'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
@@ -631,7 +631,7 @@ echo '<div id="social-content-right">';
 							echo '</div>';
 						}
 						// Images uploaded by course
-						
+
 						if (!empty($file_list)) {
 							echo '<div><h3>'.get_lang('ImagesUploaded').'</h3></div>';
 							echo '<div class="social-content-information">';

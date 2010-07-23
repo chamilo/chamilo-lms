@@ -208,7 +208,7 @@ if ($survey_data['survey_type'] == 1 || $_GET['action'] == 'add') {
 if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id)) {
 	if ($survey_data['anonymous'] == 0) {
 
-		$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'), '', 'onclick="javascript: if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+		$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'), '', 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 
 		if ($survey_data['show_form_profile'] == 1) {
 			$form -> addElement('html', '<div id="options_field" style="display:block">');

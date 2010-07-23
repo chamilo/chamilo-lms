@@ -854,12 +854,11 @@ function LMSFinish(val) {
     olms.G_LastErrorMessage = 'No error';
     // if olms.commit == false, then the SCORM didn't ask for a commit, so we
     // should at least report that
-    if (( olms.commit == false )) {
+    if ( !olms.commit ) {
         logit_scorm('LMSFinish() (no LMSCommit())',1);
-
     }
 
-    //if ( olms.commit == true ) {
+    //if ( olms.commit ) {
     	logit_scorm('LMSFinish() called',1);
     	savedata('finish');
         olms.commit = false;
@@ -1017,7 +1016,7 @@ function addListeners(){
  */
 function lms_save_asset(){
 	// only for dokeos lps
-	if (olms.execute_stats==true) {
+	if (olms.execute_stats) {
 		olms.execute_stats=false;
 	} else {
 		olms.execute_stats=true;
@@ -1178,7 +1177,7 @@ function update_toc(update_action,update_id,change_ids)
  * Update the stats frame using a reload of the frame to avoid unsynched data
  */
 function update_stats() {
-	if (olms.execute_stats==true) {
+	if (olms.execute_stats) {
 		try {
 		cont_f = document.getElementById('content_id');
 		cont_f.src="lp_controller.php?action=stats";
@@ -1254,7 +1253,7 @@ function process_scorm_values () {
 
     for (i=0;i<olms.scorm_variables.length;i++) {
 
-        if (olms.updatable_vars_list[olms.scorm_variables[i]]==true) {
+        if (olms.updatable_vars_list[olms.scorm_variables[i]]) {
             olms.variable_to_send.push(olms.scorm_variables[i]);
         }
     }
@@ -1269,7 +1268,7 @@ function reinit_updatable_vars_list () {
 
     for (i=0;i<olms.scorm_variables.length;i++) {
 
-        if (olms.updatable_vars_list[olms.scorm_variables[i]]==true) {
+        if (olms.updatable_vars_list[olms.scorm_variables[i]]) {
             olms.updatable_vars_list[olms.scorm_variables[i]]=false;
         }
     }

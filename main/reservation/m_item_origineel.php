@@ -79,7 +79,7 @@ if (isset ($_POST['action'])) {
 			if (count($ids) > 0) {
 				foreach ($ids as $id) {
 					$result = Rsys :: delete_item($id);
-					if ($result != 0 && $warning <> true)
+					if ($result != 0 && $warning <> true) // TODO: A strange looking logical condition, to be cleaned.
 						$warning = true;
 				}
 				ob_start();

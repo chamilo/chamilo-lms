@@ -23,7 +23,7 @@ $path_name = $_SESSION['oLP']->get_name();
 $path_id = $_SESSION['oLP']->get_id();
 // use the flag set in lp_view.php to check if this script has been loaded
 // as a frame of lp_view.php. Otherwise, redirect to lp_controller
-if(!isset($_SESSION['loaded_lp_view']) || $_SESSION['loaded_lp_view']==false)
+if (!$_SESSION['loaded_lp_view'])
 {
 	header('location: lp_controller.php?'.api_get_cidreq().'&action=view&item_id='.$path_id);
 }

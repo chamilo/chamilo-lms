@@ -180,8 +180,8 @@ class MySpace {
 			} else {
 				$$avg_score = '-';
 			}
-			
-			$return .= '	<td><div>'.$avg_score.'</div></td>';			
+
+			$return .= '	<td><div>'.$avg_score.'</div></td>';
 			// student tes score
 			//$return .= '	<td><div style="width:40px">'.round(Tracking :: get_avg_student_exercise_score ($user_id, $row[0]),2).'%</div></td>';
 			// student messages
@@ -333,7 +333,7 @@ class MySpace {
 			}
 		}
 	}
-	
+
 	/**
 	 * Display a sortable table that contains an overview of all the reporting progress of all courses
 	 */
@@ -361,17 +361,17 @@ class MySpace {
 
 		$table = new SortableTable('tracking_session_overview', array('MySpace','get_total_number_courses'), array('MySpace','get_course_data_tracking_overview'), 1);
 		$table->additional_parameters = $addparams;
-		
+
 		$table->set_header(0, '', false, null, array('style' => 'display: none'));
 		$table->set_header(1, get_lang('Course'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
 		$table->set_header(2, $t_head, false, array('style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'), array('style' => 'width:90%;padding:0;font-size:7.5pt;'));
 		$table->set_column_filter(2, array('MySpace','course_tracking_filter'));
 		$table->display();
 	}
-	
+
 	/**
 	 * Get the total number of courses
-	 * 
+	 *
 	 * @return integer Total number of courses
 	 */
 	public function get_total_number_courses() {
@@ -379,7 +379,7 @@ class MySpace {
 		$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		return Database::count_rows($main_course_table);
 	}
-	
+
 	/**
 	 * Get data for the courses
 	 *
@@ -395,11 +395,11 @@ class MySpace {
 		//$access_url_id = api_get_current_access_url_id();
 	 	//$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-		
+
 		/*if ($_configuration['multiple_access_urls']) {
 			$condition_multi_url = ", $tbl_url_rel_user as url_user WHERE user.user_id=url_user.user_id AND access_url_id='$access_url_id'";
 		}
-		
+
 		global $export_csv;
 		if ($export_csv) {
 			$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
@@ -416,7 +416,7 @@ class MySpace {
 		}
 		return $return;
 	}
-	
+
 	/**
 	 * Fills in course reporting data
 	 *
@@ -477,17 +477,17 @@ class MySpace {
 			}
 			$nb_messages += Tracking::count_student_messages($row->user_id, $course_code);
 			$nb_assignments += Tracking::count_student_assignments($row->user_id, $course_code);
-			
+
 			$last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row->user_id, $course_code, null, false);
-			if($last_login_date_tmp != false && $last_login_date == false) {
+			if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned
 				$last_login_date = $last_login_date_tmp;
-			} else if($last_login_date_tmp != false && $last_login_date == false) {
+			} else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
 				// Find the max and assign it to first_login_date
 				if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
 					$last_login_date = $last_login_date_tmp;
 				}
 			}
-			
+
 			$exercise_results_tmp = MySpace::exercises_results($row->user_id, $course_code);
 			$total_score_obtained += $exercise_results_tmp['score_obtained'];
 			$total_score_possible += $exercise_results_tmp['score_possible'];
@@ -503,7 +503,7 @@ class MySpace {
 		} else {
 			$avg_score = '-';
 		}
-		if($last_login_date != false) {
+		if($last_login_date) {
 			$last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
 		} else {
 			$last_login_date = '-';
@@ -538,7 +538,7 @@ class MySpace {
 		$return .= '</table>';
 		return $return;
 	}
-	
+
 	/**
 	 * This function exports the table that we see in display_tracking_course_overview()
 	 *
@@ -560,7 +560,7 @@ class MySpace {
 		} else {
 			$orderby = 0;
 		}
-		
+
 		if ($_GET['tracking_course_overview_direction']) {
 			$direction = $_GET['tracking_course_overview_direction'];
 		} else {
@@ -568,7 +568,7 @@ class MySpace {
 		}
 
 		$course_data = MySpace::get_course_data_tracking_overview($from, 1000, $orderby, $direction);
-		
+
 		$csv_content = array();
 
 		// the first line of the csv file with the column headers
@@ -590,10 +590,10 @@ class MySpace {
 		foreach ($course_data as $key => $course) {
 			$course_code = $course[0];
 			$course_title = $course[1];
-			
+
 			$csv_row = array();
 			$csv_row[] = $course_title;
-			
+
 			// getting all the courses of the session
 			$sql = "SELECT * FROM $tbl_user AS u INNER JOIN $tbl_course_rel_user AS cu ON cu.user_id = u.user_id WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
 			$result = Database::query($sql);
@@ -621,17 +621,17 @@ class MySpace {
 				}
 				$nb_messages += Tracking::count_student_messages($row->user_id, $course_code);
 				$nb_assignments += Tracking::count_student_assignments($row->user_id, $course_code);
-				
+
 				$last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row->user_id, $course_code, null, false);
-				if($last_login_date_tmp != false && $last_login_date == false) {
+				if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
 					$last_login_date = $last_login_date_tmp;
-				} else if($last_login_date_tmp != false && $last_login_date == false) {
+				} else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
 					// Find the max and assign it to first_login_date
 					if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
 						$last_login_date = $last_login_date_tmp;
 					}
 				}
-				
+
 				$exercise_results_tmp = MySpace::exercises_results($row->user_id, $course_code);
 				$total_score_obtained += $exercise_results_tmp['score_obtained'];
 				$total_score_possible += $exercise_results_tmp['score_possible'];
@@ -647,7 +647,7 @@ class MySpace {
 			} else {
 				$avg_score = '-';
 			}
-			if($last_login_date != false) {
+			if($last_login_date) {
 				$last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
 			} else {
 				$last_login_date = '-';
@@ -679,7 +679,7 @@ class MySpace {
 		Export :: export_table_csv($csv_content, 'reporting_course_overview');
 		exit;
 	}
-	
+
 	/**
 	 * Display a sortable table that contains an overview of all the reporting progress of all sessions and all courses the user is subscribed to
 	 * @author Guillaume Viguier <guillaume@viguierjust.com>
@@ -709,17 +709,17 @@ class MySpace {
 
 		$table = new SortableTable('tracking_session_overview', array('MySpace','get_total_number_sessions'), array('MySpace','get_session_data_tracking_overview'), 1);
 		$table->additional_parameters = $addparams;
-		
+
 		$table->set_header(0, '', false, null, array('style' => 'display: none'));
 		$table->set_header(1, get_lang('Session'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
 		$table->set_header(2, $t_head, false, array('style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'), array('style' => 'width:90%;padding:0;font-size:7.5pt;'));
 		$table->set_column_filter(2, array('MySpace','session_tracking_filter'));
 		$table->display();
 	}
-	
+
 	/**
 	 * Get the total number of sessions
-	 * 
+	 *
 	 * @return integer Total number of sessions
 	 */
 	public function get_total_number_sessions() {
@@ -727,7 +727,7 @@ class MySpace {
 		$main_session_table = Database :: get_main_table(TABLE_MAIN_SESSION);
 		return Database::count_rows($main_session_table);
 	}
-	
+
 	/**
 	 * Get data for the sessions
 	 *
@@ -743,11 +743,11 @@ class MySpace {
 		//$access_url_id = api_get_current_access_url_id();
 	 	//$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$main_session_table = Database :: get_main_table(TABLE_MAIN_SESSION);
-		
+
 		/*if ($_configuration['multiple_access_urls']) {
 			$condition_multi_url = ", $tbl_url_rel_user as url_user WHERE user.user_id=url_user.user_id AND access_url_id='$access_url_id'";
 		}
-		
+
 		global $export_csv;
 		if ($export_csv) {
 			$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
@@ -764,7 +764,7 @@ class MySpace {
 		}
 		return $return;
 	}
-	
+
 	/**
 	 * Fills in session reporting data
 	 *
@@ -833,17 +833,17 @@ class MySpace {
 				}
 				$nb_messages += Tracking::count_student_messages($row_user->user_id, $row->code, $session_id);
 				$nb_assignments += Tracking::count_student_assignments($row_user->user_id, $row->code, $session_id);
-				
+
 				$last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row_user->user_id, $row->code, $session_id, false);
-				if($last_login_date_tmp != false && $last_login_date == false) {
+				if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
 					$last_login_date = $last_login_date_tmp;
-				} else if($last_login_date_tmp != false && $last_login_date == false) {
+				} else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition! To be cleaned.
 					// Find the max and assign it to first_login_date
 					if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
 						$last_login_date = $last_login_date_tmp;
 					}
 				}
-				
+
 				$exercise_results_tmp = MySpace::exercises_results($row_user->user_id, $row->code, $session_id);
 				$total_score_obtained += $exercise_results_tmp['score_obtained'];
 				$total_score_possible += $exercise_results_tmp['score_possible'];
@@ -859,7 +859,7 @@ class MySpace {
 			} else {
 				$avg_score = '-';
 			}
-			if($last_login_date != false) {
+			if($last_login_date) {
 				$last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
 			} else {
 				$last_login_date = '-';
@@ -894,7 +894,7 @@ class MySpace {
 		$return .= '</table>';
 		return $return;
 	}
-	
+
 	/**
 	 * This function exports the table that we see in display_tracking_session_overview()
 	 *
@@ -917,7 +917,7 @@ class MySpace {
 		} else {
 			$orderby = 0;
 		}
-		
+
 		if ($_GET['tracking_session_overview_direction']) {
 			$direction = $_GET['tracking_session_overview_direction'];
 		} else {
@@ -925,7 +925,7 @@ class MySpace {
 		}
 
 		$session_data = MySpace::get_session_data_tracking_overview($from, 1000, $orderby, $direction);
-		
+
 		$csv_content = array();
 
 		// the first line of the csv file with the column headers
@@ -948,7 +948,7 @@ class MySpace {
 		foreach ($session_data as $key => $session) {
 			$session_id = $session[0];
 			$session_title = $session[1];
-			
+
 			// getting all the courses of the session
 			$sql = "SELECT * FROM $tbl_course AS c INNER JOIN $tbl_session_rel_course AS sc ON sc.course_code = c.code WHERE sc.id_session = '".$session_id."';";
 			$result = Database::query($sql);
@@ -983,17 +983,17 @@ class MySpace {
 					}
 					$nb_messages += Tracking::count_student_messages($row_user->user_id, $row->code, $session_id);
 					$nb_assignments += Tracking::count_student_assignments($row_user->user_id, $row->code, $session_id);
-					
+
 					$last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row_user->user_id, $row->code, $session_id, false);
-					if($last_login_date_tmp != false && $last_login_date == false) {
+					if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
 						$last_login_date = $last_login_date_tmp;
-					} else if($last_login_date_tmp != false && $last_login_date == false) {
+					} else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
 						// Find the max and assign it to first_login_date
 						if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
 							$last_login_date = $last_login_date_tmp;
 						}
 					}
-					
+
 					$exercise_results_tmp = MySpace::exercises_results($row_user->user_id, $row->code, $session_id);
 					$total_score_obtained += $exercise_results_tmp['score_obtained'];
 					$total_score_possible += $exercise_results_tmp['score_possible'];
@@ -1009,7 +1009,7 @@ class MySpace {
 				} else {
 					$avg_score = '-';
 				}
-				if($last_login_date != false) {
+				if($last_login_date) {
 					$last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
 				} else {
 					$last_login_date = '-';
@@ -1047,8 +1047,8 @@ class MySpace {
 		Export :: export_table_csv($csv_content, 'reporting_session_overview');
 		exit;
 	}
-	
-	
+
+
 	/**
 	 * Get general information about the exercise performance of the user
 	 * the total obtained score (all the score on all the questions)
@@ -1349,11 +1349,11 @@ class MySpace {
 		$access_url_id = api_get_current_access_url_id();
 	 	$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
-		
+
 		if ($_configuration['multiple_access_urls']) {
 			$condition_multi_url = ", $tbl_url_rel_user as url_user WHERE user.user_id=url_user.user_id AND access_url_id='$access_url_id'";
 		}
-		
+
 		global $export_csv;
 		if ($export_csv) {
 			$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);

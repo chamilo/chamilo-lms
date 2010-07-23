@@ -13,7 +13,7 @@ require_once(dirname(__FILE__).'/webservice.php');
 class WSCourse extends WS {
 	/**
 	 * Deletes a course (helper method)
-	 * 
+	 *
 	 * @param string Course id field name
 	 * @param string Course id value
 	 * @return mixed True if the course was successfully deleted, WSError otherwise
@@ -28,10 +28,10 @@ class WSCourse extends WS {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Deletes a course
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Course id field name
 	 * @param string Course id value
@@ -47,10 +47,10 @@ class WSCourse extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Deletes multiple courses
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param array Array of courses with elements of the form array('course_id_field_name' => 'name_of_field', 'course_id_value' => 'value')
 	 * @return array Array with elements like array('course_id_value' => 'value', 'result' => array('code' => 0, 'message' => 'Operation was successful')). Note that if the result array contains a code different
@@ -77,10 +77,10 @@ class WSCourse extends WS {
 			return $results;
 		}
 	}
-	
+
 	/**
 	 * Creates a course (helper method)
-	 * 
+	 *
 	 * @param string Title
 	 * @param string Category code
 	 * @param string Wanted code. If it's not defined, it will be generated automatically
@@ -110,7 +110,7 @@ class WSCourse extends WS {
 			$wanted_code = generate_course_code($title);
 		}
 		$result = create_course($wanted_code, $title, $tutor_name, $category_code, $language, $course_admin_id, $this->_configuration['db_prefix'], 0);
-		if($result == false) {
+		if (!$result) {
 			return new WSError(202, 'There was an error creating the course');
 		} else {
 			// Update extra fields
@@ -122,10 +122,10 @@ class WSCourse extends WS {
 			return $course_info['id'];
 		}
 	}
-	
+
 	/**
 	 * Creates a course
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Title
 	 * @param string Category code
@@ -153,10 +153,10 @@ class WSCourse extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Create multiple courses
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param array Courses to be created, with elements following the structure presented in CreateCourse
 	 * @return array Array with elements of the form array('course_id_value' => 'original value sent', 'course_id_generated' => 'value_generated', 'result' => array('code' => 0, 'message' => 'Operation was successful'))
@@ -186,10 +186,10 @@ class WSCourse extends WS {
 			return $results;
 		}
 	}
-	
+
 	/**
 	 * Edits a course (helper method)
-	 * 
+	 *
 	 * @param string Course id field name
 	 * @param string Course id value
 	 * @param string Title
@@ -253,10 +253,10 @@ class WSCourse extends WS {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Edits a course
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Course id field name
 	 * @param string Course id value
@@ -282,10 +282,10 @@ class WSCourse extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * List courses
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Course id field name. Use "chamilo_course_id" to use internal id
 	 * @return array An array with elements of the form ('id' => 'Course internal id', 'code' => 'Course code', 'title' => 'Course title', 'language' => 'Course language', 'visibility' => 'Course visibility',
@@ -298,7 +298,7 @@ class WSCourse extends WS {
 		} else {
 			$courses_result = array();
 			$category_names = array();
-			
+
 			$courses = CourseManager::get_courses_list();
 			foreach($courses as $course) {
 				$course_tmp = array();
@@ -307,7 +307,7 @@ class WSCourse extends WS {
 				$course_tmp['title'] = $course['title'];
 				$course_tmp['language'] = $course['course_language'];
 				$course_tmp['visibility'] = $course['visibility'];
-				
+
 				// Determining category name
 				if($category_names[$course['category_code']]) {
 					$course_tmp['category_name'] = $category_names[$course['category_code']];
@@ -316,25 +316,25 @@ class WSCourse extends WS {
 					$category_names[$course['category_code']] = $category['name'];
 					$course_tmp['category_name'] = $category['name'];
 				}
-				
+
 				// Determining number of students registered in course
 				$user_list = CourseManager::get_user_list_from_course_code($course['code'], false);
 				$course_tmp['number_students'] = count($user_list);
-				
+
 				// Determining external course id
 				$course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_field_name, $course['code']);
-				
-				
+
+
 				$courses_result[] = $course_tmp;
 			}
-			
+
 			return $courses_result;
 		}
 	}
-	
+
 	/**
 	 * Subscribe or unsubscribe user to a course (helper method)
-	 * 
+	 *
 	 * @param string Course id field name. Use "chamilo_course_id" to use internal id
 	 * @param string Course id value.
 	 * @param string User id field name. Use "chamilo_user_id" to use internal id
@@ -368,10 +368,10 @@ class WSCourse extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Subscribe user to a course
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Course id field name. Use "chamilo_course_id" to use internal id
 	 * @param string Course id value.
@@ -390,10 +390,10 @@ class WSCourse extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Unsusbscribe user from course
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Course id field name. Use "chamilo_course_id" to use internal id
 	 * @param string Course id value.
@@ -411,10 +411,10 @@ class WSCourse extends WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the descriptions of a course, along with their id
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Course id field name
 	 * @param string Course id value
@@ -439,13 +439,13 @@ class WSCourse extends WS {
 				}
 				return $results;
 			}
-		}	
+		}
 	}
-	
-	
+
+
 	/**
 	 * Edit course description
-	 * 
+	 *
 	 * @param string API secret key
 	 * @param string Course id field name
 	 * @param string Course id value
@@ -478,7 +478,7 @@ class WSCourse extends WS {
 						$exists = true;
 					}
 				}
-				if($exists == false) {
+				if (!$exists) {
 					$cd->set_progress(0);
 					$cd->insert($course_info['db_name']);
 				} else {
@@ -487,8 +487,8 @@ class WSCourse extends WS {
 			}
 		}
 	}
-	
-	
-	
+
+
+
 }
 

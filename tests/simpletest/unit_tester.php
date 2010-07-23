@@ -400,7 +400,7 @@ class UnitTestCase extends SimpleTestCase {
      *    @access private
      */
     function _coerceExpectation($expected) {
-        if ($expected == false) {
+        if (!$expected) {
             return new TrueExpectation();
         }
         if (SimpleTestCompatibility::isA($expected, 'SimpleExpectation')) {

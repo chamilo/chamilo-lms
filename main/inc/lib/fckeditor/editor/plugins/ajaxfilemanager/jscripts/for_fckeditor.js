@@ -1,5 +1,5 @@
 // The function below has added by logan (cailongqun [at] yahoo [dot] com [dot] cn) from www.phpletter.com
-// Modifications by Juan Carlos RaÃ±a and Ivan Tcholakov, 2009
+// Modifications by Juan Carlos Raña Trabado and Ivan Tcholakov, 2009
 
 function selectFile(url) {
 	var selectedFileRowNum = $('#selectedFileRowNum').val();

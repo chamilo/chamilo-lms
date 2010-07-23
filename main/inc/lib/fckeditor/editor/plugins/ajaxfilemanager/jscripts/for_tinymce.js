@@ -111,7 +111,7 @@ tinyMCEPopup = {
 		t.editor.windowManager.close(window, t.id);
 	},
 
-	// Internal functions
+	// Internal functions	
 
 	_restoreSelection : function() {
 		var e = window.event.srcElement;
@@ -226,9 +226,9 @@ function selectFile(url)
 {
 	if(typeof(url) != 'undefined')
 	{
-
+		
 	}
-
+	
 	if(url != '')
 	{
 		var win = tinyMCEPopup.getWindowArg("window");
@@ -236,13 +236,15 @@ function selectFile(url)
         //for image browsers
         try { win.ImageDialog.showPreviewImage(url); }
         catch (e) { void(e); }
-        tinyMCEPopup.close();
+        tinyMCEPopup.close();   		
 	}
-
+	return false;
+    
 }
 
 function cancelSelectFile()
 {
     // close popup window
     tinyMCEPopup.close();
+    return false;
 }

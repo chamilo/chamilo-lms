@@ -1,49 +1,48 @@
 <div id="content">
-<?php
+<?php 
 
 		$count = 1;
 		$thumbnailBaseUrl = appendQueryString(CONFIG_URL_IMG_THUMBNAIL, makeQueryString(array('path')));
 		foreach($fileList as $file)
-
 		{
+			
 			///First step for hidden some type of Dokeos files and folders
 			//Juan Carlos Ra�a
 
-				//hidden files and folders deleted by Dokeos. Hidde folders css, hotpotatoes, chat
+			//hidden files and folders deleted by Dokeos. Hidde folders css, hotpotatoes, chat
 
-				$deleted_by_dokeos_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
-				$deleted_by_dokeos_folder='_DELETED_';
-				$css_folder_dokeos='css';
-				$hotpotatoes_folder_dokeos='HotPotatoes_files';
-				$chat_files_dokeos='chat_files';
+			$deleted_by_dokeos_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
+			$deleted_by_dokeos_folder='_DELETED_';
+			$css_folder_dokeos='css';
+			$hotpotatoes_folder_dokeos='HotPotatoes_files';
+			$chat_files_dokeos='chat_files';
 
-				//hidden directory of the group if the user is not a member of the group
-				$group_folder='_groupdocs';
+			//hidden directory of the group if the user is not a member of the group
+			$group_folder='_groupdocs';
 
 
-				//show group's directory only if I'm member. Or I'm a teacher
-				$show_doc_group=true;
-				if(ereg($group_folder, $file['path']))
+			//show group's directory only if I'm member. Or I'm a teacher
+			$show_doc_group=true;
+			if(ereg($group_folder, $file['path']))
+			{
+				$show_doc_group=false;
+				if($is_user_in_group ||( $to_group_id!=0 && api_is_allowed_to_edit()))
 				{
-					$show_doc_group=false;
-					if($is_user_in_group ||( $to_group_id!=0 && api_is_allowed_to_edit()))
-					{
-						$show_doc_group=true;
-					}
+					$show_doc_group=true;
 				}
+			}
 
-				//show icon sharedfolder
-				 $shared_folder='shared folder';	 //'shared folder' not 'shared_folder' because  in $file['name'] _ is replaced with blank see class.manager.php
-
+			//show icon sharedfolder
+			 $shared_folder='shared folder';	 //'shared folder' not 'shared_folder' because  in $file['name'] _ is replaced with blank see class.manager.php
+			
 			///Second step: hiding as the case
 			//Juan Carlos Ra�a
 			if((!ereg($deleted_by_dokeos_file, $file['name']) || !ereg($deleted_by_dokeos_folder, $file['path'])) && !ereg($css_folder_dokeos, $file['path']) && !ereg($hotpotatoes_folder_dokeos, $file['path']) && !ereg($chat_files_dokeos, $file['path']) && $show_doc_group==true && $file['name'][0]!='.')
-			{
-
-				?>
+			{			
+			
+			?>
 				<dl class="thumbnailListing" id="dl<?php echo $count; ?>">
-
-                <?php
+                 <?php
                  if(ereg($shared_folder, $file['name']))
                  { //add icon in ajaxfilemanager if sharedfolder is in Dokeos
                 ?>
@@ -61,32 +60,28 @@
 				}
 				?>
 
-
-					<?php
-						switch($file['cssClass'])
-						{
-							case 'filePicture':
-									echo '<a id="thumbUrl' . $count . '" rel="thumbPhotos" href="' . $file['path'] . '">';
-									echo '<img src="' . appendQueryString($thumbnailBaseUrl, 'path=' . $file['path']) . '" id="thumbImg' . $count . '"></a>' . "\n";
-									break;
-							case 'fileFlash':
-							case 'fileVideo':
-							case 'fileMusic':
-								break;
-							default:
-								echo '&nbsp;';
-						}
-					?>
-
-					</dt>
-					<dd id="dd<?php echo $count; ?>" class="thumbnailListing_info"><span id="flag<?php echo $count; ?>" class="<?php echo $file['flag']; ?>">&nbsp;</span><input id="cb<?php echo $count; ?>" type="checkbox" name="check[]" <?php echo ($file['is_writable']?'':'disabled'); ?> class="radio" value="<?php echo $file['path']; ?>" />
-					<a <?php echo ($file['cssClass']== 'filePicture'?'rel="orgImg"':''); ?> href="<?php echo "../".$file['path']; ?>" title="<?php echo $file['name']; ?>" id="a<?php echo $count; ?>"><?php echo shortenFileName($file['name']); ?></a></dd><!-- Juan Carlos Ra�a Fix for Dokeos: On the path I put a directory up echo "../".$ file [ 'path'], what makes good show when pressed next on window preview, don't only one image -->
-
-				</dl>
 				<?php
-
-				}//end if hidden files and folders deleted by Dokeos
-
+					switch($file['cssClass'])
+					{
+						case 'filePicture':
+								echo '<a id="thumbUrl' . $count . '" rel="thumbPhotos" href="' . $file['path'] . '">';
+								echo '<img src="' . appendQueryString($thumbnailBaseUrl, 'path=' . $file['path']) . '" id="thumbImg' . $count . '"></a>' . "\n";
+								break;
+						case 'fileFlash':
+						case 'fileVideo':
+						case 'fileMusic':
+							break;
+						default:
+							echo '&nbsp;';
+					}
+				?>
+				
+				</dt>
+				<dd id="dd<?php echo $count; ?>" class="thumbnailListing_info"><span id="flag<?php echo $count; ?>" class="<?php echo $file['flag']; ?>">&nbsp;</span><input id="cb<?php echo $count; ?>" type="checkbox" name="check[]" <?php echo ($file['is_writable']?'':'disabled'); ?> class="radio" value="<?php echo $file['path']; ?>" />
+				<a <?php echo ($file['cssClass']== 'filePicture'?'rel="orgImg"':''); ?> href="<?php echo "../".$file['path']; ?>" title="<?php echo $file['name']; ?>" id="a<?php echo $count; ?>"><?php echo shortenFileName($file['name']); ?></a></dd><!-- Juan Carlos Ra�a Fix for Dokeos: On the path I put a directory up echo "../".$ file [ 'path'], what makes good show when pressed next on window preview, don't only one image -->			
+                </dl>
+                <?php
+			}//end if hidden files and folders deleted by Dokeos
 			$count++;
 		}
 ?>

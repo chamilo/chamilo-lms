@@ -6,8 +6,9 @@
 	 * @since 22/April/2007
 	 *
 	 */
-	 require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';//from Dokeos
-class Upload
+ require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';//from Dokeos
+ class Upload
+
 {
 	var $fileType = ""; //the file type
 	var $originalFileName = "";
@@ -40,16 +41,16 @@ class Upload
 		8=>'File upload stopped by extension',
 		999=>'No error code avaiable',
 	);
-
+	
 
 	function Upload()
 	{
 		//doing nothing
 	}
-
+	
 	function isFileUploaded($indexInPost="file")
 	{
-
+		
 		$this->errCode = isset($_FILES[$indexInPost]['error'])?$_FILES[$indexInPost]['error']:999;
 		if((isset($_FILES[$indexInPost]['error']) && $_FILES[$indexInPost] == 0) ||
 		(!empty($_FILES[$indexInPost]['tmp_name']) && $_FILES[$indexInPost]['tmp_name'] != 'none')
@@ -59,16 +60,16 @@ class Upload
 			$this->fileSize = @filesize($this->_value['tmp_name']);
 			$this->originalFileName = $this->_value['name'];
 			$this->fileType = $this->_value['type'];
-
+			
 			return true;
-		}else
+		}else 
 		{
-
+			
 			array_push($this->errors, 'Unable to upload file');
 			return false;
-		}
+		}		
 	}
-
+	
 	function getErrorCodeMsg()
 	{
 		return (isset($this->errorCodes[$this->errCode])?$this->errorCodes[$this->errCode]:"");
@@ -103,10 +104,10 @@ class Upload
 				}
 			}
 		}
+		
+	
 
-
-
-
+		
 		if(sizeof($validFileExt))
 		{
 			if(array_search(strtolower($this->getFileExt()), $validFileExt) !== false)
@@ -118,10 +119,10 @@ class Upload
 			return true;
 		}
 
-
+		
 		$this->deleteUploadedFile();
 		return false;
-
+		
 	}
 	/**
 	 * check if the uploaded file size is too big
@@ -134,7 +135,7 @@ class Upload
 		{
 			$this->deleteUploadedFile();
 			return true;
-		}else
+		}else 
 		{
 			return false;
 		}
@@ -154,7 +155,7 @@ class Upload
 				$tem[$k]= strtolower(trim($v));
 			}
 		}
-
+		
 		$this->invalidFileExt = $tem;
 	}
 	/**
@@ -170,7 +171,7 @@ class Upload
 	 * get a file extension
 	 *
 	 * @param string $fileName the path to a file or just the file name
-	 */
+	 */	
 	function getFileExt()
 	{
 		//return strtolower(substr(strrchr($this->fileName, "."), 1));
@@ -237,7 +238,7 @@ class Upload
 		 *
 		 * @param mixed $invalidImageExts invalid image extension
 		 * @param bool $delete force to delete the uploaded file
-		 */
+		 */	
 	function isImage($invalidImageExts = array(), $delete = true)
 	{
 		if(!is_array($invalidImageExts) && !empty($invalidImageExts))
@@ -287,15 +288,15 @@ class Upload
      *
      * @access public
      *
-     * @param mixed $new_x
-     * @param mixed $new_y
+     * @param mixed $new_x 
+     * @param mixed $new_y 
      * @param string $thumb_suffix
      *
      * @return mixed none or PEAR_error
      */
 	function resize($filePath, $thumb_suffix="", $new_x = 0, $new_y = 0)
 	{
-
+		
 		if(empty($filePath))
 		{
 			$filePath = $this->dirPath . $this->fileBaseName . $thumb_suffix  . $this->fileExtension;
@@ -312,7 +313,7 @@ class Upload
 	/**
      * resize the image and return the thumbnail image  details array("width"=>, "height"=>, "name")
      *
-     * @param string $fileName
+     * @param string $fileName 
      * @param int $new_x the thumbnail width
      * @param int $new_y the thumbnail height
      * @return unknown
@@ -422,9 +423,9 @@ class Upload
 		}
 	}
 	/**
-	 * caculate the thumbnail details from the original image file
+	 * caculate the thumbnail details from the original image file 
 	 *
-	 * @param string $originalImageName
+	 * @param string $originalImageName  
 	 * @param int $originaleImageWidth
 	 * @param int $originalImageHeight
 	 * @param string $thumbnailSuffix
@@ -473,7 +474,7 @@ class Upload
 		return $outputs;
 
 	}
-
+	
 
 	/**
      * get the uploaded file
@@ -490,7 +491,7 @@ class Upload
 	{
 		@unlink($this->_value['tmp_name']);
 	}
-
+	
 	function displayError()
 	{
 		if(sizeof($this->errors))
@@ -517,12 +518,12 @@ class Upload
 	{
 		return $this->dirPath;
 	}
-
+	
 	function getFileBaseName()
 	{
 		return $this->fileBaseName;
 	}
-
+	
 	function getFileName()
 	{
 		return $this->fileName;
@@ -566,7 +567,7 @@ class Upload
 		//ensure the directory path ending with /
 		if ($dirPath != ''  && substr($dirPath, -1) != '/') {
 			$dirPath .= '/';
-		}
+		}			
 		if(!empty($originalImageName) && file_exists($dirPath . $originalImageName) && is_file($dirPath . $originalImageName))
 		{
 			@unlink($dirPath . $originalImageName);
@@ -581,10 +582,10 @@ class Upload
 					$fileExtension = substr($originalImageName, $dotIndex);
 					$fileBaseName = substr($originalImageName, 0, $dotIndex);
 				}
-				@unlink($dirPath . $fileBaseName . $v . $fileExtension);
-			}
+				@unlink($dirPath . $fileBaseName . $v . $fileExtension);			
+			}			
 		}
-
+	
 
 	}
 }

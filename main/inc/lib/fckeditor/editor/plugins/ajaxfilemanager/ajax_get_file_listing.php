@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 		/**
 	 * the php script used to get the list of file or folders under a specific folder
@@ -8,28 +8,26 @@
 	 *
 	 * Modify for Dokeos
 	 * @author Juan Carlos Raï¿½a
-	 * @since 31/December/2008
+	 * @since 31/December/2008	 
 	 */
-
- 	include ('../../../../../../inc/global.inc.php'); // Integrating with Dokeos
+	 
+	include ('../../../../../../inc/global.inc.php'); // Integrating with Dokeos
 
 	if(!isset($manager))
 	{
 		/**
-		 *  this is part of  script for processing file paste
+		 *  this is part of  script for processing file paste 
 		 */
 		//$_GET = $_POST;
 		include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 		include_once(CLASS_PAGINATION);
 		$pagination = new pagination(false);
-
-		$search_folder = str_replace("'","",$_GET['search_folder']);
-
+		//$search_folder = str_replace("'","",$_GET['search_folder']); //TODO:check if this line is necessary juan carlos raña 
 		if(!empty($_GET['search']))
 		{
 			include_once(CLASS_SEARCH);
-
-			$search  = new Search($search_folder);
+			
+			$search  = new Search($_GET['search_folder']);
 			$search->addSearchKeyword('recursive', @$_GET['search_recursively']);
 			$search->addSearchKeyword('mtime_from', @$_GET['search_mtime_from']);
 			$search->addSearchKeyword('mtime_to', @$_GET['search_mtime_to']);
@@ -39,31 +37,31 @@
 			$search->addSearchKeyword('name', @$_GET['search_name']);
 			$search->doSearch();
 			$fileList = $search->getFoundFiles();
-			$folderInfo = $search->getRootFolderInfo();
-
-		}else
+			$folderInfo = $search->getRootFolderInfo();			
+			
+		}else 
 		{
 			include_once(CLASS_MANAGER);
 			include_once(CLASS_SESSION_ACTION);
 			$sessionAction = new SessionAction();
 			include_once(DIR_AJAX_INC . "class.manager.php");
-
+		
 			$manager = new manager();
 			$manager->setSessionAction($sessionAction);
-
+		
 			$fileList = $manager->getFileList();
-			$folderInfo = $manager->getFolderInfo();
-
+			$folderInfo = $manager->getFolderInfo();	
+						
 		}
-		$pagination->setUrl(CONFIG_URL_FILEnIMAGE_MANAGER);
+		$pagination->setUrl(CONFIG_URL_FILEnIMAGE_MANAGER);	
 
-	}else
+	}else 
 	{
 		include_once(CLASS_PAGINATION);
-		$pagination = new pagination(false);
+		$pagination = new pagination(false);			
 	}
 
-
+		
 		$pagination->setTotal(sizeof($fileList));
 		$pagination->setFirstText(PAGINATION_FIRST);
 		$pagination->setPreviousText(PAGINATION_PREVIOUS);
@@ -71,7 +69,6 @@
 		$pagination->setLastText(PAGINATION_LAST);
 		$pagination->setLimit(!empty($_GET['limit'])?intval($_GET['limit']):CONFIG_DEFAULT_PAGINATION_LIMIT);
 		echo $pagination->getPaginationHTML();
-
 		///////Dokeos fix for count hidden folders
 			$count_hideItem =0;
 
@@ -84,22 +81,22 @@
 		//end previous fix for count hidden folders
 
 		echo "<script type=\"text/javascript\">\n";
-
-        echo "parentFolder = {path:'" . getParentFolderPath($folderInfo['path']). "'};\n";
-		echo 'currentFolder ={';
+		
+        echo "parentFolder = {path:'" . getParentFolderPath($folderInfo['path']). "'};\n"; 
+		echo 'currentFolder ={'; 
 		$count =1;
-
 		foreach($folderInfo as $k=>$v)
 		{
-
 			echo ($count++ == 1?'':',') . "'" . $k . "':'" . ($k=='ctime'|| $k=='mtime'?date(DATE_TIME_FORMAT, $v):$v)  . "'";
 
 		}
 		echo "};\n";
+		// moved below for Dokeos integration $fileList = array_slice($fileList, $pagination->getPageOffset(), $pagination->getLimit());
 		echo 'numRows = ' . sizeof($fileList) . ";\n";
 		echo "files = {\n";
 		$count = 1;
-
+		
+		
 		foreach($fileList as $file)
 		{
 			//show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?
@@ -125,11 +122,11 @@
 			$j = 1;
 			foreach($file as $k=>$v)
 			{
-
+				
 				if($k  == 'ctime' || $k == 'mtime')
 				{
 					$v = @date(DATE_TIME_FORMAT, $v);
-				}
+				}	
 				if($k == 'size')
 				{
 					$v = transformFileSize($v);
@@ -137,29 +134,27 @@
 				echo (($j++ > 1)?",":'') . "'" . $k . "':'" . $v . "'";
 			}
 			echo (($j++ > 1)?",":'') . "'url':'" . getFileUrl($file['path']) . "'";
-			echo "}\n";
+			echo "}\n";				
 		}
-		echo  "};";
+		$fileList = array_slice($fileList, $pagination->getPageOffset(), $pagination->getLimit());//Dokeos fix for hidden files added +$count_hideItem
 
-		$fileList = array_slice($fileList, $pagination->getPageOffset(), $pagination->getLimit()+$count_hideItem);////Dokeos fix for hidden files added +$count_hideItem
-
-        echo "</script>\n";
+		echo  "};</script>\n";
 	if(!empty($_GET['view']))
 	{
 		switch($_GET['view'])
 		{
 			case 'detail':
 			case 'thumbnail':
-			case 'text':
+			case 'text':	
 				$view = $_GET['view'];
 				break;
 			default:
 				$view = CONFIG_DEFAULT_VIEW;
 		}
-	}else
+	}else 
 	{
 		$view = CONFIG_DEFAULT_VIEW;
-	}
+	}	
 	switch($view)
 	{
 		case 'text':
@@ -174,5 +169,7 @@
 		default:
 			include_once(DIR_AJAX_ROOT . '_ajax_get_details_listing.php');
 	}
+
+	
 
 ?>

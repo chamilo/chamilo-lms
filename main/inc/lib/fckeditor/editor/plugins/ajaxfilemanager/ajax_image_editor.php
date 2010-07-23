@@ -11,12 +11,12 @@
 	{
 		die(SYS_DISABLED);
 	}
-
+		//$session->gc();// Disabled for integration with Chamilo
 		$_GET['path'] = empty($_GET['path'])?CONFIG_SYS_ROOT_PATH . "ajax_image_editor_demo.jpg":$_GET['path'];
 		if(!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']) && isUnderRoot($_GET['path']))
 		{
 				$path = $_GET['path'];
-		}else
+		}else 
 		{
 			die(IMG_GEN_IMG_NOT_EXISTS);
 		}
@@ -33,7 +33,7 @@
 		}
 		require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "class.image.php");
 		$image = new Image();
-
+		
 		$imageInfo = $image->getImageInfo($path);
 
 	?>
@@ -44,16 +44,20 @@
 <meta name="author" content="Logan Cai" />
 <meta name="website" content="http://www.phpletter.com" />
 <script type="text/javascript" src="jscripts/ajaximageeditor_c.js"></script>
-<!--
-<script type="text/javascript" src="jscripts/jquery.js"></script>
+
+<!--<script type="text/javascript" src="jscripts/jquery.js"></script>
 <script type="text/javascript" src="jscripts/form.js"></script>
 <script type="text/javascript" src="jscripts/select.js"></script>
 <script type="text/javascript" src="jscripts/jqModal.js"></script>
 <script type="text/javascript" src="jscripts/rotate.js"></script>
-<script type="text/javascript" src="jscripts/interface.js"></script>
+<script type="text/javascript" src="jscripts/interface.js"></script>-->
 
--->
+
 <script type="text/javascript" src="jscripts/ajaximageeditor.js"></script>
+
+
+
+
 
 
 <script type="text/javascript">
@@ -81,9 +85,16 @@
 			$(getImageElement()).clone().appendTo("#hiddenImage");
 			changeMode();
 			initDisabledButtons(true);
+			$("#formImageInfo").bind("keypress", function(e) {
+			if (e.keyCode == 13) {
+			
+			return false;
+			
+			}
+			});			
 		}
 	);
-
+	
 </script>
 <link href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/ajaximageeditor.css" type="text/css" rel="stylesheet" />
 <link href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/jqModal.css" type="text/css" rel="stylesheet" />
@@ -92,25 +103,25 @@
 <body>
 <?php
 	//displayArray($_SESSION);
-
+	 
 ?>
 <div id="controls">
 	<fieldset id="modes">
 		<legend>Modes</legend>
 		<form name="formAction" id="formAction" method="post" action="<?php echo appendQueryString(CONFIG_URL_IMAGE_UNDO, makeQueryString(array('path'))); ?>">
 			<input type="hidden" name="file_path" id="file_path" value="<?php echo $_GET['path']; ?>" />
-
-			<p><label><?php echo IMG_MODE_RESIZE; ?></label> <input type="radio" name="mode" value="resize" class="input" checked="checked"  onclick="return changeMode();"/>
-			<label><?php echo IMG_MODE_CROP; ?></label> <input type="radio" name="mode" value="crop" class="input" onclick="return changeMode();" />
-			<label><?php echo IMG_MODE_ROTATE; ?></label> <input type="radio" name="mode" value="rotate" class="input" onclick="return changeMode();" />
-			<label><?php echo IMG_MODE_FLIP; ?></label> <input type="radio" name="mode" value="flip" class="input" onclick="return changeMode();" />
-			<label><?php echo IMG_CHECKBOX_CONSTRAINT; ?></label> <input type="checkbox" name="constraint" id="constraint" value="1" class="input" onclick="return toggleConstraint();" />
+			
+			<p><label  id="label_resize" class="labelMode"><?php echo IMG_MODE_RESIZE; ?></label> <input type="radio" name="mode" value="resize" class="input" checked="checked"  onclick="return changeMode();"/>
+			<label id="label_crop"  class="labelMode"><?php echo IMG_MODE_CROP; ?></label> <input type="radio" name="mode" value="crop" class="input" onclick="return changeMode();" />
+			<label  id="label_rotate"  class="labelMode"><?php echo IMG_MODE_ROTATE; ?></label> <input type="radio" name="mode" value="rotate" class="input" onclick="return changeMode();" />
+			<label  id="label_flip"  class="labelMode"><?php echo IMG_MODE_FLIP; ?></label> <input type="radio" name="mode" value="flip" class="input" onclick="return changeMode();" />
+			 || <label  id="label_constraint"><?php echo IMG_CHECKBOX_CONSTRAINT; ?></label> <input type="checkbox" name="constraint" id="constraint" value="1" class="input" onclick="return toggleConstraint();" />
 			<!--			<label>Watermark:</label> <input type="radio" name="mode" value="watermark" class="input" onclick="return false;" />-->
-
+			
 			<button id="actionRotateLeft" class="disabledButton" onclick="return leftRotate();" disabled><?php echo IMG_BTN_ROTATE_LEFT; ?></button>
 			<button id="actionRotateRight" class="disabledButton" onclick="return rightRotate();" disabled><?php echo IMG_BTN_ROTATE_RIGHT; ?></button>
 			<button id="actionFlipH" class="disabledButton" onclick="return flipHorizontal();" disabled><?php echo IMG_BTN_FLIP_H; ?></button>
-			<button id="actionFlipV" class="disabledButton" onclick="return flipVertical();" disabled><?php echo IMG_BTN_FLIP_V; ?></button>
+			<button id="actionFlipV" class="disabledButton" onclick="return flipVertical();" disabled><?php echo IMG_BTN_FLIP_V; ?></button>			
 			<button id="actionReset" class="button" onclick="return resetEditor();"><?php echo IMG_BTN_RESET; ?></button>
 			<button id="actionUndo" class="button" onclick="return undoImage();"><?php echo IMG_BTN_UNDO; ?></button>
 			<button id="actionSave" class="button" onclick="return saveImage();"><?php echo IMG_BTN_SAVE; ?></button>
@@ -133,18 +144,14 @@
 <!--			<b>Percentage:</b> <input type="text" name="percentage" id="percentage" value="" class="input imageInput"/>-->
 			<label><?php echo IMG_LBL_RATIO; ?></label> <input type="text" name="ratio" id="ratio" value="" class="input imageInput"/>
 			<label><?php echo IMG_LBL_ANGLE; ?></label> <input type="text" name="angle" id="angle" value="" class="input imageInput" />
-
+			
 			</p>
 		</form>
 	</fieldset>
 </div>
 <div id="imageArea">
-    <div id="imageContainer">
+    <div id="imageContainer"> 
         <img src="<?php echo "../".$path; ?>" name="<?php echo basename($path); ?>" width="<?php echo $imageInfo['width']; ?>" height="<?php echo $imageInfo['height']; ?>" /><!-- For Dokeos integrating, enter a back directory "../" to avoid introducing main and can not read the image -->
-
-
-
-
     </div>
     <div id="resizeMe">
     	<div id="resizeSE"></div>

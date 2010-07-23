@@ -7,7 +7,7 @@
 	 * @since 22/April/2007
 	 *
 	 * Modifications of system config setting for Dokeos
-	 * @author Juan Carlos Ra�a
+	 * @author Juan Carlos Raña Trabado
 	 * @since 31/December/2008
 	 */
 
@@ -115,6 +115,5 @@
 	define('CONFIG_URL_IMG_THUMBNAIL', 'ajax_image_thumbnail.php');
 	define('CONFIG_URL_FILEnIMAGE_MANAGER', 'ajaxfilemanager.php');
 	define('CONFIG_URL_FILE_PASTE', 'ajax_file_paste.php');
-
 
 ?>

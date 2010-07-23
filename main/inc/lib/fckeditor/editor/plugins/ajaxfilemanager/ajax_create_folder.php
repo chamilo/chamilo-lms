@@ -10,11 +10,13 @@
 	 * @since 18/January/2009
 	 */
 
-	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
-
+	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");	
+	//@ob_start(); //Disabled for integration with Chamilo
+	//displayArray($_POST); //Disabled for integration with Chamilo
+	//writeInfo(@ob_get_clean()); //Disabled for integration with Chamilo
 	echo "{";
 	$error = "";
-	$info = "";
+	$info = "";	
 /*	$_POST['new_folder'] = substr(md5(time()), 1, 5);
 	$_POST['currentFolderPath'] = "../../uploaded/";*/
 	$_POST['new_folder']=htmlentities($_POST['new_folder'],ENT_QUOTES);//Dokeos improve security
@@ -42,14 +44,13 @@
 	{
 	include_once(CLASS_FILE);
 		$file = new file();
-
 		if($file->mkdir(addTrailingSlash($_POST['currentFolderPath']) . $_POST['new_folder'], 0775))
 		{
 					include_once(CLASS_MANAGER);
 					$manager = new manager(addTrailingSlash($_POST['currentFolderPath']) . $_POST['new_folder'], false);
 					$pathInfo = $manager->getFolderInfo(addTrailingSlash($_POST['currentFolderPath']) . $_POST['new_folder']);
-
-					/////////////bridge to Dokeos by Juan Carlos Ra�a Trabado
+								
+					//bridge to Dokeos by Juan Carlos Ra�a Trabado
 					if(!empty($_course['path']))
 					{
 					//only inside courses
@@ -65,13 +66,14 @@
 						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Dokeos
 					}
 					// end bridge to Dokeos
+
 					foreach($pathInfo as $k=>$v)
-					{
+					{				
 						switch ($k)
 						{
 
 
-							case "ctime";
+							case "ctime";								
 							case "mtime":
 							case "atime":
 								$v = date(DATE_TIME_FORMAT, $v);
@@ -82,10 +84,10 @@
 							case 'cssClass':
 								$v = 'folderEmpty';
 								break;
-						}
+						}							
 						$info .= sprintf(", %s:'%s'", $k, $v);
 					}
-		}else
+		}else 
 		{
 			$error = ERR_FOLDER_CREATION_FAILED;
 		}

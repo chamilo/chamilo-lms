@@ -56,6 +56,10 @@ border-left-color:#ece9d8;
 border-bottom-color:#716f64;
 
 }
+label.labelModeActive{
+color: #A1040B;
+}
+
 .imageInput{width:35px;}
 #controls
 {
@@ -106,10 +110,10 @@ top:0px;
 	position: absolute;
 	background-color: #FF0000;
 	border: 1px solid #fff;
-
+	
 }
 #loading{
-
+	 
 	overflow: hidden;
 	padding:0;
 	margin:0;

@@ -425,8 +425,8 @@ $(document).ready(
 			
      
       
-      	<fieldset class="boxSearch">
-      		<legend><?php echo LBL_SEARCH; ?></legend>
+      	<!--<fieldset class="boxSearch"> --><!-- comment these lines while integrating into dokeos -->
+      		<legend><?php //echo LBL_SEARCH; ?></legend><!-- comment these lines while integrating into dokeos -->
 
 
 
@@ -435,8 +435,8 @@ $(document).ready(
 	          <tr>
 	          	<td>
 	          		<!-- comment these lines while integrating into dokeos -->
-	          		<b><?php //echo LBL_SEARCH_NAME; ?></b> <br />
-	            	<input type="text" class="input inputSearch" name="search_name" id="search_name" />
+	          		<b><?php //echo LBL_SEARCH_NAME; ?></b> <br />                
+	            	<!--<input type="text" class="input inputSearch" name="search_name" id="search_name" /> -->
 	          	</td>
 
 	         </tr>
@@ -462,18 +462,20 @@ $(document).ready(
 	          		}else 
 	          		{
 	          	?>
-		            <select class="input inputSearch" name="search_folder" id="search_folder">
+                	<!-- comment these lines while integrating into dokeos -->
+		            <!--<select class="input inputSearch" name="search_folder" id="search_folder"> -->
 		            	<?php 
 		            		
 										foreach(getFolderListing(CONFIG_SYS_ROOT_PATH) as $k=>$v)
 										{
-											//////////////
+											
 											if(hideFolderName($k))
 											{
 												//shows only those permitted by Dokeos
 												?>
-		                  						<option value="<?php echo $v; ?>" <?php echo (removeTrailingSlash(backslashToSlash(($folderInfo['path']))) == removeTrailingSlash(backslashToSlash(($v)))?' selected="selected"':''); ?>><?php echo hideFolderName(shortenFileName($k, 30)); // shows only those permitted by Dokeos
-												?></option>
+                                                <!-- comment these lines while integrating into dokeos -->
+		                  						<!--<option value="<?php //echo $v; ?>" <?php //echo (removeTrailingSlash(backslashToSlash(($folderInfo['path']))) == removeTrailingSlash(backslashToSlash(($v)))?' selected="selected"':''); ?>><?php echo hideFolderName(shortenFileName($k, 30)); // shows only those permitted by Dokeos
+												?></option> -->
 
 		                  <?php 
 											}
@@ -500,7 +502,7 @@ $(document).ready(
 			<tr>
 				<td>  <!-- comment these lines while integrating into dokeos -->
                 </td><td><!--add a col while integrating -->
-          	<b><?php  // echo LBL_SEARCH_RECURSIVELY; ?></b>&nbsp;&nbsp;
+          	<b><?php  //echo LBL_SEARCH_RECURSIVELY; ?></b>&nbsp;&nbsp;
 		<!--change for Dokeos recursively by default  -->
      <!--     	<input type="radio" name="search_recursively" value="1" id="search_recursively_1" class="radio" <?php //echo (empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_YES; ?> -->       
         <!--  	<input type="radio" name="search_recursively" value="0" id="search_recursively_0" class="radio" <?php //echo (!empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_NO; ?> -->
@@ -519,11 +521,11 @@ $(document).ready(
         		<!--<input  type="button" value="<?php // echo LBL_ACTION_CLOSE; ?>" onclick="return cancelSelectFile();"  class="button"> -->
         	</span>
         	<span class="right" id="linkSearch">
-        		<input type="button" value="<?php echo BTN_SEARCH; ?>" onclick="return search();" class="search_button">
+        	<!--	<input type="button" value="<?php echo BTN_SEARCH; ?>" onclick="return search();" class="search_button"> -->
         	</span>
         	
         </p>
-        </fieldset>
+  <!--      </fieldset> --><!-- comment these lines while integrating into dokeos -->
   
       </div>
       

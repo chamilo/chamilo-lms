@@ -196,7 +196,7 @@ function get_lang($variable, $reserved = null, $language = null) {
 		if (empty($langvar) || !is_string($langvar)) {
 			$_api_is_translated = false;
 		}
-		return $cache[$language][$variable] = $_api_is_translated ? ($is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding)) : $langvar;
+		return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
 	}
 
 	// Translation mode for test/development servers.
@@ -209,12 +209,13 @@ function get_lang($variable, $reserved = null, $language = null) {
 	} elseif (isset(${"lang$variable"})) {
 		$langvar = ${"lang$variable"};
 		$_api_is_translated = true;
+	} else {
+		$langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
 	}
 	if (empty($langvar) || !is_string($langvar)) {
 		$_api_is_translated = false;
 	}
-	return $cache[$language][$variable] =
-		$_api_is_translated ? ($is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding)) : ($show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable);
+	return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
 }
 
 /**

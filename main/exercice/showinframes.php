@@ -1,38 +1,36 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-/**
-*	Code library for HotPotatoes integration.
-*	@package dokeos.exercise
-* 	@author Istvan Mandak
-*/
+/* For licensing terms, see /license.txt */
 
-/*
------------------------------------------------------------
-	Included libraries
------------------------------------------------------------
-*/
+/**
+ *	Code library for HotPotatoes integration.
+ *	@package chamilo.exercise
+ * 	@author Istvan Mandak
+ */
+
+/*	Included libraries */
+
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-$time=time();
-require_once api_get_path(SYS_PATH).'main/exercice/hotpotatoes.lib.php';
+$time = time();
+require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 
-// init
-$doc_url=str_replace(array('../','\\','\\0','..'),array('','','',''),urldecode($_GET['file']));
+// Initialization
+$doc_url = str_replace(array('../', '\\', '\\0', '..'), array('', '', '', ''), urldecode($_GET['file']));
 $cid = api_get_course_id();
-$documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
-$documentWebPath= api_get_path(WEB_COURSE_PATH).$_course['path']."/document";
+$document_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+$document_web_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
 $origin = $_REQUEST['origin'];
 $learnpath_id = $_REQUEST['learnpath_id'];
 $learnpath_item_id = $_REQUEST['learnpath_item_id'];
 $time = $_REQUEST['time'];
 
-// read content
-$full_file_path = $documentPath.$doc_url;
-my_delete($full_file_path.$_user['user_id'].".t.html");
-$content = ReadFileCont($full_file_path.$_user['user_id'].".t.html");
+// Read content
+$full_file_path = $document_path.$doc_url;
+my_delete($full_file_path.$_user['user_id'].'.t.html');
+$content = ReadFileCont($full_file_path.$_user['user_id'].'.t.html');
 
-if ($content=="")
-{
+if ($content == '') {
+
 	$content = ReadFileCont($full_file_path);
 	$mit = "function Finish(){";
 
@@ -57,23 +55,22 @@ if ($content=="")
 				"function Finish(){\n".
 				" mySaveScore();";
 
-	$newcontent = str_replace($mit,$js_content,$content);
-	$prehref="<!-- BeginTopNavButtons -->";
-	$posthref="<!-- BeginTopNavButtons --><!-- edited by Dokeos -->";
-	$newcontent = str_replace($prehref,$posthref,$newcontent);
+	$newcontent = str_replace($mit, $js_content, $content);
+	$prehref = "<!-- BeginTopNavButtons -->";
+	$posthref = "<!-- BeginTopNavButtons -->";
+	$newcontent = str_replace($prehref, $posthref, $newcontent);
 
 
-	if (CheckSubFolder($full_file_path.$_user['user_id'].".t.html")==0)
-	{ $newcontent = ReplaceImgTag($newcontent); }
+	if (CheckSubFolder($full_file_path.$_user['user_id'].'.t.html') == 0) {
+		$newcontent = ReplaceImgTag($newcontent);
+	}
 
-}
-else
-{
-	//my_delete($full_file_path.$_user['user_id'].".t.html");
+} else {
+	//my_delete($full_file_path.$_user['user_id'].'.t.html');
 	$newcontent = $content;
 }
 
-WriteFileCont($full_file_path.$_user['user_id'].".t.html",$newcontent);
+WriteFileCont($full_file_path.$_user['user_id'].'.t.html', $newcontent);
 
 /*	$prehref="javascript:void(0);";
 	$posthref=$_configuration['root_web']."main/exercice/Hpdownload.php?doc_url=".$doc_url."&cid=".$cid."&uid=".$uid;
@@ -85,7 +82,7 @@ WriteFileCont($full_file_path.$_user['user_id'].".t.html",$newcontent);
 */
 
 $doc_url = GetFolderPath($doc_url).urlencode(basename($doc_url));
-//	echo $documentWebPath.$doc_url.$_user['user_id'].".t.html";
+//	echo $document_web_path.$doc_url.$_user['user_id'].'.t.html';
 //	exit;
 ?>
 <html>
@@ -96,9 +93,9 @@ $doc_url = GetFolderPath($doc_url).urlencode(basename($doc_url));
 
 if ($origin!='learnpath') {
 	?>
-	<frameset rows="130,*" border="0" frameborder="no">
+	<frameset rows="178,*" border="0" frameborder="no">
 		<frame name="top" scrolling="no" noresize target="contents" src="testheaderpage.php?file=<?php echo Security::remove_XSS(str_replace(array('../','\\','\\0','..'),array('','','',''),urldecode($_GET['file']))); ?>">
-		<frame name="main" src="<?php echo $documentWebPath.$doc_url.$_user['user_id'].".t.html?time=".Security::remove_XSS($time); ?>">
+		<frame name="main" src="<?php echo $document_web_path.$doc_url.$_user['user_id'].'.t.html?time='.Security::remove_XSS($time); ?>">
 	<noframes>
 	<body>
 		<p>This page uses frames, but your browser doesn't support them.
@@ -110,8 +107,8 @@ if ($origin!='learnpath') {
 	<?php
 } else {
 	?>
-	<script language='Javascript' type='text/javascript'>
-		s='<?php echo $documentWebPath.$doc_url.$_user['user_id']; ?>.t.html?time=<?php echo Security::remove_XSS($time); ?>';
+	<script type='text/javascript'>
+		s='<?php echo $document_web_path.$doc_url.$_user['user_id']; ?>.t.html?time=<?php echo Security::remove_XSS($time); ?>';
 		//document.write(s);
 		window.location=s;
 	</script>

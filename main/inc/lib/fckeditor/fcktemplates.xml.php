@@ -13,26 +13,22 @@
  *	See the GNU General Public License for more details.
  */
 
-// setting the character set to UTF-8
+// Setting the encoding to UTF-8.
 header('Content-Type: text/xml; charset=utf-8');
 
-// name of the language file that needs to be included
+// Name of the language file that needs to be included.
 $language_file = 'document';
 
-// including the global initialization file
+// Including the global initialization file.
 require_once '../../global.inc.php';
 
-// outputting the opening tag of the xml file
+// Outputting the opening tag of the xml file.
 echo '<?xml version="1.0" encoding="utf-8" ?>';
 
-// is this needed?
-//$IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
-
-// load a stylesheet
+// Load a stylesheet.
 $css = loadCSS(api_get_setting('stylesheets'));
 
-
-// load libreries js
+// Load libraries js.
 /* This libraries will be loaded in the showinframes.php file
 $js = '';
 if (api_get_setting('show_glossary_in_documents') != 'none') {
@@ -45,37 +41,38 @@ if (api_get_setting('show_glossary_in_documents') != 'none') {
 	}
 }
 */
-// setting some paths
+
+// Setting some paths.
 $img_dir = api_get_path(REL_CODE_PATH).'img/';
 $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
 
-// start the templates node
+// Start the templates node.
 echo '<Templates imagesBasePath="">';
 
-// load empty template
+// Load empty template.
 load_empty_template();
 
-// load the templates that were defined by the platform admin
+// Load the templates that were defined by the platform admin.
 load_platform_templates();
 
-// load the personal templates
+// Load the personal templates.
 load_personal_templates(api_get_user_id());
 
-// end the templates node
+// End the templates node.
 echo '</Templates>';
+
 exit;
 
 
 /**
- * load a given css style (default.css)
+ * Loads a given css style (default.css).
  *
  * @param string $css_name the folder name of the style
  * @return html code for adding a css style <style ...
  */
-function loadCSS($css_name)
-{
-	$template_css = ' <style type="text/css">'.str_replace('../../img/',api_get_path(REL_CODE_PATH).'img/',file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css')).'</style>';
-	$template_css = str_replace('images/',api_get_path(REL_CODE_PATH).'css/'.$css_name.'/images/',$template_css);
+function loadCSS($css_name) {
+	$template_css = ' <style type="text/css">'.str_replace('../../img/', api_get_path(REL_CODE_PATH).'img/', file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css')).'</style>';
+	$template_css = str_replace('images/', api_get_path(REL_CODE_PATH).'css/'.$css_name.'/images/', $template_css);
 	return $template_css;
 }
 
@@ -85,10 +82,9 @@ function loadCSS($css_name)
  * @param unknown_type $var
  * @return unknown
  */
-function s($var)
-{
-    $search = array('&','<','>');
-    $replace = array ('&amp;','&amp;lt;','&amp;gt;');
+function s($var) {
+    static $search = array('&', '<', '>');
+    static $replace = array('&amp;',' &amp;lt;', '&amp;gt;');
     return str_replace($search, $replace, api_utf8_encode(get_lang($var, '')));
 }
 
@@ -98,41 +94,39 @@ function s($var)
  * @param unknown_type $var
  * @return unknown
  */
-function s2($var)
-{
-    $search = array('&','<','>');
-    $replace = array ('&amp;','&amp;lt;','&amp;gt;');
+function s2($var) {
+    static $search = array('&', '<', '>');
+    static $replace = array('&amp;', '&amp;lt;', '&amp;gt;');
     return str_replace($search, $replace, api_utf8_encode($var));
 }
 
 /**
- * Load the platform templates as defined by the platform administrator in "Platform administration > Dokeos configuration settings > templates"
+ * Loads the platform templates as defined by the platform administrator in
+ * "Administration > Configuration settings > Templates"
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version March 2009
  * @since Dokeos 1.8.6
  */
 function load_platform_templates() {
-	// Database table definition
+
+	global $css, $img_dir, $default_course_dir, $js;
+
 	$table_template = Database::get_main_table('system_template');
-	global $css, $img_dir, $default_course_dir,$js;
 	$sql = "SELECT title, image, comment, content FROM $table_template";
-
 	$result = Database::query($sql);
+
+	$search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');
+	$replace = array($css.$js, $img_dir, api_get_path(REL_PATH), $default_course_dir);
+	$template_thumb = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/';
+
 	while ($row = Database::fetch_array($result)) {
-        if (!empty($row['image'])) {
-            $image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$row['image'];
-        } else {
-            $image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/empty.gif';
-        }
+		$image = empty($row['image']) ? $template_thumb.'empty.gif' : $template_thumb.$row['image'];
+        $row['content'] = str_replace($search, $replace, $row['content']);
 
-      	$row['content'] =  str_replace('{CSS}',$css.$js, $row['content']);
-      	$row['content'] =  str_replace('{IMG_DIR}',$img_dir, $row['content']);
-      	$row['content'] =  str_replace('{REL_PATH}', api_get_path(REL_PATH), $row['content']);
-      	$row['content'] =  str_replace('{COURSE_DIR}',$default_course_dir, $row['content']);
-
-		echo '	<Template title="'.s(get_lang($row['title'], '')).'" image="'.$image.'">
-					<Description>'.s(get_lang($row['comment'], '')).'</Description>
+		echo '
+				<Template title="'.s($row['title']).'" image="'.$image.'">
+					<Description>'.s($row['comment']).'</Description>
 					<Html>
 						<![CDATA[
 							    '.$row['content'].'
@@ -143,7 +137,7 @@ function load_platform_templates() {
 }
 
 /**
- * Load all the personal templates of the user when
+ * Loads all the personal templates of the user when
  *
  * @param integer $user_id the id of the user
  * @return xml node
@@ -152,25 +146,21 @@ function load_platform_templates() {
  * @version March 2009
  * @since Dokeos 1.8.6 The code already existed but not in a function and a lot less performant.
  */
-function load_personal_templates($user_id=0) {
+function load_personal_templates($user_id = 0) {
 	global $_course;
 
 	// the templates that the user has defined are only available inside the course itself
-	if (empty($_course))
-	{
+	if (empty($_course)) {
 		return false;
 	}
 
 	// For which user are we getting the templates?
-	if ($user_id==0)
-	{
+	if ($user_id == 0) {
 		$user_id = api_get_user_id();
 	}
 
-	// Database table definition
 	$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
 	$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-
 
 	// The sql statement for getting all the user defined templates
 	$sql = "SELECT template.id, template.title, template.description, template.image, template.ref_doc, document.path
@@ -180,20 +170,20 @@ function load_personal_templates($user_id=0) {
 			AND document.id = template.ref_doc";
 
 	$result_template = Database::query($sql);
-	while ($row = Database::fetch_array($result_template))
-	{
+
+	while ($row = Database::fetch_array($result_template)) {
+
 		$row['content'] = file_get_contents(api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row['path']);
 		//$row['content'] = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row['path'];
 
-		if (!empty($row['image']))
-		{
+		if (!empty($row['image'])) {
 			$image = api_get_path(WEB_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/'.$row['image'];
 		} else {
 			$image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif';
 		}
 
-
-		echo '	<Template title="'.s2($row['title']).'" image="'.$image.'">
+		echo '
+				<Template title="'.s2($row['title']).'" image="'.$image.'">
 					<Description>'.s2($row['Description']).'</Description>
 					<Html>
 						<![CDATA[
@@ -204,9 +194,8 @@ function load_personal_templates($user_id=0) {
 	}
 }
 
-function load_empty_template()
-{
-	global $css,$js;
+function load_empty_template() {
+	global $css, $js;
 	?>
 <Template title="<?php echo s2('Empty'); ?>" image="<?php echo api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/empty.gif'; ?>">
     <Description></Description>
@@ -214,8 +203,8 @@ function load_empty_template()
 	    <![CDATA[
 		   <html>
 		   <head>
-			<?php echo $css ?>
-			<?php echo $js ?>
+			<?php echo $css; ?>
+			<?php echo $js; ?>
 		   <body></body>
 		   </head>
 		   </html>

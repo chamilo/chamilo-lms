@@ -14,6 +14,8 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 $time = time();
 require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 
+header('Content-Type: text/html; charset='.api_get_system_encoding());
+
 // Initialization
 $doc_url = str_replace(array('../', '\\', '\\0', '..'), array('', '', '', ''), urldecode($_GET['file']));
 $cid = api_get_course_id();
@@ -85,9 +87,13 @@ $doc_url = GetFolderPath($doc_url).urlencode(basename($doc_url));
 //	echo $document_web_path.$doc_url.$_user['user_id'].'.t.html';
 //	exit;
 ?>
-<html>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo api_get_language_isocode(); ?>" lang="<?php echo api_get_language_isocode(); ?>">
 <head>
-<title>Tests - Dokeos</title>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>">
+<title><?php echo get_lang('Exercices').' - '.api_get_software_name(); ?></title>
 </head>
 <?php
 

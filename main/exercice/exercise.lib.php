@@ -75,7 +75,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		} else {
 			$option_ie="margin-left:10px";
 		}
-		$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;\">';
+		$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp=new Answer($questionId);
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();

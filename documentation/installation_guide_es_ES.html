@@ -166,20 +166,26 @@ predeterminados. Considere cambiar la contraseña de administrador y recuérdela
 
 <br />
 
-Los siguientes directorios necesitan tener permisos de lectura, escritura y ejecución para todos el mundo:
+Los siguientes directorios necesitan tener permisos de lectura, escritura y ejecución para todos el mundo (remplace [chamilo] por el directorio en el cual está ubicado su Chamilo):
 <ul>
-  <li>chamilo/main/inc/conf/</li>
-  <li>chamilo/main/upload/users/</li>
-  <li>chamilo/main/default_course_document/</li>
-  <li>chamilo/archive/</li>
-  <li>chamilo/courses/</li>
-  <li>chamilo/home/</li>
+
+  <li>[chamilo]/main/inc/conf/</li>
+  <li>[chamilo]/main/upload/users/</li>
+  <li>[chamilo]/main/default_course_document/images/</li>
+  <li>[chamilo]/archive/</li>
+  <li>[chamilo]/courses/</li>
+  <li>[chamilo]/home/</li>
+</ul>
+Opcionalmente, puede hacer lo mismo a los directorios siguientes si desea
+activar la subida de paquetes de estilos CSS y la definición de sub-idiomas:
+<ul>
+  <li>[chamilo]/main/css/</li>
+  <li>[chamilo]/main/lang/</li>
 </ul>
 
-(donde 'chamilo' es el directorio en el cual usted instaló Chamilo)
 <p>En Linux, Mac OS X y sistemas operativos BSD  puede usar el comando CHMOD
-777 para esto (aunque nosotros recomendamos que busque la ayuda de un
-administrador de sistemas con experiencia).
+0777 para esto (aunque nosotros recomendamos que busque la ayuda de un
+administrador de sistemas con experiencia para evitar fallas de seguridad).
 En Windows, es probable que  necesite revisar las propiedades de los directorios (mediante el uso
 del clic derecho en ellos).
 </p>

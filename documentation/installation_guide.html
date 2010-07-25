@@ -113,26 +113,28 @@ the installation.<span style="font-weight: bold;"><br />
   <li>Follow the web installation process. You can accept all default
 values. Consider changing the admin password to remember it.&nbsp;</li>
 </ul>
-
-
 <br />
-
-The following directories need to be readable, writeable and executable for everyone:
+The following directories need to be readable, writeable and executable for everyone (replace [chamilo] with the directory where your Chamilo installation is located):
 <ul>
 
-  <li>chamilo/main/inc/conf/</li>
-  <li>chamilo/main/upload/users/</li>
-  <li>chamilo/main/default_course_document/</li>
-  <li>chamilo/archive/</li>
-  <li>chamilo/courses/</li>
-  <li>chamilo/home/</li>
+  <li>[chamilo]/main/inc/conf/</li>
+  <li>[chamilo]/main/upload/users/</li>
+  <li>[chamilo]/main/default_course_document/images/</li>
+  <li>[chamilo]/archive/</li>
+  <li>[chamilo]/courses/</li>
+  <li>[chamilo]/home/</li>
+</ul>
+Optionally, you can do the same to the following directories if you want to
+enable CSS styles package upload and sub-language definition:
+<ul>
+  <li>[chamilo]/main/css/</li>
+  <li>[chamilo]/main/lang/</li>
 </ul>
 
-(where 'chamilo' is the directory in which you installed Chamilo)
 <p>On Linux, Mac OS X and BSD operating systems you can use the CHMOD
-777 command for this (although we recommend you seek advice from an
-experienced system administrator).
-In Windows, you may need to check the properties of the folders (by
+0777 command for this (although we recommend you seek advice from an
+experienced system administrator to avoid security issues).
+On Windows, you may need to check the properties of the folders (by
 right-clicking on them).</p>
 
 <p>

@@ -97,6 +97,7 @@ require_once $lib_path.'display.lib.php';
 require_once $lib_path.'text.lib.php';
 require_once $lib_path.'security.lib.php';
 require_once $lib_path.'events.lib.inc.php';
+require_once $lib_path.'debug.lib.php';
 
 
 /*  DATABASE CONNECTION  */

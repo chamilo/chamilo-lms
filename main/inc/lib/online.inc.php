@@ -28,7 +28,7 @@ function LoginCheck($uid) {
 		$reallyNow = time();
 		$login_date = date("Y-m-d H:i:s",$reallyNow);
 		$access_url_id = 1;
-		if ($_configuration['multiple_access_urls'] && api_get_current_access_url_id()!=-1) {
+		if (!empty($_configuration['multiple_access_urls']) && api_get_current_access_url_id()!=-1) {
 			$access_url_id = api_get_current_access_url_id();
 		}
 		$session_id = api_get_session_id();

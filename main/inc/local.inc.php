@@ -1088,7 +1088,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 	// requires testing!!!
 
 	// check the session visibility
-	if ($is_allowed_in_course) {
+	if (!empty($is_allowed_in_course)) {
 		$my_session_id = api_get_session_id();
 		//if I'm in a session
 		//var_dump($is_platformAdmin, $is_courseTutor,api_is_coach());

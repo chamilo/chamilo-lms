@@ -10,15 +10,15 @@
  * It is triggered by a cron task configured on the server
  * @uses /main/webservices/user_import/
  * @author Eric Marguin <eric.marguin@dokeos.com>
+ * @package chamilo.cron
  */
 /**
  * Global cycle: init, execute, output
  */
-require_once('../../inc/global.inc.php');
+require_once dirname(__FILE__).'/../../inc/global.inc.php';
 // check if this client has been called by php_cli (command line or cron)
-if(php_sapi_name()!='cli')
-{
-    echo 'You can\'t call this service throw a browser';
+if (php_sapi_name()!='cli') {
+    echo 'You can\'t call this service through a browser';
     die();
 }
 
@@ -30,6 +30,4 @@ $client = new nusoap_client(api_get_path(WEB_CODE_PATH).'cron/user_import/servic
 
 // call import_user method
 $response = $client->call('import_users', array('filepath'	=> api_get_path(SYS_CODE_PATH)."upload/users_import.csv", 'security_key'=>$_configuration['security_key']));
-
 echo $response;
-?>

@@ -570,36 +570,23 @@ that criteria</li>
 
 You can enable mathematical equations writing inside the Chamilo online editor (FCKEditor) by applying the following steps:
 <ul>
-
-	<li>1. Configure your Apache installation to add a cgi-bin directory that contains a symbolic link to the mimetex.cgi in
-<i>chamilo/main/inc/lib/mimetex/</i> (*see below, step 4)</li>
-
+	<li>1. Configure your Apache installation to add a cgi-bin directory that contains a symbolic link to the mimetex.cgi in <i>chamilo/main/inc/lib/mimetex/</i> (*see below, step 4)</li>
 	<li>2. Reload your Apache configuration</li>
+	<li>3. Edit the online editor's configuration file <i>chamilo/main/inc/lib/fckeditor/myconfig.php</i> and</li>
+	<li>3.1. Enable the mimetex plugin, find the line //$config['LoadPlugin'][] = 'mimetex'; and modify it to be: <b>$config['LoadPlugin'][] = 'mimetex';</b> (remove the double slash)</li>
+	<li>3.2. The additional settings <b>$config['MimetexExecutableInstalled']</b> , <b>$config['MimetexExecutableDetectionMethod']</b>
+and <b>$config['MimetexExecutableDetectionTimeout']</b> are configured for best probability of automatic detection of the installed on the server file <i>mimetex.cgi</i> or <i>mimetex.exe</i>.
+In rare cases these options might need to be twicked, see the acccompanying comments about these options within the file <i>myconfig.php</i></li>
 
-	<li>3. Edit the online editor's configuration file <i>chamilo/main/inc/lib/fckeditor/myconfig.php</i> and
-
-    <ul>
-			<li>3.1. Enable the mimetex plugin, find the line //$config['LoadPlugin'][] = 'mimetex'; and modify it to be:
-<b>$config['LoadPlugin'][] = 'mimetex';</b> (remove the double slash)</li>
-
-			<li>3.2. The additional settings <b>$config['MimetexExecutableInstalled']</b> , <b>$config['MimetexExecutableDetectionMethod']</b>
-and <b>$config['MimetexExecutableDetectionTimeout']</b> are configured for best probability
-of automatic detection of the installed on the server file <i>mimetex.cgi</i> or <i>mimetex.exe</i>.
-In rare cases these options might need to be twicked, see the acccompanying comments abou
-these options within the file <i>myconfig.php</i></li>
-
-			<li>3.3. Once the plugin has been activated, almost in all toolbars the corresponding button appears.
+	<li>3.3. Once the plugin has been activated, almost in all toolbars the corresponding button appears.
 If you need to edit some toolbars, see the configuration files (php) within the directory <i>chamilo/main/inc/lib/fckeditor/toolbars/</i> .
 Here is an example:
-        <div class="code">$config['ToolbarSets']['Normal'] = array(<br />
-&nbsp;&nbsp;array('FitWindow','Bold','Image','Link','PasteWord','MP3',<b>'mimetex'</b>,'Table','Subscript','Superscript','ShowBlocks')<br />
-);</div>
-
-				The item <b>'mimetex'</b> represents the button, you may add it to or remove it from any toolbar.<br /><br />
-			</li>
-    </ul>
-
+    <div class="code">$config['ToolbarSets']['Normal'] = array(<br /> &nbsp;&nbsp;array('FitWindow','Bold','Image','Link','PasteWord','MP3',<b>'mimetex'</b>,'Table','Subscript','Superscript','ShowBlocks')<br />);</div>
+	The item <b>'mimetex'</b> represents the button, you may add it to or remove it from any toolbar.<br /><br />
+	</li>
     <li>4. To install mimetex executable file, make these changes:</li>
+</ul>
+
 
 <p>Add the corresponding cgi-bin directory to your Apache configuration could be done, in Apache 2, like this:
 
@@ -625,16 +612,16 @@ Here is an example:
 </div>
 <p>If you are reluctant to modify your Apache configuration, alternately you may do at step 4 the following:
 copy mimetex.exe (for windows) or mimetex.cgi (for linux) from <i>chamilo/main/inc/lib/mimetex/</i> directory to your <i>cgi-bin/</i></p>
-    <li>5. Make sure that the file mimetex.cgi (or mimetex.exe) has right to be executed by the web-server process. For example, on a Ubuntu Linux system you may write a command like the following:</li>
-<div class="code">
-  <p>sudo chmod a+x mimetex.cgi</p>
-</div>
-	</ul>
+<ul>
+    <li>5. Make sure that the file mimetex.cgi (or mimetex.exe) has right to be executed by the web-server process. For example, on a Ubuntu Linux system you may write a command like the following:
+        <div class="code">
+            sudo chmod a+x mimetex.cgi
+        </div>
+    </li>
+</ul>
 
 <p>As a result of this procedure, a new button becomes available in your Chamilo online editor, that gives you possibility
-to insert mathematical formulas into your documents.<br />
-
-
+to insert mathematical formulas into your documents.</p>
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="8._ASCIIMathML_mathematical_formulas"></a>8. Mathematical formulas with ASCIIMathML</h2>
 
@@ -661,7 +648,7 @@ Enable the setting <strong>"ASCIIMathML mathematical editor"</strong>.</p>
 	</li>
 </ul>
 
-<p>For providing <strong>image-based fallback</strong> in a production system, you should pick up and install on your server software for TeX rendering, such as:
+<p>For providing <strong>image-based fallback</strong> in a production system, you should pick up and install on your server software for TeX rendering, such as:</p>
 <ul>
 	<li>mimeTeX - <a href="http://www.forkosh.dreamhost.com/source_mimetex.html">http://www.forkosh.dreamhost.com/source_mimetex.html</a>.
 	See <a href="#7._Mathematical_formulas">"7. Mathematical formulas with LaTeX"</a> on how to install the mimetex executable file on your server</li>
@@ -681,21 +668,17 @@ You may need to alter the setting to be for example:</p>
 	<li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mimetex.cgi";</div></li>
 	<li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mathtex.cgi";</div></li>
 	<li><div class="code">var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?tex=";</div></li>
-	<li><div class="code">var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";</div></li>
+	<li><div class="code">var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&amp;chs=1x0&amp;chl=";</div></li>
 	<li>... or something else</li>
 </ul>
 <p>For testing how the variable <strong>AMTcgiloc</strong> may be set, there are some examples (as comments) inside the script.</p>
-
+<hr style="width: 100%; height: 2px;" />
 <p>
-  <hr style="width: 100%; height: 2px;" />
   <br />
   <br />
   Contact address<br />
-
   Mail: info@chamilo.org<br />
-
   <br />
-
 </p>
 <hr />
 </div>

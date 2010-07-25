@@ -719,8 +719,7 @@ Linux usando el siguiente comando:</i>
 <div class="code">ln -s /var/www/chamilo/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</div>
 <p>Si no quiere modificar su Apache, alternativamente a  este punto 6: copie mimetex.exe (para Windows) o mimetex.cgi (para Linux) en su cgi-bin/ </p>
 <p>&nbsp;</p>
-<p>Este procedimiento creará un nuevo icono en su editor en línea de Chamilo, el cual hará posible la inserción de fórmulas matemáticas en sus documentos.<br />
-  <br />
+<p>Este procedimiento creará un nuevo icono en su editor en línea de Chamilo, el cual hará posible la inserción de fórmulas matemáticas en sus documentos.</p>
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="8._ASCIIMathML_mathematical_formulas"></a>8. Fórmulas matemáticas con ASCIIMathML</h2>
 
@@ -741,7 +740,7 @@ Activar el parámetro <strong>"Editor matemático ASCIIMathML"</strong>.</p>
         <li>Traduciendo la notación de fórmulas ASCIIMath en notación TeX y pasándolo a un servicio externo. Se debe usar en el caso de navegadores que no soporten MathML.  El servicio externo produce y devuelve un imagen que contiene la fórmula. Esta técnica se llama "image-based fallback".
         </li>
 </ul>
-<p>Para proveer <strong>image-based fallback</strong> en un sistema en producción, debería seleccionar e instalar en su servidor algun software de renderización TeX, como:
+<p>Para proveer <strong>image-based fallback</strong> en un sistema en producción, debería seleccionar e instalar en su servidor algun software de renderización TeX, como:</p>
 <ul>
         <li>mimeTeX - <a href="http://www.forkosh.dreamhost.com/source_mimetex.html">http://www.forkosh.dreamhost.com/source_mimetex.html</a>.
         Ver <a href="#7._Mathematical_formulas">"7. Fórmulas matemáticas con LaTeX"</a> para instalar el ejecutable mimetex en su servidor</li>
@@ -760,22 +759,16 @@ Podría necesitar modificar el ejemplo para tener algo como:</p>
         <li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mimetex.cgi";</div></li>
         <li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mathtex.cgi";</div></li>
         <li><div class="code">var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?tex=";</div></li>
-        <li><div class="code">var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&chs=1x0&chl=";</div></li>
+        <li><div class="code">var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&amp;chs=1x0&amp;chl=";</div></li>
         <li>... o algo similar</li>
 </ul>
 <p>Para formas de probar como la variable <strong>AMTcgiloc</strong> tiene que ser configurada, existen unos ejemplos (en comentario) dentro del script.</p>
-
+<hr style="width: 100%; height: 2px;" />
 <p>
-  <hr style="width: 100%; height: 2px;" />
   <br />
   <br />
-
   Dirección de Contacto: Chamilo<br />
-
   Correo: info@chamilo.org<br />
-
-  <br />
-
 </p>
 <hr />
 </div>

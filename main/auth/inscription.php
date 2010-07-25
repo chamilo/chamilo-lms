@@ -7,7 +7,9 @@
  */
 
 $language_file = array('registration', 'admin');
-
+if (!empty($_POST['language'])) { //quick hack to adapt the registration form result to the selected registration language
+	$_GET['language'] = $_POST['language'];
+}
 require_once '../inc/global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
@@ -46,7 +48,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 	}
 }
 
-$tool_name = get_lang('Registration');
+$tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
 Display :: display_header($tool_name);
 
 echo '<div class="actions-title">';
@@ -591,7 +593,7 @@ if ($form->validate()) {
 if (!isset($_POST['username'])) {
 ?>
 <div class="actions">
-<a href="<?php echo api_get_path(WEB_PATH); ?>" class="fake_button_back" ><?php echo get_lang('Back',null,$_user['language']); ?></a>
+<a href="<?php echo api_get_path(WEB_PATH); ?>" class="fake_button_back" ><?php echo get_lang('Back'); ?></a>
 </div>
 <?php
 }

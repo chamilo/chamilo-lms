@@ -103,7 +103,7 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * name and email of the platform admin are used
  *
  * @author Bert Vanderkimpen ICT&O UGent
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  *
  * @param string    name of recipient
  * @param string    email of recipient
@@ -111,8 +111,8 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @param string    email body
  * @param string    sender name
  * @param string    sender e-mail
- * @param array     data file (path and filename)
  * @param array     extra headers in form $headers = array($name => $value) to allow parsing
+ * @param array     data file (path and filename)
  * @param array     data to attach a file (optional)
  * @param bool      True for attaching a embedded file inside content html (optional)
  * @return          returns true if mail was sent

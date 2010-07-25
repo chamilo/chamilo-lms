@@ -4140,9 +4140,8 @@ class SurveyUtil {
 	 * @version January 2007
 	 */
 	function get_survey_data($from, $number_of_items, $column, $direction) {
-		global $table_survey;
-		global $table_user;
-		global $table_survey_question;
+		global $table_survey, $table_user, $table_survey_question;
+		global $_user;
 
 		// Searching
 		$search_restriction = SurveyUtil::survey_search_restriction();
@@ -4185,7 +4184,7 @@ class SurveyUtil {
 			$array[0] = $survey[0];
 			$array[1] = $survey[1];
 
-			// Validacion when belongs to a session
+			// Validation when belonging to a session
 			$session_img = api_get_session_image($survey['session_id'], $_user['status']);
 			$array[2] = $survey[2] . $session_img;
 

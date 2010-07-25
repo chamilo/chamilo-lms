@@ -10,7 +10,11 @@
 * 	@version $Id: work.lib.php 22357 2009-07-24 17:44:17Z juliomontoya $
 * 	@todo 	this lib should be convert in a static class and moved to main/inc/lib
 */
-
+/**
+ * Initialization
+ */
+require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
  * @param	string	Current dir
@@ -18,10 +22,6 @@
  * @param	integer	Whether to show upload form option
  * @return	void
  */
-
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-
 function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form) {
 	global $gradebook;
 	$display_output = '';
@@ -693,7 +693,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$result = Database::query($sql);
 				$count = Database::num_rows($result);
 				if ($count > 0) {
-					$add_to_name = ' / <span style="color:blue">'.get_lang('Assignment').'</span>';
+					$add_to_name = ' / <span style="color:blue">'.get_lang('IncludedInEvaluation').'</span>';
 				} else {
 					$add_to_name = '';
 				}

@@ -45,7 +45,7 @@ class learnpathList {
     	} else {
     		$session_id = api_get_session_id();	
     	}		
-		$condition_session = api_get_session_condition($session_id, false, true);
+	$condition_session = api_get_session_condition($session_id, false, true);
 
     	$sql = "SELECT * FROM $lp_table $condition_session ORDER BY display_order ASC, name ASC";
     	$res = Database::query($sql);

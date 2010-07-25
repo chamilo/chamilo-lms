@@ -206,6 +206,7 @@ if (is_array($flat_list)) {
 
 	    $dsp_export = '';
 	    $dsp_edit = '';
+            $dsp_build = '';
 	    $dsp_edit_close = '';
 	    $dsp_delete = '';
 	    $dsp_visible = '';
@@ -280,7 +281,7 @@ if (is_array($flat_list)) {
 			if ($current_session == $details['lp_session']) {
 				$dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a>&nbsp;';
 			} else {
-				$dsp_edit_lp = '<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'">&nbsp;';
+				$dsp_edit_lp = '<img src="../img/edit_na.gif" border="0" title="'.get_lang('_edit_learnpath').'">&nbsp;';
 			}
 				
 			//   BUILD  
@@ -300,7 +301,6 @@ if (is_array($flat_list)) {
 			/* VISIBILITY COMMAND */
 
 			// session test not necessary if we want to show base course learning paths inside the session (see http://support.chamilo.org/projects/chamilo-18/wiki/Tools_and_sessions)
-error_log(print_r($details,1));
 			//if ($current_session == $details['lp_session']) {
 				if ($details['lp_visibility'] == 0)
 				{
@@ -416,35 +416,8 @@ error_log(print_r($details,1));
 			} else {
 				$dsp_delete = '<img src="../img/delete_na.gif" border="0" title="'.get_lang('_delete_learnpath').'" />';
 			}
-
-			if($details['lp_prevent_reinit']==1){
-				$dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
-						'<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>' .
-						'</a>&nbsp;';
-			}else{
-				$dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
-						'<img src="../img/kaboodleloop.gif" border="0" alt="Prevent reinit" title="'.get_lang("PreventMultipleAttempts").'"/>' .
-						'</a>&nbsp;';
-			}
-			if($details['lp_type']==1 || $details['lp_type']==2){
-				$dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/wizard.gif" border="0" title="'.get_lang("Build").'"></a>&nbsp;';
-			}else{
-				$dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="'.get_lang("Build").'">&nbsp;';
-			}
-			if($test_mode == 'test' or api_is_platform_admin())
-			{
-				if($details['lp_scorm_debug']==1){
-					$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
-							'<img src="../img/bug.gif" border="0" alt="'.get_lang("HideDebug").'" title="'.get_lang("HideDebug").'"/>' .
-							'</a>';
-				}else{
-					$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
-							'<img src="../img/bug_gray.gif" border="0" alt="'.get_lang("ShowDebug").'" title="'.get_lang("ShowDebug").'"/>' .
-							'</a>';
-				}
-		 	}
 		 	/*   Export  */
-	    	if($details['lp_type']==1){
+		    	if($details['lp_type']==1){
 				$dsp_disk =
 					"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
 					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .

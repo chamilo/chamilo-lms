@@ -299,24 +299,24 @@ if (is_array($flat_list)) {
 
 			/* VISIBILITY COMMAND */
 
-			if ($current_session == $details['lp_session']) {
+			// session test not necessary if we want to show base course learning paths inside the session (see http://support.chamilo.org/projects/chamilo-18/wiki/Tools_and_sessions)
+error_log(print_r($details,1));
+			//if ($current_session == $details['lp_session']) {
 				if ($details['lp_visibility'] == 0)
 				{
 				        $dsp_visible =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">" .
 					"<img src=\"../img/invisible.gif\" border=\"0\" title=\"".get_lang('Show')."\" />" .
-					"</a>" .
-					"";
+					"</a>";
 				}
 				else
 				{
 					$dsp_visible =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0'>" .
 					"<img src=\"../img/visible.gif\" border=\"0\" title=\"".get_lang('Hide')."\" />" .
-					"</a>".
-					"";
+					"</a>";
 				}
-			} else {
-				$dsp_visible = '<img src="../img/invisible.gif" border="0" title="'.get_lang('Show').'" />';
-			}
+			//} else {
+			//	$dsp_visible = '<img src="../img/invisible.gif" border="0" title="'.get_lang('Show').'" />';
+			//}
 
 
 			/* PUBLISH COMMAND */

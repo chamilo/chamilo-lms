@@ -45,7 +45,7 @@ class learnpathList {
     	} else {
     		$session_id = api_get_session_id();	
     	}		
-		$condition_session = api_get_session_condition($session_id, false);
+		$condition_session = api_get_session_condition($session_id, false, true);
 
     	$sql = "SELECT * FROM $lp_table $condition_session ORDER BY display_order ASC, name ASC";
     	$res = Database::query($sql);
@@ -70,7 +70,7 @@ class learnpathList {
 				$pub = 'i';
 			}
 			//check if visible
-			$vis = api_get_item_visibility(api_get_course_info($course_code),'learnpath',$row['id']);
+			$vis = api_get_item_visibility(api_get_course_info($course_code),'learnpath',$row['id'],$session_id);
 
     		$this->list[$row['id']] = array(
     			'lp_type' => $row['lp_type'],

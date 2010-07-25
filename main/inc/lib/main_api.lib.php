@@ -2295,17 +2295,24 @@ function api_get_datetime($time = null) {
 
 /**
  * Gets item visibility from the item_property table
+ *
+ * Getting the visibility is done by getting the last updated visibility entry,
+ * using the largest session ID found if session 0 and another was found (meaning
+ * the only one that is actually from the session, in case there are results from
+ * session 0 *AND* session n).
  * @param	array	Course properties array (result of api_get_course_info())
  * @param	string	Tool (learnpath, document, etc)
  * @param	int		The item ID in the given tool
+ * @param	int		The session ID (optional)
  * @return	int		-1 on error, 0 if invisible, 1 if visible
  */
-function api_get_item_visibility($_course, $tool, $id) {
+function api_get_item_visibility($_course, $tool, $id, $session=0) {
 	if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) { return -1; }
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
+	$session = (int) $session;
 	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-	$sql = "SELECT visibility FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $id";
+	$sql = "SELECT visibility FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $id AND (id_session = $session OR id_session = 0) ORDER BY id_session DESC, lastedit_date DESC";
 	$res = Database::query($sql);
 	if ($res === false || Database::num_rows($res) == 0) { return -1; }
 	$row = Database::fetch_array($res);

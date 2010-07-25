@@ -2406,7 +2406,7 @@ class learnpath {
 	 */
 	function get_iv_objectives_array($lp_iv_id = 0) {
 
-		global $chatset;
+		global $charset;
 
 		$list = array ();
 		$table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE);
@@ -5282,7 +5282,7 @@ class learnpath {
 		$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
 
 		for ($i = 0; $i < count($arrLP); $i++) {
-			if ($arrLP[$i]['parent_item_id'] == $parent_item_id && $arrLP[$i]['id'] != $id) {
+			if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
 				if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 					$selected = 'selected="selected" ';
 				elseif ($action == 'add') $selected = 'selected="selected" ';
@@ -5696,7 +5696,7 @@ class learnpath {
 		$return .= "\t\t\t\t" . '<select id="idPosition" name="previous" size="1">';
 		$return .= "\t\t\t\t\t" . '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
 		for ($i = 0; $i < count($arrLP); $i++) {
-			if ($arrLP[$i]['parent_item_id'] == $parent_item_id && $arrLP[$i]['id'] != $id) {
+			if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
 				if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 					$selected = 'selected="selected" ';
 				elseif ($action == 'add') $selected = 'selected="selected" ';
@@ -5908,7 +5908,7 @@ class learnpath {
 
 		//POSITION
 		for ($i = 0; $i < count($arrLP); $i++) {
-			if ($arrLP[$i]['parent_item_id'] == $parent_item_id && $arrLP[$i]['id'] != $id) {
+			if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
 				if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 					$s_selected_position = $arrLP[$i]['id'];
 				elseif ($action == 'add') $s_selected_position = $arrLP[$i]['id'];

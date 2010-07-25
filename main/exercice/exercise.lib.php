@@ -224,7 +224,9 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					<p style="float:left; padding-right:4px;">
 					<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.' /></span></p>';
 				$answer = api_parse_tex($answer);
+				$s .= '<div style="margin-left: 20px;">';
 				$s .= Security::remove_XSS($answer, STUDENT);
+				$s .= '</div>';
 				$s .= '</div></td></tr>';
 
 			} elseif ($answerType == MULTIPLE_ANSWER) {
@@ -245,7 +247,9 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					 <p style="float:left; padding-right:4px;">
 					 <span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
 				$answer = api_parse_tex($answer);
+				$s .= '<div style="margin-left: 20px;">';
 				$s .= Security::remove_XSS($answer, STUDENT);
+				$s .= '</div>';
 				$s .= '</div></td></tr>';
 
 			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
@@ -266,7 +270,9 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					 <p style="float:left; padding-right:4px;">
 					 <span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
 				$answer = api_parse_tex($answer);
+				$s .= '<div style="margin-left: 20px;">';
 				$s .= Security::remove_XSS($answer, STUDENT);
+				$s .= '</div>';
 				$s .= '</div></td></tr>';
 			} elseif ($answerType == FILL_IN_BLANKS) {
 				// fill in blanks

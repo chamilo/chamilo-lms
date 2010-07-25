@@ -11,7 +11,6 @@ $this_section =  SECTION_COURSES;
 
 if (extension_loaded('xapian')) {
 	include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-	include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 	include_once (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
 	include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 	include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');

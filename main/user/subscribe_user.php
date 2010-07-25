@@ -784,9 +784,3 @@ function display_extra_profile_fields_filter()
 	echo '</form>';
 
 }
-
-function debug($var) {
-	echo '<pre>';
-	print_r($var);
-	echo '</pre>';
-}

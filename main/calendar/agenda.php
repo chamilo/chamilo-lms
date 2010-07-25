@@ -56,9 +56,6 @@ if (!empty($_GET['view'])) {
 */
 // containing the functions for the agenda tool
 require_once 'agenda.inc.php';
-// some debug functions
-require_once $includePath."/lib/debug.lib.inc.php";
-
 /*
   			TREATING THE PARAMETERS
 			1. viewing month only or everything

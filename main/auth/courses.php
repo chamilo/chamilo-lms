@@ -47,7 +47,6 @@ if (!(api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_crea
 }
 
 // Include additional libraries.
-include_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 

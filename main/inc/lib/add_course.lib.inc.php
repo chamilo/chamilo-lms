@@ -2623,7 +2623,7 @@ function checkArchive($pathToArchive) {
  */
 function readPropertiesInArchive($archive, $isCompressed = TRUE) {
 	include api_get_path(LIBRARY_PATH) . "pclzip/pclzip.lib.php";
-	printVar(dirname($archive), "Zip : ");
+	debug::printVar(dirname($archive), "Zip : ");
 	$uid = api_get_user_id();
 	/*
 	string tempnam ( string dir, string prefix)

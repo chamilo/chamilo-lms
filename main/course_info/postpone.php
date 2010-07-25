@@ -40,7 +40,6 @@ TD {border-bottom: thin dashed Gray;}
 require '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-@include api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
 Display::display_header($nameTools, 'Settings');
 
 //include api_get_path(CONFIGURATION_PATH).'postpone.conf.php';

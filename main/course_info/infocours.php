@@ -26,7 +26,6 @@ $nameTools = get_lang('ModifInfo');
 /*	Libraries */
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(INCLUDE_PATH).'conf/course_info.conf.php';
-require_once api_get_path(INCLUDE_PATH).'lib/debug.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 /*	Constants and variables */

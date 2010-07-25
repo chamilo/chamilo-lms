@@ -68,7 +68,6 @@ $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 $lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
 require_once $lib.'groupmanager.lib.php';
 require_once $lib.'mail.lib.inc.php';
-require_once $lib.'debug.lib.inc.php';
 require_once $lib.'tracking.lib.php';
 require_once $lib.'fckeditor/fckeditor.php';
 require_once $lib.'fileUpload.lib.php';

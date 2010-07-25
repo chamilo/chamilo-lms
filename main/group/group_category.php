@@ -11,7 +11,6 @@ $language_file = 'group';
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 if (!api_is_allowed_to_edit(false,true) || !(isset ($_GET['id']) || isset ($_POST['id']) || isset ($_GET['action']) || isset ($_POST['action']))) {
 	api_not_allowed();

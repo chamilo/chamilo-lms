@@ -275,7 +275,7 @@ class SystemAnnouncementManager
 		$res = Database::query($sql);
 		if ($res === false) {
 			Debug::log_s(mysql_error());
-			return false
+			return false;
 		}
 		return true;
 	}
@@ -332,7 +332,7 @@ class SystemAnnouncementManager
 		$res = Database::query($sql);
 		if ($res === false) {
 			Debug::log_s(mysql_error());
-			return false
+			return false;
 		}
 		return true;
 	}
@@ -348,7 +348,7 @@ class SystemAnnouncementManager
 		$res = Database::query($sql);
 		if ($res === false) {
 			Debug::log_s(mysql_error());
-			return false
+			return false;
 		}
 		return true;
 	}
@@ -380,7 +380,7 @@ class SystemAnnouncementManager
 		$res = Database::query($sql);
 		if ($res === false) {
 			Debug::log_s(mysql_error());
-			return false
+			return false;
 		}
 		return true;
 	}

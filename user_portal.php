@@ -49,7 +49,6 @@ $cidReset = true; /* Flag forcing the 'current course' reset,
 require_once './main/inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'course.lib.php';
-require_once $libpath.'debug.lib.inc.php';
 require_once $libpath.'system_announcements.lib.php';
 require_once $libpath.'groupmanager.lib.php';
 require_once $libpath.'usermanager.lib.php';

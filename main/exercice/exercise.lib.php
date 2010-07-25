@@ -75,7 +75,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		} else {
 			$option_ie="margin-left:10px";
 		}
-		$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;\">';
+		$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp=new Answer($questionId);
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
@@ -158,12 +158,12 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				// replaces [blank] by an input field
 
 				//getting the matches
-				$answer = api_ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10">',($answer));
+				$answer = api_ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10" />',($answer));
 
 				// Change input size
 				/*
 				preg_match_all('/\[[^]]+]/',$answer,$matches);
-				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="@@">',($answer));
+				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="@@" />',($answer));
 
 				// 4. resize the input
 
@@ -217,14 +217,16 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 						$selected = 'checked="checked"';
 					}
 				}
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0">
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />
 				<tr>
 				 <td colspan="3">
 				 	<div class="u-m-answer">
 					<p style="float:left; padding-right:4px;">
-					<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.'></p></span>';
+					<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.' /></span></p>';
 				$answer = api_parse_tex($answer);
+				$s .= '<div style="margin-left: 20px;">';
 				$s .= Security::remove_XSS($answer, STUDENT);
+				$s .= '</div>';
 				$s .= '</div></td></tr>';
 
 			} elseif ($answerType == MULTIPLE_ANSWER) {
@@ -238,14 +240,16 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 						$selected = 'checked="checked"';
 					}
 				}
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0">
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />
 				<tr>
 				  <td colspan="3">
 					 <div class="u-m-answer">
 					 <p style="float:left; padding-right:4px;">
-					 <span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.'></p></span>';
+					 <span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
 				$answer = api_parse_tex($answer);
+				$s .= '<div style="margin-left: 20px;">';
 				$s .= Security::remove_XSS($answer, STUDENT);
+				$s .= '</div>';
 				$s .= '</div></td></tr>';
 
 			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
@@ -259,14 +263,16 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 						$selected = 'checked="checked"';
 					}
 				}
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0">
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />
 				<tr>
 				  <td colspan="3">
 					 <div class="u-m-answer">
 					 <p style="float:left; padding-right:4px;">
-					 <span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.'></p></span>';
+					 <span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
 				$answer = api_parse_tex($answer);
+				$s .= '<div style="margin-left: 20px;">';
 				$s .= Security::remove_XSS($answer, STUDENT);
+				$s .= '</div>';
 				$s .= '</div></td></tr>';
 			} elseif ($answerType == FILL_IN_BLANKS) {
 				// fill in blanks
@@ -380,7 +386,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			//@todo I need to the get the feedback type
 			//if($answerType == 2)
 			//	$s.=' / '.$total_item;
-			echo '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'">';
+			echo '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />';
 			echo '<table class="exercise_questions" >
 				  <tr>
 			  		<td valign="top" colspan="2">';

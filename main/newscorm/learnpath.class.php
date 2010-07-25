@@ -6912,7 +6912,7 @@ class learnpath {
 			$return .= 'child_value[' . $row['id'] . '] = new Array();' . "\n\n";
 
 			while ($row_parent = Database :: fetch_array($res_parent)) {
-				$return .= 'child_name[' . $row['id'] . '][' . $i . '] = "' . get_lang("After") . ' \"' . api_convert_encoding($row_parent['title'], $charset, $this->encoding) . '\"";' . "\n";
+				$return .= 'child_name[' . $row['id'] . '][' . $i . '] = "' . get_lang("After") . ' \"' . api_html_entity_decode(api_convert_encoding ($row_parent['title'], $charset, $this->encoding), ENT_QUOTES, $charset) . '\"";' . "\n";
 				$return .= 'child_value[' . $row['id'] . '][' . $i++ . '] = "' . $row_parent['id'] . '";' . "\n";
 			}
 			$return .= "\n";

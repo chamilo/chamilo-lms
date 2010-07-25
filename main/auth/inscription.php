@@ -375,7 +375,7 @@ $form->setDefaults($defaults);
 
 if ($form->validate()) {
 	/*
-	  STORE THE NEW USER DATA INSIDE THE MAIN DOKEOS DATABASE
+	  STORE THE NEW USER DATA INSIDE THE MAIN DATABASE
 	 */
 	$values = $form->exportValues();
 
@@ -483,19 +483,19 @@ if ($form->validate()) {
 				// 2. send mail to the platform admin
 				$emailfromaddr 	 = api_get_setting('emailAdministrator');
 				$emailfromname 	 = api_get_setting('siteName');
-				$emailsubject	 = get_lang('ApprovalForNewAccount').': '.$values['username'];
-				$emailbody		 = get_lang('ApprovalForNewAccount')."\n";
-				$emailbody		.= get_lang('UserName').': '.$values['username']."\n";
+				$emailsubject	 = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
+				$emailbody		 = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
+				$emailbody		.= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
 				if (api_is_western_name_order()) {
-					$emailbody	.= get_lang('FirstName').': '.$values['firstname']."\n";
-					$emailbody	.= get_lang('LastName').': '.$values['lastname']."\n";
+					$emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
+					$emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
 				} else {
-					$emailbody	.= get_lang('LastName').': '.$values['lastname']."\n";
-					$emailbody	.= get_lang('FirstName').': '.$values['firstname']."\n";
+					$emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
+					$emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
 				}
-				$emailbody		.= get_lang('Email').': '.$values['email']."\n";
-				$emailbody		.= get_lang('Status').': '.$values['status']."\n\n";
-				$emailbody		.= get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;
+				$emailbody		.= get_lang('Email',null,$values['language']).': '.$values['email']."\n";
+				$emailbody		.= get_lang('Status',null,$values['language']).': '.$values['status']."\n\n";
+				$emailbody		.= get_lang('ManageUser',null,$values['language']).': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;
 
 				$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 			    $email_admin = api_get_setting('emailAdministrator');
@@ -536,7 +536,7 @@ if ($form->validate()) {
 			$email = $values['email'];
 			$emailfromaddr = api_get_setting('emailAdministrator');
 			$emailfromname = api_get_setting('siteName');
-			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg',null,$_user['language']).' '.api_get_setting('siteName');
 
 			// The body can be as long as you wish, and any combination of text and variables
 			$portal_url = $_configuration['root_web'];
@@ -548,7 +548,7 @@ if ($form->validate()) {
 				}
 			}
 
-			$emailbody = get_lang('Dear').' '.stripslashes(Security::remove_XSS($recipient_name)).",\n\n".get_lang('YouAreReg').' '.api_get_setting('siteName').' '.get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username').' : '.$values['username']."\n".get_lang('Pass').' : '.stripslashes($values['pass1'])."\n\n".get_lang('Address').' '.api_get_setting('siteName').' '.get_lang('Is').' : '.$portal_url."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager').' '.api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').' : '.api_get_setting('emailAdministrator');
+			$emailbody = get_lang('Dear',null,$_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).",\n\n".get_lang('YouAreReg',null,$_user['language']).' '.api_get_setting('siteName').' '.get_lang('WithTheFollowingSettings',null,$_user['language'])."\n\n".get_lang('Username',null,$_user['language']).' : '.$values['username']."\n".get_lang('Pass',null,$_user['language']).' : '.stripslashes($values['pass1'])."\n\n".get_lang('Address',null,$_user['language']).' '.api_get_setting('siteName').' '.get_lang('Is',null,$_user['language']).' : '.$portal_url."\n\n".get_lang('Problem',null,$_user['language'])."\n\n".get_lang('Formula',null,$_user['language']).",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager',null,$_user['language']).' '.api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email',null,$_user['language']).' : '.api_get_setting('emailAdministrator');
 
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last
@@ -558,29 +558,29 @@ if ($form->validate()) {
 		}
 	}
 
-	echo '<p>'.get_lang('Dear').' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings').".</p>\n";
+	echo '<p>'.get_lang('Dear',null,$_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>\n";
 
 	if (!empty ($values['email'])) {
-		echo '<p>'.get_lang('MailHasBeenSent').'.</p>';
+		echo '<p>'.get_lang('MailHasBeenSent',null,$_user['language']).'.</p>';
 	}
 
 	$button_text = '';
 	if ($is_allowedCreateCourse) {
-		echo '<p>', get_lang('NowGoCreateYourCourse'), ".</p>\n";
+		echo '<p>', get_lang('NowGoCreateYourCourse',null,$_user['language']), ".</p>\n";
 		$action_url = '../create_course/add_course.php';
-		$button_text = get_lang('CourseCreate');
+		$button_text = get_lang('CourseCreate',null,$_user['language']);
 	} else {
 		if (api_get_setting('allow_students_to_browse_courses') == 'true')
 			$action_url = 'courses.php?action=subscribe';
 		else
 			$action_url = api_get_path(WEB_PATH).'user_portal.php';
-		echo '<p>', get_lang('NowGoChooseYourCourses'), ".</p>\n";
+		echo '<p>', get_lang('NowGoChooseYourCourses',null,$_user['language']), ".</p>\n";
 
-		$button_text = get_lang('Next');
+		$button_text = get_lang('Next',null,$_user['language']);
 	}
 	// ?uidReset=true&uidReq=$_user['user_id']
 
-	echo '<form action="', $action_url, '"  method="post">', "\n", '<button type="submit" class="next" name="next" value="', get_lang('Next'), '" validationmsg=" ', get_lang('Next'), ' ">', $button_text, '</button>', "\n", '</form><br />', "\n";
+	echo '<form action="', $action_url, '"  method="post">', "\n", '<button type="submit" class="next" name="next" value="', get_lang('Next',null,$_user['language']), '" validationmsg=" ', get_lang('Next',null,$_user['language']), ' ">', $button_text, '</button>', "\n", '</form><br />', "\n";
 
 } else {
 	$form->display();
@@ -591,7 +591,7 @@ if ($form->validate()) {
 if (!isset($_POST['username'])) {
 ?>
 <div class="actions">
-<a href="<?php echo api_get_path(WEB_PATH); ?>" class="fake_button_back" ><?php echo get_lang('Back'); ?></a>
+<a href="<?php echo api_get_path(WEB_PATH); ?>" class="fake_button_back" ><?php echo get_lang('Back',null,$_user['language']); ?></a>
 </div>
 <?php
 }

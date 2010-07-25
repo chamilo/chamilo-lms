@@ -8,7 +8,7 @@ class TestSystemAnnouncementManager extends UnitTestCase {
     public function __construct(){
         $this->UnitTestCase('System announcements library - main/inc/lib/system_announcements.lib.test.php');
     }
-	function testadd_announcement() {
+	function test_add_announcement() {
 		$title='Anuncio';
 		$content='Contenido del anuncio';
 		$date_start='2010-01-02';
@@ -18,83 +18,68 @@ class TestSystemAnnouncementManager extends UnitTestCase {
 		$visible_guest = 0;
 		$lang = null;
 		$send_mail=0;
-		//ob_start();
 		$res=SystemAnnouncementManager::add_announcement($title, $content, $date_start, $date_end, $visible_teacher, $visible_student, $visible_guest, $lang, $send_mail);
         $this->assertTrue(is_bool($res));
-        //ob_end_clean();
-        //var_dump($res);
 	}
 
-	function testcount_nb_announcement() {
+	function test_count_nb_announcement() {
 		$res=SystemAnnouncementManager::count_nb_announcement($start = 0,$user_id = '');
 		$this->assertTrue(is_numeric($res));
-        //var_dump($res);
 	}
 
-	function testdelete_announcement() {
+	function test_delete_announcement() {
 		$id='';
 		$res=SystemAnnouncementManager::delete_announcement($id);
 		$this->assertTrue(is_bool($res));
-        //var_dump($res);
 	}
 
-	function testdisplay_all_announcements() {
+	function test_display_all_announcements() {
 		$visible='';
 		$res=SystemAnnouncementManager::display_all_announcements($visible, $id = -1,$start = 0,$user_id='');
 		$this->assertTrue(is_null($res));
-        //var_dump($res);
 	}
 
-	function testdisplay_announcements() {
+	function test_display_announcements() {
 		$visible='';
 		$res=SystemAnnouncementManager::display_announcements($visible, $id = -1);
-		$this->assertTrue(is_null($res));
-        //var_dump($res);
+		$this->assertNull($res);
 	}
 
-	function testdisplay_fleche() {
+	function test_display_fleche() {
 		$user_id='';
 		$res=SystemAnnouncementManager::display_fleche($user_id);
 		$this->assertTrue(is_null($res));
         //var_dump($res);
 	}
 
-	function testget_all_announcements() {
+	function test_get_all_announcements() {
 		$res=SystemAnnouncementManager::get_all_announcements();
 		$this->assertTrue(is_array($res));
         //var_dump($res);
 	}
 
-	function testget_announcement() {
+	function test_get_announcement() {
 		$id='';
 		$res=SystemAnnouncementManager::get_announcement($id);
 		$this->assertTrue(is_bool($res));
         //var_dump($res);
 	}
 
-	function testsend_system_announcement_by_email() {
-		global $_user;
-		global $_setting;
-		global $charset;
-		$title='';
-		$content='';
-		$teacher='';
-		$student='';
+	function test_send_system_announcement_by_email_is_null() {
+		global $_user, $_setting, $charset;
+		$title   = $content = $teacher = $student = '';
 		$res=SystemAnnouncementManager::send_system_announcement_by_email($title,$content,$teacher, $student);
 		$this->assertTrue(is_null($res));
-        //var_dump($res);
 	}
 
-	function testset_visibility() {
-		$announcement_id='';
-		$user='';
-		$visible='';
+	function test_set_visibility() {
+		$announcement_id = $user = $visible='';
 		$res=SystemAnnouncementManager::set_visibility($announcement_id, $user, $visible);
 		$this->assertTrue(is_bool($res));
         //var_dump($res);
 	}
 
-	function testupdate_announcement() {
+	function test_update_announcement() {
 		$id=1;
 		$title='Anuncio';
 		$content='Contenido';

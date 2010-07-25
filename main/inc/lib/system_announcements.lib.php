@@ -220,10 +220,15 @@ class SystemAnnouncementManager
 	}
 	/**
 	 * Adds an announcement to the database
-	 * @param string $title Title of the announcement
-	 * @param string $content Content of the announcement
-	 * @param string $date_start Start date (YYYY-MM-DD HH:II: SS)
-	 * @param string $date_end End date (YYYY-MM-DD HH:II: SS)
+	 * @param string Title of the announcement
+	 * @param string Content of the announcement
+	 * @param string Start date (YYYY-MM-DD HH:II: SS)
+	 * @param string End date (YYYY-MM-DD HH:II: SS)
+	 * @param int    Whether the announcement should be visible to teachers (1) or not (0)
+	 * @param int    Whether the announcement should be visible to students (1) or not (0)
+	 * @param int    Whether the announcement should be visible to anonymous users (1) or not (0)
+	 * @param string The language for which the announvement should be shown. Leave null for all langages
+	 * @param int    Whether to send an e-mail to all users (1) or not (0)
 	 */
 	public static function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail=0)
 	{
@@ -348,8 +353,7 @@ class SystemAnnouncementManager
 	 * @param 	int $user For who should the visibility be changed (possible values are VISIBLE_TEACHER, VISIBLE_STUDENT, VISIBLE_GUEST)
 	 * @return 	resource
 	 */
-	public static function set_visibility($announcement_id, $user, $visible)
-	{
+	public static function set_visibility($announcement_id, $user, $visible) {
 		$db_table 			= Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$visible			= intval($visible);
 		$announcement_id 	= intval($announcement_id);
@@ -359,8 +363,7 @@ class SystemAnnouncementManager
 		return Database::query($sql);
 	}
 
-	public static function send_system_announcement_by_email($title, $content, $teacher, $student)
-	{
+	public static function send_system_announcement_by_email($title, $content, $teacher, $student) {
 		global $_user;
 		global $_setting;
 		global $charset;
@@ -380,7 +383,7 @@ class SystemAnnouncementManager
 		}
 		$result = Database::query($sql);
 		while($row = Database::fetch_array($result,'ASSOC')) {
-			@api_mail_html(api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $row['email'], api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset), api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'',$content)), ENT_QUOTES, $charset), api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));
+			@api_mail_html(api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $row['email'], api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset), api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'',$content)), ENT_QUOTES, $charset), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator'));
 		}
 	}
 }

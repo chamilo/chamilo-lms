@@ -5,7 +5,7 @@
 *	This class provides methods for the social network management.
 *	Include/require it in your code to use its features.
 *
-*	@package chamilo.library
+*	@package chamilo.social
 */
 
 //PLUGIN PLACES
@@ -344,7 +344,7 @@ class SocialManager extends UserManager {
 	    $feeds = split(';',$feed['rssfeeds']);
 	    if (count($feeds)==0) { return ''; }
 	    foreach ($feeds as $url) {
-		if (empty($url)) { continue; }
+			if (empty($url)) { continue; }
 	        $rss = @fetch_rss($url);
 	        $i = 1;
 			if (!empty($rss->items)) {

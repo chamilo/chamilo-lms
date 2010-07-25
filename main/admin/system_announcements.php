@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
 *	This page allows the administrator to manage the system announcements.
-*	@package chamilo.admin
+*	@package chamilo.admin.announcement
 */
 /*		INIT SECTION */
 // name of the language file that needs to be included
@@ -33,15 +33,15 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 
 $tool_name = get_lang('SystemAnnouncements');
 
-if(empty($_GET['lang'])) {
-    $_GET['lang']=	$_SESSION['user_language_choice'];
+if (empty($_GET['lang'])) {
+    $_GET['lang'] = $_SESSION['user_language_choice'];
 }
 
 // displaying the header
 Display :: display_header($tool_name);
 
 /*
-		MAIN CODE
+ 	MAIN CODE
 */
 
 if($_GET['action'] != 'add' && $_GET['action'] != 'edit') {

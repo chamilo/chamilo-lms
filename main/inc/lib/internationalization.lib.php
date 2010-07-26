@@ -113,7 +113,6 @@ $_api_is_translated_call = false;
  * @link http://translate.chamilo.org/
  */
 function get_lang($variable, $reserved = null, $language = null) {
-
 	global
 		// For serving some old hacks:
 		// By manipulating this global variable the translation may be done in different languages too (not the elegant way).
@@ -160,10 +159,21 @@ function get_lang($variable, $reserved = null, $language = null) {
 	if (!$read_global_variables) {
 		global $language_files;
 		if (isset($language_files)) {
+			$parent_language = null;
+			if (api_get_setting('allow_use_sub_language') == 'true') {
+				require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
+				$parent_language = SubLanguageManager::get_parent_language_path($language);
+			}
 			if (!is_array($language_files)) {
+				if (isset($parent_language)) {
+					@include "$langpath$parent_language/$language_files.inc.php";
+				}
 				@include "$langpath$language/$language_files.inc.php";
 			} else {
 				foreach ($language_files as &$language_file) {
+					if (isset($parent_language)) {
+						@include "$langpath$parent_language/$language_file.inc.php";
+					}
 					@include "$langpath$language/$language_file.inc.php";
 				}
 			}

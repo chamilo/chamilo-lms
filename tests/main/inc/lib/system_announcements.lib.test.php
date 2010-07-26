@@ -45,9 +45,9 @@ class TestSystemAnnouncementManager extends UnitTestCase {
 		$this->assertNull($res);
 	}
 
-	function test_display_fleche() {
+	function test_display_arrow() {
 		$user_id='';
-		$res=SystemAnnouncementManager::display_fleche($user_id);
+		$res=SystemAnnouncementManager::display_arrow($user_id);
 		$this->assertTrue(is_null($res));
         //var_dump($res);
 	}

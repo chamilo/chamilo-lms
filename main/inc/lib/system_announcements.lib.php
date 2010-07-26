@@ -115,7 +115,7 @@ class SystemAnnouncementManager
 			echo '<table align="center">';
 				echo '<tr>';
 					echo '<td>';
-						SystemAnnouncementManager :: display_fleche($user_id);
+						SystemAnnouncementManager :: display_arrow($user_id);
 					echo '</td>';
 				echo '</tr>';
 			echo '</table>';
@@ -138,7 +138,7 @@ class SystemAnnouncementManager
 			echo '<table align="center">';
 				echo '<tr>';
 					echo '<td>';
-						SystemAnnouncementManager :: display_fleche($user_id);
+						SystemAnnouncementManager :: display_arrow($user_id);
 					echo '</td>';
 				echo '</tr>';
 			echo '</table>';
@@ -146,7 +146,7 @@ class SystemAnnouncementManager
 		}
 	}
 
-	public static function display_fleche($user_id)
+	public static function display_arrow($user_id)
 	{
 		$start = (int)$_GET['start'];
 		$nb_announcement = SystemAnnouncementManager :: count_nb_announcement($start,$user_id);

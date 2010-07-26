@@ -1283,7 +1283,6 @@ class MySpace {
 				if (is_numeric($avg_score_in_course)) {
 					$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
 				}
-				$avg_score_in_exercise = round($avg_score_in_exercise / $nb_students_in_course, 2);
 				$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
 
 			} else {

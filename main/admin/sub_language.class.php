@@ -80,6 +80,10 @@ class SubLanguageManager {
      * @return Array Contains all information of chamilo file
      */
    public static function get_all_language_variable_in_file ($system_path_file) {
+   		$res_list = array();
+   		if (!is_readable($system_path_file)) {
+   			return $res_list;
+   		}
 	   	$info_file=file($system_path_file);
 	   	foreach ($info_file as $line) {
 	        if (substr($line,0,1)!='$') { continue; }

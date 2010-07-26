@@ -374,8 +374,6 @@ class Tracking {
 					$quiz_avg_score = $quiz_avg_score / $row['num_attempts'];
 		        }
 		        return $quiz_avg_score;
-		        //$quiz_avg_total_score = $quiz_avg_score;
-				//return round($quiz_avg_total_score/$count_quiz[0],2);
 			}
 		}
 		return null;

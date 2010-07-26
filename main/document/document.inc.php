@@ -153,12 +153,11 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		$tooltip_title_alt = get_lang('SharedFolder').' ('.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).')';
 	}
 
-
+	$current_session_id=api_get_session_id();
 	if (!$show_as_icon) {
 		if ($filetype == 'folder') {
 			if (api_is_allowed_to_edit() || api_is_platform_admin() || api_get_setting('students_download_folders') == 'true') {
 				//filter when I am into shared folder, I can show for donwload only my shared folder
-				$current_session_id=api_get_session_id();
 				if(is_shared_folder($_GET['curdirpath'],$current_session_id))
 				{
 					if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link))|| preg_match('/shared_folder_session_'.$current_session_id.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) || api_is_allowed_to_edit() || api_is_platform_admin())
@@ -176,7 +175,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		}
 		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html;
 	} else {
-		if(preg_match('/shared_folder/', urldecode($url)) && preg_match('/shared_folder$/', urldecode($url))==false){
+		if(preg_match('/shared_folder/', urldecode($url)) && preg_match('/shared_folder$/', urldecode($url))==false && preg_match('/shared_folder_session_'.$current_session_id.'$/', urldecode($url))==false){
 			return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $tooltip_title).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
 		}
 		else

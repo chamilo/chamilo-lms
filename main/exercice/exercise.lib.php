@@ -237,7 +237,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				$s .= '</td></tr>';
 				*/
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-				$s .= '<tr><td><p style="float:left; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">';
+				$s .= '<tr><td style="width: 24px;"><p style="padding-right: 4px; padding-left: 4px;">';
 				$s .= '<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.' /></span></p>';
 				$s .= '<td colspan="2"><div class="u-m-answer">'.$answer.'</div></td></tr>';
 
@@ -265,7 +265,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				$s .= '</td></tr>';
 				*/
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-				$s .= '<tr><td><p style="padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">';
+				$s .= '<tr><td style="width: 24px;"><p style="padding-right: 4px; padding-left: 4px;">';
 				$s .= '<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span><p></td>';
 				$s .= '<td colspan="2"><div class="u-m-answer">'.$answer.'</div></td></tr>';
 
@@ -293,7 +293,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				$s .= '</td></tr>';
 				*/
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-				$s .= '<tr><td><p style="padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">';
+				$s .= '<tr><td style="width: 24px;"><p style="padding-right: 4px; padding-left: 4px;">';
 				$s .= '<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
 				$s .= '<td colspan="2"><div class="u-m-answer">'.$answer.'</div></td></tr>';
 

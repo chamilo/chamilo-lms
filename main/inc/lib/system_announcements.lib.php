@@ -266,11 +266,11 @@ class SystemAnnouncementManager
 		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
 		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
 
-		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
+		$langsql = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
-				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
+				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$langsql.")";
 		if ($send_mail==1) {
-			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);
+			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang);
 		}
 		$res = Database::query($sql);
 		if ($res === false) {
@@ -299,7 +299,7 @@ class SystemAnnouncementManager
 		$a_arrayED = explode('-',$a_dateE[0]);
 		$a_arrayEH = explode(':',$a_dateE[1]);
 		$date_end = array_merge($a_arrayED,$a_arrayEH);
-		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
+		$langsql = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		if (!checkdate($date_start[1], $date_start[2], $date_start[0])) {
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
@@ -323,11 +323,11 @@ class SystemAnnouncementManager
 		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
 
 		$id = intval($id);
-		$sql = "UPDATE ".$db_table." SET lang=$lang,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
+		$sql = "UPDATE ".$db_table." SET lang=$langsql,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
 
 		if ($send_mail==1) {
-			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);
+			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang);
 		}
 		$res = Database::query($sql);
 		if ($res === false) {
@@ -391,21 +391,25 @@ class SystemAnnouncementManager
 	 * @param	string	Content
 	 * @param	int		Whether to send to all teachers (1) or not (0)
 	 * @param	int		Whether to send to all students (1) or not (0)
+	 * @param	string	Language (optional, considered for all languages if left empty)
 	 */
-	public static function send_system_announcement_by_email($title, $content, $teacher, $student) {
+	public static function send_system_announcement_by_email($title, $content, $teacher, $student, $language=null) {
 		global $_user;
 		global $_setting;
 		global $charset;
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		
-		if ($teacher <> 0 AND $student == '0') {
+		if ($teacher <> 0 AND $student == 0) {
 			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '1' AND active = 1";
 		}
-		if ($teacher == '0' AND $student <> '0') {
+		if ($teacher == 0 AND $student <> 0) {
 			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '5' AND active = 1 ";
 		}
-		if ($teacher<>'0' AND $student <> '0') {
+		if ($teacher<> 0 AND $student <> 0) {
 			$sql = "SELECT firstname, lastname, email FROM $user_table WHERE email<>'' AND active = 1 ";
+		}
+		if (!empty($language)) { //special condition because language was already treated for SQL insert before
+			$sql .= " AND language = '".Database::escape_string($language)."' ";
 		}
 		if ($teacher == '0' AND $student == '0') {
 			return true;

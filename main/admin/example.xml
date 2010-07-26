@@ -5,6 +5,7 @@
         <FirstName>Marty</FirstName>
         <UserName>marty</UserName>
         <Password>secret</Password>
+	<AuthSource>platform</AuthSource>
         <Email>marty@example.net</Email>
         <OfficialCode>12345678</OfficialCode>
         <PhoneNumber>001-123-456-789</PhoneNumber>
@@ -16,6 +17,7 @@
         <FirstName>Emmett</FirstName>
         <UserName>emmett</UserName>
         <Password>secret</Password>
+	<AuthSource>platform</AuthSource>
         <Email>drbrown@example.net</Email>
         <OfficialCode />
         <PhoneNumber />

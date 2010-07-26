@@ -124,9 +124,9 @@ if ($form->validate())
 	if ($export['addcsvheader']=='1' AND $export['file_type']=='csv')
 	{
 		if($userPasswordCrypted!='none') {
-			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName', 'AuthSource', 'Status', 'OfficialCode', 'Phone');
+			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName', 'AuthSource', 'Status', 'OfficialCode', 'PhoneNumber');
 		} else {
-			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName','Password',  'AuthSource', 'Status', 'OfficialCode', 'Phone');
+			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName','Password',  'AuthSource', 'Status', 'OfficialCode', 'PhoneNumber');
 		}
 
 		foreach($extra_fields as $extra) {

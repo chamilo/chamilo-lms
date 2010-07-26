@@ -226,20 +226,12 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				}
 				$answer = api_parse_tex($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
-				/*
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" /><tr><td colspan="3">';
-				$s .= '<div class="u-m-answer">
-					<p style="float:left; padding-right:4px;">
-					<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.' /></span></p>';
-				$s .= '<div style="margin-left: 20px;">';
-				$s .= $answer;
-				$s .= '</div></div>';
-				$s .= '</td></tr>';
-				*/
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-				$s .= '<tr><td style="width: 24px;"><p style="padding-right: 4px; padding-left: 4px;">';
-				$s .= '<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.' /></span></p>';
-				$s .= '<td colspan="2"><div class="u-m-answer">'.$answer.'</div></td></tr>';
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
+					'<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">'.
+					'<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.' /></span></p>'.
+					'<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
+					$answer.
+					'</div></div></td></tr>';
 
 			} elseif ($answerType == MULTIPLE_ANSWER) {
 				// multiple answers
@@ -254,20 +246,12 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				}
 				$answer = api_parse_tex($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
-				/*
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" /><tr><td colspan="3">';
-				$s .= '<div class="u-m-answer">
-					<p style="float:left; padding-right:4px;">
-					<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
-				$s .= '<div style="margin-left: 20px;">';
-				$s .= $answer;
-				$s .= '</div></div>';
-				$s .= '</td></tr>';
-				*/
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-				$s .= '<tr><td style="width: 24px;"><p style="padding-right: 4px; padding-left: 4px;">';
-				$s .= '<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span><p></td>';
-				$s .= '<td colspan="2"><div class="u-m-answer">'.$answer.'</div></td></tr>';
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
+					'<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">'.
+					'<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>'.
+					'<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
+					$answer.
+					'</div></div></td></tr>';
 
 			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
 				// multiple answers
@@ -282,20 +266,12 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				}
 				$answer = api_parse_tex($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
-				/*
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" /><tr><td colspan="3">';
-				$s .= '<div class="u-m-answer">
-					<p style="float:left; padding-right:4px;">
-					<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
-				$s .= '<div style="margin-left: 20px;">';
-				$s .= $answer;
-				$s .= '</div></div>';
-				$s .= '</td></tr>';
-				*/
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-				$s .= '<tr><td style="width: 24px;"><p style="padding-right: 4px; padding-left: 4px;">';
-				$s .= '<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
-				$s .= '<td colspan="2"><div class="u-m-answer">'.$answer.'</div></td></tr>';
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
+					'<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">'.
+					'<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>'.
+					'<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
+					$answer.
+					'</div></div></td></tr>';
 
 			} elseif ($answerType == FILL_IN_BLANKS) {
 				// fill in blanks

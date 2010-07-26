@@ -736,7 +736,7 @@ class CourseHome {
 					echo '</li>';
 				}
 				$i++;
-			}
+			} // end of foreach
 		}
 		if ($theme == 'activity') {
 			if ($i % 2) {

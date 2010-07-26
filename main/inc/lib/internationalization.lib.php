@@ -3573,7 +3573,7 @@ function api_detect_encoding_html($string) {
 			return api_refine_encoding_id(trim($matches[1]));
 		}
 	}
-	return api_detect_encoding(strip_tags($string));
+	return api_detect_encoding(api_html_to_text($string));
 }
 
 /**

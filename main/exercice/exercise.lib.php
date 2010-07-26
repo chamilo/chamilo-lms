@@ -144,6 +144,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			$answer          = $objAnswerTmp->selectAnswer($answerId);
 			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);
 			$numAnswer       = $objAnswerTmp->selectAutoId($answerId);
+
 			if ($answerType == FILL_IN_BLANKS) {
 				// splits text and weightings that are joined with the character '::'
 				list($answer) = explode('::',$answer);
@@ -211,7 +212,8 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				$answer=str_replace("{texcode}",$texstring,$answer);
 
 			}
-			// unique answer
+
+			// Unique answer
 			if ($answerType == UNIQUE_ANSWER) {
 				// set $debug_mark_answer to true at function start to
 				// show the correct answer with a suffix '-x'
@@ -224,6 +226,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				}
 				$answer = api_parse_tex($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
+				/*
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" /><tr><td colspan="3">';
 				$s .= '<div class="u-m-answer">
 					<p style="float:left; padding-right:4px;">
@@ -232,6 +235,11 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				$s .= $answer;
 				$s .= '</div></div>';
 				$s .= '</td></tr>';
+				*/
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
+				$s .= '<tr><td style="width: 24px;"><p style="padding-right: 4px; padding-left: 4px;">';
+				$s .= '<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.' /></span></p>';
+				$s .= '<td colspan="2"><div class="u-m-answer">'.$answer.'</div></td></tr>';
 
 			} elseif ($answerType == MULTIPLE_ANSWER) {
 				// multiple answers
@@ -246,6 +254,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				}
 				$answer = api_parse_tex($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
+				/*
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" /><tr><td colspan="3">';
 				$s .= '<div class="u-m-answer">
 					<p style="float:left; padding-right:4px;">
@@ -254,6 +263,11 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				$s .= $answer;
 				$s .= '</div></div>';
 				$s .= '</td></tr>';
+				*/
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
+				$s .= '<tr><td style="width: 24px;"><p style="padding-right: 4px; padding-left: 4px;">';
+				$s .= '<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span><p></td>';
+				$s .= '<td colspan="2"><div class="u-m-answer">'.$answer.'</div></td></tr>';
 
 			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
 				// multiple answers
@@ -268,6 +282,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				}
 				$answer = api_parse_tex($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
+				/*
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" /><tr><td colspan="3">';
 				$s .= '<div class="u-m-answer">
 					<p style="float:left; padding-right:4px;">
@@ -276,9 +291,16 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				$s .= $answer;
 				$s .= '</div></div>';
 				$s .= '</td></tr>';
+				*/
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
+				$s .= '<tr><td style="width: 24px;"><p style="padding-right: 4px; padding-left: 4px;">';
+				$s .= '<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
+				$s .= '<td colspan="2"><div class="u-m-answer">'.$answer.'</div></td></tr>';
+
 			} elseif ($answerType == FILL_IN_BLANKS) {
 				// fill in blanks
 				$s .= '<tr><td colspan="3">'.$answer.'</td></tr>';
+
 			} else {
 				//  matching type, showing suggestions and answers
 				// TODO: replace $answerId by $numAnswer

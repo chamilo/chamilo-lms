@@ -110,9 +110,10 @@ d=new Date();savEvtTime=d.getTime();savTO=setTimeout(function()
 {isSupportedExt=true;break;}}
 if(isSupportedExt)
 {switch(files[num].cssClass)
-{ case 'fileVideo':case 'fileMusic':
+{ case 'fileVideo':
+case 'fileMusic':
 case 'fileFlash':
-$('#playGround').html('<a id="playGround' + num + '" href="' + '../'+files[num].path + '"><div id="player">&nbsp;this is mine</div></a> '); $('#playGround' + num).html(''); $('#playGround' + num).media({ width: 255, height: 210, autoplay: true }); showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250' + '&width=256' + '&inlineId=winPlay&modal=true')); break; //Juan Carlos Raña added  '../'+  for preview video and flash on  href="' + '../'+files[num].path +
+$('#playGround').html('<a id="playGround' + num + '" href="' + '../'+files[num].path + '"><div id="player">&nbsp;this is mine</div></a> '); $('#playGround' + num).html(''); $('#playGround' + num).media({ width: 255, height: 210, autoplay: true }); showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250' + '&width=256' + '&inlineId=winPlay&modal=true')); break; //Juan Carlos Raña added for Chamilo '../'+  for preview video and flash on  href="' + '../'+files[num].path +
 default:
 showThickBox(linkElem, appendQueryString('../'+path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));}
 }
@@ -134,8 +135,9 @@ return false;};function getUrl(index,limitNeeded,viewNeeded,searchNeeded)
 {excluded[excluded.length]='limit';queryStr+=(queryStr==''?'':'&')+'limit='+limit.options[limit.selectedIndex].value;}}
 if(typeof(viewNeeded)=='boolean'&&viewNeeded)
 {queryStr+=(queryStr==''?'':'&')+'view='+getView();excluded[excluded.length]='view';}
+//hack for Chamilo change below var search_recursively=0 to var search_recursively=1
 if(typeof(searchNeeded)=='boolean'&&searchNeeded&&searchRequired)
-{var search_recursively=0;$('input[@name=search_recursively][@checked]').each(function()
+{var search_recursively=1;$('input[@name=search_recursively][@checked]').each(function()
 {search_recursively=this.value;});var searchFolder=document.getElementById('search_folder');queryStr+=(queryStr==''?'':'&')+'search=1&search_name='+$('#search_name').val()+'&search_recursively='+search_recursively+'&search_mtime_from='+$('#search_mtime_from').val()+'&search_mtime_to='+$('#search_mtime_to').val()+'&search_folder='+searchFolder.options[searchFolder.selectedIndex].value;excluded[excluded.length]='search';excluded[excluded.length]='search_recursively';excluded[excluded.length]='search_mtime_from';excluded[excluded.length]='search_mtime_to';excluded[excluded.length]='search_folder';excluded[excluded.length]='search_name';excluded[excluded.length]='search';}
 return appendQueryString(appendQueryString(urls[index],queryString),queryStr,excluded);};function changeView()
 {var url=getUrl('view',true,true);$('#rightCol').empty();ajaxStart('#rightCol');$('#rightCol').load(url,{},function(){ajaxStop('#rightCol img.ajaxLoadingImg');urls.present=getUrl('home',true,true);initAfterListingLoaded();});return true;};function goParentFolder()
@@ -420,10 +422,14 @@ $('#folderFieldSet').css('display','');$('#fileFieldSet').css('display','none');
 if(info.is_writable=='1')
 {$('#fileWritable').html("<span class=\"flagYes\"> </span>");}else
 {$('#fileWritable').html("<span class=\"flagNo\"> </span>");}
-$('#folderFieldSet').css('display','none');$('#fileFieldSet').css('display','');if(typeof(selectFile)!='undefined'&&$('#fileList input[@type=checkbox][@checked]').length==1)
+//hack for Chamilo replace this line below for insert/select in browse mode
+//$('#folderFieldSet').css('display','none');$('#fileFieldSet').css('display','');if(typeof(selectFile)!='undefined'&&$('#fileList input[@type=checkbox][@checked]').length==1) 
+$('#folderFieldSet').css('display','none');$('#fileFieldSet').css('display','');if(typeof(selectFile)!='undefined'&&$('#fileList input[@type=checkbox][@checked]').length==1 || $('#rightCol dl.thumbnailListing input[@type=checkbox][@checked]').length==1)
 {$('#selectCurrentUrl').unbind('click').click(function()
 {selectFile(info.url);});$('#returnCurrentUrl').show();}else
-{$('#returnCurrentUrl').hide();}}};function search()
+{$('#returnCurrentUrl').hide();}}};
+
+function search()
 {searchRequired=true;var url=getUrl('view',true,true,true);$('#rightCol').empty();ajaxStart('#rightCol');$('#rightCol').load(url,{},function(){ajaxStop('#rightCol img.ajaxLoadingImg');initAfterListingLoaded();});return false;};function closeWinPlay()
 {tb_remove();$('#playGround').empty();return false;};function closeWindow(msg)
 {if(window.confirm(msg))

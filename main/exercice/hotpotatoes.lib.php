@@ -46,32 +46,25 @@ function hotpotatoes_init($base_work_dir) {
  */
 function GetQuizName($fname, $fpath) {
 
-	$title = '';
 	$title = GetComment($fname);
 
 	if ($title == '') {
 		if (file_exists($fpath.$fname)) {
 			if (!($fp = fopen($fpath.$fname, 'r'))) {
-			//die('Could not open Quiz input.');
+				//die('Could not open Quiz input.');
 				return basename($fname);
 			}
 
 			$contents = fread($fp, filesize($fpath.$fname));
 			fclose($fp);
 
-			$contents = api_strtolower($contents);
-
-			$pattern = array(1 => 'title>', 2 => '/title>');
-
-			$s_contents = api_substr($contents, 0, api_strpos($contents, $pattern['2']) - 1);
-			$e_contents = api_substr($s_contents, api_strpos($contents, $pattern['1']) + api_strlen($pattern['1']), api_strlen($s_contents));
-
-			$title = $e_contents;
-		} else {
-			return '';
+			$encoding = api_detect_encoding_html($contents);
+			$contents = substr($contents, 0, stripos($contents, '/title>') - 1);
+			$contents = substr($contents, stripos($contents, 'title>') + 6);
+			$title = trim(api_html_entity_decode(api_to_system_encoding($contents, $encoding), ENT_QUOTES));
 		}
 	}
-	return $title;
+	return (string)$title;
 }
 
 /**

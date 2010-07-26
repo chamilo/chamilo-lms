@@ -19,15 +19,20 @@ require_once '../inc/lib/fckeditor/fckeditor.php';
  * @param int current item from the list of questions
  * @param int number of total questions
  * */
-function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_item, $total_item) {
-	//change false to true in the following line to enable answer hinting
+function showQuestion($questionId, $onlyAnswers = false, $origin = false, $current_item, $total_item) {
+
+	// Text direction for the current language
+	$is_ltr_text_direction = api_get_text_direction() != 'rtl';
+
+	// Change false to true in the following line to enable answer hinting.
 	$debug_mark_answer = api_is_allowed_to_edit() && false;
+
 	if (!ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) {
 		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
 		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
 	}
 
-	// reads question informations
+	// Reads question informations.
 	if (!$objQuestionTmp = Question::read($questionId)) {
 		// question not found
 		return false;
@@ -217,17 +222,16 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 						$selected = 'checked="checked"';
 					}
 				}
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />
-				<tr>
-				 <td colspan="3">
-				 	<div class="u-m-answer">
+				$answer = api_parse_tex($answer);
+				$answer = Security::remove_XSS($answer, STUDENT);
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" /><tr><td colspan="3">';
+				$s .= '<div class="u-m-answer">
 					<p style="float:left; padding-right:4px;">
 					<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.' /></span></p>';
-				$answer = api_parse_tex($answer);
 				$s .= '<div style="margin-left: 20px;">';
-				$s .= Security::remove_XSS($answer, STUDENT);
-				$s .= '</div>';
-				$s .= '</div></td></tr>';
+				$s .= $answer;
+				$s .= '</div></div>';
+				$s .= '</td></tr>';
 
 			} elseif ($answerType == MULTIPLE_ANSWER) {
 				// multiple answers
@@ -240,17 +244,16 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 						$selected = 'checked="checked"';
 					}
 				}
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />
-				<tr>
-				  <td colspan="3">
-					 <div class="u-m-answer">
-					 <p style="float:left; padding-right:4px;">
-					 <span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
 				$answer = api_parse_tex($answer);
+				$answer = Security::remove_XSS($answer, STUDENT);
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" /><tr><td colspan="3">';
+				$s .= '<div class="u-m-answer">
+					<p style="float:left; padding-right:4px;">
+					<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
 				$s .= '<div style="margin-left: 20px;">';
-				$s .= Security::remove_XSS($answer, STUDENT);
-				$s .= '</div>';
-				$s .= '</div></td></tr>';
+				$s .= $answer;
+				$s .= '</div></div>';
+				$s .= '</td></tr>';
 
 			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
 				// multiple answers
@@ -263,17 +266,16 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 						$selected = 'checked="checked"';
 					}
 				}
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />
-				<tr>
-				  <td colspan="3">
-					 <div class="u-m-answer">
-					 <p style="float:left; padding-right:4px;">
-					 <span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
 				$answer = api_parse_tex($answer);
+				$answer = Security::remove_XSS($answer, STUDENT);
+				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" /><tr><td colspan="3">';
+				$s .= '<div class="u-m-answer">
+					<p style="float:left; padding-right:4px;">
+					<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>';
 				$s .= '<div style="margin-left: 20px;">';
-				$s .= Security::remove_XSS($answer, STUDENT);
-				$s .= '</div>';
-				$s .= '</div></td></tr>';
+				$s .= $answer;
+				$s .= '</div></div>';
+				$s .= '</td></tr>';
 			} elseif ($answerType == FILL_IN_BLANKS) {
 				// fill in blanks
 				$s .= '<tr><td colspan="3">'.$answer.'</td></tr>';

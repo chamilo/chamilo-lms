@@ -658,7 +658,7 @@ if ($folders === false) {
 }
 
 echo '<div class="actions">';
-
+if ($is_allowed_to_edit || $group_member_with_upload_rights){
 /* BUILD SEARCH FORM */
 	echo '<span style="display:inline-block;">';
 	$form = new FormValidator('search_document', 'get', '', '', null, false);
@@ -668,7 +668,7 @@ echo '<div class="actions">';
 	$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
 	$form->display();
 	echo '</span>';
-	
+}
 /* GO TO PARENT DIRECTORY */
 
 if ($curdirpath!= '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {

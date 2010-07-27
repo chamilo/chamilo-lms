@@ -18,20 +18,23 @@ require_once _MPDF_PATH.'mpdf.php';
 $content_pdf = api_html_entity_decode($_POST['contentPDF'], ENT_QUOTES, api_get_system_encoding());
 $title_pdf = api_html_entity_decode($_POST['titlePDF'], ENT_QUOTES, api_get_system_encoding());
 
-$html = '
-<page backtop="10mm" backbottom="10mm" footer="page">
-      <page_header>
-{TITLE_PDF}<br/><hr/>
-      </page_header>
-{CONTENT_PDF}
-      <page_footer>
-            <hr/>
-      </page_footer>
- </page>
-';
-
-$html = api_utf8_encode(str_replace(array('{TITLE_PDF}', '{CONTENT_PDF}'), array($title_pdf, $content_pdf), $html), api_get_system_encoding());
 $title_pdf = api_utf8_encode($title_pdf, api_get_system_encoding());
+$content_pdf = api_utf8_encode($content_pdf, api_get_system_encoding());
+
+$html='
+<!-- defines the headers/footers - this must occur before the headers/footers are set -->
+
+<!--mpdf
+<pageheader name="odds" content-left="'.$title_pdf.'"  header-style-left="color: #880000; font-style: italic;"  line="1" />
+<pagefooter name="odds" content-right="{PAGENO}/{nb}" line="1" />
+
+<!-- set the headers/footers - they will occur from here on in the document -->
+<!--mpdf
+<setpageheader name="odds" page="odd" value="on" show-this-page="1" />
+<setpagefooter name="odds" page="O" value="on" />
+
+mpdf-->'.$content_pdf;
+
 
 $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
 if (file_exists($css_file)) {
@@ -40,7 +43,7 @@ if (file_exists($css_file)) {
 	$css = '';
 }
 
-$pdf = new mPDF('UTF-8', 'A4', '', '', 32, 25, 27, 25, 16, 13, 'P');
+$pdf = new mPDF('UTF-8', 'A4', '', '', 30, 20, 27, 25, 16, 13, 'P');
 
 $pdf->directionality = api_get_text_direction();
 

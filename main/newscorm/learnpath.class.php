@@ -6974,12 +6974,14 @@ class learnpath {
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_student_publication_form('move', $item_id, $row);
 					break;
-				case TOOL_FORUM :
+				case TOOL_FORUM :				
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_forum_form('move', $item_id, $row);
+					break;
 				case TOOL_THREAD :
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_forum_form('move', $item_id, $row);
+					break;
 			}
 		}
 

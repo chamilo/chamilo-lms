@@ -7578,7 +7578,7 @@ class learnpath {
 	 	foreach($this->items as $index => $item){
 	 		if(!in_array($item->type , array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK, TOOL_STUDENTPUBLICATION)))
 	 		{
-		 		//get included documents from this item
+                                //get included documents from this item
 		 		if($item->type=='sco')
 		 			$inc_docs = $item->get_resources_from_source(null,api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.'scorm/'.$this->path.'/'.$item->get_path());
 		 		else
@@ -7592,7 +7592,7 @@ class learnpath {
 		 		//give a child element <title> to the <item> element
 		 		$my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(), ENT_QUOTES, $this->encoding));
 		 		$my_item->appendChild($my_title);
-		 		//give a child element <adlcp:prerequisites> to the <item> element
+                                //give a child element <adlcp:prerequisites> to the <item> element
 		 		$my_prereqs = $xmldoc->createElement('adlcp:prerequisites',$this->get_scorm_prereq_string($my_item_id));
 		 		$my_prereqs->setAttribute('type','aicc_script');
 		 		$my_item->appendChild($my_prereqs);
@@ -7603,7 +7603,7 @@ class learnpath {
 		 		//give a child element <adlcp:datafromlms> to the <item> element - not yet supported
 		 		//$xmldoc->createElement('adlcp:datafromlms','');
 		 		//give a child element <adlcp:masteryscore> to the <item> element
-		 		$my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->get_mastery_score());
+                                $my_masteryscore = $xmldoc->createElement('adlcp:masteryscore',$item->get_mastery_score());
 		 		$my_item->appendChild($my_masteryscore);
 
 
@@ -8056,7 +8056,7 @@ class learnpath {
 				 					}
 			 						break;
 			 					case 'abs': //absolute path from DocumentRoot. Save file and leave path as is in the zip
-				 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+                                                                        $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
 									$file_path = realpath($doc_info[0]);
 					 				$my_dep_file->setAttribute('href',$file_path);
 			 			 			$my_dep->setAttribute('xml:base','');
@@ -8092,7 +8092,7 @@ class learnpath {
 				 					}
 			 						break;
 			 					case 'rel': //path relative to the current document. Save xml:base as current document's directory and save file in zip as subdir.file_path
-				 					if(substr($doc_info[0],0,2)=='..')
+                                                                        if(substr($doc_info[0],0,2)=='..')
 					 				{ //relative path going up
 					 					$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
 					 					$file_path = realpath($current_dir.$doc_info[0]);
@@ -8107,7 +8107,7 @@ class learnpath {
 											//file path is courses/DOKEOS/document/....
 											$info_file_path=explode('/',$file_path);
 											if ($info_file_path[0]=='courses') {//add character "/" in file path
-												 $file_path_dest='/'.$file_path;
+												$file_path_dest='document/'.$file_path;                                                                                                
 											}
 
 					 						//error_log('Reduced path: '.$file_path,0);
@@ -8121,7 +8121,7 @@ class learnpath {
 					 					$zip_files[] = $my_sub_dir.'/'.$doc_info[0];
 						 				$my_dep_file->setAttribute('href',$doc_info[0]);
 				 			 			$my_dep->setAttribute('xml:base',$my_xml_sub_dir);
-					 				}
+					 				}                                                                         
 
 			 						break;
 			 					default:

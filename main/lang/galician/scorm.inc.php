@@ -53,4 +53,8 @@ $UnknownPackageFormat = "O formato do paquete non pode ser recoñecido. Por favo
 $Attempt = "Intento";
 $MoveTheCurrentForum = "Mover o foro actual";
 $WarningWhenEditingScorm = "¡ Aviso ! <br /> Se edita o contido de un paso scorm, pode alterar o informe da secuencia de aprendizaxe ou danar o paso";
+$AdditionalProfileField = "Engadir campo do perfil do usuario";
+$ScormUnknownPackageFormat = "O paquete que está tentando de subir ten un formato descoñecido. Por favor comprobe si utiliza un dos formatos soportados.";
+$ScormNotEnoughSpaceInCourseToInstallPackage = "Non hai espazo suficiente neste curso para descomprimir o paquete actual.";
+$ScormPackageFormatNotScorm = "O paquete que está tentando subir non parece estar en fomrato SCORM. Por favor comprobe que o imsmanifest.xml esté dentro do arquivo ZIP que está tentando subir.";
 ?>

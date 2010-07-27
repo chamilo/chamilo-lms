@@ -944,4 +944,10 @@ $RepeatDate = "Repetir día";
 $ToAttend = "Por asistir";
 $HaveFun = "Diviértase,";
 $ClearSearchResults = "Reiniciar los resultados de búsqueda";
+$TestServerMode = "Servidor en modo test";
+$PageExecutionTimeWas = "El tiempo de ejecución de la página fue de";
+$MemoryUsage = "Uso memoria";
+$MemoryUsagePeak = "Uso memoria pico";
+$Seconds = "segundos";
+$QualifyInGradebook = "Calificar en la evaluación";
 ?>

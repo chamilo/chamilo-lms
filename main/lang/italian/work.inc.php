@@ -90,4 +90,5 @@ $ViewUsersWithoutTask = "Mostra i corsisti senza compiti assegnati";
 $HomeworkCreated = "E' stato assegnato un nuovo compito";
 $HomeworkHasBeenCreatedForTheCourse = "E' stato assegnato un nuovo compito per il corso";
 $PleaseCheckHomeworkPage = "Ti prego di controllare la pagina degli Elaborati";
+$IncludedInEvaluation = "Incluso nella valutazione";
 ?>

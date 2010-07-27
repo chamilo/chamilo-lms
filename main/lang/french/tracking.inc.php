@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $AssignSessionsTo = "Assigner des sessions à %s";
 $langToolName = "Importer des cours Blackboard";
 $TrackingDisabled = "Le système de suivi a été désactivé par l'administrateur système.";
-$InactivesStudents = "Apprenants inactifs";
+$InactivesStudents = "Apprenants non connectés depuis une semaine ou plus";
 $AverageTimeSpentOnThePlatform = "Temps moyen passé sur la plateforme";
 $AverageCoursePerStudent = "Nombre de cours moyen par apprenant";
 $AverageProgressInLearnpath = "Progression moyenne dans les parcours";
@@ -215,7 +215,7 @@ $SessionCourses = "Session de cours";
 $NoUsersInCourseTracking = "Ici vous trouverez le suivi de tous les apprenants inscrits à votre cours.";
 $AvgTimeSpentInTheCourse = "Temps moyen passé dans le cours";
 $RemindInactiveUser = "Relancer l'utilisateur inactif";
-$FirstLogin = "First connexion";
+$FirstLogin = "Première connexion";
 $AccessDetails = "Détails d'accès";
 $DateAndTimeOfAccess = "Date et heure d'accès";
 $Duration = "Durée";
@@ -270,4 +270,8 @@ $LinkInvisible = "Lien rendu invisible";
 $LinkAdded = "Lien ajouté";
 $Minutes = "Minutes";
 $BackupCreated = "Backup généré";
+$DisplayCourseOverview = "Vue globale du cours";
+$DisplaySessionOverview = "Vue globale des sessions";
+$TotalNumberOfMessages = "Nombre total de messages";
+$TotalNumberOfAssignments = "Nombre total de travaux";
 ?>

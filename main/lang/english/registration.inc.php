@@ -181,4 +181,6 @@ $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Your account on %s
 $HaveFun = "Have fun,";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "You can now login at %s using the login and the password you have provided.";
 $AreYouSureToEditTheUserStatus = "Are you sure to edit the user status?";
+$TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "The tutor can only keep track of all progress of users registered to the course.";
+$TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "The teacher can qualify, evaluate and keep track of all students enrolled in the course.";
 ?>

@@ -90,4 +90,5 @@ $ViewUsersWithoutTask = "View missing assignments";
 $HomeworkCreated = "An assignment was created";
 $HomeworkHasBeenCreatedForTheCourse = "An assignment was created for the course";
 $PleaseCheckHomeworkPage = "Please check the assignments page.";
+$IncludedInEvaluation = "Included in the evaluation";
 ?>

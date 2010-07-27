@@ -270,4 +270,8 @@ $LinkInvisible = "Il collegamento è stato reso visibile";
 $LinkAdded = "Collegamento aggiunto";
 $Minutes = "Minuti";
 $BackupCreated = "Backup creato";
+$DisplayCourseOverview = "Panoramica dei corsi";
+$DisplaySessionOverview = "Panoramica delle sessioni";
+$TotalNumberOfMessages = "Numero totale dei messaggi";
+$TotalNumberOfAssignments = "Numero totale dei compiti assegnati";
 ?>

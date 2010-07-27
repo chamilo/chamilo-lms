@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $AssignSessionsTo = "Asignar sesiones a";
 $langToolName = "Importar cursos de Blackboard";
 $TrackingDisabled = "El seguimiento ha sido deshabilitado por el administrador del sistema.";
-$InactivesStudents = "Alumnos inactivos";
+$InactivesStudents = "Alumnos no conectados por una semana o más";
 $AverageTimeSpentOnThePlatform = "Tiempo medio de conexión a la plataforma";
 $AverageCoursePerStudent = "Media de cursos por usuario";
 $AverageProgressInLearnpath = "Progreso medio en las lecciones";

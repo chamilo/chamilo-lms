@@ -66,10 +66,13 @@ $FolderCreated = "Nova mapa je bila ustvarjena";
 $LinkAdded = "Povezava dodana";
 $AnnouncementAdded = "Obvestilo je bilo dodano";
 $AgendaAdded = "Zapis agende je bil dodan";
+$LoginEnter = "Prijava";
 $Messages = "Sporočila";
 $Inbox = "Prejeto";
 $Comppose = "Sestavi novo";
 $PendingInvitations = "Čakajoča povabila";
 $YouDoNotHaveAnySessionInItsHistory = "V zgodovini nimate beležene nobene seje tečaja";
 $PortalHomepageDefaultIntroduction = "<h2>Čestitke! Vaš portal je uspešno nameščen!</h2>  <p>Namestitev lahko sedaj zaključite z izvedbo naslednjih treh korakov:<br /> <ol>     <li>Prilagodite ali spremenite nastavitve portala v upraviteljevem področju; izberite  Portal -> <a href=\"main/admin/settings.php\">Configuration settings</a>.</li>     <li>Dodajte nekaj življenja vašemu portalu s tem, da ustvarite nekaj uporabnikov in/ali nekaj tečajev. To lahko izvedete z vabilom izbranim osebam, kjer jih pozovete k registraciji v portal, ali pa uporabniške račune zanje kreirate sami preko <a href=\"main/admin/\">upraviteljevega</a> razdelka Uporabniki oz. tečaje preko razdelka Tečaji.</li>     <li>Uredite in spremenite to stran preko <a href=\"main/admin/configure_homepage.php\">Nastavitev domače strani portala</a>.</li> </ol> <p>Vedno in ob vsakem času lahko več informacij o tej programski opremi najdete na naši spletni strani: <a href=\"http://www.chamilo.org\">http://www.chamilo.org</a>.</p> <p>Želimo vam veliko uspeha, in ne oklevajte se pridružiti naši skupnosti in/ali nam posredovati povratne informacije preko <a href=\"http://www.chamilo.org/forum\">našega foruma</a>.</p>";
+$Username = "Uporabniško ime";
+$Profile = "Profil";
 ?>

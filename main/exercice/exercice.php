@@ -680,12 +680,13 @@ $condition_session = api_get_session_condition($session_id);
 // only for administrator
 if ($is_allowedToEdit) {
 	if ($show == 'test') {
-		$sql = "SELECT id, title, type, active, description, results_disabled, session_id FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
+		$sql = "SELECT id, title, type, active, description, results_disabled, session_id, start_time FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
 		$result = Database::query($sql);
 	}
 }
 elseif ($show == 'test') { // only for students
-	$sql = "SELECT id, title, type, description, results_disabled, session_id FROM $TBL_EXERCICES WHERE active='1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
+	$sql = "SELECT id, title, type, description, results_disabled, session_id, start_time FROM $TBL_EXERCICES WHERE active='1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
+
 	$result = Database::query($sql);
 }
 if ($show == 'test') {
@@ -857,6 +858,7 @@ if ($_configuration['tracking_enabled']) {
 		}
 	}	*/
 }
+
 echo '</div>'; // closing the actions div
 
 if ($show == 'test') {
@@ -898,7 +900,6 @@ if ($show == 'test') {
 	 * Listing exercises
 	 *
 	 */
-
 	if ($origin != 'learnpath') {
 		//avoid sending empty parameters
 		$myorigin = (empty ($origin) ? '' : '&origin=' . $origin);
@@ -906,38 +907,44 @@ if ($show == 'test') {
 		$mylpitemid = (empty ($learnpath_item_id) ? '' : '&learnpath_item_id=' . $learnpath_item_id);
 
 		$token = Security::get_token();
-
-		while ($row = Database :: fetch_array($result)) {
-			//validacion when belongs to a session
-			$session_img = api_get_session_image($row['session_id'], $_user['status']);
-
-			if ($i % 2 == 0)
-				$s_class = "row_odd";
-			else
-				$s_class = "row_even";
-			// prof only
-			if ($is_allowedToEdit) {
-				echo '<tr class="' . $s_class . '">';
-
-				echo '<td width="30" align="left">'.Display::return_icon('quiz.gif', get_lang('Exercice')).'</td>';
-				echo '<td width="15" valign="left">'.($i+($page*$limitExPage)).'.'.'</td>';
-
-				//Showing exercise title
-				$row['title']=api_parse_tex($row['title']);
-
-				echo '<td>';
-				$class_invisible = '';
-				if (!$row['active']) {
-					$class_invisible = 'class="invisible"';
-				}
-				echo '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&amp;exerciseId='.$row['id'].'" '.$class_invisible.'>';
-				echo Security::remove_XSS($row['title']);
-				echo '</a>';
-				echo $session_img;
-				echo '</td>';
-				echo '<td align="center">';
-
+				while ($row = Database :: fetch_array($result)) {
+				//validacion when belongs to a session
+				$session_img = api_get_session_image($row['session_id'], $_user['status']);
+				
+				// check if start time ...
+				$is_actived_time = true;																
+				if ($row['start_time'] != '0000-00-00 00:00:00' && api_strtotime($row['start_time']) > time()) {
+					$is_actived_time = false;
+				} 
+		
+				if ($i % 2 == 0)
+					$s_class = "row_odd";
+				else
+					$s_class = "row_even";
+				// prof only
+				if ($is_allowedToEdit) {
+					echo '<tr class="' . $s_class . '">';
+	
+					echo '<td width="30" align="left">'.Display::return_icon('quiz.gif', get_lang('Exercice')).'</td>';
+					echo '<td width="15" valign="left">'.($i+($page*$limitExPage)).'.'.'</td>';
+	
+					//Showing exercise title
+					$row['title']=api_parse_tex($row['title']);
+			
+					echo '<td>';
+					$class_invisible = '';
+					if (!$row['active']) {
+						$class_invisible = 'class="invisible"';
+					}
+					echo '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&amp;exerciseId='.$row['id'].'" '.$class_invisible.'>';
+					echo Security::remove_XSS($row['title']);
+					echo '</a>';
+					echo $session_img;
+					echo '</td>';
+					echo '<td align="center">';
+				
 				$exid = $row['id'];
+				
 				//count number exercice - teacher
 				$sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . Database :: escape_string($exid) . "'";
 				$sqlresult = Database::query($sqlquery);
@@ -1003,7 +1010,20 @@ if ($show == 'test') {
 	          <tr>
 	            <td><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
 	            <?php $row['title']=api_parse_tex($row['title']);?>
-	            <td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$myllpitemid; ?>&exerciseId=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a></td>
+	            <td>
+	            
+	          	<?php 
+	            // if time is actived show link to exercise      
+	            if ($is_actived_time) { ?>
+	            	<a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$myllpitemid; ?>&exerciseId=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a>	            
+	            <?php 	            
+	            } else { 
+	            	echo $row['title'];
+	            } 	            
+	            ?>
+	            
+	            </td>
+				
 				<td align="center"> <?php
 				$exid = $row['id'];
 				//count number exercise questions
@@ -1032,24 +1052,28 @@ if ($show == 'test') {
 				$num = Database :: num_rows($qryres);
 
 				//hide the results
+				if (!$is_actived_time) { 
 				$my_result_disabled = $row['results_disabled'];
-				if ($my_result_disabled == 0) {
-					if ($num > 0) {
-						$row = Database :: fetch_array($qryres);
-						$percentage = 0;
-						if ($row['exe_weighting'] != 0) {
-							$percentage = ($row['exe_result'] / $row['exe_weighting']) * 100;
+					if ($my_result_disabled == 0) {
+						if ($num > 0) {
+							$row = Database :: fetch_array($qryres);
+							$percentage = 0;
+							if ($row['exe_weighting'] != 0) {
+								$percentage = ($row['exe_result'] / $row['exe_weighting']) * 100;
+							}
+							echo get_lang('Attempted') . ' (' . get_lang('Score') . ': ';
+							printf("%1.2f\n", $percentage);
+							echo " %)";		
+						} else {
+							echo get_lang('WillBeActivated' .' '. $row['start_time']);
 						}
-						echo get_lang('Attempted') . ' (' . get_lang('Score') . ': ';
-						printf("%1.2f\n", $percentage);
-						echo " %)";
 					} else {
-						echo get_lang('NotAttempted');
+						echo get_lang('CantShowResults');
 					}
+					echo '</td></tr>';
 				} else {
-					echo get_lang('CantShowResults');
+				    echo get_lang('NotAttempted');					
 				}
-				echo '</td></tr>';
 			}
 			// skips the last exercise, that is only used to know if we have or not to create a link "Next page"
 			if ($i == $limitExPage) {

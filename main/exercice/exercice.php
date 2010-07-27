@@ -1143,9 +1143,8 @@ if ($show == 'test') {
     <tr>
 
         <td><?php echo ($ind+($page*$limitExPage)).'.'; ?><!--<img src="../img/jqz.jpg" alt="HotPotatoes" />--></td>
-        <!--<td>&nbsp;</td>-->
         <td><a href="showinframes.php?<?php echo api_get_cidreq()."&amp;file=".$path."&amp;cid=".$_course['official_code']."&amp;uid=".$_user['user_id'].'"'; if(!$active) echo 'class="invisible"'; ?>"><?php echo $title;?></a></td>
-		<td>&nbsp;</td><td>&nbsp;</td>
+		<td style="text-align: center;">-</td><td style="text-align: center;">-</td>
   </tr>
   <?php
 
@@ -1172,18 +1171,6 @@ echo '</table>';
 
 // if tracking is enabled
 if ($_configuration['tracking_enabled'] && ($show == 'result')) {
-?>
-		<!--<table class="data_table">
-		 <tr class="row_odd">
-		  <?php if($is_allowedToEdit || $is_tutor): ?>
-		  <th><?php  echo get_lang('User'); ?></th><?php endif; ?>
-		  <th><?php echo get_lang('Exercice'); ?></th>
-		  <th><?php echo get_lang('Duration'); ?></th>
-		  <th><?php echo get_lang('Date'); ?></th>
-		  <th><?php echo get_lang('Result'); ?></th>
-		  <th><?php echo (($is_allowedToEdit||$is_tutor)?get_lang("CorrectTest"):get_lang("ViewTest")); ?></th>
-		 </tr>-->
-		<?php
 
 	$session_id_and = ' AND ce.session_id = ' . api_get_session_id() . ' ';
 	if ($is_allowedToEdit || $is_tutor) {
@@ -1231,12 +1218,16 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 	$results = getManyResultsXCol($sql, 12);
 	$hpresults = getManyResultsXCol($hpsql, 5);
 
-	$NoTestRes = 0;
-	$NoHPTestRes = 0;
-	//Print the results of tests
+	$has_test_results = false;
+	$list_info = array();
+
+	// Print test results.
 	$lang_nostartdate = get_lang('NoStartDate') . ' / ';
 
 	if (is_array($results)) {
+
+		$has_test_results = true;
+
 		$users_array_id = array ();
 		if ($_GET['gradebook'] == 'view') {
 			$filter_by_no_revised = true;
@@ -1250,7 +1241,6 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 		$date_list = '';
 		$result_list = '';
 		$more_details_list = '';
-		$list_info = array();
 		for ($i = 0; $i < $sizeof; $i++) {
 			$revised = false;
 			$sql_exe = 'SELECT exe_id FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING) . '
@@ -1391,9 +1381,32 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 				//echo '</td>';
 
 				//echo '</tr>';
-
 			}
 		}
+	}
+
+	// Print HotPotatoes test results.
+	if (is_array($hpresults)) {
+
+		$has_test_results = true;
+
+		for ($i = 0; $i < sizeof($hpresults); $i++) {
+			$hp_title = GetQuizName($hpresults[$i][1], $documentPath);
+			if ($hp_title == '') {
+				$hp_title = basename($hpresults[$i][1]);
+			}
+			//$hp_date = api_convert_and_format_date($hpresults[$i][4], null, date_default_timezone_get());
+			$hp_date = api_get_local_time($hpresults[$i][4], null, date_default_timezone_get());
+			$hp_result = round(($hpresults[$i][2] / ($hpresults[$i][3] != 0 ? $hpresults[$i][3] : 1)) * 100, 2).'% ('.$hpresults[$i][2].' / '.$hpresults[$i][3].')';
+			if ($is_allowedToEdit) {
+				$list_info[] = array($hpresults[$i][0], $hp_title, '-', $hp_date , $hp_result , '-');
+			} else {
+				$list_info[] = array($hp_title, '-', $hp_date , $hp_result , '-');
+			}
+		}
+	}
+
+	if ($has_test_results) {
 
 		$parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'show'=>Security::remove_XSS($_GET['show']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
 
@@ -1409,46 +1422,14 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 		$table->set_header(-$secuence + 2, get_lang('Duration'),false);
 		$table->set_header(-$secuence + 3, get_lang('Date'));
 		$table->set_header(-$secuence + 4, get_lang('Result'),false);
-		$table->set_header(-$secuence + 5, (($is_allowedToEdit||$is_tutor) ? get_lang("CorrectTest") : get_lang("ViewTest")), false);
+		$table->set_header(-$secuence + 5, (($is_allowedToEdit||$is_tutor) ? get_lang('CorrectTest') : get_lang('ViewTest')), false);
 		$table->display();
 
 	} else {
-		$NoTestRes = 1;
-	}
 
-	// Print the Result of Hotpotatoes Tests
-	if (is_array($hpresults)) {
-		for ($i = 0; $i < sizeof($hpresults); $i++) {
-			$title = GetQuizName($hpresults[$i][1], $documentPath);
-			if ($title == '') {
-				$title = basename($hpresults[$i][1]);
-			}
-			echo '<tr>';
-			if ($is_allowedToEdit) {
-				echo '<td class="content">' . $hpresults[$i][0] . '</td>';
-			}
-			echo '<td class="content">' . $title . '</td>';
-			echo '<td class="content">' . api_convert_and_format_date($hpresults[$i][4], null, date_default_timezone_get()) . '</td>';
-			echo '<td class="content">' . round(($hpresults[$i][2] / ($hpresults[$i][3] != 0 ? $hpresults[$i][3] : 1)) * 100, 2) . '% (' . $hpresults[$i][2] . ' / ' . $hpresults[$i][3] . ')</td>';
-			echo '<td></td>'; //there is no possibility to edit the results of a Hotpotatoes test
-			echo '</tr>';
-		}
-	} else {
-		$NoHPTestRes = 1;
-	}
-
-	if ($NoTestRes == 1 && $NoHPTestRes == 1) {
-?>
-			 <tr>
-			  <td colspan="6"><?php echo get_lang("NoResult"); ?></td>
-			 </tr>
-			<?php
+		echo get_lang('NoResult');
 
 	}
-?>
-		</table>
-		<br />
-		<?php
 
 }
 

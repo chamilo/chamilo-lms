@@ -230,12 +230,14 @@ class Security {
 	 * @return	mixed	Filtered string or array
 	 */
 	public static function remove_XSS ($var,$user_status=ANONYMOUS) {
-		$purifier = new HTMLPurifier(null,$user_status);
-		if (is_array($var)) {
-			return $purifier->purifyArray($var);
-		} else {
-			return $purifier->purify($var);
-		}
-
+        static $purifier = array();
+        if (!isset($purifier[$user_status])) {
+            $purifier[$user_status] = new HTMLPurifier(null, $user_status);
+        }
+        if (is_array($var)) {
+            return $purifier[$user_status]->purifyArray($var);
+        } else {
+            return $purifier[$user_status]->purify($var);
+        }
 	}
 }

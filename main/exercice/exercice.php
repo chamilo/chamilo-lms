@@ -1143,7 +1143,7 @@ if ($show == 'test') {
     <tr>
 
         <td><?php echo ($ind+($page*$limitExPage)).'.'; ?><!--<img src="../img/jqz.jpg" alt="HotPotatoes" />--></td>
-       <td>&nbsp;</td>
+        <!--<td>&nbsp;</td>-->
         <td><a href="showinframes.php?<?php echo api_get_cidreq()."&amp;file=".$path."&amp;cid=".$_course['official_code']."&amp;uid=".$_user['user_id'].'"'; if(!$active) echo 'class="invisible"'; ?>"><?php echo $title;?></a></td>
 		<td>&nbsp;</td><td>&nbsp;</td>
   </tr>

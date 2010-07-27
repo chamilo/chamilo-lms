@@ -2406,7 +2406,7 @@ class learnpath {
 	 */
 	function get_iv_objectives_array($lp_iv_id = 0) {
 
-		global $chatset;
+		global $charset;
 
 		$list = array ();
 		$table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE);

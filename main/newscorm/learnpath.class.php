@@ -2406,7 +2406,7 @@ class learnpath {
 	 */
 	function get_iv_objectives_array($lp_iv_id = 0) {
 
-		global $charset;
+		global $chatset;
 
 		$list = array ();
 		$table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE);
@@ -4512,7 +4512,8 @@ class learnpath {
 		$return .= "\tm.add(" . $menu . ", -1, '" . addslashes(Security::remove_XSS(($this->name))) . "');\n";
 		$tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
-		$sql = " SELECT * FROM " . $tbl_lp_item . "
+		$sql = " SELECT id, title, description, item_type, path, parent_item_id, previous_item_id, next_item_id, max_score, min_score, mastery_score, display_order
+				 FROM " . $tbl_lp_item . "
 				 WHERE lp_id = " . Database :: escape_string($this->lp_id);
 		$result = Database::query($sql);
 		$arrLP = array ();
@@ -4520,20 +4521,20 @@ class learnpath {
 		while ($row = Database :: fetch_array($result)) {
 			$row['title'] = Security :: remove_XSS(api_convert_encoding($row['title'], $platform_charset, $this->encoding));
 			$row['description'] = Security :: remove_XSS(api_convert_encoding($row['description'], $platform_charset, $this->encoding));
-			//$row['title'] = Security :: remove_XSS($row['title']);
+
 			$arrLP[] = array (
-				'id' => $row['id'],
-				'item_type' => $row['item_type'],
-				'title' => $row['title'],
-				'path' => $row['path'],
-				'description' => $row['description'],
-				'parent_item_id' => $row['parent_item_id'],
-				'previous_item_id' => $row['previous_item_id'],
-				'next_item_id' => $row['next_item_id'],
-				'max_score' => $row['max_score'],
-				'min_score' => $row['min_score'],
-				'mastery_score' => $row['mastery_score'],
-				'display_order' => $row['display_order']
+				'id' 				=> $row['id'],
+				'item_type' 		=> $row['item_type'],
+				'title' 			=> $row['title'],
+				'path' 				=> $row['path'],
+				'description' 		=> $row['description'],
+				'parent_item_id' 	=> $row['parent_item_id'],
+				'previous_item_id' 	=> $row['previous_item_id'],
+				'next_item_id' 		=> $row['next_item_id'],
+				'max_score' 		=> $row['max_score'],
+				'min_score' 		=> $row['min_score'],
+				'mastery_score' 	=> $row['mastery_score'],
+				'display_order' 	=> $row['display_order']
 			);
 		}
 

@@ -12,7 +12,7 @@ $web_path = api_get_path(WEB_CODE_PATH);
 $getid3_path = api_get_path(LIBRARY_PATH);
 
 
-require_once($getid3_path."getid3/getid3.php");
+require_once $getid3_path.'getid3/getid3.php';
 
 function getFLVDuration($flv_path) {
 	$getid3 = new getID3;

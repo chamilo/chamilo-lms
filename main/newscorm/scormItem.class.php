@@ -7,7 +7,7 @@
 /**
  * This class handles the <item> elements from an imsmanifest file.
  */
-require_once('learnpathItem.class.php');
+require_once 'learnpathItem.class.php';
 class scormItem extends learnpathItem{
 	var $identifier = '';
 	var $identifierref = '';

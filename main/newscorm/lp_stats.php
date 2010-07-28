@@ -9,7 +9,7 @@
  */
 
 require_once 'learnpath.class.php';
-//require_once('scorm.class.php');
+//require_once 'scorm.class.php';
 require_once 'resourcelinker.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
@@ -189,8 +189,8 @@ if (is_array($list) && count($list) > 0) {
 		$result = Database::query($sql);
 		$num = Database :: num_rows($result);
 		$time_for_total = 'NaN';
-		
-		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);					
+
+		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
 		if (($extend_this || $extend_all) && $num > 0) {
 			$row = Database :: fetch_array($result);
@@ -233,7 +233,7 @@ if (is_array($list) && count($list) > 0) {
 			}
 
 			$counter++;
-						
+
 			do {
 				$row['iv_view_count'];
 				//check if there are interactions below
@@ -298,8 +298,8 @@ if (is_array($list) && count($list) > 0) {
 				);
 
 				$my_lesson_status = api_convert_encoding(get_lang($mylanglist[$lesson_status]), $lp_charset, $dokeos_charset);
-		
-				
+
+
 
 				if ($row['item_type'] != 'dokeos_chapter') {
 					if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -374,7 +374,7 @@ if (is_array($list) && count($list) > 0) {
 					}
 				}
 			} while ($row = Database :: fetch_array($result));
-			
+
 		} elseif ($num > 0) {
 			$row = Database :: fetch_array($result);
 			$my_id = $row['myid'];
@@ -486,7 +486,7 @@ if (is_array($list) && count($list) > 0) {
 						} else {
 							$score = 0;
 							$subtotal_time =  0;
-							
+
 						}
 						//echo $subtotal_time ;
 						//$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
@@ -573,7 +573,7 @@ if (is_array($list) && count($list) > 0) {
 					 if ($row['item_type'] == 'quiz') {
 
 					 	if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-							$output .= Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting')); 
+							$output .= Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
 						} else {
 							$output .= ($score == 0 ? '0/'.float_format($maxscore, 1) : ($maxscore == 0 ? $score : float_format($score, 1) . '/' . float_format($maxscore, 1)));
 						}
@@ -655,7 +655,7 @@ if (is_array($list) && count($list) > 0) {
 								$mytime = ((int)$mktime_exe_date-(int)$mktime_start_date);
 								$time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
 								$time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);
-						
+
 								if (!$is_allowed_to_edit && $result_disabled_ext_all) {
 									$view_score =  Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
 								} else {
@@ -681,7 +681,7 @@ if (is_array($list) && count($list) > 0) {
 									} else {
 										$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id .$from_link. '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';
 									}
-								} else {									
+								} else {
 									if (!$is_allowed_to_edit && $result_disabled_ext_all ) {
 										$output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></td>';
 									} else {
@@ -718,18 +718,18 @@ if (!empty($a_my_id)) {
 	}
 	$total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id);
 } else {
-	
+
 	if ($origin == 'tracking') {
 		$my_studen_id = $student_id;
 		$my_course_id = Database::escape_string($_GET['course']);
 		if (!empty($my_studen_id) && !empty($my_course_id)) {
 			$total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, array(intval($_GET['lp_id'])));
 		} else {
-			$total_score = 0; 
-		}		
+			$total_score = 0;
+		}
 	} else {
 		$total_score = 0;
-	}	
+	}
 }
 
 $total_time = learnpathItem :: get_scorm_time('js', $total_time);
@@ -743,7 +743,7 @@ if(!$is_allowed_to_edit && $result_disabled_ext_all) {
 } else {
 	if (is_numeric($total_score))
 		$final_score = $total_score.'%';
-	else 
+	else
 		$final_score = $total_score;
 }
 

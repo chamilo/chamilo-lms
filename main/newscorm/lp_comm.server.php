@@ -13,7 +13,7 @@
 $use_anonymous = true;
 // name of the language file that needs to be included
 $language_file[] = 'learnpath';
-require_once('back_compat.inc.php');
+require_once 'back_compat.inc.php';
 /**
  * Backup an item's values into the javascript API as "old" values (so we still have them at hand)
  * @param	integer	Learnpath ID
@@ -64,12 +64,12 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 	$debug=0;
 	if($debug>0){error_log('In xajax_save_item('.$lp_id.','.$user_id.','.$view_id.','.$item_id.','.$score.','.$max.','.$min.',"'.$status.'",'.$time.',"'.$suspend.'","'.$location.'","'.(count($interactions)>0?$interactions[0]:'').'","'.$core_exit.'")',0);}
 	$objResponse = new xajaxResponse();
-	require_once('learnpath.class.php');
-	require_once('scorm.class.php');
-	require_once('aicc.class.php');
-	require_once('learnpathItem.class.php');
-	require_once('scormItem.class.php');
-	require_once('aiccItem.class.php');
+	require_once 'learnpath.class.php';
+	require_once 'scorm.class.php';
+	require_once 'aicc.class.php';
+	require_once 'learnpathItem.class.php';
+	require_once 'scormItem.class.php';
+	require_once 'aiccItem.class.php';
 	$mylp = '';
 	if(isset($_SESSION['lpobject']))
 	{
@@ -205,12 +205,12 @@ function save_objectives($lp_id,$user_id,$view_id,$item_id,$objectives=array())
 	$debug=0;
 	if($debug>0){error_log('In xajax_save_objectives('.$lp_id.','.$user_id.','.$view_id.','.$item_id.',"'.(count($objectives)>0?count($objectives):'').'")',0);}
 	$objResponse = new xajaxResponse();
-	require_once('learnpath.class.php');
-	require_once('scorm.class.php');
-	require_once('aicc.class.php');
-	require_once('learnpathItem.class.php');
-	require_once('scormItem.class.php');
-	require_once('aiccItem.class.php');
+	require_once 'learnpath.class.php';
+	require_once 'scorm.class.php';
+	require_once 'aicc.class.php';
+	require_once 'learnpathItem.class.php';
+	require_once 'scormItem.class.php';
+	require_once 'aiccItem.class.php';
 	$mylp = '';
 	if(isset($_SESSION['lpobject']))
 	{
@@ -260,12 +260,12 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 	 * -'last'
 	 * - a real item ID
 	 */
-	require_once('learnpath.class.php');
-	require_once('scorm.class.php');
-	require_once('aicc.class.php');
-	require_once('learnpathItem.class.php');
-	require_once('scormItem.class.php');
-	require_once('aiccItem.class.php');
+	require_once 'learnpath.class.php';
+	require_once 'scorm.class.php';
+	require_once 'aicc.class.php';
+	require_once 'learnpathItem.class.php';
+	require_once 'scormItem.class.php';
+	require_once 'aiccItem.class.php';
 	$mylp = '';
 	if(isset($_SESSION['lpobject']))
 	{
@@ -450,6 +450,6 @@ function start_timer()
 	return $objResponse;
 }
 
-require('lp_comm.common.php');
+require 'lp_comm.common.php';
 $xajax->processRequests();
 ?>

@@ -10,7 +10,7 @@
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
-require_once('back_compat.inc.php');
+require_once 'back_compat.inc.php';
 $course_dir  = api_get_course_path().'/scorm';
 $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_dir;
 if ( empty($_POST['current_dir']) ) {
@@ -48,11 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 
 	$new_dir = replace_dangerous_char(trim($file_base_name),'strict');
 
-	require_once('learnpath.class.php');
+	require_once 'learnpath.class.php';
 	$type = learnpath::get_package_type($_FILES['user_file']['tmp_name'],$_FILES['user_file']['name']);
 	switch($type){
 		case 'scorm':
-			require_once('scorm.class.php');
+			require_once 'scorm.class.php';
 			$oScorm = new scorm();
 			$manifest = $oScorm->import_package($_FILES['user_file'],$current_dir);
 			if (!$manifest) { //if api_set_failure
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 			$oScorm->set_jslib('scorm_api.php');
 			break;
 		case 'aicc':
-			require_once('aicc.class.php');
+			require_once 'aicc.class.php';
 			$oAICC = new aicc();
 			$config_dir = $oAICC->import_package($_FILES['user_file']);
 			if(!empty($config_dir)){
@@ -90,13 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 			$oAICC->set_jslib('aicc_api.php');
 			break;
 		case 'oogie':
-			require_once('openoffice_presentation.class.php');
+			require_once 'openoffice_presentation.class.php';
 			$take_slide_name = empty($_POST['take_slide_name']) ? false : true;
 			$o_ppt = new OpenofficePresentation($take_slide_name);
 			$first_item_id = $o_ppt -> convert_document($_FILES['user_file']);
 			break;
 		case 'woogie':
-			require_once('openoffice_text.class.php');
+			require_once 'openoffice_text.class.php';
 			$split_steps = $_POST['split_steps'];
 			$o_doc = new OpenofficeText($split_steps);
 			$first_item_id = $o_doc -> convert_document($_FILES['user_file']);
@@ -124,12 +124,12 @@ elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 	$file_base_name = str_replace('.'.$extension,'',$filename);
 	$new_dir = replace_dangerous_char(trim($file_base_name),'strict');
 
-	require_once('learnpath.class.php');
+	require_once 'learnpath.class.php';
 
 	$type = learnpath::get_package_type($s,basename($s));
 	switch($type){
 		case 'scorm':
-			require_once('scorm.class.php');
+			require_once 'scorm.class.php';
 			$oScorm = new scorm();
 			$manifest = $oScorm->import_local_package($s,$current_dir);
 			if ($manifest === false ) { //if api_set_failure
@@ -149,7 +149,7 @@ elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 			$oScorm->set_jslib('scorm_api.php');
 			break;
 		case 'aicc':
-			require_once('aicc.class.php');
+			require_once 'aicc.class.php';
 			$oAICC = new aicc();
 			$config_dir = $oAICC->import_local_package($s,$current_dir);
 			if(!empty($config_dir)){

@@ -9,11 +9,12 @@
  * Defines the "aicc" child of class "learnpath"
  * @package dokeos.learnpath.aicc
  */
-require_once('aiccItem.class.php');
-//require_once('aiccMetadata.class.php');
-//require_once('aiccOrganization.class.php');
-require_once('aiccResource.class.php');
-require_once('aiccBlock.class.php');
+require_once 'aiccItem.class.php';
+//require_once 'aiccMetadata.class.php';
+//require_once 'aiccOrganization.class.php';
+require_once 'aiccResource.class.php';
+require_once 'aiccBlock.class.php';
+
 class aicc extends learnpath {
 
 	var $config = array();
@@ -663,11 +664,11 @@ class aicc extends learnpath {
 	 	//error_log('New LP - in export_zip()',0);
 	 	//zip everything that is in the corresponding scorm dir
 	 	//write the zip file somewhere (might be too big to return)
-		require_once (api_get_path(LIBRARY_PATH)."fileUpload.lib.php");
-		require_once (api_get_path(LIBRARY_PATH)."fileManage.lib.php");
-		require_once (api_get_path(LIBRARY_PATH)."document.lib.php");
-		require_once (api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
-		require_once ("learnpath_functions.inc.php");
+		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
+		require_once 'learnpath_functions.inc.php';
 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 		$_course = Database::get_course_info(api_get_course_id());
 

@@ -11,11 +11,11 @@
  * Defines the "OpenofficePresentation" child of class "OpenofficeDocument"
  * @package dokeos.learnpath.OpenofficeDocument
  */
-require_once('openoffice_document.class.php');
+require_once 'openoffice_document.class.php';
 if (api_get_setting('search_enabled')=='true') {
-	require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
-	require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
-	require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+	require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+	require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
+	require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 }
 
 class OpenofficePresentation extends OpenofficeDocument {

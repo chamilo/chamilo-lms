@@ -49,9 +49,9 @@ api_protect_course_script();
 //the main_api.lib.php, database.lib.php and display.lib.php
 //libraries are included by default
 
-include('learnpath_functions.inc.php');
-//include('../resourcelinker/resourcelinker.inc.php');
-include('resourcelinker.inc.php');
+include 'learnpath_functions.inc.php';
+//include '../resourcelinker/resourcelinker.inc.php';
+include 'resourcelinker.inc.php';
 //rewrite the language file, sadly overwritten by resourcelinker.inc.php
 // name of the language file that needs to be included
 $language_file = 'learnpath';

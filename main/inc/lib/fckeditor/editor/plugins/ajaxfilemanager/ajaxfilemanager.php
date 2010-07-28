@@ -5,13 +5,13 @@
 	 * @link www.phpletter.com
 	 * @since 22/May/2007
 	 *
-	 * Modify system config setting for Dokeos
-	 * @author Juan Carlos RaÃ±a
+	 * Modify system config setting for Chamilo
+	 * @author Juan Carlos Raña Trabado
 	 * @since 31/December/2008
 	 */
 
-	include ('../../../../../../inc/global.inc.php'); // Integrating with Dokeos
-	api_block_anonymous_users();// from Dokeos
+	include ('../../../../../../inc/global.inc.php'); // Integrating with Chamilo
+	api_block_anonymous_users();// from Chamilo
 
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 	//$session->gc(); // Disabled for integration with Chamilo
@@ -88,6 +88,24 @@
 	var globalSettings = {'upload_init':false};
 	var queryString = '<?php echo makeQueryString(array('path')); ?>';
 	var paths = {'root':'<?php echo addTrailingSlash(backslashToSlash(CONFIG_SYS_ROOT_PATH)); ?>', 'root_title':'<?php echo LBL_FOLDER_ROOT; ?>'};
+	
+	<!-- Chamilo hack for breadcrumb into shared folders -->
+	var shared_folder = '<?php echo get_lang('SharedDocumentsDirectory');?>';
+	
+	<?php 
+	$course_session = explode('_', basename($currentPath));
+	$course_session = strtolower($course_session[sizeof($course_session) - 1]);
+	?>
+	var shared_folder_session = '<?php echo get_lang('SharedDocumentsDirectory').' ('.api_get_session_name($course_session).')';?>';
+
+	<?php 
+	
+	//$userinfo=Database::get_user_info_from_id(substr(basename($folderInfo['path']), 8));	// problem with $folderInfo['path'] does not refresh?>
+	//var shared_user_folder = '<?php //echo api_get_person_name($userinfo['firstname'], $userinfo['lastname']);?>';
+	var shared_user_folder = '<?php echo get_lang('User');?>';
+
+	<!--end hack -->
+	
 	var parentFolder = {};
 	var urls = {
 			'upload':'<?php echo CONFIG_URL_UPLOAD; ?>',
@@ -209,16 +227,16 @@ $(document).ready(
 <body style="background-color:#E8E8E8;" dir="<?php echo CONFIG_LANG_TEXT_DIRECTION_DEFAULT; ?>"><!-- hack for lang default Chamilo -->
 	<div id="wrapper">
   	<div id="header">
-  		<dl id="currentFolderInfo">
+  		<dl id="currentFolderInfo">        
   			<dt><?php echo LBL_CURRENT_FOLDER_PATH; ?></dt>
-  			<dt id="currentFolderPath"><?php echo $folderInfo['path']; ?></dt><!-- hack for breadcrumb for Dokeos change <dd> by <dt> -->
-
+  			<dt id="currentFolderPath"><?php echo $folderInfo['path']; ?></dt><!-- hack for breadcrumb for Chamilo change <dd> by <dt> -->
   		</dl>
     	<div id="viewList">
-    		
+    	
     	
     			<label><?php echo LBL_BTN_VIEW_OPTIONS; ?></label>
-					<?php 
+                
+					<?php
 						foreach($views as $k=>$v)
 						{
 							?>
@@ -295,14 +313,14 @@ $(document).ready(
     </div>
     
     <div id="body">
-         
-         
+        
       <div id="rightCol">
 	      	<?php
 			if(CONFIG_LOAD_DOC_LATTER )
 			{
 				$currentPath = getCurrentFolderPath();
 				?>
+                
 				<script type="text/javascript">
 				parentFolder = {path:'<?php echo getParentFolderPath($currentPath); ?>'}; 
 				currentFolder = {'friendly_path':'<?php echo transformFilePath($currentPath); ?>'};
@@ -333,7 +351,7 @@ $(document).ready(
       
       <div id="leftCol">
       
-
+ 
 
 				<fieldset id="folderFieldSet" >
 					
@@ -343,7 +361,7 @@ $(document).ready(
 						<tr>
 							<th><?php echo LBL_FOLDER_PATH; ?></th>
 							<td colspan="3" id="folderPath"><?php echo transformFilePath($folderInfo['path']); ?></td>
-						</tr>
+  						</tr>
 						<tr>
 							<th><?php echo LBL_FOLDER_CREATED; ?></th>
 							<td colspan="3" id="folderCtime"><?php echo (!empty($folderInfo['ctime'])?date(DATE_TIME_FORMAT,$folderInfo['ctime']):'&nbsp;') ; ?></td>
@@ -351,7 +369,7 @@ $(document).ready(
 						</tr>
 						<tr>
 							<th><?php echo LBL_FOLDER_MODIFIED; ?></th>
-							 <!-- comment these lines while integrating into dokeos -->
+							 <!-- comment these lines while integrating into Chamilo -->
 							<th><?php //echo LBL_FOLDER_MODIFIED; ?></th>
 						<!--	<td colspan="3" id="folderMtime"><?php //echo (!empty($folderInfo['mtime'])?date(DATE_TIME_FORMAT,$folderInfo['mtime']):'&nbsp;'); ?></td> -->
 						</tr>
@@ -366,7 +384,7 @@ $(document).ready(
 						</tr>
 						
 						<tr>
-							 <!-- comment these lines while integrating into dokeos -->
+							 <!-- comment these lines while integrating into Chamilo -->
 							<th><?php // echo LBL_FOLDER_WRITABLE; ?></th>
 						<!--	<td id="folderWritable"><span class="<?php //echo (isset($folderInfo['is_readable'])?($folderInfo['is_readable']?'flagYes':'flagNo'):'&nbsp;'); ?>">&nbsp;</span></td> -->
 							<th><?php // echo LBL_FOLDER_READABLE; ?></th>
@@ -389,7 +407,7 @@ $(document).ready(
 
 						</tr>
 						<tr>
-							 <!-- comment these lines while integrating into dokeos -->
+							 <!-- comment these lines while integrating into Chamilo -->
 							<th><?php //echo LBL_FILE_MODIFIED; ?></th>
 							<!--<td colspan="3" id="fileMtime"></td> -->
 						</tr>
@@ -404,7 +422,7 @@ $(document).ready(
 							<td  colspan="3" id="fileType"></td>						
 						</tr>
 						<tr>
-							 <!-- comment these lines while integrating into dokeos -->
+							 <!-- comment these lines while integrating into Chamilo -->
 							<th><?php //echo LBL_FILE_WRITABLE; ?></th>
 							<!--<td id="fileWritable"><span class="flagYes">&nbsp;</span></td> -->
 							<th><?php //echo LBL_FILE_READABLE; ?></th>
@@ -434,7 +452,7 @@ $(document).ready(
           	<tbody>
 	          <tr>
 	          	<td>
-	          		<!-- comment these lines while integrating into dokeos -->
+	          		<!-- comment these lines while integrating into Chamilo -->
 	          		<b><?php //echo LBL_SEARCH_NAME; ?></b> <br />
 	            	<input type="text" class="input inputSearch" name="search_name" id="search_name" />
 	          	</td>
@@ -442,7 +460,7 @@ $(document).ready(
 	         </tr>
 	          <tr>
 	          	<td >
-	          	 <!-- comment these lines while integrating into dokeos -->
+	          	 <!-- comment these lines while integrating into Chamilo -->
 	          	<b><?php // echo LBL_SEARCH_FOLDER; ?></b><br />
 	          	<span id="searchFolderContainer">
 	          	<?php
@@ -462,17 +480,17 @@ $(document).ready(
 	          		}else 
 	          		{
 	          	?>
-		            <select class="input inputSearch" name="search_folder" id="search_folder">
+             
+		            <select class="input inputSearchSelect" name="search_folder" id="search_folder"><!-- Chamilo integrating, modify name class for disable by css -->
 		            	<?php 
 		            		
 										foreach(getFolderListing(CONFIG_SYS_ROOT_PATH) as $k=>$v)
 										{
-											//////////////
 											if(hideFolderName($k))
 											{
-												//shows only those permitted by Dokeos
+												//show only those permitted by Chamilo
 												?>
-		                  						<option value="<?php echo $v; ?>" <?php echo (removeTrailingSlash(backslashToSlash(($folderInfo['path']))) == removeTrailingSlash(backslashToSlash(($v)))?' selected="selected"':''); ?>><?php echo hideFolderName(shortenFileName($k, 30)); // shows only those permitted by Dokeos
+		                  						<option value="<?php echo $v; ?>" <?php echo (removeTrailingSlash(backslashToSlash(($folderInfo['path']))) == removeTrailingSlash(backslashToSlash(($v)))?' selected="selected"':''); ?>><?php echo hideFolderName(shortenFileName($k, 30));
 												?></option>
 
 		                  <?php 
@@ -492,16 +510,16 @@ $(document).ready(
         		<!--<input type="text" class="input inputMtime" name="search_mtime_from" id="search_mtime_from" value="<?php //echo (!empty($_GET['search_mtime_from'])?$_GET['search_mtime_from']:''); ?>" />  -->
         		<!--<span class="leftToRightArrow">&nbsp;</span> -->
         		<!--<input type="text" class="input inputMtime" name="search_mtime_to" id="search_mtime_to" value="<?php //echo (!empty($_GET['search_mtime_to'])?$_GET['search_mtime_to']:''); ?>" /> -->
-                 <!--This lines replace above lines while integrating into dokeos -->
+                 <!--This lines replace above lines while integrating into Chamilo -->
                 <input type="hidden" name="search_mtime_from" id="search_mtime_from" value="<?php //echo (!empty($_GET['search_mtime_from'])?$_GET['search_mtime_from']:''); ?>" />
         		<input type="hidden" name="search_mtime_to" id="search_mtime_to" value="<?php //echo (!empty($_GET['search_mtime_to'])?$_GET['search_mtime_to']:''); ?>" />        
         	<!--</td></tr>
 
 			<tr>
-				<td>  <!-- comment these lines while integrating into dokeos -->
+				<td>  <!-- comment these lines while integrating into Chamilo -->
                 </td><td><!--add a col while integrating -->
           	<b><?php  // echo LBL_SEARCH_RECURSIVELY; ?></b>&nbsp;&nbsp;
-		<!--change for Dokeos recursively by default  -->
+		<!--change for Chamilo recursively by default  -->
      <!--     	<input type="radio" name="search_recursively" value="1" id="search_recursively_1" class="radio" <?php //echo (empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_YES; ?> -->       
         <!--  	<input type="radio" name="search_recursively" value="0" id="search_recursively_0" class="radio" <?php //echo (!empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_NO; ?> -->
           	</td>
@@ -515,7 +533,7 @@ $(document).ready(
        	
         <p class="searchButtons">
         	<span class="left" id="linkClose" style="display:none">
-                  <!-- comment these lines while integrating into Dokeos -->
+                  <!-- comment these lines while integrating into Chamilo -->
         		<!--<input  type="button" value="<?php // echo LBL_ACTION_CLOSE; ?>" onclick="return cancelSelectFile();"  class="button"> -->
         	</span>
         	<span class="right" id="linkSearch">
@@ -533,8 +551,6 @@ $(document).ready(
   
   </div>
   <div class="clear"></div>
-
-
   
   <div id="ajaxLoading" style="display:none"><img class="ajaxLoadingImg" src="theme/<?php echo CONFIG_THEME_NAME; ?>/images/ajaxLoading.gif" /></div>
   <div id="winUpload" style="display:none">
@@ -728,7 +744,7 @@ $(document).ready(
   	<ul>
   		<li><a href="#" class="contentMenuItem" id="menuSelect"><?php echo MENU_SELECT; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuPreview"><?php echo MENU_PREVIEW; ?></a></li>
-  		<!--	<li><a href="#" class="contentMenuItem"  id="menuDownload"><?php echo MENU_DOWNLOAD; ?></a></li> Dokeos temporarily disable contextual menu download -->
+  		<!--	<li><a href="#" class="contentMenuItem"  id="menuDownload"><?php echo MENU_DOWNLOAD; ?></a></li> Chamilo temporarily disable contextual menu download -->
   		<li><a href="#" class="contentMenuItem"  id="menuRename"><?php echo MENU_RENAME; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuEdit"><?php echo MENU_EDIT; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuCut"><?php echo MENU_CUT; ?></a></li>

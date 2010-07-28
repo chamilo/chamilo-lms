@@ -47,13 +47,13 @@ if(!empty($_REQUEST['aicc_sid']))
 	if($debug>1){error_log('New LP - '.__FILE__.','.__LINE__.' - reusing session ID '.$_REQUEST['aicc_sid'],0);}
 }
 //Load common libraries using a compatibility script to bridge between 1.6 and 1.8
-require_once('back_compat.inc.php');
+require_once 'back_compat.inc.php';
 if($debug>2){error_log('New LP - '.__FILE__.','.__LINE__.' - Current session ID: '.session_id(),0);}
 //Load learning path libraries so we can use the objects to define the initial values
 //of the API
-require_once('learnpath.class.php');
-require_once('learnpathItem.class.php');
-require_once('aicc.class.php');
+require_once 'learnpath.class.php';
+require_once 'learnpathItem.class.php';
+require_once 'aicc.class.php';
 
 // Is this needed? This is probabaly done in the header file
 //$_user							= $_SESSION['_user'];

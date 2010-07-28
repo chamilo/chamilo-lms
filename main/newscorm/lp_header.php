@@ -11,10 +11,10 @@
 $use_anonymous = true;
 // name of the language file that needs to be included
 $language_file[] = "scormdocument";
-require_once('back_compat.inc.php');
-require_once('learnpath.class.php');
-require_once('scorm.class.php');
-require_once('aicc.class.php');
+require_once 'back_compat.inc.php';
+require_once 'learnpath.class.php';
+require_once 'scorm.class.php';
+require_once 'aicc.class.php';
 if(isset($_SESSION['lpobject'])){
 	$temp = $_SESSION['lpobject'];
 	$_SESSION['oLP'] = unserialize($temp);
@@ -68,7 +68,7 @@ if($show_link)
 $interbreadcrumb[] = array("url"=>"./lp_controller.php?action=view&lp_id=".$path_id,'name'=>$path_name);
 $noPHP_SELF = true;
 $lp_theme_css=$_SESSION['oLP']->get_theme();
-include('../inc/reduced_header.inc.php');
+include '../inc/reduced_header.inc.php';
 echo '<div style="font-size:14px;padding-left: 17px;">';
 echo '<table ><tr><td>';
 echo '<a href="./lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">';

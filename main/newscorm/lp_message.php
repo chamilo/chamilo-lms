@@ -20,9 +20,9 @@
 $use_anonymous = true;
 // name of the language file that needs to be included
 $language_file = "learnpath";
-require_once('back_compat.inc.php');
-require_once('learnpath.class.php');
-require_once('scorm.class.php');
+require_once 'back_compat.inc.php';
+require_once 'learnpath.class.php';
+require_once 'scorm.class.php';
 if(empty($debug)){$debug=0;}
 $error = '';
 $display_mode = '';
@@ -39,7 +39,7 @@ $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 </script>';
 $lp_theme_css=$_SESSION['oLP']->get_theme();
 $scorm_css_header=true;
-include_once('../inc/reduced_header.inc.php');
+include_once '../inc/reduced_header.inc.php';
 //close the session immediately to avoid concurrent access problems
 session_write_close();
 ?>

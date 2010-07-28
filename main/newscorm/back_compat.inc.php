@@ -6,11 +6,11 @@
  * something like lp_includes.inc.php
  * @package dokeos.learnpath
  */
-require_once('../inc/global.inc.php');
-require_once(api_get_path(LIBRARY_PATH) . 'database.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php'); //replace_dangerous_char()
-require_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php'); //check_name_exists()
-require_once(api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'database.lib.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php'; //replace_dangerous_char()
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php'; //check_name_exists()
+require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 ?>

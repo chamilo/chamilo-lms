@@ -10,10 +10,10 @@ $use_anonymous = true;
 $language_file[] = "scormdocument";
 $language_file[] = "scorm";
 $language_file[] = "learnpath";
-require_once('back_compat.inc.php');
-require_once('learnpath.class.php');
-require_once('scorm.class.php');
-require_once('aicc.class.php');
+require_once 'back_compat.inc.php';
+require_once 'learnpath.class.php';
+require_once 'scorm.class.php';
+require_once 'aicc.class.php';
 
 if(isset($_SESSION['lpobject']))
 {
@@ -33,7 +33,7 @@ $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 $scorm_css_header=true;
 $display_mode='';
 $lp_theme_css=$_SESSION['oLP']->get_theme();
-include_once('../inc/reduced_header.inc.php');
+include_once '../inc/reduced_header.inc.php';
 ?>
 <body>
   <?php  echo $_SESSION['oLP']->get_html_toc();?><br/>

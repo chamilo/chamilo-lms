@@ -42,9 +42,9 @@ $use_anonymous = true;
 $language_file = "scormdocument";
 $uncompress=1; //this variable shouldn't be found here (find its usage before removal)
 
-require_once('back_compat.inc.php');
-include('learnpath_functions.inc.php');
-include_once('scorm.lib.php');
+require_once 'back_compat.inc.php';
+include 'learnpath_functions.inc.php';
+include_once 'scorm.lib.php';
 
 $is_allowedToEdit = api_is_allowed_to_edit();
 

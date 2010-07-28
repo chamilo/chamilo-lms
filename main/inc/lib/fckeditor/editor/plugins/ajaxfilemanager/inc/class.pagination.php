@@ -527,53 +527,59 @@ class pagination
 		switch($type)
 		{
 			case "2":
-				$output .= "<span class=\"pagination_summany\">" . $this->getFirstItem() . " to " . $this->getLastItem() . " of " . $this->getTotal() . " results.</span> ";	
-			if($previousUrl = $this->getPreviousUrl())
-			{
-				$output .= " " . $previousUrl;
-			}
+				//comment while integrating with Chamilo
+			
+				//$output .= "<span class=\"pagination_summany\">" . $this->getFirstItem() . " to " . $this->getLastItem() . " of " . $this->getTotal() . " results.</span> ";	
+			//if($previousUrl = $this->getPreviousUrl())
+			//{
+			//	$output .= " " . $previousUrl;
+			//}
 
-			if($nextUrl = $this->getNextUrl())
+			//if($nextUrl = $this->getNextUrl())
 			{
-				$output .= " " . $nextUrl;
+			//	$output .= " " . $nextUrl;
 			}							
 				break;
 			case 1:
 				//get full summary pagination
 			default:
-				$output .= "<span class=\"pagination_summany\">" . $this->getFirstItem() . "/" . $this->getLastItem() . " (" . $this->getTotal() . ")</span> ";
-			if($firstUrl = $this->getFirstUrl())
-			{
-				$output .= " " . $firstUrl;
-			}
-			if($previousUrl = $this->getPreviousUrl())
-			{
-				$output .= " " . $previousUrl;
-			}
+				//$output .= "<span class=\"pagination_summany\">" . $this->getFirstItem() . "/" . $this->getLastItem() . " (" . $this->getTotal() . ")</span> ";
+			//if($firstUrl = $this->getFirstUrl())
+			//{
+			//	$output .= " " . $firstUrl;
+			//}
+			//if($previousUrl = $this->getPreviousUrl())
+			//{
+			//	$output .= " " . $previousUrl;
+			//}
 
-			if($groupUrls = $this->getGroupUrls())
-			{
-				$output .= " " . $groupUrls;
-			}
-			if($nextUrl = $this->getNextUrl())
-			{
-				$output .= " " . $nextUrl;
-			}
-			if($lastUrl = $this->getLastUrl())
-			{
-				$output .= " " . $lastUrl;
-			}
-			$itemPerPage = '';
-			$itemPerPage .= "<select name=\"" . $this->limitIndex . "\" id=\"limit\" class=\"input inputLimit\" onchange=\"changePaginationLimit();\">\n";
-			foreach ($this->limits as $v)
-			{
-				$itemPerPage .= "<option value=\"" . $v . "\" " . ($v==$this->itemsPerPage?'selected="selected"':'') . ">" . $v . "</option>\n";
-			}
-			$itemPerPage .= "</select>\n"; 
-			$output .= "<span class=\"pagination_items_per_page\">";
-			$output .= sprintf(PAGINATION_ITEMS_PER_PAGE, $itemPerPage);
-			$output .= "</span>";
-			$output .= "<span class=\"pagination_parent\"><a href=\"#\" onclick=\"goParentFolder();\" id=\"pagination_parent_link\" title=\"" . PAGINATION_GO_PARENT . "\">&nbsp;</a></span>";
+			//if($groupUrls = $this->getGroupUrls())
+			//{
+			//	$output .= " " . $groupUrls;
+			//}
+			//if($nextUrl = $this->getNextUrl())
+			//{
+			//	$output .= " " . $nextUrl;
+			//}
+			//if($lastUrl = $this->getLastUrl())
+			//{
+			//	$output .= " " . $lastUrl;
+			//}
+			//$itemPerPage = '';
+			//$itemPerPage .= "<select name=\"" . $this->limitIndex . "\" id=\"limit\" class=\"input inputLimit\" onchange=\"changePaginationLimit();\">\n";
+			//foreach ($this->limits as $v)
+			//{
+			//	$itemPerPage .= "<option value=\"" . $v . "\" " . ($v==$this->itemsPerPage?'selected="selected"':'') . ">" . $v . "</option>\n";
+			//}
+			//$itemPerPage .= "</select>\n"; 
+		
+		    $itemPerPage ="100000";//hack for Chamilo
+			//$output .= "<span class=\"pagination_items_per_page\">";
+			//$output .= sprintf(PAGINATION_ITEMS_PER_PAGE, $itemPerPage);
+			//$output .= "</span>";
+			
+			//end comment while integrating with Chamilo
+			$output .= "<span class=\"pagination_parent\"><a href=\"#\" onclick=\"goParentFolder();\" id=\"pagination_parent_link\" title=\"" . PAGINATION_GO_PARENT . "\">&nbsp;".PAGINATION_GO_PARENT."</a></span>";
 		}
 
 		$output .= "</p></div>";

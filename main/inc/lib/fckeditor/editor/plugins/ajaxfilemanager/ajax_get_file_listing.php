@@ -6,12 +6,12 @@
 	 * @link www.phpletter.com
 	 * @since 22/May/2007
 	 *
-	 * Modify for Dokeos
-	 * @author Juan Carlos Raï¿½a
+	 * Modify for Chamilo
+	 * @author Juan Carlos Raña Trabado
 	 * @since 31/December/2008	 
 	 */
 	 
-	include ('../../../../../../inc/global.inc.php'); // Integrating with Dokeos
+	include ('../../../../../../inc/global.inc.php'); // Integrating with Chamilo
 
 	if(!isset($manager))
 	{
@@ -22,7 +22,7 @@
 		include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 		include_once(CLASS_PAGINATION);
 		$pagination = new pagination(false);
-		//$search_folder = str_replace("'","",$_GET['search_folder']); //TODO:check if this line is necessary juan carlos raña 
+		//$search_folder = str_replace("'","",$_GET['search_folder']); //TODO:check if this line is necessary Juan Carlos Raña
 		if(!empty($_GET['search']))
 		{
 			include_once(CLASS_SEARCH);
@@ -69,14 +69,14 @@
 		$pagination->setLastText(PAGINATION_LAST);
 		$pagination->setLimit(!empty($_GET['limit'])?intval($_GET['limit']):CONFIG_DEFAULT_PAGINATION_LIMIT);
 		echo $pagination->getPaginationHTML();
-		///////Dokeos fix for count hidden folders
+		///////Chamilo fix for count hidden folders
 			$count_hideItem =0;
 
-			$deleted_by_dokeos_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
-			$deleted_by_dokeos_folder='_DELETED_';
-			$css_folder_dokeos='css';
-			$hotpotatoes_folder_dokeos='HotPotatoes_files';
-			$chat_files_dokeos='chat_files';
+			$deleted_by_Chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
+			$deleted_by_Chamilo_folder='_DELETED_';
+			$css_folder_Chamilo='css';
+			$hotpotatoes_folder_Chamilo='HotPotatoes_files';
+			$chat_files_Chamilo='chat_files';
 
 		//end previous fix for count hidden folders
 
@@ -91,7 +91,7 @@
 
 		}
 		echo "};\n";
-		// moved below for Dokeos integration $fileList = array_slice($fileList, $pagination->getPageOffset(), $pagination->getLimit());
+		// moved below for Chamilo integration $fileList = array_slice($fileList, $pagination->getPageOffset(), $pagination->getLimit());
 		echo 'numRows = ' . sizeof($fileList) . ";\n";
 		echo "files = {\n";
 		$count = 1;
@@ -112,7 +112,7 @@
 
 			}
 
-			if((!ereg($deleted_by_dokeos_file, $file['name']) || !ereg($deleted_by_dokeos_folder, $file['path'])) || ereg($css_folder_dokeos, $file['path']) || ereg($hotpotatoes_folder_dokeos, $file['path']) || ereg($chat_files_dokeos, $file['path']) || $hide_doc_group || $file['name'][0]=='.')//Dokeos fix for hidden items.
+			if((!ereg($deleted_by_Chamilo_file, $file['name']) || !ereg($deleted_by_Chamilo_folder, $file['path'])) || ereg($css_folder_Chamilo, $file['path']) || ereg($hotpotatoes_folder_Chamilo, $file['path']) || ereg($chat_files_Chamilo, $file['path']) || $hide_doc_group || $file['name'][0]=='.')//Chamilo fix for hidden items.
 			{
 
 				$count_hideItem=$count_hideItem+1;
@@ -136,7 +136,7 @@
 			echo (($j++ > 1)?",":'') . "'url':'" . getFileUrl($file['path']) . "'";
 			echo "}\n";				
 		}
-		$fileList = array_slice($fileList, $pagination->getPageOffset(), $pagination->getLimit());//Dokeos fix for hidden files added +$count_hideItem
+		$fileList = array_slice($fileList, $pagination->getPageOffset(), $pagination->getLimit());//Chamilo fix for hidden files added +$count_hideItem
 
 		echo  "};</script>\n";
 	if(!empty($_GET['view']))

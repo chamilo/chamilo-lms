@@ -9,7 +9,7 @@
  * Class defining the Block elements in an AICC Course Structure file
  *
  */
-require_once('learnpathItem.class.php');
+require_once 'learnpathItem.class.php';
 class aiccBlock extends learnpathItem{
 	var $identifier = '';
 	var $members = array();

@@ -14,7 +14,7 @@
 $use_anonymous = true;
 // name of the language file that needs to be included
 $language_file[] = 'learnpath';
-require_once('back_compat.inc.php');
+require_once 'back_compat.inc.php';
 /**
  * Write a log with the current message
  * @param   string Message
@@ -25,7 +25,7 @@ function lp_ajax_log($msg, $level) {
     $return = '';
     if ($debug>0) {error_log('In log('.$msg.')',0);}
     if ($level == 0) {
-	//error_log('Logging level too low, not writing files in '.__FILE__); 
+	//error_log('Logging level too low, not writing files in '.__FILE__);
 	return $return;
     }
     $msg = str_replace('<br />',"\r\n", $msg);

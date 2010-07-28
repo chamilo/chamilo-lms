@@ -13,13 +13,13 @@
 //Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
 if(isset($_GET['src'])) {
 	// including the global file
-	require_once '../inc/global.inc.php';	
+	require_once '../inc/global.inc.php';
 	api_protect_course_script();
 	//get parameter only came from lp_view.php
 	$url_info 		= parse_url($_GET['src']);
 	$real_url_info	= parse_url(api_get_path(WEB_PATH));
-	
-	//the host must be the same 
+
+	//the host must be the same
 	if ($url_info['host'] == $real_url_info['host']) {
 		header("Location: ".urldecode(Security::remove_XSS($_GET['src'])));
 		exit;
@@ -46,7 +46,7 @@ api_protect_course_script();
 //libraries are included by default
 
 require_once 'learnpath_functions.inc.php';
-//include('../resourcelinker/resourcelinker.inc.php');
+//include '../resourcelinker/resourcelinker.inc.php';
 require_once 'resourcelinker.inc.php';
 //rewrite the language file, sadly overwritten by resourcelinker.inc.php
 // name of the language file that needs to be included

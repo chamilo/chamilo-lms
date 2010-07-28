@@ -8,7 +8,7 @@
 /**
  * This class handles the elements from an AICC Descriptor file.
  */
-require_once('learnpathItem.class.php');
+require_once 'learnpathItem.class.php';
 class aiccItem extends learnpathItem{
 	var $identifier = '';//AICC AU's system_id
 	var $identifierref = '';

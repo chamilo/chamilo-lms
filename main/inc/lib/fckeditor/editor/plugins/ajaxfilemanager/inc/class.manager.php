@@ -5,10 +5,11 @@
 	 * @link www.phpletter.com
 	 * @since 22/April/2007
 	 * 
-	 * Modify for Dokeos
+	 * Modify for Chamilo
 	 * @author Juan Carlos Raña
 	 * @since 31/December/2008
 	 */
+	 
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.file.php");
 class manager
 {
@@ -89,22 +90,33 @@ class manager
 		}
 		if(is_dir($this->currentFolderPath))
 		{
+						  
 			$file = new file($this->currentFolderPath);
 			$folderInfo = $file->getFileInfo();
 			if(sizeof($folderInfo))
 			{
-				//for Dokeos in a name folder, replace num user by user names
-				if(ereg('sf_user_', basename($this->currentFolderPath)))
+				//for Chamilo in a name folder, replace num user by user names
+				if(preg_match('/sf_user_/',basename($this->currentFolderPath)))
 				{
 					$userinfo=Database::get_user_info_from_id(substr(basename($this->currentFolderPath), 8));
 					$this->currentFolderInfo['name']=api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 				}
 				else
 				{
-					$this->currentFolderInfo['name']=str_replace('_',' ',basename($this->currentFolderPath));//for Dokeos. Prevent long directory name
+					$this->currentFolderInfo['name']=str_replace('_',' ',basename($this->currentFolderPath));//for Chamilo. Prevent long directory name
+				}				
+				if(preg_match('/shared_folder/', basename($this->currentFolderPath)))
+				{
+					$this->currentFolderInfo['name']=get_lang('SharedDocumentsDirectory');
 				}
-				//end Chamilo		
-				
+				if(preg_match('/shared_folder_session_/',basename($this->currentFolderPath)))
+				{
+					$session = explode('_', basename($this->currentFolderPath));
+					$session = strtolower($session[sizeof($session) - 1]);
+					$this->currentFolderInfo['name']=get_lang('SharedDocumentsDirectory').' ('.api_get_session_name($session).')*';
+				}
+			
+				//end Chamilo
 				$this->currentFolderInfo['subdir']=0;
 				$this->currentFolderInfo['file']=0;
 				$this->currentFolderInfo['ctime']=$folderInfo['ctime'];
@@ -184,11 +196,11 @@ class manager
 					if(is_dir($path) && isListingDocument($path) )
 					{
 						$this->currentFolderInfo['subdir']++;
-						//fix count left folders for Dokeos
-						$deleted_by_dokeos_folder='_DELETED_';
-						$css_folder_dokeos='css';
-						$hotpotatoes_folder_dokeos='HotPotatoes_files';
-						$chat_files_dokeos='chat_files';
+						//fix count left folders for Chamilo
+						$deleted_by_Chamilo_folder='_DELETED_';
+						$css_folder_Chamilo='css';
+						$hotpotatoes_folder_Chamilo='HotPotatoes_files';
+						$chat_files_Chamilo='chat_files';
 						//show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?
 						$group_folder='_groupdocs';
 						$hide_doc_group=false;
@@ -202,11 +214,11 @@ class manager
 
 						}
 
-						if(ereg($deleted_by_dokeos_folder, $path)|| ereg($css_folder_dokeos, $path) || ereg($hotpotatoes_folder_dokeos, $path) || ereg($chat_files_dokeos, $path) || $hide_doc_group || $file[0]=='.')
+						if(ereg($deleted_by_Chamilo_folder, $path)|| ereg($css_folder_Chamilo, $path) || ereg($hotpotatoes_folder_Chamilo, $path) || ereg($chat_files_Chamilo, $path) || $hide_doc_group || $file[0]=='.')
 						{
 							$this->currentFolderInfo['subdir']=$this->currentFolderInfo['subdir']-1;
 						}
-						//end fix for Dokeos						
+						//end fix for Chamilo						
 
 						if(!$this->calculateSubdir)
 						{			
@@ -234,13 +246,13 @@ class manager
 								}
 								$this->currentFolderInfo['size'] += $tem['size'];
 								$this->currentFolderInfo['file']++;
-								//fix count left files for Dokeos
-								$deleted_by_dokeos_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
-								if(ereg($deleted_by_dokeos_file, $tem['name']) || $tem['name'][0]=='.')
+								//fix count left files for Chamilo
+								$deleted_by_Chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
+								if(ereg($deleted_by_Chamilo_file, $tem['name']) || $tem['name'][0]=='.')
 								{
 									$this->currentFolderInfo['file']=$this->currentFolderInfo['file']-1;
 								}
-								///end fix for Dokeos
+								///end fix for Chamilo
 								$tem['path'] = backslashToSlash($path);		
 								$tem['type'] = "file";
 								$tem['flag'] = $flag;

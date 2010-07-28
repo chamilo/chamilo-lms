@@ -1,4 +1,4 @@
-/*~~~~~~ Hack for Dokeos ~~~~~~~~*/
+/*~~~~~~ Hack for Chamilo ~~~~~~~~*/
 /*~~~~~~Global Setting ~~~~~~~~*/
 html, body{
     margin: 0px;
@@ -102,6 +102,9 @@ overflow-x: hidden;
 .inputMtime{width:75px; height:14px; font-size:9px;}
 .radio{
 	background-color:none;
+}
+.inputSearchSelect{
+	visibility:hidden;
 }
 .calendar_trigger{
 	background:none;
@@ -300,7 +303,6 @@ span.fileZip{background-image:url(../images/small_icon/fileZip.png);}
 
 span.folderShared{background-image:url(../images/small_icon/folderShared.png);}
 
-
 /* big icon */
 dt.folderEmpty, dt.folder, dt.folderParent,
 dt.fileUnknown, dt.fileText, dt.fileWord,
@@ -419,10 +421,11 @@ p.pagination{
 	border-bottom-style: solid;
 	border-bottom-color: #FFFFFF;
 }
+
 #pagination_parent_link
 {
     background: url(../images/go_parent.png) no-repeat 100% 50%;
-    padding: 2px 6px 2px 10px;
+    padding: 2px 30px 2px 370px;	
 }
 a.pagination_first,
 a.pagination_previous,
@@ -508,6 +511,9 @@ a.pagination_active{font-weight: bold; color: #CC0000;}
 
 }
 
+.search_folder{ 
+visibility:hidden;	
+}
 /**  Detail View */
 #tableList{
 font-size:100%;

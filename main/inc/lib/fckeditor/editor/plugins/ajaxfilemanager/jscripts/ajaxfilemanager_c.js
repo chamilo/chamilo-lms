@@ -196,7 +196,24 @@ return'';};function parseCurrentFolder()
 {if(i==0)
 {parentPath+=paths.root;str+='/<a href="'+appendQueryString(url,'path='+parentPath,['path'])+'"><span class="folderRoot">'+paths.root_title+'</span></a>'}else
 {if(folders[i]!='')
-{parentPath+=folders[i]+'/';str+='/<a href="'+appendQueryString(url,'path='+parentPath,['path'])+'"><span class="folderSub">'+folders[i]+'</span></a>';}}}
+{
+//hack for Chamilo: rename breadcrumbs into shared folders
+if(folders[i]=='shared_folder')
+{
+	parentPath+=folders[i]+'/';str+='/<a href="'+appendQueryString(url,'path='+parentPath,['path'])+'"><span class="folderSub">'+shared_folder+'</span></a>';
+	
+}
+else if (folders[i].indexOf('shared_folder_session_')!=-1) {
+	parentPath+=folders[i]+'/';str+='/<a href="'+appendQueryString(url,'path='+parentPath,['path'])+'"><span class="folderSub">'+shared_folder_session+'</span></a>';
+}
+else if (folders[i].indexOf('sf_user_')!=-1) {
+	parentPath+=folders[i]+'/';str+='/<a href="'+appendQueryString(url,'path='+parentPath,['path'])+'"><span class="folderSub">'+shared_user_folder+'</span></a>';
+}
+else{
+	parentPath+=folders[i]+'/';str+='/<a href="'+appendQueryString(url,'path='+parentPath,['path'])+'"><span class="folderSub">'+folders[i]+'</span></a>';
+}
+//end hack
+}}}
 $('#currentFolderPath').empty().append(str);$('#currentFolderPath a').each(function()
 {doEnableFolderBrowsable(this,$(this).attr('href'));});};function parsePagination()
 {$('p.pagination a[@id!=pagination_parent_link]').each(function()

@@ -6,16 +6,16 @@
 		foreach($fileList as $file)
 		{
 			
-			///First step for hidden some type of Dokeos files and folders
+			///First step for hidden some type of Chamilo files and folders
 			//Juan Carlos Ra�a
 
-			//hidden files and folders deleted by Dokeos. Hidde folders css, hotpotatoes, chat
+			//hidden files and folders deleted by Chamilo. Hidde folders css, hotpotatoes, chat
 
-			$deleted_by_dokeos_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
-			$deleted_by_dokeos_folder='_DELETED_';
-			$css_folder_dokeos='css';
-			$hotpotatoes_folder_dokeos='HotPotatoes_files';
-			$chat_files_dokeos='chat_files';
+			$deleted_by_Chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
+			$deleted_by_Chamilo_folder='_DELETED_';
+			$css_folder_Chamilo='css';
+			$hotpotatoes_folder_Chamilo='HotPotatoes_files';
+			$chat_files_Chamilo='chat_files';
 
 			//hidden directory of the group if the user is not a member of the group
 			$group_folder='_groupdocs';
@@ -37,14 +37,14 @@
 			
 			///Second step: hiding as the case
 			//Juan Carlos Ra�a
-			if((!ereg($deleted_by_dokeos_file, $file['name']) || !ereg($deleted_by_dokeos_folder, $file['path'])) && !ereg($css_folder_dokeos, $file['path']) && !ereg($hotpotatoes_folder_dokeos, $file['path']) && !ereg($chat_files_dokeos, $file['path']) && $show_doc_group && $file['name'][0]!='.')
+			if((!ereg($deleted_by_Chamilo_file, $file['name']) && !ereg($deleted_by_Chamilo_folder, $file['path'])) && !ereg($css_folder_Chamilo, $file['path']) && !ereg($hotpotatoes_folder_Chamilo, $file['path']) && !ereg($chat_files_Chamilo, $file['path']) && $show_doc_group && $file['name'][0]!='.')
 			{			
 			
 			?>
 				<dl class="thumbnailListing" id="dl<?php echo $count; ?>">
                  <?php
-                 if(ereg($shared_folder, $file['name']))
-                 { //add icon in ajaxfilemanager if sharedfolder is in Dokeos
+                 if(preg_match('/shared_folder/', basename($file['path'])))
+                 { //add icon into ajaxfilemanager if sharedfolder is in Chamilo
                 ?>
 
                 	<dt id="dt<?php echo $count; ?>" class="<?php echo ($file['type'] == 'folder' && empty($file['file']) || empty($file['subdir'])?'folderShared':$file['cssClass']); ?>" class="<?php echo $file['cssClass']; ?>">
@@ -78,10 +78,10 @@
 				
 				</dt>
 				<dd id="dd<?php echo $count; ?>" class="thumbnailListing_info"><span id="flag<?php echo $count; ?>" class="<?php echo $file['flag']; ?>">&nbsp;</span><input id="cb<?php echo $count; ?>" type="checkbox" name="check[]" <?php echo ($file['is_writable']?'':'disabled'); ?> class="radio" value="<?php echo $file['path']; ?>" />
-				<a <?php echo ($file['cssClass']== 'filePicture'?'rel="orgImg"':''); ?> href="<?php echo "../".$file['path']; ?>" title="<?php echo $file['name']; ?>" id="a<?php echo $count; ?>"><?php echo shortenFileName($file['name']); ?></a></dd><!-- Juan Carlos Ra�a Fix for Dokeos: On the path I put a directory up echo "../".$ file [ 'path'], what makes good show when pressed next on window preview, don't only one image -->			
+				<a <?php echo ($file['cssClass']== 'filePicture'?'rel="orgImg"':''); ?> href="<?php echo "../".$file['path']; ?>" title="<?php echo $file['name']; ?>" id="a<?php echo $count; ?>"><?php echo shortenFileName($file['name']); ?></a></dd><!-- Juan Carlos Ra�a Fix for Chamilo: On the path I put a directory up echo "../".$ file [ 'path'], what makes good show when pressed next on window preview, don't only one image -->			
                 </dl>
                 <?php
-			}//end if hidden files and folders deleted by Dokeos
+			}//end if hidden files and folders deleted by Chamilo
 			$count++;
 		}
 ?>

@@ -50,9 +50,9 @@ api_protect_course_script();
 //the main_api.lib.php, database.lib.php and display.lib.php
 //libraries are included by default
 
-include('learnpath_functions.inc.php');
-//include('../resourcelinker/resourcelinker.inc.php');
-include('resourcelinker.inc.php');
+include 'learnpath_functions.inc.php';
+//include '../resourcelinker/resourcelinker.inc.php';
+include 'resourcelinker.inc.php';
 //rewrite the language file, sadly overwritten by resourcelinker.inc.php
 $language_file = "learnpath";
 
@@ -261,7 +261,7 @@ if (isset($_POST['save_audio']))
 			}
 
 			// upload the file in the documents tool
-			include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+			include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 			$file_path = handle_uploaded_document($_course, $_FILES[$key],api_get_path(SYS_COURSE_PATH).$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);
 
 			// getting the filename only

@@ -5,8 +5,8 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
 */
 
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 global $charset;
 
@@ -75,7 +75,7 @@ foreach($encodings as $encoding){
 $origin_select = &$form->addElement('select', 'lp_maker', get_lang('Origin'));
 $lp_orig = $_SESSION['oLP']->get_maker();
 
-include('content_makers.inc.php');
+include 'content_makers.inc.php';
 foreach($content_origins as $origin){
 	if($lp_orig == $origin){
 		$s_selected_origin = $origin;

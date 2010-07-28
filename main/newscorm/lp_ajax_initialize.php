@@ -14,7 +14,7 @@
 $use_anonymous = true;
 // name of the language file that needs to be included
 $language_file[] = 'learnpath';
-require_once('back_compat.inc.php');
+require_once 'back_compat.inc.php';
 /**
  * Get one item's details
  * @param   integer LP ID
@@ -36,12 +36,12 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
      * -'last'
      * - a real item ID
      */
-    require_once('learnpath.class.php');
-    require_once('scorm.class.php');
-    require_once('aicc.class.php');
-    require_once('learnpathItem.class.php');
-    require_once('scormItem.class.php');
-    require_once('aiccItem.class.php');
+    require_once 'learnpath.class.php';
+    require_once 'scorm.class.php';
+    require_once 'aicc.class.php';
+    require_once 'learnpathItem.class.php';
+    require_once 'scormItem.class.php';
+    require_once 'aiccItem.class.php';
     $mylp = '';
     if (isset($_SESSION['lpobject'])) {
         if ($debug>1) {error_log('////$_SESSION[lpobject] is set',0);}

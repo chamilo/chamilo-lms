@@ -13,7 +13,7 @@
 $use_anonymous = true;
 // name of the language file that needs to be included
 $language_file[] = 'learnpath';
-require_once('back_compat.inc.php');
+require_once 'back_compat.inc.php';
 /**
  * Writes an item's new values into the database and returns the operation result
  * @param   integer Learnpath ID
@@ -29,12 +29,12 @@ function save_objectives($lp_id,$user_id,$view_id,$item_id,$objectives=array())
     $return = '';
     if($debug>0){error_log('In xajax_save_objectives('.$lp_id.','.$user_id.','.$view_id.','.$item_id.',"'.(count($objectives)>0?count($objectives):'').'")',0);}
     //$objResponse = new xajaxResponse();
-    require_once('learnpath.class.php');
-    require_once('scorm.class.php');
-    require_once('aicc.class.php');
-    require_once('learnpathItem.class.php');
-    require_once('scormItem.class.php');
-    require_once('aiccItem.class.php');
+    require_once 'learnpath.class.php';
+    require_once 'scorm.class.php';
+    require_once 'aicc.class.php';
+    require_once 'learnpathItem.class.php';
+    require_once 'scormItem.class.php';
+    require_once 'aiccItem.class.php';
     $mylp = '';
     if(isset($_SESSION['lpobject']))
     {

@@ -226,8 +226,8 @@ class learnpath {
 					break;
 				case 2 :
 
-					require_once ('scorm.class.php');
-					require_once ('scormItem.class.php');
+					require_once 'scorm.class.php';
+					require_once 'scormItem.class.php';
 					$oItem = new scormItem('db', $row['id']);
 					if (is_object($oItem)) {
 						$my_item_id = $oItem->get_id();
@@ -245,7 +245,7 @@ class learnpath {
 				case 1 :
 
 				default :
-					require_once ('learnpathItem.class.php');
+					require_once 'learnpathItem.class.php';
 					$oItem = new learnpathItem($row['id'], $user_id);
 					if (is_object($oItem)) {
 						$my_item_id = $oItem->get_id();
@@ -552,7 +552,7 @@ class learnpath {
 			}
 
 			// upload the file in the documents tool
-			include_once (api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+			include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 			$file_path = handle_uploaded_document($_course, $_FILES['mp3'], api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document', '/audio', api_get_user_id(), '', '', '', '', '', false);
 
 			// getting the filename only
@@ -882,7 +882,7 @@ class learnpath {
 
 		//TODO: also delete items and item-views
 		if (api_get_setting('search_enabled') == 'true') {
-			require_once (api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+			require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 			$r = delete_all_values_for_item($this->cc, TOOL_LEARNPATH, $this->lp_id);
 		}
 	}
@@ -967,7 +967,7 @@ class learnpath {
 			$res = Database::query($sql);
 			if (Database :: num_rows($res) > 0) {
 				$row2 = Database :: fetch_array($res);
-				require_once (api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
+				require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
 				$di = new DokeosIndexer();
 				$di->remove_document((int) $row2['search_did']);
 			}
@@ -1362,7 +1362,7 @@ class learnpath {
 	 * @return  array Array of terms
 	 */
 	function get_common_index_terms_by_prefix($prefix) {
-		require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 		$terms = get_specific_field_values_list_by_prefix($prefix, $this->cc, TOOL_LEARNPATH, $this->lp_id);
 		$prefix_terms = array ();
 		foreach ($terms as $term) {
@@ -2605,7 +2605,7 @@ class learnpath {
 
 		}
 		$html .= '<div id="inner_lp_toc" class="inner_lp_toc">' . "\n";
-		require_once ('resourcelinker.inc.php');
+		require_once 'resourcelinker.inc.php';
 
 		//temp variables
 		$mycurrentitemid = $this->get_current_item_id();
@@ -2819,7 +2819,7 @@ class learnpath {
 					if ($lp_item_type == 'dokeos_chapter') {
 						$file = 'lp_content.php?type=dir';
 					} else {
-						require_once ('resourcelinker.inc.php');
+						require_once 'resourcelinker.inc.php';
 						$file = rl_get_resource_link_for_learnpath(api_get_course_id(), $this->get_id(), $item_id);
 
 						// check how much attempts of a exercise exits in lp
@@ -2897,7 +2897,7 @@ class learnpath {
 								$decoded = html_entity_decode($lp_item_path);
 								list ($decoded) = explode('?', $decoded);
 								if (!is_file(realpath($sys_course_path . '/scorm/' . $lp_path . '/' . $decoded))) {
-									require_once ('resourcelinker.inc.php');
+									require_once 'resourcelinker.inc.php';
 									$file = rl_get_resource_link_for_learnpath(api_get_course_id(), $this->get_id(), $item_id);
 									if (empty($file)) {
 										$file = 'blank.php?error=document_not_found';
@@ -3781,10 +3781,10 @@ class learnpath {
 		if ((count(array_diff($terms, $stored_terms)) == 0) && (count(array_diff($stored_terms, $terms)) == 0))
 			return FALSE;
 
-		require_once ('xapian.php'); //TODO try catch every xapian use or make wrappers on api
-		require_once (api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
-		require_once (api_get_path(LIBRARY_PATH) . 'search/xapian/XapianQuery.php');
-		require_once (api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php');
+		require_once 'xapian.php'; //TODO try catch every xapian use or make wrappers on api
+		require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+		require_once api_get_path(LIBRARY_PATH).'search/xapian/XapianQuery.php';
+		require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 
 		$items_table = Database :: get_course_table(TABLE_LP_ITEM);
 		//TODO: make query secure agains XSS : use member attr instead of post var
@@ -5852,7 +5852,7 @@ class learnpath {
 		$return .= '	</div>
 							</div>';
 
-		require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
+		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 		$form = new FormValidator('form', 'POST', api_get_self() . "?" . $_SERVER["QUERY_STRING"]);
 		//$defaults["title"] = api_convert_encoding($item_title, $charset, $this->encoding);
 		$defaults["title"] = api_html_entity_decode(api_convert_encoding($item_title, $charset, $this->encoding), ENT_QUOTES, $charset);
@@ -6081,7 +6081,7 @@ class learnpath {
 		if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
 			$return .= Display :: return_warning_message('<strong>' . get_lang("Warning") . ' !</strong><br />' . get_lang("WarningEditingDocument"), false);
 		}
-		require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
+		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 		$form = new FormValidator('form', 'POST', api_get_self() . "?" . $_SERVER["QUERY_STRING"], '', 'enctype="multipart/form-data"');
 		$defaults["title"] = Security :: remove_XSS(api_convert_encoding($item_title, api_get_system_encoding() ,$this->encoding));
 		if (empty ($item_title)) {
@@ -6974,7 +6974,7 @@ class learnpath {
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_student_publication_form('move', $item_id, $row);
 					break;
-				case TOOL_FORUM :				
+				case TOOL_FORUM :
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_forum_form('move', $item_id, $row);
 					break;
@@ -7253,7 +7253,7 @@ class learnpath {
 	 */
 	function write_resources_tree($resources_sorted, $num = 0) {
 
-		require_once (api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php');
+		require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 		if (count($resources_sorted) > 0) {
 			foreach ($resources_sorted as $key => $resource) {
 				if (is_int($resource['id'])) {
@@ -7398,8 +7398,8 @@ class learnpath {
 	 * @return string
 	 */
 	function get_forums() {
-		include ('../forum/forumfunction.inc.php');
-		include ('../forum/forumconfig.inc.php');
+		include '../forum/forumfunction.inc.php';
+		include '../forum/forumconfig.inc.php';
 		global $table_forums, $table_threads, $table_posts, $table_item_property, $table_users;
 		$table_forums = Database :: get_course_table(TABLE_FORUM);
 		$table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
@@ -7926,7 +7926,7 @@ class learnpath {
 	 			}
 	 			elseif($item->type == TOOL_QUIZ)
 	 			{
-	 				require_once(api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php');
+	 				require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 	 				$exe_id = $item->path; //should be using ref when everything will be cleaned up in this regard
 	 				$exe = new Exercise();
 	 				$exe->read($exe_id);
@@ -7969,7 +7969,7 @@ class learnpath {
 			 		}
 
 			 		//include export scripts
-			 		require_once(api_get_path(SYS_CODE_PATH).'exercice/export/scorm/scorm_export.php');
+			 		require_once api_get_path(SYS_CODE_PATH).'exercice/export/scorm/scorm_export.php';
 
 			 		//get the path of the file(s) from the course directory root
 					//$my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
@@ -8110,7 +8110,7 @@ class learnpath {
 											//file path is courses/DOKEOS/document/....
 											$info_file_path=explode('/',$file_path);
 											if ($info_file_path[0]=='courses') {//add character "/" in file path
-												$file_path_dest='document/'.$file_path;                                                                                                
+												$file_path_dest='document/'.$file_path;
 											}
 
 					 						//error_log('Reduced path: '.$file_path,0);
@@ -8124,7 +8124,7 @@ class learnpath {
 					 					$zip_files[] = $my_sub_dir.'/'.$doc_info[0];
 						 				$my_dep_file->setAttribute('href',$doc_info[0]);
 				 			 			$my_dep->setAttribute('xml:base',$my_xml_sub_dir);
-					 				}                                                                         
+					 				}
 
 			 						break;
 			 					default:
@@ -8316,7 +8316,7 @@ EOD;
 		}
 		//Send file to client
 		//$name = 'scorm_export_'.$this->lp_id.'.zip';
-		require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 		$name = preg_replace('([^a-zA-Z0-9_\.])','-',html_entity_decode($this->get_name(),ENT_QUOTES)).'.zip';
 		DocumentManager::file_send_for_download($temp_zip_file,true,$name);
 	}
@@ -8391,7 +8391,7 @@ EOD;
 
 					//$result= @move_uploaded_file($image_array['tmp_name'], $new_path);
 					// resize the image
-					include_once (api_get_path(LIBRARY_PATH) . 'image.lib.php');
+					include_once api_get_path(LIBRARY_PATH).'image.lib.php';
 					$temp = new image($image_array['tmp_name']);
 					$picture_infos=@getimagesize($image_array['tmp_name']); // $picture_infos[0]-> width
 					if ($picture_infos[0] > 104) {

@@ -14,10 +14,10 @@ $use_anonymous = true;
 $language_file[] = "scormdocument";
 $language_file[] = "scorm";
 $language_file[] = "learnpath";
-require_once('back_compat.inc.php');
-require_once('learnpath.class.php');
-require_once('scorm.class.php');
-require_once('aicc.class.php');
+require_once 'back_compat.inc.php';
+require_once 'learnpath.class.php';
+require_once 'scorm.class.php';
+require_once 'aicc.class.php';
 //error_log('New LP - Loaded lp_nav: '.$_SERVER['REQUEST_URI'],0);
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 	  var dokeos_xajax_handler = window.parent.oxajax;
@@ -40,7 +40,7 @@ if(isset($_SESSION['lpobject'])) {
 	$scorm_css_header = true;
 	$lp_theme_css = $_SESSION['oLP']->get_theme();
 	//Setting up the CSS theme if exists
-	include_once('../inc/reduced_header.inc.php');
+	include_once '../inc/reduced_header.inc.php';
 
 	if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1 ) {
 		global $lp_theme_css;

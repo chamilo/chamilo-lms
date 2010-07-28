@@ -543,7 +543,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 			{
 				$row_items = $row;
 				echo "<tr>\n  <td colspan='2' valign='top'>";
-				//require('resourcelinker.inc.php');
+				//require 'resourcelinker.inc.php';
 				display_addedresource_link_in_learnpath($row_items["item_type"], $row_items["ref"], '', $row_items["id"], 'builder', 'icon', $level);
 
 				if ($row_items["description"])
@@ -1405,10 +1405,10 @@ function export_exercise($item_id)
 
 	$exerciseId = $item_id;
 
-	require_once ('../exercice/exercise.class.php');
-	require_once ('../exercice/question.class.php');
-	require_once ('../exercice/answer.class.php');
-	require_once ('../exercice/exercise.lib.php');
+	require_once '../exercice/exercise.class.php';
+	require_once '../exercice/question.class.php';
+	require_once '../exercice/answer.class.php';
+	require_once '../exercice/exercise.lib.php';
 
 	// answer types
 	define('UNIQUE_ANSWER', 1);
@@ -1417,7 +1417,7 @@ function export_exercise($item_id)
 	define('MATCHING', 4);
 	define('FREE_ANSWER', 5);
 
-	include_once (api_get_path(LIBRARY_PATH).'/text.lib.php');
+	include_once api_get_path(LIBRARY_PATH).'text.lib.php';
 
 	$TBL_EXERCISES = Database :: get_course_table(TABLE_QUIZ_TEST);
 
@@ -1609,27 +1609,27 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 	global $timeNoSecFormat, $dateFormatLong, $language_interface, $langPubl, $langDone, $langThisCourseDescriptionIsEmpty, $lang_course_description, $lang_introduction_text, $_cid, $langHotPotatoesFinished, $lang_author, $lang_date, $lang_groups, $lang_users, $lang_ass, $lang_dropbox, $test, $langQuestion;
 
 	//	$_course=$_SESSION['course'];
-	require_once (api_get_path(LIBRARY_PATH)."database.lib.php");
+	require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 	//$tbl_learnpath_item     = Database::get_course_learnpath_item_table();
 
-	include_once ('exercise.class.php');
-	include_once ('question.class.php');
-	include_once ('answer.class.php');
-	include_once ('exercise.lib.php');
+	include_once 'exercise.class.php';
+	include_once 'question.class.php';
+	include_once 'answer.class.php';
+	include_once 'exercise.lib.php';
 
-	include_once ('../lang/english/announcements.inc.php'); //this line is here only for $langPubl in announcements
-	include_once ("../lang/".$language_interface."/announcements.inc.php"); //this line is here only for $langPubl in announcements
-	include_once ('../lang/english/course_description.inc.php'); //this line is here only for $langThisCourseDescriptionIsEmpty
-	include_once ("../lang/".$language_interface."/course_description.inc.php"); //				 -||-
-	include_once ('../lang/english/resourcelinker.inc.php');
-	include_once ("../lang/".$language_interface."/resourcelinker.inc.php");
-	include_once ('../lang/english/learnpath.inc.php');
-	include_once ("../lang/".$language_interface."/learnpath.inc.php");
-	include_once ('../lang/english/exercice.inc.php');
-	include_once ("../lang/".$language_interface."/exercice.inc.php");
+	include_once '../lang/english/announcements.inc.php'; //this line is here only for $langPubl in announcements
+	include_once '../lang/'.$language_interface.'/announcements.inc.php'; //this line is here only for $langPubl in announcements
+	include_once '../lang/english/course_description.inc.php'; //this line is here only for $langThisCourseDescriptionIsEmpty
+	include_once '../lang/'.$language_interface.'/course_description.inc.php'; //				 -||-
+	include_once '../lang/english/resourcelinker.inc.php';
+	include_once '../lang/'.$language_interface.'/resourcelinker.inc.php';
+	include_once '../lang/english/learnpath.inc.php';
+	include_once '../lang/'.$language_interface.'/learnpath.inc.php';
+	include_once '../lang/english/exercice.inc.php';
+	include_once '../lang/'.$language_interface.'/exercice.inc.php';
 
-	include_once (api_get_path(LIBRARY_PATH).'text.lib.php');
-	include_once ("../resourcelinker/resourcelinker.inc.php");
+	include_once api_get_path(LIBRARY_PATH).'text.lib.php';
+	include_once '../resourcelinker/resourcelinker.inc.php';
 
 	$LPname = display_addedresource_link_in_learnpath($item_type, $item_id, '', $id, 'builder', 'nolink');
 
@@ -2200,7 +2200,7 @@ function exportpath($learnpath_id)
 	$add_scorm_button = true;
 
 	//2 Get the name of the LP
-	include_once (api_get_path(LIBRARY_PATH)."fileUpload.lib.php");
+	include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 	$sql = "SELECT * FROM $tbl_learnpath_main WHERE (lp_id=$learnpath_id)";
 	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
@@ -2286,7 +2286,7 @@ function exportpath($learnpath_id)
 	createimsmanifest($circle1_files, $learnpath_id);
 
 	//8 put the files in the exportdir into a zip and force download
-	include_once (api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
+	include_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 	//create zipfile of given directory
 	$zip_folder = new PclZip(api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$LPnamesafe.".zip");
 
@@ -2304,7 +2304,7 @@ function exportpath($learnpath_id)
 	DocumentManager :: file_send_for_download($zipfilename, false, basename($LPnamesafe.".zip"));
 
 	//9 Delete the temporary zip file and directory
-	include_once (api_get_path(LIBRARY_PATH)."fileManage.lib.php");
+	include_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 	// in fileManage.lib.php
 	my_delete($zipfilename);
 	my_delete($zipfoldername);
@@ -2335,7 +2335,7 @@ function exportSCORM($scormname, $course)
 	$zipfilename = $zipfoldername.".zip";
 
 	//create zipfile of given directory
-	include_once (api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
+	include_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 	$zip_folder = new PclZip($zipfilename);
 	$list = 1;
 	//$list = $zip_folder->create($zipfoldername."/",PCLZIP_OPT_REMOVE_PATH,$tmpname.$scormname."/"); // whitout folder
@@ -2349,7 +2349,7 @@ function exportSCORM($scormname, $course)
 	DocumentManager :: file_send_for_download($zipfilename, false, basename($scormname.".zip"));
 
 	//clear
-	include_once (api_get_path(LIBRARY_PATH)."fileManage.lib.php");
+	include_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 	my_delete($zipfilename);
 }
 
@@ -2418,7 +2418,7 @@ function createimsmanifest($circle1_files, $learnpath_id)
 	$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
 	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
-	include_once ('../metadata/md_funcs.php'); // RH: export metadata
+	include_once '../metadata/md_funcs.php'; // RH: export metadata
 
 	//1.1 header
 	/*

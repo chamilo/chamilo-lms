@@ -10,10 +10,10 @@
  * Defines the "scorm" child of class "learnpath"
  * @package chamilo.learnpath
  */
-require_once('scormItem.class.php');
-require_once('scormMetadata.class.php');
-require_once('scormOrganization.class.php');
-require_once('scormResource.class.php');
+require_once 'scormItem.class.php';
+require_once 'scormMetadata.class.php';
+require_once 'scormOrganization.class.php';
+require_once 'scormResource.class.php';
 
 class scorm extends learnpath {
 	var $manifest = array();
@@ -487,9 +487,9 @@ class scorm extends learnpath {
 
 				// code for indexing, now only index specific fields like terms and the title
 				if (!empty($_POST['index_document'])) {
-					require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
-					require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
-					require_once(api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php');
+					require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+					require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
+					require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 					$di = new DokeosIndexer();
 					isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
@@ -562,7 +562,7 @@ class scorm extends learnpath {
      function import_package($zip_file_info,$current_dir = '')
      {
      	if($this->debug>0){error_log('In scorm::import_package('.print_r($zip_file_info,true).',"'.$current_dir.'") method',0);}
-     	require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
+     	require_once api_get_path(LIBRARY_PATH).'document.lib.php';
      	$maxFilledSpace = DocumentManager :: get_course_quota();
      	//$maxFilledSpace = 1000000000;
 
@@ -650,7 +650,7 @@ class scorm extends learnpath {
 		}
 
 		if (! enough_size($realFileSize, $course_sys_dir, $maxFilledSpace) )
-		{ 
+		{
 			if($this->debug>1){error_log('New LP - Not enough space to store package',0);}
 			return api_failure::set_failure('not_enough_space');
 		}
@@ -864,11 +864,11 @@ class scorm extends learnpath {
 	 	//error_log('New LP - in export_zip()',0);
 	 	//zip everything that is in the corresponding scorm dir
 	 	//write the zip file somewhere (might be too big to return)
-		require_once (api_get_path(LIBRARY_PATH)."fileUpload.lib.php");
-		require_once (api_get_path(LIBRARY_PATH)."fileManage.lib.php");
-		require_once (api_get_path(LIBRARY_PATH)."document.lib.php");
-		require_once (api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
-		require_once ("learnpath_functions.inc.php");
+		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
+		require_once 'learnpath_functions.inc.php';
 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 		$_course = Database::get_course_info(api_get_course_id());
 

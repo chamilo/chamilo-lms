@@ -2,7 +2,7 @@
 /**
  * This script contains the server part of the xajax interaction process. The client part is located
  * in lp_api.php or other api's.
- * This script updated the TOC of the SCORM without updating the SCO's attributes 
+ * This script updated the TOC of the SCORM without updating the SCO's attributes
  * @package dokeos.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -13,7 +13,7 @@
 $use_anonymous = true;
 // name of the language file that needs to be included
 $language_file[] = 'learnpath';
-require_once('back_compat.inc.php');
+require_once 'back_compat.inc.php';
 /**
  * Get one item's details
  * @param   integer LP ID
@@ -27,12 +27,12 @@ function switch_item_toc($lp_id,$user_id,$view_id,$current_item,$next_item)
     $debug=0;
     $return = '';
     if($debug>0){error_log('In xajax_switch_item_toc('.$lp_id.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')',0);}
-    require_once('learnpath.class.php');
-    require_once('scorm.class.php');
-    require_once('aicc.class.php');
-    require_once('learnpathItem.class.php');
-    require_once('scormItem.class.php');
-    require_once('aiccItem.class.php');
+    require_once 'learnpath.class.php';
+    require_once 'scorm.class.php';
+    require_once 'aicc.class.php';
+    require_once 'learnpathItem.class.php';
+    require_once 'scormItem.class.php';
+    require_once 'aiccItem.class.php';
     $mylp = '';
     if(isset($_SESSION['lpobject']))
     {

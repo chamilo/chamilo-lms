@@ -44,12 +44,12 @@
 
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
-require_once('back_compat.inc.php');
-include(api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php');
+require_once 'back_compat.inc.php';
+include api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php';
 if(!empty($_course['language'])){
-	include(api_get_path(SYS_CODE_PATH).'lang/'.$_course['language'].'/resourcelinker.inc.php');
+	include api_get_path(SYS_CODE_PATH).'lang/'.$_course['language'].'/resourcelinker.inc.php';
 }
-include('../exercice/hotpotatoes.lib.php');
+include '../exercice/hotpotatoes.lib.php';
 
 /*
 ==============================================================================

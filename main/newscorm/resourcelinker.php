@@ -42,7 +42,7 @@
 $use_anonymous = true;
 // name of the language file that needs to be included
 $language_file = 'resourcelinker';
-require_once('back_compat.inc.php');
+require_once 'back_compat.inc.php';
 $this_section=SECTION_COURSES;
 
 api_protect_course_script();
@@ -52,7 +52,7 @@ api_protect_course_script();
 	Libraries
 -----------------------------------------------------------
 */
-include ('resourcelinker.inc.php');
+include 'resourcelinker.inc.php';
 
 /*
 -----------------------------------------------------------
@@ -737,7 +737,7 @@ if ($from_learnpath != 'yes')
 // Agenda items -->
 if ($content == "Agenda")
 {
-	include (api_get_path(LIBRARY_PATH)."text.lib.php");
+	include api_get_path(LIBRARY_PATH).'text.lib.php';
 	$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -815,7 +815,7 @@ if ($content == "Document" OR (empty($content) AND (is_allowed_to_edit() OR in_a
 */
 if ($content == "Ad_Valvas")
 {
-	include (api_get_path(LIBRARY_PATH)."text.lib.php");
+	include api_get_path(LIBRARY_PATH).'text.lib.php';
 	$tbl_announcement = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 	$sql = "SELECT * FROM ".$tbl_announcement." a, ".$item_property_table." i  WHERE i.tool = '".TOOL_ANNOUNCEMENT."' AND a.id=i.ref AND i.visibility='1' AND i.to_group_id = 0 AND i.to_user_id IS NULL ORDER BY a.display_order ASC";
 	//error_log($sql,0);
@@ -918,10 +918,10 @@ if ($content == "Forum")
 if ($content == "Link")
 {
 	// including the links language file
-	include ("../lang/$language/link.inc.php");
+	include "../lang/$language/link.inc.php";
 
 	// including the links functions file
-	include ("../link/linkfunctions.php");
+	include '../link/linkfunctions.php';
 
 	$tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 	if (($learnpath_id != '') and ($content == 'Link'))

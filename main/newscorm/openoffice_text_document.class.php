@@ -10,10 +10,10 @@
  * Defines the "OpenOfficeTextDocument" child of class "learnpath"
  * @package dokeos.learnpath.openofficedocument
  */
-require_once('openoffice_document.class.php');
-require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php');
-require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
+require_once 'openoffice_document.class.php';
+require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 
 class OpenOfficeTextDocument extends OpenofficeDocument {
 

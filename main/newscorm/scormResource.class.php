@@ -188,7 +188,7 @@ class scormResource {
      {
      	if(!empty($this->href))
      	{
-     		require_once('learnpath.class.php');
+     		require_once 'learnpath.class.php';
      		return learnpath::escape_string($this->href);
      	}else{
      		return '';
@@ -201,7 +201,7 @@ class scormResource {
      function get_scorm_type()
      {
      	if(!empty($this->scormtype)){
-     		require_once('learnpath.class.php');
+     		require_once 'learnpath.class.php';
      		return learnpath::escape_string($this->scormtype);
      	}else{
      		return '';

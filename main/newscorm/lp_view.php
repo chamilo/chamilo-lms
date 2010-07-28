@@ -29,11 +29,11 @@ if ($lp_controller_touched != 1){
 	Libraries
 */
 require_once 'back_compat.inc.php';
-//require_once('../learnpath/learnpath_functions.inc.php');
+//require_once '../learnpath/learnpath_functions.inc.php';
 require_once 'scorm.lib.php';
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
-//require_once('lp_comm.common.php'); //xajax functions
+//require_once 'lp_comm.common.php'; //xajax functions
 
 if (!$is_allowed_in_course) api_not_allowed();
 

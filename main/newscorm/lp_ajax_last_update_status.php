@@ -22,7 +22,7 @@
 $use_anonymous = true;
 // name of the language file that needs to be included
 $language_file[] = 'learnpath';
-require_once('back_compat.inc.php');
+require_once 'back_compat.inc.php';
 /**
  * Writes an item's new values into the database and returns the operation result
  * @param   integer Learnpath ID
@@ -38,10 +38,10 @@ function last_update_status($lp_id,$user_id,$view_id,$item_id)
     $debug=0;
     $return = '';
     if($debug>0){error_log('In last_update_status('.$lp_id.','.$user_id.','.$view_id.','.$item_id.')',0);}
-    require_once('learnpath.class.php');
-    require_once('scorm.class.php');
-    require_once('learnpathItem.class.php');
-    require_once('scormItem.class.php');
+    require_once 'learnpath.class.php';
+    require_once 'scorm.class.php';
+    require_once 'learnpathItem.class.php';
+    require_once 'scormItem.class.php';
     $mylp = '';
     if(isset($_SESSION['lpobject']))
     {

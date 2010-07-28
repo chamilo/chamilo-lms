@@ -1,50 +1,26 @@
-<?php //$id:$
-/* For licensing terms, see /dokeos_license.txt */
-//error_log(__FILE__);
+<?php
+/* For licensing terms, see /license.txt */
+
 /**
-*	Hotspot languae conversion
-*	@package dokeos.exercise
-* 	@author
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
-*/
+ *	Hotspot languae conversion
+ *	@package chamilo.exercise
+ */
 
-session_cache_limiter("none");
+session_cache_limiter('none');
 
-include_once('../inc/global.inc.php');
+$language_file = 'hotspot';
 
-$hotspot_lang_file = api_get_path(SYS_LANG_PATH);
+include_once '../inc/global.inc.php';
 
-$search = array('../','\\0');
+header('Content-Type: text/html; charset=UTF-8');
 
-if(file_exists($hotspot_lang_file . $language_interface . '/hotspot.inc.php'))
-	$hotspot_lang_file .= $language_interface . '/hotspot.inc.php';
-else
-	$hotspot_lang_file .= 'english/hotspot.inc.php';
+$file = file(api_get_path(SYS_LANG_PATH).'english/hotspot.inc.php');
 
-
-$file = file($hotspot_lang_file);
-
-$temp = array();
-
-foreach($file as $value)
-{
-	$explode = explode('=', $value , 2);
-
-	if(count($explode) > 1)
-	{
-		$explode[0] = trim($explode[0]);
-		$explode[0] = '&' . substr($explode[0], 1, strlen($explode[0]));
-
-		$explode[1] = trim($explode[1]);
-		$explode[1] = substr($explode[1], 0, strlen($explode[1]) - 1);
-		$explode[1] = str_replace('"', '', $explode[1]);
-
-		$temp[] = $explode[0] . '=' . $explode[1];
+foreach ($file as &$value) {
+	$variable = explode('=', $value , 2);
+	if (count($variable) > 1) {
+		$variable = substr(trim($variable[0]), 1);
+		$variable = '&'.$variable.'='.api_utf8_encode(get_lang($variable)).' ';
+		echo $variable;
 	}
 }
-
-foreach($temp as $value)
-{
-	echo $value . ' ';
-}
-?>

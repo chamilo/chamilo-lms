@@ -200,6 +200,57 @@ $OogieUnknownError = " \tA conversión fallou por unha razón descoñecida. <br 
 $OogieBadExtension = "O arquivo non ten unha extensión correcta.";
 $WoogieBadExtension = " Por favor, envíe só documentos de texto. A extensión do arquivo debe ser .doc, .docx ou ben .odt";
 $ShowAudioRecorder = "Mostrar o gravador de audio";
+$SearchFeatureNotEnabledComment = "A procura en todo o texto non está activada en Chamilo. Por favor contacte co administrador de Chamilo.";
+$SearchFeatureSearchExplanation = "Para procurar na base de datos do curso, por favor, use a seguinte sintaxe:
+    term tag:tag_name -exclude +include \"exact phrase\"
+Por exemplo:
+    car tag:truck -ferrari +ford \"high consumption\".
+Isto mostraralle tódolos resultados para a palabra 'car' marcados coma 'truck', sen incluir a palabra 'ferrari' pero incluindo a palabra 'ford' e a frase exacta 'high consumption'.";
 $ViewLearningPath = "Ver lección";
+$SearchFeatureDocumentTagsIfIndexing = "Etiquetas a engadir no documento, si está indexado";
+$ReturnToLearningPaths = "Voltar ós cursos.";
+$UploadMp3audio = "Subir audio en Mp3";
+$UpdateAllAudioFragments = "Engadir audio";
+$LeaveEmptyToKeepCurrentFile = "Deixar o formulario de importación baleiro para manter o arquivo de audio actual";
+$RemoveAudio = "Eliminar audio";
+$SaveAudio = "Validar";
+$ChangesStored = "Audio engadido";
+$ViewScoreChangeHistory = "Ver cambios na historia da puntuación";
+$ImageWillResizeMsg = "A foto do profesor cambiará de tamaño en caso de ser preciso";
+$ImagePreview = "Previsualización da imaxe";
+$UplAlreadyExists = "xa existe.";
+$UplUnableToSaveFile = "O arquivo subido non puido ser gardado(quizais un problema de permisos?)";
+$UnknownPackageFormat = "O formato deste paquete non puido ser recoñezido. Por favor comprobe que é un paquete válido";
+$MoveDocument = "Mover documento";
+$EditLPSettings = "Editar opcións do curso";
+$SaveLPSettings = "Gardar opcións do curso";
+$ShowAllAttempts = "Amosar tódolos intentos";
+$HideAllAttempts = "Ocultar tódolos intentos";
+$ShowAllAttemptsByExercise = "Amosar tódolos intentos por test";
+$ShowAttempt = "Amosar intento";
+$ShowAndQualifyAttempt = "Amosar e marcar intento";
+$langAddEdit = "Engadir / Editar";
+$ModifyPrerequisites = "Gardar opcións dos prerrequisitos";
+$CreateLearningPath = "Continuar";
+$AddExercise = "Engadir test ó curso";
 $AddForum = "Engadir un novo foro";
+$LPCreateDocument = "Engadir este documento ó curso";
+$ObjectiveID = "ID Obxectivo";
+$ObjectiveStatus = "Estado do obxectivo";
+$ObjectiveRawScore = "Puntuación bruta do obxectivo";
+$ObjectiveMaxScore = "Puntuación máxima do obxectivo";
+$ObjectiveMinScore = "Puntuación mínima do obxectivo";
+$LPName = "Nome do curso";
+$AuthoringOptions = "Opcións de autoría";
+$CourseSettings = "Opcións do curso";
+$SaveSection = "Gardar sección";
+$AddLinkToCourse = "Engadir enlace ó curso";
+$AddAssignmentToCourse = "Engadir tarefa ó curso";
+$AddForumToCourse = "Engadir foro ó curso";
+$SaveAudioAndOrganization = "Gardar audio e organización";
+$UploadOnlyMp3Files = "Por favor, suba só arquivos mp3";
+$ModifyHotPotatoes = "Modificar hotpotatoes";
+$SaveHotpotatoes = "Gardar hotpotatoes";
+$ReturnToLPList = "Voltar ó listado";
+$LpPrerequisiteDescription = "Seleccionando outro itinerario de aprendizaxe coma prerrequisito ocultara o prerrequisito actual ata que o prerrequisito sexa completado (100%)";
 ?>

@@ -181,4 +181,6 @@ $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "La tua iscrizione 
 $HaveFun = "Buon lavoro,";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Ora puoi accedere a %s usando il nome utente e la password da te indicata";
 $AreYouSureToEditTheUserStatus = "Sei sicuro di modificare lo stato dell'utente?";
+$TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "Il tutor può solo controllare i progressi dei corsisti";
+$TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "Il docente può controllare, valutare i corsisti e assegnarne i diritti";
 ?>

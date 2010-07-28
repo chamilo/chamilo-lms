@@ -76,4 +76,5 @@ Administrando as enquisas
 
 Existen as opcións de Editar \"\" e \"Eliminar\" na columna \"Modificar\" da \"Lista de enquisas\"";
 $HBlogs = "Axuda: Blogs";
+$BlogsContent = "As ferramentas do Proxecto dan ó alumno a oportunidade de construir coñecemento colaborativo a través de roles, tarefas e datas de vencemento.";
 ?>

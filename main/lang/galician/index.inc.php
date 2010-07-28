@@ -72,4 +72,18 @@ $Inbox = "Entrada";
 $Comppose = "Redactar";
 $PendingInvitations = "Invitacións pendentes";
 $YouDoNotHaveAnySessionInItsHistory = "Non tes ningunha sesión formativa previa";
+$PortalHomepageDefaultIntroduction = "
+<h2>Noraboa! Instalou satisfactoriamente o seu portal de aprendizaxe!</h2>
+
+<p>Agora pode completar a instalación seguindo tres sinxelos pasos:<br></p>
+
+   1. Configure o seu portal indo a sección de administración e seleccione a entrada Portal -> Opcións de configuración.
+   2. Déalle algo de vida ó seu portal creando usuarios e/ou cursos. Pode facer iso invitando xente a crear as súas contas ou crealas vostede mesmo a través da administración de Usuarios e de Cursos.
+   3. Edite esta páxina a través de Editar páxina principal na sección de administración.
+
+Sempre pode atopar máis información acerca deste software no noso website: http://www.chamilo.org.
+
+Disfrute, e non dubide en unirse á comunidade e proporcionarnos feedback a través do foro.";
+$Username = "Nome de usuario";
+$Profile = "Perfil";
 ?>

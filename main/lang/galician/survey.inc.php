@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$PublishSurvey = "Publicar enquisa";
+$CompareQuestions = "Comparar preguntas";
+$InformationUpdated = "Información actualizada";
 $SurveyTitle = "Título da enquisa";
 $SurveyIntroduction = "Introdución á enquisa";
 $CreateNewSurvey = "Crear enquisa";
@@ -164,4 +167,41 @@ $IllegalSurveyId = "Identificador de enquisa descoñecido";
 $SurveyQuestionMoved = "Moveuse a pregunta";
 $IdenticalSurveycodeWarning = "Este código da enquisa xa existe. Probablemente isto sexa debido a que a enquisa tamén existe noutros idiomas. Os usuarios poderán elixir entre diferentes idiomas.";
 $ThisSurveyCodeSoonExistsInThisLanguage = "Este código de enquisa xa existe neste idioma";
+$SurveyUserAnswersHaveBeenRemovedSuccessfully = "As respostas do usuario á encosta foron eliminadas correctamente.";
+$DeleteSurveyByUser = "Eliminar as respostas deste usuario";
+$SelectType = "Seleccionar tipo";
+$Conditional = "Condicional";
+$ParentSurvey = "Enquisa pai";
+$OneQuestionPerPage = "Unha pregunta por páxina";
+$ActivateShuffle = "Activar modo aleatorio";
+$ShowFormProfile = "Amosar formulario do perfil";
+$PersonalityQuestion = "Editar pregunta";
+$YouNeedToCreateGroups = "Precisa crear grupos";
+$ManageGroups = "Manexar grupos";
+$Create = "Crear";
+$GroupCreatedSuccessfully = "Grupo creado satisfactoriamente";
+$GroupNeedName = "O grupo precisa un nome";
+$Personality = "Personalizar";
+$Condition = "Condición";
+$Primary = "Primario";
+$Secondary = "Secundario";
+$CourseSettings = "Opcións do curso";
+$PleaseChooseACondition = "Por favor escolla unha condición";
+$ChooseDifferentCategories = "Escolla diferentes categorías";
+$Version = "Versión";
+$Normal = "Normal";
+$NoLogOfDuration = "Sen log de duración";
+$AutoInviteLink = "Os usuarios que non están invitados poden usar este link para acceder á enquisa:";
+$CompleteTheSurveysQuestions = "Complete as cuestións da enquisa";
+$SurveysDeleted = "Enquisas eliminadas";
+$RemindUnanswered = "Recordar só ós usuarios que non respostaron";
+$ModifySurvey = "Editar enquisas";
+$CreateQuestionSurvey = "Crear pregunta";
+$ModifyQuestionSurvey = "Editar pregunta";
+$BackToSurvey = "Voltar á enquisa";
+$UpdateInformation = "Actualizar información";
+$PleaseFillSurvey = "Por favor, complete a enquisa";
+$ReportingOverview = "Reportando vista xeral";
+$ThereAreNotQuestionsForthisSurvey = "Non hai cuestións para esta enquisa";
+$Multipleresponse = "Resposta múltiple";
 ?>

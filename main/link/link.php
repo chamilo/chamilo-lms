@@ -88,7 +88,7 @@ $nameTools = get_lang('Links');
 
 // Condition for the session
 $session_id = api_get_session_id();
-$condition_session = api_get_session_condition($session_id, false);
+$condition_session = api_get_session_condition($session_id, false, true);
 
 if (isset($_GET['action']) && $_GET['action'] == 'addlink') {
 	$nameTools = '';
@@ -306,7 +306,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 				// Author : <input name="A" type="text" />
 
 				$default_values = '';
-                if ($_GET['action'] == 'editlink') {
+				if ($_GET['action'] == 'editlink') {
 					$filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => Security::remove_XSS($_GET['id']), 'tool_id' => '\''. TOOL_LINK .'\'');
 					$values = get_specific_field_values_list($filter, array('value'));
 					if (!empty($values)) {
@@ -382,15 +382,6 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 
 		echo "</form>";
 	}
-	/*elseif(($_GET['action'] == 'importcsv') and !$submit_import) {
-		echo "<h4>", get_lang('CsvImport'), "</h4>\n\n",
-		     "<form method=\"post\" action=\"".api_get_self()."?action=".$_GET['action']."&amp;urlview=".$urlview."\" enctype=\"multipart/form-data\">",
-                // uncomment if you want to set a limit: '<input type="hidden" name="MAX_FILE_SIZE" value="32768">', "\n",
-                '<input type="file" name="import_file" size="30">', "\n",
-		     	"<input type=\"Submit\" name=\"submitImport\" value=\"".get_lang('Ok')."\">",
-		     "</form>";
-		echo get_lang('CsvExplain');
-	}*/
 }
 
 if (!empty($down)) {
@@ -478,13 +469,16 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 					echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;">';
 					echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview='.Security::remove_XSS($newurlview).'">';
 					echo '<img src="../img/remove.gif" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).'</a><br />&nbsp;&nbsp;&nbsp;'.$myrow['description'];
-
-					if (api_is_allowed_to_edit(null, true)) {
-						echo '<th>';
-						showcategoryadmintools($myrow['id']);
-						echo '</th>';
-					}
 					echo '</th>';
+					if (api_is_allowed_to_edit(null, true)) {
+						if ($session_id == $myrow['session_id']) {
+							echo '<th>';
+							showcategoryadmintools($myrow['id']);
+							echo '</th>';
+						} else {
+							echo '<th>'.get_lang('EditionNotAvailableFromSession');
+						}
+					}
 				echo '</tr>';
 				echo '</table>';
 				echo showlinksofcategory($myrow['id']);

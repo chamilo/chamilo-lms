@@ -1206,6 +1206,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	border-width: 1px;
 	border-style: solid;
 	border: 1px solid #4171B5;
+	-moz-border-radius: 10px;
 	padding: 6px;
 	color: #00407F;
 	background-color: #EFEFEF;
@@ -1218,6 +1219,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	border-style: solid;
 	padding: 6px;
 	border: 1px solid #FFB30F;
+	-moz-border-radius: 10px;
 	color: #000;
 	background-color: #FFEFA7;
 	min-height: 30px;
@@ -1231,6 +1233,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
+	-moz-border-radius: 10px;
 	padding:6px;	
 	min-height: 30px;
 }
@@ -1242,7 +1245,8 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	border-style: solid;
 	padding: 6px;
 	border: 1px solid #FF0000;
-	color: #000;
+	-moz-border-radius: 10px;
+	color: #440000;
 	background-color: #FFD1D1;
 	min-height: 30px;
 }

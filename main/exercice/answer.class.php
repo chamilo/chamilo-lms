@@ -13,31 +13,31 @@ if(!class_exists('Answer')):
 
 class Answer
 {
-	var $questionId;
+	public $questionId;
 
 	// these are arrays
-	var $answer;
-	var $correct;
-	var $comment;
-	var $weighting;
-	var $position;
-	var $hotspot_coordinates;
-	var $hotspot_type;
-	var $destination;
+	public $answer;
+	public $correct;
+	public $comment;
+	public $weighting;
+	public $position;
+	public $hotspot_coordinates;
+	public $hotspot_type;
+	public $destination;
 
 	// these arrays are used to save temporarily new answers
 	// then they are moved into the arrays above or deleted in the event of cancellation
-	var $new_answer;
-	var $new_correct;
-	var $new_comment;
-	var $new_weighting;
-	var $new_position;
-	var $new_hotspot_coordinates;
-	var $new_hotspot_type;
+	public $new_answer;
+	public $new_correct;
+	public $new_comment;
+	public $new_weighting;
+	public $new_position;
+	public $new_hotspot_coordinates;
+	public $new_hotspot_type;
 
-	var $nbrAnswers;
-	var $new_nbrAnswers;
-	var $new_destination; // id of the next question if feedback option is set to Directfeedback
+	public $nbrAnswers;
+	public $new_nbrAnswers;
+	public $new_destination; // id of the next question if feedback option is set to Directfeedback
 
 /**
 	 * constructor of the class

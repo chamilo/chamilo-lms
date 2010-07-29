@@ -341,9 +341,7 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
 		} else {
 			$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;remove_as_template='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/wizard_gray_small.gif" border="0" title="'.get_lang('RemoveAsTemplate').'" alt=""'.get_lang('RemoveAsTemplate').'" /></a>';
 		}
-		////////// commented code until implementation is completed (Feature #1768)
-		//$modify_icons .= '<a href="export_htmldoc2pdf.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/file_pdf_small.gif" border="0" title="'.get_lang('Export2PDF').'" alt="" /></a>';
-		////////////
+		$modify_icons .= '<a href="export_htmldoc2pdf.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/file_pdf_small.gif" border="0" title="'.get_lang('Export2PDF').'" alt="" /></a>';
 	}
 
 	return $modify_icons;

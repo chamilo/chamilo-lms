@@ -8,6 +8,7 @@ api_block_anonymous_users();
 
 $file = Security::remove_XSS($_GET['file']);
 $file_info = pathinfo($file);
+$dirname = str_replace("\\", '/', $file_info['dirname']);
 $filename = $file_info['basename'];
 $extension = $file_info['extension'];
 
@@ -58,7 +59,9 @@ if (empty($title)) {
 
 $pdf = new mPDF('UTF-8', 'A4', '', '', 30, 20, 27, 25, 16, 13, 'P');
 
-$pdf->directionality = api_get_text_direction();
+$pdf->SetBasePath($basehref);
+
+$pdf->directionality = api_get_text_direction(); // TODO: To be read from the html document.
 
 $pdf->useOnlyCoreFonts = true;
 

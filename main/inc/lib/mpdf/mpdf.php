@@ -8709,7 +8709,7 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 		}
 		if (!$data && $check = @fopen($file,"rb")) { 	// mPDF 4.2.029
 			fclose($check);
-			// Modified by Ivan Tcholakov, 28-JIN-2010.
+			// Modified by Ivan Tcholakov, 28-JUN-2010.
 			//$data = file_get_contents($file);
 			if (api_is_internal_path($file)) {
 				$data = file_get_contents(api_get_path(TO_SYS, $file));
@@ -10444,7 +10444,14 @@ function GetFullPath(&$path,$basepath='') {
 function _get_file($path) {
 	// If local file try using local path (? quicker, but also allowed even if allow_url_fopen false)
 	$contents = '';
-	$contents = @file_get_contents($path);
+	// Modified by Ivan Tcholakov, 29-JUl-2010.
+	//$contents = @file_get_contents($path);
+	if (api_is_internal_path($path)) {
+		$contents = @file_get_contents(api_get_path(TO_SYS, $path));
+	} else {
+		$contents = @file_get_contents($path);
+	}
+	//
 	if ($contents) { return $contents; }
 	if ($this->basepathIsLocal) {
 		$tr = parse_url($path);

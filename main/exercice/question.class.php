@@ -32,15 +32,15 @@ define('MULTIPLE_ANSWER_COMBINATION', 	9);
  */
 abstract class Question
 {
-	var $id;
-	var $question;
-	var $description;
-	var $weighting;
-	var $position;
-	var $type;
-	var $level;
-	var $picture;
-	var $exerciseList;  // array with the list of exercises which this question is in
+	public $id;
+	public $question;
+	public $description;
+	public $weighting;
+	public $position;
+	public $type;
+	public $level;
+	public $picture;
+	public $exerciseList;  // array with the list of exercises which this question is in
 	private $isContent;
 	
 	static $typePicture = 'new_question.png';

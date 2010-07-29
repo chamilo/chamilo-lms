@@ -18,22 +18,22 @@ if(!class_exists('Exercise')):
 
 class Exercise
 {
-	var $id;
-	var $exercise;
-	var $description;
-	var $sound;
-	var $type;
-	var $random;
-	var $random_answers;
-	var $active;
-	var $timeLimit;
-	var $attempts;
-	var $feedbacktype;
-	var $end_time;
-  	var $start_time;
-	var $questionList;  // array with the list of this exercise's questions
-	var $results_disabled;
-  	var $expired_time;
+	public $id;
+	public $exercise;
+	public $description;
+	public $sound;
+	public $type;
+	public $random;
+	public $random_answers;
+	public $active;
+	public $timeLimit;
+	public $attempts;
+	public $feedbacktype;
+	public $end_time;
+  	public $start_time;
+	public $questionList;  // array with the list of this exercise's questions
+	public $results_disabled;
+  	public $expired_time;
 	/**
 	 * constructor of the class
 	 *

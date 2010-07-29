@@ -5,8 +5,8 @@
  */
 require_once '../inc/global.inc.php'; 
 api_protect_course_script();
-//Not sure what values can be set here I just found that $_SESSION["roomType"] could be the string "conference" 
-if ($_GET['type'] == 'conference') {
+// Only allow conference or classroom modes. Others are likely to be attacks
+if ($_GET['type'] == 'conference' or $_GET['type'] == 'classroom') {
 	$_SESSION["roomType"] = $_GET['type'];
 }
 ?>

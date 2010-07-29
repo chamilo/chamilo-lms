@@ -431,6 +431,17 @@ EOF;
 			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], api_get_timezones(), '');
 			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
+		case USER_FIELD_TYPE_SOCIAL_PROFILE:
+			// get the social network's favicon
+			$icon_path = UserManager::get_favicon_from_url($extra_data['extra_'.$field_details[1]], $field_details[4]);
+			// special hack for hi5
+			$leftpad = '1.7'; $top = '0.4'; $domain = parse_url($icon_path, PHP_URL_HOST); if ($domain == 'www.hi5.com' or $domain == 'hi5.com') { $leftpad = '3'; $top = '0';}
+			// print the input field
+			$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 60, 'style' => 'background-image: url(\''.$icon_path.'\'); background-repeat: no-repeat; background-position: 0.4em '.$top.'em; padding-left: '.$leftpad.'em; '));
+			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+			$form->applyFilter('extra_'.$field_details[1], 'trim');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+			break;
 	}
 }
 
@@ -713,17 +724,13 @@ if ($form->validate()) {
 }
 
 
-if (isset($_GET['show'])) {
-
-	if ((api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') || (api_get_setting('allow_social_tool') == 'true')) {
-
+//if (isset($_GET['show'])) {
+	//if ((api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') || (api_get_setting('allow_social_tool') == 'true')) {
 		//$interbreadcrumb[] = array ('url' => 'javascript: void(0);', 'name' => get_lang('SocialNetwork'));
-
-	} elseif ((api_get_setting('allow_social_tool') == 'false' && api_get_setting('allow_message_tool') == 'true')) {
-
+	//} elseif ((api_get_setting('allow_social_tool') == 'false' && api_get_setting('allow_message_tool') == 'true')) {
 		//$interbreadcrumb[] = array('url' => 'javascript: void(0);', 'name' => get_lang('MessageTool'));
-	}
-}
+	//}
+//}
 
 /*
 ==============================================================================

@@ -341,6 +341,13 @@ if ($show_full_profile) {
 						if (is_array($user_tags) && count($user_tags)>0) {
 							$extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt><dd>'.implode(', ',$tag_tmp).'</dd>';
 						}
+					} elseif ($field_type == USER_FIELD_TYPE_SOCIAL_PROFILE) {
+						$icon_path = UserManager::get_favicon_from_url($data);
+						$bottom = '0.3';
+						//quick hack for hi5
+						$domain = parse_url($icon_path, PHP_URL_HOST); if ($domain == 'www.hi5.com' or $domain == 'hi5.com') { $bottom = '0.8'; }
+						$data = '<a href="'.$data.'"><img src="'.$icon_path.'" alt="ico" style="margin-right:0.5em;margin-bottom:-'.$bottom.'em;" />'.ucfirst($field_display_text).'</a>';
+						$extra_information_value .= '<dd>'.$data.'</dd>'; 
 					} else {
 						if (!empty($data)) {
 							$extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt><dd>'.$data.'</dd>';

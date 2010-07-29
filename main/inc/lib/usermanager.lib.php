@@ -20,6 +20,7 @@ define('USER_FIELD_TYPE_DOUBLE_SELECT', 	8);
 define('USER_FIELD_TYPE_DIVIDER', 			9);
 define('USER_FIELD_TYPE_TAG', 				10);
 define('USER_FIELD_TYPE_TIMEZONE', 			11);
+define('USER_FIELD_TYPE_SOCIAL_PROFILE', 	12);
 
 //User image sizes
 define('USER_IMAGE_SIZE_ORIGINAL',	1);
@@ -3244,6 +3245,25 @@ class UserManager
 	    	$result = true;
 	    }
 	    return $result;
+	}
+	/**
+	 * This function returns an icon path that represents the favicon of the website of which the url given. Defaults to the current Chamilo favicon
+	 * @param	string	URL of website where to look for favicon.ico
+	 * @param	string	Optional second URL of website where to look for favicon.ico
+	 * @return	string	Path of icon to load
+	 */
+	public function get_favicon_from_url($url1, $url2 = null) {
+		$icon_link = '';
+		$url = $url1;
+		if (empty($url1)) {
+			$url = $url2;
+			if (empty($url)) {
+				$url = api_get_access_url(api_get_current_access_url_id());
+			}
+		}
+		$pieces = parse_url($url);
+		$icon_link = $pieces['scheme'].'://'.$pieces['host'].'/favicon.ico';
+		return $icon_link;
 	}
 
 }

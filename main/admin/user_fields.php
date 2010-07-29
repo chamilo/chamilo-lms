@@ -214,6 +214,7 @@ function type_filter($type)
 	$types[USER_FIELD_TYPE_DIVIDER] 			= get_lang('FieldTypeDivider');
 	$types[USER_FIELD_TYPE_TAG] 				= get_lang('FieldTypeTag');
 	$types[USER_FIELD_TYPE_TIMEZONE]			= get_lang('FieldTypeTimezone');
+	$types[USER_FIELD_TYPE_SOCIAL_PROFILE]		= get_lang('FieldTypeSocialProfile');
 	return $types[$type];
 }
 

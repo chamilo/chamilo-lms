@@ -137,6 +137,7 @@ $types[USER_FIELD_TYPE_DOUBLE_SELECT] 	= get_lang('FieldTypeDoubleSelect');
 $types[USER_FIELD_TYPE_DIVIDER] 		= get_lang('FieldTypeDivider');
 $types[USER_FIELD_TYPE_TAG] 		= get_lang('FieldTypeTag');
 $types[USER_FIELD_TYPE_TIMEZONE]	= get_lang('FieldTypeTimezone');
+$types[USER_FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
 
 $form->addElement('select','fieldtype',get_lang('FieldType'),$types,array('onchange'=>'change_image_user_field(this.value)'));
 $form->addRule('fieldtype', get_lang('ThisFieldIsRequired'), 'required');

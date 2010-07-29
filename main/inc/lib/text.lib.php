@@ -9,7 +9,200 @@
  * @package chamilo.library
  */
 
-/*	FUNCTIONS */
+
+/* HTML processing functions */
+
+/**
+ * This function strips all html-tags found in the input string and outputs a pure text.
+ * Mostly, the function is to be used before language or encoding detection of the input string.
+ * @param string $string	The input string with html-tags to be converted to plain text.
+ * @return string			The returned plain text as a result.
+ */
+function api_html_to_text($string) {
+	// These purifications have been found experimentally, for nice looking output.
+	$string = preg_replace('/<br[^>]*>/i', "\n", $string);
+	$string = preg_replace('/<\/?(div|p|h[1-6]|table|ol|ul|blockquote)[^>]*>/i', "\n", $string);
+	$string = preg_replace('/<\/(tr|li)[^>]*>/i', "\n", $string);
+	$string = preg_replace('/<\/(td|th)[^>]*>/i', "\t", $string);
+
+	$string = strip_tags($string);
+
+	// Line endings unification and cleaning.
+	$string = str_replace(array("\r\n", "\n\r", "\r"), "\n", $string);
+	$string = preg_replace('/\s*\n/', "\n", $string);
+	$string = preg_replace('/\n+/', "\n", $string);
+
+	return trim($string);
+}
+
+/**
+ * Detects encoding of html-formatted text.
+ * @param string $string				The input html-formatted text.
+ * @return string						Returns the detected encoding.
+ */
+function api_detect_encoding_html($string) {
+	if (@preg_match('/<head.*(<meta[^>]*content=[^>]*>).*<\/head>/si', $string, $matches)) {
+		if (@preg_match('/<meta[^>]*charset=(.*)["\';][^>]*>/si', $matches[1], $matches)) {
+			return api_refine_encoding_id(trim($matches[1]));
+		}
+	}
+	return api_detect_encoding(api_html_to_text($string));
+}
+
+/**
+ * Converts the text of a html-document to a given encoding, the meta-tag is changed accordingly.
+ * @param string $string				The input full-html document.
+ * @param string						The new encoding value to be set.
+ */
+function api_set_encoding_html(&$string, $encoding) {
+	$old_encoding = api_detect_encoding_html($string);
+	if (@preg_match('/(.*<head.*)(<meta[^>]*content=[^>]*>)(.*<\/head>.*)/si', $string, $matches)) {
+		$meta = $matches[2];
+		if (@preg_match("/(<meta[^>]*charset=)(.*)([\"';][^>]*>)/si", $meta, $matches1)) {
+			$meta = $matches1[1] . $encoding . $matches1[3];
+			$string = $matches[1] . $meta . $matches[3];
+		} else {
+			$string = $matches[1] . '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/>' . $matches[3];
+		}
+	} else {
+		$count = 1;
+		$string = str_ireplace('</head>', '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/></head>', $string, $count);
+	}
+	$string = api_convert_encoding($string, $encoding, $old_encoding);
+}
+
+/**
+ * Returns the title of a html document.
+ * @param string $string				The contents of the input document.
+ * @param string $input_encoding		The encoding of the input document. If the value is not set, it is detected.
+ * @param string $$output_encoding		The encoding of the retrieved title. If the value is not set, the system encoding is assumend.
+ * @return string						The retrieved title, html-entities and extra-whitespace between the words are cleaned.
+ */
+function api_get_title_html(&$string, $output_encoding = null, $input_encoding = null) {
+	if (@preg_match('/<head.*<title[^>]*>(.*)<\/title>.*<\/head>/si', $string, $matches)) {
+		if (empty($output_encoding)) {
+			$output_encoding = api_get_system_encoding();
+		}
+		if (empty($input_encoding)) {
+			$input_encoding = api_detect_encoding_html($string);
+		}
+		return trim(@preg_replace('/\s+/', ' ', api_html_entity_decode(api_convert_encoding($matches[1], $output_encoding, $input_encoding), ENT_QUOTES, $output_encoding)));
+	}
+	return '';
+}
+
+
+/* XML processing functions */
+
+/**
+ * Detects encoding of xml-formatted text.
+ * @param string $string				The input xml-formatted text.
+ * @param string $default_encoding		This is the default encoding to be returned if there is no way the xml-text's encoding to be detected. If it not spesified, the system encoding is assumed then.
+ * @return string						Returns the detected encoding.
+ * @todo The second parameter is to be eliminated. See api_detect_encoding_html().
+ */
+function api_detect_encoding_xml($string, $default_encoding = null) {
+	if (preg_match(_PCRE_XML_ENCODING, $string, $matches)) {
+		return api_refine_encoding_id($matches[1]);
+	}
+	if (api_is_valid_utf8($string)) {
+		return 'UTF-8';
+	}
+	if (empty($default_encoding)) {
+		$default_encoding = _api_mb_internal_encoding();
+	}
+	return api_refine_encoding_id($default_encoding);
+}
+
+
+/* CSV processing functions */
+
+/**
+ * Parses CSV data (one line) into an array. This function is not affected by the OS-locale settings.
+ * @param string $string				The input string.
+ * @param string $delimiter (optional)	The field delimiter, one character only. The default delimiter character is comma {,).
+ * @param string $enclosure (optional)	The field enclosure, one character only. The default enclosure character is quote (").
+ * @param string $escape (optional)		The escape character, one character only. The default escape character is backslash (\).
+ * @return array						Returns an array containing the fields read.
+ * Note: In order this function to work correctly with UTF-8, limitation for the parameters $delimiter, $enclosure and $escape
+ * should be kept. These parameters should be single ASCII characters only. Thus the implementation of this function is faster.
+ * @link http://php.net/manual/en/function.str-getcsv.php   (exists as of PHP 5 >= 5.3.0)
+ */
+function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape = '\\') {
+	$delimiter = (string)$delimiter;
+	if (api_byte_count($delimiter) > 1) { $delimiter = $delimiter[1]; }
+	$enclosure = (string)$enclosure;
+	if (api_byte_count($enclosure) > 1) { $enclosure = $enclosure[1]; }
+	$escape = (string)$escape;
+	if (api_byte_count($escape) > 1) { $escape = $escape[1]; }
+	$str = (string)$string;
+	$len = api_byte_count($str);
+	$enclosed = false;
+	$escaped = false;
+	$value = '';
+	$result = array();
+
+	for ($i = 0; $i < $len; $i++) {
+		$char = $str[$i];
+		if ($char == $escape) {
+			if (!$escaped) {
+				$escaped = true;
+				continue;
+			}
+		}
+		$escaped = false;
+		switch ($char) {
+			case $enclosure:
+				if ($enclosed && $str[$i + 1] == $enclosure) {
+					$value .= $char;
+					$i++;
+				} else {
+					$enclosed = !$enclosed;
+				}
+				break;
+			case $delimiter:
+				if (!$enclosed) {
+					$result[] = $value;
+					$value = '';
+				} else {
+					$value .= $char;
+				}
+				break;
+			default:
+				$value .= $char;
+				break;
+		}
+	}
+	if (!empty($value)) {
+		$result[] = $value;
+	}
+
+	return $result;
+}
+
+/**
+ * Reads a line from a file pointer and parses it for CSV fields. This function is not affected by the OS-locale settings.
+ * @param resource $handle				The file pointer, it must be valid and must point to a file successfully opened by fopen().
+ * @param int $length (optional)		Reading ends when length - 1 bytes have been read, on a newline (which is included in the return value), or on EOF (whichever comes first).
+ * 										If no length is specified, it will keep reading from the stream until it reaches the end of the line.
+ * @param string $delimiter (optional)	The field delimiter, one character only. The default delimiter character is comma {,).
+ * @param string $enclosure (optional)	The field enclosure, one character only. The default enclosure character is quote (").
+ * @param string $escape (optional)		The escape character, one character only. The default escape character is backslash (\).
+ * @return array						Returns an array containing the fields read.
+ * Note: In order this function to work correctly with UTF-8, limitation for the parameters $delimiter, $enclosure and $escape
+ * should be kept. These parameters should be single ASCII characters only.
+ * @link http://php.net/manual/en/function.fgetcsv.php
+ */
+function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"', $escape = '\\') {
+	if (($line = is_null($length) ? fgets($handle): fgets($handle, $length)) !== false) {
+		$line = rtrim($line, "\r\n");
+		return api_str_getcsv($line, $delimiter, $enclosure, $escape);
+	}
+	return false;
+}
+
+
+/* Miscellaneous text processing functions */
 
 /**
  * Convers a string from camel case into underscore.
@@ -189,7 +382,7 @@ function text_filter($input, $filter = true) {
  * @return string The text after parsing.
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version June 2004
-*/
+ */
 function _text_parse_tex($textext) {
 	//$textext = str_replace(array ("[tex]", "[/tex]"), array ('[*****]', '[/*****]'), $textext);
 	//$textext = stripslashes($texttext);
@@ -217,7 +410,7 @@ function _text_parse_tex($textext) {
  * @return string The text after parsing.
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version June 2004
-*/
+ */
 function _text_parse_texexplorer($textext) {
 	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
 		$textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
@@ -228,18 +421,18 @@ function _text_parse_texexplorer($textext) {
 }
 
 /**
-* This function should not be accessed directly but should be accesse through the text_filter function
-* @author 	Patrick Cool <patrick.cool@UGent.be>
-*/
+ * This function should not be accessed directly but should be accesse through the text_filter function
+ * @author 	Patrick Cool <patrick.cool@UGent.be>
+ */
 function _text_parse_glossary($input) {
 	return $input;
 }
 
 /**
-* @desc this function makes a valid link to a different tool
-*		This function should not be accessed directly but should be accesse through the text_filter function
-* @author Patrick Cool <patrick.cool@UGent.be>
-*/
+ * @desc this function makes a valid link to a different tool
+ *		This function should not be accessed directly but should be accesse through the text_filter function
+ * @author Patrick Cool <patrick.cool@UGent.be>
+ */
 function _text_parse_tool($input) {
 	// An array with all the valid tools
 	$tools[] = array(TOOL_ANNOUNCEMENT, 'announcements/announcements.php');
@@ -249,9 +442,9 @@ function _text_parse_tool($input) {
 }
 
 /**
-* render LaTeX code into a gif or retrieve a cached version of the gif
-* @author Patrick Cool <patrick.cool@UGent.be> Ghent University
-*/
+ * render LaTeX code into a gif or retrieve a cached version of the gif
+ * @author Patrick Cool <patrick.cool@UGent.be> Ghent University
+ */
 function latex_gif_renderer($latex_code) {
 	global $_course;
 

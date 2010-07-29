@@ -1,5 +1,5 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
+require_once(api_get_path(LIBRARY_PATH).'debug.lib.php');
 
 
 class TestDebug extends UnitTestCase {

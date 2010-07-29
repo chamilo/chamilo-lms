@@ -58,10 +58,7 @@ function GetQuizName($fname, $fpath) {
 			$contents = fread($fp, filesize($fpath.$fname));
 			fclose($fp);
 
-			$encoding = api_detect_encoding_html($contents);
-			$contents = substr($contents, 0, stripos($contents, '/title>') - 1);
-			$contents = substr($contents, stripos($contents, 'title>') + 6);
-			$title = trim(api_html_entity_decode(api_to_system_encoding($contents, $encoding), ENT_QUOTES));
+			$title = api_get_title_html($contents);
 		}
 	}
 	return (string)$title;

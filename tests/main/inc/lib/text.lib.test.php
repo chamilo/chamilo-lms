@@ -3,6 +3,45 @@ require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
 class TestText extends UnitTestCase {
 
+	public function test_api_html_to_text() {
+		$filename = api_get_path(SYS_PATH).'documentation/installation_guide.html';
+		$res = @file_get_contents($filename);
+		if ($res !== false) {
+			$res = api_html_to_text($res);
+			$this->assertTrue(is_string($res));
+		} else {
+			$this->assertTrue(true); // The file is missing, skip this test.
+		}
+		//var_dump('<pre>'.$res.'</pre>');
+	}
+
+	public function test_api_str_getcsv() {
+		$strings = array('FirstName;LastName;Email', 'John;Doe;john.doe@mail.com', '"Иван";\\Чолаков;ivan@mail.com');
+		$expected_results = array(array('FirstName', 'LastName', 'Email'), array('John', 'Doe', 'john.doe@mail.com'), array('Иван', 'Чолаков', 'ivan@mail.com'));
+		$res = array();
+		foreach ($strings as $string) {
+			$res[] = api_str_getcsv($string, ';');
+		}
+		$this->assertTrue($res === $expected_results);
+		//var_dump($res);
+	}
+
+	public function test_api_fgetcsv() {
+		$filename = api_get_path(SYS_CODE_PATH).'admin/exemple.csv';
+		$res = array();
+		$handle = @fopen($filename, 'r');
+		if ($handle !== false) {
+			while (($line = @api_fgetcsv($handle, null, ';')) !== false) {
+				$res[] = $line;
+			}
+			@fclose($handle);
+			$this->assertTrue(is_array($res) && count($res) > 0);
+		} else {
+			$this->assertTrue(true); // The file is missing, skip this test.
+		}
+		//var_dump($res);
+	}
+
 	public function test_api_camel_case_to_underscore() {
 		$input_strings    = array('myDocuments', 'MyProfile', 'CreateNewCourse', 'Create_New_course');
 		$expected_results = array('my_documents', 'my_profile', 'create_new_course', 'create_new_course');

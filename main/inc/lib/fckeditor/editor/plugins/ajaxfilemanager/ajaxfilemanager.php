@@ -96,12 +96,12 @@
 	$course_session = explode('_', basename($currentPath));
 	$course_session = strtolower($course_session[sizeof($course_session) - 1]);
 	?>
-	var shared_folder_session = '<?php echo get_lang('SharedDocumentsDirectory').' ('.api_get_session_name($course_session).')';?>';
-
+	<!--var shared_folder_session = '<?php //echo get_lang('SharedDocumentsDirectory').' ('.api_get_session_name($course_session).')';?>'; --><!--// problem does not refresh, does not synchronize with javascript -->
+	var shared_folder_session = '<?php echo get_lang('SharedDocumentsDirectory').'*';?>';
 	<?php 
 	
-	//$userinfo=Database::get_user_info_from_id(substr(basename($folderInfo['path']), 8));	// problem with $folderInfo['path'] does not refresh?>
-	//var shared_user_folder = '<?php //echo api_get_person_name($userinfo['firstname'], $userinfo['lastname']);?>';
+	//$userinfo=Database::get_user_info_from_id(substr(basename($folderInfo['path']), 8));	// problem with $folderInfo['path'] does not refresh, sincronisation with javascript?>
+	<!--var shared_user_folder = '<?php //echo api_get_person_name($userinfo['firstname'], $userinfo['lastname']);?>'; --><!--// problem does not refresh, does not synchronize with javascript -->
 	var shared_user_folder = '<?php echo get_lang('User');?>';
 
 	<!--end hack -->

@@ -75,7 +75,7 @@ $pdf->defaultfooterfontsize = 12;	// in pts
 $pdf->defaultfooterfontstyle = B;	// blank, B, I, or BI
 $pdf->defaultfooterline = 1;		// 1 to include line below header/above footer
 
-$pdf->SetHeader($head_title_filename.'|||');
+$pdf->SetHeader($head_title_filename.'|||');// ('{DATE j-m-Y}|{PAGENO}/{nb}|'.$title);
 $pdf->SetFooter('||{PAGENO}');		// defines footer for Odd and Even Pages - placed at Outer margin
 
 $pdf->SetAuthor('Documents Chamilo');

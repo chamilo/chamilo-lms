@@ -536,9 +536,15 @@ if (!empty($_REQUEST['new_dir'])) {
 				require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
 				require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 				$course = isset($course_info) ? $course_info : null;
-				$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.substr(Security::remove_XSS($dir_name_sql), 1).'" >'.$_POST['new_dir'].'</a> - '.$_POST['description'];
-
-				$agenda_id = agenda_add_item($course, $_POST['new_dir'], $content, date('Y-m-d H:i:s'), date('Y-m-d H:i:s'), array('GROUP:'.$toolgroup), 0);
+				$date = date('Y-m-d H:i:s');
+				$title = Security::remove_XSS($_POST['new_dir']);
+				if (!empty($_POST['type1'])) {
+					$date = get_date_from_select('expires');
+					$title = sprintf(get_lang('HandingOverOfTaskX'),Security::remove_XSS($_POST['new_dir']));
+				}
+				$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.substr(Security::remove_XSS($dir_name_sql), 1).'" >'.Security::remove_XSS($_POST['new_dir']).'</a> - '.Security::remove_XSS($_POST['description']);
+				error_log($date);
+				$agenda_id = agenda_add_item($course, $title, $content, $date, $date, array('GROUP:'.$toolgroup), 0);
 			}
 			$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
 									   "url         = '".Database::escape_string($dir_name_sql)."',

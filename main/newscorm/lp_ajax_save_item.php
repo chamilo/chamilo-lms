@@ -3,7 +3,7 @@
  * This script contains the server part of the xajax interaction process. The client part is located
  * in lp_api.php or other api's.
  * This is a first attempt at using xajax and AJAX in general, so the code might be a bit unsettling.
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**
@@ -60,7 +60,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
         }
     }
     //$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
-
+    if (!is_a($mylp,'learnpath')) { return ''; }
 
     $prereq_check = $mylp->prerequisites_match($item_id);
     if($prereq_check === true) //launch the prerequisites check and set error if needed

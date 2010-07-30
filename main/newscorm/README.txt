@@ -12,4 +12,4 @@ Please note this DOES NOT manage the Dokeos learnpaths yet.
 
 For more detailed development information, please read the corresponding Wiki page: http://www.dokeos.com/wiki/index.php/SCORM_tool_redesign
 
-For any problem contact me directly at <yannick.warnier@dokeos.com>
+For any problem contact me directly at <yannick.warnier@beeznest.com>

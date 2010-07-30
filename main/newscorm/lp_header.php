@@ -1,7 +1,8 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Script that displays the header frame for lp_view.php
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**

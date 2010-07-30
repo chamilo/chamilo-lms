@@ -1,18 +1,19 @@
-<?php //$id:$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Container for the aiccResource class that deals with elemens from AICC Descriptor file
- * @package	dokeos.learnpath
+ * @package	chamilo.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
- * @license	GNU/GPL - See Dokeos license directory for details
+ * @license	GNU/GPL
  */
 /**
  * Class defining the elements from an AICC Descriptor file
  */
 class aiccResource {
-	var $identifier = '';
-	var $title = '';
-	var $description = '';
-	var $developer_id = '';
+	public $identifier = '';
+	public $title = '';
+	public $description = '';
+	public $developer_id = '';
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormResource
@@ -20,7 +21,7 @@ class aiccResource {
      * @param	string	Type of construction needed ('db' or 'config', default = 'config')
      * @param	mixed	Depending on the type given, DB id for the lp_item or parameters array
      */
-    function aiccResource($type='config',$params) {
+    public function aiccResource($type='config',$params) {
 
     	if(isset($params))
     	{

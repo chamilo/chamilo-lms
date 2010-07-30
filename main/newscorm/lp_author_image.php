@@ -1,7 +1,8 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Script that displays the author name and image of a LP
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Julio Montoya Armas <gugli100@gmail.com>
  */
 

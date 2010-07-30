@@ -1,7 +1,8 @@
-<?php //$id:$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Container for the scormResource class
- * @package dokeos.learnpath.scorm
+ * @package chamilo.learnpath.scorm
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  */
 /**
@@ -9,17 +10,17 @@
  *
  */
 class scormResource {
-	var $identifier = '';
-	var $type = 'webcontent';
-	//var $identifierref = '';
-	var $scormtype = 'sco'; //fix problems with ENI content where asset is not defined
-	var $base = '';
-	var $href = '';
-	var $metadata;
-	//var $file_href;
-	//var $file_metadata;
-	var $files = array();
-	var $dependencies = array();
+	public $identifier = '';
+	public $type = 'webcontent';
+	//public $identifierref = '';
+	public $scormtype = 'sco'; //fix problems with ENI content where asset is not defined
+	public $base = '';
+	public $href = '';
+	public $metadata;
+	//public $file_href;
+	//public $file_metadata;
+	public $files = array();
+	public $dependencies = array();
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormResource
@@ -27,7 +28,7 @@ class scormResource {
      * @param	string	Type of construction needed ('db' or 'manifest', default = 'manifest')
      * @param	mixed	Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
-    function scormResource($type='manifest',&$element) {
+    public function __construct($type='manifest',&$element) {
     	/*
     	echo "<pre>Analysing resource:<br />\n";
     	var_dump($element);
@@ -184,8 +185,7 @@ class scormResource {
       * Path getter
       * @return	string	Path for this resource
       */
-     function get_path()
-     {
+     public function get_path() {
      	if(!empty($this->href))
      	{
      		require_once 'learnpath.class.php';
@@ -198,8 +198,7 @@ class scormResource {
       * Scorm type getter
       * @return	string	generally 'asset' or 'sco' as these are the only two values defined in SCORM 1.2
       */
-     function get_scorm_type()
-     {
+     public function get_scorm_type() {
      	if(!empty($this->scormtype)){
      		require_once 'learnpath.class.php';
      		return learnpath::escape_string($this->scormtype);
@@ -208,4 +207,3 @@ class scormResource {
      	}
      }
 }
-?>

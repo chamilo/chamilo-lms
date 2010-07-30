@@ -1,7 +1,8 @@
-<?php //$id:$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * File containing the declaration of the learnpathList class.
- * @package	dokeos.learnpath
+ * @package	chamilo.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  */
 /**

@@ -1,9 +1,10 @@
-<?php //$id:$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Container for the aiccResource class that deals with elemens from AICC Course Structure file
- * @package	dokeos.learnpath
+ * @package	chamilo.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
- * @license	GNU/GPL - See Dokeos license directory for details
+ * @license	GNU/GPL
  */
 /**
  * Class defining the Block elements in an AICC Course Structure file
@@ -11,8 +12,8 @@
  */
 require_once 'learnpathItem.class.php';
 class aiccBlock extends learnpathItem{
-	var $identifier = '';
-	var $members = array();
+	public $identifier = '';
+	public $members = array();
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormResource

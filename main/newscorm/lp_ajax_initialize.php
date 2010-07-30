@@ -1,10 +1,11 @@
-<?php //$id$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * This script contains the server part of the xajax interaction process. The client part is located
  * in lp_api.php or other api's.
  * This script, in particular, enables the process of SCO's initialization. It
  * resets the JavaScript values for each SCO to the current LMS status.
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**

@@ -1,15 +1,14 @@
-<?php // $Id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	API event handler functions for AICC / CMIv4 in API communication mode
 *
 *	@author   Denes Nagy <darkden@freemail.hu>
 *   @author   Yannick Warnier <ywarnier@beeznest.org>
 *	@version  v 1.0
 *	@access   public
-*	@package  dokeos.learnpath
-* 	@license	GNU/GPL - See Dokeos license directory for details
-==============================================================================
+*	@package  chamilo.learnpath
+* 	@license	GNU/GPL
 */
 /**
  * This script is divided into three sections.
@@ -22,10 +21,8 @@
  * made by another set of scripts.
  */
 /*
-==============================================================================
-	   INIT SECTION
-==============================================================================
-*/
+ * INIT SECTION
+ */
 
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;

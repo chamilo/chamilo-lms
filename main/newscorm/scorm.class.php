@@ -1,42 +1,43 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements)
- * @package dokeos.learnpath.scorm
+ * @package chamilo.learnpath.scorm
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  */
 /**
- * Defines the "scorm" child of class "learnpath"
- * @package chamilo.learnpath
+ * Includes
  */
 require_once 'scormItem.class.php';
 require_once 'scormMetadata.class.php';
 require_once 'scormOrganization.class.php';
 require_once 'scormResource.class.php';
-
+/**
+ * Defines the "scorm" child of class "learnpath"
+ * @package chamilo.learnpath
+ */
 class scorm extends learnpath {
-	var $manifest = array();
-	var $resources = array();
-	var $resources_att = array();
-	var $organizations = array();
-	var $organizations_att = array();
-	var $metadata = array();
-	var $idrefs = array(); //will hold the references to resources for each item ID found
-	var $refurls = array(); //for each resource found, stores the file url/uri
-	var $subdir = ''; //path between the scorm/ directory and the imsmanifest.xml e.g. maritime_nav/maritime_nav. This is the path that will be used in the lp_path when importing a package
-	var $items = array();
-	var $zipname = ''; //keeps the zipfile safe for the object's life so that we can use it if no title avail
-	var $lastzipnameindex = 0; //keeps an index of the number of uses of the zipname so far
-	var $manifest_encoding = 'UTF-8';
-	var $debug = 0;
+	public $manifest = array();
+	public $resources = array();
+	public $resources_att = array();
+	public $organizations = array();
+	public $organizations_att = array();
+	public $metadata = array();
+	public $idrefs = array(); //will hold the references to resources for each item ID found
+	public $refurls = array(); //for each resource found, stores the file url/uri
+	public $subdir = ''; //path between the scorm/ directory and the imsmanifest.xml e.g. maritime_nav/maritime_nav. This is the path that will be used in the lp_path when importing a package
+	public $items = array();
+	public $zipname = ''; //keeps the zipfile safe for the object's life so that we can use it if no title avail
+	public $lastzipnameindex = 0; //keeps an index of the number of uses of the zipname so far
+	public $manifest_encoding = 'UTF-8';
+	public $debug = 0;
 	/**
 	 * Class constructor. Based on the parent constructor.
 	 * @param	string	Course code
 	 * @param	integer	Learnpath ID in DB
 	 * @param	integer	User ID
 	 */
-    function scorm($course_code=null,$resource_id=null,$user_id=null) {
+    function __construct($course_code=null,$resource_id=null,$user_id=null) {
     	if($this->debug>0){error_log('New LP - scorm::scorm('.$course_code.','.$resource_id.','.$user_id.') - In scorm constructor',0);}
     	if(!empty($course_code) and !empty($resource_id) and !empty($user_id))
     	{

@@ -1,15 +1,15 @@
-<?php //$id:$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Defines the OpenofficeDocument class, which is meant as a conversion
  * tool from Office presentations (.ppt, .sxi, .odp, .pptx) to
  * learning paths
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author  Eric Marguin <eric.marguin@dokeos.com>
- * @license GNU/GPL - See Dokeos license directory for details
+ * @license GNU/GPL
  */
 /**
  * Defines the "OpenofficePresentation" child of class "OpenofficeDocument"
- * @package dokeos.learnpath.OpenofficeDocument
  */
 require_once 'openoffice_document.class.php';
 if (api_get_setting('search_enabled')=='true') {
@@ -22,7 +22,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 
 	public $take_slide_name;
 
-	function OpenofficePresentation($take_slide_name=false, $course_code=null, $resource_id=null,$user_id=null) {
+	public function __construct($take_slide_name=false, $course_code=null, $resource_id=null,$user_id=null) {
 
 		$this -> take_slide_name = $take_slide_name;
 		parent::OpenofficeDocument($course_code, $resource_id, $user_id);
@@ -30,7 +30,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 	}
 
 
-    function make_lp($files=array()) {
+    public function make_lp($files=array()) {
 
     	global $_course;
 

@@ -1,31 +1,32 @@
-<?php //$id:$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Container for the aiccItem class that deals with AICC Assignable Units (AUs)
- * @package	dokeos.learnpath
+ * @package	chamilo.learnpath
  * @author	Yannick Warnier	<ywarnier@beeznest.org>
- * @license	GNU/GPL - See Dokeos license directory for details
+ * @license	GNU/GPL
  */
 /**
  * This class handles the elements from an AICC Descriptor file.
  */
 require_once 'learnpathItem.class.php';
 class aiccItem extends learnpathItem{
-	var $identifier = '';//AICC AU's system_id
-	var $identifierref = '';
-	var $parameters = ''; //AICC AU's web_launch
-	var $title = ''; //no AICC equivalent
-	var $sub_items = array(); //AICC elements (des)
-	//var $prerequisites = ''; - defined in learnpathItem.class.php
-	//var $max_score = ''; //defined in learnpathItem
-	//var $path = ''; //defined in learnpathItem
-	var $maxtimeallowed = '00:00:00'; //AICC AU's max_time_allowed
-	var $timelimitaction = ''; //AICC AU's time_limit_action
-	var $masteryscore = ''; //AICC AU's mastery_score
-	var $core_vendor = ''; //AICC AU's core_vendor
-	var $system_vendor = ''; //AICC AU's system_vendor
-	var $au_type = ''; //AICC AU's type
-	var $command_line = ''; //AICC AU's command_line
-	var $debug=0;
+	public $identifier = '';//AICC AU's system_id
+	public $identifierref = '';
+	public $parameters = ''; //AICC AU's web_launch
+	public $title = ''; //no AICC equivalent
+	public $sub_items = array(); //AICC elements (des)
+	//public $prerequisites = ''; - defined in learnpathItem.class.php
+	//public $max_score = ''; //defined in learnpathItem
+	//public $path = ''; //defined in learnpathItem
+	public $maxtimeallowed = '00:00:00'; //AICC AU's max_time_allowed
+	public $timelimitaction = ''; //AICC AU's time_limit_action
+	public $masteryscore = ''; //AICC AU's mastery_score
+	public $core_vendor = ''; //AICC AU's core_vendor
+	public $system_vendor = ''; //AICC AU's system_vendor
+	public $au_type = ''; //AICC AU's type
+	public $command_line = ''; //AICC AU's command_line
+	public $debug=0;
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormItem
@@ -33,7 +34,7 @@ class aiccItem extends learnpathItem{
      * @param	string	Type of construction needed ('db' or 'config', default = 'config')
      * @param	mixed	Depending on the type given, DB id for the lp_item or parameters array
      */
-    function aiccItem($type='config',$params) {
+    public function aiccItem($type='config',$params) {
     	if(isset($params))
     	{
     		switch($type){

@@ -1,4 +1,5 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Container script for the messages coming from the learnpath object. Initially, this wasn't supposed to be
  * a separate file but rather some text included in lp_view.php, but SCORM involves loading a script that
@@ -10,7 +11,7 @@
  * TOC drawn with your 'incomplete' status, while the SCORM messages generally arrives just after the TOC
  * is drawn. By updating it here and in lp_save.php, we avoid funny visual effect like having a complete
  * item showing as incomplete.
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**
@@ -23,16 +24,16 @@ $language_file = "learnpath";
 require_once 'back_compat.inc.php';
 require_once 'learnpath.class.php';
 require_once 'scorm.class.php';
-if(empty($debug)){$debug=0;}
+if (empty($debug)) {$debug=0;}
 $error = '';
 $display_mode = '';
-if(isset($_SESSION['lpobject'])){
+if (isset($_SESSION['lpobject'])) {
 	$temp = $_SESSION['lpobject'];
 	$_SESSION['oLP'] = unserialize($temp);
 	$error = $_SESSION['oLP']->error;
 	$display_mode = $_SESSION['oLP']->mode;
 }
-if($debug>0){error_log('New LP - Loaded lp_message : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER['HTTP_REFERER'],0);}
+if ($debug>0) {error_log('New LP - Loaded lp_message : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER['HTTP_REFERER'],0);}
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
   var dokeos_xajax_handler = window.parent.oxajax;

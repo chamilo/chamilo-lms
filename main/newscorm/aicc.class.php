@@ -1,13 +1,10 @@
-<?php //$id:$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Defines the AICC class, which is meant to contain the aicc items (nuclear elements)
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
- * @license	GNU/GPL - See Dokeos license directory for details
- */
-/**
- * Defines the "aicc" child of class "learnpath"
- * @package dokeos.learnpath.aicc
+ * @license	GNU/GPL
  */
 require_once 'aiccItem.class.php';
 //require_once 'aiccMetadata.class.php';
@@ -17,12 +14,12 @@ require_once 'aiccBlock.class.php';
 
 class aicc extends learnpath {
 
-	var $config = array();
-	var $config_basename = '';  //the configuration files might be multiple and might have
+	public $config = array();
+	public $config_basename = '';  //the configuration files might be multiple and might have
 								//funny names. We need to keep the name of that file while we
 								//install the content.
-	var $config_files = array();
-	var $config_exts = array(
+	public $config_files = array();
+	public $config_exts = array(
 			'crs'=>0, //Course description file (mandatory)
 			'au' =>0, //Assignable Unit file (mandatory)
 			'des'=>0, //Descriptor file (mandatory)
@@ -31,25 +28,25 @@ class aicc extends learnpath {
 			'pre'=>0, //Prerequisites file (optional)
 			'cmp'=>0  //Completion Requirements file (optional)
 	);
-	var $aulist = array();
-	var $au_order_list = array();
-	var $au_order_list_new_id = array();
-	var $deslist = array();
-	var $cstlist = array();
-	var $orelist = array();
+	public $aulist = array();
+	public $au_order_list = array();
+	public $au_order_list_new_id = array();
+	public $deslist = array();
+	public $cstlist = array();
+	public $orelist = array();
 
-	var $subdir = ''; //path between the scorm/ directory and the config files e.g. maritime_nav/maritime_nav. This is the path that will be used in the lp_path when importing a package
-	var $zipname = ''; //keeps the zipfile safe for the object's life so that we can use it if no title avail
-	var $lastzipnameindex = 0; //keeps an index of the number of uses of the zipname so far
-	var $config_encoding = 'ISO-8859-1';
-	var $debug = 0;
+	public $subdir = ''; //path between the scorm/ directory and the config files e.g. maritime_nav/maritime_nav. This is the path that will be used in the lp_path when importing a package
+	public $zipname = ''; //keeps the zipfile safe for the object's life so that we can use it if no title avail
+	public $lastzipnameindex = 0; //keeps an index of the number of uses of the zipname so far
+	public $config_encoding = 'ISO-8859-1';
+	public $debug = 0;
 	/**
 	 * Class constructor. Based on the parent constructor.
 	 * @param	string	Course code
 	 * @param	integer	Learnpath ID in DB
 	 * @param	integer	User ID
 	 */
-    function aicc($course_code=null,$resource_id=null,$user_id=null) {
+    public function __construct($course_code=null,$resource_id=null,$user_id=null) {
     	if($this->debug>0){error_log('In aicc::aicc()',0);}
     	if(!empty($course_code) and !empty($resource_id) and !empty($user_id))
     	{
@@ -62,7 +59,7 @@ class aicc extends learnpath {
      * Opens a resource
      * @param	integer	Database ID of the resource
      */
-    function open($id)
+    public function open($id)
     {
     	if($this->debug>0){error_log('In aicc::open()',0);}
     	// redefine parent method

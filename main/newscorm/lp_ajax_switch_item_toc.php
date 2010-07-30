@@ -1,9 +1,10 @@
-<?php //$id$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * This script contains the server part of the xajax interaction process. The client part is located
  * in lp_api.php or other api's.
  * This script updated the TOC of the SCORM without updating the SCO's attributes
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**

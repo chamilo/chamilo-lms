@@ -1,4 +1,4 @@
-<?php // $Id: scorm_api.php 21162 2009-06-01 16:18:46Z yannoo $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	API event handler functions for Scorm 1.1 and 1.2 and 1.3

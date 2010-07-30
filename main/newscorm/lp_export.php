@@ -1,4 +1,5 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Script to export the current path as a SCORM zip package.
  * This script cannot use the common controller lp_controller.php because we need to keep
@@ -9,7 +10,7 @@
  * to force the download and let the user do the rest. This script should not change the screen
  * at all, so the user will still be able to continue what he was doing.
  * @todo get some ID proof
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**

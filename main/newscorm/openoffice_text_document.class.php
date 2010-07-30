@@ -1,14 +1,15 @@
-<?php //$id:$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Defines the OpenOfficeDocument class, which is meant as a conversion
  * tool from Office text documents (.doc, .sxw, .odt, .docx) to
  * learning paths
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author  Eric Marguin <eric.marguin@dokeos.com>
  * @license GNU/GPL - See Doke
 /**
  * Defines the "OpenOfficeTextDocument" child of class "learnpath"
- * @package dokeos.learnpath.openofficedocument
+ * @package chamilo.learnpath.openofficedocument
  */
 require_once 'openoffice_document.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -28,8 +29,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 	 * @param	integer Creator user id
 	 * @return	void
 	 */
-	function OpenofficeTextDocument($split_steps=false, $course_code=null, $resource_id=null,$user_id=null)
-	{
+	public function __construct($split_steps=false, $course_code=null, $resource_id=null,$user_id=null) {
 
 		$this -> split_steps = $split_steps;
 		parent::OpenofficeDocument($course_code, $resource_id, $user_id);
@@ -41,8 +41,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
      * @param	array	The files that will compose the generated learning path. Unused so far.
      * @return	boolean	False if file does not exit. Nothing otherwise.
      */
-    function make_lp($files=array())
-    {
+    public function make_lp($files=array()) {
 
 		global $_course;
 		// we get a content where ||page_break|| indicates where the page is broken

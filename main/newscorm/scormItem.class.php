@@ -1,7 +1,8 @@
-<?php //$id:$
+<?php 
+/* For licensing terms, see /license.txt */
 /**
  * Container for the scormItem class that deals with <item> elements in an imsmanifest file
- * @package	dokeos.learnpath.scorm
+ * @package	chamilo.learnpath.scorm
  * @author	Yannick Warnier	<ywarnier@beeznest.org>
  */
 /**
@@ -9,22 +10,22 @@
  */
 require_once 'learnpathItem.class.php';
 class scormItem extends learnpathItem{
-	var $identifier = '';
-	var $identifierref = '';
-	var $isvisible = '';
-	var $parameters = '';
-	var $title = '';
-	var $sub_items = array();
-	var $metadata;
-	//var $prerequisites = ''; - defined in learnpathItem.class.php
+	public $identifier = '';
+	public $identifierref = '';
+	public $isvisible = '';
+	public $parameters = '';
+	public $title = '';
+	public $sub_items = array();
+	public $metadata;
+	//public $prerequisites = ''; - defined in learnpathItem.class.php
 	// Modified by Ivan Tcholakov, 06-FEB-2010.
-	//var $max_time_allowed = ''; //should be something like HHHH:MM:SS.SS
-	var $max_time_allowed = '00:00:00';
+	//public $max_time_allowed = ''; //should be something like HHHH:MM:SS.SS
+	public $max_time_allowed = '00:00:00';
 	//
-	var $timelimitaction = '';
-	var $datafromlms = '';
-	var $mastery_score = '';
-	var $scorm_contact;
+	public $timelimitaction = '';
+	public $datafromlms = '';
+	public $mastery_score = '';
+	public $scorm_contact;
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormItem
@@ -32,7 +33,7 @@ class scormItem extends learnpathItem{
      * @param	string	Type of construction needed ('db' or 'manifest', default = 'manifest')
      * @param	mixed	Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
-    function scormItem($type='manifest',&$element) {
+    public function __construct($type='manifest',&$element) {
     	if(isset($element))
     	{
 
@@ -267,8 +268,7 @@ class scormItem extends learnpathItem{
      * @param	integer	Optional relative order of the item at this level
      * @param	integer	Optional level. If not given, assumes it's level 0
      */
-    function get_flat_list(&$list,&$abs_order,$rel_order=1,$level=0)
-    {
+    public function get_flat_list(&$list,&$abs_order,$rel_order=1,$level=0) {
     	$list[] = array(
     		'abs_order' => $abs_order,
 			'datafromlms' => $this->datafromlms,
@@ -299,8 +299,7 @@ class scormItem extends learnpathItem{
      * Save function. Uses the parent save function and adds a layer for SCORM.
      * @param	boolean	Save from URL params (1) or from object attributes (0)
      */
-    function save($from_outside=true,$prereqs_complete=false)
-    {
+    public function save($from_outside=true,$prereqs_complete=false) {
     	parent::save($from_outside,$prereqs_complete);
     	//under certain conditions, the scorm_contact should not be set, because no scorm signal was sent
     	$this->scorm_contact = true;

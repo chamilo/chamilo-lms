@@ -1,9 +1,9 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * Admin script for SCORM packages
- * @package	dokeos.learnpath.scorm
+ * @package	chamilo.learnpath.scorm
  */
 /**
  * Here comes the script
  */
-?>

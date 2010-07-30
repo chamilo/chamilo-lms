@@ -1,9 +1,10 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Script opened in an iframe and containing the learning path's navigation and progress bar
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
- * @license	GNU/GPL - See Dokeos license directory for details
+ * @license	GNU/GPL
  */
 /**
  * Script
@@ -27,10 +28,10 @@ $navigation_bar = '';
 $display_mode = '';
 $autostart = 'true';
 
-if(isset($_SESSION['lpobject'])) {
+if (isset($_SESSION['lpobject'])) {
 	//if($debug>0) //error_log('New LP - in lp_nav.php - SESSION[lpobject] is defined',0);
 	$oLP = unserialize($_SESSION['lpobject']);
-	if(is_object($oLP)) {
+	if (is_object($oLP)) {
 		$_SESSION['oLP'] = $oLP;
 	} else {
 		//error_log('New LP - in lp_nav.php - SESSION[lpobject] is not object - dying',0);

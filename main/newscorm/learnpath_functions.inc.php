@@ -1,27 +1,6 @@
-<?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
-==============================================================================
-*/
-
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This is a function library for the learning path.
 *
 * Due to the face that the learning path has been built upon the resoucelinker,
@@ -36,15 +15,13 @@
 *
 * @author  Denes Nagy <darkden@evk.bke.hu>, main author
 * @author  Roan Embrechts, some code cleaning
-* @author	Yannick Warnier <yannick.warnier@dokeos.com>, multi-level learnpath behaviour + new SCORM tool
+* @author	Yannick Warnier <yannick.warnier@beeznest.com>, multi-level learnpath behaviour + new SCORM tool
 * @access  public
-* @package dokeos.learnpath
+* @package chamilo.learnpath
 * @todo rename functions to coding conventions: not deleteitem but delete_item, etc
 * @todo rewrite functions to comply with phpDocumentor
 * @todo remove code duplication
-==============================================================================
 */
-
 /**
  * This function deletes an item
  * @param integer 	$id: the item we want to delete
@@ -406,7 +383,7 @@ function array_learnpath_categories()
 * @todo eliminate all global $lang declarations, use get_lang, improve structure.
 * @author   Denes Nagy
 * @author   Roan Embrechts
-* @author   Yannick Warnier <yannick.warnier@dokeos.com> - complete redesign for multi-level learnpath chapters
+* @author   Yannick Warnier <yannick.warnier@beeznest.com> - complete redesign for multi-level learnpath chapters
 */
 function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $level = 0)
 {
@@ -1037,7 +1014,7 @@ function prereqcheck($id_in_path)
  * Constructs the tree that will be used to build the learnpath structure
  * @params  integer     Learnpath_id
  * @return  array       Tree of the learnpath structure
- * @author  Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author  Yannick Warnier <yannick.warnier@beeznest.com>
  * @comment This is a temporary function, which exists while the chapters and items
  *          are still in separate tables in the database. This function gathers the data in a unique tree.
  **/
@@ -1109,7 +1086,7 @@ function get_learnpath_tree($learnpath_id)
  * @param   integer The chapter id to start from
  * @param   boolean Whether to include chapters or not
  * @return  array   List of elements in the first to last order
- * @author  Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author  Yannick Warnier <yannick.warnier@beeznest.com>
  **/
 function get_ordered_items_list($tree, $chapter = 0, $include_chapters = false)
 {
@@ -1145,7 +1122,7 @@ function get_ordered_items_list($tree, $chapter = 0, $include_chapters = false)
  * @param	boolean	Indicates if the style is wrapped (true) or extended (false)
  * @param	integer	Level reached so far in the tree depth (enables recursive behaviour)
  * @return	array		Number of items, Number of items completed
- * @author	Many changes by Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author	Many changes by Yannick Warnier <yannick.warnier@beeznest.com>
  **/
 function display_toc_chapter_contents($tree, $parent_item_id = 0, $learnpath_id, $uid, $wrap, $level = 0)
 {
@@ -1251,7 +1228,7 @@ function display_toc_chapter_contents($tree, $parent_item_id = 0, $learnpath_id,
  * @param   array       Tree of elements as returned by get_learnpath_tree()
  * @param   integer     Level of recursivity we have reached
  * @param   integer     Counter of elements already displayed
- * @author  Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author  Yannick Warnier <yannick.warnier@beeznest.com>
  * @note : forced display because of display_addedresource_link_in_learnpath behaviour (outputing a string would be better)
  **/
 function get_tracking_table($learnpath_id, $user_id, $parent_item_id = 0, $tree = false, $level = 0, $counter = 0)

@@ -1,16 +1,15 @@
-<?php //$id:$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Defines the OpenofficeDocument class, which is meant as a mother class
  * to help in the conversion of Office documents to learning paths
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author	Eric Marguin <eric.marguin@dokeos.com>
- * @license	GNU/GPL - See Dokeos license directory for details
+ * @license	GNU/GPL
  */
 /**
  * Defines the "OpenofficeDocument" child of class "learnpath"
- * @package dokeos.learnpath.aicc
  */
-
 abstract class OpenofficeDocument extends learnpath {
 
 
@@ -24,7 +23,7 @@ abstract class OpenofficeDocument extends learnpath {
 	 * @param	integer	Learnpath ID in DB
 	 * @param	integer	User ID
 	 */
-    function OpenofficeDocument($course_code=null,$resource_id=null,$user_id=null) {
+    public function __construct($course_code=null,$resource_id=null,$user_id=null) {
     	if($this->debug>0){error_log('In OpenofficeDocument::OpenofficeDocument()',0);}
     	if(!empty($course_code) and !empty($resource_id) and !empty($user_id))
     	{
@@ -34,7 +33,7 @@ abstract class OpenofficeDocument extends learnpath {
     	}
     }
 
-    function convert_document($file, $action_after_conversion='make_lp'){
+    public function convert_document($file, $action_after_conversion='make_lp'){
 
     	global $_course, $_user, $_configuration;
 

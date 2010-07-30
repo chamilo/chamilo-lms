@@ -1,7 +1,8 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Script allowing simple edition of learnpath information (title, description, etc)
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
 */
 
@@ -16,7 +17,7 @@ $this_section=SECTION_COURSES;
 event_access_tool(TOOL_LEARNPATH);
 if (! $is_allowed_in_course) api_not_allowed();
 
-if (isset($_SESSION['gradebook'])){
+if (isset($_SESSION['gradebook'])) {
 	$gradebook=	$_SESSION['gradebook'];
 }
 
@@ -63,7 +64,7 @@ $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 //Encoding
 $encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));
 $encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP');
-foreach($encodings as $encoding){
+foreach ($encodings as $encoding) {
 	if (api_equal_encodings($encoding, $_SESSION['oLP']->encoding)) {
   		$s_selected_encoding = $encoding;
   	}
@@ -76,8 +77,8 @@ $origin_select = &$form->addElement('select', 'lp_maker', get_lang('Origin'));
 $lp_orig = $_SESSION['oLP']->get_maker();
 
 include 'content_makers.inc.php';
-foreach($content_origins as $origin){
-	if($lp_orig == $origin){
+foreach ($content_origins as $origin) {
+	if ($lp_orig == $origin) {
 		$s_selected_origin = $origin;
 	}
 	$origin_select->addOption($origin,$origin);
@@ -87,20 +88,18 @@ foreach($content_origins as $origin){
 //Content proximity
 $content_proximity_select = &$form->addElement('select', 'lp_proximity', get_lang('ContentProximity'));
 $lp_prox = $_SESSION['oLP']->get_proximity();
-if($lp_prox != 'local'){
+if ($lp_prox != 'local') {
 	$s_selected_proximity = 'remote';
-}else{
+} else {
 	$s_selected_proximity = 'local';
 }
 $content_proximity_select->addOption(get_lang('Local'), 'local');
 $content_proximity_select->addOption(get_lang('Remote'), 'remote');
 
 
-if (api_get_setting('allow_course_theme') == 'true')
-{
+if (api_get_setting('allow_course_theme') == 'true') {
 	$mycourselptheme=api_get_course_setting('allow_learning_path_theme');
-	if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1)
-	{
+	if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1) {
 		//LP theme picker
 		$theme_select = &$form->addElement('select_theme', 'lp_theme', get_lang('Theme'));
 		$form->applyFilter('lp_theme', 'trim');
@@ -116,8 +115,7 @@ $form->applyFilter('lp_author', 'html_filter');
 
 // LP image
 $form->add_progress_bar();
-if( strlen($_SESSION['oLP']->get_preview_image() ) > 0)
-{
+if ( strlen($_SESSION['oLP']->get_preview_image() ) > 0) {
 	$show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
 	$div = '<div class="row">
 	<div class="label">'.get_lang('ImagePreview').'</div>
@@ -136,8 +134,7 @@ $form->addElement('static', null, null, get_lang('ImageWillResizeMsg'));
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
 
 // Search terms (only if search is activated)
-if (api_get_setting('search_enabled') === 'true')
-{
+if (api_get_setting('search_enabled') === 'true') {
 	$specific_fields = get_specific_field_list();
 	foreach ($specific_fields as $specific_field) {
 		$form -> addElement ('text', $specific_field['code'], $specific_field['name']);
@@ -177,4 +174,3 @@ echo '<table><tr><td width="550px">';
 echo '</td><td valign="top"><img src="../img/course_setting_layout.png" /></td></tr></table>';
 
 Display::display_footer();
-?>

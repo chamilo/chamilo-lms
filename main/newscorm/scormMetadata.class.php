@@ -1,18 +1,19 @@
-<?php //$id:$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Container for the scormMetadata class, setup to hold information about the <metadata> element in imsmanifest files
- * @package dokeos.learnpath.scorm
+ * @package chamilo.learnpath.scorm
  */
 /**
  * scormMetadata class, handling each <metadata> element found in an imsmanifest file
  */
 class scormMetadata {
-	var	$lom = '';
-	var $schema = '';
-	var $schemaversion = '';
-	var $location = '';
-	var $text = '';
-	var $attribs = array();
+	public	$lom = '';
+	public $schema = '';
+	public $schemaversion = '';
+	public $location = '';
+	public $text = '';
+	public $attribs = array();
 
 	/**
 	 * Class constructor. Works in two different ways defined by the first element, being 'db' or 'manifest'.
@@ -23,12 +24,11 @@ class scormMetadata {
 	 * @param	mixed	Depending on the type, can be the DB ID of the learnpath item or the pointer to the <metadata> element in the imsmanifest.xml file
 	 * @return	boolean	True on success, false on failure
 	 */
-    function scormMetadata($type='manifest', &$element) {
-    	if(isset($element))
-    	{
+    public function __construct($type='manifest', &$element) {
+    	if (isset($element)) {
     		$v = substr(phpversion(),0,1);
-			if($v == 4){
-	    		switch($type){
+			if ($v == 4) {
+	    		switch ($type) {
 	    			case 'db':
 	    				//TODO implement this way of metadata object creation
 	    				return false;
@@ -36,17 +36,15 @@ class scormMetadata {
 	    			case 'manifest': //do the same as the default
 				     	//if($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function
 				     	$children = $element->children();
-				    	foreach($children as $a => $dummy)
-				     	{
+				    	foreach ($children as $a => $dummy) {
 				     		$child =& $children[$a];
-				     		switch($child->type)
-				     		{
+				     		switch ($child->type) {
 				     			case XML_ELEMENT_NODE:
 									//could be 'lom','schema','schemaversion' or 'location'
-				     				switch($child->tagname){
+				     				switch ($child->tagname) {
 				     					case 'lom':
 				     						$childchildren = $child->children();
-				     						foreach($childchildren as $index => $dummy)
+				     						foreach ($childchildren as $index => $dummy)
 				     						{
 				     							$my_elem = $childchildren[$index];
 				     							//there is generally only one child here
@@ -56,7 +54,7 @@ class scormMetadata {
 				     						break;
 				     					case 'schema':
 				     						$childchildren = $child->children();
-				     						foreach($childchildren as $index => $dummy)
+				     						foreach ($childchildren as $index => $dummy)
 				     						{
 				     							$my_elem = $childchildren[$index];
 				     							//there is generally only one child here
@@ -66,7 +64,7 @@ class scormMetadata {
 				     						break;
 				     					case 'schemaversion':
 				     						$childchildren = $child->children();
-				     						foreach($childchildren as $index => $dummy)
+				     						foreach ($childchildren as $index => $dummy)
 				     						{
 				     							$my_elem = $childchildren[$index];
 				     							//there is generally only one child here
@@ -76,7 +74,7 @@ class scormMetadata {
 				     						break;
 				     					case 'location':
 				     						$childchildren = $child->children();
-				     						foreach($childchildren as $index => $dummy)
+				     						foreach ($childchildren as $index => $dummy)
 				     						{
 				     							$my_elem = $childchildren[$index];
 				     							//there is generally only one child here
@@ -87,12 +85,11 @@ class scormMetadata {
 				     				}
 				     				break;
 				     			case XML_TEXT_NODE:
-				     				if(trim($child->content) != '')
-				     				{
-				     					if(count($children == 1)){
+				     				if(trim($child->content) != '') {
+				     					if (count($children == 1)) {
 				     						//if this is the only child at this level and it is a content... save differently
 				     						$this->text = $child->content;
-				     					}else{
+				     					} else {
 				     						$this->text[$element->tagname] = $child->content;
 				     					}
 				     				}
@@ -101,8 +98,8 @@ class scormMetadata {
 				     	}
 				     	$attributes = $element->attributes();
 				     	//$keep_href = '';
-				     	if(is_array($attributes)){
-					     	foreach($attributes as $a1 => $dummy)
+				     	if (is_array($attributes)) {
+					     	foreach ($attributes as $a1 => $dummy)
 					     	{
 					     		$attrib =& $attributes[$a1];
 					     		if(trim($attrib->value) != ''){
@@ -113,25 +110,25 @@ class scormMetadata {
 						return true;
 	    				//break;
 	    		}
-	    	}elseif($v == 5){
+	    	} elseif ($v == 5) {
 	    		//parsing using PHP5 DOMXML methods
-	    		switch($type){
+	    		switch ($type) {
 	    			case 'db':
 	    				//TODO implement this way of metadata object creation
 	    				return false;
 	    				//break;
 	    			case 'manifest': //do the same as the default
 				     	$children = $element->childNodes;
-				    	foreach($children as $child)
+				    	foreach ($children as $child)
 				     	{
-				     		switch($child->nodeType)
+				     		switch ($child->nodeType)
 				     		{
 				     			case XML_ELEMENT_NODE:
 									//could be 'lom','schema','schemaversion' or 'location'
-				     				switch($child->tagName){
+				     				switch ($child->tagName) {
 				     					case 'lom':
 				     						$childchildren = $child->childNodes;
-				     						foreach($childchildren as $childchild)
+				     						foreach ($childchildren as $childchild)
 				     						{
 				     							//$this->lom = $childchild->textContent;
 				     							$this->lom = $childchild->nodeValue;
@@ -139,7 +136,7 @@ class scormMetadata {
 				     						break;
 				     					case 'schema':
 				     						$childchildren = $child->childNodes;
-				     						foreach($childchildren as $childchild)
+				     						foreach ($childchildren as $childchild)
 				     						{
 				     							//there is generally only one child here
 				     							//$this->schema = $childchildren[$index]->textContent;
@@ -148,7 +145,7 @@ class scormMetadata {
 				     						break;
 				     					case 'schemaversion':
 				     						$childchildren = $child->childNodes;
-				     						foreach($childchildren as $childchild)
+				     						foreach ($childchildren as $childchild)
 				     						{
 				     							//there is generally only one child here
 				     							//$this->schemaversion = $childchildren[$index]->textContent;
@@ -157,7 +154,7 @@ class scormMetadata {
 				     						break;
 				     					case 'location':
 				     						$childchildren = $child->childNodes;
-				     						foreach($childchildren as $childchild)
+				     						foreach ($childchildren as $childchild)
 				     						{
 				     							//there is generally only one child here
 				     							//$this->location = $childchildren[$index]->textContent;
@@ -167,12 +164,11 @@ class scormMetadata {
 				     				}
 				     				break;
 				     			case XML_TEXT_NODE:
-				     				if(trim($child->textContent) != '')
-				     				{
-				     					if(count($children == 1)){
+				     				if (trim($child->textContent) != '') {
+				     					if (count($children == 1)){
 				     						//if this is the only child at this level and it is a content... save differently
 				     						$this->text = $child->textContent;
-				     					}else{
+				     					} else {
 				     						$this->text[$element->tagName] = $child->textContent;
 				     					}
 				     				}
@@ -181,7 +177,7 @@ class scormMetadata {
 				     	}
 				     	$attributes = $element->attributes;
 				     	//$keep_href = '';
-				     	if(is_array($attributes)){
+				     	if (is_array($attributes)) {
 					     	foreach($attributes as $attrib)
 					     	{
 					     		if(trim($attrib->value) != ''){
@@ -192,7 +188,7 @@ class scormMetadata {
 						return true;
 	    				//break;
 	    		}
-			}else{
+			} else {
 				//cannot parse because not PHP4 nor PHP5... We should not even be here anyway...
 				return false;
 			}

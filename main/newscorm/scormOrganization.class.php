@@ -1,30 +1,30 @@
-<?php //$id:$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Container for the scormOrganization class
- * @package dokeos.learnpath.scorm
+ * @package chamilo.learnpath.scorm
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  */
 /**
  * Class defining the <organization> tag in an imsmanifest.xml file
  */
 class scormOrganization {
-	var $identifier = '';
-	var $structure = '';
-	var $title = '';
-	var $items = array();
-	var $metadata;
+	public $identifier = '';
+	public $structure = '';
+	public $title = '';
+	public $items = array();
+	public $metadata;
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormOrganization
      * object from database records or from the DOM element given as parameter
      * @param	string	Type of construction needed ('db' or 'manifest', default = 'manifest')
      * @param	mixed	Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
-    function scormOrganization($type='manifest',&$element,$scorm_charset='UTF-8') {
-    	if(isset($element))
-    	{
+    public function __construct($type='manifest',&$element,$scorm_charset='UTF-8') {
+    	if (isset($element))	{
 			$v = substr(phpversion(),0,1);
-			if($v == 4){
-	    		switch($type){
+			if ($v == 4) {
+	    		switch ($type) {
 	    			case 'db':
 	    				//TODO implement this way of metadata object creation
 	    				return false;
@@ -32,16 +32,14 @@ class scormOrganization {
 	    			default:
 				     	//if($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function
 				     	$children = $element->children();
-				    	foreach($children as $a => $dummy)
-				     	{
+				    	foreach ($children as $a => $dummy) {
 				     		$child =& $children[$a];
-				     		switch($child->type)
-				     		{
+				     		switch ($child->type) {
 				     			case XML_ELEMENT_NODE:
-									switch($child->tagname){
+									switch ($child->tagname) {
 				     					case 'item':
 				     						$oItem = new scormItem('manifest',$child);
-				     						if($oItem->identifier != ''){
+				     						if ($oItem->identifier != '') {
 												$this->items[$oItem->identifier] = $oItem;
 				     						}
 											break;
@@ -50,8 +48,7 @@ class scormOrganization {
 				     						break;
 				     					case 'title':
 						     				$tmp_children = $child->children();
-						     				if(count($tmp_children)==1 and $tmp_children[0]->content!='' )
-						     				{
+						     				if (count($tmp_children)==1 and $tmp_children[0]->content!='' ) {
 						     					$this->title = $tmp_children[0]->content;
 						     				}
 						     				break;
@@ -63,10 +60,9 @@ class scormOrganization {
 				     	}
 				     	$attributes = $element->attributes();
 				     	//$keep_href = '';
-				     	foreach($attributes as $a1 => $dummy)
-				     	{
+				     	foreach ($attributes as $a1 => $dummy) {
 				     		$attrib =& $attributes[$a1];
-				     		switch($attrib->name){
+				     		switch ($attrib->name) {
 				     			case 'identifier':
 				     				$this->identifier = $attrib->value;
 				     				break;
@@ -78,7 +74,7 @@ class scormOrganization {
 						return true;
 
 	    		}
-	    	}elseif($v == 5){
+	    	} elseif ($v == 5) {
 	    		//parsing using PHP5 DOMXML methods
 	    		switch($type){
 	    			case 'db':
@@ -88,12 +84,10 @@ class scormOrganization {
 	    			default:
 				     	//if($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function
 				     	$children = $element->childNodes;
-				    	foreach($children as $child)
-				     	{
-				     		switch($child->nodeType)
-				     		{
+				    	foreach ($children as $child) {
+				     		switch ($child->nodeType) {
 				     			case XML_ELEMENT_NODE:
-									switch($child->tagName){
+									switch ($child->tagName) {
 				     					case 'item':
 				     						$oItem = new scormItem('manifest',$child);
 				     						if($oItem->identifier != ''){
@@ -105,8 +99,7 @@ class scormOrganization {
 				     						break;
 				     					case 'title':
 						     				$tmp_children = $child->childNodes;
-						     				if($tmp_children->length==1 and $child->firstChild->nodeValue != '' )
-						     				{
+						     				if ($tmp_children->length==1 and $child->firstChild->nodeValue != '' ) {
 						     					$this->title = html_entity_decode(html_entity_decode($child->firstChild->nodeValue,ENT_QUOTES,$scorm_charset));
 						     				}
 						     				break;
@@ -116,12 +109,11 @@ class scormOrganization {
 				     				break;
 				     		}
 				     	}
-						if($element->hasAttributes()){
+						if ($element->hasAttributes()) {
 					     	$attributes = $element->attributes;
 					     	//$keep_href = '';
-					     	foreach($attributes as $attrib)
-					     	{
-					     		switch($attrib->name){
+					     	foreach ($attributes as $attrib) {
+					     		switch ($attrib->name) {
 					     			case 'identifier':
 					     				$this->identifier = $attrib->value;
 					     				break;
@@ -134,7 +126,7 @@ class scormOrganization {
 						return true;
 
 	    		}
-			}else{
+			} else {
 				//cannot parse because not PHP4 nor PHP5... We should not even be here anyway...
 				return false;
 			}
@@ -145,12 +137,10 @@ class scormOrganization {
 	 * Get a flat list of items in the organization
 	 * @return	array	Array containing an ordered list of all items with their level and all information related to each item
 	 */
-	function get_flat_items_list()
-	{
+	public function get_flat_items_list() {
 		$list = array();
 		$i = 1;
-		foreach($this->items as $id=>$dummy)
-		{
+		foreach ($this->items as $id=>$dummy) {
 			$abs_order = 0;
 			$this->items[$id]->get_flat_list($list,$abs_order,$i,0); //passes the array as a pointer so it is modified in $list directly
 			$i++;
@@ -161,11 +151,10 @@ class scormOrganization {
      * Name getter
      * @return	string	Name or empty string
      */
-    function get_name()
-    {
-    	if(!empty($this->title)){
+    public function get_name() {
+    	if (!empty($this->title)) {
     		return Database::escape_string($this->title);
-    	}else{
+    	} else {
     		return '';
     	}
     }
@@ -173,11 +162,10 @@ class scormOrganization {
      * Reference identifier getter
      * @return	string	Identifier or empty string
      */
-    function get_ref()
-    {
-    	if(!empty($this->identifier)){
+    public function get_ref() {
+    	if (!empty($this->identifier)) {
     		return Database::escape_string($this->identifier);
-    	}else{
+    	} else {
     		return '';
     	}
     }
@@ -185,8 +173,8 @@ class scormOrganization {
      * Sets the title element
      * @param	string	New title to set
      */
-    function set_name($title){
-    	if(!empty($title)){
+    public function set_name($title) {
+    	if (!empty($title)) {
     		$this->title = Database::escape_string($title);
     	}
     }

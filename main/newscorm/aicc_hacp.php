@@ -1,16 +1,15 @@
 <?php // $Id: $
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	API event handler functions for AICC / CMIv4 in HACP communication mode
-*
-*	@author   Denes Nagy <darkden@freemail.hu>
-*   @author   Yannick Warnier <ywarnier@beeznest.org>
-*	@version  v 1.0
-*	@access   public
-*	@package  dokeos.learnpath
-* 	@license	GNU/GPL - See Dokeos license directory for details
-==============================================================================
-*/
+ *	API event handler functions for AICC / CMIv4 in HACP communication mode
+ *
+ *	@author   Denes Nagy <darkden@freemail.hu>
+ *   @author   Yannick Warnier <ywarnier@beeznest.org>
+ *	@version  v 1.0
+ *	@access   public
+ *	@package  chamilo.learnpath
+ * 	@license	GNU/GPL
+ */
 /**
  * This script is divided into three sections.
  * The first section (below) is the initialisation part.

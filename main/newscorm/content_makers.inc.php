@@ -1,8 +1,9 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * The only usage of this script is to have a portable way of keeping the list of content makers
- * @package dokeos.learnpath
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @package chamilo.learnpath
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 /**
  * Script

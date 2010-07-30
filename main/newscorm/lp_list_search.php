@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
-
 /**
  * Script to draw the results from a query
- * @package: dokeos.learnpath
+ * @package: chamilo.learnpath
  * @author: Diego Escalante Urrelo <diegoe@gmail.com>
  * @author: Marco Antonio Villegas Vega <marvil07@gmail.com>
  */

@@ -1,43 +1,17 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Patrick Cool (patrick.cool@ugent.be)
-	Copyright (c) Denes Nagy
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-* @author Patrick Cool, original code
-* @author Denes Nagy - many bugfixes and improvements, adjusted for learning path
-* @author Roan Embrechts - refactoring, code cleaning
-* @package dokeos.resourcelinker
-* @todo reorganise code,
-* use Database API instead of creating table names locally.
-==============================================================================
-*/
+ * @author Patrick Cool, original code
+ * @author Denes Nagy - many bugfixes and improvements, adjusted for learning path
+ * @author Roan Embrechts - refactoring, code cleaning
+ * @package chamilo.resourcelinker
+ * @todo reorganise code,
+ * use Database API instead of creating table names locally.
+ */
 
 /*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+ * INIT SECTION
+ */
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
 // name of the language file that needs to be included
@@ -104,8 +78,7 @@ $multi_level_learnpath = true;
 		MAIN CODE
 ==============================================================================
 */
-if ($from_learnpath == 'yes')
-{
+if ($from_learnpath == 'yes') {
 	//start from clear every time in LearnPath Builder
 	$_SESSION['addedresource'] = null;
 	$_SESSION['addedresourceid'] = null;
@@ -116,8 +89,7 @@ if ($from_learnpath == 'yes')
 }
 
 // Process a new chapter?
-if (!empty ($_POST['add_chapter']) && !empty ($_POST['title']))
-{
+if (!empty ($_POST['add_chapter']) && !empty ($_POST['title'])) {
 	$title = $_POST['title'];
 	$description = '';
 	/*if (!empty ($_POST['description']))
@@ -132,10 +104,10 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title']))
 	$res = Database::query($sql);
 	$row = Database::fetch_array($res);
 	$lastorder_item = $row['maxi'];
-	if(empty($lastorder_item)){
+	if (empty($lastorder_item)) {
 		$lastorder_item = 0;
 		$previous = 0;
-	}else{
+	} else {
 		$sql = "SELECT id FROM $tbl_lp_item " .
 				"WHERE lp_id = $learnpath_id AND parent_item_id=$chapter_id AND display_order = $lastorder_item";
 		$result = Database::query($sql);
@@ -149,12 +121,11 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title']))
 	//error_log('New LP - Inserting new resource: '.$sql,0);
 	$res = Database::query($sql);
 	$my_id = Database::insert_id($res);
-	if($previous>0){
+	if ($previous>0) {
 		$sql = "UPDATE $tbl_lp_item SET next_item_id = $my_id WHERE id=$previous";
 		$res = Database::query($sql);
 	}
-	if ($res !== false)
-	{
+	if ($res !== false) {
 		$title = '';
 		$description = '';
 	}
@@ -162,37 +133,32 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title']))
 }
 
 // This if when a external link is submitted
-if (!empty ($_POST['external_link_submit']))
-{
-	if ($external_link == "" || $external_link == "http://")
+if (!empty ($_POST['external_link_submit'])) {
+	if ($external_link == "" || $external_link == "http://") {
 	  $InvalidURL = 1;
-	else
-	{
-	$add = true;
-	if ($add_2_links != "niet toevoegen")
-	{
-		// add external link to the links table.
-		$pos = strpos($external_link, 'ttp:');
-		if ($pos == '')
-		{
-			$external_link = 'http://'.$external_link;
+	} else {
+		$add = true;
+		if ($add_2_links != "niet toevoegen") {
+			// add external link to the links table.
+			$pos = strpos($external_link, 'ttp:');
+			if ($pos == '')
+			{
+				$external_link = 'http://'.$external_link;
+			}
+	
+			$sql = "INSERT INTO $link_table (url, title, category_id) VALUES ('$external_link','$external_link','$add_2_links')";
+			$result = Database::query($sql);
+			$addedresource[] = "Link";
+			$addedresourceid[] = Database::insert_id();
+			$_SESSION['addedresource'] = $addedresource;
+			$_SESSION['addedresourceid'] = $addedresourceid;
+		} else {
+			// do not add external link to the links table
+			$addedresource[] = "Externallink";
+			$addedresourceid[] = $external_link;
+			$_SESSION['addedresource'] = $addedresource;
+			$_SESSION['addedresourceid'] = $addedresourceid;
 		}
-
-		$sql = "INSERT INTO $link_table (url, title, category_id) VALUES ('$external_link','$external_link','$add_2_links')";
-		$result = Database::query($sql);
-		$addedresource[] = "Link";
-		$addedresourceid[] = Database::insert_id();
-		$_SESSION['addedresource'] = $addedresource;
-		$_SESSION['addedresourceid'] = $addedresourceid;
-	}
-	else
-	{
-		// do not add external link to the links table
-		$addedresource[] = "Externallink";
-		$addedresourceid[] = $external_link;
-		$_SESSION['addedresource'] = $addedresource;
-		$_SESSION['addedresourceid'] = $addedresourceid;
-	}
 	}
 }
 
@@ -201,11 +167,9 @@ $addedresource = $_SESSION['addedresource'];
 $addedresourceid = $_SESSION['addedresourceid'];
 
 // This is when a resource was added to the session
-if ($add)
-{
+if ($add) {
 	// adding the new variable to the local array
-	if (empty ($_POST['external_link_submit']))
-	{
+	if (empty ($_POST['external_link_submit'])) {
 		//that case is already arranged, see upwards
 		$addedresource[] = $content;
 		$addedresourceid[] = $add;

@@ -1,47 +1,19 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Patrick Cool
-	Copyright (c) Denes Nagy
-	Copyright (c) Yannick Warnier
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-* This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
-*
-* @author Patrick Cool
-* @author Denes Nagy
-* @author Roan Embrechts, refactoring and code cleaning
-* @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
-* @author Julio Montoya  - Improving the list of templates
-* @package dokeos.learnpath
-==============================================================================
+ * This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
+ *
+ * @author Patrick Cool
+ * @author Denes Nagy
+ * @author Roan Embrechts, refactoring and code cleaning
+ * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
+ * @author Julio Montoya  - Improving the list of templates
+ * @package chamilo.learnpath
 */
 
 /*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+ * INIT SECTION
+ */
 $this_section=SECTION_COURSES;
 
 api_protect_course_script();
@@ -123,12 +95,10 @@ $type           = $_REQUEST['type'];
 ==============================================================================
 */
 // using the resource linker as a tool for adding resources to the learning path
-if ($action=="add" and $type=="learnpathitem")
-{
+if ($action=="add" and $type=="learnpathitem") {
 	 $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
-if ( (! $is_allowed_to_edit) or ($isStudentView) )
-{
+if ( (! $is_allowed_to_edit) or ($isStudentView) ) {
 	error_log('New LP - User not authorized in lp_add_item.php');
 	header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 }
@@ -220,7 +190,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 		$path_file=Database::result($res_doc,0,0);
 		$path_parts = pathinfo($path_file);
 
-		if (Database::num_rows($res_doc) > 0 && $path_parts['extension']=='html'){
+		if (Database::num_rows($res_doc) > 0 && $path_parts['extension']=='html') {
 			$count_items = count($_SESSION['oLP']->ordered_items);
 			$style = ($count_items > 12)?' style="height:250px;width:230px;overflow-x : auto; overflow : scroll;" ':' class="lp_tree" ';
 			echo '<div '.$style.'>';
@@ -240,7 +210,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 
 		echo '</td>';
 		echo '<td class="workspace">';
-			if(isset($is_success) && $is_success === true) {
+			if (isset($is_success) && $is_success === true) {
 				$msg = '<div class="lp_message" style="margin-bottom:10px;">';
 					$msg .= 'The item has been edited.';
 				$msg .= '</div>';

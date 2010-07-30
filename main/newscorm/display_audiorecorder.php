@@ -1,10 +1,10 @@
-<?php //$id: $
-// This file is part of the Dokeos software - See license and credits in the documentation/ directory
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Script opened in an iframe and containing the learning path's table of contents
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
- * @license	GNU/GPL - See Dokeos license directory for details
+ * @license	GNU/GPL
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;

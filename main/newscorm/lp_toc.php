@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Script opened in an iframe and containing the learning path's table of contents
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
@@ -15,8 +15,7 @@ require_once 'learnpath.class.php';
 require_once 'scorm.class.php';
 require_once 'aicc.class.php';
 
-if(isset($_SESSION['lpobject']))
-{
+if (isset($_SESSION['lpobject'])) {
 	//if($debug>0) error_log('New LP - in lp_toc.php - SESSION[lpobject] is defined',0);
 	$oLP = unserialize($_SESSION['lpobject']);
 	if(is_object($oLP)){
@@ -40,7 +39,7 @@ include_once '../inc/reduced_header.inc.php';
 </body>
 </html>
 <?php
-if(!empty($_SESSION['oLP'])){
+if (!empty($_SESSION['oLP'])) {
 	$_SESSION['lpobject'] = serialize($_SESSION['oLP']);
 }
 ?>

@@ -81,7 +81,7 @@ class learnpath {
     public function __construct($course, $lp_id, $user_id) {
     	//check params
     	//check course code
-    	if ($this->debug>0){error_log('New LP - In learnpath::learnpath('.$course.','.$lp_id.','.$user_id.')',0);}
+    	if ($this->debug>0){error_log('New LP - In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')',0);}
     	if (empty($course)) {
     		$this->error = 'Course code is empty';
     		return false;
@@ -90,7 +90,7 @@ class learnpath {
     		//$course = Database::escape_string($course);
     		$course = $this->escape_string($course);
     		$sql = "SELECT * FROM $main_table WHERE code = '$course'";
-    		if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - Querying course: '.$sql,0);}
+    		if($this->debug>2){error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying course: '.$sql,0);}
     		//$res = Database::query($sql);
     		$res = Database::query($sql);
     		if(Database::num_rows($res)>0)
@@ -114,7 +114,7 @@ class learnpath {
     		//$id = Database::escape_integer($id);
     		$lp_id = $this->escape_string($lp_id);
     		$sql = "SELECT * FROM $lp_table WHERE id = '$lp_id'";
-    		if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - Querying lp: '.$sql,0);}
+    		if($this->debug>2){error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql,0);}
     		//$res = Database::query($sql);
     		$res = Database::query($sql);
     		if (Database::num_rows($res)>0) {
@@ -156,7 +156,7 @@ class learnpath {
     		//$user_id = Database::escape_integer($user_id);
     		$user_id = $this->escape_string($user_id);
     		$sql = "SELECT * FROM $main_table WHERE user_id = '$user_id'";
-    		if($this->debug>2){error_log('New LP - learnpath::learnpath() '.__LINE__.' - Querying user: '.$sql,0);}
+    		if($this->debug>2){error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying user: '.$sql,0);}
     		//$res = Database::query($sql);
     		$res = Database::query($sql);
     		if (Database::num_rows($res)>0) {
@@ -173,14 +173,14 @@ class learnpath {
 		//selecting by view_count descending allows to get the highest view_count first
 		$sql = "SELECT * FROM $lp_table WHERE lp_id = '$lp_id' AND user_id = '$user_id' ORDER BY view_count DESC";
 		if ($this->debug > 2) {
-			error_log('New LP - learnpath::learnpath() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0);
+			error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0);
 		}
 		//$res = Database::query($sql);
 		$res = Database::query($sql);
 		$view_id = 0; //used later to query lp_item_view
 		if (Database :: num_rows($res) > 0) {
 			if ($this->debug > 2) {
-				error_log('New LP - learnpath::learnpath() ' . __LINE__ . ' - Found previous view', 0);
+				error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Found previous view', 0);
 			}
 			$row = Database :: fetch_array($res);
 			$this->attempt = $row['view_count'];
@@ -189,14 +189,14 @@ class learnpath {
 			$this->progress_db = $row['progress'];
 		} else {
 			if ($this->debug > 2) {
-				error_log('New LP - learnpath::learnpath() ' . __LINE__ . ' - NOT Found previous view', 0);
+				error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
 			}
 			$this->attempt = 1;
 			$sql_ins = "INSERT INTO $lp_table (lp_id,user_id,view_count) VALUES ($lp_id,$user_id,1)";
 			$res_ins = Database::query($sql_ins);
 			$this->lp_view_id = Database :: insert_id();
 			if ($this->debug > 2) {
-				error_log('New LP - learnpath::learnpath() ' . __LINE__ . ' - inserting new lp_view: ' . $sql_ins, 0);
+				error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - inserting new lp_view: ' . $sql_ins, 0);
 			}
 		}
 
@@ -220,7 +220,7 @@ class learnpath {
 						$this->items[$my_item_id] = $oItem;
 						$this->refs_list[$oItem->ref] = $my_item_id;
 						if ($this->debug > 2) {
-							error_log('New LP - learnpath::learnpath() - aicc object with id ' . $my_item_id . ' set in items[]', 0);
+							error_log('New LP - learnpath::__construct() - aicc object with id ' . $my_item_id . ' set in items[]', 0);
 						}
 					}
 					break;
@@ -255,7 +255,7 @@ class learnpath {
 						$this->items[$my_item_id] = $oItem;
 						$this->refs_list[$my_item_id] = $my_item_id;
 						if ($this->debug > 2) {
-							error_log('New LP - learnpath::learnpath() ' . __LINE__ . ' - object with id ' . $my_item_id . ' set in items[]', 0);
+							error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - object with id ' . $my_item_id . ' set in items[]', 0);
 						}
 					}
 					break;
@@ -272,7 +272,7 @@ class learnpath {
 					$this->items[$row['parent_item_id']]->add_child($row['id']);
 				} else {
 					if ($this->debug > 2) {
-						error_log('New LP - learnpath::learnpath() ' . __LINE__ . ' - The parent item (' . $row['parent_item_id'] . ') of item ' . $row['id'] . ' could not be found', 0);
+						error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - The parent item (' . $row['parent_item_id'] . ') of item ' . $row['id'] . ' could not be found', 0);
 					}
 				}
 			}
@@ -285,7 +285,7 @@ class learnpath {
 			"WHERE lp_view_id = " . $this->lp_view_id . " " .
 			"AND lp_item_id = " . $row['id'] . " ORDER BY view_count DESC ";
 			if ($this->debug > 2) {
-				error_log('New LP - learnpath::learnpath() - Selecting item_views: ' . $sql, 0);
+				error_log('New LP - learnpath::__construct() - Selecting item_views: ' . $sql, 0);
 			}
 			//get the item status
 			$res2 = Database::query($sql);
@@ -295,7 +295,7 @@ class learnpath {
 				//$max = 0;
 				$row2 = Database :: fetch_array($res2);
 				if ($this->debug > 2) {
-					error_log('New LP - learnpath::learnpath() - Got item_view: ' . print_r($row2, true), 0);
+					error_log('New LP - learnpath::__construct() - Got item_view: ' . print_r($row2, true), 0);
 				}
 				$this->items[$row['id']]->set_status($row2['status']);
 				if (empty ($row2['status'])) {
@@ -315,7 +315,7 @@ class learnpath {
 				"(lp_item_id, lp_view_id, view_count, status) VALUES " .
 				"(" . $row['id'] . "," . $this->lp_view_id . ",1,'not attempted')";
 				if ($this->debug > 2) {
-					error_log('New LP - learnpath::learnpath() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
+					error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
 				}
 				$res_ins = Database::query($sql_ins);
 			}
@@ -332,7 +332,7 @@ class learnpath {
 		//TODO define the current item better
 		$this->first();
 		if ($this->debug > 2) {
-			error_log('New LP - learnpath::learnpath() ' . __LINE__ . ' - End of learnpath constructor for learnpath ' . $this->get_id(), 0);
+			error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - End of learnpath constructor for learnpath ' . $this->get_id(), 0);
 		}
 	}
 

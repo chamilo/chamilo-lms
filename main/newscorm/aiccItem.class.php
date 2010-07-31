@@ -39,7 +39,7 @@ class aiccItem extends learnpathItem{
     	{
     		switch($type){
     			case 'db':
-    				parent::learnpathItem($params,api_get_user_id());
+    				parent::__construct($params,api_get_user_id());
     				$this->aicc_contact = false;
     				//TODO implement this way of metadata object creation
     				return false;

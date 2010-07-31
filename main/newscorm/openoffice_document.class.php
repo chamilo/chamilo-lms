@@ -27,7 +27,7 @@ abstract class OpenofficeDocument extends learnpath {
     	if($this->debug>0){error_log('In OpenofficeDocument::OpenofficeDocument()',0);}
     	if(!empty($course_code) and !empty($resource_id) and !empty($user_id))
     	{
-    		parent::learnpath($course_code, $resource_id, $user_id);
+    		parent::__construct($course_code, $resource_id, $user_id);
     	}else{
     		//do nothing but still build the presentation object
     	}

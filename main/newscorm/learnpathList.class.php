@@ -12,12 +12,12 @@
  * @uses	learnpath.class.php to generate learnpath objects to get in the list
  */
 class learnpathList {
-	var $list = array(); //holds a flat list of learnpaths data from the database
-	var $ref_list = array(); //holds a list of references to the learnpaths objects (only filled by get_refs())
-	var $alpha_list = array(); //holds a flat list of learnpaths sorted by alphabetical name order
-	var $course_code;
-	var $user_id;
-	var $refs_active = false;
+	public $list = array(); //holds a flat list of learnpaths data from the database
+	public $ref_list = array(); //holds a list of references to the learnpaths objects (only filled by get_refs())
+	public $alpha_list = array(); //holds a flat list of learnpaths sorted by alphabetical name order
+	public $course_code;
+	public $user_id;
+	public $refs_active = false;
 
 	/**
 	 * This method is the constructor for the learnpathList. It gets a list of available learning paths from
@@ -28,7 +28,7 @@ class learnpathList {
 	 * @param	int			Optional session id (otherwise we use api_get_session_id())
 	 * @return	void
 	 */
-    function learnpathList($user_id, $course_code='', $session_id = null) {
+    function __construct($user_id, $course_code='', $session_id = null) {
     	
     	if (!empty($course_code)){
     		$course_info = api_get_course_info($course_code);
@@ -62,7 +62,7 @@ class learnpathList {
     		$myname = domesticate($row['name']);
 			$mylink = 'newscorm/lp_controller.php?action=view&lp_id='.$row['id'];
 			$sql2="SELECT * FROM $tbl_tool where (name='$myname' and image='scormbuilder.gif' and link LIKE '$mylink%')";
-			//error_log('New LP - learnpathList::learnpathList - getting visibility - '.$sql2,0);
+			//error_log('New LP - learnpathList::__construct - getting visibility - '.$sql2,0);
 			$res2 = Database::query($sql2);
 			if(Database::num_rows($res2)>0){
 				$row2 = Database::fetch_array($res2);

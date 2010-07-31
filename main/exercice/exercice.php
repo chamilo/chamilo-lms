@@ -1045,45 +1045,33 @@ if ($show == 'test') {
 				}
 				// prof only
 				if ($is_allowedToEdit) {
-?>
-
-    <tr>
-      <td><img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /></td>
-	   <td><?php echo ($ind+($page*$limitExPage)).'.'; ?></td>
-       <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>
-  <td></td>
-      <td align="center"><a href="adminhp.php?<?php echo api_get_cidreq() ?>&hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo get_lang('Modify'); ?>" alt="<?php echo api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
-       <img src="../img/wizard_gray_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('NotMarkActivity'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" />
-  <a href="<?php echo $exercicePath; ?>?<?php echo api_get_cidreq() ?>&amp;hpchoice=delete&amp;file=<?php echo $path; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSure'),ENT_QUOTES,$charset).$title."?"); ?>')) return false;"><img src="../img/delete.gif" border="0" title="<?php echo get_lang('Delete'); ?>" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
-    <?php
-
+					echo '   <tr>'.
+					'      <td><img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /></td>'.
+					'      <td>'.($ind+($page*$limitExPage)).'.</td>'.
+					'      <td><a href="showinframes.php?file='.$path.'&cid='.$_course['official_code'].'&uid='.$_user['user_id'].'"'.(!$active?'class="invisible"':'').'>'.$title.'</a></td>'.
+					'      <td align="center">-</td>'.
+					'      <td align="center">' .
+					'        <a href="adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path.'">'.
+					'          <img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset).'" />' .
+					'        </a>'.
+					'        <a href="'.$exercicePath.'?'.api_get_cidreq().'&amp;hpchoice=delete&amp;file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('AreYouSure'),ENT_QUOTES,$charset).$title."?").'\')) return false;"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="'.api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset).'" /></a>';
 					// if active
 					if ($active) {
 						$nbrActiveTests = $nbrActiveTests +1;
-?>
-      <a href="<?php echo $exercicePath; ?>?<?php echo api_get_cidreq() ?>&hpchoice=disable&amp;page=<?php echo $page; ?>&amp;file=<?php echo $path; ?>"><img src="../img/visible.gif" border="0" title="<?php echo get_lang('Deactivate'); ?>" alt="<?php echo api_htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset); ?>" /></a>
-    <?php
-
+						echo '      <a href="'.$exercicePath.'?'.api_get_cidreq().'&hpchoice=disable&amp;page='.$page.'&amp;file='.$path.'"><img src="../img/visible.gif" border="0" title="'.get_lang('Deactivate').'" alt="'.api_htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset).'" /></a>';
 					} else { // else if not active
-?>
-    <a href="<?php echo $exercicePath; ?>?<?php echo api_get_cidreq() ?>&hpchoice=enable&amp;page=<?php echo $page; ?>&amp;file=<?php echo $path; ?>"><img src="../img/invisible.gif" border="0" title="<?php echo get_lang('Activate'); ?>" alt="<?php echo api_htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
-    <?php
-
+						echo '    <a href="'.$exercicePath.'?'.api_get_cidreq().'&hpchoice=enable&amp;page='.$page.'&amp;file='.$path.'"><img src="../img/invisible.gif" border="0" title="'.get_lang('Activate').'" alt="'.api_htmlentities(get_lang('Activate'),ENT_QUOTES,$charset).'" /></a>';
 					}
 					echo '<img src="../img/lp_quiz_na.gif" border="0" title="'.get_lang('NotMarkActivity').'" alt="" />';
 					echo '</td>';
 				} else { // student only
 					if ($active == 1) {
 						$nbrActiveTests = $nbrActiveTests +1;
-?>
-    <tr>
-
-        <td><?php echo ($ind+($page*$limitExPage)).'.'; ?><!--<img src="../img/jqz.jpg" alt="HotPotatoes" />--></td>
-        <td><a href="showinframes.php?<?php echo api_get_cidreq()."&amp;file=".$path."&amp;cid=".$_course['official_code']."&amp;uid=".$_user['user_id'].'"'; if(!$active) echo 'class="invisible"'; ?>"><?php echo $title;?></a></td>
-		<td style="text-align: center;">-</td><td style="text-align: center;">-</td>
-  </tr>
-  <?php
-
+						echo '    <tr>'.
+							'       <td>'.($ind+($page*$limitExPage)).'.<!--<img src="../img/jqz.jpg" alt="HotPotatoes" />--></td>' .
+							'       <td><a href="showinframes.php?'.api_get_cidreq().'&amp;file='.$path.'&amp;cid='.$_course['official_code'].'&amp;uid='.$_user['user_id'].'"'.(!$active?'class="invisible"':'').'">'.$title.'</a></td>'.
+							'       <td style="text-align: center;">-</td><td style="text-align: center;">-</td>'.
+							'     </tr>';
 					}
 				}
 				if ($ind == $limitExPage) {

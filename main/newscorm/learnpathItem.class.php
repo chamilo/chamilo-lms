@@ -10,50 +10,50 @@
  * information that enables tracking a user's progress in a learning path
  */
 class learnpathItem {
-	var $attempt_id; //also called "objectives" SCORM-wise
-    var $audio; //the path to an audio file (stored in document/audio/)
-	var $children = array(); //contains the ids of children items
-	var $condition; //if this item has a special condition embedded
-	var $current_score;
-	var $current_start_time;
-	var $current_stop_time;
-	var $current_data = '';
-	var $db_id;
-	var $db_item_view_id = '';
-	var $description = '';
-	var $file;
+	public $attempt_id; //also called "objectives" SCORM-wise
+    public $audio; //the path to an audio file (stored in document/audio/)
+	public $children = array(); //contains the ids of children items
+	public $condition; //if this item has a special condition embedded
+	public $current_score;
+	public $current_start_time;
+	public $current_stop_time;
+	public $current_data = '';
+	public $db_id;
+	public $db_item_view_id = '';
+	public $description = '';
+	public $file;
 	//at the moment, interactions are just an array of arrays with a structure of 8 text fields
 	//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
-	var $interactions = array();
-	var $interactions_count = 0;
-	var $objectives = array();
-	var $objectives_count = 0;
-	var $launch_data = '';
-	var $lesson_location = '';
-	var $level = 0;
+	public $interactions = array();
+	public $interactions_count = 0;
+	public $objectives = array();
+	public $objectives_count = 0;
+	public $launch_data = '';
+	public $lesson_location = '';
+	public $level = 0;
 	//var $location; //only set this for SCORM?
-	var $lp_id;
-	var $max_score;
-	var $mastery_score;
-	var $min_score;
-	var $max_time_allowed = '';
-	var $name;
-	var $next;
-	var $parent;
-	var $path; //  In some cases the exo_id = exercise_id in courseDb exercices table
-	var $possible_status = array('not attempted','incomplete','completed','passed','failed','browsed');
-	var $prereq_string = '';
-	var $prereq_alert = '';
-	var $prereqs = array();
-	var $previous;
-	var $prevent_reinit = 1; // 0 =  multiple attempts   1 = one attempt
-	var $ref;
-	var $save_on_close = true;
-    var $search_did = NULL;
-	var $status;
-	var $title;
-	var $type; // this attribute can contain chapter|link|student_publication|module|quiz|document|forum|thread
-	var $view_id;
+	public $lp_id;
+	public $max_score;
+	public $mastery_score;
+	public $min_score;
+	public $max_time_allowed = '';
+	public $name;
+	public $next;
+	public $parent;
+	public $path; //  In some cases the exo_id = exercise_id in courseDb exercices table
+	public $possible_status = array('not attempted','incomplete','completed','passed','failed','browsed');
+	public $prereq_string = '';
+	public $prereq_alert = '';
+	public $prereqs = array();
+	public $previous;
+	public $prevent_reinit = 1; // 0 =  multiple attempts   1 = one attempt
+	public $ref;
+	public $save_on_close = true;
+    public $search_did = NULL;
+	public $status;
+	public $title;
+	public $type; // this attribute can contain chapter|link|student_publication|module|quiz|document|forum|thread
+	public $view_id;
 
 	const debug = 0; //logging param
     /**
@@ -65,7 +65,7 @@ class learnpathItem {
      * @param	integer	User ID
      * @return	boolean	True on success, false on failure
      */
-    function learnpathItem($db_id, $user_id) {
+    public function learnpathItem($db_id, $user_id) {
     	//get items table
     	if(self::debug>0){error_log('New LP - In learnpathItem constructor: '.$db_id.','.$user_id,0);}
     	$items_table = Database::get_course_table(TABLE_LP_ITEM);
@@ -122,7 +122,7 @@ class learnpathItem {
     /**
      * Adds a child to the current item
      */
-    function add_child($item)
+    public function add_child($item)
     {
     	if(self::debug>0){error_log('New LP - In learnpathItem::add_child()',0);}
     	if(!empty($item))
@@ -138,7 +138,7 @@ class learnpathItem {
 	 * @param	array	Array of parameters: id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
 	 * @result	void
      */
-    function add_interaction($index,$params)
+    public function add_interaction($index,$params)
     {
 		$this->interactions[$index] = $params;
 		//take the current maximum index to generate the interactions_count
@@ -164,7 +164,7 @@ class learnpathItem {
 	 * @param	array	Array of parameters: id(0), status(1), score_raw(2), score_max(3), score_min(4)
 	 * @result	void
      */
-    function add_objective($index,$params)
+    public function add_objective($index,$params)
     {
     	if(empty($params[0])){return null;}
 		$this->objectives[$index] = $params;
@@ -178,7 +178,7 @@ class learnpathItem {
      * Closes/stops the item viewing. Finalises runtime values. If required, save to DB.
      * @return	boolean	True on success, false otherwise
      */
-    function close()
+    public function close()
     {
 		if(self::debug>0){error_log('New LP - In learnpathItem::close()',0);}
 	   	$this->current_stop_time = time();
@@ -203,7 +203,7 @@ class learnpathItem {
      * Deletes all traces of this item in the database
      * @return	boolean	true. Doesn't check for errors yet.
      */
-    function delete()
+    public function delete()
     {
     	if(self::debug>0){error_log('New LP - In learnpath_item::delete() for item '.$this->db_id,0);}
     	$lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -236,7 +236,7 @@ class learnpathItem {
      * @param	string index of child item to drop
      * @return 	void
      */
-    function drop_child($item)
+    public function drop_child($item)
     {
     	if(self::debug>0){error_log('New LP - In learnpathItem::drop_child()',0);}
     	if(!empty($item))
@@ -253,7 +253,7 @@ class learnpathItem {
      * Gets the current attempt_id for this user on this item
      * @return	integer	The attempt_id for this item view by this user, or 1 if none defined
      */
-    function get_attempt_id()
+    public function get_attempt_id()
     {
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_attempt_id() on item '.$this->db_id,0);}
     	$res = 1;
@@ -268,7 +268,7 @@ class learnpathItem {
      * Gets a list of the item's children
      * @return	array	Array of children items IDs
      */
-    function get_children()
+    public function get_children()
     {
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_children()',0);}
     	$list = array();
@@ -284,7 +284,7 @@ class learnpathItem {
     /**
      * Gets the core_exit value from the database
      */
-    function get_core_exit()
+    public function get_core_exit()
     {
     	return $this->core_exit;
     }
@@ -293,7 +293,7 @@ class learnpathItem {
      * autorization. Credit tells the sco(content) if Dokeos will record the data it is sent (credit) or not (no-credit)
      * @return	string	'credit' or 'no-credit'. Defaults to 'credit' because if we don't know enough about this item, it's probably because it was never used before.
      */
-    function get_credit(){
+    public function get_credit(){
     	if (self::debug>1) {error_log('New LP - In learnpathItem::get_credit()',0);}
 		$credit = 'credit';
     	//now check the value of prevent_reinit (if it's 0, return credit as the default was)
@@ -313,7 +313,7 @@ class learnpathItem {
      * Gets the current start time property
      * @return	integer	Current start time, or current time if none
      */
-    function get_current_start_time()
+    public function get_current_start_time()
     {
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_current_start_time()',0);}
     	if(empty($this->current_start_time))
@@ -327,7 +327,7 @@ class learnpathItem {
      * Gets the item's description
      * @return	string	Description
      */
-    function get_description(){
+    public function get_description(){
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_description()',0);}
     	if(empty($this->description)){return '';}
     	return $this->description;
@@ -336,7 +336,7 @@ class learnpathItem {
      * Gets the file path from the course's root directory, no matter what tool it is from.
      * @return	string	The file path, or an empty string if there is no file attached, or '-1' if the file must be replaced by an error page
      */
-    function get_file_path($path_to_scorm_dir=''){
+    public function get_file_path($path_to_scorm_dir=''){
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_file_path()',0);}
     	$path = $this->get_path();
    		$type = $this->get_type();
@@ -385,7 +385,7 @@ class learnpathItem {
      * Gets the DB ID
      * @return	integer	Database ID for the current item
      */
-    function get_id(){
+    public function get_id(){
     	if(self::debug>1){error_log('New LP - In learnpathItem::get_id()',0);}
     	if(!empty($this->db_id))
     	{
@@ -400,7 +400,7 @@ class learnpathItem {
      * using the database elements only.
      * @return void Directly sets the interactions attribute in memory
      */
-    function load_interactions() {
+    public function load_interactions() {
             $this->interactions = array();
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
             $sql = "SELECT id FROM $tbl " .
@@ -425,7 +425,7 @@ class learnpathItem {
      * @param   bool    Whether to count from database or not (defaults to no)
      * @return	int	The current number of interactions recorder
      */
-    function get_interactions_count($checkdb=false)
+    public function get_interactions_count($checkdb=false)
     {
     	if(self::debug>1){error_log('New LP - In learnpathItem::get_interactions_count()',0);}
     	$return = 0;
@@ -460,7 +460,7 @@ class learnpathItem {
      * @params  bool    Whether to check directly into the database (default no)
      * @return  string  An empty string if no interaction, a JS array definition otherwise
      */
-    function get_interactions_js_array($checkdb=false) {
+    public function get_interactions_js_array($checkdb=false) {
         $return = '';
         if ($checkdb) {
             $this->load_interactions(true);
@@ -477,7 +477,7 @@ class learnpathItem {
      * Gets the current count of objectives recorded in the database
      * @return	int	The current number of objectives recorder
      */
-    function get_objectives_count()
+    public function get_objectives_count()
     {
     	if(self::debug>1){error_log('New LP - In learnpathItem::get_objectives_count()',0);}
     	$res = 0;
@@ -490,7 +490,7 @@ class learnpathItem {
      * Gets the launch_data field found in imsmanifests (this is SCORM- or AICC-related, really)
      * @return	string	Launch data as found in imsmanifest and stored in Dokeos (read only). Defaults to ''.
      */
-    function get_launch_data(){
+    public function get_launch_data(){
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_launch_data()',0);}
     	if(!empty($this->launch_data)){
     		return $this->launch_data;
@@ -501,7 +501,7 @@ class learnpathItem {
      * Gets the lesson location
      * @return string	lesson location as recorded by the SCORM and AICC elements. Defaults to ''
      */
-	function get_lesson_location(){
+	public function get_lesson_location(){
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_lesson_location()',0);}
     	if(!empty($this->lesson_location)){return $this->lesson_location;}else{return '';}
 	}
@@ -511,7 +511,7 @@ class learnpathItem {
 	 * The "browse" mode is not supported yet (because there is no such way of seeing a sco in Dokeos)
 	 * @return	string	'browse','normal' or 'review'. Defaults to 'normal'
 	 */
-	function get_lesson_mode(){
+	public function get_lesson_mode(){
 		$mode = 'normal';
 		if($this->get_prevent_reinit() != 0){ //if prevent_reinit == 0
 			$my_status = $this->get_status();
@@ -525,7 +525,7 @@ class learnpathItem {
      * Gets the depth level
      * @return int	Level. Defaults to 0
      */
-    function get_level(){
+    public function get_level(){
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_level()',0);}
     	if(empty($this->level)){return 0;}
     	return $this->level;
@@ -533,7 +533,7 @@ class learnpathItem {
     /**
      * Gets the mastery score
      */
-    function get_mastery_score()
+    public function get_mastery_score()
     {
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_mastery_score()',0);}
     	if(isset($this->mastery_score)){return $this->mastery_score;}else{return -1;}
@@ -542,7 +542,7 @@ class learnpathItem {
      * Gets the maximum (score)
      * @return	int	Maximum score. Defaults to 100 if nothing else is defined
      */
-    function get_max(){
+    public function get_max(){
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_max()',0);}
     	if($this->type == 'sco')
     	{
@@ -568,7 +568,7 @@ class learnpathItem {
      * Gets the maximum time allowed for this user in this attempt on this item
      * @return	string	Time string in SCORM format (HH:MM:SS or HH:MM:SS.SS or HHHH:MM:SS.SS)
      */
-    function get_max_time_allowed()
+    public function get_max_time_allowed()
     {
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_max_time_allowed()',0);}
     	if(!empty($this->max_time_allowed)){return $this->max_time_allowed;}else{return '';}
@@ -577,7 +577,7 @@ class learnpathItem {
      * Gets the minimum (score)
      * @return int	Minimum score. Defaults to 0
      */
-    function get_min(){
+    public function get_min(){
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_min()',0);}
     	if(!empty($this->min_score)){return $this->min_score;}else{return 0;}
     }
@@ -585,7 +585,7 @@ class learnpathItem {
      * Gets the parent ID
      * @return	int	Parent ID. Defaults to null
      */
-    function get_parent(){
+    public function get_parent(){
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_parent()',0);}
     	if(!empty($this->parent))
     	{
@@ -598,7 +598,7 @@ class learnpathItem {
      * Gets the path attribute.
      * @return	string	Path. Defaults to ''
      */
-    function get_path(){
+    public function get_path(){
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_path()',0);}
     	if(empty($this->path)){return '';}
     	return $this->path;
@@ -607,7 +607,7 @@ class learnpathItem {
      * Gets the prerequisites string
      * @return	string	Empty string or prerequisites string if defined. Defaults to
      */
-    function get_prereq_string()
+    public function get_prereq_string()
     {
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_prereq_string()',0);}
     	if(!empty($this->prereq_string))
@@ -621,7 +621,7 @@ class learnpathItem {
      * Gets the prevent_reinit attribute value (and sets it if not set already)
      * @return	int	1 or 0 (defaults to 1)
      */
-    function get_prevent_reinit(){
+    public function get_prevent_reinit(){
 		if(self::debug>2){error_log('New LP - In learnpathItem::get_prevent_reinit()',0);}
     	if(!isset($this->prevent_reinit)){
 	    	if(!empty($this->lp_id)){
@@ -648,7 +648,7 @@ class learnpathItem {
      * Gets the item's reference column
      * @return string	The item's reference field (generally used for SCORM identifiers)
      */
-    function get_ref()
+    public function get_ref()
     {
     	return $this->ref;
     }
@@ -663,7 +663,7 @@ class learnpathItem {
      * @param	int		level of recursivity we're in
      * @return	array	List of file paths. An additional field containing 'local' or 'remote' helps determine if the file should be copied into the zip or just linked
      */
-    function get_resources_from_source($type=null,$abs_path=null, $recursivity=1)
+    public function get_resources_from_source($type=null,$abs_path=null, $recursivity=1)
     {
     	$max = 5;
     	if($recursivity > $max)
@@ -989,7 +989,7 @@ class learnpathItem {
      * Gets the score
      * @return	float	The current score or 0 if no score set yet
      */
-    function get_score(){
+    public function get_score(){
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_score()',0);}
     	$res = 0;
     	if(!empty($this->current_score))
@@ -1005,7 +1005,7 @@ class learnpathItem {
      * @param	boolean	Do or don't update the local attribute value with what's been found in DB
      * @return	string	Current status or 'Nnot attempted' if no status set yet
      */
-    function get_status($check_db=true,$update_local=false) {
+    public function get_status($check_db=true,$update_local=false) {
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_status() on item '.$this->db_id,0);}
     	if($check_db) {
     		if(self::debug>2){error_log('New LP - In learnpathItem::get_status(): checking db',0);}
@@ -1035,7 +1035,7 @@ class learnpathItem {
     /**
      * Gets the suspend data
      */
-    function get_suspend_data()
+    public function get_suspend_data()
     {
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_suspend_data()',0);}
     	//TODO : improve cleaning of breaklines ... it works but is it really a beautiful way to do it ?
@@ -1046,7 +1046,7 @@ class learnpathItem {
      * @param	string	Origin of the request. If coming from PHP, send formatted as xxhxx'xx", otherwise use scorm format 00:00:00
      * @param	integer	Given time is a default time to return formatted
      */
-    function get_scorm_time($origin='php',$given_time=null,$query_db=false) {
+    public function get_scorm_time($origin='php',$given_time=null,$query_db=false) {
     	$h = get_lang('h');
     	if (!isset($given_time)) {
             if (self::debug>2) {error_log('New LP - In learnpathItem::get_scorm_time(): given time empty, current_start_time = '.$this->current_start_time,0);}
@@ -1092,7 +1092,7 @@ class learnpathItem {
   		return $scorm_time;
     }
 
-    function get_terms() {
+    public function get_terms() {
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT * FROM $lp_item WHERE id='".Database::escape_string($this->db_id)."'";
         $res = Database::query($sql);
@@ -1103,7 +1103,7 @@ class learnpathItem {
      * Returns the item's title
      * @return	string	Title
      */
-    function get_title() {
+    public function get_title() {
     	if (self::debug>0) {error_log('New LP - In learnpathItem::get_title()',0);}
     	if (empty($this->title)) {return '';}
     	return $this->title;
@@ -1113,7 +1113,7 @@ class learnpathItem {
      * Returns the total time used to see that item
      * @return	integer	Total time
      */
-    function get_total_time() {
+    public function get_total_time() {
     	if (self::debug>0){error_log('New LP - In learnpathItem::get_total_time()',0);}
     	if ($this->current_start_time == 0){ //shouldn't be necessary thanks to the open() method
     		$this->current_start_time = time();
@@ -1136,7 +1136,7 @@ class learnpathItem {
      * Gets the item type
      * @return	string	The item type (can be doc, dir, sco, asset)
      */
-    function get_type()
+    public function get_type()
     {
     	$res = 'asset';
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_type() on item '.$this->db_id,0);}
@@ -1152,7 +1152,7 @@ class learnpathItem {
      * Gets the view count for this item
      * @return  int     Number of attempts or 0
      */
-	function get_view_count(){
+	public function get_view_count(){
     	if(self::debug>0){error_log('New LP - In learnpathItem::get_view_count()',0);}
 		if(!empty($this->attempt_id)){
 			return $this->attempt_id;
@@ -1179,7 +1179,7 @@ class learnpathItem {
 	 * 					 0 if it is not allowed but the item has to be finished
 	 * 					 1 if it is allowed. Defaults to 1
 	 */
-	function is_restart_allowed()
+	public function is_restart_allowed()
 	{
 		if(self::debug>2){error_log('New LP - In learnpathItem::is_restart_allowed()',0);}
 		$restart = 1;
@@ -1203,7 +1203,7 @@ class learnpathItem {
      * Opens/launches the item. Initialises runtime values.
      * @return	boolean	True on success, false on failure.
      */
-    function open($allow_new_attempt=false){
+    public function open($allow_new_attempt=false){
     	if(self::debug>0){error_log('New LP - In learnpathItem::open()',0);}
     	if($this->prevent_reinit == 0)
     	{
@@ -1260,7 +1260,7 @@ class learnpathItem {
 	 * @param	integer	The user ID. In some cases like Dokeos quizzes, it's necessary to have the user ID to query other tables (like the results of quizzes)
      * @return	boolean	True if the list of prerequisites given is entirely satisfied, false otherwise
      */
-    function parse_prereq($prereqs_string, $items, $refs_list,$user_id){
+    public function parse_prereq($prereqs_string, $items, $refs_list,$user_id){
 		if(self::debug>0){error_log('New LP - In learnpathItem::parse_prereq() for learnpath '.$this->lp_id.' with string '.$prereqs_string,0);}
     	//deal with &, |, ~, =, <>, {}, ,, X*, () in reverse order
 		$this->prereq_alert = '';
@@ -1653,7 +1653,7 @@ class learnpathItem {
      * Reinits all local values as the learnpath is restarted
      * @return	boolean	True on success, false otherwise
      */
-    function restart()
+    public function restart()
     {
 		if(self::debug>0){error_log('New LP - In learnpathItem::restart()',0);}
 		$this->save();
@@ -1694,7 +1694,7 @@ class learnpathItem {
      * @param	boolean	The results of a check on prerequisites for this item. True if prerequisites are completed, false otherwise. Defaults to false. Only used if not sco or au
      * @return	boolean	True on success, false on failure
      */
-    function save($from_outside=true,$prereqs_complete=false)
+    public function save($from_outside=true,$prereqs_complete=false)
     {
 		if(self::debug>0){error_log('New LP - In learnpathItem::save()',0);}
 		//$item_view_table = Database::get_course_table(COURSEID,LEARNPATH_ITEM_VIEW_TABLE);
@@ -1786,7 +1786,7 @@ class learnpathItem {
 			 			$this->set_status($this->possible_status[2]);
 		 			}
 		 			break;
-		 		case TOOL_HOTPOTATOES:
+		 		case TOOL_HOTPOTATOES: break;
 		 		case TOOL_QUIZ: return false;break;
 				default:
 		 			//for now, everything that is not sco and not asset is set to
@@ -1807,7 +1807,7 @@ class learnpathItem {
      * @param	integer	The given value to set attempt_id to
      * @return	boolean	TRUE on success, FALSE otherwise
      */
-    function set_attempt_id($num)
+    public function set_attempt_id($num)
     {
 		if(self::debug>0){error_log('New LP - In learnpathItem::set_attempt_id()',0);}
      	if($num == strval(intval($num)) && $num>=0){
@@ -1820,7 +1820,7 @@ class learnpathItem {
      * Sets the core_exit value to the one given
      * @return  bool    True (always)
      */
-    function set_core_exit($value)
+    public function set_core_exit($value)
     {
     	switch($value){
     		case '':
@@ -1840,7 +1840,7 @@ class learnpathItem {
      * @param	string	Description
      * @return  void
      */
-    function set_description($string=''){
+    public function set_description($string=''){
 		if(self::debug>0){error_log('New LP - In learnpathItem::set_description()',0);}
     	if(!empty($string)){$this->description = $string;}
     }
@@ -1849,7 +1849,7 @@ class learnpathItem {
      * @param	string	lesson_location as provided by the SCO
      * @return	boolean	True on success, false otherwise
      */
-    function set_lesson_location($location)
+    public function set_lesson_location($location)
     {
    		if(self::debug>0){error_log('New LP - In learnpathItem::set_lesson_location()',0);}
 		if(isset($location)){
@@ -1863,7 +1863,7 @@ class learnpathItem {
      * @param	integer	Level
      * @return  void
      */
-    function set_level($int=0){
+    public function set_level($int=0){
 		if(self::debug>0){error_log('New LP - In learnpathItem::set_level('.$int.')',0);}
     	if(!empty($int) AND $int == strval(intval($int))){$this->level = $int;}
     }
@@ -1873,7 +1873,7 @@ class learnpathItem {
      * @return  void
      * @todo //todo insert into lp_item_view if lp_view not exists
      */
-    function set_lp_view($lp_view_id)
+    public function set_lp_view($lp_view_id)
     {
 		if(self::debug>0){error_log('New LP - In learnpathItem::set_lp_view('.$lp_view_id.')',0);}
     	if(!empty($lp_view_id) and $lp_view_id = intval(strval($lp_view_id)))
@@ -1928,7 +1928,7 @@ class learnpathItem {
      * @param	string	Path
      * @return  void
      */
-    function set_path($string=''){
+    public function set_path($string=''){
 		if(self::debug>0){error_log('New LP - In learnpathItem::set_path()',0);}
     	if(!empty($string)){$this->path = $string;}
     }
@@ -1938,7 +1938,7 @@ class learnpathItem {
      * @param	integer	1 for "prevent", 0 for "don't prevent" saving freshened values (new "not attempted" status etc)
      * @return  void
      */
-    function set_prevent_reinit($prevent){
+    public function set_prevent_reinit($prevent){
 		if(self::debug>0){error_log('New LP - In learnpathItem::set_prevent_reinit()',0);}
     	if($prevent){
     		$this->prevent_reinit = 1;
@@ -1952,7 +1952,7 @@ class learnpathItem {
      * @param	float	Score
      * @return	boolean	True on success, false otherwise
      */
-    function set_score($score)
+    public function set_score($score)
     {
    		if(self::debug>0){error_log('New LP - In learnpathItem::set_score('.$score.')',0);}
    		if(($this->max_score<=0 || $score <= $this->max_score) && ($score >= $this->min_score))
@@ -1978,7 +1978,7 @@ class learnpathItem {
      * @param	int		Maximum score - must be a decimal or an empty string
      * @return	boolean	True on success, false on error
      */
-    function set_max_score($score)
+    public function set_max_score($score)
     {
    		if(self::debug>0){error_log('New LP - In learnpathItem::set_max_score('.$score.')',0);}
      	if(is_int($score) or $score == '')
@@ -1994,7 +1994,7 @@ class learnpathItem {
      * @param	string	Status - must be one of the values defined in $this->possible_status
      * @return	boolean	True on success, false on error
      */
-    function set_status($status)
+    public function set_status($status)
     {
    		if(self::debug>0){error_log('New LP - In learnpathItem::set_status('.$status.')',0);}
      	$found = false;
@@ -2019,7 +2019,7 @@ class learnpathItem {
      * @param   string  Terms, as a comma-split list
      * @return  boolean Always return true
      */
-    function set_terms($terms) {
+    public function set_terms($terms) {
 		global $charset;
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
@@ -2045,7 +2045,7 @@ class learnpathItem {
      * Get the document ID from inside the text index database
      * @return  int     Search index database document ID
      */
-    function get_search_did()
+    public function get_search_did()
     {
         return $this->search_did;
     }
@@ -2055,7 +2055,7 @@ class learnpathItem {
      * @param	string	Time as given by SCORM
      * @return  void
      */
-    function set_time($scorm_time,$format='scorm')
+    public function set_time($scorm_time,$format='scorm')
     {
    		if(self::debug>0){error_log('New LP - In learnpathItem::set_time('.$scorm_time.')',0);}
      	if($scorm_time == 0 and ($this->type!='sco') and $this->current_start_time!=0){
@@ -2086,7 +2086,7 @@ class learnpathItem {
      * @param	string	Title
      * @return  void
      */
-    function set_title($string=''){
+    public function set_title($string=''){
    		if(self::debug>0){error_log('New LP - In learnpathItem::set_title()',0);}
     	if(!empty($string)){$this->title = $string;}
     }
@@ -2095,7 +2095,7 @@ class learnpathItem {
      * @param	string	Type
      * @return  void
      */
-    function set_type($string=''){
+    public function set_type($string=''){
    		if(self::debug>0){error_log('New LP - In learnpathItem::set_type()',0);}
     	if(!empty($string)){$this->type = $string;}
     }
@@ -2104,7 +2104,7 @@ class learnpathItem {
 	 * @param	strings_array	An array of status to check for. If the current status is one of the strings, return true
 	 * @return	boolean			True if the status was one of the given strings, false otherwise
 	 */
-	function status_is($list=array())
+	public function status_is($list=array())
 	{
    		if(self::debug>1){error_log('New LP - In learnpathItem::status_is('.print_r($list,true).') on item '.$this->db_id,0);}
 		$mystatus = $this->get_status(true);
@@ -2130,7 +2130,7 @@ class learnpathItem {
      * @return  void
      * //TODO @TODO make this method better by allowing better/multiple time slices
      */
-    function update_time($total_sec=0){
+    public function update_time($total_sec=0){
    		if(self::debug>0){error_log('New LP - In learnpathItem::update_time('.$total_sec.')',0);}
     	if($total_sec>=0){
 	 		//getting start time from finish time. The only problem in the calculation is it might be
@@ -2168,7 +2168,7 @@ class learnpathItem {
      * objectives are lost as a side effect to AJAX and session concurrent access
      * @return	boolean		True or false on error
      */
-    function write_objectives_to_db()
+    public function write_objectives_to_db()
     {
    		if(self::debug>0){error_log('New LP - In learnpathItem::write_objectives_to_db()',0);}
      	if(is_array($this->objectives) && count($this->objectives)>0){
@@ -2227,7 +2227,7 @@ class learnpathItem {
      * Writes the current data to the database
      * @return	boolean	Query result
      */
-     function write_to_db()
+     public function write_to_db()
      {
 
 		// check the session visibility
@@ -2340,8 +2340,6 @@ class learnpathItem {
 	     	} else {
 	     		$sql = '';
 	     		if($this->type=='hotpotatoes') {
-	     			//make an exception for HotPotatoes, don't update the score
-		     		//because it has been saved outside of this tool
 			     	$sql = "UPDATE $item_view_table " .
 			     			"SET total_time = ".$this->get_total_time().", " .
 			     			" start_time = ".$this->get_current_start_time().", " .

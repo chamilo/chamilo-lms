@@ -71,8 +71,9 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
         if(isset($max) && $max!=-1)
         {
             $mylpi->max_score=$max;
+            $mylpi->set_max_score($max);
         }
-        if(isset($min) && $min!=-1)
+        if(isset($min) && $min!=-1 && $min != 'undefined')
         {
             $mylpi->min_score=$min;
         }
@@ -80,14 +81,31 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
         {
             if($debug>1){error_log('Calling set_score('.$score.') from xajax',0);}
         	$mylpi->set_score($score);
+            if($debug>1){error_log('Done calling set_score from xajax - now '.$mylpi->get_score(),0);}
         }
-        if(isset($status) && $status!='')
+        if(isset($status) && $status!='' && $status!='undefined')
         {
             if($debug>1){error_log('Calling set_status('.$status.') from xajax',0);}
             $mylpi->set_status($status);
-            if($debug>1){error_log('Done calling set_status from xajax',0);}
+            if($debug>1){error_log('Done calling set_status from xajax - now '.$mylpi->get_status(false),0);}
         }
-        if(isset($time) && $time!='')
+	    // hack to set status to completed for hotpotatoes if score > 80%
+	    if ($mylpi->get_type()=='hotpotatoes') {
+	    	if ((empty($status) || $status == 'undefined' || $status == 'not attempted') && $max>0) {
+		    	if (($score/$max) > 0.8) {
+		    		$mystatus = 'completed';
+		            if($debug>1){error_log('Calling set_status('.$mystatus.') from xajax for hotpotatoes',0);}
+		            $mylpi->set_status($mystatus);
+		            if($debug>1){error_log('Done calling set_status from xajax for hotpotatoes - now '.$mylpi->get_status(false),0);}
+		    	}
+	    	} elseif ($status == 'completed' && $max>0 && ($score/$max)<0.8) {
+	    		$mystatus = 'failed';
+	            if($debug>1){error_log('Calling set_status('.$mystatus.') from xajax for hotpotatoes',0);}
+	            $mylpi->set_status($mystatus);
+	            if($debug>1){error_log('Done calling set_status from xajax for hotpotatoes - now '.$mylpi->get_status(false),0);}
+	    	}
+	    }
+        if(isset($time) && $time!='' && $time!='undefined')
         {
             //if big integer, then it's a timestamp, otherwise it's normal scorm time
             if($debug>1){error_log('Calling set_time('.$time.') from xajax',0);}
@@ -98,12 +116,15 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
             }else{
                 $mylpi->set_time($time);
             }
+            if($debug>1){error_log('Done calling set_time from xajax - now '.$mylpi->get_total_time(),0);}
+        } else {
+        	$time = $mylpi->get_total_time();
         }
-        if(isset($suspend) && $suspend!='')
+        if(isset($suspend) && $suspend!='' && $suspend!='undefined')
         {
             $mylpi->current_data = $suspend;//escapetxt($suspend);
         }
-        if(isset($location) && $location!='')
+        if(isset($location) && $location!='' && $location!='undefined')
         {
             $mylpi->set_lesson_location($location);
         }
@@ -117,7 +138,9 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
                 $mylpi->add_interaction($index,$clean_interaction);
             }
         }
-        $mylpi->set_core_exit($core_exit);
+        if($core_exit != 'undefined') {
+        	$mylpi->set_core_exit($core_exit);
+        }
         $mylp->save_item($item_id,false);
     }else{
         //return $objResponse;

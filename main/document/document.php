@@ -893,7 +893,7 @@ $table->set_header($column++, get_lang('Size'),true,array ('style' => 'width:50p
 $table->set_header($column++, get_lang('Date'),true,array ('style' => 'width:150px;'));
 // Admins get an edit column
 if ($is_allowed_to_edit || $group_member_with_upload_rights) {
-	$table->set_header($column++, get_lang('Modify'), false,array ('style' => 'width:100px;'));
+	$table->set_header($column++, get_lang('Modify'), false,array ('style' => 'width:150px;'));
 }
 
 // Actions on multiple selected documents

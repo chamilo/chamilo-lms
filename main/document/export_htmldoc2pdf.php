@@ -10,6 +10,7 @@ $file = Security::remove_XSS($_GET['file']);
 $file_info = pathinfo($file);
 $dirname = str_replace("\\", '/', $file_info['dirname']);
 $filename = $file_info['basename'];
+$filename =str_replace('_','',$filename);
 $extension = $file_info['extension'];
 
 if (!($extension == 'html' || $extension == 'htm')) {

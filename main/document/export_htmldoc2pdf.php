@@ -18,9 +18,9 @@ if (!($extension == 'html' || $extension == 'htm')) {
 }
 
 if($extension == 'html'){
-	$head_title_filename =basename($file,'.html');
+	$filename =basename($file,'.html');
 }elseif($extension == 'htm'){
-	$head_title_filename =basename($file,'.htm');
+	$filename =basename($file,'.htm');
 }
 
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');

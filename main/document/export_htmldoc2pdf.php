@@ -18,9 +18,9 @@ if (!($extension == 'html' || $extension == 'htm')) {
 }
 
 if($extension == 'html'){
-	$filename =basename($file,'.html');
+	$filename =basename($filename,'.html');
 }elseif($extension == 'htm'){
-	$filename =basename($file,'.htm');
+	$filename =basename($filename,'.htm');
 }
 
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
@@ -76,7 +76,7 @@ $pdf->defaultfooterfontsize = 12;	// in pts
 $pdf->defaultfooterfontstyle = B;	// blank, B, I, or BI
 $pdf->defaultfooterline = 1;		// 1 to include line below header/above footer
 
-$pdf->SetHeader($head_title_filename.'|||');// ('{DATE j-m-Y}|{PAGENO}/{nb}|'.$title);
+$pdf->SetHeader($filename.'|||');// ('{DATE j-m-Y}|{PAGENO}/{nb}|'.$title);
 $pdf->SetFooter('||{PAGENO}');		// defines footer for Odd and Even Pages - placed at Outer margin
 
 $pdf->SetAuthor('Documents Chamilo');

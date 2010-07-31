@@ -149,22 +149,25 @@ class BlockTeacherGraph extends Block {
 			} else {
 				
 				// Initializing the graph			      
-				$test = new pChart(400,330);  
+				$bg_width = 440;
+				$bg_height = 350;
+				$test = new pChart($bg_width+10,$bg_height+20);  
 				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
-				$test->setGraphArea(65,30,350,250);  
-				$test->drawFilledRoundedRectangle(7,7,393,303,5,240,240,240);  
-				$test->drawRoundedRectangle(5,5,395,305,5,230,230,230);  
+				$test->setGraphArea(65,30,$bg_width-70,$bg_height-50);  
+				$test->drawFilledRoundedRectangle(7,7,$bg_width,$bg_height,5,240,240,240);  
+				$test->drawRoundedRectangle(5,5,$bg_width+2,$bg_height+2,5,230,230,230);  
 				$test->drawGraphArea(255,255,255,TRUE);  
 				$test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2,TRUE);  
 				$test->drawGrid(4,TRUE,230,230,230,50);  
 				
 				// Drawing lines
-				$test->drawLineGraph($data_set->GetData(),$data_set->GetDataDescription());
-				$test->drawPlotGraph($data_set->GetData(),$data_set->GetDataDescription(),3,2,255,255,255);
+				//$test->drawLineGraph($data_set->GetData(),$data_set->GetDataDescription());
+				$test->drawFilledCubicCurve($data_set->GetData(),$data_set->GetDataDescription(),.1,30);
+				//$test->drawPlotGraph($data_set->GetData(),$data_set->GetDataDescription(),3,2,255,255,255);
 				
 				// Drawing Legend  			 
 				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
-				$test->drawLegend(320,20,$data_set->GetDataDescription(),204,204,255);  
+				$test->drawLegend($bg_width-80,20,$data_set->GetDataDescription(),204,204,255);  
 								 
 				$test->writeValues($data_set->GetData(),$data_set->GetDataDescription(),array("Days")); 
 								 

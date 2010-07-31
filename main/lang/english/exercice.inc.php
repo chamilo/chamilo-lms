@@ -368,5 +368,4 @@ $ReUseACopyInCurrentTest = "Re-use a copy inside the current test";
 $Copy = "Copy";
 $ScoreAverageFromAllAttempts = "Score average from all attempts";
 $DefaultContent = "Generate default content";
-$ExerciseEditionNotAvailableInSession = "You can't edit this course exercise from inside a session";
 ?>

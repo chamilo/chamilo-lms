@@ -887,7 +887,7 @@ $SelectAnAttendance = "Select an attendance";
 $ResultsHiddenByExerciseSetting = "Results hidden by the exercise setting";
 $ThematicSectionHasBeenCreatedSuccessfull = "Thematic section has been created success full";
 $NowYouShouldAddThematicPlanXAndThematicAdvanceX = "Now you should add thematic plan %s and thematic advance %s";
-$QualificationNumeric = "Numeric score  under";
+$QualificationNumeric = "Maximum score";
 $Literal0 = "zero";
 $Literal1 = "one";
 $Literal2 = "two";
@@ -949,4 +949,7 @@ $MemoryUsage = "Memory usage";
 $MemoryUsagePeak = "Memory usage peak";
 $Seconds = "seconds";
 $QualifyInGradebook = "Qualify in the gradebook";
+$SessionSpecificResource = "Session-specific resource";
+$EditionNotAvailableFromSession = "Edition not available from the session, please edit from the basic course.";
+$HandingOverOfTaskX = "Handing over of task %s";
 ?>

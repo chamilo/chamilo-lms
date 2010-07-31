@@ -1268,4 +1268,5 @@ $AddUsersToGroup = "Dodaj uporabnike v skupino";
 $ErrorReadingZip = "Napaka med branjem ZIP datoteke";
 $ErrorStylesheetFilesExtensionsInsideZip = "Dovoljene končnice datotek znotraj ZIP so jpg, jpeg, png, gif in css.";
 $MyTextHere = "Vstavite svoje besedilo ...";
+$FieldTypeSocialProfile = "Povezava socialnega omrežja";
 ?>

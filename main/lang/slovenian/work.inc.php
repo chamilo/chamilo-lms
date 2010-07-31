@@ -90,4 +90,5 @@ $ViewUsersWithoutTask = "Poglej neizvršene/manjkajoče zadolžitve";
 $HomeworkCreated = "Zadolžitev/naloga je bila ustvarjena";
 $HomeworkHasBeenCreatedForTheCourse = "Ustvarjena je bila zadolžitev/naloga za tečaj";
 $PleaseCheckHomeworkPage = "Prosim, preverite stran nalog/zadolžitev";
+$IncludedInEvaluation = "Vključeno v ocenjevanje";
 ?>

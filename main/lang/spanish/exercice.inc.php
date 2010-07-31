@@ -202,7 +202,7 @@ $ChooseQuestionType = "Para crear una nueva pregunta, seleccione el tipo arriba"
 $MatchesTo = "Corresponde a";
 $CorrectTest = "Corregir este ejercicio";
 $ViewTest = "Ver";
-$State = "Estado del sistema";
+$State = "Estado";
 $NotAttempted = "Sin intentar";
 $AddElem = "Añadir elemento";
 $DelElem = "Quitar elemento";
@@ -368,4 +368,5 @@ $ReUseACopyInCurrentTest = "Reutilizar una copia de esta pregunta en el ejercici
 $Copy = "Copia";
 $ScoreAverageFromAllAttempts = "Promedio de todos los intentos en ejercicios";
 $DefaultContent = "Generar contenido por defecto";
+$ExerciseEditionNotAvailableInSession = "Edición de ejercicio de curso no autorizada desde la sesión";
 ?>

@@ -850,13 +850,13 @@ if ($show == 'test') {
 				while ($row = Database :: fetch_array($result)) {
 				//validacion when belongs to a session
 				$session_img = api_get_session_image($row['session_id'], $_user['status']);
-				
+
 				// check if start time
 				$is_actived_time = true;
 				if ($row['start_time'] != '0000-00-00 00:00:00' && api_strtotime($row['start_time']) > time()) {
 					$is_actived_time = false;
-				} 
-		
+				}
+
 				if ($i % 2 == 0)
 					$s_class = "row_odd";
 				else
@@ -864,13 +864,13 @@ if ($show == 'test') {
 				// prof only
 				if ($is_allowedToEdit) {
 					echo '<tr class="' . $s_class . '">';
-	
+
 					echo '<td width="30" align="left">'.Display::return_icon('quiz.gif', get_lang('Exercice')).'</td>';
 					echo '<td width="15" valign="left">'.($i+($page*$limitExPage)).'.'.'</td>';
-	
+
 					//Showing exercise title
 					$row['title']=api_parse_tex($row['title']);
-			
+
 					echo '<td>';
 					$class_invisible = '';
 					if (!$row['active']) {
@@ -882,14 +882,14 @@ if ($show == 'test') {
 					echo $session_img;
 					echo '</td>';
 					echo '<td align="center">';
-				
+
 					$exid = $row['id'];
-					
+
 					//count number exercice - teacher
 					$sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . Database :: escape_string($exid) . "'";
 					$sqlresult = Database::query($sqlquery);
 					$rowi = Database :: result($sqlresult, 0);
-	
+
 					//count number random exercice - teacher
 					$sql_random_query = 'SELECT type,random,active,results_disabled,max_attempt FROM ' . $TBL_EXERCICES . ' WHERE id="' . Database :: escape_string($exid) . '" ';
 					$rs_random = Database::query($sql_random_query);
@@ -930,15 +930,15 @@ if ($show == 'test') {
 					  <td><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
 					  <?php $row['title']=api_parse_tex($row['title']);?>
 					  <td>
-					
-					<?php 
+
+					<?php
 					// if time is actived show link to exercise
 					if ($is_actived_time) { ?>
-						<a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$myllpitemid; ?>&exerciseId=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a>	            
-					<?php 	            
-					} else { 
+						<a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$myllpitemid; ?>&exerciseId=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a>
+					<?php
+					} else {
 						echo $row['title'];
-					} 	            
+					}
 					echo '</td><td align="center">';
 					$exid = $row['id'];
 					//count number exercise questions
@@ -965,9 +965,9 @@ if ($show == 'test') {
 							ORDER BY exe_id DESC";
 					$qryres = Database::query($qry);
 					$num = Database :: num_rows($qryres);
-	
+
 					//hide the results
-					if (!$is_actived_time) { 
+					if (!$is_actived_time) {
 					$my_result_disabled = $row['results_disabled'];
 						if ($my_result_disabled == 0) {
 							if ($num > 0) {
@@ -978,7 +978,7 @@ if ($show == 'test') {
 								}
 								echo get_lang('Attempted') . ' (' . get_lang('Score') . ': ';
 								printf("%1.2f\n", $percentage);
-								echo " %)";		
+								echo " %)";
 							} else {
 								echo get_lang('WillBeActivated' .' '. $row['start_time']);
 							}
@@ -1052,7 +1052,7 @@ if ($show == 'test') {
 	   <td><?php echo ($ind+($page*$limitExPage)).'.'; ?></td>
        <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>
   <td></td>
-      <td><a href="adminhp.php?<?php echo api_get_cidreq() ?>&hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo get_lang('Modify'); ?>" alt="<?php echo api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
+      <td align="center"><a href="adminhp.php?<?php echo api_get_cidreq() ?>&hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo get_lang('Modify'); ?>" alt="<?php echo api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
        <img src="../img/wizard_gray_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('NotMarkActivity'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" />
   <a href="<?php echo $exercicePath; ?>?<?php echo api_get_cidreq() ?>&amp;hpchoice=delete&amp;file=<?php echo $path; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSure'),ENT_QUOTES,$charset).$title."?"); ?>')) return false;"><img src="../img/delete.gif" border="0" title="<?php echo get_lang('Delete'); ?>" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
     <?php

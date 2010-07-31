@@ -11,13 +11,13 @@
 // name of the language file that needs to be included
 $language_file = 'learnpath';
 
-if($_GET['origin']=='learnpath') {
-	require_once ('../newscorm/learnpath.class.php');
-	require_once ('../newscorm/learnpathItem.class.php');
-	require_once ('../newscorm/scorm.class.php');
-	require_once ('../newscorm/scormItem.class.php');
-	require_once ('../newscorm/aicc.class.php');
-	require_once ('../newscorm/aiccItem.class.php');
+if ($_GET['origin'] == 'learnpath') {
+	require_once '../newscorm/learnpath.class.php';
+	require_once '../newscorm/learnpathItem.class.php';
+	require_once '../newscorm/scorm.class.php';
+	require_once '../newscorm/scormItem.class.php';
+	require_once '../newscorm/aicc.class.php';
+	require_once '../newscorm/aiccItem.class.php';
 }
 
 require_once '../inc/global.inc.php';
@@ -100,12 +100,16 @@ if ($origin != 'learnpath') {
 	echo $jscript2run;
 } else {
 ?>
-<html>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo api_get_language_isocode(); ?>" lang="<?php echo api_get_language_isocode(); ?>">
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 <link rel='stylesheet' type='text/css' href='../css/<?php echo api_get_setting('stylesheets');?>/scorm.css' />
 <?php echo $jscript2run; ?>
 </head>
-<body>
+<body dir="<?php echo api_get_text_direction(); ?>">
 <br />
 <div class='message'>
 <?php echo get_lang('HotPotatoesFinished'); ?>

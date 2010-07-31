@@ -1667,8 +1667,12 @@ class learnpath {
 		}
 		while (!empty ($this->ordered_items[$index]) AND ($this->items[$this->ordered_items[$index]]->get_type() == 'dir' || $this->items[$this->ordered_items[$index]]->get_type() == 'dokeos_chapter') AND $index < $this->max_ordered_items) {
 			$index++;
-			if ($index == $this->max_ordered_items) {
-				return $this->index;
+			if ($index == $this->max_ordered_items){
+				if ($this->items[$this->ordered_items[$index]]->get_type() == 'dir' || $this->items[$this->ordered_items[$index]]->get_type() == 'dokeos_chapter') {
+					return $this->index;
+				} else {
+					return $index;
+				}
 			}
 		}
 		if (empty ($this->ordered_items[$index])) {

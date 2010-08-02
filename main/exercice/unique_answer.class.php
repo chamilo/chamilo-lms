@@ -45,7 +45,7 @@ class UniqueAnswer extends Question {
 	function createAnswersForm ($form) {
 		// getting the exercise list
 		$obj_ex =$_SESSION['objExercise'];
-		
+
 		$editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
 
 		//this line define how many question by default appear when creating a choice question
@@ -113,10 +113,9 @@ class UniqueAnswer extends Question {
 		$question_list=$obj_ex->selectQuestionList();
 		$select_question=array();
 		$select_question[0]=get_lang('SelectTargetQuestion');
-		
-		require_once('../newscorm/learnpathList.class.php');
-		require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
-		
+
+		require_once '../newscorm/learnpathList.class.php';
+
 		if (is_array($question_list)) {
 			foreach ($question_list as $key=>$questionid) {
 				//To avoid warning messages
@@ -144,15 +143,15 @@ class UniqueAnswer extends Question {
 		}
 
 		$temp_scenario=array();
-			
+
 			if ($nb_answers < 1) {
 				$nb_answers = 1;
 				Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
 			}
-						
+
 			for($i = 1 ; $i <= $nb_answers ; ++$i)
 			{
-				
+
 				$form -> addElement ('html', '<tr>');
 				if(is_object($answer))
 				{
@@ -160,35 +159,35 @@ class UniqueAnswer extends Question {
 					{
 						$correct = $i;
 					}
-	
+
 					$defaults['answer['.$i.']'] = $answer -> answer[$i];
 					$defaults['comment['.$i.']'] = $answer -> comment[$i];
 					$defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
-	
+
 					$item_list=explode('@@',$answer -> destination[$i]);
 					//echo '<pre>';	print_r($item_list);
-	
+
 					$try = $item_list[0];
 					$lp = $item_list[1];
 					$list_dest= $item_list[2];
 					$url=$item_list[3];
-	
+
 					if ($try==0)
 						$try_result=0;
 					else
 						$try_result=1;
-	
+
 					if ($url==0)
 						$url_result='';
 					else
 						$url_result=$url;
-	
+
 					$temp_scenario['url'.$i]=$url_result;
 					$temp_scenario['try'.$i]=$try_result;
 					$temp_scenario['lp'.$i]=$lp;
 					$temp_scenario['destination'.$i]=$list_dest;
-	
-	
+
+
 					/*$pre_list_destination=explode(';',$list_dest);
 					$list_destination=array();
 					foreach($pre_list_destination as $value)
@@ -203,18 +202,18 @@ class UniqueAnswer extends Question {
 					$defaults['weighting[1]'] = 10;
 					$defaults['answer[2]']  = get_lang('langDefaultUniqueAnswer2');
 					$defaults['weighting[2]'] = 0;
-	
+
 					$temp_scenario['destination'.$i] = array('0');
 					$temp_scenario['lp'.$i] = array('0');
 					//$defaults['scenario']
 				}
-				
-				$defaults['scenario']=$temp_scenario;	
+
+				$defaults['scenario']=$temp_scenario;
 				$renderer = & $form->defaultRenderer();
 				$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
 				$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
 				$answer_number->freeze();
-	
+
 				$form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
 				$form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 				$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
@@ -231,13 +230,13 @@ class UniqueAnswer extends Question {
 					$group['lp'.$i] =&$form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);
 					$group['destination'.$i]=&$form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);
 					$group['url'.$i] =&$form->createElement('text', 'url'.$i,get_lang('Other').': ',array('size'=>'25px'));
-	
+
 					$form -> addGroup($group, 'scenario', 'scenario');
 					$renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>','scenario');
 				}
-	
+
 				//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
-	
+
 				$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0"');
 				$form -> addElement ('html', '</tr>');
 			}
@@ -245,7 +244,7 @@ class UniqueAnswer extends Question {
 		$form -> addElement ('html', '</table>');
 		$form -> addElement ('html', '<br />');
 		$navigator_info = api_get_navigator();
-		
+
 		global $text, $class, $show_quiz_edition;
 		//ie6 fix
 		if ($show_quiz_edition) {
@@ -260,8 +259,8 @@ class UniqueAnswer extends Question {
 				$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 			}
 		}
-		$renderer->setElementTemplate('{element}','submitQuestion');		
-		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');		
+		$renderer->setElementTemplate('{element}','submitQuestion');
+		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}','moreAnswers');
 
 		$form -> addElement ('html', '</div></div>');
@@ -271,7 +270,7 @@ class UniqueAnswer extends Question {
 			$correct=1;
 		}
 		$defaults['correct'] = $correct;
-		
+
 		if (!empty($this -> id)) {
 			$form -> setDefaults($defaults);
 		} else {

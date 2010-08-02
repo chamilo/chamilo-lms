@@ -1037,7 +1037,7 @@ function zip_download($array) {
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);
 
 	// zip library for creation of the zipfile
-	require api_get_path(LIBRARY_PATH).'/pclzip/pclzip.lib.php';
+	require api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 
 	// place to temporarily stash the zipfiles
 	$temp_zip_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/';

@@ -22,7 +22,6 @@ $this_section=SECTION_COURSES;
 
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'text.lib.php';
 require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
@@ -1199,13 +1198,13 @@ if ($_GET['action']=='showpage' AND !isset($_POST['SaveWikiNew']))
 
 if ($_GET['action']=='edit')
 {
-	
+
 	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 		api_not_allowed();
 	}
 
 	$_clean['group_id']=(int)$_SESSION['_gid'];
-	
+
 
 	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.Database::escape_string($page).'" AND '.$tbl_wiki.'.'.$groupfilter.$condition_session.' ORDER BY id DESC';
  	$result=Database::query($sql);

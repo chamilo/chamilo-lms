@@ -4,11 +4,11 @@
  * @package dokeos.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
- 
+
 $language_file= 'userInfo';
 $cidReset=true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
@@ -30,19 +30,19 @@ function text_longitud(){
       document.forms[0].description.value = textarea;
    }else{
       textarea = document.forms[0].description.value;
-   } 
+   }
 }
-function show_icon_edit(element_html) {	
+function show_icon_edit(element_html) {
 	ident="#edit_image";
 	$(ident).show();
-}		
+}
 
 function hide_icon_edit(element_html)  {
 	ident="#edit_image";
 	$(ident).hide();
-}	
+}
 </script>';
-					
+
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 
 $form = new FormValidator('add_group');
@@ -86,19 +86,19 @@ if ($form->validate()) {
 	$picture_uri 	= '';
 	$name 			= $values['name'];
 	$description	= $values['description'];
-	$url 			= $values['url'];	
+	$url 			= $values['url'];
 	$status 		= intval($values['visibility']);
 	$picture 		= $_FILES['picture'];
 
 	$group_id = GroupPortalManager::add($name, $description, $url, $status);
 	GroupPortalManager::add_user_to_group(api_get_user_id(), $group_id,GROUP_USER_PERMISSION_ADMIN);
-		
+
 	if (!empty($picture['name'])) {
 		$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 		GroupPortalManager::update($group_id, $name, $description, $url,$status, $picture_uri);
 	}
 	header('Location: groups.php?id='.$group_id.'&action=show_message&message='.urlencode(get_lang('GroupAdded')));
-	exit();		
+	exit();
 }
 
 $nameTools = get_lang('AddGroup');
@@ -111,11 +111,11 @@ Display :: display_header($tool_name, 'Groups');
 
 echo '<div id="social-content">';
 	echo '<div id="social-content-left">';
-		//show the action menu			
+		//show the action menu
 		SocialManager::show_social_menu('group_add');
 	echo '</div>';
 	echo '<div id="social-content-right">';
-		$form->display();	
+		$form->display();
 	echo '</div>';
 echo '</div>';
 

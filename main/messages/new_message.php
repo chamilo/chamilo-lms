@@ -25,7 +25,6 @@ if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH).'text.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
@@ -198,11 +197,11 @@ function manage_form ($default, $select_from_user_list = null) {
 		$message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
 		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');
-		
+
 		//adding reply mail
 		$user_reply_info = UserManager::get_user_info_by_id($message_reply_info['user_sender_id']);
 		$default['content']='<p></p>'.api_get_person_name($user_reply_info['firstname'],$user_reply_info['lastname']).' '.get_lang('Wrote').' :<i> <br />'.api_html_entity_decode($message_reply_info['content'],ENT_QUOTES,$charset).'</i>';
-		
+
 	}
 	if (empty($group_id)) {
 		$form->addElement('html','<div class="row"><div class="label">'.get_lang('FilesAttachment').'</div><div class="formw">

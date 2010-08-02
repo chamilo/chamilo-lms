@@ -131,7 +131,10 @@ if (api_is_xml_http_request()) {
 				$test->drawBarGraph($data_set->GetData(), $data_set->GetDataDescription(), TRUE);
 			} else {
 				//Draw the line graph
-				$test->drawLineGraph($data_set->GetData(), $data_set->GetDataDescription());
+				//$test->drawLineGraph($data_set->GetData(), $data_set->GetDataDescription());
+				//$test->drawCubicCurve($data_set->GetData(), $data_set->GetDataDescription());
+				//$test->drawFilledLineGraph($data_set->GetData(), $data_set->GetDataDescription());
+				$test->drawFilledCubicCurve($data_set->GetData(), $data_set->GetDataDescription(),.2,50);
 				$test->drawPlotGraph($data_set->GetData(), $data_set->GetDataDescription(), 3, 2, 255, 255, 255);
 			}
 

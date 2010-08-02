@@ -41,7 +41,7 @@ class scormItem extends learnpathItem{
 			if($v == 4){
 	    		switch($type){
 	    			case 'db':
-	    				parent::learnpathItem($element,api_get_user_id());
+	    				parent::__construct($element,api_get_user_id());
 	    				$this->scorm_contact = false;
 	    				//TODO implement this way of metadata object creation
 	    				return false;
@@ -141,7 +141,7 @@ class scormItem extends learnpathItem{
 	    		//parsing using PHP5 DOMXML methods
 	    		switch($type){
 	    			case 'db':
-	    				parent::learnpathItem($element,api_get_user_id());
+	    				parent::__construct($element,api_get_user_id());
 	    				$this->scorm_contact = false;
 	    				//TODO implement this way of metadata object creation
 	    				return false;

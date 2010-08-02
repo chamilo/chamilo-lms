@@ -1027,7 +1027,7 @@ class TestLearnpath extends UnitTestCase {
 		$course = '';
 		$lp_id = '';
 		$user_id = '';
-		$res = learnpath::learnpath($course, $lp_id, $user_id);
+		$res = learnpath::__construct($course, $lp_id, $user_id);
 	 	$this->assertTrue(is_bool($res));
 		//ob_end_clean();
 	 	//var_dump($res);

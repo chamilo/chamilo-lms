@@ -145,7 +145,7 @@ if (!empty ($_POST['external_link_submit'])) {
 			{
 				$external_link = 'http://'.$external_link;
 			}
-	
+
 			$sql = "INSERT INTO $link_table (url, title, category_id) VALUES ('$external_link','$external_link','$add_2_links')";
 			$result = Database::query($sql);
 			$addedresource[] = "Link";
@@ -701,7 +701,6 @@ if ($from_learnpath != 'yes')
 // Agenda items -->
 if ($content == "Agenda")
 {
-	include_once api_get_path(LIBRARY_PATH).'text.lib.php';
 	$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -779,7 +778,6 @@ if ($content == "Document" OR (empty($content) AND (is_allowed_to_edit() OR in_a
 */
 if ($content == "Ad_Valvas")
 {
-	include_once api_get_path(LIBRARY_PATH).'text.lib.php';
 	$tbl_announcement = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 	$sql = "SELECT * FROM ".$tbl_announcement." a, ".$item_property_table." i  WHERE i.tool = '".TOOL_ANNOUNCEMENT."' AND a.id=i.ref AND i.visibility='1' AND i.to_group_id = 0 AND i.to_user_id IS NULL ORDER BY a.display_order ASC";
 	//error_log($sql,0);

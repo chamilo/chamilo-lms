@@ -481,7 +481,7 @@ class MySpace {
 			$last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row->user_id, $course_code, null, false);
 			if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned
 				$last_login_date = $last_login_date_tmp;
-			} else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
+			} else if($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition. To be cleaned.
 				// Find the max and assign it to first_login_date
 				if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
 					$last_login_date = $last_login_date_tmp;
@@ -837,7 +837,7 @@ class MySpace {
 				$last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row_user->user_id, $row->code, $session_id, false);
 				if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
 					$last_login_date = $last_login_date_tmp;
-				} else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition! To be cleaned.
+				} else if($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition! To be cleaned.
 					// Find the max and assign it to first_login_date
 					if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
 						$last_login_date = $last_login_date_tmp;

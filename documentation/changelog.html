@@ -19,29 +19,103 @@
 <div id="outerframe">
 <div id="main">
 
-<h1>Chamilo 1.8.7.1 - </h1>
+<h1>Chamilo 1.8.7.1 - Palmas</h1>
 
 <h3>New Features</h3>
 <ul>
-  <li>The mPDF library (which is used for PDF-files generation) has been upgraded from version 4.2 to version 4.6 (Feature #1656)</li>
-  <li>ASCIIMathML.js: The script for showing mathematical formulas has been upgraded from version 2.0.2 to version 2.1. Additional changes have been made in the online editor's plugin asciimath (Feature #541)</li>
   <li>Ajax File Manager updated to  1.0 RC5 (Feature #247)</li>
-  <li>Added simple document search feature</li>
-  <li>Added simple social network link feature (Feature #1764)</li>
+  <li>Display message when uploading a file that is larger than the maximum file size (Feature #250, #1769)</li>
+  <li>Improved SCORM lesson_status behaviour (Feature #283)</li>
+  <li>Multiple answers can now be shuffled (Feature #291)</li>
+  <li>Added simple document search feature (Feature #300)</li>
+  <li>Added short URL feature for users profile (through .htaccess disabled by default) (Feature #322)</li>
+  <li>ASCIIMathML.js: The script for showing mathematical formulas has been upgraded from version 2.0.2 to version 2.1. Additional changes have been made in the online editor's plugin asciimath (Feature #541)</li>
+  <li>Moved slideshow buttons to action bar to improve usability (Feature #744)</li>
+  <li>Added robots.txt to avoid parsing by index engines (Feature #837)</li>
+  <li>Added e-mail notification on wiki updates (Feature #1202)</li>
+  <li>Re-enabled course tutor role: a student can be tutor and help the teacher (Bug #1206)</li>
+  <li>Removed possibility for student to upload an assignment outside an assignment directory (Bug #1220)</li>
+  <li>Improved gradebook XLS report (Bug #1237)</li>
+  <li>Added performance info in test server mode (Feature #1634)</li>
+  <li>Adding an assignment to the calendar is now done by hand out date instead of creation date (Bug #1638)</li>
+  <li>The mPDF library (which is used for PDF-files generation) has been upgraded from version 4.2 to version 4.6 (Feature #1656)</li>
+  <li>Now a student only downloads *his* shared folder (Feature #1663)</li>
+  <li>General visual improvements in gradebook tool (Feature #1740)</li>
+  <li>General code improvements in gradebook (Feature #1742)</li>
+  <li>Now displaying images uploaded by users in courses inside their social profile (Feature #1750)</li>
+  <li>Added simple social network link featurei (LinkedIn, Twitter, Facebook, ...) (Feature #1764)</li>
+  <li>Enabled PDF export for HTML documents in documents tool (Feature #1768)</li>
+  <li>Changed Mr. Chamilo picture in course introduction for the Chamilo logo (more professional) (Feature #1778)</li>
 </ul>
 
 <h3>Debugging</h3>
 <ul>
+  <li>Fixed excessive memory usage caused by HTMLPurifier (Bug #1297)</li>
   <li>Duplicate query calls have been removed from .../install/update-db-18.6.2-1.8.7.inc.php. The bug has been reported (with solution given) by Omar Arino (Bug #1713)</li>
+  <li>Fixed answer option rendering problem (Bug #351)</li>
+  <li>Fixed install process not detecting HTTPS (Bug #413)</li>
+  <li>Fixed multi-url statitics bug (Bug #1099)</li>
+  <li>Fixed references to previous platform in hotspot (Bug#1161)</li>
+  <li>Fixed UTF-8 characters encoding problems in hotspot (Bug #1752)</li>
+  <li>Fixed various wiki comments bugs (Bug #1203, #1204)</li>
+  <li>Improved the survey report export to make one cell for each percentage question (Bug #1249)</li>
   <li>Tests tool: Errors have been fixed about showing HotPotatoes tests and results. The solution has been proposed by Hubert Borderiou (Bug #1301)</li>
-  <li>Tests tool: Titles of the imported HotPotatoes tests are retrieved in their original spelling, without modifications due to technical reasons, as it was before. The problem has been reported by Oliver Corre (Bug #1761)</li>
+  <li>Fixed cache memory problem preventing sub-languages to show translated tool titles in course homepages (Bug #1304)</li>
+  <li>Fixed problem with more than 100 users in attendance sheets (Bug #1364)</li>
+  <li>Fixed bug with left and right arrows in learning paths, whereby the system didn't move to the next chapter (Bug #1413)</li>
+  <li>Fixed wiki report (Bug #1432)</li>
+  <li>Fixed minor spacing problem in new links in wiki (Bug #1433, #1434)</li>
+  <li>Fixed notice messages in Chamilo install process (Bug #1442)</li>
+  <li>Fix users and courses reports access bug when upgrading from 1.8.6.2 to 1.8.7 (Bug #1443, #1449)</li>
+  <li>Fixed users CSV import/export issues (Bug #1454)</li>
+  <li>Fixed PDF export under Linux (Bug #1461)</li>
+  <li>Fixed DB errors in attendance through session users list stats (Bug #1462)</li>
+  <li>Fixed access to course documents by students in session courses (Bug #1463)</li>
+  <li>Limited global announcement e-mails to selected language users (Bug #1471)</li>
+  <li>Fixed sender e-mail for global announcements (Bug #1472)</li>
+  <li>Fixed sending global announcements to disabled users (Bug #1474)</li>
+  <li>Fixed bug in score in trainer reporting view (Bug #1479)</li>
+  <li>Fixed call to undefined function imageftbbox in stats (Bug #1481)</li>
+  <li>Fixed (through #1297) bug preventing attendance sheets to show (Bug #1510)</li>
+  <li>Fixed HotPotatoes score not being saved in learning path (Bug #1512)</li>
+  <li>Fixed error in progress page with single-db installs (Bug #1581)</li>
   <li>Improved resource visibility from sessions (Bug #1599)</li>
+  <li>Fixed various French sintaxis minor bugs (Bug #1608, #1635, #1636, #1639, #1642, #1643, #1644, #1645, #1648))</li>
+  <li>Fixed chat history file download auto-triggered (Bug #1637)</li>
   <li>Tasks now create a calendar event based on the hand out date instead of the task creation date (if hand out date is defined) (Bug #1638)</li>
+  <li>Fixed minor unescaped backslash in assignments description (Bug #1641)</li>
+  <li>Fixed wrong character set used in RSS feed import (Bug #1649)</li>
+  <li>Fixed hidden extended profile fields in social network's shared profile - now visible if selected by admin (Bug #1650)</li>
+  <li>Fixed moving learnpath chapters (Bug #1651)</li>
+  <li>Fixed learning paths visibility from sessions (Bug #1653)</li>
+  <li>Fixed plain text pasting in wiki (Bug #1655)</li>
+  <li>Fixed certificates "back" button (Bug #1683)</li>
+  <li>Fixed bug not showing star icon for documents created through session (Bug #1684)</li>
+  <li>Fixed next/previous links in sessions list preventing numerous sessions to be seen (Bug #1712)</li>
+  <li>Fixed copy of questions between courses (Bug #1714)</li>
+  <li>Fixed bug in breadcrumb for shared directory (Bug #1718)</li>
+  <li>Improved shared folder when inside session (Bug #1719, #1720, #1721)</li>
+  <li>Fixed order in attendance sheets (Bug #1733)</li>
+  <li>Fixed encoding problem in announcements in Chinese (Bug #1734)</li>
+  <li>Fixed broken UTF-8 text in hotspot (Bug #1752)</li>
+  <li>Fixed image insertion in documents (Bug #1760)</li>
+  <li>Tests tool: Titles of the imported HotPotatoes tests are retrieved in their original spelling, without modifications due to technical reasons, as it was before. The problem has been reported by Oliver Corre (Bug #1761)</li>
+  <li>Fixed PDF export from wiki to limit header/footer repetition (Bug #1767)</li>
+  <li>Fixed unclear label in tests list titles (Bug #1770)</li>
+  <li>Fixed videoconference starter page (classroom/meeting) (Bug #1774)</li>
+  <li>General code cleanup (if conditions) (Feature #1744)</li>
+</ul>
+
+<h3>Security</h3>
+<ul>
+  <li>Fixed security bugs in the wiki (Bug #1666)</li>
 </ul>
 
 <h3>Deprecated files</h3>
 <ul>
   <li>html2pdf library (replaced by mPDF libray)</li>
+  <li>main/WCAG folder has been removed (deprecated) </li>
+  <li>main/online folder has been removed (deprecated)</li>
 </ul>
 
 <h1>Chamilo 1.8.7 - Istanbul</h1>

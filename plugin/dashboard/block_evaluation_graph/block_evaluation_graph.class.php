@@ -44,6 +44,8 @@ class BlockEvaluationGraph extends Block {
     public function __construct ($user_id) {    	
     	$this->path = 'block_evaluation_graph';
     	$this->user_id 	= $user_id;
+    	$this->bg_width = 450;
+    	$this->bg_height = 350;
     	if ($this->is_block_visible_for_user($user_id)) {    		
     		/*if (api_is_platform_admin()) {
 	    		$this->courses  = CourseManager::get_real_course_list();
@@ -157,7 +159,7 @@ class BlockEvaluationGraph extends Block {
 					    $data_set->AddPoint($avg, "Avg");
 					    $data_set->AddPoint($min, "Min");  	    
 					    $data_set->AddPoint($items, "Items");					    
-					    $data_set->SetXAxisName(get_lang('Step'));
+					    $data_set->SetXAxisName(get_lang('EvaluationName'));
 						$data_set->SetYAxisName(get_lang('Percentage'));				
 						$data_set->AddAllSeries();  
 					   	$data_set->RemoveSerie("Items");  
@@ -171,28 +173,31 @@ class BlockEvaluationGraph extends Block {
 							$img_file = $cache->GetHash($graph_id, $data);
 						} else {
 							// Initialise the graph  
-						    $test = new pChart(450,260);  
+						    $test = new pChart($this->bg_width,$this->bg_height);  
 						    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
-						    $test->setGraphArea(50,30,375,200);  
-						    $test->drawFilledRoundedRectangle(7,7,373,223,5,240,240,240);  
-						    $test->drawRoundedRectangle(5,5,375,225,5,230,230,230);  
+						    $test->setGraphArea(50,30,$this->bg_width-75,$this->bg_height-75);  
+						    $test->drawFilledRoundedRectangle(7,7,$this->bg_width-20,$this->bg_height-20,5,240,240,240);  
+						    $test->drawRoundedRectangle(5,5,$this->bg_width-18,$this->bg_height-18,5,230,230,230);  
 						    $test->drawGraphArea(255,255,255,TRUE);  						    
 						    $test->setFixedScale(0,100,5);							    
 						    $test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALL,150,150,150,TRUE,0,2,TRUE);  						    
-						    $test->setColorPalette(0,125,201,44);
-							$test->setColorPalette(1,255,138,0);
+						    $test->setColorPalette(0,105,221,34);
+							$test->setColorPalette(1,255,135,30);
 							$test->setColorPalette(2,255,0,0);						    
 						    $test->drawGrid(4,TRUE,230,230,230,50);  						     
 						    // Draw the 0 line  
 						    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);  
 						    $test->drawTreshold(0,143,55,72,TRUE,TRUE);  						     
 						    // Draw the bar graph  
-						    $test->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 100);						     
+						    $test->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 90);						     
 						    // Finish the graph  
 						    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
-						    $test->drawLegend(365,20,$data_set->GetDataDescription(),255,255,255);  
+						    $test->drawLegend($this->bg_width-80,20,$data_set->GetDataDescription(),255,255,255);  
 						    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);  
 						    //$test->drawTitle(50,22,$course_code,50,50,50,185);  					    
+						    $test->setColorPalette(0,50,50,50);
+							$test->setColorPalette(1,50,50,50);
+							$test->setColorPalette(2,50,50,50);						    
 						    $test->writeValues($data_set->GetData(),$data_set->GetDataDescription(),array("Min", "Max", "Avg"));					    		   		    
 						    $cache->WriteToCache($graph_id, $data_set->GetData(), $test);
 							ob_start();
@@ -243,7 +248,7 @@ class BlockEvaluationGraph extends Block {
 						    $data_set->AddPoint($avg, "Avg");
 						    $data_set->AddPoint($min, "Min");  	    
 						    $data_set->AddPoint($items, "Items");						    
-						    $data_set->SetXAxisName(get_lang('Step'));
+						    $data_set->SetXAxisName(get_lang('EvaluationName'));
 							$data_set->SetYAxisName(get_lang('Percentage'));					
 							$data_set->AddAllSeries();  
 						   	$data_set->RemoveSerie("Items");  
@@ -257,17 +262,17 @@ class BlockEvaluationGraph extends Block {
 								$img_file = $cache->GetHash($graph_id, $data);
 							} else {
 								// Initialise the graph  
-							    $test = new pChart(450,260);  
+							    $test = new pChart($this->bg_width,$this->bg_height);  
 							    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
-							    $test->setGraphArea(50,30,375,200);  
-							    $test->drawFilledRoundedRectangle(7,7,373,230,5,240,240,240);  
-							    $test->drawRoundedRectangle(5,5,375,225,5,230,230,230);  
+							    $test->setGraphArea(50,30,$this->bg_width-75,$this->bg_height-75);  
+							    $test->drawFilledRoundedRectangle(7,7,$this->bg_width-20,$this->bg_height-20,5,240,240,240);  
+							    $test->drawRoundedRectangle(5,5,$this->bg_width-18,$this->bg_height-18,5,230,230,230);  
 							    $test->drawGraphArea(255,255,255,TRUE);  							    
 							    $test->setFixedScale(0,100,5);								    
 							    $test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALL,150,150,150,TRUE,0,2,TRUE);  							    
-							    $test->setColorPalette(0,125,201,44);
-								$test->setColorPalette(1,255,138,0);
-								$test->setColorPalette(2,255,0,0);							    
+							    $test->setColorPalette(0,105,221,34);
+								$test->setColorPalette(1,255,135,30);
+								$test->setColorPalette(2,255,0,0);						    
 							    $test->drawGrid(4,TRUE,230,230,230,50);  							     
 							    // Draw the 0 line  
 							    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);  
@@ -276,8 +281,11 @@ class BlockEvaluationGraph extends Block {
 							    $test->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 100);							     
 							    // Finish the graph  
 							    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
-							    $test->drawLegend(365,20,$data_set->GetDataDescription(),255,255,255);  
+							    $test->drawLegend($this->bg_width-80,20,$data_set->GetDataDescription(),255,255,255);  
 							    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);  
+							    $test->setColorPalette(0,50,50,50);
+								$test->setColorPalette(1,50,50,50);
+								$test->setColorPalette(2,50,50,50);						    
 							    $test->writeValues($data_set->GetData(),$data_set->GetDataDescription(),array("Min", "Max", "Avg"));					    		   		    
 							    $cache->WriteToCache($graph_id, $data_set->GetData(), $test);
 								ob_start();

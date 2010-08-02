@@ -19,14 +19,14 @@
  * @since 31/December/2008
  */
 
-require_once api_get_path(LIBRARY_PATH).'/fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 $permissions_for_new_directories = api_get_permissions_for_new_directories();
 $permissions_for_new_files = api_get_permissions_for_new_files();
 
 if (!empty($_course['path'])) {
-	require_once api_get_path(LIBRARY_PATH).'/document.lib.php';
-	require_once api_get_path(LIBRARY_PATH).'/groupmanager.lib.php';
+	require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+	require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
     // Get the Chamilo session properties. Before ajaximagemanager!!!
     $to_group_id = !empty($_SESSION['_gid']) ? $_SESSION['_gid'] : 0 ;
@@ -54,12 +54,12 @@ if (api_is_platform_admin()) {
 
 
 // Create course shared folders
-if (api_is_in_course()) {	
+if (api_is_in_course()) {
 	$course_dir      = $_course['path'].'/document';
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);
 	$base_work_dir   = $sys_course_path.$course_dir;
 	$current_session_id = api_get_session_id();
-	
+
 	if($current_session_id==0){
 		//Create shared folder. Necessary for courses recycled. Allways session_id should be zero. Allway should be created from a base course, never from a session.
 		if (!file_exists($base_work_dir.'/shared_folder')) {
@@ -67,7 +67,7 @@ if (api_is_in_course()) {
 			$usf_dir_name = '/shared_folder';
 			$to_group_id = 0;
 			$visibility = 0;
-			create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);	
+			create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
 		}
 		// Create dynamic user shared folder
 		if (!file_exists($base_work_dir.'/shared_folder/sf_user_'.api_get_user_id())) {
@@ -78,11 +78,11 @@ if (api_is_in_course()) {
 				create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
 		}
 	}
-	else{	
+	else{
 			//Create shared folder session
 			if (!file_exists($base_work_dir.'/shared_folder_session_'.$current_session_id)) {
 				$usf_dir_title = get_lang('SharedFolder').' ('.api_get_session_name($current_session_id).')';
-				$usf_dir_name = '/shared_folder_session_'.$current_session_id;			
+				$usf_dir_name = '/shared_folder_session_'.$current_session_id;
 				$to_group_id = 0;
 				$visibility = 0;
 				create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
@@ -90,7 +90,7 @@ if (api_is_in_course()) {
 			//Create dynamic user shared folder into a shared folder session
 			if (!file_exists($base_work_dir.'/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id())) {
 				$usf_dir_title = api_get_person_name($_user['firstName'], $_user['lastName']).' ('.api_get_session_name($current_session_id).')';
-				$usf_dir_name = '/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id();			
+				$usf_dir_name = '/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id();
 				$to_group_id = 0;
 				$visibility = 1;
 				create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);

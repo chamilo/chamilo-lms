@@ -175,7 +175,7 @@ class BlockStudentGraph extends Block {
 				//X axis
 				$test->setFixedScale(0,100,10);
 				//var_dump($data_set->GetDataDescription());
-				$test->drawHorScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2,TRUE);				
+				$test->drawHorScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALL,150,150,150,TRUE,0,0,TRUE);				
 				$test->setColorPalette(0,255,0,0);				
 				$test->drawHorGrid(10,TRUE,230,230,230,50);
 				
@@ -184,7 +184,7 @@ class BlockStudentGraph extends Block {
 				$test->drawTreshold(0,143,55,72,TRUE,TRUE);
 
 				// Draw the bar graph
-				$test->drawHorBarGraph($data_set->GetData(),$data_set->GetDataDescription(),FALSE);
+				$test->drawHorBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE,50);
 				
 				$cache->WriteToCache($graph_id, $data_set->GetData(), $test);
 				

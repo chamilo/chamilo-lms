@@ -949,4 +949,7 @@ $MemoryUsage = "Poraba pomnilnika";
 $MemoryUsagePeak = "Največja poraba pomnilnika";
 $Seconds = "sekund";
 $QualifyInGradebook = "Uvrsti v redovalnico";
+$SessionSpecificResource = "Za sejo specifičen resurs";
+$EditionNotAvailableFromSession = "Urejanje ni dostopno preko seje. Prosim, izvedite urejanje preko osnovnega tečaja.";
+$HandingOverOfTaskX = "Predaja naloge %s";
 ?>

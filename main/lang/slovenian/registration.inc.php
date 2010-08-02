@@ -181,4 +181,6 @@ $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Vaš uporabniški 
 $HaveFun = "Veliko uspeha,";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Sedaj se lahko prijavite v %s z uporabniškim imenom in geslom, ki ste ga podali pri registraciji.";
 $AreYouSureToEditTheUserStatus = "Ste prepričani, da želite urediti uporabniški status?";
+$TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "Tutor lahko zgolj sledi napredkom vseh registiranih tečajnikov tega tečaja";
+$TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "Učitelj lahko primerja, ocenjuje in sledi napredku vsakega posameznega tečajnika tega tečaja";
 ?>

@@ -368,4 +368,5 @@ $ReUseACopyInCurrentTest = "Ponovno uporabi kopijo znotraj trenutnega testa";
 $Copy = "Kopiraj";
 $ScoreAverageFromAllAttempts = "Povprečen rezultat iz vseh poizkusov";
 $DefaultContent = "Generiraj privzeto vsebino";
+$ExerciseEditionNotAvailableInSession = "Iz seje vaje/testa tega tečaja ni mogoče urejati";
 ?>

@@ -14,7 +14,7 @@ if (empty($_GET['term']) || empty($_GET['prefix']) || !in_array($_GET['operator'
 }
 
 require_once dirname(__FILE__) . '../../../global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'/search/DokeosQuery.php';
+require_once api_get_path(LIBRARY_PATH).'search/DokeosQuery.php';
 
 /**
  * search with filter and build base array avoding repeated terms

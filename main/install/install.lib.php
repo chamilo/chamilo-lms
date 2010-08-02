@@ -650,9 +650,14 @@ function fill_track_countries_table($track_countries_table) {
  */
 function load_main_database($installation_settings, $db_script = '') {
 	if (!empty($db_script)) {
-		$sql_text = file_get_contents($db_script);
+		if (file_exists($db_script)) {
+			$sql_text = file_get_contents($db_script);
+		}
 	} else {
-		$sql_text = file_get_contents(SYSTEM_MAIN_DATABASE_FILE);
+		$db_script = api_get_path(SYS_CODE_PATH).'install/'.SYSTEM_MAIN_DATABASE_FILE;
+		if (file_exists($db_script)) { 
+			$sql_text = file_get_contents($db_script);
+		}
 	}
 
 	//replace symbolic parameters with user-specified values
@@ -677,7 +682,10 @@ function load_main_database($installation_settings, $db_script = '') {
  * @param	string	Name of the file containing the SQL script inside the install directory
  */
 function load_database_script($db_script) {
-	$sql_text = file_get_contents($db_script);
+	$db_script = api_get_path(SYS_CODE_PATH).'install/'.$db_script;
+	if (file_exists($db_script)) {
+		$sql_text = file_get_contents($db_script);
+	}
 
 	//split in array of sql strings
 	$sql_instructions = array();

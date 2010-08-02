@@ -43,7 +43,7 @@ include('../inc/global.inc.php');
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
-include_once(api_get_library_path().'/text.lib.php');
+include_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
 // answer types
 define('UNIQUE_ANSWER',	1);

@@ -99,7 +99,7 @@ else {
 	$work = new Dropbox_work($_GET['id']);
 	$path = dropbox_cnf('sysPath') . '/' . $work -> filename; //path to file as stored on server
 	$file = $work->title;
-	require_once api_get_path(LIBRARY_PATH) . '/document.lib.php';
+	require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 	$mimetype = DocumentManager::file_get_mime_type(true);
 	$fileparts = explode('.', $file);
 	$filepartscount = count($fileparts);

@@ -37,7 +37,7 @@ include '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
-include api_get_path(LIBRARY_PATH).'/fileManage.lib.php';
+include api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 $session_id = intval($_GET['session_id']);
 $formSent = 0;

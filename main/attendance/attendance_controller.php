@@ -201,6 +201,7 @@
 		}
 				
 		$data['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);
+		$data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);
 		
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {	
 
@@ -218,6 +219,7 @@
 			$data['attendant_calendar'] 		 = $attendance->get_attendance_calendar($attendance_id);
 			$data['users_presence'] 			 = $attendance->get_users_attendance_sheet($attendance_id);
 			$data['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);			
+			$data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);			
 		}
 		
 		$this->view->set_data($data);

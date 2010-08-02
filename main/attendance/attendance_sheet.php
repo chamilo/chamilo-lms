@@ -115,8 +115,10 @@ if (api_is_allowed_to_edit(null, true)) {
 					<tr class="<?php echo $class ?>">
 					<?php
 						if (count($attendant_calendar) > 0 ) {
-							foreach ($attendant_calendar as $calendar) {
+							foreach ($attendant_calendar as $key => $calendar) {
+								//error_log(print_r($calendar,1));
 								$checked = 'checked';
+								// if the 
 								if (isset($users_presence[$user['user_id']][$calendar['id']]['presence'])) {
 									$presence = $users_presence[$user['user_id']][$calendar['id']]['presence'];
 									if (intval($presence) == 1) {
@@ -124,9 +126,15 @@ if (api_is_allowed_to_edit(null, true)) {
 									} else {
 										$checked = '';
 									}
+								} else {
+									//if the user wasn't registered at that time, consider unchecked
+									if ($next_attendance_calendar_datetime == 0 || $calendar['date_time'] < $next_attendance_calendar_datetime) {
+										$checked = '';
+									}
 								}
 								$disabled = 'disabled';
 								$style_td = '';
+								// if this is the active column, then set it to darker background and enable it
 								if ($next_attendance_calendar_id == $calendar['id']) {
 									$style_td = 'background-color:#e1e1e1';
 									$disabled = '';

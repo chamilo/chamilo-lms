@@ -21,6 +21,13 @@ define('MATCHING',			4);
 define('FREE_ANSWER', 		5);
 define('HOTSPOT',			6);
 
+if (!function_exists('mime_content_type')) {
+	require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+	function mime_content_type($filename) {
+		return DocumentManager::file_get_mime_type((string)$filename);
+	}
+}
+
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/answer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/exercise.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/hotspot.class.php');

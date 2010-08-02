@@ -56,8 +56,6 @@ if (!ereg("MSIE",$_SERVER["HTTP_USER_AGENT"])) {
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-require_once api_get_path(LIBRARY_PATH) . 'text.lib.php';
-
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 
 $_configuration['live_exercise_tracking'] = true;

@@ -62,7 +62,6 @@ $tool_name = get_lang('CreateSubLanguage');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'languages.php', 'name' => get_lang('PlatformLanguages'));
 
-require_once api_get_path(LIBRARY_PATH).'text.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {

@@ -7,7 +7,6 @@
 * 	@author Toon Keppens
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
 if(!defined('ALLOWED_TO_INCLUDE')) {
@@ -174,7 +173,7 @@ if($modifyAnswers)
             $reponse[$i]=$objAnswer->selectAnswer($i);
             if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
             	$comment[$i]=$objAnswer->selectComment($i);
-            }            
+            }
             $weighting[$i]=$objAnswer->selectWeighting($i);
             $hotspot_coordinates[$i]=$objAnswer->selectHotspotCoordinates($i);
             $hotspot_type[$i]=$objAnswer->selectHotspotType($i);
@@ -302,15 +301,15 @@ if($modifyAnswers)
 					-->
 					<tr>
 					  <th width="5" >&nbsp;<?php /* echo get_lang('HotSpot'); */ ?></th>
-					  
-					  
+
+
 					  <?php if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-					  <th><?php echo get_lang('HotspotDescription'); ?>*</th>						  
+					  <th><?php echo get_lang('HotspotDescription'); ?>*</th>
 					  <th><?php echo get_lang('Comment'); ?></th>
 					  <?php } else { ?>
 					  	<th colspan="2"><?php echo get_lang('HotspotDescription'); ?>*</th>
-					  <?php } ?>	
-					  
+					  <?php } ?>
+
 					  <th><?php echo get_lang('QuestionWeighting'); ?>*</th>
 					</tr>
 
@@ -318,8 +317,8 @@ if($modifyAnswers)
 								for($i=1;$i <= $nbrAnswers;$i++) {
 					?>
 					<tr>
-					  <td valign="top"><div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div></td>					  					
-					<?php if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>					   
+					  <td valign="top"><div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div></td>
+					<?php if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 						<td valign="top" align="left"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo api_htmlentities($reponse[$i], ENT_QUOTES, api_get_system_encoding()); ?>" size="45" /></td>
 					<?php
 						require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
@@ -337,7 +336,7 @@ if($modifyAnswers)
 					<?php } else { ?>
 						<td valign="top" align="left" colspan="2"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo api_htmlentities($reponse[$i], ENT_QUOTES, api_get_system_encoding()); ?>" size="45" /></td>
 					<?php } ?>
-					
+
 					<td valign="top"><input type="text" name="weighting[<?php echo $i; ?>]" size="5" value="<?php echo (isset($weighting[$i]) ? float_format($weighting[$i],1) : 10); ?>" />
 					<input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
 					<input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>" /></td>

@@ -1,7 +1,7 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'/pclzip/pclzip.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
 
 class TestFileUpload extends UnitTestCase {
 
@@ -302,7 +302,7 @@ class TestFileUpload extends UnitTestCase {
 		//unzipping
 
 		function testunzip_uploaded_document() {
-			//require_once(api_get_path(LIBRARY_PATH).'/pclzip/pclzip.lib.php');
+			//require_once(api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
 			global $_course;
 			global $_user;
 			global $to_user_id;

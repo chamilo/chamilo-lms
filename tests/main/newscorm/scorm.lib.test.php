@@ -65,7 +65,7 @@ class TestScormLib extends UnitTestCase {
  * @uses        removescormDir()        to actually remove the directory
  */
 	public function testscorm_delete() {
-		require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
+		require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 		$path_name = api_get_path(SYS_COURSE_PATH);
 		$file=$path_name.'scorm/';
 		$res=scorm_delete($file);

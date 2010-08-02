@@ -5,7 +5,7 @@
  * @package dokeos.search
  */
 require_once dirname(__FILE__) . '/IndexableChunk.class.php';
-require_once api_get_path(LIBRARY_PATH).'/specific_fields_manager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 //require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 /**
@@ -293,7 +293,7 @@ function display_search_form($action, $show_thesaurus, $sf_terms, $op) {
  */
 function search_widget_show($action='index.php') {
     global $charset;
-    require_once api_get_path(LIBRARY_PATH).'/search/DokeosQuery.php';
+    require_once api_get_path(LIBRARY_PATH).'search/DokeosQuery.php';
     // TODO: load images dinamically when they're avalaible from specific field ui to add
     $icons_for_search_terms = array();
 

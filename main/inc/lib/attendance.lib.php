@@ -640,6 +640,24 @@ class Attendance
 	}
 
 	/**
+	 * Get next attendance calendar datetime without presences (done attendances)
+	 * @param	int	attendance id
+	 * @return 	int UNIX time format datetime
+	 */
+	public function get_next_attendance_calendar_datetime($attendance_id) {
+		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+		$attendance_id = intval($attendance_id);
+		$sql = "SELECT id, date_time FROM $tbl_attendance_calendar WHERE attendance_id = '$attendance_id' AND done_attendance = 0 ORDER BY date_time limit 1";
+		$rs = Database::query($sql);
+		$next_calendar_datetime = 0;
+		if (Database::num_rows($rs) > 0) {
+			$row = Database::fetch_array($rs);
+			$next_calendar_datetime = api_get_local_time($row['date_time']);
+		}
+		return $next_calendar_datetime;
+	}
+
+	/**
 	 * Get user' score from current attendance
 	 * @param	int	user id
 	 * @param	int attendance id

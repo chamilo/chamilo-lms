@@ -320,6 +320,8 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	if (is_array($users)) {
 		foreach ($users as $my_user) {
 			if (!in_array($my_user['UserName'], $user_id_error)) {
+				$my_user['FirstName'] = api_to_system_encoding($my_user['FirstName']);
+				$my_user['LastName'] =  api_to_system_encoding($my_user['LastName']);
 				$users_to_insert[] = $my_user;
 			}
 		}
@@ -328,6 +330,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$inserted_in_course = array();
 	// this replace if (strcmp($_FILES['import_file']['type'], 'text/'.$file_type.'') === 0)
 	if (strcmp($file_type, 'csv') === 0) {
+		
 		save_data($users_to_insert);
 	} elseif (strcmp($file_type, 'xml') === 0) {
 		save_data($users_to_insert);

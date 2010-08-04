@@ -86,6 +86,40 @@ WriteFileCont($full_file_path.$_user['user_id'].'.t.html', $newcontent);
 $doc_url = GetFolderPath($doc_url).urlencode(basename($doc_url));
 //	echo $document_web_path.$doc_url.$_user['user_id'].'.t.html';
 //	exit;
+
+// Adjustung the header's height according to the current visual theme.
+// This is not the elegant solution, but it helps for the moment.
+$header_heights = array(
+	'academica' => 105,
+	'baby_orange' => 105,
+	'blue_lagoon' => 105,
+	'chamilo' => 178,
+	'chamilo_electric_blue' => 178,
+	'chamilo_green' => 178,
+	'chamilo_orange' => 178,
+	'chamilo_red' => 178,
+	'cool_blue' => 105,
+	'corporate' => 105,
+	'cosmic_campus' => 178,
+	'delicious_bordeaux' => 105,
+	'dokeos_blue' => 105,
+	'dokeos_classic' => 105,
+	'dokeos_classic_2D' => 105,
+	'empire_green' => 105,
+	'fruity_orange' => 105,
+	'medical' => 130,
+	'public_admin' => 130,
+	'royal_purple' => 105,
+	'silver_line' => 105,
+	'sober_brown' => 130,
+	'steel_grey' => 105,
+	'tasty_olive' => 105
+);
+$header_height = $header_heights[api_get_visual_theme()];
+if (empty($header_height)) {
+	$header_height = 178;
+}
+
 ?>
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -99,7 +133,7 @@ $doc_url = GetFolderPath($doc_url).urlencode(basename($doc_url));
 
 if ($origin!='learnpath') {
 	?>
-	<frameset rows="178,*" border="0" frameborder="no">
+	<frameset rows="<?php echo $header_height; ?>,*" border="0" frameborder="no">
 		<frame name="top" scrolling="no" noresize target="contents" src="testheaderpage.php?file=<?php echo Security::remove_XSS(str_replace(array('../','\\','\\0','..'),array('','','',''),urldecode($_GET['file']))); ?>">
 		<frame name="main" src="<?php echo $document_web_path.$doc_url.$_user['user_id'].'.t.html?time='.Security::remove_XSS($time); ?>">
 	<noframes>

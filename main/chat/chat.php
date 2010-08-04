@@ -26,26 +26,10 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 /*
  * Choose CSS style (platform's, user's, or course's)
  */
-$platform_theme = api_get_setting('stylesheets'); 	// plataform's css
-$my_style = $platform_theme;
-if (api_get_setting('user_selected_theme') == 'true') {
-	$useri = api_get_user_info();
-	$user_theme = $useri['theme'];
-	if (!empty($user_theme) && $user_theme != $my_style) {
-		$my_style = $user_theme;					// user's css
-	}
-}
+$my_style = api_get_visual_theme();
 
 $mycourseid = api_get_course_id();
 if (!empty($mycourseid) && $mycourseid != -1) {
-	if (api_get_setting('allow_course_theme') == 'true') {
-		$mycoursetheme = api_get_course_setting('course_theme');
-		if (!empty($mycoursetheme) && $mycoursetheme != -1) {
-			if (!empty($mycoursetheme) && $mycoursetheme != $my_style) {
-				$my_style = $mycoursetheme;			// course's css
-			}
-		}
-	}
 	$open_chat_window = api_get_course_setting('allow_open_chat_window');
 }
 
@@ -102,9 +86,8 @@ if ($_SESSION['_gid'] OR $_GET['group_id']) {
 
 
 if (empty($open_chat_window)) {
-Display::display_header($tool_name, 'Chat');
+	Display::display_header($tool_name, 'Chat');
 }
-	
 
 echo '<iframe src="chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="auto" style="height:320px; width:19%; border: 0px none; float:left"></iframe>';
 echo '<iframe src="chat_chat.php?origin='.Security::remove_XSS($_GET['origin']).'&target='.Security::remove_XSS($_GET['target']).'&amp;cidReq='.$cidreq.'" name="chat_chat" scrolling="auto" height="240" style="width:80%; border: 0px none; float:right"></iframe>';
@@ -112,7 +95,7 @@ echo '<iframe src="chat_message.php?cidReq='.$cidreq.'" name="chat_message" scro
 echo '<iframe src="chat_hidden.php?cidReq='.$cidreq.'" name="chat_hidden" height="0" style="border: 0px none"></iframe>';
 
 if (empty($open_chat_window)) {
-Display::display_footer();
+	Display::display_footer();
 }
 
 echo '</html>';

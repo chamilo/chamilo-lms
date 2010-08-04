@@ -51,7 +51,8 @@ $_setting = array(
 	'platform_charset' => 'UTF-8',
 	'server_type' => 'production', // 'production' | 'test'
 	'permissions_for_new_directories' => '0770',
-	'permissions_for_new_files' => '0660'
+	'permissions_for_new_files' => '0660',
+	'stylesheets' => 'chamilo'
 );
 
 // Determination of the language during the installation procedure.
@@ -306,7 +307,7 @@ if ($encryptPassForm == '1') {
 	<title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
-		@import "../css/chamilo/default.css";
+		@import "../css/<?php echo api_get_visual_theme(); ?>/default.css";
 		/*]]>*/
 	</style>
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.js"></script>

@@ -2647,6 +2647,64 @@ function api_get_language_id($language) {
 }
 
 /**
+ * Returns the name of the visual theme to be applied on the current page.
+ * The rethurned name depends on platform, course or user -wide settings.
+ * @return string	The visual theme's name, it is the name of a folder inside .../chamilo/main/css/
+ */
+function api_get_visual_theme() {
+
+	static $visual_theme;
+
+	if (!isset($visual_theme)) {
+
+		$platform_theme = api_get_setting('stylesheets'); 	// Plataform's theme.
+		$visual_theme = $platform_theme;
+
+		if (api_get_setting('user_selected_theme') == 'true') {
+			$user_info = api_get_user_info();
+			$user_theme = $user_info['theme'];
+			if (!empty($user_theme)) {
+				$visual_theme = $user_theme;				// User's theme.
+			}
+		}
+
+		$course_id = api_get_course_id();
+		if (!empty($course_id) && $course_id != -1) {
+			if (api_get_setting('allow_course_theme') == 'true') {
+				$course_theme = api_get_course_setting('course_theme');
+
+				if (!empty($course_theme) && $course_theme != -1) {
+					if (!empty($course_theme)) {
+						$visual_theme = $course_theme;		// Course's theme.
+					}
+				}
+
+				$allow_lp_theme = api_get_course_setting('allow_learning_path_theme');
+				if ($allow_lp_theme == 1) {
+					global $lp_theme_css, $lp_theme_config;	// These variables come from the file lp_controller.php.
+					if (!$lp_theme_config) {
+						if (!empty($lp_theme_css)) {
+							$visual_theme = $lp_theme_css;	// LP's theme.
+						}
+					}
+				}
+			}
+		}
+
+		if (empty($visual_theme)) {
+			$visual_theme = 'chamilo';
+		}
+
+		global $lp_theme_log;
+		if ($lp_theme_log) {
+			$visual_theme = $platform_theme;
+		}
+	}
+
+	return $visual_theme;
+}
+
+/**
  * Returns a list of CSS themes currently available in the CSS folder
  * @return	array	List of themes directories from the css folder
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.

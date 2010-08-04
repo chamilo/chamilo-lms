@@ -295,7 +295,7 @@ function handle_stylesheets()
 			$dirpath = api_get_path(SYS_PATH).'main/css/'.$style_dir;
 			if (is_dir($dirpath)) {
 				if ($style_dir != '.' && $style_dir != '..') {
-					if ($currentstyle == $style_dir OR ($style_dir == 'dokeos_classic' AND !$currentstyle)) {
+					if ($currentstyle == $style_dir OR ($style_dir == 'chamilo' AND !$currentstyle)) {
 						$selected = 'selected="true"';
 					} else {
 						$selected = '';

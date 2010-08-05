@@ -92,6 +92,10 @@ define('SPREADSHEET_EXCEL_WRITER_EQ', "=");
 */
 define('SPREADSHEET_EXCEL_WRITER_NE', "<>");
 
+/**
+* * @const SPREADSHEET_EXCEL_WRITER_CONCAT token identifier for character "&"
+*/
+define('SPREADSHEET_EXCEL_WRITER_CONCAT', "&");
 
 require_once 'PEAR.php';
 
@@ -663,10 +667,10 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
     * @access private
     * @param string $range An Excel range in the A1:A2 or A1..A2 format.
     */
-    function _convertRange2d($range)
+    function _convertRange2d($range, $class=0)
     {
-        $class = 2; // as far as I know, this is magick.
 
+        // TODO: possible class value 0,1,2 check Formula.pm
         // Split the range into 2 cell refs
         if (preg_match("/^([A-Ia-i]?[A-Za-z])(\d+)\:([A-Ia-i]?[A-Za-z])(\d+)$/", $range)) {
             list($cell1, $cell2) = split(':', $range);
@@ -1203,10 +1207,13 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
             case SPREADSHEET_EXCEL_WRITER_NE:
                 return $token;
                 break;
+            case SPREADSHEET_EXCEL_WRITER_CONCAT:
+                return $token;
+                break;
             default:
                 // if it's a reference
                 if (preg_match('/^\$?[A-Ia-i]?[A-Za-z]\$?[0-9]+$/',$token) and
-                   !ereg("[0-9]",$this->_lookahead) and
+                   !preg_match("/[0-9]/",$this->_lookahead) and
                    ($this->_lookahead != ':') and ($this->_lookahead != '.') and
                    ($this->_lookahead != '!'))
                 {
@@ -1214,39 +1221,39 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
                 }
                 // If it's an external reference (Sheet1!A1 or Sheet1:Sheet2!A1)
                 elseif (preg_match("/^\w+(\:\w+)?\![A-Ia-i]?[A-Za-z][0-9]+$/u",$token) and
-                       !ereg("[0-9]",$this->_lookahead) and
+                       !preg_match("/[0-9]/",$this->_lookahead) and
                        ($this->_lookahead != ':') and ($this->_lookahead != '.'))
                 {
                     return $token;
                 }
                 // If it's an external reference ('Sheet1'!A1 or 'Sheet1:Sheet2'!A1)
                 elseif (preg_match("/^'[\w -]+(\:[\w -]+)?'\![A-Ia-i]?[A-Za-z][0-9]+$/u",$token) and
-                       !ereg("[0-9]",$this->_lookahead) and
+                       !preg_match("/[0-9]/",$this->_lookahead) and
                        ($this->_lookahead != ':') and ($this->_lookahead != '.'))
                 {
                     return $token;
                 }
                 // if it's a range (A1:A2)
                 elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+:(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$token) and
-                       !ereg("[0-9]",$this->_lookahead))
+                       !preg_match("/[0-9]/",$this->_lookahead))
                 {
                     return $token;
                 }
                 // if it's a range (A1..A2)
                 elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+\.\.(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$token) and
-                       !ereg("[0-9]",$this->_lookahead))
+                       !preg_match("/[0-9]/",$this->_lookahead))
                 {
                     return $token;
                 }
                 // If it's an external range like Sheet1!A1 or Sheet1:Sheet2!A1:B2
                 elseif (preg_match("/^\w+(\:\w+)?\!([A-Ia-i]?[A-Za-z])?[0-9]+:([A-Ia-i]?[A-Za-z])?[0-9]+$/u",$token) and
-                       !ereg("[0-9]",$this->_lookahead))
+                       !preg_match("/[0-9]/",$this->_lookahead))
                 {
                     return $token;
                 }
                 // If it's an external range like 'Sheet1'!A1 or 'Sheet1:Sheet2'!A1:B2
                 elseif (preg_match("/^'[\w -]+(\:[\w -]+)?'\!([A-Ia-i]?[A-Za-z])?[0-9]+:([A-Ia-i]?[A-Za-z])?[0-9]+$/u",$token) and
-                       !ereg("[0-9]",$this->_lookahead))
+                       !preg_match("/[0-9]/",$this->_lookahead))
                 {
                     return $token;
                 }
@@ -1258,12 +1265,12 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
                     return $token;
                 }
                 // If it's a string (of maximum 255 characters)
-                elseif (ereg("^\"[^\"]{0,255}\"$",$token))
+                elseif (preg_match("/^\"[^\"]{0,255}\"$/",$token))
                 {
                     return $token;
                 }
                 // if it's a function call
-                elseif (eregi("^[A-Z0-9\xc0-\xdc\.]+$",$token) and ($this->_lookahead == "("))
+                elseif (preg_match("/^[A-Z0-9\xc0-\xdc\.]+$/i",$token) and ($this->_lookahead == "("))
                 {
                     return $token;
                 }
@@ -1347,6 +1354,13 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
                 return $result2;
             }
             $result = $this->_createTree('ptgNE', $result, $result2);
+        } elseif ($this->_current_token == SPREADSHEET_EXCEL_WRITER_CONCAT) {
+            $this->_advance();
+            $result2 = $this->_expression();
+            if (PEAR::isError($result2)) {
+                return $result2;
+        }
+            $result = $this->_createTree('ptgConcat', $result, $result2);
         }
         return $result;
     }
@@ -1363,7 +1377,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
     function _expression()
     {
         // If it's a string return a string node
-        if (ereg("^\"[^\"]{0,255}\"$", $this->_current_token)) {
+        if (preg_match("/^\"[^\"]{0,255}\"$/", $this->_current_token)) {
             $result = $this->_createTree($this->_current_token, '', '');
             $this->_advance();
             return $result;
@@ -1521,7 +1535,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
             return $result;
         }
         // if it's a function call
-        elseif (eregi("^[A-Z0-9\xc0-\xdc\.]+$",$this->_current_token))
+        elseif (preg_match("/^[A-Z0-9\xc0-\xdc\.]+$/i",$this->_current_token))
         {
             $result = $this->_func();
             return $result;

@@ -429,7 +429,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
 
             $header      = pack("vv",       $record, $length);
 
-            $rotation      = 0x00;
+            $rotation      = $this->_rotation;
             $biff8_options = 0x00;
             $data  = pack("vvvC", $ifnt, $ifmt, $style, $align);
             $data .= pack("CCC", $rotation, $biff8_options, $used_attrib);
@@ -996,13 +996,25 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
                 $this->_rotation = 0;
                 break;
             case 90:
+                if ($this->_BIFF_version == 0x0500) {
                 $this->_rotation = 3;
+                } elseif ($this->_BIFF_version == 0x0600) {
+                    $this->_rotation = 180;
+                }
                 break;
             case 270:
+                if ($this->_BIFF_version == 0x0500) {
                 $this->_rotation = 2;
+                } elseif ($this->_BIFF_version == 0x0600) {
+                    $this->_rotation = 90;
+                }
                 break;
             case -1:
+                if ($this->_BIFF_version == 0x0500) {
                 $this->_rotation = 1;
+                } elseif ($this->_BIFF_version == 0x0600) {
+                    $this->_rotation = 255;
+                }
                 break;
             default :
                 return $this->raiseError("Invalid value for angle.".

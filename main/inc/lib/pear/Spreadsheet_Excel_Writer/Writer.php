@@ -32,7 +32,7 @@
 */
 
 //require_once(api_get_path(LIBRARY_PATH).'pear/PEAR.php');
-require_once('Writer/Workbook.php');
+require_once 'Writer/Workbook.php';
 
 /**
 * Class for writing Excel Spreadsheets. This class should change COMPLETELY.

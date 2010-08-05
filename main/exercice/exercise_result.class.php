@@ -317,9 +317,11 @@ class ExerciseResult
 		require_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php');
 		$workbook = new Spreadsheet_Excel_Writer();
 		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
+		$workbook->setVersion(8); // BIFF8
 
 		$workbook->send($filename);
 		$worksheet =& $workbook->addWorksheet('Report '.date('YmdGis'));
+		$worksheet->setInputEncoding(api_get_system_encoding());
 		$line = 0;
 		$column = 0; //skip the first column (row titles)
 

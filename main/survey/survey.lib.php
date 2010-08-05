@@ -2768,9 +2768,9 @@ class SurveyUtil {
 				FROM $table_survey_question q LEFT JOIN $table_survey_question_option o
 				ON q.question_id = o.question_id
 				WHERE q.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-				GROUP BY q.question_id 
+				GROUP BY q.question_id
 				ORDER BY q.sort ASC";
-		// </hub> 		
+		// </hub>
 		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			// We show the questions if
@@ -2837,11 +2837,11 @@ class SurveyUtil {
 				}
 				else if ($row['type'] == 'percentage' && $display_percentage_header) {
 					echo '<th>&nbsp;%&nbsp;</th>';
-					$possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];					
+					$possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
 					$display_percentage_header = 0;
 				}
 				else if ($row['type'] == 'percentage') {
-					$possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];					
+					$possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
 				}
 				else if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak' AND $row['type'] <> 'percentage')
 				{
@@ -2928,7 +2928,7 @@ class SurveyUtil {
 					echo '<td align="center">';
 					echo $answers_of_user[$question_id]['0']['option_id'];
 					echo '</td>';
-				} 
+				}
 				else {
 					foreach ($possible_option as $option_id => & $value) {
 						if ($questions[$question_id]['type'] == 'percentage') {
@@ -2938,12 +2938,12 @@ class SurveyUtil {
 								echo "</td>";
 							}
 						}
-						else {						
+						else {
 							echo '<td align="center">';
 							if (!empty($answers_of_user[$question_id][$option_id])) {
 								if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
 									echo $answers_of_user[$question_id][$option_id]['value'];
-								} 
+								}
 								else {
 									echo 'v';
 								}
@@ -3158,7 +3158,9 @@ class SurveyUtil {
 		$workbook = new Spreadsheet_Excel_Writer();
 		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
 		$workbook->send($filename);
+		$workbook->setVersion(8); // BIFF8
 		$worksheet =& $workbook->addWorksheet('Report 1');
+		$worksheet->setInputEncoding(api_get_system_encoding());
 		$line = 0;
 		$column = 1; // Skip the first column (row titles)
 

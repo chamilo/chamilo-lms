@@ -32,8 +32,8 @@
 *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer/Parser.php');
-require_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer/BIFFwriter.php');
+require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer/Parser.php';
+require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer/BIFFwriter.php';
 
 /**
 * Class for generating Excel Spreadsheets
@@ -364,13 +364,15 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     * @param mixed   &$firstsheet  The first worksheet in the workbook we belong to
     * @param mixed   &$url_format  The default format for hyperlinks
     * @param mixed   &$parser      The formula parser created for the Workbook
+    * @param string  $tmp_dir      The path to the directory for temporary files
     * @access private
     */
     function Spreadsheet_Excel_Writer_Worksheet($BIFF_version, $name,
                                                 $index, &$activesheet,
                                                 &$firstsheet, &$str_total,
                                                 &$str_unique, &$str_table,
-                                                &$url_format, &$parser)
+                                                &$url_format, &$parser,
+                                                $tmp_dir)
     {
         // It needs to call its parent's constructor explicitly
         $this->Spreadsheet_Excel_Writer_BIFFwriter();
@@ -461,6 +463,8 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
 
         $this->_dv                = array();
 
+        $this->_tmp_dir = $tmp_dir;
+
         $this->_initialize();
     }
 
@@ -473,14 +477,32 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     */
     function _initialize()
     {
+        if ($this->_using_tmpfile == false) {
+            return;
+        }
+
+        if ($this->_tmp_dir === '' && ini_get('open_basedir') === false) {
+            // open_basedir restriction in effect - store data in memory
+            // ToDo: Let the error actually have an effect somewhere
+            $this->_using_tmpfile = false;
+            return new PEAR_Error('Temp file could not be opened since open_basedir restriction in effect - please use setTmpDir() - using memory storage instead');
+        }
+
         // Open tmp file for storing Worksheet data
-        $fh = tmpfile();
-        if ($fh) {
-            // Store filehandle
-            $this->_filehandle = $fh;
+        if ($this->_tmp_dir === '') {
+            $fh = tmpfile();
         } else {
+            // For people with open base dir restriction
+            $tmpfilename = tempnam($this->_tmp_dir, "Spreadsheet_Excel_Writer");
+            $fh = @fopen($tmpfilename, "w+b");
+        }
+
+        if ($fh === false) {
             // If tmpfile() fails store data in memory
             $this->_using_tmpfile = false;
+        } else {
+            // Store filehandle
+            $this->_filehandle = $fh;
         }
     }
 
@@ -1155,9 +1177,6 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         } elseif (preg_match("/^=/", $token)) {
             // Match formula
             return $this->writeFormula($row, $col, $token, $format);
-        } elseif (preg_match("/^@/", $token)) {
-            // Match formula
-            return $this->writeFormula($row, $col, $token, $format);
         } elseif ($token == '') {
             // Match blank
             return $this->writeBlank($row, $col, $format);
@@ -1514,7 +1533,10 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     */
     function setInputEncoding($encoding)
     {
-         if ($encoding != 'UTF-16LE' && !function_exists('iconv')) {
+         // Modified by Ivan Tcholakov, 06-AUG-2010.
+         //if ($encoding != 'UTF-16LE' && !function_exists('iconv')) {
+         if (!api_equal_encodings($encoding, 'UTF-16LE') && !api_is_encoding_supported($encoding)) {
+         //
              $this->raiseError("Using an input encoding other than UTF-16LE requires PHP support for iconv");
          }
          $this->_input_encoding = $encoding;
@@ -1537,15 +1559,25 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     */
     function writeStringBIFF8($row, $col, $str, $format = null)
     {
-        if ($this->_input_encoding == 'UTF-16LE')
+        // Modified by Ivan Tcholakov, 06-AUG-2010.
+        //if ($this->_input_encoding == 'UTF-16LE')
+        if (api_equal_encodings($this->_input_encoding, 'UTF-16LE'))
+        //
         {
-            $strlen = function_exists('mb_strlen') ? mb_strlen($str, 'UTF-16LE') : (strlen($str) / 2);
+            // Modified by Ivan Tcholakov, 06-AUG-2010.
+            //$strlen = function_exists('mb_strlen') ? mb_strlen($str, 'UTF-16LE') : (strlen($str) / 2);
+            $strlen = api_is_encoding_supported('UTF-16LE') ? api_strlen($str, 'UTF-16LE') : (strlen($str) / 2);
+            //
             $encoding  = 0x1;
         }
         elseif ($this->_input_encoding != '')
         {
-            $str = iconv($this->_input_encoding, 'UTF-16LE', $str);
-            $strlen = function_exists('mb_strlen') ? mb_strlen($str, 'UTF-16LE') : (strlen($str) / 2);
+            // Modified by Ivan Tcholakov, 06-AUG-2010.
+            //$str = iconv($this->_input_encoding, 'UTF-16LE', $str);
+            //$strlen = function_exists('mb_strlen') ? mb_strlen($str, 'UTF-16LE') : (strlen($str) / 2);
+            $str = api_convert_encoding($str, 'UTF-16LE', $this->_input_encoding);
+            $strlen = api_is_encoding_supported('UTF-16LE') ? api_strlen($str, 'UTF-16LE') : (strlen($str) / 2);
+            //
             $encoding  = 0x1;
         }
         else
@@ -2879,7 +2911,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         $colcount = count($this->_colinfo);
         for ($i = 0; $i < $colcount; $i++) {
            // Skip cols without outline level info.
-           if (count($col_level) >= 6) {
+           if (count($this->_colinfo[$i]) >= 6) {
               $col_level = max($this->_colinfo[$i][5], $col_level);
            }
         }
@@ -2895,8 +2927,8 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
             $col_level++;
         }
 
-        $header      = pack("vv",   $record, $length);
-        $data        = pack("vvvv", $dxRwGut, $dxColGut, $row_level, $col_level);
+        $header = pack("vv",   $record, $length);
+        $data   = pack("vvvv", $dxRwGut, $dxColGut, $row_level, $col_level);
 
         $this->_prepend($header.$data);
     }
@@ -2940,8 +2972,8 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
             $grbit |= 0x0400; // Outline symbols displayed
         }
 
-        $header      = pack("vv", $record, $length);
-        $data        = pack("v",  $grbit);
+        $header = pack("vv", $record, $length);
+        $data   = pack("v",  $grbit);
         $this->_prepend($header . $data);
     }
 

@@ -1,17 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
-==============================================================================
-* This class provides some functions which can be used when importing data from
-* external files into Dokeos
-* @package	 dokeos.library
-==============================================================================
-*/
-class Import
-{
+ * This class provides some functions which can be used when importing data from
+ * external files into Chamilo.
+ * @package	 chamilo.library
+ */
+
+class Import {
+
 	/**
-	 * Reads a CSV-file into an array. The first line of the CSV-file should
-	 * contain the array-keys.
+	 * Reads a CSV-file into an array. The first line of the CSV-file should contain the array-keys.
+	 * The encoding of the input file is tried to be detected.
+	 * The elements of the returned array are encoded in the system encoding.
 	 * Example:
 	 *   FirstName;LastName;Email
 	 *   John;Doe;john.doe@mail.com
@@ -22,29 +23,47 @@ class Import
 	 *   $result [0]['Email'] = 'john.doe@mail. com';
 	 *   $result [1]['FirstName'] = 'Adam';
 	 *   ...
-	 * @param string $filename Path to the CSV-file which should be imported
-	 * @return array An array with all data from the CSV-file
+	 * @param string $filename	The path to the CSV-file which should be imported.
+	 * @return array			Returns an array (in the system encoding) that contains all data from the CSV-file.
 	 */
 	function csv_to_array($filename) {
 		$result = array();
+
+		// Encoding detection.
+
 		$handle = fopen($filename, 'r');
 		if ($handle === false) {
 			return $result;
 		}
-		// Modified by Ivan Tcholakov, 01-FEB-2010.
-		//$keys = fgetcsv($handle, 4096, ";");
+		$buffer = array();
+		$i = 0;
+		while (!feof($handle) && $i < 200) {
+			// We assume that 200 lines are enough for encoding detection.
+			$buffer[] = fgets($handle);
+			$i++;
+		}
+		fclose($handle);
+		$buffer = implode("\n", $buffer);
+		$from_encoding = api_detect_encoding($buffer);
+		unset($buffer);
+
+		// Reading the file, parsing and importing csv data.
+
+		$handle = fopen($filename, 'r');
+		if ($handle === false) {
+			return $result;
+		}
 		$keys = api_fgetcsv($handle, null, ';');
-		//
-		// Modified by Ivan Tcholakov, 01-FEB-2010.
-		//while (($row_tmp = fgetcsv($handle, 4096, ";")) !== FALSE) {
+		foreach ($keys as $key => &$key_value) {
+			$key_value = api_to_system_encoding($key_value, $from_encoding);
+		}
 		while (($row_tmp = api_fgetcsv($handle, null, ';')) !== false) {
-		//
 			$row = array();
-			//avoid empty lines in csv
+			// Avoid empty lines in csv.
 			if (is_array($row_tmp) && count($row_tmp) > 0 && $row_tmp[0] != '') {
 				if (!is_null($row_tmp[0])) {
 					foreach ($row_tmp as $index => $value) {
-						$row[$keys[$index]] = $value;
+						$row[$keys[$index]] = api_to_system_encoding($value, $from_encoding);
 					}
 					$result[] = $row;
 				}

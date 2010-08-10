@@ -165,6 +165,7 @@ function InnerDialogLoaded()
 
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
@@ -327,8 +328,8 @@ $renderer = & $form->defaultRenderer();
 //$filename_template = str_replace('{element}', "<tt>$display_dir</tt> {element} <tt>.html</tt>", $renderer->_elementTemplate);
 $filename_template = str_replace('{element}', '{element}', $renderer->_elementTemplate); // TODO: What is the point of this statement?
 $renderer->setElementTemplate($filename_template, 'filename');
-
 // Initialize group array
+
 $group = array();
 
 // If allowed, add element for document title
@@ -336,6 +337,8 @@ if (api_get_setting('use_document_title') == 'true') {
 	//$group[]= $form->add_textfield('title', get_lang('Title'),true,'class="input_titles" id="title"');
 	// replace the 	add_textfield with this
 	$group[]=$form->createElement('text','title',get_lang('Title'),'class="input_titles" id="document_title"');
+	
+	
 	//$form->applyFilter('title','trim');
 	//$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -346,6 +349,7 @@ if (api_get_setting('use_document_title') == 'true') {
 	//$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename" onblur="javascript: check_if_still_empty();"');
 	// replace the 	add_textfield with this
 	$group[]=$form->createElement('text', 'filename', get_lang('FileName'), 'class="input_titles" id="document_title" onblur="javascript: check_if_still_empty();"');
+	
 	//$form->applyFilter('filename','trim');
 	//$form->addRule('filename', get_lang('ThisFieldIsRequired'), 'required');
 	//$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
@@ -354,6 +358,16 @@ if (api_get_setting('use_document_title') == 'true') {
 	$form->addElement('hidden', 'title', '', array('id' => 'title'));
 	//
 }
+
+/*
+// Selected the file where are save the news documents
+
+build_directory_selector($folders, $path, $group_properties['directory']);
+
+$subjects = $folders;
+
+$form->addElement('select', get_lang('CurrentDirectory'), '', $folders);
+*/
 
 // Show read-only box only in groups
 if (!empty($_SESSION['_gid'])) {
@@ -394,6 +408,74 @@ $renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel"
 $form->add_html_editor('content','', false, false, $html_editor_config);
 // Comment-field
 
+$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
+
+// If we are not in the certificates creation, display a folder chooser for the
+// new document created 
+if (!$is_certificate_mode) {
+	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
+	//$parent_select -> addOption(get_lang('HomeDirectory'), '/');
+	$parent_select = $form->addElement('select', 'curdirpath', get_lang('DestinationDirectory'));
+	
+	// Following two conditions copied from document.inc.php::build_directory_selector()
+	$folder_titles = array();
+	if (api_get_setting('use_document_title') == 'true') {
+		if (is_array($folders)) {			
+			$escaped_folders = array();			
+			foreach ($folders as $key => & $val) {
+				$escaped_folders[$key] = Database::escape_string($val);
+			}
+			$folder_sql = implode("','", $escaped_folders);
+			$doc_table = Database::get_course_table(TABLE_DOCUMENT);
+			$sql = "SELECT * FROM $doc_table WHERE filetype='folder' AND path IN ('".$folder_sql."')";
+			$res = Database::query($sql);
+			$folder_titles = array();	
+			while ($obj = Database::fetch_object($res)) {
+				$folder_titles[$obj->path] = $obj->title;
+			}
+		}
+	} else {
+	
+		if (is_array($folders)) {
+			foreach ($folders as & $folder) {
+				$folder_titles[$folder] = basename($folder);
+			}
+		}
+	}
+	
+	if (empty($group_dir)) {
+		$parent_select -> addOption(get_lang('HomeDirectory'), '/');
+		if (is_array($folders)) {
+			foreach ($folders as & $folder) {
+				$selected = (substr($dir,0,-1) == $folder) ? ' selected="selected"' : '';
+				$path_parts = explode('/', $folder);
+				$folder_titles[$folder] = cut($folder_titles[$folder], 80);
+				$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$folder_titles[$folder];
+				$parent_select -> addOption($label, $folder);
+				if ($selected != '') {
+					$parent_select->setSelected($folder);
+				}
+			}
+		}
+	} else {
+		foreach ($folders as & $folder) {
+			$selected = (substr($dir,0,-1)==$folder) ? ' selected="selected"' : '';
+			$label = $folder_titles[$folder];
+			if ($folder == $group_dir) {
+				$label = '/ ('.get_lang('HomeDirectory').')';
+			} else {
+				$path_parts = explode('/', str_replace($group_dir, '', $folder));
+				$label = cut($label, 80);
+				$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
+			}
+			$parent_select -> addOption($label, $folder);
+			if ($selected != '') {
+				$parent_select->setSelected($folder);
+			}
+		}
+	}
+}
+
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
 if ($is_certificate_mode)
 	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="save"');
@@ -421,6 +503,13 @@ if ($form->validate()) {
 	$values['filename'] = Security::remove_XSS($values['filename']);
 	$values['filename'] = replace_dangerous_char($values['filename']);
 	$values['filename'] = disable_dangerous_file($values['filename']);
+	//die($values['curdirpath']);
+	if (!empty($values['curdirpath'])) {
+		$dir = $values['curdirpath'];
+	}
+	if ($dir[strlen($dir) - 1] != '/') {
+		$dir .= '/';
+	}
 
 	if (api_get_setting('use_document_title') != 'true') {
 		$values['title'] = $values['filename'];
@@ -502,6 +591,31 @@ if ($form->validate()) {
 		Display :: display_footer();
 	}
 } else {
+	// Interbreadcrumb for the current directory root path
+	// Copied from document.php
+	$dir_array = explode('/', $dir);
+	$array_len = count($dir_array);
+	if (!$is_certificate_mode) {
+		if ($array_len > 1) {
+			if (empty($_SESSION['_gid'])) {
+				$url_dir = 'document.php?&curdirpath=/';
+				$interbreadcrumb[] = array('url' => $url_dir, 'name' => get_lang('HomeDirectory'));
+			}
+		}
+	}
+	$dir_acum = '';
+	for ($i = 0; $i < $array_len; $i++) {
+		$url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
+		//Max char 80
+		$url_to_who = cut($dir_array[$i],80);
+		if ($is_certificate_mode) {
+			$interbreadcrumb[] = array('url' => $url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
+		} else {
+			$interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
+		}
+		$dir_acum .= $dir_array[$i].'/';
+	}
+	
 	Display :: display_header($nameTools, "Doc");
 	//api_display_tool_title($nameTools);
 	// actions

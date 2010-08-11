@@ -5,7 +5,7 @@
  * File: internationalization_internal.lib.php
  * Main API extension library for Chamilo 1.8.7 LMS,
  * contains functions for internal use only.
- * License: GNU/GPL version 2 or later (Free Software Foundation)
+ * License: GNU General Public License Version 3 (Free Software Foundation)
  * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, 2009, 2010
  * @author More authors, mentioned in the correpsonding fragments of this source.
  * @package chamilo.library

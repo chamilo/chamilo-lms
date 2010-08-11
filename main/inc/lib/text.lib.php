@@ -305,21 +305,6 @@ function make_clickable($string) {
 }
 
 /**
- * Applies parsing the content for tex commands that are separated by [tex]
- * [/tex] to make it readable for techexplorer plugin.
- * @param string $text The text to parse
- * @return string The text after parsing.
- * @author Patrick Cool <patrick.cool@UGent.be>
- * @version June 2004
- */
-function api_parse_tex($textext) {
-	if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
-		return str_replace(array('[tex]', '[/tex]'), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
-	}
-	return str_replace(array('[tex]', '[/tex]'), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
-}
-
-/**
  * @desc This function does some parsing on the text that gets inputted. This parsing can be of any kind
  * 		LaTeX notation, Word Censoring, Glossary Terminology (extension will available soon), Musical Notations, ...
  *		The inspiration for this filter function came from Moodle an phpBB who both use a similar approach
@@ -337,7 +322,7 @@ function text_filter($input, $filter = true) {
 		// ***  parse [tex]...[/tex] tags  *** //
 		// which will return techexplorer or image html depending on the capabilities of the
 		// browser of the user (using some javascript that checks if the browser has the TechExplorer plugin installed or not)
-		$input = _text_parse_tex($input);
+		//$input = _text_parse_tex($input);
 
 		// *** parse [teximage]...[/teximage] tags *** //
 		// these force the gif rendering of LaTeX using the mimetex gif renderer
@@ -345,7 +330,7 @@ function text_filter($input, $filter = true) {
 
 		// *** parse [texexplorer]...[/texexplorer] tags  *** //
 		// these force the texeplorer LaTeX notation
-		$input = _text_parse_texexplorer($input);
+		//$input = _text_parse_texexplorer($input);
 
 		// *** Censor Words *** //
 		// censor words. This function removes certain words by [censored]
@@ -354,7 +339,7 @@ function text_filter($input, $filter = true) {
 
 		// *** parse [?]...[/?] tags *** //
 		// for the glossary tool
-		$input = _text_parse_glossary($input);
+		//$input = _text_parse_glossary($input);
 
 		// parse [wiki]...[/wiki] tags
 		// this is for the coolwiki plugin.
@@ -403,24 +388,6 @@ function _text_parse_tex($textext) {
 }
 
 /**
- * Applies parsing for tex commandos that are seperated by [tex]
- * [/tex] to make it readable for techexplorer plugin.
- * This function should not be accessed directly but should be accesse through the text_filter function
- * @param string $text The text to parse
- * @return string The text after parsing.
- * @author Patrick Cool <patrick.cool@UGent.be>
- * @version June 2004
- */
-function _text_parse_texexplorer($textext) {
-	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
-		$textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
-	} else {
-		$textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
-	}
-	return $textext;
-}
-
-/**
  * This function should not be accessed directly but should be accesse through the text_filter function
  * @author 	Patrick Cool <patrick.cool@UGent.be>
  */
@@ -454,10 +421,10 @@ function latex_gif_renderer($latex_code) {
 	$latex_filename = md5($latex_code).'.gif';
 
 	if (!file_exists($temp_path.$latex_filename) OR isset($_GET['render'])) {
-		if ((PHP_OS == "WINNT") || (PHP_OS == "WIN32") || (PHP_OS == "Windows")) {
+		if (IS_WINDOWS_OS) {
 			$mimetex_command = $mimetex_path.'mimetex.exe -e "'.$temp_path.md5($latex_code).'.gif" '.escapeshellarg($latex_code).'';
 		} else {
-			$mimetex_command = $mimetex_path.'mimetex.linux -e "'.$temp_path.md5($latex_code).'.gif" '.escapeshellarg($latex_code);
+			$mimetex_command = $mimetex_path.'mimetex.cgi -e "'.$temp_path.md5($latex_code).'.gif" '.escapeshellarg($latex_code);
 		}
 		exec($mimetex_command);
 		//echo 'volgende shell commando werd uitgevoerd:<br /><pre>'.$mimetex_command.'</pre><hr>';
@@ -528,4 +495,48 @@ function get_last_week() {
         $arrdays[] = strtotime("$year"."W$lastweek"."$i");
     }
     return $arrdays;
+}
+
+
+/**
+ * Deprecated functions
+ */
+
+/**
+ * Applies parsing the content for tex commands that are separated by [tex]
+ * [/tex] to make it readable for techexplorer plugin.
+ * @param string $text The text to parse
+ * @return string The text after parsing.
+ * @author Patrick Cool <patrick.cool@UGent.be>
+ * @version June 2004
+ */
+function api_parse_tex($textext) {
+	/*
+	if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
+		return str_replace(array('[tex]', '[/tex]'), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
+	}
+	return str_replace(array('[tex]', '[/tex]'), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
+	*/
+	return $textext;
+}
+
+/**
+ * Applies parsing for tex commandos that are seperated by [tex]
+ * [/tex] to make it readable for techexplorer plugin.
+ * This function should not be accessed directly but should be accesse through the text_filter function
+ * @param string $text The text to parse
+ * @return string The text after parsing.
+ * @author Patrick Cool <patrick.cool@UGent.be>
+ * @version June 2004
+ */
+function _text_parse_texexplorer($textext) {
+	/*
+	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+		$textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
+	} else {
+		$textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
+	}
+	return $textext;
+	*/
+	return $textext;
 }

@@ -195,7 +195,8 @@ function parse_file($exercisePath, $file, $questionFile) {
 	}
 
 	//parse XML question file
-
+	$data = str_replace(array('<p>', '</p>'), '', $data);
+	
 	//used global variable start values declaration :
 
 	$record_item_body = false;
@@ -533,7 +534,7 @@ function elementData($parser, $data) {
 				if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'])) {
 					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] = trim($data);
 				} else {
-					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] .= ' ' . trim($data);
+					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] .= ''.trim($data);
 				}
 			}
 			break;

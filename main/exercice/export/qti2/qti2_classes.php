@@ -96,12 +96,13 @@ class ImsAnswerMultipleChoice extends Answer
      */
     function imsExportResponses($questionIdent, $questionStatment)
     {
-		$this->answerList = $this->getAnswersList();
+		$this->answerList = $this->getAnswersList(true);
         $out  = '    <choiceInteraction responseIdentifier="' . $questionIdent . '" >' . "\n";
         $out .= '      <prompt> ' . $questionStatment . ' </prompt>'. "\n";
 		if (is_array($this->answerList)) {
-	        foreach ($this->answerList as $current_answer)
-	        {
+	        foreach ($this->answerList as $current_answer) {
+	        	
+	        	
 	            $out .= '      <simpleChoice identifier="answer_' . $current_answer['id'] . '" fixed="false">' . $current_answer['answer'];
 	            if (isset($current_answer['comment']) && $current_answer['comment'] != '')
 	            {
@@ -120,7 +121,7 @@ class ImsAnswerMultipleChoice extends Answer
      */
     function imsExportResponsesDeclaration($questionIdent)
     {
-		$this->answerList = $this->getAnswersList();
+		$this->answerList = $this->getAnswersList(true);
 		$type = $this->getQuestionType();
         if ($type == MCMA)  $cardinality = 'multiple'; else $cardinality = 'single';
 
@@ -130,8 +131,7 @@ class ImsAnswerMultipleChoice extends Answer
 
         $out .= '    <correctResponse>'. "\n";
 		if (is_array($this->answerList)) {
-	        foreach($this->answerList as $current_answer)
-	        {
+	        foreach($this->answerList as $current_answer) {
 	            if ($current_answer['correct'])
 	            {
 	                $out .= '      <value>answer_'. $current_answer['id'] .'</value>'. "\n";
@@ -170,7 +170,7 @@ class ImsAnswerFillInBlanks extends Answer
     function imsExportResponses($questionIdent, $questionStatment)
     {
         global $charset;
-		$this->answerList = $this->getAnswersList();
+		$this->answerList = $this->getAnswersList(true);
 
         //switch ($this->type)
         //{
@@ -179,8 +179,7 @@ class ImsAnswerFillInBlanks extends Answer
         		$text = '';
                 $text .= $this->answerText;
 				if (is_array($this->answerList)) {
-	                foreach ($this->answerList as $key=>$answer)
-	                {
+	                foreach ($this->answerList as $key=>$answer) {
 	                	$key = $answer['id'];
 	                	$answer = $answer['answer'];
 	                	$len = api_strlen($answer);
@@ -243,12 +242,12 @@ class ImsAnswerFillInBlanks extends Answer
     function imsExportResponsesDeclaration($questionIdent)
     {
 
-		$this->answerList = $this->getAnswersList();
+		$this->answerList = $this->getAnswersList(true);
 		$this->gradeList = $this->getGradesList();
         $out = '';
 		if (is_array($this->answerList)) {
-	        foreach ($this->answerList as $answerKey=>$answer)
-	        {
+	        foreach ($this->answerList as $answerKey=>$answer) {
+	        	
 	        	$answerKey = $answer['id'];
 	        	$answer = $answer['answer'];
 	            $out .= '  <responseDeclaration identifier="fill_' . $answerKey . '" cardinality="single" baseType="identifier">' . "\n";
@@ -296,7 +295,7 @@ class ImsAnswerMatching extends Answer
      */
     function imsExportResponses($questionIdent, $questionStatment)
     {
-		$this->answerList = $this->getAnswersList();
+		$this->answerList = $this->getAnswersList(true);
 		$maxAssociation = max(count($this->leftList), count($this->rightList));
 
         $out = "";
@@ -341,7 +340,7 @@ class ImsAnswerMatching extends Answer
      */
     function imsExportResponsesDeclaration($questionIdent)
     {
-		$this->answerList = $this->getAnswersList();
+		$this->answerList = $this->getAnswersList(true);
         $out =  '  <responseDeclaration identifier="' . $questionIdent . '" cardinality="single" baseType="identifier">' . "\n";
         $out .= '    <correctResponse>' . "\n";
 
@@ -387,7 +386,7 @@ class ImsAnswerHotspot extends Answer
    	function imsExportResponses($questionIdent, $questionStatment, $questionDesc='', $questionMedia='')
     {
         global $charset;
-		$this->answerList = $this->getAnswersList();
+		$this->answerList = $this->getAnswersList(true);
 		$questionMedia = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/'.$questionMedia;
 		$mimetype = mime_content_type($questionMedia);
 		if(empty($mimetype)){
@@ -446,7 +445,7 @@ class ImsAnswerHotspot extends Answer
     function imsExportResponsesDeclaration($questionIdent)
     {
 
-		$this->answerList = $this->getAnswersList();
+		$this->answerList = $this->getAnswersList(true);
 		$this->gradeList = $this->getGradesList();
         $out = '';
         $out .= '  <responseDeclaration identifier="hotspot_'.$questionIdent.'" cardinality="ordered" baseType="identifier">' . "\n";

@@ -266,11 +266,18 @@ class Answer
 	 * @author Yannick Warnier <ywarnier@beeznest.org>
 	 * @return array	List of answers where each answer is an array of (id, answer, comment, grade) and grade=weighting
 	 */
-	 function getAnswersList()
+	 function getAnswersList($decode = false)
 	 {
 	 	$list = array();
 	 	for($i = 1; $i<=$this->nbrAnswers;$i++){
 	 		if(!empty($this->answer[$i])){
+	 			
+	 			//Avoid problems when parsing elements with accents
+	 			if ($decode) {
+	        		$this->answer[$i] 	= html_entity_decode($this->answer[$i], ENT_QUOTES, api_get_system_encoding());
+	        		$this->comment[$i]	= html_entity_decode($this->comment[$i], ENT_QUOTES, api_get_system_encoding());
+	 			}
+	        	
 	 			$list[] = array(
 						'id'=>$i,
 						'answer'=>$this->answer[$i],

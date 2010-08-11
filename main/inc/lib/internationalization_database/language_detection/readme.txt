@@ -12,6 +12,6 @@ To understand how does language recognition work you need to read the following 
 W. B. Cavnar and J. M. Trenkle. N-gram-based text categorization. Proceedings of SDAIR-94, 3rd Annual Symposium on Document Analysis and Information Retrieval, 1994.
 http://citeseer.ist.psu.edu/cache/papers/cs/810/http:zSzzSzwww.info.unicaen.frzSz~giguetzSzclassifzSzcavnar_trenkle_ngram.pdf/n-gram-based-text.pdf
 
-License: GNU General Public License (GPL) as published by the Free Software Foundation (http://www.fsf.org/); either version 2 of the License, or (at your option) any later version.
+License: GNU General Public License 3 as published by the Free Software Foundation (http://www.fsf.org/).
 Assembled by Ivan Tcholakov, <ivantcholakov@gmail.com>
 November, 2009

@@ -514,6 +514,8 @@ function update_Db_course($courseDbName, $language = null)
 		 locked int NOT NULL default 0,
 		 session_id int NOT NULL default 0,
 		 forum_image varchar(255) NOT NULL default '',
+                 start_time datetime NOT NULL default '0000-00-00 00:00:00',
+                 end_time datetime NOT NULL default '0000-00-00 00:00:00',
 		 PRIMARY KEY (forum_id)
 		)" . $charset_clause;
 

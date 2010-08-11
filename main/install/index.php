@@ -104,7 +104,7 @@ error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 // Upgrading from any subversion of 1.6 is just like upgrading from 1.6.5
 $update_from_version_6 = array('1.6', '1.6.1', '1.6.2', '1.6.3', '1.6.4', '1.6.5');
 // Upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
-$update_from_version_8 = array('1.8', '1.8.2', '1.8.3', '1.8.4', '1.8.5', '1.8.6', '1.8.6.1', '1.8.6.2','1.8.7');
+$update_from_version_8 = array('1.8', '1.8.2', '1.8.3', '1.8.4', '1.8.5', '1.8.6', '1.8.6.1', '1.8.6.2','1.8.7','1.8.7.1');
 
 $my_old_version = '';
 $tmp_version = get_config_param('dokeos_version');
@@ -119,9 +119,9 @@ if (!empty($_POST['old_version'])) {
 	$my_old_version = $dokeos_version;
 }
 
-$new_version = '1.8.7.1';
-$new_version_stable = true;
-$new_version_major = false;
+$new_version = '1.8.8';
+$new_version_stable = false;
+$new_version_major = true;
 $software_name = 'Chamilo';
 $software_url = 'http://www.chamilo.org/';
 
@@ -741,7 +741,6 @@ if ($_POST['step2']) {
             case '1.8.6.2':
                 include 'update-db-1.8.6.2-1.8.7.inc.php';
                 include 'update-files-1.8.6.2-1.8.7.inc.php';
-
                 // After database conversion to UTF-8, new encoding initialization is necessary
                 // to be used for the next (hypothetical) upgrade 1.8.7 -> 1.8.7.1.
                 Database::query("SET SESSION character_set_server='utf8';");
@@ -749,6 +748,9 @@ if ($_POST['step2']) {
                 Database::query("SET CHARACTER SET 'utf8';");
 
             case '1.8.7':
+            case '1.8.7.1':
+                include 'update-db-1.8.7-1.8.8.inc.php';
+                include 'update-files-1.8.7-1.8.8.inc.php';
 
             default:
 				break;

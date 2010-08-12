@@ -32,7 +32,7 @@ if($dashboard_view == 'list') {
 
 $configuration_link = '';
 if (api_is_platform_admin()) {
-	$configuration_link = '<span style="float: right; margin: 0px; padding: 0px;">'.Display::return_icon('acces_tool.gif').'<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.get_lang('ConfigureDashboardPlugin').'</a></span>';
+	$configuration_link = '<span style="margin: 0px 0px -17px; padding: 3px 0px 0px; float: right;">'.Display::return_icon('acces_tool.gif').'<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.get_lang('ConfigureDashboardPlugin').'</a></span>';
 }
 
 echo '<div class="actions">';

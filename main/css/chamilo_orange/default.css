@@ -2431,7 +2431,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	/*display:inline-block;*/
 	border: none;
 	text-decoration: none;
-	background-color: #efefef;
+	/*background-color: #efefef;*/
 	padding-right: 5px;
 	vertical-align:middle;
 }
@@ -4064,7 +4064,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 		height: 400px;
 }
 
-#columns ul, #columns ol {margin:0; padding:0; list-style:none; border:none;}
+#columns ul, #columns ol {margin:-1px; padding:0; list-style:none; border:none;}
 
 
 

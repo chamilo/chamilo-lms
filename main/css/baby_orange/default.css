@@ -471,7 +471,7 @@ form span.form_error {
 	/*display:inline-block;*/
 	border: none;
 	text-decoration: none;
-	background-color: #FDDEAA;
+	/*background-color: #FDDEAA;*/
 	padding-right: 5px;
 	vertical-align:middle;
 }
@@ -892,7 +892,7 @@ div.report_section h4 {
 	display:inline-block;
 	border: none;
 	text-decoration: none;
-	background-color: #fff;
+	/*background-color: #fff;*/
 	padding-right: 5px;
 	vertical-align:middle;
 }

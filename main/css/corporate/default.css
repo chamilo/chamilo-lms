@@ -888,7 +888,7 @@ div.report_section h4 {
 	display:inline-block;
 	border: none;
 	text-decoration: none;
-	background-color: #fff;
+	/*background-color: #fff;*/
 	padding-right: 5px;
 	vertical-align:middle;
 }

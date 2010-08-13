@@ -105,6 +105,7 @@ overflow-x: hidden;
 }
 .inputSearchSelect{
 	visibility:hidden;
+	max-width:160px;
 }
 .calendar_trigger{
 	background:none;

@@ -171,7 +171,9 @@ class learnpath {
     	//now get the latest attempt from this user on this LP, if available, otherwise create a new one
 		$lp_table = Database::get_course_table(TABLE_LP_VIEW);
 		//selecting by view_count descending allows to get the highest view_count first
-		$sql = "SELECT * FROM $lp_table WHERE lp_id = '$lp_id' AND user_id = '$user_id' ORDER BY view_count DESC";
+		$session_id = api_get_session_id();
+		$session = api_get_session_condition($session_id);
+		$sql = "SELECT * FROM $lp_table WHERE lp_id = '$lp_id' AND user_id = '$user_id' $session  ORDER BY view_count DESC";
 		if ($this->debug > 2) {
 			error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0);
 		}
@@ -192,7 +194,7 @@ class learnpath {
 				error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
 			}
 			$this->attempt = 1;
-			$sql_ins = "INSERT INTO $lp_table (lp_id,user_id,view_count) VALUES ($lp_id,$user_id,1)";
+			$sql_ins = "INSERT INTO $lp_table (lp_id,user_id,view_count, session_id) VALUES ($lp_id,$user_id,1,$session_id)";
 			$res_ins = Database::query($sql_ins);
 			$this->lp_view_id = Database :: insert_id();
 			if ($this->debug > 2) {

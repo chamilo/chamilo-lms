@@ -43,11 +43,11 @@
 			?>
 				<dl class="thumbnailListing" id="dl<?php echo $count; ?>">
                  <?php
-                 if(preg_match('/shared_folder/', basename($file['path'])))
+				 if(preg_match('/shared_folder/', basename($file['path'])))
                  { //add icon into ajaxfilemanager if sharedfolder is in Chamilo
                 ?>
 
-                	<dt id="dt<?php echo $count; ?>" class="<?php echo ($file['type'] == 'folder' && empty($file['file']) || empty($file['subdir'])?'folderShared':$file['cssClass']); ?>" class="<?php echo $file['cssClass']; ?>">
+                	<dt id="dt<?php echo $count; ?>" class="<?php echo ($file['type'] == 'folder' || empty($file['file']) || empty($file['subdir'])?'folderShared':$file['cssClass']); ?>" class="<?php echo $file['cssClass']; ?>">
                 <?php
 				}
 				else

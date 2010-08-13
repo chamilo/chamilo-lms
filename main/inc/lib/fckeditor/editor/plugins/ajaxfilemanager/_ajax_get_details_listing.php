@@ -82,7 +82,13 @@
 											?>
                                             	<td  lign="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;<a id="a<?php echo $count; ?>" href="<?php echo $file['path']; ?>" <?php echo $file['cssClass'] == 'filePicture'?'rel="ajaxPhotos"':''; ?>  ><span class="<?php echo ($file['type'] == 'folder '?$file['cssClass']:"folderShared"); ?>">&nbsp;</span></a></td>
                                             <?php
-                                            }											
+                                            }
+											elseif(preg_match('/sf_user_/', basename($file['path'])))
+											{
+											?>
+											<td  lign="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;<a id="a<?php echo $count; ?>" href="<?php echo $file['path']; ?>" <?php echo $file['cssClass'] == 'filePicture'?'rel="ajaxPhotos"':''; ?>  ><span class="<?php echo ($file['type'] == 'folder '?$file['cssClass']:"unknownUser"); ?>">&nbsp;</span></a></td>											
+											<?php
+											}
                                             else
 											{
 											?>

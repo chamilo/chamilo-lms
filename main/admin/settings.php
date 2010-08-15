@@ -86,6 +86,9 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 
 // setting the name of the tool
 $tool_name = get_lang('DokeosConfigSettings');
+if(empty($_GET['category'])) {
+    $_GET['category'] = 'Platform';
+}
 
 // Build the form
 if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {

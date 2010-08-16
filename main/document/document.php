@@ -317,6 +317,26 @@ if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_se
 	
 }
 
+// Copy a file to general my files user's
+if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && (api_get_setting('students_copy_folders') == 'true')) {	
+	
+	$clean_get_id = Security::remove_XSS($_GET['id']);
+	$user_folder  = api_get_path(SYS_CODE_PATH).'upload/users/'.api_get_user_id().'/my_files/';
+		if (!file_exists($user_folder)) {	
+			@mkdir($user_folder, $permissions_for_new_directories, true);
+		}
+
+		$file = $sys_course_path.$_course['path'].'/document'.$clean_get_id;
+		$copyfile = $user_folder.basename($clean_get_id);
+		if (file_exists($copyfile)) {
+			//Display::display_error_message(get_lang('Overwrite. Warning already copy'));//TODO: fix message and show acept or cancel
+		}
+		if (!copy($file, $copyfile)) {
+			//Display::display_error_message(get_lang('Copy Failled'));//TODO: fix message
+		}
+}
+
+
 // Slideshow inititalisation
 $_SESSION['image_files_only'] = '';
 $image_files_only = '';

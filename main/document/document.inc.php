@@ -173,7 +173,12 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		} else {
 			$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array('height'=>'16', 'width' => '16')).'</a>';
 		}
-		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html;
+		//copy files to users myfiles
+		$copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&amp;action=copytomyfiles&amp;id='.$url_path.$req_gid :api_get_self().'?'.api_get_cidreq();
+		$copy_myfiles_icon = ($filetype == 'file') ? 'briefcase.png' : '';		
+		$copy_to_myfiles='<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($copy_myfiles_icon, get_lang('CopyToMyFiles'), array('height'=>'16', 'width' => '16')).'&nbsp;&nbsp;</a>';		
+		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles;
+		//end copy files to users myfiles
 	} else {
 		if(preg_match('/shared_folder/', urldecode($url)) && preg_match('/shared_folder$/', urldecode($url))==false && preg_match('/shared_folder_session_'.$current_session_id.'$/', urldecode($url))==false){
 			return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $tooltip_title).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';

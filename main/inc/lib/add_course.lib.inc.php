@@ -937,10 +937,9 @@ function update_Db_course($courseDbName, $language = null)
 		PRIMARY KEY (id),
 		KEY reflink (reflink),
 		KEY group_id (group_id),
-		KEY page_id (page_id)
+		KEY page_id (page_id),
+		KEY session_id (session_id)
 		)" . $charset_clause;
-	Database::query($sql);
-	$sql = "ALTER TABLE `".$TABLETOOLWIKI . "` ADD INDEX ( session_id ) ";
 	Database::query($sql);
 
 	//
@@ -983,6 +982,7 @@ function update_Db_course($courseDbName, $language = null)
 		user_id int NOT NULL,
 		type text NOT NULL,
 		group_id int DEFAULT NULL,
+		session_id smallint default 0,
 		KEY (id)
 		)" . $charset_clause;
 	Database::query($sql);

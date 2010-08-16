@@ -1,3 +1,4 @@
+/*~~~~~~ Hack for Chamilo ~~~~~~~~*/
 /*~~~~~~Global Setting ~~~~~~~~*/
 html, body{
     margin: 0px;
@@ -24,7 +25,7 @@ form{margin: 0;}
 	background-color: #d9dbdc;
 }
 #leftCol legend {
-	
+
 	/*
 	position: absolute;
 	top: -.5em;
@@ -46,31 +47,32 @@ input{ padding: 0; background-color: transparent;}
 }
 #wrapper
 {
-    margin: 0px 0px;
+    margin: 0px 0px;	
 	min-width:760px;
 	width:100%;
     padding:0px;
-		
+
 }
 #body{
 position:absolute;
 top:60px;
 width:100%;
 border-color:#0000CC;
+margin-top:15px;
 }
 #leftCol{
 	background:#e8e8e8;
-	width:265px;
+	width:200px;
 	float:left;
 	text-align:left;
-	
+
 }
 #rightCol{
 	width:100%;
 	border: none;
-	margin-left: -265px;
+	margin-left: -200px;
 	float:right;
-	
+
 
 }
 #rightCol img.ajaxLoadingImg{
@@ -78,15 +80,15 @@ margin-left: 50%;
 margin-top:100px;
 }
 #content{
-  margin-left: 265px;
+margin-left: 200px;
 overflow: auto;
-overflow-x: hidden;	
+overflow-x: hidden;
 max-height:380px;
 }
  .pagination_content{
-  margin-left: 265px;
+  margin-left: 200px;
 overflow: auto;
-overflow-x: hidden;	  
+overflow-x: hidden;
  }
 .leftToRightArrow{
 	background-image:url(../images/arrow_right.png);
@@ -97,9 +99,13 @@ overflow-x: hidden;
     height:100%;
 }
 /*      forms                */
-.inputMtime{width:55px; height:14px; font-size:9px;}
+.inputMtime{width:75px; height:14px; font-size:9px;}
 .radio{
 	background-color:none;
+}
+.inputSearchSelect{
+	visibility:hidden;
+	max-width:160px;
 }
 .calendar_trigger{
 	background:none;
@@ -172,6 +178,7 @@ float:left;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: #b3b3b4;
+	cursor: default;
 }
 
 #currentFolderInfo dl{
@@ -181,7 +188,6 @@ float:left;
 	font-size: 14px;
 	font-weight: bold;
 	color: #666666;
-	
 }
 #currentFolderInfo dt{
 	font-size:12px;
@@ -268,7 +274,7 @@ span.filePPT, span.fileExcel, span.filePhp,
 span.fileMusic, span.fileExe, span.fileAcrobat,
 span.fileRTF, span.fileXml, span.fileCode,
 span.fileZip, span.addMore, span.deleteFile,
-span.cancel,span.uploadProcessing{
+span.cancel,span.uploadProcessing, span.folderShared, span.unknownUser{
 padding:2px 0 2px 16px;
 background-repeat:no-repeat;
 background-position:0 50%;
@@ -295,6 +301,10 @@ span.fileRTF{background-image:url(../images/small_icon/fileRTF.png);}
 span.fileXml{background-image:url(../images/small_icon/fileXml.png);}
 span.fileCode{background-image:url(../images/small_icon/fileCode.png);}
 span.fileZip{background-image:url(../images/small_icon/fileZip.png);}
+
+span.folderShared{background-image:url(../images/small_icon/folderShared.png);}
+span.unknownUser{background-image:url(../images/small_icon/smallunknownUser.png);}
+
 /* big icon */
 dt.folderEmpty, dt.folder, dt.folderParent,
 dt.fileUnknown, dt.fileText, dt.fileWord,
@@ -302,7 +312,7 @@ dt.fileFlash, dt.fileVideo,
 dt.filePPT, dt.fileExcel, dt.filePhp,
 dt.fileMusic, dt.fileExe, dt.fileAcrobat,
 dt.fileRTF, dt.fileXml, dt.fileCode,
-dt.fileZip{
+dt.fileZip,dt.folderShared, dt.unknownUser{
 margin: 0px;
 padding:0px;
 border:solid #ccc 1px;
@@ -334,6 +344,10 @@ dt.fileRTF{background-image:url(../images/big_icon/fileRTF.png);}
 dt.fileXml{background-image:url(../images/big_icon/fileXml.png);}
 dt.fileCode{background-image:url(../images/big_icon/fileCode.png);}
 dt.fileZip{background-image:url(../images/big_icon/fileZip.png);}
+
+dt.folderShared{background-image:url(../images/big_icon/bigfolderShared.png);}
+dt.unknownUser{background-image:url(../images/big_icon/biguserUnknown.png);}
+
 
 table.tableSummary{
 border-collapse:collapse;
@@ -411,10 +425,11 @@ p.pagination{
 	border-bottom-style: solid;
 	border-bottom-color: #FFFFFF;
 }
+
 #pagination_parent_link
 {
     background: url(../images/go_parent.png) no-repeat 100% 50%;
-    padding: 2px 6px 2px 10px;
+    padding: 2px 30px 2px 370px;	
 }
 a.pagination_first,
 a.pagination_previous,
@@ -451,41 +466,70 @@ a.pagination_active{font-weight: bold; color: #CC0000;}
 }
 
 .button{
-	font: bold 10px Verdana, Arial, Helvetica, sans-serif;
-	background:url(../images/button.gif);
-	width:90px;
-	height:20px;
-	border:none;
+	border:1px solid #4171b5;
+	background:#F0F0F0;
+	padding:5px 15px 5px 15px;
+	font-weight:bold;
+	color:#4171b5;
+	margin: 5px;
 }
 
+.select_button{
+	visibility:hidden;
+}
+
+.search_button{
+	font-family: bold arial, verdana, helvetica, sans-serif;
+	font-size: 100%;
+	line-height :130%;
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+	padding:5px 15px 5px 15px;
+	vertical-align:middle;
+	border:1px solid #4171b5;
+	background:#F0F0F0;
+	padding-left:30px;
+	padding-right:10px;
+	font-weight:bold;
+	color:#4171b5;
+	background: url(../images/button_search.gif);
+	background-position:10px;
+	background-repeat:no-repeat;
+
+}
+
+.search_folder{ 
+visibility:hidden;	
+}
 /**  Detail View */
 #tableList{
 font-size:100%;
-width:100%; 
+width:100%;
 }
 #tableList thead th{
 	text-align:left;
 	color:#7a92c2;
 	padding:8px 8px 6px 8px;
 	background-color: #DDDBD2;
-} 
+}
 #tableList thead th.docName{
-	background:#DDDBD2; 
+	background:#DDDBD2;
 	padding:2px 0px 2px 20px;
-	border-right-width: 2px;	
+	border-right-width: 2px;
 	border-right-style: groove;
-} 
+}
 #tableList tbody td		{ background:#f2f1ee; padding:0; }
-#tableList tbody td.docName	{ 
-	background-color:#fff; 
-	height: 22px; 
+#tableList tbody td.docName	{
+	background-color:#fff;
+	height: 22px;
 	border-right-width: 2px;
 	border-right-style: groove;
 	padding:2px 0px 2px 20px;
 }
-#tableList tbody td.docInfo{ 
-	background-color:#f2f1ee; 
-	height: 22px; 
+#tableList tbody td.docInfo{
+	background-color:#f2f1ee;
+	height: 22px;
 	border-right-width: 2px;
 	border-right-style: groove;
 	padding:2px 0px 2px 20px;

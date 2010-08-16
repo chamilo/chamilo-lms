@@ -514,9 +514,8 @@ $(document).ready(
                 <input type="hidden" name="search_mtime_from" id="search_mtime_from" value="<?php //echo (!empty($_GET['search_mtime_from'])?$_GET['search_mtime_from']:''); ?>" />
         		<input type="hidden" name="search_mtime_to" id="search_mtime_to" value="<?php //echo (!empty($_GET['search_mtime_to'])?$_GET['search_mtime_to']:''); ?>" />        
         	<!--</td></tr>
-
 			<tr>
-				<td>  <!-- comment these lines while integrating into Chamilo -->
+				<td>  --><!-- comment these lines while integrating into Chamilo -->
                 </td><td><!--add a col while integrating -->
           	<b><?php  // echo LBL_SEARCH_RECURSIVELY; ?></b>&nbsp;&nbsp;
 		<!--change for Chamilo recursively by default  -->

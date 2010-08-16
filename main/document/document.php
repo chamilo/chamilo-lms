@@ -299,7 +299,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'download') {
 
 
 // Download a folder
-if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
+if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_setting('students_copy_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
 	
 	//filter when I am into shared folder, I can donwload only my shared folder
 	

@@ -77,14 +77,18 @@
 <script type="text/javascript" src="jscripts/ajaxfileupload.js"></script>
 <script type="text/javascript" src="jscripts/ajaxfilemanager.js"></script>-->
 <script type="text/javascript">
-	// Added by Ivan Tcholakov, 22-JUL-2009.
-	// For integration with the editor's dialig system.
-	var oEditor = null ;
-	if ( !window.opener && window.parent ) {
-		// The file manager is inside a dialog.
-		oEditor = window.parent.InnerDialogLoaded() ;
+
+	var mode_editor = '<?php echo Security::remove_XSS($_GET['editor']);?>';<!-- Chamilo hack for general my files users  -->
+	if (!mode_editor){		
+		// Added by Ivan Tcholakov, 22-JUL-2009.
+		// For integration with the editor's dialig system.
+		var oEditor = null ;
+		if ( !window.opener && window.parent ) {
+			// The file manager is inside a dialog.
+			oEditor = window.parent.InnerDialogLoaded() ;
+		}
+		//end hack
 	}
-	//end hack
 	var globalSettings = {'upload_init':false};
 	var queryString = '<?php echo makeQueryString(array('path')); ?>';
 	var paths = {'root':'<?php echo addTrailingSlash(backslashToSlash(CONFIG_SYS_ROOT_PATH)); ?>', 'root_title':'<?php echo LBL_FOLDER_ROOT; ?>'};
@@ -435,7 +439,7 @@ $(document).ready(
         <p class="searchButtons" id="returnCurrentUrl">
   
         	<span class="right" id="linkSelect">
-        		<input type="button" value="<?php echo MENU_SELECT; ?>"  id="selectCurrentUrl" class="button">
+        		<input type="button" value="<?php echo MENU_SELECT; ?>"  id="selectCurrentUrl" class="select_button"><!-- Change button class by Chamilo select_button class -->
         	</span>
         	
         </p>				
@@ -514,9 +518,8 @@ $(document).ready(
                 <input type="hidden" name="search_mtime_from" id="search_mtime_from" value="<?php //echo (!empty($_GET['search_mtime_from'])?$_GET['search_mtime_from']:''); ?>" />
         		<input type="hidden" name="search_mtime_to" id="search_mtime_to" value="<?php //echo (!empty($_GET['search_mtime_to'])?$_GET['search_mtime_to']:''); ?>" />        
         	<!--</td></tr>
-
 			<tr>
-				<td>  <!-- comment these lines while integrating into Chamilo -->
+				<td>  --><!-- comment these lines while integrating into Chamilo -->
                 </td><td><!--add a col while integrating -->
           	<b><?php  // echo LBL_SEARCH_RECURSIVELY; ?></b>&nbsp;&nbsp;
 		<!--change for Chamilo recursively by default  -->
@@ -744,7 +747,7 @@ $(document).ready(
   	<ul>
   		<li><a href="#" class="contentMenuItem" id="menuSelect"><?php echo MENU_SELECT; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuPreview"><?php echo MENU_PREVIEW; ?></a></li>
-  		<!--	<li><a href="#" class="contentMenuItem"  id="menuDownload"><?php echo MENU_DOWNLOAD; ?></a></li> Chamilo temporarily disable contextual menu download -->
+  		<li><a href="#" class="contentMenuItem"  id="menuDownload"><?php echo MENU_DOWNLOAD; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuRename"><?php echo MENU_RENAME; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuEdit"><?php echo MENU_EDIT; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuCut"><?php echo MENU_CUT; ?></a></li>

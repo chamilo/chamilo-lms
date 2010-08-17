@@ -108,16 +108,26 @@ d=new Date();savEvtTime=d.getTime();savTO=setTimeout(function()
 {var ext=getFileExtension(path);var supportedExts=supporedPreviewExts.split(",");var isSupportedExt=false;for(i in supportedExts)
 {var typeOf=typeof(supportedExts[i]);if(typeOf.toLowerCase()=='string'&&supportedExts[i].toLowerCase()==ext.toLowerCase())
 {isSupportedExt=true;break;}}
-if(isSupportedExt)
-{switch(files[num].cssClass)
-{ case 'fileVideo':
-case 'fileMusic':
-case 'fileFlash':
-$('#playGround').html('<a id="playGround' + num + '" href="' + '../'+files[num].path + '"><div id="player">&nbsp;this is mine</div></a> '); $('#playGround' + num).html(''); $('#playGround' + num).media({ width: 255, height: 210, autoplay: true }); showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250' + '&width=256' + '&inlineId=winPlay&modal=true')); break; //Juan Carlos Raña added for Chamilo '../'+  for preview video and flash on  href="' + '../'+files[num].path +
-default:
-showThickBox(linkElem, appendQueryString('../'+path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));}
+/////start hack for Chamilo
+if(isSupportedExt){
+	switch(files[num].cssClass){
+		case 'fileVideo':
+		case 'fileMusic':
+		case 'fileFlash':
+		if(mode_editor==='stand_alone'){// Juan Carlos Raña add swich for mode editor. default is fckeditor
+			$('#playGround').html('<a id="playGround' + num + '" href="' + files[num].path + '"><div id="player">&nbsp;this is mine</div></a> '); $('#playGround' + num).html(''); $('#playGround' + num).media({ width: 255, height: 210, autoplay: true }); showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250' + '&width=256' + '&inlineId=winPlay&modal=true')); break;
+		}else{
+			$('#playGround').html('<a id="playGround' + num + '" href="' + '../'+files[num].path + '"><div id="player">&nbsp;this is mine</div></a> '); $('#playGround' + num).html(''); $('#playGround' + num).media({ width: 255, height: 210, autoplay: true }); showThickBox($('#a' + num).get(0), appendQueryString('#TB_inline', 'height=250' + '&width=256' + '&inlineId=winPlay&modal=true')); break; //Juan Carlos Raña added for Chamilo '../'+  for preview video and flash on  href="' + '../'+files[num].path +
+		}
+		default:
+		if(mode_editor==='stand_alone'){
+			showThickBox(linkElem, appendQueryString(path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));
+		}else{
+			showThickBox(linkElem, appendQueryString('../'+path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width)); //Juan Carlos Raña (line above added '../'+ to line for preview and don't go to main showThickBox(linkElem, appendQueryString('../'+path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));
+		}
+	}
 }
-//Juan Carlos Raña (line above added '../'+ to line for preview and don't go to main showThickBox(linkElem, appendQueryString('../'+path, 'KeepThis=true&TB_iframe=true&height=' + thickbox.height + '&width=' + thickbox.width));}
+/////end hack for Chamilo
 }
 return false;},dcTime);return false;});$(this).dblclick(function()
 {var d=new Date();dcAt=d.getTime();if(savTO!=null){clearTimeout(savTO);savTO=null;}

@@ -25,7 +25,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 	public function __construct($take_slide_name=false, $course_code=null, $resource_id=null,$user_id=null) {
 
 		$this -> take_slide_name = $take_slide_name;
-		parent::OpenofficeDocument($course_code, $resource_id, $user_id);
+		parent::__construct($course_code, $resource_id, $user_id);
 
 	}
 

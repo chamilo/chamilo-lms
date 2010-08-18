@@ -299,7 +299,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'download') {
 
 
 // Download a folder
-if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_setting('students_copy_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
+if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
 	
 	//filter when I am into shared folder, I can donwload only my shared folder
 	
@@ -318,7 +318,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_se
 }
 
 // Copy a file to general my files user's
-if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && (api_get_setting('students_copy_folders') == 'true')) {	
+if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && (api_get_setting('students_copy_files') == 'true')) {	
 	
 	$clean_get_id = Security::remove_XSS($_GET['id']);
 	$user_folder  = api_get_path(SYS_CODE_PATH).'upload/users/'.api_get_user_id().'/my_files/';

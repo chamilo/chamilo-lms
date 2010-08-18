@@ -1230,11 +1230,11 @@ function getRootPath() {
 */
 function hideFolderName($folderName)
 {
-	//hidden files and folders deleted by Dokeos. Hidde folders css, hotpotatoes, chat
-	$deleted_by_dokeos='_DELETED_';
-	$css_folder_dokeos='css';
-	$hotpotatoes_folder_dokeos='HotPotatoes_files';
-	$chat_files_dokeos='chat_files';
+	//hidden files and folders deleted by Chamilo. Hidde folders css, hotpotatoes, chat
+	$deleted_by_chamilo='_DELETED_';
+	$css_folder_chamilo='css';
+	$hotpotatoes_folder_chamilo='HotPotatoes_files';
+	$chat_files_chamilo='chat_files';
 	$thumbs_folder='.thumbs';
 
 	//hidden directory of the group if the user is not a member of the group
@@ -1251,7 +1251,7 @@ function hideFolderName($folderName)
 		}
 	}
 
-	if(!ereg($deleted_by_dokeos, $folderName) && !ereg($css_folder_dokeos, $folderName) && !ereg($hotpotatoes_folder_dokeos, $folderName) && !ereg($chat_files_dokeos, $folderName) && !ereg($thumbs_folder, $folderName) && $show_doc_group==true)
+	if(!ereg($deleted_by_chamilo, $folderName) && !ereg($css_folder_chamilo, $folderName) && !ereg($hotpotatoes_folder_chamilo, $folderName) && !ereg($chat_files_chamilo, $folderName) && !ereg($thumbs_folder, $folderName) && $show_doc_group==true)
 	{
 		return substr($folderName,strpos($folderName, '-'),strlen($folderName)); //hide the firsts numbers
 	}

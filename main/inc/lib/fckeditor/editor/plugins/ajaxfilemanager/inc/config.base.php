@@ -6,7 +6,7 @@
 	 * @since 1/August/2007
 	 *
 	 *
-	 * Modify system config setting for Dokeos
+	 * Modify system config setting for Chamilo
 	 * @author Juan Carlos Raña Trabado
 	 * @since 31/December/2008
 	 */
@@ -38,7 +38,7 @@
 	define('CONFIG_SYS_THUMBNAIL_VIEW_ENABLE', true);//REMOVE THE thumbnail view if false
 
 	//User Permissions
-	//Hack by Juan Carlos Ra�a Trabado
+	//Hack by Juan Carlos Raña Trabado
 	if(empty($_course['path']))
 	{
 		define('CONFIG_OPTIONS_DELETE', true);
@@ -46,20 +46,20 @@
 		define('CONFIG_OPTIONS_COPY', true);
 		define('CONFIG_OPTIONS_NEWFOLDER', true);
 		define('CONFIG_OPTIONS_RENAME', true);
-		define('CONFIG_OPTIONS_UPLOAD', true); //
+		define('CONFIG_OPTIONS_UPLOAD', true);
 		define('CONFIG_OPTIONS_EDITABLE', false); //disable image editor and text editor
 	}
 	else
 	{
 		if(api_is_allowed_to_edit())
 		{
-		//api_is_allowed_to_edit() from Dokeos
+		//api_is_allowed_to_edit() from Chamilo
 			define('CONFIG_OPTIONS_DELETE', true);
 			define('CONFIG_OPTIONS_CUT', false);
 			define('CONFIG_OPTIONS_COPY', false);
 			define('CONFIG_OPTIONS_NEWFOLDER', true);
 			define('CONFIG_OPTIONS_RENAME', false);
-			define('CONFIG_OPTIONS_UPLOAD', true); //
+			define('CONFIG_OPTIONS_UPLOAD', true);
 			define('CONFIG_OPTIONS_EDITABLE', false); //disable image editor and text editor
 
 		}
@@ -70,7 +70,7 @@
 			define('CONFIG_OPTIONS_COPY', false);
 			define('CONFIG_OPTIONS_NEWFOLDER', true);
 			define('CONFIG_OPTIONS_RENAME', false);
-			define('CONFIG_OPTIONS_UPLOAD', true); //
+			define('CONFIG_OPTIONS_UPLOAD', true);
 			define('CONFIG_OPTIONS_EDITABLE', false); //disable image editor and text editor
 		}
 	}
@@ -85,30 +85,30 @@
 			//define('CONFIG_SYS_DEFAULT_PATH', '../uploaded/'); //accept relative path only
 			//define('CONFIG_SYS_ROOT_PATH', '../uploaded/');	//accept relative path only
 
-	/////////////// Integration for Dokeos
+	/////////////// Integration for Chamilo
 
 	if(!empty($_course['path']))
 	{
 		if(!empty($group_properties['directory']))
 		{
-			$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document'.$group_properties['directory'].'/';
+			$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document'.$group_properties['directory'].'/';
 		}
 		else
 		{
 			if(api_is_allowed_to_edit())
 			{
-				$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/';
+				$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/';
 			}
 			else
 			{
 				$current_session_id = api_get_session_id();
 				if($current_session_id==0)
 				{
-					$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+					$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 				}
 				else
 				{
-					$PathDokeosAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
+					$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
 				}				
 			}
 		}
@@ -118,20 +118,20 @@
 		if (api_is_platform_admin() && $_SESSION['this_section']=='platform_admin')
 		{
 			//home page portal
-			$PathDokeosAjaxFileManager='../../../../../../../home/default_platform_document/';
+			$PathChamiloAjaxFileManager='../../../../../../../home/default_platform_document/';
 		}
 		else
 		{
 			//my profile
-			$PathDokeosAjaxFileManager='../../../../../../../main/upload/users/'.api_get_user_id().'/my_files/';
+			$PathChamiloAjaxFileManager='../../../../../../../main/upload/users/'.api_get_user_id().'/my_files/';
 		}
 
 	}
 
-	define('CONFIG_SYS_DEFAULT_PATH', $PathDokeosAjaxFileManager);
-	define('CONFIG_SYS_ROOT_PATH', $PathDokeosAjaxFileManager);
+	define('CONFIG_SYS_DEFAULT_PATH', $PathChamiloAjaxFileManager);
+	define('CONFIG_SYS_ROOT_PATH', $PathChamiloAjaxFileManager);
 
-	////////////// end dokeos
+	////////////// end chamilo
 
 	define('CONFIG_SYS_FOLDER_SHOWN_ON_TOP', true); //show your folders on the top of list if true or order by name
 
@@ -154,14 +154,14 @@
 	define('CONFIG_SYS_DELETE_RECURSIVE', 1); //delete all contents within a specific folder if set to be 1
 
 	//UPLOAD OPTIONS CONFIG
-	define('CONFIG_UPLOAD_MAXSIZE', 50000 * 1024 ); //by bytes For Dokeos upgrade from 50 to 50000 (50MB)
+	define('CONFIG_UPLOAD_MAXSIZE', 50000 * 1024 ); //by bytes For Chamilo upgrade from 50 to 50000 (50MB)
 
-	define('CONFIG_EDITABLE_VALID_EXTS', 'txt,htm,html'); //make you include all these extension in CONFIG_UPLOAD_VALID_EXTS if you want all valid. For Dokeos exclude original xml, js and css
+	define('CONFIG_EDITABLE_VALID_EXTS', 'txt,htm,html'); //make you include all these extension in CONFIG_UPLOAD_VALID_EXTS if you want all valid. For Chamilo exclude original xml, js and css
 
 	define('CONFIG_OVERWRITTEN', false); //overwirte when processing paste
-	define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,jpeg,png,bmp,tif,psd,zip,sit,rar,gz,tar,htm,html,mov,mpg,avi,asf,mpeg,wmv,aif,aiff,wav,mp3,swf, flv, mp4, aac, ppt,rtf,doc, pdf,xls,txt,flv,odt,ods,odp,odg,odc,odf,odb,odi,pps,docx,pptx,xlsx,accdb,xml, mid');//For Dokeos updated
-	define("CONFIG_VIEWABLE_VALID_EXTS", 'gif,bmp,txt,jpg,jpeg,png,tif,html,htm,mp3,wav,wmv,wma,rm,rmvb,mov,swf,flv,mp4,aac,avi,mpg,mpeg,asf,mid');//For Dokeos updated
-	define('CONFIG_UPLOAD_INVALID_EXTS', 'php,php3,php4,php5,php6,phps,phtml,asp,aspx,jsp,cfm,cfc,pl,jar,sh,cgi,js,exe,com,bat,pif,scr,msi,ws,wsc,wsf,vb,vbe,vbs,reg,dll'); //For Dokeos added.
+	define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,jpeg,png,bmp,tif,psd,zip,sit,rar,gz,tar,htm,html,mov,mpg,avi,asf,mpeg,wmv,aif,aiff,wav,mp3,swf, flv, mp4, aac, ppt,rtf,doc, pdf,xls,txt,flv,odt,ods,odp,odg,odc,odf,odb,odi,pps,docx,pptx,xlsx,accdb,xml, mid');//For Chamilo updated
+	define("CONFIG_VIEWABLE_VALID_EXTS", 'gif,bmp,txt,jpg,jpeg,png,tif,html,htm,mp3,wav,wmv,wma,rm,rmvb,mov,swf,flv,mp4,aac,avi,mpg,mpeg,asf,mid');//For Chamilo updated
+	define('CONFIG_UPLOAD_INVALID_EXTS', 'php,php3,php4,php5,php6,phps,phtml,asp,aspx,jsp,cfm,cfc,pl,jar,sh,cgi,js,exe,com,bat,pif,scr,msi,ws,wsc,wsf,vb,vbe,vbs,reg,dll'); //For Chamilo added.
 	//Preview
 	define('CONFIG_IMG_THUMBNAIL_MAX_X', 100);
 	define('CONFIG_IMG_THUMBNAIL_MAX_Y', 100);
@@ -200,10 +200,10 @@
 					fckeditor
 			*/
 	//CONFIG_EDITOR_NAME replaced CONFIG_THEME_MODE since @version 0.8
-	define('CONFIG_EDITOR_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['editor'])?secureFileName($_GET['editor']):'fckeditor')); // run mode fckeditor (Dokeos editor)
+	define('CONFIG_EDITOR_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['editor'])?secureFileName($_GET['editor']):'fckeditor')); // run mode fckeditor (Chamilo editor)
 	define('CONFIG_THEME_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['theme'])?secureFileName($_GET['theme']):'default'));  //change the theme to your custom theme rather than default
 	define('CONFIG_DEFAULT_VIEW', (CONFIG_SYS_THUMBNAIL_VIEW_ENABLE?'thumbnail':'detail')); //thumbnail or detail
-	define('CONFIG_DEFAULT_PAGINATION_LIMIT', 10000); //change 10 by 10000 while pagination is deactivated on Dokeos
+	define('CONFIG_DEFAULT_PAGINATION_LIMIT', 10000); //change 10 by 10000 while pagination is deactivated on Chamilo
 	define('CONFIG_LOAD_DOC_LATTER', false); //all documents will be loaded up after the template has been loaded to the client
 
 

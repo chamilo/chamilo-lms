@@ -162,7 +162,7 @@
 							}
 						}elseif(is_dir($path) && $this->searchkeywords['recursive'])
 						{
-							$this->doSearch($path); // For Dokeos this line replaces $this->Search($baseFolderPath); to run the search recursively from the root directory
+							$this->doSearch($path); // For Chamilo this line replaces $this->Search($baseFolderPath); to run the search recursively from the root directory
 						}
 					}
 				}

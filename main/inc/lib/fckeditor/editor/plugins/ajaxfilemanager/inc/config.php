@@ -6,7 +6,7 @@
 	 * @version 1.0
 	 * @since 22/April/2007
 	 *
-	 * Modifications of system config setting for Dokeos
+	 * Modifications of system config setting for Chamilo
 	 * @author Juan Carlos Raña Trabado
 	 * @since 31/December/2008
 	 */

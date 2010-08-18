@@ -32,7 +32,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 	public function __construct($split_steps=false, $course_code=null, $resource_id=null,$user_id=null) {
 
 		$this -> split_steps = $split_steps;
-		parent::OpenofficeDocument($course_code, $resource_id, $user_id);
+		parent::__construct($course_code, $resource_id, $user_id);
 
 	}
 

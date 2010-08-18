@@ -35,7 +35,7 @@ class OpenofficeText extends OpenofficeDocument {
 	{
 
 		$this -> split_steps = $split_steps;
-		parent::OpenofficeDocument($course_code, $resource_id, $user_id);
+		parent::__construct($course_code, $resource_id, $user_id);
 
 	}
 

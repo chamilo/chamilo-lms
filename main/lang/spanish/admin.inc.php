@@ -1269,6 +1269,6 @@ $ErrorReadingZip = "Error leyendo el archivo ZIP";
 $ErrorStylesheetFilesExtensionsInsideZip = "Las únicas extensiones aceptadas en el archivo ZIP son jpg, jpeg, png, gif y css.";
 $MyTextHere = "Introduzca su texto aquí...";
 $FieldTypeSocialProfile = "Vínculo red social";
-$AllowStudentsCopyFilesTitle = "Permitir a los estudiantes copiar archivos de un curso en su área de archivos personales";
-$AllowStudentsCopyFilesComment = "Permite a los estudiantes copiar archivos de un curso en su área personal, visible a través de la herramienta de Red Social o mediante el editor de HTML cuando se encuentran fuera de un curso";
+$AllowUsersCopyFilesTitle = "Permitir a los usuarios copiar archivos de un curso en su área de archivos personales";
+$AllowUsersCopyFilesComment = "Permite a los usuarios copiar archivos de un curso en su área personal, visible a través de la herramienta de Red Social o mediante el editor de HTML cuando se encuentran fuera de un curso";
 ?>

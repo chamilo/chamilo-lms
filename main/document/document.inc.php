@@ -173,14 +173,16 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		} else {
 			$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array('height'=>'16', 'width' => '16')).'</a>';
 		}
+		
 		//copy files to users myfiles
-		$copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&amp;action=copytomyfiles&amp;id='.$url_path.$req_gid :api_get_self().'?'.api_get_cidreq();
-		
-		if($filetype == 'file')
-		{		
-		$copy_to_myfiles='<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase_small.png', get_lang('CopyToMyFiles'), array('height'=>'16', 'width' => '16')).'&nbsp;&nbsp;</a>';		
+		if(api_get_setting('users_copy_files') == 'true'){
+			$copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&curdirpath='.$_GET['curdirpath'].'&amp;action=copytomyfiles&amp;id='.$url_path.$req_gid :api_get_self().'?'.api_get_cidreq();
+			
+			if($filetype == 'file')
+			{		
+			$copy_to_myfiles='<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase_small.png', get_lang('CopyToMyFiles'), array('height'=>'16', 'width' => '16')).'&nbsp;&nbsp;</a>';		
+			}
 		}
-		
 		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles;
 		//end copy files to users myfiles
 	} else {

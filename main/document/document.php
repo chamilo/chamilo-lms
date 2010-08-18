@@ -318,7 +318,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_se
 }
 
 // Copy a file to general my files user's
-if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && (api_get_setting('students_copy_files') == 'true')) {	
+if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_setting('users_copy_files') == 'true') {	
 	
 	$clean_get_id = Security::remove_XSS($_GET['id']);
 	$user_folder  = api_get_path(SYS_CODE_PATH).'upload/users/'.api_get_user_id().'/my_files/';
@@ -327,13 +327,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && (api_get_set
 		}
 
 		$file = $sys_course_path.$_course['path'].'/document'.$clean_get_id;
-		$copyfile = $user_folder.basename($clean_get_id);
+		$copyfile = $user_folder.basename($clean_get_id);		
 		if (file_exists($copyfile)) {
-			//Display::display_error_message(get_lang('Overwrite. Warning already copy'));//TODO: fix message and show acept or cancel
+			$copy_to_myfiles_message_overwrite  = 	get_lang('AlreadyCopy');			
+		}elseif (!copy($file, $copyfile)) {
+			$copy_to_myfiles_message_failled	=	get_lang('CopyFailled');			
+		}else{	
+			$copy_to_myfiles_message_relased	=	get_lang('CopyReleased');
 		}
-		if (!copy($file, $copyfile)) {
-			//Display::display_error_message(get_lang('Copy Failled'));//TODO: fix message
-		}
+
 }
 
 
@@ -399,6 +401,19 @@ if (!empty($_SESSION['_gid'])) {
 	Display::display_introduction_section(TOOL_DOCUMENT.$_SESSION['_gid']);
 } else {
 	Display::display_introduction_section(TOOL_DOCUMENT);
+}
+
+/*	COPY TO MY FILES MESSAGES */
+if(!empty($copy_to_myfiles_message_failled)){
+	Display::display_error_message($copy_to_myfiles_message_failled);
+}
+else{
+	if(!empty($copy_to_myfiles_message_overwrite)){
+		Display::display_warning_message($copy_to_myfiles_message_overwrite);
+	}
+	if (!empty($copy_to_myfiles_message_relased)){
+		Display::display_confirmation_message($copy_to_myfiles_message_relased);
+	}
 }
 
 if ($is_allowed_to_edit || $group_member_with_upload_rights) { // TEACHER ONLY

@@ -5,7 +5,7 @@
 	 * @link www.phpletter.com
 	 * @since 22/May/2007
 	 *
-	 * Modify for Dokeos
+	 * Modify for Chamilo
 	 * @author Juan Carlos Ra�a
 	 * @since 18/January/2009
 	 */
@@ -19,9 +19,9 @@
 	$info = "";	
 /*	$_POST['new_folder'] = substr(md5(time()), 1, 5);
 	$_POST['currentFolderPath'] = "../../uploaded/";*/
-	$_POST['new_folder']=htmlentities($_POST['new_folder'],ENT_QUOTES);//Dokeos improve security
-	$_POST['new_folder']=str_replace(' ','_',$_POST['new_folder']);//Interaction with Dokeos. Because fix long names. See: ajaxfilemanager/inc/class.manager.php
-	$_POST['currentFolderPath']=htmlentities($_POST['currentFolderPath'],ENT_QUOTES);//Dokeos improve security
+	$_POST['new_folder']=htmlentities($_POST['new_folder'],ENT_QUOTES);//Chamilo improve security
+	$_POST['new_folder']=str_replace(' ','_',$_POST['new_folder']);//Interaction with Chamilo. Because fix long names. See: ajaxfilemanager/inc/class.manager.php
+	$_POST['currentFolderPath']=htmlentities($_POST['currentFolderPath'],ENT_QUOTES);//Chamilo improve security
 
 	if(CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_NEWFOLDER)
 	{
@@ -50,22 +50,22 @@
 					$manager = new manager(addTrailingSlash($_POST['currentFolderPath']) . $_POST['new_folder'], false);
 					$pathInfo = $manager->getFolderInfo(addTrailingSlash($_POST['currentFolderPath']) . $_POST['new_folder']);
 								
-					//bridge to Dokeos by Juan Carlos Ra�a Trabado
+					//bridge to Chamilo
 					if(!empty($_course['path']))
 					{
 					//only inside courses
-						$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Dokeos
+						$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Chamilo
 						$fullPath = $_POST['currentFolderPath'].$_POST['new_folder']; //get Ajaxfilemanager
-						$dokeosPath = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
-						$_POST['new_folder']=str_replace('_',' ',$_POST['new_folder']);//Restore for interaction with Dokeos. Because fix long names. See: ajaxfilemanager/inc/class.manager.php
-						$dokeosFile = $_POST['new_folder']; //get Ajaxfilemanager
+						$chamiloPath = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
+						$_POST['new_folder']=str_replace('_',' ',$_POST['new_folder']);//Restore for interaction with Chamilo. Because fix long names. See: ajaxfilemanager/inc/class.manager.php
+						$chamiloFile = $_POST['new_folder']; //get Ajaxfilemanager
 
-						$doc_id = add_document($_course, $dokeosPath,'folder', 0, $dokeosFile); //get Dokeos
-						$current_session_id = api_get_session_id();
-						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Dokeos
-						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Dokeos
+						$doc_id = add_document($_course, $chamiloPath,'folder', 0, $chamiloFile); //get Chamilo
+						$current_session_id = api_get_session_id();//get Chamilo
+						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Chamilo
+						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Chamilo
 					}
-					// end bridge to Dokeos
+					// end bridge to Chamilo
 
 					foreach($pathInfo as $k=>$v)
 					{				

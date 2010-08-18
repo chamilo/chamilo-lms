@@ -11,11 +11,11 @@
 
 			//hidden files and folders deleted by Chamilo. Hidde folders css, hotpotatoes, chat
 
-			$deleted_by_Chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
-			$deleted_by_Chamilo_folder='_DELETED_';
-			$css_folder_Chamilo='css';
-			$hotpotatoes_folder_Chamilo='HotPotatoes_files';
-			$chat_files_Chamilo='chat_files';
+			$deleted_by_chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
+			$deleted_by_chamilo_folder='_DELETED_';
+			$css_folder_chamilo='css';
+			$hotpotatoes_folder_chamilo='HotPotatoes_files';
+			$chat_files_chamilo='chat_files';
 
 			//hidden directory of the group if the user is not a member of the group
 			$group_folder='_groupdocs';
@@ -37,7 +37,7 @@
 			
 			///Second step: hiding as the case
 			//Juan Carlos Ra�a
-			if((!ereg($deleted_by_Chamilo_file, $file['name']) && !ereg($deleted_by_Chamilo_folder, $file['path'])) && !ereg($css_folder_Chamilo, $file['path']) && !ereg($hotpotatoes_folder_Chamilo, $file['path']) && !ereg($chat_files_Chamilo, $file['path']) && $show_doc_group && $file['name'][0]!='.')
+			if((!ereg($deleted_by_chamilo_file, $file['name']) && !ereg($deleted_by_chamilo_folder, $file['path'])) && !ereg($css_folder_chamilo, $file['path']) && !ereg($hotpotatoes_folder_chamilo, $file['path']) && !ereg($chat_files_chamilo, $file['path']) && $show_doc_group && $file['name'][0]!='.')
 			{			
 			
 			?>
@@ -80,11 +80,17 @@
 						default:
 							echo '&nbsp;';
 					}
+					if(Security::remove_XSS($_GET['editor'])!='stand_alone'){										
+						$path_chamilo_file='../'.$file['path'];// fix for makes a good show when pressed next on window preview, don't only one image
+					}
+					else{
+						$path_chamilo_file=$file['path'];
+					}
 				?>
 				
 				</dt>
 				<dd id="dd<?php echo $count; ?>" class="thumbnailListing_info"><span id="flag<?php echo $count; ?>" class="<?php echo $file['flag']; ?>">&nbsp;</span><input id="cb<?php echo $count; ?>" type="checkbox" name="check[]" <?php echo ($file['is_writable']?'':'disabled'); ?> class="radio" value="<?php echo $file['path']; ?>" />
-				<a <?php echo ($file['cssClass']== 'filePicture'?'rel="orgImg"':''); ?> href="<?php echo "../".$file['path']; ?>" title="<?php echo $file['name']; ?>" id="a<?php echo $count; ?>"><?php echo shortenFileName($file['name']); ?></a></dd><!-- Juan Carlos Ra�a Fix for Chamilo: On the path I put a directory up echo "../".$ file [ 'path'], what makes good show when pressed next on window preview, don't only one image -->			
+				<a <?php echo ($file['cssClass']== 'filePicture'?'rel="orgImg"':''); ?> href="<?php echo $path_chamilo_file;// fix for Chamilo ?>" title="<?php echo $file['name']; ?>" id="a<?php echo $count; ?>"><?php echo shortenFileName($file['name']); ?></a></dd>
                 </dl>
                 <?php
 			}//end if hidden files and folders deleted by Chamilo

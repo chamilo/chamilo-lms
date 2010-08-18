@@ -22,12 +22,12 @@
 		include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 		include_once(CLASS_PAGINATION);
 		$pagination = new pagination(false);
-		//$search_folder = str_replace("'","",$_GET['search_folder']); //TODO:check if this line is necessary Juan Carlos Raña
+		$search_folder = str_replace("'","",$_GET['search_folder']); //security fix for Chamilo by cfasanando
 		if(!empty($_GET['search']))
 		{
-			include_once(CLASS_SEARCH);
-			
-			$search  = new Search($_GET['search_folder']);
+			include_once(CLASS_SEARCH);			
+		
+			$search  = new Search($search_folder);//security fix for Chamilo by cfasanando
 			$search->addSearchKeyword('recursive', @$_GET['search_recursively']);
 			$search->addSearchKeyword('mtime_from', @$_GET['search_mtime_from']);
 			$search->addSearchKeyword('mtime_to', @$_GET['search_mtime_to']);

@@ -64,7 +64,7 @@
 								$tem['flag'] = 'noFlag';
 								
 								/**
-								* Bridge to Dokeos documents tool
+								* Bridge to Chamilo documents tool
 								* @author Juan Carlos Ra�a Trabado
 								*/
 
@@ -74,12 +74,12 @@
 									$folderInfo = $manager->getFolderInfo(); //get	ajaxmanager
 									$fullPath= $upload->getFilePath();		//get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/image.jpg
 									$mainPath= getParentFolderPath($folderInfo['path']);//get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/
-									$dokeosFolder = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
-									$dokeosFile = $tem['name'];	//get	ajaxmanager
-									$dokeosFileSize = $tem['size'];//get ajaxmanager
-									if(!empty($group_properties['directory'])) //get Dokeos
+									$chamiloFolder = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
+									$chamiloFile = $tem['name'];	//get	ajaxmanager
+									$chamiloFileSize = $tem['size'];//get ajaxmanager
+									if(!empty($group_properties['directory'])) //get Chamilo
 									{
-										$dokeosFolder=$group_properties['directory'].$dokeosFolder;//get Dokeos
+										$chamiloFolder=$group_properties['directory'].$chamiloFolder;//get Chamilo
 									}
 									else
 									{
@@ -88,18 +88,18 @@
 											$current_session_id = api_get_session_id();
 											if($current_session_id==0)
 											{											
-												$dokeosFolder='/shared_folder/sf_user_'.api_get_user_id().$dokeosFolder;
+												$chamiloFolder='/shared_folder/sf_user_'.api_get_user_id().$chamiloFolder;
 											}
 											else
 											{
-												$dokeosFolder='/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().$dokeosFolder;
+												$chamiloFolder='/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().$chamiloFolder;
 											}
 										}
 									}
 
-									$doc_id = add_document($_course, $dokeosFolder,'file', $dokeosFileSize , $dokeosFile); //get Dokeos
+									$doc_id = add_document($_course, $chamiloFolder,'file', $chamiloFileSize , $chamiloFile); //get Chamilo
 									$current_session_id = api_get_session_id();
-									api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Dokeos
+									api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Chamilo
 									
 								}
 								// end bridge								

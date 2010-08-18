@@ -5,7 +5,7 @@
 	 * @link www.phpletter.com
 	 * @since 22/April/2007
 	 *
-	 * Modify for Dokeos
+	 * Modify for Chamilo
 	 * @author Juan Carlos Ra�a
 	 * @since 19/March/2009
 
@@ -33,69 +33,69 @@
 					 &&  isValidPattern(CONFIG_SYS_INC_DIR_PATTERN, getBaseName($_GET['delete'])) 
 					 && !isInvalidPattern(CONFIG_SYS_EXC_DIR_PATTERN, getBaseName($_GET['delete'])))
 					{
-						/////////////bridge to Dokeos by Juan Carlos Ra�a Trabado
+						/////////////bridge to Chamilo by Juan Carlos Ra�a Trabado
 						if(!empty($_course['path']))
 						{
 							//find path
-							$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Dokeos
+							$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Chamilo
 							$fullPath = $_GET['delete']; //get Ajaxfilemanager
-							$dokeosPath = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1,-1);
+							$chamiloPath = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1,-1);
 							//find base_work_dir
-							$course_dir   = $_course['path']."/document";//get Dokeos
-							$sys_course_path = api_get_path(SYS_COURSE_PATH);//get Dokeos
-							$base_work_dir = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/dokeos2009beta/courses/JUAN2009/document
+							$course_dir   = $_course['path']."/document";//get Chamilo
+							$sys_course_path = api_get_path(SYS_COURSE_PATH);//get Chamilo
+							$base_work_dir = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/chamilo2009beta/courses/JUAN2009/document
 							//delete directory
 
 							   //check protect directories
-							   if ($dokeosPath!='/audio' && $dokeosPath!='/flash' && $dokeosPath!='/images' && $dokeosPath!='/shared_folder' && $dokeosPath!='/video')
+							   if ($chamiloPath!='/audio' && $chamiloPath!='/flash' && $chamiloPath!='/images' && $chamiloPath!='/shared_folder' && $chamiloPath!='/video')
 							   {
-								   if(! $is_allowed_to_edit && DocumentManager::check_readonly($_course,api_get_user_id(),$dokeosPath))
+								   if(! $is_allowed_to_edit && DocumentManager::check_readonly($_course,api_get_user_id(),$chamiloPath))
 								   {
-										$error=get_lang('CantDeleteReadonlyFiles'); //From Dokeos to Ajaxfilemanager
+										$error=get_lang('CantDeleteReadonlyFiles'); //From Chamilo to Ajaxfilemanager
 								   }
 								   else
 								   {
-										$deleted= DocumentManager::delete_document($_course,$dokeosPath,$base_work_dir); //deleted by Dokeos
+										$deleted= DocumentManager::delete_document($_course,$chamiloPath,$base_work_dir); //deleted by Chamilo
 										//$file->delete(addTrailingSlash(backslashToSlash($_GET['delete'])));//deleted by ajaxfilemanager
 								   }
 							   }
 							   else
 							   {
-									$error=get_lang('ProtectFolder'); //From Dokeos to Ajaxfilemanager
+									$error=get_lang('ProtectFolder'); //From Chamilo to Ajaxfilemanager
 							   }
 						}
 						else
 						{
 							$file->delete(addTrailingSlash(backslashToSlash($_GET['delete'])));//deleted by ajaxfilemanager
 						}
-							//////end bridge to Dokeos
+							//////end bridge to Chamilo
 						$file->delete(addTrailingSlash(backslashToSlash($_GET['delete'])));
 					}elseif(is_file($_GET['delete']) 
 					&& isValidPattern(CONFIG_SYS_INC_FILE_PATTERN, getBaseName($_GET['delete']))
 					&& !isInvalidPattern(CONFIG_SYS_EXC_FILE_PATTERN, getBaseName($_GET['delete']))
 					)
 					{
-						/////////////bridge to Dokeos by Juan Carlos Ra�a Trabado
+						/////////////bridge to Chamilo by Juan Carlos Ra�a Trabado
 						if(!empty($_course['path']))
 						{
 							//find path
-							$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Dokeos
+							$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Chamilo
 							$fullPath = $_GET['delete']; //get Ajaxfilemanager
-							$dokeosPath = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
+							$chamiloPath = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
 							//find base_work_dir
-							$course_dir   = $_course['path']."/document";//get Dokeos
-							$sys_course_path = api_get_path(SYS_COURSE_PATH);//get Dokeos
-							$base_work_dir = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/dokeos2009beta/courses/JUAN2009/document
+							$course_dir   = $_course['path']."/document";//get Chamilo
+							$sys_course_path = api_get_path(SYS_COURSE_PATH);//get Chamilo
+							$base_work_dir = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/chamilo2009beta/courses/JUAN2009/document
 							//delete file
 
-								   if(! $is_allowed_to_edit && DocumentManager::check_readonly($_course,api_get_user_id(),$dokeosPath))
+								   if(! $is_allowed_to_edit && DocumentManager::check_readonly($_course,api_get_user_id(),$chamiloPath))
 								   {
-										$error=get_lang('CantDeleteReadonlyFiles'); //From Dokeos to Ajaxfilemanager
+										$error=get_lang('CantDeleteReadonlyFiles'); //From Chamilo to Ajaxfilemanager
 								   }
 								   else
 								   {
 
-										$deleted= DocumentManager::delete_document($_course,$dokeosPath,$base_work_dir); //deleted by Dokeos
+										$deleted= DocumentManager::delete_document($_course,$chamiloPath,$base_work_dir); //deleted by Chamilo
 										//$file->delete(($_GET['delete'])); // disabled deleted by ajaxfilemanager
 
 								   }
@@ -104,7 +104,7 @@
 						{
 							$file->delete(($_GET['delete']));//deleted by ajaxfilemanager
 						}
-						//////end bridge to Dokeos
+						//////end bridge to Chamilo
 					}			
 		}
 	}else 
@@ -127,68 +127,68 @@
 					 &&  isValidPattern(CONFIG_SYS_INC_DIR_PATTERN, $doc) 
 					 && !isInvalidPattern(CONFIG_SYS_EXC_DIR_PATTERN, $doc))
 					{
-						/////////////bridge to Dokeos by Juan Carlos Ra�a Trabado
+						/////////////bridge to Chamilo by Juan Carlos Ra�a Trabado
 						if(!empty($_course['path']))
 						{
 							//find path
-							$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Dokeos
+							$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Chamilo
 							$fullPath = $doc; //get Ajaxfilemanager
-							$dokeosPath = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1,-1);
+							$chamiloPath = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1,-1);
 							//find base_work_dir
-							$course_dir   = $_course['path']."/document";//get Dokeos
-							$sys_course_path = api_get_path(SYS_COURSE_PATH);//get Dokeos
-							$base_work_dir = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/dokeos2009beta/courses/JUAN2009/document
+							$course_dir   = $_course['path']."/document";//get Chamilo
+							$sys_course_path = api_get_path(SYS_COURSE_PATH);//get Chamilo
+							$base_work_dir = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/chamilo2009beta/courses/JUAN2009/document
 							//delete directory
 
 							   //check protect directories
-							   if ($dokeosPath!='/audio' && $dokeosPath!='/flash' && $dokeosPath!='/images' && $dokeosPath!='/shared_folder' && $dokeosPath!='/video')
+							   if ($chamiloPath!='/audio' && $chamiloPath!='/flash' && $chamiloPath!='/images' && $chamiloPath!='/shared_folder' && $chamiloPath!='/video')
 							   {
-								   if(! $is_allowed_to_edit && DocumentManager::check_readonly($_course,api_get_user_id(),$dokeosPath))
+								   if(! $is_allowed_to_edit && DocumentManager::check_readonly($_course,api_get_user_id(),$chamiloPath))
 								   {
-										$error=get_lang('CantDeleteReadonlyFiles'); //From Dokeos to Ajaxfilemanager
+										$error=get_lang('CantDeleteReadonlyFiles'); //From Chamilo to Ajaxfilemanager
 								   }
 								   else
 								   {
-										$deleted= DocumentManager::delete_document($_course,$dokeosPath,$base_work_dir); //deleted by Dokeos
+										$deleted= DocumentManager::delete_document($_course,$chamiloPath,$base_work_dir); //deleted by Chamilo
 										//$file->delete(addTrailingSlash(backslashToSlash($doc))); // disabled deleted by ajaxfilemanager
 								   }
 							   }
 							   else
 							   {
-									$error=get_lang('ProtectFolder'); //From Dokeos to Ajaxfilemanager
+									$error=get_lang('ProtectFolder'); //From Chamilo to Ajaxfilemanager
 							   }
 						}
 						else
 						{
 							$file->delete(addTrailingSlash(backslashToSlash($doc)));//deleted by ajaxfilemanager
 						}
-						//////end bridge to Dokeos
+						//////end bridge to Chamilo
 					}elseif(is_file($doc) 
 					&& isValidPattern(CONFIG_SYS_INC_FILE_PATTERN, $doc)
 					&& !isInvalidPattern(CONFIG_SYS_EXC_FILE_PATTERN, $doc)
 					)
 					{		
-						/////////////bridge to Dokeos by Juan Carlos Ra�a Trabado
+						/////////////bridge to Chamilo by Juan Carlos Ra�a Trabado
 						if(!empty($_course['path']))
 						{
 						//find path
-						$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Dokeos
+						$mainPath='../../../../../../../courses/'.$_course['path'].'/document/';//get Chamilo
 						$fullPath = $doc; //get Ajaxfilemanager
-						$dokeosPath = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
+						$chamiloPath = substr($fullPath, strlen($mainPath)-strlen($fullPath)-1);
 						//find base_work_dir
-						$course_dir   = $_course['path']."/document";//get Dokeos
-						$sys_course_path = api_get_path(SYS_COURSE_PATH);//get Dokeos
-						$base_work_dir = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/dokeos2009beta/courses/JUAN2009/document
+						$course_dir   = $_course['path']."/document";//get Chamilo
+						$sys_course_path = api_get_path(SYS_COURSE_PATH);//get Chamilo
+						$base_work_dir = $sys_course_path.$course_dir; // sample c:/xampp/htdocs/chamilo2009beta/courses/JUAN2009/document
 						//delete file
 
-							   if(! $is_allowed_to_edit && DocumentManager::check_readonly($_course,api_get_user_id(),$dokeosPath))
+							   if(! $is_allowed_to_edit && DocumentManager::check_readonly($_course,api_get_user_id(),$chamiloPath))
 							   {
-									$error=get_lang('CantDeleteReadonlyFiles'); //From Dokeos to Ajaxfilemanager
+									$error=get_lang('CantDeleteReadonlyFiles'); //From Chamilo to Ajaxfilemanager
 							   }
 							   else
 							   {
 
-									$deleted= DocumentManager::delete_document($_course,$dokeosPath,$base_work_dir); //deleted by Dokeos
+									$deleted= DocumentManager::delete_document($_course,$chamiloPath,$base_work_dir); //deleted by Chamilo
 									//$file->delete($doc); // disabled deleted by ajaxfilemanager
 
 							   }
@@ -197,7 +197,7 @@
 						{
 							$file->delete($doc); //deleted by ajaxfilemanager
 						}
-						//////end bridge to Dokeos
+						//////end bridge to Chamilo
 					}					
 				}				
 			}

@@ -25,11 +25,11 @@
 								//Juan Carlos Raña
 
 									//hidden files and folders deleted by Chamilo. Hidde folders css, hotpotatoes, chat_files
-									$deleted_by_Chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
-									$deleted_by_Chamilo_folder='_DELETED_';
-									$css_folder_Chamilo='css';
-									$hotpotatoes_folder_Chamilo='HotPotatoes_files';
-									$chat_files_Chamilo='chat_files';
+									$deleted_by_chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
+									$deleted_by_chamilo_folder='_DELETED_';
+									$css_folder_chamilo='css';
+									$hotpotatoes_folder_chamilo='HotPotatoes_files';
+									$chat_files_chamilo='chat_files';
 
 									//show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?
 									$group_folder='_groupdocs';
@@ -48,17 +48,25 @@
 								///Second step: hiding as the case
 								//Juan Carlos Raña
 
-								if((!ereg($deleted_by_Chamilo_file, $file['name']) && !ereg($deleted_by_Chamilo_folder, $file['path'])) && !ereg($css_folder_Chamilo, $file['path']) && !ereg($hotpotatoes_folder_Chamilo, $file['path']) && !ereg($chat_files_Chamilo, $file['path']) && $show_doc_group && $file['name'][0]!='.')
+								if((!ereg($deleted_by_chamilo_file, $file['name']) && !ereg($deleted_by_chamilo_folder, $file['path'])) && !ereg($css_folder_chamilo, $file['path']) && !ereg($hotpotatoes_folder_chamilo, $file['path']) && !ereg($chat_files_chamilo, $file['path']) && $show_doc_group && $file['name'][0]!='.')
 								{							
 								
 									if($file['type'] == 'file')
 									{
 	
+										if(Security::remove_XSS($_GET['editor'])!='stand_alone'){
+										
+											$path_chamilo_file='../'.$file['path'];// fix for makes a good show when pressed next on window preview, don't only one image
+										}
+										else{
+											$path_chamilo_file=$file['path'];
+										}
+	
 									?>
 									<tr class="<?php echo $css; ?>" id="row<?php echo $count; ?>"  >
 										<td align="center" id="tdz<?php echo $count; ?>"><span id="flag<?php echo $count; ?>" class="<?php echo $file['flag']; ?>">&nbsp;</span><input type="checkbox"  name="check[]" id="cb<?php echo $count; ?>" value="<?php echo $file['path']; ?>" <?php echo $strDisabled; ?> /></td>
-                                        <td align="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;<a id="a<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><span class="<?php echo $file['cssClass']; ?>">&nbsp;</span></a></td><!-- Juan Carlos Raña Fix for Chamilo: On the path I put a directory up echo "../".$ file [ 'path'], what makes good show when pressed next on window preview, don't only one image -->
-										<td class="<?php echo $strClass; ?> docName"  id="tdnd<?php echo $count; ?>"><a id="aa<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo $file['name']; ?></a></td>
+                                        <td align="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;<a id="a<?php echo $count; ?>" href="<?php echo $path_chamilo_file; // fix for Chamilo ?>" target="_blank"><span class="<?php echo $file['cssClass']; ?>">&nbsp;</span></a></td>
+                                     <td class="<?php echo $strClass; ?> docName"  id="tdnd<?php echo $count; ?>"><a id="aa<?php echo $count; ?>" href="<?php echo $path_chamilo_file; //fix for Chamilo ?>" target="_blank"><?php echo $file['name']; ?></a></td>
                                         
 										<td class="docInfo" id="tdrd<?php echo $count; ?>"><?php echo transformFileSize($file['size']); ?></td>
 										<!-- hide while implementing this Chamilo -->

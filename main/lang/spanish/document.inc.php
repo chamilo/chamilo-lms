@@ -216,4 +216,7 @@ $HelpSharedFolder = "Este directorio contiene los archivos que los estudiantes (
 $TemplateImage = "Imagen de la plantilla";
 $MoveElement = "Mover elemento";
 $CertificateName = "Nombre del certificado";
+$CopyToMyFiles = "Copiar en mi área personal de archivos de la plataforma";
+$Export2PDF = "Exportar a formato PDF";
+$ResourceShared ="Recurso compartido";
 ?>

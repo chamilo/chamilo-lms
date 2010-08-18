@@ -216,4 +216,7 @@ $HelpSharedFolder = "This directory contains the files that other learners (or y
 $TemplateImage = "Template's icon";
 $MoveElement = "Move element";
 $CertificateName = "Name";
+$CopyToMyFiles = "Copy to personal platform area my files";
+$Export2PDF = "Export to PDF format";
+$ResourceShared ="Resource shared";
 ?>

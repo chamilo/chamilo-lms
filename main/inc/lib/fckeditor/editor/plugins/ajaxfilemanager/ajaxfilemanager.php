@@ -135,9 +135,9 @@
 	var counts = {'new_file':1};
 	var thickbox = {'width':'<?php echo CONFIG_THICKBOX_MAX_WIDTH; ?>', 
 									'height':'<?php echo CONFIG_THICKBOX_MAX_HEIGHT; ?>',
-									'next':'<?php echo THICKBOX_NEXT; ?>',
-									'previous':'<?php echo THICKBOX_PREVIOUS; ?>',
-									'close':'<?php echo THICKBOX_CLOSE; ?>' 
+									'next':'<img src="theme/default/images/next.gif" title="<?php echo THICKBOX_NEXT; ?>" style="float:right;">',
+									'previous':'<img src="theme/default/images/prev.gif" title="<?php echo THICKBOX_PREVIOUS; ?>" style="float:left">',
+									'close':'<img src="theme/default/images/flagno.png"title="<?php echo THICKBOX_CLOSE; ?>"><?php echo THICKBOX_CLOSE; ?>' 
 		
 	};
 	
@@ -559,7 +559,12 @@ $(document).ready(
   <div id="winUpload" style="display:none">
   	<div class="jqmContainer">
   		<div class="jqmHeader">
-  			<a href="#" onclick="tb_remove();"><?php echo LBL_ACTION_CLOSE; ?></a>
+  			<a href="#" onclick="tb_remove();"><img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?></a><!-- Add close image for Chamilo -->
+            
+           
+            
+            
+            
   		</div>
   		<div class="jqmBody">
 		  	<form id="formUpload" name="formUpload" method="POST" enctype="multipart/form-data" action="">
@@ -586,8 +591,8 @@ $(document).ready(
 		  				<th><label><?php echo FILE_LABEL_SELECT; ?></label></th>
 		  				<td>
 		  					<input type="file" class="input" name="file"  />
-		  					<input type="button" class="button" value="<?php echo FILE_LBL_UPLOAD; ?>" />
-		  					<a href="#" class="action" title="Cancel" style="display:none" >
+		  					<input type="button" class="upload_button" value="<?php echo FILE_LBL_UPLOAD; ?>" /><!-- change style of upload button by Chamilo -->
+		  					<a href="#" class="action" title="<?php echo get_lang('Cancel')?>" style="display:none" ><!-- Chamilo lang var added -->
 		  						<span class="cancel">&nbsp;</span>
 		  					</a>
 		  					<span class="uploadProcessing" style="display:none">&nbsp;</span>
@@ -610,7 +615,7 @@ $(document).ready(
   <div id="winNewFolder" style="display:none">
   	<div class="jqmContainer">
   		<div class="jqmHeader">
-  			<a href="#" onclick="return tb_remove();"><?php echo LBL_ACTION_CLOSE; ?></a>
+  			<a href="#" onclick="return tb_remove();"><img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?></a><!-- Add close image for Chamilo -->  
   		</div>
   		<div class="jqmBody">
 	    	<form id="formNewFolder" name="formNewFolder" method="POST" action="">
@@ -632,7 +637,7 @@ $(document).ready(
 	  		<tfoot>
 	  			<tr>
 	  				<th>&nbsp;</th>
-	  				<td><input type="button" value="<?php echo FOLDER_LBL_CREATE; ?>" class="button" onclick="return doCreateFolder();"  /></td>
+	  				<td><input type="button" value="<?php echo FOLDER_LBL_CREATE; ?>" class="create_button" onclick="return doCreateFolder();"  /></td>
 	  			</tr>
 	  		</tfoot>
 	  	</table>	
@@ -671,14 +676,14 @@ $(document).ready(
 		  		<tbody>
 		  			<tr>
 		  				<th><label><?php echo RENAME_NEW_NAME; ?></label></th>
-		  				<td><input type="name" id="renameName" class="input" name="name" style="width:250px" /> 
+		  				<td><input type="name" id="renameName" class="input" name="name" /> <!--  Chamilo delete style="width:250px"-->
 		          </td>
 		  			</tr>
 		  		</tbody>
 		  		<tfoot>
 		  			<tr>
 		  				<th>&nbsp;</th>
-		  				<td><input type="button" value="<?php echo RENAME_LBL_RENAME; ?>" class="button" onclick="return doRename();"  /></td>
+		  				<td><input type="button" value="<?php echo RENAME_LBL_RENAME; ?>" class="create_button" onclick="return doRename();"  /></td>
 		  			</tr>
 		  		</tfoot>
 		  	</table>

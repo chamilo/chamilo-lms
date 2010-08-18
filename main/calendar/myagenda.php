@@ -8,6 +8,8 @@ $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
 $this_section = SECTION_MYAGENDA;
+unset($_SESSION['this_section']);//for hmtl editor repository
+
 api_block_anonymous_users();
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once 'agenda.inc.php';

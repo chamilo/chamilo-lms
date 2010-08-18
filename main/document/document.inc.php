@@ -178,7 +178,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		
 		if($filetype == 'file')
 		{		
-		$copy_to_myfiles='<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array('height'=>'16', 'width' => '16')).'&nbsp;&nbsp;</a>';		
+		$copy_to_myfiles='<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase_small.png', get_lang('CopyToMyFiles'), array('height'=>'16', 'width' => '16')).'&nbsp;&nbsp;</a>';		
 		}
 		
 		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles;

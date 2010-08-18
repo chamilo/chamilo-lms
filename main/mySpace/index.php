@@ -22,6 +22,8 @@ require_once 'myspace.lib.php';
 
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
+unset($_SESSION['this_section']);//for hmtl editor repository
+
 ob_start();
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;

@@ -18,7 +18,7 @@ $user_id = api_get_user_id();
 $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
-
+unset($_SESSION['this_section']);//for hmtl editor repository
 $interbreadcrumb[]= array ('url' => 'home.php','name' => get_lang('Social'));
 
 api_block_anonymous_users();

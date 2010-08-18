@@ -37,6 +37,7 @@ $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 't
 
 // the section (for the tabs)
 $this_section = SECTION_CAMPUS;
+unset($_SESSION['this_section']);//for hmtl editor repository
 
 /*	Action Handling */
 

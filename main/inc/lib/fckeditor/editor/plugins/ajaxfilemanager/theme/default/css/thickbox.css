@@ -1,3 +1,5 @@
+/*hack for Chamilo */
+
 /* ----------------------------------------------------------------------------------------------------------------*/
 /* ---------->>> global settings needed for thickbox <<<-----------------------------------------------------------*/
 /* ----------------------------------------------------------------------------------------------------------------*/
@@ -31,9 +33,9 @@
 	top: 0px;
 	left: 0px;
 	background-color:#000;
-	filter:alpha(opacity=75);
-	-moz-opacity: 0.75;
-	opacity: 0.75;
+	filter:alpha(opacity=55); /* Chamilo change 75 by 50 */
+	-moz-opacity: 0.55; /* Chamilo change 0.75 by .50 */
+	opacity: 0.55; /* Chamilo change 0.75 by .50 */
 	height:100%;
 	width:100%;
 }
@@ -53,6 +55,7 @@
 	text-align:left;
 	top:50%;
 	left:50%;
+	padding:20px; /* Chamilo */
 }
 
 * html #TB_window { /* ie6 hack */

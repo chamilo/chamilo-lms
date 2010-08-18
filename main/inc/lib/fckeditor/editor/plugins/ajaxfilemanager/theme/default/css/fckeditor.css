@@ -474,6 +474,27 @@ a.pagination_active{font-weight: bold; color: #CC0000;}
 	margin: 5px;
 }
 
+.create_button{
+	font-family: bold arial, verdana, helvetica, sans-serif;
+	font-size: 100%;
+	line-height :130%;
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+	padding:5px 15px 5px 15px;
+	vertical-align:middle;
+	border:1px solid #4171b5;
+	background:#F0F0F0;
+	padding-left:30px;
+	padding-right:10px;
+	font-weight:bold;
+	color:#4171b5;
+	background: url(../images/button_accept.gif);
+	background-position:10px;
+	background-repeat:no-repeat;
+	margin:10px;
+}
+
 .select_button{
 	font-family: bold arial, verdana, helvetica, sans-serif;
 	font-size: 100%;
@@ -510,6 +531,27 @@ a.pagination_active{font-weight: bold; color: #CC0000;}
 	font-weight:bold;
 	color:#4171b5;
 	background: url(../images/button_search.gif);
+	background-position:10px;
+	background-repeat:no-repeat;
+
+}
+
+.upload_button{
+	font-family: bold arial, verdana, helvetica, sans-serif;
+	font-size: 100%;
+	line-height :130%;
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+	padding:5px 15px 5px 15px;
+	vertical-align:middle;
+	border:1px solid #4171b5;
+	background:#F0F0F0;
+	padding-left:30px;
+	padding-right:10px;
+	font-weight:bold;
+	color:#4171b5;
+	background: url(../images/button_upload.gif);
 	background-position:10px;
 	background-repeat:no-repeat;
 

@@ -25,6 +25,7 @@ api_block_anonymous_users();
 
 // current section
 $this_section = SECTION_DASHBOARD;
+unset($_SESSION['this_section']);//for hmtl editor repository
 
 // get actions
 $actions = array('listing', 'store_user_block', 'disable_block');

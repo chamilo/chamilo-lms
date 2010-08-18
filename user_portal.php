@@ -34,6 +34,9 @@ $language_file = array ('courses', 'index');
 
 $cidReset = true; /* Flag forcing the 'current course' reset,
 					as we're not inside a course anymore  */
+					
+unset($_SESSION['this_section']);//for hmtl editor repository
+
 /*
 	Included libraries
 */

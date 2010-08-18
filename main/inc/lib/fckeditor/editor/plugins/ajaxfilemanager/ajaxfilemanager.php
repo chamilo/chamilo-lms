@@ -560,11 +560,6 @@ $(document).ready(
   	<div class="jqmContainer">
   		<div class="jqmHeader">
   			<a href="#" onclick="tb_remove();"><img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?></a><!-- Add close image for Chamilo -->
-            
-           
-            
-            
-            
   		</div>
   		<div class="jqmBody">
 		  	<form id="formUpload" name="formUpload" method="POST" enctype="multipart/form-data" action="">
@@ -651,7 +646,7 @@ $(document).ready(
   <div id="winPlay" style="display:none">
   	<div class="jqmContainer">
   		<div class="jqmHeader">
-  			<a href="#" onclick="return closeWinPlay();"><?php echo LBL_ACTION_CLOSE; ?></a>
+  			<a href="#" onclick="return closeWinPlay();"><img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?></a><!-- Add close image for Chamilo -->
   		</div>
   		<div class="jqmBody">
   			<div id="playGround"></div>
@@ -661,7 +656,7 @@ $(document).ready(
   <div id="winRename" style="display:none">
   	<div class="jqmContainer">
   		<div class="jqmHeader">
-  			<a href="#" onclick="return tb_remove();"><?php echo LBL_ACTION_CLOSE; ?></a>
+            <a href="#" onclick="return tb_remove();"><img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?></a><!-- Add close image for Chamilo -->
   		</div>
   		<div class="jqmBody">
 		  	<form id="formRename" name="formRename" method="POST" action="">

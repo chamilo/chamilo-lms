@@ -318,14 +318,10 @@ function editlinkcategory($type) {
 		// This is used to put the modified info of the link-form into the database
 		if ($_POST['submitLink']) {
 
-			if ($_POST['onhomepage'] == '') {
-				$onhomepage = 0;
-				$mytarget = '';
-			} else {
-				$onhomepage = Security::remove_XSS($_POST['onhomepage']);
-				$target = Security::remove_XSS($_POST['target_link']);
-				$mytarget = ",target='".$target."'";
-			}
+			$onhomepage = Security::remove_XSS($_POST['onhomepage']);
+			$target = Security::remove_XSS($_POST['target_link']);
+			if (empty($mytarget)) { $mytarget = '_self'; }
+			$mytarget = ",target='".$target."'";
 
 			// Finding the old category_id
 			$sql = "SELECT * FROM ".$tbl_link." WHERE id='".intval($_POST['id'])."'";

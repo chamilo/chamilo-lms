@@ -39,26 +39,6 @@ $(document).ready( function() {
 			$(".actions:eq("+i+")").hide();
 		}
 	}
-
-	$("#div_target").attr("style","display:none;")//hide
-
-	$("#id_check_target").click(function () {
-      if($(this).attr("checked")==true) {
-      	$("#div_target").attr("style","display:block;")//show
-      } else {
-     	 $("#div_target").attr("style","display:none;")//hide
-      }
-    });
-
-    $(window).load(function () {
-      if($("#id_check_target").attr("checked")==true) {
-      	$("#div_target").attr("style","display:block;")//show
-      } else {
-     	 $("#div_target").attr("style","display:none;")//hide
-      }
-    });
-
-
  } );
 
  </script>';

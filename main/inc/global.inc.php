@@ -177,6 +177,7 @@ api_set_internationalization_default_encoding($charset);
 Database::query("SET SESSION character_set_server='utf8';");
 Database::query("SET SESSION collation_server='utf8_general_ci';");
 if (api_is_utf8($charset)) {
+	// See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
 	Database::query("SET NAMES 'utf8';");
 } else {
 	Database::query("SET CHARACTER SET '" . Database::to_db_encoding($charset) . "';");

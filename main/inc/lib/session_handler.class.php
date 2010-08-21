@@ -44,7 +44,13 @@ class session_handler {
 			// The internationalization library should be already initialized.
 			@mysql_query("SET SESSION character_set_server='utf8';", $this->connection_handler);
 			@mysql_query("SET SESSION collation_server='utf8_general_ci';", $this->connection_handler);
-			@mysql_query("SET CHARACTER SET '" . Database::to_db_encoding(api_get_system_encoding()) . "';", $this->connection_handler);
+			$system_encoding = api_get_system_encoding();
+			if (api_is_utf8($system_encoding)) {
+				// See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
+				@mysql_query("SET NAMES 'utf8';", $this->connection_handler);
+			} else {
+				@mysql_query("SET CHARACTER SET '" . Database::to_db_encoding($system_encoding) . "';", $this->connection_handler);
+			}
 		}
 
 		return $this->connection_handler ? true : false;

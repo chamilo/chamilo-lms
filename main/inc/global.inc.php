@@ -176,7 +176,11 @@ api_set_internationalization_default_encoding($charset);
 // Initialization of the database encoding to be used.
 Database::query("SET SESSION character_set_server='utf8';");
 Database::query("SET SESSION collation_server='utf8_general_ci';");
-Database::query("SET CHARACTER SET '" . Database::to_db_encoding($charset) . "';");
+if (api_is_utf8($charset)) {
+	Database::query("SET NAMES 'utf8';");
+} else {
+	Database::query("SET CHARACTER SET '" . Database::to_db_encoding($charset) . "';");
+}
 
 // Start session after the internationalization library has been initialized.
 api_session_start($already_installed);

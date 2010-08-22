@@ -48,7 +48,7 @@ class UniqueAnswer extends Question {
 		$editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
 
 		//this line define how many question by default appear when creating a choice question
-		$nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 2;
+		$nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 4;  // The previous default value was 2. See task #1759.
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
 		/*

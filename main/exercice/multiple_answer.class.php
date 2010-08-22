@@ -1,12 +1,11 @@
-<?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
-/* For licensing terms, see /chamilo_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 
 /**
-*	File containing the MultipleAnswer class.
-*	@package dokeos.exercise
-* 	@author Eric Marguin
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
-*/
+ *	File containing the MultipleAnswer class.
+ *	@package dokeos.exercise
+ * 	@author Eric Marguin
+ */
 
 if(!class_exists('MultipleAnswer')):
 
@@ -63,13 +62,13 @@ class MultipleAnswer extends Question {
 						<th>
 							'.get_lang('Answer').'
 						</th>';
-				// show column comment when feedback is enable				
-				if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {	
+				// show column comment when feedback is enable
+				if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {
 				$html .='<th>
 							'.get_lang('Comment').'
 						</th>';
 				}
-						
+
 				$html .= '<th>
 							'.get_lang('Weighting').'
 						</th>
@@ -119,15 +118,15 @@ class MultipleAnswer extends Question {
 
 			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
 			$boxes_names[] = 'correct['.$i.']';
-							
-			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));		
+
+			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-			
-			// show comment when feedback is enable				
+
+			// show comment when feedback is enable
 			if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));	
+				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			}
-			
+
 			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0"');
 			$form -> addElement ('html', '</tr>');
 		}
@@ -138,7 +137,7 @@ class MultipleAnswer extends Question {
 
 
 		$navigator_info = api_get_navigator();
-		
+
 		global $text, $class, $show_quiz_edition;
 		if ($show_quiz_edition) {
 			//ie6 fix
@@ -157,9 +156,9 @@ class MultipleAnswer extends Question {
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}','moreAnswers');
 		$form -> addElement ('html', '</div></div>');
-		
+
 		$defaults['correct'] = $correct;
-		
+
 		if (!empty($this -> id)) {
 			$form -> setDefaults($defaults);
 		} else {
@@ -167,7 +166,7 @@ class MultipleAnswer extends Question {
 				$form -> setDefaults($defaults);
 			}
 		}
-		
+
 		$form->setConstants(array('nb_answers' => $nb_answers));
 	}
 

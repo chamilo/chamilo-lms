@@ -705,6 +705,13 @@ if ($_POST['step2']) {
 			$userPasswordCrypted = 'none';
 		}
 
+		if (version_compare($my_old_version, '1.8.7', '>=')) {
+			Database::query("SET SESSION character_set_server='utf8';");
+			Database::query("SET SESSION collation_server='utf8_general_ci';");
+			//Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.
+			Database::query("SET NAMES 'utf8';");
+		}
+
 		switch ($my_old_version) {
 			case '1.6':
 			case '1.6.0':
@@ -742,10 +749,11 @@ if ($_POST['step2']) {
                 include 'update-db-1.8.6.2-1.8.7.inc.php';
                 include 'update-files-1.8.6.2-1.8.7.inc.php';
                 // After database conversion to UTF-8, new encoding initialization is necessary
-                // to be used for the next (hypothetical) upgrade 1.8.7 -> 1.8.7.1.
+                // to be used for the next upgrade 1.8.7[.1] -> 1.8.8.
                 Database::query("SET SESSION character_set_server='utf8';");
                 Database::query("SET SESSION collation_server='utf8_general_ci';");
-                Database::query("SET CHARACTER SET 'utf8';");
+                //Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.
+                Database::query("SET NAMES 'utf8';");
 
             case '1.8.7':
             case '1.8.7.1':
@@ -764,7 +772,8 @@ if ($_POST['step2']) {
 		// Initialization of the database encoding to be used.
 		Database::query("SET SESSION character_set_server='utf8';");
 		Database::query("SET SESSION collation_server='utf8_general_ci';");
-		Database::query("SET CHARACTER SET 'utf8';");
+		//Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.
+		Database::query("SET NAMES 'utf8';");
 
 		include 'install_db.inc.php';
 		include 'install_files.inc.php';

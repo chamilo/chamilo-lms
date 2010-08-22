@@ -2,11 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	File containing the UNIQUE_ANSWER class.
-*	@package dokeos.exercise
-* 	@author Eric Marguin
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
-*/
+ *	File containing the UNIQUE_ANSWER class.
+ *	@package dokeos.exercise
+ * 	@author Eric Marguin
+ */
 
 
 if(!class_exists('UniqueAnswer')):

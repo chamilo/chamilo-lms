@@ -3985,7 +3985,7 @@ function replace_dangerous_char($filename, $strict = 'loose') {
 	// Replacing remaining dangerous non-letter characters.
 	$filename = str_replace($search, $replace, $filename);
 	if ($strict == 'strict') {
-		$filename = str_replace('-', '_', $filename);
+		//$filename = str_replace('-', '_', $filename); // See task #1848.
 		$filename = preg_replace('/[^0-9A-Za-z_.\-]/', '', $filename);
 	}
 

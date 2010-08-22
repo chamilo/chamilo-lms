@@ -40,7 +40,7 @@ class MultipleAnswer extends Question {
 	 */
 	function createAnswersForm ($form) {
 
-		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
+		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;  // The previous default value was 2. See task #1759.
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
 		$obj_ex = $_SESSION['objExercise'];

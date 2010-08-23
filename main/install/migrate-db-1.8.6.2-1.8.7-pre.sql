@@ -145,6 +145,4 @@ ALTER TABLE lp ADD prerequisite int unsigned NOT NULL DEFAULT 0;
 ALTER TABLE student_publication MODIFY COLUMN description TEXT DEFAULT NULL;
 ALTER TABLE student_publication ADD COLUMN user_id INTEGER  NOT NULL AFTER session_id;
 INSERT INTO course_setting(variable,value,category) VALUES ('email_alert_students_on_new_homework',0,'work');
--- See task #1805. The index unique_setting might not exist, in this case a harmless error message would appear in the log.
 ALTER TABLE course_setting DROP INDEX unique_setting;
---

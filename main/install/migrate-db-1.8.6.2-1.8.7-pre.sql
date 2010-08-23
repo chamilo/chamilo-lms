@@ -14,6 +14,9 @@
 
 -- xxMAINxx
 
+ALTER TABLE settings_current DROP INDEX unique_setting;
+ALTER TABLE settings_options DROP INDEX unique_setting_option;
+
 ALTER TABLE user_friend RENAME TO user_rel_user;
 ALTER TABLE session_rel_user ADD COLUMN relation_type int NOT NULL default 0;
 ALTER TABLE course_rel_user  ADD COLUMN relation_type int NOT NULL default 0;

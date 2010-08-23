@@ -557,7 +557,7 @@ CREATE TABLE settings_current (
   INDEX (access_url)
 );
 
-ALTER TABLE settings_current ADD UNIQUE unique_setting ( variable , subkey , category, access_url) ;
+ALTER TABLE settings_current ADD UNIQUE unique_setting (variable(110), subkey(110), category(110), access_url);
 
 --
 -- Dumping data for table settings_current
@@ -783,7 +783,7 @@ CREATE TABLE settings_options (
   UNIQUE KEY id (id)
 );
 
-ALTER TABLE settings_options ADD UNIQUE unique_setting_option (variable , value) ;
+ALTER TABLE settings_options ADD UNIQUE unique_setting_option (variable(165), value(165));
 
 --
 -- Dumping data for table settings_options
@@ -1205,7 +1205,7 @@ CREATE TABLE user_field_options (
 );
 DROP TABLE IF EXISTS user_field_values;
 CREATE TABLE user_field_values(
-	id	bigint	NOT NULL auto_increment, 	
+	id	bigint	NOT NULL auto_increment,
 	user_id	int	unsigned NOT NULL,
 	field_id int NOT NULL,
 	field_value	text,
@@ -2273,7 +2273,7 @@ CREATE TABLE gradebook_certificate (
 	id bigint unsigned not null auto_increment,
 	cat_id int unsigned not null,
 	user_id int unsigned not null,
-	score_certificate float unsigned not null default 0,	
+	score_certificate float unsigned not null default 0,
 	created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
 	path_certificate text null,
 	PRIMARY KEY(id)

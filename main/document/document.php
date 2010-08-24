@@ -317,27 +317,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_se
 	
 }
 
-// Copy a file to general my files user's
-if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_setting('users_copy_files') == 'true') {	
-	
-	$clean_get_id = Security::remove_XSS($_GET['id']);
-	$user_folder  = api_get_path(SYS_CODE_PATH).'upload/users/'.api_get_user_id().'/my_files/';
-		if (!file_exists($user_folder)) {	
-			@mkdir($user_folder, $permissions_for_new_directories, true);
-		}
-
-		$file = $sys_course_path.$_course['path'].'/document'.$clean_get_id;
-		$copyfile = $user_folder.basename($clean_get_id);		
-		if (file_exists($copyfile)) {
-			$copy_to_myfiles_message_overwrite  = 	get_lang('AlreadyCopy');			
-		}elseif (!copy($file, $copyfile)) {
-			$copy_to_myfiles_message_failled	=	get_lang('CopyFailled');			
-		}else{	
-			$copy_to_myfiles_message_relased	=	get_lang('CopyReleased');
-		}
-
-}
-
 
 // Slideshow inititalisation
 $_SESSION['image_files_only'] = '';
@@ -403,17 +382,40 @@ if (!empty($_SESSION['_gid'])) {
 	Display::display_introduction_section(TOOL_DOCUMENT);
 }
 
-/*	COPY TO MY FILES MESSAGES */
-if(!empty($copy_to_myfiles_message_failled)){
-	Display::display_error_message($copy_to_myfiles_message_failled);
-}
-else{
-	if(!empty($copy_to_myfiles_message_overwrite)){
-		Display::display_warning_message($copy_to_myfiles_message_overwrite);
-	}
-	if (!empty($copy_to_myfiles_message_relased)){
-		Display::display_confirmation_message($copy_to_myfiles_message_relased);
-	}
+
+// Copy a file to general my files user's
+if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_setting('users_copy_files') == 'true') {	
+	
+	$clean_get_id = Security::remove_XSS($_GET['id']);
+	$user_folder  = api_get_path(SYS_CODE_PATH).'upload/users/'.api_get_user_id().'/my_files/';
+		if (!file_exists($user_folder)) {	
+			@mkdir($user_folder, $permissions_for_new_directories, true);
+		}
+
+		$file = $sys_course_path.$_course['path'].'/document'.$clean_get_id;
+		$copyfile = $user_folder.basename($clean_get_id);
+				
+		if (file_exists($copyfile) && !isset ($_GET['copy'])) {			
+			$message = get_lang('AlreadyCopy').' '.get_lang('ConfirmCopyDoc').'</p>'.'<p>'.'<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$_GET['curdirpath'].'">'.get_lang("No").'</a>'.'&nbsp;&nbsp;|&nbsp;&nbsp;'.'<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$_GET['curdirpath'].'&amp;action=copytomyfiles&amp;id='.$clean_get_id.'&amp;copy=yes\">'.get_lang("Yes").'</a>'.'</p>';
+			
+			Display::display_warning_message($message,false);
+						
+			if (Security::remove_XSS($_GET['copy']) == 'yes')
+			{		
+				if (!copy($file, $copyfile)) {
+					Display::display_error_message(get_lang('CopyFailled'));			
+				}else{	
+					Display::display_confirmation_message(get_lang('CopyReleased'));
+				}			
+			}
+		}else{
+			
+			if (!copy($file, $copyfile)) {
+					Display::display_error_message(get_lang('CopyFailled'));			
+			}else{	
+					Display::display_confirmation_message(get_lang('CopyReleased'));
+			}			
+		}		
 }
 
 if ($is_allowed_to_edit || $group_member_with_upload_rights) { // TEACHER ONLY

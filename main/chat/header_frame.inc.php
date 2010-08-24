@@ -22,17 +22,20 @@ if (FRAME == 'hidden') {
 	$bodyXtra .= 'onload="javascript: eventMessage();"';
 }
 
-/*
- * Choose CSS style (platform's, user's, or course's)
- */
-$my_style = api_get_visual_theme();
-
+$mycourseid=api_get_cidreq();
 if (empty($mycourseid)) {
 	// If it is not set $mycourse id we reload the chat_message window in order to hide the textarea to submit a message.
 	echo '<script type="text/javascript" language="javascript">';
 	echo "parent.chat_message.location.href='chat_whoisonline.php?".api_get_cidreq()."';";
 	echo '</script>';
 }
+
+/*
+ * Choose CSS style (platform's, user's, or course's)
+ */
+$my_style = api_get_visual_theme();
+
+
 
 ?><!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"

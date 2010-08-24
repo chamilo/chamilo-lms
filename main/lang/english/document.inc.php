@@ -216,7 +216,12 @@ $HelpSharedFolder = "This directory contains the files that other learners (or y
 $TemplateImage = "Template's icon";
 $MoveElement = "Move element";
 $CertificateName = "Name";
-$CopyToMyFiles = "Copy to personal platform area my files";
+$CopyToMyFiles = "Copy to my personal area files";
 $Export2PDF = "Export to PDF format";
 $ResourceShared ="Resource shared";
+$AlreadyCopy="There is a file with the same name in your user area. Do you want replace it?";
+$CopyFailled="Copy failled";
+$CopyReleased="Copy released";
+$FileOverwrited="File replaced";
+
 ?>

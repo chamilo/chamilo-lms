@@ -1269,6 +1269,6 @@ $ErrorReadingZip = "Error reading ZIP file";
 $ErrorStylesheetFilesExtensionsInsideZip = "The only accepted extensions in the ZIP file are jpg, jpeg, png, gif and css.";
 $MyTextHere = "Enter your text here...";
 $FieldTypeSocialProfile = "Social network link";
-$AllowUsersCopyFilesTitle = "Allow users to copy files from a course in your area personal file";
-$AllowUsersCopyFilesComment = "Allows users to copy files from a course in your personal area, visible through the Social Network or through the html editor when they are out of a course";
+$AllowUsersCopyFilesTitle = "Allow users to copy files from a course in your personal file area";
+$AllowUsersCopyFilesComment = "Allows users to copy files from a course in your personal file area, visible through the Social Network or through the HTML editor when they are out of a course";
 ?>

@@ -181,4 +181,6 @@ $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "A súa conta en %s
 $HaveFun = "Disfrute,";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Non pode loguearse en %s usando o nome de usuario e contrasinal que introduceu.";
 $AreYouSureToEditTheUserStatus = "Está seguro/a de editar o status do usuario?";
+$TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "O tutor só pode manter o seguimento dos progresos de usuarios rexistrados no curso.";
+$TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "O profesor pode cualificar, evaluar e manter un seguimento de tódolos usuarios inscritos no curso.";
 ?>

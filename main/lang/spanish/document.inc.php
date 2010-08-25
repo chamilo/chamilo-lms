@@ -216,11 +216,11 @@ $HelpSharedFolder = "Este directorio contiene los archivos que los estudiantes (
 $TemplateImage = "Imagen de la plantilla";
 $MoveElement = "Mover elemento";
 $CertificateName = "Nombre del certificado";
-$CopyToMyFiles = "Copiar en mi área personal de archivos";
+$CopyToMyFiles = "Copiar a mi área personal de archivos";
 $Export2PDF = "Exportar a formato PDF";
-$ResourceShared ="Recurso compartido";
-$AlreadyCopy="Hay un archivo con el mismo nombre en su area de usuario. ¿Desea reemplazarlo?";
-$CopyFailled="Copia fallida";
-$CopyReleased="Copia realizada";
-$FileOverwrited="Archivo reemplazado";
+$ResourceShared = "Recurso compartido";
+$CopyAlreadyDone = "Hay un archivo con el mismo nombre en su área personal de archivos de usuario. ¿Desea reemplazarlo?";
+$CopyFailed = "Copia fallida";
+$CopyMade = "Copia realizada";
+$OverwritenFile = "Archivo reemplazado";
 ?>

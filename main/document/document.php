@@ -396,23 +396,23 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 		$copyfile = $user_folder.basename($clean_get_id);
 				
 		if (file_exists($copyfile)) {			
-			$message = get_lang('AlreadyCopy').'</p><p>'.'<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$_GET['curdirpath'].'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$_GET['curdirpath'].'&amp;action=copytomyfiles&amp;id='.$clean_get_id.'&amp;copy=yes">'.get_lang("Yes").'</a></p>';
+			$message = get_lang('CopyAlreadyDone').'</p><p>'.'<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$_GET['curdirpath'].'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$_GET['curdirpath'].'&amp;action=copytomyfiles&amp;id='.$clean_get_id.'&amp;copy=yes">'.get_lang("Yes").'</a></p>';
 			if (!isset($_GET['copy'])){
 				Display::display_warning_message($message,false);
 			}
 			if (Security::remove_XSS($_GET['copy']) == 'yes'){		
 				if (!copy($file, $copyfile)) {
-					Display::display_error_message(get_lang('CopyFailled'));			
+					Display::display_error_message(get_lang('CopyFailed'));			
 				}else{	
-					Display::display_confirmation_message(get_lang('FileOverwrited'));
+					Display::display_confirmation_message(get_lang('OverwritenFile'));
 				}			
 			}
 		}else{
 			
 			if (!copy($file, $copyfile)) {
-					Display::display_error_message(get_lang('CopyFailled'));			
+					Display::display_error_message(get_lang('CopyFailed'));			
 			}else{	
-					Display::display_confirmation_message(get_lang('CopyReleased'));
+					Display::display_confirmation_message(get_lang('CopyMade'));
 			}			
 		}		
 }

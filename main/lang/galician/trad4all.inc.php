@@ -952,4 +952,7 @@ $MemoryUsage = "Uso de memoria";
 $MemoryUsagePeak = "Picos de uso de memoria";
 $Seconds = "segundos";
 $QualifyInGradebook = "Cualificación no libro de cualificacións";
+$SessionSpecificResource = "Recurso específico da sesión";
+$EditionNotAvailableFromSession = "Edición non dispoñible dende a sesión, por favor edite dende o propio curso.";
+$HandingOverOfTaskX = "Porcentaxe completada da tarefa %s";
 ?>

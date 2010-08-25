@@ -216,4 +216,5 @@ $CourseSettings = "Kurssin asetukset";
 $AddLinkToCourse = "Lisää linkki kurssiin";
 $AddAssignmentToCourse = "Lisää tehtävä kurssiin";
 $AddForumToCourse = "Lisää keskustelualue kurssiin";
+$ReturnToLPList = "Palaa luetteloon";
 ?>

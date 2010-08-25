@@ -368,4 +368,5 @@ $ReUseACopyInCurrentTest = "Realizar unha copia desta pregunta no exercicio actu
 $Copy = "Copia";
 $ScoreAverageFromAllAttempts = "Promedio de todos os intentos en exercicios";
 $DefaultContent = "Xerar contido por defecto";
+$ExerciseEditionNotAvailableInSession = "Non pode editar este exercicio do curso dende unha sesión";
 ?>

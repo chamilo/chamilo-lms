@@ -90,4 +90,5 @@ $ViewUsersWithoutTask = "Ver tarefas perdidas";
 $HomeworkCreated = "Unha tarefa foi creada";
 $HomeworkHasBeenCreatedForTheCourse = "Unha tarefa foi creada para o curso";
 $PleaseCheckHomeworkPage = "Por favor comprobe a páxina de tarefas";
+$IncludedInEvaluation = "Incluido na avaliación";
 ?>

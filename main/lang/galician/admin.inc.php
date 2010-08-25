@@ -1268,4 +1268,5 @@ $AddUsersToGroup = "Engadir usuarios ao grupo";
 $ErrorReadingZip = "Erro lendo arquivo ZIP";
 $ErrorStylesheetFilesExtensionsInsideZip = "As únicas extensións aceptadas no ZIP son jpg, jpeg, png, gif e css.";
 $MyTextHere = "Introduza o seu texto aquí...";
+$FieldTypeSocialProfile = "Ligazón da rede social";
 ?>

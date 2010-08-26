@@ -175,7 +175,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		}
 		
 		//copy files to users myfiles
-		if(api_get_setting('users_copy_files') == 'true'){
+		if(api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0){
 			$copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&curdirpath='.$_GET['curdirpath'].'&amp;action=copytomyfiles&amp;id='.$url_path.$req_gid :api_get_self().'?'.api_get_cidreq();
 			
 			if($filetype == 'file')

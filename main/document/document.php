@@ -382,9 +382,8 @@ if (!empty($_SESSION['_gid'])) {
 	Display::display_introduction_section(TOOL_DOCUMENT);
 }
 
-
 // Copy a file to general my files user's
-if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_setting('users_copy_files') == 'true') {	
+if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0) {	
 	
 	$clean_get_id = Security::remove_XSS($_GET['id']);
 	$user_folder  = api_get_path(SYS_CODE_PATH).'upload/users/'.api_get_user_id().'/my_files/';

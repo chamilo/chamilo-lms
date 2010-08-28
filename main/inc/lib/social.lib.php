@@ -648,9 +648,9 @@ class SocialManager extends UserManager {
 			if (in_array($show, $show_messages)) {
 
 					echo '<li><ul>';
-						echo '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox_message.png', get_lang('Inbox'), array('hspace'=>'6')).'<span class="'.($show=='messages_inbox'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Inbox').'</span></a></li>';
 						echo '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='messages_compose'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('ComposeMessage').'</span></a></li>';
-						echo '<li class="social-menu-sub-level" style="background:none;padding:0px"><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox_message.png', get_lang('Outbox'), array('hspace'=>'6')).'<span class="'.($show=='messages_outbox'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Outbox').'</span></a></li>';
+						echo '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png', get_lang('Inbox'), array('hspace'=>'6')).'<span class="'.($show=='messages_inbox'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Inbox').'</span></a></li>';						
+						echo '<li class="social-menu-sub-level" style="background:none;padding:0px"><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array('hspace'=>'6')).'<span class="'.($show=='messages_outbox'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Outbox').'</span></a></li>';
 					echo '</ul></li>';
 				}
 

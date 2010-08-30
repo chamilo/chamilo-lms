@@ -1,4 +1,4 @@
-﻿﻿/*
+﻿/*
  * == BEGIN LICENSE ==
  *
  * Licensed under the terms of any of the following licenses at your
@@ -15,32 +15,31 @@
  *
  * == END LICENSE ==
  *
- * Google Maps for FCKeditor.
- * Norwegian language file.
+ * Google Maps for FCKeditor, Norwegian language file.
  */
 
-FCKLang.DlgGMapsTitle = 'Google Maps properties' ;
+FCKLang.DlgGMapsTitle = 'Google Maps egenskaper' ;
 FCKLang.GMapsBtn		  = 'Google Maps' ;
-FCKLang.GMapsBtnTooltip	= 'Insert/Edit a Google Map' ;
-FCKLang.GMapsMap			= 'Map' ;
-FCKLang.GMapsZoomLevel	= 'Zoom Level' ;
-FCKLang.txtLatitude	  = 'Latitude' ;
-FCKLang.txtLongitude  = 'Longitude' ;
-FCKLang.GMapsMarker		= 'Marker' ;
-FCKLang.GMapsSearchLabel	= 'Search a direction' ;
-FCKLang.GMapsSearch		= 'Search' ;
-FCKLang.GMapsNotFound = '%s not found.' ;
-FCKLang.GMapsMarkerText	= 'Text' ;
-FCKLang.GMapsMarkerDefaultText	= 'Write your text' ;
-FCKLang.GMapsLine = 'Line' ;
-FCKLang.GMapsLineInstructions = 'Click on the map to place the first point, and then keep on clicking to add more points.<br>You can drag them or delete them using "DEL" in your keyboard' ;
+FCKLang.GMapsBtnTooltip	= 'Legg til/Rediger et Google Map' ;
+FCKLang.GMapsMap			= 'Kart' ;
+FCKLang.GMapsZoomLevel	= 'Zoom Nivå' ;
+FCKLang.txtLatitude	  = 'Lengdegrad' ;
+FCKLang.txtLongitude  = 'Breddegrad' ;
+FCKLang.GMapsMarker		= 'Markør' ;
+FCKLang.GMapsSearchLabel	= 'Søk etter sted' ;
+FCKLang.GMapsSearch		= 'Søk' ;
+FCKLang.GMapsNotFound = 'Finner ikke %s.' ;
+FCKLang.GMapsMarkerText	= 'Tekst' ;
+FCKLang.GMapsMarkerDefaultText	= 'Skriv inn din beskrivelse' ;
+FCKLang.GMapsLine = 'Linje' ;
+FCKLang.GMapsLineInstructions = 'Klikk på kartet for å plassere det første punktet, og fortsett å klikke for å legge til flere punkter.<br>Du kan velge og dra punktene med musen eller slette dem ved hjelp av "DEL" tasten på tastaturet.';
 
 FCKLang.GMapsHelpFile	= 'install.html' ;
 FCKLang.GMapsUserHelpFile = 'users.html' ;
-FCKLang.Help = 'Help' ;
+FCKLang.Help = 'Hjelp' ;
 
-FCKLang.GMapsClickToAddMarker = 'Click on the map to add a new marker' ;
-FCKLang.GMapsDeleteMarker = 'Delete marker' ;
-FCKLang.GMapsAddMarker = 'Add new marker' ;
+FCKLang.GMapsClickToAddMarker = 'Klikk på kartet for å legge til en ny markør';
+FCKLang.GMapsDeleteMarker = 'Slett markør' ;
+FCKLang.GMapsAddMarker = 'Legg til markør' ;
 
-FCKLang.GMaps_MissingKey = 'You must enter the Google Maps Key for your domain.' ;
+FCKLang.GMaps_MissingKey = 'Du må angi en Google Maps Key for ditt domene i konfigurasjonsfilen.' ;

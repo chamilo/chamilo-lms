@@ -694,7 +694,7 @@ return true;
 		echo '</div>';
 
 		//to define as an individual assignment
-		echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;"><img src="../img/wiki/assignment.gif" />&nbsp;'.get_lang('DefineAssignmentPage').': <input type="checkbox" name="assignment" value="1"></div>'; // 1= teacher 2 =student
+		echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;"><img src="../img/wiki/assignment.png" />&nbsp;'.get_lang('DefineAssignmentPage').': <input type="checkbox" name="assignment" value="1"></div>'; // 1= teacher 2 =student
 		//
 		echo'</div>';
 
@@ -800,11 +800,11 @@ function display_wiki_entry($newtitle)
 	//assignment mode: identify page type
 	if($row['assignment']==1)
 	{
-		$icon_assignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
+		$icon_assignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
 	}
 	elseif($row['assignment']==2)
 	{
-		$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
+		$icon_assignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
 	}
 
 	//task mode
@@ -1991,11 +1991,11 @@ function display_wiki_search_results($search_term, $search_content=0)
 			//get type assignment icon
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{

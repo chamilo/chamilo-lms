@@ -268,11 +268,11 @@ if ($_GET['view'])
 			if($current_row['assignment']==1)
 			{
 				Display::display_normal_message(get_lang('EditAssignmentWarning'));
-				$icon_assignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
+				$icon_assignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
 			}
 			elseif($current_row['assignment']==2)
 			{
-				$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
+				$icon_assignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
 				if((api_get_user_id()==$current_row['user_id'])==false)
 				{
 					if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
@@ -372,12 +372,12 @@ echo '<td>';
 		// page action: enable or disable the adding of new pages
 		if (check_addnewpagelock()==0)
 		{
-			$protect_addnewpage= '<img src="../img/wiki/lockadd.gif" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
+			$protect_addnewpage= '<img src="../img/wiki/lockadd.png" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
 			$lock_unlock_addnew='unlockaddnew';
 		}
 		else
 		{
-			$protect_addnewpage= '<img src="../img/wiki/unlockadd.gif" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" width="8" height="8" />';
+			$protect_addnewpage= '<img src="../img/wiki/unlockadd.png" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" width="8" height="8" />';
 			$lock_unlock_addnew='lockaddnew';
 		}
 	}
@@ -607,11 +607,11 @@ if ($_GET['action']=='usercontrib')
 			//get type assignment icon
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{
@@ -683,11 +683,11 @@ if ($_GET['action']=='mostchanged')
 			//get type assignment icon
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{
@@ -737,11 +737,11 @@ if ($_GET['action']=='mvisited')
 			//get type assignment icon
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{
@@ -878,11 +878,11 @@ if ($_GET['action']=='orphaned')
 			//fix assignment icon
 			if($row['assignment']==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.png" />';
 			}
 			elseif ($row['assignment']==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" />';
+				$ShowAssignment='<img src="../img/wiki/works.png" />';
 			}
 			elseif ($row['assignment']==0)
 			{
@@ -1029,11 +1029,11 @@ if ($_GET['action']=='links')
 
 				if($row['assignment']==1)
 				{
-					$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+					$ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 				}
 				elseif ($row['assignment']==2)
 				{
-					$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+					$ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 				}
 				elseif ($row['assignment']==0)
 				{
@@ -1096,11 +1096,11 @@ if ($_GET['action']=='links')
 				//get type assignment icon
 				if($obj->assignment==1)
 				{
-					$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+					$ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 				}
 				elseif ($obj->assignment==2)
 				{
-					$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+					$ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 				}
 				elseif ($obj->assignment==0)
 				{
@@ -1264,11 +1264,11 @@ if ($_GET['action']=='edit')
 		if($row['assignment']==1)
 		{
 		    Display::display_normal_message(get_lang('EditAssignmentWarning'));
-			$icon_assignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
+			$icon_assignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
 		}
 		elseif($row['assignment']==2)
 		{
-			$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
+			$icon_assignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
 			if((api_get_user_id()==$row['user_id'])==false)
 			{
 			    if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
@@ -1661,11 +1661,11 @@ if ($_GET['action']=='history' or $_POST['HistoryDifferences'])
 
 	    if($KeyAssignment==1)
 		{
-			$icon_assignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
+			$icon_assignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
 		}
 		elseif($KeyAssignment==2)
 		{
-			$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
+			$icon_assignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
 		}
 
 
@@ -1883,11 +1883,11 @@ if ($_GET['action']=='recentchanges') {
 			//get type assignment icon
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{
@@ -1965,11 +1965,11 @@ if ($_GET['action']=='allpages')
 			//get type assignment icon
 			if($obj->assignment==1)
 			{
-				$ShowAssignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+				$ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
 			}
 			elseif ($obj->assignment==2)
 			{
-				$ShowAssignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+				$ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
 			}
 			elseif ($obj->assignment==0)
 			{
@@ -2045,11 +2045,11 @@ if ($_GET['action']=='discuss')
 	//mode assignment: previous to show  page type
 	if($row['assignment']==1)
 	    {
-		$icon_assignment='<img src="../img/wiki/assignment.gif" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
+		$icon_assignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
 	    }
 	elseif($row['assignment']==2)
 	{
-		$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
+		$icon_assignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
 	}
 
 
@@ -2112,7 +2112,7 @@ if ($_GET['action']=='discuss')
 			{
 				if (check_ratinglock_discuss()==1)
 				{
-					$ratinglock_disc= '<img src="../img/wiki/rating.gif" title="'.get_lang('UnlockRatingDiscussExtra').'" alt="'.get_lang('UnlockRatingDiscussExtra').'" />';
+					$ratinglock_disc= '<img src="../img/wiki/rating.png" title="'.get_lang('UnlockRatingDiscussExtra').'" alt="'.get_lang('UnlockRatingDiscussExtra').'" />';
 					$lock_unlock_rating_disc='unlockrating';
 				}
 				else

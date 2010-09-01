@@ -342,7 +342,7 @@ if ($group_id != 0 ) {
 
 				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
-				$grid_item_1 = Display::return_icon('boxmygroups.jpg');
+				$grid_item_1 = Display::return_icon('boxmygroups.jpg',get_lang('MyGroups'));
 				$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg','').'</div>';
 				$item_2 = '';
 				$item_3 = '';
@@ -377,7 +377,7 @@ if ($group_id != 0 ) {
 			$name = api_strtoupper(cut($result['name'],30,true));
 			$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 			$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
-			$grid_item_1 = Display::return_icon('boxmygroups.jpg');
+			$grid_item_1 = Display::return_icon('boxmygroups.jpg',get_lang('Newest'));
 			$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg','').'</div>';
 
 			if ($result['description'] != '') {
@@ -413,7 +413,7 @@ if ($group_id != 0 ) {
 				$name = api_strtoupper(cut($result['name'],30,true));
 				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
-				$grid_item_1 = Display::return_icon('boxmygroups.jpg');
+				$grid_item_1 = Display::return_icon('boxmygroups.jpg',get_lang('Popular'));
 				$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
 
 				if ($result['description'] != '') {

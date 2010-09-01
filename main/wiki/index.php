@@ -460,7 +460,7 @@ if ($_POST['export2DOC'])
 	$export2doc = export2doc($titleDOC,$contentDOC,$groupIdDOC);
 
 	if ($export2doc) {
-		Display::display_normal_message(get_lang('ThePageHasBeenExportedToDocArea'));
+		Display::display_confirmation_message(get_lang('ThePageHasBeenExportedToDocArea'));
 	}
 
 }

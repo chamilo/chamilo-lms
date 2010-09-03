@@ -19,6 +19,9 @@ ALTER TABLE settings_current ADD UNIQUE unique_setting (variable(110), subkey(11
 ALTER TABLE settings_options ADD UNIQUE unique_setting_option (variable(165), value(165));
 ALTER TABLE settings_current CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE settings_options CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+ALTER TABLE user MODIFY COLUMN username VARCHAR(40) NOT NULL;
+
 UPDATE settings_current SET variable='chamilo_database_version' WHERE variable='dokeos_database_version';
 UPDATE settings_current SET selected_value = '1.8.8.12378' WHERE variable = 'chamilo_database_version';
 

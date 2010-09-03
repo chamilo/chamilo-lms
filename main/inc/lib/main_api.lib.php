@@ -143,7 +143,7 @@ define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 20 characters maximal length.
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
-define('USERNAME_MAX_LENGTH', 20);
+define('USERNAME_MAX_LENGTH', 40);
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 define('USERNAME_PURIFIER_SHALLOW', '/\s/');
 

@@ -23,7 +23,7 @@ CREATE TABLE user (
   user_id int unsigned NOT NULL auto_increment,
   lastname varchar(60) default NULL,
   firstname varchar(60) default NULL,
-  username varchar(20) NOT NULL default '',
+  username varchar(40) NOT NULL default '',
   password varchar(50) NOT NULL default '',
   auth_source varchar(50) default 'platform',
   email varchar(100) default NULL,

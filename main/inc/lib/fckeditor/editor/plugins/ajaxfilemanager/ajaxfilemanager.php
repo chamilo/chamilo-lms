@@ -228,7 +228,7 @@ $(document).ready(
 <link href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/ie6.css" type="text/css" rel="Stylesheet" media="screen">
 <![endif]-->
 </head>
-<body style="background-color:#E8E8E8;" dir="<?php echo CONFIG_LANG_TEXT_DIRECTION_DEFAULT; ?>"><!-- hack for lang default Chamilo -->
+<body dir="<?php echo CONFIG_LANG_TEXT_DIRECTION_DEFAULT; ?>"><!-- move style to css and hack for default lang Chamilo -->
 	<div id="wrapper">
   	<div id="header">
   		<dl id="currentFolderInfo">        

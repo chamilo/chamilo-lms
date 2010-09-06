@@ -84,7 +84,7 @@ echo '<div id="social-content">';
 
 			// information current user
 			echo	'<div class="social-box-container1">
-                    	<div>'.Display::return_icon('boxmygroups.jpg').'</div>
+                    	<div>'.Display::return_icon('boxmygroups.jpg',get_lang('Information')).'</div>
                         <div class="social-box-content1">';
 
                    echo	'<div>'.$image.'</div>';
@@ -103,7 +103,7 @@ echo '<div id="social-content">';
 			if (count($user_online_list) > 0) {
 
 			echo '<div class="social-box-container1">
-                    	<div>'.Display::return_icon('boxmygroups.jpg').'</div>
+                    	<div>'.Display::return_icon('boxmygroups.jpg',get_lang('UsersOnline')).'</div>
                         <div class="social-box-content1">
                           <div><p class="groupTex3"><strong>'.get_lang('UsersOnline').'</strong> </p></div>
                           <div>';

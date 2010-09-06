@@ -261,7 +261,7 @@ echo '  </div>';
 echo '  <div id="social-content-right">';
 echo '    <div class="social-box-main1">';
 echo '      <div class="social-box-left">';
-echo '        <div>'.Display::return_icon('boxmygroups.jpg').'</div>';
+echo '        <div>'.Display::return_icon('boxmygroups.jpg', get_lang('Information')).'</div>';
 echo '          <div class="social-box-content1">';
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
 	echo '            <div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
@@ -374,7 +374,7 @@ echo '</div>';	// close div tag .social-box-left
 if ($show_full_profile) {
 
 	echo '<div class="social-box-left">';
-	echo '<div>'.Display::return_icon('boxmygroups.jpg').'</div>';
+	echo '<div>'.Display::return_icon('boxmygroups.jpg', get_lang('SocialFriend')).'</div>';
 	echo '<div class="social-box-content1">';
 
 	$list_path_friends= $list_path_normal_friends = $list_path_parents = array();
@@ -492,7 +492,7 @@ if ($show_full_profile) {
     if (count($grid_my_groups) > 0) {
     	echo '<div class="social-box-main1">';
 			echo '<div class="social-box-container2">';
-				echo '<div>'.Display::return_icon('content-post-group1.jpg').'</div>';
+				echo '<div>'.Display::return_icon('content-post-group1.jpg', get_lang('MyGroups')).'</div>';
 				echo '<div class="social-box-content2">';
 					echo '<div><h3>'.get_lang('MyGroups').'</h3></div>';
 					$count_groups = 0;
@@ -522,7 +522,7 @@ if ($show_full_profile) {
 	if ( is_array($list) ) {
 		echo '<div class="social-box-main1">';
 			echo '<div class="social-box-container2">';
-				echo '<div>'.Display::return_icon('content-post-group1.jpg').'</div>';
+				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('MyCourses')).'</div>';
 				echo '<div class="social-box-content2">';
 					echo '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';
 					echo '<div class="social-content-training">';
@@ -555,7 +555,7 @@ if ($show_full_profile) {
 	if (!empty($user_feeds )) {
 		echo '<div class="social-box-main1">';
 			echo '<div class="social-box-container2">';
-				echo '<div>'.Display::return_icon('content-post-group1.jpg').'</div>';
+				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('RSSFeeds')).'</div>';
 				echo '<div class="social-box-content2">';
 					echo '<div><h3>'.get_lang('RSSFeeds').'</h3></div>';
 	    			echo '<div class="social-content-training">'.$user_feeds.'</div>';
@@ -590,7 +590,7 @@ if ($show_full_profile) {
 		//Pending invitations
 		if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
 			if ($count_pending_invitations > 0) {
-				echo '<div>'.Display::return_icon('boxmygroups.jpg').'</div>';
+				echo '<div>'.Display::return_icon('boxmygroups.jpg',get_lang('PendingInvitations')).'</div>';
 				echo '<div class="social-box-content1">';
 				echo '<div><h3>'.get_lang('PendingInvitations').'</h3></div>';
 				for ($i=0;$i<$count_pending_invitations;$i++) {
@@ -616,7 +616,7 @@ if ($show_full_profile) {
 			}
 		}
 
-		echo '<div>'.Display::return_icon('boxmygroups.jpg').'</div>';
+		echo '<div>'.Display::return_icon('boxmygroups.jpg',get_lang('MyProductions')).'</div>';
 		echo '<div class="social-box-content1">';
 		//--Productions
 		$production_list =  UserManager::build_production_list($user_id);
@@ -639,7 +639,7 @@ if ($show_full_profile) {
 	}
 	if (!empty($user_info['competences']) || !empty($user_info['diplomas']) || !empty($user_info['openarea']) || !empty($user_info['teach']) ) {
 		echo '<div class="social-box-left">';
-		echo '<div>'.Display::return_icon('boxmygroups.jpg').'</div>';
+		echo '<div>'.Display::return_icon('boxmygroups.jpg',get_lang('MoreInformation')).'</div>';
 		echo '<div class="social-box-content1">';
 		echo '<div><h3>'.get_lang('MoreInformation').'</h3></div>';
 		echo '<div class="social-content-competences">';

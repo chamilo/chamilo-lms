@@ -147,7 +147,7 @@ if (count($friends) == 0 ) {
 			<td height="153" valign="top">
 				<?php
 				echo '<div class="social-box-container2">';
-				echo '<div>'.Display::return_icon('content-post-group1.jpg').'</div>';
+				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Friends')).'</div>';
 				echo '<div id="div_content_table" class="social-box-content2">';
 				
 		

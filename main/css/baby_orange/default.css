@@ -3180,3 +3180,73 @@ span.form_required  {
 	margin-bottom: 5px;
 	height:35px;
 }
+
+/* Categories courses*/
+
+#course-picture {
+    position:absolute;
+    top:8%;
+    left:85%;
+    padding:4px;
+    border:1pt solid #ccc;
+}
+
+#categories-content-left {
+    border:1pt solid #ccc;
+    width:290px;
+    padding:10px;
+    float:left;
+}
+
+#categories-search {
+    border:1pt solid #ccc;
+    padding:10px;
+    text-align:center;
+    height:105px;
+}
+
+#categories-list {
+    border:1pt solid #ccc;
+    padding:25px;
+    margin-top:10px;
+    font-size:11pt;
+}
+
+#categories-content-right {
+    border:1pt solid #ccc;
+    margin-left: 315px;
+    padding:5px;
+    margin-top:5px;
+}
+
+.categories-block-course {
+    border:1pt solid #ccc;
+    width:246px;
+    height:180px;
+    margin:5px;
+    float:left;
+    padding:5px;
+}
+
+.categories-course-picture {
+    border:1pt solid #ccc;
+    width:75px;
+    height:75px;
+    float:left;
+}
+
+.categories-course-picture img {
+    width: 75px;
+    height: 75px;
+}
+
+.categories-course-description {
+    border:1pt solid #ccc;
+    margin-left:80px;
+}
+
+.categories-course-links {
+    border:1pt solid #ccc;
+    margin-top:5px;
+    height: 40px;
+}

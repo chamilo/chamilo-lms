@@ -34,15 +34,22 @@ class image {
 		return $imhandler;
 	}
 
-	function resize($thumbw, $thumbh, $border) {
+	function resize($thumbw, $thumbh, $border, $specific_size = false) {
 
 		$size [0] = $this->bgx;
 		$size [1] = $this->bgy;
 
 		if ($border == 1) {
-			$scale = min($thumbw / $size[0], $thumbh / $size[1]);
-			$width = (int)($size[0] * $scale);
-			$height = (int)($size[1] * $scale);
+
+                        if ($specific_size) {
+                            $width = $thumbw;
+                            $height = $thumbh;
+                        } else {
+                            $scale = min($thumbw / $size[0], $thumbh / $size[1]);
+                            $width = (int)($size[0] * $scale);
+                            $height = (int)($size[1] * $scale);
+                        }
+
 			$deltaw = (int)(($thumbw - $width) / 2);
 			$deltah = (int)(($thumbh - $height) / 2);
 			$dst_img = @ImageCreateTrueColor($thumbw, $thumbh);
@@ -53,9 +60,17 @@ class image {
 			$this->bgy = $thumbh;
 		}
 		elseif ($border == 0) {
-			$scale = ($size[0] > 0 && $size[1] > 0) ? min($thumbw / $size[0], $thumbh / $size[1]) : 0;
-			$width = (int)($size[0] * $scale);
-			$height = (int)($size[1] * $scale);
+
+
+                        if ($specific_size) {
+                            $width = $thumbw;
+                            $height = $thumbh;
+                        } else {
+                            $scale = ($size[0] > 0 && $size[1] > 0) ? min($thumbw / $size[0], $thumbh / $size[1]) : 0;
+                            $width = (int)($size[0] * $scale);
+                            $height = (int)($size[1] * $scale);
+                        }
+
 
 			$deltaw = 0;
 			$deltah = 0;

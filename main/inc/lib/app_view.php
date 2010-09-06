@@ -19,15 +19,20 @@ class View {
    	 * Constructor, init tool path for rendering
    	 * @param string  tool name (optional)
    	 */
-	public function __construct($toolname = '') {		
+	public function __construct($toolname = '', $template_path=null) {
 		if (!empty($toolname)) {
-			$path = api_get_path(SYS_CODE_PATH).$toolname.'/';
+                        if (isset($template_path)) {
+                            $path = $template_path.$toolname.'/';
+                        } else {
+                            $path = api_get_path(SYS_CODE_PATH).$toolname.'/';
+                        }
+
 			if (is_dir($path)) {
-				$this->tool_path = $path;	
+				$this->tool_path = $path;
 			} else {
 				throw new ViewException('View::__construct() $path directory does not exist ' . $path);
-			}				
-		}		
+			}
+		}
 	}
    
     /**

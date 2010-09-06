@@ -37,7 +37,7 @@ $TABLECOURSEHOME 			= Database :: get_course_table(TABLE_TOOL_LIST);
 $TABLELANGUAGES 			= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 $TABLEBBCONFIG 				= Database :: get_course_table(TOOL_FORUM_CONFIG_TABLE);
 $currentCourseID 			= $_course['sysCode'];
-$currentCourseRepository 	= $_course['path'];
+$currentCourseRepository                = $_course['path'];
 $is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
 $course_setting_table 		= Database::get_course_table(TABLE_COURSE_SETTING);
 
@@ -130,6 +130,12 @@ $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array('
 $form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
 $form->addElement('static', null, '&nbsp;', get_lang('TipLang'));
+
+// Picture
+$form->addElement('file', 'picture', get_lang('AddPicture'));
+$allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+
+$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
@@ -294,6 +300,13 @@ $form->setDefaults($values);
 // Validate form
 if ($form->validate() && is_settings_editable()) {
 	$update_values = $form->exportValues();
+
+        // update course picture
+        $picture = $_FILES['picture'];
+        if (!empty($picture['name'])) {
+                $picture_uri = CourseManager::update_course_picture($course_code, $picture['name'], $picture['tmp_name']);
+        }
+
 	foreach ($update_values as $index => & $value) {
 		$update_values[$index] = Database::escape_string($value);
 	}
@@ -398,6 +411,14 @@ if (api_get_setting('allow_course_theme') == 'true') {
 	echo '<a href="#theme">'.Display::return_icon('theme.gif', get_lang('Theming')).' '.get_lang('Theming').'</a>';
 }
 echo '</div>';
+
+// display course picture
+$course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository;   // course path
+if (file_exists($course_path.'/course-pic85x85.png')) {
+    $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository;   // course web path
+    $course_medium_image = $course_web_path.'/course-pic85x85.png'; // redimensioned image 85x85
+    echo '<div id="course-picture"><img src="'.$course_medium_image.'" /></div>';
+}
 
 // Display the form
 $form->display();

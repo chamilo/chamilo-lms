@@ -192,6 +192,8 @@ define('CONFIGURATION_PATH', 'CONFIGURATION_PATH');
 define('WEB_LIBRARY_PATH', 'WEB_LIBRARY_PATH');
 define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
 define('SYS_TEST_PATH', 'SYS_TEST_PATH');
+define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
+define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
 
 // Constants for requesting path conversion.
 define('TO_WEB', 'TO_WEB');
@@ -261,31 +263,32 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  *
  * 	This is how we can retireve mosth used paths, for common purpose:
 
- *  api_get_path(REL_PATH)						/chamilo/
- *  api_get_path(REL_COURSE_PATH)				/chamilo/courses/
+ *      api_get_path(REL_PATH)						/chamilo/
+ *      api_get_path(REL_COURSE_PATH)				/chamilo/courses/
  * 	api_get_path(REL_CODE_PATH)					/chamilo/main/
-
  *	api_get_path(SYS_SERVER_ROOT_PATH)			/var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
  * 	api_get_path(SYS_PATH)						/var/www/chamilo/
- *  api_get_path(SYS_ARCHIVE_PATH)				/var/www/chamilo/archive/
- *  api_get_path(SYS_COURSE_PATH)				/var/www/chamilo/courses/
- *  api_get_path(SYS_CODE_PATH)					/var/www/chamilo/main/
+ *      api_get_path(SYS_ARCHIVE_PATH)				/var/www/chamilo/archive/
+ *      api_get_path(SYS_COURSE_PATH)				/var/www/chamilo/courses/
+ *      api_get_path(SYS_CODE_PATH)					/var/www/chamilo/main/
  *	api_get_path(INCLUDE_PATH)					/var/www/chamilo/main/inc/
  * 	api_get_path(LIBRARY_PATH)					/var/www/chamilo/main/inc/lib/
  * 	api_get_path(CONFIGURATION_PATH)			/var/www/chamilo/main/inc/conf/
- *  api_get_path(SYS_LANG_PATH)					/var/www/chamilo/main/lang/
- *  api_get_path(SYS_PLUGIN_PATH)				/var/www/chamilo/plugin/
- *  api_get_path(SYS_TEST_PATH)					/var/www/chamilo/tests/
+ *      api_get_path(SYS_LANG_PATH)					/var/www/chamilo/main/lang/
+ *      api_get_path(SYS_PLUGIN_PATH)				/var/www/chamilo/plugin/
+ *      api_get_path(SYS_TEST_PATH)					/var/www/chamilo/tests/
+ *      api_get_path(SYS_TEMPLATE_PATH)                         /var/www/chamilo/main/template/
  *
- *  api_get_path(WEB_SERVER_ROOT_PATH)			http://www.mychamilo.org/
- *  api_get_path(WEB_PATH)						http://www.mychamilo.org/chamilo/
+ *      api_get_path(WEB_SERVER_ROOT_PATH)			http://www.mychamilo.org/
+ *      api_get_path(WEB_PATH)						http://www.mychamilo.org/chamilo/
  *	api_get_path(WEB_COURSE_PATH)				http://www.mychamilo.org/chamilo/courses/
  * 	api_get_path(WEB_CODE_PATH)					http://www.mychamilo.org/chamilo/main/
  *	api_get_path(WEB_PLUGIN_PATH)				http://www.mychamilo.org/chamilo/plugin/
- *  api_get_path(WEB_ARCHIVE_PATH)				http://www.mychamilo.org/chamilo/archive/
+ *      api_get_path(WEB_ARCHIVE_PATH)				http://www.mychamilo.org/chamilo/archive/
  * 	api_get_path(WEB_IMG_PATH)					http://www.mychamilo.org/chamilo/main/img/
  *	api_get_path(WEB_CSS_PATH)					http://www.mychamilo.org/chamilo/main/css/
  *	api_get_path(WEB_LIBRARY_PATH)				http://www.mychamilo.org/chamilo/main/inc/lib/
+ * 	api_get_path(WEB_TEMPLATE_PATH)				http://www.mychamilo.org/chamilo/main/template/
  *
  *
  *	This is how we retrieve paths of "registerd" resource files (scripts, players, etc.):
@@ -329,7 +332,9 @@ function api_get_path($path_type, $path = null) {
 		CONFIGURATION_PATH		=> 'inc/conf/',
 		WEB_LIBRARY_PATH 		=> 'inc/lib/',
 		WEB_AJAX_PATH			=> 'inc/ajax/',
-		SYS_TEST_PATH 			=> 'tests/'
+		SYS_TEST_PATH 			=> 'tests/',
+                WEB_TEMPLATE_PATH               => 'template/',
+                SYS_TEMPLATE_PATH               => 'template/'
 	);
 
 	static $resource_paths = array(
@@ -431,6 +436,7 @@ function api_get_path($path_type, $path = null) {
 		$paths[SYS_PLUGIN_PATH] 		= $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
 		$paths[SYS_ARCHIVE_PATH] 		= $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
 		$paths[SYS_TEST_PATH] 			= $paths[SYS_PATH].$paths[SYS_TEST_PATH];
+                $paths[SYS_TEMPLATE_PATH] 		= $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
 
 		$paths[WEB_CSS_PATH] 			= $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
 		$paths[WEB_IMG_PATH] 			= $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
@@ -439,6 +445,8 @@ function api_get_path($path_type, $path = null) {
 
 		$paths[WEB_PLUGIN_PATH] 		= $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
 		$paths[WEB_ARCHIVE_PATH] 		= $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
+
+                $paths[WEB_TEMPLATE_PATH] 		= $paths[WEB_CODE_PATH].$paths[WEB_TEMPLATE_PATH];
 
 		$paths[INCLUDE_PATH] 			= $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH];
 		$paths[LIBRARY_PATH] 			= $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
@@ -4597,5 +4605,29 @@ function api_protect_global_admin_script() {
 		return false;
 	}
 	return true;
+}
+
+/**
+ * Get actived template
+ * @param string    theme type (optional: default)
+ * @param string    path absolute(abs) or relative(rel) (optional:rel)
+ * @return string   actived template path
+ */
+function api_get_template($path_type = 'rel') {
+    $path_types = array('rel', 'abs');
+    $template_path = '';
+    if (in_array($path_type, $path_types)) {
+        if ($path_type == 'rel') {
+            $template_path = api_get_path(SYS_TEMPLATE_PATH);
+        } else {
+            $template_path = api_get_path(WEB_TEMPLATE_PATH);
+        }
+    }
+    $actived_theme = 'default';
+    if (api_get_setting('active_template')) {
+        $actived_theme = api_get_setting('active_template');
+    }
+    $actived_theme_path = $template_path.$actived_theme.DIRECTORY_SEPARATOR;
+    return $actived_theme_path;
 }
 

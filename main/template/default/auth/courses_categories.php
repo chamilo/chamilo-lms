@@ -16,23 +16,23 @@ $stok = Security::get_token();
 
 <div id="actions" class="actions">
     <?php if ($action != 'sortmycourses' && isset($action)) { ?>
-            &nbsp;&nbsp;<a href="<?php echo api_get_self() ?>?action=sortmycourses"><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses') ?></a>&nbsp;
+            &nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=sortmycourses"><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses'); ?></a>&nbsp;
     <?php } else { ?>
-            &nbsp;&nbsp;<strong><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses') ?></strong>&nbsp;
+            &nbsp;&nbsp;<strong><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses'); ?></strong>&nbsp;
     <?php } ?>
     &nbsp;
 
     <?php if ($action != 'createcoursecategory') { ?>
-	&nbsp;&nbsp;<a href="<?php echo api_get_self() ?>?action=createcoursecategory"><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory') ?></a>&nbsp;
+	&nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=createcoursecategory"><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory'); ?></a>&nbsp;
     <?php } else { ?>
-        &nbsp;&nbsp;<strong><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory') ?></strong>&nbsp;
+        &nbsp;&nbsp;<strong><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory'); ?></strong>&nbsp;
     <?php } ?>
     &nbsp;
 
     <?php if ($action != 'subscribe') { ?>
-        &nbsp;&nbsp;<a href="<?php echo api_get_self() ?>?action=subscribe"><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse') ?></a>&nbsp;
+        &nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=subscribe"><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse'); ?></a>&nbsp;
     <?php } else { ?>
-        &nbsp;&nbsp;<strong><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse') ?></strong>&nbsp;
+        &nbsp;&nbsp;<strong><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse'); ?></strong>&nbsp;
     <?php } ?>
 </div>
 
@@ -40,16 +40,16 @@ $stok = Security::get_token();
 
 <div id="categories-content" >
 
-    <div id="categories-content-left">
+    <div id="categories-content-first">
 
         <div id="categories-search">
 
-            <p><strong><?php echo get_lang('SearchCourse') ?></strong><br />
-            <form class="course_list" method="post" action="<?php echo api_get_self() ?>?action=subscribe&hidden_links=1">
-                <input type="hidden" name="sec_token" value="<?php echo $stok ?>">
+            <p><strong><?php echo get_lang('SearchCourse'); ?></strong><br />
+            <form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&hidden_links=1">
+                <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                 <input type="hidden" name="search_course" value="1" />
-                <input type="text" size="12" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : Security::remove_XSS($_POST['search_term'])) ?>" />
-                &nbsp;<button class="search" type="submit"><?php echo get_lang('_search') ?></button>
+                <input type="text" size="12" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : Security::remove_XSS($_POST['search_term'])); ?>" />
+                &nbsp;<button class="search" type="submit"><?php echo get_lang('_search'); ?></button>
             </form>
 	
         </div>
@@ -112,7 +112,7 @@ $stok = Security::get_token();
 
     </div>
 
-    <div id="categories-content-right">
+    <div id="categories-content-second">
 
         <?php if (!empty($message)) { Display::display_confirmation_message($message, false); } ?>
         <?php if (!empty($error)) { Display::display_error_message($error, false); } ?>

@@ -4256,7 +4256,7 @@ span.form_required  {
     border:1pt solid #ccc;
 }
 
-#categories-content-left {
+#categories-content-first {
     border:1pt solid #ccc;
     width:290px;
     padding:10px;
@@ -4277,7 +4277,7 @@ span.form_required  {
     font-size:11pt;
 }
 
-#categories-content-right {
+#categories-content-second {
     border:1pt solid #ccc;
     margin-left: 315px;
     padding:5px;

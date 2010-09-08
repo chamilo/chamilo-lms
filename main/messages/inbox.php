@@ -129,7 +129,6 @@ if ($_GET['f']=='social' || api_get_setting('allow_social_tool') == 'true') {
 	//comes from normal profile
 	
 	echo '<div class="actions">';
-	
 	if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
 		echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
 	}
@@ -149,8 +148,8 @@ echo '<div id="social-content">';
 		$id_content_right = 'inbox';
 		echo '<div id="inbox-menu" class="actions">';
 		echo '<ul>';
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';			
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
 		echo '</ul>';
 		echo '</div>';		
@@ -164,6 +163,11 @@ echo '<div id="social-content">';
 	}
 
 	echo '<div id="'.$id_content_right.'">';
+			if (api_get_setting('allow_social_tool') == 'true'){
+				echo '<div class="social-box-container2">';				
+				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Inbox')).'</div>';
+				echo '<div id="div_content_table" class="social-box-content2">';
+			}	
 			//MAIN CONTENT
 			if (!isset($_GET['del_msg'])) {	
 				inbox_display();
@@ -177,6 +181,11 @@ echo '<div id="social-content">';
 				}
 				inbox_display();
 			}
+			if (api_get_setting('allow_social_tool') == 'true'){
+				echo '</div>';
+				echo '</div>';
+			}
+			
 	echo '</div>';	
 echo '</div>';
 

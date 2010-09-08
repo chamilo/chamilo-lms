@@ -174,8 +174,16 @@ echo '<div id="social-content">';
 	SocialManager::show_social_menu('group_edit',$group_id);
 	echo '</div>';
 	echo '<div id="social-content-right">';
-		// Display form
-		$form->display();
+		echo '<div class="social-box-container2">';				
+		echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('GroupEdit')).'</div>';
+			echo '<div id="div_content_table" class="social-box-content2">';
+				echo '<table><tr><td>';
+				// Display form
+				$form->display();
+				echo '</td></tr></table>';
+			echo '</div>';
+		echo '</div>';
+		
 	echo '</div>';
 echo '</div>';
 

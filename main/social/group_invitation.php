@@ -400,6 +400,9 @@ if ($add_type=='multiple') {
 if(!empty($errorMsg)) {
 	Display::display_normal_message($errorMsg); //main API
 }
+	echo '<div class="social-box-container2">';				
+	echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('SubscribeUsersToGroup')).'</div>';
+		echo '<div id="div_content_table" class="social-box-content2">';	
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
@@ -440,7 +443,7 @@ if(!empty($errorMsg)) {
   	  } else {
   	  ?>
   	  <div id="ajax_list_users_multiple">
-	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:320px;">
+	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:290px;">
 		<?php
 		foreach($nosessionUsersList as $enreg) {
 		?>
@@ -474,7 +477,7 @@ if(!empty($errorMsg)) {
 	<br /><br /><br /><br /><br />
   </td>
   <td align="center">
-  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:320px;">
+  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:290px;">
 
 <?php
 foreach($sessionUsersList as $enreg) {
@@ -513,7 +516,8 @@ if (is_array($members) && count($members)>0) {
 	echo '<span class="social-groups-text1"><strong>'.get_lang('UsersAlreadyInvited').'</strong></span>';
 	Display::display_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
 }
-
+			echo '</div>';//end  class social-box-content2
+		echo '</div>';// end class social-box-container2		
 	echo '</div>'; // end layout right
 
 echo '</div>'; //

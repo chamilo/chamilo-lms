@@ -115,7 +115,13 @@ echo '<div id="social-content">';
 		SocialManager::show_social_menu('group_add');
 	echo '</div>';
 	echo '<div id="social-content-right">';
+	echo '<div class="social-box-container2">';				
+	echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Groups')).'</div>';
+	echo '<div id="div_content_table" class="social-box-content2">';
+	
 		$form->display();
+	echo '</div>';
+	echo '</div>';
 	echo '</div>';
 echo '</div>';
 

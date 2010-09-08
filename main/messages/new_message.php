@@ -306,8 +306,8 @@ echo '<div id="social-content" >';
 		$id_content_right = 'inbox';
 		echo '<div id="inbox-menu" class="actions">';
 		echo '<ul>';
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';			
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
 		echo '</ul>';
 		echo '</div>';
@@ -323,6 +323,11 @@ echo '<div id="social-content" >';
 	echo '<div id="'.$id_content_right.'">';
 
 		//MAIN CONTENT
+		if (api_get_setting('allow_social_tool') == 'true'){
+			echo '<div class="social-box-container2">';				
+			echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('ComposeMessage')).'</div>';
+			echo '<div id="div_content_table" class="social-box-content2">';
+		}
 		if (!isset($_POST['compose'])) {
 			if(isset($_GET['re_id'])) {
 				show_compose_reply_to_message($_GET['re_id'], api_get_user_id());
@@ -364,6 +369,10 @@ echo '<div id="social-content" >';
 					Display::display_error_message(get_lang('ErrorSendingMessage'));
 				}
 			}
+		}
+		if (api_get_setting('allow_social_tool') == 'true'){
+			echo '</div>';
+			echo '</div>';
 		}
 	echo '</div>';
 

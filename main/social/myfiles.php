@@ -114,6 +114,7 @@ echo '<div id="social-content">';
 
 	echo '<div id="social-content-right>';
 		echo '<a href=""></a>';//TODO: hack and delete this line
+		echo '</br>';
 				echo '<div class="social-box-container2">';				
 				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('MyFiles')).'</div>';
 					echo '<div id="div_content_table" class="social-box-content2">';				

@@ -433,7 +433,7 @@ if ($group_id != 0 ) {
 
 
 		// display groups (newest, mygroups, pop)
-		echo '<div class="social-box-main1">';
+			echo '<div class="social-box-container2">';
 		   	if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 		   		$view_group = $_GET['view'];
 

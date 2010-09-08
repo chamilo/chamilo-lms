@@ -75,8 +75,8 @@ echo '<div id="social-content">';
 						$results[] = array($img, $user['firstname'],$user['lastname'], $user['tag']);			
 					}					
 					echo '<div class="social-box-container2">';
-					echo '<div>'.Display::return_icon('content-post-group1.jpg').'</div>';
-					echo '<div id="div_content_table" class="social-box-content2">';					
+					echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Users')).'</div>';
+					echo '<div id="div_content_table" class="social-box-content2">';				
 						Display::display_sortable_grid('search_user', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
 					echo '</div>';
 					echo '</div>';						
@@ -106,7 +106,7 @@ echo '<div id="social-content">';
 						
 						$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);							
 						$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
-						$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
+						$grid_item_1 = Display::return_icon('boxmygroups.jpg');				
 						$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
 					
 						if ($result['description'] != '') {
@@ -141,7 +141,7 @@ echo '<div id="social-content">';
 						$picture = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'],80);
 						$tags = GroupPortalManager::get_group_tags($group['id']);						
 						$group['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
-						$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
+						$grid_item_1 = Display::return_icon('boxmygroups.jpg',get_lang('Groups'));						
 						$item_1 = '<div>'.$url_open.$group['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
 						if ($group['description'] != '') {
 							$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('Description').'</span></div>';
@@ -156,8 +156,13 @@ echo '<div id="social-content">';
 						$grid_groups[]= array($grid_item_1,$grid_item_2);
 									
 					}		
-				}		
-				Display::display_sortable_grid('search_group', array(), $grid_groups, array('hide_navigation'=>true, 'per_page' => 5), $query_vars,  false, array(true,true,true,true,true));							    
+				}
+				echo '<div class="social-box-container2">';
+				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Groups')).'</div>';
+					echo '<div id="div_content_table" class="social-box-content2">';	
+						Display::display_sortable_grid('search_group', array(), $grid_groups, array('hide_navigation'=>true, 'per_page' => 5), $query_vars,  false, array(true,true,true,true,true));		
+					echo '</div>';
+				echo '</div>';
 			}		
 		} else {
 			//we should show something

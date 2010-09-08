@@ -235,6 +235,7 @@ $(document).ready(
   			<dt><?php echo LBL_CURRENT_FOLDER_PATH; ?></dt>
   			<dt id="currentFolderPath"><?php echo $folderInfo['path']; ?></dt><!-- hack for breadcrumb for Chamilo change <dd> by <dt> -->
   		</dl>
+        <br />
     	<div id="viewList">
     	
     	

@@ -32,10 +32,10 @@
 	z-index:100;
 	top: 0px;
 	left: 0px;
-	background-color:#000;
-	filter:alpha(opacity=55); /* Chamilo change 75 by 50 */
-	-moz-opacity: 0.55; /* Chamilo change 0.75 by .50 */
-	opacity: 0.55; /* Chamilo change 0.75 by .50 */
+	background-color:#ccc; /* Chamilo change 000 by ccc */
+	filter:alpha(opacity=55); /* Chamilo change 75 by 55 */
+	-moz-opacity: 0.55; /* Chamilo change 0.75 by .55 */
+	opacity: 0.55; /* Chamilo change 0.75 by .55 */
 	height:100%;
 	width:100%;
 }
@@ -81,7 +81,7 @@ margin-top: expression(0 - parseInt(this.offsetHeight / 2) + (TBWindowMargin = d
 #TB_closeWindow{
 	height:25px;
 	padding:11px 25px 10px 0;
-	float:right;
+	float:right;	
 }
 
 #TB_closeAjaxWindow{
@@ -89,6 +89,9 @@ margin-top: expression(0 - parseInt(this.offsetHeight / 2) + (TBWindowMargin = d
 	margin-bottom:1px;
 	text-align:right;
 	float:right;
+	background-repeat:no-repeat; /* Chamilo */
+	background-image:url(../images/flagno.png); /* Chamilo */
+	background-position: left; /* Chamilo */
 }
 
 #TB_ajaxWindowTitle{
@@ -107,7 +110,7 @@ margin-top: expression(0 - parseInt(this.offsetHeight / 2) + (TBWindowMargin = d
 	padding:2px 15px 15px 15px;
 	overflow:auto;
 	text-align:left;
-	line-height:1.4em;
+	line-height:1.4em;	
 }
 
 #TB_ajaxContent.TB_modal{

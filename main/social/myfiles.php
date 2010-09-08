@@ -114,12 +114,14 @@ echo '<div id="social-content">';
 
 	echo '<div id="social-content-right>';
 		echo '<a href=""></a>';//TODO: hack and delete this line
-
-		echo '<iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:450px; width:80%; border: 0px; padding: 0px; float:left"></iframe>';
+				echo '<div class="social-box-container2">';				
+				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('MyFiles')).'</div>';
+					echo '<div id="div_content_table" class="social-box-content2">';				
+						echo '<table><tr><td><iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:450px; width:655px; float:left"></iframe></td></tr></table>';			
+                    echo '</div>';
+				echo '</div>';
+		echo '</div>';
 	echo '</div>';
-echo '</div>';
-
-
 
 Display::display_footer();
 ?>

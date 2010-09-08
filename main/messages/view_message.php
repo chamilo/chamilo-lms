@@ -84,6 +84,11 @@ echo '<div id="social-content">';
 	}
 
 	echo '<div id="'.$id_content_right.'">';
+	if (api_get_setting('allow_social_tool') == 'true'){
+		echo '<div class="social-box-container2">';				
+		echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('View')).'</div>';
+		echo '<div id="div_content_table" class="social-box-content2">';
+	}	
 		//MAIN CONTENT
 		$message = MessageManager::show_message_box($id_message,$source);
 		
@@ -92,7 +97,10 @@ echo '<div id="social-content">';
 		} else {
 			api_not_allowed();
 		}
-
+	if (api_get_setting('allow_social_tool') == 'true'){
+		echo '</div>';
+		echo '</div>';
+	}
 	echo '</div>';
 
 echo '</div>';

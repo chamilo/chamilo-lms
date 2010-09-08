@@ -114,12 +114,16 @@ echo '<div id="social-content">';
 	echo '</div>';
 
 	echo '<div id="social-content-right">';
-	
+	///////////////////
+			echo '<div class="social-box-container2">';				
+			
+		/////////////	
 		if (! empty($show_message)){
 			Display :: display_normal_message($show_message);
 		}
-	
-		echo '<div id="id_response" align="center"></div>';
+		echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Invitations')).'</div>';
+			echo '<div id="div_content_table" class="social-box-content2">';		
+		echo '<div id="id_response" align="center">&nbsp;</div>';
 		$list_get_invitation=array();
 		$user_id = api_get_user_id();
 		
@@ -240,6 +244,13 @@ echo '<div id="social-content">';
 			Display::display_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
 		}
 	echo '</div>';
+	
+	///////////7
+	echo '</div>';
+	echo '</div>';
+	
+	////////////7
+	
 echo '</div>';
 
 Display::display_footer();

@@ -109,6 +109,9 @@ echo '<div id="social-content">';
 	SocialManager::show_social_menu('member_list',$group_id);
 	echo '</div>';
 	echo '<div id="social-content-right">';
+		echo '<div class="social-box-container2">';				
+			echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('MemberList')).'</div>';
+			echo '<div id="div_content_table" class="social-box-content2">';
 		if (! empty($show_message)){
 			Display :: display_normal_message($show_message);
 		}	
@@ -143,7 +146,9 @@ echo '<div id="social-content">';
 		}		
 		if (count($new_member_list) > 0) {			
 			Display::display_sortable_grid('list_members', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true,false,true,true));		
-		}	
+		}
+			echo '</div>';
+		echo '</div>';
 	echo '</div>';
 echo '</div>';
 

@@ -113,27 +113,27 @@ echo '<div id="social-content">';
 			echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('MemberList')).'</div>';
 			echo '<div id="div_content_table" class="social-box-content2">';
 		if (! empty($show_message)){
-			Display :: display_normal_message($show_message);
+			Display :: display_confirmation_message($show_message);
 		}	
 		foreach($users as $user) {		
 				switch ($user['relation_type']) {
 					case  GROUP_USER_PERMISSION_ADMIN:
-						$user['link'] = Display::return_icon('admin_star.png', get_lang('Admin'));
+						$user['link'] = Display::return_icon('social_group_admin.png', get_lang('Admin'));
 					break;
 					case  GROUP_USER_PERMISSION_READER:
 						if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
-						$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete">'.Display::return_icon('del_user_big.gif', get_lang('DeleteFromGroup')).'</a>'.
-										'<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('admins.gif', get_lang('AddModerator')).'</a>';
+						$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete">'.Display::return_icon('user_delete.png', get_lang('DeleteFromGroup')).'</a>'.
+										'<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';
 						}
 					break;		
 					case  GROUP_USER_PERMISSION_PENDING_INVITATION:
 						$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=add">'.Display::return_icon('pending_invitation.png', get_lang('PendingInvitation')).'</a>';					
 					break;
 					case  GROUP_USER_PERMISSION_MODERATOR:
-						$user['link'] = Display::return_icon('moderator_star.png', get_lang('Moderator'));
+						$user['link'] = Display::return_icon('social_group_moderator.png', get_lang('Moderator'));
 						//only group admin can manage moderators 
 						if ($user_role == GROUP_USER_PERMISSION_ADMIN) {
-							$user['link'] .='<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete_moderator">'.Display::return_icon('del_user_big.gif', get_lang('DeleteModerator')).'</a>';
+							$user['link'] .='<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete_moderator">'.Display::return_icon('social_moderator_delete.png', get_lang('DeleteModerator')).'</a>';
 						}
 					break;				
 				}

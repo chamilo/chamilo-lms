@@ -673,8 +673,8 @@ function date_to_str_ago($date) {
 	date_default_timezone_set(_api_get_timezone());
 
 	if (!$initialized) {
-		$today = api_ucfirst(get_lang('Today'));
-		$yesterday = api_ucfirst(get_lang('Yesterday'));
+		$today = get_lang('Today');
+		$yesterday = get_lang('Yesterday');
 
 		$min_decade = get_lang('MinDecade');
 		$min_year = get_lang('MinYear');

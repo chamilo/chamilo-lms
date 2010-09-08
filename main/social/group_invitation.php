@@ -398,7 +398,7 @@ if ($add_type=='multiple') {
 
 <?php
 if(!empty($errorMsg)) {
-	Display::display_normal_message($errorMsg); //main API
+	Display::display_error_message($errorMsg); //main API
 }
 	echo '<div class="social-box-container2">';				
 	echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('SubscribeUsersToGroup')).'</div>';

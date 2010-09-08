@@ -7,10 +7,10 @@ $test = "Test";
 $WCAGImage = "Bild";
 $WCAGLabel = "Bildbezeichnung";
 $WCAGLink = "Link";
-$WCAGLinkLabel = "Link Bezeichnung";
-$errorNoLabel = "Das Bild hat kein Label";
+$WCAGLinkLabel = "Linkbeschreibung";
+$errorNoLabel = "Das Bild hat keine Beschreibung";
 $AllLanguages = "alle Sprachen";
 $WCAGEditor = "WCAG Editor";
 $WCAGGoMenu = "Gehe zu Menü";
-$WCAGGoContent = "Geh zu Inhalt";
+$WCAGGoContent = "Gehe zu Inhalt";
 ?>

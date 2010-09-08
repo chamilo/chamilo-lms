@@ -84,7 +84,7 @@ echo '<div id="social-content">';
 
 			// information current user
 			echo	'<div class="social-box-container1">
-                    	<div>'.Display::return_icon('boxmygroups.jpg',get_lang('Information')).'</div>
+                    	<div>'.Display::return_icon('boxmygroups.jpg',get_lang('Profile')).'</div>
                         <div class="social-box-content1">';
 
                    echo	'<div>'.$image.'</div>';

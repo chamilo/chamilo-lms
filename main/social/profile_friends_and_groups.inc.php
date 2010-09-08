@@ -63,9 +63,9 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 				$icon = '';					
 				$name = api_strtoupper(cut($result['name'],20,true));				
 				if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {		 	
-					$icon = Display::return_icon('admin_star.png', get_lang('Admin'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
+					$icon = Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
 				} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
-					$icon = Display::return_icon('moderator_star.png', get_lang('Moderator'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
+					$icon = Display::return_icon('social_group_moderator.png', get_lang('Moderator'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
 				}
 				$count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
 				if ($count_users_group == 1 ) {

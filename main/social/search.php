@@ -93,9 +93,9 @@ echo '<div id="social-content">';
 						
 						$name = api_strtoupper(cut($result['name'],25,true));				
 						if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {		 	
-							$name .= Display::return_icon('admin_star.png', get_lang('Admin'), array('style'=>'vertical-align:middle'));
+							$name .= Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle'));
 						} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
-							$name .= Display::return_icon('moderator_star.png', get_lang('Moderator'), array('style'=>'vertical-align:middle'));
+							$name .= Display::return_icon('social_group_moderator.png', get_lang('Moderator'), array('style'=>'vertical-align:middle'));
 						}
 						$count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
 						if ($count_users_group == 1 ) {

@@ -216,4 +216,11 @@ $HelpSharedFolder = "La cartella contiene i documenti caricati da te e dai corsi
 $TemplateImage = "Immagine del modello";
 $MoveElement = "Sposta l'elemento";
 $CertificateName = "Nome";
+$CopyToMyFiles = "Copia nella mia area personale";
+$Export2PDF = "Esporta in formato PDF";
+$ResourceShared = "Risorsa condivisa";
+$CopyAlreadyDone = "Nell'area personale è presente un documento con lo stesso nome, vuoi sostituirlo?";
+$CopyFailed = "Copia non effettuata";
+$CopyMade = "Copia effettuata";
+$OverwritenFile = "Documento sostituito";
 ?>

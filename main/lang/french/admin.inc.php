@@ -1270,4 +1270,6 @@ $ErrorReadingZip = "Erreur de lecture du fichier ZIP";
 $ErrorStylesheetFilesExtensionsInsideZip = "Les seules extensions acceptées pour les fichiers contenus dans le ZIP sont jpg, jpeg, png, gif et css.";
 $MyTextHere = "Introduisez votre texte ici...";
 $FieldTypeSocialProfile = "Lien réseau social";
+$AllowUsersCopyFilesTitle = "Permet aux utilisateurs de copier des fichiers à partir d'un cours de votre dossier personnel";
+$AllowUsersCopyFilesComment = "Permet aux utilisateurs de copier des fichiers à partir d'un cours de votre dossier personnel, visible à travers les réseaux sociaux ou par l'intermédiaire de l'éditeur HTML lorsqu'ils ne font pas partis d'un cours";
 ?>

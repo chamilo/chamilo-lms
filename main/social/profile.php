@@ -261,13 +261,13 @@ echo '  </div>';
 echo '  <div id="social-content-right">';
 echo '    <div class="social-box-main1">';
 echo '      <div class="social-box-left">';
-echo '        <div>'.Display::return_icon('boxmygroups.jpg', get_lang('Information')).'</div>';
+echo '        <div>'.Display::return_icon('boxmygroups.jpg', get_lang('Profile')).'</div>';
 echo '          <div class="social-box-content1">';
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
 	echo '            <div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
 } else {
 	//--- Basic Information
-	echo '            <div><h3>'.get_lang('Information').'</h3></div>';
+	echo '            <div><h3>'.get_lang('Profile').'</h3></div>';
 }
 
 if ($show_full_profile) {
@@ -460,9 +460,9 @@ if ($show_full_profile) {
 			$icon = '';
 			$name = api_strtoupper(cut($result['name'],20,true));
 			if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
-				$icon = Display::return_icon('admin_star.png', get_lang('Admin'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
+				$icon = Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
 			} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
-				$icon = Display::return_icon('moderator_star.png', get_lang('Moderator'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
+				$icon = Display::return_icon('social_group_moderator.png', get_lang('Moderator'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
 			}
 			$count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
 			if ($count_users_group == 1 ) {

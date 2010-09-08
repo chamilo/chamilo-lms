@@ -896,7 +896,7 @@ class MessageManager
 					$name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
 
 					$html .= '<div class="social-box-container2" >';
-						$html .= '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Show')).'</div>';
+						$html .= '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Theme')).'</div>';
 						$html .= '<div class="social-box-content2">';
 							$html .= '<a href="#" class="head" id="head_'.$topic['id'].'">';
 							$html .= '<span class="message-group-title-topic">'.(((isset($_GET['anchor_topic']) && $_GET['anchor_topic'] == 'topic_'.$topic['id']) || in_array('items_'.$topic['id'].'_page_nr',$param_names))?Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align: middle')):
@@ -942,7 +942,7 @@ class MessageManager
 							$name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
 
 							$html_items.= '<div class="social-box-container3" >';
-								$html_items .= '<div>'.Display::return_icon('content-post-reply01.jpg').'</div>';
+								$html_items .= '<div>'.Display::return_icon('content-post-reply01.jpg',get_lang('Message')).'</div>';
 								$html_items .= '<div class="social-box-content3">';
 								$html_items.= '<div id="message-reply-link">';
 

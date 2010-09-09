@@ -270,6 +270,7 @@ if ($origin != 'learnpath') {
 		$tool_name = get_lang('SearchResults');
 	} else {
 		$tool_name = get_lang('Users');
+		$origin = 'users';
 	}
 	Display::display_header($tool_name, "User");
 } else {

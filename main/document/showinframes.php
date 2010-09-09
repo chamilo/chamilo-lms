@@ -126,7 +126,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 		HeaderHeight = document.getElementById("header").offsetHeight;
 		FooterHeight = document.getElementById("footer").offsetHeight;
 		docHeight = document.body.clientHeight;
-		document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))-60)+"px";
+		document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";
 	};
 
 	// Fixes the content height of the frame

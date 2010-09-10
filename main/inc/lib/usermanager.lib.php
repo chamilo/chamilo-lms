@@ -2786,7 +2786,7 @@ class UserManager
 			<div id="search_label">
 					<b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')
 			<div>
-				<input type="text" size="30" value="'.Security::remove_XSS($query).'" name="q"/><br />
+				<input type="text" size="30" value="'.Security::remove_XSS($query).'" name="q"/> &nbsp;
 				<button class="search" type="submit" value="search">'.get_lang('Search').'</button>
 			</div>
 		</td>

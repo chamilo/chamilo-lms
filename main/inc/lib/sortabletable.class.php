@@ -310,17 +310,22 @@ class SortableTable extends HTML_Table {
 					.grid_selectbox { width:30%; float:left;}
 					.grid_title 	{ width:30%; float:left;}
 					.grid_nav 		{ }
-
 			</style>';
 
 			// @todo  This also must be moved
-	
+			
+			// Show only navigations if there are more than 1 page
+			$my_pager = $this->get_pager();
+			
 			$html .= '<div class="main-grid">';
-			$html .= '<div class="sub-header">';
-			$html .= '<div class="grid_selectbox">'.$form.'</div>';
-			$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';
-			$html .= '<div class="grid_nav">'.$nav.'</div>';
-			$html .= '</div>';
+			
+			if ($my_pager->numPages() > 1) {				
+				$html .= '<div class="sub-header">';
+						$html .= '<div class="grid_selectbox">'.$form.'</div>';
+						$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';				
+						$html .= '<div class="grid_nav">'.$nav.'</div>';
+				$html .= '</div>';
+			}
 
 			$html .= '<div class="clear"></div>';
 			if (count($this->form_actions) > 0) {

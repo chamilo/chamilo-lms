@@ -59,6 +59,7 @@ if ($tool_info['visibility'] == 1 ) {
 if ($origin != 'learnpath')
 { //so we are not in learnpath tool
 	Display :: display_header($nameTools, "User");
+	$origin = Security::remove_XSS($_GET['origin']);
 }
 else
 {
@@ -238,7 +239,13 @@ if ($allowedToEditContent) {
 
 if (api_is_allowed_to_edit(null, true)) {
 	echo '<div class="actions">';
-	echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';	
+	if($origin=='users'){
+		echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';
+	}
+	else{
+		echo '<a href="javascript:history.back(1)">'.Display::return_icon('back.png',get_lang('Back')).get_lang('Back').'</a>';
+	}
+	
 	if (!is_numeric($_GET['editMainUserInfo'])) {
 		if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
                     echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.gif',get_lang('EditUser')).get_lang('EditUser').'</a>';
@@ -253,7 +260,12 @@ if (api_is_allowed_to_edit(null, true)) {
 } else {
 	if ($tool_info['visibility'] == 1 ) {
 		echo '<div class="actions">';
-		echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';
+		if($origin=='users'){
+			echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';
+		}
+		else{
+			echo '<a href="javascript:history.back(1)">'.Display::return_icon('back.png',get_lang('Back')).get_lang('Back').'</a>';
+		}
 		echo '</div>';	
 	}	
 }

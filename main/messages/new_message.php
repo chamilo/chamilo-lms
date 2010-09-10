@@ -15,7 +15,7 @@
 */
 /* 		INIT SECTION	*/
 // name of the language file that needs to be included
-$language_file= array('messages','userInfo');
+$language_file= array('messages','userInfo', 'admin');
 $cidReset	= true;
 require_once '../inc/global.inc.php';
 
@@ -224,6 +224,7 @@ function manage_form ($default, $select_from_user_list = null) {
 	if ($form->validate()) {
 
 		$check = Security::check_token('post');
+		
 		if ($check) {
 			$values 		= $default;
 			$user_list		= $values['users'];
@@ -233,11 +234,12 @@ function manage_form ($default, $select_from_user_list = null) {
 
 			$group_id		= $values['group_id'];
 			$parent_id 		= $values['parent_id'];
-
+	
 			if (is_array($user_list) && count($user_list)> 0) {
 				//all is well, send the message
 				foreach ($user_list as $user) {
 					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);
+				
 					if ($res) {
 						if (is_string($res)) {
 							Display::display_error_message($res);
@@ -246,6 +248,8 @@ function manage_form ($default, $select_from_user_list = null) {
 						}
 					}
 				}
+			} else {
+				Display::display_error_message('error');
 			}
 		}
 		Security::clear_token();

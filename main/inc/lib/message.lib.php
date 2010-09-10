@@ -296,8 +296,9 @@ class MessageManager
 				}
 			}
 			return $result;
-        }
-		return false;
+        } else {
+        	return get_lang('UserDoesNotExist');
+        }		
 	}
 
 	/**

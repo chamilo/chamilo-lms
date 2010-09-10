@@ -249,7 +249,7 @@ function manage_form ($default, $select_from_user_list = null) {
 					}
 				}
 			} else {
-				Display::display_error_message('error');
+				Display::display_error_message('ErrorSendingMessage');
 			}
 		}
 		Security::clear_token();

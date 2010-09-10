@@ -632,7 +632,7 @@ if ($timezone !== null) {
 				$any_result = false;
 				
 				// Get progress in lp				
-				$progress = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id));
+				$progress = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id),$session_id);
 				
 				if ($progress === null) { 
 					$progress = '0%';
@@ -641,15 +641,15 @@ if ($timezone !== null) {
 				}
 				
 				// Get time in lp
-				$total_time = Tracking::get_time_spent_in_lp($student_id, $course_code, array($lp_id));				
+				$total_time = Tracking::get_time_spent_in_lp($student_id, $course_code, array($lp_id),$session_id);				
 				if (!empty($total_time)) $any_result = true;
 				
 				// Get last connection time in lp
-				$start_time = Tracking::get_last_connection_time_in_lp($student_id, $course_code, $lp_id);
+				$start_time = Tracking::get_last_connection_time_in_lp($student_id, $course_code, $lp_id,$session_id);
 				if (!empty($total_time)) $any_result = true;
 			
 				// Quizz in lp
-				$score = Tracking :: get_avg_student_score($student_id, $course_code, array($lp_id));
+				$score = Tracking :: get_avg_student_score($student_id, $course_code, array($lp_id),$session_id);
 
 				if ($i % 2 == 0) $css_class = "row_odd";
 				else $css_class = "row_even";

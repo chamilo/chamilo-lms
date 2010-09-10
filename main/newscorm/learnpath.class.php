@@ -168,16 +168,14 @@ class learnpath {
     	}
     	//end of variables checking
 
+	$session_id = api_get_session_id();
+	// get the session condition for learning paths of the base + session
+	$session = api_get_session_condition($session_id,true,true);
     	//now get the latest attempt from this user on this LP, if available, otherwise create a new one
 		$lp_table = Database::get_course_table(TABLE_LP_VIEW);
 		//selecting by view_count descending allows to get the highest view_count first
-		$session_id = api_get_session_id();
-		$session = api_get_session_condition($session_id);
 		$sql = "SELECT * FROM $lp_table WHERE lp_id = '$lp_id' AND user_id = '$user_id' $session  ORDER BY view_count DESC";
-		if ($this->debug > 2) {
-			error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0);
-		}
-		//$res = Database::query($sql);
+		if ($this->debug > 2) {error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0);}
 		$res = Database::query($sql);
 		$view_id = 0; //used later to query lp_item_view
 		if (Database :: num_rows($res) > 0) {
@@ -1829,8 +1827,10 @@ class learnpath {
 	 */
 	public function get_db_progress($lp_id, $user_id, $mode = '%', $course_db = '', $sincere = false) {
 		//if($this->debug>0){error_log('New LP - In learnpath::get_db_progress()',0);}
+		$session_id = api_get_session_id();
+		$session_condition = api_get_session_condition($session_id);
 		$table = Database :: get_course_table(TABLE_LP_VIEW, $course_db);
-		$sql = "SELECT * FROM $table WHERE lp_id = $lp_id AND user_id = $user_id";
+		$sql = "SELECT * FROM $table WHERE lp_id = $lp_id AND user_id = $user_id $session_condition";
 		$res = Database::query($sql);
 		$view_id = 0;
 		if (Database :: num_rows($res) > 0) {
@@ -1978,7 +1978,7 @@ class learnpath {
 	 * @return	string	HTML string containing the progress bar
 	 */
 	public function get_progress_bar($mode = '', $percentage = -1, $text_add = '', $from_lp = false) {
-		//if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar()',0);}
+		if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar('.$mode.','.$percentage.','.$text_add.','.$from_lp.')',0);}
 		global $lp_theme_css;
 
 		// Setting up the CSS path of the current style if exists

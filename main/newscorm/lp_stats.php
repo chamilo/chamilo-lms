@@ -23,6 +23,10 @@ if(empty($_SESSION['_course']['id']) && isset($_GET['course'])) {
 if (isset($_GET['student_id'])) {
 	$student_id = intval($_GET['student_id']);
 }
+$session_id = 0;
+if (isset($_GET['session_id'])) {
+	$session_id = intval($_GET['session_id']);
+}
 
 //The two following variables have to be declared by the includer script
 //$lp_id = $_SESSION['oLP']->get_id();
@@ -72,7 +76,7 @@ if (!empty($_GET['fs']) && strcmp($_GET['fs'], 'true') == 0) {
 $extend_all_link = '';
 $extend_all = 0;
 if ($origin == 'tracking') {
-	$url_suffix = '&course=' . Security::remove_XSS($_GET['course']) . '&student_id=' . $student_id . '&lp_id=' . Security::remove_XSS($_GET['lp_id']) . '&origin=' . Security::remove_XSS($_GET['origin']).$from_link;
+	$url_suffix = '&session_id='.$session_id.'&course=' . Security::remove_XSS($_GET['course']) . '&student_id=' . $student_id . '&lp_id=' . Security::remove_XSS($_GET['lp_id']) . '&origin=' . Security::remove_XSS($_GET['origin']).$from_link;
 } else {
 	$url_suffix = '';
 }
@@ -98,7 +102,7 @@ $tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_E
 $tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION);
 $sql = "SELECT max(view_count) FROM $TBL_LP_VIEW " .
-"WHERE lp_id = $lp_id AND user_id = '" . $user_id . "'";
+"WHERE lp_id = $lp_id AND user_id = '" . $user_id . "' AND session_id = $session_id";
 $res = Database::query($sql);
 $view = '';
 $num = 0;
@@ -134,9 +138,9 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
 
 	if (Database::num_rows($res_path) > 0 ){
 		if ($origin != 'tracking') {
-			$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '" AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '" AND status <> "incomplete" ORDER BY exe_date';
+			$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '" AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '" AND status <> "incomplete" AND session_id = '.$session_id.' ORDER BY exe_date';
 		} else {
-			$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '" AND status <> "incomplete" ORDER BY exe_date';
+			$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '" AND status <> "incomplete" AND session_id = '.$session_id.' ORDER BY exe_date';
 		}
 			$sql_attempts;
 	}
@@ -157,11 +161,11 @@ if (is_array($list) && count($list) > 0) {
 
 		if (!empty ($view)) {
 			$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
-			"iv.score as myscore, iv.total_time as mytime, i.id as myid, i.lp_id as mylpid, iv.lp_view_id as mylpviewid, " .
-			"i.title as mytitle, i.max_score as mymaxscore, " .
-			"iv.max_score as myviewmaxscore, " .
-			"i.item_type as item_type, iv.view_count as iv_view_count, " .
-			"iv.id as iv_id, path as path" .
+			" iv.score as myscore, iv.total_time as mytime, i.id as myid, i.lp_id as mylpid, iv.lp_view_id as mylpviewid, " .
+			" i.title as mytitle, i.max_score as mymaxscore, " .
+			" iv.max_score as myviewmaxscore, " .
+			" i.item_type as item_type, iv.view_count as iv_view_count, " .
+			" iv.id as iv_id, path as path" .
 			" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v" .
 			" WHERE i.id = iv.lp_item_id " .
 			" AND i.id = $my_item_id " .
@@ -169,20 +173,22 @@ if (is_array($list) && count($list) > 0) {
 			" AND i.lp_id = $lp_id " .
 			" AND v.user_id = " . $user_id . " " .
 			" AND v.view_count = $view " .
+			" AND v.session_id = $session_id " .
 			" ORDER BY iv.view_count $qry_order ";
 		} else {
 			$sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
-			"iv.score as myscore, iv.total_time as mytime, i.id as myid, i.lp_id as mylpid, iv.lp_view_id as mylpviewid, " .
-			"i.title as mytitle, i.max_score as mymaxscore, " .
-			"iv.max_score as myviewmaxscore, " .
-			"i.item_type as item_type, iv.view_count as iv_view_count, " .
-			"iv.id as iv_id, path as path " .
+			" iv.score as myscore, iv.total_time as mytime, i.id as myid, i.lp_id as mylpid, iv.lp_view_id as mylpviewid, " .
+			" i.title as mytitle, i.max_score as mymaxscore, " .
+			" iv.max_score as myviewmaxscore, " .
+			" i.item_type as item_type, iv.view_count as iv_view_count, " .
+			" iv.id as iv_id, path as path " .
 			" FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v " .
 			" WHERE i.id = iv.lp_item_id " .
 			" AND i.id = $my_item_id " .
 			" AND iv.lp_view_id = v.id " .
 			" AND i.lp_id = $lp_id " .
 			" AND v.user_id = " . $user_id . " " .
+			" AND v.session_id = $session_id " .
 			" ORDER BY iv.view_count $qry_order ";
 		}
 		//$sql.'<br/>';
@@ -443,9 +449,9 @@ if (is_array($list) && count($list) > 0) {
 
 			// selecting the exe_id from stats attempts tables in order to look the max score value
 			if ($origin != 'tracking') {
-				$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
+				$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" AND session_id = '.$session_id.' ORDER BY exe_date DESC limit 1';
 			} else {
-				$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
+				$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" AND session_id = '.$session_id.' ORDER BY exe_date DESC limit 1';
 			}
 
 			$resultLastAttempt = Database::query($sql_last_attempt);
@@ -534,10 +540,10 @@ if (is_array($list) && count($list) > 0) {
 					$my_url_suffix ='';
 					if ($origin != 'tracking' && $origin != 'tracking_course') {
 						$my_url_suffix = '&course=' . api_get_course_id() . '&student_id=' . api_get_user_id() . '&lp_id=' . Security::remove_XSS($row['mylpid']);
-						$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC ';
+						$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" AND session_id = '.$session_id.' ORDER BY exe_date DESC ';
 					} else {
 						$my_url_suffix = '&course=' . Security::remove_XSS($_GET['course']) . '&student_id=' . $student_id . '&lp_id=' . Security::remove_XSS($row['mylpid']).'&origin=' . Security::remove_XSS($_GET['origin'].$from_link);
-						$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete"  ORDER BY exe_date DESC ';
+						$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete" AND session_id = '.$session_id.'  ORDER BY exe_date DESC ';
 					}
 
 					$resultLastAttempt = Database::query($sql_last_attempt);

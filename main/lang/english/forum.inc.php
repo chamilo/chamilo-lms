@@ -140,4 +140,7 @@ $BackToForum = "Back to forum";
 $BackToForumOverview = "Back to forum overview";
 $BackToThread = "Back to thread";
 $ForumcategoryLocked = "Forum category Locked";
+$PreviewImage = "Preview image";
+$UpdateImage = "Update Image";
+$EnableTimeLimits = "Enable time limits";
 ?>

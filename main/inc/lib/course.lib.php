@@ -970,7 +970,7 @@ class CourseManager {
 	 *  @return array
 	 */
 	public static function get_user_list_from_course_code($course_code, $with_session = true, $session_id = 0, $limit = '', $order_by = '') {
-
+		global $_configuration;
 		// variable initialisation
 		$session_id 	= intval($session_id);
 		$users			= array();
@@ -1008,11 +1008,20 @@ class CourseManager {
 						AND course_rel_user.course_code="'.$course_code.'"';
 			$where[] = ' course_rel_user.course_code IS NOT NULL ';
 		}
-
+		
+		if ($_configuration['multiple_access_urls']) {
+			$sql  .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au ON (au.user_id = user.user_id) ';
+		}
+			
 		$sql .= ' WHERE '.implode(' OR ', $where);
+		
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+			$sql .= " AND (access_url_id =  $current_access_url_id ) ";
+		}
 
 		$sql .= ' '.$order_by.' '.$limit;
-
+		
 		$rs = Database::query($sql);
 
 		while ($user = Database::fetch_array($rs)) {

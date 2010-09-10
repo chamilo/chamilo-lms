@@ -41,6 +41,8 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
+global $_configuration;
+
 //CHECK KEYS
 if (!isset ($_cid)) {
 	header('location: '.api_get_path(WEB_PATH));
@@ -91,20 +93,34 @@ if (api_is_allowed_to_edit(null, true)) {
 
 				$data = array();
 				$a_users = array();
-
+				
+				if ($_configuration['multiple_access_urls']) {				
+					$current_access_url_id = api_get_current_access_url_id();
+				}	
+				
 				// users subscribed to the course through a session
 				if (api_get_setting('use_session_mode') == 'true') {
+					
 					$session_id = intval($_SESSION['id_session']);
 					$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.email, user.official_code
-						FROM $table_session_course_user as session_course_user, $table_users as user
-						WHERE `course_code` = '$currentCourseID' AND session_course_user.id_user = user.user_id ";
+								  FROM $table_session_course_user as session_course_user, $table_users as user ";
+					if ($_configuration['multiple_access_urls']) {
+						$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
+					}
+					$sql_query .="WHERE course_code = '$currentCourseID' AND session_course_user.id_user = user.user_id ";
 
 					if ($session_id != 0) {
 						$sql_query .= ' AND id_session = '.$session_id;
-					}
+					}	
+					
+					if ($_configuration['multiple_access_urls']) {				
+						$sql_query .= " AND user.user_id = au.user_id AND access_url_id =  $current_access_url_id  ";
+					}					
+					
 					$sql_query .= $sort_by_first_name ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
 					$rs = Database::query($sql_query);
+					
 					while ($user = Database:: fetch_array($rs, 'ASSOC')) {
 						$data[] = $user;
 						//$user_infos = Database :: get_user_info_from_id($user['user_id']);
@@ -116,7 +132,17 @@ if (api_is_allowed_to_edit(null, true)) {
 					// users directly subscribed to the course
 					$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.email, user.official_code
-						FROM $table_course_user as course_user, $table_users as user WHERE `course_code` = '$currentCourseID' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_user.user_id = user.user_id ".($sort_by_first_name ? "ORDER BY user.firstname, user.lastname" : "ORDER BY user.lastname, user.firstname");
+								  FROM $table_course_user as course_user, $table_users as user";
+					if ($_configuration['multiple_access_urls']) {
+						$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
+					}   
+					$sql_query .= "WHERE course_code = '$currentCourseID' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_user.user_id = user.user_id ";
+					
+					if ($_configuration['multiple_access_urls']) {							
+						$sql_query .= " AND user.user_id = au.user_id  AND access_url_id =  $current_access_url_id  ";
+					}
+					$sql_query .= ($sort_by_first_name ? "ORDER BY user.firstname, user.lastname" : "ORDER BY user.lastname, user.firstname");
+					
 					$rs = Database::query($sql_query);
 					while ($user = Database::fetch_array($rs, 'ASSOC')) {
 						$data[] = $user;
@@ -270,6 +296,7 @@ if ($origin != 'learnpath') {
 		$tool_name = get_lang('SearchResults');
 	} else {
 		$tool_name = get_lang('Users');
+		$origin = 'users';
 	}
 	Display::display_header($tool_name, "User");
 } else {

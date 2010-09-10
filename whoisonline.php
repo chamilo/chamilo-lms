@@ -148,13 +148,20 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 		if (!isset($_GET['id'])) {
 			if (api_get_setting('allow_social_tool') == 'true') {
 				echo '<div id="social-content-right">';
+				
+				echo '<div class="social-box-container2">';
 				//this include the social menu div
 				if (!api_is_anonymous()) {
 					echo UserManager::get_search_form($_GET['q']);
 				}
 			}			
 			SocialManager::display_user_list($user_list);
-			echo '</div>';
+			
+			if (api_get_setting('allow_social_tool') == 'true') {
+				echo '</div>';
+				echo '</div>';
+			}
+			
 		} else {
 			//individual user information - also displays header info
 			SocialManager::display_individual_user(Security::remove_XSS($_GET['id']));

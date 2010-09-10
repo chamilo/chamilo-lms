@@ -138,14 +138,7 @@ function who_is_online($valid, $friends = false) {
 		//$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'
 		$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." e INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' ORDER BY picture_uri DESC";
 	}
-
-	/*
-	//This query will show all registered users. Only for dev purposes.
-		$query = "SELECT DISTINCT u.user_id as login_user_id, login_date
-		FROM ".$track_online_table ."  e , $table_user u
-		GROUP by u.user_id  ORDER BY picture_uri DESC";
-	}*/
-
+	
 	global $_configuration;
 	if ($_configuration['multiple_access_urls']) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -164,7 +157,12 @@ function who_is_online($valid, $friends = false) {
 			}
 		}
 	}
-
+	/*
+	//This query will show all registered users. Only for dev purposes.
+	$query = "SELECT DISTINCT u.user_id as login_user_id, login_date
+	FROM ".$track_online_table ."  e , $table_user u
+	GROUP by u.user_id  ORDER BY picture_uri DESC";
+	*/
 	$result = @Database::query($query);
 	//@todo why we dont believe in db query results?
 	if (count($result)>0) {

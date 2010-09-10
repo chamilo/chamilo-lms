@@ -41,6 +41,21 @@ if (!api_is_allowed_to_edit(false,true)) {
 /*	FUNCTIONS */
 
 /**
+ *  List all users registered to the course
+ */
+function search_members_keyword($firstname, $lastname, $username, $official_code, $keyword) {
+	if (api_strripos($firstname, $keyword) !== false || api_strripos($lastname, $keyword) !== false || api_strripos($username, $keyword) !== false || api_strripos($official_code, $keyword) !== false) {
+		var_dump($firstname);
+		echo 'aaaaa111111';
+		return true;
+	} else {
+		return false;
+	}
+	
+}
+
+
+/**
  * function to sort users after getting the list in the db. Necessary because there are 2 or 3 queries. Called by usort()
  */
 function sort_users($user_a, $user_b) {
@@ -170,13 +185,39 @@ $form->addElement('radio', 'chat_state', get_lang('Chat'), get_lang('NotAvailabl
 $form->addElement('radio', 'chat_state', null, get_lang('Public'), TOOL_PUBLIC);
 $form->addElement('radio', 'chat_state', null, get_lang('Private'), TOOL_PRIVATE);
 
+// Search Members of group
+//$form = new FormValidator('search_member', 'get', 'group_edit', '', null, false);
+//$renderer = & $form->defaultRenderer();
+//$renderer->setElementTemplate('<span>{element}</span> ');
+$form->add_textfield('keyword', get_lang('SearchMembersOfGroup'), false);
+$form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
+
 // Getting all the users
 if (isset($_SESSION['id_session'])) {
 	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session']);
 	$complete_user_list2 = CourseManager :: get_coach_list_from_course_code($_course['id'], $_SESSION['id_session']);
 	$complete_user_list = array_merge($complete_user_list, $complete_user_list2);
+	
 } else {
 	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id']);
+}
+
+foreach ($complete_user_list as $user_id => $o_course_user) {
+		if ((isset ($_GET['keyword']) && search_members_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
+		$groups_name = GroupManager :: get_user_group_name($user_id);
+		
+		if ($is_western_name_order) {
+					$temp[] = $o_course_user['firstname'];
+					$temp[] = $o_course_user['lastname'];
+				} else {
+					$temp[] = $o_course_user['lastname'];
+					$temp[] = $o_course_user['firstname'];
+				}
+
+				$temp[] = $o_course_user['role'];
+				$temp[] = implode(', ', $groups_name); //Group
+				$temp[] = $o_course_user['official_code'];
+	}
 }
 
 usort($complete_user_list, 'sort_users');
@@ -291,6 +332,11 @@ if (isset($_POST['group_members'])) {
 	} else {
 		header('Location:group_edit.php?show_message='.get_lang('GroupTooMuchMembers'));
 	}
+}
+
+if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
+	$keyword_name = Security::remove_XSS($_GET['keyword']);
+	echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
 Display :: display_header($nameTools, 'Group');

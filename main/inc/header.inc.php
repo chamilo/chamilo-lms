@@ -78,7 +78,7 @@ if ($show_learn_path) {
 	$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CSS_PATH).$my_style.'/learnpath.css"/>';
 	$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; //will be moved
 	$htmlHeadXtra[] = '<script src="dtree.js" type="text/javascript"></script>'; //will be moved
-}
+	}
 
 echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";'."\n";
 echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/course.css";'."\n";
@@ -98,7 +98,9 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 ?>
 /*]]>*/
 </style>
-
+<script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/jquery.js" type="text/javascript" ></script>
+<script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/thickbox.js" type="text/javascript" ></script>
+<link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/thickbox.css" type="text/css" />
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />
 <link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/courses.php" title="<?php echo api_htmlentities(get_lang('OtherCourses'), ENT_QUOTES); ?>" />
 <link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/profile.php" title="<?php echo api_htmlentities(get_lang('ModifyProfile'), ENT_QUOTES); ?>" />
@@ -106,7 +108,25 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 <link href="http://www.chamilo.org/team.php" rel="Author" />
 <link href="http://www.chamilo.org" rel="Copyright" />
 <link rel="shortcut icon" href="<?php echo api_get_path(WEB_PATH); ?>favicon.ico" type="image/x-icon" />
+
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
+<script src= "<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/mmenu.js" type="text/javascript"></script>
+
+<?php if (!empty($help)) { ?>
+	<script type="text/javascript">
+		//One global variable to set, use true if you want the menus to reinit when the user changes text size (recommended):
+		menu[3] = { 
+		id:'menu-slide-right', //use unique quoted id (quoted) REQUIRED!!
+		bartext: '<img src="/main/img/help.png">',
+		menupos:'right',
+		kviewtype:'fixed', 
+		menuItems:[ // REQUIRED!!
+			//[name, link, target, colspan, endrow?] - leave 'link' and 'target' blank to make a header
+			["Help", "<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600", "", "thickbox"],	
+		]}; // REQUIRED!! do not edit or remove
+		make_menus();
+	</script>
+<?php } ?>
 
 <script type="text/javascript">
 //<![CDATA[
@@ -133,7 +153,10 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 	) ;
 }
 //]]>
+
 </script>
+
+
 
 <?php
 if (isset($htmlHeadXtra) && $htmlHeadXtra) {
@@ -160,7 +183,6 @@ include api_get_path(LIBRARY_PATH).'javascript/email_links.lib.js.php';
 <li><a href="#content" accesskey="2"><?php echo get_lang('WCAGGoContent'); ?></a></li>
 </ul>
 </div>
-
 <?php
 // Banner
 require_once api_get_path(INCLUDE_PATH).'banner.inc.php';

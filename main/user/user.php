@@ -178,7 +178,7 @@ function display_user_search_form() {
 	echo get_lang("SearchForUser") . "&nbsp;&nbsp;";
 	echo '<input type="text" name="keyword" value="'.Security::remove_XSS($_GET['keyword']).'"/>';
 	echo '<input type="submit" value="'.get_lang('SearchButton').'"/>';
-	echo '</form>';
+	echo '</form>';	
 }
 /**
 *	This function displays a list if users for each virtual course linked to the current
@@ -366,6 +366,7 @@ function get_number_of_users() {
 	$counter = 0;
 	if (!empty($_SESSION["id_session"])){
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
+
 	} else {
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], false);
 	}
@@ -383,6 +384,7 @@ function search_keyword($firstname, $lastname, $username, $official_code, $keywo
 	} else {
 		return false;
 	}
+	
 }
 
 
@@ -390,7 +392,6 @@ function search_keyword($firstname, $lastname, $username, $official_code, $keywo
  * Get the users to display on the current page.
  */
 function get_user_data($from, $number_of_items, $column, $direction) {
-
 	global $origin;
 	global $is_western_name_order;
 	global $sort_by_first_name;
@@ -509,6 +510,8 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		}
 	}
 	return $a_users;
+	
+	
 }
 
 

@@ -571,6 +571,96 @@ margin-top:0;
 	text-align:right;
 	width:92%;
 }
+
+/**********************************************************
+* MENU SLIDER BAR                   *
+**********************************************************/
+/*Menu Links*/
+
+/*NOTE: anything not specified for the #(menu id's) a selector and its pseudo classes
+may be inherited in some browsers from other 'a' element styles (if any) on the page*/
+
+#menu1 {
+	background-color:white;
+	color:black;
+	text-decoration:none;
+	text-indent:1ex;
+
+}
+
+#menu1 a {
+	color:black;
+	background-color:white;
+	text-decoration:none;
+	text-indent:1ex;
+}
+
+#menu1 a:active {
+	color:black;
+	text-decoration:none;
+}
+
+#menu1 a:hover {
+	color:black;
+	background-color:#FFFF99
+}
+
+#menu1 a:visited {
+	color:black;
+	text-decoration:none;
+}
+
+#menu2 a {
+	color:navy;
+	background-color:white;
+	text-decoration:none;
+	text-indent:1ex;
+}
+
+#menu2 a:active	{
+	color:blue;
+	text-decoration:none;
+}
+
+#menu2 a:visited {
+	color:blue;
+	text-decoration:none;
+}
+
+#menu2 a:hover {
+	color:navy;
+	background-color:#f0fea8
+}
+
+#menu3 a { /*Menu3 Links*/
+	color:black;
+	background-color:white;
+	text-decoration:none;
+	text-indent:2ex;
+	width: 15px; 
+	height: 15px;
+	right: -20px;
+}
+.menu3 {
+	color:black;
+	background-color:#FFFF99;
+}
+
+#menu3 a:hover {
+	color:black;
+	background-color:#FFFF99;
+	
+}
+#menu3 a:active	{
+	color:black;
+	text-decoration:none;
+}
+#menu3 a:visited	{
+	color:black;
+	text-decoration:none;
+}
+/*End Menu Links*/
+
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
@@ -3590,6 +3680,7 @@ div.image-social-content center.friend {
 #social-content-right {
 	height:auto;
 	overflow:hidden;	
+	width:72%;
 	float:left;
 	overflow:hidden;
 }
@@ -4234,72 +4325,3 @@ span.form_required  {
 	padding:0px;
 }
 
-/* Categories courses*/
-
-#course-picture {
-    position:absolute;
-    top:8%;
-    left:85%;
-    padding:4px;
-    border:1pt solid #ccc;
-}
-
-#categories-content-first {
-    border:1pt solid #ccc;
-    width:290px;
-    padding:10px;
-    float:left;
-}
-
-#categories-search {
-    border:1pt solid #ccc;
-    padding:10px;
-    text-align:center;
-    height:105px;
-}
-
-#categories-list {
-    border:1pt solid #ccc;
-    padding:25px;
-    margin-top:10px;
-    font-size:11pt;
-}
-
-#categories-content-second {
-    border:1pt solid #ccc;
-    margin-left: 315px;
-    padding:5px;
-    margin-top:5px;
-}
-
-.categories-block-course {
-    border:1pt solid #ccc;
-    width:246px;
-    height:180px;
-    margin:5px;
-    float:left;
-    padding:5px;
-}
-
-.categories-course-picture {
-    border:1pt solid #ccc;
-    width:75px;
-    height:75px;
-    float:left;
-}
-
-.categories-course-picture img {
-    width: 75px;
-    height: 75px;
-}
-
-.categories-course-description {
-    border:1pt solid #ccc;
-    margin-left:80px;
-}
-
-.categories-course-links {
-    border:1pt solid #ccc;
-    margin-top:5px;
-    height: 40px;
-}

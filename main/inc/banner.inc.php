@@ -144,6 +144,7 @@ if (api_get_setting('show_link_bug_notification') == 'true') { ?>
 <?php
 }
 
+
 if (api_is_allowed_to_edit()) {
 		if (!empty($help)) {			
 		echo '<li>';
@@ -152,10 +153,11 @@ if (api_is_allowed_to_edit()) {
 			echo '|';	
 		}
 		//echo get_lang('Help');
-		?>		
+	?>	<?php /*	
 			<a href="#" onclick="javascript: MyWindow=window.open('<?php echo api_get_path(WEB_CODE_PATH).'help/help.php'; ?>?open=<?php echo $help; ?>','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=620,height=600,left=200,top=20'); return false;">
 			<img src="<?php echo api_get_path(WEB_IMG_PATH); ?>help.png" style="vertical-align: middle;" title="<?php echo get_lang('Help'); ?>" alt="<?php echo get_lang('Help'); ?>"/></a>			
-		<?php
+		 */?>
+		<?php 
 		echo "</li>";		
 	}
 }
@@ -469,6 +471,7 @@ if (!empty($header_hide_main_div) && $header_hide_main_div === true) {
 	//do nothing
 } else {
 ?>
+
 <div id="main"> <!-- start of #main wrapper for #content and #menu divs -->
 <?php
 }

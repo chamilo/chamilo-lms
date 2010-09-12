@@ -1591,7 +1591,7 @@ function api_get_session_image($session_id, $status_id) {
  * This function add an additional condition according to the session of the course
  * @param int	session id
  * @param bool	optional, true if more than one condition false if the only condition in the query
- * @param bool	optional, true if condition is only with session_id = current session id, false if condition is with 0 else
+ * @param bool	optional, true to accept content with session=0 as well, false for strict session condition
  * @return string	condition of the session
  */
 function api_get_session_condition($session_id, $and = true, $with_base_content = false) {

@@ -1978,7 +1978,7 @@ class learnpath {
 	 * @return	string	HTML string containing the progress bar
 	 */
 	public function get_progress_bar($mode = '', $percentage = -1, $text_add = '', $from_lp = false) {
-		if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar('.$mode.','.$percentage.','.$text_add.','.$from_lp.')',0);}
+		//if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar('.$mode.','.$percentage.','.$text_add.','.$from_lp.')',0);}
 		global $lp_theme_css;
 
 		// Setting up the CSS path of the current style if exists

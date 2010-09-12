@@ -23,11 +23,8 @@ if(empty($_SESSION['_course']['id']) && isset($_GET['course'])) {
 if (isset($_GET['student_id'])) {
 	$student_id = intval($_GET['student_id']);
 }
-$session_id = 0;
-if (isset($_GET['session_id'])) {
-	$session_id = intval($_GET['session_id']);
-}
-
+$session_id = api_get_session_id();
+$session_condition = api_get_session_condition($session_id);
 //The two following variables have to be declared by the includer script
 //$lp_id = $_SESSION['oLP']->get_id();
 //$list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
@@ -102,7 +99,7 @@ $tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_E
 $tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION);
 $sql = "SELECT max(view_count) FROM $TBL_LP_VIEW " .
-"WHERE lp_id = $lp_id AND user_id = '" . $user_id . "' AND session_id = $session_id";
+"WHERE lp_id = $lp_id AND user_id = '" . $user_id . "' $session_condition";
 $res = Database::query($sql);
 $view = '';
 $num = 0;

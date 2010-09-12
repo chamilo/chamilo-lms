@@ -67,6 +67,7 @@ class learnpath {
 	public $debug = 0; //logging level
 
 	public $lp_session_id =0;
+	public $lp_view_session_id =0; //the specific view might be bound to a session
 
 	public $prerequisite = 0;
 
@@ -170,7 +171,7 @@ class learnpath {
 
 	$session_id = api_get_session_id();
 	// get the session condition for learning paths of the base + session
-	$session = api_get_session_condition($session_id,true,true);
+	$session = api_get_session_condition($session_id);
     	//now get the latest attempt from this user on this LP, if available, otherwise create a new one
 		$lp_table = Database::get_course_table(TABLE_LP_VIEW);
 		//selecting by view_count descending allows to get the highest view_count first
@@ -187,6 +188,7 @@ class learnpath {
 			$this->lp_view_id = $row['id'];
 			$this->last_item_seen = $row['last_item'];
 			$this->progress_db = $row['progress'];
+			$this->lp_view_session_id = $row['session_id'];
 		} else {
 			if ($this->debug > 2) {
 				error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
@@ -3505,9 +3507,10 @@ class learnpath {
 		//TODO
 		//call autosave method to save the current progress
 		//$this->index = 0;
+		$session_id = api_get_session_id();
 		$lp_view_table = Database :: get_course_table(TABLE_LP_VIEW);
-		$sql = "INSERT INTO $lp_view_table (lp_id, user_id, view_count) " .
-		"VALUES (" . $this->lp_id . "," . $this->get_user_id() . "," . ($this->attempt + 1) . ")";
+		$sql = "INSERT INTO $lp_view_table (lp_id, user_id, view_count, session_id) " .
+		"VALUES (" . $this->lp_id . "," . $this->get_user_id() . "," . ($this->attempt + 1) . ", $session_id)";
 		if ($this->debug > 2) {
 			error_log('New LP - Inserting new lp_view for restart: ' . $sql, 0);
 		}
@@ -3594,13 +3597,14 @@ class learnpath {
 		if ($this->debug > 0) {
 			error_log('New LP - In learnpath::save_last()', 0);
 		}
+		$session_condition = api_get_session_condition(api_get_session_id(),true,false);
 		$table = Database :: get_course_table(TABLE_LP_VIEW);
 		if (isset ($this->current)) {
 			if ($this->debug > 2) {
 				error_log('New LP - Saving current item (' . $this->current . ') for later review', 0);
 			}
 			$sql = "UPDATE $table SET last_item = " . Database::escape_string($this->get_current_item_id()). " " .
-					"WHERE lp_id = " . $this->get_id() . " AND user_id = " . $this->get_user_id();
+					"WHERE lp_id = " . $this->get_id() . " AND user_id = " . $this->get_user_id().' '.$session_condition;
 
 			if ($this->debug > 2) {
 				error_log('New LP - Saving last item seen : ' . $sql, 0);
@@ -3618,7 +3622,7 @@ class learnpath {
 
 			$sql = "UPDATE $table SET progress = $progress " .
 					"WHERE lp_id = " . $this->get_id() . " AND " .
-				  		  "user_id = " . $this->get_user_id();
+				  		  "user_id = " . $this->get_user_id().' '.$session_condition;
 			$res = Database::query($sql); //ignore errors as some tables might not have the progress field just yet
 			$this->progress_db = $progress;
 		}

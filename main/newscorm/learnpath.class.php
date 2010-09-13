@@ -7365,13 +7365,13 @@ class learnpath {
 		while ($row_link = Database :: fetch_array($res_link)) {
 			$return .= '<div class="lp_resource_element">';
 
-			$return .= '<img alt="" src="../img/file_html_small.gif" style="margin-right:5px;" title="" />';
+			$return .= '<img alt="" src="../img/lp_link.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
 
 			$return .= '</div>';
 		}
 		$return .= '<div class="lp_resource_element">';
-		$return .= '<img alt="" src="../img/file_html_new_small.gif" style="margin-right:5px;" title="" />';
+		$return .= '<img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px" title="" />';
 		$return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'link/link.php?' . api_get_cidreq() . '&action=addlink" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
 		$return .= '</div>';
 

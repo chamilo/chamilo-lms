@@ -916,7 +916,7 @@ class UserManager
 		$production_dir = $production_path['dir'].$user_id.'/';
 		$del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
 		$del_text = get_lang('Delete');
-		$production_list = '';
+		$production_list = '';	
 		if (count($productions) > 0) {
 			$production_list = '<ul id="productions">';
 			foreach ($productions as $file) {
@@ -968,9 +968,12 @@ class UserManager
 	 */
 	public static function remove_user_production($user_id, $production) {
 		$production_path = self::get_user_picture_path_by_id($user_id, 'system', true);
-		if (is_file($production_path['dir'].$production)) {
-			unlink($production_path['dir'].$production);
+		$production_file = $production_path['dir'].$user_id.'/'.$production;
+		if (is_file($production_file)) {
+			unlink($production_file);
+			return true;
 		}
+		return false;
 	}
 
 	/**

@@ -6160,7 +6160,7 @@ class learnpath {
 
 		//POSITION
 		for ($i = 0; $i < count($arrLP); $i++) {
-			if ($arrLP[$i]['parent_item_id'] == $parent_item_id && $arrLP[$i]['id'] != $id) {
+			if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
 				if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 					$s_selected_position = $arrLP[$i]['id'];
 				elseif ($action == 'add') $s_selected_position = $arrLP[$i]['id'];

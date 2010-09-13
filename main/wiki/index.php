@@ -1462,7 +1462,7 @@ if ($_GET['action']=='edit')
 					echo '<td>'.get_lang('DescriptionOfTheTask').'</td>';
 					echo '</tr>';
 					echo '<tr>';
-					echo '<td>'.api_disp_html_area('task', $row['task'], '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '600', 'Height' => '200')).'</td>';
+					echo '<td>'.api_disp_html_area('task', $row['task'], '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '585', 'Height' => '200')).'</td>';
 					echo '</tr>';
 					echo '</table>';
 					echo '</div>';
@@ -1536,7 +1536,7 @@ if ($_GET['action']=='edit')
 					echo  '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 					echo '<table width="100%" border="0" style="font-weight:normal">';
 					echo '<tr>';
-					echo '<td align="right">'.get_lang("StartDate").':</td>';
+					echo '<td align="right" width="150">'.get_lang("StartDate").':</td>';
 					echo '<td>';
 					if ($row['startdate_assig']=='0000-00-00 00:00:00')
 					{
@@ -1545,12 +1545,12 @@ if ($_GET['action']=='edit')
 					}
 					else
 					{
-						echo draw_date_picker('startdate_assig', $row['startdate_assig']).' <input type="checkbox" name="initstartdate" value="1"> '.get_lang('Yes').'/'.get_lang('No').'';
+						echo draw_date_picker('startdate_assig', $row['startdate_assig']).' <input type="checkbox" name="initstartdate" value="1">'.get_lang('Yes').'/'.get_lang('No').'';
 					}
 					echo '</td>';
 					echo '</tr>';
 					echo '<tr>';
-					echo '<td align="right">'.get_lang("EndDate").':</td>';
+					echo '<td align="right" width="150">'.get_lang("EndDate").':</td>';
 					echo '<td>';
 					if ($row['enddate_assig']=='0000-00-00 00:00:00')
 					{

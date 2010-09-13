@@ -195,7 +195,7 @@ class GradebookTable extends SortableTable
 				if (empty($_GET['selectcat'])) {
 					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
 						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$id.'" target="_blank">
-										 <img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display;
+										 <img src="'.api_get_path(WEB_CODE_PATH) . 'img/logo.gif" /></a>&nbsp;'.$scoretotal_display;
 
 						//register gradebook certificate
 						$current_user_id=api_get_user_id();

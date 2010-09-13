@@ -851,7 +851,7 @@ if ($category != '0') {
 			//show certificate
 			$certificate_min_score=$cats[0]->get_certificate_min_score();
 			if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
-				$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id().'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" />'.get_lang('Certificates').'</a>&nbsp;'.get_lang('langTotal').': '.$scoretotal_display;
+				$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id().'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/logo.gif" />'.get_lang('Certificates').'</a>&nbsp;'.get_lang('langTotal').': '.$scoretotal_display;
 				echo '<div class="actions" align="right">';
 				echo $certificates;
 				echo '</div>';

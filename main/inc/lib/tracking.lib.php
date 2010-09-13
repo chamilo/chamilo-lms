@@ -816,7 +816,7 @@ class Tracking {
 	 * @param 	int 		Learning path id
 	 * @return 	int         Total time
 	 */
-	public static function get_last_connection_time_in_lp($student_id, $course_code, $lp_id) {
+	public static function get_last_connection_time_in_lp($student_id, $course_code, $lp_id, $session_id=0) {
 
 		$course = CourseManager :: get_course_information($course_code);
 		$student_id = intval($student_id);
@@ -841,7 +841,8 @@ class Tracking {
 											INNER JOIN ' . $t_lpv . ' AS view
 												ON item_view.lp_view_id = view.id
 												AND view.lp_id = '.$lp_id.'
-												AND view.user_id = '.$student_id;
+												AND view.user_id = '.$student_id.' 
+												AND view.session_id = '.$session_id;
 				$rs = Database::query($sql);
 				if (Database :: num_rows($rs) > 0) {
 					$last_time = Database :: result($rs, 0, 0);

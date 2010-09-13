@@ -11,7 +11,7 @@
  * Initialisations
  */
 $debug = 0;
-if($debug>0) error_log('New LP -+- Entered lp_controller.php -+-',0);
+if($debug>0) error_log('New LP -+- Entered lp_controller.php -+- (action: '.$_REQUEST['action'].')',0);
 // name of the language file that needs to be included
 if (isset($_GET['action']))
 {
@@ -71,6 +71,8 @@ if($debug>0) error_log('New LP - Included aiccItem',0);
 require_once 'back_compat.inc.php';
 if($debug>0) error_log('New LP - Included back_compat',0);
 
+$session_id = api_get_session_id();
+
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
@@ -102,7 +104,7 @@ if(isset($_SESSION['lpobject']))
 	$oLP = unserialize($_SESSION['lpobject']);
 	if(is_object($oLP)){
 		if($debug>0) error_log('New LP - oLP is object',0);
-		if($myrefresh == 1 OR (empty($oLP->cc)) OR $oLP->cc != api_get_course_id()){
+		if($myrefresh == 1 OR (empty($oLP->cc)) OR $oLP->cc != api_get_course_id() OR $oLP->lp_view_session_id != $session_id){
 			if($debug>0) error_log('New LP - Course has changed, discard lp object',0);
 			if($myrefresh == 1){$myrefresh_id = $oLP->get_id();}
 			$oLP = null;
@@ -747,10 +749,9 @@ switch($action)
 		else
 		{
 			if($debug > 0){error_log('New LP - Trying to set current item to ' . $_REQUEST['item_id'], 0);}
-			if ( !empty($_REQUEST['item_id']) )
-            {
-                $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
-            }
+			if ( !empty($_REQUEST['item_id']) ) {
+				$_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
+			}
 			require 'lp_view.php';
 		}
 		break;
@@ -836,25 +837,25 @@ switch($action)
 		require 'lp_message.php';
 		break;
 	case 'return_to_course_homepage':
-        if(!$lp_found){ error_log('New LP - No learnpath given for stats',0); require 'lp_list.php'; }
-        else{
-            $_SESSION['oLP']->save_current();
-            $_SESSION['oLP']->save_last();
-            //declare variables to be used in lp_stats.php
-            $lp_id = $_SESSION['oLP']->get_id();
-            $list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
-            $user_id = api_get_user_id();
-            $stats_charset = $_SESSION['oLP']->encoding;
-            //header('location: ../course_home/course_home.php?'.api_get_cidreq()); // This is not the preferable way to go to the homepage.
-            header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php');
-        }
-        break;
-    case 'search':
-        /* Include the search script, it's smart enough to know when we are
-         * searching or not
-         */
-        require 'lp_list_search.php';
-        break;
+	        if(!$lp_found){ error_log('New LP - No learnpath given for stats',0); require 'lp_list.php'; }
+        	else{
+	            $_SESSION['oLP']->save_current();
+        	    $_SESSION['oLP']->save_last();
+	            //declare variables to be used in lp_stats.php
+        	    $lp_id = $_SESSION['oLP']->get_id();
+	            $list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
+        	    $user_id = api_get_user_id();
+	            $stats_charset = $_SESSION['oLP']->encoding;
+        	    //header('location: ../course_home/course_home.php?'.api_get_cidreq()); // This is not the preferable way to go to the homepage.
+	            header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php');
+        	}
+	        break;
+    	case 'search':
+	        /* Include the search script, it's smart enough to know when we are
+	         * searching or not
+	         */
+	        require 'lp_list_search.php';
+        	break;
 	default:
 		if($debug>0) error_log('New LP - default action triggered',0);
 		//$_SESSION['refresh'] = 1;

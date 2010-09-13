@@ -41,10 +41,11 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH)
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 function confirmation(name) {
-	if (confirm("'.get_lang('AreYouSureToDelete', '').' " + name + " ?"))
-		{return true;}
-	else
-		{return false;}
+	if (confirm("'.get_lang('AreYouSureToDelete', '').' " + name + " ?")) {
+			document.forms["profile"].submit();
+	} else {
+		return false;
+	}
 }
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
@@ -72,7 +73,6 @@ if (!empty ($_GET['coursePath'])) {
 	$course_url = api_get_path(WEB_COURSE_PATH).htmlentities(strip_tags($_GET['coursePath'])).'/index.php';
 	$interbreadcrumb[] = array('url' => $course_url, 'name' => Security::remove_XSS($_GET['courseCode']));
 }
-
 
 $warning_msg = '';
 if (!empty($_GET['fe'])) {
@@ -510,7 +510,6 @@ function upload_user_production($user_id) {
 	if (!file_exists($production_repository)) {
 		@mkdir($production_repository, api_get_permissions_for_new_directories(), true);
 	}
-
 	$filename = replace_dangerous_char($_FILES['production']['name']);
 	$filename = disable_dangerous_file($filename);
 
@@ -580,15 +579,6 @@ if (!empty($_SESSION['change_email'])) {
 } elseif (!empty($_SESSION['production_uploaded'])) {
 	$upload_production_success = ($_SESSION['production_uploaded'] == 'success');
 	unset($_SESSION['production_uploaded']);
-} elseif (isset($_POST['remove_production'])) {
-	foreach (array_keys($_POST['remove_production']) as $production) {
-		UserManager::remove_user_production($_user['user_id'], urldecode($production));
-	}
-	if ($production_list = UserManager::build_production_list($_user['user_id'], true, true)) {
-		$form->insertElementBefore($form->createElement('static', null, null, $production_list), 'productions_list');
-	}
-	$form->removeElement('productions_list');
-	$file_deleted = true;
 }
 
 if ($form->validate()) {
@@ -596,6 +586,7 @@ if ($form->validate()) {
 	$wrong_current_password = false;
 //	$user_data = $form->exportValues();
 	$user_data = $form->getSubmitValues();
+	
 	// set password if a new one was provided
 	if (!empty($user_data['password0'])) {
 		if (check_user_password($user_data['password0'])) {
@@ -632,6 +623,20 @@ if ($form->validate()) {
 		UserManager::delete_user_picture($_user['user_id']);
 		$user_data['picture_uri'] = '';
 	}
+	
+	//Remove production	
+	if (is_array($user_data['remove_production'])) {
+		foreach (array_keys($user_data['remove_production']) as $production) {
+			UserManager::remove_user_production($_user['user_id'], urldecode($production));
+		}
+		if ($production_list = UserManager::build_production_list($_user['user_id'], true, true)) {
+			var_dump($production_list);
+			$form->insertElementBefore($form->createElement('static', null, null, $production_list), 'productions_list');
+		}
+		$form->removeElement('productions_list');
+		$file_deleted = true;
+	}
+	
 
 	// upload production if a new one is provided
 	if ($_FILES['production']['size']) {

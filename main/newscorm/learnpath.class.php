@@ -67,6 +67,7 @@ class learnpath {
 	public $debug = 0; //logging level
 
 	public $lp_session_id =0;
+	public $lp_view_session_id =0; //the specific view might be bound to a session
 
 	public $prerequisite = 0;
 
@@ -168,16 +169,14 @@ class learnpath {
     	}
     	//end of variables checking
 
+	$session_id = api_get_session_id();
+	// get the session condition for learning paths of the base + session
+	$session = api_get_session_condition($session_id);
     	//now get the latest attempt from this user on this LP, if available, otherwise create a new one
 		$lp_table = Database::get_course_table(TABLE_LP_VIEW);
 		//selecting by view_count descending allows to get the highest view_count first
-		$session_id = api_get_session_id();
-		$session = api_get_session_condition($session_id);
 		$sql = "SELECT * FROM $lp_table WHERE lp_id = '$lp_id' AND user_id = '$user_id' $session  ORDER BY view_count DESC";
-		if ($this->debug > 2) {
-			error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0);
-		}
-		//$res = Database::query($sql);
+		if ($this->debug > 2) {error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0);}
 		$res = Database::query($sql);
 		$view_id = 0; //used later to query lp_item_view
 		if (Database :: num_rows($res) > 0) {
@@ -189,6 +188,7 @@ class learnpath {
 			$this->lp_view_id = $row['id'];
 			$this->last_item_seen = $row['last_item'];
 			$this->progress_db = $row['progress'];
+			$this->lp_view_session_id = $row['session_id'];
 		} else {
 			if ($this->debug > 2) {
 				error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
@@ -1829,8 +1829,10 @@ class learnpath {
 	 */
 	public function get_db_progress($lp_id, $user_id, $mode = '%', $course_db = '', $sincere = false) {
 		//if($this->debug>0){error_log('New LP - In learnpath::get_db_progress()',0);}
+		$session_id = api_get_session_id();
+		$session_condition = api_get_session_condition($session_id);
 		$table = Database :: get_course_table(TABLE_LP_VIEW, $course_db);
-		$sql = "SELECT * FROM $table WHERE lp_id = $lp_id AND user_id = $user_id";
+		$sql = "SELECT * FROM $table WHERE lp_id = $lp_id AND user_id = $user_id $session_condition";
 		$res = Database::query($sql);
 		$view_id = 0;
 		if (Database :: num_rows($res) > 0) {
@@ -1978,7 +1980,7 @@ class learnpath {
 	 * @return	string	HTML string containing the progress bar
 	 */
 	public function get_progress_bar($mode = '', $percentage = -1, $text_add = '', $from_lp = false) {
-		//if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar()',0);}
+		//if($this->debug>0){error_log('New LP - In learnpath::get_progress_bar('.$mode.','.$percentage.','.$text_add.','.$from_lp.')',0);}
 		global $lp_theme_css;
 
 		// Setting up the CSS path of the current style if exists
@@ -3505,9 +3507,10 @@ class learnpath {
 		//TODO
 		//call autosave method to save the current progress
 		//$this->index = 0;
+		$session_id = api_get_session_id();
 		$lp_view_table = Database :: get_course_table(TABLE_LP_VIEW);
-		$sql = "INSERT INTO $lp_view_table (lp_id, user_id, view_count) " .
-		"VALUES (" . $this->lp_id . "," . $this->get_user_id() . "," . ($this->attempt + 1) . ")";
+		$sql = "INSERT INTO $lp_view_table (lp_id, user_id, view_count, session_id) " .
+		"VALUES (" . $this->lp_id . "," . $this->get_user_id() . "," . ($this->attempt + 1) . ", $session_id)";
 		if ($this->debug > 2) {
 			error_log('New LP - Inserting new lp_view for restart: ' . $sql, 0);
 		}
@@ -3594,13 +3597,14 @@ class learnpath {
 		if ($this->debug > 0) {
 			error_log('New LP - In learnpath::save_last()', 0);
 		}
+		$session_condition = api_get_session_condition(api_get_session_id(),true,false);
 		$table = Database :: get_course_table(TABLE_LP_VIEW);
 		if (isset ($this->current)) {
 			if ($this->debug > 2) {
 				error_log('New LP - Saving current item (' . $this->current . ') for later review', 0);
 			}
 			$sql = "UPDATE $table SET last_item = " . Database::escape_string($this->get_current_item_id()). " " .
-					"WHERE lp_id = " . $this->get_id() . " AND user_id = " . $this->get_user_id();
+					"WHERE lp_id = " . $this->get_id() . " AND user_id = " . $this->get_user_id().' '.$session_condition;
 
 			if ($this->debug > 2) {
 				error_log('New LP - Saving last item seen : ' . $sql, 0);
@@ -3618,7 +3622,7 @@ class learnpath {
 
 			$sql = "UPDATE $table SET progress = $progress " .
 					"WHERE lp_id = " . $this->get_id() . " AND " .
-				  		  "user_id = " . $this->get_user_id();
+				  		  "user_id = " . $this->get_user_id().' '.$session_condition;
 			$res = Database::query($sql); //ignore errors as some tables might not have the progress field just yet
 			$this->progress_db = $progress;
 		}
@@ -6156,7 +6160,7 @@ class learnpath {
 
 		//POSITION
 		for ($i = 0; $i < count($arrLP); $i++) {
-			if ($arrLP[$i]['parent_item_id'] == $parent_item_id && $arrLP[$i]['id'] != $id) {
+			if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
 				if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
 					$s_selected_position = $arrLP[$i]['id'];
 				elseif ($action == 'add') $s_selected_position = $arrLP[$i]['id'];
@@ -7361,13 +7365,13 @@ class learnpath {
 		while ($row_link = Database :: fetch_array($res_link)) {
 			$return .= '<div class="lp_resource_element">';
 
-			$return .= '<img alt="" src="../img/file_html_small.gif" style="margin-right:5px;" title="" />';
+			$return .= '<img alt="" src="../img/lp_link.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">' . $row_link['title'] . '</a>';
 
 			$return .= '</div>';
 		}
 		$return .= '<div class="lp_resource_element">';
-		$return .= '<img alt="" src="../img/file_html_new_small.gif" style="margin-right:5px;" title="" />';
+		$return .= '<img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px" title="" />';
 		$return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'link/link.php?' . api_get_cidreq() . '&action=addlink" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
 		$return .= '</div>';
 

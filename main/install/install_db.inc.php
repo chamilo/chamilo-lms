@@ -61,15 +61,19 @@ if (empty($mysqlUserDb) || $mysqlUserDb == 'mysql' || $mysqlUserDb == $dbPrefixF
 	$mysqlUserDb = $dbPrefixForm.'user';
 }
 
-$result = Database::query("SHOW VARIABLES LIKE 'datadir'") or die(Database::error());
+//This parameter is needed to run a command line to install Chamilo using BNPanel + ISPConfig see #1799
+if(!defined('CLI_INSTALLATION')) {
 
-$mysqlRepositorySys = Database::fetch_array($result);
-$mysqlRepositorySys = $mysqlRepositorySys['Value'];
-
-if (!$singleDbForm) {
-	Database::query("DROP DATABASE IF EXISTS `$mysqlMainDb`") or die(Database::error());
+	$result = Database::query("SHOW VARIABLES LIKE 'datadir'") or die(Database::error());
+	
+	$mysqlRepositorySys = Database::fetch_array($result);
+	$mysqlRepositorySys = $mysqlRepositorySys['Value'];
+	
+	if (!$singleDbForm) {
+		Database::query("DROP DATABASE IF EXISTS `$mysqlMainDb`") or die(Database::error());
+	}
+	Database::query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`") or die(Database::error());
 }
-Database::query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`") or die(Database::error());
 
 /**
  * CREATING THE STATISTICS DATABASE

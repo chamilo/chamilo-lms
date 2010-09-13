@@ -630,7 +630,7 @@ if ($form->validate()) {
 			UserManager::remove_user_production($_user['user_id'], urldecode($production));
 		}
 		if ($production_list = UserManager::build_production_list($_user['user_id'], true, true)) {
-			var_dump($production_list);
+			//var_dump($production_list);
 			$form->insertElementBefore($form->createElement('static', null, null, $production_list), 'productions_list');
 		}
 		$form->removeElement('productions_list');

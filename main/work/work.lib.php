@@ -1036,11 +1036,11 @@ function del_dir($base_work_dir, $dir, $id) {
 		return -1;
 	}
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "DELETE FROM $table WHERE url BINARY 'work/".$dir."/%'";
+	$sql = "DELETE FROM $table WHERE url LIKE BINARY 'work/".$dir."/%'";
 	$res = Database::query($sql);
 
 	//delete from DB the directories
-	$sql = "DELETE FROM $table WHERE filetype = 'folder' AND url BINARY '/".$dir."%'";
+	$sql = "DELETE FROM $table WHERE filetype = 'folder' AND url LIKE BINARY '/".$dir."%'";
 	$res = Database::query($sql);
 
 	require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';

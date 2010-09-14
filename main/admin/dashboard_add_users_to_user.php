@@ -18,6 +18,9 @@ require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
+global $_configuration;
+
+
 // create an ajax object
 $xajax = new xajax();
 $xajax -> registerFunction ('search_users');
@@ -34,6 +37,7 @@ $interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList
 
 // Database Table Definitions
 $tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
+$tbl_access_url_rel_user		= 	Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 // initializing variables
 $id_session=intval($_GET['id_session']);
@@ -61,7 +65,7 @@ if (!api_is_platform_admin()) {
 }
 
 function search_users($needle,$type) {
-	global $tbl_user, $user_anonymous, $current_user_id, $user_id;
+	global $_configuration,$tbl_access_url_rel_user,  $tbl_user, $user_anonymous, $current_user_id, $user_id;
 
 	$xajax_response = new XajaxResponse();
 	$return = '';
@@ -73,12 +77,21 @@ function search_users($needle,$type) {
 		$assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
 		$assigned_users_id = array_keys($assigned_users_to_hrm);
 		$without_assigned_users = '';
+		
 		if (count($assigned_users_id) > 0) {
 			$without_assigned_users = " AND user_id NOT IN(".implode(',',$assigned_users_id).")";
+		}	
+		
+		if ($_configuration['multiple_access_urls']) {			
+			$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
+			WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status NOT IN(".DRH.", ".SESSIONADMIN.") AND user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) $without_assigned_users AND access_url_id = ".api_get_current_access_url_id()."";
+			
+		} else {
+			$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
+			WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status NOT IN(".DRH.", ".SESSIONADMIN.") AND user_id NOT IN ($user_anonymous, $current_user_id, $user_id) $without_assigned_users";
 		}
-
-		$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
-				WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status NOT IN(".DRH.", ".SESSIONADMIN.") AND user_id NOT IN ($user_anonymous, $current_user_id, $user_id) $without_assigned_users";
+		
+		
 		$rs	= Database::query($sql);
 
 		$return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
@@ -176,7 +189,7 @@ $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
 $assigned_users_id = array_keys($assigned_users_to_hrm);
 $without_assigned_users = '';
 if (count($assigned_users_id) > 0) {
-	$without_assigned_users = " user_id NOT IN(".implode(',',$assigned_users_id).") AND ";
+	$without_assigned_users = " user.user_id NOT IN(".implode(',',$assigned_users_id).") AND ";
 }
 
 $search_user = '';
@@ -185,8 +198,15 @@ if (isset($_POST['firstLetterUser'])) {
 	$search_user ="AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%'";
 }
 
-$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
-		WHERE  $without_assigned_users user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user ";
+
+if ($_configuration['multiple_access_urls']) {
+	$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user  LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
+			WHERE  $without_assigned_users user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user AND access_url_id = ".api_get_current_access_url_id()."";
+} else {
+	$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
+			WHERE  $without_assigned_users user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user ";
+}
+		
 $result	= Database::query($sql);
 
 ?>

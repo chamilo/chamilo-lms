@@ -1000,6 +1000,7 @@ CREATE TABLE sys_announcement (
   title varchar(250) NOT NULL default '',
   content text NOT NULL,
   lang varchar(70) NULL default NULL,
+  access_url_id INT NOT NULL default 1,  
   PRIMARY KEY  (id)
 );
 
@@ -1294,6 +1295,7 @@ CREATE TABLE IF NOT EXISTS sys_calendar (
   content text,
   start_date datetime NOT NULL default '0000-00-00 00:00:00',
   end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  access_url_id INT NOT NULL default 1,
   PRIMARY KEY  (id)
 );
 

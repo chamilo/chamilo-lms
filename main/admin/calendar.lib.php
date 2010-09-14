@@ -681,7 +681,15 @@ function display_agenda_items()
     $repeats = array(); //placeholder for repeated events
 
 	if (is_allowed_to_edit() && !api_is_anonymous()) {
-		$sql="SELECT * FROM ".$TABLEAGENDA.' ORDER BY start_date '.$_SESSION['sort'];
+		$sql="SELECT * FROM ".$TABLEAGENDA;
+		
+		global $_configuration;
+		$current_access_url_id = 1;
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+		}
+		$sql .= " WHERE access_url_id = $current_access_url_id";
+		$sql .= ' ORDER BY start_date '.$_SESSION['sort'];
 		//echo "<pre>".$sql."</pre>";
 		$result=Database::query($sql) or die(Database::error());
 		$number_items=Database::num_rows($result);
@@ -1680,18 +1688,22 @@ function display_upcoming_events() {
 	/*if (api_is_allowed_to_edit())
 	{*/
 		//echo "course admin";
-		$sqlquery = "SELECT
-						DISTINCT *
-						FROM ".$TABLEAGENDA."
-						ORDER BY start_date ";
+	$sqlquery = "SELECT DISTINCT * FROM ".$TABLEAGENDA;
+	
+	global $_configuration;
+	$current_access_url_id = 1;
+	if ($_configuration['multiple_access_urls']) {
+		$current_access_url_id = api_get_current_access_url_id();
+	}
+	$sqlquery .= "WHERE access_url_id = $current_access_url_id ";
+			
+	$sqlquery .= " ORDER BY start_date ";
 	//}
 	// if the user is not an administrator of that course
 	$result = Database::query($sqlquery);
 	$counter = 0;
-	while ($item = Database::fetch_array($result,'ASSOC'))
-	{
-		if ($counter < $number_of_items_to_show)
-		{
+	while ($item = Database::fetch_array($result,'ASSOC')) {
+		if ($counter < $number_of_items_to_show) {
 			echo $item['start_date'],' - ',$item['title'],'<br />';
 			$counter++;
 		}
@@ -2843,11 +2855,15 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     if ($count > 0) {
     	return false;
     }
-
-    $sql = "INSERT INTO ".$t_agenda."
-                            (title,content, start_date, end_date)
-                            VALUES
-                            ('".$title."','".$content."', '".$start_date."','".$end_date."')";
+	
+	global $_configuration;
+	$current_access_url_id = 1;
+	if ($_configuration['multiple_access_urls']) {
+		$current_access_url_id = api_get_current_access_url_id();
+	}				
+						
+    $sql = "INSERT INTO ".$t_agenda." (title,content, start_date, end_date, access_url_id)
+			VALUES ('".$title."','".$content."', '".$start_date."','".$end_date."', '".$current_access_url_id."')";
 
     $result = Database::query($sql) or die (Database::error());
     $last_id=Database::insert_id();
@@ -2902,8 +2918,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
  * @param   array   Original event's destination
  * @return  boolean False if error, True otherwise
  */
- function get_calendar_items($month, $year)
-{
+ function get_calendar_items($month, $year) {
 	global $_user, $_course;
 	global $is_allowed_to_edit;
 
@@ -2922,12 +2937,19 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     $repeats = array();
     $data=array();
 	if (is_allowed_to_edit()) {
-	$sql="SELECT
-			DISTINCT *
+		$sql="SELECT DISTINCT *
 			FROM ".$TABLEAGENDA." agenda
-			WHERE MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
-			GROUP BY id ".
-			"ORDER BY  start_date ";
+			WHERE MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'";
+			
+		global $_configuration;
+		$current_access_url_id = 1;
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+		}
+		$sql .= " AND access_url_id = '$current_access_url_id' ";
+			
+		$sql .= "GROUP BY id ORDER BY  start_date ";
+	
 		$result=Database::query($sql);
 
 		while ($row=Database::fetch_array($result)) {

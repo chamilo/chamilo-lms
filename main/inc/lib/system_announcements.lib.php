@@ -33,6 +33,15 @@ class SystemAnnouncementManager
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
+		
+		global $_configuration;
+		$current_access_url_id = 1;
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+		}
+		$sql .= " AND access_url_id = '$current_access_url_id' ";
+		
+		
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
 		
 		$announcements = Database::query($sql);
@@ -87,6 +96,7 @@ class SystemAnnouncementManager
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date FROM ".$db_table."
 				WHERE (lang='$user_selected_language' OR lang IS NULL) AND ((NOW() BETWEEN date_start AND date_end)	OR date_end='0000-00-00')";
+				
 		switch ($visible) {
 			case VISIBLE_GUEST :
 				$sql .= " AND visible_guest = 1 ";
@@ -98,6 +108,13 @@ class SystemAnnouncementManager
 				$sql .= " AND visible_teacher = 1 ";
 				break;
 		}
+		
+		global $_configuration;
+		$current_access_url_id = 1;
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+		}
+		$sql .= " AND access_url_id = '$current_access_url_id' ";		
 
 		if(!isset($_GET['start']) || $_GET['start'] == 0) {
 			$sql .= " ORDER BY date_start DESC LIMIT ".$start.",20";
@@ -191,6 +208,15 @@ class SystemAnnouncementManager
 					break;
 			}
  		}
+ 		
+ 		global $_configuration;
+		$current_access_url_id = 1;
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+		}
+		$sql .= " AND access_url_id = '$current_access_url_id' ";
+		
+		
 		$sql .= 'LIMIT '.$start.',21';
 		$announcements = Database::query($sql);
 		$i = 0;
@@ -210,7 +236,17 @@ class SystemAnnouncementManager
 	{
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
-		$sql = "SELECT *, IF( NOW() BETWEEN date_start AND date_end, '1', '0') AS visible FROM ".$db_table." ORDER BY date_start ASC";
+		$sql = "SELECT *, IF( NOW() BETWEEN date_start AND date_end, '1', '0') AS visible FROM ".$db_table." ";
+		
+		
+		global $_configuration;
+		$current_access_url_id = 1;
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+		}
+		$sql .= " WHERE access_url_id = '$current_access_url_id' ";
+		$sql .= "ORDER BY date_start ASC";		
+		
 		$announcements = Database::query($sql);
 		$all_announcements = array();
 		while ($announcement = Database::fetch_object($announcements)) {
@@ -267,8 +303,15 @@ class SystemAnnouncementManager
 		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
 
 		$langsql = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
-		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
-				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$langsql.")";
+				
+		global $_configuration;
+		$current_access_url_id = 1;
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+		}
+		
+		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang, access_url_id)
+				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$langsql.", ".$current_access_url_id.")";
 		if ($send_mail==1) {
 			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang);
 		}
@@ -321,10 +364,16 @@ class SystemAnnouncementManager
 		//Fixing urls that are sent by email
 		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
 		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
-
+		
+		global $_configuration;
+		$current_access_url_id = 1;
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+		}
+		
 		$id = intval($id);
 		$sql = "UPDATE ".$db_table." SET lang=$langsql,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
-		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
+		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' , access_url_id = '".$current_access_url_id."'  WHERE id='".$id."'";
 
 		if ($send_mail==1) {
 			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang);
@@ -411,6 +460,15 @@ class SystemAnnouncementManager
 		if (!empty($language)) { //special condition because language was already treated for SQL insert before
 			$sql .= " AND language = '".Database::escape_string($language)."' ";
 		}
+		
+		global $_configuration;
+		$current_access_url_id = 1;
+		if ($_configuration['multiple_access_urls']) {
+			$current_access_url_id = api_get_current_access_url_id();
+		}		
+		$sql .= " AND access_url_id = '".$current_access_url_id."' ";
+		
+		
 		if ($teacher == '0' AND $student == '0') {
 			return true;
 		}
@@ -423,4 +481,3 @@ class SystemAnnouncementManager
 		}
 	}
 }
-?>

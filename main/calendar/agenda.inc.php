@@ -259,13 +259,21 @@ function get_calendar_items($month, $year) {
 			$data[$datum_item][$datum_item][] = $row;
 		}
 	}
-	/*
-	//Check global agenda events	*/
+	
+	/* Check global agenda events	*/
 	$table_agenda_system = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
+	
+	global $_configuration;
+	$current_access_url_id = 1;
+	if ($_configuration['multiple_access_urls']) {
+		$current_access_url_id = api_get_current_access_url_id();
+	}
+		
 	$sql = "SELECT DISTINCT * FROM ".$table_agenda_system."
 			WHERE
 			MONTH(start_date)='".$month."'
-			AND YEAR(start_date)='".$year."'
+			AND YEAR(start_date)='".$year."' 
+			AND access_url_id = '$current_access_url_id'
 			ORDER BY start_date ";
 	$result=Database::query($sql);
 	while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -2039,8 +2047,14 @@ function display_agenda_items($select_month, $select_year) {
 
 	//Check global agenda events	*/
 	$table_agenda_system = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
+	global $_configuration;
+	$current_access_url_id = 1;
+	if ($_configuration['multiple_access_urls']) {
+		$current_access_url_id = api_get_current_access_url_id();
+	}
+	
 	$sql = "SELECT DISTINCT id, title, content , start_date, end_date FROM ".$table_agenda_system."
-			WHERE 1=1  ".$show_all_current."
+			WHERE 1=1  ".$show_all_current." AND access_url_id = $current_access_url_id
 			ORDER BY start_date ";
 	$result=Database::query($sql);
 	while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -4685,19 +4699,26 @@ function agenda_import_ical($course_info,$file) {
  * @param	string	Type of view (month_view, week_view, day_view)
  * @return 	array	The results of the database query, or null if not found
  */
-function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "", $week = "", $type)
-{
+function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "", $week = "", $type) {
+	global $_user, $_configuration;
+	
 	$tbl_global_agenda= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-	global $_user;
-	global $_configuration;
+	
 	$month=Database::escape_string($month);
 	$year=Database::escape_string($year);
 	$week=Database::escape_string($week);
 	$day=Database::escape_string($day);
 	// 1. creating the SQL statement for getting the personal agenda items in MONTH view
-	if ($type == "month_view" or $type == "") // we are in month view
-	{
-		$sql = "SELECT * FROM ".$tbl_global_agenda." WHERE MONTH(start_date)='".$month."' AND YEAR(start_date) = '".$year."'  ORDER BY start_date ASC";
+	
+	global $_configuration;
+	$current_access_url_id = 1;
+	if ($_configuration['multiple_access_urls']) {
+		$current_access_url_id = api_get_current_access_url_id();
+	}
+	
+	if ($type == "month_view" or $type == "") {
+		// We are in month view
+		$sql = "SELECT * FROM ".$tbl_global_agenda." WHERE MONTH(start_date)='".$month."' AND YEAR(start_date) = '".$year."'  AND access_url_id = $current_access_url_id ORDER BY start_date ASC";
 	}
 	// 2. creating the SQL statement for getting the personal agenda items in WEEK view
 	if ($type == "week_view") // we are in week view
@@ -4712,7 +4733,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		// in sql statements you have to use year-month-day for date calculations
 		$start_filter = $start_year."-".$start_month."-".$start_day." 00:00:00";
 		$end_filter = $end_year."-".$end_month."-".$end_day." 23:59:59";
-		$sql = " SELECT * FROM ".$tbl_global_agenda." WHERE start_date>='".$start_filter."' AND start_date<='".$end_filter."'";
+		$sql = " SELECT * FROM ".$tbl_global_agenda." WHERE start_date>='".$start_filter."' AND start_date<='".$end_filter."' AND  access_url_id = $current_access_url_id ";
 	}
 	// 3. creating the SQL statement for getting the personal agenda items in DAY view
 	if ($type == "day_view") // we are in day view
@@ -4720,8 +4741,9 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		// we could use mysql date() function but this is only available from 4.1 and higher
 		$start_filter = $year."-".$month."-".$day." 00:00:00";
 		$end_filter = $year."-".$month."-".$day." 23:59:59";
-		$sql = " SELECT * FROM ".$tbl_global_agenda." WHERE start_date>='".$start_filter."' AND start_date<='".$end_filter."'";
+		$sql = " SELECT * FROM ".$tbl_global_agenda." WHERE start_date>='".$start_filter."' AND start_date<='".$end_filter."'  AND  access_url_id = $current_access_url_id";
 	}
+	
 	$result = Database::query($sql);
 
 	while ($item = Database::fetch_array($result)) {
@@ -4740,13 +4762,10 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		$minute = $agendatime[1];
 		$second = $agendatime[2];
 		// if the student has specified a course we a add a link to that course
-		if ($item['course'] <> "")
-		{
+		if ($item['course'] <> "") {
 			$url = $_configuration['root_web']."main/admin/agenda.php?cidReq=".urlencode($item['course'])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$course_link = "<a href=\"$url\" title=\"".$item['course']."\">".$item['course']."</a>";
-		}
-		else
-		{
+		} else {
 			$course_link = "";
 		}
 		// Creating the array that will be returned. If we have week or month view we have an array with the date as the key

@@ -34,3 +34,6 @@ ALTER TABLE course_setting CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci
 ALTER TABLE forum_forum ADD start_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE forum_forum ADD end_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE wiki_mailcue ADD session_id smallint DEFAULT 0;
+
+ALTER TABLE sys_announcement ADD COLUMN access_url_id INT  NOT NULL default 1;
+ALTER TABLE sys_calendar ADD COLUMN access_url_id INT  NOT NULL default 1;

@@ -562,7 +562,17 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 						$values = $values['my_group'];
 						$dir_name = replace_dangerous_char($values['dir_name']);
 						$dir_name = disable_dangerous_file($dir_name);
-						if (!is_work_exist_by_url('/'.$dir_name)) {
+						
+						$edit_check = false;						
+						if ($dir_name != $dir) {
+							if (!is_work_exist_by_url('/'.$dir_name)) {
+								$edit_check = true;								
+							}
+						} else {
+							$edit_check = true;
+						}
+						
+						if ($edit_check) {
 
 							$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
 							if ($there_is_a_end_date || $there_is_a_expire_date) {

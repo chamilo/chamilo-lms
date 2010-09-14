@@ -19,6 +19,9 @@ require_once '../inc/lib/xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
+global $_configuration;
+
+
 // create an ajax object
 $xajax = new xajax();
 $xajax -> registerFunction ('search_courses');
@@ -36,6 +39,7 @@ $interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList
 // Database Table Definitions
 $tbl_course 			= 	Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_rel_user 	= 	Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_course_rel_access_url 	= 	Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
 // initializing variables
 $id_session=intval($_GET['id_session']);
@@ -63,7 +67,7 @@ if (!api_is_platform_admin()) {
 }
 
 function search_courses($needle,$type) {
-	global $tbl_course, $tbl_course_rel_user, $user_id;
+	global $_configuration, $tbl_course, $tbl_course_rel_user, $tbl_course_rel_access_url,$user_id;
 
 	$xajax_response = new XajaxResponse();
 	$return = '';
@@ -82,8 +86,15 @@ function search_courses($needle,$type) {
 			$without_assigned_courses = " AND c.code NOT IN(".implode(',',$assigned_courses_code).")";
 		}
 
-		$sql = "SELECT c.code, c.title FROM $tbl_course c
+		if ($_configuration['multiple_access_urls']) {
+			$sql = "SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+				WHERE  c.code LIKE '$needle%' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."";					
+		} else {
+			$sql = "SELECT c.code, c.title FROM $tbl_course c
 				WHERE  c.code LIKE '$needle%' $without_assigned_courses ";
+		}
+
+
 		$rs	= Database::query($sql);
 
 		$return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">';
@@ -193,8 +204,16 @@ if (isset($_POST['firstLetterCourse'])) {
 	$needle = "$needle%";
 }
 
-$sql 	= " SELECT c.code, c.title FROM $tbl_course c
+if ($_configuration['multiple_access_urls']) {
+	$sql 	= " SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+			WHERE  c.code LIKE '$needle' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."";
+			
+} else {
+	$sql 	= " SELECT c.code, c.title FROM $tbl_course c
 			WHERE  c.code LIKE '$needle' $without_assigned_courses ";
+}
+			
+			
 $result	= Database::query($sql);
 
 ?>

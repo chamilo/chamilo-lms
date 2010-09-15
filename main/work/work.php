@@ -535,14 +535,14 @@ if (!empty($_REQUEST['new_dir'])) {
 				require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
 				require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 				$course = isset($course_info) ? $course_info : null;
-				$date = date('Y-m-d H:i:s');
+				$date = api_get_utc_datetime();
 				$title = Security::remove_XSS($_POST['new_dir']);
 				if (!empty($_POST['type1'])) {
-					$date = get_date_from_select('expires');
+					$date = api_get_utc_datetime(get_date_from_select('expires'));
 					$title = sprintf(get_lang('HandingOverOfTaskX'),Security::remove_XSS($_POST['new_dir']));
 				}
 				$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.substr(Security::remove_XSS($dir_name_sql), 1).'" >'.Security::remove_XSS($_POST['new_dir']).'</a> - '.Security::remove_XSS($_POST['description']);
-				error_log($date);
+				
 				$agenda_id = agenda_add_item($course, $title, $content, $date, $date, array('GROUP:'.$toolgroup), 0);
 			}
 			$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
@@ -554,7 +554,7 @@ if (!empty($_REQUEST['new_dir'])) {
 									   accepted		= '1',
 									   filetype 	= 'folder',
 									   post_group_id = '".$toolgroup."',
-									   sent_date	= NOW(),
+									   sent_date	= '".api_get_utc_datetime()."',
 									   qualification	= '".(($_POST['qualification_value']!='') ? Database::escape_string($_POST['qualification_value']) : '') ."',
 									   parent_id	= '',
 									   qualificator_id	= '',
@@ -582,8 +582,8 @@ if (!empty($_REQUEST['new_dir'])) {
 
 				$enable_calification = isset($_POST['enable_calification']) ? (int)$_POST['enable_calification'] : null;
 				$sql_add_homework = "INSERT INTO $TSTDPUBASG SET " .
-														   "expires_on         = '".((isset($_POST['type1']) && $_POST['type1']==1) ? get_date_from_select('expires') : '0000-00-00 00:00:00'). "',
-													        ends_on        = '".((isset($_POST['type2']) && $_POST['type2']==1) ? get_date_from_select('ends') : '0000-00-00 00:00:00')."',
+														   "expires_on         = '".((isset($_POST['type1']) && $_POST['type1']==1) ? api_get_utc_datetime(get_date_from_select('expires')) : '0000-00-00 00:00:00'). "',
+													        ends_on        = '".((isset($_POST['type2']) && $_POST['type2']==1) ? api_get_utc_datetime(get_date_from_select('ends')) : '0000-00-00 00:00:00')."',
 										                    add_to_calendar  = '$agenda_id',
 										                    enable_qualification = '".$enable_calification."',
 										                    publication_id = '".$id."'";
@@ -595,7 +595,7 @@ if (!empty($_REQUEST['new_dir'])) {
 			} else {
 
 				$sql_add_homework = "INSERT INTO $TSTDPUBASG SET " .
-														   "expires_on         = '0000-00-00 00:00:00',
+														   "expires_on     = '0000-00-00 00:00:00',
 													        ends_on        = '0000-00-00 00:00:00',
 										                    add_to_calendar  = '$agenda_id',
 										                    enable_qualification = '".(isset($_POST['enable_calification'])?(int)$_POST['enable_calification']:'')."',
@@ -885,7 +885,7 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 				if (!Database::num_rows($result)) {
 					Database::query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL");
 				}
-				$current_date = date('Y-m-d H:i:s');
+				$current_date = api_get_utc_datetime();
 				$parent_id = '';
 				$active = '';
 				$user_id = api_get_user_id();
@@ -943,7 +943,7 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 			if (!Database::num_rows($result)) {
 				Database::query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL");
 			}
-			$current_date = date('Y-m-d H:i:s');
+			$current_date = api_get_utc_datetime();
 			$sql = "INSERT INTO  " . $work_table . "
 					        	SET url        	= '" . $url . "',
 					            title       	= '" . Database::escape_string($title) . "',
@@ -992,7 +992,7 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 				if($is_allowed_to_edit && ($_POST['qualification']!='')) {
 					$add_to_update = ',qualificator_id ='."'".api_get_user_id()."',";
 					$add_to_update .= 'qualification ='."'".Database::escape_string($_POST['qualification'])."',";
-					$add_to_update .= 'date_of_qualification ='."'".date('Y-m-d H:i:s')."'";
+					$add_to_update .= 'date_of_qualification ='."'".api_get_utc_datetime()."'";
 				}
 
 				if ((int)$_POST['qualification'] > (int)$_POST['qualification_over']) {
@@ -1074,7 +1074,7 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 			$emailbody = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
 			$emailbody .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
 			$emailbody .= get_lang('UserName')." : ".$currentUserFirstName .' '.$currentUserLastName ."\n";
-			$emailbody .= get_lang('DateSent')." : ".date('d/m/Y H:i')."\n";
+			$emailbody .= get_lang('DateSent')." : ".api_get_local_time()."\n";
 			$emailbody .= get_lang('FileName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
 			$emailbody .= api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path."\n\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');
 			// Here we are forming one large header line
@@ -1084,7 +1084,7 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 			$emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName ."\n";
 			$emailbody_user .= get_lang('MessageConfirmSendingOfTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
 			$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
-			$emailbody_user .= get_lang('DateSent')." : ".date('d/m/Y H:i')."\n";
+			$emailbody_user .= get_lang('DateSent')." : ".api_get_local_time()."\n";
 			$emailbody_user .= get_lang('FileName')." : ".$title."\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');;
 
 			//Mail to user
@@ -1125,15 +1125,18 @@ if ($is_special > 0) {
 	$has_expiry_date = true;
 
 	if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
-		$time_now = convert_date_to_number(date('Y-m-d H:i:s'));
-		$time_expires = convert_date_to_number($homework['expires_on']);
-		$time_ends = convert_date_to_number($homework['ends_on']);
-		$difference = $time_expires - $time_now;
-		$difference2 = $time_ends - $time_now;
-		if ($homework['expires_on'] != '0000-00-00 00:00:00' && $difference < 0) {
+		$time_now		= convert_date_to_number(api_get_local_time());
+		$time_expires 	= convert_date_to_number(api_get_local_time($homework['expires_on']));
+		$time_ends 		= convert_date_to_number(api_get_local_time($homework['ends_on']));
+				
+		$difference 	= $time_expires - $time_now;		
+		
+		$difference2 	= $time_ends - $time_now;
+		if ($homework['expires_on'] != '0000-00-00 00:00:00' && $difference < 0) {			
 			$has_expired = true;
 		}
 		if ($homework['ends_on'] != '0000-00-00 00:00:00' && $difference2 < 0) {
+			
 			$has_ended = true;
 		}
 		if ($homework['expires_on'] == '0000-00-00 00:00:00') {
@@ -1143,8 +1146,8 @@ if ($is_special > 0) {
 			//@todo fix me
 			define('ASSIGNMENT_EXPIRES', $time_expires);
 		}
-		$ends_on 	= api_convert_and_format_date($homework['ends_on'], null, date_default_timezone_get());
-		$expires_on = api_convert_and_format_date($homework['expires_on'], null, date_default_timezone_get());
+		$ends_on 	= api_convert_and_format_date($homework['ends_on']);
+		$expires_on = api_convert_and_format_date($homework['expires_on']);
 
 		if ($has_ended) {
 			display_action_links($cur_dir_path, $always_show_tool_options, true);
@@ -1486,7 +1489,8 @@ function make_checkbox($name, $checked = '') {
 function draw_date_picker($prefix, $default = '') {
 	//$default = 2008-10-01 10:00:00
 	if (empty($default)) {
-		$default = date('Y-m-d H:i:s');
+		//$default = date('Y-m-d H:i:s');		
+		$default = api_get_local_time();
 	}
 	$parts = split(' ', $default);
 	list($d_year, $d_month, $d_day) = split('-', $parts[0]);

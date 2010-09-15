@@ -2360,8 +2360,11 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 	$start_visible 	= ($start_visible == 0) ? '0000-00-00 00:00:00' : $start_visible;
 	$end_visible 	= ($end_visible == 0) ? '0000-00-00 00:00:00' : $end_visible;
 	$to_filter 		= '';
-	$time 			= time();
-	$time 			= date('Y-m-d H:i:s', $time);
+	//$time 			= time();
+	//$time 			= date('Y-m-d H:i:s', $time);
+	//According to http://support.chamilo.org/projects/chamilo-18/wiki/Date_and_time_management
+	//@todo fix $start_visible and $end_visible
+	$time			= api_get_utc_datetime();
 
 	if (!empty($session_id)) {
 		$session_id = intval($session_id);

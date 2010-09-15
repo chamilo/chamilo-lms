@@ -258,9 +258,6 @@ function convert_date_to_array($date, $group) {
 	foreach ($time_parts as $item) {
 		$time_parts_tmp[] = intval($item);
 	}
-
-
-
 	list($data[$group.'[year]'], $data[$group.'[month]'], $data[$group.'[day]']) = $date_parts_tmp;
 	list($data[$group.'[hour]'], $data[$group.'[minute]']) = $time_parts_tmp;
 	return $data;
@@ -296,6 +293,9 @@ function create_group_date_select($prefix = '') {
 * @param $dateFormatLong - date format
 * @param $origin - typically empty or 'learnpath'
 */
+
+	
+			
 function display_student_publications_list($work_dir, $sub_course_dir, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin, $add_in_where_query = '') {
 	global $timeNoSecFormat, $dateFormatShort, $gradebook, $_user;
 	// Database table names
@@ -480,10 +480,12 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 					if ($row['view_properties'] == '1') {
 						if ($homework['expires_on'] != '0000-00-00 00:00:00') {
+							$homework['expires_on'] = api_get_local_time($homework['expires_on']);
 							$there_is_a_expire_date = true;
 							$form_folder -> addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
 						}
 						if ($homework['ends_on'] != '0000-00-00 00:00:00') {
+							$homework['ends_on'] = api_get_local_time($homework['ends_on']);
 							$there_is_a_end_date = true;
 							$form_folder -> addGroup(create_group_date_select(), 'ends', get_lang('EndsAt'));
 						}
@@ -501,13 +503,16 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 		  	                         </div>	');
 
 		  	            $form_folder -> addElement('html', '<div id="options" style="display: none;">');
+		  	            
 						if (empty($default)) {
-							$default = date('Y-m-d 12:00:00');
+							$default = api_get_local_time();
 						}
 
 						$parts = split(' ', $default);
+						
 						list($d_year, $d_month, $d_day) = split('-', $parts[0]);
 						list($d_hour, $d_minute) = split(':', $parts[1]);
+						
 						if ((int)$row['weight'] == 0) {
 							$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
 							$form_folder -> addElement('html', '<div id=\'option3\' style="display:none">');
@@ -517,7 +522,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 						}
 
 						if ($homework['expires_on'] == '0000-00-00 00:00:00') {
-							$homework['expires_on'] = date('Y-m-d H:i:s');
+							$homework['expires_on'] = api_get_local_time();
 							$there_is_a_expire_date = true;
 							$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
 							$form_folder -> addElement('html', '<div id=\'option1\' style="display:none">');
@@ -525,7 +530,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 							$form_folder -> addElement('html', '</div>');
 						}
 						if ($homework['ends_on'] == '0000-00-00 00:00:00') {
-							$homework['ends_on'] = date('Y-m-d H:i:s');
+							$homework['ends_on'] = api_get_local_time();
 							$there_is_a_end_date = true;
 							$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
 							$form_folder -> addElement('html', '<div id=\'option2\' style="display:none">');
@@ -534,19 +539,17 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 						}
 
 						$form_folder -> addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
-
 						$form_folder -> addElement('html', '</div>');
 					}
 
 					$form_folder -> addElement('style_submit_button', 'submit', get_lang('ModifyDirectory'), 'class="save"');
-					if ($there_is_a_end_date) {
-						$end_date_array = convert_date_to_array($homework['ends_on'], 'ends');
+					if ($there_is_a_end_date) {						
+						$end_date_array = convert_date_to_array($homework['ends_on'], 'ends');						
 						$defaults = array_merge($defaults, $end_date_array);
 					}
 					if ($there_is_a_expire_date) {
 						$expires_date_array = convert_date_to_array($homework['expires_on'], 'expires');
 						$defaults = array_merge($defaults, $expires_date_array);
-
 					}
 					if (!empty($row['qualification'])) {
 						$defaults = array_merge($defaults, array('qualification[qualification]' => $row['qualification']));
@@ -579,12 +582,12 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 								if ($row['view_properties'] == '1') {
 									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
 									Database::query($sql_add_publication);
-									$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? get_date_from_group('expires') : '0000-00-00 00:00:00')."'".',';
-									$ends_query =    ' ends_on = '."'".($there_is_a_end_date ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
+									$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? api_get_utc_datetime(get_date_from_group('expires')) : '0000-00-00 00:00:00')."'".',';
+									$ends_query =    ' ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
 									Database::query('UPDATE '.$work_assigment.$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
 								} elseif ($row['view_properties'] == '0') {
 									if ($_POST['enableExpiryDate'] == '1') {
-										$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? get_date_from_group('expires') : '0000-00-00 00:00:00')."'";
+										$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? api_get_utc_datetime(get_date_from_group('expires')) : '0000-00-00 00:00:00')."'";
 										//$ends_query =    ' ends_on = '."'".($there_is_a_end_date ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
 										Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'");
 										$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
@@ -592,7 +595,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 									}
 									if ($_POST['enableEndDate'] == '1') {
 										//$expires_query = ' SET expires_on = '."'".($there_is_a_expire_date ? get_date_from_group('expires') : '0000-00-00 00:00:00')."'".',';
-										$ends_query =    ' SET ends_on = '."'".($there_is_a_end_date ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
+										$ends_query =    ' SET ends_on = '."'".($there_is_a_end_date ? api_get_utc_datetime(get_date_from_group('ends')) : '0000-00-00 00:00:00')."'";
 										Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'");
 										$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
 										Database::query($sql_add_publication);
@@ -722,7 +725,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 			}
 
 			if ($direc_date != '' && $direc_date != '0000-00-00 00:00:00') {
-				$direc_date_local = api_get_local_time($direc_date, null, date_default_timezone_get());
+				$direc_date_local = api_get_local_time($direc_date);
 				$row[] = date_to_str_ago($direc_date_local).'<br /><span class="dropbox_date">'.api_format_date($direc_date_local).'</span>';
 			} else {
 				$direc_date_local = '0000-00-00 00:00:00';
@@ -784,14 +787,14 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$row[] = '<a href="download.php?file='.$url.'">'.build_document_icon_tag('file', substr(basename($work->url), 13)).'</a>';
 				$row[] = '<a href="download.php?file='.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
 				$row[] = display_user_link_work($row2['insert_user_id'], $work->author).$qualification_string; // $work->author;
-
-				$work_sent_date_local = api_get_local_time($work->sent_date, null, date_default_timezone_get());
+			
+				$work_sent_date_local = api_get_local_time($work->sent_date);				
 				$row[] = date_to_str_ago($work_sent_date_local).$add_string.'<br /><span class="dropbox_date">'.api_format_date($work_sent_date_local).'</span>';
 
 				if ($is_allowed_to_edit) {
 
 					$action = '';
-					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Score').'"  ><img src="../img/qualify.png" alt="'.get_lang('Score').'" title="'.get_lang('Score').'"></a>';
+					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.gif', get_lang('WorkDelete')).'</a>';
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;move='.$work->id.'" title="'.get_lang('Move').'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="'.get_lang('Move').'" /></a>';
 					if ($work->accepted == '1') {

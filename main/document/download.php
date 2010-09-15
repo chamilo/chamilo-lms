@@ -76,7 +76,7 @@ $full_file_name = $sys_course_path.$_course['path'].'/document'.str_replace('+',
 // Check visibility of document and paths
 $is_allowed_to_edit = api_is_allowed_to_edit();
 if (!$is_allowed_to_edit && !DocumentManager::is_visible($doc_url, $_course)) {
-	echo 'document not visible'; //api_not_allowed backbutton won't work.
+	Display::display_error_message(get_lang('ProtectedDocument'));//api_not_allowed backbutton won't work.
 	exit; // You shouldn't be here anyway.
 }
 

@@ -49,6 +49,7 @@ $file_url_sys = api_get_path(SYS_COURSE_PATH).'document'.$header_file;
 $path_info = pathinfo($file_url_sys);
 $this_section = SECTION_COURSES;
 
+
 /*
 if (!empty($_GET['nopages'])) {
 	$nopages = Security::remove_XSS($_GET['nopages']);
@@ -137,6 +138,17 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 -->
 </script>';
 
+//fix the screen when you try to access a protected course through the url
+$is_allowed_in_course = $_SESSION ['is_allowed_in_course'];   
+if($is_allowed_in_course==false){
+	Display::display_header();
+	echo '<div align="center">';
+		Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="javascript:history.back(1)">'.get_lang('BackToPreviousPage').'</a><br />', false);
+	echo '</div>';
+	Display::display_footer();
+die();
+}
+		
 //Display::display_header($tool_name, 'User');
 
 Display::display_header('');

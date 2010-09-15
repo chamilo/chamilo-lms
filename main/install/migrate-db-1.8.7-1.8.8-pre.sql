@@ -25,6 +25,10 @@ ALTER TABLE user MODIFY COLUMN username VARCHAR(40) NOT NULL;
 UPDATE settings_current SET variable='chamilo_database_version' WHERE variable='dokeos_database_version';
 UPDATE settings_current SET selected_value = '1.8.8.12378' WHERE variable = 'chamilo_database_version';
 
+ALTER TABLE sys_announcement ADD COLUMN access_url_id INT  NOT NULL default 1;
+ALTER TABLE sys_calendar ADD COLUMN access_url_id INT  NOT NULL default 1;
+
+
 -- xxSTATSxx
 
 -- xxUSERxx
@@ -35,5 +39,4 @@ ALTER TABLE forum_forum ADD start_time DATETIME NOT NULL DEFAULT '0000-00-00 00:
 ALTER TABLE forum_forum ADD end_time DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE wiki_mailcue ADD session_id smallint DEFAULT 0;
 
-ALTER TABLE sys_announcement ADD COLUMN access_url_id INT  NOT NULL default 1;
-ALTER TABLE sys_calendar ADD COLUMN access_url_id INT  NOT NULL default 1;
+

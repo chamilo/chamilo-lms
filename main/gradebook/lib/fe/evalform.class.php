@@ -57,7 +57,7 @@ class EvalForm extends FormValidator
 		}
 		if (isset ($extra1)) {
 			$this->extra = $extra1;
-		}
+		}		
 		if ($form_type == self :: TYPE_EDIT) {
 			$this->build_editing_form();
 		} elseif ($form_type == self :: TYPE_ADD) {
@@ -119,15 +119,31 @@ class EvalForm extends FormValidator
 		$this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());
 		$this->addElement('hidden', 'minvalue', 0);
 		$this->addElement('header','h1','<b>'.get_lang('EditResult').'</b>');
-		$renderer = $this->defaultRenderer();
-		$elementTemplateTwoLabel = '<div><div class="row"><ul style="list-style-type:none;">
-			<li><div class="label_result" >
-			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-			</div>
-			<div class="formw_result">
-			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element} / '.$this->evaluation_object->get_max().'
-			</div></li></ul>
-			</div></div>';
+		$renderer = $this->defaultRenderer();				
+			
+		$renderer->setFormTemplate(
+		   '<form{attributes}>
+		      <table class="data_table" border="0" cellpadding="5" cellspacing="5">{content}
+		      </table>		      
+		   </form>'
+		);
+				
+		$renderer->setHeaderTemplate(
+		   '<tr>
+		       <th>'.get_lang('OfficialCode').'</th>		
+		      <th>'.get_lang('Username').'</th>
+		      <th>'.get_lang('Firstname').'</th>
+		      <th>'.get_lang('LastName').'</th>		
+		      <th>'.get_lang('Qualify').'</th>
+		   </tr>'  
+		);   
+		$template_submit =  '<tr>
+			       <td colspan="4" ></td>			         
+			      <td >
+			       {element}
+			         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+			      </td>
+			   </tr>';	
 
 		$results_and_users = array();
 		foreach ($this->result_object as $result) {
@@ -139,6 +155,7 @@ class EvalForm extends FormValidator
 
 
 		$defaults= array ();
+		
 		foreach ($results_and_users as $result_and_user) {
 			$user = $result_and_user['user'];
 			$result = $result_and_user['result'];
@@ -156,10 +173,22 @@ class EvalForm extends FormValidator
 			$this->addRule(array (
 			'score[' . $result->get_id() . ']', 'minvalue'), get_lang('UnderMin'), 'compare', '>=');
 			$defaults['score[' . $result->get_id() . ']']= $result->get_score();
-			$renderer->setElementTemplate($elementTemplateTwoLabel,'score[' . $result->get_id() . ']');
+			
+			
+			$template =  '<tr>
+		      <td align="left" >'.$user['official_code'].'</td>
+		      <td align="left" >'.$user['username'].'</td>
+		      <td align="left" >'.$user['firstname'].'</td>
+		      <td align="left" >'.$user['lastname'].'</td>
+		       <td align="left">{element} / '.$this->evaluation_object->get_max().'
+		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+		      </td>
+		   </tr>';	
+		   $renderer->setElementTemplate($template,'score[' . $result->get_id() . ']');		   
 		}
 		$this->setDefaults($defaults);
 		$this->addElement('style_submit_button', 'submit',get_lang('EditResult'),'class="save"');
+		$renderer->setElementTemplate($template_submit,'submit');
 	}
 	/**
 	 * This function builds a form to move an item to another category
@@ -191,23 +220,39 @@ class EvalForm extends FormValidator
 		$this->addElement('hidden', 'minvalue', 0);
 		$this->addElement('header','h1','<b>'.get_lang('AddResult').'</b>');
 
-		$renderer = $this->defaultRenderer();
-		$elementTemplateTwoLabel = '<div><div class="row" ><ul style="list-style-type:none;">
-			<li><div class="label_result">
-			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-			</div>
-			<div class="formw_result">
-			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element} / '.$this->evaluation_object->get_max().'
-			</div></li></ul>
-			</div></div>';
+		$renderer = $this->defaultRenderer();		
+			
+		$renderer->setFormTemplate(
+		   '<form{attributes}>
+		      <table class="data_table" border="0" cellpadding="5" cellspacing="5">{content}
+		      </table>		      
+		   </form>'
+		);
+				
+		$renderer->setHeaderTemplate(
+		   '<tr>
+		       <th>'.get_lang('OfficialCode').'</th>		
+		      <th>'.get_lang('Username').'</th>
+		      <th>'.get_lang('Firstname').'</th>
+		      <th>'.get_lang('LastName').'</th>		
+		      <th>'.get_lang('Qualify').'</th>
+		   </tr>'  
+		);   
+		$template_submit =  '<tr>
+			       <td colspan="4" ></td>			         
+			      <td >
+			       {element}
+			         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+			      </td>
+			   </tr>';	
+			   
 		foreach ($tblusers as $user) {
+			
 			//user_id, user.username, lastname, firstname
 			$this->add_textfield('score[' . $user[0] . ']',
 								 $this->build_stud_label($user[0], $user[1], $user[2], $user[3]),
 								 false,
-								 array ('size' => 4,
-										'maxlength' => 5));
-
+								 array ('size' => 4,'maxlength' => 5));
 			$this->addRule('score[' . $user[0] . ']', get_lang('OnlyNumbers'), 'numeric');
 			$this->addRule(array (
 				'score[' . $user[0] . ']',
@@ -217,13 +262,27 @@ class EvalForm extends FormValidator
 				'score[' . $user[0] . ']',
 				'minvalue'
 			), get_lang('UnderMin'), 'compare', '>=');
+			
+			$template =  '<tr>
+		      <td align="left" >'.$user[4].'</td>
+		      <td align="left" >'.$user[1].'</td>
+		      <td align="left" >'.$user[3].'</td>
+		      <td align="left" >'.$user[2].'</td>
+		       <td align="left">{element} / '.$this->evaluation_object->get_max().'
+		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+		      </td>
+		   </tr>';	
+			   
 
-			$renderer->setElementTemplate($elementTemplateTwoLabel,'score[' . $user[0] . ']');
+			$renderer->setElementTemplate($template, 'score[' . $user[0] . ']');
 			$nr_users++;
 		}
+		
 		$this->addElement('hidden', 'nr_users', $nr_users);
-		$this->addElement('hidden', 'evaluation_id', $this->result_object->get_evaluation_id());
+		$this->addElement('hidden', 'evaluation_id', $this->result_object->get_evaluation_id());		
 		$this->addElement('style_submit_button', 'submit', get_lang('AddResult'),'class="save"');
+		
+		$renderer->setElementTemplate($template_submit,'submit');
 	}
 	/**
 	 * Builds a form to edit a result

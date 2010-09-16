@@ -1067,7 +1067,7 @@ if ($origin != 'learnpath') {
 
 	if (!isset($_GET['fb_type'])) {
 		$lp_mode =  $_SESSION['lp_mode'];
-		$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
+		$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
 		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
 		echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
 

@@ -1225,7 +1225,13 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 					//echo ceil((($results[$i][4] - $results[$i][7]) / 60)) . ' ' . get_lang('MinMinutes');
 					$exe_date_timestamp = api_strtotime($results[$i]['exdate'], date_default_timezone_get());
 					$start_date_timestamp = api_strtotime($results[$i]['exstart'], date_default_timezone_get());
-					$duration_list = ceil((($exe_date_timestamp - $start_date_timestamp) / 60)) . ' ' . get_lang('MinMinutes');
+					
+					$my_duration = ceil((($exe_date_timestamp - $start_date_timestamp) / 60));
+					if ($my_duration == 1 ) {						
+						$duration_list = $my_duration . ' ' . get_lang('MinMinute');	
+					} else {
+						$duration_list =  $my_duration. ' ' . get_lang('MinMinutes');						
+					}					
 					if ($results[$i]['exstep'] > 1) {
 						//echo ' ( ' . $results[$i][8] . ' ' . get_lang('Steps') . ' )';
 						$duration_list = ' ( ' . $results[$i]['exstep'] . ' ' . get_lang('Steps') . ' )';

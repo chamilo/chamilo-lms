@@ -50,25 +50,23 @@ class SystemAnnouncementManager
 			$query_string = ereg_replace('&$', '', $query_string);
 			$url = api_get_self();
 			echo '<div class="system_announcements">';
+			
 			echo '<h3>'.get_lang('SystemAnnouncements').'</h3>';
-			echo '<table border="0">';
+			
+			echo '<div style="margin:10px;text-align:right;"><a href="news_list.php">'.get_lang('More').'</a></div>';		
 			
 			while ($announcement = Database::fetch_object($announcements)) {
-
 				if ($id != $announcement->id) {
 					if (strlen($query_string) > 0) {
 						$show_url = 'news_list.php#'.$announcement->id;
-						//$show_url = $url.'?'.$query_string.'&announcement='.$announcement->id;
 					} else {
 						$show_url = 'news_list.php#'.$announcement->id;
-						//$show_url = $url.'?announcement='.$announcement->id;
 					}
 					$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, date_default_timezone_get());					
 					echo '<a name="'.$announcement->id.'"></a>
 						<div class="system_announcement">
 							<div class="system_announcement_title"><a name="ann'.$announcement->id.'" href="'.$show_url.'">'.$announcement->title.'</a></div><div class="system_announcement_date">'.$display_date.'</div>
-					  	</div>
-						<br />';				
+					  	</div>';				
 				} else {
 					echo '<div class="system_announcement">
 							<div class="system_announcement_title">'
@@ -76,14 +74,8 @@ class SystemAnnouncementManager
 								<a name="ann'.$announcement->id.'" href="'.$url.'?'.$query_string.'#ann'.$announcement->id.'">'.$announcement->title.'</a>
 							</div>';
 				}
-
+				echo '<br />';
 			}
-
-			/*echo '<tr><td height="15px"></td></tr>';*/
-			echo '<tr><td colspan="2">';
-			echo '<a href="news_list.php">'.get_lang('More').'</a>';
-			echo '</td></tr>';
-			echo '</table>';
 			echo '</div>';
 		}
 		return;

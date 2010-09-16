@@ -1126,18 +1126,19 @@ if ($is_special > 0) {
 
 	if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
 		$time_now		= convert_date_to_number(api_get_local_time());
-		$time_expires 	= convert_date_to_number(api_get_local_time($homework['expires_on']));
-		$time_ends 		= convert_date_to_number(api_get_local_time($homework['ends_on']));
-				
-		$difference 	= $time_expires - $time_now;		
 		
-		$difference2 	= $time_ends - $time_now;
-		if ($homework['expires_on'] != '0000-00-00 00:00:00' && $difference < 0) {			
-			$has_expired = true;
+		if ($homework['expires_on'] != '0000-00-00 00:00:00') {
+			$time_expires 	= convert_date_to_number(api_get_local_time($homework['expires_on']));
+			$difference 	= $time_expires - $time_now;					
+			if ($difference < 0)			
+				$has_expired = true;
 		}
-		if ($homework['ends_on'] != '0000-00-00 00:00:00' && $difference2 < 0) {
-			
-			$has_ended = true;
+		if ($homework['ends_on'] != '0000-00-00 00:00:00') {
+			$time_ends 		= convert_date_to_number(api_get_local_time($homework['ends_on']));
+			$difference2 	= $time_ends - $time_now;				
+			if ($difference2 < 0) {
+				$has_ended = true;
+			}
 		}
 		if ($homework['expires_on'] == '0000-00-00 00:00:00') {
 			$has_expiry_date = false;

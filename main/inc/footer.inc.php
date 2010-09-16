@@ -68,6 +68,7 @@ if (api_get_setting('show_tutor_data') == 'true') {
 				$bar = '<br />';
 				echo get_lang('Coachs').' : <ul>';
 				echo '<li>'.implode("<li>", $email_link);
+				echo '</ul>';
 			} elseif (count($coachs_email) == 1) {
 				echo get_lang('Coach').' : ';
 				echo implode("&nbps;", $email_link);
@@ -75,11 +76,12 @@ if (api_get_setting('show_tutor_data') == 'true') {
 				echo '';
 			}
 		}
-		echo '</ul></div>';
+		echo '</div>';
 	}
 	echo '<br>';
 }
 
+echo '<div style="clear:both"></div>';
 $class = '';
 
 if (api_get_setting('show_teacher_data') == 'true') {

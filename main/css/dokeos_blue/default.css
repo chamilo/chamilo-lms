@@ -1139,6 +1139,7 @@ span.form_error {
 .data_table tr.tableName {
 	padding: 5px;
 	border: 1px solid gray;
+
 	background-color: #e6e6ff;
 	text-align:left;
 }
@@ -1951,6 +1952,7 @@ div.comments {
 	padding: 0.5em 0.5em 2em 0;
 	-moz-border-radius: 0.5em;
 }
+
 .glossary-term-edit-desc {
 	font-weight: bold;
 	font-size: 120%;
@@ -3545,6 +3547,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 .attendance-calendar-edit div.row {
 	display:inline;
 }
+
 .attendance-calendar-row {
 	padding:5px;
 }
@@ -3832,4 +3835,12 @@ span.form_required  {
     border:1pt solid #ccc;
     margin-top:5px;
     height: 40px;
+}
+
+.attendance-users-table td {
+	height:66px;
+}
+
+.attendance-calendar-table td {
+	height:66px;
 }

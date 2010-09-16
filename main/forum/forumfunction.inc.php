@@ -3725,7 +3725,7 @@ function send_notifications($forum_id=0, $thread_id=0, $post_id=0) {
 				$email_body .= get_lang('NewForumPost')."\n";
 				$email_body .= get_lang('YouWantedToStayInformed')."<br /><br />\n";
 				$email_body .= get_lang('ThreadCanBeFoundHere')." : <a href=\"".$thread_link."\">".$thread_link."</a>\n";
-
+				var_dump($email_body);
 				@api_mail_html(api_get_person_name($value['firstname'], $value['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $value['email'], $email_subject, $email_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
 			}
 		}

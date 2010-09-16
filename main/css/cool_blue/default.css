@@ -1139,6 +1139,7 @@ span.form_error {
 .data_table tr.total {
 	padding: 5px;
 	border: 1px solid gray;
+
 	background-color: #ffffcc;
 	text-align:left;
 }
@@ -3799,4 +3800,12 @@ span.form_required  {
     border:1pt solid #ccc;
     margin-top:5px;
     height: 40px;
+}
+
+.attendance-users-table td {
+	height:66px;
+}
+
+.attendance-calendar-table td {
+	height:66px;
 }

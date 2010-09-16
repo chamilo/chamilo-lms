@@ -4324,3 +4324,11 @@ span.form_required  {
 	padding:0px;
 }
 
+
+.attendance-users-table td {
+	height:66px;
+}
+
+.attendance-calendar-table td {
+	height:66px;
+}

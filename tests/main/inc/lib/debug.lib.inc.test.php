@@ -32,7 +32,7 @@ class TestDebug extends UnitTestCase {
 
 	function test_debug_paths_is_string() {
 		ob_start();
-		Debug::paths();
+		Debug::debug_paths();
 		$res=ob_get_contents();
 		ob_end_clean();
 		//print_r($res);

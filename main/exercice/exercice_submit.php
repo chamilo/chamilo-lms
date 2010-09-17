@@ -838,7 +838,7 @@ if (!isset ($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUE
     }
 }
 
-if (!isset ($objExcercise) && isset ($_SESSION['objExercise'])) {
+if (!isset ($objExercise) && isset ($_SESSION['objExercise'])) {
     $objExercise = $_SESSION['objExercise'];
 }
 if (!is_object($objExercise)) {
@@ -890,7 +890,7 @@ if (!isset ($_SESSION['questionList'])) {
         echo str_repeat('&nbsp;', 0) . '$_SESSION[questionList] was unset - set now - end' . "<br />\n";
     }
 }
-if (!isset ($objExcercise) && isset ($_SESSION['objExercise'])) {
+if (!isset ($objExercise) && isset ($_SESSION['objExercise'])) {
     $questionList = $_SESSION['questionList'];
 }
 

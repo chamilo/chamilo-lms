@@ -124,6 +124,9 @@ $_configuration['session_lifetime']						= SESSION_LIFETIME;
 $_configuration['software_name']						= 'Chamilo';
 $_configuration['software_url']							= 'http://www.chamilo.org/';
 
+//Deny the elimination of users
+$_configuration['deny_delete_users']					= false;
+
 // Version settings
 $_configuration['system_version']						= '{NEW_VERSION}';
 $_configuration['system_stable']						= NEW_VERSION_STABLE;

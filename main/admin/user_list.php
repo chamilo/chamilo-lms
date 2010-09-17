@@ -15,6 +15,13 @@ require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
+global $_configuration;
+// Blocks the possibility to delete a user
+$delete_user_available = true;
+if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete_users']) {
+	$delete_user_available = false;
+}
+
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 function load_course_list (div_course,my_user_id) {
@@ -550,11 +557,8 @@ function user_filter($name, $params, $row) {
  * @param   array   Row of elements to alter
  * @return string Some HTML-code with modify-buttons
  */
-function modify_filter($user_id,$url_params,$row)
-{
-	global $charset;
-	global $_user;
-	global $_admins_list;
+function modify_filter($user_id,$url_params,$row) {
+	global $charset, $_user, $_admins_list, $delete_user_available;
 	$is_admin = in_array($user_id,$_admins_list);
 	$statusname = api_get_status_langvars();
 	$user_is_anonymous = false;
@@ -600,14 +604,13 @@ function modify_filter($user_id,$url_params,$row)
 		} else {
 				$result .= Display::return_icon('edit_na.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
 		}
-
-		if ($row[0] != $_user['user_id'] && !$user_is_anonymous) {
-
-			// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-			$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-
-		} else {
-			$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
+		if ($delete_user_available) {
+			if ($row[0] != $_user['user_id'] && !$user_is_anonymous) {			
+				// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
+				$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';			
+			} else {
+				$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
+			}
 		}
 	}
 	if ($is_admin) {
@@ -772,10 +775,14 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 					break;
 				case 'delete_user' :
 					if (api_is_platform_admin()) {
-						if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id'])) {
-							Display :: display_confirmation_message(get_lang('UserDeleted'));
+						if ($delete_user_available) {
+							if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id'])) {
+								Display :: display_confirmation_message(get_lang('UserDeleted'));
+							} else {
+								Display :: display_error_message(get_lang('CannotDeleteUserBecauseOwnsCourse'));
+							}
 						} else {
-							Display :: display_error_message(get_lang('CannotDeleteUserBecauseOwnsCourse'));
+							Display :: display_error_message(get_lang('CannotDeleteUser'));
 						}
 					}
 					break;

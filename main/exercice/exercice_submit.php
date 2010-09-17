@@ -779,7 +779,9 @@ if ($formSent) {
                     //Verify if the current test is fraudulent
                     $current_time = time();
 
-                    if (isset($_SESSION['expired_time'][$current_expired_time_key]) && $exercise_row['expired_time'][$exerciseId] != 0) {
+					//The $exercise_row['expired_time'][$exerciseId] is never set. It means nothing.
+                    //if (isset($_SESSION['expired_time'][$current_expired_time_key]) && $exercise_row['expired_time'][$exerciseId] != 0) {                    
+                    if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
                         $expired_date = $_SESSION['expired_time'][$current_expired_time_key];
                         $expired_time = strtotime($expired_date);
 

@@ -1602,7 +1602,7 @@ div.admin_section h4 {
 .session_box_coach {
 }
 /***************************************************************
- *  DOKEOS CONFIG SETTINGS OF THE PLATFORM ADMIN SECTION 	   *
+ *  CHAMILO CONFIG SETTINGS OF THE PLATFORM ADMIN SECTION 	   *
  ***************************************************************/
 .sectiontitle {
 	background-color: #D2ECF5;
@@ -2557,6 +2557,8 @@ span.radio {
 	float: left;
 }
 #question_title {
+	font-size: 1.5em;
+	font-weight: bold;
 }
 #question_description {
 	padding-left:5px;

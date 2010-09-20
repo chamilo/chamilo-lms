@@ -281,8 +281,10 @@ if($submitAnswers || $buttonBack)
                 $reponse=str_replace('::','',$reponse);
 
                 // we save the answer because it will be modified
-                $temp=$reponse;
+                //$temp=$reponse;
+                $temp = text_filter($reponse);
 
+                /* // Deprecated code.
                 // 1. find everything between the [tex] and [/tex] tags
                 $startlocations=api_strpos($temp,'[tex]');
                 $endlocations=api_strpos($temp,'[/tex]');
@@ -294,6 +296,7 @@ if($submitAnswers || $buttonBack)
                     // 2. replace this by {texcode}
                     $temp=str_replace($texstring,"{texcode}",$temp);
                 }
+                */
 
                 // blanks will be put into an array
                 $blanks=Array();

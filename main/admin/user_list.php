@@ -946,8 +946,9 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
             $form->addElement('html', '<div id="extra_data_text" style="display:none;">');
             $form->add_textfield('keyword_extra_data_text', '', false, array('style'=>'margin-left:17px', 'id'=>'input_extra_text'));
             $form->addElement('html', '</div>');
-        }
-
+        } else {
+            $form->addElement('html', '<div id="extra_data_text" style="display:none;">');
+	}
 
         $form->addElement('html', '</td></tr>');
 

@@ -330,7 +330,7 @@ function version_check() {
 		{
 		*/
 		$return = 'site registered. ';
-		$return .= check_system_version2();
+		$return .= check_system_version();
 		//}
 	}
 	return $return;
@@ -372,7 +372,7 @@ function register_site()
 * @copyright (C) 2001 The phpBB Group
 * @return language string with some layout (color)
 */
-function check_system_version2()
+function check_system_version()
 {
 	global $_configuration;
 	$system_version = trim($_configuration['system_version']); // the chamilo version of your installation
@@ -403,65 +403,6 @@ function check_system_version2()
 	else
 	{
 		$output = '<span style="color:red">' . get_lang('AllowurlfopenIsSetToOff') . '</span>';
-	}
-	return $output;
-}
-
-/**
-* Check if the current installation is up to date
-* The code is borrowed from phpBB and slighlty modified
-* @author The phpBB Group <support@phpbb.com> (the code)
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (the modifications)
-* @copyright (C) 2001 The phpBB Group
-* @return language string with some layout (color)
-* @deprecated 	For some reason this code adds a 9 in front and a 0 at the end of what normally gets displayed by
-				the http://www.dokeos.com/version.php page (instead of version.txt) . That's why I chose to use fopen which requires however
-				that allow_url_open is set to true
-*/
-function check_system_version()
-{
-	global $_configuration; // the chamilo version of your installation
-	$system_version = $_configuration['system_version'];
-
-	if ($fsock = @fsockopen('www.chamilo.org', 80, $errno, $errstr))
-	{
-		@fputs($fsock, "GET /version.php HTTP/1.1\r\n");
-		@fputs($fsock, "HOST: www.chamilo.org\r\n");
-		@fputs($fsock, "Connection: close\r\n\r\n");
-
-		$get_info = false;
-		while (!@feof($fsock))
-		{
-			if ($get_info)
-			{
-				$version_info .= @fread($fsock, 1024);
-			}
-			else
-			{
-				if (@fgets($fsock, 1024) == "\r\n")
-				{
-					$get_info = true;
-				}
-			}
-		}
-		@fclose($fsock);
-
-		if (trim($system_version) <> trim($version_info)) {
-			$output='<span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$system_version. '</b>. '.str_replace('http://www.chamilo.org','<a href="http://www.chamilo.org">http://www.chamilo.org</a>',get_lang('PleaseVisitDokeos')).'</span>';
-		} else {
-			$output = '<span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
-		}
-	}
-	else
-	{
-		if ($errstr)
-		{
-			$output = '<span style="color:red">' . get_lang('ConnectSocketError') . ': '. $errstr . '</span>';
-		}
-		else
-		{
-			$output = '<span>' . get_lang('SocketFunctionsDisabled') . '</span>';
-		}
 	}
 	return $output;
 }

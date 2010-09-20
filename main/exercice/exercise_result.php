@@ -314,14 +314,14 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 	</td>
 	<td width="45%" style="border-bottom: 1px solid #4171B5;">
 		<?php
-		$answer=api_parse_tex($answer);
+		$answer=text_filter($answer);
 		echo $answer;
 		?>
 	</td>
 	<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 	<td width="45%" style="border-bottom: 1px solid #4171B5;">
 		<?php
-		$answerComment=api_parse_tex($answerComment);
+		$answerComment=text_filter($answerComment);
 		if($studentChoice)
 		{
 			if(!$answerCorrect)
@@ -440,7 +440,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '</div>';
 }
 
-$exerciseTitle=api_parse_tex($exerciseTitle);
+$exerciseTitle=text_filter($exerciseTitle);
 
 //show exercise title
 ?>
@@ -685,8 +685,10 @@ foreach ($questionList as $questionId) {
 					$answerWeighting = explode(',',$is_set_switchable[0]);
 
 					// we save the answer because it will be modified
-					$temp=$answer;
+					//$temp=$answer;
+					$temp = text_filter($answer);
 
+					/* // Deprecated code.
 					// TeX parsing
 					// 1. find everything between the [tex] and [/tex] tags
 					$startlocations=api_strpos($temp,'[tex]');
@@ -698,6 +700,7 @@ foreach ($questionList as $questionId) {
 						// 2. replace this by {texcode}
 						$temp=str_replace($texstring,'{texcode}',$temp);
 					}
+					*/
 
 					$answer='';
 					$j=0;
@@ -714,9 +717,11 @@ foreach ($questionList as $questionId) {
 						{
 							// adds the end of the textsolution
 							$answer=$temp;
+							/* // Deprecated code.
 							// TeX parsing - replacement of texcode tags
 							$texstring = api_parse_tex($texstring);
 							$answer=str_replace("{texcode}",$texstring,$answer);
+							*/
                             $real_text[] = $answer;
 							break; //no more "blanks", quit the loop
 						}
@@ -890,7 +895,7 @@ foreach ($questionList as $questionId) {
 			{
 				if ($origin != 'learnpath') {
 					echo '<tr>';
-					echo '<td>'.api_parse_tex($answer_matching[$answerId]).'</td><td>'.api_parse_tex($user_answer).' / <b><span style="color: #008000;">'.api_parse_tex($answer_matching[$answerCorrect]).'</span></b></td>';
+					echo '<td>'.text_filter($answer_matching[$answerId]).'</td><td>'.text_filter($user_answer).' / <b><span style="color: #008000;">'.text_filter($answer_matching[$answerCorrect]).'</span></b></td>';
 					echo '</tr>';
 				}
 			}

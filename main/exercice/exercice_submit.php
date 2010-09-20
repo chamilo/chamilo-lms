@@ -519,8 +519,10 @@ if ($formSent) {
                                     $answerWeighting = explode(',', $is_set_switchable[0]);
 
                                     // we save the answer because it will be modified
-                                    $temp = $answer;
+                                    //$temp = $answer;
+                                    $temp = text_filter($answer);
 
+                                    /* // Deprecated code
                                     // TeX parsing
                                     // 1. find everything between the [tex] and [/tex] tags
                                     $startlocations = api_strpos($temp, '[tex]');
@@ -531,6 +533,7 @@ if ($formSent) {
                                         // 2. replace this by {texcode}
                                         $temp = str_replace($texstring, '{texcode}', $temp);
                                     }
+                                    */
 
                                     $answer = '';
                                     $j = 0;
@@ -545,9 +548,11 @@ if ($formSent) {
                                         if (($pos = api_strpos($temp, '[')) === false) {
                                             // adds the end of the text
                                             $answer = $temp;
+                                            /* // Deprecated code
                                             // TeX parsing - replacement of texcode tags
                                             $texstring = api_parse_tex($texstring);
                                             $answer = str_replace("{texcode}", $texstring, $answer);
+                                            */
                                             $real_text[] = $answer;
                                             break; //no more "blanks", quit the loop
                                         }
@@ -780,7 +785,7 @@ if ($formSent) {
                     $current_time = time();
 
 					//The $exercise_row['expired_time'][$exerciseId] is never set. It means nothing.
-                    //if (isset($_SESSION['expired_time'][$current_expired_time_key]) && $exercise_row['expired_time'][$exerciseId] != 0) {                    
+                    //if (isset($_SESSION['expired_time'][$current_expired_time_key]) && $exercise_row['expired_time'][$exerciseId] != 0) {
                     if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
                         $expired_date = $_SESSION['expired_time'][$current_expired_time_key];
                         $expired_time = strtotime($expired_date);
@@ -1086,7 +1091,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     echo '</div>';
 }
 
-$exerciseTitle = api_parse_tex($exerciseTitle);
+$exerciseTitle = text_filter($exerciseTitle);
 echo "<h3>" . $exerciseTitle . "</h3>";
 $show_clock = true;
 

@@ -1473,7 +1473,7 @@ function export_exercise($item_id)
 		}
 	}
 
-	$exerciseTitle = api_parse_tex($exerciseTitle);
+	$exerciseTitle = text_filter($exerciseTitle);
 
 	$test .= "<h3>".$exerciseTitle."</h3>";
 
@@ -1482,7 +1482,7 @@ function export_exercise($item_id)
 		$test .= "<a href=\"../document/download.php?doc_url=%2Faudio%2F".$exerciseSound."\"&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9 target=\"_blank\"><img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=".get_lang("Sound")."\" /></a>";
 	}
 
-	$exerciseDescription = api_parse_tex($exerciseDescription);
+	$exerciseDescription = text_filter($exerciseDescription);
 
 	// --------- writing the .js file with to check the correct answers begin -----------------------
 	$scriptfilename = "Exercice".$item_id.".js";
@@ -1716,7 +1716,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 				$content = $myrow["content"];
 				//3.2.7 Make clickable???
 				$content = make_clickable($content);
-				$content = api_parse_tex($content);
+				$content = text_filter($content);
 				//3.2.8 Write the prepared content to the export string
 				$expcontent .= "<tr><td class=\"text\" colspan='2'>";
 				$expcontent .= $content;
@@ -1755,7 +1755,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 				//$content = nl2br($content);
 				//3.2 Prepare the data for export
 				$content = make_clickable($content);
-				$content = api_parse_tex($content);
+				$content = text_filter($content);
 
 				//3.3 Get a UNIX(?<-mktime) Timestamp of the end_date for this announcement
 				$last_post_datetime = $myrow['end_date']; // post time format  datetime de mysql
@@ -1801,7 +1801,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 					$expcontent .= "<h4>".$row['title']."</h4>";
 					//2.a.1.2 Prepare content
 					$content = make_clickable(nl2br($row['content']));
-					$content = api_parse_tex($content);
+					$content = text_filter($content);
 					//2.a.1.3 Write content to the export string
 					$expcontent .= $content;
 				}

@@ -129,12 +129,12 @@ class ScormQuestion extends Question
 		$cols = 2;
 		$s='<tr>' .
 			'<td colspan="'.$cols.'" id="question_'.$this->id.'_title" valign="middle" style="background-color:#d6d6d6;">' . "\n" .
-		   	api_parse_tex($title).
+		   	text_filter($title).
 		   	'</td>' . "\n" .
 		   	'</tr>' . "\n" .
 		   	'<tr>' . "\n" .
 		   	'<td valign="top" colspan="'.$cols.'">' . "\n" .
-		   	'<i>'.api_parse_tex($description).'</i>' . "\n" .
+		   	'<i>'.text_filter($description).'</i>' . "\n" .
 		   	'</td>' . "\n" .
 		   	'</tr>' . "\n";
 		return $s;
@@ -174,7 +174,7 @@ class ScormAnswerMultipleChoice extends Answer
 		$type = $this->getQuestionType();
 		$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
 		$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
-		
+
 		//not sure if we are going to export also the MULTIPLE_ANSWER_COMBINATION to SCORM
         //if ($type == MCMA  || $type == MULTIPLE_ANSWER_COMBINATION ) {
 		if ($type == MCMA ) {
@@ -208,7 +208,7 @@ class ScormAnswerMultipleChoice extends Answer
 	    		$js .= 'questions_types['.$this->questionJSId.'] = \'mcma\';'."\n";
 	    	} else {
 	    		$js .= 'questions_types['.$this->questionJSId.'] = \'exact\';'."\n";
-	    	}	    	
+	    	}
 	    	$js .= $jstmpw;
         } elseif ($type == MULTIPLE_ANSWER_COMBINATION) {
         		//To this items we show the ThisItemIsNotExportable
@@ -443,7 +443,7 @@ class ScormAnswerMatching extends Answer
 				// options (A, B, C, ...) that will be put into the list-box
 				$Select[$answerId]['Lettre']=$cpt1;
 				// answers that will be shown at the right side
-				$answer = api_parse_tex($answer);
+				$answer = text_filter($answer);
 				$Select[$answerId]['Reponse']=$answer;
 				$cpt1++;
 			}
@@ -722,14 +722,14 @@ class ScormAnswerHotspot extends Answer
 		{
 			$s="<tr>
 			  <td valign='top' colspan='2'>&nbsp;";
-			$questionName=api_parse_tex($questionName);
+			$questionName=text_filter($questionName);
 			$s.=$questionName;
 			$s.="</td>
 			</tr>
 			<tr>
 			  <td valign='top' colspan='2'>
 				<i>";
-			$questionDescription=api_parse_tex($questionDescription);
+			$questionDescription=text_filter($questionDescription);
 			$s.=$questionDescription;
 			$s.="</i>
 			  </td>

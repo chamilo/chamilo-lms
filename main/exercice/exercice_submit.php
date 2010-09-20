@@ -780,7 +780,7 @@ if ($formSent) {
                     $current_time = time();
 
 					//The $exercise_row['expired_time'][$exerciseId] is never set. It means nothing.
-                    //if (isset($_SESSION['expired_time'][$current_expired_time_key]) && $exercise_row['expired_time'][$exerciseId] != 0) {                    
+                    //if (isset($_SESSION['expired_time'][$current_expired_time_key]) && $exercise_row['expired_time'][$exerciseId] != 0) {
                     if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
                         $expired_date = $_SESSION['expired_time'][$current_expired_time_key];
                         $expired_time = strtotime($expired_date);
@@ -1086,7 +1086,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     echo '</div>';
 }
 
-$exerciseTitle = api_parse_tex($exerciseTitle);
+$exerciseTitle = text_filter($exerciseTitle);
 echo "<h3>" . $exerciseTitle . "</h3>";
 $show_clock = true;
 

@@ -269,7 +269,7 @@ $show_results = true;
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (Database::num_rows($result)>0 && isset($id)) {
 	$test=Database::result($result,0,0);
-	$exerciseTitle=api_parse_tex($test);
+	$exerciseTitle=text_filter($test);
 	$exerciseDescription=Database::result($result,0,1);
 
 	// if the results_disabled of the Quiz is 1 when block the script

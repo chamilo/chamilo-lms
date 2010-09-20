@@ -31,7 +31,7 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
     api_not_allowed(true);
 }
 
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';

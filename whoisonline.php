@@ -31,7 +31,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 	}
 
 </script>';
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){
 	$("input#id_btn_send_invitation").bind("click", function(){

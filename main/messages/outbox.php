@@ -26,7 +26,7 @@ if (isset($_GET['messages_page_nr'])) {
 if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[]='<script language="javascript">
 <!--

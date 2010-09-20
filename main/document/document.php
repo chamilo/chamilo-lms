@@ -48,7 +48,7 @@ require_once $lib_path.'formvalidator/FormValidator.class.php';
 
 api_protect_course_script(true);
 
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {

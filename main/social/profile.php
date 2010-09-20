@@ -61,7 +61,7 @@ require_once $libpath.'magpierss/rss_fetch.inc';
 
 api_block_anonymous_users();
 
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript" language="javascript"></script>';
 

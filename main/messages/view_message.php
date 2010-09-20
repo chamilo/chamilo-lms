@@ -17,7 +17,7 @@ require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 /*
 		HEADER
 */
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 
 if ($_REQUEST['f']=='social') {
 	$this_section = SECTION_SOCIAL;

@@ -17,7 +17,7 @@ require_once '../inc/lib/xajax/xajax.inc.php';
 
 api_block_anonymous_users();
 
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 

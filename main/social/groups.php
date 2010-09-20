@@ -17,7 +17,7 @@ api_block_anonymous_users();
 
 $this_section = SECTION_SOCIAL;
 
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 
 // prepare anchor for message group topic
 $anchor = '';

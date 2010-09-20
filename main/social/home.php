@@ -22,7 +22,7 @@ unset($_SESSION['this_section']);//for hmtl editor repository
 $interbreadcrumb[]= array ('url' => 'home.php','name' => get_lang('Social'));
 
 api_block_anonymous_users();
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 

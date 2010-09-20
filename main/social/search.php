@@ -19,7 +19,7 @@ $this_section = SECTION_SOCIAL;
 $tool_name = get_lang('Search');
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 		

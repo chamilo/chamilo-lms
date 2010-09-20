@@ -65,7 +65,7 @@ if (!empty($attendance_id)) {
 	$attendance_data = $attendance->get_attendance_by_id($attendance_id);
 }
 
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '<script language="javascript">
 		

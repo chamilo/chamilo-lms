@@ -19,7 +19,7 @@ api_block_anonymous_users();
 
 $this_section = SECTION_SOCIAL;
 
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 $htmlHeadXtra[] = '<script type="text/javascript">
 
 function delete_friend (element_div) {

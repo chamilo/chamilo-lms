@@ -79,7 +79,7 @@ if (!empty($thematic_id)) {
 // get default thematic plan title
 $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 
-//jquery tickbox already called from main/inc/header.inc.php
+//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '<script language="javascript">
 

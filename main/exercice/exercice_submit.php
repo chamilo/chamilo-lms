@@ -1264,7 +1264,7 @@ if (!empty ($error)) {
 
     if ($objExercise->selectFeedbackType() == 1 && $exerciseType == 2) {
         $submit_btn = '';
-        //jquery tickbox already called from main/inc/header.inc.php
+        //jquery thickbox already called from main/inc/header.inc.php
         $hotspot_get = $_POST['hotspot'];
         // Show a hidden div
         echo "<script>$(document).ready( function(){

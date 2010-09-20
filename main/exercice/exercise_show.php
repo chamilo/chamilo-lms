@@ -634,8 +634,10 @@ if ($show_results) {
 
 				//$answerWeighting=explode(',',$answerWeighting);
 				// we save the answer because it will be modified
-			    $temp=$answer;
+			    //$temp=$answer;
+			    $temp = text_filter($answer);
 
+			    /* // Deprecated code
 				// TeX parsing
 				// 1. find everything between the [tex] and [/tex] tags
 				$startlocations=api_strpos($temp,'[tex]');
@@ -645,6 +647,8 @@ if ($show_results) {
 					// 2. replace this by {texcode}
 					$temp=str_replace($texstring,'{texcode}',$temp);
 				}
+				*/
+
 				$j=0;
 				// the loop will stop at the end of the text
 				$i=0;
@@ -655,8 +659,10 @@ if ($show_results) {
 						if (($pos = api_strpos($temp,'[')) === false) {
 							// adds the end of the text
 							$answer.=$temp;
+							/* // Deprecated code
 							// TeX parsing
 							$texstring = api_parse_tex($texstring);
+							*/
 							break;
 						}
 					    $temp=api_substr($temp,$pos+1);
@@ -703,9 +709,11 @@ if ($show_results) {
 						if (($pos = api_strpos($temp,'[')) === false) {
 							// adds the end of the text
 							$answer.=$temp;
+							/* // Deprecated code
 							// TeX parsing
 							$texstring = api_parse_tex($texstring);
 							//$answer=str_replace("{texcode}",$texstring,$answer);
+							*/
 							break;
 						}
 						// adds the piece of text that is before the blank and ended by [

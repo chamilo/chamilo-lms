@@ -685,8 +685,10 @@ foreach ($questionList as $questionId) {
 					$answerWeighting = explode(',',$is_set_switchable[0]);
 
 					// we save the answer because it will be modified
-					$temp=$answer;
+					//$temp=$answer;
+					$temp = text_filter($answer);
 
+					/* // Deprecated code.
 					// TeX parsing
 					// 1. find everything between the [tex] and [/tex] tags
 					$startlocations=api_strpos($temp,'[tex]');
@@ -698,6 +700,7 @@ foreach ($questionList as $questionId) {
 						// 2. replace this by {texcode}
 						$temp=str_replace($texstring,'{texcode}',$temp);
 					}
+					*/
 
 					$answer='';
 					$j=0;
@@ -714,9 +717,11 @@ foreach ($questionList as $questionId) {
 						{
 							// adds the end of the textsolution
 							$answer=$temp;
+							/* // Deprecated code.
 							// TeX parsing - replacement of texcode tags
 							$texstring = api_parse_tex($texstring);
 							$answer=str_replace("{texcode}",$texstring,$answer);
+							*/
                             $real_text[] = $answer;
 							break; //no more "blanks", quit the loop
 						}

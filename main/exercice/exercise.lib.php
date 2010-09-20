@@ -150,6 +150,8 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				list($answer) = explode('::',$answer);
 
 				// because [] is parsed here we follow this procedure:
+				$answer = text_filter($answer);
+				/* // Deprecated code
 				// 1. find everything between the [tex] and [/tex] tags
 				$startlocations = api_strpos($answer,'[tex]');
 				$endlocations = api_strpos($answer,'[/tex]');
@@ -159,6 +161,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 					// 2. replace this by {texcode}
 					$answer = str_replace($texstring,'{texcode}',$answer);
 				}
+				*/
 
 				// 3. do the normal matching parsing
 				// replaces [blank] by an input field
@@ -207,9 +210,11 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 
 				*/
 
+				/* // Deprecated code
 				// 5. replace the {texcode by the api_pare_tex parsed code}
 				$texstring = api_parse_tex($texstring);
 				$answer=str_replace("{texcode}",$texstring,$answer);
+				*/
 
 			}
 

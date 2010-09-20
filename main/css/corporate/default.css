@@ -3269,3 +3269,11 @@ span.form_required  {
     margin-top:5px;
     height: 40px;
 }
+
+.attendance-users-table td {
+	height:66px;
+}
+
+.attendance-calendar-table td {
+	height:66px;
+}

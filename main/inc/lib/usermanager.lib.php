@@ -173,6 +173,10 @@ class UserManager
 	 * @return boolean true if user can be deleted
 	 */
 	public static function can_delete_user($user_id) {
+		global $_configuration;
+		if (isset($_configuration['delete_users']) && $_configuration['delete_users'] == false) {
+			return false;
+		} 
 		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		if ($user_id != strval(intval($user_id))) return false;
 		if ($user_id === false) return false;

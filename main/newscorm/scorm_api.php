@@ -1705,6 +1705,11 @@ if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
 function attach_glossary_into_scorm(type) {
 
     var f = $('#content_id')[0];
+    //Prevents "f is undefined" javascript error
+    if (f == null) {
+    	logit_lms('attach_glossary_into_scorm failed', 0);
+    	return false;
+    }
 	//logit_lms('attach_glossary_into_scorm', 0);
     var doc = f.contentWindow ? f.contentWindow.document :
     f.contentDocument ? f.contentDocument : f.document;

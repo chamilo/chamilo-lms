@@ -109,7 +109,7 @@ class ExerciseResult
     	$session_id_and = ' AND ce.session_id = ' . api_get_session_id() . ' ';
 		if (empty($user_id)) {
 			
-			$sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname as userpart1" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult ,
+			$sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart2, lastname as userpart1" : "lastname as userpart2, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult ,
 								 te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, user.email as exemail, user.user_id as userid
 				  FROM $TBL_EXERCISES AS ce , $TBL_TRACK_EXERCISES AS te, $TBL_USER AS user,$TBL_COURSE_REL_USER AS cuser
 				  WHERE  user.user_id=cuser.user_id AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($cid) . "'
@@ -245,11 +245,11 @@ class ExerciseResult
 		//titles
 		if(!empty($this->results[0]['last_name']))
 		{
-			$data .= get_lang('last_name').';';
+			$data .= get_lang('LastName').';';
 		}
 		if(!empty($this->results[0]['first_name']))
 		{
-			$data .= get_lang('first_name').';';
+			$data .= get_lang('FirstName').';';
 		}
 		if($export_user_fields)
 		{
@@ -352,9 +352,9 @@ class ExerciseResult
 		}
 
 		if($with_column_user) {
-		   	$worksheet->write($line,$column,get_lang('last_name'));
+		   	$worksheet->write($line,$column,get_lang('LastName'));
 				$column++;
-			$worksheet->write($line,$column,get_lang('first_name'));
+			$worksheet->write($line,$column,get_lang('FirstName'));
 				$column++;
 		}
 		$export_user_fields = true;

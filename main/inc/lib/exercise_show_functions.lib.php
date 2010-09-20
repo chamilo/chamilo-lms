@@ -124,7 +124,7 @@ class ExerciseShowFunctions {
 			<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 			<td valign="top" align="left" >
 				<?php
-				$answerComment=api_parse_tex($answerComment);
+				$answerComment=text_filter($answerComment);
 				if($studentChoice) {
 					echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
 				} else {
@@ -169,7 +169,7 @@ class ExerciseShowFunctions {
 		</td>
 		<td width="40%" style="border-bottom: 1px solid #4171B5;">
 			<?php
-			$answer=api_parse_tex($answer);
+			$answer=text_filter($answer);
 			echo $answer;
 			?>
 		</td>
@@ -177,7 +177,7 @@ class ExerciseShowFunctions {
 		<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 		<td width="20%" style="border-bottom: 1px solid #4171B5;">
 			<?php
-			$answerComment=api_parse_tex($answerComment);
+			$answerComment=text_filter($answerComment);
 			if($studentChoice)
 			{
 				if(!$answerCorrect)

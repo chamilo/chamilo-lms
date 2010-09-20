@@ -42,7 +42,7 @@ abstract class Question
 	public $picture;
 	public $exerciseList;  // array with the list of exercises which this question is in
 	private $isContent;
-	
+
 	static $typePicture = 'new_question.png';
 	static $explanationLangVar = '';
 	static $questionTypes = array(
@@ -70,7 +70,7 @@ abstract class Question
 		$this->level = 1;
 		$this->exerciseList=array();
 	}
-	
+
 	public function getIsContent() {
 		$isContent = intval($_REQUEST['isContent']);
 		return $this->isContent = $isContent;
@@ -142,7 +142,7 @@ abstract class Question
 	 */
 	function selectTitle()
 	{
-		$this->question=api_parse_tex($this->question);
+		$this->question=text_filter($this->question);
 		return $this->question;
 	}
 
@@ -154,7 +154,7 @@ abstract class Question
 	 */
 	function selectDescription()
 	{
-		$this->description=api_parse_tex($this->description);
+		$this->description=text_filter($this->description);
 		return $this->description;
 	}
 
@@ -516,15 +516,15 @@ abstract class Question
 		// saves the picture into a temporary file
 		@move_uploaded_file($Picture,$picturePath.'/tmp.'.$Extension);
 	}
-	
+
 	/**
-		Sets the title 
+		Sets the title
 	*/
 	public function setTitle($title)
 	{
-		$this->question = $title; 	
+		$this->question = $title;
 	}
-	
+
 
 	/**
 	 * Moves the temporary question "tmp" to "quiz-$questionId"
@@ -1002,10 +1002,10 @@ abstract class Question
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw" >{element}</div></div>','questionName');
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
-		
+
 		// default content
 		$isContent = intval($_REQUEST['isContent']);
-		
+
 		// question type
 		$answerType= intval($_REQUEST['answerType']);
 		$form->addElement('hidden','answerType',$_REQUEST['answerType']);
@@ -1101,26 +1101,26 @@ abstract class Question
 			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
 			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]);
 		}
-		
+
 		//blocking edition
-		
+
 		$show_quiz_edition = true;
 		if (isset($exerciseId) && !empty($exerciseId)) {
 			$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
 			$sql="SELECT max_score FROM $TBL_LP_ITEM
 				  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
 			$result = Database::query($sql);
-			if (Database::num_rows($result) > 0) {				
+			if (Database::num_rows($result) > 0) {
 				$show_quiz_edition = false;
 			}
 		}
-		
+
 		echo '<ul class="question_menu">';
 
 		foreach ($question_type_custom_list as $i=>$a_type) {
 			// include the class of the type
-			require_once($a_type[0]);			
- 		    // get the picture of the type and the langvar which describes it			 
+			require_once($a_type[0]);
+ 		    // get the picture of the type and the langvar which describes it
 			eval('$img = '.$a_type[1].'::$typePicture;');
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
 			echo '<li>';
@@ -1139,7 +1139,7 @@ abstract class Question
 			echo '</div>';
 			echo '</li>';
 		}
-		
+
 		echo '<li>';
 		echo '<div class="icon_image_content">';
 		if ($show_quiz_edition) {
@@ -1164,11 +1164,11 @@ abstract class Question
 	{
 		return self::$questionTypes;
 	}
-	
+
 	static function updateId()
 	{
 		return self::$questionTypes;
-	}	
+	}
 }
 endif;
 ?>

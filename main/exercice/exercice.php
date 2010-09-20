@@ -869,7 +869,7 @@ if ($show == 'test') {
 					echo '<td width="15" valign="left">'.($i+($page*$limitExPage)).'.'.'</td>';
 
 					//Showing exercise title
-					$row['title']=api_parse_tex($row['title']);
+					$row['title']=text_filter($row['title']);
 
 					echo '<td>';
 					$class_invisible = '';
@@ -928,7 +928,7 @@ if ($show == 'test') {
 					?>
 					<tr>
 					  <td><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
-					  <?php $row['title']=api_parse_tex($row['title']);?>
+					  <?php $row['title']=text_filter($row['title']);?>
 					  <td>
 
 					<?php
@@ -1131,7 +1131,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 							"te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
 							"te.start_date as exstart, steps_counter as exstep, cuser.user_id as excruid, te.exe_duration as exduration, ce.results_disabled as exdisabled
 							FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
-					WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id 
+					WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id
                     AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'
 					AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." $user_id_and $session_id_and AND ce.active <>-1 AND" .
 					" orig_lp_id = 0 AND orig_lp_item_id = 0 AND cuser.course_code=te.exe_cours_id ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC," .
@@ -1166,7 +1166,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 			$from_gradebook = true;
 		}
 		$sizeof = sizeof($results);
-		
+
 		$user_list_id = array ();
 		$user_last_name = '';
 		$user_first_name = '';
@@ -1225,7 +1225,13 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 					//echo ceil((($results[$i][4] - $results[$i][7]) / 60)) . ' ' . get_lang('MinMinutes');
 					$exe_date_timestamp = api_strtotime($results[$i]['exdate'], date_default_timezone_get());
 					$start_date_timestamp = api_strtotime($results[$i]['exstart'], date_default_timezone_get());
-					$duration_list = ceil((($exe_date_timestamp - $start_date_timestamp) / 60)) . ' ' . get_lang('MinMinutes');
+
+					$my_duration = ceil((($exe_date_timestamp - $start_date_timestamp) / 60));
+					if ($my_duration == 1 ) {
+						$duration_list = $my_duration . ' ' . get_lang('MinMinute');
+					} else {
+						$duration_list =  $my_duration. ' ' . get_lang('MinMinutes');
+					}
 					if ($results[$i]['exstep'] > 1) {
 						//echo ' ( ' . $results[$i][8] . ' ' . get_lang('Steps') . ' )';
 						$duration_list = ' ( ' . $results[$i]['exstep'] . ' ' . get_lang('Steps') . ' )';

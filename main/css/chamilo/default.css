@@ -1752,7 +1752,7 @@ div.system_announcement {
 	background: transparent url('images/systemenouvelles.jpg') no-repeat top  left;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	width: 90%;
+	margin-left:8px;
 }
 .system_announcements h3 {
 	padding-left:70px;
@@ -4324,3 +4324,11 @@ span.form_required  {
 	padding:0px;
 }
 
+
+.attendance-users-table td {
+	height:66px;
+}
+
+.attendance-calendar-table td {
+	height:66px;
+}

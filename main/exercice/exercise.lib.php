@@ -47,7 +47,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			$questionName=$objQuestionTmp->selectTitle();
 			$questionDescription=$objQuestionTmp->selectDescription();
 
-			$questionName=api_parse_tex($questionName);
+			$questionName=text_filter($questionName);
 
 			$s="<div id=\"question_title\" class=\"sectiontitle\">
 				".get_lang('Question').' ';
@@ -63,7 +63,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			$s='';
 			$s.="<table class='exercise_questions' style='margin:4px;padding:2px;'>
 				<tr><td valign='top' colspan='2'>";
-			$questionDescription=api_parse_tex($questionDescription);
+			$questionDescription=text_filter($questionDescription);
 			$s.=$questionDescription;
 			$s.="</td></tr></table>";
 
@@ -150,6 +150,8 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				list($answer) = explode('::',$answer);
 
 				// because [] is parsed here we follow this procedure:
+				$answer = text_filter($answer);
+				/* // Deprecated code
 				// 1. find everything between the [tex] and [/tex] tags
 				$startlocations = api_strpos($answer,'[tex]');
 				$endlocations = api_strpos($answer,'[/tex]');
@@ -159,6 +161,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 					// 2. replace this by {texcode}
 					$answer = str_replace($texstring,'{texcode}',$answer);
 				}
+				*/
 
 				// 3. do the normal matching parsing
 				// replaces [blank] by an input field
@@ -207,9 +210,11 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 
 				*/
 
+				/* // Deprecated code
 				// 5. replace the {texcode by the api_pare_tex parsed code}
 				$texstring = api_parse_tex($texstring);
 				$answer=str_replace("{texcode}",$texstring,$answer);
+				*/
 
 			}
 
@@ -224,7 +229,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 						$selected = 'checked="checked"';
 					}
 				}
-				$answer = api_parse_tex($answer);
+				$answer = text_filter($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
 					'<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">'.
@@ -244,7 +249,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 						$selected = 'checked="checked"';
 					}
 				}
-				$answer = api_parse_tex($answer);
+				$answer = text_filter($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
 					'<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">'.
@@ -264,7 +269,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 						$selected = 'checked="checked"';
 					}
 				}
-				$answer = api_parse_tex($answer);
+				$answer = text_filter($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
 					'<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">'.
@@ -284,7 +289,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 					// only show elements to be answered (not the contents of
 					// the select boxes, who are corrrect = 0)
 					$s .= '<tr><td width="45%" valign="top" >';
-					$parsed_answer = api_parse_tex($answer);
+					$parsed_answer = text_filter($answer);
 					//left part questions
 					$s .= ' <span style="float:left; width:8%;"><b>'.$lines_count.'</b>.&nbsp;</span>
 						 	<span style="float:left; width:92%;">'.$parsed_answer.'</span></td>';
@@ -390,7 +395,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			echo '<table class="exercise_questions" >
 				  <tr>
 			  		<td valign="top" colspan="2">';
-			echo $questionDescription=api_parse_tex($questionDescription);
+			echo $questionDescription=text_filter($questionDescription);
 			echo '</td></tr>';
 		}
 

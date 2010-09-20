@@ -376,17 +376,18 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 	$row = Database::fetch_array($sql_result_num);
 	$count_files = $row[0];
 
-	$table_header[] = array(get_lang('Type'), true, 'style="width:40px"');
+	$table_header[] = array(get_lang('Type'), false, 'style="width:40px"');
 	$table_header[] = array(get_lang('Title'), true);
 
 	if ($count_files != 0) {
 		$table_header[] = array(get_lang('Authors'), true);
+		$table_header[] = array(get_lang('Qualification'), true);
 	}
 
 	$table_header[] = array(get_lang('Date'), true);
 
 	if ($origin != 'learnpath') {
-		$table_header[] = array(get_lang('Modify'), true);
+		$table_header[] = array(get_lang('Modify'), false);
 		$table_header[] = array('RealDate', true);
 	}
 
@@ -396,6 +397,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 	if ($count_files != 0) {
 		$column_show[] = 1;	 // authors
+		$column_show[] = 1;	 // qualification
 	}
 
 	$column_show[] = 1; //date
@@ -406,18 +408,27 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 	// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
 	// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
 
-	if ($count_files != 0) {
-		$column_order[3] = 5;
-	} else {
-		$column_order[2] = 4;
+	$column_order = array();
+	$i=0;
+	foreach($table_header as $item) {
+		$column_order[$i] = $i;
+		$i++;
 	}
-
+	
+	if ($count_files != 0) {
+		$column_order[2] = 5;
+	} else {
+		$column_order[1] = 4;
+	}
+	
 	$table_data = array();
 	$dirs_list = get_subdirs_list($work_dir);
 
 	$my_sub_dir = str_replace('work/', '', $sub_course_dir);
-
-	// List of all folders
+	
+	// @todo Since "works" cant have sub works this foreach is useless when selecting the list of works 
+	
+	// List of all folders	
 	if (is_array($dirs_list)) {
 		foreach ($dirs_list as $dir) {
 			if ($my_sub_dir == '') {
@@ -432,7 +443,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 			} else {
 				$sql_select_directory .= " work.post_group_id = '0' ";
 			}
-			$sql_select_directory .= " AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";
+			$sql_select_directory .= " AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";			
 			$result = Database::query($sql_select_directory);
 			$row = Database::fetch_array($result);
 
@@ -746,6 +757,11 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 			$table_data[] = $row;
 		}
 	}
+	
+	//Redefining $my_sub_dir
+	if (substr($my_sub_dir,strlen($my_sub_dir)-1, strlen($my_sub_dir)) == '/') {
+		$my_sub_dir = substr($my_sub_dir, 0,strlen($my_sub_dir)-1);
+	}
 
 	if (Database::num_rows($sql_result) > 0) {
 		while ($work = Database::fetch_object($sql_result)) {
@@ -754,8 +770,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND ref=".$work->id;
 			$author_qry = Database::query($author_sql);
 			$row2 = Database::fetch_array($author_qry);
-
-
+			
 			if (Database::num_rows($author_qry) == 1) {
 				$is_author = true;
 			}
@@ -773,9 +788,11 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$add_string = '';
 				if (defined('IS_ASSIGNMENT')) {
 					if($work->qualification == '') {
-						$qualification_string = ' / <b style="color:orange">'.get_lang('NotRevised').'</b>';
+						//$qualification_string = '<b style="color:orange">'.get_lang('NotRevised').'</b>';
+						$qualification_string = '<b style="color:orange"> - </b>';
 					} else {
-						$qualification_string = ' / <b style="color:blue">'.get_lang('Qualification').': '.$work->qualification.'</b>';
+						//$qualification_string = '<b style="color:blue">'.get_lang('Qualification').': '.$work->qualification.'</b>';
+						$qualification_string = '<b style="color:blue">'.$work->qualification.'</b>';
 					}
 					if (defined('ASSIGNMENT_EXPIRES') && (ASSIGNMENT_EXPIRES < convert_date_to_number($work->sent_date))) {
 						$add_string = ' <b style="color:red">'.get_lang('Expired').'</b>';
@@ -786,13 +803,13 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 				$row[] = '<a href="download.php?file='.$url.'">'.build_document_icon_tag('file', substr(basename($work->url), 13)).'</a>';
 				$row[] = '<a href="download.php?file='.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
-				$row[] = display_user_link_work($row2['insert_user_id'], $work->author).$qualification_string; // $work->author;
+				$row[] = display_user_link_work($row2['insert_user_id'], $work->author); // $work->author;
+				$row[] = $qualification_string;
 			
 				$work_sent_date_local = api_get_local_time($work->sent_date);				
 				$row[] = date_to_str_ago($work_sent_date_local).$add_string.'<br /><span class="dropbox_date">'.api_format_date($work_sent_date_local).'</span>';
 
 				if ($is_allowed_to_edit) {
-
 					$action = '';
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.gif', get_lang('WorkDelete')).'</a>';
@@ -802,7 +819,6 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					} else {
 						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_visible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Visible').'" ><img src="../img/invisible.gif" alt="'.get_lang('Visible').'"  title="'.get_lang('Visible').'"></a>';
 					}
-
 					$row[] = $action;
 				// the user that is not course admin can only edit/delete own document
 				} elseif ($row2['insert_user_id'] == $_user['user_id']) {
@@ -811,7 +827,6 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					if (api_get_course_setting('student_delete_own_publication') == 1) {
 						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'"  >'.Display::return_icon('delete.gif',get_lang('WorkDelete')).'</a>';
 					}
-
 					$row[] = $action;
 				} else {
 					$row[] = ' ';

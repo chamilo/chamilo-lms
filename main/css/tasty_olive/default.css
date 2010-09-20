@@ -3550,6 +3550,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 	margin-right:2px;
 	margin-top:5px;
 }
+
 .attendance-calendar-add div.row {
 	display:inline;
 }
@@ -3777,4 +3778,12 @@ span.form_required  {
     border:1pt solid #ccc;
     margin-top:5px;
     height: 40px;
+}
+
+.attendance-users-table td {
+	height:66px;
+}
+
+.attendance-calendar-table td {
+	height:66px;
 }

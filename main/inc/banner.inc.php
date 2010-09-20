@@ -26,10 +26,22 @@ $session_name   = api_get_session_name($my_session_id);
 			if (!empty($iname)) {
 	           echo '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
 			}
-			?>
+			
+			/*	External link section a.k.a Department - Department URL */
+			
+			if (isset($_course['extLink']) && $_course['extLink']['name'] != '') {
+				echo '<span class="extLinkSeparator"> - </span>';
+				if ($_course['extLink']['url'] != '') {
+					echo '<a class="extLink" href="'.$_course['extLink']['url'].'" target="_top">';
+					echo $_course['extLink']['name'];
+					echo '</a>';
+				} else {
+					echo $_course['extLink']['name'];
+				}
+			}
+?>
 		</div>
 <?php
-
 /*	Course title section */
 
 if (!empty($_cid) and $_cid != -1 and isset($_course)) {
@@ -79,23 +91,7 @@ echo '</div>';
 echo '<div class="clear">&nbsp;</div>';
 
 /*	Plugins for banner section */
-
-
-
 $web_course_path = api_get_path(WEB_COURSE_PATH);
-
-/*	External link section */
-
-if (isset($_course['extLink']) && $_course['extLink']['name'] != '') {
-	echo '<span class="extLinkSeparator"> / </span>';
-	if ($_course['extLink']['url'] != '') {
-		echo '<a class="extLink" href="'.$_course['extLink']['url'].'" target="_top">';
-		echo $_course['extLink']['name'];
-		echo '</a>';
-	} else {
-		echo $_course['extLink']['name'];
-	}
-}
 ?>
 	</div>
 	<div id="header2">

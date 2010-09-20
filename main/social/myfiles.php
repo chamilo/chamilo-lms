@@ -16,9 +16,7 @@ $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('MyFiles'));
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js"></script>';
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
+//jquery tickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '
 <script type="text/javascript">

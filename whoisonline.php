@@ -31,9 +31,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 	}
 
 </script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="./main/inc/lib/javascript/jquery.js"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="./main/inc/lib/javascript/thickbox.js"></script>';
-$htmlHeadXtra[] = '<link rel="stylesheet" href="./main/inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
+//jquery tickbox already called from main/inc/header.inc.php
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){
 	$("input#id_btn_send_invitation").bind("click", function(){

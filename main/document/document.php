@@ -47,9 +47,9 @@ require_once $lib_path.'sortabletable.class.php';
 require_once $lib_path.'formvalidator/FormValidator.class.php';
 
 api_protect_course_script(true);
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js"></script>';
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
+
+//jquery tickbox already called from main/inc/header.inc.php
+
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
 	for (i=0;i<$(".actions").length;i++) {

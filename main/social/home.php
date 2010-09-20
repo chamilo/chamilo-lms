@@ -22,9 +22,8 @@ unset($_SESSION['this_section']);//for hmtl editor repository
 $interbreadcrumb[]= array ('url' => 'home.php','name' => get_lang('Social'));
 
 api_block_anonymous_users();
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
+//jquery tickbox already called from main/inc/header.inc.php
+
 $htmlHeadXtra[] = '<script type="text/javascript">
 
 function show_icon_edit(element_html) {

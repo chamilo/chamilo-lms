@@ -35,7 +35,7 @@ $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+//jquery already called from main/inc/header.inc.php
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
 
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
@@ -1264,8 +1264,7 @@ if (!empty ($error)) {
 
     if ($objExercise->selectFeedbackType() == 1 && $exerciseType == 2) {
         $submit_btn = '';
-        echo '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.js" type="text/javascript"></script>';
-        echo '<style type="text/css" media="all">@import "' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css";</style>';
+        //jquery tickbox already called from main/inc/header.inc.php
         $hotspot_get = $_POST['hotspot'];
         // Show a hidden div
         echo "<script>$(document).ready( function(){

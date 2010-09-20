@@ -19,10 +19,7 @@ require_once $libpath.'formvalidator/FormValidator.class.php';
 require_once $libpath.'image.lib.php';
 require_once $libpath.'mail.lib.inc.php';
 require_once $libpath.'social.lib.php';
-
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
+//jquery tickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 var textarea = "";

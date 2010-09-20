@@ -263,26 +263,50 @@ class Statistics {
 		if ($_configuration['multiple_access_urls']) {
 			$table_url = ", $access_url_rel_user_table";
 			$where_url = " WHERE login_user_id=user_id AND access_url_id='".$current_url_id."'";
+			$where_url_last = ' AND login_date > DATE_SUB(NOW(),INTERVAL 1 %s)';
 		} else {
 			$table_url = '';
-			$where_url='';
+			$where_url = '';
+			$where_url_last = ' WHERE login_date > DATE_SUB(NOW(),INTERVAL 1 %s)';
 		}
 		switch ($type) {
 			case 'month':
 				$months = api_get_months_long();
 				$period = get_lang('PeriodMonth');
 				$sql = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY login_date ";
+				$sql_last_x = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'YEAR')." GROUP BY stat_date ORDER BY login_date ";
 				break;
 			case 'hour':
 				$period = get_lang('PeriodHour');
 				$sql = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY stat_date ";
+				$sql_last_x = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'DAY')." GROUP BY stat_date ORDER BY stat_date ";
 				break;
 			case 'day':
 				$week_days = api_get_week_days_long();
 				$period = get_lang('PeriodDay');
 				$sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
+				$sql_last_x = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'WEEK')." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
 				break;
 		}
+		$res_last_x = Database::query($sql_last_x);
+		$result_last_x = array();
+		while ($obj = Database::fetch_object($res_last_x)) {
+			$stat_date = $obj->stat_date;
+			switch ($type) {
+				case 'month':
+					$stat_date = explode('-', $stat_date);
+					$stat_date[1] = $months[$stat_date[1] - 1];
+					$stat_date = implode(' ', $stat_date);
+					break;
+				case 'day':
+					$stat_date = $week_days[$stat_date];
+					break;
+			}
+			$result_last_x[$stat_date] = $obj->number_of_logins;
+		}
+		Statistics::print_stats(get_lang('LastLogins').' ('.$period.')', $result_last_x, true);
+		flush(); //flush web request at this point to see something already while the full data set is loading
+		echo '<br />';
 		$res = Database::query($sql);
 		$result = array();
 		while ($obj = Database::fetch_object($res)) {
@@ -299,7 +323,7 @@ class Statistics {
 			}
 			$result[$stat_date] = $obj->number_of_logins;
 		}
-		Statistics::print_stats(get_lang('Logins').' ('.$period.')', $result, true);
+		Statistics::print_stats(get_lang('AllLogins').' ('.$period.')', $result, true);
 	}
 	/**
 	 * Print the number of recent logins

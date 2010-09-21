@@ -61,10 +61,10 @@ require_once $libpath.'magpierss/rss_fetch.inc';
 
 api_block_anonymous_users();
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+//jquery thickbox already called from main/inc/header.inc.php
+
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js"></script>';
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
+
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function toogle_course (element_html, course_code){

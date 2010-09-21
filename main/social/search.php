@@ -19,10 +19,7 @@ $this_section = SECTION_SOCIAL;
 $tool_name = get_lang('Search');
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
-
+//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 		

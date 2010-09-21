@@ -19,8 +19,8 @@ if (api_get_setting('allow_students_to_create_groups_in_social') == 'false' && !
 }
 
 global $charset;
+//jquery already called from main/inc/header.inc.php
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 textarea = "";
 num_characters_permited = 255;

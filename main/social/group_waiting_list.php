@@ -11,9 +11,8 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>'; 
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
+//jquery thickbox already called from main/inc/header.inc.php
+
 $htmlHeadXtra[] = '<script type="text/javascript">
 		
 function show_icon_edit(element_html) {	
@@ -106,9 +105,9 @@ echo '<div id="social-content">';
 		foreach($users as $user) {	 
 			switch ($user['relation_type']) {			
 				case  GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
-				$user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=accept">'.Display::return_icon('add_normal_user.png', get_lang('AddNormalUser')).'</a>';
-				$user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('add_moderator.png', get_lang('AddModerator')).'</a>';
-				$user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=deny">'.Display::return_icon('delete.gif', get_lang('DenyEntry')).'</a>';
+				$user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=accept">'.Display::return_icon('invitation_friend.png', get_lang('AddNormalUser')).'</a>';
+				$user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';
+				$user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=deny">'.Display::return_icon('user_delete.png', get_lang('DenyEntry')).'</a>';
 				break;				
 			}
 			$new_member_list[] = $user;

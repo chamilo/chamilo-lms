@@ -80,6 +80,7 @@ class learnpath {
 	 * @return	boolean		True on success, false on error
 	 */
     public function __construct($course, $lp_id, $user_id) {
+    	$this->encoding = api_get_system_encoding(); // Chamilo 1.8.8: We intend always to use the system encoding.
     	//check params
     	//check course code
     	if ($this->debug>0){error_log('New LP - In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')',0);}
@@ -123,7 +124,7 @@ class learnpath {
     			$row = Database::fetch_array($res);
     			$this->type = $row['lp_type'];
     			$this->name = stripslashes($row['name']);
-    			$this->encoding = $row['default_encoding'];
+    			//$this->encoding = $row['default_encoding']; // Chamilo 1.8.8: We intend not to use 'default_encoding' field anymore.
     			$this->proximity = $row['content_local'];
     			$this->theme = $row['theme'];
     			$this->maker = $row['content_maker'];

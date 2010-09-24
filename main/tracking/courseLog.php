@@ -1,14 +1,15 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
+
 /**
-*	@author Thomas Depraetere
-*	@author Hugues Peeters
-*	@author Christophe Gesche
-*	@author Sebastien Piraux
-*	@author Toon Keppens (Vi-Host.net)
-*
-*	@package chamilo.tracking
-*/
+ *	@author Thomas Depraetere
+ *	@author Hugues Peeters
+ *	@author Christophe Gesche
+ *	@author Sebastien Piraux
+ *	@author Toon Keppens (Vi-Host.net)
+ *
+ *	@package chamilo.tracking
+ */
 
 /*
  *	INIT SECTION
@@ -69,16 +70,6 @@ if ($export_csv) {
 	ob_start();
 }
 $csv_content = array();
-
-// charset determination
-if (!empty($_GET['scormcontopen'])) {
-    $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-	$contopen = (int) $_GET['scormcontopen'];
-	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = $contopen AND session_id = $session_id";
-	$res = Database::query($sql);
-	$row = Database::fetch_array($res);
-	$lp_charset = $row['default_encoding'];
-}
 
 $htmlHeadXtra[] = "<style type='text/css'>
 /*<![CDATA[*/
@@ -464,9 +455,9 @@ if ($_GET['studentlist'] == 'false') {
 
 	    $all_datas = array();
 	    $course_code = $_course['id'];
-	    
+
 		$user_ids = array_keys($a_students);
-		
+
 		$table = new SortableTable('users_tracking', array('TrackingCourseLog','get_number_of_users'), array('TrackingCourseLog','get_user_data'), (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 
 		$parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);

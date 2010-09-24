@@ -1,4 +1,4 @@
-<?php // $Id: userLog.php 21626 2009-06-26 12:19:41Z pcool $
+<?php
 /* For licensing terms, see /license.txt */
 
 // TODO: Is this file deprecated?
@@ -17,8 +17,8 @@ $view  = $_REQUEST['view'];
 // name of the language file that needs to be included
 $language_file = 'tracking';
 
-// including the global Dokeos file
-//include('../inc/global.inc.php');
+// Including the global initialization file
+require_once '../inc/global.inc.php';
 
 // the section (for the tabs)
 $this_section = "session_my_space";
@@ -29,34 +29,15 @@ $course_id = api_get_course_id();
 
 //YW Hack security to quick fix RolesRights bug
 $is_allowed = true;
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
-include(api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php');
-include(api_get_path(LIBRARY_PATH).'course.lib.php');
-include(api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
-// charset determination
-if (isset($_GET['scormcontopen'])) {
-	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-	$contopen = Database::escape_string($_GET['scormcontopen']);
-	if (is_numeric($contopen)) {
-		$contopen = intval($contopen);
-		$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-		$res = Database::query($sql);
-		$row = Database::fetch_array($res);
-		$lp_charset = $row['default_encoding'];
-	}
-	//header('Content-Type: text/html; charset='. $row['default_encoding']);
-}
+/*	Libraries */
+
+require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
+
+/*	Header */
 
 /*
 $interbreadcrumb[]= array ("url"=>"../group/group.php", "name"=> get_lang('BredCrumpGroups'));
@@ -84,11 +65,8 @@ td {border-bottom: thin dashed gray;}
 
 Display::display_header($nameTools,"Tracking");
 
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/
+/*	Constants and variables */
+
 $is_allowedToTrack = $is_courseAdmin;
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_id);
 
@@ -146,11 +124,7 @@ $MonthsShort = api_get_months_short();
 $is_allowedToTrack = true; // allowed to track only user of one group
 $is_allowedToTrackEverybodyInCourse = $is_allowedToTrack; // allowed to track all students in course
 
-/*
-==============================================================================
-		MAIN SECTION
-==============================================================================
-*/
+/*	MAIN SECTION */
 ?>
 <h3>
 	<?php echo $nameTools ?>
@@ -163,11 +137,9 @@ $is_allowedToTrackEverybodyInCourse = $is_allowedToTrack; // allowed to track al
 // check if uid is tutor of this group
 if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configuration['tracking_enabled'] ) {
 	if(!$uInfo && !isset($uInfo) ) {
-		/***************************************************************************
-		*
-		*		Display list of user of this group
-		*
-		***************************************************************************/
+		/*
+		 *		Display list of user of this group
+		 */
 
 		echo "<h4>".get_lang('ListStudents')."</h4>";
 		if( $is_allowedToTrackEverybodyInCourse ) {
@@ -257,11 +229,9 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 	} else {
 		// if uInfo is set
 
-		/***************************************************************************
-		*
-		*		Informations about student uInfo
-		*
-		***************************************************************************/
+		/*
+		 *		Informations about student uInfo
+		 */
 		// these checks exists for security reasons, neither a prof nor a tutor can see statistics of a user from
 		// another course, or group
 		if( $is_allowedToTrackEverybodyInCourse ) {
@@ -326,11 +296,9 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		}
 
 
-		/***************************************************************************
-         *
+		/*
          *		Scorm contents and Learning Path
-         *
-         ***************************************************************************/
+         */
         if(substr($view,5,1) == '1') {
             $new_view = substr_replace($view,'0',5,1);
             echo "<tr>
@@ -380,11 +348,10 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
        				                </td>
        					            </tr>";
        							while ($ar3['status'] != '') {
-									require_once('../newscorm/learnpathItem.class.php');
+									require_once '../newscorm/learnpathItem.class.php';
 									$time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
-									$title = api_htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
        								echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
-       								echo "$title</td><td align=right>{$ar3['status']}</td><td     align=right>{$ar3['score']}</td><td align=right>$time</td>";
+       								echo "$title</td><td align=right>{$ar3['status']}</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
        								echo "</tr>";
        								$ar3=Database::fetch_array($result3);
        							}
@@ -432,4 +399,3 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 </table>
 <?php
 Display::display_footer();
-?>

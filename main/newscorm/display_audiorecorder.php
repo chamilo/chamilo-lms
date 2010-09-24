@@ -22,7 +22,6 @@ if(isset($_SESSION['lpobject']))
 		die('Could not instanciate lp object');
 	}
 }
-$charset = $_SESSION['oLP']->encoding;
 
 $lp_theme_css=$_SESSION['oLP']->get_theme();
 $scorm_css_header=true;

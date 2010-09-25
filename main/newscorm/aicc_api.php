@@ -1,57 +1,54 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
-*	API event handler functions for AICC / CMIv4 in API communication mode
-*
-*	@author   Denes Nagy <darkden@freemail.hu>
-*   @author   Yannick Warnier <ywarnier@beeznest.org>
-*	@version  v 1.0
-*	@access   public
-*	@package  chamilo.learnpath
-* 	@license	GNU/GPL
-*/
+ *	API event handler functions for AICC / CMIv4 in API communication mode
+ *
+ *	@author   Denes Nagy <darkden@freemail.hu>
+ *   @author   Yannick Warnier <ywarnier@beeznest.org>
+ *	@version  v 1.0
+ *	@access   public
+ *	@package  chamilo.learnpath
+ * 	@license	GNU/GPL
+ */
+
 /**
  * This script is divided into three sections.
  * The first section (below) is the initialisation part.
  * The second section is the AICC object part
- * The third section defines the event handlers for Dokeos' internal messaging
+ * The third section defines the event handlers for Chamilo's internal messaging
  * and frames refresh
  *
  * This script implements the API messaging for AICC. The HACP messaging is
  * made by another set of scripts.
  */
-/*
- * INIT SECTION
- */
 
-//flag to allow for anonymous user - needs to be set before global.inc.php
+/* INIT SECTION */
+
+// Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
-//Load common libraries using a compatibility script to bridge between 1.6 and 1.8
+// Load common libraries using a compatibility script to bridge between 1.6 and 1.8.
 require_once 'back_compat.inc.php';
-//Load learning path libraries so we can use the objects to define the initial values
-//of the API
+// Load learning path libraries so we can use the objects to define the initial values of the API.
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 require_once 'aicc.class.php';
 
-// Is this needed? This is probabaly done in the header file
+// Is this needed? This is probabaly done in the header file.
 // $_user							= $_SESSION['_user'];
 $file							= $_SESSION['file'];
 $oLP							= unserialize($_SESSION['lpobject']);
 $oItem 							= $oLP->items[$oLP->current];
-if(!is_object($oItem)){
-	error_log('New LP - scorm_api - Could not load oItem item',0);
+if (!is_object($oItem)) {
+	error_log('New LP - scorm_api - Could not load oItem item', 0);
 	exit;
 }
 $autocomplete_when_80pct = 0;
 
-/*
-==============================================================================
-		JavaScript Functions
-==============================================================================
-*/
-?>var scorm_logs=<?php echo (empty($oLP->scorm_debug)?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+/* JavaScript Functions */
+
+?>var scorm_logs=<?php echo (empty($oLP->scorm_debug) ? '0' : '3'); ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs=0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 //logit_lms('scormfunctions.php included',0);
 
@@ -66,7 +63,7 @@ function APIobject() {
   this.LMSGetDiagnostic=LMSGetDiagnostic;
 }
 
-//it is not sure that the scos use the above declarations
+// It is not sure that the scos use the above declarations.
 
 API = new APIobject(); //for scorm 1.2
 
@@ -87,7 +84,7 @@ var G_LastError = G_NoError ;
 
 var commit = false ;
 
-//Strictly scorm variables
+// Strictly SCORM variables.
 var score=<?php echo $oItem->get_score();?>;
 var max=<?php echo $oItem->get_max();?>;
 var min=<?php echo $oItem->get_min();?>;
@@ -97,7 +94,7 @@ var suspend_data = '<?php echo $oItem->get_suspend_data();?>';
 var lesson_location = '<?php echo $oItem->get_lesson_location();?>';
 var total_time = '<?php echo $oItem->get_scorm_time('js');?>';
 
-//Dokeos internal variables
+// Chamilo internal variables.
 var saved_lesson_status = 'not attempted';
 var lms_lp_id = <?php echo $oLP->get_id();?>;
 var lms_item_id = <?php echo $oItem->get_id();?>;
@@ -116,7 +113,7 @@ var lms_previous_item = '<?php echo $oLP->get_previous_item_id();?>';
 var lms_lp_type = '<?php echo $oLP->get_type();?>';
 var lms_item_type = '<?php echo $oItem->get_type();?>';
 
-//Backup for old values
+// Backup for old values.
 var old_score = 0;
 var old_max = 0;
 var old_min = 0;
@@ -140,18 +137,18 @@ function LMSGetValue(param) {
 	}else if(param == 'cmi.core.exit'){
 		result='';
 	}else if(param == 'cmi.core.lesson_status'){
-	    if(lesson_status != '') {
-	    	result=lesson_status;
-	    }
-	    else{
-	    	result='not attempted';
-	    }
+		if(lesson_status != '') {
+			result=lesson_status;
+		}
+		else{
+			result='not attempted';
+		}
 	}else if(param == 'cmi.core.student_id'){
 		result='<?php echo $_user['user_id']; ?>';
 	}else if(param == 'cmi.core.student_name'){
 		  <?php
-			$who=addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
-		    echo "result='$who';";
+			$who = addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
+			echo "result='$who';";
 		  ?>
 	}else if(param == 'cmi.core.lesson_location'){
 		result=lesson_location;
@@ -179,7 +176,7 @@ function LMSGetValue(param) {
 		result='<?php echo $oItem->get_view_count();?>';
 	}
 	/*
-	//Switch not working??? WTF???
+	// Switch not working??? WTF???
 	switch(param) {
 		case 'cmi.core._children'		:
 			result='entry, exit, lesson_status, student_id, student_name, lesson_location, total_time, credit, lesson_mode, score, session_time';
@@ -194,20 +191,20 @@ function LMSGetValue(param) {
 			result='';
 			break;
 		case 'cmi.core.lesson_status'	:
-		    if(lesson_status != '') {
-		    	result=lesson_status;
-		    }
-		    else{
-		    	result='not attempted';
-		    }
-		    break;
+			if(lesson_status != '') {
+				result=lesson_status;
+			}
+			else{
+				result='not attempted';
+			}
+			break;
 		case 'cmi.core.student_id'	   :
 			result='<?php echo $_user['user_id']; ?>';
 			break;
 		case 'cmi.core.student_name'	:
 		  <?php
-		    $who=addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
-		    echo "result='$who';";
+			$who = addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
+			echo "result='$who';";
 		  ?>	break;
 		case 'cmi.core.lesson_location'	:
 			result='';
@@ -263,9 +260,9 @@ function LMSSetValue(param, val) {
 	case 'cmi.core.lesson_status'	:
 		saved_lesson_status = lesson_status;
 		lesson_status = val;
-		<?php if($oLP->mode != 'fullscreen'){ ?>
-	    //var update = update_toc(lesson_status,lms_item_id);
-	    <?php } ?>
+		<?php if ($oLP->mode != 'fullscreen') { ?>
+		//var update = update_toc(lesson_status,lms_item_id);
+		<?php } ?>
 		break;
 	case 'cmi.completion_status'	: lesson_status = val;	break; //1.3
 	case 'cmi.core.session_time'	: session_time = val;	break;
@@ -273,29 +270,29 @@ function LMSSetValue(param, val) {
 	case 'cmi.success_status'		: success_status = val; break; //1.3
 	case 'cmi.suspend_data'			: suspend_data = val;   break;
 	}
-    //var update = update_toc();
+	//var update = update_toc();
 	//var update_progress = update_progress_bar();
 	<?php
-	if ($oLP->force_commit == 1){
-		echo "    var mycommit = LMSCommit('force');";
+	if ($oLP->force_commit == 1) {
+		echo "	var mycommit = LMSCommit('force');";
 	}
 	?>
 	return(true);
 }
 function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
-    <?php if ($autocomplete_when_80pct){ ?>
-    if( ( lesson_status == 'incomplete') && (score >= (0.8*max) ) ){
-      lesson_status = 'completed';
-    }
-    <?php }?>
-    param = 'id='+lms_item_id+'&origin='+origin+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
+	<?php if ($autocomplete_when_80pct) { ?>
+	if( ( lesson_status == 'incomplete') && (score >= (0.8*max) ) ){
+	  lesson_status = 'completed';
+	}
+	<?php }?>
+	param = 'id='+lms_item_id+'&origin='+origin+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
 
-    url="http://<?php
-    $self=api_get_self();
-    $url=$_SERVER['HTTP_HOST'].$self;
-    $url=substr($url,0,-14);//14 is the length of this file's name (/scorm_api.php)
-    echo $url;
-    ?>/lp_controller.php?cidReq=<?php echo api_get_course_id();?>&action=save&lp_id=<?php echo $oLP->get_id();?>&" + param + "";
+	url="http://<?php
+	$self = api_get_self();
+	$url = $_SERVER['HTTP_HOST'].$self;
+	$url = substr($url, 0, -14); // 14 is the length of this file's name (/scorm_api.php).
+	echo $url;
+	?>/lp_controller.php?cidReq=<?php echo api_get_course_id();?>&action=save&lp_id=<?php echo $oLP->get_id();?>&" + param + "";
 	logit_lms('saving data (status='+lesson_status+')',1);
 	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location);
 	//xajax_update_pgs();
@@ -304,7 +301,7 @@ function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
 
 function LMSCommit(val) {
 	logit_scorm('LMSCommit()',0);
-    commit = true ;
+	commit = true ;
 	savedata('commit');
 	return('true');
 }
@@ -331,17 +328,16 @@ function LMSGetDiagnostic(errCode){
 	return(API.LMSGetLastError());
 }
 <?php
-//--------------------------------------------------------------------//
 /**
- * Dokeos-specific code that deals with event handling and inter-frames
+ * Chamilo-specific code that deals with event handling and inter-frames
  * messaging/refreshing.
- * Note that from now on, the Dokeos JS code in this library will act as
+ * Note that from now on, the Chamilo JS code in this library will act as
  * a controller, of the MVC pattern, and receive all requests for frame
  * updates, then redispatch to any frame concerned.
  */
 ?>
 /**
- * Defining the AJAX-object class to be made available from other frames
+ * Defining the AJAX-object class to be made available from other frames.
  */
 function XAJAXobject() {
   this.xajax_switch_item_details=xajax_switch_item_details;
@@ -389,8 +385,8 @@ function addListeners(){
 	//assign event handlers to objects
 	if(lms_lp_type==1 || lms_item_type=='asset'){
 		logit_lms('Dokeos LP or asset',2);
-		//if this path is a Dokeos learnpath, then start manual save
-		//when something is loaded in there
+		// If this path is a Chamilo learnpath, then start manual save
+		// when something is loaded in there.
 		var myelem = document.getElementById('content_id');
 		if(!myelem){logit_lms("Impossible to find content_id element in document",2);}
 		addEvent(myelem,'unload',dokeos_save_asset,false);
@@ -433,15 +429,15 @@ function load_item(item_id,url){
 	return false;
 }
 /**
- * Save a Dokeos learnpath item's time and mark as completed upon
+ * Save a Chamilo learnpath item's time and mark as completed upon
  * leaving it
  */
 function dokeos_save_asset(){
-    //var linkparams = 'id='+lms_item_id+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
-    //var url = "<?php echo api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php' ?>?action=save&" + linkparams + "";
+	//var linkparams = 'id='+lms_item_id+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
+	//var url = "<?php echo api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php'; ?>?action=save&" + linkparams + "";
 	logit_lms('dokeos_save_asset: '+url,0);
-    //frames["message_name"].src = url;
-    xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location);
+	//frames["message_name"].src = url;
+	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location);
 }
 /**
  * Logs information about SCORM messages into the log frame
@@ -471,7 +467,7 @@ function logit_lms(message,priority){
  */
 function update_toc(update_action,update_id)
 {
-	<?php if($oLP->mode != 'fullscreen'){ ?>
+	<?php if ($oLP->mode != 'fullscreen') { ?>
 		var myframe = frames["toc_name"];
 		var myelem = myframe.document.getElementById("toc_"+update_id);
 		var myelemimg = myframe.document.getElementById("toc_img_"+update_id);
@@ -526,7 +522,7 @@ function update_toc(update_action,update_id)
 			}
 		}
 		return true;
-    <?php } ?>
+	<?php } ?>
 	return true;
 }
 /**
@@ -598,7 +594,7 @@ function update_message_frame(msg_msg)
  * current item, (2) refresh all the values inside the SCORM API object, (3) open the
  * new item into the content_id frame, (4) refresh the table of contents, (5) refresh
  * the progress bar (completion), (6) refresh the message frame
- * @param	integer		Dokeos ID for the current item
+ * @param	integer		Chamilo ID for the current item
  * @param	string		This parameter can be a string specifying the next
  *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item
  */
@@ -662,106 +658,106 @@ function switch_item(current_item, next_item){
  * manually into GET[]
  */
 function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit) {
-        params='';
-        params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
-        params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
-        params += '&status='+lesson_status+'&t='+session_time;
-        params += '&suspend='+suspend_data+'&loc='+lesson_location;
-        params += '&core_exit='+lms_item_core_exit;
-        interact_string = '';
-        for (i in interactions){
-            interact_string += '&interact['+i+']=';
-            interact_temp = '[';
-            for (j in interactions[i]) {
-                interact_temp += interactions[i][j]+',';
-            }
-            interact_temp = interact_temp.substr(0,(interact_temp.length-2)) + ']';
-            interact_string += encodeURIComponent(interact_temp);
-        }
-        //interact_string = encodeURIComponent(interact_string.substr(0,(interact_string.length-1)));
-        params += interact_string;
-        /*params = {
-            'lid': lms_lp_id,
-            'uid': lms_user_id,
-            'vid': lms_view_id,
-            'iid': lms_item_id,
-            's': score,
-            'max': max,
-            'min': min,
-            'status': lesson_status,
-            't': session_time,
-            'suspend': suspend_data,
-            'loc': lesson_location,
-            'interact': interac_string,
-            'core_exit': lms_item_core_exit
-        }
-        */
-        $.ajax({
-            type:"POST",
-            data: params,
-            url: "lp_ajax_save_item.php",
-            dataType: "script",
-            async: false
-            }
-        );
+		params='';
+		params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
+		params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
+		params += '&status='+lesson_status+'&t='+session_time;
+		params += '&suspend='+suspend_data+'&loc='+lesson_location;
+		params += '&core_exit='+lms_item_core_exit;
+		interact_string = '';
+		for (i in interactions){
+			interact_string += '&interact['+i+']=';
+			interact_temp = '[';
+			for (j in interactions[i]) {
+				interact_temp += interactions[i][j]+',';
+			}
+			interact_temp = interact_temp.substr(0,(interact_temp.length-2)) + ']';
+			interact_string += encodeURIComponent(interact_temp);
+		}
+		//interact_string = encodeURIComponent(interact_string.substr(0,(interact_string.length-1)));
+		params += interact_string;
+		/*params = {
+			'lid': lms_lp_id,
+			'uid': lms_user_id,
+			'vid': lms_view_id,
+			'iid': lms_item_id,
+			's': score,
+			'max': max,
+			'min': min,
+			'status': lesson_status,
+			't': session_time,
+			'suspend': suspend_data,
+			'loc': lesson_location,
+			'interact': interac_string,
+			'core_exit': lms_item_core_exit
+		}
+		*/
+		$.ajax({
+			type:"POST",
+			data: params,
+			url: "lp_ajax_save_item.php",
+			dataType: "script",
+			async: false
+			}
+		);
 }
 /**
  * Starts the timer with the server clock time.
  * Originally, we used the xajax library. Now we use jQuery
  */
 function xajax_start_timer() {
-    $.ajax({
-        type: "GET",
-        url: "lp_ajax_start_timer.php",
-        dataType: "script",
-        async: false
-    });
+	$.ajax({
+		type: "GET",
+		url: "lp_ajax_start_timer.php",
+		dataType: "script",
+		async: false
+	});
 }
 /**
  * Save a specific item's objectives into the LMS through
  * an AJAX call. Originally, we used the xajax library. Now we use jQuery
  */
 function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives) {
-        params='';
-        params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
-        params += '&iid='+lms_item_id;
-        obj_string = '';
-        for (i in item_objectives){
-            obj_string += '&objectives['+i+']=';
-            obj_temp = '[';
-            for (j in item_objectives[i]) {
-                obj_temp += item_objectives[i][j]+',';
-            }
-            obj_temp = obj_temp.substr(0,(obj_temp.length-2)) + ']';
-            obj_string += encodeURIComponent(obj_temp);
-        }
-        params += obj_string;
-        $.ajax({
-            type: "POST",
-            data: params,
-            url: "lp_ajax_save_objectives.php",
-            dataType: "script",
-            async: false
-        });
+		params='';
+		params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
+		params += '&iid='+lms_item_id;
+		obj_string = '';
+		for (i in item_objectives){
+			obj_string += '&objectives['+i+']=';
+			obj_temp = '[';
+			for (j in item_objectives[i]) {
+				obj_temp += item_objectives[i][j]+',';
+			}
+			obj_temp = obj_temp.substr(0,(obj_temp.length-2)) + ']';
+			obj_string += encodeURIComponent(obj_temp);
+		}
+		params += obj_string;
+		$.ajax({
+			type: "POST",
+			data: params,
+			url: "lp_ajax_save_objectives.php",
+			dataType: "script",
+			async: false
+		});
 }
 /**
  * Switch between two items through
  * an AJAX call. Originally, we used the xajax library. Now we use jQuery
  */
 function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item) {
-    params = {
-        'lid': lms_lp_id,
-        'uid': lms_user_id,
-        'vid': lms_view_id,
-        'iid': lms_item_id,
-        'next': next_item
-    }
-    $.ajax({
-        type: "POST",
-        data: params,
-        url: "lp_ajax_switch_item.php",
-        dataType: "script",
-        async: false
-    });
+	params = {
+		'lid': lms_lp_id,
+		'uid': lms_user_id,
+		'vid': lms_view_id,
+		'iid': lms_item_id,
+		'next': next_item
+	}
+	$.ajax({
+		type: "POST",
+		data: params,
+		url: "lp_ajax_switch_item.php",
+		dataType: "script",
+		async: false
+	});
 }
 addEvent(window,'load',addListeners,false);

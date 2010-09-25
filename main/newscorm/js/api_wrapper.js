@@ -1,5 +1,5 @@
 /**
- * Wrapper to the SCORM API provided by Dokeos
+ * Wrapper to the SCORM API provided by Chamilo
  * The complete set of functions and variables are in this file to avoid unnecessary file
  * accesses.
  * Only event triggers and answer data are inserted into the final document.
@@ -9,7 +9,7 @@
 /**
  * Initialisation of the SCORM API section.
  * Find the SCO functions (startTimer, computeTime, etc in the second section)
- * Find the Dokeos-proper functions (checkAnswers, etc in the third section)
+ * Find the Chamilo-proper functions (checkAnswers, etc in the third section)
  */
 var _debug = false;
 var findAPITries = 0;
@@ -413,7 +413,7 @@ function unloadPage(status)
     }
 }
 /**
- * Third section - depending on Dokeos - check answers and set score
+ * Third section - depending on Chamilo - check answers and set score
  */
 var questions = new Array();
 var questions_answers = new Array();

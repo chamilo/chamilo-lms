@@ -1,16 +1,18 @@
-<?php //$id: $
-// This file is part of the Dokeos software - See license and credits in the documentation/ directory
+<?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Created on 27.09.2006
  * Include the lazlo file necessary to use the audiorecorder
  * @author Sebastian Wagner <seba.wagner@gmail.com>
  * @author Eric Marguin <e.marguin@elixir-interactive.com>
  * @author Arnaud Ligot <arnaud@cblue.be>
+ * @package chamilo.learnpath
  */
+
 global $_configuration;
 $web_path = api_get_path(WEB_CODE_PATH);
 $getid3_path = api_get_path(LIBRARY_PATH);
-
 
 require_once $getid3_path.'getid3/getid3.php';
 
@@ -25,19 +27,15 @@ function getFLVDuration($flv_path) {
 	}
 }
 
-
-if($audio_recorder_studentview=='false')
-{
+if ($audio_recorder_studentview == 'false') {
 	$width = 295;
 	$height= 90;
 	$player = 'recorder2.swf';
-	$server = (api_get_setting('service_visio','visio_use_rtmpt')=='true'?'rtmpt://':'rtmp://').api_get_setting('service_visio','visio_host').':'.(api_get_setting('service_visio','visio_use_rtmpt')=='true'?'80':api_get_setting('service_visio','visio_port')).'/recorder';
+	$server = (api_get_setting('service_visio', 'visio_use_rtmpt') == 'true' ? 'rtmpt://' : 'rtmp://').api_get_setting('service_visio', 'visio_host').':'.(api_get_setting('service_visio', 'visio_use_rtmpt') == 'true' ? '80' : api_get_setting('service_visio', 'visio_port')).'/recorder';
 	$post_uri = urlencode($web_path.'conference/audiopost.php?course_code='.api_get_course_id().'&user_id='.api_get_user_id().'&checker='.md5(api_get_course_id().api_get_user_id().gmdate('Ymd').$_configuration['security_key']));
-	$filename = 'lpi'.$audio_recorder_item_id.'-'.gmdate('YmdHis').api_get_user_id().'.flv';//using -z- as fields splitter
+	$filename = 'lpi'.$audio_recorder_item_id.'-'.gmdate('YmdHis').api_get_user_id().'.flv'; // Using -z- as fields splitter.
 	$path_to_lzx = $web_path.'conference/'.$player.'?server='.urlencode($server).'&postURI='.$post_uri.'&filename='.$filename;
-}
-else
-{
+} else {
 	$width = 295;
 	$height = 24;
 	$player = 'player2.swf';
@@ -47,8 +45,7 @@ else
 			" WHERE path like BINARY '/audio/lpi".Database::escape_string($audio_recorder_item_id)."-%' AND filetype='file' " .
 			" ORDER BY path DESC";
 	$res = Database::query($select);
-	if(Database::num_rows($res)>0)
-	{
+	if (Database::num_rows($res) > 0) {
 		$row = Database::fetch_array($res);
 		//$filepath = api_get_path(WEB_COURSE_PATH).$cp.'/document'.$row['path'];
 		$duration = getFLVDuration(api_get_path(SYS_COURSE_PATH).$cp.'/document'.$row['path']);
@@ -57,16 +54,15 @@ else
 	}
 }
 
-if(!empty($path_to_lzx)){
+if (!empty($path_to_lzx)) {
 	$recorder_content = sprintf("<object type=\"application/x-shockwave-flash\" data=\"%s\" ".
 			"width='$width' height='$height'>".
 	         "<param name=\"movie\" value=\"%s\">".
 		 "<param name=\"quality\" value=\"high\">".
 		 "<param name=\"scale\" value=\"noscale\">".
 		 "<param name=\"salign\" value=\"LT\">".
-		 "<param name=\"menu\" value=\"false\"></object>",$path_to_lzx,$path_to_lzx);
-	if($audio_recorder_studentview=='false')
-	{
+		 "<param name=\"menu\" value=\"false\"></object>", $path_to_lzx, $path_to_lzx);
+	if ($audio_recorder_studentview == 'false') {
 		echo '<script type="text/javascript">
 
 		function show_audiorecorder()
@@ -77,13 +73,10 @@ if(!empty($path_to_lzx)){
 
 		</script>
 		';
-		//Commented the audio for the version stable
+		// Commented the audio for the version stable.
 		//echo '<div id="show_audiorecorder_div"><a style="cursor:pointer" onclick="show_audiorecorder()">'.get_lang('ShowAudioRecorder').'</a></div>';
 		//echo '<div id="audiorecorder_frame"></div>';
-	}
-	else
-	{
+	} else {
 		echo $recorder_content;
 	}
 }
-?>

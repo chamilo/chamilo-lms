@@ -1,21 +1,22 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Script that displays a blank page (with later a message saying why)
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
-$language_file = array('learnpath','document');
+$language_file = array('learnpath', 'document');
 
-//flag to allow for anonymous user - needs to be set before global.inc.php
+// Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
 require_once '../inc/global.inc.php';
 require_once '../inc/reduced_header.inc.php';
-?>
-<body>
-<?php
+
+echo '<body dir="'.api_get_text_direction().'">';
+
 if (isset($_GET['error'])) {
 	switch($_GET['error']){
 		case 'document_deleted':
@@ -33,7 +34,7 @@ if (isset($_GET['error'])) {
 		default:
 			break;
 	}
-} else if(isset($_GET['msg']) && $_GET['msg']=='exerciseFinished') {
+} elseif (isset($_GET['msg']) && $_GET['msg'] == 'exerciseFinished') {
 	echo '<br /><br />';
 	Display::display_normal_message(get_lang('ExerciseFinished'));
 }

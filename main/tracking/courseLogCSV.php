@@ -12,21 +12,39 @@
 
 // TODO: Is this file deprecated?
 
-/* INIT SECTION */
-
+/*
+==============================================================================
+		INIT SECTION
+==============================================================================
+*/
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 // name of the language file that needs to be included
 $language_file = "tracking";
 
-require_once '../inc/global.inc.php';
+include('../inc/global.inc.php');
 //includes for SCORM and LP
-require_once '../newscorm/learnpath.class.php';
-require_once '../newscorm/learnpathItem.class.php';
-require_once '../newscorm/scorm.class.php';
-require_once '../newscorm/scormItem.class.php';
+require_once('../newscorm/learnpath.class.php');
+require_once('../newscorm/learnpathItem.class.php');
+require_once('../newscorm/scorm.class.php');
+require_once('../newscorm/scormItem.class.php');
 
-/*	Constants and variables */
+// charset determination
+if ($_GET['scormcontopen'])
+{
+	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+	$contopen = (int) $_GET['scormcontopen'];
+	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
+	$res = Database::query($sql);
+	$row = Database::fetch_array($res);
+	$lp_charset = $row['default_encoding'];
+	//header('Content-Type: text/html; charset='. $row['default_encoding']);
+}
 
+/*
+-----------------------------------------------------------
+	Constants and variables
+-----------------------------------------------------------
+*/
 // regroup table names for maintenance purpose
 $TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 $TABLETRACK_LINKS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
@@ -65,7 +83,11 @@ include("../resourcelinker/resourcelinker.inc.php");
 
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || api_is_drh();
 
-/*	MAIN CODE */
+/*
+==============================================================================
+		MAIN CODE
+==============================================================================
+*/
 
 $title[0]=get_lang('StatsOfCourse')." : ".$_course['official_code'];
 
@@ -84,14 +106,18 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     if(!isset($view)) $view ="0000000";
 
 
-/*	Reporting */
+/***************************************************************************
+ *
+ *		Reporting
+ *
+ ***************************************************************************/
 
 	$tempView = $view;
     if($view[6] == '1'){
 
     	$tempView[6] = '0';
 
-        // BEGIN users in this course
+        //--------------------------------BEGIN users in this course
         $sql = "SELECT $TABLECOURSUSER.user_i, $table_user.lastname, $table_user.firstname
                     FROM $TABLECOURSUSER, $table_user
                     WHERE $TABLECOURSUSER.course_code = '".$_cid."' AND $TABLECOURSUSER.user_id = $table_user.user_id AND $TABLECOURSUSER.relation_type<>".COURSE_RELATION_TYPE_RRHH."
@@ -112,7 +138,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
             {
 
 
-            	// BEGIN % visited
+            	//--------------------------------BEGIN % visited
             	// sum of all items (= multiple learningpaths + SCORM imported paths)
             	$sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) " .
             			"FROM $tbl_learnpath_item_view iv " .
@@ -131,11 +157,11 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
             	// calculation & bgcolor setting
             	$lpath_pct_completed = empty($total_lpath_items) ? "-" : round(($total_lpath_items_completed / $total_lpath_items) * 100);
 
-            	// END % visited
+            	//--------------------------------END % visited
 
 
 
-            	// BEGIN first/last access
+            	//--------------------------------BEGIN first/last access
             	// first access
             	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS_2 WHERE access_user_id = '".$results[$j][0]."' AND access_cours_code = '".$_course['official_code']."' AND access_tool = 'learnpath' AND access_session_id = '".api_get_session_id()."' ORDER BY access_id ASC LIMIT 1";
             	$first_access = getOneResult($sql);
@@ -145,14 +171,14 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
             	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE access_user_id = '".$results[$j][0]."' AND access_cours_code = '".$_course['official_code']."' AND access_tool = 'learnpath'";
             	$last_access = getOneResult($sql);
             	$last_access = empty($last_access) ? "-" : date('d.m.y',strtotime($last_access));
-            	// END first/last access
+            	//--------------------------------END first/last access
 
 
 
-            	// BEGIN presentation of data
+            	//--------------------------------BEGIN presentation of data
 				$line .= $results[$j][1]." ".$results[$j][2].";".$first_access.";".$last_access.";".$lpath_pct_completed."\n";
 
-				// END presentation of data
+				//--------------------------------END presentation of data
 
 
 
@@ -168,7 +194,11 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
 
 
-/*	Main */
+/***************************************************************************
+ *
+ *		Main
+ *
+ ***************************************************************************/
 
     $tempView = $view;
     if($view[0] == '1')
@@ -187,7 +217,11 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     }
 
 
-/*	Access to this course */
+/***************************************************************************
+*
+*		Access to this course
+*
+***************************************************************************/
     $tempView = $view;
     if($view[1] == '1'){
 
@@ -240,7 +274,11 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
 
 
-/*	Tools */
+/***************************************************************************
+ *
+ *		Tools
+ *
+ ***************************************************************************/
 	$tempView = $view;
 	if($view[2] == '1'){
 
@@ -275,7 +313,11 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 	}
 
 
-/*	Links */
+/***************************************************************************
+*
+*		Links
+*
+***************************************************************************/
 
     $tempView = $view;
     if($view[3] == '1'){
@@ -310,7 +352,11 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     }
 
 
-/*	Documents */
+/***************************************************************************
+*
+*		Documents
+*
+***************************************************************************/
 
     $tempView = $view;
     if($view[4] == '1'){
@@ -344,7 +390,11 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     }
 
 
-/*	Scorm contents and Learning Path */
+/***************************************************************************
+*
+*		Scorm contents and Learning Path
+*
+***************************************************************************/
     $tempView = $view;
     if($view[5] == '1'){
 
@@ -405,8 +455,9 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 							    $ar3=Database::fetch_array($result3);
 						        $title_line .= get_lang('ScormTitleColumn').";".get_lang('ScormStatusColumn').";".get_lang('ScormScoreColumn').";".get_lang('ScormTimeColumn');
 								while ($ar3['status'] != '') {
-									require_once '../newscorm/learnpathItem.class.php';
+									require_once('../newscorm/learnpathItem.class.php');
 									$time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
+									$title = api_htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
 									$line .= $title.";".$ar3['status'].";".$ar3['score'].";".$time;
 									$ar3=Database::fetch_array($result3);
 								}
@@ -431,17 +482,17 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
 
     }
+	 /***************************************************************************
+     *
+     *		Export to a CSV file
+     *		force the browser to save the file instead of opening it
+     ***************************************************************************/
 
-	/*
-	 * Export to a CSV file
-     * Force the browser to save the file instead of opening it.
-     */
 	$len = strlen($title_line.$line);
 	header('Content-type: application/octet-stream');
 	//header('Content-Type: application/force-download');
 	header('Content-length: '.$len);
-	$filename = api_html_entity_decode(str_replace(":","",str_replace(" ","_", $title[0].'_'.$title[1].'.csv')));
-	$filename = replace_dangerous_char($filename);
+	$filename = html_entity_decode(str_replace(":","",str_replace(" ","_", $title[0].'_'.$title[1].'.csv')));
 	if(preg_match("/MSIE 5.5/",$_SERVER['HTTP_USER_AGENT']))
 	{
 		header('Content-Disposition: filename= '.$filename);
@@ -459,9 +510,10 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 	header('Content-Description: '.$filename);
 	header('Content-transfer-encoding: binary');
 
-	echo api_html_entity_decode($title_line, ENT_COMPAT);
-	echo api_html_entity_decode($line, ENT_COMPAT);
+	echo api_html_entity_decode($title_line, ENT_COMPAT, $charset);
+	echo api_html_entity_decode($line, ENT_COMPAT, $charset);
 	exit;
+
 
 
 }
@@ -477,3 +529,4 @@ else
         api_not_allowed();
     }
 }
+?>

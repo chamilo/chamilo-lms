@@ -1,15 +1,17 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
+
 /**
  *	API event handler functions for AICC / CMIv4 in HACP communication mode
  *
  *	@author   Denes Nagy <darkden@freemail.hu>
- *   @author   Yannick Warnier <ywarnier@beeznest.org>
+ *  @author   Yannick Warnier <ywarnier@beeznest.org>
  *	@version  v 1.0
  *	@access   public
  *	@package  chamilo.learnpath
  * 	@license	GNU/GPL
  */
+
 /**
  * This script is divided into three sections.
  * The first section (below) is the initialisation part.
@@ -29,48 +31,44 @@
  * Only suspend_data and core.lesson_location should be sent updated to a late GetParam
  * request. All other params should be as when the AU was launched.
  */
-/*
-==============================================================================
-	   INIT SECTION
-==============================================================================
-*/
+
+/* INIT SECTION */
+
 $debug = 0;
 
-//flag to allow for anonymous user - needs to be set before global.inc.php
+// Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
-//Use session ID as provided by the request
-if(!empty($_REQUEST['aicc_sid']))
-{
+// Use session ID as provided by the request.
+if (!empty($_REQUEST['aicc_sid'])) {
 	session_id($_REQUEST['aicc_sid']);
-	if($debug>1){error_log('New LP - '.__FILE__.','.__LINE__.' - reusing session ID '.$_REQUEST['aicc_sid'],0);}
+	if ($debug > 1) { error_log('New LP - '.__FILE__.','.__LINE__.' - reusing session ID '.$_REQUEST['aicc_sid'], 0); }
 }
-//Load common libraries using a compatibility script to bridge between 1.6 and 1.8
+//Load common libraries using a compatibility script to bridge between 1.6 and 1.8.
 require_once 'back_compat.inc.php';
-if($debug>2){error_log('New LP - '.__FILE__.','.__LINE__.' - Current session ID: '.session_id(),0);}
-//Load learning path libraries so we can use the objects to define the initial values
-//of the API
+if ($debug > 2) { error_log('New LP - '.__FILE__.','.__LINE__.' - Current session ID: '.session_id(), 0); }
+//Load learning path libraries so we can use the objects to define the initial values of the API.
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 require_once 'aicc.class.php';
 
-// Is this needed? This is probabaly done in the header file
+// Is this needed? This is probabaly done in the header file.
 //$_user							= $_SESSION['_user'];
 $file							= $_SESSION['file'];
 $oLP							= unserialize($_SESSION['lpobject']);
 $oItem 							=& $oLP->items[$oLP->current];
-if(!is_object($oItem)){
-	error_log('New LP - aicc_hacp - Could not load oItem item',0);
+if (!is_object($oItem)) {
+	error_log('New LP - aicc_hacp - Could not load oItem item', 0);
 	exit;
 }
 $autocomplete_when_80pct = 0;
 
 $result = array(
-	'core'=>array(),
-	'core_lesson'=>array(),
-	'core_vendor'=>array(),
-	'evaluation'=>array(),
-	'student_data'=>array(),
+	'core' => array(),
+	'core_lesson' => array(),
+	'core_vendor' => array(),
+	'evaluation' => array(),
+	'student_data' => array(),
 );
 $convert_enc = array('%25','%0D','%0A','%09','%20','%2D','%2F','%3B','%3F','%7B','%7D','%7C','%5C','%5E','%7E','%5B','%5D','%60','%23','%3E','%3C','%22');
 $convert_dec = array('%',"\r","\n","\t",' ','-','/',';','?','{','}','|','\\','^','~','[',']','`','#','>','<','"');
@@ -80,24 +78,22 @@ $s_ec = 'error='; //string for error code
 $s_et = 'error_text='; //string for error text
 $s_ad = 'aicc_data='; //string for aicc_data
 
-$errors = array(0=>'Successful',1=>'Invalid Command',2=>'Invalid AU password',3=>'Invalid Session ID');
+$errors = array(0 => 'Successful', 1 => 'Invalid Command', 2 => 'Invalid AU password', 3 => 'Invalid Session ID');
 
 $error_code = 0;
 $error_text = '';
 $aicc_data = '';
 $result = '';
-//GET REQUEST
-if(!empty($_REQUEST['command']))
-{
-	//error_log('In '.__FILE__.', '.__LINE__.' - request is '.$_REQUEST['command'],0);
-	switch(strtolower($_REQUEST['command']))
-	{
+// Get REQUEST
+if (!empty($_REQUEST['command'])) {
+	//error_log('In '.__FILE__.', '.__LINE__.' - request is '.$_REQUEST['command'], 0);
+	switch (strtolower($_REQUEST['command'])) {
 		case 'getparam':
-			//request for all available data to be printed out in the answer
-			if(!empty($_REQUEST['version'])){
+			// Request for all available data to be printed out in the answer.
+			if (!empty($_REQUEST['version'])) {
 				$hacp_version = learnpath::escape_string($_REQUEST['version']);
 			}
-			if(!empty($_REQUEST['session_id'])){
+			if (!empty($_REQUEST['session_id'])) {
 				$hacp_session_id = learnpath::escape_string($_REQUEST['session_id']);
 			}
 			$error_code = 0;
@@ -127,18 +123,16 @@ if(!empty($_REQUEST['command']))
 			//$result .= '[Student_Preferences]'.$crlf;
 
 			//error_log('Returning message: '.$result,0);
-			$result = str_replace($convert_dec,$convert_enc,$result);
+			$result = str_replace($convert_dec, $convert_enc, $result);
 			//error_log('Returning message (encoded): '.$result,0);
 			break;
 		case 'putparam':
 			$hacp_version = '';
 			$hacp_session_id = '';
 			$hacp_aicc_data = '';
-			foreach($_REQUEST as $name => $value)
-			{
+			foreach ($_REQUEST as $name => $value) {
 				//escape the value as described in the AICC documentation p170
-				switch(strtolower($name))
-				{
+				switch (strtolower($name)) {
 					case 'version':
 						$hacp_version = $value;
 						break;
@@ -146,43 +140,43 @@ if(!empty($_REQUEST['command']))
 						$hacp_session_id = $value;
 						break;
 					case 'aicc_data':
-						//error_log('In '.__FILE__.', '.__LINE__.' - aicc data before translation is '.$value,0);
-						$value = str_replace('+',' ',$value);
-						$value = str_replace($convert_enc,$convert_dec,$value);
+						//error_log('In '.__FILE__.', '.__LINE__.' - aicc data before translation is '.$value, 0);
+						$value = str_replace('+', ' ', $value);
+						$value = str_replace($convert_enc, $convert_dec, $value);
 						$hacp_aicc_data = $value;
 						break;
 				}
 			}
-			//error_log('In '.__FILE__.', '.__LINE__.' - aicc data is '.$hacp_aicc_data,0);
-			//treat the incoming request:
-			$msg_array = aicc::parse_ini_string_quotes_safe($hacp_aicc_data,array('core_lesson','core_vendor'));
-			//error_log('Message is now in this form: '.print_r($msg_array,true),0);
-			foreach($msg_array as $key=>$dummy){
-				switch (strtolower($key)){
+			//error_log('In '.__FILE__.', '.__LINE__.' - aicc data is '.$hacp_aicc_data, 0);
+			// Treat the incoming request:
+			$msg_array = aicc::parse_ini_string_quotes_safe($hacp_aicc_data, array('core_lesson', 'core_vendor'));
+			//error_log('Message is now in this form: '.print_r($msg_array, true), 0);
+			foreach ($msg_array as $key => $dummy) {
+				switch (strtolower($key)) {
 					case 'core':
-						foreach($msg_array[$key] as $subkey => $value){
-							switch(strtolower($subkey)){
+						foreach ($msg_array[$key] as $subkey => $value){
+							switch (strtolower($subkey)) {
 								case 'lesson_location':
-									//error_log('Setting lesson_location to '.$value,0);
+									//error_log('Setting lesson_location to '.$value, 0);
 									$oItem->set_lesson_location($value);
 									break;
 								case 'lesson_status':
-									//error_log('Setting lesson_status to '.$value,0);
+									//error_log('Setting lesson_status to '.$value, 0);
 									$oItem->set_status($value);
 									break;
 								case 'score':
-									//error_log('Setting lesson_score to '.$value,0);
+									//error_log('Setting lesson_score to '.$value, 0);
 									$oItem->set_score($value);
 									break;
 								case 'time':
-									//error_log('Setting lesson_time to '.$value,0);
+									//error_log('Setting lesson_time to '.$value, 0);
 									$oItem->set_time($value);
 									break;
 							}
 						}
 						break;
 					case 'core_lesson':
-						//error_log('Setting suspend_data to '.print_r($msg_array[$key],true),0);
+						//error_log('Setting suspend_data to '.print_r($msg_array[$key], true), 0);
 						$oItem->current_data = $msg_array[$key];
 						break;
 					case 'comments':
@@ -238,7 +232,6 @@ if(!empty($_REQUEST['command']))
 	}
 }
 $_SESSION['lpobject'] = serialize($oLP);
-//content type must be text/plain
+// Content type must be text/plain.
 header('Content-type: text/plain');
 echo $result;
-?>

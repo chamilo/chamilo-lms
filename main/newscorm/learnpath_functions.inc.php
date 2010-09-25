@@ -2394,9 +2394,15 @@ function createimsmanifest($circle1_files, $learnpath_id)
 
 	include_once '../metadata/md_funcs.php'; // RH: export metadata
 
-	// Header
-	// Charset should be dependent on content
-	$header = '<?xml version="1.0" encoding="'.api_get_system_encoding().'"?>'."\n<manifest identifier='".$LPnamesafe."' version='1.1'\n xmlns='http://www.imsproject.org/xsd/imscp_rootv1p1p2'\n xmlns:adlcp='http://www.adlnet.org/xsd/adlcp_rootv1p2'\n xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'\n xsi:schemaLocation='http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd\n http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd\n http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd'>\n";
+	//1.1 header
+	/*
+		$header='<?xml version="1.0" encoding="UTF-8"?><manifest identifier="'.$LPnamesafe.'" xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" xmlns:imsmd="http://www.imsglobal.org/xsd/imsmd_v1p2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1 imscp_v1p1.xsd http://www.imsglobal.org/xsd/imsmd_v1p2 imsmd_v1p2.xsd" version="IMS CP 1.1.3">'."\n";
+	*/
+
+	//1.2
+	//charset should be dependent on content
+	$mycharset = api_get_system_encoding();
+	$header = '<?xml version="1.0" encoding="'.$mycharset.'"?>'."\n<manifest identifier='".$LPnamesafe."' version='1.1'\n xmlns='http://www.imsproject.org/xsd/imscp_rootv1p1p2'\n xmlns:adlcp='http://www.adlnet.org/xsd/adlcp_rootv1p2'\n xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'\n xsi:schemaLocation='http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd\n http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd\n http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd'>\n";
 
 	$org .= xmltagwrite('metadata', 'open');
 	$org .= "  ".xmltagwrite('schema', 'full', 'ADL SCORM');

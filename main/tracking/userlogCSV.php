@@ -3,18 +3,23 @@
 // TODO: Is this file deprecated?
 
 /**
- * @package chamilo.tracking
- * @todo clean code - structure is unclear and difficult to modify
- */
+==============================================================================
+* @package dokeos.tracking
+* @todo clean code - structure is unclear and difficult to modify
+==============================================================================
+*/
 
-/*	INIT SECTION */
-
+/*
+==============================================================================
+		INIT SECTION
+==============================================================================
+*/
 $uInfo = $_REQUEST['uInfo'];
 $view = $_REQUEST['view'];
 // name of the language file that needs to be included
 $language_file = 'tracking';
 
-require_once '../inc/global.inc.php';
+include('../inc/global.inc.php');
 
 // Roles and rights system
 $user_id = api_get_user_id();
@@ -30,15 +35,33 @@ RolesRights::protect_location($role_id, $location_id);
 */
 //YW Hack security to quick fix RolesRights bug
 $is_allowed = true;
+/*
+-----------------------------------------------------------
+	Libraries
+-----------------------------------------------------------
+*/
+include(api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php');
+include(api_get_path(LIBRARY_PATH).'course.lib.php');
+include(api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 
-/*	Libraries */
+/*
+-----------------------------------------------------------
+	Header
+-----------------------------------------------------------
+*/
+// charset determination
+if ($_GET['scormcontopen'])
+{
+	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+	$contopen = (int) $_GET['scormcontopen'];
+	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
+	$res = Database::query($sql);
+	$row = Database::fetch_array($res);
+	$lp_charset = $row['default_encoding'];
+	//header('Content-Type: text/html; charset='. $row['default_encoding']);
+}
 
-require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
-
-/*	Header */
 
 /*
 $interbreadcrumb[]= array ("url"=>"../group/group.php", "name"=> get_lang('BredCrumpGroups'));
@@ -52,8 +75,12 @@ if($uInfo)
 
 $nameTools = get_lang('ToolName');
 
-/*	Constants and variables */
 
+/*
+-----------------------------------------------------------
+	Constants and variables
+-----------------------------------------------------------
+*/
 $is_allowedToTrack = $is_courseAdmin;
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_id);
 
@@ -113,8 +140,11 @@ $MonthsShort = api_get_months_short();
 $is_allowedToTrack = true; // allowed to track only user of one group
 $is_allowedToTrackEverybodyInCourse = $is_allowedToTrack; // allowed to track all students in course
 
-/*	MAIN SECTION */
-
+/*
+==============================================================================
+		MAIN SECTION
+==============================================================================
+*/
 $title[0]='';
 $title[1]='';
 $line='';
@@ -125,9 +155,11 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 {
 	if(!$uInfo && !isset($uInfo) )
 	{
-		/*
-		 *		Display list of user of this group
-		 */
+		/***************************************************************************
+		*
+		*		Display list of user of this group
+		*
+		***************************************************************************/
 
 		if( $is_allowedToTrackEverybodyInCourse )
 		{
@@ -208,9 +240,11 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 	}
 	else // if uInfo is set
 	{
-		/*
-		 *		Informations about student uInfo
-		 */
+		/***************************************************************************
+		*
+		*		Informations about student uInfo
+		*
+		***************************************************************************/
 		// these checks exists for security reasons, neither a prof nor a tutor can see statistics of a user from
 		// another course, or group
 		if( $is_allowedToTrackEverybodyInCourse )
@@ -267,9 +301,11 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		}
 
 
-		/*
+		/***************************************************************************
+         *
          *		Scorm contents and Learning Path
-         */
+         *
+         ***************************************************************************/
          //TODO: scorm tools is in work and the logs will change in few days...
         /*if(substr($view,5,1) == '1')
         {
@@ -302,6 +338,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
        							while ($ar3['status'] != '') {
 									require_once('../newscorm/learnpathItem.class.php');
 									$time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
+									$title = api_htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
        								$line .= $title.';'.$ar3['status'].';'.$ar3['score'].';'.$time."\n";
        								$ar3=Database::fetch_array($result3);
        							}
@@ -328,17 +365,17 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
         }*/
 
     }
-	 /*
-      *		Export to a CSV file
-      *		force the browser to save the file instead of opening it
-      */
+	 /***************************************************************************
+     *
+     *		Export to a CSV file
+     *		force the browser to save the file instead of opening it
+     ***************************************************************************/
 
 	$len = strlen($title_line.$line);
 	header('Content-type: application/octet-stream');
 	//header('Content-Type: application/force-download');
 	header('Content-length: '.$len);
 	$filename = html_entity_decode(str_replace(":","",str_replace(" ","_", $title[0].'_'.$title[1].'.csv')));
-	$filename = replace_dangerous_char($filename);
 	if(preg_match("/MSIE 5.5/",$_SERVER['HTTP_USER_AGENT']))
 	{
 		header('Content-Disposition: filename= '.$filename);

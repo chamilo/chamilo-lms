@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This script displays statistics on the current learning path (scorm)
  *
@@ -14,7 +15,7 @@ require_once 'resourcelinker.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
-if(empty($_SESSION['_course']['id']) && isset($_GET['course'])) {
+if (empty($_SESSION['_course']['id']) && isset($_GET['course'])) {
 	$course_code = Security::remove_XSS($_GET['course']);
 } else {
 	$course_code = $_SESSION['_course']['id'];
@@ -29,38 +30,20 @@ $session_condition = api_get_session_condition($session_id);
 //$lp_id = $_SESSION['oLP']->get_id();
 //$list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
 //$user_id = $_user['user_id'];
-//$stats_charset = $_SESSION['oLP']->encoding
-if(!isset($origin))
+
+if (!isset($origin))
 	$origin = '';
-if($origin != 'tracking') {
-	if (!empty ($stats_charset)) {
-		$lp_charset = $stats_charset;
-	} else {
-		$lp_charset = api_get_setting('platform_charset');
-	}
-	$charset = $lp_charset;
+if ($origin != 'tracking') {
 	//$w = $tablewidth -20;
-	$htmlHeadXtra[] = ''.'<style type="text/css" media="screen, projection">
+	$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
 		@import "../css/public_admin/scorm.css";
 		/*]]>*/
 	</style>';
 	include_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
-	echo '<body>';
-} else {
-    //Get learning path's encoding
-    $TBL_LP = Database :: get_course_table(TABLE_LP_MAIN);
-    $sql = "SELECT default_encoding FROM $TBL_LP " .
-                "WHERE id = '".(int)$_GET['lp_id']."'";
-    $res = Database::query($sql);
-    if (Database :: num_rows($res) > 0) {
-        $row = Database::fetch_array($res);
-        $lp_charset = $row['default_encoding'];
-    }
+	echo '<body dir="'.api_get_text_direction().'">';
 }
 
-// The dokeos interface's encoding
-$dokeos_charset = api_get_setting('platform_charset');
 $output = '';
 //if display in fullscreen required
 if (!empty($_GET['fs']) && strcmp($_GET['fs'], 'true') == 0) {
@@ -79,16 +62,16 @@ if ($origin == 'tracking') {
 }
 
 if (!empty ($_GET['extend_all'])) {
-	$extend_all_link = '<a href="' . api_get_self() . '?action=stats' . $url_suffix . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="'.api_convert_encoding(get_lang('HideAllAttempts'), $lp_charset, $dokeos_charset).'"></a>';
+	$extend_all_link = '<a href="' . api_get_self() . '?action=stats' . $url_suffix . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="'.get_lang('HideAllAttempts').'"></a>';
 	$extend_all = 1;
 } else {
-	$extend_all_link = '<a href="' . api_get_self() . '?action=stats&extend_all=1' . $url_suffix . '"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="'.api_convert_encoding(get_lang('ShowAllAttempts'), $lp_charset, $dokeos_charset).'"></a>';
+	$extend_all_link = '<a href="' . api_get_self() . '?action=stats&extend_all=1' . $url_suffix . '"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="'.get_lang('ShowAllAttempts').'"></a>';
 }
 
 if ($origin != 'tracking') {
-	$output .= "<tr><td><div class='title'>" . api_convert_encoding(get_lang('ScormMystatus'), $lp_charset, $dokeos_charset) . "</div></td></tr>";
+	$output .= "<tr><td><div class='title'>" . get_lang('ScormMystatus') . "</div></td></tr>";
 }
-$output .= "<tr><td>&nbsp;</td></tr>" . "<tr><td>" . "<table border='0' class='data_table'><tr>\n" . '<td width="16">' . $extend_all_link . '</td>' . '<td colspan="4" class="title"><div class="mystatusfirstrow">' . api_convert_encoding(get_lang('ScormLessonTitle'), $lp_charset, $dokeos_charset) . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . api_convert_encoding(get_lang('ScormStatus'), $lp_charset, $dokeos_charset) . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . api_convert_encoding(get_lang('ScormScore'), $lp_charset, $dokeos_charset) . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . api_convert_encoding(get_lang('ScormTime'), $lp_charset, $dokeos_charset) . "</div></td><td class='title'><div class='mystatusfirstrow'>" . api_convert_encoding(get_lang('Actions'), $lp_charset, $dokeos_charset) . "</div></td></tr>\n";
+$output .= "<tr><td>&nbsp;</td></tr>" . "<tr><td>" . "<table border='0' class='data_table'><tr>\n" . '<td width="16">' . $extend_all_link . '</td>' . '<td colspan="4" class="title"><div class="mystatusfirstrow">' . get_lang('ScormLessonTitle') . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormStatus') . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormScore') . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormTime') . "</div></td><td class='title'><div class='mystatusfirstrow'>" .get_lang('Actions') . "</div></td></tr>\n";
 //going through the items using the $items[] array instead of the database order ensures
 // we get them in the same order as in the imsmanifest file, which is rather random when using
 // the database table
@@ -113,14 +96,14 @@ $counter = 0;
 $total_score = 0;
 $total_max_score = 0;
 $total_time = 0;
-$h = api_convert_encoding(get_lang('h'), $lp_charset, $dokeos_charset);
+$h = get_lang('h');
 
 if (!empty($export_csv)) {
 	$csv_content[] = array (
-		api_convert_encoding(get_lang('ScormLessonTitle'), $lp_charset, $dokeos_charset),
-		api_convert_encoding(get_lang('ScormStatus'), $lp_charset, $dokeos_charset),
-		api_convert_encoding(get_lang('ScormScore'), $lp_charset, $dokeos_charset),
-		api_convert_encoding(get_lang('ScormTime'), $lp_charset, $dokeos_charset)
+		get_lang('ScormLessonTitle'),
+		get_lang('ScormStatus'),
+		get_lang('ScormScore'),
+		get_lang('ScormTime')
 	);
 }
 
@@ -193,7 +176,7 @@ if (is_array($list) && count($list) > 0) {
 		$num = Database :: num_rows($result);
 		$time_for_total = 'NaN';
 
-		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+		$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 		if (($extend_this || $extend_all) && $num > 0) {
 			$row = Database :: fetch_array($result);
@@ -206,7 +189,7 @@ if (is_array($list) && count($list) > 0) {
 				$res_result_disabled = Database::query($sql);
 				$row_result_disabled = Database::fetch_row($res_result_disabled);
 
-				if (Database::num_rows($res_result_disabled) > 0 && (int)$row_result_disabled[0]===1) {
+				if (Database::num_rows($res_result_disabled) > 0 && (int)$row_result_disabled[0] === 1) {
 					$result_disabled_ext_all = true;
 				}
 			}
@@ -218,9 +201,9 @@ if (is_array($list) && count($list) > 0) {
 			} else {
 				$oddclass = "row_even";
 			}
-	        $extend_link='';
+	        $extend_link = '';
 			if (!empty($inter_num)) {
-				$extend_link = '<a href="' . api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix . '"><img src="../img/visible.gif" alt="'.api_convert_encoding(get_lang('HideAttemptView'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('HideAttemptView'), $lp_charset, $dokeos_charset).'"  border="0"></a>' . "\n";
+				$extend_link = '<a href="' . api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix . '"><img src="../img/visible.gif" alt="'.get_lang('HideAttemptView').'" title="'.get_lang('HideAttemptView').'"  border="0"></a>' . "\n";
 			}
 			$title = $row['mytitle'];
 
@@ -230,7 +213,6 @@ if (is_array($list) && count($list) > 0) {
 
 			if ($row['item_type'] != 'dokeos_chapter') {
 				$correct_test_link = '-';
-				//api_convert_encoding($title, $lp_charset, $lp_charset)
 				$title = Security::remove_XSS($title);
 				$output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4" class="content"><div class="mystatus">' . $title . "</div></td>\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td><td class="content"></td>' . "\n" . "</tr>\n";
 			}
@@ -246,10 +228,10 @@ if (is_array($list) && count($list) > 0) {
 					if (!empty ($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
 						//the extend button for this attempt has been clicked
 						$extend_this_attempt = 1;
-						$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/visible.gif" alt="'.api_convert_encoding(get_lang('HideAttemptView'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('HideAttemptView'), $lp_charset, $dokeos_charset).'" border="0"></a>' . "\n";
+						$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/visible.gif" alt="'.get_lang('HideAttemptView').'" title="'.get_lang('HideAttemptView').'" border="0"></a>' . "\n";
 					} else { //same case if fold_attempt_id is set, so not implemented explicitly
 						//the extend button for this attempt has not been clicked
-						$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="'.api_convert_encoding(get_lang('ExtendAttemptView'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ExtendAttemptView'), $lp_charset, $dokeos_charset).'"  border="0"></a>' . "\n";
+						$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="'.get_lang('ExtendAttemptView').'" title="'.get_lang('ExtendAttemptView').'"  border="0"></a>' . "\n";
 					}
 				}
 
@@ -300,9 +282,7 @@ if (is_array($list) && count($list) > 0) {
 
 				);
 
-				$my_lesson_status = api_convert_encoding(get_lang($mylanglist[$lesson_status]), $lp_charset, $dokeos_charset);
-
-
+				$my_lesson_status = get_lang($mylanglist[$lesson_status]);
 
 				if ($row['item_type'] != 'dokeos_chapter') {
 					if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -310,8 +290,7 @@ if (is_array($list) && count($list) > 0) {
 					} else {
 						$view_score = ($score == 0 ? '/' : ($maxscore === 0 ? $score : $score . '/' . float_format($maxscore, 1)));
 					}
-					$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . api_convert_encoding(get_lang('Attempt'), $lp_charset, $dokeos_charset) . ' ' . $row['iv_view_count'] . "</td>\n"
-					//."<td><font color='$color'><div class='mystatus'>".api_htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
+					$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . get_lang('Attempt') . ' ' . $row['iv_view_count'] . "</td>\n"
 					 . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . $view_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';
 
 					if (!empty($export_csv)) {
@@ -357,9 +336,7 @@ if (is_array($list) && count($list) > 0) {
 							$student_response=implode(',',$content_student_response);
 						}
 						$output .= "<tr class='$oddclass'>\n" . '<td></td>' . "\n" . '<td></td>' . "\n" . '<td>&nbsp;</td>' . "\n" . '<td>' . $interaction['order_id'] . '</td>' . "\n" . '<td>' . $interaction['id'] . '</td>' . "\n"
-						//."<td><font color='$color'><div class='mystatus'>".api_convert_encoding($array_status[$lesson_status],$lp_charset,$lp_charset)."</div></font></td>\n"
 						 . '<td colspan="2">' . $interaction['type'] . "</td>\n"
-						//.'<td>'.$interaction['correct_responses']."</td>\n"
 						 . '<td>' . $student_response . "</td>\n" . '<td>' . $interaction['result'] . "</td>\n" . '<td>' . $interaction['latency'] . "</td>\n" . '<td>' . $interaction['time'] . "</td>\n<td></td>\n</tr>\n";
 						$counter++;
 					}
@@ -409,10 +386,10 @@ if (is_array($list) && count($list) > 0) {
 				if (!empty ($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
 					//the extend button for this attempt has been clicked
 					$extend_this_attempt = 1;
-					$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/visible.gif" alt="'.api_convert_encoding(get_lang('HideAttemptView'),$lp_charset,$charset).'" title="'.api_convert_encoding(get_lang('HideAttemptView'),$lp_charset,$charset).'" border="0"></a>' . "\n";
+					$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/visible.gif" alt="'.get_lang('HideAttemptView').'" title="'.get_lang('HideAttemptView').'" border="0"></a>' . "\n";
 				} else { //same case if fold_attempt_id is set, so not implemented explicitly
 					//the extend button for this attempt has not been clicked
-					$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="'.api_convert_encoding(get_lang('ExtendAttemptView'),$lp_charset,$charset).'" title="'.api_convert_encoding(get_lang('ExtendAttemptView'),$lp_charset,$charset).'" border="0"></a>' . "\n";
+					$extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="'.get_lang('ExtendAttemptView').'" title="'.get_lang('ExtendAttemptView').'" border="0"></a>' . "\n";
 				}
 			}
 
@@ -424,7 +401,7 @@ if (is_array($list) && count($list) > 0) {
 			//$extend_link = '<img src="../img/invisible.gif" alt="extend_disabled">';
 			$extend_link = '';
 			if ($inter_num > 1) {
-				$extend_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="'.api_convert_encoding(get_lang('ExtendAttemptView'),$lp_charset,$charset).'" title="'.api_convert_encoding(get_lang('ExtendAttemptView'),$lp_charset,$charset).'"  border="0"></a>';
+				$extend_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="'.get_lang('ExtendAttemptView').'" title="'.get_lang('ExtendAttemptView').'"  border="0"></a>';
 			}
 			if (($counter % 2) == 0) {
 				$oddclass = "row_odd";
@@ -529,7 +506,7 @@ if (is_array($list) && count($list) > 0) {
 				'not attempted' => 'ScormNotAttempted',
 
 			);
-			$my_lesson_status = api_convert_encoding(get_lang($mylanglist[$lesson_status]), $lp_charset, $dokeos_charset);
+			$my_lesson_status = get_lang($mylanglist[$lesson_status]);
 
 			if ($row['item_type'] != 'dokeos_chapter') {
 				if ($row['item_type'] == 'quiz') {
@@ -547,10 +524,10 @@ if (is_array($list) && count($list) > 0) {
 					$num = Database :: num_rows($resultLastAttempt);
 					if ($num > 0) {
 						if (isset($_GET['extend_attempt']) && $_GET['extend_attempt'] == 1 && (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)  ) {
-							$correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&my_ext_lp_id='.$my_id.'"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="'.api_convert_encoding(get_lang('HideAllAttempts'),$lp_charset,$charset).'"></a>';
+							$correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&my_ext_lp_id='.$my_id.'"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="'.get_lang('HideAllAttempts').'"></a>';
 							$extend_attempt = 1;
 						} else {
-							$correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_attempt=1'.$my_url_suffix.'&my_lp_id='.$my_id.'"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="'.api_convert_encoding(get_lang('ShowAllAttemptsByExercise'),$lp_charset,$charset).'"></a>';
+							$correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_attempt=1'.$my_url_suffix.'&my_lp_id='.$my_id.'"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="'.get_lang('ShowAllAttemptsByExercise').'"></a>';
 						}
 					} else {
 						$correct_test_link = '-';
@@ -559,7 +536,6 @@ if (is_array($list) && count($list) > 0) {
 					$correct_test_link = '-';
 				}
 
-				//."<td><font color='$color'><div class='mystatus'>".api_htmlentities($array_status[$lesson_status],ENT_QUOTES,$lp_charset)."</div></font></td>\n"
 				$title = Security::remove_XSS($title);
 				if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {
 					$output .= "<tr class='$oddclass' >\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' .$title. '</div></td>' . "\n";
@@ -590,8 +566,8 @@ if (is_array($list) && count($list) > 0) {
 
 				if (!empty($export_csv)) {
 					$temp = array ();
-					$temp[] = api_html_entity_decode($title, ENT_QUOTES, $lp_charset);
-					$temp[] = api_html_entity_decode($my_lesson_status, ENT_QUOTES, $lp_charset);
+					$temp[] = api_html_entity_decode($title, ENT_QUOTES);
+					$temp[] = api_html_entity_decode($my_lesson_status, ENT_QUOTES);
 
 					if ($row['item_type'] == 'quiz') {
 
@@ -618,9 +594,7 @@ if (is_array($list) && count($list) > 0) {
 						$oddclass = "row_even";
 					}
 					$output .= "<tr class='$oddclass'>\n" . '<td></td>' . "\n" . '<td></td>' . "\n" . '<td>&nbsp;</td>' . "\n" . '<td>' . $interaction['order_id'] . '</td>' . "\n" . '<td>' . $interaction['id'] . '</td>' . "\n"
-					//."<td><font color='$color'><div class='mystatus'>"api_convert_encoding($array_status[$lesson_status],$lp_charset,$lp_charset)."</div></font></td>\n"
 					 . '<td colspan="2">' . $interaction['type'] . "</td>\n"
-					//.'<td>'.$interaction['correct_responses']."</td>\n"
 					 . '<td>' . urldecode($interaction['student_response']) . "</td>\n" . '<td>' . $interaction['result'] . "</td>\n" . '<td>' . $interaction['latency'] . "</td>\n" . '<td>' . $interaction['time'] . "</td>\n<td></td>\n</tr>\n";
 					$counter++;
 				}
@@ -676,19 +650,19 @@ if (is_array($list) && count($list) > 0) {
 									//$view_score = ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore));
 								}
 								$time_attemp;
-								$output .= '<tr class="'.$oddclass.'" ><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . api_convert_encoding(get_lang('Attempt'), $lp_charset, $dokeos_charset) . ' ' . $n . '</td>'
+								$output .= '<tr class="'.$oddclass.'" ><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . get_lang('Attempt') . ' ' . $n . '</td>'
 							 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . $view_score  . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
 							 	if ($origin != 'tracking') {
 							 		if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-										$output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></td>';
+										$output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'"></td>';
 									} else {
-										$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id .$from_link. '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';
+										$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id .$from_link. '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'"></a></td>';
 									}
 								} else {
 									if (!$is_allowed_to_edit && $result_disabled_ext_all ) {
-										$output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></td>';
+										$output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
 									} else {
-										$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id . '&total_time='.$mytime.'&my_exe_exo_id='.$my_exo_exe_id.$from_link.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';
+										$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id . '&total_time='.$mytime.'&my_exe_exo_id='.$my_exo_exe_id.$from_link.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
 									}
 								}
 							 	$output .= '</tr>';
@@ -741,7 +715,7 @@ $total_time = str_replace('NaN', '00' . $h . '00\'00"', $total_time);
 $lp_type = learnpath :: get_type_static($lp_id);
 $total_percent = 0;
 
-if(!$is_allowed_to_edit && $result_disabled_ext_all) {
+if (!$is_allowed_to_edit && $result_disabled_ext_all) {
 	$final_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
 } else {
 	if (is_numeric($total_score))
@@ -757,7 +731,7 @@ if (($counter % 2) == 0) {
 }
 
 if (empty($extend_all)) {
-	$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . '<td colspan="4"><div class="mystatus"><i>' . api_convert_encoding(get_lang('AccomplishedStepsTotal') , $lp_charset, $dokeos_charset) . "</i></div></td>\n"
+	$output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . '<td colspan="4"><div class="mystatus"><i>' . get_lang('AccomplishedStepsTotal') . "</i></div></td>\n"
  			. '<td colspan="2"></td>' . "\n" . '<td colspan="2"><div class="mystatus" align="center">' . $final_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $total_time . '</div></td><td></td>' . "\n" . "</tr>\n";
 }
 
@@ -772,7 +746,7 @@ if (!empty($export_csv)) {
 	);
 	$csv_content[] = $temp;
 	$temp = array (
-		api_convert_encoding(get_lang('AccomplishedStepsTotal') , $lp_charset, $dokeos_charset),
+		get_lang('AccomplishedStepsTotal'),
 		'',
 		$final_score,
 		$total_time

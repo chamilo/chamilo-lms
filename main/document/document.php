@@ -822,6 +822,14 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 <?php
 	}
 
+	// Create new draw
+		if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id)) {
+	?>
+		<a href="create_draw.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+			<?php Display::display_icon('svg-edit.png', get_lang('CreateDraw')); echo get_lang('CreateDraw'); ?></a>&nbsp;
+	<?php
+		}
+
 	// Create new certificate
 	if ($is_certificate_mode) {
 ?>

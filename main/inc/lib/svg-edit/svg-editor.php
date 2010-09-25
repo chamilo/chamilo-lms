@@ -1,3 +1,8 @@
+<?php
+require_once '../../../inc/global.inc.php';//hack for Chamilo
+api_protect_course_script();
+api_block_anonymous_users();
+?>
 <!DOCTYPE html>
 <html>
 <!-- removed for now, causes problems in Firefox: manifest="svg-editor.manifest" -->
@@ -18,7 +23,8 @@
 <script type="text/javascript" src="jquerybbq/jquery.bbq.min.js"></script>
 <script type="text/javascript" src="spinbtn/JQuerySpinBtn.min.js"></script>
 <script type="text/javascript" src="svgcanvas.min.js"></script>
-<script type="text/javascript" src="svg-editor.min.js"></script>
+<!--<script type="text/javascript" src="svg-editor.min.js"></script> -->
+<script type="text/javascript" src="svg-editor.js"></script>
 <script type="text/javascript" src="locale/locale.min.js"></script>
 
 <!-- See http://code.google.com/p/svg-edit/wiki/ConfigOptions for configuration options -->
@@ -129,10 +135,10 @@
 			</li>
 		</ul>
 		
-		<p>
-			<a href="http://svg-edit.googlecode.com/" target="_blank">
+		<p
+			<!--<a href="http://svg-edit.googlecode.com/" target="_blank">
 				SVG-edit Home Page
-			</a>
+			</a> --><!-- comment for Chamilo -->
 		</p>
 
 	</div>
@@ -511,7 +517,7 @@
 	<div id="tools_bottom_3">
 		<div id="palette_holder"><div id="palette" title="Click to change fill color, shift-click to change stroke color"></div></div>
 	</div>
-	<div id="copyright"><span id="copyrightLabel">Powered by</span> <a href="http://svg-edit.googlecode.com/" target="_blank">SVG-edit v2.5.1</a></div>
+<!--	<div id="copyright"><span id="copyrightLabel">Powered by</span> <a href="http://svg-edit.googlecode.com/" target="_blank">SVG-edit v2.5.1</a></div> --><!-- temporal comment for Chamilo -->
 </div>
 
 <div id="option_lists">

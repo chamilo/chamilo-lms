@@ -8,6 +8,7 @@
  * Copyright(c) 2010 Jeff Schiller
  * Copyright(c) 2010 Narendra Sisodiya
  *
+ * Hacks for Chamilo 2010 Juan Carlos Raña Trabado
  */
 
 (function() { 
@@ -28,7 +29,7 @@
 			
 			// Note: Difference between Prefs and Config is that Prefs can be
 			// changed in the UI and are stored in the browser, config can not
-			
+			// added 'ext-server_opensave.js' extension  for Chamilo
 			curConfig = {
 				canvas_expansion: 3,
 				dimensions: [640,480],
@@ -45,7 +46,7 @@
 				imgPath: 'images/',
 				langPath: 'locale/',
 				extPath: 'extensions/',
-				extensions: ['ext-markers.js','ext-connector.js', 'ext-eyedropper.js'],
+				extensions: ['ext-markers.js','ext-connector.js', 'ext-eyedropper.js','ext-server_opensave.js'],
 				initTool: 'select',
 				wireframe: false
 			},
@@ -512,7 +513,10 @@
 		
 			var saveHandler = function(window,svg) {
 				show_save_warning = false;
-			
+				//hack for Chamilo
+					//parent.setSVG(svg);//TODO:check this hack
+                	//return true;//TODO:check this hack
+				//end hack for Chamilo
 				// by default, we add the XML prolog back, systems integrating SVG-edit (wikis, CMSs) 
 				// can just provide their own custom save handler and might not want the XML prolog
 				svg = '<?xml version="1.0"?>\n' + svg;
@@ -624,7 +628,7 @@
 					}
 				}
 				
-				show_save_warning = true;
+				show_save_warning = false; //Hack for Chamilo, change true by false
 		
 				// we update the contextual panel with potentially new
 				// positional/sizing information (we DON'T want to update the

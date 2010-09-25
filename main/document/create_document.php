@@ -529,6 +529,7 @@ if ($form->validate()) {
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
 		$content = text_filter($content);
 		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
+		
 		// change the path of mp3 to absolute
 		// first regexp deals with ../../../ urls
 		// Disabled by Ivan Tcholakov.

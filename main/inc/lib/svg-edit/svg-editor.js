@@ -8,7 +8,9 @@
  * Copyright(c) 2010 Jeff Schiller
  * Copyright(c) 2010 Narendra Sisodiya
  *
- * Hacks for Chamilo 2010 Juan Carlos Raña Trabado
+ * Integrate  with Chamilo
+ * Author Juan Carlos Raña Trabado
+ * Since 25/september/2010
  */
 
 (function() { 
@@ -3441,6 +3443,7 @@
 			};
 			
 			Editor.openPrep = function(func) {
+				//return false;// temporal hack for Chamilo, add this line to disable open svg file
 				$('#main_menu').hide();
 				if(undoMgr.getUndoStackSize() === 0) {
 					func(true);

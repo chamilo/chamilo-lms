@@ -1,8 +1,15 @@
 <?php
+/**
+* Integrate svg-edit with Chamilo
+* @author Juan Carlos Raña Trabado
+* @since 25/september/2010
+*/
+
 require_once '../../../inc/global.inc.php';//hack for Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
 ?>
+
 <!DOCTYPE html>
 <html>
 <!-- removed for now, causes problems in Firefox: manifest="svg-editor.manifest" -->
@@ -23,7 +30,7 @@ api_block_anonymous_users();
 <script type="text/javascript" src="jquerybbq/jquery.bbq.min.js"></script>
 <script type="text/javascript" src="spinbtn/JQuerySpinBtn.min.js"></script>
 <script type="text/javascript" src="svgcanvas.min.js"></script>
-<!--<script type="text/javascript" src="svg-editor.min.js"></script> -->
+<!--<script type="text/javascript" src="svg-editor.min.js"></script> --><!-- Replaced by bottom line. While integration into Chamilo, change compress svg-editor.min.js by svg-editor.js file -->
 <script type="text/javascript" src="svg-editor.js"></script>
 <script type="text/javascript" src="locale/locale.min.js"></script>
 
@@ -105,12 +112,12 @@ api_block_anonymous_users();
 				New Image [N]
 			</li>
 			
-			<li id="tool_open" style="display:none;">
+			<!--<li id="tool_open" style="display:none;">
 				<div id="fileinputs">
 					<div></div>
 				</div>
 				Open Image [O]
-			</li>
+			</li> --><!-- Disabled by now for Chamilo -->
 			
 			<li id="tool_import" style="display:none;">
 				<div id="fileinputs_import">

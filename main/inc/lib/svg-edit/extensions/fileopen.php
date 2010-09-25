@@ -8,7 +8,19 @@
  *
  * Copyright(c) 2010 Alexis Deveria
  *
- */
+ * Integrate svg-edit with Chamilo
+ * @author Juan Carlos Raña Trabado
+ * @since 25/september/2010
+*/
+
+require_once '../../../../inc/global.inc.php';//hack for chamilo
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'security.lib.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+
+api_protect_course_script();
+api_block_anonymous_users();
 	// Very minimal PHP file, all we do is Base64 encode the uploaded file and
 	// return it to the editor
 	
@@ -26,6 +38,7 @@
 		$prefix = 'data:' . $info['mime'] . ';base64,';
 	}
 ?>
-<script>
-window.top.window.svgEditor.processFile("<?php echo $prefix . base64_encode($output); ?>", "<?php echo $type ?>");
-</script>  
+<!--disable upload files (IMPORT SVG FILES) for now. Chamilo -->
+<!--<script>
+window.top.window.svgEditor.processFile("<?php // echo $prefix . base64_encode($output); ?>", "<?php // echo $type ?>");
+</script>   -->

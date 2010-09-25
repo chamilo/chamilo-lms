@@ -223,4 +223,5 @@ $CopyAlreadyDone = "There are a file with the same name in your private user fil
 $CopyFailed = "Copy failed";
 $CopyMade = "Copy made";
 $OverwritenFile = "File replaced";
+$Draw = "Draw";
 ?>

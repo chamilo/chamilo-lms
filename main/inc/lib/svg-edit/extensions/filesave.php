@@ -7,7 +7,11 @@
  *
  * Copyright(c) 2010 Alexis Deveria
  *
- */
+ * Integrate svg-edit with Chamilo
+ * @author Juan Carlos Raña Trabado
+ * @since 25/september/2010
+*/
+
 require_once '../../../../inc/global.inc.php';//hack for chamilo
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';

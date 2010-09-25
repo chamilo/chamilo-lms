@@ -223,4 +223,5 @@ $CopyAlreadyDone = "Hay un archivo con el mismo nombre en su área personal de a
 $CopyFailed = "Copia fallida";
 $CopyMade = "Copia realizada";
 $OverwritenFile = "Archivo reemplazado";
+$Draw = "Dibujar";
 ?>

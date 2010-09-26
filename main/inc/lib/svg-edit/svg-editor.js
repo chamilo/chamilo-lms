@@ -48,7 +48,7 @@
 				imgPath: 'images/',
 				langPath: 'locale/',
 				extPath: 'extensions/',
-				extensions: ['ext-markers.js','ext-connector.js', 'ext-eyedropper.js','ext-server_opensave.js'],
+				extensions: ['ext-markers.js','ext-connector.js', 'ext-eyedropper.js','ext-server_opensave.js','ext-arrows.js','ext-foreignobject.js'],
 				initTool: 'select',
 				wireframe: false
 			},

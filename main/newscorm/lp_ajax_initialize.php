@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This script contains the server part of the xajax interaction process. The client part is located
  * in lp_api.php or other api's.
@@ -8,14 +9,15 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Script
- */
-//flag to allow for anonymous user - needs to be set before global.inc.php
+
+// Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
-// name of the language file that needs to be included
+
+// Name of the language file that needs to be included.
 $language_file[] = 'learnpath';
+
 require_once 'back_compat.inc.php';
+
 /**
  * Get one item's details
  * @param   integer LP ID
@@ -24,11 +26,10 @@ require_once 'back_compat.inc.php';
  * @param   integer Current item ID
  * @param   integer New item ID
  */
-function initialize_item($lp_id,$user_id,$view_id,$next_item)
-{
+function initialize_item($lp_id, $user_id, $view_id, $next_item) {
     $debug = 0;
     $return = '';
-    if ($debug>0) {error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')',0);}
+    if ($debug > 0) { error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')', 0); }
     //$objResponse = new xajaxResponse();
     /*$item_id may be one of:
      * -'next'
@@ -45,21 +46,21 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
     require_once 'aiccItem.class.php';
     $mylp = '';
     if (isset($_SESSION['lpobject'])) {
-        if ($debug>1) {error_log('////$_SESSION[lpobject] is set',0);}
+        if ($debug > 1) { error_log('////$_SESSION[lpobject] is set', 0); }
         $oLP =& unserialize($_SESSION['lpobject']);
         if (!is_object($oLP)) {
-            if($debug>1){error_log(print_r($oLP,true),0);}
-            if($debug>2){error_log('////Building new lp',0);}
+            if ($debug > 1) { error_log(print_r($oLP,true), 0); }
+            if ($debug > 2) { error_log('////Building new lp', 0); }
             unset($oLP);
             $code = api_get_course_id();
             $mylp = & new learnpath($code,$lp_id,$user_id);
         } else {
-            if($debug>1){error_log('////Reusing session lp',0);}
+            if ($debug > 1) { error_log('////Reusing session lp', 0); }
             $mylp = & $oLP;
         }
     }
     $mylp->set_current_item($next_item);
-    if ($debug>1) {error_log('In initialize_item() - new item is '.$next_item,0);}
+    if ($debug > 1) { error_log('In initialize_item() - new item is '.$next_item, 0); }
     $mylp->start_current_item(true);
     /*
     if ($mylp->force_commit) {
@@ -68,11 +69,11 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
     */
     //$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
     if (is_object($mylp->items[$next_item])) {
-        if($debug>1){error_log('In initialize_item - recovering existing item object '.$next_item,0);}
+        if ($debug > 1) { error_log('In initialize_item - recovering existing item object '.$next_item, 0); }
     	$mylpi = & $mylp->items[$next_item];
     } else {
-        if($debug>1){error_log('In initialize_item - generating new item object '.$next_item,0);}
-        $mylpi =& new learnpathItem($next_item,$user_id);
+        if ($debug > 1) { error_log('In initialize_item - generating new item object '.$next_item, 0); }
+        $mylpi =& new learnpathItem($next_item, $user_id);
         $mylpi->set_lp_view($view_id);
     }
     /*
@@ -86,11 +87,11 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
      */
     $myscore = $mylpi->get_score();
     $mymax = $mylpi->get_max();
-    if($mymax===''){$mymax="''";}
+    if ($mymax === '') { $mymax = "''"; }
     $mymin = $mylpi->get_min();
     $mylesson_status = $mylpi->get_status();
     $mylesson_location = $mylpi->get_lesson_location();
-    $mytotal_time = $mylpi->get_scorm_time('js',null,true);
+    $mytotal_time = $mylpi->get_scorm_time('js', null, true);
     $mymastery_score = $mylpi->get_mastery_score();
     $mymax_time_allowed = $mylpi->get_max_time_allowed();
     $mylaunch_data = $mylpi->get_launch_data();
@@ -99,11 +100,11 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
     $mylesson_location = $mylpi->get_lesson_location();
     $myic = $mylpi->get_interactions_count();
     $myistring = '';
-    for ($i=0;$i<$myic;$i++) {
+    for ($i = 0; $i < $myic; $i++) {
     	$myistring .= ",[".$i.",'','','','','','','']";
     }
     if (!empty($myistring)) {
-        $myistring = substr($myistring,1);
+        $myistring = substr($myistring, 1);
     }
     $return .=
             "olms.score=".$myscore.";" .
@@ -135,7 +136,7 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
     $mytotal = $mylp->get_total_items_count_without_chapters();
     $mycomplete = $mylp->get_complete_items_count();
     $myprogress_mode = $mylp->get_progress_bar_mode();
-    $myprogress_mode = ($myprogress_mode==''?'%':$myprogress_mode);
+    $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
     $mynext = $mylp->get_next_item_id();
     $myprevious = $mylp->get_previous_item_id();
     $myitemtype = $mylpi->get_type();
@@ -153,7 +154,7 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
             "olms.lms_initialized=0;" .
             "olms.lms_view_id=".$view_id.";" .
             "olms.lms_user_id=".$user_id.";" .
-            "olms.next_item=".$next_item.";" . //this one is very important to replace possible literal strings
+            "olms.next_item=".$next_item.";" . // This one is very important to replace possible literal strings.
             "olms.lms_next_item=".$mynext.";" .
             "olms.lms_previous_item=".$myprevious.";" .
             "olms.lms_item_type = '".$myitemtype."';" .
@@ -166,10 +167,11 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
             "olms.asset_timer = 0;";
 
     $mylp->set_error_msg('');
-    $mylp->prerequisites_match(); //check the prerequisites are all complete
-    if($debug>1){error_log('Prereq_match() returned '.htmlentities($mylp->error),0);}
-    //$_SESSION['scorm_item_id'] = $new_item_id;//Save the new item ID for the exercise tool to use
+    $mylp->prerequisites_match(); // Check the prerequisites are all complete.
+    if ($debug > 1) { error_log('Prereq_match() returned '.htmlentities($mylp->error), 0); }
+    //$_SESSION['scorm_item_id'] = $new_item_id; // Save the new item ID for the exercise tool to use/
     //$_SESSION['lpobject'] = serialize($mylp);
     return $return;
 }
-echo initialize_item($_POST['lid'],$_POST['uid'],$_POST['vid'],$_POST['iid']);
+
+echo initialize_item($_POST['lid'], $_POST['uid'], $_POST['vid'], $_POST['iid']);

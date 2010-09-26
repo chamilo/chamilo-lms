@@ -1,41 +1,38 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 /**
-* This is a learning path creation and player tool in Dokeos - previously
-* learnpath_handler.php
-*
-* @author Patrick Cool
-* @author Denes Nagy
-* @author Roan Embrechts, refactoring and code cleaning
-* @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update
-* @author Julio Montoya  - Improving the list of templates
-* @package chamilo.learnpath
-*/
+ * This is a learning path creation and player tool in Dokeos - previously
+ * learnpath_handler.php
+ *
+ * @author Patrick Cool
+ * @author Denes Nagy
+ * @author Roan Embrechts, refactoring and code cleaning
+ * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update
+ * @author Julio Montoya  - Improving the list of templates
+ * @package chamilo.learnpath
+ */
 
-/*
-		INIT SECTION
-*/
-$this_section=SECTION_COURSES;
+/* INIT SECTION */
+
+$this_section = SECTION_COURSES;
 
 api_protect_course_script();
-/*
-	Libraries
-*/
-//the main_api.lib.php, database.lib.php and display.lib.php
-//libraries are included by default
+
+/* Libraries */
+
+// The main_api.lib.php, database.lib.php and display.lib.php
+// libraries are included by default.
 
 include 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
 include 'resourcelinker.inc.php';
-//rewrite the language file, sadly overwritten by resourcelinker.inc.php
-// name of the language file that needs to be included
+// Rewrite the language file, sadly overwritten by resourcelinker.inc.php.
+// Name of the language file that needs to be included.
 $language_file = 'learnpath';
 
-/*
-	Header and action code
-*/
+/* Header and action code */
+
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 
@@ -117,11 +114,10 @@ function InnerDialogLoaded() {
 </script>';
 
 $htmlHeadXtra[] = $_SESSION['oLP']->create_js();
-/*
-	Constants and variables
-*/
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+/* Constants and variables */
+
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -143,60 +139,60 @@ $moduleid       = $_REQUEST['moduleid'];
 $prereq         = $_REQUEST['prereq'];
 $type           = $_REQUEST['type'];
 */
-/*
-		MAIN CODE
-*/
-// using the resource linker as a tool for adding resources to the learning path
-if ($action=="add" and $type=="learnpathitem") {
+
+/* MAIN CODE */
+
+// Using the resource linker as a tool for adding resources to the learning path.
+if ($action == 'add' && $type == 'learnpathitem') {
 	 $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
-if ( (! $is_allowed_to_edit) or ($isStudentView) ) {
+if ((!$is_allowed_to_edit) || ($isStudentView)) {
 	error_log('New LP - User not authorized in lp_add_item.php');
 	header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 	exit;
 }
-//from here on, we are admin because of the previous condition, so don't check anymore
+// From here on, we are admin because of the previous condition, so don't check anymore.
 
 $sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
-$result=Database::query($sql_query);
-$therow=Database::fetch_array($result);
+$result = Database::query($sql_query);
+$therow = Database::fetch_array($result);
 
 //$admin_output = '';
 /*
 	Course admin section
 	- all the functions not available for students - always available in this case (page only shown to admin)
 */
-/*
-			SHOWING THE ADMIN TOOLS
- */
-if (isset($_SESSION['gradebook'])){
-	$gradebook=	$_SESSION['gradebook'];
+
+/* SHOWING THE ADMIN TOOLS */
+
+if (isset($_SESSION['gradebook'])) {
+	$gradebook = $_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array (
+if (!empty($gradebook) && $gradebook == 'view') {
+	$interbreadcrumb[] = array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('ToolGradebook')
 		);
 }
 
-$interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));
-$interbreadcrumb[]= array ("url"=>api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
+$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
+$interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
 
 switch($_GET['type']) {
 	case 'chapter':
-		$interbreadcrumb[]= array ("url"=>"#", "name" => get_lang("NewChapter"));
-	break;
+		$interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewChapter'));
+		break;
 	default:
-		$interbreadcrumb[]= array ("url"=>"#", "name" => get_lang("NewStep"));
-	break;
+		$interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewStep'));
+		break;
 }
 
-//Theme calls
-$show_learn_path=true;
-$lp_theme_css=$_SESSION['oLP']->get_theme();
+// Theme calls.
+$show_learn_path = true;
+$lp_theme_css = $_SESSION['oLP']->get_theme();
 
-Display::display_header(null,'Path');
+Display::display_header(null, 'Path');
 //api_display_tool_title($therow['name']);
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
@@ -228,28 +224,27 @@ function confirmation(name)
 
 //echo $admin_output;
 
-/*
-	DISPLAY SECTION
-*/
+/* DISPLAY SECTION */
+
 echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 	echo '<tr>';
 		echo '<td class="tree">';
-			// show the template list
-			if (isset($_GET['type']) && $_GET['type']=='document' && !isset($_GET['file'])) {
+			// Show the template list.
+			if (isset($_GET['type']) && $_GET['type'] == 'document' && !isset($_GET['file'])) {
 				$count_items = count($_SESSION['oLP']->ordered_items);
-				$style = ($count_items > 12)?' style="height:250px;width:230px;overflow-x : auto; overflow-y : scroll;" ':' class="lp_tree" ';
+				$style = ($count_items > 12) ? ' style="height:250px;width:230px;overflow-x : auto; overflow-y : scroll;" ' : ' class="lp_tree" ';
 				echo '<div  '.$style.'>';
-				//build the tree with the menu items in it
+				// Build the tree with the menu items in it.
 				echo $_SESSION['oLP']->build_tree();
 				echo '</div>';
-				// show the template list
-				echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>'; //line
+				// Show the template list.
+				echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>';
 				echo '<br />';
 				echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
 			} else {
 				echo '<div class="lp_tree">';
-				//build the tree with the menu items in it
+				// Build the tree with the menu items in it.
 				echo $_SESSION['oLP']->build_tree();
 				echo '</div>';
 			}
@@ -257,7 +252,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 		echo '</td>';
 		echo '<td class="workspace">';
 
-		if(isset($new_item_id) && is_numeric($new_item_id)) {
+		if (isset($new_item_id) && is_numeric($new_item_id)) {
 			switch($_GET['type']) {
 				case 'chapter':
 					echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
@@ -297,10 +292,10 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 		} else {
 			switch($_GET['type']) {
 				case 'chapter':
-					echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang("EnterDataNewChapter"));
+					echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang('EnterDataNewChapter'));
 					break;
 				case 'module':
-					echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang("EnterDataNewModule"));
+					echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang('EnterDataNewModule'));
 					break;
 				case 'document':
 					if(isset($_GET['file']) && is_numeric($_GET['file'])) {
@@ -336,8 +331,6 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 	echo '</tr>';
 echo '</table>';
 
-/*
-		FOOTER
-*/
+/* FOOTER */
+
 Display::display_footer();
-?>

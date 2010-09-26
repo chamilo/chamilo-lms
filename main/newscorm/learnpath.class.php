@@ -57,7 +57,7 @@ class learnpath {
 	public $proximity; // Wether the content is distant or local or unknown.
 	public $refs_list = array (); //list of items by ref => db_id. Used only for prerequisites match.
 	// !!!This array (refs_list) is built differently depending on the nature of the LP.
-	// If SCORM, uses ref, if Dokeos, uses id to keep a unique value.
+	// If SCORM, uses ref, if Chamilo, uses id to keep a unique value.
 	public $type; //type of learnpath. Could be 'dokeos', 'scorm', 'scorm2004', 'aicc', ...
 	// TODO: Check if this type variable is useful here (instead of just in the controller script).
 	public $user_id; //ID of the user that is viewing/using the course
@@ -174,7 +174,7 @@ class learnpath {
 		$sql = "SELECT * FROM $lp_table WHERE lp_id = '$lp_id' AND user_id = '$user_id' $session  ORDER BY view_count DESC";
 		if ($this->debug > 2) { error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0); }
 		$res = Database::query($sql);
-		$view_id = 0; // Uused later to query lp_item_view.
+		$view_id = 0; // Used later to query lp_item_view.
 		if (Database :: num_rows($res) > 0) {
 			if ($this->debug > 2) {
 				error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Found previous view', 0);
@@ -2664,7 +2664,7 @@ class learnpath {
 			}
 
 			// The anchor will let us center the TOC on the currently viewed item &^D
-			if ($item['type'] != 'dokeos_module' AND $item['type'] != 'dokeos_chapter') {
+			if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
 				$html .= '<a name="atoc_' . $item['id'] . '" />';
 				$html .= '<div class="' . $style_item . '" style="padding-left: ' . ($item['level'] * 1.5) . 'em; padding-right:' . ($item['level'] / 2) . 'em"             title="' . $item['description'] . '" >';
 			} else {
@@ -7693,7 +7693,7 @@ class learnpath {
 				 				$my_dep_file->setAttribute('href', $file_path);
 					 			$my_dep->setAttribute('xml:base', '');
 			 					if (strstr($file_path,$main_path) !== false) {
-			 						// The calculated real path is really inside the dokeos root path.
+			 						// The calculated real path is really inside Chamilo's root path.
 			 						// Reduce file path to what's under the DocumentRoot.
 			 						$file_path = substr($file_path, strlen($root_path) - 1);
 			 						//echo $file_path;echo '<br /><br />';
@@ -7777,7 +7777,7 @@ class learnpath {
 			 			 			$my_dep->setAttribute('xml:base', '');
 								}
 			 					elseif(strstr($file_path,$main_path) !== false) {
-			 						// The calculated real path is really inside the dokeos root path.
+			 						// The calculated real path is really inside Chamilo's root path.
 			 						// Reduce file path to what's under the DocumentRoot.
 			 						$file_path = substr($file_path,strlen($root_path));
 			 						//echo $file_path;echo '<br /><br />';
@@ -7810,7 +7810,7 @@ class learnpath {
 				 					$file_path = realpath($current_dir.$doc_info[0]);
 				 					//error_log($file_path.' <-> '.$main_path,0);
 				 					if (strstr($file_path,$main_path) !== false) {
-				 						// The calculated real path is really inside the dokeos root path.
+				 						// The calculated real path is really inside Chamilo's root path.
 				 						// Reduce file path to what's under the DocumentRoot.
 				 						$file_path = substr($file_path, strlen($root_path));
 				 						//error_log('Reduced path: '.$file_path, 0);
@@ -8073,13 +8073,13 @@ class learnpath {
 					 					$file_path = realpath($current_dir.$doc_info[0]);
 					 					//error_log($file_path.' <-> '.$main_path, 0);
 					 					if (strstr($file_path, $main_path) !== false) {
-					 						// The calculated real path is really inside the dokeos root path.
+					 						// The calculated real path is really inside Chamilo's root path.
 					 						// Reduce file path to what's under the DocumentRoot.
 
 					 						$file_path = substr($file_path, strlen($root_path));
 					 						$file_path_dest = $file_path;
 
-											// File path is courses/DOKEOS/document/....
+											// File path is courses/CHAMILO/document/....
 											$info_file_path = explode('/', $file_path);
 											if ($info_file_path[0] == 'courses') { // Add character "/" in file path.
 												$file_path_dest = 'document/'.$file_path;

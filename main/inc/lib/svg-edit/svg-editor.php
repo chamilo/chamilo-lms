@@ -112,12 +112,12 @@ api_block_anonymous_users();
 				New Image [N]
 			</li>
 			
-			<!--<li id="tool_open" style="display:none;">
+			<li id="tool_open" style="display:none;">
 				<div id="fileinputs">
 					<div></div>
 				</div>
 				Open Image [O]
-			</li> --><!-- Disabled by now for Chamilo -->
+			</li>
 			
 			<li id="tool_import" style="display:none;">
 				<div id="fileinputs_import">

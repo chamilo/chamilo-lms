@@ -37,8 +37,15 @@ api_block_anonymous_users();
 		$info = getimagesize($file);
 		$prefix = 'data:' . $info['mime'] . ';base64,';
 	}
+	
+//disable upload files (IMPORT SVG FILES) for now. Chamilo
+	$file='';
+	$output='';
+	type='';
+	prefix='';
+//
 ?>
-<!--disable upload files (IMPORT SVG FILES) for now. Chamilo -->
-<!--<script>
-window.top.window.svgEditor.processFile("<?php // echo $prefix . base64_encode($output); ?>", "<?php // echo $type ?>");
-</script>   -->
+
+<script>
+window.top.window.svgEditor.processFile("<?php echo $prefix . base64_encode($output); ?>", "<?php echo $type ?>");
+</script>

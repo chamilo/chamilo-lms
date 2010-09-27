@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 * This file was originally the copy of document.php, but many modifications happened since then ;
 * the direct file view is not needed anymore, if the user uploads a scorm zip file, a directory
@@ -10,15 +11,13 @@
 * @author Denes Nagy, principal author
 * @author Isthvan Mandak, several new features
 * @author Roan Embrechts, code improvements and refactoring
-* @license	GNU/GPL - See Dokeos license directory for details
+* @license	GNU/GPL - See Chamilo license directory for details
 */
-/**
- * Script
- */
-/*	INIT SECTION */
+
+/* INIT SECTION */
 
 $_SESSION['whereami'] = 'lp/view';
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 if ($lp_controller_touched != 1){
 	header('location: lp_controller.php?action=view&item_id='.$_REQUEST['item_id']);
@@ -37,7 +36,7 @@ require_once 'learnpathItem.class.php';
 
 if (!$is_allowed_in_course) api_not_allowed();
 
-// we set the encoding of the lp
+// We set the encoding of the lp.
 if (!empty($_SESSION['oLP']->encoding)) {
 	$charset = $_SESSION['oLP']->encoding;
 } else {
@@ -47,18 +46,18 @@ if (!empty($_SESSION['oLP']->encoding)) {
 $oLearnpath		= false;
 $course_code 	= api_get_course_id();
 $user_id 		= api_get_user_id();
-$platform_theme = api_get_setting('stylesheets'); 	// plataform's css
+$platform_theme = api_get_setting('stylesheets'); // Plataform's css.
 $my_style		= $platform_theme;
-//escape external variables
+// Escape external variables.
 
 /* 	Header  */
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
 
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
 }
-
 
 $htmlHeadXtra[] = '<script language="javascript" type="text/javascript">
 $(document).ready(function (){
@@ -72,25 +71,26 @@ $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
   	var dokeos_xajax_handler = window.oxajax;
 </script>';
 
-
 $_SESSION['oLP']->error = '';
 $lp_type 	= $_SESSION['oLP']->get_type();
 $lp_item_id = $_SESSION['oLP']->get_current_item_id();
 //$lp_item_id = learnpath::escape_string($_GET['item_id']);
-//$_SESSION['oLP']->set_current_item($lp_item_id); // already done by lp_controller.php
+//$_SESSION['oLP']->set_current_item($lp_item_id); // Already done by lp_controller.php.
 
-//Prepare variables for the test tool (just in case) - honestly, this should disappear later on
+// Prepare variables for the test tool (just in case) - honestly, this should disappear later on.
 $_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();
 $_SESSION['scorm_item_id'] = $lp_item_id;
 $_SESSION['lp_mode'] = $_SESSION['oLP']->mode;
-//reinit exercises variables to avoid spacename clashes (see exercise tool)
-if(isset($exerciseResult) or isset($_SESSION['exerciseResult'])) {
+
+// Reinit exercises variables to avoid spacename clashes (see exercise tool)
+if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
     api_session_unregister($exerciseResult);
 }
 unset($_SESSION['objExercise']);
 unset($_SESSION['questionList']);
+
 /**
- * Get a link to the corresponding document
+ * Get a link to the corresponding document.
  */
 if (!isset($src)) {
  	$src = '';
@@ -99,39 +99,39 @@ if (!isset($src)) {
 			$_SESSION['oLP']->stop_previous_item();
 			$htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
 			$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-			if($prereq_check === true){
-				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
-				//Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
+			if ($prereq_check === true) {
+				$src = $_SESSION['oLP']->get_link('http', $lp_item_id);
+				//Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
 				$file_info = pathinfo($src);
 				if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
 					$src = 'lp_view_item.php?src='.$src;
 				}
-				$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
+				$_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
 			} else {
 				$src = 'blank.php?error=prerequisites';
 			}
 			break;
 		case 2:
-			//save old if asset
-			$_SESSION['oLP']->stop_previous_item(); //save status manually if asset
+			// save old if asset
+			$_SESSION['oLP']->stop_previous_item(); // save status manually if asset
 			$htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
 			$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-			if($prereq_check === true){
+			if ($prereq_check === true) {
 				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
-				$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
-			}else{
-			$src = 'blank.php?error=prerequisites';
+				$_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
+			} else {
+				$src = 'blank.php?error=prerequisites';
 			}
 			break;
 		case 3:
-			//aicc
-			$_SESSION['oLP']->stop_previous_item(); //save status manually if asset
+			// aicc
+			$_SESSION['oLP']->stop_previous_item(); // save status manually if asset
 			$htmlHeadXtra[] = '<script src="'.$_SESSION['oLP']->get_js_lib().'" type="text/javascript" language="javascript"></script>';
 			$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
-			if($prereq_check === true){
+			if ($prereq_check === true) {
 				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
-				$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
-			}else{
+				$_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
+			} else {
 				$src = 'blank.php';
 			}
 			break;
@@ -144,13 +144,13 @@ $list = $_SESSION['oLP']->get_toc();
 $type_quiz = false;
 
 foreach($list as $toc) {
-	if ($toc['id'] == $lp_item_id && ($toc['type']=='quiz') ) {
+	if ($toc['id'] == $lp_item_id && ($toc['type']=='quiz')) {
 		$type_quiz = true;
 	}
 }
 
 $autostart = 'true';
-// update status,total_time from lp_item_view table when you finish the exercises in learning path
+// Update status, total_time from lp_item_view table when you finish the exercises in learning path.
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
 	global $src;
 	$_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
@@ -185,13 +185,13 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 		$res_last_attempt = Database::query($sql_last_attempt);
 		$row_last_attempt = Database::fetch_row($res_last_attempt);
 
-		if (Database::num_rows($res_last_attempt)>0) {
+		if (Database::num_rows($res_last_attempt) > 0) {
 			$sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score,total_time = $mytime WHERE id='".$row_last_attempt[0]."'";
 			Database::query($sql_upd_score);
 		}
 	}
 
-	if(intval($_GET['fb_type']) > 0) {
+	if (intval($_GET['fb_type']) > 0) {
 		$src = 'blank.php?msg=exerciseFinished';
 	} else {
 		$src = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?id='.Security::remove_XSS($_REQUEST['exeId']).'&origin=learnpath&learnpath_id='.Security::remove_XSS($_GET['lp_id']).'&learnpath_item_id='.Security::remove_XSS($_GET['lp_id']).'&fb_type='.Security::remove_XSS($_GET['fb_type']);
@@ -202,29 +202,31 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 $_SESSION['oLP']->set_previous_item($lp_item_id);
 $nameTools = Security :: remove_XSS(api_convert_encoding($_SESSION['oLP']->get_name(), $charset, api_get_system_encoding()));
 
-$save_setting = api_get_setting("show_navigation_menu");
+$save_setting = api_get_setting('show_navigation_menu');
 global $_setting;
 $_setting['show_navigation_menu'] = 'false';
-$scorm_css_header=true;
-$lp_theme_css=$_SESSION['oLP']->get_theme(); //sets the css theme of the LP this call is also use at the frames (toc, nav, message)
+$scorm_css_header = true;
+$lp_theme_css = $_SESSION['oLP']->get_theme(); // Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
 
-if($_SESSION['oLP']->mode == 'fullscreen') {
+if ($_SESSION['oLP']->mode == 'fullscreen') {
 	$htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
 }
-	//not fullscreen mode
+
+	// Not in fullscreen mode.
 	require_once '../inc/reduced_header.inc.php';
-	//$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
-	//check if audio recorder needs to be in studentview
-	$course_id=$_SESSION["_course"]["id"];
-	if ($_SESSION["status"][$course_id]==5) {
+	//$displayAudioRecorder = (api_get_setting('service_visio', 'active') == 'true') ? true : false;
+	// Check if audio recorder needs to be in studentview.
+	$course_id = $_SESSION['_course']['id'];
+	if ($_SESSION['status'][$course_id] == 5) {
 		$audio_recorder_studentview = true;
 	} else {
 		$audio_recorder_studentview = false;
 	}
-	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
+	// Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
 	$_SESSION['loaded_lp_view'] = true;
+
 ?>
-<body>
+<body dir="<?php echo api_get_text_direction(); ?>">
 <div id="learning_path_main"  style="width:100%;height:100%;" >
     <div id="learning_path_left_zone" style="float:left;width:280px;height:100%">
 
@@ -234,10 +236,10 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	            <table>
 	                <tr>
 	                    <td>
-	                        <a href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
+	                        <a href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
 	                    </td>
 	                    <td>
-	                        <a class="link" href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="window.parent.API.save_asset();">
+	                        <a class="link" href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
 	                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
 	                    </td>
 	                </tr>
@@ -277,7 +279,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 						$scorm_css_header = true;
 						$lp_theme_css = $_SESSION['oLP']->get_theme();
 
-						//Setting up the CSS theme if exists
+						// Setting up the CSS theme if exists.
 						if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
 							global $lp_theme_css;
 						} else {
@@ -290,7 +292,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 
 						$tbl_lp_item	= Database::get_course_table(TABLE_LP_ITEM);
 						$show_audioplayer = false;
-						// getting all the information about the item
+						// Getting all the information about the item.
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
 						$res_media= Database::query($sql);
 
@@ -314,9 +316,9 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 		</div>
 
 		<!-- media player layaout -->
-		<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"':'style="height:15px"'); ?>
-		<div id="media"  <?php echo $style_media ?>>
-			<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
+		<?php $style_media = (($show_audioplayer) ? ' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"' : 'style="height:15px"'); ?>
+		<div id="media"  <?php echo $style_media; ?>>
+			<?php echo (!empty($mediaplayer)) ? $mediaplayer : '&nbsp;' ?>
 		</div>
 		<!-- end media player layaout -->
 
@@ -346,7 +348,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	<div id="learning_path_right_zone" style="margin-left:282px;height:100%">
 	<?php
 		// hub 26-05-2010 Fullscreen or not fullscreen
-		if($_SESSION['oLP']->mode == 'fullscreen') {
+		if ($_SESSION['oLP']->mode == 'fullscreen') {
 			echo '<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0" style="width:100%;height:600px" ></iframe>';
 		} else {
 			echo '<iframe id="content_id" name="content_name" src="'.$src.'" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>';
@@ -356,11 +358,11 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
     <!-- end right Zone -->
 </div>
 <script language="JavaScript" type="text/javascript">
-	// Need to be called after the <head> to be sure window.oxajax is defined
+	// Need to be called after the <head> to be sure window.oxajax is defined.
 	//var dokeos_xajax_handler = window.oxajax;
 </script>
 <script language="JavaScript" type="text/javascript">
-	// resize right and left pane to full height (HUB 20-05-2010)
+	// Resize right and left pane to full height (HUB 20-05-2010).
 	function updateContentHeight() {
 		document.body.style.overflow = 'hidden';
 		var IE = window.navigator.appName.match(/microsoft/i);
@@ -381,7 +383,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 			document.getElementById('content_id').style.height = innerHauteur + 'px';
 		}
 
-	//loads the glossary library
+	// Loads the glossary library.
 	<?php
 	  if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
 	  	 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
@@ -419,5 +421,5 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 </script>
 </body>
 <?php
-//restore global setting
+// Restore a global setting.
 $_setting['show_navigation_menu'] = $save_setting;

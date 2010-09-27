@@ -335,8 +335,8 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
 	$mymax_time_allowed = $mylpi->get_max_time_allowed();
 	$mylaunch_data = $mylpi->get_launch_data();
 	/*
-	if($mylpi->get_type() == 'asset'){
-		//temporary measure to save completion of an asset. Later on, Dokeos should trigger something on unload, maybe... (even though that would mean the last item cannot be completed)
+	if ($mylpi->get_type() == 'asset') {
+		// Temporary measure to save completion of an asset. Later on, Chamilo should trigger something on unload, maybe... (even though that would mean the last item cannot be completed)
 		$mylesson_status = 'completed';
 		$mylpi->set_status('completed');
 		$mylpi->save();

@@ -1161,7 +1161,7 @@ function exporttofile($filename, $LPname, $LPid, $content) {
 }
 
 /**
- * This function exports the given Dokeos test
+ * This function exports the given Chamilo test
  * @param	integer	Test ID
  * @return string 	The test itself as an HTML string
  */
@@ -1378,7 +1378,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 	$LPname = display_addedresource_link_in_learnpath($item_type, $item_id, '', $id, 'builder', 'nolink');
 
 	$expcontent = "<!--
-		This is an exported file from Dokeos Learning Path belonging to a Scorm compliant content package.
+		This is an exported file from Chamilo Learning Path belonging to a Scorm compliant content package.
 		Do not modify or replace individually.
 
 		Export module author : Denes Nagy <darkden@evk.bke.hu>
@@ -1718,7 +1718,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 					$src = str_replace('mp3player.swf?son=', '', $src); //mp3
 					// Remove funny link parts.
 					$src = str_replace('?0', '', $src); //mp3
-					// The previous lines are used when creating docs with Dokeos Document tool's htmlarea.
+					// The previous lines are used when creating docs with Chamilo Document tool's htmlarea.
 					// Rows marked by 'mp3' are needed because the mp3 plugin inserts the swf-mp3 links in a very strange way
 					// and we can decode them with those 3 lines, hoping this will not cause errors in case of other htmls,
 					// created by any other software.

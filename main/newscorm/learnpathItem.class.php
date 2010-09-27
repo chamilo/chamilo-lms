@@ -283,7 +283,7 @@ class learnpathItem {
 
 	/**
 	 * Gets the credit information (rather scorm-stuff) based on current status and reinit
-	 * autorization. Credit tells the sco(content) if Dokeos will record the data it is sent (credit) or not (no-credit)
+	 * autorization. Credit tells the sco(content) if Chamilo will record the data it is sent (credit) or not (no-credit)
 	 * @return	string	'credit' or 'no-credit'. Defaults to 'credit' because if we don't know enough about this item, it's probably because it was never used before.
 	 */
 	public function get_credit() {
@@ -479,7 +479,7 @@ class learnpathItem {
 
 	/**
 	 * Gets the launch_data field found in imsmanifests (this is SCORM- or AICC-related, really)
-	 * @return	string	Launch data as found in imsmanifest and stored in Dokeos (read only). Defaults to ''.
+	 * @return	string	Launch data as found in imsmanifest and stored in Chamilo (read only). Defaults to ''.
 	 */
 	public function get_launch_data() {
 		if (self::debug > 0) { error_log('New LP - In learnpathItem::get_launch_data()', 0); }
@@ -501,7 +501,7 @@ class learnpathItem {
 	/**
 	 * Gets the lesson_mode (scorm feature, but might be used by aicc as well as dokeos paths)
 	 *
-	 * The "browse" mode is not supported yet (because there is no such way of seeing a sco in Dokeos)
+	 * The "browse" mode is not supported yet (because there is no such way of seeing a sco in Chamilo)
 	 * @return	string	'browse','normal' or 'review'. Defaults to 'normal'
 	 */
 	public function get_lesson_mode() {
@@ -647,7 +647,7 @@ class learnpathItem {
 	 * The list will generally include pictures, flash objects, java applets, or any other
 	 * stuff included in the source of the current item. The current item is expected
 	 * to be an HTML file. If it is not, then the function will return and empty list.
-	 * @param	string	type (one of the Dokeos tools) - optional (otherwise takes the current item's type)
+	 * @param	string	type (one of the Chamilo tools) - optional (otherwise takes the current item's type)
 	 * @param	string	path (absolute file path) - optional (otherwise takes the current item's path)
 	 * @param	int		level of recursivity we're in
 	 * @return	array	List of file paths. An additional field containing 'local' or 'remote' helps determine if the file should be copied into the zip or just linked
@@ -1185,7 +1185,7 @@ class learnpathItem {
 	 * @param	string	The prerequisites string as it figures in imsmanifest.xml
 	 * @param	Array	Array of items in the current learnpath object. Although we're in the learnpathItem object, it's necessary to have a list of all items to be able to check the current item's prerequisites
 	 * @param	Array	List of references (the "ref" column in the lp_item table) that are strings used in the expression of prerequisites.
-	 * @param	integer	The user ID. In some cases like Dokeos quizzes, it's necessary to have the user ID to query other tables (like the results of quizzes)
+	 * @param	integer	The user ID. In some cases like Chamilo quizzes, it's necessary to have the user ID to query other tables (like the results of quizzes)
 	 * @return	boolean	True if the list of prerequisites given is entirely satisfied, false otherwise
 	 */
 	public function parse_prereq($prereqs_string, $items, $refs_list, $user_id) {

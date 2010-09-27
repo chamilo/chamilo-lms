@@ -16,7 +16,7 @@
  * This script is divided into three sections.
  * The first section (below) is the initialisation part.
  * The second section is the AICC object part
- * The third section defines the event handlers for Dokeos' internal messaging
+ * The third section defines the event handlers for Chamilo's internal messaging
  * and frames refresh
  *
  * This script implements the HACP messaging for AICC. The API messaging is

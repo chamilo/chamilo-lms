@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
+* This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
 *
 * @author Patrick Cool
 * @author Denes Nagy

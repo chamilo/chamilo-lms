@@ -323,7 +323,7 @@ class aicc extends learnpath {
 	}
 
 	/**
-	 * Imports a zip file (presumably AICC) into the Dokeos structure
+	 * Imports a zip file (presumably AICC) into the Chamilo structure
 	 * @param	string	Zip file info as given by $_FILES['userFile']
 	 * @return	string	Absolute path to the AICC config files directory or empty string on error
 	 */

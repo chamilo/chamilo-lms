@@ -31,7 +31,7 @@
 			
 			// Note: Difference between Prefs and Config is that Prefs can be
 			// changed in the UI and are stored in the browser, config can not
-			// added 'ext-server_opensave.js' extension  for Chamilo
+			// added 'ext-server_opensave.js','ext-arrows.js','ext-foreignobject.js'(MathML) extensions  for Chamilo
 			curConfig = {
 				canvas_expansion: 3,
 				dimensions: [640,480],

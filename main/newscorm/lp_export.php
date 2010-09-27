@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Script to export the current path as a SCORM zip package.
  * This script cannot use the common controller lp_controller.php because we need to keep
@@ -13,8 +14,9 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
+
 /**
  * The script takes three get parameters that enable the export.
  */
 
-?>
+

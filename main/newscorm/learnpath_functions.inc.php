@@ -551,7 +551,7 @@ function display_all_learnpath() {
 		// Other grey color : #E6E6E6
 		echo "<tr><td bgcolor=\"$color2\" width=400><b>&nbsp;";
 		echo "<a href='learnpath_handler.php?&lp_id={$row['lp_id']}'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>{$row['learnpath_name']}</a>";
-		echo "</b><br><i><div class=text align=justify>{$row['learnpath_description']}</div></i></td>";
+		echo "</b><br /><i><div class=text align=justify>{$row['learnpath_description']}</div></i></td>";
 
 		// Showing the edit, delete and publish icons.
 		if (is_allowed_to_edit()) {

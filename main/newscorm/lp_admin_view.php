@@ -77,8 +77,6 @@ $therow = Database::fetch_array($result);
 
 /* SHOWING THE ADMIN TOOLS */
 
-/* Prerequisites setting end */
-
 if (isset($_SESSION['gradebook'])) {
 	$gradebook = $_SESSION['gradebook'];
 }

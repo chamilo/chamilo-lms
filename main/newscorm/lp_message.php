@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Container script for the messages coming from the learnpath object. Initially, this wasn't supposed to be
  * a separate file but rather some text included in lp_view.php, but SCORM involves loading a script that
@@ -14,17 +15,18 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Script
- */
-//flag to allow for anonymous user - needs to be set before global.inc.php
+
+// Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
-// name of the language file that needs to be included
-$language_file = "learnpath";
+
+// Name of the language file that needs to be included.
+$language_file = 'learnpath';
+
 require_once 'back_compat.inc.php';
 require_once 'learnpath.class.php';
 require_once 'scorm.class.php';
-if (empty($debug)) {$debug=0;}
+
+if (empty($debug)) { $debug = 0; }
 $error = '';
 $display_mode = '';
 if (isset($_SESSION['lpobject'])) {
@@ -33,18 +35,18 @@ if (isset($_SESSION['lpobject'])) {
 	$error = $_SESSION['oLP']->error;
 	$display_mode = $_SESSION['oLP']->mode;
 }
-if ($debug>0) {error_log('New LP - Loaded lp_message : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER['HTTP_REFERER'],0);}
+if ($debug > 0) { error_log('New LP - Loaded lp_message : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER['HTTP_REFERER'], 0); }
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
   var dokeos_xajax_handler = window.parent.oxajax;
 </script>';
 $lp_theme_css=$_SESSION['oLP']->get_theme();
-$scorm_css_header=true;
+$scorm_css_header = true;
 include_once '../inc/reduced_header.inc.php';
-//close the session immediately to avoid concurrent access problems
+// Close the session immediately to avoid concurrent access problems.
 session_write_close();
 ?>
-<body>
+<body dir="<?php echo api_get_text_direction(); ?>">
 <div id="msg_div_id">
 <?php
 echo $error;

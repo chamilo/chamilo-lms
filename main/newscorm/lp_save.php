@@ -8,9 +8,8 @@
  */
 
 /**
- * Init
+ * Initialization is to be done by lp_controller.php.
  */
-//done by lp_controller.php
 
 /**
  * Switching within the field to update

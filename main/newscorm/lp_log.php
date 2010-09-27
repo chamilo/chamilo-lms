@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Container script for the messages coming from the learnpath object. Initially, this wasn't supposed to be
  * a separate file but rather some text included in lp_view.php, but SCORM involves loading a script that
@@ -14,11 +15,10 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Script
- */
-//flag to allow for anonymous user - needs to be set before global.inc.php
+
+// Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
+
 require_once 'back_compat.inc.php';
 
 $htmlHeadXtra[] = '<script language="javascript">
@@ -29,14 +29,14 @@ function cleanlog(){
 }
 </script>';
 
-$scorm_css_header=true;
-$display_mode='';
-$lp_theme_log=true;
+$scorm_css_header = true;
+$display_mode = '';
+$lp_theme_log = true;
 include_once '../inc/reduced_header.inc.php';
 ?>
-<body>
+<body dir="<?php echo api_get_text_direction(); ?>">
 <div id="log_content">
 </div>
-<div style="color: white;" onclick="cleanlog();">.</div>
+<div style="color: white;" onclick="javascript: cleanlog();">.</div>
 </body>
 </html>

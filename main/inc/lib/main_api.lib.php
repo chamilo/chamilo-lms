@@ -885,6 +885,14 @@ function api_get_real_course_id() {
 }
 
 /**
+ * Returns the current course id (integer)
+ */
+function api_get_course_int_id() {
+	return $GLOBALS['_real_cid'];
+}
+
+
+/**
  * Returns the current course directory
  *
  * This function relies on api_get_course_info()
@@ -4633,4 +4641,3 @@ function api_get_template($path_type = 'rel') {
     $actived_theme_path = $template_path.$actived_theme.DIRECTORY_SEPARATOR;
     return $actived_theme_path;
 }
-

@@ -5,19 +5,21 @@
 *	Exercise class: This class allows to instantiate an object of type Exercise
 *	@package dokeos.exercise
 * 	@author Olivier Brouckaert
+* 	@author Julio Montoya Cleaning exercises
 * 	@version $Id: exercise.class.php 22046 2009-07-14 01:45:19Z ivantcholakov $
 */
 
 define('ALL_ON_ONE_PAGE',1);
 define('ONE_PER_PAGE',2);
+//0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback
 define('EXERCISE_FEEDBACK_TYPE_END',0);
 define('EXERCISE_FEEDBACK_TYPE_DIRECT',1);
 define('EXERCISE_FEEDBACK_TYPE_EXAM',2);
 
 if(!class_exists('Exercise')):
 
-class Exercise
-{
+class Exercise {
+	
 	public $id;
 	public $exercise;
 	public $description;
@@ -34,27 +36,27 @@ class Exercise
 	public $questionList;  // array with the list of this exercise's questions
 	public $results_disabled;
   	public $expired_time;
+  	
 	/**
-	 * constructor of the class
+	 * Constructor of the class
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function Exercise()
-	{
-		$this->id=0;
-		$this->exercise='';
-		$this->description='';
-		$this->sound='';
-		$this->type=1;
-		$this->random=0;
-		$this->random_answers=0;
-		$this->active=1;
-		$this->questionList=array();
-		$this->timeLimit = 0;
-		$this->end_time = '0000-00-00 00:00:00';
-		$this->start_time = '0000-00-00 00:00:00';
-		$this->results_disabled =1;
-		$this->expired_time = '0000-00-00 00:00:00';
+	function Exercise() {
+		$this->id				= 0;
+		$this->exercise			= '';
+		$this->description		= '';
+		$this->sound			= '';
+		$this->type				= 1;
+		$this->random			= 0;
+		$this->random_answers	= 0;
+		$this->active			= 1;
+		$this->questionList		= array();
+		$this->timeLimit 		= 0;
+		$this->end_time 		= '0000-00-00 00:00:00';
+		$this->start_time 		= '0000-00-00 00:00:00';
+		$this->results_disabled = 1;
+		$this->expired_time 	= '0000-00-00 00:00:00';
 	}
 
 	/**
@@ -64,12 +66,7 @@ class Exercise
 	 * @param - integer $id - exercise ID
 	 * @return - boolean - true if exercise exists, otherwise false
 	 */
-	function read($id)
-	{
-		global $_course;
-       	global $_configuration;
-        global $questionList;
-
+	function read($id) {
 	    $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     	$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -79,53 +76,50 @@ class Exercise
 		$result=Database::query($sql);
 
 		// if the exercise has been found
-		if($object=Database::fetch_object($result))
-		{
-			$this->id=$id;
-			$this->exercise=$object->title;
-			$this->description=$object->description;
-			$this->sound=$object->sound;
-			$this->type=$object->type;
-			$this->random=$object->random;
-			$this->random_answers=$object->random_answers;
-			$this->active=$object->active;
-			$this->results_disabled =$object->results_disabled;
-			$this->attempts = $object->max_attempt;
-			$this->feedbacktype = $object->feedback_type;
-			$this->end_time = $object->end_time;
-      		$this->start_time = $object->start_time;
-      		$this->expired_time = $object->expired_time;
-			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
+		if ($object=Database::fetch_object($result)) {
+			$this->id				= $id;
+			$this->exercise			= $object->title;
+			$this->description		= $object->description;
+			$this->sound			= $object->sound;
+			$this->type				= $object->type;
+			$this->random			= $object->random;
+			$this->random_answers	= $object->random_answers;
+			$this->active			= $object->active;
+			$this->results_disabled = $object->results_disabled;
+			$this->attempts 		= $object->max_attempt;
+			$this->feedbacktype 	= $object->feedback_type;
+			
+			if ($object->end_time != '0000-00-00 00:00:00') {
+				$this->end_time 		= api_get_local_time($object->end_time); 
+			}
+			if ($object->start_time != '0000-00-00 00:00:00') {
+      			$this->start_time 		= api_get_local_time($object->start_time);
+			}
+      		$this->expired_time 	= $object->expired_time; //control time
+      		
+			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
+			
 			$result=Database::query($sql);
 
 			// fills the array with the question ID for this exercise
 			// the key of the array is the question position
-			while($object=Database::fetch_object($result))
-			{
-				// makes sure that the question position is unique
-				while(isset($this->questionList[$object->question_order]))
-				{
-					$object->question_order++;
-				}
-
-				$this->questionList[$object->question_order]=$object->question_id;
+			 
+			while ($new_object = Database::fetch_object($result)) {
+				$this->questionList[$new_object->question_order]=  $new_object->question_id;
 			}
-			//var_dump($this->end_time,$object->start_time);
-			if($this->random > 0){
-          		$this->questionList = $this->selectRandomList();
-          	}
+					
             //overload questions list with recorded questions list
             //load questions only for exercises of type 'one question per page'
             //this is needed only is there is no questions
             //
-            if ($this->type == 2 && $_configuration['live_exercise_tracking'] && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED'))
-	        {
+            // @todo not sure were in the code this is used
+            global $_configuration, $questionList;
+            if ($this->type == 2 && $_configuration['live_exercise_tracking'] && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED')) {
             	//if(empty($_SESSION['questionList']))
             	$this->questionList = $questionList;
             }
 			return true;
 		}
-
 		// exercise not found
 		return false;
 	}
@@ -136,8 +130,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @return - integer - exercise ID
 	 */
-	function selectId()
-	{
+	function selectId() {
 		return $this->id;
 	}
 
@@ -147,8 +140,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @return - string - exercise title
 	 */
-	function selectTitle()
-	{
+	function selectTitle() {
 		return $this->exercise;
 	}
 
@@ -157,8 +149,7 @@ class Exercise
 	 *
 	 * @return - numeric - exercise attempts
 	 */
-	function selectAttempts()
-	{
+	function selectAttempts() {
 		return $this->attempts;
 	}
 
@@ -166,8 +157,7 @@ class Exercise
 	 *  0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback
 	 * @return - numeric - exercise attempts
 	 */
-	function selectFeedbackType()
-	{
+	function selectFeedbackType() {
 		return $this->feedbacktype;
 	}
 
@@ -175,8 +165,7 @@ class Exercise
 	/**
 	 * returns the time limit
 	 */
-	function selectTimeLimit()
-	{
+	function selectTimeLimit() {
 		return $this->timeLimit;
 	}
 
@@ -186,8 +175,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @return - string - exercise description
 	 */
-	function selectDescription()
-	{
+	function selectDescription() {
 		return $this->description;
 	}
 
@@ -197,8 +185,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @return - string - exercise description
 	 */
-	function selectSound()
-	{
+	function selectSound() {
 		return $this->sound;
 	}
 
@@ -208,8 +195,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @return - integer - exercise type
 	 */
-	function selectType()
-	{
+	function selectType() {
 		return $this->type;
 	}
 
@@ -219,8 +205,7 @@ class Exercise
 	 * @author - Carlos Vargas
 	 * @return - integer - results disabled exercise
 	 */
-	function selectResultsDisabled()
-	{
+	function selectResultsDisabled() {
 		return $this->results_disabled;
 	}
 
@@ -230,12 +215,10 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @return - integer - 0 if not random, otherwise the draws
 	 */
-	function isRandom()
-	{
+	function isRandom() {
 		if($this->random > 0){
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
 	}
@@ -245,11 +228,8 @@ class Exercise
 	 *
 	 * @author - Juan Carlos Ra�a
 	 */
-	function selectRandomAnswers()
-	{
-
+	function selectRandomAnswers() {
 		$this->random_answers;
-
 		return $this->random_answers;
 	}
 
@@ -257,8 +237,7 @@ class Exercise
 	/**
 	 * Same as isRandom() but has a name applied to values different than 0 or 1
 	 */
-	function getShuffle()
-	{
+	function getShuffle() {
 		return $this->random;
 	}
 
@@ -268,8 +247,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @return - boolean - true if enabled, otherwise false
 	 */
-	function selectStatus()
-	{
+	function selectStatus() {
 		return $this->active;
 	}
 
@@ -279,8 +257,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @return - array - question ID list
 	 */
-	function selectQuestionList()
-	{
+	function selectQuestionList() {
 		return $this->questionList;
 	}
 
@@ -290,56 +267,41 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @return - integer - number of questions
 	 */
-	function selectNbrQuestions()
-	{
+	function selectNbrQuestions() {
 		return sizeof($this->questionList);
 	}
 
 	/**
-     * selects questions randomly in the question list
+     * Selects questions randomly in the question list
 	 *
 	 * @author - Olivier Brouckaert
 	 * @return - array - if the exercise is not set to take questions randomly, returns the question list
 	 *					 without randomizing, otherwise, returns the list with questions selected randomly
      */
-	function selectRandomList()
-	{
-		$nbQuestions = $this->selectNbrQuestions();
-		$temp_list = $this->questionList;
-		//error_log(print_r($temp_list,true));
-		//error_log(count($temp_list));
-		if (count($temp_list)<>0) {
-			shuffle($temp_list);
-			return array_combine(range(1,$nbQuestions),$temp_list);
-		}
-
-
-		$nbQuestions = $this->selectNbrQuestions();
-
+	function selectRandomList() {
+		$nbQuestions	= $this->selectNbrQuestions();
+		$temp_list		= $this->questionList;
+		
 		//Not a random exercise, or if there are not at least 2 questions
-		if($this->random == 0 || $nbQuestions < 2)
-		{
+		if($this->random == 0 || $nbQuestions < 2) {
 			return $this->questionList;
 		}
-
-		$randQuestionList = array();
-		$alreadyChosen = array();
-
-		for($i=0; $i < $this->random; $i++)
-		{
-			if($i < $nbQuestions){
-				do
-				{
-					$rand=rand(1,$nbQuestions);
-				}
-				while(in_array($rand,$alreadyChosen));
-
-				$alreadyChosen[]=$rand;
-				$randQuestionList[$rand] = $this->questionList[$rand];
-			}
-		}
-
-		return $randQuestionList;
+		 
+		if ($nbQuestions != 0) {
+			shuffle($temp_list);
+			$my_random_list = array_combine(range(1,$nbQuestions),$temp_list);			
+			$my_question_list = array();
+			$i = 0;
+			foreach ($my_random_list as $item) {
+	            if ($i < $this->random) {
+	                $my_question_list[$i] = $item;
+	            } else {
+	                break;
+	            }
+	            $i++;
+	        }
+			return $my_question_list;
+		}	
 	}
 
 	/**
@@ -349,8 +311,7 @@ class Exercise
 	 * @param - integer $questionId - question ID
 	 * @return - boolean - true if in the list, otherwise false
 	 */
-	function isInList($questionId)
-	{
+	function isInList($questionId) {
 		if (is_array($this->questionList))
 			return in_array($questionId,$this->questionList);
 		else
@@ -363,8 +324,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @param - string $title - exercise title
 	 */
-	function updateTitle($title)
-	{
+	function updateTitle($title) {
 		$this->exercise=$title;
 	}
 
@@ -373,8 +333,7 @@ class Exercise
 	 *
 	 * @param - numeric $attempts - exercise max attempts
 	 */
-	function updateAttempts($attempts)
-	{
+	function updateAttempts($attempts) {
 		$this->attempts=$attempts;
 	}
 
@@ -384,8 +343,7 @@ class Exercise
 	 *
 	 * @param - numeric $attempts - exercise max attempts
 	 */
-	function updateFeedbackType($feedback_type)
-	{
+	function updateFeedbackType($feedback_type) {
 		$this->feedbacktype=$feedback_type;
 	}
 
@@ -395,8 +353,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @param - string $description - exercise description
 	 */
-	function updateDescription($description)
-	{
+	function updateDescription($description) {
 		$this->description=$description;
 	}
 
@@ -406,8 +363,7 @@ class Exercise
 	* @author - Isaac flores
 	* @param - int The expired time of the quiz
 	*/
-	function updateExpiredTime($expired_time)
-	{
+	function updateExpiredTime($expired_time) {
 	$this->expired_time = $expired_time;
 	}
 
@@ -418,45 +374,39 @@ class Exercise
 	 * @param - string $sound - exercise sound file
 	 * @param - string $delete - ask to delete the file
 	 */
-	function updateSound($sound,$delete)
-	{
+	function updateSound($sound,$delete) {
 		global $audioPath, $documentPath,$_course, $_user;
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-		if($sound['size'] && (strstr($sound['type'],'audio') || strstr($sound['type'],'video')))
-		{
+		if ($sound['size'] && (strstr($sound['type'],'audio') || strstr($sound['type'],'video'))) {
 			$this->sound=$sound['name'];
 
-			if(@move_uploaded_file($sound['tmp_name'],$audioPath.'/'.$this->sound))
-			{
+			if (@move_uploaded_file($sound['tmp_name'],$audioPath.'/'.$this->sound)) {
 				$query="SELECT 1 FROM $TBL_DOCUMENT "
             ." WHERE path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
 				$result=Database::query($query);
 
-				if(!Database::num_rows($result))
-				{
-        /*$query="INSERT INTO $TBL_DOCUMENT(path,filetype) VALUES "
-            ." ('".str_replace($documentPath,'',$audioPath).'/'.$this->sound."','file')";
-        Database::query($query);*/
-        $id = add_document($_course,str_replace($documentPath,'',$audioPath).'/'.$this->sound,'file',$sound['size'],$sound['name']);
-
-        //$id = Database::insert_id();
-        //$time = time();
-        //$time = date("Y-m-d H:i:s", $time);
-        // insert into the item_property table, using default visibility of "visible"
-        /*$query = "INSERT INTO $TBL_ITEM_PROPERTY "
-                ."(tool, ref, insert_user_id,to_group_id, insert_date, lastedit_date, lastedit_type) "
-                ." VALUES "
-                ."('".TOOL_DOCUMENT."', $id, $_user['user_id'], 0, '$time', '$time', 'DocumentAdded' )";
-        Database::query($query);*/
-        api_item_property_update($_course, TOOL_DOCUMENT, $id, 'DocumentAdded',$_user['user_id']);
-        item_property_update_on_folder($_course,str_replace($documentPath,'',$audioPath),$_user['user_id']);
+				if(!Database::num_rows($result)) {
+			        /*$query="INSERT INTO $TBL_DOCUMENT(path,filetype) VALUES "
+			            ." ('".str_replace($documentPath,'',$audioPath).'/'.$this->sound."','file')";
+			        Database::query($query);*/
+			        $id = add_document($_course,str_replace($documentPath,'',$audioPath).'/'.$this->sound,'file',$sound['size'],$sound['name']);
+			
+			        //$id = Database::insert_id();
+			        //$time = time();
+			        //$time = date("Y-m-d H:i:s", $time);
+			        // insert into the item_property table, using default visibility of "visible"
+			        /*$query = "INSERT INTO $TBL_ITEM_PROPERTY "
+			                ."(tool, ref, insert_user_id,to_group_id, insert_date, lastedit_date, lastedit_type) "
+			                ." VALUES "
+			                ."('".TOOL_DOCUMENT."', $id, $_user['user_id'], 0, '$time', '$time', 'DocumentAdded' )";
+			        Database::query($query);*/
+			        api_item_property_update($_course, TOOL_DOCUMENT, $id, 'DocumentAdded',$_user['user_id']);
+			        item_property_update_on_folder($_course,str_replace($documentPath,'',$audioPath),$_user['user_id']);
 				}
 			}
-		}
-		elseif($delete && is_file($audioPath.'/'.$this->sound))
-		{
+		} elseif($delete && is_file($audioPath.'/'.$this->sound)) {
 			$this->sound='';
 		}
 	}
@@ -467,8 +417,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @param - integer $type - exercise type
 	 */
-	function updateType($type)
-	{
+	function updateType($type) {
 		$this->type=$type;
 	}
 
@@ -479,8 +428,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @param - integer $random - 0 if not random, otherwise the draws
 	 */
-	function setRandom($random)
-	{
+	function setRandom($random) {
 		$this->random=$random;
 	}
 
@@ -491,8 +439,7 @@ class Exercise
 	 * @author - Juan Carlos Ra�a
 	 * @param - integer $random_answers - random answers
 	 */
-	function updateRandomAnswers($random_answers)
-	{
+	function updateRandomAnswers($random_answers) {
 		$this->$random_answers = $random_answers;
 	}
 
@@ -501,8 +448,7 @@ class Exercise
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function enable()
-	{
+	function enable() {
 		$this->active=1;
 	}
 
@@ -511,13 +457,11 @@ class Exercise
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function disable()
-	{
+	function disable() {
 		$this->active=0;
 	}
 
-	function disable_results()
-	{
+	function disable_results() {
 		$this->results_disabled = true;
 	}
 
@@ -540,38 +484,37 @@ class Exercise
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function save($type_e='')
-	{
+	function save($type_e='') {
 		global $_course,$_user;
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
 
-		$id = $this->id;
-		$exercise = $this->exercise;
-		$description = $this->description;
-		$sound = $this->sound;
-		$type = $this->type;
-		$attempts = $this->attempts;
-		$feedbacktype = $this->feedbacktype;
-		$random = $this->random;
+		$id 			= $this->id;
+		$exercise 		= $this->exercise;
+		$description 	= $this->description;
+		$sound 			= $this->sound;
+		$type 			= $this->type;
+		$attempts 		= $this->attempts;
+		$feedbacktype 	= $this->feedbacktype;
+		$random 		= $this->random;
 		$random_answers = $this->random_answers;
-		$active = $this->active;
-		$session_id = api_get_session_id();
-    	$expired_time = $this->expired_time;
+		$active 		= $this->active;
+		$session_id 	= api_get_session_id();    	
 
 		if ($feedbacktype==1){
 			$results_disabled = 1;
 		} else {
 			$results_disabled = intval($this->results_disabled);
 		}
-        $start_time = Database::escape_string($this->start_time);
-        $end_time = Database::escape_string($this->end_time);
+		
+		$expired_time = intval($this->expired_time);
+        $start_time = Database::escape_string(api_get_utc_datetime($this->start_time));
+        $end_time 	= Database::escape_string(api_get_utc_datetime($this->end_time));
 
-		// exercise already exists
+		// Exercise already exists
 		if($id) {
-
 			$sql="UPDATE $TBL_EXERCICES SET
 						title='".Database::escape_string($exercise)."',
 						description='".Database::escape_string($description)."'";
@@ -747,8 +690,7 @@ class Exercise
 	 * @author - Olivier Brouckaert
 	 * @param - integer $id - question ID to move down
 	 */
-	function moveDown($id)
-	{
+	function moveDown($id) {
 		// there is a bug with some version of PHP with the key and prev functions
 		// the script commented was tested in dev.dokeos.com with no success
 		// Instead of using prev and next this was change with arrays.
@@ -783,22 +725,18 @@ class Exercise
 		*/
 
 		$question_list =array();
-		foreach($this->questionList as $position=>$questionId)
-		{
+		foreach($this->questionList as $position=>$questionId) {
 			$question_list[]=	$questionId;
 		}
 		$len=count($question_list);
 		$orderlist=array_keys($this->questionList);
 
-		for($i=0;$i<$len;$i++)
-		{
+		for($i=0;$i<$len;$i++) {
 			$questionId = $question_list[$i];
-			if($questionId == $id)
-			{
+			if($questionId == $id) {
 				$pos1=$orderlist[$i+1];
 				$pos2 =$orderlist[$i];
-				if(!$pos2)
-				{
+				if(!$pos2) {
 					//echo 'cant move!';
 				}
 				break;
@@ -818,27 +756,19 @@ class Exercise
 	 * @param - integer $questionId - question ID
 	 * @return - boolean - true if the question has been added, otherwise false
 	 */
-	function addToList($questionId)
-	{
+	function addToList($questionId) {
 		// checks if the question ID is not in the list
-		if(!$this->isInList($questionId))
-		{
+		if(!$this->isInList($questionId)) {
 			// selects the max position
-			if(!$this->selectNbrQuestions())
-			{
+			if(!$this->selectNbrQuestions()) {
 				$pos=1;
-			}
-			else
-			{
+			} else {
 				if (is_array($this->questionList))
 					$pos=max(array_keys($this->questionList))+1;
 			}
-
 			$this->questionList[$pos]=$questionId;
-
 			return true;
 		}
-
 		return false;
 	}
 
@@ -849,18 +779,14 @@ class Exercise
 	 * @param - integer $questionId - question ID
 	 * @return - boolean - true if the question has been removed, otherwise false
 	 */
-	function removeFromList($questionId)
-	{
+	function removeFromList($questionId) {
 		// searches the position of the question ID in the list
 		$pos=array_search($questionId,$this->questionList);
 
 		// question not found
-		if($pos === false)
-		{
+		if($pos === false) {
 			return false;
-		}
-		else
-		{
+		} else {
 			// deletes the position from the array containing the wanted question ID
 			unset($this->questionList[$pos]);
 
@@ -874,7 +800,7 @@ class Exercise
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function delete(){
+	function delete() {
 		global $_course,$_user;
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE id='".Database::escape_string($this->id)."'";
@@ -890,8 +816,7 @@ class Exercise
 	 * Creates the form to create / edit an exercise
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
-	function createForm ($form, $type='full')
-	{
+	function createForm ($form, $type='full') {
 		global $id;
 		if(empty($type)){
 			$type='full';
@@ -1017,7 +942,6 @@ class Exercise
 
 
       		$check_option=$this -> selectType();
-			//      var_dump($check_option);
 
 			if ($check_option==1 && isset($_GET['exerciseId'])) {
 				$diplay = 'none';
@@ -1146,8 +1070,7 @@ class Exercise
 	 * function which process the creation of exercises
 	 * @param FormValidator $form the formvalidator instance
 	 */
-	function processCreation($form,$type='')
-	{
+	function processCreation($form,$type='') {
 
 		$this -> updateTitle($form -> getSubmitValue('exerciseTitle'));
 		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
@@ -1170,11 +1093,10 @@ class Exercise
         }
 
 		if($form -> getSubmitValue('enabletimercontrol') == 1) {
-			   $expired_total_time = $form -> getSubmitValue('enabletimercontroltotalminutes');
-			   if ($this->expired_time == 0) {
-				   $this->expired_time = $expired_total_time;
-			   }
-
+		   $expired_total_time = $form -> getSubmitValue('enabletimercontroltotalminutes');
+		   if ($this->expired_time == 0) {
+			   $this->expired_time = $expired_total_time;
+		   }
 		} else {
 			$this->expired_time = 0;
 		}
@@ -1448,10 +1370,610 @@ class Exercise
 	 *
 	 * @param - string $status - exercise status
 	 */
-	function updateStatus($status)
-	{
+	function updateStatus($status) {
 		$this->active = $status;
 	}
+	
+	public function get_stat_track_exercise_info($lp_id = 0, $lp_item_id = 0) {		
+		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		if (empty($lp_id)) {
+			$lp_id = 0;
+		}		
+		if (empty($lp_item_id)) {
+			$lp_item_id = 0;
+		}		
+		$condition = ' WHERE exe_exo_id 	= ' . "'" . $this->id . "'" .' AND 
+					   exe_user_id 			= ' . "'" . api_get_user_id() . "'" . ' AND 
+					   exe_cours_id 		= ' . "'" . api_get_course_id() . "'" . ' AND 
+					   status 				= ' . "'incomplete'" . ' AND 
+					   orig_lp_id 			= ' . "'" . $lp_id . "'" . ' AND 
+					   orig_lp_item_id 		= ' . "'" . $lp_item_id . "'" . ' AND 
+					   session_id 			= ' . "'" . api_get_session_id() . "' LIMIT 1"; //Adding limit 1 just in case
+					   
+		$sql_track = 'SELECT * FROM '.$track_exercises.$condition;
+				
+		$result = Database::query($sql_track);
+		$new_array = array();
+		if (Database::num_rows($result) > 0 ) {
+			$new_array = Database::fetch_array($result, 'ASSOC');
+		}			
+		return $new_array;
+	}
+	
+	
+	public function save_stat_track_exercise_info($clock_expired_time = 0, $safe_lp_id = 0, $safe_lp_item_id = 0, $questionList = array()) {
+		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		
+		if (empty($safe_lp_id)) {
+			$safe_lp_id = 0;
+		}		
+		if (empty($safe_lp_item_id)) {
+			$safe_lp_item_id = 0;
+		}
+		if (empty($clock_expired_time)) {
+			$clock_expired_time = 0;
+		}		
+		if ($this->expired_time != 0) {
+        	$sql_fields = "expired_time_control, ";        	
+        	$sql_fields_values = "'"."$clock_expired_time"."',";
+        } else {
+       		$sql_fields = "";
+       		$sql_fields_values = "";
+        }		
+        if ($this->type == ONE_PER_PAGE) {
+            $sql = "INSERT INTO $track_exercises($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
+                    VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "','" . api_get_utc_datetime() . "',$safe_lp_id,$safe_lp_item_id)";
+        } else {
+            $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
+                    VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . api_get_utc_datetime() . "',$safe_lp_id,$safe_lp_item_id)";
+        }
+        Database::query($sql);
+	}	
+	
+	public function show_button($nbrQuestions, $questionNum) {
+		$html = '';
+	    $html =  '<div style="margin-top:-10px;">';	
+	    $confirmation_alert = $this->type == 1? " onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\" ":"";	    
+	    $submit_btn = '<button class="next" type="submit" name="submit" name="submit_save" id="submit_save" '.$confirmation_alert.' >';
+		$hotspot_get = $_POST['hotspot'];
+				
+	    if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {
+	        $submit_btn = '';
+	        $html .='<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.js" type="text/javascript"></script>';
+	        $html .='<style type="text/css" media="all">@import "' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css";</style>';
+	    } else {	    	
+	        if (api_is_allowed_to_session_edit() ) {	        	
+	            if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
+	                $submit_btn .= get_lang('ValidateAnswer');
+	       			$name_btn 	= get_lang('ValidateAnswer');
+	            } else {
+	                $submit_btn .= get_lang('NextQuestion');
+	        		$name_btn = get_lang('NextQuestion');
+	            }
+	            $submit_btn .= '</button>';	            
+				if ($this->expired_time != 0) {
+			    	$html .= $submit_btn ='<button class="next" type="submit" id="submit_save" value="'.$name_btn.'" name="submit_save"/>'.$name_btn.'</button>';
+			    } else {
+			    	$html .= $submit_btn;
+			    }
+	        }
+	    }
+	    $html .= '</div>';  //margin top -10
+	    return $html;	    
+	}
+	
+	
+	/**
+	 * So the time control will work
+	 */
+	public function show_time_control_js($time_left) {
+		$time_left = intval($time_left);
+		return "<script type=\"text/javascript\">
+	
+			$(document).ready(function(){
+	
+			function get_expired_date_string(expired_time) {
+		        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+		        var day, month, year, hours, minutes, seconds, date_string;
+		        var obj_date = new Date(expired_time);
+		        day     = obj_date.getDate();
+		        if (day < 10) day = '0' + day;
+			        month   = obj_date.getMonth();
+			        year    = obj_date.getFullYear();
+			        hours   = obj_date.getHours();
+		        if (hours < 10) hours = '0' + hours;
+		        minutes = obj_date.getMinutes();
+		        if (minutes < 10) minutes = '0' + minutes;
+		        seconds = obj_date.getSeconds();
+		        if (seconds < 10) seconds = '0' + seconds;
+		        date_string = months[month] +' ' + day + ', ' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+		        return date_string;
+		      }
+	
+	      function onExpiredTimeExercise() { 
+	        $('#wrapper-clock').hide(); $('#exercise_form').hide();
+	        $('#expired-message-id').show();
+	        $('#exercise_form').submit();	     		
+	      }
+	
+	      var current_time = new Date().getTime();
+	      var time_left    = parseInt(".$time_left.");
+	      var expired_time = current_time + (time_left*1000);
+	      var expired_date = get_expired_date_string(expired_time);
+	
+	       $('#text-content').epiclock({
+	         mode: EC_COUNTDOWN,
+	         format: 'x{ : } i{ : } s{}',
+	         target: expired_date,
+	         onTimer: function(){ onExpiredTimeExercise(); }
+	       }).clocks(EC_RUN);
+	       
+	       $('#submit_save').click(function () {});
+	    });
+	    </script>";
+	}
+	
+	/**
+	 * Lp javascript for hotspots
+	 */
+	public function show_lp_javascript() {
+		
+		return "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
+                    <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
+                    <script language=\"JavaScript\" type=\"text/javascript\">
+                    <!--
+                    // -----------------------------------------------------------------------------
+                    // Globals
+                    // Major version of Flash required
+                    var requiredMajorVersion = 7;
+                    // Minor version of Flash required
+                    var requiredMinorVersion = 0;
+                    // Minor version of Flash required
+                    var requiredRevision = 0;
+                    // the version of javascript supported
+                    var jsVersion = 1.0;
+                    // -----------------------------------------------------------------------------
+                    // -->
+                    </script>
+                    <script language=\"VBScript\" type=\"text/vbscript\">
+                    <!-- // Visual basic helper required to detect Flash Player ActiveX control version information
+                    Function VBGetSwfVer(i)
+                      on error resume next
+                      Dim swControl, swVersion
+                      swVersion = 0
+
+                      set swControl = CreateObject(\"ShockwaveFlash.ShockwaveFlash.\" + CStr(i))
+                      if (IsObject(swControl)) then
+                        swVersion = swControl.GetVariable(\"\$version\")
+                      end if
+                      VBGetSwfVer = swVersion
+                    End Function
+                    // -->
+                    </script>
+
+                    <script language=\"JavaScript1.1\" type=\"text/javascript\">
+                    <!-- // Detect Client Browser type
+                    var isIE  = (navigator.appVersion.indexOf(\"MSIE\") != -1) ? true : false;
+                    var isWin = (navigator.appVersion.toLowerCase().indexOf(\"win\") != -1) ? true : false;
+                    var isOpera = (navigator.userAgent.indexOf(\"Opera\") != -1) ? true : false;
+                    jsVersion = 1.1;
+                    // JavaScript helper required to detect Flash Player PlugIn version information
+                    function JSGetSwfVer(i){
+                        // NS/Opera version >= 3 check for Flash plugin in plugin array
+                        if (navigator.plugins != null && navigator.plugins.length > 0) {
+                            if (navigator.plugins[\"Shockwave Flash 2.0\"] || navigator.plugins[\"Shockwave Flash\"]) {
+                                var swVer2 = navigator.plugins[\"Shockwave Flash 2.0\"] ? \" 2.0\" : \"\";
+                                var flashDescription = navigator.plugins[\"Shockwave Flash\" + swVer2].description;
+                                descArray = flashDescription.split(\" \");
+                                tempArrayMajor = descArray[2].split(\".\");
+                                versionMajor = tempArrayMajor[0];
+                                versionMinor = tempArrayMajor[1];
+                                if ( descArray[3] != \"\" ) {
+                                    tempArrayMinor = descArray[3].split(\"r\");
+                                } else {
+                                    tempArrayMinor = descArray[4].split(\"r\");
+                                }
+                                versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
+                                flashVer = versionMajor + \".\" + versionMinor + \".\" + versionRevision;
+                            } else {
+                                flashVer = -1;
+                            }
+                        }
+                        // MSN/WebTV 2.6 supports Flash 4
+                        else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.6\") != -1) flashVer = 4;
+                        // WebTV 2.5 supports Flash 3
+                        else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.5\") != -1) flashVer = 3;
+                        // older WebTV supports Flash 2
+                        else if (navigator.userAgent.toLowerCase().indexOf(\"webtv\") != -1) flashVer = 2;
+                        // Can't detect in all other cases
+                        else {
+
+                            flashVer = -1;
+                        }
+                        return flashVer;
+                    }
+                    // When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
+                    function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
+                    {
+                        reqVer = parseFloat(reqMajorVer + \".\" + reqRevision);
+                        // loop backwards through the versions until we find the newest version
+                        for (i=25;i>0;i--) {
+                            if (isIE && isWin && !isOpera) {
+                                versionStr = VBGetSwfVer(i);
+                            } else {
+                                versionStr = JSGetSwfVer(i);
+                            }
+                            if (versionStr == -1 ) {
+                                return false;
+                            } else if (versionStr != 0) {
+                                if(isIE && isWin && !isOpera) {
+                                    tempArray         = versionStr.split(\" \");
+                                    tempString        = tempArray[1];
+                                    versionArray      = tempString .split(\",\");
+                                } else {
+                                    versionArray      = versionStr.split(\".\");
+                                }
+                                versionMajor      = versionArray[0];
+                                versionMinor      = versionArray[1];
+                                versionRevision   = versionArray[2];
+
+                                versionString     = versionMajor + \".\" + versionRevision;   // 7.0r24 == 7.24
+                                versionNum        = parseFloat(versionString);
+                                // is the major.revision >= requested major.revision AND the minor version >= requested minor
+                                if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
+                                    return true;
+                                } else {
+                                    return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
+                                }
+                            }
+                        }
+                    }
+                    // -->
+                    </script>";
+	}
+	
+	
+	function manage_answer($exeId, $questionId, $choice) {
+		global $_configuration;
+		$exeId = intval($exeId);
+		//require_once 'question.class.php';
+        //require_once 'answer.class.php';
+                    
+     	// Creates a temporary Question object
+        $objQuestionTmp = Question :: read($questionId);
+
+        $questionName 			= $objQuestionTmp->selectTitle();
+        $questionDescription 	= $objQuestionTmp->selectDescription();
+        $questionWeighting 		= $objQuestionTmp->selectWeighting();
+        $answerType 			= $objQuestionTmp->selectType();
+        $quesId 				= $objQuestionTmp->selectId(); //added by priya saini
+        $totalWeighting 		= 0;
+        $totalScore				= 0;
+
+        // Destruction of the Question object
+        unset ($objQuestionTmp);
+        error_log('$questionWeighting '.$questionWeighting);
+
+        if (isset ($_POST['hotspot']) && isset($_POST['hotspot'][$questionId])) {
+            $exerciseResultCoordinates[$questionId] = $_POST['hotspot'][$questionId];
+        }
+
+        // construction of the Answer object
+        $objAnswerTmp = new Answer($questionId);
+        $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
+        $questionScore = 0;
+        if ($answerType == FREE_ANSWER) {
+            $nbrAnswers = 1;
+        }        
+		$real_answers = array();
+        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+            $answer = $objAnswerTmp->selectAnswer($answerId);
+            $answerComment = $objAnswerTmp->selectComment($answerId);
+            $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+            $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
+            $numAnswer=$objAnswerTmp->selectAutoId($answerId);
+            switch ($answerType) {
+                // for unique answer
+                case UNIQUE_ANSWER :
+                    $studentChoice=($choice == $numAnswer)?1:0;
+                    if ($studentChoice) {
+                        $questionScore+=$answerWeighting;
+                        $totalScore+=$answerWeighting;
+                    }
+                    break;
+                    // for multiple answers
+                case MULTIPLE_ANSWER :
+                    $studentChoice=$choice[$numAnswer];
+                    if ($studentChoice) {
+                        $questionScore+=$answerWeighting;
+                        $totalScore+=$answerWeighting;
+                    }
+                    break;
+                case MULTIPLE_ANSWER_COMBINATION:
+                    $studentChoice=$choice[$numAnswer];
+
+                    if ($answerCorrect == 1) {
+                        if ($studentChoice) {
+                            $real_answers[$answerId] = true;
+                        } else {
+                            $real_answers[$answerId] = false;
+                        }
+                    } else {
+                        if ($studentChoice) {
+                            $real_answers[$answerId] = false;
+                        } else {
+                            $real_answers[$answerId] = true;
+                        }
+                    }
+
+                    $final_answer = true;
+                    foreach($real_answers as $my_answer) {
+                        if (!$my_answer) {
+                            $final_answer = false;
+                        }
+                    }
+                    break;
+                    // for fill in the blanks
+                case FILL_IN_BLANKS :
+                
+                    // the question is encoded like this
+                    // [A] B [C] D [E] F::10,10,10@1
+                    // number 1 before the "@" means that is a switchable fill in blank question
+                    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
+                    // means that is a normal fill blank question
+
+                    // first we explode the "::"
+                    $pre_array = explode('::', $answer);
+
+                    // is switchable fill blank or not
+                    $last = count($pre_array) - 1;
+                    $is_set_switchable = explode('@', $pre_array[$last]);
+
+                    $switchable_answer_set = false;
+                    if (isset ($is_set_switchable[1]) && $is_set_switchable[1] == 1) {
+                        $switchable_answer_set = true;
+                    }
+
+                    $answer = '';
+                    for ($k = 0; $k < $last; $k++) {
+                        $answer .= $pre_array[$k];
+                    }
+
+                    // splits weightings that are joined with a comma
+                    $answerWeighting = explode(',', $is_set_switchable[0]);
+
+                    // we save the answer because it will be modified
+                    //$temp = $answer;
+                    $temp = text_filter($answer);
+
+                    /* // Deprecated code
+                    // TeX parsing
+                    // 1. find everything between the [tex] and [/tex] tags
+                    $startlocations = api_strpos($temp, '[tex]');
+                    $endlocations = api_strpos($temp, '[/tex]');
+
+                    if ($startlocations !== false && $endlocations !== false) {
+                        $texstring = api_substr($temp, $startlocations, $endlocations - $startlocations +6);
+                        // 2. replace this by {texcode}
+                        $temp = str_replace($texstring, '{texcode}', $temp);
+                    }
+                    */
+
+                    $answer = '';
+                    $j = 0;
+
+                    //initialise answer tags
+                    $user_tags = array ();
+                    $correct_tags = array ();
+                    $real_text = array ();
+                    // the loop will stop at the end of the text
+                    while (1) {
+                        // quits the loop if there are no more blanks (detect '[')
+                        if (($pos = api_strpos($temp, '[')) === false) {
+                            // adds the end of the text
+                            $answer = $temp;
+                            /* // Deprecated code
+                            // TeX parsing - replacement of texcode tags
+                            $texstring = api_parse_tex($texstring);
+                            $answer = str_replace("{texcode}", $texstring, $answer);
+                            */
+                            $real_text[] = $answer;
+                            break; //no more "blanks", quit the loop
+                        }
+                        // adds the piece of text that is before the blank
+                        //and ends with '[' into a general storage array
+                        $real_text[] = api_substr($temp, 0, $pos +1);
+                        $answer .= api_substr($temp, 0, $pos +1);
+                        //take the string remaining (after the last "[" we found)
+                        $temp = api_substr($temp, $pos +1);
+                        // quit the loop if there are no more blanks, and update $pos to the position of next ']'
+                        if (($pos = api_strpos($temp, ']')) === false) {
+                            // adds the end of the text
+                            $answer .= $temp;
+                            break;
+                        }
+                        $choice[$j] = trim($choice[$j]);
+                        $user_tags[] = api_strtolower($choice[$j]);
+                        //put the contents of the [] answer tag into correct_tags[]
+                        $correct_tags[] = api_strtolower(substr($temp, 0, $pos));
+                        $j++;
+                        $temp = api_substr($temp, $pos +1);
+                        //$answer .= ']';
+                    }
+
+                    $answer = '';
+                    $real_correct_tags = $correct_tags;
+                    $chosen_list = array ();
+
+                    for ($i = 0; $i < count($real_correct_tags); $i++) {
+                        if ($i == 0) {
+                            $answer .= $real_text[0];
+                        }
+
+                        if (!$switchable_answer_set) {
+                        	//needed to parse ' and " characters
+                        	$user_tags[$i] = stripslashes($user_tags[$i]);
+                            if ($correct_tags[$i] == $user_tags[$i]) {
+                                // gives the related weighting to the student
+                                $questionScore += $answerWeighting[$i];
+                                // increments total score
+                                $totalScore += $answerWeighting[$i];
+                                // adds the word in green at the end of the string
+                                $answer .= $correct_tags[$i];
+                            }
+                            // else if the word entered by the student IS NOT the same as the one defined by the professor
+                            elseif (!empty ($user_tags[$i])) {
+                                // adds the word in red at the end of the string, and strikes it
+                                $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
+                            } else {
+                                // adds a tabulation if no word has been typed by the student
+                                $answer .= '&nbsp;&nbsp;&nbsp;';
+                            }
+                        } else {
+                            // switchable fill in the blanks
+                            if (in_array($user_tags[$i], $correct_tags)) {
+                                $chosen_list[] = $user_tags[$i];
+                                $correct_tags = array_diff($correct_tags, $chosen_list);
+
+                                // gives the related weighting to the student
+                                $questionScore += $answerWeighting[$i];
+                                // increments total score
+                                $totalScore += $answerWeighting[$i];
+                                // adds the word in green at the end of the string
+                                $answer .= $user_tags[$i];
+                            }
+                            elseif (!empty ($user_tags[$i])) {
+                                // else if the word entered by the student IS NOT the same as the one defined by the professor
+                                // adds the word in red at the end of the string, and strikes it
+                                $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
+                            } else {
+                                // adds a tabulation if no word has been typed by the student
+                                $answer .= '&nbsp;&nbsp;&nbsp;';
+                            }
+                        }
+                        // adds the correct word, followed by ] to close the blank
+                        $answer .= ' / <font color="green"><b>' . $real_correct_tags[$i] . '</b></font>]';
+                        if (isset ($real_text[$i +1])) {
+                            $answer .= $real_text[$i +1];
+                        }
+                    }
+
+                    break;
+                    // for free answer
+                case FREE_ANSWER :
+                    $studentChoice = $choice;
+
+                    if ($studentChoice) {
+                        //Score is at -1 because the question has'nt been corected
+                        $questionScore = -1;
+                        $totalScore += 0;
+                    }
+                    break;
+                    // for matching
+                case MATCHING :
+
+                    $numAnswer=$objAnswerTmp->selectAutoId($answerId);
+                    if ($answerCorrect) {
+                        if ($answerCorrect == $choice[$numAnswer]) {
+                            $questionScore+=$answerWeighting;
+                            $totalScore+=$answerWeighting;
+                        }
+                        $matching[$numAnswer] =  $choice[$numAnswer];
+                    }
+                    break;
+                    // for hotspot with no order
+                case HOT_SPOT :
+                    $studentChoice = $choice[$answerId];
+                    if ($studentChoice) {
+                        $questionScore += $answerWeighting;
+                        $totalScore += $answerWeighting;
+                    }
+                    break;
+                    // for hotspot with fixed order
+                case HOT_SPOT_ORDER :
+                    $studentChoice = $choice['order'][$answerId];
+
+                    if ($studentChoice == $answerId) {
+                        $questionScore += $answerWeighting;
+                        $totalScore += $answerWeighting;
+                        $studentChoice = true;
+                    } else {
+                        $studentChoice = false;
+                    }
+                    break;
+            } // end switch Answertype
+        } // end for that loops over all answers of the current question
+        
+        // destruction of Answer
+
+        //we add the total score after dealing with the answers
+        if ($answerType == MULTIPLE_ANSWER_COMBINATION) {
+            if ($final_answer) {
+                //getting only the first score where we save the weight of all the question
+                $answerWeighting=$objAnswerTmp->selectWeighting(1);
+                $questionScore+=$answerWeighting;
+                $totalScore+=$answerWeighting;
+            }
+        }
+        unset ($objAnswerTmp);
+        $i++;
+
+        $totalWeighting += $questionWeighting;
+        //added by priya saini
+        // Store results directly in the database
+        // For all in one page exercises, the results will be
+        // stored by exercise_results.php (using the session)
+        if ($_configuration['tracking_enabled']) {
+            if (empty ($choice)) {
+                $choice = 0;
+            }
+            if ($answerType == MULTIPLE_ANSWER) {
+                if ($choice != 0) {
+                    $reply = array_keys($choice);
+                    for ($i = 0; $i < sizeof($reply); $i++) {
+                        $ans = $reply[$i];
+                        exercise_attempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                    }
+                } else {
+                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                }
+            } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
+                if ($choice != 0) {
+                    $reply = array_keys($choice);
+                    for ($i = 0; $i < sizeof($reply); $i++) {
+                        $ans = $reply[$i];
+                        exercise_attempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                    }
+                } else {
+                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                }
+            } elseif ($answerType == MATCHING) {
+                foreach ($matching as $j => $val) {
+                    exercise_attempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
+                }
+            } elseif ($answerType == FREE_ANSWER) {
+                $answer = $choice;
+                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+            } elseif ($answerType == UNIQUE_ANSWER) {
+                $answer = $choice;
+                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+            } elseif ($answerType == HOT_SPOT) {
+                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                if (is_array($exerciseResultCoordinates[$questionId])) {
+                    foreach($exerciseResultCoordinates[$questionId] as $idx => $val) {
+                        exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val,$this->id);
+                    }
+                }
+            } else {
+                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0,$this->id);
+            }
+        }
+        $stat_table 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . $exeId;
+		Database::query($sql_update);
+                        
+        
+	} //End function
 }
 endif;
 ?>

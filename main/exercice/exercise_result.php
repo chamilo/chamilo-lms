@@ -15,9 +15,10 @@
 *	@todo	split more code up in functions, move functions to library?
 */
 /*	INIT SECTION	*/
-require_once('exercise.class.php');
-require_once('question.class.php');
-require_once('answer.class.php');
+require_once 'exercise.class.php';
+require_once 'exercise.lib.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 
 if ($_GET['origin']=='learnpath') {
 	require_once ('../newscorm/learnpath.class.php');
@@ -98,6 +99,8 @@ if ( empty ( $exerciseType ) ) {
     $exerciseType = $_REQUEST['exerciseType'];
 }
 
+
+//@todo There should be some doc about this settings
 $_configuration['live_exercise_tracking'] = false;
 if($_configuration['live_exercise_tracking']) define('ENABLED_LIVE_EXERCISE_TRACKING',1);
 
@@ -150,126 +153,13 @@ if (!empty($gradebook) && $gradebook=='view') {
 $nameTools=get_lang('Exercice');
 
 $interbreadcrumb[]=array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
-$htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
-					<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
-					<script language=\"JavaScript\" type=\"text/javascript\">
-					<!--
-					// -----------------------------------------------------------------------------
-					// Globals
-					// Major version of Flash required
-					var requiredMajorVersion = 7;
-					// Minor version of Flash required
-					var requiredMinorVersion = 0;
-					// Minor version of Flash required
-					var requiredRevision = 0;
-					// the version of javascript supported
-					var jsVersion = 1.0;
-					// -----------------------------------------------------------------------------
-					// -->
-					</script>
-					<script language=\"VBScript\" type=\"text/vbscript\">
-					<!-- // Visual basic helper required to detect Flash Player ActiveX control version information
-					Function VBGetSwfVer(i)
-					  on error resume next
-					  Dim swControl, swVersion
-					  swVersion = 0
-
-					  set swControl = CreateObject(\"ShockwaveFlash.ShockwaveFlash.\" + CStr(i))
-					  if (IsObject(swControl)) then
-					    swVersion = swControl.GetVariable(\"\$version\")
-					  end if
-					  VBGetSwfVer = swVersion
-					End Function
-					// -->
-					</script>
-
-					<script language=\"JavaScript1.1\" type=\"text/javascript\">
-					<!-- // Detect Client Browser type
-					var isIE  = (navigator.appVersion.indexOf(\"MSIE\") != -1) ? true : false;
-					var isWin = (navigator.appVersion.toLowerCase().indexOf(\"win\") != -1) ? true : false;
-					var isOpera = (navigator.userAgent.indexOf(\"Opera\") != -1) ? true : false;
-					jsVersion = 1.1;
-					// JavaScript helper required to detect Flash Player PlugIn version information
-					function JSGetSwfVer(i){
-						// NS/Opera version >= 3 check for Flash plugin in plugin array
-						if (navigator.plugins != null && navigator.plugins.length > 0) {
-							if (navigator.plugins[\"Shockwave Flash 2.0\"] || navigator.plugins[\"Shockwave Flash\"]) {
-								var swVer2 = navigator.plugins[\"Shockwave Flash 2.0\"] ? \" 2.0\" : \"\";
-					      		var flashDescription = navigator.plugins[\"Shockwave Flash\" + swVer2].description;
-								descArray = flashDescription.split(\" \");
-								tempArrayMajor = descArray[2].split(\".\");
-								versionMajor = tempArrayMajor[0];
-								versionMinor = tempArrayMajor[1];
-								if ( descArray[3] != \"\" ) {
-									tempArrayMinor = descArray[3].split(\"r\");
-								} else {
-									tempArrayMinor = descArray[4].split(\"r\");
-								}
-					      		versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
-					            flashVer = versionMajor + \".\" + versionMinor + \".\" + versionRevision;
-					      	} else {
-								flashVer = -1;
-							}
-						}
-						// MSN/WebTV 2.6 supports Flash 4
-						else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.6\") != -1) flashVer = 4;
-						// WebTV 2.5 supports Flash 3
-						else if (navigator.userAgent.toLowerCase().indexOf(\"webtv/2.5\") != -1) flashVer = 3;
-						// older WebTV supports Flash 2
-						else if (navigator.userAgent.toLowerCase().indexOf(\"webtv\") != -1) flashVer = 2;
-						// Can't detect in all other cases
-						else {
-
-							flashVer = -1;
-						}
-						return flashVer;
-					}
-					// When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
-					function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
-					{
-					 	reqVer = parseFloat(reqMajorVer + \".\" + reqRevision);
-					   	// loop backwards through the versions until we find the newest version
-						for (i=25;i>0;i--) {
-							if (isIE && isWin && !isOpera) {
-								versionStr = VBGetSwfVer(i);
-							} else {
-								versionStr = JSGetSwfVer(i);
-							}
-							if (versionStr == -1 ) {
-								return false;
-							} else if (versionStr != 0) {
-								if(isIE && isWin && !isOpera) {
-									tempArray         = versionStr.split(\" \");
-									tempString        = tempArray[1];
-									versionArray      = tempString .split(\",\");
-								} else {
-									versionArray      = versionStr.split(\".\");
-								}
-								versionMajor      = versionArray[0];
-								versionMinor      = versionArray[1];
-								versionRevision   = versionArray[2];
-
-								versionString     = versionMajor + \".\" + versionRevision;   // 7.0r24 == 7.24
-								versionNum        = parseFloat(versionString);
-					        	// is the major.revision >= requested major.revision AND the minor version >= requested minor
-								if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
-									return true;
-								} else {
-									return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
-								}
-							}
-						}
-					}
-					// -->
-					</script>";
+$htmlHeadXtra[] = $objExercise->show_lp_javascript();
 
 if ($origin != 'learnpath') {
 	//so we are not in learnpath tool
 	Display::display_header($nameTools,"Exercise");
 } else {
-
 	header('Content-Type: text/html; charset='.api_get_system_encoding());
-
 	$document_language = api_get_language_isocode();
 
 	/*
@@ -401,9 +291,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				<?php echo $answerId; ?>
 				</div>
 					<div style="float:left; padding-left:5px;">
-
 						<div style="display:inline; float:left; width:80px;"><?php echo $answer ?></div>
-
 					</div>
 				</td>
 				<td valign="top">
@@ -435,7 +323,7 @@ DISPLAY AND MAIN PROCESS
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '<div class="actions">';
-	echo Display::return_icon('quiz.gif', get_lang('GoBackToEx')).'<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('GoBackToEx').'</a>';
+	echo Display::return_icon('back.png', get_lang('GoBackToEx')).'<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('GoBackToEx').'</a>';
 	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
 	echo '</div>';
 }
@@ -445,7 +333,7 @@ $exerciseTitle=text_filter($exerciseTitle);
 //show exercise title
 ?>
 	<?php if($origin != 'learnpath') {?>
-		<h3><?php echo $exerciseTitle ?>: <?php echo get_lang("Result"); ?></h3>
+		<h2><?php echo Display::return_icon('quiz_big.png', get_lang('Result')).' '; echo $exerciseTitle; ?> : <?php echo get_lang("Result"); ?></h2>
 		<?php echo $exerciseDescription; ?>
 	<?php } ?>
 
@@ -710,8 +598,7 @@ foreach ($questionList as $questionId) {
 					$correct_tags=array();
 					$real_text=array();
 					// the loop will stop at the end of the text
-					while(1)
-					{
+					while(1) {
 						// quits the loop if there are no more blanks (detect '[')
 						if(($pos = api_strpos($temp,'[')) === false)
 						{
@@ -772,9 +659,7 @@ foreach ($questionList as $questionId) {
 							{
 								// adds the word in red at the end of the string, and strikes it
 								$answer.='<font color="red"><s>'.$user_tags[$i].'</s></font>';
-							}
-							else
-							{
+							} else {
 								// adds a tabulation if no word has been typed by the student
 								$answer.='&nbsp;&nbsp;&nbsp;';
 							}
@@ -791,13 +676,10 @@ foreach ($questionList as $questionId) {
 								// adds the word in green at the end of the string
 								$answer.=$user_tags[$i];
 							}													// else if the word entered by the student IS NOT the same as the one defined by the professor
-							elseif(!empty($user_tags[$i]))
-							{
+							elseif(!empty($user_tags[$i])) {
 								// adds the word in red at the end of the string, and strikes it
 								$answer.='<font color="red"><s>'.$user_tags[$i].'</s></font>';
-							}
-							else
-							{
+							} else {
 								// adds a tabulation if no word has been typed by the student
 								$answer.='&nbsp;&nbsp;&nbsp;';
 							}
@@ -812,9 +694,7 @@ foreach ($questionList as $questionId) {
 			// for free answer
 			case FREE_ANSWER :
 					$studentChoice=$choice;
-
-					if($studentChoice)
-					{
+					if($studentChoice) {
 						//Score is at -1 because the question has'nt been corected
 					  	$questionScore=-1;
 						$totalScore+=0;
@@ -845,17 +725,13 @@ foreach ($questionList as $questionId) {
 			case HOT_SPOT_ORDER :
 					$studentChoice=$choice['order'][$answerId];
 
-					if($studentChoice == $answerId)
-					{
+					if($studentChoice == $answerId) {
 						$questionScore+=$answerWeighting;
 						$totalScore+=$answerWeighting;
 						$studentChoice = true;
-					}
-					else
-					{
+					} else {
 						$studentChoice = false;
 					}
-
 					break;
 		} // end switch Answertype
 
@@ -871,28 +747,18 @@ foreach ($questionList as $questionId) {
 				}
 			} elseif($answerType == FREE_ANSWER) {
 				// to store the details of open questions in an array to be used in mail
-
 				$arrques[] = $questionName;
 				$arrans[]  = $choice;
-
-
 				if($origin != 'learnpath') {
 					display_free_answer($choice);
 				}
-
-			}
-			elseif($answerType == HOT_SPOT)
-			{
+			} elseif($answerType == HOT_SPOT) {
 				if ($origin != 'learnpath') {
 					display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
 				}
-			}
-			elseif($answerType == HOT_SPOT_ORDER)
-			{
+			} elseif($answerType == HOT_SPOT_ORDER) {
 				display_hotspot_order_answer($answerId, $answer, $studentChoice, $answerComment);
-			}
-			elseif($answerType==MATCHING)
-			{
+			} elseif($answerType==MATCHING) {
 				if ($origin != 'learnpath') {
 					echo '<tr>';
 					echo '<td>'.text_filter($answer_matching[$answerId]).'</td><td>'.text_filter($user_answer).' / <b><span style="color: #008000;">'.text_filter($answer_matching[$answerCorrect]).'</span></b></td>';
@@ -970,43 +836,43 @@ foreach ($questionList as $questionId) {
 				$reply = array_keys($choice);
 				for ($i=0;$i<sizeof($reply);$i++) {
 					$ans = $reply[$i];
-					exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
+					exercise_attempt($questionScore,$ans,$quesId,$exeId,$i, $objExercise->id);
 				}
 			} else {
-				exercise_attempt($questionScore, 0 ,$quesId,$exeId,0);
+				exercise_attempt($questionScore, 0 ,$quesId,$exeId,0, $objExercise->id);
 			}
 		} elseif ($answerType==MULTIPLE_ANSWER_COMBINATION ) {
 			if ($choice != 0) {
 				$reply = array_keys($choice);
 				for ($i=0;$i<sizeof($reply);$i++) {
 					$ans = $reply[$i];
-					exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
+					exercise_attempt($questionScore,$ans,$quesId,$exeId,$i, $objExercise->id);
 				}
 			} else {
-				exercise_attempt($questionScore, 0 ,$quesId,$exeId,0);
+				exercise_attempt($questionScore, 0 ,$quesId,$exeId,0, $objExercise->id);
 			}
 		} elseif ($answerType==MATCHING) {
 			foreach ($matching as $j => $val) {
-				exercise_attempt($questionScore, $val, $quesId, $exeId, $j);
+				exercise_attempt($questionScore, $val, $quesId, $exeId, $j, $objExercise->id);
 			}
 		}
 		elseif ($answerType==FREE_ANSWER) {
 			$answer = $choice;
-			exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
+			exercise_attempt($questionScore,$answer,$quesId,$exeId,0, $objExercise->id);
 		}
 		elseif ($answerType==UNIQUE_ANSWER) {
 			// exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
 			// In fact, we are not storing the results by answer ID, but by *position*, which is stored in $choice
-			exercise_attempt($questionScore,$choice,$quesId,$exeId,0);
+			exercise_attempt($questionScore,$choice,$quesId,$exeId,0, $objExercise->id);
 		} elseif ($answerType == HOT_SPOT) {
-			exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
+			exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $objExercise->id);
 			if (is_array($exerciseResultCoordinates[$quesId])) {
 				foreach($exerciseResultCoordinates[$quesId] as $idx => $val) {
-					exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val);
+					exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val, $objExercise->id);
 				}
 			}
 		} else {
-			exercise_attempt($questionScore,$answer,$quesId,$exeId,0);
+			exercise_attempt($questionScore,$answer,$quesId,$exeId,0, $objExercise->id);
 		}
 	}
 } // end huge foreach() block that loops over all questions
@@ -1042,9 +908,7 @@ foreach ($questionList as $questionId) {
 <?php
 
 /*
-==============================================================================
 		Tracking of results
-==============================================================================
 */
 
 if ($_configuration['tracking_enabled']) {
@@ -1085,7 +949,6 @@ if($objExercise->results_disabled) {
 		echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 		echo '</body></html>';
 	}
-
 }
 
 if ($origin != 'learnpath') {
@@ -1124,7 +987,6 @@ if($num>1) {
 } else {
 	//this is a problem (it means that there is no admin for this course)
 }
-
 
 // we are able to send emails to the teachers?
 if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
@@ -1182,7 +1044,6 @@ if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
 					$msg1= str_replace("#i#",$i,$msg);
 					$msg= str_replace("#course#",$courseName,$msg1);
 			}
-
 			$msg.='</table><br>
 		 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
 					<a href="#url#">#url#</a></span></body></html>';

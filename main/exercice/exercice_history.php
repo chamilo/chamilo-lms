@@ -21,9 +21,7 @@ api_protect_course_script(true);
 $show=(isset($_GET['show']) && $_GET['show'] == 'result')?'result':'test'; // moved down to fix bug: http://www.dokeos.com/forum/viewtopic.php?p=18609#18609
 
 /*
------------------------------------------------------------
 	Libraries
------------------------------------------------------------
 */
 
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
@@ -31,9 +29,7 @@ require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 include(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 
 /*
------------------------------------------------------------
 	Constants and variables
------------------------------------------------------------
 */
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $is_tutor = api_is_allowed_to_edit(true);
@@ -106,14 +102,10 @@ while($row = Database::fetch_array($query)){
 	} else {
 		echo '<td>'.get_lang('WithoutComment').'</td>';
 	}
-
-	echo '<td>'.$row['insert_date'].'</td>';
+	echo '<td>'.api_get_local_time($row['insert_date']).'</td>';
 	echo '<td>'.(empty($row['firstname']) && empty($row['lastname']) ? '<i>'.get_lang('OriginalValue').'</i>' : api_get_person_name($row['firstname'], $row['lastname'])).'</td>';
 
 	echo '</tr>';
 }
 echo '</table>';
-
 Display::display_footer();
-
-?>

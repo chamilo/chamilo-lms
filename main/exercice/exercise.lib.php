@@ -27,11 +27,6 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 	// Change false to true in the following line to enable answer hinting.
 	$debug_mark_answer = api_is_allowed_to_edit() && false;
 
-	if (!ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) {
-		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
-		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
-	}
-
 	// Reads question informations.
 	if (!$objQuestionTmp = Question::read($questionId)) {
 		// question not found
@@ -49,8 +44,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 
 			$questionName=text_filter($questionName);
 
-			$s="<div id=\"question_title\" class=\"sectiontitle\">
-				".get_lang('Question').' ';
+			$s="<div id=\"question_title\" class=\"sectiontitle\">".get_lang('Question').' ';
 
 			$s.=$current_item;
 			//@todo I need the get the feedback type
@@ -541,4 +535,69 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 	}
 	echo '</table><br />';
 	return $nbrAnswers;
+}
+
+
+function get_exercise_track_exercise_info($exe_id) {
+	$TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
+	$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	
+	$sql_fb_type='SELECT * FROM '.$TBL_EXERCICES.' as e INNER JOIN '.$TBL_TRACK_EXERCICES.' as te  ON (e.id=te.exe_exo_id) WHERE te.exe_id='.Database::escape_string($exe_id);
+	$res_fb_type=Database::query($sql_fb_type);
+	$row_fb_type=Database::fetch_array($res_fb_type, 'ASSOC');
+	return $row_fb_type;	
+}
+
+
+/**
+ * Validates the time control key
+ */
+function exercise_time_control_is_valid($exercise_id) {
+	//Fast check
+	$exercise_id = intval($exercise_id);
+	$TBL_EXERCICES =  Database::get_course_table(TABLE_QUIZ_TEST);
+	$sql 	= "SELECT expired_time FROM $TBL_EXERCICES WHERE id = $exercise_id";
+	$result = Database::query($sql);
+	$row	= Database::fetch_array($result, 'ASSOC');
+	if (!empty($row['expired_time']) ) {	
+		$current_expired_time_key = get_time_control_key($exercise_id);
+		if (isset($_SESSION['expired_time'][$current_expired_time_key])) {                  	
+	        $current_time = time();
+			$expired_time = api_strtotime($_SESSION['expired_time'][$current_expired_time_key], 'UTC');
+			$total_time_allowed = $expired_time + 30;
+			//error_log('expired time converted + 30: '.$total_time_allowed);
+			//error_log('$current_time: '.$current_time);
+	        if ($total_time_allowed < $current_time) {
+	        	return false;
+	        }
+	        return true;
+		} else {
+			return false;
+		}
+	} else {
+		return true;
+	}
+}
+
+/**
+	Deletes the time control token 
+*/
+function exercise_time_control_delete($exercise_id) {	
+	$current_expired_time_key = get_time_control_key($exercise_id);
+	unset($_SESSION['expired_time'][$current_expired_time_key]);	
+}
+
+/**
+	Generates the time control key
+*/
+function generate_time_control_key($exercise_id) {
+	$exercise_id = intval($exercise_id);
+	return api_get_course_int_id().'_'.api_get_session_id().'_'.$exercise_id.'_'.api_get_user_id();
+}
+/**
+	Returns the time controller key
+*/
+function get_time_control_key($exercise_id){
+	$exercise_id = intval($exercise_id);
+	return api_get_course_int_id().'_'.api_get_session_id().'_'.$exercise_id.'_'.api_get_user_id();
 }

@@ -17,6 +17,7 @@ require_once '../inc/global.inc.php';
 require_once '../inc/lib/course.lib.php';
 // including additional libraries
 require_once 'exercise.class.php';
+require_once 'exercise.lib.php';
 require_once 'question.class.php'; //also defines answer type constants
 require_once 'answer.class.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
@@ -80,6 +81,7 @@ if ( empty ( $questionList ) ) {
 if ( empty ( $objExercise ) ) {
     $objExercise = $_SESSION['objExercise'];
 }
+
 if ( empty ( $exeId ) ) {
     $exeId = $_REQUEST['id'];
 }
@@ -87,51 +89,28 @@ if ( empty ( $exeId ) ) {
 if ( empty ( $action ) ) {
     $action = $_GET['action'];
 }
-$current_user_id = api_get_user_id();
-$current_user_id = "'".$current_user_id."'";
-$current_attempt = $_SESSION['current_exercice_attempt'][$current_user_id];
 
-//Is fraudulent exercice
 $current_time = time();
-
 $emailId   = $_REQUEST['email'];
-$user_name = $_REQUEST['user'];
-$test 	   = $_REQUEST['test'];
-$dt	 	   = $_REQUEST['dt'];
-$marks 	   = $_REQUEST['res'];
 $id 	   = $_REQUEST['id'];
 
-$sql_fb_type='SELECT feedback_type, exercises.id FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
-$res_fb_type=Database::query($sql_fb_type);
-$row_fb_type=Database::fetch_row($res_fb_type);
-$feedback_type = $row_fb_type[0];
-$exercise_id = intval($row_fb_type[1]);
-
-$course_code = api_get_course_id();
-$session_id  = api_get_session_id();
-$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exercise_id;
-
-if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
-	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
-	$expired_time = strtotime($expired_date);
-
-	//Validation in case of fraud
-	$total_time_allowed = $expired_time + 30;
-	if ($total_time_allowed < $current_time) {
-	  $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = '$current_attempt' ";
-	  Database::query($sql_fraud);
-	}
+if (empty($id)) {
+	api_not_allowed();
 }
 
+$track_exercise_info = get_exercise_track_exercise_info($id);
+$exercise_id 		 = $track_exercise_info['id'];
+$course_code		 = api_get_course_id();
+if (!exercise_time_control_is_valid($exercise_id)) {
+	$sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = '{$track_exercise_info['exe_id']}' ";
+	Database::query($sql_fraud);
+}
 //Unset session for clock time
-unset($_SESSION['current_exercice_attempt'][$current_user_id]);
-unset($_SESSION['expired_time'][$current_expired_time_key]);
-unset($_SESSION['end_expired_time'][$current_expired_time_key]);
+exercise_time_control_delete($exercise_id);
 
 $is_allowedToEdit=api_is_allowed_to_edit(null,true) || $is_courseTutor;
 $nameTools=get_lang('CorrectTest');
-
-if (isset($_SESSION['gradebook'])){
+if (isset($_SESSION['gradebook'])) {
 	$gradebook=	$_SESSION['gradebook'];
 }
 
@@ -143,7 +122,6 @@ if($origin=='user_course') {
 	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".Security::remove_XSS($_GET['course']), "name" => get_lang("Users"));
 	$interbreadcrumb[] = array("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student'])."&course=".$_course['id']."&details=true&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("DetailsStudentInCourse"));
 } else if($origin=='tracking_course') {
-
 	//$interbreadcrumb[] = array ("url" => "../mySpace/index.php", "name" => get_lang('MySpace'));
  	//$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student']).'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
  	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
@@ -186,20 +164,17 @@ if ($origin != 'learnpath') {
 	height:75px;
 	z-index:1;
 }
-
 -->
 </style>
 <script language="javascript">
-function showfck(sid,marksid)
-{
+function showfck(sid,marksid) {
 	document.getElementById(sid).style.display='block';
 	document.getElementById(marksid).style.display='block';
 	var comment = 'feedback_'+sid;
 	document.getElementById(comment).style.display='none';
 }
 
-function getFCK(vals,marksid)
-{
+function getFCK(vals,marksid) {
   var f=document.getElementById('myform');
 
   var m_id = marksid.split(',');
@@ -233,8 +208,6 @@ function getFCK(vals,marksid)
 // Email configuration settings
 
 $coursecode = api_get_course_id();
-$courseName = $_SESSION['_course']['name'];
-
 $to = '';
 $teachers = array();
 if(api_get_setting('use_session_mode')=='true' && !empty($_SESSION['id_session'])) {
@@ -263,17 +236,14 @@ if($num>1) {
   <tr>
     <td colspan="2">
 <?php
-$sql_test_name='SELECT title, description, results_disabled FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
-$result=Database::query($sql_test_name);
 $show_results = true;
 // Avoiding the "Score 0/0" message  when the exe_id is not set
-if (Database::num_rows($result)>0 && isset($id)) {
-	$test=Database::result($result,0,0);
-	$exerciseTitle=text_filter($test);
-	$exerciseDescription=Database::result($result,0,1);
-
+if (!empty($track_exercise_info)) {	
+	$exerciseTitle			= text_filter($track_exercise_info['title']);
+	$exerciseDescription	= $track_exercise_info['description'];
 	// if the results_disabled of the Quiz is 1 when block the script
-	$result_disabled=Database::result($result,0,2);
+	$result_disabled		= $track_exercise_info['results_disabled'];
+	
 	if (!(api_is_platform_admin() || api_is_course_admin()) ) {
 		if ($result_disabled==1) {
 			//api_not_allowed();
@@ -287,17 +257,6 @@ if (Database::num_rows($result)>0 && isset($id)) {
 			}
 		}
 	}
-	if ($show_results) {
-		$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($_user['user_id'])." ";
-		$query = "SELECT attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as attempts
-						INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id
-						INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
-						INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id
-				  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
-				  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
-					//GROUP BY questions.position, attempts.question_id";
-		$result =Database::query($query);
-	}
 } else {
 	Display::display_warning_message(get_lang('CantViewResults'));
 	$show_results = false;
@@ -308,50 +267,60 @@ if (Database::num_rows($result)>0 && isset($id)) {
 if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 	$show_results = false;
 }
-
+/*
+<tr>
+			<td style="font-weight:bold" width="10%">
+			<div class="actions-message"><?php echo '&nbsp;'.get_lang('CourseTitle')?> : </div></td>
+			<td><div class="actions-message" width="90%"><?php echo $_course['name'] ?></div></td>
+		</tr>*/		
 if ($show_results) {
 	?>
 	<table width="100%">
 		<tr>
-			<td style="font-weight:bold" width="10%"><div class="actions-message"><?php echo '&nbsp;'.get_lang('CourseTitle')?> : </div></td>
-			<td><div class="actions-message" width="90%"><?php echo $_course['name'] ?></div></td>
-		</tr>
+		<td colspan="2">
+			<h2><?php echo  Display::return_icon('quiz_big.png', get_lang('Result')).' '.$exerciseTitle.' : '.get_lang('Result');?></h2>
+		</td>	
+		</tr>		
 		<tr>
-			<td style="font-weight:bold" width="10%"><div class="actions-message"><?php echo '&nbsp;'.get_lang('User')?> : </div></td>
-			<td><div class="actions-message" width="90%"><?php
+			<td style="font-weight:bold" width="80px"><div ><?php echo '&nbsp;'.get_lang('User')?> : </div></td>
+			<td><div width="90%"><?php
+			/*
 			if (isset($_GET['cidReq'])) {
 				$course_code = Security::remove_XSS($_GET['cidReq']);
 			} else {
 				$course_code = api_get_course_id();
-			}
+			}*/
+			/*
 			if (isset($_GET['student'])) {
-				$user_id	= Security::remove_XSS($_GET['student']);
-			}else {
-				$user_id	= api_get_user_id();
-			}
-
-			$status_info=CourseManager::get_user_in_course_status($user_id,$course_code);
+				$user_id	= intval($_GET['student']);
+			} else {
+				$user_id	= $track_exercise_info['exe_user_id'];
+			}*/
+			
+			$user_id	= $track_exercise_info['exe_user_id'];
+			$user_info=api_get_user_info($user_id);
+			echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
+			
+			/*$status_info=CourseManager::get_user_in_course_status($user_id,$course_code);
 			if (STUDENT==$status_info) {
 				$user_info=api_get_user_info($user_id);
 				echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
 			} elseif(COURSEMANAGER==$status_info && !isset($_GET['user'])) {
 				$user_info=api_get_user_info($user_id);
 				echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
-			} else {
-				echo $user_name;
-			}
-
+			}*/
 			?></div></td>
 		</tr>
+		<?php if (!empty($exerciseDescription)) { ?>
 		<tr>
 			<td style="font-weight:bold" width="10%" class="actions-message">
-				<?php echo '&nbsp;'.get_lang("Exercise").' :'; ?>
+				<?php echo '&nbsp;'.get_lang("Description").' :'; ?>
 			</td>
-			<td width="90%">
-			<?php echo $test; ?><br />
+			<td width="90%">			
 			<?php echo $exerciseDescription; ?>
 			</td>
 		</tr>
+		<?php } ?>
 	</table>
 	<br />
 	</table>
@@ -362,28 +331,46 @@ $i=$totalScore=$totalWeighting=0;
 if($debug>0){echo "ExerciseResult: "; var_dump($exerciseResult); echo "QuestionList: ";var_dump($questionList);}
 $arrques = array();
 $arrans = array();
-
 if ($show_results) {
+	$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($_user['user_id'])." ";
+	$query = "SELECT attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as attempts
+					INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id
+					INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
+					INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id
+			  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
+			  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
+				//GROUP BY questions.position, attempts.question_id";
+	
+	$result =Database::query($query);
+	
 	$questionList = array();
 	$exerciseResult = array();
-	$k=0;
-	$counter=0;
+	
 	while ($row = Database::fetch_array($result)) {
 		$questionList[] = $row['question_id'];
-		$exerciseResult[] = $row['answer'];
+		$exerciseResult[$row['question_id']] = $row['answer'];
 	}
+	
+	//Fixing #2073
+	if (!empty($track_exercise_info['data_tracking']) && $track_exercise_info['random_answers'] == 1) {
+		$tempquestionList = explode(',',$track_exercise_info['data_tracking']);
+		if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {
+			$questionList = $tempquestionList;			
+		}		
+	}
+	
 	// for each question
+	$counter=0;
 	foreach($questionList as $questionId) {
-		$counter++;
-		$k++;
+		$counter++;		
 		$choice=$exerciseResult[$questionId];
 		// creates a temporary Question object
-		$objQuestionTmp = Question::read($questionId);
-		$questionName=$objQuestionTmp->selectTitle();
-		$questionDescription=$objQuestionTmp->selectDescription();
-		$questionWeighting=$objQuestionTmp->selectWeighting();
-		$answerType=$objQuestionTmp->selectType();
-		$quesId =$objQuestionTmp->selectId(); //added by priya saini
+		$objQuestionTmp 	= Question::read($questionId);
+		$questionName		= $objQuestionTmp->selectTitle();
+		$questionDescription= $objQuestionTmp->selectDescription();
+		$questionWeighting	= $objQuestionTmp->selectWeighting();
+		$answerType			= $objQuestionTmp->selectType();
+		$quesId 			= $objQuestionTmp->selectId(); //added by priya saini
 
 		// destruction of the Question object
 		unset($objQuestionTmp);
@@ -430,7 +417,7 @@ if ($show_results) {
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
-			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+			for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
 				$answer=$objAnswerTmp->selectAnswer($answerId);
 				$answerComment=$objAnswerTmp->selectComment($answerId);
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
@@ -441,20 +428,17 @@ if ($show_results) {
 					$ind = $row['answer'];
 					$choice[$ind] = 1;
 				}
-
 				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
-
 				$studentChoice=$choice[$numAnswer];
-
 				if ($studentChoice) {
 					$questionScore+=$answerWeighting;
 					$totalScore+=$answerWeighting;
 				}
 				echo '<tr><td>';
 				if ($answerId==1) {
-						ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
+					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
 				} else {
-						ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
+					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
 				}
 				echo '</td></tr>';
 				$i++;
@@ -514,14 +498,13 @@ if ($show_results) {
 
 				echo '<tr><td>';
 				if ($answerId==1) {
-						ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
+					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
 				} else {
-						ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
+					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
 				}
 				echo '</td></tr>';
 				$i++;
 		 	}
-
 		 	$final_answer = true;
 		 	foreach($real_answers as $my_answer) {
 		 		if (!$my_answer) {
@@ -990,8 +973,6 @@ if ($show_results) {
 		</td>
 		</tr>
 		</table>
-
-
 		<?php
 		$my_total_score  = float_format($questionScore,1);
 		$my_total_weight = float_format($questionWeighting,1);
@@ -1020,7 +1001,7 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 			$my_total_weight = float_format($totalWeighting,1);
 			echo $my_total_score."/".$my_total_weight;
 		}
-		echo '!</div>';
+		echo '</div>';
 	}
 }
 
@@ -1031,8 +1012,7 @@ if (is_array($arrid) && is_array($arrmarks)) {
 
 if ($is_allowedToEdit) {
 	if (in_array($origin, array('tracking_course','user_course'))) {
-
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.urlencode($test).'&emailid='.$emailId.'&origin='.$origin.'&student='.Security::remove_XSS($_GET['student']).'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';
 		if (isset($_GET['myid']) && isset($_GET['my_lp_id']) && isset($_GET['student'])) {
 			?>
@@ -1045,7 +1025,7 @@ if ($is_allowedToEdit) {
 			<?php
 		}
 	} else {
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.$test.'&emailid='.$emailId.'&totalWeighting='.$totalWeighting.'" method="post">';
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&totalWeighting='.$totalWeighting.'" method="post">';
 	}
 	if ($origin!='learnpath' && $origin!='student_progress') {
 		?>
@@ -1054,8 +1034,6 @@ if ($is_allowedToEdit) {
 		<?php
 	}
 }
-
-
 if ($origin=='student_progress' && !isset($_GET['my_lp_id'])) {?>
 	<button type="button" class="back" onclick="window.back();" value="<?php echo get_lang('Back'); ?>" ><?php echo get_lang('Backs');?></button>
 <?php
@@ -1067,7 +1045,6 @@ if ($origin=='student_progress' && !isset($_GET['my_lp_id'])) {?>
 
 if ($origin != 'learnpath') {
 	$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
-
 	//we are not in learnpath tool
 	Display::display_footer();
 } else {

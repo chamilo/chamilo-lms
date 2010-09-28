@@ -12,11 +12,11 @@
 // name of the language file that needs to be included
 $language_file='exercice';
 
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-include('../inc/global.inc.php');
-include('exercise.lib.php');
+include 'exercise.class.php';
+include 'question.class.php';
+include 'answer.class.php';
+include '../inc/global.inc.php';
+include 'exercise.lib.php';
 $this_section=SECTION_COURSES;
 
 if(!api_is_allowed_to_edit(null,true)) {

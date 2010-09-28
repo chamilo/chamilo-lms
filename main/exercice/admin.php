@@ -71,24 +71,16 @@ define(ALLOWED_TO_INCLUDE,1);
 
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-/****************************/
 /*  stripslashes POST data  */
-/****************************/
-
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	foreach($_POST as $key=>$val) {
-		if(is_string($val))
-		{
+		if(is_string($val)) {
 			$_POST[$key]=stripslashes($val);
-		}
-		elseif(is_array($val))
-		{
-			foreach($val as $key2=>$val2)
-			{
+		} elseif(is_array($val)) {
+			foreach($val as $key2=>$val2) {
 				$_POST[$key][$key2]=stripslashes($val2);
 			}
 		}
-
 		$GLOBALS[$key]=$_POST[$key];
 	}
 }
@@ -180,8 +172,7 @@ if(!is_object($objExercise)) {
 	$objExercise=new Exercise();
 
 	// creation of a new exercise if wrong or not specified exercise ID
-	if($exerciseId)
-	{
+	if($exerciseId) {
 	    $objExercise->read($exerciseId);
 	}
 
@@ -200,14 +191,11 @@ if(!$fromExercise) {
 $nbrQuestions=$objExercise->selectNbrQuestions();
 
 // intializes the Question object
-if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers)
-{
-	if($editQuestion || $newQuestion)
-	{
+if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
+	if($editQuestion || $newQuestion) {
 
 		// reads question data
-		if($editQuestion)
-		{
+		if($editQuestion) {
 			// question not found
 			if(!$objQuestion = Question::read($editQuestion))
 			{
@@ -434,10 +422,8 @@ echo Display::return_icon('preview.gif', get_lang('Preview')).'<a href="exercice
 echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
 echo '</div>';
 
-if(isset($_GET['message']))
-{
-	if (in_array($_GET['message'], array('ExerciseStored')))
-	{
+if(isset($_GET['message'])) {
+	if (in_array($_GET['message'], array('ExerciseStored'))) {
 		Display::display_confirmation_message(get_lang($_GET['message']));
 	}
 }
@@ -460,10 +446,10 @@ if($newQuestion || $editQuestion) {
 }
 
 if(isset($_GET['hotspotadmin'])) {
-	include('hotspot_admin.inc.php');
+	require 'hotspot_admin.inc.php';
 }
 if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
-	include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+	require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?exerciseId='.$_GET['exerciseId']);
 	$form -> addElement ('hidden','edit','true');
 	//$objExercise -> createForm ($form,'simple');
@@ -479,7 +465,7 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 	$form -> display ();
 	echo '<br />';
 	// question list management
-	include('question_list_admin.inc.php');
+	require 'question_list_admin.inc.php';
 }
 
 api_session_register('objExercise');

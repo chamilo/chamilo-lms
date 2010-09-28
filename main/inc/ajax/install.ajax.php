@@ -13,6 +13,7 @@ switch ($action) {
 			if (!empty($_POST)) {          
                             // get params from contact form
                             $person_name = $_POST['person_name'];
+                            $person_email = $_POST['person_email'];
                             $person_role = $_POST['person_role'];
                             $financial_decision = $_POST['financial_decision'];
                             $contact_language = $_POST['language'];
@@ -44,6 +45,7 @@ switch ($action) {
                                 // call method ws_add_contact_information
                                 $contact_params = array(
                                                         'person_name' => $person_name,
+                                                        'person_email' => $person_email,
                                                         'person_role' => $person_role,
                                                         'financial_decision' => $financial_decision,
                                                         'contact_language' => $contact_language,

@@ -1391,8 +1391,12 @@ function get_contact_registration_form() {
     <div id="div_sent_information"></div>
     <form>
     <div class="row">
-            <div class="label"><span class="form_required">*</span>'.get_lang('PersonName').'</div>
+            <div class="label"><span class="form_required">*</span>'.get_lang('Name').'</div>
             <div class="formw"><input id="person_name" type="text" name="person_name" size="30" /></div>
+    </div>
+    <div class="row">
+            <div class="label"><span class="form_required">*</span>'.get_lang('Email').'</div>
+            <div class="formw"><input id="person_name" type="text" name="person_email" size="30" /></div>
     </div>
     <div class="row">
             <div class="label"><span class="form_required">*</span>'.get_lang('CompanyName').'</div>

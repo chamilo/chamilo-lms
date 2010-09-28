@@ -150,10 +150,10 @@ $stok = Security::get_token();
                                 <img src="'.$course_medium_image.'" />
                             </div>
                             <div class="categories-course-description">
-                                <div class="course-block-text" style="text-align:center;"><strong>'.strtoupper($title).'</strong></div>
-                                <div class="course-block-text"><strong>'.get_lang('TutorName').':</strong> <br />'.$tutor_name.'</div>
+                                <div class="course-block-text"><strong>'.strtoupper($title).'</strong></div>
+                                <div class="course-block-text"><strong>'.get_lang('Teacher').':</strong><br />'.$tutor_name.'</div>
                                 <div class="course-block-text"><strong>'.get_lang('CreationDate').':</strong><br />'.$creation_date.'</div>
-                                <div class="course-block-text"><strong>'.get_lang('ConexionsLastMonth').':</strong>'.$count_connections.'</div>
+                                <div class="course-block-text"><strong>'.get_lang('ConnectionsLastMonth').':</strong> '.$count_connections.'</div>
                             </div>
 
                         </div>

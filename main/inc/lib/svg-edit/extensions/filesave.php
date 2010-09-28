@@ -11,18 +11,38 @@
  * @author Juan Carlos Raña Trabado
  * @since 25/september/2010
 */
+//Chamilo load libraries
+require_once '../../../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
-require_once '../../../../inc/global.inc.php';//hack for chamilo
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'security.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
+//Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
 
+//Adding Chamilo style because Display :: display_error_message() dont run well.
+?>
+<style type="text/css">
+<!--
+.error-message {
+	position: relative;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-width: 1px;
+	border-style: solid;
+	-moz-border-radius: 10px;
+	padding: 6px;
+	border: 1px solid #FF0000;
+	color: #440000;
+	background-color: #FFD1D1;
+	min-height: 30px;
+}
+-->
+</style>
+<?php
+
 if(!isset($_POST['output_svg']) && !isset($_POST['output_png'])) {
-	die('post fail');
+	echo '<div class="error-message">'. get_lang('lang_no_access_here').'</div>';// from Chamilo
+	die();
 }
 
 $file = '';
@@ -51,49 +71,62 @@ if($suffix == 'svg') {
 
 /////hack for Chamilo
 
+//get SVG-Edit values
 $filename=$file;//from svg-edit
 $extension=$suffix;// from svg-edit
 $content=$contents;//from svg-edit
- 
-//a bit title security  
+
+$title = Database::escape_string(str_replace('_',' ',$filename));
+
+//get Chamilo variables 
+$current_session_id = api_get_session_id();
+$groupId=$_SESSION['_gid'];
+$relativeUrlPath=$_SESSION['draw_dir'];// for main documents and for groups (groupmanager only returns the root directory of the group) // alias $groupPath
+$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
+$saveDir=$dirBaseDocuments.$_SESSION['draw_dir']; // saveDir alias exporDir
+
+//a bit title security
+
 $filename = addslashes(trim($filename));
 $filename = Security::remove_XSS($filename);
-$filename = replace_dangerous_char($filename);
-$filename = disable_dangerous_file($filename); 
- 
-$current_session_id = api_get_session_id();
-//TODO:implement groups
-if (0 != $groupId)
+$filename = replace_dangerous_char($filename, 'strict');
+$filename = disable_dangerous_file($filename);
+
+//a bit mime security
+$finfo = new finfo(FILEINFO_MIME);
+$current_mime=$finfo->buffer($contents);
+$mime_png='image/png';//image/png; charset=binary 
+$mime_svg='application/xml';//application/xml; charset=us-ascii
+if(strpos($current_mime, $mime_png)===false && $extension=='png')
 {
-	$groupPart = '_group' . $groupId; // and add groupId to put the same document title in different groups
-	$group_properties  = GroupManager :: get_group_properties($groupId);
-	$groupPath = $group_properties['directory'];
+	die('File extension does not match its content');
+}elseif(strpos($current_mime, $mime_svg)===false && $extension=='svg')
+{
+	die('File extension does not match its content');
 }
-else
+//check path
+if(!isset($_SESSION['draw_dir']))
 {
-	$groupPart = '';
-	$groupPath ='';
+	die('Error');
 }
 
-$exportDir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-$groupId=0;
-if(file_exists($exportDir . '/' .$filename.$i.'.'.$extension))
-{   
+//checks if the file exists, then rename the new
+if(file_exists($saveDir.'/'.$filename.$i.'.'.$extension)){
 	$i = 1;
-	while ( file_exists($exportDir . '/' .$filename.'_'.$i.'.'.$extension) ) $i++; //prevent duplicates
-	$drawFileName = $filename . '_' . $i . '.'.$extension;
+	while (file_exists($saveDir.'/'.$filename.'_'.$i.'.'.$extension)) $i++; //prevent duplicates
+	$drawFileName = $filename.'_'.$i.'.'.$extension;
+	$title=$title.' '.$i.'.'.$extension;
+}else{
+	$drawFileName = $filename.'.'.$extension;
+	$title = $title.'.'.$extension;
 }
-else
-{
-	$drawFileName = $filename.'.'.$extension;;	
-}
-$documentPath = $exportDir . '/' . $drawFileName;
+$documentPath = $saveDir.'/'.$drawFileName;
 
 //add new document to disk
 file_put_contents( $documentPath, $contents );	
 
 //add new document to database
-$doc_id = add_document($_course, $groupPath.'/'.$drawFileName, 'file', filesize($documentPath), $drawFileName);
+$doc_id = add_document($_course, $relativeUrlPath.'/'.$drawFileName, 'file', filesize($documentPath), $title);
 api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId,null, null,$current_session_id);
 api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'], $groupId,null, null,$current_session_id);
 

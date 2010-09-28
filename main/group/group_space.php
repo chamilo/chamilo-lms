@@ -130,6 +130,7 @@ if (!empty($current_group['description'])) {
  */
 // If the user is subscribed to the group or the user is a tutor of the group then
 if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group($_SESSION['_user']['user_id'], $current_group['id'])) {
+	echo '<ul>';
 	$tools = '';
 	// Link to the forum of this group
 	$forums_of_groups = get_forums_of_group($current_group['id']);
@@ -137,7 +138,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group($_SE
 		if ($current_group['forum_state'] != TOOL_NOT_AVAILABLE ) {
 			foreach ($forums_of_groups as $key => $value) {
 				if ($value['forum_group_public_private'] == 'public' || (/*!empty($user_subscribe_to_current_group) && */ $value['forum_group_public_private'] == 'private') || !empty($user_is_tutor) || api_is_allowed_to_edit(false, true)) {
-					$tools .= Display::return_icon('forum.gif', get_lang('GroupForum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'">'.get_lang('Forum').': '.$value['forum_title'].'</a><br />';
+					$tools .= '<li style="display:inline; margin:5px;">'.Display::return_icon('forum.gif', get_lang('GroupForum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'">'.get_lang('Forum').': '.$value['forum_title'].'</a></li>';
 					//$tools .= Display::return_icon('forum.gif', get_lang('Forum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.get_lang('Forum').': '.$value['forum_title'].'</a><br />';
 				}
 			}
@@ -145,39 +146,41 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group($_SE
 	}
 	if ($current_group['doc_state'] != TOOL_NOT_AVAILABLE ) {
 		// Link to the documents area of this group
-		$tools .= '<div style="margin-bottom: 5px;"><a href="../document/document.php?'.api_get_cidreq().'&amp;gidReq='.$current_group['id'].'">'.Display::return_icon('folder_document.gif', get_lang('GroupDocument')).'&nbsp;'.get_lang('GroupDocument').'</a></div>';
+		$tools .= '<li style="display:inline; margin:5px;" ><a href="../document/document.php?'.api_get_cidreq().'&amp;gidReq='.$current_group['id'].'">'.Display::return_icon('folder_document.gif', get_lang('GroupDocument')).'&nbsp;'.get_lang('GroupDocument').'</a></li>';
 	}
 	if ($current_group['calendar_state'] != TOOL_NOT_AVAILABLE) {
 		// Link to a group-specific part of agenda
-		$tools .= '<div style="margin-bottom: 5px;"><a href="../calendar/agenda.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'&amp;group='.$current_group['id'].'&amp;acces=0">'.Display::return_icon('agenda.gif', get_lang('GroupCalendar')).'&nbsp;'.get_lang('GroupCalendar').'</a></div>';
+		$tools .= '<li style="display:inline; margin:5px;"><a href="../calendar/agenda.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'&amp;group='.$current_group['id'].'&amp;acces=0">'.Display::return_icon('agenda.gif', get_lang('GroupCalendar')).'&nbsp;'.get_lang('GroupCalendar').'</a></li>';
 	}
 	if ($current_group['work_state'] != TOOL_NOT_AVAILABLE) {
 		// Link to the works area of this group
-		$tools .= '<div style="margin-bottom: 5px;"><a href="../work/work.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('works.gif', get_lang('GroupWork')).'&nbsp;'.get_lang('GroupWork').'</a></div>';
+		$tools .= '<li style="display:inline; margin:5px;" ><a href="../work/work.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('works.gif', get_lang('GroupWork')).'&nbsp;'.get_lang('GroupWork').'</a></li>';
 	}
 	if ($current_group['announcements_state'] != TOOL_NOT_AVAILABLE) {
 		// Link to a group-specific part of announcements
-		$tools .= '<div style="margin-bottom: 5px;"><a href="../announcements/announcements.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('valves.gif', get_lang('GroupAnnouncements')).'&nbsp;'.get_lang('GroupAnnouncements').'</a></div>';
+		$tools .= '<li style="display:inline; margin:5px;"><a href="../announcements/announcements.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('valves.gif', get_lang('GroupAnnouncements')).'&nbsp;'.get_lang('GroupAnnouncements').'</a></li>';
 	}
 	if ($current_group['wiki_state'] != TOOL_NOT_AVAILABLE) {
 		// Link to the wiki area of this group
-		$tools .= '<div style="margin-bottom: 5px;"><a href="../wiki/index.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('wiki.gif', get_lang('GroupWiki')).'&nbsp;'.get_lang('GroupWiki').'</a></div>';
+		$tools .= '<li style="display:inline; margin:5px;"><a href="../wiki/index.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('wiki.gif', get_lang('GroupWiki')).'&nbsp;'.get_lang('GroupWiki').'</a></li>';
 	}
 	if ($current_group['chat_state'] != TOOL_NOT_AVAILABLE) {
 		// Link to the chat area of this group
 		if (api_get_course_setting('allow_open_chat_window')) {
-			$tools .= "<div style='margin-bottom: 5px;'><a href=\"javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."','window_chat_group_".$_SESSION['_cid']."_".$_SESSION['_gid']."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \" >".Display::return_icon('chat.gif', get_lang('Chat'))."&nbsp;".get_lang('Chat')."</a></div>";
+			$tools .= "<li style=\"display:inline; margin:5px;\"><a href=\"javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."','window_chat_group_".$_SESSION['_cid']."_".$_SESSION['_gid']."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \" >".Display::return_icon('chat.gif', get_lang('Chat'))."&nbsp;".get_lang('Chat')."</a></li>";
 		} else {
-			$tools .= "<div style='margin-bottom: 5px;'><a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.gif', get_lang('Chat'))."&nbsp;".get_lang('Chat')."</a></div>";
+			$tools .= "<li style=\"display:inline; margin:5px;\"><a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.gif', get_lang('Chat'))."&nbsp;".get_lang('Chat')."</a></li>";
 		}
 	}
-
+echo '</ul>';
 	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang('Tools').':</b></div>';
 	if (!empty($tools)) {
 		echo '<div style="margin-left:5px;">'.$tools.'</div>';
 	}
 
 } else {
+	echo '<ul>';
+	
 	$tools = '';
 	// Link to the forum of this group
 	$forums_of_groups = get_forums_of_group($current_group['id']);
@@ -185,7 +188,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group($_SE
 		if ( $current_group['forum_state'] == TOOL_PUBLIC ) {
 			foreach ($forums_of_groups as $key => $value) {
 				if ($value['forum_group_public_private'] == 'public' ) {
-					$tools.= Display::return_icon('forum.gif', get_lang('GroupForum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'">'.$value['forum_title'].'</a><br />';
+					$tools.= '<li style="display:inline; margin:5px;">'.Display::return_icon('forum.gif', get_lang('GroupForum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'">'.$value['forum_title'].'</a></li>';
 					//$tools.= Display::return_icon('forum.gif', get_lang('Forum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.get_lang("Forum").': '.$value['forum_title'].'</a><br />';
 				}
 			}
@@ -193,34 +196,34 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group($_SE
 	}
 	if ($current_group['doc_state'] == TOOL_PUBLIC) {
 		// Link to the documents area of this group
-		$tools .= '<a href="../document/document.php?'.api_get_cidreq().'&amp;gidReq='.$current_group['id'].'&amp;origin='.$origin.'">'.Display::return_icon('folder_document.gif', get_lang('GroupDocument')).'&nbsp;'.get_lang('GroupDocument').'</a><br />';
+		$tools .= '<li style="display:inline; margin:5px;"><a href="../document/document.php?'.api_get_cidreq().'&amp;gidReq='.$current_group['id'].'&amp;origin='.$origin.'">'.Display::return_icon('folder_document.gif', get_lang('GroupDocument')).'&nbsp;'.get_lang('GroupDocument').'</a></li>';
 	}
 	if ($current_group['calendar_state'] == TOOL_PUBLIC) {
 		// Link to a group-specific part of agenda
-		$tools .= '<a href="../calendar/agenda.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'&amp;group='.$current_group['id'].'">'.Display::return_icon('agenda.gif', get_lang('GroupCalendar')).'&nbsp;'.get_lang('GroupCalendar').'</a><br />';
+		$tools .= '<li style="display:inline; margin:5px;"><a href="../calendar/agenda.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'&amp;group='.$current_group['id'].'">'.Display::return_icon('agenda.gif', get_lang('GroupCalendar')).'&nbsp;'.get_lang('GroupCalendar').'</a></li>';
 	}
 	if ($current_group['work_state'] == TOOL_PUBLIC) {
 		// Link to the works area of this group
-		$tools .= '<a href="../work/work.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('works.gif', get_lang('GroupWork')).'&nbsp;'.get_lang('GroupWork').'</a><br />';
+		$tools .= '<li style="display:inline; margin:5px;"><a href="../work/work.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('works.gif', get_lang('GroupWork')).'&nbsp;'.get_lang('GroupWork').'</a></li>';
 	}
 	if ($current_group['announcements_state'] == TOOL_PUBLIC) {
 		// Link to a group-specific part of announcements
-		$tools .= '<a href="../announcements/announcements.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'&amp;group='.$current_group['id'].'">'.Display::return_icon('valves.gif', get_lang('GroupAnnouncements')).'&nbsp;'.get_lang('GroupAnnouncements').'</a><br />';
+		$tools .= '<li style="display:inline; margin:5px;"><a href="../announcements/announcements.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'&amp;group='.$current_group['id'].'">'.Display::return_icon('valves.gif', get_lang('GroupAnnouncements')).'&nbsp;'.get_lang('GroupAnnouncements').'</a></li>';
 	}
 	if ($current_group['wiki_state'] == TOOL_PUBLIC) {
 		// Link to the wiki area of this group
-		$tools .= '<a href="../wiki/index.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('wiki.gif', get_lang('GroupWiki')).'&nbsp;'.get_lang('GroupWiki').'</a><br />';
+		$tools .= '<li style="display:inline; margin:5px;"><a href="../wiki/index.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('wiki.gif', get_lang('GroupWiki')).'&nbsp;'.get_lang('GroupWiki').'</a></li>';
 	}
 	if ($current_group['chat_state'] == TOOL_PUBLIC ) {
 		// Link to the chat area of this group
 		if (api_get_course_setting('allow_open_chat_window')) {
-			$tools .= "<div style='margin-bottom: 5px;'><a href=\"javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."','window_chat_group_".$_SESSION['_cid']."_".$_SESSION['_gid']."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \" >".Display::return_icon('chat.gif', get_lang("Chat"))."&nbsp;".get_lang("Chat")."</a></div>";
+			$tools .= "<li style=\"display:inline; margin:5px;\"><a href=\"javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."','window_chat_group_".$_SESSION['_cid']."_".$_SESSION['_gid']."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \" >".Display::return_icon('chat.gif', get_lang("Chat"))."&nbsp;".get_lang("Chat")."</a></li>";
 		} else {
-			$tools .= "<div style='margin-bottom: 5px;'><a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.gif', get_lang("Chat"))."&nbsp;".get_lang("Chat")."</a></div>";
+			$tools .= "<li style=\"display:inline; margin:5px;\"><a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.gif', get_lang("Chat"))."&nbsp;".get_lang("Chat")."</a></li>";
 		}
 	}
 
-	echo '<br />';
+	echo '</ul>';
 
 	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang('Tools').':</b></div>';
 	if (!empty($tools)) {

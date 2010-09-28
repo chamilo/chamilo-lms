@@ -16,6 +16,7 @@ class scormOrganization {
 	public $title = '';
 	public $items = array();
 	public $metadata;
+
 	/**
 	 * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormOrganization
 	 * object from database records or from the DOM element given as parameter
@@ -24,46 +25,46 @@ class scormOrganization {
 	 */
 	public function __construct($type = 'manifest', &$element, $scorm_charset = 'UTF-8') {
 		if (isset($element))	{
-			$v = substr(phpversion(), 0, 1);
-			if ($v == 4) {
-				switch ($type) {
-					case 'db':
-						// TODO: Implement this way of metadata object creation
-						return false;
-					case 'manifest': // Do the same as the default.
-					default:
-					 	//if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function
-					 	$children = $element->children();
-						foreach ($children as $a => $dummy) {
-					 		$child =& $children[$a];
-					 		switch ($child->type) {
-					 			case XML_ELEMENT_NODE:
-									switch ($child->tagname) {
-					 					case 'item':
-					 						$oItem = new scormItem('manifest', $child);
-					 						if ($oItem->identifier != '') {
-												$this->items[$oItem->identifier] = $oItem;
-					 						}
-											break;
-					 					case 'metadata':
-					 						$this->metadata = new scormMetadata('manifest', $child);
-					 						break;
-					 					case 'title':
-							 				$tmp_children = $child->children();
-							 				if (count($tmp_children) == 1 && $tmp_children[0]->content != '') {
-							 					$this->title = $tmp_children[0]->content;
-							 				}
-							 				break;
-					 				}
-					 				break;
-					 			case XML_TEXT_NODE:
-					 				break;
-					 		}
-					 	}
-					 	$attributes = $element->attributes();
+
+			// Parsing using PHP5 DOMXML methods.
+
+			switch ($type) {
+				case 'db':
+					// TODO: Implement this way of metadata object creation.
+					return false;
+				case 'manifest': // Do the same as the default.
+				default:
+				 	//if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
+				 	$children = $element->childNodes;
+					foreach ($children as $child) {
+				 		switch ($child->nodeType) {
+				 			case XML_ELEMENT_NODE:
+								switch ($child->tagName) {
+				 					case 'item':
+				 						$oItem = new scormItem('manifest', $child);
+				 						if ($oItem->identifier != '') {
+											$this->items[$oItem->identifier] = $oItem;
+				 						}
+										break;
+				 					case 'metadata':
+				 						$this->metadata = new scormMetadata('manifest', $child);
+				 						break;
+				 					case 'title':
+						 				$tmp_children = $child->childNodes;
+						 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+						 					$this->title = html_entity_decode(html_entity_decode($child->firstChild->nodeValue, ENT_QUOTES, $scorm_charset)); // TODO: This conversion from html-entities looks strange.
+						 				}
+						 				break;
+				 				}
+				 				break;
+				 			case XML_TEXT_NODE:
+				 				break;
+				 		}
+				 	}
+					if ($element->hasAttributes()) {
+					 	$attributes = $element->attributes;
 					 	//$keep_href = '';
-					 	foreach ($attributes as $a1 => $dummy) {
-					 		$attrib =& $attributes[$a1];
+					 	foreach ($attributes as $attrib) {
 					 		switch ($attrib->name) {
 					 			case 'identifier':
 					 				$this->identifier = $attrib->value;
@@ -73,64 +74,12 @@ class scormOrganization {
 					 				break;
 					 		}
 					 	}
-						return true;
-
-				}
-			} elseif ($v == 5) {
-				// Parsing using PHP5 DOMXML methods.
-				switch ($type) {
-					case 'db':
-						// TODO: Implement this way of metadata object creation.
-						return false;
-					case 'manifest': // Do the same as the default.
-					default:
-					 	//if($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
-					 	$children = $element->childNodes;
-						foreach ($children as $child) {
-					 		switch ($child->nodeType) {
-					 			case XML_ELEMENT_NODE:
-									switch ($child->tagName) {
-					 					case 'item':
-					 						$oItem = new scormItem('manifest', $child);
-					 						if ($oItem->identifier != '') {
-												$this->items[$oItem->identifier] = $oItem;
-					 						}
-											break;
-					 					case 'metadata':
-					 						$this->metadata = new scormMetadata('manifest', $child);
-					 						break;
-					 					case 'title':
-							 				$tmp_children = $child->childNodes;
-							 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
-							 					$this->title = html_entity_decode(html_entity_decode($child->firstChild->nodeValue, ENT_QUOTES, $scorm_charset)); // TODO: This conversion from html-entities looks strange.
-							 				}
-							 				break;
-					 				}
-					 				break;
-					 			case XML_TEXT_NODE:
-					 				break;
-					 		}
-					 	}
-						if ($element->hasAttributes()) {
-						 	$attributes = $element->attributes;
-						 	//$keep_href = '';
-						 	foreach ($attributes as $attrib) {
-						 		switch ($attrib->name) {
-						 			case 'identifier':
-						 				$this->identifier = $attrib->value;
-						 				break;
-						 			case 'structure':
-						 				$this->structure = $attrib->value;
-						 				break;
-						 		}
-						 	}
-						}
-						return true;
-				}
-			} else {
-				// Cannot parse because not PHP4 nor PHP5... We should not even be here anyway...
-				return false;
+					}
+					return true;
 			}
+
+			// End parsing using PHP5 DOMXML methods.
+
 		}
 		return false;
 	}

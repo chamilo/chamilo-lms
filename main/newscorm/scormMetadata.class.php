@@ -28,160 +28,77 @@ class scormMetadata {
 	 */
 	public function __construct($type = 'manifest', &$element) {
 		if (isset($element)) {
-			$v = substr(phpversion(), 0, 1);
-			if ($v == 4) {
-				switch ($type) {
-					case 'db':
-						// TODO: Implement this way of metadata object creation
-						return false;
-						//break;
-					case 'manifest': // Do the same as the default.
-					 	//if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
-					 	$children = $element->children();
-						foreach ($children as $a => $dummy) {
-					 		$child =& $children[$a];
-					 		switch ($child->type) {
-					 			case XML_ELEMENT_NODE:
-									// Could be 'lom', 'schema', 'schemaversion' or 'location'.
-					 				switch ($child->tagname) {
-					 					case 'lom':
-					 						$childchildren = $child->children();
-					 						foreach ($childchildren as $index => $dummy) {
-					 							$my_elem = $childchildren[$index];
-					 							// There is generally only one child here.
-					 							//$this->lom[] = $my_elem->content;
-					 							$this->lom = $my_elem->content;
-					 						}
-					 						break;
-					 					case 'schema':
-					 						$childchildren = $child->children();
-					 						foreach ($childchildren as $index => $dummy) {
-					 							$my_elem = $childchildren[$index];
-					 							// There is generally only one child here.
-					 							//$this->schema[] = $my_elem->content;
-					 							$this->schema = $my_elem->content;
-					 						}
-					 						break;
-					 					case 'schemaversion':
-					 						$childchildren = $child->children();
-					 						foreach ($childchildren as $index => $dummy) {
-					 							$my_elem = $childchildren[$index];
-					 							// There is generally only one child here.
-					 							//$this->schemaversion[] = $my_elem->content;
-					 							$this->schemaversion = $my_elem->content;
-					 						}
-					 						break;
-					 					case 'location':
-					 						$childchildren = $child->children();
-					 						foreach ($childchildren as $index => $dummy) {
-					 							$my_elem = $childchildren[$index];
-					 							// There is generally only one child here.
-					 							//$this->location[] = $my_elem->content;
-					 							$this->location = $my_elem->content;
-					 						}
-					 						break;
-					 				}
-					 				break;
-					 			case XML_TEXT_NODE:
-					 				if (trim($child->content) != '') {
-					 					if (count($children == 1)) {
-					 						// If this is the only child at this level and it is a content... save differently.
-					 						$this->text = $child->content;
-					 					} else {
-					 						$this->text[$element->tagname] = $child->content;
-					 					}
-					 				}
-					 				break;
+
+			// Parsing using PHP5 DOMXML methods.
+
+			switch ($type) {
+				case 'db':
+					// TODO: Implement this way of metadata object creation.
+					return false;
+					//break;
+				case 'manifest': // Do the same as the default.
+				 	$children = $element->childNodes;
+					foreach ($children as $child) {
+				 		switch ($child->nodeType) {
+				 			case XML_ELEMENT_NODE:
+								// Could be 'lom', 'schema', 'schemaversion' or 'location'.
+				 				switch ($child->tagName) {
+				 					case 'lom':
+				 						$childchildren = $child->childNodes;
+				 						foreach ($childchildren as $childchild) {
+				 							$this->lom = $childchild->nodeValue;
+				 						}
+				 						break;
+				 					case 'schema':
+				 						$childchildren = $child->childNodes;
+				 						foreach ($childchildren as $childchild) {
+				 							// There is generally only one child here.
+				 							$this->schema = $childchild->nodeValue;
+				 						}
+				 						break;
+				 					case 'schemaversion':
+				 						$childchildren = $child->childNodes;
+				 						foreach ($childchildren as $childchild) {
+				 							// There is generally only one child here.
+				 							$this->schemaversion = $childchild->nodeValue;
+				 						}
+				 						break;
+				 					case 'location':
+				 						$childchildren = $child->childNodes;
+				 						foreach ($childchildren as $childchild) {
+				 							// There is generally only one child here.
+				 							$this->location = $childchild->nodeValue;
+				 						}
+				 						break;
+				 				}
+				 				break;
+				 			case XML_TEXT_NODE:
+				 				if (trim($child->textContent) != '') {
+				 					if (count($children == 1)) {
+				 						// If this is the only child at this level and it is a content... save differently.
+				 						$this->text = $child->textContent;
+				 					} else {
+				 						$this->text[$element->tagName] = $child->textContent;
+				 					}
+				 				}
+				 				break;
+				 		}
+				 	}
+				 	$attributes = $element->attributes;
+				 	//$keep_href = '';
+				 	if (is_array($attributes)) {
+					 	foreach ($attributes as $attrib) {
+					 		if (trim($attrib->value) != ''){
+					 			$this->attribs[$attrib->name] = $attrib->value;
 					 		}
 					 	}
-					 	$attributes = $element->attributes();
-					 	//$keep_href = '';
-					 	if (is_array($attributes)) {
-						 	foreach ($attributes as $a1 => $dummy) {
-						 		$attrib =& $attributes[$a1];
-						 		if (trim($attrib->value) != '') {
-						 			$this->attribs[$attrib->name] = $attrib->value;
-						 		}
-						 	}
-					 	}
-						return true;
-						//break;
-				}
-			} elseif ($v == 5) {
-				// Parsing using PHP5 DOMXML methods.
-				switch ($type) {
-					case 'db':
-						// TODO: Implement this way of metadata object creation.
-						return false;
-						//break;
-					case 'manifest': // Do the same as the default.
-					 	$children = $element->childNodes;
-						foreach ($children as $child) {
-					 		switch ($child->nodeType) {
-					 			case XML_ELEMENT_NODE:
-									// Could be 'lom','schema','schemaversion' or 'location'.
-					 				switch ($child->tagName) {
-					 					case 'lom':
-					 						$childchildren = $child->childNodes;
-					 						foreach ($childchildren as $childchild) {
-					 							//$this->lom = $childchild->textContent;
-					 							$this->lom = $childchild->nodeValue;
-					 						}
-					 						break;
-					 					case 'schema':
-					 						$childchildren = $child->childNodes;
-					 						foreach ($childchildren as $childchild) {
-					 							// There is generally only one child here.
-					 							//$this->schema = $childchildren[$index]->textContent;
-					 							$this->schema = $childchild->nodeValue;
-					 						}
-					 						break;
-					 					case 'schemaversion':
-					 						$childchildren = $child->childNodes;
-					 						foreach ($childchildren as $childchild) {
-					 							// There is generally only one child here.
-					 							//$this->schemaversion = $childchildren[$index]->textContent;
-					 							$this->schemaversion = $childchild->nodeValue;
-					 						}
-					 						break;
-					 					case 'location':
-					 						$childchildren = $child->childNodes;
-					 						foreach ($childchildren as $childchild) {
-					 							// There is generally only one child here.
-					 							//$this->location = $childchildren[$index]->textContent;
-					 							$this->location = $childchild->nodeValue;
-					 						}
-					 						break;
-					 				}
-					 				break;
-					 			case XML_TEXT_NODE:
-					 				if (trim($child->textContent) != '') {
-					 					if (count($children == 1)) {
-					 						// If this is the only child at this level and it is a content... save differently.
-					 						$this->text = $child->textContent;
-					 					} else {
-					 						$this->text[$element->tagName] = $child->textContent;
-					 					}
-					 				}
-					 				break;
-					 		}
-					 	}
-					 	$attributes = $element->attributes;
-					 	//$keep_href = '';
-					 	if (is_array($attributes)) {
-						 	foreach ($attributes as $attrib) {
-						 		if (trim($attrib->value) != ''){
-						 			$this->attribs[$attrib->name] = $attrib->value;
-						 		}
-						 	}
-					 	}
-						return true;
-						//break;
-				}
-			} else {
-				// Cannot parse because not PHP4 nor PHP5... We should not even be here anyway...
-				return false;
+				 	}
+					return true;
+					//break;
 			}
+
+			// End parsing using PHP5 DOMXML methods.
+
 		}
 		return false;
 	}

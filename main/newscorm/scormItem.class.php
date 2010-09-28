@@ -35,82 +35,92 @@ class scormItem extends learnpathItem {
 	 * @param	string	Type of construction needed ('db' or 'manifest', default = 'manifest')
 	 * @param	mixed	Depending on the type given, DB id for the lp_item or reference to the DOM element
 	 */
-	public function __construct($type='manifest',&$element) {
+	public function __construct($type = 'manifest', &$element) {
 		if (isset($element)) {
 
-			$v = substr(phpversion(), 0, 1);
-			if ($v == 4) {
-				switch ($type) {
-					case 'db':
-						parent::__construct($element,api_get_user_id());
-						$this->scorm_contact = false;
-						// TODO: Implement this way of metadata object creation.
-						return false;
-					case 'manifest': // Do the same as the default.
-					default:
-					 	// if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
-					 	$children = $element->children();
-						foreach($children as $a => $dummy) {
-					 		$child =& $children[$a];
-					 		switch($child->type) {
-					 			case XML_ELEMENT_NODE:
-									switch($child->tagname) {
-					 					case 'title':
-							 				$tmp_children = $child->children();
-							 				if (count($tmp_children) == 1 && $tmp_children[0]->content != '') {
-							 					$this->title = $tmp_children[0]->content;
-							 				}
-							 				break;
-					 					case 'maxtimeallowed':
-							 				$tmp_children = $child->children();
-							 				if (count($tmp_children) == 1 && $tmp_children[0]->content != '') {
-							 					$this->max_time_allowed = $tmp_children[0]->content;
-							 				}
-							 				break;
-										case 'prerequisites':
-							 				$tmp_children = $child->children();
-							 				if (count($tmp_children) == 1 && $tmp_children[0]->content != '') {
-							 					$this->prereq_string = $tmp_children[0]->content;
-							 				}
-							 				break;
-										case 'timelimitaction':
-							 				$tmp_children = $child->children();
-							 				if (count($tmp_children) == 1 && $tmp_children[0]->content != '') {
-							 					$this->timelimitaction = $tmp_children[0]->content;
-							 				}
-							 				break;
-										case 'datafromlms':
-							 				$tmp_children = $child->children();
-							 				if (count($tmp_children) == 1 && $tmp_children[0]->content != '') {
-							 					$this->datafromlms = $tmp_children[0]->content;
-							 				}
-							 				break;
-										case 'masteryscore':
-							 				$tmp_children = $child->children();
-							 				if (count($tmp_children) == 1 && $tmp_children[0]->content != '') {
-							 					$this->mastery_score = $tmp_children[0]->content;
-							 				}
-							 				break;
-					 					case 'item':
-					 						$oItem = new scormItem('manifest', $child);
-					 						if ($oItem->identifier != ''){
-					 							$this->sub_items[$oItem->identifier] = $oItem;
-					 						}
-											break;
-					 					case 'metadata':
-					 						$this->metadata = new scormMetadata('manifest', $child);
-					 						break;
-					 				}
-					 				break;
-					 			case XML_TEXT_NODE:
-					 				// This case is actually treated by looking into ELEMENT_NODEs above.
-					 				break;
-					 		}
-					 	}
-					 	$attributes = $element->attributes();
+			// Parsing using PHP5 DOMXML methods.
+
+			switch ($type) {
+				case 'db':
+					parent::__construct($element,api_get_user_id());
+					$this->scorm_contact = false;
+					// TODO: Implement this way of metadata object creation.
+					return false;
+				case 'manifest': // Do the same as the default.
+				default:
+				 	//if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
+				 	$children = $element->childNodes;
+					foreach ($children as $child) {
+				 		switch ($child->nodeType) {
+				 			case XML_ELEMENT_NODE:
+								switch ($child->tagName) {
+				 					case 'title':
+						 				$tmp_children = $child->childNodes;
+						 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+						 					$this->title = $child->firstChild->nodeValue;
+						 				}
+						 				break;
+						 			case 'max_score':
+					 					if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+						 					$this->max_score = $child->firstChild->nodeValue;
+						 				}
+						 				break;
+				 					case 'maxtimeallowed':
+				 					case 'adlcp:maxtimeallowed':
+						 				$tmp_children = $child->childNodes;
+						 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+						 					$this->max_time_allowed = $child->firstChild->nodeValue;
+						 				}
+						 				break;
+									case 'prerequisites':
+									case 'adlcp:prerequisites':
+						 				$tmp_children = $child->childNodes;
+						 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+						 					$this->prereq_string = $child->firstChild->nodeValue;
+						 				}
+						 				break;
+									case 'timelimitaction':
+									case 'adlcp:timelimitaction':
+						 				$tmp_children = $child->childNodes;
+						 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+						 					$this->timelimitaction = $child->firstChild->nodeValue;
+						 				}
+						 				break;
+									case 'datafromlms':
+									case 'adlcp:datafromlms':
+									case 'adlcp:launchdata': //in some cases (Wouters)
+						 				$tmp_children = $child->childNodes;
+						 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+						 					$this->datafromlms = $child->firstChild->nodeValue;
+						 				}
+						 				break;
+									case 'masteryscore':
+									case 'adlcp:masteryscore':
+						 				$tmp_children = $child->childNodes;
+						 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
+						 					$this->mastery_score = $child->firstChild->nodeValue;
+						 				}
+						 				break;
+				 					case 'item':
+				 						$oItem = new scormItem('manifest',$child);
+				 						if ($oItem->identifier != '') {
+				 							$this->sub_items[$oItem->identifier] = $oItem;
+				 						}
+										break;
+				 					case 'metadata':
+				 						$this->metadata = new scormMetadata('manifest', $child);
+				 						break;
+				 				}
+				 				break;
+				 			case XML_TEXT_NODE:
+				 				// This case is actually treated by looking into ELEMENT_NODEs above.
+				 				break;
+				 		}
+				 	}
+				 	if ($element->hasAttributes()) {
+					 	$attributes = $element->attributes;
 					 	//$keep_href = '';
-					 	foreach ($attributes as $a1 => $dummy) {
-					 		$attrib =& $attributes[$a1];
+					 	foreach ($attributes as $attrib) {
 					 		switch($attrib->name){
 					 			case 'identifier':
 					 				$this->identifier = $attrib->value;
@@ -126,121 +136,12 @@ class scormItem extends learnpathItem {
 					 				break;
 					 		}
 					 	}
-						return true;
-
-				}
-			} elseif ($v == 5) {
-				// Parsing using PHP5 DOMXML methods.
-				switch ($type) {
-					case 'db':
-						parent::__construct($element,api_get_user_id());
-						$this->scorm_contact = false;
-						//TODO: Implement this way of metadata object creation.
-						return false;
-					case 'manifest': // Do the same as the default.
-					default:
-					 	//if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
-					 	$children = $element->childNodes;
-						foreach ($children as $child) {
-					 		switch ($child->nodeType) {
-					 			case XML_ELEMENT_NODE:
-									switch ($child->tagName) {
-					 					case 'title':
-							 				$tmp_children = $child->childNodes;
-							 				//if (count($tmp_children) == 1 && $tmp_children[0]->textContent != '') {
-							 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
-							 					$this->title = $child->firstChild->nodeValue;
-							 				}
-							 				break;
-							 			case 'max_score':
-						 					if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
-							 					$this->max_score = $child->firstChild->nodeValue;
-							 				}
-							 				break;
-					 					case 'maxtimeallowed':
-					 					case 'adlcp:maxtimeallowed':
-							 				$tmp_children = $child->childNodes;
-							 				//if (count($tmp_children) == 1 && $tmp_children[0]->textContent != '') {
-							 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
-							 					$this->max_time_allowed = $child->firstChild->nodeValue;
-							 				}
-							 				break;
-										case 'prerequisites':
-										case 'adlcp:prerequisites':
-							 				$tmp_children = $child->childNodes;
-							 				//if (count($tmp_children) == 1 && $tmp_children[0]->textContent != '') {
-							 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
-							 					$this->prereq_string = $child->firstChild->nodeValue;
-							 				}
-							 				break;
-										case 'timelimitaction':
-										case 'adlcp:timelimitaction':
-							 				$tmp_children = $child->childNodes;
-							 				//if (count($tmp_children) == 1 && $tmp_children[0]->textContent != '') {
-							 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
-							 					$this->timelimitaction = $child->firstChild->nodeValue;
-							 				}
-							 				break;
-										case 'datafromlms':
-										case 'adlcp:datafromlms':
-										case 'adlcp:launchdata': //in some cases (Wouters)
-							 				$tmp_children = $child->childNodes;
-							 				//if (count($tmp_children) == 1 && $tmp_children[0]->textContent != '') {
-							 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
-							 					$this->datafromlms = $child->firstChild->nodeValue;
-							 				}
-							 				break;
-										case 'masteryscore':
-										case 'adlcp:masteryscore':
-							 				$tmp_children = $child->childNodes;
-							 				//if (count($tmp_children) == 1 && $tmp_children[0]->textContent != '') {
-							 				if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
-							 					$this->mastery_score = $child->firstChild->nodeValue;
-							 				}
-							 				break;
-					 					case 'item':
-					 						$oItem = new scormItem('manifest',$child);
-					 						if ($oItem->identifier != '') {
-					 							$this->sub_items[$oItem->identifier] = $oItem;
-					 						}
-											break;
-					 					case 'metadata':
-					 						$this->metadata = new scormMetadata('manifest', $child);
-					 						break;
-					 				}
-					 				break;
-					 			case XML_TEXT_NODE:
-					 				// This case is actually treated by looking into ELEMENT_NODEs above.
-					 				break;
-					 		}
-					 	}
-					 	if ($element->hasAttributes()) {
-						 	$attributes = $element->attributes;
-						 	//$keep_href = '';
-						 	foreach ($attributes as $attrib) {
-						 		switch($attrib->name){
-						 			case 'identifier':
-						 				$this->identifier = $attrib->value;
-						 				break;
-						 			case 'identifierref':
-						 				$this->identifierref = $attrib->value;
-						 				break;
-						 			case 'isvisible':
-						 				$this->isvisible = $attrib->value;
-						 				break;
-						 			case 'parameters':
-						 				$this->parameters = $attrib->value;
-						 				break;
-						 		}
-						 	}
-					 	}
-						return true;
-
-				}
-			} else {
-				// Cannot parse because not PHP4 nor PHP5... We should not even be here anyway...
-				return false;
+				 	}
+					return true;
 			}
+
+			// End parsing using PHP5 DOMXML methods.
+
 		}
 		return false;
 	}

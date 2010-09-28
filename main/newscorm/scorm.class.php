@@ -77,57 +77,59 @@ class scorm extends learnpath {
 		if (empty($file)) {
 			// Get the path of the imsmanifest file.
 		}
-		if (is_file($file) and is_readable($file)) {
-			$v = substr(phpversion(), 0, 1);
-			if ($v == 4) {
-				if ($this->debug > 0) { error_log('In scorm::parse_manifest() - Parsing using PHP4 method', 0); }
-				$var = file_get_contents($file);
-				// Quick ugly hack to remove xml:id attributes from the file (break the system if xslt not installed).
-				$var = preg_replace('/xml:id=["\']id_\d{1,4}["\']/i', '', $var);
-				$doc = xmldoc($var);
-				//error_reporting(E_ALL);
-				//$doc = xmldocfile($file);
-				if (!empty($doc->encoding)) {
-					$this->manifest_encoding = strtoupper($doc->encoding);
-				}
-				if ($this->debug > 1) { error_log('New LP - Called xmldoc() (encoding:'.strtoupper($doc->encoding).' - saved: '.$this->manifest_encoding.')', 0); }
-				if (!$doc) {
-					if ($this->debug > 1) { error_log('New LP - File '.$file.' is not an XML file', 0); }
-					//$this->set_error_msg("File $file is not an XML file");
-					return null;
-				} else {
-					if ($this->debug > 1) { error_log('New LP - File '.$file.' is XML', 0); }
-					$root = $doc->root();
-					$attributes = $root->attributes();
-					for ($a = 0; $a < sizeof($attributes); $a++) {
+		if (is_file($file) && is_readable($file)) {
+
+			// Parsing using PHP5 DOMXML methods.
+
+			if ($this->debug > 0) { error_log('In scorm::parse_manifest() - Parsing using PHP5 method', 0); }
+			$doc = new DOMDocument();
+			$res = $doc->load($file);
+			if ($res === false) {
+				if ($this->debug > 0) { error_log('New LP - In scorm::parse_manifest() - Exception thrown when loading '.$file.' in DOMDocument', 0); }
+				// Throw exception?
+				return null;
+			}
+
+			if (!empty($doc->xmlEncoding)) {
+				$this->manifest_encoding = strtoupper($doc->xmlEncoding);
+			}
+			if ($this->debug > 1) { error_log('New LP - Called  (encoding:'.$doc->xmlEncoding.' - saved: '.$this->manifest_encoding.')', 0); }
+
+			$root = $doc->documentElement;
+			if ($root->hasAttributes()) {
+				$attributes = $root->attributes;
+				if ($attributes->length !== 0) {
+					foreach ($attributes as $attrib) {
 						// <manifest> element attributes
-						if ($attributes[$a]->type == XML_ATTRIBUTE_NODE) {
-							$this->manifest[$attributes[$a]->name] = $attributes[$a]->value;
-						}
+						$this->manifest[$attrib->name] = $attrib->value;
 					}
-					$this->manifest['name'] = $root->name;
-					$children = $root->children();
-					for($b = 0; $b < sizeof($children); $b++) {
+				}
+			}
+			$this->manifest['name'] = $root->tagName;
+			if ($root->hasChildNodes()) {
+				$children = $root->childNodes;
+				if ($children->length !== 0) {
+					foreach ($children as $child) {
 						// <manifest> element children (can be <metadata>, <organizations> or <resources> )
-						if ($children[$b]->type == XML_ELEMENT_NODE) {
-							switch($children[$b]->tagname) {
+						if ($child->nodeType == XML_ELEMENT_NODE) {
+							switch($child->tagName) {
 								case 'metadata':
 									// Parse items from inside the <metadata> element.
-									$this->metadata = new scormMetadata('manifest',$children[$b]);
+									$this->metadata = new scormMetadata('manifest',$child);
 									break;
 								case 'organizations':
 									// Contains the course structure - this element appears 1 and only 1 time in a package imsmanifest. It contains at least one 'organization' sub-element.
-									$orgs_attribs = $children[$b]->attributes();
-									for($c = 0; $c < sizeof($orgs_attribs); $c++) {
+									$orgs_attribs = $child->attributes;
+									foreach ($orgs_attribs as $orgs_attrib) {
 										// Attributes of the <organizations> element.
-										if ($orgs_attribs[$c]->type == XML_ATTRIBUTE_NODE) {
-											$this->manifest['organizations'][$orgs_attribs[$c]->name] = $orgs_attribs[$c]->value;
+										if ($orgs_attrib->nodeType == XML_ATTRIBUTE_NODE) {
+											$this->manifest['organizations'][$orgs_attrib->name] = $orgs_attrib->value;
 										}
 									}
-									$orgs_nodes = $children[$b]->children();
+									$orgs_nodes = $child->childNodes;
 									$i = 0;
 									$found_an_org = false;
-									foreach ($orgs_nodes as $c => $dummy) {
+									foreach ($orgs_nodes as $orgnode) {
 										// <organization> elements - can contain <item>, <metadata> and <title>
 										// Here we are at the 'organization' level. There might be several organization tags but
 										// there is generally only one.
@@ -136,24 +138,21 @@ class scorm extends learnpath {
 										// -item (may contain other item tags or may appear several times inside organization)
 										// -metadata (relative to the organization)
 										$found_an_org = false;
-										$orgnode =& $orgs_nodes[$c];
-										switch ($orgnode->type) {
+										switch ($orgnode->nodeType) {
 											case XML_TEXT_NODE:
 												// Ignore here.
 												break;
 											case XML_ATTRIBUTE_NODE:
-												// just in case ther would be interesting attributes inside the organization tag. There shouldn't
+												// Just in case there would be interesting attributes inside the organization tag. There shouldn't
 												// as this is a node-level, not a data level.
 												//$manifest['organizations'][$i][$orgnode->name] = $orgnode->value;
 												//$found_an_org = true;
 												break;
 											case XML_ELEMENT_NODE:
 												// <item>, <metadata> or <title> (or attributes)
-												$organizations_attributes = $orgnode->attributes();
-												foreach($organizations_attributes as $d1 => $dummy) {
-													//$manifest['organizations'][$i]['attributes'][$organizations_attributes[$d1]->name] = $organizations_attributes[$d1]->value;
-													//$found_an_org = true;
-													$this->organizations_att[$organizations_attributes[$d1]->name] = $organizations_attributes[$d1]->value;
+												$organizations_attributes = $orgnode->attributes;
+												foreach ($organizations_attributes as $orgs_attr) {
+													$this->organizations_att[$orgs_attr->name] = $orgs_attr->value;
 												}
 												$oOrganization = new scormOrganization('manifest', $orgnode, $this->manifest_encoding);
 												if ($oOrganization->identifier != '') {
@@ -174,26 +173,23 @@ class scorm extends learnpath {
 									}
 									break;
 								case 'resources':
-									$resources_attribs = $children[$b]->attributes();
-									for ($c = 0; $c < sizeof($resources_attribs); $c++) {
-										if ($resources_attribs[$c]->type == XML_ATTRIBUTE_NODE) {
-											$this->manifest['resources'][$resources_attribs[$c]->name] = $resources_attribs[$c]->value;
+									if ($child->hasAttributes()) {
+										$resources_attribs = $child->attributes;
+										foreach ($resources_attribs as $res_attr) {
+											if ($res_attr->type == XML_ATTRIBUTE_NODE) {
+												$this->manifest['resources'][$res_attr->name] = $res_attr->value;
+											}
 										}
 									}
-									$resources_nodes = $children[$b]->children();
-									$i = 0;
-									foreach ($resources_nodes as $c => $dummy) {
-										/*
-										$my_res = scorm::parse_items($resources_nodes[$c]);
-										scorm::parse_items_get_refurls($resources_nodes[$c], $refurls);
-										if (count($my_res) > 0) {
-											$manifest['resources'][$i] = $my_res;
-										}
-										*/
-										$oResource = new scormResource('manifest', $resources_nodes[$c]);
-										if ($oResource->identifier != '') {
-											$this->resources[$oResource->identifier] = $oResource;
-											$i++;
+									if ($child->hasChildNodes()) {
+										$resources_nodes = $child->childNodes;
+										$i = 0;
+										foreach ($resources_nodes as $res_node) {
+											$oResource = new scormResource('manifest', $res_node);
+											if ($oResource->identifier != '') {
+												$this->resources[$oResource->identifier] = $oResource;
+												$i++;
+											}
 										}
 									}
 									// Contains links to physical resources.
@@ -205,141 +201,17 @@ class scorm extends learnpath {
 						}
 					}
 				}
-				unset($doc);
-			} elseif ($v==5) {
-				if ($this->debug > 0) { error_log('In scorm::parse_manifest() - Parsing using PHP5 method', 0); }
-				$doc = new DOMDocument();
-				$res = $doc->load($file);
-				if ($res === false) {
-					if ($this->debug > 0) { error_log('New LP - In scorm::parse_manifest() - Exception thrown when loading '.$file.' in DOMDocument', 0); }
-					// Throw exception?
-					return null;
-				}
-
-				if (!empty($doc->xmlEncoding)) {
-					$this->manifest_encoding = strtoupper($doc->xmlEncoding);
-				}
-				if ($this->debug > 1) { error_log('New LP - Called  (encoding:'.$doc->xmlEncoding.' - saved: '.$this->manifest_encoding.')', 0); }
-
-				$root = $doc->documentElement;
-				if ($root->hasAttributes()) {
-					$attributes = $root->attributes;
-					if ($attributes->length !== 0) {
-						foreach($attributes as $attrib) {
-							// <manifest> element attributes
-							$this->manifest[$attrib->name] = $attrib->value;
-						}
-					}
-				}
-				$this->manifest['name'] = $root->tagName;
-				if ($root->hasChildNodes()) {
-					$children = $root->childNodes;
-					if ($children->length !== 0) {
-						foreach($children as $child) {
-							// <manifest> element children (can be <metadata>, <organizations> or <resources> )
-							if ($child->nodeType == XML_ELEMENT_NODE) {
-								switch($child->tagName) {
-									case 'metadata':
-										// Parse items from inside the <metadata> element.
-										$this->metadata = new scormMetadata('manifest',$child);
-										break;
-									case 'organizations':
-										// Contains the course structure - this element appears 1 and only 1 time in a package imsmanifest. It contains at least one 'organization' sub-element.
-										$orgs_attribs = $child->attributes;
-										foreach($orgs_attribs as $orgs_attrib) {
-											// Attributes of the <organizations> element.
-											if ($orgs_attrib->nodeType == XML_ATTRIBUTE_NODE) {
-												$this->manifest['organizations'][$orgs_attrib->name] = $orgs_attrib->value;
-											}
-										}
-										$orgs_nodes = $child->childNodes;
-										$i = 0;
-										$found_an_org = false;
-										foreach ($orgs_nodes as $orgnode) {
-											// <organization> elements - can contain <item>, <metadata> and <title>
-											// Here we are at the 'organization' level. There might be several organization tags but
-											// there is generally only one.
-											// There are generally three children nodes we are looking for inside and organization:
-											// -title
-											// -item (may contain other item tags or may appear several times inside organization)
-											// -metadata (relative to the organization)
-											$found_an_org = false;
-											switch($orgnode->nodeType) {
-												case XML_TEXT_NODE:
-													// Ignore here.
-													break;
-												case XML_ATTRIBUTE_NODE:
-													// Just in case there would be interesting attributes inside the organization tag. There shouldn't
-													// as this is a node-level, not a data level.
-													//$manifest['organizations'][$i][$orgnode->name] = $orgnode->value;
-													//$found_an_org = true;
-													break;
-												case XML_ELEMENT_NODE:
-													// <item>, <metadata> or <title> (or attributes)
-													$organizations_attributes = $orgnode->attributes;
-													foreach ($organizations_attributes as $orgs_attr) {
-														$this->organizations_att[$orgs_attr->name] = $orgs_attr->value;
-													}
-													$oOrganization = new scormOrganization('manifest',$orgnode,$this->manifest_encoding);
-													if ($oOrganization->identifier != '') {
-														$name = $oOrganization->get_name();
-														if (empty($name)) {
-															// If the org title is empty, use zip file name.
-															$myname = $this->zipname;
-															if ($this->lastzipnameindex != 0) {
-																$myname = $myname + $this->lastzipnameindex;
-																$this->lastzipnameindex++;
-															}
-															$oOrganization->set_name($this->zipname);
-														}
-														$this->organizations[$oOrganization->identifier] = $oOrganization;
-													}
-													break;
-											}
-										}
-										break;
-									case 'resources':
-										if ($child->hasAttributes()) {
-											$resources_attribs = $child->attributes;
-											foreach ($resources_attribs as $res_attr) {
-												if ($res_attr->type == XML_ATTRIBUTE_NODE) {
-													$this->manifest['resources'][$res_attr->name] = $res_attr->value;
-												}
-											}
-										}
-										if ($child->hasChildNodes()) {
-											$resources_nodes = $child->childNodes;
-											$i = 0;
-											foreach ($resources_nodes as $res_node) {
-												$oResource = new scormResource('manifest', $res_node);
-												if ($oResource->identifier != '') {
-													$this->resources[$oResource->identifier] = $oResource;
-													$i++;
-												}
-											}
-										}
-										// Contains links to physical resources.
-										break;
-									case 'manifest':
-										// Only for sub-manifests.
-										break;
-								}
-							}
-						}
-					}
-				}
-				unset($doc);
-			} else {
-				if ($this->debug > 0) { error_log('In scorm::parse_manifest() - PHP version is not 4 nor 5, cannot parse', 0); }
-				$this->set_error_msg("Parsing impossible because PHP version is not 4 nor 5");
-				return null;
 			}
+			unset($doc);
+
+			// End parsing using PHP5 DOMXML methods.
+
 		} else {
 			if ($this->debug > 1) { error_log('New LP - Could not open/read file '.$file, 0); }
 			$this->set_error_msg("File $file could not be read");
 			return null;
 		}
-		// TODO: close the DOM handler
+		// TODO: Close the DOM handler.
 		return $this->manifest;
 	}
 

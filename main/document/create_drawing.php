@@ -86,9 +86,13 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'])) {
+
+
+if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder($_user['user_id'], Security::remove_XSS($_GET['dir']),api_get_session_id()))) {
 	api_not_allowed(true);
 }
+
+
 /*	Header */
 event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;

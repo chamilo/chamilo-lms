@@ -128,6 +128,5 @@ file_put_contents( $documentPath, $contents );
 //add new document to database
 $doc_id = add_document($_course, $relativeUrlPath.'/'.$drawFileName, 'file', filesize($documentPath), $title);
 api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId,null, null,$current_session_id);
-api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'], $groupId,null, null,$current_session_id);
 
 ?>

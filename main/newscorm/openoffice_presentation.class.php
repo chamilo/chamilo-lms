@@ -198,8 +198,8 @@ class OpenofficePresentation extends OpenofficeDocument {
 			list($slide_name,$file_name) = explode('||',$file); // '||' is used as separator between slide name (with accents) and file name (without accents).
 			$slide_name = api_htmlentities($slide_name, ENT_COMPAT, $this->original_charset);
 			$slide_name = str_replace('&rsquo;', '\'', $slide_name);
-			$slide_name = api_convert_encoding($slide_name, api_get_setting('platform_charset'), $this->original_charset);
-			$slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_setting('platform_charset'));
+			$slide_name = api_convert_encoding($slide_name, api_get_system_encoding(), $this->original_charset);
+			$slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_system_encoding());
 
 			$did = add_document($_course, $this->created_dir.'/'.urlencode($file_name), 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$file_name), $slide_name);
 			if ($did)

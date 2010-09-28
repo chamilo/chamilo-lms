@@ -37,7 +37,7 @@ if ($origin != 'tracking') {
 	if (!empty ($stats_charset)) {
 		$lp_charset = $stats_charset;
 	} else {
-		$lp_charset = api_get_setting('platform_charset');
+		$lp_charset = api_get_system_encoding();
 	}
 	$charset = $lp_charset;
 	//$w = $tablewidth -20;
@@ -61,7 +61,7 @@ if ($origin != 'tracking') {
 }
 
 // The Chamilo interface's encoding
-$dokeos_charset = api_get_setting('platform_charset');
+$dokeos_charset = api_get_system_encoding();
 $output = '';
 // if display in fullscreen required.
 if (!empty($_GET['fs']) && strcmp($_GET['fs'], 'true') == 0) {

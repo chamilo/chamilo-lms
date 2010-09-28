@@ -11,7 +11,7 @@ class AddManySessionToCategoryFunctions {
 		$return = '';
 		if(!empty($needle) && !empty($type)) {
 			// xajax send utf8 datas... datas in db can be non-utf8 datas
-			$charset = api_get_setting('platform_charset');
+			$charset = api_get_system_encoding();
 			$needle = api_convert_encoding($needle, $charset, 'utf-8');
 			$needle = Database::escape_string($needle);
 

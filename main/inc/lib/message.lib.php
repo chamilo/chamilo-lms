@@ -298,7 +298,7 @@ class MessageManager
 			return $result;
         } else {
         	return get_lang('UserDoesNotExist');
-        }		
+        }
 	}
 
 	/**
@@ -704,7 +704,7 @@ class MessageManager
 				$band=1;
 
 		$row[5] = Security::remove_XSS($row[5]);
-		
+
 		$message_content =  '
 		<table class="message_view_table">
 		    <tr>
@@ -744,7 +744,7 @@ class MessageManager
 		            </tr>
 		        </table>
 		        <br />
-		        <table height=209 width="100%" bgColor=#ffffff>		          
+		        <table height=209 width="100%" bgColor=#ffffff>
 		            <tr>
 		              <td vAlign=top class="view-message-content">'.str_replace("\\","",$row[6]).'</td>
 		            </tr>
@@ -1095,7 +1095,7 @@ class MessageManager
 
 function inbox_display() {
 	global $charset;
-//	$charset = api_get_setting('platform_charset');
+//	$charset = api_get_system_encoding();
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	$request=api_is_xml_http_request();
 	if ($_SESSION['social_exist']===true) {

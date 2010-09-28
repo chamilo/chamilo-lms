@@ -2360,7 +2360,7 @@ class learnpath {
 	 */
 	public function get_iv_interactions_array($lp_iv_id = 0) {
 
-		$charset = api_get_setting('platform_charset');
+		$charset = api_get_system_encoding();
 
 		$list = array ();
 		$table = Database :: get_course_table(TABLE_LP_IV_INTERACTION);
@@ -2585,7 +2585,7 @@ class learnpath {
 
 		$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-		$charset = api_get_setting('platform_charset');
+		$charset = api_get_system_encoding();
 		$display_action_links_with_icons = false;
 
 		if ($this->debug > 0) {

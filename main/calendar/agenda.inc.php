@@ -259,20 +259,20 @@ function get_calendar_items($month, $year) {
 			$data[$datum_item][$datum_item][] = $row;
 		}
 	}
-	
+
 	/* Check global agenda events	*/
 	$table_agenda_system = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-	
+
 	global $_configuration;
 	$current_access_url_id = 1;
 	if ($_configuration['multiple_access_urls']) {
 		$current_access_url_id = api_get_current_access_url_id();
 	}
-		
+
 	$sql = "SELECT DISTINCT * FROM ".$table_agenda_system."
 			WHERE
 			MONTH(start_date)='".$month."'
-			AND YEAR(start_date)='".$year."' 
+			AND YEAR(start_date)='".$year."'
 			AND access_url_id = '$current_access_url_id'
 			ORDER BY start_date ";
 	$result=Database::query($sql);
@@ -2052,7 +2052,7 @@ function display_agenda_items($select_month, $select_year) {
 	if ($_configuration['multiple_access_urls']) {
 		$current_access_url_id = api_get_current_access_url_id();
 	}
-	
+
 	$sql = "SELECT DISTINCT id, title, content , start_date, end_date FROM ".$table_agenda_system."
 			WHERE 1=1  ".$show_all_current." AND access_url_id = $current_access_url_id
 			ORDER BY start_date ";
@@ -4614,7 +4614,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$fil
  */
 function agenda_import_ical($course_info,$file) {
 	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-   	$charset = api_get_setting('platform_charset');
+   	$charset = api_get_system_encoding();
     $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
     if(!@move_uploaded_file($file['tmp_name'],$filepath)) {
     	error_log('Problem moving uploaded file: '.$file['error'].' in '.__FILE__.' line '.__LINE__);
@@ -4701,21 +4701,21 @@ function agenda_import_ical($course_info,$file) {
  */
 function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "", $week = "", $type) {
 	global $_user, $_configuration;
-	
+
 	$tbl_global_agenda= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-	
+
 	$month=Database::escape_string($month);
 	$year=Database::escape_string($year);
 	$week=Database::escape_string($week);
 	$day=Database::escape_string($day);
 	// 1. creating the SQL statement for getting the personal agenda items in MONTH view
-	
+
 	global $_configuration;
 	$current_access_url_id = 1;
 	if ($_configuration['multiple_access_urls']) {
 		$current_access_url_id = api_get_current_access_url_id();
 	}
-	
+
 	if ($type == "month_view" or $type == "") {
 		// We are in month view
 		$sql = "SELECT * FROM ".$tbl_global_agenda." WHERE MONTH(start_date)='".$month."' AND YEAR(start_date) = '".$year."'  AND access_url_id = $current_access_url_id ORDER BY start_date ASC";
@@ -4743,7 +4743,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		$end_filter = $year."-".$month."-".$day." 23:59:59";
 		$sql = " SELECT * FROM ".$tbl_global_agenda." WHERE start_date>='".$start_filter."' AND start_date<='".$end_filter."'  AND  access_url_id = $current_access_url_id";
 	}
-	
+
 	$result = Database::query($sql);
 
 	while ($item = Database::fetch_array($result)) {

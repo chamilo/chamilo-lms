@@ -177,7 +177,7 @@ else if ($action == "service")
 						api_strlen($files[$k]['title']) > 32 ?
 							api_substr($files[$k]['title'],0, 32)."..." :
 							$files[$k]['title'],
-						'utf-8',api_get_setting('platform_charset'));
+						'utf-8',api_get_system_encoding());
 			// removing '<', '>' and '_'
 			$files[$k]['title'] = str_replace(array('<','>','_'),' ', $files[$k]['title']);
 		}

@@ -148,7 +148,7 @@ function courses_of_user($arg) {
     {
     	$newContent .= '- '.get_lang('None').' -<br />';
     }
-    $newContent = api_convert_encoding($newContent,'utf-8',api_get_setting('platform_charset'));
+    $newContent = api_convert_encoding($newContent,'utf-8',api_get_system_encoding());
 
 	// Instantiate the xajaxResponse object
 	$objResponse = new xajaxResponse();
@@ -605,9 +605,9 @@ function modify_filter($user_id,$url_params,$row) {
 				$result .= Display::return_icon('edit_na.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
 		}
 		if ($delete_user_available) {
-			if ($row[0] != $_user['user_id'] && !$user_is_anonymous) {			
+			if ($row[0] != $_user['user_id'] && !$user_is_anonymous) {
 				// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-				$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';			
+				$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 			} else {
 				$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
 			}

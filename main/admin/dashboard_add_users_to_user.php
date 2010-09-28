@@ -71,27 +71,27 @@ function search_users($needle,$type) {
 	$return = '';
 	if(!empty($needle) && !empty($type)) {
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_setting('platform_charset');
+		$charset = api_get_system_encoding();
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 
 		$assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
 		$assigned_users_id = array_keys($assigned_users_to_hrm);
 		$without_assigned_users = '';
-		
+
 		if (count($assigned_users_id) > 0) {
 			$without_assigned_users = " AND user_id NOT IN(".implode(',',$assigned_users_id).")";
-		}	
-		
-		if ($_configuration['multiple_access_urls']) {			
+		}
+
+		if ($_configuration['multiple_access_urls']) {
 			$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
 			WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status NOT IN(".DRH.", ".SESSIONADMIN.") AND user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) $without_assigned_users AND access_url_id = ".api_get_current_access_url_id()."";
-			
+
 		} else {
 			$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 			WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status NOT IN(".DRH.", ".SESSIONADMIN.") AND user_id NOT IN ($user_anonymous, $current_user_id, $user_id) $without_assigned_users";
 		}
-		
-		
+
+
 		$rs	= Database::query($sql);
 
 		$return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
@@ -181,7 +181,7 @@ echo '<div class="actions" style="height:22px;">
 <span style="float: right;margin:0px;padding:0px;">
 <a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
 <a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>
-<span style="vertical-align:middle">'.sprintf(get_lang('AssignUsersToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])).'</span></div>';	
+<span style="vertical-align:middle">'.sprintf(get_lang('AssignUsersToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])).'</span></div>';
 
 // *******************
 
@@ -206,7 +206,7 @@ if ($_configuration['multiple_access_urls']) {
 	$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 			WHERE  $without_assigned_users user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user ";
 }
-		
+
 $result	= Database::query($sql);
 
 ?>
@@ -227,11 +227,11 @@ if(!empty($msg)) {
   <td width="45%" align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b></td>
   <td width="10%">&nbsp;</td>
   <td align="center" width="45%"><b>
-  <?php 
+  <?php
 	if (UserManager::is_admin($user_id)) {
 		echo get_lang('AssignedUsersListToPlatformAdministrator');
 	} else if ($user_info['status'] == SESSIONADMIN) {
-		echo get_lang('AssignedUsersListToSessionsAdministrator');		
+		echo get_lang('AssignedUsersListToSessionsAdministrator');
 	} else {
 		echo get_lang('AssignedUsersListToHumanResourcesManager');
 	}

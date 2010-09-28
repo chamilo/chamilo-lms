@@ -682,7 +682,7 @@ function display_agenda_items()
 
 	if (is_allowed_to_edit() && !api_is_anonymous()) {
 		$sql="SELECT * FROM ".$TABLEAGENDA;
-		
+
 		global $_configuration;
 		$current_access_url_id = 1;
 		if ($_configuration['multiple_access_urls']) {
@@ -1689,14 +1689,14 @@ function display_upcoming_events() {
 	{*/
 		//echo "course admin";
 	$sqlquery = "SELECT DISTINCT * FROM ".$TABLEAGENDA;
-	
+
 	global $_configuration;
 	$current_access_url_id = 1;
 	if ($_configuration['multiple_access_urls']) {
 		$current_access_url_id = api_get_current_access_url_id();
 	}
 	$sqlquery .= "WHERE access_url_id = $current_access_url_id ";
-			
+
 	$sqlquery .= " ORDER BY start_date ";
 	//}
 	// if the user is not an administrator of that course
@@ -2855,13 +2855,13 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     if ($count > 0) {
     	return false;
     }
-	
+
 	global $_configuration;
 	$current_access_url_id = 1;
 	if ($_configuration['multiple_access_urls']) {
 		$current_access_url_id = api_get_current_access_url_id();
-	}				
-						
+	}
+
     $sql = "INSERT INTO ".$t_agenda." (title,content, start_date, end_date, access_url_id)
 			VALUES ('".$title."','".$content."', '".$start_date."','".$end_date."', '".$current_access_url_id."')";
 
@@ -2940,16 +2940,16 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 		$sql="SELECT DISTINCT *
 			FROM ".$TABLEAGENDA." agenda
 			WHERE MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'";
-			
+
 		global $_configuration;
 		$current_access_url_id = 1;
 		if ($_configuration['multiple_access_urls']) {
 			$current_access_url_id = api_get_current_access_url_id();
 		}
 		$sql .= " AND access_url_id = '$current_access_url_id' ";
-			
+
 		$sql .= "GROUP BY id ORDER BY  start_date ";
-	
+
 		$result=Database::query($sql);
 
 		while ($row=Database::fetch_array($result)) {
@@ -3062,7 +3062,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
 function agenda_import_ical($course_info,$file) {
 
 	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-    $charset = api_get_setting('platform_charset');
+    $charset = api_get_system_encoding();
     $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
     if(!@move_uploaded_file($file['tmp_name'],$filepath))
     {

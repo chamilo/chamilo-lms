@@ -19,10 +19,10 @@ require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/draw';
 $this_section = SECTION_COURSES;
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+
 $nameTools = get_lang('Draw');
 
 api_protect_course_script();
@@ -57,6 +57,18 @@ if ($dir[strlen($dir) - 1] != '/') {
 	$dir .= '/';
 }
 
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+
+
+$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
+
+if (!is_dir($filepath)) {
+	$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
+	$dir = '/';
+}
+
+
+$to_group_id = 0;
 
 if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
@@ -71,14 +83,64 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 	}
 	$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
 
+if (!$is_allowed_in_course) {
+	api_not_allowed(true);
+}
 
-////////////////////////
+
+if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder($_user['user_id'], Security::remove_XSS($_GET['dir']),api_get_session_id()))) {
+	api_not_allowed(true);
+}
+
+
+/*	Header */
+event_access_tool(TOOL_DOCUMENT);
+$display_dir = $dir;
+if (isset ($group)) {
+	$display_dir = explode('/', $dir);
+	unset ($display_dir[0]);
+	unset ($display_dir[1]);
+	$display_dir = implode('/', $display_dir);
+}
+
+// Interbreadcrumb for the current directory root path
+	// Copied from document.php
+	$dir_array = explode('/', $dir);
+	$array_len = count($dir_array);
+	if (!$is_certificate_mode) {
+		if ($array_len > 1) {
+			if (empty($_SESSION['_gid'])) {
+				$url_dir = 'document.php?&curdirpath=/';
+				$interbreadcrumb[] = array('url' => $url_dir, 'name' => get_lang('HomeDirectory'));
+			}
+		}
+	}
+	$dir_acum = '';
+	for ($i = 0; $i < $array_len; $i++) {
+		$url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
+		//Max char 80
+		$url_to_who = cut($dir_array[$i],80);
+		if ($is_certificate_mode) {
+			$interbreadcrumb[] = array('url' => $url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
+		} else {
+			$interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
+		}
+		$dir_acum .= $dir_array[$i].'/';
+	}
+	
+//path for svg-edit save
+$_SESSION['draw_dir']=Security::remove_XSS($_GET['dir']);
+if($_SESSION['draw_dir']=='/'){
+	$_SESSION['draw_dir']='';
+}
+
+//
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 echo '</div>';
 
-echo '<iframe style=\'height: 500px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php \'>';
+echo '<iframe style=\'height: 500px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php\'>';
 echo '</iframe>';
 
 Display :: display_footer();

@@ -815,7 +815,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 	/* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
 
 	// Create new document
-	if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id)) {
+	if (!$is_certificate_mode) {
 ?>
 	<a href="create_document.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
 		<?php Display::display_icon('filenew.gif', get_lang('CreateDoc')); echo get_lang('CreateDoc'); ?></a>&nbsp;
@@ -823,12 +823,10 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 	}
 
 	// Create new draw
-		if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id)) {
 	?>
 		<a href="create_drawing.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
 			<?php Display::display_icon('draw.png', get_lang('Draw')); echo get_lang('Draw'); ?></a>&nbsp;
-	<?php
-		}
+	<?php	
 
 	// Create new certificate
 	if ($is_certificate_mode) {

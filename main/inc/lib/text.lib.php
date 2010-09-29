@@ -94,6 +94,11 @@ function api_get_title_html(&$string, $output_encoding = null, $input_encoding =
 
 /* XML processing functions */
 
+// A regular expression for accessing declared encoding within xml-formatted text.
+// Published by Steve Minutillo,
+// http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
+define('_PCRE_XML_ENCODING', '/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m');
+
 /**
  * Detects encoding of xml-formatted text.
  * @param string $string				The input xml-formatted text.
@@ -112,6 +117,67 @@ function api_detect_encoding_xml($string, $default_encoding = null) {
         $default_encoding = _api_mb_internal_encoding();
     }
     return api_refine_encoding_id($default_encoding);
+}
+
+
+/**
+ * Converts character encoding of a xml-formatted text. If inside the text the encoding is declared, it is modified accordingly.
+ * @param string $string                    The text being converted.
+ * @param string $to_encoding               The encoding that text is being converted to.
+ * @param string $from_encoding (optional)  The encoding that text is being converted from. If it is omited, it is tried to be detected then.
+ * @return string                           Returns the converted xml-text.
+ */
+function api_convert_encoding_xml($string, $to_encoding, $from_encoding = null) {
+    return _api_convert_encoding_xml($string, $to_encoding, $from_encoding);
+}
+
+/**
+ * Converts character encoding of a xml-formatted text into UTF-8. If inside the text the encoding is declared, it is set to UTF-8.
+ * @param string $string                    The text being converted.
+ * @param string $from_encoding (optional)  The encoding that text is being converted from. If it is omited, it is tried to be detected then.
+ * @return string                           Returns the converted xml-text.
+ */
+function api_utf8_encode_xml($string, $from_encoding = null) {
+    return _api_convert_encoding_xml($string, 'UTF-8', $from_encoding);
+}
+
+/**
+ * Converts character encoding of a xml-formatted text from UTF-8 into a specified encoding. If inside the text the encoding is declared, it is modified accordingly.
+ * @param string $string                    The text being converted.
+ * @param string $to_encoding (optional)    The encoding that text is being converted to. If it is omited, the platform character set is assumed.
+ * @return string                           Returns the converted xml-text.
+ */
+function api_utf8_decode_xml($string, $to_encoding = null) {
+    if (empty($to_encoding)) {
+        $to_encoding = _api_mb_internal_encoding();
+    }
+    return _api_convert_encoding_xml($string, $to_encoding, 'UTF-8');
+}
+
+/**
+ * Converts character encoding of a xml-formatted text. If inside the text the encoding is declared, it is modified accordingly.
+ * @param string $string                    The text being converted.
+ * @param string $to_encoding               The encoding that text is being converted to.
+ * @param string $from_encoding (optional)  The encoding that text is being converted from. If the value is empty, it is tried to be detected then.
+ * @return string                           Returns the converted xml-text.
+ */
+function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
+    if (empty($from_encoding)) {
+        $from_encoding = api_detect_encoding_xml($string);
+    }
+    global $_api_encoding;
+    $_api_encoding = api_refine_encoding_id($to_encoding);
+    return api_convert_encoding(preg_replace_callback(_PCRE_XML_ENCODING, '_api_convert_encoding_xml_callback', $string), $to_encoding, $from_encoding);
+}
+
+/**
+ * A callback for serving the function _api_convert_encoding_xml().
+ * @param array $matches    Input array of matches corresponding to the xml-declaration.
+ * @return string           Returns the xml-declaration with modified encoding.
+ */
+function _api_convert_encoding_xml_callback($matches) {
+    global $_api_encoding;
+    return str_replace($matches[1], $_api_encoding, $matches[0]);
 }
 
 

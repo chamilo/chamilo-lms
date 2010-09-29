@@ -1399,40 +1399,6 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
     return $result;
 }
 
-/**
- * Converts character encoding of a xml-formatted text. If inside the text the encoding is declared, it is modified accordingly.
- * @param string $string					The text being converted.
- * @param string $to_encoding				The encoding that text is being converted to.
- * @param string $from_encoding (optional)	The encoding that text is being converted from. If it is omited, it is tried to be detected then.
- * @return string							Returns the converted xml-text.
- */
-function api_convert_encoding_xml($string, $to_encoding, $from_encoding = null) {
-    return _api_convert_encoding_xml($string, $to_encoding, $from_encoding);
-}
-
-/**
- * Converts character encoding of a xml-formatted text into UTF-8. If inside the text the encoding is declared, it is set to UTF-8.
- * @param string $string					The text being converted.
- * @param string $from_encoding (optional)	The encoding that text is being converted from. If it is omited, it is tried to be detected then.
- * @return string							Returns the converted xml-text.
- */
-function api_utf8_encode_xml($string, $from_encoding = null) {
-    return _api_convert_encoding_xml($string, 'UTF-8', $from_encoding);
-}
-
-/**
- * Converts character encoding of a xml-formatted text from UTF-8 into a specified encoding. If inside the text the encoding is declared, it is modified accordingly.
- * @param string $string					The text being converted.
- * @param string $to_encoding (optional)	The encoding that text is being converted to. If it is omited, the platform character set is assumed.
- * @return string							Returns the converted xml-text.
- */
-function api_utf8_decode_xml($string, $to_encoding = null) {
-    if (empty($to_encoding)) {
-        $to_encoding = _api_mb_internal_encoding();
-    }
-    return _api_convert_encoding_xml($string, $to_encoding, 'UTF-8');
-}
-
 
 /**
  * Common multibyte string functions

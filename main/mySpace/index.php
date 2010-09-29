@@ -152,7 +152,6 @@ if (api_is_allowed_to_create_course() && $_GET['display'] != 'yourstudents') {
 		if (!$is_coach && !$is_platform_admin) {
 			$view = 'teacher';
 		}
-
 		if ($view == 'teacher' && empty($session_id)) {
 			$menu_items[] = get_lang('TeacherInterface');
 
@@ -164,8 +163,9 @@ if (api_is_allowed_to_create_course() && $_GET['display'] != 'yourstudents') {
 			if (!empty($session_id)) {
 				$session_name = api_get_session_name($session_id);
 				$title = ucfirst($session_name);
-			}
+			}            
 			$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';
+            
 		}
 	}
 }
@@ -179,6 +179,7 @@ if ($is_coach && $_GET['display'] != 'yourstudents') {
 		$title = get_lang('YourStatistics');
 	} else {
 		$menu_items[] = '<a href="'.api_get_self().'?view=coach">'.get_lang('CoachInterface').'</a>';
+        
 	}
 }
 
@@ -190,9 +191,11 @@ if ($is_platform_admin &&  $_GET['display'] != 'yourstudents') {
 	if ($view == 'admin') {
 		$menu_items[] = get_lang('AdminInterface');
 		$title = get_lang('CoachList');
+        $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'tracking/exams.php">'.get_lang('ExamTracking').'</a>';
 		//$menu_items[] = $title;
 	} else {
 		$menu_items[] = '<a href="'.api_get_self().'?view=admin">'.get_lang('AdminInterface').'</a>';
+        $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'tracking/exams.php">'.get_lang('ExamTracking').'</a>';
 	}
 }
 
@@ -257,6 +260,8 @@ if ($view == 'coach' || $view == 'drh') {
 	$avg_results_to_exercises = 0;
 	$nb_inactive_students = 0;
 	$nb_posts = $nb_assignments = 0;
+    
+    if (!empty($students))
 	foreach ($students as $student_id) {
 		// inactive students
 		$last_connection_date = Tracking :: get_last_connection_date($student_id, true, true);

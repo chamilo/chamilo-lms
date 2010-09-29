@@ -149,15 +149,32 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 		MAIN CODE
 */
 
-echo '<div class="actions">';
+echo '<div class="actions-title"  style ="font-size:10pt;">';
 if ($_GET['studentlist'] == 'false') {
-	echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | '.get_lang('CourseTracking').'&nbsp;|&nbsp;<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking');
+	echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | ';
+    echo get_lang('CourseTracking').' | ';
+    echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
+    if (empty($session_id))
+    echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a> ';
+    
+    
 } elseif($_GET['studentlist'] == 'resources') {
-	echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a> | '.get_lang('ResourcesTracking');
+	echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | ';
+    echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a> | ';
+    echo get_lang('ResourcesTracking');
+    if (empty($session_id))
+    echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';
+    
 } elseif($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
-	echo get_lang('StudentsTracking').' | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a> | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
+	echo get_lang('StudentsTracking').' | ';
+    echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a> | ';
+    echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
+    if (empty($session_id))
+    echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';
 }
+
 echo '&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printmgr.gif',get_lang('Print')).get_lang('Print').'</a>';
+
 if($_GET['studentlist'] == 'false') {
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 } elseif ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
@@ -170,6 +187,8 @@ if($_GET['studentlist'] == 'false') {
 if($_GET['studentlist'] == 'true' || empty($_GET['studentlist'])) {
 	echo TrackingCourseLog::display_additional_profile_fields();
 }
+
+
 echo '</div>';
 
 

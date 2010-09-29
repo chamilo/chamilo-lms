@@ -3082,20 +3082,28 @@ class UserManager
 	  **/
 	public static function suscribe_users_to_hr_manager($hr_dept_id, $users_id) {
 
-		// Database Table Definitions
-		$tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+	    global $_configuration;
+        // Database Table Definitions
+        $tbl_user           =   Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_user_rel_user  =   Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $tbl_user_rel_access_url     =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);    
 
-		$hr_dept_id = intval($hr_dept_id);
-		$affected_rows = 0;
-		//Deleting assigned users to hrm_id
-	   	$sql = "SELECT user_id FROM $tbl_user_rel_user WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
-		$result = Database::query($sql,__FILE__,__LINE__);
-
-		if (Database::num_rows($result) > 0) {
-			$sql = "DELETE FROM $tbl_user_rel_user WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
-			Database::query($sql,__FILE__,__LINE__);
-		}
+        $hr_dept_id = intval($hr_dept_id);
+        $affected_rows = 0;
+        
+        if ($_configuration['multiple_access_urls']) {  
+            //Deleting assigned users to hrm_id
+            $sql = "SELECT s.user_id FROM $tbl_user_rel_user s INNER JOIN $tbl_user_rel_access_url a ON (a.user_id = s.user_id)  WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."'  AND access_url_id = ".api_get_current_access_url_id()."";            
+        } else {
+            $sql = "SELECT user_id FROM $tbl_user_rel_user WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
+        }
+        $result = Database::query($sql,__FILE__,__LINE__);
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result))   {
+                $sql = "DELETE FROM $tbl_user_rel_user WHERE user_id = '{$row['user_id']}'  AND friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
+                Database::query($sql,__FILE__,__LINE__);
+            }
+        }
 
 		// inserting new user list
 		if (is_array($users_id)) {

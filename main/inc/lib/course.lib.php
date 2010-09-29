@@ -2314,21 +2314,29 @@ class CourseManager {
 	  * @param	int			Relation type
 	  **/
 	public static function suscribe_courses_to_hr_manager($hr_manager_id,$courses_list) {
+     global $_configuration;
+        
+        // Database Table Definitions
+        $tbl_course             =   Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course_rel_user    =   Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_course_rel_access_url     =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);       
 
-		// Database Table Definitions
-		$tbl_course 			= 	Database::get_main_table(TABLE_MAIN_COURSE);
-		$tbl_course_rel_user 	= 	Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $hr_manager_id = intval($hr_manager_id);
+        $affected_rows = 0;
 
-		$hr_manager_id = intval($hr_manager_id);
-		$affected_rows = 0;
-
-		//Deleting assigned courses to hrm_id
-	   	$sql = "SELECT course_code FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id AND relation_type=".COURSE_RELATION_TYPE_RRHH." ";
-		$result = Database::query($sql);
-		if (Database::num_rows($result) > 0) {
-			$sql = "DELETE FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id AND relation_type=".COURSE_RELATION_TYPE_RRHH." ";
-			Database::query($sql);
-		}
+        //Deleting assigned courses to hrm_id
+        if ($_configuration['multiple_access_urls']) {  
+            $sql = "SELECT s.course_code FROM $tbl_course_rel_user s INNER JOIN $tbl_course_rel_access_url a ON (a.course_code = s.course_code) WHERE user_id = $hr_manager_id AND relation_type=".COURSE_RELATION_TYPE_RRHH." AND access_url_id = ".api_get_current_access_url_id()."";
+        } else {
+            $sql = "SELECT course_code FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id AND relation_type=".COURSE_RELATION_TYPE_RRHH." ";      
+        }
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result))   {
+                $sql = "DELETE FROM $tbl_course_rel_user WHERE course_code = '{$row['course_code']}' AND user_id = $hr_manager_id AND relation_type=".COURSE_RELATION_TYPE_RRHH." ";
+                Database::query($sql);
+            }
+        }
 
 		// inserting new courses list
 		if (is_array($courses_list)) {

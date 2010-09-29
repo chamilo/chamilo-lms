@@ -952,5 +952,6 @@ $QualifyInGradebook = "Qualify in the gradebook";
 $SessionSpecificResource = "Session-specific resource";
 $EditionNotAvailableFromSession = "Edition not available from the session, please edit from the basic course.";
 $HandingOverOfTaskX = "Handing over of task %s";
-$ProtectedDocument ="Protected Document";
+$ProtectedDocument = "Protected Document";
+$ConnectionsLastMonth = "Connections last month";
 ?>

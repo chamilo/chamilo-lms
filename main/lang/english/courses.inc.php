@@ -51,7 +51,7 @@ $CourseManagement = "Courses catalog";
 $SortMyCourses = "Sort training";
 $SubscribeToCourse = "Subscribe to training";
 $UnsubscribeFromCourse = "Unsubscribe from training";
-$CreateCourseCategory = "Create a training category";
+$CreateCourseCategory = "Create a personal training category";
 $CourseCategoryAbout2bedeleted = "Are you sure you want to delete this training category? Training inside this category will be moved outside the categories";
 $CourseCategories = "Training categories";
 $CoursesInCategory = "Training in this category";
@@ -83,4 +83,5 @@ $Collapse = "Collapse";
 $CourseDetails = "Course description";
 $GroupPendingInvitations = "Group pending invitations";
 $Compose = "Compose";
+$ThereAreNoCoursesInThisCategory = "No course at this category level";
 ?>

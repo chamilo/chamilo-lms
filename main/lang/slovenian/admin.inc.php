@@ -1269,4 +1269,6 @@ $ErrorReadingZip = "Napaka med branjem ZIP datoteke";
 $ErrorStylesheetFilesExtensionsInsideZip = "Dovoljene končnice datotek znotraj ZIP so jpg, jpeg, png, gif in css.";
 $MyTextHere = "Vstavite svoje besedilo ...";
 $FieldTypeSocialProfile = "Povezava socialnega omrežja";
+$AllowUsersCopyFilesTitle = "Dovoli uporabnikom prepis datotek tečaja iz tvojega osebnega področja datotek";
+$AllowUsersCopyFilesComment = "Dovoljenje uporabnikom za prepis datotek tečaja iz tvojega osebnega področja datotek, ki je vidno preko Socialnega omrežja ali iz HTML urejevalnika, v primeru, da ti uporabniki trenutno niso v področju tečaja iz katerega so prenašane datoteke.";
 ?>

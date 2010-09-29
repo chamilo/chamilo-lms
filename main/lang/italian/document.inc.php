@@ -223,4 +223,5 @@ $CopyAlreadyDone = "Nell'area personale è presente un documento con lo stesso n
 $CopyFailed = "Copia non effettuata";
 $CopyMade = "Copia effettuata";
 $OverwritenFile = "Documento sostituito";
+$Draw = "Disegna";
 ?>

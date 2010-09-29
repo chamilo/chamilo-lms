@@ -273,4 +273,6 @@ $DisplayCourseOverview = "Courses overview";
 $DisplaySessionOverview = "Sessions overview";
 $TotalNumberOfMessages = "Total number of messages";
 $TotalNumberOfAssignments = "Total number of assignments";
+$LastLogins = "Last logins";
+$AllLogins = "All logins";
 ?>

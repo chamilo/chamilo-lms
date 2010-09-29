@@ -950,4 +950,6 @@ $QualifyInGradebook = "Qualifier dans l'évaluation";
 $SessionSpecificResource = "Ressource de session";
 $EditionNotAvailableFromSession = "Cette ressource ne peut pas être éditée dans le contexte d'une session";
 $HandingOverOfTaskX = "Remise du travail %s";
+$ProtectedDocument = "Document protégé";
+$ConnectionsLastMonth = "Connexions le mois dernier";
 ?>

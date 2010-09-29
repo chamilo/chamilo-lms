@@ -25,4 +25,8 @@ $Authoring = "Julkaiseminen";
 $Administration = "Ylläpito";
 $IntroductionTextUpdated = "Esittely teksti on päivitetty";
 $IntroductionTextDeleted = "Esitttely teksti poistettu";
+$SessionIdentifier = "Session tunniste";
+$SessionName = "Session nimi";
+$SessionCategory = "Session kategoria";
+$SessionData = "Session tiedot";
 ?>

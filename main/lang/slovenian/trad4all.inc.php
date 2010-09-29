@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Odstrani vso obstoječo prisotnost";
 $Title = "Naslov";
-$By = "(Od)";
+$By = "Objavil";
 $UsersOnline = "Aktivnih uporabnikov";
 $Remove = "Odstrani";
 $langEnter = "Nazaj na seznam tečajev";
@@ -952,4 +952,5 @@ $QualifyInGradebook = "Uvrsti v redovalnico";
 $SessionSpecificResource = "Za sejo specifičen resurs";
 $EditionNotAvailableFromSession = "Urejanje ni dostopno preko seje. Prosim, izvedite urejanje preko osnovnega tečaja.";
 $HandingOverOfTaskX = "Predaja naloge %s";
+$ProtectedDocument = "Zaščiten dokument";
 ?>

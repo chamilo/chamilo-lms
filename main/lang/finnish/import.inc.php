@@ -13,4 +13,5 @@ $langSendPage = "Tallennettava sivu";
 $langPageTitleModified = "Sivun otsikko on muutettu";
 $langPageAdded = "Sivu lisätty";
 $langAddPage = "Lisää sivu";
+$Choose = "Valitse";
 ?>

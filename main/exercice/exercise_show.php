@@ -352,7 +352,7 @@ if ($show_results) {
 	}
 	
 	//Fixing #2073
-	if (!empty($track_exercise_info['data_tracking']) && $track_exercise_info['random_answers'] == 1) {
+	if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
 		$tempquestionList = explode(',',$track_exercise_info['data_tracking']);
 		if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {
 			$questionList = $tempquestionList;			

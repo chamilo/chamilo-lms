@@ -748,7 +748,6 @@ switch ($action) {
             $lp_id = $_SESSION['oLP']->get_id();
             $list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
             $user_id = api_get_user_id();
-            $stats_charset = $_SESSION['oLP']->encoding;
             require 'lp_stats.php';
         }
         break;
@@ -829,7 +828,6 @@ switch ($action) {
                 $lp_id = $_SESSION['oLP']->get_id();
                 $list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
                 $user_id = api_get_user_id();
-                $stats_charset = $_SESSION['oLP']->encoding;
                 header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php');
             }
             break;

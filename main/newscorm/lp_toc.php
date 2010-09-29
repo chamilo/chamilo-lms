@@ -29,7 +29,6 @@ if (isset($_SESSION['lpobject'])) {
         die('Could not instanciate lp object');
     }
 }
-$charset = $_SESSION['oLP']->encoding;
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
   var dokeos_xajax_handler = window.parent.oxajax;

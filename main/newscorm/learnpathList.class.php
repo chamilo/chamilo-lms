@@ -84,7 +84,8 @@ class learnpathList {
                 'lp_force_commit' => $row['force_commit'],
                 'lp_maker'	=> stripslashes($row['content_maker']),
                 'lp_proximity' => $row['content_local'],
-                'lp_encoding' => $row['default_encoding'],
+                //'lp_encoding' => $row['default_encoding'],
+                'lp_encoding' => api_get_system_encoding(),  // Chamilo 1.8.8: We intend always to use the system encoding.
                 'lp_visibility' => $vis,
                 'lp_published'	=> $pub,
                 'lp_prevent_reinit' => $row['prevent_reinit'],

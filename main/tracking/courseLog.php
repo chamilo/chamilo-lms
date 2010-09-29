@@ -72,16 +72,6 @@ if ($export_csv) {
 }
 $csv_content = array();
 
-// Charset determination.
-if (!empty($_GET['scormcontopen'])) {
-    $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-    $contopen = (int) $_GET['scormcontopen'];
-    $sql = "SELECT default_encoding FROM $tbl_lp WHERE id = $contopen AND session_id = $session_id";
-    $res = Database::query($sql);
-    $row = Database::fetch_array($res);
-    $lp_charset = $row['default_encoding'];
-}
-
 $htmlHeadXtra[] = "<style type='text/css'>
 /*<![CDATA[*/
 .secLine {background-color : #E6E6E6;}

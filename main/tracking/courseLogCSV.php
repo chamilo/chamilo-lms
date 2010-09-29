@@ -26,18 +26,6 @@ require_once '../newscorm/learnpathItem.class.php';
 require_once '../newscorm/scorm.class.php';
 require_once '../newscorm/scormItem.class.php';
 
-// Charset determination.
-if ($_GET['scormcontopen'])
-{
-    $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-    $contopen = (int) $_GET['scormcontopen'];
-    $sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-    $res = Database::query($sql);
-    $row = Database::fetch_array($res);
-    $lp_charset = $row['default_encoding'];
-    //header('Content-Type: text/html; charset='. $row['default_encoding']);
-}
-
 /* Constants and variables */
 
 // regroup table names for maintenance purpose
@@ -420,7 +408,6 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
                                 while ($ar3['status'] != '') {
                                     require_once '../newscorm/learnpathItem.class.php';
                                     $time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
-                                    $title = api_htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
                                     $line .= $title.";".$ar3['status'].";".$ar3['score'].";".$time;
                                     $ar3=Database::fetch_array($result3);
                                 }

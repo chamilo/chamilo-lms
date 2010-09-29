@@ -41,19 +41,6 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 
 /* Header */
 
-// Charset determination
-if ($_GET['scormcontopen'])
-{
-    $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-    $contopen = (int) $_GET['scormcontopen'];
-    $sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-    $res = Database::query($sql);
-    $row = Database::fetch_array($res);
-    $lp_charset = $row['default_encoding'];
-    //header('Content-Type: text/html; charset='. $row['default_encoding']);
-}
-
-
 /*
 $interbreadcrumb[]= array ("url"=>"../group/group.php", "name"=> get_lang('BredCrumpGroups'));
 $interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=$_gid", "name"=> get_lang('BredCrumpGroupSpace'));
@@ -316,7 +303,6 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                                    while ($ar3['status'] != '') {
                                     require_once('../newscorm/learnpathItem.class.php');
                                     $time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
-                                    $title = api_htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
                                        $line .= $title.';'.$ar3['status'].';'.$ar3['score'].';'.$time."\n";
                                        $ar3=Database::fetch_array($result3);
                                    }

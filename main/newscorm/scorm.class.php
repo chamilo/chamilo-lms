@@ -77,22 +77,25 @@ class scorm extends learnpath {
         if (empty($file)) {
             // Get the path of the imsmanifest file.
         }
-        if (is_file($file) && is_readable($file)) {
+        if (is_file($file) && is_readable($file) && ($xml = @file_get_contents($file))) {
 
             // Parsing using PHP5 DOMXML methods.
 
             if ($this->debug > 0) { error_log('In scorm::parse_manifest() - Parsing using PHP5 method', 0); }
+
+            //$this->manifest_encoding = api_detect_encoding_xml($xml); // This is the usual way for reading the encoding.
+            $this->manifest_encoding = self::detect_manifest_encoding($xml); // This method reads the encoding, it tries to be correct even in cases of wrong or missing encoding declarations.
+
+            $xml = api_utf8_encode_xml($xml, $this->manifest_encoding); // UTF-8 is supported by DOMDocument class, this is for sure.
+
             $doc = new DOMDocument();
-            $res = $doc->load($file);
+            $res = @$doc->loadXML($xml);
             if ($res === false) {
                 if ($this->debug > 0) { error_log('New LP - In scorm::parse_manifest() - Exception thrown when loading '.$file.' in DOMDocument', 0); }
                 // Throw exception?
                 return null;
             }
 
-            if (!empty($doc->xmlEncoding)) {
-                $this->manifest_encoding = strtoupper($doc->xmlEncoding);
-            }
             if ($this->debug > 1) { error_log('New LP - Called  (encoding:'.$doc->xmlEncoding.' - saved: '.$this->manifest_encoding.')', 0); }
 
             $root = $doc->documentElement;

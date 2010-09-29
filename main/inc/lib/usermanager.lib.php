@@ -3042,10 +3042,11 @@ class UserManager
 	 * @return array 	users
 	 */
 	public static function get_users_followed_by_drh($hr_dept_id, $user_status = 0) {
-
+        global $_configuration;  
 		// Database Table Definitions
 		$tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $tbl_user_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 		$hr_dept_id = intval($hr_dept_id);
 		$assigned_users_to_hrm = array();
@@ -3055,9 +3056,14 @@ class UserManager
 			$status = intval($status);
 			$condition_status = ' AND u.status = '.$user_status;
 		}
-
-		$sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
-				 INNER JOIN $tbl_user_rel_user uru ON uru.user_id = u.user_id AND friend_user_id = '$hr_dept_id' AND relation_type = '".USER_RELATION_TYPE_RRHH."' $condition_status";
+        if ($_configuration['multiple_access_urls']) {
+            $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
+				 INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id) LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.user_id) WHERE friend_user_id = '$hr_dept_id' AND relation_type = '".USER_RELATION_TYPE_RRHH."' $condition_status AND access_url_id = ".api_get_current_access_url_id()."";
+        } else {
+            $sql = "SELECT u.user_id, u.username, u.lastname, u.firstname, u.email FROM $tbl_user u
+                 INNER JOIN $tbl_user_rel_user uru ON uru.user_id = u.user_id AND friend_user_id = '$hr_dept_id' AND relation_type = '".USER_RELATION_TYPE_RRHH."' $condition_status";
+        }
+        
 		$rs_assigned_users = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($rs_assigned_users) > 0) {
 			while ($row_assigned_users = Database::fetch_array($rs_assigned_users))	{

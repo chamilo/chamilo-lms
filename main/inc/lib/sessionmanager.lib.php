@@ -1125,17 +1125,22 @@ class SessionManager {
 	 * @return array 	sessions
 	 */
 	public static function get_sessions_followed_by_drh($hr_manager_id) {
-
+        global $_configuration;
 		// Database Table Definitions
 		$tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 		$hr_manager_id = intval($hr_manager_id);
 		$assigned_sessions_to_hrm = array();
 
-		$sql = "SELECT * FROM $tbl_session s
-				 INNER JOIN $tbl_session_rel_user sru ON sru.id_session = s.id AND sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
-
+		if ($_configuration['multiple_access_urls']) {   
+           $sql = "SELECT * FROM $tbl_session s INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id) LEFT JOIN $tbl_session_rel_access_url a  ON (s.id = a.session_id)
+                   WHERE sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
+        } else {
+            $sql = "SELECT * FROM $tbl_session s
+                     INNER JOIN $tbl_session_rel_user sru ON sru.id_session = s.id AND sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";   
+        }
 		$rs_assigned_sessions = Database::query($sql);
 		if (Database::num_rows($rs_assigned_sessions) > 0) {
 			while ($row_assigned_sessions = Database::fetch_array($rs_assigned_sessions))	{

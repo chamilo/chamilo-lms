@@ -20,14 +20,14 @@ require_once 'scorm.class.php';
 require_once 'aicc.class.php';
 
 if (isset($_SESSION['lpobject'])) {
-	//if ($debug > 0) error_log('New LP - in lp_toc.php - SESSION[lpobject] is defined', 0);
-	$oLP = unserialize($_SESSION['lpobject']);
-	if (is_object($oLP)) {
-		$_SESSION['oLP'] = $oLP;
-	} else {
-		//error_log('New LP - in lp_toc.php - SESSION[lpobject] is not object - dying', 0);
-		die('Could not instanciate lp object');
-	}
+    //if ($debug > 0) error_log('New LP - in lp_toc.php - SESSION[lpobject] is defined', 0);
+    $oLP = unserialize($_SESSION['lpobject']);
+    if (is_object($oLP)) {
+        $_SESSION['oLP'] = $oLP;
+    } else {
+        //error_log('New LP - in lp_toc.php - SESSION[lpobject] is not object - dying', 0);
+        die('Could not instanciate lp object');
+    }
 }
 $charset = $_SESSION['oLP']->encoding;
 
@@ -47,5 +47,5 @@ include_once '../inc/reduced_header.inc.php';
 </html>
 <?php
 if (!empty($_SESSION['oLP'])) {
-	$_SESSION['lpobject'] = serialize($_SESSION['oLP']);
+    $_SESSION['lpobject'] = serialize($_SESSION['oLP']);
 }

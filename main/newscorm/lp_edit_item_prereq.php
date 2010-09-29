@@ -58,11 +58,11 @@ $type           = $_REQUEST['type'];
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' and $type == 'learnpathitem') {
-	 $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 if ((! $is_allowed_to_edit) || ($isStudentView)) {
-	error_log('New LP - User not authorized in lp_edit_item_prereq.php');
-	header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    error_log('New LP - User not authorized in lp_edit_item_prereq.php');
+    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
@@ -72,21 +72,21 @@ $therow = Database::fetch_array($result);
 
 //$admin_output = '';
 /*
-	Course admin section
-	- all the functions not available for students - always available in this case (page only shown to admin)
+    Course admin section
+    - all the functions not available for students - always available in this case (page only shown to admin)
 */
 
 /* SHOWING THE ADMIN TOOLS */
 
 if (isset($_SESSION['gradebook'])){
-	$gradebook = $_SESSION['gradebook'];
+    $gradebook = $_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-	$interbreadcrumb[] = array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('ToolGradebook')
-		);
+    $interbreadcrumb[] = array (
+            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+            'name' => get_lang('ToolGradebook')
+        );
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
@@ -106,23 +106,23 @@ $suredel = trim(get_lang('AreYouSureToDelete'));
 <script type='text/javascript'>
 /* <![CDATA[ */
 function stripslashes(str) {
-	str=str.replace(/\\'/g,'\'');
-	str=str.replace(/\\"/g,'"');
-	str=str.replace(/\\\\/g,'\\');
-	str=str.replace(/\\0/g,'\0');
-	return str;
+    str=str.replace(/\\'/g,'\'');
+    str=str.replace(/\\"/g,'"');
+    str=str.replace(/\\\\/g,'\\');
+    str=str.replace(/\\0/g,'\0');
+    return str;
 }
 function confirmation(name)
 {
-	name=stripslashes(name);
-	if (confirm("<?php echo $suredel; ?> " + name + " ?"))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    name=stripslashes(name);
+    if (confirm("<?php echo $suredel; ?> " + name + " ?"))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 </script>
 <?php
@@ -133,26 +133,26 @@ function confirmation(name)
 
 echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-	echo '<tr>';
+    echo '<tr>';
 
-		echo '<td class="tree">';
-			echo '<div class="lp_tree">';
-				// Build the tree with the menu items in it.
-				echo $_SESSION['oLP']->build_tree();
+        echo '<td class="tree">';
+            echo '<div class="lp_tree">';
+                // Build the tree with the menu items in it.
+                echo $_SESSION['oLP']->build_tree();
 
-			echo '</div>';
-		echo '</td>';
-		echo '<td class="workspace">';
+            echo '</div>';
+        echo '</td>';
+        echo '<td class="workspace">';
 
-			if (isset($is_success) && $is_success === true) {
-				echo '<div class="lp_message" style="margin:3px 10px;">';
-				echo get_lang("PrerequisitesAdded");
-				echo '</div>';
-			} else {
-				echo $_SESSION['oLP']->display_item_prerequisites_form($_GET['id']);
-			}
-		echo '</td>';
-	echo '</tr>';
+            if (isset($is_success) && $is_success === true) {
+                echo '<div class="lp_message" style="margin:3px 10px;">';
+                echo get_lang("PrerequisitesAdded");
+                echo '</div>';
+            } else {
+                echo $_SESSION['oLP']->display_item_prerequisites_form($_GET['id']);
+            }
+        echo '</td>';
+    echo '</tr>';
 echo '</table>';
 
 /* FOOTER */

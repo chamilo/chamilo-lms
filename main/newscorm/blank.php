@@ -18,25 +18,25 @@ require_once '../inc/reduced_header.inc.php';
 echo '<body dir="'.api_get_text_direction().'">';
 
 if (isset($_GET['error'])) {
-	switch($_GET['error']){
-		case 'document_deleted':
-			echo '<br /><br />';
-			Display::display_error_message(get_lang('DocumentHasBeenDeleted'));
-			break;
-		case 'prerequisites':
-			echo '<br /><br />';
-			Display::display_normal_message(get_lang('_prereq_not_complete'));
-			break;
-		case 'document_not_found':
-			echo '<br /><br />';
-			Display::display_normal_message(get_lang('FileNotFound'));
-			break;
-		default:
-			break;
-	}
+    switch($_GET['error']){
+        case 'document_deleted':
+            echo '<br /><br />';
+            Display::display_error_message(get_lang('DocumentHasBeenDeleted'));
+            break;
+        case 'prerequisites':
+            echo '<br /><br />';
+            Display::display_normal_message(get_lang('_prereq_not_complete'));
+            break;
+        case 'document_not_found':
+            echo '<br /><br />';
+            Display::display_normal_message(get_lang('FileNotFound'));
+            break;
+        default:
+            break;
+    }
 } elseif (isset($_GET['msg']) && $_GET['msg'] == 'exerciseFinished') {
-	echo '<br /><br />';
-	Display::display_normal_message(get_lang('ExerciseFinished'));
+    echo '<br /><br />';
+    Display::display_normal_message(get_lang('ExerciseFinished'));
 }
 ?>
 </body>

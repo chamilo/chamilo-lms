@@ -24,7 +24,7 @@ require_once 'back_compat.inc.php';
 $htmlHeadXtra[] = '<script language="javascript">
 function cleanlog(){
   if(document.getElementById){
-  	document.getElementById("log_content").innerHTML = "";
+      document.getElementById("log_content").innerHTML = "";
   }
 }
 </script>';

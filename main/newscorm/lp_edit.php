@@ -19,14 +19,14 @@ event_access_tool(TOOL_LEARNPATH);
 if (! $is_allowed_in_course) api_not_allowed();
 
 if (isset($_SESSION['gradebook'])) {
-	$gradebook = $_SESSION['gradebook'];
+    $gradebook = $_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-	$interbreadcrumb[] = array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('ToolGradebook')
-		);
+    $interbreadcrumb[] = array (
+            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+            'name' => get_lang('ToolGradebook')
+        );
 }
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=admin_view&lp_id=$learnpath_id", 'name' => $_SESSION['oLP']->get_name());
@@ -66,10 +66,10 @@ $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 $encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));
 $encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP');
 foreach ($encodings as $encoding) {
-	if (api_equal_encodings($encoding, $_SESSION['oLP']->encoding)) {
-  		$s_selected_encoding = $encoding;
-  	}
-  	$encoding_select->addOption($encoding,$encoding);
+    if (api_equal_encodings($encoding, $_SESSION['oLP']->encoding)) {
+          $s_selected_encoding = $encoding;
+      }
+      $encoding_select->addOption($encoding,$encoding);
 }
 
 // Origin
@@ -78,33 +78,33 @@ $lp_orig = $_SESSION['oLP']->get_maker();
 
 include 'content_makers.inc.php';
 foreach ($content_origins as $origin) {
-	if ($lp_orig == $origin) {
-		$s_selected_origin = $origin;
-	}
-	$origin_select->addOption($origin, $origin);
+    if ($lp_orig == $origin) {
+        $s_selected_origin = $origin;
+    }
+    $origin_select->addOption($origin, $origin);
 }
 
 // Content proximity
 $content_proximity_select = &$form->addElement('select', 'lp_proximity', get_lang('ContentProximity'));
 $lp_prox = $_SESSION['oLP']->get_proximity();
 if ($lp_prox != 'local') {
-	$s_selected_proximity = 'remote';
+    $s_selected_proximity = 'remote';
 } else {
-	$s_selected_proximity = 'local';
+    $s_selected_proximity = 'local';
 }
 $content_proximity_select->addOption(get_lang('Local'), 'local');
 $content_proximity_select->addOption(get_lang('Remote'), 'remote');
 
 if (api_get_setting('allow_course_theme') == 'true') {
-	$mycourselptheme = api_get_course_setting('allow_learning_path_theme');
-	if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1) {
-		//LP theme picker
-		$theme_select = &$form->addElement('select_theme', 'lp_theme', get_lang('Theme'));
-		$form->applyFilter('lp_theme', 'trim');
+    $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
+    if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1) {
+        //LP theme picker
+        $theme_select = &$form->addElement('select_theme', 'lp_theme', get_lang('Theme'));
+        $form->applyFilter('lp_theme', 'trim');
 
-		$s_theme = $_SESSION['oLP']->get_theme();
-		$theme_select ->setSelected($s_theme); //default
-	}
+        $s_theme = $_SESSION['oLP']->get_theme();
+        $theme_select ->setSelected($s_theme); //default
+    }
 }
 
 // Author
@@ -114,15 +114,15 @@ $form->applyFilter('lp_author', 'html_filter');
 // LP image
 $form->add_progress_bar();
 if (strlen($_SESSION['oLP']->get_preview_image()) > 0) {
-	$show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
-	$div = '<div class="row">
-	<div class="label">'.get_lang('ImagePreview').'</div>
-	<div class="formw">
-	'.$show_preview_image.'
-	</div>
-	</div>';
-	$form->addElement('html', $div .'<br />');
-	$form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
+    $show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
+    $div = '<div class="row">
+    <div class="label">'.get_lang('ImagePreview').'</div>
+    <div class="formw">
+    '.$show_preview_image.'
+    </div>
+    </div>';
+    $form->addElement('html', $div .'<br />');
+    $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 }
 
 $form->addElement('file', 'lp_preview_image', ($_SESSION['oLP']->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
@@ -133,19 +133,19 @@ $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', ar
 
 // Search terms (only if search is activated).
 if (api_get_setting('search_enabled') === 'true') {
-	$specific_fields = get_specific_field_list();
-	foreach ($specific_fields as $specific_field) {
-		$form -> addElement ('text', $specific_field['code'], $specific_field['name']);
-		$filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $_SESSION['oLP']->lp_id, 'tool_id' => '\''. TOOL_LEARNPATH .'\'');
-		$values = get_specific_field_values_list($filter, array('value'));
-		if (!empty($values)) {
-			$arr_str_values = array();
-			foreach ($values as $value) {
-				$arr_str_values[] = $value['value'];
-			}
-			$defaults[$specific_field['code']] = implode(', ', $arr_str_values);
-		}
-	}
+    $specific_fields = get_specific_field_list();
+    foreach ($specific_fields as $specific_field) {
+        $form -> addElement ('text', $specific_field['code'], $specific_field['name']);
+        $filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $_SESSION['oLP']->lp_id, 'tool_id' => '\''. TOOL_LEARNPATH .'\'');
+        $values = get_specific_field_values_list($filter, array('value'));
+        if (!empty($values)) {
+            $arr_str_values = array();
+            foreach ($values as $value) {
+                $arr_str_values[] = $value['value'];
+            }
+            $defaults[$specific_field['code']] = implode(', ', $arr_str_values);
+        }
+    }
 }
 
 // Default values

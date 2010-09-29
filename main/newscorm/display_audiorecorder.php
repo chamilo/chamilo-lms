@@ -17,12 +17,12 @@ require_once 'scorm.class.php';
 require_once 'aicc.class.php';
 
 if (isset($_SESSION['lpobject'])) {
-	$oLP = unserialize($_SESSION['lpobject']);
-	if (is_object($oLP)) {
-		$_SESSION['oLP'] = $oLP;
-	} else {
-		die('Could not instanciate lp object.');
-	}
+    $oLP = unserialize($_SESSION['lpobject']);
+    if (is_object($oLP)) {
+        $_SESSION['oLP'] = $oLP;
+    } else {
+        die('Could not instanciate lp object.');
+    }
 }
 $charset = $_SESSION['oLP']->encoding;
 
@@ -32,13 +32,13 @@ require_once '../inc/reduced_header.inc.php';
 
 echo '<body dir="'.api_get_text_direction().'">';
 
-		echo '<div id="audiorecorder">	';
-		$audio_recorder_studentview = 'true';
-		$audio_recorder_item_id = $_SESSION['oLP']->current;
-		if (api_get_setting('service_visio', 'active') == 'true') {
-			include 'audiorecorder.inc.php';
-		}
-		echo '</div>';
-		// end of audiorecorder include
+        echo '<div id="audiorecorder">	';
+        $audio_recorder_studentview = 'true';
+        $audio_recorder_item_id = $_SESSION['oLP']->current;
+        if (api_get_setting('service_visio', 'active') == 'true') {
+            include 'audiorecorder.inc.php';
+        }
+        echo '</div>';
+        // end of audiorecorder include
 
 echo '</body></html>';

@@ -61,11 +61,11 @@ $submit			= $_POST['submit_button'];
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {
-	 $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
-	error_log('New LP - User not authorized in lp_add.php');
-	header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    error_log('New LP - User not authorized in lp_add.php');
+    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
@@ -74,18 +74,18 @@ $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
 
 /*
-	Course admin section
-	- all the functions not available for students - always available in this case (page only shown to admin)
+    Course admin section
+    - all the functions not available for students - always available in this case (page only shown to admin)
 */
 if (isset($_SESSION['gradebook'])){
-	$gradebook =	$_SESSION['gradebook'];
+    $gradebook =	$_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('ToolGradebook')
-		);
+    $interbreadcrumb[]= array (
+            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+            'name' => get_lang('ToolGradebook')
+        );
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
@@ -100,7 +100,7 @@ echo '</div>';
 Display::display_normal_message(get_lang('AddLpIntro'), false);
 
 if ($_POST AND empty($_REQUEST['learnpath_name'])) {
-	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
+    Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
 }
 
 echo '<form method="post">';

@@ -70,7 +70,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
     //$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
     if (is_object($mylp->items[$next_item])) {
         if ($debug > 1) { error_log('In initialize_item - recovering existing item object '.$next_item, 0); }
-    	$mylpi = & $mylp->items[$next_item];
+        $mylpi = & $mylp->items[$next_item];
     } else {
         if ($debug > 1) { error_log('In initialize_item - generating new item object '.$next_item, 0); }
         $mylpi =& new learnpathItem($next_item, $user_id);
@@ -101,7 +101,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
     $myic = $mylpi->get_interactions_count();
     $myistring = '';
     for ($i = 0; $i < $myic; $i++) {
-    	$myistring .= ",[".$i.",'','','','','','','']";
+        $myistring .= ",[".$i.",'','','','','','','']";
     }
     if (!empty($myistring)) {
         $myistring = substr($myistring, 1);

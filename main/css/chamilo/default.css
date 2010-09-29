@@ -4334,3 +4334,18 @@ span.form_required  {
 .attendance-calendar-table td {
 	height:66px;
 }
+
+#contact_registration .label{
+	width:205px;
+	
+}
+
+#contact_registration .formw{
+	width:344px;	
+	float:left;
+	margin-left:20px;
+}
+
+#id_contact_form .normal-message{
+	padding:20px;
+}

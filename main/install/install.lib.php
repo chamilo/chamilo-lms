@@ -1387,7 +1387,7 @@ function get_contact_registration_form() {
 
     $html ='
     <div id="contact_registration">
-    <fieldset style="width:90%;padding:15px;border:1pt solid #eee">
+    <fieldset style="width:95%;padding:15px;border:1pt solid #eee">
     <div id="div_sent_information"></div>
     <form>
     <div class="row">
@@ -1518,18 +1518,13 @@ return $html;
 function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute = '') {
 	echo "<tr ".$tr_attribute.">\n";
 	echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
-
 	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update) {
-
 		echo '<td><input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'.$parameter_value."</td>\n";
-
 	} else {
-
 		$inputtype = $form_field_name == 'dbPassForm' ? 'password' : 'text';
 
 		//Slightly limit the length of the database prefix to avoid having to cut down the databases names later on
 		$maxlength = $form_field_name == 'dbPrefixForm' ? '15' : MAX_FORM_FIELD_LENGTH;
-
 		echo '<td><input type="'.$inputtype.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxlength.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'."</td>\n";
 		echo "<td>$extra_notice</td>\n";
 	}
@@ -1635,8 +1630,9 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 		display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" style="display:none;"');
 	}
 	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" style="display:none;"');
-
-	?>
+	
+	/*	Tracking is always available see #2066
+	 * 
 	<tr id="optional_param5" style="display:none;">
 	  <td><?php echo get_lang('EnableTracking'); ?> </td>
 
@@ -1650,7 +1646,9 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	  <?php endif; ?>
 
 	  <td>&nbsp;</td>
-	</tr>
+	</tr>	*/
+	?>
+	<input type="hidden" name="enableTrackingForm" value="1" />
 	<tr id="optional_param6" style="display:none;">
 	  <td><?php echo get_lang('SingleDb'); ?> </td>
 

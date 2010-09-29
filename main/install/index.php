@@ -124,14 +124,14 @@ $new_version_stable = false;
 $new_version_major = true;
 $software_name = 'Chamilo';
 $software_url = 'http://www.chamilo.org/';
-
+/*
 // A protection measure for already installed systems.
 if (is_already_installed_system()) {
 	// The system has already been installed, so block re-installation.
 	$global_error_code = 6;
 	require '../inc/global_error_message.inc.php';
 	die();
-}
+}*/
 
 /*		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 
@@ -358,7 +358,7 @@ if ($encryptPassForm == '1') {
 					document.getElementById('optional_param3').style.display = '';
 				}
 				document.getElementById('optional_param4').style.display = '';
-				document.getElementById('optional_param5').style.display = '';
+				//document.getElementById('optional_param5').style.display = '';
 				document.getElementById('optional_param6').style.display = '';
 				init_visibility = 1;
 				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
@@ -369,7 +369,7 @@ if ($encryptPassForm == '1') {
 					document.getElementById('optional_param3').style.display = 'none';
 				}
 				document.getElementById('optional_param4').style.display = 'none';
-				document.getElementById('optional_param5').style.display = 'none';
+				//document.getElementById('optional_param5').style.display = 'none';
 				document.getElementById('optional_param6').style.display = 'none';
 				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
 				init_visibility = 0;
@@ -625,7 +625,7 @@ if ($_POST['step2']) {
 		echo '<br />';
 	}
 	?>
-	<?php echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?><br />
+	<?php //echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?>
 	<?php echo get_lang('SingleDb').' : '.($singleDbForm ? get_lang('One') : get_lang('Several')); ?><br /><br />
 
 	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />

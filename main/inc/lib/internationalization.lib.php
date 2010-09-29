@@ -29,8 +29,8 @@ define('DATE_TIME_FORMAT_LONG', 3);	// August 25, 2009 at 03:28 PM
 
 // Formatting person's name.
 define('PERSON_NAME_COMMON_CONVENTION', 0);	// Formatting a person's name using the pattern as it has been
-											// configured in the internationalization database for every language.
-											// This (default) option would be the most used.
+                                            // configured in the internationalization database for every language.
+                                            // This (default) option would be the most used.
 // The followind options may be used in limited number of places for overriding the common convention:
 define('PERSON_NAME_WESTERN_ORDER', 1);		// Formatting a person's name in Western order: first_name last_name
 define('PERSON_NAME_EASTERN_ORDER', 2);		// Formatting a person's name in Eastern order: last_name first_name
@@ -59,14 +59,14 @@ define ('LANGUAGE_DETECT_MAX_DELTA', 140000);
  * Note: This function should be called only once in the global initialization script.
  */
 function api_initialize_internationalization() {
-	if (MBSTRING_INSTALLED) {
-		@ini_set('mbstring.func_overload', 0);
-		@ini_set('mbstring.encoding_translation', 0);
-		@ini_set('mbstring.http_input', 'pass');
-		@ini_set('mbstring.http_output', 'pass');
-		@ini_set('mbstring.language', 'neutral');
-	}
-	api_set_internationalization_default_encoding('UTF-8');
+    if (MBSTRING_INSTALLED) {
+        @ini_set('mbstring.func_overload', 0);
+        @ini_set('mbstring.encoding_translation', 0);
+        @ini_set('mbstring.http_input', 'pass');
+        @ini_set('mbstring.http_output', 'pass');
+        @ini_set('mbstring.language', 'neutral');
+    }
+    api_set_internationalization_default_encoding('UTF-8');
 }
 
 /**
@@ -75,12 +75,12 @@ function api_initialize_internationalization() {
  * @return string				Returns the old value of the default encoding.
  */
 function api_set_internationalization_default_encoding($encoding) {
-	$encoding = api_refine_encoding_id($encoding);
-	$result = _api_mb_internal_encoding();
-	_api_mb_internal_encoding($encoding);
-	_api_mb_regex_encoding($encoding);
-	_api_iconv_set_encoding('iconv_internal_encoding', $encoding);
-	return $result;
+    $encoding = api_refine_encoding_id($encoding);
+    $result = _api_mb_internal_encoding();
+    _api_mb_internal_encoding($encoding);
+    _api_mb_regex_encoding($encoding);
+    _api_iconv_set_encoding('iconv_internal_encoding', $encoding);
+    return $result;
 }
 
 
@@ -113,119 +113,119 @@ $_api_is_translated_call = false;
  * @link http://translate.chamilo.org/
  */
 function get_lang($variable, $reserved = null, $language = null) {
-	global
-		// For serving some old hacks:
-		// By manipulating this global variable the translation may be done in different languages too (not the elegant way).
-		$language_interface,
-		// Because of possibility for manipulations of the global variable $language_interface, we need its initial value.
-		$language_interface_initial_value,
-		// For serving the function is_translated()
-		$_api_is_translated, $_api_is_translated_call;
+    global
+        // For serving some old hacks:
+        // By manipulating this global variable the translation may be done in different languages too (not the elegant way).
+        $language_interface,
+        // Because of possibility for manipulations of the global variable $language_interface, we need its initial value.
+        $language_interface_initial_value,
+        // For serving the function is_translated()
+        $_api_is_translated, $_api_is_translated_call;
 
-	// Caching results from some API functions, for speed.
-	static $initialized, $encoding, $is_utf8_encoding, $langpath, $test_server_mode, $show_special_markup;
-	if (!isset($initialized)) {
-		$encoding = api_get_system_encoding();
-		$is_utf8_encoding = api_is_utf8($encoding);
-		$langpath = api_get_path(SYS_LANG_PATH);
-		$test_server_mode = api_get_setting('server_type') == 'test';
-		$show_special_markup = api_get_setting('hide_dltt_markup') != 'true' || $test_server_mode;
-		$initialized = true;
-	}
+    // Caching results from some API functions, for speed.
+    static $initialized, $encoding, $is_utf8_encoding, $langpath, $test_server_mode, $show_special_markup;
+    if (!isset($initialized)) {
+        $encoding = api_get_system_encoding();
+        $is_utf8_encoding = api_is_utf8($encoding);
+        $langpath = api_get_path(SYS_LANG_PATH);
+        $test_server_mode = api_get_setting('server_type') == 'test';
+        $show_special_markup = api_get_setting('hide_dltt_markup') != 'true' || $test_server_mode;
+        $initialized = true;
+    }
 
-	// Combining both ways for requesting specific language.
-	if (empty($language)) {
-		$language = $language_interface;
-	}
-	$is_interface_language = $language == $language_interface_initial_value;
+    // Combining both ways for requesting specific language.
+    if (empty($language)) {
+        $language = $language_interface;
+    }
+    $is_interface_language = $language == $language_interface_initial_value;
 
-	// This is a cache for already translated language variables. By using it, we avoid repetitive translations, gaining speed.
-	static $cache;
+    // This is a cache for already translated language variables. By using it, we avoid repetitive translations, gaining speed.
+    static $cache;
 
-	// Looking up into the cache for existing translation.
-	if (isset($cache[$language][$variable]) && !$_api_is_translated_call) {
-		// There is a previously saved translation, returning it.
-		return $cache[$language][$variable];
-	}
+    // Looking up into the cache for existing translation.
+    if (isset($cache[$language][$variable]) && !$_api_is_translated_call) {
+        // There is a previously saved translation, returning it.
+        return $cache[$language][$variable];
+    }
 
-	$_api_is_translated = false;
+    $_api_is_translated = false;
 
-	// There is no cached translation, we have to retrieve it:
-	// - from a global variable (the faster way) - on production server mode;
-	// - from a local variable after reloading the language files - on test server mode or when requested language is different than the genuine interface language.
-	$read_global_variables = $is_interface_language && !$test_server_mode && !$_api_is_translated_call;
+    // There is no cached translation, we have to retrieve it:
+    // - from a global variable (the faster way) - on production server mode;
+    // - from a local variable after reloading the language files - on test server mode or when requested language is different than the genuine interface language.
+    $read_global_variables = $is_interface_language && !$test_server_mode && !$_api_is_translated_call;
 
-	// Reloading the language files when it is necessary.
-	if (!$read_global_variables) {
-		global $language_files;
-		if (isset($language_files)) {
-			$parent_language = null;
-			if (api_get_setting('allow_use_sub_language') == 'true') {
-				require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
-				$parent_language = SubLanguageManager::get_parent_language_path($language);
-			}
-			if (!is_array($language_files)) {
-				if (isset($parent_language)) {
-					@include "$langpath$parent_language/$language_files.inc.php";
-				}
-				@include "$langpath$language/$language_files.inc.php";
-			} else {
-				foreach ($language_files as &$language_file) {
-					if (isset($parent_language)) {
-						@include "$langpath$parent_language/$language_file.inc.php";
-					}
-					@include "$langpath$language/$language_file.inc.php";
-				}
-			}
-		}
-	}
+    // Reloading the language files when it is necessary.
+    if (!$read_global_variables) {
+        global $language_files;
+        if (isset($language_files)) {
+            $parent_language = null;
+            if (api_get_setting('allow_use_sub_language') == 'true') {
+                require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
+                $parent_language = SubLanguageManager::get_parent_language_path($language);
+            }
+            if (!is_array($language_files)) {
+                if (isset($parent_language)) {
+                    @include "$langpath$parent_language/$language_files.inc.php";
+                }
+                @include "$langpath$language/$language_files.inc.php";
+            } else {
+                foreach ($language_files as &$language_file) {
+                    if (isset($parent_language)) {
+                        @include "$langpath$parent_language/$language_file.inc.php";
+                    }
+                    @include "$langpath$language/$language_file.inc.php";
+                }
+            }
+        }
+    }
 
-	// Translation mode for production servers.
-	if (!$test_server_mode) {
-		if ($read_global_variables) {
-			if (isset($GLOBALS[$variable])) {
-				$langvar = $GLOBALS[$variable];
-				$_api_is_translated = true;
-			} elseif (isset($GLOBALS["lang$variable"])) {
-				$langvar = $GLOBALS["lang$variable"];
-				$_api_is_translated = true;
-			} else {
-				$langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
-			}
-		} else {
-			if (isset($$variable)) {
-				$langvar = $$variable;
-				$_api_is_translated = true;
-			} elseif (isset(${"lang$variable"})) {
-				$langvar = ${"lang$variable"};
-				$_api_is_translated = true;
-			} else {
-				$langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
-			}
-		}
-		if (empty($langvar) || !is_string($langvar)) {
-			$_api_is_translated = false;
-		}
-		return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
-	}
+    // Translation mode for production servers.
+    if (!$test_server_mode) {
+        if ($read_global_variables) {
+            if (isset($GLOBALS[$variable])) {
+                $langvar = $GLOBALS[$variable];
+                $_api_is_translated = true;
+            } elseif (isset($GLOBALS["lang$variable"])) {
+                $langvar = $GLOBALS["lang$variable"];
+                $_api_is_translated = true;
+            } else {
+                $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
+            }
+        } else {
+            if (isset($$variable)) {
+                $langvar = $$variable;
+                $_api_is_translated = true;
+            } elseif (isset(${"lang$variable"})) {
+                $langvar = ${"lang$variable"};
+                $_api_is_translated = true;
+            } else {
+                $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
+            }
+        }
+        if (empty($langvar) || !is_string($langvar)) {
+            $_api_is_translated = false;
+        }
+        return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
+    }
 
-	// Translation mode for test/development servers.
-	if (!is_string($variable)) {
-		return $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;
-	}
-	if (isset($$variable)) {
-		$langvar = $$variable;
-		$_api_is_translated = true;
-	} elseif (isset(${"lang$variable"})) {
-		$langvar = ${"lang$variable"};
-		$_api_is_translated = true;
-	} else {
-		$langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
-	}
-	if (empty($langvar) || !is_string($langvar)) {
-		$_api_is_translated = false;
-	}
-	return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
+    // Translation mode for test/development servers.
+    if (!is_string($variable)) {
+        return $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;
+    }
+    if (isset($$variable)) {
+        $langvar = $$variable;
+        $_api_is_translated = true;
+    } elseif (isset(${"lang$variable"})) {
+        $langvar = ${"lang$variable"};
+        $_api_is_translated = true;
+    } else {
+        $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
+    }
+    if (empty($langvar) || !is_string($langvar)) {
+        $_api_is_translated = false;
+    }
+    return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
 }
 
 /**
@@ -236,11 +236,11 @@ function get_lang($variable, $reserved = null, $language = null) {
  * @author Ivan Tcholakov, 2010.
  */
 function api_is_translated($variable, $language = null) {
-	global $_api_is_translated, $_api_is_translated_call;
-	$_api_is_translated_call = true;
-	get_lang($variable, $language);
-	$_api_is_translated_call = false;
-	return $_api_is_translated;
+    global $_api_is_translated, $_api_is_translated_call;
+    $_api_is_translated_call = true;
+    get_lang($variable, $language);
+    $_api_is_translated_call = false;
+    return $_api_is_translated;
 }
 
 /**
@@ -249,8 +249,8 @@ function api_is_translated($variable, $language = null) {
  * @return string					The current language of the interface.
  */
 function api_get_interface_language($purified = false) {
-	global $language_interface;
-	return empty($language_interface) ? 'english' : ($purified ? api_purify_language_id($language_interface) : $language_interface);
+    global $language_interface;
+    return empty($language_interface) ? 'english' : ($purified ? api_purify_language_id($language_interface) : $language_interface);
 }
 
 /**
@@ -259,11 +259,11 @@ function api_get_interface_language($purified = false) {
  * @return bool $language		TRUE if the language is supported, FALSE otherwise.
  */
 function api_is_language_supported($language) {
-	static $supported = array();
-	if (!isset($supported[$language])) {
-		$supported[$language] = in_array(api_purify_language_id($language), array_keys(_api_non_utf8_encodings()));
-	}
-	return $supported[$language];
+    static $supported = array();
+    if (!isset($supported[$language])) {
+        $supported[$language] = in_array(api_purify_language_id($language), array_keys(_api_non_utf8_encodings()));
+    }
+    return $supported[$language];
 }
 
 /**
@@ -273,16 +273,16 @@ function api_is_language_supported($language) {
  * @return string				Returns the input language identificator. If the input language is not enabled, platform language is returned then.
  */
 function api_get_valid_language($language) {
-	static $enabled_languages;
-	if (!isset($enabled_languages)) {
-		$enabled_languages_info = api_get_languages();
-		$enabled_languages = $enabled_languages_info['folder'];
-	}
-	$language = str_replace('_km', '_KM', strtolower(trim($language)));
-	if (empty($language) || !in_array($language, $enabled_languages) || !api_is_language_supported($language)) {
-		$language = api_get_setting('platformLanguage');
-	}
-	return $language;
+    static $enabled_languages;
+    if (!isset($enabled_languages)) {
+        $enabled_languages_info = api_get_languages();
+        $enabled_languages = $enabled_languages_info['folder'];
+    }
+    $language = str_replace('_km', '_KM', strtolower(trim($language)));
+    if (empty($language) || !in_array($language, $enabled_languages) || !api_is_language_supported($language)) {
+        $language = api_get_setting('platformLanguage');
+    }
+    return $language;
 }
 
 /**
@@ -291,11 +291,11 @@ function api_get_valid_language($language) {
  * @param string			The same purified or filtered language identificator, for example 'french'.
  */
 function api_purify_language_id($language) {
-	static $purified = array();
-	if (!isset($purified[$language])) {
-		$purified[$language] = trim(str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language)));
-	}
-	return $purified[$language];
+    static $purified = array();
+    if (!isset($purified[$language])) {
+        $purified[$language] = trim(str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language)));
+    }
+    return $purified[$language];
 }
 
 /**
@@ -311,27 +311,27 @@ function api_purify_language_id($language) {
  * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
  */
 function api_get_language_isocode($language = null, $default_code = 'en') {
-	static $iso_code = array();
-	if (empty($language)) {
-		$language = api_get_interface_language();
-	}
-	if (!isset($iso_code[$language])) {
-		if (!class_exists('Database')) {
-			return $default_code; // This might happen, in case of calling this function early during the global initialization.
-		}
-		$sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'");
-		if (Database::num_rows($sql_result)) {
-			$result = Database::fetch_array($sql_result);
-			$iso_code[$language] = trim($result['isocode']);
-		} else {
-			$language_purified_id = api_purify_language_id($language);
-			$iso_code[$language] = isset($iso_code[$language_purified_id]) ? $iso_code[$language_purified_id] : null;
-		}
-		if (empty($iso_code[$language])) {
-			$iso_code[$language] = $default_code;
-		}
-	}
-	return $iso_code[$language];
+    static $iso_code = array();
+    if (empty($language)) {
+        $language = api_get_interface_language();
+    }
+    if (!isset($iso_code[$language])) {
+        if (!class_exists('Database')) {
+            return $default_code; // This might happen, in case of calling this function early during the global initialization.
+        }
+        $sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'");
+        if (Database::num_rows($sql_result)) {
+            $result = Database::fetch_array($sql_result);
+            $iso_code[$language] = trim($result['isocode']);
+        } else {
+            $language_purified_id = api_purify_language_id($language);
+            $iso_code[$language] = isset($iso_code[$language_purified_id]) ? $iso_code[$language_purified_id] : null;
+        }
+        if (empty($iso_code[$language])) {
+            $iso_code[$language] = $default_code;
+        }
+    }
+    return $iso_code[$language];
 }
 
 /**
@@ -341,25 +341,25 @@ function api_get_language_isocode($language = null, $default_code = 'en') {
  * @return string			The correspondent to the language text direction ('ltr' or 'rtl').
  */
 function api_get_text_direction($language = null) {
-	static $text_direction = array();
-	if (empty($language)) {
-		$language = api_get_interface_language();
-	}
-	if (!isset($text_direction[$language])) {
-		$text_direction[$language] = in_array(api_purify_language_id($language),
-			array(
-				'arabic', 'ar',
-				'dari', 'prs',
-				'hebrew', 'he',
-				'iw',
-				'pashto', 'ps',
-				'persian', 'fa',
-				'ur',
-				'yiddish', 'yid'
-			)
-		) ? 'rtl' : 'ltr';
-	}
-	return $text_direction[$language];
+    static $text_direction = array();
+    if (empty($language)) {
+        $language = api_get_interface_language();
+    }
+    if (!isset($text_direction[$language])) {
+        $text_direction[$language] = in_array(api_purify_language_id($language),
+            array(
+                'arabic', 'ar',
+                'dari', 'prs',
+                'hebrew', 'he',
+                'iw',
+                'pashto', 'ps',
+                'persian', 'fa',
+                'ur',
+                'yiddish', 'yid'
+            )
+        ) ? 'rtl' : 'ltr';
+    }
+    return $text_direction[$language];
 }
 
 /**
@@ -370,12 +370,12 @@ function api_get_text_direction($language = null) {
  * @return bool				TRUE if the given language can use Latin 1 encoding (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...), FALSE otherwise.
  */
 function api_is_latin1_compatible($language) {
-	static $latin1_languages;
-	if (!isset($latin1_languages)) {
-		$latin1_languages = _api_get_latin1_compatible_languages();
-	}
-	$language = api_purify_language_id($language);
-	return in_array($language, $latin1_languages);
+    static $latin1_languages;
+    if (!isset($latin1_languages)) {
+        $latin1_languages = _api_get_latin1_compatible_languages();
+    }
+    $language = api_purify_language_id($language);
+    return in_array($language, $latin1_languages);
 }
 
 
@@ -389,18 +389,18 @@ function api_is_latin1_compatible($language) {
  */
 
 function api_detect_language(&$string, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (empty($string)) {
-		return false;
-	}
-	$result_array = &_api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
-	if (empty($result_array)) {
-		return false;
-	}
-	list($key, $delta_points) = each($result_array);
-	return strstr($key, ':', true);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (empty($string)) {
+        return false;
+    }
+    $result_array = &_api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
+    if (empty($result_array)) {
+        return false;
+    }
+    list($key, $delta_points) = each($result_array);
+    return strstr($key, ':', true);
 }
 
 
@@ -416,19 +416,19 @@ function api_detect_language(&$string, $encoding = null) {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_get_timezones() {
-	if (!DATE_TIME_INSTALLED) {
-		// This occurs when PHP < 5.2
-		return array('' => '');
-	}
-	$timezone_identifiers = DateTimeZone::listIdentifiers();
-	sort($timezone_identifiers);
-	$out = array();
-	foreach ($timezone_identifiers as $tz) {
-		$out[$tz] = $tz;
-	}
-	$null_option = array('' => '');
-	$result = array_merge($null_option, $out);
-	return $result;
+    if (!DATE_TIME_INSTALLED) {
+        // This occurs when PHP < 5.2
+        return array('' => '');
+    }
+    $timezone_identifiers = DateTimeZone::listIdentifiers();
+    sort($timezone_identifiers);
+    $out = array();
+    foreach ($timezone_identifiers as $tz) {
+        $out[$tz] = $tz;
+    }
+    $null_option = array('' => '');
+    $result = array_merge($null_option, $out);
+    return $result;
 }
 
 /**
@@ -437,25 +437,25 @@ function api_get_timezones() {
  * @return string The timezone chosen
  */
 function _api_get_timezone() {
-	global $_user;
-	// First, get the default timezone of the server
-	$to_timezone = date_default_timezone_get();
-	// Second, see if a timezone has been chosen for the platform
-	$timezone_value = api_get_setting('timezone_value', 'timezones');
-	if ($timezone_value != null) {
-		$to_timezone = $timezone_value;
-	}
-	// If allowed by the administrator
-	$use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
-	if ($use_users_timezone == 'true') {
-		// Get the timezone based on user preference, if it exists
-		require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-		$timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
-		if ($timezone_user['timezone'] != null) {
-			$to_timezone = $timezone_user['timezone'];
-		}
-	}
-	return $to_timezone;
+    global $_user;
+    // First, get the default timezone of the server
+    $to_timezone = date_default_timezone_get();
+    // Second, see if a timezone has been chosen for the platform
+    $timezone_value = api_get_setting('timezone_value', 'timezones');
+    if ($timezone_value != null) {
+        $to_timezone = $timezone_value;
+    }
+    // If allowed by the administrator
+    $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
+    if ($use_users_timezone == 'true') {
+        // Get the timezone based on user preference, if it exists
+        require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+        $timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
+        if ($timezone_user['timezone'] != null) {
+            $to_timezone = $timezone_user['timezone'];
+        }
+    }
+    return $to_timezone;
 }
 
 /**
@@ -467,26 +467,26 @@ function _api_get_timezone() {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_get_utc_datetime($time = null) {
-	$from_timezone = _api_get_timezone();
-	$to_timezone = 'UTC';
-	if (is_null($time)) {
-		return gmdate('Y-m-d H:i:s');
-	}
-	// If time is a timestamp, return directly in utc
-	if (is_int($time)) {
-		return gmdate('Y-m-d H:i:s', $time);
-	}
-	if (!DATE_TIME_INSTALLED) {
-		// This occurs when PHP < 5.2
-		return $time;
-	}
-	try {
-		$date = new DateTime($time, new DateTimezone($from_timezone));
-		$date->setTimezone(new DateTimeZone($to_timezone));
-		return $date->format('Y-m-d H:i:s');
-	} catch (Exception $e) {
-		return null;
-	}
+    $from_timezone = _api_get_timezone();
+    $to_timezone = 'UTC';
+    if (is_null($time)) {
+        return gmdate('Y-m-d H:i:s');
+    }
+    // If time is a timestamp, return directly in utc
+    if (is_int($time)) {
+        return gmdate('Y-m-d H:i:s', $time);
+    }
+    if (!DATE_TIME_INSTALLED) {
+        // This occurs when PHP < 5.2
+        return $time;
+    }
+    try {
+        $date = new DateTime($time, new DateTimezone($from_timezone));
+        $date->setTimezone(new DateTimeZone($to_timezone));
+        return $date->format('Y-m-d H:i:s');
+    } catch (Exception $e) {
+        return null;
+    }
 }
 
 /**
@@ -499,40 +499,40 @@ function api_get_utc_datetime($time = null) {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_get_local_time($time = null, $to_timezone = null, $from_timezone = null) {
-	if (!DATE_TIME_INSTALLED) {
-		// This occurs when PHP < 5.2
-		if (is_null($time)) {
-			$time = time();
-		}
-		if (is_int($time)) {
-			$time = date('Y-m-d H:i:s', $time);
-		}
-		return $time;
-	}
-	// Determining the timezone to be converted from
-	if (is_null($from_timezone)) {
-		$from_timezone = 'UTC';
-	}
-	// Determining the timezone to be converted to
-	if (is_null($to_timezone)) {
-		$to_timezone = _api_get_timezone();
-	}
-	// If time is a timestamp, convert it to a string
-	if (is_null($time)) {
-		$from_timezone = 'UTC';
-		$time = gmdate('Y-m-d H:i:s');
-	}
-	if (is_int($time)) {
-		$from_timezone = 'UTC';
-		$time = gmdate('Y-m-d H:i:s', $time);
-	}
-	try {
-		$date = new DateTime($time, new DateTimezone($from_timezone));
-		$date->setTimezone(new DateTimeZone($to_timezone));
-		return $date->format('Y-m-d H:i:s');
-	} catch (Exception $e) {
-		return null;
-	}
+    if (!DATE_TIME_INSTALLED) {
+        // This occurs when PHP < 5.2
+        if (is_null($time)) {
+            $time = time();
+        }
+        if (is_int($time)) {
+            $time = date('Y-m-d H:i:s', $time);
+        }
+        return $time;
+    }
+    // Determining the timezone to be converted from
+    if (is_null($from_timezone)) {
+        $from_timezone = 'UTC';
+    }
+    // Determining the timezone to be converted to
+    if (is_null($to_timezone)) {
+        $to_timezone = _api_get_timezone();
+    }
+    // If time is a timestamp, convert it to a string
+    if (is_null($time)) {
+        $from_timezone = 'UTC';
+        $time = gmdate('Y-m-d H:i:s');
+    }
+    if (is_int($time)) {
+        $from_timezone = 'UTC';
+        $time = gmdate('Y-m-d H:i:s', $time);
+    }
+    try {
+        $date = new DateTime($time, new DateTimezone($from_timezone));
+        $date->setTimezone(new DateTimeZone($to_timezone));
+        return $date->format('Y-m-d H:i:s');
+    } catch (Exception $e) {
+        return null;
+    }
 }
 
 /**
@@ -545,11 +545,11 @@ function api_get_local_time($time = null, $to_timezone = null, $from_timezone = 
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_strtotime($time, $timezone = null) {
-	$system_timezone = date_default_timezone_get();
-	date_default_timezone_set($timezone);
-	$timestamp = strtotime($time);
-	date_default_timezone_set($system_timezone);
-	return $timestamp;
+    $system_timezone = date_default_timezone_get();
+    date_default_timezone_set($timezone);
+    $timestamp = strtotime($time);
+    date_default_timezone_set($system_timezone);
+    return $timestamp;
 }
 
 /**
@@ -571,83 +571,83 @@ function api_strtotime($time, $timezone = null) {
  */
 function api_format_date($time, $format = null, $language = null) {
 
-	$system_timezone = date_default_timezone_get();
-	date_default_timezone_set(_api_get_timezone());
+    $system_timezone = date_default_timezone_get();
+    date_default_timezone_set(_api_get_timezone());
 
-	if (is_string($time)) {
-		$time = strtotime($time);
-	}
+    if (is_string($time)) {
+        $time = strtotime($time);
+    }
 
-	if (is_null($format)) {
-		$format = DATE_TIME_FORMAT_LONG;
-	}
+    if (is_null($format)) {
+        $format = DATE_TIME_FORMAT_LONG;
+    }
 
-	$datetype = null;
-	$timetype = null;
+    $datetype = null;
+    $timetype = null;
 
-	if(is_int($format)) {
-		switch ($format) {
-			case TIME_NO_SEC_FORMAT:
-				$date_format = get_lang('timeNoSecFormat', '', $language);
-				if (IS_PHP_53 && INTL_INSTALLED) {
-					$datetype = IntlDateFormatter::NONE;
-					$timetype = IntlDateFormatter::SHORT;
-				}
-				break;
-			case DATE_FORMAT_SHORT:
-				$date_format = get_lang('dateFormatShort', '', $language);
-				if (IS_PHP_53 && INTL_INSTALLED) {
-					$datetype = IntlDateFormatter::LONG;
-					$timetype = IntlDateFormatter::NONE;
-				}
-				break;
-			case DATE_FORMAT_LONG:
-				$date_format = get_lang('dateFormatLong', '', $language);
-				if (IS_PHP_53 && INTL_INSTALLED) {
-					$datetype = IntlDateFormatter::FULL;
-					$timetype = IntlDateFormatter::NONE;
-				}
-				break;
-			case DATE_TIME_FORMAT_LONG:
-				$date_format = get_lang('dateTimeFormatLong', '', $language);
-				if (IS_PHP_53 && INTL_INSTALLED) {
-					$datetype = IntlDateFormatter::FULL;
-					$timetype = IntlDateFormatter::SHORT;
-				}
-				break;
-			default:
-				$date_format = get_lang('dateTimeFormatLong', '', $language);
-				if (IS_PHP_53 && INTL_INSTALLED) {
-					$datetype = IntlDateFormatter::FULL;
-					$timetype = IntlDateFormatter::SHORT;
-				}
-		}
-	} else {
-		$date_format = $format;
-	}
+    if(is_int($format)) {
+        switch ($format) {
+            case TIME_NO_SEC_FORMAT:
+                $date_format = get_lang('timeNoSecFormat', '', $language);
+                if (IS_PHP_53 && INTL_INSTALLED) {
+                    $datetype = IntlDateFormatter::NONE;
+                    $timetype = IntlDateFormatter::SHORT;
+                }
+                break;
+            case DATE_FORMAT_SHORT:
+                $date_format = get_lang('dateFormatShort', '', $language);
+                if (IS_PHP_53 && INTL_INSTALLED) {
+                    $datetype = IntlDateFormatter::LONG;
+                    $timetype = IntlDateFormatter::NONE;
+                }
+                break;
+            case DATE_FORMAT_LONG:
+                $date_format = get_lang('dateFormatLong', '', $language);
+                if (IS_PHP_53 && INTL_INSTALLED) {
+                    $datetype = IntlDateFormatter::FULL;
+                    $timetype = IntlDateFormatter::NONE;
+                }
+                break;
+            case DATE_TIME_FORMAT_LONG:
+                $date_format = get_lang('dateTimeFormatLong', '', $language);
+                if (IS_PHP_53 && INTL_INSTALLED) {
+                    $datetype = IntlDateFormatter::FULL;
+                    $timetype = IntlDateFormatter::SHORT;
+                }
+                break;
+            default:
+                $date_format = get_lang('dateTimeFormatLong', '', $language);
+                if (IS_PHP_53 && INTL_INSTALLED) {
+                    $datetype = IntlDateFormatter::FULL;
+                    $timetype = IntlDateFormatter::SHORT;
+                }
+        }
+    } else {
+        $date_format = $format;
+    }
 
-	if (IS_PHP_53 && INTL_INSTALLED && $datetype !== null && $timetype !== null) {
-		// Use ICU
-		if (is_null($language)) {
-			$language = api_get_language_isocode();
-		}
-		$date_formatter = datefmt_create($language, $datetype, $timetype, date_default_timezone_get());
-		$formatted_date = api_to_system_encoding(datefmt_format($date_formatter, $time), 'UTF-8');
+    if (IS_PHP_53 && INTL_INSTALLED && $datetype !== null && $timetype !== null) {
+        // Use ICU
+        if (is_null($language)) {
+            $language = api_get_language_isocode();
+        }
+        $date_formatter = datefmt_create($language, $datetype, $timetype, date_default_timezone_get());
+        $formatted_date = api_to_system_encoding(datefmt_format($date_formatter, $time), 'UTF-8');
 
-	} else {
-		// We replace %a %A %b %B masks of date format with translated strings.
+    } else {
+        // We replace %a %A %b %B masks of date format with translated strings.
 
-		$translated = &_api_get_day_month_names($language);
-		$date_format = str_replace(array('%A', '%a', '%B', '%b'),
-		array($translated['days_long'][(int)strftime('%w', $time )],
-			$translated['days_short'][(int)strftime('%w', $time)],
-			$translated['months_long'][(int)strftime('%m', $time) - 1],
-			$translated['months_short'][(int)strftime('%m', $time) - 1]),
-		$date_format);
-		$formatted_date = api_to_system_encoding(strftime($date_format, $time), 'UTF-8');
-	}
-	date_default_timezone_set($system_timezone);
-	return $formatted_date;
+        $translated = &_api_get_day_month_names($language);
+        $date_format = str_replace(array('%A', '%a', '%B', '%b'),
+        array($translated['days_long'][(int)strftime('%w', $time )],
+            $translated['days_short'][(int)strftime('%w', $time)],
+            $translated['months_long'][(int)strftime('%m', $time) - 1],
+            $translated['months_short'][(int)strftime('%m', $time) - 1]),
+        $date_format);
+        $formatted_date = api_to_system_encoding(strftime($date_format, $time), 'UTF-8');
+    }
+    date_default_timezone_set($system_timezone);
+    return $formatted_date;
 }
 
 /**
@@ -663,119 +663,119 @@ function api_format_date($time, $format = null, $language = null) {
 
 function date_to_str_ago($date) {
 
-	static $initialized = false;
-	static $today, $yesterday;
-	static $min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute;
-	static $min_decades, $min_years, $min_months, $min_weeks, $min_days, $min_hours, $min_minutes;
-	static $sec_time_time, $sec_time_sing, $sec_time_plu;
+    static $initialized = false;
+    static $today, $yesterday;
+    static $min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute;
+    static $min_decades, $min_years, $min_months, $min_weeks, $min_days, $min_hours, $min_minutes;
+    static $sec_time_time, $sec_time_sing, $sec_time_plu;
 
-	$system_timezone = date_default_timezone_get();
-	date_default_timezone_set(_api_get_timezone());
+    $system_timezone = date_default_timezone_get();
+    date_default_timezone_set(_api_get_timezone());
 
-	if (!$initialized) {
-		$today = get_lang('Today');
-		$yesterday = get_lang('Yesterday');
+    if (!$initialized) {
+        $today = get_lang('Today');
+        $yesterday = get_lang('Yesterday');
 
-		$min_decade = get_lang('MinDecade');
-		$min_year = get_lang('MinYear');
-		$min_month = get_lang('MinMonth');
-		$min_week = get_lang('MinWeek');
-		$min_day = get_lang('MinDay');
-		$min_hour = get_lang('MinHour');
-		$min_minute = get_lang('MinMinute');
+        $min_decade = get_lang('MinDecade');
+        $min_year = get_lang('MinYear');
+        $min_month = get_lang('MinMonth');
+        $min_week = get_lang('MinWeek');
+        $min_day = get_lang('MinDay');
+        $min_hour = get_lang('MinHour');
+        $min_minute = get_lang('MinMinute');
 
-		$min_decades = get_lang('MinDecades');
-		$min_years = get_lang('MinYears');
-		$min_months = get_lang('MinMonths');
-		$min_weeks = get_lang('MinWeeks');
-		$min_days = get_lang('MinDays');
-		$min_hours = get_lang('MinHours');
-		$min_minutes = get_lang('MinMinutes');
+        $min_decades = get_lang('MinDecades');
+        $min_years = get_lang('MinYears');
+        $min_months = get_lang('MinMonths');
+        $min_weeks = get_lang('MinWeeks');
+        $min_days = get_lang('MinDays');
+        $min_hours = get_lang('MinHours');
+        $min_minutes = get_lang('MinMinutes');
 
-		// original 1
-		//$sec_time=array('century'=>3.1556926*pow(10,9),'decade'=>315569260,'year'=>31556926,'month'=>2629743.83,'week'=>604800,'day'=>86400,'hour'=>3600,'minute'=>60,'second'=>1);
-		//$sec_time=array(get_lang('MinDecade')=>315569260,get_lang('MinYear')=>31556926,get_lang('MinMonth')=>2629743.83,get_lang('MinWeek')=>604800,get_lang('MinDay')=>86400,get_lang('MinHour')=>3600,get_lang('MinMinute')=>60);
-		$sec_time_time = array(315569260, 31556926, 2629743.83, 604800, 86400, 3600, 60);
-		$sec_time_sing = array($min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute);
-		$sec_time_plu = array($min_decades, $min_years, $min_months, $min_weeks, $min_days, $min_hours, $min_minutes);
-		$initialized = true;
-	}
+        // original 1
+        //$sec_time=array('century'=>3.1556926*pow(10,9),'decade'=>315569260,'year'=>31556926,'month'=>2629743.83,'week'=>604800,'day'=>86400,'hour'=>3600,'minute'=>60,'second'=>1);
+        //$sec_time=array(get_lang('MinDecade')=>315569260,get_lang('MinYear')=>31556926,get_lang('MinMonth')=>2629743.83,get_lang('MinWeek')=>604800,get_lang('MinDay')=>86400,get_lang('MinHour')=>3600,get_lang('MinMinute')=>60);
+        $sec_time_time = array(315569260, 31556926, 2629743.83, 604800, 86400, 3600, 60);
+        $sec_time_sing = array($min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute);
+        $sec_time_plu = array($min_decades, $min_years, $min_months, $min_weeks, $min_days, $min_hours, $min_minutes);
+        $initialized = true;
+    }
 
-	$dst_date = is_string($date) ? strtotime($date) : $date;
-	// For avoiding calling date() several times
-	$date_array = date('s/i/G/j/n/Y', $dst_date);
-	$date_split = explode('/', $date_array);
+    $dst_date = is_string($date) ? strtotime($date) : $date;
+    // For avoiding calling date() several times
+    $date_array = date('s/i/G/j/n/Y', $dst_date);
+    $date_split = explode('/', $date_array);
 
-	$dst_s = $date_split[0];
-	$dst_m = $date_split[1];
-	$dst_h = $date_split[2];
-	$dst_day = $date_split[3];
-	$dst_mth = $date_split[4];
-	$dst_yr = $date_split[5];
+    $dst_s = $date_split[0];
+    $dst_m = $date_split[1];
+    $dst_h = $date_split[2];
+    $dst_day = $date_split[3];
+    $dst_mth = $date_split[4];
+    $dst_yr = $date_split[5];
 
-	$dst_date = mktime($dst_h, $dst_m, $dst_s, $dst_mth, $dst_day, $dst_yr);
-	$time = $offset = time() - $dst_date; // Seconds between current days and today.
+    $dst_date = mktime($dst_h, $dst_m, $dst_s, $dst_mth, $dst_day, $dst_yr);
+    $time = $offset = time() - $dst_date; // Seconds between current days and today.
 
-	// Here start the functions sec_to_str()
-	$act_day = date('d');
-	$act_mth = date('n');
-	$act_yr = date('Y');
+    // Here start the functions sec_to_str()
+    $act_day = date('d');
+    $act_mth = date('n');
+    $act_yr = date('Y');
 
-	if ($dst_day == $act_day && $dst_mth == $act_mth && $dst_yr == $act_yr) {
-		return $today;
-	}
+    if ($dst_day == $act_day && $dst_mth == $act_mth && $dst_yr == $act_yr) {
+        return $today;
+    }
 
-	if ($dst_day == $act_day - 1 && $dst_mth == $act_mth && $dst_yr == $act_yr) {
-		return $yesterday;
-	}
+    if ($dst_day == $act_day - 1 && $dst_mth == $act_mth && $dst_yr == $act_yr) {
+        return $yesterday;
+    }
 
-	$str_result = array();
-	$time_result = array();
-	$key_result = array();
+    $str_result = array();
+    $time_result = array();
+    $key_result = array();
 
-	$str = '';
-	$i = 0;
-	for ($i = 0; $i < count($sec_time_time); $i++) {
-		$seconds = $sec_time_time[$i];
-		if ($seconds > $time) {
-			continue;
-		}
-		$current_value = intval($time/$seconds);
+    $str = '';
+    $i = 0;
+    for ($i = 0; $i < count($sec_time_time); $i++) {
+        $seconds = $sec_time_time[$i];
+        if ($seconds > $time) {
+            continue;
+        }
+        $current_value = intval($time/$seconds);
 
-		if ($current_value != 1) {
-			$date_str = $sec_time_plu[$i];
-		} else {
-			$date_str = $sec_time_sing[$i];
+        if ($current_value != 1) {
+            $date_str = $sec_time_plu[$i];
+        } else {
+            $date_str = $sec_time_sing[$i];
 
-		}
-		$key_result[] = $sec_time_sing[$i];
+        }
+        $key_result[] = $sec_time_sing[$i];
 
-		$str_result[] = $current_value.' '.$date_str;
-		$time_result[] = $current_value;
-		$str .= $current_value.$date_str;
-		$time %= $seconds;
-	}
+        $str_result[] = $current_value.' '.$date_str;
+        $time_result[] = $current_value;
+        $str .= $current_value.$date_str;
+        $time %= $seconds;
+    }
 
-	if ($key_result[0] == $min_day && $key_result[1]== $min_minute) {
-		$key_result[1] = ' 0 '.$min_hours;
-		$str_result[0] = $time_result[0].' '.$key_result[0];
-		$str_result[1] = $key_result[1];
-	}
+    if ($key_result[0] == $min_day && $key_result[1]== $min_minute) {
+        $key_result[1] = ' 0 '.$min_hours;
+        $str_result[0] = $time_result[0].' '.$key_result[0];
+        $str_result[1] = $key_result[1];
+    }
 
-	if ($key_result[0] == $min_year && ($key_result[1] == $min_day || $key_result[1] == $min_week)) {
-		$key_result[1] = ' 0 '.$min_months;
-		$str_result[0] = $time_result[0].' '.$key_result[0];
-		$str_result[1] = $key_result[1];
-	}
+    if ($key_result[0] == $min_year && ($key_result[1] == $min_day || $key_result[1] == $min_week)) {
+        $key_result[1] = ' 0 '.$min_months;
+        $str_result[0] = $time_result[0].' '.$key_result[0];
+        $str_result[1] = $key_result[1];
+    }
 
-	if (!empty($str_result[1])) {
-		$str = $str_result[0].', '.$str_result[1];
-	} else {
-		$str = $str_result[0];
-	}
+    if (!empty($str_result[1])) {
+        $str = $str_result[0].', '.$str_result[1];
+    } else {
+        $str = $str_result[0];
+    }
 
-	date_default_timezone_set($system_timezone);
-	return $str;
+    date_default_timezone_set($system_timezone);
+    return $str;
 }
 
 /**
@@ -788,10 +788,10 @@ function date_to_str_ago($date) {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_convert_and_format_date($time = null, $format = null, $from_timezone = null) {
-	// First, convert the datetime to the right timezone
-	$time = api_get_local_time($time, null, $from_timezone);
-	// Second, localize the date
-	return api_format_date($time, $format);
+    // First, convert the datetime to the right timezone
+    $time = api_get_local_time($time, null, $from_timezone);
+    // Second, localize the date
+    return api_format_date($time, $format);
 }
 
 /**
@@ -802,8 +802,8 @@ function api_convert_and_format_date($time = null, $format = null, $from_timezon
  * Note: For all languges returned days are in the English order.
  */
 function api_get_week_days_short($language = null) {
-	$days = &_api_get_day_month_names($language);
-	return $days['days_short'];
+    $days = &_api_get_day_month_names($language);
+    return $days['days_short'];
 }
 
 /**
@@ -814,8 +814,8 @@ function api_get_week_days_short($language = null) {
  * Note: For all languges returned days are in the English order.
  */
 function api_get_week_days_long($language = null) {
-	$days = &_api_get_day_month_names($language);
-	return $days['days_long'];
+    $days = &_api_get_day_month_names($language);
+    return $days['days_long'];
 }
 
 /**
@@ -825,8 +825,8 @@ function api_get_week_days_long($language = null) {
  * Example: api_get_months_short('english') means array('Jan', 'Feb', ... 'Dec').
  */
 function api_get_months_short($language = null) {
-	$months = &_api_get_day_month_names($language);
-	return $months['months_short'];
+    $months = &_api_get_day_month_names($language);
+    return $months['months_short'];
 }
 
 /**
@@ -836,8 +836,8 @@ function api_get_months_short($language = null) {
  * Example: api_get_months_long('english') means array('January, 'February' ... 'December').
  */
 function api_get_months_long($language = null) {
-	$months = &_api_get_day_month_names($language);
-	return $months['months_long'];
+    $months = &_api_get_day_month_names($language);
+    return $months['months_long'];
 }
 
 
@@ -863,45 +863,45 @@ function api_get_months_long($language = null) {
  * @author Ivan Tcholakov
  */
 function api_get_person_name($first_name, $last_name, $title = null, $format = null, $language = null, $encoding = null) {
-	static $valid = array();
-	if (empty($format)) {
-		$format = PERSON_NAME_COMMON_CONVENTION;
-	}
-	if (empty($language)) {
-		$language = api_get_interface_language();
-	}
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (!isset($valid[$format][$language])) {
-		if (is_int($format)) {
-			switch ($format) {
-				case PERSON_NAME_COMMON_CONVENTION:
-					$valid[$format][$language] = _api_get_person_name_convention($language, 'format');
-					break;
-				case PERSON_NAME_WESTERN_ORDER:
-					$valid[$format][$language] = '%t %f %l';
-					break;
-				case PERSON_NAME_EASTERN_ORDER:
-					$valid[$format][$language] = '%t %l %f';
-					break;
-				case PERSON_NAME_LIBRARY_ORDER:
-					$valid[$format][$language] = '%t %l, %f';
-					break;
-				default:
-					$valid[$format][$language] = '%t %f %l';
-					break;
-			}
-		} else {
-			$valid[$format][$language] = _api_validate_person_name_format($format);
-		}
-	}
-	$format = $valid[$format][$language];
-	$person_name = str_replace(array('%f', '%l', '%t'), array($first_name, $last_name, $title), $format);
-	if (strpos($format, '%F') !== false || strpos($format, '%L') !== false || strpos($format, '%T') !== false) {
-		$person_name = str_replace(array('%F', '%L', '%T'), array(api_strtoupper($first_name, $encoding), api_strtoupper($last_name, $encoding), api_strtoupper($title, $encoding)), $person_name);
-	}
-	return _api_clean_person_name($person_name);
+    static $valid = array();
+    if (empty($format)) {
+        $format = PERSON_NAME_COMMON_CONVENTION;
+    }
+    if (empty($language)) {
+        $language = api_get_interface_language();
+    }
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (!isset($valid[$format][$language])) {
+        if (is_int($format)) {
+            switch ($format) {
+                case PERSON_NAME_COMMON_CONVENTION:
+                    $valid[$format][$language] = _api_get_person_name_convention($language, 'format');
+                    break;
+                case PERSON_NAME_WESTERN_ORDER:
+                    $valid[$format][$language] = '%t %f %l';
+                    break;
+                case PERSON_NAME_EASTERN_ORDER:
+                    $valid[$format][$language] = '%t %l %f';
+                    break;
+                case PERSON_NAME_LIBRARY_ORDER:
+                    $valid[$format][$language] = '%t %l, %f';
+                    break;
+                default:
+                    $valid[$format][$language] = '%t %f %l';
+                    break;
+            }
+        } else {
+            $valid[$format][$language] = _api_validate_person_name_format($format);
+        }
+    }
+    $format = $valid[$format][$language];
+    $person_name = str_replace(array('%f', '%l', '%t'), array($first_name, $last_name, $title), $format);
+    if (strpos($format, '%F') !== false || strpos($format, '%L') !== false || strpos($format, '%T') !== false) {
+        $person_name = str_replace(array('%F', '%L', '%T'), array(api_strtoupper($first_name, $encoding), api_strtoupper($last_name, $encoding), api_strtoupper($title, $encoding)), $person_name);
+    }
+    return _api_clean_person_name($person_name);
 }
 
 /**
@@ -913,18 +913,18 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
  * @author Ivan Tcholakov
  */
 function api_is_western_name_order($format = null, $language = null) {
-	static $order = array();
-	if (empty($format)) {
-		$format = PERSON_NAME_COMMON_CONVENTION;
-	}
-	if (empty($language)) {
-		$language = api_get_interface_language();
-	}
-	if (!isset($order[$format][$language])) {
-		$test_name = api_get_person_name('%f', '%l', '%t', $format, $language);
-		$order[$format][$language] = stripos($test_name, '%f') <= stripos($test_name, '%l');
-	}
-	return $order[$format][$language];
+    static $order = array();
+    if (empty($format)) {
+        $format = PERSON_NAME_COMMON_CONVENTION;
+    }
+    if (empty($language)) {
+        $language = api_get_interface_language();
+    }
+    if (!isset($order[$format][$language])) {
+        $test_name = api_get_person_name('%f', '%l', '%t', $format, $language);
+        $order[$format][$language] = stripos($test_name, '%f') <= stripos($test_name, '%l');
+    }
+    return $order[$format][$language];
 }
 
 /**
@@ -937,14 +937,14 @@ function api_is_western_name_order($format = null, $language = null) {
  * @author Ivan Tcholakov
  */
 function api_sort_by_first_name($language = null) {
-	static $sort_by_first_name = array();
-	if (empty($language)) {
-		$language = api_get_interface_language();
-	}
-	if (!isset($sort_by_first_name[$language])) {
-		$sort_by_first_name[$language] = _api_get_person_name_convention($language, 'sort_by');
-	}
-	return $sort_by_first_name[$language];
+    static $sort_by_first_name = array();
+    if (empty($language)) {
+        $language = api_get_interface_language();
+    }
+    if (!isset($sort_by_first_name[$language])) {
+        $sort_by_first_name[$language] = _api_get_person_name_convention($language, 'sort_by');
+    }
+    return $sort_by_first_name[$language];
 }
 
 
@@ -959,14 +959,14 @@ function api_sort_by_first_name($language = null) {
  * @return int				Returns the length of the input string (or binary data) as number of bytes.
  */
 function api_byte_count(& $string) {
-	static $use_mb_strlen;
-	if (!isset($use_mb_strlen)) {
-		$use_mb_strlen = MBSTRING_INSTALLED && ((int) ini_get('mbstring.func_overload') & 2);
-	}
-	if ($use_mb_strlen) {
-		return mb_strlen($string, '8bit');
-	}
-	return strlen($string);
+    static $use_mb_strlen;
+    if (!isset($use_mb_strlen)) {
+        $use_mb_strlen = MBSTRING_INSTALLED && ((int) ini_get('mbstring.func_overload') & 2);
+    }
+    if ($use_mb_strlen) {
+        return mb_strlen($string, '8bit');
+    }
+    return strlen($string);
 }
 
 
@@ -984,28 +984,28 @@ function api_byte_count(& $string) {
  * @link http://php.net/manual/en/function.mb-convert-encoding
  */
 function api_convert_encoding($string, $to_encoding, $from_encoding = null) {
-	if (empty($from_encoding)) {
-		$from_encoding = _api_mb_internal_encoding();
-	}
-	if (api_equal_encodings($to_encoding, $from_encoding)) {
-		return $string; // When conversion is not needed, the string is returned directly, without validation.
-	}
-	if (_api_mb_supports($to_encoding) && _api_mb_supports($from_encoding)) {
-		return @mb_convert_encoding($string, $to_encoding, $from_encoding);
-	}
-	if (_api_iconv_supports($to_encoding) && _api_iconv_supports($from_encoding)) {
-		return @iconv($from_encoding, $to_encoding, $string);
-	}
-	if (api_is_utf8($to_encoding) && api_is_latin1($from_encoding, true)) {
-		return utf8_encode($string);
-	}
-	if (api_is_latin1($to_encoding, true) && api_is_utf8($from_encoding)) {
-		return utf8_decode($string);
-	}
-	if (_api_convert_encoding_supports($to_encoding) && _api_convert_encoding_supports($from_encoding)) {
-		return _api_convert_encoding($string, $to_encoding, $from_encoding);
-	}
-	return $string; // Here the function gives up.
+    if (empty($from_encoding)) {
+        $from_encoding = _api_mb_internal_encoding();
+    }
+    if (api_equal_encodings($to_encoding, $from_encoding)) {
+        return $string; // When conversion is not needed, the string is returned directly, without validation.
+    }
+    if (_api_mb_supports($to_encoding) && _api_mb_supports($from_encoding)) {
+        return @mb_convert_encoding($string, $to_encoding, $from_encoding);
+    }
+    if (_api_iconv_supports($to_encoding) && _api_iconv_supports($from_encoding)) {
+        return @iconv($from_encoding, $to_encoding, $string);
+    }
+    if (api_is_utf8($to_encoding) && api_is_latin1($from_encoding, true)) {
+        return utf8_encode($string);
+    }
+    if (api_is_latin1($to_encoding, true) && api_is_utf8($from_encoding)) {
+        return utf8_decode($string);
+    }
+    if (_api_convert_encoding_supports($to_encoding) && _api_convert_encoding_supports($from_encoding)) {
+        return _api_convert_encoding($string, $to_encoding, $from_encoding);
+    }
+    return $string; // Here the function gives up.
 }
 
 /**
@@ -1017,25 +1017,25 @@ function api_convert_encoding($string, $to_encoding, $from_encoding = null) {
  * @link http://php.net/manual/en/function.utf8-encode
  */
 function api_utf8_encode($string, $from_encoding = null) {
-	if (empty($from_encoding)) {
-		$from_encoding = _api_mb_internal_encoding();
-	}
-	if (api_is_utf8($from_encoding)) {
-		return $string; // When conversion is not needed, the string is returned directly, without validation.
-	}
-	if (_api_mb_supports($from_encoding)) {
-		return @mb_convert_encoding($string, 'UTF-8', $from_encoding);
-	}
-	if (_api_iconv_supports($from_encoding)) {
-		return @iconv($from_encoding, 'UTF-8', $string);
-	}
-	if (api_is_latin1($from_encoding, true)) {
-		return utf8_encode($string);
-	}
-	if (_api_convert_encoding_supports($from_encoding)) {
-		return _api_convert_encoding($string, 'UTF-8', $from_encoding);
-	}
-	return $string; // Here the function gives up.
+    if (empty($from_encoding)) {
+        $from_encoding = _api_mb_internal_encoding();
+    }
+    if (api_is_utf8($from_encoding)) {
+        return $string; // When conversion is not needed, the string is returned directly, without validation.
+    }
+    if (_api_mb_supports($from_encoding)) {
+        return @mb_convert_encoding($string, 'UTF-8', $from_encoding);
+    }
+    if (_api_iconv_supports($from_encoding)) {
+        return @iconv($from_encoding, 'UTF-8', $string);
+    }
+    if (api_is_latin1($from_encoding, true)) {
+        return utf8_encode($string);
+    }
+    if (_api_convert_encoding_supports($from_encoding)) {
+        return _api_convert_encoding($string, 'UTF-8', $from_encoding);
+    }
+    return $string; // Here the function gives up.
 }
 
 /**
@@ -1047,25 +1047,25 @@ function api_utf8_encode($string, $from_encoding = null) {
  * @link http://php.net/manual/en/function.utf8-decode
  */
 function api_utf8_decode($string, $to_encoding = null) {
-	if (empty($to_encoding)) {
-		$to_encoding = _api_mb_internal_encoding();
-	}
-	if (api_is_utf8($to_encoding)) {
-		return $string; // When conversion is not needed, the string is returned directly, without validation.
-	}
-	if (_api_mb_supports($to_encoding)) {
-		return @mb_convert_encoding($string, $to_encoding, 'UTF-8');
-	}
-	if (_api_iconv_supports($to_encoding)) {
-		return @iconv('UTF-8', $to_encoding, $string);
-	}
-	if (api_is_latin1($to_encoding, true)) {
-		return utf8_decode($string);
-	}
-	if (_api_convert_encoding_supports($to_encoding)) {
-		return _api_convert_encoding($string, $to_encoding, 'UTF-8');
-	}
-	return $string; // Here the function gives up.
+    if (empty($to_encoding)) {
+        $to_encoding = _api_mb_internal_encoding();
+    }
+    if (api_is_utf8($to_encoding)) {
+        return $string; // When conversion is not needed, the string is returned directly, without validation.
+    }
+    if (_api_mb_supports($to_encoding)) {
+        return @mb_convert_encoding($string, $to_encoding, 'UTF-8');
+    }
+    if (_api_iconv_supports($to_encoding)) {
+        return @iconv('UTF-8', $to_encoding, $string);
+    }
+    if (api_is_latin1($to_encoding, true)) {
+        return utf8_decode($string);
+    }
+    if (_api_convert_encoding_supports($to_encoding)) {
+        return _api_convert_encoding($string, $to_encoding, 'UTF-8');
+    }
+    return $string; // Here the function gives up.
 }
 
 /**
@@ -1081,30 +1081,30 @@ function api_utf8_decode($string, $to_encoding = null) {
  * @return string								Returns the converted string.
  */
 function api_to_system_encoding($string, $from_encoding = null, $check_utf8_validity = false) {
-	$system_encoding = api_get_system_encoding();
-	if (empty($from_encoding)) {
-		if (api_is_utf8($system_encoding)) {
-			$from_encoding = api_get_non_utf8_encoding();
-		} else {
-			$from_encoding = 'UTF-8';
-		}
-	}
-	if (api_equal_encodings($system_encoding, $from_encoding)) {
-		return $string;
-	}
-	if ($check_utf8_validity) {
-		if (api_is_utf8($system_encoding)) {
-			if (api_is_valid_utf8($string)) {
-				return $string;
-			}
-		}
-		elseif (api_is_utf8($from_encoding)) {
-			if (!api_is_valid_utf8($string)) {
-				return $string;
-			}
-		}
-	}
-	return api_convert_encoding($string, $system_encoding, $from_encoding);
+    $system_encoding = api_get_system_encoding();
+    if (empty($from_encoding)) {
+        if (api_is_utf8($system_encoding)) {
+            $from_encoding = api_get_non_utf8_encoding();
+        } else {
+            $from_encoding = 'UTF-8';
+        }
+    }
+    if (api_equal_encodings($system_encoding, $from_encoding)) {
+        return $string;
+    }
+    if ($check_utf8_validity) {
+        if (api_is_utf8($system_encoding)) {
+            if (api_is_valid_utf8($string)) {
+                return $string;
+            }
+        }
+        elseif (api_is_utf8($from_encoding)) {
+            if (!api_is_valid_utf8($string)) {
+                return $string;
+            }
+        }
+    }
+    return api_convert_encoding($string, $system_encoding, $from_encoding);
 }
 
 /**
@@ -1117,40 +1117,40 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
  * @link http://php.net/manual/en/function.htmlentities
  */
 function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (!api_is_utf8($encoding) && _api_html_entity_supports($encoding)) {
-		return htmlentities($string, $quote_style, $encoding);
-	}
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (!api_is_utf8($encoding) && _api_html_entity_supports($encoding)) {
+        return htmlentities($string, $quote_style, $encoding);
+    }
     switch($quote_style) {
-		case ENT_COMPAT:
-			$string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
-			break;
-		case ENT_QUOTES:
-			$string = str_replace(array('&', '\'', '"', '<', '>'), array('&amp;', '&#039;', '&quot;', '&lt;', '&gt;'), $string);
-			break;
-	}
-	if (_api_mb_supports($encoding)) {
-		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_encode($string, $encoding);
-		}
-		$string = @mb_convert_encoding(api_utf8_encode($string, $encoding), 'HTML-ENTITIES', 'UTF-8');
-		if (!api_is_utf8($encoding)) { // Just in case.
-			$string = api_utf8_decode($string, $encoding);
-		}
-	}
-	elseif (_api_convert_encoding_supports($encoding)) {
-		if (!api_is_utf8($encoding)) {
-			$string = _api_convert_encoding($string, 'UTF-8', $encoding);
-		}
-		$string = implode(array_map('_api_html_entity_from_unicode', _api_utf8_to_unicode($string)));
-		if (!api_is_utf8($encoding)) { // Just in case.
-			$string = _api_convert_encoding($string, $encoding, 'UTF-8');
-		}
-	}
+        case ENT_COMPAT:
+            $string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
+            break;
+        case ENT_QUOTES:
+            $string = str_replace(array('&', '\'', '"', '<', '>'), array('&amp;', '&#039;', '&quot;', '&lt;', '&gt;'), $string);
+            break;
+    }
+    if (_api_mb_supports($encoding)) {
+        if (!api_is_utf8($encoding)) {
+            $string = api_utf8_encode($string, $encoding);
+        }
+        $string = @mb_convert_encoding(api_utf8_encode($string, $encoding), 'HTML-ENTITIES', 'UTF-8');
+        if (!api_is_utf8($encoding)) { // Just in case.
+            $string = api_utf8_decode($string, $encoding);
+        }
+    }
+    elseif (_api_convert_encoding_supports($encoding)) {
+        if (!api_is_utf8($encoding)) {
+            $string = _api_convert_encoding($string, 'UTF-8', $encoding);
+        }
+        $string = implode(array_map('_api_html_entity_from_unicode', _api_utf8_to_unicode($string)));
+        if (!api_is_utf8($encoding)) { // Just in case.
+            $string = _api_convert_encoding($string, $encoding, 'UTF-8');
+        }
+    }
 
-	return $string;
+    return $string;
 }
 
 /**
@@ -1163,23 +1163,23 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
  * @link http://php.net/html_entity_decode
  */
 function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (_api_html_entity_supports($encoding)) {
-		return html_entity_decode($string, $quote_style, $encoding);
-	}
-	if (api_is_encoding_supported($encoding)) {
-		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_encode($string, $encoding);
-		}
-		$string = html_entity_decode($string, $quote_style, 'UTF-8');
-		if (!api_is_utf8($encoding)) {
-			return api_utf8_decode($string, $encoding);
-		}
-		return $string;
-	}
-	return $string; // Here the function guves up.
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (_api_html_entity_supports($encoding)) {
+        return html_entity_decode($string, $quote_style, $encoding);
+    }
+    if (api_is_encoding_supported($encoding)) {
+        if (!api_is_utf8($encoding)) {
+            $string = api_utf8_encode($string, $encoding);
+        }
+        $string = html_entity_decode($string, $quote_style, 'UTF-8');
+        if (!api_is_utf8($encoding)) {
+            return api_utf8_decode($string, $encoding);
+        }
+        return $string;
+    }
+    return $string; // Here the function guves up.
 }
 
 /**
@@ -1189,15 +1189,15 @@ function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 
  * @return string							Returns the converted string.
  */
 function api_xml_http_response_encode($string, $from_encoding = null) {
-	if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-		if (empty($from_encoding)) {
-			$from_encoding = _api_mb_internal_encoding();
-		}
-		if (!api_is_utf8($from_encoding)) {
-			return api_utf8_encode($string, $from_encoding);
-		}
-	}
-	return $string;
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        if (empty($from_encoding)) {
+            $from_encoding = _api_mb_internal_encoding();
+        }
+        if (!api_is_utf8($from_encoding)) {
+            return api_utf8_encode($string, $from_encoding);
+        }
+    }
+    return $string;
 }
 
 /**
@@ -1207,10 +1207,10 @@ function api_xml_http_response_encode($string, $from_encoding = null) {
  * @return string							Returns the converted string.
  */
 function api_file_system_encode($string, $from_encoding = null) {
-	if (empty($from_encoding)) {
-		$from_encoding = _api_mb_internal_encoding();
-	}
-	return api_convert_encoding($string, api_get_file_system_encoding(), $from_encoding);
+    if (empty($from_encoding)) {
+        $from_encoding = _api_mb_internal_encoding();
+    }
+    return api_convert_encoding($string, api_get_file_system_encoding(), $from_encoding);
 }
 
 /**
@@ -1220,10 +1220,10 @@ function api_file_system_encode($string, $from_encoding = null) {
  * @return string							Returns the converted string.
  */
 function api_file_system_decode($string, $to_encoding = null) {
-	if (empty($to_encoding)) {
-		$to_encoding = _api_mb_internal_encoding();
-	}
-	return api_convert_encoding($string, $to_encoding, api_get_file_system_encoding());
+    if (empty($to_encoding)) {
+        $to_encoding = _api_mb_internal_encoding();
+    }
+    return api_convert_encoding($string, $to_encoding, api_get_file_system_encoding());
 }
 
 /**
@@ -1256,147 +1256,147 @@ function api_file_system_decode($string, $to_encoding = null) {
  * @author Ivan Tcholakov
  */
 function api_transliterate($string, $unknown = '?', $from_encoding = null) {
-	static $map = array();
-	$string = api_utf8_encode($string, $from_encoding);
-	// Screen out some characters that eg won't be allowed in XML.
-	$string = preg_replace('/[\x00-\x08\x0b\x0c\x0e-\x1f]/', $unknown, $string);
-	// ASCII is always valid NFC!
-	// If we're only ever given plain ASCII, we can avoid the overhead
-	// of initializing the decomposition tables by skipping out early.
-	if (api_is_valid_ascii($string)) {
-		return $string;
-	}
-	static $tail_bytes;
-	if (!isset($tail_bytes)) {
-		// Each UTF-8 head byte is followed by a certain
-		// number of tail bytes.
-		$tail_bytes = array();
-		for ($n = 0; $n < 256; $n++) {
-			if ($n < 0xc0) {
-				$remaining = 0;
-			}
-			elseif ($n < 0xe0) {
-				$remaining = 1;
-			}
-			elseif ($n < 0xf0) {
-				$remaining = 2;
-			}
-			elseif ($n < 0xf8) {
-				$remaining = 3;
-			}
-			elseif ($n < 0xfc) {
-				$remaining = 4;
-			}
-			elseif ($n < 0xfe) {
-				$remaining = 5;
-			} else {
-				$remaining = 0;
-			}
-			$tail_bytes[chr($n)] = $remaining;
-		}
-	}
+    static $map = array();
+    $string = api_utf8_encode($string, $from_encoding);
+    // Screen out some characters that eg won't be allowed in XML.
+    $string = preg_replace('/[\x00-\x08\x0b\x0c\x0e-\x1f]/', $unknown, $string);
+    // ASCII is always valid NFC!
+    // If we're only ever given plain ASCII, we can avoid the overhead
+    // of initializing the decomposition tables by skipping out early.
+    if (api_is_valid_ascii($string)) {
+        return $string;
+    }
+    static $tail_bytes;
+    if (!isset($tail_bytes)) {
+        // Each UTF-8 head byte is followed by a certain
+        // number of tail bytes.
+        $tail_bytes = array();
+        for ($n = 0; $n < 256; $n++) {
+            if ($n < 0xc0) {
+                $remaining = 0;
+            }
+            elseif ($n < 0xe0) {
+                $remaining = 1;
+            }
+            elseif ($n < 0xf0) {
+                $remaining = 2;
+            }
+            elseif ($n < 0xf8) {
+                $remaining = 3;
+            }
+            elseif ($n < 0xfc) {
+                $remaining = 4;
+            }
+            elseif ($n < 0xfe) {
+                $remaining = 5;
+            } else {
+                $remaining = 0;
+            }
+            $tail_bytes[chr($n)] = $remaining;
+        }
+    }
 
-	// Chop the text into pure-ASCII and non-ASCII areas;
-	// large ASCII parts can be handled much more quickly.
-	// Don't chop up Unicode areas for punctuation, though,
-	// that wastes energy.
-	preg_match_all('/[\x00-\x7f]+|[\x80-\xff][\x00-\x40\x5b-\x5f\x7b-\xff]*/', $string, $matches);
-	$result = '';
-	foreach ($matches[0] as $str) {
-		if ($str{0} < "\x80") {
-			// ASCII chunk: guaranteed to be valid UTF-8
-			// and in normal form C, so skip over it.
-			$result .= $str;
-			continue;
-		}
-		// We'll have to examine the chunk byte by byte to ensure
-		// that it consists of valid UTF-8 sequences, and to see
-		// if any of them might not be normalized.
-		//
-		// Since PHP is not the fastest language on earth, some of
-		// this code is a little ugly with inner loop optimizations.
-		$head = '';
-		$chunk = api_byte_count($str);
-		// Counting down is faster. I'm *so* sorry.
-		$len = $chunk + 1;
-		for ($i = -1; --$len; ) {
-			$c = $str{++$i};
-			if ($remaining = $tail_bytes[$c]) {
-				// UTF-8 head byte!
-				$sequence = $head = $c;
-				do {
-					// Look for the defined number of tail bytes...
-					if (--$len && ($c = $str{++$i}) >= "\x80" && $c < "\xc0") {
-					// Legal tail bytes are nice.
-					$sequence .= $c;
-					} else {
-						if ($len == 0) {
-							// Premature end of string!
-							// Drop a replacement character into output to
-							// represent the invalid UTF-8 sequence.
-							$result .= $unknown;
-							break 2;
-						} else {
-							// Illegal tail byte; abandon the sequence.
-							$result .= $unknown;
-							// Back up and reprocess this byte; it may itself
-							// be a legal ASCII or UTF-8 sequence head.
-							--$i;
-							++$len;
-							continue 2;
-						}
-					}
-				} while (--$remaining);
-				$n = ord($head);
-				if ($n <= 0xdf) {
-					$ord = ($n - 192) * 64 + (ord($sequence{1}) - 128);
-				}
-				else if ($n <= 0xef) {
-					$ord = ($n - 224) * 4096 + (ord($sequence{1}) - 128) * 64 + (ord($sequence{2}) - 128);
-				}
-				else if ($n <= 0xf7) {
-					$ord = ($n - 240) * 262144 + (ord($sequence{1}) - 128) * 4096 + (ord($sequence{2}) - 128) * 64 + (ord($sequence{3}) - 128);
-				}
-				else if ($n <= 0xfb) {
-					$ord = ($n - 248) * 16777216 + (ord($sequence{1}) - 128) * 262144 + (ord($sequence{2}) - 128) * 4096 + (ord($sequence{3}) - 128) * 64 + (ord($sequence{4}) - 128);
-				}
-				else if ($n <= 0xfd) {
-					$ord = ($n - 252) * 1073741824 + (ord($sequence{1}) - 128) * 16777216 + (ord($sequence{2}) - 128) * 262144 + (ord($sequence{3}) - 128) * 4096 + (ord($sequence{4}) - 128) * 64 + (ord($sequence{5}) - 128);
-				}
-				// Lookup and replace a character from the transliteration database.
-				$bank = $ord >> 8;
-				// Check if we need to load a new bank
-				if (!isset($map[$bank])) {
-					$file = dirname(__FILE__).'/internationalization_database/transliteration/' . sprintf('x%02x', $bank) . '.php';
-					if (file_exists($file)) {
-						$map[$bank] = include ($file);
-					} else {
-						$map[$bank] = array('en' => array());
-					}
-				}
-				$ord = $ord & 255;
-				$result .= isset($map[$bank]['en'][$ord]) ? $map[$bank]['en'][$ord] : $unknown;
+    // Chop the text into pure-ASCII and non-ASCII areas;
+    // large ASCII parts can be handled much more quickly.
+    // Don't chop up Unicode areas for punctuation, though,
+    // that wastes energy.
+    preg_match_all('/[\x00-\x7f]+|[\x80-\xff][\x00-\x40\x5b-\x5f\x7b-\xff]*/', $string, $matches);
+    $result = '';
+    foreach ($matches[0] as $str) {
+        if ($str{0} < "\x80") {
+            // ASCII chunk: guaranteed to be valid UTF-8
+            // and in normal form C, so skip over it.
+            $result .= $str;
+            continue;
+        }
+        // We'll have to examine the chunk byte by byte to ensure
+        // that it consists of valid UTF-8 sequences, and to see
+        // if any of them might not be normalized.
+        //
+        // Since PHP is not the fastest language on earth, some of
+        // this code is a little ugly with inner loop optimizations.
+        $head = '';
+        $chunk = api_byte_count($str);
+        // Counting down is faster. I'm *so* sorry.
+        $len = $chunk + 1;
+        for ($i = -1; --$len; ) {
+            $c = $str{++$i};
+            if ($remaining = $tail_bytes[$c]) {
+                // UTF-8 head byte!
+                $sequence = $head = $c;
+                do {
+                    // Look for the defined number of tail bytes...
+                    if (--$len && ($c = $str{++$i}) >= "\x80" && $c < "\xc0") {
+                    // Legal tail bytes are nice.
+                    $sequence .= $c;
+                    } else {
+                        if ($len == 0) {
+                            // Premature end of string!
+                            // Drop a replacement character into output to
+                            // represent the invalid UTF-8 sequence.
+                            $result .= $unknown;
+                            break 2;
+                        } else {
+                            // Illegal tail byte; abandon the sequence.
+                            $result .= $unknown;
+                            // Back up and reprocess this byte; it may itself
+                            // be a legal ASCII or UTF-8 sequence head.
+                            --$i;
+                            ++$len;
+                            continue 2;
+                        }
+                    }
+                } while (--$remaining);
+                $n = ord($head);
+                if ($n <= 0xdf) {
+                    $ord = ($n - 192) * 64 + (ord($sequence{1}) - 128);
+                }
+                else if ($n <= 0xef) {
+                    $ord = ($n - 224) * 4096 + (ord($sequence{1}) - 128) * 64 + (ord($sequence{2}) - 128);
+                }
+                else if ($n <= 0xf7) {
+                    $ord = ($n - 240) * 262144 + (ord($sequence{1}) - 128) * 4096 + (ord($sequence{2}) - 128) * 64 + (ord($sequence{3}) - 128);
+                }
+                else if ($n <= 0xfb) {
+                    $ord = ($n - 248) * 16777216 + (ord($sequence{1}) - 128) * 262144 + (ord($sequence{2}) - 128) * 4096 + (ord($sequence{3}) - 128) * 64 + (ord($sequence{4}) - 128);
+                }
+                else if ($n <= 0xfd) {
+                    $ord = ($n - 252) * 1073741824 + (ord($sequence{1}) - 128) * 16777216 + (ord($sequence{2}) - 128) * 262144 + (ord($sequence{3}) - 128) * 4096 + (ord($sequence{4}) - 128) * 64 + (ord($sequence{5}) - 128);
+                }
+                // Lookup and replace a character from the transliteration database.
+                $bank = $ord >> 8;
+                // Check if we need to load a new bank
+                if (!isset($map[$bank])) {
+                    $file = dirname(__FILE__).'/internationalization_database/transliteration/' . sprintf('x%02x', $bank) . '.php';
+                    if (file_exists($file)) {
+                        $map[$bank] = include ($file);
+                    } else {
+                        $map[$bank] = array('en' => array());
+                    }
+                }
+                $ord = $ord & 255;
+                $result .= isset($map[$bank]['en'][$ord]) ? $map[$bank]['en'][$ord] : $unknown;
 
-				$head = '';
-			}
-			elseif ($c < "\x80") {
-				// ASCII byte.
-				$result .= $c;
-				$head = '';
-			}
-			elseif ($c < "\xc0") {
-				// Illegal tail bytes.
-				if ($head == '') {
-					$result .= $unknown;
-				}
-			} else {
-				// Miscellaneous freaks.
-				$result .= $unknown;
-				$head = '';
-			}
-		}
-	}
-	return $result;
+                $head = '';
+            }
+            elseif ($c < "\x80") {
+                // ASCII byte.
+                $result .= $c;
+                $head = '';
+            }
+            elseif ($c < "\xc0") {
+                // Illegal tail bytes.
+                if ($head == '') {
+                    $result .= $unknown;
+                }
+            } else {
+                // Miscellaneous freaks.
+                $result .= $unknown;
+                $head = '';
+            }
+        }
+    }
+    return $result;
 }
 
 /**
@@ -1407,7 +1407,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
  * @return string							Returns the converted xml-text.
  */
 function api_convert_encoding_xml($string, $to_encoding, $from_encoding = null) {
-	return _api_convert_encoding_xml($string, $to_encoding, $from_encoding);
+    return _api_convert_encoding_xml($string, $to_encoding, $from_encoding);
 }
 
 /**
@@ -1417,7 +1417,7 @@ function api_convert_encoding_xml($string, $to_encoding, $from_encoding = null) 
  * @return string							Returns the converted xml-text.
  */
 function api_utf8_encode_xml($string, $from_encoding = null) {
-	return _api_convert_encoding_xml($string, 'UTF-8', $from_encoding);
+    return _api_convert_encoding_xml($string, 'UTF-8', $from_encoding);
 }
 
 /**
@@ -1427,10 +1427,10 @@ function api_utf8_encode_xml($string, $from_encoding = null) {
  * @return string							Returns the converted xml-text.
  */
 function api_utf8_decode_xml($string, $to_encoding = null) {
-	if (empty($to_encoding)) {
-		$to_encoding = _api_mb_internal_encoding();
-	}
-	return _api_convert_encoding_xml($string, $to_encoding, 'UTF-8');
+    if (empty($to_encoding)) {
+        $to_encoding = _api_mb_internal_encoding();
+    }
+    return _api_convert_encoding_xml($string, $to_encoding, 'UTF-8');
 }
 
 
@@ -1448,7 +1448,7 @@ function api_utf8_decode_xml($string, $to_encoding = null) {
  * Note the difference with the original funtion ord(): ord('') returns 0, api_ord('') returns 0xFFFD (unknown character).
  */
 function api_ord($character, $encoding) {
-	return _api_utf8_ord(api_utf8_encode($character, $encoding));
+    return _api_utf8_ord(api_utf8_encode($character, $encoding));
 }
 
 /**
@@ -1460,7 +1460,7 @@ function api_ord($character, $encoding) {
  * @link http://php.net/manual/en/function.chr.php
  */
 function api_chr($codepoint, $encoding) {
-	return api_utf8_decode(_api_utf8_chr($codepoint), $encoding);
+    return api_utf8_decode(_api_utf8_chr($codepoint), $encoding);
 }
 
 /**
@@ -1485,61 +1485,61 @@ function api_chr($codepoint, $encoding) {
  * @author Ivan Tcholakov
  */
 function api_str_ireplace($search, $replace, $subject, & $count = null, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (api_is_encoding_supported($encoding)) {
-		if (!is_array($search) && !is_array($replace)) {
-			if (!api_is_utf8($encoding)) {
-				$search = api_utf8_encode($search, $encoding);
-			}
-			$slen = api_byte_count($search);
-			if ( $slen == 0 ) {
-				return $subject;
-			}
-			if (!api_is_utf8($encoding)) {
-				$replace = api_utf8_encode($replace, $encoding);
-				$subject = api_utf8_encode($subject, $encoding);
-			}
-			$lendif = api_byte_count($replace) - api_byte_count($search);
-			$search = api_strtolower($search, 'UTF-8');
-			$search = preg_quote($search);
-			$lstr = api_strtolower($subject, 'UTF-8');
-			$i = 0;
-			$matched = 0;
-			while (preg_match('/(.*)'.$search.'/Us', $lstr, $matches) ) {
-				if ($i === $count) {
-					break;
-				}
-				$mlen = api_byte_count($matches[0]);
-				$lstr = substr($lstr, $mlen);
-				$subject = substr_replace($subject, $replace, $matched + api_byte_count($matches[1]), $slen);
-				$matched += $mlen + $lendif;
-				$i++;
-			}
-			if (!api_is_utf8($encoding)) {
-				$subject = api_utf8_decode($subject, $encoding);
-			}
-			return $subject;
-		} else {
-			foreach (array_keys($search) as $k) {
-				if (is_array($replace)) {
-					if (array_key_exists($k, $replace)) {
-						$subject = api_str_ireplace($search[$k], $replace[$k], $subject, $count);
-					} else {
-						$subject = api_str_ireplace($search[$k], '', $subject, $count);
-					}
-				} else {
-					$subject = api_str_ireplace($search[$k], $replace, $subject, $count);
-				}
-			}
-			return $subject;
-		}
-	}
-	if (is_null($count)) {
-		return str_ireplace($search, $replace, $subject);
-	}
-	return str_ireplace($search, $replace, $subject, $count);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (api_is_encoding_supported($encoding)) {
+        if (!is_array($search) && !is_array($replace)) {
+            if (!api_is_utf8($encoding)) {
+                $search = api_utf8_encode($search, $encoding);
+            }
+            $slen = api_byte_count($search);
+            if ( $slen == 0 ) {
+                return $subject;
+            }
+            if (!api_is_utf8($encoding)) {
+                $replace = api_utf8_encode($replace, $encoding);
+                $subject = api_utf8_encode($subject, $encoding);
+            }
+            $lendif = api_byte_count($replace) - api_byte_count($search);
+            $search = api_strtolower($search, 'UTF-8');
+            $search = preg_quote($search);
+            $lstr = api_strtolower($subject, 'UTF-8');
+            $i = 0;
+            $matched = 0;
+            while (preg_match('/(.*)'.$search.'/Us', $lstr, $matches) ) {
+                if ($i === $count) {
+                    break;
+                }
+                $mlen = api_byte_count($matches[0]);
+                $lstr = substr($lstr, $mlen);
+                $subject = substr_replace($subject, $replace, $matched + api_byte_count($matches[1]), $slen);
+                $matched += $mlen + $lendif;
+                $i++;
+            }
+            if (!api_is_utf8($encoding)) {
+                $subject = api_utf8_decode($subject, $encoding);
+            }
+            return $subject;
+        } else {
+            foreach (array_keys($search) as $k) {
+                if (is_array($replace)) {
+                    if (array_key_exists($k, $replace)) {
+                        $subject = api_str_ireplace($search[$k], $replace[$k], $subject, $count);
+                    } else {
+                        $subject = api_str_ireplace($search[$k], '', $subject, $count);
+                    }
+                } else {
+                    $subject = api_str_ireplace($search[$k], $replace, $subject, $count);
+                }
+            }
+            return $subject;
+        }
+    }
+    if (is_null($count)) {
+        return str_ireplace($search, $replace, $subject);
+    }
+    return str_ireplace($search, $replace, $subject, $count);
 }
 
 /**
@@ -1557,37 +1557,37 @@ function api_str_ireplace($search, $replace, $subject, & $count = null, $encodin
  * @link http://php.net/str_split
  */
 function api_str_split($string, $split_length = 1, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (empty($string)) {
-		return array();
-	}
-	if ($split_length < 1) {
-		return false;
-	}
-	if (_api_is_single_byte_encoding($encoding)) {
-		return str_split($string, $split_length);
-	}
-	if (api_is_encoding_supported($encoding)) {
-		$len = api_strlen($string);
-		if ($len <= $split_length) {
-			return array($string);
-		}
-		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_encode($string, $encoding);
-		}
-		if (preg_match_all('/.{'.$split_length.'}|[^\x00]{1,'.$split_length.'}$/us', $string, $result) === false) {
-			return array();
-		}
-		if (!api_is_utf8($encoding)) {
-			global $_api_encoding;
-			$_api_encoding = $encoding;
-			$result = _api_array_utf8_decode($result[0]);
-		}
-		return $result[0];
-	}
-	return str_split($string, $split_length);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (empty($string)) {
+        return array();
+    }
+    if ($split_length < 1) {
+        return false;
+    }
+    if (_api_is_single_byte_encoding($encoding)) {
+        return str_split($string, $split_length);
+    }
+    if (api_is_encoding_supported($encoding)) {
+        $len = api_strlen($string);
+        if ($len <= $split_length) {
+            return array($string);
+        }
+        if (!api_is_utf8($encoding)) {
+            $string = api_utf8_encode($string, $encoding);
+        }
+        if (preg_match_all('/.{'.$split_length.'}|[^\x00]{1,'.$split_length.'}$/us', $string, $result) === false) {
+            return array();
+        }
+        if (!api_is_utf8($encoding)) {
+            global $_api_encoding;
+            $_api_encoding = $encoding;
+            $result = _api_array_utf8_decode($result[0]);
+        }
+        return $result[0];
+    }
+    return str_split($string, $split_length);
 }
 
 /**
@@ -1603,34 +1603,34 @@ function api_str_split($string, $split_length = 1, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-stripos
  */
 function api_stripos($haystack, $needle, $offset = 0, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (!is_string($needle)) {
-		$needle = (int)$needle;
-		if (api_is_utf8($encoding)) {
-			$needle = _api_utf8_chr($needle);
-		} else {
-			$needle = chr($needle);
-		}
-	}
-	if ($needle == '') {
-		return false;
-	}
-	if (_api_mb_supports($encoding)) {
-		return @mb_stripos($haystack, $needle, $offset, $encoding);
-	}
-	elseif (api_is_encoding_supported($encoding)) {
-		if (MBSTRING_INSTALLED) {
-			if (!api_is_utf8($encoding)) {
-				$haystack = api_utf8_encode($haystack, $encoding);
-				$needle = api_utf8_encode($needle, $encoding);
-			}
-			return @mb_stripos($haystack, $needle, $offset, 'UTF-8');
-		}
-		return api_strpos(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $offset, $encoding);
-	}
-	return stripos($haystack, $needle, $offset);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (!is_string($needle)) {
+        $needle = (int)$needle;
+        if (api_is_utf8($encoding)) {
+            $needle = _api_utf8_chr($needle);
+        } else {
+            $needle = chr($needle);
+        }
+    }
+    if ($needle == '') {
+        return false;
+    }
+    if (_api_mb_supports($encoding)) {
+        return @mb_stripos($haystack, $needle, $offset, $encoding);
+    }
+    elseif (api_is_encoding_supported($encoding)) {
+        if (MBSTRING_INSTALLED) {
+            if (!api_is_utf8($encoding)) {
+                $haystack = api_utf8_encode($haystack, $encoding);
+                $needle = api_utf8_encode($needle, $encoding);
+            }
+            return @mb_stripos($haystack, $needle, $offset, 'UTF-8');
+        }
+        return api_strpos(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $offset, $encoding);
+    }
+    return stripos($haystack, $needle, $offset);
 }
 
 /**
@@ -1649,51 +1649,51 @@ function api_stripos($haystack, $needle, $offset = 0, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-stristr
  */
 function api_stristr($haystack, $needle, $before_needle = false, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (!is_string($needle)) {
-		$needle = (int)$needle;
-		if (api_is_utf8($encoding)) {
-			$needle = _api_utf8_chr($needle);
-		} else {
-			$needle = chr($needle);
-		}
-	}
-	if ($needle == '') {
-		return false;
-	}
-	if (_api_mb_supports($encoding)) {
-		return @mb_stristr($haystack, $needle, $before_needle, $encoding);
-	}
-	elseif (api_is_encoding_supported($encoding)) {
-		if (MBSTRING_INSTALLED) {
-			if (!api_is_utf8($encoding)) {
-				$haystack = api_utf8_encode($haystack, $encoding);
-				$needle = api_utf8_encode($needle, $encoding);
-			}
-			$result = @mb_stristr($haystack, $needle, $before_needle, 'UTF-8');
-			if ($result === false) {
-				return false;
-			}
-			if (!api_is_utf8($encoding)) {
-				return api_utf8_decode($result, $encoding);
-			}
-			return $result;
-		}
-		$result = api_strstr(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $before_needle, $encoding);
-		if ($result === false) {
-			return false;
-		}
-		if ($before_needle) {
-			return api_substr($haystack, 0, api_strlen($result, $encoding), $encoding);
-		}
-		return api_substr($haystack, api_strlen($haystack, $encoding) - api_strlen($result, $encoding), null, $encoding);
-	}
-	if (!IS_PHP_53) {
-		return stristr($haystack, $needle);
-	}
-	return stristr($haystack, $needle, $before_needle);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (!is_string($needle)) {
+        $needle = (int)$needle;
+        if (api_is_utf8($encoding)) {
+            $needle = _api_utf8_chr($needle);
+        } else {
+            $needle = chr($needle);
+        }
+    }
+    if ($needle == '') {
+        return false;
+    }
+    if (_api_mb_supports($encoding)) {
+        return @mb_stristr($haystack, $needle, $before_needle, $encoding);
+    }
+    elseif (api_is_encoding_supported($encoding)) {
+        if (MBSTRING_INSTALLED) {
+            if (!api_is_utf8($encoding)) {
+                $haystack = api_utf8_encode($haystack, $encoding);
+                $needle = api_utf8_encode($needle, $encoding);
+            }
+            $result = @mb_stristr($haystack, $needle, $before_needle, 'UTF-8');
+            if ($result === false) {
+                return false;
+            }
+            if (!api_is_utf8($encoding)) {
+                return api_utf8_decode($result, $encoding);
+            }
+            return $result;
+        }
+        $result = api_strstr(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $before_needle, $encoding);
+        if ($result === false) {
+            return false;
+        }
+        if ($before_needle) {
+            return api_substr($haystack, 0, api_strlen($result, $encoding), $encoding);
+        }
+        return api_substr($haystack, api_strlen($haystack, $encoding) - api_strlen($result, $encoding), null, $encoding);
+    }
+    if (!IS_PHP_53) {
+        return stristr($haystack, $needle);
+    }
+    return stristr($haystack, $needle, $before_needle);
 }
 
 /**
@@ -1711,22 +1711,22 @@ function api_stristr($haystack, $needle, $before_needle = false, $encoding = nul
  * there is no need the original function strlen() to be changed, it works correctly and faster for these cases.
  */
 function api_strlen($string, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (_api_is_single_byte_encoding($encoding)) {
-		return strlen($string);
-	}
-	if (_api_mb_supports($encoding)) {
-		return @mb_strlen($string, $encoding);
-	}
-	if (_api_iconv_supports($encoding)) {
-		return @iconv_strlen($string, $encoding);
-	}
-	if (api_is_utf8($encoding)) {
-    	return api_byte_count(preg_replace("/[\x80-\xBF]/", '', $string));
-	}
-	return strlen($string);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (_api_is_single_byte_encoding($encoding)) {
+        return strlen($string);
+    }
+    if (_api_mb_supports($encoding)) {
+        return @mb_strlen($string, $encoding);
+    }
+    if (_api_iconv_supports($encoding)) {
+        return @iconv_strlen($string, $encoding);
+    }
+    if (api_is_utf8($encoding)) {
+        return api_byte_count(preg_replace("/[\x80-\xBF]/", '', $string));
+    }
+    return strlen($string);
 }
 
 /**
@@ -1742,48 +1742,48 @@ function api_strlen($string, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-strpos
  */
 function api_strpos($haystack, $needle, $offset = 0, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (!is_string($needle)) {
-		$needle = (int)$needle;
-		if (api_is_utf8($encoding)) {
-			$needle = _api_utf8_chr($needle);
-		} else {
-			$needle = chr($needle);
-		}
-	}
-	if ($needle == '') {
-		return false;
-	}
-	if (_api_is_single_byte_encoding($encoding)) {
-		return strpos($haystack, $needle, $offset);
-	}
-	elseif (_api_mb_supports($encoding)) {
-		return @mb_strpos($haystack, $needle, $offset, $encoding);
-	}
-	elseif (api_is_encoding_supported($encoding)) {
-		if (!api_is_utf8($encoding)) {
-			$haystack = api_utf8_encode($haystack, $encoding);
-			$needle = api_utf8_encode($needle, $encoding);
-		}
-		if (MBSTRING_INSTALLED) {
-			return @mb_strpos($haystack, $needle, $offset, 'UTF-8');
-		}
-		if (empty($offset)) {
-			$haystack = explode($needle, $haystack, 2);
-			if (count($haystack) > 1) {
-				return api_strlen($haystack[0]);
-			}
-			return false;
-		}
-		$haystack = api_substr($haystack, $offset);
-		if (($pos = api_strpos($haystack, $needle)) !== false ) {
-			return $pos + $offset;
-		}
-		return false;
-	}
-	return strpos($haystack, $needle, $offset);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (!is_string($needle)) {
+        $needle = (int)$needle;
+        if (api_is_utf8($encoding)) {
+            $needle = _api_utf8_chr($needle);
+        } else {
+            $needle = chr($needle);
+        }
+    }
+    if ($needle == '') {
+        return false;
+    }
+    if (_api_is_single_byte_encoding($encoding)) {
+        return strpos($haystack, $needle, $offset);
+    }
+    elseif (_api_mb_supports($encoding)) {
+        return @mb_strpos($haystack, $needle, $offset, $encoding);
+    }
+    elseif (api_is_encoding_supported($encoding)) {
+        if (!api_is_utf8($encoding)) {
+            $haystack = api_utf8_encode($haystack, $encoding);
+            $needle = api_utf8_encode($needle, $encoding);
+        }
+        if (MBSTRING_INSTALLED) {
+            return @mb_strpos($haystack, $needle, $offset, 'UTF-8');
+        }
+        if (empty($offset)) {
+            $haystack = explode($needle, $haystack, 2);
+            if (count($haystack) > 1) {
+                return api_strlen($haystack[0]);
+            }
+            return false;
+        }
+        $haystack = api_substr($haystack, $offset);
+        if (($pos = api_strpos($haystack, $needle)) !== false ) {
+            return $pos + $offset;
+        }
+        return false;
+    }
+    return strpos($haystack, $needle, $offset);
 }
 
 /**
@@ -1802,55 +1802,55 @@ function api_strpos($haystack, $needle, $offset = 0, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-strrchr
  */
 function api_strrchr($haystack, $needle, $before_needle = false, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (!is_string($needle)) {
-		$needle = (int)$needle;
-		if (api_is_utf8($encoding)) {
-			$needle = _api_utf8_chr($needle);
-		} else {
-			$needle = chr($needle);
-		}
-	}
-	if ($needle == '') {
-		return false;
-	}
-	if (_api_is_single_byte_encoding($encoding)) {
-		if (!$before_needle) {
-			return strrchr($haystack, $needle);
-		}
-		$result = strrchr($haystack, $needle);
-		if ($result === false) {
-			return false;
-		}
-		return api_substr($haystack, 0, api_strlen($haystack, $encoding) - api_strlen($result, $encoding), $encoding);
-	}
-	elseif (_api_mb_supports($encoding)) {
-		return @mb_strrchr($haystack, $needle, $before_needle, $encoding);
-	}
-	elseif (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
-		if (!api_is_utf8($encoding)) {
-			$haystack = api_utf8_encode($haystack, $encoding);
-			$needle = api_utf8_encode($needle, $encoding);
-		}
-		$result = @mb_strrchr($haystack, $needle, $before_needle, 'UTF-8');
-		if ($result === false) {
-			return false;
-		}
-		if (!api_is_utf8($encoding)) {
-			return api_utf8_decode($result, $encoding);
-		}
-		return $result;
-	}
-	if (!$before_needle) {
-		return strrchr($haystack, $needle);
-	}
-	$result = strrchr($haystack, $needle);
-	if ($result === false) {
-		return false;
-	}
-	return api_substr($haystack, 0, api_strlen($haystack, $encoding) - api_strlen($result, $encoding), $encoding);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (!is_string($needle)) {
+        $needle = (int)$needle;
+        if (api_is_utf8($encoding)) {
+            $needle = _api_utf8_chr($needle);
+        } else {
+            $needle = chr($needle);
+        }
+    }
+    if ($needle == '') {
+        return false;
+    }
+    if (_api_is_single_byte_encoding($encoding)) {
+        if (!$before_needle) {
+            return strrchr($haystack, $needle);
+        }
+        $result = strrchr($haystack, $needle);
+        if ($result === false) {
+            return false;
+        }
+        return api_substr($haystack, 0, api_strlen($haystack, $encoding) - api_strlen($result, $encoding), $encoding);
+    }
+    elseif (_api_mb_supports($encoding)) {
+        return @mb_strrchr($haystack, $needle, $before_needle, $encoding);
+    }
+    elseif (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
+        if (!api_is_utf8($encoding)) {
+            $haystack = api_utf8_encode($haystack, $encoding);
+            $needle = api_utf8_encode($needle, $encoding);
+        }
+        $result = @mb_strrchr($haystack, $needle, $before_needle, 'UTF-8');
+        if ($result === false) {
+            return false;
+        }
+        if (!api_is_utf8($encoding)) {
+            return api_utf8_decode($result, $encoding);
+        }
+        return $result;
+    }
+    if (!$before_needle) {
+        return strrchr($haystack, $needle);
+    }
+    $result = strrchr($haystack, $needle);
+    if ($result === false) {
+        return false;
+    }
+    return api_substr($haystack, 0, api_strlen($haystack, $encoding) - api_strlen($result, $encoding), $encoding);
 }
 
 /**
@@ -1862,19 +1862,19 @@ function api_strrchr($haystack, $needle, $before_needle = false, $encoding = nul
  * @link http://php.net/manual/en/function.strrev
  */
 function api_strrev($string, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (empty($string)) {
-		return '';
-	}
-	if (_api_is_single_byte_encoding($encoding)) {
-		return strrev($string);
-	}
-	if (api_is_encoding_supported($encoding)) {
-		return implode(array_reverse(api_str_split($string, 1, $encoding)));
-	}
-	return strrev($string);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (empty($string)) {
+        return '';
+    }
+    if (_api_is_single_byte_encoding($encoding)) {
+        return strrev($string);
+    }
+    if (api_is_encoding_supported($encoding)) {
+        return implode(array_reverse(api_str_split($string, 1, $encoding)));
+    }
+    return strrev($string);
 }
 
 /**
@@ -1890,7 +1890,7 @@ function api_strrev($string, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-strripos
  */
 function api_strripos($haystack, $needle, $offset = 0, $encoding = null) {
-	return api_strrpos(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $offset, $encoding);
+    return api_strrpos(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $offset, $encoding);
 }
 
 /**
@@ -1906,65 +1906,65 @@ function api_strripos($haystack, $needle, $offset = 0, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-strrpos
  */
 function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (!is_string($needle)) {
-		$needle = (int)$needle;
-		if (api_is_utf8($encoding)) {
-			$needle = _api_utf8_chr($needle);
-		} else {
-			$needle = chr($needle);
-		}
-	}
-	if ($needle == '') {
-		return false;
-	}
-	if (_api_is_single_byte_encoding($encoding)) {
-		return strrpos($haystack, $needle, $offset);
-	}
-	if (_api_mb_supports($encoding) && IS_PHP_52) {
-		return @mb_strrpos($haystack, $needle, $offset, $encoding);
-	}
-	elseif (api_is_encoding_supported($encoding)) {
-		if (!api_is_utf8($encoding)) {
-			$haystack = api_utf8_encode($haystack, $encoding);
-			$needle = api_utf8_encode($needle, $encoding);
-		}
-		if (MBSTRING_INSTALLED && IS_PHP_52) {
-			return @mb_strrpos($haystack, $needle, $offset, 'UTF-8');
-		}
-		// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
-		$found = false;
-		$haystack = _api_utf8_to_unicode($haystack);
-		$haystack_count = count($haystack);
-		$matches = array_count_values($haystack);
-		$needle = _api_utf8_to_unicode($needle);
-		$needle_count = count($needle);
-		$position = $offset;
-		while (($found === false) && ($position < $haystack_count)) {
-			if (isset($needle[0]) && $needle[0] === $haystack[$position]) {
-				for ($i = 1; $i < $needle_count; $i++) {
-					if ($needle[$i] !== $haystack[$position + $i]) {
-						if ($needle[$i] === $haystack[($position + $i) -1]) {
-							$position--;
-							$found = true;
-							continue;
-						}
-					}
-				}
-				if (!$offset && isset($matches[$needle[0]]) && $matches[$needle[0]] > 1) {
-					$matches[$needle[0]] = $matches[$needle[0]] - 1;
-				} elseif ($i === $needle_count) {
-					$found = true;
-					$position--;
-				}
-			}
-			$position++;
-		}
-		return ($found) ? $position : false;
-	}
-	return strrpos($haystack, $needle, $offset);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (!is_string($needle)) {
+        $needle = (int)$needle;
+        if (api_is_utf8($encoding)) {
+            $needle = _api_utf8_chr($needle);
+        } else {
+            $needle = chr($needle);
+        }
+    }
+    if ($needle == '') {
+        return false;
+    }
+    if (_api_is_single_byte_encoding($encoding)) {
+        return strrpos($haystack, $needle, $offset);
+    }
+    if (_api_mb_supports($encoding) && IS_PHP_52) {
+        return @mb_strrpos($haystack, $needle, $offset, $encoding);
+    }
+    elseif (api_is_encoding_supported($encoding)) {
+        if (!api_is_utf8($encoding)) {
+            $haystack = api_utf8_encode($haystack, $encoding);
+            $needle = api_utf8_encode($needle, $encoding);
+        }
+        if (MBSTRING_INSTALLED && IS_PHP_52) {
+            return @mb_strrpos($haystack, $needle, $offset, 'UTF-8');
+        }
+        // This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
+        $found = false;
+        $haystack = _api_utf8_to_unicode($haystack);
+        $haystack_count = count($haystack);
+        $matches = array_count_values($haystack);
+        $needle = _api_utf8_to_unicode($needle);
+        $needle_count = count($needle);
+        $position = $offset;
+        while (($found === false) && ($position < $haystack_count)) {
+            if (isset($needle[0]) && $needle[0] === $haystack[$position]) {
+                for ($i = 1; $i < $needle_count; $i++) {
+                    if ($needle[$i] !== $haystack[$position + $i]) {
+                        if ($needle[$i] === $haystack[($position + $i) -1]) {
+                            $position--;
+                            $found = true;
+                            continue;
+                        }
+                    }
+                }
+                if (!$offset && isset($matches[$needle[0]]) && $matches[$needle[0]] > 1) {
+                    $matches[$needle[0]] = $matches[$needle[0]] - 1;
+                } elseif ($i === $needle_count) {
+                    $found = true;
+                    $position--;
+                }
+            }
+            $position++;
+        }
+        return ($found) ? $position : false;
+    }
+    return strrpos($haystack, $needle, $offset);
 }
 
 /**
@@ -1983,63 +1983,63 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-strstr
  */
 function api_strstr($haystack, $needle, $before_needle = false, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (!is_string($needle)) {
-		$needle = (int)$needle;
-		if (api_is_utf8($encoding)) {
-			$needle = _api_utf8_chr($needle);
-		} else {
-			$needle = chr($needle);
-		}
-	}
-	if ($needle == '') {
-		return false;
-	}
-	if (_api_is_single_byte_encoding($encoding)) {
-		// Adding the missing parameter $before_needle to the original function strstr(), PHP_VERSION < 5.3
-		if (!$before_needle) {
-			return strstr($haystack, $needle);
-		}
-		if (!IS_PHP_53) {
-			$result = explode($needle, $haystack, 2);
-			if ($result === false || count($result) < 2) {
-				return false;
-			}
-			return $result[0];
-		}
-		return strstr($haystack, $needle, $before_needle);
-	}
-	if (_api_mb_supports($encoding)) {
-		return @mb_strstr($haystack, $needle, $before_needle, $encoding);
-	}
-	elseif (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
-		if (!api_is_utf8($encoding)) {
-			$haystack = api_utf8_encode($haystack, $encoding);
-			$needle = api_utf8_encode($needle, $encoding);
-		}
-		$result = @mb_strstr($haystack, $needle, $before_needle, 'UTF-8');
-		if ($result !== false) {
-			if (!api_is_utf8($encoding)) {
-				return api_utf8_decode($result, $encoding);
-			}
-			return $result;
-		}
-		return false;
-	}
-	// Adding the missing parameter $before_needle to the original function strstr(), PHP_VERSION < 5.3
-	if (!$before_needle) {
-		return strstr($haystack, $needle);
-	}
-	if (!IS_PHP_53) {
-		$result = explode($needle, $haystack, 2);
-		if ($result === false || count($result) < 2) {
-			return false;
-		}
-		return $result[0];
-	}
-	return strstr($haystack, $needle, $before_needle);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (!is_string($needle)) {
+        $needle = (int)$needle;
+        if (api_is_utf8($encoding)) {
+            $needle = _api_utf8_chr($needle);
+        } else {
+            $needle = chr($needle);
+        }
+    }
+    if ($needle == '') {
+        return false;
+    }
+    if (_api_is_single_byte_encoding($encoding)) {
+        // Adding the missing parameter $before_needle to the original function strstr(), PHP_VERSION < 5.3
+        if (!$before_needle) {
+            return strstr($haystack, $needle);
+        }
+        if (!IS_PHP_53) {
+            $result = explode($needle, $haystack, 2);
+            if ($result === false || count($result) < 2) {
+                return false;
+            }
+            return $result[0];
+        }
+        return strstr($haystack, $needle, $before_needle);
+    }
+    if (_api_mb_supports($encoding)) {
+        return @mb_strstr($haystack, $needle, $before_needle, $encoding);
+    }
+    elseif (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
+        if (!api_is_utf8($encoding)) {
+            $haystack = api_utf8_encode($haystack, $encoding);
+            $needle = api_utf8_encode($needle, $encoding);
+        }
+        $result = @mb_strstr($haystack, $needle, $before_needle, 'UTF-8');
+        if ($result !== false) {
+            if (!api_is_utf8($encoding)) {
+                return api_utf8_decode($result, $encoding);
+            }
+            return $result;
+        }
+        return false;
+    }
+    // Adding the missing parameter $before_needle to the original function strstr(), PHP_VERSION < 5.3
+    if (!$before_needle) {
+        return strstr($haystack, $needle);
+    }
+    if (!IS_PHP_53) {
+        $result = explode($needle, $haystack, 2);
+        if ($result === false || count($result) < 2) {
+            return false;
+        }
+        return $result[0];
+    }
+    return strstr($haystack, $needle, $before_needle);
 }
 
 /**
@@ -2052,59 +2052,59 @@ function api_strstr($haystack, $needle, $before_needle = false, $encoding = null
  * @link http://php.net/manual/en/function.mb-strtolower
  */
 function api_strtolower($string, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (_api_mb_supports($encoding)) {
-		return @mb_strtolower($string, $encoding);
-	}
-	elseif (api_is_encoding_supported($encoding)) {
-		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_encode($string, $encoding);
-		}
-		if (MBSTRING_INSTALLED) {
-			$string = @mb_strtolower($string, 'UTF-8');
-		} else {
-			// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
-			$codepoints = _api_utf8_to_unicode($string);
-			$length = count($codepoints);
-			$matched = false;
-			$result = array();
-			for ($i = 0 ; $i < $length; $i++) {
-				$codepoint = $codepoints[$i];
-				if ($codepoint < 128) {
-					$str = strtolower(chr($codepoint));
-					$strlen = api_byte_count($str);
-					for ($ii = 0 ; $ii < $strlen; $ii++) {
-						$lower = ord($str[$ii]);
-					}
-					$result[] = $lower;
-					$matched = true;
-				} else {
-					$matched = false;
-					$properties = &_api_utf8_get_letter_case_properties($codepoint, 'upper');
-					if (!empty($properties)) {
-						foreach ($properties as $key => $value) {
-							if ($properties[$key]['upper'] == $codepoint && count($properties[$key]['lower'][0]) === 1) {
-								$result[] = $properties[$key]['lower'][0];
-								$matched = true;
-								break 1;
-							}
-						}
-					}
-				}
-				if ($matched === false) {
-					$result[] = $codepoint;
-				}
-			}
-			$string = _api_utf8_from_unicode($result);
-		}
-		if (!api_is_utf8($encoding)) {
-			return api_utf8_decode($string, $encoding);
-		}
-		return $string;
-	}
-	return strtolower($string);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (_api_mb_supports($encoding)) {
+        return @mb_strtolower($string, $encoding);
+    }
+    elseif (api_is_encoding_supported($encoding)) {
+        if (!api_is_utf8($encoding)) {
+            $string = api_utf8_encode($string, $encoding);
+        }
+        if (MBSTRING_INSTALLED) {
+            $string = @mb_strtolower($string, 'UTF-8');
+        } else {
+            // This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
+            $codepoints = _api_utf8_to_unicode($string);
+            $length = count($codepoints);
+            $matched = false;
+            $result = array();
+            for ($i = 0 ; $i < $length; $i++) {
+                $codepoint = $codepoints[$i];
+                if ($codepoint < 128) {
+                    $str = strtolower(chr($codepoint));
+                    $strlen = api_byte_count($str);
+                    for ($ii = 0 ; $ii < $strlen; $ii++) {
+                        $lower = ord($str[$ii]);
+                    }
+                    $result[] = $lower;
+                    $matched = true;
+                } else {
+                    $matched = false;
+                    $properties = &_api_utf8_get_letter_case_properties($codepoint, 'upper');
+                    if (!empty($properties)) {
+                        foreach ($properties as $key => $value) {
+                            if ($properties[$key]['upper'] == $codepoint && count($properties[$key]['lower'][0]) === 1) {
+                                $result[] = $properties[$key]['lower'][0];
+                                $matched = true;
+                                break 1;
+                            }
+                        }
+                    }
+                }
+                if ($matched === false) {
+                    $result[] = $codepoint;
+                }
+            }
+            $string = _api_utf8_from_unicode($result);
+        }
+        if (!api_is_utf8($encoding)) {
+            return api_utf8_decode($string, $encoding);
+        }
+        return $string;
+    }
+    return strtolower($string);
 }
 
 /**
@@ -2117,97 +2117,97 @@ function api_strtolower($string, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-strtoupper
  */
 function api_strtoupper($string, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (_api_mb_supports($encoding)) {
-		return @mb_strtoupper($string, $encoding);
-	}
-	elseif (api_is_encoding_supported($encoding)) {
-		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_encode($string, $encoding);
-		}
-		if (MBSTRING_INSTALLED) {
-			$string = @mb_strtoupper($string, 'UTF-8');
-		} else {
-			// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
-			$codepoints = _api_utf8_to_unicode($string);
-			$length = count($codepoints);
-			$matched = false;
-			$replaced = array();
-			$result = array();
-			for ($i = 0 ; $i < $length; $i++) {
-				$codepoint = $codepoints[$i];
-				if ($codepoint < 128) {
-					$str = strtoupper(chr($codepoint));
-					$strlen = api_byte_count($str);
-					for ($ii = 0 ; $ii < $strlen; $ii++) {
-						$lower = ord($str[$ii]);
-					}
-					$result[] = $lower;
-					$matched = true;
-				} else {
-					$matched = false;
-					$properties = &_api_utf8_get_letter_case_properties($codepoint);
-					$property_count = count($properties);
-					if (!empty($properties)) {
-						foreach ($properties as $key => $value) {
-							$matched = false;
-							$replace = 0;
-							if ($length > 1 && count($properties[$key]['lower']) > 1) {
-								$j = 0;
-								for ($ii = 0; $ii < count($properties[$key]['lower']); $ii++) {
-									$next_codepoint = $next_codepoints[$i + $ii];
-									if (isset($next_codepoint) && ($next_codepoint == $properties[$key]['lower'][$j + $ii])) {
-										$replace++;
-									}
-								}
-								if ($replace == count($properties[$key]['lower'])) {
-									$result[] = $properties[$key]['upper'];
-									$replaced = array_merge($replaced, array_values($properties[$key]['lower']));
-									$matched = true;
-									break 1;
-								}
-							} elseif ($length > 1 && $property_count > 1) {
-								$j = 0;
-								for ($ii = 1; $ii < $property_count; $ii++) {
-									$next_codepoint = $next_codepoints[$i + $ii - 1];
-									if (in_array($next_codepoint, $properties[$ii]['lower'])) {
-										for ($jj = 0; $jj < count($properties[$ii]['lower']); $jj++) {
-											$next_codepoint = $next_codepoints[$i + $jj];
-											if (isset($next_codepoint) && ($next_codepoint == $properties[$ii]['lower'][$j + $jj])) {
-												$replace++;
-											}
-										}
-										if ($replace == count($properties[$ii]['lower'])) {
-											$result[] = $properties[$ii]['upper'];
-											$replaced = array_merge($replaced, array_values($properties[$ii]['lower']));
-											$matched = true;
-											break 2;
-										}
-									}
-								}
-							}
-							if ($properties[$key]['lower'][0] == $codepoint) {
-								$result[] = $properties[$key]['upper'];
-								$matched = true;
-								break 1;
-							}
-						}
-					}
-				}
-				if ($matched === false && !in_array($codepoint, $replaced, true)) {
-					$result[] = $codepoint;
-				}
-			}
-			$string = _api_utf8_from_unicode($result);
-		}
-		if (!api_is_utf8($encoding)) {
-			return api_utf8_decode($string, $encoding);
-		}
-		return $string;
-	}
-	return strtoupper($string);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (_api_mb_supports($encoding)) {
+        return @mb_strtoupper($string, $encoding);
+    }
+    elseif (api_is_encoding_supported($encoding)) {
+        if (!api_is_utf8($encoding)) {
+            $string = api_utf8_encode($string, $encoding);
+        }
+        if (MBSTRING_INSTALLED) {
+            $string = @mb_strtoupper($string, 'UTF-8');
+        } else {
+            // This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
+            $codepoints = _api_utf8_to_unicode($string);
+            $length = count($codepoints);
+            $matched = false;
+            $replaced = array();
+            $result = array();
+            for ($i = 0 ; $i < $length; $i++) {
+                $codepoint = $codepoints[$i];
+                if ($codepoint < 128) {
+                    $str = strtoupper(chr($codepoint));
+                    $strlen = api_byte_count($str);
+                    for ($ii = 0 ; $ii < $strlen; $ii++) {
+                        $lower = ord($str[$ii]);
+                    }
+                    $result[] = $lower;
+                    $matched = true;
+                } else {
+                    $matched = false;
+                    $properties = &_api_utf8_get_letter_case_properties($codepoint);
+                    $property_count = count($properties);
+                    if (!empty($properties)) {
+                        foreach ($properties as $key => $value) {
+                            $matched = false;
+                            $replace = 0;
+                            if ($length > 1 && count($properties[$key]['lower']) > 1) {
+                                $j = 0;
+                                for ($ii = 0; $ii < count($properties[$key]['lower']); $ii++) {
+                                    $next_codepoint = $next_codepoints[$i + $ii];
+                                    if (isset($next_codepoint) && ($next_codepoint == $properties[$key]['lower'][$j + $ii])) {
+                                        $replace++;
+                                    }
+                                }
+                                if ($replace == count($properties[$key]['lower'])) {
+                                    $result[] = $properties[$key]['upper'];
+                                    $replaced = array_merge($replaced, array_values($properties[$key]['lower']));
+                                    $matched = true;
+                                    break 1;
+                                }
+                            } elseif ($length > 1 && $property_count > 1) {
+                                $j = 0;
+                                for ($ii = 1; $ii < $property_count; $ii++) {
+                                    $next_codepoint = $next_codepoints[$i + $ii - 1];
+                                    if (in_array($next_codepoint, $properties[$ii]['lower'])) {
+                                        for ($jj = 0; $jj < count($properties[$ii]['lower']); $jj++) {
+                                            $next_codepoint = $next_codepoints[$i + $jj];
+                                            if (isset($next_codepoint) && ($next_codepoint == $properties[$ii]['lower'][$j + $jj])) {
+                                                $replace++;
+                                            }
+                                        }
+                                        if ($replace == count($properties[$ii]['lower'])) {
+                                            $result[] = $properties[$ii]['upper'];
+                                            $replaced = array_merge($replaced, array_values($properties[$ii]['lower']));
+                                            $matched = true;
+                                            break 2;
+                                        }
+                                    }
+                                }
+                            }
+                            if ($properties[$key]['lower'][0] == $codepoint) {
+                                $result[] = $properties[$key]['upper'];
+                                $matched = true;
+                                break 1;
+                            }
+                        }
+                    }
+                }
+                if ($matched === false && !in_array($codepoint, $replaced, true)) {
+                    $result[] = $codepoint;
+                }
+            }
+            $string = _api_utf8_from_unicode($result);
+        }
+        if (!api_is_utf8($encoding)) {
+            return api_utf8_decode($string, $encoding);
+        }
+        return $string;
+    }
+    return strtoupper($string);
 }
 
 /**
@@ -2223,95 +2223,95 @@ function api_strtoupper($string, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-substr
  */
 function api_substr($string, $start, $length = null, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	// Passing null as $length would mean 0. This behaviour has been corrected here.
-	if (is_null($length)) {
-		$length = api_strlen($string, $encoding);
-	}
-	if (_api_is_single_byte_encoding($encoding)) {
-		return substr($string, $start, $length);
-	}
-	if (_api_mb_supports($encoding)) {
-		return @mb_substr($string, $start, $length, $encoding);
-	}
-	elseif (api_is_encoding_supported($encoding)) {
-		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_encode($string, $encoding);
-		}
-		if (MBSTRING_INSTALLED) {
-			$string = @mb_substr($string, $start, $length, 'UTF-8');
-		} else {
-			// The following branch of code is from the Drupal CMS, see the function drupal_substr().
-			$strlen = api_byte_count($string);
-			// Find the starting byte offset
-			$bytes = 0;
-			if ($start > 0) {
-				// Count all the continuation bytes from the start until we have found
-				// $start characters
-				$bytes = -1; $chars = -1;
-				while ($bytes < $strlen && $chars < $start) {
-					$bytes++;
-					$c = ord($string[$bytes]);
-					if ($c < 0x80 || $c >= 0xC0) {
-						$chars++;
-					}
-				}
-			}
-			else if ($start < 0) {
-				// Count all the continuation bytes from the end until we have found
-				// abs($start) characters
-				$start = abs($start);
-				$bytes = $strlen; $chars = 0;
-				while ($bytes > 0 && $chars < $start) {
-					$bytes--;
-					$c = ord($string[$bytes]);
-					if ($c < 0x80 || $c >= 0xC0) {
-						$chars++;
-					}
-				}
-			}
-			$istart = $bytes;
-			// Find the ending byte offset
-			if ($length === NULL) {
-				$bytes = $strlen - 1;
-			}
-			else if ($length > 0) {
-				// Count all the continuation bytes from the starting index until we have
-				// found $length + 1 characters. Then backtrack one byte.
-				$bytes = $istart; $chars = 0;
-				while ($bytes < $strlen && $chars < $length) {
-					$bytes++;
-					$c = ord($string[$bytes]);
-					if ($c < 0x80 || $c >= 0xC0) {
-						$chars++;
-					}
-				}
-				$bytes--;
-			}
-			else if ($length < 0) {
-				// Count all the continuation bytes from the end until we have found
-				// abs($length) characters
-				$length = abs($length);
-				$bytes = $strlen - 1; $chars = 0;
-				while ($bytes >= 0 && $chars < $length) {
-					$c = ord($string[$bytes]);
-					if ($c < 0x80 || $c >= 0xC0) {
-						$chars++;
-					}
-					$bytes--;
-				}
-			}
-			$iend = $bytes;
-			$string = substr($string, $istart, max(0, $iend - $istart + 1));
-		}
-		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_decode($string, $encoding);
-		}
-		return $string;
-	}
-	return substr($string, $start, $length);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    // Passing null as $length would mean 0. This behaviour has been corrected here.
+    if (is_null($length)) {
+        $length = api_strlen($string, $encoding);
+    }
+    if (_api_is_single_byte_encoding($encoding)) {
+        return substr($string, $start, $length);
+    }
+    if (_api_mb_supports($encoding)) {
+        return @mb_substr($string, $start, $length, $encoding);
+    }
+    elseif (api_is_encoding_supported($encoding)) {
+        if (!api_is_utf8($encoding)) {
+            $string = api_utf8_encode($string, $encoding);
+        }
+        if (MBSTRING_INSTALLED) {
+            $string = @mb_substr($string, $start, $length, 'UTF-8');
+        } else {
+            // The following branch of code is from the Drupal CMS, see the function drupal_substr().
+            $strlen = api_byte_count($string);
+            // Find the starting byte offset
+            $bytes = 0;
+            if ($start > 0) {
+                // Count all the continuation bytes from the start until we have found
+                // $start characters
+                $bytes = -1; $chars = -1;
+                while ($bytes < $strlen && $chars < $start) {
+                    $bytes++;
+                    $c = ord($string[$bytes]);
+                    if ($c < 0x80 || $c >= 0xC0) {
+                        $chars++;
+                    }
+                }
+            }
+            else if ($start < 0) {
+                // Count all the continuation bytes from the end until we have found
+                // abs($start) characters
+                $start = abs($start);
+                $bytes = $strlen; $chars = 0;
+                while ($bytes > 0 && $chars < $start) {
+                    $bytes--;
+                    $c = ord($string[$bytes]);
+                    if ($c < 0x80 || $c >= 0xC0) {
+                        $chars++;
+                    }
+                }
+            }
+            $istart = $bytes;
+            // Find the ending byte offset
+            if ($length === NULL) {
+                $bytes = $strlen - 1;
+            }
+            else if ($length > 0) {
+                // Count all the continuation bytes from the starting index until we have
+                // found $length + 1 characters. Then backtrack one byte.
+                $bytes = $istart; $chars = 0;
+                while ($bytes < $strlen && $chars < $length) {
+                    $bytes++;
+                    $c = ord($string[$bytes]);
+                    if ($c < 0x80 || $c >= 0xC0) {
+                        $chars++;
+                    }
+                }
+                $bytes--;
+            }
+            else if ($length < 0) {
+                // Count all the continuation bytes from the end until we have found
+                // abs($length) characters
+                $length = abs($length);
+                $bytes = $strlen - 1; $chars = 0;
+                while ($bytes >= 0 && $chars < $length) {
+                    $c = ord($string[$bytes]);
+                    if ($c < 0x80 || $c >= 0xC0) {
+                        $chars++;
+                    }
+                    $bytes--;
+                }
+            }
+            $iend = $bytes;
+            $string = substr($string, $istart, max(0, $iend - $istart + 1));
+        }
+        if (!api_is_utf8($encoding)) {
+            $string = api_utf8_decode($string, $encoding);
+        }
+        return $string;
+    }
+    return substr($string, $start, $length);
 }
 
 /**
@@ -2323,13 +2323,13 @@ function api_substr($string, $start, $length = null, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-substr-count.php
  */
 function api_substr_count($haystack, $needle, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
     if (_api_mb_supports($encoding)) {
-		return @mb_substr_count($haystack, $needle, $encoding);
-	}
-	return substr_count($haystack, $needle);
+        return @mb_substr_count($haystack, $needle, $encoding);
+    }
+    return substr_count($haystack, $needle);
 }
 
 /**
@@ -2352,35 +2352,35 @@ function api_substr_count($haystack, $needle, $encoding = null) {
  * @link http://php.net/manual/function.substr-replace
  */
 function api_substr_replace($string, $replacement, $start, $length = null, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (_api_is_single_byte_encoding($encoding)) {
-		if (is_null($length)) {
-			return substr_replace($string, $replacement, $start);
-		}
-		return substr_replace($string, $replacement, $start, $length);
-	}
-	if (api_is_encoding_supported($encoding)) {
-		if (is_null($length)) {
-			$length = api_strlen($string);
-		}
-		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_encode($string, $encoding);
-			$replacement = api_utf8_encode($replacement, $encoding);
-		}
-		$string = _api_utf8_to_unicode($string);
-		array_splice($string, $start, $length, _api_utf8_to_unicode($replacement));
-		$string = _api_utf8_from_unicode($string);
-		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_decode($string, $encoding);
-		}
-		return $string;
-	}
-	if (is_null($length)) {
-		return substr_replace($string, $replacement, $start);
-	}
-	return substr_replace($string, $replacement, $start, $length);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (_api_is_single_byte_encoding($encoding)) {
+        if (is_null($length)) {
+            return substr_replace($string, $replacement, $start);
+        }
+        return substr_replace($string, $replacement, $start, $length);
+    }
+    if (api_is_encoding_supported($encoding)) {
+        if (is_null($length)) {
+            $length = api_strlen($string);
+        }
+        if (!api_is_utf8($encoding)) {
+            $string = api_utf8_encode($string, $encoding);
+            $replacement = api_utf8_encode($replacement, $encoding);
+        }
+        $string = _api_utf8_to_unicode($string);
+        array_splice($string, $start, $length, _api_utf8_to_unicode($replacement));
+        $string = _api_utf8_from_unicode($string);
+        if (!api_is_utf8($encoding)) {
+            $string = api_utf8_decode($string, $encoding);
+        }
+        return $string;
+    }
+    if (is_null($length)) {
+        return substr_replace($string, $replacement, $start);
+    }
+    return substr_replace($string, $replacement, $start, $length);
 }
 
 /**
@@ -2392,10 +2392,10 @@ function api_substr_replace($string, $replacement, $start, $length = null, $enco
  * @link http://php.net/manual/en/function.ucfirst
  */
 function api_ucfirst($string, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-   	return api_strtoupper(api_substr($string, 0, 1, $encoding), $encoding) . api_substr($string, 1, api_strlen($string, $encoding), $encoding);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+       return api_strtoupper(api_substr($string, 0, 1, $encoding), $encoding) . api_substr($string, 1, api_strlen($string, $encoding), $encoding);
 }
 
 /**
@@ -2407,32 +2407,32 @@ function api_ucfirst($string, $encoding = null) {
  * @link http://php.net/manual/en/function.ucwords
  */
 function api_ucwords($string, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
     if (_api_mb_supports($encoding)) {
-		return @mb_convert_case($string, MB_CASE_TITLE, $encoding);
-	}
-	if (api_is_encoding_supported($encoding)) {
-		if (!api_is_utf8($encoding)) {
-			$string = api_utf8_encode($string, $encoding);
-		}
-		if (MBSTRING_INSTALLED) {
-			$string = @mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
-		} else {
-			// The following fragment (branch) of code is based on the function utf8_ucwords() by Harry Fuecks
-			// See http://dev.splitbrain.org/view/darcs/dokuwiki/inc/utf8.php
-			// Note: [\x0c\x09\x0b\x0a\x0d\x20] matches - form feeds, horizontal tabs, vertical tabs, linefeeds and carriage returns.
-			// This corresponds to the definition of a "word" defined at http://www.php.net/ucwords
-			$pattern = '/(^|([\x0c\x09\x0b\x0a\x0d\x20]+))([^\x0c\x09\x0b\x0a\x0d\x20]{1})[^\x0c\x09\x0b\x0a\x0d\x20]*/u';
-			$string = preg_replace_callback($pattern, '_api_utf8_ucwords_callback', $string);
-		}
-		if (!api_is_utf8($encoding)) {
-			return api_utf8_decode($string, $encoding);
-		}
-		return $string;
-	}
-	return ucwords($string);
+        return @mb_convert_case($string, MB_CASE_TITLE, $encoding);
+    }
+    if (api_is_encoding_supported($encoding)) {
+        if (!api_is_utf8($encoding)) {
+            $string = api_utf8_encode($string, $encoding);
+        }
+        if (MBSTRING_INSTALLED) {
+            $string = @mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
+        } else {
+            // The following fragment (branch) of code is based on the function utf8_ucwords() by Harry Fuecks
+            // See http://dev.splitbrain.org/view/darcs/dokuwiki/inc/utf8.php
+            // Note: [\x0c\x09\x0b\x0a\x0d\x20] matches - form feeds, horizontal tabs, vertical tabs, linefeeds and carriage returns.
+            // This corresponds to the definition of a "word" defined at http://www.php.net/ucwords
+            $pattern = '/(^|([\x0c\x09\x0b\x0a\x0d\x20]+))([^\x0c\x09\x0b\x0a\x0d\x20]{1})[^\x0c\x09\x0b\x0a\x0d\x20]*/u';
+            $string = preg_replace_callback($pattern, '_api_utf8_ucwords_callback', $string);
+        }
+        if (!api_is_utf8($encoding)) {
+            return api_utf8_decode($string, $encoding);
+        }
+        return $string;
+    }
+    return ucwords($string);
 }
 
 
@@ -2454,10 +2454,10 @@ function api_ucwords($string, $encoding = null) {
  * @link http://php.net/preg_match
  */
 function api_preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	return preg_match(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $matches, $flags, $offset);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    return preg_match(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $matches, $flags, $offset);
 }
 
 /**
@@ -2477,13 +2477,13 @@ function api_preg_match($pattern, $subject, &$matches = null, $flags = 0, $offse
  * @link http://php.net/preg_match_all
  */
 function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN_ORDER, $offset = 0, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (is_null($flags)) {
-		$flags = PREG_PATTERN_ORDER;
-	}
-	return preg_match_all(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $matches, $flags, $offset);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (is_null($flags)) {
+        $flags = PREG_PATTERN_ORDER;
+    }
+    return preg_match_all(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $matches, $flags, $offset);
 }
 
 /**
@@ -2499,18 +2499,18 @@ function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN
  * @link http://php.net/preg_replace
  */
 function api_preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	$is_utf8 = api_is_utf8($encoding);
-	if (is_array($pattern)) {
-		foreach ($pattern as &$p) {
-			$p = $is_utf8 ? $p.'u' : $p;
-		}
-	} else {
-		$pattern = $is_utf8 ? $pattern.'u' : $pattern;
-	}
-	return preg_replace($pattern, $replacement, $subject, $limit, $count);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    $is_utf8 = api_is_utf8($encoding);
+    if (is_array($pattern)) {
+        foreach ($pattern as &$p) {
+            $p = $is_utf8 ? $p.'u' : $p;
+        }
+    } else {
+        $pattern = $is_utf8 ? $pattern.'u' : $pattern;
+    }
+    return preg_replace($pattern, $replacement, $subject, $limit, $count);
 }
 
 /**
@@ -2525,17 +2525,17 @@ function api_preg_replace($pattern, $replacement, $subject, $limit = -1, &$count
  * @link http://php.net/preg_replace_callback
  */
 function api_preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	if (is_array($pattern)) {
-		foreach ($pattern as &$p) {
-			$p = api_is_utf8($encoding) ? $p.'u' : $p;
-		}
-	} else {
-		$pattern = api_is_utf8($encoding) ? $pattern.'u' : $pattern;
-	}
-	return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    if (is_array($pattern)) {
+        foreach ($pattern as &$p) {
+            $p = api_is_utf8($encoding) ? $p.'u' : $p;
+        }
+    } else {
+        $pattern = api_is_utf8($encoding) ? $pattern.'u' : $pattern;
+    }
+    return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
 }
 
 /**
@@ -2553,10 +2553,10 @@ function api_preg_replace_callback($pattern, $callback, $subject, $limit = -1, &
  * @link http://php.net/preg_split
  */
 function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = _api_mb_internal_encoding();
-	}
-	return preg_split(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $limit, $flags);
+    if (empty($encoding)) {
+        $encoding = _api_mb_internal_encoding();
+    }
+    return preg_split(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $limit, $flags);
 }
 
 
@@ -2578,31 +2578,31 @@ function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding =
  * @link http://php.net/manual/en/function.mb-ereg
  */
 function api_ereg($pattern, $string, & $regs = null) {
-	$count = func_num_args();
-	$encoding = _api_mb_regex_encoding();
-	if (_api_mb_supports($encoding)) {
-		if ($count < 3) {
-			return @mb_ereg($pattern, $string);
-		}
-		return @mb_ereg($pattern, $string, $regs);
-	}
-	if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
-		global $_api_encoding;
-		$_api_encoding = $encoding;
-		_api_mb_regex_encoding('UTF-8');
-		if ($count < 3) {
-			$result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
-		} else {
-			$result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
-			$regs = _api_array_utf8_decode($regs);
-		}
-		_api_mb_regex_encoding($encoding);
-		return $result;
-	}
-	if ($count < 3) {
-		return ereg($pattern, $string);
-	}
-	return ereg($pattern, $string, $regs);
+    $count = func_num_args();
+    $encoding = _api_mb_regex_encoding();
+    if (_api_mb_supports($encoding)) {
+        if ($count < 3) {
+            return @mb_ereg($pattern, $string);
+        }
+        return @mb_ereg($pattern, $string, $regs);
+    }
+    if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
+        global $_api_encoding;
+        $_api_encoding = $encoding;
+        _api_mb_regex_encoding('UTF-8');
+        if ($count < 3) {
+            $result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
+        } else {
+            $result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
+            $regs = _api_array_utf8_decode($regs);
+        }
+        _api_mb_regex_encoding($encoding);
+        return $result;
+    }
+    if ($count < 3) {
+        return ereg($pattern, $string);
+    }
+    return ereg($pattern, $string, $regs);
 }
 
 /**
@@ -2625,24 +2625,24 @@ function api_ereg($pattern, $string, & $regs = null) {
  * @link http://php.net/manual/en/function.mb-ereg-replace
  */
 function api_ereg_replace($pattern, $replacement, $string, $option = null) {
-	$encoding = _api_mb_regex_encoding();
-	if (_api_mb_supports($encoding)) {
-		if (is_null($option)) {
-			return @mb_ereg_replace($pattern, $replacement, $string);
-		}
-		return @mb_ereg_replace($pattern, $replacement, $string, $option);
-	}
-	if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
-		_api_mb_regex_encoding('UTF-8');
-		if (is_null($option)) {
-			$result = api_utf8_decode(@mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
-		} else {
-			$result = api_utf8_decode(@mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
-		}
-		_api_mb_regex_encoding($encoding);
-		return $result;
-	}
-	return ereg_replace($pattern, $replacement, $string);
+    $encoding = _api_mb_regex_encoding();
+    if (_api_mb_supports($encoding)) {
+        if (is_null($option)) {
+            return @mb_ereg_replace($pattern, $replacement, $string);
+        }
+        return @mb_ereg_replace($pattern, $replacement, $string, $option);
+    }
+    if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
+        _api_mb_regex_encoding('UTF-8');
+        if (is_null($option)) {
+            $result = api_utf8_decode(@mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
+        } else {
+            $result = api_utf8_decode(@mb_ereg_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
+        }
+        _api_mb_regex_encoding($encoding);
+        return $result;
+    }
+    return ereg_replace($pattern, $replacement, $string);
 }
 
 /**
@@ -2659,31 +2659,31 @@ function api_ereg_replace($pattern, $replacement, $string, $option = null) {
  * @link http://php.net/manual/en/function.mb-eregi
  */
 function api_eregi($pattern, $string, & $regs = null) {
-	$count = func_num_args();
-	$encoding = _api_mb_regex_encoding();
-	if (_api_mb_supports($encoding)) {
-		if ($count < 3) {
-			return @mb_eregi($pattern, $string);
-		}
-		return @mb_eregi($pattern, $string, $regs);
-	}
-	if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
-		global $_api_encoding;
-		$_api_encoding = $encoding;
-		_api_mb_regex_encoding('UTF-8');
-		if ($count < 3) {
-			$result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
-		} else {
-			$result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
-			$regs = _api_array_utf8_decode($regs);
-		}
-		_api_mb_regex_encoding($encoding);
-		return $result;
-	}
-	if ($count < 3) {
-		return eregi($pattern, $string);
-	}
-	return eregi($pattern, $string, $regs);
+    $count = func_num_args();
+    $encoding = _api_mb_regex_encoding();
+    if (_api_mb_supports($encoding)) {
+        if ($count < 3) {
+            return @mb_eregi($pattern, $string);
+        }
+        return @mb_eregi($pattern, $string, $regs);
+    }
+    if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
+        global $_api_encoding;
+        $_api_encoding = $encoding;
+        _api_mb_regex_encoding('UTF-8');
+        if ($count < 3) {
+            $result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
+        } else {
+            $result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
+            $regs = _api_array_utf8_decode($regs);
+        }
+        _api_mb_regex_encoding($encoding);
+        return $result;
+    }
+    if ($count < 3) {
+        return eregi($pattern, $string);
+    }
+    return eregi($pattern, $string, $regs);
 }
 
 /**
@@ -2706,24 +2706,24 @@ function api_eregi($pattern, $string, & $regs = null) {
  * @link http://php.net/manual/en/function.mb-eregi-replace
  */
 function api_eregi_replace($pattern, $replacement, $string, $option = null) {
-	$encoding = _api_mb_regex_encoding();
-	if (_api_mb_supports($encoding)) {
-		if (is_null($option)) {
-			return @mb_eregi_replace($pattern, $replacement, $string);
-		}
-		return @mb_eregi_replace($pattern, $replacement, $string, $option);
-	}
-	if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
-		_api_mb_regex_encoding('UTF-8');
-		if (is_null($option)) {
-			$result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
-		} else {
-			$result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
-		}
-		_api_mb_regex_encoding($encoding);
-		return $result;
-	}
-	return eregi_replace($pattern, $replacement, $string);
+    $encoding = _api_mb_regex_encoding();
+    if (_api_mb_supports($encoding)) {
+        if (is_null($option)) {
+            return @mb_eregi_replace($pattern, $replacement, $string);
+        }
+        return @mb_eregi_replace($pattern, $replacement, $string, $option);
+    }
+    if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
+        _api_mb_regex_encoding('UTF-8');
+        if (is_null($option)) {
+            $result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding)), $encoding);
+        } else {
+            $result = api_utf8_decode(@mb_eregi_replace(api_utf8_encode($pattern, $encoding), api_utf8_encode($replacement, $encoding), api_utf8_encode($string, $encoding), $option), $encoding);
+        }
+        _api_mb_regex_encoding($encoding);
+        return $result;
+    }
+    return eregi_replace($pattern, $replacement, $string);
 }
 
 /**
@@ -2740,30 +2740,30 @@ function api_eregi_replace($pattern, $replacement, $string, $option = null) {
  * @link http://php.net/manual/en/function.mb-split
  */
 function api_split($pattern, $string, $limit = null) {
-	$encoding = _api_mb_regex_encoding();
-	if (_api_mb_supports($encoding)) {
-		if (is_null($limit)) {
-			return @mb_split($pattern, $string);
-		}
-		return @mb_split($pattern, $string, $limit);
-	}
-	if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
-		global $_api_encoding;
-		$_api_encoding = $encoding;
-		_api_mb_regex_encoding('UTF-8');
-		if (is_null($limit)) {
-			$result = @mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
-		} else {
-			$result = @mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $limit);
-		}
-		$result = _api_array_utf8_decode($result);
-		_api_mb_regex_encoding($encoding);
-		return $result;
-	}
-	if (is_null($limit)) {
-		return split($pattern, $string);
-	}
-	return split($pattern, $string, $limit);
+    $encoding = _api_mb_regex_encoding();
+    if (_api_mb_supports($encoding)) {
+        if (is_null($limit)) {
+            return @mb_split($pattern, $string);
+        }
+        return @mb_split($pattern, $string, $limit);
+    }
+    if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
+        global $_api_encoding;
+        $_api_encoding = $encoding;
+        _api_mb_regex_encoding('UTF-8');
+        if (is_null($limit)) {
+            $result = @mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
+        } else {
+            $result = @mb_split(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $limit);
+        }
+        $result = _api_array_utf8_decode($result);
+        _api_mb_regex_encoding($encoding);
+        return $result;
+    }
+    if (is_null($limit)) {
+        return split($pattern, $string);
+    }
+    return split($pattern, $string, $limit);
 }
 
 
@@ -2782,7 +2782,7 @@ function api_split($pattern, $string, $limit = null) {
  * @link http://php.net/manual/en/function.strcasecmp
  */
 function api_strcasecmp($string1, $string2, $language = null, $encoding = null) {
-	return api_strcmp(api_strtolower($string1, $encoding), api_strtolower($string2, $encoding), $language, $encoding);
+    return api_strcmp(api_strtolower($string1, $encoding), api_strtolower($string2, $encoding), $language, $encoding);
 }
 
 /**
@@ -2797,14 +2797,14 @@ function api_strcasecmp($string1, $string2, $language = null, $encoding = null) 
  * @link http://php.net/manual/en/collator.compare.php
  */
 function api_strcmp($string1, $string2, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		$collator = _api_get_collator($language);
-		if (is_object($collator)) {
-			$result = collator_compare($collator, api_utf8_encode($string1, $encoding), api_utf8_encode($string2, $encoding));
-			return $result === false ? 0 : $result;
-		}
-	}
-	return strcmp($string1, $string2);
+    if (INTL_INSTALLED) {
+        $collator = _api_get_collator($language);
+        if (is_object($collator)) {
+            $result = collator_compare($collator, api_utf8_encode($string1, $encoding), api_utf8_encode($string2, $encoding));
+            return $result === false ? 0 : $result;
+        }
+    }
+    return strcmp($string1, $string2);
 }
 
 /**
@@ -2818,7 +2818,7 @@ function api_strcmp($string1, $string2, $language = null, $encoding = null) {
  * @link http://php.net/manual/en/function.strnatcasecmp
  */
 function api_strnatcasecmp($string1, $string2, $language = null, $encoding = null) {
-	return api_strnatcmp(api_strtolower($string1, $encoding), api_strtolower($string2, $encoding), $language, $encoding);
+    return api_strnatcmp(api_strtolower($string1, $encoding), api_strtolower($string2, $encoding), $language, $encoding);
 }
 
 /**
@@ -2833,14 +2833,14 @@ function api_strnatcasecmp($string1, $string2, $language = null, $encoding = nul
  * @link http://php.net/manual/en/collator.compare.php
  */
 function api_strnatcmp($string1, $string2, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		$collator = _api_get_alpha_numerical_collator($language);
-		if (is_object($collator)) {
-			$result = collator_compare($collator, api_utf8_encode($string1, $encoding), api_utf8_encode($string2, $encoding));
-			return $result === false ? 0 : $result;
-		}
-	}
-	return strnatcmp($string1, $string2);
+    if (INTL_INSTALLED) {
+        $collator = _api_get_alpha_numerical_collator($language);
+        if (is_object($collator)) {
+            $result = collator_compare($collator, api_utf8_encode($string1, $encoding), api_utf8_encode($string2, $encoding));
+            return $result === false ? 0 : $result;
+        }
+    }
+    return strnatcmp($string1, $string2);
 }
 
 
@@ -2865,25 +2865,25 @@ function api_strnatcmp($string1, $string2, $language = null, $encoding = null) {
  * @link http://php.net/manual/en/collator.asort.php
  */
 function api_asort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_collator($language);
-		if (is_object($collator)) {
-			if (api_is_utf8($encoding)) {
-				$sort_flag = ($sort_flag == SORT_LOCALE_STRING) ? SORT_STRING : $sort_flag;
-				return collator_asort($collator, $array, _api_get_collator_sort_flag($sort_flag));
-			}
-			elseif ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-				global $_api_collator, $_api_encoding;
-				$_api_collator = $collator;
-				$_api_encoding = $encoding;
-				return uasort($array, '_api_cmp');
-			}
-		}
-	}
-	return asort($array, $sort_flag);
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_collator($language);
+        if (is_object($collator)) {
+            if (api_is_utf8($encoding)) {
+                $sort_flag = ($sort_flag == SORT_LOCALE_STRING) ? SORT_STRING : $sort_flag;
+                return collator_asort($collator, $array, _api_get_collator_sort_flag($sort_flag));
+            }
+            elseif ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+                global $_api_collator, $_api_encoding;
+                $_api_collator = $collator;
+                $_api_encoding = $encoding;
+                return uasort($array, '_api_cmp');
+            }
+        }
+    }
+    return asort($array, $sort_flag);
 }
 
 /**
@@ -2902,21 +2902,21 @@ function api_asort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
  * @link http://php.net/manual/en/function.arsort.php
  */
 function api_arsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_collator($language);
-		if (is_object($collator)) {
-			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-				global $_api_collator, $_api_encoding;
-				$_api_collator = $collator;
-				$_api_encoding = $encoding;
-				return uasort($array, '_api_rcmp');
-			}
-		}
-	}
-	return arsort($array, $sort_flag);
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_collator($language);
+        if (is_object($collator)) {
+            if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+                global $_api_collator, $_api_encoding;
+                $_api_collator = $collator;
+                $_api_encoding = $encoding;
+                return uasort($array, '_api_rcmp');
+            }
+        }
+    }
+    return arsort($array, $sort_flag);
 }
 
 /**
@@ -2929,19 +2929,19 @@ function api_arsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encod
  * @link http://php.net/manual/en/function.natsort.php
  */
 function api_natsort(&$array, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_alpha_numerical_collator($language);
-		if (is_object($collator)) {
-			global $_api_collator, $_api_encoding;
-			$_api_collator = $collator;
-			$_api_encoding = $encoding;
-			return uasort($array, '_api_cmp');
-		}
-	}
-	return natsort($array);
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_alpha_numerical_collator($language);
+        if (is_object($collator)) {
+            global $_api_collator, $_api_encoding;
+            $_api_collator = $collator;
+            $_api_encoding = $encoding;
+            return uasort($array, '_api_cmp');
+        }
+    }
+    return natsort($array);
 }
 
 /**
@@ -2952,19 +2952,19 @@ function api_natsort(&$array, $language = null, $encoding = null) {
  * @return bool							Returns TRUE on success, FALSE on error.
  */
 function api_natrsort(&$array, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_alpha_numerical_collator($language);
-		if (is_object($collator)) {
-			global $_api_collator, $_api_encoding;
-			$_api_collator = $collator;
-			$_api_encoding = $encoding;
-			return uasort($array, '_api_rcmp');
-		}
-	}
-	return uasort($array, '_api_strnatrcmp');
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_alpha_numerical_collator($language);
+        if (is_object($collator)) {
+            global $_api_collator, $_api_encoding;
+            $_api_collator = $collator;
+            $_api_encoding = $encoding;
+            return uasort($array, '_api_rcmp');
+        }
+    }
+    return uasort($array, '_api_strnatrcmp');
 }
 
 /**
@@ -2977,19 +2977,19 @@ function api_natrsort(&$array, $language = null, $encoding = null) {
  * @link http://php.net/manual/en/function.natcasesort.php
  */
 function api_natcasesort(&$array, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_alpha_numerical_collator($language);
-		if (is_object($collator)) {
-			global $_api_collator, $_api_encoding;
-			$_api_collator = $collator;
-			$_api_encoding = $encoding;
-			return uasort($array, '_api_casecmp');
-		}
-	}
-	return natcasesort($array);
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_alpha_numerical_collator($language);
+        if (is_object($collator)) {
+            global $_api_collator, $_api_encoding;
+            $_api_collator = $collator;
+            $_api_encoding = $encoding;
+            return uasort($array, '_api_casecmp');
+        }
+    }
+    return natcasesort($array);
 }
 
 /**
@@ -3000,19 +3000,19 @@ function api_natcasesort(&$array, $language = null, $encoding = null) {
  * @return bool							Returns TRUE on success, FALSE on error.
  */
 function api_natcasersort(&$array, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_alpha_numerical_collator($language);
-		if (is_object($collator)) {
-			global $_api_collator, $_api_encoding;
-			$_api_collator = $collator;
-			$_api_encoding = $encoding;
-			return uasort($array, '_api_casercmp');
-		}
-	}
-	return uasort($array, '_api_strnatcasercmp');
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_alpha_numerical_collator($language);
+        if (is_object($collator)) {
+            global $_api_collator, $_api_encoding;
+            $_api_collator = $collator;
+            $_api_encoding = $encoding;
+            return uasort($array, '_api_casercmp');
+        }
+    }
+    return uasort($array, '_api_strnatcasercmp');
 }
 
 /**
@@ -3031,21 +3031,21 @@ function api_natcasersort(&$array, $language = null, $encoding = null) {
  * @link http://php.net/manual/en/function.ksort.php
  */
 function api_ksort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_collator($language);
-		if (is_object($collator)) {
-			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-				global $_api_collator, $_api_encoding;
-				$_api_collator = $collator;
-				$_api_encoding = $encoding;
-				return uksort($array, '_api_cmp');
-			}
-		}
-	}
-	return ksort($array, $sort_flag);
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_collator($language);
+        if (is_object($collator)) {
+            if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+                global $_api_collator, $_api_encoding;
+                $_api_collator = $collator;
+                $_api_encoding = $encoding;
+                return uksort($array, '_api_cmp');
+            }
+        }
+    }
+    return ksort($array, $sort_flag);
 }
 
 /**
@@ -3064,21 +3064,21 @@ function api_ksort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
  * @link http://php.net/manual/en/function.krsort.php
  */
 function api_krsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_collator($language);
-		if (is_object($collator)) {
-			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-				global $_api_collator, $_api_encoding;
-				$_api_collator = $collator;
-				$_api_encoding = $encoding;
-				return uksort($array, '_api_rcmp');
-			}
-		}
-	}
-	return krsort($array, $sort_flag);
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_collator($language);
+        if (is_object($collator)) {
+            if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+                global $_api_collator, $_api_encoding;
+                $_api_collator = $collator;
+                $_api_encoding = $encoding;
+                return uksort($array, '_api_rcmp');
+            }
+        }
+    }
+    return krsort($array, $sort_flag);
 }
 
 /**
@@ -3089,19 +3089,19 @@ function api_krsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encod
  * @return bool							Returns TRUE on success, FALSE on error.
  */
 function api_knatsort(&$array, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_alpha_numerical_collator($language);
-		if (is_object($collator)) {
-			global $_api_collator, $_api_encoding;
-			$_api_collator = $collator;
-			$_api_encoding = $encoding;
-			return uksort($array, '_api_cmp');
-		}
-	}
-	return uksort($array, 'strnatcmp');
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_alpha_numerical_collator($language);
+        if (is_object($collator)) {
+            global $_api_collator, $_api_encoding;
+            $_api_collator = $collator;
+            $_api_encoding = $encoding;
+            return uksort($array, '_api_cmp');
+        }
+    }
+    return uksort($array, 'strnatcmp');
 }
 
 /**
@@ -3112,19 +3112,19 @@ function api_knatsort(&$array, $language = null, $encoding = null) {
  * @return bool							Returns TRUE on success, FALSE on error.
  */
 function api_knatrsort(&$array, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_alpha_numerical_collator($language);
-		if (is_object($collator)) {
-			global $_api_collator, $_api_encoding;
-			$_api_collator = $collator;
-			$_api_encoding = $encoding;
-			return uksort($array, '_api_rcmp');
-		}
-	}
-	return uksort($array, '_api_strnatrcmp');
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_alpha_numerical_collator($language);
+        if (is_object($collator)) {
+            global $_api_collator, $_api_encoding;
+            $_api_collator = $collator;
+            $_api_encoding = $encoding;
+            return uksort($array, '_api_rcmp');
+        }
+    }
+    return uksort($array, '_api_strnatrcmp');
 }
 
 /**
@@ -3135,19 +3135,19 @@ function api_knatrsort(&$array, $language = null, $encoding = null) {
  * @return bool							Returns TRUE on success, FALSE on error.
  */
 function api_knatcasesort(&$array, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_alpha_numerical_collator($language);
-		if (is_object($collator)) {
-			global $_api_collator, $_api_encoding;
-			$_api_collator = $collator;
-			$_api_encoding = $encoding;
-			return uksort($array, '_api_casecmp');
-		}
-	}
-	return uksort($array, 'strnatcasecmp');
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_alpha_numerical_collator($language);
+        if (is_object($collator)) {
+            global $_api_collator, $_api_encoding;
+            $_api_collator = $collator;
+            $_api_encoding = $encoding;
+            return uksort($array, '_api_casecmp');
+        }
+    }
+    return uksort($array, 'strnatcasecmp');
 }
 
 /**
@@ -3158,19 +3158,19 @@ function api_knatcasesort(&$array, $language = null, $encoding = null) {
  * @return bool							Returns TRUE on success, FALSE on error.
  */
 function api_knatcasersort(&$array, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_alpha_numerical_collator($language);
-		if (is_object($collator)) {
-			global $_api_collator, $_api_encoding;
-			$_api_collator = $collator;
-			$_api_encoding = $encoding;
-			return uksort($array, '_api_casercmp');
-		}
-	}
-	return uksort($array, '_api_strnatcasercmp');
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_alpha_numerical_collator($language);
+        if (is_object($collator)) {
+            global $_api_collator, $_api_encoding;
+            $_api_collator = $collator;
+            $_api_encoding = $encoding;
+            return uksort($array, '_api_casercmp');
+        }
+    }
+    return uksort($array, '_api_strnatcasercmp');
 }
 
 /**
@@ -3190,25 +3190,25 @@ function api_knatcasersort(&$array, $language = null, $encoding = null) {
  * @link http://php.net/manual/en/collator.sort.php
  */
 function api_sort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_collator($language);
-		if (is_object($collator)) {
-			if (api_is_utf8($encoding)) {
-				$sort_flag = ($sort_flag == SORT_LOCALE_STRING) ? SORT_STRING : $sort_flag;
-				return collator_sort($collator, $array, _api_get_collator_sort_flag($sort_flag));
-			}
-			elseif ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-				global $_api_collator, $_api_encoding;
-				$_api_collator = $collator;
-				$_api_encoding = $encoding;
-				return usort($array, '_api_cmp');
-			}
-		}
-	}
-	return sort($array, $sort_flag);
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_collator($language);
+        if (is_object($collator)) {
+            if (api_is_utf8($encoding)) {
+                $sort_flag = ($sort_flag == SORT_LOCALE_STRING) ? SORT_STRING : $sort_flag;
+                return collator_sort($collator, $array, _api_get_collator_sort_flag($sort_flag));
+            }
+            elseif ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+                global $_api_collator, $_api_encoding;
+                $_api_collator = $collator;
+                $_api_encoding = $encoding;
+                return usort($array, '_api_cmp');
+            }
+        }
+    }
+    return sort($array, $sort_flag);
 }
 
 /**
@@ -3227,21 +3227,21 @@ function api_sort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodin
  * @link http://php.net/manual/en/function.rsort.php
  */
 function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null) {
-	if (INTL_INSTALLED) {
-		if (empty($encoding)) {
-			$encoding = _api_mb_internal_encoding();
-		}
-		$collator = _api_get_collator($language);
-		if (is_object($collator)) {
-			if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-				global $_api_collator, $_api_encoding;
-				$_api_collator = $collator;
-				$_api_encoding = $encoding;
-				return usort($array, '_api_rcmp');
-			}
-		}
-	}
-	return rsort($array, $sort_flag);
+    if (INTL_INSTALLED) {
+        if (empty($encoding)) {
+            $encoding = _api_mb_internal_encoding();
+        }
+        $collator = _api_get_collator($language);
+        if (is_object($collator)) {
+            if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+                global $_api_collator, $_api_encoding;
+                $_api_collator = $collator;
+                $_api_encoding = $encoding;
+                return usort($array, '_api_rcmp');
+            }
+        }
+    }
+    return rsort($array, $sort_flag);
 }
 
 
@@ -3259,28 +3259,28 @@ function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
  * @link http://php.net/manual/en/function.in-array.php
  */
 function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = null) {
-	if (is_array($needle)) {
-		foreach ($needle as $item) {
-			if (api_in_array_nocase($item, $haystack, $strict, $encoding)) return true;
-		}
-		return false;
-	}
-	if (!is_string($needle)) {
-		return in_array($needle, $haystack, $strict);
-	}
-	$needle = api_strtolower($needle, $encoding);
-	if (!is_array($haystack)) {
-		return false;
-	}
-	foreach ($haystack as $item) {
-		if ($strict && !is_string($item)) {
-			continue;
-		}
-		if (api_strtolower($item, $encoding) == $needle) {
-			return true;
-		}
-	}
-	return false;
+    if (is_array($needle)) {
+        foreach ($needle as $item) {
+            if (api_in_array_nocase($item, $haystack, $strict, $encoding)) return true;
+        }
+        return false;
+    }
+    if (!is_string($needle)) {
+        return in_array($needle, $haystack, $strict);
+    }
+    $needle = api_strtolower($needle, $encoding);
+    if (!is_array($haystack)) {
+        return false;
+    }
+    foreach ($haystack as $item) {
+        if ($strict && !is_string($item)) {
+            continue;
+        }
+        if (api_strtolower($item, $encoding) == $needle) {
+            return true;
+        }
+    }
+    return false;
 }
 
 
@@ -3294,10 +3294,10 @@ function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = nu
  * @return string					Returns the encoding identificator modified in suitable for comparison way.
  */
 function api_refine_encoding_id($encoding) {
-	if (is_array($encoding)){
-		return array_map('api_refine_encoding_id', $encoding);
-	}
-	return strtoupper(str_replace('_', '-', $encoding));
+    if (is_array($encoding)){
+        return array_map('api_refine_encoding_id', $encoding);
+    }
+    return strtoupper(str_replace('_', '-', $encoding));
 }
 
 /**
@@ -3308,40 +3308,40 @@ function api_refine_encoding_id($encoding) {
  * @return bool							Returns TRUE if the encodings are equal, FALSE otherwise.
  */
 function api_equal_encodings($encoding1, $encoding2, $strict = false) {
-	static $equal_encodings = array();
-	if (is_array($encoding1)) {
-		foreach ($encoding1 as $encoding) {
-			if (api_equal_encodings($encoding, $encoding2, $strict)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	elseif (is_array($encoding2)) {
-		foreach ($encoding2 as $encoding) {
-			if (api_equal_encodings($encoding1, $encoding, $strict)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	if (!isset($equal_encodings[$encoding1][$encoding2][$strict])) {
-		$encoding_1 = api_refine_encoding_id($encoding1);
-		$encoding_2 = api_refine_encoding_id($encoding2);
-		if ($encoding_1 == $encoding_2) {
-			$result = true;
-		} else {
-			if ($strict) {
-				$result = false;
-			} else {
-				$alias1 = _api_get_character_map_name($encoding_1);
-				$alias2 = _api_get_character_map_name($encoding_2);
-				$result = !empty($alias1) && !empty($alias2) && $alias1 == $alias2;
-			}
-		}
-		$equal_encodings[$encoding1][$encoding2][$strict] = $result;
-	}
-	return $equal_encodings[$encoding1][$encoding2][$strict];
+    static $equal_encodings = array();
+    if (is_array($encoding1)) {
+        foreach ($encoding1 as $encoding) {
+            if (api_equal_encodings($encoding, $encoding2, $strict)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    elseif (is_array($encoding2)) {
+        foreach ($encoding2 as $encoding) {
+            if (api_equal_encodings($encoding1, $encoding, $strict)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    if (!isset($equal_encodings[$encoding1][$encoding2][$strict])) {
+        $encoding_1 = api_refine_encoding_id($encoding1);
+        $encoding_2 = api_refine_encoding_id($encoding2);
+        if ($encoding_1 == $encoding_2) {
+            $result = true;
+        } else {
+            if ($strict) {
+                $result = false;
+            } else {
+                $alias1 = _api_get_character_map_name($encoding_1);
+                $alias2 = _api_get_character_map_name($encoding_2);
+                $result = !empty($alias1) && !empty($alias2) && $alias1 == $alias2;
+            }
+        }
+        $equal_encodings[$encoding1][$encoding2][$strict] = $result;
+    }
+    return $equal_encodings[$encoding1][$encoding2][$strict];
 }
 
 /**
@@ -3350,11 +3350,11 @@ function api_equal_encodings($encoding1, $encoding2, $strict = false) {
  * @return bool					Returns TRUE if the given encoding id means UTF-8, otherwise returns false.
  */
 function api_is_utf8($encoding) {
-	static $result = array();
-	if (!isset($result[$encoding])) {
-		$result[$encoding] = api_equal_encodings($encoding, 'UTF-8');
-	}
-	return $result[$encoding];
+    static $result = array();
+    if (!isset($result[$encoding])) {
+        $result[$encoding] = api_equal_encodings($encoding, 'UTF-8');
+    }
+    return $result[$encoding];
 }
 
 /**
@@ -3364,22 +3364,22 @@ function api_is_utf8($encoding) {
  * @return bool							Returns TRUE if the given encoding id means Latin 1 character set, otherwise returns false.
  */
 function api_is_latin1($encoding, $strict = false) {
-	static $latin1 = array();
-	static $latin1_strict = array();
-	if ($strict) {
-		if (!isset($latin1_strict[$encoding])) {
-			$latin1_strict[$encoding] = api_equal_encodings($encoding, array('ISO-8859-1', 'ISO8859-1', 'CP819', 'LATIN1'));
-		}
-		return $latin1_strict[$encoding];
-	}
-	if (!isset($latin1[$encoding])) {
-		$latin1[$encoding] = api_equal_encodings($encoding, array(
-			'ISO-8859-1', 'ISO8859-1', 'CP819', 'LATIN1',
-			'ISO-8859-15', 'ISO8859-15', 'CP923', 'LATIN0', 'LATIN-9',
-			'WINDOWS-1252', 'CP1252', 'WIN-1252', 'WIN1252'
-		));
-	}
-	return $latin1[$encoding];
+    static $latin1 = array();
+    static $latin1_strict = array();
+    if ($strict) {
+        if (!isset($latin1_strict[$encoding])) {
+            $latin1_strict[$encoding] = api_equal_encodings($encoding, array('ISO-8859-1', 'ISO8859-1', 'CP819', 'LATIN1'));
+        }
+        return $latin1_strict[$encoding];
+    }
+    if (!isset($latin1[$encoding])) {
+        $latin1[$encoding] = api_equal_encodings($encoding, array(
+            'ISO-8859-1', 'ISO8859-1', 'CP819', 'LATIN1',
+            'ISO-8859-15', 'ISO8859-15', 'CP923', 'LATIN0', 'LATIN-9',
+            'WINDOWS-1252', 'CP1252', 'WIN-1252', 'WIN1252'
+        ));
+    }
+    return $latin1[$encoding];
 }
 
 /**
@@ -3390,19 +3390,19 @@ function api_is_latin1($encoding, $strict = false) {
  * reason both attempts fail, then the libraly's internal value will be returned.
  */
 function api_get_system_encoding() {
-	static $system_encoding;
-	if (!isset($system_encoding)) {
-		$encoding_setting = api_get_setting('platform_charset');
-		if (empty($encoding_setting)) {
-			global $charset;
-			if (empty($charset)) {
-				return _api_mb_internal_encoding();
-			}
-			return $charset;
-		}
-		$system_encoding = $encoding_setting;
-	}
-	return $system_encoding;
+    static $system_encoding;
+    if (!isset($system_encoding)) {
+        $encoding_setting = api_get_setting('platform_charset');
+        if (empty($encoding_setting)) {
+            global $charset;
+            if (empty($charset)) {
+                return _api_mb_internal_encoding();
+            }
+            return $charset;
+        }
+        $system_encoding = $encoding_setting;
+    }
+    return $system_encoding;
 }
 
 /**
@@ -3412,32 +3412,32 @@ function api_get_system_encoding() {
  * Note: For Linux systems, to see all installed locales type in a terminal  locale -a
  */
 function api_get_file_system_encoding() {
-	static $file_system_encoding;
-	if (!isset($file_system_encoding)) {
-		$locale = setlocale(LC_CTYPE, '0');
-		$seek_pos = strpos($locale, '.');
-		if ($seek_pos !== false) {
-			$file_system_encoding = substr($locale, $seek_pos + 1);
-			if (IS_WINDOWS_OS) {
-				$file_system_encoding = 'CP'.$file_system_encoding;
-			}
-		}
-		// Dealing with some aliases.
-		$file_system_encoding = str_ireplace('utf8', 'UTF-8', $file_system_encoding);
-		$file_system_encoding = preg_replace('/^CP65001$/', 'UTF-8', $file_system_encoding);
-		$file_system_encoding = preg_replace('/^CP(125[0-9])$/', 'WINDOWS-\1', $file_system_encoding);
-		$file_system_encoding = str_replace('WINDOWS-1252', 'ISO-8859-15', $file_system_encoding);
-		if (empty($file_system_encoding)) {
-			if (IS_WINDOWS_OS) {
-				// Not expected for Windows, this assignment is here just in case.
-				$file_system_encoding = api_get_system_encoding();
-			} else {
-				// For Ububntu and other UTF-8 enabled Linux systems this fits with the default settings.
-				$file_system_encoding = 'UTF-8';
-			}
-		}
-	}
-	return $file_system_encoding;
+    static $file_system_encoding;
+    if (!isset($file_system_encoding)) {
+        $locale = setlocale(LC_CTYPE, '0');
+        $seek_pos = strpos($locale, '.');
+        if ($seek_pos !== false) {
+            $file_system_encoding = substr($locale, $seek_pos + 1);
+            if (IS_WINDOWS_OS) {
+                $file_system_encoding = 'CP'.$file_system_encoding;
+            }
+        }
+        // Dealing with some aliases.
+        $file_system_encoding = str_ireplace('utf8', 'UTF-8', $file_system_encoding);
+        $file_system_encoding = preg_replace('/^CP65001$/', 'UTF-8', $file_system_encoding);
+        $file_system_encoding = preg_replace('/^CP(125[0-9])$/', 'WINDOWS-\1', $file_system_encoding);
+        $file_system_encoding = str_replace('WINDOWS-1252', 'ISO-8859-15', $file_system_encoding);
+        if (empty($file_system_encoding)) {
+            if (IS_WINDOWS_OS) {
+                // Not expected for Windows, this assignment is here just in case.
+                $file_system_encoding = api_get_system_encoding();
+            } else {
+                // For Ububntu and other UTF-8 enabled Linux systems this fits with the default settings.
+                $file_system_encoding = 'UTF-8';
+            }
+        }
+    }
+    return $file_system_encoding;
 }
 
 /**
@@ -3446,11 +3446,11 @@ function api_get_file_system_encoding() {
  * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
  */
 function api_is_encoding_supported($encoding) {
-	static $supported = array();
-	if (!isset($supported[$encoding])) {
-		$supported[$encoding] = _api_mb_supports($encoding) || _api_iconv_supports($encoding) || _api_convert_encoding_supports($encoding);
-	}
-	return $supported[$encoding];
+    static $supported = array();
+    if (!isset($supported[$encoding])) {
+        $supported[$encoding] = _api_mb_supports($encoding) || _api_iconv_supports($encoding) || _api_convert_encoding_supports($encoding);
+    }
+    return $supported[$encoding];
 }
 
 /**
@@ -3462,18 +3462,18 @@ function api_is_encoding_supported($encoding) {
  * if you wish to revise the leading non-UTF-8 encoding for your language.
  */
 function api_get_non_utf8_encoding($language = null) {
-	if (empty($language)) {
-		$language = api_get_interface_language();
-	}
-	$language = api_purify_language_id($language);
-	$encodings = & _api_non_utf8_encodings();
-	if (is_array($encodings[$language])) {
-		if (!empty($encodings[$language][0])) {
-			return $encodings[$language][0];
-		}
-		return null;
-	}
-	return null;
+    if (empty($language)) {
+        $language = api_get_interface_language();
+    }
+    $language = api_purify_language_id($language);
+    $encodings = & _api_non_utf8_encodings();
+    if (is_array($encodings[$language])) {
+        if (!empty($encodings[$language][0])) {
+            return $encodings[$language][0];
+        }
+        return null;
+    }
+    return null;
 }
 
 /**
@@ -3481,30 +3481,30 @@ function api_get_non_utf8_encoding($language = null) {
  * @return array	List of valid encodings, preferably IANA-registared.
  */
 function api_get_valid_encodings() {
-	$encodings = & _api_non_utf8_encodings();
-	if (!is_array($encodings)) {
-		$encodings = array('english', array('ISO-8859-15'));
-	}
-	$result1 = array(); $result2 = array(); $result3 = array();
-	foreach ($encodings as $value) {
-		$encoding = api_refine_encoding_id(trim($value[0]));
-		if (!empty($encoding)) {
-			if (strpos($encoding, 'ISO-') === 0) {
-				$result1[] = $encoding;
-			} elseif (strpos($encoding, 'WINDOWS-') === 0) {
-				$result2[] = $encoding;
-			} else {
-				$result3[] = $encoding;
-			}
-		}
-	}
-	$result1 = array_unique($result1);
-	$result2 = array_unique($result2);
-	$result3 = array_unique($result3);
-	natsort($result1);
-	natsort($result2);
-	natsort($result3);
-	return array_merge(array('UTF-8'), $result1, $result2, $result3);
+    $encodings = & _api_non_utf8_encodings();
+    if (!is_array($encodings)) {
+        $encodings = array('english', array('ISO-8859-15'));
+    }
+    $result1 = array(); $result2 = array(); $result3 = array();
+    foreach ($encodings as $value) {
+        $encoding = api_refine_encoding_id(trim($value[0]));
+        if (!empty($encoding)) {
+            if (strpos($encoding, 'ISO-') === 0) {
+                $result1[] = $encoding;
+            } elseif (strpos($encoding, 'WINDOWS-') === 0) {
+                $result2[] = $encoding;
+            } else {
+                $result3[] = $encoding;
+            }
+        }
+    }
+    $result1 = array_unique($result1);
+    $result2 = array_unique($result2);
+    $result3 = array_unique($result3);
+    natsort($result1);
+    natsort($result2);
+    natsort($result3);
+    return array_merge(array('UTF-8'), $result1, $result2, $result3);
 }
 
 /**
@@ -3514,52 +3514,52 @@ function api_get_valid_encodings() {
  * @return string						Returns the detected encoding.
  */
 function api_detect_encoding($string, $language = null) {
-	// Testing against valid UTF-8 first.
-	if (api_is_valid_utf8($string)) {
-		return 'UTF-8';
-	}
-	$result = null;
-	$delta_points_min = LANGUAGE_DETECT_MAX_DELTA;
-	// Testing non-UTF-8 encodings.
-	$encodings = api_get_valid_encodings();
-	foreach ($encodings as & $encoding) {
-		if (api_is_encoding_supported($encoding) && !api_is_utf8($encoding)) {
-			$result_array = & _api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
-			if (!empty($result_array)) {
-				list($key, $delta_points) = each($result_array);
-				if ($delta_points < $delta_points_min) {
-					$pos = strpos($key, ':');
-					$result_encoding = api_refine_encoding_id(substr($key, $pos + 1));
-					if (api_equal_encodings($encoding, $result_encoding)) {
-						if ($string == api_utf8_decode(api_utf8_encode($string, $encoding), $encoding)) {
-							$delta_points_min = $delta_points;
-							$result = $encoding;
-						}
-					}
-				}
-			}
-		}
-	}
-	// "Broken" UTF-8 texts are to be detected as UTF-8.
-	// This functionality is enabled when language of the text is known.
-	$language = api_purify_language_id((string)$language);
-	if (!empty($language)) {
-		$encoding = 'UTF-8';
-		$result_array = & _api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
-		if (!empty($result_array)) {
-			list($key, $delta_points) = each($result_array);
-			if ($delta_points < $delta_points_min) {
-				$pos = strpos($key, ':');
-				$result_encoding = api_refine_encoding_id(substr($key, $pos + 1));
-				$result_language = substr($key, 0, $pos);
-				if ($language == $result_language && api_is_utf8($result_encoding)) {
-					$delta_points_min = $delta_points;
-					$result = $encoding;
-				}
-			}
-		}
-	}
-	return $result;
+    // Testing against valid UTF-8 first.
+    if (api_is_valid_utf8($string)) {
+        return 'UTF-8';
+    }
+    $result = null;
+    $delta_points_min = LANGUAGE_DETECT_MAX_DELTA;
+    // Testing non-UTF-8 encodings.
+    $encodings = api_get_valid_encodings();
+    foreach ($encodings as & $encoding) {
+        if (api_is_encoding_supported($encoding) && !api_is_utf8($encoding)) {
+            $result_array = & _api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
+            if (!empty($result_array)) {
+                list($key, $delta_points) = each($result_array);
+                if ($delta_points < $delta_points_min) {
+                    $pos = strpos($key, ':');
+                    $result_encoding = api_refine_encoding_id(substr($key, $pos + 1));
+                    if (api_equal_encodings($encoding, $result_encoding)) {
+                        if ($string == api_utf8_decode(api_utf8_encode($string, $encoding), $encoding)) {
+                            $delta_points_min = $delta_points;
+                            $result = $encoding;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // "Broken" UTF-8 texts are to be detected as UTF-8.
+    // This functionality is enabled when language of the text is known.
+    $language = api_purify_language_id((string)$language);
+    if (!empty($language)) {
+        $encoding = 'UTF-8';
+        $result_array = & _api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
+        if (!empty($result_array)) {
+            list($key, $delta_points) = each($result_array);
+            if ($delta_points < $delta_points_min) {
+                $pos = strpos($key, ':');
+                $result_encoding = api_refine_encoding_id(substr($key, $pos + 1));
+                $result_language = substr($key, 0, $pos);
+                if ($language == $result_language && api_is_utf8($result_encoding)) {
+                    $delta_points_min = $delta_points;
+                    $result = $encoding;
+                }
+            }
+        }
+    }
+    return $result;
 }
 
 
@@ -3575,165 +3575,165 @@ function api_detect_encoding($string, $language = null) {
  */
 function api_is_valid_utf8(&$string) {
 
-	//return @mb_detect_encoding($string, 'UTF-8', true) == 'UTF-8' ? true : false;
-	// Ivan Tcholakov, 05-OCT-2008: I do not trust mb_detect_encoding(). I have
-	// found a string with a single cyrillic letter (single byte), that is
-	// wrongly detected as UTF-8. Possibly, there would be problems with other
-	// languages too. An alternative implementation will be used.
+    //return @mb_detect_encoding($string, 'UTF-8', true) == 'UTF-8' ? true : false;
+    // Ivan Tcholakov, 05-OCT-2008: I do not trust mb_detect_encoding(). I have
+    // found a string with a single cyrillic letter (single byte), that is
+    // wrongly detected as UTF-8. Possibly, there would be problems with other
+    // languages too. An alternative implementation will be used.
 
-	$str = (string)$string;
-	$len = api_byte_count($str);
-	$i = 0;
-	while ($i < $len) {
-		$byte1 = ord($str[$i++]);		// Here the current character begins. Its size is
-											// determined by the senior bits in the first byte.
+    $str = (string)$string;
+    $len = api_byte_count($str);
+    $i = 0;
+    while ($i < $len) {
+        $byte1 = ord($str[$i++]);		// Here the current character begins. Its size is
+                                            // determined by the senior bits in the first byte.
 
-		if (($byte1 & 0x80) == 0x00) {		// 0xxxxxxx
-											//    &
-											// 10000000
-											// --------
-											// 00000000
-											// This is s valid character and it contains a single byte.
-		}
+        if (($byte1 & 0x80) == 0x00) {		// 0xxxxxxx
+                                            //    &
+                                            // 10000000
+                                            // --------
+                                            // 00000000
+                                            // This is s valid character and it contains a single byte.
+        }
 
-		elseif (($byte1 & 0xE0) == 0xC0) {	// 110xxxxx 10xxxxxx
-											//    &        &
-											// 11100000 11000000
-											// -------- --------
-											// 11000000 10000000
-											// The character contains two bytes.
-			if ($i == $len) {
-				return false;				// Here the string ends unexpectedly.
-			}
+        elseif (($byte1 & 0xE0) == 0xC0) {	// 110xxxxx 10xxxxxx
+                                            //    &        &
+                                            // 11100000 11000000
+                                            // -------- --------
+                                            // 11000000 10000000
+                                            // The character contains two bytes.
+            if ($i == $len) {
+                return false;				// Here the string ends unexpectedly.
+            }
 
-			if (!((ord($str[$i++]) & 0xC0) == 0x80))
-				return false;				// Invalid second byte, invalid string.
-		}
+            if (!((ord($str[$i++]) & 0xC0) == 0x80))
+                return false;				// Invalid second byte, invalid string.
+        }
 
-		elseif(($byte1 & 0xF0) == 0xE0) {	// 1110xxxx 10xxxxxx 10xxxxxx
-											//    &        &        &
-											// 11110000 11000000 11000000
-											// -------- -------- --------
-											// 11100000 10000000 10000000
-											// This is a character of three bytes.
-			if ($i == $len) {
-				return false;				// Unexpected end of the string.
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;				// Invalid second byte.
-			}
-			if ($i == $len) {
-				return false;				// Unexpected end of the string.
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;				// Invalid third byte, invalid string.
-			}
-		}
+        elseif(($byte1 & 0xF0) == 0xE0) {	// 1110xxxx 10xxxxxx 10xxxxxx
+                                            //    &        &        &
+                                            // 11110000 11000000 11000000
+                                            // -------- -------- --------
+                                            // 11100000 10000000 10000000
+                                            // This is a character of three bytes.
+            if ($i == $len) {
+                return false;				// Unexpected end of the string.
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;				// Invalid second byte.
+            }
+            if ($i == $len) {
+                return false;				// Unexpected end of the string.
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;				// Invalid third byte, invalid string.
+            }
+        }
 
-		elseif(($byte1 & 0xF8) == 0xF0) {	// 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-											//    &        &        &        &
-											// 11111000 11000000 11000000 11000000
-											// -------- -------- -------- --------
-											// 11110000 10000000 10000000 10000000
-											// This is a character of four bytes.
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-		}
+        elseif(($byte1 & 0xF8) == 0xF0) {	// 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+                                            //    &        &        &        &
+                                            // 11111000 11000000 11000000 11000000
+                                            // -------- -------- -------- --------
+                                            // 11110000 10000000 10000000 10000000
+                                            // This is a character of four bytes.
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+        }
 
-		elseif(($byte1 & 0xFC) == 0xF8) {	// 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
-											//    &        &        &        &        &
-											// 11111100 11000000 11000000 11000000 11000000
-											// -------- -------- -------- -------- --------
-											// 11111000 10000000 10000000 10000000 10000000
-											// This is a character of five bytes.
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-		}
+        elseif(($byte1 & 0xFC) == 0xF8) {	// 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+                                            //    &        &        &        &        &
+                                            // 11111100 11000000 11000000 11000000 11000000
+                                            // -------- -------- -------- -------- --------
+                                            // 11111000 10000000 10000000 10000000 10000000
+                                            // This is a character of five bytes.
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+        }
 
-		elseif(($byte1 & 0xFE) == 0xFC) {	// 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
-											//    &        &        &        &        &        &
-											// 11111110 11000000 11000000 11000000 11000000 11000000
-											// -------- -------- -------- -------- -------- --------
-											// 11111100 10000000 10000000 10000000 10000000 10000000
-											// This is a character of six bytes.
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-			if ($i == $len) {
-				return false;
-			}
-			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
-				return false;
-			}
-		}
+        elseif(($byte1 & 0xFE) == 0xFC) {	// 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+                                            //    &        &        &        &        &        &
+                                            // 11111110 11000000 11000000 11000000 11000000 11000000
+                                            // -------- -------- -------- -------- -------- --------
+                                            // 11111100 10000000 10000000 10000000 10000000 10000000
+                                            // This is a character of six bytes.
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+            if ($i == $len) {
+                return false;
+            }
+            if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
+                return false;
+            }
+        }
 
-		else {
-			return false;					// In any other case the character is invalid.
-		}
-											// Here the current character is valid, it
-											// matches to some of the cases above.
-				 							// The next character is to be examinated.
-	}
-	return true;							// Empty strings are valid too.
+        else {
+            return false;					// In any other case the character is invalid.
+        }
+                                            // Here the current character is valid, it
+                                            // matches to some of the cases above.
+                                             // The next character is to be examinated.
+    }
+    return true;							// Empty strings are valid too.
 }
 
 /**
@@ -3742,10 +3742,10 @@ function api_is_valid_utf8(&$string) {
  * @return bool				Returns TRUE when the tested string contains 7-bit ASCII characters only, FALSE othewise.
  */
 function api_is_valid_ascii(&$string) {
-	if (MBSTRING_INSTALLED) {
-		return @mb_detect_encoding($string, 'ASCII', true) == 'ASCII' ? true : false;
-	}
-	return !preg_match('/[^\x00-\x7F]/S', $string);
+    if (MBSTRING_INSTALLED) {
+        return @mb_detect_encoding($string, 'ASCII', true) == 'ASCII' ? true : false;
+    }
+    return !preg_match('/[^\x00-\x7F]/S', $string);
 }
 
 

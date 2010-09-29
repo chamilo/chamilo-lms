@@ -778,36 +778,45 @@ else {
 				}
 			}
 		} else {
+            $file_deleted = false;
 			//Get the author ID for that document from the item_property table
 			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" .Database::escape_string($delete);
 			$author_qry = Database::query($author_sql);
+            
 
-			if (Database :: num_rows($author_qry) == 1 AND api_get_course_setting('student_delete_own_publication') == 1 OR api_is_allowed_to_edit(null,true)) {
+			if (Database :: num_rows($author_qry) == 1 AND api_get_course_setting('student_delete_own_publication') == 1 || api_is_allowed_to_edit(null,true)) {
 				//we found the current user is the author
-				$queryString1 = "SELECT url FROM  " . $work_table . "  WHERE id = '$delete'";
-				$queryString2 = "DELETE FROM  " . $work_table . "  WHERE id='$delete'";
-				$queryString3 = "DELETE FROM  " . $TSTDPUBASG . "  WHERE publication_id='$delete'";
-
-				$result1 = Database::query($queryString1);
-				$result2 = Database::query($queryString2);
-				$result3 = Database::query($queryString3);
-				if ($result1) {
-					api_item_property_update($_course, 'work', $delete, 'DocumentDeleted', $user_id);
-					$row = Database::fetch_array($result1);
+				$queryString1 = "SELECT url FROM  " . $work_table . "  WHERE id = '$delete'";                
+				$result1 = Database::query($queryString1);				
+                $row = Database::fetch_array($result1);
+                
+				if (Database::num_rows($result1) > 0) {         
+                    $queryString2 = "DELETE FROM  " . $work_table . "  WHERE id='$delete'";
+                    $queryString3 = "DELETE FROM  " . $TSTDPUBASG . "  WHERE publication_id='$delete'";
+                    $result2 = Database::query($queryString2);
+                    $result3 = Database::query($queryString3);           
+                     
+					api_item_property_update($_course, 'work', $delete, 'DocumentDeleted', $user_id);					
 					$work = $row['url'];
-
-					require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-					$extension = pathinfo($work, PATHINFO_EXTENSION);
-					$basename_file = basename($work, '.'.$extension);
-					$new_dir = $work.'_DELETED_'.$delete.'.'.$extension;
-
-					if (api_get_setting('permanently_remove_deleted_files') == 'true'){
-						my_delete($currentCourseRepositorySys.'/'.$work);
-					} else {
-						rename($currentCourseRepositorySys.'/'.$work, $currentCourseRepositorySys.'/'.$new_dir);
-					}
+                    if (!empty($work)) {			
+                        if (api_get_setting('permanently_remove_deleted_files') == 'true') {                        
+                            my_delete($currentCourseRepositorySys.'/'.$work);
+                            Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
+                            $file_deleted = true;
+                        } else {         
+                            require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+                            $extension = pathinfo($work, PATHINFO_EXTENSION);
+                            $basename_file = basename($work, '.'.$extension);
+                            $new_dir = $work.'_DELETED_'.$delete.'.'.$extension;           
+					        rename($currentCourseRepositorySys.'/'.$work, $currentCourseRepositorySys.'/'.$new_dir);
+                            Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
+                            $file_deleted = true;                            
+					   }
+                    }
 				}
-				Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
+                if (!$file_deleted) {
+				    Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
+                }
 			} else {
 				Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
 			}

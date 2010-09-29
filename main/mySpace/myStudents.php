@@ -213,7 +213,7 @@ $check= Security::check_token('get');
 				$session_id	= isset($_GET['session_id'])?intval($_GET['session_id']):0;
 				$lp_reset = 0;
 				
-				if(api_is_platform_admin(true) && !empty($course) && !empty($lp_id) && !empty($student_id)) {
+				if (api_is_course_admin() && !empty($course) && !empty($lp_id) && !empty($student_id)) {
 					   
 					$course_info 	= api_get_course_info($course);
 					$lp_view_table 	= Database::get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
@@ -591,7 +591,7 @@ if ($timezone !== null) {
 						</th>
 				<?php		
 					echo '<th>'.get_lang('Details').'</th>'; 
-					if (api_is_platform_admin(true)) {
+					if (api_is_course_admin()) {
 						echo '<th>'.get_lang('ResetLP').'</th>';
 					}
 				?>						
@@ -715,7 +715,7 @@ if ($timezone !== null) {
 				}
 				echo '</td>';
 				
-				if (api_is_platform_admin(true)) {					
+				if (api_is_course_admin()) {					
 					echo '<td align="center">';							
 						if($any_result === true) {											
 							echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student='.$info_user['user_id'].'&details=true&id_session='.Security::remove_XSS($_GET['id_session']).'">';

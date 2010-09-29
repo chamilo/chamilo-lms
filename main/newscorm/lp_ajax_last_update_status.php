@@ -38,92 +38,92 @@ require_once 'back_compat.inc.php';
  * @return  string  JavaScript operations to execute as soon as returned
  */
 function last_update_status($lp_id, $user_id, $view_id, $item_id) {
-	error_log(__LINE__);
-	global $_configuration;
-	$debug = 0;
-	$return = '';
-	if ($debug > 0) { error_log('In last_update_status('.$lp_id.','.$user_id.','.$view_id.','.$item_id.')', 0); }
-	require_once 'learnpath.class.php';
-	require_once 'scorm.class.php';
-	require_once 'learnpathItem.class.php';
-	require_once 'scormItem.class.php';
-	$mylp = '';
-	if (isset($_SESSION['lpobject'])) {
-		if ($debug > 1) { error_log('////$_SESSION[lpobject] is set', 0); }
-		$oLP =& unserialize($_SESSION['lpobject']);
-		if (!is_object($oLP)) {
-			if ($debug > 2) { error_log(print_r($oLP, true), 0); }
-			if ($debug > 2) { error_log('////Building new lp', 0); }
-			unset($oLP);
-			$code = api_get_course_id();
-			$mylp = & new learnpath($code,$lp_id,$user_id);
-		} else {
-			if ($debug > 2) { error_log('////Reusing session lp', 0); }
-			$mylp = & $oLP;
-		}
-	}
-	error_log(__LINE__);
+    error_log(__LINE__);
+    global $_configuration;
+    $debug = 0;
+    $return = '';
+    if ($debug > 0) { error_log('In last_update_status('.$lp_id.','.$user_id.','.$view_id.','.$item_id.')', 0); }
+    require_once 'learnpath.class.php';
+    require_once 'scorm.class.php';
+    require_once 'learnpathItem.class.php';
+    require_once 'scormItem.class.php';
+    $mylp = '';
+    if (isset($_SESSION['lpobject'])) {
+        if ($debug > 1) { error_log('////$_SESSION[lpobject] is set', 0); }
+        $oLP =& unserialize($_SESSION['lpobject']);
+        if (!is_object($oLP)) {
+            if ($debug > 2) { error_log(print_r($oLP, true), 0); }
+            if ($debug > 2) { error_log('////Building new lp', 0); }
+            unset($oLP);
+            $code = api_get_course_id();
+            $mylp = & new learnpath($code,$lp_id,$user_id);
+        } else {
+            if ($debug > 2) { error_log('////Reusing session lp', 0); }
+            $mylp = & $oLP;
+        }
+    }
+    error_log(__LINE__);
 
-	// This function should only be used for SCORM paths.
-	if ($mylp->get_type() != 2) {
-		return;
-	}
-	$prereq_check = $mylp->prerequisites_match($item_id);
-	$mystatus = '';
-	if ($prereq_check === true) {
-		error_log(__LINE__);
-		// Launch the prerequisites check and set error if needed.
-		$mylpi =& $mylp->items[$item_id];
+    // This function should only be used for SCORM paths.
+    if ($mylp->get_type() != 2) {
+        return;
+    }
+    $prereq_check = $mylp->prerequisites_match($item_id);
+    $mystatus = '';
+    if ($prereq_check === true) {
+        error_log(__LINE__);
+        // Launch the prerequisites check and set error if needed.
+        $mylpi =& $mylp->items[$item_id];
 
-		$mystatus_in_db = $mylpi->get_status(true);
-		error_log($mystatus_in_db);
-		if ($mystatus_in_db == 'not attempted' or $mystatus_in_db == '') {
-		error_log(__LINE__);
-			$mystatus = 'completed';
-			$mastery_score = $mylpi->get_mastery_score();
-			if ($mastery_score != -1) {
-		error_log(__LINE__);
-				$score = $mylpi->get_score();
-				if ($score != 0 && $score >= $mastery_score) {
-		error_log(__LINE__);
-					$mystatus = 'passed';
-				} else {
-		error_log(__LINE__);
-					$mystatus = 'failed';
-				}
-			}
-			error_log(__LINE__);
-			$mylpi->set_status($mystatus);
-			$mylp->save_item($item_id, false);
-		} else {
-			error_log(__LINE__);
-			return $return;
-		}
-	} else {
-		error_log(__LINE__);
-		return $return;
-	}
-	error_log(__LINE__);
-	$mytotal = $mylp->get_total_items_count_without_chapters();
-	$mycomplete = $mylp->get_complete_items_count();
-	$myprogress_mode = $mylp->get_progress_bar_mode();
-	$myprogress_mode = ($myprogress_mode==''?'%':$myprogress_mode);
-	$return .= "update_toc('".$mystatus."','".$item_id."','no');";
-	error_log('Return is now '.$return);
-	$update_list = $mylp->get_update_queue();
-	foreach ($update_list as $my_upd_id => $my_upd_status) {
-		if ($my_upd_id != $item_id) { // Only update the status from other items (i.e. parents and brothers), do not update current as we just did it already.
-			$return .= "update_toc('".$my_upd_status."','".$my_upd_id."','no');";
-		}
-	}
-	$return .= "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
-	$return .="update_stats();";
-	return $return;
-	//return $objResponse;
+        $mystatus_in_db = $mylpi->get_status(true);
+        error_log($mystatus_in_db);
+        if ($mystatus_in_db == 'not attempted' or $mystatus_in_db == '') {
+        error_log(__LINE__);
+            $mystatus = 'completed';
+            $mastery_score = $mylpi->get_mastery_score();
+            if ($mastery_score != -1) {
+        error_log(__LINE__);
+                $score = $mylpi->get_score();
+                if ($score != 0 && $score >= $mastery_score) {
+        error_log(__LINE__);
+                    $mystatus = 'passed';
+                } else {
+        error_log(__LINE__);
+                    $mystatus = 'failed';
+                }
+            }
+            error_log(__LINE__);
+            $mylpi->set_status($mystatus);
+            $mylp->save_item($item_id, false);
+        } else {
+            error_log(__LINE__);
+            return $return;
+        }
+    } else {
+        error_log(__LINE__);
+        return $return;
+    }
+    error_log(__LINE__);
+    $mytotal = $mylp->get_total_items_count_without_chapters();
+    $mycomplete = $mylp->get_complete_items_count();
+    $myprogress_mode = $mylp->get_progress_bar_mode();
+    $myprogress_mode = ($myprogress_mode==''?'%':$myprogress_mode);
+    $return .= "update_toc('".$mystatus."','".$item_id."','no');";
+    error_log('Return is now '.$return);
+    $update_list = $mylp->get_update_queue();
+    foreach ($update_list as $my_upd_id => $my_upd_status) {
+        if ($my_upd_id != $item_id) { // Only update the status from other items (i.e. parents and brothers), do not update current as we just did it already.
+            $return .= "update_toc('".$my_upd_status."','".$my_upd_id."','no');";
+        }
+    }
+    $return .= "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
+    $return .="update_stats();";
+    return $return;
+    //return $objResponse;
 }
 error_log(__LINE__);
 echo last_update_status(
-			$_REQUEST['lid'],
-			$_REQUEST['uid'],
-			$_REQUEST['vid'],
-			$_REQUEST['iid']);
+            $_REQUEST['lid'],
+            $_REQUEST['uid'],
+            $_REQUEST['vid'],
+            $_REQUEST['iid']);

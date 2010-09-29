@@ -13,28 +13,28 @@
 
 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
 if (isset($_GET['src'])) {
-	// Including the global initialization file.
-	require_once '../inc/global.inc.php';
-	api_protect_course_script();
-	// Get parameter only came from lp_view.php.
-	$url_info 		= parse_url($_GET['src']);
-	$real_url_info	= parse_url(api_get_path(WEB_PATH));
+    // Including the global initialization file.
+    require_once '../inc/global.inc.php';
+    api_protect_course_script();
+    // Get parameter only came from lp_view.php.
+    $url_info 		= parse_url($_GET['src']);
+    $real_url_info	= parse_url(api_get_path(WEB_PATH));
 
-	// The host must be the same.
-	if ($url_info['host'] == $real_url_info['host']) {
-		header("Location: ".urldecode(Security::remove_XSS($_GET['src'])));
-		exit;
-	} else {
-		header("Location: blank.php?error=document_not_found");
-		exit;
-	}
+    // The host must be the same.
+    if ($url_info['host'] == $real_url_info['host']) {
+        header("Location: ".urldecode(Security::remove_XSS($_GET['src'])));
+        exit;
+    } else {
+        header("Location: blank.php?error=document_not_found");
+        exit;
+    }
 }
 
 /* INIT SECTION */
 
 $_SESSION['whereami'] = 'lp/build';
 if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
-	$_SESSION['oLP'] -> current = intval($_GET['id']);
+    $_SESSION['oLP'] -> current = intval($_GET['id']);
 }
 $this_section=SECTION_COURSES;
 
@@ -80,11 +80,11 @@ $type           = $_REQUEST['type'];
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {
-	 $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
-	error_log('New LP - User not authorized in lp_view_item.php');
-	header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    error_log('New LP - User not authorized in lp_view_item.php');
+    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
@@ -94,21 +94,21 @@ $therow=Database::fetch_array($result);
 
 //$admin_output = '';
 /*
-	Course admin section
-	- all the functions not available for students - always available in this case (page only shown to admin)
+    Course admin section
+    - all the functions not available for students - always available in this case (page only shown to admin)
 */
 
 /* SHOWING THE ADMIN TOOLS	*/
 
 if (isset($_SESSION['gradebook'])) {
-	$gradebook = $_SESSION['gradebook'];
+    $gradebook = $_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-	$interbreadcrumb[] = array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('ToolGradebook')
-		);
+    $interbreadcrumb[] = array (
+            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+            'name' => get_lang('ToolGradebook')
+        );
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
@@ -128,19 +128,19 @@ $suredel = trim(get_lang('AreYouSureToDelete'));
 /* <![CDATA[ */
 
 function stripslashes(str) {
-	str=str.replace(/\\'/g,'\'');
-	str=str.replace(/\\"/g,'"');
-	str=str.replace(/\\\\/g,'\\');
-	str=str.replace(/\\0/g,'\0');
-	return str;
+    str=str.replace(/\\'/g,'\'');
+    str=str.replace(/\\"/g,'"');
+    str=str.replace(/\\\\/g,'\\');
+    str=str.replace(/\\0/g,'\0');
+    return str;
 }
 function confirmation(name) {
-	name=stripslashes(name);
-	if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-		return true;
-	} else {
-		return false;
-	}
+    name=stripslashes(name);
+    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
+        return true;
+    } else {
+        return false;
+    }
 }
 </script>
 <?php
@@ -151,17 +151,17 @@ function confirmation(name) {
 
 echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-	echo '<tr>';
-		echo '<td class="tree">';
-			echo '<div class="lp_tree">';
-				// Build the tree with the menu items in it.
-				echo $_SESSION['oLP']->build_tree();
-			echo '</div>';
-		echo '</td>';
-		echo '<td class="workspace">';
-			echo $_SESSION['oLP']->display_item((isset($new_item_id)) ? $new_item_id : $_GET['id']);
-		echo '</td>';
-	echo '</tr>';
+    echo '<tr>';
+        echo '<td class="tree">';
+            echo '<div class="lp_tree">';
+                // Build the tree with the menu items in it.
+                echo $_SESSION['oLP']->build_tree();
+            echo '</div>';
+        echo '</td>';
+        echo '<td class="workspace">';
+            echo $_SESSION['oLP']->display_item((isset($new_item_id)) ? $new_item_id : $_GET['id']);
+        echo '</td>';
+    echo '</tr>';
 echo '</table>';
 
 /* FOOTER */

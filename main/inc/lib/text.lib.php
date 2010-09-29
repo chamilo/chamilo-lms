@@ -170,7 +170,12 @@ function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
         return api_convert_encoding('<?xml version="1.0" encoding="'.$to_encoding.'"?>'."\n".$string, $to_encoding, $from_encoding);
     }
     if (!preg_match(_PCRE_XML_ENCODING, $string)) {
-        $replace = str_replace('?>', ' encoding="'.$to_encoding.'"?>' , $matches[0]);
+        if (strpos($matches[0], 'standalone') !== false) {
+            // The encoding option should precede the standalone option, othewise DOMDocument fails to load the document.
+            $replace = str_replace('standalone', ' encoding="'.$to_encoding.'" standalone' , $matches[0]);
+        } else {
+            $replace = str_replace('?>', ' encoding="'.$to_encoding.'"?>' , $matches[0]);
+        }
         return api_convert_encoding(str_replace($matches[0], $replace, $string), $to_encoding, $from_encoding);
     }
     global $_api_encoding;

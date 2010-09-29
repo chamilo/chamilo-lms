@@ -97,7 +97,7 @@ function api_get_title_html(&$string, $output_encoding = null, $input_encoding =
 // A regular expression for accessing declared encoding within xml-formatted text.
 // Published by Steve Minutillo,
 // http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
-define('_PCRE_XML_ENCODING', '/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m');
+define('_PCRE_XML_ENCODING', '/<\?xml.*encoding=[\'"](.*?)[\'"].*\?>/m');
 
 /**
  * Detects encoding of xml-formatted text.
@@ -164,6 +164,14 @@ function api_utf8_decode_xml($string, $to_encoding = null) {
 function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
     if (empty($from_encoding)) {
         $from_encoding = api_detect_encoding_xml($string);
+    }
+    $to_encoding = api_refine_encoding_id($to_encoding);
+    if (!preg_match('/<\?xml.*\?>/m', $string, $matches)) {
+        return api_convert_encoding('<?xml version="1.0" encoding="'.$to_encoding.'"?>'."\n".$string, $to_encoding, $from_encoding);
+    }
+    if (!preg_match(_PCRE_XML_ENCODING, $string)) {
+        $replace = str_replace('?>', ' encoding="'.$to_encoding.'"?>' , $matches[0]);
+        return api_convert_encoding(str_replace($matches[0], $replace, $string), $to_encoding, $from_encoding);
     }
     global $_api_encoding;
     $_api_encoding = api_refine_encoding_id($to_encoding);

@@ -112,7 +112,7 @@ class scorm extends learnpath {
                     foreach ($children as $child) {
                         // <manifest> element children (can be <metadata>, <organizations> or <resources> )
                         if ($child->nodeType == XML_ELEMENT_NODE) {
-                            switch($child->tagName) {
+                            switch ($child->tagName) {
                                 case 'metadata':
                                     // Parse items from inside the <metadata> element.
                                     $this->metadata = new scormMetadata('manifest',$child);
@@ -216,6 +216,45 @@ class scorm extends learnpath {
     }
 
     /**
+     * Detects the encoding of a given manifest (a xml-text).
+     * It is possible the encoding of the manifest to be wrongly declared or
+     * not to be declared at all. The proposed method tries to resolve these problems.
+     * @param string $xml    The input xml-text.
+     * @return string        The detected value of the input xml.
+     */
+    private function detect_manifest_encoding(& $xml) {
+
+        if (api_is_valid_utf8($string)) {
+            return 'UTF-8';
+        }
+
+        if (preg_match(_PCRE_XML_ENCODING, $xml, $matches)) {
+            $declared_encoding = api_refine_encoding_id($matches[1]);
+        } else {
+            $declared_encoding = '';
+        }
+
+        if (!empty($declared_encoding) && !api_is_utf8($declared_encoding)) {
+            return $declared_encoding;
+        }
+
+        $test_string = '';
+        if (preg_match_all('/<langstring[^>]*>(.*)<\/langstring>/m', $xml, $matches)) {
+            $test_string = implode("\n", $matches[1]);
+            unset($matches);
+        }
+        if (preg_match_all('/<title[^>]*>(.*)<\/title>/m', $xml, $matches)) {
+            $test_string .= "\n".implode("\n", $matches[1]);
+            unset($matches);
+        }
+        if (empty($test_string)) {
+            $test_string = $xml;
+        }
+        return api_detect_encoding($test_string);
+
+    }
+
+    /**
      * Import the scorm object (as a result from the parse_manifest function) into the database structure
      * @param	string	Unique course code
      * @return	bool	Returns -1 on error
@@ -225,7 +264,7 @@ class scorm extends learnpath {
 
         $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code='$course_code'";
         $res = Database::query($sql);
-        if (Database::num_rows($res) < 1) { error_log('Database for '.$course_code.' not found '.__FILE__.' '.__LINE__,0); return -1; }
+        if (Database::num_rows($res) < 1) { error_log('Database for '.$course_code.' not found '.__FILE__.' '.__LINE__, 0); return -1; }
         $row = Database::fetch_array($res);
         $dbname = $row['db_name'];
 
@@ -233,7 +272,7 @@ class scorm extends learnpath {
         $new_lp = Database::get_course_table(TABLE_LP_MAIN, $dbname);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM, $dbname);
 
-        foreach($this->organizations as $id => $dummy) {
+        foreach ($this->organizations as $id => $dummy) {
             $is_session = api_get_session_id();
             $is_session != 0 ? $session_id = $is_session : $session_id = 0;
 
@@ -256,15 +295,15 @@ class scorm extends learnpath {
                 $myname = api_convert_encoding($myname, $charset, $this->manifest_encoding);
             }
             $sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order, session_id)" .
-                    "VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."','scorm_api.php',$dsp,$session_id)";
+                    "VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $session_id)";
             if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting path: '. $sql, 0); }
 
             $res = Database::query($sql);
             $lp_id = Database::insert_id();
             $this->lp_id = $lp_id;
             // Insert into item_property.
-            api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'LearnpathAdded',api_get_user_id());
-            api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'visible',api_get_user_id());
+            api_item_property_update(api_get_course_info($course_code), TOOL_LEARNPATH, $this->lp_id, 'LearnpathAdded', api_get_user_id());
+            api_item_property_update(api_get_course_info($course_code), TOOL_LEARNPATH, $this->lp_id, 'visible', api_get_user_id());
 
             // Now insert all elements from inside that learning path.
             // Make sure we also get the href and sco/asset from the resources.
@@ -846,9 +885,9 @@ class scorm extends learnpath {
                 $this->prevent_reinit = $row['prevent_reinit'];
                 $this->license = $row['content_license'];
                 $this->scorm_debug = $row['debug'];
-                 $this->js_lib = $row['js_lib'];
-                 $this->path = $row['path'];
-                 if ($this->type == 2) {
+                $this->js_lib = $row['js_lib'];
+                $this->path = $row['path'];
+                if ($this->type == 2) {
                     if ($row['force_commit'] == 1) {
                         $this->force_commit = true;
                     }

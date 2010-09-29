@@ -124,14 +124,14 @@ $new_version_stable = false;
 $new_version_major = true;
 $software_name = 'Chamilo';
 $software_url = 'http://www.chamilo.org/';
-/*
+
 // A protection measure for already installed systems.
 if (is_already_installed_system()) {
 	// The system has already been installed, so block re-installation.
 	$global_error_code = 6;
 	require '../inc/global_error_message.inc.php';
 	die();
-}*/
+}
 
 /*		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 

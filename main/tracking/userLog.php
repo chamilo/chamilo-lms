@@ -1,24 +1,23 @@
-<?php // $Id: userLog.php 21626 2009-06-26 12:19:41Z pcool $
+<?php
 /* For licensing terms, see /license.txt */
 
 // TODO: Is this file deprecated?
 
 /**
-* @package chamilo.tracking
-* @todo clean code - structure is unclear and difficult to modify
-*/
+ * @package chamilo.tracking
+ * @todo clean code - structure is unclear and difficult to modify
+ */
 
-/*
-		INIT SECTION
-*/
+/* INIT SECTION */
+
 $uInfo = $_REQUEST['uInfo'];
 $view  = $_REQUEST['view'];
 
 // name of the language file that needs to be included
 $language_file = 'tracking';
 
-// including the global Dokeos file
-//include('../inc/global.inc.php');
+// Including the global initialization file
+require_once '../inc/global.inc.php';
 
 // the section (for the tabs)
 $this_section = "session_my_space";
@@ -29,33 +28,28 @@ $course_id = api_get_course_id();
 
 //YW Hack security to quick fix RolesRights bug
 $is_allowed = true;
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
-include(api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php');
-include(api_get_path(LIBRARY_PATH).'course.lib.php');
-include(api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php');
-require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
-// charset determination
+/* Libraries */
+
+require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
+
+/* Header */
+
+// Charset determination.
 if (isset($_GET['scormcontopen'])) {
-	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-	$contopen = Database::escape_string($_GET['scormcontopen']);
-	if (is_numeric($contopen)) {
-		$contopen = intval($contopen);
-		$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-		$res = Database::query($sql);
-		$row = Database::fetch_array($res);
-		$lp_charset = $row['default_encoding'];
-	}
-	//header('Content-Type: text/html; charset='. $row['default_encoding']);
+    $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+    $contopen = Database::escape_string($_GET['scormcontopen']);
+    if (is_numeric($contopen)) {
+        $contopen = intval($contopen);
+        $sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+        $lp_charset = $row['default_encoding'];
+    }
+    //header('Content-Type: text/html; charset='. $row['default_encoding']);
 }
 
 /*
@@ -64,7 +58,7 @@ $interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=$_gid", "name
 */
 
 if(isset($uInfo)) {
-	$interbreadcrumb[]= array ('url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo), "name"=> api_ucfirst(get_lang('Users')));
+    $interbreadcrumb[]= array ('url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo), "name"=> api_ucfirst(get_lang('Users')));
 }
 
 $nameTools = get_lang('ToolName');
@@ -84,11 +78,8 @@ td {border-bottom: thin dashed gray;}
 
 Display::display_header($nameTools,"Tracking");
 
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/
+/*	Constants and variables */
+
 $is_allowedToTrack = $is_courseAdmin;
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_id);
 
@@ -112,19 +103,19 @@ $TABLECOURSE_EXERCICES  	= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_TRACK_HOTPOTATOES  	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 
 if(api_get_setting('use_session_mode') == "true") {
-	$sql = "SELECT 1
-			FROM $tbl_session_course_user AS session_course_user
-			INNER JOIN $tbl_session AS session
-				ON session_course_user.id_session = session.id
-				AND ((date_start<=NOW()
-				AND date_end>=NOW())
-				OR (date_start='0000-00-00' AND date_end='0000-00-00'))
-			WHERE id_session='".$_SESSION['id_session']."' AND course_code='$_cid'";
-	//echo $sql;
-	$result=Database::query($sql);
-	if(!Database::num_rows($result)){
-		$disabled = true;
-	}
+    $sql = "SELECT 1
+            FROM $tbl_session_course_user AS session_course_user
+            INNER JOIN $tbl_session AS session
+                ON session_course_user.id_session = session.id
+                AND ((date_start<=NOW()
+                AND date_end>=NOW())
+                OR (date_start='0000-00-00' AND date_end='0000-00-00'))
+            WHERE id_session='".$_SESSION['id_session']."' AND course_code='$_cid'";
+    //echo $sql;
+    $result=Database::query($sql);
+    if(!Database::num_rows($result)){
+        $disabled = true;
+    }
 }
 
 $tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
@@ -146,191 +137,181 @@ $MonthsShort = api_get_months_short();
 $is_allowedToTrack = true; // allowed to track only user of one group
 $is_allowedToTrackEverybodyInCourse = $is_allowedToTrack; // allowed to track all students in course
 
-/*
-==============================================================================
-		MAIN SECTION
-==============================================================================
-*/
+/*	MAIN SECTION */
 ?>
 <h3>
-	<?php echo $nameTools ?>
+    <?php echo $nameTools ?>
 </h3>
 <h4>
-	<?php echo get_lang('StatsOfUser'); ?>
+    <?php echo get_lang('StatsOfUser'); ?>
 </h4>
 <table width="100%" cellpadding="2" cellspacing="3" border="0">
 <?php
 // check if uid is tutor of this group
 if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configuration['tracking_enabled'] ) {
-	if(!$uInfo && !isset($uInfo) ) {
-		/***************************************************************************
-		*
-		*		Display list of user of this group
-		*
-		***************************************************************************/
+    if(!$uInfo && !isset($uInfo) ) {
+        /*
+        *		Display list of user of this group
+         */
 
-		echo "<h4>".get_lang('ListStudents')."</h4>";
-		if( $is_allowedToTrackEverybodyInCourse ) {
-			// if user can track everybody : list user of course
-			if(api_get_setting('use_session_mode')) {
-				$sql = "SELECT count(user_id)
-						FROM $TABLECOURSUSER
-						WHERE course_code = '".Database::escape_string($_cid)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
-			} else {
-				$sql = "SELECT count(id_user)
-						FROM $tbl_session_course_user
-						WHERE course_code = '".Database::escape_string($_cid)."'";
-			}
-		} else {
-			// if user can only track one group : list users of this group
-			$sql = "SELECT count(user)
-					FROM $TABLECOURSE_GROUPSUSER
-					WHERE group_id = '".Database::escape_string($_gid)."'";
-		}
-		$userGroupNb = getOneResult($sql);
-		$step = 25; // number of student per page
-		if ($userGroupNb > $step) {
-			if(!isset($offset)) {
-					$offset=0;
-			}
+        echo "<h4>".get_lang('ListStudents')."</h4>";
+        if( $is_allowedToTrackEverybodyInCourse ) {
+            // if user can track everybody : list user of course
+            if(api_get_setting('use_session_mode')) {
+                $sql = "SELECT count(user_id)
+                        FROM $TABLECOURSUSER
+                        WHERE course_code = '".Database::escape_string($_cid)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
+            } else {
+                $sql = "SELECT count(id_user)
+                        FROM $tbl_session_course_user
+                        WHERE course_code = '".Database::escape_string($_cid)."'";
+            }
+        } else {
+            // if user can only track one group : list users of this group
+            $sql = "SELECT count(user)
+                    FROM $TABLECOURSE_GROUPSUSER
+                    WHERE group_id = '".Database::escape_string($_gid)."'";
+        }
+        $userGroupNb = getOneResult($sql);
+        $step = 25; // number of student per page
+        if ($userGroupNb > $step) {
+            if(!isset($offset)) {
+                    $offset=0;
+            }
 
-			$next     = $offset + $step;
-			$previous = $offset - $step;
+            $next     = $offset + $step;
+            $previous = $offset - $step;
 
-			$navLink = "<table width='100%' border='0'>\n"
-					."<tr>\n"
-							."<td align='left'>";
+            $navLink = "<table width='100%' border='0'>\n"
+                    ."<tr>\n"
+                            ."<td align='left'>";
 
-			if ($previous >= 0) {
-					$navLink .= "<a href='".api_get_self()."?offset=$previous'>&lt;&lt; ".get_lang('PreviousPage')."</a>";
-			}
+            if ($previous >= 0) {
+                    $navLink .= "<a href='".api_get_self()."?offset=$previous'>&lt;&lt; ".get_lang('PreviousPage')."</a>";
+            }
 
-			$navLink .= "</td>\n"
-					."<td align='right'>";
+            $navLink .= "</td>\n"
+                    ."<td align='right'>";
 
-			if ($next < $userGroupNb) {
-					$navLink .= "<a href='".api_get_self()."?offset=$next'>".get_lang('NextPage')." &gt;&gt;</a>";
-			}
+            if ($next < $userGroupNb) {
+                    $navLink .= "<a href='".api_get_self()."?offset=$next'>".get_lang('NextPage')." &gt;&gt;</a>";
+            }
 
-			$navLink .= "</td>\n"
-					."</tr>\n"
-					."</table>\n";
-		} else {
-			$offset = 0;
-		}
-		echo $navLink;
+            $navLink .= "</td>\n"
+                    ."</tr>\n"
+                    ."</table>\n";
+        } else {
+            $offset = 0;
+        }
+        echo $navLink;
 
-	if (!settype($offset, 'integer') || !settype($step, 'integer')) die('Offset or step variables are not integers.');	//sanity check of integer vars
-		if( $is_allowedToTrackEverybodyInCourse ) {
-			// list of users in this course
-			$sql = "SELECT u.user_id, u.firstname,u.lastname
-						FROM $TABLECOURSUSER cu , $TABLEUSER u
-						WHERE cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-							AND cu.course_code = '".Database::escape_string($_cid)."'
-						LIMIT $offset,$step";
-		}
-		else
-		{
-			// list of users of this group
-			$sql = "SELECT u.user_id, u.firstname,u.lastname
-						FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-						WHERE gu.user_id = u.user_id
-							AND gu.group_id = '".Database::escape_string($_gid)."'
-						LIMIT $offset,$step";
-		}
-		$list_users = getManyResults3Col($sql);
-		echo 	"<table width='100%' cellpadding='2' cellspacing='1' border='0'>\n"
-					."<tr align='center' valign='top' bgcolor='#E6E6E6'>\n"
-					."<td align='left'>",get_lang('UserName'),"</td>\n"
-					."</tr>\n";
-		for($i = 0 ; $i < sizeof($list_users) ; $i++) {
-			echo    "<tr valign='top' align='center'>\n"
-					."<td align='left'>"
-					."<a href='".api_get_self()."?uInfo=",$list_users[$i][0],"'>"
-					.$list_users[$i][1]," ",$list_users[$i][2]
-					."</a>".
-					"</td>\n";
-		}
-		echo        "</table>\n";
+    if (!settype($offset, 'integer') || !settype($step, 'integer')) die('Offset or step variables are not integers.');	//sanity check of integer vars
+        if( $is_allowedToTrackEverybodyInCourse ) {
+            // list of users in this course
+            $sql = "SELECT u.user_id, u.firstname,u.lastname
+                        FROM $TABLECOURSUSER cu , $TABLEUSER u
+                        WHERE cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                            AND cu.course_code = '".Database::escape_string($_cid)."'
+                        LIMIT $offset,$step";
+        }
+        else
+        {
+            // list of users of this group
+            $sql = "SELECT u.user_id, u.firstname,u.lastname
+                        FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
+                        WHERE gu.user_id = u.user_id
+                            AND gu.group_id = '".Database::escape_string($_gid)."'
+                        LIMIT $offset,$step";
+        }
+        $list_users = getManyResults3Col($sql);
+        echo 	"<table width='100%' cellpadding='2' cellspacing='1' border='0'>\n"
+                    ."<tr align='center' valign='top' bgcolor='#E6E6E6'>\n"
+                    ."<td align='left'>",get_lang('UserName'),"</td>\n"
+                    ."</tr>\n";
+        for($i = 0 ; $i < sizeof($list_users) ; $i++) {
+            echo    "<tr valign='top' align='center'>\n"
+                    ."<td align='left'>"
+                    ."<a href='".api_get_self()."?uInfo=",$list_users[$i][0],"'>"
+                    .$list_users[$i][1]," ",$list_users[$i][2]
+                    ."</a>".
+                    "</td>\n";
+        }
+        echo        "</table>\n";
 
-		echo $navLink;
-	} else {
-		// if uInfo is set
+        echo $navLink;
+    } else {
+        // if uInfo is set
 
-		/***************************************************************************
-		*
-		*		Informations about student uInfo
-		*
-		***************************************************************************/
-		// these checks exists for security reasons, neither a prof nor a tutor can see statistics of a user from
-		// another course, or group
-		if( $is_allowedToTrackEverybodyInCourse ) {
-			// check if user is in this course
-			$tracking_is_accepted = $is_course_member;
-			$tracked_user_info = Database::get_user_info_from_id($uInfo);
-		} else {
+        /*
+        *		Informations about student uInfo
+         */
+        // these checks exists for security reasons, neither a prof nor a tutor can see statistics of a user from
+        // another course, or group
+        if( $is_allowedToTrackEverybodyInCourse ) {
+            // check if user is in this course
+            $tracking_is_accepted = $is_course_member;
+            $tracked_user_info = Database::get_user_info_from_id($uInfo);
+        } else {
 
-			// check if user is in the group of this tutor
-			$sql = "SELECT u.firstname,u.lastname, u.email
-						FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-						WHERE gu.user_id = u.user_id`
-							AND gu.group_id = '".Database::escape_string($_gid)."'
-							AND u.user_id = '".Database::escape_string($uInfo)."'";
-			$query = Database::query($sql);
-			$tracked_user_info = @Database::fetch_assoc($query);
-			if(is_array($tracked_user_info)) $tracking_is_accepted = true;
-		}
+            // check if user is in the group of this tutor
+            $sql = "SELECT u.firstname,u.lastname, u.email
+                        FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
+                        WHERE gu.user_id = u.user_id`
+                            AND gu.group_id = '".Database::escape_string($_gid)."'
+                            AND u.user_id = '".Database::escape_string($uInfo)."'";
+            $query = Database::query($sql);
+            $tracked_user_info = @Database::fetch_assoc($query);
+            if(is_array($tracked_user_info)) $tracking_is_accepted = true;
+        }
 
-		if ($tracking_is_accepted) {
-			$tracked_user_info['email'] == '' ? $mail_link = get_lang('NoEmail') : $mail_link = Display::encrypted_mailto_link($tracked_user_info['email']);
+        if ($tracking_is_accepted) {
+            $tracked_user_info['email'] == '' ? $mail_link = get_lang('NoEmail') : $mail_link = Display::encrypted_mailto_link($tracked_user_info['email']);
 
-			echo "<tr><td>";
-			echo get_lang('informationsAbout').' :';
-			echo "<ul>\n"
-					."<li>".get_lang('FirstName')." : ".$tracked_user_info['firstname']."</li>\n"
-					."<li>".get_lang('LastName')." : ".$tracked_user_info['lastname']."</li>\n"
-					."<li>".get_lang('Email')." : ".$mail_link."</li>\n"
-					."</ul>";
-			echo "</td></tr>\n";
+            echo "<tr><td>";
+            echo get_lang('informationsAbout').' :';
+            echo "<ul>\n"
+                    ."<li>".get_lang('FirstName')." : ".$tracked_user_info['firstname']."</li>\n"
+                    ."<li>".get_lang('LastName')." : ".$tracked_user_info['lastname']."</li>\n"
+                    ."<li>".get_lang('Email')." : ".$mail_link."</li>\n"
+                    ."</ul>";
+            echo "</td></tr>\n";
 
-			// show all : number of 1 is equal to or bigger than number of categories
-			// show none : number of 0 is equal to or bigger than number of categories
-			echo "<tr>
-					<td>
-					[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($uInfo)."&view=1111111'>".get_lang('ShowAll')."</a>]
-					[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($uInfo)."&view=0000000'>".get_lang('ShowNone')."</a>]".
-					//"||[<a href='".api_get_self()."'>".get_lang('BackToList')."</a>]".
-					"</td>
-				</tr>
-			";
-			if(!isset($view))
-			{
-				$view ='0000000';
-			}
-			//Logins
-			TrackingUserLog::display_login_tracking_info($view, $uInfo, $_cid);
+            // show all : number of 1 is equal to or bigger than number of categories
+            // show none : number of 0 is equal to or bigger than number of categories
+            echo "<tr>
+                    <td>
+                    [<a href='".api_get_self()."?uInfo=".Security::remove_XSS($uInfo)."&view=1111111'>".get_lang('ShowAll')."</a>]
+                    [<a href='".api_get_self()."?uInfo=".Security::remove_XSS($uInfo)."&view=0000000'>".get_lang('ShowNone')."</a>]".
+                    //"||[<a href='".api_get_self()."'>".get_lang('BackToList')."</a>]".
+                    "</td>
+                </tr>
+            ";
+            if(!isset($view))
+            {
+                $view ='0000000';
+            }
+            //Logins
+            TrackingUserLog::display_login_tracking_info($view, $uInfo, $_cid);
 
-			//Exercise results
-			TrackingUserLog::display_exercise_tracking_info($view, $uInfo, $_cid);
+            //Exercise results
+            TrackingUserLog::display_exercise_tracking_info($view, $uInfo, $_cid);
 
-			//Student publications uploaded
-			TrackingUserLog::display_student_publications_tracking_info($view, $uInfo, $_cid);
+            //Student publications uploaded
+            TrackingUserLog::display_student_publications_tracking_info($view, $uInfo, $_cid);
 
-			//Links usage
-			TrackingUserLog::display_links_tracking_info($view, $uInfo, $_cid);
+            //Links usage
+            TrackingUserLog::display_links_tracking_info($view, $uInfo, $_cid);
 
-			//Documents downloaded
-			TrackingUserLog::display_document_tracking_info($view, $uInfo, $_cid);
-		} else {
-			echo get_lang('ErrorUserNotInGroup');
-		}
+            //Documents downloaded
+            TrackingUserLog::display_document_tracking_info($view, $uInfo, $_cid);
+        } else {
+            echo get_lang('ErrorUserNotInGroup');
+        }
 
 
-		/***************************************************************************
-         *
+        /*
          *		Scorm contents and Learning Path
-         *
-         ***************************************************************************/
+         */
         if(substr($view,5,1) == '1') {
             $new_view = substr_replace($view,'0',5,1);
             echo "<tr>
@@ -340,71 +321,71 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                 </tr>";
 
             $sql = "SELECT id, name FROM $tbl_learnpath_main";
-    		$result=Database::query($sql);
-    	    $ar=Database::fetch_array($result);
+            $result=Database::query($sql);
+            $ar=Database::fetch_array($result);
 
-	    	echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
+            echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
             echo "<table cellpadding='2' cellspacing='1' border='0' align='center'><tr>
-    				                <td class='secLine'>
-    								&nbsp;".get_lang('ScormContentColumn')."&nbsp;
-    				                </td>
-    		</tr>";
+                                    <td class='secLine'>
+                                    &nbsp;".get_lang('ScormContentColumn')."&nbsp;
+                                    </td>
+            </tr>";
             if (is_array($ar)) {
-    			while ($ar['id'] != '') {
-    				$lp_title = stripslashes($ar['name']);
-    				echo "<tr><td>";
-    				echo "<a href='".api_get_self()."?view=".$view."&scormcontopen=".$ar['id']."&uInfo=".Security::remove_XSS($uInfo)."' class='specialLink'>$lp_title</a>";
-    				echo "</td></tr>";
-    				if ($ar['id']==$scormcontopen) { //have to list the students here
-        					$contentId=$ar['id'];
-							$sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
-									"FROM $tbl_learnpath_item i " .
-									"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
-									"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
-									"WHERE (v.user_id=".Database::escape_string($uInfo)." and v.lp_id=$contentId) ORDER BY v.id, i.id";
-   							$result3=Database::query($sql3);
-   						    $ar3=Database::fetch_array($result3);
+                while ($ar['id'] != '') {
+                    $lp_title = stripslashes($ar['name']);
+                    echo "<tr><td>";
+                    echo "<a href='".api_get_self()."?view=".$view."&scormcontopen=".$ar['id']."&uInfo=".Security::remove_XSS($uInfo)."' class='specialLink'>$lp_title</a>";
+                    echo "</td></tr>";
+                    if ($ar['id']==$scormcontopen) { //have to list the students here
+                            $contentId=$ar['id'];
+                            $sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
+                                    "FROM $tbl_learnpath_item i " .
+                                    "INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
+                                    "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
+                                    "WHERE (v.user_id=".Database::escape_string($uInfo)." and v.lp_id=$contentId) ORDER BY v.id, i.id";
+                               $result3=Database::query($sql3);
+                               $ar3=Database::fetch_array($result3);
                             if (is_array($ar3)) {
                                 echo "<tr><td>&nbsp;&nbsp;&nbsp;</td>
-       				                <td class='secLine'>
-       				                &nbsp;".get_lang('ScormTitleColumn')."&nbsp;
-       				                </td>
-       				                <td class='secLine'>
-       				                &nbsp;".get_lang('ScormStatusColumn')."&nbsp;
-       				                </td>
-       				                <td class='secLine'>
-       				                &nbsp;".get_lang('ScormScoreColumn')."&nbsp;
-       				                </td>
-       				                <td class='secLine'>
-       				                &nbsp;".get_lang('ScormTimeColumn')."&nbsp;
-       				                </td>
-       					            </tr>";
-       							while ($ar3['status'] != '') {
-									require_once('../newscorm/learnpathItem.class.php');
-									$time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
-									$title = api_htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
-       								echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
-       								echo "$title</td><td align=right>{$ar3['status']}</td><td     align=right>{$ar3['score']}</td><td align=right>$time</td>";
-       								echo "</tr>";
-       								$ar3=Database::fetch_array($result3);
-       							}
+                                       <td class='secLine'>
+                                       &nbsp;".get_lang('ScormTitleColumn')."&nbsp;
+                                       </td>
+                                       <td class='secLine'>
+                                       &nbsp;".get_lang('ScormStatusColumn')."&nbsp;
+                                       </td>
+                                       <td class='secLine'>
+                                       &nbsp;".get_lang('ScormScoreColumn')."&nbsp;
+                                       </td>
+                                       <td class='secLine'>
+                                       &nbsp;".get_lang('ScormTimeColumn')."&nbsp;
+                                       </td>
+                                       </tr>";
+                                   while ($ar3['status'] != '') {
+                                    require_once '../newscorm/learnpathItem.class.php';
+                                    $time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
+                                    $title = api_htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
+                                       echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
+                                       echo "$title</td><td align=right>{$ar3['status']}</td><td     align=right>{$ar3['score']}</td><td align=right>$time</td>";
+                                       echo "</tr>";
+                                       $ar3=Database::fetch_array($result3);
+                                   }
                             } else {
                                 echo "<tr>";
                                 echo "<td colspan='3'><center>".get_lang('ScormNeverOpened')."</center></td>";
                                 echo"</tr>";
                             }
-   					}
-		    		$ar=Database::fetch_array($result);
-    			}
+                       }
+                    $ar=Database::fetch_array($result);
+                }
             } else {
-				$noscorm=true;
+                $noscorm=true;
             }
 
-			if ($noscorm) {
+            if ($noscorm) {
                 echo "<tr>";
                 echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
                 echo "</tr>";
-			}
+            }
             echo "</table>";
             echo "</td></tr>";
         } else {
@@ -420,7 +401,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 
     }
 } else {
-	// not allowed
+    // not allowed
     if(!$_configuration['tracking_enabled'])
     {
         echo get_lang('TrackingDisabled');
@@ -432,4 +413,3 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 </table>
 <?php
 Display::display_footer();
-?>

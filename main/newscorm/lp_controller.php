@@ -562,15 +562,15 @@ switch ($action) {
                 $auth_end = $auth_init + stripos(substr($author, $auth_init + 6), '</body>') + 7;
                 $len = $auth_end - $auth_init + 6;
             } else {
-                $auth_end  =  strripos($author, '</p>');
+                $auth_end = strripos($author, '</p>');
                 $len = $auth_end - $auth_init + 4;
             }
 
-            $author_fixed=substr($author,$auth_init, $len);
+            $author_fixed = substr($author, $auth_init, $len);
             //$author_fixed = $author;
 
             $_SESSION['oLP']->set_author($author_fixed);
-            $_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);
+            $_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);  // TODO (as of Chamilo 1.8.8): Check in the future whether this field is needed.
             $_SESSION['oLP']->set_maker($_REQUEST['lp_maker']);
             $_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
             $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);

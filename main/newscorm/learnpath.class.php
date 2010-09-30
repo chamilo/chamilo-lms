@@ -3683,11 +3683,14 @@ class learnpath {
     /**
      * Sets the encoding
      * @param	string	New encoding
+     * TODO (as of Chamilo 1.8.8): Check in the future whether this method is needed.
      */
-    public function set_encoding($enc = 'ISO-8859-15') {
+    public function set_encoding($enc = 'UTF-8') {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_encoding()', 0);
         }
+
+        /* // Deprecated code (Chamilo 1.8.8).
         $enc = strtoupper($enc);
         $encodings = array (
             'UTF-8',
@@ -3703,6 +3706,22 @@ class learnpath {
             ''
         );
         if (in_array($enc, $encodings)) { // TODO: Incorrect comparison, fix it.
+            $lp = $this->get_id();
+            if ($lp != 0) {
+                $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
+                $sql = "UPDATE $tbl_lp SET default_encoding = '$enc' WHERE id = " . $lp;
+                $res = Database::query($sql);
+                return $res;
+            }
+        }
+        return false;
+        */
+
+        $enc = api_refine_encoding_id($enc);
+        if (empty($enc)) {
+            $enc = api_get_system_encoding();
+        }
+        if (api_is_encoding_supported($enc)) {
             $lp = $this->get_id();
             if ($lp != 0) {
                 $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
@@ -4327,7 +4346,6 @@ class learnpath {
     public function overview() {
         $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
-        $platform_charset = api_get_system_encoding();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::overview()', 0);
         }
@@ -4343,8 +4361,8 @@ class learnpath {
         $result = Database::query($sql);
         $arrLP = array ();
         while ($row = Database :: fetch_array($result)) {
-            $row['title'] = Security :: remove_XSS(api_convert_encoding($row['title'], $platform_charset, $this->encoding));
-            $row['description'] = Security :: remove_XSS(api_convert_encoding($row['description'], $platform_charset, $this->encoding));
+            $row['title'] = Security :: remove_XSS($row['title']);
+            $row['description'] = Security :: remove_XSS($row['description']);
             $arrLP[] = array (
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
@@ -4537,7 +4555,7 @@ class learnpath {
      * @uses dtree.js :: necessary javascript for building this tree
      */
     public function build_tree() {
-        $platform_charset = api_get_system_encoding();
+
         $return = "<script type=\"text/javascript\">\n";
         $return .= "\tm = new dTree('m');\n\n";
         $return .= "\tm.config.folderLinks		= true;\n";
@@ -4559,8 +4577,8 @@ class learnpath {
         $arrLP = array ();
 
         while ($row = Database :: fetch_array($result)) {
-            $row['title'] = Security :: remove_XSS(api_convert_encoding($row['title'], $platform_charset, $this->encoding));
-            $row['description'] = Security :: remove_XSS(api_convert_encoding($row['description'], $platform_charset, $this->encoding));
+            $row['title'] = Security :: remove_XSS($row['title']);
+            $row['description'] = Security :: remove_XSS($row['description']);
 
             $arrLP[] = array (
                 'id' 				=> $row['id'],

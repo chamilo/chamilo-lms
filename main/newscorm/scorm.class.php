@@ -292,11 +292,8 @@ class scorm extends learnpath {
                 $dsp = $row[0] + 1;
             }
             $myname = $oOrganization->get_name();
-            //$this->manifest_encoding = 'UTF-8';
-            global $charset;
-            if (!empty($charset) && !empty($this->manifest_encoding) && $this->manifest_encoding != $charset) {
-                $myname = api_convert_encoding($myname, $charset, $this->manifest_encoding);
-            }
+            $myname = api_utf8_decode($myname);
+
             $sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order, session_id)" .
                     "VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $session_id)";
             if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting path: '. $sql, 0); }
@@ -353,19 +350,11 @@ class scorm extends learnpath {
                     $value_add .= "'".$item['maxtimeallowed']."',";
                 }
                 $title = Database::escape_string($item['title']);
+                $title = api_utf8_decode($title);
                 $max_score = Database::escape_string($item['max_score']);
                 if ($max_score == 0 || is_null($max_score) || $max_score == '') {
                     $max_score = 100;
                 }
-                // DOM in PHP5 is always recovering data as UTF-8, somehow, no matter what
-                // the XML document encoding is. This means that we have to convert
-                // the data to the declared encoding when it is not UTF-8.
-                if ($this->manifest_encoding != 'UTF-8') {
-                    $title = api_convert_encoding($title, $this->manifest_encoding, 'UTF-8');
-                }
-                //if ($this->manifest_encoding != $charset) {
-                //	$title = api_convert_encoding($title, $charset, $this->manifest_encoding);
-                //}
                 $identifier = Database::escape_string($item['identifier']);
                 $prereq = Database::escape_string($item['prerequisites']);
                 $sql_item = "INSERT INTO $new_lp_item " .

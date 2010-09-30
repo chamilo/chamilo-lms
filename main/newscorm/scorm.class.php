@@ -818,7 +818,7 @@ class scorm extends learnpath {
         $title = '';
         if (isset($this->manifest['organizations']['default'])) {
             $title = $this->organizations[$this->manifest['organizations']['default']]->get_name();
-        }elseif (count($this->organizations)==1) {
+        } elseif (count($this->organizations)==1) {
             // This will only get one title but so we don't need to know the index.
             foreach($this->organizations as $id => $value) {
                 $title = $this->organizations[$id]->get_name();
@@ -829,6 +829,7 @@ class scorm extends learnpath {
     }
 
     /**
+     * // TODO @TODO This method is not used anywhere. Is it really needed?
      * // TODO @TODO Implement this function to restore items data from an imsmanifest,
      * updating the existing table... This will prove very useful in case initial data
      * from imsmanifest were not imported well enough
@@ -854,9 +855,9 @@ class scorm extends learnpath {
         } else {
             $this->error = 'Course code does not exist in database ('.$sql.')';
             return false;
-           }
+        }
 
-           // TODO: Make it flexible to use any course_code (still using env course code here)
+        // TODO: Make it flexible to use any course_code (still using env course code here)
         //$lp_table = Database::get_course_table(LEARNPATH_TABLE);
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
 
@@ -867,25 +868,25 @@ class scorm extends learnpath {
         //$res = Database::query($sql);
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-                $this->lp_id = $lp_id;
-                $row = Database::fetch_array($res);
-                $this->type = $row['lp_type'];
-                $this->name = stripslashes($row['name']);
-                $this->encoding = $row['default_encoding'];
-                $this->proximity = $row['content_local'];
-                $this->maker = $row['content_maker'];
-                $this->prevent_reinit = $row['prevent_reinit'];
-                $this->license = $row['content_license'];
-                $this->scorm_debug = $row['debug'];
-                $this->js_lib = $row['js_lib'];
-                $this->path = $row['path'];
-                if ($this->type == 2) {
-                    if ($row['force_commit'] == 1) {
-                        $this->force_commit = true;
-                    }
+            $this->lp_id = $lp_id;
+            $row = Database::fetch_array($res);
+            $this->type = $row['lp_type'];
+            $this->name = stripslashes($row['name']);
+            $this->encoding = $row['default_encoding'];
+            $this->proximity = $row['content_local'];
+            $this->maker = $row['content_maker'];
+            $this->prevent_reinit = $row['prevent_reinit'];
+            $this->license = $row['content_license'];
+            $this->scorm_debug = $row['debug'];
+            $this->js_lib = $row['js_lib'];
+            $this->path = $row['path'];
+            if ($this->type == 2) {
+                if ($row['force_commit'] == 1) {
+                    $this->force_commit = true;
                 }
-                $this->mode = $row['default_view_mod'];
-                $this->subdir = $row['path'];
+            }
+            $this->mode = $row['default_view_mod'];
+            $this->subdir = $row['path'];
         }
         // Parse the manifest (it is already in this lp's details).
         $manifest_file = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/scorm/'.$this->subdir.'/imsmanifest.xml';

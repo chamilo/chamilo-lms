@@ -173,9 +173,9 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group($_SE
 		}
 	}
 echo '</ul>';
-	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang('Tools').':</b></div>';
+	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang('Tools').'</b></div>';
 	if (!empty($tools)) {
-		echo '<div style="margin-left:5px;">'.$tools.'</div>';
+		echo '<div style="margin-left:5px; margin-bottom:4px; margin-top:4px;">'.$tools.'</div>';
 	}
 
 } else {
@@ -225,9 +225,9 @@ echo '</ul>';
 
 	echo '</ul>';
 
-	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang('Tools').':</b></div>';
+	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang('Tools').'</b></div>';
 	if (!empty($tools)) {
-		echo '<div style="margin-left:5px;">'.$tools.'</div>';
+		echo '<div style="margin-left:5px; margin-bottom:4px; margin-top:4px;">'.$tools.'</div>';
 	}
 }
 
@@ -249,7 +249,7 @@ if (count($tutors) == 0) {
 	}
 }
 
-echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang('GroupTutors').':</b></div>';
+echo '<div class="actions-message" style="margin-bottom:4px;style="margin:4px;"><b>'.get_lang('GroupTutors').'</b></div>';
 if (!empty($tutor_info)) {
 	echo '<div style="margin-left:5px;">'.$tutor_info.'</div>';
 }
@@ -258,7 +258,7 @@ echo '<br />';
 /*
  * List all the members of the current group
  */
-echo '<b>'.get_lang("GroupMembers").':</b>';
+echo '<b>'.get_lang("GroupMembers").'</b>';
 
 $table = new SortableTable('group_users', 'get_number_of_group_users', 'get_group_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1);
 $my_cidreq = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';

@@ -53,15 +53,23 @@ $document_language = api_get_language_isocode();
 <head>
 <title>
 <?php
-if (!empty($nameTools)) {
-	echo $nameTools.' - ';
-}
 
-if (!empty($_course['official_code'])) {
-	echo $_course['official_code'].' - ';
-}
+$title_list[] = api_get_setting('siteName');
+$title_list[] = $nameTools;
+$title_list[] = $_course['official_code'];
 
-echo api_get_setting('siteName');
+$title_string = '';
+for($i=0; $i<count($title_list);$i++) {
+    if (!empty($title_list[$i])) {
+    	$title_string .=$title_list[$i];
+        
+        if (isset($title_list[$i+1])) {
+            $title_string .=' - ';
+        }
+    }
+}
+echo $title_string;
+
 
 ?>
 </title>

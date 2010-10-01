@@ -39,6 +39,8 @@ api_protect_course_script(true);
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 
 //Blocking access in LPs
+//This funcionality has been moved to the get_link function in the learnpath_class.php
+/*
 if ($origin == 'learnpath' && isset ($_GET['not_multiple_attempt']) && $_GET['not_multiple_attempt'] == strval(intval($_GET['not_multiple_attempt']))) {
     $not_multiple_attempt = (int) $_GET['not_multiple_attempt'];
     if ($not_multiple_attempt === 1) {
@@ -47,7 +49,7 @@ if ($origin == 'learnpath' && isset ($_GET['not_multiple_attempt']) && $_GET['no
         Display :: display_warning_message(get_lang('ReachedOneAttempt'));
         exit;
     }
-}
+}*/
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 //$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>'; //Not necessary to use jquery corner to do that effect use CSS3
@@ -80,6 +82,9 @@ if (empty ($learnpath_id)) {
 }
 if (empty ($learnpath_item_id)) {
     $learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
+}
+if (empty ($learnpath_item_view_id)) {
+    $learnpath_item_view_id = intval($_REQUEST['learnpath_item_view_id']);
 }
 if (empty ($formSent)) {
     $formSent = $_REQUEST['formSent'];
@@ -116,7 +121,7 @@ $error = '';
 // if the user has clicked on the "Cancel" button
 if ($buttonCancel) {
     // returns to the exercise list
-    header("Location: exercice.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
+    header("Location: exercice.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
     exit;
 }
 if ($origin == 'builder') {
@@ -151,11 +156,12 @@ if ($origin == 'builder') {
     if (isset ($_SESSION['exerciseResultCoordinates'])) {
         api_session_unregister('exerciseResultCoordinates');
         unset ($exerciseResultCoordinates);
-    }
+    } 
 }
 
 $safe_lp_id = ($learnpath_id == '') ? 0 : $learnpath_id;
 $safe_lp_item_id = ($learnpath_item_id == '') ? 0 : $learnpath_item_id;
+$safe_lp_item_view_id = ($learnpath_item_view_id == '') ? 0 : $learnpath_item_view_id;
 
 // Loading the $objExercise variable
 
@@ -193,7 +199,7 @@ $exerciseType 			= $objExercise->type;
 $current_timestamp 		= time();
 
 //Getting track exercise info
-$exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id);
+$exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
 if ($debug) {error_log('$objExercise->get_stat_track_exercise_info function called::  '.print_r($exercise_stat_info, 1)); };
 
 /*
@@ -385,10 +391,10 @@ if ($formSent) {
         if ( api_is_allowed_to_session_edit() ) {
             // goes to the script that will show the result of the exercise
             if ($exerciseType == ALL_ON_ONE_PAGE) {
-                header("Location: exercise_result.php?exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
+                header("Location: exercise_result.php?exerciseType=$exerciseType&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
                 exit;
             } else {
-                if ($exe_id != '') {
+                if (!empty($exe_id) && is_numeric($exe_id)) {
                     //Verify if the current test is fraudulent
                     if (exercise_time_control_is_valid($exerciseId)) {
                     	$sql_exe_result = "";                    	
@@ -397,11 +403,11 @@ if ($formSent) {
                     }
                     //Clean incomplete - @todo why setting to blank the data_tracking?
                     //$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . api_get_utc_datetime() . "' $sql_exe_result " . ' WHERE exe_id = ' . Database::escape_string($exe_id);
-                    $update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', exe_date = '" . api_get_utc_datetime() . "' $sql_exe_result " . ' WHERE exe_id = ' . Database::escape_string($exe_id);
+                    $update_query = "UPDATE $stat_table SET  status = '', exe_date = '".api_get_utc_datetime() ."' , orig_lp_item_view_id = '$safe_lp_item_view_id' $sql_exe_result  WHERE exe_id = ".$exe_id;
                     if ($debug) {error_log($update_query);};
                     Database::query($update_query);
                 }
-                header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
+                header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
                 exit;
             }            
         } else {
@@ -497,7 +503,7 @@ echo "<h2>" . $exerciseTitle . "</h2>";
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {	
-	$attempt_count = get_attempt_count($user_id, $exerciseId, $safe_lp_id, $safe_lp_item_id);
+	$attempt_count = get_attempt_count($user_id, $exerciseId, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
     if ($attempt_count >= $objExercise->selectAttempts()) {
     	$show_clock = false;
         if (!api_is_allowed_to_edit(null,true)) {
@@ -648,7 +654,7 @@ if (!empty ($error)) {
 }
 if ($_configuration['live_exercise_tracking'] && $objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {	
   	if (empty($exercise_stat_info)) {
-  		$objExercise->save_stat_track_exercise_info($clock_expired_time, $safe_lp_id, $safe_lp_item_id,$questionList);
+  		$objExercise->save_stat_track_exercise_info($clock_expired_time, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $questionList);
     }
 }
 if ($origin != 'learnpath') {

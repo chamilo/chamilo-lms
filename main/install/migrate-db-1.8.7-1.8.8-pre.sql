@@ -30,6 +30,8 @@ ALTER TABLE sys_calendar ADD COLUMN access_url_id INT  NOT NULL default 1;
 
 
 -- xxSTATSxx
+ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
+
 
 -- xxUSERxx
 

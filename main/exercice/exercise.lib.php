@@ -541,11 +541,14 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 function get_exercise_track_exercise_info($exe_id) {
 	$TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
 	$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	
-	$sql_fb_type='SELECT * FROM '.$TBL_EXERCICES.' as e INNER JOIN '.$TBL_TRACK_EXERCICES.' as te  ON (e.id=te.exe_exo_id) WHERE te.exe_id='.Database::escape_string($exe_id);
-	$res_fb_type=Database::query($sql_fb_type);
-	$row_fb_type=Database::fetch_array($res_fb_type, 'ASSOC');
-	return $row_fb_type;	
+	$exe_id = intval($exe_id);
+    $result = array();
+    if (!empty($exe_id)) {
+	   $sql_fb_type = 'SELECT * FROM '.$TBL_EXERCICES.' as e INNER JOIN '.$TBL_TRACK_EXERCICES.' as te  ON (e.id=te.exe_exo_id) WHERE te.exe_id='.$exe_id;
+	   $res_fb_type = Database::query($sql_fb_type);
+	   $result      = Database::fetch_array($res_fb_type, 'ASSOC');
+    }
+	return $result;	
 }
 
 

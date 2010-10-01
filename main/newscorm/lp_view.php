@@ -11,7 +11,7 @@
 * @author Denes Nagy, principal author
 * @author Isthvan Mandak, several new features
 * @author Roan Embrechts, code improvements and refactoring
-* @license	GNU/GPL - See Chamilo license directory for details
+* @license  GNU/GPL - See Chamilo license directory for details
 */
 
 /* INIT SECTION */
@@ -43,14 +43,14 @@ if (!empty($_SESSION['oLP']->encoding)) {
     $charset = api_get_system_encoding();
 }
 
-$oLearnpath		= false;
-$course_code 	= api_get_course_id();
-$user_id 		= api_get_user_id();
+$oLearnpath     = false;
+$course_code    = api_get_course_id();
+$user_id        = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Plataform's css.
-$my_style		= $platform_theme;
+$my_style       = $platform_theme;
 // Escape external variables.
 
-/* 	Header  */
+/*  Header  */
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
 
@@ -72,8 +72,10 @@ $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 </script>';
 
 $_SESSION['oLP']->error = '';
-$lp_type 	= $_SESSION['oLP']->get_type();
+$lp_type    = $_SESSION['oLP']->get_type();
 $lp_item_id = $_SESSION['oLP']->get_current_item_id();
+
+
 //$lp_item_id = learnpath::escape_string($_GET['item_id']);
 //$_SESSION['oLP']->set_current_item($lp_item_id); // Already done by lp_controller.php.
 
@@ -143,6 +145,12 @@ if (!isset($src)) {
 $list = $_SESSION['oLP']->get_toc();
 $type_quiz = false;
 
+$current_item = $_SESSION['oLP']->items[$_SESSION['oLP']->get_current_item_id()];
+$attempt_id =  $current_item->get_attempt_id();
+error_log('get attempts'.$current_item->get_attempt_id());
+
+
+
 foreach($list as $toc) {
     if ($toc['id'] == $lp_item_id && ($toc['type']=='quiz')) {
         $type_quiz = true;
@@ -154,22 +162,23 @@ $autostart = 'true';
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
     global $src;
     $_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
-    $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $TBL_LP_ITEM_VIEW		= Database::get_course_table(TABLE_LP_ITEM_VIEW);
-    $TBL_LP_VIEW			= Database::get_course_table(TABLE_LP_VIEW);
-    $TBL_LP_ITEM			= Database::get_course_table(TABLE_LP_ITEM);
-    $safe_item_id      		= Database::escape_string($_GET['lp_item_id']);
-    $safe_id           		= Database::escape_string($_GET['lp_id']);
-    $safe_exe_id 			= Database::escape_string($_REQUEST['exeId']);
+    $TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TBL_LP_ITEM_VIEW       = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+    $TBL_LP_VIEW            = Database::get_course_table(TABLE_LP_VIEW);
+    $TBL_LP_ITEM            = Database::get_course_table(TABLE_LP_ITEM);
+    $safe_item_id           = Database::escape_string($_GET['lp_item_id']);
+    $safe_id                = Database::escape_string($_GET['lp_id']);
+    $safe_exe_id            = intval($_REQUEST['exeId']);
 
     if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
 
-        $sql = 'SELECT start_date,exe_date,exe_result,exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.(int)$safe_exe_id;
+        $sql = 'SELECT start_date,exe_date,exe_result,exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.$safe_exe_id;
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
 
-        $time_start_date = convert_mysql_date($row_dates['start_date']);
-        $time_exe_date 	 = convert_mysql_date($row_dates['exe_date']);
+        $time_start_date = api_strtotime($row_dates['start_date'],'UTC');
+        $time_exe_date   = api_strtotime($row_dates['exe_date'],'UTC');
+        
         $mytime = ((int)$time_exe_date-(int)$time_start_date);
         $score = (float)$row_dates['exe_result'];
         $max_score = (float)$row_dates['exe_weighting'];
@@ -184,11 +193,16 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
         $sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
         $res_last_attempt = Database::query($sql_last_attempt);
         $row_last_attempt = Database::fetch_row($res_last_attempt);
+        $lp_item_view_id = $row_last_attempt[0];
 
         if (Database::num_rows($res_last_attempt) > 0) {
-            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score,total_time = $mytime WHERE id='".$row_last_attempt[0]."'";
+            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score,total_time = $mytime WHERE id='".$lp_item_view_id."'";
             Database::query($sql_upd_score);
-        }
+                   
+            $update_query = "UPDATE $TBL_TRACK_EXERCICES SET  orig_lp_item_view_id = $lp_item_view_id  WHERE exe_id = ".$safe_exe_id;
+            error_log('dddd-->'.$update_query);
+            Database::query($update_query);
+        }        
     }
 
     if (intval($_GET['fb_type']) > 0) {
@@ -286,11 +300,11 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
                             $lp_theme_css = $my_style;
                         }
 
-                        $progress_bar 	= $_SESSION['oLP']->get_progress_bar('', -1, '', true);
+                        $progress_bar   = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
                         $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-                        $mediaplayer 	= $_SESSION['oLP']->get_mediaplayer($autostart);
+                        $mediaplayer    = $_SESSION['oLP']->get_mediaplayer($autostart);
 
-                        $tbl_lp_item	= Database::get_course_table(TABLE_LP_ITEM);
+                        $tbl_lp_item    = Database::get_course_table(TABLE_LP_ITEM);
                         $show_audioplayer = false;
                         // Getting all the information about the item.
                         $sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";

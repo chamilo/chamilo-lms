@@ -51,12 +51,6 @@ if($debug>0) {
 }
 // general parameters passed via POST/GET
 
-if ( empty ( $learnpath_id ) ) {
-    $learnpath_id       = $_REQUEST['learnpath_id'];
-}
-if ( empty ( $learnpath_item_id ) ) {
-    $learnpath_item_id  = $_REQUEST['learnpath_item_id'];
-}
 if ( empty ( $formSent ) ) {
     $formSent= $_REQUEST['formSent'];
 }
@@ -92,26 +86,52 @@ if ( empty ( $action ) ) {
 
 $current_time = time();
 $emailId   = $_REQUEST['email'];
-$id 	   = $_REQUEST['id'];
+$id 	   = $_REQUEST['id']; //exe id
 
 if (empty($id)) {
 	api_not_allowed();
 }
 
+$is_allowedToEdit=api_is_allowed_to_edit(null,true) || $is_courseTutor;
+
+//Getting results
 $track_exercise_info = get_exercise_track_exercise_info($id);
-$exercise_id 		 = $track_exercise_info['id'];
-$course_code		 = api_get_course_id();
+
+//No track info
+if (empty($track_exercise_info)) {
+    api_not_allowed();
+}
+
+
+$exercise_id        = $track_exercise_info['id'];
+$student_id         = $track_exercise_info['exe_user_id'];
+$learnpath_id       = $track_exercise_info['orig_lp_id'];
+$learnpath_item_id  = $track_exercise_info['orig_lp_item_id'];    
+$lp_item_view_id    = $track_exercise_info['orig_lp_item_view_id'];
+$course_code        = api_get_course_id();
+
+//Check if user can see the results 
+if (!$is_allowedToEdit) {
+    $current_user_id = api_get_user_id();
+    if ($student_id != $current_user_id) {
+    	api_not_allowed();
+    }
+}
+
+
 if (!exercise_time_control_is_valid($exercise_id)) {
-	$sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = '{$track_exercise_info['exe_id']}' ";
+	$sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = $id ";
 	Database::query($sql_fraud);
 }
+
 //Unset session for clock time
 exercise_time_control_delete($exercise_id);
 
-$is_allowedToEdit=api_is_allowed_to_edit(null,true) || $is_courseTutor;
+
+
 $nameTools=get_lang('CorrectTest');
 if (isset($_SESSION['gradebook'])) {
-	$gradebook=	$_SESSION['gradebook'];
+	$gradebook=	Security::remove_XSS($_SESSION['gradebook']);
 }
 
 if (!empty($gradebook) && $gradebook=='view') {
@@ -120,14 +140,14 @@ if (!empty($gradebook) && $gradebook=='view') {
 $fromlink = '';
 if($origin=='user_course') {
 	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".Security::remove_XSS($_GET['course']), "name" => get_lang("Users"));
-	$interbreadcrumb[] = array("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student'])."&course=".$_course['id']."&details=true&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("DetailsStudentInCourse"));
+	$interbreadcrumb[] = array("url" => "../mySpace/myStudents.php?student=".$student_id."&course=".$_course['id']."&details=true&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("DetailsStudentInCourse"));
 } else if($origin=='tracking_course') {
 	//$interbreadcrumb[] = array ("url" => "../mySpace/index.php", "name" => get_lang('MySpace'));
- 	//$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student']).'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
+ 	//$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($student_id).'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
  	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
 	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));
-	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student']).'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
-	$interbreadcrumb[] = array ("url" => "../mySpace/lp_tracking.php?action=stats&course=".$cidReq."&student_id=".Security::remove_XSS($_GET['student'])."&lp_id=".Security::remove_XSS($_GET['my_lp_id'])."&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("LearningPathDetails"));
+	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".$student_id.'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
+	$interbreadcrumb[] = array ("url" => "../mySpace/lp_tracking.php?action=stats&course=".$cidReq."&student_id=".$student_id."&lp_id=".Security::remove_XSS($_GET['my_lp_id'])."&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("LearningPathDetails"));
 
 	$from_myspace = false;
 	if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
@@ -238,24 +258,26 @@ if($num>1) {
 <?php
 $show_results = true;
 // Avoiding the "Score 0/0" message  when the exe_id is not set
-if (!empty($track_exercise_info)) {	
+if (!empty($track_exercise_info)) {
 	$exerciseTitle			= text_filter($track_exercise_info['title']);
 	$exerciseDescription	= $track_exercise_info['description'];
 	// if the results_disabled of the Quiz is 1 when block the script
 	$result_disabled		= $track_exercise_info['results_disabled'];
 	
 	if (!(api_is_platform_admin() || api_is_course_admin()) ) {
-		if ($result_disabled==1) {
+        
+		if ($result_disabled == 1) {
 			//api_not_allowed();
 			$show_results = false;
 			//Display::display_warning_message(get_lang('CantViewResults'));
-			if ($origin!='learnpath') {
+			if ($origin != 'learnpath') {
 				Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);
 				echo '</td>
 				</tr>
 				</table>';
 			}
 		}
+        
 	}
 } else {
 	Display::display_warning_message(get_lang('CantViewResults'));
@@ -264,6 +286,7 @@ if (!empty($track_exercise_info)) {
 	</tr>
 	</table>';
 }
+
 if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 	$show_results = false;
 }
@@ -1012,20 +1035,19 @@ if (is_array($arrid) && is_array($arrmarks)) {
 
 if ($is_allowedToEdit) {
 	if (in_array($origin, array('tracking_course','user_course'))) {
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';
-		if (isset($_GET['myid']) && isset($_GET['my_lp_id']) && isset($_GET['student'])) {
-			?>
-			<input type = "hidden" name="lp_item_id" value="<?php echo Security::remove_XSS($_GET['myid']); ?>">
-			<input type = "hidden" name="lp_item_view_id" value="<?php echo Security::remove_XSS($_GET['my_lp_id']); ?>">
-			<input type = "hidden" name="student_id" value="<?php echo Security::remove_XSS($_GET['student']);?>">
-			<input type = "hidden" name="total_score" value="<?php echo $totalScore; ?>">
-			<input type = "hidden" name="total_time" value="<?php echo Security::remove_XSS($_GET['total_time']);?>">
-			<input type = "hidden" name="my_exe_exo_id" value="<?php echo Security::remove_XSS($_GET['my_exe_exo_id']); ?>">
-			<?php
+		if (!empty($learnpath_id) && !empty($_GET['my_lp_id']) && isset($_GET['student'])) {
+			
+			echo '<input type = "hidden" name="lp_item_id"       value="'.$lp_id.'">';
+			echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
+			echo '<input type = "hidden" name="student_id"       value="'.$student_id.'">';
+			echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
+			//echo '<input type = "hidden" name="total_time"       value="'.Security::remove_XSS($_GET['total_time']).'"> ';
+			echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';			
 		}
 	} else {
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&totalWeighting='.$totalWeighting.'" method="post">';
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&filter=2&comments=update&exeid='.$id.'&totalWeighting='.$totalWeighting.'" method="post">';
 	}
 	if ($origin!='learnpath' && $origin!='student_progress') {
 		?>
@@ -1034,8 +1056,10 @@ if ($is_allowedToEdit) {
 		<?php
 	}
 }
-if ($origin=='student_progress' && !isset($_GET['my_lp_id'])) {?>
-	<button type="button" class="back" onclick="window.back();" value="<?php echo get_lang('Back'); ?>" ><?php echo get_lang('Backs');?></button>
+
+//Came from lpstats in a lp
+if ($origin =='student_progress') {?>
+	<button type="button" class="back" onclick="window.back();" value="<?php echo get_lang('Back'); ?>" ><?php echo get_lang('Back');?></button>
 <?php
 } else if($origin=='myprogress') {
 ?>
@@ -1064,6 +1088,7 @@ if ($origin != 'learnpath') {
 			ExerciseShowFunctions::send_notification($arrques, $arrans, $to);
 		}
 		Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));
+        echo '<br />';
 	}
 }
 

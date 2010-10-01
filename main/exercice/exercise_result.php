@@ -21,14 +21,14 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 
 if ($_GET['origin']=='learnpath') {
-	require_once ('../newscorm/learnpath.class.php');
-	require_once ('../newscorm/learnpathItem.class.php');
-	require_once ('../newscorm/scorm.class.php');
-	require_once ('../newscorm/scormItem.class.php');
-	require_once ('../newscorm/aicc.class.php');
-	require_once ('../newscorm/aiccItem.class.php');
+	require_once '../newscorm/learnpath.class.php';
+	require_once '../newscorm/learnpathItem.class.php';
+	require_once '../newscorm/scorm.class.php';
+	require_once '../newscorm/scormItem.class.php';
+	require_once '../newscorm/aicc.class.php';
+	require_once '../newscorm/aiccItem.class.php';
 }
-global $_cid;
+
 // name of the language file that needs to be included
 $language_file='exercice';
 
@@ -63,11 +63,15 @@ if ( empty ( $origin ) ) {
      $origin = Security::remove_XSS($_REQUEST['origin']);
 }
 if ( empty ( $learnpath_id ) ) {
-     $learnpath_id       = Security::remove_XSS($_REQUEST['learnpath_id']);
+     $learnpath_id       = intval($_REQUEST['learnpath_id']);
 }
 if ( empty ( $learnpath_item_id ) ) {
-     $learnpath_item_id  = Security::remove_XSS($_REQUEST['learnpath_item_id']);
+     $learnpath_item_id  = intval($_REQUEST['learnpath_item_id']);
 }
+if ( empty ( $learnpath_item_view_id ) ) {
+     $learnpath_item_view_id  = intval($_REQUEST['learnpath_item_view_id']);
+}
+
 if ( empty ( $formSent ) ) {
     $formSent       = $_REQUEST['formSent'];
 }
@@ -341,6 +345,7 @@ $exerciseTitle=text_filter($exerciseTitle);
 	<input type="hidden" name="origin" value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
     <input type="hidden" name="learnpath_item_id" value="<?php echo $learnpath_item_id; ?>" />
+    <input type="hidden" name="learnpath_item_view_id" value="<?php echo $learnpath_item_view_id; ?>" />
 
 <?php
 
@@ -915,9 +920,10 @@ if ($_configuration['tracking_enabled']) {
 	//	Updates the empty exercise
 	$safe_lp_id = $learnpath_id==''?0:(int)$learnpath_id;
 	$safe_lp_item_id = $learnpath_item_id==''?0:(int)$learnpath_item_id;
+    $safe_lp_item_view_id = $learnpath_item_view_id==''?0:(int)$learnpath_item_view_id;
 	$quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
 	if (api_is_allowed_to_session_edit() ) {
-		update_event_exercice($exeId, $objExercise->selectId(),$totalScore,$totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$quizDuration);
+		update_event_exercice($exeId, $objExercise->selectId(),$totalScore, $totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration);
 	}
 }
 

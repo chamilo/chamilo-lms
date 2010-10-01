@@ -678,13 +678,13 @@ if (is_array($list) && count($list) > 0) {
                                  if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                     $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></td>';
                                 } else {
-                                    $output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id .$from_link. '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';
+                                    $output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&id=' . $my_exe_id . '&cidReq=' . $course_code . $from_link. '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';
                                 }
                             } else {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all ) {
                                     $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></td>';
                                 } else {
-                                    $output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id . '&total_time='.$mytime.'&my_exe_exo_id='.$my_exo_exe_id.$from_link.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';
+                                    $output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&id=' . $my_exe_id . '&cidReq=' . $course_code.$from_link.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';
                                 }
                             }
                              $output .= '</tr>';

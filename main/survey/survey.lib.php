@@ -3724,7 +3724,7 @@ class SurveyUtil {
 			if (($new_user || $reminder == 1) && $sendmail != 0) {
 				// Make a change for absolute url
 				if (isset($invitation_text)) {
-					$invitation_text = api_html_entity_decode(api_convert_encoding($invitation_text, api_get_system_encoding(), $_SESSION['oLP']->encoding), ENT_QUOTES);
+					$invitation_text = api_html_entity_decode($invitation_text, ENT_QUOTES);
 					$invitation_text = str_replace('src="../../', 'src="'.api_get_path(WEB_PATH), $invitation_text);
 					$invitation_text = trim(stripslashes($invitation_text));
 				}

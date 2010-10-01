@@ -174,7 +174,7 @@ $langPlatform = "Piattaforma";
 $localLangName = "Italiano";
 $email = "e-mail";
 $langCourseCodeAlreadyExists = "Spiacente, ma questo codice è già in uso, scegline uno diverso.";
-$Statistics = "Registro";
+$Statistics = "Statistiche";
 $langGrouplist = "Elenco dei gruppi";
 $langPrevious = "precedente";
 $DestDirectoryDoesntExist = "La cartella di destinazione non esiste";
@@ -957,4 +957,5 @@ $QualifyInGradebook = "Valuta nel Registro";
 $SessionSpecificResource = "Risorsa specifica della sessione";
 $EditionNotAvailableFromSession = "Non è possibile modificare questa risorsa nel corso di una sessione: puoi farlo nel corso di origine";
 $HandingOverOfTaskX = "Compito realizzato al %s";
+$ProtectedDocument = "Documento protetto";
 ?>

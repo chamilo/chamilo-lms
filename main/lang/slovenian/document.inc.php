@@ -216,4 +216,12 @@ $HelpSharedFolder = "Ta mapa vsebuje datoteke, ki jih tečajniki (ali vi sami) p
 $TemplateImage = "Ikona predloge";
 $MoveElement = "Premakni dokument";
 $CertificateName = "Ime";
+$CopyToMyFiles = "Prepiši v moje osebno področje datotek";
+$Export2PDF = "Izvozi v PDF";
+$ResourceShared = "Resurs v skupni rabi";
+$CopyAlreadyDone = "V vašem privatnem področju datotek obstaja datoteka z enakim imenom. Nadomestim obstoječo datoteko z novo?";
+$CopyFailed = "Prepisovanje ni uspelo";
+$CopyMade = "Prepisovanje je uspelo";
+$OverwritenFile = "Datoteka je bila nadomeščena";
+$Draw = "Nariši";
 ?>

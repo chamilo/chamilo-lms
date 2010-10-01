@@ -194,4 +194,5 @@ $YouNeedToHaveFriendsInYourSocialNetwork = "Imeti morate prijatelje v svojem soc
 $SeeAllMyGroups = "Pokaži vse moje skupine";
 $YouAlreadyInviteAllYourContacts = "Povabili ste že vse svoje kontakte";
 $YouShouldCreateAGroup = "Kreirati je potrebno skupino";
+$MyFiles = "Moje datoteke";
 ?>

@@ -68,11 +68,11 @@ if (!api_is_platform_admin() && !api_is_session_admin()) {
 function search_sessions($needle,$type) {
 	global $_configuration, $tbl_session_rel_access_url, $tbl_session, $user_id;
 
-	$xajax_response = new XajaxResponse();	
+	$xajax_response = new XajaxResponse();
 	$return = '';
 	if(!empty($needle) && !empty($type)) {
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_setting('platform_charset');
+		$charset = api_get_system_encoding();
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
 		$assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
@@ -87,9 +87,9 @@ function search_sessions($needle,$type) {
 						WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()."";
 		} else {
 			$sql = "SELECT s.id, s.name FROM $tbl_session s
-				WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";			
+				WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";
 		}
-		
+
 		$rs	= Database::query($sql);
 
 		$return .= '<select id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20" style="width:340px;">';
@@ -208,7 +208,7 @@ if ($_configuration['multiple_access_urls']) {
 	$sql 	= " SELECT s.id, s.name FROM $tbl_session s
 				WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";
 }
-			
+
 $result	= Database::query($sql);
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
@@ -228,15 +228,15 @@ if(!empty($msg)) {
   <td width="45%" align="center"><b><?php echo get_lang('SessionsListInPlatform') ?> :</b></td>
   <td width="10%">&nbsp;</td>
   <td align="center" width="45%"><b>
-  <?php 
+  <?php
   	if (UserManager::is_admin($user_id)) {
 		echo get_lang('AssignedSessionsListToPlatformAdministrator');
 	} else if ($user_info['status'] == SESSIONADMIN) {
-		echo get_lang('AssignedSessionsListToSessionsAdministrator');		
+		echo get_lang('AssignedSessionsListToSessionsAdministrator');
 	} else {
 		echo get_lang('AssignedSessionsListToHumanResourcesManager');
-	}   
-  ?> 
+	}
+  ?>
   : </b></td>
 </tr>
 

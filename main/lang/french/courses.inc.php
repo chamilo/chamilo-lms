@@ -51,7 +51,7 @@ $CourseManagement = "Catalogue de cours";
 $SortMyCourses = "Trier mes cours";
 $SubscribeToCourse = "S'inscrire aux cours";
 $UnsubscribeFromCourse = "Se désinscrire d'un ou plusieurs cours";
-$CreateCourseCategory = "Créer une catégorie de cours";
+$CreateCourseCategory = "Créer une catégorie personnelle de cours";
 $CourseCategoryAbout2bedeleted = "Êtes-vous certain de vouloir supprimer cette catégorie de cours ? Les cours de cette catégorie seront déplacés en dehors de toute catégorie de cours.";
 $CourseCategories = "Catégories de cours";
 $CoursesInCategory = "Cours dans cette catégorie";
@@ -83,4 +83,5 @@ $Collapse = "Replier";
 $CourseDetails = "Description du cours";
 $GroupPendingInvitations = "Invitations de groupe en attente";
 $Compose = "Composer";
+$ThereAreNoCoursesInThisCategory = "Aucun cours dans la catégorie courante";
 ?>

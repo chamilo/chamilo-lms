@@ -52,7 +52,7 @@ if (!(api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_crea
 
 // filter actions
 $actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'unsubscribe', 'display_courses');
-$action = 'sortmycourses';
+$action = 'subscribe';
 $nameTools = get_lang('SortMyCourses');
 
 if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {

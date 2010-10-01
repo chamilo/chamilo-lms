@@ -1354,7 +1354,7 @@ class Exercise {
 			$new_answer_obj->read();
 			$new_answer_obj->duplicate($new_id);
 		}
-	}
+	}  
 
 	/**
 	 * Changes the exercise id
@@ -1374,20 +1374,24 @@ class Exercise {
 		$this->active = $status;
 	}
 	
-	public function get_stat_track_exercise_info($lp_id = 0, $lp_item_id = 0) {		
+	public function get_stat_track_exercise_info($lp_id = 0, $lp_item_id = 0, $lp_item_view_id = 0) {		
 		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		if (empty($lp_id)) {
 			$lp_id = 0;
 		}		
 		if (empty($lp_item_id)) {
 			$lp_item_id = 0;
-		}		
+		}	
+        if (empty($lp_item_view_id)) {
+            $lp_item_view_id = 0;
+        }   	
 		$condition = ' WHERE exe_exo_id 	= ' . "'" . $this->id . "'" .' AND 
 					   exe_user_id 			= ' . "'" . api_get_user_id() . "'" . ' AND 
 					   exe_cours_id 		= ' . "'" . api_get_course_id() . "'" . ' AND 
 					   status 				= ' . "'incomplete'" . ' AND 
 					   orig_lp_id 			= ' . "'" . $lp_id . "'" . ' AND 
-					   orig_lp_item_id 		= ' . "'" . $lp_item_id . "'" . ' AND 
+					   orig_lp_item_id 		= ' . "'" . $lp_item_id . "'" . ' AND
+                       orig_lp_item_view_id = ' . "'" . $lp_item_view_id . "'" . ' AND
 					   session_id 			= ' . "'" . api_get_session_id() . "' LIMIT 1"; //Adding limit 1 just in case
 					   
 		$sql_track = 'SELECT * FROM '.$track_exercises.$condition;
@@ -1401,7 +1405,7 @@ class Exercise {
 	}
 	
 	
-	public function save_stat_track_exercise_info($clock_expired_time = 0, $safe_lp_id = 0, $safe_lp_item_id = 0, $questionList = array()) {
+	public function save_stat_track_exercise_info($clock_expired_time = 0, $safe_lp_id = 0, $safe_lp_item_id = 0, $safe_lp_item_view_id = 0, $questionList = array()) {
 		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		
 		if (empty($safe_lp_id)) {

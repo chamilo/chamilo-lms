@@ -73,7 +73,7 @@ function search_courses($needle,$type) {
 	$return = '';
 	if(!empty($needle) && !empty($type)) {
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_setting('platform_charset');
+		$charset = api_get_system_encoding();
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 
 		$assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
@@ -88,7 +88,7 @@ function search_courses($needle,$type) {
 
 		if ($_configuration['multiple_access_urls']) {
 			$sql = "SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
-				WHERE  c.code LIKE '$needle%' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."";					
+				WHERE  c.code LIKE '$needle%' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."";
 		} else {
 			$sql = "SELECT c.code, c.title FROM $tbl_course c
 				WHERE  c.code LIKE '$needle%' $without_assigned_courses ";
@@ -207,13 +207,13 @@ if (isset($_POST['firstLetterCourse'])) {
 if ($_configuration['multiple_access_urls']) {
 	$sql 	= " SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
 			WHERE  c.code LIKE '$needle' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."";
-			
+
 } else {
 	$sql 	= " SELECT c.code, c.title FROM $tbl_course c
 			WHERE  c.code LIKE '$needle' $without_assigned_courses ";
 }
-			
-			
+
+
 $result	= Database::query($sql);
 
 ?>
@@ -234,15 +234,15 @@ if(!empty($msg)) {
   <td width="45%" align="center"><b><?php echo get_lang('CoursesListInPlatform') ?> :</b></td>
   <td width="10%">&nbsp;</td>
   <td align="center" width="45%"><b>
-  	<?php   	
+  	<?php
 	  	if (UserManager::is_admin($user_id)) {
 			echo get_lang('AssignedCoursesListToPlatformAdministrator');
 		} else if ($user_info['status'] == SESSIONADMIN) {
-			echo get_lang('AssignedCoursesListToSessionsAdministrator');		
+			echo get_lang('AssignedCoursesListToSessionsAdministrator');
 		} else {
 			echo get_lang('AssignedCoursesListToHumanResourcesManager');
-		}  	
-  	?> 
+		}
+  	?>
   	:</b></td>
 </tr>
 

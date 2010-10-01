@@ -59,11 +59,11 @@ $type           = $_REQUEST['type'];
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action=="add" and $type=="learnpathitem") {
-	 $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
-	error_log('New LP - User not authorized in lp_build.php');
-	header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    error_log('New LP - User not authorized in lp_build.php');
+    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
@@ -71,17 +71,17 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 $is_new = false;
 
 if ($learnpath_id == 0) {
-	$is_new = true;
+    $is_new = true;
 
-	$sql = "
-		SELECT id
-		FROM " . $tbl_lp . "
-		ORDER BY id DESC
-		LIMIT 0, 1";
-	$result = Database::query($sql);
-	$row = Database::fetch_array($result);
+    $sql = "
+        SELECT id
+        FROM " . $tbl_lp . "
+        ORDER BY id DESC
+        LIMIT 0, 1";
+    $result = Database::query($sql);
+    $row = Database::fetch_array($result);
 
-	$learnpath_id = $row['id'];
+    $learnpath_id = $row['id'];
 }
 
 $sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
@@ -91,25 +91,25 @@ $therow = Database::fetch_array($result);
 
 //$admin_output = '';
 /*
-	Course admin section
-	- all the functions not available for students - always available in this case (page only shown to admin)
+    Course admin section
+    - all the functions not available for students - always available in this case (page only shown to admin)
 */
 
 /* SHOWING THE ADMIN TOOLS */
 
 if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-	$_SESSION['gradebook'] = Security::remove_XSS($_GET['gradebook']);
-	$gradebook = $_SESSION['gradebook'];
+    $_SESSION['gradebook'] = Security::remove_XSS($_GET['gradebook']);
+    $gradebook = $_SESSION['gradebook'];
 } elseif (empty($_GET['gradebook'])) {
-	unset($_SESSION['gradebook']);
-	$gradebook = '';
+    unset($_SESSION['gradebook']);
+    $gradebook = '';
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-	$interbreadcrumb[] = array (
-		'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
-		'name' => get_lang('ToolGradebook')
-	);
+    $interbreadcrumb[] = array (
+        'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", "name" => stripslashes("{$therow['name']}"));
@@ -127,23 +127,23 @@ $suredel = trim(get_lang('AreYouSureToDelete'));
 <script type='text/javascript'>
 /* <![CDATA[ */
 function stripslashes(str) {
-	str=str.replace(/\\'/g,'\'');
-	str=str.replace(/\\"/g,'"');
-	str=str.replace(/\\\\/g,'\\');
-	str=str.replace(/\\0/g,'\0');
-	return str;
+    str=str.replace(/\\'/g,'\'');
+    str=str.replace(/\\"/g,'"');
+    str=str.replace(/\\\\/g,'\\');
+    str=str.replace(/\\0/g,'\0');
+    return str;
 }
 function confirmation(name)
 {
-	name=stripslashes(name);
-	if (confirm("<?php echo $suredel; ?> " + name + " ?"))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    name=stripslashes(name);
+    if (confirm("<?php echo $suredel; ?> " + name + " ?"))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 </script>
 <?php
@@ -154,34 +154,34 @@ function confirmation(name)
 
 echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-	echo '<tr>';
-		echo '<td class="tree">';
-			echo '<div class="lp_tree">';
-				// Build the tree with the menu items in it.
-				echo $_SESSION['oLP']->build_tree();
-			echo '</div>';
-		echo '</td>';
-		echo '<td class="workspace">';
-			if (isset($is_success) && $is_success === true) {
-				Display::display_confirmation_message(get_lang('ItemRemoved'));
-			} else {
-				if ($is_new) {
-					Display::display_normal_message(get_lang('LearnpathAdded'), false);
-				}
-				// Display::display_normal_message(get_lang('LPCreatedAddChapterStep'), false);
-				$gradebook = Security::remove_XSS($_GET['gradebook']);
-				//$learnpathadded = Display::return_icon('gallery/creative.gif', '', array('align' => 'right'));
-				$learnpathadded .= '<p><strong>'.get_lang('LearnPathAddedTitle').'</strong><br /><br />';
-				$learnpathadded .= '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'" target="_parent">'.Display::return_icon('learnpath_build.gif', get_lang('Build'), array('style' => 'vertical-align: middle;')).' '.get_lang('Build')."</a>: ".get_lang('BuildComment').'<br />';
-				$learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("BasicOverview").'">'.Display::return_icon('learnpath_organize.gif', get_lang('BasicOverview'), array('style' => 'vertical-align: middle;')).' '.get_lang('BasicOverview').'</a>: '.get_lang('BasicOverviewComment').'<br />';
-				$learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.Display::return_icon('learnpath_view.gif', get_lang('Display'),array('style' => 'vertical-align: middle;')).' '.get_lang('Display').'</a>: '.get_lang('DisplayComment').'<br />';
-				$learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang('NewChapter').'">'.Display::return_icon('lp_dokeos_chapter_add.gif', get_lang('NewChapter'), array('style' => 'vertical-align: middle;')).' '.get_lang('NewChapter').'</a>: '.get_lang('NewChapterComment').'<br />';
-				$learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang('NewStep').'">'.Display::return_icon('new_test.gif', get_lang('NewStep'), array('style' => 'vertical-align: middle;')).' '.get_lang('NewStep').'</a>: '.get_lang('NewStepComment').'<br />';
-				$learnpathadded .= '<br /><br /><br /><br /></p>';
-				Display::display_normal_message($learnpathadded, false);
-			}
-		echo '</td>';
-	echo '</tr>';
+    echo '<tr>';
+        echo '<td class="tree">';
+            echo '<div class="lp_tree">';
+                // Build the tree with the menu items in it.
+                echo $_SESSION['oLP']->build_tree();
+            echo '</div>';
+        echo '</td>';
+        echo '<td class="workspace">';
+            if (isset($is_success) && $is_success === true) {
+                Display::display_confirmation_message(get_lang('ItemRemoved'));
+            } else {
+                if ($is_new) {
+                    Display::display_normal_message(get_lang('LearnpathAdded'), false);
+                }
+                // Display::display_normal_message(get_lang('LPCreatedAddChapterStep'), false);
+                $gradebook = Security::remove_XSS($_GET['gradebook']);
+                //$learnpathadded = Display::return_icon('gallery/creative.gif', '', array('align' => 'right'));
+                $learnpathadded .= '<p><strong>'.get_lang('LearnPathAddedTitle').'</strong><br /><br />';
+                $learnpathadded .= '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'" target="_parent">'.Display::return_icon('learnpath_build.gif', get_lang('Build'), array('style' => 'vertical-align: middle;')).' '.get_lang('Build')."</a>: ".get_lang('BuildComment').'<br />';
+                $learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang("BasicOverview").'">'.Display::return_icon('learnpath_organize.gif', get_lang('BasicOverview'), array('style' => 'vertical-align: middle;')).' '.get_lang('BasicOverview').'</a>: '.get_lang('BasicOverviewComment').'<br />';
+                $learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&action=view&lp_id='.$_SESSION['oLP']->lp_id.'">'.Display::return_icon('learnpath_view.gif', get_lang('Display'),array('style' => 'vertical-align: middle;')).' '.get_lang('Display').'</a>: '.get_lang('DisplayComment').'<br />';
+                $learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang('NewChapter').'">'.Display::return_icon('lp_dokeos_chapter_add.gif', get_lang('NewChapter'), array('style' => 'vertical-align: middle;')).' '.get_lang('NewChapter').'</a>: '.get_lang('NewChapterComment').'<br />';
+                $learnpathadded .= '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="'.get_lang('NewStep').'">'.Display::return_icon('new_test.gif', get_lang('NewStep'), array('style' => 'vertical-align: middle;')).' '.get_lang('NewStep').'</a>: '.get_lang('NewStepComment').'<br />';
+                $learnpathadded .= '<br /><br /><br /><br /></p>';
+                Display::display_normal_message($learnpathadded, false);
+            }
+        echo '</td>';
+    echo '</tr>';
 echo '</table>';
 
 /* FOOTER */

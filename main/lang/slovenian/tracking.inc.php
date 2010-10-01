@@ -273,4 +273,6 @@ $DisplayCourseOverview = "Povzetek tečajev";
 $DisplaySessionOverview = "Povzetek sej";
 $TotalNumberOfMessages = "Skupno število sporočil";
 $TotalNumberOfAssignments = "Skupno število nalog/zadolžitev";
+$LastLogins = "Zadnje prijave";
+$AllLogins = "Vse prijave";
 ?>

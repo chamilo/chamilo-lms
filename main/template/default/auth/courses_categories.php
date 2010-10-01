@@ -15,37 +15,36 @@ $stok = Security::get_token();
 <?php if(intval($_GET['hidden_links']) != 1) { ?>
 
 <div id="actions" class="actions">
-    <?php if ($action != 'sortmycourses' && isset($action)) { ?>
-            &nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=sortmycourses"><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses'); ?></a>&nbsp;
+    <?php if ($action != 'subscribe') { ?>
+        &nbsp;<a href="<?php echo api_get_self(); ?>?action=subscribe"><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse'); ?></a>&nbsp;
     <?php } else { ?>
-            &nbsp;&nbsp;<strong><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses'); ?></strong>&nbsp;
+        &nbsp;<strong><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse'); ?></strong>&nbsp;
     <?php } ?>
-    &nbsp;
+
+    <?php if ($action != 'sortmycourses' && isset($action)) { ?>
+            &nbsp;<a href="<?php echo api_get_self(); ?>?action=sortmycourses"><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses'); ?></a>&nbsp;
+    <?php } else { ?>
+            &nbsp;<strong><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses'); ?></strong>&nbsp;
+    <?php } ?>
 
     <?php if ($action != 'createcoursecategory') { ?>
-	&nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=createcoursecategory"><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory'); ?></a>&nbsp;
+	&nbsp;<a href="<?php echo api_get_self(); ?>?action=createcoursecategory"><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory'); ?></a>&nbsp;
     <?php } else { ?>
-        &nbsp;&nbsp;<strong><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory'); ?></strong>&nbsp;
-    <?php } ?>
-    &nbsp;
-
-    <?php if ($action != 'subscribe') { ?>
-        &nbsp;&nbsp;<a href="<?php echo api_get_self(); ?>?action=subscribe"><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse'); ?></a>&nbsp;
-    <?php } else { ?>
-        &nbsp;&nbsp;<strong><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse'); ?></strong>&nbsp;
+        &nbsp;<strong><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory'); ?></strong>&nbsp;
     <?php } ?>
 </div>
 
-<?php } ?>
+<?php 
+    $hidden_links = 0;
+} else { 
+    $hidden_links = 1; 
+} ?>
 
 <div id="categories-content" >
-
     <div id="categories-content-first">
-
         <div id="categories-search">
-
             <p><strong><?php echo get_lang('SearchCourse'); ?></strong><br />
-            <form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&hidden_links=1">
+            <form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&hidden_links=<?php echo $hidden_links; ?>">
                 <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                 <input type="hidden" name="search_course" value="1" />
                 <input type="text" size="12" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : Security::remove_XSS($_POST['search_term'])); ?>" />
@@ -67,7 +66,7 @@ $stok = Security::get_token();
                         if ($code == $category_code) {
                             $category_link = '<strong>'.$category_name.' ('.$count_courses_lv1.')</strong>';
                         } else {
-                            $category_link = '<a href="'. api_get_self().'?action=display_courses&category_code='.$category_code.'&hidden_links=1">'.$category_name.'</a> ('.$count_courses_lv1.')';
+                            $category_link = '<a href="'. api_get_self().'?action=display_courses&category_code='.$category_code.'&hidden_links='.$hidden_links.'">'.$category_name.'</a> ('.$count_courses_lv1.')';
                         }
 
                         echo '<div>'.$category_link.'</div>';
@@ -80,7 +79,7 @@ $stok = Security::get_token();
                                 if ($code == $subcategory1_code) {
                                     $subcategory1_link = '<strong>'.$subcategory1_name.' ('.$count_courses_lv2.')</strong>';
                                 } else {
-                                    $subcategory1_link = '<a href="'. api_get_self().'?action=display_courses&category_code='.$subcategory1_code.'&hidden_links=1">'.$subcategory1_name.'</a> ('.$count_courses_lv2.')';
+                                    $subcategory1_link = '<a href="'. api_get_self().'?action=display_courses&category_code='.$subcategory1_code.'&hidden_links='.$hidden_links.'">'.$subcategory1_name.'</a> ('.$count_courses_lv2.')';
                                 }
                                 echo '<div style="margin-left:20px;">'.$subcategory1_link.'</div>';
                             }
@@ -93,7 +92,7 @@ $stok = Security::get_token();
                                     if ($code == $subcategory2_code) {
                                         $subcategory2_link = '<strong>'.$subcategory2_name.' ('.$count_courses_lv3.')</strong>';
                                     } else {
-                                        $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&category_code='.$subcategory2_code.'&hidden_links=1">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
+                                        $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&category_code='.$subcategory2_code.'&hidden_links='.$hidden_links.'">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
                                     }
                                     echo '<div style="margin-left:40px;">'.$subcategory2_link.'</div>';
                                 }
@@ -150,10 +149,10 @@ $stok = Security::get_token();
                                 <img src="'.$course_medium_image.'" />
                             </div>
                             <div class="categories-course-description">
-                                <div class="course-block-text" style="text-align:center;"><strong>'.strtoupper($title).'</strong></div>
-                                <div class="course-block-text"><strong>'.get_lang('TutorName').':</strong> <br />'.$tutor_name.'</div>
+                                <div class="course-block-text"><strong>'.strtoupper($title).'</strong></div>
+                                <div class="course-block-text"><strong>'.get_lang('Teacher').':</strong><br />'.$tutor_name.'</div>
                                 <div class="course-block-text"><strong>'.get_lang('CreationDate').':</strong><br />'.$creation_date.'</div>
-                                <div class="course-block-text"><strong>'.get_lang('ConexionsLastMonth').':</strong>'.$count_connections.'</div>
+                                <div class="course-block-text"><strong>'.get_lang('ConnectionsLastMonth').':</strong> '.$count_connections.'</div>
                             </div>
 
                         </div>

@@ -30,10 +30,10 @@ if (empty($debug)) { $debug = 0; }
 $error = '';
 $display_mode = '';
 if (isset($_SESSION['lpobject'])) {
-	$temp = $_SESSION['lpobject'];
-	$_SESSION['oLP'] = unserialize($temp);
-	$error = $_SESSION['oLP']->error;
-	$display_mode = $_SESSION['oLP']->mode;
+    $temp = $_SESSION['lpobject'];
+    $_SESSION['oLP'] = unserialize($temp);
+    $error = $_SESSION['oLP']->error;
+    $display_mode = $_SESSION['oLP']->mode;
 }
 if ($debug > 0) { error_log('New LP - Loaded lp_message : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER['HTTP_REFERER'], 0); }
 

@@ -19,6 +19,7 @@ $Myself = "Minulle";
 $From = "Keneltä";
 $To = "Kenelle";
 $Date = "Päivä";
+$InvalidMessageId = "Vastattavan viestin tunnus ei ole kelvollinen";
 $ErrorSendingMessage = "Virhe viestin lähetyksessä.";
 $SureYouWantToDeleteSelectedMessages = "Haluatko varmasti poistaa valitut viestit?";
 $SelectedMessagesDeleted = "Valitut viestit on poistettu";

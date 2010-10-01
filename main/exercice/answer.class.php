@@ -274,8 +274,8 @@ class Answer
 	 			
 	 			//Avoid problems when parsing elements with accents
 	 			if ($decode) {
-	        		$this->answer[$i] 	= html_entity_decode($this->answer[$i], ENT_QUOTES, api_get_system_encoding());
-	        		$this->comment[$i]	= html_entity_decode($this->comment[$i], ENT_QUOTES, api_get_system_encoding());
+	        		$this->answer[$i] 	= api_html_entity_decode($this->answer[$i], ENT_QUOTES, api_get_system_encoding());
+	        		$this->comment[$i]	= api_html_entity_decode($this->comment[$i], ENT_QUOTES, api_get_system_encoding());
 	 			}
 	        	
 	 			$list[] = array(

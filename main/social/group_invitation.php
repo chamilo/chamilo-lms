@@ -86,7 +86,7 @@ function search_users($needle,$type) {
 	if (!empty($needle) && !empty($type)) {
 
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_setting('platform_charset');
+		$charset = api_get_system_encoding();
 		$needle = Database::escape_string($needle);
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$user_anonymous=api_get_anonymous_id();
@@ -399,9 +399,9 @@ if ($add_type=='multiple') {
 if(!empty($errorMsg)) {
 	Display::display_error_message($errorMsg); //main API
 }
-	echo '<div class="social-box-container2">';				
+	echo '<div class="social-box-container2">';
 	echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('SubscribeUsersToGroup')).'</div>';
-		echo '<div id="div_content_table" class="social-box-content2">';	
+		echo '<div id="div_content_table" class="social-box-content2">';
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
@@ -516,7 +516,7 @@ if (is_array($members) && count($members)>0) {
 	Display::display_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
 }
 			echo '</div>';//end  class social-box-content2
-		echo '</div>';// end class social-box-container2		
+		echo '</div>';// end class social-box-container2
 	echo '</div>'; // end layout right
 
 echo '</div>'; //

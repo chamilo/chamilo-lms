@@ -785,10 +785,15 @@ abstract class Question
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$id = $this->id;
 		// checks if the exercise ID is not in the list
-		if (!in_array($exerciseId,$this->exerciseList)) {
-			$this->exerciseList[]=$exerciseId;
-			$sql="INSERT INTO $TBL_EXERCICE_QUESTION (question_id, exercice_id) VALUES('".Database::escape_string($id)."','".Database::escape_string($exerciseId)."')";
+		if (!in_array($exerciseId,$this->exerciseList)) {            
+			$this->exerciseList[]=$exerciseId;            
+            $new_exercise = new Exercise();
+            $new_exercise->read($exerciseId);
+            $count = $new_exercise->selectNbrQuestions();
+            $count++;
+			$sql="INSERT INTO $TBL_EXERCICE_QUESTION (question_id, exercice_id, question_order) VALUES ('".Database::escape_string($id)."','".Database::escape_string($exerciseId)."', '$count' )";
 			Database::query($sql);
+            
             // we do not want to reindex if we had just saved adnd indexed the question
             if (!$fromSave) {
             	$this->search_engine_edit($exerciseId, TRUE);

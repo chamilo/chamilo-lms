@@ -37,21 +37,21 @@ $htmlHeadXtra[] = '
 
 function FCKeditor_OnComplete( editorInstance )
 {
-	document.getElementById(\'frmModel\').innerHTML = "<iframe height=890px; width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
+    document.getElementById(\'frmModel\').innerHTML = "<iframe height=890px; width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 }
 
 function InnerDialogLoaded()
 {
-	if (document.all)
-	{
-		// if is iexplorer
-		var B=new window.frames.content_lp___Frame.FCKToolbarButton(\'Templates\',window.content_lp___Frame.FCKLang.Templates);
-	}
-	else
-	{
-		var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
-	}
-	return B.ClickFrame();
+    if (document.all)
+    {
+        // if is iexplorer
+        var B=new window.frames.content_lp___Frame.FCKToolbarButton(\'Templates\',window.content_lp___Frame.FCKLang.Templates);
+    }
+    else
+    {
+        var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
+    }
+    return B.ClickFrame();
 };
 
 </script>';
@@ -86,11 +86,11 @@ $type           = $_REQUEST['type'];
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {
-	 $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
-	error_log('New LP - User not authorized in lp_add_item.php');
-	header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    error_log('New LP - User not authorized in lp_add_item.php');
+    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
@@ -100,21 +100,21 @@ $therow = Database::fetch_array($result);
 
 //$admin_output = '';
 /*
-	Course admin section
-	- all the functions not available for students - always available in this case (page only shown to admin)
+    Course admin section
+    - all the functions not available for students - always available in this case (page only shown to admin)
 */
 
 /* SHOWING THE ADMIN TOOLS */
 
 if (isset($_SESSION['gradebook'])) {
-	$gradebook = $_SESSION['gradebook'];
+    $gradebook = $_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-	$interbreadcrumb[] = array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('ToolGradebook')
-		);
+    $interbreadcrumb[] = array (
+            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+            'name' => get_lang('ToolGradebook')
+        );
 }
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
@@ -132,23 +132,23 @@ $suredel = trim(get_lang('AreYouSureToDelete'));
 <script type='text/javascript'>
 /* <![CDATA[ */
 function stripslashes(str) {
-	str=str.replace(/\\'/g,'\'');
-	str=str.replace(/\\"/g,'"');
-	str=str.replace(/\\\\/g,'\\');
-	str=str.replace(/\\0/g,'\0');
-	return str;
+    str=str.replace(/\\'/g,'\'');
+    str=str.replace(/\\"/g,'"');
+    str=str.replace(/\\\\/g,'\\');
+    str=str.replace(/\\0/g,'\0');
+    return str;
 }
 function confirmation(name)
 {
-	name=stripslashes(name);
-	if (confirm("<?php echo $suredel; ?> " + name + " ?"))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    name=stripslashes(name);
+    if (confirm("<?php echo $suredel; ?> " + name + " ?"))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 </script>
 <?php
@@ -159,47 +159,47 @@ function confirmation(name)
 
 echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-		echo '<tr>';
-		echo '<td class="tree">';
+        echo '<tr>';
+        echo '<td class="tree">';
 
-		$path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
-		$path_item = Database::escape_string($path_item);
-		$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-		$sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE id = '". $path_item."' ";
-		$res_doc = Database::query($sql_doc);
-		$path_file = Database::result($res_doc, 0, 0);
-		$path_parts = pathinfo($path_file);
+        $path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
+        $path_item = Database::escape_string($path_item);
+        $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
+        $sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE id = '". $path_item."' ";
+        $res_doc = Database::query($sql_doc);
+        $path_file = Database::result($res_doc, 0, 0);
+        $path_parts = pathinfo($path_file);
 
-		if (Database::num_rows($res_doc) > 0 && $path_parts['extension'] == 'html') {
-			$count_items = count($_SESSION['oLP']->ordered_items);
-			$style = ($count_items > 12) ? ' style="height:250px;width:230px;overflow-x : auto; overflow : scroll;" ' : ' class="lp_tree" ';
-			echo '<div '.$style.'>';
-			// Build the tree with the menu items in it.
-			echo $_SESSION['oLP']->build_tree();
-			echo '</div>';
-			// Show the template list
-			echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>';
-			echo '<br />';
-			echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
-		} else {
-			echo '<div class="lp_tree" style="height:90%" >';
-			// Build the tree with the menu items in it.
-			echo $_SESSION['oLP']->build_tree();
-			echo '</div>';
-		}
+        if (Database::num_rows($res_doc) > 0 && $path_parts['extension'] == 'html') {
+            $count_items = count($_SESSION['oLP']->ordered_items);
+            $style = ($count_items > 12) ? ' style="height:250px;width:230px;overflow-x : auto; overflow : scroll;" ' : ' class="lp_tree" ';
+            echo '<div '.$style.'>';
+            // Build the tree with the menu items in it.
+            echo $_SESSION['oLP']->build_tree();
+            echo '</div>';
+            // Show the template list
+            echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>';
+            echo '<br />';
+            echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
+        } else {
+            echo '<div class="lp_tree" style="height:90%" >';
+            // Build the tree with the menu items in it.
+            echo $_SESSION['oLP']->build_tree();
+            echo '</div>';
+        }
 
-		echo '</td>';
-		echo '<td class="workspace">';
-			if (isset($is_success) && $is_success === true) {
-				$msg = '<div class="lp_message" style="margin-bottom:10px;">';
-				$msg .= 'The item has been edited.';
-				$msg .= '</div>';
-				echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
-			} else {
-				echo $_SESSION['oLP']->display_edit_item($_GET['id']);
-			}
-		echo '</td>';
-	echo '</tr>';
+        echo '</td>';
+        echo '<td class="workspace">';
+            if (isset($is_success) && $is_success === true) {
+                $msg = '<div class="lp_message" style="margin-bottom:10px;">';
+                $msg .= 'The item has been edited.';
+                $msg .= '</div>';
+                echo $_SESSION['oLP']->display_item($_GET['id'], $msg);
+            } else {
+                echo $_SESSION['oLP']->display_edit_item($_GET['id']);
+            }
+        echo '</td>';
+    echo '</tr>';
 echo '</table>';
 
 /* FOOTER */

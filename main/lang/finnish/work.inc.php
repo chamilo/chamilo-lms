@@ -34,6 +34,7 @@ $SendMailBody = "Käyttäjä on tehnyt dokumentin kurssisi julkaisu työkalulla.
 $DirDelete = "Poista hakemisto";
 $ValidateChanges = "Tallenna muutokset";
 $FolderUpdated = "Kansio päivitetty";
+$EndsAt = "Päättyy (täysin suljettu)";
 $AddToCalendar = "Lisää kalenteriin";
 $ButtonCreateAssignment = "Luo testi";
 $AssignmentName = "Testin nimi";

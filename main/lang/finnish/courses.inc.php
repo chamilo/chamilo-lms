@@ -76,4 +76,11 @@ $CourseCategoryEditStored = "Kategoria päivitetty";
 $buttonCreateCourseCategory = "Tallenna kategoria";
 $buttonSaveCategory = "Tallenna kategoria";
 $buttonChangeCategory = "Muuta kategoria";
+$SessionName = "Session nimi";
+$SessionCategory = "Sessioiden luokat";
+$Expand = "Laajenna";
+$Collapse = "Pienennä";
+$CourseDetails = "Kurssin kuvaus";
+$GroupPendingInvitations = "Ryhmän odottavat kutsut";
+$Compose = "Laadi";
 ?>

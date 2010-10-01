@@ -123,9 +123,14 @@ else {
 	// only if login form was not sent because if the form is sent the user was already on the page.
 	event_open();
 }
-
+ 
 // the header
-Display::display_header(get_lang('Homepage'));
+$header_title = get_lang('Homepage');
+$sitename = api_get_setting('siteName');
+if (!empty($sitename)) {
+	$header_title = null;
+}
+Display::display_header($header_title);
 
 /*
 	MAIN CODE

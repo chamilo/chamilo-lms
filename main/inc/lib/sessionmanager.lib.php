@@ -1077,23 +1077,30 @@ class SessionManager {
 	  * @param	int			Relation type
 	  **/
 	public static function suscribe_sessions_to_hr_manager($hr_manager_id,$sessions_list) {
+        global $_configuration;
+        // Database Table Definitions
+        $tbl_session                    =   Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_rel_user           =   Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_rel_course_user    =   Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);        
+        $tbl_session_rel_access_url     =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);        
 
-		// Database Table Definitions
-		$tbl_session 					= 	Database::get_main_table(TABLE_MAIN_SESSION);
-		$tbl_session_rel_user 			= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
-		$tbl_session_rel_course_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $hr_manager_id = intval($hr_manager_id);
+        $affected_rows = 0;
 
-		$hr_manager_id = intval($hr_manager_id);
-		$affected_rows = 0;
+        //Deleting assigned sessions to hrm_id
+        if ($_configuration['multiple_access_urls']) {  
+            $sql = "SELECT id_session FROM $tbl_session_rel_user s INNER JOIN $tbl_session_rel_access_url a ON (a.session_id = s.id_session) WHERE id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH." AND access_url_id = ".api_get_current_access_url_id()."";
+        } else {
+            $sql = "SELECT id_session FROM $tbl_session_rel_user s WHERE id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH."";
+        }
+        $result = Database::query($sql);  
 
-		//Deleting assigned sessions to hrm_id
-	   	$sql = "SELECT id_session FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH." ";
-		$result = Database::query($sql);
-
-		if (Database::num_rows($result) > 0) {
-			$sql = "DELETE FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH." ";
-			Database::query($sql);
-		}
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result))   {
+                 $sql = "DELETE FROM $tbl_session_rel_user WHERE id_session = {$row['id_session']} AND id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH." ";
+                 Database::query($sql);
+            }
+        }
 
 		/*
 		//Deleting assigned courses in sessions to hrm_id
@@ -1125,17 +1132,22 @@ class SessionManager {
 	 * @return array 	sessions
 	 */
 	public static function get_sessions_followed_by_drh($hr_manager_id) {
-
+        global $_configuration;
 		// Database Table Definitions
 		$tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 		$hr_manager_id = intval($hr_manager_id);
 		$assigned_sessions_to_hrm = array();
 
-		$sql = "SELECT * FROM $tbl_session s
-				 INNER JOIN $tbl_session_rel_user sru ON sru.id_session = s.id AND sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
-
+		if ($_configuration['multiple_access_urls']) {   
+           $sql = "SELECT * FROM $tbl_session s INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id) LEFT JOIN $tbl_session_rel_access_url a  ON (s.id = a.session_id)
+                   WHERE sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
+        } else {
+            $sql = "SELECT * FROM $tbl_session s
+                     INNER JOIN $tbl_session_rel_user sru ON sru.id_session = s.id AND sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";   
+        }
 		$rs_assigned_sessions = Database::query($sql);
 		if (Database::num_rows($rs_assigned_sessions) > 0) {
 			while ($row_assigned_sessions = Database::fetch_array($rs_assigned_sessions))	{

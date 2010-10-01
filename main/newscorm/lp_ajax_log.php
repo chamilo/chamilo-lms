@@ -24,19 +24,19 @@ require_once 'back_compat.inc.php';
  * @param   int    Debug level (if 0, do not log)
  */
 function lp_ajax_log($msg, $level) {
-	$debug = 0;
-	$return = '';
-	if ($debug > 0) {error_log('In log('.$msg.')', 0); }
-	if ($level == 0) {
-		//error_log('Logging level too low, not writing files in '.__FILE__);
-		return $return;
-	}
-	$msg = str_replace('<br />', "\r\n", $msg);
-	$file = sys_get_temp_dir().DIRECTORY_SEPARATOR.session_id().'.'.date('Ymd').'-'.api_get_user_id().'.scorm.log';
-	$fh = @fopen($file, 'a');
-	@fwrite($fh,'['.date('Y-m-d H:m:s').'] '.$msg."\r\n");
-	@fclose($fh);
-	return $return;
+    $debug = 0;
+    $return = '';
+    if ($debug > 0) {error_log('In log('.$msg.')', 0); }
+    if ($level == 0) {
+        //error_log('Logging level too low, not writing files in '.__FILE__);
+        return $return;
+    }
+    $msg = str_replace('<br />', "\r\n", $msg);
+    $file = sys_get_temp_dir().DIRECTORY_SEPARATOR.session_id().'.'.date('Ymd').'-'.api_get_user_id().'.scorm.log';
+    $fh = @fopen($file, 'a');
+    @fwrite($fh,'['.date('Y-m-d H:m:s').'] '.$msg."\r\n");
+    @fclose($fh);
+    return $return;
 }
 
 echo lp_ajax_log($_POST['msg'], $_POST['debug']);

@@ -19,20 +19,20 @@
  * @return string			The returned plain text as a result.
  */
 function api_html_to_text($string) {
-	// These purifications have been found experimentally, for nice looking output.
-	$string = preg_replace('/<br[^>]*>/i', "\n", $string);
-	$string = preg_replace('/<\/?(div|p|h[1-6]|table|ol|ul|blockquote)[^>]*>/i', "\n", $string);
-	$string = preg_replace('/<\/(tr|li)[^>]*>/i', "\n", $string);
-	$string = preg_replace('/<\/(td|th)[^>]*>/i', "\t", $string);
+    // These purifications have been found experimentally, for nice looking output.
+    $string = preg_replace('/<br[^>]*>/i', "\n", $string);
+    $string = preg_replace('/<\/?(div|p|h[1-6]|table|ol|ul|blockquote)[^>]*>/i', "\n", $string);
+    $string = preg_replace('/<\/(tr|li)[^>]*>/i', "\n", $string);
+    $string = preg_replace('/<\/(td|th)[^>]*>/i', "\t", $string);
 
-	$string = strip_tags($string);
+    $string = strip_tags($string);
 
-	// Line endings unification and cleaning.
-	$string = str_replace(array("\r\n", "\n\r", "\r"), "\n", $string);
-	$string = preg_replace('/\s*\n/', "\n", $string);
-	$string = preg_replace('/\n+/', "\n", $string);
+    // Line endings unification and cleaning.
+    $string = str_replace(array("\r\n", "\n\r", "\r"), "\n", $string);
+    $string = preg_replace('/\s*\n/', "\n", $string);
+    $string = preg_replace('/\n+/', "\n", $string);
 
-	return trim($string);
+    return trim($string);
 }
 
 /**
@@ -41,12 +41,12 @@ function api_html_to_text($string) {
  * @return string						Returns the detected encoding.
  */
 function api_detect_encoding_html($string) {
-	if (@preg_match('/<head.*(<meta[^>]*content=[^>]*>).*<\/head>/si', $string, $matches)) {
-		if (@preg_match('/<meta[^>]*charset=(.*)["\';][^>]*>/si', $matches[1], $matches)) {
-			return api_refine_encoding_id(trim($matches[1]));
-		}
-	}
-	return api_detect_encoding(api_html_to_text($string));
+    if (@preg_match('/<head.*(<meta[^>]*content=[^>]*>).*<\/head>/si', $string, $matches)) {
+        if (@preg_match('/<meta[^>]*charset=(.*)["\';][^>]*>/si', $matches[1], $matches)) {
+            return api_refine_encoding_id(trim($matches[1]));
+        }
+    }
+    return api_detect_encoding(api_html_to_text($string));
 }
 
 /**
@@ -55,20 +55,20 @@ function api_detect_encoding_html($string) {
  * @param string						The new encoding value to be set.
  */
 function api_set_encoding_html(&$string, $encoding) {
-	$old_encoding = api_detect_encoding_html($string);
-	if (@preg_match('/(.*<head.*)(<meta[^>]*content=[^>]*>)(.*<\/head>.*)/si', $string, $matches)) {
-		$meta = $matches[2];
-		if (@preg_match("/(<meta[^>]*charset=)(.*)([\"';][^>]*>)/si", $meta, $matches1)) {
-			$meta = $matches1[1] . $encoding . $matches1[3];
-			$string = $matches[1] . $meta . $matches[3];
-		} else {
-			$string = $matches[1] . '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/>' . $matches[3];
-		}
-	} else {
-		$count = 1;
-		$string = str_ireplace('</head>', '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/></head>', $string, $count);
-	}
-	$string = api_convert_encoding($string, $encoding, $old_encoding);
+    $old_encoding = api_detect_encoding_html($string);
+    if (@preg_match('/(.*<head.*)(<meta[^>]*content=[^>]*>)(.*<\/head>.*)/si', $string, $matches)) {
+        $meta = $matches[2];
+        if (@preg_match("/(<meta[^>]*charset=)(.*)([\"';][^>]*>)/si", $meta, $matches1)) {
+            $meta = $matches1[1] . $encoding . $matches1[3];
+            $string = $matches[1] . $meta . $matches[3];
+        } else {
+            $string = $matches[1] . '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/>' . $matches[3];
+        }
+    } else {
+        $count = 1;
+        $string = str_ireplace('</head>', '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/></head>', $string, $count);
+    }
+    $string = api_convert_encoding($string, $encoding, $old_encoding);
 }
 
 /**
@@ -79,20 +79,25 @@ function api_set_encoding_html(&$string, $encoding) {
  * @return string						The retrieved title, html-entities and extra-whitespace between the words are cleaned.
  */
 function api_get_title_html(&$string, $output_encoding = null, $input_encoding = null) {
-	if (@preg_match('/<head.*<title[^>]*>(.*)<\/title>.*<\/head>/si', $string, $matches)) {
-		if (empty($output_encoding)) {
-			$output_encoding = api_get_system_encoding();
-		}
-		if (empty($input_encoding)) {
-			$input_encoding = api_detect_encoding_html($string);
-		}
-		return trim(@preg_replace('/\s+/', ' ', api_html_entity_decode(api_convert_encoding($matches[1], $output_encoding, $input_encoding), ENT_QUOTES, $output_encoding)));
-	}
-	return '';
+    if (@preg_match('/<head.*<title[^>]*>(.*)<\/title>.*<\/head>/si', $string, $matches)) {
+        if (empty($output_encoding)) {
+            $output_encoding = api_get_system_encoding();
+        }
+        if (empty($input_encoding)) {
+            $input_encoding = api_detect_encoding_html($string);
+        }
+        return trim(@preg_replace('/\s+/', ' ', api_html_entity_decode(api_convert_encoding($matches[1], $output_encoding, $input_encoding), ENT_QUOTES, $output_encoding)));
+    }
+    return '';
 }
 
 
 /* XML processing functions */
+
+// A regular expression for accessing declared encoding within xml-formatted text.
+// Published by Steve Minutillo,
+// http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
+define('_PCRE_XML_ENCODING', '/<\?xml.*encoding=[\'"](.*?)[\'"].*\?>/m');
 
 /**
  * Detects encoding of xml-formatted text.
@@ -102,16 +107,90 @@ function api_get_title_html(&$string, $output_encoding = null, $input_encoding =
  * @todo The second parameter is to be eliminated. See api_detect_encoding_html().
  */
 function api_detect_encoding_xml($string, $default_encoding = null) {
-	if (preg_match(_PCRE_XML_ENCODING, $string, $matches)) {
-		return api_refine_encoding_id($matches[1]);
-	}
-	if (api_is_valid_utf8($string)) {
-		return 'UTF-8';
-	}
-	if (empty($default_encoding)) {
-		$default_encoding = _api_mb_internal_encoding();
-	}
-	return api_refine_encoding_id($default_encoding);
+    if (preg_match(_PCRE_XML_ENCODING, $string, $matches)) {
+        return api_refine_encoding_id($matches[1]);
+    }
+    if (api_is_valid_utf8($string)) {
+        return 'UTF-8';
+    }
+    if (empty($default_encoding)) {
+        $default_encoding = _api_mb_internal_encoding();
+    }
+    return api_refine_encoding_id($default_encoding);
+}
+
+
+/**
+ * Converts character encoding of a xml-formatted text. If inside the text the encoding is declared, it is modified accordingly.
+ * @param string $string                    The text being converted.
+ * @param string $to_encoding               The encoding that text is being converted to.
+ * @param string $from_encoding (optional)  The encoding that text is being converted from. If it is omited, it is tried to be detected then.
+ * @return string                           Returns the converted xml-text.
+ */
+function api_convert_encoding_xml($string, $to_encoding, $from_encoding = null) {
+    return _api_convert_encoding_xml($string, $to_encoding, $from_encoding);
+}
+
+/**
+ * Converts character encoding of a xml-formatted text into UTF-8. If inside the text the encoding is declared, it is set to UTF-8.
+ * @param string $string                    The text being converted.
+ * @param string $from_encoding (optional)  The encoding that text is being converted from. If it is omited, it is tried to be detected then.
+ * @return string                           Returns the converted xml-text.
+ */
+function api_utf8_encode_xml($string, $from_encoding = null) {
+    return _api_convert_encoding_xml($string, 'UTF-8', $from_encoding);
+}
+
+/**
+ * Converts character encoding of a xml-formatted text from UTF-8 into a specified encoding. If inside the text the encoding is declared, it is modified accordingly.
+ * @param string $string                    The text being converted.
+ * @param string $to_encoding (optional)    The encoding that text is being converted to. If it is omited, the platform character set is assumed.
+ * @return string                           Returns the converted xml-text.
+ */
+function api_utf8_decode_xml($string, $to_encoding = null) {
+    if (empty($to_encoding)) {
+        $to_encoding = _api_mb_internal_encoding();
+    }
+    return _api_convert_encoding_xml($string, $to_encoding, 'UTF-8');
+}
+
+/**
+ * Converts character encoding of a xml-formatted text. If inside the text the encoding is declared, it is modified accordingly.
+ * @param string $string                    The text being converted.
+ * @param string $to_encoding               The encoding that text is being converted to.
+ * @param string $from_encoding (optional)  The encoding that text is being converted from. If the value is empty, it is tried to be detected then.
+ * @return string                           Returns the converted xml-text.
+ */
+function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
+    if (empty($from_encoding)) {
+        $from_encoding = api_detect_encoding_xml($string);
+    }
+    $to_encoding = api_refine_encoding_id($to_encoding);
+    if (!preg_match('/<\?xml.*\?>/m', $string, $matches)) {
+        return api_convert_encoding('<?xml version="1.0" encoding="'.$to_encoding.'"?>'."\n".$string, $to_encoding, $from_encoding);
+    }
+    if (!preg_match(_PCRE_XML_ENCODING, $string)) {
+        if (strpos($matches[0], 'standalone') !== false) {
+            // The encoding option should precede the standalone option, othewise DOMDocument fails to load the document.
+            $replace = str_replace('standalone', ' encoding="'.$to_encoding.'" standalone' , $matches[0]);
+        } else {
+            $replace = str_replace('?>', ' encoding="'.$to_encoding.'"?>' , $matches[0]);
+        }
+        return api_convert_encoding(str_replace($matches[0], $replace, $string), $to_encoding, $from_encoding);
+    }
+    global $_api_encoding;
+    $_api_encoding = api_refine_encoding_id($to_encoding);
+    return api_convert_encoding(preg_replace_callback(_PCRE_XML_ENCODING, '_api_convert_encoding_xml_callback', $string), $to_encoding, $from_encoding);
+}
+
+/**
+ * A callback for serving the function _api_convert_encoding_xml().
+ * @param array $matches    Input array of matches corresponding to the xml-declaration.
+ * @return string           Returns the xml-declaration with modified encoding.
+ */
+function _api_convert_encoding_xml_callback($matches) {
+    global $_api_encoding;
+    return str_replace($matches[1], $_api_encoding, $matches[0]);
 }
 
 
@@ -129,55 +208,55 @@ function api_detect_encoding_xml($string, $default_encoding = null) {
  * @link http://php.net/manual/en/function.str-getcsv.php   (exists as of PHP 5 >= 5.3.0)
  */
 function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape = '\\') {
-	$delimiter = (string)$delimiter;
-	if (api_byte_count($delimiter) > 1) { $delimiter = $delimiter[1]; }
-	$enclosure = (string)$enclosure;
-	if (api_byte_count($enclosure) > 1) { $enclosure = $enclosure[1]; }
-	$escape = (string)$escape;
-	if (api_byte_count($escape) > 1) { $escape = $escape[1]; }
-	$str = (string)$string;
-	$len = api_byte_count($str);
-	$enclosed = false;
-	$escaped = false;
-	$value = '';
-	$result = array();
+    $delimiter = (string)$delimiter;
+    if (api_byte_count($delimiter) > 1) { $delimiter = $delimiter[1]; }
+    $enclosure = (string)$enclosure;
+    if (api_byte_count($enclosure) > 1) { $enclosure = $enclosure[1]; }
+    $escape = (string)$escape;
+    if (api_byte_count($escape) > 1) { $escape = $escape[1]; }
+    $str = (string)$string;
+    $len = api_byte_count($str);
+    $enclosed = false;
+    $escaped = false;
+    $value = '';
+    $result = array();
 
-	for ($i = 0; $i < $len; $i++) {
-		$char = $str[$i];
-		if ($char == $escape) {
-			if (!$escaped) {
-				$escaped = true;
-				continue;
-			}
-		}
-		$escaped = false;
-		switch ($char) {
-			case $enclosure:
-				if ($enclosed && $str[$i + 1] == $enclosure) {
-					$value .= $char;
-					$i++;
-				} else {
-					$enclosed = !$enclosed;
-				}
-				break;
-			case $delimiter:
-				if (!$enclosed) {
-					$result[] = $value;
-					$value = '';
-				} else {
-					$value .= $char;
-				}
-				break;
-			default:
-				$value .= $char;
-				break;
-		}
-	}
-	if (!empty($value)) {
-		$result[] = $value;
-	}
+    for ($i = 0; $i < $len; $i++) {
+        $char = $str[$i];
+        if ($char == $escape) {
+            if (!$escaped) {
+                $escaped = true;
+                continue;
+            }
+        }
+        $escaped = false;
+        switch ($char) {
+            case $enclosure:
+                if ($enclosed && $str[$i + 1] == $enclosure) {
+                    $value .= $char;
+                    $i++;
+                } else {
+                    $enclosed = !$enclosed;
+                }
+                break;
+            case $delimiter:
+                if (!$enclosed) {
+                    $result[] = $value;
+                    $value = '';
+                } else {
+                    $value .= $char;
+                }
+                break;
+            default:
+                $value .= $char;
+                break;
+        }
+    }
+    if (!empty($value)) {
+        $result[] = $value;
+    }
 
-	return $result;
+    return $result;
 }
 
 /**
@@ -194,11 +273,11 @@ function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape
  * @link http://php.net/manual/en/function.fgetcsv.php
  */
 function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"', $escape = '\\') {
-	if (($line = is_null($length) ? fgets($handle): fgets($handle, $length)) !== false) {
-		$line = rtrim($line, "\r\n");
-		return api_str_getcsv($line, $delimiter, $enclosure, $escape);
-	}
-	return false;
+    if (($line = is_null($length) ? fgets($handle): fgets($handle, $length)) !== false) {
+        $line = rtrim($line, "\r\n");
+        return api_str_getcsv($line, $delimiter, $enclosure, $escape);
+    }
+    return false;
 }
 
 
@@ -211,7 +290,7 @@ function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"'
  * @return string									The converted result string
  */
 function api_camel_case_to_underscore($string) {
-	return strtolower(preg_replace('/([a-z])([A-Z])/', "$1_$2", $string));
+    return strtolower(preg_replace('/([a-z])([A-Z])/', "$1_$2", $string));
 }
 
 /**
@@ -222,15 +301,15 @@ function api_camel_case_to_underscore($string) {
  * @return string									The converted result string
  */
 function api_underscore_to_camel_case($string, $capitalise_first_char = true) {
-	if ($capitalise_first_char) {
-		$string = ucfirst($string);
-	}
-	return preg_replace_callback('/_([a-z])/', '_api_camelize', $string);
+    if ($capitalise_first_char) {
+        $string = ucfirst($string);
+    }
+    return preg_replace_callback('/_([a-z])/', '_api_camelize', $string);
 }
 
 // A function for internal use, only for this library.
 function _api_camelize($match) {
-	return strtoupper($match[1]);
+    return strtoupper($match[1]);
 }
 
 /**
@@ -245,17 +324,17 @@ function _api_camelize($match) {
  * @return string						Truncated string, decorated with the given suffix (replacement).
  */
 function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $encoding = null) {
-	if (empty($encoding)) {
-		$encoding = api_get_system_encoding();
-	}
-	$text_length = api_strlen($text, $encoding);
-	if ($text_length <= $length) {
-		return $text;
-	}
-	if ($middle) {
-		return rtrim(api_substr($text, 0, round($length / 2), $encoding)).$suffix.ltrim(api_substr($text, - round($length / 2), $text_length, $encoding));
-	}
-	return rtrim(api_substr($text, 0, $length, $encoding)).$suffix;
+    if (empty($encoding)) {
+        $encoding = api_get_system_encoding();
+    }
+    $text_length = api_strlen($text, $encoding);
+    if ($text_length <= $length) {
+        return $text;
+    }
+    if ($middle) {
+        return rtrim(api_substr($text, 0, round($length / 2), $encoding)).$suffix.ltrim(api_substr($text, - round($length / 2), $text_length, $encoding));
+    }
+    return rtrim(api_substr($text, 0, $length, $encoding)).$suffix;
 }
 
 /**
@@ -265,10 +344,10 @@ function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $e
  * @param  string variable - the variable to be revised
  */
 function domesticate($input) {
-	$input = stripslashes($input);
-	$input = str_replace("'", "''", $input);
-	$input = str_replace('"', "''", $input);
-	return ($input);
+    $input = stripslashes($input);
+    $input = str_replace("'", "''", $input);
+    $input = str_replace('"', "''", $input);
+    return ($input);
 }
 
 /**
@@ -296,12 +375,12 @@ function domesticate($input) {
  */
 
 function make_clickable($string) {
-	// TODO: eregi_replace() is deprecated as of PHP 5.3
-	if (!stristr($string, ' src=') && !stristr($string, ' href=')) {
-		$string = eregi_replace("(https?|ftp)://([a-z0-9#?/&=._+:~%-]+)", "<a href=\"\\1://\\2\" target=\"_blank\">\\1://\\2</a>", $string);
-		$string = eregi_replace("([a-z0-9_.-]+@[a-z0-9.-]+)", "<a href=\"mailto:\\1\">\\1</a>", $string);
-	}
-	return $string;
+    // TODO: eregi_replace() is deprecated as of PHP 5.3
+    if (!stristr($string, ' src=') && !stristr($string, ' href=')) {
+        $string = eregi_replace("(https?|ftp)://([a-z0-9#?/&=._+:~%-]+)", "<a href=\"\\1://\\2\" target=\"_blank\">\\1://\\2</a>", $string);
+        $string = eregi_replace("([a-z0-9_.-]+@[a-z0-9.-]+)", "<a href=\"mailto:\\1\">\\1</a>", $string);
+    }
+    return $string;
 }
 
 /**
@@ -316,47 +395,47 @@ function make_clickable($string) {
  */
 function text_filter($input, $filter = true) {
 
-	//$input = stripslashes($input);
+    //$input = stripslashes($input);
 
-	if ($filter) {
-		// ***  parse [tex]...[/tex] tags  *** //
-		// which will return techexplorer or image html depending on the capabilities of the
-		// browser of the user (using some javascript that checks if the browser has the TechExplorer plugin installed or not)
-		//$input = _text_parse_tex($input);
+    if ($filter) {
+        // ***  parse [tex]...[/tex] tags  *** //
+        // which will return techexplorer or image html depending on the capabilities of the
+        // browser of the user (using some javascript that checks if the browser has the TechExplorer plugin installed or not)
+        //$input = _text_parse_tex($input);
 
-		// *** parse [teximage]...[/teximage] tags *** //
-		// these force the gif rendering of LaTeX using the mimetex gif renderer
-		//$input=_text_parse_tex_image($input);
+        // *** parse [teximage]...[/teximage] tags *** //
+        // these force the gif rendering of LaTeX using the mimetex gif renderer
+        //$input=_text_parse_tex_image($input);
 
-		// *** parse [texexplorer]...[/texexplorer] tags  *** //
-		// these force the texeplorer LaTeX notation
-		//$input = _text_parse_texexplorer($input);
+        // *** parse [texexplorer]...[/texexplorer] tags  *** //
+        // these force the texeplorer LaTeX notation
+        //$input = _text_parse_texexplorer($input);
 
-		// *** Censor Words *** //
-		// censor words. This function removes certain words by [censored]
-		// this can be usefull when the campus is open to the world.
-		// $input=text_censor_words($input);
+        // *** Censor Words *** //
+        // censor words. This function removes certain words by [censored]
+        // this can be usefull when the campus is open to the world.
+        // $input=text_censor_words($input);
 
-		// *** parse [?]...[/?] tags *** //
-		// for the glossary tool
-		//$input = _text_parse_glossary($input);
+        // *** parse [?]...[/?] tags *** //
+        // for the glossary tool
+        //$input = _text_parse_glossary($input);
 
-		// parse [wiki]...[/wiki] tags
-		// this is for the coolwiki plugin.
-		// $input=text_parse_wiki($input);
+        // parse [wiki]...[/wiki] tags
+        // this is for the coolwiki plugin.
+        // $input=text_parse_wiki($input);
 
-		// parse [tool]...[/tool] tags
-		// this parse function adds a link to a certain tool
-		// $input=text_parse_tool($input);
+        // parse [tool]...[/tool] tags
+        // this parse function adds a link to a certain tool
+        // $input=text_parse_tool($input);
 
-		// parse [user]...[/user] tags
+        // parse [user]...[/user] tags
 
-		// parse [email]...[/email] tags
+        // parse [email]...[/email] tags
 
-		// parse [code]...[/code] tags
-	}
+        // parse [code]...[/code] tags
+    }
 
-	return $input;
+    return $input;
 }
 
 /**
@@ -369,22 +448,22 @@ function text_filter($input, $filter = true) {
  * @version June 2004
  */
 function _text_parse_tex($textext) {
-	//$textext = str_replace(array ("[tex]", "[/tex]"), array ('[*****]', '[/*****]'), $textext);
-	//$textext = stripslashes($texttext);
+    //$textext = str_replace(array ("[tex]", "[/tex]"), array ('[*****]', '[/*****]'), $textext);
+    //$textext = stripslashes($texttext);
 
-	$input_array = preg_split("/(\[tex]|\[\/tex])/", $textext, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $input_array = preg_split("/(\[tex]|\[\/tex])/", $textext, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-	foreach ($input_array as $key => $value) {
-		if ($key > 0 && $input_array[$key - 1] == '[tex]' AND $input_array[$key + 1] == '[/tex]') {
-			$input_array[$key] = latex_gif_renderer($value);
-			unset($input_array[$key - 1]);
-			unset($input_array[$key + 1]);
-			//echo 'LaTeX: <embed type="application/x-techexplorer" texdata="'.stripslashes($value).'" autosize="true" pluginspage="http://www.integretechpub.com/techexplorer/"><br />';
-		}
-	}
+    foreach ($input_array as $key => $value) {
+        if ($key > 0 && $input_array[$key - 1] == '[tex]' AND $input_array[$key + 1] == '[/tex]') {
+            $input_array[$key] = latex_gif_renderer($value);
+            unset($input_array[$key - 1]);
+            unset($input_array[$key + 1]);
+            //echo 'LaTeX: <embed type="application/x-techexplorer" texdata="'.stripslashes($value).'" autosize="true" pluginspage="http://www.integretechpub.com/techexplorer/"><br />';
+        }
+    }
 
-	$output = implode('',$input_array);
-	return $output;
+    $output = implode('',$input_array);
+    return $output;
 }
 
 /**
@@ -392,7 +471,7 @@ function _text_parse_tex($textext) {
  * @author 	Patrick Cool <patrick.cool@UGent.be>
  */
 function _text_parse_glossary($input) {
-	return $input;
+    return $input;
 }
 
 /**
@@ -401,11 +480,11 @@ function _text_parse_glossary($input) {
  * @author Patrick Cool <patrick.cool@UGent.be>
  */
 function _text_parse_tool($input) {
-	// An array with all the valid tools
-	$tools[] = array(TOOL_ANNOUNCEMENT, 'announcements/announcements.php');
-	$tools[] = array(TOOL_CALENDAR_EVENT, 'calendar/agenda.php');
+    // An array with all the valid tools
+    $tools[] = array(TOOL_ANNOUNCEMENT, 'announcements/announcements.php');
+    $tools[] = array(TOOL_CALENDAR_EVENT, 'calendar/agenda.php');
 
-	// Check if the name between the [tool] [/tool] tags is a valid one
+    // Check if the name between the [tool] [/tool] tags is a valid one
 }
 
 /**
@@ -413,26 +492,26 @@ function _text_parse_tool($input) {
  * @author Patrick Cool <patrick.cool@UGent.be> Ghent University
  */
 function latex_gif_renderer($latex_code) {
-	global $_course;
+    global $_course;
 
-	// Setting the paths and filenames
-	$mimetex_path = api_get_path(LIBRARY_PATH).'mimetex/';
-	$temp_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/';
-	$latex_filename = md5($latex_code).'.gif';
+    // Setting the paths and filenames
+    $mimetex_path = api_get_path(LIBRARY_PATH).'mimetex/';
+    $temp_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/';
+    $latex_filename = md5($latex_code).'.gif';
 
-	if (!file_exists($temp_path.$latex_filename) OR isset($_GET['render'])) {
-		if (IS_WINDOWS_OS) {
-			$mimetex_command = $mimetex_path.'mimetex.exe -e "'.$temp_path.md5($latex_code).'.gif" '.escapeshellarg($latex_code).'';
-		} else {
-			$mimetex_command = $mimetex_path.'mimetex.cgi -e "'.$temp_path.md5($latex_code).'.gif" '.escapeshellarg($latex_code);
-		}
-		exec($mimetex_command);
-		//echo 'volgende shell commando werd uitgevoerd:<br /><pre>'.$mimetex_command.'</pre><hr>';
-	}
+    if (!file_exists($temp_path.$latex_filename) OR isset($_GET['render'])) {
+        if (IS_WINDOWS_OS) {
+            $mimetex_command = $mimetex_path.'mimetex.exe -e "'.$temp_path.md5($latex_code).'.gif" '.escapeshellarg($latex_code).'';
+        } else {
+            $mimetex_command = $mimetex_path.'mimetex.cgi -e "'.$temp_path.md5($latex_code).'.gif" '.escapeshellarg($latex_code);
+        }
+        exec($mimetex_command);
+        //echo 'volgende shell commando werd uitgevoerd:<br /><pre>'.$mimetex_command.'</pre><hr>';
+    }
 
-	$return  = "<a href=\"\" onclick=\"javascript: newWindow=window.open('".api_get_path(WEB_CODE_PATH)."inc/latex.php?code=".urlencode($latex_code)."&amp;filename=$latex_filename','latexCode','toolbar=no,location=no,scrollbars=yes,resizable=yes,status=yes,width=375,height=250,left=200,top=100');\">";
-	$return .= '<img src="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/temp/'.$latex_filename.'" alt="'.$latex_code.'" border="0" /></a>';
-	return $return;
+    $return  = "<a href=\"\" onclick=\"javascript: newWindow=window.open('".api_get_path(WEB_CODE_PATH)."inc/latex.php?code=".urlencode($latex_code)."&amp;filename=$latex_filename','latexCode','toolbar=no,location=no,scrollbars=yes,resizable=yes,status=yes,width=375,height=250,left=200,top=100');\">";
+    $return .= '<img src="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/temp/'.$latex_filename.'" alt="'.$latex_code.'" border="0" /></a>';
+    return $return;
 }
 
 /**
@@ -444,13 +523,13 @@ function latex_gif_renderer($latex_code) {
  * @return string
  * */
 function cut($text, $maxchar, $embed = false) {
-	if (api_strlen($text) > $maxchar) {
-		if ($embed) {
-			return '<span title="'.$text.'">'.api_substr($text, 0, $maxchar).'...</span>';
-		}
-		return api_substr($text, 0, $maxchar).'...'	;
-	}
-	return $text;
+    if (api_strlen($text) > $maxchar) {
+        if ($embed) {
+            return '<span title="'.$text.'">'.api_substr($text, 0, $maxchar).'...</span>';
+        }
+        return api_substr($text, 0, $maxchar).'...'	;
+    }
+    return $text;
 }
 
 /**
@@ -461,18 +540,18 @@ function cut($text, $maxchar, $embed = false) {
  * @return mixed an integer or a float depends on the parameter
  */
 function float_format($number, $flag = 1) {
-	if (is_numeric($number)) {
-		if (!$number) {
-			$result = ($flag == 2 ? '0.00' : '0');
-		} else {
-			if (floor($number) == $number) {
-				$result = number_format($number, ($flag == 2 ? 2 : 0));
-			} else {
-				$result = number_format(round($number, 2), ($flag == 0 ? 0 : 2));
-			}
-		}
-		return $result;
-	}
+    if (is_numeric($number)) {
+        if (!$number) {
+            $result = ($flag == 2 ? '0.00' : '0');
+        } else {
+            if (floor($number) == $number) {
+                $result = number_format($number, ($flag == 2 ? 2 : 0));
+            } else {
+                $result = number_format(round($number, 2), ($flag == 0 ? 0 : 2));
+            }
+        }
+        return $result;
+    }
 }
 
 // TODO: To be checked for correct timezone management.
@@ -511,13 +590,13 @@ function get_last_week() {
  * @version June 2004
  */
 function api_parse_tex($textext) {
-	/*
-	if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
-		return str_replace(array('[tex]', '[/tex]'), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
-	}
-	return str_replace(array('[tex]', '[/tex]'), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
-	*/
-	return $textext;
+    /*
+    if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
+        return str_replace(array('[tex]', '[/tex]'), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
+    }
+    return str_replace(array('[tex]', '[/tex]'), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
+    */
+    return $textext;
 }
 
 /**
@@ -530,13 +609,13 @@ function api_parse_tex($textext) {
  * @version June 2004
  */
 function _text_parse_texexplorer($textext) {
-	/*
-	if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
-		$textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
-	} else {
-		$textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
-	}
-	return $textext;
-	*/
-	return $textext;
+    /*
+    if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+        $textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
+    } else {
+        $textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
+    }
+    return $textext;
+    */
+    return $textext;
 }

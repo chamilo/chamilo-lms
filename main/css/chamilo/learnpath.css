@@ -173,7 +173,7 @@ table.lp_form .small_form {
 	background:#FFFFFF;
 }
 table.lp_form select {
-	padding:0;
+/*	padding:0;*/
 }
 table.lp_form input.button {
 	width:75px;

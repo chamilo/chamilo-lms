@@ -2355,8 +2355,6 @@ class learnpath {
      */
     public function get_iv_interactions_array($lp_iv_id = 0) {
 
-        $charset = api_get_system_encoding();
-
         $list = array ();
         $table = Database :: get_course_table(TABLE_LP_IV_INTERACTION);
         $sql = "SELECT * FROM $table WHERE lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
@@ -2364,14 +2362,14 @@ class learnpath {
         $num = Database :: num_rows($res);
         if ($num > 0) {
             $list[] = array (
-                'order_id' => api_htmlentities(get_lang('Order'), ENT_QUOTES, $charset),
-                'id' => api_htmlentities(get_lang('InteractionID'), ENT_QUOTES, $charset),
-                'type' => api_htmlentities(get_lang('Type'), ENT_QUOTES, $charset),
-                'time' => api_htmlentities(get_lang('TimeFinished'), ENT_QUOTES, $charset),
-                'correct_responses' => api_htmlentities(get_lang('CorrectAnswers'), ENT_QUOTES, $charset),
-                'student_response' => api_htmlentities(get_lang('StudentResponse'), ENT_QUOTES, $charset),
-                'result' => api_htmlentities(get_lang('Result'), ENT_QUOTES, $charset),
-                'latency' => api_htmlentities(get_lang('LatencyTimeSpent'), ENT_QUOTES, $charset)
+                'order_id' => api_htmlentities(get_lang('Order'), ENT_QUOTES),
+                'id' => api_htmlentities(get_lang('InteractionID'), ENT_QUOTES),
+                'type' => api_htmlentities(get_lang('Type'), ENT_QUOTES),
+                'time' => api_htmlentities(get_lang('TimeFinished'), ENT_QUOTES),
+                'correct_responses' => api_htmlentities(get_lang('CorrectAnswers'), ENT_QUOTES),
+                'student_response' => api_htmlentities(get_lang('StudentResponse'), ENT_QUOTES),
+                'result' => api_htmlentities(get_lang('Result'), ENT_QUOTES),
+                'latency' => api_htmlentities(get_lang('LatencyTimeSpent'), ENT_QUOTES)
             );
             while ($row = Database :: fetch_array($res)) {
                 $list[] = array (
@@ -2417,8 +2415,6 @@ class learnpath {
      */
     public function get_iv_objectives_array($lp_iv_id = 0) {
 
-        global $charset;
-
         $list = array();
         $table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE);
         $sql = "SELECT * FROM $table WHERE lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
@@ -2426,12 +2422,12 @@ class learnpath {
         $num = Database :: num_rows($res);
         if ($num > 0) {
             $list[] = array (
-                'order_id' => api_htmlentities(get_lang('Order'), ENT_QUOTES, $charset),
-                'objective_id' => api_htmlentities(get_lang('ObjectiveID'), ENT_QUOTES, $charset),
-                'score_raw' => api_htmlentities(get_lang('ObjectiveRawScore'), ENT_QUOTES, $charset),
-                'score_max' => api_htmlentities(get_lang('ObjectiveMaxScore'), ENT_QUOTES, $charset),
-                'score_min' => api_htmlentities(get_lang('ObjectiveMinScore'), ENT_QUOTES, $charset),
-                'status' => api_htmlentities(get_lang('ObjectiveStatus'), ENT_QUOTES, $charset)
+                'order_id' => api_htmlentities(get_lang('Order'), ENT_QUOTES),
+                'objective_id' => api_htmlentities(get_lang('ObjectiveID'), ENT_QUOTES),
+                'score_raw' => api_htmlentities(get_lang('ObjectiveRawScore'), ENT_QUOTES),
+                'score_max' => api_htmlentities(get_lang('ObjectiveMaxScore'), ENT_QUOTES),
+                'score_min' => api_htmlentities(get_lang('ObjectiveMinScore'), ENT_QUOTES),
+                'status' => api_htmlentities(get_lang('ObjectiveStatus'), ENT_QUOTES)
             );
             while ($row = Database :: fetch_array($res)) {
                 $list[] = array (
@@ -2486,7 +2482,7 @@ class learnpath {
      * table returned is used inside of scorm_api.php
      * @return  string  A JS array vairiable construction
      */
-    public function get_items_details_as_js($varname='olms.lms_item_types') {
+    public function get_items_details_as_js($varname = 'olms.lms_item_types') {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_items_details_as_js()', 0);
         }
@@ -7504,13 +7500,6 @@ class learnpath {
      */
     public  function scorm_export() {
         global $_course;
-        global $charset;
-
-        if (!class_exists('DomDocument')) {
-            error_log('DOM functions not supported for PHP version below 5.0', 0);
-            $this->error = 'PHP DOM functions not supported for PHP versions below 5.0';
-            return null;
-        }
 
         // Remove memory and time limits as much as possible as this might be a long process...
         if (function_exists('ini_set')) {
@@ -7546,7 +7535,7 @@ class learnpath {
             mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
         } else {
             // Cleanup: Check the temp dir for old files and delete them.
-            $handle=opendir($temp_zip_dir);
+            $handle = opendir($temp_zip_dir);
             while (false !== ($file = readdir($handle))) {
                 if ($file != '.' && $file != '..') {
                     unlink("$temp_zip_dir/$file");
@@ -7565,7 +7554,7 @@ class learnpath {
         // Build a dummy imsmanifest structure. Do not add to the zip yet (we still need it).
         // This structure is developed following regulations for SCORM 1.2 packaging in the SCORM 1.2 Content
         // Aggregation Model official document, secion "2.3 Content Packaging".
-        $xmldoc = new DOMDocument('1.0', $this->encoding); // TODO: Check this line for encoding issues.
+        $xmldoc = new DOMDocument('1.0'); // We are going to build a UTF-8 encoded manifest. Later we will recode it to the desired (and supported) encoding.
         $root = $xmldoc->createElement('manifest');
         $root->setAttribute('identifier', 'SingleCourseManifest');
         $root->setAttribute('version', '1.1');
@@ -7586,16 +7575,16 @@ class learnpath {
         $resources = $xmldoc->createElement('resources');
 
         // Build the only organization we will use in building our learnpaths.
-        $organizations->setAttribute('default', 'dokeos_scorm_export');
+        $organizations->setAttribute('default', 'chamilo_scorm_export');
         $organization = $xmldoc->createElement('organization');
-        $organization->setAttribute('identifier', 'dokeos_scorm_export');
+        $organization->setAttribute('identifier', 'chamilo_scorm_export');
         // To set the title of the SCORM entity (=organization), we take the name given
         // in Chamilo and convert it to HTML entities using the Chamilo charset (not the
         // learning path charset) as it is the encoding that defines how it is stored
         // in the database. Then we convert it to HTML entities again as the "&" character
         // alone is not authorized in XML (must be &amp;).
         // The title is then decoded twice when extracting (see scorm::parse_manifest).
-        $org_title = $xmldoc->createElement('title', htmlentities(api_htmlentities($this->get_name(), ENT_QUOTES, $charset))); // TODO: Check this line for encoding issues.
+        $org_title = $xmldoc->createElement('title', api_utf8_encode($this->get_name()));
         $organization->appendChild($org_title);
 
         // For each element, add it to the imsmanifest structure, then add it to the zip.
@@ -7606,17 +7595,17 @@ class learnpath {
             if (!in_array($item->type, array(TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK, TOOL_STUDENTPUBLICATION))) {
                 // Get included documents from this item.
                 if ($item->type == 'sco')
-                    $inc_docs = $item->get_resources_from_source(null,api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.'scorm/'.$this->path.'/'.$item->get_path());
+                    $inc_docs = $item->get_resources_from_source(null, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.'scorm/'.$this->path.'/'.$item->get_path());
                 else
                     $inc_docs = $item->get_resources_from_source();
                 // Give a child element <item> to the <organization> element.
                 $my_item_id = $item->get_id();
                 $my_item = $xmldoc->createElement('item');
                 $my_item->setAttribute('identifier', 'ITEM_'.$my_item_id);
-                $my_item->setAttribute('identifierref','RESOURCE_'.$my_item_id);
+                $my_item->setAttribute('identifierref', 'RESOURCE_'.$my_item_id);
                 $my_item->setAttribute('isvisible', 'true');
                 // Give a child element <title> to the <item> element.
-                $my_title = $xmldoc->createElement('title', htmlspecialchars($item->get_title(), ENT_QUOTES, $this->encoding)); // TODO: Check this line for encoding issues.
+                $my_title = $xmldoc->createElement('title', htmlspecialchars(api_utf8_encode($item->get_title()), ENT_QUOTES, 'UTF-8'));
                 $my_item->appendChild($my_title);
                 // Give a child element <adlcp:prerequisites> to the <item> element.
                 $my_prereqs = $xmldoc->createElement('adlcp:prerequisites', $this->get_scorm_prereq_string($my_item_id));
@@ -7635,7 +7624,7 @@ class learnpath {
                 // Attach this item to the organization element or hits parent if there is one.
                 if (!empty($item->parent) && $item->parent != 0) {
                     $children = $organization->childNodes;
-                    $possible_parent = &$this->get_scorm_xml_node($children,'ITEM_'.$item->parent);
+                    $possible_parent = &$this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
                     if (is_object($possible_parent)) {
                         $possible_parent->appendChild($my_item);
                     } else {
@@ -7649,14 +7638,17 @@ class learnpath {
                 // Get the path of the file(s) from the course directory root.
                 $my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
 
-                $my_xml_file_path = api_htmlentities($my_file_path, ENT_QUOTES, $this->encoding); // TODO: Check this line for encoding issues.
+                //$my_xml_file_path = api_htmlentities(api_utf8_encode($my_file_path), ENT_QUOTES, 'UTF-8');
+                $my_xml_file_path = $my_file_path;
                 $my_sub_dir = dirname($my_file_path);
-                $my_xml_sub_dir = api_htmlentities($my_sub_dir, ENT_QUOTES, $this->encoding); // TODO: Check this line for encoding issues.
+                $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
+                //$my_xml_sub_dir = api_htmlentities(api_utf8_encode($my_sub_dir), ENT_QUOTES, 'UTF-8');
+                $my_xml_sub_dir = $my_sub_dir;
                 // Give a <resource> child to the <resources> element
                 $my_resource = $xmldoc->createElement('resource');
                 $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
                 $my_resource->setAttribute('type', 'webcontent');
-                $my_resource->setAttribute('href',$my_xml_file_path);
+                $my_resource->setAttribute('href', $my_xml_file_path);
                 // adlcp:scormtype can be either 'sco' or 'asset'.
                 if ($item->type == 'sco') {
                     $my_resource->setAttribute('adlcp:scormtype', 'sco');
@@ -7691,10 +7683,12 @@ class learnpath {
                             case 'url': // Local URL - save path as url for now, don't zip file.
                                 $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
                                 $current_dir = dirname($abs_path);
+                                $current_dir = str_replace('\\', '/', $current_dir);
                                 $file_path = realpath($abs_path);
+                                $file_path = str_replace('\\', '/', $file_path);
                                 $my_dep_file->setAttribute('href', $file_path);
                                 $my_dep->setAttribute('xml:base', '');
-                                if (strstr($file_path,$main_path) !== false) {
+                                if (strstr($file_path, $main_path) !== false) {
                                     // The calculated real path is really inside Chamilo's root path.
                                     // Reduce file path to what's under the DocumentRoot.
                                     $file_path = substr($file_path, strlen($root_path) - 1);
@@ -7713,7 +7707,7 @@ class learnpath {
                                     $file_path = $_SERVER['DOCUMENT_ROOT'].$abs_path;
                                     $file_path = str_replace('//', '/', $file_path);
                                     if (file_exists($file_path)) {
-                                        $file_path = substr($file_path,strlen($current_dir)); // We get the relative path.
+                                        $file_path = substr($file_path, strlen($current_dir)); // We get the relative path.
                                         $zip_files[] = $my_sub_dir.'/'.$file_path;
                                         $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => $file_path);
                                         $my_dep_file->setAttribute('href', $file_path);
@@ -7725,7 +7719,7 @@ class learnpath {
                                 $my_dep_file->setAttribute('href', $doc_info[0]);
                                 $my_dep->setAttribute('xml:base', '');
 
-                                //$current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+                                //$current_dir = str_replace('\\', '/', dirname($current_course_path.'/'.$item->get_file_path())).'/';
                                 // The next lines fix a bug when using the "subdir" mode of Chamilo, whereas
                                 // an image path would be constructed as /var/www/subdir/subdir/img/foo.bar
                                 $abs_img_path_without_subdir = $doc_info[0];
@@ -7746,6 +7740,7 @@ class learnpath {
                                     // The document is in that path, now get the relative path
                                     // to the containing document.
                                     $orig_file_path = dirname($cur_path.$my_file_path).'/';
+                                    $orig_file_path = str_replace('\\', '/', $orig_file_path);
                                     $relative_path = '';
                                     if (strstr($file_path, $cur_path) !== false) {
                                         $relative_path = substr($file_path, strlen($orig_file_path));
@@ -7756,14 +7751,17 @@ class learnpath {
                                         //$file_path = substr($file_path,strlen($cur_path));
                                         // Calculate the directory path to the current file (without trailing slash).
                                         $my_relative_path = dirname($file_path);
+                                        $my_relative_path = str_replace('\\', '/', $my_relative_path);
                                         $my_relative_file = basename($file_path);
                                         // Calculate the directory path to the containing file (without trailing slash).
                                         $my_orig_file_path = substr($orig_file_path, 0, -1);
                                         $dotdot = '';
                                         $subdir = '';
-                                        while(strstr($my_relative_path, $my_orig_file_path) === false && (strlen($my_orig_file_path) > 1) && (strlen($my_relative_path) > 1)) {
+                                        while (strstr($my_relative_path, $my_orig_file_path) === false && (strlen($my_orig_file_path) > 1) && (strlen($my_relative_path) > 1)) {
                                             $my_relative_path2 = dirname($my_relative_path);
+                                            $my_relative_path2 = str_replace('\\', '/', $my_relative_path2);
                                             $my_orig_file_path = dirname($my_orig_file_path);
+                                            $my_orig_file_path = str_replace('\\', '/', $my_orig_file_path);
                                             $subdir = substr($my_relative_path, strlen($my_relative_path2) + 1).'/'.$subdir;
                                             $dotdot += '../';
                                             $my_relative_path = $my_relative_path2;
@@ -7778,10 +7776,10 @@ class learnpath {
                                     $my_dep_file->setAttribute('href', $file_path);
                                     $my_dep->setAttribute('xml:base', '');
                                 }
-                                elseif(strstr($file_path,$main_path) !== false) {
+                                elseif (strstr($file_path,$main_path) !== false) {
                                     // The calculated real path is really inside Chamilo's root path.
                                     // Reduce file path to what's under the DocumentRoot.
-                                    $file_path = substr($file_path,strlen($root_path));
+                                    $file_path = substr($file_path, strlen($root_path));
                                     //echo $file_path;echo '<br /><br />';
                                     //error_log('Reduced path: '.$file_path, 0);
                                     $zip_files_abs[] = $file_path;
@@ -7809,9 +7807,11 @@ class learnpath {
                                  if (substr($doc_info[0], 0, 2) == '..') {
                                      // Relative path going up.
                                      $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+                                     $current_dir = str_replace('\\', '/', $current_dir);
                                      $file_path = realpath($current_dir.$doc_info[0]);
+                                     $file_path = str_replace('\\', '/', $file_path);
                                      //error_log($file_path.' <-> '.$main_path,0);
-                                     if (strstr($file_path,$main_path) !== false) {
+                                     if (strstr($file_path, $main_path) !== false) {
                                          // The calculated real path is really inside Chamilo's root path.
                                          // Reduce file path to what's under the DocumentRoot.
                                          $file_path = substr($file_path, strlen($root_path));
@@ -7854,7 +7854,7 @@ class learnpath {
                     $my_item->setAttribute('identifierref', 'RESOURCE_'.$item->get_id());
                     $my_item->setAttribute('isvisible', 'true');
                     // Give a child element <title> to the <item> element.
-                    $my_title = $xmldoc->createElement('title',htmlspecialchars($item->get_title(),ENT_QUOTES));
+                    $my_title = $xmldoc->createElement('title', htmlspecialchars(api_utf8_encode($item->get_title()), ENT_QUOTES, 'UTF-8'));
                     $my_item->appendChild($my_title);
                     // Give a child element <adlcp:prerequisites> to the <item> element.
                     $my_prereqs = $xmldoc->createElement('adlcp:prerequisites', $item->get_prereq_string());
@@ -7892,14 +7892,17 @@ class learnpath {
                         $url = $link['url'];
                         $title = stripslashes($link['title']);
                         $links_to_create[$my_file_path] = array('title' => $title, 'url' => $url);
-                        $my_xml_file_path = api_htmlentities($my_file_path, ENT_QUOTES, $this->encoding); // TODO: Check this line for encoding issues.
+                        //$my_xml_file_path = api_htmlentities(api_utf8_encode($my_file_path), ENT_QUOTES, 'UTF-8');
+                        $my_xml_file_path = $my_file_path;
                         $my_sub_dir = dirname($my_file_path);
-                        $my_xml_sub_dir = api_htmlentities($my_sub_dir, ENT_QUOTES, $this->encoding); // TODO: Check this line for encoding issues.
+                        $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
+                        //$my_xml_sub_dir = api_htmlentities(api_utf8_encode($my_sub_dir), ENT_QUOTES, 'UTF-8');
+                        $my_xml_sub_dir = $my_sub_dir;
                         // Give a <resource> child to the <resources> element.
                         $my_resource = $xmldoc->createElement('resource');
                         $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
                         $my_resource->setAttribute('type', 'webcontent');
-                        $my_resource->setAttribute('href',$my_xml_file_path);
+                        $my_resource->setAttribute('href', $my_xml_file_path);
                         // adlcp:scormtype can be either 'sco' or 'asset'.
                         $my_resource->setAttribute('adlcp:scormtype', 'asset');
                         // xml:base is the base directory to find the files declared in this resource.
@@ -7921,7 +7924,7 @@ class learnpath {
                     $my_item->setAttribute('identifierref', 'RESOURCE_'.$item->get_id());
                     $my_item->setAttribute('isvisible', 'true');
                     // Give a child element <title> to the <item> element.
-                    $my_title = $xmldoc->createElement('title', htmlspecialchars($item->get_title(), ENT_QUOTES, $this->encoding)); // TODO: Check this line for encoding issues.
+                    $my_title = $xmldoc->createElement('title', htmlspecialchars(api_utf8_encode($item->get_title()), ENT_QUOTES, 'UTF-8'));
                     $my_item->appendChild($my_title);
                     $my_max_score = $xmldoc->createElement('max_score', $item->get_max());
                     //$my_item->appendChild($my_max_score);
@@ -7963,21 +7966,24 @@ class learnpath {
                     if ($res === false) { error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__, 0); }
                     $files_cleanup[] = $tmp_file_path;
                     //error_log($tmp_path); die();
-                    $my_xml_file_path = api_htmlentities($my_file_path, ENT_QUOTES, $this->encoding); // TODO: Check this line for encoding issues.
+                    //$my_xml_file_path = api_htmlentities(api_utf8_encode($my_file_path), ENT_QUOTES, 'UTF-8');
+                    $my_xml_file_path = $my_file_path;
                     $my_sub_dir = dirname($my_file_path);
-                    $my_xml_sub_dir = api_htmlentities($my_sub_dir, ENT_QUOTES, $this->encoding); // TODO: Check this line for encoding issues.
+                    $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
+                    //$my_xml_sub_dir = api_htmlentities(api_utf8_encode($my_sub_dir), ENT_QUOTES, 'UTF-8');
+                    $my_xml_sub_dir = $my_sub_dir;
                     // Give a <resource> child to the <resources> element.
                     $my_resource = $xmldoc->createElement('resource');
-                    $my_resource->setAttribute('identifier','RESOURCE_'.$item->get_id());
-                    $my_resource->setAttribute('type','webcontent');
-                    $my_resource->setAttribute('href',$my_xml_file_path);
+                    $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
+                    $my_resource->setAttribute('type', 'webcontent');
+                    $my_resource->setAttribute('href', $my_xml_file_path);
                     // adlcp:scormtype can be either 'sco' or 'asset'.
-                    $my_resource->setAttribute('adlcp:scormtype','sco');
+                    $my_resource->setAttribute('adlcp:scormtype', 'sco');
                     // xml:base is the base directory to find the files declared in this resource.
-                    $my_resource->setAttribute('xml:base','');
+                    $my_resource->setAttribute('xml:base', '');
                     // Give a <file> child to the <resource> element.
                     $my_file = $xmldoc->createElement('file');
-                    $my_file->setAttribute('href',$my_xml_file_path);
+                    $my_file->setAttribute('href', $my_xml_file_path);
                     $my_resource->appendChild($my_file);
 
                     // Get included docs.
@@ -8004,7 +8010,9 @@ class learnpath {
                                     // Save file but as local file (retrieve from URL).
                                     $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
                                     $current_dir = dirname($abs_path);
+                                    $current_dir = str_replace('\\', '/', $current_dir);
                                     $file_path = realpath($abs_path);
+                                    $file_path = str_replace('\\', '/', $file_path);
                                     $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                     $my_dep->setAttribute('xml:base', '');
                                     if (strstr($file_path, $main_path) !== false) {
@@ -8028,7 +8036,7 @@ class learnpath {
                                         if (file_exists($file_path)) {
                                             $file_path = substr($file_path, strlen($current_dir)); // We get the relative path.
                                             $zip_files[] = $my_sub_dir.'/'.$file_path;
-                                            $link_updates[$my_file_path][] = array('orig' => $doc_info[0],'dest' => 'document/'.$file_path);
+                                            $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => 'document/'.$file_path);
                                             $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                              $my_dep->setAttribute('xml:base', '');
                                         }
@@ -8036,7 +8044,9 @@ class learnpath {
                                     break;
                                 case 'abs': // Absolute path from DocumentRoot. Save file and leave path as is in the zip.
                                     $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+                                    $current_dir = str_replace('\\', '/', $current_dir);
                                     $file_path = realpath($doc_info[0]);
+                                    $file_path = str_replace('\\', '/', $file_path);
                                     $my_dep_file->setAttribute('href', $file_path);
                                     $my_dep->setAttribute('xml:base', '');
 
@@ -8071,7 +8081,9 @@ class learnpath {
                                     if (substr($doc_info[0], 0, 2) == '..') {
                                         // Relative path going up.
                                         $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+                                        $current_dir = str_replace('\\', '/', $current_dir);
                                         $file_path = realpath($current_dir.$doc_info[0]);
+                                        $file_path = str_replace('\\', '/', $file_path);
                                         //error_log($file_path.' <-> '.$main_path, 0);
                                         if (strstr($file_path, $main_path) !== false) {
                                             // The calculated real path is really inside Chamilo's root path.
@@ -8120,14 +8132,17 @@ class learnpath {
 
                     // Get the path of the file(s) from the course directory root
                     $my_file_path = 'non_exportable.html';
-                    $my_xml_file_path = api_htmlentities($my_file_path, ENT_COMPAT, $this->encoding); // TODO: Check this line for encoding issues.
+                    //$my_xml_file_path = api_htmlentities(api_utf8_encode($my_file_path), ENT_COMPAT, 'UTF-8');
+                    $my_xml_file_path = $my_file_path;
                     $my_sub_dir = dirname($my_file_path);
-                    $my_xml_sub_dir = api_htmlentities($my_sub_dir, ENT_COMPAT, $this->encoding); // TODO: Check this line for encoding issues.
+                    $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
+                    //$my_xml_sub_dir = api_htmlentities(api_utf8_encode($my_sub_dir), ENT_COMPAT, 'UTF-8');
+                    $my_xml_sub_dir = $my_sub_dir;
                     // Give a <resource> child to the <resources> element.
                     $my_resource = $xmldoc->createElement('resource');
                     $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
                     $my_resource->setAttribute('type', 'webcontent');
-                    $my_resource->setAttribute('href','document/'.$my_xml_file_path);
+                    $my_resource->setAttribute('href', 'document/'.$my_xml_file_path);
                     // adlcp:scormtype can be either 'sco' or 'asset'.
                     $my_resource->setAttribute('adlcp:scormtype', 'asset');
                     // xml:base is the base directory to find the files declared in this resource.
@@ -8168,8 +8183,8 @@ class learnpath {
                     // will be added in document/main/inc/lib/flv_player/flv_player.swf and that needs
                     // to find the flv to play in document/main/, so we replace main/ in the flv path by
                     // ../../.. to return from inc/lib/flv_player to the document/main path.
-                    if(substr($old_new['dest'],-3) == 'flv' && substr($old_new['dest'], 0, 5) == 'main/') {
-                        $old_new['dest'] = str_replace('main/','../../../',$old_new['dest']);
+                    if (substr($old_new['dest'], -3) == 'flv' && substr($old_new['dest'], 0, 5) == 'main/') {
+                        $old_new['dest'] = str_replace('main/', '../../../', $old_new['dest']);
                     }
                     elseif (substr($old_new['dest'], -3) == 'flv' && substr($old_new['dest'], 0, 6) == 'video/') {
                         $old_new['dest'] = str_replace('video/', '../../../../video/', $old_new['dest']);
@@ -8179,7 +8194,7 @@ class learnpath {
                 file_put_contents($dest_file, $string);
             }
         }
-        foreach($zip_files_abs as $file_path) {
+        foreach ($zip_files_abs as $file_path) {
             if (empty($file_path)) { continue; }
             //error_log(__LINE__.'checking existence of '.$main_path.$file_path.'', 0);
             if (!is_file($main_path.$file_path) || !is_readable($main_path.$file_path)) { continue; }
@@ -8192,7 +8207,7 @@ class learnpath {
 
             copy($main_path.$file_path, $dest_file);
             // Check if the file needs a link update.
-            if (in_array($file_path,array_keys($link_updates))) {
+            if (in_array($file_path, array_keys($link_updates))) {
                 $string = file_get_contents($dest_file);
                 unlink($dest_file);
                 foreach ($link_updates[$file_path] as $old_new) {
@@ -8211,16 +8226,36 @@ class learnpath {
         }
         if (is_array($links_to_create)) {
             foreach ($links_to_create as $file => $link) {
-                $file_content = '<html><body><div style="text-align:center"><a href="'.$link['url'].'">'.$link['title'].'</a></div></body></html>'; // TODO: Generated html here misses data about DOCTYPE, language, encoding, text direction.
+               $file_content = '<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.api_get_language_isocode().'" lang="'.api_get_language_isocode().'">
+    <head>
+        <title>'.$link['title'].'</title>
+        <meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
+    </head>
+    <body dir="'.api_get_text_direction().'">
+        <div style="text-align:center"><a href="'.$link['url'].'">'.$link['title'].'</a></div>
+    </body>
+</html>';
                 file_put_contents($archive_path.$temp_dir_short.'/'.$file, $file_content);
             }
         }
         // Add non exportable message explanation.
         $lang_not_exportable = get_lang('ThisItemIsNotExportable');
-        $file_content =
-<<<EOD
-<html>
+        $file_content = '<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.api_get_language_isocode().'" lang="'.api_get_language_isocode().'">
     <head>
+        <title>'.$lang_not_exportable.'</title>
+        <meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
+    </head>
+    <body dir="'.api_get_text_direction().'">
+';
+
+        $file_content .=
+<<<EOD
         <style>
             .error-message {
                 font-family: arial, verdana, helvetica, sans-serif;
@@ -8258,14 +8293,15 @@ EOD;
             else {
                 $dest_file = $archive_path . $temp_dir_short . '/' . $extra_file;
                 $this->create_path($dest_file);
-                copy($main_code_path.$extra_file,$dest_file);
+                copy($main_code_path.$extra_file, $dest_file);
             }
         }
 
         // Finalize the imsmanifest structure, add to the zip, then return the zip.
 
-        $xmldoc->save($archive_path.'/'.$temp_dir_short.'/imsmanifest.xml');
-
+        $manifest = @$xmldoc->saveXML();
+        $manifest = api_utf8_decode_xml($manifest); // The manifest gets the system encoding now.
+        file_put_contents($archive_path.'/'.$temp_dir_short.'/imsmanifest.xml', $manifest);
         $zip_folder->add($archive_path.'/'.$temp_dir_short, PCLZIP_OPT_REMOVE_PATH, $archive_path.'/'.$temp_dir_short.'/');
 
         // Clean possible temporary files.
@@ -8277,7 +8313,6 @@ EOD;
         //$name = 'scorm_export_'.$this->lp_id.'.zip';
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
-        //$name = preg_replace('([^a-zA-Z0-9_\.])', '-', html_entity_decode($this->get_name(), ENT_QUOTES)).'.zip';
         $name = replace_dangerous_char($this->get_name()).'.zip';
 
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);

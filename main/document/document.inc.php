@@ -286,6 +286,7 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
 	$is_certificate_mode = DocumentManager::is_certificate_mode($path);
 	$modify_icons = '';
 	$cur_ses = api_get_session_id();
+	$extension = pathinfo($path, PATHINFO_EXTENSION);
 	// If document is read only *or* we're in a session and the document
 	// is from a non-session context, hide the edition capabilities
 	if ($is_read_only /*or ($session_id!=$cur_ses)*/) {
@@ -296,8 +297,12 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
 	} else {
 		if ($is_certificate_mode) {
 			$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
-		} else {
-			$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
+		}else {
+			if($extension=='svg') {			
+				$modify_icons = '<a href="edit_drawing.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';		
+			}else{			
+				$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
+			}
 		}
 
         if (in_array($path, array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates'))) {
@@ -325,7 +330,7 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
         }
 	}
 
-	$extension = pathinfo($path, PATHINFO_EXTENSION);
+	//$extension = pathinfo($path, PATHINFO_EXTENSION);//already load above
 	if ($type == 'file' && ($extension == 'html' || $extension == 'htm')) {
 		if ($is_template == 0) {
 			if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] != '/certificates') || !isset($_GET['curdirpath'])) {

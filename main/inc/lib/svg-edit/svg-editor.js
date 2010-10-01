@@ -3443,7 +3443,7 @@
 			};
 			
 			Editor.openPrep = function(func) {
-				return false;// temporal hack for Chamilo, add this line to disable open svg file
+				//return false;// temporal hack for Chamilo, add this line to disable open svg file
 				$('#main_menu').hide();
 				if(undoMgr.getUndoStackSize() === 0) {
 					func(true);

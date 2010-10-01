@@ -17,7 +17,7 @@ $language_file = array('document');
 
 require_once '../inc/global.inc.php';
 
-$_SESSION['whereami'] = 'document/draw';
+$_SESSION['whereami'] = 'document/createdraw';
 $this_section = SECTION_COURSES;
 
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
@@ -32,12 +32,7 @@ api_block_anonymous_users();
 /*	Constants and variables */
 
 $dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
-
-/*	MAIN CODE */
-
-if (api_is_in_group()) {
-	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
-}
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 // Please, do not modify this dirname formatting
 
@@ -57,9 +52,6 @@ if ($dir[strlen($dir) - 1] != '/') {
 	$dir .= '/';
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
-
 $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
 
 if (!is_dir($filepath)) {
@@ -67,10 +59,8 @@ if (!is_dir($filepath)) {
 	$dir = '/';
 }
 
-
-$to_group_id = 0;
-
-if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
+//groups //TODO: clean
+if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
 		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
 		$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
 		$noPHP_SELF = true;
@@ -136,8 +126,9 @@ if($_SESSION['draw_dir']=='/'){
 
 //
 Display :: display_header($nameTools, 'Doc');
+
 echo '<div class="actions">';
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 echo '</div>';
 
 echo '<iframe style=\'height: 500px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php\'>';

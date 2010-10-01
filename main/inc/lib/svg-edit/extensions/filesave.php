@@ -79,11 +79,18 @@ $content=$contents;//from svg-edit
 $title = Database::escape_string(str_replace('_',' ',$filename));
 
 //get Chamilo variables 
+
+if(!isset($_SESSION['draw_dir']) ||!isset($_SESSION['whereami']) )
+{
+	die();
+}
+
 $current_session_id = api_get_session_id();
 $groupId=$_SESSION['_gid'];
-$relativeUrlPath=$_SESSION['draw_dir'];// for main documents and for groups (groupmanager only returns the root directory of the group) // alias $groupPath
-$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-$saveDir=$dirBaseDocuments.$_SESSION['draw_dir']; // saveDir alias exporDir
+$relativeUrlPath=$_SESSION['draw_dir'];
+$currentTool=$_SESSION['whereami'];
+$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+$saveDir=$dirBaseDocuments.$_SESSION['draw_dir'];
 
 //a bit title security
 
@@ -95,23 +102,19 @@ $filename = disable_dangerous_file($filename);
 //a bit mime security
 $finfo = new finfo(FILEINFO_MIME);
 $current_mime=$finfo->buffer($contents);
-$mime_png='image/png';//image/png; charset=binary 
-$mime_svg='application/xml';//application/xml; charset=us-ascii
+$mime_png='image/png';//svg-edit return image/png; charset=binary 
+$mime_svg='application/xml';//svg-edit return application/xml; charset=us-ascii TODO: shoud be image/svg+xml    (http://www.w3.org/TR/SVG11/mimereg.html)
 if(strpos($current_mime, $mime_png)===false && $extension=='png')
 {
-	die('File extension does not match its content');
+	die();//File extension does not match its content
 }elseif(strpos($current_mime, $mime_svg)===false && $extension=='svg')
 {
-	die('File extension does not match its content');
-}
-//check path
-if(!isset($_SESSION['draw_dir']))
-{
-	die('Error');
+	die();//File extension does not match its content
 }
 
+
 //checks if the file exists, then rename the new
-if(file_exists($saveDir.'/'.$filename.$i.'.'.$extension)){
+if(file_exists($saveDir.'/'.$filename.$i.'.'.$extension) && $currentTool=='document/createdraw'){
 	$i = 1;
 	while (file_exists($saveDir.'/'.$filename.'_'.$i.'.'.$extension)) $i++; //prevent duplicates
 	$drawFileName = $filename.'_'.$i.'.'.$extension;
@@ -123,10 +126,27 @@ if(file_exists($saveDir.'/'.$filename.$i.'.'.$extension)){
 $documentPath = $saveDir.'/'.$drawFileName;
 
 //add new document to disk
-file_put_contents( $documentPath, $contents );	
+file_put_contents( $documentPath, $contents );
 
-//add new document to database
-$doc_id = add_document($_course, $relativeUrlPath.'/'.$drawFileName, 'file', filesize($documentPath), $title);
-api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId,null, null,$current_session_id);
+if($currentTool=='document/createdraw'){
+	//add document to database
+	$doc_id = add_document($_course, $relativeUrlPath.'/'.$drawFileName, 'file', filesize($documentPath), $title);
+	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
+}elseif($currentTool=='document/editdraw'){
+
+	//check path
+	if(!isset($_SESSION['draw_file'])){
+		die();
+	}
+	if($_SESSION['draw_file']==$drawFileName){		
+		$document_id = DocumentManager::get_document_id($_course, $relativeUrlPath.'/'.$drawFileName);
+		update_existing_document($_course, $document_id, filesize($documentPath), null);
+		api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id'], $groupId, null, null, null, $current_session_id);
+	}else{
+		//add a new document
+		$doc_id = add_document($_course, $relativeUrlPath.'/'.$drawFileName, 'file', filesize($documentPath), $title);
+		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
+	}	
+}
 
 ?>

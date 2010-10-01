@@ -44,15 +44,15 @@ $interbreadcrumb[] = array('url'=>api_get_path(WEB_PATH).'user_portal.php', 'nam
 $tool_name = get_lang('CreateSite');
 
 if (api_get_setting('allow_users_to_create_courses')=='false' && !api_is_platform_admin()) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 Display :: display_header($tool_name);
 
 // Check access rights
 if (!api_is_allowed_to_create_course()) {
-	Display :: display_error_message(get_lang("NotAllowed"));
-	Display::display_footer();
-	exit;
+    Display :: display_error_message(get_lang("NotAllowed"));
+    Display::display_footer();
+    exit;
 }
 // Get all course categories
 $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
@@ -95,62 +95,62 @@ $form->add_progress_bar();
 
 // Set default values
 if (isset($_user["language"]) && $_user["language"]!="") {
-	$values['course_language'] = $_user["language"];
+    $values['course_language'] = $_user["language"];
 } else {
-	$values['course_language'] = api_get_setting('platformLanguage');
+    $values['course_language'] = api_get_setting('platformLanguage');
 }
 
 $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
 $form->setDefaults($values);
 // Validate the form
 if ($form->validate()) {
-	$course_values = $form->exportValues();
-	$wanted_code = $course_values['wanted_code'];
-	$tutor_name = $course_values['tutor_name'];
-	$category_code = $course_values['category_code'];
-	$title = $course_values['title'];
-	$course_language = $course_values['course_language'];
+    $course_values = $form->exportValues();
+    $wanted_code = $course_values['wanted_code'];
+    $tutor_name = $course_values['tutor_name'];
+    $category_code = $course_values['category_code'];
+    $title = $course_values['title'];
+    $course_language = $course_values['course_language'];
 
-	if (trim($wanted_code) == '') {
-		$wanted_code = generate_course_code(api_substr($title,0,$maxlength));
-	}
+    if (trim($wanted_code) == '') {
+        $wanted_code = generate_course_code(api_substr($title,0,$maxlength));
+    }
 
-	$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
+    $keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
 
-	$sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
-	$result_check = Database::query($sql_check); //I don't know why this api function doesn't work...   Ivan, 12-FEB-2010: What do you mean?
-	if ( Database::num_rows($result_check)<1 ) {
-		if (sizeof($keys)) {
-			$visual_code = $keys["currentCourseCode"];
-			$code = $keys["currentCourseId"];
-			$db_name = $keys["currentCourseDbName"];
-			$directory = $keys["currentCourseRepository"];
-			$expiration_date = time() + $firstExpirationDelay;
-			prepare_course_repository($directory, $code);
-			update_Db_course($db_name);
-			$pictures_array=fill_course_repository($directory);
-			fill_Db_course($db_name, $directory, $course_language,$pictures_array);
-			register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
-		}
+    $sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
+    $result_check = Database::query($sql_check); //I don't know why this api function doesn't work...   Ivan, 12-FEB-2010: What do you mean?
+    if ( Database::num_rows($result_check)<1 ) {
+        if (sizeof($keys)) {
+            $visual_code = $keys["currentCourseCode"];
+            $code = $keys["currentCourseId"];
+            $db_name = $keys["currentCourseDbName"];
+            $directory = $keys["currentCourseRepository"];
+            $expiration_date = time() + $firstExpirationDelay;
+            prepare_course_repository($directory, $code);
+            update_Db_course($db_name);
+            $pictures_array=fill_course_repository($directory);
+            fill_Db_course($db_name, $directory, $course_language,$pictures_array);
+            register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
+        }
         $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
-		$message = get_lang('JustCreated');
-		$message .= ' <a href="'.$link.'">'.$title."</a>";
-		//$message .= "<br /><br /><br />";
-		//$message .= '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
-		Display :: display_confirmation_message($message,false);
-		echo '<div style="float:right; margin:0px; padding:0px;">' .
-				'<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .
-			 '</div>';
-	} else {
-		Display :: display_error_message(get_lang('CourseCodeAlreadyExists'),false);
-		$form->display();
-		//echo '<p>'.get_lang('CourseCodeAlreadyExistExplained').'</p>';
-	}
+        $message = get_lang('JustCreated');
+        $message .= ' <a href="'.$link.'">'.$title."</a>";
+        //$message .= "<br /><br /><br />";
+        //$message .= '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>';
+        Display :: display_confirmation_message($message,false);
+        echo '<div style="float:right; margin:0px; padding:0px;">' .
+                '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .
+             '</div>';
+    } else {
+        Display :: display_error_message(get_lang('CourseCodeAlreadyExists'),false);
+        $form->display();
+        //echo '<p>'.get_lang('CourseCodeAlreadyExistExplained').'</p>';
+    }
 
 } else {
-	// Display the form
-	$form->display();
-	Display::display_normal_message(get_lang('Explanation'));
+    // Display the form
+    $form->display();
+    Display::display_normal_message(get_lang('Explanation'));
 }
 /*	FOOTER */
 Display :: display_footer();

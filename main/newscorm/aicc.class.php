@@ -188,13 +188,13 @@ class aicc extends learnpath {
                 // Distribute pre params into the aicc object.
                 foreach ($pre_params as $pre) {
                     // Place a constraint on the corresponding block or AU.
-                    if (in_array(strtolower($pre['structure_element']), array_keys($this->cstlist))) {
+                    if (in_array(api_strtolower($pre['structure_element']), array_keys($this->cstlist))) {
                         // If this references a block element:
-                        $this->cstlist[strtolower($pre['structure_element'])]->prereq_string = strtolower($pre['prerequisite']);
+                        $this->cstlist[api_strtolower($pre['structure_element'])]->prereq_string = api_strtolower($pre['prerequisite']);
                     }
-                    if (in_array(strtolower($pre['structure_element']), array_keys($this->aulist))) {
+                    if (in_array(api_strtolower($pre['structure_element']), array_keys($this->aulist))) {
                         // If this references a block element:
-                        $this->aulist[strtolower($pre['structure_element'])]->prereq_string = strtolower($pre['prerequisite']);
+                        $this->aulist[api_strtolower($pre['structure_element'])]->prereq_string = api_strtolower($pre['prerequisite']);
                     }
                 }
             }
@@ -246,7 +246,6 @@ class aicc extends learnpath {
         }
 
         $this->config_encoding = "ISO-8859-1"; // TODO: We may apply detection for this value, see the function api_detect_encoding().
-                                               // TODO: Also, we have to recode data from this config encoding to the system encoding.
 
         $sql = "INSERT INTO $new_lp " .
                 "(lp_type, name, ref, description, " .
@@ -395,7 +394,7 @@ class aicc extends learnpath {
                         if (!is_array($files_found[$res[1]])) {
                             $files_found[$res[1]] = $this->config_exts; // Initialise list of expected extensions (defined in class definition).
                         }
-                        $files_found[$res[1]][strtolower($res[2])] = $thisContent['filename'];
+                        $files_found[$res[1]][api_strtolower($res[2])] = $thisContent['filename'];
                         $subdir_isset = true;
                     } else {
                         if (!$subdir_isset) {
@@ -413,7 +412,7 @@ class aicc extends learnpath {
                         if (!is_array($files_found[basename($res[1])])) {
                             $files_found[basename($res[1])] = $this->config_exts;
                         }
-                        $files_found[basename($res[1])][strtolower($res[2])] = basename($thisContent['filename']);
+                        $files_found[basename($res[1])][api_strtolower($res[2])] = basename($thisContent['filename']);
                     }
                     $package_type = 'aicc';
                 } else {
@@ -763,7 +762,9 @@ class aicc extends learnpath {
         $null = '';
         $r = $null;
         $sec = $null;
-        $f = @file($f);
+        $f = @file_get_contents($f);
+        $f = api_convert_encoding($f, api_get_system_encoding(), $this->config_encoding);
+        $f = preg_split('/\r?\n/', $s);
         for ($i = 0; $i < @count($f); $i++) {
             $newsec = 0;
             $w = @trim($f[$i]);
@@ -783,13 +784,13 @@ class aicc extends learnpath {
                         $v = @substr($v, 1, @strlen($v) - 2);
                     }
                     if ($sec) {
-                        if (strtolower($sec) == 'course_description') { // A special case.
-                            $r[strtolower($sec)] = $k;
+                        if (api_strtolower($sec) == 'course_description') { // A special case.
+                            $r[api_strtolower($sec)] = $k;
                         } else {
-                            $r[strtolower($sec)][strtolower($k)] = $v;
+                            $r[api_strtolower($sec)][api_strtolower($k)] = $v;
                         }
                     } else {
-                        $r[strtolower($k)] = $v;
+                        $r[api_strtolower($k)] = $v;
                     }
                 }
             }
@@ -808,6 +809,7 @@ class aicc extends learnpath {
         $null = '';
         $r = $null;
         $sec = $null;
+        $s = api_convert_encoding($s, api_get_system_encoding(), $this->config_encoding);
         //$f = split("\r\n", $s);
         $f = preg_split('/\r?\n/', $s);
         for ($i = 0; $i < @count($f); $i++) {
@@ -818,10 +820,10 @@ class aicc extends learnpath {
                     if ((@substr($w, 0, 1) == '[') and (@substr($w, -1, 1)) == ']') {
                         $sec = @substr($w, 1, @strlen($w) - 2);
                         $pure_data = 0;
-                        if (in_array(strtolower($sec), $pure_strings)) {
+                        if (in_array(api_strtolower($sec), $pure_strings)) {
                             // This section can only be considered as pure string data (until the next section).
                             $pure_data = 1;
-                            $r[strtolower($sec)] = '';
+                            $r[api_strtolower($sec)] = '';
                         }
                         $newsec = 1;
                     }
@@ -836,16 +838,16 @@ class aicc extends learnpath {
                     }
                     if ($sec) {
                         if ($pure_data) {
-                            $r[strtolower($sec)] .= $f[$i];
+                            $r[api_strtolower($sec)] .= $f[$i];
                         } else {
-                            if (strtolower($sec) == 'course_description') { // A special case.
-                                $r[strtolower($sec)] = $k;
+                            if (api_strtolower($sec) == 'course_description') { // A special case.
+                                $r[api_strtolower($sec)] = $k;
                             } else {
-                                $r[strtolower($sec)][strtolower($k)] = $v;
+                                $r[api_strtolower($sec)][api_strtolower($k)] = $v;
                             }
                         }
                     } else {
-                        $r[strtolower($k)] = $v;
+                        $r[api_strtolower($k)] = $v;
                     }
                 }
             }
@@ -863,7 +865,8 @@ class aicc extends learnpath {
      * @return array	Simple structured array
      */
     function parse_csv_file($f, $delim = ',', $enclosure = '"', $multiples = false) {
-        $data = file_get_contents($f);
+        $data = @file_get_contents($f);
+        $data = api_convert_encoding($data, api_get_system_encoding(), $this->config_encoding);
         $enclosed = false;
         $fldcount = 0;
         $linecount = 0;
@@ -923,10 +926,10 @@ class aicc extends learnpath {
             } else {
                 $ret_ret_array[$line_idx] = array();
                 foreach ($line as $idx => $val) {
-                    if ($multiples && !empty($ret_ret_array[$line_idx][strtolower($titles[$idx])])) {
-                        $ret_ret_array[$line_idx][strtolower($titles[$idx])] .= ','.$val;
+                    if ($multiples && !empty($ret_ret_array[$line_idx][api_strtolower($titles[$idx])])) {
+                        $ret_ret_array[$line_idx][api_strtolower($titles[$idx])] .= ','.$val;
                     } else {
-                        $ret_ret_array[$line_idx][strtolower($titles[$idx])] = $val;
+                        $ret_ret_array[$line_idx][api_strtolower($titles[$idx])] = $val;
                     }
                 }
             }

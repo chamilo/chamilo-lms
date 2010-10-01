@@ -245,7 +245,8 @@ class aicc extends learnpath {
             $dsp = $row[0] + 1;
         }
 
-        $this->config_encoding = "ISO-8859-1";
+        $this->config_encoding = "ISO-8859-1"; // TODO: We may apply detection for this value, see the function api_detect_encoding().
+                                               // TODO: Also, we have to recode data from this config encoding to the system encoding.
 
         $sql = "INSERT INTO $new_lp " .
                 "(lp_type, name, ref, description, " .
@@ -319,7 +320,7 @@ class aicc extends learnpath {
         $file_info['tmp_name'] = $file_path;
         $file_info['name'] = basename($file_path);
         // Call the normal import_package function.
-        return $this->import_package($file_info,$current_dir);
+        return $this->import_package($file_info, $current_dir);
     }
 
     /**
@@ -337,7 +338,7 @@ class aicc extends learnpath {
         if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name, 0); }
         $course_rel_dir  = api_get_course_path().'/scorm'; // Scorm dir web path starting from /courses
         $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // The absolute system path of this course.
-        $current_dir = replace_dangerous_char(trim($current_dir),'strict'); // Current dir we are in, inside scorm/
+        $current_dir = replace_dangerous_char(trim($current_dir), 'strict'); // Current dir we are in, inside scorm/
         if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Current_dir = '.$current_dir, 0); }
 
          //$uploaded_filename = $_FILES['userFile']['name'];
@@ -500,8 +501,8 @@ class aicc extends learnpath {
 
                         // TODO: RENAMING FILES CAN BE VERY DANGEROUS AICC-WISE, avoid that as much as possible!
                         //$safe_file = replace_dangerous_char($file, 'strict');
-                        $find_str = array('\\','.php','.phtml');
-                        $repl_str = array('/', '.txt','.txt');
+                        $find_str = array('\\', '.php', '.phtml');
+                        $repl_str = array('/',  '.txt', '.txt');
                         $safe_file = str_replace($find_str, $repl_str, $file);
 
                         if ($safe_file != $file) {
@@ -782,7 +783,7 @@ class aicc extends learnpath {
                         $v = @substr($v, 1, @strlen($v) - 2);
                     }
                     if ($sec) {
-                        if (strtolower($sec) == 'course_description') { //A special case.
+                        if (strtolower($sec) == 'course_description') { // A special case.
                             $r[strtolower($sec)] = $k;
                         } else {
                             $r[strtolower($sec)][strtolower($k)] = $v;
@@ -807,7 +808,8 @@ class aicc extends learnpath {
         $null = '';
         $r = $null;
         $sec = $null;
-        $f = split("\r\n", $s);
+        //$f = split("\r\n", $s);
+        $f = preg_split('/\r?\n/', $s);
         for ($i = 0; $i < @count($f); $i++) {
             $newsec = 0;
             $w = @trim($f[$i]);

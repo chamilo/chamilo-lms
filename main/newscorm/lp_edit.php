@@ -63,6 +63,7 @@ $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 //$form->addElement('static', null, get_lang('Metadata'), $metadata_link);
 
 // Encoding
+/* // Chamilo 1.8.8: Deprecated code.
 $encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));
 $encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP');
 foreach ($encodings as $encoding) {
@@ -71,6 +72,8 @@ foreach ($encodings as $encoding) {
       }
       $encoding_select->addOption($encoding,$encoding);
 }
+*/
+$form->addElement('hidden', 'lp_encoding');
 
 // Origin
 $origin_select = &$form->addElement('select', 'lp_maker', get_lang('Origin'));
@@ -151,7 +154,12 @@ if (api_get_setting('search_enabled') === 'true') {
 // Default values
 $content_proximity_select -> setSelected($s_selected_proximity);
 $origin_select -> setSelected($s_selected_origin);
+
+/* // Chamilo 1.8.8: Deprecated code.
 $encoding_select -> setSelected($s_selected_encoding);
+*/
+$defaults['lp_encoding'] = Security::remove_XSS($_SESSION['oLP']->encoding);
+
 $defaults['lp_name'] = Security::remove_XSS($_SESSION['oLP']->get_name());
 $defaults['lp_author'] = Security::remove_XSS($_SESSION['oLP']->get_author());
 

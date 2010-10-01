@@ -23,7 +23,6 @@ if (isset($_SESSION['lpobject'])) {
     }
 }
 /*
-$charset = $_SESSION['oLP']->encoding;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 */
 

@@ -11,7 +11,7 @@
 * @author Denes Nagy, principal author
 * @author Isthvan Mandak, several new features
 * @author Roan Embrechts, code improvements and refactoring
-* @license  GNU/GPL - See Chamilo license directory for details
+* @license	GNU/GPL - See Chamilo license directory for details
 */
 
 /* INIT SECTION */
@@ -24,9 +24,8 @@ if ($lp_controller_touched != 1){
     exit;
 }
 
-/*
-    Libraries
-*/
+/* Libraries */
+
 require_once 'back_compat.inc.php';
 //require_once '../learnpath/learnpath_functions.inc.php';
 require_once 'scorm.lib.php';
@@ -35,14 +34,6 @@ require_once 'learnpathItem.class.php';
 //require_once 'lp_comm.common.php'; //xajax functions
 
 if (!$is_allowed_in_course) api_not_allowed();
-
-// We set the encoding of the lp.
-if (!empty($_SESSION['oLP']->encoding)) {
-    $charset = $_SESSION['oLP']->encoding;
-} else {
-    $charset = api_get_system_encoding();
-}
-
 $oLearnpath     = false;
 $course_code    = api_get_course_id();
 $user_id        = api_get_user_id();
@@ -144,11 +135,11 @@ if (!isset($src)) {
 
 $list = $_SESSION['oLP']->get_toc();
 $type_quiz = false;
-
+/*
 $current_item = $_SESSION['oLP']->items[$_SESSION['oLP']->get_current_item_id()];
 $attempt_id =  $current_item->get_attempt_id();
 error_log('get attempts'.$current_item->get_attempt_id());
-
+*/
 
 
 foreach($list as $toc) {
@@ -200,7 +191,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
             Database::query($sql_upd_score);
                    
             $update_query = "UPDATE $TBL_TRACK_EXERCICES SET  orig_lp_item_view_id = $lp_item_view_id  WHERE exe_id = ".$safe_exe_id;
-            error_log('dddd-->'.$update_query);
+            //error_log('dddd-->'.$update_query);
             Database::query($update_query);
         }        
     }
@@ -214,7 +205,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 }
 
 $_SESSION['oLP']->set_previous_item($lp_item_id);
-$nameTools = Security :: remove_XSS(api_convert_encoding($_SESSION['oLP']->get_name(), $charset, api_get_system_encoding()));
+$nameTools = Security :: remove_XSS($_SESSION['oLP']->get_name());
 
 $save_setting = api_get_setting('show_navigation_menu');
 global $_setting;
@@ -254,7 +245,7 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
                         </td>
                         <td>
                             <a class="link" href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                            <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
+                            <?php echo get_lang('CourseHomepageLink'); ?></a>
                         </td>
                     </tr>
                 </table>

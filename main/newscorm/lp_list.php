@@ -235,7 +235,11 @@ if (is_array($flat_list)) {
             }
             */
 
+            /* // Deprecated code, Chamilo 1.8.8.
             $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'</td>'."\n";
+            */
+
+            $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].'</td>'."\n";
 
             /* Export */
 

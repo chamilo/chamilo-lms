@@ -292,11 +292,8 @@ class scorm extends learnpath {
                 $dsp = $row[0] + 1;
             }
             $myname = $oOrganization->get_name();
-            //$this->manifest_encoding = 'UTF-8';
-            global $charset;
-            if (!empty($charset) && !empty($this->manifest_encoding) && $this->manifest_encoding != $charset) {
-                $myname = api_convert_encoding($myname, $charset, $this->manifest_encoding);
-            }
+            $myname = api_utf8_decode($myname);
+
             $sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order, session_id)" .
                     "VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $session_id)";
             if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting path: '. $sql, 0); }
@@ -353,19 +350,11 @@ class scorm extends learnpath {
                     $value_add .= "'".$item['maxtimeallowed']."',";
                 }
                 $title = Database::escape_string($item['title']);
+                $title = api_utf8_decode($title);
                 $max_score = Database::escape_string($item['max_score']);
                 if ($max_score == 0 || is_null($max_score) || $max_score == '') {
                     $max_score = 100;
                 }
-                // DOM in PHP5 is always recovering data as UTF-8, somehow, no matter what
-                // the XML document encoding is. This means that we have to convert
-                // the data to the declared encoding when it is not UTF-8.
-                if ($this->manifest_encoding != 'UTF-8') {
-                    $title = api_convert_encoding($title, $this->manifest_encoding, 'UTF-8');
-                }
-                //if ($this->manifest_encoding != $charset) {
-                //	$title = api_convert_encoding($title, $charset, $this->manifest_encoding);
-                //}
                 $identifier = Database::escape_string($item['identifier']);
                 $prereq = Database::escape_string($item['prerequisites']);
                 $sql_item = "INSERT INTO $new_lp_item " .
@@ -829,7 +818,7 @@ class scorm extends learnpath {
         $title = '';
         if (isset($this->manifest['organizations']['default'])) {
             $title = $this->organizations[$this->manifest['organizations']['default']]->get_name();
-        }elseif (count($this->organizations)==1) {
+        } elseif (count($this->organizations)==1) {
             // This will only get one title but so we don't need to know the index.
             foreach($this->organizations as $id => $value) {
                 $title = $this->organizations[$id]->get_name();
@@ -840,6 +829,7 @@ class scorm extends learnpath {
     }
 
     /**
+     * // TODO @TODO This method is not used anywhere. Is it really needed?
      * // TODO @TODO Implement this function to restore items data from an imsmanifest,
      * updating the existing table... This will prove very useful in case initial data
      * from imsmanifest were not imported well enough
@@ -865,9 +855,9 @@ class scorm extends learnpath {
         } else {
             $this->error = 'Course code does not exist in database ('.$sql.')';
             return false;
-           }
+        }
 
-           // TODO: Make it flexible to use any course_code (still using env course code here)
+        // TODO: Make it flexible to use any course_code (still using env course code here)
         //$lp_table = Database::get_course_table(LEARNPATH_TABLE);
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
 
@@ -878,25 +868,25 @@ class scorm extends learnpath {
         //$res = Database::query($sql);
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-                $this->lp_id = $lp_id;
-                $row = Database::fetch_array($res);
-                $this->type = $row['lp_type'];
-                $this->name = stripslashes($row['name']);
-                $this->encoding = $row['default_encoding'];
-                $this->proximity = $row['content_local'];
-                $this->maker = $row['content_maker'];
-                $this->prevent_reinit = $row['prevent_reinit'];
-                $this->license = $row['content_license'];
-                $this->scorm_debug = $row['debug'];
-                $this->js_lib = $row['js_lib'];
-                $this->path = $row['path'];
-                if ($this->type == 2) {
-                    if ($row['force_commit'] == 1) {
-                        $this->force_commit = true;
-                    }
+            $this->lp_id = $lp_id;
+            $row = Database::fetch_array($res);
+            $this->type = $row['lp_type'];
+            $this->name = stripslashes($row['name']);
+            $this->encoding = $row['default_encoding'];
+            $this->proximity = $row['content_local'];
+            $this->maker = $row['content_maker'];
+            $this->prevent_reinit = $row['prevent_reinit'];
+            $this->license = $row['content_license'];
+            $this->scorm_debug = $row['debug'];
+            $this->js_lib = $row['js_lib'];
+            $this->path = $row['path'];
+            if ($this->type == 2) {
+                if ($row['force_commit'] == 1) {
+                    $this->force_commit = true;
                 }
-                $this->mode = $row['default_view_mod'];
-                $this->subdir = $row['path'];
+            }
+            $this->mode = $row['default_view_mod'];
+            $this->subdir = $row['path'];
         }
         // Parse the manifest (it is already in this lp's details).
         $manifest_file = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/scorm/'.$this->subdir.'/imsmanifest.xml';

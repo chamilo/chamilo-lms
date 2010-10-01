@@ -24,7 +24,7 @@ class scormOrganization {
      * @param	mixed	Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
     public function __construct($type = 'manifest', &$element, $scorm_charset = 'UTF-8') {
-        if (isset($element))	{
+        if (isset($element)) {
 
             // Parsing using PHP5 DOMXML methods.
 
@@ -34,8 +34,8 @@ class scormOrganization {
                     return false;
                 case 'manifest': // Do the same as the default.
                 default:
-                     //if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
-                     $children = $element->childNodes;
+                    //if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
+                    $children = $element->childNodes;
                     foreach ($children as $child) {
                          switch ($child->nodeType) {
                              case XML_ELEMENT_NODE:
@@ -52,7 +52,7 @@ class scormOrganization {
                                      case 'title':
                                          $tmp_children = $child->childNodes;
                                          if ($tmp_children->length == 1 && $child->firstChild->nodeValue != '') {
-                                             $this->title = html_entity_decode(html_entity_decode($child->firstChild->nodeValue, ENT_QUOTES, $scorm_charset)); // TODO: This conversion from html-entities looks strange.
+                                             $this->title = api_utf8_decode(api_html_entity_decode($child->firstChild->nodeValue, ENT_QUOTES, 'UTF-8'));
                                          }
                                          break;
                                  }

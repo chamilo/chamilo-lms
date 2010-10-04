@@ -718,10 +718,10 @@ function delete_post($post_id) {
     $thread_id_of_deleted_post = $tab_post_info['thread_id'];
     $forum_if_of_deleted_post = $tab_post_info['forum_id'];
     $sql = "UPDATE $table_posts SET post_parent_id=$post_parent_id_of_deleted_post WHERE post_parent_id=$post_id AND thread_id=$thread_id_of_deleted_post AND forum_id=$forum_if_of_deleted_post;";
-    api_sql_query($sql);
+    Database::query($sql);
 
     $sql="DELETE FROM $table_posts WHERE post_id='".Database::escape_string($post_id)."'"; // note: this has to be a recursive function that deletes all of the posts in this block.
-    api_sql_query($sql);
+    Database::query($sql);
 
     //delete attachment file about this post id
     delete_attachment($post_id);
@@ -734,13 +734,13 @@ function delete_post($post_id) {
                     thread_last_post='".Database::escape_string($last_post_of_thread['post_id'])."',
                     thread_date='".Database::escape_string($last_post_of_thread['post_date'])."'
             WHERE thread_id='".intval($_GET['thread'])."'";
-        api_sql_query($sql);
+        Database::query($sql);
         return 'PostDeleted';
     }
     if (!$last_post_of_thread) {
         // we deleted the very single post of the thread so we need to delete the entry in the thread table also.
         $sql="DELETE FROM $table_threads WHERE thread_id='".intval($_GET['thread'])."'";
-        api_sql_query($sql);
+        Database::query($sql);
         return 'PostDeletedSpecial';
     }
 }

@@ -50,7 +50,7 @@ if ($global) {
 	//Get exam lists
 	$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST,$_course['db_name']);	
 	$sqlExercices = "	SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE active='1' ORDER BY quiz.title ASC";
-	$resultExercices = api_sql_query($sqlExercices,__FILE__,__LINE__);	
+	$resultExercices = Database::query($sqlExercices);	
 	$exercise_list[0] = get_lang('All');
 	while($a_exercices = Database::fetch_array($resultExercices)) {
 		$exercise_list[$a_exercices['id']] = $a_exercices['title'];
@@ -131,8 +131,8 @@ foreach($course_list as $current_course ) {
 	$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST,$current_course['db_name']);
 	
 	$sqlExercices		= "SELECT count(id) as count FROM ".$t_quiz." AS quiz WHERE active='1' ";
-	$resultExercices 	= api_sql_query($sqlExercices,__FILE__,__LINE__);
-	$data_exercises  	= api_store_result($resultExercices);
+	$resultExercices 	= Database::query($sqlExercices);
+	$data_exercises  	= Database::store_result($resultExercices);
 	$exercise_count 	= $data_exercises[0]['count'];	
 	if ($global) {
         if ($exercise_count == 0) {
@@ -145,7 +145,7 @@ foreach($course_list as $current_course ) {
 	}
 
 	$sql='SELECT visibility FROM '.$current_course['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz" ';
-	$resultVisibilityQuizz = api_sql_query($sql,__FILE__,__LINE__);
+	$resultVisibilityQuizz = Database::query($sql);
 	
 	if (Database::result($resultVisibilityQuizz, 0 ,'visibility') == 1) {		
 		$sqlExercices = "	SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE active='1' ORDER BY quiz.title ASC";		
@@ -155,7 +155,7 @@ foreach($course_list as $current_course ) {
 				$sqlExercices = "	SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE active='1' AND id = $exercise_id ORDER BY quiz.title ASC";	
 			}
 		}		
-		$resultExercices = api_sql_query($sqlExercices,__FILE__,__LINE__);
+		$resultExercices = Database::query($sqlExercices);
 		$i = 0;
 		if (Database::num_rows($resultExercices) > 0) {
 			
@@ -195,7 +195,7 @@ foreach($course_list as $current_course ) {
 									AND exe_user_id='".$current_student_id."'";
 									
 									
-					$resultEssais = api_sql_query($sqlEssais,__FILE__,__LINE__);					
+					$resultEssais = Database::query($sqlEssais);					
 					$a_essais = Database::fetch_array($resultEssais);					
 					
 					$sqlScore = "SELECT exe_id, exe_result,exe_weighting
@@ -206,7 +206,7 @@ foreach($course_list as $current_course ) {
 							 ORDER BY exe_result DESC LIMIT 1"; // we take the higher value
 							 //ORDER BY exe_date DESC LIMIT 1";
 					
-					$resultScore = api_sql_query($sqlScore,__FILE__,__LINE__);
+					$resultScore = Database::query($sqlScore);
 					$score = 0;
 					
 					while($a_score = Database::fetch_array($resultScore)) {
@@ -263,7 +263,7 @@ foreach($course_list as $current_course ) {
 				
 					/*				
 					$sql_last_attempt='SELECT exe_id FROM '.$tbl_stats_exercices.' WHERE exe_exo_id="'.$a_exercices['id'].'" AND exe_user_id="'.$current_student_id.'" AND exe_cours_id="'.$current_course['code'].'" ORDER BY exe_date DESC LIMIT 1';
-					$resultLastAttempt = api_sql_query($sql_last_attempt,__FILE__,__LINE__);
+					$resultLastAttempt = Database::query($sql_last_attempt);
 					if(Database::num_rows($resultLastAttempt)>0) {
 						$id_last_attempt=Database::result($resultLastAttempt,0,0);					
 						if($a_essais['essais']>0) {

@@ -462,7 +462,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 			        $sql = 'SELECT id, url, parent_id FROM '.$t_student_publication;
 					$result = Database::query($sql);
 					if (Database::num_rows($result) > 0) {
-						$items = api_store_result($result);
+						$items = Database::store_result($result);
 						$directory_list = $file_list=array();
 
 						foreach($items as $item) {

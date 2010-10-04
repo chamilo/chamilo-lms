@@ -1849,7 +1849,7 @@ class UserManager
 			WHERE  course_rel_user.user_id = '".$user_id."' AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."  $where_access_url
 										ORDER BY user_course_category.sort, course_rel_user.sort, course.title ASC";
 
-		$course_list_sql_result = api_sql_query($personal_course_list_sql);
+		$course_list_sql_result = Database::query($personal_course_list_sql);
 
 		$personal_course_list = array();
 		if (Database::num_rows($course_list_sql_result) > 0 ) {
@@ -2938,7 +2938,7 @@ class UserManager
 											WHERE  $code_special_courses $where_access_url
 											GROUP BY course.code
 											ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
-			$course_list_sql_result = api_sql_query($course_list_sql);
+			$course_list_sql_result = Database::query($course_list_sql);
 			while ($result_row = Database::fetch_array($course_list_sql_result)) {
 				$course_list[] = $result_row;
 			}
@@ -3097,11 +3097,11 @@ class UserManager
         } else {
             $sql = "SELECT user_id FROM $tbl_user_rel_user WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
         }
-        $result = Database::query($sql,__FILE__,__LINE__);
+        $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result))   {
                 $sql = "DELETE FROM $tbl_user_rel_user WHERE user_id = '{$row['user_id']}'  AND friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
-                Database::query($sql,__FILE__,__LINE__);
+                Database::query($sql);
             }
         }
 
@@ -3110,7 +3110,7 @@ class UserManager
 			foreach ($users_id as $user_id) {
 				$user_id = intval($user_id);
 				$insert_sql = "INSERT IGNORE INTO $tbl_user_rel_user(user_id, friend_user_id, relation_type) VALUES('$user_id', $hr_dept_id, '".USER_RELATION_TYPE_RRHH."')";
-				Database::query($insert_sql,__FILE__,__LINE__);
+				Database::query($insert_sql);
 				$affected_rows = Database::affected_rows();
 			}
 		}
@@ -3156,7 +3156,7 @@ class UserManager
 	 		$sql='SELECT u.user_id FROM '.$table_user.' u
 					INNER JOIN '.$table_course_user.' ru ON ru.user_id=u.user_id
 					WHERE ru.status=1 AND ru.course_code="'.Database::escape_string($course_id).'" ';
-			$rs=Database::query($sql,__FILE__,__LINE__);
+			$rs=Database::query($sql);
 			$num_rows=Database::num_rows($rs);
 			if ($num_rows==1) {
 				$row=Database::fetch_array($rs);
@@ -3170,7 +3170,7 @@ class UserManager
 			$sql='SELECT u.user_id FROM '.$table_user.' u
 				INNER JOIN '.$table_session_course_user.' sru
 				ON sru.id_user=u.user_id WHERE sru.course_code="'.Database::escape_string($course_id).'" ';
-			$rs=Database::query($sql,__FILE__,__LINE__);
+			$rs=Database::query($sql);
 			$row=Database::fetch_array($rs);
 
 			return $row['user_id'];
@@ -3186,7 +3186,7 @@ class UserManager
 	public function is_user_certified($cat_id,$user_id) {
 		$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 		$sql='SELECT path_certificate FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
-		$rs=Database::query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql);
 		$row=Database::fetch_array($rs);
 		if ($row['path_certificate']=='' || is_null($row['path_certificate'])) {
 			return false;
@@ -3205,7 +3205,7 @@ class UserManager
 	  	$tbl_grade_certificate 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 	  	$tbl_grade_category 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 	  	$sql='SELECT * FROM '.$tbl_grade_certificate.' WHERE cat_id= (SELECT id FROM '.$tbl_grade_category.' WHERE course_code = "'.Database::escape_string($course_code).'" ) AND user_id="'.Database::escape_string($user_id).'" ';
-	  	$rs = Database::query($sql,__FILE__,__LINE__);
+	  	$rs = Database::query($sql);
 	  	$row= Database::fetch_array($rs);
 	  	if (Database::num_rows($rs) > 0)
 	  		return $row;
@@ -3235,7 +3235,7 @@ class UserManager
 	 	$sql= "SELECT tc.path_certificate,tc.cat_id,tgc.course_code,tgc.name FROM $table_certificate tc, $table_gradebook_category tgc
 			   WHERE tgc.id = tc.cat_id AND tc.user_id='$user_id'  ORDER BY tc.date_certificate DESC limit 5";
 
-	 	$rs=Database::query($sql,__FILE__,__LINE__);
+	 	$rs=Database::query($sql);
 	 	while ($row=Database::fetch_array($rs)) {
 	 		$my_certificate[]=$row;
 	 	}

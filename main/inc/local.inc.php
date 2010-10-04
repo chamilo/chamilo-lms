@@ -892,7 +892,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 						AND course_code='$course_code'
 						AND login_course_date > now() - INTERVAL $session_lifetime SECOND
 						ORDER BY login_course_date DESC LIMIT 0,1";
-				$result=Database::query($sql,__FILE__,__LINE__);
+				$result=Database::query($sql);
 
 			if (Database::num_rows($result)>0) {
 
@@ -903,12 +903,12 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 						"SET logout_course_date = '$time', " .
 						"counter = counter+1 " .
 					"WHERE course_access_id=".intval($i_course_access_id);
-				Database::query($sql,__FILE__,__LINE__);
+				Database::query($sql);
 			} else {
 				$sql="INSERT INTO $course_tracking_table
 						(course_code, user_id, login_course_date, logout_course_date, counter)" .
 					"VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1')";
-				Database::query($sql,__FILE__,__LINE__);
+				Database::query($sql);
 			}
    	 	}
 	}

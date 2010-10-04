@@ -717,7 +717,7 @@ class CourseBuilder {
 			$tbl_wiki = Database::get_course_table(TABLE_WIKI);
 	        $sql = 'SELECT * FROM ' . $tbl_wiki . ' WHERE session_id = 0';
 		}
-		$db_result = api_sql_query($sql);
+		$db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$wiki = new Wiki($obj->id, $obj->page_id, $obj->reflink, $obj->title, $obj->content, $obj->user_id, $obj->group_id, $obj->dtime, $obj->progress, $obj->version);

@@ -308,7 +308,7 @@ function get_number_of_users() {
 	}
 
 	//executing the SQL statement
-	$res = api_sql_query($sql);
+	$res = Database::query($sql);
 	while ($user = Database::fetch_row($res)) {
 		$users[] = $user[0];
 	}
@@ -715,7 +715,7 @@ function search_additional_profile_fields($keyword)
 
 	// getting the field option text that match this keyword (for radio buttons and checkboxes)
 	$sql_profiling = "SELECT * FROM $table_user_field_options WHERE option_display_text LIKE '%".$keyword."%'";
-	$result_profiling = api_sql_query($sql_profiling);
+	$result_profiling = Database::query($sql_profiling);
 	while ($profiling_field_options = Database::fetch_array($result_profiling)) {
 		$profiling_field_options_exact_values[] = $profiling_field_options;
 	}
@@ -731,7 +731,7 @@ function search_additional_profile_fields($keyword)
 							WHERE user.user_id = user_values.user_id
 							AND ( field_value LIKE '%".$keyword."%'
 							".$profiling_field_options_exact_values_sql.")";
-	$result_profiling_values = api_sql_query($sql_profiling_values);
+	$result_profiling_values = Database::query($sql_profiling_values);
 	while ($profiled_users = Database::fetch_array($result_profiling_values)) {
 		$additional_users[$profiled_users['col0']] = $profiled_users;
 	}

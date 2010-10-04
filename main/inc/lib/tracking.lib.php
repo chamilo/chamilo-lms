@@ -1595,7 +1595,7 @@ class Tracking {
 					AND stats_login.login_course_date IS NULL
 					GROUP BY course_user.user_id';
 		}
-		$rs = api_sql_query($sql);
+		$rs = Database::query($sql);
 		$inactive_users = array();
 		while($user = Database::fetch_array($rs))
 		{
@@ -2174,7 +2174,7 @@ class TrackingCourseLog {
 		$sql = "SELECT user.user_id, field.field_value FROM $table_user user, $table_user_field_values field
 			WHERE user.user_id = field.user_id
 			AND field.field_id='".intval($field_id)."'";
-		$result = api_sql_query($sql);
+		$result = Database::query($sql);
 		while($row = Database::fetch_array($result)) {
 			$return[$row['user_id']][] = $row['field_value'];
 		}
@@ -2219,7 +2219,7 @@ class TrackingCourseLog {
 						ON (user.user_id = field.user_id)
 						WHERE field.field_id=".intval($field_id)." AND user.user_id IN ($users)";
 
-				$result = api_sql_query($sql);
+				$result = Database::query($sql);
 				while($row = Database::fetch_array($result)) {
 					// get option value for field type double select by id
 					if (!empty($row['field_value'])) {

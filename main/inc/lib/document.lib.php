@@ -998,7 +998,7 @@ class DocumentManager {
 	 	}
 	 	$sql='UPDATE '.$tbl_category.' SET document_id="'.Database::escape_string($document_id).'"
 	 		  WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
-	 	$rs=Database::query($sql,__FILE__,__LINE__);
+	 	$rs=Database::query($sql);
 	 }
 
 	 /**
@@ -1018,7 +1018,7 @@ class DocumentManager {
 	 	}
 	 	$sql='SELECT document_id FROM '.$tbl_category.'
 	 	WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
-	 	$rs=Database::query($sql,__FILE__,__LINE__);
+	 	$rs=Database::query($sql);
 	 	$row=Database::fetch_array($rs);
 	 	return $row['document_id'];
 	 }
@@ -1037,7 +1037,7 @@ class DocumentManager {
 
 	  	$sql='SELECT path FROM '.$tbl_document.' WHERE id="'.Database::escape_string($document_id).'" ';
 
-	  	$rs=Database::query($sql,__FILE__,__LINE__);
+	  	$rs=Database::query($sql);
 	  	$new_content = '';
 	  	if (Database::num_rows($rs)) {
 		  	$row=Database::fetch_array($rs);
@@ -1127,7 +1127,7 @@ class DocumentManager {
 
 			 	$sql='UPDATE '.$tbl_category.' SET document_id=null
 			 		  WHERE course_code="'.Database::escape_string($course_id).'" AND document_id="'.$default_certificate_id.'" '.$sql_session;
-			 	$rs=Database::query($sql,__FILE__,__LINE__);
+			 	$rs=Database::query($sql);
 	   		}
 	   }
 
@@ -1164,7 +1164,7 @@ class DocumentManager {
 	    	global $_course;
 	  		$tbl_document=Database::get_course_table(TABLE_DOCUMENT);
 	    	$sql='SELECT id FROM '.$tbl_document.' WHERE path="/certificates" ';
-	    	$rs=Database::query($sql,__FILE__,__LINE__);
+	    	$rs=Database::query($sql);
 	    	$row=Database::fetch_array($rs);
 	    	return $row['id'];
 	    }

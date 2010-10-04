@@ -1821,7 +1821,7 @@ class CourseManager {
 												WHERE  $with_special_courses
 												GROUP BY course.code
 												ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
-			$rs_special_course = api_sql_query($sql);
+			$rs_special_course = Database::query($sql);
 			if (Database::num_rows($rs_special_course) > 0) {
 				while ($result_row = Database::fetch_array($rs_special_course)) {
 						$result_row['special_course'] = 1;

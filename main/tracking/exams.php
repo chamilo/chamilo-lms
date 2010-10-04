@@ -280,8 +280,7 @@ foreach($course_list as $current_course ) {
 						$user_row = '<td align="center">';					  
 						$user_row .= 		$user_info['firstName'].' '.$user_info['lastName'];
 						$user_row .= '</td>';
-						$row_not_global['users'][]= $user_info['firstName'].' '.$user_info['lastName'];
-						
+						$user_info = $user_info['firstName'].' '.$user_info['lastName'];						
 						
 						//Best result																								
 						if (!empty($a_essais['essais'])) {
@@ -321,7 +320,7 @@ foreach($course_list as $current_course ) {
 							$user_row .= '</td>';
 						}						
 						$user_row .= '</tr>';
-						$student_result[$current_student_id]  = array('html'=>$user_row,'score'=>$score,'array'=>$temp_array);	
+						$student_result[$current_student_id]  = array('html'=>$user_row,'score'=>$score,'array'=>$temp_array,'user'=>$user_info);	
 						$temp_array = array();
 					}
 				}
@@ -342,7 +341,8 @@ foreach($course_list as $current_course ) {
 						
 						foreach($student_result as $row) {
 							$html_result .=$row['html'];
-							$row_not_global['results'][]= $row['array'];						
+							$row_not_global['results'][]= $row['array'];
+                            $row_not_global['users'][]   = $row['user'];    						
 						}
 						$export_array[] = $row_not_global;
 						$row_not_global = array();
@@ -369,7 +369,7 @@ foreach($course_list as $current_course ) {
 						$html_result .= '<td align="center"  style="background-color:#FCE89A"  >';
 					}
 					
-					$html_result .= 		$total_with_parameter_score;
+					$html_result .= $total_with_parameter_score;
 					$global_row[]= $total_with_parameter_score;
 					$html_result .= '</td>';
 					

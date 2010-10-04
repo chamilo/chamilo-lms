@@ -24,7 +24,7 @@
     CourseManager::get_real_course_code_select_html($element_name, $has_size=true, $only_current_user_courses=true)
     CourseManager::check_parameter($parameter, $error_message)
     CourseManager::check_parameter_or_fail($parameter, $error_message)
-    CourseManager::is_existing_course_code($wanted_course_code)
+    CourseManager::course_code_exists($wanted_course_code)
     CourseManager::get_real_course_list()
     CourseManager::get_virtual_course_list()
 
@@ -540,8 +540,7 @@ class CourseManager {
      *	@return true if there already are one or more courses
      *	with the same code OR visual_code (visualcode), false otherwise
      */
-    // TODO: course_code_exists() is a better name.
-    public static function is_existing_course_code($wanted_course_code) {
+    public static function course_code_exists($wanted_course_code) {
         $wanted_course_code = Database::escape_string($wanted_course_code);
         $result = Database::fetch_array(Database::query("SELECT COUNT(*) as number FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."WHERE code = '$wanted_course_code' OR visual_code = '$wanted_course_code'"));
         return $result['number'] > 0;
@@ -1298,7 +1297,7 @@ class CourseManager {
 
         //check: virtual course creation fails if another course has the same
         //code, real or fake.
-        if (self::is_existing_course_code($wanted_course_code)) {
+        if (self::course_code_exists($wanted_course_code)) {
             Display::display_error_message($wanted_course_code.' - '.get_lang('CourseCodeAlreadyExists'));
             return false;
         }
@@ -2314,7 +2313,7 @@ class CourseManager {
       * @param	int			Relation type
       **/
     public static function suscribe_courses_to_hr_manager($hr_manager_id,$courses_list) {
-     global $_configuration;
+        global $_configuration;
 
         // Database Table Definitions
         $tbl_course             =   Database::get_main_table(TABLE_MAIN_COURSE);
@@ -2413,65 +2412,72 @@ class CourseManager {
      */
     public static function update_course_picture($course_code, $filename, $source_file = null) {
 
-            $course_info = api_get_course_info($course_code);
-            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'];   // course path
-            $course_image = $store_path.'/course-pic.png';                      // image name for courses
-            $course_medium_image = $store_path.'/course-pic85x85.png';
-            $extension = strtolower(substr(strrchr($filename, '.'), 1));
+        $course_info = api_get_course_info($course_code);
+        $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'];   // course path
+        $course_image = $store_path.'/course-pic.png';                      // image name for courses
+        $course_medium_image = $store_path.'/course-pic85x85.png';
+        $extension = strtolower(substr(strrchr($filename, '.'), 1));
 
-            $result = false;
-            $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-            if (in_array($extension, $allowed_picture_types)) {
-                if (file_exists($course_image)) {
-                    @unlink($course_image);
-                }
-                if (file_exists($course_medium_image)) {
-                    @unlink($course_medium_image);
-                }
-                if ($extension != 'png') {
-                    // convert image to png extension
-                    if ($extension == 'jpg' || $extension == 'jpeg') {
-                        $image = imagecreatefromjpeg($source_file);
-                    } else {
-                        $image = imagecreatefromgif($source_file);
-                    }
-                    ob_start();
-                    imagepng($image);
-                    $imagevariable = ob_get_contents();
-                    ob_end_clean();
-                    // save picture
-                    if (@file_put_contents($course_image, $imagevariable)) {
-                        $result = true;
-                    }
+        $result = false;
+        $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+        if (in_array($extension, $allowed_picture_types)) {
+            if (file_exists($course_image)) {
+                @unlink($course_image);
+            }
+            if (file_exists($course_medium_image)) {
+                @unlink($course_medium_image);
+            }
+            if ($extension != 'png') {
+                // convert image to png extension
+                if ($extension == 'jpg' || $extension == 'jpeg') {
+                    $image = imagecreatefromjpeg($source_file);
                 } else {
-                    $result = @move_uploaded_file($source_file, $course_image);
+                    $image = imagecreatefromgif($source_file);
                 }
+                ob_start();
+                imagepng($image);
+                $imagevariable = ob_get_contents();
+                ob_end_clean();
+                // save picture
+                if (@file_put_contents($course_image, $imagevariable)) {
+                    $result = true;
+                }
+            } else {
+                $result = @move_uploaded_file($source_file, $course_image);
             }
-
-            // redimension image to 85x85
-            if ($result) {
-
-                $max_size_for_picture = 85;
-
-                if (!class_exists('image')) {
-                        require_once api_get_path(LIBRARY_PATH).'image.lib.php';
-                }
-
-                $medium = new image($course_image);
-
-                $picture_infos = api_getimagesize($course_image);
-                if ($picture_infos[0] > $max_size_for_picture) {
-                        $thumbwidth = $max_size_for_picture;
-                        $new_height = $max_size_for_picture; //round(($thumbwidth / $picture_infos[0]) * $picture_infos[1]);
-                        //if ($new_height > $max_size_for_picture) { $new_height = $thumbwidth;}
-                        $medium->resize($thumbwidth, $new_height, 0, true);
-                }
-
-                $rs = $medium->send_image('PNG', $store_path.'/course-pic85x85.png');
-
-            }
-
-            return $result;
         }
+
+        // redimension image to 85x85
+        if ($result) {
+
+            $max_size_for_picture = 85;
+
+            if (!class_exists('image')) {
+                require_once api_get_path(LIBRARY_PATH).'image.lib.php';
+            }
+
+            $medium = new image($course_image);
+
+            $picture_infos = api_getimagesize($course_image);
+            if ($picture_infos[0] > $max_size_for_picture) {
+                $thumbwidth = $max_size_for_picture;
+                $new_height = $max_size_for_picture; //round(($thumbwidth / $picture_infos[0]) * $picture_infos[1]);
+                //if ($new_height > $max_size_for_picture) { $new_height = $thumbwidth;}
+                $medium->resize($thumbwidth, $new_height, 0, true);
+            }
+
+            $rs = $medium->send_image('PNG', $store_path.'/course-pic85x85.png');
+
+        }
+
+        return $result;
+    }
+
+    /**
+     *  @deprecated See CourseManager::course_code_exists()
+     */
+    public static function is_existing_course_code($wanted_course_code) {
+        return self::course_code_exists($wanted_course_code);
+    }
 
 } //end class CourseManager

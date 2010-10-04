@@ -3064,7 +3064,7 @@ class UserManager
                  INNER JOIN $tbl_user_rel_user uru ON uru.user_id = u.user_id AND friend_user_id = '$hr_dept_id' AND relation_type = '".USER_RELATION_TYPE_RRHH."' $condition_status";
         }
         
-		$rs_assigned_users = Database::query($sql, __FILE__, __LINE__);
+		$rs_assigned_users = Database::query($sql);
 		if (Database::num_rows($rs_assigned_users) > 0) {
 			while ($row_assigned_users = Database::fetch_array($rs_assigned_users))	{
 				$assigned_users_to_hrm[$row_assigned_users['user_id']] = $row_assigned_users;

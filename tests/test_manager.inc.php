@@ -144,7 +144,7 @@ function create_test_course($course_code = 'TESTCOURSE') {
 	         ON course.category_code = course_category.code
 	         WHERE course.code = '$cidReq'";
 	         
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	
 	/*	Create the session	*/
 	

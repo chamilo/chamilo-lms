@@ -829,7 +829,6 @@ class scorm extends learnpath {
     }
 
     /**
-     * // TODO @TODO This method is not used anywhere. Is it really needed?
      * // TODO @TODO Implement this function to restore items data from an imsmanifest,
      * updating the existing table... This will prove very useful in case initial data
      * from imsmanifest were not imported well enough

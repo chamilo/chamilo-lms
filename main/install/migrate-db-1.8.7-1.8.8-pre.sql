@@ -28,7 +28,7 @@ UPDATE settings_current SET selected_value = '1.8.8.12378' WHERE variable = 'cha
 ALTER TABLE sys_announcement ADD COLUMN access_url_id INT  NOT NULL default 1;
 ALTER TABLE sys_calendar ADD COLUMN access_url_id INT  NOT NULL default 1;
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('use_copy_files', NULL, 'radio', 'Tools', 'true', 'AllowUsersCopyFilesTitle','AllowUsersCopyFilesComment', NULL,NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('users_copy_files', NULL, 'radio', 'Tools', 'true', 'AllowUsersCopyFilesTitle','AllowUsersCopyFilesComment', NULL,NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('users_copy_files', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('users_copy_files', 'false', 'No');
 UPDATE settings_current SET selected_value='1' WHERE variable='allow_social_tool';

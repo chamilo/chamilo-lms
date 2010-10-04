@@ -103,15 +103,16 @@ $filename = disable_dangerous_file($filename);
 $finfo = new finfo(FILEINFO_MIME);
 $current_mime=$finfo->buffer($contents);
 $mime_png='image/png';//svg-edit return image/png; charset=binary 
-$mime_svg='application/xml';//svg-edit return application/xml; charset=us-ascii TODO: shoud be image/svg+xml    (http://www.w3.org/TR/SVG11/mimereg.html)
+$mime_svg='image/svg+xml';
+$mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii. See
+  
 if(strpos($current_mime, $mime_png)===false && $extension=='png')
 {
 	die();//File extension does not match its content
-}elseif(strpos($current_mime, $mime_svg)===false && $extension=='svg')
+}elseif(strpos($current_mime, $mime_svg)===false && strpos($current_mime, $mime_xml)===false && $extension=='svg')
 {
 	die();//File extension does not match its content
 }
-
 
 //checks if the file exists, then rename the new
 if(file_exists($saveDir.'/'.$filename.$i.'.'.$extension) && $currentTool=='document/createdraw'){

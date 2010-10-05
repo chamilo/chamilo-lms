@@ -235,10 +235,10 @@ if ($export_result_form->validate()) {
 		$head_table = array(
 							array('#',3),
 							array(get_lang('Code'),12),
-							array($head_ape_name, 50),
+							array($head_ape_name, 40),
 							array(get_lang('Score'),12),
 							array($head_letter,15),
-							array($head_display_score,30)
+							array($head_display_score,15)
 						);
 
 		// get data table
@@ -257,13 +257,26 @@ if ($export_result_form->validate()) {
 			} else {
 				$result[] = $user_info['lastname'].', '.$user_info['firstname'];
 			}
-			$result[] = $data['score'];
-			if ($number_decimals == null) {
-				$result[] = api_strtoupper(get_lang('Literal'.$data['scoreletter']));
-			}
-			if ($scoredisplay->is_custom()) {
-				$result[] = $data['display'];
-			}
+            
+            if (empty($data['score']) && !is_numeric($data['score'])) {
+                $result[] = get_lang('DidNotTakeTheExamAcronym');
+            } else {
+                $result[] = $data['score']; 
+            }
+            if (empty($data['scoreletter']) && !is_numeric($data['score'])) {
+                $result[] = get_lang('DidNotTakeTheExam');
+            } else {
+                if ($number_decimals == null) {
+                    $result[] = api_strtoupper(get_lang('Literal'.$data['scoreletter']));
+                } else {
+                    $result[] = '';
+                }
+            }           
+            if ($scoredisplay->is_custom()) {
+                $result[] = $data['display'];
+            } else {
+                $result[] = '';
+            }
 			$data_table[] = $result;
 		}
 		export_pdf_with_html($head_table, $data_table, $header_pdf, $footer_pdf, $title_pdf);

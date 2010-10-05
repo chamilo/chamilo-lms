@@ -93,7 +93,14 @@ if ($_POST['formSent']) {
 }
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
+global $_configuration;
+if ($_configuration['multiple_access_urls']) {
+    $tbl_access_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $access_url_id = api_get_current_access_url_id();
+    $sql="SELECT u.user_id,lastname,firstname,username FROM $tbl_user u LEFT JOIN $tbl_access_rel_user  a ON(u.user_id= a.user_id) WHERE status='1' AND access_url_id = $access_url_id ".$order_clause; 
+} else {
+    $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
+}
 
 $result=Database::query($sql);
 

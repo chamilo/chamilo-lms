@@ -7,7 +7,7 @@
  */
 
 // Language files that need to be included.
-$language_file = array('admin', 'tracking', 'cesga');
+$language_file = array('admin', 'tracking');
 
 // Resetting the course id.
 $cidReset = true;
@@ -103,20 +103,13 @@ if (api_is_platform_admin()) { ?>
     </div>
     <ul>
         <li><a href="course_list.php"><?php echo get_lang('CourseList'); ?></a></li>
-    <?php if (api_get_setting('course_validation') != 'true') { ?>
         <li><a href="course_add.php"><?php echo get_lang('AddCourse'); ?></a></li>
-    <?php } ?>
         <li><a href="course_export.php"><?php echo get_lang('ExportCourses'); ?></a></li>
         <li><a href="course_import.php"><?php echo get_lang('ImportCourses'); ?></a></li>
         <!-- <li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses'); ?></a></li> -->
         <li><a href="course_category.php"><?php echo get_lang('AdminCategories'); ?></a></li>
         <li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
         <li><a href="course_user_import.php"><?php echo get_lang('ImportUsersToACourse'); ?></a></li>
-    <?php if (api_get_setting('course_validation') == 'true') { ?>
-        <li><a href="course_request_rejected.php"><?php echo get_lang('cesga_AdminCursosRexeit'); ?></a></li>
-        <li><a href="course_request_accepted.php"><?php echo get_lang('cesga_AdminCursosValid'); ?></a></li>
-        <li><a href="course_request_review.php"><?php echo get_lang('cesga_AdminValidCursos'); ?></a></li>
-    <?php } ?>
     <?php if (api_get_setting('search_enabled') == 'true') { ?>
         <li><a href="specific_fields.php"><?php echo get_lang('SpecificSearchFields'); ?></a></li>
     <?php }

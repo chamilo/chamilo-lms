@@ -83,4 +83,5 @@ $Collapse = "Riduci";
 $CourseDetails = "Informazioni sul corso";
 $GroupPendingInvitations = "Gruppi con inviti in attesa";
 $Compose = "Scrivi";
+$ThereAreNoCoursesInThisCategory = "Non ci sono corsi in questa categoria";
 ?>

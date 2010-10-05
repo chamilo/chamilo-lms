@@ -954,4 +954,14 @@ $EditionNotAvailableFromSession = "Edition not available from the session, pleas
 $HandingOverOfTaskX = "Handing over of task %s";
 $ProtectedDocument = "Protected Document";
 $ConnectionsLastMonth = "Connections last month";
+$TotalStudents = "Total students";
+$FilteringWithScoreX = "Filtering with score %s";
+$ExamTaken = "Taken";
+$ExamNotTaken = "Not taken";
+$ExamPassX = "Pass minimun %s";
+$ExamFail = "Fail";
+$ExamTracking = "Exam tracking";
+$NoAttempt = "No attempts";
+$PassExam = "Pass";
+$CreateCourseRequest = "Create a training request";
 ?>

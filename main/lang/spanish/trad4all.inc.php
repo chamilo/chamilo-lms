@@ -955,4 +955,14 @@ $EditionNotAvailableFromSession = "No es posible editar este recurso de curso de
 $HandingOverOfTaskX = "Entrega de tarea %s";
 $ProtectedDocument = "Documento protegido";
 $ConnectionsLastMonth = "Connexiones el mes pasado";
+$TotalStudents = "Alumnos totales";
+$FilteringWithScoreX = "Filtrando con resultado %s";
+$ExamTaken = "Tomado";
+$ExamNotTaken = "No tomado";
+$ExamPassX = "Aprobado con mínimo de %s";
+$ExamFail = "Reprobado";
+$ExamTracking = "Seguimiento exámenes";
+$NoAttempt = "Sin intentar";
+$PassExam = "Aprobado";
+$CreateCourseRequest = "Solicitud de nuevo curso";
 ?>

@@ -830,4 +830,5 @@ $MemoryUsage = "Използвана памет";
 $MemoryUsagePeak = "Използвана памет, пикова стойност";
 $Seconds = "секунди";
 $QualifyInGradebook = "Да се отчете в регистъра с оценки";
+$CreateCourseRequest = "Заявка за създаване на курс";
 ?>

@@ -188,7 +188,7 @@ $langAreYouSureToDelete = "Ali resnično želiš brisanje";
 $SelectAll = "Izberi vse";
 $UnSelectAll = "Izberi nobenega";
 $WithSelected = "Z izbranimi";
-$langOnLine = "Aktiven";
+$langOnLine = "Aktivni";
 $langUsers = "Uporabniki";
 $langPlatformAdmin = "Administracija platforme";
 $langNameOfLang['hungarian'] = "hungarian";
@@ -953,4 +953,5 @@ $SessionSpecificResource = "Za sejo specifičen resurs";
 $EditionNotAvailableFromSession = "Urejanje ni dostopno preko seje. Prosim, izvedite urejanje preko osnovnega tečaja.";
 $HandingOverOfTaskX = "Predaja naloge %s";
 $ProtectedDocument = "Zaščiten dokument";
+$ConnectionsLastMonth = "Povezav zadnji mesec";
 ?>

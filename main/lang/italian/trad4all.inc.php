@@ -958,4 +958,14 @@ $SessionSpecificResource = "Risorsa specifica della sessione";
 $EditionNotAvailableFromSession = "Non è possibile modificare questa risorsa nel corso di una sessione: puoi farlo nel corso di origine";
 $HandingOverOfTaskX = "Compito realizzato al %s";
 $ProtectedDocument = "Documento protetto";
+$ConnectionsLastMonth = "Accessi ultimo mese";
+$TotalStudents = "Totale Corsisti";
+$FilteringWithScoreX = "Filtro con punteggio %s";
+$ExamTaken = "Sostenuto";
+$ExamNotTaken = "Non sostenuto";
+$ExamPassX = "Superato con un minimo di %s";
+$ExamFail = "Non superato";
+$ExamTracking = "Storico esami";
+$NoAttempt = "Nessun tentativo";
+$PassExam = "Superato";
 ?>

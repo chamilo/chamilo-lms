@@ -13,7 +13,7 @@
  */
 
 // Name of the language file that needs to be included.
-$language_file = array('create_course', 'cesga');
+$language_file = 'create_course';
 
 // Flag forcing the "current course" reset.
 $cidReset = true;
@@ -56,7 +56,7 @@ $(window).load(function () {
 $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'name' => get_lang('MyCourses'));
 
 // Displaying the header.
-$tool_name = get_lang('CreateSite');
+$tool_name = $course_validation_feature ? get_lang('CreateCourseRequest') : get_lang('CreateSite');
 
 if (api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platform_admin()) {
     api_not_allowed(true);
@@ -146,7 +146,7 @@ if ($course_validation_feature) {
 
 }
 
-$form->addElement('style_submit_button', null, get_lang('CreateCourseArea'), 'class="add"');
+$form->addElement('style_submit_button', null, $course_validation_feature ? get_lang('CreateCourseRequest') : get_lang('CreateCourseArea'), 'class="add"');
 $form->add_progress_bar();
 
 // Set default values.

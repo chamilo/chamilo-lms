@@ -574,7 +574,7 @@ function display_admin_links() {
  *
  */
 function display_create_course_link() {
-    echo "<li><a href=\"main/create_course/add_course.php\">".get_lang('CourseCreate')."</a></li>";
+    echo "<li><a href=\"main/create_course/add_course.php\">".(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate'))."</a></li>";
 }
 
 

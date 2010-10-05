@@ -570,7 +570,9 @@ if ($form->validate()) {
     if ($is_allowedCreateCourse) {
         echo '<p>', get_lang('NowGoCreateYourCourse',null,$_user['language']), ".</p>\n";
         $action_url = '../create_course/add_course.php';
-        $button_text = get_lang('CourseCreate',null,$_user['language']);
+        $button_text = api_get_setting('course_validation') == 'true'
+            ? get_lang('CreateCourseRequest', null, $_user['language'])
+            : get_lang('CourseCreate', null, $_user['language']);
     } else {
         if (api_get_setting('allow_students_to_browse_courses') == 'true')
             $action_url = 'courses.php?action=subscribe';

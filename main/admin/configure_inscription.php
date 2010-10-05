@@ -187,8 +187,8 @@ if ($display_all_form) {
 
 	if (api_is_western_name_order()) {
 		//	FIRST NAME and LAST NAME
-		$form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40, 'disabled' => 'disabled'));
-		$form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40, 'disabled' => 'disabled'));
+        $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40, 'disabled' => 'disabled'));
+		$form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40, 'disabled' => 'disabled'));		
 	} else {
 		//	LAST NAME and FIRST NAME
 		$form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40, 'disabled' => 'disabled'));

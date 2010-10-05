@@ -219,8 +219,8 @@ if ($export_result_form->validate()) {
 
 		// set headers data table
 		$head_ape_name = '';
-		if (!api_is_western_name_order()) {
-			$head_ape_name = get_lang('FirstName').' '.get_lang('LastName');
+		if (api_is_western_name_order()) {
+            $head_ape_name = get_lang('FirstName').' '.get_lang('LastName');			
 		} else {
 			$head_ape_name = get_lang('LastName').' '.get_lang('FirstName');
 		}
@@ -233,12 +233,12 @@ if ($export_result_form->validate()) {
 			$head_letter = get_lang('Letters');
 		}
 		$head_table = array(
-							array(get_lang('Item'),5),
-							array(get_lang('Code'),15),
+							array('#',3),
+							array(get_lang('Code'),12),
 							array($head_ape_name, 50),
-							array(get_lang('Score'),15),
+							array(get_lang('Score'),12),
 							array($head_letter,15),
-							array($head_display_score,15)
+							array($head_display_score,30)
 						);
 
 		// get data table
@@ -252,8 +252,8 @@ if ($export_result_form->validate()) {
 			$result = array();
 			$user_info = api_get_user_info($data['id']);
 			$result[] = $user_info['username'];
-			if (!api_is_western_name_order()) {
-				$result[] = $user_info['firstname'].', '.$user_info['lastname'];
+			if (api_is_western_name_order()) {
+                $result[] = $user_info['firstname'].', '.$user_info['lastname'];                				
 			} else {
 				$result[] = $user_info['lastname'].', '.$user_info['firstname'];
 			}

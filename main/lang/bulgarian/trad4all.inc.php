@@ -831,4 +831,8 @@ $MemoryUsagePeak = "Използвана памет, пикова стойнос
 $Seconds = "секунди";
 $QualifyInGradebook = "Да се отчете в регистъра с оценки";
 $CreateCourseRequest = "Заявка за създаване на курс";
+$TermsAndConditions = "Условия за ползване";
+$ReadTermsAndConditions = "Прочетете Условията за ползване";
+$IAcceptTermsAndConditions = "Прочетох и приемам Условията за ползване";
+$YouHaveToAcceptTermsAndConditions = "Tрябва да приемете нашите Условия за ползване, за да продължите.";
 ?>

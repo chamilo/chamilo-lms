@@ -109,15 +109,15 @@ $form->addElement('static', null, null, get_lang('ExplicationTrainers'));
 if ($course_validation_feature) {
 
     // Description of the requested course.
-    $form->addElement('textarea', 'description', get_lang('cesga_SolicFormDesc'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+    $form->addElement('textarea', 'description', get_lang('Description'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
     $form->addRule('description', get_lang('ThisFieldIsRequired'), 'required', '', '');
 
     // Objectives of the requested course.
-    $form->addElement('textarea', 'objetives', get_lang('cesga_SolicFormObxe'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+    $form->addElement('textarea', 'objetives', get_lang('Objectives'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
     $form->addRule('objetives', get_lang('ThisFieldIsRequired'), 'required', '', '');
 
     // Target audience of the requested course.
-    $form->addElement('textarea', 'target_audience', get_lang('cesga_SolicFormDest'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+    $form->addElement('textarea', 'target_audience', get_lang('TargetAudience'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
     $form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required', '', '');
 }
 
@@ -127,8 +127,8 @@ $form->applyFilter('select_language', 'html_filter');
 if ($course_validation_feature) {
 
     // Terms and conditions to be accepted before sending a course request.
-    $form->addElement('checkbox', 'legal', get_lang('cesga_SolicFormLegal'), '', 1);
-    $form->addRule('legal', get_lang('cesga_SolicFormCond'), 'required', '', '');
+    $form->addElement('checkbox', 'legal', get_lang('IAcceptTermsAndConditions'), '', 1);
+    $form->addRule('legal', get_lang('YouHaveToAcceptTermsAndConditions'), 'required', '', '');
     // Link to terms and conditios.
     // TODO: This hardcoded value is to be corrected/eliminated.
     $link_terms_and_conditions = '<script type="text/JavaScript">
@@ -140,8 +140,8 @@ if ($course_validation_feature) {
     </script>
     <div class="row">
     <div class="formw">
-    <a href="#" onclick="javascript: MM_openBrWindow(\'http://TODO.change.this/hardcoded/value/use/a/setting.html\',\'Conditions (TODO: Translate this title)\',\'scrollbars=yes, width=800\')">';
-    $link_terms_and_conditions .= get_lang('cesga_SolicFormLeerCond').'</a></div></div>';
+    <a href="#" onclick="javascript: MM_openBrWindow(\'http://TODO.change.this/hardcoded/value/use/a/setting.html\',\'Conditions\',\'scrollbars=yes, width=800\')">';
+    $link_terms_and_conditions .= get_lang('ReadTermsAndConditions').'</a></div></div>';
     $form->addElement('html', $link_terms_and_conditions);
 
 }
@@ -254,7 +254,7 @@ if ($form->validate()) {
 
                 $course_request_info = CourseRequestManager::get_course_request_info($request_id);
                 $visual_code = is_array($course_request_info) ? $course_request_info['visual_code'] : '';
-                $message = get_lang('cesga_SolicFormOK');
+                $message = get_lang('CourseRequestCreated');
                 $message .= ' <strong>'.$visual_code.'</strong>';
                 Display :: display_confirmation_message($message, false);
                 echo '<div style="float: right; margin:0px; padding: 0px;">' .

@@ -964,4 +964,8 @@ $ExamTracking = "Exam tracking";
 $NoAttempt = "No attempts";
 $PassExam = "Pass";
 $CreateCourseRequest = "Create a training request";
+$TermsAndConditions = "Terms and Conditions";
+$ReadTermsAndConditions = "Read the Terms and Conditions";
+$IAcceptTermsAndConditions = "I have read and I accept the Terms and Conditions";
+$YouHaveToAcceptTermsAndConditions = "You have to accept our Terms and Conditions to proceed.";
 ?>

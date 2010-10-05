@@ -111,7 +111,7 @@ api_block_anonymous_users();
 				<div></div>
 				New Image [N]
 			</li>
-			
+            
 			<li id="tool_open" style="display:none;">
 				<div id="fileinputs">
 					<div></div>

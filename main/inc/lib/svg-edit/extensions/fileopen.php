@@ -39,8 +39,8 @@ api_block_anonymous_users();
 
 <?php
 if(!isset($_FILES['svg_file']['tmp_name'])) {
-	//echo '<div class="error-message">'. get_lang('lang_no_access_here').'</div>';// from Chamilo
-	//die();
+	echo '<div class="error-message">'. get_lang('lang_no_access_here').'</div>';// from Chamilo
+	die();
 }
 ?>
 <!doctype html>

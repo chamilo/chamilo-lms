@@ -47,18 +47,18 @@ if(!isset($_POST['output_svg']) && !isset($_POST['output_png'])) {
 
 $file = '';
 
-//$suffix = isset($_POST['output_svg'])?'.svg':'.png';
+
 $suffix = isset($_POST['output_svg'])?'svg':'png';
 
 if(isset($_POST['filename']) && strlen($_POST['filename']) > 0) {
-	//$file = $_POST['filename'] . $suffix;
+
 	$file = $_POST['filename'];
 } else {
-	//$file = 'image' . $suffix;
+
 	$file = 'image';
 }
 
-//if($suffix == '.svg') {
+
 if($suffix == 'svg') {
 	$mime = 'image/svg+xml';
 	$contents = rawurldecode($_POST['output_svg']);
@@ -69,7 +69,6 @@ if($suffix == 'svg') {
 	$contents = base64_decode(substr($contents, $pos));
 }
 
-/////hack for Chamilo
 
 //get SVG-Edit values
 $filename=$file;//from svg-edit

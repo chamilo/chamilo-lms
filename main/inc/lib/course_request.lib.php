@@ -33,7 +33,7 @@ class CourseRequestManager {
         }
         $table_course_request = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
         $wanted_course_code = Database::escape_string($wanted_course_code);
-        $sql = sprintf('SELECT COUNT(*) as number FROM %s WHERE visual_code = "%s"', $table_course_request, $wanted_course_code);
+        $sql = sprintf('SELECT COUNT(*) AS number FROM %s WHERE visual_code = "%s"', $table_course_request, $wanted_course_code);
         $result = Database::fetch_array(Database::query($sql));
         return $result['number'] > 0;
     }
@@ -54,8 +54,24 @@ class CourseRequestManager {
         $wanted_code = Database::escape_string($wanted_code);
         $title = Database::escape_string($title);
         $description = Database::escape_string($description);
-        $objetives = str_replace('"', '', $objetives);
-        $target_audience = str_replace('"', '', $target_audience);
+        $category_code = Database::escape_string($category_code);
+        $course_language = Database::escape_string($course_language);
+        $objetives = Database::escape_string($objetives);
+        $target_audience = Database::escape_string($target_audience);
+
+        $user_id = api_get_user_id();
+        if ($user_id <= 0) {
+            return false;
+        }
+
+        $user_info = api_get_user_info($user_id);
+        if (!is_array($user_info)) {
+            return false;
+        }
+        $tutor_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $course_language);
+
+        $request_date = date('Y-m-d H:i:s'); // TODO: Use the time-zones way.
+        $status = COURSE_REQUEST_PENDING;
 
         $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
         if (!count($keys)) {
@@ -65,16 +81,6 @@ class CourseRequestManager {
         $code = $keys['currentCourseId'];
         $db_name = $keys['currentCourseDbName'];
         $directory = $keys['currentCourseRepository'];
-
-        $user_id = api_get_user_id();
-        if ($user_id <= 0) {
-            return false;
-        }
-        $user_info = api_get_user_info($user_id);
-        $tutor_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $course_language);
-
-        $request_date = date('Y-m-d H:i:s'); // TODO: Use the time-zones way.
-        $status = COURSE_REQUEST_PENDING;
 
         $sql = sprintf('INSERT INTO %s (
                 code, user_id, directory, db_name,
@@ -95,7 +101,11 @@ class CourseRequestManager {
         if (!$result_sql) {
             return false;
         }
-        return Database::get_last_insert_id();
+        $last_insert_id = Database::get_last_insert_id();
+
+        // TODO: Prepare and send notification e-mail messages.
+
+        return $last_insert_id;
 
     }
 
@@ -105,12 +115,76 @@ class CourseRequestManager {
      * @return array/bool                 Returns the requested data as an array of FALSE on failure.
      */
     public static function get_course_request_info($id) {
-        $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE id='".Database::escape_string($id)."'";
+        $id = (int)$id;
+        $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE id = ".$id;
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return Database::fetch_array($result);
         }
         return false;
+    }
+
+    /**
+     * Accepts a given by its id course request. The requested course gets created immediately after the request acceptance.
+     * @param int/string $id              The id (an integer number) of the corresponding database record.
+     * @return array/bool                 Returns the requested data as an array of FALSE on failure.
+     */
+    public static function accept_course_request($id) {
+
+        $id = (int)$id;
+
+        // Retrieve request's data
+        $course_request_info = CourseRequestManager::get_course_request_info($id);
+        if (!is_array($course_request_info)) {
+            return false;
+        }
+
+        // Make all the checks again before the new course creation.
+
+        $wanted_code = $course_request_info['code'];
+        if (CourseManager::course_code_exists($wanted_code)) {
+            return false;
+        }
+
+        $title = $course_request_info['title'];
+        $category_code = $course_request_info['category_code'];
+        $course_language = $course_request_info['course_language'];
+
+        $user_id = (int)$course_request_info['user_id'];
+        if ($user_id <= 0) {
+            return false;
+        }
+        $user_info = api_get_user_info($user_id);
+        if (!is_array($user_info)) {
+            return false;
+        }
+        $tutor_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $course_language);
+
+        // Create the requested course.
+
+        $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
+        if (!count($keys)) {
+            return false;
+        }
+        $visual_code = $keys['currentCourseCode'];
+        $code = $keys['currentCourseId'];
+        $db_name = $keys['currentCourseDbName'];
+        $directory = $keys['currentCourseRepository'];
+        $expiration_date = time() + $firstExpirationDelay;
+        prepare_course_repository($directory, $code);
+        update_Db_course($db_name);
+        $pictures_array = fill_course_repository($directory);
+        fill_Db_course($db_name, $directory, $course_language, $pictures_array);
+        register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $user_id, $expiration_date);
+
+        // Mark the request as accepted.
+        $sql = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET status = ".COURSE_REQUEST_ACCEPTED." WHERE id = ".$id;
+        Database::query($sql);
+
+        // TODO: Prepare and send notification e-mail messages.
+
+        return $code;
+
     }
 
 }

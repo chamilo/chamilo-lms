@@ -8,10 +8,10 @@
  */
 
 svgEditor.addExtension("imagelib", function() {
-
+	//Chamilo change library title and index.html by index.php
 	var img_libs = [{
-			name: 'Demo library (local)',
-			url: 'extensions/imagelib/index.html',
+			name: 'Local library',
+			url: 'extensions/imagelib/index.php',
 			description: 'Demonstration library for SVG-edit on this server'
 		}, 
 		{

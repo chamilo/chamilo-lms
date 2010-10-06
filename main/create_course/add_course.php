@@ -174,6 +174,7 @@ if ($form->validate()) {
         $target_audience = Security::remove_XSS($course_values['target_audience']);
         $status = '0';
 
+        // TODO: Why escaping quotes is needed here?
         $description = str_replace('"', '', $description);
         $objetives = str_replace('"', '', $objetives);
         $target_audience = str_replace('"', '', $target_audience);
@@ -249,8 +250,6 @@ if ($form->validate()) {
             $request_id = CourseRequestManager::create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience);
 
             if ($request_id) {
-
-                // TODO: Prepare and send notification e-mail messages.
 
                 $course_request_info = CourseRequestManager::get_course_request_info($request_id);
                 $visual_code = is_array($course_request_info) ? $course_request_info['visual_code'] : '';

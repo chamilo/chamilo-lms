@@ -112,7 +112,7 @@ class CourseRequestManager {
     /**
      * Gets all the information about a course request using its database id as access key.
      * @param int/string $id              The id (an integer number) of the corresponding database record.
-     * @return array/bool                 Returns the requested data as an array of FALSE on failure.
+     * @return array/bool                 Returns the requested data as an array or FALSE on failure.
      */
     public static function get_course_request_info($id) {
         $id = (int)$id;
@@ -127,7 +127,7 @@ class CourseRequestManager {
     /**
      * Accepts a given by its id course request. The requested course gets created immediately after the request acceptance.
      * @param int/string $id              The id (an integer number) of the corresponding database record.
-     * @return array/bool                 Returns the requested data as an array of FALSE on failure.
+     * @return array/bool                 Returns the code of the newly created course or FALSE on failure.
      */
     public static function accept_course_request($id) {
 
@@ -185,6 +185,22 @@ class CourseRequestManager {
 
         return $code;
 
+    }
+
+    /**
+     * Rejects a given course request.
+     * @param int/string $id              The id (an integer number) of the corresponding database record.
+     * @return array/bool                 Returns TRUE on success or FALSE on failure.
+     */
+    public static function reject_course_request($id) {
+
+        $id = (int)$id;
+        $sql = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET status = ".COURSE_REQUEST_REJECTED." WHERE id = ".$id;
+        $result = Database::query($sql) !== false;
+
+        // TODO: Prepare and send notification e-mail messages.
+
+        return $result;
     }
 
 }

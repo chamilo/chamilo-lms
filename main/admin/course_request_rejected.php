@@ -38,50 +38,36 @@ require api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 // Including additional libraries.
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
+// Filltering passed to this page parameters.
+$accept_course_request = intval($_GET['accept_course_request']);
+$request_info = intval($_GET['request_info']);
+
 
 /**
  * Acceptance and creation of the requested course.
  */
-if (isset($_GET['accept_course']) && $_GET['accept_course'] != '') { // TODO: Secure $_GET['accept_course'].
-    //Constulta de los datos del curso
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE id LIKE '".$_GET['accept_course']."'"; // TODO: Why "SELECT ... id LIKE x"? Why not "SELECT ... id = x"?
-    $result = Database :: query($sql);
-    $curso_alta = Database :: fetch_array($result);
+if (!empty($accept_course_request)) {
 
-    //Creación del curso
+    $course_id = CourseRequestManager::accept_course_request($accept_course_request);
 
-    $wanted_code = $curso_alta['code'];
-    $tutor_name = $curso_alta['tutor_name'];
-    $category_code = $curso_alta['category_code'];
-    $title = $curso_alta['title'];
-    $course_language = $curso_alta['course_language'];
-    $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
-
-    if (sizeof($keys)) {
-        $visual_code = $keys['currentCourseCode'];
-        $code = $keys['currentCourseId'];
-        $db_name = $keys['currentCourseDbName'];
-        $directory = $keys['currentCourseRepository'];
-        $expiration_date = time() + $firstExpirationDelay;
-        prepare_course_repository($directory, $code);
-        update_Db_course($db_name);
-        $pictures_array = fill_course_repository($directory);
-        fill_Db_course($db_name, $directory, $course_language,$pictures_array);
-        register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $curso_alta['user_id'], $expiration_date);
+    if ($course_id) {
+        // TODO: Prepare a confirmation message.
+    } else {
+        // Prepare an error message.
     }
 
+}
 
-    // TODO: Sent the e-mail.
+/**
+ * Sending to the teacher a request for additional information about the proposed course.
+ */
+if (!empty($request_info)) {
 
+    // Marking the fact, that additional information has been requested.
+    $sql_info = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET info = 1 WHERE id = ".$request_info;
+    $result_info = Database::query($sql_info);
 
-
-    //Una vez creado el curso, cambiamos su estado en la tabla temporal
-    $sql_temp = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET status = 1 WHERE id LIKE '".$_GET['accept_course']."'";
-
-    //$sql_temp = "DELETE FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE id LIKE '".$_GET['accept_course']."'";
-    $result = api_sql_query($sql_temp);
-
-    unset ($_GET['accept_course']);
+    // TODO: Send the e-mail.
 }
 
 /**
@@ -131,7 +117,7 @@ function get_course_data($from, $number_of_items, $column, $direction) {
 function modify_filter($id) {
     return
         '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.' '.
-        '<a href="?accept_course='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertCrear'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminValidar').'" alt="'.get_lang('cesga_AdminValidar').'"/></a>';
+        '<a href="?accept_course_request='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertCrear'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminValidar').'" alt="'.get_lang('cesga_AdminValidar').'"/></a>';
 }
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));

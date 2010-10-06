@@ -35,52 +35,19 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 
 // Including additional libraries.
-require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
-// Information about the helpdesk.
-$emailto_rt = "helpdesk_elearning@cesga.es";
-$emailbody_rt = "Owner: e-learning\nStatus: resolved\n\n";
-$email_send_rt = get_setting('administratorName').' '.get_setting('administratorSurname');
-$email_send2_rt = get_setting('emailAdministrator');
-
-/*
- * Sending to the teacher a request for additional information about the proposed course.
- */
-
-if (isset($_GET['request_info']) && $_GET['request_info'] != '') {
-
-    // TODO: Sent the e-mail.
-
-    // Marking the fact, that additional information has been requested.
-    $sql_info = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET info = 1 WHERE id LIKE '".$_GET['request_info']."'";
-    $result_info = Database::query($sql_info);
-
-    unset ($_GET['request_info']);
-}
-
-/**
- * Course rejection
- */
-
-if (isset($_GET['reject_course']) && $_GET['reject_course'] != '') {
-
-    // TODO: Send the e-mail.
-
-    //Una vez notificado al profesor, cambiamos el estado del curso en la tabla temporal
-    $sql_borrar = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET status = ".COURSE_REQUEST_REJECTED." WHERE id LIKE '".$_GET['reject_course']."'";
-    $result_borrar = Database::query($sql_borrar);
-
-    unset ($_GET['reject_course']);
-}
+// Filltering passed to this page parameters.
+$accept_course_request = intval($_GET['accept_course_request']);
+$reject_course_request = intval($_GET['reject_course_request']);
+$request_info = intval($_GET['request_info']);
 
 /**
  * Coutse acceptance and creation.
  */
+if (!empty($accept_course_request)) {
 
-if (isset($_GET['accept_course']) && $_GET['accept_course'] != '') {
-
-    // TODO: Filter $_GET['accept_course']
-    $course_id = CourseRequestManager::accept_course_request($_GET['accept_course']);
+    $course_id = CourseRequestManager::accept_course_request($accept_course_request);
 
     if ($course_id) {
         // TODO: Prepare a confirmation message.
@@ -88,10 +55,35 @@ if (isset($_GET['accept_course']) && $_GET['accept_course'] != '') {
         // Prepare an error message.
     }
 
-    // TODO: Send the e-mail.
-
-    unset ($_GET['accept_course']);
 }
+
+/**
+ * Course rejection
+ */
+if (isset($_GET['reject_course_request']) && $_GET['reject_course_request'] != '') {
+
+    $result = CourseRequestManager::reject_course_request($reject_course_request);
+
+    if ($result) {
+        // TODO: Prepare a confirmation message.
+    } else {
+        // Prepare an error message.
+    }
+}
+
+/**
+ * Sending to the teacher a request for additional information about the proposed course.
+ */
+if (!empty($request_info)) {
+
+    // Marking the fact, that additional information has been requested.
+    $sql_info = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET info = 1 WHERE id = ".$request_info;
+    $result_info = Database::query($sql_info);
+
+    // TODO: Send the e-mail.
+}
+
+
 
 /**
  * Funcion feita por nos para saber o numero de cursos na taboa temporal sen validar
@@ -150,7 +142,7 @@ function email_filter($teacher) {
 function modify_filter($id) {
     /*
     return
-    '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.' '.'<a href="?reject_course='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>'.'  '.'<a href="?request_info='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertInfo'), ENT_QUOTES))."'".')) return false;"><img src="../img/cesga_question.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminPedirInfo').'" alt="'.get_lang('cesga_AdminPedirInfo').'"/></a>&nbsp;'.'  '.'<a href="?accept_course='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertCrear'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminValidar').'" alt="'.get_lang('cesga_AdminValidar').'"/></a>&nbsp;';
+    '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.' '.'<a href="?reject_course_request='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>'.'  '.'<a href="?request_info='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertInfo'), ENT_QUOTES))."'".')) return false;"><img src="../img/cesga_question.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminPedirInfo').'" alt="'.get_lang('cesga_AdminPedirInfo').'"/></a>&nbsp;'.'  '.'<a href="?accept_course_request='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertCrear'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminValidar').'" alt="'.get_lang('cesga_AdminValidar').'"/></a>&nbsp;';
     */
     $sql_request_info = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE (id = ".$id." AND info = 1 )";
     $res_request_info = Database::query($sql_request_info);
@@ -158,12 +150,12 @@ function modify_filter($id) {
     if (Database::num_rows($res_request_info) > 0) { //Si ya se le ha pedido información, no se muestra esa opción
 
         return
-            '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.' '.'<a href="?reject_course='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>'.'  '.'<a href="?accept_course='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertCrear'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminValidar').'" alt="'.get_lang('cesga_AdminValidar').'"/></a>&nbsp;';
+            '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.' '.'<a href="?reject_course_request='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>'.'  '.'<a href="?accept_course_request='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertCrear'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminValidar').'" alt="'.get_lang('cesga_AdminValidar').'"/></a>&nbsp;';
 
     } else {
 
         return
-            '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.'  '.'<a href="?reject_course='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>'.'  '.'<a href="?accept_course='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertCrear'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminValidar').'" alt="'.get_lang('cesga_AdminValidar').'"/></a>'.'  '.'<a href="?request_info='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertInfo'), ENT_QUOTES))."'".')) return false;"><img src="../img/cesga_question.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminPedirInfo').'" alt="'.get_lang('cesga_AdminPedirInfo').'"/></a>&nbsp;&nbsp;';
+            '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.'  '.'<a href="?reject_course_request='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>'.'  '.'<a href="?accept_course_request='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertCrear'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminValidar').'" alt="'.get_lang('cesga_AdminValidar').'"/></a>'.'  '.'<a href="?request_info='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertInfo'), ENT_QUOTES))."'".')) return false;"><img src="../img/cesga_question.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminPedirInfo').'" alt="'.get_lang('cesga_AdminPedirInfo').'"/></a>&nbsp;&nbsp;';
     }
 }
 

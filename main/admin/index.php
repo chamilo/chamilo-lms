@@ -7,7 +7,7 @@
  */
 
 // Language files that need to be included.
-$language_file = array('admin', 'tracking', 'cesga');
+$language_file = array('admin', 'tracking');
 
 // Resetting the course id.
 $cidReset = true;

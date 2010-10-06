@@ -8,6 +8,9 @@
 require_once '../../../inc/global.inc.php';//hack for Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
+if(!isset($_SESSION['draw_dir'])){
+		die();
+	}
 ?>
 
 <!DOCTYPE html>
@@ -21,36 +24,31 @@ api_block_anonymous_users();
 <link rel="stylesheet" href="jgraduate/css/jgraduate.css" type="text/css"/>
 <link rel="stylesheet" href="svg-editor.css" type="text/css"/>
 <link rel="stylesheet" href="spinbtn/JQuerySpinBtn.css" type="text/css"/>
-
-<!-- Release version of script tags: -->
-<script type="text/javascript" src="jquery.js"></script>
+<!-- Development version of script tags: --><!--Chamilo TODO: compress sgv-editor.js and change all calls by release version -->
+<script type="text/javascript" src="jquery.js"></script><!--chamilo enabled -->
+<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js"></script> --><!--chamilo disabled -->
 <script type="text/javascript" src="js-hotkeys/jquery.hotkeys.min.js"></script>
-<script type="text/javascript" src="jgraduate/jquery.jgraduate.min.js"></script>
-<script type="text/javascript" src="svgicons/jquery.svgicons.min.js"></script>
-<script type="text/javascript" src="jquerybbq/jquery.bbq.min.js"></script>
-<script type="text/javascript" src="spinbtn/JQuerySpinBtn.min.js"></script>
-<script type="text/javascript" src="svgcanvas.min.js"></script>
-<!--<script type="text/javascript" src="svg-editor.min.js"></script> --><!-- Replaced by bottom line. While integration into Chamilo, change compress svg-editor.min.js by svg-editor.js file -->
-<script type="text/javascript" src="svg-editor.js"></script>
-<script type="text/javascript" src="locale/locale.min.js"></script>
-
-<!-- See http://code.google.com/p/svg-edit/wiki/ConfigOptions for configuration options -->
-
-<!-- you can load extensions here -->
-<!-- <script type="text/javascript" src="extensions/ext-helloworld.js"></script> -->
-
-
-<!-- Development version of script tags: 
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="js-hotkeys/jquery.hotkeys.min.js"></script>
-<script type="text/javascript" src="jgraduate/jquery.jgraduate.min.js"></script>
-<script type="text/javascript" src="svgicons/jquery.svgicons.min.js"></script>
+<script type="text/javascript" src="jgraduate/jquery.jgraduate.js"></script>
+<script type="text/javascript" src="svgicons/jquery.svgicons.js"></script>
 <script type="text/javascript" src="jquerybbq/jquery.bbq.min.js"></script>
 <script type="text/javascript" src="spinbtn/JQuerySpinBtn.js"></script>
+<script type="text/javascript" src="contextmenu/jquery.contextMenu.js"></script>
 <script type="text/javascript" src="svgcanvas.js"></script>
 <script type="text/javascript" src="svg-editor.js"></script>
 <script type="text/javascript" src="locale/locale.js"></script>
--->
+<!-- you can load extensions here -->
+<!-- <script type="text/javascript" src="extensions/ext-helloworld.js"></script> -->
+
+<!-- Release version of script tags: >
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="js-hotkeys/jquery.hotkeys-0.7.9.js"></script>
+<script type="text/javascript" src="jquerybbq/jquery.bbq.min.js"></script>
+<script type="text/javascript" src="jgraduate/jquery.jgraduate.min.js"></script>
+<script type="text/javascript" src="spinbtn/JQuerySpinBtn.min.js"></script>
+<script type="text/javascript" src="svgcanvas.min.js"></script>
+<script type="text/javascript" src="svg-editor.min.js"></script>
+script type="text/javascript" src="locale/locale.min.js"></script-->
+
 
 <!-- always minified scripts -->
 <script type="text/javascript" src="jquery-ui/jquery-ui-1.8.custom.min.js"></script>
@@ -66,9 +64,21 @@ api_block_anonymous_users();
 <body>
 <div id="svg_editor">
 
+<div id="rulers">
+	<div id="ruler_corner"></div>
+	<div id="ruler_x">
+		<canvas height="15"></canvas>
+	</div>
+	<div id="ruler_y">
+		<canvas width="15"></canvas>
+	</div>
+</div>
+
 <div id="workarea">
 <style id="styleoverrides" type="text/css" media="screen" scoped="scoped"></style>
-<div id="svgcanvas"></div>
+<div id="svgcanvas" style="position:relative">
+
+</div>
 </div>
 
 <div id="sidepanels">
@@ -80,6 +90,7 @@ api_block_anonymous_users();
 			<div id="layer_rename" class="layer_button"  title="Rename Layer"></div>
 			<div id="layer_up" class="layer_button"  title="Move Layer Up"></div>
 			<div id="layer_down" class="layer_button"  title="Move Layer Down"></div>
+			<div id="layer_moreopts" class="layer_button"  title="More Options"></div>
 		</fieldset>
 		
 		<table id="layerlist">
@@ -141,12 +152,17 @@ api_block_anonymous_users();
 				Document Properties [P]
 			</li>
 		</ul>
-		
-		<p
+
+		<p>
 			<!--<a href="http://svg-edit.googlecode.com/" target="_blank">
 				SVG-edit Home Page
-			</a> --><!-- comment for Chamilo -->
+			</a> --><!-- Comment for Chamilo -->
 		</p>
+
+		<button id="tool_prefs_option">
+			Editor Options
+		</button>
+
 
 	</div>
 </div>
@@ -174,8 +190,8 @@ api_block_anonymous_users();
 			<div class="push_button" id="tool_clone" title="Clone Element [C]"></div>
 			<div class="push_button" id="tool_delete" title="Delete Element [Delete/Backspace]"></div>
 			<div class="tool_sep"></div>
-			<div class="push_button" id="tool_move_top" title="Move to Top [Shift+Up]"></div>
-			<div class="push_button" id="tool_move_bottom" title="Move to Bottom [Shift+Down]"></div>
+			<div class="push_button" id="tool_move_top" title="Bring to Front [ Ctrl+Shift+] ]"></div>
+			<div class="push_button" id="tool_move_bottom" title="Send to Back [ Ctrl+Shift+[ ]"></div>
 			<div class="push_button" id="tool_topath" title="Convert to Path"></div>
 			<div class="push_button" id="tool_reorient" title="Reorient path"></div>
 			<div class="tool_sep"></div>
@@ -185,7 +201,7 @@ api_block_anonymous_users();
 			</label>
 		</div>
 
-		<label id="tool_angle" title="Change rotation angle">
+		<label id="tool_angle" title="Change rotation angle" class="toolset">
 			<span id="angleLabel" class="icon_label"></span>
 			<input id="angle" size="2" value="0" type="text"/>
 		</label>
@@ -244,11 +260,6 @@ api_block_anonymous_users();
 
 	</div>
 
-	<div id="g_panel">
-		<div class="tool_sep"></div>
-		<div class="push_button" id="tool_ungroup" title="Ungroup Elements [G]"></div>
-	</div>
-
 	<div id="rect_panel">
 		<div class="toolset">
 			<label id="rect_width_tool" title="Change rectangle width">
@@ -260,7 +271,7 @@ api_block_anonymous_users();
 				<input id="rect_height" class="attr_changer" size="3" data-attr="height"/>
 			</label>
 		</div>
-		<label id="cornerRadiusLabel" title="Change Rectangle Corner Radius">
+		<label id="cornerRadiusLabel" title="Change Rectangle Corner Radius" class="toolset">
 			<span class="icon_label"></span>
 			<input id="rect_rx" size="3" value="0" type="text" data-attr="Corner Radius"/>
 		</label>
@@ -371,6 +382,27 @@ api_block_anonymous_users();
 		<!-- Not visible, but still used -->
 		<input id="text" type="text" size="35"/>
 	</div>
+
+	<!-- formerly gsvg_panel -->
+	<div id="container_panel">
+		<div class="tool_sep"></div>
+
+		<!-- Add viewBox field here? -->
+
+		<label id="group_title" title="Group identification label">
+			<span>label:</span>
+			<input id="g_title" data-attr="title" size="10" type="text"/>
+		</label>
+	</div>
+	
+	<div id="use_panel">
+		<div class="push_button" id="tool_unlink_use" title="Break link to reference element (make unique)"></div>
+	</div>
+	
+	<div id="g_panel">
+		<div class="push_button" id="tool_ungroup" title="Ungroup Elements [G]"></div>
+	</div>
+
 	
 	<div id="path_node_panel">
 		<div class="tool_sep"></div>
@@ -392,7 +424,9 @@ api_block_anonymous_users();
 		<div class="tool_button" id="tool_openclose_path" title="Open/close sub-path"></div>
 		<div class="tool_button" id="tool_add_subpath" title="Add sub-path"></div>
 	</div>
-	
+	<div id="cur_context_panel">
+		
+	</div>
 </div> <!-- tools_top -->
 
 <div id="tools_left" class="tools_panel">
@@ -524,7 +558,7 @@ api_block_anonymous_users();
 	<div id="tools_bottom_3">
 		<div id="palette_holder"><div id="palette" title="Click to change fill color, shift-click to change stroke color"></div></div>
 	</div>
-<!--	<div id="copyright"><span id="copyrightLabel">Powered by</span> <a href="http://svg-edit.googlecode.com/" target="_blank">SVG-edit v2.5.1</a></div> --><!-- temporal comment for Chamilo -->
+	<!--<div id="copyright"><span id="copyrightLabel">Powered by</span> <a href="http://svg-edit.googlecode.com/" target="_blank">SVG-edit v2.6-alpha</a></div> --><!-- Comment for Chamilo -->
 </div>
 
 <div id="option_lists">
@@ -563,11 +597,16 @@ api_block_anonymous_users();
 			<button id="tool_source_save">Apply Changes</button>
 			<button id="tool_source_cancel">Cancel</button>
 		</div>
+		<div id="save_output_btns">
+			<p id="copy_save_note">Copy the contents of this box into a text editor, then save the file with a .svg extension.</p>
+			<button id="copy_save_done">Done</button>
+		</div>
 		<form>
 			<textarea id="svg_source_textarea" spellcheck="false"></textarea>
 		</form>
 	</div>
 </div>
+
 
 <div id="svg_docprops">
 	<div id="svg_docprops_overlay"></div>
@@ -582,7 +621,7 @@ api_block_anonymous_users();
 			<legend id="svginfo_image_props">Image Properties</legend>
 			<label>
 				<span id="svginfo_title">Title:</span>
-				<input type="text" id="canvas_title" size="24"/>
+				<input type="text" id="canvas_title"/>
 			</label>			
 	
 			<fieldset id="change_resolution">
@@ -610,11 +649,20 @@ api_block_anonymous_users();
 				<label><input type="radio" name="image_opt" value="embed" checked="checked"/> <span id="image_opt_embed">Embed data (local files)</span> </label>
 				<label><input type="radio" name="image_opt" value="ref"/> <span id="image_opt_ref">Use file reference</span> </label>
 			</fieldset>			
-
-
 		</fieldset>
 
-		<fieldset id="svg_docprops_prefs">
+	</div>
+</div>
+
+<div id="svg_prefs">
+	<div id="svg_prefs_overlay"></div>
+	<div id="svg_prefs_container">
+		<div id="tool_prefs_back" class="toolbar_button">
+			<button id="tool_prefs_save">OK</button>
+			<button id="tool_prefs_cancel">Cancel</button>
+		</div>
+
+		<fieldset>
 			<legend id="svginfo_editor_prefs">Editor Preferences</legend>
 
 			<label><span id="svginfo_lang">Language:</span>
@@ -651,10 +699,34 @@ api_block_anonymous_users();
 			<fieldset id="change_background">
 				<legend id="svginfo_change_background">Editor Background</legend>
 				<div id="bg_blocks"></div>
-				<label><span id="svginfo_bg_url">URL:</span> <input type="text" id="canvas_bg_url" size="21"/></label>
+				<label><span id="svginfo_bg_url">URL:</span> <input type="text" id="canvas_bg_url"/></label>
 				<p id="svginfo_bg_note">Note: Background will not be saved with image.</p>
 			</fieldset>
 			
+			<fieldset id="change_grid">
+				<legend id="svginfo_grid_settings">Grid</legend>
+				<label><span id="svginfo_snap_onoff">Snapping on/off</span><input type="checkbox" value="snapping_on" id="grid_snapping_on"></label>
+				<label><span id="svginfo_snap_step">Snapping Step-Size:</span> <input type="text" id="grid_snapping_step" size="3" value="10"/></label>
+			</fieldset>
+
+			<fieldset id="units_rulers">
+				<legend id="svginfo_units_rulers">Units & Rulers</legend>
+				<label><span id="svginfo_rulers_onoff">Show rulers</span><input type="checkbox" value="show_rulers" id="show_rulers" checked></label>
+				<label>
+					<span id="svginfo_unit">Base Unit:</span>
+					<select id="base_unit">
+						<option value="px" selected>Pixels</option>
+						<option value="cm">Centimeters</option>
+						<option value="mm">Millimeters</option>
+						<option value="pt">Points</option>
+						<option value="pc">Picas</option>
+						<option value="em">Ems</option>
+						<option value="ex">Exs</option>
+					</select>
+				</label>
+				</label>
+			</fieldset>
+	
 		</fieldset>
 
 	</div>
@@ -667,6 +739,28 @@ api_block_anonymous_users();
 		<div id="dialog_buttons"></div>
 	</div>
 </div>
+
+<ul id="cmenu_canvas" class="contextMenu">
+	<li><a href="#cut">Cut</a></li>
+	<li><a href="#copy">Copy</a></li>
+	<li><a href="#paste">Paste</a></li>
+	<li><a href="#paste_in_place">Paste in Place</a></li>
+	<li class="separator"><a href="#delete">Delete</a></li>
+	<li class="separator"><a href="#group">Group<span class="shortcut">G</span></a></li>
+	<li><a href="#ungroup">Ungroup<span class="shortcut">G</span></a></li>
+        <li class="separator"><a href="#move_front">Bring to Front<span class="shortcut">SHFT+CTRL+]</span></a></li>
+	<li><a href="#move_up">Bring Forward<span class="shortcut">CTRL+]</span></a></li>
+	<li><a href="#move_down">Send Backward<span class="shortcut">CTRL+[</span></a></li>
+        <li><a href="#move_back">Send to Back<span class="shortcut">SHFT+CTRL+[</span></a></li>
+</ul>
+
+
+<ul id="cmenu_layers" class="contextMenu">
+	<li><a href="#dupe">Duplicate Layer...</a></li>
+	<li><a href="#delete">Delete Layer</a></li>
+	<li><a href="#merge_down">Merge Down</a></li>
+	<li><a href="#merge_all">Merge All</a></li>
+</ul>
 
 </body>
 </html>

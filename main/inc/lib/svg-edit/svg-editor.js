@@ -9,7 +9,7 @@
  * Copyright(c) 2010 Narendra Sisodiya
  *
  * Integrate  with Chamilo
- * Author Juan Carlos Ra�a Trabado
+ * Author Juan Carlos Raña Trabado
  * Since 25/september/2010
  */
 
@@ -48,11 +48,17 @@
 				imgPath: 'images/',
 				langPath: 'locale/',
 				extPath: 'extensions/',
-				extensions: ['ext-markers.js','ext-connector.js', 'ext-eyedropper.js','ext-server_opensave.js','ext-arrows.js','ext-foreignobject.js'],
+				jGraduatePath: 'jgraduate/images/',
+				extensions: ['ext-markers.js','ext-connector.js', 'ext-eyedropper.js', 'ext-shapes.js', 'ext-imagelib.js','ext-grid.js','ext-server_opensave.js','ext-arrows.js','ext-foreignobject.js'],
 				initTool: 'select',
-				wireframe: false
+				wireframe: false,
+				colorPickerCSS: null,
+				gridSnapping: false,
+				baseUnit: 'px',
+				snappingStep: 10,
+				showRulers: true
 			},
-			uiStrings = {
+			uiStrings = Editor.uiStrings = {
 			"invalidAttrValGiven":"Invalid value given",
 			"noContentToFitTo":"No content to fit to",
 			"layer":"Layer",
@@ -80,16 +86,19 @@
 		};
 		
 		var curPrefs = {}; //$.extend({}, defaultPrefs);
+		
 		var customHandlers = {};
 		
 		Editor.curConfig = curConfig;
+		
+		Editor.tool_scale = 1;
 		
 		// Store and retrieve preferences
 		$.pref = function(key, val) {
 			if(val) curPrefs[key] = val;
 			key = 'svg-edit-'+key;
 			var host = location.hostname,
-				onweb = host && host.indexOf('.') != -1,
+				onweb = host && host.indexOf('.') >= 0,
 				store = (val != undefined),
 				storage = false;
 			// Some FF versions throw security errors here
@@ -147,20 +156,21 @@
 		//	- invoke a file chooser dialog in 'save' mode
 		// 	- save the file to location chosen by the user
 		Editor.setCustomHandlers = function(opts) {
-			if(opts.open) {
-				$('#tool_open > input[type="file"]').remove();
-				$('#tool_open').show();
-				svgCanvas.open = opts.open;
-			}
-			if(opts.save) {
-				show_save_warning = false;
-				svgCanvas.bind("saved", opts.save);
-			}
-			if(opts.pngsave) {
-				svgCanvas.bind("exported", opts.pngsave);
-			}
-			customHandlers = opts;
-			
+			Editor.ready(function() {
+				if(opts.open) {
+					$('#tool_open > input[type="file"]').remove();
+					$('#tool_open').show();
+					svgCanvas.open = opts.open;
+				}
+				if(opts.save) {
+					show_save_warning = false;
+					svgCanvas.bind("saved", opts.save);
+				}
+				if(opts.pngsave) {
+					svgCanvas.bind("exported", opts.pngsave);
+				}
+				customHandlers = opts;
+			});
 		}
 		
 		Editor.randomizeIds = function() {
@@ -168,6 +178,20 @@
 		}
 
 		Editor.init = function() {
+			// For external openers
+			(function() {
+				// let the opener know SVG Edit is ready
+				var w = window.opener;
+				if (w) {
+			    		try {
+						var svgEditorReadyEvent = w.document.createEvent("Event");
+						svgEditorReadyEvent.initEvent("svgEditorReady", true, true);
+						w.document.documentElement.dispatchEvent(svgEditorReadyEvent);
+			    		}
+					catch(e) {}
+				}
+			})();
+
 			(function() {
 				// Load config/data from URL if given
 				var urldata = $.deparam.querystring(true);
@@ -186,9 +210,10 @@
 
 					svgEditor.setConfig(urldata);
 					
+					// FIXME: This is null if Data URL ends with '='. 
 					var src = urldata.source;
 					var qstr = $.param.querystring();
-					
+
 					if(src) {
 						if(src.indexOf("data:") === 0) {
 							// plusses get replaced by spaces, so re-insert
@@ -208,14 +233,22 @@
 			
 			var extFunc = function() {
 				$.each(curConfig.extensions, function() {
-					$.getScript(curConfig.extPath + this);
+					var extname = this;
+					$.getScript(curConfig.extPath + extname, function(d) {
+						// Fails locally in Chrome 5
+						if(!d) {
+							var s = document.createElement('script');
+							s.src = curConfig.extPath + extname;
+							document.querySelector('head').appendChild(s);
+						}
+					});
 				});
 			}
 			
 			// Load extensions
-			// Bit of a hack to run extensions in local Opera
-			if(window.opera && document.location.protocol === 'file:') {
-				setTimeout(extFunc, 1000);
+			// Bit of a hack to run extensions in local Opera/IE9
+			if(document.location.protocol === 'file:') {
+				setTimeout(extFunc, 100);
 			} else {
 				extFunc();
 			}
@@ -223,7 +256,7 @@
 			$.svgIcons(curConfig.imgPath + 'svg_edit_icons.svg', {
 				w:24, h:24,
 				id_match: false,
-				no_img: true,
+ 				no_img: (!!window.opera), // Opera gives odd behavior w/images
 				fallback_path: curConfig.imgPath,
 				fallback:{
 					'new_image':'clear.png',
@@ -321,6 +354,7 @@
 					'#tool_reorient':'reorient',
 					'#tool_group':'group',
 					'#tool_ungroup':'ungroup',
+					'#tool_unlink_use':'unlink_use',
 					
 					'#tool_alignleft, #tool_posleft':'align_left',
 					'#tool_aligncenter, #tool_poscenter':'align_center',
@@ -342,10 +376,11 @@
 					
 					'#layer_up':'go_up',
 					'#layer_down':'go_down',
+					'#layer_moreopts':'context_menu',
 					'#layerlist td.layervis':'eye',
 					
-					'#tool_source_save,#tool_docprops_save':'ok',
-					'#tool_source_cancel,#tool_docprops_cancel':'cancel',
+					'#tool_source_save,#tool_docprops_save,#tool_prefs_save':'ok',
+					'#tool_source_cancel,#tool_docprops_cancel,#tool_prefs_cancel':'cancel',
 					
 					'#rwidthLabel, #iwidthLabel':'width',
 					'#rheightLabel, #iheightLabel':'height',
@@ -378,16 +413,17 @@
 						$(this).parent().prepend(this);
 					});
 					
-					// Use small icons by default if not all left tools are visible
 					var tleft = $('#tools_left');
-					var min_height = tleft.offset().top + tleft.outerHeight();
-					var size = $.pref('iconsize');
-					if(size && size != 'm') {
-						svgEditor.setIconSize(size);				
-					} else if($(window).height() < min_height) {
-						// Make smaller
-						svgEditor.setIconSize('s');
+					if (tleft.length != 0) {
+						var min_height = tleft.offset().top + tleft.outerHeight();
 					}
+// 					var size = $.pref('iconsize');
+// 					if(size && size != 'm') {
+// 						svgEditor.setIconSize(size);				
+// 					} else if($(window).height() < min_height) {
+// 						// Make smaller
+// 						svgEditor.setIconSize('s');
+// 					}
 					
 					// Look for any missing flyout icons from plugins
 					$('.tools_flyout').each(function() {
@@ -396,12 +432,20 @@
 						// Check if there's an icon here
 						if(!shower.children('svg, img').length) {
 							var clone = $(sel).children().clone();
-							shower.append(clone);
+							if(clone.length) {
+								clone[0].removeAttribute('style'); //Needed for Opera
+								shower.append(clone);
+							}
 						}
-						if(window.opera) shower.children().removeAttr('style');
 					});
 					
 					svgEditor.runCallbacks();
+					
+					setTimeout(function() {
+						$('.flyout_arrow_horiz:empty').each(function() {
+							$(this).append($.getSvgIcon('arrow_right').width(5).height(5));
+						});
+					}, 1);
 				}
 			});
 
@@ -419,15 +463,21 @@
 			           "#aaaaff", "#d4aaff", "#ffaaff", "#ffaad4",
 			           ];
 	
-				isMac = false, //(navigator.platform.indexOf("Mac") != -1);
-				modKey = "", //(isMac ? "meta+" : "ctrl+");
+				isMac = (navigator.platform.indexOf("Mac") >= 0);
+				modKey = (isMac ? "meta+" : "ctrl+"); // ⌘
 				path = svgCanvas.pathActions,
 				undoMgr = svgCanvas.undoMgr,
 				Utils = svgCanvas.Utils,
 				default_img_url = curConfig.imgPath + "logo.png",
 				workarea = $("#workarea"),
+				canv_menu = $("#cmenu_canvas"),
+				layer_menu = $("#cmenu_layers"),
 				show_save_warning = false, 
-				exportWindow = null;
+				exportWindow = null, 
+				tool_scale = 1,
+				zoomInIcon = 'crosshair',
+				zoomOutIcon = 'crosshair',
+				ui_context = 'toolbars';
 
 			// This sets up alternative dialog boxes. They mostly work the same way as
 			// their UI counterparts, expect instead of returning the result, a callback
@@ -479,10 +529,14 @@
 			}());
 			
 			var setSelectMode = function() {
-				$('.tool_button_current').removeClass('tool_button_current').addClass('tool_button');
-				$('#tool_select').addClass('tool_button_current').removeClass('tool_button');
-				$('#styleoverrides').text('#svgcanvas svg *{cursor:move;pointer-events:all} #svgcanvas svg{cursor:default}');
+				var curr = $('.tool_button_current');
+				if(curr.length && curr[0].id !== 'tool_select') {
+					curr.removeClass('tool_button_current').addClass('tool_button');
+					$('#tool_select').addClass('tool_button_current').removeClass('tool_button');
+					$('#styleoverrides').text('#svgcanvas svg *{cursor:move;pointer-events:all} #svgcanvas svg{cursor:default}');
+				}
 				svgCanvas.setMode('select');
+				workarea.css('cursor','auto');
 			};
 			
 			var togglePathEditMode = function(editmode, elems) {
@@ -509,21 +563,30 @@
 			var multiselected = false;
 			var editingsource = false;
 			var docprops = false;
+			var preferences = false;
+			var cur_context = '';
+			var orig_title = $('title:first').text();
 			
 			var fillPaint = new $.jGraduate.Paint({solidColor: curConfig.initFill.color});
 			var strokePaint = new $.jGraduate.Paint({solidColor: curConfig.initStroke.color});
 		
 			var saveHandler = function(window,svg) {
 				show_save_warning = false;
-				//hack for Chamilo
-					//parent.setSVG(svg);//TODO:check this hack
-                	//return true;//TODO:check this hack
-				//end hack for Chamilo
+			
 				// by default, we add the XML prolog back, systems integrating SVG-edit (wikis, CMSs) 
 				// can just provide their own custom save handler and might not want the XML prolog
 				svg = '<?xml version="1.0"?>\n' + svg;
 				
 				// Opens the SVG in new window, with warning about Mozilla bug #308590 when applicable
+				
+				var ua = navigator.userAgent;
+
+				// Chrome 5 (and 6?) don't allow saving, show source instead ( http://code.google.com/p/chromium/issues/detail?id=46735 )
+				// IE9 doesn't allow standalone Data URLs ( https://connect.microsoft.com/IE/feedback/details/542600/data-uri-images-fail-when-loaded-by-themselves )
+				if((~ua.indexOf('Chrome') && $.browser.version >= 533) || ~ua.indexOf('MSIE')) {
+					showSourceEditor(0,true);
+					return;	
+				}
 				
 				var win = window.open("data:image/svg+xml;base64," + Utils.encode64(svg));
 				
@@ -534,7 +597,7 @@
 					var note = uiStrings.saveFromBrowser.replace('%s', 'SVG');
 					
 					// Check if FF and has <defs/>
-					if(navigator.userAgent.indexOf('Gecko/') !== -1) {
+					if(ua.indexOf('Gecko/') !== -1) {
 						if(svg.indexOf('<defs') !== -1) {
 							note += "\n\n" + uiStrings.defsFailOnSave;
 							$.pref('save_notice_done', 'all');
@@ -562,30 +625,31 @@
 				
 				c.width = svgCanvas.contentW;
 				c.height = svgCanvas.contentH;
-				canvg(c, data.svg);
-				var datauri = c.toDataURL('image/png');
-				exportWindow.location.href = datauri;
-				
-				var done = $.pref('export_notice_done');
-				if(done !== "all") {
-					var note = uiStrings.saveFromBrowser.replace('%s', 'PNG');
-					
-					// Check if there's issues
-					if(issues.length) {
-						var pre = "\n \u2022 ";
-						note += ("\n\n" + uiStrings.noteTheseIssues + pre + issues.join(pre));
-					} 
-					
-					// Note that this will also prevent the notice even though new issues may appear later.
-					// May want to find a way to deal with that without annoying the user
-					$.pref('export_notice_done', 'all'); 
-					exportWindow.alert(note);
-				}
+				canvg(c, data.svg, {renderCallback: function() {
+					var datauri = c.toDataURL('image/png');
+					exportWindow.location.href = datauri;
+					var done = $.pref('export_notice_done');
+					if(done !== "all") {
+						var note = uiStrings.saveFromBrowser.replace('%s', 'PNG');
+						
+						// Check if there's issues
+						if(issues.length) {
+							var pre = "\n \u2022 ";
+							note += ("\n\n" + uiStrings.noteTheseIssues + pre + issues.join(pre));
+						} 
+						
+						// Note that this will also prevent the notice even though new issues may appear later.
+						// May want to find a way to deal with that without annoying the user
+						$.pref('export_notice_done', 'all'); 
+						exportWindow.alert(note);
+					}
+				}});
 			};
 			
 			// called when we've selected a different element
 			var selectedChanged = function(window,elems) {
 				var mode = svgCanvas.getMode();
+				if(mode === "select") setSelectMode();
 				var is_node = (mode == "pathedit");
 				// if elems[1] is present, then we have more than one element
 				selectedElement = (elems.length == 1 || elems[1] == null ? elems[0] : null);
@@ -594,9 +658,9 @@
 					// unless we're already in always set the mode of the editor to select because
 					// upon creation of a text element the editor is switched into
 					// select mode and this event fires - we need our UI to be in sync
-					
-					if (mode != "multiselect" && !is_node) {
-						setSelectMode();
+
+					if (mode !== "multiselect" && !is_node) {
+						// FIXME: This also needs to fire if only one element is selected via multiselect
 						updateToolbar();
 					} 
 					
@@ -614,6 +678,10 @@
 		
 			// called when any element has changed
 			var elementChanged = function(window,elems) {
+				if(svgCanvas.getMode() == "select") {
+					setSelectMode();
+				}
+				
 				for (var i = 0; i < elems.length; ++i) {
 					var elem = elems[i];
 					
@@ -651,7 +719,6 @@
 					res = svgCanvas.getResolution(),
 					w_area = workarea,
 					canvas_pos = $('#svgcanvas').position();
-				w_area.css('cursor','auto');
 				var z_info = svgCanvas.setBBoxZoom(bbox, w_area.width()-scrbar, w_area.height()-scrbar);
 				if(!z_info) return;
 				var zoomlevel = z_info.zoom,
@@ -668,7 +735,54 @@
 					// Go to select if a zoom box was drawn
 					setSelectMode();
 				}
+				
 				zoomDone();
+			}
+			
+			$('#cur_context_panel').delegate('a', 'click', function() {
+				var link = $(this);
+				if(link.attr('data-root')) {
+					svgCanvas.leaveContext();
+				} else {
+					svgCanvas.setContext(link.text());
+				}
+				return false;
+			});
+			
+			var contextChanged = function(win, context) {
+				$('#workarea,#sidepanels').css('top', context?100:75);
+				$('#rulers').toggleClass('moved', context);
+				if(cur_context && !context) {
+					// Back to normal
+					workarea[0].scrollTop -= 25;
+				} else if(!cur_context && context) {
+					workarea[0].scrollTop += 25;
+				}
+				
+				var link_str = '';
+				if(context) {
+					var str = '';
+					link_str = '<a href="#" data-root="y">' + svgCanvas.getCurrentLayer() + '</a>';
+					
+					$(context).parentsUntil('#svgcontent > g').andSelf().each(function() {
+						if(this.id) {
+							str += ' > ' + this.id;
+							if(this !== context) {
+								link_str += ' > <a href="#">' + this.id + '</a>';
+							} else {
+								link_str += ' > ' + this.id;
+							}
+						}
+					});
+
+					cur_context = str;
+				} else {
+					cur_context = null;
+				}
+				$('#cur_context_panel').toggle(!!context).html(link_str);
+
+				
+				updateTitle();
 			}
 			
 			var flyout_funcs = {};
@@ -677,6 +791,7 @@
 				$.each(holders, function(hold_sel, btn_opts) {
 					var buttons = $(hold_sel).children();
 					var show_sel = hold_sel + '_show';
+					var shower = $(show_sel);
 					var def = false;
 					buttons.addClass('tool_button')
 						.unbind('click mousedown mouseup') // may not be necessary
@@ -697,13 +812,12 @@
 									opts.fn();
 								}
 								if(opts.icon) {
-									var icon = $.getSvgIcon(opts.icon).clone();
+									var icon = $.getSvgIcon(opts.icon, true);
 								} else {
 									// 
 									var icon = $(opts.sel).children().eq(0).clone();
 								}
 								
-								var shower = $(show_sel);
 								icon[0].setAttribute('width',shower.width());
 								icon[0].setAttribute('height',shower.height());
 								shower.children(':not(.flyout_arrow_horiz)').remove();
@@ -718,33 +832,42 @@
 						});
 					
 					if(def) {
-						$(show_sel).attr('data-curopt', btn_opts[def].sel);
-					} else if(!$(show_sel).attr('data-curopt')) {
+						shower.attr('data-curopt', btn_opts[def].sel);
+					} else if(!shower.attr('data-curopt')) {
 						// Set first as default
-						$(show_sel).attr('data-curopt', btn_opts[0].sel);
+						shower.attr('data-curopt', btn_opts[0].sel);
 					}
 					
 					var timer;
 					
 					// Clicking the "show" icon should set the current mode
-					$(show_sel).mousedown(function(evt) {
-						if($(show_sel).hasClass('disabled')) return false;
+					shower.mousedown(function(evt) {
+						if(shower.hasClass('disabled')) return false;
 						var holder = $(show_sel.replace('_show',''));
 						var l = holder.css('left');
 						var w = holder.width()*-1;
 						var time = holder.data('shown_popop')?200:0;
 						timer = setTimeout(function() {
 							// Show corresponding menu
-							holder.css('left', w).show().animate({
-								left: l
-							},150);
+							if(!shower.data('isLibrary')) {
+								holder.css('left', w).show().animate({
+									left: l
+								},150);
+							} else {
+								holder.css('left', l).show();
+							}
 							holder.data('shown_popop',true);
 						},time);
 						evt.preventDefault();
-					}).mouseup(function() {
+					}).mouseup(function(evt) {
 						clearTimeout(timer);
 						var opt = $(this).attr('data-curopt');
-						if (toolButtonClick(show_sel)) {
+						// Is library and popped up, so do nothing
+						if(shower.data('isLibrary') && $(show_sel.replace('_show','')).is(':visible')) {
+							toolButtonClick(show_sel, true);
+							return;
+						}
+						if (toolButtonClick(show_sel) && (opt in flyout_funcs)) {
 							flyout_funcs[opt]();
 						}
 					});
@@ -772,7 +895,7 @@
 					var shower = $('#' + this.id + '_show');
 					var pos = shower.offset();
 					var w = shower.outerWidth();
-					$(this).css({left: pos.left + w, top: pos.top});
+					$(this).css({left: (pos.left + w)*tool_scale, top: pos.top});
 				});
 			}
 			
@@ -786,13 +909,31 @@
 					shower[0].title = tooltips.join(' / ');
 				});
 			}
+
+			var resize_timer;			
 			
 			var extAdded = function(window, ext) {
 		
 				var cb_called = false;
+				var resize_done = false;
+				var cb_ready = true; // Set to false to delay callback (e.g. wait for $.svgIcons)
+				
+				function prepResize() {
+					if(resize_timer) {
+						clearTimeout(resize_timer);
+						resize_timer = null;
+					}
+					if(!resize_done) {
+						resize_timer = setTimeout(function() {
+							resize_done = true;
+							setIconSize(curPrefs.iconsize);
+						}, 50);	
+					}
+				}
+
 				
 				var runCallback = function() {
-					if(ext.callback && !cb_called) {
+					if(ext.callback && !cb_called && cb_ready) {
 						cb_called = true;
 						ext.callback();
 					}
@@ -911,13 +1052,18 @@
 						} else {
 							fallback_obj[id] = btn.icon;
 							var svgicon = btn.svgicon?btn.svgicon:btn.id;
-							placement_obj['#' + id] = svgicon;
+							if(btn.type == 'app_menu') {
+								placement_obj['#' + id + ' > div'] = svgicon;
+							} else {
+								placement_obj['#' + id] = svgicon;
+							}
 						}
 						
 						var cls, parent;
 						
 						// Set button up according to its type
 						switch ( btn.type ) {
+						case 'mode_flyout':
 						case 'mode':
 							cls = 'tool_button';
 							parent = "#tools_left";
@@ -929,14 +1075,78 @@
 							if(!$(parent).length)
 								$('<div>', {id: btn.panel}).appendTo("#tools_top");
 							break;
+						case 'app_menu':
+							cls = '';
+							parent = '#main_menu ul';
+							break;
 						}
 						
-						var button = $(btn.list?'<li/>':'<div/>')
+						var button = $((btn.list || btn.type == 'app_menu')?'<li/>':'<div/>')
 							.attr("id", id)
 							.attr("title", btn.title)
 							.addClass(cls);
 						if(!btn.includeWith && !btn.list) {
-							button.appendTo(parent);
+							if("position" in btn) {
+								$(parent).children().eq(btn.position).before(button);
+							} else {
+								button.appendTo(parent);
+							}
+
+							if(btn.type =='mode_flyout') {
+							// Add to flyout menu / make flyout menu
+	// 							var opts = btn.includeWith;
+	// 							// opts.button, default, position
+								var ref_btn = $(button);
+								
+								var flyout_holder = ref_btn.parent();
+								// Create a flyout menu if there isn't one already
+								if(!ref_btn.parent().hasClass('tools_flyout')) {
+									// Create flyout placeholder
+									var tls_id = ref_btn[0].id.replace('tool_','tools_')
+									var show_btn = ref_btn.clone()
+										.attr('id',tls_id + '_show')
+										.append($('<div>',{'class':'flyout_arrow_horiz'}));
+										
+									ref_btn.before(show_btn);
+								
+									// Create a flyout div
+									flyout_holder = makeFlyoutHolder(tls_id, ref_btn);
+									flyout_holder.data('isLibrary', true);
+									show_btn.data('isLibrary', true);
+								} 
+								
+								
+								
+	// 							var ref_data = Actions.getButtonData(opts.button);
+								
+								placement_obj['#' + tls_id + '_show'] = btn.id;
+								// TODO: Find way to set the current icon using the iconloader if this is not default
+								
+								// Include data for extension button as well as ref button
+								var cur_h = holders['#'+flyout_holder[0].id] = [{
+									sel: '#'+id,
+									fn: btn.events.click,
+									icon: btn.id,
+// 									key: btn.key,
+									isDefault: true
+								}, ref_data];
+	// 							
+	// 							// {sel:'#tool_rect', fn: clickRect, evt: 'mouseup', key: 4, parent: '#tools_rect', icon: 'rect'}
+	// 								
+	// 							var pos  = ("position" in opts)?opts.position:'last';
+	// 							var len = flyout_holder.children().length;
+	// 							
+	// 							// Add at given position or end
+	// 							if(!isNaN(pos) && pos >= 0 && pos < len) {
+	// 								flyout_holder.children().eq(pos).before(button);
+	// 							} else {
+	// 								flyout_holder.append(button);
+	// 								cur_h.reverse();
+	// 							}
+							} else if(btn.type == 'app_menu') {
+								button.append('<div>').append(btn.title);
+							}
+							
 						} else if(btn.list) {
 							// Add button to list
 							button.addClass('push_button');
@@ -956,8 +1166,6 @@
 							// Create a flyout menu if there isn't one already
 							if(!ref_btn.parent().hasClass('tools_flyout')) {
 								// Create flyout placeholder
-								var arr_div = $('<div>',{id:'flyout_arrow_horiz'})
-								
 								var tls_id = ref_btn[0].id.replace('tool_','tools_')
 								var show_btn = ref_btn.clone()
 									.attr('id',tls_id + '_show')
@@ -997,7 +1205,7 @@
 								flyout_holder.append(button);
 								cur_h.reverse();
 							}
-						}
+						} 
 						
 						if(!svgicons) {
 							button.append(icon);
@@ -1036,19 +1244,22 @@
 					$.each(btn_selects, function() {
 						addAltDropDown(this.elem, this.list, this.callback, {seticon: true}); 
 					});
-
 					
+					if (svgicons)
+						cb_ready = false; // Delay callback
+
 					$.svgIcons(svgicons, {
 						w:24, h:24,
 						id_match: false,
-						no_img: true,
+						no_img: (!!window.opera),
 						fallback: fallback_obj,
 						placement: placement_obj,
 						callback: function(icons) {
 							// Non-ideal hack to make the icon match the current size
 							if(curPrefs.iconsize && curPrefs.iconsize != 'm') {
-								setIconSize(curPrefs.iconsize, true);
+								prepResize();
 							}
+							cb_ready = true; // Ready for callback
 							runCallback();
 						}
 				
@@ -1084,7 +1295,8 @@
 			// updates the toolbar (colors, opacity, etc) based on the selected element
 			// This function also updates the opacity and id elements that are in the context panel
 			var updateToolbar = function() {
-				if (selectedElement != null && $.inArray(selectedElement.tagName, ['image', 'foreignObject', 'g', 'a']) === -1) {
+				if (selectedElement != null && ['use', 'image', 'foreignObject', 'g', 'a'].indexOf(selectedElement.tagName) === -1) {
+				
 					// get opacity values
 					var fillOpacity = parseFloat(selectedElement.getAttribute("fill-opacity"));
 					if (isNaN(fillOpacity)) {
@@ -1107,7 +1319,7 @@
 					// prevent undo on these canvas changes
 					svgCanvas.setColor('stroke', strokeColor, true);
 					svgCanvas.setPaintOpacity('stroke', strokeOpacity, true);
-		
+					
 					// update the rect inside #fill_color
 					$("#stroke_color rect").attr({
 						fill: strokeColor,
@@ -1138,16 +1350,18 @@
 						strokeOpacity = "N/A";
 					}
 					
-					$('#stroke_width').val(selectedElement.getAttribute("stroke-width")||1);
-					$('#stroke_style').val(selectedElement.getAttribute("stroke-dasharray")||"none");
+					$('#stroke_width').val(selectedElement.getAttribute("stroke-width")||1).change();
+					$('#stroke_style').val(selectedElement.getAttribute("stroke-dasharray")||"none").change();
 
 					var attr = selectedElement.getAttribute("stroke-linejoin") || 'miter';
 					
-					setStrokeOpt($('#linejoin_' + attr)[0]);
+					if ($('#linejoin_' + attr).length != 0)
+						setStrokeOpt($('#linejoin_' + attr)[0]);
 					
 					attr = selectedElement.getAttribute("stroke-linecap") || 'butt';
 					
-					setStrokeOpt($('#linecap_' + attr)[0]);
+					if ($('#linecap_' + attr).length != 0)
+						setStrokeOpt($('#linecap_' + attr)[0]);
 
 				}
 				
@@ -1161,6 +1375,38 @@
 				
 				updateToolButtonState();
 			};
+		
+			var setImageURL = Editor.setImageURL = function(url) {
+				if(!url) url = default_img_url;
+				
+				svgCanvas.setImageURL(url);
+				$('#image_url').val(url);
+				
+				if(url.indexOf('data:') === 0) {
+					// data URI found
+					$('#image_url').hide();
+					$('#change_image_url').show();
+				} else {
+					// regular URL
+					
+					svgCanvas.embedImage(url, function(datauri) {
+						if(!datauri) {
+							// Couldn't embed, so show warning
+							$('#url_notice').show();
+						} else {
+							$('#url_notice').hide();
+						}
+						default_img_url = url;
+					});
+					$('#image_url').show();
+					$('#change_image_url').hide();
+				}
+			}
+		
+			var setInputWidth = function(elem) {
+				var w = Math.min(Math.max(12 + elem.value.length * 6, 50), 300);
+				$(elem).width(w);
+			}
 		
 			// updates the context panel tools based on the selected element
 			var updateContextPanel = function() {
@@ -1177,8 +1423,9 @@
 					return;
 				}
 				var is_node = currentMode == 'pathedit'; //elem ? (elem.id && elem.id.indexOf('pathpointgrip') == 0) : false;
+				var menu_items = $('#cmenu_canvas li');
 				$('#selected_panel, #multiselected_panel, #g_panel, #rect_panel, #circle_panel,\
-					#ellipse_panel, #line_panel, #text_panel, #image_panel').hide();
+					#ellipse_panel, #line_panel, #text_panel, #image_panel, #container_panel, #use_panel').hide();
 				if (elem != null) {
 					var elname = elem.nodeName;
 					
@@ -1199,10 +1446,8 @@
 					
 					if(svgCanvas.addedNew) {
 						if(elname == 'image') {
-							var xlinkNS = "http://www.w3.org/1999/xlink";
-							var href = elem.getAttributeNS(xlinkNS, "href");
 							// Prompt for URL if not a data URL
-							if(href.indexOf('data:') !== 0) {
+							if(svgCanvas.getHref(elem).indexOf('data:') !== 0) {
 								promptImgURL();
 							}
 						} else if(elname == 'text') {
@@ -1213,12 +1458,12 @@
 					if(!is_node && currentMode != 'pathedit') {
 						$('#selected_panel').show();
 						// Elements in this array already have coord fields
-						if($.inArray(elname, ['line', 'circle', 'ellipse']) != -1) {
+						if(['line', 'circle', 'ellipse'].indexOf(elname) >= 0) {
 							$('#xy_panel').hide();
 						} else {
 							var x,y;
 							// Get BBox vals for g, polyline and path
-							if($.inArray(elname, ['g', 'polyline', 'path']) != -1) {
+							if(['g', 'polyline', 'path'].indexOf(elname) >= 0) {
 								var bb = svgCanvas.getStrokedBBox([elem]);
 								if(bb) {
 									x = bb.x;
@@ -1234,7 +1479,7 @@
 						}
 						
 						// Elements in this array cannot be converted to a path
-						var no_path = $.inArray(elname, ['image', 'text', 'path', 'g', 'use']) == -1;
+						var no_path = ['image', 'text', 'path', 'g', 'use'].indexOf(elname) == -1;
 						$('#tool_topath').toggle(no_path);
 						$('#tool_reorient').toggle(elname == 'path');
 						$('#tool_reorient').toggleClass('disabled', angle == 0);
@@ -1267,10 +1512,15 @@
 						circle: ['cx','cy','r'],
 						ellipse: ['cx','cy','rx','ry'],
 						line: ['x1','y1','x2','y2'], 
-						text: []
+						text: [],
+						'use': []
 					};
 					
 					var el_name = elem.tagName;
+					
+// 					if($(elem).data('gsvg')) {
+// 						$('#g_panel').show();
+// 					}
 					
 					if(panels[el_name]) {
 						var cur_panel = panels[el_name];
@@ -1300,18 +1550,39 @@
 							$('#font_size').val(elem.getAttribute("font-size"));
 							$('#text').val(elem.textContent);
 							if (svgCanvas.addedNew) {
-								$('#text').focus().select();
+								// Timeout needed for IE9
+								setTimeout(function() {
+									$('#text').focus().select();
+								},100);
 							}
 						} // text
 						else if(el_name == 'image') {
-							var xlinkNS="http://www.w3.org/1999/xlink";
-							var href = elem.getAttributeNS(xlinkNS, "href");
-							setImageURL(href);
+							setImageURL(svgCanvas.getHref(elem));
 						} // image
+						else if(el_name === 'g' || el_name === 'use') {
+							$('#container_panel').show();
+							var title = svgCanvas.getTitle();
+							var label = $('#g_title')[0];
+							label.value = title;
+							setInputWidth(label);
+							var d = 'disabled';
+							if(el_name == 'use') {
+								label.setAttribute(d, d);
+							} else {
+								label.removeAttribute(d);
+							}
+						}
 					}
+					menu_items[(el_name === 'g' ? 'en':'dis') + 'ableContextMenuItems']('#ungroup');
+					menu_items[((el_name === 'g' || !multiselected) ? 'dis':'en') + 'ableContextMenuItems']('#group');
 				} // if (elem != null)
 				else if (multiselected) {
 					$('#multiselected_panel').show();
+					menu_items
+						.enableContextMenuItems('#group')
+						.disableContextMenuItems('#ungroup');
+				} else {
+					menu_items.disableContextMenuItems('#delete,#cut,#copy,#group,#ungroup,#move_front,#move_up,#move_down,#move_back');
 				}
 				
 				// update history buttons
@@ -1333,6 +1604,9 @@
 				if ( (elem && !is_node)	|| multiselected) {
 					// update the selected elements' layer
 					$('#selLayerNames').removeAttr('disabled').val(currentLayer);
+					
+					// Enable regular menu options
+					canv_menu.enableContextMenuItems('#delete,#cut,#copy,#move_front,#move_up,#move_down,#move_back');
 				}
 				else {
 					$('#selLayerNames').attr('disabled', 'disabled');
@@ -1348,6 +1622,7 @@
 			svgCanvas.bind("saved", saveHandler);
 			svgCanvas.bind("exported", exportHandler);
 			svgCanvas.bind("zoomed", zoomChanged);
+			svgCanvas.bind("contextset", contextChanged);
 			svgCanvas.bind("extension_added", extAdded);
 			svgCanvas.textActions.setInputElem($("#text")[0]);
 		
@@ -1397,7 +1672,7 @@
 			
 			var changeStrokeWidth = function(ctl) {
 				var val = ctl.value;
-				if(val == 0 && selectedElement && $.inArray(selectedElement.nodeName, ['line', 'polyline']) != -1) {
+				if(val == 0 && selectedElement && ['line', 'polyline'].indexOf(selectedElement.nodeName) >= 0) {
 					val = ctl.value = 1;
 				}
 				svgCanvas.setStrokeWidth(val);
@@ -1502,6 +1777,12 @@
 			$('#image_url').change(function(){
 				setImageURL(this.value); 
 			});
+			
+			$('#g_title').change(function() {
+				svgCanvas.setGroupTitle(this.value);
+				setInputWidth(this);
+
+			});
 		
 			$('.attr_changer').change(function() {
 				var attr = this.getAttribute("data-attr");
@@ -1513,6 +1794,13 @@
 					this.value = selectedElement.getAttribute(attr);
 					return false;
 				}
+				
+				// Convert unitless value to one with given unit
+				if(curConfig.baseUnit !== 'px' && !isNaN(val) ) {
+					val += curConfig.baseUnit;
+					this.value = val;
+				}
+				
 				// if the user is changing the id, then de-select the element first
 				// change the ID, then re-select it with the new ID
 				if (attr == "id") {
@@ -1531,11 +1819,12 @@
 				var inp = $('<input type="hidden">');
 				$(this).append(inp);
 				inp.focus().remove();
-			});
-		
-			$('.palette_item').click(function(evt){
-				var picker = (evt.shiftKey ? "stroke" : "fill");
-				var id = (evt.shiftKey ? '#stroke_' : '#fill_');
+			})
+			
+			$('.palette_item').mousedown(function(evt){
+				var right_click = evt.button === 2;
+				var picker = ((evt.shiftKey || right_click) ? "stroke" : "fill");
+				var id = ((evt.shiftKey || right_click) ? '#stroke_' : '#fill_');
 				var color = $(this).attr('data-rgb');
 				var rectbox = document.getElementById("gradbox_"+picker).parentNode.firstChild;
 				var paint = null;
@@ -1570,7 +1859,7 @@
 					}
 				}
 				updateToolButtonState();
-			});
+			}).bind('contextmenu', function(e) {e.preventDefault()});
 		
 			$("#toggle_stroke_tools").toggle(function() {
 				$(".stroke_tool").css('display','table-cell');
@@ -1585,16 +1874,17 @@
 			// - removes the tool_button_current class from whatever tool currently has it
 			// - hides any flyouts
 			// - adds the tool_button_current class to the button passed in
-			var toolButtonClick = function(button, fadeFlyouts) {
+			var toolButtonClick = function(button, noHiding) {
 				if ($(button).hasClass('disabled')) return false;
 				if($(button).parent().hasClass('tools_flyout')) return true;
 				var fadeFlyouts = fadeFlyouts || 'normal';
-				$('.tools_flyout').fadeOut(fadeFlyouts);
+				if(!noHiding) {
+					$('.tools_flyout').fadeOut(fadeFlyouts);
+				}
 				$('#styleoverrides').text('');
+				workarea.css('cursor','auto');
 				$('.tool_button_current').removeClass('tool_button_current').addClass('tool_button');
 				$(button).addClass('tool_button_current').removeClass('tool_button');
-				// when a tool is selected, we should deselect any currently selected elements
-				svgCanvas.clearSelection();
 				return true;
 			};
 			
@@ -1632,7 +1922,15 @@
 				}).bind('keyup', 'space', function(evt) {
 					evt.preventDefault();
 					svgCanvas.spaceKey = keypan = false;
-				});
+				}).bind('keydown', 'shift', function(evt) {
+					if(svgCanvas.getMode() === 'zoom') {
+						workarea.css('cursor', zoomOutIcon);
+					}
+				}).bind('keyup', 'shift', function(evt) {
+					if(svgCanvas.getMode() === 'zoom') {
+						workarea.css('cursor', zoomInIcon);
+					}
+				})
 			}());
 			
 			
@@ -1668,7 +1966,7 @@
 						button.removeClass('buttondown');
 						// do not hide if it was the file input as that input needs to be visible 
 						// for its change event to fire
-						if (evt.target.tagName.toLowerCase() != "input") {
+						if (evt.target.tagName != "INPUT") {
 							list.fadeOut(200);
 						} else if(!set_click) {
 							set_click = true;
@@ -1678,8 +1976,12 @@
 						}
 					}
 					on_button = false;
-				}).mousedown(function() {
-					$('.tools_flyout:visible').fadeOut();
+				}).mousedown(function(evt) {
+// 					$(".contextMenu").hide();
+// 					console.log('cm', $(evt.target).closest('.contextMenu'));
+				
+					var islib = $(evt.target).closest('div.tools_flyout, .contextMenu').length;
+					if(!islib) $('.tools_flyout:visible,.contextMenu').fadeOut(250);
 				});
 				
 				overlay.bind('mousedown',function() {
@@ -1723,8 +2025,9 @@
 					}
 				});
 			}());
-			
-			var addDropDown = function(elem, callback, dropUp) {
+			// Made public for UI customization.
+			// TODO: Group UI functions into a public svgEditor.ui interface.
+			Editor.addDropDown = function(elem, callback, dropUp) {
 				var button = $(elem).find('button');
 				var list = $(elem).find('ul');
 				var on_button = false;
@@ -1820,12 +2123,12 @@
 				}
 			}
 			
-			addDropDown('#font_family_dropdown', function() {
+			Editor.addDropDown('#font_family_dropdown', function() {
 				var fam = $(this).text();
 				$('#font_family').val($(this).text()).change();
 			});
 			
-			addDropDown('#opacity_dropdown', function() {
+			Editor.addDropDown('#opacity_dropdown', function() {
 				if($(this).find('div').length) return;
 				var perc = parseInt($(this).text().split('%')[0]);
 				changeOpacity(false, perc);
@@ -1845,7 +2148,7 @@
 				}
 			});
 		
-			addDropDown('#blur_dropdown', function() {
+			Editor.addDropDown('#blur_dropdown', function() {
 			});
 			
 			var slideStart = false;
@@ -1868,7 +2171,7 @@
 			});
 
 		
-			addDropDown('#zoom_dropdown', function() {
+			Editor.addDropDown('#zoom_dropdown', function() {
 				var item = $(this);
 				var val = item.attr('data-val');
 				if(val) {
@@ -1915,14 +2218,19 @@
 					$(inp).blur();
 				}
 				
-				// Do not include the #text input, as it needs to remain focused 
-				// when clicking on an SVG text element.
-				$('#svg_editor input:text:not(#text)').focus(function() {
+				$('#svg_editor').find('button, select, input:not(#text)').focus(function() {
 					inp = this;
+					ui_context = 'toolbars';
 					workarea.mousedown(unfocus);
 				}).blur(function() {
+					ui_context = 'canvas';
 					workarea.unbind('mousedown', unfocus);
+					// Go back to selecting text if in textedit mode
+					if(svgCanvas.getMode() == 'textedit') {
+						$('#text').focus();
+					}
 				});
+				
 			}());
 
 			var clickSelect = function() {
@@ -1945,27 +2253,39 @@
 			};
 		
 			var clickSquare = function(){
-				svgCanvas.setMode('square');
+				if (toolButtonClick('#tool_square')) {
+					svgCanvas.setMode('square');
+				}
 			};
 			
 			var clickRect = function(){
-				svgCanvas.setMode('rect');
+				if (toolButtonClick('#tool_rect')) {
+					svgCanvas.setMode('rect');
+				}
 			};
 			
 			var clickFHRect = function(){
-				svgCanvas.setMode('fhrect');
+				if (toolButtonClick('#tool_fhrect')) {
+					svgCanvas.setMode('fhrect');
+				}
 			};
 			
 			var clickCircle = function(){
-				svgCanvas.setMode('circle');
+				if (toolButtonClick('#tool_circle')) {
+					svgCanvas.setMode('circle');
+				}
 			};
 		
 			var clickEllipse = function(){
-				svgCanvas.setMode('ellipse');
+				if (toolButtonClick('#tool_ellipse')) {
+					svgCanvas.setMode('ellipse');
+				}
 			};
 		
 			var clickFHEllipse = function(){
-				svgCanvas.setMode('fhellipse');
+				if (toolButtonClick('#tool_fhellipse')) {
+					svgCanvas.setMode('fhellipse');
+				}
 			};
 			
 			var clickImage = function(){
@@ -1976,8 +2296,8 @@
 		
 			var clickZoom = function(){
 				if (toolButtonClick('#tool_zoom')) {
-					workarea.css('cursor','crosshair');
 					svgCanvas.setMode('zoom');
+					workarea.css('cursor', zoomInIcon);
 				}
 			};
 		
@@ -1989,13 +2309,15 @@
 			};
 		
 			var clickText = function(){
-				toolButtonClick('#tool_text');
-				svgCanvas.setMode('text');
+				if (toolButtonClick('#tool_text')) {
+					svgCanvas.setMode('text');
+				}
 			};
 			
 			var clickPath = function(){
-				toolButtonClick('#tool_path');
-				svgCanvas.setMode('path');
+				if (toolButtonClick('#tool_path')) {
+					svgCanvas.setMode('path');
+				}
 			};
 			
 			// Delete is a contextual tool that only appears in the ribbon if
@@ -2006,18 +2328,36 @@
 				}
 			};
 		
+			var cutSelected = function() {
+				if (selectedElement != null || multiselected) {
+					svgCanvas.cutSelectedElements();
+				}
+			};
+			
+			var copySelected = function() {
+				if (selectedElement != null || multiselected) {
+					svgCanvas.copySelectedElements();
+				}
+			};
+			
 			var moveToTopSelected = function() {
 				if (selectedElement != null) {
 					svgCanvas.moveToTopSelectedElement();
 				}
 			};
-		
+			
 			var moveToBottomSelected = function() {
 				if (selectedElement != null) {
 					svgCanvas.moveToBottomSelectedElement();
 				}
 			};
 			
+			var moveUpDownSelected = function(dir) {
+				if (selectedElement != null) {
+					svgCanvas.moveUpDownSelected(dir);
+				}
+			};
+
 			var convertToPath = function() {
 				if (selectedElement != null) {
 					svgCanvas.convertToPath();
@@ -2032,6 +2372,12 @@
 		
 			var moveSelected = function(dx,dy) {
 				if (selectedElement != null || multiselected) {
+					if(curConfig.gridSnapping) {
+						// Use grid snap value regardless of zoom level
+						var multi = svgCanvas.getZoom() * curConfig.snappingStep;
+						dx *= multi;
+						dy *= multi;
+					}
 					svgCanvas.moveSelectedElements(dx,dy);
 				}
 			};
@@ -2083,9 +2429,8 @@
 				svgCanvas.cycleElement(0);
 			};
 			
-			var rotateSelected = function(cw) {
+			var rotateSelected = function(cw,step) {
 				if (selectedElement == null || multiselected) return;
-				var step = 5;
 				if(!cw) step *= -1;
 				var new_angle = $('#angle').val()*1 + step;
 				svgCanvas.setRotationAngle(new_angle);
@@ -2109,11 +2454,13 @@
 			var clickBold = function(){
 				svgCanvas.setBold( !svgCanvas.getBold() );
 				updateContextPanel();
+				return false;
 			};
 			
 			var clickItalic = function(){
 				svgCanvas.setItalic( !svgCanvas.getItalic() );
 				updateContextPanel();
+				return false;
 			};
 		
 			var clickSave = function(){
@@ -2172,7 +2519,7 @@
 					svgCanvas.groupSelectedElements();
 				}
 				// ungroup
-				else if(selectedElement && selectedElement.tagName == 'g'){
+				else if(selectedElement){
 					svgCanvas.ungroupSelectedElement();
 				}
 			};
@@ -2229,9 +2576,13 @@
 				$('#wireframe_rules').text(workarea.hasClass('wireframe') ? rule : "");
 			}
 		
-			var showSourceEditor = function(){
+			var showSourceEditor = function(e, forSaving){
 				if (editingsource) return;
 				editingsource = true;
+				
+				$('#save_output_btns').toggle(!!forSaving);
+				$('#tool_source_back').toggle(!forSaving);
+				
 				var str = svgCanvas.getSvgString();
 				$('#svg_source_textarea').val(str);
 				$('#svg_source_editor').fadeIn();
@@ -2239,7 +2590,7 @@
 				$('#svg_source_textarea').focus();
 			};
 			
-			$('#svg_docprops_container').draggable({cancel:'button,fieldset'});
+			$('#svg_docprops_container, #svg_prefs_container').draggable({cancel:'button,fieldset'});
 			
 			var showDocProperties = function(){
 				if (docprops) return;
@@ -2253,6 +2604,15 @@
 				$('#canvas_width').val(res.w);
 				$('#canvas_height').val(res.h);
 				$('#canvas_title').val(svgCanvas.getDocumentTitle());
+				
+				$('#svg_docprops').fadeIn();
+			};
+			
+			
+			var showPreferences = function(){
+				if (preferences) return;
+				preferences = true;
+				$('#main_menu').hide();
 				
 				// Update background color with current one
 				var blocks = $('#bg_blocks div');
@@ -2270,9 +2630,15 @@
 				if(url) {
 					$('#canvas_bg_url').val(url);
 				}
+				$('grid_snapping_step').attr('value', curConfig.snappingStep);
+				if (curConfig.gridSnapping == true) {
+				    $('#grid_snapping_on').attr('checked', 'checked');
+				} else {
+				    $('#grid_snapping_on').removeAttr('checked');
+				}
 				
-				$('#svg_docprops').fadeIn();
-			};
+				$('#svg_prefs').fadeIn();
+			};			
 			
 			var properlySourceSizeTextArea = function(){
 				// TODO: remove magic numbers here and get values from CSS
@@ -2288,7 +2654,7 @@
 					hideSourceEditor();
 					zoomImage();
 					populateLayers();
-					setTitle(svgCanvas.getDocumentTitle());
+					updateTitle();
 				}
 		
 				if (!svgCanvas.setSvgString($('#svg_source_textarea').val())) {
@@ -2302,16 +2668,19 @@
 				setSelectMode();		
 			};
 			
-			var setTitle = function(title) {
-				var editor_title = $('title:first').text().split(':')[0];
-				var new_title = editor_title + (title?': ' + title:'');
+			var updateTitle = function(title) {
+				title = title || svgCanvas.getDocumentTitle();
+				var new_title = orig_title + (title?': ' + title:'');
+				if(cur_context) {
+					new_title = new_title + cur_context;
+				}
 				$('title:first').text(new_title);
 			}
 			
 			var saveDocProperties = function(){
 				// set title
 				var new_title = $('#canvas_title').val();
-				setTitle(new_title);
+				updateTitle(new_title);
 				svgCanvas.setDocumentTitle(new_title);
 			
 				// update resolution
@@ -2342,7 +2711,11 @@
 				// set image save option
 				curPrefs.img_save = $('#image_save_opts :checked').val();
 				$.pref('img_save',curPrefs.img_save);
-				
+				updateCanvas();
+				hideDocProperties();
+			};
+			
+			var savePreferences = function() {
 				// set background
 				var color = $('#bg_blocks div.cur_background').css('background-color') || '#FFF';
 				setBackground(color, $('#canvas_bg_url').val());
@@ -2356,9 +2729,20 @@
 				// set icon size
 				setIconSize($('#iconsize').val());
 				
+				// set grid setting
+				curConfig.gridSnapping = $('#grid_snapping_on')[0].checked;
+				curConfig.snappingStep = $('#grid_snapping_step').val();
+				curConfig.showRulers = $('#show_rulers')[0].checked;
+				
+				$('#rulers').toggle(curConfig.showRulers);
+				if(curConfig.showRulers) updateRulers();
+				curConfig.baseUnit = $('#base_unit').val();
+				
+				svgCanvas.setConfig(curConfig);
+
 				updateCanvas();
-				hideDocProperties();
-			};
+				hidePreferences();
+			}
 			
 			function setBackground(color, url) {
 // 				if(color == curPrefs.bkgd_color && url == curPrefs.bkgd_url) return;
@@ -2370,161 +2754,248 @@
 			}
 			
 			var setIcon = Editor.setIcon = function(elem, icon_id, forcedSize) {
-				var icon = (typeof icon_id == 'string') ? $.getSvgIcon(icon_id).clone() : icon_id.clone();
-				$(elem).empty().append(icon);
-				if(forcedSize) {
-					var obj = {};
-					obj[elem + ' .svg_icon'] = forcedSize;
-					$.resizeSvgIcons(obj);
-				} else {
-					var size = curPrefs.iconsize;
-					if(size && size !== 'm') {
-						var icon_sizes = { s:16, m:24, l:32, xl:48}, obj = {};
-						obj[elem + ' .svg_icon'] = icon_sizes[size];
-						$.resizeSvgIcons(obj);
-					}
+				var icon = (typeof icon_id === 'string') ? $.getSvgIcon(icon_id, true) : icon_id.clone();
+				if(!icon) {
+					console.log('NOTE: Icon image missing: ' + icon_id);
+					return;
 				}
+
+				$(elem).empty().append(icon);
 			}
 		
+			var ua_prefix;
+			(ua_prefix = function() {
+				var regex = /^(Moz|Webkit|Khtml|O|ms|Icab)(?=[A-Z])/;
+				var someScript = document.getElementsByTagName('script')[0];
+				for(var prop in someScript.style) {
+					if(regex.test(prop)) {
+						// test is faster than match, so it's better to perform
+						// that on the lot and match only when necessary
+						return prop.match(regex)[0];
+					}
+				}
+			
+				// Nothing found so far?
+				if('WebkitOpacity' in someScript.style) return 'Webkit';
+				if('KhtmlOpacity' in someScript.style) return 'Khtml';
+				
+				return '';
+			}());
+			
+			var scaleElements = function(elems, scale) {
+				var prefix = '-' + ua_prefix.toLowerCase() + '-';
+				
+				var sides = ['top', 'left', 'bottom', 'right'];
+			
+				elems.each(function() {
+// 					console.log('go', scale);
+
+					// Handled in CSS
+					// this.style[ua_prefix + 'Transform'] = 'scale(' + scale + ')';
+				
+					var el = $(this);
+					
+					var w = el.outerWidth() * (scale - 1);
+					var h = el.outerHeight() * (scale - 1);
+					var margins = {};
+					
+					for(var i = 0; i < 4; i++) {
+						var s = sides[i];
+						
+						var cur = el.data('orig_margin-' + s);
+						if(cur == null) {
+							cur = parseInt(el.css('margin-' + s));
+							// Cache the original margin
+							el.data('orig_margin-' + s, cur);
+						}
+						var val = cur * scale;
+						if(s === 'right') {
+							val += w;
+						} else if(s === 'bottom') {
+							val += h;
+						}
+						
+						el.css('margin-' + s, val);
+// 						el.css('outline', '1px solid red');
+					}
+				});
+			}
+			
 			var setIconSize = Editor.setIconSize = function(size, force) {
 				if(size == curPrefs.size && !force) return;
+// 				return;
+// 				var elems = $('.tool_button, .push_button, .tool_button_current, .disabled, .icon_label, #url_notice, #tool_open');
+				console.log('size', size);
+				
+				var sel_toscale = '#tools_top .toolset, #editor_panel > *, #history_panel > *,\
+				#main_button, #tools_left > *, #path_node_panel > *, #multiselected_panel > *,\
+				#g_panel > *, #tool_font_size > *, .tools_flyout';
+				
+				var elems = $(sel_toscale);
+				
+				var scale = 1;
+				
+				if(typeof size == 'number') {
+					scale = size;
+				} else {
+					var icon_sizes = { s:.75, m:1, l:1.25, xl:1.5 };
+					scale = icon_sizes[size];
+				}
+				
+				Editor.tool_scale = tool_scale = scale;
+				
+				setFlyoutPositions();
+				// $('.tools_flyout').each(function() {
+// 					var pos = $(this).position();
+// 					console.log($(this),  pos.left+(34 * scale));
+// 					$(this).css({'left': pos.left+(34 * scale), 'top': pos.top+(77 * scale)});
+// 					console.log('l', $(this).css('left'));
+// 				});
+
+// 				var scale = .75;//0.75;
+				
+				var hidden_ps = elems.parents(':hidden');
+				hidden_ps.css('visibility', 'hidden').show();
+				scaleElements(elems, scale);
+				hidden_ps.css('visibility', 'visible').hide();
+// 				console.timeEnd('elems');								
+// 				return;
+				
 				$.pref('iconsize', size);
 				$('#iconsize').val(size);
-				var icon_sizes = { s:16, m:24, l:32, xl:48 };
-				var size_num = icon_sizes[size];
+				
 				
 				// Change icon size
-				$('.tool_button, .push_button, .tool_button_current, .disabled, .icon_label, #url_notice, #tool_open')
-				.find('> svg, > img').each(function() {
-					this.setAttribute('width',size_num);
-					this.setAttribute('height',size_num);
-				});
-				
-				$.resizeSvgIcons({
-					'.flyout_arrow_horiz > svg, .flyout_arrow_horiz > img': size_num / 5,
-					'#logo > svg, #logo > img': size_num * 1.3,
-					'#tools_bottom .icon_label > *': (size_num === 16 ? 18 : size_num * .75)
-				});
-				if(size != 's') {
-					$.resizeSvgIcons({'#layerbuttons svg, #layerbuttons img': size_num * .6});
-				}
+// 				$('.tool_button, .push_button, .tool_button_current, .disabled, .icon_label, #url_notice, #tool_open')
+// 				.find('> svg, > img').each(function() {
+// 					this.setAttribute('width',size_num);
+// 					this.setAttribute('height',size_num);
+// 				});
+// 				
+// 				$.resizeSvgIcons({
+// 					'.flyout_arrow_horiz > svg, .flyout_arrow_horiz > img': size_num / 5,
+// 					'#logo > svg, #logo > img': size_num * 1.3,
+// 					'#tools_bottom .icon_label > *': (size_num === 16 ? 18 : size_num * .75)
+// 				});
+// 				if(size != 's') {
+// 					$.resizeSvgIcons({'#layerbuttons svg, #layerbuttons img': size_num * .6});
+// 				}
 				
 				// Note that all rules will be prefixed with '#svg_editor' when parsed
 				var cssResizeRules = {
-					".tool_button,\
-					.push_button,\
-					.tool_button_current,\
-					.push_button_pressed,\
-					.disabled,\
-					.icon_label,\
-					.tools_flyout .tool_button": {
-						'width': {s: '16px', l: '32px', xl: '48px'},
-						'height': {s: '16px', l: '32px', xl: '48px'},
-						'padding': {s: '1px', l: '2px', xl: '3px'}
-					},
-					".tool_sep": {
-						'height': {s: '16px', l: '32px', xl: '48px'},
-						'margin': {s: '2px 2px', l: '2px 5px', xl: '2px 8px'}
-					},
-					"#main_icon": {
-						'width': {s: '31px', l: '53px', xl: '75px'},
-						'height': {s: '22px', l: '42px', xl: '64px'}
-					},
+// 					".tool_button,\
+// 					.push_button,\
+// 					.tool_button_current,\
+// 					.push_button_pressed,\
+// 					.disabled,\
+// 					.icon_label,\
+// 					.tools_flyout .tool_button": {
+// 						'width': {s: '16px', l: '32px', xl: '48px'},
+// 						'height': {s: '16px', l: '32px', xl: '48px'},
+// 						'padding': {s: '1px', l: '2px', xl: '3px'}
+// 					},
+// 					".tool_sep": {
+// 						'height': {s: '16px', l: '32px', xl: '48px'},
+// 						'margin': {s: '2px 2px', l: '2px 5px', xl: '2px 8px'}
+// 					},
+// 					"#main_icon": {
+// 						'width': {s: '31px', l: '53px', xl: '75px'},
+// 						'height': {s: '22px', l: '42px', xl: '64px'}
+// 					},
 					"#tools_top": {
-						'left': {s: '36px', l: '60px', xl: '80px'},
-						'height': {s: '50px', l: '88px', xl: '125px'}
+						'left': 50,
+						'height': 72
 					},
 					"#tools_left": {
-						'width': {s: '22px', l: '30px', xl: '38px'},
-						'top': {s: '50px', l: '87px', xl: '125px'}
+						'width': 31,
+						'top': 74
 					},
 					"div#workarea": {
-						'left': {s: '27px', l: '46px', xl: '65px'},
-						'top': {s: '50px', l: '88px', xl: '125px'},
-						'bottom': {s: '55px', l: '98px', xl: '145px'}
+						'left': 38,
+						'top': 74
 					},
-					"#tools_bottom": {
-						'left': {s: '27px', l: '46px', xl: '65px'},
-						'height': {s: '58px', l: '98px', xl: '145px'}
-					},
-					"#color_tools": {
-						'border-spacing': {s: '0 1px'},
-						'margin-top': {s: '-1px'}
-					},
-					"#color_tools .icon_label": {
-						'width': {l:'43px', xl: '60px'}
-					},
-					".color_tool": {
-						'height': {s: '20px'}
-					},
-					"#tool_opacity": {
-						'top': {s: '1px'},
-						'height': {s: 'auto', l:'auto', xl:'auto'}
-					},
-					"#tools_top input, #tools_bottom input": {
-						'margin-top': {s: '2px', l: '4px', xl: '5px'},
-						'height': {s: 'auto', l: 'auto', xl: 'auto'},
-						'border': {s: '1px solid #555', l: 'auto', xl: 'auto'},
-						'font-size': {s: '.9em', l: '1.2em', xl: '1.4em'}
-					},
-					"#zoom_panel": {
-						'margin-top': {s: '3px', l: '4px', xl: '5px'}
-					},
-					"#copyright, #tools_bottom .label": {
-						'font-size': {l: '1.5em', xl: '2em'},
-						'line-height': {s: '15px'}
-					},
-					"#tools_bottom_2": {
-						'width': {l: '295px', xl: '355px'},
-						'top': {s: '4px'}
-					},
-					"#tools_top > div, #tools_top": {
-						'line-height': {s: '17px', l: '34px', xl: '50px'}
-					}, 
-					".dropdown button": {
-						'height': {s: '18px', l: '34px', xl: '40px'},
-						'line-height': {s: '18px', l: '34px', xl: '40px'},
-						'margin-top': {s: '3px'}
-					},
-					"#tools_top label, #tools_bottom label": {
-						'font-size': {s: '1em', l: '1.5em', xl: '2em'},
-						'height': {s: '25px', l: '42px', xl: '64px'}
-					}, 
-					"div.toolset": {
-						'height': {s: '25px', l: '42px', xl: '64px'}
-					},
-					"#tool_bold, #tool_italic": {
-						'font-size': {s: '1.5em', l: '3em', xl: '4.5em'}
-					},
-					"#sidepanels": {
-						'top': {s: '50px', l: '88px', xl: '125px'},
-						'bottom': {s: '51px', l: '68px', xl: '65px'}
-					},
-					'#layerbuttons': {
-						'width': {l: '130px', xl: '175px'},
-						'height': {l: '24px', xl: '30px'}
-					},
-					'#layerlist': {
-						'width': {l: '128px', xl: '150px'}
-					},			
-					'.layer_button': {
-						'width': {l: '19px', xl: '28px'},
-						'height': {l: '19px', xl: '28px'}
-					},
-					"input.spin-button": {
-						'background-image': {l: "url('images/spinbtn_updn_big.png')", xl: "url('images/spinbtn_updn_big.png')"},
-						'background-position': {l: '100% -5px', xl: '100% -2px'},
-						'padding-right': {l: '24px', xl: '24px' }
-					},
-					"input.spin-button.up": {
-						'background-position': {l: '100% -45px', xl: '100% -42px'}
-					},
-					"input.spin-button.down": {
-						'background-position': {l: '100% -85px', xl: '100% -82px'}
-					},
-					"#position_opts": {
-						'width': {all: (size_num*4) +'px'}
-					}
+// 					"#tools_bottom": {
+// 						'left': {s: '27px', l: '46px', xl: '65px'},
+// 						'height': {s: '58px', l: '98px', xl: '145px'}
+// 					},
+// 					"#color_tools": {
+// 						'border-spacing': {s: '0 1px'},
+// 						'margin-top': {s: '-1px'}
+// 					},
+// 					"#color_tools .icon_label": {
+// 						'width': {l:'43px', xl: '60px'}
+// 					},
+// 					".color_tool": {
+// 						'height': {s: '20px'}
+// 					},
+// 					"#tool_opacity": {
+// 						'top': {s: '1px'},
+// 						'height': {s: 'auto', l:'auto', xl:'auto'}
+// 					},
+// 					"#tools_top input, #tools_bottom input": {
+// 						'margin-top': {s: '2px', l: '4px', xl: '5px'},
+// 						'height': {s: 'auto', l: 'auto', xl: 'auto'},
+// 						'border': {s: '1px solid #555', l: 'auto', xl: 'auto'},
+// 						'font-size': {s: '.9em', l: '1.2em', xl: '1.4em'}
+// 					},
+// 					"#zoom_panel": {
+// 						'margin-top': {s: '3px', l: '4px', xl: '5px'}
+// 					},
+// 					"#copyright, #tools_bottom .label": {
+// 						'font-size': {l: '1.5em', xl: '2em'},
+// 						'line-height': {s: '15px'}
+// 					},
+// 					"#tools_bottom_2": {
+// 						'width': {l: '295px', xl: '355px'},
+// 						'top': {s: '4px'}
+// 					},
+// 					"#tools_top > div, #tools_top": {
+// 						'line-height': {s: '17px', l: '34px', xl: '50px'}
+// 					}, 
+// 					".dropdown button": {
+// 						'height': {s: '18px', l: '34px', xl: '40px'},
+// 						'line-height': {s: '18px', l: '34px', xl: '40px'},
+// 						'margin-top': {s: '3px'}
+// 					},
+// 					"#tools_top label, #tools_bottom label": {
+// 						'font-size': {s: '1em', l: '1.5em', xl: '2em'},
+// 						'height': {s: '25px', l: '42px', xl: '64px'}
+// 					}, 
+// 					"div.toolset": {
+// 						'height': {s: '25px', l: '42px', xl: '64px'}
+// 					},
+// 					"#tool_bold, #tool_italic": {
+// 						'font-size': {s: '1.5em', l: '3em', xl: '4.5em'}
+// 					},
+// 					"#sidepanels": {
+// 						'top': {s: '50px', l: '88px', xl: '125px'},
+// 						'bottom': {s: '51px', l: '68px', xl: '65px'}
+// 					},
+// 					'#layerbuttons': {
+// 						'width': {l: '130px', xl: '175px'},
+// 						'height': {l: '24px', xl: '30px'}
+// 					},
+// 					'#layerlist': {
+// 						'width': {l: '128px', xl: '150px'}
+// 					},			
+// 					'.layer_button': {
+// 						'width': {l: '19px', xl: '28px'},
+// 						'height': {l: '19px', xl: '28px'}
+// 					},
+// 					"input.spin-button": {
+// 						'background-image': {l: "url('images/spinbtn_updn_big.png')", xl: "url('images/spinbtn_updn_big.png')"},
+// 						'background-position': {l: '100% -5px', xl: '100% -2px'},
+// 						'padding-right': {l: '24px', xl: '24px' }
+// 					},
+// 					"input.spin-button.up": {
+// 						'background-position': {l: '100% -45px', xl: '100% -42px'}
+// 					},
+// 					"input.spin-button.down": {
+// 						'background-position': {l: '100% -85px', xl: '100% -82px'}
+// 					},
+// 					"#position_opts": {
+// 						'width': {all: (size_num*4) +'px'}
+// 					}
 				};
 				
 				var rule_elem = $('#tool_size_rules');
@@ -2540,12 +3011,21 @@
 						selector = '#svg_editor ' + selector.replace(/,/g,', #svg_editor');
 						style_str += selector + '{';
 						$.each(rules, function(prop, values) {
-							if(values[size] || values.all) {
-								style_str += (prop + ':' + (values[size] || values.all) + ';');
+							if(typeof values === 'number') {
+								var val = (values * scale) + 'px';
+							} else if(values[size] || values.all) {
+								var val = (values[size] || values.all);
 							}
+							style_str += (prop + ':' + val + ';');
 						});
 						style_str += '}';
 					});
+					//this.style[ua_prefix + 'Transform'] = 'scale(' + scale + ')';
+					var prefix = '-' + ua_prefix.toLowerCase() + '-';
+					style_str += (sel_toscale + '{' + prefix + 'transform: scale(' + scale + ');}'
+					+ ' #svg_editor div.toolset .toolset {' + prefix + 'transform: scale(1); margin: 1px !important;}' // Hack for markers
+					+ ' #svg_editor .ui-slider {' + prefix + 'transform: scale(' + (1/scale) + ');}' // Hack for sliders
+					);
 					rule_elem.text(style_str);
 				}
 				
@@ -2554,7 +3034,12 @@
 		
 			var cancelOverlays = function() {
 				$('#dialog_box').hide();
-				if (!editingsource && !docprops) return;
+				if (!editingsource && !docprops && !preferences) {
+					if(cur_context) {
+						svgCanvas.leaveContext();
+					}
+					return;
+				};
 		
 				if (editingsource) {
 					var oldString = svgCanvas.getSvgString();
@@ -2568,6 +3053,8 @@
 				}
 				else if (docprops) {
 					hideDocProperties();
+				} else if (preferences) {
+					hidePreferences();
 				}
 		
 			};
@@ -2585,6 +3072,11 @@
 				$('#image_save_opts input').val([curPrefs.img_save]);
 				docprops = false;
 			};
+			
+			var hidePreferences = function(){
+				$('#svg_prefs').hide();
+				preferences = false;
+			};
 
 			var win_wh = {width:$(window).width(), height:$(window).height()};
 			
@@ -2600,6 +3092,14 @@
 				});
 			});
 			
+			(function() {
+				workarea.scroll(function() {
+					$('#ruler_x')[0].scrollLeft = workarea[0].scrollLeft;
+					$('#ruler_y')[0].scrollTop = workarea[0].scrollTop;
+				});
+
+			}());
+			
 			$('#url_notice').click(function() {
 				$.alert(this.title);
 			});
@@ -2607,36 +3107,11 @@
 			$('#change_image_url').click(promptImgURL);
 			
 			function promptImgURL() {
-				$.prompt(uiStrings.enterNewImgURL, default_img_url, function(url) {
+				var curhref = svgCanvas.getHref(selectedElement);
+				curhref = curhref.indexOf("data:") === 0?"":curhref;
+				$.prompt(uiStrings.enterNewImgURL, curhref, function(url) {
 					if(url) setImageURL(url);
 				});
-			}
-		
-			function setImageURL(url) {
-				if(!url) url = default_img_url;
-				
-				svgCanvas.setImageURL(url);
-				$('#image_url').val(url);
-				
-				if(url.indexOf('data:') === 0) {
-					// data URI found
-					$('#image_url').hide();
-					$('#change_image_url').show();
-				} else {
-					// regular URL
-					
-					svgCanvas.embedImage(url, function(datauri) {
-						if(!datauri) {
-							// Couldn't embed, so show warning
-							$('#url_notice').show();
-						} else {
-							$('#url_notice').hide();
-						}
-						default_img_url = url;
-					});
-					$('#image_url').show();
-					$('#change_image_url').hide();
-				}
 			}
 		
 			// added these event handlers for all the push buttons so they
@@ -2671,9 +3146,11 @@
 				var i = shortcutButtons.length;
 				while (i--) {
 					var button = document.getElementById(shortcutButtons[i]);
-					var title = button.title;
-					var index = title.indexOf("Ctrl+");
-					button.title = [title.substr(0,index), "Cmd+", title.substr(index+5)].join('');
+					if (button != null) {
+						var title = button.title;
+						var index = title.indexOf("Ctrl+");
+						button.title = [title.substr(0, index), "Cmd+", title.substr(index + 5)].join('');
+					}
 				}
 			}
 			
@@ -2688,12 +3165,12 @@
 				var pos = elem.position();
 				$("#color_picker")
 					.draggable({cancel:'.jPicker_table,.jGraduate_lgPick,.jGraduate_rgPick'})
-					.css({'left': pos.left, 'bottom': 50 - pos.top})
+					.css(curConfig.colorPickerCSS || {'left': pos.left, 'bottom': 50 - pos.top})
 					.jGraduate(
 					{ 
 						paint: paint,
 						window: { pickerTitle: title },
-						images: { clientPath: "jgraduate/images/" }
+						images: { clientPath: curConfig.jGraduatePath }
 					},
 					function(p) {
 						paint = new $.jGraduate.Paint(p);
@@ -2785,7 +3262,7 @@
 		
 				operaRepaint();
 			};
-		
+			
 			// set up gradients to be used for the buttons
 			var svgdocbox = new DOMParser().parseFromString(
 				'<svg xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%"\
@@ -2794,15 +3271,17 @@
 						<stop stop-color="#000" offset="0.0"/>\
 						<stop stop-color="#FF0000" offset="1.0"/>\
 				</linearGradient></svg>', 'text/xml');
-		
+			var docElem = svgdocbox.documentElement;
+
+
 			var boxgrad = svgdocbox.getElementById('gradbox_');
 			boxgrad.id = 'gradbox_fill';
-			svgdocbox.documentElement.setAttribute('width',16.5);
-			$('#fill_color').append( document.importNode(svgdocbox.documentElement,true) );
+			docElem.setAttribute('width',16.5);
+			$('#fill_color').append( document.importNode(docElem,true) );
 			
 			boxgrad.id = 'gradbox_stroke';	
-			svgdocbox.documentElement.setAttribute('width',16.5);
-			$('#stroke_color').append( document.importNode(svgdocbox.documentElement,true) );
+			docElem.setAttribute('width',16.5);
+			$('#stroke_color').append( document.importNode(docElem,true) );
 			$('#stroke_color rect').attr({
 				'fill': '#' + curConfig.initStroke.color,
 				'opacity': curConfig.initStroke.opacity
@@ -2812,9 +3291,9 @@
 			$('#group_opacity').val(curConfig.initOpacity * 100);
 			
 			// Use this SVG elem to test vectorEffect support
-			var test_el = svgdocbox.documentElement.firstChild;
+			var test_el = docElem.firstChild;
 			test_el.setAttribute('style','vector-effect:non-scaling-stroke');
-			var supportsNonSS = (test_el.style.vectorEffect == 'non-scaling-stroke');
+			var supportsNonSS = (test_el.style.vectorEffect === 'non-scaling-stroke');
 			test_el.removeAttribute('style');
 			
 			// Use this to test support for blur element. Seems to work to test support in Webkit
@@ -2823,6 +3302,20 @@
 				$('#tool_blur').hide();
 			}
 			$(blur_test).remove();
+			
+			// Test for zoom icon support
+			(function() {
+				var pre = '-' + ua_prefix.toLowerCase() + '-zoom-';
+				var zoom = pre + 'in';
+				workarea.css('cursor', zoom);
+				if(workarea.css('cursor') === zoom) {
+					zoomInIcon = zoom;
+					zoomOutIcon = pre + 'out';
+				}
+				workarea.css('cursor', 'auto');
+			}());
+
+			
 			
 			// Test for embedImage support (use timeout to not interfere with page load)
 			setTimeout(function() {
@@ -2881,30 +3374,24 @@
 			});
 			
 			$('#layer_new').click(function() {
-				var curNames = new Array(svgCanvas.getNumLayers());
-				for (var i = 0; i < curNames.length; ++i) { curNames[i] = svgCanvas.getLayer(i); }
+				var i = svgCanvas.getNumLayers();
+				do {
+					var uniqName = uiStrings.layer + " " + ++i;
+				} while(svgCanvas.hasLayer(uniqName));
 				
-				var j = (curNames.length+1);
-				var uniqName = uiStrings.layer + " " + j;
-				while ($.inArray(uniqName, curNames) != -1) {
-					j++;
-					uniqName = uiStrings.layer + " " + j;
-				}
 				$.prompt(uiStrings.enterUniqueLayerName,uniqName, function(newName) {
 					if (!newName) return;
-					if ($.inArray(newName, curNames) != -1) {
+					if (svgCanvas.hasLayer(newName)) {
 						$.alert(uiStrings.dupeLayerName);
 						return;
 					}
 					svgCanvas.createLayer(newName);
 					updateContextPanel();
 					populateLayers();
-					$('#layerlist tr.layer').removeClass("layersel");
-					$('#layerlist tr.layer:first').addClass("layersel");
 				});
 			});
 			
-			$('#layer_delete').click(function() {
+			function deleteLayer() {
 				if (svgCanvas.deleteCurrentLayer()) {
 					updateContextPanel();
 					populateLayers();
@@ -2914,32 +3401,48 @@
 					$('#layerlist tr.layer').removeClass("layersel");
 					$('#layerlist tr.layer:first').addClass("layersel");
 				}
-			});
+			}
 			
-			$('#layer_up').click(function() {
-				// find index position of selected option
-				var curIndex = $('#layerlist tr.layersel').prevAll().length;
-				if (curIndex > 0) {
-					var total = $('#layerlist tr.layer').length;
-					curIndex--;
+			function cloneLayer() {
+				var name = svgCanvas.getCurrentLayer() + ' copy';
+				
+				$.prompt(uiStrings.enterUniqueLayerName, name, function(newName) {
+					if (!newName) return;
+					if (svgCanvas.hasLayer(newName)) {
+						$.alert(uiStrings.dupeLayerName);
+						return;
+					}
+					svgCanvas.cloneLayer(newName);
+					updateContextPanel();
+					populateLayers();
+				});
+			}
+			
+			function mergeLayer() {
+				if($('#layerlist tr.layersel').index() == svgCanvas.getNumLayers()-1) return;
+				svgCanvas.mergeLayer();
+				updateContextPanel();
+				populateLayers();
+			}
+			
+			function moveLayer(pos) {
+				var curIndex = $('#layerlist tr.layersel').index();
+				var total = svgCanvas.getNumLayers();
+				if(curIndex > 0 || curIndex < total-1) {
+					curIndex += pos;
 					svgCanvas.setCurrentLayerPosition(total-curIndex-1);
 					populateLayers();
-					$('#layerlist tr.layer').removeClass("layersel");
-					$('#layerlist tr.layer:eq('+curIndex+')').addClass("layersel");
 				}
+			}
+		
+			$('#layer_delete').click(deleteLayer);
+			
+			$('#layer_up').click(function() {
+				moveLayer(-1);
 			});
 		
 			$('#layer_down').click(function() {
-				// find index position of selected option
-				var curIndex = $('#layerlist tr.layersel').prevAll().length;
-				var total = $('#layerlist tr.layer').length;
-				if (curIndex < total-1) {
-					curIndex++;
-					svgCanvas.setCurrentLayerPosition(total-curIndex-1);
-					populateLayers();
-					$('#layerlist tr.layer').removeClass("layersel");
-					$('#layerlist tr.layer:eq('+curIndex+')').addClass("layersel");
-				}
+				moveLayer(1);
 			});
 		
 			$('#layer_rename').click(function() {
@@ -2947,22 +3450,13 @@
 				var oldName = $('#layerlist tr.layersel td.layername').text();
 				$.prompt(uiStrings.enterNewLayerName,"", function(newName) {
 					if (!newName) return;
-					if (oldName == newName) {
-						$.alert(uiStrings.layerHasThatName);
-						return;
-					}
-			
-					var curNames = new Array(svgCanvas.getNumLayers());
-					for (var i = 0; i < curNames.length; ++i) { curNames[i] = svgCanvas.getLayer(i); }
-					if ($.inArray(newName, curNames) != -1) {
+					if (oldName == newName || svgCanvas.hasLayer(newName)) {
 						$.alert(uiStrings.layerHasThatName);
 						return;
 					}
 					
 					svgCanvas.renameCurrentLayer(newName);
 					populateLayers();
-					$('#layerlist tr.layer').removeClass("layersel");
-					$('#layerlist tr.layer:eq('+curIndex+')').addClass("layersel");
 				});
 			});
 			
@@ -2994,6 +3488,8 @@
 				workarea.css('right', parseInt(workarea.css('right'))+deltax);
 				sidepanels.css('width', parseInt(sidepanels.css('width'))+deltax);
 				layerpanel.css('width', parseInt(layerpanel.css('width'))+deltax);
+				var ruler_x = $('#ruler_x');
+				ruler_x.css('right', parseInt(ruler_x.css('right')) + deltax);
 			}
 			
 			$('#sidepanel_handle')
@@ -3025,9 +3521,11 @@
 				var deltax = (w > 2 || close ? 2 : SIDEPANEL_OPENWIDTH) - w;
 				var sidepanels = $('#sidepanels');
 				var layerpanel = $('#layerpanel');
-				workarea.css('right', parseInt(workarea.css('right'))+deltax);
-				sidepanels.css('width', parseInt(sidepanels.css('width'))+deltax);
-				layerpanel.css('width', parseInt(layerpanel.css('width'))+deltax);
+				var ruler_x = $('#ruler_x');
+				workarea.css('right', parseInt(workarea.css('right')) + deltax);
+				sidepanels.css('width', parseInt(sidepanels.css('width')) + deltax);
+				layerpanel.css('width', parseInt(layerpanel.css('width')) + deltax);
+				ruler_x.css('right', parseInt(ruler_x.css('right')) + deltax);
 			};
 			
 			// this function highlights the layer passed in (by fading out the other layers)
@@ -3084,7 +3582,7 @@
 				}
 				// handle selection of layer
 				$('#layerlist td.layername')
-					.click(function(evt){
+					.mouseup(function(evt){
 						$('#layerlist tr.layer').removeClass("layersel");
 						var row = $(this.parentNode);
 						row.addClass("layersel");
@@ -3225,17 +3723,19 @@
 					{sel:'#tool_text', fn: clickText, evt: 'click', key: 7},
 					{sel:'#tool_image', fn: clickImage, evt: 'mouseup', key: 8},
 					{sel:'#tool_zoom', fn: clickZoom, evt: 'mouseup', key: 9},
-					{sel:'#tool_clear', fn: clickClear, evt: 'mouseup', key: [modKey+'N', true]},
-					{sel:'#tool_save', fn: function() { editingsource?saveSourceEditor():clickSave()}, evt: 'mouseup', key: [modKey+'S', true]},
+					{sel:'#tool_clear', fn: clickClear, evt: 'mouseup', key: ['N', true]},
+					{sel:'#tool_save', fn: function() { editingsource?saveSourceEditor():clickSave()}, evt: 'mouseup', key: ['S', true]},
 					{sel:'#tool_export', fn: clickExport, evt: 'mouseup'},
-					{sel:'#tool_open', fn: clickOpen, evt: 'mouseup', key: [modKey+'O', true]},
+					{sel:'#tool_open', fn: clickOpen, evt: 'mouseup', key: ['O', true]},
 					{sel:'#tool_import', fn: clickImport, evt: 'mouseup'},
 					{sel:'#tool_source', fn: showSourceEditor, evt: 'click', key: ['U', true]},
 					{sel:'#tool_wireframe', fn: clickWireframe, evt: 'click', key: ['F', true]},
-					{sel:'#tool_source_cancel,#svg_source_overlay,#tool_docprops_cancel', fn: cancelOverlays, evt: 'click', key: ['esc', false, false], hidekey: true},
+					{sel:'#tool_source_cancel,#svg_source_overlay,#tool_docprops_cancel,#tool_prefs_cancel', fn: cancelOverlays, evt: 'click', key: ['esc', false, false], hidekey: true},
 					{sel:'#tool_source_save', fn: saveSourceEditor, evt: 'click'},
 					{sel:'#tool_docprops_save', fn: saveDocProperties, evt: 'click'},
 					{sel:'#tool_docprops', fn: showDocProperties, evt: 'mouseup', key: ['P', true]},
+					{sel:'#tool_prefs_save', fn: savePreferences, evt: 'click'},
+					{sel:'#tool_prefs_option', fn: function() {showPreferences();return false}, evt: 'mouseup', key: ['I', true]},
 					{sel:'#tool_delete,#tool_delete_multi', fn: deleteSelected, evt: 'click', key: ['del/backspace', true]},
 					{sel:'#tool_reorient', fn: reorientPath, evt: 'click'},
 					{sel:'#tool_node_link', fn: linkControlPoints, evt: 'click'},
@@ -3243,33 +3743,43 @@
 					{sel:'#tool_node_delete', fn: deletePathNode, evt: 'click'},
 					{sel:'#tool_openclose_path', fn: opencloseSubPath, evt: 'click'},
 					{sel:'#tool_add_subpath', fn: addSubPath, evt: 'click'},
-					{sel:'#tool_move_top', fn: moveToTopSelected, evt: 'click', key: 'shift+up'},
-					{sel:'#tool_move_bottom', fn: moveToBottomSelected, evt: 'click', key: 'shift+down'},
+					{sel:'#tool_move_top', fn: moveToTopSelected, evt: 'click', key: 'ctrl+shift+]'},
+					{sel:'#tool_move_bottom', fn: moveToBottomSelected, evt: 'click', key: 'ctrl+shift+['},
 					{sel:'#tool_topath', fn: convertToPath, evt: 'click'},
-					{sel:'#tool_undo', fn: clickUndo, evt: 'click', key: [modKey+'Z', true]},
-					{sel:'#tool_redo', fn: clickRedo, evt: 'click', key: [modKey+'Y', true]},
-					{sel:'#tool_clone,#tool_clone_multi', fn: clickClone, evt: 'click', key: [modKey+'C', true]},
-					{sel:'#tool_group', fn: clickGroup, evt: 'click', key: [modKey+'G', true]},
+					{sel:'#tool_undo', fn: clickUndo, evt: 'click', key: ['Z', true]},
+					{sel:'#tool_redo', fn: clickRedo, evt: 'click', key: ['Y', true]},
+					{sel:'#tool_clone,#tool_clone_multi', fn: clickClone, evt: 'click', key: ['C', true]},
+					{sel:'#tool_group', fn: clickGroup, evt: 'click', key: ['G', true]},
 					{sel:'#tool_ungroup', fn: clickGroup, evt: 'click'},
+					{sel:'#tool_unlink_use', fn: clickGroup, evt: 'click'},
 					{sel:'[id^=tool_align]', fn: clickAlign, evt: 'click'},
 					// these two lines are required to make Opera work properly with the flyout mechanism
 		// 			{sel:'#tools_rect_show', fn: clickRect, evt: 'click'},
 		// 			{sel:'#tools_ellipse_show', fn: clickEllipse, evt: 'click'},
 					{sel:'#tool_bold', fn: clickBold, evt: 'mousedown'},
 					{sel:'#tool_italic', fn: clickItalic, evt: 'mousedown'},
-					{sel:'#sidepanel_handle', fn: toggleSidePanel, key: [modKey+'X']},
+					{sel:'#sidepanel_handle', fn: toggleSidePanel, key: ['X']},
+					{sel:'#copy_save_done', fn: cancelOverlays, evt: 'click'},
 					
 					// Shortcuts not associated with buttons
-					{key: 'shift+left', fn: function(){rotateSelected(0)}},
-					{key: 'shift+right', fn: function(){rotateSelected(1)}},
+					{key: 'ctrl+left', fn: function(){rotateSelected(0,1)}},
+					{key: 'ctrl+right', fn: function(){rotateSelected(1,1)}},
+					{key: 'ctrl+shift+left', fn: function(){rotateSelected(0,5)}},					
+					{key: 'ctrl+shift+right', fn: function(){rotateSelected(1,5)}},
 					{key: 'shift+O', fn: selectPrev},
 					{key: 'shift+P', fn: selectNext},
-					{key: ['ctrl+up', true], fn: function(){zoomImage(2);}},
-					{key: ['ctrl+down', true], fn: function(){zoomImage(.5);}},
+					{key: [modKey+'up', true], fn: function(){zoomImage(2);}},
+					{key: [modKey+'down', true], fn: function(){zoomImage(.5);}},
+					{key: [modKey+']', true], fn: function(){moveUpDownSelected('Up');}},
+                                        {key: [modKey+'[', true], fn: function(){moveUpDownSelected('Down');}},
 					{key: ['up', true], fn: function(){moveSelected(0,-1);}},
 					{key: ['down', true], fn: function(){moveSelected(0,1);}},
 					{key: ['left', true], fn: function(){moveSelected(-1,0);}},
 					{key: ['right', true], fn: function(){moveSelected(1,0);}},
+					{key: 'shift+up', fn: function(){moveSelected(0,-10)}},
+					{key: 'shift+down', fn: function(){moveSelected(0,10)}},
+					{key: 'shift+left', fn: function(){moveSelected(-10,0)}},
+					{key: 'shift+right', fn: function(){moveSelected(10,0)}},
 					{key: 'A', fn: function(){svgCanvas.selectAllInCurrentLayer();}}
 				];
 				
@@ -3283,16 +3793,17 @@
 					setAll: function() {
 						var flyouts = {};
 						
-						$.each(tool_buttons, function(i, opts)  {
+						$.each(tool_buttons, function(i, opts)  {				
 							// Bind function to button
 							if(opts.sel) {
 								var btn = $(opts.sel);
+								if (btn.length == 0) return true; // Skip if markup does not exist
 								if(opts.evt) {
 									btn[opts.evt](opts.fn);
 								}
 		
-								// Add to parent flyout menu
-								if(opts.parent) {
+								// Add to parent flyout menu, if able to be displayed
+								if(opts.parent && $(opts.parent + '_show').length != 0) {
 									var f_h = $(opts.parent);
 									if(!f_h.length) {
 										f_h = makeFlyoutHolder(opts.parent.substr(1));
@@ -3354,6 +3865,18 @@
 						$('.attr_changer, #image_url').bind('keydown', 'return', 
 							function(evt) {$(this).change();evt.preventDefault();}
 						);
+						
+						$(window).bind('keydown', 'tab', function(e) {
+							if(ui_context === 'canvas') {
+								e.preventDefault();
+								selectNext();
+							}
+						}).bind('keydown', 'shift+tab', function(e) {
+							if(ui_context === 'canvas') {
+								e.preventDefault();
+								selectPrev();
+							}
+						});
 						
 						$('#tool_zoom').dblclick(dblclickZoom);
 					},
@@ -3419,6 +3942,18 @@
 				if(curConfig.showlayers) {
 					toggleSidePanel();
 				}
+				
+				if(curConfig.gridSnapping) {
+					$('#grid_snapping_on')[0].checked = true;
+				}
+
+				if(curConfig.baseUnit) {
+					$('#base_unit').val(curConfig.baseUnit);
+				}
+				
+				if(curConfig.snappingStep) {
+					$('#grid_snapping_step').val(curConfig.snappingStep);
+				}
 			});
 			
 			$('#rect_rx').SpinButton({ min: 0, max: 1000, step: 1, callback: changeRectRadius });
@@ -3428,6 +3963,94 @@
 			$('#group_opacity').SpinButton({ step: 5, min: 0, max: 100, callback: changeOpacity });
 			$('#blur').SpinButton({ step: .1, min: 0, max: 10, callback: changeBlur });
 			$('#zoom').SpinButton({ min: 0.001, max: 10000, step: 50, stepfunc: stepZoom, callback: changeZoom });
+			
+			$("#workarea").contextMenu({
+					menu: 'cmenu_canvas',
+					inSpeed: 0
+				},
+				function(action, el, pos) {
+					switch ( action ) {
+						case 'delete':
+							deleteSelected();
+							break;
+						case 'cut':
+							cutSelected();
+							break;
+						case 'copy':
+							copySelected();
+							break;
+						case 'paste':
+							svgCanvas.pasteElements();
+							break;
+						case 'paste_in_place':
+							svgCanvas.pasteElements('in_place');
+							break;
+						case 'group':
+							svgCanvas.groupSelectedElements();
+							break;
+						case 'ungroup':         
+							svgCanvas.ungroupSelectedElement();  
+							break;
+                                                case 'move_front':
+                                                        moveToTopSelected();
+                                                        break;
+                                                case 'move_up':
+                                                        moveUpDownSelected('Up');
+                                                        break;
+						case 'move_down':
+							moveUpDownSelected('Down');
+							break;
+						case 'move_back':
+							moveToBottomSelected();
+							break;
+
+					}
+					
+					if(svgCanvas.clipBoard.length) {
+						canv_menu.enableContextMenuItems('#paste,#paste_in_place');
+					}
+			});
+			
+			var lmenu_func = function(action, el, pos) {
+				switch ( action ) {
+					case 'dupe':
+						cloneLayer();
+						break;
+					case 'delete':
+						deleteLayer();
+						break;
+					case 'merge_down':
+						mergeLayer();
+						break;
+					case 'merge_all':
+						svgCanvas.mergeAllLayers();
+						updateContextPanel();
+						populateLayers();
+						break;
+				}
+			}
+			
+			$("#layerlist").contextMenu({
+					menu: 'cmenu_layers',
+					inSpeed: 0
+				},
+				lmenu_func
+			);
+			
+			$("#layer_moreopts").contextMenu({
+					menu: 'cmenu_layers',
+					inSpeed: 0,
+					allowLeft: true
+				},
+				lmenu_func
+			);
+			
+			$('.contextMenu li').mousedown(function(ev) {
+				ev.preventDefault();
+			})
+			
+			$('#cmenu_canvas li').disableContextMenu();
+			canv_menu.enableContextMenuItems('#delete,#cut,#copy');
 			
 			window.onbeforeunload = function() { 
 				// Suppress warning if page is empty 
@@ -3443,7 +4066,6 @@
 			};
 			
 			Editor.openPrep = function(func) {
-				//return false;// temporal hack for Chamilo, add this line to disable open svg file
 				$('#main_menu').hide();
 				if(undoMgr.getUndoStackSize() === 0) {
 					func(true);
@@ -3478,7 +4100,7 @@
 					if(this.files.length==1) {
 						var reader = new FileReader();
 						reader.onloadend = function(e) {
-							svgCanvas.importSvgString(e.target.result);
+							svgCanvas.importSvgString(e.target.result, true);
 							updateCanvas();
 						};
 						reader.readAsText(this.files[0]);
@@ -3540,11 +4162,130 @@
 				}
 				
 				if(center) {
-					w_area[0].scrollLeft = scroll_x;
-					w_area[0].scrollTop = scroll_y;
+					// Go to top-left for larger documents
+					if(svgCanvas.contentW > w_area.width()) {
+						// Top-left
+						workarea[0].scrollLeft = offset.x - 10;
+						workarea[0].scrollTop = offset.y - 10;
+					} else {
+						// Center
+						w_area[0].scrollLeft = scroll_x;
+						w_area[0].scrollTop = scroll_y;
+					}
 				} else {
 					w_area[0].scrollLeft = new_ctr.x - w_orig/2;
 					w_area[0].scrollTop = new_ctr.y - h_orig/2;
+				}
+				
+				if(curConfig.showRulers) {
+					updateRulers(cnvs, zoom);
+					workarea.scroll();
+				}
+			}
+			
+			// Make [1,2,5] array
+			var r_intervals = [];
+			for(var i = .1; i < 1E5; i *= 10) {
+				r_intervals.push(1 * i);
+				r_intervals.push(2 * i);
+				r_intervals.push(5 * i);
+			}
+			
+			function updateRulers(scanvas, zoom) {
+				if(!zoom) zoom = svgCanvas.getZoom();
+				if(!scanvas) scanvas = $("#svgcanvas");
+				
+				var c_elem = svgCanvas.getContentElem();
+				
+				var units = svgCanvas.getUnits();
+				var unit = units[curConfig.baseUnit]; // 1 = 1px
+			
+				for(var d = 0; d < 2; d++) {
+					var is_x = (d === 0);
+					var dim = is_x ? 'x' : 'y';
+					var lentype = is_x?'width':'height';
+					
+					var content_d = c_elem.getAttribute(dim)-0;
+					
+					var hcanv = $('#ruler_' + dim + ' canvas')[0];
+					// Set the canvas size to the width of the container
+					var len = hcanv[lentype] = scanvas[lentype]();
+					var ctx = hcanv.getContext("2d");
+					
+					var u_multi = unit * zoom;
+					
+					// Calculate the main number interval
+					var raw_m = 50 / u_multi;
+					var multi = 1;
+					for(var i = 0; i < r_intervals.length; i++) {
+						var num = r_intervals[i];
+						multi = num;
+						if(raw_m <= num) {
+							break;
+						}
+					}
+					
+					var big_int = multi * u_multi;
+
+					ctx.font = "9px sans-serif";
+					
+					var ruler_d = ((content_d / u_multi) % multi) * u_multi;
+					
+					for (; ruler_d < len; ruler_d += big_int) {
+						var real_d = Math.round((ruler_d) - content_d );
+	
+						var cur_d = Math.round(ruler_d) + .5;
+						if(is_x) {
+							ctx.moveTo(cur_d, 15);
+							ctx.lineTo(cur_d, 0);
+						} else {
+							ctx.moveTo(15, cur_d);
+							ctx.lineTo(0, cur_d);
+						}
+	
+	
+						var num = real_d / u_multi;
+						if(multi >= 1) {
+							label = Math.round(num);
+						} else {
+							var decs = (multi+'').split('.')[1].length;
+							label = num.toFixed(decs)-0;
+						}
+						
+						// Do anything special for negative numbers?
+// 						var is_neg = label < 0;
+// 						real_d2 = Math.abs(real_d2);
+						
+						// Change 1000s to Ks
+						if(label !== 0 && label !== 1000 && label % 1000 === 0) {
+							label = (label / 1000) + 'K';
+						}
+						
+						if(is_x) {
+							ctx.fillText(label, ruler_d+2, 8);
+						} else {
+							var str = (label+'').split('');
+							for(var i = 0; i < str.length; i++) {
+								ctx.fillText(str[i], 1, (ruler_d+9) + i*9);
+							}
+						}
+						
+						var part = big_int / 10;
+						for(var i = 1; i < 10; i++) {
+							var sub_d = Math.round(ruler_d + part * i) + .5;
+							var line_num = (i % 2)?12:10;
+							if(is_x) {
+								ctx.moveTo(sub_d, 15);
+								ctx.lineTo(sub_d, line_num);
+							} else {
+								ctx.moveTo(15, sub_d);
+								ctx.lineTo(line_num ,sub_d);
+							}
+						}
+					}
+					
+					ctx.strokeStyle = "#000";
+					ctx.stroke();
 				}
 			}
 		
@@ -3552,7 +4293,7 @@
 				updateCanvas(true);
 // 			});
 			
-		//	var revnums = "svg-editor.js ($Rev: 1738 $) ";
+		//	var revnums = "svg-editor.js ($Rev: 1776 $) ";
 		//	revnums += svgCanvas.getVersion();
 		//	$('#copyright')[0].setAttribute("title", revnums);
 		
@@ -3565,45 +4306,46 @@
 // 			var lang = ('lang' in curPrefs) ? curPrefs.lang : null;
 			Editor.putLocale(null, good_langs);
 			
-			try{
-				json_encode = function(obj){
-			  //simple partial JSON encoder implementation
-			  if(window.JSON && JSON.stringify) return JSON.stringify(obj);
-			  var enc = arguments.callee; //for purposes of recursion
-			  if(typeof obj == "boolean" || typeof obj == "number"){
-				  return obj+'' //should work...
-			  }else if(typeof obj == "string"){
-				//a large portion of this is stolen from Douglas Crockford's json2.js
-				return '"'+
-					  obj.replace(
-						/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g
-					  , function (a) {
-						return '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
-					  })
-					  +'"'; //note that this isn't quite as purtyful as the usualness
-			  }else if(obj.length){ //simple hackish test for arrayish-ness
-				for(var i = 0; i < obj.length; i++){
-				  obj[i] = enc(obj[i]); //encode every sub-thingy on top
-				}
-				return "["+obj.join(",")+"]";
-			  }else{
-				var pairs = []; //pairs will be stored here
-				for(var k in obj){ //loop through thingys
-				  pairs.push(enc(k)+":"+enc(obj[k])); //key: value
-				}
-				return "{"+pairs.join(",")+"}" //wrap in the braces
-			  }
-			}
-			  window.addEventListener("message", function(e){
-				var cbid = parseInt(e.data.substr(0, e.data.indexOf(";")));
-				try{
-				e.source.postMessage("SVGe"+cbid+";"+json_encode(eval(e.data)), e.origin);
-			  }catch(err){
-				e.source.postMessage("SVGe"+cbid+";error:"+err.message, e.origin);
-			  }
-			}, false)
-			}catch(err){
-			  window.embed_error = err;
+			// Callback handler for embedapi.js
+ 			try{
+ 				json_encode = function(obj){
+ 			  //simple partial JSON encoder implementation
+ 			  if(window.JSON && JSON.stringify) return JSON.stringify(obj);
+ 			  var enc = arguments.callee; //for purposes of recursion
+ 			  if(typeof obj == "boolean" || typeof obj == "number"){
+ 				  return obj+'' //should work...
+ 			  }else if(typeof obj == "string"){
+ 				//a large portion of this is stolen from Douglas Crockford's json2.js
+ 				return '"'+
+ 					  obj.replace(
+ 						/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g
+ 					  , function (a) {
+ 						return '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+ 					  })
+ 					  +'"'; //note that this isn't quite as purtyful as the usualness
+ 			  }else if(obj.length){ //simple hackish test for arrayish-ness
+ 				for(var i = 0; i < obj.length; i++){
+ 				  obj[i] = enc(obj[i]); //encode every sub-thingy on top
+ 				}
+ 				return "["+obj.join(",")+"]";
+ 			  }else{
+ 				var pairs = []; //pairs will be stored here
+ 				for(var k in obj){ //loop through thingys
+ 				  pairs.push(enc(k)+":"+enc(obj[k])); //key: value
+ 				}
+ 				return "{"+pairs.join(",")+"}" //wrap in the braces
+ 			  }
+ 			}
+ 			  window.addEventListener("message", function(e){
+ 				var cbid = parseInt(e.data.substr(0, e.data.indexOf(";")));
+ 				try{
+					e.source.postMessage("SVGe"+cbid+";"+json_encode(eval(e.data)), "*");
+ 			  }catch(err){					
+					e.source.postMessage("SVGe"+cbid+";error:"+err.message, "*");
+ 			  }
+ 			}, false)
+ 			}catch(err){
+ 			  window.embed_error = err;
 			}
 			
 		
@@ -3681,11 +4423,12 @@
 			});
 		};
 		
-		Editor.loadFromURL = function(url) {
+		Editor.loadFromURL = function(url, cache) {
 			Editor.ready(function() {
 				$.ajax({
 					'url': url,
 					'dataType': 'text',
+					cache: !!cache,
 					success: svgCanvas.setSvgString,
 					error: function(xhr, stat, err) {
 						if(xhr.responseText) {
@@ -3709,8 +4452,11 @@
 		
 		Editor.addExtension = function() {
 			var args = arguments;
+			
+			// Note that we don't want this on Editor.ready since some extensions
+			// may want to run before then (like server_opensave).
 			$(function() {
-				svgCanvas.addExtension.apply(this, args);
+				if(svgCanvas) svgCanvas.addExtension.apply(this, args);
 			});
 		};
 

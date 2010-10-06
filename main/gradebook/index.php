@@ -657,7 +657,7 @@ if (isset ($_GET['studentoverview'])) {
 						visibility:hidden;
 						}
 					</style>';
-					$print ='<a href="javascript:window.print();" style="float:right; padding:4px;" id="imprimir"><img src="'.api_get_path(WEB_CODE_PATH).'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+					$print .='<a href="javascript:window.print();" style="float:right; padding:4px;" id="imprimir"><img src="'.api_get_path(WEB_CODE_PATH).'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
 
 					//add header
 					$new_content_html=$new_content[0].$print.'</head>'.$new_content_html;

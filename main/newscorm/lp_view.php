@@ -385,12 +385,7 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
         <?php if (!empty($_SESSION['oLP']->scorm_debug)) echo 'debugsize = 150;' ?>
         document.getElementById('inner_lp_toc').style.height = innerHauteur - hauteurHaut - 40 - debugsize + "px";
         if (document.getElementById('content_id')) {
-            document.getElementById('content_id').style.height = innerHauteur + 'px';
-            
-            //Adding margin to the lp content see BT#1607
-            if (frames['content_name']) {
-                frames['content_name'].document.body.style.margin="0 12px 0px 5px";
-            }            
+            document.getElementById('content_id').style.height = innerHauteur + 'px';               
         }
 
     // Loads the glossary library.

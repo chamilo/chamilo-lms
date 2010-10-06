@@ -203,8 +203,14 @@ $(document).ready( function() {
   olms.info_lms_item[0]='<?php echo $oItem->get_id();?>';
   olms.info_lms_item[1]='<?php echo $oItem->get_id();?>';
 
-  $("#content_id").load( function(){
-          olms.info_lms_item[0]=olms.info_lms_item[1];
+  $("#content_id").load( function() {
+    
+    //Add a right margin see BT#1607
+    if (frames['content_name']) {
+        frames['content_name'].document.body.style.margin="0 12px 0px 5px";
+    }  
+    olms.info_lms_item[0]=olms.info_lms_item[1];
+    
     if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
       LMSInitialize();
     }
@@ -1449,13 +1455,6 @@ function switch_item(current_item, next_item){
             cont_f.attr("src",mysrc);
     <?php } ?>
     
-    
-    //Add a right margin see BT#1607
-    if (frames['content_name']) {
-        frames['content_name'].document.body.style.margin="0 12px 0px 5px";
-    }  
-    
-
     if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
         xajax_start_timer();
     }

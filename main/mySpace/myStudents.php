@@ -201,51 +201,45 @@ $student_id = intval($_GET['student']);
 
 // Action behaviour
 $check= Security::check_token('get');
-
-	if ($check) {
-		switch ($_GET['action']) {
-			case 'reset_lp' :
-			
-				$origin		= isset($_GET['origin'])	?Security::remove_XSS($_GET['origin']):"";
-				$details	= isset($_GET['details'])	?Security::remove_XSS($_GET['details']):"";  
-				$course		= isset($_GET['course'])	?$_GET['course']:"";
-				$lp_id		= isset($_GET['lp_id'])		?intval($_GET['lp_id']):"";				
-				$session_id	= isset($_GET['session_id'])?intval($_GET['session_id']):0;
-				$lp_reset = 0;
-				
-				if (api_is_course_admin() && !empty($course) && !empty($lp_id) && !empty($student_id)) {
-					   
-					$course_info 	= api_get_course_info($course);
-					$lp_view_table 	= Database::get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
-					$lp_item_view_table 	= Database::get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
-					//make sure we have the exact lp_view_id
-					$sqlview = "SELECT id FROM $lp_view_table WHERE user_id = $student_id AND lp_id = $lp_id AND session_id= $session_id";					
-					$resultview = Database::query($sqlview);
-					$view = Database::fetch_array($resultview, 'ASSOC');
-					$lp_view_id =  $view['id'] ;
-					
-					
-					$sql_delete = "DELETE FROM $lp_item_view_table  WHERE lp_view_id = $view_id ";
-					$result = Database::query($sql_delete);
+if ($check) {
+	switch ($_GET['action']) {
+		case 'reset_lp' :		
+			$origin		= isset($_GET['origin'])	?Security::remove_XSS($_GET['origin']):"";
+			$details	= isset($_GET['details'])	?Security::remove_XSS($_GET['details']):"";  
+			$course		= isset($_GET['course'])	?$_GET['course']:"";
+			$lp_id		= isset($_GET['lp_id'])		?intval($_GET['lp_id']):"";
 						
-					$sql_delete = "DELETE FROM $lp_view_table  WHERE user_id = $student_id AND lp_id= $lp_id AND session_id= $session_id ";
-					$result = Database::query($sql_delete);
+			if (api_is_course_admin() && !empty($course) && !empty($lp_id) && !empty($student_id)) {					   
+				$course_info 	= api_get_course_info($course);                    
+                delete_student_lp_events($student_id, $lp_id, $course_info, $session_id);
+                
+                /*
+				$lp_view_table 	= Database::get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
+				$lp_item_view_table 	= Database::get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
+                
+				//make sure we have the exact lp_view_id
+				$sqlview       = "SELECT id FROM $lp_view_table WHERE user_id = $student_id AND lp_id = $lp_id AND session_id= $session_id";					
+				$resultview    = Database::query($sqlview);
+				$view          = Database::fetch_array($resultview, 'ASSOC');
+				$lp_view_id    = $view['id'] ;					
+				
+				$sql_delete = "DELETE FROM $lp_item_view_table  WHERE lp_view_id = $view_id ";
+				$result = Database::query($sql_delete);
 					
-					//@todo delete the stats.track_e_exercices records. First implement this http://support.chamilo.org/issues/1334					
-					Display::display_confirmation_message('LPWasReset');
-				}				
+				$sql_delete = "DELETE FROM $lp_view_table  WHERE user_id = $student_id AND lp_id= $lp_id AND session_id= $session_id ";
+				$result = Database::query($sql_delete);
+                */
+				
+				//@todo delete the stats.track_e_exercices records. First implement this http://support.chamilo.org/issues/1334					
+				Display::display_confirmation_message(get_lang('LPWasReset'));
+			}				
+		  break;			
+		default:
 			break;
-			
-			default:
-				break;
-			
-		}
-		Security::clear_token();	
-	}	
-
-	
-	
-	
+		
+	}
+	Security::clear_token();	
+}		
 	
 if (!empty ($_GET['student'])) {
 
@@ -347,6 +341,38 @@ if (!empty ($_GET['student'])) {
 		$avg_student_progress . '%',
 		$avg_student_score
 	);
+
+    
+    //Show title
+    $course_code = $_GET['course'];
+    $info_course = CourseManager :: get_course_information($course_code);       
+    $coachs_name  = '';
+    $session_name = '';     
+    $nb_login = Tracking :: count_login_per_student($info_user['user_id'], $_GET['course']);
+    //get coach and session_name if there is one and if session_mode is activated
+    if (api_get_setting('use_session_mode') == 'true' && $session_id > 0) {
+        
+        $session_info  = api_get_session_info($session_id);         
+        $course_coachs = api_get_coachs_from_course($session_id,$course_code);
+        $nb_login = '';         
+        if (!empty($course_coachs)) {
+            $info_tutor_name = array();
+            foreach ($course_coachs as $course_coach) {
+                $info_tutor_name[] = api_get_person_name($course_coach['firstname'], $course_coach['lastname']);
+            }
+            $info_course['tutor_name'] = implode(",",$info_tutor_name);
+        } elseif ($session_coach_id != 0) {                 
+            $session_coach_id = intval($session_info['id_coach']);      
+            $coach_info = UserManager::get_user_info_by_id($session_coach_id);
+            $info_course['tutor_name'] = api_get_person_name($coach_info['firstname'], $coach_info['lastname']);
+        }
+        $coachs_name  = $info_course['tutor_name'];
+        $session_name = $session_info['name'];
+    } // end if(api_get_setting('use_session_mode')=='true')
+
+    $table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].($coachs_name?'&nbsp;|&nbsp;'.get_lang('Tutor').' : '.stripslashes($coachs_name):'');
+    echo '<h2>'.$table_title.'</h2>';
+
 ?>
 	<a name="infosStudent"></a>
 				<table width="100%" border="0" >
@@ -489,7 +515,17 @@ if ($timezone !== null) {
 						</td>
 						<td align="left"><?php if (is_numeric($avg_student_score)) { echo $avg_student_score.'%';} else { echo $avg_student_score ;}  ?></td>
 					</tr>
-					<?php } ?>
+                    <?php
+                        if (!empty($nb_login)) {
+                        	echo '<tr><td align="right">';
+                            echo get_lang('CountToolAccess');
+                            echo '</td>';
+                            echo '<td align="left">';
+                            echo $nb_login;
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+					} ?>
 				</table>
 			</td>
 		</tr>
@@ -497,51 +533,11 @@ if ($timezone !== null) {
 	
 <?php
 
-	if (!empty ($_GET['details'])) { ?>
-
-		<table class="data_table">
-		<tr>
-			<td colspan="5" style="border-width: 0px;">&nbsp;</td>
-		</tr>
-		
-		<?php
-		$course_code = $_GET['course'];
-		$info_course = CourseManager :: get_course_information($course_code);		
-		$coachs_name  = '';
-		$session_name = '';		
-		$nb_login = Tracking :: count_login_per_student($info_user['user_id'], $_GET['course']);
-		//get coach and session_name if there is one and if session_mode is activated
-		if (api_get_setting('use_session_mode') == 'true' && $session_id > 0) {
-			
-			$session_info  = api_get_session_info($session_id);			
-			$course_coachs = api_get_coachs_from_course($session_id,$course_code);
-			$nb_login = '';			
-			if (!empty($course_coachs)) {
-				$info_tutor_name = array();
-				foreach ($course_coachs as $course_coach) {
-					$info_tutor_name[] = api_get_person_name($course_coach['firstname'], $course_coach['lastname']);
-				}
-				$info_course['tutor_name'] = implode(",",$info_tutor_name);
-			} elseif ($session_coach_id != 0) {					
-				$session_coach_id = intval($session_info['id_coach']);		
-				$coach_info = UserManager::get_user_info_by_id($session_coach_id);
-				$info_course['tutor_name'] = api_get_person_name($coach_info['firstname'], $coach_info['lastname']);
-			}
-			$coachs_name  = $info_course['tutor_name'];
-			$session_name = $session_info['name'];
-		} // end if(api_get_setting('use_session_mode')=='true')
-
-		$table_title = $info_course['title'].($nb_login?'&nbsp;|&nbsp;'.get_lang('CountToolAccess').' : '.$nb_login:'').($session_name?'&nbsp;|&nbsp;'.get_lang('Session').' : '.ucfirst($session_name):'').($coachs_name?'&nbsp;|&nbsp;'.get_lang('Tutor').' : '.stripslashes($coachs_name):'');
-
-		$csv_content[] = array ();
-		$csv_content[] = array (str_replace('&nbsp;', '', $table_title));
-?>
-		<tr>
-			<td colspan="6">
-					<strong><?php echo $table_title; ?></strong>
-			</td>
-		</tr>
-	</table>
+	if (!empty ($_GET['details'])) {         
+        $csv_content[] = array ();
+        $csv_content[] = array (str_replace('&nbsp;', '', $table_title));        
+        ?>
+<br />
 
 	<!-- line about learnpaths -->
 				<table class="data_table">
@@ -550,54 +546,25 @@ if ($timezone !== null) {
 							<?php echo get_lang('Learnpaths');?>
 						</th>
 						<th>
-							<?php
-
-		echo get_lang('Time');
-		Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array (
-			'align' => 'absmiddle',
-			'hspace' => '3px'
-		));
-?>
+							<?php echo get_lang('Time'); Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?>
 						</th>
 						<th>
-							<?php
-
-		echo get_lang('Score');
-		Display :: display_icon('info3.gif', get_lang('LPTestScore'), array (
-			'align' => 'absmiddle',
-			'hspace' => '3px'
-		));
-?>
+							<?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('LPTestScore'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>
 						</th>
 						<th>
-							<?php
-
-		echo get_lang('Progress');
-		Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array (
-			'align' => 'absmiddle',
-			'hspace' => '3px'
-		));
-?>
+							<?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
 						</th>
 						<th>
-							<?php
-
-		echo get_lang('LastConnexion');
-		Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array (
-			'align' => 'absmiddle',
-			'hspace' => '3px'
-		));
-?>
+							<?php echo get_lang('LastConnexion'); Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
 						</th>
-				<?php		
-					echo '<th>'.get_lang('Details').'</th>'; 
-					if (api_is_course_admin()) {
-						echo '<th>'.get_lang('ResetLP').'</th>';
-					}
-				?>						
-		</tr>
+        				<?php		
+        					echo '<th>'.get_lang('Details').'</th>'; 
+        					if (api_is_course_admin()) {
+        						echo '<th>'.get_lang('ResetLP').'</th>';
+        					}
+        				?>						
+		          </tr>
 <?php
-
 		$headerLearnpath = array (
 			get_lang('Learnpath'),
 			get_lang('Time'),
@@ -618,10 +585,12 @@ if ($timezone !== null) {
 			get_lang('Progress', ''),
 			get_lang('LastConnexion', '')
 		);
-
-		$sql_lp = "	SELECT lp.name, lp.id FROM $t_lp lp WHERE lp.session_id = $session_id ORDER BY lp.display_order";
+        
+        // 
+		//$sql_lp = "	SELECT lp.name, lp.id FROM $t_lp lp WHERE lp.session_id = $session_id ORDER BY lp.display_order";
+        $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp ORDER BY lp.display_order";
 		$rs_lp = Database::query($sql_lp);
-		$token = Security::get_token();
+		$token = Security::get_token();        
 		
 		if (Database :: num_rows($rs_lp) > 0) {
 			$i = 0;
@@ -632,7 +601,7 @@ if ($timezone !== null) {
 				$any_result = false;
 				
 				// Get progress in lp				
-				$progress = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id),$session_id);
+				$progress = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
 				
 				if ($progress === null) { 
 					$progress = '0%';
@@ -645,11 +614,19 @@ if ($timezone !== null) {
 				if (!empty($total_time)) $any_result = true;
 				
 				// Get last connection time in lp
-				$start_time = Tracking::get_last_connection_time_in_lp($student_id, $course_code, $lp_id,$session_id);
+				$start_time = Tracking::get_last_connection_time_in_lp($student_id, $course_code, $lp_id, $session_id);
+                
+                if (!empty($start_time)) {
+                    $start_time = api_get_utc_datetime($start_time );
+                } else {
+                    $start_time =  '-';
+                }
+                
 				if (!empty($total_time)) $any_result = true;
 			
-				// Quizz in lp
+				// Quizz in lp                
 				$score = Tracking :: get_avg_student_score($student_id, $course_code, array($lp_id),$session_id);
+                
 
 				if ($i % 2 == 0) $css_class = "row_odd";
 				else $css_class = "row_even";
@@ -662,7 +639,7 @@ if ($timezone !== null) {
 					api_time_to_hms($total_time),
 					$score . '%',
 					$progress.'%',
-					date('Y-m-d h:i:s', $start_time)
+					$start_time
 				);
 ?>
 					<tr class="<?php echo $css_class;?>">
@@ -676,7 +653,12 @@ if ($timezone !== null) {
 							<?php
 
 				if (!is_null($score)) {
-					if (is_numeric($score)) { echo $score.'%';} else { echo $score ;}
+					if (is_numeric($score)) { 
+                        echo $score.'%';
+                    } else { 
+                        // if result == '-' means that the LP does not have exercises if result is 0 means the LP have an exercise
+                        echo $score ;
+                    }
 				}
 				 
 				if (is_numeric($progress)) {						
@@ -691,13 +673,11 @@ if ($timezone !== null) {
 						</td>
 						<td align="center">
 							<?php
-				if ($start_time != '' && $start_time > 0) {
+				
 					//Do not change with api_convert_and_format_date, because this value came from the lp_item_view table 
-					//which implies several other changes not a priority right now								
-					echo date('Y-m-d h:i:s', $start_time); 
-				} else {
-					echo '-';
-				}
+					//which implies several other changes not a priority right now	
+                    echo $start_time;							
+				
 ?>
 						</td>
 						<td align="center">
@@ -995,6 +975,7 @@ if ($timezone !== null) {
 				  </tr>';
 
 			if (!empty($courses)) {
+                
 				foreach ($courses as $course_code) {
 					if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
 						$course_info = CourseManager :: get_course_information($course_code);

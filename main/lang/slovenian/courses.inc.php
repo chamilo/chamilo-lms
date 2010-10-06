@@ -83,4 +83,5 @@ $Collapse = "Skrči";
 $CourseDetails = "Podrobnosti tečaja";
 $GroupPendingInvitations = "Čakajoča povabila skupine";
 $Compose = "Sestavi";
+$ThereAreNoCoursesInThisCategory = "Ni tečajev na tem nivoju kategorij";
 ?>

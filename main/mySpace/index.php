@@ -235,7 +235,7 @@ if ($nb_teacher_courses > 0 ) {
 }
 
 
-echo '<h4>'.$title.'</h4>';
+echo '<h2>'.$title.'</h2>';
 
 if (($is_drh && $view == 'drh') || $_GET['display'] == 'yourstudents') {
 	// get data for human resources manager
@@ -540,7 +540,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 
 	// display sessions
 	if ($nb_sessions > 0 && !isset($_GET['session_id'])) {
-		echo '<h4>'.get_lang('Sessions').'</h4>';
+		echo '<h2>'.get_lang('Sessions').'</h2>';
 		$table = new SortableTable('tracking_sessions', 'count_sessions_coached');
 		$table->set_header(0, get_lang('Title'));
 		$table->set_header(1, get_lang('Date'));

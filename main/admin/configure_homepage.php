@@ -251,7 +251,7 @@ if (!empty($action)) {
 				}
 				break;
 			case 'insert_tabs':
-			case 'edit_tabs':
+			case 'edit_tabs':            
 			case 'insert_link':
 			case 'edit_link':
 				$link_index = intval($_POST['link_index']);
@@ -279,7 +279,6 @@ if (!empty($action)) {
 				} elseif (empty($link_name)) {
 					$errorMsg = get_lang('PleaseEnterLinkName');
 				} else {
-
 					// New links are added as new files in the home/ directory
 					if ($action == 'insert_link' || $action == 'insert_tabs' || empty($filename) || strstr($filename, '/') || !strstr($filename, '.html')) {
 						$filename = replace_dangerous_char($link_name, 'strict').'.html';
@@ -311,26 +310,29 @@ if (!empty($action)) {
 					//}
 					//
 					// If the given link url is empty, then replace the link url by a link to the link file created
-					if (empty($link_url)) {
+					if (empty($link_url) || $link_url == 'http://') {
 						$link_url = api_get_path(WEB_PATH).'index.php?include='.urlencode($filename);
 						// If the file doesn't exist, then create it and
 						// fill it with default text
-						if (!file_exists($homep.$filename)) {
-							$fp = @fopen($homep.$filename, 'w');
-							if ($fp) {
-								fputs($fp, get_lang('MyTextHere'));
-								fclose($fp);
-							}
-						}
+                        
+                        $fp = @fopen($homep.$filename, 'w');                       
+                        if ($fp) {
+                            if (empty($link_html)) {
+                                fputs($fp, get_lang('MyTextHere'));
+                            } else {
+                            	fputs($fp, $link_html);
+                            }
+                            fclose($fp);
+                        } 
 					}
 					// If the requested action is to edit a link, open the file and
 					// write to it (if the file doesn't exist, create it)
-					if ($action == 'edit_link' && !empty($link_html)) {
-						$fp = @fopen($homep.$filename, 'w');
-						if ($fp) {
-							fputs($fp, $link_html);
-							fclose($fp);
-						}
+					if (in_array($action, array('edit_link'))  && !empty($link_html)) {                     
+						  $fp = @fopen($homep.$filename, 'w');
+						  if ($fp) {
+							 fputs($fp, $link_html);
+							 fclose($fp);
+						  }                       
 					}
 					// If the requested action is to create a link, make some room
 					// for the new link in the home_menu array at the requested place
@@ -350,10 +352,10 @@ if (!empty($action)) {
 					}
 					// Re-build the file from the home_menu array
 					$home_menu = implode("\n", $home_menu);
-					// Write
+					// Write                    
 					if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
 						if (is_writable($homep.$menuf.'_'.$lang.$ext)) {
-							$fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
+							$fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');                          
 							fputs($fp, $home_menu);
 							fclose($fp);
 							if (file_exists($homep.$menuf.$ext)) {
@@ -406,6 +408,7 @@ if (!empty($action)) {
 				}
 				$home_menu = implode("\n", $home_menu);
 				$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+                
 				$fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
 				fputs($fp, $home_menu);
 				fclose($fp);
@@ -697,7 +700,17 @@ switch ($action) {
 			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 			$form->addElement('html', '</td></tr>');
 		} else {
-			$form->addElement('html', '<tr><td>&nbsp;</td><td>');
+            if (in_array($action, array('edit_tabs','insert_tabs'))) {
+                $form->addElement('html', '<tr><td valign="top">'.get_lang('Content').' ('.get_lang('Optional').')</td><td>');
+                if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+                    $form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html));
+                } else {
+                    $default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
+                    $form->add_html_editor('link_html', '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
+                }
+            } else {
+            	$form->addElement('html', '<tr><td valign="top"></td><td>');
+            }            
 			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 			$form->addElement('html', '</td></tr>');
 		}

@@ -127,16 +127,28 @@ class EvalForm extends FormValidator
 		      </table>		      
 		   </form>'
 		);
-				
-		$renderer->setHeaderTemplate(
-		   '<tr>
-		       <th>'.get_lang('OfficialCode').'</th>		
-		      <th>'.get_lang('Username').'</th>
-		      <th>'.get_lang('Firstname').'</th>
-		      <th>'.get_lang('LastName').'</th>		
-		      <th>'.get_lang('Qualify').'</th>
-		   </tr>'  
-		);   
+        
+        if (api_is_western_name_order()){
+    		$renderer->setHeaderTemplate(
+    		   '<tr>
+    		       <th>'.get_lang('OfficialCode').'</th>		
+    		      <th>'.get_lang('UserName').'</th>
+    		      <th>'.get_lang('FirstName').'</th>
+    		      <th>'.get_lang('LastName').'</th>		
+    		      <th>'.get_lang('Qualify').'</th>
+    		   </tr>'  
+    		);
+        } else {
+        	$renderer->setHeaderTemplate(
+               '<tr>
+                   <th>'.get_lang('OfficialCode').'</th>        
+                  <th>'.get_lang('UserName').'</th>
+                  <th>'.get_lang('LastName').'</th>
+                  <th>'.get_lang('FirstName').'</th>     
+                  <th>'.get_lang('Qualify').'</th>
+               </tr>'  
+            );
+        }   
 		$template_submit =  '<tr>
 			       <td colspan="4" ></td>			         
 			      <td >
@@ -149,10 +161,8 @@ class EvalForm extends FormValidator
 		foreach ($this->result_object as $result) {
 			$user= get_user_info_from_id($result->get_user_id());
 			$results_and_users[] = array ('result' => $result, 'user' => $user);
-		}
-
+		}        
 		usort($results_and_users, array ('EvalForm', 'sort_by_user'));
-
 
 		$defaults= array ();
 		
@@ -174,12 +184,18 @@ class EvalForm extends FormValidator
 			'score[' . $result->get_id() . ']', 'minvalue'), get_lang('UnderMin'), 'compare', '>=');
 			$defaults['score[' . $result->get_id() . ']']= $result->get_score();
 			
+            if (api_is_western_name_order() ) {
+            	$user_info = '<td align="left" >'.$user['firstname'].'</td>';
+                $user_info .= '<td align="left" >'.$user['lastname'].'</td>';
+            } else {
+                $user_info = '<td align="left" >'.$user['lastname'].'</td>';
+            	$user_info .= '<td align="left" >'.$user['firstname'].'</td>';                
+            }
 			
 			$template =  '<tr>
 		      <td align="left" >'.$user['official_code'].'</td>
-		      <td align="left" >'.$user['username'].'</td>
-		      <td align="left" >'.$user['firstname'].'</td>
-		      <td align="left" >'.$user['lastname'].'</td>
+		      <td align="left" >'.$user['username'].'</td>		      
+		      '.$user_info.'
 		       <td align="left">{element} / '.$this->evaluation_object->get_max().'
 		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
 		      </td>
@@ -228,16 +244,29 @@ class EvalForm extends FormValidator
 		      </table>		      
 		   </form>'
 		);
-				
-		$renderer->setHeaderTemplate(
-		   '<tr>
-		       <th>'.get_lang('OfficialCode').'</th>		
-		      <th>'.get_lang('Username').'</th>
-		      <th>'.get_lang('Firstname').'</th>
-		      <th>'.get_lang('LastName').'</th>		
-		      <th>'.get_lang('Qualify').'</th>
-		   </tr>'  
-		);   
+
+        if (api_is_western_name_order()){
+            $renderer->setHeaderTemplate(
+               '<tr>
+                   <th>'.get_lang('OfficialCode').'</th>        
+                  <th>'.get_lang('UserName').'</th>
+                  <th>'.get_lang('FirstName').'</th>
+                  <th>'.get_lang('LastName').'</th>     
+                  <th>'.get_lang('Qualify').'</th>
+               </tr>'  
+            );
+        } else {
+            $renderer->setHeaderTemplate(
+               '<tr>
+                   <th>'.get_lang('OfficialCode').'</th>        
+                  <th>'.get_lang('UserName').'</th>
+                  <th>'.get_lang('LastName').'</th>
+                  <th>'.get_lang('FirstName').'</th>     
+                  <th>'.get_lang('Qualify').'</th>
+               </tr>'  
+            );
+        }   
+         
 		$template_submit =  '<tr>
 			       <td colspan="4" ></td>			         
 			      <td >
@@ -262,16 +291,26 @@ class EvalForm extends FormValidator
 				'score[' . $user[0] . ']',
 				'minvalue'
 			), get_lang('UnderMin'), 'compare', '>=');
+            
+            
+            if (api_is_western_name_order() ) {
+                $user_info = '<td align="left" >'.$user[3].'</td>';
+                $user_info .= '<td align="left" >'.$user[2].'</td>';
+            } else {
+                $user_info = '<td align="left" >'.$user[2].'</td>';
+                $user_info .= '<td align="left" >'.$user[3].'</td>';                
+            }           
 			
 			$template =  '<tr>
 		      <td align="left" >'.$user[4].'</td>
 		      <td align="left" >'.$user[1].'</td>
-		      <td align="left" >'.$user[3].'</td>
-		      <td align="left" >'.$user[2].'</td>
+		      '.$user_info.'
 		       <td align="left">{element} / '.$this->evaluation_object->get_max().'
 		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
 		      </td>
 		   </tr>';	
+           
+           
 			   
 
 			$renderer->setElementTemplate($template, 'score[' . $user[0] . ']');

@@ -81,6 +81,7 @@ $langExerciseNotFound = "Harjoitusta ei löydy tai se ei ole käytössä";
 $langAlreadyAnswered = "Olet jo vastannut kysymykseen";
 $langElementList = "Luettelo";
 $langScore = "Pisteet";
+$langCorrespondsTo = "Vastaa";
 $langExpectedChoice = "Oikea vastaus";
 $langYourTotalScore = "Yhteispistemääräsi on";
 $ReachedMaxAttemptsAdmin = "Olet saavuttanut yritysten maksimin.";

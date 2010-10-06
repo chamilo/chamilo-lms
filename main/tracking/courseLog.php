@@ -448,7 +448,8 @@ if ($_GET['studentlist'] == 'false') {
 
     $form -> addElement('hidden', 'action', 'add');
     $form -> addElement('hidden', 'remindallinactives', 'true');
-
+    $course_info = api_get_course_info(api_get_course_id());
+    echo '<h2>'.get_lang('Course').' '.$course_info['name'].'</h2>'; 
     $form -> display();
     // END : form to remind inactives susers
 

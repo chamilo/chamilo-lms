@@ -247,7 +247,7 @@ foreach ($courses as $enreg) {
 
 						$last_connection_in_lp = Tracking::get_last_connection_time_in_lp($_user['user_id'], $course, $learnpath['id']);
 						if (!empty($last_connection_in_lp)) {
-							echo date('Y-m-d h:i:s', $last_connection_in_lp);
+							echo api_get_utc_datetime($last_connection_in_lp);
 						} else {
 							echo '-';
 						}

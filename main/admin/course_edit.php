@@ -56,6 +56,7 @@ if ($_configuration['multiple_access_urls']) {
 			INNER JOIN $access_url_rel_user_table url_rel_user
 			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 } else {
+	
 	$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;
 }
 
@@ -74,7 +75,7 @@ while ($obj = Database::fetch_object($res)) {
 		$course['tutor_name']=$obj->user_id;
 	}
 	//We add in the array platform teachers
-	$platform_teachers[$obj->user_id] = $obj->firstname.' '.$obj->lastname;
+	$platform_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
 //Case where there is no teacher in the course

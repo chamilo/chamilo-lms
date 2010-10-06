@@ -106,4 +106,8 @@ $Create = "Create";
 $MessageOfNewCourseToAdmin = "This message is to inform you that has created a new course on platform";
 $NewCourseCreatedIn = "New course created in";
 $ExplicationTrainers = "The trainer is set as you for now. You can change this setting later in the training configuration settings";
+$Objectives = "Objectives";
+$TargetAudience = "Target audience";
+$YouHaveToAcceptTermsAndConditions = "You have to accept our Terms and Conditions in order to request a new training.";
+$CourseRequestCreated = "Your request for a new training has been sent successfully. You may receive a reply soon, within one or two days.";
 ?>

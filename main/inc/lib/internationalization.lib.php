@@ -473,7 +473,8 @@ function api_get_utc_datetime($time = null) {
         return gmdate('Y-m-d H:i:s');
     }
     // If time is a timestamp, return directly in utc
-    if (is_int($time)) {
+    if (is_numeric($time)) {
+        $time = intval($time);
         return gmdate('Y-m-d H:i:s', $time);
     }
     if (!DATE_TIME_INSTALLED) {
@@ -504,7 +505,8 @@ function api_get_local_time($time = null, $to_timezone = null, $from_timezone = 
         if (is_null($time)) {
             $time = time();
         }
-        if (is_int($time)) {
+        if (is_numeric($time)) {
+            $time = intval($time);
             $time = date('Y-m-d H:i:s', $time);
         }
         return $time;
@@ -522,7 +524,8 @@ function api_get_local_time($time = null, $to_timezone = null, $from_timezone = 
         $from_timezone = 'UTC';
         $time = gmdate('Y-m-d H:i:s');
     }
-    if (is_int($time)) {
+    if (is_numeric($time)) {
+        $time = intval($time);
         $from_timezone = 'UTC';
         $time = gmdate('Y-m-d H:i:s', $time);
     }

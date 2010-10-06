@@ -38,7 +38,13 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
  */
 function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_available,$parent_id) {
 	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-	$sql='INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id) VALUES ("'.api_htmlentities($original_name).'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
+    $original_name          = Database::escape_string($original_name);
+    $english_name           = Database::escape_string($english_name);
+    $isocode                = Database::escape_string($isocode);
+    $sublanguage_available  = Database::escape_string($sublanguage_available);
+    $parent_id              = Database::escape_string($parent_id);
+    
+	$sql='INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id) VALUES ("'.$original_name.'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
 	Database::query($sql);
 }
 /**
@@ -57,7 +63,7 @@ function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_av
  */
 function check_if_language_exist ($original_name,$english_name,$isocode,$sublanguage_available) {
 	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-	$sql_original_name='SELECT count(*) AS count_original_name FROM '.$tbl_admin_languages.' WHERE original_name="'.Database::escape_string(api_htmlentities($original_name)).'" ';
+	$sql_original_name='SELECT count(*) AS count_original_name FROM '.$tbl_admin_languages.' WHERE original_name="'.Database::escape_string($original_name).'" ';
 	$sql_english_name='SELECT count(*) AS count_english_name FROM '.$tbl_admin_languages.' WHERE english_name="'.Database::escape_string($english_name).'" ';
 	$sql_isocode='SELECT count(*) AS count_isocode FROM '.$tbl_admin_languages.' WHERE isocode="'.Database::escape_string($isocode).'" ';
 	$rs_original_name=Database::query($sql_original_name);
@@ -251,6 +257,9 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 	if (strlen($original_name)>0 && strlen($english_name)>0 && strlen($isocode)>0) {
 		if ($allow_insert_info===true && $language_id_exist===true) {
 			$english_name=str_replace(' ','_',$english_name);
+            //Fixes BT#1636
+            $english_name=api_strtolower($english_name);
+            
 			$isocode=str_replace(' ','_',$isocode);
 			$str_info='<br/>'.get_lang('OriginalName').' : '.$original_name.'<br/>'.get_lang('EnglishName').' : '.$english_name.'<br/>'.get_lang('PlatformCharsetTitle').' : '.$isocode;
 			$path=api_get_path(SYS_LANG_PATH).$english_name;

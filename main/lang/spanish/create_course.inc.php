@@ -106,4 +106,8 @@ $Create = "Crear";
 $MessageOfNewCourseToAdmin = "Este mensaje es para informarle que se ha creado un nuevo curso en la plataforma";
 $NewCourseCreatedIn = "Nuevo curso creado en";
 $ExplicationTrainers = "El profesor está definido como Ud por ahora. Podrá cambiarlo en la página de configuración del curso";
+$Objectives = "Objetivos";
+$TargetAudience = "Destinatarios";
+$YouHaveToAcceptTermsAndConditions = "Debe aceptar las condiciones del servicio para poder solicitar un curso.";
+$CourseRequestCreated = "Se recibió correctamente su solicitud de curso. En breve (uno o dos días laborables) recibirá respuesta sobre la misma.";
 ?>

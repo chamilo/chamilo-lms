@@ -385,7 +385,7 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
         <?php if (!empty($_SESSION['oLP']->scorm_debug)) echo 'debugsize = 150;' ?>
         document.getElementById('inner_lp_toc').style.height = innerHauteur - hauteurHaut - 40 - debugsize + "px";
         if (document.getElementById('content_id')) {
-            document.getElementById('content_id').style.height = innerHauteur + 'px';
+            document.getElementById('content_id').style.height = innerHauteur + 'px';               
         }
 
     // Loads the glossary library.

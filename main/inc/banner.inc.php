@@ -270,7 +270,6 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 		}
 	}
 }
-
 // Displaying the tabs
 foreach ($navigation as $section => $navigation_info) {
 	if (isset($GLOBALS['this_section'])) {
@@ -290,6 +289,8 @@ if (!empty($_SESSION['user_language_choice'])) {
 	$lang = get_setting('platformLanguage');
 }
 
+//Preparing home folder for multiple urls
+global $_configuration;
 if ($_configuration['multiple_access_urls']) {
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
@@ -298,38 +299,31 @@ if ($_configuration['multiple_access_urls']) {
 		$clean_url = replace_dangerous_char($url);
 		$clean_url = str_replace('/', '-', $clean_url);
 		$clean_url .= '/';
-
-		$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
-		$homep_new = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path added the url
-		$new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
+		$homep            = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path		       
 		//we create the new dir for the new sites
-		if (!is_dir($new_url_dir)){
-			mkdir($new_url_dir, api_get_permissions_for_new_directories());
+		if (!is_dir($homep)) {
+			mkdir($homep, api_get_permissions_for_new_directories());
 		}
 	}
-} else {
-	$homep_new = '';
+} else {	
 	$homep = api_get_path(SYS_PATH).'home/';
 }
 
 $ext = '.html';
 $menutabs = 'home_tabs';
+
 if (is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
-	$home_top = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);
+	$home_top = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);    
 } elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
 	$home_top = @(string)file_get_contents($homep.$menutabs.$lang.$ext);
 } else {
 	$errorMsg = get_lang('HomePageFilesNotReadable');
 }
+
 $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
 
 if (api_get_self() != '/main/admin/configure_homepage.php') {
-	if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
-		$home_top_temp = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);
-	} else if (file_exists($homep.$menutabs.$ext)) {
-		$home_top_temp = @(string)file_get_contents($homep.$menutabs.$ext);
-	}
-	$open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top_temp);
+	$open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
 	$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 	echo $open;
 } else {
@@ -347,7 +341,6 @@ if (api_get_self() != '/main/admin/configure_homepage.php') {
 		$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 		$home_menu = explode("\n", $home_menu);
 	}
-
 	foreach ($home_menu as $key => $enreg) {
 		$enreg = trim($enreg);
 		if (!empty($enreg)) {

@@ -1021,7 +1021,7 @@ echo '</table>';
 // if tracking is enabled
 if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 
-	$session_id_and = ' AND ce.session_id = ' . api_get_session_id() . ' ';
+	$session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
 	if ($is_allowedToEdit || $is_tutor) {
 		$user_id_and = '';
 		if (!empty ($_POST['filter_by_user'])) {
@@ -1034,33 +1034,47 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 		if ($_GET['gradebook'] == 'view') {
 			$exercise_where_query = 'te.exe_exo_id =ce.id AND ';
 		}
+        
+        //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
-		$sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult ,
+		/*$sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult ,
 							 te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, te.start_date as exstart, steps_counter as exstep,cuser.user_id as excruid,te.exe_duration as exduration
 					  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
 					  WHERE  user.user_id=cuser.user_id AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'
 					  $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
-					  AND cuser.course_code=te.exe_cours_id ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
+					  AND cuser.course_code=te.exe_cours_id ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";*/                      
+                      
+        $sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult , te.exe_weighting as exweight,
+                te.exe_date as exdate, te.exe_id as exid, email as exemail, te.start_date as exstart, steps_counter as exstep, exe_user_id as excruid,te.exe_duration as exduration
+                FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0";
 		
-		$hpsql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", tth.exe_name,
-							tth.exe_result , tth.exe_weighting, tth.exe_date
-						FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-						WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid) . " $user_id_and '
-						ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
+		$hpsql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
+    				FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
+    				WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid) . " $user_id_and '
+    				ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
+                        
+          
 
 	} else {
 		// get only this user's results
 		$user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
 
-		$sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult, " .
+		/*$sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult, " .
 					"te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
 					"te.start_date as exstart, steps_counter as exstep, cuser.user_id as excruid, te.exe_duration as exduration, ce.results_disabled as exdisabled
 					FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
 			WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id 
             AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'
 			AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." $user_id_and $session_id_and AND ce.active <>-1 AND" .
-			" orig_lp_id = 0 AND orig_lp_item_id = 0 AND cuser.course_code=te.exe_cours_id ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC," .
-			"te.exe_date DESC";
+			" orig_lp_id = 0 AND orig_lp_item_id = 0 AND cuser.course_code=te.exe_cours_id ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";*/
+            
+      $sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult, " .
+                    "te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
+                    "te.start_date as exstart, steps_counter as exstep, exe_user_id as excruid, te.exe_duration as exduration, ce.results_disabled as exdisabled
+            FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
+            WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'  $user_id_and $session_id_and AND ce.active <>-1 AND" .
+            " orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
 		$hpsql = "SELECT '',exe_name, exe_result , exe_weighting, exe_date
 						FROM $TBL_TRACK_HOTPOTATOES
@@ -1088,6 +1102,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 			$from_gradebook = true;
 		}
 		$sizeof = sizeof($results);
+		
 		$user_list_id = array ();
 		$user_last_name = '';
 		$user_first_name = '';

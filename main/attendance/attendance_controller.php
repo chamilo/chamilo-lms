@@ -185,7 +185,10 @@
 		$data['attendance_id'] = $attendance_id;		
 		$data['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
 		
-		$data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id);
+		$filter_type = 'today';
+		if (!empty($_REQUEST['filter'])) {
+			$filter_type = $_REQUEST['filter'];
+		}		
 
 		if (api_is_allowed_to_edit(null, true)) {
 			$data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);	
@@ -216,10 +219,12 @@
 			}
 
 			$data['users_in_course'] 			 = $attendance->get_users_rel_course($attendance_id);
-			$data['attendant_calendar'] 		 = $attendance->get_attendance_calendar($attendance_id);
+			$data['attendant_calendar'] 		 = $attendance->get_attendance_calendar($attendance_id, $filter_type);
 			$data['users_presence'] 			 = $attendance->get_users_attendance_sheet($attendance_id);
 			$data['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);			
 			$data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);			
+		} else {
+			$data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id,$filter_type);
 		}
 		
 		$this->view->set_data($data);
@@ -243,50 +248,49 @@
 		$data['attendance_id'] = $attendance_id;
 		$attendance_id = intval($attendance_id);
 
-		if ($action == 'calendar_add') {			
+		if ($action == 'calendar_add') {		
 			if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {	
-				if (!isset($_POST['cancel'])) {												
-										
-                                        if (isset($_POST['repeat'])) {
-                                            $start_datetime = api_strtotime($attendance->build_datetime_from_array($_POST['date_time']));
+				if (!isset($_POST['cancel'])) {
+                    if (isset($_POST['repeat'])) {
+                       error_log($attendance->build_datetime_from_array($_POST['date_time']));
+                       //$start_datetime = api_strtotime($attendance->build_datetime_from_array($_POST['date_time']));
+                       
+                        $start_datetime = api_strtotime(api_get_utc_datetime($attendance->build_datetime_from_array($_POST['date_time'])),'UTC');
+                        error_log('$start_datetime '.$start_datetime);
+                        
+                        $_POST['end_date_time']['H'] = $_POST['date_time']['H'];
+                        $_POST['end_date_time']['i'] = $_POST['date_time']['i'];
+                        error_log($attendance->build_datetime_from_array($_POST['end_date_time']));
+                        
+                        $end_datetime = api_strtotime(api_get_utc_datetime($attendance->build_datetime_from_array($_POST['end_date_time'])),'UTC');
+                        error_log('$end_datetime '.$end_datetime);
+                        $checkdate = checkdate($_POST['end_date_time']['F'], $_POST['end_date_time']['d'], $_POST['end_date_time']['Y']);
 
-                                            
-                                            $_POST['end_date_time']['H'] = $_POST['date_time']['H'];
-                                            $_POST['end_date_time']['i'] = $_POST['date_time']['i'];
-
-                                            $end_datetime = api_strtotime($attendance->build_datetime_from_array($_POST['end_date_time']));
-                                            $checkdate = checkdate($_POST['end_date_time']['F'], $_POST['end_date_time']['d'], $_POST['end_date_time']['Y']);
-
-                                            $repeat_type = $_POST['repeat_type'];
-                                            if (($end_datetime > $start_datetime) && $checkdate) {
-                                                    $affected_rows = $attendance->attendance_repeat_calendar_add($attendance_id, $start_datetime, $end_datetime, $repeat_type);
-                                                    $action = 'calendar_list';
-                                                
-                                            } else {
-
-                                                if (!$checkdate) {
-                                                    $data['error_checkdate'] = true;
-                                                } else {
-                                                    $data['error_repeat_date'] = true;
-                                                }
-          
-                                                $data['repeat'] = true;                                                
-                                                $action = 'calendar_add';
-                                            }
-                                        } else {
-                                            $datetime = $attendance->build_datetime_from_array($_POST['date_time']);
-                                            $datetimezone = api_get_utc_datetime($datetime);
-                                            if (!empty($datetime)) {
-						$attendance->set_date_time($datetimezone);
-						$affected_rows = $attendance->attendance_calendar_add($attendance_id);
-                                                $action = 'calendar_list';
-                                            } else {
-                                                    $data['error_date'] = true;
-                                                    $action = 'calendar_add';
-                                            }
-
-                                        }
-
+                        $repeat_type = $_POST['repeat_type'];
+                        if (($end_datetime > $start_datetime) && $checkdate) {
+                            $affected_rows = $attendance->attendance_repeat_calendar_add($attendance_id, $start_datetime, $end_datetime, $repeat_type);
+                            $action = 'calendar_list';                            
+                        } else {
+                            if (!$checkdate) {
+                                $data['error_checkdate'] = true;
+                            } else {
+                                $data['error_repeat_date'] = true;
+                            }
+                            $data['repeat'] = true;                                                
+                            $action = 'calendar_add';
+                        }
+                    } else {
+                        $datetime = $attendance->build_datetime_from_array($_POST['date_time']);
+                        $datetimezone = api_get_utc_datetime($datetime);
+                        if (!empty($datetime)) {
+	                       $attendance->set_date_time($datetimezone);
+	                       $affected_rows = $attendance->attendance_calendar_add($attendance_id);
+                           $action = 'calendar_list';
+                        } else {
+                           $data['error_date'] = true;
+                           $action = 'calendar_add';
+                        }
+                    }
 				} else {
 					$action = 'calendar_list';
 				}

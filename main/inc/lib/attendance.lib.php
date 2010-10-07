@@ -695,26 +695,53 @@ class Attendance
 			}
 		}
 		return $data;
-	}
-
+	}	
+	
 	/**
 	 * Get all attendance calendar data inside current attendance
 	 * @param	int	attendance id
 	 * @return	array attendance calendar data
 	 */
-	public function get_attendance_calendar($attendance_id) {
+	public function get_attendance_calendar($attendance_id, $type = 'all') {
 		global $dateFormatShort, $timeNoSecFormat;
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-		$attendance_id = intval($attendance_id);
-		$sql = "SELECT * FROM $tbl_attendance_calendar WHERE attendance_id = '$attendance_id' ORDER BY date_time ";
+		$attendance_id = intval($attendance_id);		
+		$sql = "SELECT * FROM $tbl_attendance_calendar WHERE attendance_id = '$attendance_id' ";		
+		$filter_where = '';
+		if (!in_array($type, array('today', 'all', 'all_done', 'all_not_done'))) {
+			$type = 'all';
+		}		
+		switch ($type ) {
+			case 'today':
+				//$sql .= ' AND DATE_FORMAT(date_time,"%d-%m-%Y") = DATE_FORMAT("'.api_get_utc_datetime().'", "%d-%m-%Y" )';
+				break;				
+			case 'all_done':
+				$sql .= " AND done_attendance = 1 ";
+				break;
+			case 'all_not_done':
+				$sql .= " AND done_attendance = 0 ";
+				break;
+			case 'all':					
+			default:				
+				break;	
+		}		
+		$sql .= " ORDER BY date_time ";		
+        
 		$rs = Database::query($sql);
 		$data = array();
 		if (Database::num_rows($rs) > 0) {
-			while ($row = Database::fetch_array($rs)) {
-				$row['date_time'] = api_get_local_time($row['date_time']);
-				$row['date'] = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
-				$row['time'] = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);
-				$data[] = $row;
+			while ($row = Database::fetch_array($rs,'ASSOC')) {
+                $row['db_date_time']    = $row['date_time'];
+                $row['date_time']       = api_get_local_time($row['date_time']);
+                $row['date']            = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
+                $row['time']            = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);              
+                if ($type == 'today') {
+                    if (date('d-m-Y', api_strtotime($row['date_time'])) == api_strtotime(api_get_local_time())) {
+                        $data[] = $row;                        
+                    }                
+                } else {
+                	$data[] = $row;
+                }
 			}
 		}
 		return $data;
@@ -742,48 +769,73 @@ class Attendance
 
         /**
          * save repeated date inside attendance calendar table
+         * @param   int attendance id
+         * @param   int start date in tms
+         * @param   int end date in tms
+         * @param   string  repeat type  daily, weekly, monthlyByDate
+         
          */
         public function attendance_repeat_calendar_add($attendance_id, $start_date, $end_date, $repeat_type) {
-
             $attendance_id = intval($attendance_id);
-
             // save start date
-            $datetime = date('Y-m-d H:i:s', $start_date);
-            $datetimezone = api_get_utc_datetime($datetime);
+            $datetimezone = api_get_utc_datetime($start_date);
             $this->set_date_time($datetimezone);
             $res = $this->attendance_calendar_add($attendance_id);
-
-            // save repeated dates
+            
+            //86400 = 24 hours in seconds
+            //604800 = 1 week in seconds
+            // Saves repeated dates
             switch($repeat_type) {
                 case 'daily':
+                    $j = 1;
                     for ($i = $start_date + 86400; ($i <= $end_date); $i += 86400) {
-                        $datetime = date('Y-m-d H:i:s', $i);
-                        $datetimezone = api_get_utc_datetime($datetime);
+                        //$datetimezone = api_get_utc_date_add(api_get_utc_datetime($start_date), 0 , 0, $j);    //to support europe timezones                    
+                        $datetimezone = api_get_utc_datetime($i);
                         $this->set_date_time($datetimezone);
                         $res = $this->attendance_calendar_add($attendance_id);
+                        $j++;
                     }
                     break;
                     exit;
                 case 'weekly':
-                    for ($i = $start_date + 604800; ($i <= $end_date); $i += 604800) {
-                        $datetime = date('Y-m-d H:i:s', $i);
-                        $datetimezone = api_get_utc_datetime($datetime);
+                    $j = 1;
+                    for ($i = $start_date + 604800; ($i <= $end_date); $i += 604800) {                        
+                        $datetimezone = api_get_utc_datetime($i);
+                        //$datetimezone = api_get_utc_date_add(api_get_utc_datetime($start_date), 0 , 0, $j*7); //to support europe timezones
                         $this->set_date_time($datetimezone);
                         $res = $this->attendance_calendar_add($attendance_id);
+                        $j++;
                     }
                     break;
                 case 'monthlyByDate':
-                    $next_start = $this->add_month($start_date);
-                    while($next_start <= $end_date) {
-                        $datetime = date('Y-m-d H:i:s', $next_start);
-                        $datetimezone = api_get_utc_datetime($datetime);
+                    $j = 1;
+                    //@todo fix bug with february
+                    for ($i = $start_date + 2419200; ($i <= $end_date); $i += 2419200) {                        
+                        $datetimezone = api_get_utc_datetime($i);
+                        //$datetimezone = api_get_utc_date_add(api_get_utc_datetime($start_date), 0 , $j); //to support europe timezones
                         $this->set_date_time($datetimezone);
                         $res = $this->attendance_calendar_add($attendance_id);
-                        $next_start = $this->add_month($next_start);
+                        $j++;
                     }
+                
+                    //$next_start = $this->add_month($start_date);
+                    /*
+                    $next_start = api_strtotime(api_get_utc_date_add(api_get_utc_datetime($start_date), 0 , 1),'UTC');
+                    error_log('22-->$start_date '.$start_date);
+                    error_log('$next_start '.$next_start);
+                    error_log('$end_date '.$end_date);
+                    while($next_start <= $end_date) {
+                        //$datetime = date('Y-m-d H:i:s', $next_start);
+                        $datetimezone = api_get_utc_datetime($next_start);
+                        error_log('$datetimezone n loop '.$datetimezone);
+                        $this->set_date_time($datetimezone);
+                        $res = $this->attendance_calendar_add($attendance_id);
+                        //$next_start = $this->add_month($next_start);
+                        $next_start = api_strtotime(api_get_utc_date_add(api_get_utc_datetime($next_start), 0 , 1),'UTC');
+                        error_log('$next_start in loop '.$next_start);
+                    }*/
                     break;
             }
-
         }
 
         /**
@@ -793,14 +845,22 @@ class Attendance
          * @return  int     The new timestamp
          */
         private function add_month($timestamp, $num=1) {
-            list($y, $m, $d, $h, $n, $s) = split('/',date('Y/m/d/h/i/s',$timestamp));
+            $values = api_get_utc_datetime($timestamp);
+            $values = str_replace(array(':','-',' '), '/', $values);            
+            list($y, $m, $d, $h, $n, $s) = split('/',$values);            
             if($m+$num>12) {
                 $y += floor($num/12);
                 $m += $num%12;
             } else {
                 $m += $num;
             }
-            return mktime($h, $n, $s, $m, $d, $y);
+            //date_default_timezone_set('UTC');
+           // return mktime($h, $n, $s, $m, $d, $y);                
+            $result = api_strtotime($y.'-'.$m.'-'.$d.' '.$h.':'.$n.':'.$s, 'UTC');           
+            if (!empty($result)) {
+            	return $result;
+            }
+            return false;
         }
 
 	/**

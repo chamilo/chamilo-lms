@@ -484,6 +484,10 @@ class DocumentManager {
 		//condition for the session
 		$current_session_id = api_get_session_id();
 		$condition_session = " AND (id_session = '$current_session_id' OR id_session = '0')";
+        
+        if( !$can_see_invisible) {
+        	$condition_session = " AND (id_session = '$current_session_id' ) ";
+        }
 		
 		//condition for search (get ALL folders and documents)
 		if($search){

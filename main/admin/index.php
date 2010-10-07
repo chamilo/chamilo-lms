@@ -113,9 +113,9 @@ if (api_is_platform_admin()) { ?>
         <li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
         <li><a href="course_user_import.php"><?php echo get_lang('ImportUsersToACourse'); ?></a></li>
     <?php if (api_get_setting('course_validation') == 'true') { ?>
-        <li><a href="course_request_rejected.php"><?php echo get_lang('cesga_AdminCursosRexeit'); ?></a></li>
-        <li><a href="course_request_accepted.php"><?php echo get_lang('cesga_AdminCursosValid'); ?></a></li>
-        <li><a href="course_request_review.php"><?php echo get_lang('cesga_AdminValidCursos'); ?></a></li>
+        <li><a href="course_request_rejected.php"><?php echo get_lang('RejectedCourseRequests'); ?></a></li>
+        <li><a href="course_request_accepted.php"><?php echo get_lang('AcceptedCourseRequests'); ?></a></li>
+        <li><a href="course_request_review.php"><?php echo get_lang('ReviewCourseRequests'); ?></a></li>
     <?php } ?>
     <?php if (api_get_setting('search_enabled') == 'true') { ?>
         <li><a href="specific_fields.php"><?php echo get_lang('SpecificSearchFields'); ?></a></li>

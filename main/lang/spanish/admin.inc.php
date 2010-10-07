@@ -1271,4 +1271,7 @@ $MyTextHere = "Introduzca su texto aquí...";
 $FieldTypeSocialProfile = "Vínculo red social";
 $AllowUsersCopyFilesTitle = "Permitir a los usuarios copiar archivos de un curso en su área de archivos personales";
 $AllowUsersCopyFilesComment = "Permite a los usuarios copiar archivos de un curso en su área personal, visible a través de la herramienta de Red Social o mediante el editor de HTML cuando se encuentran fuera de un curso";
+$ReviewCourseRequests = "Validar Cursos";
+$AcceptedCourseRequests = "Cursos Validados";
+$RejectedCourseRequests = "Cursos Rechazados";
 ?>

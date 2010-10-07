@@ -1204,4 +1204,7 @@ $AddUsersToGroup = "Добавяне на потребители към груп
 $ErrorReadingZip = "Грешка при четенето на ZIP-файла.";
 $ErrorStylesheetFilesExtensionsInsideZip = "От ZIP-файла се извличат и приемат само файлове от типовете jpg, jpeg, png, gif и css.";
 $MyTextHere = "Въведете вашия текст тук...";
+$ReviewCourseRequests = "Преглед на заявките за нови курсове";
+$AcceptedCourseRequests = "Одобрени заявки за курсове";
+$RejectedCourseRequests = "Отхвърлени заявки за курсове";
 ?>

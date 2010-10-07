@@ -199,19 +199,20 @@ if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['in
     echo $open;
 }
 
-// Display System announcements
-$announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
-$announcement = intval($announcement);
-
-if (isset($_user['user_id'])) {
-    $visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
-    SystemAnnouncementManager :: display_announcements($visibility, $announcement);
-} else {
-    SystemAnnouncementManager :: display_announcements(VISIBLE_GUEST, $announcement);
-}
-
 // Display courses and category list
 if (!$page_included) {
+    
+    // Display System announcements
+    $announcement = isset($_GET['announcement']) ? $_GET['announcement'] : -1;
+    $announcement = intval($announcement);
+    
+    if (isset($_user['user_id'])) {
+        $visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
+        SystemAnnouncementManager :: display_announcements($visibility, $announcement);
+    } else {
+        SystemAnnouncementManager :: display_announcements(VISIBLE_GUEST, $announcement);
+    }
+    
     if (api_get_setting('display_categories_on_homepage') == 'true') {
         echo '<div class="home_cats">';
         display_anonymous_course_list();
@@ -225,14 +226,10 @@ echo '<div class="menu" id="menu">';
 display_anonymous_right_menu();
 echo '</div>';
 
-/*
-    Footer
-*/
+/*    Footer    */
 Display :: display_footer();
 
-/*
-    Functions
-*/
+/*    Functions */
 
 /**
  * This function handles the logout and is called whenever there is a $_GET['logout']

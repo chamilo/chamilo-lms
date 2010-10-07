@@ -57,8 +57,14 @@ $web_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/images/gal
 echo '<ul>';
 foreach($png_svg_files as $filename) {
 		$image=$disk_path.$filename;
-		$new_sizes = api_resize_image($image, 60, 60);	
-	echo '<li style="display:inline; padding:8px;"><a href="'.$web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';	
+		$new_sizes = api_resize_image($image, 60, 60);
+		
+if (strpos($filename, "svg")){
+	echo '<li style="display:inline; padding:8px;"><a href="'.$web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.api_get_path(WEB_IMG_PATH).'svg_medium.png" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+}else{
+	echo '<li style="display:inline; padding:8px;"><a href="'.$web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+}
+	
 }
 echo '</ul>';
 ?>

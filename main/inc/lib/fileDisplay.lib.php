@@ -53,6 +53,7 @@ function choose_image($file_name)
 		$type['word'      ] = array('doc', 'dot',  'rtf', 'mcw',  'wps', 'psw', 'docm', 'docx', 'dotm',  'dotx');
 		$type['web'       ] = array('htm', 'html', 'htx', 'xml',  'xsl',  'php', 'xhtml');
 		$type['image'     ] = array('gif', 'jpg',  'png', 'bmp',  'jpeg');
+		$type['image_vect'] = array('svg');
 		$type['audio'     ] = array('wav', 'mid',  'mp2', 'mp3',  'midi', 'sib', 'amr', 'kar');
 		$type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'au', 'flv', 'avi', 'wmv', 'asf', '3gp');
 		$type['excel'     ] = array('xls', 'xlt',  'xls', 'xlt', 'pxl', 'xlsx', 'xlsm', 'xlam', 'xlsb', 'xltm', 'xltx');
@@ -66,10 +67,12 @@ function choose_image($file_name)
 		$type['oo_calc'   ] = array('ods', 'ots', 'sxc', 'stc');
 		$type['oo_impress'] = array('odp', 'otp', 'sxi', 'sti');
 		$type['oo_draw'   ] = array('odg', 'otg', 'sxd', 'std');
+		
 
 		$image['word'      ] = 'word.gif';
 		$image['web'       ] = 'file_html.gif';
 		$image['image'     ] = 'file_image.gif';
+		$image['image_vect'] = 'file_svg.png';
 		$image['audio'     ] = 'file_sound.gif';
 		$image['video'     ] = 'film.gif';
 		$image['excel'     ] = 'excel.gif';

@@ -823,11 +823,13 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 	}
 
 	// Create new draw
+	if (support_svg()){
 	?>
 		<a href="create_drawing.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
 			<?php Display::display_icon('draw.png', get_lang('Draw')); echo get_lang('Draw'); ?></a>&nbsp;
 	<?php	
-
+	}
+	
 	// Create new certificate
 	if ($is_certificate_mode) {
 ?>

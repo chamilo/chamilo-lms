@@ -179,34 +179,56 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance_delete_select') {
 }
 
 // distpacher actions to controller
+
 switch ($action) {	
-	case 'attendance_list'	: 
-		$attendance_controller->attendance_list();
+	case 'attendance_list'		:	
+        $attendance_controller->attendance_list();
 		break;
-	case 'attendance_add'	:	
-		$attendance_controller->attendance_add();
+	case 'attendance_add'		:
+        if (api_is_allowed_to_edit(null, true)) {
+            $attendance_controller->attendance_add();
+        } else {
+        	api_not_allowed();
+        }
+        break;
+	case 'attendance_edit'		:	
+        if (api_is_allowed_to_edit(null, true)) {
+            $attendance_controller->attendance_edit($attendance_id);
+        } else {
+            api_not_allowed();
+        }
 		break;
-	case 'attendance_edit'	:	
-		$attendance_controller->attendance_edit($attendance_id);
+	case 'attendance_delete'	:
+    	if (api_is_allowed_to_edit(null, true)) {
+        $attendance_controller->attendance_delete($attendance_id);
+        } else { api_not_allowed();}
+		 break;									
+	case 'attendance_sheet_list'	:	
+        $attendance_controller->attendance_sheet($action, $attendance_id, $student_id);
 		break;
-	case 'attendance_delete':	
-		$attendance_controller->attendance_delete($attendance_id);
-		break;									
-	case 'attendance_sheet_list':	
-		$attendance_controller->attendance_sheet($action, $attendance_id, $student_id);
+	case 'attendance_sheet_add' 	:	
+        if (api_is_allowed_to_edit(null, true)) {
+        $attendance_controller->attendance_sheet($action, $attendance_id);
+        } else { api_not_allowed();}
 		break;
-	case 'attendance_sheet_add' :	
-		$attendance_controller->attendance_sheet($action, $attendance_id);
-		break;	
-	case 'calendar_list' 	:	
-	case 'calendar_add'  	:
-	case 'calendar_edit' 	:
-	case 'calendar_all_delete':
-	case 'calendar_delete' 	:	
-		$attendance_controller->attendance_calendar($action, $attendance_id, $calendar_id);
+    case 'lock_attendance'          :
+    case 'unlock_attendance'        :
+        if (api_is_allowed_to_edit(null, true)) {       
+        $attendance_controller->lock_attendance($action, $attendance_id);
+        } else { api_not_allowed();}
+        break;		
+	case 'calendar_add'  		:
+	case 'calendar_edit' 		:
+	case 'calendar_all_delete' 	:
+	case 'calendar_delete' 		:
+        if (!api_is_allowed_to_edit(null, true)) {
+            api_not_allowed();
+        }   
+    case 'calendar_list'        :    	
+        $attendance_controller->attendance_calendar($action, $attendance_id, $calendar_id);        
 		break;
-	default		  				:	
-		$attendance_controller->attendance_list();
+	default		  		:	
+        $attendance_controller->attendance_list();
 }
 
 ?>

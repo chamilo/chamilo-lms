@@ -199,18 +199,29 @@ switch ($action) {
 	case 'thematic_details'			:
 	case 'moveup'					:
 	case 'movedown'					:
-	case 'thematic_list'			:	$thematic_controller->thematic($action);
-										break;
-	case 'thematic_plan_list'		:
+        if (!api_is_allowed_to_edit(null,true)) {
+        	api_not_allowed();
+        }
+	case 'thematic_list'			:	
+        $thematic_controller->thematic($action);
+		break;	
 	case 'thematic_plan_add'		:
 	case 'thematic_plan_edit'		:
-	case 'thematic_plan_delete'		:	$thematic_controller->thematic_plan($action);
-										break;
-	case 'thematic_advance_list'	:
+	case 'thematic_plan_delete'		:
+        if (!api_is_allowed_to_edit(null,true)) {
+            api_not_allowed();
+        }	
+    case 'thematic_plan_list'       :
+        $thematic_controller->thematic_plan($action);
+        break;
+	
 	case 'thematic_advance_add'		:
 	case 'thematic_advance_edit'	:
-	case 'thematic_advance_delete'	:	$thematic_controller->thematic_advance($action);
-										break;
+	case 'thematic_advance_delete'	:
+        if (!api_is_allowed_to_edit(null,true)) {
+            api_not_allowed();            
+        }
+    case 'thematic_advance_list'    : 
+        $thematic_controller->thematic_advance($action);
+        break;
 }
-
-?>

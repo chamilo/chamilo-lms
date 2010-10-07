@@ -167,7 +167,7 @@ if (isset ($_POST['action'])) {
 }
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$tool_name = get_lang('cesga_AdminValidCursos'); //nombre que aparece en la barra de navegación
+$tool_name = get_lang('ReviewCourseRequests');
 Display :: display_header($tool_name);
 
 //api_display_tool_title($tool_name);
@@ -183,9 +183,9 @@ $table->set_header(1, get_lang('Code'));
 $table->set_header(2, get_lang('Title'));
 $table->set_header(3, get_lang('Category'));
 //$table->set_header(4, get_lang('Teacher'), false);
-//$table->set_header(5, get_lang('cesga_AdminFechaSolic'), false);
+//$table->set_header(5, get_lang('CourseRequestDate'), false);
 $table->set_header(4, get_lang('Teacher'));
-$table->set_header(5, get_lang('cesga_AdminFechaSolic'));
+$table->set_header(5, get_lang('CourseRequestDate'));
 $table->set_header(6, '', false);
 $table->set_column_filter(4,'email_filter');
 $table->set_column_filter(6,'modify_filter');

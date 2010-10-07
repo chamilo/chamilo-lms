@@ -141,7 +141,7 @@ if ($course_validation_feature) {
 
 }
 
-$form->addElement('style_submit_button', null, $course_validation_feature ? get_lang('CreateCourseRequest') : get_lang('CreateCourseArea'), 'class="add"');
+$form->addElement('style_submit_button', null, $course_validation_feature ? get_lang('CreateThisCourseRequest') : get_lang('CreateCourseArea'), 'class="add"');
 $form->add_progress_bar();
 
 // Set default values.

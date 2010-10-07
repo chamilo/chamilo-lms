@@ -110,4 +110,6 @@ $Objectives = "Objectives";
 $TargetAudience = "Target audience";
 $YouHaveToAcceptTermsAndConditions = "You have to accept our Terms and Conditions in order to request a new training.";
 $CourseRequestCreated = "Your request for a new training has been sent successfully. You may receive a reply soon, within one or two days.";
+$CreateThisCourseRequest = "Create this course request";
+$CourseRequestDate = "Request date";
 ?>

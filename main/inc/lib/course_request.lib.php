@@ -33,7 +33,7 @@ class CourseRequestManager {
         }
         $table_course_request = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
         $wanted_course_code = Database::escape_string($wanted_course_code);
-        $sql = sprintf('SELECT COUNT(*) AS number FROM %s WHERE visual_code = "%s"', $table_course_request, $wanted_course_code);
+        $sql = sprintf('SELECT COUNT(id) AS number FROM %s WHERE visual_code = "%s"', $table_course_request, $wanted_course_code);
         $result = Database::fetch_array(Database::query($sql));
         return $result['number'] > 0;
     }
@@ -107,6 +107,33 @@ class CourseRequestManager {
 
         return $last_insert_id;
 
+    }
+
+    /**
+     * Deletes a given course request.
+     * @param int/string $id              The id (an integer number) of the corresponding database record.
+     * @return array/bool                 Returns TRUE on success or FALSE on failure.
+     */
+    public static function delete_course_request($id) {
+        $id = (int)$id;
+        $sql = "DELETE FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE id = ".$id;
+        $result = Database::query($sql);
+        return $result !== false;
+    }
+
+    public static function count_course_requests($status = null) {
+        $course_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
+        if (is_null($status)) {
+            $sql = "SELECT COUNT(id) AS number FROM ".$course_table;
+        } else {
+            $status = (int)$status;
+            $sql = "SELECT COUNT(id) AS number FROM ".$course_table." WHERE status = ".$status;
+        }
+        $result = Database::fetch_array(Database::query($sql));
+        if (is_array($result)) {
+            return $result['number'];
+        }
+        return false;
     }
 
     /**
@@ -199,6 +226,22 @@ class CourseRequestManager {
         $result = Database::query($sql) !== false;
 
         // TODO: Prepare and send notification e-mail messages.
+
+        return $result;
+    }
+
+    /**
+     * Asks the author (through e-mail) for additional info about the given course request.
+     * @param int/string $id              The database primary id of the given request.
+     * @return array/bool                 Returns TRUE on success or FALSE on failure.
+     */
+    public static function ask_for_additional_info($id) {
+
+        $id = (int)$id;
+        $sql = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET info = 1 WHERE id = ".$id;
+        $result = Database::query($sql) !== false;
+
+        // TODO: Send the e-mail.
 
         return $result;
     }

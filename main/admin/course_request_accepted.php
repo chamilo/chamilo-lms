@@ -39,14 +39,10 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 
 /**
- * Get the number of courses which will be displayed
+ * Get the number of courses which will be displayed.
  */
 function get_number_of_courses() {
-    $course_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
-    $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table WHERE status = ".COURSE_REQUEST_ACCEPTED;
-    $res = Database :: query($sql);
-    $obj = Database :: fetch_object($res);
-    return $obj->total_number_of_items;
+    return CourseRequestManager::count_course_requests(COURSE_REQUEST_ACCEPTED);
 }
 
 /**

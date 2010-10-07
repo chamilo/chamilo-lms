@@ -75,25 +75,16 @@ if (isset($_GET['reject_course_request']) && $_GET['reject_course_request'] != '
  * Sending to the teacher a request for additional information about the proposed course.
  */
 if (!empty($request_info)) {
-
-    // Marking the fact, that additional information has been requested.
-    $sql_info = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET info = 1 WHERE id = ".$request_info;
-    $result_info = Database::query($sql_info);
-
-    // TODO: Send the e-mail.
+    CourseRequestManager::ask_for_additional_info($request_info);
 }
 
 
 
 /**
- * Funcion feita por nos para saber o numero de cursos na taboa temporal sen validar
+ * Get the number of courses which will be displayed.
  */
 function get_number_of_courses() {
-    $course_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
-    $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table WHERE status = ".COURSE_REQUEST_PENDING;
-    $res = Database::query($sql);
-    $obj = Database::fetch_object($res);
-    return $obj->total_number_of_items;
+    return CourseRequestManager::count_course_requests(COURSE_REQUEST_PENDING);
 }
 
 /**
@@ -138,13 +129,12 @@ function email_filter($teacher) {
 /**
  * Actions in the list: edit, accept, reject, request additional information.
  */
-
 function modify_filter($id) {
     /*
     return
     '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.' '.'<a href="?reject_course_request='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>'.'  '.'<a href="?request_info='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertInfo'), ENT_QUOTES))."'".')) return false;"><img src="../img/cesga_question.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminPedirInfo').'" alt="'.get_lang('cesga_AdminPedirInfo').'"/></a>&nbsp;'.'  '.'<a href="?accept_course_request='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('cesga_AdminAlertCrear'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('cesga_AdminValidar').'" alt="'.get_lang('cesga_AdminValidar').'"/></a>&nbsp;';
     */
-    $sql_request_info = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE (id = ".$id." AND info = 1 )";
+    $sql_request_info = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE (id = ".$id." AND info = 1)";
     $res_request_info = Database::query($sql_request_info);
 
     if (Database::num_rows($res_request_info) > 0) { //Si ya se le ha pedido información, no se muestra esa opción
@@ -182,7 +172,7 @@ Display :: display_header($tool_name);
 
 //api_display_tool_title($tool_name);
 if (isset ($_GET['delete_course'])) {
-    CourseManager :: delete_course($_GET['delete_course']);
+    //CourseManager :: delete_course($_GET['delete_course']);
 }
 
 // Create a sortable table with the course data

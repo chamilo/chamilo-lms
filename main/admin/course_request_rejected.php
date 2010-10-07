@@ -62,23 +62,14 @@ if (!empty($accept_course_request)) {
  * Sending to the teacher a request for additional information about the proposed course.
  */
 if (!empty($request_info)) {
-
-    // Marking the fact, that additional information has been requested.
-    $sql_info = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET info = 1 WHERE id = ".$request_info;
-    $result_info = Database::query($sql_info);
-
-    // TODO: Send the e-mail.
+    CourseRequestManager::ask_for_additional_info($request_info);
 }
 
 /**
- * Get the number of courses which will be displayed
+ * Get the number of courses which will be displayed.
  */
 function get_number_of_courses() {
-    $course_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
-    $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table WHERE status = ".COURSE_REQUEST_REJECTED;
-    $res = Database :: query($sql);
-    $obj = Database :: fetch_object($res);
-    return $obj->total_number_of_items;
+    return CourseRequestManager::count_course_requests(COURSE_REQUEST_REJECTED);
 }
 
 /**
@@ -113,7 +104,6 @@ function get_course_data($from, $number_of_items, $column, $direction) {
 /**
  * Actions in the list: edit.
  */
-
 function modify_filter($id) {
     return
         '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.' '.

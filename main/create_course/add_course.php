@@ -70,11 +70,6 @@ if (!api_is_allowed_to_create_course()) {
     exit;
 }
 
-// Get necessary table definitions.
-$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_course_request = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
-
 global $_configuration;
 $dbnamelength = strlen($_configuration['db_prefix']);
 // Ensure the database prefix + database name do not get over 40 characters.

@@ -122,8 +122,9 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		// Check the extension
 		$ext = explode('.', $path);
 		$ext = strtolower($ext[sizeof($ext) - 1]);
+		
 		// "htmlfiles" are shown in a frameset
-		if ($ext == 'htm' || $ext == 'html' || $ext == 'gif' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'pdf' || $ext == 'swf' || $ext == 'mp3') {
+		if ($ext == 'htm' || $ext == 'html' || $ext == 'gif' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'pdf' || $ext == 'swf' || $ext == 'mp3' || ($ext == 'svg' && support_svg())) {
 			$url = 'showinframes.php?'.api_get_cidreq().'&amp;file='.$url_path.$req_gid;
 		} else {
 			// url-encode for problematic characters (we may not call them dangerous characters...)
@@ -298,7 +299,7 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
 		if ($is_certificate_mode) {
 			$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
 		}else {
-			if($extension=='svg') {			
+			if($extension=='svg' && support_svg()){			
 				$modify_icons = '<a href="edit_drawing.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';		
 			}else{			
 				$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
@@ -571,4 +572,19 @@ function search_keyword($document_name, $keyword) {
 		return false;
 	}
 }
+
+/**
+ * Check brosers support for svg files
+ * @return return bool Return true
+ */
+function support_svg() {	
+	$browser_info = get_browser($_SERVER["HTTP_USER_AGENT"], true);
+	//print_r($browser_info);
+	if (($browser_info[browser]=='IE' && $browser_info[majorver]>8) || ($browser_info[browser]=='Firefox' && $browser_info[majorver]>2)||($browser_info[browser]=='Safari' && $browser_info[majorver]>4) || $browser_info[browser]=='Chrome' || ($browser_info[browser]=='Opera' && $browser_info[majorver]>9)){
+		return true;
+	}else{
+		return false;
+	}	
+}
+
 ?>

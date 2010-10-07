@@ -4137,7 +4137,6 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 	padding:2px;
 	font-size:120%;
 	font-weight: bold;
-	margin:5px;
 	padding:5px;
 }
 
@@ -4328,11 +4327,11 @@ span.form_required  {
 
 
 .attendance-users-table td {
-	height:66px;
+	/* height:66px;*/
 }
 
 .attendance-calendar-table td {
-	height:66px;
+	/*height:66px;*/
 }
 
 #contact_registration .label{

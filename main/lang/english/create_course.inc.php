@@ -112,4 +112,8 @@ $YouHaveToAcceptTermsAndConditions = "You have to accept our Terms and Condition
 $CourseRequestCreated = "Your request for a new training has been sent successfully. You may receive a reply soon, within one or two days.";
 $CreateThisCourseRequest = "Create this course request";
 $CourseRequestDate = "Request date";
+$AcceptThisCourseRequest = "Accept this training";
+$ANewCourseWillBeCreated = "A new training is going to be created. Is it OK to proceed?";
+$AdditionalInfoWillBeAsked = "Additional information about this training request is going to be asked through an e-mail message. Is it OK to proceed?";
+$AskAdditionalInfo = "Ask for additional information";
 ?>

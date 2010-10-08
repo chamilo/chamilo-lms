@@ -1271,7 +1271,7 @@ $MyTextHere = "Enter your text here...";
 $FieldTypeSocialProfile = "Social network link";
 $AllowUsersCopyFilesTitle = "Allow users to copy files from a course in your personal file area";
 $AllowUsersCopyFilesComment = "Allows users to copy files from a course in your personal file area, visible through the Social Network or through the HTML editor when they are out of a course";
-$ReviewCourseRequests = "Review course requests";
-$AcceptedCourseRequests = "Accepted course requests";
-$RejectedCourseRequests = "Rejected course requests";
+$ReviewCourseRequests = "Review training requests";
+$AcceptedCourseRequests = "Accepted training requests";
+$RejectedCourseRequests = "Rejected training requests";
 ?>

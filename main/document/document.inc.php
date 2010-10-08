@@ -13,6 +13,7 @@
  * @param	boolean	Whether to change the renderer (this will add a template <span> to the QuickForm object displaying the form)
  * @return string html form
  */
+
 function build_directory_selector($folders, $curdirpath, $group_dir = '', $change_renderer = false) {
 	$folder_titles = array();
 	if (api_get_setting('use_document_title') == 'true') {
@@ -299,7 +300,7 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
 		if ($is_certificate_mode) {
 			$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
 		}else {
-			if($extension=='svg' && support_svg()){			
+			if($extension=='svg' && support_svg()){
 				$modify_icons = '<a href="edit_drawing.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';		
 			}else{			
 				$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';

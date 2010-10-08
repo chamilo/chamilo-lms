@@ -12,6 +12,7 @@
  */
 
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 /* CONSTANTS */
 

@@ -1274,4 +1274,5 @@ $AllowUsersCopyFilesComment = "Allows users to copy files from a course in your 
 $ReviewCourseRequests = "Review incoming training requests";
 $AcceptedCourseRequests = "Accepted training requests";
 $RejectedCourseRequests = "Rejected training requests";
+$BrowscapInfo = "Browscap loading browscap.ini file that contains a large amount of data on the browser and its capabilities, so it can be used by the function get_browser () PHP";
 ?>

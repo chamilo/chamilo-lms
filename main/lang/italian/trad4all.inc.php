@@ -968,4 +968,9 @@ $ExamFail = "Non superato";
 $ExamTracking = "Storico esami";
 $NoAttempt = "Nessun tentativo";
 $PassExam = "Superato";
+$CreateCourseRequest = "Richiedi un nuovo corso";
+$TermsAndConditions = "Termini e Condizioni";
+$ReadTermsAndConditions = "Leggi i Termini e le Condizioni";
+$IAcceptTermsAndConditions = "Ho letto e accettato i Termini e le Condizioni del servizio";
+$YouHaveToAcceptTermsAndConditions = "Per procedere devi accettare i Termini e le Condizioni del servizio";
 ?>

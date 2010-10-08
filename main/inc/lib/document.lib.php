@@ -12,6 +12,7 @@
  */
 
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 /* CONSTANTS */
 
@@ -196,6 +197,7 @@ class DocumentManager {
 			'sv4crc' => 'application/x-sv4crc',
 			'svf' => 'application/vnd.svf',
 			'svg' => 'image/svg+xml',
+			'svgz'=> 'image/svg+xml',
 			'swf' => 'application/x-shockwave-flash',
 			'sxc' => 'application/vnd.sun.xml.calc',
 			'sxi' => 'application/vnd.sun.xml.impress',

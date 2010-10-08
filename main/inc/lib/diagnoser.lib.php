@@ -80,7 +80,7 @@ class Diagnoser
         }
 
         $exists = ! file_exists(api_get_path(SYS_PATH) . '/install');
-        $status = $exists ? self :: STATUS_OK : self :: STATUS_WARNING;
+        $status = $exists ? self :: STATUS_WARNING : self :: STATUS_OK;
         $array[] = $this->build_setting($status, '[FILES]', get_lang('DirectoryExists') . ': /install', 'http://be2.php.net/file_exists', $writable, 0, 'yes_no', get_lang('DirectoryShouldBeRemoved'));
 
         return $array;
@@ -195,6 +195,12 @@ class Diagnoser
         $req_setting = '4320';
         $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
         $array[] = $this->build_setting($status, '[SESSION]', 'session.gc_maxlifetime', 'http://www.php.net/manual/en/ini.core.php#session.gc-maxlifetime', $setting, $req_setting, null, get_lang('SessionGCMaxLifetimeInfo'));
+		
+		$setting = ini_get('browscap');
+		if (strpos($setting, 'browscap.ini')){$setting = true;}else{$setting=false;}		
+		$req_setting = true;
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
+        $array[] = $this->build_setting($status, '[INI]', 'browscap', 'http://www.php.net/manual/en/misc.configuration.php#ini.browscap', $setting, $req_setting, 'on_off', get_lang('BrowscapInfo'));
 
         //Extensions
         $extensions = array('gd' => 'http://www.php.net/gd', 'mysql' => 'http://www.php.net/mysql', 'pcre' => 'http://www.php.net/pcre', 'session' => 'http://www.php.net/session', 'standard' => 'http://www.php.net/spl', 'zlib' => 'http://www.php.net/zlib', 'xsl' => 'http://be2.php.net/xsl');

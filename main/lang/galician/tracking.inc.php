@@ -273,4 +273,6 @@ $DisplayCourseOverview = "Vista xeral de cursos";
 $DisplaySessionOverview = "Vista xeral de sesións";
 $TotalNumberOfMessages = "Número total de mensaxes";
 $TotalNumberOfAssignments = "Número total de tarefas";
+$LastLogins = "Última conexión";
+$AllLogins = "Todas as conexións";
 ?>

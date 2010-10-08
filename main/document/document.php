@@ -211,9 +211,13 @@ if ($to_group_id != 0 && $curdirpath == '/') {
 	$curdirpathurl = urlencode($group_properties['directory']);
 }
 
+
 // Check visibility of the current dir path. Don't show anything if not allowed
-if (!(DocumentManager::is_visible($curdirpath, $_course) || $is_allowed_to_edit)) {
-    api_not_allowed();
+
+if (!$is_allowed_to_edit || api_is_coach()) {    
+    if (!(DocumentManager::is_visible($curdirpath, $_course, api_get_session_id()))) {
+        api_not_allowed();
+    }
 }
 
 /*	Constants and variables */
@@ -316,7 +320,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_se
 	}
 	
 }
-
 
 // Slideshow inititalisation
 $_SESSION['image_files_only'] = '';
@@ -422,6 +425,13 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights) { // TEACHER ONLY
 
 	$my_get_move = Security::remove_XSS($_GET['move']);
 	if (isset($_GET['move']) && $_GET['move'] != '') {
+        
+        if (api_is_coach()) {            
+            if (!DocumentManager::is_visible_by_id($my_get_move, $_course,api_get_session_id())) {
+                api_not_allowed();
+            }           
+        }        
+        
 		if (!$is_allowed_to_edit) {
 			if (DocumentManager::check_readonly($_course, $_user['user_id'], $my_get_move)) {
 				api_not_allowed();
@@ -430,6 +440,8 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights) { // TEACHER ONLY
 
 		if (DocumentManager::get_document_id($_course, $my_get_move)) {
 			$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
+            
+            
 			echo '<div class="row"><div class="form_header">'.get_lang('Move').'</div></div>';
 			echo build_move_to_selector($folders, Security::remove_XSS($_GET['curdirpath']), $my_get_move, $group_properties['directory']);
 		}
@@ -441,6 +453,13 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights) { // TEACHER ONLY
 				api_not_allowed();
 			}
 		}
+        
+        if (api_is_coach()) {            
+            if (!DocumentManager::is_visible_by_id($my_get_move, $_course,api_get_session_id())) {
+                api_not_allowed();
+            }           
+        }    
+        
 
 		require_once $lib_path.'fileManage.lib.php';
 		// This is needed for the update_db_info function
@@ -466,12 +485,19 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights) { // TEACHER ONLY
 	/*	DELETE FILE OR DIRECTORY */
 
 	if (isset($_GET['delete'])) {
+        
+        if (api_is_coach()) {
+            if (!DocumentManager::is_visible($_GET['delete'], $_course)) {
+                api_not_allowed();
+            }           
+        }  
+        
 		if (!$is_allowed_to_edit) {
 			if (DocumentManager::check_readonly($_course, $_user['user_id'], $_GET['delete'], '', true)) {
 				api_not_allowed();
 			}
 		}
-
+           
 		require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 		if (DocumentManager::delete_document($_course, $_GET['delete'], $base_work_dir)) {
@@ -563,7 +589,13 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights) { // TEACHER ONLY
 			$update_id = $_GET['set_invisible'];
 			$visibility_command = 'invisible';
 		}
-
+        
+        if (api_is_coach()) {            
+            if (!DocumentManager::is_visible_by_id($update_id, $_course)) {
+                api_not_allowed();
+            }        	
+        }
+        
 		if (!$is_allowed_to_edit) {
 			if(DocumentManager::check_readonly($_course, $_user['user_id'], '', $update_id)) {
 				api_not_allowed();
@@ -682,9 +714,9 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
 
 /*	GET ALL DOCUMENT DATA FOR CURDIRPATH */
 if(isset($_GET['keyword']) && !empty($_GET['keyword'])){
-$docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=true);
+    $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=true);
 }else{
-$docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=false);
+    $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=false);
 }
 
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
@@ -731,8 +763,9 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
 	$use_document_title = api_get_setting('use_document_title');
 	// Create a sortable table with our data
 	$sortable_data = array();
-
-	while (list($key, $id) = each($docs_and_folders)) {
+  
+	//while (list($key, $id) = each($docs_and_folders)) {
+    foreach($docs_and_folders as $key=>$id) {        
 		$row = array();
 
 		// If the item is invisible, wrap it in a span with class invisible

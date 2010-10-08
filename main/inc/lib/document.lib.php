@@ -474,9 +474,9 @@ class DocumentManager {
 		//if they can't see invisible files, they can only see files with visibility 1
 		$visibility_bit = ' = 1';
 		//if they can see invisible files, only deleted files (visibility 2) are filtered out
-		if ($can_see_invisible) {
+		//if ($can_see_invisible) {
 			$visibility_bit = ' <> 2';
-		}
+		//}
 
 		//the given path will not end with a slash, unless it's the root '/'
 		//so no root -> add slash
@@ -485,21 +485,21 @@ class DocumentManager {
 		//condition for the session
 		$current_session_id = api_get_session_id();
 		$condition_session = " AND (id_session = '$current_session_id' OR id_session = '0')";
-        
-        if( !$can_see_invisible) {
-        	$condition_session = " AND (id_session = '$current_session_id' ) ";
+                
+        if (!$can_see_invisible) {
+        	//$condition_session = " AND (id_session = '$current_session_id' ) ";
         }
 		
 		//condition for search (get ALL folders and documents)
-		if($search){
-			$sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.lastedit_date, last.visibility
+		if ($search) {
+			$sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.id_session item_property_session_id, last.lastedit_date, last.visibility
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
 						AND last.tool = '".TOOL_DOCUMENT."'
 						AND ".$to_field." = ".$to_value."
 						AND last.visibility".$visibility_bit . $condition_session;
-		}else{
-			$sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.lastedit_date, last.visibility
+		} else {
+			$sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.id_session item_property_session_id, last.lastedit_date, last.visibility
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
 						AND docs.path LIKE '".$path.$added_slash."%'
@@ -508,10 +508,35 @@ class DocumentManager {
 						AND ".$to_field." = ".$to_value."
 						AND last.visibility".$visibility_bit . $condition_session;
 		}
+ 
+        
 		$result = Database::query($sql);
-
+        
+        $doc_list = array();
+        $document_data = array();
+        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+        
 		if ($result!==false && Database::num_rows($result) != 0) {
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
+                
+                if (api_is_coach()) {                    
+                    //Looking for course items that are invisible  to hide it in the session
+                    if (in_array($row['id'], array_keys($doc_list))) {             
+                        if ($doc_list[$row['id']]['item_property_session_id'] == 0 && $doc_list[$row['id']]['session_id'] == 0) {                        
+                            if ($doc_list[$row['id']]['visibility'] == 0) {
+                                unset($document_data[$row['id']]);                                
+                            	continue;
+                            }
+                        }
+                    }            
+                    $doc_list[$row['id']] = $row;
+                }
+                
+                if (!api_is_coach() && !$is_allowed_to_edit) {
+                    $doc_list[] = $row;
+                }
+
+                
 				if ($row['filetype'] == 'file' && pathinfo($row['path'], PATHINFO_EXTENSION) == 'html') {
 					//Templates management
 					$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
@@ -524,6 +549,61 @@ class DocumentManager {
 				}
 				$document_data[$row['id']] = $row;
 			}
+            
+            
+            //Only for the student we filter the results see BT#1652
+            if (!api_is_coach() && !$is_allowed_to_edit) {                
+                $ids_to_remove = array();                
+                $my_repeat_ids = $temp= array();
+                
+                //Selecting repetead ids
+                foreach($doc_list as $row ) {                    
+                    if (in_array($row['id'], array_keys($temp))) {
+                    	$my_repeat_ids[] = $row['id'];
+                    }
+                	$temp[$row['id']] = $row;
+                }
+                
+                //Checking disponibility in a session
+                //var_dump($my_repeat_ids);
+                foreach($my_repeat_ids as $id) {                   
+                	 foreach($doc_list as $row ) { 
+                        if ($id == $row['id']) {
+                            //var_dump($row['visibility'].' - '.$row['session_id'].' - '.$row['item_property_session_id']);                            
+                            if ($row['visibility'] == 0 && $row['item_property_session_id'] == 0) {
+                                $delete_repeated[$id] = true;
+                            }                       
+                            if ($row['visibility'] == 0 && $row['item_property_session_id'] != 0) {
+                                $delete_repeated[$id] = true;
+                            }                            
+                        }
+                    }
+                }               
+                
+                //var_dump($delete_repeated); 
+                
+                foreach($doc_list as $key=>$row) {
+                    //&& !in_array($row['id'],$my_repeat_ids)
+                    //var_dump($row['id'].' - '.$row['visibility']);
+                    if (in_array($row['visibility'], array('0','2')) && !in_array($row['id'],$my_repeat_ids) ) {  
+                        $ids_to_remove[] = $row['id'];                      
+                    	unset($doc_list[$key]);
+                    }
+                } 
+                //var_dump($ids_to_remove);
+                
+                foreach($document_data as $row) {
+                   if (in_array($row['id'], $ids_to_remove)) {
+                        unset($document_data[$row['id']]);
+                   }
+                   if (isset($delete_repeated[$row['id']]) && $delete_repeated[$row['id']]) {
+                   	   unset($document_data[$row['id']]);
+                   }
+                }
+            }             
+            
+            
+            
 			return $document_data;
 		} else {
 			//display_error("Error getting document info from database (".Database::error().")!");
@@ -556,21 +636,19 @@ class DocumentManager {
 			//condition for the session
 			$session_id = api_get_session_id();
 			$condition_session = api_get_session_condition($session_id);
-			$sql = "SELECT path
-								FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
+			$sql = "SELECT path FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 								WHERE docs.id = last.ref
 								AND docs.filetype = 'folder'
 								AND last.tool = '".TOOL_DOCUMENT."'
 								AND last.to_group_id = ".$to_group_id."
 								AND last.visibility <> 2 $condition_session";
-
+            
 			$result = Database::query($sql);
 
 			if ($result && Database::num_rows($result) != 0) {
 				while ($row = Database::fetch_array($result, 'ASSOC')) {
 					$document_folders[] = $row['path'];
 				}
-
 				//sort($document_folders);
 				natsort($document_folders);
 
@@ -579,9 +657,9 @@ class DocumentManager {
 			} else {
 				return false;
 			}
-		}
-		//no invisible folders
-		else {
+		} else {
+            //no invisible folders
+            
 			//condition for the session
 			$session_id = api_get_session_id();
 			$condition_session = api_get_session_condition($session_id);
@@ -964,26 +1042,54 @@ class DocumentManager {
 	 * @param string $document_path the relative complete path of the document
 	 * @param array  $course the _course array info of the document's course
 	 */
-	public static function is_visible($doc_path, $course) {
+	public static function is_visible($doc_path, $course, $session_id = 0) {
 		$docTable  = Database::get_course_table(TABLE_DOCUMENT, $course['dbName']);
 		$propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
 		//note the extra / at the end of doc_path to match every path in the
 		// document table that is part of the document path
 		$doc_path = Database::escape_string($doc_path);
-
-		$sql = "SELECT path FROM $docTable d, $propTable ip " .
-				"where d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND d.filetype='file' AND visibility=0 AND ".
-				"locate(concat(path,'/'),'".$doc_path."/')=1";
+        
+        $session_id = intval($session_id);
+        $condition = "AND id_session = $session_id";
+        
+		$sql  = "SELECT path FROM $docTable d, $propTable ip " .
+                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND visibility=0 $condition AND locate(concat(path,'/'),'".$doc_path."/')=1";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {
 			$row = Database::fetch_array($result);
 			//echo "$row[0] not visible";
 			return false;
 		}
-
 		//improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:	access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
 		return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
 	}
+    
+        /**
+     * return true if the documentpath have visibility=1 as item_property
+     *
+     * @param string $document_path the relative complete path of the document
+     * @param array  $course the _course array info of the document's course
+     */
+    public static function is_visible_by_id($id, $course, $session_id = 0) {
+        $docTable  = Database::get_course_table(TABLE_DOCUMENT, $course['dbName']);
+        $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);        
+        $id = intval($id);
+        
+        $session_id = intval($session_id);
+        $condition = "AND id_session = $session_id";
+        
+       echo  $sql  = "SELECT path FROM $docTable d, $propTable ip " .
+                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND visibility=0 $condition AND d.id = $id";
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            $row = Database::fetch_array($result);
+            //echo "$row[0] not visible";
+            return false;
+        }
+        //improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:  access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
+        return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
+    }
+    
 
 	/**
 	 * Allow attach a certificate to a course

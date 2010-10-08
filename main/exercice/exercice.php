@@ -829,7 +829,10 @@ if ($show == 'test') {
 						// Export qti ...
 						echo '<a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export_db.png" border="0" title="IMS/QTI" /></a>';
 					} else { // not session resource
-						echo get_lang('ExerciseEditionNotAvailableInSession');
+						echo Display::return_icon('wizard_gray_small.gif', get_lang('ExerciseEditionNotAvailableInSession'), array('title'=>get_lang('ExerciseEditionNotAvailableInSession'))); 
+                        ?>                           
+                        <a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=copy_exercise&amp;sec_token=<?php echo $token; ?>&amp;exerciseId=<?php echo $row['id']; ?>"  onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset)); echo " ".addslashes($row['title']); echo "?"; ?>')) return false;"><img width="16" src="../img/cd.gif" border="0" title="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" /></a>
+                        <?php   
 					}
 					echo "</td>";
 					echo "</tr>";

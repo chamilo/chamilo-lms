@@ -22,9 +22,24 @@ $this_section = SECTION_COURSES;
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
+//
+api_protect_course_script();
+api_block_anonymous_users();
+
+if (!isset($_GET['curdirpath']) || !isset($_GET['file'])){
+	api_not_allowed(true);
+}
 
 /* Constants & Variables */
 
+//path for svg-edit save
+$_SESSION['draw_dir']=Security::remove_XSS($_GET['curdirpath']);
+if($_SESSION['draw_dir']=='/'){
+	$_SESSION['draw_dir']='';
+}
+$_SESSION['draw_file']=basename(Security::remove_XSS($_GET['file']));
+
+//
 $get_file = Security::remove_XSS($_GET['file']);
 
 $file = basename($get_file);
@@ -89,23 +104,22 @@ if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
 
-
 event_access_tool(TOOL_DOCUMENT);
-
-//path for svg-edit save
-$_SESSION['draw_dir']=Security::remove_XSS($_GET['curdirpath']);
-if($_SESSION['draw_dir']=='/'){
-	$_SESSION['draw_dir']='';
-}
-$_SESSION['draw_file']=basename(Security::remove_XSS($_GET['file']));
 
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 echo '</div>';
 
-echo '<iframe style=\'height: 500px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'\'>';
-echo '</iframe>';
+if (api_support_svg()){
+
+	echo '<iframe style=\'height: 500px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'\'>';
+	echo '</iframe>';
+
+}else{
+	
+	Display::display_error_message(get_lang('BrowserDontSupportsSVG'));
+}
 
 Display::display_footer();
 ?>

@@ -271,7 +271,7 @@ function display_addedresource_link($type, $id, $style = '') {
             $ext = explode('.', $filename);
             $ext = strtolower($ext[sizeof($ext)-1]);
             $myrow['path'] = rawurlencode($myrow['path']);
-			if (support_svg()){
+			if (api_support_svg()){
             	$in_frames = in_array($ext, array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png', 'svg','svgz'));
 			}else{
 				$in_frames = in_array($ext, array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png'));

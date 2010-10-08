@@ -37,6 +37,15 @@ require api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 // Include additional libraries
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
+// Filltering passed to this page parameters.
+$delete_course_request = intval($_GET['delete_course_request']);
+
+/**
+ * Deletion of a course request.
+ */
+if (!empty($delete_course_request)) {
+    CourseRequestManager::delete_course_request($delete_course_request);
+}
 
 /**
  * Get the number of courses which will be displayed.
@@ -75,26 +84,22 @@ function get_course_data($from, $number_of_items, $column, $direction) {
 }
 
 /**
- * Actions in the list: edit.
+ * Actions in the list: edit, accept, delete.
  */
 function modify_filter($id) {
-    return
-        '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;';
+    $result = '<a href="editar_curso.php?id='.$id.'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
+        '&nbsp;<a href="?delete_course_request='.$id.'">'.Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;')).'</a>';
+    return $result;
 }
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $tool_name = get_lang('AcceptedCourseRequests');
 Display :: display_header($tool_name);
 
-//api_display_tool_title($tool_name);
-if (isset ($_GET['delete_course'])) {
-    //CourseManager :: delete_course($_GET['delete_course']);
-}
-
 // The action bar.
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
+echo '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
+echo '<a href="course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
 echo '</div>';
 
 // Create a sortable table with the course data

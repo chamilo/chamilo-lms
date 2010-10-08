@@ -41,9 +41,10 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 $accept_course_request = intval($_GET['accept_course_request']);
 $reject_course_request = intval($_GET['reject_course_request']);
 $request_info = intval($_GET['request_info']);
+$delete_course_request = intval($_GET['delete_course_request']);
 
 /**
- * Coutse acceptance and creation.
+ * Course acceptance and creation.
  */
 if (!empty($accept_course_request)) {
 
@@ -78,6 +79,12 @@ if (!empty($request_info)) {
     CourseRequestManager::ask_for_additional_info($request_info);
 }
 
+/**
+ * Deletion of a course request.
+ */
+if (!empty($delete_course_request)) {
+    CourseRequestManager::delete_course_request($delete_course_request);
+}
 
 
 /**
@@ -130,23 +137,17 @@ function email_filter($teacher) {
  * Actions in the list: edit, accept, reject, request additional information.
  */
 function modify_filter($id) {
-    /*
-    return
-    '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.' '.'<a href="?reject_course_request='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>'.'  '.'<a href="?request_info='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('AdditionalInfoWillBeAsked'), ENT_QUOTES))."'".')) return false;"><img src="../img/request_info.gif" border="0" style="vertical-align: middle" title="'.get_lang('AskAdditionalInfo').'" alt="'.get_lang('AskAdditionalInfo').'"/></a>&nbsp;'.'  '.'<a href="?accept_course_request='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ANewCourseWillBeCreated'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('AcceptThisCourseRequest').'" alt="'.get_lang('AcceptThisCourseRequest').'"/></a>&nbsp;';
-    */
-    $sql_request_info = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE (id = ".$id." AND info = 1)";
-    $res_request_info = Database::query($sql_request_info);
-
-    if (Database::num_rows($res_request_info) > 0) { //Si ya se le ha pedido información, no se muestra esa opción
-
-        return
-            '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.' '.'<a href="?reject_course_request='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>'.'  '.'<a href="?accept_course_request='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ANewCourseWillBeCreated'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('AcceptThisCourseRequest').'" alt="'.get_lang('AcceptThisCourseRequest').'"/></a>&nbsp;';
-
-    } else {
-
-        return
-            '<a href="editar_curso.php?id='.$id.'"><img src="../img/edit.gif" border="0" style="vertical-align: middle" title="'.get_lang('Edit').'" alt="'.get_lang('Edit').'"/></a>&nbsp;'.'  '.'<a href="?reject_course_request='.$id.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><img src="../img/delete.gif" border="0" style="vertical-align: middle" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'"/></a>'.'  '.'<a href="?accept_course_request='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ANewCourseWillBeCreated'), ENT_QUOTES))."'".')) return false;"><img src="../img/right.gif" border="0" style="vertical-align: middle" title="'.get_lang('AcceptThisCourseRequest').'" alt="'.get_lang('AcceptThisCourseRequest').'"/></a>'.'  '.'<a href="?request_info='.$id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('AdditionalInfoWillBeAsked'), ENT_QUOTES))."'".')) return false;"><img src="../img/request_info.gif" border="0" style="vertical-align: middle" title="'.get_lang('AskAdditionalInfo').'" alt="'.get_lang('AskAdditionalInfo').'"/></a>&nbsp;&nbsp;';
+    $result = '<a href="editar_curso.php?id='.$id.'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
+        '&nbsp;<a href="?accept_course_request='.$id.'">'.Display::return_icon('action_accept.gif', get_lang('AcceptThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(get_lang('ANewCourseWillBeCreated'), ENT_QUOTES)).'\')) return false;')).'</a>'.
+        '&nbsp;<a href="?reject_course_request='.$id.'">'.Display::return_icon('action_reject.gif', get_lang('Delete'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;')).'</a>';
+    if (!CourseRequestManager::additional_info_asked($id)) {
+        $result .= '&nbsp;<a href="?request_info='.$id.'">'.Display::return_icon('request_info.gif', get_lang('AskAdditionalInfo'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(get_lang('AdditionalInfoWillBeAsked'), ENT_QUOTES)).'\')) return false;')).'</a>';
     }
+
+    // The delete action has been deactivated here. Better reject the target request, after that you can delete it.
+    //$result .= '&nbsp;<a href="?delete_course_request='.$id.'">'.Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;')).'</a>';
+
+    return $result;
 }
 
 if (isset ($_POST['action'])) {
@@ -170,15 +171,10 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $tool_name = get_lang('ReviewCourseRequests');
 Display :: display_header($tool_name);
 
-//api_display_tool_title($tool_name);
-if (isset ($_GET['delete_course'])) {
-    //CourseManager :: delete_course($_GET['delete_course']);
-}
-
 // The action bar.
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/course_request_accepted.php">'.Display::return_icon('course_request_accepted.gif', get_lang('AcceptedCourseRequests')).get_lang('AcceptedCourseRequests').'</a>';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
+echo '<a href="course_request_accepted.php">'.Display::return_icon('course_request_accepted.gif', get_lang('AcceptedCourseRequests')).get_lang('AcceptedCourseRequests').'</a>';
+echo '<a href="course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
 echo '</div>';
 
 // Create a sortable table with the course data

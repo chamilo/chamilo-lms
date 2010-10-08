@@ -231,7 +231,7 @@ class CourseRequestManager {
     }
 
     /**
-     * Asks the author (through e-mail) for additional info about the given course request.
+     * Asks the author (through e-mail) for additional information about the given course request.
      * @param int/string $id              The database primary id of the given request.
      * @return array/bool                 Returns TRUE on success or FALSE on failure.
      */
@@ -244,6 +244,20 @@ class CourseRequestManager {
         // TODO: Send the e-mail.
 
         return $result;
+    }
+
+    /**
+     * Checks whether additional information about the given course request has been asked.
+     * @param int/string $id              The database primary id of the given request.
+     * @return array/bool                 Returns TRUE if additional information has been asked or FALSE otherwise.
+     */
+    public static function additional_info_asked($id) {
+
+        $id = (int)$id;
+        $sql = "SELECT id FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE (id = ".$id." AND info = 1)";
+        $result = Database::num_rows(Database::query($sql));
+        return !empty($result);
+
     }
 
 }

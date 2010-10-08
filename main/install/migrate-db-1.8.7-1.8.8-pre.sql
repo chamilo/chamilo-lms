@@ -39,7 +39,7 @@ UPDATE settings_current SET selected_value='1' WHERE variable='allow_message_too
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_validation', NULL, 'radio', 'Platform', 'false', 'EnableCourseValidation', 'EnableCourseValidationComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('course_validation', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('course_validation', 'false', 'No');
-
+UPDATE settings_current SET selected_value='1' WHERE variable='advanced_filemanager';
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
 

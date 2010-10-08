@@ -83,4 +83,5 @@ $Collapse = "Contraer";
 $CourseDetails = "Descrición do curso";
 $GroupPendingInvitations = "Invitacións de grupo pendentes";
 $Compose = "Redactar";
+$ThereAreNoCoursesInThisCategory = "Non existen cursos na categoria actual";
 ?>

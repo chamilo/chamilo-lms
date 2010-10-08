@@ -110,4 +110,10 @@ $Objectives = "Objetivos";
 $TargetAudience = "Destinatarios";
 $YouHaveToAcceptTermsAndConditions = "Debe aceptar las condiciones del servicio para poder solicitar un curso.";
 $CourseRequestCreated = "Se recibió correctamente su solicitud de curso. En breve (uno o dos días laborables) recibirá respuesta sobre la misma.";
+$CreateThisCourseRequest = "Solicitud de nuevo curso";
+$CourseRequestDate = "Fecha Solicitud";
+$AcceptThisCourseRequest = "Validar este curso";
+$ANewCourseWillBeCreated = "Se creará un curso indicado.";
+$AdditionalInfoWillBeAsked = "Enviar un e-mail solicitando información adicional.";
+$AskAdditionalInfo = "Pedir más información";
 ?>

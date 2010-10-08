@@ -110,4 +110,10 @@ $Objectives = "Цели на курса";
 $TargetAudience = "Целева аудитория";
 $YouHaveToAcceptTermsAndConditions = "Трабва да приемете нашите Условия за ползване, за да заявите нов курс.";
 $CourseRequestCreated = "Вашата заявка за нов курс е изпратена. Може да получите отговор по нея скоро, в рамките на 1-2 дена.";
+$CreateThisCourseRequest = "Създаване на заявката";
+$CourseRequestDate = "Дата на заявката";
+$AcceptThisCourseRequest = "Одобряване и създаване на курса";
+$ANewCourseWillBeCreated = "Ще се създаде нов курс. Да се направи ли това?";
+$AdditionalInfoWillBeAsked = "Ще се изпрати e-mail с искане за допълнителна информация относно заявката. Да се направи ли това?";
+$AskAdditionalInfo = "Искане на допълнителна информация";
 ?>

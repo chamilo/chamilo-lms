@@ -573,18 +573,4 @@ function search_keyword($document_name, $keyword) {
 	}
 }
 
-/**
- * Check brosers support for svg files
- * @return return bool Return true
- */
-function support_svg() {	
-	$browser_info = get_browser($_SERVER["HTTP_USER_AGENT"], true);
-	//print_r($browser_info);
-	if (($browser_info[browser]=='IE' && $browser_info[majorver]>8) || ($browser_info[browser]=='Firefox' && $browser_info[majorver]>1)||($browser_info[browser]=='Safari' && $browser_info[majorver]>3) || $browser_info[browser]=='Chrome' || ($browser_info[browser]=='Opera' && $browser_info[majorver]>9)){
-		return true;
-	}else{
-		return false;
-	}	
-}
-
 ?>

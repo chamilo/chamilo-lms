@@ -119,6 +119,12 @@ if (isset($_GET['delete_course'])) {
     CourseManager :: delete_course($_GET['delete_course']);
 }
 
+// The action bar.
+echo '<div class="actions">';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/course_request_accepted.php">'.Display::return_icon('course_request_accepted.gif', get_lang('AcceptedCourseRequests')).get_lang('AcceptedCourseRequests').'</a>';
+echo '</div>';
+
 // Create a sortable table with the course data
 $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data', 2);
 $table->set_additional_parameters($parameters);

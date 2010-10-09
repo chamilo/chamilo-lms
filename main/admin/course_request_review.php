@@ -42,6 +42,8 @@ $accept_course_request = intval($_GET['accept_course_request']);
 $reject_course_request = intval($_GET['reject_course_request']);
 $request_info = intval($_GET['request_info']);
 $delete_course_request = intval($_GET['delete_course_request']);
+$message = trim(Security::remove_XSS(stripslashes(urldecode($_GET['message']))));
+$is_error_message = !empty($_GET['is_error_message']);
 
 /**
  * Course acceptance and creation.
@@ -61,7 +63,7 @@ if (!empty($accept_course_request)) {
 /**
  * Course rejection
  */
-if (isset($_GET['reject_course_request']) && $_GET['reject_course_request'] != '') {
+if (!empty($reject_course_request)) {
 
     $result = CourseRequestManager::reject_course_request($reject_course_request);
 
@@ -170,6 +172,15 @@ if (isset ($_POST['action'])) {
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $tool_name = get_lang('ReviewCourseRequests');
 Display :: display_header($tool_name);
+
+// Display confirmation or error message.
+if (!empty($message)) {
+    if ($is_error_message) {
+        Display::display_error_message($message);
+    } else {
+        Display::display_normal_message($message);
+    }
+}
 
 // The action bar.
 echo '<div class="actions">';

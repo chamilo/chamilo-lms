@@ -39,6 +39,8 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 // Filltering passed to this page parameters.
 $delete_course_request = intval($_GET['delete_course_request']);
+$message = trim(Security::remove_XSS(stripslashes(urldecode($_GET['message']))));
+$is_error_message = !empty($_GET['is_error_message']);
 
 /**
  * Deletion of a course request.
@@ -95,6 +97,15 @@ function modify_filter($id) {
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $tool_name = get_lang('AcceptedCourseRequests');
 Display :: display_header($tool_name);
+
+// Display confirmation or error message.
+if (!empty($message)) {
+    if ($is_error_message) {
+        Display::display_error_message($message);
+    } else {
+        Display::display_normal_message($message);
+    }
+}
 
 // The action bar.
 echo '<div class="actions">';

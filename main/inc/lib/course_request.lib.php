@@ -137,7 +137,7 @@ class CourseRequestManager {
     }
 
     /**
-     * Gets all the information about a course request using its database id as access key.
+     * Gets all the information about a course request using its database id as an access key.
      * @param int/string $id              The id (an integer number) of the corresponding database record.
      * @return array/bool                 Returns the requested data as an array or FALSE on failure.
      */
@@ -147,6 +147,24 @@ class CourseRequestManager {
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return Database::fetch_array($result);
+        }
+        return false;
+    }
+
+    /**
+     * Gets the code of a given course request using its database id as an access key.
+     * @param int/string $id              The id (an integer number) of the corresponding database record.
+     * @return string/bool                Returns the requested requested code or FALSE on failure.
+     */
+    public static function get_course_request_code($id) {
+        $id = (int)$id;
+        $sql = "SELECT code FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE id = ".$id;
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            $result_array = Database::fetch_array($result, 'NUM');
+            if (is_array($result_array)) {
+                return $result_array[0];
+            }
         }
         return false;
     }

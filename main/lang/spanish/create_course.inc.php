@@ -113,7 +113,7 @@ $CourseRequestCreated = "Se recibió correctamente su solicitud de curso. En bre
 $CreateThisCourseRequest = "Solicitud de nuevo curso";
 $CourseRequestDate = "Fecha Solicitud";
 $AcceptThisCourseRequest = "Validar este curso";
-$ANewCourseWillBeCreated = "Se creará un curso indicado.";
-$AdditionalInfoWillBeAsked = "Enviar un e-mail solicitando información adicional.";
+$ANewCourseWillBeCreated = "Se creará un curso indicado (%s).";
+$AdditionalInfoWillBeAsked = "Enviar un e-mail solicitando información adicional (%s).";
 $AskAdditionalInfo = "Pedir más información";
 ?>

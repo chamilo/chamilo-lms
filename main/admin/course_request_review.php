@@ -110,14 +110,14 @@ elseif (!empty($delete_course_request)) {
 /**
  * Get the number of courses which will be displayed.
  */
-function get_number_of_courses() {
+function get_number_of_requests() {
     return CourseRequestManager::count_course_requests(COURSE_REQUEST_PENDING);
 }
 
 /**
  * Get course data to display
  */
-function get_course_data($from, $number_of_items, $column, $direction) {
+function get_request_data($from, $number_of_items, $column, $direction) {
     $course_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
     $users_table = Database :: get_main_table(TABLE_MAIN_USER);
     $course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -209,7 +209,7 @@ echo '<a href="course_request_rejected.php">'.Display::return_icon('course_reque
 echo '</div>';
 
 // Create a sortable table with the course data
-$table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data', 2);
+$table = new SortableTable('course_requests', 'get_number_of_requests', 'get_request_data', 2);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Code'));

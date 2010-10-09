@@ -235,9 +235,13 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('text', 'keyword', get_lang('keyword'));
     $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="search"');
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
-    echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">
-              <a href="'.api_get_path(WEB_CODE_PATH).'admin/course_add.php">'.Display::return_icon('course_add.gif', get_lang('AddCourse')).get_lang('AddCourse').'</a>
-         </div>';
+    echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
+    if (api_get_setting('course_validation') != 'true') {
+        echo '<a href="course_add.php">'.Display::return_icon('course_add.gif', get_lang('AddCourse')).get_lang('AddCourse').'</a>';
+    } else {
+        echo '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).'&nbsp;'.get_lang('ReviewCourseRequests').'</a>';
+    }
+    echo '</div>';
 
     echo '<div class="actions">';
         $form->display();

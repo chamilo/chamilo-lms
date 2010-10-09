@@ -120,4 +120,12 @@ $DeleteThisCourseRequest = "Delete this training request";
 $ACourseRequestWillBeDeleted = "The training request %s is going to be deleted. Is it OK to proceed?";
 $RejectThisCourseRequest = "Reject this training request";
 $ACourseRequestWillBeRejected = "The training request %s is going to be rejected. Is it OK to proceed?";
+$CourseRequestAccepted = "The course request %s has been accepted. A new training %s has been created.";
+$CourseRequestAcceptanceFailed = "The course request %s has not been accepted due to internal error.";
+$CourseRequestRejected = "The training request %s has been rejected.";
+$CourseRequestRejectionFailed = "The training request %s has not been rejected due to internal error.";
+$CourseRequestInfoAsked = "Additional information about the training request %s has been asked.";
+$CourseRequestInfoFailed = "Additional information about the training request %s has not been asked due to internal error.";
+$CourseRequestDeleted = "The training request %s has been deleted.";
+$CourseRequestDeletionFailed = "The training request %s has not been deleted due to internal error.";
 ?>

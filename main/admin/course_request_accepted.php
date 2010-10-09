@@ -46,7 +46,15 @@ $is_error_message = !empty($_GET['is_error_message']);
  * Deletion of a course request.
  */
 if (!empty($delete_course_request)) {
-    CourseRequestManager::delete_course_request($delete_course_request);
+    $course_request_code = CourseRequestManager::get_course_request_code($delete_course_request);
+    $result = CourseRequestManager::delete_course_request($delete_course_request);
+    if ($result) {
+        $message = sprintf(get_lang('CourseRequestDeleted'), $course_request_code);
+        $is_error_message = false;
+    } else {
+        $message = sprintf(get_lang('CourseRequestDeletionFailed'), $course_request_code);
+        $is_error_message = true;
+    }
 }
 
 /**

@@ -49,43 +49,61 @@ $is_error_message = !empty($_GET['is_error_message']);
  * Course acceptance and creation.
  */
 if (!empty($accept_course_request)) {
-
+    $course_request_code = CourseRequestManager::get_course_request_code($accept_course_request);
     $course_id = CourseRequestManager::accept_course_request($accept_course_request);
-
     if ($course_id) {
-        // TODO: Prepare a confirmation message.
+        $course_code = CourseManager::get_course_code_from_course_id($course_id);
+        $message = sprintf(get_lang('CourseRequestAccepted'), $course_request_code, $course_code);
+        $is_error_message = false;
     } else {
-        // Prepare an error message.
+        $message = sprintf(get_lang('CourseRequestAcceptanceFailed'), $course_request_code);
+        $is_error_message = true;
     }
-
 }
 
 /**
  * Course rejection
  */
-if (!empty($reject_course_request)) {
-
+elseif (!empty($reject_course_request)) {
+    $course_request_code = CourseRequestManager::get_course_request_code($reject_course_request);
     $result = CourseRequestManager::reject_course_request($reject_course_request);
-
     if ($result) {
-        // TODO: Prepare a confirmation message.
+        $message = sprintf(get_lang('CourseRequestRejected'), $course_request_code);
+        $is_error_message = false;
     } else {
-        // Prepare an error message.
+        $message = sprintf(get_lang('CourseRequestRejectionFailed'), $course_request_code);
+        $is_error_message = true;
     }
 }
 
 /**
  * Sending to the teacher a request for additional information about the proposed course.
  */
-if (!empty($request_info)) {
-    CourseRequestManager::ask_for_additional_info($request_info);
+elseif (!empty($request_info)) {
+    $course_request_code = CourseRequestManager::get_course_request_code($request_info);
+    $result = CourseRequestManager::ask_for_additional_info($request_info);
+    if ($result) {
+        $message = sprintf(get_lang('CourseRequestInfoAsked'), $course_request_code);
+        $is_error_message = false;
+    } else {
+        $message = sprintf(get_lang('CourseRequestInfoFailed'), $course_request_code);
+        $is_error_message = true;
+    }
 }
 
 /**
  * Deletion of a course request.
  */
-if (!empty($delete_course_request)) {
-    CourseRequestManager::delete_course_request($delete_course_request);
+elseif (!empty($delete_course_request)) {
+    $course_request_code = CourseRequestManager::get_course_request_code($delete_course_request);
+    $result = CourseRequestManager::delete_course_request($delete_course_request);
+    if ($result) {
+        $message = sprintf(get_lang('CourseRequestDeleted'), $course_request_code);
+        $is_error_message = false;
+    } else {
+        $message = sprintf(get_lang('CourseRequestDeletionFailed'), $course_request_code);
+        $is_error_message = true;
+    }
 }
 
 

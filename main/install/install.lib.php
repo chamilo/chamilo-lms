@@ -207,21 +207,6 @@ function detect_browser_language() {
 	return 'english';
 }
 
-/**
- * This function checks if exist path to file browscap.ini
- * Juan Carlos Raña Trabado
- */
-function check_browscap(){
-	$setting = ini_get('browscap');
-	if (strpos($setting, 'browscap.ini')){
-		return '<strong><font color="green">'.$setting.'</font></strong>';
-			$setting = true;
-		}else{
-			return '<strong><font color="red">NULL</font></strong>';
-			$setting=false;
-		}	
-}
-
 
 /*		FILESYSTEM RELATED FUNCTIONS */
 
@@ -1163,11 +1148,6 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 				<td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.post-max-size">Maximum post size</a></td>
 				<td class="requirements-recommended">10M-100M</td>
 				<td class="requirements-value">'.ini_get('post_max_size').'</td>
-			</tr>
-			<tr>
-				<td class="requirements-item"><a href="http://www.php.net/manual/en/misc.configuration.php#ini.browscap">Browscap is loaded</a></td>
-				<td class="requirements-recommended">Not null. Path to browscap.ini</td>
-				<td class="requirements-value">'.check_browscap().'</td>
 			</tr>
 		  </table>';
 	echo '	</div>';

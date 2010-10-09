@@ -196,8 +196,7 @@ class Diagnoser
         $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
         $array[] = $this->build_setting($status, '[SESSION]', 'session.gc_maxlifetime', 'http://www.php.net/manual/en/ini.core.php#session.gc-maxlifetime', $setting, $req_setting, null, get_lang('SessionGCMaxLifetimeInfo'));
 		
-		$setting = ini_get('browscap');
-		if (strpos($setting, 'browscap.ini')){$setting = true;}else{$setting=false;}		
+		if (api_check_browscap()){$setting = true;}else{$setting=false;}		
 		$req_setting = true;
         $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
         $array[] = $this->build_setting($status, '[INI]', 'browscap', 'http://www.php.net/manual/en/misc.configuration.php#ini.browscap', $setting, $req_setting, 'on_off', get_lang('BrowscapInfo'));

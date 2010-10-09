@@ -4643,17 +4643,41 @@ function api_get_template($path_type = 'rel') {
 }
 
 /**
- * Check brosers support for svg files
+ * Check browser support for svg files
  * @return bool
  *
  * @author Juan Carlos Raña Trabado
  */
-function api_support_svg() {	
-	$browser_info = get_browser($_SERVER["HTTP_USER_AGENT"], true);
-	//print_r($browser_info);
-	if (($browser_info[browser]=='IE' && $browser_info[majorver]>8) || ($browser_info[browser]=='Firefox' && $browser_info[majorver]>1)||($browser_info[browser]=='Safari' && $browser_info[majorver]>3) || $browser_info[browser]=='Chrome' || ($browser_info[browser]=='Opera' && $browser_info[majorver]>9)){
+function api_support_svg() {
+	require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
+	$browser = new Browser();
+	//print_r($browser);
+	$current_browser=$browser->getBrowser();		
+	$a_versiontemp = explode(".",$browser->getVersion());
+	$current_majorver= $a_versiontemp[0];
+
+	if (($current_browser=='Internet Explorer' && $current_majorver>8) || ($current_browser=='Firefox' && $current_majorver>1)||($current_browser=='Safari' && $current_majorver>=4) || ($current_browser=='Chrome' && $current_majorver >=1) || ($current_browser=='Opera' && $current_majorver>9)){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/**
+ * This function checks if exist path and file browscap.ini
+ * @return bool
+ *
+ * @author Juan Carlos Raña Trabado
+ */
+function api_check_browscap(){
+	$setting = ini_get('browscap');
+	$browser = get_browser($_SERVER['HTTP_USER_AGENT'], true);
+	
+	if (strpos($setting, 'browscap.ini') && !empty($browser)){
 		return true;
 	}else{
 		return false;
 	}	
 }
+
+?>

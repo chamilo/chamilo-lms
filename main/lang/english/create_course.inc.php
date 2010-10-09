@@ -128,4 +128,7 @@ $CourseRequestInfoAsked = "Additional information about the training request %s 
 $CourseRequestInfoFailed = "Additional information about the training request %s has not been asked due to internal error.";
 $CourseRequestDeleted = "The training request %s has been deleted.";
 $CourseRequestDeletionFailed = "The training request %s has not been deleted due to internal error.";
+$DeleteCourseRequests = "Delete selected training request(s)";
+$SelectedCourseRequestsDeleted = "The selected course requests have been deleted.";
+$SomeCourseRequestsNotDeleted = "Some of the selected course requests have not been deleted due to internal error.";
 ?>

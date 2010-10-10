@@ -4,8 +4,8 @@
 require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
 require_once api_get_path(CONFIGURATION_PATH).'mail.conf.php';
 
-//regular expression to test for valid email address
-// this should actually be revised to use the complete RFC3696 description
+// A regular expression for testing against valid email addresses.
+// It should actually be revised for using the complete RFC3696 description:
 // http://tools.ietf.org/html/rfc3696#section-3
 $regexp_rfc3696 = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$";
 
@@ -23,78 +23,69 @@ $regexp_rfc3696 = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z
  * @return                  returns true if mail was sent
  * @see                     class.phpmailer.php
  */
-function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name="", $sender_email="", $extra_headers="") {
+function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', $extra_headers = '') {
 
-	global $regexp_rfc3696;
-	global $platform_email;
+    global $regexp_rfc3696;
+    global $platform_email;
 
-	$mail = new PHPMailer();
-	$mail->Mailer  = $platform_email['SMTP_MAILER'];
-	$mail->Host    = $platform_email['SMTP_HOST'];
-	$mail->Port    = $platform_email['SMTP_PORT'];
-	$mail->CharSet = $platform_email['SMTP_CHARSET'];
-	$mail->WordWrap = 200; // stay far below SMTP protocol 980 chars limit
+    $mail = new PHPMailer();
+    $mail->Mailer  = $platform_email['SMTP_MAILER'];
+    $mail->Host    = $platform_email['SMTP_HOST'];
+    $mail->Port    = $platform_email['SMTP_PORT'];
+    $mail->CharSet = $platform_email['SMTP_CHARSET'];
+    $mail->WordWrap = 200; // Stay far below SMTP protocol 980 chars limit.
 
-	if($platform_email['SMTP_AUTH'])
-	{
-		$mail->SMTPAuth = 1;
-		$mail->Username = $platform_email['SMTP_USER'];
-		$mail->Password = $platform_email['SMTP_PASS'];
-	}
+    if ($platform_email['SMTP_AUTH']) {
+        $mail->SMTPAuth = 1;
+        $mail->Username = $platform_email['SMTP_USER'];
+        $mail->Password = $platform_email['SMTP_PASS'];
+    }
 
-	$mail->Priority = 3; // 5=low, 1=high
-	$mail->AddCustomHeader("Errors-To: ".$platform_email['SMTP_FROM_EMAIL']."");
-	$mail->IsHTML(0);
-	$mail->SMTPKeepAlive = true;
+    $mail->Priority = 3; // 5 = low, 1 = high
+    $mail->AddCustomHeader('Errors-To: '.$platform_email['SMTP_FROM_EMAIL']);
+    $mail->IsHTML(0);
+    $mail->SMTPKeepAlive = true;
 
-	// attachments
-	// $mail->AddAttachment($path);
-	// $mail->AddAttachment($path,$filename);
+    // Attachments
+    // $mail->AddAttachment($path);
+    // $mail->AddAttachment($path, $filename);
 
-	if ($sender_email!="")
-	{
-		$mail->From         = $sender_email;
-		$mail->Sender       = $sender_email;
-		//$mail->ConfirmReadingTo = $sender_email; //Disposition-Notification
-	}
-	else
-	{
-		$mail->From         = $platform_email['SMTP_FROM_EMAIL'];
-		$mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
-		//$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; //Disposition-Notification
-	}
+    if ($sender_email != '') {
+        $mail->From         = $sender_email;
+        $mail->Sender       = $sender_email;
+        //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
+    } else {
+        $mail->From         = $platform_email['SMTP_FROM_EMAIL'];
+        $mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
+        //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; // Disposition-Notification
+    }
 
-	if ($sender_name!="")
-	{
-		$mail->FromName = $sender_name;
-	}
-	else
-	{
-		$mail->FromName = $platform_email['SMTP_FROM_NAME'];
-	}
-	$mail->Subject = $subject;
-	$mail->Body    = $message;
+    if ($sender_name != '') {
+        $mail->FromName = $sender_name;
+    } else {
+        $mail->FromName = $platform_email['SMTP_FROM_NAME'];
+    }
+    $mail->Subject = $subject;
+    $mail->Body    = $message;
 
-	//only valid address
-	if(eregi( $regexp_rfc3696, $recipient_email ))
-	{
-		$mail->AddAddress($recipient_email, $recipient_name);
-	}
+    // Only valid addresses are accepted.
+    if (eregi($regexp_rfc3696, $recipient_email)) {
+        $mail->AddAddress($recipient_email, $recipient_name);
+    }
 
-	if ($extra_headers != ""){
-		$mail->AddCustomHeader($extra_headers);
-	}
+    if ($extra_headers != '') {
+        $mail->AddCustomHeader($extra_headers);
+    }
 
-	//send mail
-	if (!$mail->Send())
-	{
-		//echo "ERROR: mail not sent to ".$recipient_name." (".$recipient_email.") because of ".$mail->ErrorInfo."<br>";
-		return 0;
-	}
+    // Send the mail message.
+    if (!$mail->Send()) {
+        //echo 'ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />';
+        return 0;
+    }
 
-	// Clear all addresses
-	$mail->ClearAddresses();
-	return 1;
+    // Clear all the addresses.
+    $mail->ClearAddresses();
+    return 1;
 }
 
 /**
@@ -118,61 +109,61 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @return          returns true if mail was sent
  * @see             class.phpmailer.php
  */
-function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = "", $sender_email = "", $extra_headers = null, $data_file = array(), $embedded_image = false) {
+function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', $extra_headers = null, $data_file = array(), $embedded_image = false) {
 
-	global $regexp_rfc3696;
-	global $platform_email;
+    global $regexp_rfc3696;
+    global $platform_email;
 
-	$mail = new PHPMailer();
-	$mail->Mailer  = $platform_email['SMTP_MAILER'];
-	$mail->Host    = $platform_email['SMTP_HOST'];
-	$mail->Port    = $platform_email['SMTP_PORT'];
-	$mail->CharSet = $platform_email['SMTP_CHARSET'];
-	$mail->WordWrap = 200; // stay far below SMTP protocol 980 chars limit
+    $mail = new PHPMailer();
+    $mail->Mailer  = $platform_email['SMTP_MAILER'];
+    $mail->Host    = $platform_email['SMTP_HOST'];
+    $mail->Port    = $platform_email['SMTP_PORT'];
+    $mail->CharSet = $platform_email['SMTP_CHARSET'];
+    $mail->WordWrap = 200; // Stay far below SMTP protocol 980 chars limit.
 
-	if ($platform_email['SMTP_AUTH']) {
-		$mail->SMTPAuth = 1;
-		$mail->Username = $platform_email['SMTP_USER'];
-		$mail->Password = $platform_email['SMTP_PASS'];
-	}
+    if ($platform_email['SMTP_AUTH']) {
+        $mail->SMTPAuth = 1;
+        $mail->Username = $platform_email['SMTP_USER'];
+        $mail->Password = $platform_email['SMTP_PASS'];
+    }
 
-	$mail->Priority = 3; // 5=low, 1=high
-	$mail->AddCustomHeader("Errors-To: ".$platform_email['SMTP_FROM_EMAIL']."");
-	$mail->IsHTML(0);
-	$mail->SMTPKeepAlive = true;
+    $mail->Priority = 3; // 5 = low, 1 = high
+    $mail->AddCustomHeader('Errors-To: '.$platform_email['SMTP_FROM_EMAIL']);
+    $mail->IsHTML(0);
+    $mail->SMTPKeepAlive = true;
 
-	if (($sender_email != "") && ($sender_name != "")) {
-		$mail->AddReplyTo ($sender_email,$sender_name);
-	}
+    if (($sender_email != '') && ($sender_name != '')) {
+        $mail->AddReplyTo($sender_email, $sender_name);
+    }
 
-	// attachments
-	// $mail->AddAttachment($path);
-	// $mail->AddAttachment($path,$filename);
+    // Attachments
+    // $mail->AddAttachment($path);
+    // $mail->AddAttachment($path, $filename);
 
-	if ($sender_email!="") {
-		$mail->From         = $sender_email;
-		$mail->Sender       = $sender_email;
-		//$mail->ConfirmReadingTo = $sender_email; //Disposition-Notification
-	} else {
-		$mail->From         = $platform_email['SMTP_FROM_EMAIL'];
-		$mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
-		//$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; //Disposition-Notification
-	}
+    if ($sender_email != '') {
+        $mail->From         = $sender_email;
+        $mail->Sender       = $sender_email;
+        //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
+    } else {
+        $mail->From         = $platform_email['SMTP_FROM_EMAIL'];
+        $mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
+        //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; // Disposition-Notification
+    }
 
-	if ($sender_name!="") {
-		$mail->FromName = $sender_name;
-	} else {
-		$mail->FromName = $platform_email['SMTP_FROM_NAME'];
-	}
-	$mail->Subject = $subject;
+    if ($sender_name != '') {
+        $mail->FromName = $sender_name;
+    } else {
+        $mail->FromName = $platform_email['SMTP_FROM_NAME'];
+    }
+    $mail->Subject = $subject;
 
-	$mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
+    $mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
 
-        // send embedded image
+        // Send embedded image.
         if ($embedded_image) {
-           // get all images html inside content
-           preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i",$message,$m);
-           // prepare new tag images
+           // Get all images html inside content.
+           preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i", $message, $m);
+           // Prepare new tag images.
            $new_images_html = array();
            $i = 1;
            if (!empty($m[1])) {
@@ -187,7 +178,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
                    $i++;
                }
            }
-           // replace origin image for new embedded image html
+           // Replace origin image for new embedded image html.
            $x = 0;
            if (!empty($m[0])) {
                foreach ($m[0] as $orig_img) {
@@ -197,65 +188,60 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
            }
         }
 
-	$mail->Body = '<html><head></head><body>'.$message.'</body></html>';
+    $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
 
-	// attachment ...
-	if (!empty($data_file)) {
-		$mail->AddAttachment($data_file['path'], $data_file['filename']);
-	}
+    // Attachment ...
+    if (!empty($data_file)) {
+        $mail->AddAttachment($data_file['path'], $data_file['filename']);
+    }
 
-	// only valid address
-	if(is_array($recipient_email)) {
-		foreach($recipient_email as $dest) {
-			if(eregi( $regexp_rfc3696, $dest )) {
-				$mail->AddAddress($dest, $recipient_name);
-				//$mail->AddAddress($dest, ($i>1?'':$recipient_name));
-			}
-		}
-	} else {
-		if(eregi( $regexp_rfc3696, $recipient_email ))
-		{
-			$mail->AddAddress($recipient_email, $recipient_name);
-		} else {
-			return 0;
-		}
-	}
+    // Only valid addresses are accepted.
+    if (is_array($recipient_email)) {
+        foreach ($recipient_email as $dest) {
+            if (eregi($regexp_rfc3696, $dest)) {
+                $mail->AddAddress($dest, $recipient_name);
+                //$mail->AddAddress($dest, ($i > 1 ? '' : $recipient_name));
+            }
+        }
+    } else {
+        if (eregi($regexp_rfc3696, $recipient_email)) {
+            $mail->AddAddress($recipient_email, $recipient_name);
+        } else {
+            return 0;
+        }
+    }
 
-	if (is_array($extra_headers) && count($extra_headers)>0){
-		foreach($extra_headers as $key=>$value)
-		{
-			switch(strtolower($key)){
-				case 'encoding':
-				case 'content-transfer-encoding':
-					$mail->Encoding = $value;
-					break;
-				case 'charset':
-					$mail->Charset = $value;
-					break;
-				case 'contenttype':
-				case 'content-type':
-					$mail->ContentType = $value;
-					break;
-				default:
-					$mail->AddCustomHeader($key.':'.$value);
-					break;
-			}
-		}
-	}
+    if (is_array($extra_headers) && count($extra_headers) > 0) {
+        foreach ($extra_headers as $key => $value) {
+            switch (strtolower($key)) {
+                case 'encoding':
+                case 'content-transfer-encoding':
+                    $mail->Encoding = $value;
+                    break;
+                case 'charset':
+                    $mail->Charset = $value;
+                    break;
+                case 'contenttype':
+                case 'content-type':
+                    $mail->ContentType = $value;
+                    break;
+                default:
+                    $mail->AddCustomHeader($key.':'.$value);
+                    break;
+            }
+        }
+    }
 
-	// WordWrap the html body (phpMailer only fixes AltBody) FS#2988
-	$mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
+    // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
+    $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
 
-	//send mail
-	if (!$mail->Send())
-	{
-		//echo "ERROR: mail not sent to ".$recipient_name." (".$recipient_email.") because of ".$mail->ErrorInfo."<br>";
-		return 0;
-	}
+    // Send the mail message.
+    if (!$mail->Send()) {
+        //echo 'ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />';
+        return 0;
+    }
 
-	// Clear all addresses
-	$mail->ClearAddresses();
-	return 1;
+    // Clear all the addresses.
+    $mail->ClearAddresses();
+    return 1;
 }
-
-?>

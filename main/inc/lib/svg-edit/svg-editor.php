@@ -666,19 +666,24 @@ script type="text/javascript" src="locale/locale.min.js"></script-->
 			<legend id="svginfo_editor_prefs">Editor Preferences</legend>
 
 			<label><span id="svginfo_lang">Language:</span>
-				<!-- Source: http://en.wikipedia.org/wiki/Language_names -->
+				<!-- Source: http://en.wikipedia.org/wiki/Language_names --><!-- Add for Chamilo bulgarian, (Български), italian (Italiano), hungarian (Magyar), indonesian (Bahasa Indonesia) -->
 				<select id="lang_select">
 				  <option id="lang_ar" value="ar">العربية</option>
-					<option id="lang_cs" value="cs">Čeština</option>
+                  
+                  	<option id="lang_id" value="id">Bahasa Indonesia</option>
+                  	<option id="lang_bg" value="bg">Български</option>
+            		<option id="lang_cs" value="cs">Čeština</option>
 					<option id="lang_de" value="de">Deutsch</option>
 					<option id="lang_en" value="en" selected="selected">English</option>
-					<option id="lang_es" value="es">Español</option>
+					<option id="lang_es" value="es">Español</option>                    
 					<option id="lang_fa" value="fa">فارسی</option>
 					<option id="lang_fr" value="fr">Français</option>
 					<option id="lang_fy" value="fy">Frysk</option>
 					<option id="lang_hi" value="hi">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;, &#2361;&#2367;&#2306;&#2342;&#2368;</option>
-					<option id="lang_ja" value="ja">日本語</option>
+					<option id="lang_it" value="it">Italiano</option>
+                    <option id="lang_ja" value="ja">日本語</option>
 					<option id="lang_nl" value="nl">Nederlands</option>
+                    <option id="lang_hu" value="hu">Magyar</option>
 					<option id="lang_pt-BR" value="pt-BR">Português (BR)</option>
 					<option id="lang_ro" value="ro">Româneşte</option>
 					<option id="lang_ru" value="ru">Русский</option>

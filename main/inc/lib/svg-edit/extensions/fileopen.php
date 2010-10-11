@@ -60,7 +60,7 @@ $mime_svg='image/svg+xml';
 $mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii.
 		
 if(strpos($current_mime, $mime_svg)===false && strpos($current_mime, $mime_xml)===false && $extension=='svg'){
-	die();//File extension does not match its content
+	// die();//File extension does not match its content disabled to check into chamilo dev campus TODO:enabled
 }
 
 ?>

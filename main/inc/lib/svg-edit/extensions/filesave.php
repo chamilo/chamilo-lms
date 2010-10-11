@@ -89,17 +89,17 @@ if (phpversion() >= '5.3') {
 	$mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii. See	  
 	if(strpos($current_mime, $mime_png)===false && $extension=='png')
 	{
-		die();//File extension does not match its content
+		//die();//File extension does not match its content //disabled to check into chamilo dev campus 
 	}elseif(strpos($current_mime, $mime_svg)===false && strpos($current_mime, $mime_xml)===false && $extension=='svg')
 	{
-		die();//File extension does not match its content
+		//die();//File extension does not match its content //disabled to check into chamilo dev campus TODO:enabled
 	}
 	
 }else{
 	
 	if($suffix!= 'svg' || $suffix!= 'png')
 	{
-		die();
+		//die();//disabled to check into chamilo dev campus 
 	}
 }
 

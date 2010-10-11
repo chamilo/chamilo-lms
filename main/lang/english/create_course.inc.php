@@ -131,9 +131,10 @@ $CourseRequestDeletionFailed = "The training request %s has not been deleted due
 $DeleteCourseRequests = "Delete selected training request(s)";
 $SelectedCourseRequestsDeleted = "The selected course requests have been deleted.";
 $SomeCourseRequestsNotDeleted = "Some of the selected course requests have not been deleted due to internal error.";
-$CourseRequestEmailSubject = "A request for a new training %s";
+$CourseRequestEmailSubject = "%s A request for a new training %s";
 $CourseRequestMailOpening = "We registered the following request for a new training:";
 $CourseRequestPageForApproval = "This training request can be accepted (approved) at the following page:";
 $PleaseActivateCourseValidationFeature = "The \"Training validation\" feature is not active at the moment. In order to use this feature, please, activate it by using the setting %s.";
 $CourseRequestLegalNote = "The information of this training request is considered as protected; it can be used only for serving the procedure of opening a new training within our training portal; it should not be revealed to third parties.";
+$CourseRequestAskInfoEmailSubject = "%s A request for additional information about the training request %s";
 ?>

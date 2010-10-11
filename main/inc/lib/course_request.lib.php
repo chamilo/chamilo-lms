@@ -110,7 +110,7 @@ class CourseRequestManager {
         //$email_language = api_get_interface_language();
         $email_language = api_get_setting('platformLanguage');
 
-        $email_subject = sprintf(get_lang('CourseRequestEmailSubject', null, $email_language), $code);
+        $email_subject = sprintf(get_lang('CourseRequestEmailSubject', null, $email_language), '['.api_get_setting('siteName').']', $code);
 
         $email_body = get_lang('CourseRequestMailOpening', null, $email_language)."\n\n";
         $email_body .= get_lang('CourseName', null, $email_language).': '.$title."\n";

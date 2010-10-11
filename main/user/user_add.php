@@ -26,75 +26,75 @@ $tbl_courseUser    = "course_rel_user";
 /* DATA CHECKING	*/
 
 if($register) {
-	/*
-	 * Fields Checking
-	 */
+    /*
+     * Fields Checking
+     */
 
-	$lastname_form    = trim($lastname_form);
-	$firstname_form   = trim($firstname_form);
-	$password_form = trim($password_form);
-	$username_form = trim($username_form);
-	$email_form    = trim($email_form);
-	$official_code_form = trim($official_code_form);
+    $lastname_form    = trim($lastname_form);
+    $firstname_form   = trim($firstname_form);
+    $password_form = trim($password_form);
+    $username_form = trim($username_form);
+    $email_form    = trim($email_form);
+    $official_code_form = trim($official_code_form);
 
-	// empty field checking
+    // empty field checking
 
-	if(empty($lastname_form) || empty($firstname_form) || empty($password_form) || empty($username_form) || empty($email_form))
-	{
-		$dataChecked = false;
-		$message     = get_lang('Filled');
-	}
+    if(empty($lastname_form) || empty($firstname_form) || empty($password_form) || empty($username_form) || empty($email_form))
+    {
+        $dataChecked = false;
+        $message     = get_lang('Filled');
+    }
 
-	// valid mail address checking
+    // valid mail address checking
 
-	elseif(!eregi('^[0-9a-z_.-]+@([0-9a-z-]+\.)+([0-9a-z]){2,4}$',$email_form))
-	{
-		$dataChecked = false;
-		$message     = get_lang('EmailWrong');
-	}
-	else
-	{
-		$dataChecked = true;
-	}
+    elseif(!eregi('^[0-9a-z_.-]+@([0-9a-z-]+\.)+([0-9a-z]){2,4}$',$email_form))
+    {
+        $dataChecked = false;
+        $message     = get_lang('EmailWrong');
+    }
+    else
+    {
+        $dataChecked = true;
+    }
 
-	// prevent conflict with existing user account
+    // prevent conflict with existing user account
 
-	if($dataChecked)
-	{
-		$result=Database::query("SELECT user_id,
-		                       (username='$username_form') AS loginExists,
-		                       (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form') AS userExists
-		                     FROM $tbl_user
-		                     WHERE username='$username_form' OR (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form')
-		                     ORDER BY userExists DESC, loginExists DESC");
+    if($dataChecked)
+    {
+        $result=Database::query("SELECT user_id,
+                               (username='$username_form') AS loginExists,
+                               (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form') AS userExists
+                             FROM $tbl_user
+                             WHERE username='$username_form' OR (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form')
+                             ORDER BY userExists DESC, loginExists DESC");
 
-		if(Database::num_rows($result))
-		{
-			while($user=Database::fetch_array($result))
-			{
-				// check if the user is already registered to the platform
+        if(Database::num_rows($result))
+        {
+            while($user=Database::fetch_array($result))
+            {
+                // check if the user is already registered to the platform
 
-				if($user['userExists'])
-				{
-					$userExists = true;
-					$userId     = $user['user_id'];
-					break;
-				}
+                if($user['userExists'])
+                {
+                    $userExists = true;
+                    $userId     = $user['user_id'];
+                    break;
+                }
 
-				// check if the login name choosen is already taken by another user
+                // check if the login name choosen is already taken by another user
 
-				if($user['loginExists'])
-				{
-					$loginExists = true;
-					$userId      = 0;
+                if($user['loginExists'])
+                {
+                    $loginExists = true;
+                    $userId      = 0;
 
-					$message     = get_lang('UserNo')." (".stripslashes($username_form).") ".get_lang('Taken');
+                    $message     = get_lang('UserNo')." (".stripslashes($username_form).") ".get_lang('Taken');
 
-					break;
-				}
-			}				// end while $result
-		}					// end if num rows
-	}						// end if datachecked
+                    break;
+                }
+            }				// end while $result
+        }					// end if num rows
+    }						// end if datachecked
 
 
 
@@ -104,118 +104,118 @@ if($register) {
   NEW USER REGISTRATION PROCESS
   =============================*/
 
-	if($dataChecked && !$userExists && !$loginExists)
-	{
-			/*---------------------------
-			      PLATFORM REGISTRATION
-			  ----------------------------*/
+    if($dataChecked && !$userExists && !$loginExists)
+    {
+            /*---------------------------
+                  PLATFORM REGISTRATION
+              ----------------------------*/
 
-		if ($_cid) $platformStatus = STUDENT;          // course registrartion context...
-		else       $platformStatus = $platformStatus; // admin section of the platform context...
+        if ($_cid) $platformStatus = STUDENT;          // course registrartion context...
+        else       $platformStatus = $platformStatus; // admin section of the platform context...
 
-		//if ($userPasswordCrypted) $pw = md5($password_form);
-		//else                      $pw = $password_form;
-		$pw = api_get_encrypted_password($password_form);
-		$result = Database::query("INSERT INTO $tbl_user
-		                       SET lastname       = '$lastname_form',
-		                           firstname    = '$firstname_form',
-		                           username  = '$username_form',
-		                           password  = '$pw',
-		                           email     = '$email_form',
-		                           status    = '$platformStatus',
-		                           official_code = '$official_code_form',
-		                           creator_id = '".$_user['user_id']."'");
+        //if ($userPasswordCrypted) $pw = md5($password_form);
+        //else                      $pw = $password_form;
+        $pw = api_get_encrypted_password($password_form);
+        $result = Database::query("INSERT INTO $tbl_user
+                               SET lastname       = '$lastname_form',
+                                   firstname    = '$firstname_form',
+                                   username  = '$username_form',
+                                   password  = '$pw',
+                                   email     = '$email_form',
+                                   status    = '$platformStatus',
+                                   official_code = '$official_code_form',
+                                   creator_id = '".$_user['user_id']."'");
 
-		$userId = Database::insert_id();
+        $userId = Database::insert_id();
 
-		if ($userId) $platformRegSucceed = true;
-	}
+        if ($userId) $platformRegSucceed = true;
+    }
 
-	if($userId && $_cid)
-	{
-		/*
-		  Note : As we temporarly use this script in the platform administration
-		  section to also add user to the platform, We have to prevent course
-		  registration. That's why we check if $_cid is initialized, it gives us
-		  an hint about the use context of the script
-		*/
+    if($userId && $_cid)
+    {
+        /*
+          Note : As we temporarly use this script in the platform administration
+          section to also add user to the platform, We have to prevent course
+          registration. That's why we check if $_cid is initialized, it gives us
+          an hint about the use context of the script
+        */
 
-			/*---------------------------
-			      COURSE REGISTRATION
-			  ----------------------------*/
+            /*---------------------------
+                  COURSE REGISTRATION
+              ----------------------------*/
 
-		/*
-		 * check the return value of the query
-		 * if 0, the user is already registered to the course
-		 */
+        /*
+         * check the return value of the query
+         * if 0, the user is already registered to the course
+         */
 
-		if (Database::query("INSERT INTO $tbl_courseUser
-						SET user_id     = '$userId',
-							course_code  = '$currentCourseID',
-							status      = '$admin_form',
-							tutor_id       = '$tutor_form'"))
-		{
-			$courseRegSucceed = true;
-		}
-	} // if $platformRegSucceed && $_cid
+        if (Database::query("INSERT INTO $tbl_courseUser
+                        SET user_id     = '$userId',
+                            course_code  = '$currentCourseID',
+                            status      = '$admin_form',
+                            tutor_id       = '$tutor_form'"))
+        {
+            $courseRegSucceed = true;
+        }
+    } // if $platformRegSucceed && $_cid
 
 
-	/*---------------------------
-	   MAIL NOTIFICATION TO NEW USER
-	  ----------------------------*/
+    /*---------------------------
+       MAIL NOTIFICATION TO NEW USER
+      ----------------------------*/
 
-	if ($platformRegSucceed)
-	{
+    if ($platformRegSucceed)
+    {
 
-		$emailto       = "$lastname_form $firstname_form <$email_form>";
-		$emailfromaddr = $administratorEmail;
-		$emailfromname = api_get_setting('siteName');
-		$emailsubject  = get_lang('YourReg').' '.api_get_setting('siteName');
+        $emailto       = "$lastname_form $firstname_form <$email_form>";
+        $emailfromaddr = $administratorEmail;
+        $emailfromname = api_get_setting('siteName');
+        $emailsubject  = get_lang('YourReg').' '.api_get_setting('siteName');
 
-		$emailheaders  = "From: ".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS)." <".$administratorEmail.">\n";
-		$emailheaders .= "Reply-To: ".$administratorEmail."\n";
-		$emailheaders .= "Return-Path: ".$administratorEmail."\n";
-		$emailheaders .= "charset: ".api_get_system_encoding()."\n";
-		$emailheaders .= "X-Mailer: PHP/" . phpversion() . "\n";
-		$emailheaders .= "X-Sender-IP: $REMOTE_ADDR"; // (small security precaution...)
-		$recipient_name = api_get_person_name($firstname_form, $lastname_form, null, PERSON_NAME_EMAIL_ADDRESS);
-		$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-	    $email_admin = api_get_setting('emailAdministrator');
+        $emailheaders  = "From: ".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS)." <".$administratorEmail.">\n";
+        $emailheaders .= "Reply-To: ".$administratorEmail."\n";
+        $emailheaders .= "Return-Path: ".$administratorEmail."\n";
+        $emailheaders .= "charset: ".api_get_system_encoding()."\n";
+        $emailheaders .= "X-Mailer: PHP/" . phpversion() . "\n";
+        $emailheaders .= "X-Sender-IP: $REMOTE_ADDR"; // (small security precaution...)
+        $recipient_name = api_get_person_name($firstname_form, $lastname_form, null, PERSON_NAME_EMAIL_ADDRESS);
+        $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+        $email_admin = api_get_setting('emailAdministrator');
 
-		$portal_url = $_configuration['root_web'];
-		if ($_configuration['multiple_access_urls']) {
-			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1 ){
-				$url = api_get_access_url($access_url_id);
-				$portal_url = $url['url'];
-			}
-		}
+        $portal_url = $_configuration['root_web'];
+        if ($_configuration['multiple_access_urls']) {
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1 ){
+                $url = api_get_access_url($access_url_id);
+                $portal_url = $url['url'];
+            }
+        }
 
-		if ($courseRegSucceed)
-		{
-			$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname_form, $lastname_form)).",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
-			$message = get_lang('TheU')." ".stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedToCourse')."<a href=\"user.php\">".get_lang('BackUser')."</a>\n";
-		}
-		else
-		{
-			$emailbody = get_lang('Dear')." ".api_get_person_name($firstname_form, $lastname_form).",\n ".get_lang('YouAreReg')."  ".api_get_setting('siteName')."  ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_person_name(api_get_setting('administratorName')." ".api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
+        if ($courseRegSucceed)
+        {
+            $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname_form, $lastname_form)).",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
+            $message = get_lang('TheU')." ".stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedToCourse')."<a href=\"user.php\">".get_lang('BackUser')."</a>\n";
+        }
+        else
+        {
+            $emailbody = get_lang('Dear')." ".api_get_person_name($firstname_form, $lastname_form).",\n ".get_lang('YouAreReg')."  ".api_get_setting('siteName')."  ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_person_name(api_get_setting('administratorName')." ".api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
 
-			$message = stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedU');
-		}
+            $message = stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedU');
+        }
 
-		@api_mail($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name,$email_admin);
+        @api_mail($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name,$email_admin);
 
-		/*
-		 * remove <form> variables to prevent any pre-filled fields
-		 */
+        /*
+         * remove <form> variables to prevent any pre-filled fields
+         */
 
-		unset($lastname_form, $firstname_form, $username_form, $password_form, $email_form, $admin_form, $tutor_form);
+        unset($lastname_form, $firstname_form, $username_form, $password_form, $email_form, $admin_form, $tutor_form);
 
-	} 	// end if ($platformRegSucceed)
-	//else
-	//{
-	//	$message = get_lang('UserAlreadyRegistered');
-	//}
+    } 	// end if ($platformRegSucceed)
+    //else
+    //{
+    //	$message = get_lang('UserAlreadyRegistered');
+    //}
 
 } // end if register request
 
@@ -259,7 +259,7 @@ if(!empty($message))
   <td colspan="2">
 
 <?php
-	Display::display_normal_message($message); //main API
+    Display::display_normal_message($message); //main API
 ?>
 
   </td>
@@ -327,7 +327,7 @@ if ($_cid) // if we're inside a course, then it's a course registration
 <?php
 
 }			// end if $_cid - for the case we're not in a course registration
-			// but a platform registration
+            // but a platform registration
 else
 {
 
@@ -360,11 +360,11 @@ else
 
 if($is_platformAdmin)
 {
-	echo "<a href=\"".$rootAdminWeb."importUserList.php\">".get_lang('UserMany')."</a>";
+    echo "<a href=\"".$rootAdminWeb."importUserList.php\">".get_lang('UserMany')."</a>";
 } // if is_platformAdmin
 else
 {
-	echo "<p>".get_lang('IfYouWantToAddManyUsers')."</p>";
+    echo "<p>".get_lang('IfYouWantToAddManyUsers')."</p>";
 }
 
 Display::display_footer();

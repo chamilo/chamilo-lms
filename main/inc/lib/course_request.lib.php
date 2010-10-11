@@ -115,6 +115,7 @@ class CourseRequestManager {
         $email_body = get_lang('CourseRequestMailOpening', null, $email_language)."\n\n";
         $email_body .= get_lang('CourseName', null, $email_language).': '.$title."\n";
         $email_body .= get_lang('Fac', null, $email_language).': '.$category_code."\n";
+        $email_body .= get_lang('CourseCode', null, $email_language).': '.$code."\n";
         $email_body .= get_lang('Professor', null, $email_language).': '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language)."\n";
         $email_body .= get_lang('Email', null, $email_language).': '.$user_info['mail']."\n";
         $email_body .= get_lang('Description', null, $email_language).': '.$description."\n";

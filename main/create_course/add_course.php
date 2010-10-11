@@ -13,7 +13,7 @@
  */
 
 // Name of the language file that needs to be included.
-$language_file = array('create_course', 'cesga');
+$language_file = 'create_course';
 
 // Flag forcing the "current course" reset.
 $cidReset = true;

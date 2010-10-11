@@ -47,19 +47,17 @@ if(!isset($_FILES['svg_file']['tmp_name'])) {
 $filename = addslashes(trim($file));
 $filename = Security::remove_XSS($filename);
 $filename = replace_dangerous_char($filename, 'strict');
-$filename = disable_dangerous_file($filename);
-
-
+$filename = disable_dangerous_file($filename);	
+	
 //a bit mime security
-$finfo = new finfo(FILEINFO_MIME);
-$current_mime=$finfo->buffer($contents);
-
+$current_mime = $_FILES['svg_file']['type'];
 $mime_svg='image/svg+xml';
 $mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii.
-
+	
 if(strpos($current_mime, $mime_svg)===false && strpos($current_mime, $mime_xml)===false && $extension=='svg'){
 	die();//File extension does not match its content
 }
+
 ?>
 
 <script>

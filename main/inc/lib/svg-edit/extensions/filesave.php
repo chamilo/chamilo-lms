@@ -58,7 +58,7 @@ $title = Database::escape_string(str_replace('_',' ',$filename));
 
 //get Chamilo variables 
 
-if(!isset($_SESSION['draw_dir']) ||!isset($_SESSION['whereami']) )
+if(!isset($_SESSION['draw_dir']) || !isset($_SESSION['whereami']) )
 {
 	api_not_allowed(false);//from Chamilo
 	die();	
@@ -79,18 +79,28 @@ $filename = replace_dangerous_char($filename, 'strict');
 $filename = disable_dangerous_file($filename);
 
 //a bit mime security
-$finfo = new finfo(FILEINFO_MIME);
-$current_mime=$finfo->buffer($contents);
-$mime_png='image/png';//svg-edit return image/png; charset=binary 
-$mime_svg='image/svg+xml';
-$mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii. See
-  
-if(strpos($current_mime, $mime_png)===false && $extension=='png')
-{
-	die();//File extension does not match its content
-}elseif(strpos($current_mime, $mime_svg)===false && strpos($current_mime, $mime_xml)===false && $extension=='svg')
-{
-	die();//File extension does not match its content
+
+if (phpversion() >= '5.3') {
+	$finfo = new finfo(FILEINFO_MIME);
+	$current_mime=$finfo->buffer($contents);
+	finfo_close($finfo);
+	$mime_png='image/png';//svg-edit return image/png; charset=binary 
+	$mime_svg='image/svg+xml';
+	$mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii. See
+	  
+	if(strpos($current_mime, $mime_png)===false && $extension=='png')
+	{
+		die();//File extension does not match its content
+	}elseif(strpos($current_mime, $mime_svg)===false && strpos($current_mime, $mime_xml)===false && $extension=='svg')
+	{
+		die();//File extension does not match its content
+	}
+}else{
+	
+	if($suffix!= 'svg' || $suffix!= 'png')
+	{
+		die();
+	}
 }
 
 //checks if the file exists, then rename the new

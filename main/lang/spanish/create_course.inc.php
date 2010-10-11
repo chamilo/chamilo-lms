@@ -116,4 +116,7 @@ $AcceptThisCourseRequest = "Validar este curso";
 $ANewCourseWillBeCreated = "Se creará un curso indicado (%s).";
 $AdditionalInfoWillBeAsked = "Enviar un e-mail solicitando información adicional (%s).";
 $AskAdditionalInfo = "Pedir más información";
+$CourseRequestEmailSubject = "Solicitud de nuevo curso %s";
+$CourseRequestMailOpening = "Se registró la siguiente solicitud para un curso nuevo:";
+$CourseRequestPageForApproval = "Puede validar la solicitud en:";
 ?>

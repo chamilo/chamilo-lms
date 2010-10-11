@@ -131,4 +131,9 @@ $CourseRequestDeletionFailed = "Заявката %s не можа да бъде 
 $DeleteCourseRequests = "Изтриване на избраните заявки за курсове";
 $SelectedCourseRequestsDeleted = "Избраните заявки за курсове са изтрити.";
 $SomeCourseRequestsNotDeleted = "Някои от избраните заявки за курсове не са изтрити поради появила се грешка.";
+$CourseRequestEmailSubject = "Заявка за нов курс %s";
+$CourseRequestMailOpening = "Регистрирана е следната заявка за нов курс:";
+$CourseRequestPageForApproval = "Тази заявка може да бъде одобрена на страницата:";
+$PleaseActivateCourseValidationFeature = "Функцията \"Одобряване на курсове\" не е активна в момента. За да я активирате използвайте страницата %s.";
+$CourseRequestLegalNote = "Информацията в тази заявка е защитена; тя може да служи само за обслужване на процедурата по откриване на нов учебен курс в нашия учебен портал; тя не може да бъде разкривана пред трети страни.";
 ?>

@@ -13,7 +13,7 @@
  */
 
 // Name of the language file that needs to be included.
-$language_file = 'create_course';
+$language_file = array('create_course', 'cesga');
 
 // Flag forcing the "current course" reset.
 $cidReset = true;
@@ -97,7 +97,7 @@ $form->add_textfield('wanted_code', get_lang('Code'), false, array('size' => '$m
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
 
-$titular = & $form->add_textfield('tutor_name', get_lang('Professors'), null, array('size' => '60', 'disabled' => 'disabled'));
+$titular = & $form->add_textfield('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
 $form->addElement('static', null, null, get_lang('ExplicationTrainers'));
 //$form->applyFilter('tutor_name', 'html_filter');
 

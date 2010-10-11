@@ -38,6 +38,9 @@ require api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 // Including additional libraries.
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
+// A check whether the course validation feature is enabled.
+$course_validation_feature = api_get_setting('course_validation') == 'true';
+
 // Filltering passed to this page parameters.
 $accept_course_request = intval($_GET['accept_course_request']);
 $delete_course_request = intval($_GET['delete_course_request']);
@@ -45,51 +48,80 @@ $request_info = intval($_GET['request_info']);
 $message = trim(Security::remove_XSS(stripslashes(urldecode($_GET['message']))));
 $is_error_message = !empty($_GET['is_error_message']);
 
+if ($course_validation_feature) {
 
 /**
  * Acceptance and creation of the requested course.
  */
-if (!empty($accept_course_request)) {
-    $course_request_code = CourseRequestManager::get_course_request_code($accept_course_request);
-    $course_id = CourseRequestManager::accept_course_request($accept_course_request);
-    if ($course_id) {
-        $course_code = CourseManager::get_course_code_from_course_id($course_id);
-        $message = sprintf(get_lang('CourseRequestAccepted'), $course_request_code, $course_code);
-        $is_error_message = false;
-    } else {
-        $message = sprintf(get_lang('CourseRequestAcceptanceFailed'), $course_request_code);
-        $is_error_message = true;
+    if (!empty($accept_course_request)) {
+        $course_request_code = CourseRequestManager::get_course_request_code($accept_course_request);
+        $course_id = CourseRequestManager::accept_course_request($accept_course_request);
+        if ($course_id) {
+            $course_code = CourseManager::get_course_code_from_course_id($course_id);
+            $message = sprintf(get_lang('CourseRequestAccepted'), $course_request_code, $course_code);
+            $is_error_message = false;
+        } else {
+            $message = sprintf(get_lang('CourseRequestAcceptanceFailed'), $course_request_code);
+            $is_error_message = true;
+        }
     }
-}
 
-/**
- * Sending to the teacher a request for additional information about the proposed course.
- */
-elseif (!empty($request_info)) {
-    $course_request_code = CourseRequestManager::get_course_request_code($request_info);
-    $result = CourseRequestManager::ask_for_additional_info($request_info);
-    if ($result) {
-        $message = sprintf(get_lang('CourseRequestInfoAsked'), $course_request_code);
-        $is_error_message = false;
-    } else {
-        $message = sprintf(get_lang('CourseRequestInfoFailed'), $course_request_code);
-        $is_error_message = true;
+    /**
+     * Sending to the teacher a request for additional information about the proposed course.
+     */
+    elseif (!empty($request_info)) {
+        $course_request_code = CourseRequestManager::get_course_request_code($request_info);
+        $result = CourseRequestManager::ask_for_additional_info($request_info);
+        if ($result) {
+            $message = sprintf(get_lang('CourseRequestInfoAsked'), $course_request_code);
+            $is_error_message = false;
+        } else {
+            $message = sprintf(get_lang('CourseRequestInfoFailed'), $course_request_code);
+            $is_error_message = true;
+        }
     }
-}
 
-/**
- * Deletion of a course request.
- */
-elseif (!empty($delete_course_request)) {
-    $course_request_code = CourseRequestManager::get_course_request_code($delete_course_request);
-    $result = CourseRequestManager::delete_course_request($delete_course_request);
-    if ($result) {
-        $message = sprintf(get_lang('CourseRequestDeleted'), $course_request_code);
-        $is_error_message = false;
-    } else {
-        $message = sprintf(get_lang('CourseRequestDeletionFailed'), $course_request_code);
-        $is_error_message = true;
+    /**
+     * Deletion of a course request.
+     */
+    elseif (!empty($delete_course_request)) {
+        $course_request_code = CourseRequestManager::get_course_request_code($delete_course_request);
+        $result = CourseRequestManager::delete_course_request($delete_course_request);
+        if ($result) {
+            $message = sprintf(get_lang('CourseRequestDeleted'), $course_request_code);
+            $is_error_message = false;
+        } else {
+            $message = sprintf(get_lang('CourseRequestDeletionFailed'), $course_request_code);
+            $is_error_message = true;
+        }
     }
+
+    /**
+     * Form actions: delete.
+     */
+    elseif (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            // Delete selected courses
+            case 'delete_course_requests' :
+                $course_requests = $_POST['course_request'];
+                if (is_array($_POST['course_request']) && !empty($_POST['course_request'])) {
+                    $success = true;
+                    foreach ($_POST['course_request'] as $index => $course_request_id) {
+                        $success &= CourseRequestManager::delete_course_request($course_request_id);
+                    }
+                    $message = $success ? get_lang('SelectedCourseRequestsDeleted') : get_lang('SomeCourseRequestsNotDeleted');
+                    $is_error_message = !$success;
+                }
+                break;
+        }
+    }
+
+} else {
+
+   $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#course_validation';
+   $message = sprintf(get_lang('PleaseActivateCourseValidationFeature'), sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation')));
+   $is_error_message = true;
+
 }
 
 /**
@@ -143,26 +175,6 @@ function modify_filter($id) {
     return $result;
 }
 
-/**
- * Form actions: delete.
- */
-if (isset($_POST['action'])) {
-    switch ($_POST['action']) {
-        // Delete selected courses
-        case 'delete_course_requests' :
-            $course_requests = $_POST['course_request'];
-            if (is_array($_POST['course_request']) && !empty($_POST['course_request'])) {
-                $success = true;
-                foreach ($_POST['course_request'] as $index => $course_request_id) {
-                    $success &= CourseRequestManager::delete_course_request($course_request_id);
-                }
-                $message = $success ? get_lang('SelectedCourseRequestsDeleted') : get_lang('SomeCourseRequestsNotDeleted');
-                $is_error_message = !$success;
-            }
-            break;
-    }
-}
-
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $tool_name = get_lang('RejectedCourseRequests');
 Display :: display_header($tool_name);
@@ -170,10 +182,15 @@ Display :: display_header($tool_name);
 // Display confirmation or error message.
 if (!empty($message)) {
     if ($is_error_message) {
-        Display::display_error_message($message);
+        Display::display_error_message($message, false);
     } else {
-        Display::display_normal_message($message);
+        Display::display_normal_message($message, false);
     }
+}
+
+if (!$course_validation_feature) {
+    Display :: display_footer();
+    exit;
 }
 
 // The action bar.

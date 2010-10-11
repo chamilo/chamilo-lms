@@ -22,6 +22,8 @@ if(!isset($_FILES['svg_file']['tmp_name'])) {
 	api_not_allowed(false);//from Chamilo
 	die();
 }
+
+
 ?>
 <!doctype html>
 <?php
@@ -42,8 +44,11 @@ if(!isset($_FILES['svg_file']['tmp_name'])) {
 		$prefix = 'data:' . $info['mime'] . ';base64,';
 	}
 	
-//a bit title security
+//check the extension
+$extension = explode('.', $file);
+$extension = strtolower($extension[sizeof($extension) - 1]);	
 
+//a bit title security
 $filename = addslashes(trim($file));
 $filename = Security::remove_XSS($filename);
 $filename = replace_dangerous_char($filename, 'strict');
@@ -53,7 +58,7 @@ $filename = disable_dangerous_file($filename);
 $current_mime = $_FILES['svg_file']['type'];
 $mime_svg='image/svg+xml';
 $mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii.
-	
+		
 if(strpos($current_mime, $mime_svg)===false && strpos($current_mime, $mime_xml)===false && $extension=='svg'){
 	die();//File extension does not match its content
 }

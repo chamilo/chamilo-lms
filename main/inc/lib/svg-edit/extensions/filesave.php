@@ -86,8 +86,7 @@ if (phpversion() >= '5.3') {
 	finfo_close($finfo);
 	$mime_png='image/png';//svg-edit return image/png; charset=binary 
 	$mime_svg='image/svg+xml';
-	$mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii. See
-	  
+	$mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii. See	  
 	if(strpos($current_mime, $mime_png)===false && $extension=='png')
 	{
 		die();//File extension does not match its content
@@ -95,6 +94,7 @@ if (phpversion() >= '5.3') {
 	{
 		die();//File extension does not match its content
 	}
+	
 }else{
 	
 	if($suffix!= 'svg' || $suffix!= 'png')

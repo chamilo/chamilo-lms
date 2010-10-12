@@ -265,6 +265,7 @@ if (!empty ($_GET['student'])) {
 		echo '<a href="access_details.php?student=' . Security :: remove_XSS($_GET['student']) . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">' . Display :: return_icon('statistics.gif', get_lang('AccessDetails')) . ' ' . get_lang('AccessDetails') . '</a>';
 	}
 	echo '</div>';
+    
 	
 
 	// is the user online ?
@@ -370,7 +371,9 @@ if (!empty ($_GET['student'])) {
         $session_name = $session_info['name'];
     } // end if(api_get_setting('use_session_mode')=='true')
 
-    $table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].($coachs_name?'&nbsp;|&nbsp;'.get_lang('Tutor').' : '.stripslashes($coachs_name):'');
+    //$table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].($coachs_name?'&nbsp;|&nbsp;'.get_lang('Tutor').' : '.stripslashes($coachs_name):'');
+    //Hiding coach name 
+    $table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].' | '.api_get_person_name($info_user['lastname'], $info_user['firstname']);
     echo '<h2>'.$table_title.'</h2>';
 
 ?>

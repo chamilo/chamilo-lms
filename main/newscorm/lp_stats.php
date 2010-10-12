@@ -69,7 +69,7 @@ if (!empty ($_GET['extend_all'])) {
 }
 
 if ($origin != 'tracking') {
-    $output .= "<tr><td><div class='title'>" . get_lang('ScormMystatus') . "</div></td></tr>";
+    $output .= "<tr><td><h2>" . get_lang('ScormMystatus') . "</h2></td></tr>";
 }
 $output .= "<tr><td>&nbsp;</td></tr>" . "<tr><td>" . "<table border='0' class='data_table'><tr>\n" . '<td width="16">' . $extend_all_link . '</td>' . '<td colspan="4" class="title"><div class="mystatusfirstrow">' . get_lang('ScormLessonTitle') . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormStatus') . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormScore') . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormTime') . "</div></td><td class='title'><div class='mystatusfirstrow'>" .get_lang('Actions') . "</div></td></tr>\n";
 
@@ -520,10 +520,10 @@ if (is_array($list) && count($list) > 0) {
                     $num = Database :: num_rows($resultLastAttempt);
                     if ($num > 0) {
                         if (isset($_GET['extend_attempt']) && $_GET['extend_attempt'] == 1 && (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)  ) {
-                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&my_ext_lp_id='.$my_id.'"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="'.get_lang('HideAllAttempts').'"></a>';
+                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&session_id='.api_get_session_id().'&my_ext_lp_id='.$my_id.'"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="'.get_lang('HideAllAttempts').'"></a>';
                             $extend_attempt = 1;
                         } else {
-                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_attempt=1'.$my_url_suffix.'&my_lp_id='.$my_id.'"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="'.get_lang('ShowAllAttemptsByExercise').'"></a>';
+                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_attempt=1'.$my_url_suffix.'&session_id='.api_get_session_id().'&my_lp_id='.$my_id.'"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="'.get_lang('ShowAllAttemptsByExercise').'"></a>';
                         }
                     } else {
                         $correct_test_link = '-';

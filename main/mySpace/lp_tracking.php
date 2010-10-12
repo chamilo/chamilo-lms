@@ -136,13 +136,18 @@ $sql = 'SELECT name
 $rs = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 
-echo '<div class ="actions"><div align="left" style="float:left;margin-top:2px;" ><strong>'.$_course['title'].' - '.$lp_title.' - '.$name.'</strong></div>
+
+echo '<div class ="actions"><div align="left" style="float:left;margin-top:2px;" ><a href="javascript:window.back();">'.Display::return_icon('back.png').get_lang('Back').'</a></div>
 	  <div  align="right">
 			<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 			<a href="'.api_get_self().'?export=csv&'.Security::remove_XSS($_SERVER['QUERY_STRING']).'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
 		 </div></div>
 	<div class="clear"></div>';
 
+$table_title = ($session_name? get_lang('Session').' : '.$session_name.' | ':'').get_lang('Course').' : '.$_course['title'].' | '.$name;
+echo '<h2>'.$table_title.'</h2>';
+echo '<h3>'.get_lang('ToolLearnpath').' : '.$lp_title.'</h3>';
+    
 $list = learnpath :: get_flat_ordered_items_list($lp_id);
 $origin = 'tracking';
 if ($export_csv) {

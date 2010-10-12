@@ -618,18 +618,21 @@ if (is_array($list) && count($list) > 0) {
                     if ($num_attempts > 0) {
                         $n = 1;
                         while ($row_attempts = Database :: fetch_array($res_attempts)) {
-                            $my_score = $row_attempts['exe_result'];
-                            $my_maxscore = $row_attempts['exe_weighting'];
-                            $my_exe_id	= $row_attempts['exe_id'];
-                            $my_orig_lp = $row_attempts['orig_lp_id'];
-                            $my_orig_lp_item = $row_attempts['orig_lp_item_id'];
-                            $my_exo_exe_id=$row_attempts['exe_exo_id'];
-                            $mktime_start_date = convert_mysql_date($row_attempts['start_date']);
-                            $mktime_exe_date = convert_mysql_date($row_attempts['exe_date']);
-                            $mytime = ((int)$mktime_exe_date-(int)$mktime_start_date);
-                            $time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
-                            $time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);
-
+                            $my_score           = $row_attempts['exe_result'];
+                            $my_maxscore        = $row_attempts['exe_weighting'];
+                            $my_exe_id	        = $row_attempts['exe_id'];
+                            $my_orig_lp         = $row_attempts['orig_lp_id'];
+                            $my_orig_lp_item    = $row_attempts['orig_lp_item_id'];
+                            $my_exo_exe_id      = $row_attempts['exe_exo_id'];
+                            $mktime_start_date  = api_strtotime($row_attempts['start_date'],'UTC');
+                            $mktime_exe_date    = api_strtotime($row_attempts['exe_date'],'UTC');
+                            if ($mktime_start_date && $mktime_exe_date) {
+                                $mytime = ((int)$mktime_exe_date-(int)$mktime_start_date);
+                                $time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
+                                $time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);
+                            } else {
+                            	$time_attemp = ' - ';
+                            }
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $view_score =  Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                             } else {
@@ -658,16 +661,15 @@ if (is_array($list) && count($list) > 0) {
                                      . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . $view_score  . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
                              if ($origin != 'tracking') {
                                  if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                        $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'"></td>';										
+                                    $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'"></td>';										
                                 } else {                                        
-										$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&id=' . $my_exe_id . '&cidReq=' . $course_code . $from_link. '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'"></a></td>';
+									$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&id=' . $my_exe_id . '&cidReq=' . $course_code . $from_link. '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'"></a></td>';
                                 }
                             } else {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all ) {
-                                        $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
+                                    $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
                                 } else {
-    
-	                                    $output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&id=' . $my_exe_id . '&cidReq=' . $course_code.$from_link.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
+                                    $output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&id=' . $my_exe_id . '&cidReq=' . $course_code.$from_link.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
                                 }
                             }
                              $output .= '</tr>';
@@ -698,13 +700,13 @@ if (!empty($a_my_id)) {
         $my_studen_id = intval(api_get_user_id());
         $my_course_id = Database::escape_string(api_get_course_id());
     }
-    $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id);
+    $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id, api_get_session_id());    
 } else {
     if ($origin == 'tracking') {
         $my_studen_id = $student_id;
         $my_course_id = Database::escape_string($_GET['course']);
         if (!empty($my_studen_id) && !empty($my_course_id)) {
-            $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, array(intval($_GET['lp_id'])));
+            $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, array(intval($_GET['lp_id'])), api_get_session_id());
         } else {
             $total_score = 0;
         }

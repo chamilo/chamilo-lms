@@ -174,9 +174,9 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
         $score = (float)$row_dates['exe_result'];
         $max_score = (float)$row_dates['exe_weighting'];
 
-        $sql_upd_status = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' WHERE lp_item_id = '".(int)$safe_item_id."'
+        /*$sql_upd_status = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' WHERE lp_item_id = '".(int)$safe_item_id."'
                  AND lp_view_id = (SELECT lp_view.id FROM $TBL_LP_VIEW lp_view WHERE user_id = '".(int)$_SESSION['oLP']->user_id."' AND lp_id='".(int)$safe_id."')";
-        Database::query($sql_upd_status);
+        Database::query($sql_upd_status);*/
 
         $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE id = '".(int)$safe_item_id."'";
         Database::query($sql_upd_max_score);
@@ -187,7 +187,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
         $lp_item_view_id = $row_last_attempt[0];
 
         if (Database::num_rows($res_last_attempt) > 0) {
-            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score,total_time = $mytime WHERE id='".$lp_item_view_id."'";
+            $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score,total_time = $mytime WHERE id='".$lp_item_view_id."'";
             Database::query($sql_upd_score);
                    
             $update_query = "UPDATE $TBL_TRACK_EXERCICES SET  orig_lp_item_view_id = $lp_item_view_id  WHERE exe_id = ".$safe_exe_id;

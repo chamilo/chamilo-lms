@@ -139,4 +139,7 @@ $CourseRequestLegalNote = "The information of this training request is considere
 $CourseRequestAskInfoEmailSubject = "%s A request for additional information about the training request %s";
 $CourseRequestAskInfoEmailText = "We have received your request for a new training with code %s. But before we consider it for approval we need some additional information.\n\nPlease, provide brief information about the training content (description), the objectives, the students or the users that are to be involved in the proposed training. If it is applicable, mention the name of the institution or the unit on which behalf you made the training request.";
 $CourseRequestAcceptedEmailSubject = "%s The training request %s has been approved";
+$CourseRequestAcceptedEmailText = "Your training request %s has been approved. A new course %s has been created and you are registered in it as a teacher.\n\nYou can access your newly created course from: %s";
+$CourseRequestRejectedEmailSubject = "%s The training request %s has been rejected";
+$CourseRequestRejectedEmailText = "To our regret we have to inform you that the trainig request %s was rejected due to not conforming to the requirements of our Terms and Conditions.";
 ?>

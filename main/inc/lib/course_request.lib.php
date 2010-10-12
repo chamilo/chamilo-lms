@@ -277,10 +277,34 @@ class CourseRequestManager {
         $sql = "UPDATE ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." SET status = ".COURSE_REQUEST_ACCEPTED." WHERE id = ".$id;
         Database::query($sql);
 
-        // TODO: Prepare and send notification e-mail messages.
+        // E-mail notification.
+
+        // E-mail language: The platform language seems to be the best choice.
+        //$email_language = $course_language;
+        //$email_language = api_get_interface_language();
+        $email_language = api_get_setting('platformLanguage');
+
+        $email_subject = sprintf(get_lang('CourseRequestAcceptedEmailSubject', null, $email_language), '['.api_get_setting('siteName').']', $wanted_code);
+
+        $email_body = get_lang('Dear', null, $email_language).' ';
+        $email_body .= api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language).",\n\n";
+        $email_body .= sprintf(get_lang('CourseRequestAcceptedEmailText', null, $email_language), $wanted_code, $code, api_get_path(WEB_COURSE_PATH).$directory.'/')."\n";
+        $email_body .= "\n".get_lang('Formula', null, $email_language)."\n";
+        $email_body .= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, null, $email_language)."\n";
+        $email_body .= get_lang('Manager', null, $email_language).' '.api_get_setting('siteName')."\n";
+        $email_body .= get_lang('Phone', null, $email_language).': '.api_get_setting('administratorTelephone')."\n";
+        $email_body .= get_lang('Email', null, $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
+        $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
+
+        $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+        $sender_email = get_setting('emailAdministrator');
+        $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+        $recipient_email = $user_info['mail'];
+        $extra_headers = 'Bcc: '.$sender_email;
+
+        @api_mail($recipient_name, $recipient_email, $email_subject, $email_body, $sender_name, $sender_email);
 
         return $code;
-
     }
 
     /**
@@ -340,6 +364,7 @@ class CourseRequestManager {
         $email_language = api_get_setting('platformLanguage');
 
         $email_subject = sprintf(get_lang('CourseRequestAskInfoEmailSubject', null, $email_language), '['.api_get_setting('siteName').']', $code);
+
         $email_body = get_lang('Dear', null, $email_language).' ';
         $email_body .= api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language).",\n\n";
         $email_body .= sprintf(get_lang('CourseRequestAskInfoEmailText', null, $email_language), $code)."\n";
@@ -374,12 +399,10 @@ class CourseRequestManager {
      * @return array/bool                 Returns TRUE if additional information has been asked or FALSE otherwise.
      */
     public static function additional_info_asked($id) {
-
         $id = (int)$id;
         $sql = "SELECT id FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE (id = ".$id." AND info = 1)";
         $result = Database::num_rows(Database::query($sql));
         return !empty($result);
-
     }
 
 }

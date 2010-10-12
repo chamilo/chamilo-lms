@@ -106,4 +106,10 @@ $Create = "Crea";
 $MessageOfNewCourseToAdmin = "Caro %s, nn questo messaggio ti informa che sulla piattaforma %s - %s nn è stato creato il nuovo corson Titolo: %s n Categoria: %s n Creato da: %s n Lingua: %s\";";
 $NewCourseCreatedIn = "Nuovo corso creato in";
 $ExplicationTrainers = "Ora sei tu il docente del corso; in seguito potrai configurare altre persone come docenti.";
+$Objectives = "Obiettivi";
+$TargetAudience = "Destinatari";
+$YouHaveToAcceptTermsAndConditions = "Per poter richiedere un corso devi accettare i Termini e le Condizioni d'uso";
+$CourseRequestCreated = "La tua richiesta di attivazione di un corso è stata inviata correttamente. Riceverai entro pochi giorni una risposta dal responsabile.";
+$CreateThisCourseRequest = "Invia la richiesta di attivazione";
+$CourseRequestDate = "Data della richiesta";
 ?>

@@ -604,7 +604,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights) { // TEACHER ONLY
 
 		// Update item_property to change visibility
 		if (api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, $_user['user_id'], null, null, null, null, $current_session_id)) {
-			Display::display_confirmation_message(get_lang('ViMod'));
+			Display::display_confirmation_message(get_lang('VisibilityChanged'));//don't use ViMod because firt is load ViMdod (Gradebook). VisibilityChanged (trad4all)
 		} else {
 			Display::display_error_message(get_lang('ViModProb'));
 		}
@@ -849,18 +849,20 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 
 	// Create new document
 	if (!$is_certificate_mode) {
-?>
-	<a href="create_document.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
-		<?php Display::display_icon('filenew.gif', get_lang('CreateDoc')); echo get_lang('CreateDoc'); ?></a>&nbsp;
-<?php
-	}
-
-	// Create new draw
-	if (support_svg()){
-	?>
-		<a href="create_drawing.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
-			<?php Display::display_icon('draw.png', get_lang('Draw')); echo get_lang('Draw'); ?></a>&nbsp;
-	<?php	
+		?>
+		<a href="create_document.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+			<?php Display::display_icon('filenew.gif', get_lang('CreateDoc')); echo get_lang('CreateDoc'); ?></a>&nbsp;
+		<?php		
+	
+		// Create new draw
+		if (api_support_svg()){
+		?>
+			<a href="create_drawing.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+				<?php Display::display_icon('draw_new.png', get_lang('Draw')); echo get_lang('Draw'); ?></a>&nbsp;
+		<?php	
+		}else{
+			Display::display_icon('draw_new.png', get_lang('BrowserDontSupportsSVG')); echo get_lang('Draw').'&nbsp;';
+		}
 	}
 	
 	// Create new certificate

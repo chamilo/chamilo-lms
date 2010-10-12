@@ -1274,4 +1274,7 @@ $AllowUsersCopyFilesComment = "Allows users to copy files from a course in your 
 $ReviewCourseRequests = "Review incoming training requests";
 $AcceptedCourseRequests = "Accepted training requests";
 $RejectedCourseRequests = "Rejected training requests";
+$BrowscapInfo = "Browscap loading browscap.ini file that contains a large amount of data on the browser and its capabilities, so it can be used by the function get_browser () PHP";
+$EnableCourseValidation = "Training validation";
+$EnableCourseValidationComment = "When \"Training validation\" feature is activated, a teacher is not able to create a training alone. He/she fills a training request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messages; set Chamilo to access an e-mail server and to use a dedicated an e-mail account.";
 ?>

@@ -207,6 +207,7 @@ function detect_browser_language() {
 	return 'english';
 }
 
+
 /*		FILESYSTEM RELATED FUNCTIONS */
 
 /**

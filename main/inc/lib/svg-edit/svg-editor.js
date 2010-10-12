@@ -468,7 +468,7 @@
 				path = svgCanvas.pathActions,
 				undoMgr = svgCanvas.undoMgr,
 				Utils = svgCanvas.Utils,
-				default_img_url = curConfig.imgPath + "logo.png",
+				default_img_url = curConfig.imgPath + "mascot.png",
 				workarea = $("#workarea"),
 				canv_menu = $("#cmenu_canvas"),
 				layer_menu = $("#cmenu_layers"),
@@ -3319,7 +3319,7 @@
 			
 			// Test for embedImage support (use timeout to not interfere with page load)
 			setTimeout(function() {
-				svgCanvas.embedImage('images/logo.png', function(datauri) {
+				svgCanvas.embedImage('images/mascot.png', function(datauri) {
 					if(!datauri) {
 						// Disable option
 						$('#image_save_opts [value=embed]').attr('disabled','disabled');

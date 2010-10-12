@@ -113,7 +113,11 @@ $CourseRequestCreated = "Se recibió correctamente su solicitud de curso. En bre
 $CreateThisCourseRequest = "Solicitud de nuevo curso";
 $CourseRequestDate = "Fecha Solicitud";
 $AcceptThisCourseRequest = "Validar este curso";
-$ANewCourseWillBeCreated = "Se creará un curso indicado.";
-$AdditionalInfoWillBeAsked = "Enviar un e-mail solicitando información adicional.";
+$ANewCourseWillBeCreated = "Se creará un curso indicado (%s).";
+$AdditionalInfoWillBeAsked = "Enviar un e-mail solicitando información adicional (%s).";
 $AskAdditionalInfo = "Pedir más información";
+$CourseRequestEmailSubject = "%s Solicitud de nuevo curso %s";
+$CourseRequestMailOpening = "Se registró la siguiente solicitud para un curso nuevo:";
+$CourseRequestPageForApproval = "Puede validar la solicitud en:";
+$CourseRequestAskInfoEmailSubject = "%s Solicitud de informacion %s";
 ?>

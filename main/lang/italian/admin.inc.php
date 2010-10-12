@@ -1276,4 +1276,7 @@ $MyTextHere = "Scrivi qui dentro...";
 $FieldTypeSocialProfile = "Collegamento alla rete sociale";
 $AllowUsersCopyFilesTitle = "Consenti agli utenti di fare una copia di file del corso nella propria area personale";
 $AllowUsersCopyFilesComment = "Consenti agli utenti di fare una copia di file del corso nell'area personale, rendendoli visibili tramite la rete sociale o un browser/editor, nel caso siano esterni al corso";
+$ReviewCourseRequests = "Attivare i corsi richiesti";
+$AcceptedCourseRequests = "Corsi confermati";
+$RejectedCourseRequests = "Corsi non confermati";
 ?>

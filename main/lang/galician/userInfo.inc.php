@@ -194,4 +194,5 @@ $YouNeedToHaveFriendsInYourSocialNetwork = "Precisa ter amigos na súa rede soci
 $SeeAllMyGroups = "Ver tódolos meus grupos";
 $YouAlreadyInviteAllYourContacts = "Xa invitou a tódolos seus contactos";
 $YouShouldCreateAGroup = "Debería crear un grupo";
+$MyFiles = "Os meus arquivos";
 ?>

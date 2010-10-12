@@ -12,7 +12,8 @@ svgEditor.addExtension("imagelib", function() {
 	var img_libs = [{
 			name: 'Local library',
 			url: 'extensions/imagelib/index.php',
-			description: 'Demonstration library for SVG-edit on this server'
+			//description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
+			description: 'Course gallery'
 		}, 
 		{
 			name: 'IAN Symbol Libraries',

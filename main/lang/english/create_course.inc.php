@@ -137,4 +137,5 @@ $CourseRequestPageForApproval = "This training request can be accepted (approved
 $PleaseActivateCourseValidationFeature = "The \"Training validation\" feature is not active at the moment. In order to use this feature, please, activate it by using the setting %s.";
 $CourseRequestLegalNote = "The information of this training request is considered as protected; it can be used only for serving the procedure of opening a new training within our training portal; it should not be revealed to third parties.";
 $CourseRequestAskInfoEmailSubject = "%s A request for additional information about the training request %s";
+$CourseRequestAskInfoEmailText = "We have received your request for a new training with code %s. But before we consider it for approval we need some additional information.\n\nPlease, provide brief information about the training content (description), the objectives, the students or the users that are to be involved in the proposed training. If it is applicable, mention the name of the institution or the unit on which behalf you made the training request.";
 ?>

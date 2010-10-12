@@ -141,5 +141,5 @@ $CourseRequestAskInfoEmailText = "We have received your request for a new traini
 $CourseRequestAcceptedEmailSubject = "%s The training request %s has been approved";
 $CourseRequestAcceptedEmailText = "Your training request %s has been approved. A new course %s has been created and you are registered in it as a teacher.\n\nYou can access your newly created course from: %s";
 $CourseRequestRejectedEmailSubject = "%s The training request %s has been rejected";
-$CourseRequestRejectedEmailText = "To our regret we have to inform you that the trainig request %s was rejected due to not conforming to the requirements of our Terms and Conditions.";
+$CourseRequestRejectedEmailText = "To our regret we have to inform you that the training request %s has been rejected due to not conforming to the requirements of our Terms and Conditions.";
 ?>

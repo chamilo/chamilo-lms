@@ -197,6 +197,10 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 }
 
 $session_id = intval($_GET['id_session']);
+if (empty($session_id)) {
+    $session_id = api_get_session_id();
+}
+
 $student_id = intval($_GET['student']);
 
 // Action behaviour

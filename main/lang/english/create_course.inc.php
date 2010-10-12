@@ -142,4 +142,6 @@ $CourseRequestAcceptedEmailSubject = "%s The training request %s has been approv
 $CourseRequestAcceptedEmailText = "Your training request %s has been approved. A new course %s has been created and you are registered in it as a teacher.\n\nYou can access your newly created course from: %s";
 $CourseRequestRejectedEmailSubject = "%s The training request %s has been rejected";
 $CourseRequestRejectedEmailText = "To our regret we have to inform you that the training request %s has been rejected due to not conforming to the requirements of our Terms and Conditions.";
+$CourseCreationFailed = "The training has not been created due to internal error.";
+$CourseRequestCreationFailed = "The training request has not been created due to internal error.";
 ?>

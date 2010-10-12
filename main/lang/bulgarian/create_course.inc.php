@@ -142,4 +142,6 @@ $CourseRequestAcceptedEmailSubject = "%s Заявката за нов курс %
 $CourseRequestAcceptedEmailText = "Вашата заявка %s е одобрена. Създаден е нов курс %s за който сте регистрирани като преподавател.\n\nМожете да получите достъп до своя курс оттук: %s";
 $CourseRequestRejectedEmailSubject = "%s Заявката за нов курс %s е отхвърлена";
 $CourseRequestRejectedEmailText = "За съжаление Вашата заявка за нов курс %s е отхвърлена, тъй като не отговаря на нашите Условия за ползване.";
+$CourseCreationFailed = "Курсът не е създаден поради появила се грешка.";
+$CourseRequestCreationFailed = "Заявката за нов курс не е създадена поради появила се грешка.";
 ?>

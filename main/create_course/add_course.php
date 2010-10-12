@@ -237,9 +237,7 @@ if ($form->validate()) {
 
             } else {
 
-                // TODO: Prepare an error message.
-                $message = '?';
-                Display :: display_error_message(get_lang($message), false);
+                Display :: display_error_message(get_lang('CourseCreationFailed'), false);
                 // Display the form.
                 $form->display();
 
@@ -264,9 +262,7 @@ if ($form->validate()) {
 
             } else {
 
-                // TODO: Prepare an error message.
-                $message = '?';
-                Display :: display_error_message(get_lang($message), false);
+                Display :: display_error_message(get_lang('CourseRequestCreationFailed'), false);
                 // Display the form.
                 $form->display();
 

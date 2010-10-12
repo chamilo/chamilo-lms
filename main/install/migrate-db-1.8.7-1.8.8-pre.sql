@@ -36,9 +36,10 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('users_copy
 UPDATE settings_current SET selected_value='1' WHERE variable='allow_social_tool';
 UPDATE settings_current SET selected_value='1' WHERE variable='allow_message_tool';
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_validation', NULL, 'radio', 'Platform', 'false', 'EnableCourseValidation', 'EnableCourseValidationComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_validation', NULL, 'radio', 'Platform', 'false', 'EnableCourseValidation', 'EnableCourseValidationComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('course_validation', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('course_validation', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_validation_terms_and_conditions_url', NULL, 'textfield', 'Platform', '', 'CourseValidationTermsAndConditionsLink', 'CourseValidationTermsAndConditionsLinkComment', NULL, NULL, 1);
 UPDATE settings_current SET selected_value='1' WHERE variable='advanced_filemanager';
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

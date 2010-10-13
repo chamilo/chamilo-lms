@@ -777,6 +777,11 @@ if (isset($uidReset) && $uidReset) {	// session data refresh requested
 /*  COURSE INIT */
 
 if (isset($cidReset) && $cidReset) { // course session data refresh requested or empty data
+
+    if (api_get_session_id()) {
+        api_session_unregister('id_session');
+    }
+    
     if ($cidReq) {
     	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     	$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);

@@ -336,7 +336,7 @@ class Tracking {
 				$session_id = intval($session_id);
 				$condition_session = " AND session_id = $session_id ";
 			}
-			$sql = "SELECT count(id) FROM $tbl_course_quiz WHERE active <> -1 $condition_quiz $condition_session";
+			$sql = "SELECT count(id) FROM $tbl_course_quiz WHERE active <> -1 $condition_quiz ";
 			$count_quiz = Database::fetch_row(Database::query($sql));
 
 			$quiz_avg_total_score = 0;
@@ -349,17 +349,17 @@ class Tracking {
 				}
 				$sql = "SELECT SUM(exe_result/exe_weighting*100) as avg_score, COUNT(*) as num_attempts
 						FROM $tbl_stats_exercise
-						WHERE exe_exo_id IN (SELECT id FROM $tbl_course_quiz WHERE active <> -1 $condition_quiz $condition_session)
+						WHERE exe_exo_id IN (SELECT id FROM $tbl_course_quiz WHERE active <> -1 $condition_quiz)
 						$condition_user
 						AND orig_lp_id = 0
 						AND exe_cours_id = '$course_code'
-						AND orig_lp_item_id = 0
+						AND orig_lp_item_id = 0 $condition_session
 						ORDER BY exe_date DESC";
 				$res = Database::query($sql);
 				$row = Database::fetch_array($res);
 				$quiz_avg_score = 0;
 				if (!empty($row['avg_score'])) {
-					$quiz_avg_score = round($row['avg_score'],2);
+					$quiz_avg_score = round($row['avg_score'],1);
 				}
 				if(!empty($row['num_attempts'])) {
 					$quiz_avg_score = $quiz_avg_score / $row['num_attempts'];

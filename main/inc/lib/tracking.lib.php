@@ -394,13 +394,12 @@ class Tracking {
 		if (!empty($course_info['db_name'])) {
 			$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES, $course_info['db_name']);
 
-			$sql = "SELECT COUNT(ex.exe_id) as essais
-															FROM $tbl_stats_exercices AS ex
-															WHERE  ex.exe_cours_id = '$course_code'
-															AND ex.exe_exo_id = $exercise_id
-															AND orig_lp_id = $lp_id
-															AND orig_lp_item_id = $lp_item_id
-															AND exe_user_id= $student_id ";
+			$sql = "SELECT COUNT(ex.exe_id) as essais FROM $tbl_stats_exercices AS ex
+					WHERE  ex.exe_cours_id = '$course_code'
+					AND ex.exe_exo_id = $exercise_id
+					AND orig_lp_id = $lp_id
+					AND orig_lp_item_id = $lp_item_id
+					AND exe_user_id= $student_id ";
 			$rs = Database::query($sql);
 			$row = Database::fetch_row($rs);
 			$count_attempts = $row[0];

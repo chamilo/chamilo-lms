@@ -696,7 +696,7 @@ function get_all_exercise_event($exercise_id, $course_code, $session_id = 0) {
 	$exercise_id = intval($exercise_id);
 	$session_id = intval($session_id);
 	
-	$sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id";
+	$sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id ORDER BY exe_id";
 	
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$list = array();	

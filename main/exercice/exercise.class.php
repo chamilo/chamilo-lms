@@ -24,7 +24,7 @@ class Exercise {
 	public $exercise;
 	public $description;
 	public $sound;
-	public $type;
+	public $type; //ALL_ON_ONE_PAGE or ONE_PER_PAGE
 	public $random;
 	public $random_answers;
 	public $active;
@@ -47,7 +47,7 @@ class Exercise {
 		$this->exercise			= '';
 		$this->description		= '';
 		$this->sound			= '';
-		$this->type				= 1;
+		$this->type				= ALL_ON_ONE_PAGE;
 		$this->random			= 0;
 		$this->random_answers	= 0;
 		$this->active			= 1;
@@ -112,9 +112,9 @@ class Exercise {
             //load questions only for exercises of type 'one question per page'
             //this is needed only is there is no questions
             //
-            // @todo not sure were in the code this is used
+            // @todo not sure were in the code this is used somebody mess with the exercise 
             global $_configuration, $questionList;
-            if ($this->type == 2 && $_configuration['live_exercise_tracking'] && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED')) {
+            if ($this->type == ONE_PER_PAGE && $_configuration['live_exercise_tracking'] && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED')) {
             	//if(empty($_SESSION['questionList']))
             	$this->questionList = $questionList;
             }
@@ -1407,7 +1407,7 @@ class Exercise {
 	
 	public function save_stat_track_exercise_info($clock_expired_time = 0, $safe_lp_id = 0, $safe_lp_item_id = 0, $safe_lp_item_view_id = 0, $questionList = array()) {
 		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		
+		error_log('save_stat_track_exercise_info');
 		if (empty($safe_lp_id)) {
 			$safe_lp_id = 0;
 		}		

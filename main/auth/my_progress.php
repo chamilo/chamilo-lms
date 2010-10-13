@@ -316,7 +316,7 @@ if (!empty($course_in_session)) {
 								<td align='center' width=180px >";
 						                        
 						if (!empty($last_connection_in_lp)) {
-							echo $last_connection_in_lp;
+							echo api_get_utc_datetime($last_connection_in_lp);
 						} else {
 							echo '-';
 						}

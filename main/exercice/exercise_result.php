@@ -335,11 +335,10 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 $exerciseTitle=text_filter($exerciseTitle);
 
 //show exercise title
-?>
-	<?php if($origin != 'learnpath') {?>
-		<h2><?php echo Display::return_icon('quiz_big.png', get_lang('Result')).' '; echo $exerciseTitle; ?> : <?php echo get_lang("Result"); ?></h2>
-		<?php echo $exerciseDescription; ?>
-	<?php } ?>
+if($origin != 'learnpath') {?>
+	<h2><?php echo Display::return_icon('quiz_big.png', get_lang('Result')).' '; echo $exerciseTitle; ?> : <?php echo get_lang("Result"); ?></h2>
+	<?php echo $exerciseDescription; ?>
+<?php } ?>
 
 	<form method="get" action="exercice.php?<?php echo api_get_cidreq() ?>">
 	<input type="hidden" name="origin" value="<?php echo $origin; ?>" />

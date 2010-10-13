@@ -63,9 +63,7 @@ $tbl_admin					= Database :: get_main_table(TABLE_MAIN_ADMIN);
 $tbl_track_cours_access 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
 
-/*
- * FUNCTIONS
- */
+/* * FUNCTIONS */
 
 function count_teacher_courses() {
 	global $nb_teacher_courses;
@@ -108,9 +106,7 @@ function rsort_sessions($a, $b) {
 	}
 }
 
-/*
- * MAIN CODE
- */
+/* * MAIN CODE  */
 
 $is_coach 			= api_is_coach();
 $is_platform_admin 	= api_is_platform_admin();
@@ -162,10 +158,9 @@ if (api_is_allowed_to_create_course() && $_GET['display'] != 'yourstudents') {
 		} else {
 			if (!empty($session_id)) {
 				$session_name = api_get_session_name($session_id);
-				$title = ucfirst($session_name);
+				$title = get_lang('Session').' '.$session_name;
 			}            
-			$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';
-            
+			$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';            
 		}
 	}
 }
@@ -178,13 +173,11 @@ if ($is_coach && $_GET['display'] != 'yourstudents') {
 		$menu_items[] = get_lang('CoachInterface');
 		$title = get_lang('YourStatistics');
 	} else {
-		$menu_items[] = '<a href="'.api_get_self().'?view=coach">'.get_lang('CoachInterface').'</a>';
-        
+		$menu_items[] = '<a href="'.api_get_self().'?view=coach">'.get_lang('CoachInterface').'</a>';        
 	}
 }
 
 if ($is_platform_admin &&  $_GET['display'] != 'yourstudents') {
-
 	if ($nb_teacher_courses == 0 && $nb_sessions == 0) {
 		$view = 'admin';
 	}
@@ -210,8 +203,7 @@ if ($is_drh || $_GET['display'] == 'yourstudents') {
 // Actions menu
 $nb_menu_items = count($menu_items);
 
-if ($nb_teacher_courses > 0 ) {
-    
+if ($nb_teacher_courses > 0 ) {    
 	echo '<div class="actions" style ="font-size:10pt;">';    
     if (empty($session_id)) {
     	if ($nb_menu_items > 1) {
@@ -239,7 +231,7 @@ if ($nb_teacher_courses > 0 ) {
 }
 
 
-echo '<h2>'.get_lang('Session').' '.$title.'</h2>';
+echo '<h2>'.$title.'</h2>';
 
 if (($is_drh && $view == 'drh') || $_GET['display'] == 'yourstudents') {
 	// get data for human resources manager
@@ -457,7 +449,7 @@ if ($view == 'coach') {
 		$csv_content[] = array(get_lang('NbStudentPerSession', '').';'.$nb_students_per_session);
 		$csv_content[] = array(get_lang('NbCoursesPerSession', '').';'.$nb_courses_per_session);
 		$csv_content[] = array();
-	} else {
+	} else {        
 		// html part
 		echo '
 		 <div class="report_section">

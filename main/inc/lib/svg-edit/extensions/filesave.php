@@ -11,6 +11,9 @@
  * @author Juan Carlos Raña Trabado
  * @since 25/september/2010
 */
+
+$language_file = array('document');//Chamilo load lang var
+
 //Chamilo load libraries
 require_once '../../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -23,6 +26,8 @@ if(!isset($_POST['output_svg']) && !isset($_POST['output_png'])) {
 	api_not_allowed(false);//from Chamilo
 	die();
 }
+
+
 
 $file = '';
 
@@ -122,6 +127,7 @@ if($currentTool=='document/createdraw'){
 	//add document to database
 	$doc_id = add_document($_course, $relativeUrlPath.'/'.$drawFileName, 'file', filesize($documentPath), $title);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
+
 }elseif($currentTool=='document/editdraw'){
 
 	//check path
@@ -129,7 +135,7 @@ if($currentTool=='document/createdraw'){
 		api_not_allowed(false);//from Chamilo
 		die();
 	}
-	if($_SESSION['draw_file']==$drawFileName){		
+	if($_SESSION['draw_file']==$drawFileName){
 		$document_id = DocumentManager::get_document_id($_course, $relativeUrlPath.'/'.$drawFileName);
 		update_existing_document($_course, $document_id, filesize($documentPath), null);
 		api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id'], $groupId, null, null, null, $current_session_id);
@@ -139,5 +145,17 @@ if($currentTool=='document/createdraw'){
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
 	}	
 }
+
+//add messages and return to current document list
+echo '<script language="javascript" type="text/javascript">';
+if($suffix!= 'png'){	
+	if($relativeUrlPath==''){$relativeUrlPath='/';};
+	$interbreadcrumb=api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$_course['path'].'&curdirpath='.	urlencode($relativeUrlPath);
+	echo 'alert("'.get_lang('FileSavedAs').': '.$title.'");';	
+	echo 'window.top.location.href="'.$interbreadcrumb.'";';//return to current document list
+}else{
+	echo 'alert("'.get_lang('FileExportAs').': '.$title.'");';
+}
+echo '</script>';
 
 ?>

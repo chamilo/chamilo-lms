@@ -211,15 +211,20 @@ if ($is_drh || $_GET['display'] == 'yourstudents') {
 $nb_menu_items = count($menu_items);
 
 if ($nb_teacher_courses > 0 ) {
-	echo '<div class="actions-title" style ="font-size:10pt;">';
-	if ($nb_menu_items > 1) {
-		foreach ($menu_items as $key => $item) {
-			echo $item;
-			if ($key != $nb_menu_items - 1) {
-				echo '&nbsp;|&nbsp;';
-			}
-		}
-	}
+    
+	echo '<div class="actions" style ="font-size:10pt;">';    
+    if (empty($session_id)) {
+    	if ($nb_menu_items > 1) {
+    		foreach ($menu_items as $key => $item) {
+    			echo $item;
+    			if ($key != $nb_menu_items - 1) {
+    				echo '&nbsp;|&nbsp;';
+    			}
+    		}
+    	}
+    } else {
+    	echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
+    }
 	echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
 	if (isset($_GET['display']) && ($_GET['display'] == 'useroverview' || $_GET['display'] == 'sessionoverview' || $_GET['display'] == 'courseoverview')) {
 		echo '<a href="'.api_get_self().'?display='.$_GET['display'].'&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
@@ -229,13 +234,12 @@ if ($nb_teacher_courses > 0 ) {
 } else {
 	echo '<div class="actions-title" style ="font-size:10pt;">';
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/statistics.gif">&nbsp;'.get_lang('MyStats').'</a> ';
-
 	echo '</div>';
 	//Display::display_warning_message(get_lang('HaveNoCourse'));
 }
 
 
-echo '<h2>'.$title.'</h2>';
+echo '<h2>'.get_lang('Session').' '.$title.'</h2>';
 
 if (($is_drh && $view == 'drh') || $_GET['display'] == 'yourstudents') {
 	// get data for human resources manager

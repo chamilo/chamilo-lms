@@ -139,7 +139,7 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 
 /* MAIN CODE */
 
-echo '<div class="actions-title"  style ="font-size:10pt;">';
+echo '<div class="actions"  style ="font-size:10pt;">';
 if ($_GET['studentlist'] == 'false') {
     echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | ';
     echo get_lang('CourseTracking').' | ';
@@ -156,11 +156,14 @@ if ($_GET['studentlist'] == 'false') {
         echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';
 
 } elseif($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
+    echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
+    
+    /*
     echo get_lang('StudentsTracking').' | ';
     echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a> | ';
     echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
     if (empty($session_id))
-        echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';
+        echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';*/
 }
 
 echo '&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printmgr.gif', get_lang('Print')).get_lang('Print').'</a>';
@@ -483,7 +486,7 @@ if ($_GET['studentlist'] == 'false') {
         $course_code = $_course['id'];
 
         $user_ids = array_keys($a_students);
-
+        
         $table = new SortableTable('users_tracking', array('TrackingCourseLog', 'get_number_of_users'), array('TrackingCourseLog', 'get_user_data'), (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 
         $parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);

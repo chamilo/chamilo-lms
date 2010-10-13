@@ -69,6 +69,8 @@ while($row = Database :: fetch_array($rs)) {
 echo '<div class="actions-title" >';
 echo $nameTools;
 echo '</div>';
+
+if (!empty($courses)) {
 ?>
 <table class="data_table" width="100%">
 <tr class="tableName">
@@ -85,49 +87,52 @@ echo '</div>';
   <th><?php echo get_lang('Details'); ?></th>
 </tr>
 <?php
-$i = 0;
-foreach ($courses as $enreg) {
-	$weighting = 0;
-	$last_connection       = Tracking :: get_last_connection_date_on_the_course($_user['user_id'], $enreg['code']);
-	$progress              = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
-	$total_time_login      = Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']);
-	$time                  = api_time_to_hms($total_time_login);
-	$percentage_score      = Tracking :: get_average_test_scorm_and_lp ($_user['user_id'], $enreg['code']);
 
-    echo '<tr class='.($i?'row_odd':'row_even').'>';
-  	echo '<td>'.$enreg['title'].'</td>';
+    $i = 0;
+    foreach ($courses as $enreg) {
+    	$weighting = 0;
+    	$last_connection       = Tracking :: get_last_connection_date_on_the_course($_user['user_id'], $enreg['code']);
+    	$progress              = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
+    	$total_time_login      = Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']);
+    	$time                  = api_time_to_hms($total_time_login);
+    	$percentage_score      = Tracking :: get_average_test_scorm_and_lp ($_user['user_id'], $enreg['code']);
     
-  	echo '<td align="center">'.$time.'</td>';
-    echo '<td align="center">'.$progress.'%</td>';
-  	
-  	echo '<td align="center">';
-    	if (!is_null($percentage_score)) {
-			echo $percentage_score.'%';
-		} else {
-			echo '0%';
-		}	
-  	echo '</td>';
-    
-  	echo '<td align="center">'.$last_connection.'</td>';
-	
-  	echo '<td align="center">';		
-	if ($enreg['code'] == $_GET['course'] && empty($_GET['session_id'])) {
-		echo '<a href="#">';
-		Display::display_icon('2rightarrow_na.gif', get_lang('Details'));
-	} else {
-		echo '<a href="'.api_get_self().'?course='.$enreg['code'].'">';
-		Display::display_icon('2rightarrow.gif', get_lang('Details'));
-	}
-	echo '</a>';
-    echo '</td></tr>';
-	$i = $i ? 0 : 1;
+        echo '<tr class='.($i?'row_odd':'row_even').'>';
+      	echo '<td>'.$enreg['title'].'</td>';
+        
+      	echo '<td align="center">'.$time.'</td>';
+        echo '<td align="center">'.$progress.'%</td>';
+      	
+      	echo '<td align="center">';
+    	if (is_numeric($percentage_score)) {
+    		echo $percentage_score.'%';
+    	} else {
+    		echo '0%';
+    	}	
+      	echo '</td>';        
+      	echo '<td align="center">'.$last_connection.'</td>';    	
+      	echo '<td align="center">';		
+    	if ($enreg['code'] == $_GET['course'] && empty($_GET['session_id'])) {
+    		echo '<a href="#">';
+    		Display::display_icon('2rightarrow_na.gif', get_lang('Details'));
+    	} else {
+    		echo '<a href="'.api_get_self().'?course='.$enreg['code'].'">';
+    		Display::display_icon('2rightarrow.gif', get_lang('Details'));
+    	}
+    	echo '</a>';
+        echo '</td></tr>';
+    	$i = $i ? 0 : 1;
+    }    
+    echo '</table>';
 }
+
+if (!empty($course_in_session)) {
 ?>
-</table>
+
 <br />
 <table class="data_table" width="100%">
 <tr class="tableName">
-    <td colspan="6">
+    <td colspan="7">
         <strong><?php echo get_lang('Sessions'); ?></strong>
     </td>
 </tr>
@@ -141,54 +146,54 @@ foreach ($courses as $enreg) {
   <th><?php echo get_lang('Details'); ?></th>
 </tr>
 <?php
-
-foreach ($course_in_session as $key=>$session) {
     
-    echo '<tr  class='.($i?'row_odd':'row_even').'>';
-    
-    echo '<td rowspan="'.count($session).'" > '.api_get_session_name($key).' </td>';
-    
-    foreach ($session as $enreg) {
-        
-        
-        $weighting = 0;
-        $last_connection       = Tracking :: get_last_connection_date_on_the_course($_user['user_id'], $enreg['code'], $enreg['session_id']);
-        $progress              = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code'],array(), $enreg['session_id']);
-        $total_time_login      = Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code'], $enreg['session_id']);
-        $time                  = api_time_to_hms($total_time_login);
-        $percentage_score      = Tracking :: get_avg_student_score ($_user['user_id'], $enreg['code'], array(), $enreg['session_id']);
-        
-        echo '<td>'.$enreg['title'].' </td>';
-        
-        echo '<td align="center">'.$time.'</td>';
-        echo '<td align="center">'.$progress.'%</td>';
-        
-        echo '<td align="center">';
-            if (!is_null($percentage_score)) {
+    foreach ($course_in_session as $key=>$session) {    
+        echo '<tr  class='.($i?'row_odd':'row_even').'>';    
+        echo '<td rowspan="'.count($session).'" > '.api_get_session_name($key).' </td>';    
+        foreach ($session as $enreg) {               
+            $weighting = 0;
+            $last_connection       = Tracking :: get_last_connection_date_on_the_course($_user['user_id'], $enreg['code'], $key);
+            $progress              = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code'],array(), $key);
+            
+            $total_time_login      = Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code'], $key);
+            $time                  = api_time_to_hms($total_time_login);
+            $percentage_score      = Tracking :: get_avg_student_score ($_user['user_id'], $enreg['code'], array(), $key);
+            
+            echo '<td>'.$enreg['title'].' </td>';        
+            echo '<td align="center">'.$time.'</td>';
+            
+            if (is_numeric($progress)) {
+                $progress = $progress.'%';
+            } else {
+                $progress = '0%';
+            }
+            
+            echo '<td align="center">'.$progress.'</td>';
+            echo '<td align="center">';
+            if (is_numeric($percentage_score)) {
                 echo $percentage_score.'%';
             } else {
                 echo '0%';
             }   
-        echo '</td>';
-        
-        echo '<td align="center">'.$last_connection.'</td>';
-        
-        echo '<td align="center">';     
-        if ($enreg['code'] == $_GET['course'] && $_GET['session_id'] == $key) {
-            echo '<a href="#">';
-            Display::display_icon('2rightarrow_na.gif', get_lang('Details'));
-        } else {
-            echo '<a href="'.api_get_self().'?course='.$enreg['code'].'&session_id='.$key.'">';
-            Display::display_icon('2rightarrow.gif', get_lang('Details'));
-        }
-        echo '</a>';
-        echo '</td>';
-        $i = $i ? 0 : 1;
-          echo '</tr>';
-    }  
+            echo '</td>';        
+            echo '<td align="center">'.$last_connection.'</td>';        
+            echo '<td align="center">';     
+            if ($enreg['code'] == $_GET['course'] && $_GET['session_id'] == $key) {
+                echo '<a href="#">';
+                Display::display_icon('2rightarrow_na.gif', get_lang('Details'));
+            } else {
+                echo '<a href="'.api_get_self().'?course='.$enreg['code'].'&session_id='.$key.'">';
+                Display::display_icon('2rightarrow.gif', get_lang('Details'));
+            }
+            echo '</a>';
+            echo '</td>';
+            $i = $i ? 0 : 1;
+            echo '</tr>';
+        }  
+    }
+    echo '</table>';
 }
 ?>
-</table>
 <br /><br />
 <?php
 /*	Details for one course  */
@@ -201,8 +206,6 @@ foreach ($course_in_session as $key=>$session) {
         $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course         = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        
-        
         $tbl_course_lp_view         = Database :: get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
         $tbl_course_lp_view_item    = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
         $tbl_course_lp              = Database :: get_course_table(TABLE_LP_MAIN, $course_info['db_name']);
@@ -313,7 +316,7 @@ foreach ($course_in_session as $key=>$session) {
 								<td align='center' width=180px >";
 						                        
 						if (!empty($last_connection_in_lp)) {
-							echo api_get_utc_datetime($last_connection_in_lp);
+							echo $last_connection_in_lp;
 						} else {
 							echo '-';
 						}

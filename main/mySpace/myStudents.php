@@ -257,6 +257,8 @@ if (!empty ($_GET['student'])) {
 
 	// Actions bar
 	echo '<div class="actions">';
+    echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
+    
 	echo '<a href="javascript: void(0);" onclick="javascript: window.print();"><img src="../img/printmgr.gif">&nbsp;' . get_lang('Print') . '</a>';
 	echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv"><img src="../img/csv.gif">&nbsp;' . get_lang('ExportAsCSV') . '</a>';
 	if (!empty ($info_user['email'])) {

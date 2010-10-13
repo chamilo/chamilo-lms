@@ -4572,7 +4572,7 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
     // Regular expression to test for valid email address.
     // This should actually be revised to use the complete RFC3696 description.
     // http://tools.ietf.org/html/rfc3696#section-3
-    $regexp = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$";
+    //$regexp = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$"; // Deprecated, 13-OCT-2010.
 
     $mail = new PHPMailer();
     $mail->CharSet = $platform_email['SMTP_CHARSET'];
@@ -4613,7 +4613,8 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
     $mail->Subject = $subject;
     $mail->Body = $message;
     // Only valid address are to be accepted.
-    if (eregi( $regexp, $recipient_email )) {
+    //if (eregi( $regexp, $recipient_email )) { // Deprecated, 13-OCT-2010.
+    if (api_valid_email($recipient_email)) {
         $mail->AddAddress($recipient_email, $recipient_name);
     }
 

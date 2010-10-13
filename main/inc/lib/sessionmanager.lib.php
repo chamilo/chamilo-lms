@@ -345,7 +345,9 @@ class SessionManager {
 		$session_info = api_get_session_info($id_session);
 		$session_name = $session_info['name'];
 
-	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+	   	//$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+        $sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' ";
+        
 		$result = Database::query($sql);
 		$existingUsers = array();
 		while($row = Database::fetch_array($result)){

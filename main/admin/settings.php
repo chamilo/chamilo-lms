@@ -150,9 +150,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
         ($countsetting['0'] % 10) < 5 ? $b = $countsetting['0'] - 10 : $b = $countsetting['0'];
         if ($i % 10 == 0 and $i < $b) {
-            $form->addElement('html','<div align="right">');
+            $form->addElement('html', '<div align="right">');
             $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-            $form->addElement('html','</div>');
+            $form->addElement('html', '</div>');
         }
 
         $i++;
@@ -179,9 +179,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 if (empty($row['category']))
                     $row['category'] = 0;
 
-                if (is_array ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ])) {
-                    // Ee are sure that the other site have a selected value.
-                    if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]['selected_value']!='')
+                if (is_array($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ])) {
+                    // We are sure that the other site have a selected value.
+                    if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ] [ $row['category'] ]['selected_value'] != '')
                         $row['selected_value'] =$settings_by_access_list[$row['variable']] [$row['subkey']] [ $row['category'] ]['selected_value'];
                 }
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
@@ -223,13 +223,13 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                     $form->addElement('select', $row['variable'], get_lang($row['comment']), $valid_encodings);
                     $default_values[$row['variable']] = $current_system_encoding;
                 } else {
-                    $form->addElement('text', $row['variable'], get_lang($row['comment']),$hideme);
+                    $form->addElement('text', $row['variable'], get_lang($row['comment']), $hideme);
                     $form->applyFilter($row['variable'],'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
                 }
                 break;
             case 'textarea':
-                $form->addElement('textarea', $row['variable'], get_lang($row['comment']),$hideme);
+                $form->addElement('textarea', $row['variable'], get_lang($row['comment']), $hideme);
                 $default_values[$row['variable']] = $row['selected_value'];
                 break;
             case 'radio':
@@ -265,7 +265,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                      if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_gradebook') { continue; }
 
                     $element = & $form->createElement('checkbox', $rowkeys['subkey'], '', get_lang($rowkeys['subkeytext']));
-                    if ($row['access_url_changeable']==1) {
+                    if ($row['access_url_changeable'] == 1) {
                         // 2. We look into the DB if there is a setting for a specific access_url.
                         $access_url = $_configuration['access_url'];
                         if (empty($access_url )) $access_url = 1;
@@ -334,8 +334,8 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
                         $elementTemplateTwoLabel2 =
                         '<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->&nbsp{element}
-                        <a href="javascript:minItem(' . ($counter) . ')"><img style="display: '.(($counter>=$nr_items && $counter!=1)?'inline':'none').';" id="min-' . $counter . '" src="../img/gradebook_remove.gif" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img></a>
-                        <a href="javascript:plusItem(' . ($counter+1) . ')"><img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="../img/gradebook_add.gif" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img></a>
+                        <a href="javascript:minItem(' . ($counter) . ')"><img style="display: '.(($counter >= $nr_items && $counter != 1) ? 'inline' : 'none').';" id="min-' . $counter . '" src="../img/gradebook_remove.gif" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img></a>
+                        <a href="javascript:plusItem(' . ($counter+1) . ')"><img style="display: '.(($counter >= $nr_items) ? 'inline' : 'none').';" id="plus-' . ($counter+1) . '" src="../img/gradebook_add.gif" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img></a>
                         </div></p></div>';
 
                         $scorebetw= array ();
@@ -352,16 +352,15 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                         $renderer->setElementTemplate($elementTemplateTwoLabel,'gradebook_score_display_custom_values_endscore[' . $counter . ']');
                         $renderer->setElementTemplate($elementTemplateTwoLabel2,'gradebook_score_display_custom_values_displaytext[' . $counter . ']');
                         $form->addRule('gradebook_score_display_custom_values_endscore[' . $counter . ']', get_lang('OnlyNumbers'), 'numeric');
-                        $form->addRule(array ('gradebook_score_display_custom_values_endscore[' . $counter . ']', 'gradebook_score_display_custom_values_maxvalue'), get_lang('Over100'), 'compare', '<=');
-                        $form->addRule(array ('gradebook_score_display_custom_values_endscore[' . $counter . ']', 'gradebook_score_display_custom_values_minvalue'), get_lang('UnderMin'), 'compare', '>');
+                        $form->addRule(array('gradebook_score_display_custom_values_endscore[' . $counter . ']', 'gradebook_score_display_custom_values_maxvalue'), get_lang('Over100'), 'compare', '<=');
+                        $form->addRule(array('gradebook_score_display_custom_values_endscore[' . $counter . ']', 'gradebook_score_display_custom_values_minvalue'), get_lang('UnderMin'), 'compare', '>');
                         if ($customdisplays[$counter - 1]) {
-                            $default_values['gradebook_score_display_custom_values_endscore['.$counter.']'] = $customdisplays[$counter-1]['score'];
-                            $default_values['gradebook_score_display_custom_values_displaytext['.$counter.']'] = $customdisplays[$counter-1]['display'];
+                            $default_values['gradebook_score_display_custom_values_endscore['.$counter.']'] = $customdisplays[$counter - 1]['score'];
+                            $default_values['gradebook_score_display_custom_values_displaytext['.$counter.']'] = $customdisplays[$counter - 1]['display'];
                         }
                     }
                 }
                 break;
-
                 */
         }
     }
@@ -384,22 +383,55 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         // therefore not be set to false.
         // This, however, also means that if the process breaks on the third of five checkboxes, the others
         // will be set to false.
-        $r = api_set_settings_category($my_category,'false',$_configuration['access_url'],array('checkbox','radio'));
+        $r = api_set_settings_category($my_category, 'false', $_configuration['access_url'], array('checkbox', 'radio'));
         //$sql = "UPDATE $table_settings_current SET selected_value='false' WHERE category='$my_category' AND type='checkbox'";
         //$result = Database::query($sql);
-        // Save the settings
+        // Save the settings.
         $keys = array();
         //$gradebook_score_display_custom_values = array();
         foreach ($values as $key => $value) {
             // Treat gradebook values in separate function.
-            //if(strpos($key, 'gradebook_score_display_custom_values') === false) {
+            //if (strpos($key, 'gradebook_score_display_custom_values') === false) {
                 if (!is_array($value)) {
                     //$sql = "UPDATE $table_settings_current SET selected_value='".Database::escape_string($value)."' WHERE variable='$key'";
                     //$result = Database::query($sql);
 
-                    if (api_get_setting($key) != $value) $keys[] = $key;
+                    $old_value = api_get_setting($key);
 
-                    $result = api_set_setting($key,$value,null,null,$_configuration['access_url']);
+                    switch ($key) {
+
+                        // URL validation for some settings.
+                        case 'InstitutionUrl':
+                        case 'course_validation_terms_and_conditions_url':
+                            $value = trim(Security::remove_XSS($value));
+                            if ($value != '') {
+                                // Here we accept absolute URLs only.
+                                if (strpos($value, '://') === false) {
+                                    $value = 'http://'.$value;
+                                }
+                                if (!api_valid_url($value, true)) {
+                                    // If the new (non-empty) URL value is invalid, then the old URL value stays.
+                                    $value = $old_value;
+                                }
+                            }
+                            // If the new URL value is empty, then it will be stored (i.e. the setting will be deleted).
+                            break;
+
+                        // Validation against e-mail address for some settings.
+                        case 'emailAdministrator':
+                            $value = trim(Security::remove_XSS($value));
+                            if ($value != '' && !api_valid_email($value)) {
+                                // If the new (non-empty) e-mail address is invalid, then the old e-mail address stays.
+                                // If the new e-mail address is empty, then it will be stored (i.e. the setting will be deleted).
+                                $value = $old_value;
+                            }
+                            break;
+
+                    }
+
+                    if ($old_value != $value) $keys[] = $key;
+
+                    $result = api_set_setting($key, $value, null, null, $_configuration['access_url']);
 
                 } else {
 
@@ -408,8 +440,8 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                     $subkeys = array();
                     while ($row_subkeys = Database::fetch_array($res)) {
                         // If subkey is changed:
-                        if ( (isset($value[$row_subkeys['subkey']]) && api_get_setting($key,$row_subkeys['subkey']) == 'false') ||
-                             (!isset($value[$row_subkeys['subkey']]) && api_get_setting($key,$row_subkeys['subkey']) == 'true')) {
+                        if ((isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'false') ||
+                            (!isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'true')) {
                             $keys[] = $key;
                             break;
                         }
@@ -420,7 +452,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                         //$sql = "UPDATE $table_settings_current SET selected_value='true' WHERE variable='$key' AND subkey = '$subkey'";
                         //$result = Database::query($sql);
 
-                        $result = api_set_setting($key,'true',$subkey,null,$_configuration['access_url']);
+                        $result = api_set_setting($key, 'true', $subkey, null, $_configuration['access_url']);
 
                     }
                 }
@@ -483,7 +515,7 @@ $action_images['timezones']     = 'timezones.png';
 // Grabbing the categories.
 //$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
 //$resultcategories = Database::query($selectcategories);
-$resultcategories = api_get_settings_categories(array('stylesheets','Plugins', 'Templates', 'Search'));
+$resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 'Templates', 'Search'));
 echo "\n<div class=\"actions\">";
 //while ($row = Database::fetch_array($resultcategories))
 foreach ($resultcategories as $row) {

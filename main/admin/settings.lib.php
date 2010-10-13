@@ -250,7 +250,7 @@ function handle_stylesheets() {
     $list_of_names  = array();
 
     if ($handle = @opendir(api_get_path(SYS_PATH).'main/css/')) {
-        $counter=1;
+        $counter = 1;
         while (false !== ($style_dir = readdir($handle))) {
             if (substr($style_dir, 0, 1) == '.') { // Skip directories starting with a '.'
                 continue;
@@ -304,8 +304,7 @@ function handle_stylesheets() {
  * @version May 2008
  * @since Dokeos 1.8.5
  */
-function upload_stylesheet($values,$picture)
-{
+function upload_stylesheet($values, $picture) {
     // Valid name for the stylesheet folder.
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
 
@@ -320,12 +319,12 @@ function upload_stylesheet($values,$picture)
         $zip = new ZipArchive();
         if ($zip->open($picture['tmp_name'])) {
             // Make sure all files inside the zip are images or css.
-            $numFiles = $zip->numFiles;
+            $num_files = $zip->numFiles;
             $valid = true;
             $single_directory = true;
             $invalid_files = array();
 
-            for ($i =0; $i < $numFiles; $i++) {
+            for ($i = 0; $i < $num_files; $i++) {
                 $file = $zip->statIndex($i);
                 if (substr($file['name'], -1) != '/') {
                     $path_parts = pathinfo($file['name']);
@@ -341,7 +340,7 @@ function upload_stylesheet($values,$picture)
             }
             if (!$valid) {
                 $error_string = '<ul>';
-                foreach($invalid_files as $invalid_file) {
+                foreach ($invalid_files as $invalid_file) {
                     $error_string .= '<li>'.$invalid_file.'</li>';
                 }
                 $error_string .= '</ul>';
@@ -353,7 +352,7 @@ function upload_stylesheet($values,$picture)
                     $zip->extractTo(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/');
                 } else {
                     $extraction_path = api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/';
-                    for ($i = 0; $i < $numFiles; $i++) {
+                    for ($i = 0; $i < $num_files; $i++) {
                         $entry = $zip->getNameIndex($i);
                         if (substr($entry, -1) == '/') continue;
 
@@ -402,7 +401,7 @@ function store_plugins() {
     // Step 1 : We remove all the plugins.
     //$sql = "DELETE FROM $table_settings_current WHERE category='Plugins'";
     //Database::query($sql);
-    $r = api_delete_category_settings('Plugins',$_configuration['access_url']);
+    $r = api_delete_category_settings('Plugins', $_configuration['access_url']);
 
     // Step 2: Looping through all the post values we only store these which are really a valid plugin location.
     foreach ($_POST as $form_name => $formvalue) {
@@ -653,8 +652,8 @@ function get_template_data($from, $number_of_items, $column, $direction) {
  * @since Dokeos 1.8.6
  */
 function actions_filter($id) {
-    $return .= '<a href="settings.php?category=Templates&amp;action=edit&amp;id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-    $return .= '<a href="settings.php?category=Templates&amp;action=delete&amp;id='.Security::remove_XSS($id).'" onclick="javascript:if(!confirm('."'".get_lang("ConfirmYourChoice")."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+    $return = '<a href="settings.php?category=Templates&amp;action=edit&amp;id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+    $return .= '<a href="settings.php?category=Templates&amp;action=delete&amp;id='.Security::remove_XSS($id).'" onclick="javascript:if(!confirm('."'".get_lang('ConfirmYourChoice')."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
     return $return;
 }
 
@@ -778,7 +777,7 @@ function add_edit_template() {
                         }
                         $new_height = round(($thumbwidth / $picture_infos[0]) * $picture_infos[1]);
 
-                        $temp->resize($thumbwidth, $new_height,0);
+                        $temp->resize($thumbwidth, $new_height, 0);
                     }
 
                     $type = $picture_infos[2];

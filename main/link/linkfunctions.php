@@ -52,23 +52,25 @@ function addlinkcategory($type) {
         $title = trim($title);
         $description = trim($description);
 
-        // If title is empty, an error occurs.
-        if (!filter_var($urllink, FILTER_VALIDATE_URL)) {
+        // We ensure URL to be absolute.
+        if (strpos($urllink, '://') === false) {
+            $urllink = 'http://'.$urllink;
+        }
+
+        // If the title is empty, we use the URL as title.
+        if ($title == '') {
+            $title = $urllink;
+        }
+
+        // If the URL is invalid, an error occurs.
+        // Ivan, 13-OCT-2010, Chamilo 1.8.8: Let us still tolerate PHP 5.1.x and avoid a specific bug in filter_var(), see http://bugs.php.net/51192
+        //if (!filter_var($urllink, FILTER_VALIDATE_URL)) {
+        if (!api_valid_url($urllink, true)) { // A check against an absolute URL.
+        //
             $msgErr = get_lang('GiveURL');
             Display::display_error_message(get_lang('GiveURL'));
             $ok = false;
-        }
-        // If the title is empty, we use the url as the title.
-        else {
-            if (empty($title)) {
-                $title = $urllink;
-            }
-
-            // We check weither the $url starts with http://, if not we add this.
-            if (strpos($urllink, '://') === false) {
-                $urllink = 'http://'.$urllink;
-            }
-
+        } else {
             // Looking for the largest order number for this category.
             $result = Database::query("SELECT MAX(display_order) FROM  ".$tbl_link." WHERE category_id='".Database::escape_string($_POST['selectcategory'])."'");
             list($orderMax) = Database::fetch_row($result);
@@ -315,8 +317,35 @@ function editlinkcategory($type) {
                 $target_link = $myrow['target'];
             }
         }
+
         // This is used to put the modified info of the link-form into the database.
         if ($_POST['submitLink']) {
+
+            // Ivan, 13-OCT-2010: It is a litle bit messy code below, just in case I added some extra-security checks here.
+            $_POST['urllink'] = trim(Security::remove_XSS($_POST['urllink']));
+            $_POST['title'] = trim(Security::remove_XSS($_POST['title']));
+            $_POST['description'] = trim(Security::remove_XSS($_POST['description']));
+            $_POST['selectcategory'] = intval($_POST['selectcategory']);
+            $_POST['id'] = intval($_POST['id']);
+
+            // We ensure URL to be absolute.
+            if (strpos($_POST['urllink'], '://') === false) {
+                $_POST['urllink'] = 'http://'.$_POST['urllink'];
+            }
+
+            // If the title is empty, we use the URL as title.
+            if ($_POST['title'] == '') {
+                $_POST['title'] = $_POST['urllink'];
+            }
+
+            // If the URL is invalid, an error occurs.
+            // Ivan, 13-OCT-2010, Chamilo 1.8.8: Let us still tolerate PHP 5.1.x and avoid a specific bug in filter_var(), see http://bugs.php.net/51192
+            //if (!filter_var($urllink, FILTER_VALIDATE_URL)) {
+            if (!api_valid_url($urllink, true)) { // A check against an absolute URL.
+                $msgErr = get_lang('GiveURL');
+                Display::display_error_message(get_lang('GiveURL'));
+                return false;
+            }
 
             $onhomepage = Security::remove_XSS($_POST['onhomepage']);
             $target = Security::remove_XSS($_POST['target_link']);
@@ -449,8 +478,8 @@ function editlinkcategory($type) {
             $sql = "SELECT * FROM ".$tbl_categories." WHERE id='".intval($_GET['id'])."'";
             $result = Database::query($sql);
             if ($myrow = Database::fetch_array($result)) {
-                $category_title = $myrow["category_title"];
-                $description = $myrow["description"];
+                $category_title = $myrow['category_title'];
+                $description = $myrow['description'];
             }
         }
 
@@ -462,6 +491,8 @@ function editlinkcategory($type) {
         }
 
     }
+
+    return true; // On errors before this statement, exit from this function by returning false value.
 }
 
 /**

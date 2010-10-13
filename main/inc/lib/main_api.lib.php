@@ -625,6 +625,60 @@ function api_remove_trailing_slash($path) {
     return substr($path, -1) == '/' ? substr($path, 0, -1) : $path;
 }
 
+/**
+ * Checks the RFC 3986 syntax of a given URL.
+ * @param string $url       The URL to be checked.
+ * @param bool $absolute    Whether the URL is absolute (beginning with a scheme such as "http:").
+ * @return bool             Returns the URL if it is valid, FALSE otherwise.
+ * This function is an adaptation from the function valid_url(), Drupal CMS.
+ * @link http://drupal.org
+ * Note: The built-in function filter_var($urs, FILTER_VALIDATE_URL) has a bug for some versions of PHP.
+ * @link http://bugs.php.net/51192
+ */
+function api_valid_url($url, $absolute = false) {
+    if ($absolute) {
+        if (preg_match("
+            /^                                                      # Start at the beginning of the text
+            (?:ftp|https?|feed):\/\/                                # Look for ftp, http, https or feed schemes
+            (?:                                                     # Userinfo (optional) which is typically
+                (?:(?:[\w\.\-\+!$&'\(\)*\+,;=]|%[0-9a-f]{2})+:)*    # a username or a username and password
+                (?:[\w\.\-\+%!$&'\(\)*\+,;=]|%[0-9a-f]{2})+@        # combination
+            )?
+            (?:
+                (?:[a-z0-9\-\.]|%[0-9a-f]{2})+                      # A domain name or a IPv4 address
+                |(?:\[(?:[0-9a-f]{0,4}:)*(?:[0-9a-f]{0,4})\])       # or a well formed IPv6 address
+            )
+            (?::[0-9]+)?                                            # Server port number (optional)
+            (?:[\/|\?]
+                (?:[\w#!:\.\?\+=&@$'~*,;\/\(\)\[\]\-]|%[0-9a-f]{2}) # The path and query (optional)
+            *)?
+            $/xi", $url)) {
+            return $url;
+        }
+        return false;
+    } else {
+        return preg_match("/^(?:[\w#!:\.\?\+=&@$'~*,;\/\(\)\[\]\-]|%[0-9a-f]{2})+$/i", $url) ? $url : false;
+    }
+}
+
+/**
+ * Checks whether a given string looks roughly like an email address.
+ * Tries to use PHP built-in validator in the filter extension (from PHP 5.2), falls back to a reasonably competent regex validator.
+ * Conforms approximately to RFC2822
+ * @link http://www.hexillion.com/samples/#Regex Original pattern found here
+ * This function is an adaptation from the method PHPMailer::ValidateAddress(), PHPMailed module.
+ * @link http://phpmailer.worxware.com
+ * @param string $address   The e-mail address to be checked.
+ * @return mixed            Returns the e-mail if it is valid, FALSE otherwise.
+ */
+function api_valid_email($address) {
+    if (function_exists('filter_var')) { //Introduced in PHP 5.2
+        return filter_var($address, FILTER_VALIDATE_EMAIL);
+    } else {
+        return preg_match('/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/', $address) ? $address : false;
+    }
+}
+
 
 /* PROTECTION FUNCTIONS
    Use these functions to protect your scripts. */

@@ -231,7 +231,7 @@ if ($nb_teacher_courses > 0 ) {
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/statistics.gif">&nbsp;'.get_lang('MyStats').'</a> ';
 
 	echo '</div>';
-	Display::display_warning_message(get_lang('HaveNoCourse'));
+	//Display::display_warning_message(get_lang('HaveNoCourse'));
 }
 
 
@@ -589,6 +589,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 }
 
 if ($is_platform_admin && $view == 'admin' && $_GET['display'] != 'yourstudents') {
+    
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';
 	if ($_GET['display'] == 'useroverview') {
@@ -596,6 +597,12 @@ if ($is_platform_admin && $view == 'admin' && $_GET['display'] != 'yourstudents'
 	}
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=sessionoverview">'.get_lang('DisplaySessionOverview').'</a>';
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=courseoverview">'.get_lang('DisplayCourseOverview').'</a>';
+    
+    echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin">'.get_lang('LPQuestionListResults').'</a>';
+    
+    echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin">'.get_lang('LPExerciseResultsBySession').'</a>';
+    
+    
 	echo '<br /><br />';
 	if ($_GET['display'] === 'useroverview') {
 		MySpace::display_tracking_user_overview();

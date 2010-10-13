@@ -1278,5 +1278,5 @@ $BrowscapInfo = "Browscap loading browscap.ini file that contains a large amount
 $EnableCourseValidation = "Training validation";
 $EnableCourseValidationComment = "When \"Training validation\" feature is activated, a teacher is not able to create a training alone. He/she fills a training request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messages; set Chamilo to access an e-mail server and to use a dedicated an e-mail account.";
 $CourseValidationTermsAndConditionsLink = "Training validation - a link to the terms and conditions";
-$CourseValidationTermsAndConditionsLinkComment = "This is the URL to the \"Terms and Conditions\" document that is valid for making a training request. If the address here is set, before sending a training request the user should read and agree with these terms and conditions.";
+$CourseValidationTermsAndConditionsLinkComment = "This is the URL to the \"Terms and Conditions\" document that is valid for making a training request. If the address here is set, before sending a training request the user should read and agree with these terms and conditions.<br />If you activate Chamilo's module \"Terms and Conditions\" and if you want its URL to be used, then leave this setting empty.";
 ?>

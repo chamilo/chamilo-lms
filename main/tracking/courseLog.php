@@ -156,7 +156,9 @@ if ($_GET['studentlist'] == 'false') {
         echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';
 
 } elseif($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
-    echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
+    if (!empty($_GET['from'])) {    
+        echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
+    }
     
     /*
     echo get_lang('StudentsTracking').' | ';

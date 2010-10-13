@@ -7,7 +7,7 @@ require_once api_get_path(CONFIGURATION_PATH).'mail.conf.php';
 // A regular expression for testing against valid email addresses.
 // It should actually be revised for using the complete RFC3696 description:
 // http://tools.ietf.org/html/rfc3696#section-3
-$regexp_rfc3696 = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$";
+//$regexp_rfc3696 = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$"; // Deprecated, 13-OCT-2010.
 
 /**
  * Sends email using the phpmailer class
@@ -25,7 +25,7 @@ $regexp_rfc3696 = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z
  */
 function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', $extra_headers = '') {
 
-    global $regexp_rfc3696;
+    //global $regexp_rfc3696; // Deprecated, 13-OCT-2010.
     global $platform_email;
 
     $mail = new PHPMailer();
@@ -69,7 +69,8 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
     $mail->Body    = $message;
 
     // Only valid addresses are accepted.
-    if (eregi($regexp_rfc3696, $recipient_email)) {
+    //if (eregi($regexp_rfc3696, $recipient_email)) { // Deprecated, 13-OCT-2010.
+    if (api_valid_email($recipient_email)) {
         $mail->AddAddress($recipient_email, $recipient_name);
     }
 
@@ -111,7 +112,7 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  */
 function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', $extra_headers = null, $data_file = array(), $embedded_image = false) {
 
-    global $regexp_rfc3696;
+    //global $regexp_rfc3696; // Deprecated, 13-OCT-2010.
     global $platform_email;
 
     $mail = new PHPMailer();
@@ -198,13 +199,15 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
     // Only valid addresses are accepted.
     if (is_array($recipient_email)) {
         foreach ($recipient_email as $dest) {
-            if (eregi($regexp_rfc3696, $dest)) {
+            //if (eregi($regexp_rfc3696, $dest)) { // Deprecated, 13-OCT-2010.
+            if (api_valid_email($dest)) {
                 $mail->AddAddress($dest, $recipient_name);
                 //$mail->AddAddress($dest, ($i > 1 ? '' : $recipient_name));
             }
         }
     } else {
-        if (eregi($regexp_rfc3696, $recipient_email)) {
+        //if (eregi($regexp_rfc3696, $recipient_email)) { // Deprecated, 13-OCT-2010.
+        if (api_valid_email($recipient_email)) {
             $mail->AddAddress($recipient_email, $recipient_name);
         } else {
             return 0;

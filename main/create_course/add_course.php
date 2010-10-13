@@ -121,10 +121,14 @@ $form->applyFilter('select_language', 'html_filter');
 
 if ($course_validation_feature) {
 
-    // URL to terms and conditions.
+    // A special URL to terms and conditions that is set in the platform settings page.
     $terms_and_conditions_url = trim(api_get_setting('course_validation_terms_and_conditions_url'));
+
+    // If the special setting is empty, then we may get the URL from Chamilo's module "Terms and conditions", if it is activated.
     if (empty($terms_and_conditions_url)) {
-        // TODO: If Chamilo's module "Terms and conditions" is active, we may get the URL from there.
+        if (api_get_setting('allow_terms_conditions') == 'true') {
+            $terms_and_conditions_url = api_get_path(WEB_CODE_PATH).'auth/inscription.php?legal';
+        }
     }
 
     if (!empty($terms_and_conditions_url)) {

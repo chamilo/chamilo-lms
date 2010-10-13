@@ -666,13 +666,13 @@ function api_valid_url($url, $absolute = false) {
  * Tries to use PHP built-in validator in the filter extension (from PHP 5.2), falls back to a reasonably competent regex validator.
  * Conforms approximately to RFC2822
  * @link http://www.hexillion.com/samples/#Regex Original pattern found here
- * This function is an adaptation from the method PHPMailer::ValidateAddress(), PHPMailed module.
+ * This function is an adaptation from the method PHPMailer::ValidateAddress(), PHPMailer module.
  * @link http://phpmailer.worxware.com
  * @param string $address   The e-mail address to be checked.
  * @return mixed            Returns the e-mail if it is valid, FALSE otherwise.
  */
 function api_valid_email($address) {
-    if (function_exists('filter_var')) { //Introduced in PHP 5.2
+    if (function_exists('filter_var')) { // Introduced in PHP 5.2.
         return filter_var($address, FILTER_VALIDATE_EMAIL);
     } else {
         return preg_match('/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/', $address) ? $address : false;

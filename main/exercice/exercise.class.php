@@ -24,7 +24,7 @@ class Exercise {
 	public $exercise;
 	public $description;
 	public $sound;
-	public $type;
+	public $type; //ALL_ON_ONE_PAGE or ONE_PER_PAGE
 	public $random;
 	public $random_answers;
 	public $active;

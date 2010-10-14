@@ -31,8 +31,11 @@ class ExerciseShowFunctions {
 	 * @return void
 	 */
 
-	function display_fill_in_blanks_answer($answer,$id,$questionId)
-	{	global $feedback_type;
+	function display_fill_in_blanks_answer($answer,$id,$questionId) {
+        global $feedback_type;
+        if (empty($id)) {
+            echo '<tr><td>'. nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)).'</td></tr>';
+        } else {
 		?>
 			<tr>
 			<td>
@@ -50,6 +53,7 @@ class ExerciseShowFunctions {
 
 				</tr>
 		<?php
+        }
 	}
 
 	/**
@@ -60,13 +64,30 @@ class ExerciseShowFunctions {
 	 * @return void
 	 */
 	function display_free_answer($answer,$id,$questionId) {
-		global $feedback_type;
+        global $feedback_type;        
+        if (empty($id)) {
+            ?>
+        	       <tr>
+        <td width="55%">
+            <?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
+        </td>
+    <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+   <td width="45%">
+    <?php echo get_lang('notCorrectedYet');?>
+
+   </td>
+   <?php } else { ?>
+        <td>&nbsp;</td>
+    <?php } ?>
+        </tr>
+        
+        <?php 
+        } else {		
 		?>
 			<tr>
 			<td>
 				<?php if (!empty($answer)) {echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY));} ?>
 			</td>
-
 			<?php if(!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {?>
 	        <td>
 	        <?php
@@ -74,10 +95,9 @@ class ExerciseShowFunctions {
 	        ?>
 	        </td>
 	    	<?php }?>
-
-
 	    </tr>
 	    <?php
+        }
 	}
 
 	/**
@@ -337,4 +357,9 @@ class ExerciseShowFunctions {
 			$result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
 		}
 	}
+    
+    
+    
+    
+    
 }

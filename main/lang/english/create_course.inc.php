@@ -145,4 +145,5 @@ $CourseRequestRejectedEmailText = "To our regret we have to inform you that the 
 $CourseCreationFailed = "The training has not been created due to internal error.";
 $CourseRequestCreationFailed = "The training request has not been created due to internal error.";
 $CourseRequestEdit = "Edit a training request";
+$CourseRequestHasNotBeenFound = "The training request you wanted to access has not been found or it does not exist.";
 ?>

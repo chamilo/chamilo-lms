@@ -76,7 +76,6 @@ $dbnamelength = strlen($_configuration['db_prefix']);
 $maxlength = 40 - $dbnamelength;
 
 // Build the form.
-$categories = array();
 $form = new FormValidator('add_course');
 
 // Form title
@@ -85,11 +84,10 @@ $form->addElement('header', '', $tool_name);
 // Title
 $form->addElement('text', 'title', get_lang('CourseName'), array('size' => '60', 'id' => 'title'));
 $form->applyFilter('title', 'html_filter');
-
 $form->addElement('static', null, null, get_lang('Ex'));
-$categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), $categories);
-$form->applyFilter('category_code', 'html_filter');
 
+$categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), array());
+$form->applyFilter('category_code', 'html_filter');
 CourseManager::select_and_sort_categories($categories_select);
 $form->addElement('static', null, null, get_lang('TargetFac'));
 

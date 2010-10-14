@@ -7,7 +7,7 @@
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
  */
 
-/* INIT SECTION */
+// Initialization section.
 
 // Language files that need to be included.
 $language_file = array('admin', 'create_course');
@@ -40,19 +40,22 @@ $course_validation_feature = api_get_setting('course_validation') == 'true';
 $id = intval($_GET['id']);
 $caller = intval($_GET['caller']);
 
-// Code for testing purposes, to be removed.
-$message = 'id = '.$id.';<br />caller = "'.get_caller_name($caller).'";';
-$is_error_message = false;
-
 if ($course_validation_feature) {
 
-    // Actions, if any.
+    // Retrieve request's data from the corresponding database record.
+    $course_request_info = CourseRequestManager::get_course_request_info($id);
+    if (!is_array($course_request_info)) {
+        // Prepare an error message notifying that the course request has not been found or does not exist.
+        $message = get_lang('CourseRequestHasNotBeenFound');
+        $is_error_message = true;
+    }
 
 } else {
 
-   $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#course_validation';
-   $message = sprintf(get_lang('PleaseActivateCourseValidationFeature'), sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation')));
-   $is_error_message = true;
+    // Prepare an error message notifying that the course validation feature has not been enabled.
+    $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#course_validation';
+    $message = sprintf(get_lang('PleaseActivateCourseValidationFeature'), sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation')));
+    $is_error_message = true;
 
 }
 
@@ -84,6 +87,7 @@ if (!empty($message)) {
 }
 
 if (!$course_validation_feature) {
+    // Disabled course validation feature - show nothing after the error message.
     Display :: display_footer();
     exit;
 }
@@ -96,10 +100,42 @@ echo '<a href="course_request_accepted.php">'.Display::return_icon('course_reque
 echo '<a href="course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
 echo '</div>';
 
-// The form.
+if (!is_array($course_request_info)) {
+    // Not accessible database record - show the error message and the action bar.
+    Display :: display_footer();
+    exit;
+}
+
+// Build the form.
+$form = new FormValidator('add_course');
+
+// Form title.
+$form->addElement('header', '', $tool_name);
+
+// Title
+$form->addElement('text', 'title', get_lang('CourseName'), array('size' => '60', 'id' => 'title'));
+$form->applyFilter('title', 'html_filter');
+$form->addElement('static', null, null, get_lang('Ex'));
+
+$categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), array());
+$form->applyFilter('category_code', 'html_filter');
+CourseManager::select_and_sort_categories($categories_select);
+$form->addElement('static', null, null, get_lang('TargetFac'));
+
+// Other form's elements...
 
 //...
 
+// Set the default values based on the corresponding database record.
+
+//...
+
+// Validate the form and perform the ordered actions.
+
+//...
+
+// Display the form.
+$form->display();
+
 // The footer.
 Display :: display_footer();
-

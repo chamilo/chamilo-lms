@@ -28,7 +28,6 @@ if(!isset($_POST['output_svg']) && !isset($_POST['output_png'])) {
 }
 
 
-
 $file = '';
 
 
@@ -37,6 +36,7 @@ $suffix = isset($_POST['output_svg'])?'svg':'png';
 if(isset($_POST['filename']) && strlen($_POST['filename']) > 0) {
 
 	$file = $_POST['filename'];
+	
 } else {
 
 	$file = 'image';
@@ -110,10 +110,10 @@ if (phpversion() >= '5.3') {
 
 //checks if the file exists, then rename the new
 if(file_exists($saveDir.'/'.$filename.$i.'.'.$extension) && $currentTool=='document/createdraw'){
-	$i = 1;
-	while (file_exists($saveDir.'/'.$filename.'_'.$i.'.'.$extension)) $i++; //prevent duplicates
-	$drawFileName = $filename.'_'.$i.'.'.$extension;
-	$title=$title.' '.$i.'.'.$extension;
+	echo '<script language="javascript" type="text/javascript">';
+	echo 'alert("'.get_lang('FileExistsChangeToSave').'");';
+	echo '</script>';
+	die();
 }else{
 	$drawFileName = $filename.'.'.$extension;
 	$title = $title.'.'.$extension;

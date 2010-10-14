@@ -139,7 +139,7 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 
 /* MAIN CODE */
 
-echo '<div class="actions-title"  style ="font-size:10pt;">';
+echo '<div class="actions"  style ="font-size:10pt;">';
 if ($_GET['studentlist'] == 'false') {
     echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | ';
     echo get_lang('CourseTracking').' | ';
@@ -156,11 +156,16 @@ if ($_GET['studentlist'] == 'false') {
         echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';
 
 } elseif($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
+    if (!empty($_GET['from'])) {    
+        echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
+    }
+    
+    /*
     echo get_lang('StudentsTracking').' | ';
     echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a> | ';
     echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
     if (empty($session_id))
-        echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';
+        echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';*/
 }
 
 echo '&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printmgr.gif', get_lang('Print')).get_lang('Print').'</a>';
@@ -174,11 +179,8 @@ if ($_GET['studentlist'] == 'false') {
     }
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.'">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
 }
-if ($_GET['studentlist'] == 'true' || empty($_GET['studentlist'])) {
-    echo TrackingCourseLog::display_additional_profile_fields();
-}
-
 echo '</div>';
+
 
 if ($_GET['studentlist'] == 'false') {
     $course_code = api_get_course_id();
@@ -448,8 +450,21 @@ if ($_GET['studentlist'] == 'false') {
 
     $form -> addElement('hidden', 'action', 'add');
     $form -> addElement('hidden', 'remindallinactives', 'true');
+    
     $course_info = api_get_course_info(api_get_course_id());
-    echo '<h2>'.get_lang('Course').' '.$course_info['name'].'</h2>'; 
+    $course_name = get_lang('Course').' '.$course_info['name'];
+
+    
+    if (api_get_session_id()) {
+        echo '<h2>'.get_lang('Session').' '.api_get_session_name(api_get_session_id()).' | '.$course_name.'</h2>';
+    } else {
+        echo '<h2>'.get_lang('Course').' '.$course_info['name'].'</h2>';
+    }
+    
+    echo TrackingCourseLog::display_additional_profile_fields();
+    
+    
+    
     $form -> display();
     // END : form to remind inactives susers
 
@@ -473,7 +488,7 @@ if ($_GET['studentlist'] == 'false') {
         $course_code = $_course['id'];
 
         $user_ids = array_keys($a_students);
-
+        
         $table = new SortableTable('users_tracking', array('TrackingCourseLog', 'get_number_of_users'), array('TrackingCourseLog', 'get_user_data'), (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 
         $parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);

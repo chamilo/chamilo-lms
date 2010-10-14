@@ -763,7 +763,8 @@ VALUES
 ('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
 ('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 1),
 ('show_link_bug_notification', NULL, 'radio', 'Platform', 'true', 'ShowLinkBugNotificationTitle', 'ShowLinkBugNotificationComment', NULL, NULL, 0),
-('course_validation', NULL, 'radio', 'Platform', 'false', 'EnableCourseValidation', 'EnableCourseValidationComment', NULL, NULL, 0),
+('course_validation', NULL, 'radio', 'Platform', 'false', 'EnableCourseValidation', 'EnableCourseValidationComment', NULL, NULL, 1),
+('course_validation_terms_and_conditions_url', NULL, 'textfield', 'Platform', '', 'CourseValidationTermsAndConditionsLink', 'CourseValidationTermsAndConditionsLinkComment', NULL, NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.8.8.12378', 'DokeosDatabaseVersion', '', NULL, NULL, 0);
 
 
@@ -2443,7 +2444,7 @@ CREATE TABLE course_request (
   category_code varchar(40) DEFAULT NULL,
   tutor_name varchar(200) DEFAULT NULL,
   visual_code varchar(40) DEFAULT NULL,
-  request_date datetime DEFAULT NULL,
+  request_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   objetives text,
   target_audience text,
   status int unsigned NOT NULL default '0',

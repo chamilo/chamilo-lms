@@ -197,6 +197,10 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 }
 
 $session_id = intval($_GET['id_session']);
+if (empty($session_id)) {
+    $session_id = api_get_session_id();
+}
+
 $student_id = intval($_GET['student']);
 
 // Action behaviour
@@ -253,6 +257,8 @@ if (!empty ($_GET['student'])) {
 
 	// Actions bar
 	echo '<div class="actions">';
+    echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
+    
 	echo '<a href="javascript: void(0);" onclick="javascript: window.print();"><img src="../img/printmgr.gif">&nbsp;' . get_lang('Print') . '</a>';
 	echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv"><img src="../img/csv.gif">&nbsp;' . get_lang('ExportAsCSV') . '</a>';
 	if (!empty ($info_user['email'])) {
@@ -265,6 +271,7 @@ if (!empty ($_GET['student'])) {
 		echo '<a href="access_details.php?student=' . Security :: remove_XSS($_GET['student']) . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">' . Display :: return_icon('statistics.gif', get_lang('AccessDetails')) . ' ' . get_lang('AccessDetails') . '</a>';
 	}
 	echo '</div>';
+    
 	
 
 	// is the user online ?
@@ -370,7 +377,9 @@ if (!empty ($_GET['student'])) {
         $session_name = $session_info['name'];
     } // end if(api_get_setting('use_session_mode')=='true')
 
-    $table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].($coachs_name?'&nbsp;|&nbsp;'.get_lang('Tutor').' : '.stripslashes($coachs_name):'');
+    //$table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].($coachs_name?'&nbsp;|&nbsp;'.get_lang('Tutor').' : '.stripslashes($coachs_name):'');
+    //Hiding coach name 
+    $table_title = ($session_name? get_lang('Session').' : '.ucfirst($session_name).' | ':'').get_lang('Course').' : '.$info_course['title'].' | '.api_get_person_name($info_user['lastname'], $info_user['firstname']);
     echo '<h2>'.$table_title.'</h2>';
 
 ?>
@@ -498,20 +507,11 @@ if ($timezone !== null) {
 						<td align="left"><?php echo  $time_spent_on_the_course ?></td>
 					</tr>
 					<tr>
-						<td align="right">
-										<?php
-											echo get_lang('Progress');
-											Display :: display_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'));
-										?>
-						</td>
+						<td align="right"><?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'));?></td>
 						<td align="left"><?php echo $avg_student_progress.'%' ?></td>
 					</tr>
 					<tr>
-						<td align="right">
-										<?php
-											echo get_lang('Score');
-											Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'));
-										?>
+						<td align="right"><?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?>
 						</td>
 						<td align="left"><?php if (is_numeric($avg_student_score)) { echo $avg_student_score.'%';} else { echo $avg_student_score ;}  ?></td>
 					</tr>
@@ -539,31 +539,31 @@ if ($timezone !== null) {
         ?>
 <br />
 
-	<!-- line about learnpaths -->
-				<table class="data_table">
-					<tr>
-						<th>
-							<?php echo get_lang('Learnpaths');?>
-						</th>
-						<th>
-							<?php echo get_lang('Time'); Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?>
-						</th>
-						<th>
-							<?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('LPTestScore'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>
-						</th>
-						<th>
-							<?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
-						</th>
-						<th>
-							<?php echo get_lang('LastConnexion'); Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
-						</th>
-        				<?php		
-        					echo '<th>'.get_lang('Details').'</th>'; 
-        					if (api_is_course_admin()) {
-        						echo '<th>'.get_lang('ResetLP').'</th>';
-        					}
-        				?>						
-		          </tr>
+<!-- line about learnpaths -->
+	<table class="data_table">
+		<tr>
+			<th>
+				<?php echo get_lang('Learnpaths');?>
+			</th>
+			<th>
+				<?php echo get_lang('Time'); Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?>
+			</th>
+			<th>
+				<?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('LPTestScore'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>
+			</th>
+		  	<th>
+				<?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
+			</th>
+			<th>
+				<?php echo get_lang('LastConnexion'); Display :: display_icon('info3.gif', get_lang('LastTimeTheCourseWasUsed'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
+			</th>
+			<?php		
+				echo '<th>'.get_lang('Details').'</th>'; 
+				if (api_is_course_admin()) {
+					echo '<th>'.get_lang('ResetLP').'</th>';
+				}
+			?>						
+      </tr>
 <?php
 		$headerLearnpath = array (
 			get_lang('Learnpath'),
@@ -588,7 +588,11 @@ if ($timezone !== null) {
         
         // 
 		//$sql_lp = "	SELECT lp.name, lp.id FROM $t_lp lp WHERE lp.session_id = $session_id ORDER BY lp.display_order";
-        $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp ORDER BY lp.display_order";
+        if (empty($session_id)) {
+            $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE session_id = 0 ORDER BY lp.display_order";
+        } else {
+        	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp ORDER BY lp.display_order";
+        }
 		$rs_lp = Database::query($sql_lp);
 		$token = Security::get_token();        
 		

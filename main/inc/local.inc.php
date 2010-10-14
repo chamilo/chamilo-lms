@@ -777,6 +777,7 @@ if (isset($uidReset) && $uidReset) {	// session data refresh requested
 /*  COURSE INIT */
 
 if (isset($cidReset) && $cidReset) { // course session data refresh requested or empty data
+    
     if ($cidReq) {
     	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     	$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -841,7 +842,8 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 				$time = api_get_datetime();
 		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
-					 "VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1', ".api_get_session_id().")";
+					 "VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1', '".api_get_session_id()."')";
+                //error_log($sql);
 				Database::query($sql);
 			}
         } else {
@@ -852,6 +854,11 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
         api_session_unregister('_cid');
         api_session_unregister('_real_cid');
         api_session_unregister('_course');
+        
+        //Deleting session id 
+        if (api_get_session_id()) {                
+            api_session_unregister('id_session');
+        }   
     }
 } else { // continue with the previous values
 	if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
@@ -862,7 +869,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
    		$_course    = $_SESSION['_course'];
 
    		// these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
-   		// Moreover, if we want to track a course with another session it can be usefull
+   		// Moreover, if we want to track a course with another session it can be usefull        
 		if (!empty($_GET['id_session'])) {
 			$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 			$_SESSION['id_session']		= intval($_GET['id_session']);
@@ -885,29 +892,26 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 
 			//We select the last record for the current course in the course tracking table
 			// But only if the login date is < thant now + max_life_time
-
+            
 			$sql="SELECT course_access_id FROM $course_tracking_table
-
-				WHERE user_id=".intval($_user ['user_id'])."
-						AND course_code='$course_code'
+				  WHERE user_id=".intval($_user ['user_id'])."
+						AND course_code='$course_code' AND session_id = ".api_get_session_id()."
 						AND login_course_date > now() - INTERVAL $session_lifetime SECOND
 						ORDER BY login_course_date DESC LIMIT 0,1";
 				$result=Database::query($sql);
-
+                //error_log($sql);
 			if (Database::num_rows($result)>0) {
 
 				$i_course_access_id = Database::result($result,0,0);
 				//We update the course tracking table
-
-				$sql="UPDATE $course_tracking_table " .
-						"SET logout_course_date = '$time', " .
-						"counter = counter+1 " .
-					"WHERE course_access_id=".intval($i_course_access_id);
+				$sql="UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1 ".
+					 "WHERE course_access_id=".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
+                //error_log($sql);
 				Database::query($sql);
 			} else {
-				$sql="INSERT INTO $course_tracking_table
-						(course_code, user_id, login_course_date, logout_course_date, counter)" .
-					"VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1')";
+				$sql="INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
+					 "VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
+                //error_log($sql);
 				Database::query($sql);
 			}
    	 	}
@@ -1180,3 +1184,4 @@ if (isset($_cid)) {
 	$sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
 	Database::query($sql);
 }
+

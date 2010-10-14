@@ -652,7 +652,7 @@ if (!empty ($error)) {
 	            </tr>
 	            </table></form>';
 }
-if ($_configuration['live_exercise_tracking'] && $objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {	
+if ($objExercise->type == ONE_PER_PAGE) {	
   	if (empty($exercise_stat_info)) {
   		$objExercise->save_stat_track_exercise_info($clock_expired_time, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $questionList);
     }

@@ -345,7 +345,9 @@ class SessionManager {
 		$session_info = api_get_session_info($id_session);
 		$session_name = $session_info['name'];
 
-	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+	   	//$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+        $sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' ";
+        
 		$result = Database::query($sql);
 		$existingUsers = array();
 		while($row = Database::fetch_array($result)){
@@ -1197,4 +1199,29 @@ class SessionManager {
 			return 0;
 		}
 	}
+    
+    /**
+     * Get users by session
+     * @param   int sesssion id
+     * @return  array a list with the user info
+     */
+    public static function get_users_by_session($id) {
+        $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session_rel_user               = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $order_clause ='';
+        $sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username
+        FROM '.$tbl_user.'
+        INNER JOIN '.$tbl_session_rel_user.'
+            ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user 
+            AND '.$tbl_session_rel_user.'.id_session = '.$id.$order_clause;
+
+        $result=Database::query($sql);
+        //$users=Database::store_result($result);
+        while ($row = Database::fetch_array($result,'ASSOC')) {
+            $return_array[] = $row;
+        }
+        
+        return $return_array;
+    }
+    
 }

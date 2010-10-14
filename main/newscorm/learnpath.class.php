@@ -1823,9 +1823,9 @@ class learnpath {
      * @param	boolean	Whether to return null if no record was found (true), or 0 (false) (optional, defaults to false)
      * @return	integer	Current progress value as found in the database
      */
-    public function get_db_progress($lp_id, $user_id, $mode = '%', $course_db = '', $sincere = false) {
+    public function get_db_progress($lp_id, $user_id, $mode = '%', $course_db = '', $sincere = false,$session_id = 0) {
         //if ($this->debug > 0) { error_log('New LP - In learnpath::get_db_progress()', 0); }
-        $session_id = api_get_session_id();
+        $session_id = intval($session_id);
         $session_condition = api_get_session_condition($session_id);
         $table = Database :: get_course_table(TABLE_LP_VIEW, $course_db);
         $sql = "SELECT * FROM $table WHERE lp_id = $lp_id AND user_id = $user_id $session_condition";
@@ -1848,7 +1848,7 @@ class learnpath {
         } else {
             // Get the number of items completed and the number of items total.
             $tbl = Database :: get_course_table(TABLE_LP_ITEM, $course_db);
-            $sql = "SELECT count(*) FROM $tbl WHERE lp_id = " . $lp_id . "
+            $sql = "SELECT count(*) FROM $tbl WHERE lp_id = " . $lp_id . " 
                                 AND item_type NOT IN('dokeos_chapter','chapter','dir')";
             $res = Database::query($sql);
             $row = Database :: fetch_array($res);
@@ -1863,8 +1863,8 @@ class learnpath {
                                 INNER JOIN $tbl_item as item
                                     ON item.id = item_view.lp_item_id
                                     AND item_type NOT IN('dokeos_chapter','chapter','dir')
-                                WHERE lp_view_id = " . $view_id . "
-                                AND status IN ('passed','completed','succeeded','browsed','failed')";
+                                WHERE lp_view_id = " . $view_id . "  
+                                AND status IN ('passed','completed','succeeded','browsed','failed')"; echo '<br />';
             $res = Database::query($sql);
             $row = Database :: fetch_array($res);
             $completed = $row[0];
@@ -1951,8 +1951,8 @@ class learnpath {
         $is_visible = true;
         $progress = 0;
 
-        if (!empty($prerequisite)) {
-            $progress = self::get_db_progress($prerequisite,$student_id,'%');
+        if (!empty($prerequisite)) {            
+            $progress = self::get_db_progress($prerequisite,$student_id,'%', '', false, api_get_session_id());
             $progress = intval($progress);
             if ($progress < 100) {
                 $is_visible = false;

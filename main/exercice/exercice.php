@@ -166,7 +166,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	} else {
 		$array_content_id_exe=$post_content_id;
 	}
-	var_dump($_POST);
+	
 	for ($i=0;$i<$loop_in_track;$i++) {
 		$my_marks			= Database::escape_string($_POST['marks_'.$array_content_id_exe[$i]]);
 		$contain_comments	= Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);

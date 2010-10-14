@@ -76,7 +76,6 @@ $dbnamelength = strlen($_configuration['db_prefix']);
 $maxlength = 40 - $dbnamelength;
 
 // Build the form.
-$categories = array();
 $form = new FormValidator('add_course');
 
 // Form title
@@ -85,11 +84,10 @@ $form->addElement('header', '', $tool_name);
 // Title
 $form->addElement('text', 'title', get_lang('CourseName'), array('size' => '60', 'id' => 'title'));
 $form->applyFilter('title', 'html_filter');
-
 $form->addElement('static', null, null, get_lang('Ex'));
-$categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), $categories);
-$form->applyFilter('category_code', 'html_filter');
 
+$categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), array());
+$form->applyFilter('category_code', 'html_filter');
 CourseManager::select_and_sort_categories($categories_select);
 $form->addElement('static', null, null, get_lang('TargetFac'));
 
@@ -121,23 +119,34 @@ $form->applyFilter('select_language', 'html_filter');
 
 if ($course_validation_feature) {
 
-    // Terms and conditions to be accepted before sending a course request.
-    $form->addElement('checkbox', 'legal', get_lang('IAcceptTermsAndConditions'), '', 1);
-    $form->addRule('legal', get_lang('YouHaveToAcceptTermsAndConditions'), 'required', '', '');
-    // Link to terms and conditios.
-    // TODO: This hardcoded value is to be corrected/eliminated.
-    $link_terms_and_conditions = '<script type="text/JavaScript">
-    <!--
-    function MM_openBrWindow(theURL,winName,features) { //v2.0
-      window.open(theURL,winName,features);
+    // A special URL to terms and conditions that is set in the platform settings page.
+    $terms_and_conditions_url = trim(api_get_setting('course_validation_terms_and_conditions_url'));
+
+    // If the special setting is empty, then we may get the URL from Chamilo's module "Terms and conditions", if it is activated.
+    if (empty($terms_and_conditions_url)) {
+        if (api_get_setting('allow_terms_conditions') == 'true') {
+            $terms_and_conditions_url = api_get_path(WEB_CODE_PATH).'auth/inscription.php?legal';
+        }
     }
-    //-->
-    </script>
-    <div class="row">
-    <div class="formw">
-    <a href="#" onclick="javascript: MM_openBrWindow(\'http://TODO.change.this/hardcoded/value/use/a/setting.html\',\'Conditions\',\'scrollbars=yes, width=800\')">';
-    $link_terms_and_conditions .= get_lang('ReadTermsAndConditions').'</a></div></div>';
-    $form->addElement('html', $link_terms_and_conditions);
+
+    if (!empty($terms_and_conditions_url)) {
+        // Terms and conditions to be accepted before sending a course request.
+        $form->addElement('checkbox', 'legal', get_lang('IAcceptTermsAndConditions'), '', 1);
+        $form->addRule('legal', get_lang('YouHaveToAcceptTermsAndConditions'), 'required', '', '');
+        // Link to terms and conditions.
+        $link_terms_and_conditions = '<script type="text/JavaScript">
+        <!--
+        function MM_openBrWindow(theURL,winName,features) { //v2.0
+            window.open(theURL,winName,features);
+        }
+        //-->
+        </script>
+        <div class="row">
+        <div class="formw">
+        <a href="#" onclick="javascript: MM_openBrWindow(\''.$terms_and_conditions_url.'\',\'Conditions\',\'scrollbars=yes, width=800\')">';
+        $link_terms_and_conditions .= get_lang('ReadTermsAndConditions').'</a></div></div>';
+        $form->addElement('html', $link_terms_and_conditions);
+    }
 
 }
 
@@ -230,9 +239,7 @@ if ($form->validate()) {
 
             } else {
 
-                // TODO: Prepare an error message.
-                $message = '?';
-                Display :: display_error_message(get_lang($message), false);
+                Display :: display_error_message(get_lang('CourseCreationFailed'), false);
                 // Display the form.
                 $form->display();
 
@@ -257,9 +264,7 @@ if ($form->validate()) {
 
             } else {
 
-                // TODO: Prepare an error message.
-                $message = '?';
-                Display :: display_error_message(get_lang($message), false);
+                Display :: display_error_message(get_lang('CourseRequestCreationFailed'), false);
                 // Display the form.
                 $form->display();
 

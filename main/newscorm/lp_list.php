@@ -219,10 +219,10 @@ if (is_array($flat_list)) {
 
         $lp_theme_css = $mystyle;
 
-        if ($display_progress_bar) {
-            $dsp_progress = '<td width="140px">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id()), '').'</td>';
+        if ($display_progress_bar) {            
+            $dsp_progress = '<td width="140px">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</td>';
         } else {
-            $dsp_progress = '<td width="140px" style="padding-top:1em;">'.learnpath::get_db_progress($id, api_get_user_id(), 'both').'</td>';
+            $dsp_progress = '<td width="140px" style="padding-top:1em;">'.learnpath::get_db_progress($id, api_get_user_id(), 'both','',false, api_get_session_id()).'</td>';
         }
 
         if ($is_allowed_to_edit) {

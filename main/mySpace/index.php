@@ -63,9 +63,7 @@ $tbl_admin					= Database :: get_main_table(TABLE_MAIN_ADMIN);
 $tbl_track_cours_access 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
 
-/*
- * FUNCTIONS
- */
+/* * FUNCTIONS */
 
 function count_teacher_courses() {
 	global $nb_teacher_courses;
@@ -108,9 +106,7 @@ function rsort_sessions($a, $b) {
 	}
 }
 
-/*
- * MAIN CODE
- */
+/* * MAIN CODE  */
 
 $is_coach 			= api_is_coach();
 $is_platform_admin 	= api_is_platform_admin();
@@ -162,10 +158,9 @@ if (api_is_allowed_to_create_course() && $_GET['display'] != 'yourstudents') {
 		} else {
 			if (!empty($session_id)) {
 				$session_name = api_get_session_name($session_id);
-				$title = ucfirst($session_name);
+				$title = get_lang('Session').' '.$session_name;
 			}            
-			$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';
-            
+			$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';            
 		}
 	}
 }
@@ -178,13 +173,11 @@ if ($is_coach && $_GET['display'] != 'yourstudents') {
 		$menu_items[] = get_lang('CoachInterface');
 		$title = get_lang('YourStatistics');
 	} else {
-		$menu_items[] = '<a href="'.api_get_self().'?view=coach">'.get_lang('CoachInterface').'</a>';
-        
+		$menu_items[] = '<a href="'.api_get_self().'?view=coach">'.get_lang('CoachInterface').'</a>';        
 	}
 }
 
 if ($is_platform_admin &&  $_GET['display'] != 'yourstudents') {
-
 	if ($nb_teacher_courses == 0 && $nb_sessions == 0) {
 		$view = 'admin';
 	}
@@ -210,16 +203,20 @@ if ($is_drh || $_GET['display'] == 'yourstudents') {
 // Actions menu
 $nb_menu_items = count($menu_items);
 
-if ($nb_teacher_courses > 0 ) {
-	echo '<div class="actions-title" style ="font-size:10pt;">';
-	if ($nb_menu_items > 1) {
-		foreach ($menu_items as $key => $item) {
-			echo $item;
-			if ($key != $nb_menu_items - 1) {
-				echo '&nbsp;|&nbsp;';
-			}
-		}
-	}
+if ($nb_teacher_courses > 0 ) {    
+	echo '<div class="actions" style ="font-size:10pt;">';    
+    if (empty($session_id)) {
+    	if ($nb_menu_items > 1) {
+    		foreach ($menu_items as $key => $item) {
+    			echo $item;
+    			if ($key != $nb_menu_items - 1) {
+    				echo '&nbsp;|&nbsp;';
+    			}
+    		}
+    	}
+    } else {
+    	echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
+    }
 	echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
 	if (isset($_GET['display']) && ($_GET['display'] == 'useroverview' || $_GET['display'] == 'sessionoverview' || $_GET['display'] == 'courseoverview')) {
 		echo '<a href="'.api_get_self().'?display='.$_GET['display'].'&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
@@ -229,9 +226,8 @@ if ($nb_teacher_courses > 0 ) {
 } else {
 	echo '<div class="actions-title" style ="font-size:10pt;">';
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/statistics.gif">&nbsp;'.get_lang('MyStats').'</a> ';
-
 	echo '</div>';
-	Display::display_warning_message(get_lang('HaveNoCourse'));
+	//Display::display_warning_message(get_lang('HaveNoCourse'));
 }
 
 
@@ -453,7 +449,7 @@ if ($view == 'coach') {
 		$csv_content[] = array(get_lang('NbStudentPerSession', '').';'.$nb_students_per_session);
 		$csv_content[] = array(get_lang('NbCoursesPerSession', '').';'.$nb_courses_per_session);
 		$csv_content[] = array();
-	} else {
+	} else {        
 		// html part
 		echo '
 		 <div class="report_section">
@@ -589,6 +585,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 }
 
 if ($is_platform_admin && $view == 'admin' && $_GET['display'] != 'yourstudents') {
+    
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';
 	if ($_GET['display'] == 'useroverview') {
@@ -596,6 +593,12 @@ if ($is_platform_admin && $view == 'admin' && $_GET['display'] != 'yourstudents'
 	}
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=sessionoverview">'.get_lang('DisplaySessionOverview').'</a>';
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=courseoverview">'.get_lang('DisplayCourseOverview').'</a>';
+    
+    echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin">'.get_lang('LPQuestionListResults').'</a>';
+    
+    echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin">'.get_lang('LPExerciseResultsBySession').'</a>';
+    
+    
 	echo '<br /><br />';
 	if ($_GET['display'] === 'useroverview') {
 		MySpace::display_tracking_user_overview();

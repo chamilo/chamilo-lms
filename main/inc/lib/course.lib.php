@@ -130,7 +130,7 @@ class CourseManager {
     public static function get_course_information($course_code) {
         return Database::fetch_array(Database::query(
             "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-            WHERE code='".Database::escape_string($course_code)."'")
+            WHERE code='".Database::escape_string($course_code)."'"),'ASSOC'
         );
     }
 

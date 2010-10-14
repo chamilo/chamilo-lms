@@ -35,7 +35,7 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 // A check whether the course validation feature is enabled.
 $course_validation_feature = api_get_setting('course_validation') == 'true';
-$course_validation_feature = false;
+
 // Filltering passed to this page parameters.
 $id = intval($_GET['id']);
 $caller = intval($_GET['caller']);

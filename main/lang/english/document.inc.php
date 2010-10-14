@@ -224,4 +224,5 @@ $CopyFailed = "Copy failed";
 $CopyMade = "Copy made";
 $OverwritenFile = "File replaced";
 $Draw = "Draw";
+$FileExistsChangeToSave = "This file name already exists, choose another to save your image.";
 ?>

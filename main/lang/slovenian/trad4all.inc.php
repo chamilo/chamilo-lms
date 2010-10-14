@@ -954,4 +954,12 @@ $EditionNotAvailableFromSession = "Urejanje ni dostopno preko seje. Prosim, izve
 $HandingOverOfTaskX = "Predaja naloge %s";
 $ProtectedDocument = "Zaščiten dokument";
 $ConnectionsLastMonth = "Povezav zadnji mesec";
+$TotalStudents = "Vseh tečajnikov";
+$FilteringWithScoreX = "Filtriranje z rezultatom %s";
+$CreateCourseRequest = "Ustvari zahtevo po tečaju";
+$TermsAndConditions = "Pogoji rabe";
+$ReadTermsAndConditions = "Preberite pogoje rabe";
+$IAcceptTermsAndConditions = "Sem prebral in sprejemam pogoje rabe";
+$YouHaveToAcceptTermsAndConditions = "Sprejeti morate pogoje rabe";
+$BrowserDontSupportsSVG = "Vaš brskalnik ne podpira SVG datotek. Za uporabo risalnega orodja potrebujete napreden brskalnik, kot so npr. Firefox 1.5+, Chrome 1+, Safari 4+, Opera 9.50+ ali IE9";
 ?>

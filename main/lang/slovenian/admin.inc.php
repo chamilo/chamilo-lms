@@ -1271,4 +1271,10 @@ $MyTextHere = "Vstavite svoje besedilo ...";
 $FieldTypeSocialProfile = "Povezava socialnega omrežja";
 $AllowUsersCopyFilesTitle = "Dovoli uporabnikom prepis datotek tečaja iz tvojega osebnega področja datotek";
 $AllowUsersCopyFilesComment = "Dovoljenje uporabnikom za prepis datotek tečaja iz tvojega osebnega področja datotek, ki je vidno preko Socialnega omrežja ali iz HTML urejevalnika, v primeru, da ti uporabniki trenutno niso v področju tečaja iz katerega so prenašane datoteke.";
+$ReviewCourseRequests = "Preglej prispele zahteve po tečaju";
+$AcceptedCourseRequests = "Odobri zahtevo po tečaju";
+$RejectedCourseRequests = "Zavrni zahtevo po tečaju";
+$BrowscapInfo = "Browscap nalaga datoteko browscap.ini z veliko količino podatkov, preko brskalnika in njegovih zmožnosti, s PHP funkcijo get_browser().";
+$EnableCourseValidation = "Vrednotenje tečajev";
+$EnableCourseValidationComment = "Kadar je zmožnost 'Vrednotenje tečaja' omogočena, učitelj ne more samostojno kreirati tečaja. Izpolniti mora zahtevo po kreiranju, nato upravitelj pregleda zahtevo in jo odobri ali zavrne. Zmožnost bazira na avtomatiziranem e-poštnem sporočanju, zato mora Chamilo biti zmožen dostopati do poštnega strežnika in uporabiti posebej za to funkcijo dodeljen e-poštni naslov.";
 ?>

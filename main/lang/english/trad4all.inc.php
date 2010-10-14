@@ -968,5 +968,5 @@ $TermsAndConditions = "Terms and Conditions";
 $ReadTermsAndConditions = "Read the Terms and Conditions";
 $IAcceptTermsAndConditions = "I have read and I accept the Terms and Conditions";
 $YouHaveToAcceptTermsAndConditions = "You have to accept our Terms and Conditions to proceed.";
-$BrowserDontSupportsSVG = "Your browser does not support SVG files. To use the drawing tool you must have an advanced browser like: Firefox 1.5+, Chrome 1+, Safari 4+, Opera 9.50+ or IE9";
+$BrowserDontSupportsSVG = "Your browser does not support SVG files. To use the drawing tool you must have an advanced browser like: Firefox or Chrome";
 ?>

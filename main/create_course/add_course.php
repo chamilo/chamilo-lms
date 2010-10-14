@@ -86,15 +86,18 @@ $form->addElement('text', 'title', get_lang('CourseName'), array('size' => '60',
 $form->applyFilter('title', 'html_filter');
 $form->addElement('static', null, null, get_lang('Ex'));
 
+// Course category.
 $categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), array());
 $form->applyFilter('category_code', 'html_filter');
 CourseManager::select_and_sort_categories($categories_select);
 $form->addElement('static', null, null, get_lang('TargetFac'));
 
+// Course code.
 $form->add_textfield('wanted_code', get_lang('Code'), false, array('size' => '$maxlength', 'maxlength' => $maxlength));
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
 
+// The teacher.
 $titular = & $form->add_textfield('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
 $form->addElement('static', null, null, get_lang('ExplicationTrainers'));
 //$form->applyFilter('tutor_name', 'html_filter');
@@ -114,6 +117,7 @@ if ($course_validation_feature) {
     $form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required', '', '');
 }
 
+// Course language.
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
 $form->applyFilter('select_language', 'html_filter');
 
@@ -150,7 +154,10 @@ if ($course_validation_feature) {
 
 }
 
+// Submit button.
 $form->addElement('style_submit_button', null, $course_validation_feature ? get_lang('CreateThisCourseRequest') : get_lang('CreateCourseArea'), 'class="add"');
+
+// The progress bar of this form.
 $form->add_progress_bar();
 
 // Set default values.

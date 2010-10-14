@@ -106,25 +106,57 @@ if (!is_array($course_request_info)) {
     exit;
 }
 
+global $_configuration;
+$dbnamelength = strlen($_configuration['db_prefix']);
+// Ensure the database prefix + database name do not get over 40 characters.
+$maxlength = 40 - $dbnamelength;
+
 // Build the form.
 $form = new FormValidator('add_course');
 
 // Form title.
 $form->addElement('header', '', $tool_name);
 
-// Title
+// Title.
 $form->addElement('text', 'title', get_lang('CourseName'), array('size' => '60', 'id' => 'title'));
 $form->applyFilter('title', 'html_filter');
-$form->addElement('static', null, null, get_lang('Ex'));
 
+// Course category.
 $categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), array());
 $form->applyFilter('category_code', 'html_filter');
 CourseManager::select_and_sort_categories($categories_select);
-$form->addElement('static', null, null, get_lang('TargetFac'));
 
-// Other form's elements...
+// Course code.
+$form->add_textfield('wanted_code', get_lang('Code'), false, array('size' => '$maxlength', 'maxlength' => $maxlength));
+$form->applyFilter('wanted_code', 'html_filter');
+$form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
 
-//...
+// The teacher.
+$titular = & $form->add_textfield('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
+//$form->applyFilter('tutor_name', 'html_filter');
+
+// Description of the requested course.
+$form->addElement('textarea', 'description', get_lang('Description'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+$form->addRule('description', get_lang('ThisFieldIsRequired'), 'required', '', '');
+
+// Objectives of the requested course.
+$form->addElement('textarea', 'objetives', get_lang('Objectives'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+$form->addRule('objetives', get_lang('ThisFieldIsRequired'), 'required', '', '');
+
+// Target audience of the requested course.
+$form->addElement('textarea', 'target_audience', get_lang('TargetAudience'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
+$form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required', '', '');
+
+// Course language.
+$form->addElement('select_language', 'course_language', get_lang('Ln'));
+$form->applyFilter('select_language', 'html_filter');
+
+// Submit buttons.
+$submit_buttons[] = FormValidator::createElement('style_submit_button', 'save_button', get_lang('Save'), array('class' => 'save'));
+$submit_buttons[] = FormValidator::createElement('style_submit_button', 'accept_button', get_lang('Accept'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'action_accept.gif);'));
+$submit_buttons[] = FormValidator::createElement('style_submit_button', 'reject_button', get_lang('Reject'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'action_reject.gif);'));
+$submit_buttons[] = FormValidator::createElement('style_submit_button', 'ask_info_button', get_lang('AskAdditionalInfo'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'request_info.gif);'));
+$form->addGroup($submit_buttons);
 
 // Set the default values based on the corresponding database record.
 

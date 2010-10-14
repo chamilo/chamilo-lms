@@ -230,7 +230,7 @@ class CourseRequestManager {
         $id = (int)$id;
 
         // Retrieve request's data
-        $course_request_info = CourseRequestManager::get_course_request_info($id);
+        $course_request_info = self::get_course_request_info($id);
         if (!is_array($course_request_info)) {
             return false;
         }
@@ -317,7 +317,7 @@ class CourseRequestManager {
         $id = (int)$id;
 
         // Retrieve request's data
-        $course_request_info = CourseRequestManager::get_course_request_info($id);
+        $course_request_info = self::get_course_request_info($id);
         if (!is_array($course_request_info)) {
             return false;
         }
@@ -379,7 +379,7 @@ class CourseRequestManager {
         $id = (int)$id;
 
         // Retrieve request's data
-        $course_request_info = CourseRequestManager::get_course_request_info($id);
+        $course_request_info = self::get_course_request_info($id);
         if (!is_array($course_request_info)) {
             return false;
         }

@@ -145,4 +145,5 @@ $CourseRequestRejectedEmailText = "За съжаление Вашата заяв
 $CourseCreationFailed = "Курсът не е създаден поради появила се грешка.";
 $CourseRequestCreationFailed = "Заявката за нов курс не е създадена поради появила се грешка.";
 $CourseRequestEdit = "Редактиране на заявка за нов курс";
+$CourseRequestHasNotBeenFound = "Заявката за нов курс, до която искате достъп не е намерена или не съществува.";
 ?>

@@ -144,4 +144,5 @@ $CourseRequestRejectedEmailSubject = "%s Заявката за нов курс %
 $CourseRequestRejectedEmailText = "За съжаление Вашата заявка за нов курс %s е отхвърлена, тъй като не отговаря на нашите Условия за ползване.";
 $CourseCreationFailed = "Курсът не е създаден поради появила се грешка.";
 $CourseRequestCreationFailed = "Заявката за нов курс не е създадена поради появила се грешка.";
+$CourseRequestEdit = "Редактиране на заявка за нов курс";
 ?>

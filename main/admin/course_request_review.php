@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Con este archivo se editan, se validan, se rechazan o se solicita mas informacion de los cursos que se solicitaron por parte de los profesores y que estan añadidos en la tabla temporal.
  * A list containig the pending course requests
  * @package chamilo.admin
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
@@ -210,7 +209,7 @@ function email_filter($teacher) {
  */
 function modify_filter($id) {
     $code = CourseRequestManager::get_course_request_code($id);
-    $result = '<a href="course_request_edit.php?id='.$id.'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
+    $result = '<a href="course_request_edit.php?id='.$id.'&caller=0">'.Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
         '&nbsp;<a href="?accept_course_request='.$id.'">'.Display::return_icon('action_accept.gif', get_lang('AcceptThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ANewCourseWillBeCreated'), $code), ENT_QUOTES)).'\')) return false;')).'</a>'.
         '&nbsp;<a href="?reject_course_request='.$id.'">'.Display::return_icon('action_reject.gif', get_lang('RejectThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeRejected'), $code), ENT_QUOTES)).'\')) return false;')).'</a>';
     if (!CourseRequestManager::additional_info_asked($id)) {
@@ -247,7 +246,7 @@ echo '<a href="course_request_accepted.php">'.Display::return_icon('course_reque
 echo '<a href="course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
 echo '</div>';
 
-// Create a sortable table with the course data
+// Create a sortable table with the course data.
 $offet = DELETE_ACTION_ENABLED ? 1 : 0;
 $table = new SortableTable('course_requests', 'get_number_of_requests', 'get_request_data', 1 + $offet);
 $table->set_additional_parameters($parameters);

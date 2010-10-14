@@ -144,4 +144,5 @@ $CourseRequestRejectedEmailSubject = "%s The training request %s has been reject
 $CourseRequestRejectedEmailText = "To our regret we have to inform you that the training request %s has been rejected due to not conforming to the requirements of our Terms and Conditions.";
 $CourseCreationFailed = "The training has not been created due to internal error.";
 $CourseRequestCreationFailed = "The training request has not been created due to internal error.";
+$CourseRequestEdit = "Edit a training request";
 ?>

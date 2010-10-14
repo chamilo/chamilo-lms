@@ -1,13 +1,15 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
-**	@package chamilo.exercise
-* 	@author Julio Montoya Armas Added switchable fill in blank option added
-* 	@version $Id: exercise_show.php 22256 2009-07-20 17:40:20Z ivantcholakov $
-*	@package chamilo.exercise
-* 	@todo remove the debug code and use the general debug library
-* 	@todo small letters for table variables
-*/
+ *  Shows the exercise results 
+ *
+ *  @package chamilo.exercise
+ * 	@author Julio Montoya Armas Added switchable fill in blank option added
+ * 	@version $Id: exercise_show.php 22256 2009-07-20 17:40:20Z ivantcholakov $
+ *	@package chamilo.exercise
+ * 	@todo remove the debug code and use the general debug library
+ * 	@todo small letters for table variables
+ * */
 
 // name of the language file that needs to be included
 $language_file=array('exercice','tracking');
@@ -38,63 +40,39 @@ $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          	= Database::get_course_table(TABLE_QUIZ_ANSWER);
-$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
-$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$main_user_table 		= Database::get_main_table(TABLE_MAIN_USER);
+$main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 $dsp_percent = false;
 $debug=0;
 
-if($debug>0) {
-	echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);
-}
-// general parameters passed via POST/GET
+// General parameters passed via POST/GET
+if($debug>0) { error_log('Entered exercise_result.php: '.print_r($_POST,1)); }
 
-if ( empty ( $formSent ) ) {
-    $formSent= $_REQUEST['formSent'];
-}
-if ( empty ( $exerciseResult ) ) {
-    $exerciseResult = $_SESSION['exerciseResult'];
-}
-if ( empty ( $questionId ) ) {
-    $questionId = $_REQUEST['questionId'];
-}
-if ( empty ( $choice ) ) {
-    $choice = $_REQUEST['choice'];
-}
-if ( empty ( $questionNum ) ) {
-    $questionNum    = $_REQUEST['questionNum'];
-}
-if ( empty ( $nbrQuestions ) ) {
-    $nbrQuestions   = $_REQUEST['nbrQuestions'];
-}
-if ( empty ( $questionList ) ) {
-    $questionList = $_SESSION['questionList'];
-}
-if ( empty ( $objExercise ) ) {
-    $objExercise = $_SESSION['objExercise'];
-}
+if ( empty ( $formSent ) ) {            $formSent       = $_REQUEST['formSent']; }
+if ( empty ( $exerciseResult ) ) {      $exerciseResult = $_SESSION['exerciseResult'];}
+if ( empty ( $questionId ) ) {          $questionId     = $_REQUEST['questionId'];}
+if ( empty ( $choice ) ) {              $choice         = $_REQUEST['choice'];}
+if ( empty ( $questionNum ) ) {         $questionNum    = $_REQUEST['questionNum'];}
+if ( empty ( $nbrQuestions ) ) {        $nbrQuestions   = $_REQUEST['nbrQuestions'];}
+if ( empty ( $questionList ) ) {        $questionList   = $_SESSION['questionList'];}
+if ( empty ( $objExercise ) ) {         $objExercise    = $_SESSION['objExercise'];}
+if ( empty ( $exeId ) ) {               $exeId          = $_REQUEST['id'];}
+if ( empty ( $action ) ) {              $action         = $_GET['action']; }
 
-if ( empty ( $exeId ) ) {
-    $exeId = $_REQUEST['id'];
-}
-
-if ( empty ( $action ) ) {
-    $action = $_GET['action'];
-}
-
-$current_time = time();
-$emailId   = $_REQUEST['email'];
-$id 	   = $_REQUEST['id']; //exe id
+//$emailId       = $_REQUEST['email'];
+$id 	       = intval($_REQUEST['id']); //exe id
+$current_time  = time();
 
 if (empty($id)) {
 	api_not_allowed();
 }
 
-$is_allowedToEdit=api_is_allowed_to_edit(null,true) || $is_courseTutor;
+$is_allowedToEdit   = api_is_allowed_to_edit(null,true) || $is_courseTutor;
 
-//Getting results
+//Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = get_exercise_track_exercise_info($id);
 
 //No track info
@@ -102,22 +80,24 @@ if (empty($track_exercise_info)) {
     api_not_allowed();
 }
 
-
 $exercise_id        = $track_exercise_info['id'];
+$exercise_date      = $track_exercise_info['exe_date'];
 $student_id         = $track_exercise_info['exe_user_id'];
 $learnpath_id       = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id  = $track_exercise_info['orig_lp_item_id'];    
 $lp_item_view_id    = $track_exercise_info['orig_lp_item_view_id'];
 $course_code        = api_get_course_id();
+$current_user_id    = api_get_user_id();
 
 //Check if user can see the results 
 if (!$is_allowedToEdit) {
-    $current_user_id = api_get_user_id();
+    if ($track_exercise_info['results_disabled']) {
+    	api_not_allowed();
+    }    
     if ($student_id != $current_user_id) {
     	api_not_allowed();
     }
 }
-
 
 if (!exercise_time_control_is_valid($exercise_id)) {
 	$sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = $id ";
@@ -127,8 +107,6 @@ if (!exercise_time_control_is_valid($exercise_id)) {
 //Unset session for clock time
 exercise_time_control_delete($exercise_id);
 
-
-
 $nameTools=get_lang('CorrectTest');
 if (isset($_SESSION['gradebook'])) {
 	$gradebook=	Security::remove_XSS($_SESSION['gradebook']);
@@ -137,6 +115,7 @@ if (isset($_SESSION['gradebook'])) {
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
 }
+
 $fromlink = '';
 if($origin=='user_course') {
 	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".Security::remove_XSS($_GET['course']), "name" => get_lang("Users"));
@@ -156,7 +135,6 @@ if($origin=='user_course') {
 	} else {
 		$this_section = SECTION_COURSES;
 	}
-
 } elseif($origin=='student_progress') {
 	$this_section = SECTION_TRACKING;
 	$interbreadcrumb[] = array ("url" => "../auth/my_progress.php?id_session".Security::remove_XSS($_GET['id_session'])."&course=".$_cid, "name" => get_lang('MyProgress'));
@@ -166,9 +144,8 @@ if($origin=='user_course') {
 	$this_section=SECTION_COURSES;
 }
 
-
 if ($origin != 'learnpath') {
-	Display::display_header($nameTools,"Exercise");
+	Display::display_header($nameTools,get_lang('Exercise'));
 } else {
 	Display::display_reduced_header();
 }
@@ -221,17 +198,14 @@ function getFCK(vals,marksid) {
 </script>
 <?php
 
-/*
-		MAIN CODE
-*/
+/*	MAIN CODE    */
 
 // Email configuration settings
-
 $coursecode = api_get_course_id();
 $to = '';
 $teachers = array();
-if(api_get_setting('use_session_mode')=='true' && !empty($_SESSION['id_session'])) {
-	$teachers = CourseManager::get_coach_list_from_course_code($coursecode,$_SESSION['id_session']);
+if(api_get_session_id()) {
+	$teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
 } else {
 	$teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
 }
@@ -264,8 +238,7 @@ if (!empty($track_exercise_info)) {
 	// if the results_disabled of the Quiz is 1 when block the script
 	$result_disabled		= $track_exercise_info['results_disabled'];
 	
-	if (!(api_is_platform_admin() || api_is_course_admin()) ) {
-        
+	if (!(api_is_platform_admin() || api_is_course_admin()) ) {        
 		if ($result_disabled == 1) {
 			//api_not_allowed();
 			$show_results = false;
@@ -290,12 +263,7 @@ if (!empty($track_exercise_info)) {
 if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 	$show_results = false;
 }
-/*
-<tr>
-			<td style="font-weight:bold" width="10%">
-			<div class="actions-message"><?php echo '&nbsp;'.get_lang('CourseTitle')?> : </div></td>
-			<td><div class="actions-message" width="90%"><?php echo $_course['name'] ?></div></td>
-		</tr>*/		
+
 if ($show_results) {
 	?>
 	<table width="100%">
@@ -305,34 +273,21 @@ if ($show_results) {
 		</td>	
 		</tr>		
 		<tr>
-			<td style="font-weight:bold" width="80px"><div ><?php echo '&nbsp;'.get_lang('User')?> : </div></td>
-			<td><div width="90%"><?php
-			/*
-			if (isset($_GET['cidReq'])) {
-				$course_code = Security::remove_XSS($_GET['cidReq']);
-			} else {
-				$course_code = api_get_course_id();
-			}*/
-			/*
-			if (isset($_GET['student'])) {
-				$user_id	= intval($_GET['student']);
-			} else {
-				$user_id	= $track_exercise_info['exe_user_id'];
-			}*/
-			
-			$user_id	= $track_exercise_info['exe_user_id'];
-			$user_info=api_get_user_info($user_id);
-			echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
-			
-			/*$status_info=CourseManager::get_user_in_course_status($user_id,$course_code);
-			if (STUDENT==$status_info) {
-				$user_info=api_get_user_info($user_id);
-				echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
-			} elseif(COURSEMANAGER==$status_info && !isset($_GET['user'])) {
-				$user_info=api_get_user_info($user_id);
-				echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
-			}*/
-			?></div></td>
+			<td style="font-weight:bold" width="80px"><?php echo '&nbsp;'.get_lang('User')?> : </td>
+			<td>
+            <?php			
+			$user_info   = api_get_user_info($student_id);
+			echo api_get_person_name($user_info['firstName'], $user_info['lastName']);            	
+			?>            
+            </td>
+        </tr>
+        <tr>         
+            <td style="font-weight:bold" width="80px"><?php echo '&nbsp;'.get_lang('Date')?> : </td>
+            <td>
+            <?php
+            echo api_get_local_time($exercise_date);    
+            ?>            
+            </td>
 		</tr>
 		<?php if (!empty($exerciseDescription)) { ?>
 		<tr>
@@ -348,14 +303,15 @@ if ($show_results) {
 	<br />
 	</table>
   	<?php
-}
-$i=$totalScore=$totalWeighting=0;
 
-if($debug>0){echo "ExerciseResult: "; var_dump($exerciseResult); echo "QuestionList: ";var_dump($questionList);}
-$arrques = array();
-$arrans = array();
-if ($show_results) {
-	$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($_user['user_id'])." ";
+    $i=$totalScore=$totalWeighting=0;
+
+    if($debug>0){error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
+    
+    $arrques = array();
+    $arrans = array();
+
+	$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($student_id)." ";
 	$query = "SELECT attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as attempts
 					INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id
 					INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
@@ -363,9 +319,8 @@ if ($show_results) {
 			  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
 			  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 				//GROUP BY questions.position, attempts.question_id";
-	
-	$result =Database::query($query);
-	
+
+	$result =Database::query($query);	
 	$questionList = array();
 	$exerciseResult = array();
 	
@@ -374,7 +329,7 @@ if ($show_results) {
 		$exerciseResult[$row['question_id']] = $row['answer'];
 	}
 	
-	//Fixing #2073
+	//Fixing #2073 Fixing order of questions
 	if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
 		$tempquestionList = explode(',',$track_exercise_info['data_tracking']);
 		if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {
@@ -633,6 +588,7 @@ if ($show_results) {
 				}
 
 				$answer = $pre_array[0];
+                
 
 				// splits weightings that are joined with a comma
 				$answerWeighting = explode(',',$is_set_switchable[0]);
@@ -659,6 +615,7 @@ if ($show_results) {
 				// the loop will stop at the end of the text
 				$i=0;
 				//normal fill in blank
+                
 				if (!$switchable_answer_set) {
 					while (1) {
 						// quits the loop if there are no more blanks
@@ -680,6 +637,7 @@ if ($show_results) {
 						$queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' AND question_id= '".Database::escape_string($questionId)."'";
 						$resfill = Database::query($queryfill);
 						$str = Database::result($resfill,0,'answer');
+                        
 
 						preg_match_all('#\[([^[]*)\]#', $str, $arr);
 						$str = str_replace('\r\n', '', $str);

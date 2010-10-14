@@ -379,7 +379,6 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
 				   status 			= '',
 				   start_date       = '".api_get_utc_datetime($start_date)."'
 				 WHERE exe_id = '".Database::escape_string($exeid)."'";
-        
 		$res = @Database::query($sql);
         
         //Deleting control time session track		
@@ -438,8 +437,8 @@ function create_event_exercice($exo_id) {
     	$expired_date = '0000-00-00 00:00:00';
     }
 
-	$sql = "INSERT INTO $TABLETRACK_EXERCICES ( exe_user_id, exe_cours_id, expired_time_control, exe_exo_id)
-			VALUES (  ".$user_id.",  '".api_get_course_id()."' ,'".$expired_date."','".$exo_id."')";
+	$sql = "INSERT INTO $TABLETRACK_EXERCICES ( exe_user_id, exe_cours_id, expired_time_control, exe_exo_id, session_id)
+			VALUES (  ".$user_id.",  '".api_get_course_id()."' ,'".$expired_date."','".$exo_id."','".api_get_session_id()."')";
 	$res = Database::query($sql);
 	$id= Database::insert_id();
 	return $id;
@@ -696,7 +695,7 @@ function get_all_exercise_event($exercise_id, $course_code, $session_id = 0) {
 	$exercise_id = intval($exercise_id);
 	$session_id = intval($session_id);
 	
-	$sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id ORDER BY exe_id";
+	$sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";
 	
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$list = array();	

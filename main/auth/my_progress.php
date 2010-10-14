@@ -38,7 +38,6 @@ $tbl_course_quiz 			= Database :: get_course_table(TABLE_QUIZ_TEST);
 $tbl_access_rel_session     = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 $tbl_access_rel_course      = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
-
 // get course list
 if ($_configuration['multiple_access_urls']) {    
     $sql = 'SELECT cu.course_code FROM '.$tbl_course_user.' cu INNER JOIN '.$tbl_access_rel_course.' a  ON(a.course_code = cu.course_code) WHERE user_id='.intval($_user['user_id']).' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND access_url_id = '.api_get_current_access_url_id().'';
@@ -53,9 +52,7 @@ while($row = Database :: fetch_array($rs)) {
 	$courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
 }
 
-// get the list of sessions where the user is subscribed as student
-
-
+// Get the list of sessions where the user is subscribed as student
 if ($_configuration['multiple_access_urls']) {
     $sql = 'SELECT DISTINCT cu.course_code, id_session as session_id FROM '.$tbl_session_course_user.' cu INNER JOIN '.$tbl_access_rel_session.' a  ON(a.session_id = cu.id_session) WHERE id_user='.$_user['user_id'].' AND access_url_id = '.api_get_current_access_url_id().'';
 } else {
@@ -66,20 +63,20 @@ $rs = Database::query($sql);
 while($row = Database :: fetch_array($rs)) {
 	$course_in_session[$row['session_id']][$row['course_code']] = CourseManager::get_course_information($row['course_code']);
 }
-echo '<div class="actions-title" >';
+/*echo '<div class="actions-title" >';
 echo $nameTools;
-echo '</div>';
+echo '</div>';*/
 
 if (!empty($courses)) {
 ?>
 <table class="data_table" width="100%">
 <tr class="tableName">
 	<td colspan="6">
-		<strong><?php echo get_lang('MyCourses'); ?></strong>
+		<h1><?php echo get_lang('MyCourses'); ?></h1>
 	</td>
 </tr>
 <tr>
-  <th><?php echo get_lang('Course'); ?></th>
+  <th width="300px"><?php echo get_lang('Course'); ?></th>
   <th><?php echo get_lang('Time'); ?></th>
   <th><?php echo get_lang('Progress'); ?></th>
   <th><?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?></th>
@@ -87,17 +84,23 @@ if (!empty($courses)) {
   <th><?php echo get_lang('Details'); ?></th>
 </tr>
 <?php
-
     $i = 0;
     foreach ($courses as $enreg) {
     	$weighting = 0;
+        
+        $total_time_login      = Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']);
+        $time                  = api_time_to_hms($total_time_login);
+        $progress              = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
+        $percentage_score      = Tracking :: get_avg_student_score($_user['user_id'], $enreg['code'], array());
     	$last_connection       = Tracking :: get_last_connection_date_on_the_course($_user['user_id'], $enreg['code']);
-    	$progress              = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
-    	$total_time_login      = Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']);
-    	$time                  = api_time_to_hms($total_time_login);
-    	$percentage_score      = Tracking :: get_average_test_scorm_and_lp ($_user['user_id'], $enreg['code']);
+    	
     
-        echo '<tr class='.($i?'row_odd':'row_even').'>';
+        if ($enreg['code'] == $_GET['course'] && empty($_GET['session_id'])) {
+            echo '<tr class="row_odd" style="background-color:#FBF09D">';
+        } else {
+            echo '<tr class="row_even">';
+        }
+        
       	echo '<td>'.$enreg['title'].'</td>';
         
       	echo '<td align="center">'.$time.'</td>';
@@ -130,26 +133,22 @@ if (!empty($course_in_session)) {
 ?>
 
 <br />
-<table class="data_table" width="100%">
-<tr class="tableName">
-    <td colspan="7">
-        <strong><?php echo get_lang('Sessions'); ?></strong>
-    </td>
-</tr>
-<tr>
-  <th><?php echo get_lang('Session'); ?></th>
-  <th><?php echo get_lang('Course'); ?></th>
-  <th><?php echo get_lang('Time'); ?></th>
-  <th><?php echo get_lang('Progress'); ?></th>
-  <th><?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?></th>
-  <th><?php echo get_lang('LastConnexion'); ?></th>
-  <th><?php echo get_lang('Details'); ?></th>
-</tr>
-<?php
-    
-    foreach ($course_in_session as $key=>$session) {    
-        echo '<tr  class='.($i?'row_odd':'row_even').'>';    
-        echo '<td rowspan="'.count($session).'" > '.api_get_session_name($key).' </td>';    
+ <h1><?php echo get_lang('Sessions'); ?></h1>
+<?php    
+    foreach ($course_in_session as $key=>$session) {
+        echo '<h2>'.api_get_session_name($key).' </h2>';
+        ?>        
+        <table class="data_table" width="100%">
+        <tr>
+          <th width="300px"><?php echo get_lang('Course'); ?></th>
+          <th><?php echo get_lang('Time'); ?></th>
+          <th><?php echo get_lang('Progress'); ?></th>
+          <th><?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?></th>
+          <th><?php echo get_lang('LastConnexion'); ?></th>
+          <th><?php echo get_lang('Details'); ?></th>
+        </tr>
+        <?php           
+          
         foreach ($session as $enreg) {               
             $weighting = 0;
             $last_connection       = Tracking :: get_last_connection_date_on_the_course($_user['user_id'], $enreg['code'], $key);
@@ -157,7 +156,14 @@ if (!empty($course_in_session)) {
             
             $total_time_login      = Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code'], $key);
             $time                  = api_time_to_hms($total_time_login);
-            $percentage_score      = Tracking :: get_avg_student_score ($_user['user_id'], $enreg['code'], array(), $key);
+            $percentage_score      = Tracking :: get_avg_student_score($_user['user_id'], $enreg['code'], array(), $key);
+            
+            if ($enreg['code'] == $_GET['course'] && $_GET['session_id'] == $key) {
+                echo '<tr  class="row_odd" style="background-color:#FBF09D" >';
+            } else {
+                echo '<tr  class="row_even">';
+            }
+            
             
             echo '<td>'.$enreg['title'].' </td>';        
             echo '<td align="center">'.$time.'</td>';
@@ -189,9 +195,10 @@ if (!empty($course_in_session)) {
             echo '</td>';
             $i = $i ? 0 : 1;
             echo '</tr>';
-        }  
+        }
+        echo '</table>';  
     }
-    echo '</table>';
+    
 }
 ?>
 <br /><br />
@@ -311,7 +318,7 @@ if (!empty($course_in_session)) {
                         if (is_numeric($progress)) {
                             $progress = $progress.'%';
                         }
-						echo		$progress;
+						echo $progress;
 						echo "	</td>
 								<td align='center' width=180px >";
 						                        

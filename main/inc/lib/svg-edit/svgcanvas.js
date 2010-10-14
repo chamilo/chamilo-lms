@@ -9283,7 +9283,7 @@ this.getTitle = function(elem) {
 			return childs[i].textContent;
 		}
 	}
-	return '';
+	return 'image';//hack for Chamilo. Avoid missing the title inside a svg document
 }
 
 // Function: getHref

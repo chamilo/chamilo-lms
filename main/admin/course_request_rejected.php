@@ -135,7 +135,7 @@ function get_number_of_requests() {
  * Get course data to display
  */
 function get_request_data($from, $number_of_items, $column, $direction) {
-    $course_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
+    $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
     $users_table = Database :: get_main_table(TABLE_MAIN_USER);
     $course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -146,18 +146,18 @@ function get_request_data($from, $number_of_items, $column, $direction) {
                    tutor_name AS col4,
                    request_date AS col5,
                    id  AS col6
-                   FROM $course_table WHERE status = ".COURSE_REQUEST_REJECTED;
+                   FROM $course_request_table WHERE status = ".COURSE_REQUEST_REJECTED;
 
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
     $res = Database :: query($sql);
 
-    $courses = array();
-    while ($course = Database :: fetch_row($res)) {
-        $courses[] = $course;
+    $course_requests = array();
+    while ($course_request = Database :: fetch_row($res)) {
+        $course_requests[] = $course_request;
     }
 
-    return $courses;
+    return $course_requests;
 }
 
 /**

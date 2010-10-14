@@ -759,8 +759,9 @@ class Tracking {
 
 			// Compose a filter based on optional session id
 			$condition_session = "";
-			if (isset($session_id)) {
-				$session_id = intval($session_id);
+            $session_id = intval($session_id);
+            
+			if (isset($session_id)) {				
 				if (count($lp_ids) > 0) {
 					$condition_session = " AND session_id = $session_id ";
 				} else {
@@ -1643,6 +1644,7 @@ class Tracking {
 	 * @param 	string 	Course id
 	 * @return	float	average of test
 	 * @author 	isaac flores paz <florespaz@bidsoftperu.com>
+     * @deprecated get_avg_student_score should be use
 	 */
 	public static function get_average_test_scorm_and_lp ($user_id,$course_id) {
 

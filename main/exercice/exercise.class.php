@@ -533,7 +533,6 @@ class Exercise {
 				}
 			$sql .= " WHERE id='".Database::escape_string($id)."'";
 
-		//	echo $sql;
 			Database::query($sql);
 
 			// update into the item_property table
@@ -579,7 +578,6 @@ class Exercise {
 			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
 				$this -> search_engine_save();
 			}
-
 		}
 
 		// updates the question position
@@ -589,8 +587,7 @@ class Exercise {
     function update_question_positions() {
     	// updates the question position
         $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        foreach($this->questionList as $position=>$questionId)
-        {
+        foreach($this->questionList as $position=>$questionId) {
             //$sql="UPDATE $TBL_QUESTIONS SET position='".Database::escape_string($position)."' WHERE id='".Database::escape_string($questionId)."'";
             $sql="UPDATE $TBL_QUIZ_QUESTION SET question_order='".Database::escape_string($position)."' " .
                  "WHERE question_id='".Database::escape_string($questionId)."' and exercice_id=".Database::escape_string($this->id)."";
@@ -606,8 +603,7 @@ class Exercise {
  	 * @author - Julio Montoya (rewrote the code)
 	 * @param - integer $id - question ID to move up
 	 */
-	function moveUp($id)
-	{
+	function moveUp($id) {
 		// there is a bug with some version of PHP with the key and prev functions
 		// the script commented was tested in dev.dokeos.com with no success
 		// Instead of using prev and next this was change with arrays.
@@ -1233,7 +1229,6 @@ class Exercise {
                     $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\'';
                     $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
                     Database::query($sql);
-                    //var_dump($sql);
                     $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
                         VALUES (NULL , \'%s\', \'%s\', %s, %s)';
                     $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id, $did);
@@ -1287,7 +1282,7 @@ class Exercise {
 	}
 
 	/**
-	* Cleans the student's results only for the Exercise tool.
+	* Cleans the student's results only for the Exercise tool (Not from the LP)
 	* The LP results are NOT deleted
 	* Works with exercises in sessions
 	* @return int quantity of user's exercises deleted
@@ -1636,7 +1631,12 @@ class Exercise {
                     </script>";
 	}
 	
-	
+	/**
+     * This function was originally found in the exercise_show.php
+     * @param   int exe id
+     * @param   int question id
+     * @param   int the choice the user selected
+	 */
 	function manage_answer($exeId, $questionId, $choice) {
 		global $_configuration;
 		$exeId = intval($exeId);
@@ -1644,7 +1644,7 @@ class Exercise {
         //require_once 'answer.class.php';
                     
      	// Creates a temporary Question object
-        $objQuestionTmp = Question :: read($questionId);
+        $objQuestionTmp         = Question :: read($questionId);
 
         $questionName 			= $objQuestionTmp->selectTitle();
         $questionDescription 	= $objQuestionTmp->selectDescription();
@@ -1709,7 +1709,6 @@ class Exercise {
                             $real_answers[$answerId] = true;
                         }
                     }
-
                     $final_answer = true;
                     foreach($real_answers as $my_answer) {
                         if (!$my_answer) {
@@ -1799,7 +1798,7 @@ class Exercise {
                         $choice[$j] = trim($choice[$j]);
                         $user_tags[] = api_strtolower($choice[$j]);
                         //put the contents of the [] answer tag into correct_tags[]
-                        $correct_tags[] = api_strtolower(substr($temp, 0, $pos));
+                        $correct_tags[] = api_strtolower(api_substr($temp, 0, $pos));
                         $j++;
                         $temp = api_substr($temp, $pos +1);
                         //$answer .= ']';
@@ -1975,8 +1974,6 @@ class Exercise {
         $stat_table 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . $exeId;
 		Database::query($sql_update);
-                        
-        
 	} //End function
 }
 endif;

@@ -70,7 +70,7 @@ class CourseRequestManager {
         }
         $tutor_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $course_language);
 
-        $request_date = date('Y-m-d H:i:s'); // TODO: Use the time-zones way.
+        $request_date = api_get_utc_datetime();
         $status = COURSE_REQUEST_PENDING;
 
         $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);

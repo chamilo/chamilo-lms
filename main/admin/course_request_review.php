@@ -184,6 +184,11 @@ function get_request_data($from, $number_of_items, $column, $direction) {
 
     $course_requests = array();
     while ($course_request = Database::fetch_row($res)) {
+        if (DELETE_ACTION_ENABLED) {
+            $course_request[5] = api_get_local_time($course_request[5]);
+        } else {
+            $course_request[4] = api_get_local_time($course_request[4]);
+        }
         $course_requests[] = $course_request;
     }
 

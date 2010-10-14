@@ -120,6 +120,7 @@ function get_request_data($from, $number_of_items, $column, $direction) {
 
     $course_requests = array();
     while ($course_request = Database :: fetch_row($res)) {
+        $course_request[5] = api_get_local_time($course_request[5]);
         $course_requests[] = $course_request;
     }
 

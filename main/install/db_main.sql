@@ -2444,7 +2444,7 @@ CREATE TABLE course_request (
   category_code varchar(40) DEFAULT NULL,
   tutor_name varchar(200) DEFAULT NULL,
   visual_code varchar(40) DEFAULT NULL,
-  request_date datetime DEFAULT NULL,
+  request_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   objetives text,
   target_audience text,
   status int unsigned NOT NULL default '0',

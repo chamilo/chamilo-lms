@@ -20,6 +20,11 @@ require_once 'exercise.lib.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 
+// Name of the language file that needs to be included
+$language_file='exercice';
+
+require_once '../inc/global.inc.php';
+
 if ($_GET['origin']=='learnpath') {
 	require_once '../newscorm/learnpath.class.php';
 	require_once '../newscorm/learnpathItem.class.php';
@@ -28,19 +33,19 @@ if ($_GET['origin']=='learnpath') {
 	require_once '../newscorm/aicc.class.php';
 	require_once '../newscorm/aiccItem.class.php';
 }
+require_once api_get_path(LIBRARY_PATH).'exercise_show_functions.lib.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
-// name of the language file that needs to be included
-$language_file='exercice';
 
-require_once '../inc/global.inc.php';
+
 $this_section=SECTION_COURSES;
 
 /* 	ACCESS RIGHTS  */
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+
 
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -56,52 +61,24 @@ $table_ans 				= Database :: get_course_table(TABLE_QUIZ_ANSWER);
 //temp values to move to admin settings
 $dsp_percent = false; //false to display total score as absolute values
 //debug param. 0: no display - 1: debug display
-$debug=0;
-if($debug>0){echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);}
+$debug=1;
+if($debug>0){error_log('Entered exercise_result.php: '.print_r($_POST,1));}
 // general parameters passed via POST/GET
-if ( empty ( $origin ) ) {
-     $origin = Security::remove_XSS($_REQUEST['origin']);
-}
-if ( empty ( $learnpath_id ) ) {
-     $learnpath_id       = intval($_REQUEST['learnpath_id']);
-}
-if ( empty ( $learnpath_item_id ) ) {
-     $learnpath_item_id  = intval($_REQUEST['learnpath_item_id']);
-}
-if ( empty ( $learnpath_item_view_id ) ) {
-     $learnpath_item_view_id  = intval($_REQUEST['learnpath_item_view_id']);
-}
+if ( empty ( $origin ) ) {                  $origin                 = Security::remove_XSS($_REQUEST['origin']);}
+if ( empty ( $learnpath_id ) ) {            $learnpath_id           = intval($_REQUEST['learnpath_id']);}
+if ( empty ( $learnpath_item_id ) ) {       $learnpath_item_id      = intval($_REQUEST['learnpath_item_id']);}
+if ( empty ( $learnpath_item_view_id ) ) {  $learnpath_item_view_id = intval($_REQUEST['learnpath_item_view_id']);}
+if ( empty ( $formSent ) ) {                $formSent               = $_REQUEST['formSent'];}
+if ( empty ( $exerciseResult ) ) {          $exerciseResult         = $_SESSION['exerciseResult'];}
+if ( empty ( $exerciseResultCoordinates)){  $exerciseResultCoordinates = $_SESSION['exerciseResultCoordinates'];}
+if ( empty ( $questionId ) ) {              $questionId             = $_REQUEST['questionId'];}
+if ( empty ( $choice ) ) {                  $choice                 = $_REQUEST['choice'];}
+if ( empty ( $questionNum ) ) {             $questionNum            = $_REQUEST['questionNum'];}
+if ( empty ( $nbrQuestions ) ) {            $nbrQuestions           = $_REQUEST['nbrQuestions'];}
+if ( empty ( $questionList ) ) {            $questionList           = $_SESSION['questionList'];}
+if ( empty ( $objExercise ) ) {             $objExercise            = $_SESSION['objExercise'];}
+if ( empty ( $exerciseType ) ) {            $exerciseType           = $_REQUEST['exerciseType'];}
 
-if ( empty ( $formSent ) ) {
-    $formSent       = $_REQUEST['formSent'];
-}
-if ( empty ( $exerciseResult ) ) {
-     $exerciseResult = $_SESSION['exerciseResult'];
-}
-if ( empty ( $exerciseResultCoordinates ) ) {
-     $exerciseResultCoordinates = $_SESSION['exerciseResultCoordinates'];
-}
-if ( empty ( $questionId ) ) {
-    $questionId = $_REQUEST['questionId'];
-}
-if ( empty ( $choice ) ) {
-    $choice = $_REQUEST['choice'];
-}
-if ( empty ( $questionNum ) ) {
-   $questionNum    = $_REQUEST['questionNum'];
-}
-if ( empty ( $nbrQuestions ) ) {
-    $nbrQuestions   = $_REQUEST['nbrQuestions'];
-}
-if ( empty ( $questionList ) ) {
-    $questionList = $_SESSION['questionList'];
-}
-if ( empty ( $objExercise ) ) {
-    $objExercise = $_SESSION['objExercise'];
-}
-if ( empty ( $exerciseType ) ) {
-    $exerciseType = $_REQUEST['exerciseType'];
-}
 
 
 //@todo There should be some doc about this settings
@@ -128,6 +105,7 @@ $url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&s
 
  // if the above variables are empty or incorrect, we don't have any result to show, so stop the script
 if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise)) {
+    if ($debug) {error_log('Exit exercise result'); error_log('$exerciseResult:'.print_r($exerciseResult,1)); error_log('$questionList:'.print_r($questionList,1));error_log('$objExercise:'.print_r($objExercise,1));}
 	header('Location: exercice.php');
 	exit();
 }
@@ -187,139 +165,6 @@ if ($origin != 'learnpath') {
 if ($objExercise->results_disabled) {
 	ob_start();
 }
-
-/*
-FUNCTIONS
-*/
-
-
-function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect)
-{
-	global $feedback_type;
-	?>
-	<tr>
-	<td width="5%" align="center">
-		<img src="../img/<?php echo ($answerType == UNIQUE_ANSWER)?'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
-		border="0" alt="" />
-	</td>
-	<td width="5%" align="center">
-		<img src="../img/<?php echo ($answerType == UNIQUE_ANSWER)?'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
-		border="0" alt=" " />
-	</td>
-	<td width="45%" style="border-bottom: 1px solid #4171B5;">
-		<?php
-		$answer=text_filter($answer);
-		echo $answer;
-		?>
-	</td>
-	<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-	<td width="45%" style="border-bottom: 1px solid #4171B5;">
-		<?php
-		$answerComment=text_filter($answerComment);
-		if($studentChoice)
-		{
-			if(!$answerCorrect)
-			{
-				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
-			}
-			else{
-				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
-			}
-		}
-		else
-		{
-			echo '&nbsp;';
-		}
-		?>
-	</td>
-	<?php } else { ?>
-		<td>&nbsp;</td>
-	<?php } ?>
-	</tr>
-	<?php
-}
-
-function display_fill_in_blanks_answer($answer)
-{
-	?>
-		<tr>
-		<td>
-			<?php echo Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY); ?>
-		</td>
-		</tr>
-	<?php
-}
-
-function display_free_answer($answer)
-{
-	global $feedback_type;
-	?>
-		<tr>
-		<td width="55%">
-			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
-		</td>
-	<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-   <td width="45%">
-    <?php echo get_lang('notCorrectedYet');?>
-
-   </td>
-   <?php } else { ?>
-		<td>&nbsp;</td>
-	<?php } ?>
-		</tr>
-	<?php
-}
-
-function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment)
-{
-	global $feedback_type;
-	$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
-            						"#4271B5",
-									"#FE8E16",
-									"#3B3B3B",
-									"#BCD631",
-									"#D63173",
-									"#D7D7D7",
-									"#90AFDD",
-									"#AF8640",
-									"#4F9242",
-									"#F4EB24",
-									"#ED2024",
-									"#45C7F0",
-									"#F7BDE2");
-	?>
-		<tr>
-				<td valign="top">
-				<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; display:inline; float:left; margin-top:3px;"></div>
-				<div style="float:left; padding-left:5px;">
-				<?php echo $answerId; ?>
-				</div>
-					<div style="float:left; padding-left:5px;">
-						<div style="display:inline; float:left; width:80px;"><?php echo $answer ?></div>
-					</div>
-				</td>
-				<td valign="top">
-					<?php $my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $my_choice; ?>
-				</td>
-				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-				<td valign="top">
-					<?php
-					if ($studentChoice) {
-						echo '<span style="font-weight: bold; color: #008000;">';
-					} else {
-						echo '<span style="font-weight: bold; color: #FF0000;">';
-					}
-					echo $answerComment;
-					echo '</span>';
-					?>
-				</td>
-				<?php } else { ?>
-					<td>&nbsp;</td>
-				<?php } ?>
-		</tr>
-	<?php
-}
-
 /*
 DISPLAY AND MAIN PROCESS
 */
@@ -327,7 +172,7 @@ DISPLAY AND MAIN PROCESS
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '<div class="actions">';
-	echo Display::return_icon('back.png', get_lang('GoBackToEx')).'<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('GoBackToEx').'</a>';
+	echo Display::return_icon('back.png', get_lang('GoBackToQuestionList')).'<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('GoBackToQuestionList').'</a>';
 	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
 	echo '</div>';
 }
@@ -349,7 +194,7 @@ if($origin != 'learnpath') {?>
 <?php
 
 $i=$totalScore=$totalWeighting=0;
-if($debug>0){echo "ExerciseResult: "; var_dump($exerciseResult); echo "QuestionList: ";var_dump($questionList);}
+if($debug>0){error_log ("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
 
 if ($_configuration['tracking_enabled']) {
 	// Create an empty exercise
@@ -362,15 +207,15 @@ $counter=0;
 foreach ($questionList as $questionId) {
 	$counter++;
 	// gets the student choice for this question
-	$choice=$exerciseResult[$questionId];
+	$choice                = $exerciseResult[$questionId];
 	// creates a temporary Question object
-	$objQuestionTmp = Question :: read($questionId);
+	$objQuestionTmp        = Question :: read($questionId);
 	// initialize question information
-	$questionName=$objQuestionTmp->selectTitle();
-	$questionDescription=$objQuestionTmp->selectDescription();
-	$questionWeighting=$objQuestionTmp->selectWeighting();
-	$answerType=$objQuestionTmp->selectType();
-	$quesId =$objQuestionTmp->selectId(); //added by priya saini
+	$questionName          = $objQuestionTmp->selectTitle();
+	$questionDescription   = $objQuestionTmp->selectDescription();
+	$questionWeighting     = $objQuestionTmp->selectWeighting();
+	$answerType            = $objQuestionTmp->selectType();
+	$quesId                = $objQuestionTmp->selectId(); //added by priya saini
 
 	// destruction of the Question object
 	unset($objQuestionTmp);
@@ -389,9 +234,11 @@ foreach ($questionList as $questionId) {
 	// show titles
 	if ($origin != 'learnpath') {?>
 		<table width="100%" border="0" cellpadding="3" cellspacing="2">
-		<tr bgcolor="#E6E6E6">
+		<tr>
 		<td colspan="<?php echo $colspan; ?>">
+            <div id="question_title" class="sectiontitle">
 			<?php echo get_lang("Question").' '.($counter).' : '.$questionName; ?>
+            </div>
 		</td>
 		</tr>
 		<tr>
@@ -502,11 +349,11 @@ foreach ($questionList as $questionId) {
 	for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 
 		//select answer of *position*=$answerId
-		$answer=$objAnswerTmp->selectAnswer($answerId);
-		$answerComment=$objAnswerTmp->selectComment($answerId);
-		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-		$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-		$numAnswer=$objAnswerTmp->selectAutoId($answerId);
+		$answer           =$objAnswerTmp->selectAnswer($answerId);
+		$answerComment    =$objAnswerTmp->selectComment($answerId);
+		$answerCorrect    =$objAnswerTmp->isCorrect($answerId);
+		$answerWeighting  =$objAnswerTmp->selectWeighting($answerId);
+		$numAnswer        =$objAnswerTmp->selectAutoId($answerId);
 
 		switch ($answerType) {
 			// for unique answer
@@ -637,6 +484,7 @@ foreach ($questionList as $questionId) {
 						$temp=api_substr($temp,$pos+1);
                         //$answer .= ']';
 					}
+                    
 
 					$answer='';
 					$real_correct_tags = $correct_tags;
@@ -743,25 +591,25 @@ foreach ($questionList as $questionId) {
 		if ($answerType != MATCHING || $answerCorrect) {
 			if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
 				if ($origin!='learnpath') {
-					display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect);
+					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
 				}
 			} elseif($answerType == FILL_IN_BLANKS) {
 				if ($origin!='learnpath') {
-					display_fill_in_blanks_answer($answer);
+					ExerciseShowFunctions::display_fill_in_blanks_answer($answer,0,0);
 				}
 			} elseif($answerType == FREE_ANSWER) {
 				// to store the details of open questions in an array to be used in mail
 				$arrques[] = $questionName;
 				$arrans[]  = $choice;
 				if($origin != 'learnpath') {
-					display_free_answer($choice);
+					ExerciseShowFunctions::display_free_answer($choice,0,0);
 				}
 			} elseif($answerType == HOT_SPOT) {
 				if ($origin != 'learnpath') {
-					display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
+					ExerciseShowFunctions::display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
 				}
 			} elseif($answerType == HOT_SPOT_ORDER) {
-				display_hotspot_order_answer($answerId, $answer, $studentChoice, $answerComment);
+				ExerciseShowFunctions::display_hotspot_order_answer($answerId, $answer, $studentChoice, $answerComment);
 			} elseif($answerType==MATCHING) {
 				if ($origin != 'learnpath') {
 					echo '<tr>';

@@ -37,15 +37,11 @@ require_once api_get_path(LIBRARY_PATH).'exercise_show_functions.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
-
-
 $this_section=SECTION_COURSES;
 
 /* 	ACCESS RIGHTS  */
 // notice for unauthorized people.
 api_protect_course_script(true);
-
-
 
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -54,15 +50,17 @@ $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          	= Database::get_course_table(TABLE_QUIZ_ANSWER);
 $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
-$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$table_ans 				= Database :: get_course_table(TABLE_QUIZ_ANSWER);
+$main_user_table 		= Database::get_main_table(TABLE_MAIN_USER);
+$main_admin_table       = Database::get_main_table(TABLE_MAIN_ADMIN);
+$main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$table_ans 				= Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 //temp values to move to admin settings
 $dsp_percent = false; //false to display total score as absolute values
 //debug param. 0: no display - 1: debug display
 $debug=1;
 if($debug>0){error_log('Entered exercise_result.php: '.print_r($_POST,1));}
+
 // general parameters passed via POST/GET
 if ( empty ( $origin ) ) {                  $origin                 = Security::remove_XSS($_REQUEST['origin']);}
 if ( empty ( $learnpath_id ) ) {            $learnpath_id           = intval($_REQUEST['learnpath_id']);}
@@ -79,8 +77,6 @@ if ( empty ( $questionList ) ) {            $questionList           = $_SESSION[
 if ( empty ( $objExercise ) ) {             $objExercise            = $_SESSION['objExercise'];}
 if ( empty ( $exerciseType ) ) {            $exerciseType           = $_REQUEST['exerciseType'];}
 
-
-
 //@todo There should be some doc about this settings
 $_configuration['live_exercise_tracking'] = false;
 if($_configuration['live_exercise_tracking']) define('ENABLED_LIVE_EXERCISE_TRACKING',1);
@@ -92,8 +88,6 @@ $arrques = array();
 $arrans = array();
 
 // set admin name as person who sends the results e-mail (lacks policy about whom should really send the results)
-$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
-$main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 
 $query = "SELECT user_id FROM $main_admin_table LIMIT 1"; //get all admins from admin table
 $admin_id = Database::result(Database::query($query),0,"user_id");
@@ -110,26 +104,12 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 	exit();
 }
 
-$sql_fb_type='SELECT feedback_type FROM '.$TBL_EXERCICES.' WHERE id ="'.Database::escape_string($objExercise->selectId()).'"';
-$res_fb_type=Database::query($sql_fb_type);
-$row_fb_type=Database::fetch_row($res_fb_type);
-$feedback_type = $row_fb_type[0];
-
-
-// define basic exercise info to print on screen
-$exerciseTitle=$objExercise->selectTitle();
-$exerciseDescription=$objExercise->selectDescription();
-
 $gradebook = '';
 if (isset($_SESSION['gradebook'])) {
 	$gradebook=	$_SESSION['gradebook'];
 }
-
 if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('ToolGradebook')
-		);
+	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('ToolGradebook'));
 }
 
 $nameTools=get_lang('Exercice');
@@ -139,15 +119,11 @@ $htmlHeadXtra[] = $objExercise->show_lp_javascript();
 
 if ($origin != 'learnpath') {
 	//so we are not in learnpath tool
-	Display::display_header($nameTools,"Exercise");
+	Display::display_header($nameTools,get_lang('Exercise'));
 } else {
 	header('Content-Type: text/html; charset='.api_get_system_encoding());
 	$document_language = api_get_language_isocode();
-
-	/*
-	 * HTML HEADER
-	 */
-
+	/* HTML HEADER  */
 ?>
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -165,9 +141,7 @@ if ($origin != 'learnpath') {
 if ($objExercise->results_disabled) {
 	ob_start();
 }
-/*
-DISPLAY AND MAIN PROCESS
-*/
+/* DISPLAY AND MAIN PROCESS */
 
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && $origin != 'learnpath') {
@@ -177,12 +151,12 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '</div>';
 }
 
-$exerciseTitle=text_filter($exerciseTitle);
+$exerciseTitle=text_filter($objExercise->selectTitle());
 
 //show exercise title
 if($origin != 'learnpath') {?>
 	<h2><?php echo Display::return_icon('quiz_big.png', get_lang('Result')).' '; echo $exerciseTitle; ?> : <?php echo get_lang("Result"); ?></h2>
-	<?php echo $exerciseDescription; ?>
+	<?php echo $objExercise->selectDescription(); ?>
 <?php } ?>
 
 	<form method="get" action="exercice.php?<?php echo api_get_cidreq() ?>">
@@ -259,7 +233,7 @@ foreach ($questionList as $questionId) {
 				<td width="45%" valign="top">
 					<i><?php echo get_lang("Answer"); ?></i>
 				</td>
-				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+				<?php if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td width="45%" valign="top">
 					<i><?php echo get_lang("Comment"); ?></i>
 				</td>
@@ -282,7 +256,7 @@ foreach ($questionList as $questionId) {
 				<td width="55%">
 					<i><?php echo get_lang("Answer"); ?></i>
 				</td>
-				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+				<?php if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td width="45%" valign="top">
 					<i><?php echo get_lang("Comment"); ?></i>
 				</td>
@@ -304,7 +278,7 @@ foreach ($questionList as $questionId) {
 								<td width="100" valign="top">
 									<i><?php echo get_lang('HotspotHit'); ?></i><br /><br />
 								</td>
-								<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+								<?php if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 								<td width="300" valign="top">
 									<i><?php echo get_lang("Comment"); ?></i><br /><br />
 								</td>
@@ -782,7 +756,7 @@ if($objExercise->results_disabled) {
 		Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><br />',false);
 
 		$lp_mode =  $_SESSION['lp_mode'];
-		$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
+		$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$objExercise->feedbacktype;
 		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
 		echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
 		//record the results in the learning path, using the SCORM interface (API)
@@ -794,7 +768,7 @@ if($objExercise->results_disabled) {
 	if ($origin == 'learnpath') {
 		Display::display_normal_message(get_lang('ExerciseFinished'));
 		$lp_mode =  $_SESSION['lp_mode'];
-		$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
+		$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$objExercise->feedbacktype;
 		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
 		echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
 

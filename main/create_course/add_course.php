@@ -256,7 +256,7 @@ if ($form->validate()) {
 
             // Create a request for a new course.
 
-            $request_id = CourseRequestManager::create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience);
+            $request_id = CourseRequestManager::create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, api_get_user_id());
 
             if ($request_id) {
 

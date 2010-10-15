@@ -158,14 +158,20 @@ $origin_select -> setSelected($s_selected_origin);
 /* // Chamilo 1.8.8: Deprecated code.
 $encoding_select -> setSelected($s_selected_encoding);
 */
-$defaults['lp_encoding'] = Security::remove_XSS($_SESSION['oLP']->encoding);
-
-$defaults['lp_name'] = Security::remove_XSS($_SESSION['oLP']->get_name());
-$defaults['lp_author'] = Security::remove_XSS($_SESSION['oLP']->get_author());
+$defaults['lp_encoding']    = Security::remove_XSS($_SESSION['oLP']->encoding);
+$defaults['lp_name']        = Security::remove_XSS($_SESSION['oLP']->get_name());
+$defaults['lp_author']      = Security::remove_XSS($_SESSION['oLP']->get_author());
 
 // Prerequisites
 $form->addElement('html', '<div class="row"><div class="label">'.get_lang('Prerequisites').'</div><div class="formw">'.$_SESSION['oLP']->display_lp_prerequisites_list().'</div></div>');
 $form->addElement('static', null, null, get_lang('LpPrerequisiteDescription'));
+
+
+if (api_is_platform_admin()) {
+    $form->addElement('checkbox', 'use_max_score', get_lang('UseMaxScore100'));
+    $defaults['use_max_score'] = 1;
+}
+
 
 //Submit button
 $form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');
@@ -173,6 +179,9 @@ $form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'cl
 // Hidden fields
 $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
+
+
+
 
 $form->setDefaults($defaults);
 echo '<table><tr><td width="550px">';

@@ -56,6 +56,9 @@ $form->addElement('file','user_file',get_lang('FileToUpload'));
 
 $select_content_marker = &$form->addElement('select','content_maker',get_lang('ContentMaker'));
 
+
+
+
 foreach($content_origins as $index => $origin){
 	$select_content_marker->addOption($origin,$origin);
 }
@@ -74,6 +77,11 @@ if(api_get_setting('search_enabled')=='true')
 		$form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
 	}
 }
+
+if (api_is_platform_admin()) {
+    $form->addElement('checkbox', 'use_max_score', get_lang('UseMaxScore100'));    
+}
+
 $form->addElement('style_submit_button','submit', get_lang('Send'),'class="upload"');
 
 $form->addElement('html', '<br /><br /><br />');
@@ -107,7 +115,7 @@ $form->add_real_progress_bar('uploadScorm','user_file');
 // the rules for the form
 $form->addRule('user_file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 // the default values for the form
-$defaults = array('index_document'=>'checked="checked"');
+$defaults = array('index_document'=>'checked="checked"','use_max_score'=>1);
 $form->setDefaults($defaults);
 $form->display();
 

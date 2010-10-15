@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
 
     require_once 'learnpath.class.php';
     $type = learnpath::get_package_type($_FILES['user_file']['tmp_name'], $_FILES['user_file']['name']);
+    
     switch ($type) {
         case 'scorm':
             require_once 'scorm.class.php';
@@ -55,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES
             }
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
-                $oScorm->import_manifest(api_get_course_id());
+                $oScorm->import_manifest(api_get_course_id(),$_REQUEST['use_max_score']);
             } else {
                 // Show error message stored in $oScrom->error_msg.
             }
@@ -132,7 +133,7 @@ elseif($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
-                $oScorm->import_manifest(api_get_course_id());
+                $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
             }
 
             $proximity = '';

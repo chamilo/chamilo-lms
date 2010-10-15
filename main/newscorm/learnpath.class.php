@@ -72,6 +72,7 @@ class learnpath {
     public $lp_view_session_id =0; // The specific view might be bound to a session.
 
     public $prerequisite = 0;
+    public $use_max_score = 100; //Should work as usual
 
     /**
      * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
@@ -3971,7 +3972,6 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new proximity : ' . $this->proximity, 0);
         }
-        //$res = Database::query($sql);
         $res = Database::query($sql);
         return true;
     }
@@ -3986,6 +3986,36 @@ class learnpath {
         }
         $this->last = $id;
     }
+    
+    
+     /**
+     * Sets use_max_score
+     * @param   string  Optional string giving the new location of this learnpath
+     * @return  boolean True on success / False on error
+     */
+    public function set_use_max_score($use_max_score = 1) {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::set_use_max_score()', 0);
+        }
+        if ($use_max_score) {
+        	$use_max_score = 1;
+        } else {
+        	$use_max_score = 0;
+        }        
+        
+        $this->use_max_score = $this->escape_string($use_max_score);
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $lp_table SET use_max_score = '" . $this->use_max_score . "' WHERE id = '$lp_id'";
+        
+        if ($this->debug > 2) {
+            error_log('New LP - lp updated with new use_max_score : ' . $this->use_max_score, 0);
+        }
+        $res = Database::query($sql);
+        return true;
+    }
+    
+    
 
     /**
      * Sets the object's error message

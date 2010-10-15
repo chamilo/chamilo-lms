@@ -550,16 +550,18 @@ class Tracking {
             // database (and if no list was given, get them all)
             
             if (empty($session_id)) {
-                $sql = "SELECT DISTINCT(id) FROM $lp_table  WHERE session_id = 0 $condition_lp ";
+                $sql = "SELECT DISTINCT(id), use_max_score FROM $lp_table  WHERE session_id = 0 $condition_lp ";
             } else {
-                $sql = "SELECT DISTINCT(id) FROM $lp_table WHERE 1 $condition_lp ";
+                $sql = "SELECT DISTINCT(id), use_max_score FROM $lp_table WHERE 1 $condition_lp ";
             }
             
             $res_row_lp = Database::query($sql);         
             $count_row_lp = Database::num_rows($res_row_lp);
-            $lp_list = array();
+            $lp_list = $use_max_score = array();
+            
             while ($row_lp = Database::fetch_array($res_row_lp)) {
-                $lp_list[] = $row_lp[0];
+                $lp_list[]                     = $row_lp['id'];
+                $use_max_score[$row_lp['id']]  = $row_lp['use_max_score'];
             }
 
             // Init local variables that will be used through the calculation
@@ -604,7 +606,7 @@ class Tracking {
 
                         // For the currently analysed view, get the score and
                         // max_score of each item if it is a sco or a TOOL_QUIZ
-                        $sql_max_score = "SELECT lp_iv.score as score,lp_i.max_score, lp_i.path, lp_i.item_type , lp_i.id as iid".
+                        $sql_max_score = "SELECT lp_iv.score as score,lp_i.max_score, lp_iv.max_score as max_score_item_view, lp_i.path, lp_i.item_type , lp_i.id as iid".
                                   " FROM $lp_item_view_table as lp_iv ".
                                   " INNER JOIN $lp_item_table as lp_i ".
                                   " ON lp_i.id = lp_iv.lp_item_id ".
@@ -623,18 +625,31 @@ class Tracking {
                         $score_of_scorm_calculate = 0;
 
                         while ($row_max_score = Database::fetch_array($res_max_score,'ASSOC')) {
-                            $max_score = $row_max_score['max_score'];
-                            $score = $row_max_score['score'];
-                            
+                            $max_score              = $row_max_score['max_score'];  //Came from the original lp_item
+                            $max_score_item_view    = $row_max_score['max_score_item_view']; //Came from the lp_item_view
+                            $score                  = $row_max_score['score'];
+                                                        
                             if ($row_max_score['item_type'] == 'sco') {
+                                
                                 // Check if it is sco (easier to get max_score)
                                 //when there's no max score, we assume 100 as the max score, as the SCORM 1.2 says that the value should always be between 0 and 100.
-                                if ($max_score==0) {
-                                    $max_score = 100;
+                                if ($max_score == 0 || is_null($max_score) || $max_score == '') {                                
+                                    //Chamilo style
+                                    if ($use_max_score[$lp_id]) {
+                                	   $max_score = 100;
+                                    } else {
+                                        //Overwrites max score = 100 to use the one that came in the lp_item_view see BT#1613
+                                        $max_score = $max_score_item_view;                                    
+                                    }
                                 }
-                                $lp_scorm_result_score_total += $score/$max_score;
-                                $lp_partial_total            += $score/$max_score;
-                                $current_value                = $score/$max_score;                                
+                                
+                                //Avoid division by zero errors
+                                if (!empty($max_score)) {
+                                    $lp_scorm_result_score_total += $score/$max_score;
+                                    $lp_partial_total            += $score/$max_score;
+                                    $current_value                = $score/$max_score;
+                                }                            
+                                    
                             } else {
                                 // Case of a TOOL_QUIZ element
                                 $item_id    = $row_max_score['iid'];
@@ -679,9 +694,16 @@ class Tracking {
                                     //$lp_scorm_result_score_total += 0;
                                 }
                             }
-                           
-                            $count_items++;    
-                                                    
+                            
+                            // Normal way
+                            if ($use_max_score[$lp_id]) {
+                                $count_items++;
+                            } else {
+                                if ($max_score != '') {    
+                                    $count_items++;
+                                }
+                            }
+                                                                                
                         } //end while
                         $global_count_item +=$count_items;
                         //echo 'lp_view '.$lp_view_id.' - $count_items '.$count_items.' lp partiual '.$lp_partial_total.' <br />';

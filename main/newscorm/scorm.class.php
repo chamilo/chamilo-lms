@@ -262,7 +262,7 @@ class scorm extends learnpath {
      * @param	string	Unique course code
      * @return	bool	Returns -1 on error
      */
-    function import_manifest($course_code) {
+    function import_manifest($course_code, $use_max_score = 1) {
         if ($this->debug > 0) { error_log('New LP - Entered import_manifest('.$course_code.')', 0); }
 
         $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code='$course_code'";
@@ -274,7 +274,7 @@ class scorm extends learnpath {
         // Get table names.
         $new_lp = Database::get_course_table(TABLE_LP_MAIN, $dbname);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM, $dbname);
-
+        $use_max_score = intval($use_max_score);
         foreach ($this->organizations as $id => $dummy) {
             $is_session = api_get_session_id();
             $is_session != 0 ? $session_id = $is_session : $session_id = 0;
@@ -294,8 +294,8 @@ class scorm extends learnpath {
             $myname = $oOrganization->get_name();
             $myname = api_utf8_decode($myname);
 
-            $sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order, session_id)" .
-                    "VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $session_id)";
+            $sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order, session_id, use_max_score)" .
+                    "VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $session_id, $use_max_score)";
             if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting path: '. $sql, 0); }
 
             $res = Database::query($sql);
@@ -352,9 +352,19 @@ class scorm extends learnpath {
                 $title = Database::escape_string($item['title']);
                 $title = api_utf8_decode($title);
                 $max_score = Database::escape_string($item['max_score']);
+                
                 if ($max_score == 0 || is_null($max_score) || $max_score == '') {
-                    $max_score = 100;
+                    //If max score is not set The use_max_score parameter is check in order to use 100 (chamilo style) or '' (strict scorm)
+                    if ($use_max_score) {
+                        $max_score = "'100'";
+                    } else {
+                    	$max_score = "NULL";
+                    }
+                } else {
+                    //Otherwise save the max score
+                    $max_score = "'$max_score'";  	
                 }
+                
                 $identifier = Database::escape_string($item['identifier']);
                 $prereq = Database::escape_string($item['prerequisites']);
                 $sql_item = "INSERT INTO $new_lp_item " .
@@ -365,11 +375,12 @@ class scorm extends learnpath {
                         "parameters) " .
                         "VALUES " .
                         "($lp_id, '$type','".$identifier."','".$title."'," .
-                        "'$path',0,'$max_score', $value_add" .
+                        "'$path',0,$max_score, $value_add" .
                         "$parent, $previous, 0, " .
                         "'$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."'," .
                         "'".$item['parameters']."'" .
                         ")";
+                    error_log($sql_item);    
                 $res_item = Database::query($sql_item);
                 if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.mysql_error(), 0); }
                 $item_id = Database::insert_id();

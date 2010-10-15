@@ -1209,7 +1209,8 @@ function update_Db_course($courseDbName, $language = null)
 		"preview_image	varchar(255)    not null default '', " . //stores the theme of the LP
 		"author 		varchar(255)    not null default '', " . //stores the theme of the LP
 		"session_id  	int	unsigned not null  default 0, " . //the session_id
-		"prerequisite  	int	unsigned not null  default 0 " . // pre requisite for next lp
+		"prerequisite  	int	unsigned not null  default 0, " . // pre requisite for next lp
+        "use_max_score  int unsigned not null  default 1 " . // pre requisite for next lp
 		")" . $charset_clause;
 	if(!Database::query($sql))
 	{
@@ -1253,7 +1254,7 @@ function update_Db_course($courseDbName, $language = null)
 		"description	varchar(511)	not null default ''," . //the description of this item - deprecated
 		"path			text		not null," . //the path to that item, starting at 'courses/...' level
 		"min_score		float unsigned	not null default 0," . //min score allowed
-		"max_score		float unsigned	not null default 100," . //max score allowed
+		"max_score		float unsigned	default 100," . //max score allowed
 		"mastery_score float unsigned null," . //minimum score to pass the test
 		"parent_item_id		int unsigned	not null default 0," . //the item one level higher
 		"previous_item_id	int unsigned	not null default 0," . //the item before this one in the sequential learning order (MySQL id)

@@ -341,13 +341,15 @@ if (api_get_self() != '/main/admin/configure_homepage.php') {
 		$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 		$home_menu = explode("\n", $home_menu);
 	}
-	foreach ($home_menu as $key => $enreg) {
+    $tab_counter = 0;
+	foreach ($home_menu as $enreg) {
 		$enreg = trim($enreg);
 		if (!empty($enreg)) {
-			$edit_link = '<a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$key.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
-			$delete_link = '<a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$key.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
+			$edit_link = '<a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
+			$delete_link = '<a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
 			$tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'), $enreg);
 			echo $tab_string;
+            $tab_counter++;
 		}
 	}
 	echo '<li id="insert-link"> <a href="'.api_get_self().'?action=insert_tabs" style="padding-right:0px;"><span>'. Display::return_icon('insert_row.png', get_lang('InsertLink'), array('style' => 'vertical-align:middle')).' '.get_lang('InsertLink').'</span></a></li>';

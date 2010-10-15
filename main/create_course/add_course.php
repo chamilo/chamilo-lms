@@ -85,6 +85,7 @@ $form->addElement('header', '', $tool_name);
 $form->addElement('text', 'title', get_lang('CourseName'), array('size' => '60', 'id' => 'title'));
 $form->applyFilter('title', 'html_filter');
 $form->addElement('static', null, null, get_lang('Ex'));
+$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
 // Course category.
 $categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), array());
@@ -96,6 +97,9 @@ $form->addElement('static', null, null, get_lang('TargetFac'));
 $form->add_textfield('wanted_code', get_lang('Code'), false, array('size' => '$maxlength', 'maxlength' => $maxlength));
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
+if ($course_validation_feature) {
+    $form->addRule('wanted_code', get_lang('ThisFieldIsRequired'), 'required');
+}
 
 // The teacher.
 $titular = & $form->add_textfield('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
@@ -106,15 +110,15 @@ if ($course_validation_feature) {
 
     // Description of the requested course.
     $form->addElement('textarea', 'description', get_lang('Description'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
-    $form->addRule('description', get_lang('ThisFieldIsRequired'), 'required', '', '');
+    $form->addRule('description', get_lang('ThisFieldIsRequired'), 'required');
 
     // Objectives of the requested course.
     $form->addElement('textarea', 'objetives', get_lang('Objectives'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
-    $form->addRule('objetives', get_lang('ThisFieldIsRequired'), 'required', '', '');
+    $form->addRule('objetives', get_lang('ThisFieldIsRequired'), 'required');
 
     // Target audience of the requested course.
     $form->addElement('textarea', 'target_audience', get_lang('TargetAudience'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
-    $form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required', '', '');
+    $form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required');
 }
 
 // Course language.
@@ -136,7 +140,7 @@ if ($course_validation_feature) {
     if (!empty($terms_and_conditions_url)) {
         // Terms and conditions to be accepted before sending a course request.
         $form->addElement('checkbox', 'legal', get_lang('IAcceptTermsAndConditions'), '', 1);
-        $form->addRule('legal', get_lang('YouHaveToAcceptTermsAndConditions'), 'required', '', '');
+        $form->addRule('legal', get_lang('YouHaveToAcceptTermsAndConditions'), 'required');
         // Link to terms and conditions.
         $link_terms_and_conditions = '<script type="text/JavaScript">
         <!--

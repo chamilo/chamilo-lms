@@ -52,7 +52,7 @@ class CourseRequestManager {
      */
     public static function create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, $user_id) {
 
-        $wanted_code = Database::escape_string($wanted_code);
+        $wanted_code = trim(Database::escape_string($wanted_code));
         $title = Database::escape_string($title);
         $description = Database::escape_string($description);
         $category_code = Database::escape_string($category_code);
@@ -60,6 +60,10 @@ class CourseRequestManager {
         $objetives = Database::escape_string($objetives);
         $target_audience = Database::escape_string($target_audience);
         $user_id = (int)$user_id;
+
+        if ($wanted_code == '') {
+            return false;
+        }
 
         if (self::course_code_exists($wanted_code)) {
             return false;
@@ -182,7 +186,7 @@ class CourseRequestManager {
     public static function update_course_request($id, $wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, $user_id) {
 
         $id = (int)$id;
-        $wanted_code = Database::escape_string($wanted_code);
+        $wanted_code = trim(Database::escape_string($wanted_code));
         $title = Database::escape_string($title);
         $description = Database::escape_string($description);
         $category_code = Database::escape_string($category_code);
@@ -190,6 +194,10 @@ class CourseRequestManager {
         $objetives = Database::escape_string($objetives);
         $target_audience = Database::escape_string($target_audience);
         $user_id = (int)$user_id;
+
+        if ($wanted_code == '') {
+            return false;
+        }
 
         if ($user_id <= 0) {
             return false;

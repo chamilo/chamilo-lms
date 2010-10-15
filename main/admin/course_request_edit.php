@@ -59,6 +59,8 @@ if ($course_validation_feature) {
         // Build the form.
         $form = new FormValidator('add_course', 'post', 'course_request_edit.php?id='.$id.'&caller='.$caller);
 
+        // TODO: Check which fields are to be mandatory.
+
         // Form title.
         $form->addElement('header', '', $tool_name);
 
@@ -132,6 +134,12 @@ if ($course_validation_feature) {
 
         // Validate the form and perform the ordered actions.
         if ($form->validate()) {
+            $course_request_values = $form->exportValues();
+
+            // Filter incoming data.
+            foreach ($course_request_values as &$value) {
+                $value = trim(Security::remove_XSS($value));
+            }
 
             // Detection which submit button has been pressed.
             $submit_button = isset($_POST['save_button']) ? 'save_button'
@@ -140,19 +148,81 @@ if ($course_validation_feature) {
                 : (isset($_POST['ask_info_button']) ? 'ask_info_button'
                 : 'submit_button')));
 
+            // Check the course code for avoiding duplication.
+            $course_code_ok = $course_request_values['wanted_code'] == $course_request_info['code']
+                ? true
+                : !CourseRequestManager::course_code_exists($course_request_values['wanted_code']);
 
-            // Line of code for testing purposes, to be removed
-            $message = 'The button "'.$submit_button.'" has been pressed.';
+            if ($course_code_ok) {
+                $message = array();
+                $is_error_message = false;
+
+                // Update the course request.
+                $update_ok = CourseRequestManager::update_course_request($id,
+                    $course_request_values['wanted_code'],
+                    $course_request_values['title'],
+                    $course_request_values['description'],
+                    $course_request_values['category_code'],
+                    $course_request_values['course_language'],
+                    $course_request_values['objetives'],
+                    $course_request_values['target_audience'],
+                    $course_request_values['user_id']
+                );
+
+                if ($update_ok) {
+                    $message[] = sprintf(get_lang(CourseRequestUpdated), $course_request_values['wanted_code']);
+
+                    switch ($submit_button) {
+                        case 'accept_button':
+                            if (CourseRequestManager::accept_course_request($id)) {
+                                $message[] = sprintf(get_lang('CourseRequestAccepted'), $course_request_values['wanted_code'], $course_request_values['wanted_code']);
+                            } else {
+                                $message[] = sprintf(get_lang('CourseRequestAcceptanceFailed'), $course_request_values['wanted_code']);
+                                $is_error_message = true;
+                            }
+                            break;
+                        case 'reject_button':
+                            if (CourseRequestManager::reject_course_request($id)) {
+                                $message[] = sprintf(get_lang('CourseRequestRejected'), $course_request_values['wanted_code']);
+                            } else {
+                                $message[] = sprintf(get_lang('CourseRequestRejectionFailed'), $course_request_values['wanted_code']);
+                                $is_error_message = true;
+                            }
+                            break;
+                        case 'ask_info_button':
+                            if (CourseRequestManager::ask_for_additional_info($id)) {
+                                $message[] = sprintf(get_lang('CourseRequestInfoAsked'), $course_request_values['wanted_code']);
+                            } else {
+                                $message[] = sprintf(get_lang('CourseRequestInfoFailed'), $course_request_values['wanted_code']);
+                                $is_error_message = true;
+                            }
+                            break;
+                    }
+                    // Line of code for testing purposes, to be removed
+                    //$message = 'The button "'.$submit_button.'" has been pressed.';
+
+                } else {
+                    $message[] = sprintf(get_lang(CourseRequestUpdateFailed), $course_request_values['wanted_code']);
+                    $is_error_message = true;
+                }
 
 
-            $back_url = get_caller_name($caller);
-            if ($message != '') {
-                $back_url = api_add_url_param($back_url, 'message='.urlencode(Security::remove_XSS($message)), false);
+                $message = implode(' ', $message);
+
+                $back_url = get_caller_name($caller);
+                if ($message != '') {
+                    $back_url = api_add_url_param($back_url, 'message='.urlencode(Security::remove_XSS($message)), false);
+                }
+                if ($is_error_message) {
+                    $back_url = api_add_url_param($back_url, 'is_error_message=1', false);
+                }
+                header('location:'.$back_url);
+
+            } else {
+
+                $message = $course_request_values['wanted_code'].' - '.get_lang('CourseCodeAlreadyExists');
+                $is_error_message = true;
             }
-            if ($is_error_message) {
-                $back_url = api_add_url_param($back_url, 'is_error_message=1', false);
-            }
-            header('location:'.$back_url);
         }
     }
 

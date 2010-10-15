@@ -148,4 +148,6 @@ $CourseRequestEdit = "Edit a training request";
 $CourseRequestHasNotBeenFound = "The training request you wanted to access has not been found or it does not exist.";
 $Accept = "Accept";
 $Reject = "Reject";
+$CourseRequestUpdateFailed = "The course request %s has not been updated due to internal error.";
+$CourseRequestUpdated = "The training request %s has been updated.";
 ?>

@@ -242,10 +242,10 @@ class CourseRequestManager {
         }
 
         $sql = sprintf('UPDATE %s SET
-                code = %s, user_id = %s, directory = %s, db_name = %s,
-                course_language = %s, title = %s, description = %s, category_code = %s,
-                tutor_name = %s, visual_code = %s, request_date = %s,
-                objetives = %s, target_audience = %s, status = %s, info = %s
+                code = "%s", user_id = "%s", directory = "%s", db_name = "%s",
+                course_language = "%s", title = "%s", description = "%s", category_code = "%s",
+                tutor_name = "%s", visual_code = "%s", request_date = "%s",
+                objetives = "%s", target_audience = "%s", status = "%s", info = "%s"
             WHERE id = '.$id, Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
                 $code, $user_id, $directory, $db_name,
                 $course_language, $title, $description, $category_code,

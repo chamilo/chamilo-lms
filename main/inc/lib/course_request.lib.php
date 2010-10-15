@@ -551,7 +551,7 @@ class CourseRequestManager {
      */
     public static function additional_info_asked($id) {
         $id = (int)$id;
-        $sql = "SELECT id FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE (id = ".$id." AND info = 1)";
+        $sql = "SELECT id FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE (id = ".$id." AND info > 0)";
         $result = Database::num_rows(Database::query($sql));
         return !empty($result);
     }

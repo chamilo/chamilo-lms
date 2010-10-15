@@ -44,6 +44,7 @@ $course_validation_feature = api_get_setting('course_validation') == 'true';
 $delete_course_request = intval($_GET['delete_course_request']);
 $message = trim(Security::remove_XSS(stripslashes(urldecode($_GET['message']))));
 $is_error_message = !empty($_GET['is_error_message']);
+$keyword = Database::escape_string(trim($_GET['keyword']));
 
 if ($course_validation_feature) {
 
@@ -101,6 +102,8 @@ function get_number_of_requests() {
  * Get course data to display
  */
 function get_request_data($from, $number_of_items, $column, $direction) {
+    global $keyword;
+
     $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
     $users_table = Database :: get_main_table(TABLE_MAIN_USER);
     $course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -114,6 +117,9 @@ function get_request_data($from, $number_of_items, $column, $direction) {
                    id  AS col6
                    FROM $course_request_table WHERE status = ".COURSE_REQUEST_ACCEPTED;
 
+    if ($keyword != '') {
+        $sql .= " AND (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%')";
+    }
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
     $res = Database :: query($sql);
@@ -155,15 +161,25 @@ if (!$course_validation_feature) {
     exit;
 }
 
+// Create a simple search-box.
+$form = new FormValidator('search_simple', 'get', '', '', 'width=200px', false);
+$renderer = $form->defaultRenderer();
+$renderer->setElementTemplate('<span>{element}</span> ');
+$form->addElement('text', 'keyword', get_lang('keyword'));
+$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+
 // The action bar.
-echo '<div class="actions">';
+echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
 echo '<a href="course_list.php">'.Display::return_icon('courses.gif', get_lang('CourseList')).get_lang('CourseList').'</a>';
-echo '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
-echo '<a href="course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
+echo ' <a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
+echo ' <a href="course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
+echo '</div>';
+echo '<div class="actions">';
+$form->display();
 echo '</div>';
 
 // Create a sortable table with the course data.
-$table = new SortableTable('course_requests', 'get_number_of_requests', 'get_request_data', 2);
+$table = new SortableTable('course_requests_accepted', 'get_number_of_requests', 'get_request_data', 5, 20, 'DESC');
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Code'));

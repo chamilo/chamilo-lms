@@ -855,9 +855,10 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
         api_session_unregister('_real_cid');
         api_session_unregister('_course');
         
-        //Deleting session id 
+        //Deleting session info 
         if (api_get_session_id()) {                
             api_session_unregister('id_session');
+            api_session_unregister('session_name');
         }   
     }
 } else { // continue with the previous values

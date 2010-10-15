@@ -119,9 +119,9 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
 
     if (Database::num_rows($res_path) > 0) {
         if ($origin != 'tracking') {
-            $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '" AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '"  AND session_id = '.$session_id.' ORDER BY exe_date';
+            $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '"   AND status <> "incomplete"  AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '"  AND session_id = '.$session_id.' ORDER BY exe_date';
         } else {
-            $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '"  AND session_id = '.$session_id.' ORDER BY exe_date';
+            $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '"   AND status <> "incomplete"  AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '"  AND session_id = '.$session_id.' ORDER BY exe_date';
         }
             $sql_attempts;
     }

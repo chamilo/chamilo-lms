@@ -248,7 +248,7 @@ echo '</div>';
 
 // Create a sortable table with the course data.
 $offet = DELETE_ACTION_ENABLED ? 1 : 0;
-$table = new SortableTable('course_requests', 'get_number_of_requests', 'get_request_data', 1 + $offet);
+$table = new SortableTable('course_requests_review', 'get_number_of_requests', 'get_request_data', 4 + $offet, 20, 'DESC');
 $table->set_additional_parameters($parameters);
 if (DELETE_ACTION_ENABLED) {
     $table->set_header(0, '', false);

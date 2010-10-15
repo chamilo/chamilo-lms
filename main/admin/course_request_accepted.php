@@ -163,7 +163,7 @@ echo '<a href="course_request_rejected.php">'.Display::return_icon('course_reque
 echo '</div>';
 
 // Create a sortable table with the course data.
-$table = new SortableTable('course_requests', 'get_number_of_requests', 'get_request_data', 2);
+$table = new SortableTable('course_requests_accepted', 'get_number_of_requests', 'get_request_data', 5, 20, 'DESC');
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Code'));

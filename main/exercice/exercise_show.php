@@ -644,7 +644,7 @@ if ($show_results) {
 						$choice = $arr[1];
 
 						$tmp=strrpos($choice[$j],' / ');
-						$choice[$j]=substr($choice[$j],0,$tmp);
+						$choice[$j]=api_substr($choice[$j],0,$tmp);
 						$choice[$j]=trim($choice[$j]);
 
 						//Needed to let characters ' and " to work as part of an answer

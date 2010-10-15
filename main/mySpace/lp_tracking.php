@@ -144,6 +144,7 @@ echo '<div class ="actions"><div align="left" style="float:left;margin-top:2px;"
 		 </div></div>
 	<div class="clear"></div>';
 
+$session_name = api_get_session_name(api_get_session_id());
 $table_title = ($session_name? get_lang('Session').' : '.$session_name.' | ':'').get_lang('Course').' : '.$_course['title'].' | '.$name;
 echo '<h2>'.$table_title.'</h2>';
 echo '<h3>'.get_lang('ToolLearnpath').' : '.$lp_title.'</h3>';

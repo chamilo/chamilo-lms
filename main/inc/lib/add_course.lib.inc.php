@@ -1868,7 +1868,7 @@ function sort_pictures($files, $type) {
 function fill_course_repository($course_repository, $fill_with_exemplary_content = null) {
 
     if (is_null($fill_with_exemplary_content)) {
-        $fill_with_exemplary_content = api_get_setting('example_material_course_creation');
+        $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
     }
 
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -2053,7 +2053,7 @@ function lang2db($string) {
 function fill_Db_course($course_db_name, $course_repository, $language, $default_document_array = array(), $fill_with_exemplary_content = null) {
 
     if (is_null($fill_with_exemplary_content)) {
-        $fill_with_exemplary_content = api_get_setting('example_material_course_creation');
+        $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
     }
 
     global $_configuration, $_user;

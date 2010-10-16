@@ -237,7 +237,7 @@ if ($form->validate()) {
 
                 $expiration_date = time() + $firstExpirationDelay;
                 prepare_course_repository($directory, $code);
-                update_Db_course($db_name, $course_language);
+                update_Db_course($db_name);
                 $pictures_array = fill_course_repository($directory,  $exemplary_content);
                 fill_Db_course($db_name, $directory, $course_language, $pictures_array, $exemplary_content);
                 register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);

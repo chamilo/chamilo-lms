@@ -41,7 +41,7 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
         $expiration_date = time() + $first_expiration_delay;
 
         prepare_course_repository($directory, $code);
-        update_Db_course($db_name, $course_language);
+        update_Db_course($db_name);
         fill_course_repository($directory, $fill_with_exemplary_content);
         fill_Db_course($db_name, $directory, $course_language, $fill_with_exemplary_content);
         register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $course_admin_id, $expiration_date);
@@ -218,14 +218,10 @@ function prepare_course_repository($course_repository, $course_code) {
 /**
  * Creates all the necessary tables for a new course.
  */
-function update_Db_course($course_db_name, $language = null) {
-    global $_configuration, $language_interface;
+function update_Db_course($course_db_name) {
 
-    if (empty($language)) {
-        $language = $language_interface;
-    }
+    global $_configuration;
 
-    //$charset_clause = Database::make_charset_clause('UTF-8', $language); // A problematic choice, see Bug #825.
     $charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';
 
     if (!$_configuration['single_database']) {

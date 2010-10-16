@@ -136,7 +136,7 @@ class CourseRequestManager {
         // Sending an e-mail to the platform administrator.
 
         $email_body_admin = $email_body;
-        $email_body_admin .= "\n".get_lang('CourseRequestPageForApproval', null, $email_language).' '.api_get_path(WEB_CODE_PATH).'admin/course_request_review.php'."\n";
+        $email_body_admin .= "\n".get_lang('CourseRequestPageForApproval', null, $email_language).' '.api_get_path(WEB_CODE_PATH).'admin/course_request_edit.php?id='.$last_insert_id."\n";
         $email_body_admin .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
 
         $sender_name_teacher = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);

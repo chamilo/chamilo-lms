@@ -125,6 +125,7 @@ if ($course_validation_feature) {
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
 $form->applyFilter('select_language', 'html_filter');
 
+// Exemplary content checkbox.
 $form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));
 
 if ($course_validation_feature) {
@@ -264,7 +265,7 @@ if ($form->validate()) {
 
             // Create a request for a new course.
 
-            $request_id = CourseRequestManager::create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, api_get_user_id());
+            $request_id = CourseRequestManager::create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, api_get_user_id(), $exemplary_content);
 
             if ($request_id) {
 

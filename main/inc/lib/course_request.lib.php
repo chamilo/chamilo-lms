@@ -50,7 +50,7 @@ class CourseRequestManager {
      * @param int/string $user_id
      * @return int/bool                 The database id of the newly created course request or FALSE on failure.
      */
-    public static function create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, $user_id) {
+    public static function create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, $user_id, $exemplary_content) {
 
         $wanted_code = trim(Database::escape_string($wanted_code));
         $title = Database::escape_string($title);
@@ -60,6 +60,7 @@ class CourseRequestManager {
         $objetives = Database::escape_string($objetives);
         $target_audience = Database::escape_string($target_audience);
         $user_id = (int)$user_id;
+        $exemplary_content = (bool)$exemplary_content ? 1 : 0;
 
         if ($wanted_code == '') {
             return false;
@@ -96,16 +97,16 @@ class CourseRequestManager {
                 code, user_id, directory, db_name,
                 course_language, title, description, category_code,
                 tutor_name, visual_code, request_date,
-                objetives, target_audience, status, info)
+                objetives, target_audience, status, info, exemplary_content)
             VALUES (
                 "%s", "%s", "%s", "%s",
                 "%s", "%s", "%s", "%s",
                 "%s", "%s", "%s",
-                "%s", "%s", "%s", "%s");', Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
+                "%s", "%s", "%s", "%s", "%s");', Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
                 $code, $user_id, $directory, $db_name,
                 $course_language, $title, $description, $category_code,
                 $tutor_name, $visual_code, $request_date,
-                $objetives, $target_audience, $status, $info);
+                $objetives, $target_audience, $status, $info, $exemplary_content);
         $result_sql = Database::query($sql);
 
         if (!$result_sql) {
@@ -132,6 +133,7 @@ class CourseRequestManager {
         $email_body .= get_lang('Objectives', null, $email_language).': '.$objetives."\n";
         $email_body .= get_lang('TargetAudience', null, $email_language).': '.$target_audience."\n";
         $email_body .= get_lang('Ln', null, $email_language).': '.$course_language."\n";
+        $email_body .= get_lang('FillWithExemplaryContent', null, $email_language).': '.($exemplary_content ? get_lang('Yes', null, $email_language) : get_lang('No', null, $email_language))."\n";
 
         // Sending an e-mail to the platform administrator.
 
@@ -183,7 +185,7 @@ class CourseRequestManager {
      * @param int/string $user_id
      * @return bool                     Returns TRUE on success or FALSE on failure.
      */
-    public static function update_course_request($id, $wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, $user_id) {
+    public static function update_course_request($id, $wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, $user_id, $exemplary_content) {
 
         $id = (int)$id;
         $wanted_code = trim(Database::escape_string($wanted_code));
@@ -194,6 +196,7 @@ class CourseRequestManager {
         $objetives = Database::escape_string($objetives);
         $target_audience = Database::escape_string($target_audience);
         $user_id = (int)$user_id;
+        $exemplary_content = (bool)$exemplary_content ? 1 : 0;
 
         if ($wanted_code == '') {
             return false;
@@ -253,12 +256,12 @@ class CourseRequestManager {
                 code = "%s", user_id = "%s", directory = "%s", db_name = "%s",
                 course_language = "%s", title = "%s", description = "%s", category_code = "%s",
                 tutor_name = "%s", visual_code = "%s", request_date = "%s",
-                objetives = "%s", target_audience = "%s", status = "%s", info = "%s"
+                objetives = "%s", target_audience = "%s", status = "%s", info = "%s", exemplary_content = "%s"
             WHERE id = '.$id, Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
                 $code, $user_id, $directory, $db_name,
                 $course_language, $title, $description, $category_code,
                 $tutor_name, $visual_code, $request_date,
-                $objetives, $target_audience, $status, $info);
+                $objetives, $target_audience, $status, $info, $exemplary_content);
         $result_sql = Database::query($sql);
 
         return $result_sql !== false;
@@ -350,6 +353,7 @@ class CourseRequestManager {
         $title = $course_request_info['title'];
         $category_code = $course_request_info['category_code'];
         $course_language = $course_request_info['course_language'];
+        $exemplary_content = intval($course_request_info['exemplary_content']) > 0;
 
         $user_id = (int)$course_request_info['user_id'];
         if ($user_id <= 0) {
@@ -374,8 +378,8 @@ class CourseRequestManager {
         $expiration_date = time() + $firstExpirationDelay;
         prepare_course_repository($directory, $code);
         update_Db_course($db_name);
-        $pictures_array = fill_course_repository($directory);
-        fill_Db_course($db_name, $directory, $course_language, $pictures_array);
+        $pictures_array = fill_course_repository($directory, $exemplary_content);
+        fill_Db_course($db_name, $directory, $course_language, $pictures_array, $exemplary_content);
         register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $user_id, $expiration_date);
 
         // Mark the request as accepted.

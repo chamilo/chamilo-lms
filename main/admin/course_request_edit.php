@@ -98,6 +98,9 @@ if ($course_validation_feature) {
         $form->addElement('select_language', 'course_language', get_lang('Ln'));
         $form->applyFilter('select_language', 'html_filter');
 
+        // Exemplary content checkbox.
+        $form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));
+
         // Submit buttons.
         $submit_buttons[] = FormValidator::createElement('style_submit_button', 'save_button', get_lang('Save'), array('class' => 'save'));
         if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED) {
@@ -136,6 +139,7 @@ if ($course_validation_feature) {
         $values['target_audience'] = $course_request_info['target_audience'];
         $values['status'] = $course_request_info['status'];
         $values['info'] = $course_request_info['info'];
+        $values['exemplary_content'] = $course_request_info['exemplary_content'];
         $form->setDefaults($values);
 
         // Validate the form and perform the ordered actions.
@@ -172,7 +176,8 @@ if ($course_validation_feature) {
                     $course_request_values['course_language'],
                     $course_request_values['objetives'],
                     $course_request_values['target_audience'],
-                    $course_request_values['user_id']
+                    $course_request_values['user_id'],
+                    $course_request_values['exemplary_content']
                 );
 
                 if ($update_ok) {
@@ -211,7 +216,6 @@ if ($course_validation_feature) {
                     $message[] = sprintf(get_lang(CourseRequestUpdateFailed), $course_request_values['wanted_code']);
                     $is_error_message = true;
                 }
-
 
                 $message = implode(' ', $message);
 

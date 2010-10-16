@@ -88,6 +88,8 @@ $form->applyFilter('department_url', 'html_filter');
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
 $form->applyFilter('select_language', 'html_filter');
 
+$form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));
+
 $form->addElement('radio', 'visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
 $form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $form->addElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
@@ -133,6 +135,7 @@ if ($form->validate()) {
     $department_name = $course['department_name'];
     $department_url = $course['department_url'];
     $course_language = $course['course_language'];
+    $exemplary_content = empty($course['exemplary_content']) ? false : true;
     $disk_quota = $course['disk_quota'];
     if (stripos($department_url, 'http://') === false) {
         $department_url = 'http://'.$department_url;
@@ -148,9 +151,9 @@ if ($form->validate()) {
         $currentCourseRepository = $keys['currentCourseRepository'];
         $expiration_date = time() + $firstExpirationDelay;
         prepare_course_repository($currentCourseRepository, $currentCourseId);
-        update_Db_course($currentCourseDbName);
-        $pictures_array=fill_course_repository($currentCourseRepository);
-        fill_Db_course($currentCourseDbName, $currentCourseRepository, $course_language,$pictures_array);
+        update_Db_course($currentCourseDbName, $course_language);
+        $pictures_array=fill_course_repository($currentCourseRepository, $exemplary_content);
+        fill_Db_course($currentCourseDbName, $currentCourseRepository, $course_language,$pictures_array, $exemplary_content);
         register_course($currentCourseId, $currentCourseCode, $currentCourseRepository, $currentCourseDbName, $tutor_name, $category, $title, $course_language, $teacher_id, $expiration_date, $course_teachers);
         $sql = "UPDATE $table_course SET disk_quota = '".$disk_quota."', visibility = '".Database::escape_string($course['visibility'])."', subscribe = '".Database::escape_string($course['subscribe'])."', unsubscribe='".Database::escape_string($course['unsubscribe'])."' WHERE code = '".$currentCourseId."'";
         Database::query($sql);

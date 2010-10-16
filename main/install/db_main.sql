@@ -2449,6 +2449,7 @@ CREATE TABLE course_request (
   target_audience text,
   status int unsigned NOT NULL default '0',
   info int unsigned NOT NULL default '0',
+  exemplary_content int unsigned NOT NULL default '0',
   PRIMARY KEY (id),
   UNIQUE KEY code (code)
 );

@@ -125,8 +125,7 @@ function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base
             $final_suffix['CourseDb'] = substr('_'.md5(uniqid(rand())), 0, 4);
         }
 
-        // @todo: Use and api_get_path here instead of constructing it by yourself.
-        if (file_exists($_configuration['root_sys'] . $_configuration['course_folder'] . $keys_course_repository)) {
+        if (file_exists(api_get_path(SYS_COURSE_PATH).$keys_course_repository)) {
             $keys_are_unique = false;
             $try_new_fsc_dir ++;
             $final_suffix['CourseDir'] = substr(md5(uniqid(rand())), 0, 4);

@@ -28,15 +28,16 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 * @param int        Expiration delay in unix timestamp
 * @return mixed     Course code if course was successfully created, false otherwise
 */
-function create_course($wanted_code, $title, $tutor_name, $category_code, $course_language, $course_admin_id, $db_prefix, $firstExpirationDelay) {
+function create_course($wanted_code, $title, $tutor_name, $category_code, $course_language, $course_admin_id, $db_prefix, $first_expiration_delay) {
+
     $keys = define_course_keys($wanted_code, '', $db_prefix);
 
-    if (sizeof($keys)) {
+    if (count($keys)) {
         $visual_code = $keys['currentCourseCode'];
         $code = $keys['currentCourseId'];
         $db_name = $keys['currentCourseDbName'];
         $directory = $keys['currentCourseRepository'];
-        $expiration_date = time() + $firstExpirationDelay;
+        $expiration_date = time() + $first_expiration_delay;
 
         prepare_course_repository($directory, $code);
         update_Db_course($db_name, $course_language);
@@ -59,133 +60,133 @@ function generate_course_code($course_title, $encoding = null) {
     return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, 'X', $encoding))), 0, 20);
 }
 
-
 /**
  * Defines the four needed keys to create a course based on several parameters.
- * @return array with the needed keys ['currentCourseCode'], ['currentCourseId'], ['currentCourseDbName'], ['currentCourseRepository']
- *
  * @param string    The code you want for this course
  * @param string    Prefix added for ALL keys
  * @param string    Prefix added for databases only
  * @param string    Prefix added for paths only
  * @param bool      Add unique prefix
  * @param bool      Use code-independent keys
+ * @return array    An array with the needed keys ['currentCourseCode'], ['currentCourseId'], ['currentCourseDbName'], ['currentCourseRepository']
  * @todo Eliminate the global variables.
  */
-function define_course_keys($wantedCode, $prefix4all = '', $prefix4baseName = '', $prefix4path = '', $addUniquePrefix = false, $useCodeInDepedentKeys = true) {
+function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base_name = '', $prefix_for_path = '', $add_unique_prefix = false, $use_code_indepedent_keys = true) {
+
     global $prefixAntiNumber, $_configuration;
     $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $wantedCode = generate_course_code($wantedCode);
-    $keysCourseCode = $wantedCode;
-    if (!$useCodeInDepedentKeys) {
-        $wantedCode = '';
+
+    $wanted_code = generate_course_code($wanted_code);
+    $keys_course_code = $wanted_code;
+    if (!$use_code_indepedent_keys) {
+        $wanted_code = '';
     }
 
-    if ($addUniquePrefix) {
-        $uniquePrefix = substr(md5(uniqid(rand())), 0, 10);
+    if ($add_unique_prefix) {
+        $unique_prefix = substr(md5(uniqid(rand())), 0, 10);
     } else {
-        $uniquePrefix = '';
+        $unique_prefix = '';
     }
 
     $keys = array ();
-    $finalSuffix = array('CourseId' => '', 'CourseDb' => '', 'CourseDir' => '');
-    $limitNumbTry = 100;
-    $keysAreUnique = false;
-    $tryNewFSCId = $tryNewFSCDb = $tryNewFSCDir = 0;
+    $final_suffix = array('CourseId' => '', 'CourseDb' => '', 'CourseDir' => '');
+    $limit_numb_try = 100;
+    $keys_are_unique = false;
+    $try_new_fsc_id = $try_new_fsc_db = $try_new_fsc_dir = 0;
 
-    while (!$keysAreUnique) {
+    while (!$keys_are_unique) {
 
-        $keysCourseId = $prefix4all.$uniquePrefix.$wantedCode.$finalSuffix['CourseId'];
-        $keysCourseDbName = $prefix4baseName.$uniquePrefix.strtoupper($keysCourseId).$finalSuffix['CourseDb'];
-        $keysCourseRepository = $prefix4path.$uniquePrefix.$wantedCode.$finalSuffix['CourseDir'];
-        $keysAreUnique = true;
+        $keys_course_id = $prefix_for_all . $unique_prefix . $wanted_code . $final_suffix['CourseId'];
+        $keys_course_db_name = $prefix_for_base_name . $unique_prefix . strtoupper($keys_course_id) . $final_suffix['CourseDb'];
+        $keys_course_repository = $prefix_for_path . $unique_prefix . $wanted_code . $final_suffix['CourseDir'];
+        $keys_are_unique = true;
 
         // Check whether they are unique.
-        $query = "SELECT 1 FROM ".$course_table . " WHERE code='".$keysCourseId . "' LIMIT 0,1";
+        $query = "SELECT 1 FROM ".$course_table." WHERE code='".$keys_course_id."' LIMIT 0,1";
         $result = Database::query($query);
 
-        if ($keysCourseId == DEFAULT_COURSE || Database::num_rows($result)) {
-            $keysAreUnique = false;
-            $tryNewFSCId ++;
-            $finalSuffix['CourseId'] = substr(md5(uniqid(rand())), 0, 4);
+        if ($keys_course_id == DEFAULT_COURSE || Database::num_rows($result)) {
+            $keys_are_unique = false;
+            $try_new_fsc_id ++;
+            $final_suffix['CourseId'] = substr(md5(uniqid(rand())), 0, 4);
         }
 
         if ($_configuration['single_database']) {
-            $query = "SHOW TABLES FROM `".$_configuration['main_database']."` LIKE '".$_configuration['table_prefix']."$keysCourseDbName".$_configuration['db_glue']."%'";
+            $query = "SHOW TABLES FROM `".$_configuration['main_database']."` LIKE '".$_configuration['table_prefix'].$keys_course_db_name.$_configuration['db_glue']."%'";
             $result = Database::query($query);
         } else {
-            $query = "SHOW DATABASES LIKE '$keysCourseDbName'";
+            $query = "SHOW DATABASES LIKE '$keys_course_db_name'";
             $result = Database::query($query);
         }
 
         if (Database::num_rows($result)) {
-            $keysAreUnique = false;
-            $tryNewFSCDb ++;
-            $finalSuffix['CourseDb'] = substr('_'.md5(uniqid(rand())), 0, 4);
+            $keys_are_unique = false;
+            $try_new_fsc_db ++;
+            $final_suffix['CourseDb'] = substr('_'.md5(uniqid(rand())), 0, 4);
         }
 
         // @todo: Use and api_get_path here instead of constructing it by yourself.
-        if (file_exists($_configuration['root_sys'].$_configuration['course_folder'].$keysCourseRepository)) {
-            $keysAreUnique = false;
-            $tryNewFSCDir ++;
-            $finalSuffix['CourseDir'] = substr(md5(uniqid(rand())), 0, 4);
+        if (file_exists($_configuration['root_sys'] . $_configuration['course_folder'] . $keys_course_repository)) {
+            $keys_are_unique = false;
+            $try_new_fsc_dir ++;
+            $final_suffix['CourseDir'] = substr(md5(uniqid(rand())), 0, 4);
         }
 
-        if (($tryNewFSCId + $tryNewFSCDb + $tryNewFSCDir) > $limitNumbTry) {
+        if (($try_new_fsc_id + $try_new_fsc_db + $try_new_fsc_dir) > $limit_numb_try) {
             return $keys;
         }
     }
 
     // Db name can't begin with a number.
-    if (!stristr('abcdefghijklmnopqrstuvwxyz', $keysCourseDbName[0])) {
-        $keysCourseDbName = $prefixAntiNumber.$keysCourseDbName;
+    if (stripos('abcdefghijklmnopqrstuvwxyz', $keys_course_db_name[0]) === false) {
+        $keys_course_db_name = $prefixAntiNumber . $keys_course_db_name;
     }
 
-    $keys['currentCourseCode'] = $keysCourseCode;
-    $keys['currentCourseId'] = $keysCourseId;
-    $keys['currentCourseDbName'] = $keysCourseDbName;
-    $keys['currentCourseRepository'] = $keysCourseRepository;
+    $keys['currentCourseCode'] = $keys_course_code;
+    $keys['currentCourseId'] = $keys_course_id;
+    $keys['currentCourseDbName'] = $keys_course_db_name;
+    $keys['currentCourseRepository'] = $keys_course_repository;
 
     return $keys;
 }
 
 /**
- *
- *
+ * Initializes a file repository for a newly created course.
  */
-function prepare_course_repository($courseRepository, $courseId) {
+function prepare_course_repository($course_repository, $course_code) {
+
     $perm = api_get_permissions_for_new_directories();
     $perm_file = api_get_permissions_for_new_files();
 
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository, $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/document', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/document/images', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/document/images/gallery/', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/document/shared_folder/', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/document/audio', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/document/flash', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/document/video', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/document/video/flv', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/dropbox', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/group', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/page', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/scorm', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/temp', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/upload', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/upload/forum', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/upload/forum/images', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/upload/test', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/upload/blog', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/upload/learning_path', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/upload/learning_path/images', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/upload/calendar', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/upload/calendar/images', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/work', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/upload/announcements', $perm);
-    mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . '/upload/announcements/images', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository, $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/document', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/document/images', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/document/images/gallery/', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/document/shared_folder/', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/document/audio', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/document/flash', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/document/video', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/document/video/flv', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/dropbox', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/group', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/page', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/scorm', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/temp', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/forum', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/forum/images', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/test', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/blog', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/learning_path', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/learning_path/images', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/calendar', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/calendar/images', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/work', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/announcements', $perm);
+    mkdir(api_get_path(SYS_COURSE_PATH).$course_repository . '/upload/announcements/images', $perm);
 
     // Create .htaccess in the dropbox directory.
-    $fp = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . '/dropbox/.htaccess', 'w');
+    $fp = fopen(api_get_path(SYS_COURSE_PATH).$course_repository . '/dropbox/.htaccess', 'w');
     fwrite($fp, "AuthName AllowLocalAccess
                    AuthType Basic
 
@@ -196,25 +197,28 @@ function prepare_course_repository($courseRepository, $courseId) {
     fclose($fp);
 
     // Build index.php of the course.
-    $fd = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . '/index.php', 'w');
+    $fd = fopen(api_get_path(SYS_COURSE_PATH).$course_repository . '/index.php', 'w');
 
     // str_replace() removes \r that cause squares to appear at the end of each line
     $string = str_replace("\r", "", "<?" . "php
-    \$cidReq = \"$courseId\";
-    \$dbname = \"$courseId\";
+    \$cidReq = \"$course_code\";
+    \$dbname = \"$course_code\";
 
     include(\"../../main/course_home/course_home.php\");
     ?>");
-    fwrite($fd,$string);
-    @chmod(api_get_path(SYS_COURSE_PATH).$courseRepository . '/index.php',$perm_file);
-    $fd = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . '/group/index.html', 'w');
+    fwrite($fd, $string);
+    @chmod(api_get_path(SYS_COURSE_PATH).$course_repository . '/index.php',$perm_file);
+    $fd = fopen(api_get_path(SYS_COURSE_PATH).$course_repository . '/group/index.html', 'w');
     $string = '<html></html>';
     fwrite($fd, $string);
     fclose($fd);
     return 0;
 };
 
-function update_Db_course($courseDbName, $language = null) {
+/**
+ * Creates all the necessary tables for a new course.
+ */
+function update_Db_course($course_db_name, $language = null) {
     global $_configuration, $language_interface;
 
     if (empty($language)) {
@@ -225,144 +229,144 @@ function update_Db_course($courseDbName, $language = null) {
     $charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';
 
     if (!$_configuration['single_database']) {
-        Database::query("CREATE DATABASE IF NOT EXISTS `" . $courseDbName . "`" . $charset_clause);
+        Database::query("CREATE DATABASE IF NOT EXISTS `" . $course_db_name . "`" . $charset_clause);
     }
 
-    $courseDbName = $_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'];
+    $course_db_name = $_configuration['table_prefix'].$course_db_name.$_configuration['db_glue'];
 
-    $tbl_course_homepage        = $courseDbName . 'tool';
-    $TABLEINTROS                = $courseDbName . 'tool_intro';
+    $tbl_course_homepage        = $course_db_name . 'tool';
+    $TABLEINTROS                = $course_db_name . 'tool_intro';
 
     // Group tool
-    $TABLEGROUPS                = $courseDbName . 'group_info';
-    $TABLEGROUPCATEGORIES       = $courseDbName . 'group_category';
-    $TABLEGROUPUSER             = $courseDbName . 'group_rel_user';
-    $TABLEGROUPTUTOR            = $courseDbName . 'group_rel_tutor';
+    $TABLEGROUPS                = $course_db_name . 'group_info';
+    $TABLEGROUPCATEGORIES       = $course_db_name . 'group_category';
+    $TABLEGROUPUSER             = $course_db_name . 'group_rel_user';
+    $TABLEGROUPTUTOR            = $course_db_name . 'group_rel_tutor';
 
-    $TABLEITEMPROPERTY          = $courseDbName . 'item_property';
+    $TABLEITEMPROPERTY          = $course_db_name . 'item_property';
 
-    $TABLETOOLUSERINFOCONTENT   = $courseDbName . 'userinfo_content';
-    $TABLETOOLUSERINFODEF       = $courseDbName . 'userinfo_def';
+    $TABLETOOLUSERINFOCONTENT   = $course_db_name . 'userinfo_content';
+    $TABLETOOLUSERINFODEF       = $course_db_name . 'userinfo_def';
 
-    $TABLETOOLCOURSEDESC        = $courseDbName . 'course_description';
-    $TABLETOOLAGENDA            = $courseDbName . 'calendar_event';
-    $TABLETOOLAGENDAREPEAT      = $courseDbName . 'calendar_event_repeat';
-    $TABLETOOLAGENDAREPEATNOT   = $courseDbName . 'calendar_event_repeat_not';
-    $TABLETOOLAGENDAATTACHMENT  = $courseDbName . 'calendar_event_attachment';
+    $TABLETOOLCOURSEDESC        = $course_db_name . 'course_description';
+    $TABLETOOLAGENDA            = $course_db_name . 'calendar_event';
+    $TABLETOOLAGENDAREPEAT      = $course_db_name . 'calendar_event_repeat';
+    $TABLETOOLAGENDAREPEATNOT   = $course_db_name . 'calendar_event_repeat_not';
+    $TABLETOOLAGENDAATTACHMENT  = $course_db_name . 'calendar_event_attachment';
 
     // Announcements
-    $TABLETOOLANNOUNCEMENTS             = $courseDbName . 'announcement';
-    $TABLETOOLANNOUNCEMENTSATTACHMENT   = $courseDbName . 'announcement_attachment';
+    $TABLETOOLANNOUNCEMENTS             = $course_db_name . 'announcement';
+    $TABLETOOLANNOUNCEMENTSATTACHMENT   = $course_db_name . 'announcement_attachment';
 
     // Resourcelinker
-    $TABLEADDEDRESOURCES        = $courseDbName . 'resource';
+    $TABLEADDEDRESOURCES        = $course_db_name . 'resource';
 
     // Student Publication
-    $TABLETOOLWORKS             = $courseDbName . 'student_publication';
-    $TABLETOOLWORKSASS          = $courseDbName . 'student_publication_assignment';
+    $TABLETOOLWORKS             = $course_db_name . 'student_publication';
+    $TABLETOOLWORKSASS          = $course_db_name . 'student_publication_assignment';
 
     // Document
-    $TABLETOOLDOCUMENT          = $courseDbName . 'document';
+    $TABLETOOLDOCUMENT          = $course_db_name . 'document';
 
     // Forum
-    $TABLETOOLFORUMCATEGORY     = $courseDbName . 'forum_category';
-    $TABLETOOLFORUM             = $courseDbName . 'forum_forum';
-    $TABLETOOLFORUMTHREAD       = $courseDbName . 'forum_thread';
-    $TABLETOOLFORUMPOST         = $courseDbName . 'forum_post';
-    $TABLETOOLFORUMMAILCUE      = $courseDbName . 'forum_mailcue';
-    $TABLETOOLFORUMATTACHMENT   = $courseDbName . 'forum_attachment';
-    $TABLETOOLFORUMNOTIFICATION = $courseDbName . 'forum_notification';
-    $TABLETOOLFORUMQUALIFY      = $courseDbName . 'forum_thread_qualify';
-    $TABLETOOLFORUMQUALIFYLOG   = $courseDbName . 'forum_thread_qualify_log';
+    $TABLETOOLFORUMCATEGORY     = $course_db_name . 'forum_category';
+    $TABLETOOLFORUM             = $course_db_name . 'forum_forum';
+    $TABLETOOLFORUMTHREAD       = $course_db_name . 'forum_thread';
+    $TABLETOOLFORUMPOST         = $course_db_name . 'forum_post';
+    $TABLETOOLFORUMMAILCUE      = $course_db_name . 'forum_mailcue';
+    $TABLETOOLFORUMATTACHMENT   = $course_db_name . 'forum_attachment';
+    $TABLETOOLFORUMNOTIFICATION = $course_db_name . 'forum_notification';
+    $TABLETOOLFORUMQUALIFY      = $course_db_name . 'forum_thread_qualify';
+    $TABLETOOLFORUMQUALIFYLOG   = $course_db_name . 'forum_thread_qualify_log';
 
     // Link
-    $TABLETOOLLINK              = $courseDbName . 'link';
-    $TABLETOOLLINKCATEGORIES    = $courseDbName . 'link_category';
+    $TABLETOOLLINK              = $course_db_name . 'link';
+    $TABLETOOLLINKCATEGORIES    = $course_db_name . 'link_category';
 
-    $TABLETOOLONLINECONNECTED   = $courseDbName . 'online_connected';
-    $TABLETOOLONLINELINK        = $courseDbName . 'online_link';
+    $TABLETOOLONLINECONNECTED   = $course_db_name . 'online_connected';
+    $TABLETOOLONLINELINK        = $course_db_name . 'online_link';
 
     // Chat
-    $TABLETOOLCHATCONNECTED     = $courseDbName . 'chat_connected';
+    $TABLETOOLCHATCONNECTED     = $course_db_name . 'chat_connected';
 
     // Quiz (a.k.a. exercises)
-    $TABLEQUIZ                  = $courseDbName . 'quiz';
-    $TABLEQUIZQUESTION          = $courseDbName . 'quiz_rel_question';
-    $TABLEQUIZQUESTIONLIST      = $courseDbName . 'quiz_question';
-    $TABLEQUIZANSWERSLIST       = $courseDbName . 'quiz_answer';
+    $TABLEQUIZ                  = $course_db_name . 'quiz';
+    $TABLEQUIZQUESTION          = $course_db_name . 'quiz_rel_question';
+    $TABLEQUIZQUESTIONLIST      = $course_db_name . 'quiz_question';
+    $TABLEQUIZANSWERSLIST       = $course_db_name . 'quiz_answer';
 
     // Dropbox
-    $TABLETOOLDROPBOXPOST       = $courseDbName . 'dropbox_post';
-    $TABLETOOLDROPBOXFILE       = $courseDbName . 'dropbox_file';
-    $TABLETOOLDROPBOXPERSON     = $courseDbName . 'dropbox_person';
-    $TABLETOOLDROPBOXCATEGORY   = $courseDbName . 'dropbox_category';
-    $TABLETOOLDROPBOXFEEDBACK   = $courseDbName . 'dropbox_feedback';
+    $TABLETOOLDROPBOXPOST       = $course_db_name . 'dropbox_post';
+    $TABLETOOLDROPBOXFILE       = $course_db_name . 'dropbox_file';
+    $TABLETOOLDROPBOXPERSON     = $course_db_name . 'dropbox_person';
+    $TABLETOOLDROPBOXCATEGORY   = $course_db_name . 'dropbox_category';
+    $TABLETOOLDROPBOXFEEDBACK   = $course_db_name . 'dropbox_feedback';
 
     // New Learning path
-    $TABLELP                    = $courseDbName . 'lp';
-    $TABLELPITEM                = $courseDbName . 'lp_item';
-    $TABLELPVIEW                = $courseDbName . 'lp_view';
-    $TABLELPITEMVIEW            = $courseDbName . 'lp_item_view';
-    $TABLELPIVINTERACTION       = $courseDbName . 'lp_iv_interaction';
-    $TABLELPIVOBJECTIVE         = $courseDbName . 'lp_iv_objective';
+    $TABLELP                    = $course_db_name . 'lp';
+    $TABLELPITEM                = $course_db_name . 'lp_item';
+    $TABLELPVIEW                = $course_db_name . 'lp_view';
+    $TABLELPITEMVIEW            = $course_db_name . 'lp_item_view';
+    $TABLELPIVINTERACTION       = $course_db_name . 'lp_iv_interaction';
+    $TABLELPIVOBJECTIVE         = $course_db_name . 'lp_iv_objective';
 
     // Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
-    $tbl_blogs                  = $courseDbName . 'blog';
-    $tbl_blogs_comments         = $courseDbName . 'blog_comment';
-    $tbl_blogs_posts            = $courseDbName . 'blog_post';
-    $tbl_blogs_rating           = $courseDbName . 'blog_rating';
-    $tbl_blogs_rel_user         = $courseDbName . 'blog_rel_user';
-    $tbl_blogs_tasks            = $courseDbName . 'blog_task';
-    $tbl_blogs_tasks_rel_user   = $courseDbName . 'blog_task_rel_user';
-    $tbl_blogs_attachment       = $courseDbName . 'blog_attachment';
+    $tbl_blogs                  = $course_db_name . 'blog';
+    $tbl_blogs_comments         = $course_db_name . 'blog_comment';
+    $tbl_blogs_posts            = $course_db_name . 'blog_post';
+    $tbl_blogs_rating           = $course_db_name . 'blog_rating';
+    $tbl_blogs_rel_user         = $course_db_name . 'blog_rel_user';
+    $tbl_blogs_tasks            = $course_db_name . 'blog_task';
+    $tbl_blogs_tasks_rel_user   = $course_db_name . 'blog_task_rel_user';
+    $tbl_blogs_attachment       = $course_db_name . 'blog_attachment';
 
     //Smartblogs permissions (Kevin Van Den Haute :: kevin@develop-it.be)
-    $tbl_permission_group       = $courseDbName . 'permission_group';
-    $tbl_permission_user        = $courseDbName . 'permission_user';
-    $tbl_permission_task        = $courseDbName . 'permission_task';
+    $tbl_permission_group       = $course_db_name . 'permission_group';
+    $tbl_permission_user        = $course_db_name . 'permission_user';
+    $tbl_permission_task        = $course_db_name . 'permission_task';
 
     //Smartblogs roles (Kevin Van Den Haute :: kevin@develop-it.be)
-    $tbl_role                   = $courseDbName . 'role';
-    $tbl_role_group             = $courseDbName . 'role_group';
-    $tbl_role_permissions       = $courseDbName . 'role_permissions';
-    $tbl_role_user              = $courseDbName . 'role_user';
+    $tbl_role                   = $course_db_name . 'role';
+    $tbl_role_group             = $course_db_name . 'role_group';
+    $tbl_role_permissions       = $course_db_name . 'role_permissions';
+    $tbl_role_user              = $course_db_name . 'role_user';
 
     //Survey variables for course homepage;
-    $TABLESURVEY                = $courseDbName . 'survey';
-    $TABLESURVEYQUESTION        = $courseDbName . 'survey_question';
-    $TABLESURVEYQUESTIONOPTION  = $courseDbName . 'survey_question_option';
-    $TABLESURVEYINVITATION      = $courseDbName . 'survey_invitation';
-    $TABLESURVEYANSWER          = $courseDbName . 'survey_answer';
-    $TABLESURVEYGROUP           = $courseDbName . 'survey_group';
+    $TABLESURVEY                = $course_db_name . 'survey';
+    $TABLESURVEYQUESTION        = $course_db_name . 'survey_question';
+    $TABLESURVEYQUESTIONOPTION  = $course_db_name . 'survey_question_option';
+    $TABLESURVEYINVITATION      = $course_db_name . 'survey_invitation';
+    $TABLESURVEYANSWER          = $course_db_name . 'survey_answer';
+    $TABLESURVEYGROUP           = $course_db_name . 'survey_group';
 
     // Wiki
-    $TABLETOOLWIKI              = $courseDbName . 'wiki';
-    $TABLEWIKICONF              = $courseDbName . 'wiki_conf';
-    $TABLEWIKIDISCUSS           = $courseDbName . 'wiki_discuss';
-    $TABLEWIKIMAILCUE           = $courseDbName . 'wiki_mailcue';
+    $TABLETOOLWIKI              = $course_db_name . 'wiki';
+    $TABLEWIKICONF              = $course_db_name . 'wiki_conf';
+    $TABLEWIKIDISCUSS           = $course_db_name . 'wiki_discuss';
+    $TABLEWIKIMAILCUE           = $course_db_name . 'wiki_mailcue';
 
     // audiorecorder
-    $TABLEAUDIORECORDER         = $courseDbName . 'audiorecorder';
+    $TABLEAUDIORECORDER         = $course_db_name . 'audiorecorder';
 
     // Course settings
-    $TABLESETTING               = $courseDbName . 'course_setting';
+    $TABLESETTING               = $course_db_name . 'course_setting';
 
     // Glossary
-    $TBL_GLOSSARY               = $courseDbName . 'glossary';
+    $TBL_GLOSSARY               = $course_db_name . 'glossary';
 
     // Notebook
-    $TBL_NOTEBOOK               = $courseDbName . 'notebook';
+    $TBL_NOTEBOOK               = $course_db_name . 'notebook';
 
     // Attendance
-    $TBL_ATTENDANCE             = $courseDbName . 'attendance';
-    $TBL_ATTENDANCE_SHEET       = $courseDbName . 'attendance_sheet';
-    $TBL_ATTENDANCE_CALENDAR    = $courseDbName . 'attendance_calendar';
-    $TBL_ATTENDANCE_RESULT      = $courseDbName . 'attendance_result';
+    $TBL_ATTENDANCE             = $course_db_name . 'attendance';
+    $TBL_ATTENDANCE_SHEET       = $course_db_name . 'attendance_sheet';
+    $TBL_ATTENDANCE_CALENDAR    = $course_db_name . 'attendance_calendar';
+    $TBL_ATTENDANCE_RESULT      = $course_db_name . 'attendance_result';
 
     // Thematic
-    $TBL_THEMATIC               = $courseDbName . 'thematic';
-    $TBL_THEMATIC_PLAN          = $courseDbName . 'thematic_plan';
-    $TBL_THEMATIC_ADVANCE       = $courseDbName . 'thematic_advance';
+    $TBL_THEMATIC               = $course_db_name . 'thematic';
+    $TBL_THEMATIC_PLAN          = $course_db_name . 'thematic_plan';
+    $TBL_THEMATIC_ADVANCE       = $course_db_name . 'thematic_advance';
 
     /*
     -----------------------------------------------------------
@@ -1861,7 +1865,8 @@ function sort_pictures($files, $type) {
  * example content.
  * @version	 1.2
  */
-function fill_course_repository($courseRepository) {
+function fill_course_repository($course_repository) {
+
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
     $web_code_path = api_get_path(WEB_CODE_PATH);
 
@@ -1870,7 +1875,7 @@ function fill_course_repository($courseRepository) {
 
     /*doc_html = file(api_get_path(SYS_CODE_PATH).'document/example_document.html');
 
-    $fp = fopen($sys_course_path.$courseRepository.'/document/example_document.html', 'w');
+    $fp = fopen($sys_course_path.$course_repository.'/document/example_document.html', 'w');
 
     foreach ($doc_html as $key => $enreg) {
         $enreg = str_replace('"stones.jpg"', '"'.$web_code_path.'img/stones.jpg"', $enreg);
@@ -1886,10 +1891,10 @@ function fill_course_repository($courseRepository) {
         $audio_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/audio/';
         $flash_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/flash/';
         $video_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/video/';
-        $course_documents_folder_images = $sys_course_path.$courseRepository.'/document/images/gallery/';
-        $course_documents_folder_audio = $sys_course_path.$courseRepository.'/document/audio/';
-        $course_documents_folder_flash = $sys_course_path.$courseRepository.'/document/flash/';
-        $course_documents_folder_video = $sys_course_path.$courseRepository.'/document/video/';
+        $course_documents_folder_images = $sys_course_path.$course_repository.'/document/images/gallery/';
+        $course_documents_folder_audio = $sys_course_path.$course_repository.'/document/audio/';
+        $course_documents_folder_flash = $sys_course_path.$course_repository.'/document/flash/';
+        $course_documents_folder_video = $sys_course_path.$course_repository.'/document/video/';
 
         /*
          * Images
@@ -2040,41 +2045,41 @@ function lang2db($string) {
  * Fills the course database with some required content and example content.
  * @version 1.2
  */
-function fill_Db_course($courseDbName, $courseRepository, $language, $default_document_array = array()) {
-    global $_configuration, $clarolineRepositoryWeb, $_user;
+function fill_Db_course($course_db_name, $course_repository, $language, $default_document_array = array()) {
+    global $_configuration, $_user;
 
-    $courseDbName = $_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'];
+    $course_db_name = $_configuration['table_prefix'].$course_db_name.$_configuration['db_glue'];
 
-    $tbl_course_homepage = $courseDbName . 'tool';
-    $TABLEINTROS = $courseDbName . 'tool_intro';
+    $tbl_course_homepage = $course_db_name . 'tool';
+    $TABLEINTROS = $course_db_name . 'tool_intro';
 
-    $TABLEGROUPS = $courseDbName . 'group_info';
-    $TABLEGROUPCATEGORIES = $courseDbName . 'group_category';
-    $TABLEGROUPUSER = $courseDbName . 'group_rel_user';
+    $TABLEGROUPS = $course_db_name . 'group_info';
+    $TABLEGROUPCATEGORIES = $course_db_name . 'group_category';
+    $TABLEGROUPUSER = $course_db_name . 'group_rel_user';
 
-    $TABLEITEMPROPERTY = $courseDbName . 'item_property';
+    $TABLEITEMPROPERTY = $course_db_name . 'item_property';
 
-    $TABLETOOLCOURSEDESC = $courseDbName . 'course_description';
-    $TABLETOOLAGENDA = $courseDbName . 'calendar_event';
-    $TABLETOOLANNOUNCEMENTS = $courseDbName . 'announcement';
-    $TABLEADDEDRESOURCES = $courseDbName . 'resource';
-    $TABLETOOLWORKS = $courseDbName . 'student_publication';
-    $TABLETOOLWORKSUSER = $courseDbName . 'stud_pub_rel_user';
-    $TABLETOOLDOCUMENT = $courseDbName . 'document';
-    $TABLETOOLWIKI = $courseDbName . 'wiki';
+    $TABLETOOLCOURSEDESC = $course_db_name . 'course_description';
+    $TABLETOOLAGENDA = $course_db_name . 'calendar_event';
+    $TABLETOOLANNOUNCEMENTS = $course_db_name . 'announcement';
+    $TABLEADDEDRESOURCES = $course_db_name . 'resource';
+    $TABLETOOLWORKS = $course_db_name . 'student_publication';
+    $TABLETOOLWORKSUSER = $course_db_name . 'stud_pub_rel_user';
+    $TABLETOOLDOCUMENT = $course_db_name . 'document';
+    $TABLETOOLWIKI = $course_db_name . 'wiki';
 
-    $TABLETOOLLINK = $courseDbName . 'link';
+    $TABLETOOLLINK = $course_db_name . 'link';
 
-    $TABLEQUIZ = $courseDbName . 'quiz';
-    $TABLEQUIZQUESTION = $courseDbName . 'quiz_rel_question';
-    $TABLEQUIZQUESTIONLIST = $courseDbName . 'quiz_question';
-    $TABLEQUIZANSWERSLIST = $courseDbName . 'quiz_answer';
-    $TABLESETTING = $courseDbName . 'course_setting';
+    $TABLEQUIZ = $course_db_name . 'quiz';
+    $TABLEQUIZQUESTION = $course_db_name . 'quiz_rel_question';
+    $TABLEQUIZQUESTIONLIST = $course_db_name . 'quiz_question';
+    $TABLEQUIZANSWERSLIST = $course_db_name . 'quiz_answer';
+    $TABLESETTING = $course_db_name . 'course_setting';
 
-    $TABLEFORUMCATEGORIES = $courseDbName . 'forum_category';
-    $TABLEFORUMS = $courseDbName . 'forum_forum';
-    $TABLEFORUMTHREADS = $courseDbName . 'forum_thread';
-    $TABLEFORUMPOSTS = $courseDbName . 'forum_post';
+    $TABLEFORUMCATEGORIES = $course_db_name . 'forum_category';
+    $TABLEFORUMS = $course_db_name . 'forum_forum';
+    $TABLEFORUMTHREADS = $course_db_name . 'forum_thread';
+    $TABLEFORUMPOSTS = $course_db_name . 'forum_post';
 
     $nom = $_user['lastName'];
     $prenom = $_user['firstName'];
@@ -2085,7 +2090,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language, $default_do
         include api_get_path(SYS_CODE_PATH) . $file_to_include;
     }
 
-    Database::select_db($courseDbName);
+    Database::select_db($course_db_name);
 
     /*
     ==============================================================================
@@ -2096,9 +2101,9 @@ function fill_Db_course($courseDbName, $courseRepository, $language, $default_do
     ==============================================================================
     */
 
-    $visible4all = 1;
-    $visible4AdminOfCourse = 0;
-    $visible4AdminOfClaroline = 2;
+    $visible_for_all = 1;
+    $visible_for_course_admin = 0;
+    $visible_for_platform_admin = 2;
 
     /*
     -----------------------------------------------------------
@@ -2150,9 +2155,9 @@ function fill_Db_course($courseDbName, $courseRepository, $language, $default_do
     -----------------------------------------------------------
     */
 
-    Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible4AdminOfCourse','1','', 'NO','_self','admin','0')");
-    Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible4AdminOfCourse','1','', 'NO','_self','admin','0')");
-    Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL,'".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible4AdminOfCourse','1','','NO','_self', 'admin','0')");
+    Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0')");
+    Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0')");
+    Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL,'".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0')");
 
     /*
     -----------------------------------------------------------
@@ -2196,9 +2201,9 @@ function fill_Db_course($courseDbName, $courseRepository, $language, $default_do
     */
 
     global $language_interface;
-    // Example material in the same language
-    $language_interface_tmp=$language_interface;
-    $language_interface=$language;
+    // Example material should be in the same language as the course is.
+    $language_interface_tmp = $language_interface;
+    $language_interface = $language;
 
     /*
     -----------------------------------------------------------
@@ -2207,7 +2212,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language, $default_do
     */
 
     //Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/example_document.html','example_document.html','file','3367')");
-    //we need to add the document properties too!
+    // We need to add the document properties too!
     //$example_doc_id = Database :: insert_id();
     //Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,1)");
 
@@ -2245,19 +2250,19 @@ function fill_Db_course($courseDbName, $courseRepository, $language, $default_do
     foreach ($default_document_array as $media_type => $array_media) {
         if ($media_type == 'images') {
             $path_documents = '/images/gallery/';
-            $course_documents_folder = $sys_course_path.$courseRepository.'/document/images/gallery/';
+            $course_documents_folder = $sys_course_path.$course_repository.'/document/images/gallery/';
         }
         if ($media_type == 'audio') {
             $path_documents = '/audio/';
-            $course_documents_folder = $sys_course_path.$courseRepository.'/document/audio/';
+            $course_documents_folder = $sys_course_path.$course_repository.'/document/audio/';
         }
         if ($media_type == 'flash') {
             $path_documents = '/flash/';
-            $course_documents_folder = $sys_course_path.$courseRepository.'/document/flash/';
+            $course_documents_folder = $sys_course_path.$course_repository.'/document/flash/';
         }
         if ($media_type == 'video') {
             $path_documents = '/video/';
-            $course_documents_folder = $sys_course_path.$courseRepository.'/document/video/';
+            $course_documents_folder = $sys_course_path.$course_repository.'/document/video/';
         }
         foreach ($array_media as $key => $value) {
             if ($value['dir'] != '') {
@@ -2406,10 +2411,10 @@ function string2binary($variable) {
 
 /**
  * function register_course to create a record in the course table of the main database
- * @param string    $courseId
- * @param string    $courseCode
- * @param string    $courseRepository
- * @param string    $courseDbName
+ * @param string    $course_sys_code
+ * @param string    $course_screen_code
+ * @param string    $course_repository
+ * @param string    $course_db_name
  * @param string    $tutor_name
  * @param string    $category
  * @param string    $title              complete name of course
@@ -2419,44 +2424,44 @@ function string2binary($variable) {
  * @param array                         Optional array of teachers' user ID
  * @return int      0
  */
-function register_course($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName, $titular, $category, $title, $course_language, $uidCreator, $expiration_date = '', $teachers = array(), $visibility = null) {
+function register_course($course_sys_code, $course_screen_code, $course_repository, $course_db_name, $titular, $category, $title, $course_language, $uid_creator, $expiration_date = '', $teachers = array(), $visibility = null) {
     global $defaultVisibilityForANewCourse, $error_msg;
 
     $TABLECOURSE = Database :: get_main_table(TABLE_MAIN_COURSE);
     $TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
-    $TABLEANNOUNCEMENTS = Database :: get_course_table(TABLE_ANNOUNCEMENT, $courseDbName);
+    $TABLEANNOUNCEMENTS = Database :: get_course_table(TABLE_ANNOUNCEMENT, $course_db_name);
 
-    $okForRegisterCourse = true;
+    $ok_to_register_course = true;
 
-    // Check if I have all
-    if (empty($courseSysCode)) {
+    // Check whether all the needed parameters are present.
+    if (empty($course_sys_code)) {
         $error_msg[] = 'courseSysCode is missing';
-        $okForRegisterCourse = false;
+        $ok_to_register_course = false;
     }
-    if (empty($courseScreenCode)) {
+    if (empty($course_screen_code)) {
         $error_msg[] = 'courseScreenCode is missing';
-        $okForRegisterCourse = false;
+        $ok_to_register_course = false;
     }
-    if (empty($courseDbName)) {
+    if (empty($course_db_name)) {
         $error_msg[] = 'courseDbName is missing';
-        $okForRegisterCourse = false;
+        $ok_to_register_course = false;
     }
-    if (empty($courseRepository)) {
+    if (empty($course_repository)) {
         $error_msg[] = 'courseRepository is missing';
-        $okForRegisterCourse = false;
+        $ok_to_register_course = false;
     }
     if (empty($titular)) {
         $error_msg[] = 'titular is missing';
-        $okForRegisterCourse = false;
+        $ok_to_register_course = false;
     }
     if (empty($title)) {
         $error_msg[] = 'title is missing';
-        $okForRegisterCourse = false;
+        $ok_to_register_course = false;
     }
     if (empty($course_language)) {
         $error_msg[] = 'language is missing';
-        $okForRegisterCourse = false;
+        $ok_to_register_course = false;
     }
 
     if (empty($expiration_date)) {
@@ -2468,20 +2473,20 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
     if ($visibility === null) {
         $visibility = $defaultVisibilityForANewCourse;
     } else {
-        if($visibility < 0 || $visibility > 3) {
+        if ($visibility < 0 || $visibility > 3) {
             $error_msg[] = 'visibility is invalid';
-            $okForRegisterCourse = false;
+            $ok_to_register_course = false;
         }
     }
 
-    if ($okForRegisterCourse) {
+    if ($ok_to_register_course) {
         $titular = addslashes($titular);
 
         // Here we must add 2 fields.
         $sql = "INSERT INTO ".$TABLECOURSE . " SET
-                    code = '".Database :: escape_string($courseSysCode) . "',
-                    db_name = '".Database :: escape_string($courseDbName) . "',
-                    directory = '".Database :: escape_string($courseRepository) . "',
+                    code = '".Database :: escape_string($course_sys_code) . "',
+                    db_name = '".Database :: escape_string($course_db_name) . "',
+                    directory = '".Database :: escape_string($course_repository) . "',
                     course_language = '".Database :: escape_string($course_language) . "',
                     title = '".Database :: escape_string($title) . "',
                     description = '".lang2db(get_lang('CourseDescription')) . "',
@@ -2494,17 +2499,17 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
                     last_edit = now(),
                     last_visit = NULL,
                     tutor_name = '".Database :: escape_string($titular) . "',
-                    visual_code = '".Database :: escape_string($courseScreenCode) . "'";
+                    visual_code = '".Database :: escape_string($course_screen_code) . "'";
         Database::query($sql);
 
         $sort = api_max_sort_value('0', api_get_user_id());
 
         require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-        $i_course_sort = CourseManager :: userCourseSort($uidCreator,$courseSysCode);
+        $i_course_sort = CourseManager :: userCourseSort($uid_creator, $course_sys_code);
 
         $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-                    course_code = '".addslashes($courseSysCode) . "',
-                    user_id = '".Database::escape_string($uidCreator) . "',
+                    course_code = '".addslashes($course_sys_code) . "',
+                    user_id = '".Database::escape_string($uid_creator) . "',
                     status = '1',
                     role = '".lang2db(get_lang('Professor')) . "',
                     tutor_id='0',
@@ -2512,10 +2517,10 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
                     user_course_cat='0'";
         Database::query($sql);
 
-        if (count($teachers)>0) {
+        if (count($teachers) > 0) {
             foreach ($teachers as $key) {
                 $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-                    course_code = '".Database::escape_string($courseSysCode) . "',
+                    course_code = '".Database::escape_string($course_sys_code) . "',
                     user_id = '".Database::escape_string($key) . "',
                     status = '1',
                     role = '',
@@ -2534,15 +2539,15 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
             if (api_get_current_access_url_id() != -1) {
                 $url_id = api_get_current_access_url_id();
             }
-            UrlManager::add_course_to_url($courseSysCode, $url_id);
+            UrlManager::add_course_to_url($course_sys_code, $url_id);
         } else {
-            UrlManager::add_course_to_url($courseSysCode, 1);
+            UrlManager::add_course_to_url($course_sys_code, 1);
         }
 
         // Add event to the system log.
         $time = time();
         $user_id = api_get_user_id();
-        event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $courseSysCode, $time, $user_id, $courseSysCode);
+        event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $course_sys_code, $time, $user_id, $course_sys_code);
 
         $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
 
@@ -2570,20 +2575,18 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 /**
  * WARNING: This function always returns true.
  */
-function checkArchive($pathToArchive) {
+function checkArchive($path_to_archive) {
     return true;
 }
 
 /**
- * TODO: This function is not used anywhere. Probably it is obsolete.
- *
  * Extract properties of the files from a ZIP package, write them to disk and
  * return them as an array.
  * @param string        Absolute path to the ZIP file
  * @param bool          Whether the ZIP file is compressed (not implemented). Defaults to TRUE.
  * @return array        List of files properties from the ZIP package
  */
-function readPropertiesInArchive($archive, $isCompressed = true) {
+function readPropertiesInArchive($archive, $is_compressed = true) {
     include api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php';
     debug::printVar(dirname($archive), 'Zip : ');
     $uid = api_get_user_id();
@@ -2600,16 +2603,16 @@ function readPropertiesInArchive($archive, $isCompressed = true) {
     details.
     tempnam() returns the temporary filename, or the string NULL upon failure.
     */
-    $zipFile = new pclZip($archive);
-    $tmpDirName = dirname($archive) . '/tmp'.$uid.uniqid($uid);
-    if (mkdir($tmpDirName, api_get_permissions_for_new_directories(), true)) {
-        $unzippingSate = $zipFile->extract($tmpDirName);
+    $zip_file = new pclZip($archive);
+    $tmp_dir_name = dirname($archive) . '/tmp'.$uid.uniqid($uid);
+    if (mkdir($tmp_dir_name, api_get_permissions_for_new_directories(), true)) {
+        $unzipping_state = $zip_file->extract($tmp_dir_name);
     } else {
         die ('mkdir failed');
     }
-    $pathToArchiveIni = dirname($tmpDirName) . '/archive.ini';
-    //echo $pathToArchiveIni;
-    $courseProperties = parse_ini_file($pathToArchiveIni);
-    rmdir($tmpDirName);
-    return $courseProperties;
+    $path_to_archive_ini = dirname($tmp_dir_name) . '/archive.ini';
+    //echo $path_to_archive_ini;
+    $course_properties = parse_ini_file($path_to_archive_ini);
+    rmdir($tmp_dir_name);
+    return $course_properties;
 }

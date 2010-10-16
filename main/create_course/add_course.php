@@ -125,6 +125,8 @@ if ($course_validation_feature) {
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
 $form->applyFilter('select_language', 'html_filter');
 
+$form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));
+
 if ($course_validation_feature) {
 
     // A special URL to terms and conditions that is set in the platform settings page.
@@ -182,6 +184,7 @@ if ($form->validate()) {
     $category_code = $course_values['category_code'];
     $title = Security::remove_XSS($course_values['title']);
     $course_language = $course_values['course_language'];
+    $exemplary_content = !empty($course_values['exemplary_content']);
 
     if ($course_validation_feature) {
         $description = Security::remove_XSS($course_values['description']);
@@ -204,7 +207,8 @@ if ($form->validate()) {
         $target_audience = Database::escape_string($target_audience);
     }
 
-    if (trim($wanted_code) == '') {
+    $wanted_code = trim($wanted_code);
+    if ($wanted_code == '') {
         $wanted_code = generate_course_code(api_substr($title, 0, $maxlength));
         $wanted_code = Database::escape_string($wanted_code);
     }
@@ -233,9 +237,9 @@ if ($form->validate()) {
 
                 $expiration_date = time() + $firstExpirationDelay;
                 prepare_course_repository($directory, $code);
-                update_Db_course($db_name);
-                $pictures_array = fill_course_repository($directory);
-                fill_Db_course($db_name, $directory, $course_language, $pictures_array);
+                update_Db_course($db_name, $course_language);
+                $pictures_array = fill_course_repository($directory,  $exemplary_content);
+                fill_Db_course($db_name, $directory, $course_language, $pictures_array, $exemplary_content);
                 register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
 
                 // Preparing a confirmation message.

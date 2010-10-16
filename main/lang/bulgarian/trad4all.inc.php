@@ -835,4 +835,5 @@ $TermsAndConditions = "Условия за ползване";
 $ReadTermsAndConditions = "Прочетете Условията за ползване";
 $IAcceptTermsAndConditions = "Прочетох и приемам Условията за ползване";
 $YouHaveToAcceptTermsAndConditions = "Tрябва да приемете нашите Условия за ползване, за да продължите.";
+$FillWithExemplaryContent = "Да се добави примерно съдържание";
 ?>

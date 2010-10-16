@@ -26,9 +26,10 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 * @param int        Course admin ID
 * @param string     DB prefix
 * @param int        Expiration delay in unix timestamp
+* @param bool/null  A boolean flag to enable filling the created course with exemplary content. If the flag is NULL, then the platform setting 'example_material_course_creation' is taken into account.
 * @return mixed     Course code if course was successfully created, false otherwise
 */
-function create_course($wanted_code, $title, $tutor_name, $category_code, $course_language, $course_admin_id, $db_prefix, $first_expiration_delay) {
+function create_course($wanted_code, $title, $tutor_name, $category_code, $course_language, $course_admin_id, $db_prefix, $first_expiration_delay, $fill_with_exemplary_content = null) {
 
     $keys = define_course_keys($wanted_code, '', $db_prefix);
 
@@ -41,8 +42,8 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
 
         prepare_course_repository($directory, $code);
         update_Db_course($db_name, $course_language);
-        fill_course_repository($directory);
-        fill_Db_course($db_name, $directory, $course_language);
+        fill_course_repository($directory, $fill_with_exemplary_content);
+        fill_Db_course($db_name, $directory, $course_language, $fill_with_exemplary_content);
         register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $course_admin_id, $expiration_date);
 
         return $code;
@@ -1864,7 +1865,11 @@ function sort_pictures($files, $type) {
  * example content.
  * @version	 1.2
  */
-function fill_course_repository($course_repository) {
+function fill_course_repository($course_repository, $fill_with_exemplary_content = null) {
+
+    if (is_null($fill_with_exemplary_content)) {
+        $fill_with_exemplary_content = api_get_setting('example_material_course_creation');
+    }
 
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
     $web_code_path = api_get_path(WEB_CODE_PATH);
@@ -1885,7 +1890,8 @@ function fill_course_repository($course_repository) {
 
     $default_document_array = array();
 
-    if (api_get_setting('example_material_course_creation') != 'false') {
+    if ($fill_with_exemplary_content) {
+
         $img_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
         $audio_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/audio/';
         $flash_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/flash/';
@@ -2044,7 +2050,12 @@ function lang2db($string) {
  * Fills the course database with some required content and example content.
  * @version 1.2
  */
-function fill_Db_course($course_db_name, $course_repository, $language, $default_document_array = array()) {
+function fill_Db_course($course_db_name, $course_repository, $language, $default_document_array = array(), $fill_with_exemplary_content = null) {
+
+    if (is_null($fill_with_exemplary_content)) {
+        $fill_with_exemplary_content = api_get_setting('example_material_course_creation');
+    }
+
     global $_configuration, $_user;
 
     $course_db_name = $_configuration['table_prefix'].$course_db_name.$_configuration['db_glue'];
@@ -2282,7 +2293,7 @@ function fill_Db_course($course_db_name, $course_repository, $language, $default
         }
     }
 
-    if (api_get_setting('example_material_course_creation') != 'false') {
+    if ($fill_with_exemplary_content) {
 
         /*
         -----------------------------------------------------------

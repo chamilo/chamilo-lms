@@ -848,7 +848,8 @@ function get_sql_file_contents($file, $section, $print_errors = true) {
         return false;
     }
     //read the file in an array
-    $file_contents = file($filepath);
+    // Empty lines should not be executed as SQL statements, because errors occur, see Task #2167.
+    $file_contents = file($filepath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     if (!is_array($file_contents) or count($file_contents) < 1) {
         $error = "File $filepath looks empty in get_sql_file_contents()";
         if ($print_errors) echo $error;

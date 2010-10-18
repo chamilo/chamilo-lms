@@ -230,7 +230,7 @@ if ($form->validate()) {
                 // Preparing a confirmation message.
                 $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
                 $message = get_lang('JustCreated');
-                $message .= ' <a href="'.$link.'">'.api_htmlentities($title, ENT_QUOTES).'</a>';
+                $message .= ' <a href="'.$link.'">'.$title.'</a>';
 
                 Display :: display_confirmation_message($message, false);
                 echo '<div style="float: right; margin:0px; padding: 0px;">' .

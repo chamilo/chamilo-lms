@@ -52,13 +52,7 @@ class CourseRequestManager {
      */
     public static function create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, $user_id, $exemplary_content) {
 
-        $wanted_code = trim(Database::escape_string($wanted_code));
-        $title = Database::escape_string($title);
-        $description = Database::escape_string($description);
-        $category_code = Database::escape_string($category_code);
-        $course_language = Database::escape_string($course_language);
-        $objetives = Database::escape_string($objetives);
-        $target_audience = Database::escape_string($target_audience);
+        $wanted_code = trim($wanted_code);
         $user_id = (int)$user_id;
         $exemplary_content = (bool)$exemplary_content ? 1 : 0;
 
@@ -103,10 +97,10 @@ class CourseRequestManager {
                 "%s", "%s", "%s", "%s",
                 "%s", "%s", "%s",
                 "%s", "%s", "%s", "%s", "%s");', Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
-                $code, $user_id, $directory, $db_name,
-                $course_language, $title, $description, $category_code,
-                $tutor_name, $visual_code, $request_date,
-                $objetives, $target_audience, $status, $info, $exemplary_content);
+                Database::escape_string($code), Database::escape_string($user_id), Database::escape_string($directory), Database::escape_string($db_name),
+                Database::escape_string($course_language), Database::escape_string($title), Database::escape_string($description), Database::escape_string($category_code),
+                Database::escape_string($tutor_name), Database::escape_string($visual_code), Database::escape_string($request_date),
+                Database::escape_string($objetives), Database::escape_string($target_audience), Database::escape_string($status), Database::escape_string($info), Database::escape_string($exemplary_content));
         $result_sql = Database::query($sql);
 
         if (!$result_sql) {
@@ -188,13 +182,7 @@ class CourseRequestManager {
     public static function update_course_request($id, $wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, $user_id, $exemplary_content) {
 
         $id = (int)$id;
-        $wanted_code = trim(Database::escape_string($wanted_code));
-        $title = Database::escape_string($title);
-        $description = Database::escape_string($description);
-        $category_code = Database::escape_string($category_code);
-        $course_language = Database::escape_string($course_language);
-        $objetives = Database::escape_string($objetives);
-        $target_audience = Database::escape_string($target_audience);
+        $wanted_code = trim($wanted_code);
         $user_id = (int)$user_id;
         $exemplary_content = (bool)$exemplary_content ? 1 : 0;
 
@@ -258,10 +246,10 @@ class CourseRequestManager {
                 tutor_name = "%s", visual_code = "%s", request_date = "%s",
                 objetives = "%s", target_audience = "%s", status = "%s", info = "%s", exemplary_content = "%s"
             WHERE id = '.$id, Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
-                $code, $user_id, $directory, $db_name,
-                $course_language, $title, $description, $category_code,
-                $tutor_name, $visual_code, $request_date,
-                $objetives, $target_audience, $status, $info, $exemplary_content);
+                Database::escape_string($code), Database::escape_string($user_id), Database::escape_string($directory), Database::escape_string($db_name),
+                Database::escape_string($course_language), Database::escape_string($title), Database::escape_string($description), Database::escape_string($category_code),
+                Database::escape_string($tutor_name), Database::escape_string($visual_code), Database::escape_string($request_date),
+                Database::escape_string($objetives), Database::escape_string($target_audience), Database::escape_string($status), Database::escape_string($info), Database::escape_string($exemplary_content));
         $result_sql = Database::query($sql);
 
         return $result_sql !== false;

@@ -148,7 +148,7 @@ if ($course_validation_feature) {
 
             // Filter incoming data.
             foreach ($course_request_values as &$value) {
-                $value = trim(Security::remove_XSS($value));
+                $value = trim(Security::remove_XSS(stripslashes($value)));
             }
 
             // Detection which submit button has been pressed.

@@ -180,38 +180,22 @@ $form->setDefaults($values);
 if ($form->validate()) {
     $course_values = $form->exportValues();
 
-    $wanted_code = Security::remove_XSS($course_values['wanted_code']);
-    $tutor_name = $course_values['tutor_name'];
+    $wanted_code = trim(Security::remove_XSS(stripslashes($course_values['wanted_code'])));
+    $tutor_name = stripslashes($course_values['tutor_name']);
     $category_code = $course_values['category_code'];
-    $title = Security::remove_XSS($course_values['title']);
+    $title = Security::remove_XSS(stripslashes($course_values['title']));
     $course_language = $course_values['course_language'];
     $exemplary_content = !empty($course_values['exemplary_content']);
 
     if ($course_validation_feature) {
-        $description = Security::remove_XSS($course_values['description']);
-        $objetives = Security::remove_XSS($course_values['objetives']);
-        $target_audience = Security::remove_XSS($course_values['target_audience']);
+        $description = Security::remove_XSS(stripslashes($course_values['description']));
+        $objetives = Security::remove_XSS(stripslashes($course_values['objetives']));
+        $target_audience = Security::remove_XSS(stripslashes($course_values['target_audience']));
         $status = '0';
-
-        // TODO: Why escaping quotes is needed here?
-        $description = str_replace('"', '', $description);
-        $objetives = str_replace('"', '', $objetives);
-        $target_audience = str_replace('"', '', $target_audience);
     }
 
-    $wanted_code = Database::escape_string($wanted_code);
-    $title = Database::escape_string($title);
-
-    if ($course_validation_feature) {
-        $description = Database::escape_string($description);
-        $objetives = Database::escape_string($objetives);
-        $target_audience = Database::escape_string($target_audience);
-    }
-
-    $wanted_code = trim($wanted_code);
     if ($wanted_code == '') {
         $wanted_code = generate_course_code(api_substr($title, 0, $maxlength));
-        $wanted_code = Database::escape_string($wanted_code);
     }
 
     // Check whether the requested course code has already been occupied.
@@ -246,7 +230,7 @@ if ($form->validate()) {
                 // Preparing a confirmation message.
                 $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
                 $message = get_lang('JustCreated');
-                $message .= ' <a href="'.$link.'">'.$title.'</a>';
+                $message .= ' <a href="'.$link.'">'.api_htmlentities($title, ENT_QUOTES).'</a>';
 
                 Display :: display_confirmation_message($message, false);
                 echo '<div style="float: right; margin:0px; padding: 0px;">' .
@@ -270,9 +254,7 @@ if ($form->validate()) {
             if ($request_id) {
 
                 $course_request_info = CourseRequestManager::get_course_request_info($request_id);
-                $visual_code = is_array($course_request_info) ? $course_request_info['visual_code'] : '';
-                $message = get_lang('CourseRequestCreated');
-                $message .= ' <strong>'.$visual_code.'</strong>';
+                $message = (is_array($course_request_info) ? '<strong>'.$course_request_info['code'].'</strong> : ' : '').get_lang('CourseRequestCreated');
                 Display :: display_confirmation_message($message, false);
                 echo '<div style="float: right; margin:0px; padding: 0px;">' .
                     '<a class="bottom-link" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .

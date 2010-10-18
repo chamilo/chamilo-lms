@@ -371,7 +371,7 @@ if ($formSent) {
                     $choice = $exerciseResult[$questionId];                    
                     if (isset($exe_id)) {
                     	//Manage the question and answer attempts
-                    	$objExercise->manage_answer($exe_id, $questionId, $choice);
+                    	$objExercise->manage_answer($exe_id, $questionId, $choice,'exercise_show');
                     }
                     //END of saving and qualifying
                 }

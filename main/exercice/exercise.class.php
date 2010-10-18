@@ -1636,12 +1636,11 @@ class Exercise {
      * @param   int exe id
      * @param   int question id
      * @param   int the choice the user selected
+     * @param   string  function is called from 'exercise_show' or 'exercise_result'
 	 */
-	function manage_answer($exeId, $questionId, $choice) {
+	function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show') {
 		global $_configuration;
 		$exeId = intval($exeId);
-		//require_once 'question.class.php';
-        //require_once 'answer.class.php';
                     
      	// Creates a temporary Question object
         $objQuestionTmp         = Question :: read($questionId);
@@ -1656,19 +1655,29 @@ class Exercise {
 
         // Destruction of the Question object
         unset ($objQuestionTmp);
-        error_log('$questionWeighting '.$questionWeighting);
 
         if (isset ($_POST['hotspot']) && isset($_POST['hotspot'][$questionId])) {
             $exerciseResultCoordinates[$questionId] = $_POST['hotspot'][$questionId];
         }
 
-        // construction of the Answer object
+        // Construction of the Answer object
         $objAnswerTmp = new Answer($questionId);
         $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
         $questionScore = 0;
         if ($answerType == FREE_ANSWER) {
             $nbrAnswers = 1;
+        }   
+        $user_answer = '';             
+        $table_ans   = Database::get_course_table(TABLE_QUIZ_ANSWER);
+                
+        // Get answer list for matching
+        $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" ';
+        $res_answer = Database::query($sql_answer);
+        $answer_matching =array();
+        while ($real_answer = Database::fetch_array($res_answer)) {
+            $answer_matching[$real_answer['id']]= $real_answer['answer'];
         }        
+        
 		$real_answers = array();
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
@@ -1695,7 +1704,6 @@ class Exercise {
                     break;
                 case MULTIPLE_ANSWER_COMBINATION:
                     $studentChoice=$choice[$numAnswer];
-
                     if ($answerCorrect == 1) {
                         if ($studentChoice) {
                             $real_answers[$answerId] = true;
@@ -1717,8 +1725,7 @@ class Exercise {
                     }
                     break;
                     // for fill in the blanks
-                case FILL_IN_BLANKS :
-                
+                case FILL_IN_BLANKS :                
                     // the question is encoded like this
                     // [A] B [C] D [E] F::10,10,10@1
                     // number 1 before the "@" means that is a switchable fill in blank question
@@ -1761,7 +1768,6 @@ class Exercise {
                         $temp = str_replace($texstring, '{texcode}', $temp);
                     }
                     */
-
                     $answer = '';
                     $j = 0;
 
@@ -1865,7 +1871,6 @@ class Exercise {
                     // for free answer
                 case FREE_ANSWER :
                     $studentChoice = $choice;
-
                     if ($studentChoice) {
                         //Score is at -1 because the question has'nt been corected
                         $questionScore = -1;
@@ -1874,13 +1879,15 @@ class Exercise {
                     break;
                     // for matching
                 case MATCHING :
-
                     $numAnswer=$objAnswerTmp->selectAutoId($answerId);
                     if ($answerCorrect) {
                         if ($answerCorrect == $choice[$numAnswer]) {
                             $questionScore+=$answerWeighting;
                             $totalScore+=$answerWeighting;
-                        }
+                            $user_answer = '<span>'.$answer_matching[$choice[$numAnswer]].'</span>';
+                        } else {
+                            $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answer_matching[$choice[$numAnswer]].'</span>';                    
+                        }         
                         $matching[$numAnswer] =  $choice[$numAnswer];
                     }
                     break;
@@ -1905,6 +1912,41 @@ class Exercise {
                     }
                     break;
             } // end switch Answertype
+            
+            if ($from == 'exercise_result') {
+                global $origin;
+                    //display answers (if not matching type, or if the answer is correct)
+                if ($answerType != MATCHING || $answerCorrect) {
+                    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
+                        if ($origin!='learnpath') {
+                            ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
+                        }
+                    } elseif($answerType == FILL_IN_BLANKS) {
+                        if ($origin!='learnpath') {
+                            ExerciseShowFunctions::display_fill_in_blanks_answer($answer,0,0);
+                        }
+                    } elseif($answerType == FREE_ANSWER) {
+                        // to store the details of open questions in an array to be used in mail
+                        $arrques[] = $questionName;
+                        $arrans[]  = $choice;
+                        if($origin != 'learnpath') {
+                            ExerciseShowFunctions::display_free_answer($choice,0,0);
+                        }
+                    } elseif($answerType == HOT_SPOT) {
+                        if ($origin != 'learnpath') {
+                            ExerciseShowFunctions::display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
+                        }
+                    } elseif($answerType == HOT_SPOT_ORDER) {
+                        ExerciseShowFunctions::display_hotspot_order_answer($answerId, $answer, $studentChoice, $answerComment);
+                    } elseif($answerType==MATCHING) {
+                        if ($origin != 'learnpath') {
+                            echo '<tr>';
+                            echo '<td>'.text_filter($answer_matching[$answerId]).'</td><td>'.text_filter($user_answer).' / <b><span style="color: #008000;">'.text_filter($answer_matching[$answerCorrect]).'</span></b></td>';
+                            echo '</tr>';
+                        }
+                    }
+                }
+            }            
         } // end for that loops over all answers of the current question
         
         // destruction of Answer
@@ -1918,9 +1960,48 @@ class Exercise {
                 $totalScore+=$answerWeighting;
             }
         }
+        
+        
+       if ($from == 'exercise_result') {
+            global $colspan;
+            // if answer is hotspot. To the difference of exercise_show.php, we use the results from the session (from_db=0)
+            // TODO Change this, because it is wrong to show the user some results that haven't been stored in the database yet
+            if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
+                    // We made an extra table for the answers
+                    if($origin != 'learnpath') {
+                        echo '</table></td></tr>';
+                        echo '<tr>
+                            <td colspan="2">';
+                        echo '<i>'.get_lang('HotSpot').'</i><br /><br />';
+                        echo '<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id=&from_db=0" width="552" height="352">';
+                        echo '<param name="movie" value="'.api_get_path(WEB_PLUGIN_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id=&from_db=0" />
+                                </object>
+                            </td>
+                        </tr>';                    
+                    }
+                }
+            ?>
+            <?php if($origin != 'learnpath') { ?>
+                <tr>
+                <td colspan="<?php echo $colspan; ?>" align="left">
+                    <b>
+                    <?php
+                    if($questionScore==-1){
+                        echo get_lang('Score').": 0 /".float_format($questionWeighting);
+                    } else {
+                        echo get_lang('Score').": ".float_format($questionScore,1)."/".float_format($questionWeighting,1);
+                    }
+                    ?></b><br /><br />
+                </td>
+                </tr>
+                </table>
+                <?php } ?>
+            <?php
+        }
+        
         unset ($objAnswerTmp);
         $i++;
-
+    
         $totalWeighting += $questionWeighting;
         //added by priya saini
         // Store results directly in the database
@@ -1971,9 +2052,13 @@ class Exercise {
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0,$this->id);
             }
         }
-        $stat_table 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . $exeId;
-		Database::query($sql_update);
+            
+        if ($from == 'exercise_show') {
+            $stat_table 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+            $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . $exeId;
+    		Database::query($sql_update);
+        }        
+        return array('score'=>$questionScore, 'weight'=>$questionWeighting);
 	} //End function
 }
 endif;

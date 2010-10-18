@@ -851,7 +851,6 @@ if ($show_results) {
 				$resq=Database::query($query);
 				$choice = Database::result($resq,0,"hotspot_correct");
 				ExerciseShowFunctions::display_hotspot_answer($answerId,$answer,$choice,$answerComment);
-
 				$i++;
 		 	}
 		 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
@@ -959,7 +958,7 @@ if ($show_results) {
 		$my_total_weight = float_format($questionWeighting,1);
 
 		echo '<div id="question_score">';
-		echo get_lang('Score')." : $my_total_score/$my_total_weight";
+		echo get_lang('YourTotalScore')." : $my_total_score/$my_total_weight";
 		echo '</div>';
 
 		unset($objAnswerTmp);

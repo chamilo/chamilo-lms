@@ -13,9 +13,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $htmlHeadXtra[] = '<script language="javascript">
-
 				function selectAll(idCheck,numRows,action) {
-
 					for(i=0;i<numRows;i++) {
 						idcheck = document.getElementById(idCheck+"_"+i);
 						if (action == "true"){
@@ -24,9 +22,7 @@ $htmlHeadXtra[] = '<script language="javascript">
 							idcheck.checked = false;
 						}
 					}
-
 				}
-
 				</script>
 		';
 
@@ -306,7 +302,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		  <td>
 			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('add_user_big.gif', get_lang('SubscribeUsersToSession')); ?></a>
 			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('course_add.gif', get_lang('SubscribeCoursesToSession')); ?></a>
-			<a href="session_edit.php?page=session_list.php&id=<?php echo $enreg['id']; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a>
+			<a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a>
 			<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('delete.gif', get_lang('Delete')); ?></a>
 		  </td>
 		</tr>

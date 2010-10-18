@@ -117,9 +117,9 @@ class BlockStudentGraph extends Block {
 	 			$results_faults_avg = $attendance->get_faults_average_inside_courses($student_id);
 	 				 				
 	 			if (!empty($results_faults_avg)) {
-	 				$attendances_faults_avg[$student['username']] = $results_faults_avg['porcent'];	 				
+	 				$attendances_faults_avg[$student['lastname']] = $results_faults_avg['porcent'];	 				
 	 			} else {
-	 				$attendances_faults_avg[$student['username']] = 0;
+	 				$attendances_faults_avg[$student['lastname']] = 0;
 	 			} 			
 	 		}
  		}

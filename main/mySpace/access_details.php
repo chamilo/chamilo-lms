@@ -191,27 +191,33 @@ $main_user_info = api_get_user_info($user_id);
 
 $result_to_print = '';
 $main_date_array = array();
-
-foreach ($connections as $key => $data) {
-	$result_to_print .= '&nbsp;&nbsp;'.date('d-m-Y (H:i:s)', $data['login']).' - '.api_time_to_hms($data['logout'] - $data['login']).'<br />'."\n";
+$session_name = api_get_session_name(api_get_session_id());
+if (!empty($session_name)) {
+    $session_name = get_lang('Session').' '.$session_name.' | ';
 }
+echo '<h2>'.get_lang('Course').': '.$course_code.' | '.(empty($session_name)?'':$session_name).' '.get_lang('User').': '.api_get_person_name($main_user_info['firstName'], $main_user_info['lastName']).'</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong></h2>';
+
 api_display_tool_title(get_lang('DetailsStudentInCourse'));
-echo '<div class="actions">';
-echo '<strong>'.get_lang('User').': '.api_get_person_name($main_user_info['firstName'], $main_user_info['lastName']).'</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>'.get_lang('Course').': '.$course_code.'</strong></div>';
+    
+if (!empty($connections)) {
+    foreach ($connections as $key => $data) {
+	   $result_to_print .= '&nbsp;&nbsp;'.date('d-m-Y (H:i:s)', $data['login']).' - '.api_time_to_hms($data['logout'] - $data['login']).'<br />'."\n";
+    }
 
-?>
-<div id="container-9">
-    <ul>
-        <li><a href="access_details.php?type=day&course=<?php echo $course_code?>&student=<?php echo $user_id?>"><span> <?php echo api_ucfirst(get_lang('Day')); ?></span></a></li>
-        <li><a href="access_details.php?type=month&course=<?php echo $course_code?>&student=<?php echo $user_id?>"><span><?php echo api_ucfirst(get_lang('MinMonth')); ?></span></a></li>
-    </ul>
-    <?php echo '<div id="show"></div>'; ?>
-</div>
-<?php
+    echo '<div id="container-9">';
+    echo '<ul>';
+    echo '<li><a href="access_details.php?type=day&course='.$course_code.'&student='.$user_id.'"><span>'.api_ucfirst(get_lang('Day')).'</span></a></li>';
+    echo '<li><a href="access_details.php?type=month&course='.$course_code.'&student='.$user_id.'"><span>'.api_ucfirst(get_lang('MinMonth')).'</span></a></li>';
+    echo '</ul>';
+    echo '<div id="show"></div>'; 
+    echo '</div>';
 
-echo '<div id="graph"></div><br />';
-echo '<div class="actions"><strong>', get_lang('DateAndTimeOfAccess'), ' - ', get_lang('Duration'), '</strong></div><br />';
-echo $result_to_print;
+    echo '<div id="graph"></div><br />';
+    echo '<div class="actions"><strong>', get_lang('DateAndTimeOfAccess'), ' - ', get_lang('Duration'), '</strong></div><br />';
+    echo $result_to_print;
+} else {
+    Display::display_warning_message(get_lang('GraphicNotAvailable'));	
+}
 
 /* Login time against logout time
 foreach ($connections as $key => $data) {

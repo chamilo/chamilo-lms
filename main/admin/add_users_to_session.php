@@ -99,21 +99,21 @@ function search_users($needle,$type)
 				}
 			}
 			if (count($user_ids) > 0){
-				$cond_user_id = ' AND user_id NOT IN('.implode(",",$user_ids).')';
+				$cond_user_id = ' AND user.user_id NOT IN('.implode(",",$user_ids).')';
 			}
 		}
 
 		if ($type == 'single') {
 			// search users where username or firstname or lastname begins likes $needle
-			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
+			$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
 					WHERE (username LIKE "'.$needle.'%"
 					OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"   AND user.status<>'.DRH.''.
+				OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"   AND user.status<>'.DRH.''.
 				$order_clause.
 				' LIMIT 11';
 		} else {
-			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+			$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+					WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
 					$order_clause;
 		}
 

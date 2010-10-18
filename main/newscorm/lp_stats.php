@@ -669,7 +669,7 @@ if (is_array($list) && count($list) > 0) {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all ) {
                                     $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
                                 } else {
-                                    $output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&id=' . $my_exe_id . '&cidReq=' . $course_code.$from_link.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
+                                    $output .= '<td><a href="../exercice/exercise_show.php?origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
                                 }
                             }
                              $output .= '</tr>';

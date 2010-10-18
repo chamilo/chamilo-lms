@@ -992,18 +992,14 @@ if (is_array($arrid) && is_array($arrmarks)) {
 }
 
 if ($is_allowedToEdit) {
-	if (in_array($origin, array('tracking_course','user_course'))) {
+	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {
 		echo ' <form name="myform" id="myform" action="exercice.php?show=result&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
-		echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';
-		if (!empty($learnpath_id) && !empty($_GET['my_lp_id']) && isset($_GET['student'])) {
-			
-			echo '<input type = "hidden" name="lp_item_id"       value="'.$lp_id.'">';
-			echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
-			echo '<input type = "hidden" name="student_id"       value="'.$student_id.'">';
-			echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
-			//echo '<input type = "hidden" name="total_time"       value="'.Security::remove_XSS($_GET['total_time']).'"> ';
-			echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';			
-		}
+		echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';	
+		echo '<input type = "hidden" name="lp_item_id"       value="'.$lp_id.'">';
+		echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
+		echo '<input type = "hidden" name="student_id"       value="'.$student_id.'">';
+		echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
+		echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';					
 	} else {
 		echo ' <form name="myform" id="myform" action="exercice.php?show=result&filter=2&comments=update&exeid='.$id.'&totalWeighting='.$totalWeighting.'" method="post">';
 	}
@@ -1026,11 +1022,11 @@ if ($origin =='student_progress') {?>
 }
 
 if ($origin != 'learnpath') {
-	$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
+	//$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
 	//we are not in learnpath tool
 	Display::display_footer();
 } else {
-	$url_email = api_get_path(WEB_CODE_PATH).'mySpace/lp_tracking.php?course='.api_get_course_id().'&origin=tracking_course&lp_id='.$learnpath_id.'&student_id='.api_get_user_id();
+    //$url_email = api_get_path(WEB_CODE_PATH).'mySpace/lp_tracking.php?course='.api_get_course_id().'&origin=tracking_course&lp_id='.$learnpath_id.'&student_id='.api_get_user_id();
 
 	if (!isset($_GET['fb_type'])) {
 		$lp_mode =  $_SESSION['lp_mode'];

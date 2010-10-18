@@ -826,10 +826,10 @@ switch ($action) {
                 $_SESSION['oLP']->save_current();
                 $_SESSION['oLP']->save_last();
                 // Declare variables to be used in lp_stats.php.
-                $lp_id = $_SESSION['oLP']->get_id();
-                $list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
-                $user_id = api_get_user_id();
-                header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php');
+                $lp_id  = $_SESSION['oLP']->get_id();
+                $list   = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
+                $user_id = api_get_user_id();                
+                header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/?id_session='.api_get_session_id());
             }
             break;
 

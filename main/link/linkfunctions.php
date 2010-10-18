@@ -35,9 +35,9 @@ function addlinkcategory($type) {
     if ($type == 'link') {
         $tbl_link = Database :: get_course_table(TABLE_LINK);
 
-        $title = Security::remove_XSS($_POST['title']);
+        $title = Security::remove_XSS(stripslashes($_POST['title']));
         $urllink = Security::remove_XSS($_POST['urllink']);
-        $description = Security::remove_XSS($_POST['description']);
+        $description = Security::remove_XSS(stripslashes($_POST['description']));
         $selectcategory = Security::remove_XSS($_POST['selectcategory']);
 
         if ($_POST['onhomepage'] == '') {
@@ -78,7 +78,10 @@ function addlinkcategory($type) {
 
             $session_id = api_get_session_id();
 
-            $sql = "INSERT INTO ".$tbl_link." (url, title, description, category_id, display_order, on_homepage, target, session_id) VALUES ('$urllink','$title','$description','$selectcategory','$order', '$onhomepage','$target','$session_id')";
+            $sql = "INSERT INTO ".$tbl_link." (url, title, description, category_id, display_order, on_homepage, target, session_id)
+                VALUES ('".Database::escape_string($urllink)."','".Database::escape_string($title)."','".Database::escape_string($description)."','".
+                Database::escape_string($selectcategory)."','".Database::escape_string($order)."', '".Database::escape_string($onhomepage)."','".
+                Database::escape_string($target)."','".Database::escape_string($session_id)."')";
             $catlinkstatus = get_lang('LinkAdded');
             Database::query($sql);
             $link_id = Database::insert_id();
@@ -323,8 +326,8 @@ function editlinkcategory($type) {
 
             // Ivan, 13-OCT-2010: It is a litle bit messy code below, just in case I added some extra-security checks here.
             $_POST['urllink'] = trim(Security::remove_XSS($_POST['urllink']));
-            $_POST['title'] = trim(Security::remove_XSS($_POST['title']));
-            $_POST['description'] = trim(Security::remove_XSS($_POST['description']));
+            $_POST['title'] = trim(Security::remove_XSS(stripslashes($_POST['title'])));
+            $_POST['description'] = trim(Security::remove_XSS(stripslashes($_POST['description'])));
             $_POST['selectcategory'] = intval($_POST['selectcategory']);
             $_POST['id'] = intval($_POST['id']);
 

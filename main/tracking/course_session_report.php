@@ -73,9 +73,13 @@ $course_list = SessionManager::get_course_list_by_session_id($session_id);
 if (!$export_to_xls) {
 	Display :: display_header(get_lang("MySpace"));
 	echo '<div class="actions">';	
+    
 	if ($global) {		
 		$menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('TeacherInterface').'</a>';
 		$menu_items[] = get_lang('AdminInterface');		
+        $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'tracking/exams.php">'.get_lang('ExamTracking').'</a>';
+        
+        
 		
 		$nb_menu_items = count($menu_items);
 		if($nb_menu_items>1) {
@@ -88,6 +92,7 @@ if (!$export_to_xls) {
 			echo '<br />';
 		}
 	} else {
+        
 		echo '<div style="float:left; clear:left">
 				<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|			
 				<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;';		

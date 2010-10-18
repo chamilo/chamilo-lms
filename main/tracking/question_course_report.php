@@ -148,6 +148,8 @@ if (!$export_to_xls) {
 	if ($global) {		
 		$menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('TeacherInterface').'</a>';
 		$menu_items[] = get_lang('AdminInterface');
+        $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'tracking/exams.php">'.get_lang('ExamTracking').'</a>';
+        
 		$nb_menu_items = count($menu_items);
 		if($nb_menu_items>1) {
 			foreach($menu_items as $key=> $item) {

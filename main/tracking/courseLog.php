@@ -139,15 +139,13 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 
 /* MAIN CODE */
 
-echo '<div class="actions"  style ="font-size:10pt;">';
+echo '<div class="actions">';
 if ($_GET['studentlist'] == 'false') {
     echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | ';
     echo get_lang('CourseTracking').' | ';
     echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
     if (empty($session_id))
         echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a> ';
-
-
 } elseif($_GET['studentlist'] == 'resources') {
     echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | ';
     echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a> | ';

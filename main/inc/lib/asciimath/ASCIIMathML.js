@@ -105,7 +105,10 @@ var checkForMathML = true;     // check if browser can display MathML
 var notifyIfNoMathML = false;   // display note at top if no MathML capability
 var alertIfNoMathML = false;   // show alert box if no MathML capability
 var translateOnLoad = true;    // set to false to do call translators from js
-var translateLaTeX = false;     // false to preserve $..$, $$..$$
+//Modified by Ivan Tcholakov, 05-JUL-2010.
+//var translateLaTeX = false;     // false to preserve $..$, $$..$$
+var translateLaTeX = true;
+//
 var translateLaTeXformatting = true; // false to preserve \emph,\begin{},\end{}
 var translateASCIIMath = true; // false to preserve `..`
 var translateASCIIsvg = true;  // false to preserve agraph.., \begin{graph}..

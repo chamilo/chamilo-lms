@@ -105,7 +105,7 @@ var checkForMathML = true;     // check if browser can display MathML
 var notifyIfNoMathML = false;   // display note at top if no MathML capability
 var alertIfNoMathML = false;   // show alert box if no MathML capability
 var translateOnLoad = true;    // set to false to do call translators from js
-//Modified by Ivan Tcholakov, 05-JUL-2010.
+//Modified by Ivan Tcholakov, 19-OCT-2010.
 //var translateLaTeX = false;     // false to preserve $..$, $$..$$
 var translateLaTeX = true;
 //

@@ -415,10 +415,16 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 		$i++;
 	}
 	
+    
 	if ($count_files != 0) {
-		$column_order[2] = 5;
+        if ($sub_course_dir == '/work') {
+            $column_order[2] = 2;
+        } else {
+            //$column_order[2] = 5;
+        }
 	} else {
-		$column_order[1] = 4;
+		//$column_order[1] = 4;
+        $column_order[2] = 4;
 	}
 	
 	$table_data = array();

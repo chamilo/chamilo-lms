@@ -145,71 +145,8 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 
 				// because [] is parsed here we follow this procedure:
 				$answer = text_filter($answer);
-				/* // Deprecated code
-				// 1. find everything between the [tex] and [/tex] tags
-				$startlocations = api_strpos($answer,'[tex]');
-				$endlocations = api_strpos($answer,'[/tex]');
-
-				if ($startlocations !== false && $endlocations !== false) {
-					$texstring = api_substr($answer,$startlocations,$endlocations-$startlocations+6);
-					// 2. replace this by {texcode}
-					$answer = str_replace($texstring,'{texcode}',$answer);
-				}
-				*/
-
-				// 3. do the normal matching parsing
-				// replaces [blank] by an input field
-
 				//getting the matches
 				$answer = api_ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10" />',($answer));
-
-				// Change input size
-				/*
-				preg_match_all('/\[[^]]+]/',$answer,$matches);
-				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="@@" />',($answer));
-
-				// 4. resize the input
-
-
-				foreach($matches[0] as $match) {
-				$answer_len = strlen($match)-2;
-				//we will only replace 1 item
-				// echo implode("replace term", explode("search term", "input", $limit));
-				if ($answer_len <= 5) {
-				$answer = (implode("5", explode("@@", $answer, 2)));
-				} elseif($answer_len <= 10) {
-				$answer = (implode("10", explode("@@", $answer, 2)));
-				} elseif($answer_len <= 20) {
-				$answer = (implode("20", explode("@@", $answer, 2)));
-				} elseif($answer_len <= 30) {
-				$answer = (implode("30", explode("@@", $answer, 2)));
-				} elseif($answer_len <= 40) {
-				$answer = (implode("45", explode("@@", $answer, 2)));
-				} elseif($answer_len <= 50) {
-				$answer = (implode("60", explode("@@", $answer, 2)));
-				} elseif($answer_len <= 60) {
-				$answer = (implode("70", explode("@@", $answer, 2)));
-				} elseif($answer_len <= 70) {
-				$answer = (implode("80", explode("@@", $answer, 2)));
-				} elseif($answer_len <= 80) {
-				$answer = (implode("90", explode("@@", $answer, 2)));
-				} elseif($answer_len <= 90) {
-				$answer = (implode("100", explode("@@", $answer, 2)));
-				} elseif($answer_len <= 100) {
-				$answer = (implode("110", explode("@@", $answer, 2)));
-				} elseif($answer_len > 100 ) {
-				$answer = (implode("120", explode("@@", $answer, 2)));
-				}
-				}
-
-				*/
-
-				/* // Deprecated code
-				// 5. replace the {texcode by the api_pare_tex parsed code}
-				$texstring = api_parse_tex($texstring);
-				$answer=str_replace("{texcode}",$texstring,$answer);
-				*/
-
 			}
 
 			// Unique answer
@@ -356,12 +293,12 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 	} elseif ($answerType == HOT_SPOT) {
 
 		// Question is of type HOT_SPOT
-		$questionName=$objQuestionTmp->selectTitle();
-		$questionDescription=$objQuestionTmp->selectDescription();
+		$questionName         = $objQuestionTmp->selectTitle();
+		$questionDescription  = $objQuestionTmp->selectDescription();
 
 		// Get the answers, make a list
-		$objAnswerTmp=new Answer($questionId);
-		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
+		$objAnswerTmp         = new Answer($questionId);
+		$nbrAnswers           = $objAnswerTmp->selectNbrAnswers();
 
 		// get answers of hotpost
 		$answers_hotspot = array();
@@ -396,6 +333,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 		//$tes = isset($_GET['modifyAnswers']) ? '0' : '1';
 		//echo $tes;
+        
 		$s .= '<script language="JavaScript" type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
 						<script src="../plugin/hotspot/hotspot.js" type="text/javascript" language="JavaScript"></script>
 						<script language="JavaScript" type="text/javascript">
@@ -530,7 +468,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 					</td>
 					<td valign="top" align="left">'.$answer_list.'</td></tr>
 					</table>
-		</td></tr>';
+		</td></tr>';        
 		echo $s;
 	}
 	echo '</table><br />';

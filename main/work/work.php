@@ -784,7 +784,7 @@ else {
 			$author_qry = Database::query($author_sql);
             
 
-			if (Database :: num_rows($author_qry) == 1 AND api_get_course_setting('student_delete_own_publication') == 1 || api_is_allowed_to_edit(null,true)) {
+			if ((Database :: num_rows($author_qry) == 1 AND api_get_course_setting('student_delete_own_publication') == 1) || api_is_allowed_to_edit(null,true)) {
 				//we found the current user is the author
 				$queryString1 = "SELECT url FROM  " . $work_table . "  WHERE id = '$delete'";                
 				$result1 = Database::query($queryString1);				

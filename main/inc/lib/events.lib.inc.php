@@ -772,3 +772,20 @@ function get_all_exercises_from_lp($lp_id, $course_db) {
 	return $my_exercise_list; 
 }
 
+
+/**
+ * This function gets the comments of an exercise
+ *
+ * @param int $id
+ * @param int $question_id
+ * @return str the comment
+ */
+function get_comments($id,$question_id)
+{
+    $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $sql = "SELECT teacher_comment FROM ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' ORDER by question_id";
+    $sqlres = Database::query($sql);
+    $comm = Database::result($sqlres,0,"teacher_comment");
+    return $comm;
+}
+

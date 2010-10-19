@@ -25,6 +25,8 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once 'exercise.lib.php';
 
+
+
 // debug var. Set to 0 to hide all debug display. Set to 1 to display debug messages.
 $debug = 1;
 
@@ -32,6 +34,7 @@ $debug = 1;
 $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
+
 $this_section = SECTION_COURSES;
 
 // Notice for unauthorized people.
@@ -323,7 +326,7 @@ if ($_configuration['live_exercise_tracking'] && $objExercise->type == ONE_PER_P
 
 // if the user has submitted the form
 
-if ($formSent) {
+if ($formSent && isset($_POST)) {    
     if ($debug > 0) { error_log('$formSent was set'); }
 
     // Initializing
@@ -371,7 +374,7 @@ if ($formSent) {
                     $choice = $exerciseResult[$questionId];                    
                     if (isset($exe_id)) {
                     	//Manage the question and answer attempts
-                    	$objExercise->manage_answer($exe_id, $questionId, $choice,'exercise_show');
+                    	$objExercise->manage_answer($exe_id, $questionId, $choice,'exercise_show', true, false,false);
                     }
                     //END of saving and qualifying
                 }

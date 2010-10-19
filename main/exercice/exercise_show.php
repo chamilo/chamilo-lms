@@ -12,19 +12,20 @@
  * */
 
 // name of the language file that needs to be included
-$language_file=array('exercice','tracking');
+$language_file=array('exercice');
 
-// including the global dokeos file
-require_once '../inc/global.inc.php';
-require_once '../inc/lib/course.lib.php';
 // including additional libraries
 require_once 'exercise.class.php';
 require_once 'exercise.lib.php';
 require_once 'question.class.php'; //also defines answer type constants
 require_once 'answer.class.php';
+
+require_once '../inc/global.inc.php';
+
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'exercise_show_functions.lib.php';
+
 
 if ( empty ( $origin ) ) {
     $origin = $_REQUEST['origin'];
@@ -89,19 +90,21 @@ $lp_item_view_id    = $track_exercise_info['orig_lp_item_view_id'];
 $course_code        = api_get_course_id();
 $current_user_id    = api_get_user_id();
 
-//Check if user can see the results 
-if (!$is_allowedToEdit) {
-    if ($track_exercise_info['results_disabled']) {
-    	api_not_allowed();
-    }    
-    if ($student_id != $current_user_id) {
-    	api_not_allowed();
-    }
+if (empty($objExercise)) {
+	$objExercise = new Exercise();
+    $objExercise->read($exercise_id);
 }
 
 if (!exercise_time_control_is_valid($exercise_id)) {
-	$sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = $id ";
-	Database::query($sql_fraud);
+    $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = $id ";
+    Database::query($sql_fraud);
+}
+
+//Only users can see their own results 
+if (!$is_allowedToEdit) {
+    if ($student_id != $current_user_id) {
+    	api_not_allowed();
+    }
 }
 
 //Unset session for clock time
@@ -339,7 +342,8 @@ if ($show_results) {
 	
 	// for each question
 	$counter=0;
-	foreach($questionList as $questionId) {
+    //var_dump($exerciseResult);
+	foreach ($questionList as $questionId) {
 		$counter++;		
 		$choice=$exerciseResult[$questionId];
 		// creates a temporary Question object
@@ -361,17 +365,15 @@ if ($show_results) {
 		} else {
 			$colspan=2;
 		}
-		?>
-    	<div id="question_title" class="sectiontitle">
-    		<?php echo get_lang("Question").' '.($counter).' : '.$questionName; ?>
-    	</div>
-    	<div id="question_description">
-    		<?php echo $questionDescription; ?>
-    	</div>
-
-	 	<?php
+        
+		echo '<div id="question_title" class="sectiontitle">';
+        echo get_lang("Question").' '.($counter).' : '.$questionName; 
+    	echo '</div>';
+    	echo '<div id="question_description">';
+        echo $questionDescription; 
+    	echo '</div>';
+	 	
 		if ($answerType == MULTIPLE_ANSWER) {
-			$choice=array();
 			?>
 			<table width="100%" border="0" cellspacing="3" cellpadding="3">
 			<tr>
@@ -392,6 +394,9 @@ if ($show_results) {
 			</tr>
 			<?php
 			// construction of the Answer object
+           
+           /* $choice=array();
+                        
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
@@ -400,6 +405,7 @@ if ($show_results) {
 				$answerComment=$objAnswerTmp->selectComment($answerId);
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+                
 				$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 				$resultans = Database::query($queryans);
 				while ($row = Database::fetch_array($resultans)) {
@@ -414,13 +420,17 @@ if ($show_results) {
 				}
 				echo '<tr><td>';
 				if ($answerId==1) {
-					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
+					//ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
 				} else {
-					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
+					//ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
 				}
 				echo '</td></tr>';
 				$i++;
-		 	}
+		 	}*/            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);
+            //var_dump($question_result);
+            $questionScore  = $question_result['score'];
+            $totalScore     += $question_result['score'];
 		 	echo '</table>';
 		} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
 			$choice=array();
@@ -440,7 +450,7 @@ if ($show_results) {
 			</tr>
 			<?php
 			// construction of the Answer object
-			$objAnswerTmp=new Answer($questionId);
+			/*$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
 
@@ -495,7 +505,12 @@ if ($show_results) {
 		 		$answerWeighting=$objAnswerTmp->selectWeighting(1);
 				$questionScore+=$answerWeighting;
 				$totalScore+=$answerWeighting;
-			}
+			}*/
+            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);
+            
+            $questionScore  = $question_result['score'];
+            $totalScore    += $question_result['score'];
 
 		 	echo '</table>';
 		} elseif ($answerType == UNIQUE_ANSWER) {
@@ -518,7 +533,7 @@ if ($show_results) {
 				<td>&nbsp;</td>
 				</tr>
 			<?php
-			$objAnswerTmp=new Answer($questionId);
+			/*$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
 			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
@@ -545,11 +560,14 @@ if ($show_results) {
 				}
 				echo '</td></tr>';
 				$i++;
-			}
+			}*/
+            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);
+            $questionScore  = $question_result['score'];
+            $totalScore    += $question_result['score'];  
 			echo '</table>';
 
 		} elseif ($answerType == FILL_IN_BLANKS) {
-
 			?>
 			<table width="100%" border="0" cellspacing="3" cellpadding="3">
 			<tr>
@@ -562,6 +580,7 @@ if ($show_results) {
 			<td>&nbsp;</td>
 			</tr>
 			<?php
+            /*
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
@@ -599,17 +618,7 @@ if ($show_results) {
 			    //$temp=$answer;
 			    $temp = text_filter($answer);
 
-			    /* // Deprecated code
-				// TeX parsing
-				// 1. find everything between the [tex] and [/tex] tags
-				$startlocations=api_strpos($temp,'[tex]');
-				$endlocations=api_strpos($temp,'[/tex]');
-				if ($startlocations !== false && $endlocations !== false) {
-					$texstring=api_substr($temp,$startlocations,$endlocations-$startlocations+6);
-					// 2. replace this by {texcode}
-					$temp=str_replace($texstring,'{texcode}',$temp);
-				}
-				*/
+
 
 				$j=0;
 				// the loop will stop at the end of the text
@@ -622,10 +631,7 @@ if ($show_results) {
 						if (($pos = api_strpos($temp,'[')) === false) {
 							// adds the end of the text
 							$answer.=$temp;
-							/* // Deprecated code
-							// TeX parsing
-							$texstring = api_parse_tex($texstring);
-							*/
+		
 							break;
 						}
 					    $temp=api_substr($temp,$pos+1);
@@ -673,11 +679,7 @@ if ($show_results) {
 						if (($pos = api_strpos($temp,'[')) === false) {
 							// adds the end of the text
 							$answer.=$temp;
-							/* // Deprecated code
-							// TeX parsing
-							$texstring = api_parse_tex($texstring);
-							//$answer=str_replace("{texcode}",$texstring,$answer);
-							*/
+
 							break;
 						}
 						// adds the piece of text that is before the blank and ended by [
@@ -723,9 +725,15 @@ if ($show_results) {
 				ExerciseShowFunctions::display_fill_in_blanks_answer($answer,$id,$questionId);
 				echo '</td></tr>';
 				$i++;
-			}
+			}*/
+            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);
+            $questionScore  = $question_result['score'];
+            $totalScore    += $question_result['score'];
+              
 			echo '</table>';
-		} elseif ($answerType == FREE_ANSWER) {$answer = $str;
+		} elseif ($answerType == FREE_ANSWER) {
+            $answer = $str;
 			?>
 			<table width="100%" border="0" cellspacing="3" cellpadding="3">
 			<tr>
@@ -739,7 +747,8 @@ if ($show_results) {
 			</tr>
 
 			<?php
-			$objAnswerTmp = new Answer($questionId);
+			
+           /* $objAnswerTmp = new Answer($questionId);
 			$nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 			$questionScore = 0;
 			$query 	= "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' AND question_id= '".Database::escape_string($questionId)."'";
@@ -756,112 +765,34 @@ if ($show_results) {
 			}
 
 			$arrques[] = $questionName;
-            $arrans[]  = $choice;
-
-			echo '<tr>
+            $arrans[]  = $choice;*/
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);            
+            $questionScore  = $question_result['score'];
+            $totalScore    += $question_result['score'];
+            
+			/*echo '<tr>
 			<td valign="top">'.ExerciseShowFunctions::display_free_answer($choice, $id, $questionId).'</td>
 			</tr>
-			</table>';
+			</table>';*/
 
-		} elseif ($answerType == MATCHING) {
-
-			$objAnswerTmp=new Answer($questionId);
-			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-			$TBL_TRACK_ATTEMPT= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-			$sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct=0';
-			$res_answer = Database::query($sql_answer);
-			// getting the real answer
-			$real_list =array();
-			while ($real_answer = Database::fetch_array($res_answer)) {
-				$real_list[$real_answer['id']]= $real_answer['answer'];
-			}
-
-			$sql_select_answer = 'SELECT id, answer, correct, id_auto FROM '.$table_ans.'
-								  WHERE question_id="'.Database::escape_string($questionId).'" AND correct <> 0 ORDER BY id_auto';
-
-			$res_answers = Database::query($sql_select_answer);
-
-			echo '<table width="100%" height="71" border="0" cellspacing="3" cellpadding="3" >';
-			echo '<tr><td colspan="2">&nbsp;</td></tr>';
-			echo '<tr>
-					<td><span style="font-style: italic;">'.get_lang('ElementList').'</span> </td>
-					<td><span style="font-style: italic;">'.get_lang('CorrespondsTo').'</span></td>
-				  </tr>';
-			echo '<tr><td colspan="2">&nbsp;</td></tr>';
-
-			$questionScore = 0;
-
-			while ($a_answers = Database::fetch_array($res_answers)) {
-
-				$i_answer_id 	= $a_answers['id']; //3
-				$s_answer_label = $a_answers['answer'];  // your daddy - your mother
-				$i_answer_correct_answer = $a_answers['correct']; //1 - 2
-				$i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
-
-				$sql_user_answer = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-									WHERE exe_id = '$id' AND question_id = '$questionId' AND position='$i_answer_id_auto'";
-
-				$res_user_answer = Database::query($sql_user_answer);
-
-				if (Database::num_rows($res_user_answer)>0 ) {
-					$s_user_answer = Database::result($res_user_answer,0,0); //  rich - good looking
-				} else {
-					$s_user_answer = 0;
-				}
-
-				$i_answerWeighting=$objAnswerTmp->selectWeighting($i_answer_id);
-
-				$user_answer = '';
-
-				if (!empty($s_user_answer)) {
-					if ($s_user_answer == $i_answer_correct_answer)	{
-						$questionScore	+= $i_answerWeighting;
-						$totalScore		+= $i_answerWeighting;
-						$user_answer = '<span>'.$real_list[$i_answer_correct_answer].'</span>';
-					} else {
-						$user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$real_list[$s_user_answer].'</span>';
-					}
-				}
-				echo '<tr>';
-				echo '<td>'.$s_answer_label.'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b></td>';
-				echo '</tr>';
-			}
+		} elseif ($answerType == MATCHING) {            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);            
+            $questionScore  = $question_result['score'];
+            $totalScore    += $question_result['score'];			
 			echo '</table>';
 		} elseif ($answerType == HOT_SPOT) {
-			?>
-			<table width="500" border="0">
-
-			<?php
-			$objAnswerTmp=new Answer($questionId);
-			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-			$questionScore=0;
-			?>
-				<tr>
-					<td valign="top" align="center" style="padding-left:0px;" >
-						<table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">
-			<?php
-			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-				$answer=$objAnswerTmp->selectAnswer($answerId);
-				$answerComment=$objAnswerTmp->selectComment($answerId);
-				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-
-				$TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-				$query = "select hotspot_correct from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".Database::escape_string($id)."' and hotspot_question_id= '".Database::escape_string($questionId)."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
-				$resq=Database::query($query);
-				$choice = Database::result($resq,0,"hotspot_correct");
-				ExerciseShowFunctions::display_hotspot_answer($answerId,$answer,$choice,$answerComment);
-				$i++;
-		 	}
-		 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-			$resfree = Database::query($queryfree);
-			$questionScore= Database::result($resfree,0,"marks");
-			$totalScore+=$questionScore;
-			echo '</table></td></tr>';
+			
+			echo '<table width="500" border="0">
+            <tr>
+                    <td valign="top" align="center" style="padding-left:0px;" >
+                        <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';			
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);            
+            $questionScore  = $question_result['score'];
+            $totalScore    += $question_result['score'];
+			echo '</table></td></tr>';            
 		 	echo '<tr>
 				<td colspan="2">'.
-					//<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="421">
-					'<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" width="552" height="352">
+					'<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" width="552" height="352">
 						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" />
 					</object>
 
@@ -889,7 +820,7 @@ if ($show_results) {
 				}
 			}
 			echo '</a><br /><div id="feedback_'.$name.'" style="width:100%">';
-			$comnt = trim(ExerciseShowFunctions::get_comments($id,$questionId));
+			$comnt = trim(get_comments($id,$questionId));
 			if (empty($comnt)) {
 				echo '<br />';
 			} else {
@@ -903,7 +834,7 @@ if ($show_results) {
 			$renderer =& $feedback_form->defaultRenderer();
 			$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
-			$comnt = ExerciseShowFunctions::get_comments($id,$questionId);
+			$comnt = get_comments($id,$questionId);
 			${user.$questionId}['comments_'.$questionId] = $comnt;
 			$feedback_form->addElement('html_editor', 'comments_'.$questionId, null, null, array('ToolbarSet' => 'TestAnswerFeedback', 'Width' => '100%', 'Height' => '120'));
 			$feedback_form->addElement('html','<br>');
@@ -912,7 +843,7 @@ if ($show_results) {
 			$feedback_form->display();
 			echo '</div>';
 		} else {
-			$comnt = ExerciseShowFunctions::get_comments($id,$questionId);
+			$comnt = get_comments($id,$questionId);
 			echo '<tr><td><br />';
 			if (!empty($comnt)) {
 				echo '<b>'.get_lang('Feedback').'</b>';
@@ -958,7 +889,7 @@ if ($show_results) {
 		$my_total_weight = float_format($questionWeighting,1);
 
 		echo '<div id="question_score">';
-		echo get_lang('YourTotalScore')." : $my_total_score/$my_total_weight";
+		echo get_lang('Score')." : $my_total_score/$my_total_weight";
 		echo '</div>';
 
 		unset($objAnswerTmp);
@@ -971,12 +902,14 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 	//$query = "update ".$TBL_TRACK_EXERCICES." set exe_result = $totalScore where exe_id = '$id'";
 	//Database::query($query);
 	if ($show_results) {
+        
 		echo '<div id="question_score">'.get_lang('YourTotalScore')." ";
-		if ($dsp_percent) {
+		if ($dsp_percent) {            
 			$my_result = number_format(($totalScore/$totalWeighting)*100,1,'.','');
 			$my_result = float_format($my_result,1);
 			echo $my_result."%";
-		} else {
+		} else {            
+            
 			$my_total_score  = float_format($totalScore,1);
 			$my_total_weight = float_format($totalWeighting,1);
 			echo $my_total_score."/".$my_total_weight;
@@ -1038,7 +971,7 @@ if ($origin != 'learnpath') {
 		echo '</body></html>';
 	} else {
 		if (!$is_allowedToEdit) {
-			ExerciseShowFunctions::send_notification($arrques, $arrans, $to);
+			$objExercise->send_notification($arrques, $arrans, $to);
 		}
 		Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));
         echo '<br />';
@@ -1047,7 +980,7 @@ if ($origin != 'learnpath') {
 
 if (!$is_allowedToEdit) {
 	if ($origin != 'learnpath') {
- 		ExerciseShowFunctions::send_notification($arrques, $arrans, $to);
+ 		$objExercise->send_notification($arrques, $arrans, $to);
 	}
 }
 

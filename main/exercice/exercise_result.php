@@ -182,6 +182,7 @@ foreach ($questionList as $questionId) {
 	$counter++;
 	// gets the student choice for this question
 	$choice                = $exerciseResult[$questionId];
+    
 	// creates a temporary Question object
 	$objQuestionTmp        = Question :: read($questionId);
 	// initialize question information
@@ -242,8 +243,7 @@ foreach ($questionList as $questionId) {
 				<?php } ?>
 				</tr>
 			<?php
-		} elseif ($answerType == FILL_IN_BLANKS) {
-			?>
+		} elseif ($answerType == FILL_IN_BLANKS) { ?>
 				<tr>
 				<td>
 					<i><?php echo get_lang("Answer"); ?></i>

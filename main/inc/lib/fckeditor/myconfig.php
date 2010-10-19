@@ -69,13 +69,10 @@
 // If it has not been defined, then the toolbar set for the "normal" size is used.
 // if do you prefer configure for each toolbar edit main/inc/lib/fckeditor/toolbars/
 
-if ((api_get_setting('more_buttons_maximized_mode') == 'true'))
-{
-	$config['ToolbarSets']['Directory'] = 'extended';
-}
-else
-{
-	$config['ToolbarSets']['Directory'] = 'default';
+if ((api_get_setting('more_buttons_maximized_mode') == 'true')) {
+    $config['ToolbarSets']['Directory'] = 'extended';
+} else {
+    $config['ToolbarSets']['Directory'] = 'default';
 }
 
 
@@ -89,8 +86,8 @@ $config['LoadPlugin'][] = 'customizations';
 
 // dragresizetable & tablecommands : Plugins for improvement table-related operations.
 if (trim(get_lang('text_dir', '')) != 'rtl') {
-	// This plugin works properly only when language writting system is "from left to right (ltr)".
-	$config['LoadPlugin'][] = 'dragresizetable';
+    // This plugin works properly only when language writting system is "from left to right (ltr)".
+    $config['LoadPlugin'][] = 'dragresizetable';
 }
 $config['LoadPlugin'][] = 'tablecommands';
 
@@ -103,7 +100,7 @@ $config['LoadPlugin'][] = 'audio';
 
 // glossary: this plugin add a term from glossary tool in Chamilo.
 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
-	$config['LoadPlugin'][] = 'glossary';
+    $config['LoadPlugin'][] = 'glossary';
 }
 
 // MP3: This is the old plugin for inserting audio files.
@@ -113,11 +110,11 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 // ImageManager : Adds a dialog (image gallery) for inserting images. The advanced file manager has its own functionality
 // for previewing images. This is why we load this plugin only in case when the simple file manager is used.
 if (!(api_get_setting('advanced_filemanager') == 'true')) {
-	$config['LoadPlugin'][] = 'ImageManager';
-	// The following setting defines how the simple file manager to be opened:
-	// true  - in a new browser window, or
-	// false - as a dialog whithin the page (recommended).
-	$config['OpenImageManagerInANewWindow'] = false;
+    $config['LoadPlugin'][] = 'ImageManager';
+    // The following setting defines how the simple file manager to be opened:
+    // true  - in a new browser window, or
+    // false - as a dialog whithin the page (recommended).
+    $config['OpenImageManagerInANewWindow'] = false;
 }
 
 // fckEmbedMovies : Adds a dilog for inserting video files.
@@ -128,14 +125,11 @@ $config['LoadPlugin'][] = 'flvPlayer';
 
 // youtube : Adds a dilog for inserting YouTube video-streams.
 if ((api_get_setting('youtube_for_students') == 'true')) {
-
-	$config['LoadPlugin'][] = 'youtube';
-
-}
-else{
-	if (api_is_allowed_to_edit() || api_is_platform_admin()) { // (not for students)
-		$config['LoadPlugin'][] = 'youtube';
-	}
+    $config['LoadPlugin'][] = 'youtube';
+} else {
+    if (api_is_allowed_to_edit() || api_is_platform_admin()) { // (not for students)
+        $config['LoadPlugin'][] = 'youtube';
+    }
 }
 
 // googlemaps : Adds a dilog for inserting Google maps.
@@ -152,8 +146,7 @@ $config['LoadPlugin'][] = 'googlemaps';
 // in your server configuration have to be done. The MimeTex executable file has to be installed, see the installation guide.
 //
 if ((api_get_setting('math_mimetex') == 'true')) {
-
-	$config['LoadPlugin'][] = 'mimetex';
+    $config['LoadPlugin'][] = 'mimetex';
 }
 
 //
@@ -172,9 +165,9 @@ $config['MimetexExecutableInstalled'] = 'detect'; // 'detect' (default), true, f
 // 'ip'             - detection is tried at ip address, for example http://192.168.0.1/cgi-bin/mimetex.cgi
 // 'server_name'    - detection is tried at address based on server's name, for example http://mysite.com/cgi-bin/mimetex.cgi
 if (IS_WINDOWS_OS) {
-	$config['MimetexExecutableDetectionMethod'] = 'bootstrap_ip'; // 'bootstrap_ip' for better chance on Windows (no firewall blocking).
+    $config['MimetexExecutableDetectionMethod'] = 'bootstrap_ip'; // 'bootstrap_ip' for better chance on Windows (no firewall blocking).
 } else {
-	$config['MimetexExecutableDetectionMethod'] = 'server_name';
+    $config['MimetexExecutableDetectionMethod'] = 'server_name';
 }
 // Timeout for MimeTeX executable file detection - keep this value as low as possible, especially on Windows servers.
 $config['MimetexExecutableDetectionTimeout'] = 0.05;
@@ -186,8 +179,7 @@ $config['MimetexExecutableDetectionTimeout'] = 0.05;
 // Browser compatibility: Internet Explorer 6.0+ with MathPlayer plugin, Mozilla Firefox 2.0+, Opera 9.5+
 
 if ((api_get_setting('math_asciimathML') == 'true')) {
-
-	$config['LoadPlugin'][] = 'asciimath';
+    $config['LoadPlugin'][] = 'asciimath';
 }
 
 // wikilink : Adds a dialog for inserting wiki-formatted links.
@@ -226,66 +218,67 @@ $config['OpenAdvancedFileManagerInANewWindow'] = false;
 
 if ((api_get_setting('advanced_filemanager') == 'true')) {
 
-	// For the advanced file manager.
+    // For the advanced file manager.
 
-	// Dialog/window size for browsing:
-	// any type of files;
-	$config['LinkBrowserWindowWidth']	= 800 ;
-	$config['LinkBrowserWindowHeight']	= 580 ;
-	// images;
-	$config['ImageBrowserWindowWidth']	= 800 ;
-	$config['ImageBrowserWindowHeight']	= 580 ;
-	// flash objects;
-	$config['FlashBrowserWindowWidth']	= 800 ;
-	$config['FlashBrowserWindowHeight']	= 580 ;
-	// audio files;
-	$config['MP3BrowserWindowWidth']	= 800 ;
-	$config['MP3BrowserWindowHeight']	= 580 ;
-	// video files;
-	$config['VideoBrowserWindowWidth']	= 800 ;
-	$config['VideoBrowserWindowHeight']	= 580 ;
-	// video (flv) files.
-	$config['MediaBrowserWindowWidth']	= 800 ;
-	$config['MediaBrowserWindowHeight']	= 580 ;
+    // Dialog/window size for browsing:
+    // any type of files;
+    $config['LinkBrowserWindowWidth']	= 800 ;
+    $config['LinkBrowserWindowHeight']	= 580 ;
+    // images;
+    $config['ImageBrowserWindowWidth']	= 800 ;
+    $config['ImageBrowserWindowHeight']	= 580 ;
+    // flash objects;
+    $config['FlashBrowserWindowWidth']	= 800 ;
+    $config['FlashBrowserWindowHeight']	= 580 ;
+    // audio files;
+    $config['MP3BrowserWindowWidth']	= 800 ;
+    $config['MP3BrowserWindowHeight']	= 580 ;
+    // video files;
+    $config['VideoBrowserWindowWidth']	= 800 ;
+    $config['VideoBrowserWindowHeight']	= 580 ;
+    // video (flv) files.
+    $config['MediaBrowserWindowWidth']	= 800 ;
+    $config['MediaBrowserWindowHeight']	= 580 ;
 
-	// Set true/false to enable/disable the quick-upload tabs for different resource types:
-	$config['LinkUpload']  = false;  // for any type of files;
-	$config['ImageUpload'] = false;  // for images;
-	$config['FlashUpload'] = false;  // for flash objects;
-	$config['MP3Upload']   = false;  // for audio files;
-	$config['VideoUpload'] = false;  // for video files;
-	$config['MediaUpload'] = false;  // for video (flv) files.
+    // Set true/false to enable/disable the quick-upload tabs for different resource types:
+    $config['LinkUpload']  = false;  // for any type of files;
+    $config['ImageUpload'] = false;  // for images;
+    $config['FlashUpload'] = false;  // for flash objects;
+    $config['MP3Upload']   = false;  // for audio files;
+    $config['VideoUpload'] = false;  // for video files;
+    $config['MediaUpload'] = false;  // for video (flv) files.
+
 } else {
 
-	// For the simple file manager.
+    // For the simple file manager.
 
-	// Dialog/window size for browsing:
-	// any type of files;
-	$config['LinkBrowserWindowWidth']	= 780 ;
-	$config['LinkBrowserWindowHeight']	= 500 ;
-	// images;
-	$config['ImageBrowserWindowWidth']	= 780 ;
-	$config['ImageBrowserWindowHeight']	= 500 ;
-	// flash objects;
-	$config['FlashBrowserWindowWidth']	= 780 ;
-	$config['FlashBrowserWindowHeight']	= 500 ;
-	// audio files;
-	$config['MP3BrowserWindowWidth']	= 780 ;
-	$config['MP3BrowserWindowHeight']	= 500 ;
-	// video files;
-	$config['VideoBrowserWindowWidth']	= 780 ;
-	$config['VideoBrowserWindowHeight']	= 500 ;
-	// video (flv) files.
-	$config['MediaBrowserWindowWidth']	= 780 ;
-	$config['MediaBrowserWindowHeight']	= 500 ;
+    // Dialog/window size for browsing:
+    // any type of files;
+    $config['LinkBrowserWindowWidth']	= 780 ;
+    $config['LinkBrowserWindowHeight']	= 500 ;
+    // images;
+    $config['ImageBrowserWindowWidth']	= 780 ;
+    $config['ImageBrowserWindowHeight']	= 500 ;
+    // flash objects;
+    $config['FlashBrowserWindowWidth']	= 780 ;
+    $config['FlashBrowserWindowHeight']	= 500 ;
+    // audio files;
+    $config['MP3BrowserWindowWidth']	= 780 ;
+    $config['MP3BrowserWindowHeight']	= 500 ;
+    // video files;
+    $config['VideoBrowserWindowWidth']	= 780 ;
+    $config['VideoBrowserWindowHeight']	= 500 ;
+    // video (flv) files.
+    $config['MediaBrowserWindowWidth']	= 780 ;
+    $config['MediaBrowserWindowHeight']	= 500 ;
 
-	// Set true/false to enable/disable the quick-upload tabs for different resource types:
-	$config['LinkUpload']  = true;  // for any type of files;
-	$config['ImageUpload'] = true;  // for images;
-	$config['FlashUpload'] = true;  // for flash objects;
-	$config['MP3Upload']   = true;  // for audio files;
-	$config['VideoUpload'] = true;  // for video files;
-	$config['MediaUpload'] = true;  // for video (flv) files.
+    // Set true/false to enable/disable the quick-upload tabs for different resource types:
+    $config['LinkUpload']  = true;  // for any type of files;
+    $config['ImageUpload'] = true;  // for images;
+    $config['FlashUpload'] = true;  // for flash objects;
+    $config['MP3Upload']   = true;  // for audio files;
+    $config['VideoUpload'] = true;  // for video files;
+    $config['MediaUpload'] = true;  // for video (flv) files.
 }
 
 
@@ -304,10 +297,8 @@ $config['EditorAreaStyles'] = 'body { background: #ffffff; }';
 // A setting for blocking copy/paste functions of the editor.
 // This setting activates on leaners only. For users with other statuses there is no blocking copy/paste.
 // if do you prefer configure for each toolbar edit main/inc/lib/fckeditor/toolbars/
-if ((api_get_setting('block_copy_paste_for_students') == 'true'))
-{
-
-	$config['BlockCopyPaste'] = true;
+if ((api_get_setting('block_copy_paste_for_students') == 'true')) {
+    $config['BlockCopyPaste'] = true;
 }
 
 /*

@@ -6,3 +6,5 @@
  * Author: Ivan Tcholakov (ivantcholakov@gmail.com), 2010
  */
 
+FCKLang["DlgAsciiSvg"] = 'Add/Edit Mathematical Graphics' ;
+FCKLang["DlgAsciiSvgGraphEditor"] = 'Mathematical Graphics Editor' ;

@@ -835,7 +835,7 @@ class SocialManager extends UserManager {
 			if (api_get_setting('show_email_addresses') == 'true') {
 				$table_header[] = array(get_lang('Email'), true);
 			}
-			Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 25), $extra_params, array(),'grid');
+			Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 10), $extra_params, array(),'grid');
 		}
 	}
 	/**

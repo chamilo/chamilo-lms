@@ -170,6 +170,8 @@ if (api_is_allowed_to_edit(false, true)) {
 	//echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
 	echo Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';
 	//echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang('NewGroupCreate').'</a>&nbsp;';
+	echo Display::return_icon('members.gif', get_lang('Users')) .'<a href="../user/user.php?'.api_get_cidreq().'">'.get_lang('Users').'</a>&nbsp;';
+	
 }
 
 $group_cats = GroupManager :: get_categories();

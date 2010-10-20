@@ -584,6 +584,7 @@ class FCKeditor
         $config['FlashPlayerVideo'] = api_get_path(TO_REL, FLASH_PLAYER_VIDEO);
         $config['ScriptSWFObject'] = api_get_path(TO_REL, SCRIPT_SWFOBJECT);
         $config['ScriptASCIIMathML'] = api_get_path(TO_REL, SCRIPT_ASCIIMATHML);
+        $config['DrawingASCIISVG'] = api_get_path(TO_REL, DRAWING_ASCIISVG);
         return $config;
     }
 

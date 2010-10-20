@@ -42,7 +42,8 @@ class TestMainApi extends UnitTestCase {
             FLASH_PLAYER_AUDIO,
             FLASH_PLAYER_VIDEO,
             SCRIPT_SWFOBJECT,
-            SCRIPT_ASCIIMATHML
+            SCRIPT_ASCIIMATHML,
+            DRAWING_ASCIISVG
         );
 
         $res = array();
@@ -240,7 +241,8 @@ class TestMainApi extends UnitTestCase {
             FLASH_PLAYER_AUDIO,
             FLASH_PLAYER_VIDEO,
             SCRIPT_SWFOBJECT,
-            SCRIPT_ASCIIMATHML
+            SCRIPT_ASCIIMATHML,
+            DRAWING_ASCIISVG
         );
 
         $res = array();

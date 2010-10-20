@@ -129,7 +129,7 @@ $stok = Security::get_token();
 
                 $title = $course['title'];
                 $tutor_name = $course['tutor'];
-                $creation_date = $course['creation_date'];
+                $creation_date = substr($course['creation_date'],0,10);
                 $count_connections = $course['count_connections'];
 
 

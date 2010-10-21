@@ -1964,8 +1964,8 @@ class Exercise {
                     } else {
                         $studentChoice = $choice;
                         if ($studentChoice) {
-                            //@todo verify this--> set to -1 because the question has'nt been corrected 
-                            $questionScore = -1;
+                            //Fixing negative puntation see #2193 
+                            $questionScore = 0;
                             $totalScore += 0;
                         }                        
                     }

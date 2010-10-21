@@ -199,36 +199,6 @@ function getFCK(vals,marksid) {
 //f.submit();
 }
 </script>
-<?php
-
-/*	MAIN CODE    */
-
-// Email configuration settings
-$coursecode = api_get_course_id();
-$to = '';
-$teachers = array();
-if(api_get_session_id()) {
-	$teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
-} else {
-	$teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
-}
-
-$num = count($teachers);
-if($num>1) {
-	$to = array();
-	foreach($teachers as $teacher) {
-		$to[] = $teacher['email'];
-	}
-} elseif ($num>0){
-	foreach($teachers as $teacher) {
-		$to = $teacher['email'];
-	}
-} else {
-	//this is a problem (it means that there is no admin for this course)
-}
-
-
-?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td colspan="2">
@@ -954,12 +924,9 @@ if ($origin =='student_progress') {?>
 }
 
 if ($origin != 'learnpath') {
-	//$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
 	//we are not in learnpath tool
 	Display::display_footer();
 } else {
-    //$url_email = api_get_path(WEB_CODE_PATH).'mySpace/lp_tracking.php?course='.api_get_course_id().'&origin=tracking_course&lp_id='.$learnpath_id.'&student_id='.api_get_user_id();
-
 	if (!isset($_GET['fb_type'])) {
 		$lp_mode =  $_SESSION['lp_mode'];
 		$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
@@ -971,7 +938,7 @@ if ($origin != 'learnpath') {
 		echo '</body></html>';
 	} else {
 		if (!$is_allowedToEdit) {
-			$objExercise->send_notification($arrques, $arrans, $to);
+			$objExercise->send_notification($arrques, $arrans);
 		}
 		Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));
         echo '<br />';
@@ -980,7 +947,7 @@ if ($origin != 'learnpath') {
 
 if (!$is_allowedToEdit) {
 	if ($origin != 'learnpath') {
- 		$objExercise->send_notification($arrques, $arrans, $to);
+ 		$objExercise->send_notification($arrques, $arrans);
 	}
 }
 

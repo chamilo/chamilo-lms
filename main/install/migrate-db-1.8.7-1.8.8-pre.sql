@@ -25,7 +25,7 @@ ALTER TABLE settings_options CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_
 ALTER TABLE user MODIFY COLUMN username VARCHAR(40) NOT NULL;
 
 UPDATE settings_current SET variable='chamilo_database_version' WHERE variable='dokeos_database_version';
-UPDATE settings_current SET selected_value = '1.8.8.12378' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.8.8.12885' WHERE variable = 'chamilo_database_version';
 
 ALTER TABLE sys_announcement ADD COLUMN access_url_id INT  NOT NULL default 1;
 ALTER TABLE sys_calendar ADD COLUMN access_url_id INT  NOT NULL default 1;
@@ -41,10 +41,17 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('course_val
 INSERT INTO settings_options (variable, value, display_text) VALUES ('course_validation', 'false', 'No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_validation_terms_and_conditions_url', NULL, 'textfield', 'Platform', '', 'CourseValidationTermsAndConditionsLink', 'CourseValidationTermsAndConditionsLinkComment', NULL, NULL, 1);
 UPDATE settings_current SET selected_value='1' WHERE variable='advanced_filemanager';
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('sso_authentication',NULL,'radio','Security','false','EnableSSOTitle','EnableSSOComment',NULL,NULL,1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('sso_authentication_domain',NULL,'textfield','Security','','SSOServerDomainTitle','SSOServerDomainComment',NULL,NULL,1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('sso_authentication_auth_uri',NULL,'textfield','Security','/?q=user','SSOServerAuthURITitle','SSOServerAuthURIComment',NULL,NULL,1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('sso_authentication_unauth_uri',NULL,'textfield','Security','/?q=logout','SSOServerUnAuthURITitle','SSOServerUnAuthURIComment',NULL,NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('sso_authentication_protocol',NULL,'radio','Security','http://','SSOServerProtocolTitle','SSOServerProtocolComment',NULL,NULL,1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authentication', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authentication', 'false', 'No');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authentication_protocol', 'http://', 'http://');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authentication_protocol', 'https://', 'https://');
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
-
-
 -- xxUSERxx
 
 -- xxCOURSExx

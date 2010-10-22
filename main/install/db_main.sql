@@ -765,7 +765,12 @@ VALUES
 ('show_link_bug_notification', NULL, 'radio', 'Platform', 'true', 'ShowLinkBugNotificationTitle', 'ShowLinkBugNotificationComment', NULL, NULL, 0),
 ('course_validation', NULL, 'radio', 'Platform', 'false', 'EnableCourseValidation', 'EnableCourseValidationComment', NULL, NULL, 1),
 ('course_validation_terms_and_conditions_url', NULL, 'textfield', 'Platform', '', 'CourseValidationTermsAndConditionsLink', 'CourseValidationTermsAndConditionsLinkComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield', NULL, '1.8.8.12378', 'DokeosDatabaseVersion', '', NULL, NULL, 0);
+('sso_authentication',NULL,'radio','Security','false','EnableSSOTitle','EnableSSOComment',NULL,NULL,1),
+('sso_authentication_domain',NULL,'textfield','Security','','SSOServerDomainTitle','SSOServerDomainComment',NULL,NULL,1),
+('sso_authentication_auth_uri',NULL,'textfield','Security','/?q=user','SSOServerAuthURITitle','SSOServerAuthURIComment',NULL,NULL,1),
+('sso_authentication_unauth_uri',NULL,'textfield','Security','/?q=logout','SSOServerUnAuthURITitle','SSOServerUnAuthURIComment',NULL,NULL,1),
+('sso_authentication_protocol',NULL,'radio','Security','http://','SSOServerProtocolTitle','SSOServerProtocolComment',NULL,NULL,1),
+('chamilo_database_version', NULL, 'textfield', NULL, '1.8.8.12885', 'DokeosDatabaseVersion', '', NULL, NULL, 0);
 
 
 UNLOCK TABLES;
@@ -983,7 +988,11 @@ VALUES
 ('show_link_bug_notification', 'true', 'Yes'),
 ('show_link_bug_notification', 'false', 'No'),
 ('course_validation', 'true', 'Yes'),
-('course_validation', 'false', 'No');
+('course_validation', 'false', 'No'),
+('sso_authentication', 'true', 'Yes'),
+('sso_authentication', 'false', 'No'),
+('sso_authentication_protocol', 'http://', 'http://'),
+('sso_authentication_protocol', 'https://', 'https://');
 
 UNLOCK TABLES;
 

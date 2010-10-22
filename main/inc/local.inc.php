@@ -428,7 +428,6 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		 * - Implement user interface for api_get_setting('sso_authentication')
 		 *   } elseif (api_get_setting('sso_authentication')=='true') {
 		 * - Work on a better validation for webservices paths. Current is very poor and exit
-		 * - $master variable should be recovered from chamilo settings.
 		*/
 	    $master = array(
 			'domain' 		=> api_get_setting('sso_authentication_domain'), 			//	'localhost/project/drupal5',

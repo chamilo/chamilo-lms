@@ -973,4 +973,6 @@ $TermsAndConditions = "Termini e Condizioni";
 $ReadTermsAndConditions = "Leggi i Termini e le Condizioni";
 $IAcceptTermsAndConditions = "Ho letto e accettato i Termini e le Condizioni del servizio";
 $YouHaveToAcceptTermsAndConditions = "Per procedere devi accettare i Termini e le Condizioni del servizio";
+$BrowserDontSupportsSVG = "Il browser non accetta l'uso di immagini SVG. Per poter usare la funzionalità è necessario installare un apposito plugin o usare un browser quale Firefox o Chrome";
+$FillWithExemplaryContent = "Riempi di contenuti esemplificativi";
 ?>

@@ -1274,4 +1274,6 @@ $AllowUsersCopyFilesComment = "Permite aos usuarios copiar arquivos dun curso na
 $ReviewCourseRequests = "Validar cursos";
 $AcceptedCourseRequests = "Cursos validados";
 $RejectedCourseRequests = "Cursos rexeitados";
+$BrowscapInfo = "Browscap carga o arquivo breowscap.ini que contén unha gran cantidade de datos sobre os navegadores e as súas capacidades para que poda ser usada pola función get_browser() de PHP.";
+$EnableCourseValidation = "Validación de formación";
 ?>

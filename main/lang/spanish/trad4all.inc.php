@@ -917,26 +917,26 @@ $Letters = "Letras";
 $MaximumOfParticipants = "Número máximo de miembros";
 $ContactInformation = "Información del contacto";
 $PersonName = "Nombre de la persona";
-$CompanyName = "Nombre de la companía";
-$PersonRole = "Rol de la persona";
+$CompanyName = "Nombre de su empresa";
+$PersonRole = "Su cargo";
 $HaveYouThePowerToTakeFinancialDecisions = "¿Tienes el poder de tomar decisiones financieras?";
-$CompanyCountry = "País de la companía";
-$CompanyCity = "Ciudad de la companía";
-$WhichLanguageWouldYouLikeToUseWhenContactingYou = "¿Qué idioma te gustaría que usemos al contactarte?";
+$CompanyCountry = "País de su empresa";
+$CompanyCity = "Ciudad de su empresa";
+$WhichLanguageWouldYouLikeToUseWhenContactingYou = "¿En qué idioma le gustaría que le contactemos?";
 $SendInformation = "Enviar la información";
-$YouMustAcceptLicence = "Debes aceptar la licencia";
+$YouMustAcceptLicence = "Debe aceptar la licencia para poder usar este software";
 $SelectOne = "Seleccione uno";
-$ContactInformationHasBeenSent = "Información del contacto ha sido enviado";
+$ContactInformationHasBeenSent = "Información de contacto enviada";
 $ContactInformationDescription = "Estimado usuario,
 
-Esta a punto de instalar una de las mejores plataformas e-learning de código abierto en el mercado. Al igual que muchos otros proyectos de código abierto, Chamilo está respaldado por una amplia comunidad de estudiantes, profesores, desarrolladores y creadores de contenido que desean promover el proyecto.
+Está a punto de instalar una de las mejores plataformas e-learning de código abierto en el mercado. Al igual de muchos otros proyectos de código abierto, Chamilo está respaldado por una amplia comunidad de profesores, estudiantes, desarrolladores y creadores de contenido que desean promover el proyecto.
 
 Al saber un poco más de usted, uno de nuestros usuarios más importantes que gestionará este sistema e-learning, podremos dar a conocer a otros que nuestro software se utiliza y podremos informarle sobre eventos que pueden ser relevantes para usted.
 
 Llenar este formulario, implica la aceptación de que la asociación Chamilo o sus miembros puedan enviarle información por correo electrónico sobre eventos importantes o actualizaciones en el software Chamilo. Esto ayudará a crecer a la comunidad como una entidad organizada, donde el flujo de información, se haga con respeto permanente a su tiempo y su privacidad.
 
-Tenga en cuenta que no está obligado a llenar este formulario. Si desea permanecer en el anonimato, perderemos la oportunidad de ofrecerle todos los privilegios de ser un administrador del portal registrado, pero nosotros respetaremos su decisión. Basta con dejar vacío este formulario y hacer clic en \"Siguiente\".";
-$CompanyActivity = "Actividad de la compañia";
+Tenga en cuenta que no está obligado a llenar este formulario. Si desea permanecer en el anonimato, perderemos la oportunidad de ofrecerle todos los privilegios de ser un administrador de portal registrado, pero respetaremos su decisión. Basta con dejar vacío este formulario y hacer clic en \"Siguiente\" para seguir instalando Chamilo.";
+$CompanyActivity = "Actividad de su empresa";
 $DateUnLock = "Desbloquear fecha";
 $DateLock = "Bloquear fecha";
 $GoToStudentDetails = "Ver detalles del estudiante";
@@ -970,4 +970,5 @@ $ReadTermsAndConditions = "Leer las condiciones del servicio";
 $IAcceptTermsAndConditions = "He leido y acepto las condiciones del servicio";
 $YouHaveToAcceptTermsAndConditions = "Para continuar debe aceptar nuestros términos y condiciones";
 $BrowserDontSupportsSVG = "Su navegador no soporta archivos SVG. Para poder utilizar esta herramienta debe tener instalado un navegador avanzado del tipo: Firefox o Chrome";
+$FillWithExemplaryContent = "Rellenar con contenido de ejemplo";
 ?>

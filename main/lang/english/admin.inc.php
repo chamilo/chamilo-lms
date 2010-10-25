@@ -1279,4 +1279,16 @@ $EnableCourseValidation = "Training validation";
 $EnableCourseValidationComment = "When \"Training validation\" feature is activated, a teacher is not able to create a training alone. He/she fills a training request. The platform administrator reviews the request and approves it or rejects it.<br />This feature relies on automated e-mail messages; set Chamilo to access an e-mail server and to use a dedicated an e-mail account.";
 $CourseValidationTermsAndConditionsLink = "Training validation - a link to the terms and conditions";
 $CourseValidationTermsAndConditionsLinkComment = "This is the URL to the \"Terms and Conditions\" document that is valid for making a training request. If the address here is set, before sending a training request the user should read and agree with these terms and conditions.<br />If you activate Chamilo's module \"Terms and Conditions\" and if you want its URL to be used, then leave this setting empty.";
+$EnableSSOTitle = "Single Sign On";
+$EnableSSOComment = "Enabling Single Sign On allows you to connect this platform as a slave of an authentication master, for example a Drupal website with the Drupal-Chamilo plugin or any other similar master setup.";
+$SSOServerDomainTitle = "Domain of the Single Sign On server";
+$SSOServerDomainComment = "The domain of the Single Sign On server (the web address of the other server that will allow automatic registration to Chamilo). This should generally be the address of the other server without any trailing slash and without the protocol, e.g. www.example.com";
+$SSOServerAuthURITitle = "Single Sign On server authentication URL";
+$SSOServerAuthURIComment = "The address of the page that deals with the authentication verification. For example /?q=user in Drupal's case.";
+$SSOServerUnAuthURITitle = "Single Sign On server's logout URL";
+$SSOServerUnAuthURIComment = "The address of the page on the server that logs the user out. This option is useful if you want users logging out of Chamilo to be automatically logged out of the authentication server.";
+$SSOServerProtocolTitle = "Single Sign On server's protocol";
+$SSOServerProtocolComment = "The protocol string to prefix the Single Sign On server's domain (we recommend you use https:// if your server is able to provide this feature, as all non-secure protocols are dangerous for authentication matters)";
+$EnabledWirisTitle = "WIRIS mathematical editor";
+$EnabledWirisComment = "Enable WIRIS mathematical editor";
 ?>

@@ -11,7 +11,7 @@
 $config['ToolbarSets']['Normal'] = array(
 	array('FitWindow','Save','NewPage','PageBreak','Preview','-','PasteText','-','Undo','Redo','-','SelectAll','-','Find'),
 	array('Wikilink','Link','Unlink','Anchor'),
-	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath'),
+	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
 	array('Table','Rule','Smiley','SpecialChar','googlemaps'),
 	array('FontFormat','FontName','FontSize'),
 	array('Bold','Italic','Underline'),

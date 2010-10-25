@@ -45,13 +45,13 @@ if (api_get_setting('stylesheets') != '') {
 <body dir="<?php echo api_get_text_direction(); ?>">
 <div style="margin:10px;">
 <div style="text-align:right;"><a href="javascript: window.close();"><?php echo get_lang('Close'); ?></a></div>
-<a href="faq.php"><?php echo get_lang('AccessToFaq') ?></a>
+<a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php"><?php echo get_lang('AccessToFaq') ?></a>
 <h4>
 <?php echo get_lang('H'.$help_name); ?>
 </h4>
 <?php echo get_lang($help_name.'Content'); ?>
 <br /><br />
-<a href="faq.php"><?php echo get_lang('AccessToFaq'); ?></a>
+<a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php"><?php echo get_lang('AccessToFaq'); ?></a>
 <div style="text-align:right;"><a href="javascript: window.close();"><?php echo get_lang('Close'); ?></a></div>
 </div>
 </body>

@@ -68,6 +68,50 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 
 
+/*
+-----------------------------------------------------------------------------
+Menu Slide JQuery
+-----------------------------------------------------------------------------
+*/
+ul#navigation {
+	position: fixed;
+	margin: 0px;
+	padding: 0px;
+	top: 10px;
+	right: -10px;
+	list-style: none;
+	z-index:9999;
+}
+
+ul#navigation li {
+	width: 73px;
+}
+
+ul#navigation li a {
+	display: block;
+	margin-left: 1px;
+	width: 65px;
+	height: 60px;
+	background-color:#CFCFCF;
+	background-repeat:no-repeat;
+	background-position:center center;
+	border:1px solid #AFAFAF;
+	-moz-border-radius:10px 0px 0px 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	-webkit-border-top-right-radius: 10x;
+	-khtml-border-bottom-right-radius: 10px;
+	-khtml-border-top-right-radius: 10px;
+	-moz-box-shadow: 0px 4px 3px #000;
+	opacity: 0.6;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60);
+	-webkit-box-shadow: 0px 4px 3px #000;
+}
+
+ul#navigation .help a{
+	background-image: url(images/help2.png);
+}
+
+
 /* for content section in main index.php file */
 /*
 |----------------------------------------------------------------------------
@@ -404,9 +448,6 @@ float:left; /* important for ieX*/
 	margin: 11px 0px 0px 0px ;
 }
 
-
-
-
 #header3  a {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
@@ -580,85 +621,7 @@ margin-top:0;
 /*NOTE: anything not specified for the #(menu id's) a selector and its pseudo classes
 may be inherited in some browsers from other 'a' element styles (if any) on the page*/
 
-#menu1 {
-	background-color:white;
-	color:black;
-	text-decoration:none;
-	text-indent:1ex;
 
-}
-
-#menu1 a {
-	color:black;
-	background-color:white;
-	text-decoration:none;
-	text-indent:1ex;
-}
-
-#menu1 a:active {
-	color:black;
-	text-decoration:none;
-}
-
-#menu1 a:hover {
-	color:black;
-	background-color:#FFFF99
-}
-
-#menu1 a:visited {
-	color:black;
-	text-decoration:none;
-}
-
-#menu2 a {
-	color:navy;
-	background-color:white;
-	text-decoration:none;
-	text-indent:1ex;
-}
-
-#menu2 a:active	{
-	color:blue;
-	text-decoration:none;
-}
-
-#menu2 a:visited {
-	color:blue;
-	text-decoration:none;
-}
-
-#menu2 a:hover {
-	color:navy;
-	background-color:#f0fea8
-}
-
-#menu3 a { /*Menu3 Links*/
-	color:black;
-	background-color:white;
-	text-decoration:none;
-	text-indent:2ex;
-	width: 15px; 
-	height: 15px;
-	right: -20px;
-}
-.menu3 {
-	color:black;
-	background-color:#FFFF99;
-}
-
-#menu3 a:hover {
-	color:black;
-	background-color:#FFFF99;
-	
-}
-#menu3 a:active	{
-	color:black;
-	text-decoration:none;
-}
-#menu3 a:visited	{
-	color:black;
-	text-decoration:none;
-}
 /*End Menu Links*/
 
 /*****************************************************

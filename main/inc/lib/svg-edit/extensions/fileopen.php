@@ -8,7 +8,7 @@
  * Copyright(c) 2010 Alexis Deveria
  *
  * Integrate svg-edit with Chamilo
- * @author Juan Carlos Raña Trabado
+ * @author Juan Carlos Raï¿½a Trabado
  * @since 25/september/2010
 */
 

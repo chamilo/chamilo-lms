@@ -47,8 +47,7 @@
  * 5-th level (the lowest priority)
  * Configuration settings from myconfig.js. This file is "as is" in the original source, modifying it is not recommended.
  */
-
-
+	
 /*
  * Toolbar definitions.
  */
@@ -180,6 +179,14 @@ $config['MimetexExecutableDetectionTimeout'] = 0.05;
 
 if ((api_get_setting('math_asciimathML') == 'true')) {
     $config['LoadPlugin'][] = 'asciimath';
+}
+
+// WIRIS: plugin for inserting mathematical formulas
+// You may try it in the "Documents" and "Wiki" tools.
+// Users' computers need java installed
+
+if ((api_get_setting('enabled_wiris') == 'true')) {
+    $config['LoadPlugin'][] = 'fckeditor_wiris';
 }
 
 // wikilink : Adds a dialog for inserting wiki-formatted links.

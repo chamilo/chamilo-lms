@@ -765,7 +765,8 @@ VALUES
 ('show_link_bug_notification', NULL, 'radio', 'Platform', 'true', 'ShowLinkBugNotificationTitle', 'ShowLinkBugNotificationComment', NULL, NULL, 0),
 ('course_validation', NULL, 'radio', 'Platform', 'false', 'EnableCourseValidation', 'EnableCourseValidationComment', NULL, NULL, 1),
 ('course_validation_terms_and_conditions_url', NULL, 'textfield', 'Platform', '', 'CourseValidationTermsAndConditionsLink', 'CourseValidationTermsAndConditionsLinkComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield', NULL, '1.8.8.12378', 'DokeosDatabaseVersion', '', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield', NULL, '1.8.8.12378', 'DokeosDatabaseVersion', '', NULL, NULL, 0),
+('enabled_wiris',NULL,'radio','Editor','false','EnabledWirisTitle','EnabledWirisComment',NULL,NULL, 0);
 
 
 UNLOCK TABLES;
@@ -983,7 +984,10 @@ VALUES
 ('show_link_bug_notification', 'true', 'Yes'),
 ('show_link_bug_notification', 'false', 'No'),
 ('course_validation', 'true', 'Yes'),
-('course_validation', 'false', 'No');
+('course_validation', 'false', 'No'),
+('enabled_wiris','true','Yes'),
+('enabled_wiris','false','No')
+;
 
 UNLOCK TABLES;
 

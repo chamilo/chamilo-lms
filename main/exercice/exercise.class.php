@@ -1964,8 +1964,8 @@ class Exercise {
                     } else {
                         $studentChoice = $choice;
                         if ($studentChoice) {
-                            //@todo verify this--> set to -1 because the question has'nt been corrected 
-                            $questionScore = -1;
+                            //Fixing negative puntation see #2193 
+                            $questionScore = 0;
                             $totalScore += 0;
                         }                        
                     }
@@ -2310,7 +2310,33 @@ class Exercise {
     
     
 
-    function send_notification($arrques, $arrans, $to) {
+    function send_notification($arrques, $arrans) {
+        
+        // Email configuration settings
+        $coursecode     = api_get_course_id();
+        $course_info    = api_get_course_info(api_get_course_id());
+        $to = '';
+        $teachers = array();
+        if (api_get_session_id()) {
+            $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
+        } else {
+            $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+        }        
+        $num = count($teachers);
+        if($num>1) {
+            $to = array();
+            foreach($teachers as $teacher) {
+                $to[] = $teacher['email'];
+            }
+        } elseif ($num>0){
+            foreach($teachers as $teacher) {
+                $to = $teacher['email'];
+            }
+        } else {
+            //this is a problem (it means that there is no admin for this course)
+        }
+                
+                
         global $courseName, $exerciseTitle, $url_email;
         require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
         $user_info = UserManager::get_user_info_by_id(api_get_user_id());

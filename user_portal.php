@@ -274,7 +274,7 @@ function display_special_courses ($user_id) {
                                 course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course_rel_user.user_id, course.visibility
                                 FROM $TABLECOURS course
                                 LEFT JOIN $TABLECOURSUSER course_rel_user ON course.code = course_rel_user.course_code AND course_rel_user.user_id = '$user_id'
-                                WHERE $with_special_courses";
+                                WHERE $with_special_courses group by course.code";
 
             $rs_special_course = Database::query($sql);
             $number_of_courses = Database::num_rows($rs_special_course);

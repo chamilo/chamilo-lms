@@ -770,6 +770,7 @@ VALUES
 ('sso_authentication_auth_uri',NULL,'textfield','Security','/?q=user','SSOServerAuthURITitle','SSOServerAuthURIComment',NULL,NULL,1),
 ('sso_authentication_unauth_uri',NULL,'textfield','Security','/?q=logout','SSOServerUnAuthURITitle','SSOServerUnAuthURIComment',NULL,NULL,1),
 ('sso_authentication_protocol',NULL,'radio','Security','http://','SSOServerProtocolTitle','SSOServerProtocolComment',NULL,NULL,1),
+('enabled_wiris',NULL,'radio','Editor','false','EnabledWirisTitle','EnabledWirisComment',NULL,NULL, 0),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.8.8.12885', 'DokeosDatabaseVersion', '', NULL, NULL, 0);
 
 
@@ -992,7 +993,9 @@ VALUES
 ('sso_authentication', 'true', 'Yes'),
 ('sso_authentication', 'false', 'No'),
 ('sso_authentication_protocol', 'http://', 'http://'),
-('sso_authentication_protocol', 'https://', 'https://');
+('sso_authentication_protocol', 'https://', 'https://'),
+('enabled_wiris','true','Yes'),
+('enabled_wiris','false','No');
 
 UNLOCK TABLES;
 

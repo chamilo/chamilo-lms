@@ -55,6 +55,10 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_wiris', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_wiris', 'false', 'No');
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_spellcheck',NULL,'radio','Editor','false','AllowSpellCheckTitle','AllowSpellCheckComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_spellcheck', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_spellcheck', 'false', 'No');
+
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
 -- xxUSERxx

@@ -7,6 +7,14 @@
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
+// Hide/show SpellCheck buttom
+if ((api_get_setting('allow_spellcheck') == 'true')) {
+	$VSpellCheck='SpellCheck';
+}
+else{
+	$VSpellCheck='';	
+}
+
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
 	array('FitWindow','Save','NewPage','Templates','PageBreak','Preview','-','PasteText','-','Undo','Redo','-','SelectAll','-','Find'),
@@ -15,7 +23,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Table','Rule','Smiley','SpecialChar','googlemaps'),
 	array('FontFormat','FontName','FontSize'),
 	array('Bold','Italic','Underline'),
-	array('Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'),
+	array('Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor', $VSpellCheck),
 	array('Source')
 );
 

@@ -195,14 +195,14 @@ switch ($action) {
 	case 'thematic_add'				:
 	case 'thematic_edit'			:
 	case 'thematic_delete'			:
-	case 'thematic_delete_select'	:
-	case 'thematic_details'			:
+	case 'thematic_delete_select'	:	
 	case 'moveup'					:
 	case 'movedown'					:
         if (!api_is_allowed_to_edit(null,true)) {
         	api_not_allowed();
         }
-	case 'thematic_list'			:	
+	case 'thematic_list'			:
+    case 'thematic_details'         :	
         $thematic_controller->thematic($action);
 		break;	
 	case 'thematic_plan_add'		:

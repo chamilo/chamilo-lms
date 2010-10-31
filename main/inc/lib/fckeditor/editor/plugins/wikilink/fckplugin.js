@@ -48,8 +48,9 @@ FCKPlaceholders.SetupSpan = function( span, name )
 	span.style.backgroundColor = '#ffff00' ;
 	span.style.color = '#000000' ;
 
-	if ( FCKBrowserInfo.IsGecko )
-		span.style.cursor = 'default' ;
+	//if ( FCKBrowserInfo.IsGecko )//Chamilo change by below to fix Chrome
+	if (!FCKBrowserInfo.IsIE)
+		span.style.cursor = 'default' ; 
 
 	span._fckplaceholder = name ;
 	span.contentEditable = false ;
@@ -134,7 +135,7 @@ if ( FCKBrowserInfo.IsIE )
 			if ( oRange.findText( aPlaholders[i] ) )
 			{
 				var sName = aPlaholders[i].match( /\[\[\s*([^\]]*?)\s*\]\]/ )[1] ;
-				oRange.pasteHTML( '<span style="color: #000000; background-color: #ffff00" contenteditable="false" _fckplaceholder="' + sName + '">' + aPlaholders[i] + '</span>' ) ;
+				oRange.pasteHTML( '<span style="color: #000000; background-color: #ffff00" contenteditable="true" _fckplaceholder="' + sName + '">' + aPlaholders[i] + '</span>' ) ;//Chamilo change contenteditable to true to fix ie8
 			}
 		}
 	}

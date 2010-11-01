@@ -161,7 +161,7 @@ UnknownToolbarSet	: "Nombre de barra \"%1\" no definido",
 NoActiveX			: "La configuración de las opciones de seguridad de su navegador puede estar limitando algunas características del editor. Por favor active la opción \"Ejecutar controles y complementos de ActiveX \", de lo contrario puede experimentar errores o ausencia de funcionalidades.",
 BrowseServerBlocked : "La ventana de visualización del servidor no pudo ser abierta. Verifique que su navegador no esté bloqueando las ventanas emergentes (pop up).",
 DialogBlocked		: "No se ha podido abrir la ventana de diálogo. Verifique que su navegador no esté bloqueando las ventanas emergentes (pop up).",
-VisitLinkBlocked	: "Nose ha podido abrir la ventana. Asegurese de que todos los bloqueadores de popups están deshabilitados.",
+VisitLinkBlocked	: "No se ha podido abrir la ventana. Asegúrese de que todos los bloqueadores de popups están deshabilitados.",
 
 // Dialogs
 DlgBtnOK			: "OK",
@@ -273,8 +273,8 @@ DlgLnkPopHeight		: "Altura",
 DlgLnkPopLeft		: "Posición Izquierda",
 DlgLnkPopTop		: "Posición Derecha",
 
-DlnLnkMsgNoUrl		: "Por favor tipee el vínculo URL",
-DlnLnkMsgNoEMail	: "Por favor tipee la dirección de e-mail",
+DlnLnkMsgNoUrl		: "Por favor escriba el vínculo URL",
+DlnLnkMsgNoEMail	: "Por favor escriba la dirección de e-mail",
 DlnLnkMsgNoAnchor	: "Por favor seleccione una referencia",
 DlnLnkMsgInvPopName	: "El nombre debe empezar con un caracter alfanumérico y no debe contener espacios",
 

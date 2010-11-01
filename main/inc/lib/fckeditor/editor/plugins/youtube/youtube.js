@@ -8,7 +8,7 @@ var FCKConfig	= oEditor.FCKConfig ;
 var FCKTools	= oEditor.FCKTools ;
 
 // Security RegExp
-var REG_SCRIPT = new RegExp( "< *script.*>|< *style.*>|< *link.*>|< *body .*>", "i" ) ;
+var REG_SCRIPT = new RegExp( "< *script.*>|< *style.*>|< *link.*>|< *body.*>", "i" ) ;
 var REG_PROTOCOL = new RegExp( "javascript:|vbscript:|about:", "i" ) ;
 var REG_CALL_SCRIPT = new RegExp( "&\{.*\};", "i" ) ;
 var REG_EVENT = new RegExp( "onError|onUnload|onBlur|onFocus|onClick|onMouseOver|onMouseOut|onSubmit|onReset|onChange|onSelect|onAbort", "i" ) ;

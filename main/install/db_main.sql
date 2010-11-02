@@ -160,7 +160,7 @@ CREATE TABLE course (
   PRIMARY KEY (id),
   UNIQUE KEY code (code)
 );
-
+ALTER TABLE course ADD INDEX idx_course_category_code (category_code);
 --
 -- Dumping data for table course
 --

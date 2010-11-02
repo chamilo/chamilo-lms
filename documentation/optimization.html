@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Chamilo 1.8.7.1 Optimization Guide</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
+	<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+	<style type="text/css">
+	<!--
+		page { width: 21cm; height: 29.7cm; margin: 2cm }
+		pre { font-family: "Courier New", monospace }
+		p { margin-bottom: 0.21cm }
+		.code {margin: 1em 1em 1em 2em; padding: 0.5em; background-color: rgb(229, 229, 229); vertical-align: top; border: 1px solid #999999;}
+	-->
+	</style>
+	</head>
+<body>
+
+<div id="header1">
+	<h1>Chamilo 1.8.7.1 : Optimization Guide</h1>
+</div>
+
+<a href="index.html">Documentation</a> &gt; Optimization Guide
+<div id="outerframe">
+<div id="main">
+<p></p>
+
+<p>In seldom cases, you will need to start looking into efficiency issues with Chamilo. This guide is a work in progress intended to help administrators optimize their Chamilo installtion.</p>
+
+
+<h2><b>Contents</b></h2>
+
+<ol>
+
+  <li><a href="#1.Using-XCache">Using xCache</a></li>
+  <li><a href="#2.Slow-queries">Slow queries</a></li>
+  <li><a href="#3.Indexes-caching">Indexes caching</a></li>
+  <li><a href="#4.Sessions-directories">Sessions directories</a></li>
+  <li><a href="#5.Users-upload-directories">Users upload directories</a></li>
+</ol>
+
+<h2><a name="1.Using-XCache"></a>1. Using xCache</h2>
+See <a href="http://xcache.lighttpd.net/">xCache's website</a> for summary documentation.<br />
+<ul>
+<li>On Debian/Ubuntu: sudo apt-get install php5-xcache</li>
+</ul>
+Set your xcache.ini configuration (/etc/php5/conf.d/xcache.ini) to match your system. For example, you *could* have something like this (intentionally hiding comments here):
+<pre>
+xcache.shm_scheme =        "mmap"
+xcache.size  =                32M
+xcache.count =                 2
+xcache.slots =                8K
+xcache.ttl   =                 0
+xcache.gc_interval =           0
+xcache.var_size  =           16M
+xcache.var_count =            16
+xcache.var_slots =            8K
+xcache.var_ttl   =            60
+xcache.var_maxttl   =        300
+xcache.var_gc_interval =     300
+xcache.test =                Off
+</pre>
+xCache will feel useless until you actually start to put some variables in cache. If you're showing the "Who is online" counter, that's one of the best item there is to implement xCache.<br />
+For example, you could implement it this way (in main/inc/banner.inc.php):<br />
+<pre>
+$xc = function_exists('xcache_isset');
+$number = 0;
+if ($xc &amp;&amp; xcache_isset('campus_chamilo_org_whoisonline_count_simple')) {
+  $number = xcache_get('campus_chamilo_org_whoisonline_count_simple');
+} else {
+  $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+  xcache_set('campus_chamilo_org_whoisonline_count_simple',$number);
+}
+$number_online_in_course = 0;
+if(!empty($_course['id'])) {
+  if ($xc &amp;&amp; xcache_isset('campus_chamilo_org_whoisonline_count_simple_'.$_course['id'])) {
+    $number_online_in_course = xcache_get('campus_chamilo_org_whoisonline_count_simple_'.$_course['id']);
+  } else {
+    $number_online_in_course = who_is_online_in_this_course_count(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_course['id']);
+    xcache_set('campus_chamilo_org_whoisonline_count_simple_'.$_course['id'],$number_online_in_course);
+  }
+}
+</pre>
+Note that, as xCache is a shared caching system, it is very important to prefix your variables with a domain name or some kind of identifier, otherwise it would end up in disaster if you use a shared server for several portals.<br />
+<hr />
+<h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
+Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log
+<hr />
+<h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>
+One good reference: <a href="http://dev.mysql.com/doc/refman/5.1/en/multiple-key-caches.html">MySQL documentation on multiple key caches</a><br />
+
+<hr />
+
+<h2><a name="4.Sessions-directories"></a>4. Sessions directories</h2>
+php_admin_value session.save_path 1;/var/www/test.chamilo.org/sessions/
+<hr />
+<h2><a name="5.Users-upload-directories"></a>5. Users upload directories</h2>
+Create 10 directories inside the main/upload/users directory (from 0 to 9) and update your admin settings. This has to be done at install &amp; configuration time, otherwise you might loose user data (or have to write a script for data distribution).
+<hr />
+Don't have time or resources to optimize your Chamilo installation yourself? Hire an <a href="http://www.chamilo.org/en/providers">official Chamilo provider</a> and get it sorted out professionally by specialists.
+    <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
+	<a href="http://jigsaw.w3.org/css-validator/">
+		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
+	</a>
+</body></html>

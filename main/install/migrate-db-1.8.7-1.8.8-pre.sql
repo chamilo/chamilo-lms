@@ -62,6 +62,9 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_spel
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
 -- xxUSERxx
+ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_user (user);
+ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_id);
+ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
 
 -- xxCOURSExx
 ALTER TABLE course_setting CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;

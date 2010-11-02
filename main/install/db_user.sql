@@ -39,3 +39,6 @@ CREATE TABLE user_course_category (
   sort int, 
   PRIMARY KEY  (id)
 );
+ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_user (user);
+ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_id);
+ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);

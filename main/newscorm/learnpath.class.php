@@ -953,6 +953,11 @@ class learnpath {
         // Now update all following items with new display order.
         $sql_all = "UPDATE $lp_item SET display_order = display_order-1 WHERE lp_id = $lp AND parent_item_id = $parent AND display_order > $display";
         $res_all = Database::query($sql_all);
+        
+        //Removing prerequisites since the item will not longer exist
+        $sql_all = "UPDATE $lp_item SET prerequisite = '' WHERE prerequisite = $id";
+        $res_all = Database::query($sql_all);
+        
         // Remove from search engine if enabled.
         if (api_get_setting('search_enabled') == 'true') {
             $tbl_se_ref = Database :: get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);

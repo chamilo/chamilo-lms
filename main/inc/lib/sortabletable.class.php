@@ -582,9 +582,10 @@ class SortableTable extends HTML_Table {
 		for ($nr = 10; $nr <= min(50, $total_number_of_items); $nr += 10) {
 			$result[] = '<option value="'.$nr.'" '. ($nr == $this->per_page ? 'selected="selected"' : '').'>'.$nr.'</option>';
 		}
-		if ($total_number_of_items < 500) {
+        // @todo no limits
+		//if ($total_number_of_items < 500) {
 			$result[] = '<option value="'.$total_number_of_items.'" '. ($total_number_of_items == $this->per_page ? 'selected="selected"' : '').'>'.api_ucfirst(get_lang('All')).'</option>';
-		}
+		//}
 		$result[] = '</select>';
 		$result[] = '<noscript>';
 		$result[] = '<button class="save" type="submit">'.get_lang('Save').'</button>';

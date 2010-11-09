@@ -584,14 +584,11 @@ class Tracking {
             if ($count_row_lp>0 && !empty($student_id)) {
 
                 // Get all views through learning paths filter
-                $sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id ".
-                        "FROM $lp_view_table ".
-                        "WHERE lp_id IN (".implode(',',$lp_list).") ".
-                        "$condition_user1 AND session_id= $session_id GROUP BY lp_id,user_id";
-                //var_dump(          $sql              );
-                
+                //@todo problem whe course have more than 1500 users
+                $sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id  FROM $lp_view_table ".
+                        "WHERE lp_id IN (".implode(',',$lp_list).") $condition_user1 AND session_id= $session_id GROUP BY lp_id,user_id";
+                //var_dump(          $sql              );                
                 $rs_last_lp_view_id = Database::query($sql);
-
                 $global_count_item = 0;
                 $global_result = 0;
 
@@ -606,12 +603,10 @@ class Tracking {
 
                         // For the currently analysed view, get the score and
                         // max_score of each item if it is a sco or a TOOL_QUIZ
-                        $sql_max_score = "SELECT lp_iv.score as score,lp_i.max_score, lp_iv.max_score as max_score_item_view, lp_i.path, lp_i.item_type , lp_i.id as iid".
-                                  " FROM $lp_item_view_table as lp_iv ".
-                                  " INNER JOIN $lp_item_table as lp_i ".
+                        $sql_max_score = "SELECT lp_iv.score as score,lp_i.max_score, lp_iv.max_score as max_score_item_view, lp_i.path, lp_i.item_type, lp_i.id as iid".
+                                  " FROM $lp_item_view_table as lp_iv INNER JOIN $lp_item_table as lp_i ".
                                   " ON lp_i.id = lp_iv.lp_item_id ".
-                                  " AND (lp_i.item_type='sco' ".
-                                  " OR lp_i.item_type='".TOOL_QUIZ."') ".
+                                  " AND (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') ".
                                   " WHERE lp_view_id='$lp_view_id'";
                         //echo $sql_max_score; echo '<br />';
                         
@@ -663,6 +658,7 @@ class Tracking {
                                    " AND orig_lp_item_id = '$item_id' ".
                                    " AND exe_cours_id = '$course_code' AND session_id = $session_id".
                                    " ORDER BY exe_date DESC limit 1";
+                                   
                                 $result_last_attempt = Database::query($sql_last_attempt);
                                 $num = Database :: num_rows($result_last_attempt);
                                 if ($num > 0 ) {
@@ -2317,6 +2313,7 @@ class TrackingCourseLog {
 	    $number_of_items = intval($number_of_items);
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
+        
 		$res = Database::query($sql);
 		$users = array ();
 	    $t = time();

@@ -175,10 +175,12 @@ if ($_GET['studentlist'] == 'false') {
     if (isset($_GET['additional_profile_field'])) {
         $addional_param ='additional_profile_field='.intval($_GET['additional_profile_field']);
     }
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.'">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
+    if (isset($_GET['users_tracking_per_page'])) {
+        $users_tracking_per_page= '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
+    }
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
 }
 echo '</div>';
-
 
 if ($_GET['studentlist'] == 'false') {
     $course_code = api_get_course_id();
@@ -558,6 +560,7 @@ if ($_GET['studentlist'] == 'false') {
         }
         ob_end_clean();
         array_unshift($csv_content, $csv_headers); // Adding headers before the content.
+        
         Export :: export_table_csv($csv_content, 'reporting_student_list');
         exit;
     }

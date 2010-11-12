@@ -231,7 +231,7 @@ function convert_date_to_number($default) {
 	$parts = split(' ', $default);
 	list($d_year, $d_month, $d_day) = split('-', $parts[0]);
 	list($d_hour, $d_minute, $d_second) = split(':', $parts[1]);
-	return mktime($d_hour, $d_minute, $d_second, $d_month, $d_day, $d_year);
+	return mktime((int)$d_hour, (int)$d_minute, (int)$d_second, (int)$d_month, (int)$d_day, (int)$d_year);
 }
 
 /**

@@ -52,12 +52,12 @@ class manager
 			array(array("txt"), "fileText", SEARCH_TYPE_TEXT, 1),
 			array(array("xml", "xsl", "dtd"), "fileXml", SEARCH_TYPE_XML, 1),
 			array(array("svg","svgz"), "fileSVG", SEARCH_TYPE_SVG, 1),			
-			array(array("odt"), "fileODT", SEARCH_TYPE_ODT, 1),			
-			array(array("odp"), "fileODP", SEARCH_TYPE_ODP, 1),
-			array(array("ods"), "fileODS", SEARCH_TYPE_ODS, 1),
-			array(array("odg"), "fileODG", SEARCH_TYPE_ODG, 1)
-			
-	);// Added svg, svgz, pps, docx, pptx, xlsx, midi, ogg, ogv, oga,odt,ods,odp,odg types to Chamilo, and change flv from flash to video
+			array(array("odt", "ott", "sxw", "stw"), "fileODT", SEARCH_TYPE_ODT, 1),			
+			array(array("odp", "otp", "sxi", "sti"), "fileODP", SEARCH_TYPE_ODP, 1),
+			array(array("ods", "ots", "sxc", "stc"), "fileODS", SEARCH_TYPE_ODS, 1),
+			array(array("odg", "otg", "sxd", "std"), "fileODG", SEARCH_TYPE_ODG, 1)
+
+	);// Added svg, svgz, pps, docx, pptx, xlsx, midi, ogg, ogv, oga,(odt,ods,odp,odg and extra) types to Chamilo, and change flv from flash to video
 	
 	/**
 		 * constructor

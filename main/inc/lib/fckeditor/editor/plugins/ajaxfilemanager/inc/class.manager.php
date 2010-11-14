@@ -41,18 +41,23 @@ class manager
 			array(array("zip", "sit", "rar", "gz", "tar"), "fileZip", SEARCH_TYPE_ARCHIVE, 0),
 			array(array("htm", "html", "php", "jsp", "asp", 'js', 'css'), "fileCode", SEARCH_TYPE_HTML, 1),
 			array(array("mov", "ram", "rm", "asx", "dcr", "wmv"), "fileVideo", SEARCH_TYPE_VIDEO, 1),
-			array(array("mpg", "avi", "asf", "mpeg"), "fileVideo", SEARCH_TYPE_MOVIE, 1),
-			array(array("aif", "aiff", "wav", "mp3", "wma","mid"), "fileMusic", SEARCH_TYPE_MUSIC, 1),
-			array(array("swf", 'flv'), "fileFlash", SEARCH_TYPE_FLASH, 1),
-			array(array("ppt"), "filePPT", SEARCH_TYPE_PPT, 0),
+			array(array("mpg", "avi", "asf", "mpeg", "flv", "ogg", "ogv"), "fileVideo", SEARCH_TYPE_MOVIE, 1),
+			array(array("aif", "aiff", "wav", "mp3", "wma","mid", "midi", "oga"), "fileMusic", SEARCH_TYPE_MUSIC, 1),
+			array(array("swf", ), "fileFlash", SEARCH_TYPE_FLASH, 1),
+			array(array("ppt", "pps", "pptx"), "filePPT", SEARCH_TYPE_PPT, 0),
 			array(array("rtf"), "fileRTF", SEARCH_TYPE_DOC, 0),
-			array(array("doc"), "fileWord", SEARCH_TYPE_WORD, 0),
+			array(array("doc","docx"), "fileWord", SEARCH_TYPE_WORD, 0),
 			array(array("pdf"), "fileAcrobat", SEARCH_TYPE_PDF, 0),
-			array(array("xls", "csv"), "fileExcel", SEARCH_TYPE_EXCEL, 0),
+			array(array("xls", "xlsx", "csv"), "fileExcel", SEARCH_TYPE_EXCEL, 0),
 			array(array("txt"), "fileText", SEARCH_TYPE_TEXT, 1),
 			array(array("xml", "xsl", "dtd"), "fileXml", SEARCH_TYPE_XML, 1),
-			array(array("svg","svgz"), "fileSVG", SEARCH_TYPE_SVG, 1)
-	);// Added svg and svgz types to Chamilo
+			array(array("svg","svgz"), "fileSVG", SEARCH_TYPE_SVG, 1),			
+			array(array("odt"), "fileODT", SEARCH_TYPE_ODT, 1),			
+			array(array("odp"), "fileODP", SEARCH_TYPE_ODP, 1),
+			array(array("ods"), "fileODS", SEARCH_TYPE_ODS, 1),
+			array(array("odg"), "fileODG", SEARCH_TYPE_ODG, 1)
+			
+	);// Added svg, svgz, pps, docx, pptx, xlsx, midi, ogg, ogv, oga,odt,ods,odp,odg types to Chamilo, and change flv from flash to video
 	
 	/**
 		 * constructor

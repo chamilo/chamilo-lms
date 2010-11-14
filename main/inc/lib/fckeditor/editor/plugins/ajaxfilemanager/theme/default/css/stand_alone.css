@@ -267,7 +267,8 @@ span.filePPT, span.fileExcel, span.filePhp,
 span.fileMusic, span.fileExe, span.fileAcrobat,
 span.fileRTF, span.fileXml, span.fileCode,
 span.fileZip, span.addMore, span.deleteFile,
-span.cancel,span.uploadProcessing, span.folderShared, span.unknownUser{
+span.cancel,span.uploadProcessing,
+span.folderShared, span.unknownUser, span.fileSVG{
 padding:2px 0 2px 16px;
 background-repeat:no-repeat;
 background-position:0 50%;
@@ -297,6 +298,7 @@ span.fileZip{background-image:url(../images/small_icon/fileZip.png);}
 
 span.folderShared{background-image:url(../images/small_icon/folderShared.png);}
 span.unknownUser{background-image:url(../images/small_icon/smallunknownUser.png);}
+span.fileSVG{background-image:url(../images/small_icon/fileSVG.png);}
 
 /* big icon */
 dt.folderEmpty, dt.folder, dt.folderParent,
@@ -305,7 +307,8 @@ dt.fileFlash, dt.fileVideo,
 dt.filePPT, dt.fileExcel, dt.filePhp,
 dt.fileMusic, dt.fileExe, dt.fileAcrobat,
 dt.fileRTF, dt.fileXml, dt.fileCode,
-dt.fileZip,dt.folderShared, dt.unknownUser{
+dt.fileZip,
+dt.folderShared, dt.unknownUser, dt.fileSVG{
 margin: 0px;
 padding:0px;
 border:solid #ccc 1px;
@@ -340,7 +343,7 @@ dt.fileZip{background-image:url(../images/big_icon/fileZip.png);}
 
 dt.folderShared{background-image:url(../images/big_icon/bigfolderShared.png);}
 dt.unknownUser{background-image:url(../images/big_icon/biguserUnknown.png);}
-
+dt.fileSVG{background-image:url(../images/big_icon/fileSVG.png);}
 
 table.tableSummary{
 border-collapse:collapse;

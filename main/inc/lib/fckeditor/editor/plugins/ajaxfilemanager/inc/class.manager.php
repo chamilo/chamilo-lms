@@ -50,8 +50,9 @@ class manager
 			array(array("pdf"), "fileAcrobat", SEARCH_TYPE_PDF, 0),
 			array(array("xls", "csv"), "fileExcel", SEARCH_TYPE_EXCEL, 0),
 			array(array("txt"), "fileText", SEARCH_TYPE_TEXT, 1),
-			array(array("xml", "xsl", "dtd"), "fileXml", SEARCH_TYPE_XML, 1)
-	);
+			array(array("xml", "xsl", "dtd"), "fileXml", SEARCH_TYPE_XML, 1),
+			array(array("svg","svgz"), "fileSVG", SEARCH_TYPE_SVG, 1)
+	);// Added svg and svgz types to Chamilo
 	
 	/**
 		 * constructor

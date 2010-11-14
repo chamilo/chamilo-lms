@@ -460,7 +460,13 @@ function add_ext_on_mime($file_name, $file_type) {
 		$mime_type[] = 'video/x-msvideo';                $extension[] = '.avi';
 
 		$mime_type[] = 'video/x-ms-wmv';                 $extension[] = '.wmv';
-		$mime_type[] = 'video/x-flv';                    $extension[] = '.flv';
+		$mime_type[] = 'video/x-flv';                    $extension[] = '.flv';		
+		$mime_type[] = 'image/svg+xml';                  $extension[] = '.svg';
+		$mime_type[] = 'image/svg+xml';                  $extension[] = '.svgz';
+		$mime_type[] = 'video/ogg';                  	 $extension[] = '.ogv';
+		$mime_type[] = 'audio/ogg';                  	 $extension[] = '.oga';		
+		$mime_type[] = 'application/ogg';                $extension[] = '.ogg';
+		$mime_type[] = 'application/ogg';                $extension[] = '.ogx';	
 
 		$mime_type[] = 'application/vnd.ms-word.document.macroEnabled.12';							$extension[] = '.docm';
 		$mime_type[] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';	$extension[] = '.docx';

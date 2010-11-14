@@ -125,7 +125,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		$ext = strtolower($ext[sizeof($ext) - 1]);
 		
 		// "htmlfiles" are shown in a frameset
-		if ($ext == 'htm' || $ext == 'html' || $ext == 'gif' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'pdf' || $ext == 'swf' || $ext == 'mp3' || ($ext == 'svg' || $ext =='svgz' && api_support_svg())) {
+		if ($ext == 'htm' || $ext == 'html' || $ext == 'gif' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'pdf' || $ext == 'swf' || $ext == 'mp3' || ($ext == 'svg' && api_support_svg())) {
 			$url = 'showinframes.php?'.api_get_cidreq().'&amp;file='.$url_path.$req_gid;
 		} else {
 			// url-encode for problematic characters (we may not call them dangerous characters...)

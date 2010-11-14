@@ -41,7 +41,7 @@ class manager
 			array(array("zip", "sit", "rar", "gz", "tar"), "fileZip", SEARCH_TYPE_ARCHIVE, 0),
 			array(array("htm", "html", "php", "jsp", "asp", 'js', 'css'), "fileCode", SEARCH_TYPE_HTML, 1),
 			array(array("mov", "ram", "rm", "asx", "dcr", "wmv"), "fileVideo", SEARCH_TYPE_VIDEO, 1),
-			array(array("mpg", "avi", "asf", "mpeg", "flv"), "fileVideo", SEARCH_TYPE_MOVIE, 1),
+			array(array("mpg", "avi", "asf", "mpeg", "flv", "mp4"), "fileVideo", SEARCH_TYPE_MOVIE, 1),
 			array(array("aif", "aiff", "wav", "mp3", "wma","mid", "midi"), "fileMusic", SEARCH_TYPE_MUSIC, 1),
 			array(array("swf", ), "fileFlash", SEARCH_TYPE_FLASH, 1),
 			array(array("ppt", "pps", "pptx"), "filePPT", SEARCH_TYPE_PPT, 0),

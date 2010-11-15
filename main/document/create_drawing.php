@@ -132,7 +132,7 @@ echo '<div class="actions">';
 		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 echo '</div>';
 
-if (api_support_svg()){
+if (api_browser_support('svg')){
 	
 	//automatic loading the course language
 	$svgedit_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');

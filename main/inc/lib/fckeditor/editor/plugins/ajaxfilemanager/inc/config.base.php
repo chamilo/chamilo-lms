@@ -160,16 +160,29 @@
 
 	define('CONFIG_OVERWRITTEN', false); //overwirte when processing paste
 	define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,jpeg,png,bmp,tif,psd,zip,sit,rar,gz,tar,htm,html,mov,mpg,avi,asf,mpeg,wmv,ogg,ogx,ogv,oga, aif,aiff,wav,mp3,swf,flv, mp4, aac, ppt,rtf,doc, pdf,xls,txt,flv,odt,ods,odp,odg,odc,odf,odb,odi,pps,docx,pptx,xlsx,accdb,xml,mid, midi, svg, svgz');//For Chamilo updated
+		
+	//define viewable valid exts
+	$viewable='gif,bmp,txt,jpg,jpeg,png,tif,html,htm,mp3,wav,wmv,wma,rm,rmvb,mov,swf,flv,mp4,aac,avi,mpg,mpeg,asf,mid,midi,pdf';//updated by Chamilo
+	$viewable_array = explode(" ",$viewable);
 	
-	//api_support_svg() from Chamilo
-	if (api_support_svg())
-	{	
-		define("CONFIG_VIEWABLE_VALID_EXTS", 'gif,bmp,txt,jpg,jpeg,png,tif,html,htm,mp3,wav,wmv,wma,rm,rmvb,mov,swf,flv,mp4,aac,avi,mpg,mpeg,asf,mid,midi,pdf,ogg,ogx,ogv,oga,svg');//For Chamilo updated
+	if (api_browser_support('svg')){				
+		$viewable_array[]=',svg';
 	}
-	else{
-		define("CONFIG_VIEWABLE_VALID_EXTS", 'gif,bmp,txt,jpg,jpeg,png,tif,html,htm,mp3,wav,wmv,wma,rm,rmvb,mov,swf,flv,mp4,aac,avi,mpg,mpeg,asf,mid,midi,pdf');//For Chamilo updated
+	if (api_browser_support('ogg')){
+		$viewable_array[]=',ogg';
+		$viewable_array[]=',ogx';
+		$viewable_array[]=',oga';
+		$viewable_array[]=',ogv';
 	}
+		
+	$viewable = implode(" ",$viewable_array);
+	$viewable = preg_replace('/\s+/', '', $viewable);//clean spaces
 	
+	//print_r($viewable);
+	
+	define("CONFIG_VIEWABLE_VALID_EXTS", $viewable);
+	
+	//define invalid exts
 	define('CONFIG_UPLOAD_INVALID_EXTS', 'php,php3,php4,php5,php6,phps,phtml,asp,aspx,jsp,cfm,cfc,pl,jar,sh,cgi,js,exe,com,bat,pif,scr,msi,ws,wsc,wsf,vb,vbe,vbs,reg,dll,ini'); //For Chamilo added.
 	//Preview
 	define('CONFIG_IMG_THUMBNAIL_MAX_X', 100);

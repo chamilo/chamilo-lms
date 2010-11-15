@@ -448,9 +448,16 @@ class SessionManager {
 		}
 
 		// update number of users in the session
-		$nbr_users = count($user_list);
-		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
-		Database::query($update_sql);
+		$nbr_users = count($user_list);		
+        if ($empty_users) {
+            // update number of users in the session            
+            $update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
+            Database::query($update_sql);
+        } else {
+            echo $update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users + $nbr_users WHERE id='$id_session' ";
+            Database::query($update_sql);           
+        }
+        
 	}
 
 	/**

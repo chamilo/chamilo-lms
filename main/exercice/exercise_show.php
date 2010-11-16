@@ -61,7 +61,7 @@ if ( empty ( $nbrQuestions ) ) {        $nbrQuestions   = $_REQUEST['nbrQuestion
 if ( empty ( $questionList ) ) {        $questionList   = $_SESSION['questionList'];}
 if ( empty ( $objExercise ) ) {         $objExercise    = $_SESSION['objExercise'];}
 if ( empty ( $exeId ) ) {               $exeId          = $_REQUEST['id'];}
-if ( empty ( $action ) ) {              $action         = $_GET['action']; }
+if ( empty ( $action ) ) {              $action         = $_REQUEST['action']; }
 
 //$emailId       = $_REQUEST['email'];
 $id 	       = intval($_REQUEST['id']); //exe id
@@ -95,7 +95,9 @@ if (empty($objExercise)) {
     $objExercise->read($exercise_id);
 }
 
-if (!exercise_time_control_is_valid($exercise_id)) {
+//If is not valid
+$session_control_key = get_session_time_control_key($exercise_id);
+if (isset($session_control_key) && !exercise_time_control_is_valid($exercise_id) && !in_array($action, array('qualify','edit'))) {
     $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = $id ";
     Database::query($sql_fraud);
 }
@@ -895,6 +897,7 @@ if (is_array($arrid) && is_array($arrmarks)) {
 
 if ($is_allowedToEdit) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {
+        
 		echo ' <form name="myform" id="myform" action="exercice.php?show=result&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';	
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$lp_id.'">';
@@ -903,7 +906,7 @@ if ($is_allowedToEdit) {
 		echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
 		echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';					
 	} else {
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&filter=2&comments=update&exeid='.$id.'&totalWeighting='.$totalWeighting.'" method="post">';
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&action=qualify&filter=2&comments=update&exeid='.$id.'&totalWeighting='.$totalWeighting.'" method="post">';
 	}
 	if ($origin!='learnpath' && $origin!='student_progress') {
 		?>

@@ -125,8 +125,10 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 		<span class="viewcaption"><?php echo get_lang('Interaction'); ?></span>
 		<table width="100%">
 <?php
-			$my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
-			CourseHome::show_tools_category($my_list);
+        $my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
+        $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
+        $my_list = array_merge($my_list,$list2);
+        CourseHome::show_tools_category($my_list);
 ?>
 		</table>
 	</div>
@@ -134,8 +136,8 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 		<span class="viewcaption"><?php echo get_lang('Administration'); ?></span>
 		<table width="100%">
 <?php
-			$my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATEFORM);
-			CourseHome::show_tools_category($my_list);
+        $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATEFORM);
+        CourseHome::show_tools_category($my_list);
 ?>
 		</table>
 	</div>

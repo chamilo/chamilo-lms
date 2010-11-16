@@ -437,9 +437,9 @@ class CourseHome {
 
 		switch ($course_tool_category) {
 			case TOOL_STUDENT_VIEW:
-					$condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction") ';
+					$condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") ';
 					if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
-						$condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction") OR (name = "'.TOOL_TRACKING.'") )   ';
+						$condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") OR (name = "'.TOOL_TRACKING.'") )   ';
 					}
 					$sql = "SELECT * FROM $course_tool_table  $condition_display_tools $condition_session ORDER BY id";
 					$result = Database::query($sql);

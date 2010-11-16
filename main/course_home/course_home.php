@@ -133,6 +133,7 @@ define('TOOL_COURSE_ADMIN', 		'courseAdmin');
 define('TOOL_PLATFORM_ADMIN', 		'platformAdmin');
 define('TOOL_AUTHORING', 			'toolauthoring');
 define('TOOL_INTERACTION',			'toolinteraction');
+define('TOOL_COURSE_PLUGIN',		'toolcourseplugin'); //all plugins that can be enabled in courses
 define('TOOL_ADMIN', 				'tooladmin');
 define('TOOL_ADMIN_PLATEFORM', 		'tooladminplatform');
 

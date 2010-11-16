@@ -425,17 +425,17 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
     } elseif (api_get_setting('sso_authentication')==='true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
         /**
          * TODO:
-         * - Implement user interface for api_get_setting('sso_authentication')
-         *   } elseif (api_get_setting('sso_authentication')=='true') {
          * - Work on a better validation for webservices paths. Current is very poor and exit
         */
-        $master = array(
-            'domain'         => api_get_setting('sso_authentication_domain'),             //    'localhost/project/drupal5',
-            'auth_uri'         => api_get_setting('sso_authentication_auth_uri'),        //    '/?q=user',
-            'deauth_uri'    => api_get_setting('sso_authentication_unauth_uri'),    //    '/?q=logout',
-            'protocol'         => api_get_setting('sso_authentication_protocol')        //    'http://',
-        );
-        $referer = $master['protocol'] . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $subsso = api_get_setting('sso_authentication_subclass');
+        require_once(api_get_path(SYS_CODE_PATH).'auth/sso/sso.class.php');
+        if (!empty($subsso)) {
+            require_once(api_get_path(SYS_CODE_PATH).'auth/sso/sso.'.$subsso.'.class.php');
+            $subsso = 'sso'.$subsso;
+            $osso = new $subsso(); //load the subclass
+        } else {
+            $osso = new sso();
+        }
         if (isset($_SESSION['_user']['user_id'])) {
             if ($logout) {
                 // Library needed by index.php
@@ -446,156 +446,23 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
                 $logout_no_redirect = TRUE;
                 // Make custom redirect after logout
                 online_logout();
-                header('Location: '. $master['protocol'] . $master['domain'] . $master['deauth_uri']);
-                exit;
+                $osso->logout(); //redirects and exits
             }
         } elseif(!$logout) {
-              $master_url = $master['domain'] . $master['auth_uri'];
             // Handle cookie comming from Master Server
             if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed'])) {
-                // Target to redirect after success SSO
-                $target = api_get_path(WEB_PATH);
                 // Redirect to master server
-                header('Location: ' . $master['protocol'] . $master_url . '&sso_referer=' . urlencode($referer) . '&sso_target=' . urlencode($target));
-                exit;
+                $osso->ask_master();
             } elseif (isset($_GET['sso_cookie'])) {
                 if (isset($_GET['sso_referer']) ? $_GET['sso_referer'] === $master['protocol']. $master_url : FALSE) {
-                    $sso = unserialize(base64_decode($_GET['sso_cookie']));
-                    //lookup the user in the main database
-                    $user_table = Database::get_main_table(TABLE_MAIN_USER);
-                    $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
-                            FROM $user_table
-                            WHERE username = '".trim(addslashes($sso['username']))."'";
-                    $result = Database::query($sql);
-
-                if (Database::num_rows($result) > 0) {
-                    $uData = Database::fetch_array($result);
-                    //Check the user's password
-                    if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
-                            // Make sure password is encrypted with md5
-                            if (!$userPasswordCrypted) {
-                                    $uData['password'] = md5($uData['password']);
-                            }
-                            //the authentification of this user is managed by Chamilo itself// check the user's password
-                            // password hash comes into a sha1
-                            if ($sso['secret'] === sha1($uData['password']) && ($sso['username'] == $uData['username'])) {
-                                //Check if the account is active (not locked)
-                                if ($uData['active']=='1') {
-                                    // check if the expiration date has not been reached
-                                    if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
-                                        global $_configuration;
-                                        //If Multiple URL is enabled
-                                        if ($_configuration['multiple_access_urls']) {
-                                              $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-                                            //Check if user is an admin
-                                            $sql = "SELECT user_id FROM $admin_table
-                                                    WHERE user_id = '".trim(addslashes($uData['user_id']))."' LIMIT 1";
-                                            $result = Database::query($sql);
-                                            $my_user_is_admin = false;
-                                            if (Database::num_rows($result) > 0) {
-                                                $my_user_is_admin = true;
-                                            }
-
-                                            //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
-                                            //Getting the current access_url_id of the platform
-                                            $current_access_url_id = api_get_current_access_url_id();
-
-                                            // my user is subscribed in these sites => $my_url_list
-                                            $my_url_list = api_get_access_url_from_user($uData['user_id']);
-
-                                            if ($my_user_is_admin === false) {
-                                                if (is_array($my_url_list) && count($my_url_list)>0 ) {
-                                                      if (in_array($current_access_url_id, $my_url_list)) {
-                                                          // the user has permission to enter at this site
-                                                          $_user['user_id'] = $uData['user_id'];
-                                                          api_session_register('_user');
-                                                          event_login();
-
-                                                          // Redirect to homepage
-                                                          $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
-                                                          header('Location: '. $sso_target);
-                                                      } else {
-                                                          // user does not have permission for this site
-                                                          $loginFailed = true;
-                                                          api_session_unregister('_uid');
-                                                          header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                                          exit;
-                                                      }
-                                                } else {
-                                                      // there is no URL in the multiple urls list for this user
-                                                      $loginFailed = true;
-                                                      api_session_unregister('_uid');
-                                                      header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                                      exit;
-                                                }
-                                            } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
-                                                if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal portal
-                                                    $_user['user_id'] = $uData['user_id'];
-                                                    api_session_register('_user');
-                                                    event_login();
-                                                } else {
-                                                    //This means a secondary admin wants to login so we check as a normal user
-                                                    if (in_array($current_access_url_id, $my_url_list)) {
-                                                        $_user['user_id'] = $uData['user_id'];
-                                                        api_session_register('_user');
-                                                        event_login();
-                                                    } else {
-                                                        $loginFailed = true;
-                                                        api_session_unregister('_uid');
-                                                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                                        exit;
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            //Single URL access (Only 1 portal)
-                                            $_user['user_id'] = $uData['user_id'];
-                                            api_session_register('_user');
-                                            event_login();
-                                            // Redirect to homepage
-                                            $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
-                                            header('Location: '. $sso_target);
-                                        }
-                                    } else {
-                                        // user account expired
-                                        $loginFailed = true;
-                                        api_session_unregister('_uid');
-                                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
-                                        exit;
-                                    }
-                                } else {
-                                    //User not active
-                                    $loginFailed = true;
-                                    api_session_unregister('_uid');
-                                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
-                                    exit;
-                                }
-                            } else {
-                              //SHA1 of password is wrong
-                              $loginFailed = true;
-                              api_session_unregister('_uid');
-                              header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
-                              exit;
-                            }
-                        } else {
-                            //Auth_source is wrong
-                            $loginFailed = true;
-                            api_session_unregister('_uid');
-                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
-                            exit;
-                        }
-                    } else {
-                        //No user by that login
-                        $loginFailed = true;
-                        api_session_unregister('_uid');
-                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
-                        exit;
-                    }
+                    //make all the process of checking 
+                    //if the user exists (delegated to the sso class)
+                    $osso->check_user(); 
                 } else {
                     //Request comes from unknown source
                     $loginFailed = true;
                     api_session_unregister('_uid');
-                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
+                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=unrecognize_sso_origin');
                     exit;
                 }
             }

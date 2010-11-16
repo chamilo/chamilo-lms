@@ -481,18 +481,9 @@ function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0
 	} else {
 		// anonymous
 		$user_id = api_get_anonymous_id();
-	}    
+	}
     
-	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT (
-			   exe_id,
-			   user_id,
-			   question_id,
-			   answer,
-			   marks,
-			   course_code,
-			   position,
-			   tms
-			  )
+	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT (exe_id, user_id, question_id, answer, marks, course_code, position, tms )
 			  VALUES (
 			  ".$exeId.",
 			  ".$user_id.",
@@ -503,7 +494,7 @@ function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0
 			   '".$j."',
 			   '".$reallyNow."'
 			  )";
-              
+    error_log($sql);
 	if (!empty($quesId) && !empty($exeId) && !empty($user_id)) {
 		$res = Database::query($sql);		
 		if (defined('ENABLED_LIVE_EXERCISE_TRACKING')){

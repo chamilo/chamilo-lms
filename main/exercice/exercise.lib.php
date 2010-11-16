@@ -500,9 +500,9 @@ function exercise_time_control_is_valid($exercise_id) {
 	$sql 	= "SELECT expired_time FROM $TBL_EXERCICES WHERE id = $exercise_id";
 	$result = Database::query($sql);
 	$row	= Database::fetch_array($result, 'ASSOC');
-	if (!empty($row['expired_time']) ) {	
-		$current_expired_time_key = get_time_control_key($exercise_id);
-		if (isset($_SESSION['expired_time'][$current_expired_time_key])) {                  	
+	if (!empty($row['expired_time']) ) {
+		$current_expired_time_key = get_time_control_key($exercise_id);        
+		if (isset($_SESSION['expired_time'][$current_expired_time_key])) {                	
 	        $current_time = time();
 			$expired_time = api_strtotime($_SESSION['expired_time'][$current_expired_time_key], 'UTC');
 			$total_time_allowed = $expired_time + 30;
@@ -537,8 +537,17 @@ function generate_time_control_key($exercise_id) {
 }
 /**
 	Returns the time controller key
+    @todo this function is the same as generate_time_control_key
 */
-function get_time_control_key($exercise_id){
+function get_time_control_key($exercise_id) {
 	$exercise_id = intval($exercise_id);
 	return api_get_course_int_id().'_'.api_get_session_id().'_'.$exercise_id.'_'.api_get_user_id();
+}
+/**
+ * @todo use this function instead of get_time_control_key
+ */
+function get_session_time_control_key($exercise_id) {
+    $time_control_key = get_time_control_key($exercise_id);
+    $return_value = $_SESSION['expired_time'][$time_control_key];
+    return $return_value;
 }

@@ -681,7 +681,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				while($row_admin = Database::fetch_row($res)) {
 					$admin_course .= '\''.$row_admin[0].'\',';
 				}
-				$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p WHERE s.id = p.ref AND p.tool='work' AND lastedit_user_id IN(".$admin_course.'\''.api_get_user_id().'\''.") AND s.accepted='1' AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
+				$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p WHERE s.id = p.ref AND p.tool='work'  AND lastedit_user_id IN(".$admin_course.'\''.api_get_user_id().'\''.") AND s.accepted='1' AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
 			}
 			//count documents
 			$res_document = Database::query($sql_document);

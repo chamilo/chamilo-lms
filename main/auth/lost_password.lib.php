@@ -32,7 +32,7 @@ function get_email_headers() {
  */
 function get_user_account_list($user, $reset = false, $by_username = false) {
 	global $_configuration;
-	$portal_url = $_configuration['root_web'];
+	$portal_url = api_get_path(WEB_PATH);
 	if ($_configuration['multiple_access_urls']) {
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1 ) {

@@ -722,7 +722,7 @@ function update_Db_course($course_db_name) {
         address varchar(255) default NULL,
         added_tool tinyint unsigned default 1,
         target enum('_self','_blank') NOT NULL default '_self',
-        category enum('authoring','interaction','admin') NOT NULL default 'authoring',
+        category varchar(20) not null default 'authoring',
         session_id smallint default 0,
         PRIMARY KEY (id)
         )" . $charset_clause;

@@ -76,6 +76,4 @@ ALTER TABLE wiki_mailcue ADD session_id smallint DEFAULT 0;
 
 ALTER TABLE lp ADD COLUMN use_max_score INT DEFAULT 1;
 ALTER TABLE lp_item MODIFY COLUMN max_score FLOAT UNSIGNED DEFAULT 100;
-
-
-
+ALTER TABLE tool MODIFY COLUMN category varchar(20) not null default 'authoring';

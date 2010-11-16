@@ -125,7 +125,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		$ext = strtolower($ext[sizeof($ext) - 1]);
 		
 		// "htmlfiles" are shown in a frameset
-		if ($ext == 'htm' || $ext == 'html' || $ext == 'gif' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'pdf' || $ext == 'swf' || $ext == 'mp3' || ($ext == 'svg' || $ext =='svgz' && api_support_svg())) {
+		if ($ext == 'htm' || $ext == 'html' || $ext == 'gif' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'pdf' || $ext == 'swf' || $ext == 'mp3' || $ext == 'mp4' ||(($ext== 'ogg' || $ext== 'ogx' || $ext== 'oga' || $ext== 'ogv') && api_browser_support('ogg')) ||($ext == 'svg' && api_browser_support('svg'))) {
 			$url = 'showinframes.php?'.api_get_cidreq().'&amp;file='.$url_path.$req_gid;
 		} else {
 			// url-encode for problematic characters (we may not call them dangerous characters...)
@@ -300,7 +300,7 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
 		if ($is_certificate_mode) {
 			$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
 		}else {
-			if($extension=='svg' && api_support_svg()){
+			if($extension=='svg' && api_browser_support('svg')){
 				$modify_icons = '<a href="edit_drawing.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';		
 			}else{			
 				$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';

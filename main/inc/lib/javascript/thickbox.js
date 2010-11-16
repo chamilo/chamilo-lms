@@ -5,7 +5,12 @@
  * Licensed under the MIT License: http://www.opensource.org/licenses/mit-license.php
 */
 
-var tb_pathToImage = "main/img/loadingAnimation.gif";
+// Identify the url of the current script to load the loadingAnimation.gif animation
+var src=document.getElementsByTagName('script');
+var src=src[src.length-1].getAttribute('src');
+// remove the inc/lib/javascript/thickbox.js part (30 characters)
+var src=src.substr(0,src.length-30);
+var tb_pathToImage = src+"img/loadingAnimation.gif";
 
 /*!!!!!!!!!!!!!!!!! edit below this line at your own risk !!!!!!!!!!!!!!!!!!!!!!!*/
 

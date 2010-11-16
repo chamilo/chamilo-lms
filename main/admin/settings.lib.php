@@ -43,7 +43,6 @@ function handle_plugins() {
         $user_id = api_get_user_id();
         $category = $_GET['category'];
         event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
-
         Display :: display_confirmation_message(get_lang('SettingsStored'));
     }
 
@@ -91,6 +90,8 @@ function handle_plugins() {
     echo get_lang('Header');
     echo '</th><th>';
     echo get_lang('Footer');
+    echo '</th><th>';
+    echo get_lang('CourseTool');
     echo '</th>';
     echo '</tr>';
 
@@ -137,6 +138,7 @@ function handle_plugins() {
             display_plugin_cell('mycourses_menu', $plugin_info, $testplugin, $usedplugins);
             display_plugin_cell('header', $plugin_info, $testplugin, $usedplugins);
             display_plugin_cell('footer', $plugin_info, $testplugin, $usedplugins);
+            display_plugin_cell('course_tool_plugin', $plugin_info, $testplugin, $usedplugins);
             echo '</tr>';
         }
     }
@@ -398,19 +400,44 @@ function store_plugins() {
     $table_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     global $_configuration;
 
+    // Get a list of all current 'Plugins' settings
+    $installed_plugins = api_get_settings('Plugins','list',$_configuration['access_url']);
+    $shortlist_installed = array();
+    foreach ($installed_plugins as $plugin) {
+        $shortlist_installed[] = $plugin['subkey'];
+    }
+    $shortlist_installed = array_flip(array_flip($shortlist_installed));
     // Step 1 : We remove all the plugins.
     //$sql = "DELETE FROM $table_settings_current WHERE category='Plugins'";
     //Database::query($sql);
     $r = api_delete_category_settings('Plugins', $_configuration['access_url']);
-
+    $shortlist_required = array();
     // Step 2: Looping through all the post values we only store these which are really a valid plugin location.
     foreach ($_POST as $form_name => $formvalue) {
         $form_name_elements = explode('-', $form_name);
         if (is_valid_plugin_location($form_name_elements[1])) {
+            $shortlist_required[] = $form_name_elements[0];
             //$sql = "INSERT into $table_settings_current (variable,category,selected_value) VALUES ('".$form_name_elements['1']."','Plugins','".$form_name_elements['0']."')";
             //Database::query($sql);
             api_add_setting($form_name_elements['0'], $form_name_elements['1'], $form_name_elements['0'], null, 'Plugins', $form_name_elements['0'], null, null, null, $_configuration['access_url'], 1);
+            // check if there is an install procedure
+            $pluginpath = api_get_path(SYS_PLUGIN_PATH).$form_name_elements[0].'/install.php';
+            if (is_file($pluginpath) && is_readable($pluginpath)) {
+                //execute the install procedure
+            	include $pluginpath;
+            }
         }
+    }
+    foreach ($shortlist_installed as $plugin) {
+        // if one plugin was really deleted, execute the uninstall script
+    	if (!in_array($plugin,$shortlist_required)) {
+            // check if there is an install procedure
+            $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/uninstall.php';
+            if (is_file($pluginpath) && is_readable($pluginpath)) {
+                //execute the install procedure
+                include $pluginpath;
+            }    		
+    	}
     }
 }
 
@@ -419,7 +446,7 @@ function store_plugins() {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function is_valid_plugin_location($location) {
-    static $valid_locations = array('loginpage_main', 'loginpage_menu', 'campushomepage_main', 'campushomepage_menu', 'mycourses_main', 'mycourses_menu', 'header', 'footer');
+    static $valid_locations = array('loginpage_main', 'loginpage_menu', 'campushomepage_main', 'campushomepage_menu', 'mycourses_main', 'mycourses_menu', 'header', 'footer', 'course_tool_plugin');
     return in_array($location, $valid_locations);
 }
 

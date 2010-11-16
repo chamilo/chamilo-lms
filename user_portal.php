@@ -1207,6 +1207,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
         $thisCoursePath = $my_course['d'];
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
         $dbname = $my_course['k'];
+	$status = array();
         $status[$dbname] = $my_course['s'];
 
         $nbDigestEntries = 0; // Number of entries already collected.

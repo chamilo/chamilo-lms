@@ -4701,23 +4701,41 @@ function api_get_template($path_type = 'rel') {
 
 /**
  * Check browser support for svg files
+ ** This function check if the users browser support a file format
+ * @param string $format
  * @return bool
  *
  * @author Juan Carlos Raña Trabado
  */
-function api_support_svg() {
+ 
+function api_browser_support($format) {
     require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
     $browser = new Browser();
     //print_r($browser);
     $current_browser = $browser->getBrowser();
     $a_versiontemp = explode('.', $browser->getVersion());
     $current_majorver= $a_versiontemp[0];
-
-    if (($current_browser == 'Internet Explorer' && $current_majorver > 8) || ($current_browser == 'Firefox' && $current_majorver > 1) || ($current_browser == 'Safari' && $current_majorver >= 4) || ($current_browser == 'Chrome' && $current_majorver >= 1) || ($current_browser == 'Opera' && $current_majorver > 9)) {
-        return true;
-    } else {
-        return false;
-    }
+	
+	if ($format=='svg'){
+		if (($current_browser == 'Internet Explorer' && $current_majorver > 8) || ($current_browser == 'Firefox' && $current_majorver > 1) || ($current_browser == 'Safari' && $current_majorver >= 4) || ($current_browser == 'Chrome' && $current_majorver >= 1) || ($current_browser == 'Opera' && $current_majorver > 9)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	elseif($format=='ogg'){
+		//native support
+		if (($current_browser == 'Firefox' && $current_majorver >= 3)  || ($current_browser == 'Chrome' && $current_majorver >= 3)) {			
+			return true;
+		}
+		else {
+			return false;
+		}		
+	}
+	else{
+		return false;
+	}
 }
 
 /**

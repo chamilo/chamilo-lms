@@ -271,11 +271,18 @@ function display_addedresource_link($type, $id, $style = '') {
             $ext = explode('.', $filename);
             $ext = strtolower($ext[sizeof($ext)-1]);
             $myrow['path'] = rawurlencode($myrow['path']);
-			if (api_support_svg()){
-            	$in_frames = in_array($ext, array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png', 'svg','svgz'));
-			}else{
-				$in_frames = in_array($ext, array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png'));
+			
+			$array_ext=array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png')
+			
+			if (api_browser_support('svg')){				
+				$array_ext[]='svg';
 			}
+			if (api_browser_support('ogg')){
+				$array_ext[]='ogg';
+			}
+							
+            $in_frames = in_array($ext, $array_ext);
+
             echo '<img src="../img/'.$image.'" align="middle" /> <a href="../document/'.($in_frames ? 'showinframes.php?file=' : 'download.php?doc_url=').$myrow['path'].'"'.$styling.'>'.$filename."</a><br />\n";
             break;
         case 'Externallink':

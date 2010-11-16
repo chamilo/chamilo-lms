@@ -3627,7 +3627,6 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
     } else {
         $sql .= " ORDER BY 1,2 ASC";
     }
-    error_log($sql);
     return Database::store_result(Database::query($sql));
 }
 

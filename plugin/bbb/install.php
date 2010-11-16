@@ -29,13 +29,13 @@ $sql = "CREATE TABLE $table ( " .
         "id BIGINT unsigned NOT NULL auto_increment PRIMARY KEY, " .
         "course_id INT unsigned NOT NULL DEFAULT 0, " .
         "name VARCHAR(255) NOT NULL DEFAULT '', " .
-        "meetingname VARCHAR(255) NOT NULL DEFAULT '', " .
-        "meetingid VARCHAR(255) NOT NULL DEFAULT '', " .
-        "attendeepw VARCHAR(255) NOT NULL DEFAULT '', " .
-        "moderatorpw VARCHAR(255) NOT NULL DEFAULT '', " .
-        "autologin VARCHAR(255) NOT NULL DEFAULT '', " .
-        "newwindow VARCHAR(255) NOT NULL DEFAULT '', " .
-        "welcomemsg VARCHAR(255) NOT NULL DEFAULT '')";
+        "meeting_name VARCHAR(255) NOT NULL DEFAULT '', " .
+        "meeting_id VARCHAR(255) NOT NULL DEFAULT '', " .
+        "attendee_pw VARCHAR(255) NOT NULL DEFAULT '', " .
+        "moderator_pw VARCHAR(255) NOT NULL DEFAULT '', " .
+        "auto_login VARCHAR(255) NOT NULL DEFAULT '', " .
+        "new_window VARCHAR(255) NOT NULL DEFAULT '', " .
+        "welcome_msg VARCHAR(255) NOT NULL DEFAULT '')";
 Database::query($sql);
 // update existing courses to add conference settings
 $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);

@@ -50,7 +50,7 @@ if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
 }
 
 $nameTools = get_lang('StudentDetails');
-$cidReset = true;
+//$cidReset = true;
 $get_course_code = Security :: remove_XSS($_GET['course']);
 if (isset ($_GET['details'])) {
 	if (!empty ($_GET['origin']) && $_GET['origin'] == 'user_course') {

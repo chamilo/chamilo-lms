@@ -500,11 +500,12 @@ class Tracking {
 	 * 1. The score average from all SCORM Test items in all LP in a course-> All the answers / All the max scores.
 	 * 2. The score average from all Tests (quiz) in all LP in a course-> All the answers / All the max scores.
 	 * 3. And finally it will return the average between 1. and 2.
+     * @todo improve performance, when loading 1500 users with 20 lps the script dies 
 	 * This function does not take the results of a Test out of a LP
 	 *
-	 * @param 	int|array	Student id(s)
+	 * @param 	mixed       Array of user ids or an user id
 	 * @param 	string 		Course code
-	 * @param 	array 		Limit average to listed lp ids
+	 * @param 	array 		List of LP ids
 	 * @param 	int			Session id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
 	 * @param	bool		Returns an array of the type [sum_score, num_score] if set to true
 	 * @return 	string 		Value (number %) Which represents a round integer explain in got in 3.
@@ -521,6 +522,7 @@ class Tracking {
         $course = CourseManager :: get_course_information($course_code);
 
         if (!empty($course['db_name'])) {
+            
             // get course tables names
             $tbl_quiz_questions = Database :: get_course_table(TABLE_QUIZ_QUESTION,$course['db_name']);
             $lp_table           = Database :: get_course_table(TABLE_LP_MAIN,$course['db_name']);
@@ -580,11 +582,11 @@ class Tracking {
             } else {
                 $condition_user1 =" AND user_id = '$student_id' ";
             }
-            //var_dump($student_id);
+            
             if ($count_row_lp>0 && !empty($student_id)) {
 
                 // Get all views through learning paths filter
-                //@todo problem whe course have more than 1500 users
+                //@todo problem when a  course have more than 1500 users
                 $sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id  FROM $lp_view_table ".
                         "WHERE lp_id IN (".implode(',',$lp_list).") $condition_user1 AND session_id= $session_id GROUP BY lp_id,user_id";
                 //var_dump(          $sql              );                

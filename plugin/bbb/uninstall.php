@@ -30,7 +30,7 @@ while ($row = Database::fetch_assoc($res)) {
     $r = Database::query($sql_course);
     $sql_course = "DELETE FROM $t_course  WHERE variable = 'big_blue_button_welcome_message'";
     $r = Database::query($sql_course);
-    $t_tool = Database::get_course_table(TABLE_TOOL_LIST,$cdb);
+    $t_tool = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
     $sql_course = "DELETE FROM $t_tool WHERE link = '../../plugin/bbb/start.php'";
     $r = Database::query($sql_course);
 }

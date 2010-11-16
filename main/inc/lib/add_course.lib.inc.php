@@ -2053,6 +2053,7 @@ function fill_Db_course($course_db_name, $course_repository, $language, $default
     }
 
     global $_configuration, $_user;
+    $cdb = $course_db_name; //save it for plugins, later on
 
     $course_db_name = $_configuration['table_prefix'].$course_db_name.$_configuration['db_glue'];
 
@@ -2392,6 +2393,22 @@ function fill_Db_course($course_db_name, $course_repository, $language, $default
         Database::query("INSERT INTO `$TABLEFORUMPOSTS` VALUES (1, '".lang2db(get_lang('ExampleThread'))."', '".lang2db(get_lang('ExampleThreadContent'))."', 1, 1, 1, '', NOW(), 0, 0, 1)");
 
     }
+    
+    // PLUGINS - if an installed plugin has a course_install.php file, execute it
+    $installed_plugins = api_get_settings('Plugins','list',$_configuration['access_url']);
+    $shortlist_installed = array();
+    foreach ($installed_plugins as $plugin) {
+        $shortlist_installed[] = $plugin['subkey'];
+    }
+    $shortlist_installed = array_flip(array_flip($shortlist_installed));
+    foreach ($shortlist_installed as $plugin) {
+        $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin.'/course_install.php';
+        if (is_file($pluginpath) && is_readable($pluginpath)) {
+            //execute the install procedure
+            include $pluginpath;
+        }
+    }
+    //end of installed plugins alterations
 
     $language_interface = $language_interface_tmp;
 

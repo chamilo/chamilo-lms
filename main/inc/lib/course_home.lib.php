@@ -419,7 +419,7 @@ class CourseHome {
 	 * Gets the tools of a certain category. Returns an array expected
 	 * by show_tools_category()
 	 * @param string $course_tool_category	contains the category of tools to
-	 * display: "toolauthoring", "toolinteraction", "tooladmin", "tooladminplatform"
+	 * display: "toolauthoring", "toolinteraction", "tooladmin", "tooladminplatform", "toolplugin"
 	 * @return array
 	 */
 
@@ -465,9 +465,15 @@ class CourseHome {
 					$result = Database::query($sql);
 					$col_link ="##003399";
 					break;
+			case TOOL_COURSE_PLUGIN:
+					//Other queries recover id, name, link, image, visibility, admin, address, added_tool, target, category and session_id
+					// but plugins are not present in the tool table, only globally and inside the course_settings table once configured 
+					$sql = "SELECT * FROM $course_tool_table WHERE category = 'plugin' $condition_session ORDER BY id";
+					$result = Database::query($sql);
+					break;
 		}
 
-		while ($temp_row = Database::fetch_array($result)) {
+		while ($temp_row = Database::fetch_assoc($result)) {
 			$all_tools_list[] = $temp_row;
 		}
 

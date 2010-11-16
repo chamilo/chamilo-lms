@@ -3615,7 +3615,7 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
     if ($url_changeable == 1) {
         $url_changeable_where= " AND access_url_changeable= '1' ";
     }
-    if (empty($access_url)) { $access_url = 1; }
+    if (empty($access_url) or $access_url == -1) { $access_url = 1; }
     $sql = "SELECT id, variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable " .
             " FROM $t_cs WHERE access_url = $access_url  $url_changeable_where ";
     if (!empty($cat)) {
@@ -3627,6 +3627,7 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
     } else {
         $sql .= " ORDER BY 1,2 ASC";
     }
+    error_log($sql);
     return Database::store_result(Database::query($sql));
 }
 

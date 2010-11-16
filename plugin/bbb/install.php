@@ -24,6 +24,19 @@ $sql = "INSERT INTO $t_settings
     VALUES
     ('bbb_plugin_salt', '', 'textfield', 'Extra', '', 'BigBlueButtonSecuritySaltTitle','BigBlueButtonSecuritySaltComment',NULL,NULL, 1)";
 Database::query($sql);
+$table = Database::get_main_table('plugin_bbb');
+$sql = "CREATE TABLE $table ( " .
+        "id BIGINT unsigned NOT NULL auto_increment PRIMARY KEY, " .
+        "course_id INT unsigned NOT NULL DEFAULT 0, " .
+        "name VARCHAR(255) NOT NULL DEFAULT '', " .
+        "meetingname VARCHAR(255) NOT NULL DEFAULT '', " .
+        "meetingid VARCHAR(255) NOT NULL DEFAULT '', " .
+        "attendeepw VARCHAR(255) NOT NULL DEFAULT '', " .
+        "moderatorpw VARCHAR(255) NOT NULL DEFAULT '', " .
+        "autologin VARCHAR(255) NOT NULL DEFAULT '', " .
+        "newwindow VARCHAR(255) NOT NULL DEFAULT '', " .
+        "welcomemsg VARCHAR(255) NOT NULL DEFAULT '')";
+Database::query($sql);
 // update existing courses to add conference settings
 $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
 $sql = "SELECT id, code, db_name FROM $t_courses ORDER BY id";

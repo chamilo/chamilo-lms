@@ -272,7 +272,7 @@ function display_addedresource_link($type, $id, $style = '') {
             $ext = strtolower($ext[sizeof($ext)-1]);
             $myrow['path'] = rawurlencode($myrow['path']);
 			
-			$array_ext=array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png')
+			$array_ext=array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png');
 			
 			if (api_browser_support('svg')){				
 				$array_ext[]='svg';

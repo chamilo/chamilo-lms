@@ -1235,7 +1235,7 @@ function update_Db_course($course_db_name) {
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPITEM` (" .
-        "i              int unsigned        primary key auto_increment," .  // unique ID from MySQL
+        "id              int unsigned        primary key auto_increment," .  // unique ID from MySQL
         "lp_id          int unsigned        not null," .                    // lp_id from 'lp'
         "item_type      char(32)            not null default 'dokeos_document'," .  // can be dokeos_document, dokeos_chapter or scorm_asset, scorm_sco, scorm_chapter
         "ref            tinytext            not null default ''," .         // the ID given to this item in the imsmanifest file

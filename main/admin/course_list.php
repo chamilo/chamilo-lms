@@ -70,6 +70,7 @@ function get_course_data($from, $number_of_items, $column, $direction) {
     $sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, tutor_name as col7, code AS col8, visibility AS col9,directory as col10 FROM $course_table";
     //$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9, visibility AS col10,directory as col11 FROM $course_table";
     global $_configuration;
+    
     if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id() != -1) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
@@ -77,16 +78,15 @@ function get_course_data($from, $number_of_items, $column, $direction) {
 
     if (isset ($_GET['keyword'])) {
         $keyword = Database::escape_string(trim($_GET['keyword']));
-        $sql .= " WHERE title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%'";
-    }
-    elseif (isset ($_GET['keyword_code'])) {
-        $keyword_code = Database::escape_string($_GET['keyword_code']);
-        $keyword_title = Database::escape_string($_GET['keyword_title']);
-        $keyword_category = Database::escape_string($_GET['keyword_category']);
-        $keyword_language = Database::escape_string($_GET['keyword_language']);
-        $keyword_visibility = Database::escape_string($_GET['keyword_visibility']);
-        $keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
-        $keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
+        $sql .= " WHERE (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%' ) ";
+    } elseif (isset ($_GET['keyword_code'])) {
+        $keyword_code           = Database::escape_string($_GET['keyword_code']);
+        $keyword_title          = Database::escape_string($_GET['keyword_title']);
+        $keyword_category       = Database::escape_string($_GET['keyword_category']);
+        $keyword_language       = Database::escape_string($_GET['keyword_language']);
+        $keyword_visibility     = Database::escape_string($_GET['keyword_visibility']);
+        $keyword_subscribe      = Database::escape_string($_GET['keyword_subscribe']);
+        $keyword_unsubscribe    = Database::escape_string($_GET['keyword_unsubscribe']);
         $sql .= " WHERE (code LIKE '%".$keyword_code."%' OR visual_code LIKE '%".$keyword_code."%') AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
     }
 
@@ -97,6 +97,7 @@ function get_course_data($from, $number_of_items, $column, $direction) {
 
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
+
     $res = Database::query($sql);
     $courses = array ();
     while ($course = Database::fetch_row($res)) {

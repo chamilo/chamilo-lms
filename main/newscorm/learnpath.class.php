@@ -7269,6 +7269,7 @@ class learnpath {
                         AND last.tool = '".TOOL_DOCUMENT."' $condition_session ORDER BY docs.path ASC";
 
         //$sql_doc = "SELECT * FROM $tbl_doc WHERE path NOT LIKE '%_DELETED_%' ORDER BY path ASC";
+        
         $res_doc = Database::query($sql_doc);
 
         $return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '>'.Display::return_icon('folder_document.gif',get_lang('Documents'),array('style'=>'margin-right:5px;', 'height' => '16px')).' '. get_lang('Documents') . '</div>';
@@ -7293,6 +7294,10 @@ class learnpath {
             }
             if ($is_file) {
                 //eval ('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' . $last_path . '";');
+                //for backward compatibility
+                 if (empty($resource['title'])) {
+                    $resource['title'] = basename($resource['path']);
+                 }                
                 eval ('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' .$resource['title']."/". $last_path. '";');
             } else {
                 eval ('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');

@@ -33,8 +33,8 @@ if (!$bbb_plugin) {
     //the BigBlueButton plugin is not enabled (strangely), return to course homepage
     header('location: '.api_get_path(WEB_COURSE_PATH).'/'.$ccode);
 }
-$teacher = api_is_course_admin() || api_is_coach();
-$user_info = api_get_user_info();
+$teacher = api_is_course_admin() || api_is_coach() || api_is_platform_admin();
+$user_info = api_get_user_info(api_get_user_id());
 $full_user_name = api_get_person_name($user_info['firstname'],$user_info['lastname']);
 $user_id = api_get_user_id();
 

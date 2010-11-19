@@ -882,7 +882,7 @@ switch ($action) {
 
 
 			<br />
-			<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('insert_row.png', get_lang('InsertLink')); ?></a>
+			<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); ?></a>
 			<a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
 
 			<div class="menusection">

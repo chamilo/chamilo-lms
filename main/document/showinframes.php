@@ -38,12 +38,13 @@ $nameTools = $header_file;
 
 if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
+	$interbreadcrumb[] = array ('url' => '../group/group.php?', 'name' => get_lang('Groups'));
 	$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace'));
 }
 
 $interbreadcrumb[] = array('url' => './document.php?curdirpath='.dirname($header_file).$req_gid, 'name' => get_lang('Documents'));
 $name_to_show = cut($header_file, 80);
-$interbreadcrumb[] = array('url' => 'showinframes.php?file='.$header_file, 'name' => $name_to_show);
+$interbreadcrumb[] = array('url' => 'showinframes.php?gid='.$req_gid.'&file='.$header_file, 'name' => $name_to_show);
 
 $file_url_sys = api_get_path(SYS_COURSE_PATH).'document'.$header_file;
 $path_info = pathinfo($file_url_sys);

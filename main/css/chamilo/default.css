@@ -119,6 +119,7 @@ ul#navigation .help a {
 	margin-left:1px;
 	opacity:0.6;
 	width:65px;
+        padding-bottom: 8px;
 }
 
 
@@ -134,6 +135,7 @@ ul#navigation .report a {
 	margin-left:1px;
 	opacity:0.6;
 	width:65px;
+        padding-bottom: 8px;
 }
 
 
@@ -149,6 +151,7 @@ ul#navigation .student a {
 	margin-left:1px;
 	opacity:0.6;
 	width:65px;
+        padding-bottom: 8px;
 }
 
 
@@ -164,6 +167,7 @@ ul#navigation .user-online a {
 	margin-left:1px;
 	opacity:0.6;
 	width:65px;
+        padding-bottom: 8px;
 }
 
 /* Otros colores para otras opciones basado en tonalidades tierra */
@@ -179,6 +183,7 @@ ul#navigation .user-online a {
 	margin-left:1px;
 	opacity:0.6;
 	width:65px;
+        padding-bottom: 8px;
 }
 
 ul#navigation .student-connect a {
@@ -193,6 +198,7 @@ ul#navigation .student-connect a {
 	margin-left:1px;
 	opacity:0.6;
 	width:65px;
+        padding-bottom: 8px;
 }
 
 /* for content section in main index.php file */

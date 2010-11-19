@@ -211,17 +211,17 @@ class MessageManager
 	 * @param int     group id (optional)
 	 * @param int     parent id (optional)
 	 * @param int 	  message id for updating the message (optional)
+     * @param bool    sent an email or not (@todo)
 	 * @return bool
 	 */
-	public static function send_message ($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0) {
+	public static function send_message ($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0, $sent_email = false) {
         global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
-		$group_id = intval($group_id);
-        $receiver_user_id = intval($receiver_user_id);
-        $parent_id = intval($parent_id);
-		$user_sender_id = api_get_user_id();
-
-		//var_dump($subject,$content);exit;
+        $group_id           = intval($group_id);
+        $receiver_user_id   = intval($receiver_user_id);
+        $parent_id          = intval($parent_id);
+        $edit_message_id    = intval($edit_message_id);
+		$user_sender_id     = api_get_user_id();
 
 		$total_filesize = 0;
 		if (is_array($file_attachments)) {
@@ -240,19 +240,8 @@ class MessageManager
         if (!empty($receiver_user_id) || !empty($group_id)) {
 
         	// message for user friend
-		//    $subject = api_convert_encoding($subject, $charset);
 	        $subject = Database::escape_string($subject);
-   	      //  $content = api_convert_encoding($content, $charset);
 	        $content = Database::escape_string($content);
-	        //$content = Security::remove_XSS($content);
-
-			//useless query
-			//echo $sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".$user_sender_id." AND user_receiver_id='$receiver_user_id' AND title = '$title' AND content ='$content' AND group_id = '$group_id' AND parent_id = '$parent_id'";
-			//$res_exist = Database::query($sql);
-			//$row_exist = Database::fetch_array($res_exist,'ASSOC');
-
-			//We should ALWAYS sent emails
-			//if ($row_exist['count'] == 0) {
 
 			//message in inbox for user friend
 			if ($edit_message_id) {
@@ -295,6 +284,11 @@ class MessageManager
 					}
 				}
 			}
+            
+            //@todo sent email process            
+            if ($sent_email) {            	
+            }
+            
 			return $result;
         } else {
         	return get_lang('UserDoesNotExist');

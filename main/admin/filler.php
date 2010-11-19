@@ -49,7 +49,7 @@ if (count($output)>0) {
     }
     $result .= '</table>';
     $result .= '</div>';
-    Display::display_normal_message($result);
+    Display::display_normal_message($result,false);
 }
 ?>
 <div class="admin_section">

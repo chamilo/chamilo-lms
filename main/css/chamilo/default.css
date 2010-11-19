@@ -4437,3 +4437,7 @@ text-decoration:underline;
 .course-link-desc span {
 padding-top:10px;
 }
+
+.categories-course-links {padding-top:10px;text-align:right;}
+
+.categories-course-links span {margin-right:10px;padding-top:10px;text-align:right;}

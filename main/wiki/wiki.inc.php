@@ -242,17 +242,16 @@ function make_wiki_link_clickable($input)
 			if ($link==get_lang('DefaultTitle')){
 				$link='index';
 			}
-			$link = api_html_entity_decode($link);
 
 			// note: checkreflink checks if the link is still free. If it is not used then it returns true, if it is used, then it returns false. Now the title may be different
 			if (checktitle(strtolower(str_replace(' ','_',$link))))
 			{
+				$link = api_html_entity_decode($link);
 				$input_array[$key]='<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq='.$_course[id].'&action=addnew&amp;title='.api_htmlentities(urlencode($link)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'" class="new_wiki_link">'.$title.$titleg_ex.'</a>';
 			}
 			else
 			{
-
-				$input_array[$key]='<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.api_htmlentities(urlencode(strtolower(str_replace(' ','_',$link)))).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'" class="wiki_link">'.$title.$titleg_ex.'</a>';
+				$input_array[$key]='<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.urlencode(strtolower(str_replace(' ','_',$link))).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'" class="wiki_link">'.$title.$titleg_ex.'</a>';
 			}
 			unset($input_array[$key-1]);
 			unset($input_array[$key+1]);
@@ -274,7 +273,7 @@ function save_wiki() {
 
 	// cleaning the variables
 	$_clean['page_id']		= Database::escape_string($_POST['page_id']);
-	$_clean['reflink']		= Database::escape_string(trim($_POST['reflink']));
+	$_clean['reflink']		= Database::escape_string(trim(api_htmlentities($_POST['reflink'])));
 	$_clean['title']		= Database::escape_string(trim($_POST['title']));
 	$_clean['content']		= Database::escape_string($_POST['content']);
 	$_clean['user_id']		= api_get_user_id();
@@ -283,6 +282,9 @@ function save_wiki() {
     $_clean['progress']		= Database::escape_string($_POST['progress']);
 	$_clean['version']		= intval($_POST['version']) + 1 ;
 	$_clean['linksto'] 		= links_to($_clean['content']); //and check links content
+
+
+
 
 	$dtime = date( "Y-m-d H:i:s" );
 	$session_id = api_get_session_id();
@@ -444,7 +446,7 @@ function save_new_wiki() {
     } else {
 	 	$page = str_replace(' ','_',$_POST['title']);
 	}
-	$_clean['reflink']=Database::escape_string($page);
+	$_clean['reflink']=Database::escape_string(api_htmlentities($page));	
 	$_clean['title']=Database::escape_string(trim($_POST['title']));
 	$_clean['content']= Database::escape_string($_POST['content']);
 

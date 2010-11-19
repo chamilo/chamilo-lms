@@ -444,9 +444,9 @@ function display_anonymous_right_menu() {
     if (!isset($user_selected_language)) {
         $user_selected_language = $platformLanguage;
     }
-
-    $home_menu = @(string)file_get_contents($sys_path.$home.'home_menu_'.$user_selected_language.'.html');
-    if (empty($home_menu)) {
+    
+    $home_menu = @(string)file_get_contents($sys_path.$home.'home_menu_'.$user_selected_language.'.html');    
+    /*if (empty($home_menu)) {
         $home_menu = @(string)file_get_contents($sys_path.$home_old.'home_menu_'.$user_selected_language.'.html');
     }
     if (empty($home_menu)) {
@@ -454,7 +454,7 @@ function display_anonymous_right_menu() {
     }
     if (empty($home_menu)) {
         $home_menu = @(string)file_get_contents($sys_path.$home_old.'home_menu.html');
-    }
+    }*/
     if (!empty($home_menu)) {
         echo '<div class="menusection">', '<span class="menusectioncaption">'.get_lang('MenuGeneral').'</span>';
          echo '<ul class="menulist">';

@@ -28,6 +28,7 @@
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $noPHP_SELF = true;
 $header_file = Security::remove_XSS($_GET['file']);
@@ -36,14 +37,25 @@ $path_array = array_map('urldecode', $path_array);
 $header_file = implode('/', $path_array);
 $nameTools = $header_file;
 
+$name_to_show = cut($header_file, 80);
+
+$current_group = GroupManager :: get_group_properties($_SESSION['_gid']);
+$current_group_name=$current_group['name'];
+
+
+
 if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-	$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace'));
+	$interbreadcrumb[] = array ('url' => '../group/group.php?', 'name' => get_lang('Groups'));
+	$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace').' '.$current_group_name);
+	$name_to_show = explode('/', $name_to_show);	
+	unset ($name_to_show[1]);
+	$name_to_show = implode('/', $name_to_show);	
 }
 
 $interbreadcrumb[] = array('url' => './document.php?curdirpath='.dirname($header_file).$req_gid, 'name' => get_lang('Documents'));
-$name_to_show = cut($header_file, 80);
-$interbreadcrumb[] = array('url' => 'showinframes.php?file='.$header_file, 'name' => $name_to_show);
+
+$interbreadcrumb[] = array('url' => 'showinframes.php?gid='.$req_gid.'&file='.$header_file, 'name' => $name_to_show);
 
 $file_url_sys = api_get_path(SYS_COURSE_PATH).'document'.$header_file;
 $path_info = pathinfo($file_url_sys);

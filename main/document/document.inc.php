@@ -51,7 +51,7 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
 
 	// Group documents cannot be uploaded in the root
 	if (empty($group_dir)) {
-		$parent_select -> addOption(get_lang('HomeDirectory'), '/');
+		$parent_select -> addOption(get_lang('Documents'), '/');
 		if (is_array($folders)) {
 			foreach ($folders as & $folder) {
 				$selected = ($curdirpath == $folder) ? ' selected="selected"' : '';
@@ -69,7 +69,7 @@ function build_directory_selector($folders, $curdirpath, $group_dir = '', $chang
 			$selected = ($curdirpath==$folder) ? ' selected="selected"' : '';
 			$label = $folder_titles[$folder];
 			if ($folder == $group_dir) {
-				$label = '/ ('.get_lang('HomeDirectory').')';
+				$label = get_lang('Documents');
 			} else {
 				$path_parts = explode('/', str_replace($group_dir, '', $folder));
 				$label = cut($label, 80);
@@ -380,7 +380,7 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
 	// Group documents cannot be uploaded in the root
 	if ($group_dir == '') {
 		if ($curdirpath != '/') {
-			$form .= '<option value="/">/ ('.get_lang('HomeDirectory').')</option>';
+			$form .= '<option value="/">'.get_lang('Documents').'</option>';
 		}
 		if (is_array($folders)) {
 			foreach ($folders as & $folder) {
@@ -405,7 +405,7 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
 					$path_displayed = get_titles_of_path($folder);
 				}
 				$display_folder = substr($path_displayed,strlen($group_dir));
-				$display_folder = ($display_folder == '') ? '/ ('.get_lang('HomeDirectory').')' : $display_folder;
+				$display_folder = ($display_folder == '') ? get_lang('Documents') : $display_folder;
 				$form .= '<option value="'.$folder.'">'.$display_folder.'</option>'."\n";
 			}
 		}

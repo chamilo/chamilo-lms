@@ -160,7 +160,7 @@ if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 			$to_group_id = $_SESSION['_gid'];
 			$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
 			$interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
-			$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace').' ('.$group_properties['name'].')');
+			$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 			//they are allowed to upload
 			$group_member_with_upload_rights = true;
 		} else {
@@ -171,7 +171,7 @@ if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 		$to_group_id = $_SESSION['_gid'];
 		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
 		$interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
-		$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace').' ('.$group_properties['name'].')');
+		$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 		//allowed to upload?
 		if ($is_allowed_to_edit || GroupManager::is_subscribed($_user['user_id'], $_SESSION['_gid'])) { // Only courseadmin or group members can upload
 			$group_member_with_upload_rights = true;
@@ -338,6 +338,8 @@ if ($is_certificate_mode) {
 $dir_array = explode('/', $curdirpath);
 $array_len = count($dir_array);
 
+/*
+TODO:check and delete this code
 if (!$is_certificate_mode) {
 	if ($array_len > 1) {
 		if (empty($_SESSION['_gid'])) {
@@ -346,6 +348,7 @@ if (!$is_certificate_mode) {
 		}
 	}
 }
+*/
 
 $dir_acum = '';
 for ($i = 0; $i < $array_len; $i++) {
@@ -356,15 +359,28 @@ for ($i = 0; $i < $array_len; $i++) {
 	//Max char 80
 	$url_to_who = cut($dir_array[$i],80);
 	
-	if ($is_certificate_mode) {
+	if ($is_certificate_mode) {		
 		$interbreadcrumb[] = array('url' => $url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
-	} else {
 		
-		$interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
 	}
-
+	else{		
+		$interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);		
+	}
+	
+	//does not repeat the name group in the url
+	if (!empty($_SESSION['_gid'])) {
+		unset($dir_array[1]);
+		}
+	
 	$dir_acum .= $dir_array[$i].'/';
+
 }
+
+
+if (isset($_GET['createdir'])) {		
+	$interbreadcrumb[] = array('url' => '', 'name' => get_lang('CreateDir'));
+}
+
 
 Display::display_header('','Doc');
 
@@ -573,8 +589,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights) { // TEACHER ONLY
 	}
 
 	// Show them the form for the directory name
-	if (isset($_GET['createdir'])) {
-		// Show the form
+	if (isset($_GET['createdir'])) {		
 		echo create_dir_form();
 	}
 

@@ -596,6 +596,9 @@ if ($form->validate()) {
 	// Copied from document.php
 	$dir_array = explode('/', $dir);
 	$array_len = count($dir_array);
+	
+	/*
+	TODO:check and delete this code
 	if (!$is_certificate_mode) {
 		if ($array_len > 1) {
 			if (empty($_SESSION['_gid'])) {
@@ -604,6 +607,8 @@ if ($form->validate()) {
 			}
 		}
 	}
+	*/
+	
 	$dir_acum = '';
 	for ($i = 0; $i < $array_len; $i++) {
 		$url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];

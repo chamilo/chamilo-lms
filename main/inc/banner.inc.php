@@ -352,7 +352,7 @@ if (api_get_self() != '/main/admin/configure_homepage.php') {
             $tab_counter++;
 		}
 	}
-	echo '<li id="insert-link"> <a href="'.api_get_self().'?action=insert_tabs" style="padding-right:0px;"><span>'. Display::return_icon('insert_row.png', get_lang('InsertLink'), array('style' => 'vertical-align:middle')).' '.get_lang('InsertLink').'</span></a></li>';
+	echo '<li id="insert-link"> <a href="'.api_get_self().'?action=insert_tabs" style="padding-right:0px;"><span>'. Display::return_icon('addd.gif', get_lang('InsertLink'), array('style' => 'vertical-align:middle')).' '.get_lang('InsertLink').'</span></a></li>';
 }
 
 if ($_self == 'admin_intro_edition_page')

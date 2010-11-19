@@ -1,7 +1,7 @@
 /*****************************************************
- *  MAIN  - CHAMILO CSS		                 
+ *  MAIN  - CHAMILO CSS
  *****************************************************/
- 
+
 /* the sticky effect */
 html {
 	height: 100%;
@@ -15,10 +15,10 @@ body {
 	color: #000;
 	margin: 0;
 	padding: 0;
-	background-color: #fff;	
+	background-color: #fff;
 	height: 100%; /* stick */
 }
-/* Sticky footer*/ 
+/* Sticky footer*/
 #wrapper {
 	min-height: 100%;
 	height: auto !important;
@@ -107,10 +107,93 @@ ul#navigation li a {
 	-webkit-box-shadow: 0px 4px 3px #000;
 }
 
-ul#navigation .help a{
-	background-image: url(images/help2.png);
+ul#navigation .help a {
+	-moz-border-radius:8px 0 0 8px;
+	-moz-box-shadow:0 2px 2px #000000;
+	background-color:#879DAA;
+	background-position:center center;
+	background-repeat:no-repeat;
+	border:1px solid #FFFFFF;
+	display:block;
+	height:44px;
+	margin-left:1px;
+	opacity:0.6;
+	width:65px;
 }
 
+
+ul#navigation .report a {
+	-moz-border-radius:8px 0 0 8px;
+	-moz-box-shadow:0 2px 2px #000000;
+	background-color:#8fd400;
+	background-position:center center;
+	background-repeat:no-repeat;
+	border:1px solid #FFFFFF;
+	display:block;
+	height:44px;
+	margin-left:1px;
+	opacity:0.6;
+	width:65px;
+}
+
+
+ul#navigation .student a {
+	-moz-border-radius:8px 0 0 8px;
+	-moz-box-shadow:0 2px 2px #000000;
+	background-color:#b27651 ;
+	background-position:center center;
+	background-repeat:no-repeat;
+	border:1px solid #FFFFFF;
+	display:block;
+	height:44px;
+	margin-left:1px;
+	opacity:0.6;
+	width:65px;
+}
+
+
+ul#navigation .user-online a {
+	-moz-border-radius:8px 0 0 8px;
+	-moz-box-shadow:0 2px 2px #000000;
+	background-color:#ccbc67 ;
+	background-position:center center;
+	background-repeat:no-repeat;
+	border:1px solid #FFFFFF;
+	display:block;
+	height:44px;
+	margin-left:1px;
+	opacity:0.6;
+	width:65px;
+}
+
+/* Otros colores para otras opciones basado en tonalidades tierra */
+	ul#navigation .user-connect a {
+	-moz-border-radius:8px 0 0 8px;
+	-moz-box-shadow:0 2px 2px #000000;
+	background-color:#fac97a ;
+	background-position:center center;
+	background-repeat:no-repeat;
+	border:1px solid #FFFFFF;
+	display:block;
+	height:44px;
+	margin-left:1px;
+	opacity:0.6;
+	width:65px;
+}
+
+ul#navigation .student-connect a {
+	-moz-border-radius:8px 0 0 8px;
+	-moz-box-shadow:0 2px 2px #000000;
+	background-color:#d0d5d1 ;
+	background-position:center center;
+	background-repeat:no-repeat;
+	border:1px solid #FFFFFF;
+	display:block;
+	height:44px;
+	margin-left:1px;
+	opacity:0.6;
+	width:65px;
+}
 
 /* for content section in main index.php file */
 /*
@@ -121,8 +204,8 @@ ul#navigation .help a{
 */
 .maincontent {
 	width: 60%;
-	float: left;	
-	 padding: 0 20px 0 20px; 
+	float: left;
+	 padding: 0 20px 0 20px;
 	//padding: 0px;
 	min-height: 333px;
 	margin-top:8px;
@@ -146,18 +229,18 @@ ul#navigation .help a{
 	color: #999;
 }
 .courseadminview table td a {
-	font-weight: bold;		
+	font-weight: bold;
 }
 
 .Authoringview, .courseadminview, .platformadminview {
 	position: relative;
 	width: 80%;
 	margin: 25px auto 10px;
-	padding: 10px;	
+	padding: 10px;
 }
 
 .Authoringview table td a {
-	font-weight: bold;		
+	font-weight: bold;
 }
 
 .invisible a:link, .invisible a:visited {
@@ -207,7 +290,7 @@ img {
 }
 p, blockquote, ol, ul {
 	font-size: 12px;
-	
+
 }
 
 h1 {
@@ -247,7 +330,7 @@ a:active {
 	font-family:Tahoma, Geneva, sans-serif;
 	text-decoration: none;
 	color : #3757f7;
-	
+
 }
 select, textarea {
 	color : #000;
@@ -289,7 +372,7 @@ input[text] {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
-	height: 30px;	
+	height: 30px;
 }
 /* user_portal session list */
 .session_course_item .courses {
@@ -349,7 +432,7 @@ input[text] {
 }
 #top_corner {
 }
-#institution {	
+#institution {
 	background-image: url(images/header-logo.png);
 	background-repeat:no-repeat;
 	height:80px;
@@ -421,7 +504,7 @@ input[text] {
 	font-size: 1.0em;
 	color: #006;
 	border-bottom: 2px solid #0daee4;
-	
+
 	overflow:hidden;
 	margin-bottom: 1px;
 	padding: 0px 10px 0px 20px;
@@ -457,13 +540,13 @@ float:left; /* important for ieX*/
 	cursor:pointer;
 	float:left;
 	height:25px;
-	padding-left:9px;	
+	padding-left:9px;
 	padding-right:2px;
 	text-decoration:none;
 }
 
 
-#header3 li a span {	
+#header3 li a span {
 	background:transparent url(images/tab_right.gif) no-repeat scroll right top;
 	color:#fff;
 	cursor:pointer;
@@ -502,7 +585,7 @@ margin-right:-3px;
 margin-right:3px;
 }
 
-#current #tab_active {	
+#current #tab_active {
 	background:transparent url(images/tab_right-active.gif) no-repeat scroll right top;
 	color:#fff;
 	cursor:pointer;
@@ -520,7 +603,7 @@ margin-right:3px;
 }
 #header3 input.logout {
 	/* makes an input appear like a link in this header */
-	
+
 	margin: 0 0 0 0;
 	padding: 0 30px 0 0;
 	background-color: transparent;
@@ -593,7 +676,7 @@ margin-top:0;
 	background-image:url(images/bg-header4.png);
 	background-repeat:repeat-x;
 	color: #009;
-	padding: 4px 10px 4px 20px;	
+	padding: 4px 10px 4px 20px;
 	clear:right;
 	height:14px;
 }
@@ -633,12 +716,12 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
 	background-repeat:repeat-x;
 	font-size: 12px;
 	color:#ffffff;
-//	height: 10em;	 /* Do not change this value */ 
+//	height: 10em;	 /* Do not change this value */
 	overflow:hidden;
 	width: 100%;
 	padding-bottom:10px;
 }
-/* Sticky footer*/ 
+/* Sticky footer*/
 .push {
 	height: 10em; /* Very important */
 }
@@ -648,13 +731,13 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
 	margin-right:5%;
 	background-color: #037fb2;
 	background-image: url(images/bg-footer.gif);
-	background-repeat:repeat-x;	
+	background-repeat:repeat-x;
 }
 
 .footer_emails{
 	float: left;
 	padding-top:60px;
-	margin-right:5%;	
+	margin-right:5%;
 	background-color: #037fb2;
 	background-image: url(images/bg-footer.gif);
 	background-repeat:repeat-x;
@@ -685,26 +768,26 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
 
 #menu-wrapper {
 	width:200px;
-	float: right;	
+	float: right;
 }
-	
+
 #menu {
 	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
-	-opera-border-radius: 10px; border: 1px solid #e1e1e0;	
-	
+	-opera-border-radius: 10px; border: 1px solid #e1e1e0;
+
 	margin-top:20px;
 	margin-right:10px;
 	margin-bottom:0px;
-	
+
 	padding-left:10px;
 	padding-right:10px;
 	padding-top:5px;
-	padding-bottom:30px;	
-	
+	padding-bottom:30px;
+
 	width:200px;
 	float: right;
-	min-height: 150px;	
+	min-height: 150px;
 }
 
 .menucaption {
@@ -712,7 +795,7 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
 	font-weight: bold;
 	padding-left: 12px;
 }
-.menusection {	
+.menusection {
 	margin: 20px 0px 0 6px;
 	padding-left: 3px;
 	width: auto;
@@ -721,13 +804,13 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
 	font-weight:bold;
 	font-size: 12px;
 	position: relative;
-	top: -5px;	 
+	top: -5px;
 }
 .menulist {
 	list-style: none;
 	margin: 0 0 10px 0;
 	padding: 0;
-	
+
 	list-style-image:none;
 	list-style-position:outside;
 	list-style-type:none;
@@ -904,7 +987,7 @@ this lets the navigation menu appear to the left:
 	-moz-border-radius-topright:5px;
 	border:1px solid #E1E1E0;
 	/*width:100%;*/
-	
+
 }
 #login_fail {
 	margin: 0 6px 6px 6px;
@@ -1100,7 +1183,7 @@ input.liteoption {
 	vertical-align: top;
 	border: 1px solid #ccc;
 	border-collapse: collapse;
-	background-color: #FFFFC0;	
+	background-color: #FFFFC0;
 }
 
 #agenda_list th {
@@ -1277,13 +1360,13 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	background-color:#CAF0C7;
 	border-color:#1F8323;
 	-moz-border-radius: 10px;
-	color:#1F8323;	
+	color:#1F8323;
 	position: relative;
 	margin-top: 10px;
 	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
-	padding:6px;	
+	padding:6px;
 	min-height: 30px;
 }
 .error-message {
@@ -1458,7 +1541,7 @@ div.row div.label {
 div.row div.formw {
 	width: 80%;
 	float:left;
-	
+
 }
 [dir=ltr] div.row div.label, [dir=rtl] div.row div.formw {
 	float: left;
@@ -1628,20 +1711,20 @@ div.admin_section h4 {
 	color: #666;
 	list-style-type: none;
 	margin:5px 5px 10px 5px;
-	padding: 5px;	
-	background-color:#FFF;	
+	padding: 5px;
+	background-color:#FFF;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 }
 .sub_session_box {
-	 border: 1px solid #DCE5F3; 
+	 border: 1px solid #DCE5F3;
 	/* font-weight: bold; */
 	color: #666;
 	list-style-type: none;
 	margin:5px 5px 10px 0px;
-	padding: 5px;	
-	background-color:#FFF;	
+	padding: 5px;
+	background-color:#FFF;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
@@ -1701,12 +1784,12 @@ div.system_announcement {
     -moz-border-radius-topleft : 5px;
     -moz-border-radius-bottomright : 5px;
     -moz-border-radius-bottomleft : 5px;
-    min-height:20px;    
+    min-height:20px;
 }
 .system_announcement {
 	background: #eee url('images/headertables.jpg') repeat-x top center;
 	font: bold 100% arial, sans-serif, sans;
-	
+
 }
 .system_announcement_content {
 	font: normal 100% 'Lucida Grande', verdana, Arial, sans-serif, sans;
@@ -1725,7 +1808,7 @@ div.system_announcement {
 .system_announcement_title {
 	font-weight: bold;
 	font-size: 120%;
-	float:left;	
+	float:left;
 }
 
 .system_announcement_date {
@@ -2300,7 +2383,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
   margin:0;
 }
 .count_down{
-  padding: 3px;  
+  padding: 3px;
   font-size:22px;
   font-weight:bold;
   color:#222;
@@ -2655,7 +2738,7 @@ span.radio {
 button {
 	margin:2px 5px 3px 3px !important;
 	background-color: #F5F5F5;
-	
+
 	border-width: 0px;
 	border-color:#EEEEEE #DEDEDE #DEDEDE #EEEEEE;
 	border-style:solid;
@@ -2671,11 +2754,11 @@ button {
 	vertical-align:middle;
 }
 button:hover {
-	
+
 	color:#545454;
 	border-style: inset;
 	background-color:#DFF4FF;
-	border:1px solid #C2E1EF;	
+	border:1px solid #C2E1EF;
 }
 /* button with image */
 button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
@@ -2971,7 +3054,7 @@ input.arrowl {
 * {
 	outline :none;
 }
-input, select, textarea {	
+input, select, textarea {
 	-moz-border-radius-bottomleft:5px;
 	-moz-border-radius-bottomright:5px;
 	-moz-border-radius-topleft:5px;
@@ -3001,17 +3084,17 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 #maincontent .courseslist li {
 	margin-bottom:8px;
 }
-a.read {	
+a.read {
 	font-weight:normal;
 }
 .actions {
 	background:#efefef;
-	border:1px solid #ccc;	
+	border:1px solid #ccc;
 	padding:2px;
 	margin-bottom: 5px;
 	vertical-align:middle;
 }
-.actions-title {	
+.actions-title {
 	background:#efefef;
 	border:1px solid #ccc;
 	padding:4px;
@@ -3044,7 +3127,7 @@ a.read {
 	margin: 20px 0px 20px 0px;
 }
 
-#group_permissions ul {	
+#group_permissions ul {
 	list-style-image:none;
 	list-style-position:outside;
 	list-style-type:none;
@@ -3058,7 +3141,7 @@ a.read {
 
 /* Groups boxes */
 
-.groups_grid_container { 
+.groups_grid_container {
 	width:100%;
 }
 .groups_grid_item {
@@ -3076,9 +3159,9 @@ a.read {
 	float:left;
 	width:350px;
 	height:165px;
-	margin-top:20px;			
+	margin-top:20px;
 	}
-	
+
 .popular_grid_element_1 {
 	width:330px;
 	height:165px;
@@ -3097,8 +3180,8 @@ a.read {
 	height:165px;
 	margin-top:20px;
 	}
-	
-.newest_grid_element_1 { 
+
+.newest_grid_element_1 {
 	width:330px;
 	height:165px;
 	padding-left:10px;
@@ -3116,8 +3199,8 @@ a.read {
 	height:165px;
 	margin-top:20px;
 }
-	
-.mygroups_grid_element_1 { 
+
+.mygroups_grid_element_1 {
 	width:330px;
 	height:165px;
 	padding-left:10px;
@@ -3272,9 +3355,9 @@ a.read {
 
 .search_group_grid_container {
 	margin-top:0px;
-} 
-	
-.search_group_grid_element_1 { 
+}
+
+.search_group_grid_element_1 {
 	width:330px;
 	height:165px;
 	padding-left:10px;
@@ -3287,8 +3370,8 @@ a.read {
 #menu {
 	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
-	-opera-border-radius: 10px; border: 1px solid #e1e1e0;	
-	
+	-opera-border-radius: 10px; border: 1px solid #e1e1e0;
+
 	border:1px solid #E1E1E0;
 	float:right;
 	margin-bottom:0;
@@ -3301,7 +3384,7 @@ a.read {
 }
 
 /* INVITATIONS */
- 
+
 .invitation_confirm {
 	border-top:1px solid #D8DFEA;
 }
@@ -3313,7 +3396,7 @@ a.read {
 /**********************************************
  *  MESSAGE TOOL                           *
  **********************************************/
- 
+
  #inbox-wrapper {
 	width:100%;
 }
@@ -3348,7 +3431,7 @@ a.read {
 
 #message-reply-link {
 	float:right;
-} 
+}
 .message-item {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
@@ -3391,7 +3474,7 @@ a.read {
 .message-group-date {
 	color:#666;
 	width:100%;
-	text-align:right;	
+	text-align:right;
 }
 .view-message-content {
 	line-height:150%;
@@ -3423,8 +3506,8 @@ a.read {
 .message-content {
 /*	float:right;
 	background:#FFF;
-	padding: 10px 0 0 5px;	
-	width:125px; 
+	padding: 10px 0 0 5px;
+	width:125px;
 	position:relative;*/
 }
 .message-content .message-delete {
@@ -3548,7 +3631,7 @@ a.read {
 .message-content-body-right:hover {
 }
 
-a.unread {	
+a.unread {
 	font-weight:bold;
 }
 
@@ -3619,7 +3702,7 @@ div.image-social-content center.friend {
 }
 .social-search-image {
 	color:#000033;
-	margin-top:2px;	
+	margin-top:2px;
 	width:200px;
 }
 .social-subtitle-search {
@@ -3787,7 +3870,7 @@ div.image-social-content center.friend {
 	color:#000;
 	font-weight:bold;
 	font-size:12px;
-	vertical-align:bottom;	
+	vertical-align:bottom;
 }
 .social-menu-title-right {
 	width:84%;
@@ -3824,18 +3907,18 @@ div.image-social-content center.friend {
 	padding:2px;
 	width:76px;
 }
- 
+
 
 /* styles from the my.profile.php file */
 #social_widget  {
 /*	border:1px dotted #ccc; */
-	float:left;	
+	float:left;
 	padding:1px;
 	padding-bottom:10px;
 	margin-bottom:10px;
 	margin-left:0px;
 	margin-right:0px;
-	width:215px;	
+	width:215px;
 }
 
 #social_widget_image {
@@ -3859,11 +3942,11 @@ div.image-social-content center.friend {
 	margin:0px;
 }
 
-.social-box-right {	
+.social-box-right {
 	width:300px;
 	float:left;
 	height:auto;
-	margin-left:10px;	
+	margin-left:10px;
 	overflow:hidden;
 }
 .social-box-container1 {
@@ -3935,7 +4018,7 @@ div.image-social-content center.friend {
 .social-groups-text1 {
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:12px;
-	color:#669;	
+	color:#669;
 }
 .social-groups-text2 {
 	font-family:Verdana, Geneva, sans-serif;
@@ -3997,13 +4080,13 @@ div.image-social-content center.friend {
 
 .social-background-content .hidden_message {
 	cursor:pointer;
-	position:absolute;	
+	position:absolute;
 	top:0px;
 	right:0px;
 }
 
 .hidden_message {
-	background-color:#5A5A5A;	
+	background-color:#5A5A5A;
 	padding:2px;
 	margin:0px;
 }
@@ -4014,18 +4097,18 @@ div.image-social-content center.friend {
 }
 
 
-#social-forum-main-title {	
+#social-forum-main-title {
 	font-size:130%;
 	font-weight:bold;
 	padding: 0px 8px 0px 8px;
-	
+
 }
 
-#social-forum-title {	
+#social-forum-title {
 	font-size:130%;
 	font-weight:bold;
 	padding: 0px 8px 0px 8px;
-	
+
 }
 
 #social-thread {
@@ -4113,7 +4196,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 #head h1 {
     line-height: 100px;
     color: #FFF;
-    text-align: center;    
+    text-align: center;
     text-indent: -9999em
 }
 /* End Head Section */
@@ -4124,7 +4207,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
     width: 50%;
 		/* Min-height: */
 		min-height: 400px;
-		height: auto !important; 
+		height: auto !important;
 		height: 400px;
 }
 
@@ -4137,12 +4220,12 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 
 .session_box_title span {
 	font-size: 130%;
-	font-weight: bold;	
+	font-weight: bold;
 }
 
 .sub_session_box_title span {
 	font-size: 130%;
-	font-weight: bold;	
+	font-weight: bold;
 }
 
 #session_category_title {
@@ -4151,7 +4234,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 	padding: 2px 0px 5px 5px;
 }
 
-/* fixes the * */ 
+/* fixes the * */
 span.form_required  {
 	padding-right:5px;
 }
@@ -4162,7 +4245,7 @@ span.form_required  {
 	border-radius: 10px;
 	background-color:#F9F9F9;
 	padding:5px 10px 5px 10px;
-	height:40px;	
+	height:40px;
 	margin:5px;
 }
 
@@ -4176,15 +4259,15 @@ span.form_required  {
 	height:330px;
 }
 
-.courseadminview-activity-3col ul {	
-	padding:0px 20px 10px 4px;	
+.courseadminview-activity-3col ul {
+	padding:0px 20px 10px 4px;
 	list-style-type:none;
 	height:240px;
 	margin-left:0px;
 	margin: 0px 0px 0px 0px ;
 }
 
-.courseadminview-activity-3col ul li {	
+.courseadminview-activity-3col ul li {
 	padding:4px 0px 4px 0px;
 }
 
@@ -4201,13 +4284,13 @@ span.form_required  {
 	border-radius: 10px;
 	background-color:#F9F9F9;
 	padding:5px 10px 10px 6px;
-	/* height:40px; */	
+	/* height:40px; */
 }
 
 .userportal-catalog-item .catalog_box li span {
 	font-size:130%;
 	font-weight:bold;
-	margin-left:5px;	
+	margin-left:5px;
 }
 
 .userportal-session-item {
@@ -4216,7 +4299,7 @@ span.form_required  {
 	border-radius: 10px;
 	background-color:#F9F9F9;
 	padding:5px 10px 10px 6px;
-	/* height:40px; */	
+	/* height:40px; */
 }
 
 .userportal-session-category-item {
@@ -4225,7 +4308,7 @@ span.form_required  {
 	border-radius: 10px;
 	background-color:#F9F9F9;
 	padding:5px 10px 10px 16px;
-	/* height:40px; */	
+	/* height:40px; */
 	/*background-color:#f9f9f9; border:1px solid #dddddd; padding:5px 10px 5px 10px; margin-top: 10px; */
 }
 
@@ -4235,8 +4318,8 @@ span.form_required  {
 	color: #666;
 	list-style-type: none;
 	margin:5px 5px 10px 5px;
-	padding: 5px;	
-	background-color:#FFF;	
+	padding: 5px;
+	background-color:#FFF;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
@@ -4254,23 +4337,23 @@ span.form_required  {
 	margin-right: auto ;
 }
 
-.course-student-view-activity-3col ul {	
+.course-student-view-activity-3col ul {
 	padding:10px 20px 10px 20px;
 	list-style-type:none;
 	/* height:240px; */
 	margin-left:0px;
 	margin: 0px 0px 0px 0px ;
 	 float:left;
-	width : 280px; 
+	width : 280px;
 }
 
-.course-student-view-activity-3col ul li {	
+.course-student-view-activity-3col ul li {
 	padding:5px 0px 4px 0px;
 	/* float:left;
 	width : 380px; */
 }
 
-/* plugins divs */ 
+/* plugins divs */
 
 #plugin-header {
 	margin-left:65px;
@@ -4299,15 +4382,52 @@ span.form_required  {
 
 #contact_registration .label{
 	width:205px;
-	
+
 }
 
 #contact_registration .formw{
-	width:344px;	
+	width:344px;
 	float:left;
 	margin-left:20px;
 }
 
 #id_contact_form .normal-message{
 	padding:20px;
+}
+
+.categories-block-course {
+-moz-border-radius-topleft:8px;
+-moz-border-radius-topright:8px;
+-webkit-border-top-left-radius: 8px;
+-webkit-border-top-right-radius: 8px;
+border-top-left-radius: 8px;
+border-top-right-radius: 8px;
+-moz-box-shadow:0 -1px 10px 2px #CCCCCC;
+-Webkit-box-shadow: 0 -1px 10px 2px  #CCCCCC;
+box-shadow: 0 -1px 10px 2px #CCCCCC;
+border:1px solid #CCCCCC;
+float:left;
+margin:10px;
+padding:9px;
+width:240px;
+min-height:132px;
+}
+
+
+.categories-course-picture {
+float:left;
+}
+
+.categories-course-description {
+font-family:arial;
+font-size:11px;
+}
+
+
+.course-link-desc a {
+text-decoration:underline;
+}
+
+.course-link-desc span {
+padding-top:10px;
 }

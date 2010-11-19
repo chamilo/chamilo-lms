@@ -17,7 +17,7 @@ switch ($action) {
 		$tbl_my_user		= Database :: get_main_table(TABLE_MAIN_USER);
 		$tbl_my_user_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
 		$tbl_user 			= Database :: get_main_table(TABLE_MAIN_USER);
-		$search				= Database::escape_string($_POST['search']);
+		$search				= Database::escape_string($_REQUEST['tag']);
 		$current_date		= date('Y-m-d H:i:s',time());
 
 		$user_id = api_get_user_id();

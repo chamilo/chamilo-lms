@@ -1290,4 +1290,8 @@ $SSOServerUnAuthURITitle = "URL de logout du serveur de Single Sign On";
 $SSOServerUnAuthURIComment = "L'adresse de la page qui se charge de la déconnexion de l'utilisateur. Cette option est utile uniquement si vous voulez que la déconnexion de Chamilo déclenche la déconnexion du serveur d'authentification.";
 $SSOServerProtocolTitle = "Protocole du serveur Single Sign On";
 $SSOServerProtocolComment = "Le protocole à préfixer au domaine du serveur Single Sign On (nous recommandons l'usage de https:// si votre serveur le permet, car tout protocole non sécurisé engendre des risques au niveau du mécanisme d'authentification).";
+$EnabledWirisTitle = "Editeur mathématique WIRIS";
+$EnabledWirisComment = "Activer l'éditeur mathématique WIRIS";
+$AllowSpellCheckTitle = "Correcteur orthographique";
+$AllowSpellCheckComment = "Activer le correcteur orthographique";
 ?>

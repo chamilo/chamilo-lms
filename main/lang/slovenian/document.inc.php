@@ -224,4 +224,7 @@ $CopyFailed = "Prepisovanje ni uspelo";
 $CopyMade = "Prepisovanje je uspelo";
 $OverwritenFile = "Datoteka je bila nadomeščena";
 $Draw = "Nariši";
+$FileExistsChangeToSave = "Datoteka s tem imenom že obstaja. Izberite drugo ime za sliko, ki jo želite shraniti.";
+$FileSavedAs = "Datoteka je bila shranjena kot";
+$FileExportAs = "Datoeka je bila izvožena kot";
 ?>

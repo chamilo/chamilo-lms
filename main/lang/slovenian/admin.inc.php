@@ -1277,4 +1277,21 @@ $RejectedCourseRequests = "Zavrni zahtevo po tečaju";
 $BrowscapInfo = "Browscap nalaga datoteko browscap.ini z veliko količino podatkov, preko brskalnika in njegovih zmožnosti, s PHP funkcijo get_browser().";
 $EnableCourseValidation = "Vrednotenje tečajev";
 $EnableCourseValidationComment = "Kadar je zmožnost 'Vrednotenje tečaja' omogočena, učitelj ne more samostojno kreirati tečaja. Izpolniti mora zahtevo po kreiranju, nato upravitelj pregleda zahtevo in jo odobri ali zavrne. Zmožnost bazira na avtomatiziranem e-poštnem sporočanju, zato mora Chamilo biti zmožen dostopati do poštnega strežnika in uporabiti posebej za to funkcijo dodeljen e-poštni naslov.";
+$CourseValidationTermsAndConditionsLink = "Validacija tečajev - povezava k pogojem rabe";
+$CourseValidationTermsAndConditionsLinkComment = "Predstavlja URL k dokuemntu \"Pogoji rabe\", ki je veljaven ob zahtevi po kreiranju tečaja. V primeru, da je naslov podan, mora uporabnik pred pošiljanjem zahteve prebrati in sprejeti pogoje predstavljene v dokumentu.<br />
+V primeru, da ste aktivirali modul Chamila \"Pogoji rabe\" in želite, da se uporabi njegov dokument, pustite ta naslov prazen.";
+$EnableSSOTitle = "Mehanizem enkratne prijave SSO (Single Sign On)";
+$EnableSSOComment = "Omogočanje SSO dovoljuje prijavo na to platformo z mehanizmom enkratne prijave preko strežnika SSO.";
+$SSOServerDomainTitle = "Domena SSO strežnika";
+$SSOServerDomainComment = "DOmena SSO strežnika (web naslov strežnika, ki dovoljuje avtomatično prijavo v Chamilo platformo).";
+$SSOServerAuthURITitle = "avtentifikacijski URL SSO strežnika";
+$SSOServerAuthURIComment = "Naslov strani, ki služi za preverjanje avtentifikacijskega zahtevka. Npr.: /?q=user v primeru Drupal-ove platforme.";
+$SSOServerUnAuthURITitle = "odjavni URL SSO strežnika";
+$SSOServerUnAuthURIComment = "Naslov strani, ki odjavi uporabnika iz SSO strežnika. To možnost uporabite v primeru, če želite, da po odjavi uporabnika odjavite tudi iz avtorizacijskega strežnika.";
+$SSOServerProtocolTitle = "Protokol SSO strežnika";
+$SSOServerProtocolComment = "Niz znakov, ki označuje protokol domene SSO strežnika (priporočamo rabo https:// , če vaš strežnik to omogoča).";
+$EnabledWirisTitle = "WIRIS matematični urejevalnik";
+$EnabledWirisComment = "Omogoči WIRIS urejevalnik matematičnih izrazov";
+$AllowSpellCheckTitle = "Preverjanje črkovanja";
+$AllowSpellCheckComment = "Omogoči preverjanje črkovanja";
 ?>

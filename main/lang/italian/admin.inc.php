@@ -1284,4 +1284,18 @@ $EnableCourseValidation = "Conferma del corso";
 $EnableCourseValidationComment = "Attivando la \"Conferma del corso\" il docente può creare il corso solo dopo l'approvazione da parte dell'amministratore della piattaforma. La funzionalità richiede di poter inviare un messaggio di posta elettronica ad un indirizzo raggiungibile, per cui il server di posta deve essere in funzione.";
 $CourseValidationTermsAndConditionsLink = "Conferma del corso - collegamento a termini e condizioni d'uso";
 $CourseValidationTermsAndConditionsLinkComment = "Attivando il modulo per poter richiedere la creazione di un corso dovranno essere accettati i Termini e le Condizioni d'uso . La funzionalità richiede il collegamento ad un URL, che può anche essere quello interno di Chamilo.";
+$EnableSSOTitle = "Accesso unico";
+$EnableSSOComment = "Attivando l'Accesso unico è possibile accedere alla piattaforma attraverso un accesso esterno, come ad esempio da Drupal attraverso il plugin Drupal-Chamilo o simile.";
+$SSOServerDomainTitle = "Dominio del server principale di accesso";
+$SSOServerDomainComment = "Il Dominio del server principale di accesso è l'indirizzo web del server da cui si accede per entrare in Chamilo. In genere va dato senza indicazione del protocollo e senza barre (esempio: www.example.com)";
+$SSOServerAuthURITitle = "URL del server principale di accesso";
+$SSOServerAuthURIComment = "l'URL della pagina che si occupa dell'autenticazione dell'accesso, ad esempio, in Drupal, /?q=user .";
+$SSOServerUnAuthURITitle = "URL di uscita dall'accesso al server";
+$SSOServerUnAuthURIComment = "l'URL della pagina che si occupa dell'uscita (logout) dall'accesso, nel caso in cui si desideri che un utente uscito da Chamilo esca anche dal server principale.";
+$SSOServerProtocolTitle = "Protocollo del server di accesso principale";
+$SSOServerProtocolComment = "In genere https:// - se consentito dal server - in quanto altri protocolli possono essere pericolosi nelle operazioni di autenticazione.";
+$EnabledWirisTitle = "Editor matematico WIRIS";
+$EnabledWirisComment = "Abilitazione dell'editor di WIRIS";
+$AllowSpellCheckTitle = "Correttore ortografico";
+$AllowSpellCheckComment = "Attivazione del Correttore ortografico";
 ?>

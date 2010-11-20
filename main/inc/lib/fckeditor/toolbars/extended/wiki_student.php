@@ -57,8 +57,12 @@ $config['ToolbarSets']['Maximized'] = array(
 //$config['BlockCopyPaste'] = true;
 
 // A setting for force paste as plain text.
-// Possible values: true , false
-$config['ForcePasteAsPlainText'] = true;
+if ((api_get_setting('force_wiki_paste_as_plain_text') == 'true')) {
+	$config['ForcePasteAsPlainText'] = true;
+}
+else{
+	$config['ForcePasteAsPlainText'] = false;
+}
 
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...

@@ -299,8 +299,8 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
 	} else {
 		if ($is_certificate_mode) {
 			$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
-		}else {
-			if($extension=='svg' && api_browser_support('svg')){
+		}else {	
+			if($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
 				$modify_icons = '<a href="edit_drawing.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';		
 			}else{			
 				$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';

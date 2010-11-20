@@ -869,14 +869,18 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 			<?php Display::display_icon('filenew.gif', get_lang('CreateDoc')); echo get_lang('CreateDoc'); ?></a>&nbsp;
 		<?php		
 	
-		// Create new draw
-		if (api_browser_support('svg')){
-		?>
-			<a href="create_drawing.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
-				<?php Display::display_icon('draw_new.png', get_lang('Draw')); echo get_lang('Draw'); ?></a>&nbsp;
-		<?php	
-		}else{
-			Display::display_icon('draw_new.png', get_lang('BrowserDontSupportsSVG')); echo get_lang('Draw').'&nbsp;';
+		// Create new draw		
+		if (api_get_setting('enabled_support_svg') == 'true'){
+		
+		
+			if (api_browser_support('svg')){
+			?>
+				<a href="create_drawing.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+					<?php Display::display_icon('draw_new.png', get_lang('Draw')); echo get_lang('Draw'); ?></a>&nbsp;
+			<?php	
+			}else{
+				Display::display_icon('draw_new.png', get_lang('BrowserDontSupportsSVG')); echo get_lang('Draw').'&nbsp;';
+			}
 		}
 	}
 	

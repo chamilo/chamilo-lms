@@ -773,6 +773,10 @@ VALUES
 ('sso_authentication_protocol',NULL,'radio','Security','http://','SSOServerProtocolTitle','SSOServerProtocolComment',NULL,NULL,1),
 ('enabled_wiris',NULL,'radio','Editor','false','EnabledWirisTitle','EnabledWirisComment',NULL,NULL, 0),
 ('allow_spellcheck',NULL,'radio','Editor','false','AllowSpellCheckTitle','AllowSpellCheckComment',NULL,NULL, 0),
+('force_wiki_paste_as_plain_text',NULL,'radio','Editor','true','ForceWikiPasteAsPlainTextTitle','ForceWikiPasteAsPlainTextComment',NULL,NULL, 0),
+('enabled_googlemaps',NULL,'radio','Editor','true','EnabledGooglemapsTitle','EnabledGooglemapsComment',NULL,NULL, 0),
+('enabled_imgmap',NULL,'radio','Editor','true','EnabledImageMapsTitle','EnabledImageMapsComment',NULL,NULL, 0),
+('enabled_support_svg',NULL,'radio','Tools','true','EnabledSVGTitle','EnabledSVGComment',NULL,NULL, 0),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.8.8.12885', 'DokeosDatabaseVersion', '', NULL, NULL, 0);
 
 
@@ -999,7 +1003,15 @@ VALUES
 ('enabled_wiris','true','Yes'),
 ('enabled_wiris','false','No'),
 ('allow_spellcheck','true','Yes'),
-('allow_spellcheck','false','No');
+('allow_spellcheck','false','No'),
+('force_wiki_paste_as_plain_text','true','Yes'),
+('force_wiki_paste_as_plain_text','false','No'),
+('enabled_googlemaps','true','Yes'),
+('enabled_googlemaps','false','No'),
+('enabled_imgmap','true','Yes'),
+('enabled_imgmap','false','No'),
+('enabled_support_svg','true','Yes'),
+('enabled_support_svg','false','No');
 
 UNLOCK TABLES;
 

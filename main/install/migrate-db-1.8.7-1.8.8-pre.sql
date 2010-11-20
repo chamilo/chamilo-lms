@@ -50,16 +50,26 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authen
 INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authentication', 'false', 'No');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authentication_protocol', 'http://', 'http://');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authentication_protocol', 'https://', 'https://');
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_wiris',NULL,'radio','Editor','false','EnabledWirisTitle','EnabledWirisComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_wiris', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_wiris', 'false', 'No');
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_spellcheck',NULL,'radio','Editor','false','AllowSpellCheckTitle','AllowSpellCheckComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_spellcheck', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_spellcheck', 'false', 'No');
 ALTER TABLE course ADD INDEX idx_course_category_code (category_code);
 ALTER TABLE course ADD INDEX idx_course_directory (directory(10));
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('force_wiki_paste_as_plain_text',NULL,'radio','Editor','true','ForceWikiPasteAsPlainText','ForceWikiPasteAsPlainTextComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('force_wiki_paste_as_plain_text', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('force_wiki_paste_as_plain_text', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_googlemaps',NULL,'radio','Editor','true','EnabledGooglemapsTitle','EnabledGooglemapsComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_googlemaps', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_googlemaps', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_imgmap',NULL,'radio','Editor','true','EnabledImageMapsTitle','EnabledImageMapsComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_imgmap', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_imgmap', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_support_svg',NULL,'radio','Editor','true','EnabledSVGTitle','EnabledSVGComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_svg', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_svg', 'false', 'No');
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

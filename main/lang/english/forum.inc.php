@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $ForumDeleted = "Forum deleted";
 $ForumCategoryDeleted = "Forum category deleted";
 $ForumLocked = "Forum blocked";
-$Forum = "Forums";
+$Forum = "Forum";
 $AddForumCategory = "Add forum category";
 $AddForum = "Add a forum";
 $Topics = "Topics";
@@ -143,4 +143,5 @@ $ForumcategoryLocked = "Forum category Locked";
 $PreviewImage = "Preview image";
 $UpdateImage = "Update Image";
 $EnableTimeLimits = "Enable time limits";
+$RemoveSearchResults = "Clean search results";
 ?>

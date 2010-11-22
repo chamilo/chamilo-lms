@@ -1298,4 +1298,12 @@ $EnabledWirisTitle = "Editor matematico WIRIS";
 $EnabledWirisComment = "Abilitazione dell'editor di WIRIS";
 $AllowSpellCheckTitle = "Correttore ortografico";
 $AllowSpellCheckComment = "Attivazione del Correttore ortografico";
+$EnabledSVGTitle = "Crea e modifica file SVG";
+$EnabledSVGComment = "La scelta ti permette di creare o modificare immagini SVG (Scalable Vector Graphics) on-line ed esportarle in formato png";
+$ForceWikiPasteAsPlainTextTitle = "Forza il Wiki ad incollare come testo semplice";
+$ForceWikiPasteAsPlainTextComment = "L'opzione eviterà la possibilità di pervenire a tag sbagliati o non standard, con il vantaggio di evitare malfunzionamenti ma con lo svantaggio di limitare alcune funzionalità di modifica.";
+$EnabledGooglemapsTitle = "Abilita le mappe di Google";
+$EnabledGooglemapsComment = "Verrà reso attivo il pulsante per l'inserimento di mappe Google: lo strumento funzionerà correttamente solo se una API key valida sarà presente nel file main/inc/lib/fckeditor/myconfig.php";
+$EnabledImageMapsTitle = "Attiva Image map";
+$EnabledImageMapsComment = "Verrà reso attivo il pulsante per trasformare un'immagine in una mappa, creando delle zone attive cui verranno associate URL di destinazione.";
 ?>

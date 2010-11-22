@@ -66,7 +66,7 @@ if (!empty ($_GET['gidReq'])) {
 	api_session_register('toolgroup');
 }
 
-if (!empty($_SESSION['toolgroup'])) {
+if ($origin=='group') {
 	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
 	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));

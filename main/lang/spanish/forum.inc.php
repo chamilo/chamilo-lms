@@ -143,4 +143,5 @@ $ForumcategoryLocked = "Categoría de foro bloqueado";
 $PreviewImage = "Imagen previa";
 $UpdateImage = "Actualizar imagen";
 $EnableTimeLimits = "Activar limites de tiempo";
+$RemoveSearchResults ="Limpiar los resultados";
 ?>

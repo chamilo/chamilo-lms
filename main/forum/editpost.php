@@ -52,6 +52,12 @@ $nameTools=get_lang('ToolForum');
 include 'forumconfig.inc.php';
 include 'forumfunction.inc.php';
 
+//
+$origin = '';
+if(isset($_GET['origin'])) {
+	$origin =  Security::remove_XSS($_GET['origin']);
+}
+
 // javascript
 $htmlHeadXtra[] = '<script>
 
@@ -94,13 +100,11 @@ if (!empty($gradebook) && $gradebook=='view') {
 		);
 }
 
-
-if (!empty($_SESSION['toolgroup'])) {
-
+if ($origin=='group') {	
 	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
 	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
-	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 	$interbreadcrumb[] = array("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
 	$interbreadcrumb[] = array("url" => "javascript: void (0);","name" => get_lang('EditPost'));
 
@@ -178,8 +182,13 @@ if (!api_is_allowed_to_edit(null,true) AND $current_forum['allow_edit']==0) {
 if ($origin!='learnpath') {
 	echo '<div class="actions">';
 	echo '<span style="float:right;">'.search_link().'</span>';
-	echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
-	echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'">'.Display::return_icon('forum.gif').' '.get_lang('BackToForum').'</a>';
+	if ($origin=='group') {		
+		echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups')).get_lang('BackTo').' '.get_lang('GroupSpace').'</a>';	
+	}
+	else{
+		echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
+	}
+	echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin=group">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
 	echo '</div>';
 }
 

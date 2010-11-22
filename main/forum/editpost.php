@@ -188,7 +188,7 @@ if ($origin!='learnpath') {
 	else{
 		echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png').' '.get_lang('BackToForumOverview').'</a>';
 	}
-	echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin=group">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
+	echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin='.$origin.'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
 	echo '</div>';
 }
 

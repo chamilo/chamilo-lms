@@ -147,8 +147,8 @@ if ($origin != 'learnpath') {
 		echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview')).' '.get_lang('BackToForumOverview').'</a>';
 		
 	}
-	echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin=group">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
-	echo '<a href="viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin=group">'.Display::return_icon('forumthread.gif',get_lang('BackToThread')).' '.get_lang('BackToThread').'</a>';
+	echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin='.$origin.'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
+	echo '<a href="viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin='.$origin.'">'.Display::return_icon('forumthread.gif',get_lang('BackToThread')).' '.get_lang('BackToThread').'</a>';
 	
 	echo '</div>';
 } else {

@@ -136,7 +136,7 @@ if (isset($_GET['toolgroup']) && $_GET['toolgroup']==strval(intval($_GET['toolgr
 	$_clean['toolgroup']=(int)$_GET['toolgroup'];
 	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
-	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".Security::remove_XSS($_GET['toolgroup']), "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".Security::remove_XSS($_GET['toolgroup']), "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 	Display::display_header($nameTools,'Agenda');
 
 } elseif (empty($_GET['origin']) or $_GET['origin'] != 'learnpath') {

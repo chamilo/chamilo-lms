@@ -785,7 +785,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	$id = Security::remove_XSS($id);
 	if ($current_visibility_status=='1') {
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&';
 		if (is_array($additional_url_parameters)) {
 			foreach ($additional_url_parameters as $key=>$value) {
 				echo $key.'='.$value.'&amp;';
@@ -794,7 +794,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 		echo 'action=invisible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.icon('../img/visible.gif',get_lang('MakeInvisible')).'</a>';
 	}
 	if ($current_visibility_status=='0') {
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&';
 		if (is_array($additional_url_parameters)) {
 			foreach ($additional_url_parameters as $key=>$value) {
 				echo $key.'='.$value.'&amp;';
@@ -818,7 +818,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
 function display_lock_unlock_icon($content, $id, $current_lock_status, $additional_url_parameters='') {
 	$id = Security::remove_XSS($id);
 	if ($current_lock_status=='1') {
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&';
 		if (is_array($additional_url_parameters)) {
 			foreach ($additional_url_parameters as $key=>$value) {
 				echo $key.'='.$value.'&amp;';
@@ -827,7 +827,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
 		echo 'action=unlock&amp;content='.$content.'&amp;id='.$id.'">'.icon('../img/lock.gif',get_lang('Unlock')).'</a>';
 	}
 	if ($current_lock_status=='0') {
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&';
 		if (is_array($additional_url_parameters)) {
 			foreach ($additional_url_parameters as $key=>$value) {
 				echo $key.'='.$value.'&amp;';
@@ -866,13 +866,13 @@ function display_up_down_icon($content, $id, $list) {
 		}
 	}
 	if ($position>1) {
-		$return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveUp').'">'.Display::return_icon('up.gif',get_lang('MoveUp')).'</a>';
+		$return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveUp').'">'.Display::return_icon('up.gif',get_lang('MoveUp')).'</a>';
 	} else {
 		$return_value=Display::return_icon('up_na.gif','-');
 	}
 
 	if ($position<$total_items) {
-		$return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" >'.Display::return_icon('down.gif',get_lang('MoveDown')).'</a>';
+		$return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" >'.Display::return_icon('down.gif',get_lang('MoveDown')).'</a>';
 	} else {
 
 	   $return_value.=Display::return_icon('down_na.gif','-');
@@ -3316,7 +3316,7 @@ function search_link() {
 	$return = '';
 
 	if ($origin != 'learnpath') {
-		$return = '<a href="forumsearch.php?'.api_get_cidreq().'&action=search&origin='.$origin.'"> '.Display::return_icon('search.gif', get_lang('Search')).' '.get_lang('Search').'</a>';
+		$return = '<a href="forumsearch.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=search&origin='.$origin.'"> '.Display::return_icon('search.gif', get_lang('Search')).' '.get_lang('Search').'</a>';
 		if (!empty($_GET['search'])) {
 			$return .= ': '.Security::remove_XSS($_GET['search']).' ';
 			$url = api_get_self().'?';
@@ -3697,7 +3697,7 @@ function send_notifications($forum_id=0, $thread_id=0, $post_id=0) {
 
 	// the content of the mail
 	$email_subject = get_lang('NewForumPost')." - ".$_course['official_code'];
-	$thread_link= api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum_id.'&thread='.$thread_id;
+	$thread_link= api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.$forum_id.'&thread='.$thread_id;
 	$my_link=isset($link)?$link:'';
 	$my_message=isset($message)?$message:'';
 	$my_message .= $my_link;

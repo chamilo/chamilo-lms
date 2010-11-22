@@ -234,7 +234,7 @@ if (!empty($_SESSION['toolgroup'])){
 	$_clean_toolgroup=intval($_SESSION['toolgroup']);
 	$group_properties  = GroupManager :: get_group_properties($_clean_toolgroup);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
-	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_clean_toolgroup, "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_clean_toolgroup, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 } else {
 	/*
 	if($surveyid) {

@@ -99,7 +99,7 @@ if ($_SESSION['_gid'] OR $_GET['group_id']) {
 
 	$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
-	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_clean['group_id'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_clean['group_id'], "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 
 	$add_group_to_title = ' ('.$group_properties['name'].')';
 	$groupfilter='group_id="'.$_clean['group_id'].'"';

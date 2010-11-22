@@ -87,7 +87,7 @@ foreach ($rows as $post) {
 			$class='';
 		}
 		$count_loop=($count==0)?'&id=1' : '';
-		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display($post['post_title'])."</a></div>";
+		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display($post['post_title'])."</a></div>";
 		$prev_next_array[]=$post['post_id'];
 	}
 	$count++;
@@ -116,10 +116,10 @@ $prev_img 	= Display::return_icon('action_prev.png',get_lang('PrevMessage'), arr
 $next_img 	= Display::return_icon('action_next.png',get_lang('NextMessage'), array('style' => 'vertical-align: middle;'));
 
 // links
-$first_href = 'viewthread.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;id=1&amp;post='.$prev_next_array[0];
-$last_href 	= 'viewthread.php?'.api_get_cidreq()."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;gradebook='.$gradebook.'&amp;origin=".$origin."&amp;post=".$prev_next_array[$max-1];
-$prev_href	= 'viewthread.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$prev_id];
-$next_href	= 'viewthread.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$next_id];
+$first_href = 'viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;id=1&amp;post='.$prev_next_array[0];
+$last_href 	= 'viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$max-1];
+$prev_href	= 'viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$prev_id];
+$next_href	= 'viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$next_id];
 
 echo '<center>';
 //go to: first and previous
@@ -190,11 +190,11 @@ $id_attach = !empty($attachment_list)?$attachment_list['id']:'';
 // The course admin him/herself can do this off course always
 if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))
 {
-	echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;origin=".$origin."&amp;post=".$rows[$display_post_id]['post_id']."&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
+	echo "<a href=\"editpost.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;origin=".$origin."&amp;post=".$rows[$display_post_id]['post_id']."&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 }
 if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))
 {
-	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=delete&amp;content=post&amp;id=".$rows[$display_post_id]['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=delete&amp;content=post&amp;id=".$rows[$display_post_id]['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeletePost"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 	display_visible_invisible_icon('post', $rows[$display_post_id]['post_id'], $rows[$display_post_id]['visible'],array('forum'=>$clean_forum_id,'thread'=>$clean_thread_id, 'post'=>Security::remove_XSS($_GET['post']) ));
 	echo "";
 	//verified the post minor
@@ -211,7 +211,7 @@ if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_f
 	$post_minor=(int)$id_posts[0];
 	$post_id = isset($_GET['post'])?(int)$_GET['post']:0;
 	if (!isset($_GET['id']) && $post_id>$post_minor) {
-		echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;origin=".$origin."&amp;action=move&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>";
+		echo "<a href=\"viewthread.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;origin=".$origin."&amp;action=move&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>";
 	}
 }
 $userinf=api_get_user_info($rows[$display_post_id]['user_id']);
@@ -222,7 +222,7 @@ if (api_is_allowed_to_edit(null,true)) {
 		if($user_status!=1)
 		{
 			$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$rows[$display_post_id]['user_id'],$_GET['thread']);
-			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$rows[$display_post_id]['post_id']."&amp;user=".$rows[$display_post_id]['user_id']."&user_id=".$rows[$display_post_id]['user_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>";
+			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$rows[$display_post_id]['post_id']."&amp;user=".$rows[$display_post_id]['user_id']."&user_id=".$rows[$display_post_id]['user_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>";
 		}
 	}
 }
@@ -233,8 +233,8 @@ if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $cu
 	if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
 	{
 		if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
-			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=replymessage&amp;origin='. $origin .'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>";
-			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=quote&amp;origin='. $origin .'">'.Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>";
+			echo '<a href="reply.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=replymessage&amp;origin='. $origin .'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>";
+			echo '<a href="reply.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=quote&amp;origin='. $origin .'">'.Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>";
 		}
 	}
 }
@@ -290,7 +290,7 @@ if (!empty($attachment_list)) {
 	echo ' "> '.$user_filename.' </a>';
 	echo '<span class="forum_attach_comment" >'.Security::remove_XSS($attachment_list['comment'], STUDENT).'</span>';
 	if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
-		echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
+		echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
 	}
 	echo '</td></tr>';
 }

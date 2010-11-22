@@ -63,7 +63,7 @@ if ($_SESSION['_gid'] OR $_GET['group_id']) {
 
 	$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);
 	$interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
-	$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 	$noPHP_SELF = true;
 	$shortBanner = false;
 	$add_group_to_title = ' ('.$group_properties['name'].')';

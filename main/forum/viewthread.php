@@ -68,11 +68,11 @@ if (!empty($gradebook) && $gradebook=='view') {
 	);
 }
 
-if (!empty($_SESSION['toolgroup'])) {
+if ($origin=='group') {
 	$session_toolgroup	= intval($_SESSION['toolgroup']);
 	$group_properties	= GroupManager :: get_group_properties($session_toolgroup);
 	$interbreadcrumb[] 	= array("url"=>"../group/group.php", "name" => get_lang('Groups'));
-	$interbreadcrumb[] 	= array("url"=>"../group/group_space.php?gidReq=".$session_toolgroup, "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] 	= array("url"=>"../group/group_space.php?gidReq=".$session_toolgroup, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 	$interbreadcrumb[] 	= array("url"=>"viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;gidReq=".$session_toolgroup."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => Security::remove_XSS($current_forum['forum_title']));
 	$interbreadcrumb[] 	= array("url"=>"viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&gradebook=".$gradebook."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => Security::remove_XSS($current_thread['thread_title']));
 
@@ -150,8 +150,17 @@ if ($my_message<>'PostDeletedSpecial') {
 	echo '<div class="actions">';
 	echo '<span style="float:right;">'.search_link().'</span>';
 	if ($origin != 'learnpath') {
-		echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview')).' '.get_lang('BackToForumOverview').'</a>';
-		echo '<a href="viewforum.php?&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
+		
+		if ($origin=='group') {
+			echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups')).get_lang('BackTo').' '.get_lang('GroupSpace').'</a>';
+			echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&origin=group">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
+		}
+		else{
+			echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview')).' '.get_lang('BackToForumOverview').'</a>';	
+			echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
+		}
+		
+	
 	}
 	// the reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
 	// if one of the three levels is locked then the link should not be displayed
@@ -160,7 +169,7 @@ if ($my_message<>'PostDeletedSpecial') {
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
 			//reply link
 			if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
-				echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.Display::return_icon('forumthread_new.gif',get_lang('ReplyToThread')).get_lang('ReplyToThread').'</a>';
+				echo '<a href="reply.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.Display::return_icon('forumthread_new.gif',get_lang('ReplyToThread')).get_lang('ReplyToThread').'</a>';
 			}
 			//new thread link
 			if ((api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
@@ -179,9 +188,12 @@ if ($my_message<>'PostDeletedSpecial') {
 		}
 	}
 
+
+
+
 	// the different views of the thread
 	if ($origin != 'learnpath') {
-		$my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;search='.Security::remove_XSS(urlencode($my_search));
+		$my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;search='.Security::remove_XSS(urlencode($my_search));
 		echo $my_url.'&amp;view=flat&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('forum_listview.gif',get_lang('FlatView')).get_lang('FlatView').'</a>';
 		echo $my_url.'&amp;view=threaded&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('forum_threadedview.gif',get_lang('ThreadedView')).get_lang('ThreadedView').'</a>';
 		echo $my_url.'&amp;view=nested&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('forum_nestedview.gif',get_lang('NestedView')).get_lang('NestedView').'</a>';

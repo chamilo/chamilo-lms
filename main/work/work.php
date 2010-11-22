@@ -276,7 +276,7 @@ if (!empty($_SESSION['toolgroup'])) {
 	$_clean['toolgroup'] = (int)$_SESSION['toolgroup'];
 	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
 	$interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
-	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name' => get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 
 	$url_dir ='';
 	$interbreadcrumb[] = array ('url' => $url_dir,'name' => get_lang('StudentPublications'));

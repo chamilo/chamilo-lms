@@ -138,7 +138,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group($_SE
 		if ($current_group['forum_state'] != TOOL_NOT_AVAILABLE ) {
 			foreach ($forums_of_groups as $key => $value) {
 				if ($value['forum_group_public_private'] == 'public' || (/*!empty($user_subscribe_to_current_group) && */ $value['forum_group_public_private'] == 'private') || !empty($user_is_tutor) || api_is_allowed_to_edit(false, true)) {
-					$tools .= '<li style="display:inline; margin:5px;">'.Display::return_icon('forum.gif', get_lang('GroupForum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'">'.get_lang('Forum').': '.$value['forum_title'].'</a></li>';
+					$tools .= '<li style="display:inline; margin:5px;">'.Display::return_icon('forum.gif', get_lang('GroupForum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'&amp;origin=group">'.get_lang('Forum').': '.$value['forum_title'].'</a></li>';
 					//$tools .= Display::return_icon('forum.gif', get_lang('Forum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.get_lang('Forum').': '.$value['forum_title'].'</a><br />';
 				}
 			}
@@ -188,7 +188,7 @@ echo '</ul>';
 		if ( $current_group['forum_state'] == TOOL_PUBLIC ) {
 			foreach ($forums_of_groups as $key => $value) {
 				if ($value['forum_group_public_private'] == 'public' ) {
-					$tools.= '<li style="display:inline; margin:5px;">'.Display::return_icon('forum.gif', get_lang('GroupForum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'">'.$value['forum_title'].'</a></li>';
+					$tools.= '<li style="display:inline; margin:5px;">'.Display::return_icon('forum.gif', get_lang('GroupForum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'&amp;origin=group">'.$value['forum_title'].'</a></li>';
 					//$tools.= Display::return_icon('forum.gif', get_lang('Forum')) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.get_lang("Forum").': '.$value['forum_title'].'</a><br />';
 				}
 			}

@@ -259,12 +259,12 @@ if ($allowed_to_edit) {
 		echo '<h4>'.get_lang('QualificationChangesHistory').'</h4>';
 		if ($_GET['type'] == 'false') {
 
-			echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.$threadid.'&user='.Security::remove_XSS($_GET['user']).'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=true&idtextqualify='.$act_qualify.$view_gradebook.'#history">'.get_lang('MoreRecent').'</a>&nbsp;|
+			echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:<a href="forumqualify.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.$threadid.'&user='.Security::remove_XSS($_GET['user']).'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=true&idtextqualify='.$act_qualify.$view_gradebook.'#history">'.get_lang('MoreRecent').'</a>&nbsp;|
 					'.get_lang('Older').'
 				  </div>';
 		} else {
 			echo '<div style="float:left; clear:left">'.get_lang('OrderBy').'&nbsp;:'.get_lang('MoreRecent').' |
-					<a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.$threadid.'&user='.Security::remove_XSS($_GET['user']).'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=false&idtextqualify='.$act_qualify.$view_gradebook.'#history">'.get_lang('Older').'</a>&nbsp;
+					<a href="forumqualify.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'&thread='.$threadid.'&user='.Security::remove_XSS($_GET['user']).'&user_id='.Security::remove_XSS($_GET['user_id']).'&type=false&idtextqualify='.$act_qualify.$view_gradebook.'#history">'.get_lang('Older').'</a>&nbsp;
 				  </div>';
 		}
 		$table_list.= '<a name="history" /><br /><br /><table class="data_table" style="width:100%">';

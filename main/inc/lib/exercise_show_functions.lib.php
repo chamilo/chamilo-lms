@@ -188,18 +188,13 @@ class ExerciseShowFunctions {
 		<td width="20%" style="border-bottom: 1px solid #4171B5;">
 			<?php
 			$answerComment=text_filter($answerComment);
-			if($studentChoice)
-			{
-				if(!$answerCorrect)
-				{
+			if($studentChoice) {
+				if(!$answerCorrect) {
 					echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+				} else {
+                    echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
 				}
-				else{
-					echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
-				}
-			}
-			else
-			{
+			} else {
 				echo '&nbsp;';
 			}
 			?>

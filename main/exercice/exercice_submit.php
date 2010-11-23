@@ -25,8 +25,6 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once 'exercise.lib.php';
 
-
-
 // debug var. Set to 0 to hide all debug display. Set to 1 to display debug messages.
 $debug = 1;
 
@@ -61,6 +59,8 @@ if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/glossary.js" type="text/javascript" language="javascript"></script>'; //Glossary
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
 }
+
+//@todo we should only enable this when there is a time control
 
 //This library is necessary for the time control feature
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.epiclock.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
@@ -162,9 +162,9 @@ if ($origin == 'builder') {
     } 
 }
 
-$safe_lp_id = ($learnpath_id == '') ? 0 : $learnpath_id;
-$safe_lp_item_id = ($learnpath_item_id == '') ? 0 : $learnpath_item_id;
-$safe_lp_item_view_id = ($learnpath_item_view_id == '') ? 0 : $learnpath_item_view_id;
+$safe_lp_id             = ($learnpath_id == '')             ? 0 : $learnpath_id;
+$safe_lp_item_id        = ($learnpath_item_id == '')        ? 0 : $learnpath_item_id;
+$safe_lp_item_view_id   = ($learnpath_item_view_id == '')   ? 0 : $learnpath_item_view_id;
 
 // Loading the $objExercise variable
 
@@ -469,7 +469,7 @@ $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook",	"name"
 $interbreadcrumb[] = array ("url" => api_get_self()."?gradebook=$gradebook","name" => $objExercise->selectTitle());
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
-    $htmlHeadXtra[] = $objExercise->show_lp_javascript();
+    //$htmlHeadXtra[] = $objExercise->show_lp_javascript();
         Display :: display_header($nameTools,get_lang('Exercises'));
     if (!api_is_allowed_to_session_edit() ) {
         Display :: display_warning_message(get_lang('SessionIsReadOnly'));

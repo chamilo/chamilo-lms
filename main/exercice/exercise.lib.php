@@ -293,6 +293,19 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 	} elseif ($answerType == HOT_SPOT) {
 
 		// Question is of type HOT_SPOT
+        
+        //checking document/images visibility
+        if (api_is_platform_admin() || api_is_course_admin()) {
+            require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+            $course = api_get_course_info();        
+            $doc_id = DocumentManager::get_document_id($course, '/images');  
+            if (is_numeric($doc_id)) {              
+                $images_folder_visibility = api_get_item_visibility($course,'document', $doc_id, api_get_session_id());
+                if (!$images_folder_visibility) {
+            	   Display::display_warning_message(get_lang('ChangeTheVisibilityOfTheDocumentImagesFolder'));
+                }
+            }
+        }
 		$questionName         = $objQuestionTmp->selectTitle();
 		$questionDescription  = $objQuestionTmp->selectDescription();
 

@@ -115,7 +115,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 $nameTools=get_lang('Exercice');
 
 $interbreadcrumb[]=array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
-$htmlHeadXtra[] = $objExercise->show_lp_javascript();
+//$htmlHeadXtra[] = $objExercise->show_lp_javascript();
 
 if ($origin != 'learnpath') {
 	//so we are not in learnpath tool
@@ -274,7 +274,6 @@ foreach ($questionList as $questionId) {
 								<td width="152" valign="top">
 									<i><?php echo get_lang("CorrectAnswer"); ?></i><br /><br />
 								</td>
-
 								<td width="100" valign="top">
 									<i><?php echo get_lang('HotspotHit'); ?></i><br /><br />
 								</td>

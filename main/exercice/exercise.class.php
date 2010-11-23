@@ -1635,10 +1635,14 @@ class Exercise {
 	
 	/**
      * This function was originally found in the exercise_show.php
-     * @param   int exe id
-     * @param   int question id
-     * @param   int the choice the user selected
+     * @param   int     exe id
+     * @param   int     question id
+     * @param   int     the choice the user selected
      * @param   string  function is called from 'exercise_show' or 'exercise_result'
+     * @param   bool    save results in the DB or just show the reponse
+     * @param   bool    gets information from DB or from the current selection
+     * @param   bool    show results or not
+     * @return  string  html code
 	 */
 	function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $saved_results = true, $from_database = false, $show_result = true) {        
 		global $_configuration;
@@ -1685,8 +1689,7 @@ class Exercise {
             $answer_matching[$real_answer['id']]= $real_answer['answer'];
         }        
         
-		$real_answers = array();
-        
+		$real_answers = array();        
          
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer             = $objAnswerTmp->selectAnswer($answerId);
@@ -2029,7 +2032,7 @@ class Exercise {
                                 echo '</tr>';
                             }
                         }
-                        break(2); //break the switch and the for condition                    
+                        break(2); //break the switch and the "for" condition                    
                     } else {                   
                         $numAnswer=$objAnswerTmp->selectAutoId($answerId);
                         if ($answerCorrect) {
@@ -2078,9 +2081,11 @@ class Exercise {
             
             global $origin;
             
-            if ($show_result) {                
+            if ($show_result) {      
+                          
                 if ($from == 'exercise_result') {         
                         //display answers (if not matching type, or if the answer is correct)
+                        
                     if ($answerType != MATCHING || $answerCorrect) {
                         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
                             if ($origin!='learnpath') {
@@ -2097,8 +2102,7 @@ class Exercise {
                             if($origin != 'learnpath') {
                                 ExerciseShowFunctions::display_free_answer($choice,0,0);
                             }
-                        } elseif($answerType == HOT_SPOT) {
-                            exit;
+                        } elseif($answerType == HOT_SPOT) {                            
                             if ($origin != 'learnpath') {
                                 ExerciseShowFunctions::display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
                             }
@@ -2112,7 +2116,7 @@ class Exercise {
                             }
                         }
                     }
-                } else {                  
+                } else { 
                     switch($answerType) {
                         case UNIQUE_ANSWER : 
                         case MULTIPLE_ANSWER : 
@@ -2135,7 +2139,7 @@ class Exercise {
                             </table>';
                         break;
                         case HOT_SPOT:
-                            //ExerciseShowFunctions::display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
+                            ExerciseShowFunctions::display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
                             break;                    
                         case HOT_SPOT_ORDER:                            
                             ExerciseShowFunctions::display_hotspot_order_answer($answerId, $answer, $studentChoice, $answerComment);                                   

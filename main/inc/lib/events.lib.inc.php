@@ -117,20 +117,11 @@ function event_access_course() {
 	} else {
 		$user_id = "0"; // no one
 	}
-	$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
-				(access_user_id,
-				 access_cours_code,
-				 access_date,
-				 access_session_id)
-				VALUES
-				(".$user_id.",
-				'".$_cid."',
-				'".$reallyNow."',
-				'".$id_session."')";
+	$sql = "INSERT INTO ".$TABLETRACK_ACCESS."  (access_user_id, access_cours_code, access_date, access_session_id) VALUES
+		    (".$user_id.", '".$_cid."', '".$reallyNow."','".$id_session."')";
 	$res = Database::query($sql);
 	// added for "what's new" notification
-	$sql = "UPDATE $TABLETRACK_LASTACCESS
-			SET access_date = '$reallyNow'
+	$sql = "UPDATE $TABLETRACK_LASTACCESS  SET access_date = '$reallyNow' 
 			WHERE access_user_id = $user_id AND access_cours_code = '$_cid' AND access_tool IS NULL AND access_session_id=".$id_session;
 	$res = Database::query($sql);
 	if (Database::affected_rows() == 0) {
@@ -348,8 +339,7 @@ function event_link($link_id) {
  * @desc Record result of user when an exercice was done 
 */
 function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$learnpath_id=0, $learnpath_item_id=0, $learnpath_item_view_id = 0, $duration) {
-	if ($exeid!='') {
-        
+	if ($exeid!='') {        
 		// Validation in case of fraud with actived control time
 		if (!exercise_time_control_is_valid($exo_id)) {
 			$score = 0;		
@@ -383,8 +373,8 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting,$session_id,$
         
         //Deleting control time session track		
 		exercise_time_control_delete($exo_id);
-        error_log('update_event_exercice');
-        error_log($sql);
+        //error_log('update_event_exercice');
+        //error_log($sql);
 		return $res;
         
 	} else
@@ -531,8 +521,7 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
     }
 
 	$tbl_track_e_hotspot = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-	$sql = "INSERT INTO $tbl_track_e_hotspot " .
-			"(hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".
+	$sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".
 			" VALUES ('" . Database :: escape_string($_user['user_id']) . "'," .
 			" '" . api_get_course_id() . "', " .
 			" '" . Database :: escape_string($exe_id) . "', " .

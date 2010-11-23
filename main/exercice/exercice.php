@@ -200,10 +200,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 		Database::query($recording_changes);
 	}
 	
-	$qry = 'SELECT DISTINCT question_id, marks
-			FROM ' . $TBL_TRACK_ATTEMPT . ' where exe_id = ' . $id . '
-			GROUP BY question_id';
-
+	$qry = 'SELECT DISTINCT question_id, marks FROM ' . $TBL_TRACK_ATTEMPT . ' where exe_id = ' . $id . ' GROUP BY question_id';
 	$res = Database::query($qry);
 	$tot = 0;
 	while ($row = Database :: fetch_array($res, 'ASSOC')) {
@@ -582,7 +579,7 @@ $condition_session = api_get_session_condition($session_id,true,true);
 // only for administrator
 if ($is_allowedToEdit) {
 	if ($show == 'test') {
-		$sql = "SELECT id, title, type, active, description, results_disabled, session_id, start_time, end_time FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
+		$sql = "SELECT id, title, type, active, description, results_disabled, session_id, start_time, end_time, random,max_attempt  FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
 		$result = Database::query($sql);
 	}
 } elseif ($show == 'test') { // only for students
@@ -752,7 +749,7 @@ if ($show == 'test') {
 		$mylpitemid = (empty ($learnpath_item_id) ? '' : '&learnpath_item_id=' . $learnpath_item_id);
 
 		$token = Security::get_token();
-		while ($row = Database :: fetch_array($result)) {
+		while ($row = Database :: fetch_array($result,'ASSOC')) {                
 				//validacion when belongs to a session
 				$session_img = api_get_session_image($row['session_id'], $_user['status']);
 				
@@ -780,9 +777,8 @@ if ($show == 'test') {
 					$s_class = "row_even";
 				// prof only
 				if ($is_allowedToEdit) {
-					echo '<tr class="' . $s_class . '">';
-
-					echo '<td width="30" align="left">'.Display::return_icon('quiz.gif', get_lang('Exercice')).'</td>';
+					echo '<tr class="' . $s_class . '">';                
+					echo '<td width="30" align="left">'.Display::return_icon('quiz.gif', get_lang('Exercice')) .'</td>';
 					echo '<td width="15" valign="left">'.($i+($page*$limitExPage)).'.'.'</td>';
 
 					//Showing exercise title
@@ -807,12 +803,15 @@ if ($show == 'test') {
 					$sqlresult = Database::query($sqlquery);
 					$rowi = Database :: result($sqlresult, 0);
 
-					//count number random exercice - teacher
-					$sql_random_query = 'SELECT type,random,active,results_disabled,max_attempt FROM ' . $TBL_EXERCICES . ' WHERE id="' . Database :: escape_string($exid) . '" ';
+					//useless query
+					/*$sql_random_query = 'SELECT type,random,active,results_disabled,max_attempt FROM ' . $TBL_EXERCICES . ' WHERE id="' . Database :: escape_string($exid) . '" ';
 					$rs_random = Database::query($sql_random_query);
-					$row_random = Database :: fetch_array($rs_random);
-					if ($row_random['random'] > 0) {
-						echo $row_random['random'] . ' ' . api_strtolower(get_lang(($row_random['random'] > 1 ? 'Questions' : 'Question'))) . '</td>';
+					$row_random = Database :: fetch_array($rs_random);*/
+                    
+                    $random_label = '';
+					if ($row['random'] > 0) {
+                       $random_label = ' ('.get_lang('Random').') ';
+						echo $row['random'] . ' ' . api_strtolower(get_lang(($row['random'] > 1 ? 'Questions' : 'Question'))) .$random_label. '</td>';
 					} else {
 						echo $rowi . ' ' . api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question'))) . '</td>';
 					}

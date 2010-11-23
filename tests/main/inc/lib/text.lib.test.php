@@ -139,5 +139,12 @@ class TestText extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
+
+	function testApiParseTex(){
+		$textext = 'abc';
+		$res = api_parse_tex($textext); //this function is practically deprecated now, it doesn't do anything
+		$this->assertEqual($textext,$res);
+	}
+
  }
 ?>

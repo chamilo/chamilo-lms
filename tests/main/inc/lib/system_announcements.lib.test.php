@@ -65,11 +65,21 @@ class TestSystemAnnouncementManager extends UnitTestCase {
         //var_dump($res);
 	}
 
-	function test_send_system_announcement_by_email_is_null() {
+	function test_send_system_announcement_by_email_is_true_on_teacher_null() {
 		global $_user, $_setting, $charset;
 		$title   = $content = $teacher = $student = '';
 		$res=SystemAnnouncementManager::send_system_announcement_by_email($title,$content,$teacher, $student);
-		$this->assertTrue(is_null($res));
+		$this->assertTrue($res);
+	}
+
+	function test_send_system_announcement_by_email_is_true_on_teacher_not_null() {
+		global $_user, $_setting, $charset;
+		$title   = 'abc';
+		$content = 'bcd';
+		$student = 0;
+		$teacher = 1;
+		$res=SystemAnnouncementManager::send_system_announcement_by_email($title,$content,$teacher, $student);
+		$this->assertTrue($res);
 	}
 
 	function test_set_visibility() {

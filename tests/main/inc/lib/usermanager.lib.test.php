@@ -279,11 +279,11 @@ class TestUserManager extends UnitTestCase {
 	 	$this->assertFalse(is_string($res));
 	 }
 
-	 function testRemoveUserProduction() {
+	 function testRemoveUserProductionIsFalseWhenProductionDoesNotExist() {
 	 	$user_id=1;
-	 	$production='my_files';
+	 	$production='my_files/abc'; //shouldn't exist
 	 	$res=UserManager::remove_user_production($user_id,$production);
-	 	$this->assertTrue(is_null($res));
+	 	$this->assertFalse($res);
 	 }
 
 	function testResizePicture() {

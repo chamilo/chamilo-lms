@@ -469,7 +469,8 @@ class SystemAnnouncementManager
 			return false;
 		}
 		while($row = Database::fetch_array($result,'ASSOC')) {
-			$res = @api_mail_html(api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $row['email'], api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset), api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'',$content)), ENT_QUOTES, $charset), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator'));
+			$res =  @api_mail_html(api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $row['email'], api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset), api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'',$content)), ENT_QUOTES, $charset), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator')) || $res;
 		}
+		return $res; //true if at least one e-mail was sent
 	}
 }

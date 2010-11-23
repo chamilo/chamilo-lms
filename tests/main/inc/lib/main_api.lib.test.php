@@ -557,13 +557,6 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 	}
 
-	function testApiParseTex(){
-		global $textext;
-		$res = api_parse_tex($textext);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
 	function testApiTimeToHms(){
 		$seconds = -1;
 		ob_start();

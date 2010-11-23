@@ -1,0 +1,17 @@
+To use the library in your own Java app you need
+
+ * commons-io
+ * jodconverter
+ * juh
+ * jurt
+ * ridl
+ * slf4j-api
+ * slf4j-jdk14 or another slf4j implementation - see http://slf4j.org
+ * unoil
+ * xstream - only if you use XmlDocumentFormatRegistry
+
+The command line interface additionally requires
+
+ * commons-cli
+ * jodconverter-cli
+

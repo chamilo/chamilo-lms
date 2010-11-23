@@ -44,8 +44,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 
 			$questionName=text_filter($questionName);
 
-			$s="<div id=\"question_title\" class=\"sectiontitle\">".get_lang('Question').' ';
-
+			$s='<div id="question_title" class="sectiontitle">'.get_lang('Question').' ';
 			$s.=$current_item;
 			//@todo I need the get the feedback type
 			//if($answerType != 1)

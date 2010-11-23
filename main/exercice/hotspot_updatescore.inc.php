@@ -60,5 +60,6 @@ $TBL_TRACK_E_HOTSPOT   = Database::get_statistic_table(STATISTIC_TRACK_E_HOTSPOT
 // update db
 $update_id = $_SESSION['exerciseResult'][$questionId]['ids'][$answerId];
 $sql = "UPDATE $TBL_TRACK_E_HOTSPOT SET coordinate = '".Database::escape_string($coordinates)."' WHERE id ='".Database::escape_string($update_id)."' LIMIT 1 ;;";
+error_log(    $sql      );
 $result = Database::query($sql);
 ?>

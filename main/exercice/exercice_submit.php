@@ -393,7 +393,7 @@ if ($formSent && isset($_POST)) {
         if ($debug > 0) { error_log('Redirecting to exercise_result.php - Remove debug option to let this happen'); }
         if ( api_is_allowed_to_session_edit() ) {
             // goes to the script that will show the result of the exercise
-            if ($exerciseType == ALL_ON_ONE_PAGE) {
+            if ($exerciseType == ALL_ON_ONE_PAGE) {                
                 header("Location: exercise_result.php?exerciseType=$exerciseType&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
                 exit;
             } else {

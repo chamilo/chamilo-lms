@@ -1,10 +1,9 @@
-<?php //$id:$
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
 *	This file generates the ActionScript variables code used by the HotSpot .swf
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Toon Keppens
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
 include('exercise.class.php');
@@ -34,40 +33,32 @@ $coursePath = $_course['path'];
 // Query db for answers
 $sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS WHERE question_id = '".Database::escape_string($questionId)."' ORDER BY id";
 $result = Database::query($sql);
-
 // Init
 $output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";
 $i = 0;
 
-while ($hotspot = Database::fetch_array($result))
-{
+while ($hotspot = Database::fetch_array($result)) {
 	$output .= "&hotspot_".$hotspot['id']."=true";
 	// Square or rectancle
-	if ($hotspot['hotspot_type'] == 'square' )
-	{
+	if ($hotspot['hotspot_type'] == 'square' ) {
 		$output .= "&hotspot_".$hotspot['id']."_type=square";
 	}
 
 	// Circle or ovale
-	if ($hotspot['hotspot_type'] == 'circle')
-	{
+	if ($hotspot['hotspot_type'] == 'circle') {
 		$output .= "&hotspot_".$hotspot['id']."_type=circle";
 	}
 
 	// Polygon
-	if ($hotspot['hotspot_type'] == 'poly')
-	{
+	if ($hotspot['hotspot_type'] == 'poly') {
 		$output .= "&hotspot_".$hotspot['id']."_type=poly";
 	}
 
 	// Delineation
-	if ($hotspot['hotspot_type'] == 'delineation')
-	{
+	if ($hotspot['hotspot_type'] == 'delineation') {
 		$output .= "&hotspot_".$hotspot['id']."_type=delineation";
 	}
-
 	$output .= "&hotspot_".$hotspot['id']."_coord=".$hotspot['hotspot_coordinates']."";
-
 	$i++;
 }
 
@@ -82,11 +73,12 @@ $questionId    = $_GET['modifyAnswers'];
 $course_code = $_course['id'];
 
 // Get clicks
-if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {
+if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {    
 	foreach ($_SESSION['exerciseResultCoordinates'][$questionId] as $coordinate) {
 		$output2 .= $coordinate."|";
 	}
 } else {
+    
 	// get it from db
 	$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 	$sql = 'SELECT hotspot_coordinate '.

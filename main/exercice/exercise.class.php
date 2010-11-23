@@ -1646,8 +1646,8 @@ class Exercise {
 	 */
 	function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $saved_results = true, $from_database = false, $show_result = true) {        
 		global $_configuration;
-        
-		$exeId = intval($exeId);        
+        $questionId   = intval($questionId);
+		$exeId        = intval($exeId);        
         $TBL_TRACK_ATTEMPT      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $table_ans              = Database::get_course_table(TABLE_QUIZ_ANSWER);        
                     
@@ -1665,9 +1665,9 @@ class Exercise {
 
         // Destruction of the Question object
         unset ($objQuestionTmp);
-
-        if (isset ($_POST['hotspot']) && isset($_POST['hotspot'][$questionId])) {
-            $exerciseResultCoordinates[$questionId] = $_POST['hotspot'][$questionId];
+        
+        if (isset($_SESSION['exerciseResultCoordinates'])) {
+            $exerciseResultCoordinates = $_SESSION['exerciseResultCoordinates'];
         }
 
         // Construction of the Answer object
@@ -1681,7 +1681,7 @@ class Exercise {
         
                 
         // Get answer list for matching
-        $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" ';
+        $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.$questionId.'" ';
         $res_answer = Database::query($sql_answer);
         $answer_matching =array();
         while ($real_answer = Database::fetch_array($res_answer)) {
@@ -1701,7 +1701,7 @@ class Exercise {
                 // for unique answer
                 case UNIQUE_ANSWER :
                     if ($from_database) {
-                    	$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
+                    	$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
                         $resultans = Database::query($queryans);
                         $choice = Database::result($resultans,0,"answer");
         
@@ -1748,7 +1748,7 @@ class Exercise {
                 case MULTIPLE_ANSWER_COMBINATION:                
                     if ($from_database) {                      
                                  
-                        $queryans = "SELECT * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
+                        $queryans = "SELECT * FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
                         $resultans = Database::query($queryans);
                         while ($row = Database::fetch_array($resultans)) {
                             $ind = $row['answer'];
@@ -1949,12 +1949,11 @@ class Exercise {
                     // for free answer
                 case FREE_ANSWER :
                     if ($from_database) {                        
-                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($exeId)."' AND question_id= '".Database::escape_string($questionId)."'";
+                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resq   = Database::query($query);
                         $choice = Database::result($resq,0,'answer');
                         $choice = str_replace('\r\n', '', $choice);
-                        $choice = stripslashes($choice);
-            
+                        $choice = stripslashes($choice);            
                         $questionScore = Database::result($resq,0,"marks");
                         if ($questionScore==-1) {
                             $totalScore+=0;
@@ -1975,7 +1974,7 @@ class Exercise {
                     // for matching
                 case MATCHING :                
                     if ($from_database) {                                    
-                        $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct=0';
+                        $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.$questionId.'" AND correct=0';
                         $res_answer = Database::query($sql_answer);
                         // getting the real answer
                         $real_list =array();
@@ -1984,7 +1983,7 @@ class Exercise {
                         }
             
                         $sql_select_answer = 'SELECT id, answer, correct, id_auto FROM '.$table_ans.'
-                                              WHERE question_id="'.Database::escape_string($questionId).'" AND correct <> 0 ORDER BY id_auto';
+                                              WHERE question_id="'.$questionId.'" AND correct <> 0 ORDER BY id_auto';
             
                         $res_answers = Database::query($sql_select_answer);
                         if ($show_result) {
@@ -2048,12 +2047,12 @@ class Exercise {
                     }  
                     
                     // for hotspot with no order
-                case HOT_SPOT :
-                
+                case HOT_SPOT :    
+                         
                     if ($from_database) {                      
                         if ($show_result) {
                             $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                            $query = "select hotspot_correct from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".Database::escape_string($exeId)."' and hotspot_question_id= '".Database::escape_string($questionId)."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
+                            $query = "SELECT hotspot_correct FROM ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".$exeId."' and hotspot_question_id= '".$questionId."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
                             $resq=Database::query($query);
                             $studentChoice = Database::result($resq,0,"hotspot_correct");                                
                         }
@@ -2083,8 +2082,7 @@ class Exercise {
             if ($show_result) {
                           
                 if ($from == 'exercise_result') {       
-                        //display answers (if not matching type, or if the answer is correct)
-                        
+                     //display answers (if not matching type, or if the answer is correct)                        
                     if ($answerType != MATCHING || $answerCorrect) {
                         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
                             if ($origin!='learnpath') {
@@ -2130,13 +2128,13 @@ class Exercise {
                             echo '<tr><td>';
                             ExerciseShowFunctions::display_fill_in_blanks_answer($answer,$exeId,$questionId);
                             echo '</td></tr>';
-                        break;
+                            break;
                         case FREE_ANSWER:
                             echo '<tr>
                             <td valign="top">'.ExerciseShowFunctions::display_free_answer($choice, $exeId, $questionId).'</td>
                             </tr>
                             </table>';
-                        break;
+                            break;
                         case HOT_SPOT:
                             ExerciseShowFunctions::display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
                             break;                    
@@ -2152,37 +2150,6 @@ class Exercise {
                         break;
                     }	  
                 }
-                    //display answers (if not matching type, or if the answer is correct)
-              /*  if ($answerType != MATCHING || $answerCorrect) {
-                    if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
-                        if ($origin!='learnpath') {
-                            ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
-                        }
-                    } elseif($answerType == FILL_IN_BLANKS) {
-                        if ($origin!='learnpath') {
-                            ExerciseShowFunctions::display_fill_in_blanks_answer($answer,0,0);
-                        }
-                    } elseif($answerType == FREE_ANSWER) {
-                        // to store the details of open questions in an array to be used in mail
-                        $arrques[] = $questionName;
-                        $arrans[]  = $choice;
-                        if($origin != 'learnpath') {
-                            ExerciseShowFunctions::display_free_answer($choice,0,0);
-                        }
-                    } elseif($answerType == HOT_SPOT) {
-                        if ($origin != 'learnpath') {
-                            ExerciseShowFunctions::display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
-                        }
-                    } elseif($answerType == HOT_SPOT_ORDER) {
-                        ExerciseShowFunctions::display_hotspot_order_answer($answerId, $answer, $studentChoice, $answerComment);
-                    } elseif($answerType==MATCHING) {
-                        if ($origin != 'learnpath') {
-                            echo '<tr>';
-                            echo '<td>'.text_filter($answer_matching[$answerId]).'</td><td>'.text_filter($user_answer).' / <b><span style="color: #008000;">'.text_filter($answer_matching[$answerCorrect]).'</span></b></td>';
-                            echo '</tr>';
-                        }
-                    }
-                }*/
             }       
         } // end for that loops over all answers of the current question
         
@@ -2294,6 +2261,7 @@ class Exercise {
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             } elseif ($answerType == HOT_SPOT) {                
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                
                 if (is_array($exerciseResultCoordinates[$questionId])) {
                     foreach($exerciseResultCoordinates[$questionId] as $idx => $val) {
                         exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val,$this->id);
@@ -2312,9 +2280,7 @@ class Exercise {
         return array('score'=>$questionScore, 'weight'=>$questionWeighting);
 	} //End function
     
-    
-    
-
+        
     function send_notification($arrques, $arrans) {
         
         // Email configuration settings

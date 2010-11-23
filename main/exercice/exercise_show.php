@@ -366,39 +366,7 @@ if ($show_results) {
 			</tr>
 			<?php
 			// construction of the Answer object
-           
-           /* $choice=array();
-                        
-			$objAnswerTmp=new Answer($questionId);
-			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-			$questionScore=0;
-			for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
-				$answer=$objAnswerTmp->selectAnswer($answerId);
-				$answerComment=$objAnswerTmp->selectComment($answerId);
-				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-                
-				$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-				$resultans = Database::query($queryans);
-				while ($row = Database::fetch_array($resultans)) {
-					$ind = $row['answer'];
-					$choice[$ind] = 1;
-				}
-				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
-				$studentChoice=$choice[$numAnswer];
-				if ($studentChoice) {
-					$questionScore+=$answerWeighting;
-					$totalScore+=$answerWeighting;
-				}
-				echo '<tr><td>';
-				if ($answerId==1) {
-					//ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
-				} else {
-					//ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
-				}
-				echo '</td></tr>';
-				$i++;
-		 	}*/            
+       
             $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);
             //var_dump($question_result);
             $questionScore  = $question_result['score'];
@@ -421,66 +389,8 @@ if ($show_results) {
 			<td>&nbsp;</td>
 			</tr>
 			<?php
-			// construction of the Answer object
-			/*$objAnswerTmp=new Answer($questionId);
-			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-			$questionScore=0;
-
-			$real_answers = array();
-
-			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-				$answer=$objAnswerTmp->selectAnswer($answerId);
-				$answerComment=$objAnswerTmp->selectComment($answerId);
-				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-				$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-				$resultans = Database::query($queryans);
-				while ($row = Database::fetch_array($resultans)) {
-					$ind = $row['answer'];
-					$choice[$ind] = 1;
-				}
-				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
-				$studentChoice=$choice[$numAnswer];
-
-				if ($answerCorrect == 1) {
-					if ($studentChoice) {
-						$real_answers[$answerId] = true;
-					} else {
-						$real_answers[$answerId] = false;
-					}
-				} else {
-					if ($studentChoice) {
-						$real_answers[$answerId] = false;
-					} else {
-						$real_answers[$answerId] = true;
-					}
-				}
-
-				echo '<tr><td>';
-				if ($answerId==1) {
-					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
-				} else {
-					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
-				}
-				echo '</td></tr>';
-				$i++;
-		 	}
-		 	$final_answer = true;
-		 	foreach($real_answers as $my_answer) {
-		 		if (!$my_answer) {
-		 			$final_answer = false;
-		 		}
-		 	}
-
-		 	if ($final_answer) {
-		 		//getting only the first score where we save the weight of all the question
-		 		$answerWeighting=$objAnswerTmp->selectWeighting(1);
-				$questionScore+=$answerWeighting;
-				$totalScore+=$answerWeighting;
-			}*/
-            
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);
-            
+	            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);            
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
 
@@ -504,35 +414,7 @@ if ($show_results) {
 				<tr>
 				<td>&nbsp;</td>
 				</tr>
-			<?php
-			/*$objAnswerTmp=new Answer($questionId);
-			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-			$questionScore=0;
-			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-				$answer=$objAnswerTmp->selectAnswer($answerId);
-				$answerComment=$objAnswerTmp->selectComment($answerId);
-				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
-				$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-				$resultans = Database::query($queryans);
-				$choice = Database::result($resultans,0,"answer");
-
-				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
-
-				$studentChoice=($choice == $numAnswer)?1:0;
-				if ($studentChoice) {
-				  	$questionScore+=$answerWeighting;
-					$totalScore+=$answerWeighting;
-				}
-				echo '<tr><td>';
-				if ($answerId==1) {
-					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
-				} else {
-					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
-				}
-				echo '</td></tr>';
-				$i++;
-			}*/
+			<?php	
             
             $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);
             $questionScore  = $question_result['score'];
@@ -552,153 +434,7 @@ if ($show_results) {
 			<td>&nbsp;</td>
 			</tr>
 			<?php
-            /*
-			$objAnswerTmp=new Answer($questionId);
-			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-			$questionScore=0;
-
-			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-				$answer = $objAnswerTmp->selectAnswer($answerId);
-				$answerComment = $objAnswerTmp->selectComment($answerId);
-				$answerCorrect = $objAnswerTmp->isCorrect($answerId);
-				$answerWeighting = $objAnswerTmp->selectWeighting($answerId);
-
-			    // the question is encoded like this
-			    // [A] B [C] D [E] F::10,10,10@1
-			    // number 1 before the "@" means that is a switchable fill in blank question
-			    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
-			    // means that is a normal fill blank question
-
-				$pre_array = explode('::', $answer);
-
-				// is switchable fill blank or not
-				$is_set_switchable = explode('@', $pre_array[1]);
-				$switchable_answer_set=false;
-				if ($is_set_switchable[1]==1) {
-					$switchable_answer_set=true;
-				}
-
-				$answer = $pre_array[0];
-                
-
-				// splits weightings that are joined with a comma
-				$answerWeighting = explode(',',$is_set_switchable[0]);
-				//list($answer,$answerWeighting)=explode('::',$multiple[0]);
-
-				//$answerWeighting=explode(',',$answerWeighting);
-				// we save the answer because it will be modified
-			    //$temp=$answer;
-			    $temp = text_filter($answer);
-
-
-
-				$j=0;
-				// the loop will stop at the end of the text
-				$i=0;
-				//normal fill in blank
-                
-				if (!$switchable_answer_set) {
-					while (1) {
-						// quits the loop if there are no more blanks
-						if (($pos = api_strpos($temp,'[')) === false) {
-							// adds the end of the text
-							$answer.=$temp;
-		
-							break;
-						}
-					    $temp=api_substr($temp,$pos+1);
-						// quits the loop if there are no more blanks
-						if (($pos = api_strpos($temp,']')) === false) {
-							break;
-						}
-
-						$queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' AND question_id= '".Database::escape_string($questionId)."'";
-						$resfill = Database::query($queryfill);
-						$str = Database::result($resfill,0,'answer');
-                        
-
-						preg_match_all('#\[([^[]*)\]#', $str, $arr);
-						$str = str_replace('\r\n', '', $str);
-						$choice = $arr[1];
-
-						$tmp=strrpos($choice[$j],' / ');
-						$choice[$j]=api_substr($choice[$j],0,$tmp);
-						$choice[$j]=trim($choice[$j]);
-
-						//Needed to let characters ' and " to work as part of an answer
-						$choice[$j] = stripslashes($choice[$j]);
-
-
-						// if the word entered by the student IS the same as the one defined by the professor
-						if (api_strtolower(api_substr($temp,0,$pos)) == api_strtolower($choice[$j])) {
-						//if ((api_substr($temp,0,$pos)) == ($choice[$j])) {
-							// gives the related weighting to the student
-							$questionScore+=$answerWeighting[$j];
-							// increments total score
-							$totalScore+=$answerWeighting[$j];
-						}
-						// else if the word entered by the student IS NOT the same as the one defined by the professor
-						$j++;
-						$temp=api_substr($temp,$pos+1);
-						$i=$i+1;
-					}
-					$answer = stripslashes($str);
-
-				} else {
-					//multiple fill in blank
-					while (1) {
-						// quits the loop if there are no more blanks
-						if (($pos = api_strpos($temp,'[')) === false) {
-							// adds the end of the text
-							$answer.=$temp;
-
-							break;
-						}
-						// adds the piece of text that is before the blank and ended by [
-						$real_text[]=api_substr($temp,0,$pos+1);
-						$answer.=api_substr($temp,0,$pos+1);
-						$temp=api_substr($temp,$pos+1);
-
-						// quits the loop if there are no more blanks
-						if (($pos = api_strpos($temp,']')) === false) {
-							// adds the end of the text
-							//$answer.=$temp;
-							break;
-						}
-
-						$queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-						$resfill = Database::query($queryfill);
-						$str=Database::result($resfill,0,"answer");
-						preg_match_all ('#\[([^[/]*)/#', $str, $arr);
-						$choice = $arr[1];
-
-						$choice[$j]=trim($choice[$j]);
-						$user_tags[]=api_strtolower($choice[$j]);
-						$correct_tags[]=api_strtolower(api_substr($temp,0,$pos));
-
-						$j++;
-						$temp=api_substr($temp,$pos+1);
-						$i=$i+1;
-					}
-					$answer='';
-					for ($i=0;$i<count($correct_tags);$i++) {
-						if (in_array($user_tags[$i],$correct_tags)) {
-							// gives the related weighting to the student
-							$questionScore+=$answerWeighting[$i];
-							// increments total score
-							$totalScore+=$answerWeighting[$i];
-						}
-					}
-					$answer = stripslashes($str);
-					$answer = str_replace('rn', '', $answer);
-				}
-				//echo $questionScore."-".$totalScore;
-				echo '<tr><td>';
-				ExerciseShowFunctions::display_fill_in_blanks_answer($answer,$id,$questionId);
-				echo '</td></tr>';
-				$i++;
-			}*/
-            
+                      
             $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
@@ -720,32 +456,9 @@ if ($show_results) {
 
 			<?php
 			
-           /* $objAnswerTmp = new Answer($questionId);
-			$nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-			$questionScore = 0;
-			$query 	= "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' AND question_id= '".Database::escape_string($questionId)."'";
-			$resq	= Database::query($query);
-			$choice = Database::result($resq,0,'answer');
-			$choice = str_replace('\r\n', '', $choice);
-			$choice = stripslashes($choice);
-
-			$questionScore = Database::result($resq,0,"marks");
-			if ($questionScore==-1) {
-				$totalScore+=0;
-			} else {
-				$totalScore+=$questionScore;
-			}
-
-			$arrques[] = $questionName;
-            $arrans[]  = $choice;*/
             $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);            
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
-            
-			/*echo '<tr>
-			<td valign="top">'.ExerciseShowFunctions::display_free_answer($choice, $id, $questionId).'</td>
-			</tr>
-			</table>';*/
 
 		} elseif ($answerType == MATCHING) {            
             $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);            

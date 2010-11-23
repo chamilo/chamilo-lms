@@ -1649,8 +1649,7 @@ class Exercise {
         
 		$exeId = intval($exeId);        
         $TBL_TRACK_ATTEMPT      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $table_ans              = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        
+        $table_ans              = Database::get_course_table(TABLE_QUIZ_ANSWER);        
                     
      	// Creates a temporary Question object
         $objQuestionTmp         = Question :: read($questionId);
@@ -2037,8 +2036,8 @@ class Exercise {
                         $numAnswer=$objAnswerTmp->selectAutoId($answerId);
                         if ($answerCorrect) {
                             if ($answerCorrect == $choice[$numAnswer]) {
-                                $questionScore+=$answerWeighting;
-                                $totalScore+=$answerWeighting;
+                                $questionScore  += $answerWeighting;
+                                $totalScore     += $answerWeighting;
                                 $user_answer = '<span>'.$answer_matching[$choice[$numAnswer]].'</span>';
                             } else {
                                 $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answer_matching[$choice[$numAnswer]].'</span>';                    
@@ -2050,6 +2049,7 @@ class Exercise {
                     
                     // for hotspot with no order
                 case HOT_SPOT :
+                
                     if ($from_database) {                      
                         if ($show_result) {
                             $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
@@ -2058,10 +2058,10 @@ class Exercise {
                             $studentChoice = Database::result($resq,0,"hotspot_correct");                                
                         }
                     }  else {
-                        $studentChoice = $choice[$answerId];
+                        $studentChoice = $choice[$answerId];                        
                         if ($studentChoice) {
-                            $questionScore += $answerWeighting;
-                            $totalScore += $answerWeighting;
+                            $questionScore  += $answerWeighting;
+                            $totalScore     += $answerWeighting;
                         }
                     }
                     break;
@@ -2070,8 +2070,8 @@ class Exercise {
                 case HOT_SPOT_ORDER :
                     $studentChoice = $choice['order'][$answerId];
                     if ($studentChoice == $answerId) {
-                        $questionScore += $answerWeighting;
-                        $totalScore += $answerWeighting;
+                        $questionScore  += $answerWeighting;
+                        $totalScore     += $answerWeighting;
                         $studentChoice = true;
                     } else {
                         $studentChoice = false;
@@ -2079,11 +2079,10 @@ class Exercise {
                     break;
             } // end switch Answertype            
             
-            global $origin;
-            
-            if ($show_result) {      
+            global $origin;            
+            if ($show_result) {
                           
-                if ($from == 'exercise_result') {         
+                if ($from == 'exercise_result') {       
                         //display answers (if not matching type, or if the answer is correct)
                         
                     if ($answerType != MATCHING || $answerCorrect) {
@@ -2188,11 +2187,11 @@ class Exercise {
         } // end for that loops over all answers of the current question
         
         // destruction of Answer
-
-        if ($answerType == HOT_SPOT) {         
-            $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($exeId)."' and question_id= '".Database::escape_string($questionId)."'";
-            $resfree = Database::query($queryfree);
-            $questionScore= Database::result($resfree,0,"marks");
+        
+        if (!$saved_results && $answerType == HOT_SPOT) {         
+            $queryfree      = "SELECT marks FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($exeId)."' and question_id= '".Database::escape_string($questionId)."'";
+            $resfree        = Database::query($queryfree);
+            $questionScore  = Database::result($resfree,0,"marks");
         }
 
         $final_answer = true;
@@ -2201,6 +2200,7 @@ class Exercise {
                 $final_answer = false;
             }
         }        
+        
         //we add the total score after dealing with the answers
         if ($answerType == MULTIPLE_ANSWER_COMBINATION) {            
             if ($final_answer) {
@@ -2210,7 +2210,7 @@ class Exercise {
                 $totalScore+=$answerWeighting;
             }
         }        
-        
+       
        if ($from == 'exercise_result') {
             global $colspan;
             // if answer is hotspot. To the difference of exercise_show.php, we use the results from the session (from_db=0)
@@ -2231,17 +2231,18 @@ class Exercise {
                 }
             if($origin != 'learnpath') { ?>
                 <tr>
-                <td colspan="<?php echo $colspan; ?>" align="left">
-                    <b>
+                <td colspan="<?php echo $colspan; ?>" align="left">                    
                     <?php                    
                     if ($this->type == ALL_ON_ONE_PAGE) {
+                        echo '<div id="question_score">';
                         if($questionScore==-1){
                             echo get_lang('Score').": 0 /".float_format($questionWeighting);
                         } else {
                             echo get_lang('Score').": ".float_format($questionScore,1)."/".float_format($questionWeighting,1);
                         }
+                        echo '</div>';
                     }
-                    ?></b><br /><br />
+                    ?><br />
                 </td>
                 </tr>
                 </table>
@@ -2291,7 +2292,7 @@ class Exercise {
             } elseif ($answerType == UNIQUE_ANSWER) {
                 $answer = $choice;
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
-            } elseif ($answerType == HOT_SPOT) {
+            } elseif ($answerType == HOT_SPOT) {                
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 if (is_array($exerciseResultCoordinates[$questionId])) {
                     foreach($exerciseResultCoordinates[$questionId] as $idx => $val) {

@@ -19,7 +19,7 @@ if (isset($current_thread['thread_id'])){
 	$clean_thread_id = intval($_GET['thread']);
 	
 	foreach ($rows as $row) {
-		echo '<table width="100%" class="post" cellspacing="5" border="0">';
+		echo '<table width="100%" class="forum_table" cellspacing="5" border="0">';
 		// the style depends on the status of the message: approved or not
 		if ($row['visible']=='0') {
 			$titleclass='forum_message_post_title_2_be_approved';
@@ -30,9 +30,16 @@ if (isset($current_thread['thread_id'])){
 			$messageclass='forum_message_post_text';
 			$leftclass='forum_message_left';
 		}
-	
+        
+       echo '<thead>';
+       echo '<tr>';
+       echo '<th class="forum_head" colspan="2">'.prepare4display($row['post_title'])."</th>";
+       echo '</tr>';
+       echo '</thead>';
+	   
 		echo "<tr>";
-		echo "<td rowspan=\"3\" class=\"$leftclass\">";
+		//echo "<td rowspan=\"3\" class=\"$leftclass\">";
+        echo "<td rowspan=\"2\" class=\"$leftclass\">";
 		if ($row['user_id']=='0') {
 			$name=prepare4display($row['poster_name']);
 		} else {
@@ -53,8 +60,9 @@ if (isset($current_thread['thread_id'])){
 		// The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 		// The course admin him/herself can do this off course always
 		if (($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
-			if (api_is_allowed_to_session_edit(false,true))
+			if (api_is_allowed_to_session_edit(false,true)) {                                
 				echo "<a href=\"editpost.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;post=".$row['post_id']."&origin=".$origin."&edit=edition&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
+            }
 		}
 	
 		if ($origin != 'learnpath') {
@@ -113,7 +121,7 @@ if (isset($current_thread['thread_id'])){
 			$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 		}
 		// The post title
-		echo "<td class=\"$titleclass\">".prepare4display($row['post_title'])."</td>";
+		
 		echo "</tr>";
 		
 		// The post message

@@ -127,7 +127,7 @@ function show_add_forumcategory_form($inputvalues=array()) {
 	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles" id="category_title"');
 
 	//$form->applyFilter('forum_category_title', 'html_filter');
-	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
+	$form->addElement('html_editor', 'forum_category_comment', get_lang('Description'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 
 	//$form->applyFilter('forum_category_comment', 'html_filter');
 	$form->addElement('style_submit_button', 'SubmitForumCategory', get_lang('CreateCategory'), 'class="add"');
@@ -185,7 +185,7 @@ function show_add_forum_form($inputvalues=array()) {
 
 	//$form->applyFilter('forum_title', 'html_filter');
 	// The comment of the forum
-	$form->addElement('html_editor', 'forum_comment', get_lang('Comment'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
+	$form->addElement('html_editor', 'forum_comment', get_lang('Description'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 
 	//$form->applyFilter('forum_comment', 'html_filter');
 	// dropdown list: Forum Categories

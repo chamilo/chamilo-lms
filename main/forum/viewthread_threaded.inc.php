@@ -170,7 +170,7 @@ else
 // we mark the image we are displaying as set
 unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$rows[$display_post_id]['post_id']]);
 
-echo "<table width=\"100%\"  class=\"post\"  cellspacing=\"5\" border=\"0\">";
+echo "<table width=\"100%\"  class=\"forum_table\"  cellspacing=\"5\" border=\"0\">";
 echo "<tr>";
 echo "<td rowspan=\"3\" class=\"$leftclass\">";
 if ($rows[$display_post_id]['user_id']=='0') {

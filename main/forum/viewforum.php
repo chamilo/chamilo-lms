@@ -308,22 +308,33 @@ if ($origin!='learnpath') {
 /*
 					Display
 */
-echo "<table class=\"data_table\" >";
+echo '<table class="forum_table" >';
 
 // the current forum
-if ($origin != 'learnpath') {
-	echo "<tr><th align=\"left\" colspan=\"7\">";
+if ($origin != 'learnpath') {    
+    
+    echo '<thead>';
+    
+	echo "<tr><th class=\"forum_head\" colspan=\"7\">";
+    
+    if (!empty ($current_forum_category['cat_title'])) {
+        
+        //echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])."</span><br />";
+        
+    }
+    
+    
 	echo '<span class="forum_title">'.prepare4display($current_forum['forum_title']).'</span>';
 
 	if (!empty ($current_forum['forum_comment'])) {
 		echo '<br><span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';
 	}
 
-	if (!empty ($current_forum_category['cat_title'])) {
-		echo '<br /><span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])."</span><br />";
-	}
+
 	echo "</th>";
 	echo "</tr>";
+    
+    echo '</thead>';
 }
 
 echo "</th>";

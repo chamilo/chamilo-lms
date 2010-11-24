@@ -1841,7 +1841,7 @@ tr.forum_category_header a {
 }
 /* **** FORUM **** */
 .forum_header {
-	background-color: #a0e5fc;
+	background-color: #EEF;
 }
 /* **** THREAD **** */
 .forum_threadheader {
@@ -1925,6 +1925,10 @@ a.forum_group_link {
 .forum_description {
 	color: #000;
 	font-weight: normal;
+	font-size: 11px;
+}
+.forum_description p{	
+	font-size: 11px;
 }
 .forum_title {
 	color: #000;
@@ -4402,21 +4406,21 @@ span.form_required  {
 }
 
 .categories-block-course {
--moz-border-radius-topleft:8px;
--moz-border-radius-topright:8px;
--webkit-border-top-left-radius: 8px;
--webkit-border-top-right-radius: 8px;
-border-top-left-radius: 8px;
-border-top-right-radius: 8px;
--moz-box-shadow:0 -1px 10px 2px #CCCCCC;
--Webkit-box-shadow: 0 -1px 10px 2px  #CCCCCC;
-box-shadow: 0 -1px 10px 2px #CCCCCC;
-border:1px solid #CCCCCC;
-float:left;
-margin:10px;
-padding:9px;
-width:240px;
-min-height:132px;
+	-moz-border-radius-topleft:8px;
+	-moz-border-radius-topright:8px;
+	-webkit-border-top-left-radius: 8px;
+	-webkit-border-top-right-radius: 8px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	-moz-box-shadow:0 -1px 10px 2px #CCCCCC;
+	-Webkit-box-shadow: 0 -1px 10px 2px  #CCCCCC;
+	box-shadow: 0 -1px 10px 2px #CCCCCC;
+	border:1px solid #CCCCCC;
+	float:left;
+	margin:10px;
+	padding:9px;
+	width:240px;
+	min-height:132px;
 }
 
 
@@ -4441,3 +4445,67 @@ padding-top:10px;
 .categories-course-links {padding-top:10px;text-align:right;}
 
 .categories-course-links span {margin-right:10px;padding-top:10px;text-align:right;}
+
+
+/*	New forum table */
+
+
+.forum_table_title {
+	border-collapse: collapse;
+	width: 100%;
+	padding: 5px;
+	border-left: 1px solid gray;
+	border-top: 1px solid gray;	
+	border-right: 1px solid gray;
+	padding:5px;	
+}
+
+.forum_table_title th {
+	padding-right: 12px;
+	/*border: 1px solid gray;*/
+	background-color: #E5EDF9;
+}
+
+
+.forum_table {
+	border-collapse: collapse;
+	width: 100%;
+	padding: 5px;
+	border: 1px solid gray;
+	margin-bottom:15px;
+}
+
+.forum_table .forum_head{
+	padding:5px;	
+	text-align: left;
+	font-size:14px;
+	 
+} 
+
+.forum_table th {
+	padding-right: 12px;
+	/*border: 1px solid gray;*/
+	background-color: #E5EDF9;
+}
+.forum_table tr.row_odd {
+	background-color: #F2F2F2;
+}
+.forum_table tr.row_odd:hover, .data_table tr.row_even:hover {
+	background-color: #E5EDF9;
+}
+.forum_table tr.row_even {
+	background-color: #fff;
+}
+.forum_table td {
+	padding: 5px;
+	vertical-align: top;
+	border-bottom: 1px solid #b0b0b0;
+	border-right: 1px dotted #e1e1e1;
+	border-left: 1px dotted #e1e1e1;
+}
+
+.post {
+	border: 1px solid gray;
+	margin-bottom:5px;
+}
+

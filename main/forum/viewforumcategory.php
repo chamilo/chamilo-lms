@@ -60,25 +60,19 @@ include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 $nameTools=get_lang('ToolForum');
 
 /*
------------------------------------------------------------
 	Including necessary files
------------------------------------------------------------
 */
 require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 
 /*
-==============================================================================
 		MAIN DISPLAY SECTION
-==============================================================================
 */
 
 
 /*
------------------------------------------------------------
 	Header and Breadcrumbs
------------------------------------------------------------
 */
 if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
@@ -214,13 +208,24 @@ if ($action_forums!='add') {
 		Display Forum Categories and the Forums in it
 	-----------------------------------------------------------
 	*/
-	echo "<table class=\"data_table\" width='100%'>";
+	echo '<table class="forum_table" width="100%">';
 	$my_session=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : null;
+    
+    if((!isset($_SESSION['id_session']) || $_SESSION['id_session']==0) && !empty($forum_category['session_name'])) {
+        $session_displayed = ' ('.Security::remove_XSS($forum_category['session_name']).')';
+    } else {
+        $session_displayed = '';
+    }
+    
+    
 	$forum_categories_list='';
-	echo "<tr><th align=\"left\" ".(api_is_allowed_to_edit(null,true)?"colspan='5'":"colspan='6'").">";
-	echo '<span class="forum_title">'.prepare4display($forum_category['cat_title']).'</span><br />';
+    echo '<thead>';
+	echo "<tr><th class=\"forum_head\" ".(api_is_allowed_to_edit(null,true)?"colspan='5'":"colspan='6'").">";
+	    
+    echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a>'. $session_img .'<br />';
+    
 	echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
-	echo "</th>";
+     
 	if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($my_session)!=0)) {
 		echo '<th style="vertical-align: top;" align="center" >';
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forumcategory&amp;id=".$forum_category['cat_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
@@ -240,6 +245,9 @@ if ($action_forums!='add') {
 	echo "<td>".get_lang('LastPosts')."</td>";
 	echo "<td>".get_lang('Actions')."</td>";
 	echo "</tr>";
+    
+    echo '</thead>';
+       
 
 	// the forums in this category
 	$forums_in_category=get_forums_in_category($forum_category['cat_id']);

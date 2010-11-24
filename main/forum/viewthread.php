@@ -49,9 +49,7 @@ $current_forum_category	= get_forumcategory_information($current_forum['forum_ca
 $whatsnew_post_info	= $_SESSION['whatsnew_post_info']; //this variable should be deprecated?
 
 /*
------------------------------------------------------------
 	Header and Breadcrumbs
------------------------------------------------------------
 */
 
 
@@ -77,7 +75,7 @@ if ($origin=='group') {
 	$interbreadcrumb[] 	= array("url"=>"viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&gradebook=".$gradebook."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => Security::remove_XSS($current_thread['thread_title']));
 
 	Display :: display_header('');
-	api_display_tool_title($nameTools);
+	//api_display_tool_title($nameTools);
 
 } else {
 
@@ -92,13 +90,11 @@ if ($origin=='group') {
 		$message = isset($message) ? $message : '';
 		// the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
 		Display :: display_header('');
-		api_display_tool_title($nameTools);
+		//api_display_tool_title($nameTools);
 	}
 }
 /*
------------------------------------------------------------
 	Is the user allowed here?
------------------------------------------------------------
 */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
@@ -110,9 +106,7 @@ if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR 
 }
 
 /*
------------------------------------------------------------
 	Actions
------------------------------------------------------------
 */
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 if ($my_action=='delete' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
@@ -126,9 +120,7 @@ if ($my_action=='move' AND isset($_GET['post'])) {
 }
 
 /*
------------------------------------------------------------
 	Display the action messages
------------------------------------------------------------
 */
 $my_message = isset($message) ? $message : '';
 if ($my_message) {
@@ -140,9 +132,7 @@ if ($my_message<>'PostDeletedSpecial') {
 	// this increases the number of times the thread has been viewed
 	increase_thread_view($_GET['thread']);
 	/* 
-	-----------------------------------------------------------
-		Action Links
-	-----------------------------------------------------------
+			Action Links
 	*/
 	if ($origin=='learnpath') {
 		echo '<div style="height:15px">&nbsp;</div>';
@@ -188,9 +178,6 @@ if ($my_message<>'PostDeletedSpecial') {
 		}
 	}
 
-
-
-
 	// the different views of the thread
 	if ($origin != 'learnpath') {
 		$my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;search='.Security::remove_XSS(urlencode($my_search));
@@ -230,20 +217,25 @@ if ($my_message<>'PostDeletedSpecial') {
 	// we are getting all the information about the current forum and forum category.
 	// note pcool: I tried to use only one sql statement (and function) for this
 	// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-	echo "<table class=\"data_table\" width='100%'>";
+    
+	echo "<table class=\"forum_table_title\" width='100%'>";
 
 	// the thread
-	echo "<tr><th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
-	echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
+	echo "<tr><th style=\"padding:5px;\" align=\"left\" colspan=\"6\">";
+    echo '<div class="forum_title">';
+        echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&origin='.$origin.'">'.$current_forum['forum_title'].'</a><br />';
+        echo '<span class="forum_description">';        
+        echo $current_forum['forum_comment'];
+        echo '</span>';
+    echo '</div>';            
+                
 
 	if ($origin!='learnpath') {
-		echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' - ';
-	}
-
-	echo prepare4display($current_forum['forum_title']).'<br />';
+		//echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' ';
+	}  
+	
 	echo "</th>";
-	echo "</tr>";
-	echo '<span>'.prepare4display(isset($current_thread['thread_comment'])?$current_thread['thread_comment']:'').'</span>';
+	echo "</tr>";	
 	echo "</table>";
 
 	switch ($viewmode) {

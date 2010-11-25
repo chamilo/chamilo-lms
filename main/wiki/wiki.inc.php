@@ -885,8 +885,11 @@ function display_wiki_entry($newtitle)
 		//echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">';
 		echo '<form name="form_export2PDF" method="post" action="export_mpdf.php" target="_blank, fullscreen">';
 		//
-		echo '<input type=hidden name="titlePDF" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
-		echo '<input type=hidden name="contentPDF" value="'.api_htmlentities(trim(preg_replace("/\[\[|\]\]/", " ", $content)), ENT_QUOTES, $charset).'">';
+		echo '<input type=hidden name="titlePDF" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';		
+		$clean_pdf_content=trim(preg_replace("/\[\[|\]\]/", " ", $content));
+		$array_clean_pdf_content= explode('|', $clean_pdf_content);
+		$clean_pdf_content= $array_clean_pdf_content[1];		
+		echo '<input type=hidden name="contentPDF" value="'.api_htmlentities($clean_pdf_content, ENT_QUOTES, $charset).'">';
 		echo '<input type="image" src="../img/wiki/wexport2pdf.gif" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none; margin-top: -6px">';
 		echo '</form>';
 		echo '</span>';

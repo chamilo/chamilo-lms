@@ -432,7 +432,7 @@ if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recen
 	//menu history
 	echo '<a href="index.php?cidReq='.$_course[id].'&action=history&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('history').'>'.Display::display_icon('history.gif',get_lang('ShowPageHistory')).' '.get_lang('History').'</a>';
 	//menu linkspages
-	echo '<a href="index.php?action=links&amp;title='.api_htmlentities(urlencode($page)).'"'.is_active_navigation_tab('links').'>'.Display::display_icon('lp_link.png',get_lang('ShowLinksPages')).' '.get_lang('LinksPages').'</a>';
+	echo '<a href="index.php?action=links&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('links').'>'.Display::display_icon('lp_link.png',get_lang('ShowLinksPages')).' '.get_lang('LinksPages').'</a>';
 
 	//menu delete wikipage
 	if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())

@@ -361,7 +361,8 @@ echo '</tr>';
 echo '<tr>';
 echo '<td>';
 	///menu home
-	echo '<ul><li><a href="index.php?cidReq='.$_course[id].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.get_lang('HomeWiki').'</a></li>';
+	echo '<ul><li style="list-style-image: url(../img/home.png)"	
+	><a href="index.php?cidReq='.$_course[id].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.get_lang('HomeWiki').'</a></li>';
 	if ( api_is_allowed_to_session_edit(false,true) ) {
 		//menu add page
 		echo '<li><a href="index.php?cidReq='.$_course[id].'&action=addnew&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('addnew').'>'.get_lang('AddNew').'</a> ';

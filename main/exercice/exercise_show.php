@@ -266,7 +266,7 @@ if ($show_results) {
 		</tr>
 		<?php if (!empty($exerciseDescription)) { ?>
 		<tr>
-			<td style="font-weight:bold" width="10%" class="actions-message">
+			<td style="font-weight:bold" width="10%">
 				<?php echo '&nbsp;'.get_lang("Description").' :'; ?>
 			</td>
 			<td width="90%">			

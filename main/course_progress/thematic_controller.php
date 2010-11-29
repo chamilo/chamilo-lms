@@ -32,8 +32,7 @@ class ThematicController
 	 * @param 	string	Action
 	 * render to thematic.php 
 	 */	
-	public function thematic($action) {
-		var_dump($action);
+	public function thematic($action) {		
 		$thematic= new Thematic();		        
 		$data = array();		
 		$error = false;

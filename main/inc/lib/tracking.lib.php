@@ -680,14 +680,12 @@ class Tracking {
                                     $row_max_score_bis = Database :: fetch_array($res_max_score_bis);
                                     if (!empty($row_max_score_bis['maxscore'])) {
                                         $max_score = $row_max_score_bis['maxscore'];
-                                    }
-                                    $lp_scorm_result_score_total += ($score/$max_score);
-                                    $lp_partial_total  += ($score/$max_score);                                     
-                                    //echo '<br>'; echo $lp_scorm_result_score_total.' - '."$score/$max_score"; echo '<br>';
-
-                                    //echo $lp_scorm_result_score_total;
-                                    //var_dump($score,$max_score);
-                                    $current_value = $score/$max_score;
+                                    }                                    
+                                    if (!empty($max_score)) {
+                                        $lp_scorm_result_score_total += ($score/$max_score);
+                                        $lp_partial_total  += ($score/$max_score);
+                                        $current_value = $score/$max_score;
+                                    }                                    
                                 } else {
                                     //$lp_scorm_result_score_total += 0;
                                 }

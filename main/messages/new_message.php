@@ -185,7 +185,7 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form->addElement('hidden','parent_id',$message_id);
 	}
 
-	$form->add_textfield('title', get_lang('Title'),true ,array('size' => 77));
+	$form->add_textfield('title', get_lang('Title'),true ,array('size' => 59));
 
 	$form->add_html_editor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
 	//$form->addElement('textarea','content', get_lang('Message'), array('cols' => 75,'rows'=>8));

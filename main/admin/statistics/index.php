@@ -8,7 +8,7 @@
 $language_file = array('admin', 'tracking');
 $cidReset = true;
 
-require '../../inc/global.inc.php';
+require_once '../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 api_protect_admin_script();
 
@@ -26,10 +26,11 @@ if (!$_configuration['tracking_enabled']) {
 require_once ('statistics.lib.php');
 
 
-$strCourse  = get_lang('Courses');
-$strUsers = get_lang('Users');
-$strSystem = get_lang('System');
-$strSocial = get_lang('Social');
+$strCourse      = get_lang('Courses');
+$strUsers       = get_lang('Users');
+$strSystem      = get_lang('System');
+$strSocial      = get_lang('Social');
+$strSession     = get_lang('Session');
 
 // courses ...
 $tools[$strCourse]['action=courses'] = get_lang('CountCours');
@@ -52,6 +53,7 @@ $tools[$strSystem]['action=activities'] = get_lang('ImportantActivities');
 $tools[$strSocial]['action=messagesent'] = get_lang('MessagesSent');
 $tools[$strSocial]['action=messagereceived'] = get_lang('MessagesReceived');
 $tools[$strSocial]['action=friends'] = get_lang('CountFriends');
+
 
 echo '<table><tr>';
 foreach ($tools as $section => $items) {

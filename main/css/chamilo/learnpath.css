@@ -159,12 +159,12 @@ table.lp_overview th.exercise {
 	width:50px;
 }
 table.lp_form input, table.lp_form select, table.lp_form textarea {
-	background:#F8F8F8;
+/*	background:#F8F8F8;
 	border:1px solid #999999;
 	font-family:Arial, Verdana, Helvetica, sans-serif;
 	font-size:12px;
 	padding:1px 2px;
-	width:300px;
+	width:300px;*/
 }
 table.lp_form td.radio input, table.lp_form td.exercise input {
 	width:auto;

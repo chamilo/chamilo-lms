@@ -200,15 +200,19 @@ class Matching extends Question {
 		global $text, $class;
 
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+            // setting the save button here and not in the question class.php
+            $group[] = FormValidator :: createElement('submit','submitQuestion',$text, 'class="'.$class.'"');
+            $group[] = FormValidator :: createElement ('submit', 'moreOptions',get_lang('AddElem'),'class="plus"');
 			$group[] = FormValidator :: createElement ('submit', 'lessOptions', get_lang('DelElem'),'class="minus"');
-			$group[] = FormValidator :: createElement ('submit', 'moreOptions',get_lang('AddElem'),'class="plus"');
-			// setting the save button here and not in the question class.php
-			$group[] = FormValidator :: createElement('submit','submitQuestion',$text, 'class="'.$class.'"');
+			
+			
 		} else {
+            // setting the save button here and not in the question class.php
+            $group[] = FormValidator :: createElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+            $group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'),'class="plus"');
 			$group[] = FormValidator :: createElement ('style_submit_button', 'lessOptions', get_lang('DelElem'),'class="minus"');
-			$group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'),'class="plus"');
-			// setting the save button here and not in the question class.php
-			$group[] = FormValidator :: createElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+			
+			
 
 		}
 		

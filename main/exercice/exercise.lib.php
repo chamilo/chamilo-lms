@@ -33,8 +33,8 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		return false;
 	}
 
-	$answerType=$objQuestionTmp->selectType();
-	$pictureName=$objQuestionTmp->selectPicture();
+	$answerType    = $objQuestionTmp->selectType();
+	$pictureName   = $objQuestionTmp->selectPicture();
 
 	if ($answerType != HOT_SPOT) {
 		// Question is not of type hotspot
@@ -54,17 +54,16 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 
 			echo $questionName.'</div>';
 			$s='';
-			$s.="<table class='exercise_questions' style='margin:4px;padding:2px;'>
-				<tr><td valign='top' colspan='2'>";
+			$s.='<table class="exercise_questions" style="margin:4px 4px 4px 0px; padding:2px;">
+				<tr><td valign="top" colspan="2">';
 			$questionDescription=text_filter($questionDescription);
 			$s.=$questionDescription;
-			$s.="</td></tr></table>";
+			$s.='</td></tr></table>';
 
 			if (!empty($pictureName)) {
-				$s.="
-				<tr>
-				  <td align='center' colspan='2'><img src='../document/download.php?doc_url=%2Fimages%2F'".$pictureName."' border='0'></td>
-				</tr>";
+				$s.="<tr>
+				        <td align='center' colspan='2'><img src='../document/download.php?doc_url=%2Fimages%2F'".$pictureName."' border='0'></td>
+				    </tr>";
 			}
 		}
 		$s.= '</table>';
@@ -297,11 +296,12 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
         if (api_is_platform_admin() || api_is_course_admin()) {
             require_once api_get_path(LIBRARY_PATH).'document.lib.php';
             $course = api_get_course_info();        
-            $doc_id = DocumentManager::get_document_id($course, '/images');  
+            $doc_id = DocumentManager::get_document_id($course, '/images/'.$pictureName);  
             if (is_numeric($doc_id)) {              
-                $images_folder_visibility = api_get_item_visibility($course,'document', $doc_id, api_get_session_id());
+                $images_folder_visibility = api_get_item_visibility($course,'document', $doc_id, api_get_session_id());                 
                 if (!$images_folder_visibility) {
-            	   Display::display_warning_message(get_lang('ChangeTheVisibilityOfTheDocumentImagesFolder'));
+                    //This message is shown only to the course/platform admin if the image is set to visibility = false
+                    Display::display_warning_message(get_lang('ChangeTheVisibilityOfTheCurrentImage'));
                 }
             }
         }

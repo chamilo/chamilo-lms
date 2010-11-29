@@ -234,8 +234,10 @@ ul#navigation .student-connect a {
 .invisible {
 	color: #999;
 }
-.courseadminview table td a {
+.courseadminview table td a, .Authoringview table td a {
 	font-weight: bold;
+	font-size:13px;
+	margin-left:2px;
 }
 
 .Authoringview, .courseadminview, .platformadminview {
@@ -1757,19 +1759,19 @@ div.admin_section h4 {
 	font-weight: bold;
 	color: #666666;
 	list-style-type: none;
-	margin: 5px;
+	margin: 5px 5px 5px 0px;
 	padding: 5px;
-	font-size: 11px;
+	font-size: 14px;
 }
 .sectioncomment {
 	color: #000000;
-	margin: 5px;
+	margin: 5px 5px 5px 0px;
 	padding: 5px;
 	font-size: 11px;
 }
 .sectionvalue {
 	list-style-type: none;
-	margin: 5px;
+	margin: 5px 5px 5px 0px;
 	padding: 5px;
 }
 /*****************************************************

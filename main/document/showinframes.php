@@ -170,7 +170,7 @@ echo '<a href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').
 //echo '<div>';
 
 if (file_exists($file_url_sys)) {
-	echo '<iframe border="0" frameborder="0" scrolling="auto"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1, 10000).'"></iframe>';
+	echo '<iframe border="0" frameborder="0" scrolling="auto"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"></iframe>';
 } else {
 	echo '<frame name="mainFrame" id="mainFrame" src=showinframes.php?nopages=1 />';
 }

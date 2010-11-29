@@ -1057,9 +1057,9 @@ class DocumentManager {
         
         $session_id = intval($session_id);
         $condition = "AND id_session = $session_id";
-        
+        // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198 
 		$sql  = "SELECT path FROM $docTable d, $propTable ip " .
-                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND visibility=0 $condition AND locate(concat(path,'/'),'".$doc_path."/')=1";
+                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND visibility=0 $condition AND d.filetype='file' AND locate(concat(path,'/'),'".$doc_path."/')=1";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {
 			$row = Database::fetch_array($result);
@@ -1083,9 +1083,9 @@ class DocumentManager {
         
         $session_id = intval($session_id);
         $condition = "AND id_session = $session_id";
-        
-       echo  $sql  = "SELECT path FROM $docTable d, $propTable ip " .
-                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND visibility=0 $condition AND d.id = $id";
+        // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198        
+        $sql  = "SELECT path FROM $docTable d, $propTable ip " .
+                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND d.filetype='file'  AND visibility=0 $condition AND d.id = $id";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result);

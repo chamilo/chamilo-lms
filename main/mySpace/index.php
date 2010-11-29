@@ -204,7 +204,20 @@ if ($is_drh || $_GET['display'] == 'yourstudents') {
 $nb_menu_items = count($menu_items);
 
 if ($nb_teacher_courses > 0 ) {    
-	echo '<div class="actions" style ="font-size:10pt;">';    
+	echo '<div class="actions" style ="font-size:10pt;">';
+    
+    echo '<div style="float:right">';
+            
+    if (isset($_GET['display']) && ($_GET['display'] == 'useroverview' || $_GET['display'] == 'sessionoverview' || $_GET['display'] == 'courseoverview')) {
+        echo '<a href="'.api_get_self().'?display='.$_GET['display'].'&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+    }
+       
+       
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/statistics.gif">&nbsp;'.get_lang('MyStats').'</a>';
+    echo '&nbsp;&nbsp; <a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>';
+    
+ 
+    echo '</div>';
     if (empty($session_id)) {
     	if ($nb_menu_items > 1) {
     		foreach ($menu_items as $key => $item) {
@@ -217,11 +230,9 @@ if ($nb_teacher_courses > 0 ) {
     } else {
     	echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
     }
-	echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
-	if (isset($_GET['display']) && ($_GET['display'] == 'useroverview' || $_GET['display'] == 'sessionoverview' || $_GET['display'] == 'courseoverview')) {
-		echo '<a href="'.api_get_self().'?display='.$_GET['display'].'&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
-	}
-	echo '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/statistics.gif">&nbsp;'.get_lang('MyStats').'</a> ';
+	
+	
+	
 	echo '</div>';
 } else {
 	echo '<div class="actions-title" style ="font-size:10pt;">';

@@ -144,7 +144,7 @@ if (!empty($course_info)) {
 if (!$export_to_xls) {
 	
 	Display :: display_header(get_lang("MySpace"));
-		echo '<div class="actions">';
+		echo '<div class="actions" style ="font-size:10pt;" >';
 	if ($global) {		
 		$menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('TeacherInterface').'</a>';
 		$menu_items[] = get_lang('AdminInterface');

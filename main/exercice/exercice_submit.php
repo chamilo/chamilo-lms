@@ -95,9 +95,6 @@ if (empty ($formSent)) {
 if (empty ($exerciseResult)) {
     $exerciseResult = $_REQUEST['exerciseResult'];
 }
-if (empty ($exerciseResultCoordinates)) {
-    $exerciseResultCoordinates = $_REQUEST['exerciseResultCoordinates'];
-}
 if (empty ($exerciseType)) {
     $exerciseType = $_REQUEST['exerciseType'];
 }
@@ -127,10 +124,9 @@ if ($buttonCancel) {
     header("Location: exercice.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
     exit;
 }
-if ($origin == 'builder') {
-    /*******************************/
-    /* Clears the exercise session */
-    /*******************************/
+
+if ($origin == 'builder') {    
+    /* Clears the exercise session */    
     if ($debug) {error_log('origin = builder'); };
     if (isset ($_SESSION['objExercise'])) {
         api_session_unregister('objExercise');
@@ -332,7 +328,7 @@ if ($formSent && isset($_POST)) {
     // Initializing
     if (!is_array($exerciseResult)) {
         $exerciseResult = array ();
-        $exerciseResultCoordinates = array ();
+        $exerciseResultCoordinates = array();
     }
 
     //Only for hotspot
@@ -340,23 +336,19 @@ if ($formSent && isset($_POST)) {
         $hotspot_id = (int)($_REQUEST['hidden_hotspot_id']);
         $choice = array($hotspot_id => '');
     }
-
     // if the user has answered at least one question
     if (is_array($choice)) {
-        if ($debug > 0) {if ($debug > 0) { error_log('$choice is an array'); } }		
+        if ($debug > 0) {if ($debug > 0) { error_log('$choice is an array'); } }	
+        // Also store hotspot spots in the session ($exerciseResultCoordinates
+        // will be stored in the session at the end of this script)
+
+        if (isset ($_POST['hotspot'])) {
+            $exerciseResultCoordinates = $_POST['hotspot'];               
+        }        	
         if ($exerciseType == ALL_ON_ONE_PAGE) {
             // $exerciseResult receives the content of the form.
             // Each choice of the student is stored into the array $choice
-            $exerciseResult = $choice;
-
-            // Also store hotspot spots in the session ($exerciseResultCoordinates
-            // will be stored in the session at the end of this script)
-            // The results will be stored by exercise_result.php if we are in
-            // an exercise of type 1 (=all on one page)
-            //This seems not useful
-            if (isset ($_POST['hotspot'])) {
-                $exerciseResultCoordinates = $_POST['hotspot'];
-            }
+            $exerciseResult = $choice;            
         } else {
             // gets the question ID from $choice. It is the key of the array
             list ($key) = array_keys($choice);
@@ -365,7 +357,7 @@ if ($formSent && isset($_POST)) {
                 // stores the user answer into the array
                 $exerciseResult[$key] = $choice[$key];
                 //saving each question
-                if ($_configuration['live_exercise_tracking'] && $exerciseType == ONE_PER_PAGE && $objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if ($_configuration['live_exercise_tracking'] && $objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                     $nro_question = $questionNum; // - 1;
                     //START of saving and qualifying each question submitted
                     define('ENABLED_LIVE_EXERCISE_TRACKING', 1);
@@ -374,7 +366,7 @@ if ($formSent && isset($_POST)) {
                     $choice = $exerciseResult[$questionId];                    
                     if (isset($exe_id)) {
                     	//Manage the question and answer attempts
-                    	$objExercise->manage_answer($exe_id, $questionId, $choice,'exercise_show', true, false,false);
+                    	$objExercise->manage_answer($exe_id, $questionId, $choice,'exercise_show',$exerciseResultCoordinates, true, false,false);
                     }
                     //END of saving and qualifying
                 }

@@ -367,7 +367,7 @@ if ($show_results) {
 			<?php
 			// construction of the Answer object
        
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);
             //var_dump($question_result);
             $questionScore  = $question_result['score'];
             $totalScore     += $question_result['score'];
@@ -390,7 +390,7 @@ if ($show_results) {
 			</tr>
 			<?php
 	            
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);            
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
 
@@ -416,7 +416,7 @@ if ($show_results) {
 				</tr>
 			<?php	
             
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];  
 			echo '</table>';
@@ -435,7 +435,7 @@ if ($show_results) {
 			</tr>
 			<?php
                       
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
               
@@ -456,12 +456,12 @@ if ($show_results) {
 
 			<?php
 			
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);            
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
 
 		} elseif ($answerType == MATCHING) {            
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);            
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];			
 			echo '</table>';
@@ -471,7 +471,7 @@ if ($show_results) {
             <tr>
                     <td valign="top" align="center" style="padding-left:0px;" >
                         <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';			
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', false, true);            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);            
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
 			echo '</table></td></tr>';            

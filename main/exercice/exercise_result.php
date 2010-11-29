@@ -69,6 +69,7 @@ if ( empty ( $learnpath_item_view_id ) ) {  $learnpath_item_view_id = intval($_R
 if ( empty ( $formSent ) ) {                $formSent               = $_REQUEST['formSent'];}
 if ( empty ( $exerciseResult ) ) {          $exerciseResult         = $_SESSION['exerciseResult'];}
 if ( empty ( $exerciseResultCoordinates)){  $exerciseResultCoordinates = $_SESSION['exerciseResultCoordinates'];}
+
 if ( empty ( $questionId ) ) {              $questionId             = $_REQUEST['questionId'];}
 if ( empty ( $choice ) ) {                  $choice                 = $_REQUEST['choice'];}
 if ( empty ( $questionNum ) ) {             $questionNum            = $_REQUEST['questionNum'];}
@@ -301,7 +302,7 @@ foreach ($questionList as $questionId) {
 	}
 
 	// We're inside *one* question. Go through each possible answer for this question
-	$result = $objExercise->manage_answer($exeId, $questionId, $choice,'exercise_result');    
+	$result = $objExercise->manage_answer($exeId, $questionId, $choice,'exercise_result', $exerciseResultCoordinates, true);    
     $totalScore        += $result['score'];
     $totalWeighting    += $result['weight'];
     

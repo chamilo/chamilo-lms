@@ -1638,14 +1638,18 @@ class Exercise {
      * @param   int     exe id
      * @param   int     question id
      * @param   int     the choice the user selected
+     * @param   array   the hotspot coordinates $hotspot[$question_id] = coordinates
      * @param   string  function is called from 'exercise_show' or 'exercise_result'
      * @param   bool    save results in the DB or just show the reponse
      * @param   bool    gets information from DB or from the current selection
      * @param   bool    show results or not
+     * @todo    reduce parameters of this function
      * @return  string  html code
 	 */
-	function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $saved_results = true, $from_database = false, $show_result = true) {        
+	function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true) {        
 		global $_configuration;
+        error_log('manage_answer');
+        error_log('$exerciseResultCoordinates'.print_r($exerciseResultCoordinates,1));
         $questionId   = intval($questionId);
 		$exeId        = intval($exeId);        
         $TBL_TRACK_ATTEMPT      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -1666,10 +1670,6 @@ class Exercise {
         // Destruction of the Question object
         unset ($objQuestionTmp);
         
-        if (isset($_SESSION['exerciseResultCoordinates'])) {
-            $exerciseResultCoordinates = $_SESSION['exerciseResultCoordinates'];
-        }
-
         // Construction of the Answer object
         $objAnswerTmp = new Answer($questionId);
         $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
@@ -2262,7 +2262,7 @@ class Exercise {
             } elseif ($answerType == HOT_SPOT) {                
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 
-                if (is_array($exerciseResultCoordinates[$questionId])) {
+                if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     foreach($exerciseResultCoordinates[$questionId] as $idx => $val) {
                         exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val,$this->id);
                     }

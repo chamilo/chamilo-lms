@@ -1647,9 +1647,7 @@ class Exercise {
      * @return  string  html code
 	 */
 	function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true) {        
-		global $_configuration;
-        error_log('manage_answer');
-        error_log('$exerciseResultCoordinates'.print_r($exerciseResultCoordinates,1));
+		global $_configuration;        
         $questionId   = intval($questionId);
 		$exeId        = intval($exeId);        
         $TBL_TRACK_ATTEMPT      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -2260,8 +2258,7 @@ class Exercise {
                 $answer = $choice;
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             } elseif ($answerType == HOT_SPOT) {                
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
-                
+                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);                
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     foreach($exerciseResultCoordinates[$questionId] as $idx => $val) {
                         exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val,$this->id);

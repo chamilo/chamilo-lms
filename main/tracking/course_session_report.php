@@ -56,7 +56,7 @@ foreach($session_list as $sesion_item) {
 	$my_session_list[$sesion_item['id']] = $sesion_item['name'];
 }
 $form->addElement('select', 'session_id', get_lang('Sessions'), $my_session_list);
-$form->addElement('submit','submit',get_lang('Filter'));
+$form->addElement('style_submit_button','submit',get_lang('Filter'));
 
 
 if (!empty($_REQUEST['score']))	$filter_score = intval($_REQUEST['score']); else $filter_score = 70;

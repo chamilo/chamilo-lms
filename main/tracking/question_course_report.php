@@ -78,7 +78,7 @@ foreach($session_list as $sesion_item) {
 $form = new FormValidator('search_simple','POST','','',null,false);
 $form->addElement('select', 'session_id', get_lang('Sessions'), $my_session_list, array('id'=>'session_id', 'onchange'=>'load_courses();'));
 $form->addElement('select', 'course_code',get_lang('Courses'), $course_select_list);
-$form->addElement('submit','submit_form', get_lang('Filter'));
+$form->addElement('style_submit_button','submit_form', get_lang('Filter'));
 
 if (!empty($_REQUEST['course_code']))	$course_code = $_REQUEST['course_code']; else $course_code = '';
 if (empty($course_code)) {

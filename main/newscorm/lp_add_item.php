@@ -308,6 +308,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
                     echo $_SESSION['oLP']->display_hotpotatoes_form('add', 0, $_GET['file']);
                     break;
                 case 'quiz':
+                    echo Display::display_warning_message(get_lang('ExerciseCantBeEditedAfterAddingToTheLP'));
                     echo $_SESSION['oLP']->display_quiz_form('add', 0, $_GET['file']);
                     break;
                 case 'forum':

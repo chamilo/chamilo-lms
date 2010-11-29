@@ -70,7 +70,12 @@ function make_select_session_list($name, $sessions, $attr = array()) {
 
 	if (is_array($sessions)) {
 		foreach ($sessions as $session) {
-			$output .= '<option value="'.$session['id'].'">'.$session['name'].' ('.$session['category_name'].')</option>';
+            $category_name = '';
+            if (!empty($session['category_name'])) {
+                $category_name = ' ('.$session['category_name'].')';
+            }
+            
+			$output .= '<option value="'.$session['id'].'">'.$session['name'].' '.$category_name.'</option>';
 		}
 	}
 	$output .= '</select>';

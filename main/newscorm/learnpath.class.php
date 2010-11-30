@@ -342,7 +342,7 @@ class learnpath {
      * @param int $parent
      * @param int $previous
      * @param string $type
-     * @param int $id
+     * @param int  Learnpath ID
      * @param string $title
      * @param string $description
      * @return int

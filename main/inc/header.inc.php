@@ -119,17 +119,6 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 <script src= "<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/jquery.menu.js" type="text/javascript"></script>
 
-<?php if (!empty($help)) { ?>
-    <ul id="navigation">
-        <li class="help">               <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600", class="thickbox" title="<?php echo get_lang('Help'); ?>"></a> </li>
-        <li class="report">             <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600", class="thickbox" title="<?php echo get_lang('Help'); ?>"></a> </li>
-        <li class="student">            <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600", class="thickbox" title="<?php echo get_lang('Help'); ?>"></a> </li>
-        <li class="user-online">        <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600", class="thickbox" title="<?php echo get_lang('Help'); ?>"></a> </li>
-        <li class="user-connect">       <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600", class="thickbox" title="<?php echo get_lang('Help'); ?>"></a> </li>
-        <li class="student-connect">    <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600", class="thickbox" title="<?php echo get_lang('Help'); ?>"></a> </li>
-</ul>
-<?php } ?>
-
 <script type="text/javascript">
 //<![CDATA[
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.

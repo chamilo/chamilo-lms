@@ -364,7 +364,7 @@ class learnpath {
         $description = $this->escape_string($description);
         $sql_count = "	SELECT COUNT(id) AS num
                         FROM " . $tbl_lp_item . "
-                        WHERE lp_id = " . $this->get_id() . " AND parent_item_id = " . $parent;
+                        WHERE lp_id = " . $id . " AND parent_item_id = " . $parent;
 
         $res_count = Database::query($sql_count);
         $row = Database :: fetch_array($res_count);
@@ -375,7 +375,7 @@ class learnpath {
                 $sql = "SELECT id, next_item_id, display_order
                            FROM " . $tbl_lp_item . "
                            WHERE
-                                   lp_id = " . $this->get_id() . " AND
+                                   lp_id = " . $id . " AND
                                    parent_item_id = " . $parent . " AND
                                    previous_item_id = 0 OR previous_item_id=" . $parent;
                 $result = Database::query($sql);
@@ -394,7 +394,7 @@ class learnpath {
                                    display_order
                                FROM " . $tbl_lp_item . "
                                WHERE
-                                   lp_id = " . $this->get_id() . " AND
+                                   lp_id = " . $id . " AND
                                    id = " . $previous;
 
                 $result = Database::query($sql);
@@ -444,7 +444,7 @@ class learnpath {
                                 max_time_allowed
 
                             ) VALUES (
-                                " . $this->get_id() . ",
+                                " . $id . ",
                                 '" . $type . "',
                                 '',
                                 '" . $title . "',
@@ -475,7 +475,7 @@ class learnpath {
                                 display_order,
                                 max_time_allowed
                             ) VALUES (
-                                " . $this->get_id() . ",
+                                " . $id . ",
                                 '" . $type . "',
                                 '',
                                 '" . $title . "',
@@ -520,7 +520,7 @@ class learnpath {
                             UPDATE " . $tbl_lp_item . "
                             SET display_order = display_order + 1
                             WHERE
-                                lp_id = " . $this->get_id() . " AND
+                                lp_id = " . $id . " AND
                                 id <> " . $new_item_id . " AND
                                 parent_item_id = " . $parent . " AND
                                 display_order > " . $display_order;

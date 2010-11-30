@@ -13,7 +13,30 @@ require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 $session_id     = api_get_session_id();
 $session_name   = api_get_session_name($my_session_id);
 ?>
+
 <div id="wrapper">
+
+  <ul id="navigation">
+<?php 
+if (!empty($help)) { 
+?>
+        <li class="help"><a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>"><img src="<?php echo api_get_path(WEB_CSS_PATH).$my_style;?>/images/help2.png" alt="<?php echo get_lang('Help');?>" title="<?php echo get_lang('Help');?>" /></a> </li>
+<?php 
+}
+if (api_get_setting('show_link_bug_notification') == 'true') { 
+?>
+    <li class="report"><a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank"><img src="<?php echo api_get_path(WEB_IMG_PATH) ?>splash.png" style="vertical-align: middle;" alt="<?php echo get_lang('ReportABug') ?>" title="<?php echo get_lang('ReportABug');?>"/></a></li>
+<?php
+}
+/*
+        <li class="student">            <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>"></a> </li>
+        <li class="user-online">        <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>"></a> </li>
+        <li class="user-connect">       <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>"></a> </li>
+        <li class="student-connect">    <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>"></a> </li>
+<?php } 
+*/
+?>
+  </ul>
 
 <div id="header">
 	<div id="header1">
@@ -135,11 +158,6 @@ if ($_user['user_id'] && isset($_cid)) {
 	}
 }
 
-if (api_get_setting('show_link_bug_notification') == 'true') { ?>
-    <li>|<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank"><img src="<?php echo api_get_path(WEB_IMG_PATH) ?>splash.png" style="vertical-align: middle;" alt="<?php echo get_lang('ReportABug') ?>"/>&nbsp;<?php echo get_lang('ReportABug') ?></a></li>
-<?php
-}
-
 
 if (api_is_allowed_to_edit()) {
 		if (!empty($help)) {			
@@ -149,7 +167,7 @@ if (api_is_allowed_to_edit()) {
 			echo '|';	
 		}
 		//echo get_lang('Help');
-	?>	<?php /*	
+                /*	
 			<a href="#" onclick="javascript: MyWindow=window.open('<?php echo api_get_path(WEB_CODE_PATH).'help/help.php'; ?>?open=<?php echo $help; ?>','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=620,height=600,left=200,top=20'); return false;">
 			<img src="<?php echo api_get_path(WEB_IMG_PATH); ?>help.png" style="vertical-align: middle;" title="<?php echo get_lang('Help'); ?>" alt="<?php echo get_lang('Help'); ?>"/></a>			
 		 */?>

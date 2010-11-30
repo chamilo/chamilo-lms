@@ -487,12 +487,15 @@ if (!empty($make_visible)) {
 		Database::query($sql);
 		Display::display_confirmation_message(get_lang('FileVisible'));
 	}
-
+    
+    /* No need to update this because it will break the end date and expiration date code see BT#1775
+     * 
 	// update all the parents in the table item propery
 	$list_id = get_parent_directories($my_cur_dir_path);
 	for ($i = 0; $i < count($list_id); $i++) {
 		api_item_property_update($_course, 'work', $list_id[$i], 'FolderUpdated', $user_id);
 	}
+    */
 }
 
 /*	Create dir command */

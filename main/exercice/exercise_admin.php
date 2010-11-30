@@ -12,11 +12,11 @@
 // name of the language file that needs to be included
 $language_file='exercice';
 
-include 'exercise.class.php';
-include 'question.class.php';
-include 'answer.class.php';
-include '../inc/global.inc.php';
-include 'exercise.lib.php';
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
+require_once '../inc/global.inc.php';
+require_once 'exercise.lib.php';
 $this_section=SECTION_COURSES;
 
 if(!api_is_allowed_to_edit(null,true)) {
@@ -133,18 +133,12 @@ $(document).ready(function () {
 });
 </script>';
 
-/*********************
- * INIT EXERCISE
- *********************/
+// INIT EXERCISE
 
 require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $objExercise = new Exercise();
 
-/*********************
- * INIT FORM
- *********************/
- 
-
+//INIT FORM
 if(isset($_GET['exerciseId'])) {
 	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.$_GET['exerciseId']);
 	$objExercise -> read (intval($_GET['exerciseId']));
@@ -156,10 +150,8 @@ if(isset($_GET['exerciseId'])) {
 
 $objExercise -> createForm ($form);
 
-/*********************
- * VALIDATE FORM
- *********************/
-if ($form -> validate()) {
+// VALIDATE FORM
+if ($form->validate()) {
 	$objExercise -> processCreation($form);
 	if ($form -> getSubmitValue('edit') == 'true') {
 		header('Location:exercice.php?message=ExerciseEdited&'.api_get_cidreq());
@@ -168,10 +160,8 @@ if ($form -> validate()) {
 		header('Location:admin.php?message=ExerciseAdded&exerciseId='.$objExercise->id);
 		exit;
 	}
-} else {
-	/*********************
-	 * DISPLAY FORM
-	 *********************/
+} else {	
+    // DISPLAY FORM	 
 	if (isset($_SESSION['gradebook'])) {
 		$gradebook=	$_SESSION['gradebook'];
 	}

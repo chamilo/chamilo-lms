@@ -744,9 +744,9 @@ if ($show == 'test') {
 	 */
 	if ($origin != 'learnpath') {
 		//avoid sending empty parameters
-		$myorigin = (empty ($origin) ? '' : '&origin=' . $origin);
-		$mylpid = (empty ($learnpath_id) ? '' : '&learnpath_id=' . $learnpath_id);
-		$mylpitemid = (empty ($learnpath_item_id) ? '' : '&learnpath_item_id=' . $learnpath_item_id);
+		$myorigin     = (empty ($origin)              ? '' : '&origin=' . $origin);
+		$mylpid       = (empty ($learnpath_id)        ? '' : '&learnpath_id=' . $learnpath_id);
+		$mylpitemid   = (empty ($learnpath_item_id)   ? '' : '&learnpath_item_id=' . $learnpath_item_id);
 
 		$token = Security::get_token();
 		while ($row = Database :: fetch_array($result,'ASSOC')) {                
@@ -756,20 +756,18 @@ if ($show == 'test') {
 				$time_limits = false;
 				if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
 					$time_limits = true;	
-				}
-				
+				}				
 				if ($time_limits) {
 					// check if start time
-									
-					$start_time = api_strtotime($row['start_time'],'UTC');
-					$end_time   = api_strtotime($row['end_time'], 'UTC');								
-					$now 		= time();				
-				
-					$is_actived_time = false;					
+					$start_time = api_strtotime($row['start_time']);
+					$end_time   = api_strtotime($row['end_time']);          							
+					$now 		= time();          
+					$is_actived_time = false;                    
 					if ($now > $start_time && $end_time > $now ) {
 						$is_actived_time = true;
 					}
-				}		
+				}
+                
 				
 				if ($i % 2 == 0)
 					$s_class = "row_odd";

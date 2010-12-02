@@ -354,15 +354,15 @@ class Tracking {
 						AND orig_lp_id = 0
 						AND exe_cours_id = '$course_code'
 						AND orig_lp_item_id = 0 $condition_session
-						ORDER BY exe_date DESC";
+					    ORDER BY exe_date DESC";                     
 				$res = Database::query($sql);
 				$row = Database::fetch_array($res);
 				$quiz_avg_score = 0;
 				if (!empty($row['avg_score'])) {
-					$quiz_avg_score = round($row['avg_score'],1);
+					$quiz_avg_score = round($row['avg_score'],2);
 				}
 				if(!empty($row['num_attempts'])) {
-					$quiz_avg_score = $quiz_avg_score / $row['num_attempts'];
+					$quiz_avg_score = round($quiz_avg_score / $row['num_attempts'], 2);
 		        }
 		        return $quiz_avg_score;
 			}
@@ -380,12 +380,13 @@ class Tracking {
 	 * @param	int		Learning path item id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
 	 * @return  int 	count of attempts
 	 */
-	public function count_student_exercise_attempts($student_id, $course_code, $exercise_id, $lp_id = 0, $lp_item_id = 0) {
+	public function count_student_exercise_attempts($student_id, $course_code, $exercise_id, $lp_id = 0, $lp_item_id = 0, $session_id = 0) {
 
 		$course_code = Database::escape_string($course_code);
 		$course_info = CourseManager :: get_course_information($course_code);
 		$student_id  = intval($student_id);
 		$exercise_id = intval($exercise_id);
+        $session_id = intval($session_id);
 		$count_attempts = 0;
 
 		if (!empty($lp_id)) $lp_id = intval($lp_id);
@@ -399,7 +400,8 @@ class Tracking {
 					AND ex.exe_exo_id = $exercise_id
 					AND orig_lp_id = $lp_id
 					AND orig_lp_item_id = $lp_item_id
-					AND exe_user_id= $student_id ";
+					AND exe_user_id= $student_id 
+                    AND session_id = $session_id ";
 			$rs = Database::query($sql);
 			$row = Database::fetch_row($rs);
 			$count_attempts = $row[0];
@@ -429,30 +431,25 @@ class Tracking {
 
 			// Compose a filter based on optional learning paths list given
 			$condition_lp = "";
-			if(count($lp_ids) > 0) {
-				$condition_lp =" WHERE id IN(".implode(',',$lp_ids).") ";
-			}
-
-			// Compose a filter based on optional session id
-			$condition_session = "";
-			
-			$session_id = intval($session_id);
-			if (count($lp_ids) > 0) {
-				$condition_session = " AND session_id = $session_id ";
-			} else {
-				$condition_session = " WHERE session_id = $session_id ";
-			}
-		
             
-            //$sql = "SELECT id FROM $tbl_course_lp lp $condition_lp $condition_session";
+            if (!empty($lp_ids)) {
+    			if (count($lp_ids) > 0) {
+    				$condition_lp =" WHERE id IN(".implode(',',$lp_ids).") ";                    
+    			}
+            }			
+			$session_id = intval($session_id);
             $sql = "SELECT id FROM $tbl_course_lp lp $condition_lp";            
 			$res_count_lp = Database::query($sql);
 			// count the number of learning paths
-			$count_lp = Database::num_rows($res_count_lp);
 			$lp_id = array();
-			while ($row_lp = Database::fetch_array($res_count_lp)) {
-				$lp_id[] = $row_lp[0];
-			}            
+			while ($row_lp = Database::fetch_array($res_count_lp,'ASSOC')) {                
+                //$visibility = api_get_item_visibility($a_course, TOOL_LEARNPATH, $row_lp['id'], $session_id);                
+              //  if ($visibility == 1) {
+				    $lp_id[] = $row_lp['id'];
+                //}
+			}      
+            $count_lp = count($lp_id);            
+            
 			$avg_progress = 0;
 			//if there is at least one learning path and one student
 			if ($count_lp>0 && !empty($student_id)) {
@@ -466,23 +463,20 @@ class Tracking {
                 }
                 // Get last view for each student (in case of multi-attempt)
                 // Also filter on LPs of this session
-                $sql_maxes = "SELECT MAX(view_count), progress ".
-                        "FROM $tbl_course_lp_view lp_view ".
-                        "WHERE $condition_user session_id = $session_id AND ".
-                        "lp_view.lp_id IN (".implode(',',$lp_id).") ".
-                        "GROUP BY lp_id, user_id";
-                
+                $sql_maxes = "SELECT MAX(view_count), progress FROM $tbl_course_lp_view lp_view ".
+                             "WHERE $condition_user session_id = $session_id AND lp_view.lp_id IN (".implode(',',$lp_id).") ".
+                             "GROUP BY lp_id, user_id";                
                 $res_maxes = Database::query($sql_maxes);
-                $sum = $number_items = 0;
+                $sum =  0;
                 while ($row_maxes = Database::fetch_array($res_maxes)) {
                     $sum += $row_maxes[1];
-                    $number_items++;
-                }
-                if ($number_items == 0) {
-                    return 0; //not necessary to return something else if there is no view
-                }
+                }                
                 // average progress = total sum divided by the number of views
                 // summed up.
+                $number_items = count($lp_id);                
+                if ($number_items == 0) {
+                    return 0; //not necessary to return something else if there is no view
+                }                
                 if (!$return_array) {
 					$avg_progress = round($sum / $number_items, 1);
 					return $avg_progress;

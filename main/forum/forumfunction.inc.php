@@ -1573,6 +1573,14 @@ function get_thread_users_details($thread_id, $db_name = null) {
 	$t_course_user         = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
     $t_session_rel_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     
+    $is_western_name_order = api_is_western_name_order();
+    if ($is_western_name_order) {
+        $orderby = 'ORDER BY user.firstname, user.lastname ';
+    } else {
+        $orderby = 'ORDER BY user.lastname, user.firstname';
+    }
+    
+    
     if (api_get_session_id()) {
         $session_info = api_get_session_info(api_get_session_id());
         $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
@@ -1585,7 +1593,7 @@ function get_thread_users_details($thread_id, $db_name = null) {
                   AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
                   AND thread_id = '".Database::escape_string($thread_id)."'
                   AND id_session = '".api_get_session_id()."'                        
-                  AND course_code = '".api_get_course_id()."'";
+                  AND course_code = '".api_get_course_id()."' $orderby ";
                   
     } else {
     	$sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, thread_id
@@ -1595,7 +1603,7 @@ function get_thread_users_details($thread_id, $db_name = null) {
     			  AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
     			  AND thread_id = '".Database::escape_string($thread_id)."'
     			  AND course_user.status NOT IN('1')
-    			  AND course_code = '".api_get_course_id()."'";
+    			  AND course_code = '".api_get_course_id()."' $orderby";
     }    
 	$result = Database::query($sql);
 	return $result;
@@ -1618,22 +1626,31 @@ function get_thread_users_qualify($thread_id, $db_name = null) {
 	$t_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
     $t_session_rel_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     
+    $is_western_name_order = api_is_western_name_order();
+    if ($is_western_name_order) {
+        $orderby = 'ORDER BY user.firstname, user.lastname ';
+    } else {
+    	$orderby = 'ORDER BY user.lastname, user.firstname';
+    }
+    
     if (api_get_session_id()) {
         $session_info = api_get_session_info(api_get_session_id());
         $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
         //not showing coaches
-        $sql = "SELECT post.poster_id, user.lastname, user.firstname, post.thread_id,user.user_id,qualify.qualify
+        $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.user_id,qualify.qualify
                   FROM $t_posts post , $t_users user, $t_session_rel_user session_rel_user_rel_course, $t_qualify qualify
                   WHERE poster_id = user.user_id
                   AND post.poster_id = qualify.user_id
                   AND user.user_id = session_rel_user_rel_course.id_user
                   AND session_rel_user_rel_course.status<>'2' 
                   AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
-                  AND qualify.thread_id = '".Database::escape_string($thread_id)."'
+                  AND qualify.thread_id = '".Database::escape_string($thread_id)."
+                  AND thread_id = '".Database::escape_string($thread_id)."'
                   AND id_session = '".api_get_session_id()."'                        
-                  AND course_code = '".api_get_course_id()."'";                  
+                  AND course_code = '".api_get_course_id()."'
+                  $orderby ";                  
     } else {
-          $sql = "SELECT post.poster_id, user.lastname, user.firstname, post.thread_id,user.user_id,qualify.qualify
+          $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.user_id,qualify.qualify
         						FROM $t_posts post,
         						     $t_qualify qualify,
         						     $t_users user,
@@ -1644,9 +1661,10 @@ function get_thread_users_qualify($thread_id, $db_name = null) {
         						     AND user.user_id = course_user.user_id
         						     AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
         						     AND qualify.thread_id = '".Database::escape_string($thread_id)."'
+                                     AND post.thread_id = '".Database::escape_string($thread_id)."'
         						     AND course_user.status not in('1')
         						     AND course_code = '".api_get_course_id()."'
-        						GROUP BY post.poster_id ";
+        							 $orderby ";
     }
 	$result = Database::query($sql);
 	return $result;
@@ -1667,8 +1685,16 @@ function get_thread_users_not_qualify($thread_id, $db_name = null) {
 	$t_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY, (empty($db_name)?null:$db_name));
 	$t_users = Database :: get_main_table(TABLE_MAIN_USER);
 	$t_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-       $t_session_rel_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
+    $t_session_rel_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    
+    
+    $is_western_name_order = api_is_western_name_order();
+    if ($is_western_name_order) {
+        $orderby = 'ORDER BY user.firstname, user.lastname ';
+    } else {
+        $orderby = 'ORDER BY user.lastname, user.firstname';
+    }
+    
   	$sql1 = "select user_id FROM  $t_qualify WHERE thread_id = '".$thread_id."'";
 	$result1 = Database::query($sql1);
     $cad='';
@@ -1685,29 +1711,26 @@ function get_thread_users_not_qualify($thread_id, $db_name = null) {
         $session_info = api_get_session_info(api_get_session_id());
         $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
         //not showing coaches
-        $sql = "SELECT user.user_id, user.lastname, user.firstname, post.thread_id
+        $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, post.thread_id
                   FROM $t_posts post , $t_users user, $t_session_rel_user session_rel_user_rel_course
                   WHERE poster_id = user.user_id
                   AND user.user_id NOT IN (".$cad.")
                   AND user.user_id = session_rel_user_rel_course.id_user
                   AND session_rel_user_rel_course.status<>'2' 
                   AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
-                      AND post.thread_id = '".Database::escape_string($thread_id)."'
+                  AND post.thread_id = '".Database::escape_string($thread_id)."'
                   AND id_session = '".api_get_session_id()."'                        
-                  AND course_code = '".api_get_course_id()."'";
-    } else {
-        	
-        
-    
-	$sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, post.thread_id
-			  FROM $t_posts post, $t_users user,$t_course_user course_user
-			  WHERE post.poster_id = user.user_id
-			  AND user.user_id NOT IN (".$cad.")
-			  AND user.user_id = course_user.user_id
-			  AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-			  AND post.thread_id = '".Database::escape_string($thread_id)."'
-			  AND course_user.status not in('1')
-			  AND course_code = '".api_get_course_id()."'";
+                  AND course_code = '".api_get_course_id()."' $orderby ";
+    } else {    
+    	$sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, post.thread_id
+    			  FROM $t_posts post, $t_users user,$t_course_user course_user
+    			  WHERE post.poster_id = user.user_id
+    			  AND user.user_id NOT IN (".$cad.")
+    			  AND user.user_id = course_user.user_id
+    			  AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+    			  AND post.thread_id = '".Database::escape_string($thread_id)."'
+    			  AND course_user.status not in('1')
+    			  AND course_code = '".api_get_course_id()."' $orderby";
     }
 	$result = Database::query($sql);
 	return $result;
@@ -2005,7 +2028,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 		// thread qualify
 		$form->addElement('static','Group', '<br /><strong>'.get_lang('AlterQualifyThread').'</strong>');
 		$form->applyFilter('numeric_calification', 'html_filter');
-		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 		$form -> addElement('html','<div id="options_field" style="display:none">');
 		$form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'),'Style="width:40px"');
 		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));

@@ -418,7 +418,8 @@ function create_event_exercice($exo_id) {
 	$row_exe_id=Database::fetch_row($res_exe_id);
 	$exercise_id = intval($row_exe_id[0]);
 
-	// get expired_date	
+	// get expired_date
+	require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 	$current_expired_time_key = get_time_control_key($exercise_id);
 
     if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"

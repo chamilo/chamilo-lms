@@ -10,7 +10,7 @@
  */
 
 // The initialization class for the online editor is needed here.
-require_once '../inc/lib/fckeditor/fckeditor.php';
+require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
 
 /**
  * @param int question id

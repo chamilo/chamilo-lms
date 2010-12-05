@@ -427,7 +427,7 @@ class Statistics {
         $sql = "SELECT COUNT(*) AS n FROM $user_table as u ".$url_condition;
         $res = Database::query($sql);
         $count1 = Database::fetch_object($res);
-        $sql = "SELECT COUNT(*) AS n FROM $user_table as u $table "
+        $sql = "SELECT COUNT(*) AS n FROM $user_table as u $table ".
                "WHERE LENGTH(picture_uri) > 0 $url_condition2";
         $res = Database::query($sql);
         $count2 = Database::fetch_object($res);

@@ -25,7 +25,7 @@ ALTER TABLE settings_options CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_
 ALTER TABLE user MODIFY COLUMN username VARCHAR(40) NOT NULL;
 
 UPDATE settings_current SET variable='chamilo_database_version' WHERE variable='dokeos_database_version';
-UPDATE settings_current SET selected_value = '1.8.8.12915' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.8.8.13050' WHERE variable = 'chamilo_database_version';
 
 ALTER TABLE sys_announcement ADD COLUMN access_url_id INT  NOT NULL default 1;
 ALTER TABLE sys_calendar ADD COLUMN access_url_id INT  NOT NULL default 1;
@@ -70,6 +70,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_im
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_support_svg',NULL,'radio','Editor','true','EnabledSVGTitle','EnabledSVGComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_svg', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_svg', 'false', 'No');
+ALTER TABLE personal_agenda ADD PRIMARY KEY (id);
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

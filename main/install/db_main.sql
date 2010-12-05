@@ -777,7 +777,7 @@ VALUES
 ('enabled_googlemaps',NULL,'radio','Editor','true','EnabledGooglemapsTitle','EnabledGooglemapsComment',NULL,NULL, 0),
 ('enabled_imgmap',NULL,'radio','Editor','true','EnabledImageMapsTitle','EnabledImageMapsComment',NULL,NULL, 0),
 ('enabled_support_svg',NULL,'radio','Tools','true','EnabledSVGTitle','EnabledSVGComment',NULL,NULL, 0),
-('chamilo_database_version', NULL, 'textfield', NULL, '1.8.8.12885', 'DokeosDatabaseVersion', '', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield', NULL, '1.8.8.13050', 'DokeosDatabaseVersion', '', NULL, NULL, 0);
 
 
 UNLOCK TABLES;

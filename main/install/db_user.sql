@@ -17,7 +17,7 @@ CREATE TABLE personal_agenda (
   enddate datetime default NULL,
   course varchar(255),
   parent_event_id int null,
-  UNIQUE KEY id (id)
+  PRIMARY KEY id (id)
 );
 CREATE TABLE personal_agenda_repeat (
   cal_id INT DEFAULT 0 NOT NULL,

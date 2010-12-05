@@ -271,7 +271,7 @@ if($is_allowedToEdit) {
 	/*if(!empty($fromExercise)) {
 		echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
 	} else {
-		echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes">'.Display::return_icon('new_test.gif'),get_lang('NewQu').'</a>';
+		echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes">'.Display::return_icon('more.png'),get_lang('NewQu').'</a>';
 	}*/
 	?>
     </form>

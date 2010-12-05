@@ -514,12 +514,12 @@ class Statistics {
 			$sql = "SELECT * FROM $table, $access_url_rel_course_table WHERE course_code = access_cours_code AND access_url_id='".$current_url_id."'
 				GROUP BY access_cours_code
 				HAVING access_cours_code <> ''
-				AND DATEDIFF( NOW() , access_date ) <= ". $date_diff;
+				AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
 		} else {
 			$sql = "SELECT * FROM $table
 				GROUP BY access_cours_code
 				HAVING access_cours_code <> ''
-				AND DATEDIFF( NOW() , access_date ) <= ". $date_diff;
+				AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
 		}
 		$res = Database::query($sql);
 		$number_of_courses = Database::num_rows($res);
@@ -533,7 +533,8 @@ class Statistics {
 			while ($obj = Database::fetch_object($res)) {
 				$course = array ();
 				$course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
-				$course[] = api_convert_and_format_date($obj->access_date);
+                                //Allow sort by date hiding the numerical date
+				$course[] = '<span style="display:none;">'.$obj->access_date.'</span>'.api_convert_and_format_date($obj->access_date).'';
 				$courses[] = $course;
 			}
 			$parameters['action'] = 'courselastvisit';

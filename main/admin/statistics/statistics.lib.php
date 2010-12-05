@@ -128,23 +128,23 @@ class Statistics {
                        $direction = 'DESC';
         }
         if ($_configuration['multiple_access_urls']) {
-            $sql = "SELECT
-                 default_event_type  as col0,
-                default_value_type    as col1,
-                default_value        as col2,
-                user.username         as col3,
-                default_date         as col4
-            FROM $track_e_default as track_default, $table_user as user, $access_url_rel_user_table as url
-            WHERE track_default.default_user_id = user.user_id AND url.user_id=user.user_id AND access_url_id='".$current_url_id."'";
+            $sql = "SELECT ".
+                "default_event_type  as col0, ".
+                "default_value_type    as col1, ".
+                "default_value        as col2, ".
+                "user.username         as col3, ".
+                "default_date         as col4 ".
+                "FROM $track_e_default as track_default, $table_user as user, $access_url_rel_user_table as url ".
+                "WHERE track_default.default_user_id = user.user_id AND url.user_id=user.user_id AND access_url_id='".$current_url_id."'";
         } else {
-            $sql = "SELECT
-                 default_event_type  as col0,
-                default_value_type    as col1,
-                default_value        as col2,
-                user.username         as col3,
-                default_date         as col4
-            FROM $track_e_default track_default, $table_user user
-            WHERE track_default.default_user_id = user.user_id ";
+            $sql = "SELECT ".
+                   "default_event_type  as col0, ".
+                   "default_value_type    as col1, ".
+                   "default_value        as col2, ".
+                   "user.username         as col3, ".
+                   "default_date         as col4 ".
+                   "FROM $track_e_default track_default, $table_user user ".
+                   "WHERE track_default.default_user_id = user.user_id ";
         }
 
         if (isset($_GET['keyword'])) {
@@ -370,15 +370,15 @@ class Statistics {
             $tool_names[$tool] = get_lang(ucfirst($tool), '');
         }
         if ($_configuration['multiple_access_urls']) {
-            $sql = "SELECT access_tool, count( access_id )
-                AS number_of_logins FROM $table, $access_url_rel_course_table
-                WHERE access_tool IN ('".implode("','",$tools)."') AND  course_code = access_cours_code AND access_url_id='".$current_url_id."'
-                GROUP BY access_tool ";
+            $sql = "SELECT access_tool, count( access_id ) ".
+                   "AS number_of_logins FROM $table, $access_url_rel_course_table ".
+                   "WHERE access_tool IN ('".implode("','",$tools)."') AND  course_code = access_cours_code AND access_url_id='".$current_url_id."' ".
+                   "GROUP BY access_tool ";
         } else {
-            $sql = "SELECT access_tool, count( access_id )
-                AS number_of_logins FROM $table
-                WHERE access_tool IN ('".implode("','",$tools)."')
-                GROUP BY access_tool ";
+            $sql = "SELECT access_tool, count( access_id ) ".
+                "AS number_of_logins FROM $table ".
+                "WHERE access_tool IN ('".implode("','",$tools)."') ".
+                "GROUP BY access_tool ";
         }
         $res = Database::query($sql);
         $result = array();
@@ -396,13 +396,13 @@ class Statistics {
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
         if ($_configuration['multiple_access_urls']) {
-            $sql = "SELECT course_language, count( c.code )
-            AS number_of_courses
-            FROM $table as c, $access_url_rel_course_table as u WHERE u.course_code=c.code AND access_url_id='".$current_url_id."' GROUP BY course_language";
+            $sql = "SELECT course_language, count( c.code ) ".
+                   "AS number_of_courses ".
+                   "FROM $table as c, $access_url_rel_course_table as u WHERE u.course_code=c.code AND access_url_id='".$current_url_id."' GROUP BY course_language";
         } else {
-            $sql = "SELECT course_language, count( code )
-            AS number_of_courses
-            FROM $table GROUP BY course_language ";
+            $sql = "SELECT course_language, count( code ) ".
+                   "AS number_of_courses ".
+                   "FROM $table GROUP BY course_language ";
         }
         $res = Database::query($sql);
         $result = array();
@@ -427,10 +427,8 @@ class Statistics {
         $sql = "SELECT COUNT(*) AS n FROM $user_table as u ".$url_condition;
         $res = Database::query($sql);
         $count1 = Database::fetch_object($res);
-        $sql = "SELECT COUNT(*) AS n FROM $user_table as u $table
-            WHERE LENGTH(picture_uri) > 0 $url_condition2";
-
-
+        $sql = "SELECT COUNT(*) AS n FROM $user_table as u $table "
+               "WHERE LENGTH(picture_uri) > 0 $url_condition2";
         $res = Database::query($sql);
         $count2 = Database::fetch_object($res);
         // #users without picture
@@ -511,15 +509,15 @@ class Statistics {
         $date_diff = $values['date_diff'];
         $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         if ($_configuration['multiple_access_urls']) {
-            $sql = "SELECT * FROM $table, $access_url_rel_course_table WHERE course_code = access_cours_code AND access_url_id='".$current_url_id."'
-                GROUP BY access_cours_code
-                HAVING access_cours_code <> ''
-                AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
+            $sql = "SELECT * FROM $table, $access_url_rel_course_table WHERE course_code = access_cours_code AND access_url_id='".$current_url_id."' ".
+                   "GROUP BY access_cours_code ".
+                   "HAVING access_cours_code <> '' ".
+                   "AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
         } else {
-            $sql = "SELECT * FROM $table
-                GROUP BY access_cours_code
-                HAVING access_cours_code <> ''
-                AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
+            $sql = "SELECT * FROM $table ".
+                   "GROUP BY access_cours_code ".
+                   "HAVING access_cours_code <> '' ".
+                   "AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
         }
         $res = Database::query($sql);
         $number_of_courses = Database::num_rows($res);
@@ -568,18 +566,18 @@ class Statistics {
                 break;
         }
         if ($_configuration['multiple_access_urls']) {
-            $sql = "SELECT lastname, firstname, username,
-                COUNT($field) AS count_message
-                FROM ".$access_url_rel_user_table." as url, ".$message_table." m
-                LEFT JOIN ".$user_table." u ON m.$field = u.user_id
-                WHERE  url.user_id = m.$field AND  access_url_id='".$current_url_id."'
-                GROUP BY m.$field";
+            $sql = "SELECT lastname, firstname, username, ".
+                "COUNT($field) AS count_message ".
+                "FROM ".$access_url_rel_user_table." as url, ".$message_table." m ".
+                "LEFT JOIN ".$user_table." u ON m.$field = u.user_id ".
+                "WHERE  url.user_id = m.$field AND  access_url_id='".$current_url_id."' ".
+                "GROUP BY m.$field";
         } else {
-            $sql = "SELECT lastname, firstname, username,
-                COUNT($field) AS count_message
-                FROM ".$message_table." m
-                LEFT JOIN ".$user_table." u ON m.$field = u.user_id
-                GROUP BY m.$field";
+            $sql = "SELECT lastname, firstname, username, ".
+                "COUNT($field) AS count_message ".
+                "FROM ".$message_table." m ".
+                "LEFT JOIN ".$user_table." u ON m.$field = u.user_id ".
+                "GROUP BY m.$field";
         }
         $res = Database::query($sql);
         $messages_sent = array();
@@ -603,19 +601,19 @@ class Statistics {
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
         if ($_configuration['multiple_access_urls']) {
-            $sql = "SELECT lastname, firstname, username,
-                COUNT(friend_user_id) AS count_friend
-                FROM ".$access_url_rel_user_table." as url, ".$user_friend_table." uf
-                LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id
-                WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND uf.user_id = url.user_id AND  access_url_id='".$current_url_id."'
-                GROUP BY uf.user_id";
+            $sql = "SELECT lastname, firstname, username, ".
+                "COUNT(friend_user_id) AS count_friend ".
+                "FROM ".$access_url_rel_user_table." as url, ".$user_friend_table." uf ".
+                "LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id ".
+                "WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND uf.user_id = url.user_id AND  access_url_id='".$current_url_id."' ".
+                "GROUP BY uf.user_id";
         } else {
-            $sql = "SELECT lastname, firstname, username,
-                COUNT(friend_user_id) AS count_friend
-                FROM ".$user_friend_table." uf
-                LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id
-                WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."'
-                GROUP BY uf.user_id";
+            $sql = "SELECT lastname, firstname, username, ".
+                "COUNT(friend_user_id) AS count_friend ".
+                "FROM ".$user_friend_table." uf ".
+                "LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id ".
+                "WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' ".
+                "GROUP BY uf.user_id";
         }
         $res = Database::query($sql);
         $list_friends = array();

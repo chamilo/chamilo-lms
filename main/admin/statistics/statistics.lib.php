@@ -533,7 +533,7 @@ class Statistics {
 			while ($obj = Database::fetch_object($res)) {
 				$course = array ();
 				$course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
-				$course[] = api_convert_and_format_date($obj->access_date, null, date_default_timezone_get());
+				$course[] = api_convert_and_format_date($obj->access_date);
 				$courses[] = $course;
 			}
 			$parameters['action'] = 'courselastvisit';

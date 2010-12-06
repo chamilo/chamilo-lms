@@ -6,19 +6,24 @@
 //Chamilo load libraries
 require_once '../../../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+
 //Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
+//
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$curdirpath='/images/gallery'; //path of library directory
+$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
+$groupdirpath = $group_properties['directory'];
+$group_disk_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$groupdirpath.'/';
+$group_web_path  = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$groupdirpath.'/';
 
-
-//get all files and folders
-$docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, 0, null, $is_allowed_to_edit, false);
-//get all filenames
-
+//get all group files and folders
+$docs_and_folders = DocumentManager::get_all_document_data($_course, $groupdirpath, $_SESSION['_gid'], null, $is_allowed_to_edit, false);
+	
+//get all group filenames
 $array_to_search = is_array($docs_and_folders) ? $docs_and_folders : array();
 
 if (count($array_to_search) > 0) {
@@ -26,8 +31,8 @@ if (count($array_to_search) > 0) {
 		$all_files[] = basename($array_to_search[$key]['path']);
 	}
 }
-
-//get all svg and png files
+	
+//get all svg and png group files
 $accepted_extensions = array('.svg', '.png');
 
 if (is_array($all_files) && count($all_files) > 0) {
@@ -40,9 +45,6 @@ if (is_array($all_files) && count($all_files) > 0) {
 	}
 }
 
-$disk_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/images/gallery/';
-$web_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/images/gallery/';
-
 ?>
 <!doctype html>
 <script src="../../jquery.js"></script><!--Chamilo TODO: compress this file and changing loads -->
@@ -50,19 +52,25 @@ $web_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/images/gal
 <body>
 
 <?php
-echo '<h1>'.get_lang('Course').': '.$_course['name'].'</h1>';
-echo '<h2>'.get_lang('SelectSVGEditImage').'</h2>';
-echo '<ul>';
-foreach($png_svg_files as $filename) {
-	$image=$disk_path.$filename;
-	$new_sizes = api_resize_image($image, 60, 60);
-	if (strpos($filename, "svg")){
-		echo '<li style="display:inline; padding:8px;"><a href="'.$web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.api_get_path(WEB_IMG_PATH).'svg_medium.png" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
-	}else{
-		echo '<li style="display:inline; padding:8px;"><a href="'.$web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+
+if(($group_properties['doc_state'] == 2 && ($is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid']))) || $group_properties['doc_state'] == 1){
+	echo '<h1>'.get_lang('GroupSingle').': '.$group_properties['name'].'</h1>';
+	echo '<h2>'.get_lang('SelectSVGEditImage').'</h2>';
+	echo '<ul>';
+	foreach($png_svg_files as $filename) {
+		$image=$group_disk_path.$filename;
+		$new_sizes = api_resize_image($image, 60, 60);			
+		if (strpos($filename, "svg")){
+			echo '<li style="display:inline; padding:8px;"><a href="'.$group_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.api_get_path(WEB_IMG_PATH).'svg_medium.png" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+		}else{
+			echo '<li style="display:inline; padding:8px;"><a href="'.$group_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$group_web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+		}		
 	}
+	echo '</ul>';
 }
-echo '</ul>';
+else{
+	echo '<h1>'.get_lang('OnlyAccessFromYourGroup').'</h1>';
+}
 ?>
 </body>
 

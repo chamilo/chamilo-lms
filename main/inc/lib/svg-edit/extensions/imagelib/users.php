@@ -1,37 +1,27 @@
 <?php
 /* Integrate svg-edit libraries with Chamilo default documents
- * @author Juan Carlos Raña Trabado
+ * @author Juan Carlos RaÃ±a Trabado
  * @since 25/september/2010
 */
+$language_file = array('userInfo');
 //Chamilo load libraries
 require_once '../../../../../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+
 //Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
+//
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
-$curdirpath='/images/gallery'; //path of library directory
-
-
+$user_disk_path = api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
+$user_web_path = api_get_path(WEB_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
 //get all files and folders
-$docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, 0, null, $is_allowed_to_edit, false);
-//get all filenames
-
-$array_to_search = is_array($docs_and_folders) ? $docs_and_folders : array();
-
-if (count($array_to_search) > 0) {
-	while (list($key) = each($array_to_search)) {
-		$all_files[] = basename($array_to_search[$key]['path']);
-	}
-}
+$scan_files = scandir($user_disk_path);
 
 //get all svg and png files
 $accepted_extensions = array('.svg', '.png');
 
-if (is_array($all_files) && count($all_files) > 0) {
-	foreach ($all_files as & $file) {
+if (is_array($scan_files) && count($scan_files) > 0) {
+	foreach ($scan_files as & $file) {
 		$slideshow_extension = strrchr($file, '.');
 		$slideshow_extension = strtolower($slideshow_extension);
 		if (in_array($slideshow_extension, $accepted_extensions)) {
@@ -40,9 +30,6 @@ if (is_array($all_files) && count($all_files) > 0) {
 	}
 }
 
-$disk_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/images/gallery/';
-$web_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/images/gallery/';
-
 ?>
 <!doctype html>
 <script src="../../jquery.js"></script><!--Chamilo TODO: compress this file and changing loads -->
@@ -50,16 +37,17 @@ $web_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/images/gal
 <body>
 
 <?php
-echo '<h1>'.get_lang('Course').': '.$_course['name'].'</h1>';
+
+echo '<h1>'.get_lang('SocialNetwork').': '.get_lang('MyFiles').'</h1>';
 echo '<h2>'.get_lang('SelectSVGEditImage').'</h2>';
 echo '<ul>';
 foreach($png_svg_files as $filename) {
-	$image=$disk_path.$filename;
+	$image=$user_disk_path.$filename;
 	$new_sizes = api_resize_image($image, 60, 60);
 	if (strpos($filename, "svg")){
-		echo '<li style="display:inline; padding:8px;"><a href="'.$web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.api_get_path(WEB_IMG_PATH).'svg_medium.png" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+		echo '<li style="display:inline; padding:8px;"><a href="'.$user_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.api_get_path(WEB_IMG_PATH).'svg_medium.png" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
 	}else{
-		echo '<li style="display:inline; padding:8px;"><a href="'.$web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
+		echo '<li style="display:inline; padding:8px;"><a href="'.$user_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$user_web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
 	}
 }
 echo '</ul>';

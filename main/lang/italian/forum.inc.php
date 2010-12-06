@@ -143,4 +143,5 @@ $ForumcategoryLocked = "Categoria di forum bloccata";
 $PreviewImage = "Anteprima immagine";
 $UpdateImage = "Aggiorna immagine";
 $EnableTimeLimits = "Abilita tempo limite";
+$RemoveSearchResults = "Pulisci il modulo di ricerca";
 ?>

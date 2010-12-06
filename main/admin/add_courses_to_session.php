@@ -102,10 +102,10 @@ $noPHP_SELF=true;
 
 if ($_POST['formSent']) {
 
-	$formSent=$_POST['formSent'];
-	$firstLetterCourse=$_POST['firstLetterCourse'];
-	$firstLetterSession=$_POST['firstLetterSession'];
-	$CourseList=$_POST['SessionCoursesList'];
+	$formSent              = $_POST['formSent'];
+	$firstLetterCourse     = $_POST['firstLetterCourse'];
+	$firstLetterSession    = $_POST['firstLetterSession'];
+	$CourseList            = $_POST['SessionCoursesList'];
 	if (!is_array($CourseList)) {
 		$CourseList=array();
 	}
@@ -117,12 +117,12 @@ if ($_POST['formSent']) {
 
 	$rs = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
 	$existingCourses = Database::store_result($rs);
-
-	$sql="SELECT id_user
-		FROM $tbl_session_rel_user
-		WHERE id_session = $id_session AND relation_type=".COURSE_RELATION_TYPE_RRHH." ";
-	$result=Database::query($sql);
-	$UserList=Database::store_result($result);
+    
+    // Updating only the RRHH users?? why?
+	//$sql="SELECT id_user FROM $tbl_session_rel_user WHERE id_session = $id_session AND relation_type=".COURSE_RELATION_TYPE_RRHH." ";
+    $sql        = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session = $id_session ";
+	$result     = Database::query($sql);
+	$UserList   = Database::store_result($result);
 
 
 	foreach($CourseList as $enreg_course) {

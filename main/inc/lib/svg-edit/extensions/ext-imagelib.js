@@ -14,6 +14,18 @@ svgEditor.addExtension("imagelib", function() {
 			url: 'extensions/imagelib/index.php',
 			//description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
 			description: 'Course gallery'
+		},
+		{
+			name: 'Local library',
+			url: 'extensions/imagelib/groups.php',
+			//description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
+			description: 'Group gallery'
+		},
+		{
+			name: 'Local library',
+			url: 'extensions/imagelib/users.php',
+			//description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
+			description: 'Personal gallery'
 		}, 
 		{
 			name: 'IAN Symbol Libraries',

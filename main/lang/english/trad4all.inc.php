@@ -970,4 +970,7 @@ $IAcceptTermsAndConditions = "I have read and I accept the Terms and Conditions"
 $YouHaveToAcceptTermsAndConditions = "You have to accept our Terms and Conditions to proceed.";
 $BrowserDontSupportsSVG = "Your browser does not support SVG files. To use the drawing tool you must have an advanced browser like: Firefox or Chrome";
 $FillWithExemplaryContent = "Fill with exemplary content";
+$ToolVideoconference = "Videoconference";
+$SelectSVGEditImage = "Select a picture";
+$OnlyAccessFromYourGroup = "Only accessible from your group";
 ?>

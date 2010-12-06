@@ -608,7 +608,7 @@ $ErrorMessage = "Mensaje de error";
 $Glossary = "Glosario";
 $Coach = "Tutor";
 $Condition = "Condición";
-$CourseSettings = "Configuración de la lección";
+$CourseSettings = "Configuración del curso";
 $EmailNotifications = "Notificaciones por e-mail";
 $UserRights = "Derechos de usuario";
 $Theming = "Tema";
@@ -971,4 +971,7 @@ $IAcceptTermsAndConditions = "He leido y acepto las condiciones del servicio";
 $YouHaveToAcceptTermsAndConditions = "Para continuar debe aceptar nuestros términos y condiciones";
 $BrowserDontSupportsSVG = "Su navegador no soporta archivos SVG. Para poder utilizar esta herramienta debe tener instalado un navegador avanzado del tipo: Firefox o Chrome";
 $FillWithExemplaryContent = "Rellenar con contenido de ejemplo";
+$ToolVideoconference = "Videoconferencia";
+$SelectSVGEditImage = "Selecciones una imagen (svg, png)";
+$OnlyAccessFromYourGroup = "Sólo accesible desde su grupo";
 ?>

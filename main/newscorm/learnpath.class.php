@@ -342,7 +342,7 @@ class learnpath {
      * @param int $parent
      * @param int $previous
      * @param string $type
-     * @param int $id
+     * @param int  resource ID (ref)
      * @param string $title
      * @param string $description
      * @return int
@@ -428,66 +428,65 @@ class learnpath {
 
         if ($prerequisites != 0) {
             $sql_ins = "
-                            INSERT INTO " . $tbl_lp_item . " (
-                                lp_id,
-                                item_type,
-                                ref,
-                                title,
-                                description,
-                                path,
-                                max_score,
-                                parent_item_id,
-                                previous_item_id,
-                                next_item_id,
-                                display_order,
-                                prerequisite,
-                                max_time_allowed
-
-                            ) VALUES (
-                                " . $this->get_id() . ",
-                                '" . $type . "',
-                                '',
-                                '" . $title . "',
-                                '" . $description . "',
-                                '" . $id . "',
-                                '" . $max_score . "',
-                                " . $parent . ",
-                                " . $previous . ",
-                                " . $next . ",
-                                " . ($display_order +1) . ",
-                                " . $prerequisites . ",
-                                " . $max_time_allowed . "
-                            )";
+                            INSERT INTO " . $tbl_lp_item . " ( ".
+                                "lp_id, ".
+                                "item_type, ".
+                                "ref, ".
+                                "title, ".
+                                "description, ".
+                                "path, ".
+                                "max_score, ".
+                                "parent_item_id, ".
+                                "previous_item_id, ".
+                                "next_item_id, ".
+                                "display_order, ".
+                                "prerequisite, ".
+                                "max_time_allowed ".
+                            ") VALUES ( ".
+                                $this->get_id() . ", ".
+                                "'" . $type . "', ".
+                                "'', ".
+                                "'" . $title . "', ".
+                                "'" . $description . "', ".
+                                "'" . $id . "', ".
+                                "'" . $max_score . "', ".
+                                $parent . ", ".
+                                $previous . ", ".
+                                $next . ", ".
+                                ($display_order +1) . ", ".
+                                $prerequisites . ", ".
+                                $max_time_allowed .
+                            ")";
         } else {
             // Insert new item.
             $sql_ins = "
-                            INSERT INTO " . $tbl_lp_item . " (
-                                lp_id,
-                                item_type,
-                                ref,
-                                title,
-                                description,
-                                path,
-                                max_score,
-                                parent_item_id,
-                                previous_item_id,
-                                next_item_id,
-                                display_order,
-                                max_time_allowed
-                            ) VALUES (
-                                " . $this->get_id() . ",
-                                '" . $type . "',
-                                '',
-                                '" . $title . "',
-                                '" . $description . "',
-                                '" . $id . "',
-                                '" . $max_score . "',
-                                " . $parent . ",
-                                " . $previous . ",
-                                " . $next . ",
-                                " . ($display_order +1) . ",
-                                " . $max_time_allowed . "
-                            )";
+                            INSERT INTO " . $tbl_lp_item . " ( ".
+                                "lp_id, ".
+                                "item_type, ".
+                                "ref, ".
+                                "title, ".
+                                "description, ".
+                                "path, ".
+                                "max_score, ".
+                                "parent_item_id, ".
+                                "previous_item_id, ".
+                                "next_item_id, ".
+                                "display_order, ".
+                                "max_time_allowed ".
+                            ") VALUES (".
+                                $this->get_id() . ",".
+                                "'" . $type . "',".
+                                "'',".
+                                "'" . $title . "',".
+                                "'" . $description . "',".
+                                "'" . $id . "',".
+                                "'" . $max_score . "',".
+                                $parent . ",".
+                                $previous . ",".
+                                $next . ",".
+                                ($display_order +1) . ",".
+                                $max_time_allowed .
+                            ")";
         }
 
         if ($this->debug > 2) {

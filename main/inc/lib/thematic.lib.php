@@ -926,7 +926,7 @@ class Thematic
 		$default_thematic_plan_icon[3]= 'kcmdf_big.gif';
 		$default_thematic_plan_icon[4]= 'misc.gif';
 		$default_thematic_plan_icon[5]= 'ktip.gif';
-		$default_thematic_plan_icon[6]= 'new_test.gif';
+		$default_thematic_plan_icon[6]= 'more.png';
 		return $default_thematic_plan_icon;
 	}
 

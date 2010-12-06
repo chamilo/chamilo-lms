@@ -42,7 +42,7 @@ echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']
 echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('scorm.gif',get_lang('ReturnToLearningPaths')).' '.get_lang('ReturnToLearningPaths').'</a>';
 echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('audio.gif', get_lang('UpdateAllAudioFragments')).' '.get_lang('UpdateAllAudioFragments').'</a>';
 echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=chapter&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('NewChapter').'"><img alt="'.get_lang('NewChapter').'" src="../img/lp_dokeos_chapter_add.gif" title="'.get_lang('NewChapter').'" />'.get_lang('NewChapter').'</a>';
-echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('NewStep').'"><img alt="'.get_lang('NewStep').'" src="../img/new_test.gif" title="'.get_lang('NewStep').'" />'.get_lang('NewStep').'</a>';
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('NewStep').'"><img alt="'.get_lang('NewStep').'" src="../img/more.png" title="'.get_lang('NewStep').'" />'.get_lang('NewStep').'</a>';
 
 echo '</div>';
 

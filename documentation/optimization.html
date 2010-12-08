@@ -81,6 +81,8 @@ if(!empty($_course['id'])) {
 }
 </pre>
 Note that, as xCache is a shared caching system, it is very important to prefix your variables with a domain name or some kind of identifier, otherwise it would end up in disaster if you use a shared server for several portals.<br />
+<br />
+An optional additional caching mechanism you may use is the realpath_cache_size and realpath_cache_ttl php.ini parameters. See <a href="http://php.net/manual/en/ini.core.php">the PHP documentation</a> for more details.
 <hr />
 <h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
 Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log

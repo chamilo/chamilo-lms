@@ -36,6 +36,7 @@
   <li><a href="#3.Indexes-caching">Indexes caching</a></li>
   <li><a href="#4.Sessions-directories">Sessions directories</a></li>
   <li><a href="#5.Users-upload-directories">Users upload directories</a></li>
+  <li><a href="#6.Zlib-compression">Zlib compressed output</a></li>
 </ol>
 
 <h2><a name="1.Using-XCache"></a>1. Using xCache</h2>
@@ -103,4 +104,52 @@ Don't have time or resources to optimize your Chamilo installation yourself? Hir
 	<a href="http://jigsaw.w3.org/css-validator/">
 		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
 	</a>
+<hr />
+<h2><a name="#6.Zlib-compression"></a>Zlib compressed output</h2>
+Although this will not make your server faster, compressing the pages you are sending to the users will definitely make them feel like your website's responses are a lot faster, and thus increase their well-being when using Chamilo.<br /><br />
+Zlib output compression has to be set at two levels: PHP configuration for PHP pages and Apache for images and CSS.<br /><br />
+To update the PHP configuration (either in php.ini or in your VirtualHost), use the <a href="http://php.net/manual/en/zlib.configuration.php">zlib.output_compression</a>. If you set this inside your Apache's VirtualHost, you should use the following syntax.
+<pre>
+php_value zlib.output_compression 1
+</pre>
+<br />
+Configuring your Apache server to use output compression is a bit trickier. You have to use <a href="http://php.net/manual/en/zlib.configuration.php">the mod_deflate module</a> to do it. Your configuration should look like something like this (please read the corresponding documentation before implementing in production).<br />
+Easy mode:
+<pre>
+AddOutputFilterByType DEFLATE text/html text/plain text/xml
+</pre> or, for every content type (dangerous) you can put the following inside a location or directory block:<pre>SetOutputFilter DEFLATE</pre>
+<br />
+Advanced mode:
+<pre>
+<Location />
+# Insert filter
+SetOutputFilter DEFLATE
+
+# Netscape 4.x has some problems...
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+
+# Netscape 4.06-4.08 have some more problems
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+
+# MSIE masquerades as Netscape, but it is fine
+# BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+# NOTE: Due to a bug in mod_setenvif up to Apache 2.0.48
+# the above regex won't work. You can use the following
+# workaround to get the desired effect:
+BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+
+# Don't compress images
+SetEnvIfNoCase Request_URI \
+\.(?:gif|jpe?g|png)$ no-gzip dont-vary
+
+# Make sure proxies don't deliver the wrong content
+Header append Vary User-Agent env=!dont-vary
+</Location> 
+</pre>
+<hr />
+<h2>Authors</h2>
+<ul>
+<li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:ywarnier@beeznest.net">ywarnier@beeznest.net</a></li>
+</ul>
 </body></html>

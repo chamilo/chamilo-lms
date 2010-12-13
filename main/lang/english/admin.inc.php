@@ -1301,4 +1301,12 @@ $EnabledGooglemapsTitle = "Activate Google maps";
 $EnabledGooglemapsComment = "Activate the button to insert Google maps. Activation is not fully realized if not previously edited the file main/inc/lib/fckeditor/myconfig.php and added a Google maps API key.";
 $EnabledImageMapsTitle = "Activate Image maps";
 $EnabledImageMapsComment = "Activate the button to insert Image maps. This allows you to associate URLs to areas of an image, creating hotspots.";
+$CourseTool = "Course tool";
+$BigBlueButtonEnableTitle = "BigBlueButton videoconference tool";
+$BigBlueButtonEnableComment = "Choose whether you want to enable the BigBlueButton videoconference tool. Once enabled, it will show as an additional course tool in all courses' homepage, and teachers will be able to launch a conference at any time. Students will not be able to launch a conference, only join one. If you don't have a BigBlueButton server, please <a href=\"http://bigbluebutton.org/\" target=\"_blank\">set one up</a> or ask the <a href=\"http://www.chamilo.org/en/providers\" target=\"_blank\">Chamilo official providers</a> for a quote.
+BigBlueButton is a free (as in freedom *and* beer), but its installation requires a set of technical skills that might not be immediately available to all. You can install it on your own or seek professional help to assist you or do it for you. This help, however, will generate a certain cost. In the pure logic of the free software, we offer you the tools to make your work easier and recommend professionals (the Chamilo Official Providers) that will be able to help you if this were too difficult.";
+$BigBlueButtonHostTitle = "BigBlueButton server host";
+$BigBlueButtonHostComment = "This is the name of the server where your BigBlueButton server is running. Might be <i>localhost</i>, an IP address (e.g. 192.168.13.54) or a domain name (e.g. my.video.com).";
+$BigBlueButtonSecuritySaltTitle = "Security key of the BigBlueButton server";
+$BigBlueButtonSecuritySaltComment = "This is the security key of your BigBlueButton server, which will allow your server to authentify the Chamilo installation. Refer to the BigBlueButton documentation to locate it.";
 ?>

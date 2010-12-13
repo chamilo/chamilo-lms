@@ -119,7 +119,7 @@ ul#navigation .help a {
 	margin-left:1px;
 	opacity:0.6;
 	width:65px;
-        padding-bottom: 8px;
+    padding: 6px 0 8px 6px;
 }
 
 
@@ -135,7 +135,7 @@ ul#navigation .report a {
 	margin-left:1px;
 	opacity:0.6;
 	width:65px;
-        padding-bottom: 8px;
+    padding: 6px 0 8px 6px;
 }
 
 
@@ -167,10 +167,10 @@ ul#navigation .user-online a {
 	margin-left:1px;
 	opacity:0.6;
 	width:65px;
-        padding-bottom: 8px;
+    padding: 6px 0 8px 6px;
 }
 
-/* Otros colores para otras opciones basado en tonalidades tierra */
+/* Other colors for other tabs in the earth tones */
 	ul#navigation .user-connect a {
 	-moz-border-radius:8px 0 0 8px;
 	-moz-box-shadow:0 2px 2px #000000;
@@ -183,7 +183,7 @@ ul#navigation .user-online a {
 	margin-left:1px;
 	opacity:0.6;
 	width:65px;
-        padding-bottom: 8px;
+    padding: 6px 0 8px 6px;
 }
 
 ul#navigation .student-connect a {
@@ -198,7 +198,7 @@ ul#navigation .student-connect a {
 	margin-left:1px;
 	opacity:0.6;
 	width:65px;
-        padding-bottom: 8px;
+    padding: 6px 0 8px 6px;
 }
 
 /* for content section in main index.php file */

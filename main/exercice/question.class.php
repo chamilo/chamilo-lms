@@ -1037,26 +1037,35 @@ abstract class Question
 
 		// hidden values
 		$form->addElement('hidden','myid',$_REQUEST['myid']);
+        
 
-		switch($answerType) {
-			case 1:	$this->question = get_lang('langDefaultUniqueQuestion'); break;
-			case 2:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
-			case 3:	$this->question = get_lang('langDefaultFillBlankQuestion'); break;
-			case 4:	$this->question = get_lang('langDefaultMathingQuestion'); break;
-			case 5:	$this->question = get_lang('langDefaultOpenQuestion');	break;
-			case 9:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
-		}
+        if (!isset($_GET['fromExercise'])) {            
+    		switch($answerType) {
+    			case 1:	$this->question = get_lang('langDefaultUniqueQuestion'); break;
+    			case 2:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
+    			case 3:	$this->question = get_lang('langDefaultFillBlankQuestion'); break;
+    			case 4:	$this->question = get_lang('langDefaultMathingQuestion'); break;
+    			case 5:	$this->question = get_lang('langDefaultOpenQuestion');	break;
+    			case 9:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
+    		}
+        }
 		$form->addElement('html','</div>');
 		// default values
 		$defaults = array();
-		$defaults['questionName'] = $this -> question;
-		$defaults['questionDescription'] = $this -> description;
-		$defaults['questionLevel'] = $this -> level;
+		$defaults['questionName']          = $this -> question;
+		$defaults['questionDescription']   = $this -> description;
+		$defaults['questionLevel']         = $this -> level;
+        
+        //Came from he question pool        
+        if (isset($_GET['fromExercise'])) {   
+            $form->setDefaults($defaults);   
+        }
+        
 		if (!empty($_REQUEST['myid'])) {
-			$form -> setDefaults($defaults);
+			$form->setDefaults($defaults);
 		} else {
 			if ($isContent == 1) {
-				$form -> setDefaults($defaults);
+				$form->setDefaults($defaults);
 			}
 		}
 	}

@@ -244,8 +244,7 @@ if($is_allowedToEdit) {
     	echo get_lang('AnswerType');
     	echo ' : <select name="answerType">';
 		//answer type
-		if (!isset($answerType)) $answerType = -1;
-		{
+		if (!isset($answerType)) $answerType = -1; {
 			for ($answer_type = -1; $answer_type <=9; $answer_type++) {
 				$selected ='';
 				if ($answer_type!=0) {
@@ -267,7 +266,7 @@ if($is_allowedToEdit) {
 
 	<button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Filter') ?></button>
 	<?php
-	echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
+	echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId='.$fromExercise.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
 	/*if(!empty($fromExercise)) {
 		echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
 	} else {
@@ -430,7 +429,8 @@ if($is_allowedToEdit) {
 	$i=1;
 
 	$session_id  = api_get_session_id();
-	while ($row = Database::fetch_array($result)) {
+	while ($row = Database::fetch_array($result,'ASSOC')) {
+        
 		
 		// if we come from the exercise administration to get a question,
         // don't show the questions already used by that exercise
@@ -448,7 +448,7 @@ if($is_allowedToEdit) {
             if (api_get_session_id() == 0 ){
             	echo '<td align="center"> <input type="checkbox" value="'.$row['id'].'" name="recup[]"/></td>';
             }
-            echo '  <td><a href="admin.php?',api_get_cidreq(),'&editQuestion=',$row['id'],'&fromExercise=',$fromExercise,'">',$row['question'],'</a></td>';
+            echo '  <td><a href="admin.php?',api_get_cidreq(),'&editQuestion=',$row['id'],'&fromExercise='.$fromExercise.'&answerType='.$row['type'].'">',$row['question'],'</a></td>';
             echo '  <td align="center" >';
 			if (empty($fromExercise)) {
                 echo '<a href="admin.php?'.api_get_cidreq().'&amp;editQuestion=',$row['id'],'"><img src="../img/edit.gif" border="0" alt="',get_lang('Modify'),'"></a>',

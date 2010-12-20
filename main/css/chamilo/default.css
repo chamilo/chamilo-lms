@@ -1533,21 +1533,25 @@ a.nobold:hover {
  *****************************************************/
 div.row {
 	clear: both;
-	padding-top: 5px;
+	padding-top: 10px;
 }
 div.row div.form_header {
 	white-space: nowrap;
 	padding: 2px;
+	margin : 0px 0px 10px 0px;
 	background-color: #E5EDF9;
-	border: 1px solid #bbb;
+	border: 1px solid #E5EDF9;
+	font-size:20px;
+	
 }
+
 div.row div.label {
 	float: left;
-	width: 18%;
+	width: 8%;
 	text-align: right;
 }
 div.row div.formw {
-	width: 80%;
+	width: 90%;
 	float:left;
 
 }
@@ -2889,7 +2893,7 @@ button.upload {
 	border-style: solid;
 	border-width : 1px 2px 2px 1px;
 	text-decoration : none;
-	padding : 4px;
+	/*padding : 4px; */ 
 	border-color : #69f #00f #00f #69f;
 }
 .fake_button_back:hover {

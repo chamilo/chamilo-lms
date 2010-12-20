@@ -227,10 +227,6 @@ class scorm extends learnpath {
      */
     private function detect_manifest_encoding(& $xml) {
 
-        if (api_is_valid_utf8($string)) {
-            return 'UTF-8';
-        }
-
         if (preg_match(_PCRE_XML_ENCODING, $xml, $matches)) {
             $declared_encoding = api_refine_encoding_id($matches[1]);
         } else {

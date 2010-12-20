@@ -227,6 +227,10 @@ class scorm extends learnpath {
      */
     private function detect_manifest_encoding(& $xml) {
 
+        if (api_is_valid_utf8($xml)) {
+            return 'UTF-8';
+        }
+
         if (preg_match(_PCRE_XML_ENCODING, $xml, $matches)) {
             $declared_encoding = api_refine_encoding_id($matches[1]);
         } else {
@@ -348,19 +352,19 @@ class scorm extends learnpath {
                 $title = Database::escape_string($item['title']);
                 $title = api_utf8_decode($title);
                 $max_score = Database::escape_string($item['max_score']);
-                
+
                 if ($max_score == 0 || is_null($max_score) || $max_score == '') {
                     //If max score is not set The use_max_score parameter is check in order to use 100 (chamilo style) or '' (strict scorm)
                     if ($use_max_score) {
                         $max_score = "'100'";
                     } else {
-                    	$max_score = "NULL";
+                        $max_score = "NULL";
                     }
                 } else {
                     //Otherwise save the max score
-                    $max_score = "'$max_score'";  	
+                    $max_score = "'$max_score'";
                 }
-                
+
                 $identifier = Database::escape_string($item['identifier']);
                 $prereq = Database::escape_string($item['prerequisites']);
                 $sql_item = "INSERT INTO $new_lp_item " .
@@ -376,7 +380,7 @@ class scorm extends learnpath {
                         "'$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."'," .
                         "'".$item['parameters']."'" .
                         ")";
-                        
+
                 $res_item = Database::query($sql_item);
                 if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.mysql_error(), 0); }
                 $item_id = Database::insert_id();

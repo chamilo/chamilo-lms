@@ -376,7 +376,7 @@ class scorm extends learnpath {
                         "'$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."'," .
                         "'".$item['parameters']."'" .
                         ")";
-                    error_log($sql_item);    
+                        
                 $res_item = Database::query($sql_item);
                 if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.mysql_error(), 0); }
                 $item_id = Database::insert_id();

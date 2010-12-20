@@ -5,15 +5,13 @@
 *	Statement (?) administration
 *	This script allows to manage the statements of questions.
 * 	It is included from the script admin.php
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Olivier Brouckaert
 * 	@version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
 */
 
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
@@ -25,9 +23,7 @@ if(!defined('ALLOWED_TO_INCLUDE')) {
 }
 
 
-/*********************
- * INIT QUESTION
- *********************/
+// INIT QUESTION
 
 if(isset($_GET['editQuestion'])) {
 	$objQuestion = Question::read ($_GET['editQuestion']);
@@ -49,34 +45,10 @@ if(isset($_GET['editQuestion'])) {
 }
 
 if(is_object($objQuestion)) {
-
-	/*********************
-	 * FORM STYLES
-	 *********************/
-	 // if you have a better way to improve the display, please inform me e.marguin@elixir-interactive.com
-	$styles = '
-	<style>
-	div.row div.label{
-		width: 10%;
-	}
-	div.row div.formw{
-		width: 85%;
-	}
-	</style>
-	';
-	echo $styles;
-
-
-	/*********************
-	 * INIT FORM
-	 *********************/
+	//INIT FORM    
 	$form = new FormValidator('question_admin_form','post',$action);
-
-
-	/*********************
-	 * FORM CREATION
-	 *********************/
-
+    //FORM CREATION
+    
 	if(isset($_GET['editQuestion'])) {
 		$class="save";
 		$text=get_lang('ModifyQuestion');
@@ -110,11 +82,8 @@ if(is_object($objQuestion)) {
 	//$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 	//$renderer = $form->defaultRenderer();
 	//$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','submitQuestion');
-
-
-	/**********************
-	 * FORM VALIDATION
-	 **********************/
+	
+	// FORM VALIDATION
 	if(isset($_POST['submitQuestion']) && $form->validate()) {
 
 		// question

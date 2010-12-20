@@ -907,12 +907,12 @@ abstract class Question
 	function duplicate() {
 		global $TBL_QUESTIONS, $picturePath;
 
-		$question=$this->question;
-		$description=$this->description;
-		$weighting=$this->weighting;
-		$position=$this->position;
-		$type=$this->type;
-		$level = intval($this->level);
+		$question     = $this->question;
+		$description  = $this->description;
+		$weighting    = $this->weighting;
+		$position     = $this->position;
+		$type         = $this->type;
+		$level        = intval($this->level);
 
 		$sql="INSERT INTO $TBL_QUESTIONS(question, description, ponderation, position, type, level ) VALUES('".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."' ,'".Database::escape_string($level)."')";
 		Database::query($sql);
@@ -950,8 +950,8 @@ abstract class Question
 	function createForm (&$form,$fck_config=0)
 	{
 		echo '	<style>
-					div.row div.label{ width: 10%; }
-					div.row div.formw{ width: 89%; }
+					div.row div.label{ width: 5%; }
+					div.row div.formw{ width: 92%; }
 					.media { display:none;}
 				</style>';
 

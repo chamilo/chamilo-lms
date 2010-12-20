@@ -152,15 +152,14 @@ class Matching extends Question {
 			$group[] = FormValidator :: createElement ('submit', 'lessMatches', get_lang('DelElem'),'class="minus"');
 			$group[] = FormValidator :: createElement ('submit', 'moreMatches', get_lang('AddElem'),'class="plus"');
 		} else {
+            $group[] = FormValidator :: createElement ('style_submit_button', 'moreMatches', get_lang('AddElem'),'class="plus"');
 			$group[] = FormValidator :: createElement ('style_submit_button', 'lessMatches', get_lang('DelElem'),'class="minus"');
-			$group[] = FormValidator :: createElement ('style_submit_button', 'moreMatches', get_lang('AddElem'),'class="plus"');
+			
 		}
 
 		$form -> addGroup($group);
 
-		////////////////////////
 		// DISPLAY OPTIONS ////
-		//////////////////////
 		$html='
 		<div class="row">
 			<div class="label">
@@ -209,8 +208,9 @@ class Matching extends Question {
 		} else {
             // setting the save button here and not in the question class.php
             $group[] = FormValidator :: createElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-            $group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'),'class="plus"');
-			$group[] = FormValidator :: createElement ('style_submit_button', 'lessOptions', get_lang('DelElem'),'class="minus"');
+            $group[] = FormValidator :: createElement ('style_submit_button', 'lessOptions', get_lang('DelElem'),'style="float:right;" class="minus"');
+            $group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'),'style="float:right;" class="plus"');
+			
 			
 			
 

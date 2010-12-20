@@ -3,7 +3,7 @@
 
 /**
  *	File containing the UNIQUE_ANSWER class.
- *	@package dokeos.exercise
+ *	@package chamilo.exercise
  * 	@author Eric Marguin
  */
 
@@ -91,7 +91,7 @@ class UniqueAnswer extends Question {
 							'.$feedback_title.'
 						<th width="20px">
 							'.get_lang('Weighting').'
-						</th>
+						</th>        
 					</tr>';
 
 		$form -> addElement ('html', $html);
@@ -101,8 +101,7 @@ class UniqueAnswer extends Question {
 		if(!empty($this -> id)) {
 			$answer = new Answer($this -> id);
 			$answer -> read();
-			if(count($answer->nbrAnswers)>0 && !$form->isSubmitted())
-			{
+			if(count($answer->nbrAnswers)>0 && !$form->isSubmitted()) {
 				$nb_answers = $answer->nbrAnswers;
 			}
 		}
@@ -113,8 +112,7 @@ class UniqueAnswer extends Question {
 		$select_question=array();
 		$select_question[0]=get_lang('SelectTargetQuestion');
 
-		require_once '../newscorm/learnpathList.class.php';
-
+		require_once '../newscorm/learnpathList.class.php';        
 		if (is_array($question_list)) {
 			foreach ($question_list as $key=>$questionid) {
 				//To avoid warning messages
@@ -126,9 +124,7 @@ class UniqueAnswer extends Question {
 			}
 		}
 		$select_question[-1]=get_lang('ExitTest');
-
-		//LP SELECT
-		require_once('../newscorm/learnpathList.class.php');
+		
 		//require_once('../newscorm/learnpath.class.php');
 		//require_once('../newscorm/learnpathItem.class.php');
 
@@ -141,35 +137,28 @@ class UniqueAnswer extends Question {
 			$select_lp_id[$id] = cut($details['lp_name'],20);
 		}
 
-		$temp_scenario=array();
-
+		$temp_scenario = array();
 			if ($nb_answers < 1) {
 				$nb_answers = 1;
 				Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
 			}
 
-			for($i = 1 ; $i <= $nb_answers ; ++$i)
-			{
-
-				$form -> addElement ('html', '<tr>');
-				if(is_object($answer))
-				{
-					if($answer -> correct[$i])
-					{
+			for($i = 1 ; $i <= $nb_answers ; ++$i) {
+				$form -> addElement ('html', '<tr>');                
+				if (is_object($answer)) {
+					if ($answer -> correct[$i]) {
 						$correct = $i;
 					}
-
-					$defaults['answer['.$i.']'] = $answer -> answer[$i];
-					$defaults['comment['.$i.']'] = $answer -> comment[$i];
+					$defaults['answer['.$i.']']    = $answer -> answer[$i];
+					$defaults['comment['.$i.']']   = $answer -> comment[$i];
 					$defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
 
 					$item_list=explode('@@',$answer -> destination[$i]);
-					//echo '<pre>';	print_r($item_list);
 
-					$try = $item_list[0];
-					$lp = $item_list[1];
-					$list_dest= $item_list[2];
-					$url=$item_list[3];
+					$try       = $item_list[0];
+					$lp        = $item_list[1];
+					$list_dest = $item_list[2];
+					$url       = $item_list[3];
 
 					if ($try==0)
 						$try_result=0;
@@ -181,10 +170,10 @@ class UniqueAnswer extends Question {
 					else
 						$url_result=$url;
 
-					$temp_scenario['url'.$i]=$url_result;
-					$temp_scenario['try'.$i]=$try_result;
-					$temp_scenario['lp'.$i]=$lp;
-					$temp_scenario['destination'.$i]=$list_dest;
+					$temp_scenario['url'.$i]        = $url_result;
+					$temp_scenario['try'.$i]        = $try_result;
+					$temp_scenario['lp'.$i]         = $lp;
+					$temp_scenario['destination'.$i]= $list_dest;
 
 
 					/*$pre_list_destination=explode(';',$list_dest);
@@ -197,10 +186,10 @@ class UniqueAnswer extends Question {
 					*/
 					//$defaults['destination'.$i] = $list_destination;
 				} else {
-					$defaults['answer[1]']  = get_lang('langDefaultUniqueAnswer1');
-					$defaults['weighting[1]'] = 10;
-					$defaults['answer[2]']  = get_lang('langDefaultUniqueAnswer2');
-					$defaults['weighting[2]'] = 0;
+					$defaults['answer[1]']     = get_lang('langDefaultUniqueAnswer1');
+					$defaults['weighting[1]']  = 10;
+					$defaults['answer[2]']     = get_lang('langDefaultUniqueAnswer2');
+					$defaults['weighting[2]']  = 0;
 
 					$temp_scenario['destination'.$i] = array('0');
 					$temp_scenario['lp'.$i] = array('0');
@@ -210,6 +199,7 @@ class UniqueAnswer extends Question {
 				$defaults['scenario']=$temp_scenario;
 				$renderer = & $form->defaultRenderer();
 				$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>','html');
 				$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
 				$answer_number->freeze();
 
@@ -220,7 +210,7 @@ class UniqueAnswer extends Question {
 				if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
 					// feedback
 					$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-				} elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+				} elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                    
 					// direct feedback
 					$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 					//Adding extra feedback fields
@@ -236,8 +226,11 @@ class UniqueAnswer extends Question {
 
 				//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
-				$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0"');
-				$form -> addElement ('html', '</tr>');
+				$form->addElement('text', 'weighting['.$i.']', null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0"');
+                   
+                    
+				$form->addElement ('html', '</tr>');
+                
 			}
 
 		$form -> addElement ('html', '</table>');
@@ -250,16 +243,15 @@ class UniqueAnswer extends Question {
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
                 $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
+                
 				$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
 				
 				
 			} else {
                 //setting the save button here and not in the question class.php
                 $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-				$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');				
-
-				
+                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'style="float:right"; class="minus"');
+                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'style="float:right"; class="plus"');				
 			}
 		}
 		$renderer->setElementTemplate('{element}','submitQuestion');

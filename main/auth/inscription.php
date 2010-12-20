@@ -81,7 +81,9 @@ if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
     $home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
     $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-    echo '<div style="border:1px solid #E1E1E1; padding:2px;">'.$open.'</div>';
+    if (!empty($open)) {
+        echo '<div style="border:1px solid #E1E1E1; padding:2px;">'.$open.'</div>';
+    }
 }
 
 // Forbidden to self-register

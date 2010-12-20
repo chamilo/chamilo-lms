@@ -94,7 +94,7 @@ $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('_add_learnpath'));
 Display::display_header(null, 'Path');
 
 echo '<div class="actions">';
-echo '<a href="lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('scorm.gif', get_lang('ReturnToLearningPaths')).' '.get_lang('ReturnToLearningPaths').'</a>';
+echo '<a href="lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('back.png', get_lang('ReturnToLearningPaths')).' '.get_lang('ReturnToLearningPaths').'</a>';
 echo '</div>';
 
 Display::display_normal_message(get_lang('AddLpIntro'), false);

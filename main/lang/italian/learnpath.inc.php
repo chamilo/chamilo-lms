@@ -249,4 +249,5 @@ $ModifyHotPotatoes = "Modifica l'elemento HotPotatoes";
 $SaveHotpotatoes = "Salva hotpotatoes";
 $ReturnToLPList = "Ritorna all'elenco";
 $LpPrerequisiteDescription = "Se un modulo didattico costituisce un prerequisito di un altro, quest'ultimo risulterà invisibile fino al completamento (100%) del primo";
+$ExerciseCantBeEditedAfterAddingToTheLP = "I Quesiti non possono essere modificati dopo esser stati aggiunti ad un modulo didattico";
 ?>

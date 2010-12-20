@@ -274,4 +274,12 @@ $DisplayCourseOverview = "Vue globale du cours";
 $DisplaySessionOverview = "Vue globale des sessions";
 $TotalNumberOfMessages = "Nombre total de messages";
 $TotalNumberOfAssignments = "Nombre total de travaux";
+$LastLogins = "Dernières connexions";
+$AllLogins = "Toutes les connexions";
+$LPExerciseResultsBySession = "Résultats exercices de parcours par session";
+$LPQuestionListResults = "Résultat des exercices de parcours, par question";
+$PleaseSelectACourse = "Veuillez sélectionner un cours";
+$StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts = "La moyenne des scores des étudiants est calculée sur base de tous les parcours et toutes les tentatives";
+$AverageScore = "Score moyen";
+$LastConnexionDate = "Date de dernière connexion";
 ?>

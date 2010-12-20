@@ -627,7 +627,7 @@ if ($show == 'test') {
 
 if (($is_allowedToEdit) and ($origin != 'learnpath')) {
 	if ($_GET['show'] != 'result') {
-		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_test.gif', get_lang('NewEx')) . get_lang('NewEx') . '</a>';
+		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('more.png', get_lang('NewEx')) . get_lang('NewEx') . '</a>';
 		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('question_add.gif', get_lang('AddQuestionToExercise')) . get_lang('AddQuestionToExercise') . '</a>';
 		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('hotpotatoes_s.png', get_lang('ImportHotPotatoesQuiz')) . get_lang('ImportHotPotatoesQuiz') . '</a>';
 		// link to import qti2 ...

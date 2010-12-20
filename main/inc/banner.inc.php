@@ -20,12 +20,12 @@ $session_name   = api_get_session_name($my_session_id);
 <?php 
 if (!empty($help)) { 
 ?>
-        <li class="help"><a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>"><img src="<?php echo api_get_path(WEB_CSS_PATH).$my_style;?>/images/help2.png" alt="<?php echo get_lang('Help');?>" title="<?php echo get_lang('Help');?>" /></a> </li>
+        <li class="help"><a href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/help.php?open=Home&height=400&width=600" class="thickbox" title="<?php echo get_lang('Help'); ?>"><img src="<?php echo api_get_path(WEB_IMG_PATH);?>help.large.png" alt="<?php echo get_lang('Help');?>" title="<?php echo get_lang('Help');?>" /></a> </li>
 <?php 
 }
 if (api_get_setting('show_link_bug_notification') == 'true') { 
 ?>
-    <li class="report"><a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank"><img src="<?php echo api_get_path(WEB_IMG_PATH) ?>splash.png" style="vertical-align: middle;" alt="<?php echo get_lang('ReportABug') ?>" title="<?php echo get_lang('ReportABug');?>"/></a></li>
+    <li class="report"><a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank"><img src="<?php echo api_get_path(WEB_IMG_PATH) ?>bug.large.png" style="vertical-align: middle;" alt="<?php echo get_lang('ReportABug') ?>" title="<?php echo get_lang('ReportABug');?>"/></a></li>
 <?php
 }
 /*

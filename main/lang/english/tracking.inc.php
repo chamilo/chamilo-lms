@@ -275,4 +275,10 @@ $TotalNumberOfMessages = "Total number of messages";
 $TotalNumberOfAssignments = "Total number of assignments";
 $LastLogins = "Last logins";
 $AllLogins = "All logins";
+$LPExerciseResultsBySession = "Results of learning paths exercises by session";
+$LPQuestionListResults = "Learning paths exercises results list";
+$PleaseSelectACourse = "Please select a course";
+$StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts = "Student score average is calculated bases on all learning paths and all attempts";
+$AverageScore = "Average score";
+$LastConnexionDate = "Last connexion date";
 ?>

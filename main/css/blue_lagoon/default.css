@@ -42,6 +42,141 @@ body {
 	padding: 0px 10px 10px 10px;
 	min-height: 320px;
 }
+
+/*
+-----------------------------------------------------------------------------
+Side-Menu Slider (JQuery) see banner.inc.php
+-----------------------------------------------------------------------------
+*/
+ul#navigation {
+    position: fixed;
+    margin: 0px;
+    padding: 0px;
+    top: 10px;
+    right: -10px;
+    list-style: none;
+    z-index:9999;
+}
+
+ul#navigation li {
+    width: 73px;
+}
+
+ul#navigation li a {
+    display: block;
+    margin-left: 1px;
+    width: 65px;
+    height: 60px;
+    background-color:#CFCFCF;
+    background-repeat:no-repeat;
+    background-position:center center;
+    border:1px solid #AFAFAF;
+    -moz-border-radius:10px 0px 0px 10px;
+    -webkit-border-bottom-right-radius: 10px;
+    -webkit-border-top-right-radius: 10x;
+    -khtml-border-bottom-right-radius: 10px;
+    -khtml-border-top-right-radius: 10px;
+    -moz-box-shadow: 0px 4px 3px #000;
+    opacity: 0.6;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60);
+    -webkit-box-shadow: 0px 4px 3px #000;
+}
+
+ul#navigation .help a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#879DAA;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+    padding: 6px 0 8px 6px;
+}
+
+
+ul#navigation .report a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#8fd400;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+    padding: 6px 0 8px 6px;
+}
+
+
+ul#navigation .student a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#b27651 ;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+        padding-bottom: 8px;
+}
+
+
+ul#navigation .user-online a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#ccbc67 ;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+    padding: 6px 0 8px 6px;
+}
+
+/* Other colors for other tabs in the earth tones */
+    ul#navigation .user-connect a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#fac97a ;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+    padding: 6px 0 8px 6px;
+}
+
+ul#navigation .student-connect a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#d0d5d1 ;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+    padding: 6px 0 8px 6px;
+}
+
+
 /* for content section in main index.php file */
 .maincontent {
 	float: left;

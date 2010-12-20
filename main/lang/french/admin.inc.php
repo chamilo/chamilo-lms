@@ -1294,4 +1294,22 @@ $EnabledWirisTitle = "Editeur mathématique WIRIS";
 $EnabledWirisComment = "Activer l'éditeur mathématique WIRIS";
 $AllowSpellCheckTitle = "Correcteur orthographique";
 $AllowSpellCheckComment = "Activer le correcteur orthographique";
+$EnabledSVGTitle = "Création et édition de fichiers SVG";
+$EnabledSVGComment = "Cette option vous permettra de créer et d'éditer des fichiers SVG (Graphiques Vectoriels Escalables) multi-couches en ligne, ainsi que de les exporter comme des images au format PNG.";
+$ForceWikiPasteAsPlainTextTitle = "Forcer le copier-coller sous forme de texte non-formatté dans le wiki";
+$ForceWikiPasteAsPlainTextComment = "Cette option empêchera la corruption des textes par des étiquettes cachées, incorrectes ou non standard lors de la copie de textes extérieurs pour l'édition du wiki, mais provoquera la perte de certaines fonctionnalités mineures d'édition.";
+$EnabledGooglemapsTitle = "Activer Google Maps";
+$EnabledGooglemapsComment = "Activer le bouton d'insertion des cartes Google. L'activation ne se reéalisera pas si vous n'avez pas, auparavant, édité le fichier main/inc/lib/fckeditor/myconfig.php et ajouté une clef API de Google Maps.";
+$EnabledImageMapsTitle = "Activer les cartes sur images";
+$EnabledImageMapsComment = "Activer le bouton pour ajouter des cartes sur image. Ceci vous permettra d'associer des adresses URL à des zones d'une image, générant ainsi des zones interactives.";
+$CourseTool = "Outil de cours";
+$BigBlueButtonEnableTitle = "Outil de vidéoconférence BigBlueButton";
+$BigBlueButtonEnableComment = "Choisissez si vous désirez activer l'outil de vidéoconférence BigBlueButton. Une fois activé, il apparaît comme un outil de cours additionnel dans toutes les pages d'accueil de cours, et les enseignants peuvent lancer une conférence à tout moment. Les étudiants ne peuvent pas lancer de conférence, seulement en rejoindre une.
+Si vous n'avez pas de serveur BigBlueButton fonctionnel, veuillez <a target=\"_blank\" href=\"http://bigbluebutton.org/\">en installer un</a> ou vous adresser aux <a target=\"_blank\" href=\"http://www.chamilo.org/en/providers\">fournisseurs officiels de Chamilo</a> pour pouvoir bénéficier de cette fonctionnalité.
+BigBlueButton est un logiciel libre et gratuit. Son installation requiert des compétences techniques particulières, ce qui demande un travail considérable et peut résulter coûteux si vous ne disposez pas desdites compétences.
+Dans la logique du développement durable de notre projet, nous vous offrons la possibilité d'installer vous-même la solution ou de vous faire aider par des professionnels à l'expérience démontrée.";
+$BigBlueButtonHostTitle = "Adresse du serveur BigBlueButton";
+$BigBlueButtonHostComment = "Veuillez indiquer l'adresse du serveur BigBlueButton. Ceci peut être <i>localhost</i>, une adresse IP (par exemple <i>192.168.13.54</i> ou un nom de domaine (par exemple <i>my.video.com</i>).";
+$BigBlueButtonSecuritySaltTitle = "Clef de sécurité du serveur BigBlueButton";
+$BigBlueButtonSecuritySaltComment = "Ceci est la clef de sécurité du serveur BigBlueButton, qui permet à votre serveur d'authentifier l'installation de Chamilo. Veuillez vous référer à la documentation de BigBlueButton pour la localiser.";
 ?>

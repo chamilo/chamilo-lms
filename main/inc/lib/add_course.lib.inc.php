@@ -1197,9 +1197,10 @@ function update_Db_course($course_db_name) {
         "theme          varchar(255)        not null default '', " .        // stores the theme of the LP
         "preview_image  varchar(255)        not null default '', " .        // stores the theme of the LP
         "author         varchar(255)        not null default '', " .        // stores the theme of the LP
-        "session_id     int unsigned        not null  default 0, " .        // the session_id
-        "prerequisite   int unsigned        not null  default 0, " .        // pre requisite for next lp
-        "use_max_score  int unsigned        not null  default 1 " .         // pre requisite for next lp
+        "session_id     int unsigned        not null default 0, " .        // the session_id
+        "prerequisite   int unsigned        not null default 0, " .        // pre requisite for next lp
+        "use_max_score  int unsigned        not null default 1, " .         // max scores for scorm packages
+        "autolunch      int unsigned        not null default 0 " .         // max scores for scorm packages
         ")" . $charset_clause;
 
     if (!Database::query($sql)) {
@@ -2112,10 +2113,8 @@ function fill_Db_course($course_db_name, $course_repository, $language, $default
     $visible_for_course_admin = 0;
     $visible_for_platform_admin = 2;
 
-    /*
-    -----------------------------------------------------------
-        Course homepage tools
-    -----------------------------------------------------------
+    /*    
+        Course homepage tools    
     */
 
     Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_COURSE_DESCRIPTION . "','course_description/','info.gif','".string2binary(api_get_setting('course_create_active_tools', 'course_description')) . "','0','squaregrey.gif','NO','_self','authoring','0')");
@@ -2156,21 +2155,13 @@ function fill_Db_course($course_db_name, $course_repository, $language, $default
     Database::query($sql);
     // end of Smartblogs
 
-    /*
-    -----------------------------------------------------------
-        Course homepage tools for course admin only
-    -----------------------------------------------------------
-    */
+    /*  Course homepage tools for course admin only    */
 
     Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0')");
     Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0')");
     Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL,'".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0')");
 
-    /*
-    -----------------------------------------------------------
-        course_setting table (courseinfo tool)
-    -----------------------------------------------------------
-    */
+    /*    course_setting table (courseinfo tool)   */
 
     Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_manager_on_new_doc',0,'work')");
     Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_on_new_doc_dropbox',0,'dropbox')");
@@ -2184,38 +2175,23 @@ function fill_Db_course($course_db_name, $course_repository, $language, $default
     Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_to_teacher_on_new_user_in_course',0,'registration')");
     Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_view_user_list',1,'user')");
     Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('display_info_advance_inside_homecourse',1,'thematic_advance')");
-    Database::query("INSERT INTO `".$TABLESETTING . "` (variable,value,category) VALUES ('email_alert_students_on_new_homework',0,'work')");
+    Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_students_on_new_homework',0,'work')");
+    Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('enable_lp_auto_launch',0,'learning_path')");
 
-    /*
-    -----------------------------------------------------------
-        Course homepage tools for platform admin only
-    -----------------------------------------------------------
-    */
-
-
-    /*
-    -----------------------------------------------------------
-        Group tool
-    -----------------------------------------------------------
-    */
+    /*    Course homepage tools for platform admin only */
+    /*    Group tool */
 
     Database::query("INSERT INTO `".$TABLEGROUPCATEGORIES . "` ( id , title , description , max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');");
 
-    /*
-    -----------------------------------------------------------
-        Example Material
-    -----------------------------------------------------------
-    */
+    /*    Example Material  */
 
     global $language_interface;
     // Example material should be in the same language as the course is.
     $language_interface_tmp = $language_interface;
     $language_interface = $language;
 
-    /*
-    -----------------------------------------------------------
-        Documents
-    -----------------------------------------------------------
+    /*    
+        Documents    
     */
 
     //Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/example_document.html','example_document.html','file','3367')");

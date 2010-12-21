@@ -1313,5 +1313,44 @@ class Database {
     public static function get_last_insert_id() {
         return mysql_insert_id();
     }
+    
+    /**
+     * Experimental useful database insert 
+     * @todo lot of stuff to do here
+     */
+    public static function insert_query($table_name, $attributes) {
+        $params = array_keys($attributes);
+        $values = array_values($attributes);
+        if (!empty($table_name) && !empty($params) && !empty($values)) {        
+            $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',array_keys($params)).') VALUES ('.implode(',',$values).')';        
+            $result = self::query($sql);
+            return $result;    
+        }
+        return false;
+    }
+    
+    /**
+     * Experimental useful database update 
+     * @todo lot of stuff to do here
+     */
+    public static function update_query($table_name, $attributes, $where = '') {      
+         
+        if (!empty($table_name) && !empty($attributes)) {
+            $update_sql = '';
+            foreach ($attributes as $key=>$value) {
+            	$update_sql .= "$key = '$value' ";
+            }    
+            if (!empty($update_sql)) {
+                
+                if (!empty($where)) {
+                	$where =" WHERE $where ";
+                }                
+                $sql    = "UPDATE $table_name SET $update_sql $where ";                
+                $result = self::query($sql);
+                return $result;
+            }                
+        }
+        return false;
+    }
 }
 //end class Database

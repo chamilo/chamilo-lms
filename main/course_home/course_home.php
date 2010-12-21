@@ -175,17 +175,38 @@ if (!$is_allowed_in_course) {
 
 /*	Header */
 
+/*  STATISTICS */
+
+if (!isset($coursesAlreadyVisited[$_cid])) {
+    event_access_course();
+    $coursesAlreadyVisited[$_cid] = 1;
+    api_session_register('coursesAlreadyVisited');
+}
+
+$show_autolunch_lp_warning = false;
+if (api_get_course_setting('enable_lp_auto_launch')) {
+    $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+    $sql = "SELECT id FROM $lp_table WHERE autolunch = 1 LIMIT 1";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) >  0) {
+        $lp_data = Database::fetch_array($result,'ASSOC');
+        if (!empty($lp_data['id'])) {
+            if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+            	$show_autolunch_lp_warning = true;
+            } else {
+                //redirecting to the LP 
+                $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];                        
+                header("Location: $url");
+                exit;   
+            }     
+        }
+    }
+}
+
 //Display::display_header($course_title, 'Home');
 Display::display_header('', 'Home');
 
 
-/*	STATISTICS */
-
-if (!isset($coursesAlreadyVisited[$_cid])) {
-	event_access_course();
-	$coursesAlreadyVisited[$_cid] = 1;
-	api_session_register('coursesAlreadyVisited');
-}
 
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 
@@ -202,15 +223,19 @@ $reqdate = "&reqdate=$temps";
 
 Display::display_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 		'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-		'CreateDocumentDir' => 'document/',
-		'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
+		'CreateDocumentDir'    => 'document/',
+		'BaseHref'             => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
 	)
 );
 
 /*	SWITCH TO A DIFFERENT HOMEPAGE VIEW
 	the setting homepage_view is adjustable through
 	the platform administration section */
+    
 
+if ($show_autolunch_lp_warning) {    
+    Display::display_warning_message(get_lang('TheLPAutoLunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'));
+}
 if (api_get_setting('homepage_view') == 'activity') {
 	require 'activity.php';
 } elseif (api_get_setting('homepage_view') == '2column') {

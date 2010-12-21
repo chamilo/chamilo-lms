@@ -465,15 +465,17 @@ switch ($action) {
         break;
         
     case 'auto_launch':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
-        if ($debug > 0) error_log('New LP - export action triggered', 0);
-        if (!$lp_found) { error_log('New LP - No learnpath given for set_autolunch', 0); require 'lp_list.php'; }
-        else {
-            $_SESSION['oLP']->set_autolunch($_GET['lp_id'], $_GET['status']);            
-            require 'lp_list.php';
-            exit;
+        if (api_get_course_setting('enable_lp_auto_launch')) {  
+            if (!$is_allowed_to_edit) {
+                api_not_allowed(true);
+            }
+            if ($debug > 0) error_log('New LP - export action triggered', 0);
+            if (!$lp_found) { error_log('New LP - No learnpath given for set_autolunch', 0); require 'lp_list.php'; }
+            else {            
+                $_SESSION['oLP']->set_autolunch($_GET['lp_id'], $_GET['status']);            
+                require 'lp_list.php';
+                exit;
+            }
         }
         break;
 

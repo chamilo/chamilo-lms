@@ -184,7 +184,7 @@ if (!isset($coursesAlreadyVisited[$_cid])) {
 }
 
 $show_autolunch_lp_warning = false;
-if (api_get_course_setting('enable_lp_auto_launch')) {
+if (api_get_course_setting('enable_lp_auto_launch') && api_get_session_id()==0 ) {
     $lp_table = Database::get_course_table(TABLE_LP_MAIN);
     $sql = "SELECT id FROM $lp_table WHERE autolunch = 1 LIMIT 1";
     $result = Database::query($sql);

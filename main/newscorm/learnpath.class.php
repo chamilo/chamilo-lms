@@ -8488,6 +8488,21 @@ EOD;
         }
         return false;
     }
+    
+    public function set_autolunch($lp_id, $status) {
+        $lp_id   = intval($lp_id);
+        $status  = intval($status);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        
+        //Setting everything to autolunch = 0
+        $attributes['autolunch'] = 0;
+        Database::update_query($lp_table, $attributes);
+        if ($status == 1) {
+            //Setting my lp_id to autolunch = 1        
+            $attributes['autolunch'] = 1;
+            Database::update_query($lp_table, $attributes, " id = $lp_id" );
+        }
+    }
 }
 
 if (!function_exists('trim_value')) {

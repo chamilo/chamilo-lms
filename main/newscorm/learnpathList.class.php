@@ -53,7 +53,7 @@ class learnpathList {
         $sql = "SELECT * FROM $lp_table $condition_session ORDER BY display_order ASC, name ASC";
         $res = Database::query($sql);
         $names = array();
-        while ($row = Database::fetch_array($res)) {
+        while ($row = Database::fetch_array($res,'ASSOC')) {
             // Check if published.
             $pub = '';
             $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
@@ -75,23 +75,24 @@ class learnpathList {
             $vis = api_get_item_visibility(api_get_course_info($course_code), 'learnpath', $row['id'], $session_id);
 
             $this->list[$row['id']] = array(
-                'lp_type' => $row['lp_type'],
-                'lp_session' => $row['session_id'],
-                'lp_name' => stripslashes($row['name']),
-                'lp_desc' => stripslashes($row['description']),
-                'lp_path' => $row['path'],
-                'lp_view_mode' => $row['default_view_mod'],
-                'lp_force_commit' => $row['force_commit'],
-                'lp_maker'	=> stripslashes($row['content_maker']),
-                'lp_proximity' => $row['content_local'],
-                //'lp_encoding' => $row['default_encoding'],
-                'lp_encoding' => api_get_system_encoding(),  // Chamilo 1.8.8: We intend always to use the system encoding.
-                'lp_visibility' => $vis,
-                'lp_published'	=> $pub,
+                'lp_type'           => $row['lp_type'],
+                'lp_session'        => $row['session_id'],
+                'lp_name'           => stripslashes($row['name']),
+                'lp_desc'           => stripslashes($row['description']),
+                'lp_path'           => $row['path'],
+                'lp_view_mode'      => $row['default_view_mod'],
+                'lp_force_commit'   => $row['force_commit'],
+                'lp_maker'	        => stripslashes($row['content_maker']),
+                'lp_proximity'      => $row['content_local'],
+                //'lp_encoding'     => $row['default_encoding'],
+                'lp_encoding'       => api_get_system_encoding(),  // Chamilo 1.8.8: We intend always to use the system encoding.
+                'lp_visibility'     => $vis,
+                'lp_published'	    => $pub,
                 'lp_prevent_reinit' => $row['prevent_reinit'],
-                'lp_scorm_debug' => $row['debug'],
-                'lp_display_order' => $row['display_order'],
-                'lp_preview_image' => stripslashes($row['preview_image'])
+                'lp_scorm_debug'    => $row['debug'],
+                'lp_display_order'  => $row['display_order'],
+                'lp_preview_image'  => stripslashes($row['preview_image']),
+                'autolaunch'        => $row['autolunch']
                 );
             $names[$row['name']] = $row['id'];
            }

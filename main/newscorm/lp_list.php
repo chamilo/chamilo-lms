@@ -30,9 +30,7 @@ require_once 'learnpathItem.class.php';
 // Extra javascript functions for in html head:
 $htmlHeadXtra[] =
 "<script language='javascript' type='text/javascript'>
-
-function confirmation(name)
-{
+function confirmation(name) {
     if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." \"+name+\"?\"))
         {return true;}
     else
@@ -153,20 +151,21 @@ if ($is_allowed_to_edit) {
         echo'<th>'.get_lang('Move')."</th>\n";
     }
 }
-
-echo "</tr>\n";
+echo '</tr>';
 
 /* DISPLAY SCORM LIST */
+$list       = new LearnpathList(api_get_user_id());
+$flat_list  = $list->get_flat_list();
 
-$list = new LearnpathList(api_get_user_id());
-$flat_list = $list->get_flat_list();
-$test_mode = api_get_setting('server_type');
-$max = count($flat_list);
 //var_dump($flat_list);
 if (is_array($flat_list)) {
-    $counter = 0;
-    $current = 0;
+    $test_mode      = api_get_setting('server_type');
+    $max            = count($flat_list);
+    $counter        = 0;
+    $current        = 0;
+    $autolunch_exists = false;
     foreach ($flat_list as $id => $details) {
+        
         // Validacion when belongs to a session
         $session_img = api_get_session_image($details['lp_session'], $_user['status']);
 
@@ -414,10 +413,20 @@ if (is_array($flat_list)) {
                     //"</a>" .
                     "";
             }
-
-            //hide icon export scorm
-            //$dsp_disk='';
-
+            
+            /* Auto Lunch LP code*/
+            $lp_auto_lunch_icon = '';            
+            if (api_get_course_setting('enable_lp_auto_launch')) {   
+                            
+                if ($details['autolaunch'] == 1 && $autolunch_exists == false) {  
+                    $autolunch_exists = true;                            
+                    $lp_auto_lunch_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=auto_launch&status=0&lp_id='.$id.'">
+                        <img src="../img/launch.png" border="0" title="'.get_lang('EnableLPAutoLaunch').'" /></a>'; 
+                } else {
+                    $lp_auto_lunch_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=auto_launch&status=1&lp_id='.$id.'">
+                        <img src="../img/launch_na.png" border="0" title="'.get_lang('EnableLPAutoLaunch').'" /></a>'; 
+                }   
+            }
             /* COLUMN ORDER	 */
             // Only active while session mode is not active
 
@@ -446,9 +455,9 @@ if (is_array($flat_list)) {
                 }
             }
         } // end if ($is_allowedToEdit)
-        //echo $dsp_line.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible;
-        echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_edit_lp.$dsp_delete.$dsp_disk.$dsp_order.$dsp_edit_close;
-        //echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_force_commit.$dsp_delete;
+        
+        echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_edit_lp.$dsp_delete.$dsp_disk.$lp_auto_lunch_icon.$dsp_order.$dsp_edit_close;
+
         echo "</tr>\n";
         $current ++; //counter for number of elements treated
     } // end foreach ($flat_list)
@@ -456,7 +465,5 @@ if (is_array($flat_list)) {
 } // end if ( is_array($flat_list)
 echo "</table>";
 echo "<br /><br />";
-
 /* FOOTER */
-
 Display::display_footer();

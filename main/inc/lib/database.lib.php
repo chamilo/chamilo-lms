@@ -1326,7 +1326,7 @@ class Database {
         foreach($attributes as $key => $value) {
             $filtred_attributes[$key] = self::escape_string($value); 
         }
-        $params = array_keys($filtred_attributes);
+        $params = array_keys($filtred_attributes); //@todo check if the field exists in the table we should use a describe of that table
         $values = array_values($filtred_attributes);
         if (!empty($params) && !empty($values)) {        
             $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',array_keys($params)).') VALUES ('.implode(',',$values).')';        

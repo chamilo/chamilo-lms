@@ -31,6 +31,7 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'dashboard.lib.php';
+require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 require_once 'settings.lib.php';
 
 // Setting the section (for the tabs).
@@ -93,6 +94,10 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $tool_name = get_lang('DokeosConfigSettings');
 if (empty($_GET['category'])) {
     $_GET['category'] = 'Platform';
+}
+$watermark_deleted = false;
+if (isset($_GET['delete_watermark'])) {
+    $watermark_deleted = PDF::delete_watermark();    
 }
 
 // Build the form.
@@ -363,6 +368,18 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 break;
                 */
         }
+        
+        
+        if ($row['variable'] == 'pdf_export_watermark_enable') {
+        	 $url =  PDF::get_watermark($course_code);
+            $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
+            if ($url != false) {                
+                $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.gif',get_lang('DelImage'), get_lang('DelImage')).'</a>';
+                $form->addElement('html', '<a href="'.$url.'">'.$url.' '.$delete_url.'</a>');
+            }   
+            $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+            $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);    
+        }
     }
 
     $form->addElement('html', '<div style="text-align: right; clear: both;">');
@@ -370,8 +387,21 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     $form->addElement('html', '</div>');
 
     $form->setDefaults($default_values);
+    
+
+
     if ($form->validate()) {
         $values = $form->exportValues();
+        
+        
+        $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
+    
+        if (!empty($pdf_export_watermark_path['name'])) {        
+            $pdf_export_watermark_path_result = PDF::upload_watermark($pdf_export_watermark_path['name'], $pdf_export_watermark_path['tmp_name']);        
+            unset($update_values['pdf_export_watermark_path']);
+        }
+        
+        
 
         // Set true for allow_message_tool variable if social tool is actived.
         if ($values['allow_social_tool'] == 'true') {
@@ -488,6 +518,11 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
 // Including the header (banner).
 Display :: display_header($tool_name);
+
+if ($watermark_deleted) {    
+    Display :: display_normal_message(get_lang('FileDeleted'));
+}
+
 //api_display_tool_title($tool_name);
 
 // Displaying the message that the settings have been stored.

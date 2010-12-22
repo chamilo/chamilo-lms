@@ -147,7 +147,8 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     $form->add_textfield('pdf_export_watermark_text', get_lang('PDFWaterMarkHeader'), false, array('size' => '60'));    
     $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
     if ($url != false) {
-        $form->addElement('html', '<div class="row"><div class="formw"><a href="'.$url.'">'.$url.'</a></div></div>');
+        $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.gif',get_lang('DelImage'), get_lang('DelImage')).'</a>';
+        $form->addElement('html', '<div class="row"><div class="formw"><a href="'.$url.'">'.$url.' '.$delete_url.'</a></div></div>');
     }   
     $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
     $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);    
@@ -381,6 +382,11 @@ if ($form->validate() && is_settings_editable()) {
 /*	Header */
 
 Display :: display_header($nameTools, MODULE_HELP_NAME);
+
+if (isset($_GET['delete_watermark'])) {
+    PDF::delete_watermark($course_code);
+    Display :: display_normal_message(get_lang('FileDeleted'));
+}
 
 //api_display_tool_title($nameTools);
 if (isset($_GET['action']) && $_GET['action'] == 'show_message') {

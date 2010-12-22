@@ -186,7 +186,22 @@ if (!isset($coursesAlreadyVisited[$_cid])) {
 $show_autolunch_lp_warning = false;
 if (api_get_course_setting('enable_lp_auto_launch') && api_get_session_id()==0 ) {
     $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-    $sql = "SELECT id FROM $lp_table WHERE autolunch = 1 LIMIT 1";
+    $session_id = api_get_session_id();
+    $condition = '';
+    
+    if (!empty($session_id)) {
+        $condition =  api_get_session_condition($session_id);
+        $sql = "SELECT id FROM $lp_table WHERE autolunch = 1 $condition LIMIT 1";
+        $result = Database::query($sql);
+        //If we found nothing in the session we just called the session_id =  0 autolunch
+        if (Database::num_rows($result) ==  0) {
+            $condition = '';
+        } else {
+        	//great, there is an specific auto lunch for this session we leave the $condition
+        }
+    }
+    
+    $sql = "SELECT id FROM $lp_table WHERE autolunch = 1 $condition LIMIT 1";
     $result = Database::query($sql);
     if (Database::num_rows($result) >  0) {
         $lp_data = Database::fetch_array($result,'ASSOC');
@@ -204,7 +219,7 @@ if (api_get_course_setting('enable_lp_auto_launch') && api_get_session_id()==0 )
 }
 
 //Display::display_header($course_title, 'Home');
-Display::display_header('', 'Home');
+Display::display_header('', get_lang('Home'));
 
 
 

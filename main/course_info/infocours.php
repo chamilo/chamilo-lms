@@ -27,6 +27,7 @@ $nameTools = get_lang('ModifInfo');
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(INCLUDE_PATH).'conf/course_info.conf.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
 /*	Constants and variables */
 define('MODULE_HELP_NAME', 'Settings');
@@ -135,11 +136,24 @@ $form->addElement('static', null, '&nbsp;', get_lang('TipLang'));
 $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
-$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
-//Auto launch LP 
+
+//Auto launch LP  Yannick's fault ... i'm hungry
 $form->addElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('Enable'), 1);
 $form->addElement('radio', 'enable_lp_auto_launch', null, get_lang('Disable'), 0);
+
+if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
+    $url =  PDF::get_watermark($course_code);    
+    $form->add_textfield('pdf_export_watermark_text', get_lang('PDFWaterMarkHeader'), false, array('size' => '60'));    
+    $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
+    if ($url != false) {
+        $form->addElement('html', '<div class="row"><div class="formw"><a href="'.$url.'">'.$url.'</a></div></div>');
+    }   
+    $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+    $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);    
+}
+
+$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
 
 
@@ -302,20 +316,35 @@ $values['email_alert_students_on_new_homework']     = api_get_course_setting('em
 
 $values['enable_lp_auto_launch']                    = api_get_course_setting('enable_lp_auto_launch');
 
+$values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
+
+
 $form->setDefaults($values);
 // Validate form
 if ($form->validate() && is_settings_editable()) {
 	$update_values = $form->exportValues();
 
-        // update course picture
-        $picture = $_FILES['picture'];
-        if (!empty($picture['name'])) {
-                $picture_uri = CourseManager::update_course_picture($course_code, $picture['name'], $picture['tmp_name']);
-        }
+    // update course picture
+    $picture = $_FILES['picture'];
+    if (!empty($picture['name'])) {
+        $picture_uri = CourseManager::update_course_picture($course_code, $picture['name'], $picture['tmp_name']);
+    }
+    
+    $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
+    
+    if (!empty($pdf_export_watermark_path['name'])) {        
+        $pdf_export_watermark_path_result = PDF::upload_watermark($pdf_export_watermark_path['name'], $pdf_export_watermark_path['tmp_name'], $course_code);        
+        unset($update_values['pdf_export_watermark_path']);
+    }
+    
+    //Variables that will be saved in the TABLE_MAIN_COURSE table
+    $update_in_course_table = array('title','visual_code', 'course_language','category_code','department_name', 'department_url','visibility',  'subscribe', 'unsubscribe','tutor_name','course_registration_password');
 
 	foreach ($update_values as $index => & $value) {
 		$update_values[$index] = Database::escape_string($value);
 	}
+    
+    
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "UPDATE $table_course SET
 				title 				    = '".Security::remove_XSS($update_values['title'])."',
@@ -333,69 +362,15 @@ if ($form->validate() && is_settings_editable()) {
 	Database::query($sql);
 
 	// Update course_settings table - this assumes those records exist, otherwise triggers an error
-	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
-	if ($update_values['email_alert_to_teacher_on_new_user_in_course'] != $values['email_alert_to_teacher_on_new_user_in_course']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_to_teacher_on_new_user_in_course']." WHERE variable = 'email_alert_to_teacher_on_new_user_in_course' ";
-		Database::query($sql);
-	}
-	if ($update_values['email_alert_manager_on_new_doc'] != $values['email_alert_manager_on_new_doc']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_manager_on_new_doc']." WHERE variable = 'email_alert_manager_on_new_doc' ";
-		Database::query($sql);
-	}
-	if ($update_values['email_alert_on_new_doc_dropbox'] != $values['email_alert_on_new_doc_dropbox']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_on_new_doc_dropbox']." WHERE variable = 'email_alert_on_new_doc_dropbox' ";
-		Database::query($sql);
-	}
-	if ($update_values['email_alert_manager_on_new_quiz'] != $values['email_alert_manager_on_new_quiz']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_manager_on_new_quiz']." WHERE variable = 'email_alert_manager_on_new_quiz' ";
-		Database::query($sql);
-	}
-	if ($update_values['allow_user_edit_agenda'] != $values['allow_user_edit_agenda']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_edit_agenda']." WHERE variable = 'allow_user_edit_agenda' ";
-		Database::query($sql);
-	}
-	if ($update_values['allow_user_edit_announcement'] != $values['allow_user_edit_announcement']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_edit_announcement']." WHERE variable = 'allow_user_edit_announcement' ";
-		Database::query($sql);
-	}
-	if ($update_values['allow_user_image_forum'] != $values['allow_user_image_forum']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_image_forum']." WHERE variable = 'allow_user_image_forum' ";
-		Database::query($sql);
-	}
-	if ($update_values['allow_open_chat_window'] != $values['allow_open_chat_window']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_open_chat_window']." WHERE variable = 'allow_open_chat_window' ";
-		Database::query($sql);
-	}
-	if ($update_values['course_theme'] != $values['course_theme']) {
-		$sql = "UPDATE $table_course_setting SET value = '".$update_values['course_theme']."' WHERE variable = 'course_theme' ";
-		Database::query($sql);
-	}
-	if ($update_values['allow_learningpath_theme'] != $values['allow_learning_path_theme']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_learning_path_theme']." WHERE variable = 'allow_learning_path_theme' ";
-		Database::query($sql);
-	}
-
-	if ($update_values['allow_user_view_user_list'] != $values['allow_user_view_user_list']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_view_user_list']." WHERE variable = 'allow_user_view_user_list' ";
-		Database::query($sql);
-	}
-
-	if ($update_values['display_info_advance_inside_homecourse'] != $values['display_info_advance_inside_homecourse']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['display_info_advance_inside_homecourse']." WHERE variable = 'display_info_advance_inside_homecourse' ";
-		Database::query($sql);
-	}
-	
-	if ($update_values['email_alert_students_on_new_homework'] != $values['email_alert_students_on_new_homework']) {
-		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_students_on_new_homework']." WHERE variable = 'email_alert_students_on_new_homework' ";
-		Database::query($sql);
-	}
+	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);   
     
-    if ($update_values['enable_lp_auto_launch'] != $values['enable_lp_auto_launch']) {
-        $sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['enable_lp_auto_launch']." WHERE variable = 'enable_lp_auto_launch' ";
-        Database::query($sql);
+    foreach($update_values as $key =>$value) {
+        //We do not update variables that were already saved in the TABLE_MAIN_COURSE table
+        if (!in_array($key, $update_in_course_table)) {            
+        	//$sql = "UPDATE $table_course_setting SET value = ".." WHERE variable = '$key' ";            
+            Database::update_query($table_course_setting, array('value' => $update_values[$key]), array('variable = ? ' =>$key));
+        }    	
     }
-    
-
 	$cidReset = true;
 	$cidReq = $course_code;
 	require '../inc/local.inc.php';
@@ -520,8 +495,6 @@ if ($showDiskQuota && $currentCourseDiskQuota != '') {
 </tr>
 </table>
 <?php
-
 }
-
 /*		FOOTER	*/
 Display::display_footer();

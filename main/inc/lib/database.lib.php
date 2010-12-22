@@ -1319,9 +1319,16 @@ class Database {
      * @todo lot of stuff to do here
      */
     public static function insert_query($table_name, $attributes) {
-        $params = array_keys($attributes);
-        $values = array_values($attributes);
-        if (!empty($table_name) && !empty($params) && !empty($values)) {        
+        if (empty($attributes) || empty($table_name)) {
+            return false;        	
+        }
+        $filtred_attributes = array();
+        foreach($attributes as $key => $value) {
+            $filtred_attributes[$key] = self::escape_string($value); 
+        }
+        $params = array_keys($filtred_attributes);
+        $values = array_values($filtred_attributes);
+        if (!empty($params) && !empty($values)) {        
             $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',array_keys($params)).') VALUES ('.implode(',',$values).')';        
             $result = self::query($sql);
             return $result;    
@@ -1333,19 +1340,41 @@ class Database {
      * Experimental useful database update 
      * @todo lot of stuff to do here
      */
-    public static function update_query($table_name, $attributes, $where = '') {      
+    public static function update_query($table_name, $attributes, $where = array()) {
          
         if (!empty($table_name) && !empty($attributes)) {
             $update_sql = '';
+            //Cleaning attributes
             foreach ($attributes as $key=>$value) {
+                $value = self::escape_string($value);
             	$update_sql .= "$key = '$value' ";
-            }    
-            if (!empty($update_sql)) {
-                
+            }
+            if (!empty($update_sql)) {               
                 if (!empty($where)) {
-                	$where =" WHERE $where ";
+                    //Parsing and cleaning the where conditions
+                    $where_return ='';
+                    foreach ($where as $condition => $value_array) {                       
+                        if (is_array($value_array)) {
+                            $clean_values = array();                            
+                            foreach($value_array as $item) {
+                            	$item = Database::escape_string($item);
+                                $clean_values[]= "'$item'";
+                            }
+                        } else {
+                            $value_array = Database::escape_string($value_array);
+                        	$clean_values = "'$value_array'";
+                        }
+                        if (!empty($condition) && !empty($clean_values)) {    
+                            $condition = str_replace('?','%s', $condition); //we treat everything as string
+                            $condition = vsprintf($condition, $clean_values);
+                        	$where_return .= $condition;                            
+                        }
+                    }
+                    if (!empty($clean_values)) {
+                	   $where_return =" WHERE $where_return ";
+                    }
                 }                
-                $sql    = "UPDATE $table_name SET $update_sql $where ";                
+                $sql    = "UPDATE $table_name SET $update_sql $where_return ";                
                 $result = self::query($sql);
                 return $result;
             }                

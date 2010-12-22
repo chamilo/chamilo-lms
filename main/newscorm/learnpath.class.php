@@ -8384,7 +8384,7 @@ EOD;
             }
         }
         require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';      
-        $result = PDF::html_to_pdf($files_to_export, $this->cc);
+        $result = PDF::html_to_pdf($files_to_export, '', $this->cc);
         return $result;
     }
 

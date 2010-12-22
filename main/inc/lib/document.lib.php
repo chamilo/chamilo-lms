@@ -994,7 +994,7 @@ class DocumentManager {
      * @param string $path
      * @return int id of document / false if no doc found
      */
-    public static function get_document_data_by_id($id,$course_code) {
+    public static function get_document_data_by_id($id, $course_code) {
         $course_info = api_get_course_info($course_code);
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
         $id = intval($id);
@@ -1686,7 +1686,7 @@ class DocumentManager {
 	* @param string		destination course directory
 	* @return string	new content html with replaced urls or return false if content is not a string
 	*/
-   function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
+   	function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
 
 		if (!is_string($content_html)) {
 			return false;
@@ -1755,6 +1755,13 @@ class DocumentManager {
 		}
    		return $content_html;
    }
-
+    
+    public function export_to_pdf($document_id, $course_code) {
+        require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+        $course_data = api_get_course_info($course_code);
+        $document_data  = self::get_document_data_by_id($document_id, $course_code);
+        $file_path      = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$document_data['path'];
+        PDF::html_to_pdf($file_path, $document_data['title'], $course_code);        
+    }
 }
 //end class DocumentManager

@@ -307,19 +307,20 @@ if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_se
 	
 	//filter when I am into shared folder, I can donwload only my shared folder
 	
-	if(is_any_user_shared_folder($_GET['path'],$current_session_id))
-	{
-		if(is_my_shared_folder($_user['user_id'], $_GET['path'], $current_session_id) || api_is_allowed_to_edit() || api_is_platform_admin())
-		{
+	if(is_any_user_shared_folder($_GET['path'],$current_session_id)) {
+		if(is_my_shared_folder($_user['user_id'], $_GET['path'], $current_session_id) || api_is_allowed_to_edit() || api_is_platform_admin()) {
 		  require 'downloadfolder.inc.php';
 		}
-	}
-	else
-	{
+	} else {
 		require 'downloadfolder.inc.php';
 	}
 	
 }
+
+if (isset($_GET['action']) && $_GET['action'] == 'export_to_pdf') {
+    DocumentManager::export_to_pdf($_GET['id'],$course_code);	
+} 
+
 
 // Slideshow inititalisation
 $_SESSION['image_files_only'] = '';

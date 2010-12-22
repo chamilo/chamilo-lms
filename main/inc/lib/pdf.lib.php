@@ -8,10 +8,8 @@ require_once _MPDF_PATH.'mpdf.php';
 
 class PDF {
 
-    private function __construct() {
-        
-    }
-    
+    private function __construct() {        
+    }    
     
     /**
      * Converts an html file to a pdf
@@ -19,7 +17,7 @@ class PDF {
      * @param   string  course code 
      * @return  string  the pdf path
      */    
-    public function html_to_pdf($html_file_array, $course_code = null) {  
+    public function html_to_pdf($html_file_array, $pdf_name = '', $course_code = null) {
         
         if (empty($html_file_array)) {
         	return false;
@@ -55,8 +53,7 @@ class PDF {
                 
         $pdf->defaultheaderfontsize = 10;   // in pts
         $pdf->defaultheaderfontstyle = BI;   // blank, B, I, or BI
-        $pdf->defaultheaderline = 1;        // 1 to include line below header/above footer        
-        
+        $pdf->defaultheaderline = 1;        // 1 to include line below header/above footer              
         
         $my_header = self::get_header($course_code);
         $pdf->SetHeader($my_header);// ('{DATE j-m-Y}|{PAGENO}/{nb}|'.$title);
@@ -173,9 +170,11 @@ class PDF {
                 foreach($elements as $item) {                    
                     $old_src = $item->getAttribute('src');
                     //$old_src= str_replace('../','',$old_src);
-                    if (strrpos('http', $old_src) === false) {
-                        $document_html= str_replace($old_src, $document_path.$old_src, $document_html);                                                       	
-                    }               
+                    if (strpos($old_src, 'http') === false) {
+                        if (strpos($old_src, '/main/default_course_document') === false) {
+                            $document_html= str_replace($old_src, $document_path.$old_src, $document_html);                            
+                        }                                                       	
+                    }                                    
                 }
             }
               
@@ -198,7 +197,12 @@ class PDF {
             //var_dump($document_html);
             $pdf->WriteHTML($document_html,2);
         }
-        $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
+        
+        if (empty($pdf_name)) {
+            $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
+        } else {
+        	$output_file = $pdf_name.'.pdf';
+        }
         $result = $pdf->Output($output_file, 'D');       /// F to save the pdf in a file              
         exit;
     }    

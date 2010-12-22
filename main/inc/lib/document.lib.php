@@ -986,6 +986,27 @@ class DocumentManager {
 		}
 		return false;
 	}
+    
+    /**
+     * Gets the document data with a given id
+     *
+     * @param array $_course
+     * @param string $path
+     * @return int id of document / false if no doc found
+     */
+    public static function get_document_data_by_id($id,$course_code) {
+        $course_info = api_get_course_info($course_code);
+        $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
+        $id = intval($id);
+        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE id  = $id";
+        $result = Database::query($sql);
+        if ($result && Database::num_rows($result) == 1) {
+            $row = Database::fetch_array($result,'ASSOC');
+            return $row;
+        }
+        return false;
+    }
+    
 
 	/**
 	 * Allow to set a specific document as a new template for FCKEditor for a particular user in a particular course

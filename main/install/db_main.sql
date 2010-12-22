@@ -776,7 +776,10 @@ VALUES
 ('force_wiki_paste_as_plain_text',NULL,'radio','Editor','true','ForceWikiPasteAsPlainTextTitle','ForceWikiPasteAsPlainTextComment',NULL,NULL, 0),
 ('enabled_googlemaps',NULL,'radio','Editor','true','EnabledGooglemapsTitle','EnabledGooglemapsComment',NULL,NULL, 0),
 ('enabled_imgmap',NULL,'radio','Editor','true','EnabledImageMapsTitle','EnabledImageMapsComment',NULL,NULL, 0),
-('enabled_support_svg',NULL,'radio','Tools','true','EnabledSVGTitle','EnabledSVGComment',NULL,NULL, 0),
+('enabled_support_svg',				NULL,'radio',		'Tools',	'true',	'EnabledSVGTitle','EnabledSVGComment',NULL,NULL, 0),
+('pdf_export_watermark_enable',		NULL,'radio',		'Platform',	'false','PDFExportWatermarkEnableTitle',	'PDFExportWatermarkEnableComment',	'platform',NULL, 1),
+('pdf_export_watermark_by_course',	NULL,'radio',		'Platform',	'false','PDFExportWatermarkByCourseTitle',	'PDFExportWatermarkByCourseComment','platform',NULL, 1),
+('pdf_export_watermark_text',		NULL,'textfield',	'Platform',	'',		'PDFExportWatermarkTextTitle',		'PDFExportWatermarkTextComment',	'platform',NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.8.8.13050', 'DokeosDatabaseVersion', '', NULL, NULL, 0);
 
 
@@ -1011,7 +1014,11 @@ VALUES
 ('enabled_imgmap','true','Yes'),
 ('enabled_imgmap','false','No'),
 ('enabled_support_svg','true','Yes'),
-('enabled_support_svg','false','No');
+('enabled_support_svg','false','No'),
+('pdf_export_watermark_enable','true','Yes'),
+('pdf_export_watermark_enable','false','No'),
+('pdf_export_watermark_by_course','true','Yes'),
+('pdf_export_watermark_by_course','false','No');
 
 UNLOCK TABLES;
 

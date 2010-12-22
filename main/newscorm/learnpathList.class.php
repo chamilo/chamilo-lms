@@ -92,7 +92,8 @@ class learnpathList {
                 'lp_scorm_debug'    => $row['debug'],
                 'lp_display_order'  => $row['display_order'],
                 'lp_preview_image'  => stripslashes($row['preview_image']),
-                'autolaunch'        => $row['autolunch']
+                'autolaunch'        => $row['autolunch'],
+                'session_id'        => $row['session_id']
                 );
             $names[$row['name']] = $row['id'];
            }

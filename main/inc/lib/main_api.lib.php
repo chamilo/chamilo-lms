@@ -1034,6 +1034,7 @@ function api_get_cidreq() {
  */
 function api_get_course_info($course_code = null) {
     if (!empty($course_code)) {
+        //global $_course;var_dump($_course);
         $course_code = Database::escape_string($course_code);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);

@@ -19,7 +19,7 @@
 class learnpath {
 
     public $attempt = 0; // The number for the current ID view.
-    public $cc; // Course (code) this learnpath is located in.
+    public $cc; // Course (code) this learnpath is located in. @todo change name for something more comprensible ...
     public $current; // Id of the current item the user is viewing.
     public $current_score; // The score of the current item.
     public $current_time_start; // The time the user loaded this resource (this does not mean he can see it yet).
@@ -8356,6 +8356,37 @@ EOD;
 
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);
     }
+    
+    public function scorm_export_to_pdf($lp_id) {
+        $lp_id = intval($lp_id);
+        $files_to_export = array();
+        $course_data = api_get_course_info($this->cc);
+        
+        $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
+        require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+        foreach($this->items as $item) {            
+            //Getting documents from a LP with chamilo documents
+            switch ($item->type) {
+                case 'document':
+                    $file_data = DocumentManager::get_document_data_by_id($item->path, $this->cc);
+                    $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$file_data['path'];
+                    if (file_exists($file_path)) {               
+                        $files_to_export[] = $file_path;
+                    }
+                    break;
+                case 'sco':             
+                    $file_path = $scorm_path.'/'.$item->path;
+                    if (file_exists($file_path)) {               
+                        $files_to_export[] = $file_path;
+                    }
+                    break;
+                    
+            }
+        }
+        require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';      
+        $result = PDF::html_to_pdf($files_to_export, $this->cc);
+        return $result;
+    }
 
     /**
      * Temp function to be moved in main_api or the best place around for this. Creates a file path
@@ -8496,11 +8527,13 @@ EOD;
         
         //Setting everything to autolunch = 0
         $attributes['autolunch'] = 0;
-        Database::update_query($lp_table, $attributes);
+        $where = array('session_id = ? '=> api_get_session_id());
+        Database::update_query($lp_table, $attributes,$where);
         if ($status == 1) {
             //Setting my lp_id to autolunch = 1        
             $attributes['autolunch'] = 1;
-            Database::update_query($lp_table, $attributes, " id = $lp_id" );
+            $where = array('id = ? AND session_id = ? '=> array($lp_id, api_get_session_id()));
+            Database::update_query($lp_table, $attributes, $where );
         }
     }
 }

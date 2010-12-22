@@ -165,7 +165,6 @@ if (is_array($flat_list)) {
     $current        = 0;
     $autolunch_exists = false;
     foreach ($flat_list as $id => $details) {
-        
         // Validacion when belongs to a session
         $session_img = api_get_session_image($details['lp_session'], $_user['status']);
 
@@ -416,8 +415,7 @@ if (is_array($flat_list)) {
             
             /* Auto Lunch LP code*/
             $lp_auto_lunch_icon = '';            
-            if (api_get_course_setting('enable_lp_auto_launch')) {   
-                            
+            if (api_get_course_setting('enable_lp_auto_launch')) {                            
                 if ($details['autolaunch'] == 1 && $autolunch_exists == false) {  
                     $autolunch_exists = true;                            
                     $lp_auto_lunch_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=auto_launch&status=0&lp_id='.$id.'">
@@ -427,7 +425,14 @@ if (is_array($flat_list)) {
                         <img src="../img/launch_na.png" border="0" title="'.get_lang('EnableLPAutoLaunch').'" /></a>'; 
                 }   
             }
+            
+            if (api_get_setting('pdf_export_watermark_enable') == 'true') {
+            	  $export_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'"><img src="../img/file_pdf.gif" border="0" title="'.get_lang('ExportToPDF').'" /></a>'; 
+            }
+            
+            
             /* COLUMN ORDER	 */
+            
             // Only active while session mode is not active
 
             if ($current_session == 0) {
@@ -456,7 +461,7 @@ if (is_array($flat_list)) {
             }
         } // end if ($is_allowedToEdit)
         
-        echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_edit_lp.$dsp_delete.$dsp_disk.$lp_auto_lunch_icon.$dsp_order.$dsp_edit_close;
+        echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_edit_lp.$dsp_delete.$dsp_disk.$lp_auto_lunch_icon.$export_icon.$dsp_order.$dsp_edit_close;
 
         echo "</tr>\n";
         $current ++; //counter for number of elements treated

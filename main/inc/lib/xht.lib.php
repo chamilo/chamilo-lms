@@ -7,7 +7,6 @@
 */
 
 /**
-==============================================================================
 *	This is an XML HTML template library.
 *	Include/require it in your code to use its functionality.
 *
@@ -20,8 +19,7 @@
 *   Assign xht_xmldoc (, xht_get_lang, xht_resource, xht_dbgn)
 *   before calling the class methods.
 *
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
 
 

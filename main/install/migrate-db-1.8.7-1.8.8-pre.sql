@@ -70,6 +70,18 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_im
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_support_svg',NULL,'radio','Editor','true','EnabledSVGTitle','EnabledSVGComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_svg', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_svg', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('pdf_export_watermark_enable',	NULL,'radio',		'Platform',	'false','PDFExportWatermarkEnableTitle',	'PDFExportWatermarkEnableComment','platform',NULL,  1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('pdf_export_watermark_enable','true','Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('pdf_export_watermark_enable','false','No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('pdf_export_watermark_by_course',	NULL,'radio',		'Platform',	'false','PDFExportWatermarkByCourseTitle',	'PDFExportWatermarkByCourseComment','platform',NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('pdf_export_watermark_by_course','true','Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('pdf_export_watermark_by_course','false','No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('pdf_export_watermark_text',		NULL,'textfield',	'Platform',	'',		'PDFExportWatermarkTextTitle',		'PDFExportWatermarkTextComment','platform',NULL, 	1);
+
+
 ALTER TABLE personal_agenda ADD PRIMARY KEY (id);
 
 -- xxSTATSxx
@@ -92,3 +104,5 @@ ALTER TABLE tool MODIFY COLUMN category varchar(20) not null default 'authoring'
 ALTER TABLE lp ADD COLUMN autolunch INT DEFAULT 0;
 
 INSERT INTO course_setting(variable,value,category) VALUES ('enable_lp_auto_launch',0,'learning_path');
+INSERT INTO course_setting(variable,value,category) VALUES ('pdf_export_watermark_text','','course');
+

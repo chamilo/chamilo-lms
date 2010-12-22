@@ -2177,6 +2177,8 @@ function fill_Db_course($course_db_name, $course_repository, $language, $default
     Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('display_info_advance_inside_homecourse',1,'thematic_advance')");
     Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_students_on_new_homework',0,'work')");
     Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('enable_lp_auto_launch',0,'learning_path')");
+    Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('pdf_export_watermark_text','','learning_path')");
+                
 
     /*    Course homepage tools for platform admin only */
     /*    Group tool */

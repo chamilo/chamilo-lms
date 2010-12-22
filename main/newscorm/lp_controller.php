@@ -197,6 +197,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $action = (!empty($_REQUEST['action']) ? $_REQUEST['action'] : '');
 switch ($action) {
+    
     case 'add_item':
 
         if (!$is_allowed_to_edit) {
@@ -283,27 +284,36 @@ switch ($action) {
         break;
 
     case 'admin_view':
-
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-
         if ($debug > 0) error_log('New LP - admin_view action triggered', 0);
-
         if (!$lp_found) { error_log('New LP - No learnpath given for admin_view', 0); require 'lp_list.php'; }
         else {
             $_SESSION['refresh'] = 1;
             require 'lp_admin_view.php';
         }
-
-        break;
-
+        break;       
+         
+    case 'auto_launch':
+        if (api_get_course_setting('enable_lp_auto_launch')) {  
+            if (!$is_allowed_to_edit) {
+                api_not_allowed(true);
+            }
+            if ($debug > 0) error_log('New LP - export action triggered', 0);
+            if (!$lp_found) { error_log('New LP - No learnpath given for set_autolunch', 0); require 'lp_list.php'; }
+            else {            
+                $_SESSION['oLP']->set_autolunch($_GET['lp_id'], $_GET['status']);            
+                require 'lp_list.php';
+                exit;
+            }
+        }
+    break;
+    
     case 'build':
-
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-
         if ($debug > 0) error_log('New LP - build action triggered', 0);
 
         if (!$lp_found) { error_log('New LP - No learnpath given for build', 0); require 'lp_list.php'; }
@@ -311,47 +321,37 @@ switch ($action) {
             $_SESSION['refresh'] = 1;
             require 'lp_build.php';
         }
-
         break;
 
     case 'delete_item':
-
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-
         if ($debug > 0) error_log('New LP - delete item action triggered', 0);
-
         if (!$lp_found) { error_log('New LP - No learnpath given for delete item', 0); require 'lp_list.php'; }
         else {
             $_SESSION['refresh'] = 1;
-
             if (is_numeric($_GET['id'])) {
                 $_SESSION['oLP']->delete_item($_GET['id']);
                 $is_success = true;
             }
-
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_build.php';
             } else {
                 require 'lp_admin_view.php';
             }
         }
-
         break;
-
+        
     case 'edit_item':
-
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
-        }
-
+        }        
         if ($debug > 0) error_log('New LP - edit item action triggered', 0);
 
         if (!$lp_found) { error_log('New LP - No learnpath given for edit item', 0); require 'lp_list.php'; }
         else {
             $_SESSION['refresh'] = 1;
-
             if (isset($_POST['submit_button']) && !empty($_POST['title'])) {
                 //$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
                 // TODO: mp3 edit
@@ -364,22 +364,18 @@ switch ($action) {
                 }
                 $is_success = true;
             }
-
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_edit_item.php';
             } else {
                 require 'lp_admin_view.php';
             }
         }
-
         break;
 
     case 'edit_item_prereq':
-
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-
         if ($debug > 0) error_log('New LP - edit item prereq action triggered', 0);
 
         if (!$lp_found) { error_log('New LP - No learnpath given for edit item prereq', 0); require 'lp_list.php'; }
@@ -390,26 +386,21 @@ switch ($action) {
             }
             require 'lp_edit_item_prereq.php';
         }
-
         break;
 
     case 'move_item':
-
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-
         if ($debug > 0) error_log('New LP - move item action triggered', 0);
 
         if (!$lp_found) { error_log('New LP - No learnpath given for move item', 0); require 'lp_list.php'; }
         else {
             $_SESSION['refresh'] = 1;
-
             if (isset($_POST['submit_button'])) {
                 $_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description']);
                 $is_success = true;
             }
-
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_move_item.php';
             } else {
@@ -422,9 +413,7 @@ switch ($action) {
                 require 'lp_admin_view.php';
             }
         }
-
         break;
-
     case 'view_item':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -463,22 +452,20 @@ switch ($action) {
             //require 'lp_list.php';
         }
         break;
-        
-    case 'auto_launch':
-        if (api_get_course_setting('enable_lp_auto_launch')) {  
-            if (!$is_allowed_to_edit) {
-                api_not_allowed(true);
+    case 'export_to_pdf':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if ($debug > 0) error_log('New LP - export action triggered', 0);
+        if (!$lp_found) { error_log('New LP - No learnpath given for export_to_pdf', 0); require 'lp_list.php'; }
+        else {
+            $result = $_SESSION['oLP']->scorm_export_to_pdf($_GET['lp_id']);
+            if (!$result) {
+                require 'lp_list.php';            	
             }
-            if ($debug > 0) error_log('New LP - export action triggered', 0);
-            if (!$lp_found) { error_log('New LP - No learnpath given for set_autolunch', 0); require 'lp_list.php'; }
-            else {            
-                $_SESSION['oLP']->set_autolunch($_GET['lp_id'], $_GET['status']);            
-                require 'lp_list.php';
-                exit;
-            }
+            exit;
         }
         break;
-
     case 'delete':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

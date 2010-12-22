@@ -7,13 +7,11 @@
 */
 
 /**
-==============================================================================
 *	This is the XML Dom library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
 *	@author René Haentjens
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
 
 class xmddoc

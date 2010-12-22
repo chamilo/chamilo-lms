@@ -1,7 +1,7 @@
 <?php
 /* See license terms in /license.txt */
 /**
-*	This is the export library for Dokeos.
+*	This is the export library for Chamilo.
 *	Include/require it in your code to use its functionality.
 *
 *	Several functions below are adaptations from functions distributed by www.nexen.net

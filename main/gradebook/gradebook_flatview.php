@@ -1,4 +1,4 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
 
 $language_file = 'gradebook';
@@ -15,10 +15,8 @@ require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/exportgradebook.php';
 require_once 'lib/scoredisplay.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
-//require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php'; // This is the old library for pdf-export (non UTF-8 compatible).
-define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
-require_once _MPDF_PATH.'mpdf.php';
 if (!class_exists('HTML_Table')) { require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php'; }
 
 api_block_anonymous_users();
@@ -185,60 +183,31 @@ if (isset ($_GET['exportpdf']))	{
 
 		// Conversion of the created HTML report to a PDF report
 
-		$html = api_utf8_encode($html);
-		$creator_pdf = api_utf8_encode($creator);
-		$title_pdf = api_utf8_encode($report_name);
-		$subject_pdf = api_utf8_encode(get_lang('FlatView'));
-		$keywods_pdf = api_utf8_encode($course_code);
+		$html         = api_utf8_encode($html);
+        //@todo this is really a must?
+		$creator_pdf  = api_utf8_encode($creator);
+		$title_pdf    = api_utf8_encode($report_name);
+		$subject_pdf  = api_utf8_encode(get_lang('FlatView'));
+		$keywods_pdf  = api_utf8_encode($course_code);
 
 		$page_format = $export['orientation'] == 'landscape' ? 'A4-L' : 'A4';
-		$pdf = new mPDF('UTF-8', $page_format, '', '', 32, 25, 27, 25, 16, 13, $export['orientation']);
-		$pdf->directionality = api_get_text_direction();
-		$pdf->useOnlyCoreFonts = true;
-
-		$pdf->SetFooter('{PAGENO}');
-
+        $pdf = new PDF($page_format, $export['orientation']);
+        
+        // Sending the created PDF report to the client
+        $file_name = date('YmdHi_', $time);
+        if (!empty($course_code)) {
+            $file_name .= $course_code.'_';
+        }
+        $file_name .= get_lang('FlatView').'.pdf';
+        $pdf->content_to_pdf($html, $css, $file_name);
+        exit;
+		
+		/*
 		$pdf->SetAuthor($creator_pdf);
 		$pdf->SetTitle($title_pdf);
 		$pdf->SetSubject($subject_pdf);
-		$pdf->SetKeywords($keywods_pdf);
+		$pdf->SetKeywords($keywods_pdf);*/
 
-		if (!empty($css)) {
-			$pdf->WriteHTML($css, 1);
-			$pdf->WriteHTML($html, 2);
-		} else {
-			$pdf->WriteHTML($html);
-		}
-
-		// Sending the created PDF report to the client
-
-		$file_name = date('YmdHi_', $time);
-		if (!empty($course_code)) {
-			$file_name .= $course_code.'_';
-		}
-		$file_name .= get_lang('FlatView').'.pdf';
-		$file_name = replace_dangerous_char($file_name);
-		$pdf->Output($file_name, 'D');
-
-		/*
-		// This is the old pdf-exporting routine that uses ezpdf library.
-		//
-		$format = $export['orientation']; //format is 'portrait' or 'landscape'
-		$pdf =& new Cezpdf('a4',$format); //format is 'portrait' or 'landscape'
-		$clear_printable_data=array();
-		$clear_send_printable_data=array();
-
-		for ($i=0;$i<count($printable_data[1]);$i++) {
-			for ($k=0;$k<count($printable_data[1][$i]);$k++) {
-				$clear_printable_data[]=strip_tags($printable_data[1][$i][$k]);
-			}
-			$clear_send_printable_data[]=$clear_printable_data;
-			$clear_printable_data=array();
-		}
-		export_pdf($pdf,$clear_send_printable_data,$printable_data[0],$format);
-		*/
-
-		exit;
 	} else {
 		Display :: display_header(get_lang('ExportPDF'));
 	}

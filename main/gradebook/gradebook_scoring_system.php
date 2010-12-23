@@ -112,12 +112,10 @@ if (((isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') || (isse
 		Display :: display_confirmation_message(get_lang('ScoringUpdated'),false);
 	}
 
-if (isset ($_GET['nouniqueranges'])) {
-	Display :: display_error_message(get_lang('NoUniqueScoreRanges'),false);
-}
-
-echo '<div class="maincontent">';
-$scoreform->display();
-echo '</div>';
+    if (isset ($_GET['nouniqueranges'])) {
+    	Display :: display_error_message(get_lang('NoUniqueScoreRanges'),false);
+    }    
+    $scoreform->display();
+    
 }
 Display :: display_footer();

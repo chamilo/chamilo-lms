@@ -90,16 +90,12 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
  */
 function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf) {
 	
-	require_once api_get_path(LIBRARY_PATH).'mpdf/mpdf.php';
-
-	$mpdf = new mPDF('UTF-8', 'A4', '', '', 18, 15, 65, 35, 5, 13, 'P');
-	$mpdf->useOnlyCoreFonts = true;
-	$mpdf->mirrorMargins = 0;      // Use different Odd/Even headers and footers and mirror margins
-
+	require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+	$headers_in_pdf = '<img src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png">';
+    
 	if (is_array($headers_pdf)) {
 		// preparing headers pdf
-		$header = '<table width="100%" cellspacing="1" cellpadding="5" border="0" class="strong">
-							<tr><td width="100%" style="text-align: left;" class="title" colspan="4"><img src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png"></td></tr>
+		$header = '<br/><br/><table width="100%" cellspacing="1" cellpadding="5" border="0" class="strong">							
 					        <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$title_pdf.'</h1></td></tr>
 					        <tr><td><strong>'.$headers_pdf[0][0].'</strong> </td><td> <strong>'.$headers_pdf[0][1].'</strong></td>
 					            <td><strong>'.$headers_pdf[1][0].'</strong> </td><td> <strong>'.$headers_pdf[1][1].'</strong></td>
@@ -122,8 +118,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 		}
 		$footer .= '</tr>';	
 	}
-	$footer .= '</table>';
-	
+	$footer .= '</table>';	
 	$footer .= '<div align="right" style="font-weight: bold;">{PAGENO}/{nb}</div>';
 	
 	// preparing content pdf		
@@ -132,8 +127,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 		$css = @file_get_contents($css_file);
 	} else {
 		$css = '';
-	}
-	
+	}	
 	$items_per_page = 30;
 	$count_pages = ceil(count($data_table) / $items_per_page);  
 	for ($x = 0; $x<$count_pages; $x++) {
@@ -178,18 +172,10 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 		if ($x < ($count_pages - 1)) { $content_table .= '<pagebreak />'; }		
 	}
 	
-	$html = $content_table;
-
-	// set attributes for pdf
-	$mpdf->SetHTMLHeader($header);
-	$mpdf->SetHTMLFooter($footer);		
-	if (!empty($css)) {
-		$mpdf->WriteHTML($css, 1);
-		$mpdf->WriteHTML($html, 2);
-	} else {
-		$mpdf->WriteHTML($html);
-	}
-	$mpdf->Output(replace_dangerous_char($title_pdf.'.pdf'), 'D');
+	$pdf = new PDF();
+    $pdf->set_custom_footer($footer);
+    $pdf->set_custom_header($headers_in_pdf);
+	$pdf->content_to_pdf($header.$content_table, $css, $title_pdf );
 	exit;
 
 }

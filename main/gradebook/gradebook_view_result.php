@@ -220,15 +220,11 @@ if ($export_result_form->validate()) {
 		// set headers data table
 		$head_ape_name = '';
 		if (api_is_western_name_order()) {
-            $head_ape_name = get_lang('FirstName').' '.get_lang('LastName');			
+            $head_ape_name = get_lang('FirstName').', '.get_lang('LastName');			
 		} else {
-			$head_ape_name = get_lang('LastName').' '.get_lang('FirstName');
+			$head_ape_name = get_lang('LastName').', '.get_lang('FirstName');
 		}
-		$head_display_score = '';
-		$scoredisplay = ScoreDisplay :: instance();
-		if ($scoredisplay->is_custom()) {
-			$head_display_score = get_lang('Display');
-		}
+	
 		if ($number_decimals == null) {
 			$head_letter = get_lang('Letters');
 		}
@@ -237,10 +233,16 @@ if ($export_result_form->validate()) {
 							array(get_lang('Code'),12),
 							array($head_ape_name, 40),
 							array(get_lang('Score'),12),
-							array($head_letter,15),
-							array($head_display_score,15)
+							array($head_letter,15)							
 						);
-
+        
+        $head_display_score = '';
+        $scoredisplay = ScoreDisplay :: instance();
+        if ($scoredisplay->is_custom()) {
+            $head_display_score = get_lang('Display');
+            $head_table[] = array($head_display_score,15);
+        }
+        
 		// get data table
 		if (api_sort_by_first_name()) {
 			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true, true);
@@ -274,11 +276,9 @@ if ($export_result_form->validate()) {
             }           
             if ($scoredisplay->is_custom()) {
                 $result[] = $data['display'];
-            } else {
-                $result[] = '';
             }
 			$data_table[] = $result;
-		}
+		}        
 		export_pdf_with_html($head_table, $data_table, $header_pdf, $footer_pdf, $title_pdf);
 	}
 

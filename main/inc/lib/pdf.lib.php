@@ -8,9 +8,26 @@ require_once _MPDF_PATH.'mpdf.php';
 
 class PDF {
     
-    var $pdf;
-    public function __construct() {
-        $this->pdf = $pdf = new mPDF('UTF-8', 'A4', '', '', 30, 20, 27, 25, 16, 13, 'P');
+    var $pdf;    
+    var $custom_header = '';
+    var $custom_footer = '';    
+    
+    /**
+     * Creates the mPDF object
+     * @params  string  orientation "P" = Portrait "L" = Landscape
+     */
+    public function __construct($page_format ='A4', $orientation = 'P') {
+        /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF
+         * mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])
+         */
+         
+        if(!in_array($orientation,array('P','L'))) {
+            $orientation = 'P';
+        }
+        $this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', 30, 20, 27, 25, 16, 13, $orientation);
+        
+            
+        //$mpdf->mirrorMargins = 0;      // Use different Odd/Even headers and footers and mirror margins
     } 
     
     /**
@@ -76,28 +93,29 @@ class PDF {
             $document_html=str_replace('href="./css/frames.css"',$absolute_css_path, $document_html);
             
             //$document_html=str_replace('<link rel="stylesheet" http://my.chamilo.net/main/css/chamilo/frames.css type="text/css" />','', $document_html);
-
-            $document_html= str_replace('../','',$document_html);            
-            $document_path = api_get_path(WEB_COURSE_PATH).$course_data['path'].'/document/';
-                       
-            $doc = new DOMDocument();           
-            $result = @$doc->loadHTML($document_html);
-                                 
-            //Fixing only images @todo do the same thing with other elements
-            $elements = $doc->getElementsByTagName('img');
-            $replace_img_elements = array();
-            if (!empty($elements)) {
-                foreach($elements as $item) {                    
-                    $old_src = $item->getAttribute('src');
-                    //$old_src= str_replace('../','',$old_src);
-                    if (strpos($old_src, 'http') === false) {
-                        if (strpos($old_src, '/main/default_course_document') === false) {
-                            $document_html= str_replace($old_src, $document_path.$old_src, $document_html);                            
-                        }                                                       	
-                    }                                    
+            
+            if (!empty($course_data['path'])) {
+                $document_html= str_replace('../','',$document_html);            
+                $document_path = api_get_path(WEB_COURSE_PATH).$course_data['path'].'/document/';
+                           
+                $doc = new DOMDocument();           
+                $result = @$doc->loadHTML($document_html);
+                                     
+                //Fixing only images @todo do the same thing with other elements
+                $elements = $doc->getElementsByTagName('img');
+                $replace_img_elements = array();
+                if (!empty($elements)) {
+                    foreach($elements as $item) {                    
+                        $old_src = $item->getAttribute('src');
+                        //$old_src= str_replace('../','',$old_src);
+                        if (strpos($old_src, 'http') === false) {
+                            if (strpos($old_src, '/main/default_course_document') === false) {
+                                $document_html= str_replace($old_src, $document_path.$old_src, $document_html);                            
+                            }                                                       	
+                        }                                    
+                    }
                 }
             }
-              
             //replace relative path by absolute path for resources
             //$document_html= str_replace('src="/chamilo/main/default_course_document/', 'temp_template_path', $document_html);// before save src templates not apply
             //$document_html= str_replace('src="/', 'temp_template_path', $document_html);// before save src templates not apply
@@ -121,6 +139,7 @@ class PDF {
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
         } else {
+            $pdf_name = replace_dangerous_char($pdf_name);
         	$output_file = $pdf_name.'.pdf';
         }
         $result = $this->pdf->Output($output_file, 'D');       /// F to save the pdf in a file              
@@ -217,6 +236,7 @@ class PDF {
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
         } else {
+            $pdf_name = replace_dangerous_char($pdf_name);
             $output_file = $pdf_name.'.pdf';
         }
         $result = $this->pdf->Output($output_file, 'D');       /// F to save the pdf in a file              
@@ -391,6 +411,14 @@ class PDF {
         $this->pdf->SetHeader($my_header);// ('{DATE j-m-Y}|{PAGENO}/{nb}|'.$title);       
     }
     
+    public function set_custom_header($header) {
+        $this->custom_header = $header;
+    }
+    
+    public function set_custom_footer($footer) {
+        $this->custom_footer = $footer;
+    }
+    
     public function format_pdf($course_code) {
         
         /*$pdf->SetAuthor('Documents Chamilo');
@@ -401,8 +429,7 @@ class PDF {
                
         $this->pdf->directionality = api_get_text_direction(); // TODO: To be read from the html document.        
         $this->pdf->useOnlyCoreFonts = true;        
-        $this->pdf->mirrorMargins = 1;            // Use different Odd/Even headers and footers and mirror margins
-        
+        $this->pdf->mirrorMargins = 1;            // Use different Odd/Even headers and footers and mirror margins       
         
         //Adding watermark
         if (api_get_setting('pdf_export_watermark_enable') == 'true') {
@@ -412,11 +439,18 @@ class PDF {
                 $this->pdf->SetWatermarkImage($watermark_file);
                 $this->pdf->showWatermarkImage = true;
             }
+        }        
+        if (empty($this->custom_header)) {
+            self::set_header($course_code);   
+        } else {
+            $this->pdf->SetHTMLHeader($this->custom_header);	
         }
         
-        
-        self::set_header($course_code);
-        self::set_footer();
+        if (empty($this->custom_footer)) {
+            self::set_footer();    
+        } else {
+            $this->pdf->SetHTMLFooter($this->custom_footer);	
+        } 
         
     }
 }

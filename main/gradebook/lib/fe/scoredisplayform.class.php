@@ -88,7 +88,7 @@ class ScoreDisplayForm extends FormValidator
 				$elementTemplateTwoLabel =
 				'<div id=' . $counter . ' style="display: '.(($counter<=$nr_items)?'inline':'none').';" class="row">
 				<p><!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-				<div class="formw"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<b>'.get_lang('And').'</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % =';
+				<div class="formw"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<br /><b>'.get_lang('And').'</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % =';
 
 				$elementTemplateTwoLabel2 =
 				'<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->&nbsp{element}

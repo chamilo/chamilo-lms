@@ -53,8 +53,6 @@ if ($origin == 'learnpath' && isset ($_GET['not_multiple_attempt']) && $_GET['no
 }*/
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>'; //Not necessary to use jquery corner to do that effect use CSS3
-
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/glossary.js" type="text/javascript" language="javascript"></script>'; //Glossary
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';

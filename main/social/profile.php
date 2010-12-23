@@ -63,8 +63,6 @@ api_block_anonymous_users();
 
 //jquery thickbox already called from main/inc/header.inc.php
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript" language="javascript"></script>';
-
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function toogle_course (element_html, course_code){
@@ -218,13 +216,6 @@ $_SESSION['social_user_id'] = intval($user_id);
  * Display
  */
 Display :: display_header($nametool);
-
-// Added by Ivan Tcholakov, 03-APR-2009.
-if (USE_JQUERY_CORNERS_SCRIPT) {
-	echo $s="<script>$(document).ready( function(){
-		  $('.rounded').corners();
-		});</script>";
-}
 
 //Setting some course info
 $my_user_id=isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();

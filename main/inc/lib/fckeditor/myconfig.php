@@ -159,7 +159,9 @@ if ((api_get_setting('math_mimetex') == 'true')) {
 	// How to test manually: Open your browser and enter in the address bar something like http://mysite.com/cgi-bin/mimetex.cgi?hello
 	// By default, the system tries to detect the MimeTeX executable file automatically.
 	// If you are sure that the MimeTeX executable has been correctly installed, you may set this option to boolean true value.
-	$config['MimetexExecutableInstalled'] = 'detect'; // 'detect' (default), true, false
+	
+	$config['MimetexExecutableInstalled'] = 'detect'; // 'false' (default), true, false
+	
 	// Sometimes detection fails (due to slow DNS service, security restrictions, ...). For better probability of success,
 	// the following methods for detection have been defined:
 	// 'bootstrap_ip'   - detection is tried at address like http://127.0.0.1/cgi-bin/mimetex.cgi

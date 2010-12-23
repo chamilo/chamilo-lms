@@ -425,11 +425,9 @@ if (!empty ($_POST['export_report']) && $_POST['export_report'] == 'export_repor
 
 if ($origin != 'learnpath') {
 	//so we are not in learnpath tool
-	Display :: display_header($nameTools, "Exercise");
+	Display :: display_header($nameTools, get_lang('Exercise'));
 	if (isset ($_GET['message'])) {
-		if (in_array($_GET['message'], array (
-				'ExerciseEdited'
-			))) {
+		if (in_array($_GET['message'], array ('ExerciseEdited'))) {
 			Display :: display_confirmation_message(get_lang($_GET['message']));
 		}
 	}
@@ -816,19 +814,23 @@ if ($show == 'test') {
 					echo '<td align="center">';
 					if ($session_id == $row['session_id']) {
 						?>
-						<a href="admin.php?<?php echo api_get_cidreq()?>&amp;exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" /></a>
-						<a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=copy_exercise&amp;sec_token=<?php echo $token; ?>&amp;exerciseId=<?php echo $row['id']; ?>"  onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset)); echo " ".addslashes($row['title']); echo "?"; ?>')) return false;"><img width="16" src="../img/cd.gif" border="0" title="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" /></a>
-						<a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=clean_results&amp;sec_token=<?php echo $token; ?>&amp;exerciseId=<?php echo $row['id']; ?>"  onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'),ENT_QUOTES,$charset)); echo " ".addslashes($row['title']); echo "?"; ?>')) return false;" ><img width="16" src="../img/clean_group.gif" border="0" title="<?php echo api_htmlentities(get_lang('CleanStudentResults'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CleanStudentResults'),ENT_QUOTES,$charset); ?>" /></a>
-						<a href="exercice.php?<?php echo api_get_cidreq() ?>&choice=delete&sec_token=<?php echo$token; ?>&amp;exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".addslashes($row['title']); echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" title="<?php echo get_lang('Delete'); ?>" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
+						<a href="admin.php?<?php echo api_get_cidreq()?>&amp;exerciseId=<?php echo $row['id']; ?>">
+                            <img src="../img/settings.png" border="0" title="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" /></a>
+						<a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=copy_exercise&amp;sec_token=<?php echo $token; ?>&amp;exerciseId=<?php echo $row['id']; ?>"  onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset)); echo " ".addslashes($row['title']); echo "?"; ?>')) return false;">
+                            <img width="22" src="../img/cd.gif" border="0" title="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" /></a>
+						<a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=clean_results&amp;sec_token=<?php echo $token; ?>&amp;exerciseId=<?php echo $row['id']; ?>"  onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'),ENT_QUOTES,$charset)); echo " ".addslashes($row['title']); echo "?"; ?>')) return false;" >
+                            <img width="22" src="../img/clean_group.png" border="0" title="<?php echo api_htmlentities(get_lang('CleanStudentResults'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CleanStudentResults'),ENT_QUOTES,$charset); ?>" /></a>
 						<?php
 						//if active
 						if ($row['active']) {
 							?>
-							<a href="exercice.php?<?php echo api_get_cidreq() ?>&choice=disable&sec_token=<?php echo$token; ?>&amp;page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/visible.gif"  border="0" title="<?php echo get_lang('Deactivate'); ?>" alt="<?php echo api_htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset); ?>" /></a>
+							<a href="exercice.php?<?php echo api_get_cidreq() ?>&choice=disable&sec_token=<?php echo$token; ?>&amp;page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>">
+                                <img src="../img/visible.gif"  border="0" title="<?php echo get_lang('Deactivate'); ?>" alt="<?php echo api_htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset); ?>" /></a>
 							<?php
 						} else { // else if not active
 							?>
-							<a href="exercice.php?<?php echo api_get_cidreq() ?>&choice=enable&sec_token=<?php echo$token; ?>&amp;page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/invisible.gif" border="0"  title="<?php echo get_lang('Activate'); ?>" alt="<?php echo api_htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
+							<a href="exercice.php?<?php echo api_get_cidreq() ?>&choice=enable&sec_token=<?php echo$token; ?>&amp;page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>">
+                                <img src="../img/invisible.gif" border="0"  title="<?php echo get_lang('Activate'); ?>" alt="<?php echo api_htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
 							<?php
 						}
 						// Export qti ...
@@ -839,6 +841,15 @@ if ($show == 'test') {
                         <a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=copy_exercise&amp;sec_token=<?php echo $token; ?>&amp;exerciseId=<?php echo $row['id']; ?>"  onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset)); echo " ".addslashes($row['title']); echo "?"; ?>')) return false;"><img width="16" src="../img/cd.gif" border="0" title="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" /></a>
                         <?php   
 					}
+                    
+                    //last option is deleted
+                    if ($session_id == $row['session_id']) {
+                        ?>                    
+                        <a href="exercice.php?<?php echo api_get_cidreq() ?>&choice=delete&sec_token=<?php echo$token; ?>&amp;exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".addslashes($row['title']); echo "?"; ?>')) return false;">
+                            <img width="22"  src="../img/delete.png" border="0" title="<?php echo get_lang('Delete'); ?>" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
+                         <?php   
+                    }
+                                     
 					echo "</td>";
 					echo "</tr>";
 				} else { // student only

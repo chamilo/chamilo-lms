@@ -286,6 +286,13 @@ if($modifyIn == 'thisExercise') {
 	}
 }
 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.4.4.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui-1.8.7.custom.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui-css/cupertino/jquery-ui-1.8.7.custom.css" type="text/css" media="print, projection, screen">';
+
+
+
+
 $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
 <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
 <script language=\"JavaScript\" type=\"text/javascript\">
@@ -418,8 +425,10 @@ if (isset($exerciseId) && !empty($exerciseId)) {
 echo '<div class="actions">';
 if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
 echo Display::return_icon('back.png', get_lang('GoBackToQuestionList')).' '.'<a href="admin.php?">'.get_lang('GoBackToQuestionList').'</a>';
+
 echo Display::return_icon('preview.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
 echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+
 echo '</div>';
 
 if(isset($_GET['message'])) {

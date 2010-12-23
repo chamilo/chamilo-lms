@@ -13,13 +13,15 @@
 require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
 
 /**
- * @param int question id
- * @param boolean only answers
- * @param boolean origin i.e = learnpath
- * @param int current item from the list of questions
- * @param int number of total questions
+ * Shows a question
+ * 
+ * @param int   question id
+ * @param bool  only answers
+ * @param bool  origin i.e = learnpath
+ * @param int   current item from the list of questions
+ * @param int   number of total questions
  * */
-function showQuestion($questionId, $onlyAnswers = false, $origin = false, $current_item, $total_item) {
+function showQuestion($questionId, $onlyAnswers = false, $origin = false, $current_item = '', $show_title = true) {
 
 	// Text direction for the current language
 	$is_ltr_text_direction = api_get_text_direction() != 'rtl';
@@ -43,16 +45,18 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			$questionDescription=$objQuestionTmp->selectDescription();
 
 			$questionName=text_filter($questionName);
-
-			$s='<div id="question_title" class="sectiontitle">'.get_lang('Question').' ';
-			$s.=$current_item;
-			//@todo I need the get the feedback type
-			//if($answerType != 1)
-			//$s.=' / '.$total_item;
-			echo $s;
-			echo ' : ';
-
-			echo $questionName.'</div>';
+            
+            if ($show_title) {
+    			$s='<div id="question_title" class="sectiontitle">'.get_lang('Question').' ';
+    			$s.=$current_item;
+    			//@todo I need the get the feedback type
+    			//if($answerType != 1)
+    			//$s.=' / '.$total_item;
+    			echo $s;
+    			echo ' : ';
+    			echo $questionName.'</div>';
+            }
+            
 			$s='';
 			$s.='<table class="exercise_questions" style="margin:4px 4px 4px 0px; padding:2px;">
 				<tr><td valign="top" colspan="2">';
@@ -330,7 +334,9 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		$answer_list .= '</dl></div>';
 
 		if (!$onlyAnswers) {
-			echo '<div id="question_title" class="sectiontitle">'.get_lang('Question').' '.$current_item.' : '.$questionName.'</div>';
+            if ($show_title) {
+                echo '<div id="question_title" class="sectiontitle">'.get_lang('Question').' '.$current_item.' : '.$questionName.'</div>';
+            }
 			//@todo I need to the get the feedback type
 			//if($answerType == 2)
 			//	$s.=' / '.$total_item;

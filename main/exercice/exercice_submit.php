@@ -630,7 +630,7 @@ if (!empty ($error)) {
 	            }
 	        }        
 	        // shows the question and its answers
-	        showQuestion($questionId, false, $origin, $i, $nbrQuestions);
+	        showQuestion($questionId, false, $origin, $i);
 	        $i++;
 	        // for sequential exercises
 	        if ($exerciseType == ONE_PER_PAGE) {

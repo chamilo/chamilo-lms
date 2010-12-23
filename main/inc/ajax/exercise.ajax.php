@@ -1,0 +1,25 @@
+<?php
+/* For licensing terms, see /license.txt */
+/**
+ * Responses to AJAX calls
+ */
+require_once '../global.inc.php';
+$action = $_REQUEST['a'];
+
+switch ($action) {    
+    case 'update_question_order':    
+        $new_question_list     = $_POST['question_id_list'];
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
+        $counter = 1;
+        foreach ($new_question_list as $new_order_id) {            
+            Database::update_query($TBL_QUESTIONS, array('question_order'=>$counter), array('question_id = ? '=>$new_order_id));
+            $counter++;
+        }
+        Display::display_confirmation_message(get_lang('Saved'));
+        break;
+    default:
+        echo '';
+
+}
+exit;
+?>

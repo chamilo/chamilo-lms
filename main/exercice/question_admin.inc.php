@@ -44,6 +44,7 @@ if(isset($_GET['editQuestion'])) {
 	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
 }
 
+
 if(is_object($objQuestion)) {
 	//INIT FORM    
 	$form = new FormValidator('question_admin_form','post',$action);

@@ -8361,32 +8361,33 @@ EOD;
         $lp_id = intval($lp_id);
         $files_to_export = array();
         $course_data = api_get_course_info($this->cc);
-        
-        $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
-        require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-        foreach($this->items as $item) {            
-            //Getting documents from a LP with chamilo documents
-            switch ($item->type) {
-                case 'document':
-                    $file_data = DocumentManager::get_document_data_by_id($item->path, $this->cc);
-                    $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$file_data['path'];
-                    if (file_exists($file_path)) {               
-                        $files_to_export[] = $file_path;
-                    }
-                    break;
-                case 'sco':             
-                    $file_path = $scorm_path.'/'.$item->path;
-                    if (file_exists($file_path)) {               
-                        $files_to_export[] = $file_path;
-                    }
-                    break;
-                    
-            }
+        if (!empty($course_data)) {
+            $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
+            require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+            foreach($this->items as $item) {            
+                //Getting documents from a LP with chamilo documents
+                switch ($item->type) {
+                    case 'document':
+                        $file_data = DocumentManager::get_document_data_by_id($item->path, $this->cc);
+                        $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$file_data['path'];
+                        if (file_exists($file_path)) {               
+                            $files_to_export[] = $file_path;
+                        }
+                        break;
+                    case 'sco':             
+                        $file_path = $scorm_path.'/'.$item->path;
+                        if (file_exists($file_path)) {               
+                            $files_to_export[] = $file_path;
+                        }
+                        break;                    
+                }
+            }            
+            require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';      
+            $pdf = new PDF();            
+            $result = $pdf->html_to_pdf($files_to_export, $this->name, $this->cc);
+            return $result;
         }
-        require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';      
-        $pdf = new PDF();
-        $result = $pdf->html_to_pdf($files_to_export, '', $this->cc);
-        return $result;
+        return false;
     }
 
     /**

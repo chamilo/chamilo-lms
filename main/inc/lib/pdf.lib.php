@@ -14,20 +14,17 @@ class PDF {
     
     /**
      * Creates the mPDF object
-     * @params  string  orientation "P" = Portrait "L" = Landscape
+     * @param   string  format A4 A4-L see  http://mpdf1.com/manual/index.php?tid=184&searchstring=format
+     * @param   string  orientation "P" = Portrait "L" = Landscape
      */
     public function __construct($page_format ='A4', $orientation = 'P') {
         /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF
          * mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])
-         */
-         
+         */         
         if(!in_array($orientation,array('P','L'))) {
             $orientation = 'P';
         }
-        $this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', 30, 20, 27, 25, 16, 13, $orientation);
-        
-            
-        //$mpdf->mirrorMargins = 0;      // Use different Odd/Even headers and footers and mirror margins
+        $this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', 30, 20, 27, 25, 16, 13, $orientation); 
     } 
     
     /**

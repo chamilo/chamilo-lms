@@ -5,6 +5,7 @@
  * Export html to pdf
  * @author Juan Carlos Raña <herodoto@telefonica.net>, initial code, 2009
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
+ * @deprecated now we use the pdf.lib.php library for all pdf export issues
  */
 
 require '../inc/global.inc.php';

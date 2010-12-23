@@ -1,17 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
-*
-*	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-* 	@Author Juan Carlos Raña <herodoto@telefonica.net>
+*   @author Juan Carlos Raña <herodoto@telefonica.net>
+*	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium* 	
+*   @author Julio Montoya <gugli100@gmail.com> using the pdf.lib.php library
 *
 * 	@package chamilo.wiki
 */
 
-/*
-FUNCTIONS FOR WIKI
-*/
+/* FUNCTIONS FOR WIKI */
 
 
 /**
@@ -883,7 +880,8 @@ function display_wiki_entry($newtitle)
 		echo '<span style="float:right;padding-top:5px;">';
 		// Modified by Ivan Tcholakov, 28-JAN-2010.
 		//echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">';
-		echo '<form name="form_export2PDF" method="post" action="export_mpdf.php" target="_blank, fullscreen">';
+        
+		/*echo '<form name="form_export2PDF" method="post" action="export_mpdf.php" target="_blank, fullscreen">';
 		//
 		echo '<input type=hidden name="titlePDF" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';		
 		$clean_pdf_content=trim(preg_replace("/\[\[|\]\]/", " ", $content));
@@ -892,7 +890,14 @@ function display_wiki_entry($newtitle)
 		echo '<input type=hidden name="contentPDF" value="'.api_htmlentities($clean_pdf_content, ENT_QUOTES, $charset).'">';
 		echo '<input type="image" src="../img/wiki/wexport2pdf.gif" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none; margin-top: -6px">';
 		echo '</form>';
-		echo '</span>';
+		echo '</span>';*/
+        
+        echo '<form name="form_export2PDF" method="post" action="index.php">';
+        echo '<input type="hidden" name="action" value="export_to_pdf">';
+        echo '<input type="hidden" name="wiki_id" value="'.$row['id'].'">';
+        echo '<input type="image" src="../img/wiki/wexport2pdf.gif" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none; margin-top: -6px">';
+        echo '</form>';
+        echo '</span>';
 
 		//page action: copy last version to doc area
 		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
@@ -1507,6 +1512,8 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 	
     $_clean['group_id']=(int)$_SESSION['_gid'];
 	$session_id=api_get_session_id();
+    
+    
 	
 	$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);
 	$group_name= $group_properties['name'];
@@ -1696,21 +1703,21 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 	$session_id=api_get_session_id();
 
 	$template =
-'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{LANGUAGE}" lang="{LANGUAGE}">
-<head>
-<title>{TITLE}</title>
-<meta http-equiv="Content-Type" content="text/html; charset={ENCODING}" />
-<style type="text/css" media="screen, projection">
-/*<![CDATA[*/
-{CSS}
-/*]]>*/
-</style>
-</head>
-<body dir="{TEXT_DIRECTION}">
-{CONTENT}
-</body>
-</html>';
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{LANGUAGE}" lang="{LANGUAGE}">
+        <head>
+        <title>{TITLE}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset={ENCODING}" />
+        <style type="text/css" media="screen, projection">
+        /*<![CDATA[*/
+        {CSS}
+        /*]]>*/
+        </style>
+        </head>
+        <body dir="{TEXT_DIRECTION}">
+        {CONTENT}
+        </body>
+        </html>';
 
 	$css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/default.css';
 	if (file_exists($css_file)) {
@@ -1765,6 +1772,42 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 
 	return $doc_id;
     // TODO: link to go document area
+}
+
+function export_to_pdf($id, $course_code) {
+        
+    require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+    
+    $data        = get_wiki_data($id);    
+    $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
+    $title_pdf   = api_html_entity_decode($data['title'], ENT_QUOTES, api_get_system_encoding());
+    
+    $title_pdf   = api_utf8_encode($title_pdf, api_get_system_encoding());
+    $content_pdf = api_utf8_encode($content_pdf, api_get_system_encoding());
+    
+    $html='
+    <!-- defines the headers/footers - this must occur before the headers/footers are set -->
+    
+    <!--mpdf
+    <pageheader name="odds" content-left="'.$title_pdf.'"  header-style-left="color: #880000; font-style: italic;"  line="1" />
+    <pagefooter name="odds" content-right="{PAGENO}/{nb}" line="1" />
+    
+    <!-- set the headers/footers - they will occur from here on in the document -->
+    <!--mpdf
+    <setpageheader name="odds" page="odd" value="on" show-this-page="1" />
+    <setpagefooter name="odds" page="O" value="on" />
+    
+    mpdf-->'.$content_pdf;
+    
+    $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
+    if (file_exists($css_file)) {
+        $css = @file_get_contents($css_file);
+    } else {
+        $css = '';
+    }   
+    $pdf = new PDF();
+    $pdf->content_to_pdf($html, $css, $title_pdf, $course_code);
+    exit;	
 }
 
 
@@ -2108,4 +2151,21 @@ function two_digits($number)
 	return ($number < 10) ? '0'.$number : $number;
 }
 
+
+/**
+ * Get wiki information
+ * @param   int     wiki id
+ * @return  array   wiki data   
+ */
+function get_wiki_data($id) {
+    global $tbl_wiki;    
+    $id = intval($id);
+    $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  id = '.$id.' ';
+    $result=Database::query($sql);
+    $data = array();
+    while ($row=Database::fetch_array($result,'ASSOC'))   {
+        $data = $row;
+    }
+    return $data;    
+}
 ?>

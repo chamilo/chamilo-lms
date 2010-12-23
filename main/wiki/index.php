@@ -54,10 +54,10 @@ function setFocus(){
 
 
 // Database table definition
-$tbl_wiki = Database::get_course_table(TABLE_WIKI);
-$tbl_wiki_discuss = Database::get_course_table(TABLE_WIKI_DISCUSS);
-$tbl_wiki_mailcue = Database::get_course_table(TABLE_WIKI_MAILCUE);
-$tbl_wiki_conf = Database::get_course_table(TABLE_WIKI_CONF);
+$tbl_wiki           = Database::get_course_table(TABLE_WIKI);
+$tbl_wiki_discuss   = Database::get_course_table(TABLE_WIKI_DISCUSS);
+$tbl_wiki_mailcue   = Database::get_course_table(TABLE_WIKI_MAILCUE);
+$tbl_wiki_conf      = Database::get_course_table(TABLE_WIKI_CONF);
 /*
 Constants and variables
 */
@@ -66,8 +66,8 @@ $tool_name = get_lang('ToolWiki');
 $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
 
 //condition for the session
-	$session_id = api_get_session_id();
-	$condition_session = api_get_session_condition($session_id);
+$session_id = api_get_session_id();
+$condition_session = api_get_session_condition($session_id);
 
 /*
 ACCESS
@@ -115,6 +115,12 @@ if ($_SESSION['_gid'] OR $_GET['group_id']) {
 } else {
 	$groupfilter='group_id=0';
 }
+
+
+if ($_POST['action']=='export_to_pdf' && isset($_POST['wiki_id']) ) {    
+    export_to_pdf($_POST['wiki_id'], api_get_course_id());    
+}
+
 
 Display::display_header($tool_name, 'Wiki');
 
@@ -338,15 +344,12 @@ if ($_GET['action']=='deletewiki'){
 
 
 if ($_GET['action']=='discuss' && $_POST['Submit']) {
-   		Display::display_confirmation_message(get_lang('CommentAdded'));
+    Display::display_confirmation_message(get_lang('CommentAdded'));
 }
 
 
-/*
------------------------------------------------------------
-WIKI WRAPPER
------------------------------------------------------------
-*/
+
+/* WIKI WRAPPER */
 
 echo "<div id='wikiwrapper'>";
 

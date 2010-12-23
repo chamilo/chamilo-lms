@@ -107,7 +107,7 @@ echo '<div class="actionsbig">';
 //we filter the type of questions we can add
 Question :: display_type_menu ($objExercise->feedbacktype);
 echo '</div><div style="clear:both;">';
-echo '<div id="message">ddddddddd</div>';
+echo '<div id="message"></div>';
 $token = Security::get_token();
 
 if ($nbrQuestions) {

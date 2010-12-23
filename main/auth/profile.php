@@ -62,7 +62,16 @@ function generate_open_id_form() {
 		 $("#div_api_key").html(datos);
 		}
 	});
-}
+}  
+           
+function hide_icon_edit(element_html)  {
+    ident="#edit_image";
+    $(ident).hide();
+}      
+function show_icon_edit(element_html) {    
+    ident="#edit_image";
+    $(ident).show();
+}       
 </script>';
 
 $interbreadcrumb[] = array('url' => '../auth/profile.php', 'name' => get_lang('ModifyProfile'));

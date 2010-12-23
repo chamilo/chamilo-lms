@@ -84,6 +84,8 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 
 ALTER TABLE personal_agenda ADD PRIMARY KEY (id);
 
+UPDATE settings_current SET selected_value='1' WHERE variable='more_buttons_maximized_mode';
+
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
 -- xxUSERxx

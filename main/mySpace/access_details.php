@@ -184,6 +184,10 @@ function load_results(type) {
             }        
         });
 }
+//By default we load the load graph      
+$(document).ready(function() {
+    load_results(\'day\');            
+});  
 </script>';
 
 Display :: display_header('');

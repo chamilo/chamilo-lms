@@ -173,16 +173,17 @@ if (isset($_GET['origin']) && strcmp($_GET['origin'], 'tracking_course') === 0) 
 }
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery-1.1.3.1.pack.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.history_remote.pack.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.tabs.pack.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';
-
 $htmlHeadXtra[] = '<script type="text/javascript">
-$(function() {
-	$("#container-9").tabs({ remote: true});
-});
-
+function load_results(type) {
+        $.ajax({
+            type: "GET",
+            url: "access_details.php?course='.$course_code.'&student='.$user_id.'",
+            data: "type=" + type,
+            success: function(data) {
+                    $("#show").html(data);
+            }        
+        });
+}
 </script>';
 
 Display :: display_header('');
@@ -204,13 +205,15 @@ if (!empty($connections)) {
 	   $result_to_print .= '&nbsp;&nbsp;'.date('d-m-Y (H:i:s)', $data['login']).' - '.api_time_to_hms($data['logout'] - $data['login']).'<br />'."\n";
     }
 
-    echo '<div id="container-9">';
+    echo '<div class="actions">';
     echo '<ul>';
-    echo '<li><a href="access_details.php?type=day&course='.$course_code.'&student='.$user_id.'"><span>'.api_ucfirst(get_lang('Day')).'</span></a></li>';
-    echo '<li><a href="access_details.php?type=month&course='.$course_code.'&student='.$user_id.'"><span>'.api_ucfirst(get_lang('MinMonth')).'</span></a></li>';
+    echo '<li><a href=# onclick="load_results(\'day\')"><span>'.api_ucfirst(get_lang('Day')).'</span></a></li>';
+    echo '<li><a href=# onclick="load_results(\'month\')"><span>'.api_ucfirst(get_lang('MinMonth')).'</span></a></li>';
     echo '</ul>';
-    echo '<div id="show"></div>'; 
     echo '</div>';
+    
+    echo '<div id="show"></div>'; 
+    
 
     echo '<div id="graph"></div><br />';
     echo '<div class="actions"><strong>', get_lang('DateAndTimeOfAccess'), ' - ', get_lang('Duration'), '</strong></div><br />';
@@ -218,17 +221,5 @@ if (!empty($connections)) {
 } else {
     Display::display_warning_message(get_lang('GraphicNotAvailable'));	
 }
-
-/* Login time against logout time
-foreach ($connections as $key => $data) {
-    echo ("<tr><td>".date("d-m-Y (H:i:s)", $data['login'])."</td><td>".date("d-m-Y (H:i:s)", $data['logout'])."</td></tr>");
-}
-*/
-/*
-foreach ($connections as $key => $data) {
-    echo ("<tr><td>".date("d-m-Y (H:i:s)", $data['login'])."</td><td>".api_time_to_hms($data['logout'] - $data['login'])."</td></tr>");
-}
-echo ("</table>");
-*/
 
 Display:: display_footer();

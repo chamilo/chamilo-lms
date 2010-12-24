@@ -160,7 +160,7 @@ if ((api_get_setting('math_mimetex') == 'true')) {
 	// By default, the system tries to detect the MimeTeX executable file automatically.
 	// If you are sure that the MimeTeX executable has been correctly installed, you may set this option to boolean true value.
 	
-	$config['MimetexExecutableInstalled'] = 'detect'; // 'false' (default), true, false
+	//$config['MimetexExecutableInstalled'] = 'detect'; // 'detect' (default), true, false
 	
 	// Sometimes detection fails (due to slow DNS service, security restrictions, ...). For better probability of success,
 	// the following methods for detection have been defined:
@@ -168,13 +168,13 @@ if ((api_get_setting('math_mimetex') == 'true')) {
 	// 'localhost'      - detection is tried at address like http://localhost/cgi-bin/mimetex.cgi
 	// 'ip'             - detection is tried at ip address, for example http://192.168.0.1/cgi-bin/mimetex.cgi
 	// 'server_name'    - detection is tried at address based on server's name, for example http://mysite.com/cgi-bin/mimetex.cgi
-	if (IS_WINDOWS_OS) {
-		$config['MimetexExecutableDetectionMethod'] = 'bootstrap_ip'; // 'bootstrap_ip' for better chance on Windows (no firewall blocking).
-	} else {
-		$config['MimetexExecutableDetectionMethod'] = 'server_name';
-	}
+	//if (IS_WINDOWS_OS) {
+		//$config['MimetexExecutableDetectionMethod'] = 'bootstrap_ip'; // 'bootstrap_ip' for better chance on Windows (no firewall blocking).
+	//} else {
+		//$config['MimetexExecutableDetectionMethod'] = 'server_name';
+	//}
 	// Timeout for MimeTeX executable file detection - keep this value as low as possible, especially on Windows servers.
-	$config['MimetexExecutableDetectionTimeout'] = 0.05;
+	//$config['MimetexExecutableDetectionTimeout'] = 0.05;
 }
 
 

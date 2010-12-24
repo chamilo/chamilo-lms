@@ -72,7 +72,7 @@
 			}
 			else
 			{
-				//snippet = FCKConfig.insertHtml_snippets;//Chamilo replaced by below
+				//snippet = FCKConfig.insertHtml_snippets;//Chamilo replaced by below (by now)
 				snippet = "";//Insert your tex here
 			}
 			insertHtmlTextArea.value = snippet;

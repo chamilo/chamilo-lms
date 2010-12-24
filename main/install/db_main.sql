@@ -780,6 +780,7 @@ VALUES
 ('pdf_export_watermark_enable',		NULL,'radio',		'Platform',	'false','PDFExportWatermarkEnableTitle',	'PDFExportWatermarkEnableComment',	'platform',NULL, 1),
 ('pdf_export_watermark_by_course',	NULL,'radio',		'Platform',	'false','PDFExportWatermarkByCourseTitle',	'PDFExportWatermarkByCourseComment','platform',NULL, 1),
 ('pdf_export_watermark_text',		NULL,'textfield',	'Platform',	'',		'PDFExportWatermarkTextTitle',		'PDFExportWatermarkTextComment',	'platform',NULL, 1),
+('enabled_insertHtml',NULL,'radio','Editor','false','EnabledInsertHtmlTitle','EnabledInsertHtmlComment',NULL,NULL, 0),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.8.8.13050', 'DokeosDatabaseVersion', '', NULL, NULL, 0);
 
 
@@ -1018,7 +1019,9 @@ VALUES
 ('pdf_export_watermark_enable','true','Yes'),
 ('pdf_export_watermark_enable','false','No'),
 ('pdf_export_watermark_by_course','true','Yes'),
-('pdf_export_watermark_by_course','false','No');
+('pdf_export_watermark_by_course','false','No'),
+('enabled_insertHtml','true','Yes'),
+('enabled_insertHtml','false','No');
 
 UNLOCK TABLES;
 

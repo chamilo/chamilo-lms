@@ -630,7 +630,7 @@ class Display {
 	 * @param array additional attributes (for instance height, width, onclick, ...)
 	*/
 	public static function display_icon($image, $alt_text = '', $additional_attributes = array()) {
-		echo Display::return_icon($image, $alt_text, $additional_attributes);
+		echo self::return_icon($image, $alt_text, $additional_attributes);
 	}
 
 	/**
@@ -640,23 +640,68 @@ class Display {
 	 * @param string $alt_text the alt text (probably a language variable)
 	 * @param array additional attributes (for instance height, width, onclick, ...)
 	 *
-	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University 2006
+     * @author Julio Montoya 2010 Function improved
 	 * @version October 2006
 	*/
-	public static function return_icon($image, $alt_text = '', $additional_attributes = array()) {
-		$attribute_list = '';
-		// alt text = the image name if there is none provided (for XHTML compliance)
-		if ($alt_text == '') {
-			$alt_text = $image;
-		}
-		// Managing the additional attributes
-		if (!empty($additional_attributes) && is_array($additional_attributes)) {
-			$attribute_list = '';
-			foreach ($additional_attributes as $key => & $value) {
-				$attribute_list .= $key.'="'.$value.'" ';
-			}
-		}
-		return '<img src="'.api_get_path(WEB_IMG_PATH).$image.'" alt="'.$alt_text.'"  title="'.$alt_text.'" '.$attribute_list.' />';
+	public static function return_icon($image, $alt_text = '', $additional_attributes = array()) {		
+		return self::img(api_get_path(WEB_IMG_PATH).$image, $alt_text,$additional_attributes);
 	}
-
+    
+    /**
+     * Returns the htmlcode for an image
+     *       
+     * @param string $image the filename of the file (in the main/img/ folder
+     * @param string $alt_text the alt text (probably a language variable)
+     * @param array additional attributes (for instance height, width, onclick, ...)
+     * @author Julio Montoya 2010
+     */
+    public static function img($image_path, $alt_text = '', $additional_attributes = array()) {
+        $attribute_list = '';
+        // alt text = the image name if there is none provided (for XHTML compliance)
+        if ($alt_text == '') {
+            $alt_text = basename($image_path);
+        } 
+        $image_path = Security::remove_XSS($image_path);
+        
+        $additional_attributes['src']   = $image_path;
+        
+        if (empty($additional_attributes['alt'])) {
+            $additional_attributes['alt']   = $alt_text;
+        }
+        if (empty($additional_attributes['title'])) {
+            $additional_attributes['title'] = $alt_text;
+        }        
+        //return '<img src="'.$image_path.'" alt="'.$alt_text.'"  title="'.$alt_text.'" '.$attribute_list.' />';
+        return self::tag('img','',$additional_attributes);        
+    }
+    
+    
+    /**
+     * Returns the htmlcode for a tag (h3, h1, div), etc
+     *       
+     * @param string $image the filename of the file (in the main/img/ folder
+     * @param string $alt_text the alt text (probably a language variable)
+     * @param array additional attributes (for instance height, width, onclick, ...)
+     * @author Julio Montoya 2010
+     */
+    public static function tag($tag, $content, $additional_attributes = array()) {
+        $attribute_list = '';    
+        // Managing the additional attributes
+        if (!empty($additional_attributes) && is_array($additional_attributes)) {
+            $attribute_list = '';
+            foreach ($additional_attributes as $key => & $value) {
+                $attribute_list .= $key.'="'.$value.'" ';
+            }
+        }   
+        //some tags don't have this </XXX>
+        if (in_array($tag, array('img','input'))) {
+            $return_value = '<'.$tag.' '.$attribute_list.' />';
+        } else {
+            $return_value = '<'.$tag.' '.$attribute_list.' > '.$content.'</'.$tag.'>';
+        }        
+        return $return_value; 
+        
+    }
+    
 } //end class Display

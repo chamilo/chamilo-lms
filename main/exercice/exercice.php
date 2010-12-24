@@ -711,13 +711,10 @@ if ($_configuration['tracking_enabled']) {
 echo '</div>'; // closing the actions div
 
 if ($show == 'test') {
-    
-    
-    
-    ?>
-    
+    ?>    
 <script>
-    $(function() {
+    $(function() {        
+        $( "a", ".operations" ).button();        
         $(".tabs-left").tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
         $(".tabs-left li").removeClass('ui-corner-top').addClass('ui-corner-left');
         
@@ -764,10 +761,13 @@ if ($show == 'test') {
     $online_icon = Display::return_icon('online.png', get_lang('Visible'),array('width'=>'12px'));
     $offline_icon = Display::return_icon('offline.png',get_lang('Invisible'),array('width'=>'12px'));
     
-    while ($row = Database :: fetch_array($result,'ASSOC')) {
+    while ($row = Database :: fetch_array($result,'ASSOC')) {        
         $status = $online_icon;
-        if ($row['active'] == 0) {
+        if (empty($row['active'])) {
             $status = $offline_icon;    
+        }
+        if (!(api_is_platform_admin() || api_is_allowed_to_edit()) ) {
+        	$status = '';
         }
         $lis.= Display::tag('li','<a href="#tabs-'.$i.'">'.$status.' '.$row['title'].'</a>');
         $i++;
@@ -820,10 +820,7 @@ if ($show == 'test') {
                 $row['title']=text_filter($row['title']);
                 echo Display::tag('h2',$row['title']);
                 echo '<p>';
-                
-                
-                echo $session_img;         
-                
+                echo $session_img;
                 $exid = $row['id'];
 
                 //count number exercice - teacher
@@ -869,8 +866,6 @@ if ($show == 'test') {
                     <?php   
                 }
                 
-           
-                
                 //last option is deleted
                 if ($session_id == $row['session_id']) {
                     ?>                    
@@ -879,10 +874,13 @@ if ($show == 'test') {
                      <?php   
                 }          
                 
+                echo '<br />'.get_count_exam_results($row['id']).' '.get_lang('Attempts');
                 
-                echo '<br /><a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&amp;exerciseId='.$row['id'].'" >';                
-                echo get_lang('Preview');
-                echo '</a>';
+                echo '<div class="operations">';                
+                    echo Display::tag('a', get_lang('Preview'), array('href'=>'exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id']));
+                    echo Display::tag('a', get_lang('Results'), array('href'=>'exercice.php?'.api_get_cidreq().'&show=result&exerciseId='.$row['id']));
+                echo '</div>';
+                
                 
                       
             } else { // student only
@@ -1459,7 +1457,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
  * Gets count of exam results
  * @todo this function should be moved in a library  + no global calls 
  */
-function get_count_exam_results() {
+function get_count_exam_results($exercise_id = null) {
  global $is_allowedToEdit, $is_tutor,$_cid,$_user,$TBL_USER, $TBL_EXERCICES,$TBL_TRACK_EXERCICES, $TBL_TRACK_ATTEMPT_RECORDING,$filter_by_not_revised,$filter_by_revised,$documentPath;
     $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
     if ($is_allowedToEdit || $is_tutor) {
@@ -1474,6 +1472,16 @@ function get_count_exam_results() {
         if ($_GET['gradebook'] == 'view') {
             $exercise_where_query = 'te.exe_exo_id =ce.id AND ';
         }
+        
+                
+        $exercise_where = '';
+        if (isset($_GET['exerciseId'])) {
+            $exercise_where = ' AND te.exe_exo_id = '.intval($_GET['exerciseId']).'  ';
+        }
+        
+        if (!empty($exercise_id)) {
+        	$exercise_where = ' AND te.exe_exo_id = '.intval($exercise_id).'  ';
+        }
 
         //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
@@ -1486,11 +1494,11 @@ function get_count_exam_results() {
 
         $sql="SELECT count(*)  as count
                 FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0";
+                WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where ";
 
         $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid) . " $user_id_and '
+                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid) . " $user_id_and  $exercise_where
                     ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
 
 
@@ -1544,9 +1552,16 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 $user_id_and = " AND user_id = '" . Database :: escape_string((int) $_POST['filter_by_user']) . "' ";
             }
         }
+        
         if ($_GET['gradebook'] == 'view') {
-            $exercise_where_query = 'te.exe_exo_id =ce.id AND ';
+            $exercise_where_query = ' te.exe_exo_id =ce.id AND ';
         }
+        
+        $exercise_where = '';
+        if (isset($_GET['exerciseId'])) {
+            $exercise_where .= ' AND te.exe_exo_id = '.intval($_GET['exerciseId']).'  ';
+        }
+        
 
         //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
@@ -1560,11 +1575,11 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
         $sql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", ce.title as col2, te.exe_result as exresult , te.exe_weighting as exweight,
                 te.exe_date as exdate, te.exe_id as exid, email as exemail, te.start_date as col4, steps_counter as exstep, exe_user_id as excruid,te.exe_duration as exduration
                 FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0";
+                WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where ";
 
         $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid) . " $user_id_and '
+                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid)." $user_id_and $exercise_where 
                     ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
 
 

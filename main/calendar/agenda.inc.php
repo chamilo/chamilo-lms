@@ -493,9 +493,9 @@ function display_monthcalendar($month, $year) {
 					//var_dump($dayheader);
 
 					if (($curday==$today['mday']) && ($year ==$today['year'])&&($month == $today['mon'])) {
-						echo '<td class="days_today"'.$bgcolor.'" style="width:10%">'.$dayheader;
+						echo '<td class="days_today"'.$bgcolor.' style="height:80px;width:10%">'.$dayheader;
 	      			} else {
-						echo '<td class="days_week"'.$bgcolor.'" style="width:10%">'.$dayheader;
+						echo '<td class="days_week" '.$bgcolor.' style="height:80px;width:10%">'.$dayheader;
 					}
 					echo '</td>';
 		      		$curday++;

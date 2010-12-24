@@ -212,6 +212,15 @@ abstract class Question
 	{
 		return $this->picture;
 	}
+    
+    function selectPicturePath() {   
+        global $_course;
+        if (!empty($this->picture)) {
+            return api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/images/'.$this->picture;
+        }
+        return false;
+        
+    }
 
 	/**
 	 * returns the array with the exercise ID list

@@ -21,7 +21,7 @@ require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
  * @param int   current item from the list of questions
  * @param int   number of total questions
  * */
-function showQuestion($questionId, $onlyAnswers = false, $origin = false, $current_item = '', $show_title = true) {
+function showQuestion($questionId, $onlyAnswers = false, $origin = false, $current_item = '', $show_title = true, $freeze = false) {
 
 	// Text direction for the current language
 	$is_ltr_text_direction = api_get_text_direction() != 'rtl';
@@ -76,6 +76,10 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		} else {
 			$option_ie="margin-left:10px";
 		}
+        
+        if ($answerType == FREE_ANSWER && $freeze) {
+            return '';
+        }
 		$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp=new Answer($questionId);
@@ -118,17 +122,19 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			}
 			$num_suggestions = ($nbrAnswers - $x) + 1;
 		} elseif ($answerType == FREE_ANSWER) {
-			#$comment = $objAnswerTmp->selectComment(1);
-			//
-
 			$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
-
 			$oFCKeditor->ToolbarSet = 'TestFreeAnswer';
 			$oFCKeditor->Width  = '100%';
 			$oFCKeditor->Height = '200';
 			$oFCKeditor->Value	= '' ;
+            
+          
+            $s .= '<tr><td colspan="3">';
+            $s .= $oFCKeditor->CreateHtml();
+            $s .= '</td></tr>';
+                       
+            
 
-			$s .= '<tr><td colspan="3">'.$oFCKeditor->CreateHtml()."</td></tr>";
 			//$s.="<tr><td colspan='2'><textarea cols='80' rows='10' name='choice[".$questionId."]'>$answer</textarea></td></tr>";
 
 		}
@@ -190,7 +196,6 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 					'<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
 					$answer.
 					'</div></div></td></tr>';
-
 			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
 				// multiple answers
 				// set $debug_mark_answer to true at function start to
@@ -214,7 +219,6 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			} elseif ($answerType == FILL_IN_BLANKS) {
 				// fill in blanks
 				$s .= '<tr><td colspan="3">'.$answer.'</td></tr>';
-
 			} else {
 				//  matching type, showing suggestions and answers
 				// TODO: replace $answerId by $numAnswer
@@ -311,6 +315,11 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
         }
 		$questionName         = $objQuestionTmp->selectTitle();
 		$questionDescription  = $objQuestionTmp->selectDescription();
+        
+        if ($freeze) {
+            echo Display::img($objQuestionTmp->selectPicturePath());
+            exit;
+        }        
 
 		// Get the answers, make a list
 		$objAnswerTmp         = new Answer($questionId);
@@ -347,10 +356,12 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			echo $questionDescription=text_filter($questionDescription);
 			echo '</td></tr>';
 		}
+        
+        
+        
+    
 
 		$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
-		//$tes = isset($_GET['modifyAnswers']) ? '0' : '1';
-		//echo $tes;
         
 		$s .= '<script language="JavaScript" type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
 						<script src="../plugin/hotspot/hotspot.js" type="text/javascript" language="JavaScript"></script>

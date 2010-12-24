@@ -56,10 +56,17 @@ class DisplayGradebook
 		$evalinfo .= get_lang('EvaluationName') . ' :<b> ' . $evalobj->get_name() . ' </b>(' . api_format_date($evalobj->get_date()).' )<br />' . get_lang('Course') . ' :<b> ' . $course . '</b><br>' . get_lang('Weight') . ' :<b> ' . $evalobj->get_weight() . '</b><br>' . get_lang('QualificationNumeric') . ' :<b> ' . $evalobj->get_max() . '</b><br>' . $description . get_lang('Visible') . ' :<b> ' . $visible . '</b><br>' . $average;
 		if (!$evalobj->has_results())
 			$evalinfo .= '<br /><i>' . get_lang('NoResultsInEvaluation') . '</i>';
-		elseif ($scoredisplay->is_custom() && api_get_self() != '/dokeos/main/gradebook/gradebook_statistics.php')
-		$evalinfo .= '<br /><br /><a href="gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('gradebook_eval_not_empty.gif'),get_lang('ViewResult')) . '</a>';
-		$evalinfo .= '<a href="gradebook_statistics.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('statistics.gif'),get_lang('ViewStatistics')) . '</a>';
-		$evalinfo .= '</td><td><img style="float:right; position:relative;" src="../img/tutorial.gif"></img></td></table>';
+		elseif ($scoredisplay->is_custom() && api_get_self() != '/dokeos/main/gradebook/gradebook_statistics.php') {
+            if (api_is_allowed_to_edit(null, true)) {    
+                $evalinfo .= '<br /><br /><a href="gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('gradebook_eval_not_empty.gif'),get_lang('ViewResult')) . '</a>';
+            }
+        }
+        
+        if (api_is_allowed_to_edit(null, true)) {
+            $evalinfo .= '<a href="gradebook_statistics.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('statistics.gif'),get_lang('ViewStatistics')) . '</a>';
+        }
+            $evalinfo .= '</td><td><img style="float:right; position:relative;" src="../img/tutorial.gif"></img></td></table>';
+        
 		Display :: display_normal_message($evalinfo,false);
 		echo $header;
 

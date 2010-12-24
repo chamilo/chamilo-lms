@@ -1,0 +1,26 @@
+Plugin for inserting HTML: a single preconfigured snippet; a choice from multiple preconfigured snippets; or manually entered HTML
+
+Move the folder 'insertHtml' into your plugins directory ('editor/plugins/') and add+configure the plugin in your fckconfig.js file by using the example below:
+
+FCKConfig.Plugins.Add('insertHtml', 'en,nl');
+	// --- config settings for the insertHtml plugin ---
+	// enter a single snippet (HMTL string) or multiple snippets to choose form (object of description string and HTML string pairs)
+	// or leave empty if you want to show a dialog for the user to enter HTML manually (and not show any default HTML in the dialog textarea)
+	FCKConfig.insertHtml_snippets = {
+		'ArtGallery': '<embed width="475" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/Art/ArtFlashGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" allowfullscreen="true" flashvars="XMLFile=userfiles/image/ArtGallery/gallery.xml"></embed>',
+		'PhotoFlowGallery' : '<embed width="700" height="300" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/PhotoFlow/PhotoFlowGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/PhotoFlowGallery/gallery.xml"></embed>',
+		'StackPhotoGallery' : '<embed width="600" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/StackPhoto/StackPhotoGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/StackPhotoGallery/gallery.xml"></embed>',
+		'ZenGallery' : '<embed width="550" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/Zen/ZenGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/ZenGallery/gallery.xml"></embed>'
+	};
+	// show a dialog for the user to enter HTML manually or to choose between snippets
+	// (if no snippets specified the dialog will show anyhow)
+	FCKConfig.insertHtml_showDialog = true;
+	// specify a custom tooltip if you want this to appear when hovering the plugin's toolbar button (e.g. a description of the element being inserted)
+	// (if no custom tooltip is set 'Insert HTML' will appear, and if available, translated into your language)
+	FCKConfig.insertHtml_buttonTooltip = '';
+	// show a textarea in the dialog? (the (first) HTML set with FCKConfig.insertHtml_snippets will be shown in the textarea by default)
+	// (if no snippets specified the textarea will show anyhow)
+	FCKConfig.insertHtml_showTextarea = false;
+	// the size of the textarea in the dialog, in px
+	FCKConfig.insertHtml_textareaWidth = 300;
+	FCKConfig.insertHtml_textareaHeight = 70;

@@ -128,24 +128,23 @@ if ($nbrQuestions) {
 			}	
 			$objQuestionTmp = Question :: read($id);
             $question_class = get_class($objQuestionTmp);
-            $label = $question_class->$explanationLangVar;            
+            $label = $question_class->$explanationLangVar;  
             
+            $edit_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'"><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').'" /></a>';          
+            // this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
+            if ($show_quiz_edition) {
+                 $delete_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))).' \')) return false;"><img src="../img/delete.gif" border="0" alt="'.get_lang('Delete').'" /></a>';                 
+            }            
+            $actions =  Display::tag('div',$edit_link.$delete_link, array('style'=>'float:right'));
 
-            echo '<div id="question_id_list_'.$id.'" >';
-                  
+            echo '<div id="question_id_list_'.$id.'" >';                  
             $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved'));            
 		    echo Display::tag('h3','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().'</a>');
             
             echo '<div>';             
             echo '<p>';			  	
-		  	$edit_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'"><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').'" /></a>';
-			
-			// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
-			if ($show_quiz_edition) {
-			     $delete_link = '<a href="'.api_get_self().'?'.api_get_cidreq().' &amp;deleteQuestion='.$id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))).' \')) return false;"><img src="../img/delete.gif" border="0" alt="'.get_lang('Delete').'" /></a>';				 
-			}
-            
-            echo Display::tag('div',$edit_link.$delete_link, array('style'=>'float:right;'));
+            echo $actions;
+		  
             
             echo get_lang($question_class.$label);
             echo '<br />'; 

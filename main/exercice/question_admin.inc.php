@@ -96,9 +96,9 @@ if(is_object($objQuestion)) {
 
 	    // redirect
 	    if($objQuestion -> type != HOT_SPOT)
-	    	echo '<script type="text/javascript">window.location.href="admin.php"</script>';
+	    	echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'"</script>';
 	    else
-	    	echo '<script type="text/javascript">window.location.href="admin.php?hotspotadmin='.$objQuestion->id.'"</script>';
+	    	echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'"</script>';
 	} else {
 
 		/******************
@@ -110,15 +110,11 @@ if(is_object($objQuestion)) {
 		if(!empty($pictureName)){
 			echo '<img src="../document/download.php?doc_url=%2Fimages%2F'.$pictureName.'" border="0">';
 		}
-
-		if(!empty($msgErr))
-		{
+		if(!empty($msgErr)) {
 			Display::display_normal_message($msgErr); //main API
 		}
-
 		// display the form
 		$form->display();
 	}
 }
-
 ?>

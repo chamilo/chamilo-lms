@@ -446,12 +446,12 @@ if(!empty($description))
 }
 */
 
-if($newQuestion || $editQuestion) {
+if ($newQuestion || $editQuestion) {
 	// statement management
 	$type = $_REQUEST['answerType'];
 	?><input type="hidden" name="Type" value="<?php echo $type; ?>" />
 	<?php
-	include('question_admin.inc.php');
+	require 'question_admin.inc.php';
 }
 
 if(isset($_GET['hotspotadmin'])) {

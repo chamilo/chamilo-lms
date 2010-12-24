@@ -1,4 +1,4 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
 $language_file= 'gradebook';
 //$cidReset= true;
@@ -10,7 +10,6 @@ require_once 'lib/user_data_generator.class.php';
 require_once 'lib/fe/usertable.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/scoredisplay.class.php';
-require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 api_block_anonymous_users();
 block_students();
@@ -35,44 +34,50 @@ if ($_GET['selectcat'] != null) {
 }
 
 $user_table= new UserTable($my_user_id, $allevals, $alllinks, $addparams);
-if (isset ($_GET['exportpdf'])) {
-	$pdf= new Cezpdf();
-	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
-	$pdf->ezSetMargins(30, 30, 50, 30);
-	$pdf->ezSetY(800);
-	$datagen= new UserDataGenerator($my_user_id, $allevals,$alllinks);
-	$data_array= $datagen->get_data(UserDataGenerator :: UDG_SORT_NAME, 0, null, true);
-	$newarray= array ();
-	$displayscore= Scoredisplay :: instance();
-	$newitem= array ();
+if (isset ($_GET['exportpdf'])) {	
+
+	$datagen       = new UserDataGenerator($my_user_id, $allevals,$alllinks);
+	$data_array    = $datagen->get_data(UserDataGenerator :: UDG_SORT_NAME, 0, null, true);
+    
+	$newarray      = array ();
+	$displayscore  = Scoredisplay :: instance();
+	$newitem       = array ();
 	foreach ($data_array as $data) {
-		$newarray[] = array_slice($data, 1);
+        $newarray[] = array_slice($data, 1);
 	}
-
-	$pdf->ezSetY(810);
-	$userinfo = get_user_info_from_id($my_user_id);
-	$pdf->ezText(get_lang('Results').' : '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('. api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT) .')', 12, array('justification'=>'center'));
-	$pdf->line(50,790,550,790);
-	$pdf->line(50,40,550,40);
-
-	$pdf->ezSetY(750);
+	$userinfo = get_user_info_from_id($my_user_id);    
+	$html .= get_lang('Results').' : '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('. api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT) .')';
+	
 	if ($displayscore->is_custom()) {
 		$header_names= array (
-			get_lang('Evaluation'
-		), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'),get_lang('Display'));
+            get_lang('Evaluation'), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'),get_lang('Display'));
 	} else {
 		$header_names= array (
-			get_lang('Evaluation'
-		), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'));
+			get_lang('Evaluation'), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'));
 	}
-	$pdf->ezTable($newarray, $header_names, '', array (
-		'showHeadings' => 1,
-		'shaded' => 1,
-		'showLines' => 1,
-		'rowGap' => 3,
-		'width' => 500
-	));
-	$pdf->ezStream();
+    
+    $table = new HTML_Table(array('class' => 'data_table'));
+    $row = 0;
+    $column = 0;
+    foreach ($header_names as $item) {
+        $table->setHeaderContents($row, $column, $item);
+        $column++;
+    }
+    $row = 1;
+    if (!empty($newarray)) {
+        foreach ($newarray as $data) {
+            $column = 0;
+            $table->setCellContents($row, $column, $data);
+            $table->updateCellAttributes($row, $column, 'align="center"');
+            $column++;
+            $row++;
+        }
+    }    
+    $html .= $table->toHtml();
+    
+    require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+    $pdf = new PDF();
+    $pdf->content_to_pdf($html);
 	exit;
 }
 $actions = '<div class="actions">';

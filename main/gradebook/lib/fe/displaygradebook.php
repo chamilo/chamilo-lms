@@ -354,13 +354,13 @@ class DisplayGradebook
 
 
 	function display_header_user($userid) {
-		$select_cat=Security::remove_XSS($_GET['selectcat']);
-		$user_id = $userid;
-		$user= get_user_info_from_id($user_id);
+		$select_cat   = intval($_GET['selectcat']);
+		$user_id      = $userid;
+		$user         = get_user_info_from_id($user_id);
 
-		$catcourse= Category :: load($select_cat);
+		$catcourse    = Category :: load($select_cat);
 		$scoredisplay = ScoreDisplay :: instance();
-		$scorecourse = $catcourse[0]->calc_score($user_id);
+		$scorecourse  = $catcourse[0]->calc_score($user_id);
 
 		// generating the total score for a course
 		$allevals= $catcourse[0]->get_evaluations($user_id,true);
@@ -385,7 +385,7 @@ class DisplayGradebook
 		$cattotal = Category :: load(0);
 		$scoretotal= $cattotal[0]->calc_score($user_id);
 		$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
-	//---------------------
+
 		$image_syspath = UserManager::get_user_picture_path_by_id($userid,'system',false,true);
         $image_size = getimagesize($image_syspath['dir'].$image_syspath['file']);
         //Web path
@@ -397,8 +397,8 @@ class DisplayGradebook
  			$img_attributes .= 'width="200" ';
 		}
 		$info = '<table width="100%" border=0 cellpadding=5><tr><td width="80%">';
-		$info.= get_lang('Name') . ' : <b>' . api_get_person_name($user['firstname'], $user['lastname']) . '</b> ( <a href="user_info.php?userid=' . $userid . '&selectcat=' . Security::remove_XSS($_GET['selectcat']) . '">' . get_lang('MoreInfo') . '...</a> )<br>';
-		$info.= get_lang('Email') . ' : <b><a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a></b><br><br>';
+		$info.= get_lang('Name') . ' :  <a target="_blank" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u=' . $userid . '"> ' . api_get_person_name($user['firstname'], $user['lastname']) . '</a><br />';
+		$info.= get_lang('Email') . ' : <a href="mailto:' . $user['email'] . '">' . $user['email'] . '</a><br />';
 		$info.= get_lang('TotalUser') . ' : <b>' . $scorecourse_display . '</b><br>';
 		$info.= '</td><td>';
 		$info.= '<img ' . $img_attributes . '/></td></tr></table>';

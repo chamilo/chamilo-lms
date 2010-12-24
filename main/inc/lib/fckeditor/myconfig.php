@@ -152,27 +152,31 @@ if ((api_get_setting('enabled_googlemaps') == 'true')) {
 if ((api_get_setting('math_mimetex') == 'true')) {
     $config['LoadPlugin'][] = 'mimetex';
 	// in your server configuration have to be done. The MimeTex executable file has to be installed, see the installation guide.
-	// Some additional settings become active only when the 'mimetex' plugin has been enabled:
-	//
-	// The following setting determines whether MimeTeX executable file has been installed on the server or not. This file should be accessible
-	// for browsers at address http://mysite.com/cgi-bin/mimetex.cgi (Linux) or at address http://mysite.com/cgi-bin/mimetex.exe (Windows).
-	// How to test manually: Open your browser and enter in the address bar something like http://mysite.com/cgi-bin/mimetex.cgi?hello
-	// By default, the system tries to detect the MimeTeX executable file automatically.
-	// If you are sure that the MimeTeX executable has been correctly installed, you may set this option to boolean true value.
-	$config['MimetexExecutableInstalled'] = 'detect'; // 'detect' (default), true, false
-	// Sometimes detection fails (due to slow DNS service, security restrictions, ...). For better probability of success,
-	// the following methods for detection have been defined:
-	// 'bootstrap_ip'   - detection is tried at address like http://127.0.0.1/cgi-bin/mimetex.cgi
-	// 'localhost'      - detection is tried at address like http://localhost/cgi-bin/mimetex.cgi
-	// 'ip'             - detection is tried at ip address, for example http://192.168.0.1/cgi-bin/mimetex.cgi
-	// 'server_name'    - detection is tried at address based on server's name, for example http://mysite.com/cgi-bin/mimetex.cgi
-	if (IS_WINDOWS_OS) {
-		$config['MimetexExecutableDetectionMethod'] = 'bootstrap_ip'; // 'bootstrap_ip' for better chance on Windows (no firewall blocking).
-	} else {
-		$config['MimetexExecutableDetectionMethod'] = 'server_name';
-	}
-	// Timeout for MimeTeX executable file detection - keep this value as low as possible, especially on Windows servers.
-	$config['MimetexExecutableDetectionTimeout'] = 0.05;
+		
+		// Some additional settings become active only when the 'mimetex' plugin has been enabled:
+		//
+		// The following setting determines whether MimeTeX executable file has been installed on the server or not. This file should be accessible
+		// for browsers at address http://mysite.com/cgi-bin/mimetex.cgi (Linux) or at address http://mysite.com/cgi-bin/mimetex.exe (Windows).
+		// How to test manually: Open your browser and enter in the address bar something like http://mysite.com/cgi-bin/mimetex.cgi?hello
+		// By default, the system tries to detect the MimeTeX executable file automatically.
+		// If you are sure that the MimeTeX executable has been correctly installed, you may set this option to boolean true value.
+		
+		$config['MimetexExecutableInstalled'] = 'true'; // 'detect' (default), true, false.
+		
+		// Sometimes detection fails (due to slow DNS service, security restrictions, ...). For better probability of success,
+		// the following methods for detection have been defined:
+		// 'bootstrap_ip'   - detection is tried at address like http://127.0.0.1/cgi-bin/mimetex.cgi
+		// 'localhost'      - detection is tried at address like http://localhost/cgi-bin/mimetex.cgi
+		// 'ip'             - detection is tried at ip address, for example http://192.168.0.1/cgi-bin/mimetex.cgi
+		// 'server_name'    - detection is tried at address based on server's name, for example http://mysite.com/cgi-bin/mimetex.cgi
+		
+		if (IS_WINDOWS_OS) {
+			$config['MimetexExecutableDetectionMethod'] = 'bootstrap_ip'; // 'bootstrap_ip' for better chance on Windows (no firewall blocking).
+		} else {
+			$config['MimetexExecutableDetectionMethod'] = 'server_name';
+		}
+		// Timeout for MimeTeX executable file detection - keep this value as low as possible, especially on Windows servers.
+		$config['MimetexExecutableDetectionTimeout'] = 0.05;
 }
 
 
@@ -200,6 +204,27 @@ if ((api_get_setting('enabled_imgmap') == 'true')) {
 // wikilink : Adds a dialog for inserting wiki-formatted links.
 $config['LoadPlugin'][] = 'wikilink';
 
+
+// insertHtml: Plugin for inserting HTML. A single preconfigured snippet; a choice from multiple preconfigured snippets; or manually entered HTML.
+if ((api_get_setting('enabled_insertHtml') == 'true')) {
+	$config['LoadPlugin'][] = 'insertHtml';
+}
+	// enter a single snippet (HMTL string) or multiple snippets to choose form (object of description string and HTML string pairs). Or leave empty if you want to show a dialog for the user to enter HTML manually (and not show any default HTML in the dialog textarea)
+	
+	//$config['insertHtml_snippets'] = { 'ArtGallery': '<embed width="475" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/Art/ArtFlashGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" allowfullscreen="true" flashvars="XMLFile=userfiles/image/ArtGallery/gallery.xml"></embed>', 'PhotoFlowGallery' : '<embed width="700" height="300" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/PhotoFlow/PhotoFlowGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/PhotoFlowGallery/gallery.xml"></embed>', 'StackPhotoGallery' : '<embed width="600" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/StackPhoto/StackPhotoGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/StackPhotoGallery/gallery.xml"></embed>', 'ZenGallery' : '<embed width="550" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/Zen/ZenGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/ZenGallery/gallery.xml"></embed>'};// TODO: this $config['insertHtml_snippets'] does not work. See also temporal hack around line 76 insertHtml.js
+			
+	// (if no snippets specified the dialog will show anyhow)
+	$config['insertHtml_showDialog'] = true;
+	
+	// specify a custom tooltip if you want this to appear when hovering the plugin's toolbar button (e.g. a description of the element being inserted). If no custom tooltip is set 'Insert HTML' will appear, and if available, translated into your language
+	$config['insertHtml_buttonTooltip'] = '';
+	
+	// show a textarea in the dialog? The first HTML set with $config['insertHtml_snippets'] will be shown in the textarea by default. If no snippets specified the textarea will show anyhow
+	$config['insertHtml_showTextarea']= false;
+	
+	// the size of the textarea in the dialog, in px
+	$config['insertHtml_textareaWidth'] = 400;
+	$config['insertHtml_textareaHeight'] = 300;
 
 /*
  * File manager.

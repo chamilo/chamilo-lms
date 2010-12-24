@@ -58,10 +58,10 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_spel
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_spellcheck', 'false', 'No');
 ALTER TABLE course ADD INDEX idx_course_category_code (category_code);
 ALTER TABLE course ADD INDEX idx_course_directory (directory(10));
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('force_wiki_paste_as_plain_text',NULL,'radio','Editor','true','ForceWikiPasteAsPlainText','ForceWikiPasteAsPlainTextComment',NULL,NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('force_wiki_paste_as_plain_text',NULL,'radio','Editor','false','ForceWikiPasteAsPlainText','ForceWikiPasteAsPlainTextComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('force_wiki_paste_as_plain_text', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('force_wiki_paste_as_plain_text', 'false', 'No');
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_googlemaps',NULL,'radio','Editor','true','EnabledGooglemapsTitle','EnabledGooglemapsComment',NULL,NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_googlemaps',NULL,'radio','Editor','false','EnabledGooglemapsTitle','EnabledGooglemapsComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_googlemaps', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_googlemaps', 'false', 'No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_imgmap',NULL,'radio','Editor','true','EnabledImageMapsTitle','EnabledImageMapsComment',NULL,NULL, 0);
@@ -83,6 +83,15 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 
 
 ALTER TABLE personal_agenda ADD PRIMARY KEY (id);
+
+UPDATE settings_current SET selected_value='1' WHERE variable='more_buttons_maximized_mode';
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_insertHtml',NULL,'radio','Editor','false','EnabledInsertHtmlTitle','EnabledInsertHtmlComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_insertHtml', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_insertHtml', 'false', 'No');
+
+
+
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

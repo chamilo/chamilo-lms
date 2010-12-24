@@ -31,7 +31,7 @@
 	text-decoration: none;
 }
 .inner_lp_toc .scorm_item A {
-	font-size: 11px;
+	font-size: 12px;
 	margin-right: 1px;
 	padding-bottom: 2px;
 	text-decoration: none;
@@ -41,35 +41,31 @@
 	font-weight: normal;
 	margin-right: 10px;
 }
-.inner_lp_toc .scorm_item_highlight {
-	font-size: 11px;
+.inner_lp_toc .scorm_item_highlight {	
 	margin-right: 1px;
-	padding-bottom: 2px;
-	text-decoration: none;
-	font-weight: normal;
-	background:#aaa;
-}
-.inner_lp_toc .scorm_item_highlight A {
-	font-size: 11px;
-	margin-right: 1px;
-	text-decoration: none;
-	font-weight: normal;
-}
-.inner_lp_toc .scorm_item_1 {
-	font-size: 11px;
-	margin-right: 1px;
-	padding-bottom: 2px;
+	padding: 10px 0px 10px 0px;
 	text-decoration: none;
 	font-weight: normal;
 	background:#ddd;
 }
-.inner_lp_toc .scorm_item_2 {
-	font-size: 11px;
+.inner_lp_toc .scorm_item_highlight a {	
 	margin-right: 1px;
-	padding-bottom: 2px;
 	text-decoration: none;
 	font-weight: normal;
-	background:#eee;
+}
+.inner_lp_toc .scorm_item_1 {	
+	margin-right: 1px;
+	padding: 10px 0px 10px 0px;
+	text-decoration: none;
+	font-weight: normal;
+	background:#FDFDFD;	
+}
+.inner_lp_toc .scorm_item_2 {	
+	margin-right: 1px;	
+	padding: 10px 0px 10px 0px;
+	text-decoration: none;
+	font-weight: normal;
+	background:#FDFDFD;
 }
 .inner_lp_toc .scorm_title {
 	font-weight: bold;
@@ -79,8 +75,6 @@
 }
 .inner_lp_toc .scorm_title_text {
 	margin-left: 10px;
- //padding: 2px;
- //cambiado no existe
 }
 .inner_lp_toc .scorm_status_img {
 	margin:0px;
@@ -161,8 +155,8 @@
 .scorm_title_text {
 	margin-left: 10px;
 	font-weight: bold;
-	background:#ccc;
-	font-size: 14px;
+	background:#eee;
+	font-size: 16px;
 	color: #444;
 	width: 89%;
 	padding: 1px 5px 3px 8px;

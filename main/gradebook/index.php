@@ -559,6 +559,9 @@ else
 */
 
 if (isset ($_GET['studentoverview'])) {
+    
+    //@todo this code also seems to be deprecated ...
+    
 	$cats= Category :: load($category);
 	$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
 	$allcat= array ();
@@ -573,7 +576,7 @@ if (isset ($_GET['studentoverview'])) {
 		foreach ($data_array as $data) {
 			$newarray[] = array_slice($data, 1);
 		}
-		$pdf= new Cezpdf();
+		$pdf= new Cezpdf(); 
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 		$pdf->ezSetMargins(30, 30, 50, 30);
 		$pdf->ezSetY(810);

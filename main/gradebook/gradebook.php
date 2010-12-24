@@ -489,6 +489,7 @@ if ($simple_search_form->validate() && (empty($keyword))) {
 	$keyword = $values['keyword'];
 }
 if (!empty($keyword)) {
+    
 	$cats= Category :: load($category);
 	$allcat= array ();
 	if ((isset($_GET['selectcat']) && $_GET['selectcat']==0) && isset($_GET['search'])) {
@@ -502,6 +503,7 @@ if (!empty($keyword)) {
 	}
 
 } elseif (isset ($_GET['studentoverview'])) {
+    //@todo this code seems to be deprecated because the gradebook tab is off 
 	$cats= Category :: load($category);
 	$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
 	$allcat= array ();
@@ -515,7 +517,7 @@ if (!empty($keyword)) {
 		foreach ($data_array as $data) {
 			$newarray[] = array_slice($data, 1);
 		}
-		$pdf= new Cezpdf();
+		$pdf= new Cezpdf(); 
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 		$pdf->ezSetMargins(30, 30, 50, 30);
 		$pdf->ezSetY(810);

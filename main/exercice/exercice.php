@@ -798,11 +798,6 @@ if ($show == 'test') {
 					$sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . Database :: escape_string($exid) . "'";
 					$sqlresult = Database::query($sqlquery);
 					$rowi = Database :: result($sqlresult, 0);
-
-					//useless query
-					/*$sql_random_query = 'SELECT type,random,active,results_disabled,max_attempt FROM ' . $TBL_EXERCICES . ' WHERE id="' . Database :: escape_string($exid) . '" ';
-					$rs_random = Database::query($sql_random_query);
-					$row_random = Database :: fetch_array($rs_random);*/
                     
                     $random_label = '';
 					if ($row['random'] > 0) {
@@ -930,9 +925,6 @@ if ($show == 'test') {
 						}
 					}
 					echo '</td></tr>';
-					/*} else {
-					    echo get_lang('NotAttempted');
-					}*/
 				}
 			// skips the last exercise, that is only used to know if we have or not to create a link "Next page"
 			if ($i == $limitExPage) {
@@ -1117,8 +1109,6 @@ function get_count_exam_results() {
     } else {
         // get only this user's results
         $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
-
-
 
         /*$sql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", ce.title as extitle, te.exe_result as exresult, " .
                             "te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .

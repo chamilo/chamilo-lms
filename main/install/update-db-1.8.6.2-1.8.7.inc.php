@@ -4,14 +4,14 @@
 /**
  * Chamilo LMS
  *
- * Update the Chamilo database from an older Dokeos version
+ * Update the Chamilo database from an older Chamilo version
  * Notice : This script has to be included by index.php
  * or update_courses.php (deprecated).
  *
  * @package chamilo.install
  * @todo
  * - conditional changing of tables. Currently we execute for example
- * ALTER TABLE `$dbNameForm`.`cours`
+ * ALTER TABLE $dbNameForm.cours
  * instructions without checking wether this is necessary.
  * - reorganise code into functions
  * @todo use database library
@@ -23,9 +23,9 @@ $new_file_version = '1.8.7';
 // Check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION')) {
 
-    // Check if the current Dokeos install is eligible for update
+    // Check if the current Chamilo install is eligible for update
     if (!file_exists('../inc/conf/configuration.php')) {
-        echo '<strong>'.get_lang('Error').' !</strong> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
+        echo '<strong>'.get_lang('Error').' !</strong> Chamilo '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
                                 '.get_lang('PleasGoBackToStep1').'.
                                 <p><button type="submit" class="back" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
                                 </td></tr></table></form></body></html>';

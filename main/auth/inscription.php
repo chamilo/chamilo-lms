@@ -48,7 +48,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
+$tool_name = get_lang('Registration',null,(!empty($_POST['language'])?api_get_valid_language($_POST['language']):$_user['language']));
 Display :: display_header($tool_name);
 
 echo '<div class="actions-title">';
@@ -146,8 +146,8 @@ if ($display_all_form) {
     $form->addRule('username', get_lang('UsernameWrong'), 'username');
     $form->addRule('username', get_lang('UserTaken'), 'username_available');
     //	PASSWORD
-    $form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 20));
-    $form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 20));
+    $form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 20, 'autocomplete' => 'off'));
+    $form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 20, 'autocomplete' => 'off'));
     $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');

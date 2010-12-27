@@ -51,22 +51,21 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false,true);
 
 // Start the templates node.
 echo '<Templates imagesBasePath="">';
-if($is_allowed_to_edit){
-		
-	// Load empty template.
-	load_empty_template();
-	
+
+// Load empty template.
+load_empty_template();
+
+if($is_allowed_to_edit){	
 	// Load the templates that were defined by the platform admin.
-	load_platform_templates();
-	
-	// Load the personal templates.
-	load_personal_templates(api_get_user_id());
-	
+	load_platform_templates();	
 }
 else{
-	load_student_templates();
-	
+	// Load student templates.
+	load_student_templates();	
 }
+// Load the personal templates.
+	load_personal_templates(api_get_user_id());
+	
 // End the templates node.
 echo '</Templates>';
 
@@ -229,14 +228,6 @@ function load_empty_template() {
 function load_student_templates() {
 	$fckeditor_template_path='/main/inc/lib/fckeditor/editor/dialog/fck_template/images/';
 	?>
-    <Template title="Empty" image="<?php echo api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/empty.gif'; ?>">
-        <Description></Description>
-        <Html>
-            <![CDATA[
-               
-            ]]>
-        </Html>
-    </Template>
     <Template title="Image and Title" image="<?php echo api_get_path(WEB_PATH).$fckeditor_template_path.'template1.gif';?>">
         <Description>One main image with a title and text that surround the image.</Description>
         <Html>

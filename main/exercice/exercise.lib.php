@@ -34,6 +34,9 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		// question not found
 		return false;
 	}
+    
+    
+    
 
 	$answerType    = $objQuestionTmp->selectType();
 	$pictureName   = $objQuestionTmp->selectPicture();
@@ -71,11 +74,15 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			}
 		}
 		$s.= '</table>';
+        
+        $s .= '<div class="rounded exercise_questions" style="width: 720px; padding: 3px;">';
+        $option_ie = '';
+        /*
 		if (!ereg("MSIE",$_SERVER["HTTP_USER_AGENT"])) {
 			$s .= '<div class="rounded exercise_questions" style="width: 720px; padding: 3px;">';
 		} else {
 			$option_ie="margin-left:10px";
-		}
+		}*/
         
         if ($answerType == FREE_ANSWER && $freeze) {
             return '';
@@ -127,21 +134,91 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			$oFCKeditor->Width  = '100%';
 			$oFCKeditor->Height = '200';
 			$oFCKeditor->Value	= '' ;
-            
-          
             $s .= '<tr><td colspan="3">';
             $s .= $oFCKeditor->CreateHtml();
             $s .= '</td></tr>';
-                       
-            
-
-			//$s.="<tr><td colspan='2'><textarea cols='80' rows='10' name='choice[".$questionId."]'>$answer</textarea></td></tr>";
-
 		}
+        
+        
+      ?>  
+        
+    <style>
+    
+   
+   #questions {
+    width:40%; 
+    height:50px;
+    float:left;  
+    padding:5px;  
+   }
+   
+   #options {
+    width:40%;
+    float:left;
+    padding:5px;  
+          
+   }
+   
+   .question_item {   
+      height:50px;  	
+   }
+   
+   .option_item {
+    width:150px;      
+   }
+   
+   
+    
+    </style>
+    <script>
+    $(function() {
+        
+         var $options = $( "#options" );
+        
+        $( "div", $options ).draggable({            
+            revert: "invalid", // when not dropped, the item will revert back to its initial position                        
+            cursor: "move",            
+        });
+        
+        
+        var $question_1 = $( "#question_1" );        
+        $question_1.droppable({        
+            accept: "#options div",            
+                  
+            activeClass: "ui-state-hover",
+            hoverClass: "ui-state-active",
+                  
+            drop: function( event, ui ) {
+                $( this ).addClass( "ui-state-highlight" );  
+                              
+            }
+        });
+        
+        
+        var $question_2 = $( "#question_2" );        
+        $question_2.droppable({        
+            accept: "#options div",            
+                hoverClass: "ui-state-active",
+            drop: function( event, ui ) {
+                $( this ).addClass( "ui-state-highlight" );
+            }
+        });        
+        
+        $options.droppable({        
+            accept: "#options div",
+            hoverClass: "ui-state-active",
+            drop: function( event, ui ) {                
+            }
+        });
 
+    });
+    </script>
+    
+    <?php
 		// Now navigate through the possible answers, using the max number of
 		// answers for the question as a limiter
 		$lines_count=1; // a counter for matching-type answers
+        $question_list = array();
 		for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$answer          = $objAnswerTmp->selectAnswer($answerId);
 			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);
@@ -227,6 +304,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 					// the select boxes, who are corrrect = 0)
 					$s .= '<tr><td width="45%" valign="top" >';
 					$parsed_answer = text_filter($answer);
+                    $question_list[] = $parsed_answer;
 					//left part questions
 					$s .= ' <span style="float:left; width:8%;"><b>'.$lines_count.'</b>.&nbsp;</span>
 						 	<span style="float:left; width:92%;">'.$parsed_answer.'</span></td>';
@@ -260,9 +338,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 					}
 					$s .= '</td>';
 					$s .= '</tr>';
-
 					$lines_count++;
-
 					//if the left side of the "matching" has been completely
 					// shown but the right side still has values to show...
 					if (($lines_count -1) == $num_suggestions) {
@@ -280,9 +356,28 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				}
 			}
 		}	// end for()
-		if (!ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) {
+        
+        
+        echo '<div id="questions">';
+        echo Display::tag('h2','Questions'); 
+        $i = 1;
+        foreach ($question_list as $key=>$val) {
+            echo Display::tag('div', Display::tag('p',$val), array('id'=>'question_'.$i, 'class'=>'question_item  ui-widget-header'));
+            $i++;            
+        }
+        echo '</div>';
+        
+         
+         echo Display::tag('h2','Options');
+        echo '<div id="options" class=" ui-widget-header">';        
+        foreach ($select_items as $key=>$val) {
+            echo Display::tag('div', Display::tag('p',$val['answer']), array('id'=>'option_'.$i, 'class'=>'option_item ui-widget-content'));                        
+        }
+        echo '</ul>';
+        
+		
 			$s .= '</table>';
-		}
+		
 		$s .= '</div><br />';
 
 		// destruction of the Answer object

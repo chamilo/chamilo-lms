@@ -73,6 +73,11 @@ class learnpath {
 
     public $prerequisite = 0;
     public $use_max_score = 100; //Should work as usual
+    
+    public $created_on      = '';
+    public $modified_on     = '';
+    public $publicated_on   = '';
+    public $expired_on      = '';
 
     /**
      * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
@@ -118,24 +123,35 @@ class learnpath {
             if ($this->debug > 2) { error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql, 0); }
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
-                $this->lp_id = $lp_id;
-                $row = Database::fetch_array($res);
-                $this->type = $row['lp_type'];
-                $this->name = stripslashes($row['name']);
-                //$this->encoding = $row['default_encoding']; // Chamilo 1.8.8: We intend not to use 'default_encoding' field anymore.
-                $this->proximity = $row['content_local'];
-                $this->theme = $row['theme'];
-                $this->maker = $row['content_maker'];
-                $this->prevent_reinit = $row['prevent_reinit'];
-                $this->license = $row['content_license'];
-                $this->scorm_debug = $row['debug'];
-                   $this->js_lib = $row['js_lib'];
-                   $this->path = $row['path'];
-                   $this->preview_image= $row['preview_image'];
-                   $this->author= $row['author'];
-                   $this->lp_session_id = $row['session_id'];
+                $this->lp_id            = $lp_id;
+                $row                    = Database::fetch_array($res);
+                $this->type             = $row['lp_type'];
+                $this->name             = stripslashes($row['name']);
+                //$this->encoding       = $row['default_encoding']; // Chamilo 1.8.8: We intend not to use 'default_encoding' field anymore.
+                $this->proximity        = $row['content_local'];
+                $this->theme            = $row['theme'];
+                $this->maker            = $row['content_maker'];
+                $this->prevent_reinit   = $row['prevent_reinit'];
+                $this->license          = $row['content_license'];
+                $this->scorm_debug      = $row['debug'];
+                $this->js_lib           = $row['js_lib'];
+                $this->path             = $row['path'];
+                $this->preview_image    = $row['preview_image'];
+                $this->author           = $row['author'];
+                $this->lp_session_id    = $row['session_id'];
+                
+                $this->created_on       = $row['created_on'];
+                $this->modified_on      = $row['modified_on'];
+                
+                if ($row['publicated_on'] != '0000-00-00 00:00:00') { 
+                    $this->publicated_on    = api_get_local_time($row['publicated_on']);
+                }
+                
+                if ($row['expired_on'] != '0000-00-00 00:00:00') {
+                    $this->expired_on     = api_get_local_time($row['expired_on']);
+                }
 
-                   if ($this->type == 2) {
+                if ($this->type == 2) {
                     if ($row['force_commit'] == 1) {
                         $this->force_commit = true;
                     }
@@ -167,9 +183,9 @@ class learnpath {
         }
         // End of variables checking.
 
-    $session_id = api_get_session_id();
-    // Get the session condition for learning paths of the base + session.
-    $session = api_get_session_condition($session_id);
+        $session_id = api_get_session_id();
+        //  Get the session condition for learning paths of the base + session.
+        $session = api_get_session_condition($session_id);
         // Now get the latest attempt from this user on this LP, if available, otherwise create a new one.
         $lp_table = Database::get_course_table(TABLE_LP_VIEW);
         // Selecting by view_count descending allows to get the highest view_count first.
@@ -572,7 +588,7 @@ class learnpath {
      * @param	string	Zip file containing the learnpath or directory containing the learnpath
      * @return	integer	The new learnpath ID on success, 0 on failure
      */
-    public function add_lp($course, $name, $description = '', $learnpath = 'guess', $origin = 'zip', $zipname = '') {
+    public function add_lp($course, $name, $description = '', $learnpath = 'guess', $origin = 'zip', $zipname = '', $publicated_on = '', $expired_on = '') {
         global $charset;
 
         //if ($this->debug > 0) { error_log('New LP - In learnpath::add_lp()', 0); }
@@ -588,6 +604,20 @@ class learnpath {
         $check_name = "SELECT * FROM $tbl_lp WHERE name = '$name'";
         //if ($this->debug > 2) { error_log('New LP - Checking the name for new LP: '.$check_name, 0); }
         $res_name = Database::query($check_name);
+        
+        if ($publicated_on == '0000-00-00 00:00:00' || empty($publicated_on)) {
+            //by default the publication date is the same that the creation date    
+            $publicated_on = api_get_utc_datetime();        
+        } else {
+        	$publicated_on   = Database::escape_string(api_get_utc_datetime($publicated_on));  
+        }
+        
+        if ($expired_on == '0000-00-00 00:00:00' || empty($expired_on)) {    
+            $expired_on = '';        
+        } else {
+            $expired_on   = Database::escape_string(api_get_utc_datetime($expired_on));  
+        }   
+        
         while (Database :: num_rows($res_name)) {
             // There is already one such name, update the current one a bit.
             $i++;
@@ -603,7 +633,7 @@ class learnpath {
         switch ($learnpath) {
             case 'guess':
                 break;
-            case 'dokeos':
+            case 'chamilo':
                 $type = 1;
                 break;
             case 'aicc':
@@ -623,17 +653,14 @@ class learnpath {
                     $row = Database :: fetch_array($res_max);
                     $dsp = $row[0] + 1;
                 }
-                $sql_insert = "INSERT INTO $tbl_lp " .
-                    "(lp_type,name,description,path,default_view_mod," .
-                    "default_encoding,display_order,content_maker," .
-                    "content_local,js_lib,session_id) " .
-                    "VALUES ($type,'$name','$description','','embedded'," .
-                    "'UTF-8','$dsp','Chamilo'," .
-                    "'local','','".Database::escape_string($session_id)."')";
+                $sql_insert = "INSERT INTO $tbl_lp (lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on) " .
+                              "VALUES ($type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";                    
+                
                 //if ($this->debug > 2) { error_log('New LP - Inserting new lp '.$sql_insert, 0); }
                 $res_insert = Database::query($sql_insert);
                 $id = Database :: insert_id();
                 if ($id > 0) {
+                    
                     // Insert into item_property.
                     api_item_property_update(api_get_course_info(), TOOL_LEARNPATH, $id, 'LearnpathAdded', api_get_user_id());
                     return $id;
@@ -4018,6 +4045,83 @@ class learnpath {
         $res = Database::query($sql);
         return true;
     }
+    
+     /**
+     * Sets and saves the expired_on date
+     * @param   string  Optional string giving the new author of this learnpath
+     * @return   bool    Returns true if author's name is not empty
+     */
+    public function set_expired_on($expired_on) {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::set_expired_on()', 0);
+        }
+        
+        if (!empty($expired_on)) {
+            $this->expired_on = $this->escape_string(api_get_utc_datetime($expired_on));
+        } else {
+            $this->expired_on = '';
+        }
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $lp_table SET expired_on = '" . $this->expired_on . "' WHERE id = '$lp_id'";
+        if ($this->debug > 2) {
+            error_log('New LP - lp updated with new expired_on : ' . $this->expired_on, 0);
+        }
+        $res = Database::query($sql);
+        return true;
+    }
+    
+    
+    /**
+     * Sets and saves the publicated_on date
+     * @param   string  Optional string giving the new author of this learnpath
+     * @return   bool    Returns true if author's name is not empty
+     */
+    public function set_publicated_on($publicated_on) {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::set_expired_on()', 0);
+        }
+        if (!empty($publicated_on)) {
+            $this->publicated_on = $this->escape_string(api_get_utc_datetime($publicated_on));
+        } else {
+        	$this->publicated_on = '';
+        }
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $lp_table SET publicated_on = '" . $this->publicated_on . "' WHERE id = '$lp_id'";
+        if ($this->debug > 2) {
+            error_log('New LP - lp updated with new publicated_on : ' . $this->publicated_on, 0);
+        }
+        $res = Database::query($sql);
+        return true;
+    }
+    
+    
+    
+    /**
+     * Sets and saves the expired_on date
+     * @param   string  Optional string giving the new author of this learnpath
+     * @return   bool    Returns true if author's name is not empty
+     */
+    public function set_modified_on() {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::set_expired_on()', 0);
+        }
+        $this->modified_on = api_get_utc_datetime();
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $lp_table SET modified_on = '" . $this->modified_on . "' WHERE id = '$lp_id'";
+        if ($this->debug > 2) {
+            error_log('New LP - lp updated with new expired_on : ' . $this->modified_on, 0);
+        }
+        $res = Database::query($sql);
+        return true;
+    }
+    
+    
+    
+    
+    
     
     
 
@@ -8538,6 +8642,8 @@ EOD;
             Database::update_query($lp_table, $attributes, $where );
         }
     }
+    
+    
 }
 
 if (!function_exists('trim_value')) {

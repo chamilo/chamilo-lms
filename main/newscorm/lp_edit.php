@@ -31,6 +31,20 @@ if (!empty($gradebook) && $gradebook == 'view') {
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('_learning_path'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=admin_view&lp_id=$learnpath_id", 'name' => $_SESSION['oLP']->get_name());
 
+$htmlHeadXtra[] = '<script type="text/javascript">
+        
+    function timelimit() {
+        if(document.getElementById(\'options2\').style.display == \'none\')
+        {
+            document.getElementById(\'options2\').style.display = \'block\';
+        } else {
+            document.getElementById(\'options2\').style.display = \'none\';
+        }
+    }
+     
+</script>';
+
+
 Display::display_header(null, 'Path');
 
 // Action links
@@ -129,9 +143,7 @@ if (strlen($_SESSION['oLP']->get_preview_image()) > 0) {
 }
 
 $form->addElement('file', 'lp_preview_image', ($_SESSION['oLP']->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
-
 $form->addElement('static', null, null, get_lang('ImageWillResizeMsg'));
-
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
 
 // Search terms (only if search is activated).
@@ -162,10 +174,30 @@ $defaults['lp_encoding']    = Security::remove_XSS($_SESSION['oLP']->encoding);
 $defaults['lp_name']        = Security::remove_XSS($_SESSION['oLP']->get_name());
 $defaults['lp_author']      = Security::remove_XSS($_SESSION['oLP']->get_author());
 
+$expired_on     = $_SESSION['oLP'] ->expired_on;
+$publicated_on  = $_SESSION['oLP'] ->publicated_on;
+
 // Prerequisites
 $form->addElement('html', '<div class="row"><div class="label">'.get_lang('Prerequisites').'</div><div class="formw">'.$_SESSION['oLP']->display_lp_prerequisites_list().'</div></div>');
 $form->addElement('static', null, null, get_lang('LpPrerequisiteDescription'));
 
+$form->addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');
+
+if( ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on)) && ( $expired_on!='0000-00-00 00:00:00' && !empty($expired_on))  )
+    $defaults['enabletimelimit'] = 1;
+    
+$display_date = 'none';   
+if ($defaults['enabletimelimit'] ) {
+    $display_date = 'block';
+}
+
+
+$form->addElement('html','<div id="options2" style="display:'.$display_date.';">');
+
+$form->addElement('datepicker', 'publicated_on', get_lang('PublicationDate'), array('form_name'=>'exercise_admin'), 5);
+$form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'exercise_admin'), 5);
+
+$form->addElement('html','</div>');            
 
 if (api_is_platform_admin()) {
     $form->addElement('checkbox', 'use_max_score', get_lang('UseMaxScore100'));
@@ -181,7 +213,8 @@ $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
 
 
-
+$defaults['publicated_on']  = ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on))? $publicated_on : date('Y-m-d 12:00:00');
+$defaults['expired_on']     = ($expired_on   !='0000-00-00 00:00:00' && !empty($expired_on) )? $expired_on : date('Y-m-d 12:00:00',time()+84600);
 
 $form->setDefaults($defaults);
 echo '<table><tr><td width="550px">';

@@ -8,13 +8,16 @@
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
+ * @author Julio Montoya <gugli100@gmail.com> Adding formvalidator support
+ * 
  * @package chamilo.learnpath
  */
 
 /* INIT SECTION */
 
-$this_section = SECTION_COURSES;
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
+$this_section = SECTION_COURSES;
 api_protect_course_script();
 
 /* Libraries */
@@ -22,9 +25,9 @@ api_protect_course_script();
 // The main_api.lib.php, database.lib.php and display.lib.php
 // libraries are included by default.
 
-include 'learnpath_functions.inc.php';
+require 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
-include 'resourcelinker.inc.php';
+require 'resourcelinker.inc.php';
 // Rewrite the language file, sadly overwritten by resourcelinker.inc.php.
 // Name of the language file that needs to be included.
 $language_file = 'learnpath';
@@ -43,13 +46,23 @@ $("#learnpath_title").focus();
 $(document).ready(function () {
   setFocus();
 });
+        
+function timelimit() {
+    if(document.getElementById(\'options2\').style.display == \'none\')
+    {
+        document.getElementById(\'options2\').style.display = \'block\';
+    } else {
+        document.getElementById(\'options2\').style.display = \'none\';
+    }
+}
+     
 </script>';
 
 /* Constants and variables */
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_lp      = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
@@ -63,6 +76,7 @@ $submit			= $_POST['submit_button'];
 if ($action == 'add' && $type == 'learnpathitem') {
      $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
+
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_add.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
@@ -99,40 +113,41 @@ echo '</div>';
 
 Display::display_normal_message(get_lang('AddLpIntro'), false);
 
-if ($_POST AND empty($_REQUEST['learnpath_name'])) {
+if ($_POST AND empty($_REQUEST['lp_name'])) {
     Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
 }
 
-echo '<form method="post">';
+
+$form = new FormValidator('lp_add', 'post', 'lp_controller.php');
 
 // Form title
-echo '<div class="row"><div class="form_header">'.get_lang('AddLpToStart').'</div></div>';
+$form->addElement('header', null, get_lang('AddLpToStart'));
 
-// Title field
-echo '<div class="row">';
-echo '<div class="label">';
-echo '<label for="idTitle"><span class="form_required">*</span> '.get_lang('LPName').'</label>';
-echo '</div>';
-echo '<div class="formw">';
-echo '<input id="learnpath_title" name="learnpath_name" type="text" size="50" />';
-echo '</div>';
-echo '</div>';
+// Title
+$form->addElement('text', 'lp_name', api_ucfirst(get_lang('LPName')), array('size' => 43));
+$form->applyFilter('lp_name', 'html_filter');
+$form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 
-// Submit button
-echo '<div class="row">';
-echo '<div class="label">';
-echo '</div>';
-echo '<div class="formw">';
-echo '<button  class="save" style="width:150px;" type="submit"/>'.get_lang('CreateLearningPath').'</button>';
-echo '</div>';
-echo '</div>';
-echo '<input name="post_time" type="hidden" value="' . time() . '" />';
-echo '</form>';
+$form->addElement('hidden', 'post_time', time());
+$form->addElement('hidden', 'action', 'add_lp');
 
-echo '<div class="row">';
-echo '<div class="label"></div>';
-echo '<div class="formw"><span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small></div>';
-echo '</div>';
+$form->addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');
+    
+$form->addElement('html','<div id="options2" style="display:none;">');
 
+$form->addElement('datepicker', 'publicated_on', get_lang('PublicationDate'), array('form_name'=>'exercise_admin'), 5);
+$form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'exercise_admin'), 5);
+
+$form->addElement('html','</div>');
+            
+            
+$defaults['publicated_on']  = date('Y-m-d 12:00:00');
+$defaults['expired_on']     = date('Y-m-d 12:00:00',time()+84600);
+
+$form->setDefaults($defaults);                  
+$form->addElement('style_submit_button', 'Submit',get_lang('CreateLearningPath'),'class="save"');
+
+
+$form->display();
 // Footer
 Display::display_footer();

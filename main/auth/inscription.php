@@ -48,7 +48,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
+$tool_name = get_lang('Registration',null,(!empty($_POST['language'])?api_get_valid_language($_POST['language']):$_user['language']));
 Display :: display_header($tool_name);
 
 echo '<div class="actions-title">';

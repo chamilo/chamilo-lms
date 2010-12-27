@@ -583,6 +583,8 @@ return true;
 		echo '<div id="options" style="display:none; margin: 20px;" >';
 
 		//task
+		echo '<div>&nbsp;</div>';
+		echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;">';
 		echo '<input type="checkbox" value="1" name="checktask" onclick="javascript: if(this.checked){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" title="'.get_lang('DefineTask').'" alt="'.get_lang('DefineTask').'"/>'.get_lang('DescriptionOfTheTask').'';
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error4" style="display:none;color:red"></span>';
 		echo '<div id="option4" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
@@ -593,12 +595,13 @@ return true;
 		echo '</tr>';
 		echo '<tr>';
 		//echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';	// TODO: ¿delete?
-		echo '<td>'.api_disp_html_area('task', $row['task'], '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '600', 'Height' => '200')).'</td>';
+		echo '<td>'.api_disp_html_area('task', $row['task'], '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '580', 'Height' => '200')).'</td>';
 		echo '</tr>';
 		echo '</table>';
 		echo '</div>';
 
 		//feedback
+		
 		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkfeedback" onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;'.get_lang('AddFeedback').'';
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
 		echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
@@ -610,9 +613,9 @@ return true;
 		echo '<td colspan="2">'.get_lang('Feedback3').'</td>';
 	  	echo '</tr>';
 	 	echo '<tr>';
-		echo '<td colspan="2"><textarea name="feedback1" cols="23" rows="4"></textarea></td>';
-		echo '<td colspan="2"><textarea name="feedback2" cols="23" rows="4"></textarea></td>';
-		echo '<td colspan="2"><textarea name="feedback3" cols="23" rows="4"></textarea></td>';
+		echo '<td colspan="2"><textarea name="feedback1" cols="21" rows="4"></textarea></td>';
+		echo '<td colspan="2"><textarea name="feedback2" cols="21" rows="4"></textarea></td>';
+		echo '<td colspan="2"><textarea name="feedback3" cols="21" rows="4"></textarea></td>';
 	 	echo '</tr>';
 		echo '<tr>';
 		echo '<td>'.get_lang('FProgress').':</td>';
@@ -691,9 +694,9 @@ return true;
 		echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 		echo '<div style="font-weight:normal"; align="center">'.get_lang('NMaxWords').':&nbsp;<input type="text" name="max_text" size="3">&nbsp;&nbsp;'.get_lang('NMaxVersion').':&nbsp;<input type="text" name="max_version" size="3"></div>';
 		echo '</div>';
-
+		echo '</div>';
 		//to define as an individual assignment
-		echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;"><img src="../img/wiki/assignment.png" />&nbsp;'.get_lang('DefineAssignmentPage').': <input type="checkbox" name="assignment" value="1"></div>'; // 1= teacher 2 =student
+		echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;"><img src="../img/wiki/assignment.png" title="'.get_lang('CreateAssignmentPage').'" alt="'.get_lang('CreateAssignmentPage').'"/>&nbsp;'.get_lang('DefineAssignmentPage').': <input type="checkbox" name="assignment" value="1"></div>'; // 1= teacher 2 =student
 		//
 		echo'</div>';
 

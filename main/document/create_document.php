@@ -169,6 +169,7 @@ require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+
 if (isset($_REQUEST['certificate'])) {
 	$nameTools = get_lang('CreateCertificate');
 } else {
@@ -412,7 +413,8 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 
 // If we are not in the certificates creation, display a folder chooser for the
 // new document created 
-if (!$is_certificate_mode) {
+
+if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $_GET['dir'], $current_session_id)) {
 	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 	//$parent_select -> addOption(get_lang('HomeDirectory'), '/');
 	$parent_select = $form->addElement('select', 'curdirpath', get_lang('DestinationDirectory'));

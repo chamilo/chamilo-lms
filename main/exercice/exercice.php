@@ -755,21 +755,21 @@ if ($show == 'test') {
                 //validacion when belongs to a session
                 $session_img = api_get_session_image($row['session_id'], $_user['status']);
                 
-                $time_limits = false;
+                $time_limits = false;                            
                 if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
                     $time_limits = true;    
-                }
-                        
+                }                        
                 if ($time_limits) {
                     // check if start time
-                    $start_time = api_strtotime($row['start_time']);
-                    $end_time   = api_strtotime($row['end_time']);                                      
-                    $now        = time();          
+                    $start_time = api_strtotime($row['start_time'],'UTC');
+                    $end_time   = api_strtotime($row['end_time'],'UTC');                                      
+                    $now        = time();
                     $is_actived_time = false;                    
                     if ($now > $start_time && $end_time > $now ) {
                         $is_actived_time = true;
                     }
                 }
+                
                       
                 // prof only
                 if ($is_allowedToEdit) {
@@ -843,6 +843,7 @@ if ($show == 'test') {
                             echo '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';
                         } else {
                             echo $row['title'];
+                            echo '<h1>cant do exam</h1>';
                         }                       
                     } else {
                         echo '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       

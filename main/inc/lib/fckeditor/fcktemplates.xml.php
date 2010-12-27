@@ -46,18 +46,27 @@ if (api_get_setting('show_glossary_in_documents') != 'none') {
 $img_dir = api_get_path(REL_CODE_PATH).'img/';
 $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
 
+// Setting templates for teachers or for students
+$is_allowed_to_edit = api_is_allowed_to_edit(false,true);
+
 // Start the templates node.
 echo '<Templates imagesBasePath="">';
-
-// Load empty template.
-load_empty_template();
-
-// Load the templates that were defined by the platform admin.
-load_platform_templates();
-
-// Load the personal templates.
-load_personal_templates(api_get_user_id());
-
+if($is_allowed_to_edit){
+		
+	// Load empty template.
+	load_empty_template();
+	
+	// Load the templates that were defined by the platform admin.
+	load_platform_templates();
+	
+	// Load the personal templates.
+	load_personal_templates(api_get_user_id());
+	
+}
+else{
+	load_student_templates();
+	
+}
 // End the templates node.
 echo '</Templates>';
 
@@ -212,4 +221,88 @@ function load_empty_template() {
     </Html>
 </Template>
 <?php
+}
+
+/**
+ * Loads the student templates
+ */
+function load_student_templates() {
+	$fckeditor_template_path='/main/inc/lib/fckeditor/editor/dialog/fck_template/images/';
+	?>
+    <Template title="Image and Title" image="<?php echo api_get_path(WEB_PATH).$fckeditor_template_path.'template1.gif';?>">
+        <Description>One main image with a title and text that surround the image.</Description>
+        <Html>
+            <![CDATA[
+                <img style="MARGIN-RIGHT: 10px" height="100" alt="" width="100" align="left"/>
+                <h3>Type the title here</h3>
+                Type the text here
+            ]]>
+        </Html>
+    </Template>
+    <Template title="Strange Template" image="<?php echo api_get_path(WEB_PATH).$fckeditor_template_path.'template2.gif';?>">
+        <Description>A template that defines two colums, each one with a title, and some text.</Description>
+        <Html>
+            <![CDATA[
+                <table cellspacing="0" cellpadding="0" width="100%" border="0">
+                    <tbody>
+                        <tr>
+                            <td width="50%">
+                            <h3>Title 1</h3>
+                            </td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+                            <td width="50%">
+                            <h3>Title 2</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Text 1</td>
+                            <td>&nbsp;</td>
+                            <td>Text 2</td>
+                        </tr>
+                    </tbody>
+                </table>
+                More text goes here.
+            ]]>
+        </Html>
+    </Template>
+    <Template title="Text and Table" image="<?php echo api_get_path(WEB_PATH).$fckeditor_template_path.'template3.gif';?>">
+        <Description>A title with some text and a table.</Description>
+        <Html>
+            <![CDATA[
+                <table align="left" width="80%" border="0" cellspacing="0" cellpadding="0"><tr><td>
+                    <h3>Title goes here</h3>
+                    <p>
+                    <table style="FLOAT: right" cellspacing="0" cellpadding="0" width="150" border="1">
+                        <tbody>
+                            <tr>
+                                <td align="center" colspan="3"><strong>Table title</strong></td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    Type the text here</p>
+                </td></tr></table>
+            ]]>
+        </Html>
+    </Template>
+    <?php
 }

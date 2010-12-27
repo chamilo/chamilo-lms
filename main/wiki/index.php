@@ -1392,7 +1392,7 @@ if ($_GET['action']=='edit')
 					}
 
 					//comp message
-					$message_task='<b>'.get_lang('DescriptionOfTheTask').'</b><p>'.api_htmlentities($row['task']).'</p><hr>';
+					$message_task='<b>'.get_lang('DescriptionOfTheTask').'</b><p>'.$row['task'].'</p><hr>';
 					$message_task.='<p>'.get_lang('StartDate').': '.$message_task_startdate.'</p>';
 					$message_task.='<p>'.get_lang('EndDate').': '.$message_task_enddate;
 					$message_task.=' ('.get_lang('AllowLaterSends').') '.$message_task_delayedsubmit.'</p>';
@@ -1483,9 +1483,9 @@ if ($_GET['action']=='edit')
 					echo '<td colspan="2">'.get_lang('Feedback3').'</td>';
 					echo '</tr>';
 					echo '<tr>';
-					echo '<td colspan="2"><textarea name="feedback1" cols="23" rows="4" >'.api_htmlentities($row['feedback1']).'</textarea></td>';
-					echo '<td colspan="2"><textarea name="feedback2" cols="23" rows="4" >'.api_htmlentities($row['feedback2']).'</textarea></td>';
-					echo '<td colspan="2"><textarea name="feedback3" cols="23" rows="4" >'.api_htmlentities($row['feedback3']).'</textarea></td>';
+					echo '<td colspan="2"><textarea name="feedback1" cols="21" rows="4" >'.api_htmlentities($row['feedback1']).'</textarea></td>';
+					echo '<td colspan="2"><textarea name="feedback2" cols="21" rows="4" >'.api_htmlentities($row['feedback2']).'</textarea></td>';
+					echo '<td colspan="2"><textarea name="feedback3" cols="21" rows="4" >'.api_htmlentities($row['feedback3']).'</textarea></td>';
 					echo '</tr>';
 					echo '<tr>';
 					echo '<td>'.get_lang('FProgress').':</td>';

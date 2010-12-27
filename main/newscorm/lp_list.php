@@ -430,7 +430,11 @@ if (is_array($flat_list)) {
             	  $export_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'"><img src="../img/file_pdf.gif" border="0" title="'.get_lang('ExportToPDF').'" /></a>'; 
             }
             
+            //Checking the "age" of the LP
+            //icons here
             
+            
+                        
             /* COLUMN ORDER	 */
             
             // Only active while session mode is not active

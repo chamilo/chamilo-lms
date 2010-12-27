@@ -73,6 +73,30 @@ class learnpathList {
             }
             // Check if visible.
             $vis = api_get_item_visibility(api_get_course_info($course_code), 'learnpath', $row['id'], $session_id);
+            
+            if (!empty($row['created_on']) && $row['created_on'] != '0000-00-00 00:00:00') {
+            	$row['created_on'] = api_get_local_time($row['created_on']);
+            } else {
+            	$row['created_on'] = '';
+            }
+            if (!empty($row['modified_on']) && $row['modified_on'] != '0000-00-00 00:00:00') {
+                $row['modified_on'] = api_get_local_time($row['modified_on']);
+            } else {
+                $row['modified_on'] = '';
+            }
+            
+            if (!empty($row['publicated_on']) && $row['publicated_on'] != '0000-00-00 00:00:00') {
+                $row['publicated_on'] = api_get_local_time($row['publicated_on']);
+            } else {
+                $row['publicated_on'] = '';
+            }
+            
+            if (!empty($row['expired_on']) && $row['expired_on'] != '0000-00-00 00:00:00') {
+                $row['expired_on'] = api_get_local_time($row['expired_on']);
+            } else {
+                $row['expired_on'] = '';
+            }
+            
 
             $this->list[$row['id']] = array(
                 'lp_type'           => $row['lp_type'],
@@ -93,7 +117,11 @@ class learnpathList {
                 'lp_display_order'  => $row['display_order'],
                 'lp_preview_image'  => stripslashes($row['preview_image']),
                 'autolaunch'        => $row['autolunch'],
-                'session_id'        => $row['session_id']
+                'session_id'        => $row['session_id'],
+                'created_on'        => $row['created_on'],
+                'modified_on'       => $row['modified_on'],
+                'publicated_on'     => $row['publicated_on'],
+                'expired_on'        => $row['expired_on']
                 );
             $names[$row['name']] = $row['id'];
            }

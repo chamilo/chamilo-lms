@@ -90,7 +90,9 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_insertHtml', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_insertHtml', 'false', 'No');
 
-
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('students_export2pdf',NULL,'radio','Tools','true','EnabledStudentExport2PDFTitle','EnabledStudentExport2PDFComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('students_export2pdf', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('students_export2pdf', 'false', 'No');
 
 
 -- xxSTATSxx

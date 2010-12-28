@@ -700,8 +700,77 @@ class Display {
         } else {
             $return_value = '<'.$tag.' '.$attribute_list.' > '.$content.'</'.$tag.'>';
         }        
-        return $return_value; 
+        return $return_value;        
+    }
+    
+    public function select($name, $values, $default = -1, $parameter_list = array(), $show_blank_item = true) {        
+        $extra = '';
+        foreach($parameter_list as $key=>$parameter) {
+            $extra .= $key.'="'.$parameter.'"';
+        }
+        $html .= '<select name="'.$name.'" id="'.$name.'" '.$extra.'>';
+    
+        if ($show_blank_item) {
+            $html .= self::tag('option', '-- '.get_lang('Select').' --', array('value'=>'-1'));
+        }
+        if($values) {
+            foreach($values as $key => $value) {
+                if(is_array($value) && isset($value['name'])) {
+                    $value = $value['name'];
+                }
+                $html .= '<option value="'.$key.'"';
+                if($default == $key) {
+                    $html .= 'selected="selected"';
+                }
+                $html .= '>'.$value.'</option>';
+            }
+        }       
+        $html .= '</select>';       
+        return $html;
+    }
+    
+    /**
+     * Creates a tab list  
+     * Requirements: declare the jquery, jquery-ui libraries + the jquery-ui.css  in the $htmlHeadXtra variable before the display_header
+     * Add this script
+     * 
+     * <script>
+            $(function() {
+                $( "#tabs" ).tabs();                
+            });
+        </script>
+     * @param   array   list of the tab titles
+     * @param   array   content that will be showed
+     * @param   string  the id of the container of the tab
+     * @param   array   attributes for the ul 
+     *   
+     */
+    public static function tabs($header_list, $content_list, $id = 'tabs', $ul_attributes = array()) {
         
+        if (empty($header_list) || count($header_list) == 0 ) {
+        	return '';
+        }       
+        
+        $lis = '';        
+        $i = 1;
+        foreach ($header_list as $item) {
+            
+            $item =self::tag('a', $item, array('href'=>'#'.$id.'-'.$i)); 
+                       
+        	$lis .=self::tag('li', $item, $ul_attributes);
+            $i++;
+        }
+        $ul = self::tag('ul',$lis);
+        
+        $i = 1;
+        $divs = '';
+        foreach ($content_list as $content) {     
+            $content = self::tag('p',$content);       
+        	$divs .=self::tag('div', $content, array('id'=>$id.'-'.$i));
+            $i++;
+        }        
+        $main_div = self::tag('div',$ul.$divs, array('id'=>$id));
+        return $main_div ;    	
     }
     
 } //end class Display

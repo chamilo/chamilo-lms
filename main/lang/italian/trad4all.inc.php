@@ -975,4 +975,7 @@ $IAcceptTermsAndConditions = "Ho letto e accettato i Termini e le Condizioni del
 $YouHaveToAcceptTermsAndConditions = "Per procedere devi accettare i Termini e le Condizioni del servizio";
 $BrowserDontSupportsSVG = "Il browser non accetta l'uso di immagini SVG. Per poter usare la funzionalità è necessario installare un apposito plugin o usare un browser quale Firefox o Chrome";
 $FillWithExemplaryContent = "Riempi di contenuti esemplificativi";
+$ToolVideoconference = "Videoconferenza";
+$SelectSVGEditImage = "Seleziona un'immagine (svg o png)";
+$OnlyAccessFromYourGroup = "Accessibile solo dal tuo gruppo";
 ?>

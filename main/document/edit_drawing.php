@@ -31,7 +31,7 @@ if (!isset($_GET['curdirpath']) || !isset($_GET['file'])){
 }
 
 /* Constants & Variables */
-
+$current_session_id=api_get_session_id();
 //path for svg-edit save
 $_SESSION['draw_dir']=Security::remove_XSS($_GET['curdirpath']);
 if($_SESSION['draw_dir']=='/'){
@@ -97,8 +97,7 @@ if (!$is_certificate_mode)
 else
 	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 
-
-$is_allowedToEdit = is_allowed_to_edit() || $_SESSION['group_member_with_upload_rights'];
+$is_allowedToEdit = is_allowed_to_edit() || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder($_user['user_id'], $my_cur_dir_path, $current_session_id);
 
 if (!$is_allowedToEdit) {
 	api_not_allowed(true);

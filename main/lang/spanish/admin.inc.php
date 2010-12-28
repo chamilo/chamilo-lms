@@ -1099,7 +1099,7 @@ $BlockCopyPasteForStudentsTitle = "Bloquear a los estudiantes copiar y pegar";
 $BlockCopyPasteForStudentsComment = "Bloquear a los estudiantes la posibilidad de copiar y pegar en el editor WYSIWYG";
 $MoreButtonsForMaximizedModeTitle = "Barras de botones extendidas";
 $MoreButtonsForMaximizedModeComment = "Habilitar las barras de botones extendidas cuando el editor WYSIWYG está maximizado";
-$Editor = "Editor WYSIWYG";
+$Editor = "Editor";
 $GoToCourseAfterLoginTitle = "Ir directamente al curso tras identificarse";
 $GoToCourseAfterLoginComment = "Cuando un usuario está inscrito sólamente en un curso, ir directamente al curso despúes de identificarse";
 $GroupList = "Lista de grupos de la red social";
@@ -1301,4 +1301,14 @@ $EnabledGooglemapsTitle = "Activar Google maps";
 $EnabledGooglemapsComment = "Activar el botón para insertar mapas de Google. La activación no se realizará completamente si previamente no ha editado el archivo main/inc/lib/fckeditor/myconfig.php y añadido una clave API de Google maps.";
 $EnabledImageMapsTitle = "Activar Mapas de imagen";
 $EnabledImageMapsComment = "Activar el botón para insertar Mapas de imagen. Esto le permitirá asociar direcciones url a zonas de una imagen, generando zonas interactivas.";
+$CourseTool = "Herramienta del curso";
+$BigBlueButtonEnableTitle = "Herramienta de videoconferencia BigBlueButton";
+$BigBlueButtonEnableComment = "Seleccione si desea habilitar la herramienta de videoconferencia BigBlueButton. Una vez activada, se mostrará como una herramienta en la página principal todos los curso. Los profesores podrán lanzar una videoconferencia en cualquier momento, pero los alumnos sólo podrán unirse a una ya lanzada.
+Si no dispone de un servidor BigBlueButton, pruebe a 
+<a href=\"http://bigbluebutton.org/\" target=\"_blank\">configurar uno</a> o pida ayuda a los <a href=\"http://www.chamilo.org/en/providers\" target=\"_blank\">proveedores oficiales de Chamilo</a>.
+BigBlueButton es libre (como la libertad *y* la cerveza), pero su instalación requiere un conjunto de habilidades técnicas que no todo el mundo posee. Puede instalarlo por su cuenta o buscar ayuda profesional para que lo haga por usted; pero esta ayuda va a generar cierto costo. En la lógica pura del software libre, nosotros le ofrecemos las herramientas para hacer más fácil su trabajo y le recomendamos profesionales (los proveedores oficiales de Chamilo) que serán capaces de ayudarle.";
+$BigBlueButtonHostTitle = "Servidor BigBlueButton";
+$BigBlueButtonHostComment = "Este es el nombre del servidor donde su servidor BigBlueButton está ejecutándose. Puede ser localhost, una dirección IP (ej., 192.168.14.54) o un nombre de dominio (por ej., my.video.com).";
+$BigBlueButtonSecuritySaltTitle = "Clave de seguridad del servidor BigBlueButton";
+$BigBlueButtonSecuritySaltComment = "Esta es la clave de seguridad de su servidor BigBlueButton, que permitirá a su servidor autentificar la instalación Chamilo. Consulte la documentación de BigBlueButton para localizarla.";
 ?>

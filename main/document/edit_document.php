@@ -88,7 +88,7 @@ require_once $lib_path.'fileUpload.lib.php';
 require_once $lib_path.'document.lib.php';
 require_once $lib_path.'groupmanager.lib.php';
 require_once $lib_path.'formvalidator/FormValidator.class.php';
-
+require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 /* Constants & Variables */
 
 if (api_is_in_group()) {
@@ -189,7 +189,7 @@ else
 	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 
 
-$is_allowedToEdit = is_allowed_to_edit() || $_SESSION['group_member_with_upload_rights'];
+$is_allowedToEdit = is_allowed_to_edit() || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder($_user['user_id'], $my_cur_dir_path, $current_session_id);
 
 if (!$is_allowedToEdit) {
 	api_not_allowed(true);
@@ -528,7 +528,7 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 		}
 	}
 
-	if (!$group_document) {
+	if (!$group_document && !is_my_shared_folder($_user['user_id'], $my_cur_dir_path, $current_session_id)) {
 		$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$docId).'">'.get_lang('AddMetadata').'</a>';
 		$form->addElement('static', null, get_lang('Metadata'), $metadata_link);
 	}

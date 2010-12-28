@@ -25,4 +25,5 @@ $Authoring = "Erstellen";
 $Administration = "Verwaltung";
 $IntroductionTextUpdated = "Der Einleitungstext wurde aktualisiert";
 $IntroductionTextDeleted = "Einleitungstext wurde gelöscht";
+$SessionIdentifier = "SizungsID";
 ?>

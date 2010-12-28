@@ -275,4 +275,10 @@ $TotalNumberOfMessages = "Número total de mensajes";
 $TotalNumberOfAssignments = "Número total de tareas";
 $LastLogins = "Última conexión";
 $AllLogins = "Todas las conexiones";
+$LPExerciseResultsBySession = "Resultados de los ejercicios de las lecciones por sesión";
+$LPQuestionListResults = "Lista de resultados de los ejercicios de las lecciones";
+$PleaseSelectACourse = "Por favor, seleccione un curso";
+$StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts = "La puntuación media del estudiante es calculada sobre el conjunto de las lecciones y de los intentos";
+$AverageScore = "Puntuación media";
+$LastConnexionDate = "Fecha de la última conexión";
 ?>

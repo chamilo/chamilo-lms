@@ -290,6 +290,24 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH)
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.4.4.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/cupertino/jquery-ui-1.8.7.custom.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
+$htmlHeadXtra[] = '<script type="text/javascript"> 
+        
+function multiple_answer_true_false_onchange(variable) {
+        var result = variable.value;
+        var id = variable.id;
+        var weight_id = "weighting_" + id;
+        var array_result=new Array(); array_result[1]="1"; array_result[0]= "-0.50"; array_result[-1]= "0";
+               
+        document.getElementById(weight_id).value = array_result[result];
+}
+        
+        
+
+        
+        
+
+</script>';
+
 $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
 <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
 <script language=\"JavaScript\" type=\"text/javascript\">
@@ -448,7 +466,7 @@ if ($newQuestion || $editQuestion) {
 	$type = $_REQUEST['answerType'];
 	?><input type="hidden" name="Type" value="<?php echo $type; ?>" />
 	<?php
-	require 'question_admin.inc.php';
+    require 'question_admin.inc.php';
 }
 
 if(isset($_GET['hotspotadmin'])) {

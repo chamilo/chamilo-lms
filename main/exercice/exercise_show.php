@@ -345,7 +345,7 @@ if ($show_results) {
         echo $questionDescription; 
     	echo '</div>';
 	 	
-		if ($answerType == MULTIPLE_ANSWER) {
+		if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
 			?>
 			<table width="100%" border="0" cellspacing="3" cellpadding="3">
 			<tr>

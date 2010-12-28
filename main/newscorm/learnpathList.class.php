@@ -75,24 +75,24 @@ class learnpathList {
             $vis = api_get_item_visibility(api_get_course_info($course_code), 'learnpath', $row['id'], $session_id);
             
             if (!empty($row['created_on']) && $row['created_on'] != '0000-00-00 00:00:00') {
-            	$row['created_on'] = api_get_local_time($row['created_on']);
+            	$row['created_on'] = $row['created_on'];
             } else {
             	$row['created_on'] = '';
             }
             if (!empty($row['modified_on']) && $row['modified_on'] != '0000-00-00 00:00:00') {
-                $row['modified_on'] = api_get_local_time($row['modified_on']);
+                $row['modified_on'] = $row['modified_on'];
             } else {
                 $row['modified_on'] = '';
             }
             
             if (!empty($row['publicated_on']) && $row['publicated_on'] != '0000-00-00 00:00:00') {
-                $row['publicated_on'] = api_get_local_time($row['publicated_on']);
+                $row['publicated_on'] = $row['publicated_on'];
             } else {
                 $row['publicated_on'] = '';
             }
             
             if (!empty($row['expired_on']) && $row['expired_on'] != '0000-00-00 00:00:00') {
-                $row['expired_on'] = api_get_local_time($row['expired_on']);
+                $row['expired_on'] = $row['expired_on'];
             } else {
                 $row['expired_on'] = '';
             }

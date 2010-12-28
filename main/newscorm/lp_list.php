@@ -165,6 +165,7 @@ if (is_array($flat_list)) {
     $current        = 0;
     $autolunch_exists = false;
     foreach ($flat_list as $id => $details) {
+        
         // Validacion when belongs to a session
         $session_img = api_get_session_image($details['lp_session'], $_user['status']);
 
@@ -176,7 +177,37 @@ if (is_array($flat_list)) {
         // Check if the learnpath is visible for student.
         if (!$is_allowed_to_edit && !learnpath::is_lp_visible_for_student($id, api_get_user_id())) {
             continue;
+        }        
+        
+        if (!$is_allowed_to_edit) {
+            $time_limits = false;                  
+            if ($details['expired_on'] != '' && $details['expired_on'] != '0000-00-00 00:00:00') {
+                $time_limits = true;  
+            }            
+            
+            if (empty($details['created_on'])  && empty($details['modified_on'])   ) {
+                //This is an old LP (from a migration) so we do nothing
+                $time_limits = false;
+            }
+     
+            if ($time_limits) {
+                // check if start time
+                $start_time = api_strtotime($details['publicated_on'],'UTC');                
+                $end_time   = api_strtotime($details['expired_on'],'UTC');                                      
+                $now        = time();          
+                $is_actived_time = false;                
+                                    
+                if ($now > $start_time && $end_time > $now ) {
+                    $is_actived_time = true;
+                }
+                                
+                if (!$is_actived_time) {
+                	continue;
+                }                
+            }
+            
         }
+        
 
         $counter++;
         if (($counter % 2) == 0) { $oddclass = 'row_odd'; } else { $oddclass = 'row_even'; }
@@ -222,6 +253,9 @@ if (is_array($flat_list)) {
         } else {
             $dsp_progress = '<td width="140px" style="padding-top:1em;">'.learnpath::get_db_progress($id, api_get_user_id(), 'both','',false, api_get_session_id()).'</td>';
         }
+        
+        //
+  
 
         if ($is_allowed_to_edit) {
 

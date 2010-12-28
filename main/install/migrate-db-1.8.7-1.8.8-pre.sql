@@ -94,6 +94,9 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('students_export2pdf', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('students_export2pdf', 'false', 'No');
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('exercise_min_note', NULL,'textfield',	'Course',	'',		'ExerciseMinNoteTitle',		'ExerciseMinNoteComment','platform',NULL, 	1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('exercise_max_note', NULL,'textfield',	'Course',	'',		'ExerciseMaxNoteTitle',		'ExerciseMaxNoteComment','platform',NULL, 	1);
+
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

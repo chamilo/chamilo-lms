@@ -600,8 +600,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 	}
 	
 	/*	VISIBILITY COMMANDS */
-	//Only teacher and all users into their group
-	if($is_allowed_to_edit || $group_member_with_upload_rights){
+	//Only teacher
+	if($is_allowed_to_edit){
 		if ((isset($_GET['set_invisible']) && !empty($_GET['set_invisible'])) || (isset($_GET['set_visible']) && !empty($_GET['set_visible'])) && $_GET['set_visible'] != '*' && $_GET['set_invisible'] != '*') {
 			// Make visible or invisible?
 			if (isset($_GET['set_visible'])) {

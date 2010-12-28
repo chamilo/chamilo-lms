@@ -276,4 +276,10 @@ $TotalNumberOfMessages = "Numero totale dei messaggi";
 $TotalNumberOfAssignments = "Numero totale dei compiti assegnati";
 $LastLogins = "Ultimo accesso";
 $AllLogins = "Tutti gli accessi";
+$LPExerciseResultsBySession = "Risultato degli esercizi presenti nei moduli per sessione";
+$LPQuestionListResults = "Elenco degli esercizi presenti nei moduli";
+$PleaseSelectACourse = "Seleziona un corso";
+$StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts = "La media dei punteggi dei corsisti è calcolata sulla base di tutti i tentativi e tutti i moduli";
+$AverageScore = "Punteggio medio";
+$LastConnexionDate = "Data dell'ultimo accesso";
 ?>

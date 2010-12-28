@@ -176,4 +176,5 @@ $FProgress = "Progress";
 $PutATimeLimit = "Set a time limit";
 $StandardTask = "Standard Task";
 $ThePageHasBeenExportedToDocArea = "The page has been exported to the document tool";
+$CreateAssignmentPage = "This will create a special wiki page in which the teacher describes the task and automatically be linked to the wiki page where students perform their task. Both the teacher's page as the students are created automatically.In such tasks, students can only edit and view theirs pages, but this can be changed if you so desire.";
 ?>

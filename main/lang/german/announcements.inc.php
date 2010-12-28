@@ -56,4 +56,5 @@ $AnnounceSentToUserSelection = "Ankündigung wurde an die ausgewählten User ver
 $SendAnnouncement = "Ankündigung versenden";
 $ModifyAnnouncement = "Ankündigung ändern";
 $ButtonPublishAnnouncement = "Ankündigung versenden";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Sehr geehrter Benutzer, Ihr Konto auf dieser Plattform wurde soeben freigeschaltet. Melden Sie Sich bitte an und genießen Sie Ihre Kurse.";
 ?>

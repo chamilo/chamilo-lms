@@ -116,4 +116,6 @@ $FailedConectionDatabase = "Die Verbindung zur Datenbank schlug fehl. Dies ist m
 $EncryptMethodUserPass = "Verschlüsselungs-Methode";
 $UpgradeFromDokeos16x = "Upgrade von Chamilo 1.6.X";
 $UpgradeFromDokeos18x = "Upgrade von Chamilo 1.8.X";
+$SuggestionOnlyToEnableCSSUploadFeature = "Vorschlag erfolgt nur, wenn das CSSuploadfeature aktiviert wurde";
+$SuggestionOnlyToEnableSubLanguageFeature = "Vorschlag erfolgt nur, wenn das Untersprachenfeature aktiviert wurde";
 ?>

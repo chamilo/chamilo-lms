@@ -51,22 +51,21 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false,true);
 
 // Start the templates node.
 echo '<Templates imagesBasePath="">';
-if($is_allowed_to_edit){
-		
-	// Load empty template.
-	load_empty_template();
-	
+
+// Load empty template.
+load_empty_template();
+
+if($is_allowed_to_edit){	
 	// Load the templates that were defined by the platform admin.
-	load_platform_templates();
-	
-	// Load the personal templates.
-	load_personal_templates(api_get_user_id());
-	
+	load_platform_templates();	
 }
 else{
-	load_student_templates();
-	
+	// Load student templates.
+	load_student_templates();	
 }
+// Load the personal templates.
+	load_personal_templates(api_get_user_id());
+	
 // End the templates node.
 echo '</Templates>';
 

@@ -1719,7 +1719,8 @@ class Exercise {
                     }               
                     break;
                     // for multiple answers
-                case MULTIPLE_ANSWER :                
+                case MULTIPLE_ANSWER_TRUE_FALSE :
+                case MULTIPLE_ANSWER_ :                   
                     if ($from_database) {
                         $choice=array();
                         $queryans = "SELECT * FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";                        
@@ -2082,7 +2083,7 @@ class Exercise {
                 if ($from == 'exercise_result') {       
                      //display answers (if not matching type, or if the answer is correct)                        
                     if ($answerType != MATCHING || $answerCorrect) {
-                        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
+                        if (in_array($answerType, array(UNIQUE_ANSWER, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, MULTIPLE_ANSWER_TRUE_FALSE))) {
                             if ($origin!='learnpath') {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
                             }
@@ -2114,7 +2115,8 @@ class Exercise {
                 } else { 
                     switch($answerType) {
                         case UNIQUE_ANSWER : 
-                        case MULTIPLE_ANSWER : 
+                        case MULTIPLE_ANSWER :
+                        case MULTIPLE_ANSWER_TRUE_FALSE : 
                     	case MULTIPLE_ANSWER_COMBINATION :                
                             if ($answerId==1) {                                
                                 ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId);
@@ -2227,7 +2229,7 @@ class Exercise {
             if (empty ($choice)) {
                 $choice = 0;
             }
-            if ($answerType == MULTIPLE_ANSWER) {
+            if ($answerType == MULTIPLE_ANSWER || $answerType ==  MULTIPLE_ANSWER_TRUE_FALSE) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {

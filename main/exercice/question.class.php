@@ -21,6 +21,8 @@ define('HOT_SPOT', 						6);
 define('HOT_SPOT_ORDER', 				7);
 define('HOT_SPOT_DELINEATION', 			8);
 define('MULTIPLE_ANSWER_COMBINATION', 	9);
+define('UNIQUE_ANSWER_NO_OPTION',       10);
+define('MULTIPLE_ANSWER_TRUE_FALSE',    11);
 
 /**
 	QUESTION CLASS
@@ -53,6 +55,9 @@ abstract class Question
 							FREE_ANSWER => 					array('freeanswer.class.php' , 		'FreeAnswer'),
 							HOT_SPOT => 					array('hotspot.class.php' , 		'HotSpot'),
 							MULTIPLE_ANSWER_COMBINATION =>	array('multiple_answer_combination.class.php' , 'MultipleAnswerCombination'),
+                            UNIQUE_ANSWER_NO_OPTION =>      array('unique_answer_no_option.class.php' ,   'UniqueAnswerNoOption'),
+                            MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php' , 'MultipleAnswerTrueFalse'),
+                            
 							);
 
 	/**
@@ -96,8 +101,7 @@ abstract class Question
 		$result=Database::query($sql);
 
 		// if the question has been found
-		if($object=Database::fetch_object($result))
-		{
+		if($object=Database::fetch_object($result)) {
 			$objQuestion 				= Question::getInstance($object->type);
 			$objQuestion->id			= $id;
 			$objQuestion->question		= $object->question;
@@ -115,7 +119,6 @@ abstract class Question
 			while($object=Database::fetch_object($result)) {
 				$objQuestion->exerciseList[]=$object->exercice_id;
 			}
-
 			return $objQuestion;
 		}
 
@@ -129,8 +132,7 @@ abstract class Question
 	 * @author - Olivier Brouckaert
 	 * @return - integer - question ID
 	 */
-	function selectId()
-	{
+	function selectId() {
 		return $this->id;
 	}
 
@@ -140,8 +142,7 @@ abstract class Question
 	 * @author - Olivier Brouckaert
 	 * @return - string - question title
 	 */
-	function selectTitle()
-	{
+	function selectTitle() {
 		$this->question=text_filter($this->question);
 		return $this->question;
 	}
@@ -152,8 +153,7 @@ abstract class Question
 	 * @author - Olivier Brouckaert
 	 * @return - string - question description
 	 */
-	function selectDescription()
-	{
+	function selectDescription() {
 		$this->description=text_filter($this->description);
 		return $this->description;
 	}
@@ -306,16 +306,13 @@ abstract class Question
 	 * @author - Olivier Brouckaert
 	 * @param - integer $type - answer type
 	 */
-	function updateType($type)
-	{
+	function updateType($type) {
 		global $TBL_REPONSES;
 
 		// if we really change the type
-		if($type != $this->type)
-		{
+		if($type != $this->type) {
 			// if we don't change from "unique answer" to "multiple answers" (or conversely)
-			if(!in_array($this->type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)) || !in_array($type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)))
-			{
+			if(!in_array($this->type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)) || !in_array($type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER))) {
 				// removes old answers
 				$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($this->id)."'";
 				Database::query($sql);
@@ -333,8 +330,7 @@ abstract class Question
 	 * @param - string $PictureName - Name of the picture
 	 * @return - boolean - true if uploaded, otherwise false
 	 */
-	function uploadPicture($Picture,$PictureName)
-	{
+	function uploadPicture($Picture,$PictureName) {
 		global $picturePath, $_course, $_user;
 
 		if (!file_exists($picturePath)) {
@@ -1113,8 +1109,7 @@ abstract class Question
 	/**
 	 * Displays the menu of question types
 	 */
-	static function display_type_menu ($feedbacktype = 0)
-	{
+	static function display_type_menu ($feedbacktype = 0) {
 		global $exerciseId;
 		// 1. by default we show all the question types
 		$question_type_custom_list = self::$questionTypes;
@@ -1149,6 +1144,7 @@ abstract class Question
 			echo '<li>';
 			echo '<div class="icon_image_content">';
 			if ($show_quiz_edition) {
+                 
 				echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
 				echo '<br>';
 				echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
@@ -1157,6 +1153,7 @@ abstract class Question
 				$img = $img['filename'];
 				echo ''.Display::return_icon($img.'_na.gif',$explanation).'';
 				echo '<br>';
+               
 				echo ''.$explanation.'';
 			}
 			echo '</div>';

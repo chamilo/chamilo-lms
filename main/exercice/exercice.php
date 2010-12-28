@@ -707,10 +707,12 @@ if ($show == 'test') {
         /* Vertical Tabs */
         .ui-tabs-vertical { width: 99%; }
         .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 20%; }
-        .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+        .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0;   white-space:normal;}
         .ui-tabs-vertical .ui-tabs-nav li a { display:block; width:100%; }
         .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-selected { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; border-right-width: 1px; }
         .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: left; width: 40em;}
+
+            
     </style>    
    
   
@@ -799,7 +801,8 @@ if ($show == 'test') {
                     
                     if ($session_id == $row['session_id']) {
                         //Settings                                                                
-                        //echo Display::tag('a',  Display::return_icon('settings.png',    get_lang('Edit')),               array('href'=>'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']));
+                        echo Display::tag('a',  Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), array('href'=>'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']));
+                        
                         //Export
                         echo Display::tag('a',  Display::return_icon('cd.gif',          get_lang('CopyExercise')),       array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
                         //Clean exercise                    
@@ -825,8 +828,9 @@ if ($show == 'test') {
                     echo '<br />'.get_count_exam_results($row['id']).' '.get_lang('Attempts');
                     
                     //Special buttons
-                    echo '<div class="operations">';        
-                        echo Display::tag('a',  Display::return_icon('settings.png',get_lang('EditQuestions'), array('width'=>'22px'))." ".get_lang('Edit'), array('href'=>'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']));
+                    echo '<div class="operations">';                       
+                                
+                        echo Display::tag('a',  Display::return_icon('quiz.gif',get_lang('Questions'), array('width'=>'22px'))." ".get_lang('Questions'), array('href'=>'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']));
                         echo ' ';      
                         echo Display::tag('a', Display::return_icon('preview.gif',get_lang('Preview'), array('width'=>'22px'))." ".get_lang('Preview'), array('href'=>'exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id']));
                         echo ' ';

@@ -35,9 +35,6 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		return false;
 	}
     
-    
-    
-
 	$answerType    = $objQuestionTmp->selectType();
 	$pictureName   = $objQuestionTmp->selectPicture();
 
@@ -160,11 +157,15 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
    }
    
    .question_item {   
-      height:50px;  	
+      height:50px;
+      padding:5px;
+      margin:10px 0px 10px 0px;	
    }
    
    .option_item {
-    width:150px;      
+    width:150px;
+    padding:3px;
+    margin:10px;      
    }
    
    
@@ -189,7 +190,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
             hoverClass: "ui-state-active",
                   
             drop: function( event, ui ) {
-                $( this ).addClass( "ui-state-highlight" );  
+                //$( this ).addClass( "ui-state-highlight" );  
                               
             }
         });
@@ -200,7 +201,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
             accept: "#options div",            
                 hoverClass: "ui-state-active",
             drop: function( event, ui ) {
-                $( this ).addClass( "ui-state-highlight" );
+                //$( this ).addClass( "ui-state-highlight" );
             }
         });        
         
@@ -235,7 +236,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			}
 
 			// Unique answer
-			if ($answerType == UNIQUE_ANSWER) {
+			if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
 				// set $debug_mark_answer to true at function start to
 				// show the correct answer with a suffix '-x'
 				$help = $selected = '';
@@ -254,7 +255,8 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 					$answer.
 					'</div></div></td></tr>';
 
-			} elseif ($answerType == MULTIPLE_ANSWER) {
+			} elseif ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
+               
 				// multiple answers
 				// set $debug_mark_answer to true at function start to
 				// show the correct answer with a suffix '-x'
@@ -265,6 +267,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 						$selected = 'checked="checked"';
 					}
 				}
+                
 				$answer = text_filter($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
@@ -357,24 +360,26 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			}
 		}	// end for()
         
+        //Adding divs for the new MATCHING interface
         
-        echo '<div id="questions">';
-        echo Display::tag('h2','Questions'); 
-        $i = 1;
-        foreach ($question_list as $key=>$val) {
-            echo Display::tag('div', Display::tag('p',$val), array('id'=>'question_'.$i, 'class'=>'question_item  ui-widget-header'));
-            $i++;            
+        if ($answerType == MATCHING && !$freeze) {
+            echo '<div id="questions">';
+            echo Display::tag('h2','Questions'); 
+            $i = 1;
+            foreach ($question_list as $key=>$val) {
+                echo Display::tag('div', Display::tag('p',$val), array('id'=>'question_'.$i, 'class'=>'question_item  ui-widget-header'));
+                $i++;            
+            }
+            echo '</div>';
+            
+             
+             echo Display::tag('h2','Options');
+            echo '<div id="options" class=" ui-widget-header">';        
+            foreach ($select_items as $key=>$val) {
+                echo Display::tag('div', Display::tag('p',$val['answer']), array('id'=>'option_'.$i, 'class'=>'option_item ui-widget-content'));                        
+            }
+            echo '</ul>';
         }
-        echo '</div>';
-        
-         
-         echo Display::tag('h2','Options');
-        echo '<div id="options" class=" ui-widget-header">';        
-        foreach ($select_items as $key=>$val) {
-            echo Display::tag('div', Display::tag('p',$val['answer']), array('id'=>'option_'.$i, 'class'=>'option_item ui-widget-content'));                        
-        }
-        echo '</ul>';
-        
 		
 			$s .= '</table>';
 		
@@ -766,7 +771,7 @@ function get_count_exam_results($exercise_id = null) {
  */
 function get_exam_results_data($from, $number_of_items, $column, $direction) {
 
-    global $is_allowedToEdit, $is_tutor,$_cid,$_user,$TBL_USER, $TBL_EXERCICES,$TBL_TRACK_EXERCICES, $TBL_TRACK_ATTEMPT_RECORDING,$filter_by_not_revised,$filter_by_revised,$documentPath;
+    global $is_allowedToEdit, $is_tutor,$_cid,$_user,$TBL_USER, $TBL_EXERCICES,$TBL_TRACK_EXERCICES, $TBL_TRACK_ATTEMPT_RECORDING,$filter_by_not_revised,$filter_by_revised,$documentPath,$filter;
     $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
     if ($is_allowedToEdit || $is_tutor) {
         $user_id_and = '';

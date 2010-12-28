@@ -182,6 +182,7 @@ if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 	}
 	$_SESSION['group_member_with_upload_rights'] = $group_member_with_upload_rights;
 } else {
+	$_SESSION['group_member_with_upload_rights'] = false;
 	$to_group_id = 0;
 	$req_gid = '';
 }

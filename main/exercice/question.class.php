@@ -23,6 +23,8 @@ define('HOT_SPOT_DELINEATION', 			8);
 define('MULTIPLE_ANSWER_COMBINATION', 	9);
 define('UNIQUE_ANSWER_NO_OPTION',       10);
 define('MULTIPLE_ANSWER_TRUE_FALSE',    11);
+define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE',    12);
+
 
 /**
 	QUESTION CLASS
@@ -57,6 +59,7 @@ abstract class Question
 							MULTIPLE_ANSWER_COMBINATION =>	array('multiple_answer_combination.class.php' , 'MultipleAnswerCombination'),
                             UNIQUE_ANSWER_NO_OPTION =>      array('unique_answer_no_option.class.php' ,   'UniqueAnswerNoOption'),
                             MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php' , 'MultipleAnswerTrueFalse'),
+                            MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE =>   array('multiple_answer_combination_true_false.class.php' , 'MultipleAnswerCombinationTrueFalse'),
                             
 							);
 

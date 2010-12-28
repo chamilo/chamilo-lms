@@ -84,6 +84,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
         if ($answerType == FREE_ANSWER && $freeze) {
             return '';
         }
+        
 		$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp=new Answer($questionId);
@@ -220,6 +221,15 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		// answers for the question as a limiter
 		$lines_count=1; // a counter for matching-type answers
         $question_list = array();
+        
+        if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {            
+            $header .= Display::tag('th', get_lang('Options'));   
+            foreach ($objQuestionTmp->options as $key=>$item) {                
+                $header .= Display::tag('th', $item);                           
+            }                
+            $s.=Display::tag('tr',$header);  
+        }
+        
 		for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$answer          = $objAnswerTmp->selectAnswer($answerId);
 			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);
@@ -248,6 +258,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				}
 				$answer = text_filter($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
+                
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
 					'<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">'.
 					'<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.' /></span></p>'.
@@ -266,16 +277,35 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 						$help = 'x-';
 						$selected = 'checked="checked"';
 					}
-				}
-                
+				}                
 				$answer = text_filter($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
-					'<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">'.
-					'<span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.' /></span></p>'.
-					'<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
-					$answer.
-					'</div></div></td></tr>';
+                
+                if ($answerType == MULTIPLE_ANSWER) {
+                    $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';                
+                    $s .= '<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">';
+                    
+                    $options = array('type'=>'checkbox','name'=>'choice['.$questionId.']['.$numAnswer.']', 'class'=>'checkbox');
+                    if ($answerCorrect) {
+                        $options['checked'] = 'checked';
+                    }
+                    $s .= Display::tag('span', Display::tag('input','',$options ));
+                    $s .= '</p>';                    
+                    $s .= '<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
+                        $answer.
+                        '</div></div></td></tr>';
+
+                } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {                    
+                    $options = array('type'=>'radio','name'=>'choice['.$questionId.']['.$numAnswer.']', 'class'=>'checkbox');
+                    $s .='<tr>';     
+                    $s .= Display::tag('td', $answer);       
+                    foreach ($objQuestionTmp->options as $key=>$item) {
+                        $options['value'] = $key;
+                        $s .= Display::tag('td', Display::tag('input','',$options ));                        	
+                    }
+                    $s.='<tr>';
+                }
+            
 			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
 				// multiple answers
 				// set $debug_mark_answer to true at function start to
@@ -295,7 +325,28 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 					'<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
 					$answer.
 					'</div></div></td></tr>';
-
+            } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
+                // multiple answers
+                // set $debug_mark_answer to true at function start to
+                // show the correct answer with a suffix '-x'
+                $help = $selected = '';
+                if ($debug_mark_answer) {
+                    if ($answerCorrect) {
+                        $help = 'x-';
+                        $selected = 'checked="checked"';
+                    }
+                }
+                $answer = text_filter($answer);
+                $answer = Security::remove_XSS($answer, STUDENT);
+                $options = array('type'=>'radio','name'=>'choice['.$questionId.']['.$numAnswer.']', 'class'=>'checkbox');
+                $s .='<tr>';     
+                $s .= Display::tag('td', $answer);       
+                foreach ($objQuestionTmp->options as $key=>$item) {
+                    $options['value'] = $key;
+                    $s .= Display::tag('td', Display::tag('input','',$options ));                           
+                }
+                $s.='<tr>';
+  
 			} elseif ($answerType == FILL_IN_BLANKS) {
 				// fill in blanks
 				$s .= '<tr><td colspan="3">'.$answer.'</td></tr>';
@@ -957,7 +1008,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 $my_res     = float_format($results[$i]['exresult'],1);
                 $my_total   = float_format($results[$i]['exweight'],1);
 
-                $result_list = round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ')';
+                $ex = show_score($my_res, $my_total);
+                
+                $result_list = round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ') --> '.$ex;
 
                 $html_link = '';
                 if ($is_allowedToEdit || $is_tutor) {
@@ -1013,4 +1066,20 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
             }
         }
     return $list_info;
+}
+
+function show_score($score, $weight, $show_porcentage = true) {
+    $html  = '';
+    $score_rounded = $score;    
+    if ($score != '' && $weight != '') {
+        $max_note =  api_get_setting('exercise_max_note');
+        $min_note =  api_get_setting('exercise_min_note');
+        if ($max_note != '' && $min_note != '') {
+    	   $score          = $min_note + ($max_note - $min_note) * $score /$weight;
+           $score_rounded  = round($score, 2);
+           $weight         = $max_note;
+        }
+        $html = round(($score / ($weight != 0 ? $weight : 1)) * 100, 2) . '% (' . $score_rounded . ' / ' . $weight . ')';
+    }    
+    return $html;	
 }

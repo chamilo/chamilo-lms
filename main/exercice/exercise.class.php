@@ -1698,6 +1698,7 @@ class Exercise {
             switch ($answerType) {
                 // for unique answer
                 case UNIQUE_ANSWER :
+                case UNIQUE_ANSWER_NO_OPTION :                 
                     if ($from_database) {
                     	$queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
                         $resultans = Database::query($queryans);
@@ -1719,35 +1720,114 @@ class Exercise {
                     }               
                     break;
                     // for multiple answers
-                case MULTIPLE_ANSWER_TRUE_FALSE :
-                case MULTIPLE_ANSWER_ :                   
+                case MULTIPLE_ANSWER_TRUE_FALSE :                  
                     if ($from_database) {
                         $choice=array();
-                        $queryans = "SELECT * FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";                        
+                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";                                                
+                        $resultans = Database::query($queryans);                        
+                        while ($row = Database::fetch_array($resultans)) {
+                            $ind = $row['answer'];
+                            $result = explode(':',$ind);
+                            $my_answer_id = $result[0];
+                            $option       = $result[1];
+                            $choice[$my_answer_id] = $option;                            
+                        }                        
+                        $numAnswer=$objAnswerTmp->selectAutoId($answerId);                        
+                        $studentChoice  =$choice[$numAnswer];                                     
+                    } else {                             
+                        $studentChoice  =$choice[$numAnswer]; // 0, 1 or 2
+                        //echo $studentChoice.' - '.$answerCorrect.'<br />';
+                    }
+                    
+                    if ($studentChoice == $answerCorrect ) {                      
+                        if ($studentChoice == 1) {
+                            $questionScore  +=1;
+                            $totalScore     +=1;  
+                        }
+                    } else {
+                        if ($studentChoice == 0 || $studentChoice == 1) {
+                           $questionScore  +=-0.5;
+                           $totalScore     +=-0.5;
+                        }
+                   }               
+                   break;
+                case MULTIPLE_ANSWER :                   
+                    if ($from_database) {
+                        $choice=array();
+                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";                        
                         $resultans = Database::query($queryans);
                         while ($row = Database::fetch_array($resultans)) {
                             $ind = $row['answer'];
                             $choice[$ind] = 1;
-                        }
-                        
+                        }                        
                         $numAnswer=$objAnswerTmp->selectAutoId($answerId);
                         $studentChoice=$choice[$numAnswer];
                         if ($studentChoice) {
-                            $questionScore+=$answerWeighting;
-                            $totalScore+=$answerWeighting;
+                            $questionScore  +=$answerWeighting;
+                            $totalScore     +=$answerWeighting;
                         }
-                    } else {                        
+                    } else {
                         $studentChoice=$choice[$numAnswer];
                         if ($studentChoice) {
-                            $questionScore+=$answerWeighting;
-                            $totalScore+=$answerWeighting;
+                            $questionScore  +=$answerWeighting;
+                            $totalScore     +=$answerWeighting;
                         } 
                     }                   
                     break;
+                case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
+                    if ($from_database) {
+                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
+                        $resultans = Database::query($queryans);
+                        while ($row = Database::fetch_array($resultans)) {
+                            $ind = $row['answer'];
+                            $result = explode(':',$ind);
+                            $my_answer_id = $result[0];
+                            $option       = $result[1];
+                            $choice[$my_answer_id] = $option;    
+                        }                              
+                        $numAnswer=$objAnswerTmp->selectAutoId($answerId);
+                        $studentChoice=$choice[$numAnswer];
+        
+                        if ($answerCorrect == 1) {
+                            if ($studentChoice) {
+                                $real_answers[$answerId] = true;
+                            } else {
+                                $real_answers[$answerId] = false;
+                            }
+                        } else {
+                            if ($studentChoice) {
+                                $real_answers[$answerId] = false;
+                            } else {
+                                $real_answers[$answerId] = true;
+                            }
+                        }                        
+                    } else {                        
+                        $studentChoice=$choice[$numAnswer];
+                        if ($answerCorrect == 1) {
+                            if ($studentChoice) {
+                                $real_answers[$answerId] = true;
+                            } else {
+                                $real_answers[$answerId] = false;
+                            }
+                        } else {
+                            if ($studentChoice) {
+                                $real_answers[$answerId] = false;
+                            } else {
+                                $real_answers[$answerId] = true;
+                            }
+                        }
+                        $final_answer = true;
+                        foreach($real_answers as $my_answer) {
+                            if (!$my_answer) {
+                                $final_answer = false;
+                            }
+                        }
+                    }
+                    
+                break;
                 case MULTIPLE_ANSWER_COMBINATION:                
-                    if ($from_database) {                      
-                                 
-                        $queryans = "SELECT * FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
+                    if ($from_database) {
+                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
                         $resultans = Database::query($queryans);
                         while ($row = Database::fetch_array($resultans)) {
                             $ind = $row['answer'];
@@ -2046,8 +2126,7 @@ class Exercise {
                     }  
                     
                     // for hotspot with no order
-                case HOT_SPOT :    
-                         
+                case HOT_SPOT :                         
                     if ($from_database) {                      
                         if ($show_result) {
                             $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
@@ -2083,10 +2162,14 @@ class Exercise {
                 if ($from == 'exercise_result') {       
                      //display answers (if not matching type, or if the answer is correct)                        
                     if ($answerType != MATCHING || $answerCorrect) {
-                        if (in_array($answerType, array(UNIQUE_ANSWER, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, MULTIPLE_ANSWER_TRUE_FALSE))) {
+                        if (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION))) {
                             if ($origin!='learnpath') {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
                             }
+                        } elseif($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
+                            if ($origin!='learnpath') {
+                                ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
+                            }                            
                         } elseif($answerType == FILL_IN_BLANKS) {
                             if ($origin!='learnpath') {
                                 ExerciseShowFunctions::display_fill_in_blanks_answer($answer,0,0);
@@ -2114,16 +2197,24 @@ class Exercise {
                     }
                 } else { 
                     switch($answerType) {
-                        case UNIQUE_ANSWER : 
-                        case MULTIPLE_ANSWER :
-                        case MULTIPLE_ANSWER_TRUE_FALSE : 
+                        case UNIQUE_ANSWER :
+                        case UNIQUE_ANSWER_NO_OPTION: 
+                        case MULTIPLE_ANSWER :                        
                     	case MULTIPLE_ANSWER_COMBINATION :                
                             if ($answerId==1) {                                
                                 ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId);
                             } else {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"");
                             }
-                            break;
+                            break;   
+                        case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:                         
+                        case MULTIPLE_ANSWER_TRUE_FALSE :                        
+                            if ($answerId==1) {                                
+                                ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId);
+                            } else {
+                                ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"");
+                            }
+                        break;
                         case FILL_IN_BLANKS:
                             echo '<tr><td>';
                             ExerciseShowFunctions::display_fill_in_blanks_answer($answer,$exeId,$questionId);
@@ -2169,12 +2260,12 @@ class Exercise {
         }        
         
         //we add the total score after dealing with the answers
-        if ($answerType == MULTIPLE_ANSWER_COMBINATION) {            
+        if ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {            
             if ($final_answer) {
                 //getting only the first score where we save the weight of all the question
-                $answerWeighting=$objAnswerTmp->selectWeighting(1);
-                $questionScore+=$answerWeighting;
-                $totalScore+=$answerWeighting;
+                $answerWeighting     = $objAnswerTmp->selectWeighting(1);
+                $questionScore      += $answerWeighting;
+                $totalScore         += $answerWeighting;
             }
         }        
        
@@ -2229,7 +2320,17 @@ class Exercise {
             if (empty ($choice)) {
                 $choice = 0;
             }
-            if ($answerType == MULTIPLE_ANSWER || $answerType ==  MULTIPLE_ANSWER_TRUE_FALSE) {
+            if ($answerType ==  MULTIPLE_ANSWER_TRUE_FALSE || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {                
+                if ($choice != 0) {
+                    $reply = array_keys($choice);
+                    for ($i = 0; $i < sizeof($reply); $i++) {
+                        $ans = $reply[$i];                        
+                        exercise_attempt($questionScore, $ans.':'.$choice[$ans], $quesId, $exeId, $i, $this->id);
+                    }
+                } else {
+                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                }                
+            } elseif ($answerType == MULTIPLE_ANSWER) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {

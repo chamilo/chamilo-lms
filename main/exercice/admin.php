@@ -293,11 +293,15 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqu
 $htmlHeadXtra[] = '<script type="text/javascript"> 
         
 function multiple_answer_true_false_onchange(variable) {
-        var result = variable.value;
+        var result = variable.checked;
         var id = variable.id;
         var weight_id = "weighting_" + id;
         var array_result=new Array(); array_result[1]="1"; array_result[0]= "-0.50"; array_result[-1]= "0";
-               
+        if (result) {
+        	result = 1;
+        } else {
+            result = 0;
+        }       
         document.getElementById(weight_id).value = array_result[result];
 }
         

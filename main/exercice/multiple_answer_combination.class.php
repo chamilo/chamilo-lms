@@ -116,10 +116,7 @@ class MultipleAnswerCombination extends Question {
 			$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
 			$answer_number->freeze();
 
-			//$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
-            $options = array('1'=>get_lang('True'),'0' =>get_lang('False'), '2' =>get_lang('Nothing'));
-            $form->addElement('select', 'correct['.$i.']',null, $options);
-            
+			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
 			$boxes_names[] = 'correct['.$i.']';
 
 			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
@@ -154,11 +151,15 @@ class MultipleAnswerCombination extends Question {
                 $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
 				$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+				
+				
 			} else {
                 $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'style="float:right"; class="minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'style="float:right"; class="plus"');				
-				// setting the save button here and not in the question class.php				
+                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'style="float:right"; class="plus"');
+				
+				// setting the save button here and not in the question class.php
+				
 			}
 		}
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');

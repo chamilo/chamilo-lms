@@ -23,7 +23,7 @@ class MultipleAnswerTrueFalse extends Question {
 
 	static $typePicture = 'mcma.gif';
 	static $explanationLangVar = 'MultipleAnswerTrueFalseSelect';
-
+    var    $options;
 	/**
 	 * Constructor
 	 */
@@ -31,6 +31,7 @@ class MultipleAnswerTrueFalse extends Question {
 		parent::question();
 		$this -> type = MULTIPLE_ANSWER_TRUE_FALSE;
 		$this -> isContent = $this-> getIsContent();
+        $this->options = array('1'=>get_lang('True'),'0' =>get_lang('False'), '2' =>get_lang('Nothing'));
 	}
 
 	/**
@@ -112,11 +113,11 @@ class MultipleAnswerTrueFalse extends Question {
 			$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
 			$answer_number->freeze();
 
-			//$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
-            $options = array('1'=>get_lang('True'),'0' =>get_lang('False'), '2' =>get_lang('Nothing'));
-            $form->addElement('select', 'correct['.$i.']',null, $options, array('id'=>$i,'onchange'=>'multiple_answer_true_false_onchange(this)'));
+			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'id="'.$i.'" class="checkbox" style="margin-left: 0em;"  onchange="multiple_answer_true_false_onchange(this);" ' );
             
-			//$boxes_names[] = 'correct['.$i.']';
+            //$form->addElement('select', 'correct['.$i.']',null, $this->options, array('id'=>$i,'onchange'=>'multiple_answer_true_false_onchange(this)'));
+            
+			$boxes_names[] = 'correct['.$i.']';
 
 			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');

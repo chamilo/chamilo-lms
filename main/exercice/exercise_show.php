@@ -372,7 +372,7 @@ if ($show_results) {
             $questionScore  = $question_result['score'];
             $totalScore     += $question_result['score'];
 		 	echo '</table>';
-		} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
+		} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
 			$choice=array();
 			?>
 			<table width="100%" border="0" cellspacing="3" cellpadding="3">
@@ -395,7 +395,7 @@ if ($show_results) {
             $totalScore    += $question_result['score'];
 
 		 	echo '</table>';
-		} elseif ($answerType == UNIQUE_ANSWER) {
+		} elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {
 			?>
 			<table width="100%" border="0" cellspacing="3" cellpadding="3">
 				<tr>

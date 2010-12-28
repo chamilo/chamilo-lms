@@ -1725,7 +1725,9 @@ function api_get_coachs_from_course($session_id=0,$course_code='') {
  */
 function api_get_setting($variable, $key = null) {
     global $_setting;
-    return is_null($key) ? (!empty($_setting[$variable]) ? $_setting[$variable] : null) : $_setting[$variable][$key];
+    //return is_null($key) ? (!empty($_setting[$variable]) ? $_setting[$variable] : null) : $_setting[$variable][$key];  does not allow "0" values
+    //Allowing "0" values
+    return is_null($key) ? (($_setting[$variable] != '') ? $_setting[$variable] : null) : $_setting[$variable][$key];
 }
 
 /**

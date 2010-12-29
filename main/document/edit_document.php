@@ -120,6 +120,7 @@ $group_document = false;
 $current_session_id = api_get_session_id();
 $doc_tree = explode('/', $file);
 $count_dir = count($doc_tree) - 2; // "2" because at the begin and end there are 2 "/"
+
 // Level correction for group documents.
 if (!empty($group_properties['directory'])) {
 	$count_dir = $count_dir > 0 ? $count_dir - 1 : 0;
@@ -129,10 +130,8 @@ for ($i = 0; $i < ($count_dir); $i++) {
 	$relative_url .= '../';
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
 $html_editor_config = array(
-	'ToolbarSet' => ($is_allowed_to_edit ? 'Documents' :'DocumentsStudent'),
+	'ToolbarSet' => (api_is_allowed_to_edit(null, true) ? 'Documents' :'DocumentsStudent'),
 	'Width' => '100%',
 	'Height' => '600',
 	'FullPage' => true,
@@ -143,6 +142,8 @@ $html_editor_config = array(
 		: api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/',
 	'BaseHref' =>  api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
 );
+
+$is_allowed_to_edit = is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder($_user['user_id'], $dir, $current_session_id);
 
 $use_document_title = api_get_setting('use_document_title') == 'true';
 $noPHP_SELF = true;
@@ -188,16 +189,13 @@ if (!$is_certificate_mode)
 else
 	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 
-
-$is_allowedToEdit = is_allowed_to_edit() || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder($_user['user_id'], $my_cur_dir_path, $current_session_id);
-
-if (!$is_allowedToEdit) {
+if (!is_allowed_to_edit) {
 	api_not_allowed(true);
 }
-
 $user_id = api_get_user_id();
 event_access_tool(TOOL_DOCUMENT);
 
+//TODO:check the below code and his funcionality
 if (!is_allowed_to_edit()) {
 	if (DocumentManager::check_readonly($_course, $user_id, $file)) {
 		api_not_allowed();
@@ -205,52 +203,6 @@ if (!is_allowed_to_edit()) {
 }
 
 /* MAIN TOOL CODE */
-
-/* General functions */
-
-/*
-	Workhorse functions
-
-	These do the actual work that is expected from of this tool, other functions
-	are only there to support these ones.
-*/
-
-/**
-	This function changes the name of a certain file.
-	It needs no global variables, it takes all info from parameters.
-	It returns nothing.
-*/
-function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {
-	$file_name_for_change = $base_work_dir.$dir.$source_file;
-	//api_display_debug_info("call my_rename: params $file_name_for_change, $rename_to");
-    $rename_to = disable_dangerous_file($rename_to); // Avoid renaming to .htaccess file
-	$rename_to = my_rename($file_name_for_change, stripslashes($rename_to)); // fileManage API
-
-	if ($rename_to) {
-		if (isset($dir) && $dir != '') {
-			$source_file = $dir.$source_file;
-			$new_full_file_name = dirname($source_file).'/'.$rename_to;
-		} else {
-			$source_file = '/'.$source_file;
-			$new_full_file_name = '/'.$rename_to;
-		}
-
-		update_db_info('update', $source_file, $new_full_file_name); // fileManage API
-		$name_changed = get_lang('ElRen');
-		$info_message = get_lang('fileModified');
-
-		$GLOBALS['file_name'] = $rename_to;
-		$GLOBALS['doc'] = $rename_to;
-
-		return $info_message;
-	} else {
-		$dialogBox = get_lang('FileExists'); // TODO: This variable is not used.
-
-		/* Return to step 1 */
-		$rename = $source_file;
-		unset($source_file);
-	}
-}
 
 /*	Code to change the comment
 	Step 2. React on POST data
@@ -311,7 +263,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
 
 /*	WYSIWYG HTML EDITOR - Program Logic */
 
-if ($is_allowedToEdit) {
+if ($is_allowed_to_edit) {
 	if ($_POST['formSent'] == 1) {
 		if (isset($_POST['renameTo'])) {
 			$_POST['filename'] = disable_dangerous_file($_POST['renameTo']);
@@ -583,6 +535,55 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 }
 
 
+Display::display_footer();
+
+
+/* General functions */
+
+/*
+	Workhorse functions
+
+	These do the actual work that is expected from of this tool, other functions
+	are only there to support these ones.
+*/
+
+/**
+	This function changes the name of a certain file.
+	It needs no global variables, it takes all info from parameters.
+	It returns nothing.
+*/
+function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {
+	$file_name_for_change = $base_work_dir.$dir.$source_file;
+	//api_display_debug_info("call my_rename: params $file_name_for_change, $rename_to");
+    $rename_to = disable_dangerous_file($rename_to); // Avoid renaming to .htaccess file
+	$rename_to = my_rename($file_name_for_change, stripslashes($rename_to)); // fileManage API
+
+	if ($rename_to) {
+		if (isset($dir) && $dir != '') {
+			$source_file = $dir.$source_file;
+			$new_full_file_name = dirname($source_file).'/'.$rename_to;
+		} else {
+			$source_file = '/'.$source_file;
+			$new_full_file_name = '/'.$rename_to;
+		}
+
+		update_db_info('update', $source_file, $new_full_file_name); // fileManage API
+		$name_changed = get_lang('ElRen');
+		$info_message = get_lang('fileModified');
+
+		$GLOBALS['file_name'] = $rename_to;
+		$GLOBALS['doc'] = $rename_to;
+
+		return $info_message;
+	} else {
+		$dialogBox = get_lang('FileExists'); // TODO: This variable is not used.
+
+		/* Return to step 1 */
+		$rename = $source_file;
+		unset($source_file);
+	}
+}
+
 //return button back to
 function show_return($call_from_tool='', $slide_id=0, $is_certificate_mode=false) {
 	$path = Security::remove_XSS($_GET['curdirpath']);
@@ -600,5 +601,3 @@ function show_return($call_from_tool='', $slide_id=0, $is_certificate_mode=false
 	}
 	echo '</div>';
 }
-
-Display::display_footer();

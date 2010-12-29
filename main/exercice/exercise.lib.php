@@ -89,6 +89,8 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp=new Answer($questionId);
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
+        
+        $quiz_question_options = Question::readQuestionOption($questionId);
 
 		// For "matching" type here, we need something a little bit special
 		// because the match between the suggestions and the answers cannot be
@@ -299,8 +301,8 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
                     $options = array('type'=>'radio','name'=>'choice['.$questionId.']['.$numAnswer.']', 'class'=>'checkbox');
                     $s .='<tr>';     
                     $s .= Display::tag('td', $answer);       
-                    foreach ($objQuestionTmp->options as $key=>$item) {
-                        $options['value'] = $key;
+                    foreach ($quiz_question_options as $id=>$item) {
+                        $options['value'] = $id;
                         $s .= Display::tag('td', Display::tag('input','',$options ));                        	
                     }
                     $s.='<tr>';
@@ -1075,7 +1077,11 @@ function show_score($score, $weight, $show_porcentage = true) {
         $max_note =  api_get_setting('exercise_max_note');
         $min_note =  api_get_setting('exercise_min_note');
         if ($max_note != '' && $min_note != '') {
-    	   $score          = $min_note + ($max_note - $min_note) * $score /$weight;
+           if (!empty($weight)) {
+    	       $score          = $min_note + ($max_note - $min_note) * $score /$weight;
+           } else {
+           	 $score          = $min_note;
+           }
            $score_rounded  = round($score, 2);
            $weight         = $max_note;
         }

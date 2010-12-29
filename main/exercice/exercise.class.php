@@ -1658,9 +1658,18 @@ class Exercise {
 
         $questionName 			= $objQuestionTmp->selectTitle();
         $questionDescription 	= $objQuestionTmp->selectDescription();
-        $questionWeighting 		= $objQuestionTmp->selectWeighting();
+        $questionWeighting 		= $objQuestionTmp->selectWeighting();        
         $answerType 			= $objQuestionTmp->selectType();
-        $quesId 				= $objQuestionTmp->selectId();
+        $quesId 				= $objQuestionTmp->selectId();        
+        $extra                  = $objQuestionTmp->extra;
+        //Extra information of the question 
+        if (!empty($extra)){
+            $extra          = explode(':', $extra);            
+            $true_score     = $extra[0];
+            $false_score    = $extra[1];
+            $doubt_score    = $extra[2];        	
+        }
+        
         
         $totalWeighting 		= 0;
         $totalScore				= 0;
@@ -1687,7 +1696,8 @@ class Exercise {
         }        
         
 		$real_answers = array();        
-         
+        $quiz_question_options = Question::readQuestionOption($questionId);
+                
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer             = $objAnswerTmp->selectAnswer($answerId);
             $answerComment      = $objAnswerTmp->selectComment($answerId);
@@ -1720,36 +1730,36 @@ class Exercise {
                     }               
                     break;
                     // for multiple answers
-                case MULTIPLE_ANSWER_TRUE_FALSE :                  
+                case MULTIPLE_ANSWER_TRUE_FALSE :                    
                     if ($from_database) {
                         $choice=array();
                         $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";                                                
                         $resultans = Database::query($queryans);                        
                         while ($row = Database::fetch_array($resultans)) {
-                            $ind = $row['answer'];
-                            $result = explode(':',$ind);
+                            $ind          = $row['answer'];
+                            $result       = explode(':',$ind);
                             $my_answer_id = $result[0];
                             $option       = $result[1];
                             $choice[$my_answer_id] = $option;                            
                         }                        
                         $numAnswer=$objAnswerTmp->selectAutoId($answerId);                        
-                        $studentChoice  =$choice[$numAnswer];                                     
+                        $studentChoice  =$choice[$numAnswer];
                     } else {                             
-                        $studentChoice  =$choice[$numAnswer]; // 0, 1 or 2
-                        //echo $studentChoice.' - '.$answerCorrect.'<br />';
-                    }
+                        $studentChoice  =$choice[$numAnswer];                   
+                    }                    
                     
-                    if ($studentChoice == $answerCorrect ) {                      
-                        if ($studentChoice == 1) {
-                            $questionScore  +=1;
-                            $totalScore     +=1;  
+                    if ($studentChoice == $answerCorrect ) {
+                        $questionScore  +=$true_score;
+                    } else {                        
+                        if ($quiz_question_options[$studentChoice]['name'] != 'DoubtScore') {
+                           $questionScore  +=  $false_score;                      
+                        } else {
+                        	$questionScore  +=  $doubt_score;
                         }
-                    } else {
-                        if ($studentChoice == 0 || $studentChoice == 1) {
-                           $questionScore  +=-0.5;
-                           $totalScore     +=-0.5;
-                        }
-                   }               
+                   }
+                   $questionWeighting+=$true_score;                   
+                   $totalScore       +=$true_score;
+                   //echo $studentChoice.' - '.$answerCorrect.' '.$questionScore.'<br />';                                           
                    break;
                 case MULTIPLE_ANSWER :                   
                     if ($from_database) {
@@ -1784,34 +1794,45 @@ class Exercise {
                             $my_answer_id = $result[0];
                             $option       = $result[1];
                             $choice[$my_answer_id] = $option;    
-                        }                              
+                        }     
+                                             
                         $numAnswer=$objAnswerTmp->selectAutoId($answerId);
                         $studentChoice=$choice[$numAnswer];
-        
+                        //echo $studentChoice.' - '.$answerCorrect.'<br /> ';
+                        
                         if ($answerCorrect == 1) {
-                            if ($studentChoice) {
+                            if ($studentChoice == 1) { //true value see MultipleAnswerCombinationTrueFalse class
                                 $real_answers[$answerId] = true;
-                            } else {
+                            } elseif ($studentChoice == 2) { //false value
                                 $real_answers[$answerId] = false;
+                            } else {
+                            	$real_answers[$answerId] = false;
                             }
                         } else {
-                            if ($studentChoice) {
+                            if ($studentChoice == 1) { //true value
                                 $real_answers[$answerId] = false;
+                            } elseif ($studentChoice == 2) { //false value see MultipleAnswerCombinationTrueFalse class
+                                $real_answers[$answerId] = true;                            
                             } else {
                                 $real_answers[$answerId] = true;
                             }
-                        }                        
+                        }
+                                  
                     } else {                        
                         $studentChoice=$choice[$numAnswer];
-                        if ($answerCorrect == 1) {
-                            if ($studentChoice) {
+                          if ($answerCorrect == 1) {
+                            if ($studentChoice == 1) { //true value see MultipleAnswerCombinationTrueFalse class
                                 $real_answers[$answerId] = true;
+                            } elseif ($studentChoice == 2) { //false value
+                                $real_answers[$answerId] = false;
                             } else {
                                 $real_answers[$answerId] = false;
                             }
                         } else {
-                            if ($studentChoice) {
+                            if ($studentChoice == 1) { //true value
                                 $real_answers[$answerId] = false;
+                            } elseif ($studentChoice == 2) { //false value see MultipleAnswerCombinationTrueFalse class
+                                $real_answers[$answerId] = true;                            
                             } else {
                                 $real_answers[$answerId] = true;
                             }
@@ -1822,8 +1843,7 @@ class Exercise {
                                 $final_answer = false;
                             }
                         }
-                    }
-                    
+                    }                    
                 break;
                 case MULTIPLE_ANSWER_COMBINATION:                
                     if ($from_database) {
@@ -2166,9 +2186,13 @@ class Exercise {
                             if ($origin!='learnpath') {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
                             }
-                        } elseif($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
+                        } elseif($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                             if ($origin!='learnpath') {
                                 ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
+                            }                            
+                        } elseif($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
+                            if ($origin!='learnpath') {
+                                ExerciseShowFunctions::display_multiple_answer_combination_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
                             }                            
                         } elseif($answerType == FILL_IN_BLANKS) {
                             if ($origin!='learnpath') {
@@ -2207,13 +2231,19 @@ class Exercise {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"");
                             }
                             break;   
-                        case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:                         
+                        case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:                        
+                            if ($answerId==1) {                                
+                                ExerciseShowFunctions::display_multiple_answer_combination_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId);
+                            } else {
+                                ExerciseShowFunctions::display_multiple_answer_combination_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"");
+                            }                         
+                            break;
                         case MULTIPLE_ANSWER_TRUE_FALSE :                        
                             if ($answerId==1) {                                
                                 ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,$answerId);
                             } else {
                                 ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$exeId,$questionId,"");
-                            }
+                            }                            
                         break;
                         case FILL_IN_BLANKS:
                             echo '<tr><td>';
@@ -2287,7 +2317,8 @@ class Exercise {
                         </tr>';                    
                     }
                 }
-            if($origin != 'learnpath') { ?>
+            if($origin != 'learnpath') { 
+            ?>
                 <tr>
                 <td colspan="<?php echo $colspan; ?>" align="left">                    
                     <?php                    

@@ -325,11 +325,12 @@ if ($show_results) {
 		$questionWeighting	= $objQuestionTmp->selectWeighting();
 		$answerType			= $objQuestionTmp->selectType();
 		$quesId 			= $objQuestionTmp->selectId(); //added by priya saini
+        
 
 		// destruction of the Question object
 		unset($objQuestionTmp);
 
-		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+		if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
 			$colspan=2;
 		}
 		if($answerType == MATCHING || $answerType == FREE_ANSWER) {
@@ -367,10 +368,12 @@ if ($show_results) {
 			<?php
 			// construction of the Answer object
        
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);            
             //var_dump($question_result);
-            $questionScore  = $question_result['score'];
-            $totalScore     += $question_result['score'];
+            $questionScore      = $question_result['score'];
+            $totalScore        += $question_result['score'];            
+            $questionWeighting += $question_result['weight'];
+            
 		 	echo '</table>';
 		} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
 			$choice=array();
@@ -390,7 +393,8 @@ if ($show_results) {
 			</tr>
 			<?php
 	            
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);    
+                    
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
 
@@ -579,12 +583,11 @@ if ($show_results) {
 		unset($objAnswerTmp);
 		$i++;
 		$totalWeighting+=$questionWeighting;
+        
 	} // end of large foreach on questions
 } //end of condition if $show_results
 
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
-	//$query = "update ".$TBL_TRACK_EXERCICES." set exe_result = $totalScore where exe_id = '$id'";
-	//Database::query($query);
 	if ($show_results) {
         
 		echo '<div id="question_score">'.get_lang('YourTotalScore')." ";

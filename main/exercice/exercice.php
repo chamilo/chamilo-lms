@@ -778,8 +778,7 @@ if ($show == 'test') {
                                     
                     //Showing exercise title
                     $row['title']=text_filter($row['title']);
-                    echo Display::tag('h1',$row['title']);
-                    
+                    echo Display::tag('h1',$row['title']);                    
                     echo '<p>';
                     echo $session_img;
                     $exid = $row['id'];
@@ -801,28 +800,28 @@ if ($show == 'test') {
                     
                     if ($session_id == $row['session_id']) {
                         //Settings                                                                
-                        echo Display::tag('a',  Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), array('href'=>'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']));
+                        echo Display::url(Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                         
                         //Export
-                        echo Display::tag('a',  Display::return_icon('cd.gif',          get_lang('CopyExercise')),       array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
+                        echo Display::url(Display::return_icon('cd.gif',          get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
                         //Clean exercise                    
-                        echo Display::tag('a',  Display::return_icon('clean_group.png', get_lang('CleanStudentResults')),array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id']));                      
+                        echo Display::url(Display::return_icon('clean_group.png', get_lang('CleanStudentResults')),'', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id']));                      
                         //Visible / invisible
                         if ($row['active']) {
-                            echo Display::tag('a', Display::return_icon('visible.gif', get_lang('Deactivate')) , array('href'=>'exercice.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']));                        
+                            echo Display::url(Display::return_icon('visible.gif', get_lang('Deactivate')) , 'exercice.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);                        
                         } else { // else if not active                    
-                            echo Display::tag('a', Display::return_icon('invisible.gif', get_lang('Activate')) , array('href'=>'exercice.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']));                      
+                            echo Display::url(Display::return_icon('invisible.gif', get_lang('Activate')) , 'exercice.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);                      
                         }                        
                         // Export qti ...                    
-                        echo Display::tag('a',  Display::return_icon('export_db.png',    'IMS/QTI'),               array('href'=>'exercice.php?choice=exportqti2&exerciseId='.$row['id']));
+                        echo Display::url(Display::return_icon('export_db.png',    'IMS/QTI'),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
                     } else { // not session resource                
                         echo Display::return_icon('wizard_gray_small.gif', get_lang('ExerciseEditionNotAvailableInSession'));
-                        echo Display::tag('a',  Display::return_icon('cd.gif',          get_lang('CopyExercise')),       array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
+                        echo Display::url(Display::return_icon('cd.gif',          get_lang('CopyExercise')),     '',  array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
                     }
                     
                     //Delete
                     if ($session_id == $row['session_id']) {
-                        echo Display::tag('a',  Display::return_icon('delete.png', get_lang('Delete')),array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));            
+                        echo Display::url(Display::return_icon('delete.png', get_lang('Delete')), '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));            
                     }
                     //Attempts                    
                     echo '<br />'.get_count_exam_results($row['id']).' '.get_lang('Attempts');
@@ -830,11 +829,11 @@ if ($show == 'test') {
                     //Special buttons
                     echo '<div class="operations">';                       
                                 
-                        echo Display::tag('a',  Display::return_icon('quiz.gif',get_lang('Questions'), array('width'=>'22px'))." ".get_lang('Questions'), array('href'=>'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']));
+                        echo Display::url(Display::return_icon('quiz.gif',get_lang('Questions'), array('width'=>'22px'))." ".get_lang('Questions'),'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
                         echo ' ';      
-                        echo Display::tag('a', Display::return_icon('preview.gif',get_lang('Preview'), array('width'=>'22px'))." ".get_lang('Preview'), array('href'=>'exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id']));
+                        echo Display::url(Display::return_icon('preview.gif',get_lang('Preview'), array('width'=>'22px'))." ".get_lang('Preview'), 'exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id']);
                         echo ' ';
-                        echo Display::tag('a', Display::return_icon('show_test_results.gif',get_lang('Results'), array('width'=>'22px'))." ".get_lang('Results'), array('href'=>'exercice.php?'.api_get_cidreq().'&show=result&exerciseId='.$row['id']));
+                        echo Display::url(Display::return_icon('show_test_results.gif',get_lang('Results'), array('width'=>'22px'))." ".get_lang('Results'), 'exercice.php?'.api_get_cidreq().'&show=result&exerciseId='.$row['id']);
                     echo '</div>';
                     
                 } else {

@@ -139,9 +139,9 @@ if ($nbrQuestions) {
 
             echo '<div id="question_id_list_'.$id.'" >';                  
             $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved'));            
-		    echo Display::tag('h3','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().'</a>');
-            
+		    echo Display::tag('h3','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().'</a>');            
             echo '<div>';             
+            
             echo '<p>';			  	
             echo $actions;
 		  

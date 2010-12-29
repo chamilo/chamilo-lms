@@ -529,11 +529,13 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 	}
 	
 	show_return($call_from_tool, $slide_id, $is_certificate_mode);
-
+	///
+	if($extension=='svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
+		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
+	}
 	$form->display();
 	//Display::display_error_message(get_lang('ReadOnlyFile'));
 }
-
 
 Display::display_footer();
 
@@ -595,6 +597,11 @@ function show_return($call_from_tool='', $slide_id=0, $is_certificate_mode=false
 	}
 	elseif($call_from_tool=='slideshow'){
 		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ViewSlideshow')).get_lang('BackTo').' '.get_lang('ViewSlideshow').'</a>';		
+	}
+	elseif($call_from_tool=='editdrawing'){
+		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
+		echo '<a href="javascript:history.back(1)">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Draw')).get_lang('BackTo').' '.get_lang('Draw').'</a>';	
+		
 	}
 	else{
 		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>&nbsp;';

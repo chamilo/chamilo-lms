@@ -137,7 +137,7 @@ class MultipleAnswerTrueFalse extends Question {
 				//$defaults['weighting['.$i.']']  = float_format($answer -> weighting[$i], 1);
       
                 $correct = $answer->correct[$i];
-                var_dump($correct);
+                                
                 //$this->options
 				$defaults['correct['.$i.']']    = $correct;  
                 $j = 1;             

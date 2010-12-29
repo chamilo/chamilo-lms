@@ -76,6 +76,7 @@ abstract class Question
 		$this->position=1;
 		$this->picture='';
 		$this->level = 1;
+        $this->extra='';
 		$this->exerciseList=array();
 	}
 
@@ -99,7 +100,7 @@ abstract class Question
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-		$sql="SELECT question,description,ponderation,position,type,picture,level FROM $TBL_QUESTIONS WHERE id='".Database::escape_string($id)."'";
+		$sql="SELECT question,description,ponderation,position,type,picture,level,extra FROM $TBL_QUESTIONS WHERE id='".Database::escape_string($id)."'";
 
 		$result=Database::query($sql);
 
@@ -114,6 +115,7 @@ abstract class Question
 			$objQuestion->type			= $object->type;
 			$objQuestion->picture		= $object->picture;
 			$objQuestion->level			= (int) $object->level;
+            $objQuestion->extra         = $object->extra;
 
 			$sql="SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE question_id='".intval($id)."'";
 			$result=Database::query($sql);
@@ -532,6 +534,15 @@ abstract class Question
 	{
 		$this->question = $title;
 	}
+    
+    /**
+        Sets the title
+    */
+    public function setExtra($extra)
+    {
+        $this->extra = $extra;
+    }
+    
 
 
 	/**
@@ -591,6 +602,7 @@ abstract class Question
 		$type=$this->type;
 		$picture=$this->picture;
 		$level=$this->level;
+        $extra=$this->extra;
 
 		// question already exists
 		if(!empty($id)) {
@@ -601,6 +613,7 @@ abstract class Question
 					position	='".Database::escape_string($position)."',
 					type		='".Database::escape_string($type)."',
 					picture		='".Database::escape_string($picture)."',
+                    extra       ='".Database::escape_string($extra)."',
 					level		='".Database::escape_string($level)."'
 				WHERE id='".Database::escape_string($id)."'";
 			Database::query($sql);
@@ -626,14 +639,15 @@ abstract class Question
 			$this -> updatePosition($current_position+1);
 			$position = $this -> position;
 
-			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture,level) VALUES(
+			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture,extra, level) VALUES(
 					'".Database::escape_string($question)."',
 					'".Database::escape_string($description)."',
 					'".Database::escape_string($weighting)."',
 					'".Database::escape_string($position)."',
 					'".Database::escape_string($type)."',
 					'".Database::escape_string($picture)."',
-					'".Database::escape_string($level)."'
+					'".Database::escape_string($extra)."',
+                    '".Database::escape_string($level)."'
 					)";
 			Database::query($sql);
 
@@ -644,10 +658,8 @@ abstract class Question
 			// If hotspot, create first answer
 			if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-
 				$sql="INSERT INTO $TBL_ANSWERS (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
 				Database::query($sql);
-
             }
 
             if (api_get_setting('search_enabled')=='true') {
@@ -1192,6 +1204,34 @@ abstract class Question
 	{
 		return self::$questionTypes;
 	}
+    
+    static function saveQuestionOption($question_id, $name, $position = 0) {
+        $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);   
+        $params['question_id']  = intval($question_id);
+        $params['name']         = $name;        
+        $params['position']     = $position;             
+        $result  = self::readQuestionOption($question_id);
+        $last_id = Database::insert($TBL_EXERCICE_QUESTION_OPTION, $params);
+        return $last_id; 
+    }
+    
+    static function deleteAllQuestionOptions($question_id) {
+    	$TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
+        Database::delete($TBL_EXERCICE_QUESTION_OPTION, array('question_id = ?'=> $question_id));
+    }
+    
+    static function updateQuestionOption($id, $params) {
+        $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
+        $result = Database::update_query($TBL_EXERCICE_QUESTION_OPTION, $params, array('id = ?'=>$id));             
+        return $result;        
+    }
+    
+    
+    static function readQuestionOption($question_id) {
+        $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
+        $result = Database::find($TBL_EXERCICE_QUESTION_OPTION, '*', array('question_id = ?' =>$question_id));
+        return $result;        
+    }
 }
 endif;
 ?>

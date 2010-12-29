@@ -224,22 +224,93 @@ class ExerciseShowFunctions {
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    function display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {        
+    function display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
+        global $feedback_type;        
+        ?>
+        <tr>
+        <td width="5%" align="center">
+        <?php   
+        
+        $question = new MultipleAnswerTrueFalse();
+        $new_options = Question::readQuestionOption($questionId);
+         
+        if (isset($new_options[$studentChoice])) {
+            echo get_lang($new_options[$studentChoice]['name']);
+        } else {
+        	echo '-';
+        }        
+        ?>          
+        </td>
+        <td width="5%" align="center">
+        <?php
+
+        if (isset($new_options[$answerCorrect])) {
+            echo get_lang($new_options[$answerCorrect]['name']);
+        } else {
+            echo '-';
+        }        
+        ?>          
+        </td>
+        <td width="40%" style="border-bottom: 1px solid #4171B5;">
+            <?php
+            $answer=text_filter($answer);
+            echo $answer;
+            ?>
+        </td>
+
+        <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+        <td width="20%" style="border-bottom: 1px solid #4171B5;">
+            <?php
+            $answerComment=text_filter($answerComment);
+            if($studentChoice) {
+                if(!$answerCorrect) {
+                    echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                } else {
+                    echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                }
+            } else {
+                echo '&nbsp;';
+            }
+            ?>
+        </td>
+            <?php
+            if ($ans==1) {
+                $comm = get_comments($id,$questionId);
+            }
+            ?>
+         <?php } else { ?>
+            <td>&nbsp;</td>
+        <?php } ?>
+        </tr>
+        <?php
+    }
+    
+     /**
+     * Display the answers to a multiple choice question
+     *
+     * @param integer Answer type
+     * @param integer Student choice
+     * @param string  Textual answer
+     * @param string  Comment on answer
+     * @param string  Correct answer comment
+     * @param integer Exercise ID
+     * @param integer Question ID
+     * @param boolean Whether to show the answer comment or not
+     * @return void
+     */
+    function display_multiple_answer_combination_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {        
         global $feedback_type;        
         ?>
         <tr>
         <td width="5%" align="center">
         <?php   
         //var_dump($studentChoice);
-        if ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
-            $question = new MultipleAnswerCombinationTrueFalse();
-        } else {
-            $question = new MultipleAnswerTrueFalse();
-        }         
+        $question = new MultipleAnswerCombinationTrueFalse();
+        
         if (isset($question->options[$studentChoice])) {
             echo $question->options[$studentChoice];
         } else {
-        	echo $question->options[2];
+            echo $question->options[2];
         }        
         ?>          
         </td>
@@ -286,5 +357,5 @@ class ExerciseShowFunctions {
         <?php } ?>
         </tr>
         <?php
-    }      
+    }       
 }

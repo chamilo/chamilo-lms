@@ -179,6 +179,7 @@ define('TABLE_QUIZ_QUESTION', 		'quiz_question');
 define('TABLE_QUIZ_TEST', 			'quiz');
 define('TABLE_QUIZ_ANSWER', 		'quiz_answer');
 define('TABLE_QUIZ_TEST_QUESTION', 	'quiz_rel_question');
+define('TABLE_QUIZ_QUESTION_OPTION','quiz_question_option');
 
 // Linked resource table
 define('TABLE_LINKED_RESOURCES', 'resource');
@@ -1297,6 +1298,134 @@ class Database {
     }
 
     /*
+        New useful DB functions
+    */
+   
+    /**
+     * Experimental useful database insert 
+     * @todo lot of stuff to do here
+     */
+    public static function insert($table_name, $attributes) {
+        if (empty($attributes) || empty($table_name)) {
+            return false;        	
+        }
+        $filtred_attributes = array();
+        foreach($attributes as $key => $value) {
+            $filtred_attributes[$key] = "'".self::escape_string($value)."'"; 
+        }
+        $params = array_keys($filtred_attributes); //@todo check if the field exists in the table we should use a describe of that table
+        $values = array_values($filtred_attributes);
+        if (!empty($params) && !empty($values)) {        
+            $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';        
+            $result = self::query($sql);
+            return  self::get_last_insert_id();             
+        }
+        return false;
+    }
+    
+    /**
+     * Experimental useful database finder 
+     * @todo lot of stuff to do here
+    */
+    
+    public static function find($table_name, $columns = '*' , $where_conditions = array(), $option = 'ASSOC') {
+    	$where_return = self::parse_where_conditions($where_conditions);        
+        $columns_filtred = '';
+        if (is_array($columns)) {
+        	$columns_filtred = implode(',', $columns);
+        } else {
+        	if ($columns == '*') {
+        		$columns_filtred = '*';
+        	}
+        }        
+        $sql    = "SELECT $columns_filtred FROM $table_name $where_return ";
+        $result = self::query($sql);
+        
+        $array = array();
+        if ($result !== false) { // For isolation from database engine's behaviour.
+            while ($row = self::fetch_array($result, $option)) {
+                if (isset($row['id'])) {
+                    $array[$row['id']] = $row;
+                } else {
+                	$array[] = $row;
+                }                    
+            }
+        }
+        return $array;
+    }
+    
+    /**
+     * Parses where conditionsof this form: array('id = ?' =>'4')
+     * @todo lot of stuff to do here
+    */
+    private function parse_where_conditions($conditions) {  
+        if (empty($conditions)) {
+        	return '';
+        }
+        $where_return = '';  
+        foreach ($conditions as $condition => $value_array) {                     
+            if (is_array($value_array)) {
+                $clean_values = array();                            
+                foreach($value_array as $item) {
+                    $item = Database::escape_string($item);
+                    $clean_values[]= "'$item'";
+                }
+            } else {
+                $value_array = Database::escape_string($value_array);
+                $clean_values = "'$value_array'";
+            }
+            if (!empty($condition) && !empty($clean_values)) {    
+                $condition = str_replace('?','%s', $condition); //we treat everything as string                
+                $condition = vsprintf($condition, $clean_values);
+                $where_return .= $condition;                            
+            }
+        }
+        
+        if (!empty($where_return)) {            
+        	$where_return = " WHERE $where_return ";
+        }
+        return $where_return;       
+    }
+    
+    /**
+     * Experimental useful database update 
+     * @todo lot of stuff to do here
+     */
+    public static function delete($table_name, $where_conditions) {
+        $result = false;                
+        $where_return = self::parse_where_conditions($where_conditions);
+        $sql    = "DELETE FROM $table_name $where_return ";
+        $result = self::query($sql);          	          
+        //@todo should return affected_rows for 
+        return $result;
+    }   
+   
+    
+    /**
+     * Experimental useful database update 
+     * @todo lot of stuff to do here
+     */
+    public static function update_query($table_name, $attributes, $where_conditions = array()) {
+         
+        if (!empty($table_name) && !empty($attributes)) {
+            $update_sql = '';
+            //Cleaning attributes
+            foreach ($attributes as $key=>$value) {
+                $value = self::escape_string($value);
+            	$update_sql .= "$key = '$value' ";
+            }
+            if (!empty($update_sql)) {  
+                //Parsing and cleaning the where conditions
+                $where_return = self::parse_where_conditions($where_conditions);
+                $sql    = "UPDATE $table_name SET $update_sql $where_return ";                
+                $result = self::query($sql);
+                return $result;
+            }                
+        }
+        return false;
+    }
+    
+     /*
         DEPRECATED METHODS
     */
 
@@ -1314,72 +1443,5 @@ class Database {
         return mysql_insert_id();
     }
     
-    /**
-     * Experimental useful database insert 
-     * @todo lot of stuff to do here
-     */
-    public static function insert_query($table_name, $attributes) {
-        if (empty($attributes) || empty($table_name)) {
-            return false;        	
-        }
-        $filtred_attributes = array();
-        foreach($attributes as $key => $value) {
-            $filtred_attributes[$key] = self::escape_string($value); 
-        }
-        $params = array_keys($filtred_attributes); //@todo check if the field exists in the table we should use a describe of that table
-        $values = array_values($filtred_attributes);
-        if (!empty($params) && !empty($values)) {        
-            $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',array_keys($params)).') VALUES ('.implode(',',$values).')';        
-            $result = self::query($sql);
-            return $result;    
-        }
-        return false;
-    }
-    
-    /**
-     * Experimental useful database update 
-     * @todo lot of stuff to do here
-     */
-    public static function update_query($table_name, $attributes, $where = array()) {
-         
-        if (!empty($table_name) && !empty($attributes)) {
-            $update_sql = '';
-            //Cleaning attributes
-            foreach ($attributes as $key=>$value) {
-                $value = self::escape_string($value);
-            	$update_sql .= "$key = '$value' ";
-            }
-            if (!empty($update_sql)) {               
-                if (!empty($where)) {
-                    //Parsing and cleaning the where conditions
-                    $where_return ='';
-                    foreach ($where as $condition => $value_array) {                       
-                        if (is_array($value_array)) {
-                            $clean_values = array();                            
-                            foreach($value_array as $item) {
-                            	$item = Database::escape_string($item);
-                                $clean_values[]= "'$item'";
-                            }
-                        } else {
-                            $value_array = Database::escape_string($value_array);
-                        	$clean_values = "'$value_array'";
-                        }
-                        if (!empty($condition) && !empty($clean_values)) {    
-                            $condition = str_replace('?','%s', $condition); //we treat everything as string
-                            $condition = vsprintf($condition, $clean_values);
-                        	$where_return .= $condition;                            
-                        }
-                    }
-                    if (!empty($clean_values)) {
-                	   $where_return =" WHERE $where_return ";
-                    }
-                }                
-                $sql    = "UPDATE $table_name SET $update_sql $where_return ";                
-                $result = self::query($sql);
-                return $result;
-            }                
-        }
-        return false;
-    }
 }
 //end class Database

@@ -703,6 +703,13 @@ class Display {
         return $return_value;        
     }
     
+    public static function url($name, $url, $extra_attributes = array()) {
+        if (!empty($url)) {
+            $extra_attributes['href']= $url;
+        }        
+        return self::tag('a', $name, $extra_attributes);    	
+    }
+    
     public function select($name, $values, $default = -1, $parameter_list = array(), $show_blank_item = true) {        
         $extra = '';
         foreach($parameter_list as $key=>$parameter) {

@@ -290,6 +290,7 @@ function update_Db_course($course_db_name) {
     $TABLEQUIZQUESTION          = $course_db_name . 'quiz_rel_question';
     $TABLEQUIZQUESTIONLIST      = $course_db_name . 'quiz_question';
     $TABLEQUIZANSWERSLIST       = $course_db_name . 'quiz_answer';
+    $TABLEQUIZQUESTIONOPTION      = $course_db_name . 'quiz_question_option';
 
     // Dropbox
     $TABLETOOLDROPBOXPOST       = $course_db_name . 'dropbox_post';
@@ -668,11 +669,25 @@ function update_Db_course($course_db_name) {
         hotspot_coordinates text,
         hotspot_type enum('square','circle','poly','delineation') default NULL,
         destination text NOT NULL,
-        id_auto int NOT NULL AUTO_INCREMENT,
+        id_auto int NOT NULL AUTO_INCREMENT,   
         PRIMARY KEY (id, question_id),
         UNIQUE KEY id_auto (id_auto)
         )" . $charset_clause;
     Database::query($sql);
+    
+    
+    
+    // Exercise tool - answer options
+    $sql = "
+        CREATE TABLE `".$TABLEQUIZQUESTIONOPTION . "` (
+        id          int NOT NULL auto_increment,
+        question_id int NOT NULL,                
+        name        varchar(255),
+        position    int unsigned NOT NULL,        
+        PRIMARY KEY (id)
+        )" . $charset_clause;
+    Database::query($sql);
+    
 
     // Exercise tool - Test/question relations
     $sql = "

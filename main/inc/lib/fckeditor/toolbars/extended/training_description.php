@@ -23,7 +23,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Save','NewPage','Templates','-','PasteWord'),
 	array('Undo','Redo'),
 	array('Link','Image','flvPlayer','Table','mimetex'),
-	array('UnorderedList','OrderedList','Rule'),
+	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor'),
 	array('FitWindow')

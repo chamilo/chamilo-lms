@@ -1330,15 +1330,17 @@ class Database {
     
     public static function find($table_name, $columns = '*' , $where_conditions = array(), $option = 'ASSOC') {
     	$where_return = self::parse_where_conditions($where_conditions);        
-        $columns_filtred = '';
+        $clean_columns = '';
         if (is_array($columns)) {
-        	$columns_filtred = implode(',', $columns);
+        	$clean_columns = implode(',', $columns);
         } else {
         	if ($columns == '*') {
-        		$columns_filtred = '*';
+        		$clean_columns = '*';
+        	} else {
+        		$clean_columns = (string)$columns;
         	}
         }        
-        $sql    = "SELECT $columns_filtred FROM $table_name $where_return ";
+        $sql    = "SELECT $clean_columns FROM $table_name $where_return ";
         $result = self::query($sql);
         
         $array = array();

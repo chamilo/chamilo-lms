@@ -600,8 +600,8 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 			$my_result = number_format(($totalScore/$totalWeighting)*100,1,'.','');
 			$my_result = float_format($my_result,1);
 			echo $my_result."%";
-		} else {
-            echo show_score($my_total_score,$my_total_weight,false);
+		} else {            
+            echo show_score($totalScore,$totalWeighting,false);
 		}
 		echo '</div>';
 	}

@@ -1097,7 +1097,7 @@ function show_score($score, $weight, $show_porcentage = true) {
         }
         if ($show_porcentage) {
             $html = round(($score / ($weight != 0 ? $weight : 1)) * 100, 2) . '% (' . $score_rounded . ' / ' . $weight . ')';	
-        } else {
+        } else {            
         	$html = $score_rounded . ' / ' . $weight;
         }        
     }    

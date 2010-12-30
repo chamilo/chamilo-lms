@@ -441,8 +441,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 //START ACTION MENU
 
 	/*	MOVE FILE OR DIRECTORY */
-	//Only teacher and all users into their group
-	if($is_allowed_to_edit || $group_member_with_upload_rights){	
+	//Only teacher and all users into their group and each user into his/her shared folder
+	if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id) || is_my_shared_folder($_user['user_id'], Security::remove_XSS($_POST['move_to']), $current_session_id)){	
 		$my_get_move = Security::remove_XSS($_GET['move']);
 		if (isset($_GET['move']) && $_GET['move'] != '') {
 			
@@ -459,13 +459,29 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 			}
 	
 			if (DocumentManager::get_document_id($_course, $my_get_move)) {
-				$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);				
+				$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
 				
-				echo '<div class="row"><div class="form_header">'.get_lang('Move').'</div></div>';
-				echo build_move_to_selector($folders, Security::remove_XSS($_GET['curdirpath']), $my_get_move, $group_properties['directory']);
+				//filter if is my shared folder. TODO: move this code to build_move_to_selector function
+				if(is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id) && !$is_allowed_to_edit){
+					$main_user_shared_folder_sub  = '/shared_folder\/sf_user_'.api_get_user_id().'\//';//all subfolders			
+					$main_user_shared_folder_main = '/shared_folder\/sf_user_'.api_get_user_id().'$/';//only main user shared folder
+					$user_shared_folders=array();
+					
+					foreach($folders as $fold){
+						if(preg_match($main_user_shared_folder_main, $fold) || preg_match($main_user_shared_folder_sub, $fold)){
+							$user_shared_folders[]=$fold;
+						}
+					}						
+					echo '<div class="row"><div class="form_header">'.get_lang('Move').'</div></div>';
+					echo build_move_to_selector($user_shared_folders, Security::remove_XSS($_GET['curdirpath']), $my_get_move, $group_properties['directory']);
+				}
+				else{
+					echo '<div class="row"><div class="form_header">'.get_lang('Move').'</div></div>';
+					echo build_move_to_selector($folders, Security::remove_XSS($_GET['curdirpath']), $my_get_move, $group_properties['directory']);			
+				}
 			}
 		}
-	
+		
 		if (isset($_POST['move_to']) && isset($_POST['move_file'])) {
 			if (!$is_allowed_to_edit) {
 				if (DocumentManager::check_readonly($_course, $_user['user_id'], $my_get_move)) {
@@ -484,7 +500,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 			// This is needed for the update_db_info function
 			//$dbTable = $_course['dbNameGlu'].'document';
 			$dbTable = Database::get_course_table(TABLE_DOCUMENT);
-	
 			// Security fix: make sure they can't move files that are not in the document table
 			if (DocumentManager::get_document_id($_course, $_POST['move_file'])) {
 				if (move($base_work_dir.$_POST['move_file'], $base_work_dir.$_POST['move_to'])) {
@@ -501,9 +516,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 			}
 		}
 	}
+	
 	/*	DELETE FILE OR DIRECTORY */
 	//Only teacher and all users into their group
-	if($is_allowed_to_edit || $group_member_with_upload_rights){
+	if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id)){
 		if (isset($_GET['delete'])) {
 			
 			if (api_is_coach()) {
@@ -634,7 +650,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 	
 	/*	TEMPLATE ACTION */
 	//Only teacher and all users into their group
-	if($is_allowed_to_edit || $group_member_with_upload_rights){
+	if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id)){
 		if (isset($_GET['add_as_template']) && !isset($_POST['create_template'])) {
 	
 			$document_id_for_template = intval($_GET['add_as_template']);

@@ -2388,7 +2388,7 @@ class Exercise {
             } elseif ($answerType == FREE_ANSWER) {
                 $answer = $choice;
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
-            } elseif ($answerType == UNIQUE_ANSWER) {
+            } elseif ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
                 $answer = $choice;
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             } elseif ($answerType == HOT_SPOT) {                

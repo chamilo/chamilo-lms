@@ -501,4 +501,3 @@ api_session_register('objQuestion');
 api_session_register('objAnswer');
 
 Display::display_footer();
-?>

@@ -119,6 +119,7 @@ if ($nbrQuestions) {
 	$questionList=$my_exercise->selectQuestionList();    
     
 	$i=1;
+    
 	if (is_array($questionList)) {
         echo '<div id="question_list">';		
 		foreach($questionList as $id) {			
@@ -140,49 +141,25 @@ if ($nbrQuestions) {
             echo '<div id="question_id_list_'.$id.'" >';                  
             $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved'));            
 		    echo Display::tag('h3','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().'</a>');            
-            echo '<div>';             
-            
-            echo '<p>';			  	
-            echo $actions;
-		  
-            
-            echo get_lang($question_class.$label);
-            echo '<br />'; 
-            
-            echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
-            echo '<br />';
-            $description = $objQuestionTmp->selectDescription();             
-            if (!empty($description)) {
-                echo get_lang('Description').': '.$description;
-            }
-            
-            
-            showQuestion($id, false, '', '',false, true);
-              
-            /*
-			if($i != 1) { ?>
-			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&moveUp=<?php echo $id; ?>&token=<?php echo $token; ?>"><img src="../img/up.gif" border="0" alt="<?php echo get_lang('MoveUp'); ?>"></a>
-			<?php if($i == $nbrQuestions) {
-		    		echo '<img src="../img/down_na.gif">';
-				}
-			}
-			if($i != $nbrQuestions) {
-				if($i == 1){
-					echo '<img src="../img/up_na.gif">';
-				}
-			?>
-			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&moveDown=<?php echo $id; ?>&token=<?php echo $token; ?>"><img src="../img/down.gif" border="0" alt="<?php echo get_lang('MoveDown'); ?>"></a>
-			<?php } ?>
-		
-		    <?php
-			$i++;
-			
-	*/
-            
-            echo '</p>';
-                  echo '</div>';
-                     echo '</div>';
-                  unset($objQuestionTmp);
+                echo '<div>';             
+                
+                    echo '<p>';			  	
+                        echo $actions;
+                        echo get_lang($question_class.$label);
+                        echo '<br />'; 
+                        
+                        echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
+                        echo '<br />';
+                        $description = $objQuestionTmp->selectDescription();             
+                        if (!empty($description)) {
+                            echo get_lang('Description').': '.$description;
+                        }
+                        showQuestion($id, false, '', '',false, true);                   
+                    echo '</p>';
+                    
+                 echo '</div>';
+            echo '</div>';
+            unset($objQuestionTmp);
 		}
         echo '</div>';
 	}

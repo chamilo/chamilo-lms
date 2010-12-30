@@ -1073,22 +1073,37 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     return $list_info;
 }
 
+/**
+ * Transform the score with exercise_max_note and exercise_min_score the platform settings
+ * @param   float   score
+ * @param   float   weight
+ * @param   bool    show porcentage or not
+ * @return  string  an html with the score modified
+ */
 function show_score($score, $weight, $show_porcentage = true) {
     $html  = '';
     $score_rounded = $score;    
     if ($score != '' && $weight != '') {
-        $max_note =  api_get_setting('exercise_max_note');
-        $min_note =  api_get_setting('exercise_min_note');
+        $max_note =  api_get_setting('exercise_max_score');
+        $min_note =  api_get_setting('exercise_min_score');
         if ($max_note != '' && $min_note != '') {
            if (!empty($weight)) {
-    	       $score          = $min_note + ($max_note - $min_note) * $score /$weight;
+    	       $score        = $min_note + ($max_note - $min_note) * $score /$weight;
            } else {
            	 $score          = $min_note;
            }
            $score_rounded  = round($score, 2);
            $weight         = $max_note;
         }
-        $html = round(($score / ($weight != 0 ? $weight : 1)) * 100, 2) . '% (' . $score_rounded . ' / ' . $weight . ')';
+        if ($show_porcentage) {
+            $html = round(($score / ($weight != 0 ? $weight : 1)) * 100, 2) . '% (' . $score_rounded . ' / ' . $weight . ')';	
+        } else {
+        	$html = $score_rounded . ' / ' . $weight;
+        }        
     }    
     return $html;	
 }
+
+
+
+

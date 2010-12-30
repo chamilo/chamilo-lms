@@ -1658,7 +1658,7 @@ class Exercise {
 
         $questionName 			= $objQuestionTmp->selectTitle();
         $questionDescription 	= $objQuestionTmp->selectDescription();
-        $questionWeighting 		= $objQuestionTmp->selectWeighting();        
+        $questionWeighting 		= $objQuestionTmp->selectWeighting();            
         $answerType 			= $objQuestionTmp->selectType();
         $quesId 				= $objQuestionTmp->selectId();        
         $extra                  = $objQuestionTmp->extra;
@@ -1697,7 +1697,7 @@ class Exercise {
         
 		$real_answers = array();        
         $quiz_question_options = Question::readQuestionOption($questionId);
-                
+ 
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer             = $objAnswerTmp->selectAnswer($answerId);
             $answerComment      = $objAnswerTmp->selectComment($answerId);
@@ -1757,9 +1757,9 @@ class Exercise {
                         	$questionScore  +=  $doubt_score;
                         }
                    }
-                   $questionWeighting+=$true_score;                   
+                   //$questionWeighting+=$true_score;                   
                    $totalScore       +=$true_score;
-                   //echo $studentChoice.' - '.$answerCorrect.' '.$questionScore.'<br />';                                           
+                   //echo $studentChoice.' - '.$answerCorrect.' '.$questionScore.' - '.$questionWeighting.'<br />';                                           
                    break;
                 case MULTIPLE_ANSWER :                   
                     if ($from_database) {
@@ -2408,7 +2408,9 @@ class Exercise {
             $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . $exeId;
     		Database::query($sql_update);
         }
-        return array('score'=>$questionScore, 'weight'=>$questionWeighting);
+        
+        $return_array = array('score'=>$questionScore, 'weight'=>$questionWeighting);         
+        return $return_array;
 	} //End function
     
         

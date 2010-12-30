@@ -314,7 +314,13 @@ if ($show_results) {
 	
 	// for each question
 	$counter=0;
-    //var_dump($exerciseResult);
+
+    $total_weighting = 0;
+    foreach ($questionList as $questionId) {
+        $objQuestionTmp     = Question::read($questionId);
+        $total_weighting  +=$objQuestionTmp->selectWeighting();        
+    }
+            
 	foreach ($questionList as $questionId) {
 		$counter++;		
 		$choice=$exerciseResult[$questionId];
@@ -372,7 +378,7 @@ if ($show_results) {
             //var_dump($question_result);
             $questionScore      = $question_result['score'];
             $totalScore        += $question_result['score'];            
-            $questionWeighting += $question_result['weight'];
+            //$questionWeighting += $question_result['weight'];
             
 		 	echo '</table>';
 		} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
@@ -393,8 +399,7 @@ if ($show_results) {
 			</tr>
 			<?php
 	            
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);    
-                    
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);                       
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
 
@@ -574,10 +579,11 @@ if ($show_results) {
 		</table>
 		<?php
 		$my_total_score  = float_format($questionScore,1);
-		$my_total_weight = float_format($questionWeighting,1);
+		$my_total_weight = float_format($questionWeighting,1);       
 
 		echo '<div id="question_score">';
-		echo get_lang('Score')." : $my_total_score/$my_total_weight";
+		//echo get_lang('Score')." : $my_total_score/$my_total_weight";        
+        echo get_lang('Score')." : ".show_score($my_total_score,$total_weighting,false);
 		echo '</div>';
 
 		unset($objAnswerTmp);
@@ -588,18 +594,14 @@ if ($show_results) {
 } //end of condition if $show_results
 
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
-	if ($show_results) {
-        
-		echo '<div id="question_score">'.get_lang('YourTotalScore')." ";
+	if ($show_results) {        
+		echo '<div id="question_score">'.get_lang('YourTotalScore').": ";
 		if ($dsp_percent) {            
 			$my_result = number_format(($totalScore/$totalWeighting)*100,1,'.','');
 			$my_result = float_format($my_result,1);
 			echo $my_result."%";
-		} else {            
-            
-			$my_total_score  = float_format($totalScore,1);
-			$my_total_weight = float_format($totalWeighting,1);
-			echo $my_total_score."/".$my_total_weight;
+		} else {
+            echo show_score($my_total_score,$my_total_weight,false);
 		}
 		echo '</div>';
 	}
@@ -611,8 +613,7 @@ if (is_array($arrid) && is_array($arrmarks)) {
 }
 
 if ($is_allowedToEdit) {
-	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {
-        
+	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {        
 		echo ' <form name="myform" id="myform" action="exercice.php?show=result&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';	
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$lp_id.'">';

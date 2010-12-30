@@ -650,7 +650,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 	
 	/*	TEMPLATE ACTION */
 	//Only teacher and all users into their group
-	if($is_allowed_to_edit || $group_member_with_upload_rights){
+	if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id)){
 		if (isset($_GET['add_as_template']) && !isset($_POST['create_template'])) {
 	
 			$document_id_for_template = intval($_GET['add_as_template']);

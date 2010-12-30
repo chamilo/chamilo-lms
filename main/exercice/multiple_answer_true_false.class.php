@@ -240,20 +240,19 @@ class MultipleAnswerTrueFalse extends Question {
             }            
         }
         
+        //Getting quiz_question_options (true, false, doubt) because it's possible that there are more options in the future
         $new_options = Question::readQuestionOption($this->id);
         $sorted_by_position = array();
         foreach($new_options as $item) {
         	$sorted_by_position[$item['position']] = $item;
-        }
+        }        
         
-        
-        //Saving quiz_question.extra values
+        //Saving quiz_question.extra values that has the correct scores of the true, false, doubt options registered in this format XX:YY:ZZZ where XX is a float score value 
         $extra_values = array();
         for ($i=1 ; $i <= 3 ; $i++) {
             $score = trim($form -> getSubmitValue('option['.$i.']'));
             $extra_values[]= $score;
-        }       
-        
+        }        
         $this->setExtra(implode(':',$extra_values));       
           
 		for ($i=1 ; $i <= $nb_answers ; $i++) {
@@ -261,10 +260,10 @@ class MultipleAnswerTrueFalse extends Question {
             $comment    = trim($form -> getSubmitValue('comment['.$i.']'));
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));  
             if (empty($options)) {
-                //new 
+                //If this is the first time that the question is created when change the default values from the form 1 and 2 by the correct "option id" registered 
                 $goodAnswer = $sorted_by_position[$goodAnswer]['id'];
             }         
-    	    $questionWeighting += $correct[1];
+    	    $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
         	$objAnswer->createAnswer($answer, $goodAnswer, $comment,'',$i);            
         }        
     

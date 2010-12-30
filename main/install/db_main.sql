@@ -782,9 +782,9 @@ VALUES
 ('pdf_export_watermark_text',		NULL,'textfield',	'Platform',	'',		'PDFExportWatermarkTextTitle',		'PDFExportWatermarkTextComment',	'platform',NULL, 1),
 ('enabled_insertHtml',				NULL,'radio',		'Editor',	'false','EnabledInsertHtmlTitle',			'EnabledInsertHtmlComment',NULL,NULL, 0),
 ('students_export2pdf',				NULL,'radio',		'Tools',	'true',	'EnabledStudentExport2PDFTitle',	'EnabledStudentExport2PDFComment',NULL,NULL, 0),
-('exercise_min_note', 				NULL,'textfield',	'Course',	'',		'ExerciseMinNoteTitle',				'ExerciseMinNoteComment','platform',NULL, 	1),
-('exercise_max_note', 				NULL,'textfield',	'Course',	'',		'ExerciseMaxNoteTitle',				'ExerciseMaxNoteComment','platform',NULL, 	1),
-('chamilo_database_version', 		NULL,'textfield', 	NULL, '1.8.8.13050','DokeosDatabaseVersion','', NULL, NULL, 0);
+('exercise_min_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMinScoreTitle',			'ExerciseMinScoreComment','platform',NULL, 	1),
+('exercise_max_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMaxScoreTitle',			'ExerciseMaxScoreComment','platform',NULL, 	1),
+('chamilo_database_version', 		NULL,'textfield', 	NULL, '1.8.8.13174','DokeosDatabaseVersion','', NULL, NULL, 0);
  
 
 UNLOCK TABLES;

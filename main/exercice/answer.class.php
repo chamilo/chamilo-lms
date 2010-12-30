@@ -45,10 +45,9 @@ class Answer
 	 * @author 	Olivier Brouckaert
 	 * @param 	integer	Question ID that answers belong to
 	 */
-	function Answer($questionId)
-	{
+	function Answer($questionId) {
 		//$this->questionType=$questionType;
-		$this->questionId			= (int)$questionId;
+		$this->questionId			= intval($questionId);
 		$this->answer				= array();
 		$this->correct				= array();
 		$this->comment				= array();
@@ -75,8 +74,7 @@ class Answer
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function cancel()
-	{
+	function cancel() {
 		$this->new_answer				= array();
 		$this->new_correct				= array();
 		$this->new_comment				= array();
@@ -93,8 +91,7 @@ class Answer
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function read()
-	{
+	function read() {
 		global $_course;
 		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
@@ -102,7 +99,7 @@ class Answer
 		//$answerType=$this->selectType();
 
 		$sql="SELECT id,answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination, id_auto FROM
-		      $TBL_ANSWER WHERE question_id ='".Database::escape_string($questionId)."' ORDER BY position";
+		      $TBL_ANSWER WHERE question_id ='".$questionId."' ORDER BY position";
 
 		$result=Database::query($sql);
 
@@ -130,24 +127,20 @@ class Answer
 	 * @param	string	DESC or ASC
 	 * @author 	Frederic Vauthier
 	 */
-	function readOrderedBy($field,$order=ASC)
-	{
+	function readOrderedBy($field,$order='ASC') {
 		global $_course;
 		$field = Database::escape_string($field);
-		if(empty($field)) {
+		if (empty($field)) {
 			$field = 'position';
 		}
-		if($order != 'ASC' and $order!='DESC')
-		{
+        
+		if ($order != 'ASC' && $order!='DESC') {
 			$order = 'ASC';
 		}
 		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-
 		$questionId=$this->questionId;
-		//$answerType=$this->selectType();
-
 		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto " .
-				"FROM $TBL_ANSWER WHERE question_id='".Database::escape_string($questionId)."' " .
+				"FROM $TBL_ANSWER WHERE question_id='".$questionId."' " .
 				"ORDER BY $field $order";
 
 		$result=Database::query($sql);
@@ -155,8 +148,7 @@ class Answer
 		$i=1;
 
 		// while a record is found
-		while($object=Database::fetch_object($result))
-		{
+		while($object=Database::fetch_object($result)) {
 			$this->answer[$i]		= $object->answer;
 			$this->correct[$i]		= $object->correct;
 			$this->comment[$i]		= $object->comment;
@@ -231,7 +223,6 @@ class Answer
 	 * return array answer by id else return a bool
 	 */
 	function selectAnswerByAutoId($auto_id) {
-
 		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$auto_id = intval($auto_id);
 		$sql="SELECT id, answer FROM $TBL_ANSWER WHERE id_auto='$auto_id'";
@@ -252,8 +243,7 @@ class Answer
 	 * @param - integer $id - answer ID
 	 * @return - bool - answer title
 	 */
-	function selectAnswerIdByPosition($pos)
-	{
+	function selectAnswerIdByPosition($pos) {
 		foreach ($this->position as $k => $v) {
 			if ($v != $pos) { continue; }
 			return $k;
@@ -266,8 +256,7 @@ class Answer
 	 * @author Yannick Warnier <ywarnier@beeznest.org>
 	 * @return array	List of answers where each answer is an array of (id, answer, comment, grade) and grade=weighting
 	 */
-	 function getAnswersList($decode = false)
-	 {
+	 function getAnswersList($decode = false) {
 	 	$list = array();
 	 	for($i = 1; $i<=$this->nbrAnswers;$i++){
 	 		if(!empty($this->answer[$i])){
@@ -316,7 +305,7 @@ class Answer
 	 function getQuestionType()
 	 {
 	 	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-	 	$sql = "SELECT type FROM $TBL_QUESTIONS WHERE id = '".Database::escape_string($this->questionId)."'";
+	 	$sql = "SELECT type FROM $TBL_QUESTIONS WHERE id = '".$this->questionId."'";
 	 	$res = Database::query($sql);
 	 	if(Database::num_rows($res)<=0){
 	 		return null;

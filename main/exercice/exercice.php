@@ -827,8 +827,7 @@ if ($show == 'test') {
                     echo '<br />'.get_count_exam_results($row['id']).' '.get_lang('Attempts');
                     
                     //Special buttons
-                    echo '<div class="operations">';                       
-                                
+                    echo '<div class="operations">';
                         echo Display::url(Display::return_icon('quiz.gif',get_lang('Questions'), array('width'=>'22px'))." ".get_lang('Questions'),'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
                         echo ' ';      
                         echo Display::url(Display::return_icon('preview.gif',get_lang('Preview'), array('width'=>'22px'))." ".get_lang('Preview'), 'exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id']);

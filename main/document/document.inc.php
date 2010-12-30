@@ -556,8 +556,8 @@ function is_any_user_shared_folder($path, $current_session_id) {
  */
 function is_my_shared_folder($user_id, $path, $current_session_id) {
 	$clean_path = Security::remove_XSS($path).'/';	
-	$main_user_shared_folder = '/shared_folder\/sf_user_'.$user_id.'\//';
-	$main_user_shared_folder_session='/shared_folder_session_'.$current_session_id.'\/sf_user_'.$user_id.'\//';
+	$main_user_shared_folder = '/shared_folder\/sf_user_'.$user_id.'\//';//for security does not remove the last slash
+	$main_user_shared_folder_session='/shared_folder_session_'.$current_session_id.'\/sf_user_'.$user_id.'\//';//for security does not remove the last slash
 	
 	if(preg_match($main_user_shared_folder, $clean_path)){
 		return true;

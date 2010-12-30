@@ -778,7 +778,13 @@ if ($show == 'test') {
                                     
                     //Showing exercise title
                     $row['title']=text_filter($row['title']);
-                    echo Display::tag('h1',$row['title']);                    
+                    echo Display::tag('h1',$row['title']);        
+                     
+                    if ($session_id == $row['session_id']) {
+                        //Settings                                                                
+                        //echo Display::url(Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
+                    }
+                                  
                     echo '<p>';
                     echo $session_img;
                     $exid = $row['id'];
@@ -800,7 +806,7 @@ if ($show == 'test') {
                     
                     if ($session_id == $row['session_id']) {
                         //Settings                                                                
-                        echo Display::url(Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
+                        echo Display::url(Display::return_icon('edit.gif',get_lang('Edit'), array('width'=>'20px')), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                         
                         //Export
                         echo Display::url(Display::return_icon('cd.gif',          get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));

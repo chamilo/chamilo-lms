@@ -1015,7 +1015,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 
                 $ex = show_score($my_res, $my_total);
                 
-                $result_list = round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ') --> '.$ex;
+                //$result_list = round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ')';
+                $result_list = $ex;
 
                 $html_link = '';
                 if ($is_allowedToEdit || $is_tutor) {
@@ -1104,6 +1105,27 @@ function show_score($score, $weight, $show_porcentage = true) {
     return $html;	
 }
 
+
+function convert_score($score, $weight) {
+    $html  = '';
+    $score_rounded = $score;   
+     
+    if ($score != '' && $weight != '') {
+        $max_note =  api_get_setting('exercise_max_score');
+        $min_note =  api_get_setting('exercise_min_score');  
+        if ($max_note != '' && $min_note != '') {
+           
+           if (!empty($weight)) {
+          
+               $score        = $min_note + ($max_note - $min_note) * $score /$weight;
+           } else {
+               $score          = $min_note;
+           }
+           $score_rounded  = round($score, 2);          
+        }           
+    }
+    return $score_rounded;
+}
 
 
 

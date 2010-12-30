@@ -122,6 +122,7 @@ ALTER TABLE lp ADD COLUMN expired_on 	DATETIME NOT NULL DEFAULT '0000-00-00 00:0
 ALTER TABLE lp ADD COLUMN publicated_on DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00';
 
 CREATE TABLE quiz_question_option (id int NOT NULL, name varchar(255), position int unsigned NOT NULL, PRIMARY KEY (id));
+ALTER TABLE quiz_question ADD COLUMN extra varchar(255) DEFAULT NULL;
 
 INSERT INTO course_setting(variable,value,category) VALUES ('enable_lp_auto_launch',0,'learning_path');
 INSERT INTO course_setting(variable,value,category) VALUES ('pdf_export_watermark_text','','course');

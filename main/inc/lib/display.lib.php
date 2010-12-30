@@ -678,7 +678,7 @@ class Display {
     
     
     /**
-     * Returns the htmlcode for a tag (h3, h1, div), etc
+     * Returns the htmlcode for a tag (h3, h1, div, a, button), etc
      *       
      * @param string $image the filename of the file (in the main/img/ folder
      * @param string $alt_text the alt text (probably a language variable)
@@ -695,7 +695,7 @@ class Display {
             }
         }   
         //some tags don't have this </XXX>
-        if (in_array($tag, array('img','input'))) {
+        if (in_array($tag, array('img','input','br'))) {
             $return_value = '<'.$tag.' '.$attribute_list.' />';
         } else {
             $return_value = '<'.$tag.' '.$attribute_list.' > '.$content.'</'.$tag.'>';
@@ -710,6 +710,23 @@ class Display {
         return self::tag('a', $name, $extra_attributes);    	
     }
     
+    public static function input($type, $name,  $value, $extra_attributes = array()) {
+    	 if (!empty($type)) {
+            $extra_attributes['type']= $type;
+         }
+         if (!empty($name)) {
+            $extra_attributes['name']= $name;
+         }
+         if (!empty($value)) {   
+            $extra_attributes['value']= $value;
+        }
+        return self::tag('input', '',$extra_attributes);        
+    }
+    
+    /**
+     * Displays a select tag
+     * 
+     */
     public function select($name, $values, $default = -1, $parameter_list = array(), $show_blank_item = true) {        
         $extra = '';
         foreach($parameter_list as $key=>$parameter) {

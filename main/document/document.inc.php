@@ -386,6 +386,7 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
 		if ($curdirpath != '/') {
 			$form .= '<option value="/">'.get_lang('Documents').'</option>';
 		}
+		
 		if (is_array($folders)) {
 			foreach ($folders as & $folder) {
 				// You cannot move a file to:
@@ -550,15 +551,18 @@ function is_any_user_shared_folder($path, $current_session_id) {
 }
 
 /**
- * Checks whether the user is into his shared folder
- * @return return bool Return true when user is in his user shared folder
+ * Checks whether the user is into his shared folder or into a subfolder
+ * @return return bool Return true when user is in his user shared folder or into a subforder
  */
 function is_my_shared_folder($user_id, $path, $current_session_id) {
-	$clean_path = Security::remove_XSS($path);
-	if($clean_path == '/shared_folder/sf_user_'.$user_id){
+	$clean_path = Security::remove_XSS($path).'/';	
+	$main_user_shared_folder = '/shared_folder\/sf_user_'.$user_id.'\//';
+	$main_user_shared_folder_session='/shared_folder_session_'.$current_session_id.'\/sf_user_'.$user_id.'\//';
+	
+	if(preg_match($main_user_shared_folder, $clean_path)){
 		return true;
 	}
-	elseif($clean_path == '/shared_folder_session_'.$current_session_id.'/sf_user_'.$user_id){
+	elseif(preg_match($main_user_shared_folder_session, $clean_path)){
 		return true;
 	}
 	else{

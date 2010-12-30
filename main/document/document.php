@@ -441,7 +441,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 //START ACTION MENU
 
 	/*	MOVE FILE OR DIRECTORY */
-	//Only teacher and all users into their group
+	//Only teacher and all users into their group and each user into his/her shared folder
 	if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id) || is_my_shared_folder($_user['user_id'], Security::remove_XSS($_POST['move_to']), $current_session_id)){	
 		$my_get_move = Security::remove_XSS($_GET['move']);
 		if (isset($_GET['move']) && $_GET['move'] != '') {
@@ -516,9 +516,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 			}
 		}
 	}
+	
 	/*	DELETE FILE OR DIRECTORY */
 	//Only teacher and all users into their group
-	if($is_allowed_to_edit || $group_member_with_upload_rights){
+	if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id)){
 		if (isset($_GET['delete'])) {
 			
 			if (api_is_coach()) {

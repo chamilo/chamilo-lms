@@ -14,6 +14,7 @@ require_once 'CourseDescription.class.php';
 require_once 'CourseCopyLearnpath.class.php';
 require_once 'Survey.class.php';
 require_once 'SurveyQuestion.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php'; 
 //require_once 'mkdirr.php';
 //require_once 'rmdirr.php';
 require_once 'Glossary.class.php';
@@ -857,11 +858,9 @@ class CourseRestorer
 			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION, $this->course->destination_db);
 			$table_doc = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz)
-			{
+			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
 				$doc = '';
-				if (strlen($quiz->media) > 0)
-				{
+				if (strlen($quiz->media) > 0) {
 					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->media]->is_restored())
 					{
 						$sql = "SELECT path FROM ".$table_doc." WHERE id = ".$resources[RESOURCE_DOCUMENT][$quiz->media]->destination_id;
@@ -870,8 +869,7 @@ class CourseRestorer
 						$doc = str_replace('/audio/', '', $doc->path);
 					}
 				}
-				if ($id != -1)
-				{
+				if ($id != -1) {
 
 					$condition_session = "";
     				if (!empty($session_id)) {
@@ -910,11 +908,12 @@ class CourseRestorer
 					$qid = $this->restore_quiz_question($question_id);
 					$question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : 1;
 					$sql = "INSERT IGNORE INTO ".$table_rel." SET question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$question_order;
-					Database::query($sql);
+					Database::query($sql);     
 				}
 			}
 		}
 	}
+    
 	/**
 	 * Restore quiz-questions
 	 */
@@ -925,24 +924,24 @@ class CourseRestorer
 
 		$new_id=0;
 
-		if(is_object($question))
-		{
+		if(is_object($question)) {
 			if ($question->is_restored())
 			{
 				return $question->destination_id;
 			}
 			$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION, $this->course->destination_db);
 			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER, $this->course->destination_db);
+            $table_options = Database :: get_course_table(TABLE_QUIZ_QUESTION_OPTION, $this->course->destination_db);
 
 			// check resources inside html from fckeditor tool and copy correct urls into recipient course
 			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->description, $this->course->code, $this->course->destination_path);
 
-			$sql = "INSERT INTO ".$table_que." SET question = '".addslashes($question->question)."', description = '".addslashes($question->description)."', ponderation = '".addslashes($question->ponderation)."', position = '".addslashes($question->position)."', type='".addslashes($question->quiz_type)."', picture='".addslashes($question->picture)."', level='".addslashes($question->level)."'";
+			$sql = "INSERT INTO ".$table_que." SET question = '".addslashes($question->question)."', description = '".addslashes($question->description)."', ponderation = '".addslashes($question->ponderation)."', position = '".addslashes($question->position)."', type='".addslashes($question->quiz_type)."', picture='".addslashes($question->picture)."', level='".addslashes($question->level)."', extra='".addslashes($question->extra)."'";
 			Database::query($sql);
 			$new_id = Database::insert_id();
 
 
-			if ($question->quiz_type == 4) { // for answer type matching
+			if ($question->quiz_type == MATCHING) { // for answer type matching
 				foreach ($question->answers as $index => $answer) {
 					$sql = "INSERT INTO ".$table_ans." SET id= '".$answer['id']."',question_id = '".$new_id."', answer = '".Database::escape_string($answer['answer'])."', correct = '".$answer['correct']."', comment = '".Database::escape_string($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
 					Database::query($sql);
@@ -951,13 +950,31 @@ class CourseRestorer
 				foreach ($question->answers as $index => $answer) {
 
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
-					$answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['answer'], $this->course->code, $this->course->destination_path);
+					$answer['answer']  = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['answer'], $this->course->code, $this->course->destination_path);
 					$answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['comment'], $this->course->code, $this->course->destination_path);
 
 					$sql = "INSERT INTO ".$table_ans." SET id= '". ($index +1)."',question_id = '".$new_id."', answer = '".Database::escape_string($answer['answer'])."', correct = '".$answer['correct']."', comment = '".Database::escape_string($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
 					Database::query($sql);
 				}
-			}
+			}           
+            
+            //Moving quiz_question_options
+            if ($question->quiz_type == MULTIPLE_ANSWER_TRUE_FALSE) {                
+                $question_option_list = Question::readQuestionOption($id);                
+                $old_option_ids = array();            
+                foreach ($question_option_list  as $item) {
+                    $old_id = $item['id'];                    
+                    unset($item['id']);                    
+                    $item['question_id'] = $new_id;
+                    $question_option_id = Database::insert($table_options, $item);
+                    $old_option_ids[$old_id] = $question_option_id;
+                }               
+                $new_answers = Database::find($table_ans,'id, correct', array('question_id = ?'=>$new_id));
+                foreach ($new_answers as $answer_item) {                	
+                    $params['correct'] = $old_option_ids[$answer_item['correct']];
+                    $question_option_id = Database::update_query($table_ans, $params, array('id = ?'=>$answer_item['id']));
+                }                
+            }            
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
 		}
 		return $new_id;

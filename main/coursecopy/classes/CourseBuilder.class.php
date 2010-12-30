@@ -372,13 +372,11 @@ class CourseBuilder {
 		// Building normal tests.
 		$sql = 'SELECT * FROM '.$table_que;
 		$db_result = Database::query($sql);
-		while ($obj = Database::fetch_object($db_result))
-		{
-			$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level);
+		while ($obj = Database::fetch_object($db_result)) {
+			$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra);
 			$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
 			$db_result2 = Database::query($sql);
-			while ($obj2 = Database::fetch_object($db_result2))
-			{
+			while ($obj2 = Database::fetch_object($db_result2)) {
 				$question->add_answer($obj2->id, $obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
 			}
 			$this->course->add_resource($question);
@@ -390,23 +388,19 @@ class CourseBuilder {
 			' as questions LEFT JOIN '.$table_rel.' as quizz_questions ON questions.id=quizz_questions.question_id LEFT JOIN '.$table_qui.
 			' as exercices ON exercice_id=exercices.id WHERE quizz_questions.exercice_id IS NULL OR exercices.active = -1'; // active = -1 means "deleted" test.
 		$db_result = Database::query($sql);
-		if (Database::num_rows($db_result) > 0)
-		{
+		if (Database::num_rows($db_result) > 0) {
 			$build_orphan_questions = true;
-			while ($obj = Database::fetch_object($db_result))
-			{
-				$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level);
+			while ($obj = Database::fetch_object($db_result)) {
+				$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra);
 				$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.(int)$obj->id;
 				$db_result2 = Database::query($sql);
-				while ($obj2 = Database::fetch_object($db_result2))
-				{
+				while ($obj2 = Database::fetch_object($db_result2)) {
 					$question->add_answer($obj2->id, $obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
 				}
 				$this->course->add_resource($question);
 			}
 		}
-		if ($build_orphan_questions)
-		{
+		if ($build_orphan_questions) {
 			//$this->course->add_resource(new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0));
 		}
 	}
@@ -430,7 +424,7 @@ class CourseBuilder {
 			$this->course->add_resource($orphan_questions);
 			while ($obj = Database::fetch_object($db_result))
 			{
-				$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level);
+				$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level,$obj->extra);
 				$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
 				$db_result2 = Database::query($sql);
 				while ($obj2 = Database::fetch_object($db_result2))

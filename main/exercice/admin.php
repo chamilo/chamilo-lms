@@ -488,7 +488,7 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 			Display::display_confirmation_message(get_lang('ExerciseEdited'));
 	}
 	if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
-			Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
+        Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
 	}
 	$form -> display ();
 	echo '<br />';
@@ -501,4 +501,3 @@ api_session_register('objQuestion');
 api_session_register('objAnswer');
 
 Display::display_footer();
-?>

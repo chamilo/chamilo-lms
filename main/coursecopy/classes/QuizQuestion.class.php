@@ -6,7 +6,7 @@ require_once 'Resource.class.php';
 /**
  * An QuizQuestion
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
+ * @package chamilo.backup
  */
 class QuizQuestion extends Resource
 {
@@ -42,6 +42,8 @@ class QuizQuestion extends Resource
 	 * Picture
 	 */
 	var $picture;
+    
+    var $extra;
 	/**
 	 * Create a new QuizQuestion
 	 * @param string $question
@@ -50,8 +52,7 @@ class QuizQuestion extends Resource
 	 * @param int $type
 	 * @param int $position
 	 */
-	function QuizQuestion($id,$question,$description,$ponderation,$type,$position,$picture,$level)
-	{
+	function QuizQuestion($id,$question,$description,$ponderation,$type,$position,$picture,$level, $extra) {
 		parent::Resource($id,RESOURCE_QUIZQUESTION);
 		$this->question = $question;
 		$this->description = $description;
@@ -61,12 +62,13 @@ class QuizQuestion extends Resource
 		$this->picture = $picture;
 		$this->level = $level;
 		$this->answers = array();
+        $this->extra = $extra;
 	}
+    
 	/**
 	 * Add an answer to this QuizQuestion
 	 */
-	function add_answer($answer_id, $answer_text,$correct,$comment,$ponderation,$position,$hotspot_coordinates,$hotspot_type)
-	{
+	function add_answer($answer_id, $answer_text,$correct,$comment,$ponderation,$position,$hotspot_coordinates,$hotspot_type) {
 		$answer = array();		
 		$answer['id'] = $answer_id;
 		$answer['answer'] = $answer_text;
@@ -78,11 +80,11 @@ class QuizQuestion extends Resource
 		$answer['hotspot_type'] = $hotspot_type;
 		$this->answers[] = $answer;
 	}
+    
 	/**
 	 * Show this question
 	 */
-	function show()
-	{
+	function show() {
 		parent::show();
 		echo $this->question;
 	}

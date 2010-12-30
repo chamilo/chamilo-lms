@@ -88,6 +88,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp=new Answer($questionId);
+        
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
         
         $quiz_question_options = Question::readQuestionOption($questionId);
@@ -255,15 +256,15 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				if ($debug_mark_answer) {
 					if ($answerCorrect) {
 						$help = 'x-';
-						$selected = 'checked="checked"';
+						$selected = 'checked';
 					}
 				}
 				$answer = text_filter($answer);
 				$answer = Security::remove_XSS($answer, STUDENT);
                 
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />'.
+				$s .= Display::input('hidden','choice2['.$questionId.']','0').
 					'<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">'.
-					'<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.' /></span></p>'.
+					'<span>'.Display::input('radio','choice['.$questionId.']', $numAnswer, array('class'=>'checkbox','selected'=>$selected)).'</span></p>'.
 					'<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
 					$answer.
 					'</div></div></td></tr>';
@@ -413,6 +414,8 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			}
 		}	// end for()
         
+        
+
         //Adding divs for the new MATCHING interface
         
         if ($answerType == MATCHING && !$freeze) {
@@ -1070,22 +1073,37 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     return $list_info;
 }
 
+/**
+ * Transform the score with exercise_max_note and exercise_min_score the platform settings
+ * @param   float   score
+ * @param   float   weight
+ * @param   bool    show porcentage or not
+ * @return  string  an html with the score modified
+ */
 function show_score($score, $weight, $show_porcentage = true) {
     $html  = '';
     $score_rounded = $score;    
     if ($score != '' && $weight != '') {
-        $max_note =  api_get_setting('exercise_max_note');
-        $min_note =  api_get_setting('exercise_min_note');
+        $max_note =  api_get_setting('exercise_max_score');
+        $min_note =  api_get_setting('exercise_min_score');
         if ($max_note != '' && $min_note != '') {
            if (!empty($weight)) {
-    	       $score          = $min_note + ($max_note - $min_note) * $score /$weight;
+    	       $score        = $min_note + ($max_note - $min_note) * $score /$weight;
            } else {
            	 $score          = $min_note;
            }
            $score_rounded  = round($score, 2);
            $weight         = $max_note;
         }
-        $html = round(($score / ($weight != 0 ? $weight : 1)) * 100, 2) . '% (' . $score_rounded . ' / ' . $weight . ')';
+        if ($show_porcentage) {
+            $html = round(($score / ($weight != 0 ? $weight : 1)) * 100, 2) . '% (' . $score_rounded . ' / ' . $weight . ')';	
+        } else {            
+        	$html = $score_rounded . ' / ' . $weight;
+        }        
     }    
     return $html;	
 }
+
+
+
+

@@ -290,7 +290,7 @@ function update_Db_course($course_db_name) {
     $TABLEQUIZQUESTION          = $course_db_name . 'quiz_rel_question';
     $TABLEQUIZQUESTIONLIST      = $course_db_name . 'quiz_question';
     $TABLEQUIZANSWERSLIST       = $course_db_name . 'quiz_answer';
-    $TABLEQUIZQUESTIONOPTION      = $course_db_name . 'quiz_question_option';
+    $TABLEQUIZQUESTIONOPTION    = $course_db_name . 'quiz_question_option';
 
     // Dropbox
     $TABLETOOLDROPBOXPOST       = $course_db_name . 'dropbox_post';
@@ -646,9 +646,10 @@ function update_Db_course($course_db_name) {
         description text default NULL,
         ponderation float(6,2) NOT NULL default 0,
         position mediumint unsigned NOT NULL default 1,
-        type tinyint unsigned NOT NULL default 2,
-        picture varchar(50) default NULL,
-        level int unsigned NOT NULL default 0,
+        type    tinyint unsigned NOT NULL default 2,
+        picture varchar(50) default NULL,        
+        level   int unsigned NOT NULL default 0,
+        extra   varchar(255) default NULL,
         PRIMARY KEY (id)
         )" . $charset_clause;
     Database::query($sql);

@@ -90,6 +90,7 @@ if(is_object($objQuestion)) {
 		// question
 	    $objQuestion -> processCreation($form,$objExercise);
 	    // answers
+        
 	    $objQuestion -> processAnswersCreation($form,$nb_answers);
 
         // TODO: maybe here is the better place to index this tool, including answers text

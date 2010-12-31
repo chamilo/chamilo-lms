@@ -133,6 +133,17 @@ class CourseManager {
             WHERE code='".Database::escape_string($course_code)."'"),'ASSOC'
         );
     }
+    
+    /**
+     * Returns all the information of a given coursecode
+     * @param   int     the course id
+     * @return an array with all the fields of the course table
+
+     */
+    public static function get_course_information_by_id($course_id) {
+        return Database::select('*', Database::get_main_table(TABLE_MAIN_COURSE), array('id = ?' =>intval($course_id)) );        
+    }
+    
 
     /**
      * Returns a list of courses. Should work with quickform syntax
@@ -612,7 +623,7 @@ class CourseManager {
         $user_id = intval($user_id);
         $data = array();
 
-        $sql_nb_cours = "SELECT course_rel_user.course_code, course.title
+        $sql_nb_cours = "SELECT course_rel_user.course_code, course.title, course.id
             FROM $tbl_course_user as course_rel_user
             INNER JOIN $tbl_course as course
                 ON course.code = course_rel_user.course_code
@@ -623,7 +634,7 @@ class CourseManager {
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sql_nb_cours = "	SELECT course_rel_user.course_code, course.title
+                $sql_nb_cours = "	SELECT course_rel_user.course_code, course.title, course.id
                     FROM $tbl_course_user as course_rel_user
                     INNER JOIN $tbl_course as course
                         ON course.code = course_rel_user.course_code
@@ -636,7 +647,7 @@ class CourseManager {
 
         $result_nb_cours = Database::query($sql_nb_cours);
         if (Database::num_rows($result_nb_cours) > 0) {
-            while ($row = Database::fetch_array($result_nb_cours)) {
+            while ($row = Database::fetch_array($result_nb_cours,'ASSOC')) {
                 $data[$row['course_code']] = $row;
             }
         }

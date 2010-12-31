@@ -944,8 +944,8 @@ if (!is_null($docs_and_folders)) {
 	global $total_size;
 	if (!$is_certificate_mode && $total_size != 0 && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
 		
-		//don't show icon into shared folder, and don´t show into main path (root)
-		if (!is_shared_folder($curdirpath, $current_session_id) && $curdirpath!='/' || api_is_allowed_to_edit() || api_is_platform_admin())
+		//for student does not show icon into other shared folder, and does not show into main path (root)
+		if (is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id) && $curdirpath!='/' || api_is_allowed_to_edit() || api_is_platform_admin())
 		{
 	    	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&path='.$curdirpathurl.'">'.Display::display_icon('zip_save.gif', get_lang('Save').' (ZIP)'). get_lang('Save').' (ZIP)</a>&nbsp';
 		}

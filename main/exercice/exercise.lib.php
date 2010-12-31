@@ -92,6 +92,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
         
         $quiz_question_options = Question::readQuestionOption($questionId);
+        
 
 		// For "matching" type here, we need something a little bit special
 		// because the match between the suggestions and the answers cannot be
@@ -301,10 +302,12 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
                 } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {                    
                     $options = array('type'=>'radio','name'=>'choice['.$questionId.']['.$numAnswer.']', 'class'=>'checkbox');
                     $s .='<tr>';     
-                    $s .= Display::tag('td', $answer);       
-                    foreach ($quiz_question_options as $id=>$item) {
-                        $options['value'] = $id;
-                        $s .= Display::tag('td', Display::tag('input','',$options ));                        	
+                    $s .= Display::tag('td', $answer);
+                    if (!empty($quiz_question_options)) {       
+                        foreach ($quiz_question_options as $id=>$item) {
+                            $options['value'] = $id;
+                            $s .= Display::tag('td', Display::tag('input','',$options ));                        	
+                        }
                     }
                     $s.='<tr>';
                 }

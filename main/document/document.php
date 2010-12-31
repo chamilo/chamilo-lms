@@ -903,7 +903,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 					<?php Display::display_icon('draw_new.png', get_lang('Draw')); echo get_lang('Draw'); ?></a>&nbsp;
 			<?php	
 			}else{
-				Display::display_icon('draw_new.png', get_lang('BrowserDontSupportsSVG')); echo get_lang('Draw').'&nbsp;';
+				Display::display_icon('draw_new_na.png', get_lang('BrowserDontSupportsSVG')); echo get_lang('Draw').'&nbsp;';
 			}
 		}
 	}

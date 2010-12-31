@@ -462,13 +462,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 				$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
 				
 				//filter if is my shared folder. TODO: move this code to build_move_to_selector function
-				if(is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id) && !$is_allowed_to_edit){
-					$main_user_shared_folder_sub  = '/shared_folder\/sf_user_'.api_get_user_id().'\//';//all subfolders			
-					$main_user_shared_folder_main = '/shared_folder\/sf_user_'.api_get_user_id().'$/';//only main user shared folder
+				if(is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id) && !$is_allowed_to_edit){								
+					$main_user_shared_folder_main = '/shared_folder/sf_user_'.api_get_user_id();//only main user shared folder
+					$main_user_shared_folder_sub  = '/shared_folder\/sf_user_'.api_get_user_id().'\//';//all subfolders
 					$user_shared_folders=array();
 					
 					foreach($folders as $fold){
-						if(preg_match($main_user_shared_folder_main, $fold) || preg_match($main_user_shared_folder_sub, $fold)){
+						if($main_user_shared_folder_main==$fold || preg_match($main_user_shared_folder_sub, $fold)){
 							$user_shared_folders[]=$fold;
 						}
 					}						

@@ -147,9 +147,9 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 
 	$tooltip_title_alt = $tooltip_title;
 	if ($tooltip_title == 'shared_folder') {
-		$tooltip_title_alt = get_lang('UserFolder');
+		$tooltip_title_alt = get_lang('UserFolders');
 	}elseif(strstr($tooltip_title, 'shared_folder_session_')) {
-		$tooltip_title_alt = get_lang('UserFolder').' ('.api_get_session_name($current_session_id).')';
+		$tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
 	}elseif(strstr($tooltip_title, 'sf_user_')) {
 		$userinfo = Database::get_user_info_from_id(substr($tooltip_title, 8));
 		$tooltip_title_alt = get_lang('UserFolder').' ('.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).')';
@@ -218,13 +218,13 @@ function build_document_icon_tag($type, $path) {
 			if ($is_allowed_to_edit) {
 				$basename = get_lang('HelpSharedFolder');
 			} else {
-				$basename = get_lang('UserFolder');
+				$basename = get_lang('UserFolders');
 			}
 		}elseif(strstr($basename, 'shared_folder_session_')) {
 			if ($is_allowed_to_edit) {
 				$basename = '***('.api_get_session_name($current_session_id).')*** '.get_lang('HelpSharedFolder');
 			} else {
-				$basename = get_lang('UserFolder').' ('.api_get_session_name($current_session_id).')';
+				$basename = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
 			}
 			$icon = 'user_folders.gif';
 		}elseif(strstr($basename, 'sf_user_')) {

@@ -253,8 +253,6 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
         $db_name = $course_info['db_name'];
     }
     
-    
-    
     //Redefining table calls
     $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION,   $db_name);
     $TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST,            $db_name);
@@ -262,8 +260,6 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     $TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER,          $db_name);
     
     $exercise_list         = get_all_exercises($course_info);
-    
-        
     
     echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
     
@@ -331,7 +327,7 @@ if ($exerciseId > 0) {
 		$where .= ' type='.$answerType.' AND ';
 	}
 
-	echo $sql="SELECT id,question,type,level
+	$sql="SELECT id,question,type,level
 			FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS
 		  	WHERE $where question_id=id AND exercice_id='".Database::escape_string($exerciseId)."'
 			ORDER BY question_order";
@@ -412,8 +408,7 @@ if ($exerciseId > 0) {
     if ($session_id != 0) {        
 
         $main_question_list = array();
-        //$exerciseId
-        
+        if (!empty($course_list))
         foreach ($course_list as $course_item) {        
             if (!empty($selected_course) && $selected_course != '-1')
                 if ($selected_course != $course_item['id']) {                
@@ -427,6 +422,7 @@ if ($exerciseId > 0) {
                     $my_exercise->read($exercise['id']);
             
                     if (!empty($my_exercise)) {
+                        if (!empty($my_exercise->questionList))
                         foreach ($my_exercise->questionList as $question) {
                             
                         	$question_obj = Question::read($question['id'], $course_item['id']);

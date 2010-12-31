@@ -74,9 +74,7 @@ class CourseBuilder {
 			$this->build_links($session_id,$course_code);
 			$this->build_course_descriptions($session_id,$course_code);
 			$this->build_wiki($session_id,$course_code);
-
 		} else {
-
 			$table_link = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 			$table_properties = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -106,13 +104,11 @@ class CourseBuilder {
 			}
 		}
 
-		foreach ($this->course->resources as $type => $resources)
-		{
+		foreach ($this->course->resources as $type => $resources) {
 			foreach ($resources as $id => $resource)
 			{
 				$tool = $resource->get_tool();
-				if ($tool != null)
-				{
+				if ($tool != null) {
 					$sql = "SELECT * FROM $table_properties WHERE TOOL = '".$tool."' AND ref='".$resource->get_id()."'";
 					$res = Database::query($sql);
 					$all_properties = array ();
@@ -124,15 +120,13 @@ class CourseBuilder {
 				}
 			}
 		}
-		
-		
 		return $this->course;
 	}
+	   
 	/**
 	 * Build the documents
 	 */
-	function build_documents($session_id = 0,$course_code = '')
-	{
+	function build_documents($session_id = 0,$course_code = '') {
 
 		if (!empty($course_code) && !empty($session_id)) {
 			$course_info = api_get_course_info($course_code);
@@ -176,8 +170,7 @@ class CourseBuilder {
 	/**
 	 * Build the forums
 	 */
-	function build_forums()
-	{
+	function build_forums() {
 		$table = Database :: get_course_table(TABLE_FORUM);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = Database::query($sql);
@@ -193,22 +186,20 @@ class CourseBuilder {
 	/**
 	 * Build a forum-category
 	 */
-	function build_forum_category($id)
-	{
+	function build_forum_category($id) {
 		$table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$sql = 'SELECT * FROM '.$table.' WHERE cat_id = '.$id;
 		$db_result = Database::query($sql);
-		while ($obj = Database::fetch_object($db_result))
-		{
+		while ($obj = Database::fetch_object($db_result)) {
 			$forum_category = new ForumCategory($obj->cat_id, $obj->cat_title, $obj->cat_comment, $obj->cat_order, $obj->locked, $obj->session_id);
 			$this->course->add_resource($forum_category);
 		}
 	}
+    
 	/**
 	 * Build the forum-topics
 	 */
-	function build_forum_topics()
-	{
+	function build_forum_topics() {
 		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = Database::query($sql);
@@ -218,6 +209,7 @@ class CourseBuilder {
 			$this->course->add_resource($forum_topic);
 		}
 	}
+    
 	/**
 	 * Build the forum-posts
 	 * TODO: All tree structure of posts should be built, attachments for example.
@@ -325,18 +317,15 @@ class CourseBuilder {
 		}
 
 		$db_result = Database::query($sql);
-		while ($obj = Database::fetch_object($db_result))
-		{
-			if (strlen($obj->sound) > 0)
-			{
+		while ($obj = Database::fetch_object($db_result)) {
+			if (strlen($obj->sound) > 0) {
 				$doc = Database::fetch_object(Database::query("SELECT id FROM ".$table_doc." WHERE path = '/audio/".$obj->sound."'"));
 				$obj->sound = $doc->id;
 			}
 			$quiz = new Quiz($obj->id, $obj->title, $obj->description, $obj->random, $obj->type, $obj->active, $obj->sound, $obj->max_attempt, $obj->results_disabled, $obj->access_condition, $obj->start_time, $obj->end_time, $obj->feedback_type, $obj->random_answers, $obj->expired_time);
 			$sql = 'SELECT * FROM '.$table_rel.' WHERE exercice_id = '.$obj->id;
 			$db_result2 = Database::query($sql);
-			while ($obj2 = Database::fetch_object($db_result2))
-			{
+			while ($obj2 = Database::fetch_object($db_result2)) {
 				$quiz->add_question($obj2->question_id, $obj2->question_order);
 			}
 			$this->course->add_resource($quiz);

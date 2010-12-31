@@ -71,6 +71,7 @@ class CourseRestorer
 			$this->course->destination_path = $course_info['path'];
 		} else {
 			$course_info = Database :: get_course_info($destination_course_code);
+            
 			$this->course->destination_db = $course_info['database'];
 			$this->course->destination_path = $course_info['directory'];
 		}
@@ -969,7 +970,7 @@ class CourseRestorer
                     $question_option_id = Database::insert($table_options, $item);
                     $old_option_ids[$old_id] = $question_option_id;
                 }               
-                $new_answers = Database::find($table_ans,'id, correct', array('question_id = ?'=>$new_id));
+                $new_answers = Database::select('id, correct', $table_ans, array('where'=>array('question_id = ?'=>$new_id)));
                 foreach ($new_answers as $answer_item) {                	
                     $params['correct'] = $old_option_ids[$answer_item['correct']];
                     $question_option_id = Database::update_query($table_ans, $params, array('id = ?'=>$answer_item['id']));

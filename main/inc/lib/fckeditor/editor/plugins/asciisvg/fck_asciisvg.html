@@ -15,7 +15,8 @@
         <meta name="robots" content="noindex, nofollow" />
 
         <script type="text/javascript">
-document.write( '<scr' + 'ipt type="text/javascript" src="' + window.parent.frameElement._DialogArguments.Editor.FCKConfig.ScriptASCIIMathML + '"><\/scr' + 'ipt>' ) ;
+//document.write( '<scr' + 'ipt type="text/javascript" src="' + window.parent.frameElement._DialogArguments.Editor.FCKConfig.ScriptASCIIMathML + '"><\/scr' + 'ipt>' ) ;
+document.write( '<scr' + 'ipt type="text/javascript" src="ASCIIsvgPI.js"><\/scr' + 'ipt>' ) ;
         </script>
 
         <script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
@@ -85,27 +86,27 @@ End with: <Select id="gend">
 
 <hr/>
 
-xmin: <input type="text" id="xmin" size="4" value="-7.5" onChange='javascript: AsciisvgDialog.graphit();'/>
-xmax: <input type="text" id="xmax" size="4" value="7.5" onChange='javascript: AsciisvgDialog.graphit();'/>
-xscl: <input type="text" id="xscl" size="3" value="1" onChange='javascript: AsciisvgDialog.graphit();'/>
+xmin: <input type="text" id="xmin" size="4" value="-7.5" onChange='javascript: UpdatePreview();'/>
+xmax: <input type="text" id="xmax" size="4" value="7.5" onChange='javascript: UpdatePreview();'/>
+xscl: <input type="text" id="xscl" size="3" value="1" onChange='javascript: UpdatePreview();'/>
 &nbsp;&nbsp;
-ymin: <input type="text" id="ymin" size="4" value="-5" onChange='javascript: AsciisvgDialog.graphit();'/>
-ymax: <input type="text" id="ymax" size="4" value="5" onChange='javascript: AsciisvgDialog.graphit();'/>
-yscl: <input type="text" id="yscl" size="3" value="1" onChange='javascript: AsciisvgDialog.graphit();'/>
+ymin: <input type="text" id="ymin" size="4" value="-5" onChange='javascript: UpdatePreview();'/>
+ymax: <input type="text" id="ymax" size="4" value="5" onChange='javascript: UpdatePreview();'/>
+yscl: <input type="text" id="yscl" size="3" value="1" onChange='javascript: UpdatePreview();'/>
 <hr/>
 
-Show axis labels: <input type="checkbox" id="labels" value="Show Labels" onClick='javascript: AsciisvgDialog.graphit();' checked="checked"/>
-Show XY grid: <input type="checkbox" id="grid" value="Show Grid" onClick='javascript: AsciisvgDialog.graphit();' checked="checked"/>
+Show axis labels: <input type="checkbox" id="labels" value="Show Labels" onClick='javascript: UpdatePreview();' checked="checked"/>
+Show XY grid: <input type="checkbox" id="grid" value="Show Grid" onClick='javascript: UpdatePreview();' checked="checked"/>
 &nbsp;&nbsp;
 Resize to: <input type="text" id="gwidth" size="5" value="300"/> by <input type="text" id="gheight" size="5" value="200"/>
-<input type="button" value="Update" onclick="javascript: AsciisvgDialog.graphit();"/>
+<input type="button" value="Update" onclick="javascript: UpdatePreview();"/>
 <hr/>
 
 <input type="button" value="Add Graph" onclick="javascript: AsciisvgDialog.addgraph();"/>
 Graphs: <select id="graphs" onchange="javascript: AsciisvgDialog.loadeqn();"></select>
 <input type="button" value="Replace Selected Graph" onclick="javascript: AsciisvgDialog.replacegraph();"/>
 <input type="button" value="Remove" onclick="javascript: AsciisvgDialog.removegraph();"/>
-<select id="alignment" onchange="javascript: AsciisvgDialog.graphit();">
+<select id="alignment" onchange="javascript: UpdatePreview();">
 <option value="text-top">Top</option>
 <option value="middle">Middle</option>
 <option value="text-bottom">Bottom</option>

@@ -40,6 +40,14 @@ var showasciiformulaonhover = false ;
 // Font size of the formulas in this dialog.
 var mathfontsize = "1.1em" ;
 
+var noSVG = ASnoSVG ; // Temporarily added.
+var width = 300 ;
+var height = 200 ;
+var alignm = 'middle' ;
+//var sscr = '' ;
+var sscr = '-7.5,7.5,-5,5,1,1,1,1,1,300,200' ;
+//var isnew = null ;
+var isnew = true ;
 
 function LoadSelection()
 {
@@ -98,7 +106,6 @@ var AsciisvgDialog =
     sscr: '-7.5,7.5,-5,5,1,1,1,1,1,300,200' ,
     //isnew: null ,
     isnew: true ,
-    AScgiloc: null ,
 
     init : function()
     {
@@ -110,16 +117,13 @@ var AsciisvgDialog =
         this.height = tinyMCEPopup.getWindowArg( 'height' ) ;
         this.isnew = tinyMCEPopup.getWindowArg( 'isnew' ) ;
         this.sscr = tinyMCEPopup.getWindowArg( 'sscr' ) ;
-        */
-        //this.AScgiloc = tinyMCEPopup.getWindowArg( 'AScgiloc' ) ;
-        this.AScgiloc = AScgiloc ;
-        /*
+        this.AScgiloc = tinyMCEPopup.getWindowArg( 'AScgiloc' ) ;
         this.alignm = tinyMCEPopup.getWindowArg( 'alignm' ) ;
         */
 
         if ( noSVG )
         {
-            GetE( 'preview' ).innerHTML = '<img id="previewimg" style="width:' + this.width + 'px; height: ' + this.height + 'px; vertical-align: middle; float: none;" src="' + this.AScgiloc + '?sscr=' + encodeURIComponent( this.sscr ) + '" script=" " />' ;
+            GetE( 'preview' ).innerHTML = '<img id="previewimg" style="width:' + this.width + 'px; height: ' + this.height + 'px; vertical-align: middle; float: none;" src="' + AScgiloc + '?sscr=' + encodeURIComponent( this.sscr ) + '" script=" " />' ;
         }
         else
         {
@@ -143,13 +147,13 @@ var AsciisvgDialog =
             {
                 aligntxt = 'vertical-align: ' + this.alignm + '; float: none;' ;
             }
-            tinyMCEPopup.editor.execCommand( 'mceInsertContent', false, '<img style="width: 300px; height: 200px; ' + aligntxt + '" src="' + this.AScgiloc + '?sscr=' + encodeURIComponent( this.sscr ) + '" sscr="' + this.sscr + '" script=" " />') ;
+            tinyMCEPopup.editor.execCommand( 'mceInsertContent', false, '<img style="width: 300px; height: 200px; ' + aligntxt + '" src="' + AScgiloc + '?sscr=' + encodeURIComponent( this.sscr ) + '" sscr="' + this.sscr + '" script=" " />') ;
         }
         else
         {
             el = tinyMCEPopup.editor.selection.getNode() ;
             ed.dom.setAttrib( el , 'sscr' , this.sscr ) ;
-            ed.dom.setAttrib( el , 'src' , this.AScgiloc + '?sscr=' + encodeURIComponent( this.sscr ) ) ;
+            ed.dom.setAttrib( el , 'src' , AScgiloc + '?sscr=' + encodeURIComponent( this.sscr ) ) ;
             ed.dom.setAttrib( el , 'width' , this.width ) ;
             ed.dom.setAttrib( el , 'height' , this.height ) ;
             ed.dom.setStyle( el , 'width' , this.width + 'px' ) ;
@@ -214,7 +218,7 @@ var AsciisvgDialog =
 
         graphs.options[ graphs.options.length ] = newopt ;
         graphs.selectedIndex = graphs.options.length - 1 ;
-        this.graphit() ;
+        UpdatePreview() ;
         GetE( 'equation' ).focus() ;
     } ,
 
@@ -235,7 +239,7 @@ var AsciisvgDialog =
             graphs.options[ graphs.selectedIndex ] = null ;
             if ( graphs.options.length > 0 ) { this.loadeqn() ; }
         }
-        this.graphit() ;
+        UpdatePreview() ;
         GetE( 'equation' ).focus() ;
     } ,
 
@@ -294,18 +298,18 @@ var AsciisvgDialog =
         this.sscr = commands ;
         this.alignm = GetE( 'alignment' ).value ;
 
-        if ( noSVG )
-        {
-            pvimg = GetE( 'previewimg' ) ;
-            pvimg.src = this.AScgiloc + '?sscr=' + encodeURIComponent(commands) ;
-            //ed.dom.setStyle( pvimg, 'width' , this.width + 'px' ) ;
-            //ed.dom.setStyle( pvimg, 'height' , this.height + 'px' ) ;
-        }
-        else
-        {
+        //if ( noSVG )
+        //{
+        //    pvimg = GetE( 'previewimg' ) ;
+        //    pvimg.src = AScgiloc + '?sscr=' + encodeURIComponent(commands) ;
+        //    //ed.dom.setStyle( pvimg, 'width' , this.width + 'px' ) ;
+        //    //ed.dom.setStyle( pvimg, 'height' , this.height + 'px' ) ;
+        //}
+        //else
+        //{
             pvsvg = GetE( 'previewsvg' ) ;
             parseShortScript( commands , this.width , this.height ) ;
-        }
+        //}
     } ,
 
     changetype : function()
@@ -486,7 +490,7 @@ var AsciisvgDialog =
             default: GetE( 'alignment' ).selectedIndex = 0 ; break ;
         }
 
-        //this.graphit() ;
+        //UpdatePreview() ;
     } ,
 
     chgtext : function( tag , text )

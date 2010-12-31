@@ -14,6 +14,7 @@ require_once 'learnpath.class.php';
 require_once 'resourcelinker.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once '../exercice/exercise.lib.php';
 
 if (empty($_SESSION['_course']['id']) && isset($_GET['course'])) {
     $course_code = Security::remove_XSS($_GET['course']);
@@ -285,7 +286,9 @@ if (is_array($list) && count($list) > 0) {
                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                         $view_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                     } else {
-                        $view_score = ($score == 0 ? '/' : ($maxscore === 0 ? $score : $score . '/' . float_format($maxscore, 1)));
+                        //$view_score = ($score == 0 ? '/' : ($maxscore === 0 ? $score : $score . '/' . float_format($maxscore, 1)));
+                        $view_score = show_score($score,$maxscore, false);
+                        
                     }
                     $output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . get_lang('Attempt') . ' ' . $row['iv_view_count'] . "</td>\n"
                      . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . $view_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';
@@ -296,7 +299,6 @@ if (is_array($list) && count($list) > 0) {
                         $temp[] = Security::remove_XSS($my_lesson_status);
 
                         if ($row['item_type'] == 'quiz') {
-
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $temp[] =  '/';
                             } else {
@@ -546,13 +548,12 @@ if (is_array($list) && count($list) > 0) {
                     $output .= "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' .$title. '</div></td>' . "\n";
                     $output .= '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">';
                      if ($row['item_type'] == 'quiz') {
-
                          if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                             $output .= Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                         } else {
-                            $output .= ($score == 0 ? '0/'.float_format($maxscore, 1) : ($maxscore == 0 ? $score : float_format($score, 1) . '/' . float_format($maxscore, 1)));
+                         //   $output .= ($score == 0 ? '0/'.float_format($maxscore, 1) : ($maxscore == 0 ? $score : float_format($score, 1) . '/' . float_format($maxscore, 1)));
+                              $output .= show_score($score, $maxscore, false);
                         }
-
                      } else {
                         $output .= ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));
                      }
@@ -642,10 +643,13 @@ if (is_array($list) && count($list) > 0) {
                                 if ($my_score == 0 ) {
                                     $view_score = 	'0/'.$my_maxscore;
                                 } else {
-                                    if ($my_maxscore == 0)
+                                    if ($my_maxscore == 0) {
                                         $view_score = $my_score;
-                                    else
-                                        $view_score = $my_score . '/' . $my_maxscore;
+                                    } else {
+                                        //$view_score = $my_score . '/' . $my_maxscore;
+                                        $view_score = show_score($my_score, $my_maxscore, false);
+                                    }
+                                    
                                 }
                                 //$view_score = ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore));
                             }

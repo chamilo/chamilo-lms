@@ -1231,4 +1231,9 @@ class SessionManager {
         return $return_array;
     }
     
+    public static function get_sessions_by_coach($user_id) {
+        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
+        return Database::select('*', $session_table, array('where'=>array('id_coach = ?'=>$user_id)));    	
+    }
+    
 }

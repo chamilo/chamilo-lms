@@ -1328,8 +1328,10 @@ class Database {
      * @todo lot of stuff to do here
     */
     
-    public static function find($table_name, $columns = '*' , $where_conditions = array(), $option = 'ASSOC') {
-    	$where_return = self::parse_where_conditions($where_conditions);        
+    public static function select($columns = '*' , $table_name,  $conditions = array(), $type_result = 'all', $option = 'ASSOC') {        
+    	$conditions = self::parse_conditions($conditions); 
+        
+        //@todo we could do a describe here to check the columns ...       
         $clean_columns = '';
         if (is_array($columns)) {
         	$clean_columns = implode(',', $columns);
@@ -1339,54 +1341,76 @@ class Database {
         	} else {
         		$clean_columns = (string)$columns;
         	}
-        }        
-        $sql    = "SELECT $clean_columns FROM $table_name $where_return ";
-        $result = self::query($sql);
+        }
         
-        $array = array();
-        if ($result !== false) { // For isolation from database engine's behaviour.
+             
+         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
+      
+               
+        
+        $result = self::query($sql);        
+        $array = array();        
+        //if (self::num_rows($result) > 0 ) {        
+        if ($type_result == 'all') {  
             while ($row = self::fetch_array($result, $option)) {
                 if (isset($row['id'])) {
                     $array[$row['id']] = $row;
                 } else {
                 	$array[] = $row;
                 }                    
-            }
+            }         
+        } else {
+        	$array = self::fetch_array($result, $option);
         }
         return $array;
     }
     
     /**
-     * Parses where conditionsof this form: array('id = ?' =>'4')
+     * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC'))
+     * @param   array   
      * @todo lot of stuff to do here
     */
-    private function parse_where_conditions($conditions) {  
+    private function parse_conditions($conditions) {  
         if (empty($conditions)) {
         	return '';
         }
-        $where_return = '';  
-        foreach ($conditions as $condition => $value_array) {                     
-            if (is_array($value_array)) {
-                $clean_values = array();                            
-                foreach($value_array as $item) {
-                    $item = Database::escape_string($item);
-                    $clean_values[]= "'$item'";
-                }
-            } else {
-                $value_array = Database::escape_string($value_array);
-                $clean_values = "'$value_array'";
-            }
-            if (!empty($condition) && !empty($clean_values)) {    
-                $condition = str_replace('?','%s', $condition); //we treat everything as string                
-                $condition = vsprintf($condition, $clean_values);
-                $where_return .= $condition;                            
-            }
-        }
         
-        if (!empty($where_return)) {            
-        	$where_return = " WHERE $where_return ";
+        $return_value = '';     
+        foreach ($conditions as $type_condition => $condition_data) {            
+             switch($type_condition) {
+                case 'where':                    
+                    foreach ($condition_data as $condition => $value_array) {                     
+                        if (is_array($value_array)) {
+                            $clean_values = array();                            
+                            foreach($value_array as $item) {
+                                $item = Database::escape_string($item);
+                                $clean_values[]= "'$item'";
+                            }
+                        } else {
+                            $value_array = Database::escape_string($value_array);
+                            $clean_values = "'$value_array'";
+                        }
+                        if (!empty($condition) && !empty($clean_values)) {    
+                            $condition = str_replace('?','%s', $condition); //we treat everything as string                
+                            $condition = vsprintf($condition, $clean_values);
+                            $where_return .= $condition;                            
+                        }
+                    }
+                    if (!empty($where_return)) {
+                        $return_value = " WHERE $where_return" ;	
+                    }
+                break;
+                case 'order':
+                    $return_value .= " ORDER BY $condition_data";
+                break;
+                
+            } 
         }
-        return $where_return;       
+        return $return_value;       
+    }
+    
+    private function parse_where_conditions($coditions){
+    	return self::parse_conditions(array('where'=>$coditions));
     }
     
     /**

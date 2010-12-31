@@ -578,12 +578,13 @@ if ($show_results) {
 		</tr>
 		</table>
 		<?php
-		$my_total_score  = float_format($questionScore,1);
-		$my_total_weight = float_format($questionWeighting,1);       
+        
+		$my_total_score  = convert_score($questionScore, $total_weighting);
+		$my_total_weight = convert_score($questionWeighting, $total_weighting);       
 
 		echo '<div id="question_score">';
-		//echo get_lang('Score')." : $my_total_score/$my_total_weight";        
-        echo get_lang('Score')." : ".show_score($my_total_score,$total_weighting,false);
+		echo get_lang('Score')." : $my_total_score/$my_total_weight";        
+        //echo get_lang('Score')." : ".show_score($my_total_score, $total_weighting, false);
 		echo '</div>';
 
 		unset($objAnswerTmp);

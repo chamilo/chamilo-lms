@@ -37,14 +37,16 @@ class Exercise {
   	public $start_time;
 	public $questionList;  // array with the list of this exercise's questions
 	public $results_disabled;
-  	public $expired_time;
+  	public $expired_time;    
+    public $course;
+    
   	
 	/**
 	 * Constructor of the class
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function Exercise() {
+	function Exercise($course_id = null) {
 		$this->id				= 0;
 		$this->exercise			= '';
 		$this->description		= '';
@@ -59,6 +61,15 @@ class Exercise {
 		$this->start_time 		= '0000-00-00 00:00:00';
 		$this->results_disabled = 1;
 		$this->expired_time 	= '0000-00-00 00:00:00';
+        
+        if (!empty($course_id)) {
+            $this->course_id        =  intval($course_id);
+            $course_info            =  api_get_course_info_by_id($this->course_id);
+        } else {            
+        	$course_info = api_get_course_info();
+        }
+        $this->course   = $course_info; 
+        
 	}
 
 	/**
@@ -69,9 +80,9 @@ class Exercise {
 	 * @return - boolean - true if exercise exists, otherwise false
 	 */
 	function read($id) {
-	    $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-    	$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
-	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
+	    $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION,$this->course['db_name']);
+    	$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST,$this->course['db_name']);
+	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION,$this->course['db_name']);
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 		$sql="SELECT title,description,sound,type,random, random_answers, active, results_disabled, max_attempt,start_time,end_time,feedback_type,expired_time FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
@@ -377,9 +388,9 @@ class Exercise {
 	 * @param - string $delete - ask to delete the file
 	 */
 	function updateSound($sound,$delete) {
-		global $audioPath, $documentPath,$_course, $_user;
-        $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+		global $audioPath, $documentPath;
+        $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $this->course['db_name']);
+        $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$this->course['db_name']);
 
 		if ($sound['size'] && (strstr($sound['type'],'audio') || strstr($sound['type'],'video'))) {
 			$this->sound=$sound['name'];
@@ -393,7 +404,7 @@ class Exercise {
 			        /*$query="INSERT INTO $TBL_DOCUMENT(path,filetype) VALUES "
 			            ." ('".str_replace($documentPath,'',$audioPath).'/'.$this->sound."','file')";
 			        Database::query($query);*/
-			        $id = add_document($_course,str_replace($documentPath,'',$audioPath).'/'.$this->sound,'file',$sound['size'],$sound['name']);
+			        $id = add_document($this->course,str_replace($documentPath,'',$audioPath).'/'.$this->sound,'file',$sound['size'],$sound['name']);
 			
 			        //$id = Database::insert_id();
 			        //$time = time();
@@ -404,8 +415,8 @@ class Exercise {
 			                ." VALUES "
 			                ."('".TOOL_DOCUMENT."', $id, $_user['user_id'], 0, '$time', '$time', 'DocumentAdded' )";
 			        Database::query($query);*/
-			        api_item_property_update($_course, TOOL_DOCUMENT, $id, 'DocumentAdded',$_user['user_id']);
-			        item_property_update_on_folder($_course,str_replace($documentPath,'',$audioPath),$_user['user_id']);
+			        api_item_property_update($this->course, TOOL_DOCUMENT, $id, 'DocumentAdded',api_get_user_id());
+			        item_property_update_on_folder($this->course,str_replace($documentPath,'',$audioPath),api_get_user_id());
 				}
 			}
 		} elseif($delete && is_file($audioPath.'/'.$this->sound)) {

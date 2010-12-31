@@ -435,11 +435,8 @@ event_access_tool(TOOL_QUIZ);
 // Tool introduction
 Display :: display_introduction_section(TOOL_QUIZ);
 
-// selects $limitExPage exercises at the same time
-$from = $page * $limitExPage;
-$sql = "SELECT count(id) FROM $TBL_EXERCICES";
-$res = Database::query($sql);
-list ($nbrexerc) = Database :: fetch_array($res);
+
+
 
 HotPotGCt($documentPath, 1, $_user['user_id']);
 $tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -550,11 +547,12 @@ if ($is_allowedToEdit) {
 echo '<div class="actions">';
 
 // display the next and previous link if needed
+// selects $limitExPage exercises at the same time
 $from = $page * $limitExPage;
 $sql = "SELECT count(id) FROM $TBL_EXERCICES";
 $res = Database::query($sql);
 list ($nbrexerc) = Database :: fetch_array($res);
-HotPotGCt($documentPath, 1, $_user['user_id']);
+HotPotGCt($documentPath, 1, api_get_user_id());
 
 //condition for the session
 $session_id = api_get_session_id();
@@ -778,7 +776,13 @@ if ($show == 'test') {
                                     
                     //Showing exercise title
                     $row['title']=text_filter($row['title']);
-                    echo Display::tag('h1',$row['title']);                    
+                    echo Display::tag('h1',$row['title']);        
+                     
+                    if ($session_id == $row['session_id']) {
+                        //Settings                                                                
+                        //echo Display::url(Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
+                    }
+                                  
                     echo '<p>';
                     echo $session_img;
                     $exid = $row['id'];
@@ -800,7 +804,7 @@ if ($show == 'test') {
                     
                     if ($session_id == $row['session_id']) {
                         //Settings                                                                
-                        echo Display::url(Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
+                        echo Display::url(Display::return_icon('edit.gif',get_lang('Edit'), array('width'=>'20px')), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                         
                         //Export
                         echo Display::url(Display::return_icon('cd.gif',          get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));

@@ -973,4 +973,5 @@ $FillWithExemplaryContent = "Fill with exemplary content";
 $ToolVideoconference = "Videoconference";
 $SelectSVGEditImage = "Select a picture";
 $OnlyAccessFromYourGroup = "Only accessible from your group";
+$UserFolders = "Folders of users";
 ?>

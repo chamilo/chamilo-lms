@@ -227,4 +227,5 @@ $Draw = "Dibujar";
 $FileExistsChangeToSave = "Este nombre de archivo ya existe, escoja otro para guardar su imagen.";
 $FileSavedAs = "Archivo guardado como";
 $FileExportAs = "Archivo exportado como";
+$UserFolder = "Carpeta del usuario";
 ?>

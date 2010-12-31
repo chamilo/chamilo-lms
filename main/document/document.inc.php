@@ -237,7 +237,7 @@ function build_document_icon_tag($type, $path) {
 				$icon = '../upload/users/'.substr($basename, 8).'/'.$image_path['file'];
 			}
 
-			$basename = get_lang('UserFolder').' ('.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).')';
+			$basename = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 
 		} else {
 			if (($basename =='audio' || $basename =='flash' || $basename =='images' || $basename =='video') && api_is_allowed_to_edit()) {

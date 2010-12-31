@@ -147,12 +147,12 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 
 	$tooltip_title_alt = $tooltip_title;
 	if ($tooltip_title == 'shared_folder') {
-		$tooltip_title_alt = get_lang('SharedFolder');
+		$tooltip_title_alt = get_lang('UserFolders');
 	}elseif(strstr($tooltip_title, 'shared_folder_session_')) {
-		$tooltip_title_alt = get_lang('SharedFolder').' ('.api_get_session_name($current_session_id).')';
+		$tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
 	}elseif(strstr($tooltip_title, 'sf_user_')) {
 		$userinfo = Database::get_user_info_from_id(substr($tooltip_title, 8));
-		$tooltip_title_alt = get_lang('SharedFolder').' ('.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).')';
+		$tooltip_title_alt = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 	}
 
 	$current_session_id=api_get_session_id();
@@ -214,19 +214,19 @@ function build_document_icon_tag($type, $path) {
 		$icon = choose_image($basename);
 	} else {
 		if ($basename == 'shared_folder') {
-			$icon = 'shared_folder.gif';
+			$icon = 'user_folders.gif';
 			if ($is_allowed_to_edit) {
 				$basename = get_lang('HelpSharedFolder');
 			} else {
-				$basename = get_lang('SharedFolder');
+				$basename = get_lang('UserFolders');
 			}
 		}elseif(strstr($basename, 'shared_folder_session_')) {
 			if ($is_allowed_to_edit) {
 				$basename = '***('.api_get_session_name($current_session_id).')*** '.get_lang('HelpSharedFolder');
 			} else {
-				$basename = get_lang('SharedFolder').' ('.api_get_session_name($current_session_id).')';
+				$basename = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
 			}
-			$icon = 'shared_folder.gif';
+			$icon = 'user_folders.gif';
 		}elseif(strstr($basename, 'sf_user_')) {
 			$userinfo = Database::get_user_info_from_id(substr($basename, 8));
 			$image_path = UserManager::get_user_picture_path_by_id(substr($basename, 8), 'web', false, true);
@@ -237,7 +237,7 @@ function build_document_icon_tag($type, $path) {
 				$icon = '../upload/users/'.substr($basename, 8).'/'.$image_path['file'];
 			}
 
-			$basename = get_lang('SharedFolder').' ('.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).')';
+			$basename = get_lang('UserFolder').' ('.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).')';
 
 		} else {
 			if (($basename =='audio' || $basename =='flash' || $basename =='images' || $basename =='video') && api_is_allowed_to_edit()) {
@@ -386,6 +386,7 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
 		if ($curdirpath != '/') {
 			$form .= '<option value="/">'.get_lang('Documents').'</option>';
 		}
+		
 		if (is_array($folders)) {
 			foreach ($folders as & $folder) {
 				// You cannot move a file to:
@@ -550,15 +551,18 @@ function is_any_user_shared_folder($path, $current_session_id) {
 }
 
 /**
- * Checks whether the user is into his shared folder
- * @return return bool Return true when user is in his user shared folder
+ * Checks whether the user is into his shared folder or into a subfolder
+ * @return return bool Return true when user is in his user shared folder or into a subforder
  */
 function is_my_shared_folder($user_id, $path, $current_session_id) {
-	$clean_path = Security::remove_XSS($path);
-	if($clean_path == '/shared_folder/sf_user_'.$user_id){
+	$clean_path = Security::remove_XSS($path).'/';	
+	$main_user_shared_folder = '/shared_folder\/sf_user_'.$user_id.'\//';//for security does not remove the last slash
+	$main_user_shared_folder_session='/shared_folder_session_'.$current_session_id.'\/sf_user_'.$user_id.'\//';//for security does not remove the last slash
+	
+	if(preg_match($main_user_shared_folder, $clean_path)){
 		return true;
 	}
-	elseif($clean_path == '/shared_folder_session_'.$current_session_id.'/sf_user_'.$user_id){
+	elseif(preg_match($main_user_shared_folder_session, $clean_path)){
 		return true;
 	}
 	else{

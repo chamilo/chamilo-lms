@@ -974,4 +974,5 @@ $FillWithExemplaryContent = "Rellenar con contenido de ejemplo";
 $ToolVideoconference = "Videoconferencia";
 $SelectSVGEditImage = "Selecciones una imagen (svg, png)";
 $OnlyAccessFromYourGroup = "Sólo accesible desde su grupo";
+$UserFolders = "Carpetas de los usuarios";
 ?>

@@ -111,7 +111,7 @@ if (isset($current_thread['thread_id'])){
 			}
 		}
 		echo "</td>";
-		// show the
+		// prepare the notification icon
 		if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) and !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']])) {
 			$post_image=icon('../img/forumpostnew.gif');
 		} else {
@@ -124,10 +124,11 @@ if (isset($current_thread['thread_id'])){
 		
 		echo "</tr>";
 		
-		// The post message
-		echo "<tr>";
-		echo "<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>";
-		echo "</tr>";
+        // The post message
+        echo "<tr>";
+        // see comments inside forumfunction.inc.php to lower filtering and allow more visual changes
+        echo "<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>";
+        echo "</tr>";
 	
 		// The check if there is an attachment
 		 

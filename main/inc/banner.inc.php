@@ -416,11 +416,11 @@ if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
 		$navigation_item['title'] = $breadcrumb_step['name'];
 		// titles for shared folders
 		if ($breadcrumb_step['name'] == 'shared_folder') {
-			$navigation_item['title'] = get_lang('SharedFolder');
+			$navigation_item['title'] = get_lang('UserFolders');
 		}			
 		elseif(strstr($breadcrumb_step['name'], 'shared_folder_session_')) {
 		
-			$navigation_item['title'] = get_lang('SharedFolder');
+			$navigation_item['title'] = get_lang('UserFolders');
 		}
 		elseif(strstr($breadcrumb_step['name'], 'sf_user_')) {			
 			$userinfo = Database::get_user_info_from_id(substr($breadcrumb_step['name'], 8));

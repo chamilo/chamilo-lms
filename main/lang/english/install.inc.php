@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $langStatDB = "Tracking DB.";
 $langEnableTracking = "Enable Tracking";
 $langInstituteShortName = "Your company short name";
-$langWarningResponsible = "Use this script only after backup. Chamilo team is not responsible if you lost or corrupted data";
+$langWarningResponsible = "Use this script only after backup. The Chamilo team is not responsible for lost or corrupted data.";
 $langAllowSelfRegProf = "Allow self-registration as a trainer";
 $langEG = "ex.";
 $langDBHost = "Database Host";

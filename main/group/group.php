@@ -189,7 +189,7 @@ foreach ($group_cats as $index => $category) {
 	$in_category = false;
 	if (api_get_setting('allow_group_categories') == 'true') {
 		if (isset ($_GET['show_all']) || (isset ($_GET['category']) && $_GET['category'] == $category['id'])) {
-			echo '<img src="../img/shared_folder.gif" alt=""/>';
+			echo '<img src="../img/group_category.gif" alt=""/>';
 			echo '<a href="group.php?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'">'.$category['title'].'</a>';
 			$in_category = true;
 		} else {

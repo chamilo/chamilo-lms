@@ -3262,8 +3262,9 @@ function prepare4display($input='') {
 				$counter++;
 			}
 		}
-		//return api_html_entity_decode(stripslashes($input));
-		return Security::remove_XSS($input, STUDENT);
+        //return api_html_entity_decode(stripslashes($input));
+        //change this to COURSEMANAGERLOWSECURITY or COURSEMANAGER to lower filtering and allow more styles (see comments of Security::remove_XSS() method to learn about other levels)
+        return Security::remove_XSS($input, STUDENT);
 	} else {
 		$returnarray=array_walk($input, 'api_html_entity_decode');
 		$returnarray=array_walk($input, 'stripslashes');

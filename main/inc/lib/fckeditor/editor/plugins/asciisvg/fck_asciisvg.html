@@ -2,7 +2,7 @@
 <!--
  *  Chamilo LMS
  *
- *  Copyright (c) 2010 Ivan Tcholakov <ivantcholakov@gmail.com>
+ *  Copyright (c) 2011 Ivan Tcholakov <ivantcholakov@gmail.com>
  *
  *  License:
  *  GNU Lesser General Public License, Version 3, 29 June 2007
@@ -15,7 +15,8 @@
         <meta name="robots" content="noindex, nofollow" />
 
         <script type="text/javascript">
-document.write( '<scr' + 'ipt type="text/javascript" src="' + window.parent.frameElement._DialogArguments.Editor.FCKConfig.ScriptASCIIMathML + '"><\/scr' + 'ipt>' ) ;
+//document.write( '<scr' + 'ipt type="text/javascript" src="' + window.parent.frameElement._DialogArguments.Editor.FCKConfig.ScriptASCIIMathML + '"><\/scr' + 'ipt>' ) ;
+document.write( '<scr' + 'ipt type="text/javascript" src="ASCIIsvgPI.js"><\/scr' + 'ipt>' ) ;
         </script>
 
         <script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
@@ -35,6 +36,87 @@ form p { margin-top: 5px; margin-bottom: 5px; }
 
     </head>
 <body scroll="no" style="overflow: hidden;">
+
+Equation type: <select id="eqntype" onchange="javascript: AsciisvgDialog.changetype();">
+<option value="func">y=f(x)</option>
+<option value="polar">r=f(t)</option>
+<option value="param">x=f(t),y=g(t)</option>
+<option value="slope">dy/dx = f(x,y)</option>
+</select>
+&nbsp;&nbsp;&nbsp;
+<span id="eq1lbl">f(x)=</span> <input type="text" id="equation" size="15" value="sin(x)"/> <span id="eq2lbl"><i></i></span><span id="eq2"><i></i></span>
+&nbsp;from <input type="text" id="xstart" size="4" value=""/> to <input type="text" id="xend" size="4" value=""/>
+<hr/>
+
+Color: <Select id="gcolor">
+    <option value="black">Black</option>
+    <option value="red">Red</option>
+    <option value="orange">Orange</option>
+    <option value="yellow">Yellow</option>
+    <option value="green">Green</option>
+    <option value="blue">Blue</option>
+    <option value="purple">Purple</option>
+</select>
+Width: <Select id="strokewidth">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+</select>
+Line: <Select id="strokedash">
+    <option value="none">Solid</option>
+    <option value="2">Dotted</option>
+    <option value="5">Dashed</option>
+    <option value="5 2">Tight Dash</option>
+    <option value="7 3 2 3">Dash-Dot</option>
+</select>
+
+Start with: <Select id="gstart">
+    <option value="none">Nothing</option>
+    <option value="arrow">Arrow</option>
+    <option value="opendot">Open Dot</option>
+    <option value="dot">Dot</option>
+</select>
+End with: <Select id="gend">
+    <option value="none">Nothing</option>
+    <option value="arrow">Arrow</option>
+    <option value="opendot">Open Dot</option>
+    <option value="dot">Dot</option>
+</select>
+
+<hr/>
+
+xmin: <input type="text" id="xmin" size="4" value="-7.5" onChange='javascript: UpdatePreview();'/>
+xmax: <input type="text" id="xmax" size="4" value="7.5" onChange='javascript: UpdatePreview();'/>
+xscl: <input type="text" id="xscl" size="3" value="1" onChange='javascript: UpdatePreview();'/>
+&nbsp;&nbsp;
+ymin: <input type="text" id="ymin" size="4" value="-5" onChange='javascript: UpdatePreview();'/>
+ymax: <input type="text" id="ymax" size="4" value="5" onChange='javascript: UpdatePreview();'/>
+yscl: <input type="text" id="yscl" size="3" value="1" onChange='javascript: UpdatePreview();'/>
+<hr/>
+
+Show axis labels: <input type="checkbox" id="labels" value="Show Labels" onClick='javascript: UpdatePreview();' checked="checked"/>
+Show XY grid: <input type="checkbox" id="grid" value="Show Grid" onClick='javascript: UpdatePreview();' checked="checked"/>
+&nbsp;&nbsp;
+Resize to: <input type="text" id="gwidth" size="5" value="300"/> by <input type="text" id="gheight" size="5" value="200"/>
+<input type="button" value="Update" onclick="javascript: UpdatePreview();"/>
+<hr/>
+
+<input type="button" value="Add Graph" onclick="javascript: AsciisvgDialog.addgraph();"/>
+Graphs: <select id="graphs" onchange="javascript: AsciisvgDialog.loadeqn();"></select>
+<input type="button" value="Replace Selected Graph" onclick="javascript: AsciisvgDialog.replacegraph();"/>
+<input type="button" value="Remove" onclick="javascript: AsciisvgDialog.removegraph();"/>
+<select id="alignment" onchange="javascript: UpdatePreview();">
+<option value="text-top">Top</option>
+<option value="middle">Middle</option>
+<option value="text-bottom">Bottom</option>
+<option value="left">Float left</option>
+<option value="right">Float right</option>
+</select>
+
+<hr/>
+
+<div id="preview"><embed id="previewsvg" type="image/svg+xml" src="d.svg" style="width: 300px; height: 200px; vertical-align: middle; float: none;" sscr="-7.5,7.5,-5,5,1,1,1,1,1,300,200" /></div>
 
 </body>
 </html>

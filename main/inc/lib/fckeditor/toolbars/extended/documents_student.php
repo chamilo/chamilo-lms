@@ -9,6 +9,7 @@
 
 //NOTE: Does not include Replace because it is redundant, being in the same tab to Find
 //TODO: DocProps, fckeditor_wiris_openFormulaEditor,fckeditor_wiris_openCAS don't run ok here. 
+//NOTE: ONLY FOR TEACHERS: source, insert html
 
 // Hide/show SpellCheck buttom
 if ((api_get_setting('allow_spellcheck') == 'true')) {
@@ -23,7 +24,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Save','NewPage','Templates','-','PasteWord'),
 	array('Undo','Redo'),
 	array('Link','Image','flvPlayer','Table','mimetex','asciimath'),
-	array('UnorderedList','OrderedList','Rule'),
+	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor'),
 	array('FitWindow')

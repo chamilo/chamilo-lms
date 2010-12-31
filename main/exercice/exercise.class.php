@@ -63,7 +63,7 @@ class Exercise {
 		$this->expired_time 	= '0000-00-00 00:00:00';
         
         if (!empty($course_id)) {
-            $this->course_id        = intval($course_id);
+            $this->course_id        =  intval($course_id);
             $course_info            =  api_get_course_info_by_id($this->course_id);
         } else {            
         	$course_info = api_get_course_info();

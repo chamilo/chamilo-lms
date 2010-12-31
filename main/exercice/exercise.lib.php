@@ -1131,4 +1131,13 @@ function convert_score($score, $weight) {
 }
 
 
+function get_all_exercises($course_info = null) {
+    if(!empty($course_info)) {
+        $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST,$course_info['db_name']);	
+    } else {
+    	$TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);
+    }    
+    return Database::select('*',$TBL_EXERCICES, array('where'=>array('active <> ?'=>'-1'), 'order'=>'title'));
+}
+
 

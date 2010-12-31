@@ -1328,8 +1328,10 @@ class Database {
      * @todo lot of stuff to do here
     */
     
-    public static function select($columns = '*' , $table_name,  $conditions = array(), $option = 'ASSOC') {        
-    	$conditions = self::parse_conditions($conditions);        
+    public static function select($columns = '*' , $table_name,  $conditions = array(), $type_result = 'all', $option = 'ASSOC') {        
+    	$conditions = self::parse_conditions($conditions); 
+        
+        //@todo we could do a describe here to check the columns ...       
         $clean_columns = '';
         if (is_array($columns)) {
         	$clean_columns = implode(',', $columns);
@@ -1340,18 +1342,23 @@ class Database {
         		$clean_columns = (string)$columns;
         	}
         }
+        
              
-        $sql    = "SELECT $clean_columns FROM $table_name $conditions";
+         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
+      
+               
+        
         $result = self::query($sql);        
         $array = array();        
-        if (self::num_rows($result) > 1 ) {          
+        //if (self::num_rows($result) > 0 ) {        
+        if ($type_result == 'all') {  
             while ($row = self::fetch_array($result, $option)) {
                 if (isset($row['id'])) {
                     $array[$row['id']] = $row;
                 } else {
                 	$array[] = $row;
                 }                    
-            }            
+            }         
         } else {
         	$array = self::fetch_array($result, $option);
         }

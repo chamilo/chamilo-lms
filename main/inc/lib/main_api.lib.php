@@ -1049,6 +1049,7 @@ function api_get_course_info($course_code = null) {
             global $_configuration;
             $cData = Database::fetch_array($result);
             $_course['id'           ]         = $cData['code'           ];
+            $_course['code'         ]         = $cData['code'           ];
             $_course['name'         ]         = $cData['title'          ];
             $_course['official_code']         = $cData['visual_code'    ]; // Use in echo statements.
             $_course['sysCode'      ]         = $cData['code'           ]; // Use as key in db.
@@ -1061,40 +1062,26 @@ function api_get_course_info($course_code = null) {
             $_course['extLink'      ]['name'] = $cData['department_name'];
             $_course['categoryCode' ]         = $cData['faCode'         ];
             $_course['categoryName' ]         = $cData['faName'         ];
-
-            $_course['visibility'   ]        = $cData['visibility'      ];
-            $_course['subscribe_allowed']    = $cData['subscribe'       ];
-            $_course['unubscribe_allowed']   = $cData['unsubscribe'     ];
+            $_course['visibility'   ]         = $cData['visibility'      ];
+            $_course['subscribe_allowed']     = $cData['subscribe'       ];
+            $_course['unubscribe_allowed']    = $cData['unsubscribe'     ];
 
             // The real_id is an integer. It is mandatory for future implementations.
-            $_course['real_id'     ]         = $cData['id'              ];
+            $_course['real_id'     ]          = $cData['id'              ];
         }
         return $_course;
     }
-    global $_course;
+    global $_course;    
     return $_course;
 }
 
 
 /**
  * Returns the current course info array.
- * Array elements:
- * ['name']
- * ['official_code']
- * ['sysCode']
- * ['path']
- * ['dbName']
- * ['dbNameGlu']
- * ['titular']
- * ['language']
- * ['extLink']['url' ]
- * ['extLink']['name']
- * ['categoryCode']
- * ['categoryName']
+
  * Now if the course_code is given, the returned array gives info about that
  * particular course, not specially the current one.
  */
-
 function api_get_course_info_by_id($id = null) {
     if (!empty($id)) {
         $id = intval($id);
@@ -1127,13 +1114,13 @@ function api_get_course_info_by_id($id = null) {
             $_course['categoryCode' ]         = $cData['faCode'         ];
             $_course['categoryName' ]         = $cData['faName'         ];
 
-            $_course['visibility'   ]        = $cData['visibility'      ];
-            $_course['subscribe_allowed']    = $cData['subscribe'       ];
-            $_course['unubscribe_allowed']   = $cData['unsubscribe'     ];
+            $_course['visibility'   ]         = $cData['visibility'      ];
+            $_course['subscribe_allowed']     = $cData['subscribe'       ];
+            $_course['unubscribe_allowed']    = $cData['unsubscribe'     ];
 
-            $_course['real_id'      ]        = $cData['id'              ];
-            $_course['db_name'      ]        = $cData['db_name'         ];
-            $_course['title'        ]        = $cData['title'           ];
+            $_course['real_id'      ]         = $cData['id'              ];
+            $_course['db_name'      ]         = $cData['db_name'         ];
+            $_course['title'        ]         = $cData['title'           ];
 
         }
         return $_course;

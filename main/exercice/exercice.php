@@ -435,11 +435,8 @@ event_access_tool(TOOL_QUIZ);
 // Tool introduction
 Display :: display_introduction_section(TOOL_QUIZ);
 
-// selects $limitExPage exercises at the same time
-$from = $page * $limitExPage;
-$sql = "SELECT count(id) FROM $TBL_EXERCICES";
-$res = Database::query($sql);
-list ($nbrexerc) = Database :: fetch_array($res);
+
+
 
 HotPotGCt($documentPath, 1, $_user['user_id']);
 $tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -550,11 +547,12 @@ if ($is_allowedToEdit) {
 echo '<div class="actions">';
 
 // display the next and previous link if needed
+// selects $limitExPage exercises at the same time
 $from = $page * $limitExPage;
 $sql = "SELECT count(id) FROM $TBL_EXERCICES";
 $res = Database::query($sql);
 list ($nbrexerc) = Database :: fetch_array($res);
-HotPotGCt($documentPath, 1, $_user['user_id']);
+HotPotGCt($documentPath, 1, api_get_user_id());
 
 //condition for the session
 $session_id = api_get_session_id();

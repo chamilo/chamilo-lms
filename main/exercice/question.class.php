@@ -106,7 +106,7 @@ abstract class Question
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION,      $course_info['db_name']);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION, $course_info['db_name']);
         $id = intval($id);
-		$sql="SELECT question,description,ponderation,position,type,picture,level,extra FROM $TBL_QUESTIONS WHERE id='".$id."'";
+		$sql="SELECT question,description,ponderation,position,type,picture,level,extra FROM $TBL_QUESTIONS WHERE id= $id ";
 
 		$result=Database::query($sql);
 
@@ -953,8 +953,7 @@ abstract class Question
         }
         
         $options = self::readQuestionOption($this->id);
-        var_dump($options);
-        
+                
 		$sql="INSERT INTO $TBL_QUESTIONS(question, description, ponderation, position, type, level, extra ) VALUES('".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."' ,'".Database::escape_string($level)."' ,'".Database::escape_string($extra)."'  )";
 		Database::query($sql);    
             

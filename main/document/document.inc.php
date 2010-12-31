@@ -152,7 +152,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		$tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
 	}elseif(strstr($tooltip_title, 'sf_user_')) {
 		$userinfo = Database::get_user_info_from_id(substr($tooltip_title, 8));
-		$tooltip_title_alt = get_lang('UserFolder').' ('.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).')';
+		$tooltip_title_alt = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 	}
 
 	$current_session_id=api_get_session_id();

@@ -37,7 +37,7 @@ form p { margin-top: 5px; margin-bottom: 5px; }
     </head>
 <body scroll="no" style="overflow: hidden;">
 
-Equation type: <select id="eqntype" onchange="javascript: AsciisvgDialog.changetype();">
+Equation type: <select id="eqntype" onchange="javascript: UpdateEquationType();">
 <option value="func">y=f(x)</option>
 <option value="polar">r=f(t)</option>
 <option value="param">x=f(t),y=g(t)</option>
@@ -102,10 +102,10 @@ Resize to: <input type="text" id="gwidth" size="5" value="300"/> by <input type=
 <input type="button" value="Update" onclick="javascript: UpdatePreview();"/>
 <hr/>
 
-<input type="button" value="Add Graph" onclick="javascript: AsciisvgDialog.addgraph();"/>
-Graphs: <select id="graphs" onchange="javascript: AsciisvgDialog.loadeqn();"></select>
-<input type="button" value="Replace Selected Graph" onclick="javascript: AsciisvgDialog.replacegraph();"/>
-<input type="button" value="Remove" onclick="javascript: AsciisvgDialog.removegraph();"/>
+<input type="button" value="Add Graph" onclick="javascript: AddGraph();"/>
+Graphs: <select id="graphs" onchange="javascript: LoadEquation();"></select>
+<input type="button" value="Replace Selected Graph" onclick="javascript: ReplaceGraph();"/>
+<input type="button" value="Remove" onclick="javascript: RemoveGraph();"/>
 <select id="alignment" onchange="javascript: UpdatePreview();">
 <option value="text-top">Top</option>
 <option value="middle">Middle</option>

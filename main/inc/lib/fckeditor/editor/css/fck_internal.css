@@ -32,28 +32,28 @@
    clicking below the content. */
 html
 {
-	min-height: 100%;
+    min-height: 100%;
 }
 
 table.FCK__ShowTableBorders, table.FCK__ShowTableBorders td, table.FCK__ShowTableBorders th
 {
-	border: #d3d3d3 1px solid;
+    border: #d3d3d3 1px solid;
 }
 
 form
 {
-	border: 1px dotted #FF0000;
-	padding: 2px;
+    border: 1px dotted #FF0000;
+    padding: 2px;
 }
 
 .FCK__Flash
 {
-	border: #a9a9a9 1px solid;
-	background-position: center center;
-	background-image: url(images/fck_flashlogo.gif);
-	background-repeat: no-repeat;
-	width: 80px;
-	height: 80px;
+    border: #a9a9a9 1px solid;
+    background-position: center center;
+    background-image: url(images/fck_flashlogo.gif);
+    background-repeat: no-repeat;
+    width: 80px;
+    height: 80px;
 }
 
 /*
@@ -62,91 +62,101 @@ form
 
 .FCK__Video
 {
-	border: #a9a9a9 1px solid;
-	background-position: center center;
-	background-image: url(images/fck_video.gif);
-	background-repeat: no-repeat;
-	width: 80px;
-	height: 80px
+    border: #a9a9a9 1px solid;
+    background-position: center center;
+    background-image: url(images/fck_video.gif);
+    background-repeat: no-repeat;
+    width: 80px;
+    height: 80px
 }
 
 .FCK__MP3
 {
-	border:none;
-	background-position: center center;
-	background-image: url(images/fck_mp3.gif);
-	background-repeat: no-repeat;
-	width: 302px;
-	height: 19px
+    border: none;
+    background-position: center center;
+    background-image: url(images/fck_mp3.gif);
+    background-repeat: no-repeat;
+    width: 302px;
+    height: 19px
+}
+
+.FCK__AsciiSvg
+{
+    border: #a9a9a9 1px solid;
+    background-position: center center;
+    background-image: url(images/fck_asciisvg.gif);
+    background-repeat: no-repeat;
+    width: 107px;
+    height: 107px
 }
 
 .FCK__UnknownObject
 {
-	border: #a9a9a9 1px solid;
-	background-position: center center;
-	background-image: url(images/fck_plugin.gif);
-	background-repeat: no-repeat;
-	width: 80px;
-	height: 80px;
+    border: #a9a9a9 1px solid;
+    background-position: center center;
+    background-image: url(images/fck_plugin.gif);
+    background-repeat: no-repeat;
+    width: 80px;
+    height: 80px;
 }
 
 /* Empty anchors images */
 .FCK__Anchor
 {
-	border: 1px dotted #00F;
-	background-position: center center;
-	background-image: url(images/fck_anchor.gif);
-	background-repeat: no-repeat;
-	width: 16px;
-	height: 15px;
-	vertical-align: middle;
+    border: 1px dotted #00F;
+    background-position: center center;
+    background-image: url(images/fck_anchor.gif);
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 15px;
+    vertical-align: middle;
 }
 
 /* Anchors with content */
 .FCK__AnchorC
 {
-	border: 1px dotted #00F;
-	background-position: 1px center;
-	background-image: url(images/fck_anchor.gif);
-	background-repeat: no-repeat;
-	padding-left: 18px;
+    border: 1px dotted #00F;
+    background-position: 1px center;
+    background-image: url(images/fck_anchor.gif);
+    background-repeat: no-repeat;
+    padding-left: 18px;
 }
 
 /* Any anchor for non-IE, if we combine it with the previous rule IE ignores all. */
 a[name]
 {
-	border: 1px dotted #00F;
-	background-position: 0 center;
-	background-image: url(images/fck_anchor.gif);
-	background-repeat: no-repeat;
-	padding-left: 18px;
+    border: 1px dotted #00F;
+    background-position: 0 center;
+    background-image: url(images/fck_anchor.gif);
+    background-repeat: no-repeat;
+    padding-left: 18px;
 }
 
 .FCK__PageBreak
 {
-	background-position: center center;
-	background-image: url(images/fck_pagebreak.gif);
-	background-repeat: no-repeat;
-	clear: both;
-	display: block;
-	float: none;
-	width: 100%;
-	border-top: #999999 1px dotted;
-	border-bottom: #999999 1px dotted;
-	border-right: 0px;
-	border-left: 0px;
-	height: 5px;
+    background-position: center center;
+    background-image: url(images/fck_pagebreak.gif);
+    background-repeat: no-repeat;
+    clear: both;
+    display: block;
+    float: none;
+    width: 100%;
+    border-top: #999999 1px dotted;
+    border-bottom: #999999 1px dotted;
+    border-right: 0px;
+    border-left: 0px;
+    height: 5px;
 }
 
 /* Hidden fields */
 .FCK__InputHidden
 {
-	width: 19px;
-	height: 18px;
-	background-image: url(images/fck_hiddenfield.gif);
-	background-repeat: no-repeat;
-	vertical-align: text-bottom;
-	background-position: center center;
+    width: 19px;
+    height: 18px;
+    background-image: url(images/fck_hiddenfield.gif);
+    background-repeat: no-repeat;
+    vertical-align: text-bottom;
+    background-position: center center;
 }
 
 .FCK__ShowBlocks p,
@@ -161,63 +171,63 @@ a[name]
 .FCK__ShowBlocks h5,
 .FCK__ShowBlocks h6
 {
-	background-repeat: no-repeat;
-	border: 1px dotted gray;
-	padding-top: 8px;
-	padding-left: 8px;
+    background-repeat: no-repeat;
+    border: 1px dotted gray;
+    padding-top: 8px;
+    padding-left: 8px;
 }
 
 .FCK__ShowBlocks p
 {
-	background-image: url(images/block_p.png);
+    background-image: url(images/block_p.png);
 }
 
 .FCK__ShowBlocks div
 {
-	background-image: url(images/block_div.png);
+    background-image: url(images/block_div.png);
 }
 
 .FCK__ShowBlocks pre
 {
-	background-image: url(images/block_pre.png);
+    background-image: url(images/block_pre.png);
 }
 
 .FCK__ShowBlocks address
 {
-	background-image: url(images/block_address.png);
+    background-image: url(images/block_address.png);
 }
 
 .FCK__ShowBlocks blockquote
 {
-	background-image: url(images/block_blockquote.png);
+    background-image: url(images/block_blockquote.png);
 }
 
 .FCK__ShowBlocks h1
 {
-	background-image: url(images/block_h1.png);
+    background-image: url(images/block_h1.png);
 }
 
 .FCK__ShowBlocks h2
 {
-	background-image: url(images/block_h2.png);
+    background-image: url(images/block_h2.png);
 }
 
 .FCK__ShowBlocks h3
 {
-	background-image: url(images/block_h3.png);
+    background-image: url(images/block_h3.png);
 }
 
 .FCK__ShowBlocks h4
 {
-	background-image: url(images/block_h4.png);
+    background-image: url(images/block_h4.png);
 }
 
 .FCK__ShowBlocks h5
 {
-	background-image: url(images/block_h5.png);
+    background-image: url(images/block_h5.png);
 }
 
 .FCK__ShowBlocks h6
 {
-	background-image: url(images/block_h6.png);
+    background-image: url(images/block_h6.png);
 }

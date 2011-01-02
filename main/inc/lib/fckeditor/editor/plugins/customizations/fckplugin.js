@@ -1181,6 +1181,25 @@ FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
             }
         }
     }
+    else if ( fakeClass == 'FCK__AsciiSvg' )
+    {
+        var width = realElement.width ;
+        var height = realElement.height ;
+        if ( width )
+        {
+            oImg.style.width = width.toString().indexOf('%') != -1 ? width : ( width + 'px' ) ;
+        }
+        if ( height )
+        {
+            oImg.style.height = height.toString().indexOf('%') != -1 ? height : ( height + 'px' ) ;
+        }
+        if ( realElement.style.width ) {
+            oImg.style.width = realElement.style.width ;
+        }
+        if ( realElement.style.height ) {
+            oImg.style.height = realElement.style.height ;
+        }
+    }
     return oImg ;
 }
 
@@ -1255,6 +1274,36 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
                 oImg.setAttribute( '_fckvideo', 'true', 0 ) ;
                 div.parentNode.insertBefore( oImg, div ) ;
                 div.parentNode.removeChild( div ) ;
+            }
+        }
+    } ;
+
+ // A custom handler for AsciiSvg graphs when a new tag has been added.
+FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
+    {
+        if ( !FCK.IsAsciiSvg( el ) )
+        {
+            return ;
+        }
+
+        fakeImg.className = 'FCK__AsciiSvg' ;
+        fakeImg.setAttribute( '_fckasciisvg', 'true', 0 ) ;
+    } ) ;
+
+// Fake images for AsciiSvg graphs when the document has been opened.
+FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
+    {
+        var embeds = document.getElementsByTagName( 'embed' ) ;
+        var embed ;
+        var i = embeds.length - 1 ;
+        while ( i >= 0 && ( embed = embeds[i--] ) )
+        {
+            if ( FCK.IsAsciiSvg( embed ) )
+            {
+                var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__AsciiSvg', embed.cloneNode(true) ) ;
+                oImg.setAttribute( '_fckasciisvg', 'true', 0 ) ;
+                embed.parentNode.insertBefore( oImg, embed ) ;
+                embed.parentNode.removeChild( embed ) ;
             }
         }
     } ;

@@ -1491,6 +1491,7 @@ FCK.IsRealImage = function ( tag )
             || tag.getAttribute( '_fckmp3' )
             || tag.getAttribute( '_fckvideo' )
             || tag.getAttribute( 'MapNumber' )
+            || FCK.IsAsciiSvg( tag )
             )
         {
             return false ;
@@ -1670,6 +1671,25 @@ FCK.GetVideoType = function ( img )
     {
         return 'flv' ;
     }
+
+    return false ;
+} ;
+
+// Checking for AsciiSvg graphics.
+FCK.IsAsciiSvg = function ( tag )
+{
+    if ( !tag )
+    {
+        return false ;
+    }
+
+    if ( tag.nodeName.IEquals( 'img' ) || tag.nodeName.IEquals( 'embed' ) )
+    {
+        if ( FCKDomTools.HasAttribute( tag, 'sscr' ) )
+        {
+            return true ;
+        }
+   }
 
     return false ;
 } ;

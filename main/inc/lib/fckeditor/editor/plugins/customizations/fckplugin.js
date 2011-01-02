@@ -1181,6 +1181,7 @@ FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
             }
         }
     }
+    // For AsciiSvg graphs.
     else if ( fakeClass == 'FCK__AsciiSvg' )
     {
         var width = realElement.width ;
@@ -1199,6 +1200,8 @@ FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
         if ( realElement.style.height ) {
             oImg.style.height = realElement.style.height ;
         }
+        var sscr = realElement.getAttribute( 'sscr' ) ;
+        oImg.setAttribute( 'sscr', sscr, 0 ) ;
     }
     return oImg ;
 }

@@ -33,8 +33,24 @@ oAsciiSvgItem.IconPath = FCKConfig.PluginsPath + 'asciisvg/asciisvg.gif' ;
 FCKToolbarItems.RegisterItem( 'asciisvg', oAsciiSvgItem ) ;
 
 // Context menu support.
-// TODO
+FCK.ContextMenu.RegisterListener( {
+    AddItems : function( menu, tag, tagName )
+    {
+        if ( FCK.IsAsciiSvg( tag ) )
+        {
+            menu.AddSeparator() ;
+            menu.AddItem( 'asciisvg', FCKLang['DlgAsciiSvg'], oAsciiSvgItem.IconPath ) ;
+        }
+    }}
+);
 
 // Double-click support.
-// TODO
-
+FCK.RegisterDoubleClickHandler(
+    function ( tag )
+    {
+        if ( FCK.IsAsciiSvg( tag ) )
+        {
+            FCKCommands.GetCommand( 'asciisvg' ).Execute() ;
+        }
+    }, null
+) ;

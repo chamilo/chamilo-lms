@@ -116,7 +116,26 @@ Graphs: <select id="graphs" onchange="javascript: LoadEquation();"></select>
 
 <hr/>
 
-<div id="preview"><embed id="previewsvg" type="image/svg+xml" src="d.svg" style="width: 300px; height: 200px; vertical-align: middle; float: none;" sscr="-7.5,7.5,-5,5,1,1,1,1,1,300,200" /></div>
+<div id="preview" style="overflow: auto;">
+<script type="text/javascript">
+//if ( noSVG )
+//{
+    // TODO: Not tested yet.
+//    document.write( '<img id="previewimg" style="width:' +
+//        width + 'px; height: ' +
+//        height + 'px; vertical-align: middle; float: none;" src="' + AScgiloc +
+//        '?sscr=' + encodeURIComponent( sscr ) + '" script=" " />' ) ;
+//}
+//else
+//{
+    document.write( '<embed id="previewsvg" type="image/svg+xml" src="' +
+        FCKConfig.DrawingASCIISVG +
+        '" style="width:' +
+        width + 'px; height: ' +
+        height + 'px; vertical-align: middle; float: none;" sscr="' + sscr + '" />' ) ;
+//}
+</script>
+</div>
 
 </body>
 </html>

@@ -7,8 +7,9 @@
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
-//NOTE: Does not include Replace because it is redundant, being in the same tab to Find
+//NOTE: Doesn't include Replace because it is redundant, being in the same tab to Find
 //TODO: DocProps, ASCIIMath don't run ok here. 
+//NOTE: Doesn't include Save button due to usability reasons in the form.
 
 // Hide/show SpellCheck buttom
 if ((api_get_setting('allow_spellcheck') == 'true')) {
@@ -20,7 +21,7 @@ else{
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('Save','NewPage','Templates','-','PasteWord'),
+	array('NewPage','Templates','-','PasteWord'),
 	array('Undo','Redo'),
 	array('Link','Image','flvPlayer','Table','mimetex'),
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent'),
@@ -32,7 +33,7 @@ $config['ToolbarSets']['Normal'] = array(
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
 $config['ToolbarSets']['Maximized'] = array(
-	array('Save','NewPage','Templates','-','Preview','Print'),
+	array('NewPage','Templates','-','Preview','Print'),
 	array('Cut','Copy','Paste','PasteText','PasteWord'),
 	array('Undo','Redo','-','SelectAll','Find','-','RemoveFormat'),
 	array('Link','Unlink','Anchor','Glossary'),

@@ -138,9 +138,8 @@ function UpdatePreview()
     {
         var pvimg = GetE( 'previewimg' ) ;
         pvimg.src = AScgiloc + '?sscr=' + encodeURIComponent(commands) ;
-        //var ed = tinyMCEPopup.editor ;
-        //ed.dom.setStyle( pvimg, 'width' , width + 'px' ) ;
-        //ed.dom.setStyle( pvimg, 'height' , height + 'px' ) ;
+        pvimg.style.width = width + 'px' ;
+        pvimg.style.height = height + 'px' ;
     }
     else
     {

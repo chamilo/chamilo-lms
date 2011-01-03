@@ -320,7 +320,7 @@ function display_special_courses ($user_id) {
                         $course_title = $course['title']." ".get_lang('CourseClosed');
                     }
 
-                    echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><span style="font-size: 135%;">'.$course_title.'</span><br />';
+                    echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><span class="userportal-course-item-title">'.$course_title.'</span><br />';
                     if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                         echo $course['visual_code'];
                     }
@@ -510,7 +510,7 @@ function display_courses_in_category($user_category_id) {
             $course_title = $course['title']." ".get_lang('CourseClosed');
         }
         // Start displaying the course block itself.
-        echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><span style="font-size: 135%;">'.$course_title.'</span><br />';
+        echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><span class="userportal-course-item-title">'.$course_title.'</span><br />';
         if (api_get_setting('display_coursecode_in_courselist') == 'true') {
             echo $course_display_code;
         }

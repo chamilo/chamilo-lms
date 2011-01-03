@@ -44,14 +44,33 @@ var noSVG = ASnoSVG ; // Temporarily added.
 var width = 300 ;
 var height = 200 ;
 var alignm = 'middle' ;
-//var sscr = '' ;
-var sscr = '-7.5,7.5,-5,5,1,1,1,1,1,300,200' ;
-//var isnew = null ;
-var isnew = true ;
+var sscr = '-7.5,7.5,-5,5,1,1,1,1,1,' + width + ',' + height ;
+
+//Get the selected audio (if available).
+var oFakeImage = dialog.Selection.GetSelectedElement() ;
+var oEmbed ;
+
+if ( oFakeImage )
+{
+    if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute('_fckasciisvg') )
+        oEmbed = FCK.GetRealElement( oFakeImage ) ;
+    else
+        oFakeImage = null ;
+}
 
 function LoadSelection()
 {
+    if ( oEmbed ) {
+        sscr = GetAttribute( oEmbed, 'sscr', '' ).toString() ;
+        width = parseInt( oEmbed.style.width ) ;
+        height = parseInt( oEmbed.style.height ) ;
+        alignm = oEmbed.style.float ;
+        //if ( alignm == 'none' ) {
+        //    alignm = ed.dom.getStyle( el, 'vertical-align' ) ;
+        //}
+    }
     // ...
+    LoadGraphScript( sscr ) ;
 
     UpdatePreview() ;
 }
@@ -72,7 +91,7 @@ window.onload = function()
     //init() ;
 
     // Initialization of the dialog's script.
-    AsciisvgDialog.init() ;
+    //AsciisvgDialog.init() ;
 
     // Load the selected element information (if any).
     LoadSelection() ;
@@ -418,7 +437,7 @@ var AsciisvgDialog =
         /*
         width = tinyMCEPopup.getWindowArg( 'width' ) ;
         height = tinyMCEPopup.getWindowArg( 'height' ) ;
-        isnew = tinyMCEPopup.getWindowArg( 'isnew' ) ;
+        isnew = tinyMCEPopup.getWindowArg( 'isnew' ) ; // This variable has been eliminated.
         sscr = tinyMCEPopup.getWindowArg( 'sscr' ) ;
         alignm = tinyMCEPopup.getWindowArg( 'alignm' ) ;
         */
@@ -439,7 +458,7 @@ var AsciisvgDialog =
     {
         var ed = tinyMCEPopup.editor ;
         // Insert the contents from the input into the document.
-        if ( isnew )
+        if ( isnew ) // This variable has been eliminated.
         {
             if ( alignm == 'left' || alignm == 'right' )
             {

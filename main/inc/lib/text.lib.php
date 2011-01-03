@@ -576,6 +576,20 @@ function get_last_week() {
     return $arrdays;
 }
 
+/**
+ * Gets the week from a day
+ * @param   string  date in UTC (2010-01-01 12:12:12)
+ * @return  int     int with the week number of the year
+ */
+function get_week_from_day($date) {
+    if (!empty($date)) {
+	   $time = api_strtotime($date,'UTC');
+       return date('W', $date);
+    } else {
+    	return date('W');
+    }
+}
+
 
 /**
  * Deprecated functions

@@ -10,10 +10,7 @@
 * 	@version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
 */
 
-/*
-		INIT SECTION
-*/
-
+/*		INIT SECTION    */
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 
@@ -22,9 +19,7 @@ if(!defined('ALLOWED_TO_INCLUDE')) {
 	exit();
 }
 
-
 // INIT QUESTION
-
 if(isset($_GET['editQuestion'])) {
 	$objQuestion = Question::read ($_GET['editQuestion']);
 	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
@@ -66,7 +61,6 @@ if(is_object($objQuestion)) {
 	// form title
 	$form->addElement('header', '', $text.': '.$form_title_extra);
 
-
 	// question form elements
 	$objQuestion -> createForm ($form,array('Height'=>150));
 
@@ -100,14 +94,8 @@ if(is_object($objQuestion)) {
 	    	echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'"</script>';
 	    else
 	    	echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'"</script>';
-	} else {
-
-		/******************
-		 * FORM DISPLAY
-		 ******************/
+	} else {	 
 		echo '<h3>'.$questionName.'</h3>';
-
-
 		if(!empty($pictureName)){
 			echo '<img src="../document/download.php?doc_url=%2Fimages%2F'.$pictureName.'" border="0">';
 		}
@@ -118,4 +106,3 @@ if(is_object($objQuestion)) {
 		$form->display();
 	}
 }
-?>

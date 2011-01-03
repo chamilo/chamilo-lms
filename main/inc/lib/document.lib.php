@@ -1285,7 +1285,7 @@ class DocumentManager {
 	    	$base_work_dir=$sys_course_path.$course_dir;
 	    	$base_work_dir_test=$base_work_dir.'certificates';
 	    	$dir_name='/certificates';
-	    	$post_dir_name='certificates';
+	    	$post_dir_name=get_lang('CertificatesFiles');
 	    	$visibility_command='invisible';
 	    	if (!is_dir($base_work_dir_test)) {
 				$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$post_dir_name);

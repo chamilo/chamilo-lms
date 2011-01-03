@@ -32,7 +32,7 @@
 /*	INIT SECTION */
 
 // Language files that need to be included
-$language_file = array('document', 'slideshow', 'gradebook');
+$language_file = array('document', 'slideshow', 'gradebook', 'create_course');
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -823,6 +823,11 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
 		// Data for checkbox
 		if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
 			$row[] = $id['path'];
+		}
+		
+		// Hide HotPotatoes and css folders
+		if(basename($id['path'])=='HotPotatoes_files' || basename($id['path'])=='css'){			
+				break;
 		}
 
 		// Show the owner of the file only in groups

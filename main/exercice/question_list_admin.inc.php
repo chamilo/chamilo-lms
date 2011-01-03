@@ -1,12 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	Code library for HotPotatoes integration.
 *	@package chamilo.exercise
 * 	@author
 */
-
 
 /**
 *	QUESTION LIST ADMINISTRATION
@@ -15,7 +13,6 @@
 *	It is included from the script admin.php
 *
 *	@author Olivier Brouckaert
-*	@package chamilo.exercise
 */
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
@@ -121,28 +118,30 @@ if ($nbrQuestions) {
 	$i=1;
     
 	if (is_array($questionList)) {
-        echo '<div id="question_list">';		
-		foreach($questionList as $id) {			
+        
+        echo '<div id="question_list">';
+        		
+		foreach($questionList as $id) {
 			//To avoid warning messages
 			if (!is_numeric($id)) {
 				continue;
 			}	
 			$objQuestionTmp = Question :: read($id);
-            $question_class = get_class($objQuestionTmp);
+            $question_class = get_class($objQuestionTmp);            
             $label = $question_class->$explanationLangVar;  
+            
             
             $edit_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'"><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').'" /></a>';          
             // this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
             if ($show_quiz_edition) {
-                 $delete_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))).' \')) return false;"><img src="../img/delete.gif" border="0" alt="'.get_lang('Delete').'" /></a>';                 
+                 $delete_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))).' \')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';                 
             }            
             $actions =  Display::tag('div',$edit_link.$delete_link, array('style'=>'float:right'));
 
             echo '<div id="question_id_list_'.$id.'" >';                  
             $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved'));            
 		    echo Display::tag('h3','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().'</a>');            
-                echo '<div>';             
-                
+                echo '<div>';
                     echo '<p>';			  	
                         echo $actions;
                         echo get_lang($question_class.$label);

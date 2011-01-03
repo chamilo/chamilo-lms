@@ -59,8 +59,7 @@ if(!empty($_GET['type'])){
 	$type = intval($_GET['type']);
 }
 
-$session_id = intval($_GET['session_id']);
-
+$session_id      = intval($_GET['session_id']);
 $selected_course = intval($_GET['selected_course']);
 
 
@@ -96,16 +95,18 @@ if ($is_allowedToEdit) {
 		$old_question_obj = Question::read($old_question_id, $origin_course_id);
 		$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));     
         
-        //Duplicating question in the current course
+        //Duplicating the source question, in the current course
 		$new_id = $old_question_obj->duplicate($current_course);
 		
+        //Reading new question
 		$new_question_obj = Question::read($new_id);			
 		$new_question_obj->addToList($fromExercise);
         			
-        //Reading Answer obj from origin course 
+        //Reading Answers obj of the current course 
 		$new_answer_obj = new Answer($old_question_id, $origin_course_id);
 		$new_answer_obj->read();
-        //Duplicating the answers in this course
+        
+        //Duplicating the Answers in the current course
 		$new_answer_obj->duplicate($new_id, $current_course);		
 		
 		// destruction of the Question object
@@ -119,7 +120,7 @@ if ($is_allowedToEdit) {
 		// adds the question ID represented by $recup into the list of questions for the current exercise
 		//$objExercise->addToList($new_id);
 		api_session_register('objExercise');
-        exit;
+        
 		
 		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");
 		exit();	
@@ -241,7 +242,7 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     foreach ($course_list as $item) {
     	$course_select_list[$item['id']] = $item['title'];
     }    
-         
+    
     echo get_lang('Course').' : ';
     echo Display::select('selected_course', $course_select_list, $selected_course, array('onchange'=>'submit_form(this);'));    
     
@@ -259,7 +260,7 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION,        $db_name);
     $TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER,          $db_name);
     
-    $exercise_list         = get_all_exercises($course_info);
+    $exercise_list         = get_all_exercises($course_info, $session_id);
     
     echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
     
@@ -410,11 +411,15 @@ if ($exerciseId > 0) {
         $main_question_list = array();
         if (!empty($course_list))
         foreach ($course_list as $course_item) {        
-            if (!empty($selected_course) && $selected_course != '-1')
+            if (!empty($selected_course) && $selected_course != '-1') {
                 if ($selected_course != $course_item['id']) {                
                 	continue;
                 }
-            $exercise_list = get_all_exercises($course_item);
+            }
+            
+      
+            $exercise_list = get_all_exercises($course_item, $session_id);
+            //var_dump($exercise_list );
             
             if (!empty($exercise_list)) {        
                 foreach ($exercise_list as $exercise) {                    
@@ -422,21 +427,23 @@ if ($exerciseId > 0) {
                     $my_exercise->read($exercise['id']);
             
                     if (!empty($my_exercise)) {
-                        if (!empty($my_exercise->questionList))
-                        foreach ($my_exercise->questionList as $question) {
-                            
-                        	$question_obj = Question::read($question['id'], $course_item['id']);
-                            if ($exerciseLevel != '-1')
-                            if ($exerciseLevel != $question_obj->level) {
-                            	continue;
+                        if (!empty($my_exercise->questionList)) {                            
+                            foreach ($my_exercise->questionList as $question_id) {  
+                                                              
+                            	$question_obj = Question::read($question_id, $course_item['id']);
+                                if ($exerciseLevel != '-1')
+                                if ($exerciseLevel != $question_obj->level) {
+                                	continue;
+                                }
+                                
+                                if ($answerType != '-1')
+                                if ($answerType != $question_obj->type) {
+                                	continue;
+                                }                        
+                                $question_row       = array('id'=>$question_obj->id, 'question'=>$question_obj->question, 'type'=>$question_obj->type, 'level'=>$question_obj->level, 'exercise_id'=>$exercise['id']);
+                                                            
+                                $main_question_list[]    = $question_row;                        
                             }
-                            
-                            if ($answerType != '-1')
-                            if ($answerType != $question_obj->type) {
-                            	continue;
-                            }                        
-                            $question_row       = array('id'=>$question_obj->id, 'question'=>$question_obj->question, 'type'=>$question_obj->type, 'level'=>$question_obj->level, 'exercise_id'=>$exercise['id']);                            
-                            $main_question_list[]    = $question_row;                        
                         }
                     }                    
                 }

@@ -24,7 +24,6 @@ class Answer
 	public $hotspot_coordinates;
 	public $hotspot_type;
 	public $destination;
-
 	// these arrays are used to save temporarily new answers
 	// then they are moved into the arrays above or deleted in the event of cancellation
 	public $new_answer;
@@ -38,7 +37,7 @@ class Answer
 	public $nbrAnswers;
 	public $new_nbrAnswers;
 	public $new_destination; // id of the next question if feedback option is set to Directfeedback
-    public $course;
+    public $course; //Course information
 
 /**
 	 * constructor of the class
@@ -452,8 +451,7 @@ class Answer
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function save()
-	{
+	function save() {
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER, $this->course['db_name']);
 
 		$questionId=$this->questionId;
@@ -503,7 +501,8 @@ class Answer
 	 * Duplicates answers by copying them into another question
 	 *
 	 * @author Olivier Brouckaert
-	 * @param  int $newQuestionId - ID of the new question
+	 * @param  int question id
+     * @param  array course info (result of the function api_get_course_info() ) 
 	 */
 	function duplicate($newQuestionId, $course_info = null) {
         require_once api_get_path(LIBRARY_PATH).'document.lib.php';
@@ -516,20 +515,16 @@ class Answer
         
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER, $course_info['db_name']);
         
-        if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {
-                
-              var_dump($this->selectQuestionId(), $newQuestionId);
-              
-            //Selecting origin options 
-            
+        if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {                
+                           
+            //Selecting origin options
             $origin_options = Question::readQuestionOption($this->selectQuestionId(),$this->course['db_name']);
-            var_dump($origin_options);
+            //var_dump($origin_options);
             if (!empty($origin_options)) {
                 foreach($origin_options as $item) {
             	   $new_option_list[]=$item['id'];
                 }
-            }
-            
+            }            
             
             $destination_options = Question::readQuestionOption($newQuestionId,$course_info['db_name']);
             $i=0;
@@ -540,7 +535,7 @@ class Answer
                     $i++;
                 }
             }
-            var_dump($fixed_list);
+            //var_dump($fixed_list);
         }
 
 		// if at least one answer
@@ -556,8 +551,7 @@ class Answer
 				$answer					= Database::escape_string($this->answer[$i]);
 				$correct				= Database::escape_string($this->correct[$i]);
                 
-                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {
-                    var_dump($correct);
+                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {                    
                     $correct = $fixed_list[intval($correct)];
                 }
                 
@@ -576,6 +570,4 @@ class Answer
 		}
 	}
 }
-
 endif;
-?>

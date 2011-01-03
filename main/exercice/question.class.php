@@ -93,25 +93,26 @@ abstract class Question
 	 * @param - integer $id - question ID
 	 * @return - boolean - true if question exists, otherwise false
 	 */
-	static function read($id, $course_id = null) {		
+	static function read($id, $course_id = null) {
+        $id = intval($id);	
         
         if (!empty($course_id)) {            
             $course_info =  api_get_course_info_by_id($course_id);
         } else {
             global $course;
             $course_info = api_get_course_info();
-        }     
+        }
 
 		$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST,          $course_info['db_name']);
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION,      $course_info['db_name']);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION, $course_info['db_name']);
-        $id = intval($id);
+        
 		$sql="SELECT question,description,ponderation,position,type,picture,level,extra FROM $TBL_QUESTIONS WHERE id= $id ";
-
+        
 		$result=Database::query($sql);
 
 		// if the question has been found
-		if ($object=Database::fetch_object($result)) {
+		if ($object = Database::fetch_object($result)) {
 			$objQuestion 				= Question::getInstance($object->type);
 			$objQuestion->id			= $id;
 			$objQuestion->question		= $object->question;
@@ -133,7 +134,6 @@ abstract class Question
 			}
 			return $objQuestion;
 		}
-
 		// question not found
 		return false;
 	}
@@ -384,8 +384,7 @@ abstract class Question
 	 * @param - integer $Max - Maximum size
 	 * @return - boolean - true if success, false if failed
 	 */
-	function resizePicture($Dimension, $Max)
-	{
+	function resizePicture($Dimension, $Max) {
 		global $picturePath;
 
 		// if the question has an ID
@@ -492,28 +491,25 @@ abstract class Question
 	 * @param - integer $questionId - ID of the target question
 	 * @return - boolean - true if copied, otherwise false
 	 */
-	function exportPicture($questionId)
-	{
-		global $TBL_QUESTIONS, $picturePath;
+	function exportPicture($questionId, $course_info) {
+        $TBL_QUESTIONS  = Database::get_course_table(TABLE_QUIZ_QUESTION, $course_info['db_name']);
+        $destination_path    = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document/images';
+        $source_path         = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/document/images';        		
 
 		// if the question has got an ID and if the picture exists
-		if($this->id && !empty($this->picture))
-		{
+		if($this->id && !empty($this->picture)) {
 			$picture=explode('.',$this->picture);
 			$Extension=$picture[sizeof($picture)-1];
 			$picture='quiz-'.$questionId.'.'.$Extension;
-
-			$sql="UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string($picture)."' WHERE id='".Database::escape_string($questionId)."'";
-			Database::query($sql);
-
-			return @copy($picturePath.'/'.$this->picture,$picturePath.'/'.$picture)?true:false;
+			$sql="UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string($picture)."' WHERE id='".intval($questionId)."'";            
+			Database::query($sql);            
+			return @copy($source_path.'/'.$this->picture, $destination_path.'/'.$picture)?true:false;
 		}
-
 		return false;
 	}
 
 	/**
-	 * saves the picture coming from POST into a temporary file
+	 * Saves the picture coming from POST into a temporary file
 	 * Temporary pictures are used when we don't want to save a picture right after a form submission.
 	 * For example, if we first show a confirmation box.
 	 *
@@ -521,8 +517,7 @@ abstract class Question
 	 * @param - string $Picture - temporary path of the picture to move
 	 * @param - string $PictureName - Name of the picture
 	 */
-	function setTmpPicture($Picture,$PictureName)
-	{
+	function setTmpPicture($Picture,$PictureName) {
 		global $picturePath;
 
 		$PictureName=explode('.',$PictureName);
@@ -925,8 +920,9 @@ abstract class Question
 	/**
 	 * Duplicates the question
 	 *
-	 * @author - Olivier Brouckaert
-	 * @return - integer - ID of the new question
+	 * @author Olivier Brouckaert
+     * @param  array   Course info of the destination course
+	 * @return int     ID of the new question
     */
      
 	function duplicate($course_info = null) {        
@@ -935,7 +931,7 @@ abstract class Question
         } else {
         	$course_info = $course_info;
         }
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION, $course_info['db_name']);
+        $TBL_QUESTIONS        = Database::get_course_table(TABLE_QUIZ_QUESTION, $course_info['db_name']);
         $TBL_QUESTION_OPTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION, $course_info['db_name']);
 
 		$question     = $this->question;
@@ -946,19 +942,20 @@ abstract class Question
 		$level        = intval($this->level);
         $extra        = $this->extra;
         
+        //Using the same method used in the course copy to transform URLs
         require_once api_get_path(LIBRARY_PATH).'document.lib.php';
         if ($course_info['db_name'] != $this->course['db_name']) {
             $description  = DocumentManager::replace_urls_inside_content_html_from_copy_course($description, $this->course['id'], $course_info['id']);
             $question     = DocumentManager::replace_urls_inside_content_html_from_copy_course($question, $this->course['id'], $course_info['id']);
         }
-        
-        $options = self::readQuestionOption($this->id);
                 
+        $options = self::readQuestionOption($this->id);  
+        //Inserting in the new course db / or the same course db
 		$sql="INSERT INTO $TBL_QUESTIONS(question, description, ponderation, position, type, level, extra ) VALUES('".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."' ,'".Database::escape_string($level)."' ,'".Database::escape_string($extra)."'  )";
 		Database::query($sql);    
             
-		$new_question_id =Database::insert_id();
-          
+		$new_question_id =Database::insert_id();        
+        
         if (!empty($options)) {
             //Saving the quiz_options      
             foreach ($options as $item) {
@@ -968,8 +965,8 @@ abstract class Question
             }
         }
         
-		// duplicates the picture
-		$this->exportPicture($new_question_id);
+		// Duplicates the picture 
+		$this->exportPicture($new_question_id, $course_info);
 		return $new_question_id;
 	}
 

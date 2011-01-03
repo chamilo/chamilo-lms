@@ -31,20 +31,22 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 
 	// Reads question informations.
 	if (!$objQuestionTmp = Question::read($questionId)) {
-		// question not found
+		// question not found        
 		return false;
 	}
+    
     
 	$answerType    = $objQuestionTmp->selectType();
 	$pictureName   = $objQuestionTmp->selectPicture();
 
 	if ($answerType != HOT_SPOT) {
 		// Question is not of type hotspot
+        
 		if (!$onlyAnswers) {
-			$questionName=$objQuestionTmp->selectTitle();
-			$questionDescription=$objQuestionTmp->selectDescription();
-
-			$questionName=text_filter($questionName);
+            
+			$questionName        = $objQuestionTmp->selectTitle();
+			$questionDescription = $objQuestionTmp->selectDescription();
+			$questionName        = text_filter($questionName);
             
             if ($show_title) {
     			$s='<div id="question_title" class="sectiontitle">'.get_lang('Question').' ';
@@ -69,8 +71,9 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				        <td align='center' colspan='2'><img src='../document/download.php?doc_url=%2Fimages%2F'".$pictureName."' border='0'></td>
 				    </tr>";
 			}
+            $s.= '</table>';
 		}
-		$s.= '</table>';
+		
         
         $s .= '<div class="rounded exercise_questions" style="width: 720px; padding: 3px;">';
         $option_ie = '';
@@ -87,13 +90,12 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
         
 		$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;">';
 		// construction of the Answer object (also gets all answers details)
-		$objAnswerTmp=new Answer($questionId);
+		$objAnswerTmp = new Answer($questionId);
         
-		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
+		$nbrAnswers   = $objAnswerTmp->selectNbrAnswers();
         
         $quiz_question_options = Question::readQuestionOption($questionId);
         
-
 		// For "matching" type here, we need something a little bit special
 		// because the match between the suggestions and the answers cannot be
 		// done easily (suggestions and answers are in the same table), so we
@@ -218,9 +220,9 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
         });
 
     });
-    </script>
-    
+    </script>    
     <?php
+    
 		// Now navigate through the possible answers, using the max number of
 		// answers for the question as a limiter
 		$lines_count=1; // a counter for matching-type answers
@@ -253,6 +255,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 			if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
 				// set $debug_mark_answer to true at function start to
 				// show the correct answer with a suffix '-x'
+                
 				$help = $selected = '';
 				if ($debug_mark_answer) {
 					if ($answerCorrect) {
@@ -477,7 +480,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
         
         if ($freeze) {
             echo Display::img($objQuestionTmp->selectPicturePath());
-            exit;
+            return;
         }        
 
 		// Get the answers, make a list
@@ -1108,21 +1111,24 @@ function show_score($score, $weight, $show_porcentage = true) {
     return $html;	
 }
 
-
+/**
+ * Converts a score to the platform scale 
+ * @param   float   score
+ * @param   float   weight
+ * @return  float   the score rounded converted to the new range
+ */
 function convert_score($score, $weight) {
     $html  = '';
-    $score_rounded = $score;   
-     
+    $score_rounded = $score;     
     if ($score != '' && $weight != '') {
         $max_note =  api_get_setting('exercise_max_score');
         $min_note =  api_get_setting('exercise_min_score');  
         if ($max_note != '' && $min_note != '') {
            
-           if (!empty($weight)) {
-          
-               $score        = $min_note + ($max_note - $min_note) * $score /$weight;
+           if (!empty($weight)) {          
+               $score   = $min_note + ($max_note - $min_note) * $score /$weight;
            } else {
-               $score          = $min_note;
+               $score   = $min_note;
            }
            $score_rounded  = round($score, 2);          
         }           
@@ -1131,13 +1137,23 @@ function convert_score($score, $weight) {
 }
 
 
-function get_all_exercises($course_info = null) {
+function get_all_exercises($course_info = null, $session_id = 0) {
     if(!empty($course_info)) {
         $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST,$course_info['db_name']);	
     } else {
     	$TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);
     }    
-    return Database::select('*',$TBL_EXERCICES, array('where'=>array('active <> ?'=>'-1'), 'order'=>'title'));
+    if ($session_id == -1) {
+    	$session_id  = 0;
+    }
+    //var_dump($session_id);
+    if ($session_id == 0) {
+    	$conditions = array('where'=>array('active <> ? AND session_id = ? '=>array('-1',$session_id)), 'order'=>'title');
+    } else {
+    	$conditions = array('where'=>array('active <> ?'=>'-1'), 'order'=>'title');
+    }
+    //var_dump($conditions);
+    return Database::select('*',$TBL_EXERCICES, $conditions);
 }
 
 

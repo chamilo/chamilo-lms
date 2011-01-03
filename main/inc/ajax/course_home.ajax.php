@@ -8,21 +8,21 @@ $action = $_GET['a'];
 switch ($action) {
 	case 'set_visibility':
 		require_once '../global.inc.php';
-		if(api_is_allowed_to_edit(null,true)) {
-				$tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-				$tool_id = Security::remove_XSS($_GET["id"]);
-				$tool_info = api_get_tool_information($tool_id);
-				$tool_visibility   = $tool_info['visibility'];
-				$tool_image        = $tool_info['image'];
-				$new_image         = str_replace('.gif','_na.gif',$tool_image);
-				$requested_image   = ($tool_visibility == 0 ) ? $tool_image : $new_image;
-				$requested_clase   = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
-				$requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
-			    $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
-			    $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
+		if (api_is_allowed_to_edit(null,true)) {
+			$tool_table = Database::get_course_table(TABLE_TOOL_LIST);
+			$tool_id = Security::remove_XSS($_GET["id"]);
+			$tool_info = api_get_tool_information($tool_id);
+			$tool_visibility   = $tool_info['visibility'];
+			$tool_image        = $tool_info['image'];
+			$new_image         = str_replace('.gif','_na.gif',$tool_image);
+			$requested_image   = ($tool_visibility == 0 ) ? $tool_image : $new_image;
+			$requested_clase   = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
+			$requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
+		    $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
+		    $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
 
-		    	$requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
-		    	$requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
+	    	$requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
+	    	$requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
 			//HIDE AND REACTIVATE TOOL
 			if ($_GET["id"]==strval(intval($_GET["id"]))) {
 
@@ -44,41 +44,15 @@ switch ($action) {
 
 				$sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".intval($_GET['id'])."'";
 				Database::query($sql);
-			}
-				/*
-				-----------------------------------------------------------
-					HIDE
-				-----------------------------------------------------------
-				*/
-		/*		if(isset($_GET['visibility']) && $_GET['visibility']==0) // visibility 1 -> 0
-				{
-					if ($_GET["id"]==strval(intval($_GET["id"]))) {
-						$sql="UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."'";
-						Database::query($sql);
-					}
-				}
-
-			  /*
-				-----------------------------------------------------------
-					REACTIVATE
-				-----------------------------------------------------------
-				*/
-		/*		elseif(isset($_GET['visibility'])&& $_GET['visibility']==1) // visibility 0,2 -> 1
-				{
-					if ($_GET["id"]==strval(intval($_GET["id"]))) {
-						Database::query("UPDATE $tool_table SET visibility=1 WHERE id='".intval($_GET["id"])."'");
-					}
-				}
-
-		*/
-				$response_data = array(
-					'image'   => $requested_image,
-					'tclass'  => $requested_clase,
-					'message' => $requested_message,
-		      		'view'    => $requested_view
-				);
-				print(json_encode($response_data));
-			}
+			}	
+			$response_data = array(
+				'image'   => $requested_image,
+				'tclass'  => $requested_clase,
+				'message' => $requested_message,
+	      		'view'    => $requested_view
+			);
+			print(json_encode($response_data));
+    }
 	break;
 	
 	case 'show_course_information' :
@@ -99,6 +73,192 @@ switch ($action) {
 		// Function that displays the details of the course description in html.
 		echo  CourseManager::get_details_course_description_html($descriptions, api_get_system_encoding(), false);
 	break;
+    case 'session_courses_lp_default':        
+        
+        require_once '../global.inc.php';
+        
+        $libpath = api_get_path(LIBRARY_PATH);
+        require_once $libpath.'course.lib.php';
+        //require_once $libpath.'usermanager.lib.php';
+        require_once $libpath.'sessionmanager.lib.php';        
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+        
+        
+        $page  = $_REQUEST['page'];     //page
+        $limit = $_REQUEST['rows'];     // quantity of rows
+        $sidx  = $_REQUEST['sidx'];    //index to filter    
+        $sord  = $_REQUEST['sord'];    //asc or desc        
+        $session_id  = $_REQUEST['session_id'];
+                
+        if(!$sidx) $sidx =1;
+        
+        $start = $limit*$page - $limit; 
+        
+        $course_list    = SessionManager::get_course_list_by_session_id($session_id);
+                        
+        $count = 0;
+        
+        foreach ($course_list as $item) {    
+            $list               = new LearnpathList(api_get_user_id(),$item['code']);
+            $flat_list          = $list->get_flat_list();    
+            $lps[$item['code']] = $flat_list;
+            
+            foreach($flat_list as $lp_id => $lp_item) {                                                    
+                $temp[$count]['id']= $lp_id;
+                $temp[$count]['cell']=array($lp_item['publicated_on'], $item['code'], $lp_item['lp_name']);
+                $count++;     
+            }              
+        } 
+        
+        $i =0;
+        foreach($temp as $key=>$row) {   
+            $row = $row['cell'];            
+            if ($key >= $start  && $key < ($start + $limit)) {                 
+                $responce->rows[$i]['id']= $key;
+                $responce->rows[$i]['cell']=array($row[0], $row[1], $row[2]);
+                $i++;                
+            }
+        }
+        
+        if($count > 0 && $limit > 0) { 
+            $total_pages = ceil($count/$limit); 
+        } else { 
+            $total_pages = 0; 
+        }         
+        $responce->total    = $total_pages;         
+        if ($page > $total_pages) { 
+            $responce->page= $total_pages;
+        } else {
+            $responce->page     = $page;	
+        }        
+        $responce->records = $count;    
+        echo json_encode($responce);        
+        break;
+        
+        case 'session_courses_lp_by_week':
+        
+            require_once '../global.inc.php';
+        
+            $libpath = api_get_path(LIBRARY_PATH);
+            require_once $libpath.'course.lib.php';
+            //require_once $libpath.'usermanager.lib.php';
+            require_once $libpath.'sessionmanager.lib.php';        
+            require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+            
+            
+            $page  = $_REQUEST['page'];     //page
+            $limit = $_REQUEST['rows'];     // quantity of rows
+            $sidx  = $_REQUEST['sidx'];    //index to filter    
+            $sord  = $_REQUEST['sord'];    //asc or desc        
+            $session_id  = $_REQUEST['session_id'];
+                    
+            if(!$sidx) $sidx =1;
+            
+            $start = $limit*$page - $limit; 
+            
+            $course_list    = SessionManager::get_course_list_by_session_id($session_id);
+                            
+            $count = 0;
+            
+            foreach ($course_list as $item) {    
+                $list               = new LearnpathList(api_get_user_id(),$item['code']);
+                $flat_list          = $list->get_flat_list();    
+                $lps[$item['code']] = $flat_list;
+                
+                foreach($flat_list as $lp_id => $lp_item) {                                                    
+                    $temp[$count]['id']= $lp_id;
+                    $temp[$count]['cell']=array(get_week_from_day($lp_item['publicated_on']), $lp_item['publicated_on'], $item['code'], $lp_item['lp_name']);
+                    $count++;     
+                }              
+            } 
+            
+            $i =0;
+            foreach($temp as $key=>$row) {   
+                $row = $row['cell'];            
+                if ($key >= $start  && $key < ($start + $limit)) {                 
+                    $responce->rows[$i]['id']= $key;
+                    $responce->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
+                    $i++;                
+                }
+            }
+            
+            if($count > 0 && $limit > 0) { 
+                $total_pages = ceil($count/$limit); 
+            } else { 
+                $total_pages = 0; 
+            }         
+            $responce->total    = $total_pages;         
+            if ($page > $total_pages) { 
+                $responce->page= $total_pages;
+            } else {
+                $responce->page     = $page;    
+            }        
+            $responce->records = $count;    
+            echo json_encode($responce); 
+            break;
+        
+          case 'session_courses_lp_by_course':
+        
+            require_once '../global.inc.php';
+        
+            $libpath = api_get_path(LIBRARY_PATH);
+            require_once $libpath.'course.lib.php';
+            //require_once $libpath.'usermanager.lib.php';
+            require_once $libpath.'sessionmanager.lib.php';        
+            require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+            
+            
+            $page  = $_REQUEST['page'];     //page
+            $limit = $_REQUEST['rows'];     // quantity of rows
+            $sidx  = $_REQUEST['sidx'];    //index to filter    
+            $sord  = $_REQUEST['sord'];    //asc or desc        
+            $session_id  = $_REQUEST['session_id'];
+                    
+            if(!$sidx) $sidx =1;
+            
+            $start = $limit*$page - $limit; 
+            
+            $course_list    = SessionManager::get_course_list_by_session_id($session_id);
+                            
+            $count = 0;
+            
+            foreach ($course_list as $item) {    
+                $list               = new LearnpathList(api_get_user_id(),$item['code']);
+                $flat_list          = $list->get_flat_list();    
+                $lps[$item['code']] = $flat_list;
+                
+                foreach($flat_list as $lp_id => $lp_item) {                                                    
+                    $temp[$count]['id']= $lp_id;
+                    $temp[$count]['cell']=array($lp_item['publicated_on'], $item['code'], $lp_item['lp_name']);
+                    $count++;     
+                }              
+            } 
+            
+            $i =0;
+            foreach($temp as $key=>$row) {   
+                $row = $row['cell'];            
+                if ($key >= $start  && $key < ($start + $limit)) {                 
+                    $responce->rows[$i]['id']= $key;
+                    $responce->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
+                    $i++;                
+                }
+            }
+            
+            if($count > 0 && $limit > 0) { 
+                $total_pages = ceil($count/$limit); 
+            } else { 
+                $total_pages = 0; 
+            }         
+            $responce->total    = $total_pages;         
+            if ($page > $total_pages) { 
+                $responce->page= $total_pages;
+            } else {
+                $responce->page     = $page;    
+            }        
+            $responce->records = $count; 
+            
+            echo json_encode($responce); 
+            break;
 	default:
 		echo '';
 }

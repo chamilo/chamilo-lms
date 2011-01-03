@@ -240,5 +240,12 @@ Si se hace visible la carpeta de los usuarios y la carpeta de uno o más alumnos
 
 Por otra parte, la herramienta documentos se sincroniza con el gestor de archivos del editor web, así que los cambios en la gestión de los documentos realizados en una u otra afectarán a ambas. 
 
-Así pues, la carpeta de usuario no sólo es un lugar para depositar los archivos, sino que se convierte en un completo gestor de los documentos que los estudiantes utilizan durante el curso. Además, recuerde que cualquier usuario podrá copiar un archivo, que sea visible, de cualquier carpeta de la herramienta documentos (sea o no la suya) a su portafolios o área personal de documentos de la red social, donde estará disponible para que la pueda usar en otros cursos.";
+Así pues, la carpeta de usuario no sólo es un lugar para depositar los archivos, sino que se convierte en un completo gestor de los documentos que los estudiantes utilizan durante el curso. Además, recuerde que cualquier usuario podrá copiar un archivo, que sea visible, de cualquier carpeta de la herramienta documentos (sea o no la suya) a su portafolios o área personal de documentos de la red social, donde estará disponible para que lo pueda usar en otros cursos.";
+$HelpFolderChat = "INFORMACIÓN VISIBLE SÓLO POR EL PROFESORADO:
+ 
+Esta carpeta contiene todas las sesiones que se han realizado en el chat. Aunque muchas veces las sesiones en el chat pueden ser triviales, en otras pueden ser realmente interesantes y dignas de ser incorporadas como un documento más de trabajo. Para ello, sin cambiar la visibilidad de esta carpeta, haga visible el archivo y enlácelo donde considere oportuno. No se recomienda hacer visible esta carpeta.";
+$HelpFolderCertificates = "INFORMACIÓN VISIBLE SÓLO POR EL PROFESORADO: 
+
+Esta carpeta contiene los distintos modelos de certificados que se han creado para la herramienta Evaluaciones. No se recomienda hacer visible esta carpeta.";
+$DestinationDirectory = "Carpeta de destino";
 ?>

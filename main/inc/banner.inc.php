@@ -426,7 +426,18 @@ if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
 			$userinfo = Database::get_user_info_from_id(substr($breadcrumb_step['name'], 8));
 			$navigation_item['title'] = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);	
 		}
+		elseif($breadcrumb_step['name'] == 'chat_files') {
 		
+			$navigation_item['title'] = get_lang('ChatFiles');
+		}
+		elseif($breadcrumb_step['name'] == 'certificates') {
+		
+			$navigation_item['title'] = get_lang('CertificatesFiles');
+		}
+		elseif($breadcrumb_step['name'] == 'HotPotatoes_files') {
+		
+			$navigation_item['title'] = get_lang('HotPotatoesFiles');
+		}
 		$navigation[] = $navigation_item;
 	}
 }

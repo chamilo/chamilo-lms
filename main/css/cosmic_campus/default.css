@@ -3316,7 +3316,9 @@ span.form_required  {
 	height:40px;	
 	margin:5px;
 }
-
+.userportal-course-item-title {
+	font-size:135%;
+}
 .courseadminview-activity-3col, .platformadminview-activity-3col {
 	-moz-border-radius:5px 5px 5px 5px;
 	border:1px solid #E1E1E0;

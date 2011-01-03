@@ -262,31 +262,68 @@ function build_document_icon_tag($type, $path) {
 
 		} else {
 			$icon = 'folder_document.gif';
-			if (($basename =='audio' || $basename =='flash' || $basename =='images' || $basename =='video' || $basename =='gallery') && api_is_allowed_to_edit()) {
-				if($basename=='audio'){
-					$icon = 'folder_audio.gif';
+			if($basename=='audio'){
+				$icon = 'folder_audio.gif';
+				if(api_is_allowed_to_edit()){
+					$basename=get_lang('HelpDefaultDirDocuments');
 				}
-				elseif($basename =='flash'){
-					$icon = 'folder_flash.gif';
-				}
-				elseif($basename =='images'){
-					$icon = 'folder_images.gif';
-				}
-				elseif($basename =='video'){
-					$icon = 'folder_video.gif';
-				}
-				elseif($basename =='gallery'){
-					$icon = 'folder_gallery.gif';
-				}	
-				$basename = get_lang('HelpDefaultDirDocuments');
+				else{
+					$basename=get_lang('Audio');
+				}				
 			}
-			elseif($basename =='chat_files' && api_is_allowed_to_edit()){
+			elseif($basename =='flash'){
+				$icon = 'folder_flash.gif';
+				if(api_is_allowed_to_edit()){
+					$basename=get_lang('HelpDefaultDirDocuments');
+				}
+				else{
+					$basename=get_lang('Flash');
+				}
+			}
+			elseif($basename =='images'){
+				$icon = 'folder_images.gif';
+				if(api_is_allowed_to_edit()){
+					$basename=get_lang('HelpDefaultDirDocuments');
+				}
+				else{
+					$basename=get_lang('Images');
+				}
+			}
+			elseif($basename =='video'){
+				$icon = 'folder_video.gif';
+				if(api_is_allowed_to_edit()){
+					$basename=get_lang('HelpDefaultDirDocuments');
+				}
+				else{
+					$basename=get_lang('Video');
+				}
+			}
+			elseif($basename =='gallery'){
+				$icon = 'folder_gallery.gif';
+				if(api_is_allowed_to_edit()){
+					$basename=get_lang('HelpDefaultDirDocuments');
+				}
+				else{
+					$basename=get_lang('Gallery');
+				}
+			}
+			elseif($basename =='chat_files'){
 				$icon = 'folder_chat.gif';
-				$basename = get_lang('HelpFolderChat');
+				if(api_is_allowed_to_edit()){
+					$basename=get_lang('HelpFolderChat');
+				}
+				else{
+					$basename=get_lang('ChatFiles');
+				}
 			}
-			elseif($basename =='certificates' && api_is_allowed_to_edit()){
+			elseif($basename =='certificates'){
 				$icon = 'folder_certificates.gif';
-				$basename = get_lang('HelpFolderCertificates');
+				if(api_is_allowed_to_edit()){
+					$basename = get_lang('HelpFolderCertificates');
+				}
+				else{
+					$basename = get_lang('Certificates');
+				}
 			}
 		}
 	}

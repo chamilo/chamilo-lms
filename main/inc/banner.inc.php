@@ -434,7 +434,7 @@ if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
 		
 			$navigation_item['title'] = get_lang('CertificatesFiles');
 		}
-		elseif($breadcrumb_step['name'] == 'image') {
+		elseif($breadcrumb_step['name'] == 'images') {
 		
 			$navigation_item['title'] = get_lang('Images');
 		}
@@ -450,7 +450,10 @@ if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
 		
 			$navigation_item['title'] = get_lang('Flash');
 		}
+		elseif($breadcrumb_step['name'] == 'gallery') {
 		
+			$navigation_item['title'] = get_lang('Gallery');
+		}
 		$navigation[] = $navigation_item;
 	}
 }

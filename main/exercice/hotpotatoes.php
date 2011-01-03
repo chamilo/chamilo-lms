@@ -63,7 +63,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 	if (hotpotatoes_init($document_sys_path.$uploadPath)) {
 		// If the directory doesn't exist, create the "HotPotatoes" directory.
-		$doc_id = add_document($_course, '/HotPotatoes_files', 'folder', 0, 'HotPotatoes Files');
+		$doc_id = add_document($_course, '/HotPotatoes_files', 'folder', 0, get_lang('HotPotatoesFiles'));
 		// Update properties in dbase (in any case).
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
 		// Make invisible (in any case) - why?

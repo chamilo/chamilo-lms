@@ -19,39 +19,22 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
-/*
-	Answer types
-*/
-define('UNIQUE_ANSWER',	1);
-define('MULTIPLE_ANSWER',	2);
-define('FILL_IN_BLANKS',	3);
-define('MATCHING',		4);
-define('FREE_ANSWER', 5);
-define('MULTIPLE_ANSWER_COMBINATION', 9);
-
-/*
-	Language
-*/
 // name of the language file that needs to be included
 $language_file='exercice';
 
-/*
-	section (for the tabs)
-*/
+/*	section (for the tabs) */
 $this_section=SECTION_COURSES;
 
 api_protect_course_script();
 
-/*
-	Table definitions
-	@todo: use the Database :: get_course_table functions
-*/
+//Table definitions
+
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES        	= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES          	= Database::get_course_table('quiz_answer');
-$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
-$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$TBL_REPONSES          	= Database::get_course_table(TABLE_QUIZ_ANSWER);
+$main_user_table 		= Database::get_main_table(TABLE_MAIN_USER);
+$main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -213,7 +196,7 @@ if (isset($_POST['ok'])) {
 		Database::query($query);
 	} else {
 		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = 0 WHERE id= $exercise_id";
-		Database::query($query);
+		Database::query($query); 
 	}
 }
 ?>

@@ -434,10 +434,23 @@ if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
 		
 			$navigation_item['title'] = get_lang('CertificatesFiles');
 		}
-		elseif($breadcrumb_step['name'] == 'HotPotatoes_files') {
+		elseif($breadcrumb_step['name'] == 'image') {
 		
-			$navigation_item['title'] = get_lang('HotPotatoesFiles');
+			$navigation_item['title'] = get_lang('Images');
 		}
+		elseif($breadcrumb_step['name'] == 'video') {
+		
+			$navigation_item['title'] = get_lang('Video');
+		}
+		elseif($breadcrumb_step['name'] == 'audio') {
+		
+			$navigation_item['title'] = get_lang('Audio');
+		}
+		elseif($breadcrumb_step['name'] == 'flash') {
+		
+			$navigation_item['title'] = get_lang('Flash');
+		}
+		
 		$navigation[] = $navigation_item;
 	}
 }

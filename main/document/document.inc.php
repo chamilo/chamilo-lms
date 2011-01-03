@@ -152,7 +152,28 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		$tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
 	}elseif(strstr($tooltip_title, 'sf_user_')) {
 		$userinfo = Database::get_user_info_from_id(substr($tooltip_title, 8));
-		$tooltip_title_alt = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+		$tooltip_title_alt = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);		
+	}
+	elseif($tooltip_title == 'chat_files') {
+		$tooltip_title_alt = get_lang('ChatFiles');		
+	}
+	elseif($tooltip_title == 'certificates') {
+		$tooltip_title_alt = get_lang('CertificatesFiles');
+	}
+	elseif($tooltip_title == 'video') {
+		$tooltip_title_alt = get_lang('Video');
+	}
+	elseif($tooltip_title == 'audio') {
+		$tooltip_title_alt = get_lang('Audio');
+	}
+	elseif($tooltip_title == 'flash') {
+		$tooltip_title_alt = get_lang('Flash');
+	}
+	elseif($tooltip_title == 'images') {
+		$tooltip_title_alt = get_lang('Images');
+	}
+	elseif($tooltip_title == 'gallery') {
+		$tooltip_title_alt = get_lang('DefaultCourseImages');
 	}
 
 	$current_session_id=api_get_session_id();
@@ -187,13 +208,13 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		}
 		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles;
 		//end copy files to users myfiles
-	} else {
+	}
+	else{
 		if(preg_match('/shared_folder/', urldecode($url)) && preg_match('/shared_folder$/', urldecode($url))==false && preg_match('/shared_folder_session_'.$current_session_id.'$/', urldecode($url))==false){
 			return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $tooltip_title).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
 		}
-		else
-		{
-		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $tooltip_title).'</a>';
+		else{
+			return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $tooltip_title).'</a>';
 		}
 	}
 }

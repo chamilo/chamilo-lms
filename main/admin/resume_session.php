@@ -273,22 +273,24 @@ if($session['nbr_users']==0){
 		</tr>';
 }
 else {
-
-	// classe development, obsolete for the moment
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-	$sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username
-			FROM '.$tbl_user.'
-			INNER JOIN '.$tbl_session_rel_user.'
-				ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user AND '.$tbl_session_rel_user.'.relation_type<>'.SESSION_RELATION_TYPE_RRHH.'
-				AND '.$tbl_session_rel_user.'.id_session = '.$id_session.$order_clause;
+	$sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username '.
+			' FROM '.$tbl_user.
+			' INNER JOIN '.$tbl_session_rel_user.
+			' ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user AND '.$tbl_session_rel_user.'.relation_type<>'.SESSION_RELATION_TYPE_RRHH.
+			' AND '.$tbl_session_rel_user.'.id_session = '.$id_session.$order_clause;
 
 	$result=Database::query($sql);
 	$users=Database::store_result($result);
 	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
 	foreach($users as $user){
+        $user_link = '';
+        if (!empty($user['user_id'])) {
+            $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']),ENT_QUOTES,$charset).' ('.$user['username'].')</a>';
+        }
 		echo '<tr>
 					<td width="90%">
-						<b>'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</b>
+						<b>'.$user_link.'</b>
 					</td>
 					<td>
 						<a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;

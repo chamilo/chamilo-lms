@@ -1,7 +1,7 @@
 /*
  *	Chamilo LMS
  *
- *	Copyright (c) 2010 Ivan Tcholakov <ivantcholakov@gmail.com>
+ *	Copyright (c) 2011 Ivan Tcholakov <ivantcholakov@gmail.com>
  *
  *	License:
  *	GNU Lesser General Public License, Version 3, 29 June 2007
@@ -31,7 +31,8 @@ var notifyIfNoMathML = false ;
 var alertIfNoMathML = false ;
 var notifyIfNoSVG = false ;
 var alertIfNoSVG = false ;
-var translateOnLoad = true ;
+var translateOnLoad = false ;
+var translateASCIIsvg = false ;
 // Formula tooltips are hard-coded in this dialog, there is no need they to be generated.
 var showasciiformulaonhover = false ;
 // Font size of the formulas in this dialog.
@@ -60,18 +61,61 @@ if ( oFakeImage )
         oFakeImage = null ;
 }
 
+window.onload = function()
+{
+    // Translate the dialog box texts.
+    oEditor.FCKLanguageManager.TranslatePage( document ) ;
+
+    if ( typeof ASpreprocess != 'undefined' ) // Dealing with version difference.
+    {
+        ASpreprocess() ;
+    }
+
+    if ( !noSVG )
+    {
+        drawPictures() ;
+    }
+
+    // Load the selected element information (if any).
+    LoadSelection() ;
+
+    dialog.SetAutoSize( true ) ;
+
+    // Activate the "OK" button.
+    dialog.SetOkButton( true ) ;
+}
+
 function LoadSelection()
 {
     if ( oEmbed ) {
         // An existing graph has been selected, reading its data.
         sscr = GetAttribute( oEmbed, 'sscr', '' ).toString() ;
-        // TODO: Check and finish here.
-        width = parseInt( oEmbed.style.width ) ;
-        height = parseInt( oEmbed.style.height ) ;
-        alignm = oEmbed.style.float ;
-        //if ( alignm == 'none' ) {
-        //    alignm = ed.dom.getStyle( el, 'vertical-align' ) ;
-        //}
+        var w = oEmbed.width ;
+        var h = oEmbed.height ;
+        if ( w )
+        {
+            width = parseInt( w );
+        }
+        if ( h )
+        {
+            height = parseInt( h ) ;
+        }
+        if ( oEmbed.style.width ) {
+            width = parseInt( oEmbed.style.width );
+        }
+        if ( oEmbed.style.height ) {
+            height = parseInt( oEmbed.style.height );
+        }
+        if ( oEmbed.style.float )
+        {
+            alignm = oEmbed.style.float ;
+        }
+        if ( alignm == 'none' ) {
+            if ( oEmbed.style.verticalAlign )
+            {
+                alignm = oEmbed.style.verticalAlign ;
+            }
+        }
     }
 
     var alignment = 'middle' ;
@@ -151,23 +195,49 @@ function LoadSelection()
 
 function Ok()
 {
-    // ...
+    FCKUndo.SaveUndoStep() ;
+
+    if ( !oEmbed )
+    {
+        oEmbed = FCK.EditorDocument.createElement( 'EMBED' ) ;
+    }
+    UpdateEmbed( oEmbed );
+
+    if ( !oFakeImage )
+    {
+        oFakeImage	= oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__AsciiSvg', oEmbed ) ;
+        oFakeImage.setAttribute( '_fckasciisvg', 'true', 0 ) ;
+        oFakeImage	= FCK.InsertElement( oFakeImage ) ;
+    }
+    else
+    {
+        oFakeImage.width = oEmbed.width ;
+        oFakeImage.height = oEmbed.height ;
+    }
+
+    oEditor.FCKEmbedAndObjectProcessor.RefreshView( oFakeImage, oEmbed ) ;
 
     return true ;
 }
 
-window.onload = function()
+function UpdateEmbed( e )
 {
-    // Translate the dialog box texts.
-    oEditor.FCKLanguageManager.TranslatePage( document ) ;
-
-    // Load the selected element information (if any).
-    LoadSelection() ;
-
-    dialog.SetAutoSize( true ) ;
-
-    // Activate the "OK" button.
-    dialog.SetOkButton( true ) ;
+    SetAttribute( e, 'type', 'image/svg+xml' ) ;
+    SetAttribute( e, 'src', FCKConfig.DrawingASCIISVG ) ;
+    SetAttribute( e, 'sscr', sscr ) ;
+    SetAttribute( e, 'width', width ) ;
+    SetAttribute( e, 'height', height ) ;
+    var style = 'width: ' + FCKTools.ConvertHtmlSizeToStyle( width.toString() ) + '; '
+        'height: ' + FCKTools.ConvertHtmlSizeToStyle( height.toString() ) + '; ' ;
+    if ( alignm == 'left' || alignm == 'right' )
+    {
+        style += 'float: ' + alignm + '; vertical-align: middle;' ;
+    }
+    else
+    {
+        style += 'float: none; vertical-align: ' + alignm + ';' ;
+    }
+    SetAttribute( e, 'style' , style ) ;
 }
 
 function UpdatePreview()
@@ -221,18 +291,22 @@ function UpdatePreview()
     sscr = commands ;
     alignm = GetE( 'alignment' ).value ;
 
-    if ( noSVG )
-    {
-        var pvimg = GetE( 'previewimg' ) ;
-        pvimg.src = AScgiloc + '?sscr=' + encodeURIComponent(commands) ;
-        pvimg.style.width = width + 'px' ;
-        pvimg.style.height = height + 'px' ;
-    }
-    else
-    {
+    var preview = FCK.ResizeToFit( width, height, 420, 280 )
+    var widthPreview = preview[ 0 ] ;
+    var heightPreview = preview[ 1 ] ;
+
+    //if ( noSVG )
+    //{
+    //    var pvimg = GetE( 'previewimg' ) ;
+    //    pvimg.src = AScgiloc + '?sscr=' + encodeURIComponent(commands) ;
+    //    pvimg.style.width = width + 'px' ;
+    //    pvimg.style.height = height + 'px' ;
+    //}
+    //else
+    //{
         var pvsvg = GetE( 'previewsvg' ) ;
-        parseShortScript( commands , width , height ) ;
-    }
+        parseShortScript( commands , widthPreview , heightPreview ) ;
+    //}
 }
 
 function UpdateText( id , text )
@@ -404,7 +478,7 @@ function ReplaceGraph()
     var graphs = GetE( 'graphs' ) ;
     if ( graphs.selectedIndex >= 0 )
     {
-        graphs.options[ graphs.selectedIndex ] = null ;  // Standards compliant.
+        graphs.options[ graphs.selectedIndex ] = null ;
     }
     AddGraph() ;
 }
@@ -420,47 +494,3 @@ function RemoveGraph()
     UpdatePreview() ;
     GetE( 'equation' ).focus() ;
 }
-
-// TODO: To be removed ...
-var AsciisvgDialog =
-{
-    insert : function()
-    {
-        var ed = tinyMCEPopup.editor ;
-        // Insert the contents from the input into the document.
-        if ( isnew ) // This variable has been eliminated.
-        {
-            if ( alignm == 'left' || alignm == 'right' )
-            {
-                aligntxt = 'vertical-align: middle; float: ' + alignm + ';' ;
-            }
-            else
-            {
-                aligntxt = 'vertical-align: ' + alignm + '; float: none;' ;
-            }
-            tinyMCEPopup.editor.execCommand( 'mceInsertContent', false, '<img style="width: 300px; height: 200px; ' + aligntxt + '" src="' + AScgiloc + '?sscr=' + encodeURIComponent( sscr ) + '" sscr="' + sscr + '" script=" " />') ;
-        }
-        else
-        {
-            el = tinyMCEPopup.editor.selection.getNode() ;
-            ed.dom.setAttrib( el , 'sscr' , sscr ) ;
-            ed.dom.setAttrib( el , 'src' , AScgiloc + '?sscr=' + encodeURIComponent( sscr ) ) ;
-            ed.dom.setAttrib( el , 'width' , width ) ;
-            ed.dom.setAttrib( el , 'height' , height ) ;
-            ed.dom.setStyle( el , 'width' , width + 'px' ) ;
-            ed.dom.setStyle( el , 'height' , height + 'px') ;
-            if ( alignm == 'left' || alignm == 'right' )
-            {
-                ed.dom.setStyle( el , 'float' , alignm ) ;
-                ed.dom.setStyle( el , 'vertical-align' , 'middle' ) ;
-            }
-            else
-            {
-                ed.dom.setStyle( el , 'float' , 'none' ) ;
-                ed.dom.setStyle( el , 'vertical-align' , alignm ) ;
-            }
-        }
-        tinyMCEPopup.close() ;
-    }
-
-} ;

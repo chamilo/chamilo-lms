@@ -142,7 +142,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
 	//Get list sessions
 	$sort = ($sort != "name_category")?  's.'.$sort : 'category_name';
-	$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name, s.visibility ".
+	$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name, s.visibility, u.user_id ".
 			" FROM $tbl_session s ".
 			 	" LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id ".
 			 	" INNER JOIN $tbl_user u ON s.id_coach = u.user_id ".
@@ -161,7 +161,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
 			$where.= " AND ar.access_url_id = $access_url_id ";
-			$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name , s.visibility
+			$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name , s.visibility, u.user_id
 			 FROM $tbl_session s
 			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
 			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id
@@ -183,8 +183,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$recorset = Database::fetch_array($result_rows);
 	$num = $recorset['total_rows'];
 	$result=Database::query($query);
-	$Sessions=Database::store_result($result);
-	$nbr_results=sizeof($Sessions);
+	$sessions=Database::store_result($result);
+	$nbr_results=sizeof($sessions);
 	$tool_name = get_lang('SessionList');
 	Display::display_header($tool_name);
 	//api_display_tool_title($tool_name);
@@ -217,8 +217,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
 	<div align="left">
 	<?php
-	//if(count($Sessions)==0 && isset($_POST['keyword'])) {
-	if(count($Sessions)==0) {
+	//if(count($sessions)==0 && isset($_POST['keyword'])) {
+	if(count($sessions)==0) {
 		if (isset($_GET['id_category'])) {
 			echo get_lang('NoSession');
 		} else {
@@ -264,7 +264,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		<?php
 		$i=0;
 		$x=0;
-		foreach ($Sessions as $key=>$enreg) {
+		foreach ($sessions as $key=>$enreg) {
 			if($key == $limit) {
 				break;
 			}
@@ -272,7 +272,10 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
 		  	$rs = Database::query($sql);
 		  	list($nb_courses) = Database::fetch_array($rs);
-
+            $user_link = '';
+            if (!empty($enreg['user_id'])) {
+                $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($enreg['user_id']).'">'.api_htmlentities(api_get_person_name($enreg['firstname'], $enreg['lastname']),ENT_QUOTES,$charset).'</a>';
+            }
 		?>
 
 		<tr class="<?php echo $i?'row_odd':'row_even'; ?>">
@@ -282,7 +285,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	      <td><?php echo api_htmlentities($enreg['category_name'],ENT_QUOTES,$charset); ?></td>
 	      <td><?php echo api_htmlentities($enreg['date_start'],ENT_QUOTES,$charset); ?></td>
 	      <td><?php echo api_htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
-	      <td><?php echo api_htmlentities(api_get_person_name($enreg['firstname'], $enreg['lastname']),ENT_QUOTES,$charset); ?></td>
+	      <td><?php echo $user_link; ?></td>
 		  <td><?php
 
 		  switch (intval($enreg['visibility'])) {
@@ -312,7 +315,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			$x++;
 		}
 
-		unset($Sessions);
+		unset($sessions);
 
 		?>
 

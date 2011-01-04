@@ -1182,22 +1182,26 @@ FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
     }
     else if ( fakeClass == 'FCK__Video' || fakeClass == 'FCK__AsciiSvg' )
     {
-        var width = realElement.width ;
-        var height = realElement.height ;
-        if ( width )
+        try
         {
-            oImg.style.width = FCKTools.ConvertHtmlSizeToStyle( width.toString() ) ;
+            var width = realElement.width ;
+            var height = realElement.height ;
+            if ( width )
+            {
+                oImg.style.width = FCKTools.ConvertHtmlSizeToStyle( width.toString() ) ;
+            }
+            if ( height )
+            {
+                oImg.style.height = FCKTools.ConvertHtmlSizeToStyle( height.toString() ) ;
+            }
+            if ( realElement.style.width ) {
+                oImg.style.width = realElement.style.width ;
+            }
+            if ( realElement.style.height ) {
+                oImg.style.height = realElement.style.height ;
+            }
         }
-        if ( height )
-        {
-            oImg.style.height = FCKTools.ConvertHtmlSizeToStyle( height.toString() ) ;
-        }
-        if ( realElement.style.width ) {
-            oImg.style.width = realElement.style.width ;
-        }
-        if ( realElement.style.height ) {
-            oImg.style.height = realElement.style.height ;
-        }
+        catch ( ex ) { }
     }
 
     // Setting attributes for detection purpose.

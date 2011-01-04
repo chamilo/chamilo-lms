@@ -36,7 +36,7 @@ $config['ToolbarSets']['Maximized'] = array(
     array('Cut','Copy','Paste','PasteText','PasteWord'),
     array('Undo','Redo','-','SelectAll','Find','-','RemoveFormat'),
     array('Link','Unlink','Anchor','Glossary'),
-    array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','insertHtml','mimetex','asciimath'),
+    array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','insertHtml','mimetex','asciimath','asciisvg'),
 '/',
     array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
     array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),

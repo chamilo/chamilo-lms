@@ -176,4 +176,5 @@ $FProgress = "Progresso";
 $PutATimeLimit = "Limiti di tempo";
 $StandardTask = "Compito predefinito";
 $ThePageHasBeenExportedToDocArea = "La pagina è stata esportata nella sezione Documenti";
+$CreateAssignmentPage = "Verrà creata una pagina speciale del wiki in cui il docente descriverà il compito assegnato; la pagina sarà automaticamente collegata alle pagine in cui i corsisti potranno completare il lavoro. I corsisti potranno modificare e vedere solo le proprie pagine, ma tale limitazione potrà essere modificata a piacimento.";
 ?>

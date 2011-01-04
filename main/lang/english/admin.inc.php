@@ -1309,4 +1309,6 @@ $BigBlueButtonHostTitle = "BigBlueButton server host";
 $BigBlueButtonHostComment = "This is the name of the server where your BigBlueButton server is running. Might be <i>localhost</i>, an IP address (e.g. 192.168.13.54) or a domain name (e.g. my.video.com).";
 $BigBlueButtonSecuritySaltTitle = "Security key of the BigBlueButton server";
 $BigBlueButtonSecuritySaltComment = "This is the security key of your BigBlueButton server, which will allow your server to authentify the Chamilo installation. Refer to the BigBlueButton documentation to locate it.";
+$AsciiSvgTitle = "Mathematical graphics editor ASCIIsvg";
+$AsciiSvgComment = "Activation of mathematical graphics editor (ASCIIsvg).";
 ?>

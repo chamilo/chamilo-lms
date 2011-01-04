@@ -31,16 +31,18 @@ var notifyIfNoMathML = false ;
 var alertIfNoMathML = false ;
 var notifyIfNoSVG = false ;
 var alertIfNoSVG = false ;
-// Formula translation will be called explicitly in this dialog after it loads.
-//var translateOnLoad = false ;
 var translateOnLoad = true ;
-//
 // Formula tooltips are hard-coded in this dialog, there is no need they to be generated.
 var showasciiformulaonhover = false ;
 // Font size of the formulas in this dialog.
 var mathfontsize = "1.1em" ;
 
-var noSVG = ASnoSVG ; // Temporarily added.
+// Fixing a version difference.
+if ( typeof ASnoSVG != 'undefined' )
+{
+    var noSVG = ASnoSVG ;
+}
+
 var width = 300 ;
 var height = 200 ;
 var alignm = 'middle' ;
@@ -69,10 +71,8 @@ function LoadSelection()
         //    alignm = ed.dom.getStyle( el, 'vertical-align' ) ;
         //}
     }
-    // ...
-    LoadGraphScript( sscr ) ;
 
-    UpdatePreview() ;
+    LoadGraphScript( sscr ) ;
 }
 
 function Ok()
@@ -86,12 +86,6 @@ window.onload = function()
 {
     // Translate the dialog box texts.
     oEditor.FCKLanguageManager.TranslatePage( document ) ;
-
-    // Initialization of the script ASCIIMathML.js.
-    //init() ;
-
-    // Initialization of the dialog's script.
-    //AsciisvgDialog.init() ;
 
     // Load the selected element information (if any).
     LoadSelection() ;
@@ -170,7 +164,11 @@ function UpdatePreview()
 function UpdateText( id , text )
 {
     var node = GetE( id ) ;
-    node.replaceChild( document.createTextNode( text ) , node.lastChild ) ;
+    try
+    {
+        node.replaceChild( document.createTextNode( text ) , node.lastChild ) ;
+    }
+    catch ( ex ) { }
 }
 
 function UpdateEquationType()
@@ -351,7 +349,7 @@ function LoadGraphScript( text )
         default: GetE( 'alignment' ).selectedIndex = 0 ; break ;
     }
 
-    //UpdatePreview() ;
+    UpdatePreview() ;
 }
 
 function AddGraph()
@@ -429,31 +427,6 @@ function RemoveGraph()
 // TODO: To be removed ...
 var AsciisvgDialog =
 {
-    init : function()
-    {
-        //var f = document.forms[ 0 ] ;
-
-        // Get the selected contents as text and place it in the input.
-        /*
-        width = tinyMCEPopup.getWindowArg( 'width' ) ;
-        height = tinyMCEPopup.getWindowArg( 'height' ) ;
-        isnew = tinyMCEPopup.getWindowArg( 'isnew' ) ; // This variable has been eliminated.
-        sscr = tinyMCEPopup.getWindowArg( 'sscr' ) ;
-        alignm = tinyMCEPopup.getWindowArg( 'alignm' ) ;
-        */
-
-        if ( noSVG )
-        {
-            GetE( 'preview' ).innerHTML = '<img id="previewimg" style="width:' + width + 'px; height: ' + height + 'px; vertical-align: middle; float: none;" src="' + AScgiloc + '?sscr=' + encodeURIComponent( sscr ) + '" script=" " />' ;
-        }
-        else
-        {
-            //GetE( 'preview' ).innerHTML = '<embed id="previewsvg" type="image/svg+xml" src="' + FCKConfig.DrawingASCIISVG + '" style="width: 300px; height: 200px; vertical-align: middle; float: none;" sscr="-7.5,7.5,-5,5,1,1,1,1,1,300,200" />' ;
-            GetE( 'previewsvg' ).setAttribute( 'sscr' , sscr );
-        }
-        LoadGraphScript( sscr ) ;
-    } ,
-
     insert : function()
     {
         var ed = tinyMCEPopup.editor ;

@@ -63,7 +63,9 @@ if ( oFakeImage )
 function LoadSelection()
 {
     if ( oEmbed ) {
+        // An existing graph has been selected, reading its data.
         sscr = GetAttribute( oEmbed, 'sscr', '' ).toString() ;
+        // TODO: Check and finish here.
         width = parseInt( oEmbed.style.width ) ;
         height = parseInt( oEmbed.style.height ) ;
         alignm = oEmbed.style.float ;
@@ -72,7 +74,79 @@ function LoadSelection()
         //}
     }
 
-    LoadGraphScript( sscr ) ;
+    var alignment = 'middle' ;
+    var sa = sscr.split( ',' ) ;
+    GetE( 'xmin' ).value = sa[ 0 ] ;
+    GetE( 'xmax' ).value = sa[ 1 ] ;
+    GetE( 'ymin' ).value = sa[ 2 ] ;
+    GetE( 'ymax' ).value = sa[ 3 ] ;
+    GetE( 'xscl' ).value = sa[ 4 ] ;
+    GetE( 'yscl' ).value = sa[ 5 ] ;
+
+    if ( sa[ 6 ] != 'null' )
+    {
+        GetE( 'labels' ).checked = true ;
+    }
+    else
+    {
+        GetE( 'labels' ).checked = false ;
+    }
+    if ( typeof eval( sa[ 7 ] ) == 'number' )
+    {
+        GetE( 'grid' ).checked = true ;
+    }
+    else
+    {
+        GetE( 'grid' ).checked = false ;
+    }
+
+    GetE( 'gwidth' ).value = sa[ 9 ] ;
+    GetE( 'gheight' ).value = sa[ 10 ] ;
+
+    GetE( 'graphs' ).length = 0 ;
+
+    var inx = 11 ;
+    while ( sa.length > inx + 9 )
+    {
+        var newopt = document.createElement( 'option' ) ;
+
+        if ( sa[ inx ] == 'func' )
+        {
+            newopt.text = 'y=' + sa[ inx + 1 ] ;
+        }
+        else if ( sa[ inx ] == 'polar' )
+        {
+            newopt.text = 'r=' + sa[ inx + 1 ] ;
+        }
+        else if ( sa[inx] == 'param' )
+        {
+            newopt.text = '[x,y]=[' + sa[ inx + 1 ] + ',' + sa[ inx + 2 ] + ']' ;
+        }
+        else if ( sa[inx] == 'slope' )
+        {
+            newopt.text = 'dy/dx=' + sa[ inx + 1 ] ;
+        }
+        newopt.value = sa[inx] + ',' + sa[ inx + 1 ] + ',' + sa[ inx + 2 ] + ',' + sa[ inx + 3 ] + ',' + sa[ inx + 4 ] + ',' + sa[ inx + 5 ] + ',' + sa[ inx + 6 ] + ',' + sa[ inx + 7 ] + ',' + sa[ inx + 8] + ',' + sa[ inx + 9 ] ;
+        var graphs = GetE( 'graphs' ) ;
+        graphs.options[ graphs.options.length ] = newopt ;
+        //GetE( 'graphs' ).add( newopt ) ;
+        inx += 10 ;
+    }
+    if ( inx > 11 ) {
+        LoadEquation() ;
+    }
+
+    switch ( alignment.toLowerCase() )
+    {
+        case 'text-top' : GetE( 'alignment' ).selectedIndex = 0 ; break ;
+        case 'middle' : GetE( 'alignment' ).selectedIndex = 1 ; break ;
+        case 'text-bottom' : GetE( 'alignment' ).selectedIndex = 2 ; break ;
+        case 'left' : GetE( 'alignment' ).selectedIndex = 3 ; break ;
+        case 'right' : GetE( 'alignment' ).selectedIndex = 4 ; break ;
+        default: GetE( 'alignment' ).selectedIndex = 0 ; break ;
+    }
+
+    UpdatePreview() ;
 }
 
 function Ok()
@@ -273,83 +347,6 @@ function LoadEquation()
         case '7 3 2 3' : GetE( 'strokedash' ).selectedIndex = 4 ; break ;
         default : GetE( 'strokedash' ).selectedIndex = 0 ;
     }
-}
-
-function LoadGraphScript( text )
-{
-    var alignment = 'middle' ;
-    var sa = text.split( ',' ) ;
-    GetE( 'xmin' ).value = sa[ 0 ] ;
-    GetE( 'xmax' ).value = sa[ 1 ] ;
-    GetE( 'ymin' ).value = sa[ 2 ] ;
-    GetE( 'ymax' ).value = sa[ 3 ] ;
-    GetE( 'xscl' ).value = sa[ 4 ] ;
-    GetE( 'yscl' ).value = sa[ 5 ] ;
-
-    if ( sa[ 6 ] != 'null' )
-    {
-        GetE( 'labels' ).checked = true ;
-    }
-    else
-    {
-        GetE( 'labels' ).checked = false ;
-    }
-    if ( typeof eval( sa[ 7 ] ) == 'number' )
-    {
-        GetE( 'grid' ).checked = true ;
-    }
-    else
-    {
-        GetE( 'grid' ).checked = false ;
-    }
-
-    GetE( 'gwidth' ).value = sa[ 9 ] ;
-    GetE( 'gheight' ).value = sa[ 10 ] ;
-
-    GetE( 'graphs' ).length = 0 ;
-
-    var inx = 11 ;
-    while ( sa.length > inx + 9 )
-    {
-        var newopt = document.createElement( 'option' ) ;
-
-        if ( sa[ inx ] == 'func' )
-        {
-            newopt.text = 'y=' + sa[ inx + 1 ] ;
-        }
-        else if ( sa[ inx ] == 'polar' )
-        {
-            newopt.text = 'r=' + sa[ inx + 1 ] ;
-        }
-        else if ( sa[inx] == 'param' )
-        {
-            newopt.text = '[x,y]=[' + sa[ inx + 1 ] + ',' + sa[ inx + 2 ] + ']' ;
-        }
-        else if ( sa[inx] == 'slope' )
-        {
-            newopt.text = 'dy/dx=' + sa[ inx + 1 ] ;
-        }
-        newopt.value = sa[inx] + ',' + sa[ inx + 1 ] + ',' + sa[ inx + 2 ] + ',' + sa[ inx + 3 ] + ',' + sa[ inx + 4 ] + ',' + sa[ inx + 5 ] + ',' + sa[ inx + 6 ] + ',' + sa[ inx + 7 ] + ',' + sa[ inx + 8] + ',' + sa[ inx + 9 ] ;
-        var graphs = GetE( 'graphs' ) ;
-        graphs.options[ graphs.options.length ] = newopt ;
-        //GetE( 'graphs' ).add( newopt ) ;
-        inx += 10 ;
-    }
-    if ( inx > 11 ) {
-        LoadEquation() ;
-    }
-
-    switch ( alignment.toLowerCase() )
-    {
-        case 'text-top' : GetE( 'alignment' ).selectedIndex = 0 ; break ;
-        case 'middle' : GetE( 'alignment' ).selectedIndex = 1 ; break ;
-        case 'text-bottom' : GetE( 'alignment' ).selectedIndex = 2 ; break ;
-        case 'left' : GetE( 'alignment' ).selectedIndex = 3 ; break ;
-        case 'right' : GetE( 'alignment' ).selectedIndex = 4 ; break ;
-        default: GetE( 'alignment' ).selectedIndex = 0 ; break ;
-    }
-
-    UpdatePreview() ;
 }
 
 function AddGraph()

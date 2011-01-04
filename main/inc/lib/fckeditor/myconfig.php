@@ -344,3 +344,4 @@ if ((api_get_setting('block_copy_paste_for_students') == 'true')) {
  * In case of problems, when you need to use this feature, go to the platform administration settings page and switch the system
  * into "test server" mode. Don't forged to switch it back to "production server" mode after testing.
  */
+$config['LoadPlugin'][] = 'asciisvg';

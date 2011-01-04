@@ -97,6 +97,23 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('students_e
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('exercise_min_score', NULL,'textfield',	'Course',	'',		'ExerciseMinScoreTitle',		'ExerciseMinScoreComment','platform',NULL, 	1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('exercise_max_score', NULL,'textfield',	'Course',	'',		'ExerciseMaxScoreTitle',		'ExerciseMaxScoreComment','platform',NULL, 	1);
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_users_folders',NULL,'radio','Tools','true','ShowUsersFoldersTitle','ShowUsersFoldersComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_users_folders', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_users_folders', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_default_folders',NULL,'radio','Tools','true','ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_default_folders', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_default_folders', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_chat_folder',NULL,'radio','Tools','true','ShowChatFolderTitle','ShowChatFolderComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_chat_folder', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_chat_folder', 'false', 'No');
+
+
+
+
+
+
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

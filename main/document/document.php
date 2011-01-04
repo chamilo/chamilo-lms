@@ -823,11 +823,26 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
 		// Data for checkbox
 		if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
 			$row[] = $id['path'];
+		}			
+		   
+		// Hide HotPotatoes Certificates and all css folders
+		if($id['path']=='/HotPotatoes_files' || $id['path']=='/certificates' || basename($id['path'])=='css'){			
+			 continue;
+		}
+
+		//Admin setting for Hide/Show the folders of all users		
+		if(api_get_setting('show_users_folders') == 'false' && ($id['path']=='/shared_folder' || strstr($id['path'], 'shared_folder_session_'))){	
+			continue;
 		}
 		
-		// Hide HotPotatoes and css folders
-		if(basename($id['path'])=='HotPotatoes_files' || basename($id['path'])=='css'){			
-				break;
+		//Admin setting for Hide/Show Default folders to all users
+		if(api_get_setting('show_default_folders') == 'false' && ($id['path']=='/images' || $id['path']=='/flash' || $id['path']=='/audio' || $id['path']=='/video')){
+			continue;
+		}
+		
+		//Admin setting for Hide/Show chat history folder
+		if(api_get_setting('show_chat_folder') == 'false' && $id['path']=='/chat_files'){
+			continue;
 		}
 
 		// Show the owner of the file only in groups

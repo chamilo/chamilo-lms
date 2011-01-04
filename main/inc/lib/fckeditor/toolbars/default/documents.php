@@ -9,30 +9,30 @@
 
 // Hide/show SpellCheck buttom
 if ((api_get_setting('allow_spellcheck') == 'true')) {
-	$VSpellCheck='SpellCheck';
+    $VSpellCheck='SpellCheck';
 }
 else{
-	$VSpellCheck='';
+    $VSpellCheck='';
 }
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('Save','FitWindow','PasteWord','-','Undo','Redo'),
-	array('Link','Unlink','Anchor','Glossary'),
-	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
-	array('Table','SpecialChar'),
-	array('Outdent','Indent','-','TextColor','BGColor','-','OrderedList','UnorderedList','-',$VSpellCheck,'Source'),
-	'/',
-	array('Style','FontFormat','FontName','FontSize'),
-	array('Bold','Italic','Underline'),
-	array('JustifyLeft','JustifyCenter','JustifyRight')
+    array('Save','FitWindow','PasteWord','-','Undo','Redo'),
+    array('Link','Unlink','Anchor','Glossary'),
+    array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath','asciisvg','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
+    array('Table','SpecialChar'),
+    array('Outdent','Indent','-','TextColor','BGColor','-','OrderedList','UnorderedList','-',$VSpellCheck,'Source'),
+    '/',
+    array('Style','FontFormat','FontName','FontSize'),
+    array('Bold','Italic','Underline'),
+    array('JustifyLeft','JustifyCenter','JustifyRight')
 );
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
 /*
 $config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow','-') // ...
+    array('FitWindow','-') // ...
 );
 */
 

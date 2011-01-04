@@ -1226,7 +1226,7 @@ function getRootPath() {
 * check if a folder is allowed to shown on the search 'look in' list
 * @param string $folderName
 * @return string
-* @author Juan Carlos RaÃ±a Trabado
+* @author Juan Carlos Raña Trabado
 */
 function hideFolderName($folderName)
 {
@@ -1236,6 +1236,7 @@ function hideFolderName($folderName)
 	$hotpotatoes_folder_chamilo='HotPotatoes_files';
 	$chat_files_chamilo='chat_files';
 	$thumbs_folder='.thumbs';
+	$certificates_chamilo='certificates';
 
 	//hidden directory of the group if the user is not a member of the group
 	$group_folder='_groupdocs';
@@ -1251,7 +1252,7 @@ function hideFolderName($folderName)
 		}
 	}
 
-	if(!ereg($deleted_by_chamilo, $folderName) && !ereg($css_folder_chamilo, $folderName) && !ereg($hotpotatoes_folder_chamilo, $folderName) && !ereg($chat_files_chamilo, $folderName) && !ereg($thumbs_folder, $folderName) && $show_doc_group==true)
+	if(!ereg($deleted_by_chamilo, $folderName) && !ereg($css_folder_chamilo, $folderName) && !ereg($hotpotatoes_folder_chamilo, $folderName) && !ereg($chat_files_chamilo, $folderName) && !ereg($certificates_chamilo, $folderName) && !ereg($thumbs_folder, $folderName) && $show_doc_group==true)
 	{
 		return substr($folderName,strpos($folderName, '-'),strlen($folderName)); //hide the firsts numbers
 	}

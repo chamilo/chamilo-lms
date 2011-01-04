@@ -36,7 +36,7 @@ FCKToolbarItems.RegisterItem( 'asciisvg', oAsciiSvgItem ) ;
 FCK.ContextMenu.RegisterListener( {
     AddItems : function( menu, tag, tagName )
     {
-        if ( FCK.IsAsciiSvg( tag ) )
+        if ( tag.tagName == 'IMG' && tag.getAttribute( '_fckasciisvg' ) )
         {
             menu.AddSeparator() ;
             menu.AddItem( 'asciisvg', FCKLang['DlgAsciiSvg'], oAsciiSvgItem.IconPath ) ;
@@ -48,7 +48,7 @@ FCK.ContextMenu.RegisterListener( {
 FCK.RegisterDoubleClickHandler(
     function ( tag )
     {
-        if ( FCK.IsAsciiSvg( tag ) )
+        if ( tag.tagName == 'IMG' && tag.getAttribute( '_fckasciisvg' ) )
         {
             FCKCommands.GetCommand( 'asciisvg' ).Execute() ;
         }

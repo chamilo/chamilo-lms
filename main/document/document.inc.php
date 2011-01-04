@@ -146,33 +146,30 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 	$tooltip_title = $tooltip_title[0];
 
 	$tooltip_title_alt = $tooltip_title;
-	if ($tooltip_title == 'shared_folder') {
+	if ($path == '/shared_folder') {
 		$tooltip_title_alt = get_lang('UserFolders');
-	}elseif(strstr($tooltip_title, 'shared_folder_session_')) {
+	}elseif(strstr($path, 'shared_folder_session_')) {
 		$tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
 	}elseif(strstr($tooltip_title, 'sf_user_')) {
 		$userinfo = Database::get_user_info_from_id(substr($tooltip_title, 8));
 		$tooltip_title_alt = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);		
 	}
-	elseif($tooltip_title == 'chat_files') {
+	elseif($path == '/chat_files') {
 		$tooltip_title_alt = get_lang('ChatFiles');		
 	}
-	elseif($tooltip_title == 'certificates') {
-		$tooltip_title_alt = get_lang('CertificatesFiles');
-	}
-	elseif($tooltip_title == 'video') {
+	elseif($path == '/video') {
 		$tooltip_title_alt = get_lang('Video');
 	}
-	elseif($tooltip_title == 'audio') {
+	elseif($path == '/audio') {
 		$tooltip_title_alt = get_lang('Audio');
 	}
-	elseif($tooltip_title == 'flash') {
+	elseif($path == '/flash') {
 		$tooltip_title_alt = get_lang('Flash');
 	}
-	elseif($tooltip_title == 'images') {
+	elseif($path == '/images') {
 		$tooltip_title_alt = get_lang('Images');
 	}
-	elseif($tooltip_title == 'gallery') {
+	elseif($path == '/images/gallery') {
 		$tooltip_title_alt = get_lang('DefaultCourseImages');
 	}
 
@@ -211,10 +208,10 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 	}
 	else{
 		if(preg_match('/shared_folder/', urldecode($url)) && preg_match('/shared_folder$/', urldecode($url))==false && preg_match('/shared_folder_session_'.$current_session_id.'$/', urldecode($url))==false){
-			return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $tooltip_title).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
+			return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array('hspace' => '5', 'align' => 'middle', 'height' => 22, 'width' => 22)).'</a>';
 		}
 		else{
-			return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $tooltip_title).'</a>';
+			return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).'</a>';
 		}
 	}
 }
@@ -234,16 +231,16 @@ function build_document_icon_tag($type, $path) {
 	if ($type == 'file') {
 		$icon = choose_image($basename);
 	} else {
-		if ($basename == 'shared_folder') {
+		if ($path == '/shared_folder') {
 			$icon = 'folder_users.gif';
 			if ($is_allowed_to_edit) {
 				$basename = get_lang('HelpUsersFolder');
 			} else {
 				$basename = get_lang('UserFolders');
 			}
-		}elseif(strstr($basename, 'shared_folder_session_')) {
+		}elseif(strstr($path, 'shared_folder_session_')) {
 			if ($is_allowed_to_edit) {
-				$basename = '***('.api_get_session_name($current_session_id).')*** '.get_lang('HelpSharedFolder');
+				$basename = '***('.api_get_session_name($current_session_id).')*** '.get_lang('HelpUsersFolder');
 			} else {
 				$basename = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
 			}
@@ -259,10 +256,10 @@ function build_document_icon_tag($type, $path) {
 			}
 
 			$basename = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
-
 		} else {
 			$icon = 'folder_document.gif';
-			if($basename=='audio'){
+			
+			if($path=='/audio'){
 				$icon = 'folder_audio.gif';
 				if(api_is_allowed_to_edit()){
 					$basename=get_lang('HelpDefaultDirDocuments');
@@ -270,8 +267,8 @@ function build_document_icon_tag($type, $path) {
 				else{
 					$basename=get_lang('Audio');
 				}				
-			}
-			elseif($basename =='flash'){
+			}			
+			elseif($path =='/flash'){
 				$icon = 'folder_flash.gif';
 				if(api_is_allowed_to_edit()){
 					$basename=get_lang('HelpDefaultDirDocuments');
@@ -280,7 +277,7 @@ function build_document_icon_tag($type, $path) {
 					$basename=get_lang('Flash');
 				}
 			}
-			elseif($basename =='images'){
+			elseif($path =='/images'){
 				$icon = 'folder_images.gif';
 				if(api_is_allowed_to_edit()){
 					$basename=get_lang('HelpDefaultDirDocuments');
@@ -289,7 +286,7 @@ function build_document_icon_tag($type, $path) {
 					$basename=get_lang('Images');
 				}
 			}
-			elseif($basename =='video'){
+			elseif($path =='/video'){
 				$icon = 'folder_video.gif';
 				if(api_is_allowed_to_edit()){
 					$basename=get_lang('HelpDefaultDirDocuments');
@@ -298,7 +295,7 @@ function build_document_icon_tag($type, $path) {
 					$basename=get_lang('Video');
 				}
 			}
-			elseif($basename =='gallery'){
+			elseif($path =='/images/gallery'){
 				$icon = 'folder_gallery.gif';
 				if(api_is_allowed_to_edit()){
 					$basename=get_lang('HelpDefaultDirDocuments');
@@ -307,22 +304,13 @@ function build_document_icon_tag($type, $path) {
 					$basename=get_lang('Gallery');
 				}
 			}
-			elseif($basename =='chat_files'){
+			elseif($path =='/chat_files'){
 				$icon = 'folder_chat.gif';
 				if(api_is_allowed_to_edit()){
 					$basename=get_lang('HelpFolderChat');
 				}
 				else{
 					$basename=get_lang('ChatFiles');
-				}
-			}
-			elseif($basename =='certificates'){
-				$icon = 'folder_certificates.gif';
-				if(api_is_allowed_to_edit()){
-					$basename = get_lang('HelpFolderCertificates');
-				}
-				else{
-					$basename = get_lang('Certificates');
 				}
 			}
 		}
@@ -470,6 +458,23 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
 		
 		if (is_array($folders)) {
 			foreach ($folders as & $folder) {
+				//Hide some folders
+				if($folder=='/HotPotatoes_files' || $folder=='/certificates' || basename($folder)=='css'){			
+				 continue;
+				}
+				//Admin setting for Hide/Show the folders of all users		
+				if(api_get_setting('show_users_folders') == 'false' && (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))){	
+					continue;
+				}
+				//Admin setting for Hide/Show Default folders to all users
+				if(api_get_setting('show_default_folders') == 'false' && ($folder=='/images' || $folder=='/flash' || $folder=='/audio' || $folder=='/video' || strstr($folder, '/images/gallery') || $folder=='/video/flv')){
+					continue;
+				}
+				//Admin setting for Hide/Show chat history folder
+				if(api_get_setting('show_chat_folder') == 'false' && $folder=='/chat_files'){
+					continue;
+				}
+				
 				// You cannot move a file to:
 				// 1. current directory
 				// 2. inside the folder you want to move
@@ -489,7 +494,7 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
 			if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) { // Cannot copy dir into his own subdir
 				if (api_get_setting('use_document_title')) {
 					$path_displayed = get_titles_of_path($folder);
-				}
+				}				
 				$display_folder = substr($path_displayed,strlen($group_dir));
 				$display_folder = ($display_folder == '') ? get_lang('Documents') : $display_folder;
 				$form .= '<option value="'.$folder.'">'.$display_folder.'</option>'."\n";

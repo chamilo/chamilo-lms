@@ -77,6 +77,7 @@
 			$css_folder_Chamilo='css';
 			$hotpotatoes_folder_Chamilo='HotPotatoes_files';
 			$chat_files_Chamilo='chat_files';
+			$certificates_Chamilo='certificates';
 
 		//end previous fix for count hidden folders
 
@@ -112,7 +113,7 @@
 
 			}
 
-			if((!ereg($deleted_by_Chamilo_file, $file['name']) || !ereg($deleted_by_Chamilo_folder, $file['path'])) || ereg($css_folder_Chamilo, $file['path']) || ereg($hotpotatoes_folder_Chamilo, $file['path']) || ereg($chat_files_Chamilo, $file['path']) || $hide_doc_group || $file['name'][0]=='.')//Chamilo fix for hidden items.
+			if((!ereg($deleted_by_Chamilo_file, $file['name']) || !ereg($deleted_by_Chamilo_folder, $file['path'])) || ereg($css_folder_Chamilo, $file['path']) || ereg($hotpotatoes_folder_Chamilo, $file['path']) || ereg($chat_files_Chamilo, $file['path']) || ereg($certificates_Chamilo, $file['path']) || $hide_doc_group || $file['name'][0]=='.')//Chamilo fix for hidden items.
 			{
 
 				$count_hideItem=$count_hideItem+1;

@@ -784,6 +784,9 @@ VALUES
 ('students_export2pdf',				NULL,'radio',		'Tools',	'true',	'EnabledStudentExport2PDFTitle',	'EnabledStudentExport2PDFComment',NULL,NULL, 0),
 ('exercise_min_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMinScoreTitle',			'ExerciseMinScoreComment','platform',NULL, 	1),
 ('exercise_max_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMaxScoreTitle',			'ExerciseMaxScoreComment','platform',NULL, 	1),
+('show_users_folders',				NULL,'radio',		'Tools',	'true',	'ShowUsersFoldersTitle','ShowUsersFoldersComment',NULL,NULL, 0),
+('show_default_folders',				NULL,'radio',		'Tools',	'true',	'ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0),
+('show_chat_folder',				NULL,'radio',		'Tools',	'true',	'ShowChatFolderTitle','ShowChatFolderComment',NULL,NULL, 0),
 ('chamilo_database_version', 		NULL,'textfield', 	NULL, '1.8.8.13174','DokeosDatabaseVersion','', NULL, NULL, 0);
  
 
@@ -1026,7 +1029,13 @@ VALUES
 ('enabled_insertHtml','true','Yes'),
 ('enabled_insertHtml','false','No'),
 ('students_export2pdf','true','Yes'),
-('students_export2pdf','false','No');
+('students_export2pdf','false','No'),
+('show_users_folders','true','Yes'),
+('show_users_folders','false','No'),
+('show_default_folders','true','Yes'),
+('show_default_folders','false','No'),
+('show_chat_folder','true','Yes'),
+('show_chat_folder','false','No');
 
 UNLOCK TABLES;
 

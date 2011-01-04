@@ -425,19 +425,35 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $_GET['dir'
 		if (is_array($folders)) {			
 			$escaped_folders = array();			
 			foreach ($folders as $key => & $val) {
-				$escaped_folders[$key] = Database::escape_string($val);
+				//Hide some folders
+				if($val=='/HotPotatoes_files' || $val=='/certificates' || basename($val)=='css'){			
+				 continue;
+				}
+				//Admin setting for Hide/Show the folders of all users		
+				if(api_get_setting('show_users_folders') == 'false' && (strstr($val, '/shared_folder') || strstr($val, 'shared_folder_session_'))){	
+					continue;
+				}
+				//Admin setting for Hide/Show Default folders to all users
+				if(api_get_setting('show_default_folders') == 'false' && ($val=='/images' || $val=='/flash' || $val=='/audio' || $val=='/video' || strstr($val, '/images/gallery') || $val=='/video/flv')){
+					continue;
+				}
+				//Admin setting for Hide/Show chat history folder
+				if(api_get_setting('show_chat_folder') == 'false' && $val=='/chat_files'){
+					continue;
+				}				
+					
+					$escaped_folders[$key] = Database::escape_string($val);
 			}
 			$folder_sql = implode("','", $escaped_folders);
 			$doc_table = Database::get_course_table(TABLE_DOCUMENT);
 			$sql = "SELECT * FROM $doc_table WHERE filetype='folder' AND path IN ('".$folder_sql."')";
 			$res = Database::query($sql);
 			$folder_titles = array();	
-			while ($obj = Database::fetch_object($res)) {
+			while ($obj = Database::fetch_object($res)) {				
 				$folder_titles[$obj->path] = $obj->title;
 			}
 		}
-	} else {
-	
+	} else {	
 		if (is_array($folders)) {
 			foreach ($folders as & $folder) {
 				$folder_titles[$folder] = basename($folder);
@@ -449,6 +465,23 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $_GET['dir'
 		$parent_select -> addOption(get_lang('HomeDirectory'), '/');
 		if (is_array($folders)) {
 			foreach ($folders as & $folder) {
+				//Hide some folders
+				if($folder=='/HotPotatoes_files' || $folder=='/certificates' || basename($folder)=='css'){			
+				 continue;
+				}
+				//Admin setting for Hide/Show the folders of all users		
+				if(api_get_setting('show_users_folders') == 'false' && (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))){	
+					continue;
+				}
+				//Admin setting for Hide/Show Default folders to all users
+				if(api_get_setting('show_default_folders') == 'false' && ($folder=='/images' || $folder=='/flash' || $folder=='/audio' || $folder=='/video' || strstr($folder, '/images/gallery') || $folder=='/video/flv')){
+					continue;
+				}
+				//Admin setting for Hide/Show chat history folder
+				if(api_get_setting('show_chat_folder') == 'false' && $folder=='/chat_files'){
+					continue;
+				}			
+				
 				$selected = (substr($dir,0,-1) == $folder) ? ' selected="selected"' : '';
 				$path_parts = explode('/', $folder);
 				$folder_titles[$folder] = cut($folder_titles[$folder], 80);

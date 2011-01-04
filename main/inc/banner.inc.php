@@ -430,10 +430,6 @@ if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
 		
 			$navigation_item['title'] = get_lang('ChatFiles');
 		}
-		elseif($breadcrumb_step['name'] == 'certificates') {
-		
-			$navigation_item['title'] = get_lang('CertificatesFiles');
-		}
 		elseif($breadcrumb_step['name'] == 'images') {
 		
 			$navigation_item['title'] = get_lang('Images');

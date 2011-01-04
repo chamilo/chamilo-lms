@@ -70,9 +70,14 @@ if( isset($_GET['action']) ) {
 	}
 }
 api_display_tool_title($tool_name);
-echo '<div align="right" style="margin-right:4em;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$_GET['user_id'].'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.gif',get_lang('Reporting')).'</a></div>'."\n";
+//only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
+$statusname = api_get_status_langvars();
+$login_as_icon = '';
+if (api_is_platform_admin() || (api_is_session_admin() && $row['6'] == $statusname[STUDENT])) {
+        $login_as_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user['user_id'].'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>';
+}
+echo '<div align="right" style="margin-right:4em;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$_GET['user_id'].'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.gif',get_lang('Reporting')).'</a>'.$login_as_icon.'</div>'."\n";
 //getting the user image
-
 $sysdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'system',false,true);
 $sysdir = $sysdir_array['dir'];
 $webdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'web',false,true);

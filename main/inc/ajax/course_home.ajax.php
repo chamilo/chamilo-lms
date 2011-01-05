@@ -103,12 +103,11 @@ switch ($action) {
         
         $course_list    = SessionManager::get_course_list_by_session_id($session_id);
         
-                        
         $count = 0;
         
         foreach ($course_list as $item) {    
             $list               = new LearnpathList(api_get_user_id(),$item['code']);
-            $flat_list          = $list->get_flat_list();    
+            $flat_list          = $list->get_flat_list(); 
             $lps[$item['code']] = $flat_list;
             
             foreach($flat_list as $lp_id => $lp_item) {                                                    
@@ -127,6 +126,7 @@ switch ($action) {
                 $i++;                
             }
         }
+        
         
         if($count > 0 && $limit > 0) { 
             $total_pages = ceil($count/$limit); 

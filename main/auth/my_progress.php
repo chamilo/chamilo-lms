@@ -359,7 +359,7 @@ if (!empty($course_in_session)) {
 						while ($exercices = Database::fetch_array($result_exercices)) {
                             $score = 0;
                             $weighting = 0;
-                            $exercise_stats = get_all_exercise_event($exercices['id'],$course_info['code'], $session_id);
+                            $exercise_stats = get_all_exercise_results($exercices['id'],$course_info['code'], $session_id);
                             $attempts = 0;
                             foreach($exercise_stats as $exercise_stat) {
                             	if ($exercise_stat['exe_user_id'] == $_user['user_id']) {

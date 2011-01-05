@@ -208,6 +208,7 @@ class manager
 						$css_folder_Chamilo='css';
 						$hotpotatoes_folder_Chamilo='HotPotatoes_files';
 						$chat_files_Chamilo='chat_files';
+						$certificates_Chamilo='certificates';
 						//show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?
 						$group_folder='_groupdocs';
 						$hide_doc_group=false;
@@ -221,7 +222,7 @@ class manager
 
 						}
 
-						if(ereg($deleted_by_Chamilo_folder, $path)|| ereg($css_folder_Chamilo, $path) || ereg($hotpotatoes_folder_Chamilo, $path) || ereg($chat_files_Chamilo, $path) || $hide_doc_group || $file[0]=='.')
+						if(ereg($deleted_by_Chamilo_folder, $path)|| ereg($css_folder_Chamilo, $path) || ereg($hotpotatoes_folder_Chamilo, $path) || ereg($chat_files_Chamilo, $path) || ereg($certificates_Chamilo, $path) || $hide_doc_group || $file[0]=='.')
 						{
 							$this->currentFolderInfo['subdir']=$this->currentFolderInfo['subdir']-1;
 						}

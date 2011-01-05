@@ -13,5 +13,11 @@ $GoToCalendarView = "Kalenderansicht öffnen";
 $GoToListView = "Listenansicht öffnen";
 $ManageResources = "Ressourcen verwalten";
 $EditResource = "Ressourcen bearbeiten";
+$BookIt = "Buchen Sie eine Ressource";
 $GoTo = "Gehe zu";
+$NoTimePicker = "Kein Timepicker";
+$TimePicker = "Timepicker";
+$ManageBookingPeriods = "Buchungsperiode verwalten";
+$BookingPeriodToSmall = "Die Buchungsperiode ist zu kurz";
+$BookingPeriodToBig = "Die Buchungsperiode ist zu lang";
 ?>

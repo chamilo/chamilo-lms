@@ -978,4 +978,10 @@ $FillWithExemplaryContent = "Riempi di contenuti esemplificativi";
 $ToolVideoconference = "Videoconferenza";
 $SelectSVGEditImage = "Seleziona un'immagine (svg o png)";
 $OnlyAccessFromYourGroup = "Accessibile solo dal tuo gruppo";
+$UserFolders = "Cartelle utenti";
+$CertificatesFiles = "Certificati";
+$ChatFiles = "Storico chat";
+$Flash = "Flash";
+$Video = "Video";
+$Images = "Immagini";
 ?>

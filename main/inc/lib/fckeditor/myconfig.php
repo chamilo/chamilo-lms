@@ -3,8 +3,8 @@
 /*
  *	Chamilo LMS
  *
- *	Copyright (c) 2009-2010 Juan Carlos Raña
- *	Copyright (c) 2009-2010 Ivan Tcholakov
+ *	Copyright (c) 2009-2011 Juan Carlos Raña
+ *	Copyright (c) 2009-2011 Ivan Tcholakov
  *	Copyright (c) 2009 Dokeos SPRL
  *
  *	For a full list of contributors, see "credits.txt".
@@ -47,7 +47,7 @@
  * 5-th level (the lowest priority)
  * Configuration settings from myconfig.js. This file is "as is" in the original source, modifying it is not recommended.
  */
-	
+
 /*
  * Toolbar definitions.
  */
@@ -133,60 +133,71 @@ if ((api_get_setting('youtube_for_students') == 'true')) {
 
 // googlemaps : Adds a dilog for inserting Google maps.
 if ((api_get_setting('enabled_googlemaps') == 'true')) {
-	$config['LoadPlugin'][] = 'googlemaps';
-	
-	/*
-	**API-key for the "googlemaps" plugin.
-	The following key is valid for http://localhost (see myconfig.js where this key has been activated by default).
-	You must get a new for each server where you intend to use the plugin 'googlemaps'. Just get the key for free after agreeing with the Terms of Use of the GoogleMaps API from here: http://www.google.com/apis/maps/signup.html.
-	At you choice, you may activate the newly obtained API-key using the following setting or using the same setting in myconfig.js.
-	Activated here API-key is not cached by browsers and overrides the key from the configuration file myconfig.js.
-	*
-	*/
-	
-	//$config['GoogleMaps_Key'] = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSy5hTGQdsosYD3dz6faZHVrO-02A'; //sample for localhost
+    $config['LoadPlugin'][] = 'googlemaps';
+
+    /*
+    **API-key for the "googlemaps" plugin.
+    The following key is valid for http://localhost (see myconfig.js where this key has been activated by default).
+    You must get a new for each server where you intend to use the plugin 'googlemaps'. Just get the key for free after agreeing with the Terms of Use of the GoogleMaps API from here: http://www.google.com/apis/maps/signup.html.
+    At you choice, you may activate the newly obtained API-key using the following setting or using the same setting in myconfig.js.
+    Activated here API-key is not cached by browsers and overrides the key from the configuration file myconfig.js.
+    *
+    */
+
+    //$config['GoogleMaps_Key'] = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSy5hTGQdsosYD3dz6faZHVrO-02A'; //sample for localhost
 }
 
 
 // mimetex : Adds a dialog for inserting mathematical formulas. In order this plugin to work properly, preliminary changes.
 if ((api_get_setting('math_mimetex') == 'true')) {
     $config['LoadPlugin'][] = 'mimetex';
-	// in your server configuration have to be done. The MimeTex executable file has to be installed, see the installation guide.
-		
-		// Some additional settings become active only when the 'mimetex' plugin has been enabled:
-		//
-		// The following setting determines whether MimeTeX executable file has been installed on the server or not. This file should be accessible
-		// for browsers at address http://mysite.com/cgi-bin/mimetex.cgi (Linux) or at address http://mysite.com/cgi-bin/mimetex.exe (Windows).
-		// How to test manually: Open your browser and enter in the address bar something like http://mysite.com/cgi-bin/mimetex.cgi?hello
-		// By default, the system tries to detect the MimeTeX executable file automatically.
-		// If you are sure that the MimeTeX executable has been correctly installed, you may set this option to boolean true value.
-		
-		$config['MimetexExecutableInstalled'] = 'true'; // 'detect' (default), true, false.
-		
-		// Sometimes detection fails (due to slow DNS service, security restrictions, ...). For better probability of success,
-		// the following methods for detection have been defined:
-		// 'bootstrap_ip'   - detection is tried at address like http://127.0.0.1/cgi-bin/mimetex.cgi
-		// 'localhost'      - detection is tried at address like http://localhost/cgi-bin/mimetex.cgi
-		// 'ip'             - detection is tried at ip address, for example http://192.168.0.1/cgi-bin/mimetex.cgi
-		// 'server_name'    - detection is tried at address based on server's name, for example http://mysite.com/cgi-bin/mimetex.cgi
-		
-		if (IS_WINDOWS_OS) {
-			$config['MimetexExecutableDetectionMethod'] = 'bootstrap_ip'; // 'bootstrap_ip' for better chance on Windows (no firewall blocking).
-		} else {
-			$config['MimetexExecutableDetectionMethod'] = 'server_name';
-		}
-		// Timeout for MimeTeX executable file detection - keep this value as low as possible, especially on Windows servers.
-		$config['MimetexExecutableDetectionTimeout'] = 0.05;
+    // in your server configuration have to be done. The MimeTex executable file has to be installed, see the installation guide.
+
+        // Some additional settings become active only when the 'mimetex' plugin has been enabled:
+        //
+        // The following setting determines whether MimeTeX executable file has been installed on the server or not. This file should be accessible
+        // for browsers at address http://mysite.com/cgi-bin/mimetex.cgi (Linux) or at address http://mysite.com/cgi-bin/mimetex.exe (Windows).
+        // How to test manually: Open your browser and enter in the address bar something like http://mysite.com/cgi-bin/mimetex.cgi?hello
+        // By default, the system tries to detect the MimeTeX executable file automatically.
+        // If you are sure that the MimeTeX executable has been correctly installed, you may set this option to boolean true value.
+
+        $config['MimetexExecutableInstalled'] = 'true'; // 'detect' (default), true, false.
+
+        // Sometimes detection fails (due to slow DNS service, security restrictions, ...). For better probability of success,
+        // the following methods for detection have been defined:
+        // 'bootstrap_ip'   - detection is tried at address like http://127.0.0.1/cgi-bin/mimetex.cgi
+        // 'localhost'      - detection is tried at address like http://localhost/cgi-bin/mimetex.cgi
+        // 'ip'             - detection is tried at ip address, for example http://192.168.0.1/cgi-bin/mimetex.cgi
+        // 'server_name'    - detection is tried at address based on server's name, for example http://mysite.com/cgi-bin/mimetex.cgi
+
+        if (IS_WINDOWS_OS) {
+            $config['MimetexExecutableDetectionMethod'] = 'bootstrap_ip'; // 'bootstrap_ip' for better chance on Windows (no firewall blocking).
+        } else {
+            $config['MimetexExecutableDetectionMethod'] = 'server_name';
+        }
+        // Timeout for MimeTeX executable file detection - keep this value as low as possible, especially on Windows servers.
+        $config['MimetexExecutableDetectionTimeout'] = 0.05;
 }
 
 
 // asciimath : Yet another plugin for inserting mathematical formulas.
-// An additional javascript library ASCIIMathML.js has to be inserted within the pages with formulas.
+// This plugin works only with full-page documents (with full html syntax).
+// The "Documents" tool can use this plugin for sure, so, activate its button there.
+// An additional javascript library ASCIIMathML.js is automaticaly inserted within the pages with formulas,
+// if there is no security restriction (script-tag should not be filtered, by default this is valid for teachers).
 // After enabling it, this plugin is configured to work with full-page html documents out-of-the box.
-// You may try it in the "Documents" and "Wiki" tools.
-// Browser compatibility: Internet Explorer 6.0+ with MathPlayer plugin, Mozilla Firefox 2.0+, Opera 9.5+	
+// Browser compatibility: Internet Explorer 6.0+ with MathPlayer plugin, Mozilla Firefox 2.0+, Opera 9.5+
 if ((api_get_setting('math_asciimathML') == 'true')) {
     $config['LoadPlugin'][] = 'asciimath';
+}
+
+// asciisvg: A plugin for drawing mathematical graphics on svg-enabled browsers.
+// This plugin works only with full-page documents (i.e. place its buttons for "Documents" tool).
+// An additional javascript library ASCIIMathML.js is automaticaly inserted within the pages with graphics,
+// if there is no security restriction (script-tag should not be filtered, by default this is valid for teachers).
+// Internet Explorer 8 (or prior) needs Adobe SVG Viewer installed, see http://www.adobe.com/svg/viewer/install/
+if ((api_get_setting('enabled_asciisvg') == 'true')) {
+    $config['LoadPlugin'][] = 'asciisvg';
 }
 
 // WIRIS: plugin for inserting mathematical formulas
@@ -198,7 +209,7 @@ if ((api_get_setting('enabled_wiris') == 'true')) {
 
 // imgmap : Adds a dialog for assigning hyperlinks to specified image areas.
 if ((api_get_setting('enabled_imgmap') == 'true')) {
-	$config['LoadPlugin'][] = 'imgmap';
+    $config['LoadPlugin'][] = 'imgmap';
 }
 
 // wikilink : Adds a dialog for inserting wiki-formatted links.
@@ -207,24 +218,24 @@ $config['LoadPlugin'][] = 'wikilink';
 
 // insertHtml: Plugin for inserting HTML. A single preconfigured snippet; a choice from multiple preconfigured snippets; or manually entered HTML.
 if ((api_get_setting('enabled_insertHtml') == 'true')) {
-	$config['LoadPlugin'][] = 'insertHtml';
+    $config['LoadPlugin'][] = 'insertHtml';
 }
-	// enter a single snippet (HMTL string) or multiple snippets to choose form (object of description string and HTML string pairs). Or leave empty if you want to show a dialog for the user to enter HTML manually (and not show any default HTML in the dialog textarea)
-	
-	//$config['insertHtml_snippets'] = { 'ArtGallery': '<embed width="475" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/Art/ArtFlashGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" allowfullscreen="true" flashvars="XMLFile=userfiles/image/ArtGallery/gallery.xml"></embed>', 'PhotoFlowGallery' : '<embed width="700" height="300" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/PhotoFlow/PhotoFlowGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/PhotoFlowGallery/gallery.xml"></embed>', 'StackPhotoGallery' : '<embed width="600" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/StackPhoto/StackPhotoGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/StackPhotoGallery/gallery.xml"></embed>', 'ZenGallery' : '<embed width="550" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/Zen/ZenGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/ZenGallery/gallery.xml"></embed>'};// TODO: this $config['insertHtml_snippets'] does not work. See also temporal hack around line 76 insertHtml.js
-			
-	// (if no snippets specified the dialog will show anyhow)
-	$config['insertHtml_showDialog'] = true;
-	
-	// specify a custom tooltip if you want this to appear when hovering the plugin's toolbar button (e.g. a description of the element being inserted). If no custom tooltip is set 'Insert HTML' will appear, and if available, translated into your language
-	$config['insertHtml_buttonTooltip'] = '';
-	
-	// show a textarea in the dialog? The first HTML set with $config['insertHtml_snippets'] will be shown in the textarea by default. If no snippets specified the textarea will show anyhow
-	$config['insertHtml_showTextarea']= false;
-	
-	// the size of the textarea in the dialog, in px
-	$config['insertHtml_textareaWidth'] = 400;
-	$config['insertHtml_textareaHeight'] = 300;
+    // enter a single snippet (HMTL string) or multiple snippets to choose form (object of description string and HTML string pairs). Or leave empty if you want to show a dialog for the user to enter HTML manually (and not show any default HTML in the dialog textarea)
+
+    //$config['insertHtml_snippets'] = { 'ArtGallery': '<embed width="475" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/Art/ArtFlashGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" allowfullscreen="true" flashvars="XMLFile=userfiles/image/ArtGallery/gallery.xml"></embed>', 'PhotoFlowGallery' : '<embed width="700" height="300" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/PhotoFlow/PhotoFlowGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/PhotoFlowGallery/gallery.xml"></embed>', 'StackPhotoGallery' : '<embed width="600" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/StackPhoto/StackPhotoGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/StackPhotoGallery/gallery.xml"></embed>', 'ZenGallery' : '<embed width="550" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/Zen/ZenGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/ZenGallery/gallery.xml"></embed>'};// TODO: this $config['insertHtml_snippets'] does not work. See also temporal hack around line 76 insertHtml.js
+
+    // (if no snippets specified the dialog will show anyhow)
+    $config['insertHtml_showDialog'] = true;
+
+    // specify a custom tooltip if you want this to appear when hovering the plugin's toolbar button (e.g. a description of the element being inserted). If no custom tooltip is set 'Insert HTML' will appear, and if available, translated into your language
+    $config['insertHtml_buttonTooltip'] = '';
+
+    // show a textarea in the dialog? The first HTML set with $config['insertHtml_snippets'] will be shown in the textarea by default. If no snippets specified the textarea will show anyhow
+    $config['insertHtml_showTextarea']= false;
+
+    // the size of the textarea in the dialog, in px
+    $config['insertHtml_textareaWidth'] = 400;
+    $config['insertHtml_textareaHeight'] = 300;
 
 /*
  * File manager.

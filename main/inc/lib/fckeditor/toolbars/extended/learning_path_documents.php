@@ -9,33 +9,33 @@
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('PasteWord','-','Undo','Redo'),
-	array('Link','Unlink','Anchor','Glossary'),
-	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath','Table','SpecialChar'),
-	array('Outdent','Indent','TextColor','BGColor','-','OrderedList','UnorderedList','JustifyLeft','JustifyCenter','JustifyRight'),
-	'/',
-	array('Style','FontFormat','FontName','FontSize'),
-	array('Bold','Italic','Underline','-','Source'),
+    array('PasteWord','-','Undo','Redo'),
+    array('Link','Unlink','Anchor','Glossary'),
+    array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath','asciisvg','Table','SpecialChar'),
+    array('Outdent','Indent','TextColor','BGColor','-','OrderedList','UnorderedList','JustifyLeft','JustifyCenter','JustifyRight'),
+    '/',
+    array('Style','FontFormat','FontName','FontSize'),
+    array('Bold','Italic','Underline','-','Source'),
 );//save, FitWindow don't run well here
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
 $config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow','DocProps','-','Save','NewPage','Preview','-','Templates'),
-	array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
-	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
-	array('Link','Unlink','Anchor','Glossary'),
-	'/',
-	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
-	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
-	array('Rule','SpecialChar','PageBreak'),
-	array('mimetex','asciimath','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','YouTube','googlemaps','Smiley'),
-	'/',
-	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor'),
-	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
-	array('ShowBlocks','Source')
+    array('FitWindow','DocProps','-','Save','NewPage','Preview','-','Templates'),
+    array('Cut','Copy','Paste','PasteText','PasteWord','-','Print'),
+    array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
+    array('Link','Unlink','Anchor','Glossary'),
+    '/',
+    array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
+    array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
+    array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+    array('Rule','SpecialChar','PageBreak'),
+    array('mimetex','asciimath','asciisvg','Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','YouTube','googlemaps','Smiley'),
+    '/',
+    array('Style','FontFormat','FontName','FontSize'),
+    array('TextColor','BGColor'),
+    array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
+    array('ShowBlocks','Source')
 );
 
 // Sets whether the toolbar can be collapsed/expanded or not.

@@ -974,4 +974,9 @@ $ToolVideoconference = "Videoconference";
 $SelectSVGEditImage = "Select a picture";
 $OnlyAccessFromYourGroup = "Only accessible from your group";
 $UserFolders = "Folders of users";
+$CertificatesFiles = "Certificates";
+$ChatFiles = "Conversation history in chat";
+$Flash = "Flash";
+$Video = "Video";
+$Images = "Images";
 ?>

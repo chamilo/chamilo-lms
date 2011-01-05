@@ -241,4 +241,11 @@ If this folder and the folder of one or more students is visible to users, other
 Moreover, the documents tool is synchronized with the file manager of the web editor, so changes in the management of documents produced in one or another will affect both.
 
 Thus, the user folder is not only a place to deposit files, it becomes a complete manager of the documents that students use during the course. Also, remember that any user can copy a file that is visible from any folder in the documents tool (whether or not the owner) to his/hers portfolios or personal documents area of social network, which will be available for his/hers can use it in other courses.";
+$HelpFolderChat = "VISIBLE INFORMATION ONLY FOR THE TEACHER: 
+
+This folder contains all sessions that have been made in the chat. Although often in the chat sessions can be trivial, others can be really interesting and worthy of being incorporated as a document more work. To do this, without changing the visibility of this folder, link the file and make it visible where deemed appropriate. Not recommended this folder visible.";
+$HelpFolderCertificates = "VISIBLE INFORMATION ONLY FOR THE TEACHER: 
+
+This folder contains the various models of certificates that have been created for the rating tool. No it is recommended that this folder visible.";
+$DestinationDirectory = "Destination folder";
 ?>

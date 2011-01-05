@@ -750,6 +750,7 @@ VALUES
 ('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0),
 ('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0),
 ('math_asciimathML',NULL,'radio','Editor','false','MathASCIImathMLTitle','MathASCIImathMLComment',NULL,NULL, 0),
+('enabled_asciisvg',NULL,'radio','Editor','false','AsciiSvgTitle','AsciiSvgComment',NULL,NULL, 0),
 ('youtube_for_students',NULL,'radio','Editor','true','YoutubeForStudentsTitle','YoutubeForStudentsComment',NULL,NULL, 0),
 ('block_copy_paste_for_students',NULL,'radio','Editor','false','BlockCopyPasteForStudentsTitle','BlockCopyPasteForStudentsComment',NULL,NULL, 0),
 ('more_buttons_maximized_mode',NULL,'radio','Editor','true','MoreButtonsForMaximizedModeTitle','MoreButtonsForMaximizedModeComment',NULL,NULL, 0),
@@ -784,8 +785,11 @@ VALUES
 ('students_export2pdf',				NULL,'radio',		'Tools',	'true',	'EnabledStudentExport2PDFTitle',	'EnabledStudentExport2PDFComment',NULL,NULL, 0),
 ('exercise_min_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMinScoreTitle',			'ExerciseMinScoreComment','platform',NULL, 	1),
 ('exercise_max_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMaxScoreTitle',			'ExerciseMaxScoreComment','platform',NULL, 	1),
-('chamilo_database_version', 		NULL,'textfield', 	NULL, '1.8.8.13174','DokeosDatabaseVersion','', NULL, NULL, 0);
- 
+('show_users_folders',				NULL,'radio',		'Tools',	'true',	'ShowUsersFoldersTitle','ShowUsersFoldersComment',NULL,NULL, 0),
+('show_default_folders',				NULL,'radio',		'Tools',	'true',	'ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0),
+('show_chat_folder',				NULL,'radio',		'Tools',	'true',	'ShowChatFolderTitle','ShowChatFolderComment',NULL,NULL, 0),
+('chamilo_database_version', 		NULL,'textfield', 	NULL, '1.8.8.13255','DokeosDatabaseVersion','', NULL, NULL, 0);
+
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -981,6 +985,8 @@ VALUES
 ('math_mimetex','false','No'),
 ('math_asciimathML','true','Yes'),
 ('math_asciimathML','false','No'),
+('enabled_asciisvg','true','Yes'),
+('enabled_asciisvg','false','No'),
 ('youtube_for_students','true','Yes'),
 ('youtube_for_students','false','No'),
 ('block_copy_paste_for_students','true','Yes'),
@@ -1026,7 +1032,13 @@ VALUES
 ('enabled_insertHtml','true','Yes'),
 ('enabled_insertHtml','false','No'),
 ('students_export2pdf','true','Yes'),
-('students_export2pdf','false','No');
+('students_export2pdf','false','No'),
+('show_users_folders','true','Yes'),
+('show_users_folders','false','No'),
+('show_default_folders','true','Yes'),
+('show_default_folders','false','No'),
+('show_chat_folder','true','Yes'),
+('show_chat_folder','false','No');
 
 UNLOCK TABLES;
 

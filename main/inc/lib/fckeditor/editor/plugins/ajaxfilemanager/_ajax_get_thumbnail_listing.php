@@ -9,14 +9,14 @@
 			///First step for hidden some type of Chamilo files and folders
 			//Juan Carlos Ra�a
 
-			//hidden files and folders deleted by Chamilo. Hidde folders css, hotpotatoes, chat
+			//hidden files and folders deleted by Chamilo. Hidde folders css, hotpotatoes, chat, certificates
 
 			$deleted_by_chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
 			$deleted_by_chamilo_folder='_DELETED_';
 			$css_folder_chamilo='css';
 			$hotpotatoes_folder_chamilo='HotPotatoes_files';
 			$chat_files_chamilo='chat_files';
-
+			$certificates_chamilo='certificates';
 			//hidden directory of the group if the user is not a member of the group
 			$group_folder='_groupdocs';
 
@@ -37,7 +37,7 @@
 			
 			///Second step: hiding as the case
 			//Juan Carlos Ra�a
-			if((!ereg($deleted_by_chamilo_file, $file['name']) && !ereg($deleted_by_chamilo_folder, $file['path'])) && !ereg($css_folder_chamilo, $file['path']) && !ereg($hotpotatoes_folder_chamilo, $file['path']) && !ereg($chat_files_chamilo, $file['path']) && $show_doc_group && $file['name'][0]!='.')
+			if((!ereg($deleted_by_chamilo_file, $file['name']) && !ereg($deleted_by_chamilo_folder, $file['path'])) && !ereg($css_folder_chamilo, $file['path']) && !ereg($hotpotatoes_folder_chamilo, $file['path']) && !ereg($chat_files_chamilo, $file['path']) && !ereg($certificates_chamilo, $file['path']) && $show_doc_group && $file['name'][0]!='.')
 			{			
 			
 			?>

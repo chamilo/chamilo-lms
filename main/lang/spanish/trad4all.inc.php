@@ -975,4 +975,9 @@ $ToolVideoconference = "Videoconferencia";
 $SelectSVGEditImage = "Selecciones una imagen (svg, png)";
 $OnlyAccessFromYourGroup = "Sólo accesible desde su grupo";
 $UserFolders = "Carpetas de los usuarios";
+$CertificatesFiles = "Certificados";
+$ChatFiles = "Historial de conversaciones en el chat";
+$Flash = "Flash";
+$Video = "Video";
+$Images = "Imágenes";
 ?>

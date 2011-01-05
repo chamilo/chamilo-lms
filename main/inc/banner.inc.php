@@ -426,7 +426,30 @@ if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
 			$userinfo = Database::get_user_info_from_id(substr($breadcrumb_step['name'], 8));
 			$navigation_item['title'] = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);	
 		}
+		elseif($breadcrumb_step['name'] == 'chat_files') {
 		
+			$navigation_item['title'] = get_lang('ChatFiles');
+		}
+		elseif($breadcrumb_step['name'] == 'images') {
+		
+			$navigation_item['title'] = get_lang('Images');
+		}
+		elseif($breadcrumb_step['name'] == 'video') {
+		
+			$navigation_item['title'] = get_lang('Video');
+		}
+		elseif($breadcrumb_step['name'] == 'audio') {
+		
+			$navigation_item['title'] = get_lang('Audio');
+		}
+		elseif($breadcrumb_step['name'] == 'flash') {
+		
+			$navigation_item['title'] = get_lang('Flash');
+		}
+		elseif($breadcrumb_step['name'] == 'gallery') {
+		
+			$navigation_item['title'] = get_lang('Gallery');
+		}
 		$navigation[] = $navigation_item;
 	}
 }

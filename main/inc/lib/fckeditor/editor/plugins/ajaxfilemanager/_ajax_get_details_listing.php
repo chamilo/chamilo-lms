@@ -24,13 +24,13 @@
 								///First step for hidden some type of Chamilo files and folders
 								//Juan Carlos Raña
 
-									//hidden files and folders deleted by Chamilo. Hidde folders css, hotpotatoes, chat_files
+									//hidden files and folders deleted by Chamilo. Hidde folders css, hotpotatoes, chat_files, certificates
 									$deleted_by_chamilo_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
 									$deleted_by_chamilo_folder='_DELETED_';
 									$css_folder_chamilo='css';
 									$hotpotatoes_folder_chamilo='HotPotatoes_files';
 									$chat_files_chamilo='chat_files';
-
+									$certificates_chamilo='certificates';
 									//show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?
 									$group_folder='_groupdocs';
 
@@ -48,7 +48,7 @@
 								///Second step: hiding as the case
 								//Juan Carlos Raña
 
-								if((!ereg($deleted_by_chamilo_file, $file['name']) && !ereg($deleted_by_chamilo_folder, $file['path'])) && !ereg($css_folder_chamilo, $file['path']) && !ereg($hotpotatoes_folder_chamilo, $file['path']) && !ereg($chat_files_chamilo, $file['path']) && $show_doc_group && $file['name'][0]!='.')
+								if((!ereg($deleted_by_chamilo_file, $file['name']) && !ereg($deleted_by_chamilo_folder, $file['path'])) && !ereg($css_folder_chamilo, $file['path']) && !ereg($hotpotatoes_folder_chamilo, $file['path']) && !ereg($chat_files_chamilo, $file['path']) && !ereg($certificates_chamilo, $file['path']) && $show_doc_group && $file['name'][0]!='.')
 								{							
 								
 									if($file['type'] == 'file')

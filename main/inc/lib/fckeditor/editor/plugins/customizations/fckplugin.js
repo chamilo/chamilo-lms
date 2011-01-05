@@ -1146,67 +1146,78 @@ FCK.ResizeToFit = function( width, height, max_width, max_height )
 // This is a modification of the original function.
 FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
 {
+    // Premature detection of fake image type is needed here.
+    if ( fakeClass = 'FCK__UnknownObject' )
+    {
+        if ( FCK.IsVideo( realElement ) )
+        {
+            fakeClass = 'FCK__Video' ;
+        }
+        else if ( FCK.IsAsciiSvg( realElement ) )
+        {
+            fakeClass = 'FCK__AsciiSvg' ;
+        }
+    }
+
+    // The original code fragment.
     var oImg = FCKTools.GetElementDocument( realElement ).createElement( 'IMG' ) ;
     oImg.className = fakeClass ;
     oImg.src = FCKConfig.BasePath + 'images/spacer.gif' ;
     oImg.setAttribute( '_fckfakelement', 'true', 0 ) ;
     oImg.setAttribute( '_fckrealelement', FCKTempBin.AddElement( realElement ), 0 ) ;
-    if ( fakeClass == 'FCK__Video' )
+
+    // Setting width and height for relevant types of fake images.
+    if ( fakeClass == 'FCK__Video' && realElement.nodeName.IEquals( 'div' ) )
     {
         // Specific to flv player, SWFObject attaching technique.
-        if ( realElement.nodeName.IEquals( 'div' ) )
+        for ( var i = 0; i < realElement.childNodes.length; i++ )
         {
-            for ( var i = 0; i < realElement.childNodes.length; i++ )
+            if ( realElement.childNodes[i].nodeName.IEquals( 'div' ) )
             {
-                if ( realElement.childNodes[i].nodeName.IEquals( 'div' ) )
-                {
-                    oImg.style.width = realElement.childNodes[i].style.width ;
-                    oImg.style.height = realElement.childNodes[i].style.height ;
-                    break ;
-                }
+                oImg.style.width = realElement.childNodes[i].style.width ;
+                oImg.style.height = realElement.childNodes[i].style.height ;
+                break ;
             }
         }
-        // For embedded video.
-        else
+    }
+    else if ( fakeClass == 'FCK__Video' || fakeClass == 'FCK__AsciiSvg' )
+    {
+        try
         {
             var width = realElement.width ;
             var height = realElement.height ;
             if ( width )
             {
-                oImg.style.width = width.toString().indexOf('%') != -1 ? width : ( width + 'px' ) ;
+                oImg.style.width = FCKTools.ConvertHtmlSizeToStyle( width.toString() ) ;
             }
             if ( height )
             {
-                oImg.style.height = height.toString().indexOf('%') != -1 ? height : ( height + 'px' ) ;
+                oImg.style.height = FCKTools.ConvertHtmlSizeToStyle( height.toString() ) ;
+            }
+            if ( realElement.style.width ) {
+                oImg.style.width = realElement.style.width ;
+            }
+            if ( realElement.style.height ) {
+                oImg.style.height = realElement.style.height ;
             }
         }
+        catch ( ex ) { }
     }
-    // For AsciiSvg graphs.
+
+    // Setting attributes for detection purpose.
+    if ( fakeClass == 'FCK__Video' )
+    {
+        oImg.setAttribute( '_fckvideo', 'true', 0 ) ;
+    }
     else if ( fakeClass == 'FCK__AsciiSvg' )
     {
-        var width = realElement.width ;
-        var height = realElement.height ;
-        if ( width )
-        {
-            oImg.style.width = width.toString().indexOf('%') != -1 ? width : ( width + 'px' ) ;
-        }
-        if ( height )
-        {
-            oImg.style.height = height.toString().indexOf('%') != -1 ? height : ( height + 'px' ) ;
-        }
-        if ( realElement.style.width ) {
-            oImg.style.width = realElement.style.width ;
-        }
-        if ( realElement.style.height ) {
-            oImg.style.height = realElement.style.height ;
-        }
-        var sscr = realElement.getAttribute( 'sscr' ) ;
-        oImg.setAttribute( 'sscr', sscr, 0 ) ;
+        oImg.setAttribute( '_fckasciisvg', 'true', 0 ) ;
     }
+
     return oImg ;
 }
 
-// A custom handler for audio files when a new tag has been added.
+// A fake image handler for audio files.
 FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
     {
         if ( !FCK.IsAudio( el ) )
@@ -1218,25 +1229,7 @@ FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
         fakeImg.setAttribute( '_fckmp3', 'true', 0 ) ;
     } ) ;
 
-// Fake images for audio files when the document has been opened.
-FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
-    {
-        var embeds = document.getElementsByTagName( 'embed' ) ;
-        var embed ;
-        var i = embeds.length - 1 ;
-        while ( i >= 0 && ( embed = embeds[i--] ) )
-        {
-            if ( FCK.IsAudio( embed ) )
-            {
-                var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', embed.cloneNode(true) ) ;
-                oImg.setAttribute( '_fckmp3', 'true', 0 ) ;
-                embed.parentNode.insertBefore( oImg, embed ) ;
-                embed.parentNode.removeChild( embed ) ;
-            }
-        }
-    } ;
-
-// A custom handler for video when a new tag has been added.
+// A fake image handler for video files.
 FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
     {
         if ( !FCK.IsVideo( el ) )
@@ -1248,23 +1241,9 @@ FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
         fakeImg.setAttribute( '_fckvideo', 'true', 0 ) ;
     } ) ;
 
-// Fake images for video when the document has been opened.
+// Fake image support for flv video files.
 FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
     {
-        var embeds = document.getElementsByTagName( 'embed' ) ;
-        var embed;
-        var i = embeds.length - 1 ;
-        while ( i >= 0 && ( embed = embeds[i--] ) )
-        {
-            if ( FCK.IsVideo( embed ) )
-            {
-                var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', embed.cloneNode(true) ) ;
-                oImg.setAttribute( '_fckvideo', 'true', 0 ) ;
-                embed.parentNode.insertBefore( oImg, embed ) ;
-                embed.parentNode.removeChild( embed ) ;
-            }
-        }
-
         // For flv player, SWFObject attaching tecnique.
         var divs = document.getElementsByTagName( 'div' ) ;
         var div;
@@ -1277,36 +1256,6 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
                 oImg.setAttribute( '_fckvideo', 'true', 0 ) ;
                 div.parentNode.insertBefore( oImg, div ) ;
                 div.parentNode.removeChild( div ) ;
-            }
-        }
-    } ;
-
- // A custom handler for AsciiSvg graphs when a new tag has been added.
-FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
-    {
-        if ( !FCK.IsAsciiSvg( el ) )
-        {
-            return ;
-        }
-
-        fakeImg.className = 'FCK__AsciiSvg' ;
-        fakeImg.setAttribute( '_fckasciisvg', 'true', 0 ) ;
-    } ) ;
-
-// Fake images for AsciiSvg graphs when the document has been opened.
-FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
-    {
-        var embeds = document.getElementsByTagName( 'embed' ) ;
-        var embed ;
-        var i = embeds.length - 1 ;
-        while ( i >= 0 && ( embed = embeds[i--] ) )
-        {
-            if ( FCK.IsAsciiSvg( embed ) )
-            {
-                var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__AsciiSvg', embed.cloneNode(true) ) ;
-                oImg.setAttribute( '_fckasciisvg', 'true', 0 ) ;
-                embed.parentNode.insertBefore( oImg, embed ) ;
-                embed.parentNode.removeChild( embed ) ;
             }
         }
     } ;
@@ -1543,7 +1492,6 @@ FCK.IsRealImage = function ( tag )
             || tag.getAttribute( '_fckmp3' )
             || tag.getAttribute( '_fckvideo' )
             || tag.getAttribute( 'MapNumber' )
-            || FCK.IsAsciiSvg( tag )
             )
         {
             return false ;
@@ -1551,7 +1499,7 @@ FCK.IsRealImage = function ( tag )
 
         if ( tag.getAttribute( 'src' ) )
         {
-            var src = tag.getAttribute( 'src' ).toString() ;
+            var src = tag.getAttribute( 'src' ).toString().toLowerCase() ;
             return ( src.indexOf( 'mimetex?' ) == -1
                     && src.indexOf( 'mimetex.cgi?' ) == -1
                     && src.indexOf( 'mimetex.exe?' ) == -1
@@ -1561,6 +1509,7 @@ FCK.IsRealImage = function ( tag )
                     && src.indexOf( 'mathtran?' ) == -1
                     && src.indexOf( 'google.com/chart?' ) == -1
                     && src.indexOf( 'latex?' ) == -1
+                    && src.indexOf( 'sscr=' ) == -1
                 ) ? true : false ;
         }
         else
@@ -1735,7 +1684,7 @@ FCK.IsAsciiSvg = function ( tag )
         return false ;
     }
 
-    if ( tag.nodeName.IEquals( 'img' ) || tag.nodeName.IEquals( 'embed' ) )
+    if ( tag.nodeName.IEquals( 'embed' ) )
     {
         if ( FCKDomTools.HasAttribute( tag, 'sscr' ) )
         {

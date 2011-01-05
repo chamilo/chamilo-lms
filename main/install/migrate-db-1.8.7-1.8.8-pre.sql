@@ -25,7 +25,7 @@ ALTER TABLE settings_options CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_
 ALTER TABLE user MODIFY COLUMN username VARCHAR(40) NOT NULL;
 
 UPDATE settings_current SET variable='chamilo_database_version' WHERE variable='dokeos_database_version';
-UPDATE settings_current SET selected_value = '1.8.8.13050' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.8.8.13255' WHERE variable = 'chamilo_database_version';
 
 ALTER TABLE sys_announcement ADD COLUMN access_url_id INT  NOT NULL default 1;
 ALTER TABLE sys_calendar ADD COLUMN access_url_id INT  NOT NULL default 1;
@@ -50,6 +50,9 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authen
 INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authentication', 'false', 'No');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authentication_protocol', 'http://', 'http://');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authentication_protocol', 'https://', 'https://');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_asciisvg',NULL,'radio','Editor','false','AsciiSvgTitle','AsciiSvgComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_asciisvg', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_asciisvg', 'false', 'No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_wiris',NULL,'radio','Editor','false','EnabledWirisTitle','EnabledWirisComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_wiris', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_wiris', 'false', 'No');
@@ -96,6 +99,23 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('students_e
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('exercise_min_score', NULL,'textfield',	'Course',	'',		'ExerciseMinScoreTitle',		'ExerciseMinScoreComment','platform',NULL, 	1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('exercise_max_score', NULL,'textfield',	'Course',	'',		'ExerciseMaxScoreTitle',		'ExerciseMaxScoreComment','platform',NULL, 	1);
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_users_folders',NULL,'radio','Tools','true','ShowUsersFoldersTitle','ShowUsersFoldersComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_users_folders', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_users_folders', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_default_folders',NULL,'radio','Tools','true','ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_default_folders', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_default_folders', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_chat_folder',NULL,'radio','Tools','true','ShowChatFolderTitle','ShowChatFolderComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_chat_folder', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_chat_folder', 'false', 'No');
+
+
+
+
+
 
 
 -- xxSTATSxx

@@ -3617,7 +3617,9 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
     } else {
         $sql .= " ORDER BY 1,2 ASC";
     }
-    return Database::store_result(Database::query($sql));
+    $result = Database::store_result(Database::query($sql));
+    return $result;
+    
 }
 
 /**

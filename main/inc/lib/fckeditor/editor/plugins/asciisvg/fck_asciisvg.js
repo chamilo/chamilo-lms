@@ -226,7 +226,7 @@ function UpdateEmbed( e )
     SetAttribute( e, 'sscr', sscr ) ;
     SetAttribute( e, 'width', width ) ;
     SetAttribute( e, 'height', height ) ;
-    var style = 'width: ' + FCKTools.ConvertHtmlSizeToStyle( width.toString() ) + '; '
+    var style = 'width: ' + FCKTools.ConvertHtmlSizeToStyle( width.toString() ) + '; ' +
         'height: ' + FCKTools.ConvertHtmlSizeToStyle( height.toString() ) + '; ' ;
     if ( alignm == 'left' || alignm == 'right' )
     {

@@ -1147,7 +1147,7 @@ FCK.ResizeToFit = function( width, height, max_width, max_height )
 FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
 {
     // Premature detection of fake image type is needed here.
-    if ( fakeClass = 'FCK__UnknownObject' )
+    if ( fakeClass == 'FCK__UnknownObject' )
     {
         if ( FCK.IsVideo( realElement ) )
         {

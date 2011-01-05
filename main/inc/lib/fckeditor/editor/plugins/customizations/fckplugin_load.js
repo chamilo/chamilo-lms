@@ -40,6 +40,8 @@ FCKPlugin.prototype.Load = function()
             this.AvailableLangs = new Array() ;
             break ;
         // The following plugins have all needed language files, default logic works well for them.
+        case 'asciimath':
+        case 'asciisvg':
         case 'customizations':
         case 'audio':
         case 'fckEmbedMovies':
@@ -81,6 +83,7 @@ FCKPlugin.prototype.Load = function()
     switch ( this.Name )
     {
         case 'asciimath':
+        case 'asciisvg':
         case 'audio':
         case 'autogrow':
         case 'customizations':

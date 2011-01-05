@@ -290,7 +290,7 @@ function UpdatePreview()
     sscr = commands ;
     alignm = GetE( 'alignment' ).value ;
 
-    var preview = FCK.ResizeToFit( width, height, 420, 280 )
+    var preview = FCK.ResizeToFit( width, height, 680, 280 )
     var widthPreview = preview[ 0 ] ;
     var heightPreview = preview[ 1 ] ;
 

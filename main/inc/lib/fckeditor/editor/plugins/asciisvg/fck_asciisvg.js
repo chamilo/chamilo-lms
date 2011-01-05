@@ -89,22 +89,6 @@ function LoadSelection()
     if ( oEmbed ) {
         // An existing graph has been selected, reading its data.
         sscr = GetAttribute( oEmbed, 'sscr', '' ).toString() ;
-        var w = oEmbed.width ;
-        var h = oEmbed.height ;
-        if ( w )
-        {
-            width = parseInt( w );
-        }
-        if ( h )
-        {
-            height = parseInt( h ) ;
-        }
-        if ( oEmbed.style.width ) {
-            width = parseInt( oEmbed.style.width );
-        }
-        if ( oEmbed.style.height ) {
-            height = parseInt( oEmbed.style.height );
-        }
         if ( oEmbed.style.float )
         {
             alignm = oEmbed.style.float ;
@@ -143,8 +127,8 @@ function LoadSelection()
         GetE( 'grid' ).checked = false ;
     }
 
-    GetE( 'gwidth' ).value = sa[ 9 ] ;
-    GetE( 'gheight' ).value = sa[ 10 ] ;
+    GetE( 'gwidth' ).value = width = parseInt( sa[ 9 ] ) ;
+    GetE( 'gheight' ).value = height = parseInt( sa[ 10 ] ) ;
 
     GetE( 'graphs' ).length = 0 ;
 
@@ -208,12 +192,11 @@ function Ok()
         oFakeImage.setAttribute( '_fckasciisvg', 'true', 0 ) ;
         oFakeImage	= FCK.InsertElement( oFakeImage ) ;
     }
-    else
-    {
-        oFakeImage.width = oEmbed.width ;
-        oFakeImage.height = oEmbed.height ;
-    }
 
+    oFakeImage.width = width ;
+    oFakeImage.height = height ;
+    oFakeImage.style.width = FCKTools.ConvertHtmlSizeToStyle( width.toString() ) ;
+    oFakeImage.style.height = FCKTools.ConvertHtmlSizeToStyle( height.toString() ) ;
     oEditor.FCKEmbedAndObjectProcessor.RefreshView( oFakeImage, oEmbed ) ;
 
     return true ;
@@ -224,6 +207,8 @@ function UpdateEmbed( e )
     SetAttribute( e, 'type', 'image/svg+xml' ) ;
     SetAttribute( e, 'src', FCKConfig.DrawingASCIISVG ) ;
     SetAttribute( e, 'sscr', sscr ) ;
+    width = GetE( 'gwidth' ).value ;
+    height = GetE( 'gheight' ).value ;
     SetAttribute( e, 'width', width ) ;
     SetAttribute( e, 'height', height ) ;
     var style = 'width: ' + FCKTools.ConvertHtmlSizeToStyle( width.toString() ) + '; ' +
@@ -290,22 +275,15 @@ function UpdatePreview()
     sscr = commands ;
     alignm = GetE( 'alignment' ).value ;
 
-    var preview = FCK.ResizeToFit( width, height, 680, 280 )
+    var preview = FCK.ResizeToFit( width, height, 680, 280 ) ;
     var widthPreview = preview[ 0 ] ;
     var heightPreview = preview[ 1 ] ;
 
-    //if ( noSVG )
-    //{
-    //    var pvimg = GetE( 'previewimg' ) ;
-    //    pvimg.src = AScgiloc + '?sscr=' + encodeURIComponent(commands) ;
-    //    pvimg.style.width = width + 'px' ;
-    //    pvimg.style.height = height + 'px' ;
-    //}
-    //else
-    //{
+    if ( !noSVG )
+    {
         var pvsvg = GetE( 'previewsvg' ) ;
         parseShortScript( commands , widthPreview , heightPreview ) ;
-    //}
+    }
 }
 
 function UpdateText( id , text )

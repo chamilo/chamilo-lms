@@ -657,17 +657,18 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
         if (Database::num_rows($result)>0) {
             $cData = Database::fetch_array($result);
             //@TODO real_cid should be cid, for working with numeric course id
-            $_real_cid                        = $cData['id'];
+            $_real_cid                      = $cData['id'];
 
-            $_cid                            = $cData['code'];
+            $_cid                           = $cData['code'];
             $_course = array();
-            $_course['real_id']                = $cData['id'];
-            $_course['id']                    = $cData['code']; //auto-assigned integer
+            $_course['real_id']             = $cData['id'];
+            $_course['id']                  = $cData['code']; //auto-assigned integer
             $_course['name']                = $cData['title'];
-            $_course['official_code']        = $cData['visual_code']; // use in echo
+            $_course['official_code']       = $cData['visual_code']; // use in echo
             $_course['sysCode']             = $cData['code']; // use as key in db
-            $_course['path']                 = $cData['directory']; // use as key in path
-            $_course['dbName']                = $cData['db_name']; // use as key in db list
+            $_course['path']                = $cData['directory']; // use as key in path
+            $_course['dbName']              = $cData['db_name']; // use as key in db list
+            $_course['db_name']             = $cData['db_name']; // 
             $_course['dbNameGlu']           = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
             $_course['titular']             = $cData['tutor_name'];
             $_course['language']            = $cData['course_language'];

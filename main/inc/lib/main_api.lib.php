@@ -1055,6 +1055,7 @@ function api_get_course_info($course_code = null) {
             $_course['sysCode'      ]         = $cData['code'           ]; // Use as key in db.
             $_course['path'         ]         = $cData['directory'      ]; // Use as key in path.
             $_course['dbName'       ]         = $cData['db_name'        ]; // Use as key in db list.
+            $_course['db_name'      ]         = $cData['db_name'];         // 
             $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // Use in all queries.
             $_course['titular'      ]         = $cData['tutor_name'     ];
             $_course['language'     ]         = $cData['course_language'];

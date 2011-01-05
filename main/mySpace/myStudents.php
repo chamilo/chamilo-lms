@@ -208,8 +208,8 @@ $check= Security::check_token('get');
 if ($check) {
 	switch ($_GET['action']) {
 		case 'reset_lp' :		
-			$origin		= isset($_GET['origin'])	?Security::remove_XSS($_GET['origin']):"";
-			$details	= isset($_GET['details'])	?Security::remove_XSS($_GET['details']):"";  
+			//$origin		= isset($_GET['origin'])	?Security::remove_XSS($_GET['origin']):"";
+			//$details	= isset($_GET['details'])	?Security::remove_XSS($_GET['details']):"";  
 			$course		= isset($_GET['course'])	?$_GET['course']:"";
 			$lp_id		= isset($_GET['lp_id'])		?intval($_GET['lp_id']):"";
 						

@@ -1210,7 +1210,7 @@ class SessionManager {
     /**
      * Get users by session
      * @param   int sesssion id
-     * @return  array a list with the user info
+     * @return  array a list with an user list
      */
     public static function get_users_by_session($id) {
         $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
@@ -1234,6 +1234,10 @@ class SessionManager {
     public static function get_sessions_by_coach($user_id) {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         return Database::select('*', $session_table, array('where'=>array('id_coach = ?'=>$user_id)));    	
+    }
+    
+    public static function get_session_by_user($coach_id, $user_id) {
+    	
     }
     
 }

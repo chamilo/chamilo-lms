@@ -205,6 +205,8 @@ function Ok()
 function UpdateEmbed( e )
 {
     UpdatePreview() ;
+    width = GetE( 'gwidth' ).value ;
+    height = GetE( 'gheight' ).value ;
     SetAttribute( e, 'type', 'image/svg+xml' ) ;
     SetAttribute( e, 'src', FCKConfig.DrawingASCIISVG ) ;
     SetAttribute( e, 'sscr', sscr ) ;

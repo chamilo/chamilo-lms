@@ -37,7 +37,7 @@ form p { margin-top: 5px; margin-bottom: 5px; }
     </head>
 <body scroll="no" style="overflow: hidden;">
 
-Equation type: <select id="eqntype" onchange="javascript: UpdateEquationType();">
+<span fckLang="DlgAsciiSvgEquationType">Equation type:</span> <select id="eqntype" onchange="javascript: UpdateEquationType();">
 <option value="func">y=f(x)</option>
 <option value="polar">r=f(t)</option>
 <option value="param">x=f(t),y=g(t)</option>
@@ -45,43 +45,43 @@ Equation type: <select id="eqntype" onchange="javascript: UpdateEquationType();"
 </select>
 &nbsp;&nbsp;&nbsp;
 <span id="eq1lbl">f(x)=</span> <input type="text" id="equation" size="15" value="sin(x)"/> <span id="eq2lbl"><i></i></span><span id="eq2"><i></i></span>
-&nbsp;from <input type="text" id="xstart" size="4" value=""/> to <input type="text" id="xend" size="4" value=""/>
+&nbsp;<span fckLang="DlgAsciiSvgFrom">from</span> <input type="text" id="xstart" size="4" value=""/> <span fckLang="DlgAsciiSvgTo">to</span> <input type="text" id="xend" size="4" value=""/>
 <hr/>
 
-Color: <Select id="gcolor">
-    <option value="black">Black</option>
-    <option value="red">Red</option>
-    <option value="orange">Orange</option>
-    <option value="yellow">Yellow</option>
-    <option value="green">Green</option>
-    <option value="blue">Blue</option>
-    <option value="purple">Purple</option>
+<span fckLang="DlgAsciiSvgColor">Color:</span> <Select id="gcolor">
+    <option fckLang="DlgAsciiSvgBlack" value="black">Black</option>
+    <option fckLang="DlgAsciiSvgRed" value="red">Red</option>
+    <option fckLang="DlgAsciiSvgOrange" value="orange">Orange</option>
+    <option fckLang="DlgAsciiSvgYellow" value="yellow">Yellow</option>
+    <option fckLang="DlgAsciiSvgGreen" value="green">Green</option>
+    <option fckLang="DlgAsciiSvgBlue" value="blue">Blue</option>
+    <option fckLang="DlgAsciiSvgPurple" value="purple">Purple</option>
 </select>
-Width: <Select id="strokewidth">
+<span fckLang="DlgAsciiSvgWidth">Width:</span> <Select id="strokewidth">
     <option value="1">1</option>
     <option value="2">2</option>
     <option value="3">3</option>
     <option value="4">4</option>
 </select>
-Line: <Select id="strokedash">
-    <option value="none">Solid</option>
-    <option value="2">Dotted</option>
-    <option value="5">Dashed</option>
-    <option value="5 2">Tight Dash</option>
-    <option value="7 3 2 3">Dash-Dot</option>
+<span fckLang="DlgAsciiSvgLine">Line:</span> <Select id="strokedash">
+    <option fckLang="DlgAsciiSvgSolid" value="none">Solid</option>
+    <option fckLang="DlgAsciiSvgDotted" value="2">Dotted</option>
+    <option fckLang="DlgAsciiSvgDashed" value="5">Dashed</option>
+    <option fckLang="DlgAsciiSvgTightDash" value="5 2">Tight Dash</option>
+    <option fckLang="DlgAsciiSvgDashDot" value="7 3 2 3">Dash-Dot</option>
 </select>
 
-Start with: <Select id="gstart">
-    <option value="none">Nothing</option>
-    <option value="arrow">Arrow</option>
-    <option value="opendot">Open Dot</option>
-    <option value="dot">Dot</option>
+<span fckLang="DlgAsciiSvgStartWith">Start with:</span> <Select id="gstart">
+    <option fckLang="DlgAsciiSvgNothing" value="none">Nothing</option>
+    <option fckLang="DlgAsciiSvgArrow" value="arrow">Arrow</option>
+    <option fckLang="DlgAsciiSvgOpenDot" value="opendot">Open Dot</option>
+    <option fckLang="DlgAsciiSvgDot" value="dot">Dot</option>
 </select>
-End with: <Select id="gend">
-    <option value="none">Nothing</option>
-    <option value="arrow">Arrow</option>
-    <option value="opendot">Open Dot</option>
-    <option value="dot">Dot</option>
+<span fckLang="DlgAsciiSvgStartWith">End with:</span> <Select id="gend">
+    <option fckLang="DlgAsciiSvgNothing" value="none">Nothing</option>
+    <option fckLang="DlgAsciiSvgArrow" value="arrow">Arrow</option>
+    <option fckLang="DlgAsciiSvgOpenDot" value="opendot">Open Dot</option>
+    <option fckLang="DlgAsciiSvgDot" value="dot">Dot</option>
 </select>
 
 <hr/>
@@ -95,23 +95,23 @@ ymax: <input type="text" id="ymax" size="4" value="5" onChange='javascript: Upda
 yscl: <input type="text" id="yscl" size="3" value="1" onChange='javascript: UpdatePreview();'/>
 <hr/>
 
-Show axis labels: <input type="checkbox" id="labels" value="Show Labels" onClick='javascript: UpdatePreview();' checked="checked"/>
-Show XY grid: <input type="checkbox" id="grid" value="Show Grid" onClick='javascript: UpdatePreview();' checked="checked"/>
+<span fckLang="DlgAsciiSvgShowAxisLabels">Show axis labels:</span> <input type="checkbox" id="labels" value="Show Labels" onClick='javascript: UpdatePreview();' checked="checked"/>
+<span fckLang="DlgAsciiSvgShowXYGrid">Show XY grid:</span> <input type="checkbox" id="grid" value="Show Grid" onClick='javascript: UpdatePreview();' checked="checked"/>
 &nbsp;&nbsp;
-Resize to: <input type="text" id="gwidth" size="5" value="300"/> by <input type="text" id="gheight" size="5" value="200"/>
-<input type="button" value="Update" onclick="javascript: UpdatePreview();"/>
+<span fckLang="DlgAsciiSvgResizeTo">Resize to:</span> <input type="text" id="gwidth" size="5" value="300"/> <span fckLang="DlgAsciiSvgBy">by</span> <input type="text" id="gheight" size="5" value="200"/>
+<input type="button" fckLang="DlgAsciiSvgUpdate" value="Update" onclick="javascript: UpdatePreview();"/>
 <hr/>
 
-<input type="button" value="Add Graph" onclick="javascript: AddGraph();"/>
-Graphs: <select id="graphs" onchange="javascript: LoadEquation();"></select>
-<input type="button" value="Replace Selected Graph" onclick="javascript: ReplaceGraph();"/>
-<input type="button" value="Remove" onclick="javascript: RemoveGraph();"/>
+<input type="button" fckLang="DlgAsciiSvgAddGraph" value="Add Graph" onclick="javascript: AddGraph();"/>
+<span fckLang="DlgAsciiSvgGraphs">Graphs:</span> <select id="graphs" onchange="javascript: LoadEquation();"></select>
+<input type="button" fckLang="DlgAsciiSvgReplaceGraph" value="Replace Selected Graph" onclick="javascript: ReplaceGraph();"/>
+<input type="button" fckLang="DlgAsciiSvgRemoveGraph" value="Remove" onclick="javascript: RemoveGraph();"/>
 <select id="alignment" onchange="javascript: UpdatePreview();">
-<option value="text-top">Top</option>
-<option value="middle">Middle</option>
-<option value="text-bottom">Bottom</option>
-<option value="left">Float left</option>
-<option value="right">Float right</option>
+<option fckLang="DlgAsciiSvgTop" value="text-top">Top</option>
+<option fckLang="DlgAsciiSvgMiddle" value="middle">Middle</option>
+<option fckLang="DlgAsciiSvgBottom" value="text-bottom">Bottom</option>
+<option fckLang="DlgAsciiSvgFloatLeft" value="left">Float left</option>
+<option fckLang="DlgAsciiSvgFloatRight" value="right">Float right</option>
 </select>
 
 <hr/>

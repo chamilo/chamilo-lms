@@ -20,8 +20,7 @@ var FCKUndo = oEditor.FCKUndo ;
 // Set the language direction.
 window.document.dir = FCKLang.Dir ;
 
-// TODO: This language variable to be corrected
-FCKLang["DlgAsciiIncompatibleBrowser"] = FCKLang["DlgAsciiIncompatibleBrowser"] ? FCKLang["DlgAsciiIncompatibleBrowser"] : 'Your browser is not able to show mathematical formulas. Please, use %s1 or Internet Explorer with %s2 plugin.' ;
+FCKLang["DlgAsciiSvgEvery"] = FCKLang["DlgAsciiSvgEvery"] ? FCKLang["DlgAsciiSvgEvery"] : 'every' ;
 
 // Settings for ASCIIMathML.js
 // Checking for native MathML support, it is always needed for this dialog.
@@ -358,7 +357,7 @@ function UpdateEquationType()
     {
         UpdateText( 'eq1lbl' , 'dy/dx (x,y) = ' ) ;
         GetE( 'equation' ).value = 'x*y' ;
-        UpdateText( 'eq2lbl' , 'every ' ) ;
+        UpdateText( 'eq2lbl' , FCKLang["DlgAsciiSvgEvery"] + ' ' ) ;
         var newinput = document.createElement( 'input' ) ;
         newinput.type = 'text' ;
         newinput.name = 'eqn2' ;

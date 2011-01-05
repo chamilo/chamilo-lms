@@ -73,6 +73,10 @@ switch ($action) {
 		// Function that displays the details of the course description in html.
 		echo  CourseManager::get_details_course_description_html($descriptions, api_get_system_encoding(), false);
 	break;
+    
+    /** 
+     * @todo this functions need to belong to a class or a special wrapper to process the AJAX petitions from the jqgrid
+     */
     case 'session_courses_lp_default':        
         
         require_once '../global.inc.php';
@@ -84,17 +88,21 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         
         
-        $page  = $_REQUEST['page'];     //page
-        $limit = $_REQUEST['rows'];     // quantity of rows
-        $sidx  = $_REQUEST['sidx'];    //index to filter    
-        $sord  = $_REQUEST['sord'];    //asc or desc        
-        $session_id  = $_REQUEST['session_id'];
+        $page  = intval($_REQUEST['page']);     //page
+        $limit = intval($_REQUEST['rows']);     // quantity of rows
+        $sidx  = $_REQUEST['sidx'];    //index to filter         
+        $sord  = $_REQUEST['sord'];    //asc or desc
+        if (!in_array($sord, array('asc','desc'))) {
+        	$sord = 'desc';
+        }        
+        $session_id  = intval($_REQUEST['session_id']);
                 
         if(!$sidx) $sidx =1;
         
         $start = $limit*$page - $limit; 
         
         $course_list    = SessionManager::get_course_list_by_session_id($session_id);
+        
                         
         $count = 0;
         
@@ -146,11 +154,14 @@ switch ($action) {
             require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
             
             
-            $page  = $_REQUEST['page'];     //page
-            $limit = $_REQUEST['rows'];     // quantity of rows
-            $sidx  = $_REQUEST['sidx'];    //index to filter    
-            $sord  = $_REQUEST['sord'];    //asc or desc        
-            $session_id  = $_REQUEST['session_id'];
+              $page  = intval($_REQUEST['page']);     //page
+            $limit = intval($_REQUEST['rows']);     // quantity of rows
+            $sidx  = $_REQUEST['sidx'];    //index to filter         
+            $sord  = $_REQUEST['sord'];    //asc or desc
+            if (!in_array($sord, array('asc','desc'))) {
+                $sord = 'desc';
+            }        
+            $session_id  = intval($_REQUEST['session_id']);
                     
             if(!$sidx) $sidx =1;
             
@@ -208,11 +219,14 @@ switch ($action) {
             require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
             
             
-            $page  = $_REQUEST['page'];     //page
-            $limit = $_REQUEST['rows'];     // quantity of rows
-            $sidx  = $_REQUEST['sidx'];    //index to filter    
-            $sord  = $_REQUEST['sord'];    //asc or desc        
-            $session_id  = $_REQUEST['session_id'];
+                $page  = intval($_REQUEST['page']);     //page
+            $limit = intval($_REQUEST['rows']);     // quantity of rows
+            $sidx  = $_REQUEST['sidx'];    //index to filter         
+            $sord  = $_REQUEST['sord'];    //asc or desc
+            if (!in_array($sord, array('asc','desc'))) {
+                $sord = 'desc';
+            }        
+            $session_id  = intval($_REQUEST['session_id']);
                     
             if(!$sidx) $sidx =1;
             

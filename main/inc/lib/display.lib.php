@@ -754,10 +754,10 @@ class Display {
     }
     
     /**
-     * Creates a tab list  
+     * Creates a tab menu  
      * Requirements: declare the jquery, jquery-ui libraries + the jquery-ui.css  in the $htmlHeadXtra variable before the display_header
      * Add this script
-     * 
+     * @example 
      * <script>
             $(function() {
                 $( "#tabs" ).tabs();                
@@ -765,7 +765,7 @@ class Display {
         </script>
      * @param   array   list of the tab titles
      * @param   array   content that will be showed
-     * @param   string  the id of the container of the tab
+     * @param   string  the id of the container of the tab in the example "tabs"
      * @param   array   attributes for the ul 
      *   
      */
@@ -795,6 +795,92 @@ class Display {
         }        
         $main_div = self::tag('div',$ul.$divs, array('id'=>$id));
         return $main_div ;    	
+    }
+    
+    /**
+     * 
+     */
+    public static function grid_html($div_id){
+    	$table  = self::tag('table','',array('id'=>$div_id));
+        $table .= self::tag('div','',array('id'=>$div_id.'_pager'));
+        return $table; 
+    }
+    
+    /**
+     * This is just a wrapper to use the jqgrid For the other options go here http://www.trirand.com/jqgridwiki/doku.php?id=wiki:options
+     * This function need to be in the ready jquery function --> $(function() { }
+     * @param   string  div id
+     * @param   string  url where the jqgrid will ask for data
+     * @param   array   Visible columns (you should use get_lang). An array in which we place the names of the columns. This is the text that appears in the head of the grid (Header layer). Example: colname   {name:'date',     index:'date',   width:120, align:'right'}, 
+     * @param   array   the column model :  Array which describes the parameters of the columns.This is the most important part of the grid. For a full description of all valid values see colModel API. See the url above.
+     * @param   array   extra parameters
+     * @return  string  the js code 
+     * 
+     */
+    public static function grid_js($div_id, $url, $column_names, $column_model, $extra_params) {
+        $obj = new stdClass();
+        $obj->url           = $url;        
+        $obj->colNames      = $column_names;        
+        $obj->colModel      = $column_model;
+        $obj->pager         = $div_id.'_pager';
+        
+        $obj->datatype  = 'json';
+        if (!empty($extra_params['datatype'])) {
+            $obj->datatype  = $extra_params['datatype'];
+        }
+        
+        if (!empty($extra_params['sortname'])) {
+            $obj->sortname      = $extra_params['sortname'];
+        }
+        $obj->sortorder     = 'desc';
+        if (!empty($extra_params['sortorder'])) {
+            $obj->sortorder     = $extra_params['sortorder'];
+        }
+        
+        if (!empty($extra_params['rowList'])) {
+            $obj->rowList     = $extra_params['rowList'];
+        }       
+        
+        $obj->viewrecords = 'true';   
+        if (!empty($extra_params['viewrecords']))
+            $obj->viewrecords   = $extra_params['viewrecords'];
+            
+        if (!empty($extra_params)) {
+            foreach ($extra_params as $key=>$element){           	
+                $obj->$key = $element;            	
+            }
+        }
+         
+        $json  = '$("#'.$div_id.'").jqGrid(';
+        $json .= json_encode($obj);
+        $json .= ');';
+        return $json;
+        
+        /*
+        Real Example
+        $("#list_week").jqGrid({
+            url:'<?php echo api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id; ?>',
+            datatype: 'json',    
+            colNames:['Week','Date','Course', 'LP'],
+            colModel :[
+              {name:'week',     index:'week',   width:120, align:'right'},       
+              {name:'date',     index:'date',   width:120, align:'right'},
+              {name:'course',   index:'course', width:150},  
+              {name:'lp',       index:'lp',     width:250} 
+            ],
+            pager: '#pager3',
+            rowNum:100,
+             rowList:[10,20,30],    
+            sortname: 'date',
+            sortorder: 'desc',
+            viewrecords: true,
+            grouping:true, 
+            groupingView : { 
+                groupField : ['week'],
+                groupColumnShow : [false],
+                groupText : ['<b>Week {0} - {1} Item(s)</b>']
+            } 
+        });  */    	
     }
     
 } //end class Display

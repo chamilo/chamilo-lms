@@ -36,7 +36,8 @@ $language_file = array('courses', 'index');
 $cidReset = true; /* Flag forcing the 'current course' reset,
                     as we're not inside a course anymore  */
 
-unset($_SESSION['this_section']); // For hmtl editor repository.
+if (isset($_SESSION['this_section']))
+    unset($_SESSION['this_section']); // For HTML editor repository.
 
 /* Included libraries */
 
@@ -1348,7 +1349,7 @@ if (is_array($courses_tree)) {
                         $extra_info = (!empty($s['coach']) ? $s['coach'].' | ' : '').$s['dates'];
                         //var_dump($s);
                         //echo get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach']) ? $s['coach'].' - ' : '').$s['dates'];
-                        $session_link = Display::tag('a',$s['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?id_session='.$session['details']['id']));
+                        $session_link = Display::tag('a',$s['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
                         echo '<span>' . $session_link. ' </span> <span style="padding-left: 10px; font-size: 90%; font-weight: normal;">'.$extra_info.'</span>';
                         if (api_is_platform_admin()) {
                             echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';

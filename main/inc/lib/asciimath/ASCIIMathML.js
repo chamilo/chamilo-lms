@@ -4719,7 +4719,10 @@ function ASpreprocess() {
                 //picture.className = "ASCIIsvg";
             }
         }
-        if (!noSVG) {
+        // Modified by Ivan Tcholakov, 06-JAN-2011.
+        //if (!noSVG) {
+        if (sscr && sscr!='' && !noSVG) {
+        //
             picture.className = "ASCIIsvg";
         }
      }

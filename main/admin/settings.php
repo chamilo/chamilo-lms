@@ -13,9 +13,9 @@
 /* INIT SECTION */
 
 // Language files that need to be included.
-if ($_GET['category'] == 'Templates') {
+if (isset($_GET['category']) && $_GET['category'] == 'Templates') {
     $language_file = array('admin', 'document');
-} else if($_GET['category'] == 'Gradebook') {
+} else if(isset($_GET['category']) && $_GET['category'] == 'Gradebook') {
     $language_file = array('admin', 'gradebook');
 } else {
     $language_file = 'admin';

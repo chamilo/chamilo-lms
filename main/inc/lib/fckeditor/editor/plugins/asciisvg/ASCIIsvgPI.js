@@ -163,21 +163,21 @@ function isSVGavailable() {
     // Added by Ivan Tcholakov, 06-JAN-2011.
     if (navigator.appName.slice(0, 8) == "Netscape") { // Gecko, Chrome, Safari
         if (window['SVGElement']) {
-            return 1;
-        } else {
             return null;
+        } else {
+            return 1;
         }
     } else if (navigator.appName.slice(0, 9) == "Microsoft") { // IE
         try {
             var oSVG = eval("new ActiveXObject('Adobe.SVGCtl.3');");
-            return 1;
-        } catch (ex) {
             return null;
+        } catch (ex) {
+            return 1;
         }
     } else if (navigator.appName.slice(0, 5) == "Opera") { // Opera 9.50b1 or higher
-        return 1;
+        return null;
     }
-    return null;
+    return 1;
     //
 }
 

@@ -25,7 +25,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License (at http://www.gnu.org/copyleft/gpl.html)
 for more details.*/
 
-//var AScgiloc = 'http://www.imathas.com/imathas/filter/graph/svgimg.php';
+var AScgiloc = 'http://www.imathas.com/imathas/filter/graph/svgimg.php';
 var ASnoSVG = false;
 var checkIfSVGavailable = true;
 var notifyIfNoSVG = false;
@@ -122,6 +122,9 @@ function myCreateElementXHTML(t) {
 
 
 function isSVGavailable() {
+
+// Disabled by Ivan Tcholakov, 06-JAN-2011.
+/*
 //Safari 3 can do SVG, but still has issues.
   if ((ver = navigator.userAgent.toLowerCase().match(/safari\/(\d+)/))!=null) {
         //if (ver[1]>524) {
@@ -155,6 +158,27 @@ function isSVGavailable() {
         return 1;
     }
   else return 1;
+*/
+
+    // Added by Ivan Tcholakov, 06-JAN-2011.
+    if (navigator.appName.slice(0, 8) == "Netscape") { // Gecko, Chrome, Safari
+        if (window['SVGElement']) {
+            return 1;
+        } else {
+            return null;
+        }
+    } else if (navigator.appName.slice(0, 9) == "Microsoft") { // IE
+        try {
+            var oSVG = eval("new ActiveXObject('Adobe.SVGCtl.3');");
+            return 1;
+        } catch (ex) {
+            return null;
+        }
+    } else if (navigator.appName.slice(0, 5) == "Opera") { // Opera 9.50b1 or higher
+        return 1;
+    }
+    return null;
+    //
 }
 
 function less(x,y) { return x < y }  // used for scripts in XML files

@@ -1649,9 +1649,9 @@ class learnpath {
             '  <tr> ' . "\n" .
             '    <td>' . "\n" .
             '      <div class="buttons">' . "\n" .
-            '        <a href="lp_controller.php?action=stats" onclick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>' . "\n" .
-            '        <a href="" onclick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>' . "\n" .
-            '        <a href="" onclick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>' . "\n" .
+            '        <a href="lp_controller.php?action=stats" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>' . "\n" .
+            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>' . "\n" .
+            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>' . "\n" .
             //'        <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang('ScormExitFullScreen').'"></a>'."\n" .
             //'        <a href="lp_controller.php?action=list" target="_top" title="learnpaths list"><img border="0" src="../img/exit.png" title="Exit"></a>'."\n" .
             '      </div>' . "\n" .
@@ -1664,9 +1664,9 @@ class learnpath {
             '  <tr> ' . "\n" .
             '    <td>' . "\n" .
             '      <div class="buttons">' . "\n" .
-            '        <a href="lp_controller.php?action=stats" onclick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>' . "\n" .
-            '        <a href="" onclick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>' . "\n" .
-            '        <a href="" onclick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>' . "\n" .
+            '        <a href="lp_controller.php?action=stats" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>' . "\n" .
+            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>' . "\n" .
+            '        <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>' . "\n" .
             // '        <a href="lp_controller.php?action=mode&mode=fullscreen" target="_top" title="fullscreen"><img border="0" src="../img/view_fullscreen.gif" width="18" height="18" title="'.get_lang('ScormFullScreen').'"></a>'."\n" .
             '      </div>' . "\n" .
             '    </td>' . "\n" .
@@ -2702,11 +2702,11 @@ class learnpath {
             if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dir' && $item['type'] != 'dokeos_module') {
                 //$html .= "<a href='lp_controller.php?".api_get_cidreq()."&action=content&lp_id=".$this->get_id()."&item_id=".$item['id']."' target='lp_content_frame_name'>".$title."</a>" ;
                 $url = $this->get_link('http', $item['id']);
-                //$html .= '<a href="'.$url.'" target="content_name" onclick="top.load_item('.$item['id'].',\''.$url.'\');">'.$title.'</a>' ;
-                //$html .= '<a href="" onclick="top.load_item('.$item['id'].',\''.$url.'\');return false;">'.$title.'</a>' ;
+                //$html .= '<a href="'.$url.'" target="content_name" onClick="top.load_item('.$item['id'].',\''.$url.'\');">'.$title.'</a>' ;
+                //$html .= '<a href="" onClick="top.load_item('.$item['id'].',\''.$url.'\');return false;">'.$title.'</a>' ;
 
                 //<img align="absbottom" width="13" height="13" src="../img/lp_document.png">&nbsp;background:#aaa;
-                $html .= '<a href="" onclick="switch_item(' .
+                $html .= '<a href="" onClick="switch_item(' .
                 $mycurrentitemid . ',' .
                 $item['id'] . ');' .
                 'return false;" >' . stripslashes($title) . '</a>';
@@ -4628,7 +4628,7 @@ class learnpath {
                     $return .= '</a>' . "\n";
                 }
 
-                $return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . addslashes($title) . '\');">';
+                $return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($title) . '\');">';
                 $return .= '<img style="margin:1px;" alt="" src="../img/delete.gif" title="' . get_lang('_delete_learnpath_module') . '" />';
                 $return .= '</a>' . "\n";
 
@@ -5205,7 +5205,7 @@ class learnpath {
         $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>' . "\n";
         $return .= "\t\t\t" . '<td class="input">' . "\n";
 
-        $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onchange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
+        $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
 
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
 
@@ -5430,7 +5430,7 @@ class learnpath {
         $return .= "\t\t" . '<tr>' . "\n";
         $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . ' :</label></td>' . "\n";
         $return .= "\t\t\t" . '<td class="input">' . "\n";
-        $return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="javascript: load_cbo(this.value);" size="1">';
+        $return .= "\t\t\t\t" . '<select id="idParent" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
             $id
@@ -5526,7 +5526,7 @@ class learnpath {
         }
 
         $return .= "\t\t" . '<tr>' . "\n";
-        $return .= "\t\t\t" . '<td> &nbsp;</td><td><button class="save" name="submit_button" action="edit" type="submit">' . get_lang('SaveHotpotatoes') . '</button></td>' . "\n";
+        $return .= "\t\t\t" . '<td>&nbsp; </td><td><button class="save" name="submit_button" action="edit" type="submit">' . get_lang('SaveHotpotatoes') . '</button></td>' . "\n";
         $return .= "\t\t" . '</tr>' . "\n";
         $return .= "\t" . '</table>' . "\n";
 
@@ -5646,7 +5646,7 @@ class learnpath {
         $return .= "\t\t" . '<tr>' . "\n";
         $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>' . "\n";
         $return .= "\t\t\t" . '<td class="input">' . "\n";
-        $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onchange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
+        $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
             $id
@@ -5841,7 +5841,7 @@ class learnpath {
         $return .= "\t\t" . '<tr>' . "\n";
         $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '&nbsp;:</label></td>' . "\n";
         $return .= "\t\t\t" . '<td class="input">' . "\n";
-        $return .= "\t\t\t\t" . '<select id="idParent" name="parent" onchange="javascript: load_cbo(this.value);" size="1">';
+        $return .= "\t\t\t\t" . '<select id="idParent" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
             $id
@@ -6592,7 +6592,7 @@ class learnpath {
         $return .= "\t\t" . '<tr>' . "\n";
         $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>' . "\n";
         $return .= "\t\t\t" . '<td class="input">' . "\n";
-        $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onchange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
+        $return .= "\t\t\t\t" . '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
             $id
@@ -6807,7 +6807,7 @@ class learnpath {
         $return .= "\t\t" . '<tr>' . "\n";
         $return .= "\t\t\t" . '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>' . "\n";
         $return .= "\t\t\t" . '<td class="input">' . "\n";
-        $return .= "\t\t\t\t" . '<select id="idParent" name="parent" style="width:100%;" onchange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
+        $return .= "\t\t\t\t" . '<select id="idParent" name="parent" style="width:100%;" onChange="javascript: load_cbo(this.value);" class="learnpath_item_form" size="1">';
         //$parent_item_id = $_SESSION['parent_item_id'];
         $return .= "\t\t\t\t\t" . '<option class="top" value="0">' . $this->name . '</option>';
         $arrHide = array (
@@ -7001,7 +7001,7 @@ class learnpath {
         if ($item_type != 'dokeos_chapter' && $item_type != 'chapter') {
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item_prereq&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" title="' . get_lang('Prerequisites') . '"><img align="absbottom" alt="' . get_lang('Prerequisites') . '" src="../img/right.gif" title="' . get_lang('Prerequisites') . '" /> ' . get_lang('Prerequisites') . '</a>';
         }
-        $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . addslashes($s_title) . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="' . get_lang('Delete') . '" /> ' . get_lang('Delete') . '</a>';
+        $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;view=build&amp;id=' . $item_id . '&amp;lp_id=' . $this->lp_id . '" onClick="return confirmation(\'' . addslashes($s_title) . '\');" title="Delete the current item"><img alt="Delete the current item" align="absbottom" src="../img/delete.gif" title="' . get_lang('Delete') . '" /> ' . get_lang('Delete') . '</a>';
 
         //$return .= '<br /><br /><p class="lp_text">' . ((trim($s_description) == '') ? ''.get_lang('NoDescription').'' : stripslashes(nl2br($s_description))) . '</p>';
 
@@ -7429,9 +7429,37 @@ class learnpath {
         require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
         if (count($resources_sorted) > 0) {
             foreach ($resources_sorted as $key => $resource) {
+				
+						
+				//echo '<br/>'.$key;//juan problema da el nombre pero no path, asi que podría borrar cosas que no quisiera, por ej. certificates, shared_folder, sf_user_ xxx, flv, video, HotPotatoes_files, chat_files
+				
+				
                 if (is_int($resource['id'])) {
-                    // It's a folder.
-                    $return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '" onclick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onclick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')" style="cursor: pointer;" >' . $key . '</span></div><div style="display: none;" id="' . $resource['id'] . '">';
+                 // It's a folder.
+					//hide some folders
+					if (in_array($key, array('shared_folder','chat_files', 'sf_user_', 'HotPotatoes_files', 'css'))){
+						continue;
+					}elseif($key=='certificates'){
+						continue;
+					}
+					//trad some titles
+					if ($key=='images'){
+						$key=get_lang('Images');
+					}
+					elseif($key=='gallery'){
+						$key=get_lang('Gallery');
+					}
+					elseif($key=='flash'){
+						$key=get_lang('Flash');
+					}
+					elseif($key=='audio'){
+						$key=get_lang('Audio');
+					}					
+					elseif($key=='video'){
+						$key=get_lang('Video');
+					}
+					
+                    $return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '" onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')" style="cursor: pointer;" >' . $key . '</span></div><div style="display: none;" id="' . $resource['id'] . '">';
                     $return .= $this->write_resources_tree($resource['files'], $num +1);
                     $return .= '</div></div>';
                 } else {

@@ -814,12 +814,15 @@ class Display {
      * @param   array   Visible columns (you should use get_lang). An array in which we place the names of the columns. This is the text that appears in the head of the grid (Header layer). Example: colname   {name:'date',     index:'date',   width:120, align:'right'}, 
      * @param   array   the column model :  Array which describes the parameters of the columns.This is the most important part of the grid. For a full description of all valid values see colModel API. See the url above.
      * @param   array   extra parameters
+     * @param   array   data that will be loaded
      * @return  string  the js code 
      * 
      */
-    public static function grid_js($div_id, $url, $column_names, $column_model, $extra_params) {
+    public static function grid_js($div_id, $url, $column_names, $column_model, $extra_params, $data = array()) {
         $obj = new stdClass();
-        $obj->url           = $url;        
+              
+        if (!empty($url))
+            $obj->url           = $url;        
         $obj->colNames      = $column_names;        
         $obj->colModel      = $column_model;
         $obj->pager         = $div_id.'_pager';
@@ -832,14 +835,20 @@ class Display {
         if (!empty($extra_params['sortname'])) {
             $obj->sortname      = $extra_params['sortname'];
         }
-        $obj->sortorder     = 'desc';
+        //$obj->sortorder     = 'desc';
         if (!empty($extra_params['sortorder'])) {
             $obj->sortorder     = $extra_params['sortorder'];
         }
         
         if (!empty($extra_params['rowList'])) {
             $obj->rowList     = $extra_params['rowList'];
-        }       
+        }
+        $obj->rowNum = 10;
+        if (!empty($extra_params['rowNum'])) {
+            $obj->rowNum     = $extra_params['rowNum'];
+        }         
+        
+        //height: 'auto',     
         
         $obj->viewrecords = 'true';   
         if (!empty($extra_params['viewrecords']))
@@ -850,10 +859,28 @@ class Display {
                 $obj->$key = $element;            	
             }
         }
+        
+        if (!empty($data)) {
+            $data_var = $div_id.'_data';
+            $json.=' var '.$data_var.' = '.json_encode($data).';';
+          /*  $json.='for(var i=0;i<='.$data_var.'.length;i++)
+                    jQuery("#'.$div_id.'").jqGrid(\'addRowData\',i+1,'.$data_var.'[i]);';*/
+            $obj->data = $data_var;
+            $obj->datatype = 'local';
+            $json.="\n";
+        }     
+        
+        $json_encode = json_encode($obj);
+        if (!empty($data)) {
+            //Converts the "data":"js_variable" to "data":js_variable
+            $json_encode = str_replace('"data":"'.$data_var.'"','"data":'.$data_var.'',$json_encode);
+        }
          
-        $json  = '$("#'.$div_id.'").jqGrid(';
-        $json .= json_encode($obj);
+        $json .= '$("#'.$div_id.'").jqGrid(';
+        $json .= $json_encode;
         $json .= ');';
+    
+        $json.="\n";
         return $json;
         
         /*

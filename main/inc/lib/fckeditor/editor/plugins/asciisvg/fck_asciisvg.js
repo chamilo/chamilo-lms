@@ -67,7 +67,10 @@ window.onload = function()
 
     if ( typeof ASpreprocess != 'undefined' ) // Dealing with version difference.
     {
-        ASpreprocess() ;
+        if ( !noSVG )
+        {
+            ASpreprocess() ;
+        }
     }
 
     if ( !noSVG )

@@ -118,22 +118,14 @@ yscl: <input type="text" id="yscl" size="3" value="1" onChange='javascript: Upda
 
 <div id="preview">
 <script type="text/javascript">
-//if ( noSVG )
-//{
-    // TODO: Not tested yet.
-//    document.write( '<img id="previewimg" style="width:' +
-//        width + 'px; height: ' +
-//        height + 'px; vertical-align: middle; float: none;" src="' + AScgiloc +
-//        '?sscr=' + encodeURIComponent( sscr ) + '" script=" " />' ) ;
-//}
-//else
-//{
+if ( !noSVG )
+{
     document.write( '<embed id="previewsvg" type="image/svg+xml" src="' +
         FCKConfig.DrawingASCIISVG +
         '" style="width:' +
         width + 'px; height: ' +
         height + 'px; vertical-align: middle; float: none;" sscr="' + sscr + '" />' ) ;
-//}
+}
 </script>
 </div>
 

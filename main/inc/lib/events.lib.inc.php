@@ -700,7 +700,7 @@ function get_all_exercise_results($exercise_id, $course_code, $session_id = 0) {
 }
 
 /**
- * Gets all exercise results (NO Exercises in LPs )from a given exercise id, course, session
+ * Gets all exercise results (NO Exercises in LPs) from a given exercise id, course, session
  * @param   int     exercise id
  * @param   string  course code
  * @param   int     session id

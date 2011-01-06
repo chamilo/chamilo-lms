@@ -1136,7 +1136,12 @@ function convert_score($score, $weight) {
     return $score_rounded;
 }
 
-
+/**
+ * Getting all exercises from a course
+ * @param   array   course data
+ * @param   int     session id
+ * @return  array   exercise data
+ */
 function get_all_exercises($course_info = null, $session_id = 0) {
     if(!empty($course_info)) {
         $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST,$course_info['db_name']);	
@@ -1157,15 +1162,24 @@ function get_all_exercises($course_info = null, $session_id = 0) {
 }
 
 /**
- * Gets the position of the score based in my score (result/weight) and the exe_id
+ * Gets the position of the score based in a given score (result/weight) and the exe_id
+ * @param   float   user score to be compared
+ * @param   int     exe id of the exercise (this is necesary becase if 2 students have the same score the one with the minor exe_id will have a best position)
+ * @param   int     exercise id
+ * @param   string  course code
+ * @param   int     session id
+ * @return  int     the position of the user between his friends in a course (or course within a session)
  */
 function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0) {
     //Getting all exercise results
+    if (empty($session_id)) {
+    	$session_id = 0;
+    }
     $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
     if (empty($user_results)) {
     	return 1;
     } else {
-        $ranking = 1; 
+        $position = 1; 
         $my_ranking = array();
         foreach($user_results as $result) {
             //print_r($result);
@@ -1177,22 +1191,18 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
         }    
         asort($my_ranking);
         $position = count($my_ranking);
-      
-        foreach($my_ranking as $exe_id=>$ranking) {
-        	if ($my_score >= $ranking) {
-                if ($my_score == $ranking) {
-                    if ($my_exe_id < $exe_id) {
-                        $position--;
+        if (!empty($my_ranking))      
+            foreach($my_ranking as $exe_id=>$ranking) {
+            	if ($my_score >= $ranking) {
+                    if ($my_score == $ranking) {
+                        if ($my_exe_id < $exe_id) {
+                            $position--;
+                        }
+                    } else {           
+            		  $position--;                    
                     }
-                } else {           
-        		  $position--;                    
-                }
-        	}
-        }        
-        //echo $position;
+            	}
+            }        
         return $position;    
     }
-
 }
-
-

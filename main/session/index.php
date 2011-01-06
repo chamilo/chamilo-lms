@@ -194,31 +194,42 @@ foreach($final_array as $session_data) {
 }     
 //echo '<pre>';print_r($my_real_array) ;
 
-//Default grid settings
+//All Learnpaths grid settings (First tab, first subtab)
+
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id;
 $columns        = array('Date','Course', 'LP');
-$column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'120', 'align'=>'right'),
-                        array('name'=>'course', 'index'=>'course', 'width'=>'120', 'align'=>'right'),
-                        array('name'=>'lp',     'index'=>'lp',     'width'=>'120', 'align'=>'right'));
+$column_model   = array(array('name'=>'date',   'index'=>'date',  'width'=>'80',   'align'=>'left'),
+                        array('name'=>'course', 'index'=>'course', 'width'=>'500', 'align'=>'left'),
+                        array('name'=>'lp',     'index'=>'lp',     'width'=>'200',  'align'=>'center'));
                         
-//Course grid settings
+$extra_params['autowidth'] = 'true'; //use the width of the parent
+//$extra_params['forceFit'] = 'true'; //use the width of the parent
+
+
+//$extra_params['altRows'] = 'true'; //zebra style
+
+                        
+//Per course grid settings
 $url_course             = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_course&session_id='.$session_id;
 $extra_params_course['grouping'] = 'true';
 $extra_params_course['groupingView'] = array('groupField'=>array('course'),
                                             'groupColumnShow'=>array('false'),
                                             'groupText' => array('<b>Course {0} - {1} Item(s)</b>'));
+$extra_params_course['autowidth'] = 'true'; //use the width of the parent                                          
                               
-//Week grid
+//Per Week grid
 $url_week             = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id;
 $column_week = array('Week','Date','Course', 'LP');
-$column_week_model =array(array('name'=>'week',     'index'=>'week',    'width'=>'120', 'align'=>'right'),       
-                          array('name'=>'date',     'index'=>'date',    'width'=>'120', 'align'=>'right'),
-                          array('name'=>'course',   'index'=>'course',  'width'=>'120', 'align'=>'right'),
-                          array('name'=>'lp',       'index'=>'lp',      'width'=>'120', 'align'=>'right'));
+$column_week_model =array(array('name'=>'week',     'index'=>'week',    'width'=>'80', 'align'=>'left'),       
+                          array('name'=>'date',     'index'=>'date',    'width'=>'80', 'align'=>'right'),
+                          array('name'=>'course',   'index'=>'course',  'width'=>'500', 'align'=>'left'),
+                          array('name'=>'lp',       'index'=>'lp',      'width'=>'200', 'align'=>'center'));
 $extra_params_week['grouping'] = 'true';
 $extra_params_week['groupingView'] = array('groupField'=>array('week'),
                                             'groupColumnShow'=>'false',
                                             'groupText' => array('<b>Week {0} - {1} Item(s)</b>'));
+$extra_params_week['autowidth'] = 'true'; //use the width of the parent
+
 //MyQCM grid
 $column_exercise        = array(get_lang('Course'),get_lang('Exercise'), get_lang('Attempt').' #', get_lang('Result'), get_lang('Note'), get_lang('Position'));
 $column_exercise_model  = array(array('name'=>'course',     'index'=>'course',    'width'=>'450', 'align'=>'left','sortable'=>'false'),
@@ -230,6 +241,8 @@ $column_exercise_model  = array(array('name'=>'course',     'index'=>'course',  
                                 );                        
 $extra_params_exercise['grouping'] = 'true';
 $extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>Course {0} - {1} Item(s)</b>'));
+//$extra_params_exercise['altRows'] = 'true';
+
                                            
 ?>
 <br />
@@ -243,7 +256,7 @@ $(function() {
     $( "#tabs" ).tabs();
     $( "#sub_tab" ).tabs();        
 <?php 
-     echo Display::grid_js('list_default',  $url,           $columns,$column_model);
+     echo Display::grid_js('list_default',  $url,           $columns,$column_model,$extra_params);
      echo Display::grid_js('list_course',   $url_course,    $columns,$column_model,$extra_params_course);
      echo Display::grid_js('list_week',     $url_week,      $column_week,$column_week_model, $extra_params_week);     
      echo Display::grid_js('exercises',      '',  $column_exercise,$column_exercise_model, $extra_params_exercise, $my_real_array);        
@@ -259,7 +272,7 @@ $(function() {
 $headers        = array(get_lang('LearningPaths'), get_lang('MyQCM'), get_lang('MyResults'));
 $sub_header     = array(get_lang('AllLearningPaths'), get_lang('PerWeek'), get_lang('ByCourse'));
 $tabs           =  Display::tabs($sub_header, array(Display::grid_html('list_default'), Display::grid_html('list_week'), Display::grid_html('list_course')),'sub_tab');
-echo Display::tabs($headers, array($tabs, Display::grid_html('exercises'),'ccc'));
+echo Display::tabs($headers, array($tabs, Display::grid_html('exercises'),$my_reporting));
 
 // Footer
 Display :: display_footer();

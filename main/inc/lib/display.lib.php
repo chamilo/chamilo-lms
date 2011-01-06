@@ -758,11 +758,11 @@ class Display {
      * Requirements: declare the jquery, jquery-ui libraries + the jquery-ui.css  in the $htmlHeadXtra variable before the display_header
      * Add this script
      * @example 
-     * <script>
-            $(function() {
-                $( "#tabs" ).tabs();                
-            });
-        </script>
+             * <script>
+                    $(function() {
+                        $( "#tabs" ).tabs();                
+                    });
+                </script>
      * @param   array   list of the tab titles
      * @param   array   content that will be showed
      * @param   string  the id of the container of the tab in the example "tabs"
@@ -798,7 +798,7 @@ class Display {
     }
     
     /**
-     * 
+     * Displays the html needed by the grid_js function
      */
     public static function grid_html($div_id){
     	$table  = self::tag('table','',array('id'=>$div_id));
@@ -806,9 +806,10 @@ class Display {
         return $table; 
     }
     
-    /**
-     * This is just a wrapper to use the jqgrid For the other options go here http://www.trirand.com/jqgridwiki/doku.php?id=wiki:options
-     * This function need to be in the ready jquery function --> $(function() { }
+    /** 
+     * This is just a wrapper to use the jqgrid For the other options go here http://www.trirand.com/jqgridwiki/doku.php?id=wiki:options 
+     * This function need to be in the ready jquery function example --> $(function() { <?php echo Display::grid_js('grid' ...); ?> }
+     * In order to work this function needs the Display::grid_html function with the same div id
      * @param   string  div id
      * @param   string  url where the jqgrid will ask for data
      * @param   array   Visible columns (you should use get_lang). An array in which we place the names of the columns. This is the text that appears in the head of the grid (Header layer). Example: colname   {name:'date',     index:'date',   width:120, align:'right'}, 
@@ -868,13 +869,15 @@ class Display {
             $obj->data = $data_var;
             $obj->datatype = 'local';
             $json.="\n";
-        }     
-        
+        }        
         $json_encode = json_encode($obj);
         if (!empty($data)) {
             //Converts the "data":"js_variable" to "data":js_variable
-            $json_encode = str_replace('"data":"'.$data_var.'"','"data":'.$data_var.'',$json_encode);
+            $json_encode = str_replace('"data":"'.$data_var.'"','"data":'.$data_var.'',$json_encode);            
         }
+        //Fixing true/false js values that doesn't need the ""
+        $json_encode = str_replace(':"true"',':true',$json_encode);
+        $json_encode = str_replace(':"false"',':false',$json_encode);
          
         $json .= '$("#'.$div_id.'").jqGrid(';
         $json .= $json_encode;

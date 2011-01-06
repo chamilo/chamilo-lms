@@ -19,10 +19,10 @@ it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation; either version 2.1 of the License, or (at
 your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-General Public License (at http://www.gnu.org/copyleft/gpl.html) 
+General Public License (at http://www.gnu.org/copyleft/gpl.html)
 for more details.*/
 
 //var AScgiloc = 'http://www.imathas.com/imathas/filter/graph/svgimg.php';
@@ -62,7 +62,7 @@ var arcsin = Math.asin, arccos = Math.acos, arctan = Math.atan;
 var sec = function(x) { return 1/Math.cos(x) };
 var csc = function(x) { return 1/Math.sin(x) };
 var cot = function(x) { return 1/Math.tan(x) };
-var xmin, xmax, ymin, ymax, xscl, yscl, 
+var xmin, xmax, ymin, ymax, xscl, yscl,
     xgrid, ygrid, xtick, ytick, initialized;
 var isIE = document.createElementNS==null;
 var picture, svgpicture, doc, width, height, a, b, c, d, i, n, p, t, x, y;
@@ -71,7 +71,7 @@ var arccsc = function(x) { return arcsin(1/x) };
 var arccot = function(x) { return arctan(1/x) };
 var sinh = function(x) { return (Math.exp(x)-Math.exp(-x))/2 };
 var cosh = function(x) { return (Math.exp(x)+Math.exp(-x))/2 };
-var tanh = 
+var tanh =
   function(x) { return (Math.exp(x)-Math.exp(-x))/(Math.exp(x)+Math.exp(-x)) };
 var sech = function(x) { return 1/cosh(x) };
 var csch = function(x) { return 1/sinh(x) };
@@ -122,29 +122,29 @@ function myCreateElementXHTML(t) {
 
 
 function isSVGavailable() {
-//Safari 3 can do SVG, but still has issues.  
+//Safari 3 can do SVG, but still has issues.
   if ((ver = navigator.userAgent.toLowerCase().match(/safari\/(\d+)/))!=null) {
-		//if (ver[1]>524) {
-		//	return null;
-		//}
-		return 1;
- } 
-//Opera can do SVG, but not very pretty, so might want to skip it 
- if ((ver = navigator.userAgent.toLowerCase().match(/opera\/([\d\.]+)/))!=null) {
-		if (ver[1]>9.1) {
-			return null;
-		}
+        //if (ver[1]>524) {
+        //	return null;
+        //}
+        return 1;
  }
- //Mozillas. 
+//Opera can do SVG, but not very pretty, so might want to skip it
+ if ((ver = navigator.userAgent.toLowerCase().match(/opera\/([\d\.]+)/))!=null) {
+        if (ver[1]>9.1) {
+            return null;
+        }
+ }
+ //Mozillas.
   if (navigator.product && navigator.product=='Gecko') {
-	   var rv = navigator.userAgent.toLowerCase().match(/rv:\s*([\d\.]+)/);
-	   if (rv!=null) {
-		rv = rv[1].split('.');
-		if (rv.length<3) { rv[2] = 0;}
-		if (rv.length<2) { rv[1] = 0;}
-	   }
-	   if (rv!=null && 10000*rv[0]+100*rv[1]+1*rv[2]>=10800) return null;
-	   else return 1;
+       var rv = navigator.userAgent.toLowerCase().match(/rv:\s*([\d\.]+)/);
+       if (rv!=null) {
+        rv = rv[1].split('.');
+        if (rv.length<3) { rv[2] = 0;}
+        if (rv.length<2) { rv[1] = 0;}
+       }
+       if (rv!=null && 10000*rv[0]+100*rv[1]+1*rv[2]>=10800) return null;
+       else return 1;
   }
   //IE + AdobeSVGviewer
   if (navigator.appName.slice(0,9)=="Microsoft")
@@ -159,7 +159,7 @@ function isSVGavailable() {
 
 function less(x,y) { return x < y }  // used for scripts in XML files
                                      // since IE does not handle CDATA well
-function setText(st,id) { 
+function setText(st,id) {
   var node = document.getElementById(id);
   if (node!=null)
     if (node.childNodes.length!=0) node.childNodes[0].nodeValue = st;
@@ -196,7 +196,7 @@ function top_listener(evt) {
 }
 
 
-function bottom_listener(evt) { 
+function bottom_listener(evt) {
   svgpicture.setAttribute("ybase",evt.clientY-height+1);
 }
 
@@ -260,12 +260,12 @@ function updatePicture(obj) {
 
 function showHideCode(obj) {
   var node = obj.nextSibling;
-  while (node != null && node.nodeName != "BUTTON" && 
+  while (node != null && node.nodeName != "BUTTON" &&
 
     node.nodeName != "button") node = node.nextSibling;
   if (node.style.display == "none") node.style.display = "";
   else node.style.display = "none";
-  while (node != null && node.nodeName != "TEXTAREA" && 
+  while (node != null && node.nodeName != "TEXTAREA" &&
     node.nodeName != "textarea") node = node.previousSibling;
   if (node.style.display == "none") node.style.display = "";
   else node.style.display = "none";
@@ -285,12 +285,12 @@ function nobutton() { //do nothing
 }
 
 
-function setBorder(l,b,r,t) { 
-	if (t==null) {
-		border = new Array(l,l,l,l);
-	} else {
-		border = new Array(l,b,r,t);
-	}
+function setBorder(l,b,r,t) {
+    if (t==null) {
+        border = new Array(l,l,l,l);
+    } else {
+        border = new Array(l,b,r,t);
+    }
 }
 
 
@@ -315,17 +315,17 @@ function initPicture(x_min,x_max,y_min,y_max) {
   if (y_max!=null) ymax = y_max;
   if (xmin==null) xmin = -5;
   if (xmax==null) xmax = 5;
- if (typeof xmin != "number" || typeof xmax != "number" || xmin >= xmax) 
+ if (typeof xmin != "number" || typeof xmax != "number" || xmin >= xmax)
    alert("Picture requires at least two numbers: xmin < xmax");
- else if (y_max != null && (typeof y_min != "number" || 
+ else if (y_max != null && (typeof y_min != "number" ||
           typeof y_max != "number" || y_min >= y_max))
    alert("initPicture(xmin,xmax,ymin,ymax) requires numbers ymin < ymax");
  else {
-  //if (width==null) 
+  //if (width==null)
   width = picture.getAttribute("width");
   //else picture.setAttribute("width",width);
   if (width==null || width=="") width=defaultwidth;
-  //if (height==null) 
+  //if (height==null)
   height = picture.getAttribute("height");
   //else picture.setAttribute("height",height);
   if (height==null || height=="") height=defaultheight;
@@ -348,8 +348,8 @@ function initPicture(x_min,x_max,y_min,y_max) {
 //  if (true ||picture.nodeName == "EMBED" || picture.nodeName == "embed") {
     if (isIE) {
       svgpicture = picture.getSVGDocument().getElementById("root");
-      while (svgpicture.childNodes.length()>5) 
-        svgpicture.removeChild(svgpicture.lastChild); 
+      while (svgpicture.childNodes.length()>5)
+        svgpicture.removeChild(svgpicture.lastChild);
       svgpicture.setAttribute("width",width);
       svgpicture.setAttribute("height",height);
       doc = picture.getSVGDocument();
@@ -438,7 +438,7 @@ function line(p,q,id) { // segment connecting points p,q (coordinates in units)
     (height-p[1]*yunitlength-origin[1])+" "+
     (q[0]*xunitlength+origin[0])+","+(height-q[1]*yunitlength-origin[1]));
   node.setAttribute("stroke-width", strokewidth);
-  if (strokedasharray!=null) 
+  if (strokedasharray!=null)
     node.setAttribute("stroke-dasharray", strokedasharray);
   node.setAttribute("stroke", stroke);
   node.setAttribute("fill", fill);
@@ -470,7 +470,7 @@ function path(plist,id,c) {
   }
   node.setAttribute("d", st);
   node.setAttribute("stroke-width", strokewidth);
-  if (strokedasharray!=null) 
+  if (strokedasharray!=null)
     node.setAttribute("stroke-dasharray", strokedasharray);
   node.setAttribute("stroke", stroke);
   node.setAttribute("fill", fill);
@@ -504,11 +504,11 @@ function circle(center,radius,id) { // coordinates in units
 }
 
 
-function loop(p,d,id) { 
+function loop(p,d,id) {
 // d is a direction vector e.g. [1,0] means loop starts in that direction
   if (d==null) d=[1,0];
   path([p,[p[0]+d[0],p[1]+d[1]],[p[0]-d[1],p[1]+d[0]],p],id,"C");
-  if (marker=="arrow" || marker=="arrowdot") 
+  if (marker=="arrow" || marker=="arrowdot")
     arrowhead([p[0]+Math.cos(1.4)*d[0]-Math.sin(1.4)*d[1],
                p[1]+Math.sin(1.4)*d[0]+Math.cos(1.4)*d[1]],p);
 }
@@ -587,65 +587,65 @@ function rect(p,q,id,rx,ry) { // opposite corners in units, rounded by radii
 }
 
 function text(p,st,pos,angle) {
-	p[0] = p[0]*xunitlength+origin[0];
-	p[1] = p[1]*yunitlength+origin[1];
-	textabs(p,st,pos,angle);
+    p[0] = p[0]*xunitlength+origin[0];
+    p[1] = p[1]*yunitlength+origin[1];
+    textabs(p,st,pos,angle);
 }
 
 function textabs(p,st,pos,angle,id,fontsty) {
   if (angle==null) {
-	  angle = 0;
+      angle = 0;
   } else {
-	  angle = (360 - angle)%360;
+      angle = (360 - angle)%360;
   }
   var textanchor = "middle";
   var dx=0; var dy=0;
   if (angle==270) {
-	  var dy = 0; var dx = fontsize/3;
-	  if (pos!=null) {
-	    if (pos.match(/left/)) {dx = -fontsize/2;}
-	    if (pos.match(/right/)) {dx = fontsize-0;}
-	    if (pos.match(/above/)) {
-	      textanchor = "start";
-	      dy = -fontsize/2;
-	    }
-	    if (pos.match(/below/)) {
-	      textanchor = "end";
-	      dy = fontsize/2;
-	    }
-	  }
-  } 
+      var dy = 0; var dx = fontsize/3;
+      if (pos!=null) {
+        if (pos.match(/left/)) {dx = -fontsize/2;}
+        if (pos.match(/right/)) {dx = fontsize-0;}
+        if (pos.match(/above/)) {
+          textanchor = "start";
+          dy = -fontsize/2;
+        }
+        if (pos.match(/below/)) {
+          textanchor = "end";
+          dy = fontsize/2;
+        }
+      }
+  }
   if (angle==90) {
-	  var dy = 0; var dx = -fontsize/3;
-	  if (pos!=null) {
-	    if (pos.match(/left/)) dx = -fontsize-0;
-	    if (pos.match(/right/)) dx = fontsize/2;
-	    if (pos.match(/above/)) {
-	      textanchor = "end";
-	      dy = -fontsize/2;
-	    }
-	    if (pos.match(/below/)) {
-	      textanchor = "start";
-	      dy = fontsize/2;
-	    }
-	  }
+      var dy = 0; var dx = -fontsize/3;
+      if (pos!=null) {
+        if (pos.match(/left/)) dx = -fontsize-0;
+        if (pos.match(/right/)) dx = fontsize/2;
+        if (pos.match(/above/)) {
+          textanchor = "end";
+          dy = -fontsize/2;
+        }
+        if (pos.match(/below/)) {
+          textanchor = "start";
+          dy = fontsize/2;
+        }
+      }
   }
   if (angle==0) {
-	  var dx = 0; var dy = fontsize/3;
-	  if (pos!=null) {
-	    if (pos.match(/above/)) { dy = -fontsize/3; }
-	    if (pos.match(/below/)) { dy = fontsize-0; }
-	    if (pos.match(/right/)) {
-	      textanchor = "start";
-	      dx = fontsize/3;
-	    }
-	    if (pos.match(/left/)) {
-	      textanchor = "end";
-	      dx = -fontsize/3;
-	    }
-	  }
+      var dx = 0; var dy = fontsize/3;
+      if (pos!=null) {
+        if (pos.match(/above/)) { dy = -fontsize/3; }
+        if (pos.match(/below/)) { dy = fontsize-0; }
+        if (pos.match(/right/)) {
+          textanchor = "start";
+          dx = fontsize/3;
+        }
+        if (pos.match(/left/)) {
+          textanchor = "end";
+          dx = -fontsize/3;
+        }
+      }
   }
- 
+
   var node;
   if (id!=null) node = doc.getElementById(id);
   if (node==null) {
@@ -658,7 +658,7 @@ function textabs(p,st,pos,angle,id,fontsty) {
   node.setAttribute("x",p[0]+dx);
   node.setAttribute("y",height-p[1]+dy);
   if (angle != 0) {
-	  node.setAttribute("transform","rotate("+angle+" "+(p[0]+dx)+" "+(height-p[1]+dy)+")");
+      node.setAttribute("transform","rotate("+angle+" "+(p[0]+dx)+" "+(height-p[1]+dy)+")");
   }
   node.setAttribute("font-style",(fontsty!=null?fontsty:fontstyle));
   node.setAttribute("font-family",fontfamily);
@@ -669,19 +669,19 @@ function textabs(p,st,pos,angle,id,fontsty) {
   if (fontfill!="none") node.setAttribute("fill",fontfill);
   node.setAttribute("stroke-width","0px");
   if (fontbackground!="none") {
-	  var bgnode = myCreateElementSVG("rect");
-	  var bb = node.getBBox();
-	  bgnode.setAttribute("fill",fontbackground);
-	  bgnode.setAttribute("stroke-width","0px");
-	  bgnode.setAttribute("x",bb.x-2);
-	  bgnode.setAttribute("y",bb.y-2);
-	  bgnode.setAttribute("width",bb.width+4);
-	  bgnode.setAttribute("height",bb.height+4);
-	  if (angle != 0) {
-		   bgnode.setAttribute("transform","rotate("+angle+" "+(p[0]+dx)+" "+(height-p[1]+dy)+")");
-	  }
-	  svgpicture.insertBefore(bgnode,node);
-		  
+      var bgnode = myCreateElementSVG("rect");
+      var bb = node.getBBox();
+      bgnode.setAttribute("fill",fontbackground);
+      bgnode.setAttribute("stroke-width","0px");
+      bgnode.setAttribute("x",bb.x-2);
+      bgnode.setAttribute("y",bb.y-2);
+      bgnode.setAttribute("width",bb.width+4);
+      bgnode.setAttribute("height",bb.height+4);
+      if (angle != 0) {
+           bgnode.setAttribute("transform","rotate("+angle+" "+(p[0]+dx)+" "+(height-p[1]+dy)+")");
+      }
+      svgpicture.insertBefore(bgnode,node);
+
   }
   return p;
 }
@@ -738,7 +738,7 @@ function dot(center, typ, label, pos, id) {
     node.setAttribute("stroke", stroke);
     node.setAttribute("fill", (typ=="open"?"white":stroke));
   }
-  if (label!=null) 
+  if (label!=null)
     text(center,label,(pos==null?"below":pos),(id==null?id:id+"label"))
 }
 
@@ -759,7 +759,7 @@ function arrowhead(p,q) { // draw arrowhead at q (in units)
     node.setAttribute("stroke-width", markerstrokewidth);
     node.setAttribute("stroke", stroke); /*was markerstroke*/
     node.setAttribute("fill", stroke); /*was arrowfill*/
-    svgpicture.appendChild(node);    
+    svgpicture.appendChild(node);
   }
 }
 
@@ -810,16 +810,16 @@ function axes(dx,dy,labels,gdx,gdy,dox,doy) {
     pnode = myCreateElementSVG("path");
     st="";
     if (dox && gdx>0) {
-	    for (x = origin[0]; x<=winxmax; x = x+gdx)
-	      if (x>=winxmin) st += " M"+x+","+winymin+" "+x+","+winymax;
-	    for (x = origin[0]-gdx; x>=winxmin; x = x-gdx)
-	      if (x<=winxmax) st += " M"+x+","+winymin+" "+x+","+winymax;
+        for (x = origin[0]; x<=winxmax; x = x+gdx)
+          if (x>=winxmin) st += " M"+x+","+winymin+" "+x+","+winymax;
+        for (x = origin[0]-gdx; x>=winxmin; x = x-gdx)
+          if (x<=winxmax) st += " M"+x+","+winymin+" "+x+","+winymax;
     }
     if (doy && gdy>0) {
-	    for (y = height-origin[1]; y<=winymax; y = y+gdy)
-	      if (y>=winymin) st += " M"+winxmin+","+y+" "+winxmax+","+y;
-	    for (y = height-origin[1]-gdy; y>=winymin; y = y-gdy)
-	      if (y<=winymax) st += " M"+winxmin+","+y+" "+winxmax+","+y;
+        for (y = height-origin[1]; y<=winymax; y = y+gdy)
+          if (y>=winymin) st += " M"+winxmin+","+y+" "+winxmax+","+y;
+        for (y = height-origin[1]-gdy; y>=winymin; y = y-gdy)
+          if (y<=winymax) st += " M"+winxmin+","+y+" "+winxmax+","+y;
     }
     pnode.setAttribute("d",st);
     pnode.setAttribute("stroke-width", .5);
@@ -829,25 +829,25 @@ function axes(dx,dy,labels,gdx,gdy,dox,doy) {
   }
   pnode = myCreateElementSVG("path");
   if (dox) {
-	  st="M"+winxmin+","+(height-origin[1])+" "+winxmax+","+
+      st="M"+winxmin+","+(height-origin[1])+" "+winxmax+","+
     (height-origin[1]);
   }
   if (doy) {
-	  st += " M"+origin[0]+","+winymin+" "+origin[0]+","+winymax;
+      st += " M"+origin[0]+","+winymin+" "+origin[0]+","+winymax;
   }
   if (dox) {
-	  for (x = origin[0]; x<winxmax; x = x+dx)
-	    if (x>=winymin) st += " M"+x+","+(height-origin[1]+ticklength)+" "+x+","+
-		   (height-origin[1]-ticklength);
-	  for (x = origin[0]-dx; x>winxmin; x = x-dx)
-	   if (x<=winxmax) st += " M"+x+","+(height-origin[1]+ticklength)+" "+x+","+
-		   (height-origin[1]-ticklength);
+      for (x = origin[0]; x<winxmax; x = x+dx)
+        if (x>=winymin) st += " M"+x+","+(height-origin[1]+ticklength)+" "+x+","+
+           (height-origin[1]-ticklength);
+      for (x = origin[0]-dx; x>winxmin; x = x-dx)
+       if (x<=winxmax) st += " M"+x+","+(height-origin[1]+ticklength)+" "+x+","+
+           (height-origin[1]-ticklength);
   }
   if (doy) {
-	  for (y = height-origin[1]; y<winymax; y = y+dy)
-	    if (y>=winymin) st += " M"+(origin[0]+ticklength)+","+y+" "+(origin[0]-ticklength)+","+y;
-	  for (y = height-origin[1]-dy; y>winymin; y = y-dy)
-	    if (y<=winymax) st += " M"+(origin[0]+ticklength)+","+y+" "+(origin[0]-ticklength)+","+y;
+      for (y = height-origin[1]; y<winymax; y = y+dy)
+        if (y>=winymin) st += " M"+(origin[0]+ticklength)+","+y+" "+(origin[0]-ticklength)+","+y;
+      for (y = height-origin[1]-dy; y>winymin; y = y-dy)
+        if (y<=winymax) st += " M"+(origin[0]+ticklength)+","+y+" "+(origin[0]-ticklength)+","+y;
   }
   if (labels!=null) with (Math) {
     ldx = dx/xunitlength;
@@ -861,16 +861,16 @@ function axes(dx,dy,labels,gdx,gdy,dox,doy) {
     if (ddy<0) { ddy = 0;}
     if (ddx<0) { ddx = 0;}
     if (dox) {
-	    for (x = (doy?ldx:0); x<=xmax; x = x+ldx)
-	      if (x>=xmin) text([x,ly],chopZ(x.toFixed(ddx)),lxp);
-	    for (x = -ldx; xmin<=x; x = x-ldx)
-	      if (x<=xmax) text([x,ly],chopZ(x.toFixed(ddx)),lxp);
+        for (x = (doy?ldx:0); x<=xmax; x = x+ldx)
+          if (x>=xmin) text([x,ly],chopZ(x.toFixed(ddx)),lxp);
+        for (x = -ldx; xmin<=x; x = x-ldx)
+          if (x<=xmax) text([x,ly],chopZ(x.toFixed(ddx)),lxp);
     }
     if (doy) {
-	    for (y = (dox?ldy:0); y<=ymax; y = y+ldy)
-	      if (y>=ymin) text([lx,y],chopZ(y.toFixed(ddy)),lyp);
-	    for (y = -ldy; ymin<=y; y = y-ldy)
-	      if (y<=ymax) text([lx,y],chopZ(y.toFixed(ddy)),lyp);
+        for (y = (dox?ldy:0); y<=ymax; y = y+ldy)
+          if (y>=ymin) text([lx,y],chopZ(y.toFixed(ddy)),lyp);
+        for (y = -ldy; ymin<=y; y = y-ldy)
+          if (y<=ymax) text([lx,y],chopZ(y.toFixed(ddy)),lyp);
     }
   }
   pnode.setAttribute("d",st);
@@ -881,30 +881,30 @@ function axes(dx,dy,labels,gdx,gdy,dox,doy) {
 }
 
 function safepow(base,power) {
-	if (base<0 && Math.floor(power)!=power) {
-		for (var j=3; j<50; j+=2) {
-			if (Math.abs(Math.round(j*power)-(j*power))<.000001) {
-				if (Math.round(j*power)%2==0) {
-					return Math.pow(Math.abs(base),power);
-				} else {
-					return -1*Math.pow(Math.abs(base),power);
-				}
-			}
-		}
-		return sqrt(-1);
-	} else {
-		return Math.pow(base,power);
-	}
+    if (base<0 && Math.floor(power)!=power) {
+        for (var j=3; j<50; j+=2) {
+            if (Math.abs(Math.round(j*power)-(j*power))<.000001) {
+                if (Math.round(j*power)%2==0) {
+                    return Math.pow(Math.abs(base),power);
+                } else {
+                    return -1*Math.pow(Math.abs(base),power);
+                }
+            }
+        }
+        return sqrt(-1);
+    } else {
+        return Math.pow(base,power);
+    }
 }
 
 function nthroot(n,base) {
-	return safepow(base,1/n);
+    return safepow(base,1/n);
 }
 function nthlogten(n,v) {
-	return ((Math.log(v))/(Math.log(n)));
+    return ((Math.log(v))/(Math.log(n)));
 }
 function matchtolower(match) {
-	return match.toLowerCase();
+    return match.toLowerCase();
 }
 
 function mathjs(st,varlist) {
@@ -921,22 +921,22 @@ function mathjs(st,varlist) {
   st = st.replace("]",")");
   st = st.replace(/arc(sin|cos|tan)/g,"a#r#c $1");
   if (varlist != null) {
-	  var reg = new RegExp("(sqrt|ln|log|sin|cos|tan|sec|csc|cot|abs)[\(]","g");
-	  st = st.replace(reg,"$1#(");
-	  var reg = new RegExp("("+varlist+")("+varlist+")$","g");
-	  st = st.replace(reg,"($1)($2)");
-	  var reg = new RegExp("("+varlist+")(a#|sqrt|ln|log|sin|cos|tan|sec|csc|cot|abs)","g");
-	  st = st.replace(reg,"($1)$2");
-	  var reg = new RegExp("("+varlist+")("+varlist+")([^a-df-zA-Z\(#])","g"); // 6/1/09 readded \( for f(350/x)
-	  st = st.replace(reg,"($1)($2)$3"); //get xy3
-	  //var reg = new RegExp("("+varlist+")("+varlist+")(\w*[^\(#])","g");
-	  //st = st.replace(reg,"($1)($2)$3"); //get xysin
-	  var reg = new RegExp("([^a-df-zA-Z#])("+varlist+")([^a-df-zA-Z#])","g");
-	  st = st.replace(reg,"$1($2)$3");	  
-	  var reg = new RegExp("^("+varlist+")([^a-df-zA-Z])","g");
-	  st = st.replace(reg,"($1)$2");
-	  var reg = new RegExp("([^a-df-zA-Z])("+varlist+")$","g");
-	  st = st.replace(reg,"$1($2)");
+      var reg = new RegExp("(sqrt|ln|log|sin|cos|tan|sec|csc|cot|abs)[\(]","g");
+      st = st.replace(reg,"$1#(");
+      var reg = new RegExp("("+varlist+")("+varlist+")$","g");
+      st = st.replace(reg,"($1)($2)");
+      var reg = new RegExp("("+varlist+")(a#|sqrt|ln|log|sin|cos|tan|sec|csc|cot|abs)","g");
+      st = st.replace(reg,"($1)$2");
+      var reg = new RegExp("("+varlist+")("+varlist+")([^a-df-zA-Z\(#])","g"); // 6/1/09 readded \( for f(350/x)
+      st = st.replace(reg,"($1)($2)$3"); //get xy3
+      //var reg = new RegExp("("+varlist+")("+varlist+")(\w*[^\(#])","g");
+      //st = st.replace(reg,"($1)($2)$3"); //get xysin
+      var reg = new RegExp("([^a-df-zA-Z#])("+varlist+")([^a-df-zA-Z#])","g");
+      st = st.replace(reg,"$1($2)$3");
+      var reg = new RegExp("^("+varlist+")([^a-df-zA-Z])","g");
+      st = st.replace(reg,"($1)$2");
+      var reg = new RegExp("([^a-df-zA-Z])("+varlist+")$","g");
+      st = st.replace(reg,"$1($2)");
   }
   st = st.replace(/#/g,"");
   st = st.replace(/a#r#c\s+(sin|cos|tan)/g,"arc$1");
@@ -944,7 +944,7 @@ function mathjs(st,varlist) {
   st = st.replace(/(Sin|Cos|Tan|Sec|Csc|Cot|Arc|Abs|Log|Ln)/g, matchtolower);
   st = st.replace(/log_(\d+)\(/,"nthlog($1,");
   st = st.replace(/log/g,"logten");
-  
+
   if (st.indexOf("^-1")!=-1) {
     st = st.replace(/sin\^-1/g,"arcsin");
     st = st.replace(/cos\^-1/g,"arccos");
@@ -959,25 +959,25 @@ function mathjs(st,varlist) {
     st = st.replace(/csch\^-1/g,"arccsch");
     st = st.replace(/coth\^-1/g,"arccoth");
   }
-  
+
   st = st.replace(/root\((\d+)\)\(/,"nthroot($1,");
   //st = st.replace(/E/g,"(EE)");
   st = st.replace(/([0-9])E([\-0-9])/g,"$1(EE)$2");
-  
+
   st = st.replace(/^e$/g,"(E)");
   st = st.replace(/pi/g,"(pi)");
   st = st.replace(/^e([^a-zA-Z])/g,"(E)$1");
   st = st.replace(/([^a-zA-Z])e$/g,"$1(E)");
-  
+
   st = st.replace(/([^a-zA-Z])e([^a-zA-Z])/g,"$1(E)$2");
   st = st.replace(/([0-9])([\(a-zA-Z])/g,"$1*$2");
   st = st.replace(/(!)([0-9\(])/g,"$1*$2");
   //want to keep scientific notation
   st= st.replace(/([0-9])\*\(EE\)([\-0-9])/,"$1e$2");
 
-  
+
   st = st.replace(/\)([\(0-9a-zA-Z])/g,"\)*$1");
-  
+
   var i,j,k, ch, nested;
   while ((i=st.indexOf("^"))!=-1) {
 
@@ -1007,7 +1007,7 @@ function mathjs(st,varlist) {
       j--;
       while (j>=0 && (ch=st.charAt(j))>="a" && ch<="z" || ch>="A" && ch<="Z")
         j--;
-    } else { 
+    } else {
       return "Error: incorrect syntax in "+st+" at position "+j;
     }
     //find right argument
@@ -1037,16 +1037,16 @@ function mathjs(st,varlist) {
       while (k<st.length && (ch=st.charAt(k))>="a" && ch<="z" ||
                ch>="A" && ch<="Z") k++;
       if (ch=='(' && st.slice(i+1,k).match(/^(sin|cos|tan|sec|csc|cot|logten|log|ln|exp|arcsin|arccos|arctan|arcsec|arccsc|arccot|sinh|cosh|tanh|sech|csch|coth|arcsinh|arccosh|arctanh|arcsech|arccsch|arccoth|sqrt|abs|nthroot)$/)) {
-	      nested = 1;
-	      k++;
-	      while (k<st.length && nested>0) {
-		ch = st.charAt(k);
-		if (ch=="(") nested++;
-		else if (ch==")") nested--;
-		k++;
-	      }
+          nested = 1;
+          k++;
+          while (k<st.length && nested>0) {
+        ch = st.charAt(k);
+        if (ch=="(") nested++;
+        else if (ch==")") nested--;
+        k++;
+          }
       }
-    } else { 
+    } else {
       return "Error: incorrect syntax in "+st+" at position "+k;
     }
     st = st.slice(0,j+1)+"safepow("+st.slice(j+1,i)+","+st.slice(i+1,k)+")"+
@@ -1079,7 +1079,7 @@ function mathjs(st,varlist) {
       j--;
       while (j>=0 && (ch=st.charAt(j))>="a" && ch<="z" || ch>="A" && ch<="Z")
         j--;
-    } else { 
+    } else {
       return "Error: incorrect syntax in "+st+" at position "+j;
     }
     st = st.slice(0,j+1)+"factorial("+st.slice(j+1,i)+")"+st.slice(i+1);
@@ -1090,7 +1090,7 @@ function mathjs(st,varlist) {
 
 function slopefield(fun,dx,dy) {
   var g = fun;
-  if (typeof fun=="string") 
+  if (typeof fun=="string")
     eval("g = function(x,y){ with(Math) return "+mathjs(fun)+" }");
   var gxy,x,y,u,v,dz;
   if (dx==null) dx=1;
@@ -1112,88 +1112,88 @@ function slopefield(fun,dx,dy) {
 
 //ASCIIsvgAddon.js dumped here
 function drawPictures() {
-	drawPics()
+    drawPics()
 }
 
 //ShortScript format:
 //xmin,xmax,ymin,ymax,xscl,yscl,labels,xgscl,ygscl,width,height plotcommands(see blow)
 //plotcommands: type,eq1,eq2,startmaker,endmarker,xmin,xmax,color,strokewidth,strokedash
 function parseShortScript(sscript,gw,gh) {
-	if (sscript == null) {
-		initialized = false;
-		sscript = picture.sscr;
-	}
-	
-	var sa= sscript.split(",");
-	
-	if (gw && gh) {
-		sa[9] = gw;
-		sa[10] = gh;
-		sscript = sa.join(",");
-		picture.setAttribute("sscr", sscript);
-	}
-	picture.setAttribute("width", sa[9]);
-	picture.setAttribute("height", sa[10]);
-	picture.style.width = sa[9] + "px";
-	picture.style.height = sa[10] + "px";
-	
-	if (sa.length > 10) {
-		commands = 'setBorder(5);';
-		commands += 'width=' +sa[9] + '; height=' +sa[10] + ';';
-		commands += 'initPicture(' + sa[0] +','+ sa[1] +','+ sa[2] +','+ sa[3] + ');';
-		commands += 'axes(' + sa[4] +','+ sa[5] +','+ sa[6] +','+ sa[7] +','+ sa[8]+ ');';
-				
-		var inx = 11;
-		var eqnlist = 'Graphs: ';
-		
-		while (sa.length > inx+9) {
-		   commands += 'stroke="' + sa[inx+7] + '";';
-		   commands += 'strokewidth="' + sa[inx+8] + '";'
-		   //commands += 'strokedasharray="' + sa[inx+9] + '";'	
-		   if (sa[inx+9] != "") {
-			   commands += 'strokedasharray="' + sa[inx+9].replace(/\s+/g,',') + '";';
-		   }
-		   if (sa[inx]=="slope") {
-			   eqnlist += "dy/dx="+sa[inx+1] + "; ";
-			commands += 'slopefield("' + sa[inx+1] + '",' + sa[inx+2] + ',' + sa[inx+2] + ');'; 
-		   } else {
-			if (sa[inx]=="func") {
-				eqnlist += "y="+sa[inx+1] + "; ";
-				eqn = '"' + sa[inx+1] + '"';
-			} else if (sa[inx] == "polar") {
-				eqnlist += "r="+sa[inx+1] + "; ";
-				eqn = '["cos(t)*(' + sa[inx+1] + ')","sin(t)*(' + sa[inx+1] + ')"]';
-			} else if (sa[inx] == "param") {
-				eqnlist += "[x,y]=["+sa[inx+1] + "," + sa[inx+2] + "]; ";
-				eqn = '["' + sa[inx+1] + '","'+ sa[inx+2] + '"]';
-			}
-			
-			
-			if (typeof eval(sa[inx+5]) == "number") {
-		//	if ((sa[inx+5]!='null')&&(sa[inx+5].length>0)) {
-				//commands += 'myplot(' + eqn +',"' + sa[inx+3] +  '","' + sa[inx+4]+'",' + sa[inx+5] + ',' + sa[inx+6]  +');';
-				commands += 'plot(' + eqn +',' + sa[inx+5] + ',' + sa[inx+6] +',null,null,' + sa[inx+3] +  ',' + sa[inx+4] +');';
-			
-			} else {
-				commands += 'plot(' + eqn +',null,null,null,null,' + sa[inx+3] +  ',' + sa[inx+4]+');';
-			}
-		   }
-		   inx += 10;
-		}
-		
-		try {
-			eval(commands);
-		} catch (e) {
-			setTimeout(function() {parseShortScript(sscript,gw,gh)},100);
-			//alert("Graph not ready");
-		}
-		
-		picture.setAttribute("alt",eqnlist);
-		//picture.setAttribute("width", sa[9]);
-		//picture.setAttribute("height", sa[9]);
-		
-		return commands;
-	}
+    if (sscript == null) {
+        initialized = false;
+        sscript = picture.sscr;
+    }
+
+    var sa= sscript.split(",");
+
+    if (gw && gh) {
+        sa[9] = gw;
+        sa[10] = gh;
+        sscript = sa.join(",");
+        picture.setAttribute("sscr", sscript);
+    }
+    picture.setAttribute("width", sa[9]);
+    picture.setAttribute("height", sa[10]);
+    picture.style.width = sa[9] + "px";
+    picture.style.height = sa[10] + "px";
+
+    if (sa.length > 10) {
+        commands = 'setBorder(5);';
+        commands += 'width=' +sa[9] + '; height=' +sa[10] + ';';
+        commands += 'initPicture(' + sa[0] +','+ sa[1] +','+ sa[2] +','+ sa[3] + ');';
+        commands += 'axes(' + sa[4] +','+ sa[5] +','+ sa[6] +','+ sa[7] +','+ sa[8]+ ');';
+
+        var inx = 11;
+        var eqnlist = 'Graphs: ';
+
+        while (sa.length > inx+9) {
+           commands += 'stroke="' + sa[inx+7] + '";';
+           commands += 'strokewidth="' + sa[inx+8] + '";'
+           //commands += 'strokedasharray="' + sa[inx+9] + '";'
+           if (sa[inx+9] != "") {
+               commands += 'strokedasharray="' + sa[inx+9].replace(/\s+/g,',') + '";';
+           }
+           if (sa[inx]=="slope") {
+               eqnlist += "dy/dx="+sa[inx+1] + "; ";
+            commands += 'slopefield("' + sa[inx+1] + '",' + sa[inx+2] + ',' + sa[inx+2] + ');';
+           } else {
+            if (sa[inx]=="func") {
+                eqnlist += "y="+sa[inx+1] + "; ";
+                eqn = '"' + sa[inx+1] + '"';
+            } else if (sa[inx] == "polar") {
+                eqnlist += "r="+sa[inx+1] + "; ";
+                eqn = '["cos(t)*(' + sa[inx+1] + ')","sin(t)*(' + sa[inx+1] + ')"]';
+            } else if (sa[inx] == "param") {
+                eqnlist += "[x,y]=["+sa[inx+1] + "," + sa[inx+2] + "]; ";
+                eqn = '["' + sa[inx+1] + '","'+ sa[inx+2] + '"]';
+            }
+
+
+            if (typeof eval(sa[inx+5]) == "number") {
+        //	if ((sa[inx+5]!='null')&&(sa[inx+5].length>0)) {
+                //commands += 'myplot(' + eqn +',"' + sa[inx+3] +  '","' + sa[inx+4]+'",' + sa[inx+5] + ',' + sa[inx+6]  +');';
+                commands += 'plot(' + eqn +',' + sa[inx+5] + ',' + sa[inx+6] +',null,null,' + sa[inx+3] +  ',' + sa[inx+4] +');';
+
+            } else {
+                commands += 'plot(' + eqn +',null,null,null,null,' + sa[inx+3] +  ',' + sa[inx+4]+');';
+            }
+           }
+           inx += 10;
+        }
+
+        try {
+            eval(commands);
+        } catch (e) {
+            setTimeout(function() {parseShortScript(sscript,gw,gh)},100);
+            //alert("Graph not ready");
+        }
+
+        picture.setAttribute("alt",eqnlist);
+        //picture.setAttribute("width", sa[9]);
+        //picture.setAttribute("height", sa[9]);
+
+        return commands;
+    }
 }
 
 
@@ -1204,54 +1204,54 @@ function drawPics() {
   pictures = document.getElementsByTagName("embed");
  // might be needed if setTimeout on parseShortScript isn't working
   if (!ASnoSVG) {
-	   try {
-		  for (var i = 0; i < pictures.length; i++) {
-			  if (pictures[i].getAttribute("sscr")!='' || pictures[i].getAttribute("script")!='') {
-				  if (pictures[i].getSVGDocument().getElementById("root") == null) {
-					setTimeout(drawPics,100);
-					return;
-				  }
-			  }
-		  }
-	  } catch (e) {
-		  setTimeout(drawPics,100);
-		  return;
-	  }
+       try {
+          for (var i = 0; i < pictures.length; i++) {
+              if (pictures[i].getAttribute("sscr")!='' || pictures[i].getAttribute("script")!='') {
+                  if (pictures[i].getSVGDocument().getElementById("root") == null) {
+                    setTimeout(drawPics,100);
+                    return;
+                  }
+              }
+          }
+      } catch (e) {
+          setTimeout(drawPics,100);
+          return;
+      }
  }
   var len = pictures.length;
-  
-  
+
+
   for (index = 0; index < len; index++) {
-	  picture = ((!ASnoSVG && isIE) ? pictures[index] : pictures[0]);
+      picture = ((!ASnoSVG && isIE) ? pictures[index] : pictures[0]);
    // for (index = len-1; index >=0; index--) {
-	//  picture = pictures[index];
-	  
-	  if (!ASnoSVG) {
-		  initialized = false;
-		  var sscr = picture.getAttribute("sscr");
-		  if ((sscr != null) && (sscr != "")) { //sscr from editor
-			  try {
-				  parseShortScript(sscr);
-			  } catch (e) {}
-		  } else {
-			  src = picture.getAttribute("script"); //script from showplot
-			  if ((src!=null) && (src != "")) {
-				  try {
-					  with (Math) eval(src);
-				  } catch(err) {alert(err+"\n"+src)}
-			  }
-		  }
-	  } else {
-		  if (picture.getAttribute("sscr")!='') {
-			  n = document.createElement('img');
-			  n.setAttribute("style",picture.getAttribute("style"));
-			  n.setAttribute("src",AScgiloc+'?sscr='+encodeURIComponent(picture.getAttribute("sscr")));
-			  pn = picture.parentNode;
-			  pn.replaceChild(n,picture);
-		  }
-		  
-	  }
-	  
+    //  picture = pictures[index];
+
+      if (!ASnoSVG) {
+          initialized = false;
+          var sscr = picture.getAttribute("sscr");
+          if ((sscr != null) && (sscr != "")) { //sscr from editor
+              try {
+                  parseShortScript(sscr);
+              } catch (e) {}
+          } else {
+              src = picture.getAttribute("script"); //script from showplot
+              if ((src!=null) && (src != "")) {
+                  try {
+                      with (Math) eval(src);
+                  } catch(err) {alert(err+"\n"+src)}
+              }
+          }
+      } else {
+          if (picture.getAttribute("sscr")!='') {
+              n = document.createElement('img');
+              n.setAttribute("style",picture.getAttribute("style"));
+              n.setAttribute("src",AScgiloc+'?sscr='+encodeURIComponent(picture.getAttribute("sscr")));
+              pn = picture.parentNode;
+              pn.replaceChild(n,picture);
+          }
+
+      }
+
   }
 }
 
@@ -1261,7 +1261,7 @@ function plot(fun,x_min,x_max,points,id,min_type,max_type) {
   var pth = [];
   var f = function(x) { return x }, g = fun;
   var name = null;
-  if (typeof fun=="string") 
+  if (typeof fun=="string")
     eval("g = function(x){ with(Math) return "+mathjs(fun)+" }");
   else if (typeof fun=="object") {
     eval("f = function(t){ with(Math) return "+mathjs(fun[0])+" }");
@@ -1283,18 +1283,18 @@ function plot(fun,x_min,x_max,points,id,min_type,max_type) {
   }
   path(pth,name);
   if (min_type == 1) {
-	arrowhead(pth[1],pth[0]);
+    arrowhead(pth[1],pth[0]);
   } else if (min_type == 2) {
-	dot(pth[0], "open");
+    dot(pth[0], "open");
   } else if (min_type == 3) {
-	dot(pth[0], "closed");
+    dot(pth[0], "closed");
   }
   if (max_type == 1) {
-	arrowhead(pth[pth.length-2],pth[pth.length-1]);
+    arrowhead(pth[pth.length-2],pth[pth.length-1]);
   } else if (max_type == 2) {
-	dot(pth[pth.length-1], "open");
+    dot(pth[pth.length-1], "open");
   } else if (max_type == 3) {
-	dot(pth[pth.length-1], "closed");
+    dot(pth[pth.length-1], "closed");
   }
 
   return p;
@@ -1346,7 +1346,7 @@ ASupdateCoords = [function() {updateCoords(0)},
   function() {updateCoords(9)}];
 
 
-// GO1.1 Generic onload by Brothercake 
+// GO1.1 Generic onload by Brothercake
 // http://www.brothercake.com/
 //onload function
 function generic()

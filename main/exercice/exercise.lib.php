@@ -1156,4 +1156,43 @@ function get_all_exercises($course_info = null, $session_id = 0) {
     return Database::select('*',$TBL_EXERCICES, $conditions);
 }
 
+/**
+ * Gets the position of the score based in my score (result/weight) and the exe_id
+ */
+function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0) {
+    //Getting all exercise results
+    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
+    if (empty($user_results)) {
+    	return 1;
+    } else {
+        $ranking = 1; 
+        $my_ranking = array();
+        foreach($user_results as $result) {
+            //print_r($result);
+            if (empty($result['exe_weighting']) || $result['exe_weighting'] == '0.00') {
+                $my_ranking[$result['exe_id']] = 0;               
+            } else {
+                $my_ranking[$result['exe_id']] = $result['exe_result']/$result['exe_weighting'];
+            }           
+        }    
+        asort($my_ranking);
+        $position = count($my_ranking);
+      
+        foreach($my_ranking as $exe_id=>$ranking) {
+        	if ($my_score >= $ranking) {
+                if ($my_score == $ranking) {
+                    if ($my_exe_id < $exe_id) {
+                        $position--;
+                    }
+                } else {           
+        		  $position--;                    
+                }
+        	}
+        }        
+        //echo $position;
+        return $position;    
+    }
+
+}
+
 

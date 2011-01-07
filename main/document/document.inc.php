@@ -238,13 +238,7 @@ function build_document_icon_tag($type, $path) {
 			} else {
 				$basename = get_lang('UserFolders');
 			}
-		}elseif(strstr($path, 'shared_folder_session_')) {
-			if ($is_allowed_to_edit) {
-				$basename = '***('.api_get_session_name($current_session_id).')*** '.get_lang('HelpUsersFolder');
-			} else {
-				$basename = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
-			}
-			$icon = 'folder_users.gif';
+		
 		}elseif(strstr($basename, 'sf_user_')) {
 			$userinfo = Database::get_user_info_from_id(substr($basename, 8));
 			$image_path = UserManager::get_user_picture_path_by_id(substr($basename, 8), 'web', false, true);
@@ -255,7 +249,14 @@ function build_document_icon_tag($type, $path) {
 				$icon = '../upload/users/'.substr($basename, 8).'/'.$image_path['file'];
 			}
 
-			$basename = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+			$basename = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);}elseif(strstr($path, 'shared_folder_session_')) {
+			if ($is_allowed_to_edit) {
+				$basename = '***('.api_get_session_name($current_session_id).')*** '.get_lang('HelpUsersFolder');
+			} else {
+				$basename = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
+			}
+			$icon = 'folder_users.gif';
+			
 		} else {
 			$icon = 'folder_document.gif';
 			

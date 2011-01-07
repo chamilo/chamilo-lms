@@ -114,13 +114,13 @@ class manager
 				}				
 				if(preg_match('/shared_folder/', basename($this->currentFolderPath)))
 				{
-					$this->currentFolderInfo['name']=get_lang('SharedDocumentsDirectory');
+					$this->currentFolderInfo['name']=get_lang('UserFolders');
 				}
 				if(preg_match('/shared_folder_session_/',basename($this->currentFolderPath)))
 				{
 					$session = explode('_', basename($this->currentFolderPath));
 					$session = strtolower($session[sizeof($session) - 1]);
-					$this->currentFolderInfo['name']=get_lang('SharedDocumentsDirectory').' ('.api_get_session_name($session).')*';
+					$this->currentFolderInfo['name']=get_lang('UserFolders').' ('.api_get_session_name($session).')*';
 				}
 			
 				//end Chamilo

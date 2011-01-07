@@ -7429,19 +7429,19 @@ class learnpath {
         require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
         if (count($resources_sorted) > 0) {
             foreach ($resources_sorted as $key => $resource) {
-				
-						
-				//echo '<br/>'.$key;//juan problema da el nombre pero no path, asi que podría borrar cosas que no quisiera, por ej. certificates, shared_folder, sf_user_ xxx, flv, video, HotPotatoes_files, chat_files
-				
-				
                 if (is_int($resource['id'])) {
                  // It's a folder.
 					//hide some folders
-					if (in_array($key, array('shared_folder','chat_files', 'sf_user_', 'HotPotatoes_files', 'css'))){
+					if (in_array($key, array('shared_folder','chat_files', 'HotPotatoes_files', 'css', 'certificates'))){
 						continue;
-					}elseif($key=='certificates'){
+					}elseif(preg_match('/_groupdocs/', $key)){
+						continue;
+					}elseif(preg_match('/sf_user_/', $key)){
+						continue;
+					}elseif(preg_match('/shared_folder_session_/', $key)){
 						continue;
 					}
+					
 					//trad some titles
 					if ($key=='images'){
 						$key=get_lang('Images');

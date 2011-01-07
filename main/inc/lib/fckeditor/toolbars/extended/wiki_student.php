@@ -22,11 +22,11 @@ else{
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-array('Save','NewPage','Templates','-','PasteText'),
+	array('Save','NewPage','Templates','-','PasteText'),
 	array('Undo','Redo'),
-	array('Wikilink','Link','Image','flvPlayer','Table','mimetex'),
+	array('Wikilink','Link','Image','flvPlayer','Table','mimetex','asciimath','asciisvg'),
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+	array('JustifyLeft','JustifyCenter','JustifyFull'),
 	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor'),
 	array('FitWindow')
 );

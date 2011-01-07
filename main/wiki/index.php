@@ -117,7 +117,7 @@ if ($_SESSION['_gid'] OR $_GET['group_id']) {
 }
 
 
-if ($_POST['action']=='export_to_pdf' && isset($_POST['wiki_id']) ) {    
+if ($_POST['action']=='export_to_pdf' && isset($_POST['wiki_id']) && api_get_setting('students_export2pdf') == 'true') {    
     export_to_pdf($_POST['wiki_id'], api_get_course_id());    
 }
 

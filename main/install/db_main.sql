@@ -461,6 +461,7 @@ CREATE TABLE session (
   session_admin_id INT UNSIGNED NOT NULL,
   visibility int NOT NULL default 1,
   session_category_id int NOT NULL,
+  promotion_id INT NOT NULL,
   PRIMARY KEY  (id),
   INDEX (session_admin_id),
   UNIQUE KEY name (name)
@@ -2508,3 +2509,21 @@ CREATE TABLE course_request (
   PRIMARY KEY (id),
   UNIQUE KEY code (code)
 );
+
+CREATE TABLE career (
+	id INT NOT NULL AUTO_INCREMENT,
+	name VARCHAR(255) NOT NULL ,
+	description TEXT NOT NULL,
+	PRIMARY KEY (id)
+);
+
+
+
+CREATE TABLE promotion (
+	id INT NOT NULL AUTO_INCREMENT,
+	name VARCHAR(255) NOT NULL ,
+	description TEXT NOT NULL,
+	career_id INT NOT NULL,
+	PRIMARY KEY(id)
+);
+

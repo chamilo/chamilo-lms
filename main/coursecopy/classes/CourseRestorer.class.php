@@ -973,7 +973,7 @@ class CourseRestorer
                 $new_answers = Database::select('id, correct', $table_ans, array('where'=>array('question_id = ?'=>$new_id)));
                 foreach ($new_answers as $answer_item) {                	
                     $params['correct'] = $old_option_ids[$answer_item['correct']];
-                    $question_option_id = Database::update_query($table_ans, $params, array('id = ?'=>$answer_item['id']));
+                    $question_option_id = Database::update($table_ans, $params, array('id = ?'=>$answer_item['id']));
                 }                
             }            
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;

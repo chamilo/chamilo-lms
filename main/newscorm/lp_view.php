@@ -191,7 +191,6 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
             Database::query($sql_upd_score);
                    
             $update_query = "UPDATE $TBL_TRACK_EXERCICES SET  orig_lp_item_view_id = $lp_item_view_id  WHERE exe_id = ".$safe_exe_id;
-            //error_log('dddd-->'.$update_query);
             Database::query($update_query);
         }        
     }

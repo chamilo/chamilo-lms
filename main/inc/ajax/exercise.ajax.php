@@ -12,7 +12,7 @@ switch ($action) {
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
         $counter = 1;
         foreach ($new_question_list as $new_order_id) {            
-            Database::update_query($TBL_QUESTIONS, array('question_order'=>$counter), array('question_id = ? '=>$new_order_id));
+            Database::update($TBL_QUESTIONS, array('question_order'=>$counter), array('question_id = ? '=>$new_order_id));
             $counter++;
         }
         Display::display_confirmation_message(get_lang('Saved'));

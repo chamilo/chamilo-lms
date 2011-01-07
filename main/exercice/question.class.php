@@ -1247,7 +1247,7 @@ abstract class Question
     
     static function updateQuestionOption($id, $params) {
         $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $result = Database::update_query($TBL_EXERCICE_QUESTION_OPTION, $params, array('id = ?'=>$id));             
+        $result = Database::update($TBL_EXERCICE_QUESTION_OPTION, $params, array('id = ?'=>$id));             
         return $result;        
     }
     

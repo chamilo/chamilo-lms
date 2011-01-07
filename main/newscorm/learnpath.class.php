@@ -8634,7 +8634,7 @@ EOD;
         //Setting everything to autolunch = 0
         $attributes['autolunch'] = 0;
         $where = array('session_id = ? '=> api_get_session_id());
-        Database::update_query($lp_table, $attributes,$where);
+        Database::update($lp_table, $attributes,$where);
         if ($status == 1) {
             //Setting my lp_id to autolunch = 1        
             $attributes['autolunch'] = 1;

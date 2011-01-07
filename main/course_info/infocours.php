@@ -369,7 +369,7 @@ if ($form->validate() && is_settings_editable()) {
         //We do not update variables that were already saved in the TABLE_MAIN_COURSE table
         if (!in_array($key, $update_in_course_table)) {            
         	//$sql = "UPDATE $table_course_setting SET value = ".." WHERE variable = '$key' ";            
-            Database::update_query($table_course_setting, array('value' => $update_values[$key]), array('variable = ? ' =>$key));
+            Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? ' =>$key));
         }    	
     }
 	$cidReset = true;

@@ -232,7 +232,7 @@ $current_session_id = api_get_session_id();
 if($current_session_id==0){
 	//Create shared folder. Necessary for courses recycled. Allways session_id should be zero. Allway should be created from a base course, never from a session.
 	if (!file_exists($base_work_dir.'/shared_folder')) {
-		$usf_dir_title = get_lang('SharedFolder');
+		$usf_dir_title = get_lang('UserFolders');
 		$usf_dir_name = '/shared_folder';
 		$to_group_id = 0;
 		$visibility = 0;
@@ -250,7 +250,7 @@ if($current_session_id==0){
 else{	
 		//Create shared folder session
 		if (!file_exists($base_work_dir.'/shared_folder_session_'.$current_session_id)) {
-			$usf_dir_title = get_lang('SharedFolder').' ('.api_get_session_name($current_session_id).')';
+			$usf_dir_title = get_lang('UserFolders').' ('.api_get_session_name($current_session_id).')';
 			$usf_dir_name = '/shared_folder_session_'.$current_session_id;			
 			$to_group_id = 0;
 			$visibility = 0;
@@ -928,6 +928,14 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		}
 	}
 	
+	// Create new audio
+	//if (api_get_setting('enabled_text2audio') == 'true'){
+	?>
+		<a href="create_audio.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+       <?php Display::display_icon('new_text2audio.png', get_lang('CreateAudio')); echo get_lang('CreateAudio'); ?></a>&nbsp;
+	<?php
+   // }	
+
 	// Create new certificate
 	if ($is_certificate_mode) {
 ?>

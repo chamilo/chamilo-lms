@@ -248,4 +248,11 @@ $HelpFolderCertificates = "INFORMACIÓN VISIBLE SÓLO POR EL PROFESORADO:
 
 Esta carpeta contiene los distintos modelos de certificados que se han creado para la herramienta Evaluaciones. No se recomienda hacer visible esta carpeta.";
 $DestinationDirectory = "Carpeta de destino";
+$CreateAudio = "Crear audio";
+$InsertText2Audio = "Introduzca el texto que desea convertir en un archivo de audio";
+$HelpText2Audio = "Transforme su texto en voz";
+$BuildMP3 = "Generar mp3";
+$Voice = "Voz";
+$Female = "Femenina";
+$Male = "Masculina";
 ?>

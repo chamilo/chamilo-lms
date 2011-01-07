@@ -94,14 +94,14 @@
 	var paths = {'root':'<?php echo addTrailingSlash(backslashToSlash(CONFIG_SYS_ROOT_PATH)); ?>', 'root_title':'<?php echo LBL_FOLDER_ROOT; ?>'};
 	
 	<!-- Chamilo hack for breadcrumb into shared folders -->
-	var shared_folder = '<?php echo get_lang('SharedDocumentsDirectory');?>';
+	var shared_folder = '<?php echo get_lang('UserFolders');?>';
 	
 	<?php 
 	$course_session = explode('_', basename($currentPath));
 	$course_session = strtolower($course_session[sizeof($course_session) - 1]);
 	?>
-	<!--var shared_folder_session = '<?php //echo get_lang('SharedDocumentsDirectory').' ('.api_get_session_name($course_session).')';?>'; --><!--// problem does not refresh, does not synchronize with javascript -->
-	var shared_folder_session = '<?php echo get_lang('SharedDocumentsDirectory').'*';?>';
+	<!--var shared_folder_session = '<?php //echo get_lang('UserFolders').' ('.api_get_session_name($course_session).')';?>'; --><!--// problem does not refresh, does not synchronize with javascript -->
+	var shared_folder_session = '<?php echo get_lang('UserFolders').'*';?>';
 	<?php 
 	
 	//$userinfo=Database::get_user_info_from_id(substr(basename($folderInfo['path']), 8));	// problem with $folderInfo['path'] does not refresh, sincronisation with javascript?>

@@ -710,6 +710,14 @@ class Display {
         return self::tag('a', $name, $extra_attributes);    	
     }
     
+    public static function div($content, $extra_attributes = array()) {      
+        return self::tag('div', $content, $extra_attributes);        
+    }
+    
+     /**
+     * Displays an HTML input tag
+     * 
+     */
     public static function input($type, $name,  $value, $extra_attributes = array()) {
     	 if (!empty($type)) {
             $extra_attributes['type']= $type;
@@ -724,15 +732,19 @@ class Display {
     }
     
     /**
-     * Displays a select tag
+     * Displays an HTML select tag
      * 
      */
-    public function select($name, $values, $default = -1, $parameter_list = array(), $show_blank_item = true) {        
+    public function select($name, $values, $default = -1, $extra_attributes = array(), $show_blank_item = true) {        
         $extra = '';
-        foreach($parameter_list as $key=>$parameter) {
+        $default_id =  'id="'.$name.'" ';
+        foreach($extra_attributes as $key=>$parameter) {
+            if ($key == 'id') {
+            	$default_id = '';
+            }
             $extra .= $key.'="'.$parameter.'"';
         }
-        $html .= '<select name="'.$name.'" id="'.$name.'" '.$extra.'>';
+        $html .= '<select name="'.$name.'" '.$default_id.' '.$extra.'>';
     
         if ($show_blank_item) {
             $html .= self::tag('option', '-- '.get_lang('Select').' --', array('value'=>'-1'));
@@ -819,11 +831,11 @@ class Display {
      * @return  string  the js code 
      * 
      */
-    public static function grid_js($div_id, $url, $column_names, $column_model, $extra_params, $data = array()) {
+    public static function grid_js($div_id, $url, $column_names, $column_model, $extra_params, $data = array(), $formatter = '') {
         $obj = new stdClass();
               
         if (!empty($url))
-            $obj->url           = $url;        
+            $obj->url       = $url;        
         $obj->colNames      = $column_names;        
         $obj->colModel      = $column_model;
         $obj->pager         = $div_id.'_pager';
@@ -851,7 +863,8 @@ class Display {
         
         //height: 'auto',     
         
-        $obj->viewrecords = 'true';   
+        $obj->viewrecords = 'true';
+         
         if (!empty($extra_params['viewrecords']))
             $obj->viewrecords   = $extra_params['viewrecords'];
             
@@ -861,6 +874,7 @@ class Display {
             }
         }
         
+        //Adding static data 
         if (!empty($data)) {
             $data_var = $div_id.'_data';
             $json.=' var '.$data_var.' = '.json_encode($data).';';
@@ -870,20 +884,29 @@ class Display {
             $obj->datatype = 'local';
             $json.="\n";
         }        
+        
         $json_encode = json_encode($obj);
         if (!empty($data)) {
-            //Converts the "data":"js_variable" to "data":js_variable
+            //Converts the "data":"js_variable" to "data":js_variable othersiwe it will not work
             $json_encode = str_replace('"data":"'.$data_var.'"','"data":'.$data_var.'',$json_encode);            
         }
+        
         //Fixing true/false js values that doesn't need the ""
         $json_encode = str_replace(':"true"',':true',$json_encode);
         $json_encode = str_replace(':"false"',':false',$json_encode);
-         
+        
+        $json_encode = str_replace('"formatter":"action_formatter"','formatter:action_formatter',$json_encode);
+              
+        //Creating the jqgrid element         
         $json .= '$("#'.$div_id.'").jqGrid(';
         $json .= $json_encode;
         $json .= ');';
     
         $json.="\n";
+        
+        //Adding edit/delete icons        
+        $json.=$formatter;
+        
         return $json;
         
         /*

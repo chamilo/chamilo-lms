@@ -276,6 +276,11 @@ define('TABLE_THEMATIC','thematic');
 define('TABLE_THEMATIC_PLAN', 'thematic_plan');
 define('TABLE_THEMATIC_ADVANCE','thematic_advance');
 
+
+define('TABLE_CAREER',      'career');
+define('TABLE_PROMOTION',   'promotion');
+
+
 /*		DATABASE CLASS
         The class and its methods
 */
@@ -1344,7 +1349,7 @@ class Database {
         }
         
              
-         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
+        $sql    = "SELECT $clean_columns FROM $table_name $conditions";
       
                
         
@@ -1373,8 +1378,7 @@ class Database {
     private function parse_conditions($conditions) {  
         if (empty($conditions)) {
         	return '';
-        }
-        
+        }        
         $return_value = '';     
         foreach ($conditions as $type_condition => $condition_data) {            
              switch($type_condition) {
@@ -1421,9 +1425,10 @@ class Database {
         $result = false;                
         $where_return = self::parse_where_conditions($where_conditions);
         $sql    = "DELETE FROM $table_name $where_return ";
-        $result = self::query($sql);          	          
+        $result = self::query($sql);        
+        $affected_rows = self::affected_rows();  	          
         //@todo should return affected_rows for 
-        return $result;
+        return $affected_rows;
     }   
    
     
@@ -1431,21 +1436,27 @@ class Database {
      * Experimental useful database update 
      * @todo lot of stuff to do here
      */
-    public static function update_query($table_name, $attributes, $where_conditions = array()) {
+    public static function update($table_name, $attributes, $where_conditions = array()) {
          
         if (!empty($table_name) && !empty($attributes)) {
             $update_sql = '';
             //Cleaning attributes
+            $count = 1;            
             foreach ($attributes as $key=>$value) {
                 $value = self::escape_string($value);
             	$update_sql .= "$key = '$value' ";
+                if ($count < count($attributes)) {
+                	$update_sql.=', ';
+                }
+                $count++;
             }
             if (!empty($update_sql)) {  
                 //Parsing and cleaning the where conditions
                 $where_return = self::parse_where_conditions($where_conditions);
                 $sql    = "UPDATE $table_name SET $update_sql $where_return ";                
                 $result = self::query($sql);
-                return $result;
+                $affected_rows = self::affected_rows(); 
+                return $affected_rows;
             }                
         }
         return false;

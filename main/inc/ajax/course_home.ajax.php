@@ -154,9 +154,9 @@ switch ($action) {
             require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
             
             
-              $page  = intval($_REQUEST['page']);     //page
+            $page  = intval($_REQUEST['page']);     //page
             $limit = intval($_REQUEST['rows']);     // quantity of rows
-            $sidx  = $_REQUEST['sidx'];    //index to filter         
+            $sidx  = intval($_REQUEST['sidx']);    //index to filter         
             $sord  = $_REQUEST['sord'];    //asc or desc
             if (!in_array($sord, array('asc','desc'))) {
                 $sord = 'desc';
@@ -221,9 +221,9 @@ switch ($action) {
             require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
             
             
-                $page  = intval($_REQUEST['page']);     //page
+            $page  = intval($_REQUEST['page']);     //page
             $limit = intval($_REQUEST['rows']);     // quantity of rows
-            $sidx  = $_REQUEST['sidx'];    //index to filter         
+            $sidx  = intval($_REQUEST['sidx']);    //index to filter         
             $sord  = $_REQUEST['sord'];    //asc or desc
             if (!in_array($sord, array('asc','desc'))) {
                 $sord = 'desc';

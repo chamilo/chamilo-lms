@@ -16,7 +16,7 @@ require_once(dirname(__FILE__).'/course.lib.php');
 *
 *	@package chamilo.library
 */
-class SessionManager {
+class SessionManager {    
 	private function __construct() {
 
 	}
@@ -958,7 +958,7 @@ class SessionManager {
 
 		$return_array = array();
 
-		$sql_query = " SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name
+		$sql_query = " SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name, s.promotion_id
 				FROM $session_table s
 				INNER JOIN $user_table u ON s.id_coach = u.user_id
 				LEFT JOIN  $session_category_table sc ON s.session_category_id = sc.id ";
@@ -1238,6 +1238,23 @@ class SessionManager {
     
     public static function get_session_by_user($coach_id, $user_id) {
     	
+    }
+    
+    function get_all_sessions_by_promotion($id) {
+        $t = Database::get_main_table(TABLE_MAIN_SESSION);
+        return Database::select('*', $t, array('where'=>array('promotion_id = ?'=>$id)));
+    }
+    
+    function suscribe_sessions_to_promotion($promotion_id, $list) {
+        $t = Database::get_main_table(TABLE_MAIN_SESSION);
+        $params['promotion_id'] = 0;             
+        Database::update($t, $params, array('promotion_id = ?'=>$promotion_id));
+        
+        $params['promotion_id'] = $promotion_id;
+        foreach ($list as $session_id) {
+            $session_id= intval($session_id);
+            Database::update($t, $params, array('id = ?'=>$session_id));
+        }                
     }
     
 }

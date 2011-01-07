@@ -160,7 +160,11 @@ if (api_is_platform_admin()) { ?>
         if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
             // Do not show on production portals, where the tests directory doesn't exist.
             echo '<li><a href="filler.php">'.get_lang('DataFiller').'</a></li>';
-        }
+        }       
+        
+        echo Display::tag('li',Display::url(get_lang('CareersAndPromotions'), 'career_dashboard.php'));
+        //echo Display::tag('li',Display::url(get_lang('Promotions'), 'promotions.php'));
+        
     ?>
     </ul>
 </div>

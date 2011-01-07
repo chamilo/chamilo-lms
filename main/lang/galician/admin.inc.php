@@ -1293,4 +1293,14 @@ $EnabledWirisTitle = "Editor matemático WIRIS";
 $EnabledWirisComment = "Habilitar o editor matemático WIRIS";
 $AllowSpellCheckTitle = "Corrector ortográfico";
 $AllowSpellCheckComment = "Activar o corrector ortográfico";
+$EnabledSVGTitle = "Creación e edición de arquivos SVG";
+$EnabledSVGComment = "Esta opción permitiralle crear e editar arquivos SVG (Gráficos vectoriais escalables) multicapa en liña, así como exportalos a imaxes en formato PNG.";
+$ForceWikiPasteAsPlainTextTitle = "Obrigar a pegar como texto plano no Wiki";
+$ForceWikiPasteAsPlainTextComment = "Isto impedirá que moitas etiquetas ocultas, incorrectas ou non estándar, copiadas de outros textos rematen corrompendo o texto do Wiki despois de moitas edicións; pero perderá algunhas posibilidades durante a edición.";
+$EnabledGooglemapsTitle = "Activar Google maps";
+$EnabledGooglemapsComment = "Activar o botón para inserir mapas de Google. A activación non se realizará completamente se previamente non editou o arquivo main/inc/lib/fckeditor/myconfig.php e engadido unha clave API de Google maps.";
+$EnabledImageMapsTitle = "Activar mapas de imaxe";
+$EnabledImageMapsComment = "Activar o botón para inserir mapas de imaxe. Isto permitiralle asociar direccións url a zonas dunha imaxe, xenerando zonas interactivas";
+$CourseTool = "Ferramenta do curso";
+$BigBlueButtonEnableTitle = "Ferramenta de videoconferencia BigBlueButton";
 ?>

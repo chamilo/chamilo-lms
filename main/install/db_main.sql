@@ -789,7 +789,9 @@ VALUES
 ('show_users_folders',				NULL,'radio',		'Tools',	'true',	'ShowUsersFoldersTitle','ShowUsersFoldersComment',NULL,NULL, 0),
 ('show_default_folders',				NULL,'radio',		'Tools',	'true',	'ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0),
 ('show_chat_folder',				NULL,'radio',		'Tools',	'true',	'ShowChatFolderTitle','ShowChatFolderComment',NULL,NULL, 0),
-('chamilo_database_version', 		NULL,'textfield', 	NULL, '1.8.8.13255','DokeosDatabaseVersion','', NULL, NULL, 0);
+'ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0),
+('enabled_text2audio',				NULL,'radio',		'Tools',	'false',	'Text2AudioTitle','Text2AudioComment',NULL,NULL, 0),
+('chamilo_database_version', 		NULL,'textfield', 	NULL, '1.8.8.13256','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 
 UNLOCK TABLES;
@@ -1039,7 +1041,9 @@ VALUES
 ('show_default_folders','true','Yes'),
 ('show_default_folders','false','No'),
 ('show_chat_folder','true','Yes'),
-('show_chat_folder','false','No');
+('show_chat_folder','false','No'),
+('enabled_text2audio','true','Yes'),
+('enabled_text2audio','false','No');
 
 UNLOCK TABLES;
 

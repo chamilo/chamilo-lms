@@ -1143,6 +1143,13 @@ function drawPictures() {
 //xmin,xmax,ymin,ymax,xscl,yscl,labels,xgscl,ygscl,width,height plotcommands(see blow)
 //plotcommands: type,eq1,eq2,startmaker,endmarker,xmin,xmax,color,strokewidth,strokedash
 function parseShortScript(sscript,gw,gh) {
+
+    // Added by Ivan Tcholakov, 07-JAN-2011.
+    if (typeof picture == 'undefined') {
+        return;
+    }
+    //
+
     if (sscript == null) {
         initialized = false;
         sscript = picture.sscr;

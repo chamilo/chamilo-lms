@@ -82,7 +82,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('pdf_export_watermark_by_course','true','Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('pdf_export_watermark_by_course','false','No');
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('pdf_export_watermark_text',		NULL,'textfield',	'Platform',	'',		'PDFExportWatermarkTextTitle',		'PDFExportWatermarkTextComment','platform',NULL, 	1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('pdf_export_watermark_text',		NULL,'textfield',	'Platform',	'',		'PDFExportWatermarkTextTitle','PDFExportWatermarkTextComment','platform',NULL, 	1);
 
 
 ALTER TABLE personal_agenda ADD PRIMARY KEY (id);
@@ -112,10 +112,9 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_chat_folder', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_chat_folder', 'false', 'No');
 
-
-
-
-
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_text2audio',NULL,'radio','Tools','false','Text2AudioTitle','Text2AudioComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_text2audio', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_text2audio', 'false', 'No');
 
 
 -- xxSTATSxx

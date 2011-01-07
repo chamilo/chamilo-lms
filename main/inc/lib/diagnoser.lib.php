@@ -30,9 +30,9 @@ class Diagnoser
         $sections = array('chamilo', 'php', 'mysql', 'webserver');
 
         if (!in_array($_GET['section'], $sections)) {
-        	$current_section = 'chamilo';
+            $current_section = 'chamilo';
         } else {
-        	$current_section = $_GET['section'];
+            $current_section = $_GET['section'];
         }
 
         $html = '<br /><div class="tabbed-pane"><ul class="tabbed-pane-tabs">';
@@ -42,26 +42,26 @@ class Diagnoser
             if ($current_section == $section) {
                 $html .= ' class="current"';
             }
-      //      $params = $this->manager->get_parameters();
+            //$params = $this->manager->get_parameters();
             $params['section'] = $section;
             $html .=' href="system_status.php?section='.$section.'">'.get_lang($section).'</a></li>';
-         //   $html[] = ' href="' . $this->manager->get_url($params, true) . '">' . htmlentities(Translation :: get(ucfirst($section) . 'Title')) . '</a></li>';
+            //$html[] = ' href="' . $this->manager->get_url($params, true) . '">' . htmlentities(Translation :: get(ucfirst($section) . 'Title')) . '</a></li>';
         }
 
         $html .= '</ul><div class="tabbed-pane-content">';
 
         $data = call_user_func(array($this, 'get_' . $current_section . '_data'));
-		echo $html;
-		$table = new SortableTableFromArray($data,1, 100);
+        echo $html;
+        $table = new SortableTableFromArray($data, 1, 100);
 
-		$table->set_header(0,get_lang(''), false);
-		$table->set_header(1,get_lang('Section'), false);
-		$table->set_header(2,get_lang('Setting'), false);
-		$table->set_header(3,get_lang('Current'), false);
-		$table->set_header(4,get_lang('Expected'), false);
-		$table->set_header(5,get_lang('Comment'), false);
+        $table->set_header(0,get_lang(''), false);
+        $table->set_header(1,get_lang('Section'), false);
+        $table->set_header(2,get_lang('Setting'), false);
+        $table->set_header(3,get_lang('Current'), false);
+        $table->set_header(4,get_lang('Expected'), false);
+        $table->set_header(5,get_lang('Comment'), false);
 
-		$table->display();
+        $table->display();
         echo '</div></div>';
     }
 
@@ -71,9 +71,9 @@ class Diagnoser
      */
     function get_chamilo_data() {
         $array = array();
-        $writable_folders = array('archive', 'courses', 'home', 'main/upload/users/','main/default_course_document/images/');
+        $writable_folders = array('archive', 'courses', 'home', 'main/upload/users/', 'main/default_course_document/images/');
         foreach ($writable_folders as $index => $folder) {
-        	//echo api_get_path(SYS_PATH) . $folder;
+            //echo api_get_path(SYS_PATH) . $folder;
             $writable = is_writable(api_get_path(SYS_PATH) . $folder);
             $status = $writable ? self :: STATUS_OK : self :: STATUS_ERROR;
             $array[] = $this->build_setting($status, '[FILES]', get_lang('IsWritable') . ': ' . $folder, 'http://be2.php.net/manual/en/function.is-writable.php', $writable, 1, 'yes_no', get_lang('DirectoryMustBeWritable'));
@@ -100,8 +100,8 @@ class Diagnoser
         $array[] = $this->build_setting($status, '[PHP]', 'phpversion()', 'http://www.php.net/manual/en/function.phpversion.php', phpversion(), '>= 5.2', null, get_lang('PHPVersionInfo'));
 
         $setting = ini_get('output_buffering');
-	    $req_setting = 1;
-	    $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $req_setting = 1;
+        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
         $array[] = $this->build_setting($status, '[INI]', 'output_buffering', 'http://www.php.net/manual/en/outcontrol.configuration.php#ini.output-buffering', $setting, $req_setting, 'on_off', get_lang('FileUploadsInfo'));
 
         $setting = ini_get('file_uploads');
@@ -195,9 +195,9 @@ class Diagnoser
         $req_setting = '4320';
         $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
         $array[] = $this->build_setting($status, '[SESSION]', 'session.gc_maxlifetime', 'http://www.php.net/manual/en/ini.core.php#session.gc-maxlifetime', $setting, $req_setting, null, get_lang('SessionGCMaxLifetimeInfo'));
-		
-		if (api_check_browscap()){$setting = true;}else{$setting=false;}		
-		$req_setting = true;
+
+        if (api_check_browscap()){$setting = true;}else{$setting=false;}
+        $req_setting = true;
         $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_WARNING;
         $array[] = $this->build_setting($status, '[INI]', 'browscap', 'http://www.php.net/manual/en/misc.configuration.php#ini.browscap', $setting, $req_setting, 'on_off', get_lang('BrowscapInfo'));
 
@@ -241,10 +241,10 @@ class Diagnoser
         $array = array();
 
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_NAME"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_NAME"], null, null, get_lang('ServerNameInfo'));
-        
+
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_ADDR"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_ADDR"], null, null, get_lang('ServerAddessInfo'));
-        
-        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_PORT"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_PORT"], null, null, get_lang('ServerPortInfo'));       
+
+        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_PORT"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_PORT"], null, null, get_lang('ServerPortInfo'));
 
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_SOFTWARE"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_SOFTWARE"], null, null, get_lang('ServerSoftwareInfo'));
 
@@ -258,7 +258,7 @@ class Diagnoser
         $array[] = $this->build_setting($status, '[SERVER]', '$_SERVER["REQUEST_URI"]', 'http://be.php.net/reserved.variables.server', $request, $path, null, get_lang('RequestURIInfo'));
         */
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_PROTOCOL"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_PROTOCOL"], null, null, get_lang('ServerProtocolInfo'));
-        
+
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', 'php_uname()', 'http://be2.php.net/php_uname', php_uname(), null, null, get_lang('UnameInfo'));
 
         return $array;
@@ -268,8 +268,7 @@ class Diagnoser
      * Additional functions needed for fast integration
      */
 
-    function build_setting($status, $section, $title, $url, $current_value, $expected_value, $formatter, $comment, $img_path = null)
-    {
+    function build_setting($status, $section, $title, $url, $current_value, $expected_value, $formatter, $comment, $img_path = null) {
         switch ($status) {
             case self :: STATUS_OK :
                 $img = 'bullet_green.gif';
@@ -311,19 +310,16 @@ class Diagnoser
      * @param $url
      * @return string the url
      */
-    function get_link($title, $url)
-    {
+    function get_link($title, $url) {
         return '<a href="' . $url . '" target="about:bank">' . $title . '</a>';
     }
 
-    function format_yes_no($value)
-    {
+    function format_yes_no($value) {
         return $value ? get_lang('Yes') : get_lang('No');
     }
 
-    function format_on_off($value)
-    {
-        return $value ? get_lang('On') : get_lang('Off');
+    function format_on_off($value) {
+        // These are the values 'On' and 'Off' used in the php-ini file. Translation (get_lang()) is not needed here.
+        return $value ? 'On' : 'Off';
     }
 }
-?>

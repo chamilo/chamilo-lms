@@ -23,9 +23,9 @@ else{
 $config['ToolbarSets']['Normal'] = array(
 	array('Save','NewPage','Templates','-','PasteText'),
 	array('Undo','Redo'),
-	array('Wikilink','Link','Image','flvPlayer','Table','mimetex'),
+	array('Wikilink','Link','Image','flvPlayer','Table','mimetex','asciimath','asciisvg'),
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+	array('JustifyLeft','JustifyCenter','JustifyFull'),
 	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor'),
 	array('FitWindow')
 );
@@ -38,7 +38,7 @@ $config['ToolbarSets']['Maximized'] = array(
 	array('Cut','Copy','Paste','PasteText','PasteWord'),
 	array('Undo','Redo','-','SelectAll','Find','-','RemoveFormat'),
 	array('Wikilink','Link','Unlink','Anchor','Glossary'),
-	array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','insertHtml','mimetex','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
+	array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','insertHtml','mimetex','asciimath','asciisvg','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
 '/',
 	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),

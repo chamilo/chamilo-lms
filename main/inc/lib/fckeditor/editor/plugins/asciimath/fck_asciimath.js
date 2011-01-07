@@ -54,229 +54,229 @@ var mathfontsize = "1.1em" ;
 var oSpanAM = FCKAsciiMath.FindFormulaContainer( FCKAsciiMath.GetSearchElementFromSelection() ) ;
 if ( oSpanAM )
 {
-	FCK.Selection.SelectNode( oSpanAM ) ;
+    FCK.Selection.SelectNode( oSpanAM ) ;
 }
 
 function LoadSelection()
 {
-	GetE( 'inputText' ).value = FCKAsciiMath.GetFormula( oSpanAM ) ;
-	Preview() ;
+    GetE( 'inputText' ).value = FCKAsciiMath.GetFormula( oSpanAM ) ;
+    Preview() ;
 }
 
 function Ok()
 {
-	if ( FCKBrowserInfo.IsIE )
-	{
-		if ( oSpanAM )
-		{
-			FCK.Selection.SelectNode( oSpanAM ) ;
-			// For IE: Before updating, we have to move the selection outside the formula
-			// in order to prevent "Unspecified error".
-			var span_target = FCK.EditorDocument.createElement( 'span' ) ;
-			span_target.innerHTML = '&nbsp;' ;
-			span_target = oSpanAM.parentNode.insertBefore( span_target, oSpanAM ) ;
-			FCK.Selection.SelectNode( span_target ) ;
-		}
-	}
+    if ( FCKBrowserInfo.IsIE )
+    {
+        if ( oSpanAM )
+        {
+            FCK.Selection.SelectNode( oSpanAM ) ;
+            // For IE: Before updating, we have to move the selection outside the formula
+            // in order to prevent "Unspecified error".
+            var span_target = FCK.EditorDocument.createElement( 'span' ) ;
+            span_target.innerHTML = '&nbsp;' ;
+            span_target = oSpanAM.parentNode.insertBefore( span_target, oSpanAM ) ;
+            FCK.Selection.SelectNode( span_target ) ;
+        }
+    }
 
-	var formula = GetE( 'inputText' ).value ;
+    var formula = GetE( 'inputText' ).value ;
 
-	if ( formula != '' )
-	{
-		FCK.InsertHtml( '<span class="AM">`' + formula + '`<\/span>' ) ;
-	}
-	else
-	{
-		FCK.Selection.Delete() ;
-	}
+    if ( formula != '' )
+    {
+        FCK.InsertHtml( '<span class="AM">`' + formula + '`<\/span>' ) ;
+    }
+    else
+    {
+        FCK.Selection.Delete() ;
+    }
 
-	if ( FCKBrowserInfo.IsIE )
-	{
-		if ( oSpanAM )
-		{
-			FCKUndo.SaveUndoStep() ;
-			oSpanAM.parentNode.removeChild( oSpanAM ) ;
-		}
-	}
+    if ( FCKBrowserInfo.IsIE )
+    {
+        if ( oSpanAM )
+        {
+            FCKUndo.SaveUndoStep() ;
+            oSpanAM.parentNode.removeChild( oSpanAM ) ;
+        }
+    }
 
-	return true ;
+    return true ;
 }
 
 window.onload = function()
 {
-	// Translate the dialog box texts.
-	oEditor.FCKLanguageManager.TranslatePage( document ) ;
+    // Translate the dialog box texts.
+    oEditor.FCKLanguageManager.TranslatePage( document ) ;
 
-	// Initialization of the script ASCIIMathML.js.
-	init() ;
+    // Initialization of the script ASCIIMathML.js.
+    init() ;
 
-	// Load the selected element information (if any).
-	LoadSelection() ;
+    // Load the selected element information (if any).
+    LoadSelection() ;
 
-	dialog.SetAutoSize( true ) ;
+    dialog.SetAutoSize( true ) ;
 
-	// When MathML is available show the button "Show MathML code".
-	if ( !noMathML ) {
-		GetE( 'show_mathml' ).style.display = '' ;
-	}
+    // When MathML is available show the button "Show MathML code".
+    if ( !noMathML ) {
+        GetE( 'show_mathml' ).style.display = '' ;
+    }
 
-	// Activate the "OK" button.
-	dialog.SetOkButton( true ) ;
+    // Activate the "OK" button.
+    dialog.SetOkButton( true ) ;
 
-	var inputField = GetE( 'inputText' ) ;
-	inputField.focus() ;
+    var inputField = GetE( 'inputText' ) ;
+    inputField.focus() ;
 }
 
 function Set( string )
 {
-	var inputField = GetE( 'inputText' ) ;
-	inputField.value += string ;
-	Preview() ;
-	inputField.focus() ;
-	return false ;
+    var inputField = GetE( 'inputText' ) ;
+    inputField.value += string ;
+    Preview() ;
+    inputField.focus() ;
+    return false ;
 }
 
 function Clear()
 {
-	var inputField = GetE( 'inputText' ) ;
-	inputField.value = '' ;
-	Preview() ;
-	inputField.focus() ;
-	return false ;
+    var inputField = GetE( 'inputText' ) ;
+    inputField.value = '' ;
+    Preview() ;
+    inputField.focus() ;
+    return false ;
 }
 
 function Delete()
 {
-	Clear();
-	dialog.Ok();
+    Clear();
+    dialog.Ok();
 }
 
 function Preview()
 {
-	if ( GetE( 'inputText' ).value != '' )
-	{
-		var str = GetE( 'inputText' ).value ;
-		var outnode = GetE( 'outputNode' ) ;
-		var newnode = createElementXHTML( 'div' ) ;
-		newnode.setAttribute( 'id', 'outputNode' ) ;
-		outnode.parentNode.replaceChild( newnode, outnode ) ;
-		outnode = GetE( 'outputNode' ) ;
-		var n = outnode.childNodes.length ;
-		for ( var i = 0; i < n; i++ )
-		{
-			outnode.removeChild( outnode.firstChild ) ;
-		}
-		outnode.appendChild( document.createComment( '`' + str + '`' ) ) ;
-		AMprocessNode( outnode, true ) ;
-		if ( FCKLang['DlgAsciiMathShowMathML'] )
-		{
-			GetE( 'show_mathml' ).value = FCKLang['DlgAsciiMathShowMathML'] ;
-		}
-	}
-	else
-	{
-		var outnode = GetE( 'outputNode' ) ;
-		var n = outnode.childNodes.length ;
-		for ( var i = 0; i < n; i++ )
-		{
-			outnode.removeChild( outnode.firstChild ) ;
-		}
-	}
+    if ( GetE( 'inputText' ).value != '' )
+    {
+        var str = GetE( 'inputText' ).value ;
+        var outnode = GetE( 'outputNode' ) ;
+        var newnode = createElementXHTML( 'div' ) ;
+        newnode.setAttribute( 'id', 'outputNode' ) ;
+        outnode.parentNode.replaceChild( newnode, outnode ) ;
+        outnode = GetE( 'outputNode' ) ;
+        var n = outnode.childNodes.length ;
+        for ( var i = 0; i < n; i++ )
+        {
+            outnode.removeChild( outnode.firstChild ) ;
+        }
+        outnode.appendChild( document.createComment( '`' + str + '`' ) ) ;
+        AMprocessNode( outnode, true ) ;
+        if ( FCKLang['DlgAsciiMathShowMathML'] )
+        {
+            GetE( 'show_mathml' ).value = FCKLang['DlgAsciiMathShowMathML'] ;
+        }
+    }
+    else
+    {
+        var outnode = GetE( 'outputNode' ) ;
+        var n = outnode.childNodes.length ;
+        for ( var i = 0; i < n; i++ )
+        {
+            outnode.removeChild( outnode.firstChild ) ;
+        }
+    }
 }
 
 function AMnode2string( inNode, indent )
 {
-	// thanks to James Frazer for contributing an initial version of this function
-	var i, str = '' ;
-	if ( inNode.nodeType == 1 )
-	{
-		var name = inNode.nodeName.toLowerCase() ; // (IE fix)
-		str = '\r' + indent + '<' + name ;
-		for ( i = 0; i < inNode.attributes.length; i++ )
-		{
-			if ( inNode.attributes[i].nodeValue != 'italic' &&
-				inNode.attributes[i].nodeValue != '' &&  //stop junk attributes
-				inNode.attributes[i].nodeValue != 'inherit' && // (mostly IE)
-				inNode.attributes[i].nodeValue != undefined &&
-				inNode.attributes[i].nodeName[0] != '-' )
-			{
-				str += ' ' + inNode.attributes[i].nodeName + '=' + '"' + inNode.attributes[i].nodeValue + '"' ;
-			}
-		}
-		if ( name == 'math' )
-		{
-			str += ' xmlns="http://www.w3.org/1998/Math/MathML"' ;
-		}
-		str += '>' ;
-		for ( i = 0; i < inNode.childNodes.length; i++ )
-		{
-			str += AMnode2string( inNode.childNodes[i], indent + '  ' ) ;
-		}
-		if ( name != 'mo' && name != 'mi' && name != 'mn' ) str += '\r' + indent ;
-		str += '</' + name + '>' ;
-	}
-	else if( inNode.nodeType == 3 )
-	{
-		var st = inNode.nodeValue ;
-		for ( i = 0; i < st.length; i++ )
-		{
-			if ( st.charCodeAt( i ) < 32 || st.charCodeAt( i ) > 126 )
-			{
-				str += '&#' + st.charCodeAt( i ) + ';' ;
-			}
-			else if ( st.charAt(i) == '<' && indent != '  ' ) str += '&lt;' ;
-			else if ( st.charAt(i) == '>' && indent != '  ' ) str += '&gt;' ;
-			else if ( st.charAt(i) == '&' && indent != '  ' ) str += '&amp;' ;
-			else str += st.charAt( i ) ;
-		}
-	}
-	return str ;
+    // thanks to James Frazer for contributing an initial version of this function
+    var i, str = '' ;
+    if ( inNode.nodeType == 1 )
+    {
+        var name = inNode.nodeName.toLowerCase() ; // (IE fix)
+        str = '\r' + indent + '<' + name ;
+        for ( i = 0; i < inNode.attributes.length; i++ )
+        {
+            if ( inNode.attributes[i].nodeValue != 'italic' &&
+                inNode.attributes[i].nodeValue != '' &&  //stop junk attributes
+                inNode.attributes[i].nodeValue != 'inherit' && // (mostly IE)
+                inNode.attributes[i].nodeValue != undefined &&
+                inNode.attributes[i].nodeName[0] != '-' )
+            {
+                str += ' ' + inNode.attributes[i].nodeName + '=' + '"' + inNode.attributes[i].nodeValue + '"' ;
+            }
+        }
+        if ( name == 'math' )
+        {
+            str += ' xmlns="http://www.w3.org/1998/Math/MathML"' ;
+        }
+        str += '>' ;
+        for ( i = 0; i < inNode.childNodes.length; i++ )
+        {
+            str += AMnode2string( inNode.childNodes[i], indent + '  ' ) ;
+        }
+        if ( name != 'mo' && name != 'mi' && name != 'mn' ) str += '\r' + indent ;
+        str += '</' + name + '>' ;
+    }
+    else if( inNode.nodeType == 3 )
+    {
+        var st = inNode.nodeValue ;
+        for ( i = 0; i < st.length; i++ )
+        {
+            if ( st.charCodeAt( i ) < 32 || st.charCodeAt( i ) > 126 )
+            {
+                str += '&#' + st.charCodeAt( i ) + ';' ;
+            }
+            else if ( st.charAt(i) == '<' && indent != '  ' ) str += '&lt;' ;
+            else if ( st.charAt(i) == '>' && indent != '  ' ) str += '&gt;' ;
+            else if ( st.charAt(i) == '&' && indent != '  ' ) str += '&amp;' ;
+            else str += st.charAt( i ) ;
+        }
+    }
+    return str ;
 }
 
 function ShowMathML()
 {
-	if ( GetE( 'inputText' ).value != '' )
-	{
-		var math = GetE( 'outputNode' ).getElementsByTagName( 'math' )[0] ;
-		if ( math )
-		{
-			var width ;
-			if ( GetE( 'outputNode' ).offsetWidth )
-			{
-				width = GetE( 'outputNode' ).offsetWidth ;
-			}
+    if ( GetE( 'inputText' ).value != '' )
+    {
+        var math = GetE( 'outputNode' ).getElementsByTagName( 'math' )[0] ;
+        if ( math )
+        {
+            var width ;
+            if ( GetE( 'outputNode' ).offsetWidth )
+            {
+                width = GetE( 'outputNode' ).offsetWidth ;
+            }
 
-			math.parentNode.innerHTML = '<pre>' + FCKTools.HTMLEncode( AMnode2string( math, '' ) ) + '</pre>' ;
+            math.parentNode.innerHTML = '<pre>' + FCKTools.HTMLEncode( AMnode2string( math, '' ) ) + '</pre>' ;
 
-			if ( width && FCKBrowserInfo.IsGecko )
-			{
-				GetE( 'outputNode' ).style.width = width + 'px' ;
-			}
+            if ( width && FCKBrowserInfo.IsGecko )
+            {
+                GetE( 'outputNode' ).style.width = width + 'px' ;
+            }
 
-			if ( FCKLang['DlgAsciiMathFormulaPreview'] )
-			{
-				GetE( 'show_mathml' ).value = FCKLang['DlgAsciiMathFormulaPreview'] ;
-			}
-		}
-		else
-		{
-			Preview() ;
-		}
-	}
-	else
-	{
-		Preview() ;
-	}
+            if ( FCKLang['DlgAsciiMathFormulaPreview'] )
+            {
+                GetE( 'show_mathml' ).value = FCKLang['DlgAsciiMathFormulaPreview'] ;
+            }
+        }
+        else
+        {
+            Preview() ;
+        }
+    }
+    else
+    {
+        Preview() ;
+    }
 }
 
 // Highlighting formulas.
 
 function over(td)
 {
-	td.className = 'LightBackground Hand' ;
+    td.className = 'LightBackground Hand' ;
 }
 
 function out(td)
 {
-	td.className = 'Hand' ;
+    td.className = 'Hand' ;
 }

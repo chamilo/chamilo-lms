@@ -24,7 +24,7 @@ var alertIfNoSVG = false;
 var translateASCIIMath = false ;
 
 // Registering the related command.
-FCKCommands.RegisterCommand( 'asciisvg', new FCKDialogCommand( FCKLang['DlgAsciiSvg'], FCKLang['DlgAsciiSvgGraphEditor'], FCKConfig.PluginsPath + 'asciisvg/fck_asciisvg.html', 750, 600 ) ) ;
+FCKCommands.RegisterCommand( 'asciisvg', new FCKDialogCommand( FCKLang['DlgAsciiSvg'], FCKLang['DlgAsciiSvgGraphEditor'], FCKConfig.PluginsPath + 'asciisvg/fck_asciisvg.html', 750, 550 ) ) ;
 
 // Create the "asciisvg" toolbar button.
 var oAsciiSvgItem = new FCKToolbarButton( 'asciisvg', FCKLang['DlgAsciiSvg'] ) ;

@@ -319,6 +319,7 @@ class Diagnoser
     }
 
     function format_on_off($value) {
-        return $value ? get_lang('On') : get_lang('Off');
+        // These are the values 'On' and 'Off' used in the php-ini file. Translation (get_lang()) is not needed here.
+        return $value ? 'On' : 'Off';
     }
 }

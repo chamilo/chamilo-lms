@@ -234,13 +234,13 @@ $HelpUsersFolder = "VISIBLE INFORMATION ONLY FOR THE TEACHER:
 
 The folder of users contains a folder for each user who has accessed it through the tool documents, or when any file has been sent to the course through the editor. If neither circumstances there has been no user folder is created. In the case of groups, files that are sent to through the editor shall be deposited in the folder for each group, which is only accessible by students from tool groups.
 
-The user folder and folders that contains each of them,will be hidden by default in documentation tool for all students, but each student can see the contents of his/hers property access the editor. However, if a student knows the address of a file folder of another student may watch it.
+The user folder and folders that contains each of them,will be hidden by default in documentation tool for all students, but each student can see the contents of his/her property access the editor. However, if a student knows the address of a file folder of another student may watch it.
 
-If this folder and the folder of one or more students is visible to users, other students can see what they contain. In this case, the student that owns the folder from the documents tool can also (only in his/hers folder): create and edit web documents, convert a document into a template web for personal use, create and edit drawings svg and png, send documents, create folders, move folders and files, delete folders and files, and download backup of his/hers folder.
+If this folder and the folder of one or more students is visible to users, other students can see what they contain. In this case, the student that owns the folder from the documents tool can also (only in his/her folder): create and edit web documents, convert a document into a template web for personal use, create and edit drawings svg and png, send documents, create folders, move folders and files, delete folders and files, and download backup of his/her folder.
 
 Moreover, the documents tool is synchronized with the file manager of the web editor, so changes in the management of documents produced in one or another will affect both.
 
-Thus, the user folder is not only a place to deposit files, it becomes a complete manager of the documents that students use during the course. Also, remember that any user can copy a file that is visible from any folder in the documents tool (whether or not the owner) to his/hers portfolios or personal documents area of social network, which will be available for his/hers can use it in other courses.";
+Thus, the user folder is not only a place to deposit files, it becomes a complete manager of the documents that students use during the course. Also, remember that any user can copy a file that is visible from any folder in the documents tool (whether or not the owner) to his/her portfolios or personal documents area of social network, which will be available for his/her can use it in other courses.";
 $HelpFolderChat = "VISIBLE INFORMATION ONLY FOR THE TEACHER: 
 
 This folder contains all sessions that have been made in the chat. Although often in the chat sessions can be trivial, others can be really interesting and worthy of being incorporated as a document more work. To do this, without changing the visibility of this folder, link the file and make it visible where deemed appropriate. Not recommended this folder visible.";
@@ -248,4 +248,11 @@ $HelpFolderCertificates = "VISIBLE INFORMATION ONLY FOR THE TEACHER:
 
 This folder contains the various models of certificates that have been created for the rating tool. No it is recommended that this folder visible.";
 $DestinationDirectory = "Destination folder";
+$CreateAudio = "Create audio";
+$InsertText2Audio = "Enter the text you want to convert an audio file";
+$HelpText2Audio = "Transform your text into speech";
+$BuildMP3 = "Build mp3";
+$Voice = "Voice";
+$Female = "Female";
+$Male = "Male";
 ?>

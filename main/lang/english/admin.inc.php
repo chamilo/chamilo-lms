@@ -1311,4 +1311,17 @@ $BigBlueButtonSecuritySaltTitle = "Security key of the BigBlueButton server";
 $BigBlueButtonSecuritySaltComment = "This is the security key of your BigBlueButton server, which will allow your server to authentify the Chamilo installation. Refer to the BigBlueButton documentation to locate it.";
 $AsciiSvgTitle = "Mathematical graphics editor ASCIIsvg";
 $AsciiSvgComment = "Activation of mathematical graphics editor (ASCIIsvg).";
+$Text2AudioTitle = "
+Enable online services to conversion text in audio";
+$Text2AudioComment = "vozMe: From text to speech. Online tool to convert text into speech. vozMe uses speech synthesis systems and technology to provide voice resources.";
+$ShowUsersFoldersTitle = "Show users folders in the documents tool";
+$ShowUsersFoldersComment = "This option allows you to show or hide to teachers the folders that the system generates for each user who visits the tool documents or send a file through the web editor. If you display these folders to the teachers, they may make visible or not the students and allow each student to have a specific place on the course where not only store documents, but where they can also create and edit web pages and to export to pdf, make drawings, make personal web templates, send files, as well as create, move and delete directories and files and make security copies from their folders. Each user of course have a complete document manager. Also, remember that any user can copy a file that is visible from any folder in the documents tool (whether or not the owner) to his/her portfolios or personal documents area of social network, which will be available for his/her can use it in other courses.";
+$ShowDefaultFoldersTitle = "Show in documents tool all folders containing multimedia resources supplied by default";
+$ShowDefaultFoldersComment = "Multimedia file folders containing files supplied by default organized in categories of video, audio, image and flash animations to use in their courses. Although you make it invisible into the document tool, you can still use these resources in the platform web editor.";
+$ShowChatFolderTitle = "Show the history folder of chat conversations";
+$ShowChatFolderComment = "This will show to theacher the folder that contains all sessions that have been made in the chat, the teacher can make them visible or not students and use them as a resource";
+$EnabledStudentExport2PDFTitle = "Allow students to export web documents to PDF format in the documents and wiki tools";
+$EnabledStudentExport2PDFComment = "This feature is enabled by default, but in case of server overload abuse it, or specific learning environments, might want to disable it for all courses.";
+$EnabledInsertHtmlTitle = "Allow the insertion of widgets";
+$EnabledInsertHtmlComment = "This allows you to embed on your webpages your favorite videos and applications such as vimeo or slideshare and all sorts of widgets and gadgets";
 ?>

@@ -3949,8 +3949,13 @@ function initPicture(x_min,x_max,y_min,y_max) { // set up the graph
   node.setAttribute("height",height);
   node.setAttribute("style",backgroundstyle);
   svgpicture.appendChild(node);
-  svgpicture.setAttribute("onmousemove","displayCoord(evt)");
-  svgpicture.setAttribute("onmouseout","removeCoord(evt)");
+  // Modified by Ivan Tcholakov, 08-JAN-2011.
+  // These events are suppressed because for some browsers
+  // the coordinates are not calculated correctly.
+  // TODO: Calculation to be tested and corrected after IE9 release.
+  //svgpicture.setAttribute("onmousemove","displayCoord(evt)");
+  //svgpicture.setAttribute("onmouseout","removeCoord(evt)");
+  //
   svgpicture.setAttribute("onclick","mClick(evt)");
   node = myCreateElementSVG("text"); // used for displayCoord
   node.appendChild(doc.createTextNode(" "));

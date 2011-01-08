@@ -7,104 +7,21 @@
 *	@package chamilo.library
 */
 
-class Promotion {
+require_once 'model.lib.php';
+
+class Promotion extends Model {
     
     var $table;
-    var $columns = array('name','description');
+    var $columns = array('id','name','description','career_id');
     
 	public function __construct() {
         $this->table =  Database::get_main_table(TABLE_PROMOTION);
 	}
     
-	/**
-	 * a little bit of javascript to display a prettier warning when deleting a note
-	 *
-     *	 */
-	function javascript_notebook()
-	{
-		return "<script type=\"text/javascript\">
-				function confirmation (name)
-				{
-					if (confirm(\" ". get_lang("NoteConfirmDelete") ." \"+ name + \" ?\"))
-						{return true;}
-					else
-						{return false;}
-				}
-				</script>";
-	}
-
-
-    /**
-     * Saves an element into the DB
-     *
-     * @param array $values
-     * @return bool
-     *
-     */
-	function save($values) {
-		/*if (!is_array($values) or empty($values['note_title'])) { 
-			return false; 
-		}*/		        
-        unset($values['submit']);
-        $id = Database::insert($this->table, $values);        
-		if (is_numeric($id)){
-			return $id;
-		}
-	}
-     /**
-     * Gets an element
-     */
-	function get($id) {
-		if (empty($id)) { return array(); }		
-        $result = Database::select('*',$this->table, array('where'=>array('id = ?'=>intval($id))),'first');
-		return $result;
-	}
-    
-     /**
-     * Get the count of elements
-     */
-    function get_count() {        
-        $row = Database::select('count(*) as count', $this->table, array(),'first');
-        return $row['count'];
-    }
-    
     function get_all_promotions_by_career_id($career_id) {        
         return Database::select('*', $this->table, array('where'=>array('career_id = ?'=>$career_id)));
-    }
-    
-    /**
-     * Updates the obj in the database
-     *
-     * @param array $values
-     *
-     */
-	function update($values) {
-		/*if (!is_array($values) or empty($values['note_title'])) {
-			return false;
-		}*/
-        unset($values['submit']);
-        $id = $values['id'];		
-        unset($values['id']);        
-        $result = Database::update($this->table, $values, array('id =  ?'=>$id));		
-        if ($result != 1){
-            return false;
-        }       
-        return true;
-	}
-    
-    /**
-     * Delets an item
-     */
-	function delete($id) {
-		if (empty($id) or $id != strval(intval($id))) { return false; }
-		// Database table definition
-		$result = Database :: delete($this->table, array('id = ?' => $id));        
-        if ($result != 1){
-        	return false;
-        }		
-		return true;
-	}
-    
+    }    
+   
     /**
      * Displays the title + grid
      */

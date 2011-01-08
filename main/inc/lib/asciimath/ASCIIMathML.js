@@ -3842,9 +3842,15 @@ function showHideCode(evt) { // called by onclick event
   var obj=evt.target;
   var name = obj.parentNode.getAttribute("name");
   var node = document.getElementById(name+"input");
-  node.style.display = (node.style.display == "none"?"":"none");
-  var node = document.getElementById(name+"button");
-  node.style.display = (node.style.display == "none"?"":"none");
+  // The try-catch block has been added by Ivan Tcholakov, 08-JAN-2011.
+  try {
+  //
+    node.style.display = (node.style.display == "none"?"":"none");
+    var node = document.getElementById(name+"button");
+    node.style.display = (node.style.display == "none"?"":"none");
+  //
+  } catch (ex) { }
+  //
 //  }
 }
 
@@ -4647,6 +4653,12 @@ function removeCoord(evt) {
     var nl = svgroot.childNodes;
     for (var i=0; i<nl.length && nl.item(i).nodeName!="text"; i++);
     var cnode = nl.item(i);
+    // Added by Ivan Tcholakov, 08-JAN-2011.
+    // Suppresing a javasript error that occurs on Opera 11.
+    if (typeof cnode != 'object') {
+        return;
+    }
+    //
     cnode.mtext = mtext;
     cnode.mtext([svgroot.getAttribute("width")-0,svgroot.getAttribute("height")-0],"", "aboveleft", "");
 /*    var dnode = nl.item(i+1);

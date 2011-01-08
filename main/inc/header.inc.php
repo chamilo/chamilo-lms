@@ -33,7 +33,7 @@ if ($navigator_info['name'] == 'Internet Explorer' &&  $navigator_info['version'
 }
 
 // Include here the script ASCIIMathML.js if you want to show mathematical formulas and graphics
-// not only in the "Documents" tool, but elsewhere in the system. This setting affects the
+// not only in the "Documents" tool, but elsewhere in the system. This setting is related to the
 // online editor's plugins 'asciimath' and 'asciisvg'.
 if (api_get_setting('include_asciimathml_script') == 'true') {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'asciimath/ASCIIMathML.js" type="text/javascript"></script>';

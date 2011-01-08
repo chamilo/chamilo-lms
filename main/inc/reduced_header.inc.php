@@ -17,10 +17,17 @@
 
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 
+// Include here the script ASCIIMathML.js if you want to show mathematical formulas and graphics
+// not only in the "Documents" tool, but elsewhere in the system. This setting is related to the
+// online editor's plugins 'asciimath' and 'asciisvg'.
+if (api_get_setting('include_asciimathml_script') == 'true') {
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'asciimath/ASCIIMathML.js" type="text/javascript"></script>';
+}
+
 if (isset($httpHeadXtra) && $httpHeadXtra) {
-	foreach ($httpHeadXtra as & $thisHttpHead) {
-		header($thisHttpHead);
-	}
+    foreach ($httpHeadXtra as & $thisHttpHead) {
+        header($thisHttpHead);
+    }
 }
 
 // Get language iso-code for this page - ignore errors
@@ -36,11 +43,11 @@ $document_language = api_get_language_isocode();
 <title>
 <?php
 if (!empty($nameTools)) {
-	echo $nameTools.' - ';
+    echo $nameTools.' - ';
 }
 
 if (!empty($_course['official_code'])) {
-	echo $_course['official_code'].' - ';
+    echo $_course['official_code'].' - ';
 }
 
 echo api_get_setting('siteName');
@@ -58,27 +65,27 @@ $my_style = api_get_visual_theme();
 
 // Sets the css reference it is call from lp_nav.php, lp_toc.php, lp_message, lp_log.php
 if (!empty($scorm_css_header)) {
-	if (!empty($my_style)) {
-		$scorm_css = api_get_path(WEB_CSS_PATH).$my_style.'/scorm.css';
-		$scormfs_css = api_get_path(WEB_CSS_PATH).$my_style.'/scormfs.css';
-	} else {
-		$scorm_css = 'scorm.css';
-		$scormfs_css = 'scormfs.css';
-	}
+    if (!empty($my_style)) {
+        $scorm_css = api_get_path(WEB_CSS_PATH).$my_style.'/scorm.css';
+        $scormfs_css = api_get_path(WEB_CSS_PATH).$my_style.'/scormfs.css';
+    } else {
+        $scorm_css = 'scorm.css';
+        $scormfs_css = 'scormfs.css';
+    }
 
-	if (!empty($display_mode) && $display_mode == 'fullscreen') {
-		$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
-							/*<![CDATA[*/
-							@import "'.$scormfs_css.'";
-							/*]]>*/
-							</style>';
-	} else {
-		$htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
-							/*<![CDATA[*/
-							@import "'.$scorm_css.'";
-							/*]]>*/
-							</style>';
-	}
+    if (!empty($display_mode) && $display_mode == 'fullscreen') {
+        $htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
+                            /*<![CDATA[*/
+                            @import "'.$scormfs_css.'";
+                            /*]]>*/
+                            </style>';
+    } else {
+        $htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
+                            /*<![CDATA[*/
+                            @import "'.$scorm_css.'";
+                            /*]]>*/
+                            </style>';
+    }
 }
 
 
@@ -107,33 +114,33 @@ if ($my_style != '') {
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.
 if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf( 'opera' ) == -1 ) )
 {
-	window.attachEvent( 'onunload', function()
-		{
-			window['__flash__removeCallback'] = function ( instance, name )
-			{
-				try
-				{
-					if ( instance )
-					{
-						instance[name] = null ;
-					}
-				}
-				catch ( flashEx )
-				{
+    window.attachEvent( 'onunload', function()
+        {
+            window['__flash__removeCallback'] = function ( instance, name )
+            {
+                try
+                {
+                    if ( instance )
+                    {
+                        instance[name] = null ;
+                    }
+                }
+                catch ( flashEx )
+                {
 
-				}
-			} ;
-		}
-	) ;
+                }
+            } ;
+        }
+    ) ;
 }
 //]]>
 </script>
 
 <?php
 if (isset($htmlHeadXtra) && $htmlHeadXtra) {
-	foreach ($htmlHeadXtra as & $this_html_head) {
-		echo $this_html_head;
-	}
+    foreach ($htmlHeadXtra as & $this_html_head) {
+        echo $this_html_head;
+    }
 }
 ?>
 </head>

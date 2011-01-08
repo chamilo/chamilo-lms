@@ -1324,4 +1324,6 @@ $EnabledStudentExport2PDFTitle = "Allow students to export web documents to PDF 
 $EnabledStudentExport2PDFComment = "This feature is enabled by default, but in case of server overload abuse it, or specific learning environments, might want to disable it for all courses.";
 $EnabledInsertHtmlTitle = "Allow the insertion of widgets";
 $EnabledInsertHtmlComment = "This allows you to embed on your webpages your favorite videos and applications such as vimeo or slideshare and all sorts of widgets and gadgets";
+$IncludeAsciiMathMlTitle = "Load the file ASCIIMathML.js in all the system's pages";
+$IncludeAsciiMathMlComment = "Activate this setting if you want to show ASCIIMathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system.";
 ?>

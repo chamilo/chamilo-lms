@@ -281,6 +281,44 @@ function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"'
 }
 
 
+/* Functions for supporting ASCIIMathML mathematical formulas and ASCIIsvg maathematical graphics */
+
+/**
+ * Dectects ASCIIMathML formula presence within a given html text.
+ * @param string $html      The input html text.
+ * @return bool             Returns TRUE when there is a formula found or FALSE otherwise.
+ */
+function api_contains_asciimathml($html) {
+    if (!preg_match_all('/<span[^>]*class\s*=\s*[\'"](.*?)[\'"][^>]*>/mi', $html, $matches)) {
+        return false;
+    }
+    foreach ($matches[1] as $string) {
+        $string = ' '.str_replace(',', ' ', $string).' ';
+        if (preg_match('/\sAM\s/m', $string)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Dectects ASCIIsvg graphics presence within a given html text.
+ * @param string $html      The input html text.
+ * @return bool             Returns TRUE when there is a graph found or FALSE otherwise.
+ */
+function api_contains_asciisvg($html) {
+    if (!preg_match_all('/<embed([^>]*?)>/mi', $html, $matches)) {
+        return false;
+    }
+    foreach ($matches[1] as $string) {
+        $string = ' '.str_replace(',', ' ', $string).' ';
+        if (preg_match('/sscr\s*=\s*[\'"](.*?)[\'"]/m', $string)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /* Miscellaneous text processing functions */
 
 /**
@@ -583,10 +621,10 @@ function get_last_week() {
  */
 function get_week_from_day($date) {
     if (!empty($date)) {
-	   $time = api_strtotime($date,'UTC');
+       $time = api_strtotime($date,'UTC');
        return date('W', $date);
     } else {
-    	return date('W');
+        return date('W');
     }
 }
 

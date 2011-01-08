@@ -1716,7 +1716,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
         {CSS}
         /*]]>*/
         </style>
-        </head>
+        {ASCIIMATHML_SCRIPT}</head>
         <body dir="{TEXT_DIRECTION}">
         {CONTENT}
         </body>
@@ -1737,7 +1737,12 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
     $css = str_replace('images/', $root_rel.$css_path.$theme.'images/', $css);
     $css = str_replace('../../img/', $root_rel.'main/img/', $css);
 
-    $template = str_replace(array('{LANGUAGE}', '{ENCODING}', '{TEXT_DIRECTION}', '{TITLE}', '{CSS}'), array(api_get_language_isocode(), api_get_system_encoding(), api_get_text_direction(), $wikiTitle, $css), $template);
+    $asciimathmal_script = (api_contains_asciimathml($wikiContents) || api_contains_asciisvg($wikiContents))
+       ? '<script src="'.api_get_path(TO_REL, SCRIPT_ASCIIMATHML).'" type="text/javascript"></script>'."\n" : '';
+
+    $template = str_replace(array('{LANGUAGE}', '{ENCODING}', '{TEXT_DIRECTION}', '{TITLE}', '{CSS}', '{ASCIIMATHML_SCRIPT}'),
+        array(api_get_language_isocode(), api_get_system_encoding(), api_get_text_direction(), $wikiTitle, $css, $asciimathmal_script),
+        $template);
 
     if (0 != $groupId)
     {

@@ -25,7 +25,7 @@ ALTER TABLE settings_options CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_
 ALTER TABLE user MODIFY COLUMN username VARCHAR(40) NOT NULL;
 
 UPDATE settings_current SET variable='chamilo_database_version' WHERE variable='dokeos_database_version';
-UPDATE settings_current SET selected_value = '1.8.8.13255' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.8.8.13309' WHERE variable = 'chamilo_database_version';
 
 ALTER TABLE sys_announcement ADD COLUMN access_url_id INT  NOT NULL default 1;
 ALTER TABLE sys_calendar ADD COLUMN access_url_id INT  NOT NULL default 1;
@@ -53,6 +53,9 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('sso_authen
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_asciisvg',NULL,'radio','Editor','false','AsciiSvgTitle','AsciiSvgComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_asciisvg', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_asciisvg', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('include_asciimathml_script',NULL,'radio','Editor','false','IncludeAsciiMathMlTitle','IncludeAsciiMathMlComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('include_asciimathml_script', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('include_asciimathml_script', 'false', 'No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_wiris',NULL,'radio','Editor','false','EnabledWirisTitle','EnabledWirisComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_wiris', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_wiris', 'false', 'No');

@@ -752,6 +752,7 @@ VALUES
 ('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0),
 ('math_asciimathML',NULL,'radio','Editor','false','MathASCIImathMLTitle','MathASCIImathMLComment',NULL,NULL, 0),
 ('enabled_asciisvg',NULL,'radio','Editor','false','AsciiSvgTitle','AsciiSvgComment',NULL,NULL, 0),
+('include_asciimathml_script',NULL,'radio','Editor','false','IncludeAsciiMathMlTitle','IncludeAsciiMathMlComment',NULL,NULL, 0),
 ('youtube_for_students',NULL,'radio','Editor','true','YoutubeForStudentsTitle','YoutubeForStudentsComment',NULL,NULL, 0),
 ('block_copy_paste_for_students',NULL,'radio','Editor','false','BlockCopyPasteForStudentsTitle','BlockCopyPasteForStudentsComment',NULL,NULL, 0),
 ('more_buttons_maximized_mode',NULL,'radio','Editor','true','MoreButtonsForMaximizedModeTitle','MoreButtonsForMaximizedModeComment',NULL,NULL, 0),
@@ -791,7 +792,7 @@ VALUES
 ('show_chat_folder',				NULL,'radio',		'Tools',	'true',	'ShowChatFolderTitle','ShowChatFolderComment',NULL,NULL, 0),
 'ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0),
 ('enabled_text2audio',				NULL,'radio',		'Tools',	'false',	'Text2AudioTitle','Text2AudioComment',NULL,NULL, 0),
-('chamilo_database_version', 		NULL,'textfield', 	NULL, '1.8.8.13256','DokeosDatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', 		NULL,'textfield', 	NULL, '1.8.8.13309','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 
 UNLOCK TABLES;
@@ -990,6 +991,8 @@ VALUES
 ('math_asciimathML','false','No'),
 ('enabled_asciisvg','true','Yes'),
 ('enabled_asciisvg','false','No'),
+('include_asciimathml_script','true','Yes'),
+('include_asciimathml_script','false','No'),
 ('youtube_for_students','true','Yes'),
 ('youtube_for_students','false','No'),
 ('block_copy_paste_for_students','true','Yes'),
@@ -2515,19 +2518,19 @@ CREATE TABLE course_request (
 );
 
 CREATE TABLE career (
-	id INT NOT NULL AUTO_INCREMENT,
-	name VARCHAR(255) NOT NULL ,
-	description TEXT NOT NULL,
-	PRIMARY KEY (id)
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL ,
+    description TEXT NOT NULL,
+    PRIMARY KEY (id)
 );
 
 
 
 CREATE TABLE promotion (
-	id INT NOT NULL AUTO_INCREMENT,
-	name VARCHAR(255) NOT NULL ,
-	description TEXT NOT NULL,
-	career_id INT NOT NULL,
-	PRIMARY KEY(id)
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL ,
+    description TEXT NOT NULL,
+    career_id INT NOT NULL,
+    PRIMARY KEY(id)
 );
 

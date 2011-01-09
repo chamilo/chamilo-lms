@@ -25,6 +25,9 @@ if (api_is_platform_admin()) {
 }
 
 header('Content-Type: text/html; charset='.api_get_system_encoding());
+//show the X-Powered-By header so that parsers can find it
+global $_configuration;
+header('X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'],0,1));
 
 $navigator_info = api_get_navigator();
 //ie6 fix
@@ -117,13 +120,14 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 <script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/thickbox.js" type="text/javascript" ></script>
 <link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/thickbox.css" type="text/css" media="projection, screen" />
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />
-<link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/courses.php" title="<?php echo api_htmlentities(get_lang('OtherCourses'), ENT_QUOTES); ?>" />
+ <link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/courses.php" title="<?php echo api_htmlentities(get_lang('OtherCourses'), ENT_QUOTES); ?>" />
 <link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/profile.php" title="<?php echo api_htmlentities(get_lang('ModifyProfile'), ENT_QUOTES); ?>" />
 <link href="http://www.chamilo.org/documentation.php" rel="Help" />
 <link href="http://www.chamilo.org/team.php" rel="Author" />
 <link href="http://www.chamilo.org" rel="Copyright" />
 <link rel="shortcut icon" href="<?php echo api_get_path(WEB_PATH); ?>favicon.ico" type="image/x-icon" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
+<meta name="Generator" content="<?php echo $_configuration['software_name'].' '.substr($_configuration['system_version'],0,1);?>">
 <script src= "<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/jquery.menu.js" type="text/javascript"></script>
 
 <script type="text/javascript">

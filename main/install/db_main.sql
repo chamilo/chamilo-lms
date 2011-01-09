@@ -790,7 +790,6 @@ VALUES
 ('show_users_folders',				NULL,'radio',		'Tools',	'true',	'ShowUsersFoldersTitle','ShowUsersFoldersComment',NULL,NULL, 0),
 ('show_default_folders',				NULL,'radio',		'Tools',	'true',	'ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0),
 ('show_chat_folder',				NULL,'radio',		'Tools',	'true',	'ShowChatFolderTitle','ShowChatFolderComment',NULL,NULL, 0),
-'ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0),
 ('enabled_text2audio',				NULL,'radio',		'Tools',	'false',	'Text2AudioTitle','Text2AudioComment',NULL,NULL, 0),
 ('chamilo_database_version', 		NULL,'textfield', 	NULL, '1.8.8.13309','DokeosDatabaseVersion','', NULL, NULL, 0);
 

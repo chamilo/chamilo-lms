@@ -11,27 +11,27 @@
 /*	GENERIC FUNCTIONS : FOR OLDER PHP VERSIONS */
 if ( ! function_exists('array_search') )
 {
-	/**
-	 * Searches haystack for needle and returns the key
-	 * if it is found in the array, FALSE otherwise.
-	 *
-	 * Natively implemented in PHP since 4.0.5 version.
-	 * This function is intended for previous version.
-	 *
-	 * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
-	 * @param  - needle (mixed)
-	 * @param  - haystack (array)
-	 * @return - array key or FALSE
-	 *
-	 * @see    - http://www.php.net/array_search
-	 */
-	function array_search($needle, $haystack)
-	{
-		while (list($key, $val) = each($haystack))
-			if ($val == $needle)
-				return $key;
-		return false;
-	}
+    /**
+     * Searches haystack for needle and returns the key
+     * if it is found in the array, FALSE otherwise.
+     *
+     * Natively implemented in PHP since 4.0.5 version.
+     * This function is intended for previous version.
+     *
+     * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
+     * @param  - needle (mixed)
+     * @param  - haystack (array)
+     * @return - array key or FALSE
+     *
+     * @see    - http://www.php.net/array_search
+     */
+    function array_search($needle, $haystack)
+    {
+        while (list($key, $val) = each($haystack))
+            if ($val == $needle)
+                return $key;
+        return false;
+    }
 }
 
 /* FILE DISPLAY FUNCTIONS */
@@ -45,65 +45,65 @@ if ( ! function_exists('array_search') )
  */
 function choose_image($file_name)
 {
-	static $type, $image;
+    static $type, $image;
 
-	/* TABLES INITIALISATION */
-	if (!$type || !$image)
-	{
-		$type['word'      ] = array('doc', 'dot',  'rtf', 'mcw',  'wps', 'psw', 'docm', 'docx', 'dotm',  'dotx');
-		$type['web'       ] = array('htm', 'html', 'htx', 'xml',  'xsl',  'php', 'xhtml');
-		$type['image'     ] = array('gif', 'jpg',  'png', 'bmp',  'jpeg');
-		$type['image_vect'] = array('svg','svgz');
-		$type['audio'     ] = array('wav', 'mid',  'mp2', 'mp3',  'midi', 'sib', 'amr', 'kar', 'oga');
-		$type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'au', 'flv', 'avi', 'wmv', 'asf', '3gp','ogv','ogg','ogx');
-		$type['excel'     ] = array('xls', 'xlt',  'xls', 'xlt', 'pxl', 'xlsx', 'xlsm', 'xlam', 'xlsb', 'xltm', 'xltx');
-		$type['compressed'] = array('zip', 'tar',  'rar', 'gz');
-		$type['code'      ] = array('js',  'cpp',  'c',   'java', 'phps');
-		$type['acrobat'   ] = array('pdf');
-		$type['powerpoint'] = array('ppt', 'pps', 'pptm', 'pptx', 'potm', 'potx', 'ppam', 'ppsm', 'ppsx');
-		$type['flash'     ] = array('fla', 'swf');
-		$type['text'      ] = array('txt','log');
-		$type['oo_writer' ] = array('odt', 'ott', 'sxw', 'stw');
-		$type['oo_calc'   ] = array('ods', 'ots', 'sxc', 'stc');
-		$type['oo_impress'] = array('odp', 'otp', 'sxi', 'sti');
-		$type['oo_draw'   ] = array('odg', 'otg', 'sxd', 'std');
-		
+    /* TABLES INITIALISATION */
+    if (!$type || !$image)
+    {
+        $type['word'      ] = array('doc', 'dot',  'rtf', 'mcw',  'wps', 'psw', 'docm', 'docx', 'dotm',  'dotx');
+        $type['web'       ] = array('htm', 'html', 'htx', 'xml',  'xsl',  'php', 'xhtml');
+        $type['image'     ] = array('gif', 'jpg',  'png', 'bmp',  'jpeg');
+        $type['image_vect'] = array('svg','svgz');
+        $type['audio'     ] = array('wav', 'mid',  'mp2', 'mp3',  'midi', 'sib', 'amr', 'kar', 'oga');
+        $type['video'     ] = array('mp4', 'mov',  'rm',  'pls',  'mpg',  'mpeg', 'au', 'flv', 'avi', 'wmv', 'asf', '3gp','ogv','ogg','ogx');
+        $type['excel'     ] = array('xls', 'xlt',  'xls', 'xlt', 'pxl', 'xlsx', 'xlsm', 'xlam', 'xlsb', 'xltm', 'xltx');
+        $type['compressed'] = array('zip', 'tar',  'rar', 'gz');
+        $type['code'      ] = array('js',  'cpp',  'c',   'java', 'phps');
+        $type['acrobat'   ] = array('pdf');
+        $type['powerpoint'] = array('ppt', 'pps', 'pptm', 'pptx', 'potm', 'potx', 'ppam', 'ppsm', 'ppsx');
+        $type['flash'     ] = array('fla', 'swf');
+        $type['text'      ] = array('txt','log');
+        $type['oo_writer' ] = array('odt', 'ott', 'sxw', 'stw');
+        $type['oo_calc'   ] = array('ods', 'ots', 'sxc', 'stc');
+        $type['oo_impress'] = array('odp', 'otp', 'sxi', 'sti');
+        $type['oo_draw'   ] = array('odg', 'otg', 'sxd', 'std');
 
-		$image['word'      ] = 'word.gif';
-		$image['web'       ] = 'file_html.gif';
-		$image['image'     ] = 'file_image.gif';
-		$image['image_vect'] = 'file_svg.png';
-		$image['audio'     ] = 'file_sound.gif';
-		$image['video'     ] = 'film.gif';
-		$image['excel'     ] = 'excel.gif';
-		$image['compressed'] = 'file_zip.gif';
-		$image['code'      ] = 'file_txt.gif';
-		$image['acrobat'   ] = 'file_pdf.gif';
-		$image['powerpoint'] = 'powerpoint.gif';
-		$image['flash'     ] = 'file_flash.gif';
-		$image['text'      ] = 'file_txt.gif';
-		$image['oo_writer' ] = 'file_oo_writer.gif';
-		$image['oo_calc'   ] = 'file_oo_calc.gif';
-		$image['oo_impress'] = 'file_oo_impress.gif';
-		$image['oo_draw'   ] = 'file_oo_draw.gif';
-	}
 
-	/* FUNCTION CORE */
-	$extension = array();
-	if (!is_array($file_name)) {
-		if (ereg('\.([[:alnum:]]+)$', $file_name, $extension)) {
-			$extension[1] = strtolower($extension[1]);
-	
-			foreach ($type as $generic_type => $extension_list)
-			{
-				if (in_array($extension[1], $extension_list))
-				{
-					return $image[$generic_type];
-				}
-			}
-		}
-	}
-	return 'defaut.gif';
+        $image['word'      ] = 'word.gif';
+        $image['web'       ] = 'file_html.gif';
+        $image['image'     ] = 'file_image.gif';
+        $image['image_vect'] = 'file_svg.png';
+        $image['audio'     ] = 'file_sound.gif';
+        $image['video'     ] = 'film.gif';
+        $image['excel'     ] = 'excel.gif';
+        $image['compressed'] = 'file_zip.gif';
+        $image['code'      ] = 'file_txt.gif';
+        $image['acrobat'   ] = 'file_pdf.gif';
+        $image['powerpoint'] = 'powerpoint.gif';
+        $image['flash'     ] = 'file_flash.gif';
+        $image['text'      ] = 'file_txt.gif';
+        $image['oo_writer' ] = 'file_oo_writer.gif';
+        $image['oo_calc'   ] = 'file_oo_calc.gif';
+        $image['oo_impress'] = 'file_oo_impress.gif';
+        $image['oo_draw'   ] = 'file_oo_draw.gif';
+    }
+
+    /* FUNCTION CORE */
+    $extension = array();
+    if (!is_array($file_name)) {
+        if (ereg('\.([[:alnum:]]+)$', $file_name, $extension)) {
+            $extension[1] = strtolower($extension[1]);
+
+            foreach ($type as $generic_type => $extension_list)
+            {
+                if (in_array($extension[1], $extension_list))
+                {
+                    return $image[$generic_type];
+                }
+            }
+        }
+    }
+    return 'defaut.gif';
 }
 
 /**
@@ -114,24 +114,24 @@ function choose_image($file_name)
  */
 function format_file_size($file_size)
 {
-	if($file_size >= 1073741824)
-	{
-		$file_size = round($file_size / 1073741824 * 100) / 100 . 'G';
-	}
-	elseif($file_size >= 1048576)
-	{
-		$file_size = round($file_size / 1048576 * 100) / 100 . 'M';
-	}
-	elseif($file_size >= 1024)
-	{
-		$file_size = round($file_size / 1024 * 100) / 100 . 'k';
-	}
-	else
-	{
-		$file_size = $file_size . 'B';
-	}
+    if($file_size >= 1073741824)
+    {
+        $file_size = round($file_size / 1073741824 * 100) / 100 . 'G';
+    }
+    elseif($file_size >= 1048576)
+    {
+        $file_size = round($file_size / 1048576 * 100) / 100 . 'M';
+    }
+    elseif($file_size >= 1024)
+    {
+        $file_size = round($file_size / 1024 * 100) / 100 . 'k';
+    }
+    else
+    {
+        $file_size = $file_size . 'B';
+    }
 
-	return $file_size;
+    return $file_size;
 }
 
 /**
@@ -143,7 +143,7 @@ function format_file_size($file_size)
  */
 function format_date($date)
 {
-	return date('d.m.Y', $date);
+    return date('d.m.Y', $date);
 }
 
 /**
@@ -154,11 +154,11 @@ function format_date($date)
  */
 function format_url($file_path)
 {
-	$path_component = explode('/', $file_path);
+    $path_component = explode('/', $file_path);
 
-	$path_component = array_map('rawurlencode', $path_component);
+    $path_component = array_map('rawurlencode', $path_component);
 
-	return implode('/', $path_component);
+    return implode('/', $path_component);
 }
 
 /**
@@ -171,29 +171,29 @@ function format_url($file_path)
 function recent_modified_file_time($dir_name, $do_recursive = true)
 {
 
-	$dir = dir($dir_name);
-	$last_modified = 0;
-	$return = 0;
-	if (is_dir($dir)) {
-		while(($entry = $dir->read()) !== false)
-		{
-			if ($entry != '.' && $entry != '..')
-				continue;
+    $dir = dir($dir_name);
+    $last_modified = 0;
+    $return = 0;
+    if (is_dir($dir)) {
+        while(($entry = $dir->read()) !== false)
+        {
+            if ($entry != '.' && $entry != '..')
+                continue;
 
-			if (!is_dir($dir_name.'/'.$entry))
-				$current_modified = filemtime($dir_name.'/'.$entry);
-			elseif ($do_recursive)
-				$current_modified = recent_modified_file_time($dir_name.'/'.$entry, true);
+            if (!is_dir($dir_name.'/'.$entry))
+                $current_modified = filemtime($dir_name.'/'.$entry);
+            elseif ($do_recursive)
+                $current_modified = recent_modified_file_time($dir_name.'/'.$entry, true);
 
-			if ($current_modified > $last_modified)
-				$last_modified = $current_modified;
-		}
+            if ($current_modified > $last_modified)
+                $last_modified = $current_modified;
+        }
 
-		$dir->close();
-		//prevents returning 0 (for empty directories)
-		$return = ($last_modified == 0) ? filemtime($dir_name) : $last_modified;
-	}
-	return $return;
+        $dir->close();
+        //prevents returning 0 (for empty directories)
+        $return = ($last_modified == 0) ? filemtime($dir_name) : $last_modified;
+    }
+    return $return;
 }
 
 /**
@@ -204,22 +204,22 @@ function recent_modified_file_time($dir_name, $do_recursive = true)
  */
 function folder_size($dir_name)
 {
-	$size = 0;
+    $size = 0;
 
-	if ($dir_handle = opendir($dir_name))
-	{
-		while (($entry = readdir($dir_handle)) !== false)
-		{
-			if($entry == '.' || $entry == '..')
-				continue;
+    if ($dir_handle = opendir($dir_name))
+    {
+        while (($entry = readdir($dir_handle)) !== false)
+        {
+            if($entry == '.' || $entry == '..')
+                continue;
 
-        	if(is_dir($dir_name.'/'.$entry))
-        		$size += folder_size($dir_name.'/'.$entry);
-        	else
-        		$size += filesize($dir_name.'/'.$entry);
-		}
+            if(is_dir($dir_name.'/'.$entry))
+                $size += folder_size($dir_name.'/'.$entry);
+            else
+                $size += filesize($dir_name.'/'.$entry);
+        }
 
-		closedir($dir_handle);
+        closedir($dir_handle);
     }
 
     return $size;
@@ -235,31 +235,31 @@ function folder_size($dir_name)
  */
 function get_total_folder_size($path, $can_see_invisible = false)
 {
-	$table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	$table_document = Database::get_course_table(TABLE_DOCUMENT);
-	$tool_document = TOOL_DOCUMENT;
+    $table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $table_document = Database::get_course_table(TABLE_DOCUMENT);
+    $tool_document = TOOL_DOCUMENT;
 
-	$visibility_rule = 'props.visibility ' . ($can_see_invisible ? '<> 2' : '= 1');
+    $visibility_rule = 'props.visibility ' . ($can_see_invisible ? '<> 2' : '= 1');
 
-	$sql = <<<EOQ
+    $sql = <<<EOQ
 SELECT SUM(size)
-	FROM $table_itemproperty AS props, $table_document AS docs
-	WHERE docs.id = props.ref
-		AND props.tool = '$tool_document'
-		AND path LIKE '$path/%'
-		AND $visibility_rule
+    FROM $table_itemproperty AS props, $table_document AS docs
+    WHERE docs.id = props.ref
+        AND props.tool = '$tool_document'
+        AND path LIKE '$path/%'
+        AND $visibility_rule
 EOQ;
 
-	$result = Database::query($sql);
+    $result = Database::query($sql);
 
-	if($result && Database::num_rows($result) != 0)
-	{
-		$row = Database::fetch_row($result);
-		return $row[0] == null ? 0 : $row[0];
-	}
-	else
-	{
-		return 0;
-	}
+    if($result && Database::num_rows($result) != 0)
+    {
+        $row = Database::fetch_row($result);
+        return $row[0] == null ? 0 : $row[0];
+    }
+    else
+    {
+        return 0;
+    }
 }
 ?>

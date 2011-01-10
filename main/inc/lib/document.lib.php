@@ -104,6 +104,7 @@ class DocumentManager {
             'dxf' => 'application/vnd.dxf',
             'dxr' => 'application/x-director',
             'eps' => 'application/postscript',
+            'epub' => 'application/epub+zip',
             'etx' => 'text/x-setext',
             'exe' => 'application/octet-stream',
             'ez' => 'application/andrew-inset',

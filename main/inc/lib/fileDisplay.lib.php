@@ -67,7 +67,7 @@ function choose_image($file_name)
         $type['oo_calc'   ] = array('ods', 'ots', 'sxc', 'stc');
         $type['oo_impress'] = array('odp', 'otp', 'sxi', 'sti');
         $type['oo_draw'   ] = array('odg', 'otg', 'sxd', 'std');
-
+        $type['epub'      ] = array('epub');
 
         $image['word'      ] = 'word.gif';
         $image['web'       ] = 'file_html.gif';
@@ -86,12 +86,13 @@ function choose_image($file_name)
         $image['oo_calc'   ] = 'file_oo_calc.gif';
         $image['oo_impress'] = 'file_oo_impress.gif';
         $image['oo_draw'   ] = 'file_oo_draw.gif';
+        $image['epub'      ] = 'file_epub.gif';
     }
 
     /* FUNCTION CORE */
     $extension = array();
     if (!is_array($file_name)) {
-        if (ereg('\.([[:alnum:]]+)$', $file_name, $extension)) {
+        if (ereg('\.([[:alnum:]]+)(\?|$)', $file_name, $extension)) {
             $extension[1] = strtolower($extension[1]);
 
             foreach ($type as $generic_type => $extension_list)

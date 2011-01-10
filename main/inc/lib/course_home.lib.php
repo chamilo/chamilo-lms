@@ -473,8 +473,27 @@ class CourseHome {
 					break;
 		}
 
+        //Get the list of hidden tools - this might imply performance slowdowns
+        // if the course homepage is loaded many times, so the list of hidden
+        // tools might benefit from a shared memory storage later on 
+        $list = api_get_settings('Tools','list',api_get_current_access_url_id());
+        $hide_list = array();
+        $check = false;
+        foreach ($list as $line) {
+        	if ($line['variable'] == 'course_hide_tools' and $line['selected_value'] == 'true') {
+        		$hide_list[] = $line['subkey'];
+                $check = true;
+        	}
+        }
 		while ($temp_row = Database::fetch_assoc($result)) {
-			$all_tools_list[] = $temp_row;
+            if ($check) {
+            	if (!in_array($temp_row['name'],$hide_list)) {
+                    $all_tools_list[] = $temp_row;        		
+            	} else {
+            	}
+            } else {
+                    $all_tools_list[] = $temp_row;
+            }
 		}
 
 		/*if(api_is_course_coach()) {

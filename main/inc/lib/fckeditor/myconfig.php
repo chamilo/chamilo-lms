@@ -188,7 +188,10 @@ if ((api_get_setting('math_mimetex') == 'true')) {
 // After enabling it, this plugin is configured to work with full-page html documents out-of-the box.
 // Browser compatibility: Internet Explorer 6.0+ with MathPlayer plugin, Mozilla Firefox 2.0+, Opera 9.5+
 if ((api_get_setting('math_asciimathML') == 'true')) {
-    $config['LoadPlugin'][] = 'asciimath';
+    // The following additional conditions are mandatory for correct working of the plugin. Please, don't alter them.
+    if ($this->Config['FullPage'] || api_get_setting('include_asciimathml_script') == 'true') {
+        $config['LoadPlugin'][] = 'asciimath';
+    }
 }
 
 // asciisvg: A plugin for drawing mathematical graphics on svg-enabled browsers.
@@ -197,7 +200,17 @@ if ((api_get_setting('math_asciimathML') == 'true')) {
 // if there is no security restriction (script-tag should not be filtered, by default this is valid for teachers).
 // Internet Explorer 8 (or prior) needs Adobe SVG Viewer installed, see http://www.adobe.com/svg/viewer/install/
 if ((api_get_setting('enabled_asciisvg') == 'true')) {
-    $config['LoadPlugin'][] = 'asciisvg';
+    // The following additional conditions are mandatory for correct working of the plugin. Please, don't alter them.
+    if ($this->Config['FullPage'] || api_get_setting('include_asciimathml_script') == 'true') {
+        $config['LoadPlugin'][] = 'asciisvg';
+    }
+}
+
+// Yet another mandatory condition for proper working of the plugins 'asciimath' and 'asciisvg'.
+if (api_get_setting('include_asciimathml_script') == 'true') {
+    // The automatic content parsing should be disabled on this case, otherwise content would be damaged.
+    // The editor does the necessary parsing within its separate iframe.
+    echo '<script type="text/javascript">var translateOnLoad = false ;</script>';
 }
 
 // WIRIS: plugin for inserting mathematical formulas

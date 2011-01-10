@@ -1,22 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-	<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Chamilo 1.8.7.1 Installation Guide</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
-	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-	<style type="text/css">
-	<!--
-		page { width: 21cm; height: 29.7cm; margin: 2cm }
-		pre { font-family: "Courier New", monospace }
-		p { margin-bottom: 0.21cm }
-		.code {margin: 1em 1em 1em 2em; padding: 0.5em; background-color: rgb(229, 229, 229); vertical-align: top; border: 1px solid #999999;}
-	-->
-	</style>
-	</head>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Chamilo 1.8.7.1 Installation Guide</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <style type="text/css">
+    <!--
+        page { width: 21cm; height: 29.7cm; margin: 2cm }
+        pre { font-family: "Courier New", monospace }
+        p { margin-bottom: 0.21cm }
+        .code {margin: 1em 1em 1em 2em; padding: 0.5em; background-color: rgb(229, 229, 229); vertical-align: top; border: 1px solid #999999;}
+    -->
+    </style>
+    </head>
 <body>
 
 <div id="header1">
-	<h1>Chamilo 1.8.7.1 : Installation Guide</h1>
+    <h1>Chamilo 1.8.7.1 : Installation Guide</h1>
 </div>
 
 <a href="index.html">Documentation</a> &gt; Installation Guide
@@ -223,11 +223,11 @@ To get the best of Chamilo, you need to finetune PHP settings. Consider : <br />
 
 
 <div class="code">
-	  max_execution_time = 300&nbsp;&nbsp;&nbsp; ; Maximum execution time of each script, in seconds<br />
-	  max_input_time = 600 ; Maximum amount of time each script may spend parsing request data<br />
-	  memory_limit = 256M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; Maximum amount of memory a script may consume (128MB)<br />
-	  post_max_size = 64M<br />
-	  upload_max_filesize = 100M
+      max_execution_time = 300&nbsp;&nbsp;&nbsp; ; Maximum execution time of each script, in seconds<br />
+      max_input_time = 600 ; Maximum amount of time each script may spend parsing request data<br />
+      memory_limit = 256M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; Maximum amount of memory a script may consume (128MB)<br />
+      post_max_size = 64M<br />
+      upload_max_filesize = 100M
 </div>
 
 <p>Some users could meet problems if their PHP settings don't fit
@@ -263,11 +263,11 @@ date.timezone = 'America/New_York'
 
 <p>You might also add the following php modules and packages:</p>
 <ul>
-	<li>php-ctype</li>
-	<li>php-gd</li>
-	<li>php-iconv</li>
-	<li>php-json</li>
-	<li>php-mbstring</li>
+    <li>php-ctype</li>
+    <li>php-gd</li>
+    <li>php-iconv</li>
+    <li>php-json</li>
+    <li>php-mbstring</li>
 </ul>
 <p><a href="http://dev.mysql.com/doc/mysql/en/index.html"></a><br /></p>
 
@@ -559,21 +559,21 @@ The fields used intensively by the Chamlio module are:<br />
 
 <ul>
 
-	<li>uid, which is matched to the username in Chamilo</li>
+    <li>uid, which is matched to the username in Chamilo</li>
 
-	<li>userPassword, which is matched to the user password, although
+    <li>userPassword, which is matched to the user password, although
 this part will only work for non-encrypted passwords for now, but it
 shouldn't be necessary if using the LDAP server as authentication</li>
 
-	<li>ou should end with the year of the person registration or any
+    <li>ou should end with the year of the person registration or any
 criteria you will use to filter users, so that they can be retrieved on
 that criteria</li>
 
-	<li>sn is used as the lastname field in Chamilo</li>
+    <li>sn is used as the lastname field in Chamilo</li>
 
-	<li>givenName is used as the firstname field in Chamilo</li>
+    <li>givenName is used as the firstname field in Chamilo</li>
 
-	<li>mail is used as the email field in Chamilo</li>
+    <li>mail is used as the email field in Chamilo</li>
 </ul>
 
 
@@ -584,20 +584,20 @@ that criteria</li>
 
 You can enable mathematical equations writing inside the Chamilo online editor (FCKEditor) by applying the following steps:
 <ul>
-	<li>1. Configure your Apache installation to add a cgi-bin directory that contains a symbolic link to the mimetex.cgi in <i>chamilo/main/inc/lib/mimetex/</i> (*see below, step 4)</li>
-	<li>2. Reload your Apache configuration</li>
-	<li>3. Edit the online editor's configuration file <i>chamilo/main/inc/lib/fckeditor/myconfig.php</i> and</li>
-	<li>3.1. Enable the mimetex plugin, find the line //$config['LoadPlugin'][] = 'mimetex'; and modify it to be: <b>$config['LoadPlugin'][] = 'mimetex';</b> (remove the double slash)</li>
-	<li>3.2. The additional settings <b>$config['MimetexExecutableInstalled']</b> , <b>$config['MimetexExecutableDetectionMethod']</b>
+    <li>1. Configure your Apache installation to add a cgi-bin directory that contains a symbolic link to the mimetex.cgi in <i>chamilo/main/inc/lib/mimetex/</i> (*see below, step 4)</li>
+    <li>2. Reload your Apache configuration</li>
+    <li>3. Edit the online editor's configuration file <i>chamilo/main/inc/lib/fckeditor/myconfig.php</i> and</li>
+    <li>3.1. Enable the mimetex plugin, find the line //$config['LoadPlugin'][] = 'mimetex'; and modify it to be: <b>$config['LoadPlugin'][] = 'mimetex';</b> (remove the double slash)</li>
+    <li>3.2. The additional settings <b>$config['MimetexExecutableInstalled']</b> , <b>$config['MimetexExecutableDetectionMethod']</b>
 and <b>$config['MimetexExecutableDetectionTimeout']</b> are configured for best probability of automatic detection of the installed on the server file <i>mimetex.cgi</i> or <i>mimetex.exe</i>.
 In rare cases these options might need to be twicked, see the acccompanying comments about these options within the file <i>myconfig.php</i></li>
 
-	<li>3.3. Once the plugin has been activated, almost in all toolbars the corresponding button appears.
+    <li>3.3. Once the plugin has been activated, almost in all toolbars the corresponding button appears.
 If you need to edit some toolbars, see the configuration files (php) within the directory <i>chamilo/main/inc/lib/fckeditor/toolbars/</i> .
 Here is an example:
     <div class="code">$config['ToolbarSets']['Normal'] = array(<br /> &nbsp;&nbsp;array('FitWindow','Bold','Image','Link','PasteWord','MP3',<b>'mimetex'</b>,'Table','Subscript','Superscript','ShowBlocks')<br />);</div>
-	The item <b>'mimetex'</b> represents the button, you may add it to or remove it from any toolbar.<br /><br />
-	</li>
+    The item <b>'mimetex'</b> represents the button, you may add it to or remove it from any toolbar.<br /><br />
+    </li>
     <li>4. To install mimetex executable file, make these changes:</li>
 </ul>
 
@@ -644,46 +644,46 @@ and about the ASCIIMath formula syntax see <a href="http://www1.chapman.edu/~jip
 and <a href="http://dlippman.imathas.com/asciimathtex/AMT.html">http://dlippman.imathas.com/asciimathtex/AMT.html</a>.</p>
 
 <p>For writing ASCIIMath formulas in documents, a correspondent plugin for the online editor should be activated. For doing this,
-see the platform administration section and open the page "Administration &gt; Configuration settings &gt; WYSIWYG Editor".
+see the platform administration section and open the page "Administration &gt; Configuration settings &gt; Editor".
 Enable the setting <strong>"ASCIIMathML mathematical editor"</strong>.</p>
 
 <p>Inside documents, the script ASCIIMathML.js renders mathematical formulas in two altrnative ways:</p>
 <ul>
-	<li>By translation ASCIIMath formula notation into MathML code. MathML standard currently is supported by the following browsers:
-		<ul>
-			<li>Mozilla Firefox, you may consider installing STIX fonts (<a href="http://www.stixfonts.org">http://www.stixfonts.org</a>) on your client machines for nice looking formulas</li>
-			<li>Internet Explorer 6 or higher with the add-on MathPlayer 2.0 or higher (<a href="http://www.dessci.com/en/products/mathplayer">http://www.dessci.com/en/products/mathplayer</a>)</li>
-			<li>Opera 9.5 or higher</li>
-		</ul>
-	</li>
-	<li>For browser that do not support MathML - by translation ASCIIMath formula notation into TeX notation and passing it to
-	an external service. The external service produces and returns an image that contains the formula. This way is so called
-	"image-based fallback".
-	</li>
+    <li>By translation ASCIIMath formula notation into MathML code. MathML standard currently is supported by the following browsers:
+        <ul>
+            <li>Mozilla Firefox, you may consider installing STIX fonts (<a href="http://www.stixfonts.org">http://www.stixfonts.org</a>) on your client machines for nice looking formulas</li>
+            <li>Internet Explorer 6 or higher with the add-on MathPlayer 2.0 or higher (<a href="http://www.dessci.com/en/products/mathplayer">http://www.dessci.com/en/products/mathplayer</a>)</li>
+            <li>Opera 9.5 or higher</li>
+        </ul>
+    </li>
+    <li>For browser that do not support MathML - by translation ASCIIMath formula notation into TeX notation and passing it to
+    an external service. The external service produces and returns an image that contains the formula. This way is so called
+    "image-based fallback".
+    </li>
 </ul>
 
 <p>For providing <strong>image-based fallback</strong> in a production system, you should pick up and install on your server software for TeX rendering, such as:</p>
 <ul>
-	<li>mimeTeX - <a href="http://www.forkosh.dreamhost.com/source_mimetex.html">http://www.forkosh.dreamhost.com/source_mimetex.html</a>.
-	See <a href="#7._Mathematical_formulas">"7. Mathematical formulas with LaTeX"</a> on how to install the mimetex executable file on your server</li>
-	<li>mathTeX - <a href="http://www.forkosh.com/mathtex.html">http://www.forkosh.com/mathtex.html</a>. Browse the site for installation instructions</li>
+    <li>mimeTeX - <a href="http://www.forkosh.dreamhost.com/source_mimetex.html">http://www.forkosh.dreamhost.com/source_mimetex.html</a>.
+    See <a href="#7._Mathematical_formulas">"7. Mathematical formulas with LaTeX"</a> on how to install the mimetex executable file on your server</li>
+    <li>mathTeX - <a href="http://www.forkosh.com/mathtex.html">http://www.forkosh.com/mathtex.html</a>. Browse the site for installation instructions</li>
 </ul>
 
 <p>As an alternative, you may try to use some public services for TeX rendering, such as:</p>
 <ul>
-	<li>MathTran - <a href="http://www.mathtran.org">http://www.mathtran.org</a></li>
-	<li>Google Chart Tools - <a href="http://code.google.com/apis/charttools">http://code.google.com/apis/charttools</a></li>
+    <li>MathTran - <a href="http://www.mathtran.org">http://www.mathtran.org</a></li>
+    <li>Google Chart Tools - <a href="http://code.google.com/apis/charttools">http://code.google.com/apis/charttools</a></li>
 </ul>
 
 <p>Open with a text editor the file <strong>.../chamilo/main/inc/lib/asciimath/ASCIIMathML.js</strong>.
 Find somewhere at the beginning the line that initializes the variable <strong>AMTcgiloc</strong>.
 You may need to alter the setting to be for example:</p>
 <ul>
-	<li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mimetex.cgi";</div></li>
-	<li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mathtex.cgi";</div></li>
-	<li><div class="code">var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?tex=";</div></li>
-	<li><div class="code">var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&amp;chs=1x0&amp;chl=";</div></li>
-	<li>... or something else</li>
+    <li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mimetex.cgi";</div></li>
+    <li><div class="code">var AMTcgiloc = "http://mychamiloserver.org/cgi-bin/mathtex.cgi";</div></li>
+    <li><div class="code">var AMTcgiloc = "http://www.mathtran.org/cgi-bin/mathtran?tex=";</div></li>
+    <li><div class="code">var AMTcgiloc = "http://chart.apis.google.com/chart?cht=tx&amp;chs=1x0&amp;chl=";</div></li>
+    <li>... or something else</li>
 </ul>
 <p>For testing how the variable <strong>AMTcgiloc</strong> may be set, there are some examples (as comments) inside the script.</p>
 <hr style="width: 100%; height: 2px;" />
@@ -701,7 +701,7 @@ You may need to alter the setting to be for example:</p>
 
 <hr />
     <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
-	<a href="http://jigsaw.w3.org/css-validator/">
-		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
-	</a>
+    <a href="http://jigsaw.w3.org/css-validator/">
+        <img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
+    </a>
 </body></html>

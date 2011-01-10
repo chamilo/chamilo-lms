@@ -4122,7 +4122,11 @@ function api_get_current_access_url_id() {
         $access_url_id = Database::result($result, 0, 0);
         return $access_url_id;
     }
-    return -1;
+    //if the url in WEB_PATH was not found, it can only mean that there is
+    // either a configuration problem or the first URL has not been defined yet
+    // (by default it is http://localhost/). Thus the more sensible thing we can
+    // do is return 1 (the main URL) as the user cannot hack this value anyway 
+    return 1;
 }
 
 /**

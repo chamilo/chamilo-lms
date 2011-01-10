@@ -10,12 +10,12 @@
 /**
  * The SSO class allows for management or remote Single Sign On resources
  */
-public class sso {
-    public var $protocol; //    'http://',
-    public var $domain; //    'localhost/project/drupal5',
-    public var $auth_uri; //    '/?q=user',
-    public var $deauth_uri; //    '/?q=logout',
-    public var $referer; // http://my.chamilo.com/main/auth/profile.php
+class sso {
+    public $protocol; //    'http://',
+    public $domain; //    'localhost/project/drupal5',
+    public $auth_uri; //    '/?q=user',
+    public $deauth_uri; //    '/?q=logout',
+    public $referer; // http://my.chamilo.com/main/auth/profile.php
 
     /**
      * Instanciates the object, initializing all relevant URL strings

@@ -1213,6 +1213,10 @@ class SessionManager {
      * @return  array a list with an user list
      */
     public static function get_users_by_session($id) {
+        if (empty($id)) {
+            return array();
+        }
+        $id = intval($id);
         $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_user               = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $order_clause ='';
@@ -1221,7 +1225,6 @@ class SessionManager {
         INNER JOIN '.$tbl_session_rel_user.'
             ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user 
             AND '.$tbl_session_rel_user.'.id_session = '.$id.$order_clause;
-
         $result=Database::query($sql);
         //$users=Database::store_result($result);
         while ($row = Database::fetch_array($result,'ASSOC')) {

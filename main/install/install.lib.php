@@ -1142,8 +1142,8 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://www.php.net/manual/en/session.configuration.php#ini.session.cookie-httponly">Cookie HTTP Only</a></td>
-                <td class="requirements-recommended">1</td>
-                <td class="requirements-value">'.check_php_setting('session.cookie_httponly','1').'</td>
+                <td class="requirements-recommended">ON</td>
+                <td class="requirements-value">'.check_php_setting('session.cookie_httponly','ON').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.upload-max-filesize">Maximum upload file size</a></td>

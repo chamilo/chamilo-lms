@@ -1314,7 +1314,7 @@ $BigBlueButtonSecuritySaltComment = "Esta es la clave de seguridad de su servido
 $AsciiSvgTitle = "Editor de gráficos matemáticos ASCIIsvg";
 $AsciiSvgComment = "Activación del editor de gráficos matemáticos (ASCIIsvg)";
 $Text2AudioTitle = "Activar servicios de conversión de texto en audio";
-$Text2AudioComment = "vozMe: De texto a voz. Herramienta on-line para convertir texto en voz. vozMe utiliza tecnología y sistemas de síntesis del habla para ofrecer recursos de voz";
+$Text2AudioComment = "Herramienta on-line para convertir texto en voz. Utiliza tecnología y sistemas de síntesis del habla para ofrecer recursos de voz.";
 $ShowUsersFoldersTitle = "Mostrar las carpetas de los usuarios en la herramienta documentos";
 $ShowUsersFoldersComment = "
 Esta opción le permitirá mostrar u ocultar a los profesores las carpetas que el sistema genera para cada usuario que visita la herramienta documentos o envía un archivo a través del editor web. Si muestra estas carpetas a los profesores, éstos podrán hacerlas visibles o no a los estudiantes y permitirán a cada estudiante tener un lugar específico en el curso donde, no sólo almacenar documentos, sino donde también podrán crear y modificar páginas web y poder exportarlas a pdf, realizar dibujos, realizar plantillas web personales, enviar archivos, así como crear, mover y eliminar subdirectorios y archivos, y sacar copias de seguridad de sus carpetas. Cada usuario del curso dispondrá de un completo gestor de documentos. Además, recuerde que cualquier usuario podrá copiar un archivo, que sea visible, de cualquier carpeta de la herramienta documentos (sea o no la suya) a su portafolios o área personal de documentos de la red social, donde estará disponible para que lo pueda usar en otros cursos.";
@@ -1326,4 +1326,8 @@ $EnabledStudentExport2PDFTitle = "Permitir a los estudiantes exportar documentos
 $EnabledStudentExport2PDFComment = "Esta prestación está habilitada por defecto, pero en caso de sobrecarga del servidor por abuso de ella, o en entornos de formación específicos, puede que desee dsactivarla en todos los cursos.";
 $EnabledInsertHtmlTitle = "Permitir la inserción de Widgets";
 $EnabledInsertHtmlComment = "Esto le permitirá embeber en sus páginas web sus videos y aplicaciones favoritas como vimeo o slideshare y todo tipo de widgets y gadgets";
+$IncludeAsciiMathMlTitle = "Cargar el fichero ASCIIMathML.js para todas las páginas de la plataforma";
+$IncludeAsciiMathMlComment = "Active este parámetro si desea mostrar fórmulas matemáticas basadas en ASCIIMathML y gráficos matemáticos basados en ASCIIsvg, no solo en la herramienta \"Documentos\", pero también en otras herramientas de la plataforma.";
+$CourseHideToolsTitle = "Esconder herramientas para los docentes";
+$CourseHideToolsComment = "Seleccione las herramientas que desea esconder del docente. Esto no prohibirá el acceso a la herramienta (no tiene vocación de seguridad), pero hará invisible la herramienta para el docente para evitar la confusión debida a una gran cantidad de herramientas (vocación de usabilidad).";
 ?>

@@ -255,4 +255,9 @@ $BuildMP3 = "Generar mp3";
 $Voice = "Voz";
 $Female = "Femenina";
 $Male = "Masculina";
+$GoogleAudio = "Usar los servicios de audio de Google";
+$vozMe = "Usar los servicios de audio de vozMe";
+$HelpGoogleAudio = "Admite un máximo de 100 caracteres, soportando una amplia variedad de idiomas. Los archivos se generarán y guardarán automáticamente en el directorio de Chamilo en el que Usted actualmente se encuentra.";
+$HelpvozMe = "Admite textos de varios miles de caracteres de longitud, también podrá seleccionar el tipo de voz: masculina o femenina. Sin embargo, trabaja con menos idiomas, la calidad del audio es inferior y Usted tendrá que descargar los archivos manualmente a su ordenador desde una nueva ventana.";
+$SaveMP3 = "Guardar mp3";
 ?>

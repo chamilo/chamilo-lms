@@ -163,10 +163,12 @@ echo '<div class="actions-title">';
 echo $tool_name;
 echo '</div>';
 
-// Forbidden to self-register
-if (get_setting('allow_registration') == 'false') {
-    api_not_allowed();
-}
+// The following security condition has been removed, because it makes no sense here. See Bug #1846.
+//// Forbidden to self-register
+//if (get_setting('allow_registration') == 'false') {
+//    api_not_allowed();
+//}
+
 //api_display_tool_title($tool_name);
 if (get_setting('allow_registration') == 'approval') {
     Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));

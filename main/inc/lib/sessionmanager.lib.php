@@ -975,9 +975,11 @@ class SessionManager {
 			$sql_query .= ' ORDER BY '.Database::escape_string(implode(',',$order_by));
 		}
 		$sql_result = Database::query($sql_query);
-		while ($result = Database::fetch_array($sql_result)) {
-			$return_array[$result['id']] = $result;
-		}
+        if (Database::num_rows($sql_result)>0) {
+    		while ($result = Database::fetch_array($sql_result)) {
+    			$return_array[$result['id']] = $result;
+    		}
+        }
 		return $return_array;
 	}
 	/**

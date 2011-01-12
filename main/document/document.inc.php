@@ -124,18 +124,20 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
         $ext = explode('.', $path);
         $ext = strtolower($ext[sizeof($ext) - 1]);
 
-        // "htmlfiles" are shown in a frameset
-        if ($ext == 'htm' || $ext == 'html' || $ext == 'gif' || $ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'pdf' || $ext == 'swf' || $ext == 'mp3' || $ext == 'mp4' ||(($ext== 'ogg' || $ext== 'ogx' || $ext== 'oga' || $ext== 'ogv') && api_browser_support('ogg')) ||($ext == 'svg' && api_browser_support('svg'))) {
+        // HTML-files an some other types are shown in a frameset by default.
+        $is_browser_viewable_file = is_browser_viewable($ext);
+        if ($is_browser_viewable_file) {
             $url = 'showinframes.php?'.api_get_cidreq().'&amp;file='.$url_path.$req_gid;
         } else {
             // url-encode for problematic characters (we may not call them dangerous characters...)
             $path = str_replace('%2F', '/',$url_path).'?'.api_get_cidreq();
             $url = $www.$path;
         }
-        // Files that we want opened in a new window
-        if ($ext == 'txt' || $ext == 'log' || $ext == 'css' || $ext == 'js') { // Add here
-            $target = '_blank';
-        }
+        // Disabled fragment of code, there is a special icon for opening in a new window.
+        //// Files that we want opened in a new window
+        //if ($ext == 'txt' || $ext == 'log' || $ext == 'css' || $ext == 'js') { // Add here
+        //    $target = '_blank';
+        //}
     } else {
         $url = api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$url_path.$req_gid;
     }
@@ -200,10 +202,15 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 
             if($filetype == 'file')
             {
-            $copy_to_myfiles='<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase_small.png', get_lang('CopyToMyFiles'), array('height'=>'16', 'width' => '16')).'&nbsp;&nbsp;</a>';
+                $copy_to_myfiles='<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase_small.png', get_lang('CopyToMyFiles'), array('height'=>'16', 'width' => '16')).'&nbsp;&nbsp;</a>';
             }
         }
-        return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles;
+
+        if ($is_browser_viewable_file) {
+            $open_in_new_window_link = '<a href="'.$www.str_replace('%2F', '/',$url_path).'?'.api_get_cidreq().'" style="float:right"'.$prevent_multiple_click.' target="_blank">'.Display::return_icon('open_in_new_window_small.png', get_lang('OpenInANewWindow'), array('height'=>'16', 'width' => '16')).'&nbsp;&nbsp;</a>';
+        }
+
+        return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link;
         //end copy files to users myfiles
     }
     else{
@@ -667,6 +674,29 @@ function search_keyword($document_name, $keyword) {
     } else {
         return false;
     }
+}
+
+/**
+ * Check whether a document can be opened inside a frame.
+ * @param string $file_extension    The filename extension of the document (it must be in lower case).
+ * @return bool                     Returns TRUE or FALSE.
+ */
+function is_browser_viewable($file_extension) {
+    static $allowed_extensions = array(
+        'htm', 'html', 'xhtml', 'gif', 'jpg', 'jpeg', 'png', 'pdf', 'swf', 'mp3', 'mp4', 'ogg', 'ogx', 'oga', 'ogv', 'svg',
+        'txt', 'log', 'css', 'js',
+        'mpg', 'mpeg'
+    );
+    if (!($result = in_array($file_extension, $allowed_extensions))) { // Assignment + a logical check.
+        return false;
+    }
+    switch ($file_extension) {
+        case 'ogg':
+            return api_browser_support('ogg');
+        case 'svg':
+            return api_browser_support('svg');
+    }
+    return $result;
 }
 
 ?>

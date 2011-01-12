@@ -979,4 +979,5 @@ $ChatFiles = "Conversation history in chat";
 $Flash = "Flash";
 $Video = "Video";
 $Images = "Images";
+$OpenInANewWindow = "Open in a new window";
 ?>

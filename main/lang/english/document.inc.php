@@ -258,6 +258,15 @@ $Male = "Male";
 $GoogleAudio = "Use Google audio services";
 $vozMe = "Use vozMe audio services";
 $HelpGoogleAudio = "Supports up to 100 characters, supporting a wide variety of languages. The files are generated and automatically saved into Chamilo directory where you currently are.";
-$HelpvozMe = "Supports text of several thousand characters long, you can also select the type of voice, male or female. However, working with fewer languages, audio quality is inferior and you have to download the files manually to your computer in a new window.";
+$HelpvozMe = "Supports text of several thousand characters, you can also select the type of voice, male or female. However, working with fewer languages, audio quality is lower and you have to download the files manually from a new window.";
 $SaveMP3 = "Save mp3";
+$Speed = "Speed";
+$GoFaster = "Go faster";
+$Fast = "Fast";
+$Normal = "Normal";
+$Slow = "Slow";
+$SlowDown = "Slow down";
+$Pediaphon = "Use Pediaphon audio services";
+$HelpPediaphon = "Supports text with several thousand characters, being able to select various types of male and female voice (depending on language). Audio files will be generated and automatically saved Chamilo directory in which you are.";
+$FirstSelectALanguage = "First select a language";
 ?>

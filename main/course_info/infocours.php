@@ -258,8 +258,8 @@ if (is_settings_editable()) {
 }
 
 
-// THEMATIC SETTINGS
-$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="chatsettings" id="chatsettings"></a>'.Display::return_icon('attendance.gif', get_lang('ConfigChat')).' '.get_lang('ThematicAdvanceConfiguration').'</div>');
+// THEMATIC ADVANCE SETTINGS
+$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="thematicadvance" id="thematicadvance"></a>'.Display::return_icon('course_progress.gif', get_lang('ThematicAdvanceConfiguration')).' '.get_lang('ThematicAdvanceConfiguration').'</div>');
 $form->addElement('radio', 'display_info_advance_inside_homecourse', get_lang('InfoAboutAdvanceInsideHomeCourse'), get_lang('DisplayAboutLastDoneAdvance'), 1);
 $form->addElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDone'), 2);
 $form->addElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance'), 3);
@@ -403,6 +403,7 @@ echo '<a href="#chatsettings">'.Display::return_icon('chat.gif', get_lang('Confi
 if (api_get_setting('allow_course_theme') == 'true') {
 	echo '<a href="#theme">'.Display::return_icon('theme.gif', get_lang('Theming')).' '.get_lang('Theming').'</a>';
 }
+echo '<a href="#thematicadvance">'.Display::return_icon('course_progress.gif', get_lang('ThematicAdvanceConfiguration')).' '.get_lang('ThematicAdvanceConfiguration').'</a>';
 echo '</div>';
 
 // display course picture

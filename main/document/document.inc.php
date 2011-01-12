@@ -677,7 +677,7 @@ function search_keyword($document_name, $keyword) {
 }
 
 /**
- * Check whether a document can be opened inside a frame.
+ * Checks whether a document can be previewed by using the browser.
  * @param string $file_extension    The filename extension of the document (it must be in lower case).
  * @return bool                     Returns TRUE or FALSE.
  */

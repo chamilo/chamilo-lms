@@ -1,4 +1,5 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Pseudo JavaScript library to deal with event handlers.
  * This script needs to be included from a script where the global include file has already been loaded.

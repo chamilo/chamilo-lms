@@ -248,7 +248,7 @@ if (!isset($_GET['running'])) {
 	$allowSelfRegProf		= 1;
 	$enableTrackingForm		= 1;
 	$singleDbForm			= 0;
-	$encryptPassForm		= 'md5';
+	$encryptPassForm		= 'sha1';
 	$session_lifetime		= 360000;
 
 } else {
@@ -293,7 +293,7 @@ if (!$_POST) {
 
 // Managing the $encryptPassForm
 if ($encryptPassForm == '1') {
-	$encryptPassForm = 'md5';
+	$encryptPassForm = 'sha1';
 } elseif ($encryptPassForm == '0') {
 	$encryptPassForm = 'none';
 }
@@ -561,7 +561,7 @@ if ($_POST['step2']) {
 			$encryptPassForm = get_config_param('userPasswordCrypted');
 			// Managing the $encryptPassForm
 			if ($encryptPassForm == '1') {
-				$encryptPassForm = 'md5';
+				$encryptPassForm = 'sha1';
 			} elseif ($encryptPassForm == '0') {
 				$encryptPassForm = 'none';
 			}
@@ -574,7 +574,7 @@ if ($_POST['step2']) {
 			$encryptPassForm = get_config_param('userPasswordCrypted');
 			// Managing the $encryptPassForm
 			if ($encryptPassForm == '1') {
-				$encryptPassForm = 'md5';
+				$encryptPassForm = 'sha1';
 			} elseif ($encryptPassForm == '0') {
 				$encryptPassForm = 'none';
 			}

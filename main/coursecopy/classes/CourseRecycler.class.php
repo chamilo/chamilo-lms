@@ -352,10 +352,14 @@ class CourseRecycler
                 // See task #875.
                 if ($learnpath->lp_type == 2)
                 {
-                    // This is SCORM type of learning path.
-                    // The directory trat contains files of the SCORM package is to be deleted.
-                    $scorm_dir_sys = realpath($this->course->path . 'scorm/' . $learnpath->path);
-                    rmdirr($scorm_dir_sys);
+                    // This is a learning path of SCORM type.
+                    if (trim($learnpath->path) != '')   // A sanity check for avoiding removal of the parent folder scorm/
+                                                        // when $learnpath->path value is incorrect for some reason.
+                    {
+                        // The directory trat contains files of the SCORM package is to be deleted.
+                        $scorm_package_dir = realpath($this->course->path . 'scorm/' . $learnpath->path);
+                        rmdirr($scorm_package_dir);
+                    }
                 }
 
                 //remove links from course homepage

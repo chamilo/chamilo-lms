@@ -349,6 +349,15 @@ class CourseRecycler
             $table_tool = Database::get_course_table(TABLE_TOOL_LIST);
             foreach($this->course->resources[RESOURCE_LEARNPATH] as $id => $learnpath)
             {
+                // See task #875.
+                if ($learnpath->lp_type == 2)
+                {
+                    // This is SCORM type of learning path.
+                    // The directory trat contains files of the SCORM package is to be deleted.
+                    $scorm_dir_sys = realpath($this->course->path . 'scorm/' . $learnpath->path);
+                    rmdirr($scorm_dir_sys);
+                }
+
                 //remove links from course homepage
                 $sql = "DELETE FROM $table_tool WHERE link LIKE '%lp_controller.php%lp_id=$id%' AND image='scormbuilder.gif'";
                 Database::query($sql);

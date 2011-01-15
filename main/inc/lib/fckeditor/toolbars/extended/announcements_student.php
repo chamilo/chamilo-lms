@@ -8,7 +8,7 @@
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 //NOTE: Does not include Replace because it is redundant, being in the same tab to Find
-//TODO: DocProps, ASCIIMath don't run ok here. 
+//TODO: DocProps, does not run ok here. 
 //NOTE: ONLY FOR TEACHERS: source, insert html
 //NOTE: Doesn't include Save button due to usability reasons in the form.
 
@@ -24,7 +24,7 @@ else{
 $config['ToolbarSets']['Normal'] = array(
 	array('NewPage','Templates','-','PasteWord'),
 	array('Undo','Redo'),
-	array('Link','Image','flvPlayer','Table','mimetex'),
+	array('Link','Image','flvPlayer','Table','mimetex','asciimath','asciisvg'),
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor'),
@@ -38,7 +38,7 @@ $config['ToolbarSets']['Maximized'] = array(
 	array('Cut','Copy','Paste','PasteText','PasteWord'),
 	array('Undo','Redo','-','SelectAll','Find','-','RemoveFormat'),
 	array('Link','Unlink','Anchor','Glossary'),
-	array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','mimetex','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
+	array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','mimetex','asciimath','asciisvg','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
 '/',
 	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),

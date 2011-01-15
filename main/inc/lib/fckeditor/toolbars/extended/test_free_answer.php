@@ -7,23 +7,48 @@
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
+//NOTE: Does not include Replace because it is redundant, being in the same tab to Find. Usability: Save button disabled
+//NOTE: ONLY FOR TEACHERS: source, insert html
+
+//TODO: DocProps does not run ok here. Sometime 'asciisvg' lock the tool bar
+
+// Hide/show SpellCheck buttom
+if ((api_get_setting('allow_spellcheck') == 'true')) {
+	$VSpellCheck='SpellCheck';
+}
+else{
+	$VSpellCheck='';	
+}
+
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-    array('FitWindow','Bold','Image','Link','PasteWord','MP3','mimetex','Table','Subscript','Superscript','ShowBlocks')
+	array('NewPage','Templates','-','PasteText'),
+	array('Undo','Redo'),
+	array('Link','Image','flvPlayer','Table','mimetex','asciimath'),
+	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent'),
+	array('JustifyLeft','JustifyCenter','JustifyFull'),
+	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor'),
+	array('FitWindow')
 );
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
+
 $config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow'),
-	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
-	array('OrderedList','UnorderedList','-','Outdent','Indent'),
-	array('JustifyLeft','JustifyCenter','JustifyRight'),
-	array('Undo','Redo','-','SelectAll','RemoveFormat'),
-	'/',
-	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor'),
-	array('SpecialChar','mimetex')
+	array('NewPage','Templates','-','Preview','Print'),
+	array('Cut','Copy','Paste','PasteText','PasteWord'),
+	array('Undo','Redo','-','SelectAll','Find','-','RemoveFormat'),
+	array('Link','Unlink','Anchor','Glossary'),
+	array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','mimetex','asciimath','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
+'/',
+	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
+	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),
+	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),	
+	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript','-','TextColor','BGColor'),
+	array($VSpellCheck),	
+	array('Style','FontFormat','FontName','FontSize'),	
+	array('PageBreak','ShowBlocks'),
+	array('FitWindow')	
 );
 
 // Sets whether the toolbar can be collapsed/expanded or not.

@@ -139,15 +139,15 @@ if ($nbrQuestions) {
             $actions =  Display::tag('div',$edit_link.$delete_link, array('style'=>'float:right'));
 
             echo '<div id="question_id_list_'.$id.'" >';                  
-            $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved'));            
-		    echo Display::tag('h3','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().'</a>');            
-                echo '<div>';
-                    echo '<p>';			  	
+            $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));            
+		    echo Display::tag('h3','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().' <span style="float: right; padding-top: 0.3em;">['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']</span></a>');            
+                echo '<div class="question-list-description-block">';
+                    echo '<p>';
                         echo $actions;
                         echo get_lang($question_class.$label);
-                        echo '<br />';                        
+                        echo '<br />';
                         echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
-                        echo '<br />';                        
+                        echo '<br />';
                         showQuestion($id, false, '', '',false, true);                   
                     echo '</p>';
                     

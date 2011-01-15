@@ -7,37 +7,47 @@
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
+//NOTE: Does not include Replace because it is redundant, being in the same tab to Find. Usability: doenst show save buttom
+
+//TODO: DocProps does not run ok here. Also 'asciisvg' buttom (their presence means that not all forms can unfold and refold)
+
+// Hide/show SpellCheck buttom
+if ((api_get_setting('allow_spellcheck') == 'true')) {
+	$VSpellCheck='SpellCheck';
+}
+else{
+	$VSpellCheck='';	
+}
+
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('FitWindow','-','PasteWord','-','Undo','Redo'),
-	array('Link','Unlink','Anchor'),
-	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
-	array('Table','Smiley'),
-	'/',
-	array('FontName','FontSize'),
-	array('Bold','Italic','Underline'),
-	array('JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList','-','TextColor','BGColor'),
-	array('Source')
+	array('NewPage','Templates','-','PasteWord'),
+	array('Undo','Redo'),
+	array('Link','Image','flvPlayer','Table','mimetex','asciimath'),
+	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent'),
+	array('JustifyLeft','JustifyCenter','JustifyFull'),
+	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor'),
+	array('FitWindow')
 );
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
+
 $config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow','NewPage','Preview'),
+	array('NewPage','Templates','-','Preview','Print'),
 	array('Cut','Copy','Paste','PasteText','PasteWord'),
-	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
-	array('Link','Unlink','Anchor'),
-	'/',
-	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
-	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
-	array('Rule','SpecialChar'),
-	array('Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
-	'/',
-	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor'),
-	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
-	array('ShowBlocks')
+	array('Undo','Redo','-','SelectAll','Find','-','RemoveFormat'),
+	array('Link','Unlink','Anchor','Glossary'),
+	array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','insertHtml','mimetex','asciimath','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
+'/',
+	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
+	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),
+	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),	
+	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript','-','TextColor','BGColor'),
+	array($VSpellCheck),	
+	array('Style','FontFormat','FontName','FontSize'),	
+	array('PageBreak','ShowBlocks','Source'),
+	array('FitWindow')	
 );
 
 // Sets whether the toolbar can be collapsed/expanded or not.

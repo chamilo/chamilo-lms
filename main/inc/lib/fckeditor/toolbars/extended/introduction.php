@@ -8,7 +8,7 @@
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 //NOTE: Does not include Replace because it is redundant, being in the same tab to Find
-//TODO: DocProps,  asciimath don't run ok here. Templates loses styles
+//TODO: DocProps does not run ok here. Templates loses styles
 
 // Hide/show SpellCheck buttom
 if ((api_get_setting('allow_spellcheck') == 'true')) {

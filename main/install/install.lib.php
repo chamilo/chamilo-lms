@@ -1830,9 +1830,9 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php echo $encryptPassForm; ?></td>
       <?php else: ?>
       <td>
-        <input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm ? 'checked="checked" ' : ''; ?>/> <label for="encryptPass0"><?php echo 'md5'; ?></label>
-        <input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo $encryptPassForm ? '' : 'checked="checked" '; ?>/> <label for="encryptPass1"><?php echo 'sha1'; ?></label>
-        <input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm ? '' : 'checked="checked" '; ?>/> <label for="encryptPass2"><?php echo get_lang('None'); ?></label>
+        <input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm === 1 ? 'checked="checked" ' : ''; ?>/> <label for="encryptPass0"><?php echo 'md5'; ?></label>
+        <input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo $encryptPassForm == 'sha1' ? '' : 'checked="checked" '; ?>/> <label for="encryptPass1"><?php echo 'sha1'; ?></label>
+        <input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm === 0 ? '' : 'checked="checked" '; ?>/> <label for="encryptPass2"><?php echo get_lang('None'); ?></label>
       </td>
       <?php endif; ?>
     </tr>

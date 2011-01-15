@@ -193,8 +193,9 @@ if (api_get_setting('use_session_mode') == 'true') { ?>
     <?php } ?>
         <li><a href="session_export.php"><?php echo get_lang('ExportSessionListXMLCSV'); ?></a></li>
         <li><a href="../coursecopy/copy_course_session.php"><?php echo get_lang('CopyFromCourseInSessionToAnotherSession'); ?></a></li>
-        
+    <?php if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) { // option only visible in development mode. Enable through code if required ?>
         <li><a href="user_move_stats.php"><?php echo get_lang('MoveUserStats'); ?></a></li>
+    <?php } ?>
          
     </ul>
 </div>

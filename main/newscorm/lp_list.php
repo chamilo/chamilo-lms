@@ -453,7 +453,7 @@ if (is_array($flat_list)) {
                 if ($details['autolaunch'] == 1 && $autolunch_exists == false) {  
                     $autolunch_exists = true;                            
                     $lp_auto_lunch_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=auto_launch&status=0&lp_id='.$id.'">
-                        <img src="../img/launch.png" border="0" title="'.get_lang('EnableLPAutoLaunch').'" /></a>'; 
+                        <img src="../img/launch.png" border="0" title="'.get_lang('DisableLPAutoLaunch').'" /></a>'; 
                 } else {
                     $lp_auto_lunch_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=auto_launch&status=1&lp_id='.$id.'">
                         <img src="../img/launch_na.png" border="0" title="'.get_lang('EnableLPAutoLaunch').'" /></a>'; 

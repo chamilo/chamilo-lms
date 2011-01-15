@@ -7,7 +7,7 @@
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
-//NOTE: Does not include Replace because it is redundant, being in the same tab to Find
+//NOTE: Does not include Replace because it is redundant, being in the same tab to Find.
 //TODO: DocProps, fckeditor_wiris_openFormulaEditor,fckeditor_wiris_openCAS don't run ok here.
 
 // Hide/show SpellCheck buttom

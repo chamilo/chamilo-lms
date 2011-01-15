@@ -34,11 +34,11 @@ $config['ToolbarSets']['Normal'] = array(
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
 $config['ToolbarSets']['Maximized'] = array(
-	array('Save','NewPage','-','Preview','Print'),
+	array('Save','NewPage','Templates','-','Preview','Print'),
 	array('Cut','Copy','Paste','PasteText','PasteWord'),
 	array('Undo','Redo','-','SelectAll','Find','-','RemoveFormat'),
 	array('Wikilink','Link','Unlink','Anchor','Glossary'),
-	array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','mimetex','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
+	array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','mimetex','asciimath','asciisvg','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
 '/',
 	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),

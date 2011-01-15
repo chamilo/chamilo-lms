@@ -8,34 +8,46 @@
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
+//TODO: DocProps does not run ok here.  asciisvg' disabled because sometimes lock the toolbar
+//NOTE: ONLY FOR TEACHERS: source, insert html
+
+// Hide/show SpellCheck buttom
+if ((api_get_setting('allow_spellcheck') == 'true')) {
+	$VSpellCheck='SpellCheck';
+}
+else{
+	$VSpellCheck='';	
+}
+
+// This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('FitWindow','-','PasteWord','-','Undo','Redo'),
-	array('Link','Unlink'),
-	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
-	array('Table','googlemaps'),
-	array('Bold','Italic','Underline'),
-	array('JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList','-','TextColor','BGColor'),
-	array('ShowBlocks')
+	array('Save','NewPage','Templates','-','PasteWord'),
+	array('Undo','Redo'),
+	array('Link','Image','flvPlayer','Table','mimetex','asciimath'),
+	array('UnorderedList','OrderedList','Rule'),
+	array('JustifyLeft','JustifyCenter','JustifyFull'),
+	array('FontFormat','FontName','FontSize','Bold','Italic','TextColor'),
+	array('FitWindow')
 );
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
+
 $config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow','-','Save','NewPage','Preview'),
+	array('Save','NewPage','Templates','-','Preview','Print'),
 	array('Cut','Copy','Paste','PasteText','PasteWord'),
-	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
-	array('Link','Unlink','Anchor'),
-	'/',
-	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
-	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
-	array('Rule','SpecialChar'),
-	array('Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
-	'/',
-	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor'),
-	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
-	array('ShowBlocks')
+	array('Undo','Redo','-','SelectAll','Find','-','RemoveFormat'),
+	array('Link','Unlink','Anchor','Glossary'),
+	array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','mimetex','asciimath','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
+'/',
+	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
+	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),
+	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),	
+	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript','-','TextColor','BGColor'),
+	array($VSpellCheck),	
+	array('Style','FontFormat','FontName','FontSize'),	
+	array('PageBreak','ShowBlocks'),
+	array('FitWindow')	
 );
 
 // Sets whether the toolbar can be collapsed/expanded or not.

@@ -9,7 +9,7 @@
 
 //NOTE: Does not include Replace because it is redundant, being in the same tab to Find.
 
-//TODO: DocProps, asciimath don't run ok here. 
+//TODO: DocProps, asciimath, asciisvg don't run ok here. 
 
 // Hide/show SpellCheck buttom
 if ((api_get_setting('allow_spellcheck') == 'true')) {
@@ -21,11 +21,11 @@ else{
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('NewPage','Templates','-','PasteText'),
+	array('NewPage','Templates','-','PasteWord'),
 	array('Undo','Redo'),
 	array('Link','Image','flvPlayer','Table','mimetex'),
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+	array('JustifyLeft','JustifyCenter','JustifyFull'),
 	array('FontFormat','FontName','Bold','Italic','Underline','TextColor','BGColor'),
 	array('FitWindow')
 );

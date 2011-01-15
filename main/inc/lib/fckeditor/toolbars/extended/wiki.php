@@ -9,7 +9,7 @@
 
 //NOTE: Does not include Replace because it is redundant, being in the same tab to Find
 
-//TODO: DocProps, asciimath don't run ok here. 
+//TODO: DocProps does not run ok here. 
 
 // Hide/show SpellCheck buttom
 if ((api_get_setting('allow_spellcheck') == 'true')) {
@@ -47,8 +47,7 @@ $config['ToolbarSets']['Maximized'] = array(
 	array($VSpellCheck),	
 	array('Style','FontFormat','FontName','FontSize'),	
 	array('PageBreak','ShowBlocks','Source'),
-	array('FitWindow')
-	
+	array('FitWindow')	
 );
 
 // Sets whether the toolbar can be collapsed/expanded or not.

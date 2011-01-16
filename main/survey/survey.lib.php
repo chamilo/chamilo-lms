@@ -3966,15 +3966,15 @@ class SurveyUtil {
 		$table->set_header(2, get_lang('SurveyCode'));
 		$table->set_header(3, get_lang('NumberOfQuestions'));
 		$table->set_header(4, get_lang('Author'));
-		$table->set_header(5, get_lang('Language'));
+		//$table->set_header(5, get_lang('Language'));
 		//$table->set_header(6, get_lang('Shared'));
-		$table->set_header(6, get_lang('AvailableFrom'));
-		$table->set_header(7, get_lang('AvailableUntil'));
-		$table->set_header(8, get_lang('Invite'));
-		$table->set_header(9, get_lang('Anonymous'));
-		$table->set_header(10, get_lang('Modify'), false, 'width="150"');
-		$table->set_column_filter(9, 'anonymous_filter');
-		$table->set_column_filter(10, 'modify_filter');
+		$table->set_header(5, get_lang('AvailableFrom'));
+		$table->set_header(6, get_lang('AvailableUntil'));
+		$table->set_header(7, get_lang('Invite'));
+		$table->set_header(8, get_lang('Anonymous'));
+		$table->set_header(9, get_lang('Modify'), false, 'width="150"');
+		$table->set_column_filter(8, 'anonymous_filter');
+		$table->set_column_filter(9, 'modify_filter');
 		$table->set_form_actions(array('delete' => get_lang('DeleteSurvey')));
 		$table->display();
 	}
@@ -3996,15 +3996,15 @@ class SurveyUtil {
 		$table->set_header(2, get_lang('SurveyCode'));
 		$table->set_header(3, get_lang('NumberOfQuestions'));
 		$table->set_header(4, get_lang('Author'));
-		$table->set_header(5, get_lang('Language'));
+		//$table->set_header(5, get_lang('Language'));
 		//$table->set_header(6, get_lang('Shared'));
-		$table->set_header(6, get_lang('AvailableFrom'));
-		$table->set_header(7, get_lang('AvailableUntil'));
-		$table->set_header(8, get_lang('Invite'));
-		$table->set_header(9, get_lang('Anonymous'));
-		$table->set_header(10, get_lang('Modify'), false, 'width="130"');
-		$table->set_column_filter(9, 'anonymous_filter');
-		$table->set_column_filter(10, 'modify_filter_for_coach');
+		$table->set_header(5, get_lang('AvailableFrom'));
+		$table->set_header(6, get_lang('AvailableUntil'));
+		$table->set_header(7, get_lang('Invite'));
+		$table->set_header(8, get_lang('Anonymous'));
+		$table->set_header(9, get_lang('Modify'), false, 'width="130"');
+		$table->set_column_filter(8, 'anonymous_filter');
+		$table->set_column_filter(9, 'modify_filter_for_coach');
 		$table->display();
 	}
 
@@ -4162,12 +4162,11 @@ class SurveyUtil {
 					survey.code									AS col2,
 					count(survey_question.question_id)			AS col3,
 					".(api_is_western_name_order() ? "CONCAT(user.firstname, ' ', user.lastname)" : "CONCAT(user.lastname, ' ', user.firstname)")."	AS col4,
-					survey.lang									AS col5,
-					survey.avail_from							AS col6,
-					survey.avail_till							AS col7,
-					CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col8,
-					survey.anonymous							AS col9,
-					survey.survey_id							AS col10,
+					survey.avail_from							AS col5,
+					survey.avail_till							AS col6,
+					CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col7,
+					survey.anonymous							AS col8,
+					survey.survey_id							AS col9,
 					survey.session_id							AS session_id
 				 FROM $table_survey survey
 				 LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
@@ -4235,12 +4234,11 @@ class SurveyUtil {
 					survey.code									AS col2,
 					count(survey_question.question_id)			AS col3,
 					".(api_is_western_name_order() ? "CONCAT(user.firstname, ' ', user.lastname)" : "CONCAT(user.lastname, ' ', user.firstname)")."	AS col4,
-					survey.lang									AS col5,
-					survey.avail_from							AS col6,
-					survey.avail_till							AS col7,
-					CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col8,
-					survey.anonymous							AS col9,
-					survey.survey_id							AS col10
+					survey.avail_from							AS col5,
+					survey.avail_till							AS col6,
+					CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col7,
+					survey.anonymous							AS col8,
+					survey.survey_id							AS col9
 				 FROM $table_survey survey
 				 LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
 				 , $table_user user

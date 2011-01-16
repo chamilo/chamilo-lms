@@ -2615,7 +2615,7 @@ class CourseManager {
         // Building an array that contains all the id's of the user defined course categories.
         // Initially this was inside the display_courses_in_category function but when we do it here we have fewer
         // sql executions = performance increase.
-        $all_user_categories = get_user_course_categories();
+        $all_user_categories = self :: get_user_course_categories();
     
         // Step 0: We display the course without a user category.
         self :: display_courses_in_category(0, 'true');
@@ -2767,5 +2767,21 @@ class CourseManager {
             echo '</div>';
             $key++;
         }
+    }
+    /**
+     * Retrieves the user defined course categories
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @return array containing all the titles of the user defined courses with the id as key of the array
+     */
+    function get_user_course_categories() {
+        global $_user;
+        $output = array();
+        $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $sql = "SELECT * FROM ".$table_category." WHERE user_id='".Database::escape_string($_user['user_id'])."'";
+        $result = Database::query($sql);
+        while ($row = Database::fetch_array($result)) {
+            $output[$row['id']] = $row['title'];
+        }
+        return $output;
     }
 } //end class CourseManager

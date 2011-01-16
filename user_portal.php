@@ -152,10 +152,7 @@ Display :: display_header($nameTools);
 
 /*
         FUNCTIONS
-
-        display_digest($toolsList, $digest, $orderKey, $courses)
         get_logged_user_course_html($my_course)
-        get_user_course_categories()
 */
 
 
@@ -468,56 +465,6 @@ function get_session_title_box($session_id) {
     return $output;
 }
 
-/**
- * Display code for one specific course a logged in user is subscribed to.
- * Shows a link to the course, what's new icons...
- *
- * $my_course['d'] - course directory
- * $my_course['i'] - course title
- * $my_course['c'] - visual course code
- * $my_course['k']   - system course code
- * $my_course['db']  - course database
- *
- * @version 1.0.3
- * @todo refactor into different functions for database calls | logic | display
- * @todo replace single-character $my_course['d'] indices
- * @todo move code for what's new icons to a separate function to clear things up
- * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
- */
-function get_global_courses_list($user_id) {
-    //1. Get list of sessions the user is subscribed to.
-    //2. Build an ordered list of session categories and sessions.
-    //3. Fill this ordered list with course details.
-    global $nosession;
-    $charset = api_get_system_encoding();
-
-    if (api_get_setting('use_session_mode')=='true' && !$nosession) {
-        global $now, $date_start, $date_end;
-    }
-
-    $output = array();
-    return $output;
-}
-
-
-
-/**
- * Retrieves the user defined course categories
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @return array containing all the titles of the user defined courses with the id as key of the array
-*/
-function get_user_course_categories() {
-    global $_user;
-    $output = array();
-    $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-    $sql = "SELECT * FROM ".$table_category." WHERE user_id='".Database::escape_string($_user['user_id'])."'";
-    $result = Database::query($sql);
-    while ($row = Database::fetch_array($result)) {
-        $output[$row['id']] = $row['title'];
-    }
-    return $output;
-}
-
 /* MAIN CODE */
 
 /* PERSONAL COURSE LIST */
@@ -826,120 +773,6 @@ if (is_array($courses_tree)) {
     }
 }
 
-/*
-$userdefined_categories = get_user_course_categories();
-if (is_array($list)) {
-    // Courses whithout sessions.
-    $old_user_category = 0;
-    foreach ($list as $key => $value) {
-        if (empty($value[2])) { // If out of any session.
-
-            $userdefined_categories = get_user_course_categories();
-            echo '<ul class="courseslist">';
-
-            if ($old_user_category != $value[0]) {
-                if ($key != 0 || $value[0] != 0) { // There are courses in the previous category.
-                    echo "\n</ul>";
-                }
-                echo "\n\n\t<ul class=\"user_course_category\"><li>".$userdefined_categories[$value[0]]."</li></ul>\n";
-                if ($key != 0 || $value[0] != 0) { // There are courses in the previous category.
-                    echo '<ul class="courseslist">';
-                }
-                $old_user_category = $value[0];
-
-            }
-            echo $value[1];
-            echo "</ul>\n";
-        }
-    }
-
-    $listActives = $listInactives = $listCourses = array();
-    foreach ($list as $key => $value) {
-        if ($value['active']) { // If the session is still active (as told by get_logged_user_course_html()).
-            $listActives[] = $value;
-        } else if (!empty($value[2])) { // If there is a session but it is not active.
-            $listInactives[] = $value;
-        }
-    }
-    $old_user_category = 0;
-    $userdefined_categories = get_user_course_categories();
-
-    if (count($listActives) > 0 && $display_actives) {
-        echo "<ul class=\"courseslist\">\n";
-
-        $name_category = array();
-        $i = 0;
-        $j=0;
-        foreach ($listActives as $key => $value) {
-            $session_category_id = $value['session_category_id'];
-            if (!empty($value[3]['category'])) {
-                if (!in_array($value[3]['category'], $name_category)) {
-
-                    if ($key != 0) {
-                        echo '</ul>';
-                    }
-                    // Category.
-                    $name_category['name'] = $value[3]['category'];
-                    echo '<ul class="category_box" id="category_box_'.$session_category_id.'">' .
-                            '<li class="category_box_title" id="category_box_title_'.$session_category_id.'">'.$name_category['name'].'</li>';
-                    echo "</ul>\n";
-                }
-
-            }
-
-            if (!empty($value[2])) {
-                if ((isset($old_session) && $old_session != $value[2]) or ((!isset($old_session)) && isset($value[2]))) {
-                    $old_session = $value[2];
-                    if ($key != 0) {
-                        echo '</ul>';
-                    }
-                    // Session.
-
-                    echo '<ul style="display:none" class="session_box_'.$session_category_id.'"  >' .
-                            '<li class="session_box_title" >'.$value[3]['title'].' '.$value[3]['dates'].'</li>';
-                    if (!empty($value[3]['coach'])) {
-                        echo '<li class="session_box_coach">'.$value[3]['coach'].'</li>';
-                    }
-                    echo "</ul>\n";
-
-                    echo '<ul  class="session_course_item" id="session_course_item_'.$i.'">';
-
-                }
-            }
-            // Courses.
-            echo $value[1];
-            $i++;
-        }
-
-        echo "\n</ul><br /><br />\n";
-
-    }
-
-    if (count($listInactives) > 0 && !$display_actives) {
-        echo '<ul class="sessions_list_inactive">';
-        foreach ($listInactives as $key => $value) {
-            if (!empty($value[2])) {
-                if ($old_session != $value[2]) {
-                    $old_session = $value[2];
-                    if ($key != 0) {
-                        echo '</ul>';
-                    }
-                    echo '<ul class="session_box">' .
-                            '<li class="session_box_title">'.$value[3]['title'].' '.$value[3]['dates'].'</li>';
-                    if (!empty($value[3]['coach'])) {
-                        echo '<li class="session_box_coach">'.$value[3]['coach'].'</li>';
-                    }
-                    echo "</ul>\n";
-                    echo '<ul>';
-                }
-            }
-            echo $value[1];
-        }
-        echo "\n</ul><br /><br />\n";
-    }
-}
-*/
-
 echo '</div>'; // End of content section.
 // Register whether full admin or null admin course
 // by course through an array dbname x user status.
@@ -948,9 +781,7 @@ api_session_register('status');
 /* RIGHT MENU */
 
 echo '    <div id="menu-wrapper">';
-
 echo '    <div id="menu" class="menu">';
-
 // api_display_language_form(); // Moved to the profile page.
 
 $show_menu = false;
@@ -1073,7 +904,7 @@ if ($show_menu) {
         }
     }
     if ($show_digest_link) {
-        display_digest($toolsList, $digest, $orderKey, $courses);
+        Display :: display_digest($toolsList, $digest, $orderKey, $courses);
     }
     echo '</ul>';
 }

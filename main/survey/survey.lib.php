@@ -4196,7 +4196,7 @@ class SurveyUtil {
 			$array[7] = $survey[7];
 			$array[8] = $survey[8];
 			$array[9] = $survey[9];
-			$array[10] = $survey[10];
+			//$array[10] = $survey[10];
 
 			$surveys[] = $array;
 		}
@@ -4228,23 +4228,21 @@ class SurveyUtil {
 		//print_r($survey_tree->surveylist);
 
 		//IF(is_shared<>0,'V','-')	 					AS col6,
-		$sql = "SELECT
-					survey.survey_id							AS col0,
-					survey.title	AS col1,
-					survey.code									AS col2,
-					count(survey_question.question_id)			AS col3,
-					".(api_is_western_name_order() ? "CONCAT(user.firstname, ' ', user.lastname)" : "CONCAT(user.lastname, ' ', user.firstname)")."	AS col4,
-					survey.avail_from							AS col5,
-					survey.avail_till							AS col6,
-					CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col7,
-					survey.anonymous							AS col8,
-					survey.survey_id							AS col9
-				 FROM $table_survey survey
-				 LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
-				 , $table_user user
-				 WHERE survey.author = user.user_id $list_condition
-				 $search_restriction
-				 ";
+		$sql = "SELECT ".
+					   "survey.survey_id							AS col0, ".
+					   "survey.title	                            AS col1, ".
+					   "survey.code									AS col2, ".
+					   "count(survey_question.question_id)			AS col3, ".
+					   (api_is_western_name_order() ? "CONCAT(user.firstname, ' ', user.lastname)" : "CONCAT(user.lastname, ' ', user.firstname)")."	AS col4, ".
+					   "survey.avail_from							AS col5, ".
+					   "survey.avail_till							AS col6, ".
+					   "CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col7, ".
+					   "survey.anonymous							AS col8, ".
+					   "survey.survey_id							AS col9  ".
+				       "FROM $table_survey survey ".
+				       "LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id ".
+				       ", $table_user user ".
+				       ",WHERE survey.author = user.user_id $list_condition ";
 		$sql .= " GROUP BY survey.survey_id";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";

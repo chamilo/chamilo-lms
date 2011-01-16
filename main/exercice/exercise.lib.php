@@ -233,7 +233,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
             foreach ($objQuestionTmp->options as $key=>$item) {                
                 $header .= Display::tag('th', $item);                           
             }                
-            $s.=Display::tag('tr',$header);  
+            $s.=Display::tag('tr',$header, array('style'=>'text-align:left;'));  
         }
         
 		for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {

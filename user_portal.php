@@ -12,7 +12,7 @@
  * @package chamilo.main
  * @todo Shouldn't the SCRIPTVAL_ and CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for?
  *       If these are really configuration settings then we can add those to the dokeos config settings.
- * @todo move get_personal_course_list and some other functions to a more appripriate place course.lib.php or user.lib.php
+ * @todo move display_special_courses and some other functions to a more appripriate place course.lib.php or user.lib.php
  * @todo use api_get_path instead of $rootAdminWeb
  * @todo check for duplication of functions with index.php (user_portal.php is orginally a copy of index.php)
  * @todo display_digest, shouldn't this be removed and be made into an extension?
@@ -159,7 +159,6 @@ Display :: display_header($nameTools);
         display_digest($toolsList, $digest, $orderKey, $courses)
         show_notification($my_course)
 
-        get_personal_course_list($user_id)
         get_logged_user_course_html($my_course)
         get_user_course_categories()
 */
@@ -168,70 +167,6 @@ Display :: display_header($nameTools);
     Database functions
     Some of these can go to database layer.
 */
-
-/**
-* Database function that gets the list of courses for a particular user.
-* @param int       The id of the user
-* @return array    An array with courses
-*/
-function get_personal_course_list($user_id) {
-    // Initialisation
-    $personal_course_list = array();
-
-    // Table definitions
-    $main_user_table            = Database :: get_main_table(TABLE_MAIN_USER);
-    $main_course_table          = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $main_course_user_table     = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $tbl_session_course         = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
-
-    $user_id = Database::escape_string($user_id);
-    $personal_course_list = array();
-
-    // Courses in which we suscribed out of any session
-    $personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
-                                        course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort,
-                                        course_rel_user.user_course_cat user_course_cat
-                                        FROM    ".$main_course_table."       course,".$main_course_user_table."   course_rel_user
-                                        WHERE course.code = course_rel_user.course_code"."
-                                        AND   course_rel_user.user_id = '".$user_id."'
-                                        AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                                        ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,i";
-
-    $course_list_sql_result = Database::query($personal_course_list_sql);
-
-    while ($result_row = Database::fetch_array($course_list_sql_result)) {
-        $personal_course_list[] = $result_row;
-    }
-
-    //$personal_course_list = array_merge($personal_course_list, $course_list_sql_result);
-
-    $personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, 5 as s
-                                FROM $main_course_table as course, $tbl_session_course_user as srcru
-                                WHERE srcru.course_code=course.code AND srcru.id_user='$user_id'";
-
-    $course_list_sql_result = Database::query($personal_course_list_sql);
-
-    while ($result_row = Database::fetch_array($course_list_sql_result)) {
-        $personal_course_list[] = $result_row;
-    }
-
-    //$personal_course_list = array_merge($personal_course_list, $course_list_sql_result);
-
-    $personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, 2 as s
-                                FROM $main_course_table as course, $tbl_session_course as src, $tbl_session as session
-                                WHERE session.id_coach='$user_id' AND session.id=src.id_session AND src.course_code=course.code";
-
-    $course_list_sql_result = Database::query($personal_course_list_sql);
-
-    //$personal_course_list = array_merge($personal_course_list, $course_list_sql_result);
-
-    while ($result_row = Database::fetch_array($course_list_sql_result)) {
-        $personal_course_list[] = $result_row;
-    }
-    return $personal_course_list;
-}
 
 /**
  * Display special courses (and only these) as several HTML divs of class userportal-course-item

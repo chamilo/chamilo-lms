@@ -121,4 +121,6 @@ $NewHomeworkEmailAlert = "Email users on homework creation";
 $NewHomeworkEmailAlertEnable = "Enable email users on homework submission";
 $NewHomeworkEmailAlertDisable = "Disable email users on homework submission";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Display the last executed step and the next unfinished step";
+$AddPicture = "Add a picture";
+$LPAutoLaunch = "Enable learning path auto-launch";
 ?>

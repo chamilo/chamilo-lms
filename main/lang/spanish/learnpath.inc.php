@@ -250,4 +250,9 @@ $SaveHotpotatoes = "Guardar hotpotatoes";
 $ReturnToLPList = "Volver a lista de lecciones";
 $LpPrerequisiteDescription = "El progreso del prerequisito debe ser completada para que esta lección sea visible al estudiante";
 $ExerciseCantBeEditedAfterAddingToTheLP = "El ejercicio no puede ser editado después de haber sido añadido al Itinerario de Aprendizaje";
+$EnableTimeLimits = "Activar limites de disponibilidad";
+$PublicationDate = "Fecha de publicación";
+$UseMaxScore100 = "Usar el puntaje máximo de 100 por defecto";
+$EnableLPAutoLaunch = "Activar lanzamiento automático";
+$DisableLPAutoLaunch = "Desactivar lanzamiento automático";
 ?>

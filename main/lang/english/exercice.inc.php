@@ -369,4 +369,8 @@ $Copy = "Copy";
 $ScoreAverageFromAllAttempts = "Score average from all attempts";
 $DefaultContent = "Generate default content";
 $ExerciseEditionNotAvailableInSession = "You can't edit this course exercise from inside a session";
+$UniqueAnswerNoOption = "Unique answer with unknown";
+$MultipleAnswerTrueFalse = "Multiple answer true/false/don't know";
+$MultipleAnswerCombinationTrueFalse = "Combination true/false/don't-know";
+$DontKnow = "Don't know";
 ?>

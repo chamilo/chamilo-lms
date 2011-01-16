@@ -227,4 +227,36 @@ $Draw = "Dessin";
 $FileExistsChangeToSave = "Ce nom de fichier existe déjà, choisissez-en un autre pour enregistrer votre image.";
 $FileSavedAs = "Le fichier a été enregistré sous";
 $FileExportAs = "Le fichier a été exporté sous";
+$UserFolder = "Dossier de l'utilisateur";
+$HelpUsersFolder = "Information visible aux enseignants uniquement;<br /><br />
+Le répertoire users contient un répertoire pour chaque utilisateur qui y a accédé au travers de l'outil documents ou lorsqu'un quelconque fichier a été envoyé dans le cours au travers de l'éditeur en ligne. Si aucune de ces circonstances ne s'est produite, aucun répertoire utilisateur n'aura été créé. Dans le cas des groupes, les fichiers qui sont envoyés au travers de l'éditeur en ligne seront ajoutés au répertoire du groupe, qui restera accessible uniquement par les membres du même groupe.<br /><br />
+Le répertoire users et chacun des répertoires qui s'y trouve sera caché par défault pour tous les apprenants, mais chaque apprenant peut voir le contenu de son répertoire au travers de l'éditeur en ligne. Cela dit, si l'étudiant connaît l'adresse exacte d'un fichier ou répertoire d'un autre étudiant, il pourrait parvenir à y accéder.<br /><br />
+Si le répertoire d'un apprenant est visible, d'autres apprenants pourront voir ce qu'il contient. Dans ce cas, l'étudiant auquel appartient ce répertoire pourra également (depuis l'outil documents et son propre répertoire): créer et éditer des documents web, convertir un document en modèle de document pour son usage personnel, créer et éditer des dessins aux formats PNG ou SVG, envoyer des documents, créer des sous-répertoires, déplacer des répertoires et des fichiers et télécharger un backup de son répertoire.<br /><br />
+Enfin, l'outil documents est synchronisé avec le système de gestion de fichiers de l'éditeur en ligne, et donc les modifications apportées d'un côté se reflètent immédiatement de l'autre.<br /><br />
+En soi, le répertoire de l'utilisateur n'est pas seulement un endroit où déposer des fichiers, il devient un gestionnaire de documents complet que les apprenants peuvent utiliser pendant le cours. N'oubliez-pas non plus que tout utilisateur peut copier un fichier qui lui est visible dans un quelconque répertoire de l'outil documents (qu'il en soit le propriétaire ou non) vers son portfolio personnel accessible depuis le réseau social, ce qui lui permettra de les réutiliser dans d'autres cours.";
+$HelpFolderChat = "Information visible par l'enseignant uniquement:<br /><br />Ce répertoire contient toutes les sessions qui ont eut lieu dans l'outil de chat. Bien que la plupart des sessions de chat soient triviales, certaines d'entre elles peuvent réellement se révéler intéressantes et valoir la peine d'être incorporées comme un nouveau document de travail. Pour cela, sans changer la visibilité de ce répertoire, vous pouvez rendre ce fichier visible de façon exclusive et placer un lien vers celui-ci depuis un endroit qui vous semble opportun. Il n'est pas recommandé de rendre ce répertoire visible.";
+$HelpFolderCertificates = "Information visible uniquement par l'enseignant:<br /><br />
+Ce répertoire contient les différents modèles de certificats qui ont été créés pour l'outil d'évaluations. Il n'est pas recommandé de rendre ce répertoire visible.";
+$DestinationDirectory = "Répertoire de destination";
+$CreateAudio = "Générer audio";
+$InsertText2Audio = "Introduisez le texte que vous voulez convertir en piste audio";
+$HelpText2Audio = "Transformer votre texte en voix";
+$BuildMP3 = "Générer MP3";
+$Voice = "Voix";
+$Female = "Féminine";
+$Male = "Masculine";
+$GoogleAudio = "Utiliser les services audio de Google";
+$vozMe = "Utiliser les services audio vozMe";
+$HelpGoogleAudio = "Supporte jusqu'à 100 caractères dans une grande variété de langues. Les fichiers sont générés et automatiquement sauvegardés dans le répertoire Chamilo du document d'origine.";
+$HelpvozMe = "Supporte des textes de plusieurs miliers de caractères. Vous pouvez également sélectionner le type de voix, masculine ou féminine. Cependant, la quantité de langues supportées est moins importante et la qualité du fichier audio est plus basse. Enfin, vous devrez télécharger les fichiers de langue manuellement depuis une nouvelle fenêtre.";
+$SaveMP3 = "Enregistrer MP3";
+$Speed = "Vitesse";
+$GoFaster = "Accélérer";
+$Fast = "Rapide";
+$Normal = "Normal";
+$Slow = "Lent";
+$SlowDown = "Ralentir";
+$Pediaphon = "Utiliser les services audio de Pediaphon";
+$HelpPediaphon = "Supporte des textes de plusieurs milliers de caractères et vous permet de choisir entre plusieurs types de voix masculines et féminines (dépendant de la langue). Les fichiers audio seront générés et automatiquement sauvegardés dans le répertoire Chamilo dans lequel vous vous trouvez.";
+$FirstSelectALanguage = "Sélectionnez d'abord une langue";
 ?>

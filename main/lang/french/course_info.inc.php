@@ -121,4 +121,6 @@ $NewHomeworkEmailAlert = "Envoi d'e-mail aux utilisateurs lors de la création d
 $NewHomeworkEmailAlertEnable = "Activer l'envoi d'un courriel lors de la réception d'un nouveau travail";
 $NewHomeworkEmailAlertDisable = "Désactiver l'envoi d'e-mail lors de la réception d'un travail";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Afficher la dernière étape achevée et la prochaine étape non terminée";
+$AddPicture = "Ajouter une image de présentation";
+$LPAutoLaunch = "Activer l'auto-démarrage des parcours d'apprentissage";
 ?>

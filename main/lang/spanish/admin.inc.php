@@ -1334,4 +1334,15 @@ $MoveUserStats = "Mover los resultados usuarios desde/hacia una sesión";
 $CompareUserResultsBetweenCoursesAndCoursesInASession = "Esta herramienta avanzada le permite mejorar manualmente el seguimiento de los resultados de usuarios cuando cambia de un modelo de cursos puros a un modelo de sesiones (ciclos) de cursos. En una mayoría de casos, no necesitará usarla.<br />
 En esta pantalla, puedes comparar resultados de usuarios entre el contexto de un curso independiente y el contexto del mismo curso dentro de una sesión.<br />
 Una vez elejido el mejor contexto para el seguimiento (resultados de ejercicios y seguimiento de lecciones), podrá moverlo de un curso a una sesión.";
+$PDFExportWatermarkEnableTitle = "Filigranas en los exportes PDF";
+$PDFExportWatermarkEnableComment = "Activar esta opción le permitirá subir un imagen o un texto que será automáticamente añadido como filigrana a todos los exportes PDF de documentos del sistema.";
+$AddWaterMark = "Subir un imagen filigrana";
+$PDFExportWatermarkByCourseTitle = "Definición de filigranas por curso";
+$PDFExportWatermarkByCourseComment = "Activar esta opción permite a los docentes de definir sus propias filigranas para los documentos de sus cursos.";
+$PDFExportWatermarkTextTitle = "Texto de filigrana PDF";
+$PDFExportWatermarkTextComment = "Este texto se añadirá en filigrana a los exportes de documentos en PDF.";
+$ExerciseMinScoreTitle = "Puntaje mínimo para los ejercicios";
+$ExerciseMinScoreComment = "Defina un puntaje mínimo (generalmente 0) para todos los ejercicios de la plataforma. Esto definirá como los resultados finales serán enseñados a los alumnos y docentes.";
+$ExerciseMaxScoreTitle = "Puntaje máximo de los ejercicios";
+$ExerciseMaxScoreComment = "Defina un puntaje máximo (generalmente 10, 20 o 100) para todos los ejercicios de la plataforma. Esto definirá la manera en que los resultados finales se mostrarán a los alumnos y docentes.";
 ?>

@@ -250,4 +250,9 @@ $SaveHotpotatoes = "Save hotpotatoes";
 $ReturnToLPList = "Return to list";
 $LpPrerequisiteDescription = "Selecting another learning path as a prerequisite will hide the current prerequisite until the one in prerequisite is fully completed (100%)";
 $ExerciseCantBeEditedAfterAddingToTheLP = "Exercise can't be edited after being added to the Learning Path";
+$EnableTimeLimits = "Enable availability limits";
+$PublicationDate = "Publication date";
+$UseMaxScore100 = "Use default maximum score of 100";
+$EnableLPAutoLaunch = "Enable learning path auto-launch";
+$DisableLPAutoLaunch = "Disable learning path auto-launch";
 ?>

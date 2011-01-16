@@ -121,4 +121,6 @@ $NewHomeworkEmailAlert = "Avisar a los alumnos con un correo eletrónico, la cre
 $NewHomeworkEmailAlertEnable = "Activar el aviso de la creación de una nueva tarea";
 $NewHomeworkEmailAlertDisable = "Deasactivar el aviso de la creación de una nueva tarea";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Mostrar información sobre el último avance temático hecho y el siguiente por hacer.";
+$AddPicture = "Añadir ilustración del curso";
+$LPAutoLaunch = "Activar modo de lanzamiento automático de lecciones";
 ?>

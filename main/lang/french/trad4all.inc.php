@@ -971,4 +971,12 @@ $FillWithExemplaryContent = "Remplir avec du contenu d'exemple";
 $ToolVideoconference = "Vidéoconférence";
 $SelectSVGEditImage = "Sélectionnez une image (svg, png)";
 $OnlyAccessFromYourGroup = "Seulement accessible à votre groupe";
+$UserFolders = "Répertoires des utilistateurs";
+$CertificatesFiles = "Certificats";
+$ChatFiles = "Historique de conversations dans le chat";
+$Flash = "Flash";
+$Video = "Vidéo";
+$Images = "Images";
+$OpenInANewWindow = "Ouvrir dans une nouvelle fenêtre";
+$ExamNotAvailableAtThisTime = "Examen non disponible pour l'instant";
 ?>

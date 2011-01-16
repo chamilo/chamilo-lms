@@ -1337,4 +1337,12 @@ Une fois que vous vous êtes décidé sur le meilleur contexte au sein duquel de
 $PDFExportWatermarkEnableTitle = "Activer les filigranes dans les exports PDF";
 $PDFExportWatermarkEnableComment = "En activant cette fonctionnalité, vous pourrez utiliser une image ou un texte comme filigranne qui sera ajouté aux documents exportés en PDF.";
 $AddWaterMark = "Télécharger une image en filigrane";
+$PDFExportWatermarkByCourseTitle = "Activer la définition de filigrannes par cours";
+$PDFExportWatermarkByCourseComment = "Lorsque cette option est activée, les enseignants peuvent définir leur propre filigranne pour les documents de leurs cours.";
+$PDFExportWatermarkTextTitle = "Texte du filigranne de PDF";
+$PDFExportWatermarkTextComment = "Ce texte sera ajouté en filigranne aux documents exportés en PDF.";
+$ExerciseMinScoreTitle = "Score minimum des exercices";
+$ExerciseMinScoreComment = "Définit un score minimum (généralement 0) pour l'affichage des résultats des exercices de la plateforme aux étudiants et enseignants.";
+$ExerciseMaxScoreTitle = "Score maximum des exercices";
+$ExerciseMaxScoreComment = "Définit le score maximum (généralement 10, 20 ou 100) utilisé pour l'affichage des résultats finaux des exercices de la plateforme. Ceci définira comment les apprenants et les enseignants verront les résultats.";
 ?>

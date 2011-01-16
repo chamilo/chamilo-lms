@@ -369,4 +369,8 @@ $Copy = "Copier";
 $ScoreAverageFromAllAttempts = "Moyenne du score sur l'ensemble des tentatives";
 $DefaultContent = "Générer contenu par défaut";
 $ExerciseEditionNotAvailableInSession = "Édition d'exercice de cours interdite depuis la session";
+$UniqueAnswerNoOption = "Réponse unique avec ne-sais-pas";
+$MultipleAnswerTrueFalse = "Réponses multiples vrai/faux/ne-sais-pas";
+$MultipleAnswerCombinationTrueFalse = "Combinaison exacte vrai/faux/ne-sais-pas";
+$DontKnow = "Ne sais pas";
 ?>

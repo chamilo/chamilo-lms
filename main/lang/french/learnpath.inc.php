@@ -250,4 +250,9 @@ $SaveHotpotatoes = "Enregistrer hotpotatoes";
 $ReturnToLPList = "Retour liste";
 $LpPrerequisiteDescription = "Sélectionner un autre parcours comme prérequis cachera le parcours actuel jusqu'à ce que celui en prérequis soit complété à 100%";
 $ExerciseCantBeEditedAfterAddingToTheLP = "Les exercices ne peuvent pas être édités après les avoir inclus dans un parcours. Vous pouvez les copier et modifier leur copie.";
+$EnableTimeLimits = "Activer les limites de disponibilité";
+$PublicationDate = "Date de publication";
+$UseMaxScore100 = "Utiliser un score maximum de 100 par défaut";
+$EnableLPAutoLaunch = "Activer lancement automatique du parcours";
+$DisableLPAutoLaunch = "Désactiver lancement automatique du parcours";
 ?>

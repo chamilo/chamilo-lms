@@ -230,43 +230,42 @@ $FileExistsChangeToSave = "This file name already exists, choose another to save
 $FileSavedAs = "File saved as";
 $FileExportAs = "File export as";
 $UserFolder = "User folder";
-$HelpUsersFolder = "VISIBLE INFORMATION ONLY FOR THE TEACHER: 
+$HelpUsersFolder = "INFORMATION VISIBLE TO THE TEACHER ONLY:<br /> 
+<br />
+The users folder contains a folder for each user who has accessed it through the documents tool, or when any file has been sent in the course through the online editor. If neither circumstances has occurred, then no user folder will have been created. In the case of groups, files that are sent through the editor will be added in the folder of each group, which is only accessible by students from this group.
+<br /><br />
+The users folder and each of the included folders will be hidden by default in for all students, but each student can see the contents of his/her directory through the online editor. However, if a student knows the address of a file or folder of another student, he may be able to access it.
+<br /><br />
+If the folder of a student is visible, other students can see what it contains. In this case, the student that owns the folder can also (from the documents tool and only in his/her folder): create and edit web documents, convert a document into a template for personal use, create and edit drawings in SVG and PNG formats, send documents, create folders, move folders and files, delete folders and files, and download backup of his/her folder.
+<br /><br />
+Moreover, the documents tool is synchronized with the file manager of the online editor, so changes in the documents triggered in any one of these will affect both.
+<br /><br />
+As such, the user folder is not only a place to deposit files, it becomes a complete manager of the documents students use during the course. Also, remember that any user can copy a file that is visible from any folder in the documents tool (whether or not he is the owner) to his/her portfolios or personal documents area of social network, which will be available to him/her for use in other courses.";
+$HelpFolderChat = "INFORMATION VISIBLE TO THE TEACHER ONLY: 
 
-The folder of users contains a folder for each user who has accessed it through the tool documents, or when any file has been sent to the course through the editor. If neither circumstances there has been no user folder is created. In the case of groups, files that are sent to through the editor shall be deposited in the folder for each group, which is only accessible by students from tool groups.
-
-The user folder and folders that contains each of them,will be hidden by default in documentation tool for all students, but each student can see the contents of his/her property access the editor. However, if a student knows the address of a file folder of another student may watch it.
-
-If this folder and the folder of one or more students is visible to users, other students can see what they contain. In this case, the student that owns the folder from the documents tool can also (only in his/her folder): create and edit web documents, convert a document into a template web for personal use, create and edit drawings svg and png, send documents, create folders, move folders and files, delete folders and files, and download backup of his/her folder.
-
-Moreover, the documents tool is synchronized with the file manager of the web editor, so changes in the management of documents produced in one or another will affect both.
-
-Thus, the user folder is not only a place to deposit files, it becomes a complete manager of the documents that students use during the course. Also, remember that any user can copy a file that is visible from any folder in the documents tool (whether or not the owner) to his/her portfolios or personal documents area of social network, which will be available for his/her can use it in other courses.";
-$HelpFolderChat = "VISIBLE INFORMATION ONLY FOR THE TEACHER: 
-
-This folder contains all sessions that have been made in the chat. Although often in the chat sessions can be trivial, others can be really interesting and worthy of being incorporated as a document more work. To do this, without changing the visibility of this folder, link the file and make it visible where deemed appropriate. Not recommended this folder visible.";
-$HelpFolderCertificates = "VISIBLE INFORMATION ONLY FOR THE TEACHER: 
-
-This folder contains the various models of certificates that have been created for the rating tool. No it is recommended that this folder visible.";
+This folder contains all sessions that have been opened in the chat. Although the chat sessions can often be trivial, others can be really interesting and worthy of being incorporated as an additional work document. To do this without changing the visibility of this folder, make the file visible and link it from where you deem appropriate. It is not recommended to make this folder visible to all.";
+$HelpFolderCertificates = "INFORMATION VISIBLE TO THE TEACHER ONLY:<br /><br />
+This folder contains the various certificates templates that have been created for the rating tool. It is not recommended to make this folder visible to all.";
 $DestinationDirectory = "Destination folder";
 $CreateAudio = "Create audio";
-$InsertText2Audio = "Enter the text you want to convert an audio file";
-$HelpText2Audio = "Transform your text into speech";
+$InsertText2Audio = "Enter the text you want to convert to an audio file";
+$HelpText2Audio = "Convert your text to speech";
 $BuildMP3 = "Build mp3";
 $Voice = "Voice";
 $Female = "Female";
 $Male = "Male";
 $GoogleAudio = "Use Google audio services";
 $vozMe = "Use vozMe audio services";
-$HelpGoogleAudio = "Supports up to 100 characters, supporting a wide variety of languages. The files are generated and automatically saved into Chamilo directory where you currently are.";
-$HelpvozMe = "Supports text of several thousand characters, you can also select the type of voice, male or female. However, working with fewer languages, audio quality is lower and you have to download the files manually from a new window.";
+$HelpGoogleAudio = "Supports up to 100 characters in a wide variety of languages. The files are generated and automatically saved into the Chamilo directory where you currently are.";
+$HelpvozMe = "Supports text of several thousands characters, you can also select the type of voice, male or female. It works with fewer languages, however, and the audio quality is lower. Finally,  you'll have to download the files manually from a new window.";
 $SaveMP3 = "Save mp3";
 $Speed = "Speed";
-$GoFaster = "Go faster";
+$GoFaster = "Faster";
 $Fast = "Fast";
 $Normal = "Normal";
 $Slow = "Slow";
-$SlowDown = "Slow down";
+$SlowDown = "Slower";
 $Pediaphon = "Use Pediaphon audio services";
-$HelpPediaphon = "Supports text with several thousand characters, being able to select various types of male and female voice (depending on language). Audio files will be generated and automatically saved Chamilo directory in which you are.";
-$FirstSelectALanguage = "First select a language";
+$HelpPediaphon = "Supports text with several thousands characters, in various types of male and female voices (depending on the language). Audio files will be generated and automatically saved to the Chamilo directory in which you are.";
+$FirstSelectALanguage = "Please select a language";
 ?>

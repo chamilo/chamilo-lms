@@ -369,4 +369,8 @@ $Copy = "Copia";
 $ScoreAverageFromAllAttempts = "Promedio de todos los intentos en ejercicios";
 $DefaultContent = "Generar contenido por defecto";
 $ExerciseEditionNotAvailableInSession = "Edición de ejercicio de curso no autorizada desde la sesión";
+$UniqueAnswerNoOption = "Respuesta única con no-se";
+$MultipleAnswerTrueFalse = "Respuestas múltiples v/f/no-se";
+$MultipleAnswerCombinationTrueFalse = "Combinación v/f/no-se";
+$DontKnow = "No se";
 ?>

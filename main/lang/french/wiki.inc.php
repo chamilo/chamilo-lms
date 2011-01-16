@@ -176,4 +176,5 @@ $FProgress = "Progrès";
 $PutATimeLimit = "Mettre une limite de temps";
 $StandardTask = "Tâche standard";
 $ThePageHasBeenExportedToDocArea = "La page a été exportée dans l'outil de documents";
+$CreateAssignmentPage = "Ceci crééra une page wiki spéciale sur laquelle l'enseignant décrira la tâche, et qui sera automatiquement liée aux pages du wiki où les apprenants la réaliseront. Les pages des enseignants, tout comme les pages des apprenants, se crééront automatiquement. Dans ce type de tâche, les apprenants pourront uniquement créer et éditer leurs propres pages, bien que vous puissiez changer ça si vous le désirez.";
 ?>

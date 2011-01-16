@@ -168,7 +168,7 @@ $OtherSettings = "Other requirements";
 $NMaxWords = "Maximum number of words";
 $NMaxVersion = "Maximum number of versions";
 $Feedback = "Feedback";
-$AddFeedback = "Add guidance messages associated with the progress in the page";
+$AddFeedback = "Add guidance messages associated with the progress on the page";
 $Feedback1 = "First message";
 $Feedback2 = "Second message";
 $Feedback3 = "Third message";
@@ -176,5 +176,5 @@ $FProgress = "Progress";
 $PutATimeLimit = "Set a time limit";
 $StandardTask = "Standard Task";
 $ThePageHasBeenExportedToDocArea = "The page has been exported to the document tool";
-$CreateAssignmentPage = "This will create a special wiki page in which the teacher describes the task and automatically be linked to the wiki page where students perform their task. Both the teacher's page as the students are created automatically.In such tasks, students can only edit and view theirs pages, but this can be changed if you so desire.";
+$CreateAssignmentPage = "This will create a special wiki page in which the teacher can describe the task and which will be automatically linked to the wiki pages where students perform the task. Both the teacher's and the students' pages are created automatically. In these tasks, students can only edit and view theirs pages, but this can be changed easily if you need to.";
 ?>

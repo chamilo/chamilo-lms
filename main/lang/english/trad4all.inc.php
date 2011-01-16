@@ -980,4 +980,5 @@ $Flash = "Flash";
 $Video = "Video";
 $Images = "Images";
 $OpenInANewWindow = "Open in a new window";
+$ExamNotAvailableAtThisTime = "Exam not available at this time";
 ?>

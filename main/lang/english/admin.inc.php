@@ -1328,4 +1328,19 @@ $IncludeAsciiMathMlTitle = "Load the file ASCIIMathML.js in all the system's pag
 $IncludeAsciiMathMlComment = "Activate this setting if you want to show ASCIIMathML-based mathematical formulas and ASCIIsvg-based mathematical graphics not only in the \"Documents\" tool, but elsewhere in the system.";
 $CourseHideToolsTitle = "Hide tools from teachers";
 $CourseHideToolsComment = "Check the tools you want to hide from teachers. This will not prohibit access to the tool (no security purpose), but will make it invisible for the teachers in order to avoid confusion (with too many tools - usability purpose).";
+$MoveUserStats = "Move users results from/to a session";
+$CompareUserResultsBetweenCoursesAndCoursesInASession = "This advanced tool allows you to manually improve the tracking of users results when moving from courses methodology to sessions methodology. In most cases, you won't need to use it.<br />
+On this screen, you can compare results of users between the context of a standalone course, and the context of the same course inside a session.<br />
+Once you are sure about what to do, you can choose to move the tracking data of the students (exercises results and learning paths tracking) from a course to a session.";
+$PDFExportWatermarkEnableTitle = "Enable watermark in PDF export";
+$PDFExportWatermarkEnableComment = "By enabling this option, you can upload an image or a text that will be automatically added as watermark to all PDF exports of documents on the system.";
+$AddWaterMark = "Upload a watermark image";
+$PDFExportWatermarkByCourseTitle = "Enable watermark definition by course";
+$PDFExportWatermarkByCourseComment = "When this option is enabled, teachers can define their own watermark for the documents in their courses.";
+$PDFExportWatermarkTextTitle = "PDF watermark text";
+$PDFExportWatermarkTextComment = "This text will be added as a watermark to the documents exports as PDF.";
+$ExerciseMinScoreTitle = "Minimum score of exercises";
+$ExerciseMinScoreComment = "Define a minimum score (generally 0) for all the exercises on the platform. This will define how final results are shown to users and teachers.";
+$ExerciseMaxScoreTitle = "Maximum score of exercises";
+$ExerciseMaxScoreComment = "Define a maximum score (generally 10,20 or 100) for all the exercises on the platform. This will define how final results are shown to users and teachers.";
 ?>

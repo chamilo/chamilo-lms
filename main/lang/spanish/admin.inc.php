@@ -1330,4 +1330,8 @@ $IncludeAsciiMathMlTitle = "Cargar el fichero ASCIIMathML.js para todas las pág
 $IncludeAsciiMathMlComment = "Active este parámetro si desea mostrar fórmulas matemáticas basadas en ASCIIMathML y gráficos matemáticos basados en ASCIIsvg, no solo en la herramienta \"Documentos\", pero también en otras herramientas de la plataforma.";
 $CourseHideToolsTitle = "Esconder herramientas para los docentes";
 $CourseHideToolsComment = "Seleccione las herramientas que desea esconder del docente. Esto no prohibirá el acceso a la herramienta (no tiene vocación de seguridad), pero hará invisible la herramienta para el docente para evitar la confusión debida a una gran cantidad de herramientas (vocación de usabilidad).";
+$MoveUserStats = "Mover los resultados usuarios desde/hacia una sesión";
+$CompareUserResultsBetweenCoursesAndCoursesInASession = "Esta herramienta avanzada le permite mejorar manualmente el seguimiento de los resultados de usuarios cuando cambia de un modelo de cursos puros a un modelo de sesiones (ciclos) de cursos. En una mayoría de casos, no necesitará usarla.<br />
+En esta pantalla, puedes comparar resultados de usuarios entre el contexto de un curso independiente y el contexto del mismo curso dentro de una sesión.<br />
+Una vez elejido el mejor contexto para el seguimiento (resultados de ejercicios y seguimiento de lecciones), podrá moverlo de un curso a una sesión.";
 ?>

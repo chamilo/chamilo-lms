@@ -33,7 +33,7 @@ $langCode = "Código del curso";
 $langUp = "Arriba";
 $Down = "Bajar";
 $Up = "Subir";
-$Theme = "Tema";
+$Theme = "Estilo";
 $TheListIsEmpty = "La lista está vacía";
 $langUniqueSelect = "Respuesta única";
 $CreateCategory = "Crear categoría";
@@ -611,7 +611,7 @@ $Condition = "Condición";
 $CourseSettings = "Configuración del curso";
 $EmailNotifications = "Notificaciones por e-mail";
 $UserRights = "Derechos de usuario";
-$Theming = "Tema";
+$Theming = "Estilos";
 $Qualification = "Calificación";
 $OnlyNumbers = "Solamente numeros";
 $ReorderOptions = "Reordenar opciones";
@@ -855,7 +855,7 @@ $EditThematicAdvance = "Editar avance temático";
 $ThereIsNoStillAthematicSection = "Todavía no hay una sección temática";
 $NewThematicSection = "Nueva sección temática";
 $DeleteAllThematics = "Borrar todas las temáticas";
-$ThematicDetailsDescription = "Se detalla las temáticas con sus respectivos planes y avances, para asignar un avance como terminado se debe seleccionar la fecha de acuerdo al orden y el sistema determinará las anteriores fechas como terminadas";
+$ThematicDetailsDescription = "Aquí se detallan los temas, su planificación y periodos de avance. Para indicar que un tema ha terminado, seleccione la fecha correspondiente siguiendo un orden cronológico y el sistema presentará todas las fechas anteriores como finalizadas.";
 $SkillToAcquireQuestions = "¿Qué habilidades se adquieren al término de esta sección temática?";
 $SkillToAcquire = "Habilidad a adquirir";
 $InfrastructureQuestions = "¿Qué infraestructura es necesaria para llevar a cabo con normalidad esta sección temática?";
@@ -869,12 +869,12 @@ $AditionalNotes = "Notas adicionales";
 $StartDateFromAnAttendance = "Fecha de inicio a partir de una asistencia";
 $StartDateCustom = "Fecha de inicio personalizado";
 $StartDateOptions = "Opciones de fecha de inicio";
-$ThematicAdvanceConfiguration = "Configuración para el avance temático";
-$InfoAboutAdvanceInsideHomeCourse = "Información sobre el avance temático en la página principal del curso";
-$DisplayAboutLastDoneAdvance = "Mostrar información sobre el último avance temático hecho";
-$DisplayAboutNextAdvanceNotDone = "Mostrar información sobre el siguiente avance temático que no esta hecho";
-$InfoAboutLastDoneAdvance = "Información sobre el último avance temático realizado";
-$InfoAboutNextAdvanceNotDone = "Información sobre el siguiente avance temático que aún no se ha realizado";
+$ThematicAdvanceConfiguration = "Configuración del avance temático";
+$InfoAboutAdvanceInsideHomeCourse = "Información del avance temático en la página principal del curso";
+$DisplayAboutLastDoneAdvance = "Mostrar información sobre el último tema finalizado";
+$DisplayAboutNextAdvanceNotDone = "Mostrar información sobre el siguiente tema a desarrollar";
+$InfoAboutLastDoneAdvance = "Información sobre el último tema finalizado";
+$InfoAboutNextAdvanceNotDone = "Información sobre el siguiente tema a desarrollar";
 $ThereIsNoAThematicSection = "No hay una sección temática";
 $ThereIsNoAThematicAdvance = "No existe un avance temático";
 $StillDoNotHaveAThematicPlan = "Aún no tiene un plan temático";
@@ -885,8 +885,8 @@ $EditThematicSection = "Editar sección temática";
 $ToolCourseProgress = "Avance temático";
 $SelectAnAttendance = "Seleccionar hoja de asistencia";
 $ResultsHiddenByExerciseSetting = "Resultados ocultos por la configuración del ejercicio";
-$ThematicSectionHasBeenCreatedSuccessfull = "Sección temática ha sido creado con éxito";
-$NowYouShouldAddThematicPlanXAndThematicAdvanceX = "Ahora debes añadir plan temático %s y avance temático %s";
+$ThematicSectionHasBeenCreatedSuccessfull = "La sección temática ha sido creada";
+$NowYouShouldAddThematicPlanXAndThematicAdvanceX = "Ahora debe añadir el plan temático %s y el avance temático %s";
 $QualificationNumeric = "Calificación numérica sobre";
 $Literal0 = "cero";
 $Literal1 = "uno";
@@ -929,13 +929,13 @@ $SelectOne = "Seleccione uno";
 $ContactInformationHasBeenSent = "Información de contacto enviada";
 $ContactInformationDescription = "Estimado usuario,
 
-Está a punto de instalar una de las mejores plataformas e-learning de código abierto en el mercado. Al igual de muchos otros proyectos de código abierto, Chamilo está respaldado por una amplia comunidad de profesores, estudiantes, desarrolladores y creadores de contenido que desean promover el proyecto.
+está a punto de instalar una de las mejores plataformas e-learning de código abierto que existen en el mercado. Al igual de muchos otros proyectos de código abierto, Chamilo está respaldado por una amplia comunidad de profesores, estudiantes, desarrolladores y creadores de contenido.
 
-Al saber un poco más de usted, uno de nuestros usuarios más importantes que gestionará este sistema e-learning, podremos dar a conocer a otros que nuestro software se utiliza y podremos informarle sobre eventos que pueden ser relevantes para usted.
+Si sabemos algo más de usted, que va a gestionar este sistema e-learning, podremos dar a conocer a otros que nuestro software lo utiliza y a usted podremos informarle sobre eventos que pueden ser de su interés.
 
-Llenar este formulario, implica la aceptación de que la asociación Chamilo o sus miembros puedan enviarle información por correo electrónico sobre eventos importantes o actualizaciones en el software Chamilo. Esto ayudará a crecer a la comunidad como una entidad organizada, donde el flujo de información, se haga con respeto permanente a su tiempo y su privacidad.
+Cumplimentar este formulario, implica la aceptación de que la asociación Chamilo o sus miembros puedan enviarle información por correo electrónico sobre eventos importantes o actualizaciones en el software Chamilo. Esto ayudará a crecer a la comunidad como una entidad organizada, donde el flujo de información, se haga con respeto permanente a su tiempo y su privacidad.
 
-Tenga en cuenta que no está obligado a llenar este formulario. Si desea permanecer en el anonimato, perderemos la oportunidad de ofrecerle todos los privilegios de ser un administrador de portal registrado, pero respetaremos su decisión. Basta con dejar vacío este formulario y hacer clic en \"Siguiente\" para seguir instalando Chamilo.";
+De cualquier forma, tenga en cuenta que no tiene la obligación de rellenar este formulario. Si desea permanecer en el anonimato, perderemos la oportunidad de ofrecerle todos los privilegios de ser un administrador de portal registrado, pero respetaremos su decisión. Basta con dejar vacío este formulario y hacer clic en \"Siguiente\" para seguir instalando Chamilo.";
 $CompanyActivity = "Actividad de su empresa";
 $DateUnLock = "Desbloquear fecha";
 $DateLock = "Bloquear fecha";
@@ -980,4 +980,5 @@ $ChatFiles = "Historial de conversaciones en el chat";
 $Flash = "Flash";
 $Video = "Video";
 $Images = "Imágenes";
+$OpenInANewWindow = "Abrir en una nueva ventana";
 ?>

@@ -1330,4 +1330,11 @@ $IncludeAsciiMathMlTitle = "Charger le fichier ASCIIMathML.js dans toutes les pa
 $IncludeAsciiMathMlComment = "Activez ce paramètre si vous désirez pouvoir afficher des formules mathématiques basées sur ASCIIMathML et des graphiques mathématiques basés sur ASCIIsvg, non seulement dans l'outil de cours, mais partout ailleurs sur la plateforme.";
 $CourseHideToolsTitle = "Cacher des outils par rapport aux enseignants";
 $CourseHideToolsComment = "Sélectionnez les outils que vous désirez cacher des enseignants. Cette option n'interdira pas l'accès à l'outil (ce n'est pas une option à vocation de sécurité en soi), mais le rendra invisible aux enseignants sur la page d'accueil du cours, afin d'éviter une éventuelle confusion due à la grande quantité d'outils (vocation ergonomique).";
+$MoveUserStats = "Déplacer les résultats utilisateurs dans/vers une session";
+$CompareUserResultsBetweenCoursesAndCoursesInASession = "Cet outil avancé vous permet d'améliorer le suivi des résultats utilisateurs lorsque vous changez d'une méthodologie de purs cours ver une méthodologie de sessions (ou cycles de formation). Dans la plupart des cas, vous n'aurez pas besoin de cet outil.<br />
+Sur cet écran, vous pouvez comparer les résultats des utilisateurs entre un contexte de cours isolé et un contexte de session.<br />
+Une fois que vous vous êtes décidé sur le meilleur contexte au sein duquel devrait exister le suivi des utilisateurs (score des exercices et suivi des parcours), vous pourrez déplacer ce suivi d'un cours vers une session.";
+$PDFExportWatermarkEnableTitle = "Activer les filigranes dans les exports PDF";
+$PDFExportWatermarkEnableComment = "En activant cette fonctionnalité, vous pourrez utiliser une image ou un texte comme filigranne qui sera ajouté aux documents exportés en PDF.";
+$AddWaterMark = "Télécharger une image en filigrane";
 ?>

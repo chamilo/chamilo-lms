@@ -146,13 +146,12 @@ if(1)
 
 	// Create a sortable table with user-data
 	$parameters['sec_token'] = Security::get_token();
-	$column_show  = array(1,1,1,1,1,1,1,1,1,0,0);
-	$column_order = array(1,2,3,4,5,6,7,8,9,10,11);
-	$extra_fields = UserManager::get_extra_fields(0,100,5,'ASC');
-
+	//$column_show  = array(1,1,1,1,1,1,1,1,1,0,0);
+	//$column_order = array(1,2,3,4,5,6,7,8,9,10,11);
+	$extra_fields = UserManager::get_extra_fields();
 	$number_of_extra_fields = count($extra_fields);
 
-	$table = new SortableTableFromArrayConfig($extra_fields, 5, 50, '', $column_show, $column_order, 'ASC');
+    $table = new SortableTable('user_field', array('UserManager','get_number_of_extra_fields'), array('UserManager','get_extra_fields'),5);
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('FieldLabel'), false);
@@ -319,8 +318,10 @@ function move_user_field($direction,$field_id)
 		$sortdirection = 'ASC';
 	}
 
-	$found = false;
+    // first reorder user_fields
+    reorder_user_fields();
 
+	$found = false;
 	$sql = "SELECT id, field_order FROM $table_user_field ORDER BY field_order $sortdirection";
 	$result = Database::query($sql);
 	while($row = Database::fetch_array($result))
@@ -340,12 +341,28 @@ function move_user_field($direction,$field_id)
 		}
 	}
 
-	$sql1 = "UPDATE ".$table_user_field." SET field_order = '".Database::escape_string($next_order)."' WHERE id =  '".Database::escape_string($this_id)."'";
-	$sql2 = "UPDATE ".$table_user_field." SET field_order = '".Database::escape_string($this_order)."' WHERE id =  '".Database::escape_string($next_id)."'";
+	$sql1 = "UPDATE ".$table_user_field." SET field_order = '".intval($next_order)."' WHERE id =  '".intval($this_id)."'";
+	$sql2 = "UPDATE ".$table_user_field." SET field_order = '".intval($this_order)."' WHERE id =  '".intval($next_id)."'";
 	Database::query($sql1);
 	Database::query($sql2);
 
 	return true;
+}
+
+/**
+* Re-order user fields
+*/
+function reorder_user_fields() {
+      // Database table definition
+      $t_user_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+      $sql = "SELECT * FROM $t_user_field ORDER by field_order ASC";
+      $res = Database::query($sql);
+      $i = 1;
+      while ($row = Database::fetch_array($res)) {
+              $sql_reorder = "UPDATE $t_user_field SET field_order = $i WHERE id = '".$row['id']."'";
+              Database::query($sql_reorder);
+              $i++;
+      }
 }
 
 /**

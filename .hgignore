@@ -103,3 +103,6 @@ main/upload/users/*
 #!plugin/index.html
 #!plugin/search
 
+#PHP Storm settings directory
+.idea
+

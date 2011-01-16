@@ -2491,4 +2491,114 @@ class CourseManager {
         return self::course_code_exists($wanted_course_code);
     }
 
+    /**
+     * Display special courses (and only these) as several HTML divs of class userportal-course-item
+     *
+     * Special courses are courses that stick on top of the list and are "auto-registerable"
+     * in the sense that any user clicking them is registered as a student
+     * @param int       User id
+     * @return void
+     */
+    function display_special_courses ($user_id) {
+
+        $user_id = intval($user_id);
+        $user_info = api_get_user_info($user_id);
+        $special_course_list = array();
+
+        $tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_course_field           = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+        $tbl_course_field_value     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $tbl_user_course_category   = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+
+        // get course list auto-register
+        $sql = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
+                " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
+
+        $special_course_result = Database::query($sql);
+        if (Database::num_rows($special_course_result) > 0) {
+            $special_course_list = array();
+            while ($result_row = Database::fetch_array($special_course_result)) {
+                $special_course_list[] = '"'.$result_row['course_code'].'"';
+            }
+        }
+        $with_special_courses = $without_special_courses = '';
+        if (!empty($special_course_list)) {
+            $with_special_courses = ' course.code IN ('.implode(',',$special_course_list).')';
+        }
+
+        if (!empty($with_special_courses)) {
+            $sql = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
+                                course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
+                                course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course_rel_user.user_id, course.visibility
+                                FROM $TABLECOURS course
+                                LEFT JOIN $TABLECOURSUSER course_rel_user ON course.code = course_rel_user.course_code AND course_rel_user.user_id = '$user_id'
+                                WHERE $with_special_courses group by course.code";
+
+            $rs_special_course = Database::query($sql);
+            $number_of_courses = Database::num_rows($rs_special_course);
+            $key = 0;
+            $status_icon = '';
+            if ($number_of_courses > 0) {
+                while ($course = Database::fetch_array($rs_special_course)) {
+
+                    // Get notifications.
+                    $my_course = array();
+                    $my_course['db']         = $course['db_name'];
+                    $my_course['k']          = $course['code'];
+                    $my_course['id_session'] = null;
+                    $my_course['s']          = $course['status'];
+                    $show_notification = show_notification($my_course);
+
+                    if (empty($course['user_id'])) {
+                        $course['status'] = $user_info['status'];
+                    }
+
+                    $status_icon = Display::return_icon('blackboard.png', get_lang('Course'), array('width'=>'48px'));
+                    /*
+                    if ($course['status'] == 1) {
+                        $status_icon = Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style' => 'width: 11px; height: 11px;'));
+                    }
+                    if (($course['status'] == 5 && !api_is_coach()) || empty($course['status'])) {
+                        $status_icon = Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'), array('style' => 'width: 11px; height: 11px;'));
+                    }*/
+
+                    echo '<div class="userportal-course-item">';
+
+                    if (api_is_platform_admin()) {
+                        echo '<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a>';
+                        if ($course['status'] == COURSEMANAGER) {
+                            //echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px;'));
+                        }
+                        echo '</div>';
+                    }
+                    $course_visibility = $course['visibility'];
+                    if ($course_visibility != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
+                        $course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0&amp;autoreg=1">'.$course['title'].'</a>';
+                    } else {
+                        $course_title = $course['title']." ".get_lang('CourseClosed');
+                    }
+
+                    echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><span class="userportal-course-item-title">'.$course_title.'</span><br />';
+                    if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+                        echo $course['visual_code'];
+                    }
+                    if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
+                        echo ' - ';
+                    }
+
+                    if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                        echo $course['tutor'];
+                    }
+                    echo '&nbsp;';
+                    echo Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));
+
+                    // Show notifications.
+                    echo $show_notification;
+                    echo '</div>';
+                    $key++;
+                }
+            }
+        }
+    }
 } //end class CourseManager

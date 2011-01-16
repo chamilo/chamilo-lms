@@ -45,10 +45,10 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 } else {
 
 	$form = new FormValidator('lost_password');
-	$form->addElement('text', 'user', get_lang('User'), array('size'=>'40'));
-	$form->addElement('text', 'email', get_lang('Email'), array('size'=>'40'));
+	$form->addElement('text', 'user', get_lang('LoginOrEmailAddress'), array('size'=>'40'));
+	//$form->addElement('text', 'email', get_lang('Email'), array('size'=>'40'));
 
-	$form->applyFilter('email','strtolower');
+	//$form->applyFilter('email','strtolower');
 	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="save"');
 
 	// setting the rules
@@ -57,39 +57,42 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 	if ($form->validate()) {
 		$values = $form->exportValues();
 		
-		$user = $values['user'];
-		$email = $values['email'];
+        if(strpos($values['user'],'@')){
+            $user = strtolower($values['user']);
+            $email = TRUE;
+        } else {
+            $user = strtolower($values['user']);
+            $email = FALSE;
+        }
 
 		$condition = '';
-		if (!empty($email)) {
-			$condition = " AND LOWER(email) = '".Database::escape_string($email)."' ";
-		}
+		if ($email) {
+			$condition = "LOWER(email) = '".Database::escape_string($user)."' ";
+		} else {
+            $condition = "LOWER(username) = '".Database::escape_string($user)."'";
+        }
 
 		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-		$query = " SELECT user_id AS uid, lastname AS lastName, firstname AS firstName,
-					username AS loginName, password, email, status AS status,
-					official_code, phone, picture_uri, creator_id
-					FROM ".$tbl_user."
-					WHERE ( username = '".Database::escape_string($user)."' $condition ) ";
+		$query = "SELECT user_id AS uid, lastname AS lastName, firstname AS firstName, ".
+				 "username AS loginName, password, email, status AS status, ".
+		         "official_code, phone, picture_uri, creator_id ".
+				 "FROM ".$tbl_user." ".
+				 "WHERE ( $condition ) ";
 
 		$result 	= Database::query($query);
 		$num_rows 	= Database::num_rows($result);
 
 		if ($result && $num_rows > 0) {
-			if ($num_rows > 1) {
-				$by_username = false; // more than one user
-				while ($data = Database::fetch_array($result)) {
-					$user[] = $data;
-				}
-			} else {
-				$by_username = true; // single user (valid user + email)
-				$user = Database::fetch_array($result);
-			}
-			if ($userPasswordCrypted != 'none') {
-				Login::handle_encrypted_password($user, $by_username);
-			} else {
-				Login::send_password_to_user($user, $by_username);
-			}
+            $by_username = true;
+//            $user = Database::fetch_array($result);
+            $users = Database::store_result($result);
+            foreach( $users as $user ) {
+                if ($userPasswordCrypted != 'none') {
+                    Login::handle_encrypted_password($user, $by_username);
+                } else {
+                    Login::send_password_to_user($user, $by_username);
+                }
+            }
 		} else {
 			Display::display_error_message(get_lang('NoUserAccountWithThisEmailAddress'));
 		}

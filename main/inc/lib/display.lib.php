@@ -1137,4 +1137,54 @@ class Display {
             }
         }
     } // End function display_digest
+    /**
+     * Get the session box details as an array
+     * @param int       Session ID
+     * @return array    Empty array or session array ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
+     */
+    function get_session_title_box($session_id) {
+        global $nosession;
+    
+        if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
+            global $now, $date_start, $date_end;
+        }
+    
+        $output = array();
+        if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
+            $main_user_table        = Database :: get_main_table(TABLE_MAIN_USER);
+            $tbl_session            = Database :: get_main_table(TABLE_MAIN_SESSION);
+            $tbl_session_category   = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+            $active = false;
+            // Request for the name of the general coach
+            $sql ='SELECT tu.lastname, tu.firstname, ts.name, ts.date_start, ts.date_end, ts.session_category_id
+                    FROM '.$tbl_session.' ts
+                    LEFT JOIN '.$main_user_table .' tu
+                    ON ts.id_coach = tu.user_id
+                    WHERE ts.id='.intval($session_id);
+            $rs = Database::query($sql);
+            $session_info = Database::store_result($rs);
+            $session_info = $session_info[0];
+            $session = array();
+            $session['title'] = $session_info[2];
+            $session['coach'] = '';
+    
+            if ($session_info[3] == '0000-00-00') {
+                $session['dates'] = get_lang('WithoutTimeLimits');
+                if (api_get_setting('show_session_coach') === 'true') {
+                    $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);
+                }
+                $active = true;
+            } else {
+                $session ['dates'] = get_lang('From').' '.$session_info[3].' '.get_lang('Until').' '.$session_info[4];
+                if ( api_get_setting('show_session_coach') === 'true' ) {
+                    $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);
+                }
+                $active = ($date_start <= $now && $date_end >= $now);
+            }
+            $session['active'] = $active;
+            $session['session_category_id'] = $session_info[5];
+            $output = $session;
+        }
+        return $output;
+    }
 } //end class Display

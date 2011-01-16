@@ -24,7 +24,7 @@ if(!class_exists('UniqueAnswerNoOption')):
 class UniqueAnswerNoOption extends Question {
 
 	static $typePicture = 'mcuao.gif';
-	static $explanationLangVar = 'UniqueAnswerNoOptionSelect';
+	static $explanationLangVar = 'UniqueAnswerNoOption';
 
 	/**
 	 * Constructor

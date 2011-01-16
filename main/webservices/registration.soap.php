@@ -3403,7 +3403,7 @@ function WSDeleteSession($params) {
 
 
 
-/** WSSubscribeUsersToCourse **/
+/** WSSubscribeUserToCourse **/
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
@@ -3457,8 +3457,8 @@ $server->register('WSSubscribeUserToCourse',					// method name
     'This service subscribes a user to a course' 					// documentation
 );
 
-// define the method WSSubscribeUsersToCourse
-function WSSubscribeUsersToCourse($params) {
+// define the method WSSubscribeUserToCourse
+function WSSubscribeUserToCourse($params) {
 
     if(!WSHelperVerifyKey($params)) {
         return -1;

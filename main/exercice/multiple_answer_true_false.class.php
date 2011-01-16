@@ -21,7 +21,7 @@ if(!class_exists('MultipleAnswerTrueFalse')):
 
 class MultipleAnswerTrueFalse extends Question {
 
-	static $typePicture = 'mcma.gif';
+	static $typePicture = 'mcmao.gif';
 	static $explanationLangVar = 'MultipleAnswerTrueFalseSelect';
     var    $options;
 	/**

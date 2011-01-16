@@ -783,7 +783,7 @@ if ($show == 'test') {
                         //echo Display::url(Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                     }
                                   
-                    echo '<p>';
+                    //echo '<p>';
                     echo $session_img;
                     $exid = $row['id'];
     
@@ -791,17 +791,7 @@ if ($show == 'test') {
                     $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . Database :: escape_string($exid) . "'";
                     $sqlresult = Database::query($sqlquery);
                     $rowi = Database :: result($sqlresult, 0);
-                    
-                    $random_label = '';
-                    
-                    if ($row['random'] > 0) {
-                       $random_label = ' ('.get_lang('Random').') ';
-                        echo $row['random'] . ' ' . api_strtolower(get_lang(($row['random'] > 1 ? 'Questions' : 'Question'))) .$random_label;
-                    } else {                    
-                        echo $rowi . ' ' . api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question')));
-                    }                
-     
-                    
+                                        
                     if ($session_id == $row['session_id']) {
                         //Settings                                                                
                         echo Display::url(Display::return_icon('edit.gif',get_lang('Edit'), array('width'=>'20px')), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
@@ -827,6 +817,16 @@ if ($show == 'test') {
                     if ($session_id == $row['session_id']) {
                         echo Display::url(Display::return_icon('delete.png', get_lang('Delete')), '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));            
                     }
+                    echo '<br />';
+
+                    $random_label = '';                    
+                    if ($row['random'] > 0) {
+                       $random_label = ' ('.get_lang('Random').') ';
+                        echo $row['random'] . ' ' . api_strtolower(get_lang(($row['random'] > 1 ? 'Questions' : 'Question'))) .$random_label;
+                    } else {                    
+                        echo $rowi . ' ' . api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question')));
+                    }                
+     
                     //Attempts                    
                     echo '<br />'.get_count_exam_results($row['id']).' '.get_lang('Attempts');
                     
@@ -849,7 +849,7 @@ if ($show == 'test') {
                             echo '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';
                         } else {
                             echo $row['title'];
-                            echo '<h1>cant do exam</h1>';
+                            echo '<span class="exam-msg">'.get_lang('ExamNotAvailableAtThisTime').'</span>';
                         }                       
                     } else {
                         echo '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       

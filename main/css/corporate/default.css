@@ -1893,16 +1893,25 @@ button.refresh {
 button.upload {
     background-image:url(images/button_upload.gif);
 }
-
 .icon_image_content {
-	width:80px;
-	cursor:hand;
-	height:8em;
-	text-align: center;
-	padding-top: 3px;
-	padding-right: 5x;
-	padding-bottom: 3px;
-	padding-left: 5px;
+    width:90px;
+    cursor:hand;
+    height:9.5em;
+    text-align: center;
+    padding-right: 5px;
+    padding-left: 5px;
+    border: 1px dotted #ccc;
+    background-color: #eee;
+    margin-right: 0.2em;
+        margin-top: 0.1em;
+    -moz-border-radius-topleft : 5px;
+    -moz-border-radius-bottomright : 5px;
+    -moz-border-radius-bottomleft : 5px;
+    -moz-border-radius-topright : 5px;
+}
+.icon_image_content:hover {
+  background-color: #fff; 
+  border: 1px solid #ccc;
 }
 .question_menu {
 	list-style:none;

@@ -2862,13 +2862,26 @@ button.upload {
 }
 
 .icon_image_content {
-	width:70px;
+	width:90px;
 	cursor:hand;
-	height:10em;
+	height:9.5em;
 	text-align: center;
 	padding-right: 5px;
 	padding-left: 5px;
+	border: 1px dotted #ccc;
+	background-color: #eee;
+	margin-right: 0.2em;
+        margin-top: 0.1em;
+	-moz-border-radius-topleft : 5px;
+	-moz-border-radius-bottomright : 5px;
+	-moz-border-radius-bottomleft : 5px;
+	-moz-border-radius-topright : 5px;
 }
+.icon_image_content:hover {
+  background-color: #fff; 
+  border: 1px solid #ccc;
+}
+
 #expire_session div {
 	float:left;
 	padding-left:15px;

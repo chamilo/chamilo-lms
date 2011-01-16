@@ -367,7 +367,7 @@ class SocialManager extends UserManager {
 	 * Helper functions definition
 	 */
 	public static function get_logged_user_course_html($my_course, $count) {
-		global $nosession;
+		global $nosession, $nbDigestEntries, $orderKey, $digest, $thisCourseSysCode;
 		if (api_get_setting('use_session_mode')=='true' && !$nosession) {
 			global $now, $date_start, $date_end;
 		}
@@ -431,51 +431,17 @@ class SocialManager extends UserManager {
 
 		//display course entry
 		$result .= '<div id="div_'.$count.'">';
-		//$result .= '<a id="btn_'.$count.'" href="#" onclick="toogle_course(this,\''.$course_database.'\')">';
 		$result .= '<h2><img src="../img/nolines_plus.gif" id="btn_'.$count.'" onclick="toogle_course(this,\''.$course_database.'\' )">';
 		$result .= $s_htlm_status_icon;
 
 		//show a hyperlink to the course, unless the course is closed and user is not course admin
 		if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
 			$result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_course(this,\''.$course_database.'\');>&nbsp;'.$course_title.'</a></h2>';
-			/*
-			if(api_get_setting('use_session_mode')=='true' && !$nosession) {
-				if(empty($my_course['id_session'])) {
-					$my_course['id_session'] = 0;
-				}
-				if($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start=='0000-00-00') {
-					//$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.$course_display_title.'</a>';
-					$result .= '<a href="#">'.$course_display_title.'</a>';
-				}
-			} else {
-				//$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
-				$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
-			}*/
 		} else {
 			$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
 		}
-		// show the course_code and teacher if chosen to display this
-		// we dont need this!
-		/*
-				if (api_get_setting('display_coursecode_in_courselist') == 'true' OR api_get_setting('display_teacher_in_courselist') == 'true') {
-					$result .= '<br />';
-				}
-				if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-					$result .= $course_display_code;
-				}
-				if (api_get_setting('display_coursecode_in_courselist') == 'true' AND api_get_setting('display_teacher_in_courselist') == 'true') {
-					$result .= ' &ndash; ';
-				}
-				if (api_get_setting('display_teacher_in_courselist') == 'true') {
-					$result .= $course_teacher;
-					if(!empty($course_teacher_email)) {
-						$result .= ' ('.$course_teacher_email.')';
-					}
-				}
-		*/
 		$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
 		// display the what's new icons
-		//	$result .= show_notification($my_course);
 		if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0) {
 			reset($digest);
 			$result .= '<ul>';

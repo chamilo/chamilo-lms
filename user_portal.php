@@ -154,8 +154,6 @@ Display :: display_header($nameTools);
         FUNCTIONS
 
         display_digest($toolsList, $digest, $orderKey, $courses)
-        show_notification($my_course)
-
         get_logged_user_course_html($my_course)
         get_user_course_categories()
 */
@@ -405,7 +403,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class = 'courses
     $current_course_settings = CourseManager :: get_access_settings($my_course['k']);
 
     // Display the "what's new" icons.
-    $result .= show_notification($my_course);
+    $result .= Display :: show_notification($my_course);
 
     if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0) {
 
@@ -573,97 +571,7 @@ function get_global_courses_list($user_id) {
     return $output;
 }
 
-/**
- * Returns the "what's new" icon notifications
- *
- * The general logic of this function is to track the last time the user
- * entered the course and compare to what has changed inside this course
- * since then, based on the item_property table inside this course. Note that,
- * if the user never entered the course before, he will not see notification
- * icons. This function takes session ID into account (if any) and only shows
- * the corresponding notifications.
- * @param array     Course information array, containing at least elements 'db' and 'k'
- * @return string   The HTML link to be shown next to the course
- */
-function show_notification($my_course) {
 
-    $statistic_database = Database :: get_statistic_database();
-    $user_id = api_get_user_id();
-    $course_database = $my_course['db'];
-    $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST, $course_database);
-    $tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_database);
-    $course_group_user_table = Database :: get_course_table(TABLE_GROUP_USER, $course_database);
-    $t_track_e_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-    // Get the user's last access dates to all tools of this course
-    $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access
-                                     USE INDEX (access_cours_code, access_user_id)
-                                     WHERE access_cours_code = '".$my_course['k']."'
-                                     AND access_user_id = '$user_id' AND access_session_id ='".$my_course['id_session']."'";
-    $resLastTrackInCourse = Database::query($sqlLastTrackInCourse);
-
-    $oldestTrackDate = '3000-01-01 00:00:00';
-    while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
-        $lastTrackInCourseDate[$lastTrackInCourse['access_tool']] = $lastTrackInCourse['access_date'];
-        if ($oldestTrackDate > $lastTrackInCourse['access_date']) {
-            $oldestTrackDate = $lastTrackInCourse['access_date'];
-        }
-    }
-
-
-    // Get the last edits of all tools of this course.
-    $sql = "SELECT tet.*, tet.lastedit_date last_date, tet.tool tool, tet.ref ref,
-                        tet.lastedit_type type, tet.to_group_id group_id,
-                        ctt.image image, ctt.link link
-                    FROM $tool_edit_table tet, $course_tool_table ctt
-                    WHERE tet.lastedit_date > '$oldestTrackDate'
-                    AND ctt.name = tet.tool
-                    AND ctt.visibility = '1'
-                    AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$my_course['id_session']."'
-                    ORDER BY tet.lastedit_date";
-    $res = Database::query($sql);
-    // Get the group_id's with user membership.
-    $group_ids = GroupManager :: get_group_ids($course_database, $user_id);
-    $group_ids[] = 0; //add group 'everyone'
-    // Filter all selected items.
-    while ($res && ($item_property = Database::fetch_array($res))) {
-        // First thing to check is if the user never entered the tool
-        // or if his last visit was earlier than the last modification.
-        if ((!isset ($lastTrackInCourseDate[$item_property['tool']]) || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date'])
-            // Drop the tool elements that are part of a group that the
-            // user is not part of.
-            && ((in_array($item_property['to_group_id'], $group_ids)
-            // Drop the dropbox, notebook and chat tools because we don't care.
-            && ($item_property['tool'] != TOOL_DROPBOX && $item_property['tool'] != TOOL_NOTEBOOK && $item_property['tool'] != TOOL_CHAT)))
-            // Take only what's visible or invisible but where the user is a teacher or where the visibility is unset.
-            && ($item_property['visibility'] == '1' || ($my_course['s'] == '1' && $item_property['visibility'] == '0') || !isset($item_property['visibility']))) {
-
-            // Also drop announcements and events that are not for the user or his group.
-            if (($item_property['tool'] == TOOL_ANNOUNCEMENT || $item_property['tool'] == TOOL_CALENDAR_EVENT) && (($item_property['to_user_id'] != $user_id ) && (!isset($item_property['to_group_id']) || !in_array($item_property['to_group_id'], $group_ids)))) continue;
-            // If it's a survey, make sure the user's invited. Otherwise drop it.
-            if ($item_property['tool'] == TOOL_SURVEY) {
-                $survey_info = survey_manager::get_survey($item_property['ref'], 0, $my_course['k']);
-                $invited_users = SurveyUtil::get_invited_users($survey_info['code'], $course_database);
-                if (!in_array($user_id, $invited_users['course_users'])) continue;
-            }
-            $notifications[$item_property['tool']] = $item_property;
-        }
-    }
-    // Show all tool icons where there is something new.
-    $retvalue = '&nbsp;';
-    if (isset($notifications)) {
-        while (list($key, $notification) = each($notifications)) {
-            $lastDate = date('d/m/Y H:i', convert_mysql_date($notification['lastedit_date']));
-            $type = $notification['lastedit_type'];
-            //$notification[image] = str_replace('.png', 'gif', $notification[image]);
-            //$notification[image] = str_replace('.gif', '_s.gif', $notification[image]);
-            if (empty($my_course['id_session'])) {
-                $my_course['id_session'] = 0;
-            }
-            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$my_course['k'].'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.'<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" /></a>&nbsp;';
-        }
-    }
-    return $retvalue;
-}
 
 /**
  * Retrieves the user defined course categories

@@ -2705,7 +2705,7 @@ class CourseManager {
             $my_course['s']          = $course['status'];
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
-            $show_notification = show_notification($my_course);
+            $show_notification = Display :: show_notification($my_course);
             // New code displaying the user's status in respect to this course.
             $status_icon = Display::return_icon('blackboard.png', get_lang('Course'), array('width' => '48px'));
     

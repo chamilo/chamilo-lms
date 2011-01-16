@@ -2618,7 +2618,7 @@ class CourseManager {
         $all_user_categories = get_user_course_categories();
     
         // Step 0: We display the course without a user category.
-        display_courses_in_category(0, 'true');
+        self :: display_courses_in_category(0, 'true');
     
         // Step 1: We get all the categories of the user.
         $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
@@ -2635,7 +2635,7 @@ class CourseManager {
                         echo $row['title'];
                         echo '</span>';
                     echo '</li>';
-                    display_courses_in_category($row['id']);
+                    self :: display_courses_in_category($row['id']);
             echo '</ul>';
             echo '</div>';
         }

@@ -935,5 +935,42 @@ class Display {
             } 
         });  */    	
     }
+    /**
+     * Display create course link
+     *
+     */
+    function display_create_course_link() {
+        echo '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
+    }
     
+    
+    /**
+     * Display dashboard link
+     *
+     */
+    function display_dashboard_link() {
+        echo '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
+    }
+    
+    /**
+     * Display edit course list links
+     *
+     */
+    function display_edit_course_list_links() {
+        echo '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
+    }
+    
+    /**
+     * Show history sessions
+     *
+     */
+    function display_history_course_session() {
+        if (api_get_setting('use_session_mode') == 'true') {
+            if (isset($_GET['history']) && intval($_GET['history']) == 1) {
+                echo '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+            } else {
+                echo '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
+            }
+        }
+    }
 } //end class Display

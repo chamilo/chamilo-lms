@@ -153,63 +153,12 @@ Display :: display_header($nameTools);
 /*
         FUNCTIONS
 
-        display_admin_links()
-        display_create_course_link()
-        display_edit_course_list_links()
         display_digest($toolsList, $digest, $orderKey, $courses)
         show_notification($my_course)
 
         get_logged_user_course_html($my_course)
         get_user_course_categories()
 */
-
-/**
- * Warning: This function defines a global variable.
- * @todo Use the correct get_path function.
- */
-function display_admin_links() {
-    global $rootAdminWeb;
-    echo '<li><a href="'.$rootAdminWeb.'">'.get_lang('PlatformAdmin').'</a></li>';
-}
-
-/**
- * Display create course link
- *
- */
-function display_create_course_link() {
-    echo '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
-}
-
-
-/**
- * Display dashboard link
- *
- */
-function display_dashboard_link() {
-    echo '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
-}
-
-/**
- * Display edit course list links
- *
- */
-function display_edit_course_list_links() {
-    echo '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
-}
-
-/**
- * Show history sessions
- *
- */
-function display_history_course_session() {
-    if (api_get_setting('use_session_mode') == 'true') {
-        if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-            echo '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
-        } else {
-            echo '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
-        }
-    }
-}
 
 /**
  * Displays a digest e.g. short summary of new agenda and announcements items.
@@ -1277,14 +1226,14 @@ echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
 if ($show_menu) {
     echo '<ul class="menulist">';
     if ($show_create_link) {
-        display_create_course_link();
+        Display :: display_create_course_link();
     }
     if ($show_course_link) {
         if (!api_is_drh()) {
-            display_edit_course_list_links();
-            display_history_course_session();
+            Display :: display_edit_course_list_links();
+            Display :: display_history_course_session();
         } else {
-            display_dashboard_link();
+            Display :: display_dashboard_link();
         }
     }
     if ($show_digest_link) {

@@ -163,223 +163,6 @@ Display :: display_header($nameTools);
         get_user_course_categories()
 */
 
-/*
-    Database functions
-    Some of these can go to database layer.
-*/
-
-/**
- * Display courses (without special courses) as several HTML divs
- * of course categories, as class userportal-catalog-item.
- * @uses display_courses_in_category() to display the courses themselves
- * @param int        user id
- * @return void
- */
-function display_courses($user_id) {
-
-    global $_user, $_configuration;
-
-    // Building an array that contains all the id's of the user defined course categories.
-    // Initially this was inside the display_courses_in_category function but when we do it here we have fewer
-    // sql executions = performance increase.
-    $all_user_categories = get_user_course_categories();
-
-    // Step 0: We display the course without a user category.
-    display_courses_in_category(0, 'true');
-
-    // Step 1: We get all the categories of the user.
-    $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-    $sql = "SELECT id, title FROM $tucc WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
-    $result = Database::query($sql);
-    while ($row = Database::fetch_array($result)) {
-        // We simply display the title of the category.
-        echo '<div class="userportal-catalog-item">';
-            echo '<ul class="catalog_box">';
-                echo '<li>';
-                    echo Display::return_icon('folder_yellow.png', '', array('width' => '48px', 'align' => 'absmiddle'));
-                    echo '<span>';
-                    echo '<a name="category'.$row['id'].'"></a>'; // Display an internal anchor.
-                    echo $row['title'];
-                    echo '</span>';
-                echo '</li>';
-                display_courses_in_category($row['id']);
-        echo '</ul>';
-        echo '</div>';
-    }
-}
-
-/**
- *  Display courses inside a category (without special courses) as HTML dics of
- *  class userportal-course-item.
- *  @param int      User category id
- *  @return void
- */
-function display_courses_in_category($user_category_id) {
-
-    global $_user, $_configuration;
-    // Table definitions
-    $TABLECOURS                  = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $TABLECOURSUSER              = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $TABLE_COURSE_FIELD          = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
-    $TABLE_COURSE_FIELD_VALUE    = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $TABLE_ACCESS_URL_REL_COURSE = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-    $TABLE_USER_COURSE_CATEGORY  = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-    $current_url_id = api_get_current_access_url_id();
-
-    // Get course list auto-register
-    $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
-            " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
-
-    $special_course_result = Database::query($sql);
-    if (Database::num_rows($special_course_result) > 0) {
-        $special_course_list = array();
-        while ($result_row = Database::fetch_array($special_course_result)) {
-            $special_course_list[] = '"'.$result_row['course_code'].'"';
-        }
-    }
-    $without_special_courses = '';
-    if (!empty($special_course_list)) {
-        $without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
-    }
-
-    $sql_select_courses = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
-                                    course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
-                                    course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course.visibility
-                                    FROM    $TABLECOURS       course,
-                                            $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
-                                    WHERE course.code = course_rel_user.course_code AND url.course_code = course.code
-                                    AND   course_rel_user.user_id = '".$_user['user_id']."'
-                                    AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                                    AND course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses ";
-    // If multiple URL access mode is enabled, only fetch courses
-    // corresponding to the current URL.
-    if ($_configuration['multiple_access_urls'] && $current_url_id != -1){
-        $sql_select_courses .= " AND url.course_code=course.code AND access_url_id='".$current_url_id."'";
-    }
-    // Use user's classification for courses (if any).
-    $sql_select_courses .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
-    $result = Database::query($sql_select_courses);
-    $number_of_courses = Database::num_rows($result);
-    $key = 0;
-    $status_icon = '';
-
-    // Browse through all courses.
-    while ($course = Database::fetch_array($result)) {
-        // Get notifications.
-        $my_course = array();
-        $my_course['db']         = $course['db_name'];
-        $my_course['k']          = $course['code'];
-        $my_course['id_session'] = null;
-        $my_course['s']          = $course['status'];
-        // For each course, get if there is any notification icon to show
-        // (something that would have changed since the user's last visit).
-        $show_notification = show_notification($my_course);
-        // New code displaying the user's status in respect to this course.
-        $status_icon = Display::return_icon('blackboard.png', get_lang('Course'), array('width' => '48px'));
-        /*
-        // Old code displaying the status of the user in respect to this course
-        if ($course['status'] == COURSEMANAGER) {
-            $status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style' => 'width: 11px; height: 11px;'));
-        } elseif (($course['status'] == STUDENT && !api_is_coach()) || empty($course['status'])) {
-            $status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'), array('style' => 'width: 11px; height: 11px;'));
-        }*/
-
-        /*
-        // Code allowing to show the thematic progress (as a percentage) inside the course box
-        if (api_is_allowed_to_edit(null, true)) {
-            $progress_thematic_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&cidReq='.$course['code'].'&description_type=8'.'">'.get_thematic_progress_icon($course['db_name']).'</a>';
-        } else {
-            $progress_thematic_icon = get_thematic_progress_icon($course['db_name']);
-        }
-        */
-
-        echo '<div class="userportal-course-item">';
-
-        if (api_is_platform_admin()) {
-            echo   '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a>';
-            if ($course['status'] == COURSEMANAGER) {
-                //echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style'=>'width: 11px; height: 11px;'));
-            }
-            echo '</div>';
-        }
-
-        // Function logic - act on the data (check if the course is virtual, if yes change the link).
-        $is_virtual_course = CourseManager :: is_virtual_course_from_system_code($course['code']);
-        if ($is_virtual_course) {
-            // If the current user is also subscribed in the real course to which this
-            // virtual course is linked, we don't need to display the virtual course entry in
-            // the course list - it is combined with the real course entry.
-            $target_course_code = CourseManager :: get_target_of_linked_course($course['code']);
-            $is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
-            if ($is_subscribed_in_target_course) {
-                return; // Do not display this course entry.
-            }
-        }
-        // Check if the course has virtual courses attached. If yes change the course title and display code.
-        $has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course['code'], api_get_user_id());
-        if ($has_virtual_courses) {
-            $course_info = api_get_course_info($course['code']);
-            $return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
-            $course_title = $return_result['title'];
-            $course_display_code = $return_result['code'];
-        } else {
-            $course_title = $course['title'];
-            $course_display_code = $course['visual_code'];
-        }
-
-        // Show a hyperlink to the course, unless the course is closed and user is not course admin.
-        $course_visibility = $course['visibility'];
-        if ($course_visibility != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
-            $course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0">'.$course['title'].'</a>';
-        } else {
-            $course_title = $course['title']." ".get_lang('CourseClosed');
-        }
-        // Start displaying the course block itself.
-        echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><span class="userportal-course-item-title">'.$course_title.'</span><br />';
-        if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-            echo $course_display_code;
-        }
-        if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
-            echo ' - ';
-        }
-        if (api_get_setting('display_teacher_in_courselist') == 'true') {
-            if (!empty($course['tutor']))
-                echo $course['tutor'];
-        }
-        // Show notifications.
-        echo $show_notification;
-        echo '</div>';
-        $key++;
-    }
-}
-
-/* Display functions */
-
-/**
- * get icon showing thematic progress for a course
- * @param string    Course database name
- * @param int       Session id (optional)
- * @return string   img html
- */
-function get_thematic_progress_icon($course_dbname,$session_id = 0) {
-    $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION,$course_dbname);
-    $session_id = intval($session_id);
-    $sql = "SELECT progress FROM $tbl_course_description WHERE description_type = 8 AND session_id = '$session_id' ";
-    $rs  = Database::query($sql);
-    $img = '';
-    $title = '0%';
-    $image = 'level_0.png';
-    if (Database::num_rows($rs) > 0) {
-        $row = Database::fetch_array($rs);
-        $progress = $row['progress'];
-        $image = 'level_'.$progress.'.png';
-        $title = $row['progress'].'%';
-        $img = Display::return_icon($image, get_lang('ThematicAdvance'), array('style' => 'vertical-align: middle')).'&nbsp;<span>'.$title.'</span>';
-    }
-    return $img;
- }
-
-
 /**
  * Warning: This function defines a global variable.
  * @todo Use the correct get_path function.
@@ -519,7 +302,7 @@ function display_digest($toolsList, $digest, $orderKey, $courses) {
  * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
  */
 function get_logged_user_course_html($course, $session_id = 0, $class = 'courses') {
-    global $nosession;
+    global $nosession, $nbDigestEntries, $digest, $thisCourseSysCode, $orderKey;
     $charset = api_get_system_encoding();
 
     $current_uid = api_get_user_id();
@@ -627,15 +410,6 @@ function get_logged_user_course_html($course, $session_id = 0, $class = 'courses
         $result .= $course_display_title.'  '.get_lang('CourseClosed');
     }
 
-    /*
-    if (api_is_allowed_to_edit(null, true)) {
-        $progress_thematic_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&cidReq='.$course['code'].'&description_type=8'.'">'.get_thematic_progress_icon($course_database, $session_id).'</a>';
-    } else {
-        $progress_thematic_icon = get_thematic_progress_icon($course_database, $session_id);
-    }
-    */
-
-    //$result .= '&nbsp;&nbsp;<span>'.$progress_thematic_icon.'</span>';
     // Show the course_code and teacher if chosen to display this.
     if (api_get_setting('display_coursecode_in_courselist') == 'true' || api_get_setting('display_teacher_in_courselist') == 'true') {
         $result .= '<br />';
@@ -1132,7 +906,7 @@ if (is_array($courses_tree)) {
             // Sessions and courses that are not in a session category.
             if (!isset($_GET['history'])) { // Check if it's not history trainnign session list.
                 CourseManager :: display_special_courses(api_get_user_id());
-                display_courses(api_get_user_id());
+                CourseManager :: display_courses(api_get_user_id());
             }
             // Independent sessions.
             foreach ($category['sessions'] as $session) {

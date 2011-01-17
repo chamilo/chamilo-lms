@@ -805,7 +805,7 @@ class SessionManager {
 		$day_end=intval($sday_end);
 
 		$date_start = "$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-		$date_end = "$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
+		$date_end = "'$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end)."'";
 
 		if (empty($name)) {
 			$msg=get_lang('SessionCategoryNameIsRequired');
@@ -813,22 +813,25 @@ class SessionManager {
 		} elseif (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start)) {
 			$msg=get_lang('InvalidStartDate');
 			return $msg;
+        } elseif (!$month_end && !$day_end && !$year_end) {
+            $date_end = 'null';
 		} elseif (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end)) {
 			$msg=get_lang('InvalidEndDate');
 			return $msg;
 		} elseif($date_start >= $date_end) {
 			$msg=get_lang('StartDateShouldBeBeforeEndDate');
 			return $msg;
-		} else {
-			$sql = "INSERT INTO $tbl_session_category(name, date_start, date_end) VALUES('".Database::escape_string($name)."','$date_start','$date_end')";
-			Database::query($sql);
-			$id_session=Database::insert_id();
-			// add event to system log
-			$time = time();
-			$user_id = api_get_user_id();
-			event_system(LOG_SESSION_CATEGORY_CREATE, LOG_SESSION_CATEGORY_ID, $id_session, $time, $user_id);
-			return $id_session;
 		}
+        $sql = "INSERT INTO $tbl_session_category(name, date_start, date_end)
+        VALUES('".Database::escape_string($name)."','$date_start',$date_end)";
+        Database::query($sql);
+        $id_session=Database::insert_id();
+        // add event to system log
+        $time = time();
+        $user_id = api_get_user_id();
+        event_system(LOG_SESSION_CATEGORY_CREATE, LOG_SESSION_CATEGORY_ID, $id_session, $time, $user_id);
+        return $id_session;
+
 	}
 
 	/**
@@ -864,18 +867,25 @@ class SessionManager {
 		} elseif (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start)) {
 			$msg=get_lang('InvalidStartDate');
 			return $msg;
+		} elseif (!$month_end && !$day_end && !$year_end) {
+            $date_end = null;
 		} elseif (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end)) {
 			$msg=get_lang('InvalidEndDate');
 			return $msg;
 		} elseif($date_start >= $date_end) {
 			$msg=get_lang('StartDateShouldBeBeforeEndDate');
 			return $msg;
-		} else {
-			$sql = "UPDATE $tbl_session_category SET name = '".Database::escape_string($name)."', date_start = '$date_start', date_end = '$date_end'
-					WHERE id= '".$id."' ";
-			$result = Database::query($sql);
-			return ($result? true:false);
 		}
+        if ( $date_end <> null ) {
+	        $sql = "UPDATE $tbl_session_category SET name = '".Database::escape_string($name)."', date_start = '$date_start' ".
+                ", date_end = '$date_end' WHERE id= '".$id."' ";
+        } else {
+            $sql = "UPDATE $tbl_session_category SET name = '".Database::escape_string($name)."', date_start = '$date_start' ".
+                ", date_end = NULL WHERE id= '".$id."' ";
+        }
+		$result = Database::query($sql);
+		return ($result? true:false);
+
 	}
 
 	/**

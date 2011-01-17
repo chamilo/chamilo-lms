@@ -156,7 +156,8 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
   <td width="20%"><?php echo get_lang('DateEnd') ?>&nbsp;&nbsp;</td>
   <td width="80%">
   <select name="day_end">
-	<option value="1">01</option>
+	<option value="0">--</option>
+	<option value="1" <?php if($day_end == 1) echo 'selected="selected"'; ?> >01</option>
 	<option value="2" <?php if($day_end == 2) echo 'selected="selected"'; ?> >02</option>
 	<option value="3" <?php if($day_end == 3) echo 'selected="selected"'; ?> >03</option>
 	<option value="4" <?php if($day_end == 4) echo 'selected="selected"'; ?> >04</option>
@@ -190,7 +191,8 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
   </select>
   /
   <select name="month_end">
-	<option value="1">01</option>
+	<option value="0">--</option>
+	<option value="1" <?php if($month_end == 1) echo 'selected="selected"'; ?> >01</option>
 	<option value="2" <?php if($month_end == 2) echo 'selected="selected"'; ?> >02</option>
 	<option value="3" <?php if($month_end == 3) echo 'selected="selected"'; ?> >03</option>
 	<option value="4" <?php if($month_end == 4) echo 'selected="selected"'; ?> >04</option>
@@ -205,12 +207,12 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
   </select>
   /
   <select name="year_end">
-
-<?php
-for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
-{ ?>
-	<option value="<?php echo $i; ?>" <?php if($year_end == $i) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
-<?php
+     <option value="0">----</option>
+    <?php
+    for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
+    { ?>
+     <option value="<?php echo $i; ?>" <?php if($year_end == $i) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
+    <?php
 } ?>
   </select>
   </td>

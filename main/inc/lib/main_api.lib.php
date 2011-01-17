@@ -2908,7 +2908,7 @@ function api_plugin($location) {
     global $_plugins;
     if (isset($_plugins[$location]) && is_array($_plugins[$location])) {
         foreach ($_plugins[$location] as $this_plugin) {
-            require_once api_get_path(SYS_PLUGIN_PATH)."$this_plugin/index.php";
+            include api_get_path(SYS_PLUGIN_PATH)."$this_plugin/index.php";
         }
     }
 }

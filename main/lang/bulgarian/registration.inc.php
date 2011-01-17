@@ -181,4 +181,5 @@ $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Вашият ак�
 $HaveFun = "Приятна работа.";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Можете да влезете в %s използвайки Вашите потребителско име и парола.";
 $AreYouSureToEditTheUserStatus = "Сигурни ли сте, че искате да промените статуса на потребителя?";
+$LoginOrEmailAddress = "Потребителско име или e-mail адрес";
 ?>

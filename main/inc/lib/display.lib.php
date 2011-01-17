@@ -935,5 +935,281 @@ class Display {
             } 
         });  */    	
     }
+    /**
+     * Display create course link
+     *
+     */
+    function display_create_course_link() {
+        echo '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
+    }
     
+    
+    /**
+     * Display dashboard link
+     *
+     */
+    function display_dashboard_link() {
+        echo '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
+    }
+    
+    /**
+     * Display edit course list links
+     *
+     */
+    function display_edit_course_list_links() {
+        echo '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
+    }
+    
+    /**
+     * Show history sessions
+     *
+     */
+    function display_history_course_session() {
+        if (api_get_setting('use_session_mode') == 'true') {
+            if (isset($_GET['history']) && intval($_GET['history']) == 1) {
+                echo '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+            } else {
+                echo '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
+            }
+        }
+    }
+    /**
+     * Returns the "what's new" icon notifications
+     *
+     * The general logic of this function is to track the last time the user
+     * entered the course and compare to what has changed inside this course
+     * since then, based on the item_property table inside this course. Note that,
+     * if the user never entered the course before, he will not see notification
+     * icons. This function takes session ID into account (if any) and only shows
+     * the corresponding notifications.
+     * @param array     Course information array, containing at least elements 'db' and 'k'
+     * @return string   The HTML link to be shown next to the course
+     */
+    function show_notification($my_course) {    
+        $statistic_database = Database :: get_statistic_database();
+        $user_id = api_get_user_id();
+        $course_database = $my_course['db'];
+        $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST, $course_database);
+        $tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_database);
+        $course_group_user_table = Database :: get_course_table(TABLE_GROUP_USER, $course_database);
+        $t_track_e_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $my_course['k'] = Database::escape_string($my_course['k']);
+        $my_course['id_session'] = intval($my_course['id_session']);
+        // Get the user's last access dates to all tools of this course
+        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access ".
+                                         " USE INDEX (access_cours_code, access_user_id) ".
+                                         "WHERE access_cours_code = '".$my_course['k']."' ".
+                                         "AND access_user_id = '$user_id' AND access_session_id ='".$my_course['id_session']."'";
+        $resLastTrackInCourse = Database::query($sqlLastTrackInCourse);
+    
+        $oldestTrackDate = $oldestTrackDateOrig = '3000-01-01 00:00:00';
+        while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
+            $lastTrackInCourseDate[$lastTrackInCourse['access_tool']] = $lastTrackInCourse['access_date'];
+            if ($oldestTrackDate > $lastTrackInCourse['access_date']) {
+                $oldestTrackDate = $lastTrackInCourse['access_date'];
+            }
+        }
+        if ($oldestTrackDate == $oldestTrackDateOrig) {
+            //if there was no connexion to the course ever, then take the
+            // course creation date as a reference
+            $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+        	$sql = "SELECT course.creation_date ".
+                 "FROM $course_table course ".
+                 "WHERE course.code = '".$my_course['k']."'";
+            $res = Database::query($sql);
+            if ($res && Database::num_rows($res)>0) {
+                $row = Database::fetch_array($res);
+            }
+            $oldestTrackDate = $row['creation_date'];
+        }
+
+        // Get the last edits of all tools of this course.
+        $sql = "SELECT tet.*, tet.lastedit_date last_date, tet.tool tool, tet.ref ref, ".
+                            " tet.lastedit_type type, tet.to_group_id group_id, ".
+                            " ctt.image image, ctt.link link ".
+                        " FROM $tool_edit_table tet, $course_tool_table ctt ".
+                        " WHERE tet.lastedit_date > '$oldestTrackDate' ".
+                        " AND ctt.name = tet.tool ".
+                        " AND ctt.visibility = '1' ".
+                        " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$my_course['id_session']."' ".
+                        " ORDER BY tet.lastedit_date";
+        $res = Database::query($sql);
+        // Get the group_id's with user membership.
+        $group_ids = GroupManager :: get_group_ids($course_database, $user_id);
+        $group_ids[] = 0; //add group 'everyone'
+        $notifications = array();
+        error_log($sql);
+        // Filter all last edits of all tools of the course
+        while ($res && ($item_property = Database::fetch_array($res))) {
+            // First thing to check is if the user never entered the tool
+            // or if his last visit was earlier than the last modification.
+            if ((!isset ($lastTrackInCourseDate[$item_property['tool']]) 
+                 || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date'])
+                // Drop the tool elements that are part of a group that the
+                // user is not part of.
+                && ((in_array($item_property['to_group_id'], $group_ids)
+                // Drop the dropbox, notebook and chat tools (we don't care)
+                && ($item_property['tool'] != TOOL_DROPBOX 
+                      && $item_property['tool'] != TOOL_NOTEBOOK 
+                      && $item_property['tool'] != TOOL_CHAT)
+                   )
+                  )
+                // Take only what's visible or invisible but where the user is a teacher or where the visibility is unset.
+                && ($item_property['visibility'] == '1' 
+                    || ($my_course['s'] == '1' && $item_property['visibility'] == '0') 
+                    || !isset($item_property['visibility']))) 
+            {
+error_log(print_r($item_property,1));
+                // Also drop announcements and events that are not for the user or his group.
+                if (($item_property['tool'] == TOOL_ANNOUNCEMENT 
+                         || $item_property['tool'] == TOOL_CALENDAR_EVENT) 
+                   && (($item_property['to_user_id'] != $user_id ) 
+                         && (!isset($item_property['to_group_id']) 
+                             || !in_array($item_property['to_group_id'], $group_ids)))) {
+                   continue;
+                }
+                // If it's a survey, make sure the user's invited. Otherwise drop it.
+                if ($item_property['tool'] == TOOL_SURVEY) {
+                    $survey_info = survey_manager::get_survey($item_property['ref'], 0, $my_course['k']);
+                    $invited_users = SurveyUtil::get_invited_users($survey_info['code'], $course_database);
+                    if (!in_array($user_id, $invited_users['course_users'])) continue;
+                }
+                $notifications[$item_property['tool']] = $item_property;
+            }
+        }
+        // Show all tool icons where there is something new.
+        $retvalue = '&nbsp;';
+        while (list($key, $notification) = each($notifications)) {
+            $lastDate = date('d/m/Y H:i', convert_mysql_date($notification['lastedit_date']));
+            $type = $notification['lastedit_type'];
+            if (empty($my_course['id_session'])) {
+                $my_course['id_session'] = 0;
+            }
+            $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$my_course['k'].'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.'<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" /></a>&nbsp;';
+        }
+        return $retvalue;
+    }
+    /**
+     * Displays a digest e.g. short summary of new agenda and announcements items.
+     * This used to be displayed in the right hand menu, but is now
+     * disabled by default (see config settings in this file) because most people like
+     * the what's new icons better.
+     *
+     * @version 1.0
+     */
+    function display_digest($toolsList, $digest, $orderKey, $courses) {
+        if (is_array($digest) && (CONFVAL_showExtractInfo == SCRIPTVAL_UnderCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both)) {
+            // // // LEVEL 1 // // //
+            reset($digest);
+            echo "<br /><br />\n";
+            while (list($key1) = each($digest)) {
+                if (is_array($digest[$key1])) {
+                    // // // Title of LEVEL 1 // // //
+                    echo "<strong>\n";
+                    if ($orderKey[0] == 'keyTools') {
+                        $tools = $key1;
+                        echo $toolsList[$key1]['name'];
+                    } elseif ($orderKey[0] == 'keyCourse') {
+                        $courseSysCode = $key1;
+                        echo "<a href=\"", api_get_path(WEB_COURSE_PATH), $courses[$key1]['coursePath'], "\">", $courses[$key1]['courseCode'], "</a>\n";
+                    } elseif ($orderKey[0] == 'keyTime') {
+                        echo api_convert_and_format_date($digest[$key1], DATE_FORMAT_LONG, date_default_timezone_get());
+                    }
+                    echo "</strong>\n";
+                    // // // End Of Title of LEVEL 1 // // //
+                    // // // LEVEL 2 // // //
+                    reset($digest[$key1]);
+                    while (list ($key2) = each($digest[$key1])) {
+                        // // // Title of LEVEL 2 // // //
+                        echo "<p>\n", "\n";
+                        if ($orderKey[1] == 'keyTools') {
+                            $tools = $key2;
+                            echo $toolsList[$key2][name];
+                        } elseif ($orderKey[1] == 'keyCourse') {
+                            $courseSysCode = $key2;
+                            echo "<a href=\"", api_get_path(WEB_COURSE_PATH), $courses[$key2]['coursePath'], "\">", $courses[$key2]['courseCode'], "</a>\n";
+                        } elseif ($orderKey[1] == 'keyTime') {
+                            echo api_convert_and_format_date($key2, DATE_FORMAT_LONG, date_default_timezone_get());
+                        }
+                        echo "\n";
+                        echo "</p>";
+                        // // // End Of Title of LEVEL 2 // // //
+                        // // // LEVEL 3 // // //
+                        reset($digest[$key1][$key2]);
+                        while (list ($key3, $dataFromCourse) = each($digest[$key1][$key2])) {
+                            // // // Title of LEVEL 3 // // //
+                            if ($orderKey[2] == 'keyTools') {
+                                $level3title = "<a href=\"".$toolsList[$key3]["path"].$courseSysCode."\">".$toolsList[$key3]['name']."</a>";
+                            } elseif ($orderKey[2] == 'keyCourse') {
+                                $level3title = "&#8226; <a href=\"".$toolsList[$tools]["path"].$key3."\">".$courses[$key3]['courseCode']."</a>\n";
+                            } elseif ($orderKey[2] == 'keyTime') {
+                                $level3title = "&#8226; <a href=\"".$toolsList[$tools]["path"].$courseSysCode."\">".api_convert_and_format_date($key3, DATE_FORMAT_LONG, date_default_timezone_get())."</a>";
+                            }
+                            // // // End Of Title of LEVEL 3 // // //
+                            // // // LEVEL 4 (data) // // //
+                            reset($digest[$key1][$key2][$key3]);
+                            while (list ($key4, $dataFromCourse) = each($digest[$key1][$key2][$key3])) {
+                                echo $level3title, ' &ndash; ', api_substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT);
+                                //adding ... (three dots) if the texts are too large and they are shortened
+                                if (api_strlen($dataFromCourse) >= CONFVAL_NB_CHAR_FROM_CONTENT) {
+                                    echo '...';
+                                }
+                            }
+                            echo "<br />\n";
+                        }
+                    }
+                }
+            }
+        }
+    } // End function display_digest
+    /**
+     * Get the session box details as an array
+     * @param int       Session ID
+     * @return array    Empty array or session array ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
+     */
+    function get_session_title_box($session_id) {
+        global $nosession;
+    
+        if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
+            global $now, $date_start, $date_end;
+        }
+    
+        $output = array();
+        if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
+            $main_user_table        = Database :: get_main_table(TABLE_MAIN_USER);
+            $tbl_session            = Database :: get_main_table(TABLE_MAIN_SESSION);
+            $tbl_session_category   = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+            $active = false;
+            // Request for the name of the general coach
+            $sql ='SELECT tu.lastname, tu.firstname, ts.name, ts.date_start, ts.date_end, ts.session_category_id
+                    FROM '.$tbl_session.' ts
+                    LEFT JOIN '.$main_user_table .' tu
+                    ON ts.id_coach = tu.user_id
+                    WHERE ts.id='.intval($session_id);
+            $rs = Database::query($sql);
+            $session_info = Database::store_result($rs);
+            $session_info = $session_info[0];
+            $session = array();
+            $session['title'] = $session_info[2];
+            $session['coach'] = '';
+    
+            if ($session_info[3] == '0000-00-00') {
+                $session['dates'] = get_lang('WithoutTimeLimits');
+                if (api_get_setting('show_session_coach') === 'true') {
+                    $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);
+                }
+                $active = true;
+            } else {
+                $session ['dates'] = get_lang('From').' '.$session_info[3].' '.get_lang('Until').' '.$session_info[4];
+                if ( api_get_setting('show_session_coach') === 'true' ) {
+                    $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);
+                }
+                $active = ($date_start <= $now && $date_end >= $now);
+            }
+            $session['active'] = $active;
+            $session['session_category_id'] = $session_info[5];
+            $output = $session;
+        }
+        return $output;
+    }
 } //end class Display

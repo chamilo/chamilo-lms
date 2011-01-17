@@ -598,7 +598,7 @@ class Thematic
 	 * @return	int		Affected rows
 	 */
 	public function thematic_plan_destroy($thematic_id, $description_type) {
-
+        global $_course;
 		// definition database table
 		$tbl_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
 

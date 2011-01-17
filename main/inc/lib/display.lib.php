@@ -1038,7 +1038,6 @@ class Display {
         $group_ids = GroupManager :: get_group_ids($course_database, $user_id);
         $group_ids[] = 0; //add group 'everyone'
         $notifications = array();
-        error_log($sql);
         // Filter all last edits of all tools of the course
         while ($res && ($item_property = Database::fetch_array($res))) {
             // First thing to check is if the user never entered the tool
@@ -1059,7 +1058,6 @@ class Display {
                     || ($my_course['s'] == '1' && $item_property['visibility'] == '0') 
                     || !isset($item_property['visibility']))) 
             {
-error_log(print_r($item_property,1));
                 // Also drop announcements and events that are not for the user or his group.
                 if (($item_property['tool'] == TOOL_ANNOUNCEMENT 
                          || $item_property['tool'] == TOOL_CALENDAR_EVENT) 

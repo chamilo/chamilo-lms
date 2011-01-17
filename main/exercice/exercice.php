@@ -885,7 +885,7 @@ if ($show == 'test') {
                     if ($time_limits) {
                         if ($my_result_disabled == 0) {                     
                             if ($num > 0) {
-                                echo sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_get_local_time($row['start_time']), api_get_local_time($row['end_time']));
+                                echo sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
                             } else {
                                 echo get_lang('NotAttempted');
                             }                           

@@ -781,11 +781,11 @@ class SocialManager extends UserManager {
 				}
 				$image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
 
-				$friends_profile = SocialManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL );
+				$friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_MEDIUM );
 				// reduce image
 				$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
 
-				$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" class="social-home-users-online" alt="'.$name.'" src="'.$friends_profile['file'].'" height="60px"></a>';
+				$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" class="social-home-users-online" alt="'.$name.'" src="'.$friends_profile['file'].'"></a>';
 				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name(cut($user_info['firstName'],15), cut($user_info['lastName'],15)).'</a>';
 /*
 				if (api_get_setting('show_email_addresses') == 'true') {

@@ -303,7 +303,7 @@ class SortableTable extends HTML_Table {
 					.sub-header { width:100%; padding-top: 10px; padding-right: 10px; padding-left: 10px; height:30px;}
 					.grid_container { width:100%;}
 					.grid_item { height: 120px; width:98px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
-					.grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+					.grid_element_0 { width:100px; height: 100px; float:left; text-align:center; margin-bottom:5px;}
 					.grid_element_1 { width:100px; float:left; text-align:center;margin-bottom:5px;}
 					.grid_element_2 { width:150px; float:left;}
 

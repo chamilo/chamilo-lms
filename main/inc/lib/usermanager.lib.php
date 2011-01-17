@@ -2258,30 +2258,35 @@ class UserManager
     }
 
     /**
-	 * Resize a picture
-	 *
-	 * @param  string file picture
-	 * @param  int size in pixels
-	 * @return obj image object
-	 */
-	public static function resize_picture($file, $max_size_for_picture) {
-		if (!class_exists('image')) {
-			require_once api_get_path(LIBRARY_PATH).'image.lib.php';
-		}
-	 	$temp = new image($file);
-	 	$picture_infos = api_getimagesize($file);
-		if ($picture_infos[0] > $max_size_for_picture) {
-			$thumbwidth = $max_size_for_picture;
-			if (empty($thumbwidth) or $thumbwidth == 0) {
-				$thumbwidth = $max_size_for_picture;
-			}
-			$new_height = round(($thumbwidth / $picture_infos[0]) * $picture_infos[1]);
-			if ($new_height > $max_size_for_picture)
-			$new_height = $thumbwidth;
-			$temp->resize($thumbwidth, $new_height, 0);
-		}
-		return $temp;
-	}
+     * Resize a picture
+     *
+     * @param  string file picture
+     * @param  int size in pixels
+     * @return obj image object
+     */
+    public static function resize_picture($file, $max_size_for_picture) {
+      if (!class_exists('image')) {
+        require_once api_get_path(LIBRARY_PATH).'image.lib.php';
+      }
+      $temp = new image($file);
+      $picture_infos = api_getimagesize($file);
+      list($width, $height) = api_getimagesize($file);
+      if ($width >= $height) {
+        if ($width >= $max_size_for_picture) {
+          // scale height
+          $new_height = round($height * ($max_size_for_picture / $width));
+          $temp->resize($max_size_for_picture, $new_height, 0);
+        }
+      }
+      else { // height > $width
+        if ($height >= $max_size_for_picture) {
+          // scale width
+          $new_width = round($width * ($max_size_for_picture / $height));
+          $temp->resize($new_width, $max_size_for_picture, 0);
+        }
+      }
+      return $temp;
+    }
 
     /**
      * Gets the current user image

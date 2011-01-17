@@ -260,7 +260,7 @@ if ($show_results) {
             <td style="font-weight:bold" width="80px"><?php echo '&nbsp;'.get_lang('Date')?> : </td>
             <td>
             <?php
-            echo api_get_local_time($exercise_date);    
+            echo api_convert_and_format_date($exercise_date);    
             ?>            
             </td>
 		</tr>

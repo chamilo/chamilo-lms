@@ -1086,7 +1086,7 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 			$emailbody = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
 			$emailbody .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
 			$emailbody .= get_lang('UserName')." : ".$currentUserFirstName .' '.$currentUserLastName ."\n";
-			$emailbody .= get_lang('DateSent')." : ".api_get_local_time()."\n";
+			$emailbody .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
 			$emailbody .= get_lang('FileName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
 			$emailbody .= api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path."\n\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');
 			// Here we are forming one large header line
@@ -1096,7 +1096,7 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 			$emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName ."\n";
 			$emailbody_user .= get_lang('MessageConfirmSendingOfTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
 			$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
-			$emailbody_user .= get_lang('DateSent')." : ".api_get_local_time()."\n";
+			$emailbody_user .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
 			$emailbody_user .= get_lang('FileName')." : ".$title."\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');;
 
 			//Mail to user

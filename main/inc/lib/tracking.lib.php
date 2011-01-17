@@ -2879,7 +2879,7 @@ class TrackingUserLogCSV {
 	*/
 	function display_student_publications_tracking_info($view, $user_id, $course_id)
 	{
-		global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong;
+		global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong, $_course;
 		if(substr($view,2,1) == '1')
 		{
 			$new_view = substr_replace($view,'0',2,1);

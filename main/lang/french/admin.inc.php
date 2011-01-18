@@ -1345,4 +1345,14 @@ $ExerciseMinScoreTitle = "Score minimum des exercices";
 $ExerciseMinScoreComment = "Définit un score minimum (généralement 0) pour l'affichage des résultats des exercices de la plateforme aux étudiants et enseignants.";
 $ExerciseMaxScoreTitle = "Score maximum des exercices";
 $ExerciseMaxScoreComment = "Définit le score maximum (généralement 10, 20 ou 100) utilisé pour l'affichage des résultats finaux des exercices de la plateforme. Ceci définira comment les apprenants et les enseignants verront les résultats.";
+$CareersAndPromotions = "Filières et promotions";
+$Careers = "Filières";
+$Promotions = "Promotions";
+$Updated = "Mise à jour enregistrée";
+$Career = "Filière";
+$SubscribeSessionsToPromotions = "Inscription de sessions aux promotions";
+$SessionsInPlatform = "Sessions non inscrites";
+$FirstLetterSessions = "Première lettre de session";
+$SessionsInPromotion = "Sessions inscrites à cette promotion";
+$SubscribeSessionsToPromotion = "Inscrire les sessions à la promotion";
 ?>

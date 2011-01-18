@@ -1343,4 +1343,14 @@ $ExerciseMinScoreTitle = "Minimum score of exercises";
 $ExerciseMinScoreComment = "Define a minimum score (generally 0) for all the exercises on the platform. This will define how final results are shown to users and teachers.";
 $ExerciseMaxScoreTitle = "Maximum score of exercises";
 $ExerciseMaxScoreComment = "Define a maximum score (generally 10,20 or 100) for all the exercises on the platform. This will define how final results are shown to users and teachers.";
+$CareersAndPromotions = "Careers and promotions";
+$Careers = "Careers";
+$Promotions = "Promotions";
+$Updated = "Update successful";
+$Career = "Career";
+$SubscribeSessionsToPromotions = "Subscribe sessions to promotions";
+$SessionsInPlatform = "Sessions not subscribed";
+$FirstLetterSessions = "First letter of session name";
+$SessionsInPromotion = "Sessions in this promotion";
+$SubscribeSessionsToPromotion = "Subscribe sessions to promotion";
 ?>

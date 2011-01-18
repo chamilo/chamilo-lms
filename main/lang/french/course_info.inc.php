@@ -123,4 +123,5 @@ $NewHomeworkEmailAlertDisable = "Désactiver l'envoi d'e-mail lors de la récept
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Afficher la dernière étape achevée et la prochaine étape non terminée";
 $AddPicture = "Ajouter une image de présentation";
 $LPAutoLaunch = "Activer l'auto-démarrage des parcours d'apprentissage";
+$ConfigLearnpath = "Configuration des parcours";
 ?>

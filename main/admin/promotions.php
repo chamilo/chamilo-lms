@@ -43,10 +43,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 }
 
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_promotions';
-$columns        = array(get_lang('Name'),get_lang('Description'),get_lang('Career'),get_lang('Actions'));
+$columns        = array(get_lang('Name'),get_lang('Career'),get_lang('Description'),get_lang('Actions'));
 $column_model   = array(array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
-                        array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
                         array('name'=>'career',         'index'=>'career',      'width'=>'100',  'align'=>'left'),
+                        array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
                         array('name'=>'actions',        'index'=>'actions',     'formatter'=>'action_formatter','width'=>'100',  'align'=>'left'),
                        );                        
 $extra_params['autowidth'] = 'true'; //use the width of the parent
@@ -83,9 +83,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     // Settting the form elements
     $form->addElement('header', '', get_lang('Add'));
     $form->addElement('text', 'name', get_lang('name'), array('size' => '95', 'id' => 'name'));
-    //$form->applyFilter('note_title', 'html_filter');
-    $form->addElement('html_editor', 'description', get_lang('Description'), null);
-    
     
     $career = new Career();
     $careers = $career->get_all();
@@ -95,6 +92,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $career_list[$item['id']] = $item['name'];
     }
     $form->addElement('select', 'career_id', get_lang('Career'), $career_list);    
+    $form->addElement('html_editor', 'description', get_lang('Description'), null);
     $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
     // Setting the rules
     $form->addRule('name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');

@@ -162,9 +162,6 @@ if (api_is_platform_admin()) { ?>
             echo '<li><a href="filler.php">'.get_lang('DataFiller').'</a></li>';
         }       
         
-        echo Display::tag('li',Display::url(get_lang('CareersAndPromotions'), 'career_dashboard.php'));
-        //echo Display::tag('li',Display::url(get_lang('Promotions'), 'promotions.php'));
-        
     ?>
     </ul>
 </div>
@@ -195,8 +192,10 @@ if (api_get_setting('use_session_mode') == 'true') { ?>
         <li><a href="../coursecopy/copy_course_session.php"><?php echo get_lang('CopyFromCourseInSessionToAnotherSession'); ?></a></li>
     <?php if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) { // option only visible in development mode. Enable through code if required ?>
         <li><a href="user_move_stats.php"><?php echo get_lang('MoveUserStats'); ?></a></li>
-    <?php } ?>
-         
+    <?php }
+        echo Display::tag('li',Display::url(get_lang('CareersAndPromotions'), 'career_dashboard.php'));
+        //echo Display::tag('li',Display::url(get_lang('Promotions'), 'promotions.php'));
+     ?>
     </ul>
 </div>
 

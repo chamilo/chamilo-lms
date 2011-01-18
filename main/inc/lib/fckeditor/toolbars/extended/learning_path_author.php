@@ -22,7 +22,7 @@ else{
 $config['ToolbarSets']['Normal'] = array(
     //array('PasteWord'),
     //array('Link','Image','flvPlayer','mimetex'),
-	//array('Table'),
+	//array('TableOC'),
     //array('OrderedList','Rule'),
     //array('JustifyFull'),
     //array('Bold','Italic','Underline','TextColor','BGColor'),
@@ -39,7 +39,7 @@ $config['ToolbarSets']['Maximized'] = array(
     //array('Link','Unlink','Anchor','Glossary'),
     //array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','insertHtml','mimetex','asciimath','asciisvg'),
 '/',
-    //array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
+    //array('TableOC','Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
     //array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),
     //array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
     //array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript','-','TextColor','BGColor'),

@@ -12,7 +12,7 @@ $config['ToolbarSets']['Normal'] = array(
     array('Save','FitWindow','-','PasteWord','-','Undo','Redo'),
     array('Link','Unlink','Anchor'),
     array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
-    array('Table','SpecialChar'),
+    array('TableOC','SpecialChar'),
     array('OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'),
     '/',
     array('Style','FontFormat','FontName','FontSize'),
@@ -37,7 +37,7 @@ $config['ToolbarSets']['Maximized'] = array(
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('TextColor','BGColor'),
-	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
+	array('TableOC','Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
 	array('ShowBlocks','Source')
 );
 

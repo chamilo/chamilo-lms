@@ -90,6 +90,9 @@ if (trim(get_lang('text_dir', '')) != 'rtl') {
 }
 $config['LoadPlugin'][] = 'tablecommands';
 
+//This plug-in allows to insert tables with one click
+$config['LoadPlugin'][] = 'tableoneclick';
+
 // prompt : This plugin is a dialog implementation as a replacemet of the javascript function prompt().
 // It provides consistent appearance and avoiding activation of browser's blocking features.
 $config['LoadPlugin'][] = 'prompt';

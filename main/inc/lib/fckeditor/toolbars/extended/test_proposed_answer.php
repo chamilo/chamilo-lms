@@ -24,7 +24,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('PasteWord'),
 	array('Link'),
 	array('Image','flvPlayer','mimetex','asciimath','asciisvg'),
-	array('Table'),
+	array('TableOC'),
 	array('Bold'),
 	array('FitWindow')	
 );
@@ -38,7 +38,7 @@ $config['ToolbarSets']['Maximized'] = array(
 	array('Link','Unlink','Anchor','Glossary'),
 	array('Image','imgmapPopup','flvPlayer','EmbedMovies','YouTube','Flash','MP3','googlemaps','Smiley','SpecialChar','insertHtml','mimetex','asciimath','asciisvg','fckeditor_wiris_openFormulaEditor','fckeditor_wiris_openCAS'),
 '/',
-	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
+	array('TableOC','Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),	
 	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript','-','TextColor','BGColor'),

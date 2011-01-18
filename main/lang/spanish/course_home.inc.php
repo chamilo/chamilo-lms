@@ -29,5 +29,5 @@ $SessionIdentifier = "Identificador de la sesión";
 $SessionName = "Nombre de la sesión";
 $SessionCategory = "Categoría de la sesión";
 $SessionData = "Datos de la sesión";
-$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "El parámetro de lanzamiento automático de lecciones está activado. Cuando los alumnos entrarán al curso, estárán redirigidos automáticamente a la lección marcada para lanzado automático.";
+$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "La configuración para el despliegue automático de lecciones está activada. Cuando los alumnos entren en el curso, serán redirigidos a la lección seleccionada para que se despliegue automáticamente.";
 ?>

@@ -805,7 +805,7 @@ $SelectBlockForDisplayingInsideBlocksDashboardView = "Seleccione los bloques que
 $ColumnPosition = "Posición (columna)";
 $EnableDashboardBlock = "Habilitar bloque del panel de control";
 $ThereAreNoEnabledDashboardPlugins = "No hay habilitado ningún plugin en el panel de control";
-$Enabled = "Habilitado";
+$Enabled = "Activado";
 $ThematicAdvanceQuestions = "¿ Cuál es el progreso actual que ha alcanzado con sus alumnos en el curso? ¿Cuánto resta para completar el programa del curso?";
 $ThematicAdvanceHistory = "Historial del avance temático";
 $Homepage = "Página principal";
@@ -982,4 +982,7 @@ $Video = "Video";
 $Images = "Imágenes";
 $OpenInANewWindow = "Abrir en una nueva ventana";
 $ExamNotAvailableAtThisTime = "Examen no disponible en este momento";
+$LoginOrEmailAddress = "Nombre de usuario o dirección e-mail";
+$Activate = "Activar";
+$Deactivate = "Desactivar";
 ?>

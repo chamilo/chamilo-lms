@@ -1328,21 +1328,21 @@ $EnabledInsertHtmlTitle = "Permitir la inserción de Widgets";
 $EnabledInsertHtmlComment = "Esto le permitirá embeber en sus páginas web sus videos y aplicaciones favoritas como vimeo o slideshare y todo tipo de widgets y gadgets";
 $IncludeAsciiMathMlTitle = "Cargar el fichero ASCIIMathML.js para todas las páginas de la plataforma";
 $IncludeAsciiMathMlComment = "Active este parámetro si desea mostrar fórmulas matemáticas basadas en ASCIIMathML y gráficos matemáticos basados en ASCIIsvg, no solo en la herramienta \"Documentos\", pero también en otras herramientas de la plataforma.";
-$CourseHideToolsTitle = "Esconder herramientas para los docentes";
+$CourseHideToolsTitle = "Ocultar las herramientas a los docentes";
 $CourseHideToolsComment = "Seleccione las herramientas que desea esconder del docente. Esto no prohibirá el acceso a la herramienta (no tiene vocación de seguridad), pero hará invisible la herramienta para el docente para evitar la confusión debida a una gran cantidad de herramientas (vocación de usabilidad).";
-$MoveUserStats = "Mover los resultados usuarios desde/hacia una sesión";
-$CompareUserResultsBetweenCoursesAndCoursesInASession = "Esta herramienta avanzada le permite mejorar manualmente el seguimiento de los resultados de usuarios cuando cambia de un modelo de cursos puros a un modelo de sesiones (ciclos) de cursos. En una mayoría de casos, no necesitará usarla.<br />
-En esta pantalla, puedes comparar resultados de usuarios entre el contexto de un curso independiente y el contexto del mismo curso dentro de una sesión.<br />
-Una vez elejido el mejor contexto para el seguimiento (resultados de ejercicios y seguimiento de lecciones), podrá moverlo de un curso a una sesión.";
-$PDFExportWatermarkEnableTitle = "Filigranas en los exportes PDF";
-$PDFExportWatermarkEnableComment = "Activar esta opción le permitirá subir un imagen o un texto que será automáticamente añadido como filigrana a todos los exportes PDF de documentos del sistema.";
-$AddWaterMark = "Subir un imagen filigrana";
-$PDFExportWatermarkByCourseTitle = "Definición de filigranas por curso";
-$PDFExportWatermarkByCourseComment = "Activar esta opción permite a los docentes de definir sus propias filigranas para los documentos de sus cursos.";
-$PDFExportWatermarkTextTitle = "Texto de filigrana PDF";
-$PDFExportWatermarkTextComment = "Este texto se añadirá en filigrana a los exportes de documentos en PDF.";
-$ExerciseMinScoreTitle = "Puntaje mínimo para los ejercicios";
-$ExerciseMinScoreComment = "Defina un puntaje mínimo (generalmente 0) para todos los ejercicios de la plataforma. Esto definirá como los resultados finales serán enseñados a los alumnos y docentes.";
-$ExerciseMaxScoreTitle = "Puntaje máximo de los ejercicios";
-$ExerciseMaxScoreComment = "Defina un puntaje máximo (generalmente 10, 20 o 100) para todos los ejercicios de la plataforma. Esto definirá la manera en que los resultados finales se mostrarán a los alumnos y docentes.";
+$MoveUserStats = "Mover los resultados de los usuarios desde/hacia una sesión de formación";
+$CompareUserResultsBetweenCoursesAndCoursesInASession = "Esta herramienta avanzada le permite mejorar manualmente el seguimiento de los resultados de los usuarios cuando cambia de un modelo de cursos a un modelo de sesiones de formación. En una mayoría de casos, no necesitará usarla.<br />
+En esta pantalla, puede comparar los resultados que los usuarios tienen en el contexto de un curso y en el contexto del mismo curso dentro de una sesión de formación.<br />
+Una vez que decidida cuál es el mejor contexto para el seguimiento (resultados de ejercicios y seguimiento de lecciones), podrá moverlo de un curso a una sesión.";
+$PDFExportWatermarkEnableTitle = "Marcas de agua en las exportaciones a PDF";
+$PDFExportWatermarkEnableComment = "Si activa esta opción podrá cargar una imagen o un texto que serán automáticamente añadidos como marca de agua en los documentos resultantes de todas las exportaciones a PDF que realice el sistema.";
+$AddWaterMark = "Cargar una imagen para marca de agua";
+$PDFExportWatermarkByCourseTitle = "Activar la definición de marcas de agua por curso";
+$PDFExportWatermarkByCourseComment = "Cuando esta opción está activada, los profesores podrán definir sus propias marcas de agua en los documentos de sus cursos.";
+$PDFExportWatermarkTextTitle = "Texto de marca de agua para PDF";
+$PDFExportWatermarkTextComment = "Este texto se añadirá como marca de agua en los documentos resultantes de las exportaciones al formato PDF.";
+$ExerciseMinScoreTitle = "Puntuación mínima de los ejercicios";
+$ExerciseMinScoreComment = "Establezca una puntuación mínima (generalmente 0) para todos los ejercicios de la plataforma. Esto definirá como los resultados finales se mostrarán a los alumnos y profesores.";
+$ExerciseMaxScoreTitle = "Puntuación máxima de los ejercicios";
+$ExerciseMaxScoreComment = "Establezca una puntuación máxima (generalmente 10, 20 o 100) para todos los ejercicios de la plataforma. Esto definirá la manera en que los resultados finales se mostrarán a los profesores y a los alumnos.";
 ?>

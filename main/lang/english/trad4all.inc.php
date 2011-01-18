@@ -981,4 +981,7 @@ $Video = "Video";
 $Images = "Images";
 $OpenInANewWindow = "Open in a new window";
 $ExamNotAvailableAtThisTime = "Exam not available at this time";
+$LoginOrEmailAddress = "Username or e-mail address";
+$Activate = "Activate";
+$Deactivate = "Deactivate";
 ?>

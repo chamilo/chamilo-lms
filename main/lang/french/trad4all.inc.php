@@ -979,4 +979,5 @@ $Video = "Vidéo";
 $Images = "Images";
 $OpenInANewWindow = "Ouvrir dans une nouvelle fenêtre";
 $ExamNotAvailableAtThisTime = "Examen non disponible pour l'instant";
+$LoginOrEmailAddress = "Nom d'utilisateur ou adresse e-mail";
 ?>

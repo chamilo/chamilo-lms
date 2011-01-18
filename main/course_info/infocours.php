@@ -137,11 +137,6 @@ $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
-
-//Auto launch LP  Yannick's fault ... i'm hungry
-$form->addElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('Enable'), 1);
-$form->addElement('radio', 'enable_lp_auto_launch', null, get_lang('Disable'), 0);
-
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     $url =  PDF::get_watermark($course_code);    
     $form->add_textfield('pdf_export_watermark_text', get_lang('PDFWaterMarkHeader'), false, array('size' => '60'));    
@@ -155,7 +150,6 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
 }
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-
 
 
 // COURSE ACCESS
@@ -234,18 +228,20 @@ $form->addElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenCh
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
-// COURSE THEME PICKER
-if (api_get_setting('allow_course_theme') == 'true') {
-	$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="theme" id="theme"></a>'.Display::return_icon('theme.gif', get_lang('Theming')).' '.get_lang('Theming').'</div><div style="clear:both;"></div>');
+// LEARNING PATH
+$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="learnpath" id="learnpath"></a>'.Display::return_icon('kcmdf.gif', get_lang('ConfigLearnpath')).' '.get_lang('ConfigLearnpath').'</div><div style="clear:both;"></div>');
+//Auto launch LP
+$form->addElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('Activate'), 1);
+$form->addElement('radio', 'enable_lp_auto_launch', null, get_lang('Deactivate'), 0);
+$form -> addElement('html', $linebreak);
 
-	// Allow Learning path
+if (api_get_setting('allow_course_theme') == 'true') {
+	// Allow theme into Learning path
 	$form->addElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
 	$form->addElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
-	$form -> addElement('html', $linebreak);
-
+	
 	$form->addElement('select_theme', 'course_theme', get_lang('Theme'));
 	$form->applyFilter('course_theme', 'trim');
-	$form -> addElement('html', $linebreak);
 }
 
 if (is_settings_editable()) {
@@ -401,7 +397,7 @@ echo '<a href="#emailnotifications">'.Display::return_icon('mail.png', get_lang(
 echo '<a href="#userrights">'.Display::return_icon('members.gif', get_lang('UserRights')).' '.get_lang('UserRights').'</a>';
 echo '<a href="#chatsettings">'.Display::return_icon('chat.gif', get_lang('ConfigChat')).' '.get_lang('ConfigChat').'</a>';
 if (api_get_setting('allow_course_theme') == 'true') {
-	echo '<a href="#theme">'.Display::return_icon('theme.gif', get_lang('Theming')).' '.get_lang('Theming').'</a>';
+	echo '<a href="#learnpath">'.Display::return_icon('kcmdf.gif', get_lang('ConfigLearnpath')).' '.get_lang('ConfigLearnpath').'</a>';
 }
 echo '<a href="#thematicadvance">'.Display::return_icon('course_progress.gif', get_lang('ThematicAdvanceConfiguration')).' '.get_lang('ThematicAdvanceConfiguration').'</a>';
 echo '</div>';

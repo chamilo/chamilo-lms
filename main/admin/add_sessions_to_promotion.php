@@ -221,12 +221,12 @@ if (!empty($session_list)) {
         if (isset($promotion_id) && !empty($promotion_id)) {
             if ($promotion_id == $id) {                
                 $session_in_promotion[$session['id']] = $session['name'];
-    	    } else {
-    	    	$session_not_in_promotion[$session['id']] = $session['name'];
-    	    } 
-    	} else {
-    		$session_not_in_promotion[$session['id']] = $session['name'];
-    	}
+            } else {
+            	$session_not_in_promotion[$session['id']] = $session['name'];
+            } 
+        } else {
+        	$session_not_in_promotion[$session['id']] = $session['name'];
+        }
     }
 }
 $ajax_search = $add_type == 'unique' ? true : false;
@@ -254,8 +254,8 @@ if ($ajax_search) {
         }
     }
     $result=Database::query($sql);
-    $Users=Database::store_result($result);
-    foreach ($Users as $user) {
+    $users=Database::store_result($result);
+    foreach ($users as $user) {
         $sessionUsersList[$user['user_id']] = $user ;
     }
 } else {
@@ -281,16 +281,18 @@ if ($ajax_search) {
         }
 
         $result=Database::query($sql);
-        $Users=Database::store_result($result);
+        $users=Database::store_result($result);
         //var_dump($_REQUEST['id_session']);
-        foreach ($Users as $user) {
+        foreach ($users as $user) {
             if($user['id_session'] != $id_session)
                 $nosessionUsersList[$user['user_id']] = $user ;
         }
         $user_anonymous=api_get_anonymous_id();
-        foreach($nosessionUsersList as $key_user_list =>$value_user_list) {
-            if ($nosessionUsersList[$key_user_list]['user_id']==$user_anonymous) {
-                unset($nosessionUsersList[$key_user_list]);
+        if (count($nosessionUsersList) > 0) {
+            foreach($nosessionUsersList as $key_user_list =>$value_user_list) {
+                if ($nosessionUsersList[$key_user_list]['user_id']==$user_anonymous) {
+                    unset($nosessionUsersList[$key_user_list]);
+                }
             }
         }
         //filling the correct users in list
@@ -314,15 +316,15 @@ if ($ajax_search) {
             }
         }
     $result=Database::query($sql);
-    $Users=Database::store_result($result);
+    $users=Database::store_result($result);
 
-    foreach($Users as $key_user_list =>$value_user_list) {
-        if ($Users[$key_user_list]['user_id']==$user_anonymous) {
-            unset($Users[$key_user_list]);
+    foreach($users as $key_user_list =>$value_user_list) {
+        if ($users[$key_user_list]['user_id']==$user_anonymous) {
+            unset($users[$key_user_list]);
             }
         }
 
-    foreach ($Users as $user) {
+    foreach ($users as $user) {
         if($user['id_session'] == $id_session){
             $sessionUsersList[$user['user_id']] = $user;
             if (array_key_exists($user['user_id'],$nosessionUsersList))

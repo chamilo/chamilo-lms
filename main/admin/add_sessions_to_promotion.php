@@ -30,7 +30,7 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareerAndPromotions'));
+$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
 
 // Database Table Definitions
 
@@ -382,7 +382,7 @@ if ($add_type=='multiple') {
 }
 echo Display::input('hidden','id',$id);
 echo Display::input('hidden','form_sent','1');
-echo Display::input('hidden','add_type');
+echo Display::input('hidden','add_type',null);
 if(!empty($errorMsg)) {
     Display::display_normal_message($errorMsg); //main API
 }

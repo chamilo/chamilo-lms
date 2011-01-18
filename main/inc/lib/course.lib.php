@@ -2629,7 +2629,7 @@ class CourseManager {
             echo '<div class="userportal-catalog-item">';
                 echo '<ul class="catalog_box">';
                     echo '<li>';
-                        echo Display::return_icon('folder_yellow.png', '', array('width' => '48px', 'align' => 'absmiddle'));
+                        echo Display::return_icon('folder_yellow.png', get_lang('Category'), array('width' => '48px', 'align' => 'absmiddle'));
                         echo '<span>';
                         echo '<a name="category'.$row['id'].'"></a>'; // Display an internal anchor.
                         echo $row['title'];

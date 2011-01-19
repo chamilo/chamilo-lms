@@ -21,7 +21,7 @@
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-$link_url = Security::remove_XSS($_GET['link_url']);
+$link_url = html_entity_decode(Security::remove_XSS($_GET['link_url']));
 $link_id = intval($_GET['link_id']);
 
 // Launch event

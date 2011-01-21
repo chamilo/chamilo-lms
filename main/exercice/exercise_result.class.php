@@ -3,7 +3,7 @@
 /**
 *	ExerciseResult class: This class allows to instantiate an object of type ExerciseResult
 *	which allows you to export exercises results in multiple presentation forms
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Yannick Warnier
 * 	@version $Id: $
 */

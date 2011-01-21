@@ -49,30 +49,32 @@ if ($page > $total_pages) {
 $start = $limit * $page - $limit; 
 
 //2. Querying the DB
+$columns = array();
 switch ($action) {
     case 'get_careers':
         if ($_REQUEST['oper'] == 'del') {
             $obj->delete($_REQUEST['id']);
         }
-        $columns    = $obj->columns;
-        $columns[]  = 'actions';        
+        $columns = array('name', 'description', 'actions');        
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
     break;
     case 'get_promotions':
         if ($_REQUEST['oper'] == 'del') {
         	$obj->delete($_REQUEST['id']);
         }
-        $columns    = $obj->columns;
-        $columns[]  = 'career';
-        $columns[]  = 'actions';                
+        $columns = array('name', 'career', 'description', 'actions');                        
         $result     = Database::select('p.id, p.name, p.description, c.name as career', "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ", array('order' =>"$sidx $sord", 'LIMIT'=> "$start , $limit"));       
     break;
     default:
         exit;            
 }
 
+
+//echo '<pre>';
+
+
 if (in_array($action, array('get_careers','get_promotions'))) {
-    //3. Creating an obj return a json
+    //3. Creating an obj to return a json
     $responce = new stdClass();           
     $responce->page     = $page; 
     $responce->total    = $total_pages; 

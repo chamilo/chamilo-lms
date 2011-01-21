@@ -168,7 +168,7 @@ foreach($final_array as $session_data) {
                     exe_id*/
                     $score          = $exercise_result['exe_result'].' / '.$exercise_result['exe_weighting'];
                     $platform_score = show_score($exercise_result['exe_result'], $exercise_result['exe_weighting'], false);
-                    if (!empty($exercise_result['exe_weighting'])) {
+                    if (!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0 ) {                        
                         $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
                     } else {
                     	$my_score = 0;

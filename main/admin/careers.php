@@ -47,6 +47,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'editnote') {
 }
 
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_careers';
+//The order is important you need to check the model.ajax.php the $column variable
 $columns        = array(get_lang('Name'),get_lang('Description'),get_lang('Actions'));
 $column_model   = array(array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
                         array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
@@ -55,17 +56,18 @@ $column_model   = array(array('name'=>'name',           'index'=>'name',        
 $extra_params['autowidth'] = 'true'; //use the width of the parent
 $extra_params['height'] = 'auto'; //use the width of the parent
 
+//With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
-                         return \'<a href="?action=edit&id=\'+options.rowId+\'"><img src="../img/edit.gif" title="'.get_lang('Edit').'"></a><a href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.gif"></a>\'; 
+                         return \'<a href="?action=edit&id=\'+options.rowId+\'"><img src="../img/edit.gif" title="'.get_lang('Edit').'"></a> <a href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.gif"></a>\'; 
                  }';
                  
 
 ?>
 <script>
 $(function() {    
-    <?php 
-         echo Display::grid_js('careers',  $url,$columns,$column_model,$extra_params,array(), $action_links);       
-    ?> 
+<?php 
+     echo Display::grid_js('careers',  $url,$columns,$column_model,$extra_params, array(), $action_links);       
+?> 
 });
 </script>   
 <?php

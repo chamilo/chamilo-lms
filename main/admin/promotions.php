@@ -43,6 +43,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 }
 
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_promotions';
+//The order is important you need to check the model.ajax.php the $column variable
 $columns        = array(get_lang('Name'),get_lang('Career'),get_lang('Description'),get_lang('Actions'));
 $column_model   = array(array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
                         array('name'=>'career',         'index'=>'career',      'width'=>'100',  'align'=>'left'),
@@ -51,8 +52,9 @@ $column_model   = array(array('name'=>'name',           'index'=>'name',        
                        );                        
 $extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['editurl'] = $url; //use the width of the parent
-$extra_params['height'] = 'auto'; //use the width of the parent
 
+$extra_params['height'] = 'auto'; //use the width of the parent
+//With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
                     return \'<a href="add_sessions_to_promotion.php?id=\'+options.rowId+\'"><img title="'.get_lang('AddSession').'" src="../img/addd.gif"></a> <a href="?action=edit&id=\'+options.rowId+\'"><img src="../img/edit.gif" title="'.get_lang('Edit').'"></a>  <a href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.gif"></a>\'; 
                  }';

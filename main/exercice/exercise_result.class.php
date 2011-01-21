@@ -90,7 +90,7 @@ class ExerciseResult
 	 * @param	string		The document path (for HotPotatoes retrieval)
 	 * @param	integer		User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
 	 */
-	function _getExercisesReporting($document_path,$user_id=null,$filter=0) {
+	function _getExercisesReporting($document_path,$user_id=null,$filter=0, $exercise_id = 0) {
 		$return = array();
     	$TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
     	$TBL_EXERCISE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -107,6 +107,12 @@ class ExerciseResult
     	$cid = api_get_course_id();
     	$user_id = intval($user_id);
     	$session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
+        $exercise_id = intval($exercise_id);
+        
+        if (!empty($exercise_id)) {
+            $session_id_and .= " AND exe_exo_id = $exercise_id ";
+        }
+        
 		if (empty($user_id)) {			
 			 $sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult , te.exe_weighting as exweight,
                 te.exe_date as exdate, te.exe_id as exid, email as exemail, te.start_date as exstart, steps_counter as exstep, exe_user_id as excruid,te.exe_duration as exduration
@@ -115,7 +121,7 @@ class ExerciseResult
         
             $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($cid) . " $user_id_and '
+                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($cid) . "' 
                     ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
 
 
@@ -234,10 +240,10 @@ class ExerciseResult
 	 * @param	boolean		Whether to include user fields or not
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportCSV($document_path='',$user_id=null, $export_user_fields = array(), $export_filter = 0)
+	public function exportCompleteReportCSV($document_path='',$user_id=null, $export_user_fields = array(), $export_filter = 0, $exercise_id = 0)
 	{
 		global $charset;
-		$this->_getExercisesReporting($document_path,$user_id,$export_filter);
+		$this->_getExercisesReporting($document_path,$user_id,$export_filter, $exercise_id);
 		$filename = 'exercise_results_'.date('YmdGis').'.csv';
 		if(!empty($user_id)) {
 			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.csv';
@@ -314,9 +320,9 @@ class ExerciseResult
 	 * Exports the complete report as an XLS file
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportXLS($document_path='',$user_id=null, $export_user_fields=array(), $export_filter = 0) {
+	public function exportCompleteReportXLS($document_path='',$user_id=null, $export_user_fields=array(), $export_filter = 0, $exercise_id=0) {
 		global $charset;
-		$this->_getExercisesReporting($document_path,$user_id,$export_filter);
+		$this->_getExercisesReporting($document_path,$user_id,$export_filter, $exercise_id);
 		$filename = 'exercise_results_'.date('YmdGis').'.xls';
 		if(!empty($user_id))
 		{

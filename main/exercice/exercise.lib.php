@@ -790,7 +790,7 @@ function get_count_exam_results($exercise_id = null) {
 
         $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid) . " $user_id_and  $exercise_where
+                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid) . "' $user_id_and  $exercise_where
                     ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
 
 
@@ -871,7 +871,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 
         $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid)." $user_id_and $exercise_where 
+                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid)."' $user_id_and $exercise_where 
                     ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
 
 
@@ -933,7 +933,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
             $filter_by_no_revised = true;
             $from_gradebook = true;
         }
-        $sizeof = sizeof($results);
+        $sizeof = count($results);
 
         $user_list_id = array ();
         $user_last_name = '';
@@ -945,8 +945,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
         $more_details_list = '';
         for ($i = 0; $i < $sizeof; $i++) {
             $revised = false;
-            $sql_exe = 'SELECT exe_id FROM ' . $TBL_TRACK_ATTEMPT_RECORDING . '
-                        WHERE author != ' . "''" . ' AND exe_id = ' . "'" . Database :: escape_string($results[$i]['exid']) . "'" . ' LIMIT 1';
+            $sql_exe = 'SELECT exe_id FROM ' . $TBL_TRACK_ATTEMPT_RECORDING . ' WHERE author != ' . "''" . ' AND exe_id = ' . Database :: escape_string($results[$i]['exid']) .' LIMIT 1';
             $query = Database::query($sql_exe);
 
             if (Database :: num_rows($query) > 0) {
@@ -964,7 +963,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 }
                 $users_array_id[] = $results[$i]['col2'] . $results[$i]['col0'] . $results[$i]['col1'];
             }
-
+                        
             $user_first_name = $results[$i]['col0'];
             $user_last_name = $results[$i]['col1'];
             $user_list_id[] = $results[$i]['excruid'];
@@ -1052,6 +1051,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 }
                 $more_details_list = $html_link;
                 if ($is_allowedToEdit || $is_tutor) {
+                    
                     $list_info [] = array($user_first_name,$user_last_name,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
                 } else {
                     $list_info [] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
@@ -1059,6 +1059,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
             }
         }
     }
+    
+    
     // Print HotPotatoes test results.
         if (is_array($hpresults)) {
             $has_test_results = true;
@@ -1094,7 +1096,7 @@ function show_score($score, $weight, $show_porcentage = true) {
         $max_note =  api_get_setting('exercise_max_score');
         $min_note =  api_get_setting('exercise_min_score');
         if ($max_note != '' && $min_note != '') {
-           if (!empty($weight)) {
+           if (!empty($weight) && intval($weight) != 0) {
     	       $score        = $min_note + ($max_note - $min_note) * $score /$weight;
            } else {
            	 $score          = $min_note;

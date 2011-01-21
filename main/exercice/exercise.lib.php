@@ -751,7 +751,8 @@ function get_session_time_control_key($exercise_id) {
  * @todo this function should be moved in a library  + no global calls 
  */
 function get_count_exam_results($exercise_id = null) {
- global $is_allowedToEdit, $is_tutor,$_cid,$_user,$TBL_USER, $TBL_EXERCICES,$TBL_TRACK_EXERCICES, $TBL_TRACK_ATTEMPT_RECORDING,$filter_by_not_revised,$filter_by_revised,$documentPath;
+    //@todo replace all this globals
+    global $is_allowedToEdit, $is_tutor,$_cid,$_user,$TBL_USER, $TBL_EXERCICES,$TBL_TRACK_EXERCICES, $TBL_TRACK_HOTPOTATOES, $TBL_TRACK_ATTEMPT_RECORDING,$filter_by_not_revised,$filter_by_revised,$documentPath;
     $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
     if ($is_allowedToEdit || $is_tutor) {
         $user_id_and = '';
@@ -832,8 +833,8 @@ function get_count_exam_results($exercise_id = null) {
  * @todo this function should be moved in a library  + no global calls 
  */
 function get_exam_results_data($from, $number_of_items, $column, $direction) {
-
-    global $is_allowedToEdit, $is_tutor,$_cid,$_user,$TBL_USER, $TBL_EXERCICES,$TBL_TRACK_EXERCICES, $TBL_TRACK_ATTEMPT_RECORDING,$filter_by_not_revised,$filter_by_revised,$documentPath,$filter;
+    //@todo replace all this globals
+    global $is_allowedToEdit, $is_tutor,$_cid,$_user,$TBL_USER, $TBL_EXERCICES,$TBL_TRACK_HOTPOTATOES, $TBL_TRACK_EXERCICES, $TBL_TRACK_ATTEMPT_RECORDING,$filter_by_not_revised,$filter_by_revised,$documentPath,$filter;
     $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
     if ($is_allowedToEdit || $is_tutor) {
         $user_id_and = '';

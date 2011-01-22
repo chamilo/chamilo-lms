@@ -1,6 +1,8 @@
 <?php
 // Language files that should be included.
-$language_file = array('courses', 'index');
+$language_file = array('courses', 'index','tracking','exercice', 'admin');
+
+
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'course.lib.php';
@@ -9,6 +11,8 @@ require_once $libpath.'sessionmanager.lib.php';
 require_once $libpath.'usermanager.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';
 require_once $libpath.'text.lib.php';
+require_once $libpath.'tracking.lib.php';
+
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
@@ -136,7 +140,8 @@ $my_real_array =array();
 foreach($final_array as $session_data) {
     //Session name    
 	$html .=Display::tag('h1',$session_data['name']);
-    $course_list = $session_data['data'];         
+    $course_list = $session_data['data'];    
+    if (!empty($course_list))     
     foreach ($course_list as $my_course_code=>$course_data) {
         //Course table        
         $table = new HTML_Table(array('class' => 'data_table'));
@@ -224,6 +229,7 @@ $column_week_model =array(array('name'=>'week',     'index'=>'week',    'width'=
                           array('name'=>'date',     'index'=>'date',    'width'=>'80', 'align'=>'right'),
                           array('name'=>'course',   'index'=>'course',  'width'=>'500', 'align'=>'left'),
                           array('name'=>'lp',       'index'=>'lp',      'width'=>'200', 'align'=>'center'));
+                          
 $extra_params_week['grouping'] = 'true';
 $extra_params_week['groupingView'] = array('groupField'=>array('week'),
                                             'groupColumnShow'=>'false',
@@ -242,37 +248,45 @@ $column_exercise_model  = array(array('name'=>'course',     'index'=>'course',  
 $extra_params_exercise['grouping'] = 'true';
 $extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>Course {0} - {1} Item(s)</b>'));
 //$extra_params_exercise['altRows'] = 'true';
-
-                                           
+                                          
 ?>
 <br />
 <script>
 
 function change_session() {
-        document.exercise_admin.submit();
+    document.exercise_admin.submit();
 }        
     
-$(function() {
-    $( "#tabs" ).tabs();
-    $( "#sub_tab" ).tabs();        
+$(function() {    
+    /*Binds a tab id in the url */
+    $("#tabs").bind('tabsselect', function(event, ui) {
+            window.location.href=ui.tab;
+    });
+    $('#tabs').tabs();
+    $( "#sub_tab" ).tabs();     
+         
 <?php 
      echo Display::grid_js('list_default',  $url,           $columns,$column_model,$extra_params);
      echo Display::grid_js('list_course',   $url_course,    $columns,$column_model,$extra_params_course);
      echo Display::grid_js('list_week',     $url_week,      $column_week,$column_week_model, $extra_params_week);     
      echo Display::grid_js('exercises',      '',  $column_exercise,$column_exercise_model, $extra_params_exercise, $my_real_array);        
-?>  
-
-
+?>
 
 });
 </script>
 
 <?php 
+$my_reporting   = Tracking::show_user_progress(api_get_user_id(), $session_id, '&session_id='.$session_id.'#tabs-3', false);
+$my_reporting   .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
 
+//Main headers
 $headers        = array(get_lang('LearningPaths'), get_lang('MyQCM'), get_lang('MyResults'));
+//Subheaders
 $sub_header     = array(get_lang('AllLearningPaths'), get_lang('PerWeek'), get_lang('ByCourse'));
+
+//Sub header tab
 $tabs           =  Display::tabs($sub_header, array(Display::grid_html('list_default'), Display::grid_html('list_week'), Display::grid_html('list_course')),'sub_tab');
+//Main tabs
 echo Display::tabs($headers, array($tabs, Display::grid_html('exercises'),$my_reporting));
 
-// Footer
 Display :: display_footer();

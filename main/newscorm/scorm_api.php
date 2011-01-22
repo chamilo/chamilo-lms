@@ -199,18 +199,21 @@ olms.execute_stats=false;
 
 // Initialize stuff when the page is loaded
 $(document).ready( function() {
-  //
+
   olms.info_lms_item[0]='<?php echo $oItem->get_id();?>';
   olms.info_lms_item[1]='<?php echo $oItem->get_id();?>';
 
   $("#content_id").load( function() {
-    
-    //Add a right margin see BT#1607
+
+    // Add a right margin see BT#1607
     if (frames['content_name']) {
-        frames['content_name'].document.body.style.margin="0 12px 0px 5px";
-    }  
+        // See the task #2558: try-catch block has been added for suppressing "Access denied" error that may occur on IE.
+        try {
+            frames['content_name'].document.body.style.margin="0 12px 0px 5px";
+        } catch (ex) { }
+    }
     olms.info_lms_item[0]=olms.info_lms_item[1];
-    
+
     if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
       LMSInitialize();
     }
@@ -1445,8 +1448,8 @@ function switch_item(current_item, next_item){
     <?php if($oLP->mode == 'fullscreen'){ ?>
     cont_f = window.open(''+mysrc,'content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     cont_f.onload=function(){
-        olms.info_lms_item[0]=olms.info_lms_item[1];      
-    }        
+        olms.info_lms_item[0]=olms.info_lms_item[1];
+    }
     cont_f.onunload=function(){
         olms.info_lms_item[0]=olms.info_lms_item[1];
     }
@@ -1454,7 +1457,7 @@ function switch_item(current_item, next_item){
     <?php } else { ?>
             cont_f.attr("src",mysrc);
     <?php } ?>
-    
+
     if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
         xajax_start_timer();
     }

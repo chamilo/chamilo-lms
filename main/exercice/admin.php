@@ -304,11 +304,7 @@ function multiple_answer_true_false_onchange(variable) {
         }       
         document.getElementById(weight_id).value = array_result[result];
 }
-        
-        
-
-        
-        
+              
 
 </script>';
 

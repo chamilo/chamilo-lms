@@ -16,12 +16,12 @@ require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
  * Shows a question
  * 
  * @param int   question id
- * @param bool  only answers
+ * @param bool  if true only show the questions, no exercise title etc
  * @param bool  origin i.e = learnpath
  * @param int   current item from the list of questions
  * @param int   number of total questions
  * */
-function showQuestion($questionId, $onlyAnswers = false, $origin = false, $current_item = '', $show_title = true, $freeze = false) {
+function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false) {
 
 	// Text direction for the current language
 	$is_ltr_text_direction = api_get_text_direction() != 'rtl';
@@ -42,7 +42,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 	if ($answerType != HOT_SPOT) {
 		// Question is not of type hotspot
         
-		if (!$onlyAnswers) {
+		if (!$only_questions) {
             
 			$questionName        = $objQuestionTmp->selectTitle();
 			$questionDescription = $objQuestionTmp->selectDescription();
@@ -141,13 +141,9 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
             $s .= '<tr><td colspan="3">';
             $s .= $oFCKeditor->CreateHtml();
             $s .= '</td></tr>';
-		}
-        
-        
-      ?>  
-        
-    <style>
-    
+		}  
+      ?>          
+    <style>    
    
    #questions {
     width:40%; 
@@ -237,8 +233,8 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
         }
         
 		for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-			$answer          = $objAnswerTmp->selectAnswer($answerId);
-			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);
+			$answer          = $objAnswerTmp->selectAnswer($answerId);            
+			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);            
 			$numAnswer       = $objAnswerTmp->selectAutoId($answerId);
 
 			if ($answerType == FILL_IN_BLANKS) {
@@ -278,7 +274,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 				// multiple answers
 				// set $debug_mark_answer to true at function start to
 				// show the correct answer with a suffix '-x'
-				$help = $selected = '';
+				$help = $selected = '';                
 				if ($debug_mark_answer) {
 					if ($answerCorrect) {
 						$help = 'x-';
@@ -293,6 +289,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
                     $s .= '<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">';
                     
                     $options = array('type'=>'checkbox','name'=>'choice['.$questionId.']['.$numAnswer.']', 'class'=>'checkbox');
+                    
                     if ($answerCorrect) {
                         $options['checked'] = 'checked';
                     }
@@ -421,7 +418,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		}	// end for()
         
         
-
+        /*
         //Adding divs for the new MATCHING interface
         
         if ($answerType == MATCHING && !$freeze) {
@@ -435,13 +432,13 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
             echo '</div>';
             
              
-             echo Display::tag('h2','Options');
+            echo Display::tag('h2','Options');
             echo '<div id="options" class=" ui-widget-header">';        
             foreach ($select_items as $key=>$val) {
                 echo Display::tag('div', Display::tag('p',$val['answer']), array('id'=>'option_'.$i, 'class'=>'option_item ui-widget-content'));                        
             }
             echo '</ul>';
-        }
+        }*/
 		
 			$s .= '</table>';
 		
@@ -504,7 +501,7 @@ function showQuestion($questionId, $onlyAnswers = false, $origin = false, $curre
 		}
 		$answer_list .= '</dl></div>';
 
-		if (!$onlyAnswers) {
+		if (!$only_questions) {
             if ($show_title) {
                 echo '<div id="question_title" class="sectiontitle">'.get_lang('Question').' '.$current_item.' : '.$questionName.'</div>';
             }

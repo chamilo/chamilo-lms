@@ -62,39 +62,53 @@ if($deleteQuestion) {
 <script>
 $(function() {
             
-        var stop = false;
-        $( "#question_list h3" ).click(function( event ) {
-            if ( stop ) {
-                event.stopImmediatePropagation();
-                event.preventDefault();
-                stop = false;
-            }
-        });
+    var stop = false;
+    $( "#question_list h3" ).click(function( event ) {
+        if ( stop ) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            stop = false;
+        }
+    });
+    
+    
+    var icons = {
+            header: "ui-icon-circle-arrow-e",
+            headerSelected: "ui-icon-circle-arrow-s"
+        };
         
-        $( "#question_list" ) 
-        .accordion({         
-            autoHeight: false,            
-            active: false, // all items closed by default
-            collapsible: true,
-                header: "> div > h3"
-        })
-        
-        .sortable({
-            cursor: "move", // works? 
-            update: function(event, ui) {            
-                var order = $(this).sortable("serialize") + "&a=update_question_order";
-                $.post("<?php echo api_get_path(WEB_AJAX_PATH)?>exercise.ajax.php", order, function(reponse){
-                    $("#message").html(reponse);
-                });
-            	
-            },
-            axis: "y",
-            placeholder: "ui-state-highlight", //defines the yellow highlight
-            handle: ".moved", //only the class "moved" 
-            stop: function() {
-                stop = true;
-            }
-        });
+    
+    /*We can add links in the accordion header*/                       
+    $("div > div > div > .edition > div > a").click(function() {           
+        newWind = window.open(this.href,"_self");
+        newWind.focus();                  
+        return false;
+    });
+
+    $( "#question_list" ).accordion({  
+        icons: icons,       
+        autoHeight: false,            
+        active: false, // all items closed by default
+        collapsible: true,
+        header: ".test1",        
+    })
+    
+    .sortable({
+        cursor: "move", // works? 
+        update: function(event, ui) {            
+            var order = $(this).sortable("serialize") + "&a=update_question_order";
+            $.post("<?php echo api_get_path(WEB_AJAX_PATH)?>exercise.ajax.php", order, function(reponse){
+                $("#message").html(reponse);
+            });
+        	
+        },
+        axis: "y",
+        placeholder: "ui-state-highlight", //defines the yellow highlight
+        handle: ".moved", //only the class "moved" 
+        stop: function() {
+            stop = true;
+        }
+    });
         
        
 });
@@ -128,31 +142,38 @@ if ($nbrQuestions) {
 			}	
 			$objQuestionTmp = Question :: read($id);
             $question_class = get_class($objQuestionTmp);            
-            $label = $question_class->$explanationLangVar;  
+            $label          = $question_class->$explanationLangVar;            
             
-            
-            $edit_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'"><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').'" /></a>';          
+            $edit_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.Display::return_icon('edit.gif',get_lang('Modify')).'</a>';          
             // this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
             if ($show_quiz_edition) {
                  $delete_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))).' \')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';                 
             }            
-            $actions =  Display::tag('div',$edit_link.$delete_link, array('style'=>'float:right'));
+            $edit_link   = Display::tag('div',$edit_link,   array('style'=>'float:left;padding:0px; margin:0px'));
+            $delete_link = Display::tag('div',$delete_link, array('style'=>'float:left;padding:0px; margin:0px'));
+            $actions =  Display::tag('div',$edit_link.$delete_link, array('class'=>'edition','style'=>'width:110px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
 
-            echo '<div id="question_id_list_'.$id.'" >';                  
-            $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));            
-		    echo Display::tag('h3','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().' <span style="float: right; padding-top: 0.3em;">['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']</span></a>');            
+            echo '<div id="question_id_list_'.$id.'" >';            
+                echo '<div class="test1">';               
+                    $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));            
+        		    echo Display::tag('span','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().' '. Display::tag('span','['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']', array('style'=>"right:110px; position: absolute;padding-top: 0.3em;")).'</a>', array('style'=>''));
+                    echo $actions;
+                echo '</div>';
+            
                 echo '<div class="question-list-description-block">';
                     echo '<p>';
-                        echo $actions;
+                        //echo $actions;
                         echo get_lang($question_class.$label);
                         echo '<br />';
                         echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                         echo '<br />';
                         showQuestion($id, false, '', '',false, true);                   
-                    echo '</p>';
-                    
+                    echo '</p>';                        
                  echo '</div>';
+                 
             echo '</div>';
+            
+                
             unset($objQuestionTmp);
 		}
         echo '</div>';

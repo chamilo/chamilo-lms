@@ -615,7 +615,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('hotpotatoes_s.png', get_lang('ImportHotPotatoesQuiz')) . get_lang('ImportHotPotatoesQuiz') . '</a>';
 		// link to import qti2 ...
 		echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_db.png', get_lang('ImportQtiQuiz')) . get_lang('ImportQtiQuiz') . '</a>';
-		echo '<a href="exercice.php?' . api_get_cidreq() . '&show=result&exercise_id='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
+		//echo '<a href="exercice.php?' . api_get_cidreq() . '&show=result&exercise_id='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
 	}
 
 	// the actions for the statistics
@@ -684,9 +684,9 @@ if ($show == 'result') {
 				null;
 		}
 		if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
-			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&gradebook='.$gradebook.'" >'.Display :: return_icon('check.gif', get_lang('ShowCorrectedOnly')).get_lang('ShowCorrectedOnly').'</a>';
+			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&exercise_id='.intval($_GET['exercise_id']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('check.gif', get_lang('ShowCorrectedOnly')).get_lang('ShowCorrectedOnly').'</a>';
 		} else {
-			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&gradebook='.$gradebook.'" >'.Display :: return_icon('un_check.gif', get_lang('ShowUnCorrectedOnly')).get_lang('ShowUnCorrectedOnly').'</a>';
+			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&exercise_id='.intval($_GET['exercise_id']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('un_check.gif', get_lang('ShowUnCorrectedOnly')).get_lang('ShowUnCorrectedOnly').'</a>';
 		}
 		echo $view_result;
 	}
@@ -816,6 +816,8 @@ if ($show == 'test') {
                         
                         $actions =  Display::url(Display::return_icon('wizard_small.gif',get_lang('Edit'), array('width'=>'22px')), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
                         
+                        $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exercise_id='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
+                        
                         //Export
                         $actions .= Display::url(Display::return_icon('cd.gif',          get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
                         //Clean exercise                    
@@ -865,6 +867,7 @@ if ($show == 'test') {
                     echo '</div>';*/
                     echo  Display::tag('tr',$item);
                 } else {
+                    
                     // Student only
                     $row['title']=text_filter($row['title']);                 
     
@@ -878,8 +881,7 @@ if ($show == 'test') {
                         }                       
                     } else {
                         $url = '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       
-                    }
-                    
+                    }                   
                                         
                     $item =  Display::tag('td',$url.' '.$session_img);  
                     
@@ -931,7 +933,7 @@ if ($show == 'test') {
                                     $percentage = ($row['exe_result'] / $row['exe_weighting']) * 100;
                                 }
                                 $attempt_text =  get_lang('Attempted') . ' (' . get_lang('Score') . ': ';
-                                $attempt_text .= printf("%1.2f\n", $percentage);
+                                $attempt_text .= sprintf("%1.2f\n", $percentage);
                                 $attempt_text .=  " %)";
                             } else {
                                 //echo get_lang('WillBeActivated' .' '. $row['start_time']);
@@ -964,7 +966,7 @@ if ($show == 'test') {
 /* Exercise Results (uses tracking tool) */
 
 // if tracking is enabled
-if ($_configuration['tracking_enabled'] && ($show == 'result')) {
+if ($show == 'result') {
 	$parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'show'=>Security::remove_XSS($_GET['show']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
     $exercise_id = intval($_GET['exercise_id']);
     if (!empty($exercise_id))
@@ -988,7 +990,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 	$table->set_header(-$secuence + 3, get_lang('Duration'),false);
 	$table->set_header(-$secuence + 4, get_lang('Date'));
 	$table->set_header(-$secuence + 5, get_lang('Result'),false);
-	$table->set_header(-$secuence + 6, (($is_allowedToEdit||$is_tutor) ? get_lang('CorrectTest') : get_lang('ViewTest')), false);
+	$table->set_header(-$secuence + 6, (($is_allowedToEdit||$is_tutor) ? get_lang('CorrectTest') : get_lang('ViewTest')), false);    
 	$table->display();	
 }
 

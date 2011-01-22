@@ -1075,25 +1075,25 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
  */
 function show_score($score, $weight, $show_porcentage = true) {
     $html  = '';
-    $score_rounded = $score;    
-    if ($score != '' && $weight != '') {
-        $max_note =  api_get_setting('exercise_max_score');
-        $min_note =  api_get_setting('exercise_min_score');
-        if ($max_note != '' && $min_note != '') {
-           if (!empty($weight) && intval($weight) != 0) {
-    	       $score        = $min_note + ($max_note - $min_note) * $score /$weight;
-           } else {
-           	 $score          = $min_note;
-           }
-           $score_rounded  = round($score, 2);
-           $weight         = $max_note;
+    $score_rounded = $score;
+     
+    $max_note =  api_get_setting('exercise_max_score');
+    $min_note =  api_get_setting('exercise_min_score');
+    
+    if ($max_note != '' && $min_note != '') {        
+        if (!empty($weight) && intval($weight) != 0) {
+	       $score        = $min_note + ($max_note - $min_note) * $score /$weight;
+        } else {
+           $score          = $min_note;
         }
-        if ($show_porcentage) {
-            $html = round(($score / ($weight != 0 ? $weight : 1)) * 100, 2) . '% (' . $score_rounded . ' / ' . $weight . ')';	
-        } else {            
-        	$html = $score_rounded . ' / ' . $weight;
-        }        
-    }    
+        $score_rounded  = round($score, 2);
+        $weight         = $max_note;
+    }
+    if ($show_porcentage) {
+        $html = round(($score / ($weight != 0 ? $weight : 1)) * 100, 2) . '% (' . $score_rounded . ' / ' . $weight . ')';	
+    } else {            
+    	$html = $score_rounded . ' / ' . $weight;
+    }
     return $html;	
 }
 

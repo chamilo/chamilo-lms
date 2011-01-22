@@ -602,17 +602,20 @@ function get_last_attempt_date_of_exercise($exe_id) {
 	return $last_attempt_date;
 }
 
-
-function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id) {
+/**
+ * Gets how many attempts exists
+ */
+function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id,$lp_item_view_id) {
 	$stat_table 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$user_id 		= intval($user_id);
 	$exerciseId 	= intval($exerciseId);
 	$lp_id 			= intval($lp_id);
 	$lp_item_id 	= intval($lp_item_id);
+    $lp_item_view_id = intval($lp_item_view_id);
 	
    	$sql = "SELECT count(*) as count FROM $stat_table WHERE exe_exo_id = '$exerciseId'
             AND exe_user_id 	= '$user_id' AND status 			!= 'incomplete'
-            AND orig_lp_id 		= $lp_id AND orig_lp_item_id = $lp_item_id AND exe_cours_id 	= '".api_get_course_id()."' AND session_id = '" . api_get_session_id() . "'";
+            AND orig_lp_id 		= $lp_id AND orig_lp_item_id = $lp_item_id AND orig_lp_item_view_id = $lp_item_view_id AND exe_cours_id = '".api_get_course_id()."' AND session_id = '" . api_get_session_id() . "'";
 
     $query = Database::query($sql);
     if (Database::num_rows($query) > 0 ) {
@@ -801,8 +804,7 @@ function get_all_exercises_from_lp($lp_id, $course_db) {
  * @param int $question_id
  * @return str the comment
  */
-function get_comments($id,$question_id)
-{
+function get_comments($id,$question_id) {
     $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $sql = "SELECT teacher_comment FROM ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' ORDER by question_id";
     $sqlres = Database::query($sql);

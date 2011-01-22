@@ -248,7 +248,7 @@ if ($show_results) {
 		</td>	
 		</tr>		
 		<tr>
-			<td style="font-weight:bold" width="80px"><?php echo '&nbsp;'.get_lang('User')?> : </td>
+			<td style="font-weight:bold" width="90px"><?php echo '&nbsp;'.get_lang('User')?> : </td>
 			<td>
             <?php			
 			$user_info   = api_get_user_info($student_id);
@@ -257,7 +257,7 @@ if ($show_results) {
             </td>
         </tr>
         <tr>         
-            <td style="font-weight:bold" width="80px"><?php echo '&nbsp;'.get_lang('Date')?> : </td>
+            <td style="font-weight:bold" width="90px"><?php echo '&nbsp;'.get_lang('Date')?> : </td>
             <td>
             <?php
             echo api_convert_and_format_date($exercise_date);    
@@ -597,11 +597,12 @@ if ($show_results) {
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
 	if ($show_results) {        
 		echo '<div id="question_score">'.get_lang('YourTotalScore').": ";
+        //@todo $dsp_percent who do that and why?
 		if ($dsp_percent) {            
 			$my_result = number_format(($totalScore/$totalWeighting)*100,1,'.','');
 			$my_result = float_format($my_result,1);
 			echo $my_result."%";
-		} else {            
+		} else {                    
             echo show_score($totalScore,$totalWeighting,false);
 		}
 		echo '</div>';

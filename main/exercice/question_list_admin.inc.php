@@ -155,8 +155,12 @@ if ($nbrQuestions) {
 
             echo '<div id="question_id_list_'.$id.'" >';            
                 echo '<div class="test1">';               
-                    $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));            
-        		    echo Display::tag('span','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().' '. Display::tag('span','['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']', array('style'=>"right:110px; position: absolute;padding-top: 0.3em;")).'</a>', array('style'=>''));
+                    $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
+                    $level = '';
+                    if (!empty($objQuestionTmp->level)) {
+                    	$level = '('.get_lang('Difficulty').' '.$objQuestionTmp->level.')';
+                    }            
+        		    echo Display::tag('span','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().' '.$level.' '. Display::tag('span','['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']', array('style'=>"right:110px; position: absolute;padding-top: 0.3em;")).'</a>', array('style'=>''));
                     echo $actions;
                 echo '</div>';
             

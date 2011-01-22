@@ -168,7 +168,6 @@ if ($is_speacialcourse){
 }
 
 /*	Is the user allowed here? */
-
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
@@ -183,6 +182,7 @@ if (!isset($coursesAlreadyVisited[$_cid])) {
     api_session_register('coursesAlreadyVisited');
 }
 
+/*Auto lunch code */
 $show_autolunch_lp_warning = false;
 if (api_get_course_setting('enable_lp_auto_launch') && api_get_session_id()==0 ) {
     $lp_table = Database::get_course_table(TABLE_LP_MAIN);
@@ -209,10 +209,15 @@ if (api_get_course_setting('enable_lp_auto_launch') && api_get_session_id()==0 )
             if (api_is_platform_admin() || api_is_allowed_to_edit()) {
             	$show_autolunch_lp_warning = true;
             } else {
-                //redirecting to the LP 
-                $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];                        
-                header("Location: $url");
-                exit;   
+                $session_key = $session_id.'_'.api_get_course_int_id().api_get_user_id();
+                if (!isset($_SESSION[$session_key])) {
+                    //redirecting to the LP 
+                    $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
+                
+                    $_SESSION[$session_key] = true;                     
+                    header("Location: $url");
+                    exit;
+                }   
             }     
         }
     }

@@ -58,6 +58,10 @@ if($deleteQuestion) {
 ?>
 <style>
     .ui-state-highlight { height: 30px; line-height: 1.2em; }
+    /*Fixes edition buttons*/
+    .ui-accordion-icons .ui-accordion-header .edition a {
+        padding-left:4px;     	
+    }
 </style>
 <script>
 $(function() {
@@ -75,7 +79,7 @@ $(function() {
     var icons = {
             header: "ui-icon-circle-arrow-e",
             headerSelected: "ui-icon-circle-arrow-s"
-        };
+    };
         
     
     /*We can add links in the accordion header*/                       
@@ -109,12 +113,9 @@ $(function() {
             stop = true;
         }
     });
-        
-       
 });
 </script>
 <?php
-
 
 echo '<div class="actionsbig">';
 //we filter the type of questions we can add
@@ -151,7 +152,7 @@ if ($nbrQuestions) {
             }            
             $edit_link   = Display::tag('div',$edit_link,   array('style'=>'float:left;padding:0px; margin:0px'));
             $delete_link = Display::tag('div',$delete_link, array('style'=>'float:left;padding:0px; margin:0px'));
-            $actions =  Display::tag('div',$edit_link.$delete_link, array('class'=>'edition','style'=>'width:110px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
+            $actions =  Display::tag('div',$edit_link.$delete_link, array('class'=>'edition','style'=>'width:70px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
 
             echo '<div id="question_id_list_'.$id.'" >';            
                 echo '<div class="test1">';               
@@ -160,7 +161,7 @@ if ($nbrQuestions) {
                     if (!empty($objQuestionTmp->level)) {
                     	$level = '('.get_lang('Difficulty').' '.$objQuestionTmp->level.')';
                     }            
-        		    echo Display::tag('span','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().' '.$level.' '. Display::tag('span','['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']', array('style'=>"right:110px; position: absolute;padding-top: 0.3em;")).'</a>', array('style'=>''));
+        		    echo Display::tag('span','<a href="#">'.$move.' '.$objQuestionTmp->selectTitle().' '.$level.' '. Display::tag('span','['.get_lang('QualificationNumeric').': '.$objQuestionTmp->selectWeighting().']', array('style'=>"right:90px; position: absolute;padding-top: 0.3em;")).'</a>', array('style'=>''));
                     echo $actions;
                 echo '</div>';
             

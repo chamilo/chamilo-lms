@@ -16,7 +16,7 @@ require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
  * Shows a question
  * 
  * @param int   question id
- * @param bool  if true only show the questions, no exercise title etc
+ * @param bool  if true only show the questions, no exercise title
  * @param bool  origin i.e = learnpath
  * @param int   current item from the list of questions
  * @param int   number of total questions
@@ -29,18 +29,17 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 	// Change false to true in the following line to enable answer hinting.
 	$debug_mark_answer = api_is_allowed_to_edit() && false;
 
-	// Reads question informations.
+	// Reads question information
 	if (!$objQuestionTmp = Question::read($questionId)) {
-		// question not found        
+		// Question not found        
 		return false;
 	}
-    
     
 	$answerType    = $objQuestionTmp->selectType();
 	$pictureName   = $objQuestionTmp->selectPicture();
 
 	if ($answerType != HOT_SPOT) {
-		// Question is not of type hotspot
+		// Question is not a hotspot
         
 		if (!$only_questions) {
             
@@ -72,8 +71,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				    </tr>";
 			}
             $s.= '</table>';
-		}
-		
+		}		
         
         $s .= '<div class="rounded exercise_questions" style="width: 720px; padding: 3px;">';
         $option_ie = '';
@@ -169,15 +167,12 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     width:150px;
     padding:3px;
     margin:10px;      
-   }
-   
-   
-    
+   } 
     </style>
     <script>
     $(function() {
-        
-         var $options = $( "#options" );
+        /*
+        var $options = $( "#options" );
         
         $( "div", $options ).draggable({            
             revert: "invalid", // when not dropped, the item will revert back to its initial position                        
@@ -213,7 +208,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             hoverClass: "ui-state-active",
             drop: function( event, ui ) {                
             }
-        });
+        });*/
 
     });
     </script>    
@@ -289,9 +284,10 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $s .= '<tr><td colspan="3"><div class="u-m-answer"><p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">';
                     
                     $options = array('type'=>'checkbox','name'=>'choice['.$questionId.']['.$numAnswer.']', 'class'=>'checkbox');
-                    
-                    if ($answerCorrect) {
-                        $options['checked'] = 'checked';
+                    if ($debug_mark_answer) {
+                        if ($answerCorrect) {
+                            $options['checked'] = 'checked';
+                        }
                     }
                     $s .= Display::tag('span', Display::tag('input','',$options ));
                     $s .= '</p>';                    
@@ -416,8 +412,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				}
 			}
 		}	// end for()
-        
-        
+                
         /*
         //Adding divs for the new MATCHING interface
         
@@ -456,9 +451,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			return($s);
 		}
 	} elseif ($answerType == HOT_SPOT) {
-
-		// Question is of type HOT_SPOT
-        
+		// Question is a HOT_SPOT        
         //checking document/images visibility
         if (api_is_platform_admin() || api_is_course_admin()) {
             require_once api_get_path(LIBRARY_PATH).'document.lib.php';
@@ -514,12 +507,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			  		<td valign="top" colspan="2">';
 			echo $questionDescription=text_filter($questionDescription);
 			echo '</td></tr>';
-		}
-        
-        
-        
-    
-
+		}        
 		$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
         
 		$s .= '<script language="JavaScript" type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>

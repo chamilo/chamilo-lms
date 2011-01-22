@@ -1,12 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- *	File containing the MultipleAnswer class.
- *	@package dokeos.exercise
- * 	@author Eric Marguin
- */
-
 if(!class_exists('MultipleAnswerTrueFalse')):
 
 /**
@@ -15,8 +9,8 @@ if(!class_exists('MultipleAnswerTrueFalse')):
  *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
  *	extending the class question
  *
- *	@author Eric Marguin
- *	@package dokeos.exercise
+ *	@author Julio Montoya
+ *	@package chamilo.exercise
  **/
 
 class MultipleAnswerTrueFalse extends Question {
@@ -184,14 +178,16 @@ class MultipleAnswerTrueFalse extends Question {
 		if ($show_quiz_edition) {
 			//ie6 fix
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-                $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-				$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+                
+                $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');				
+                $form->addElement('submit', 'submitQuestion',$text, 'class="'.$class.'"');
 			} else {
                 // setting the save button here and not in the question class.php
-                $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'style="float:right"; class="minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'style="float:right"; class="plus"');	
+                
+                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'style="class="minus"');
+                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'style="class="plus"');
+                $form->addElement('style_submit_button', 'submitQuestion',$text, 'class="'.$class.'"');	
 			}
 		}
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');

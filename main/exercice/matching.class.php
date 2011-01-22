@@ -1,17 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-
-/**
-*	File containing the Matching class.
-*	@package chamilo.exercise
-* 	@author Eric Marguin
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
-*/
-
-
 if(!class_exists('Matching')):
-
 /**
 	CLASS Matching
  *
@@ -19,7 +8,7 @@ if(!class_exists('Matching')):
  *	extending the class question
  *
  *	@author Eric Marguin
- *	@package dokeos.exercise
+ *	@package chamilo.exercise
  **/
 
 class Matching extends Question {
@@ -96,10 +85,7 @@ class Matching extends Question {
 		$form -> addElement('hidden', 'nb_matches', $nb_matches);
 		$form -> addElement('hidden', 'nb_options', $nb_options);
 
-		////////////////////////
-		// DISPLAY MATCHES ////
-		//////////////////////
-
+		// DISPLAY MATCHES
 		$html='
 		<div class="row">
 			<div class="label">
@@ -201,19 +187,17 @@ class Matching extends Question {
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
             // setting the save button here and not in the question class.php
             $group[] = FormValidator :: createElement('submit','submitQuestion',$text, 'class="'.$class.'"');
+            
+            $group[] = FormValidator :: createElement ('submit', 'lessOptions', get_lang('DelElem'),'class="minus"');
             $group[] = FormValidator :: createElement ('submit', 'moreOptions',get_lang('AddElem'),'class="plus"');
-			$group[] = FormValidator :: createElement ('submit', 'lessOptions', get_lang('DelElem'),'class="minus"');
+			
 			
 			
 		} else {
-            // setting the save button here and not in the question class.php
-            $group[] = FormValidator :: createElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+            // setting the save button here and not in the question class.php            
             $group[] = FormValidator :: createElement ('style_submit_button', 'lessOptions', get_lang('DelElem'),'style="float:right;" class="minus"');
             $group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'),'style="float:right;" class="plus"');
-			
-			
-			
-
+            $group[] = FormValidator :: createElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 		}
 		
 		$form -> addGroup($group);

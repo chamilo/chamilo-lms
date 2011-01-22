@@ -1,22 +1,5 @@
 <?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
-*/
-
+/* For licensing terms, see /license.txt */
 
 /**
 *	Free answer marking script
@@ -29,9 +12,7 @@
 */
 
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 // name of the language file that needs to be included
 $language_file='exercice';
@@ -202,9 +183,7 @@ $objAnswerTmp->selectAnswer($answerId);
 if($action == 'mark'){
 	echo $my_msg.'<br />
 		<a href="exercice.php?cidReq='.$cidReq.'">'.get_lang('Back').'</a>';
-}else{
-
-
+} else {
 	echo '<h2>'.$obj_question->question .':</h2>
 		'.$obj_question->selectTitle().'<br /><br />
 		'.get_lang('PleaseGiveAMark').
@@ -221,7 +200,4 @@ if($action == 'mark'){
 		"<input type='submit' name='submit' value='".get_lang('Ok')."'>\n"
 		."</form>";
 }
-
 Display::display_footer();
-
-?>

@@ -786,12 +786,11 @@ function get_count_exam_results($exercise_id = null) {
                 FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
                 WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where ";
 
+        //Seems that the $TBL_TRACK_HOTPOTATOES does not have an exercise id that's weird ... we are removing $exercise_where
         $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid) . "' $user_id_and  $exercise_where
+                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid) . "' $user_id_and  
                     ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
-
-
 
     } else {
         // get only this user's results
@@ -811,10 +810,10 @@ function get_count_exam_results($exercise_id = null) {
             WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'  $user_id_and $session_id_and AND ce.active <>-1 AND" .
             " orig_lp_id = 0 AND orig_lp_item_id = 0 ";
 
-        $hpsql = "SELECT '',exe_name, exe_result , exe_weighting, exe_date
-                        FROM $TBL_TRACK_HOTPOTATOES
-                        WHERE exe_user_id = '" . $_user['user_id'] . "' AND exe_cours_id = '" . Database :: escape_string($_cid) . "'
-                        ORDER BY exe_cours_id ASC, exe_date DESC";
+      $hpsql = "SELECT '',exe_name, exe_result , exe_weighting, exe_date
+                FROM $TBL_TRACK_HOTPOTATOES
+                WHERE exe_user_id = '" . $_user['user_id'] . "' AND exe_cours_id = '" . Database :: escape_string($_cid) . "'
+                ORDER BY exe_cours_id ASC, exe_date DESC";
     }
 
     $resx = Database::query($sql);
@@ -868,9 +867,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where ";
 
         $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
-                    FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid)."' $user_id_and $exercise_where 
-                    ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
+                FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
+                WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid)."' $user_id_and $exercise_where 
+                ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
 
 
 
@@ -892,14 +891,13 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
         $sql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1")." , ce.title as col2, te.exe_result as exresult, " .
                             "te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
                             "te.start_date as col4, steps_counter as exstep, exe_user_id as excruid, te.exe_duration as exduration, ce.results_disabled as exdisabled
-                    FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                    WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'  $user_id_and $session_id_and AND ce.active <>-1 AND" .
-                    " orig_lp_id = 0 AND orig_lp_item_id = 0 ";
+              FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
+              WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'  $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 ";
 
         $hpsql = "SELECT '',exe_name, exe_result , exe_weighting, exe_date
-                        FROM $TBL_TRACK_HOTPOTATOES
-                        WHERE exe_user_id = '" . $_user['user_id'] . "' AND exe_cours_id = '" . Database :: escape_string($_cid) . "'
-                        ORDER BY exe_cours_id ASC, exe_date DESC";
+                  FROM $TBL_TRACK_HOTPOTATOES
+                  WHERE exe_user_id = '" . $_user['user_id'] . "' AND exe_cours_id = '" . Database :: escape_string($_cid) . "'
+                  ORDER BY exe_cours_id ASC, exe_date DESC";
     }
 
 

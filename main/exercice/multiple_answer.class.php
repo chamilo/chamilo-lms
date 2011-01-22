@@ -16,7 +16,7 @@ if(!class_exists('MultipleAnswer')):
  *	extending the class question
  *
  *	@author Eric Marguin
- *	@package dokeos.exercise
+ *	@package chamilo.exercise
  **/
 
 class MultipleAnswer extends Question {
@@ -142,16 +142,14 @@ class MultipleAnswer extends Question {
 		if ($show_quiz_edition) {
 			//ie6 fix
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+                $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');				
                 $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-				$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
-				
-				
 			} else {
-                // setting the save button here and not in the question class.php
-                $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'style="float:right"; class="minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'style="float:right"; class="plus"');			
+                // setting the save button here and not in the question class.php                
+                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
+                $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');			
 
 				
 			}

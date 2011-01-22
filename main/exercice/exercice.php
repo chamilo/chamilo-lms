@@ -842,15 +842,16 @@ if ($show == 'test') {
                     $random_label = '';                    
                     if ($row['random'] > 0) {
                        $random_label = ' ('.get_lang('Random').') ';
-                        $row['random'] . ' ' . api_strtolower(get_lang(($row['random'] > 1 ? 'Questions' : 'Question'))) .$random_label;
+                       $number_of_questions = $row['random'] . ' ' . api_strtolower(get_lang(($row['random'] > 1 ? 'Questions' : 'Question'))) .$random_label;
                     } else {                    
-                         $rowi . ' ' . api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question')));
+                       $number_of_questions = $rowi . ' ' . api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question')));
                     }                
      
                     //Attempts                    
                     $attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
                     
-                    $item .=  Display::tag('td',$attempts);
+                    //$item .=  Display::tag('td',$attempts);
+                    $item .=  Display::tag('td',$number_of_questions);
                     $item .=  Display::tag('td',$actions);    
                     
                     //Special buttons

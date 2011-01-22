@@ -73,7 +73,7 @@ class learnpath {
 
     public $prerequisite = 0;
     public $use_max_score = 100; //Should work as usual
-    
+
     public $created_on      = '';
     public $modified_on     = '';
     public $publicated_on   = '';
@@ -139,14 +139,14 @@ class learnpath {
                 $this->preview_image    = $row['preview_image'];
                 $this->author           = $row['author'];
                 $this->lp_session_id    = $row['session_id'];
-                
+
                 $this->created_on       = $row['created_on'];
                 $this->modified_on      = $row['modified_on'];
-                
-                if ($row['publicated_on'] != '0000-00-00 00:00:00') { 
+
+                if ($row['publicated_on'] != '0000-00-00 00:00:00') {
                     $this->publicated_on    = api_get_local_time($row['publicated_on']);
                 }
-                
+
                 if ($row['expired_on'] != '0000-00-00 00:00:00') {
                     $this->expired_on     = api_get_local_time($row['expired_on']);
                 }
@@ -604,20 +604,20 @@ class learnpath {
         $check_name = "SELECT * FROM $tbl_lp WHERE name = '$name'";
         //if ($this->debug > 2) { error_log('New LP - Checking the name for new LP: '.$check_name, 0); }
         $res_name = Database::query($check_name);
-        
+
         if ($publicated_on == '0000-00-00 00:00:00' || empty($publicated_on)) {
-            //by default the publication date is the same that the creation date    
-            $publicated_on = api_get_utc_datetime();        
+            //by default the publication date is the same that the creation date
+            $publicated_on = api_get_utc_datetime();
         } else {
-        	$publicated_on   = Database::escape_string(api_get_utc_datetime($publicated_on));  
+            $publicated_on   = Database::escape_string(api_get_utc_datetime($publicated_on));
         }
-        
-        if ($expired_on == '0000-00-00 00:00:00' || empty($expired_on)) {    
-            $expired_on = '';        
+
+        if ($expired_on == '0000-00-00 00:00:00' || empty($expired_on)) {
+            $expired_on = '';
         } else {
-            $expired_on   = Database::escape_string(api_get_utc_datetime($expired_on));  
-        }   
-        
+            $expired_on   = Database::escape_string(api_get_utc_datetime($expired_on));
+        }
+
         while (Database :: num_rows($res_name)) {
             // There is already one such name, update the current one a bit.
             $i++;
@@ -654,13 +654,13 @@ class learnpath {
                     $dsp = $row[0] + 1;
                 }
                 $sql_insert = "INSERT INTO $tbl_lp (lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on) " .
-                              "VALUES ($type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";                    
-                
+                              "VALUES ($type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";
+
                 //if ($this->debug > 2) { error_log('New LP - Inserting new lp '.$sql_insert, 0); }
                 $res_insert = Database::query($sql_insert);
                 $id = Database :: insert_id();
                 if ($id > 0) {
-                    
+
                     // Insert into item_property.
                     api_item_property_update(api_get_course_info(), TOOL_LEARNPATH, $id, 'LearnpathAdded', api_get_user_id());
                     return $id;
@@ -900,7 +900,6 @@ class learnpath {
             }
         }
 
-        // TODO: Also delete items and item-views.
         if (api_get_setting('search_enabled') == 'true') {
             require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             $r = delete_all_values_for_item($this->cc, TOOL_LEARNPATH, $this->lp_id);
@@ -979,11 +978,11 @@ class learnpath {
         // Now update all following items with new display order.
         $sql_all = "UPDATE $lp_item SET display_order = display_order-1 WHERE lp_id = $lp AND parent_item_id = $parent AND display_order > $display";
         $res_all = Database::query($sql_all);
-        
+
         //Removing prerequisites since the item will not longer exist
         $sql_all = "UPDATE $lp_item SET prerequisite = '' WHERE prerequisite = $id";
         $res_all = Database::query($sql_all);
-        
+
         // Remove from search engine if enabled.
         if (api_get_setting('search_enabled') == 'true') {
             $tbl_se_ref = Database :: get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
@@ -1880,7 +1879,7 @@ class learnpath {
         } else {
             // Get the number of items completed and the number of items total.
             $tbl = Database :: get_course_table(TABLE_LP_ITEM, $course_db);
-            $sql = "SELECT count(*) FROM $tbl WHERE lp_id = " . $lp_id . " 
+            $sql = "SELECT count(*) FROM $tbl WHERE lp_id = " . $lp_id . "
                                 AND item_type NOT IN('dokeos_chapter','chapter','dir')";
             $res = Database::query($sql);
             $row = Database :: fetch_array($res);
@@ -1895,7 +1894,7 @@ class learnpath {
                                 INNER JOIN $tbl_item as item
                                     ON item.id = item_view.lp_item_id
                                     AND item_type NOT IN('dokeos_chapter','chapter','dir')
-                                WHERE lp_view_id = " . $view_id . "  
+                                WHERE lp_view_id = " . $view_id . "
                                 AND status IN ('passed','completed','succeeded','browsed','failed')"; echo '<br />';
             $res = Database::query($sql);
             $row = Database :: fetch_array($res);
@@ -1983,7 +1982,7 @@ class learnpath {
         $is_visible = true;
         $progress = 0;
 
-        if (!empty($prerequisite)) {            
+        if (!empty($prerequisite)) {
             $progress = self::get_db_progress($prerequisite,$student_id,'%', '', false, api_get_session_id());
             $progress = intval($progress);
             if ($progress < 100) {
@@ -4017,8 +4016,8 @@ class learnpath {
         }
         $this->last = $id;
     }
-    
-    
+
+
      /**
      * Sets use_max_score
      * @param   string  Optional string giving the new location of this learnpath
@@ -4029,23 +4028,23 @@ class learnpath {
             error_log('New LP - In learnpath::set_use_max_score()', 0);
         }
         if ($use_max_score) {
-        	$use_max_score = 1;
+            $use_max_score = 1;
         } else {
-        	$use_max_score = 0;
-        }        
-        
+            $use_max_score = 0;
+        }
+
         $this->use_max_score = $this->escape_string($use_max_score);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET use_max_score = '" . $this->use_max_score . "' WHERE id = '$lp_id'";
-        
+
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new use_max_score : ' . $this->use_max_score, 0);
         }
         $res = Database::query($sql);
         return true;
     }
-    
+
      /**
      * Sets and saves the expired_on date
      * @param   string  Optional string giving the new author of this learnpath
@@ -4055,7 +4054,7 @@ class learnpath {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
-        
+
         if (!empty($expired_on)) {
             $this->expired_on = $this->escape_string(api_get_utc_datetime($expired_on));
         } else {
@@ -4070,8 +4069,8 @@ class learnpath {
         $res = Database::query($sql);
         return true;
     }
-    
-    
+
+
     /**
      * Sets and saves the publicated_on date
      * @param   string  Optional string giving the new author of this learnpath
@@ -4084,7 +4083,7 @@ class learnpath {
         if (!empty($publicated_on)) {
             $this->publicated_on = $this->escape_string(api_get_utc_datetime($publicated_on));
         } else {
-        	$this->publicated_on = '';
+            $this->publicated_on = '';
         }
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
@@ -4095,9 +4094,9 @@ class learnpath {
         $res = Database::query($sql);
         return true;
     }
-    
-    
-    
+
+
+
     /**
      * Sets and saves the expired_on date
      * @param   string  Optional string giving the new author of this learnpath
@@ -4117,13 +4116,13 @@ class learnpath {
         $res = Database::query($sql);
         return true;
     }
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
 
     /**
      * Sets the object's error message
@@ -7373,7 +7372,7 @@ class learnpath {
                         AND last.tool = '".TOOL_DOCUMENT."' $condition_session ORDER BY docs.path ASC";
 
         //$sql_doc = "SELECT * FROM $tbl_doc WHERE path NOT LIKE '%_DELETED_%' ORDER BY path ASC";
-        
+
         $res_doc = Database::query($sql_doc);
 
         $return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '>'.Display::return_icon('folder_document.gif',get_lang('Documents'),array('style'=>'margin-right:5px;', 'height' => '16px')).' '. get_lang('Documents') . '</div>';
@@ -7401,7 +7400,7 @@ class learnpath {
                 //for backward compatibility
                  if (empty($resource['title'])) {
                     $resource['title'] = basename($resource['path']);
-                 }                
+                 }
                 eval ('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' .$resource['title']."/". $last_path. '";');
             } else {
                 eval ('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');
@@ -7432,34 +7431,34 @@ class learnpath {
             foreach ($resources_sorted as $key => $resource) {
                 if (is_int($resource['id'])) {
                  // It's a folder.
-					//hide some folders
-					if (in_array($key, array('shared_folder','chat_files', 'HotPotatoes_files', 'css', 'certificates'))){
-						continue;
-					}elseif(preg_match('/_groupdocs/', $key)){
-						continue;
-					}elseif(preg_match('/sf_user_/', $key)){
-						continue;
-					}elseif(preg_match('/shared_folder_session_/', $key)){
-						continue;
-					}
-					
-					//trad some titles
-					if ($key=='images'){
-						$key=get_lang('Images');
-					}
-					elseif($key=='gallery'){
-						$key=get_lang('Gallery');
-					}
-					elseif($key=='flash'){
-						$key=get_lang('Flash');
-					}
-					elseif($key=='audio'){
-						$key=get_lang('Audio');
-					}					
-					elseif($key=='video'){
-						$key=get_lang('Video');
-					}
-					
+                    //hide some folders
+                    if (in_array($key, array('shared_folder','chat_files', 'HotPotatoes_files', 'css', 'certificates'))){
+                        continue;
+                    }elseif(preg_match('/_groupdocs/', $key)){
+                        continue;
+                    }elseif(preg_match('/sf_user_/', $key)){
+                        continue;
+                    }elseif(preg_match('/shared_folder_session_/', $key)){
+                        continue;
+                    }
+
+                    //trad some titles
+                    if ($key=='images'){
+                        $key=get_lang('Images');
+                    }
+                    elseif($key=='gallery'){
+                        $key=get_lang('Gallery');
+                    }
+                    elseif($key=='flash'){
+                        $key=get_lang('Flash');
+                    }
+                    elseif($key=='audio'){
+                        $key=get_lang('Audio');
+                    }
+                    elseif($key=='video'){
+                        $key=get_lang('Video');
+                    }
+
                     $return .= '<div><div style="margin-left:' . ($num * 15) . 'px;margin-right:5px;"><img style="cursor: pointer;" src="../img/nolines_plus.gif" align="absmiddle" id="img_' . $resource['id'] . '" onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"><img alt="" src="../img/lp_folder.gif" title="" align="absmiddle" />&nbsp;<span onClick="javascript: testResources(\'' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')" style="cursor: pointer;" >' . $key . '</span></div><div style="display: none;" id="' . $resource['id'] . '">';
                     $return .= $this->write_resources_tree($resource['files'], $num +1);
                     $return .= '</div></div>';
@@ -8489,7 +8488,7 @@ EOD;
 
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);
     }
-    
+
     public function scorm_export_to_pdf($lp_id) {
         $lp_id = intval($lp_id);
         $files_to_export = array();
@@ -8497,26 +8496,26 @@ EOD;
         if (!empty($course_data)) {
             $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
             require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-            foreach($this->items as $item) {            
+            foreach($this->items as $item) {
                 //Getting documents from a LP with chamilo documents
                 switch ($item->type) {
                     case 'document':
                         $file_data = DocumentManager::get_document_data_by_id($item->path, $this->cc);
                         $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$file_data['path'];
-                        if (file_exists($file_path)) {               
+                        if (file_exists($file_path)) {
                             $files_to_export[] = $file_path;
                         }
                         break;
-                    case 'sco':             
+                    case 'sco':
                         $file_path = $scorm_path.'/'.$item->path;
-                        if (file_exists($file_path)) {               
+                        if (file_exists($file_path)) {
                             $files_to_export[] = $file_path;
                         }
-                        break;                    
+                        break;
                 }
-            }            
-            require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';      
-            $pdf = new PDF();            
+            }
+            require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+            $pdf = new PDF();
             $result = $pdf->html_to_pdf($files_to_export, $this->name, $this->cc);
             return $result;
         }
@@ -8654,25 +8653,25 @@ EOD;
         }
         return false;
     }
-    
+
     public function set_autolunch($lp_id, $status) {
         $lp_id   = intval($lp_id);
         $status  = intval($status);
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        
+
         //Setting everything to autolunch = 0
         $attributes['autolunch'] = 0;
         $where = array('session_id = ? '=> api_get_session_id());
         Database::update($lp_table, $attributes,$where);
         if ($status == 1) {
-            //Setting my lp_id to autolunch = 1        
+            //Setting my lp_id to autolunch = 1
             $attributes['autolunch'] = 1;
             $where = array('id = ? AND session_id = ? '=> array($lp_id, api_get_session_id()));
             Database::update($lp_table, $attributes, $where );
         }
     }
-    
-    
+
+
 }
 
 if (!function_exists('trim_value')) {

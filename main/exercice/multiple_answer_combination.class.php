@@ -154,8 +154,8 @@ class MultipleAnswerCombination extends Question {
                 $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');				
 			} else {
                 
-                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'style="float:right"; class="minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'style="float:right"; class="plus"');
+                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
                 $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 				
 				// setting the save button here and not in the question class.php

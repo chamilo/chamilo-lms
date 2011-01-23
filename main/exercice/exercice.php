@@ -7,7 +7,6 @@
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
 *	@author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
-* 	@version $Id:exercice.php 12269 2007-05-03 14:17:37Z elixir_julian $
 */
 
 // name of the language file that needs to be included
@@ -435,9 +434,6 @@ event_access_tool(TOOL_QUIZ);
 // Tool introduction
 Display :: display_introduction_section(TOOL_QUIZ);
 
-
-
-
 HotPotGCt($documentPath, 1, $_user['user_id']);
 $tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 // only for administrator
@@ -558,18 +554,19 @@ HotPotGCt($documentPath, 1, api_get_user_id());
 $session_id = api_get_session_id();
 $condition_session = api_get_session_condition($session_id,true,true);
 
-// only for administrator
-if ($is_allowedToEdit) {
-	if ($show == 'test') {
-		$sql = "SELECT id, title, type, active, description, results_disabled, session_id, start_time, end_time, random,max_attempt  FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
-		$result = Database::query($sql);
-	}
-} elseif ($show == 'test') { 
-    // only for students
-	$sql = "SELECT id, title, type, description, results_disabled, session_id, start_time, end_time FROM $TBL_EXERCICES WHERE active='1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
-	$result = Database::query($sql);
-}
+
 if ($show == 'test') {	
+    
+    // only for administrator
+    if ($is_allowedToEdit) {
+        $sql = "SELECT id, title, type, active, description, results_disabled, session_id, start_time, end_time, random, max_attempt FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
+        $result = Database::query($sql);   
+    } else { 
+        // only for students
+        $sql = "SELECT id, title, type, description, results_disabled, session_id, start_time, end_time , max_attempt FROM $TBL_EXERCICES WHERE active='1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
+        $result = Database::query($sql);
+    }
+        
 	$nbrExercises = Database :: num_rows($result);
 
 	//get HotPotatoes files (active and inactive)
@@ -593,16 +590,14 @@ if ($show == 'test') {
 	//show pages navigation link for previous page
 	if ($page) {
 		echo "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&amp;page=" . ($page -1) . "\">" . Display :: return_icon('previous.gif') . get_lang("PreviousPage") . "</a> | ";
-	}
-	elseif ($nbrExercises + $nbrNextTests > $limitExPage) {
+	} elseif ($nbrExercises + $nbrNextTests > $limitExPage) {
 		echo Display :: return_icon('previous.gif') . get_lang('PreviousPage') . " | ";
 	}
 
 	//show pages navigation link for previous page
 	if ($nbrExercises + $nbrNextTests > $limitExPage) {
 		echo "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&amp;page=" . ($page +1) . "\">" . get_lang("NextPage") . Display :: return_icon('next.gif') . "</a>";
-	}
-	elseif ($page) {
+	} elseif ($page) {
 		echo get_lang("NextPage") . Display :: return_icon('next.gif');
 	}
 	echo '</span>';
@@ -691,8 +686,6 @@ if ($show == 'result') {
 		echo $view_result;
 	}
 }
-
-
 echo '</div>'; // closing the actions div
 
 if ($show == 'test') {
@@ -714,8 +707,7 @@ if ($show == 'test') {
         .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: left; width: 40em;}
 
             
-    </style>    
-   
+    </style>      
   
   <?php    
     $i =1;
@@ -735,8 +727,7 @@ if ($show == 'test') {
         $lis.= Display::tag('li','<a href="#tabs-'.$i.'">'.$status.' '.$row['title'].'</a>');
         $i++;*/
         $exercise_list[] = $row;
-    }
-    
+    }    
     if (!empty($exercise_list)) {
         
         //echo '<div id="exercise_tabs" class="tabs-left">';
@@ -755,17 +746,20 @@ if ($show == 'test') {
             $i=1;
             echo '<table class="data_table">';
             if ($is_allowedToEdit) {
-                $title = array(get_lang('ExerciseName'),get_lang('QuantityQuestions'), get_lang('Actions'));
+                $headers = array(get_lang('ExerciseName'),get_lang('QuantityQuestions'), get_lang('Actions'));
             } else {
-            	$title = array(get_lang('ExerciseName'), get_lang('State'));
+            	$headers = array(get_lang('ExerciseName'), get_lang('Attempts'), get_lang('State'));
             }
+            $header_list = '';
+            foreach($headers as $header) {
+                $header_list .= Display::tag('th',$header);	
+            }
+            echo Display::tag('tr',$header_list);
             
-            foreach($title as $row) {
-                $headers .= Display::tag('th',$row);	
-            }
-            echo Display::tag('tr',$headers);
+            if (!empty($exercise_list))
+            foreach ($exercise_list as $row) {   
                 
-            foreach ($exercise_list as $row) {       
+                
                 //echo '<div  id="tabs-'.$i.'">';                
                            
                 $i++;                    
@@ -806,9 +800,9 @@ if ($show == 'test') {
                     $exid = $row['id'];
     
                     //count number exercice - teacher
-                    $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . Database :: escape_string($exid) . "'";
-                    $sqlresult = Database::query($sqlquery);
-                    $rowi = Database :: result($sqlresult, 0);
+                    $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . $exid . "'";
+                    $sqlresult  = Database::query($sqlquery);
+                    $rowi       = Database :: result($sqlresult, 0);
                                         
                     if ($session_id == $row['session_id']) {
                         //Settings                                                                
@@ -832,7 +826,7 @@ if ($show == 'test') {
                         $actions .= Display::url(Display::return_icon('export_db.png',    'IMS/QTI'),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
                     } else { // not session resource                
                         $actions .= Display::return_icon('wizard_gray_small.gif', get_lang('ExerciseEditionNotAvailableInSession'));
-                        $actions .= Display::url(Display::return_icon('cd.gif',          get_lang('CopyExercise')),     '',  array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
+                        $actions .= Display::url(Display::return_icon('cd.gif',   get_lang('CopyExercise')),     '',  array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
                     }
                     
                     //Delete
@@ -867,9 +861,9 @@ if ($show == 'test') {
                     echo '</div>';*/
                     echo  Display::tag('tr',$item);
                 } else {
-                    
+                     
                     // Student only
-                    $row['title']=text_filter($row['title']);                 
+                    $row['title'] = text_filter($row['title']);                 
     
                     // if time is actived show link to exercise
                     if ($time_limits) {                 
@@ -882,34 +876,30 @@ if ($show == 'test') {
                     } else {
                         $url = '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       
                     }                   
-                                        
+                    
+                    //Link of the exercise             
                     $item =  Display::tag('td',$url.' '.$session_img);  
-                    
-                    
-                    $exid = $row['id'];
+                           
                     //count number exercise questions
-                    $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . Database :: escape_string($exid) . "'";
-                    $sqlresult = Database::query($sqlquery);
-                    $rowi = Database :: result($sqlresult, 0);
-                    //count number random exercice
-                    $sql_random_query = 'SELECT type,random,active,results_disabled,max_attempt FROM ' . $TBL_EXERCICES . ' WHERE id="' . Database :: escape_string($exid) . '" ';
-                    $rs_random = Database::query($sql_random_query);
-                    $row_random = Database :: fetch_array($rs_random);
-                    if ($row_random['random'] > 0) {
-                        $row_random['random'] . ' ' . api_strtolower(get_lang(($row_random['random'] > 1 ? 'Questions' : 'Question')));
+                    $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . $row['id'] . "'";
+                    $sqlresult  = Database::query($sqlquery);
+                    $rowi       = Database::result($sqlresult, 0);
+                    
+                    if ($row['random'] > 0) {
+                        $row['random'] . ' ' . api_strtolower(get_lang(($row['random'] > 1 ? 'Questions' : 'Question')));
                     } else {
                         //show results student
                         $rowi . ' ' . api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question')));
-                    }        
-                            
-                    $eid = $row['id'];
+                    }      
+                    
                     $uid = api_get_user_id();
+                    
                     //this query might be improved later on by ordering by the new "tms" field rather than by exe_id
                     $qry = "SELECT * FROM $TBL_TRACK_EXERCICES
-                            WHERE exe_exo_id = '" . Database :: escape_string($eid) . "' and exe_user_id = '" . Database :: escape_string($uid) . "' AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "'
+                            WHERE exe_exo_id = '" . $row['id'] . "' and exe_user_id = '" . $uid . "' AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "'
                             ORDER BY exe_id DESC";
                     $qryres = Database::query($qry);
-                    $num = Database :: num_rows($qryres);
+                    $num    = Database :: num_rows($qryres);
             
                     //hide the results
                     $my_result_disabled = $row['results_disabled'];
@@ -927,10 +917,10 @@ if ($show == 'test') {
                     } else {
                         if ($my_result_disabled == 0) {                         
                             if ($num > 0) {
-                                $row = Database :: fetch_array($qryres);
+                                $row_track = Database :: fetch_array($qryres);
                                 $percentage = 0;
-                                if ($row['exe_weighting'] != 0) {
-                                    $percentage = ($row['exe_result'] / $row['exe_weighting']) * 100;
+                                if ($row_track['exe_weighting'] != 0) {
+                                    $percentage = ($row_track['exe_result'] / $row_track['exe_weighting']) * 100;
                                 }
                                 $attempt_text =  get_lang('Attempted') . ' (' . get_lang('Score') . ': ';
                                 $attempt_text .= sprintf("%1.2f\n", $percentage);
@@ -943,7 +933,20 @@ if ($show == 'test') {
                             $attempt_text = get_lang('CantShowResults');
                         }
                     }
+                                
+                    //User Attempts    
+                    if (empty($row['max_attempt'])) {                        
+                        $item .=  Display::tag('td','-');
+                    } else {
+                        if (empty($num)) {
+                        	$num = 0;
+                        }
+                        $item .=  Display::tag('td',$num.' / '.$row['max_attempt']);                        
+                    }
                     $item .=  Display::tag('td',$attempt_text);
+                    
+                 
+                    
                     echo Display::tag('tr',$item);                  
                 }
                 /*echo '</p>';
@@ -954,7 +957,7 @@ if ($show == 'test') {
             echo '</div>';
         }         
     } else {
-          //echo Display::display_warning_message(get_lang('NoExercises'));
+          echo Display::display_warning_message(get_lang('NoExercises'));
     }
     Display :: display_footer();    
     exit;

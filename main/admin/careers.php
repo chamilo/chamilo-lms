@@ -5,8 +5,6 @@
  *  @package chamilo.admin
  */
 
-/* INITIALIZATION SECTION */
-
 // Language files that need to be included.
 $language_file = array('admin');
 
@@ -19,9 +17,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-
-
-// Additional javascript
 //Jquery ui
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/cupertino/jquery-ui-1.8.7.custom.css" type="text/css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.4.4.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
@@ -46,27 +41,33 @@ if (isset($_GET['action']) && $_GET['action'] == 'editnote') {
     $interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Career'));
 }
 
+//jqgrid will use this URL to do the selects
+
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_careers';
-//The order is important you need to check the model.ajax.php the $column variable
+
+//The order is important you need to check the the $column variable in the model.ajax.php file 
 $columns        = array(get_lang('Name'),get_lang('Description'),get_lang('Actions'));
+
+//Column config
 $column_model   = array(array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
                         array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
                         array('name'=>'actions',        'index'=>'actions',     'formatter'=>'action_formatter','width'=>'100',  'align'=>'left'),
-                       );                        
-$extra_params['autowidth'] = 'true'; //use the width of the parent
-$extra_params['height'] = 'auto'; //use the width of the parent
+                       );            
+//Autowidth             
+$extra_params['autowidth'] = 'true';
+//height auto 
+$extra_params['height'] = 'auto'; 
 
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
                          return \'<a href="?action=edit&id=\'+options.rowId+\'"><img src="../img/edit.gif" title="'.get_lang('Edit').'"></a> <a href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.gif"></a>\'; 
                  }';
-                 
-
 ?>
 <script>
 $(function() {    
 <?php 
-     echo Display::grid_js('careers',  $url,$columns,$column_model,$extra_params, array(), $action_links);       
+    // grid definition see the $career->display() function
+    echo Display::grid_js('careers',  $url,$columns,$column_model,$extra_params, array(), $action_links);       
 ?> 
 });
 </script>   
@@ -83,7 +84,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     }
 
     $_SESSION['notebook_view'] = 'creation_date';
-
+    //@todo move this in the career.lib.php
+    
     // Initiate the object
     $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
     // Settting the form elements

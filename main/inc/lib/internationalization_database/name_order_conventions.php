@@ -84,11 +84,11 @@ return array(
 	'slovenian' =>        array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),
 
 	//'spanish' =>          array(  'format' => 'title first_name last_name',  'sort_by' => 'last_name'  ),
-	'spanish' =>          array(  'format' => 'title last_name first_name',  'sort_by' => 'last_name'  ),
+	//'spanish' =>          array(  'format' => 'title last_name first_name',  'sort_by' => 'last_name'  ),
 	// Some experimental settings for Spanish language:
 	//'spanish' =>          array(  'format' => 'title first_name LAST_NAME',  'sort_by' => 'first_name'  ), // Western order, last name is uppercase when a full name is assembled
 	//'spanish' =>          array(  'format' => 'title first_name LAST_NAME',  'sort_by' => 'last_name'   ), // Western order, last name is uppercase when a full name is assembled
-	//'spanish' =>          array(  'format' => 'title last_name, first_name',  'sort_by' => 'last_name'  ), // Library order
+	'spanish' =>          array(  'format' => 'title last_name, first_name',  'sort_by' => 'last_name'  ), // Library order
 	//'spanish' =>          array(  'format' => 'title LAST_NAME, first_name',  'sort_by' => 'last_name'  ), // Library order, last name is uppercase when a full name is assembled
 
 	'swahili' =>          array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),

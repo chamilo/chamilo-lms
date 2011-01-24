@@ -703,6 +703,9 @@ class Display {
         return $return_value;        
     }
     
+    /**
+     * Creates a URL anchor 
+     */
     public static function url($name, $url, $extra_attributes = array()) {
         if (!empty($url)) {
             $extra_attributes['href']= $url;

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 // Language files that should be included.
-$language_file = array('courses', 'index');
+$language_file = array('courses', 'index', 'admin');
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'course.lib.php';

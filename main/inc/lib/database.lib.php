@@ -1349,7 +1349,7 @@ class Database {
         }
         
              
-        $sql    = "SELECT $clean_columns FROM $table_name $conditions";
+         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
       
                
         
@@ -1380,7 +1380,8 @@ class Database {
         	return '';
         }        
         $return_value = '';     
-        foreach ($conditions as $type_condition => $condition_data) {            
+        foreach ($conditions as $type_condition => $condition_data) {    
+            $type_condition = strtolower($type_condition);        
              switch($type_condition) {
                 case 'where':                    
                     foreach ($condition_data as $condition => $value_array) {                     
@@ -1405,7 +1406,34 @@ class Database {
                     }
                 break;
                 case 'order':
-                    $return_value .= " ORDER BY $condition_data";
+                    $order_array = explode(' ', $condition_data);
+                    
+                    if (!empty($order_array)) {
+                        if (count($order_array) > 1) {
+                            $order_array[0] = self::escape_string($order_array[0]);
+                            if (!empty($order_array[1])) {
+                                $order_array[1] = strtolower($order_array[1]);
+                                $order = 'desc';
+                            	if (in_array($order_array[1], array('desc', 'asc'))) {
+                            		$order = $order_array[1];
+                            	}
+                            }
+                            $return_value .= ' ORDER BY '.$order_array[0].'  '.$order;
+                        }  else {
+                            $return_value .= ' ORDER BY '.$order_array[0].' DESC ';
+                        }
+                    }
+                break;
+                
+                case 'limit':
+                    $limit_array = explode(',', $condition_data);                    
+                    if (!empty($limit_array)) {
+                        if (count($limit_array) > 1) {
+                            $return_value .= ' LIMIT '.intval($limit_array[0]).' , '.intval($limit_array[1]);
+                        }  else {
+                            $return_value .= ' LIMIT '.intval($limit_array[0]);
+                        }
+                    }
                 break;
                 
             } 

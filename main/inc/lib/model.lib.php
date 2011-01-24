@@ -13,7 +13,12 @@ class Model {
     var $columns;
     
 	public function __construct() {
+        
 	}
+    
+    public function find() {
+    	
+    }
     
     
     /**
@@ -76,8 +81,7 @@ class Model {
      * @return unknown
      *
      */
-	function javascript()
-	{
+	function javascript() {
 		
 	}
 

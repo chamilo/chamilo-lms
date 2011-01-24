@@ -1,4 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
+
+//@todo this could be integrated in the inc/lib/model.lib.php
 $action = $_GET['a'];
 
 require_once '../global.inc.php';
@@ -11,7 +14,7 @@ $table = '';
 
 $page  = intval($_REQUEST['page']); //page
 $limit = intval($_REQUEST['rows']); // quantity of rows
-$sidx  = intval($_REQUEST['sidx']); //index to filter         
+$sidx  = $_REQUEST['sidx']; //index to filter         
 $sord  = $_REQUEST['sord'];         //asc or desc
 if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc';
@@ -37,10 +40,11 @@ switch ($action) {
         exit;   
 }
         
-if( $count >0 ) { 
-    $total_pages = ceil($count/$limit); 
-} else { 
-    $total_pages = 0; 
+$total_pages = 0;
+if ($count >0) { 
+    if (!empty($limit)) {
+        $total_pages = ceil($count/$limit);
+    }
 }
 
 if ($page > $total_pages) { 
@@ -55,23 +59,26 @@ switch ($action) {
         if ($_REQUEST['oper'] == 'del') {
             $obj->delete($_REQUEST['id']);
         }
-        $columns = array('name', 'description', 'actions');        
+        $columns = array('name', 'description', 'actions');                
+        if(!in_array($sidx, $columns)) {
+        	$sidx = 'name';
+        }
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
     break;
     case 'get_promotions':
         if ($_REQUEST['oper'] == 'del') {
         	$obj->delete($_REQUEST['id']);
         }
-        $columns = array('name', 'career', 'description', 'actions');                        
-        $result     = Database::select('p.id, p.name, p.description, c.name as career', "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ", array('order' =>"$sidx $sord", 'LIMIT'=> "$start , $limit"));       
+        $columns = array('name', 'career', 'description', 'actions');
+        if(!in_array($sidx, $columns)) {
+            $sidx = 'name';
+        }                  
+        $result     = Database::select('p.id,p.name, p.description, c.name as career', "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ", array('order' =>"$sidx $sord", 'LIMIT'=> "$start , $limit"));       
     break;
     default:
         exit;            
 }
-
-
 //echo '<pre>';
-
 
 if (in_array($action, array('get_careers','get_promotions'))) {
     //3. Creating an obj to return a json

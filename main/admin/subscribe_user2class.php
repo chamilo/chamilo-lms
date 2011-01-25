@@ -2,24 +2,24 @@
 // $Id: subscribe_user2class.php 12269 2007-05-03 14:17:37Z elixir_julian $
 /*
 ==============================================================================
-	Dokeos - elearning and course management software
+    Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
+    Copyright (c) 2004 Dokeos S.A.
+    Copyright (c) 2003 Ghent University (UGent)
+    Copyright (c) 2001 Universite catholique de Louvain (UCL)
+    Copyright (c) Olivier Brouckaert
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    For a full list of contributors, see "credits.txt".
+    The full license can be read in "license.txt".
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
 
-	See the GNU General Public License for more details.
+    See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+    Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -57,8 +57,8 @@ $result = Database::query($sql);
 
 if (!list ($class_name) = Database::fetch_row($result))
 {
-	header('Location: class_list.php?filtreCours='.urlencode($course));
-	exit ();
+    header('Location: class_list.php?filtreCours='.urlencode($course));
+    exit ();
 }
 
 $noPHP_SELF = true;
@@ -70,46 +70,46 @@ $interbreadcrumb[] = array ("url" => "class_list.php?filtreCours=".urlencode($co
 
 if ($_POST['formSent'])
 {
-	$form_sent = $_POST['formSent'];
-	$first_letter_left = $_POST['firstLetterLeft'];
-	$first_letter_right = $_POST['firstLetterRight'];
-	$left_user_list = is_array($_POST['LeftUserList']) ? $_POST['LeftUserList'] : array();
-	$right_user_list = is_array($_POST['RightUserList']) ? $_POST['RightUserList'] : array();
-	$add_to_class = empty ($_POST['addToClass']) ? 0 : 1;
-	$remove_from_class = empty ($_POST['removeFromClass']) ? 0 : 1;
-	if ($form_sent == 1)
-	{
-		if ($add_to_class)
-		{
-			if (count($left_user_list) == 0)
-			{
-				$error_message = get_lang('AtLeastOneUser');
-			}
-			else
-			{
-				foreach ($left_user_list as $user_id)
-				{
-					ClassManager :: add_user($user_id, $class_id);
-				}
-				header('Location: class_list.php?filtreCours='.urlencode($course));
-				exit ();
-			}
-		}
-		elseif ($remove_from_class)
-		{
-			if (count($right_user_list) == 0)
-				$error_message = get_lang('AtLeastOneUser');
-			else
-			{
-				foreach ($right_user_list as $index => $user_id)
-				{
-					ClassManager :: unsubscribe_user($user_id, $class_id);
-				}
-				header('Location: class_list.php?filtreCours='.urlencode($course));
-				exit ();
-			}
-		}
-	}
+    $form_sent = $_POST['formSent'];
+    $first_letter_left = $_POST['firstLetterLeft'];
+    $first_letter_right = $_POST['firstLetterRight'];
+    $left_user_list = is_array($_POST['LeftUserList']) ? $_POST['LeftUserList'] : array();
+    $right_user_list = is_array($_POST['RightUserList']) ? $_POST['RightUserList'] : array();
+    $add_to_class = empty ($_POST['addToClass']) ? 0 : 1;
+    $remove_from_class = empty ($_POST['removeFromClass']) ? 0 : 1;
+    if ($form_sent == 1)
+    {
+        if ($add_to_class)
+        {
+            if (count($left_user_list) == 0)
+            {
+                $error_message = get_lang('AtLeastOneUser');
+            }
+            else
+            {
+                foreach ($left_user_list as $user_id)
+                {
+                    ClassManager :: add_user($user_id, $class_id);
+                }
+                header('Location: class_list.php?filtreCours='.urlencode($course));
+                exit ();
+            }
+        }
+        elseif ($remove_from_class)
+        {
+            if (count($right_user_list) == 0)
+                $error_message = get_lang('AtLeastOneUser');
+            else
+            {
+                foreach ($right_user_list as $index => $user_id)
+                {
+                    ClassManager :: unsubscribe_user($user_id, $class_id);
+                }
+                header('Location: class_list.php?filtreCours='.urlencode($course));
+                exit ();
+            }
+        }
+    }
 }
 Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
@@ -122,7 +122,7 @@ $result = Database::query($sql);
 $right_users = Database::store_result($result);
 if (!empty ($error_message))
 {
-	Display :: display_normal_message($error_message);
+    Display :: display_normal_message($error_message);
 }
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?course=<?php echo urlencode($course); ?>&amp;idclass=<?php echo $class_id; ?>" style="margin:0px;">
@@ -167,9 +167,9 @@ foreach ($left_users as $user)
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
-	<input type="submit" name="addToClass" value="<?php echo get_lang('AddToClass'); ?> &gt;&gt;"/>
-	<br/><br/>
-	<input type="submit" name="removeFromClass" value="&lt;&lt; <?php echo get_lang('RemoveFromClass'); ?>"/>
+    <input type="submit" name="addToClass" value="<?php echo get_lang('AddToClass'); ?> &gt;&gt;"/>
+    <br/><br/>
+    <input type="submit" name="removeFromClass" value="&lt;&lt; <?php echo get_lang('RemoveFromClass'); ?>"/>
    </td>
    <td width="40%" align="center">
     <select name="RightUserList[]" multiple="multiple" size="20" style="width:230px;">
@@ -189,7 +189,7 @@ foreach ($right_users as $user)
 <?php
 /*
 ==============================================================================
-		FOOTER
+        FOOTER
 ==============================================================================
 */
 Display :: display_footer();

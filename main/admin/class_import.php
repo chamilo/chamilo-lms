@@ -2,25 +2,25 @@
 // $Id: class_import.php 10215 2006-11-27 13:57:17Z pcool $
 /*
 ==============================================================================
-	Dokeos - elearning and course management software
+    Dokeos - elearning and course management software
 
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
+    Copyright (c) 2004 Dokeos S.A.
+    Copyright (c) 2003 Ghent University (UGent)
+    Copyright (c) 2001 Universite catholique de Louvain (UCL)
+    Copyright (c) Olivier Brouckaert
+    Copyright (c) Bart Mollet, Hogeschool Gent
 
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
+    For a full list of contributors, see "credits.txt".
+    The full license can be read in "license.txt".
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
 
-	See the GNU General Public License for more details.
+    See the GNU General Public License for more details.
 
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
+    Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
@@ -35,37 +35,37 @@
  * Validates imported data.
  */
 function validate_data($classes) {
-	$errors = array();
-	foreach ($classes as $index => $class) {
-		// 1. Check wheter ClassName is available.
-		if (!isset($class['ClassName']) || strlen(trim($class['ClassName'])) == 0) {
-			$class['line'] = $index + 2;
-			$class['error'] = get_lang('MissingClassName');
-			$errors[] = $class;
-		}
-		// 2. Check whether class doesn't exist yet.
-		else {
-			if (ClassManager::class_name_exists($class['ClassName'])) {
-				$class['line'] = $index + 2;
-				$class['error'] = get_lang('ClassNameExists').' <strong>'.$class['ClassName'].'</strong>';
-				$errors[] = $class;
-			}
-		}
-	}
-	return $errors;
+    $errors = array();
+    foreach ($classes as $index => $class) {
+        // 1. Check wheter ClassName is available.
+        if (!isset($class['ClassName']) || strlen(trim($class['ClassName'])) == 0) {
+            $class['line'] = $index + 2;
+            $class['error'] = get_lang('MissingClassName');
+            $errors[] = $class;
+        }
+        // 2. Check whether class doesn't exist yet.
+        else {
+            if (ClassManager::class_name_exists($class['ClassName'])) {
+                $class['line'] = $index + 2;
+                $class['error'] = get_lang('ClassNameExists').' <strong>'.$class['ClassName'].'</strong>';
+                $errors[] = $class;
+            }
+        }
+    }
+    return $errors;
 }
 
 /**
  * Save imported class data to database
  */
 function save_data($classes) {
-	$number_of_added_classes = 0;
-	foreach ($classes as $index => $class) {
-		if (ClassManager::create_class($class['ClassName'])) {
-			$number_of_added_classes++;
-		}
-	}
-	return $number_of_added_classes;
+    $number_of_added_classes = 0;
+    foreach ($classes as $index => $class) {
+        if (ClassManager::create_class($class['ClassName'])) {
+            $number_of_added_classes++;
+        }
+    }
+    return $number_of_added_classes;
 }
 
 // Language files that should be included.
@@ -106,22 +106,22 @@ $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
 
 if ($form->validate()) {
-	$classes = Import::csv_to_array($_FILES['import_file']['tmp_name']);
-	$errors = validate_data($classes);
-	if (count($errors) == 0) {
-		$number_of_added_classes = save_data($classes);
-		Display::display_normal_message($number_of_added_classes.' '.get_lang('ClassesCreated'));
-	} else {
-		$error_message = get_lang('ErrorsWhenImportingFile');
-		$error_message .= '<ul>';
-		foreach ($errors as $index => $error_class) {
-			$error_message .= '<li>'.$error_class['error'].' ('.get_lang('Line').' '.$error_class['line'].')';
-			$error_message .= '</li>';
-		}
-		$error_message .= '</ul>';
-		$error_message .= get_lang('NoClassesHaveBeenCreated');
-		Display :: display_error_message($error_message);
-	}
+    $classes = Import::csv_to_array($_FILES['import_file']['tmp_name']);
+    $errors = validate_data($classes);
+    if (count($errors) == 0) {
+        $number_of_added_classes = save_data($classes);
+        Display::display_normal_message($number_of_added_classes.' '.get_lang('ClassesCreated'));
+    } else {
+        $error_message = get_lang('ErrorsWhenImportingFile');
+        $error_message .= '<ul>';
+        foreach ($errors as $index => $error_class) {
+            $error_message .= '<li>'.$error_class['error'].' ('.get_lang('Line').' '.$error_class['line'].')';
+            $error_message .= '</li>';
+        }
+        $error_message .= '</ul>';
+        $error_message .= get_lang('NoClassesHaveBeenCreated');
+        Display :: display_error_message($error_message);
+    }
 }
 
 $form->display();

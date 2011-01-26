@@ -174,6 +174,12 @@ INSERT INTO course_setting(variable,value,category) VALUES ('enable_lp_auto_laun
 INSERT INTO course_setting(variable,value,category) VALUES ('pdf_export_watermark_text','','course');
 
 
-CREATE TABLE career (	id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL ,description TEXT NOT NULL,PRIMARY KEY (id));
+CREATE TABLE career (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL,PRIMARY KEY (id));
 CREATE TABLE promotion (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL, career_id INT NOT NULL,PRIMARY KEY(id));
 ALTER TABLE session ADD promotion_id INT NOT NULL;
+
+CREATE TABLE usergroup ( id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL,PRIMARY KEY (id));
+
+CREATE TABLE usergroup_rel_user    ( usergroup_id INT NOT NULL, user_id 	INT NOT NULL );
+CREATE TABLE usergroup_rel_course  ( usergroup_id INT NOT NULL, course_id 	INT NOT NULL );
+CREATE TABLE usergroup_rel_session ( usergroup_id INT NOT NULL, session_id  INT NOT NULL );

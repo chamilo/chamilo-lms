@@ -2547,8 +2547,6 @@ CREATE TABLE career (
     PRIMARY KEY (id)
 );
 
-
-
 CREATE TABLE promotion (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL ,
@@ -2557,3 +2555,25 @@ CREATE TABLE promotion (
     PRIMARY KEY(id)
 );
 
+
+CREATE TABLE usergroup ( 
+	id INT NOT NULL AUTO_INCREMENT,	
+	name VARCHAR(255) NOT NULL, 
+	description TEXT NOT NULL,
+PRIMARY KEY (id)
+);
+
+CREATE TABLE usergroup_rel_user    ( 
+	usergroup_id INT NOT NULL, 
+	user_id 	INT NOT NULL 
+);
+
+CREATE TABLE usergroup_rel_course  ( 
+	usergroup_id INT NOT NULL, 
+	course_id 	INT NOT NULL 
+);
+
+CREATE TABLE usergroup_rel_session ( 
+	usergroup_id INT NOT NULL, 
+	session_id  INT NOT NULL 
+);

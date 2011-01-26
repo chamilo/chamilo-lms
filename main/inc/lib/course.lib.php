@@ -158,7 +158,7 @@ class CourseManager {
 
         $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." ";
         if (!empty($startwith)) {
-            $sql .= "WHERE LIKE title '".Database::escape_string($startwith)."%' ";
+            $sql .= "WHERE title LIKE '".Database::escape_string($startwith)."%' ";
             if ($visibility !== -1 && $visibility == strval(intval($visibility))) {
                 $sql .= " AND visibility = $visibility ";
             }
@@ -191,7 +191,7 @@ class CourseManager {
         } else {
             $sql .= ' OFFSET 0';
         }
-
+        
         return Database::store_result(Database::query($sql));
     }
 
@@ -228,10 +228,13 @@ class CourseManager {
 
     /**
      * Unsubscribe one or more users from a course
-     * @param int|array $user_id
-     * @param string $course_code
+     * 
+     * @param   mixed   user_id or an array with user ids 
+     * @param   int     session id
+     * @param   string  course code
+     * 
      */
-    public static function unsubscribe_user($user_id, $course_code) {
+    public static function unsubscribe_user($user_id, $course_code, $session_id = 0) {
 
         if (!is_array($user_id)) {
             $user_id = array($user_id);
@@ -240,6 +243,12 @@ class CourseManager {
             return;
         }
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+                
+        if (!empty($session_id)) {
+            $session_id = intval($session_id);
+        } else {        
+        	$session_id = intval($_SESSION['id_session']);
+        }
 
         //Cleaning the $user_id variable
         if (is_array($user_id)) {
@@ -294,38 +303,34 @@ class CourseManager {
 
 
         // Unsubscribe user from the course.
-        if (!empty($_SESSION['id_session'])) { // We suppose the session is safe!
+        if (!empty($session_id)) {
             // Delete in table session_rel_course_rel_user
-            $my_session_id = intval ($_SESSION['id_session']);
             Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    WHERE id_session ='".$my_session_id."'
-                        AND course_code = '".Database::escape_string($_SESSION['_course']['id'])."'
-                        AND id_user IN ($user_ids)");
+                    WHERE id_session ='".$session_id."' AND course_code = '".Database::escape_string($_SESSION['_course']['id'])."' AND id_user IN ($user_ids)");
 
             foreach ($user_id as $uid) {
                 // check if a user is register in the session with other course
-                $sql = "SELECT id_user FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session='$my_session_id' AND id_user='$uid'";
+                $sql = "SELECT id_user FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session='$session_id' AND id_user='$uid'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) == 0) {
                     // Delete in table session_rel_user
                     Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                                     WHERE id_session ='".$my_session_id."'
-                                     AND id_user='$uid' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."");
+                                     WHERE id_session ='".$session_id."' AND id_user='$uid' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."");
                 }
 
             }
 
             // Update the table session
             $row = Database::fetch_array(Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                    WHERE id_session = '".$my_session_id."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."  "));
+                    WHERE id_session = '".$session_id."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."  "));
             $count = $row[0]; // number of users by session
             $result = Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = '$count'
-                    WHERE id = '".$my_session_id."'");
+                    WHERE id = '".$session_id."'");
 
             // Update the table session_rel_course
-            $row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session = '$my_session_id' AND course_code = '$course_code' AND status<>2" ));
+            $row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session = '$session_id' AND course_code = '$course_code' AND status<>2" ));
             $count = $row[0]; // number of users by session and course
-            $result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '$my_session_id' AND course_code = '$course_code' ");
+            $result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '$session_id' AND course_code = '$course_code' ");
 
         } else {
 
@@ -348,7 +353,7 @@ class CourseManager {
      * @return  bool    True on success, false on failure
      * @see add_user_to_course
      */
-    public static function subscribe_user($user_id, $course_code, $status = STUDENT) {
+    public static function subscribe_user($user_id, $course_code, $status = STUDENT, $session_id = 0) {
 
         if ($user_id != strval(intval($user_id))) {
             return false; //detected possible SQL injection
@@ -357,6 +362,12 @@ class CourseManager {
         $course_code = Database::escape_string($course_code);
         if (empty ($user_id) || empty ($course_code)) {
             return false;
+        }
+        
+        if (!empty($session_id)) {
+            $session_id = intval($session_id);
+        } else {        
+            $session_id = intval($_SESSION['id_session']);
         }
 
         $status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
@@ -369,30 +380,30 @@ class CourseManager {
         }
 
         // Check whether the user has not been already subscribed to the course.
-        if (empty($_SESSION['id_session'])) {
+        if (empty($session_id)) {
             if (Database::num_rows(@Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                     WHERE user_id = '$user_id' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '$course_code'")) > 0) {
                 return false; // The user has been already subscribed to the course.
             }
         }
 
-        if (!empty($_SESSION['id_session'])) {
+        if (!empty($session_id)) {
 
             // Check whether the user has not already been stored in the session_rel_course_user table
             if (Database::num_rows(@Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
                     WHERE course_code = '".$_SESSION['_course']['id']."'
-                    AND id_session ='".$_SESSION['id_session']."'
+                    AND id_session ='".$session_id."'
                     AND id_user = '".$user_id."'")) > 0) {
                 return false;
             }
 
             // check if the user is registered in the session with other course
-            $sql = "SELECT id_user FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session='".$_SESSION['id_session']."' AND id_user='$user_id'";
+            $sql = "SELECT id_user FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session='".$session_id."' AND id_user='$user_id'";
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
                 // Check whether the user has not already been stored in the session_rel_user table
                 if (Database::num_rows(@Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                        WHERE id_session ='".$_SESSION['id_session']."'
+                        WHERE id_session ='".$session_id."'
                         AND id_user = '".$user_id."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH." ")) > 0) {
                     return false;
                 }
@@ -400,28 +411,26 @@ class CourseManager {
 
             // Add him/her in the table session_rel_course_rel_user
             @Database::query("INSERT INTO ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                    SET id_session ='".$_SESSION['id_session']."',
+                    SET id_session ='".$session_id."',
                     course_code = '".$_SESSION['_course']['id']."',
                     id_user = '".$user_id."'");
 
             // Add him/her in the table session_rel_user
             @Database::query("INSERT INTO ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-                    SET id_session ='".$_SESSION['id_session']."',
+                    SET id_session ='".$session_id."',
                     id_user = '".$user_id."'");
 
             // Update the table session
-            $row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)." WHERE id_session = '".$_SESSION['id_session']."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH.""));
+            $row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)." WHERE id_session = '".$session_id."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH.""));
             $count = $row[0]; // number of users by session
-            $result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = '$count' WHERE id = '".$_SESSION['id_session']."'");
+            $result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = '$count' WHERE id = '".$session_id."'");
 
             // Update the table session_rel_course
-            $row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session = '".$_SESSION['id_session']."' AND course_code = '$course_code' AND status<>2" ));
+            $row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session = '".$session_id."' AND course_code = '$course_code' AND status<>2" ));
             $count = $row[0]; // number of users by session
-            $result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '".$_SESSION['id_session']."' AND course_code = '$course_code' ");
-
+            $result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '".$session_id."' AND course_code = '$course_code' ");
 
         } else {
-
             $course_sort = self::userCourseSort($user_id, $course_code);
             $result = @Database::query("INSERT INTO ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                     SET course_code = '$course_code',
@@ -434,7 +443,6 @@ class CourseManager {
             $user_id = api_get_user_id();
             event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, $time, $user_id);
         }
-
         return (bool)$result;
     }
 
@@ -3060,5 +3068,7 @@ class CourseManager {
         }
     
         return $output;
-    }    
+    }
+
+    
 } //end class CourseManager

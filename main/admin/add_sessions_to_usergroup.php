@@ -13,14 +13,13 @@ $cidReset=true;
 // including some necessary files
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
-require_once api_get_path(LIBRARY_PATH).'promotion.lib.php';
-require_once api_get_path(LIBRARY_PATH).'career.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 $xajax = new xajax();
 
 //$xajax->debugOn();
-$xajax -> registerFunction ('search_sessions');
+$xajax->registerFunction('search_sessions');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -30,12 +29,12 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
+$interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('UserGroups'));
 
 // Database Table Definitions
 
 // setting the name of the tool
-$tool_name=get_lang('SubscribeSessionsToPromotions');
+$tool_name=get_lang('SubscribeSessionsToUserGroup');
 
 $add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
@@ -50,7 +49,7 @@ function add_user_to_session (code, content) {
     document.getElementById("user_to_add").value = "";
     document.getElementById("ajax_list_users_single").innerHTML = "";
 
-    destination = document.getElementById("session_in_promotion");
+    destination = document.getElementById("elements_in");
 
     for (i=0;i<destination.length;i++) {
         if(destination.options[i].text == content) {
@@ -81,57 +80,53 @@ function validate_filter() {
 
 $form_sent  = 0;
 $errorMsg   = '';
-$users      =$sessions=array();
-$promotion = new Promotion();
+$sessions=array();
+$usergroup = new UserGroup();
 $id = intval($_GET['id']);
 if($_POST['form_sent']) {
     $form_sent          = $_POST['form_sent'];    
-    $session_in_promotion_posted       = $_POST['session_in_promotion_name'];     
-    if (!is_array($session_in_promotion_posted)) {
-        $session_in_promotion_posted=array();
+    $elements_posted    = $_POST['elements_in_name'];     
+    if (!is_array($elements_posted)) {
+        $elements_posted = array();
     }
     if ($form_sent == 1) {
         //added a parameter to send emails when registering a user        
-        SessionManager::suscribe_sessions_to_promotion($id, $session_in_promotion_posted);
-        header('Location: promotions.php');
+        $usergroup->subscribe_sessions_to_usergroup($id, $elements_posted);
+        header('Location: usergroups.php');
         exit;        
     }
 }
-
-$promotion_data = $promotion->get($id);
-$session_list   = SessionManager::get_sessions_list(array(), array('name'));
+$data               = $usergroup->get($id);
+$session_list_in    = $usergroup->get_sessions_by_usergroup($id);
+$session_list       = SessionManager::get_sessions_list(array(), array('name'));
 
 //api_display_tool_title($tool_name.' ('.$session_info['name'].')');
-$session_not_in_promotion = $session_in_promotion= array();
+$elements_not_in = $elements_in= array();
 
 if (!empty($session_list)) {
-    foreach($session_list as $session) {
-        $promotion_id = $session['promotion_id'];    
-        if (isset($promotion_id) && !empty($promotion_id)) {
-            if ($promotion_id == $id) {                
-                $session_in_promotion[$session['id']] = $session['name'];
-            } else {
-                $session_not_in_promotion[$session['id']] = $session['name'];
-            } 
+    foreach($session_list as $session) {        
+        if (in_array($session['id'], $session_list_in)) {            
+            $elements_in[$session['id']] = $session['name'];             
         } else {
-            $session_not_in_promotion[$session['id']] = $session['name'];
+            $elements_not_in[$session['id']] = $session['name'];
         }
     }
 }
+
 $ajax_search = $add_type == 'unique' ? true : false;
 
 //checking for extra field with filter on
 
 function search_sessions($needle,$type) {
-    global $tbl_user,$session_in_promotion;
+    global $tbl_user,$elements_in;
     $xajax_response = new XajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
 
         // xajax send utf8 datas... datas in db can be non-utf8 datas
         $charset = api_get_system_encoding();
-        $needle = Database::escape_string($needle);
-        $needle = api_convert_encoding($needle, $charset, 'utf-8');
+        $needle  = Database::escape_string($needle);
+        $needle  = api_convert_encoding($needle, $charset, 'utf-8');
 
         if ($type == 'single') {
             // search users where username or firstname or lastname begins likes $needle
@@ -158,9 +153,10 @@ function search_sessions($needle,$type) {
             }
             $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));*/
         } else {
-            $return .= '<select id="session_not_in_promotion" name="session_not_in_promotion_name[]" multiple="multiple" size="15" style="width:360px;">';            
+            $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
+            
             foreach ($session_list as $row ) {         
-                if (!in_array($row['id'], array_keys($session_in_promotion))) {       
+                if (!in_array($row['id'], array_keys($elements_in))) {       
                     $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
                 }
             }
@@ -183,10 +179,10 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="promotions.php">'.Display::return_icon('back.png',get_lang('Back')).get_lang('Back').'</a>';       
+echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back')).get_lang('Back').'</a>';       
 echo '</div>';
 
-echo '<div class="row"><div class="form_header">'.$tool_name.' '.$promotion_data['name'].'</div></div><br/>'; ?>
+echo '<div class="row"><div class="form_header">'.$tool_name.' '.$data['name'].'</div></div><br/>'; ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 
@@ -230,7 +226,7 @@ if(!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('SessionsInPlatform') ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('SessionsInPromotion') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('SessionsInGroup') ?> :</b></td>
 </tr>
 
 <?php if ($add_type=='multiple') { ?>
@@ -259,7 +255,7 @@ if(!empty($errorMsg)) {
       } else {               
       ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('session_not_in_promotion_name',$session_not_in_promotion, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'session_not_in_promotion','size'=>'15px'),false); ?> 
+        <?php echo Display::select('elements_not_in_name',$elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?> 
       </div>
     <?php
       }
@@ -270,13 +266,13 @@ if(!empty($errorMsg)) {
   <?php
   if ($ajax_search) {
   ?>
-    <button class="arrowl" type="button" onclick="remove_item(document.getElementById('session_in_promotion'))" ></button>
+    <button class="arrowl" type="button" onclick="remove_item(document.getElementById('elements_in'))" ></button>
   <?php
   } else {
   ?>
-    <button class="arrowr" type="button" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))"></button>
+    <button class="arrowr" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))"></button>
     <br /><br />
-    <button class="arrowl" type="button" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))"></button>
+    <button class="arrowl" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))"></button>
     <?php
   }
   ?>
@@ -284,7 +280,7 @@ if(!empty($errorMsg)) {
   </td>
   <td align="center">
 <?php
-    echo Display::select('session_in_promotion_name[]', $session_in_promotion, '', array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'session_in_promotion','size'=>'15px'),false );
+    echo Display::select('elements_in_name[]', $elements_in, '', array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_in','size'=>'15px'),false );
     unset($sessionUsersList);
 ?>
  </td>
@@ -293,7 +289,7 @@ if(!empty($errorMsg)) {
     <td colspan="3" align="center">
         <br />
         <?php
-        echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeSessionsToPromotion').'</button>';
+        echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeSessionsToGroup').'</button>';
         ?>
     </td>
 </tr>
@@ -340,7 +336,7 @@ function mysort(a, b){
 }
 
 function valide(){
-    var options = document.getElementById('session_in_promotion').options;
+    var options = document.getElementById('elements_in').options;
     for (i = 0 ; i<options.length ; i++)
         options[i].selected = true;
     document.forms.formulaire.submit();
@@ -364,8 +360,8 @@ function loadUsersInSelect(select){
     xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
 
-    nosessionUsers = makepost(document.getElementById('session_not_in_promotion'));
-    sessionUsers = makepost(document.getElementById('session_in_promotion'));
+    nosessionUsers = makepost(document.getElementById('elements_not_in'));
+    sessionUsers = makepost(document.getElementById('elements_in'));
     nosessionClasses = makepost(document.getElementById('origin_classes'));
     sessionClasses = makepost(document.getElementById('destination_classes'));
     xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
@@ -379,14 +375,12 @@ function loadUsersInSelect(select){
 }
 
 function makepost(select){
-
     var options = select.options;
     var ret = "";
     for (i = 0 ; i<options.length ; i++)
         ret = ret + options[i].value +'::'+options[i].text+";;";
 
     return ret;
-
 }
 -->
 </script>

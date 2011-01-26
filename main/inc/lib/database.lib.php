@@ -280,6 +280,12 @@ define('TABLE_THEMATIC_ADVANCE','thematic_advance');
 define('TABLE_CAREER',      'career');
 define('TABLE_PROMOTION',   'promotion');
 
+define('TABLE_USERGROUP',               'usergroup');
+define('TABLE_USERGROUP_REL_USER',      'usergroup_rel_user');
+define('TABLE_USERGROUP_REL_COURSE',    'usergroup_rel_course');
+define('TABLE_USERGROUP_REL_SESSION',   'usergroup_rel_session');
+
+
 
 /*		DATABASE CLASS
         The class and its methods

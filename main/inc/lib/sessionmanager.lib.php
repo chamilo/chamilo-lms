@@ -955,12 +955,12 @@ class SessionManager {
 
 	/**
      * Get a list of sessions of which the given conditions match with an = 'cond'
-	 * @param array $conditions a list of condition (exemple : status=>STUDENT)
-	 * @param array $order_by a list of fields on which sort
+	 * @param  array $conditions a list of condition (exemple : array('status =' =>STUDENT) or array('s.name LIKE' => "%$needle%")
+	 * @param  array $order_by a list of fields on which sort
 	 * @return array An array with all sessions of the platform.
-	 * @todo optional course code parameter, optional sorting parameters...
+	 * @todo   optional course code parameter, optional sorting parameters...
 	*/
-	public static function get_sessions_list ($conditions = array(), $order_by = array()) {
+	public static function get_sessions_list($conditions = array(), $order_by = array()) {
 
 		$session_table =Database::get_main_table(TABLE_MAIN_SESSION);
 		$session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -978,12 +978,13 @@ class SessionManager {
 			foreach ($conditions as $field=>$value) {
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
-				$sql_query .= $field.' = '.$value;
+				$sql_query .= $field." '".$value."'";
 			}
 		}
 		if (count($order_by)>0) {
 			$sql_query .= ' ORDER BY '.Database::escape_string(implode(',',$order_by));
 		}
+        //echo $sql_query;
 		$sql_result = Database::query($sql_query);
         if (Database::num_rows($sql_result)>0) {
     		while ($result = Database::fetch_array($sql_result)) {
@@ -1266,10 +1267,14 @@ class SessionManager {
         Database::update($t, $params, array('promotion_id = ?'=>$promotion_id));
         
         $params['promotion_id'] = $promotion_id;
-        foreach ($list as $session_id) {
-            $session_id= intval($session_id);
-            Database::update($t, $params, array('id = ?'=>$session_id));
-        }                
+        if (!empty($list)) {
+            foreach ($list as $session_id) {
+                $session_id= intval($session_id);
+                Database::update($t, $params, array('id = ?'=>$session_id));
+            }                
+        }
     }
+    
+    
     
 }

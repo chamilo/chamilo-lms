@@ -952,7 +952,7 @@ class MessageManager
 								$html_items.= '<div class="message-group-title">'.Security::remove_XSS($item['title']).'&nbsp;</div>';						
 									$image_path = UserManager::get_user_picture_path_by_id($topic['user_sender_id'], 'web', false, true);								$image_repository = $image_path['dir'];
 									$existing_image = $image_path['file'];
-								$html_items.= '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="44" height="44" title="'.$name.'" />&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$item['user_sender_id'].'">'.$name.'&nbsp;</a></div>';
+								$html_items.= '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" />&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$item['user_sender_id'].'">'.$name.'&nbsp;</a></div>';
 								$html_items.= '<div class="message-group-content">'.$item['content'].'</div>';
 
 								if ($item['send_date'] != $item['update_date']) {

@@ -632,7 +632,7 @@ else
     $navigation .= get_lang('Next');
 
 echo $navigation;
-$user_list      = UserManager::get_user_list(array(), array(), $begin, $end);
+$user_list      = UserManager::get_user_list(array(), array(), $begin, $default);
 $session_list   = SessionManager::get_sessions_list(array(),array('name'));
 $options = '';
 $options .= '<option value="0">--'.get_lang('SelectASession').'--</option>';

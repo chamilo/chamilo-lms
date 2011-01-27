@@ -587,7 +587,7 @@ class UserManager
 	* @return array An array with all users of the platform.
 	* @todo optional course code parameter, optional sorting parameters...
 	*/
-	public static function get_user_list($conditions = array(), $order_by = array()) {
+	public static function get_user_list($conditions = array(), $order_by = array(), $limit_from = false, $limit_to = false) {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$return_array = array();
 		$sql_query = "SELECT * FROM $user_table";
@@ -602,6 +602,12 @@ class UserManager
 		if (count($order_by) > 0) {
 			$sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
 		}
+        
+        if (is_numeric($limit_from) && is_numeric($limit_from)) {
+            $limit_from = intval($limit_from);
+            $limit_to   = intval($limit_to);
+            $sql_query .= " LIMIT $limit_from, $limit_to";  
+        }        
 		$sql_result = Database::query($sql_query);
 		while ($result = Database::fetch_array($sql_result)) {
 			$return_array[] = $result;

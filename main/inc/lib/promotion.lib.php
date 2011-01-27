@@ -21,6 +21,8 @@ class Promotion extends Model {
     function get_all_promotions_by_career_id($career_id) {        
         return Database::select('*', $this->table, array('where'=>array('career_id = ?'=>$career_id)));
     }    
+    
+
    
     /**
      * Displays the title + grid

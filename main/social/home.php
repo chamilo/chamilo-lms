@@ -1,7 +1,7 @@
 <?php //$id: $
 /* For licensing terms, see /chamilo_license.txt */
 /**
- * @package dokeos.social
+ * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
 

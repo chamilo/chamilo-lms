@@ -1,7 +1,7 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
- * @author Juan  Carlos Raña Trabado herodoto@telefonica.net
+ * @author Juan  Carlos Raï¿½a Trabado herodoto@telefonica.net
  */
 $language_file = array('messages','userInfo');
 $cidReset=true;

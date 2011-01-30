@@ -1,7 +1,7 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
- * @package dokeos.social
+ * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset=true;

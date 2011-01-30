@@ -21,7 +21,12 @@ class StudentPublicationLink extends AbstractLink
     }
 
 
-    // FUNCTIONS IMPLEMENTING ABSTRACTLINK
+    /**
+     * 
+     * Returns the URL of a document
+     * This funcion is loaded when using a gradebook as a tab (gradebook = -1), see issue #2705
+     * 
+     */
 
 	public function get_view_url ($stud_id) {
 		// find a file uploaded by the given student,
@@ -39,8 +44,9 @@ class StudentPublicationLink extends AbstractLink
 		$result = Database::query($sql);
 		if ($fileurl = Database::fetch_row($result)) {
 	    	$course_info = Database :: get_course_info($this->get_course_code());
-			$url = api_get_path(WEB_PATH).'main/gradebook/open_document.php?file='.$course_info['directory'].'/'.$fileurl[0];
-			return $url;
+			//$url = api_get_path(WEB_PATH).'main/gradebook/open_document.php?file='.$course_info['directory'].'/'.$fileurl[0];
+			//return $url;
+            return null;
 		 } else {
 			return null;
 		}

@@ -21,33 +21,25 @@ class StudentPublicationLink extends AbstractLink
     }
 
 
-// FUNCTIONS IMPLEMENTING ABSTRACTLINK
+    // FUNCTIONS IMPLEMENTING ABSTRACTLINK
 
 	public function get_view_url ($stud_id) {
 		// find a file uploaded by the given student,
 		// with the same title as the evaluation name
 
     	$eval = $this->get_evaluation();
-        $stud_id = (int) $stud_id;
+        $stud_id = intval($stud_id);
 
-		$sql = 'SELECT pub.url'
-				.' FROM '.$this->get_itemprop_table().' prop, '
-						 .$this->get_studpub_table().' pub'
+		$sql = 'SELECT pub.url FROM '.$this->get_itemprop_table().' prop, '.$this->get_studpub_table().' pub'
 				." WHERE prop.tool = 'work'"
-				.' AND prop.insert_user_id = '.intval($stud_id)
+				.' AND prop.insert_user_id = '.$stud_id
 				.' AND prop.ref = pub.id'
 				." AND pub.title = '".Database::escape_string($eval->get_name())."' AND pub.session_id=".api_get_session_id()."";
 
 		$result = Database::query($sql);
 		if ($fileurl = Database::fetch_row($result)) {
 	    	$course_info = Database :: get_course_info($this->get_course_code());
-
-			$url = api_get_path(WEB_PATH)
-					.'main/gradebook/open_document.php?file='
-					.$course_info['directory']
-					.'/'
-					.$fileurl[0];
-
+			$url = api_get_path(WEB_PATH).'main/gradebook/open_document.php?file='.$course_info['directory'].'/'.$fileurl[0];
 			return $url;
 		 } else {
 			return null;
@@ -59,12 +51,11 @@ class StudentPublicationLink extends AbstractLink
     	return get_lang('DokeosStudentPublications');
     }
 
-
 	public function is_allowed_to_change_name() {
 		return false;
 	}
 
-// FUNCTIONS IMPLEMENTING ABSTRACTLINK
+    // FUNCTIONS IMPLEMENTING ABSTRACTLINK
 
 	/**
 	 * Generate an array of exercises that a teacher hasn't created a link for.

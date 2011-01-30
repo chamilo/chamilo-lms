@@ -179,7 +179,7 @@ class GradebookTable extends SortableTable
 				$cat=new Category();
 				$show_message=$cat->show_message_resource_delete($item->get_course_code());
 				if ($show_message===false) {
-					$row[] = $this->build_edit_column ($item);
+					$row[] = $this->build_edit_column ($item); 
 				}
 			} else {
 				//students get the results and certificates columns

@@ -27,21 +27,14 @@ class DropboxLink extends EvalLink
 
     	$eval = $this->get_evaluation();
 
-		$sql = 'SELECT filename'
-				.' FROM '.$this->get_dropbox_table()
+		$sql = 'SELECT filename FROM '.$this->get_dropbox_table()
 				.' WHERE uploader_id = '.intval($stud_id)
 				." AND title = '".Database::escape_string($eval->get_name())."'";
 
 		$result = Database::query($sql);
 		if ($fileurl = Database::fetch_row($result)) {
 	    	$course_info = Database :: get_course_info($this->get_course_code());
-
-			$url = api_get_path(WEB_PATH)
-					.'main/gradebook/open_document.php?file='
-					.$course_info['directory']
-					.'/'
-					.$fileurl[0];
-
+			$url = api_get_path(WEB_PATH).'main/gradebook/open_document.php?file='.$course_info['directory'].'/'.$fileurl[0];
 			return $url;
 		} else {
 			return null;

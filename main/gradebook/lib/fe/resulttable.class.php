@@ -133,24 +133,22 @@ class ResultTable extends SortableTable
 
 		return $sortable_data;
 	}
-
-// Other functions
-
-	private function build_edit_column ($item) {
+    
+	private function build_edit_column ($item) { 
 		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		if (api_is_allowed_to_edit(null, true)) {//api_is_course_admin()
 			$edit_column = '<a href="' . api_get_self() . '?editres=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
 		}
 		if ($this->evaluation->get_course_code() == null) {
 			$edit_column.= '&nbsp;<a href="' . api_get_self() . '?resultdelete=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '" onclick="return confirmationuser();"><img src="../img/delete.gif" border="0" title="' . get_lang('Delete') . '" alt="" /></a>';
-		$edit_column.= '&nbsp;<a href="user_stats.php?userid=' . $item['id'] . '&selecteval=' . $this->evaluation->get_id() . '"><img src="../img/statistics.gif" width="17px" border="0" title="' . get_lang('Statistics') . '" alt="" /></a>';
-
+		    $edit_column.= '&nbsp;<a href="user_stats.php?userid=' . $item['id'] . '&selecteval=' . $this->evaluation->get_id() . '"><img src="../img/statistics.gif" width="17px" border="0" title="' . get_lang('Statistics') . '" alt="" /></a>';
 		}
-		// evaluation's origin is a link
+		// Evaluation's origin is a link        
 		if ($this->evaluation->get_category_id() < 0) {
 			$link = LinkFactory :: get_evaluation_link ($this->evaluation->get_id());
 
 			$doc_url = $link->get_view_url($item['id']);
+            
 			if ($doc_url != null) {
 				$edit_column .= '&nbsp;<a href="'. $doc_url . '" target="_blank">'
 								.'<img src="'. api_get_path(WEB_CODE_PATH) . 'img/link.gif" border="0" title="' . get_lang('OpenDocument') . '" alt="" />'

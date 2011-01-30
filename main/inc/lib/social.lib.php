@@ -638,6 +638,8 @@ class SocialManager extends UserManager {
 			
 			//Search users and groups
 	        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'),array('hspace'=>'6')).'<span class="'.($show=='search'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Search').'</span></a></li>';
+            
+            echo Display::tag('li', Display::return_icon('group.png',get_lang('Groups'),array('hspace'=>'6')).Display::url(get_lang('MyClasses'),api_get_path(WEB_PATH).'main/social/usergroups.php'));
 			
 			//My files
 			 echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase_small.png',get_lang('MyFiles'),array('hspace'=>'6')).'<span class="'.($show=='myfiles'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyFiles').'</span></a></li>';	

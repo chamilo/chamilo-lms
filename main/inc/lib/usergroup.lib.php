@@ -66,6 +66,22 @@ class UserGroup extends Model {
         return $array; 	
     }
     
+    /**
+     * Gets the usergroup id list by user id
+     * @param   int user id
+     */
+    public function get_usergroup_by_user($id) {
+        $results = Database::select('*',$this->usergroup_rel_user_table, array('where'=>array('user_id = ?'=>$id)));
+        $array = array();
+        if (!empty($results)) {    
+            foreach($results as $row) {
+                $array[]= $row['usergroup_id'];            
+            }
+        }                       
+        return $array;  
+    }
+    
+    
     
     /**
      * Subscribes sessions to a group  (also adding the members of the group in the session and course)

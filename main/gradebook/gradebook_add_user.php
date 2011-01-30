@@ -2,6 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+//Disabling code when course code is null (gradebook as a tab) see issue #2705
+exit;
+
+
+
 $language_file = 'gradebook';
 require_once '../inc/global.inc.php';
 $this_section = SECTION_MYGRADEBOOK;

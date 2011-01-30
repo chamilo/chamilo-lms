@@ -19,12 +19,16 @@ class DropboxLink extends EvalLink
     }
 
 
-// FUNCTIONS IMPLEMENTING ABSTRACTLINK
+    /**
+     * 
+     * Returns the URL of a document
+     * This funcion is loaded when using a gradebook as a tab (gradebook = -1) see issue #2705
+     */
 
 	public function get_view_url ($stud_id) {
 		// find a file uploaded by the given student,
 		// with the same title as the evaluation name
-
+		
     	$eval = $this->get_evaluation();
 
 		$sql = 'SELECT filename'
@@ -36,13 +40,14 @@ class DropboxLink extends EvalLink
 		if ($fileurl = Database::fetch_row($result)) {
 	    	$course_info = Database :: get_course_info($this->get_course_code());
 
-			$url = api_get_path(WEB_PATH)
-					.'main/gradebook/open_document.php?file='
-					.$course_info['directory']
-					.'/'
-					.$fileurl[0];
+		//	$url = api_get_path(WEB_PATH)
+		//			.'main/gradebook/open_document.php?file='
+		//			.$course_info['directory']
+		//			.'/'
+		//			.$fileurl[0];
 
-			return $url;
+		//	return $url;
+        return null;
 		} else {
 			return null;
 		}

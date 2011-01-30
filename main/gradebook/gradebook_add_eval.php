@@ -43,7 +43,8 @@ if ($form->validate()) {
 	$eval->add();
 	if ($eval->get_course_code() == null) {
 		if ($values['adduser'] == 1) {
-			header('Location: gradebook_add_user.php?selecteval=' . $eval->get_id());
+            //Disabling code when course code is null see issue #2705
+			//header('Location: gradebook_add_user.php?selecteval=' . $eval->get_id());
 			exit;
 		} else {
 			header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat=' . $eval->get_category_id());

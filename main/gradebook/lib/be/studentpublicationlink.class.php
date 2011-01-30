@@ -42,13 +42,14 @@ class StudentPublicationLink extends AbstractLink
 		if ($fileurl = Database::fetch_row($result)) {
 	    	$course_info = Database :: get_course_info($this->get_course_code());
 
-			$url = api_get_path(WEB_PATH)
-					.'main/gradebook/open_document.php?file='
-					.$course_info['directory']
-					.'/'
-					.$fileurl[0];
+			//$url = api_get_path(WEB_PATH)
+			//		.'main/gradebook/open_document.php?file='
+			//		.$course_info['directory']
+			//		.'/'
+			//		.$fileurl[0];
 
-			return $url;
+			//return $url;
+      return null;
 		 } else {
 			return null;
 		}

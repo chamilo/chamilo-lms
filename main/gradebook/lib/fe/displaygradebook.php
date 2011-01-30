@@ -15,9 +15,9 @@ class DisplayGradebook
 			$header = '<div class="actions">';
 			$header .= '<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat=' . $selectcat . '">'. Display::return_icon(('back.png'),get_lang('FolderView')) . get_lang('FolderView') . '</a>';
 			if ($evalobj->get_course_code() == null) {
-				$header .= '<a href="gradebook_add_user.php?selecteval=' . $evalobj->get_id() . '"><img src="../img/add_user_big.gif" alt="' . get_lang('AddStudent') . '" align="absmiddle" /> ' . get_lang('AddStudent') . '</a>';
-			}
-			elseif (!$evalobj->has_results()) {
+                //Disabling code when course code is null see issue #2705
+				//$header .= '<a href="gradebook_add_user.php?selecteval=' . $evalobj->get_id() . '"><img src="../img/add_user_big.gif" alt="' . get_lang('AddStudent') . '" align="absmiddle" /> ' . get_lang('AddStudent') . '</a>';
+			} elseif (!$evalobj->has_results()) {
 				$header .= '<a href="gradebook_add_result.php?selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '"><img src="../img/filenew.gif" alt="' . get_lang('AddResult') . '" align="absmiddle"/> ' . get_lang('AddResult') . '</a>';
 			}
 			$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&import="><img src="../img/import_data.gif" border="0" alt="" />' . ' ' . get_lang('ImportResult') . '</a>';

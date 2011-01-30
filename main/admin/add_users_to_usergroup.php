@@ -29,12 +29,12 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('UserGroups'));
+$interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Groups'));
 
 // Database Table Definitions
 
 // setting the name of the tool
-$tool_name=get_lang('SubscribeUsersToUserGroup');
+$tool_name=get_lang('SubscribeUsersToGroup');
 
 $add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
@@ -226,10 +226,10 @@ if(!empty($errorMsg)) {
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td align="center"><b><?php echo get_lang('SessionsInPlatform') ?> :</b>
+  <td align="center"><b><?php echo get_lang('UsersInPlatform') ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('SessionsInGroup') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('UsersInGroup') ?> :</b></td>
 </tr>
 
 <?php if ($add_type=='multiple') { ?>

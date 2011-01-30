@@ -21,6 +21,9 @@ api_protect_admin_script();
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
+// setting breadcrumbs
+$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+
 // The header.
 Display::display_header($tool_name);
 

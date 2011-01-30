@@ -28,12 +28,12 @@ api_protect_admin_script(true);
 
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('UserGroups'));
+$interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Groups'));
 
 // Database Table Definitions
 
 // setting the name of the tool
-$tool_name=get_lang('SubscribeSessionsToUserGroup');
+$tool_name=get_lang('SubscribeCoursesToGroup');
 
 $add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){

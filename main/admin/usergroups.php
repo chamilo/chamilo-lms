@@ -20,6 +20,8 @@ api_protect_admin_script();
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
+// setting breadcrumbs
+$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 
 // The header.
 Display::display_header($tool_name);
@@ -55,9 +57,9 @@ $extra_params['height'] = 'auto';
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
                     return \'<a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/course_add.gif" title="'.get_lang('AddSession').'"></a>'
-                    .'<a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/course_add.gif" title="'.get_lang('AddCourses').'"></a>' 
+                    .'<a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/course_add.gif" title="'.get_lang('AddACourse').'"></a>' 
                     .'<a href="add_users_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/add_user_big.gif" title="'.get_lang('AddUsers').'"></a>' 
-                    .'<a href="?action=edit&id=\'+options.rowId+\'"><img src="../img/edit.gif" title="'.get_lang('Edit').'"></a>'                                       
+                    .'<a href="?action=edit&id=\'+options.rowId+\'"><img src="../img/edit.gif" title="'.get_lang('Edit').'" ></a>'                                       
                     .'<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.gif"></a>\'; 
                  }';
 ?>

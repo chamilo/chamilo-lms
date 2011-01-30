@@ -926,15 +926,15 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                 Display::display_icon('draw_new_na.png', get_lang('BrowserDontSupportsSVG')); echo get_lang('Draw').'&nbsp;';
             }
         }
-    }
-
-    // Create new audio
-    if (api_get_setting('enabled_text2audio') == 'true'){
-    ?>
-        <a href="create_audio.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
-       <?php Display::display_icon('new_text2audio.png', get_lang('CreateAudio')); echo get_lang('CreateAudio'); ?></a>&nbsp;
-    <?php
-    }
+		
+		// Create new audio
+		if (api_get_setting('enabled_text2audio') == 'true'){
+		?>
+			<a href="create_audio.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+		   <?php Display::display_icon('new_text2audio.png', get_lang('CreateAudio')); echo get_lang('CreateAudio'); ?></a>&nbsp;
+		<?php
+		}		
+    }    
 
     // Create new certificate
     if ($is_certificate_mode) {

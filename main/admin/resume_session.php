@@ -1,12 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	@author Bart Mollet
+*	@author Bart Mollet, Julio Montoya lot of fixes
 *	@package chamilo.admin
 */
-/*
-		INIT SECTION
-*/
+/*		INIT SECTION */
 
 // name of the language file that needs to be included
 $language_file = 'admin';
@@ -36,9 +34,7 @@ $tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY)
 $id_session = (int)$_GET['id_session'];
 
 $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
-		FROM '.$tbl_session.'
-		LEFT JOIN '.$tbl_user.'
-			ON id_coach = user_id
+		FROM '.$tbl_session.' LEFT JOIN '.$tbl_user.' ON id_coach = user_id
 		WHERE '.$tbl_session.'.id='.$id_session;
 
 $rs = Database::query($sql);
@@ -80,11 +76,8 @@ if($_GET['action'] == 'delete') {
 
 	if(!empty($_GET['class'])){
 		Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']));
-
 		$nbr_affected_rows=Database::affected_rows();
-
 		Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'");
-
 	}
 
 	if (!empty($_GET['user'])) {
@@ -94,11 +87,10 @@ if($_GET['action'] == 'delete') {
 
 		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']));
 		$nbr_affected_rows=Database::affected_rows();
+        
 		Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'");
 	}
 }
-
-
 
 
 Display::display_header($tool_name);
@@ -123,21 +115,33 @@ api_display_tool_title($tool_name);
 	<td><?php echo get_lang('GeneralCoach'); ?> :</td>
 	<td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
 </tr>
-<?php if(!empty($session_category)): ?>
+<?php if(!empty($session_category)) { ?>
 <tr>
 	<td><?php echo get_lang('SessionCategory') ?></td>
 	<td><?php echo $session_category;  ?></td>
 </tr>
-<?php endif; ?>
+<?php } ?>
 <tr>
 	<td><?php echo get_lang('Date'); ?> :</td>
 	<td>
 	<?php
-		if($session['date_start']=='00-00-0000')
+		if ($session['date_start'] == '00-00-0000' && $session['date_end']== '00-00-0000' )
 			echo get_lang('NoTimeLimits');
-		else
-			echo get_lang('From').' '.$session['date_start'].' '.get_lang('To').' '.$session['date_end'];
-		 ?>
+		else {
+            if ($session['date_start'] != '00-00-0000') {
+            	//$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));
+                $session['date_start'] =  get_lang('From').' '.$session['date_start'];
+            } else {
+            	$session['date_start'] = '';
+            }
+            if ($session['date_end'] == '00-00-0000') {
+                $session['date_end'] ='';
+            } else {
+            	$session['date_end'] = get_lang('Until').' '.$session['date_end'];
+            }
+			echo $session['date_start'].' '.$session['date_end'];
+        }
+        ?>
 	</td>
 </tr>
 

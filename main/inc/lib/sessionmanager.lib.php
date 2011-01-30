@@ -35,7 +35,7 @@ class SessionManager {
     }
 	 /**
 	  * Create a session
-	  * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
+	  * @author Carlos Vargas from existing code
 	  * @param	string 		name
 	  * @param 	integer		year_start
 	  * @param 	integer		month_start
@@ -50,9 +50,8 @@ class SessionManager {
 	  * @param 	integer		id_session_category
 	  * @return $id_session;
 	  **/
-	public static function create_session ($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility) {
-		global $_user;
-		$name= trim($sname);
+	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true) {		
+		$name= Database::escape_string(trim($sname));
 		$year_start= intval($syear_start);
 		$month_start=intval($smonth_start);
 		$day_start=intval($sday_start);
@@ -62,10 +61,11 @@ class SessionManager {
 		$nb_days_acess_before = intval($snb_days_acess_before);
 		$nb_days_acess_after = intval($snb_days_acess_after);
 		$id_session_category = intval($id_session_category);
-		$id_visibility = intval($id_visibility);
+		$id_visibility   = intval($id_visibility);
 		$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
-
+        
+    
 		if(is_int($coach_username)) {
 			$id_coach = $coach_username;
 		} else {
@@ -75,36 +75,47 @@ class SessionManager {
 		}
 
 		if (empty($nolimit)) {
-			$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-			$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
+			$date_start  ="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
+			$date_end    ="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
 		} else {
-			$id_visibility = 1; // by default is read only
-			$date_start="0000-00-00";
-			$date_end="0000-00-00";
+			$id_visibility   = 1; // by default session visibility is read only
+			$date_start      ="0000-00-00";
+			$date_end        ="0000-00-00";
 		}
+        
+        if (empty($end_limit)) {
+            $date_end ="0000-00-00";
+            $id_visibility   = 1; // by default session visibility is read only
+        }
+              
+        if (empty($start_limit)) {
+            $date_start ="0000-00-00";
+        }            
+         
 		if (empty($name)) {
 			$msg=get_lang('SessionNameIsRequired');
 			return $msg;
 		} elseif (empty($coach_username))   {
 			$msg=get_lang('CoachIsRequired');
 			return $msg;
-		} elseif (empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) {
+		} elseif (!empty($start_limit)  && empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) {
 			$msg=get_lang('InvalidStartDate');
 			return $msg;
-		} elseif (empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) {
+		} elseif (!empty($end_limit)  &&  empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) {
 			$msg=get_lang('InvalidEndDate');
 			return $msg;
-		} elseif(empty($nolimit) && $date_start >= $date_end) {
+		} elseif(!empty($start_limit) && !empty($end_limit)  && empty($nolimit) && $date_start >= $date_end) {
 			$msg=get_lang('StartDateShouldBeBeforeEndDate');
 			return $msg;
 		} else {
-			$rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".addslashes($name)."'");
-			if(Database::num_rows($rs)) {
+			$rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".$name."'");
+			if (Database::num_rows($rs)) {
 				$msg=get_lang('SessionNameAlreadyExists');
 				return $msg;
 			} else {
 				$sql_insert = "INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id,visibility)
-							   VALUES('".Database::escape_string($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.", ".$id_session_category.", ".$id_visibility.")";
+							   VALUES('".$name."','$date_start','$date_end','$id_coach',".api_get_user_id().",".$nb_days_acess_before.", ".$nb_days_acess_after.", ".$id_session_category.", ".$id_visibility.")";
+                              
 				Database::query($sql_insert);
 				$id_session=Database::insert_id();
 
@@ -117,9 +128,10 @@ class SessionManager {
 			}
 		}
 	}
+    
 	/**
 	 * Edit a session
-	 * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
+	 * @author Carlos Vargas from existing code
 	 * @param	integer		id
 	 * @param	string 		name
 	 * @param 	integer		year_start
@@ -136,7 +148,7 @@ class SessionManager {
 	 * @return $id;
 	 * The parameter id is a primary key
 	**/
-	public static function edit_session ($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach, $id_session_category, $id_visibility) {
+	public static function edit_session ($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach, $id_session_category, $id_visibility, $start_limit = true, $end_limit = true) {
 		global $_user;
 		$name=trim(stripslashes($name));
 		$year_start=intval($year_start);
@@ -154,29 +166,42 @@ class SessionManager {
 		$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-
-
+              
 		if (empty($nolimit)) {
-			$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-			$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
+			$date_start  = "$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
+			$date_end    = "$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
 		} else {
-			$date_start="000-00-00";
-			$date_end="000-00-00";
+			$date_start  = "0000-00-00";
+			$date_end    = "0000-00-00";
 			$id_visibility = 1;//force read only
 		}
+        
+        if (!empty($no_end_limit)) {
+        	$date_end   = "0000-00-00";
+        }
+        
+        if (empty($end_limit)) {
+            $date_end ="0000-00-00";
+            $id_visibility = 1;//force read only
+        }
+              
+        if (empty($start_limit)) {
+            $date_start ="0000-00-00";
+        }
+               
 		if (empty($name)) {
 			$msg=get_lang('SessionNameIsRequired');
 			return $msg;
 		} elseif (empty($id_coach))   {
 			$msg=get_lang('CoachIsRequired');
 			return $msg;
-		} elseif (empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) {
+		} elseif (!empty($start_limit) && empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) {
 			$msg=get_lang('InvalidStartDate');
 			return $msg;
-		} elseif (empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) {
+		} elseif (!empty($end_limit) && empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) {
 			$msg=get_lang('InvalidEndDate');
 			return $msg;
-		} elseif (empty($nolimit) && $date_start >= $date_end) {
+		} elseif (!empty($start_limit) && !empty($end_limit) && empty($nolimit) && $date_start >= $date_end) {
 			$msg=get_lang('StartDateShouldBeBeforeEndDate');
 			return $msg;
 		} else {
@@ -201,17 +226,13 @@ class SessionManager {
 						visibility= ".$id_visibility."
 					  WHERE id='$id'";
 				Database::query($sql);
-				/*$sqlu = "UPDATE $tbl_session_rel_course " .
-						  " SET id_coach='$id_coach'" .
-						  " WHERE id_session='$id'";
-				Database::query($sqlu);*/
 				return $id;
 			}
 		}
 	}
 	/**
 	 * Delete session
-	 * @author Carlos Vargas <carlos.vargas@dokeos.com>, from existing code
+	 * @author Carlos Vargas  from existing code
 	 * @param	array	id_checked
 	 * @param   boolean  optional, true if the function is called by a webservice, false otherwise.
      * @return	void	Nothing, or false on error
@@ -313,7 +334,7 @@ class SessionManager {
 
 	 /**
 	  * Subscribes users to the given session and optionally (default) unsubscribes previous users
-	  * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
+	  * @author Carlos Vargas from existing code
 	  * @param	integer		Session ID
 	  * @param	array		List of user IDs
 	  * @param	bool		Whether to unsubscribe existing users (true, default) or not (false)
@@ -503,7 +524,7 @@ class SessionManager {
 	}
 
 	 /** Subscribes courses to the given session and optionally (default) unsubscribes previous users
-	 * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
+	 * @author Carlos Vargas from existing code
      * @param	int		Session ID
      * @param	array	List of courses IDs
      * @param	bool	Whether to unsubscribe existing users (true, default) or not (false)

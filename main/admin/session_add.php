@@ -30,8 +30,8 @@ api_protect_admin_script(true);
 $formSent=0;
 $errorMsg='';
 
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
+$interbreadcrumb[]=array('url' => 'index.php',       'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 // Database Table Definitions
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
@@ -101,34 +101,42 @@ function fill_coach_field (username) {
 
 
 if ($_POST['formSent']) {
-	$formSent=1;
-	$name= $_POST['name'];
-	$year_start= $_POST['year_start'];
-	$month_start=$_POST['month_start'];
-	$day_start=$_POST['day_start'];
-	$year_end=$_POST['year_end'];
-	$month_end=$_POST['month_end'];
-	$day_end=$_POST['day_end'];
-	$nb_days_acess_before = $_POST['nb_days_acess_before'];
-	$nb_days_acess_after = $_POST['nb_days_acess_after'];
-	$nolimit=$_POST['nolimit'];
-	$coach_username=$_POST['coach_username'];
-	$id_session_category = $_POST['session_category'];
-	$id_visibility = $_POST['session_visibility'];
-	$return = SessionManager::create_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility);
+	$formSent = 1;
+	$name                  = $_POST['name'];
+	$year_start            = $_POST['year_start'];
+	$month_start           = $_POST['month_start'];
+	$day_start             = $_POST['day_start'];
+	$year_end              = $_POST['year_end'];
+	$month_end             = $_POST['month_end'];
+	$day_end               = $_POST['day_end'];
+	$nb_days_acess_before  = $_POST['nb_days_acess_before'];
+	$nb_days_acess_after   = $_POST['nb_days_acess_after'];
+	//$nolimit               = $_POST['nolimit'];
+	$coach_username        = $_POST['coach_username'];
+	$id_session_category   = $_POST['session_category'];
+	$id_visibility         = $_POST['session_visibility'];
+    
+    $end_limit             = $_POST['end_limit'];
+    $start_limit           = $_POST['start_limit'];  
+    
+    if (empty($end_limit) && empty($start_limit)) {
+        $nolimit = 1;
+    } else {
+    	$nolimit = null;
+    }
+    
+	$return = SessionManager::create_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit, $end_limit);
 
 	global $_configuration;
-		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
-		if ($_configuration['multiple_access_urls']) {
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-			$access_url_id = api_get_current_access_url_id();
-			UrlManager::add_session_to_url($return,$access_url_id);
-		} else {
-			// we are filling by default the access_url_rel_session table
-			UrlManager::add_session_to_url($return,1);
-		}
-
-
+	require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+	if ($_configuration['multiple_access_urls']) {
+		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$access_url_id = api_get_current_access_url_id();
+		UrlManager::add_session_to_url($return,$access_url_id);
+	} else {
+		// we are filling by default the access_url_rel_session table
+		UrlManager::add_session_to_url($return,1);
+	}
 	if ($return == strval(intval($return))) {
 		// integer => no error on session creation
 		header('Location: add_courses_to_session.php?id_session='.$return.'&add=true&msg=');
@@ -228,14 +236,32 @@ if (intval($count_users)<50) {
 	</select>
   </td>
 </tr>
+
 <tr>
-  <td width="40%"><?php echo get_lang('NoTimeLimits') ?></td>
+    <td>
+        &nbsp;
+    </td>
+    <td>
+        <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
+        <div style="display: <?php if($formSent && ($nb_days_acess_before!=0 || $nb_days_acess_after!=0)) echo 'block'; else echo 'none'; ?>;" id="options">
+            <br />
+            <input type="text" name="nb_days_acess_before" value="<?php echo $nb_days_acess_before; ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?><br /><br />
+            <input type="text" name="nb_days_acess_after" value="<?php echo $nb_days_acess_after; ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
+            <br />
+        </div>
+    </td>
+</tr>
+
+
+
+  <td width="40%"></td>
   <td width="60%">
-  	<input type="checkbox" name="nolimit" onChange="setDisable(this)" />
-  </td>
-<tr>
-  <td width="40%"><?php echo get_lang('DateStartSession') ?>&nbsp;&nbsp;</td>
-  <td width="60%">
+  <input type="checkbox" name="start_limit" onchange="disable_starttime(this)" <?php if ($year_start=="0000") echo "checked"; ?>/>
+    <?php echo get_lang('DateStartSession');?> 
+ 
+    <div id="start_date" style="display:none">
+       <br />
+    
   <select name="day_start">
 	<option value="1">01</option>
 	<option value="2" <?php if((!$formSent && $thisDay == 2) || ($formSent && $day_start == 2)) echo 'selected="selected"'; ?> >02</option>
@@ -286,7 +312,6 @@ if (intval($count_users)<50) {
   </select>
   /
   <select name="year_start">
-
 <?php
 for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 ?>
@@ -294,13 +319,24 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 <?php
 }
 ?>
-
   </select>
+  
+  </div>
+  
+    
+
+  
   </td>
 </tr>
 <tr>
-  <td width="40%"><?php echo get_lang('DateEndSession') ?>&nbsp;&nbsp;</td>
+  <td width="40%">&nbsp;&nbsp;</td>
   <td width="60%">
+  <input type="checkbox" name="end_limit" onchange="disable_endtime(this)" <?php if ($year_end=="0000") echo "checked"; ?>/>
+  <?php echo get_lang('DateEndSession') ?>
+  
+  <div id="end_date" style="display:none">
+  <br />
+  
   <select name="day_end">
 	<option value="1">01</option>
 	<option value="2" <?php if((!$formSent && $thisDay == 2) || ($formSent && $day_end == 2)) echo 'selected="selected"'; ?> >02</option>
@@ -359,38 +395,19 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 <?php
 }
 ?>
-  </select>
+    </select>
+    <br />    <br />
+    <?php echo get_lang('SessionVisibility') ?>
+    <select name="session_visibility" style="width:250px;">
+        <?php
+        $visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('SessionReadOnly'), SESSION_VISIBLE=>get_lang('SessionAccessible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('SessionNotAccessible')));
+        foreach($visibility_list as $key=>$item): ?>
+        <option value="<?php echo $key; ?>" <?php if($item == $visibility_id) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
+        <?php endforeach; ?>
+    </select>    
+     </div>  
   </td>
 </tr>
-<tr>
-	<td>
-		&nbsp;
-	</td>
-	<td>
-		<a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
-		<div style="display: <?php if($formSent && ($nb_days_acess_before!=0 || $nb_days_acess_after!=0)) echo 'block'; else echo 'none'; ?>;" id="options">
-			<br>
-			<input type="text" name="nb_days_acess_before" value="<?php echo $nb_days_acess_before; ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?><br>
-			<input type="text" name="nb_days_acess_after" value="<?php echo $nb_days_acess_after; ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
-			<br>
-		</div>
-	</td>
-</tr>
-
-
-<tr>
-  <td width="40%"><?php echo get_lang('SessionVisibility') ?></td>
-  <td width="60%">
-  	<select name="session_visibility" style="width:250px;">
-		<?php
-		$visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('SessionReadOnly'), SESSION_VISIBLE=>get_lang('SessionAccessible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('SessionNotAccessible')));
-		foreach($visibility_list as $key=>$item): ?>
-		<option value="<?php echo $key; ?>" <?php if($item == $visibility_id) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
-		<?php endforeach; ?>
-	</select>
-  </td>
-</tr>
-
 
 <tr>
   <td>&nbsp;</td>
@@ -414,8 +431,34 @@ function setDisable(select){
 
 	document.form.session_visibility.disabled = (select.checked) ? true : false;
 	document.form.session_visibility.selectedIndex = 0;
+    
+    document.form.start_limit.disabled = (select.checked) ? true : false;
+    document.form.start_limit.checked = false;
+    document.form.end_limit.disabled = (select.checked) ? true : false;
+    document.form.end_limit.checked = false;
+       
+    var end_div = document.getElementById('end_date');
+    end_div.style.display = 'none';
+        
+    var start_div = document.getElementById('start_date');
+    start_div.style.display = 'none';        
+}
+
+function disable_endtime(select) {
+    var end_div = document.getElementById('end_date');
+    if (end_div.style.display == 'none')
+        end_div.style.display = 'block';
+     else 
+        end_div.style.display = 'none';
+}
+
+function disable_starttime(select) {
+    var start_div = document.getElementById('start_date');
+    if (start_div.style.display == 'none')
+        start_div.style.display = 'block';
+     else 
+        start_div.style.display = 'none';
 }
 </script>
 <?php
 Display::display_footer();
-?>

@@ -1183,9 +1183,7 @@ class Display {
             $active = false;
             // Request for the name of the general coach
             $sql ='SELECT tu.lastname, tu.firstname, ts.name, ts.date_start, ts.date_end, ts.session_category_id
-                    FROM '.$tbl_session.' ts
-                    LEFT JOIN '.$main_user_table .' tu
-                    ON ts.id_coach = tu.user_id
+                    FROM '.$tbl_session.' ts  LEFT JOIN '.$main_user_table .' tu ON ts.id_coach = tu.user_id
                     WHERE ts.id='.intval($session_id);
             $rs = Database::query($sql);
             $session_info = Database::store_result($rs);
@@ -1194,14 +1192,26 @@ class Display {
             $session['title'] = $session_info[2];
             $session['coach'] = '';
     
-            if ($session_info[3] == '0000-00-00') {
-                $session['dates'] = get_lang('WithoutTimeLimits');
+            if ($session_info['date_end'] == '0000-00-00' && $session_info['date_start'] == '0000-00-00') {
+                $session['dates'] =  Display::tag('i', get_lang('WithoutTimeLimits'));
                 if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);
                 }
                 $active = true;
             } else {
-                $session ['dates'] = get_lang('From').' '.$session_info[3].' '.get_lang('Until').' '.$session_info[4];
+                if ($session_info['date_start'] == '0000-00-00') {
+                	$session_info['date_start'] = '';
+                } else {
+                	$session_info['date_start'] = get_lang('From').' '.$session_info['date_start'];
+                }
+                if ($session_info['date_end'] == '0000-00-00') {
+                    $session_info['date_end'] = '';
+                } else {
+                	$session_info['date_end'] = get_lang('Until').' '.$session_info['date_end'];
+                }
+                
+                $session['dates'] = Display::tag('i', $session_info['date_start'].' '.$session_info['date_end']);
+                
                 if ( api_get_setting('show_session_coach') === 'true' ) {
                     $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);
                 }

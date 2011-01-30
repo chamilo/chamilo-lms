@@ -4760,7 +4760,7 @@ function api_check_browscap(){
  */
 function api_get_jqgrid_js($include_jquery = true) {
     $js = '';     
-    $theme      = 'cupertino';
+    $theme      = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui 
     $languaje   = 'en';
     $platform_isocode = strtolower(api_get_language_isocode());
     
@@ -4769,8 +4769,7 @@ function api_get_jqgrid_js($include_jquery = true) {
      
     if (in_array($platform_isocode, $jqgrid_langs)) {
     	$languaje = $platform_isocode;
-    }
-    
+    }    
     if ($include_jquery) {
         //Jquery
         $js = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.css" type="text/css">';	

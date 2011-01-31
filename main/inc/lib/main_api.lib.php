@@ -4753,23 +4753,19 @@ function api_check_browscap(){
 }
 
 /**
- * Returns the jqgrid js headers 
+ * Returns the jquery-ui library js headers 
+ * @param   bool    add the jqgrid library
  * @param   bool    add the jquery library
  * @return  string  html tags
  * 
  */
-function api_get_jqgrid_js($include_jquery = true) {
+function api_get_jquery_ui_js($include_jqgrid = false, $include_jquery = true) {
     $js = '';     
     $theme      = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui 
     $languaje   = 'en';
     $platform_isocode = strtolower(api_get_language_isocode());
     
-    //languages supported by jqgrid see files in main/inc/lib/javascript/jqgrid/js/i18n
-    $jqgrid_langs = array('bg', 'bg1251', 'cat','cn','cs','da','de','el','en','es','fa','fi','fr','gl','he','hu','is','it','ja','nl','no','pl','pt-br','pt','ro','ru','sk','sr','sv','tr','ua');
-     
-    if (in_array($platform_isocode, $jqgrid_langs)) {
-    	$languaje = $platform_isocode;
-    }    
+
     if ($include_jquery) {
         //Jquery
         $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.4.4.min.js" type="text/javascript" language="javascript"></script>'; //jQuery    	
@@ -4777,11 +4773,20 @@ function api_get_jqgrid_js($include_jquery = true) {
     //Jquery ui
     $js .= '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.css" type="text/css">';
     $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.min.js" type="text/javascript" language="javascript"></script>';
-
+    
     //Grid js
-    $js .= '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/css/ui.jqgrid.css" type="text/css">';
-    $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/js/i18n/grid.locale-'.$languaje.'.js" type="text/javascript" language="javascript"></script>'; 
-    $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript" language="javascript"></script>';
+    if ($include_jqgrid) {        
+        //languages supported by jqgrid see files in main/inc/lib/javascript/jqgrid/js/i18n
+        $jqgrid_langs = array('bg', 'bg1251', 'cat','cn','cs','da','de','el','en','es','fa','fi','fr','gl','he','hu','is','it','ja','nl','no','pl','pt-br','pt','ro','ru','sk','sr','sv','tr','ua');
+         
+        if (in_array($platform_isocode, $jqgrid_langs)) {
+            $languaje = $platform_isocode;
+        }    
+    
+        $js .= '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/css/ui.jqgrid.css" type="text/css">';
+        $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/js/i18n/grid.locale-'.$languaje.'.js" type="text/javascript" language="javascript"></script>'; 
+        $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript" language="javascript"></script>';
+    }
     
     //Adding default CSS changes for Chamilo in order to preserve the neutral layout
     $js .= '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css" type="text/css">';

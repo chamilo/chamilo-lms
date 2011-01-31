@@ -22,7 +22,7 @@ api_protect_admin_script();
 $this_section = SECTION_PLATFORM_ADMIN;
 
 //Adds the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
+$htmlHeadXtra[] = api_get_jquery_ui_js(true);
 
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));

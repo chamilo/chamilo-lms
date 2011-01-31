@@ -286,9 +286,8 @@ if($modifyIn == 'thisExercise') {
 	}
 }
 
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/cupertino/jquery-ui-1.8.7.custom.css" type="text/css" media="print, projection, screen">';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.4.4.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/cupertino/jquery-ui-1.8.7.custom.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
+
+$htmlHeadXtra[] = api_get_jquery_ui_js();
 
 $htmlHeadXtra[] = '<script type="text/javascript"> 
         

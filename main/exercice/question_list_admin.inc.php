@@ -63,8 +63,46 @@ if($deleteQuestion) {
         padding-left:4px;     	
     }
 </style>
+
+<div id="dialog-confirm" title="<?php echo get_lang("ConfirmYourChoice"); ?>">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;">
+        </span>
+        <?php echo get_lang("AreYouSureToDelete"); ?>
+    </p>
+</div>
+
 <script>
-$(function() {
+$(function() {    
+    $( "#dialog:ui-dialog" ).dialog( "destroy" );
+        
+    $( "#dialog-confirm" ).dialog({
+            autoOpen: false,
+            show: "blind",                
+            resizable: false,
+            height:150,
+            modal: false
+     });
+
+    $(".opener").click(function() {
+        var my_id = this.id;
+        my_id  = my_id.split("delete_");        
+        var targetUrl = $(this).attr("href");        
+        $( "#dialog-confirm" ).dialog({        
+            buttons: {
+                "<?php echo get_lang("Ok"); ?>": function() {                    
+                    location.href = targetUrl;                
+                    $( this ).dialog( "close" );
+                    
+                },
+                "<?php echo get_lang("Cancel"); ?>": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });        
+        $( "#dialog-confirm" ).dialog("open");
+        return false;
+    });    
             
     var stop = false;
     $( "#question_list h3" ).click(function( event ) {
@@ -82,11 +120,14 @@ $(function() {
     };
         
     
-    /*We can add links in the accordion header*/                       
-    $("div > div > div > .edition > div > a").click(function() {           
-        newWind = window.open(this.href,"_self");
-        newWind.focus();                  
-        return false;
+    /* We can add links in the accordion header */                       
+    $("div > div > div > .edition > div > a").click(function() {   
+        //Avoid the redirecto when selecting the delete button             
+        if (this.id.indexOf('delete') == -1) {
+            newWind = window.open(this.href,"_self");
+            newWind.focus();
+            return false;
+        }
     });
 
     $( "#question_list" ).accordion({  
@@ -94,7 +135,7 @@ $(function() {
         autoHeight: false,            
         active: false, // all items closed by default
         collapsible: true,
-        header: ".test1",        
+        header: ".header_operations",        
     })
     
     .sortable({
@@ -103,8 +144,7 @@ $(function() {
             var order = $(this).sortable("serialize") + "&a=update_question_order";
             $.post("<?php echo api_get_path(WEB_AJAX_PATH)?>exercise.ajax.php", order, function(reponse){
                 $("#message").html(reponse);
-            });
-        	
+            });        	
         },
         axis: "y",
         placeholder: "ui-state-highlight", //defines the yellow highlight
@@ -148,14 +188,15 @@ if ($nbrQuestions) {
             $edit_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.Display::return_icon('edit.gif',get_lang('Modify')).'</a>';          
             // this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
             if ($show_quiz_edition) {
-                 $delete_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))).' \')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';                 
+                 $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
+                 //$delete_link = '<a id="delete_'.$id.'" class="opener" href="#">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';                 
             }            
             $edit_link   = Display::tag('div',$edit_link,   array('style'=>'float:left;padding:0px; margin:0px'));
             $delete_link = Display::tag('div',$delete_link, array('style'=>'float:left;padding:0px; margin:0px'));
-            $actions =  Display::tag('div',$edit_link.$delete_link, array('class'=>'edition','style'=>'width:70px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
+            $actions     = Display::tag('div',$edit_link.$delete_link, array('class'=>'edition','style'=>'width:70px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
 
             echo '<div id="question_id_list_'.$id.'" >';            
-                echo '<div class="test1">';               
+                echo '<div class="header_operations">';               
                     $move = Display::return_icon('move.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
                     $level = '';
                     if (!empty($objQuestionTmp->level)) {

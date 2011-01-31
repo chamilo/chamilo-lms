@@ -83,8 +83,12 @@ $filename = Security::remove_XSS($filename);
 $filename = replace_dangerous_char($filename, 'strict');
 $filename = disable_dangerous_file($filename);
 
-//a bit mime security
+// a bit extension
+if($suffix!= 'svg' || $suffix!= 'png'){
+	die();
+}
 
+//a bit mime security
 if (phpversion() >= '5.3') {
 	$finfo = new finfo(FILEINFO_MIME);
 	$current_mime=$finfo->buffer($contents);
@@ -100,12 +104,6 @@ if (phpversion() >= '5.3') {
 		//die();//File extension does not match its content //disabled to check into chamilo dev campus TODO:enabled
 	}
 	
-}else{
-	
-	if($suffix!= 'svg' || $suffix!= 'png')
-	{
-		//die();//disabled to check into chamilo dev campus 
-	}
 }
 
 //checks if the file exists, then rename the new

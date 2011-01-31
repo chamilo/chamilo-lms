@@ -109,7 +109,7 @@ Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 		
-		echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&amp;file='.urlencode($dir.$file).$req_gid.'&amp;origin=editdrawing">'.Display::return_icon('edit.gif',get_lang('Rename')).get_lang('Rename').', '.get_lang('Comment').'</a>';
+		echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&amp;file='.urlencode($dir.$file).$req_gid.'&amp;origin=editdraw">'.Display::return_icon('edit.gif',get_lang('Rename')).get_lang('Rename').', '.get_lang('Comment').'</a>';
 echo '</div>';
 
 if (api_browser_support('svg')){
@@ -120,7 +120,7 @@ if (api_browser_support('svg')){
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
 	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'svg-edit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
 	
-	echo '<iframe style=\'height: 500px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'&lang='.$langsvgedit.'\'>';	
+	echo '<iframe style=\'height: 500px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'&amp;lang='.$langsvgedit.'\'>';	
 	echo '</iframe>';
 }else{
 	

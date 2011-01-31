@@ -815,7 +815,8 @@ VALUES
 ('course_hide_tools','tracking','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Stats',1),
 ('course_hide_tools','course_maintenance','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Maintenance',1),
 ('course_hide_tools','course_setting','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'CourseSettings',1),
-('chamilo_database_version', 		NULL,'textfield', 	NULL, '1.8.8.13330','DokeosDatabaseVersion','', NULL, NULL, 0);
+('enabled_support_pixlr',NULL,'radio','Tools','false','EnabledPixlrTitle','EnabledPixlrComment',NULL,NULL, 0),
+('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.13330','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 
 UNLOCK TABLES;
@@ -1069,7 +1070,9 @@ VALUES
 ('show_chat_folder','true','Yes'),
 ('show_chat_folder','false','No'),
 ('enabled_text2audio','true','Yes'),
-('enabled_text2audio','false','No');
+('enabled_text2audio','false','No'),
+('enabled_support_pixlr','true','Yes'),
+('enabled_support_pixlr','false','No');
 
 UNLOCK TABLES;
 

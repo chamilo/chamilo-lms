@@ -209,7 +209,7 @@ api_protect_admin_script(true);
 *   @author Yannick Warnier <yannick.warnier@dokeos.com>
 */
 function login_user($user_id) {
-	//init ---------------------------------------------------------------------
+	//init 
     //Load $_user to be sure we clean it before logging in
 	global $uidReset, $loginFailed, $_configuration, $_user;
 
@@ -217,7 +217,8 @@ function login_user($user_id) {
 	$main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 	$track_e_login_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-	//logic --------------------------------------------------------------------
+	//logic 
+    
 	unset($_user['user_id']); // uid not in session ? prevent any hacking
 	if (!isset ($user_id)) {
 		$uidReset = true;
@@ -724,15 +725,10 @@ function status_filter($status)
 }
 
 
-/**
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/**	INIT SECTION  */
+
 $action = $_GET["action"];
 $login_as_user_id = $_GET["user_id"];
-
-
 
 // Login as ...
 if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
@@ -891,34 +887,34 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 
         $form->addElement('html','<div id="advanced_search_form" style="display:none;">');
 
-	$form->addElement('header', '', get_lang('AdvancedSearch'));
+	    $form->addElement('header', '', get_lang('AdvancedSearch'));
 
         //$form->addElement('html', '<strong>'.get_lang('SearchAUser').'</strong>');
 
         $form->addElement('html', '<table>');
 
         $form->addElement('html', '<tr><td>');
-	$form->add_textfield('keyword_firstname',get_lang('FirstName'),false,array('style'=>'margin-left:17px'));
-	$form->addElement('html', '</td><td width="200px;">');
+	    $form->add_textfield('keyword_firstname',get_lang('FirstName'),false,array('style'=>'margin-left:17px'));
+	    $form->addElement('html', '</td><td width="200px;">');
         $form->add_textfield('keyword_lastname',get_lang('LastName'),false,array('style'=>'margin-left:17px'));
-	$form->addElement('html', '</td></tr>');
+	    $form->addElement('html', '</td></tr>');
 
         $form->addElement('html', '<tr><td>');
         $form->add_textfield('keyword_username',get_lang('LoginName'),false,array('style'=>'margin-left:17px'));
-	$form->addElement('html', '</td>');
+	    $form->addElement('html', '</td>');
         $form->addElement('html', '<td>');
         $form->add_textfield('keyword_email',get_lang('Email'),false,array('style'=>'margin-left:17px'));
-	$form->addElement('html', '</td></tr>');
+	    $form->addElement('html', '</td></tr>');
 
         $form->addElement('html', '<tr><td>');
         $form->add_textfield('keyword_officialcode',get_lang('OfficialCode'),false,array('style'=>'margin-left:17px'));
-	$form->addElement('html', '</td><td>');
+	    $form->addElement('html', '</td><td>');
 
         $status_options = array();
-	$status_options['%'] = get_lang('All');
-	$status_options[STUDENT] = get_lang('Student');
-	$status_options[COURSEMANAGER] = get_lang('Teacher');
-	$status_options[DRH] = get_lang('Drh');
+    	$status_options['%'] = get_lang('All');
+    	$status_options[STUDENT] = get_lang('Student');
+    	$status_options[COURSEMANAGER] = get_lang('Teacher');
+    	$status_options[DRH] = get_lang('Drh');
         $status_options[SESSIONADMIN] = get_lang('Administrator');
         $form->addElement('select','keyword_status',get_lang('Profile'),$status_options, array('style'=>'margin-left:17px'));
         $form->addElement('html', '</td></tr>');
@@ -927,10 +923,10 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 
         $form->addElement('html', '<tr><td>');
         $active_group = array();
-	$active_group[] = $form->createElement('checkbox','keyword_active','',get_lang('Active'), array('style'=>'margin-left:17px'));
-	$active_group[] = $form->createElement('checkbox','keyword_inactive','',get_lang('Inactive'),array('style'=>'margin-left:17px'));
-	$form->addGroup($active_group,'',get_lang('ActiveAccount'),'<br/>',false);
-	$form->addElement('html', '</td><td>');
+    	$active_group[] = $form->createElement('checkbox','keyword_active','',get_lang('Active'), array('style'=>'margin-left:17px'));
+    	$active_group[] = $form->createElement('checkbox','keyword_inactive','',get_lang('Inactive'),array('style'=>'margin-left:17px'));
+    	$form->addGroup($active_group,'',get_lang('ActiveAccount'),'<br/>',false);
+    	$form->addElement('html', '</td><td>');
 
         $extra_data = UserManager::get_extra_user_data($user_id, false, true, false, 1);
         $extra_options = array();
@@ -948,7 +944,7 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
             $form->addElement('html', '</div>');
         } else {
             $form->addElement('html', '<div id="extra_data_text" style="display:none;">');
-	}
+    	}
 
         $form->addElement('html', '</td></tr>');
 
@@ -959,8 +955,8 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
         $form->addElement('html', '</table>');
 
         $defaults['keyword_active'] = 1;
-	$defaults['keyword_inactive'] = 1;
-	$form->setDefaults($defaults);
+    	$defaults['keyword_inactive'] = 1;
+    	$form->setDefaults($defaults);
         $form -> addElement('html','</div>');
 
 
@@ -995,10 +991,4 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 		$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
 	$table->display();
 //}
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display :: display_footer();
-?>

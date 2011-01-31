@@ -325,7 +325,7 @@ class Tracking {
 
             // Compose a filter based on optional exercise given
             $condition_quiz = "";
-            if(!empty($exercise_id)) {
+            if (!empty($exercise_id)) {
                 $exercise_id = intval($exercise_id);
                 $condition_quiz =" AND id = $exercise_id ";
             }
@@ -347,9 +347,25 @@ class Tracking {
                 } else {
                     $condition_user = " AND exe_user_id = '$student_id' ";
                 }
+                
+                if (empty($exercise_id)) {
+                    $sql = "SELECT id FROM $tbl_course_quiz WHERE active <> -1 $condition_quiz";
+                    $exercises = Database::fetch_row(Database::query($sql));
+                    $exercise_list = array();
+                    $exercise_id = 0;
+                    if (!empty($exercises)) {
+                        foreach($exercises as $row) {
+                    	   $exercise_list[] = $row['id'];
+                        }
+                        $exercise_id = implode("','",$exercise_list); 
+                    }
+                }
+                
+                $count_quiz = Database::fetch_row(Database::query($sql));
+                
                 $sql = "SELECT SUM(exe_result/exe_weighting*100) as avg_score, COUNT(*) as num_attempts
                         FROM $tbl_stats_exercise
-                        WHERE exe_exo_id IN (SELECT id FROM $tbl_course_quiz WHERE active <> -1 $condition_quiz)
+                        WHERE exe_exo_id IN ('".$exercise_id."')
                         $condition_user
                         AND orig_lp_id = 0
                         AND exe_cours_id = '$course_code'

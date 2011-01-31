@@ -244,16 +244,18 @@ class MessageManager
 	        $content = Database::escape_string($content);
 
 			//message in inbox for user friend
+            //@todo is possible to edit a message??????????
 			if ($edit_message_id) {
-				$query = " UPDATE $table_message SET update_date = '".date('Y-m-d H:i:s')."', title = '$subject', content = '$content' WHERE id = '$edit_message_id' ";
+				$query = " UPDATE $table_message SET update_date = '".api_get_utc_datetime()."', title = '$subject', content = '$content' WHERE id = '$edit_message_id' ";                
 				$result = Database::query($query);
 				$inbox_last_id = $edit_message_id;
 			} else {
 				$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
-					 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$subject','$content','$group_id','$parent_id', '".date('Y-m-d H:i:s')."')";
+					       " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".api_get_utc_datetime()."','$subject','$content','$group_id','$parent_id', '".api_get_utc_datetime()."')";
 				$result = Database::query($query);
 				$inbox_last_id = Database::insert_id();
 			}
+        
 
 			// save attachment file for inbox messages
 			if (is_array($file_attachments)) {
@@ -269,7 +271,7 @@ class MessageManager
 			if (empty($group_id)) {
 				//message in outbox for user friend or group
 				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
-						 " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".date('Y-m-d H:i:s')."','$subject','$content', '$group_id', '$parent_id', '".date('Y-m-d H:i:s')."')";
+						 " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".api_get_utc_datetime()."','$subject','$content', '$group_id', '$parent_id', '".api_get_utc_datetime()."')";
 				$rs = Database::query($sql);
 				$outbox_last_id = Database::insert_id();
 

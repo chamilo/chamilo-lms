@@ -10,11 +10,10 @@ require_once(api_get_path(SYS_CODE_PATH).'inc/banner.inc.php');
  *
  * @return array containing all the possible tabs
  *
- * @version Dokeos 1.8.4
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function get_tabs() {
-	global $_course, $rootAdminWeb, $_user;
+	global $_course;
 
 	// Campus Homepage
 	$navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
@@ -65,8 +64,26 @@ function get_tabs() {
 	
 	// Social
 	if (api_get_setting('allow_social_tool')=='true') {
-			$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
-			$navigation['social']['title'] = get_lang('SocialNetwork');
+		$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
+        
+        require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+        require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+                
+        // get count unread message and total invitations
+        $count_unread_message = MessageManager::get_number_of_messages(true);
+        
+
+        $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+        $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
+        $group_pending_invitations = 0;
+        if (!empty($group_pending_invitations )) {        
+	        $group_pending_invitations = count($group_pending_invitations);
+        }
+        $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
+        $total_invitations = (!empty($total_invitations)?' ('.$total_invitations.')':'');
+        
+        
+		$navigation['social']['title'] = get_lang('SocialNetwork'). $total_invitations;
 	}
 	
 	// Dashboard

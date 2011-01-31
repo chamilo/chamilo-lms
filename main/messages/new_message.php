@@ -219,9 +219,7 @@ function manage_form ($default, $select_from_user_list = null) {
 	$form->setDefaults($default);
 
 	if ($form->validate()) {
-
-		$check = Security::check_token('post');
-		
+		$check = Security::check_token('post');		
 		if ($check) {
 			$values 		= $default;
 			$user_list		= $values['users'];
@@ -232,11 +230,10 @@ function manage_form ($default, $select_from_user_list = null) {
 			$group_id		= $values['group_id'];
 			$parent_id 		= $values['parent_id'];
 	
-			if (is_array($user_list) && count($user_list)> 0) {
+			if (is_array($user_list) && count($user_list)> 0) {                
 				//all is well, send the message                 
 				foreach ($user_list as $user) {
-					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id, true);
-				
+					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);				
 					if ($res) {
 						if (is_string($res)) {
 							Display::display_error_message($res);
@@ -244,7 +241,7 @@ function manage_form ($default, $select_from_user_list = null) {
 							MessageManager::display_success_message($user);
 						}
 					}
-				}
+				}       
 			} else {
 				Display::display_error_message('ErrorSendingMessage');
 			}

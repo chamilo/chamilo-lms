@@ -535,8 +535,8 @@ class SocialManager extends UserManager {
 			$user_id = api_get_user_id();
 		}
 
-		$show_groups = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list');
-		$show_messages = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
+		$show_groups      = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list');
+		$show_messages    = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
 
 		// get count unread message and total invitations
 		$count_unread_message = MessageManager::get_number_of_messages(true);

@@ -79,8 +79,7 @@ class UserGroup extends Model {
             }
         }                       
         return $array;  
-    }
-    
+    }    
     
     
     /**

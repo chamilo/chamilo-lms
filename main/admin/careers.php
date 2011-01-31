@@ -23,6 +23,8 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
+$interbreadcrumb[]=array('url' => 'careers.php','name' => get_lang('Careers'));
 
 // The header.
 Display::display_header($tool_name);
@@ -46,7 +48,8 @@ $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_careers';
 $columns        = array(get_lang('Name'),get_lang('Description'),get_lang('Actions'));
 
 //Column config
-$column_model   = array(array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
+$column_model   = array(
+                        array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
                         array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
                         array('name'=>'actions',        'index'=>'actions',     'formatter'=>'action_formatter','width'=>'100',  'align'=>'left'),
                        );            
@@ -55,7 +58,7 @@ $extra_params['autowidth'] = 'true';
 //height auto 
 $extra_params['height'] = 'auto'; 
 
-//With this function we can add actions to the jgrid
+//With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
                          return \'<a href="?action=edit&id=\'+options.rowId+\'"><img src="../img/edit.gif" title="'.get_lang('Edit').'"></a> <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.gif"></a>\'; 
                  }';
@@ -67,40 +70,30 @@ $(function() {
     echo Display::grid_js('careers',  $url,$columns,$column_model,$extra_params, array(), $action_links);       
 ?> 
 });
-</script>   
+</script>
 <?php
 // Tool introduction
 Display::display_introduction_section(get_lang('Careers'));
 
 $career = new Career();
 
-// Action handling: Adding a note
+// Action handling: Add
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
 
     $_SESSION['notebook_view'] = 'creation_date';
-    //@todo move this in the career.lib.php
     
-    // Initiate the object
-    $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
-    // Settting the form elements
-    $form->addElement('header', '', get_lang('Add'));
-    $form->addElement('text', 'name', get_lang('name'), array('size' => '95', 'id' => 'name'));
-    //$form->applyFilter('note_title', 'html_filter');
-    $form->addElement('html_editor', 'description', get_lang('Description'), null);
-    $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
-
-    // Setting the rules
-    $form->addRule('name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+    $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
+    $form = $career->return_form($url, get_lang('Add'));
 
     // The validation or display
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->exportValues();       
-            $res = $career->save($values);            
+            $res    = $career->save($values);            
             if ($res) {
                 Display::display_confirmation_message(get_lang('Added'));
             }
@@ -116,30 +109,22 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $form->setConstants(array('sec_token' => $token));
         $form->display();
     }
-}// Action handling: Editing a note
-elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET['id'])) {
-    // Initialize the object
-    $form = new FormValidator('career', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
-    // Settting the form elements
-    $form->addElement('header', '', get_lang('Modify'));
-    $form->addElement('hidden', 'id',intval($_GET['id']));
-    $form->addElement('text', 'name', get_lang('Name'), array('size' => '100'));
-    $form->addElement('html_editor', 'description', get_lang('description'), null);
-    $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
-
-    // Setting the defaults
-    $defaults = $career->get($_GET['id']);
-    $form->setDefaults($defaults);
-
-    // Setting the rules
-    $form->addRule('name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+} elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET['id'])) {
+    // Action handling: Editing 
+    $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
+    $form = $career->return_form($url, get_lang('Modify'));    
 
     // The validation or display
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
-            $values = $form->exportValues();            
-            $res = $career->update($values);
+            $values = $form->exportValues();
+            $career->update_all_promotion_status_by_career_id($values['id'],$values['status']);
+                        
+            $res    = $career->update($values);
+            
+            
+            
             if ($res) {
                 Display::display_confirmation_message(get_lang('Updated'));
             }
@@ -155,10 +140,9 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET[
         $form->setConstants(array('sec_token' => $token));
         $form->display();
     }
-}
-// Action handling: deleting a note
-elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
-    $res = $career->delete(Security::remove_XSS($_GET['id']));
+} elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
+    // Action handling: delete
+    $res = $career->delete(intval($_GET['id']));
     if ($res) {
         Display::display_confirmation_message(get_lang('Deleted'));
     }
@@ -166,5 +150,4 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GE
 } else {
     $career->display();   
 }
-
 Display :: display_footer();

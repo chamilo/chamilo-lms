@@ -26,6 +26,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
 
 Display :: display_header($nameTools);
 

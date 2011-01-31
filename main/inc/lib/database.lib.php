@@ -1487,7 +1487,8 @@ class Database {
             if (!empty($update_sql)) {  
                 //Parsing and cleaning the where conditions
                 $where_return = self::parse_where_conditions($where_conditions);
-                $sql    = "UPDATE $table_name SET $update_sql $where_return ";                
+                $sql    = "UPDATE $table_name SET $update_sql $where_return ";    
+                //echo $sql; exit;
                 $result = self::query($sql);
                 $affected_rows = self::affected_rows(); 
                 return $affected_rows;

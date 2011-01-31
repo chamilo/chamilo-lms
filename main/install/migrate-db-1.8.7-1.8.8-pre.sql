@@ -142,7 +142,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_hide_tools','course_maintenance','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Maintenance',1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_hide_tools','course_setting','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'CourseSettings',1);
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_support_pixlr',NULL,'radio','Tools','true','EnabledPixlrTitle','EnabledPixlrComment',NULL,NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_support_pixlr',NULL,'radio','Tools','false','EnabledPixlrTitle','EnabledPixlrComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'false', 'No');
 

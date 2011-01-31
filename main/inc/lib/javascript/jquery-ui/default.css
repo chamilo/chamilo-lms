@@ -1,0 +1,30 @@
+/*
+	Custom changes for the jquery-ui 
+*/
+
+/*  smoothness */
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { 
+	border: 1px solid #d3d3d3; 
+	/* background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;*/
+	background: #EFEFEF; 
+	font-weight: normal; 
+	color: #555555; 
+	}
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #555555; text-decoration: none; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { 
+	border: 1px solid #999999; 
+	/*background: #dadada url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;*/
+	background: #E5EDF9; 
+	font-weight: normal; 
+	color: #212121; 
+	}
+	
+	
+.ui-priority-secondary, .ui-widget-content .ui-priority-secondary,  .ui-widget-header .ui-priority-secondary { opacity: 1; font-weight: normal; background-color: #F2F2F2; }
+.ui-widget-content { background: #FFF; }
+
+/*  cupertino */
+
+
+/* ui-lightness */

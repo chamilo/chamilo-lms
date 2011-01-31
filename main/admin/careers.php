@@ -119,14 +119,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->exportValues();
-            $career->update_all_promotion_status_by_career_id($values['id'],$values['status']);
-                        
-            $res    = $career->update($values);
-            
-            
-            
+            $career->update_all_promotion_status_by_career_id($values['id'],$values['status']);               
+            $res    = $career->update($values);            
             if ($res) {
-                Display::display_confirmation_message(get_lang('Updated'));
+                
+            }
+            if ($values['status']) {
+                Display::display_confirmation_message(sprintf(get_lang('CareerXArchived'), $values['name']), false);
+            } else {
+            	Display::display_confirmation_message(sprintf(get_lang('CareerXUnarchived'), $values['name']), false);
             }
         }
         Security::clear_token();

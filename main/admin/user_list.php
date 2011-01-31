@@ -920,7 +920,7 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 	$status_options[COURSEMANAGER] = get_lang('Teacher');
 	$status_options[DRH] = get_lang('Drh');
         $status_options[SESSIONADMIN] = get_lang('Administrator');
-        $form->addElement('select','keyword_status',get_lang('Status'),$status_options, array('style'=>'margin-left:17px'));
+        $form->addElement('select','keyword_status',get_lang('Profile'),$status_options, array('style'=>'margin-left:17px'));
         $form->addElement('html', '</td></tr>');
 
 
@@ -980,7 +980,7 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 	}
 	$table->set_header(5, get_lang('LoginName'));
 	$table->set_header(6, get_lang('Email'));
-	$table->set_header(7, get_lang('Status'));
+	$table->set_header(7, get_lang('Profile'));
 	$table->set_header(8, get_lang('Active'),true, 'width="15px"');
 	$table->set_header(9, get_lang('Action'), false,'width="220px"');
 

@@ -101,7 +101,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     }
 } elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET['id'])) {
     //Editing 
-    // Initialize the object
     $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);    
     $form = $promotion->return_form($url, get_lang('Modify'));
 
@@ -111,8 +110,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         if ($check) {
             $values = $form->exportValues();                    
             $res    = $promotion->update($values);
-            if ($res) {
-                Display::display_confirmation_message(get_lang('Updated'));
+            $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);    
+            if ($values['status']) {
+                Display::display_confirmation_message(sprintf(get_lang('PromotionXUnarchived'), $values['name']), false);
+            } else {
+                Display::display_confirmation_message(sprintf(get_lang('PromotionXArchived'), $values['name']), false);
             }
         }
         Security::clear_token();

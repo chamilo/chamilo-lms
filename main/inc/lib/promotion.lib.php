@@ -48,6 +48,20 @@ class Promotion extends Model {
         echo Display::grid_html('promotions');  
 	}
     
+    /**
+     * Update all session status by promotion
+     * @param   int     promotion id
+     * @param   int     status (1, 0)
+    */
+    public function update_all_sessions_status_by_promotion_id($promotion_id, $status) { 
+        require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';               
+        $session_list   = SessionManager::get_all_sessions_by_promotion($promotion_id);    
+        if (!empty($session_list)) {
+            foreach($session_list  as $item) {
+                SessionManager::set_session_status($item['id'], $status);            
+            }
+        }
+    }
     
         
     /**

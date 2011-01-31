@@ -1255,12 +1255,11 @@ class SessionManager {
         $tbl_session_rel_user               = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $order_clause ='';
         $sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username
-        FROM '.$tbl_user.'
-        INNER JOIN '.$tbl_session_rel_user.'
-            ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user 
-            AND '.$tbl_session_rel_user.'.id_session = '.$id.$order_clause;
+                FROM '.$tbl_user.'
+                INNER JOIN '.$tbl_session_rel_user.'
+                    ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user 
+                    AND '.$tbl_session_rel_user.'.id_session = '.$id.$order_clause;
         $result=Database::query($sql);
-        //$users=Database::store_result($result);
         while ($row = Database::fetch_array($result,'ASSOC')) {
             $return_array[] = $row;
         }
@@ -1294,6 +1293,17 @@ class SessionManager {
                 Database::update($t, $params, array('id = ?'=>$session_id));
             }                
         }
+    }
+    
+    /**
+    * Updates a session status
+    * @param	int 	session id
+    * @param	int 	status
+    */
+    function set_session_status($session_id, $status) {
+        $t = Database::get_main_table(TABLE_MAIN_SESSION);
+        $params['visibility'] = $status;
+    	Database::update($t, $params, array('id = ?'=>$session_id));
     }
     
     

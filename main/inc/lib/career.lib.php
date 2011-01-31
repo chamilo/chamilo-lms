@@ -28,6 +28,11 @@ class Career extends Model {
         return Database::select('*',$this->table, array('order' =>'name ASC'));
     }
     
+    /**
+     * Update all promotion status by career
+     * @param   int     career id
+     * @param   int     status (1 or 0)
+    */
     public function update_all_promotion_status_by_career_id($career_id, $status) {
         $promotion = new Promotion();        
         $promotion_list = $promotion->get_all_promotions_by_career_id($career_id);
@@ -35,7 +40,8 @@ class Career extends Model {
             foreach($promotion_list  as $item) {                
                 $params['id']     = $item['id'];
                 $params['status'] = $status; 
-                $promotion->update($params);        	
+                $promotion->update($params);     
+                $promotion->update_all_sessions_status_by_promotion_id($params['id'], $status);	
             }
         }
     }

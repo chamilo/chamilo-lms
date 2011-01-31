@@ -177,7 +177,7 @@ $status[STUDENT] = get_lang('Learner');
 $status[DRH] = get_lang('Drh');
 $status[SESSIONADMIN] = get_lang('SessionsAdmin');
 
-$form->addElement('select', 'status', get_lang('Status'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();'));
+$form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();'));
 
 //Language
 $form->addElement('select_language', 'language', get_lang('Language'));

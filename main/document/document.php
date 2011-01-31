@@ -919,13 +919,21 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 
             if (api_browser_support('svg')){
             ?>
-                <a href="create_drawing.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+                <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
                     <?php Display::display_icon('draw_new.png', get_lang('Draw')); echo get_lang('Draw'); ?></a>&nbsp;
             <?php
             }else{
                 Display::display_icon('draw_new_na.png', get_lang('BrowserDontSupportsSVG')); echo get_lang('Draw').'&nbsp;';
             }
         }
+		
+		// Create new paint
+		if (api_get_setting('enabled_support_pixlr') == 'true'){
+		?>
+			<a href="create_paint.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+		   <?php Display::display_icon('new_paint.png', get_lang('Paint')); echo get_lang('Paint'); ?></a>&nbsp;
+		<?php
+		}
 		
 		// Create new audio
 		if (api_get_setting('enabled_text2audio') == 'true'){

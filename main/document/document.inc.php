@@ -380,7 +380,10 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
             $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
         }else {
             if($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
-                $modify_icons = '<a href="edit_drawing.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
+                $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
+			}
+			elseif($extension=='png' || $extension='jpg' || $extension='jpeg' || $extension='bmp' || $extension="pxd" && api_get_setting('enabled_support_pixlr') == 'true'){
+                $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';			
             }else{
                 $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
             }
@@ -684,7 +687,7 @@ function search_keyword($document_name, $keyword) {
 function is_browser_viewable($file_extension) {
     static $allowed_extensions = array(
         'htm', 'html', 'xhtml', 'gif', 'jpg', 'jpeg', 'png', 'pdf', 'swf', 'mp3', 'mp4', 'ogg', 'ogx', 'oga', 'ogv', 'svg',
-        'txt', 'log', 'css', 'js',
+        'txt', 'log',
         'mpg', 'mpeg'
     );
     if (!($result = in_array($file_extension, $allowed_extensions))) { // Assignment + a logical check.

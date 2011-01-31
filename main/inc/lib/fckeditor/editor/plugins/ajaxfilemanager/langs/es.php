@@ -113,7 +113,7 @@
 	define('SEARCH_TYPE_HTML', 'HTML');
 	define('SEARCH_TYPE_VIDEO', 'Video');
 	define('SEARCH_TYPE_MOVIE', 'Pelicula');
-	define('SEARCH_TYPE_MUSIC', 'Sonido');
+	define('SEARCH_TYPE_MUSIC', 'Audio');
 	define('SEARCH_TYPE_FLASH', 'Flash');
 	define('SEARCH_TYPE_PPT', 'PowerPoint');
 	define('SEARCH_TYPE_DOC', 'Documento');

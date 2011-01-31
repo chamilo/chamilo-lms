@@ -18,7 +18,7 @@ define ('CAREER_STATUS_INACTIVE',0);
 class Career extends Model {
     
     var $table;
-    var $columns = array('id', 'name','description','status');
+    var $columns = array('id', 'name','description','status','created_at','updated_at');
     
 	public function __construct() {
         $this->table =  Database::get_main_table(TABLE_CAREER);
@@ -66,12 +66,17 @@ class Career extends Model {
      * Returns a Form validator Obj
      * @todo the form should be auto generated
      * @param   string  url
-     * @param   string  header name
+     * @param   string  action add, edit
      * @return  obj     form validator obj 
      */
-    public function return_form($url, $header) {
+    public function return_form($url, $action) {
         $form = new FormValidator('career', 'post', $url);
         // Settting the form elements
+        $header = get_lang('add');
+        if ($action == 'edit') {
+            $header = get_lang('Modify');
+        }
+        
         $form->addElement('header', '', $header);
         $form->addElement('hidden', 'id',intval($_GET['id']));
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '100'));
@@ -79,10 +84,15 @@ class Career extends Model {
         
         $status_list = $this->get_status_list();         
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
+        $form->addElement('text', 'created_at', get_lang('CreatedAt'));
+        $form->freeze('created_at');
+        
         $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
     
         // Setting the defaults
         $defaults = $this->get($_GET['id']);
+        $defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
+        $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
         $form->setDefaults($defaults);
     
         // Setting the rules

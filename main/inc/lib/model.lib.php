@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	This class provides methods for the notebook management.
+*	This class provides basic methods to implement a CRUD for a new table in the database see examples in: career.lib.php and promotion.lib.php
 *	Include/require it in your code to use its features.
 *	@package chamilo.library
 */
@@ -15,10 +15,11 @@ class Model {
 	public function __construct() {        
 	}
     
-    public function find() {
-    	
-    }
-    
+    /**
+     * Useful finder
+     */
+    public function find() {    	
+    }    
     
     /**
      * Delets an item
@@ -75,10 +76,7 @@ class Model {
     }
         
     /**
-     * a little bit of javascript to display a prettier warning when deleting a note
-     *
-     * @return unknown
-     *
+     * a little bit of javascript to display
      */
 	public function javascript() {
 		
@@ -93,6 +91,10 @@ class Model {
 	 */
 	public function save($params) {
         $params = $this->clean_parameters($params);
+        
+        if (in_array('created_at', $this->columns)) {        	
+            $params['created_at'] = api_get_utc_datetime();
+        }
         if (!empty($params)) {
             $id = Database::insert($this->table, $params);        
     		if (is_numeric($id)){
@@ -110,6 +112,10 @@ class Model {
      */
     public function update($params) {
         $params = $this->clean_parameters($params);
+        if (in_array('updated_at', $this->columns)) {           
+            $params['updated_at'] = api_get_utc_datetime();
+        }
+        
         if (!empty($params)) {
             $id = $params['id'];
             unset($params['id']); //To not overwrite the id 

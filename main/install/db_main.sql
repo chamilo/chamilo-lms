@@ -2544,7 +2544,9 @@ CREATE TABLE career (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL ,
     description TEXT NOT NULL,
-    status INT NOT NULL default '0', 
+    status INT NOT NULL default '0',
+    created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
     PRIMARY KEY (id)
 );
 
@@ -2554,6 +2556,8 @@ CREATE TABLE promotion (
     description TEXT NOT NULL,
     career_id INT NOT NULL,
     status INT NOT NULL default '0', 
+    created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
 

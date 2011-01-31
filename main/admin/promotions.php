@@ -41,10 +41,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_promotions';
 //The order is important you need to check the model.ajax.php the $column variable
 $columns        = array(get_lang('Name'),get_lang('Career'),get_lang('Description'),get_lang('Actions'));
-$column_model   = array(array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
+$column_model   = array(
+                        array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
                         array('name'=>'career',         'index'=>'career',      'width'=>'100',  'align'=>'left'),
                         array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
-                        array('name'=>'actions',        'index'=>'actions',     'formatter'=>'action_formatter','width'=>'100',  'align'=>'left'),
+                        array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter'),
                        );                        
 $extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['editurl'] = $url; //use the width of the parent
@@ -76,7 +77,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         api_not_allowed();
     }
     $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
-    $form = $promotion->return_form($url,get_lang('Add'));    
+    $form = $promotion->return_form($url, 'add');    
 
     // The validation or display
     if ($form->validate()) {
@@ -102,7 +103,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
 } elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET['id'])) {
     //Editing 
     $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);    
-    $form = $promotion->return_form($url, get_lang('Modify'));
+    $form = $promotion->return_form($url, 'edit');
 
     // The validation or display
     if ($form->validate()) {

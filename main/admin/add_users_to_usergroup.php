@@ -98,13 +98,19 @@ if($_POST['form_sent']) {
 }
 $data       = $usergroup->get($id);
 $list_in    = $usergroup->get_users_by_usergroup($id);
-$user_list  = UserManager::get_user_list();
+
+$order = array('lastname');
+if (api_is_western_name_order()) {
+    $order = array('firstname');	
+}
+$user_list  = UserManager::get_user_list(array(),$order);
 
 //api_display_tool_title($tool_name.' ('.$session_info['name'].')');
 $elements_not_in = $elements_in = array();
 
 if (!empty($user_list)) {
     foreach($user_list as $item) {
+        if ($item['status'] == 6 ) continue; //avoid anonymous users
         $person_name = api_get_person_name($item['firstname'], $item['lastname']);        
         if (in_array($item['user_id'], $list_in)) {                        
             $elements_in[$item['user_id']] = $person_name;             
@@ -157,7 +163,8 @@ function search($needle,$type) {
         } else {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
             
-            foreach ($list as $item ) {         
+            foreach ($list as $item ) {
+                if ($item['status'] == 6 ) continue; //avoid anonymous users
                 if (!in_array($item['user_id'], array_keys($elements_in))) {       
                     $person_name = api_get_person_name($item['firstname'], $item['lastname']);   
                     $return .= '<option value="'.$item['user_id'].'">'.$person_name.'</option>';

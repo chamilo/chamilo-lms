@@ -57,4 +57,5 @@ if (!empty($usergroup_list)) {
         echo Display::tag('div',$data['name']);
     }
 }
+echo '</div>';
 Display :: display_footer();

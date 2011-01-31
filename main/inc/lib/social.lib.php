@@ -629,11 +629,13 @@ class SocialManager extends UserManager {
 	              <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.png',get_lang('Groups'),array('hspace'=>'6')).'<span class="'.($show=='groups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Groups').'</span></a></li>';
 			
 			//Show groups
-	        if (in_array($show,$show_groups)) {
-					echo '<li><ul>';
-						echo $create_group_item;
-						echo '<li class="social-menu-sub-level" style="background:none;padding:0px"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php?view=mygroups">'.Display::return_icon('group.png',get_lang('MyGroups'),array('hspace'=>'6')).'<span class="'.($show=='mygroups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyGroups').'</span></a></li>';
-					echo '</ul></li>';
+	        if (in_array($show,$show_groups)) {					
+    			echo $create_group_item;
+                if (api_get_setting('allow_students_to_create_groups_in_social') == 'true' || api_is_platform_admin()) {                        
+                    echo '<li><ul>';    
+                    echo '<li class="social-menu-sub-level" style="background:none;padding:0px"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php?view=mygroups">'.Display::return_icon('group.png',get_lang('MyGroups'),array('hspace'=>'6')).'<span class="'.($show=='mygroups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyGroups').'</span></a></li>';
+                    echo '</ul></li>';
+                }
 			}
 			
 			//Search users and groups

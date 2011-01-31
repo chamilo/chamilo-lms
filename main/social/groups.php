@@ -260,8 +260,7 @@ if ($group_id != 0 ) {
 
 	// details about the current group
 	echo '<div class="head_group">';
-
-
+    
 		echo '<div id="social-group-details">';
 				//Group's title
 				echo '<h2><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h2>';
@@ -391,7 +390,7 @@ if ($group_id != 0 ) {
 			$grid_newest_groups[]= array($grid_item_1,$grid_item_2);
 		}
 
-		// Pop groups -----
+		// Pop groups
 		$results = GroupPortalManager::get_groups_by_popularity(4,false);
 		$grid_pop_groups = array();
 
@@ -428,9 +427,7 @@ if ($group_id != 0 ) {
 			}
 		}
 
-
-
-		// display groups (newest, mygroups, pop)
+		// Display groups (newest, mygroups, pop)
 			echo '<div class="social-box-container2">';
 		   	if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 		   		$view_group = $_GET['view'];

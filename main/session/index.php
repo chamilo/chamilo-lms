@@ -1,7 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+*   Session view
+*   @package chamilo.session
+*   @author Julio Montoya <gugli100@gmail.com>
+*/
+
 // Language files that should be included.
 $language_file = array('courses', 'index','tracking','exercice', 'admin');
-
 
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
@@ -144,12 +150,7 @@ foreach($final_array as $session_data) {
                 $counter = 1;                    
                 foreach ($exercise_data['data'] as $exercise_result) {                    
                     $my_exercise_result = array($exercise_data['name'], $exercise_result['exe_id']);
-                    $column = 1;
-                    //$exercise_result['exe_id']
-                    /*print_r($exercise_result);
-                    exe_weighting
-                    exe_result
-                    exe_id*/
+                    $column = 1;      
                     $score          = $exercise_result['exe_result'].' / '.$exercise_result['exe_weighting'];
                     $platform_score = show_score($exercise_result['exe_result'], $exercise_result['exe_weighting'], false);
                     if (!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0 ) {                        

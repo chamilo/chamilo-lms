@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	This class provides methods for the notebook management.
+*	This class provides methods for the UserGroup management.
 *	Include/require it in your code to use its features.
 *	@package chamilo.library
 */
@@ -32,7 +32,11 @@ class UserGroup extends Model {
         echo Display::grid_html('usergroups');  
     } 
     
-    
+     /**
+     * Gets a list of course ids by user group
+     * @param   int     user group id
+     * @return  array   
+     */     
     public function get_courses_by_usergroup($id) {        
         $results = Database::select('*',$this->usergroup_rel_course_table, array('where'=>array('usergroup_id = ?'=>$id)));
         $array = array();
@@ -42,8 +46,13 @@ class UserGroup extends Model {
             }
         }                       
         return $array;
-    }
+    }    
     
+    /**
+     * Gets a list of session ids by user group
+     * @param   int     user group id
+     * @return  array   
+     */
     public function get_sessions_by_usergroup($id) {
         $results = Database::select('*',$this->usergroup_rel_session_table, array('where'=>array('usergroup_id = ?'=>$id)));
         $array = array();
@@ -55,6 +64,11 @@ class UserGroup extends Model {
         return $array;
     }      
     
+    /**
+     * Gets a list of user ids by user group
+     * @param   int     user group id
+     * @return  array   with a list of user ids
+     */
     public function get_users_by_usergroup($id) {
         $results = Database::select('*',$this->usergroup_rel_user_table, array('where'=>array('usergroup_id = ?'=>$id)));
         $array = array();
@@ -89,10 +103,6 @@ class UserGroup extends Model {
     */
     function subscribe_sessions_to_usergroup($usergroup_id, $list) {
         require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-        
-        $t = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);        
-        //Deleting relationships
-  
         $current_list = self::get_sessions_by_usergroup($usergroup_id);
         $user_list    = self::get_users_by_usergroup($usergroup_id);
      
@@ -123,16 +133,15 @@ class UserGroup extends Model {
                         }
                     }*/
                 }
-                Database::delete($t, array('usergroup_id = ? AND session_id = ?'=>array($usergroup_id, $session_id)));
+                Database::delete($this->usergroup_rel_session_table, array('usergroup_id = ? AND session_id = ?'=>array($usergroup_id, $session_id)));
             }
-        }
-     
+        }     
         
         //Addding new relationships
         if (!empty($new_items)) {
             foreach($new_items as $id) {                
                 $params = array('session_id'=>$id, 'usergroup_id'=>$usergroup_id);
-                Database::insert($t, $params);                
+                Database::insert($this->usergroup_rel_session_table, $params);                
                 SessionManager::suscribe_users_to_session($session_id, $user_list);
                 /*
                 $course_list = SessionManager::get_course_list_by_session_id($id);
@@ -152,9 +161,6 @@ class UserGroup extends Model {
      */
     function subscribe_courses_to_usergroup($usergroup_id, $list) {
         require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-        
-        $t = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);        
-        //Deleting relationships
   
         $current_list = self::get_courses_by_usergroup($usergroup_id);
         $user_list    = self::get_users_by_usergroup($usergroup_id);
@@ -182,7 +188,7 @@ class UserGroup extends Model {
                 foreach($user_list as $user_id) {                                   
                     CourseManager::unsubscribe_user($user_id, $course_info['code']);                    
                 }
-                Database::delete($t, array('usergroup_id = ? AND course_id = ?'=>array($usergroup_id, $course_id)));
+                Database::delete($this->usergroup_rel_course_table, array('usergroup_id = ? AND course_id = ?'=>array($usergroup_id, $course_id)));
             }
         }
         
@@ -196,7 +202,7 @@ class UserGroup extends Model {
                 }
                  
                 $params = array('course_id'=>$id, 'usergroup_id'=>$usergroup_id);
-                Database::insert($t, $params);
+                Database::insert($this->usergroup_rel_course_table, $params);
             }
         }
     }   
@@ -207,17 +213,16 @@ class UserGroup extends Model {
      * @param   array   list of user ids
      */
     function subscribe_users_to_usergroup($usergroup_id, $list) {
-        $t = Database::get_main_table(TABLE_USERGROUP_REL_USER);            
         $user_list = self::get_users_by_usergroup($usergroup_id);        
             
         //Deleting relationships
-        Database::delete($t, array('usergroup_id = ?'=>$usergroup_id));
+        Database::delete($this->usergroup_rel_user_table, array('usergroup_id = ?'=>$usergroup_id));
         
         //Adding new relationships
         if (!empty($list)) {
             foreach($list as $id) {
                 $params = array('user_id'=>$id, 'usergroup_id'=>$usergroup_id);
-                Database::insert($t, $params);
+                Database::insert($this->usergroup_rel_user_table, $params);
             }
         }
     }

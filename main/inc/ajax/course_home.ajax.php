@@ -51,9 +51,9 @@ switch ($action) {
 				'message' => $requested_message,
 	      		'view'    => $requested_view
 			);
-			print(json_encode($response_data));
-    }
-	break;
+			echo json_encode($response_data);
+        }
+        break;
 	
 	case 'show_course_information' :
 	
@@ -83,8 +83,8 @@ switch ($action) {
         
         $libpath = api_get_path(LIBRARY_PATH);
         require_once $libpath.'course.lib.php';
-        //require_once $libpath.'usermanager.lib.php';
-        require_once $libpath.'sessionmanager.lib.php';        
+        require_once $libpath.'sessionmanager.lib.php';
+        require_once $libpath.'usermanager.lib.php';           
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         
         
@@ -96,7 +96,20 @@ switch ($action) {
         	$sord = 'desc';
         }        
         $session_id  = intval($_REQUEST['session_id']);
-                
+        
+        //Filter users that does not belong to the session
+        if (!api_is_platform_admin()) {
+            $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
+            $my_session_list  = array();
+            foreach($new_session_list as $item) {
+                if (!empty($item['id_session'])) 
+                    $my_session_list[] = $item['id_session'];
+            }        
+            if (!in_array($session_id, $my_session_list)) {
+            	break;
+            }
+        }
+                        
         if(!$sidx) $sidx =1;
         
         $start = $limit*$page - $limit; 
@@ -143,140 +156,167 @@ switch ($action) {
         echo json_encode($responce);        
         break;
         
-        case 'session_courses_lp_by_week':
+    case 'session_courses_lp_by_week':
         
-            require_once '../global.inc.php';
+        require_once '../global.inc.php';
+    
+        $libpath = api_get_path(LIBRARY_PATH);
+        require_once $libpath.'course.lib.php';
+        require_once $libpath.'usermanager.lib.php';
+        require_once $libpath.'sessionmanager.lib.php';        
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         
-            $libpath = api_get_path(LIBRARY_PATH);
-            require_once $libpath.'course.lib.php';
-            //require_once $libpath.'usermanager.lib.php';
-            require_once $libpath.'sessionmanager.lib.php';        
-            require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-            
-            
-            $page  = intval($_REQUEST['page']);     //page
-            $limit = intval($_REQUEST['rows']);     // quantity of rows
-            $sidx  = intval($_REQUEST['sidx']);    //index to filter         
-            $sord  = $_REQUEST['sord'];    //asc or desc
-            if (!in_array($sord, array('asc','desc'))) {
-                $sord = 'desc';
+        
+        $page  = intval($_REQUEST['page']);     //page
+        $limit = intval($_REQUEST['rows']);     // quantity of rows
+        $sidx  = intval($_REQUEST['sidx']);    //index to filter         
+        $sord  = $_REQUEST['sord'];    //asc or desc
+        if (!in_array($sord, array('asc','desc'))) {
+            $sord = 'desc';
+        }        
+        $session_id  = intval($_REQUEST['session_id']);
+        
+        //Filter users that does not belong to the session
+        if (!api_is_platform_admin()) {
+            $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
+            $my_session_list  = array();
+            foreach($new_session_list as $item) {
+                if (!empty($item['id_session'])) 
+                    $my_session_list[] = $item['id_session'];
             }        
-            $session_id  = intval($_REQUEST['session_id']);
-                    
-            if(!$sidx) $sidx =1;
-            
-            $start = $limit*$page - $limit; 
-            
-            $course_list    = SessionManager::get_course_list_by_session_id($session_id);
-                            
-            $count = 0;
-            
-            foreach ($course_list as $item) {    
-                $list               = new LearnpathList(api_get_user_id(),$item['code']);
-                $flat_list          = $list->get_flat_list();    
-                $lps[$item['code']] = $flat_list;
-                $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>'_blank'));
+            if (!in_array($session_id, $my_session_list)) {
+                break;
+            }
+        }       
+               
                 
-                foreach($flat_list as $lp_id => $lp_item) {                                                    
-                    $temp[$count]['id']= $lp_id;
-                                      
-                    $temp[$count]['cell']=array(get_week_from_day($lp_item['publicated_on']), substr($lp_item['publicated_on'], 0,10), $item['title'], $lp_item['lp_name']);
-                    $count++;     
-                }              
-            } 
+        if(!$sidx) $sidx =1;
+        
+        $start = $limit*$page - $limit; 
+        
+        $course_list    = SessionManager::get_course_list_by_session_id($session_id);
+                        
+        $count = 0;
+        
+        foreach ($course_list as $item) {    
+            $list               = new LearnpathList(api_get_user_id(),$item['code']);
+            $flat_list          = $list->get_flat_list();    
+            $lps[$item['code']] = $flat_list;
+            $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>'_blank'));
             
-            $i =0;
-            foreach($temp as $key=>$row) {   
-                $row = $row['cell'];            
-                if ($key >= $start  && $key < ($start + $limit)) {                 
-                    $responce->rows[$i]['id']= $key;
-                    $responce->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
-                    $i++;                
-                }
+            foreach($flat_list as $lp_id => $lp_item) {                                                    
+                $temp[$count]['id']= $lp_id;
+                                  
+                $temp[$count]['cell']=array(get_week_from_day($lp_item['publicated_on']), substr($lp_item['publicated_on'], 0,10), $item['title'], $lp_item['lp_name']);
+                $count++;     
+            }              
+        } 
+        
+        $i =0;
+        foreach($temp as $key=>$row) {   
+            $row = $row['cell'];            
+            if ($key >= $start  && $key < ($start + $limit)) {                 
+                $responce->rows[$i]['id']= $key;
+                $responce->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
+                $i++;                
             }
-            
-            if($count > 0 && $limit > 0) { 
-                $total_pages = ceil($count/$limit); 
-            } else { 
-                $total_pages = 0; 
-            }         
-            $responce->total    = $total_pages;         
-            if ($page > $total_pages) { 
-                $responce->page= $total_pages;
-            } else {
-                $responce->page     = $page;    
+        }
+        
+        if($count > 0 && $limit > 0) { 
+            $total_pages = ceil($count/$limit); 
+        } else { 
+            $total_pages = 0; 
+        }         
+        $responce->total    = $total_pages;         
+        if ($page > $total_pages) { 
+            $responce->page= $total_pages;
+        } else {
+            $responce->page     = $page;    
+        }        
+        $responce->records = $count;    
+        echo json_encode($responce); 
+        break;
+        
+
+    case 'session_courses_lp_by_course':
+        
+        require_once '../global.inc.php';
+    
+        $libpath = api_get_path(LIBRARY_PATH);
+        require_once $libpath.'course.lib.php';
+        require_once $libpath.'usermanager.lib.php';
+        require_once $libpath.'sessionmanager.lib.php';        
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+        
+        
+        $page  = intval($_REQUEST['page']);     //page
+        $limit = intval($_REQUEST['rows']);     // quantity of rows
+        $sidx  = intval($_REQUEST['sidx']);    //index to filter         
+        $sord  = $_REQUEST['sord'];    //asc or desc
+        if (!in_array($sord, array('asc','desc'))) {
+            $sord = 'desc';
+        }        
+        $session_id  = intval($_REQUEST['session_id']);
+        
+        //Filter users that does not belong to the session
+        if (!api_is_platform_admin()) {
+            $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
+            $my_session_list  = array();
+            foreach($new_session_list as $item) {
+                if (!empty($item['id_session'])) 
+                    $my_session_list[] = $item['id_session'];
             }        
-            $responce->records = $count;    
-            echo json_encode($responce); 
-            break;
-        
-          case 'session_courses_lp_by_course':
-        
-            require_once '../global.inc.php';
-        
-            $libpath = api_get_path(LIBRARY_PATH);
-            require_once $libpath.'course.lib.php';
-            //require_once $libpath.'usermanager.lib.php';
-            require_once $libpath.'sessionmanager.lib.php';        
-            require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-            
-            
-            $page  = intval($_REQUEST['page']);     //page
-            $limit = intval($_REQUEST['rows']);     // quantity of rows
-            $sidx  = intval($_REQUEST['sidx']);    //index to filter         
-            $sord  = $_REQUEST['sord'];    //asc or desc
-            if (!in_array($sord, array('asc','desc'))) {
-                $sord = 'desc';
-            }        
-            $session_id  = intval($_REQUEST['session_id']);
-                    
-            if(!$sidx) $sidx =1;
-            
-            $start = $limit*$page - $limit; 
-            
-            $course_list    = SessionManager::get_course_list_by_session_id($session_id);
-                            
-            $count = 0;
-            
-            foreach ($course_list as $item) {    
-                $list               = new LearnpathList(api_get_user_id(),$item['code']);
-                $flat_list          = $list->get_flat_list();    
-                $lps[$item['code']] = $flat_list;
-                $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>'_blank'));
-                foreach($flat_list as $lp_id => $lp_item) {                                                    
-                    $temp[$count]['id']= $lp_id;
-                    $temp[$count]['cell']=array(substr($lp_item['publicated_on'], 0,10), $item['title'], $lp_item['lp_name']);
-                    $count++;     
-                }              
-            } 
-            
-            $i =0;
-            foreach($temp as $key=>$row) {   
-                $row = $row['cell'];            
-                if ($key >= $start  && $key < ($start + $limit)) {                 
-                    $responce->rows[$i]['id']= $key;
-                    $responce->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
-                    $i++;                
-                }
+            if (!in_array($session_id, $my_session_list)) {
+                break;
             }
-            
-            if($count > 0 && $limit > 0) { 
-                $total_pages = ceil($count/$limit); 
-            } else { 
-                $total_pages = 0; 
-            }         
-            $responce->total    = $total_pages;         
-            if ($page > $total_pages) { 
-                $responce->page= $total_pages;
-            } else {
-                $responce->page     = $page;    
-            }        
-            $responce->records = $count; 
-            
-            echo json_encode($responce); 
-            break;
+        }
+                
+        if(!$sidx) $sidx =1;
+        
+        $start = $limit*$page - $limit; 
+        
+        $course_list    = SessionManager::get_course_list_by_session_id($session_id);
+                        
+        $count = 0;
+        
+        foreach ($course_list as $item) {    
+            $list               = new LearnpathList(api_get_user_id(),$item['code']);
+            $flat_list          = $list->get_flat_list();    
+            $lps[$item['code']] = $flat_list;
+            $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>'_blank'));
+            foreach($flat_list as $lp_id => $lp_item) {                                                    
+                $temp[$count]['id']= $lp_id;
+                $temp[$count]['cell']=array(substr($lp_item['publicated_on'], 0,10), $item['title'], $lp_item['lp_name']);
+                $count++;     
+            }              
+        } 
+        
+        $i =0;
+        foreach($temp as $key=>$row) {   
+            $row = $row['cell'];            
+            if ($key >= $start  && $key < ($start + $limit)) {                 
+                $responce->rows[$i]['id']= $key;
+                $responce->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
+                $i++;                
+            }
+        }
+        
+        if($count > 0 && $limit > 0) { 
+            $total_pages = ceil($count/$limit); 
+        } else { 
+            $total_pages = 0; 
+        }         
+        $responce->total    = $total_pages;         
+        if ($page > $total_pages) { 
+            $responce->page= $total_pages;
+        } else {
+            $responce->page     = $page;    
+        }        
+        $responce->records = $count; 
+        
+        echo json_encode($responce); 
+        break;
 	default:
 		echo '';
 }
 exit;
-?>

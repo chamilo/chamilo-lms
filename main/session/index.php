@@ -8,7 +8,7 @@
 
 // Language files that should be included.
 $language_file = array('courses', 'index','tracking','exercice', 'admin');
-//$cidReset = true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'course.lib.php';
@@ -31,10 +31,14 @@ $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 Display :: display_header($nameTools);
 
 $session_id     = intval($_GET['session_id']);
+if (empty($session_id)) {
+	api_not_allowed();
+}
+
 $session_info   = SessionManager::fetch($session_id);
 $session_list   = SessionManager::get_sessions_by_coach(api_get_user_id());
-
 $course_list    = SessionManager::get_course_list_by_session_id($session_id);
+
 $course_select = array();
 
 $session_select = array();
@@ -52,8 +56,6 @@ if (count($session_select) > 1) {
     $form->display();
     //if ($form->validate()) {}        
 }
-
-echo Display::tag('h1', $session_info['name']);
 
 //Listing LPs from all courses
 /*
@@ -117,7 +119,14 @@ if (!empty($new_session_list)) {
     }
 }
 
-//print_r($final_array); exit;
+//If the requested session does not exist in my list we stop the script
+if (!api_is_platform_admin()) {    
+    if (!in_array($session_id, $my_session_list)) {
+        api_not_allowed();
+    }
+}
+
+//print_r($my_session_list); exit;
 require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';
 $html = '';
 //Final data to be show
@@ -178,6 +187,8 @@ foreach($final_array as $session_data) {
     }
 }     
 //echo '<pre>';print_r($my_real_array) ;
+
+echo Display::tag('h1', $session_info['name']);
 
 //All Learnpaths grid settings (First tab, first subtab)
 

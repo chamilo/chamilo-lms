@@ -29,11 +29,12 @@
 
 .ui-widget-content a {
     color: #3757F7;
+    cursor: pointer;    
 }
 .ui-widget-content a:hover{
     color: #3757F7;
+    cursor: pointer;
 }
-
 
 /*  cupertino */
 

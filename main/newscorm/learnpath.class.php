@@ -633,6 +633,7 @@ class learnpath {
         switch ($learnpath) {
             case 'guess':
                 break;
+            case 'dokeos':
             case 'chamilo':
                 $type = 1;
                 break;

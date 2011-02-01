@@ -17,10 +17,10 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once '../gradebook/lib/be.inc.php';
 
-// setting the tabs
+// Setting the tabs
 $this_section = SECTION_COURSES;
 
-// access control
+// Access control
 api_protect_course_script(true);
 
 $show = (isset ($_GET['show']) && $_GET['show'] == 'result') ? 'result' : 'test'; // moved down to fix bug: http://www.dokeos.com/forum/viewtopic.php?p=18609#18609
@@ -122,7 +122,7 @@ if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !emp
 	$sql = 'DELETE FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES) . ' WHERE exe_id = ' . $_GET['did']; //_GET[did] filtered by entry condition
 	Database::query($sql);
 	$filter=Security::remove_XSS($_GET['filter']);
-	header('Location: exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '');
+	header('Location: exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&exerciseId='.$exerciseId);
 	exit;
 }
 
@@ -381,13 +381,13 @@ if (!empty ($_POST['export_report']) && $_POST['export_report'] == 'export_repor
 		switch ($_POST['export_format']) {
 			case 'xls' :
 				$export = new ExerciseResult();               
-				$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter'],$_POST['exercise_id']);
+				$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter'],$_POST['exerciseId']);
 				exit;
 				break;
 			case 'csv' :
 			default :
 				$export = new ExerciseResult();
-				$export->exportCompleteReportCSV($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter'],$_POST['exercise_id']);
+				$export->exportCompleteReportCSV($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter'],$_POST['exerciseId']);
 				exit;
 				break;
 		}
@@ -608,7 +608,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
 			echo '<input type="hidden" name="export_format" value="csv">';
-            echo '<input type="hidden" name="exercise_id" value="'.intval($_GET['exercise_id']).'">';            
+            echo '<input type="hidden" name="exerciseId" value="'.intval($_GET['exerciseId']).'">';            
             
             if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
                 $filter = 1;
@@ -622,7 +622,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 			echo '<input type="hidden" name="export_report" value="export_report">';
 			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
 			echo '<input type="hidden" name="export_format" value="xls">';
-            echo '<input type="hidden" name="exercise_id" value="'.intval($_GET['exercise_id']).'">';
+            echo '<input type="hidden" name="exerciseId" value="'.intval($_GET['exerciseId']).'">';
 			echo '</form>';
 		}
 	}
@@ -656,9 +656,9 @@ if ($show == 'result') {
 				null;
 		}
 		if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
-			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&exercise_id='.intval($_GET['exercise_id']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('check.gif', get_lang('ShowCorrectedOnly')).get_lang('ShowCorrectedOnly').'</a>';
+			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('check.gif', get_lang('ShowCorrectedOnly')).get_lang('ShowCorrectedOnly').'</a>';
 		} else {
-			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&exercise_id='.intval($_GET['exercise_id']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('un_check.gif', get_lang('ShowUnCorrectedOnly')).get_lang('ShowUnCorrectedOnly').'</a>';
+			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('un_check.gif', get_lang('ShowUnCorrectedOnly')).get_lang('ShowUnCorrectedOnly').'</a>';
 		}
 		echo $view_result;
 	}
@@ -791,9 +791,9 @@ if ($show == 'test') {
                         //Settings                                                                
                         //$actions  = Display::url(Display::return_icon('edit.gif',get_lang('Edit'), array('width'=>'20px')), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                         
-                        $actions =  Display::url(Display::return_icon('wizard_small.gif',get_lang('Edit'), array('width'=>'22px')), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
+                        $actions =  Display::url(Display::return_icon('wizard.gif',get_lang('Edit'), array('width'=>'22px')), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
                         
-                        $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exercise_id='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
+                        $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
                         
                         //Export
                         $actions .= Display::url(Display::return_icon('cd.gif',          get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
@@ -916,10 +916,9 @@ if ($show == 'test') {
                             $attempt_text = get_lang('CantShowResults');
                         }
                     }
-                                
                     //User Attempts    
-                    if (empty($row['max_attempt'])) {                        
-                        $item .=  Display::tag('td','-');
+                    if (empty($row['max_attempt'])) {
+                        $item .=  Display::tag('td',$num);     
                     } else {
                         if (empty($num)) {
                         	$num = 0;
@@ -944,16 +943,14 @@ if ($show == 'test') {
 }
     
 
-    
-
 /* Exercise Results (uses tracking tool) */
 
 // if tracking is enabled
 if ($show == 'result') {
 	$parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'show'=>Security::remove_XSS($_GET['show']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
-    $exercise_id = intval($_GET['exercise_id']);
+    $exercise_id = intval($_GET['exerciseId']);
     if (!empty($exercise_id))
-        $parameters['exercise_id'] = $exercise_id;
+        $parameters['exerciseId'] = $exercise_id;
                         
 	$table = new SortableTable('quiz_results', 'get_count_exam_results', 'get_exam_results_data');
 	$table->set_additional_parameters($parameters);

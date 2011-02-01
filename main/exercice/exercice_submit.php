@@ -26,7 +26,7 @@ require_once 'answer.class.php';
 require_once 'exercise.lib.php';
 
 // debug var. Set to 0 to hide all debug display. Set to 1 to display debug messages.
-$debug = 1;
+$debug = 0;
 
 // name of the language file that needs to be included
 $language_file = 'exercice';
@@ -493,7 +493,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 }
 
 $exerciseTitle = text_filter($objExercise->selectTitle());
-echo "<h2>" . $exerciseTitle . "</h2>";
+echo Display::tag('h2', $exerciseTitle);
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {	
@@ -502,6 +502,9 @@ if ($objExercise->selectAttempts() > 0) {
     	$show_clock = false;
         if (!api_is_allowed_to_edit(null,true)) {
             Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);
+            
+            
+            
             if ($origin != 'learnpath')
                 Display :: display_footer();
             exit;

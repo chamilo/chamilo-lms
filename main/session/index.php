@@ -8,7 +8,7 @@
 
 // Language files that should be included.
 $language_file = array('courses', 'index','tracking','exercice', 'admin');
-
+//$cidReset = true;
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'course.lib.php';
@@ -182,7 +182,8 @@ foreach($final_array as $session_data) {
 //All Learnpaths grid settings (First tab, first subtab)
 
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id;
-$columns        = array('Date','Course', 'LP');
+$columns        = array(get_lang('Date'),get_lang('Course'), get_lang('LearningPath'));
+
 $column_model   = array(array('name'=>'date',   'index'=>'date',  'width'=>'80',   'align'=>'left'),
                         array('name'=>'course', 'index'=>'course', 'width'=>'500', 'align'=>'left'),
                         array('name'=>'lp',     'index'=>'lp',     'width'=>'200',  'align'=>'center'));
@@ -196,25 +197,27 @@ $url_course             = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=se
 $extra_params_course['grouping'] = 'true';
 $extra_params_course['groupingView'] = array('groupField'       => array('course'),
                                              'groupColumnShow'  => array('false'),
-                                             'groupText'        => array('<b>Course {0} - {1} Item(s)</b>'));
+                                             'groupText'        => array('<b>'.get_lang('Course').' {0} - {1} Item(s)</b>'));
 $extra_params_course['autowidth'] = 'true'; //use the width of the parent                                          
                               
 //Per Week grid
-$url_week             = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id;
-$column_week = array('Week','Date','Course', 'LP');
-$column_week_model =array(array('name'=>'week',     'index'=>'week',    'width'=>'80', 'align'=>'left'),       
+$url_week           = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id;
+$column_week        = array(get_lang('PeriodWeek'), get_lang('Date'),get_lang('Course'), get_lang('LearningPath'));
+$column_week_model  = array(
+                          array('name'=>'week',     'index'=>'week',    'width'=>'80', 'align'=>'left'),       
                           array('name'=>'date',     'index'=>'date',    'width'=>'80', 'align'=>'right'),
                           array('name'=>'course',   'index'=>'course',  'width'=>'500', 'align'=>'left'),
                           array('name'=>'lp',       'index'=>'lp',      'width'=>'200', 'align'=>'center'));
                           
+                          
 $extra_params_week['grouping'] = 'true';
 $extra_params_week['groupingView'] = array('groupField'=>array('week'),
                                             'groupColumnShow'=>'false',
-                                            'groupText' => array('<b>Week {0} - {1} Item(s)</b>'));
+                                            'groupText' => array('<b>'.get_lang('PeriodWeek').' {0} - {1} </b>'));
 $extra_params_week['autowidth'] = 'true'; //use the width of the parent
 
 //MyQCM grid
-$column_exercise        = array(get_lang('Course'),get_lang('Exercise'), get_lang('Attempt').' #', get_lang('Result'), get_lang('Note'), get_lang('Position'));
+$column_exercise        = array(get_lang('Course'),get_lang('Exercise'), get_lang('Attempts'), get_lang('Result'), get_lang('Score'), get_lang('Position'));
 $column_exercise_model  = array(array('name'=>'course',     'index'=>'course',    'width'=>'450', 'align'=>'left','sortable'=>'false'),
                                 array('name'=>'exercise',   'index'=>'exercise',  'width'=>'250', 'align'=>'left', 'sortable'=>'false'),
                                 array('name'=>'attempt',    'index'=>'attempt',   'width'=>'50', 'align'=>'center', 'sortable'=>'false'),

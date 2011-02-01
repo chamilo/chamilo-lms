@@ -38,20 +38,6 @@ $this_section = SECTION_COURSES;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
-
-//Blocking access in LPs
-//This funcionality has been moved to the get_link function in the learnpath_class.php
-/*
-if ($origin == 'learnpath' && isset ($_GET['not_multiple_attempt']) && $_GET['not_multiple_attempt'] == strval(intval($_GET['not_multiple_attempt']))) {
-    $not_multiple_attempt = (int) $_GET['not_multiple_attempt'];
-    if ($not_multiple_attempt === 1) {
-        require_once '../inc/reduced_header.inc.php';
-        echo '<div style="height:10px">&nbsp;</div>';
-        Display :: display_warning_message(get_lang('ReachedOneAttempt'));
-        exit;
-    }
-}*/
-
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
@@ -393,7 +379,7 @@ if ($formSent && isset($_POST)) {
                     if (exercise_time_control_is_valid($exerciseId)) {
                     	$sql_exe_result = "";                    	
                     } else {
-                    	$sql_exe_result = ",exe_result = 0";
+                    	$sql_exe_result = ", exe_result = 0";
                     }
                     //Clean incomplete - @todo why setting to blank the data_tracking?
                     //$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . api_get_utc_datetime() . "' $sql_exe_result " . ' WHERE exe_id = ' . Database::escape_string($exe_id);
@@ -501,9 +487,33 @@ if ($objExercise->selectAttempts() > 0) {
     if ($attempt_count >= $objExercise->selectAttempts()) {
     	$show_clock = false;
         if (!api_is_allowed_to_edit(null,true)) {
-            Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);
             
-            
+            if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
+                //Showing latest attempt according with task BT#1628
+                $exercise_stat_info = get_all_exercise_results_by_user(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
+                if (!empty($exercise_stat_info )) {
+                    $max_exe_id = max(array_keys($exercise_stat_info));
+                    $last_attempt_info = $exercise_stat_info[$max_exe_id];
+                    
+                    //echo '<pre>';    //var_dump($last_attempt_info);  
+                    if (!empty($last_attempt_info['question_list'])) {               
+                        foreach($last_attempt_info['question_list'] as $question_data) {
+                            $question_id = $question_data['question_id'];
+                            $marks       = $question_data['marks'];
+                            
+                            $question_info = Question::read($question_id);                                                        
+                            echo Display::div($question_info->question, array('id'=>'question_title','class'=>'sectiontitle'));                            
+                            echo Display::div(get_lang('Score').' '.$marks, array('id'=>'question_score'));
+                        }
+                    }                    
+                    $score =  show_score($last_attempt_info['exe_result'],$last_attempt_info['exe_weighting']);
+                    echo Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
+                } else {
+                    Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);	
+                }
+            } else {
+                Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);
+            }
             
             if ($origin != 'learnpath')
                 Display :: display_footer();

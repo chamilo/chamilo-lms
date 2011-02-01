@@ -1382,7 +1382,7 @@ class Exercise {
 		$this->active = $status;
 	}
 	
-	public function get_stat_track_exercise_info($lp_id = 0, $lp_item_id = 0, $lp_item_view_id = 0) {		
+	public function get_stat_track_exercise_info($lp_id = 0, $lp_item_id = 0, $lp_item_view_id = 0, $status = 'incomplete') {		
 		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		if (empty($lp_id)) {
 			$lp_id = 0;
@@ -1392,11 +1392,11 @@ class Exercise {
 		}	
         if (empty($lp_item_view_id)) {
             $lp_item_view_id = 0;
-        }   	
+        }   
 		$condition = ' WHERE exe_exo_id 	= ' . "'" . $this->id . "'" .' AND 
 					   exe_user_id 			= ' . "'" . api_get_user_id() . "'" . ' AND 
 					   exe_cours_id 		= ' . "'" . api_get_course_id() . "'" . ' AND 
-					   status 				= ' . "'incomplete'" . ' AND 
+					   status 				= ' . "'" . Database::escape_string($status). "'" . ' AND 
 					   orig_lp_id 			= ' . "'" . $lp_id . "'" . ' AND 
 					   orig_lp_item_id 		= ' . "'" . $lp_item_id . "'" . ' AND
                        orig_lp_item_view_id = ' . "'" . $lp_item_view_id . "'" . ' AND

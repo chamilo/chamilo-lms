@@ -589,6 +589,9 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	return true;
 }
 
+/**
+ * Gets the last attempt of an exercise based in the exe_id
+ */
 function get_last_attempt_date_of_exercise($exe_id) {
 	$exe_id = intval($exe_id);
 	$track_attempts 		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -603,7 +606,12 @@ function get_last_attempt_date_of_exercise($exe_id) {
 }
 
 /**
- * Gets how many attempts exists
+ * Gets how many attempts exists by user, exercise
+ * @param   int user id
+ * @param   int exercise id
+ * @param   int lp id
+ * @param   int lp item id
+ * @param   int lp item view id
  */
 function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id,$lp_item_view_id) {
 	$stat_table 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
@@ -688,12 +696,12 @@ function get_all_exercise_results($exercise_id, $course_code, $session_id = 0) {
 	
 	$sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";
 	
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$list = array();	
 	while($row = Database::fetch_array($res,'ASSOC')) {		
 		$list[$row['exe_id']] = $row;		
 		$sql = "SELECT * FROM $TBL_TRACK_ATTEMPT WHERE exe_id = {$row['exe_id']}";
-		$res_question = api_sql_query($sql,__FILE__,__LINE__);
+		$res_question = Database::query($sql);
 		while($row_q = Database::fetch_array($res_question,'ASSOC')) {
 			$list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
 		}		
@@ -720,12 +728,12 @@ function get_all_exercise_results_by_user($user_id, $exercise_id, $course_code, 
     
     $sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = $exercise_id AND session_id = $session_id AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND exe_user_id = $user_id  ORDER by exe_id";    
     
-    $res = api_sql_query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql);
     $list = array();    
     while($row = Database::fetch_array($res,'ASSOC')) {     
         $list[$row['exe_id']] = $row;       
         $sql = "SELECT * FROM $TBL_TRACK_ATTEMPT WHERE exe_id = {$row['exe_id']}";
-        $res_question = api_sql_query($sql,__FILE__,__LINE__);
+        $res_question = Database::query($sql);
         while($row_q = Database::fetch_array($res_question,'ASSOC')) {
             $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
         }       
@@ -746,12 +754,12 @@ function get_all_exercise_event_from_lp($exercise_id, $course_code, $session_id 
   
     $sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id AND orig_lp_id !=0 AND orig_lp_item_id != 0";
     
-    $res = api_sql_query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql);
     $list = array();    
     while($row = Database::fetch_array($res,'ASSOC')) {     
         $list[$row['exe_id']] = $row;       
         $sql = "SELECT * FROM $TBL_TRACK_ATTEMPT WHERE exe_id = {$row['exe_id']}";
-        $res_question = api_sql_query($sql,__FILE__,__LINE__);
+        $res_question = Database::query($sql);
         while($row_q = Database::fetch_array($res_question,'ASSOC')) {
             $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
         }       
@@ -770,7 +778,7 @@ function get_all_exercise_event_from_lp($exercise_id, $course_db, $session_id ) 
 	$sql = "SELECT  title, user_id, score , iv.max_score, status, session_id 
 			FROM $lp_item_table as i INNER JOIN $lp_item_view_table iv ON (i.id = iv.lp_item_id ) INNER JOIN $lp_view_table v ON iv.lp_view_id = v.id 
 			WHERE path = $exercise_id AND status ='completed' AND session_id = $session_id";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$list = array();	
 	
 	while($row = Database::fetch_array($res,'ASSOC')) {		
@@ -786,7 +794,7 @@ function get_all_exercises_from_lp($lp_id, $course_db) {
 	$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM,$course_db);
 	$lp_id = intval($lp_id);
 	$sql = "SELECT * FROM $lp_item_table WHERE lp_id = '".$lp_id."'  ORDER BY parent_item_id, display_order";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$my_exercise_list = array();	
 	while($row = Database::fetch_array($res,'ASSOC')) {
 		if ($row['item_type'] == 'quiz') {

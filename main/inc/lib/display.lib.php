@@ -713,6 +713,9 @@ class Display {
         return self::tag('a', $name, $extra_attributes);    	
     }
     
+    /**
+     * Creates a div tag
+     */
     public static function div($content, $extra_attributes = array()) {      
         return self::tag('div', $content, $extra_attributes);        
     }
@@ -721,7 +724,7 @@ class Display {
      * Displays an HTML input tag
      * 
      */
-    public static function input($type, $name,  $value, $extra_attributes = array()) {
+    public static function input($type, $name, $value, $extra_attributes = array()) {
     	 if (!empty($type)) {
             $extra_attributes['type']= $type;
          }

@@ -739,6 +739,13 @@ function get_count_exam_results($exercise_id = null) {
     //@todo replace all this globals
     global $is_allowedToEdit, $is_tutor,$TBL_USER, $TBL_EXERCICES,$TBL_TRACK_EXERCICES, $TBL_TRACK_HOTPOTATOES, $TBL_TRACK_ATTEMPT_RECORDING,$filter_by_not_revised,$filter_by_revised,$documentPath;
     $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
+    
+    $exercise_id = intval($_GET['exerciseId']);
+    $exercise_where = '';
+    if (!empty($exercise_id)) {
+        $exercise_where = ' AND te.exe_exo_id = '.$exercise_id.'  ';
+    }
+    
     if ($is_allowedToEdit || $is_tutor) {
         $user_id_and = '';
         if (!empty ($_POST['filter_by_user'])) {
@@ -751,11 +758,7 @@ function get_count_exam_results($exercise_id = null) {
         if ($_GET['gradebook'] == 'view') {
             $exercise_where_query = 'te.exe_exo_id =ce.id AND ';
         }        
-        $exercise_id = intval($_GET['exerciseId']);
-        $exercise_where = '';
-        if (!empty($exercise_id)) {
-            $exercise_where = ' AND te.exe_exo_id = '.$exercise_id.'  ';
-        }
+
 
         //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
@@ -791,56 +794,57 @@ function get_count_exam_results($exercise_id = null) {
 
       $sql="SELECT count(*) as count
             FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-            WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and $session_id_and AND ce.active <>-1 AND" .
-            " orig_lp_id = 0 AND orig_lp_item_id = 0 ";
+            WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where";
 
       $hpsql = "SELECT '',exe_name, exe_result , exe_weighting, exe_date
                 FROM $TBL_TRACK_HOTPOTATOES
                 WHERE exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "'
                 ORDER BY exe_cours_id ASC, exe_date DESC";
     }
+    
     $resx = Database::query($sql);
     $hpres = Database::query($hpsql);
     
     $count = 0;
-    if (Database::num_rows($resx) > 0) {        
-        while ($rowx = Database::fetch_array($resx,'ASSOC')) {
-            $results[] = $rowx;
-        }
-        $has_test_results = false;
-       
-        if (is_array($results)) {
-            $has_test_results = true;
-            $users_array_id = array ();
-            if ($_GET['gradebook'] == 'view') {
-                $filter_by_no_revised = true;
-                $from_gradebook = true;
+    if (Database::num_rows($resx) > 0) {
+        if ($is_allowedToEdit || $is_tutor) {
+            while ($rowx = Database::fetch_array($resx,'ASSOC')) {
+                $results[] = $rowx;
             }
-            $sizeof = count($results);
-    
-            $user_list_id = array ();
-            $user_last_name = '';
-            $user_first_name = '';
-            $quiz_name_list = '';
-            $duration_list = '';
-            $date_list = '';
-            $result_list = '';
-            $more_details_list = '';
-            for ($i = 0; $i < $sizeof; $i++) {
-                $revised = false;                
-                $sql_exe = 'SELECT exe_id FROM ' . $TBL_TRACK_ATTEMPT_RECORDING . ' WHERE author != "" AND exe_id = ' . Database :: escape_string($results[$i]['exe_id']) .' LIMIT 1';            
-                $query = Database::query($sql_exe);
-                if (Database :: num_rows($query) > 0) {
-                    $revised = true;
+            //Special modification to corretly show the pagination
+            if (is_array($results)) {          
+                if ($_GET['gradebook'] == 'view') {
+                    $filter_by_no_revised = true;
+                    $from_gradebook = true;
                 }
-                if ($filter_by_not_revised && $revised) {
-                    continue;
+                $sizeof = count($results);        
+                $user_list_id = array ();
+                $user_last_name = '';
+                $user_first_name = '';
+                $quiz_name_list = '';
+                $duration_list = '';
+                $date_list = '';
+                $result_list = '';
+                $more_details_list = '';
+                for ($i = 0; $i < $sizeof; $i++) {
+                    $revised = false;                
+                    $sql_exe = 'SELECT exe_id FROM ' . $TBL_TRACK_ATTEMPT_RECORDING . ' WHERE author != "" AND exe_id = ' . Database :: escape_string($results[$i]['exe_id']) .' LIMIT 1';            
+                    $query = Database::query($sql_exe);
+                    if (Database :: num_rows($query) > 0) {
+                        $revised = true;
+                    }
+                    if ($filter_by_not_revised && $revised) {
+                        continue;
+                    }
+                    if ($filter_by_revised && !$revised) {
+                        continue;
+                    }
+                    $count++;           
                 }
-                if ($filter_by_revised && !$revised) {
-                    continue;
-                }
-                $count++;           
-            }
+            }        
+        } else {            
+        	$rowx = Database::fetch_array($resx,'ASSOC');
+            $count = $rowx['count'];
         }
     }
     if (Database::num_rows($hpres) > 0) {
@@ -849,8 +853,6 @@ function get_count_exam_results($exercise_id = null) {
     }
     return $count;
 }
-
-
 
 
 /**
@@ -863,6 +865,10 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
     
     $exercise_id = intval($_GET['exerciseId']);
+    $exercise_where = '';
+    if (!empty($exercise_id)) {
+        $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.'  ';
+    }    
     
     if ($is_allowedToEdit || $is_tutor) {
         $user_id_and = '';
@@ -870,19 +876,13 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
             if ($_POST['filter_by_user'] == 'all') {
                 $user_id_and = " AND user_id like '%'";
             } else {
-                $user_id_and = " AND user_id = '" . Database :: escape_string((int) $_POST['filter_by_user']) . "' ";
+                $user_id_and = " AND user_id = '" . intval($_POST['filter_by_user']) . "' ";
             }
         }
         
         if ($_GET['gradebook'] == 'view') {
             $exercise_where_query = ' te.exe_exo_id =ce.id AND ';
         }
-        
-        $exercise_where = '';
-        if (!empty($exercise_id)) {
-            $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.'  ';
-        }
-        
 
         //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
@@ -921,14 +921,13 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                             "te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
                             "te.start_date as col4, steps_counter as exstep, exe_user_id as excruid, te.exe_duration as exduration, ce.results_disabled as exdisabled
               FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-              WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 ";
+              WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0  $exercise_where";
 
         $hpsql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
                   FROM $TBL_TRACK_HOTPOTATOES
                   WHERE exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "'
                   ORDER BY exe_cours_id ASC, exe_date DESC";
     }
-
 
     $column             = intval($column);
     $from               = intval($from);
@@ -945,14 +944,12 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     
     $hpresults = getManyResultsXCol($hpsql, 5);
 
-    $has_test_results = false;
     $list_info = array();
 
     // Print test results.
     $lang_nostartdate = get_lang('NoStartDate') . ' / ';    
     
     if (is_array($results)) {
-        $has_test_results = true;
         $users_array_id = array ();
         if ($_GET['gradebook'] == 'view') {
             $filter_by_no_revised = true;
@@ -1087,23 +1084,23 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     
     
     // Print HotPotatoes test results.
-        if (is_array($hpresults)) {
-            $has_test_results = true;
-            for ($i = 0; $i < sizeof($hpresults); $i++) {
-                $hp_title = GetQuizName($hpresults[$i][1], $documentPath);
-                if ($hp_title == '') {
-                    $hp_title = basename($hpresults[$i][1]);
-                }
-                //$hp_date = api_convert_and_format_date($hpresults[$i][4], null, date_default_timezone_get());
-                $hp_date = api_get_local_time($hpresults[$i][4], null, date_default_timezone_get());
-                $hp_result = round(($hpresults[$i][2] / ($hpresults[$i][3] != 0 ? $hpresults[$i][3] : 1)) * 100, 2).'% ('.$hpresults[$i][2].' / '.$hpresults[$i][3].')';
-                if ($is_allowedToEdit) {
-                    $list_info[] = array($hpresults[$i][0], $hp_title, '-', $hp_date , $hp_result , '-');
-                } else {
-                    $list_info[] = array($hp_title, '-', $hp_date , $hp_result , '-');
-                }
+    if (is_array($hpresults)) {
+        
+        for ($i = 0; $i < sizeof($hpresults); $i++) {
+            $hp_title = GetQuizName($hpresults[$i][1], $documentPath);
+            if ($hp_title == '') {
+                $hp_title = basename($hpresults[$i][1]);
+            }
+            //$hp_date = api_convert_and_format_date($hpresults[$i][4], null, date_default_timezone_get());
+            $hp_date = api_get_local_time($hpresults[$i][4], null, date_default_timezone_get());
+            $hp_result = round(($hpresults[$i][2] / ($hpresults[$i][3] != 0 ? $hpresults[$i][3] : 1)) * 100, 2).'% ('.$hpresults[$i][2].' / '.$hpresults[$i][3].')';
+            if ($is_allowedToEdit) {
+                $list_info[] = array($hpresults[$i][0], $hp_title, '-', $hp_date , $hp_result , '-');
+            } else {
+                $list_info[] = array($hp_title, '-', $hp_date , $hp_result , '-');
             }
         }
+    }
     return $list_info;
 }
 

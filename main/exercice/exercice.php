@@ -521,8 +521,8 @@ if ($is_allowedToEdit) {
 // Actions div bar
 echo '<div class="actions">';
 
-// display the next and previous link if needed
-// selects $limitExPage exercises at the same time
+// Display the next and previous link if needed
+// Selects $limitExPage exercises at the same time
 $from = $page * $limitExPage;
 $sql = "SELECT count(id) FROM $TBL_EXERCICES";
 $res = Database::query($sql);
@@ -533,9 +533,9 @@ HotPotGCt($documentPath, 1, api_get_user_id());
 $session_id         = api_get_session_id();
 $condition_session  = api_get_session_condition($session_id,true,true);
 
-if ($show == 'test') {	
+if ($show == 'test') {
     
-    // Only for administrator
+    // Only for administrators
     if ($is_allowedToEdit) {
         $sql = "SELECT id, title, type, active, description, results_disabled, session_id, start_time, end_time, random, max_attempt FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
         $result = Database::query($sql);   
@@ -614,8 +614,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
                 $filter = 1;
             } else {
             	$filter = 2;
-            }
-            
+            }            
             echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
 			echo '</form>';
 			echo '<form id="form1b" name="form1b" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';
@@ -631,7 +630,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 	if ($show == 'result') {
 		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
 	} else {
-		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=result') . '">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
+		echo '<a href="' . api_get_self() .'?'.api_get_cidreq().'&show=result'.'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
 	}
 }
 
@@ -731,7 +730,7 @@ if ($show == 'test') {
             if ($is_allowedToEdit) {
                 $headers = array(get_lang('ExerciseName'),get_lang('QuantityQuestions'), get_lang('Actions'));
             } else {
-            	$headers = array(get_lang('ExerciseName'), get_lang('Attempts'), get_lang('Status'));
+            	$headers = array(get_lang('ExerciseName'), get_lang('Attempts'), get_lang('Status'), get_lang('Actions'));
             }
             $header_list = '';
             foreach($headers as $header) {
@@ -764,7 +763,7 @@ if ($show == 'test') {
                     }
                 }                
                       
-                // prof only
+                // Teacher only
                 if ($is_allowedToEdit) {
                                     
                     //Showing exercise title
@@ -846,6 +845,7 @@ if ($show == 'test') {
                 } else {
                      
                     // Student only
+                    
                     $row['title'] = text_filter($row['title']);                 
     
                     // if time is actived show link to exercise
@@ -884,7 +884,7 @@ if ($show == 'test') {
                     $qryres = Database::query($qry);
                     $num    = Database :: num_rows($qryres);
             
-                    //hide the results
+                    //Hide the results
                     $my_result_disabled = $row['results_disabled'];
                             
                     if ($time_limits) {
@@ -916,6 +916,7 @@ if ($show == 'test') {
                             $attempt_text = get_lang('CantShowResults');
                         }
                     }
+                    
                     //User Attempts    
                     if (empty($row['max_attempt'])) {
                         $item .=  Display::tag('td',$num);     
@@ -926,6 +927,10 @@ if ($show == 'test') {
                         $item .=  Display::tag('td',$num.' / '.$row['max_attempt']);                        
                     }
                     $item .=  Display::tag('td', $attempt_text);                    
+                    //See results
+                    $actions ='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';                    
+                    $item .=  Display::tag('td', $actions);
+                                     
                     echo Display::tag('tr',$item);                  
                 }
                 /*echo '</p>';
@@ -936,7 +941,7 @@ if ($show == 'test') {
             echo '</div>';
         }         
     } else {
-          echo Display::display_warning_message(get_lang('NoExercises'));
+        echo Display::display_warning_message(get_lang('NoExercises'));
     }
     Display :: display_footer();    
     exit;

@@ -4753,29 +4753,55 @@ function api_check_browscap(){
 }
 
 /**
+ * Returns the js header to include the jquery library
+ */
+function api_get_jquery_js() {
+	return '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.4.4.min.js" type="text/javascript" language="javascript"></script>';
+}
+
+
+/**
  * Returns the jquery-ui library js headers 
  * @param   bool    add the jqgrid library
+ * @return  string  html tags
+ * 
+ */
+function api_get_jquery_ui_js($include_jqgrid = false) {
+    $libraries[]='jquery-ui';
+	if ($include_jqgrid) {
+	   $libraries[]='jqgrid';	
+	}
+    return api_get_jquery_libraries_js($libraries, true);
+}
+
+/**
+ * Returns the jquery library js headers 
+ * @param   array   list of jquery libraries supported jquery-ui, jqgrid 
  * @param   bool    add the jquery library
  * @return  string  html tags
  * 
  */
-function api_get_jquery_ui_js($include_jqgrid = false, $include_jquery = true) {
-    $js = '';     
-    $theme      = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui 
-    $languaje   = 'en';
-    $platform_isocode = strtolower(api_get_language_isocode());
-    
+function api_get_jquery_libraries_js($libraries, $include_jquery = true) {
+    $js = '';
+    $js_path   =  api_get_path(WEB_LIBRARY_PATH).'javascript/';    
 
     if ($include_jquery) {
         //Jquery
-        $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.4.4.min.js" type="text/javascript" language="javascript"></script>'; //jQuery    	
+        $js .= api_get_jquery_js();
     }
-    //Jquery ui
-    $js .= '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.css" type="text/css">';
-    $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.min.js" type="text/javascript" language="javascript"></script>';
+    
+    if (in_array('jquery-ui',$libraries)) {
+        //Jquery ui
+        $theme      = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
+        $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.css" type="text/css">';
+        $js .= '<script src="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.min.js" type="text/javascript" language="javascript"></script>';
+    }
     
     //Grid js
-    if ($include_jqgrid) {        
+    if (in_array('jqgrid',$libraries)) { 
+        $languaje   = 'en';
+        $platform_isocode = strtolower(api_get_language_isocode());
+         
         //languages supported by jqgrid see files in main/inc/lib/javascript/jqgrid/js/i18n
         $jqgrid_langs = array('bg', 'bg1251', 'cat','cn','cs','da','de','el','en','es','fa','fi','fr','gl','he','hu','is','it','ja','nl','no','pl','pt-br','pt','ro','ru','sk','sr','sv','tr','ua');
          
@@ -4783,13 +4809,16 @@ function api_get_jquery_ui_js($include_jqgrid = false, $include_jquery = true) {
             $languaje = $platform_isocode;
         }    
     
-        $js .= '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/css/ui.jqgrid.css" type="text/css">';
-        $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/js/i18n/grid.locale-'.$languaje.'.js" type="text/javascript" language="javascript"></script>'; 
-        $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript" language="javascript"></script>';
+        $js .= '<link rel="stylesheet" href="'.$js_path.'jqgrid/css/ui.jqgrid.css" type="text/css">';
+        $js .= '<script src="'.$js_path.'jqgrid/js/i18n/grid.locale-'.$languaje.'.js" type="text/javascript" language="javascript"></script>'; 
+        $js .= '<script src="'.$js_path.'jqgrid/js/jquery.jqGrid.min.js" type="text/javascript" language="javascript"></script>';
     }
     
-    //Adding default CSS changes for Chamilo in order to preserve the neutral layout
-    $js .= '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css" type="text/css">';
     
+    
+    if (in_array('jquery-ui',$libraries)) {
+        //Adding default CSS changes of the jquery-ui themes for Chamilo in order to preserve the original jquery-ui css
+        $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/default.css" type="text/css">';
+    } 
     return $js;	
 }

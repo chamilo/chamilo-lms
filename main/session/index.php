@@ -19,26 +19,14 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
-
 $this_section = SECTION_COURSES;
-//Tab js
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/cupertino/jquery-ui-1.8.7.custom.css" type="text/css">';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.4.4.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/cupertino/jquery-ui-1.8.7.custom.min.js" type="text/javascript" language="javascript"></script>';
-//Grid js
-$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/css/ui.jqgrid.css" type="text/css">';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/js/i18n/grid.locale-en.js" type="text/javascript" language="javascript"></script>'; 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript" language="javascript"></script>';
-
+$htmlHeadXtra[] = api_get_jquery_ui_js(true);
     
 Display :: display_header($nameTools);
-
-
 
 $session_id     = intval($_GET['session_id']);
 $session_info   = SessionManager::fetch($session_id);
 $session_list   = SessionManager::get_sessions_by_coach(api_get_user_id());
-
 
 $course_list    = SessionManager::get_course_list_by_session_id($session_id);
 $course_select = array();
@@ -47,10 +35,7 @@ $session_select = array();
 foreach ($session_list as $item) {
     $session_select[$item['id']] =  $item['name'];
 }
-/*
-foreach ($course_list as $course_item) {
-	$course_select[$course_item['id']] =  $course_item['title'];
-}*/
+
 // Session list form
 
 if (count($session_select) > 1) {
@@ -59,33 +44,27 @@ if (count($session_select) > 1) {
     $defaults['session_id'] = $session_id;
     $form->setDefaults($defaults);
     $form->display();
-    
-    
-    if ($form->validate()) {
-        
-    }
+    //if ($form->validate()) {}        
 }
 
 echo Display::tag('h1', $session_info['name']);
 
-
 //Listing LPs from all courses
+/*
 $lps = array();
-
-foreach ($course_list as $item) {    
-    $list       = new LearnpathList(api_get_user_id(),$item['code']);
-    $flat_list  = $list->get_flat_list();        
-    $lps[$item['code']] = $flat_list;
-    foreach ($flat_list as $item) {        
-        //var_dump(get_week_from_day($item['publicated_on']));	
-    }    
-}
-
+if (!empty($course_list)) {
+    foreach ($course_list as $item) {    
+        $list       = new LearnpathList(api_get_user_id(),$item['code']);
+        $flat_list  = $list->get_flat_list();        
+        $lps[$item['code']] = $flat_list;
+        foreach ($flat_list as $item) {        
+            //var_dump(get_week_from_day($item['publicated_on']));	
+        }    
+    }
+}*/
 
 //Getting all sessions where I'm subscribed
 $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-
-//echo '<pre>';
 
 $my_session_list = array();
 $final_array = array();
@@ -209,17 +188,14 @@ $column_model   = array(array('name'=>'date',   'index'=>'date',  'width'=>'80',
                         
 $extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['forceFit'] = 'true'; //use the width of the parent
-
-
 //$extra_params['altRows'] = 'true'; //zebra style
-
                         
 //Per course grid settings
 $url_course             = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_course&session_id='.$session_id;
 $extra_params_course['grouping'] = 'true';
-$extra_params_course['groupingView'] = array('groupField'=>array('course'),
-                                            'groupColumnShow'=>array('false'),
-                                            'groupText' => array('<b>Course {0} - {1} Item(s)</b>'));
+$extra_params_course['groupingView'] = array('groupField'       => array('course'),
+                                             'groupColumnShow'  => array('false'),
+                                             'groupText'        => array('<b>Course {0} - {1} Item(s)</b>'));
 $extra_params_course['autowidth'] = 'true'; //use the width of the parent                                          
                               
 //Per Week grid
@@ -266,10 +242,10 @@ $(function() {
     $( "#sub_tab" ).tabs();     
          
 <?php 
-     echo Display::grid_js('list_default',  $url,           $columns,$column_model,$extra_params);
-     echo Display::grid_js('list_course',   $url_course,    $columns,$column_model,$extra_params_course);
-     echo Display::grid_js('list_week',     $url_week,      $column_week,$column_week_model, $extra_params_week);     
-     echo Display::grid_js('exercises',      '',  $column_exercise,$column_exercise_model, $extra_params_exercise, $my_real_array);        
+     echo Display::grid_js('list_default',  $url,           $columns,        $column_model,$extra_params);
+     echo Display::grid_js('list_course',   $url_course,    $columns,        $column_model,$extra_params_course);
+     echo Display::grid_js('list_week',     $url_week,      $column_week,    $column_week_model, $extra_params_week);     
+     echo Display::grid_js('exercises',      '',            $column_exercise,$column_exercise_model, $extra_params_exercise, $my_real_array);        
 ?>
 
 });

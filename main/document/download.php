@@ -71,7 +71,7 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 	event_download($doc_url);
 }
 
-if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path)) {
+if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     $full_file_name = $sys_course_path.$doc_url;    
     // Check visibility of document and paths    
     if (!api_is_allowed_to_edit() && !DocumentManager::is_visible($doc_url, $_course, api_get_session_id())) {

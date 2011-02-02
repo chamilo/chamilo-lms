@@ -33,4 +33,5 @@ $SurveyAdded = "Survey added";
 $NotebookAdded = "Note added";
 $NotebookUpdated = "Note updated";
 $NotebookDeleted = "Note deleted";
+$LearnpathUpdated = "Learning path updated";
 ?>

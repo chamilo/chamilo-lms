@@ -121,4 +121,7 @@ $NewHomeworkEmailAlert = "Да се уведомят потребителите 
 $NewHomeworkEmailAlertEnable = "Да се уведомят потребителите с e-mail, когато се представи домашна работа";
 $NewHomeworkEmailAlertDisable = "Да не се уведомяват потребителите, когато се представи домашна работа";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Да се показва последната изпълнена стъпка и следващата неизпълнена стъпка";
+$AddPicture = "Добавяне на изображение";
+$LPAutoLaunch = "Автоматично стартиране на пътеките за обучение";
+$ConfigLearnpath = "Настройки за пътеките за обучение";
 ?>

@@ -99,10 +99,10 @@ class Diagnoser
         $status = $version > '5.2' ? self :: STATUS_OK : self :: STATUS_ERROR;
         $array[] = $this->build_setting($status, '[PHP]', 'phpversion()', 'http://www.php.net/manual/en/function.phpversion.php', phpversion(), '>= 5.2', null, get_lang('PHPVersionInfo'));
 
-        $setting = ini_get('output_buffering');
+        $setting = ini_get('output_buffering'); var_dump($setting);
         $req_setting = 1;
-        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[] = $this->build_setting($status, '[INI]', 'output_buffering', 'http://www.php.net/manual/en/outcontrol.configuration.php#ini.output-buffering', $setting, $req_setting, 'on_off', get_lang('FileUploadsInfo'));
+        $status = $setting >= $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting($status, '[INI]', 'output_buffering', 'http://www.php.net/manual/en/outcontrol.configuration.php#ini.output-buffering', $setting, $req_setting, 'on_off', get_lang('OutputBufferingInfo'));
 
         $setting = ini_get('file_uploads');
         $req_setting = 1;
@@ -319,6 +319,11 @@ class Diagnoser
     }
 
     function format_on_off($value) {
+        $value = intval($value);
+        if ($value > 1) {
+            // Greater than 1 values are shown "as-is", they may be interpreted as "On" later.
+            return $value;
+        }
         // These are the values 'On' and 'Off' used in the php-ini file. Translation (get_lang()) is not needed here.
         return $value ? 'On' : 'Off';
     }

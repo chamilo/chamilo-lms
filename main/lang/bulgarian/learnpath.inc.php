@@ -247,4 +247,9 @@ $UploadOnlyMp3Files = "Моля, качвайте само mp3 файлове.";
 $ModifyHotPotatoes = "Промяна на HotPotatoes";
 $SaveHotpotatoes = "Запис на HotPotatoes";
 $ReturnToLPList = "Изход";
+$EnableTimeLimits = "Активиране на времеви лимити";
+$PublicationDate = "Дата на публикуване";
+$UseMaxScore100 = "Да се приеме по подразбиране максимален резултат 100";
+$EnableLPAutoLaunch = "Активиране на автоматичното стартиране";
+$DisableLPAutoLaunch = "Деактивиране на автоматичното стартиране";
 ?>

@@ -75,7 +75,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $allowed_to_download = false;
 
 // Check if the user has sent or received the file.
-$sql = "SELECT * FROM ".$dropbox_cnf['tbl_person']." WHERE file_id='".Database::escape_string($_GET['id'])."' AND user_id='".Database::escape_string($_user['user_id'])."'";
+$sql = "SELECT * FROM ".$dropbox_cnf['tbl_person']." WHERE file_id='".intval($_GET['id'])."' AND user_id='".api_get_user_id()."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) > 0) {
 	$allowed_to_download = true;
@@ -88,16 +88,16 @@ if (!$allowed_to_download) {
 	Display :: display_error_message(get_lang('YouAreNotAllowedToDownloadThisFile'));
 	Display::display_footer();
 	exit;
-}
-
-/*		DOWNLOAD THE FILE */
-
-// the user is allowed to download the file
-else {
+} else {    
+    /*      DOWNLOAD THE FILE */    
+    // the user is allowed to download the file
 	$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX][] = intval($_GET['id']);
 
 	$work = new Dropbox_work($_GET['id']);
 	$path = dropbox_cnf('sysPath') . '/' . $work -> filename; //path to file as stored on server
+    if (!Security::check_abs_path($path, dropbox_cnf('sysPath').'/')) {
+    	exit;
+    }
 	$file = $work->title;
 	require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 	$mimetype = DocumentManager::file_get_mime_type(true);
@@ -147,6 +147,16 @@ else {
 	fpassthru($fp);
 	exit();
 }
+
+
+//@todo clean this file the code below is useless there are 2 exits in previous conditions ... maybe a bad copy/paste/merge?
+exit;
+
+
+
+
+
+
 
 
 /**
@@ -237,13 +247,14 @@ else {
  * @package chamilo.dropbox
  */
 
-/*	INITIALISING VARIABLES */
+//	INITIALISING VARIABLES 
+
 
 require_once 'dropbox_init.inc.php';	//only call init1 because init2 outputs data
 require_once 'dropbox_class.inc.php';
 
 
-/*	AUTHORISATION SECTION */
+//	AUTHORISATION SECTION 
 
 if (!isset($_user['user_id']) || !$is_course_member) {
     exit();
@@ -253,7 +264,7 @@ if ($_GET['mailing']) {
 	getUserOwningThisMailing($_GET['mailing'], $_user['user_id'], '500');
 }
 
-/*	SANITY CHECKS OF GET DATA & FILE */
+//	SANITY CHECKS OF GET DATA & FILE 
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) die(get_lang('GeneralError').' (code 501)');
 
@@ -268,7 +279,7 @@ if (!is_file($path)) {
     die(get_lang('GeneralError').' (code 504)');
 }
 
-/*	SEND HEADERS */
+//	SEND HEADERS
 
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 $mimetype = DocumentManager::file_get_mime_type(true);
@@ -317,11 +328,12 @@ header('Content-Description: ' . trim(htmlentities($file)) . "\n");
 header("Content-Transfer-Encoding: binary\n");
 header('Content-Length: ' . filesize($path)."\n" );
 
-/*	SEND FILE */
+//	SEND FILE 
 
 $fp = fopen( $path, 'rb');
 fpassthru($fp);
 exit();
+
 
 /**
  * Found a workaround to another headache that just cropped up tonight.  Apparently Opera 6.1 on Linux (unsure of other versions/platforms) has problems downloading files using the above methods if you have enabled compression via zlib.output_compression in php.ini.

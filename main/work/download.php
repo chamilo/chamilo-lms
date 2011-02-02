@@ -12,7 +12,7 @@
 
 session_cache_limiter('public');
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
@@ -42,12 +42,14 @@ $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION)
 // launch event
 event_download($doc_url);
 
-$sql = 'SELECT title FROM '.$tbl_student_publication.'
-  	  WHERE url LIKE BINARY "'.$doc_url.'"';
+$sql = 'SELECT title FROM '.$tbl_student_publication.'WHERE url LIKE BINARY "'.$doc_url.'"';
 
 $result = Database::query($sql);
-$row = Database::fetch_array($result);
-$title = str_replace(' ', '_', $row['title']);
-DocumentManager::file_send_for_download($full_file_name, true, $title);
-
+if (Database::num_rows($result) > 0) {
+    $row = Database::fetch_array($result);
+    $title = str_replace(' ', '_', $row['title']);
+    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')) {
+        DocumentManager::file_send_for_download($full_file_name, true, $title);
+    }
+}
 exit;

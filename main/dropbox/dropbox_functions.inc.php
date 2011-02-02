@@ -1071,7 +1071,7 @@ function zip_download($array) {
 	}
 
 	// create the zip file
-    $name = 'dropboxdownload-'.$_user['user_id'].'-'.mktime().'.zip';
+    $name = 'dropboxdownload-'.api_get_user_id().'-'.mktime().'.zip';
 	$temp_zip_file = $temp_zip_dir.'/'.$name;
 	$zip_folder = new PclZip($temp_zip_file);
 
@@ -1135,7 +1135,7 @@ function zip_download_alternative($files)
 	}
 
 	// Step 3: create the zip file and add all the files to it
-	$temp_zip_file = $temp_zip_dir.'/dropboxdownload-'.$_user['user_id'].'-'.mktime().'.zip';
+	$temp_zip_file = $temp_zip_dir.'/dropboxdownload-'.api_get_user_id().'-'.mktime().'.zip';
 	$zip_folder = new PclZip($temp_zip_file);
 	foreach ($files as $key => $value) {
 		$zip_folder->add(api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/'.$value['title'], PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp');

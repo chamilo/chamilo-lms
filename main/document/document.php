@@ -298,7 +298,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'download') {
 
     $doc_url = $my_get_id;
     $full_file_name = $base_work_dir.$doc_url;
-    DocumentManager::file_send_for_download($full_file_name, true);
+    if (Security::check_abs_path($full_file_name, $base_work_dir.'/')) {
+        DocumentManager::file_send_for_download($full_file_name, true);
+    }
     exit;
 }
 

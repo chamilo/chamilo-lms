@@ -1,34 +1,16 @@
 <?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
-*/
-
+/* For licensing terms, see /license.txt */
 
 /**
 *	This script shows the list of exercises for administrators and students.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Istvan Mandak
 * 	@version $Id: Hpdownload.php 22201 2009-07-17 19:57:03Z cfasanando $
 */
 
-
 session_cache_limiter('public');
 
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
 $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
@@ -39,13 +21,19 @@ $filename=basename($doc_url);
 // launch event
 //event_download($doc_url);
 if (isset($_course['path'])) {
-	$full_file_name = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.Security::remove_XSS($doc_url);
+    $course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+	$full_file_name = $course_path.Security::remove_XSS($doc_url);
 } else {
-	$full_file_name = api_get_path(SYS_COURSE_PATH).$cid.'/document'.Security::remove_XSS($doc_url);
+    $course_path = api_get_path(SYS_COURSE_PATH).$cid.'/document';
+	$full_file_name = $course_path.Security::remove_XSS($doc_url);
 }
 
 if(!is_file($full_file_name)) {
-	exit();
+	exit;
+}
+
+if (!Security::check_abs_path($full_file_name, $course_path.'/')) {
+    exit;   
 }
 
 $extension=explode('.',$filename);
@@ -70,24 +58,21 @@ header('Expires: '.gmdate('D, d M Y H:i:s',time()+10).' GMT');
 header('Last-Modified: '.gmdate('D, d M Y H:i:s',time()+10).' GMT');
 
 /*
-------------------------------------------------------------------------------
 	Dynamic parsing section
 	is activated whenever a user views an html file
 	work in progress
 	- question: we could also parse per line,
 	perhaps this would be faster.
 	($file_content = file($full_file_name) returns file in array)
-------------------------------------------------------------------------------
 */
 
-if($content_type == 'text/html') {
-	include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+if ($content_type == 'text/html') {
+	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 	$directory_name = dirname($full_file_name);
 
 	$dir=str_replace(array('\\',$_configuration['root_sys']."courses/".$_course['path'].'/document'),array('/',''),$directory_name);
 
-	if($dir[strlen($dir)-1] != '/')
-	{
+	if($dir[strlen($dir)-1] != '/') {
 		$dir.='/';
 	}
 
@@ -112,7 +97,7 @@ if($content_type == 'text/html') {
 	*/
 
 
-		$exercicePath = api_get_self();
+    $exercicePath = api_get_self();
   	$exfile = explode('/',$exercicePath);
   	$exfile = $exfile[sizeof($exfile)-1];
   	$exercicePath = substr($exercicePath,0,strpos($exercicePath,$exfile));

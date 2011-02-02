@@ -1,4 +1,4 @@
-<?php // $Id: download.php 12218 2007-05-01 18:27:14Z yannoo $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	This file is responsible for  passing requested documents to the browser.
@@ -9,9 +9,7 @@
 *	@package chamilo.blogs
 */
 
-/*
-		MAIN CODE
-*/
+/*		MAIN CODE   */
 
 session_cache_limiter('public');
 
@@ -41,14 +39,13 @@ if (! isset($_course)) {
 $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/blog/'.$doc_url;
 
 //if the rewrite rule asks for a directory, we redirect to the course view
-if (is_dir($full_file_name))
-{
+if (is_dir($full_file_name)) {
 	//remove last slash if present
 	while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
 	//create the path
 	$document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
 	//redirect
-	header('Location: '.$document_explorer);
+	header('Location: '.$document_explorer); 
 }
 
 $tbl_blogs_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
@@ -57,9 +54,11 @@ $tbl_blogs_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 event_download($doc_url);
 
 $sql = 'SELECT filename FROM '.$tbl_blogs_attachment.' WHERE path LIKE BINARY "'.Database::escape_string($doc_url).'"';
-
 $result = Database::query($sql);
-$row 	= Database::fetch_array($result);
-DocumentManager::file_send_for_download($full_file_name,TRUE, $row['filename']);
+if (Database::num_rows($result) > 0) {
+    $row = Database::fetch_array($result);
+    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/blog/')) {    
+        DocumentManager::file_send_for_download($full_file_name, TRUE, $row['filename']);
+    }
+}
 exit;
-?>

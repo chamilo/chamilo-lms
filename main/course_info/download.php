@@ -23,7 +23,7 @@ if (empty($extension) || !file_exists($archive_path.$archive_file)) {
 	exit();
 }
 
-$extension = strtolower($extension);
+$extension = strtolower($extension); 
 $content_type = '';
 
 if (in_array($extension, array('xml', 'csv')) && (api_is_platform_admin(true) || api_is_drh())) {
@@ -36,13 +36,16 @@ if (empty($content_type)) {
 	api_not_allowed(true);
 }
 
-header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-header('Cache-Control: public');
-header('Pragma: no-cache');
-
-header('Content-Type: '.$content_type);
-header('Content-Length: '.filesize($archive_path.$archive_file));
-header('Content-Disposition: attachment; filename='.$archive_file);
-
-readfile($archive_path.$archive_file);
+if (Security::check_abs_path($archive_path.$archive_file, $archive_path)) {        
+    header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
+    header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+    header('Cache-Control: public');
+    header('Pragma: no-cache');
+    
+    header('Content-Type: '.$content_type);
+    header('Content-Length: '.filesize($archive_path.$archive_file));
+    header('Content-Disposition: attachment; filename='.$archive_file);
+    readfile($archive_path.$archive_file);
+} else {
+    exit;	
+}

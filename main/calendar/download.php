@@ -62,9 +62,12 @@ event_download($doc_url);
 $sql='SELECT filename FROM '.$tbl_agenda_attachment.'
   	  WHERE path LIKE BINARY "'.Database::escape_string($doc_url).'"';
 
-$result= Database::query($sql);
-$row= Database::fetch_array($result);
-$title = str_replace(' ','_', $row['filename']);
-DocumentManager::file_send_for_download($full_file_name,TRUE, $title);
+$result = Database::query($sql);
+$row    = Database::fetch_array($result);
+if (Database::num_rows($result) > 0) {
+    $title = str_replace(' ','_', $row['filename']);
+    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/calendar/')) {
+        DocumentManager::file_send_for_download($full_file_name,TRUE, $title);
+    }
+}
 exit;
-?>

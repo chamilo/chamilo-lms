@@ -223,13 +223,10 @@ else if ($action == "service")
 		DocumentManager::delete_document($_course, $path, $coursePath);
 		echo "<result>OK</result>"; // We have to return something to OpenLaszlo
 	}
-}
-else if ($action == "download")
-{
+} else if ($action == "download") {
 	/*==== DOWNLOAD ====*/
 	//check if the document is in the database
-	if(!DocumentManager::get_document_id($_course,$_REQUEST['file']))
-	{
+	if(!DocumentManager::get_document_id($_course,$_REQUEST['file'])) {
 		//file not found!
 		if ($debug>0) error_log("404 ".$_REQUEST["file"]);
 		header("HTTP/1.0 404 Not Found");
@@ -247,7 +244,8 @@ else if ($action == "download")
 	$doc_url = str_replace('../','',$_REQUEST['file']);
 	if ($debug >0) error_log($doc_url);
 	$full_file_name = $coursePath.$doc_url;
-	DocumentManager::file_send_for_download($full_file_name,false);
+    if (Security::check_abs_path($full_file_name, $coursePath.'/')) {
+	   DocumentManager::file_send_for_download($full_file_name,false);
+    }
 	exit;
 }
-?>

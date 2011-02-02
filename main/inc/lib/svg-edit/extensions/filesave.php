@@ -17,13 +17,14 @@ $language_file = array('document');//Chamilo load lang var
 //Chamilo load libraries
 require_once '../../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 //Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
 
 if(!isset($_POST['output_svg']) && !isset($_POST['output_png'])) {
-	api_not_allowed(false);//from Chamilo
+	api_not_allowed();//from Chamilo
 	die();
 }
 
@@ -63,9 +64,8 @@ $title = Database::escape_string(str_replace('_',' ',$filename));
 
 //get Chamilo variables 
 
-if(!isset($_SESSION['draw_dir']) || !isset($_SESSION['whereami']) )
-{
-	api_not_allowed(false);//from Chamilo
+if(!isset($_SESSION['draw_dir']) && !isset($_SESSION['whereami'])){
+	api_not_allowed();//from Chamilo
 	die();	
 }
 
@@ -83,8 +83,12 @@ $filename = Security::remove_XSS($filename);
 $filename = replace_dangerous_char($filename, 'strict');
 $filename = disable_dangerous_file($filename);
 
-//a bit mime security
+// a bit extension
+if($suffix!= 'svg' && $suffix!= 'png'){
+	die();
+}
 
+//a bit mime security
 if (phpversion() >= '5.3') {
 	$finfo = new finfo(FILEINFO_MIME);
 	$current_mime=$finfo->buffer($contents);
@@ -94,18 +98,12 @@ if (phpversion() >= '5.3') {
 	$mime_xml='application/xml';//hack for svg-edit because original code return application/xml; charset=us-ascii. See	  
 	if(strpos($current_mime, $mime_png)===false && $extension=='png')
 	{
-		//die();//File extension does not match its content //disabled to check into chamilo dev campus 
+		//die();//File extension does not match its content //disabled to check into chamilo dev campus TODO:check 
 	}elseif(strpos($current_mime, $mime_svg)===false && strpos($current_mime, $mime_xml)===false && $extension=='svg')
 	{
-		//die();//File extension does not match its content //disabled to check into chamilo dev campus TODO:enabled
+		//die();//File extension does not match its content //disabled to check into chamilo dev campus TODO:check 
 	}
 	
-}else{
-	
-	if($suffix!= 'svg' || $suffix!= 'png')
-	{
-		//die();//disabled to check into chamilo dev campus 
-	}
 }
 
 //checks if the file exists, then rename the new
@@ -132,7 +130,7 @@ if($currentTool=='document/createdraw'){
 
 	//check path
 	if(!isset($_SESSION['draw_file'])){
-		api_not_allowed(false);//from Chamilo
+		api_not_allowed();//from Chamilo
 		die();
 	}
 	if($_SESSION['draw_file']==$drawFileName){
@@ -146,7 +144,11 @@ if($currentTool=='document/createdraw'){
 	}	
 }
 
-//add messages and return to current document list
+//clean sessions and add messages and return to current document list
+unset($_SESSION['draw_dir']);
+unset($_SESSION['draw_file']);
+unset($_SESSION['whereami']);
+
 echo '<script language="javascript" type="text/javascript">';
 if($suffix!= 'png'){	
 	if($relativeUrlPath==''){$relativeUrlPath='/';};

@@ -54,8 +54,7 @@ class CourseRestorer
 	 * @param constant $options What to do with files with same name (FILE_SKIP,
 	 * FILE_RENAME or FILE_OVERWRITE)
 	 */
-	function set_file_option($option)
-	{
+	function set_file_option($option) {
 		$this->file_option = $option;
 	}
 
@@ -182,6 +181,7 @@ class CourseRestorer
 				}
 		}
 	}
+    
 	/**
 	 * Restore documents
 	 */
@@ -354,7 +354,7 @@ class CourseRestorer
 						} // end switch
 					} else { // end if file exists
 						//make sure the source file actually exists
-						if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path))) {
+						if (is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path))) {
 
 							copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
 							$sql = "INSERT INTO ".$table." SET path = '/".substr($document->path, 9)."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
@@ -652,14 +652,12 @@ class CourseRestorer
 	 */
 	function restore_tool_intro()
 	{
-		if ($this->course->has_resources(RESOURCE_TOOL_INTRO))
-		{
+		if ($this->course->has_resources(RESOURCE_TOOL_INTRO)) {
 			$tool_intro_table = Database :: get_course_table(TABLE_TOOL_INTRO, $this->course->destination_db);
 			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro)
-			{
+			foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
 				$sql = "DELETE FROM ".$tool_intro_table." WHERE id='".Database::escape_string($tool_intro->id)."'";
-				Database::query($sql);
+				Database::query($sql);       
 
 				$sql = "INSERT INTO ".$tool_intro_table." SET id='".Database::escape_string($tool_intro->id)."', intro_text = '".Database::escape_string($tool_intro->intro_text)."'";
 				Database::query($sql);
@@ -668,12 +666,11 @@ class CourseRestorer
 			}
 		}
 	}
+    
 	/**
 	 * Restore a link-category
 	 */
-	function restore_link_category($id,$session_id = 0)
-	{
-
+	function restore_link_category($id,$session_id = 0) {
 		$condition_session = "";
 		if (!empty($session_id)) {
 			$condition_session = " , session_id = '$session_id' ";
@@ -684,8 +681,7 @@ class CourseRestorer
 		$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY, $this->course->destination_db);
 		$resources = $this->course->resources;
 		$link_cat = $resources[RESOURCE_LINKCATEGORY][$id];
-		if (is_object($link_cat) && !$link_cat->is_restored())
-		{
+		if (is_object($link_cat) && !$link_cat->is_restored()) {
 			$sql = "SELECT MAX(display_order) FROM  $link_cat_table";
 			$result=Database::query($sql);
 			list($orderMax)=Database::fetch_array($result,'NUM');
@@ -698,11 +694,11 @@ class CourseRestorer
 		}
 		return $this->course->resources[RESOURCE_LINKCATEGORY][$id]->destination_id;
 	}
+    
 	/**
 	 * Restore events
 	 */
-	function restore_events()
-	{
+	function restore_events() {
 		if ($this->course->has_resources(RESOURCE_EVENT)) {
 			$table = Database :: get_course_table(TABLE_AGENDA, $this->course->destination_db);
 			$resources = $this->course->resources;
@@ -715,7 +711,7 @@ class CourseRestorer
 				$new_event_id = Database::insert_id();
 				$this->course->resources[RESOURCE_EVENT][$id]->destination_id = $new_event_id;
 
-				//copy event attachment
+				//Copy event attachment
 
 				$origin_path = $this->course->backup_path.'/upload/calendar/';
 				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/calendar/';
@@ -755,14 +751,11 @@ class CourseRestorer
 	/**
 	 * Restore course-description
 	 */
-	function restore_course_descriptions($session_id = 0)
-	{
-		if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION))
-		{
+	function restore_course_descriptions($session_id = 0) {
+		if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION)) {
 			$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION, $this->course->destination_db);
 			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_COURSEDESCRIPTION] as $id => $cd)
-			{
+			foreach ($resources[RESOURCE_COURSEDESCRIPTION] as $id => $cd) {
 				if (isset($_POST['destination_course'])) {
 					$course_destination=Security::remove_XSS($_POST['destination_course']);
 					$course_destination=api_get_course_info($course_destination);
@@ -788,8 +781,7 @@ class CourseRestorer
 	/**
 	 * Restore announcements
 	 */
-	function restore_announcements()
-	{
+	function restore_announcements() {
 		if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT)) {
 			$table = Database :: get_course_table(TABLE_ANNOUNCEMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
@@ -848,13 +840,12 @@ class CourseRestorer
 			}
 		}
 	}
+    
 	/**
 	 * Restore Quiz
 	 */
-	function restore_quizzes($session_id = 0)
-	{
-		if ($this->course->has_resources(RESOURCE_QUIZ))
-		{
+	function restore_quizzes($session_id = 0) {
+		if ($this->course->has_resources(RESOURCE_QUIZ)) {
 			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST, $this->course->destination_db);
 			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION, $this->course->destination_db);
 			$table_doc = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
@@ -918,16 +909,14 @@ class CourseRestorer
 	/**
 	 * Restore quiz-questions
 	 */
-	function restore_quiz_question($id)
-	{
+	function restore_quiz_question($id) {
 		$resources = $this->course->resources;
 		$question = $resources[RESOURCE_QUIZQUESTION][$id];
 
 		$new_id=0;
 
 		if(is_object($question)) {
-			if ($question->is_restored())
-			{
+			if ($question->is_restored()) {
 				return $question->destination_id;
 			}
 			$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION, $this->course->destination_db);
@@ -983,16 +972,13 @@ class CourseRestorer
 	/**
 	 * Restore surveys
 	 */
-	function restore_surveys()
-	{
-		if ($this->course->has_resources(RESOURCE_SURVEY))
-		{
+	function restore_surveys() {
+		if ($this->course->has_resources(RESOURCE_SURVEY)) {
 			$table_sur = Database :: get_course_table(TABLE_SURVEY, $this->course->destination_db);
 			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION, $this->course->destination_db);
 			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $this->course->destination_db);
 			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_SURVEY] as $id => $survey)
-			{
+			foreach ($resources[RESOURCE_SURVEY] as $id => $survey) {
 
 				$sql_check =   'SELECT survey_id FROM '.$table_sur.'
 								WHERE code = "'.Database::escape_string($survey->code).'"
@@ -1027,8 +1013,7 @@ class CourseRestorer
 						"reminder_mail = '".Database::escape_string($survey->reminder_mail)."'";
 
 				//An existing survey exists with the same code and the same language
-				if(Database::num_rows($result_check) == 1)
-				{
+				if (Database::num_rows($result_check) == 1) {
 
 					switch ($this->file_option) {
 

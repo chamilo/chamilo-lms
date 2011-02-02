@@ -207,7 +207,7 @@ class Diagnoser
         foreach ($extensions as $extension => $url) {
             $loaded = extension_loaded($extension);
             $status = $loaded ? self :: STATUS_OK : self :: STATUS_ERROR;
-            $array[] = $this->build_setting($status, '[EXTENSION]', get_lang('ExtensionLoaded') . ': ' . $extension, $url, $loaded, 1, 'yes_no', get_lang('ExtensionMustBeLoaded'));
+            $array[] = $this->build_setting($status, '[EXTENSION]', get_lang('LoadedExtension') . ': ' . $extension, $url, $loaded, 1, 'yes_no', get_lang('ExtensionMustBeLoaded'));
         }
 
         return $array;

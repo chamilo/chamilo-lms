@@ -1351,7 +1351,10 @@ function display_license_agreement() {
             <p style="font-size:75%"><textarea cols="80" rows="10" readonly><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></textarea></p>
         </td>
         </tr>
-                <tr><td><input type="checkbox" name="accept" id="accept_licence" value="1"><?php echo get_lang('IAccept'); ?></td></tr>
+                <tr><td>                    
+                    <input type="checkbox" name="accept" id="accept_licence" value="1">
+                    <label for="accept_licence"><?php echo get_lang('IAccept'); ?></label>
+                    </td></tr>
                 <tr><td><p><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
                 <tr>
                     <td>

@@ -1689,32 +1689,33 @@ class DocumentManager {
     * @param string		destination course directory
     * @return string	new content html with replaced urls or return false if content is not a string
     */
-       function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
+    function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
 
         if (!is_string($content_html)) {
             return false;
         }
 
-          $orig_source_html 	= DocumentManager::get_resources_from_source_html($content_html);
+        $orig_source_html 	= DocumentManager::get_resources_from_source_html($content_html);
         $orig_course_info 	= api_get_course_info($origin_course_code);
         $orig_course_path 	= api_get_path(SYS_PATH).'courses/'.$orig_course_info['path'].'/';
         $destination_course_code = CourseManager::get_course_id_from_path ($destination_course_directory);
         $dest_course_path 	= api_get_path(SYS_COURSE_PATH).$destination_course_directory.'/';
 
-
+     
         foreach ($orig_source_html as $source) {
 
             // get information about source url
             $real_orig_url	= $source[0];	// url
             $scope_url  	= $source[1];   // scope (local, remote)
             $type_url		= $source[2];	// tyle (rel, abs, url)
+            
 
-            // get path and query from origin url
-            $orig_parse_url  = parse_url($real_orig_url);
+            // Get path and query from origin url
+            $orig_parse_url  = parse_url($real_orig_url); 
             $real_orig_path  = $orig_parse_url['path'];
             $real_orig_query = $orig_parse_url['query'];
 
-            // replace origin course code by destination course code from origin url query
+            // Replace origin course code by destination course code from origin url query
             $dest_url_query = '';
             if (!empty($real_orig_query)) {
                 $dest_url_query = '?'.$real_orig_query;
@@ -1725,12 +1726,14 @@ class DocumentManager {
 
             if ($scope_url == 'local') {
                 if ( $type_url == 'abs' || $type_url == 'rel') {
-                    $document_file = strstr($real_orig_path, 'document');
+                    $document_file = strstr($real_orig_path, 'document');                    
                     if (strpos($real_orig_path,$document_file) !== false) {
-                        $origin_filepath = $orig_course_path.$document_file;
-                        $destination_filepath = $dest_course_path.$document_file;
+                        $origin_filepath        = $orig_course_path.$document_file;
+                        $destination_filepath   = $dest_course_path.$document_file;
+                        
                         // copy origin file inside destination course
                         if (file_exists($origin_filepath)) {
+                            
                             $filepath_dir = dirname($destination_filepath);
                             if (!is_dir($filepath_dir)) {
                                 $perm = api_get_permissions_for_new_directories();
@@ -1740,10 +1743,18 @@ class DocumentManager {
                                 @copy($origin_filepath, $destination_filepath);
                             }
                         }
-                        // replace origin course path by destination course path
+                        
+                        // Replace origin course path by destination course path
                         if (strpos($content_html,$real_orig_url) !== false) {
-                            $url_course_path = str_replace($orig_course_info['path'].'/'.$document_file, '', $real_orig_path);
-                            $destination_url = $url_course_path.$destination_course_directory.'/'.$document_file.$dest_url_query;
+                            //$origin_course_code
+                            $url_course_path = str_replace($orig_course_info['path'].'/'.$document_file, '', $real_orig_path);                                                       
+                            $destination_url = $url_course_path.$destination_course_directory.'/'.$document_file.$dest_url_query;                            
+                            
+                            //If the course code doesn't exist in the path? what we do? Nothing! see BT#1985
+                            if (strpos($real_orig_path, $origin_course_code) === false) {                                
+                                $url_course_path = $real_orig_path;
+                                $destination_url = $real_orig_path;
+                            }
                             $content_html = str_replace($real_orig_url, $destination_url, $content_html);
                         }
                     }
@@ -1753,11 +1764,15 @@ class DocumentManager {
                         $dest_url = str_replace($origin_course_code, $destination_course_code, $real_orig_url);
                         $content_html = str_replace($real_orig_url, $dest_url, $content_html);
                     }
+                } else {
+                	if ($type_url == 'url') {
+                		
+                	}
                 }
             }
         }
-           return $content_html;
-   }
+        return $content_html;
+    }
 
     public function export_to_pdf($document_id, $course_code) {
         require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';

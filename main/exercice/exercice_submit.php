@@ -472,6 +472,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
     if ($show_quiz_edition) {
     	echo Display :: return_icon('edit.gif', get_lang('ModifyExercise')) . '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">' . get_lang('ModifyExercise') . '</a>';
+        //echo Display :: return_icon('wizard.gif', get_lang('QuestionList')) . '<a href="exercice/admin.php?' . api_get_cidreq() . '&exerciseId=' . $objExercise->id . '">' . get_lang('QuestionList') . '</a>';
     } else {
     	echo Display::return_icon('edit_na.gif', get_lang('ModifyExercise')).'<a href="#">'.get_lang('ModifyExercise').'</a>';
     }

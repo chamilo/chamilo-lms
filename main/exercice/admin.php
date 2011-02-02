@@ -46,13 +46,11 @@
 * 	@version $Id: admin.php 21662 2009-06-29 14:55:09Z iflorespaz $
 */
 
-
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 
-
-// name of the language file that needs to be included
+// Name of the language file that needs to be included
 $language_file='exercice';
 
 require_once '../inc/global.inc.php';
@@ -66,7 +64,7 @@ if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
 
-// allows script inclusions
+// Allows script inclusions
 define(ALLOWED_TO_INCLUDE,1);
 
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -87,7 +85,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // get vars from GET
 if ( empty ( $exerciseId ) ) {
-    $exerciseId = $_GET['exerciseId'];
+    $exerciseId = intval($_GET['exerciseId']);
 }
 if ( empty ( $newQuestion ) )
 {
@@ -207,24 +205,19 @@ if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 	}
 
 	// checks if the object exists
-	if(is_object($objQuestion))
-	{
+	if(is_object($objQuestion)) {
 		// gets the question ID
 		$questionId=$objQuestion->selectId();
 	}
 }
 
 // if cancelling an exercise
-if($cancelExercise)
-{
+if($cancelExercise) {
 	// existing exercise
-	if($exerciseId)
-	{
+	if($exerciseId) {
 		unset($modifyExercise);
-	}
-	// new exercise
-	else
-	{
+	} else {
+        // new exercise
 		// goes back to the exercise list
 		header('Location: exercice.php');
 		exit();
@@ -232,7 +225,7 @@ if($cancelExercise)
 }
 
 // if cancelling question creation/modification
-if($cancelQuestion) {
+if ($cancelQuestion) {
 	// if we are creating a new question from the question pool
 	if(!$exerciseId && !$questionId) {
 		// goes back to the question pool

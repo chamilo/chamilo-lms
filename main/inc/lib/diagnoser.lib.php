@@ -101,8 +101,8 @@ class Diagnoser
 
         $setting = ini_get('output_buffering');
         $req_setting = 1;
-        $status = $setting == $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[] = $this->build_setting($status, '[INI]', 'output_buffering', 'http://www.php.net/manual/en/outcontrol.configuration.php#ini.output-buffering', $setting, $req_setting, 'on_off', get_lang('FileUploadsInfo'));
+        $status = $setting >= $req_setting ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting($status, '[INI]', 'output_buffering', 'http://www.php.net/manual/en/outcontrol.configuration.php#ini.output-buffering', $setting, $req_setting, 'on_off', get_lang('OutputBufferingInfo'));
 
         $setting = ini_get('file_uploads');
         $req_setting = 1;
@@ -207,7 +207,7 @@ class Diagnoser
         foreach ($extensions as $extension => $url) {
             $loaded = extension_loaded($extension);
             $status = $loaded ? self :: STATUS_OK : self :: STATUS_ERROR;
-            $array[] = $this->build_setting($status, '[EXTENSION]', get_lang('ExtensionLoaded') . ': ' . $extension, $url, $loaded, 1, 'yes_no', get_lang('ExtensionMustBeLoaded'));
+            $array[] = $this->build_setting($status, '[EXTENSION]', get_lang('LoadedExtension') . ': ' . $extension, $url, $loaded, 1, 'yes_no', get_lang('ExtensionMustBeLoaded'));
         }
 
         return $array;
@@ -319,6 +319,11 @@ class Diagnoser
     }
 
     function format_on_off($value) {
+        $value = intval($value);
+        if ($value > 1) {
+            // Greater than 1 values are shown "as-is", they may be interpreted as "On" later.
+            return $value;
+        }
         // These are the values 'On' and 'Off' used in the php-ini file. Translation (get_lang()) is not needed here.
         return $value ? 'On' : 'Off';
     }

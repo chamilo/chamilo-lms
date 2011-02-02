@@ -140,4 +140,8 @@ $BackToForum = "Обратно към форума";
 $BackToForumOverview = "Обратно към списъка с форуми";
 $BackToThread = "Обратно към темата";
 $ForumcategoryLocked = "Категорията форуми е заключена.";
+$PreviewImage = "Преглеждане на изображението";
+$UpdateImage = "Промяна на изображението";
+$EnableTimeLimits = "Активиране на времеви лимити";
+$RemoveSearchResults = "Изчистване на резултатите от търсенето";
 ?>

@@ -44,7 +44,7 @@ switch ($action) {
 //3. Calculating first, end, etc
         
 $total_pages = 0;
-if ($count >0) { 
+if ($count > 0) { 
     if (!empty($limit)) {
         $total_pages = ceil($count/$limit);
     }
@@ -52,7 +52,12 @@ if ($count >0) {
 if ($page > $total_pages) { 
     $page = $total_pages;
 }     
-$start = $limit * $page - $limit; 
+
+$start = $limit * $page - $limit;
+if ($start < 0 ) {
+	$start = 0;
+}
+ 
 
 //4. Deleting an element if the user wants to
 if ($_REQUEST['oper'] == 'del') {

@@ -112,8 +112,13 @@ class Model {
      */
     public function update($params) {
         $params = $this->clean_parameters($params);
+        //If the class have the updated at we update the date
         if (in_array('updated_at', $this->columns)) {           
             $params['updated_at'] = api_get_utc_datetime();
+        }
+        //If the class have the created at we remove it
+        if (in_array('created_at', $this->columns)) {
+            unset($params['created_at']);
         }
         
         if (!empty($params)) {

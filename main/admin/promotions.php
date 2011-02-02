@@ -76,7 +76,18 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
-    $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
+    
+    //First you need to create a Career
+    $career = new Career();
+    $careers = $career->get_all();
+    if (empty($careers)) {
+        $url = Display::url(get_lang('YouNeedToCreateACareerFirst'), 'careers.php?action=add');
+    	Display::display_normal_message($url, false);
+        Display::display_footer();
+        exit;
+    }
+    
+    $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
     $form = $promotion->return_form($url, 'add');    
 
     // The validation or display

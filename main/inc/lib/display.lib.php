@@ -874,7 +874,7 @@ class Display {
         if (!empty($extra_params['rowNum'])) {
             $obj->rowNum     = $extra_params['rowNum'];
         }         
-        
+                
         //height: 'auto',     
         
         $obj->viewrecords = 'true';

@@ -94,10 +94,10 @@ class Promotion extends Model {
         
         $status_list = $this->get_status_list();         
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
-        
-        $form->addElement('text', 'created_at', get_lang('CreatedAt'));
-        $form->freeze('created_at');
-         
+        if ($action == 'edit') {
+            $form->addElement('text', 'created_at', get_lang('CreatedAt'));
+            $form->freeze('created_at');
+        }         
         $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
     
         // Setting the defaults
@@ -105,8 +105,6 @@ class Promotion extends Model {
         $defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
         $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);            
         $form->setDefaults($defaults);
-        
-        
     
         // Setting the rules
         $form->addRule('name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');

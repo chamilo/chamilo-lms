@@ -1065,7 +1065,7 @@ class DocumentManager {
     }
 
     /**
-     * return true if the documentpath have visibility=1 as item_property
+     * Return true if the documentpath have visibility=1 as item_property
      *
      * @param string $document_path the relative complete path of the document
      * @param array  $course the _course array info of the document's course
@@ -1073,23 +1073,25 @@ class DocumentManager {
     public static function is_visible($doc_path, $course, $session_id = 0) {
         $docTable  = Database::get_course_table(TABLE_DOCUMENT, $course['dbName']);
         $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
-        //note the extra / at the end of doc_path to match every path in the
-        // document table that is part of the document path
+        //note the extra / at the end of doc_path to match every path in the document table that is part of the document path
         $doc_path = Database::escape_string($doc_path);
 
         $session_id = intval($session_id);
         $condition = "AND id_session = $session_id";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
-        $sql  = "SELECT path FROM $docTable d, $propTable ip " .
-                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND visibility=0 $condition AND d.filetype='file' AND locate(concat(path,'/'),'".$doc_path."/')=1";
+        $sql  = "SELECT visibility FROM $docTable d, $propTable ip " .
+                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND d.filetype='file' AND locate(concat(path,'/'),'".$doc_path."/')=1";
         $result = Database::query($sql);
+        $is_visible = false;
         if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result);
-            //echo "$row[0] not visible";
-            return false;
+            $row = Database::fetch_array($result,'ASSOC');
+            if ($row['visibility'] == 1) {
+            	$is_visible = $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
+            }
         }
         //improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:	access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
-        return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
+        //return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
+        return $is_visible;
     }
 
         /**

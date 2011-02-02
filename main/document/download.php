@@ -20,6 +20,12 @@ session_cache_limiter('none');
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
+// Protection
+api_protect_course_script();
+
+if (!isset($_course)) {
+    api_not_allowed(true);
+}
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 $doc_url = $_GET['doc_url'];
@@ -36,6 +42,9 @@ $doc_url = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''
 // The administrator should probably be able to disable this code through admin
 // inteface.
 $refer_script = strrchr($_SERVER["HTTP_REFERER"], '/');
+
+$sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+
 if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 	$invitation = substr(strstr($refer_script, 'invitationcode='), 15);
 	$course = strstr($refer_script, 'course=');
@@ -44,15 +53,8 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 	$_course = check_download_survey($course, $invitation, $doc_url);
 	$_course['path'] = $_course['directory'];
 } else {
-	// Protection
-	api_protect_course_script();
-
-	if (!isset($_course)) {
-		api_not_allowed(true);
-	}
-
 	// If the rewrite rule asks for a directory, we redirect to the document explorer
-	if (is_dir(api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$doc_url)) {
+	if (is_dir($sys_course_path.$doc_url)) {
 		// Remove last slash if present
 		// mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
 		while ($doc_url{$dul = strlen($doc_url) - 1} == '/') {
@@ -65,20 +67,17 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 		// Redirect
 		header('Location: '.$document_explorer);
 	}
-
 	// Launch event
 	event_download($doc_url);
 }
 
-$sys_course_path = api_get_path(SYS_COURSE_PATH);
-$full_file_name = $sys_course_path.$_course['path'].'/document'.str_replace('+', ' ', $doc_url);
-
-// Check visibility of document and paths
-$is_allowed_to_edit = api_is_allowed_to_edit();
-if (!$is_allowed_to_edit && !DocumentManager::is_visible($doc_url, $_course, api_get_session_id())) {
-	Display::display_error_message(get_lang('ProtectedDocument'));//api_not_allowed backbutton won't work.
-	exit; // You shouldn't be here anyway.
+if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path)) {
+    $full_file_name = $sys_course_path.$doc_url;    
+    // Check visibility of document and paths    
+    if (!api_is_allowed_to_edit() && !DocumentManager::is_visible($doc_url, $_course, api_get_session_id())) {
+    	Display::display_error_message(get_lang('ProtectedDocument'));//api_not_allowed backbutton won't work.
+    	exit; // You shouldn't be here anyway.
+    }    
+    DocumentManager::file_send_for_download($full_file_name);
 }
-
-DocumentManager::file_send_for_download($full_file_name);
 exit;

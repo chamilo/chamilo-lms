@@ -2556,7 +2556,7 @@ class CourseManager {
                     $my_course['k']          = $course['code'];
                     $my_course['id_session'] = null;
                     $my_course['s']          = $course['status'];
-                    $show_notification = show_notification($my_course);
+                    $show_notification = Display::show_notification($my_course);
 
                     if (empty($course['user_id'])) {
                         $course['status'] = $user_info['status'];

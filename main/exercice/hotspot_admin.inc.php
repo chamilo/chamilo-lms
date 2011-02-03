@@ -18,22 +18,19 @@ if(!is_object($objQuestion)) {
 	$objQuestion = Question :: read($modifyAnswers);
 }
 
-$questionName=$objQuestion->selectTitle();
-$answerType=$objQuestion->selectType();
-$pictureName=$objQuestion->selectPicture();
-
+$questionName   = $objQuestion->selectTitle();
+$answerType     = $objQuestion->selectType();
+$pictureName    = $objQuestion->selectPicture();
 
 $debug = 0; // debug variable to get where we are
 
 $okPicture=empty($pictureName)?false:true;
 
 // if we come from the warning box "this question is used in serveral exercises"
-if($modifyIn)
-{
+if($modifyIn) {
     if($debug>0){echo '$modifyIn was set'."<br />\n";}
     // if the user has chosed to modify the question only in the current exercise
-    if($modifyIn == 'thisExercise')
-    {
+    if($modifyIn == 'thisExercise') {
         // duplicates the question
         $questionId=$objQuestion->duplicate();
 
@@ -70,15 +67,13 @@ if($modifyIn)
     unset($buttonBack);
 }
 
-// the answer form has been submitted
-if($submitAnswers || $buttonBack)
-{
+// The answer form has been submitted
+if ($submitAnswers || $buttonBack) {
     if($debug>0){echo '$submitAnswers or $buttonBack was set'."<br />\n";}
 
     $questionWeighting=$nbrGoodAnswers=0;
 
-    for($i=1;$i <= $nbrAnswers;$i++)
-    {
+    for($i=1;$i <= $nbrAnswers;$i++) {
         if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is HOT_SPOT'."<br />\n";}
 
         $reponse[$i]=trim($reponse[$i]);
@@ -111,7 +106,7 @@ if($submitAnswers || $buttonBack)
     }  // end for()
 
 
-    if(empty($msgErr)) {
+    if (empty($msgErr)) {
 
     	for($i=1;$i <= $nbrAnswers;$i++) {
             if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is HOT_SPOT'."<br />\n";}
@@ -134,16 +129,13 @@ if($submitAnswers || $buttonBack)
 
         $editQuestion=$questionId;
         unset($modifyAnswers);
-        echo '<script type="text/javascript">window.location.href="admin.php"</script>';
+        echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'"</script>';
 
     }
     if($debug>0){echo '$modifyIn was set - end'."<br />\n";}
-
 }
 
-if($modifyAnswers)
-{
-
+if($modifyAnswers) {
 
     if($debug>0){echo str_repeat('&nbsp;',0).'$modifyAnswers is set'."<br />\n";}
 
@@ -156,20 +148,17 @@ if($modifyAnswers)
 
 	$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-	if(!$nbrAnswers)
-    {
+	if(!$nbrAnswers) {
 
         $nbrAnswers=$objAnswer->selectNbrAnswers();
-
-        $reponse=Array();
-        $comment=Array();
-        $weighting=Array();
-        $hotspot_coordinates=Array();
+        $reponse=array();
+        $comment=array();
+        $weighting=array();
+        $hotspot_coordinates=array();
         $hotspot_type=array();
 
 
-        for($i=1;$i <= $nbrAnswers;$i++)
-        {
+        for($i=1;$i <= $nbrAnswers;$i++) {
             $reponse[$i]=$objAnswer->selectAnswer($i);
             if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
             	$comment[$i]=$objAnswer->selectComment($i);
@@ -191,8 +180,7 @@ if($modifyAnswers)
     $_SESSION['tmp_answers']['hotspot_coordinates'] = $hotspot_coordinates;
     $_SESSION['tmp_answers']['hotspot_type'] = $hotspot_type;
 
-    if($lessAnswers)
-    {
+    if ($lessAnswers) {
     	// At least 1 answer
     	if ($nbrAnswers > 1) {
             $nbrAnswers--;
@@ -209,10 +197,8 @@ if($modifyAnswers)
     	}
     }
 
-    if($moreAnswers)
-    {
-    	if ($nbrAnswers < 12)
-    	{
+    if($moreAnswers) {
+    	if ($nbrAnswers < 12) {
             $nbrAnswers++;
 
             // Add a new answer
@@ -223,18 +209,12 @@ if($modifyAnswers)
 			$_SESSION['tmp_answers']['weighting'][]='1';
 			$_SESSION['tmp_answers']['hotspot_coordinates'][]='0;0|0|0';
 			$_SESSION['tmp_answers']['hotspot_type'][]='square';
-    	}
-    	else
-    	{
+    	} else {
     		$msgErr=get_lang('MaxHotspot');
     	}
-
-
     }
 
         if($debug>0){echo str_repeat('&nbsp;',2).'$usedInSeveralExercises is untrue'."<br />\n";}
-
-
         if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is HOT_SPOT'."<br />\n";}
         $hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
         						"#4271B5",
@@ -250,17 +230,11 @@ if($modifyAnswers)
 								"#ED2024",
 								"#45C7F0",
 								"#F7BDE2");
-?>
-
-<h3>
-  <?php echo get_lang('Question').": ".$questionName.' <img src="../img/info3.gif" title="'.strip_tags(get_lang('HotspotChoose')).'" alt="'.strip_tags(get_lang('HotspotChoose')).'" />'; ?>
-</h3>
-<?php
-	if(!empty($msgErr))
-	{
-		Display::display_normal_message($msgErr); //main API
-	}
-
+                                
+Display::tag('h3',get_lang('Question').": ".$questionName.' <img src="../img/info3.gif" title="'.strip_tags(get_lang('HotspotChoose')).'" alt="'.strip_tags(get_lang('HotspotChoose')).'" />');
+if(!empty($msgErr)) {
+    Display::display_normal_message($msgErr); //main API
+}
 ?>
 
 <form method="post" action="<?php echo api_get_self(); ?>?hotspotadmin=<?php echo $modifyAnswers; ?>" id="frm_exercise" name="frm_exercise">
@@ -380,11 +354,7 @@ if($modifyAnswers)
 	</tr>
 </table>
 </form>
-
-
-
 <?php
-
     if($debug>0){echo str_repeat('&nbsp;',0).'$modifyAnswers was set - end'."<br />\n";}
 }
 ?>

@@ -43,7 +43,6 @@
 *
 *	@package chamilo.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: admin.php 21662 2009-06-29 14:55:09Z iflorespaz $
 */
 
 require_once 'exercise.class.php';
@@ -431,7 +430,7 @@ if (isset($exerciseId) && !empty($exerciseId)) {
 
 echo '<div class="actions">';
 if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
-echo Display::return_icon('back.png', get_lang('GoBackToQuestionList')).' '.'<a href="admin.php?exerciseId='.$exerciseId.'">'.get_lang('GoBackToQuestionList').'</a>';
+    echo Display::return_icon('back.png', get_lang('GoBackToQuestionList')).' '.'<a href="admin.php?exerciseId='.$exerciseId.'">'.get_lang('GoBackToQuestionList').'</a>';
 
 echo Display::return_icon('preview.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
 echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
@@ -455,7 +454,7 @@ if(!empty($description))
 
 if ($newQuestion || $editQuestion) {
 	// statement management
-	$type = $_REQUEST['answerType'];
+	$type = $_REQUEST['answerType'];    
 	?><input type="hidden" name="Type" value="<?php echo $type; ?>" />
 	<?php
     require 'question_admin.inc.php';

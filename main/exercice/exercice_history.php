@@ -3,11 +3,10 @@
 
 /**
 *	Exercise list: This script shows the list of exercises for administrators and students.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-* 	@version $Id:exercice.php 12269 2007-05-03 14:17:37Z elixir_julian $
 */
 
 // name of the language file that needs to be included
@@ -34,26 +33,16 @@ if(!$is_allowedToEdit){
 	exit;
 }
 
-$interbreadcrumb[]= array (
-	'url' => 'exercice.php'.'?show=result',
-	'name' => get_lang('Exercices')
-);
-$interbreadcrumb[]= array (
-	'url' => 'exercice.php'.'?show=result&amp;filter=2',
-	'name' => get_lang('StudentScore')
-);
-$interbreadcrumb[]= array (
-	'url' => 'exercice_history.php'.'?exe_id='.Security::remove_XSS($_GET['exe_id']),
-	'name' => get_lang('Details')
-);
+$interbreadcrumb[]= array ('url' => 'exercice.php'.'?show=result','name' => get_lang('Exercices'));
+$interbreadcrumb[]= array ('url' => 'exercice.php'.'?show=result&amp;filter=2','name' => get_lang('StudentScore'));
+$interbreadcrumb[]= array ('url' => 'exercice_history.php'.'?exe_id='.intval($_GET['exe_id']), 'name' => get_lang('Details'));
 
 $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCICES			= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_EXERCICES_QUESTION	= Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT_RECORDING= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-//$nameTools=get_lang('Exercices');
-Display::display_header($nameTools,"Exercise");
+Display::display_header($nameTools,get_lang('Exercise'));
 
 	if(isset($_GET['message'])) {
 		if (in_array($_GET['message'], array('ExerciseEdited'))) {
@@ -66,7 +55,7 @@ Display::display_header($nameTools,"Exercise");
 
 ?>
 <div class="actions">
-<a href="exercice.php?cidReq=<?php echo $_GET['cidReq'] ?>&show=result"><img src="../img/back.png"/><?php echo get_lang('BackToResultList') ?></a>
+<a href="exercice.php?cidReq=<?php echo Security::remove_XSS($_GET['cidReq']) ?>&show=result&filter=2"><img src="../img/back.png"/><?php echo get_lang('BackToResultList') ?></a>
 </div>
 <table class="data_table">
 		 <tr class="row_odd">
@@ -78,7 +67,7 @@ Display::display_header($nameTools,"Exercise");
 		 </tr>
 <?php
 
-$sql = "SELECT *, quiz_question.question, firstname, lastname FROM $TBL_TRACK_ATTEMPT_RECORDING t,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY t.insert_date desc,question ASC";
+$sql = "SELECT *, quiz_question.question, firstname, lastname FROM $TBL_TRACK_ATTEMPT_RECORDING t,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY position";
 $query = Database::query($sql);
 while($row = Database::fetch_array($query)){
 	echo '<tr';

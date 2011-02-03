@@ -208,15 +208,19 @@ switch ($action) {
 
         if (!$lp_found) {
             //check if the learnpath ID was defined, otherwise send back to list
-            error_log('New LP - No learnpath given for add item', 0);
+            if ($debug > 0) error_log('New LP - No learnpath given for add item', 0);
             require 'lp_list.php';
         } else {
             $_SESSION['refresh'] = 1;
 
             if (isset($_POST['submit_button']) && !empty($_POST['title'])) {
                 // If a title was sumbitted:
-
+                
+                //Updating the lp.modified_on
+                $_SESSION['oLP']->set_modified_on();
+                    
                 if (isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time']) {
+                   
                     // Check post_time to ensure ??? (counter-hacking measure?)
                     require 'lp_add_item.php';
                 } else {
@@ -357,6 +361,10 @@ switch ($action) {
         else {
             $_SESSION['refresh'] = 1;
             if (isset($_POST['submit_button']) && !empty($_POST['title'])) {
+                
+                //Updating the lp.modified_on
+                $_SESSION['oLP']->set_modified_on();
+                
                 //$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
                 // TODO: mp3 edit
                 $audio = array();
@@ -385,6 +393,9 @@ switch ($action) {
         if (!$lp_found) { error_log('New LP - No learnpath given for edit item prereq', 0); require 'lp_list.php'; }
         else {
             if (isset($_POST['submit_button'])) {
+                //Updating the lp.modified_on
+                $_SESSION['oLP']->set_modified_on();
+                
                 $_SESSION['refresh'] = 1;
                 $_SESSION['oLP']->edit_item_prereq($_GET['id'], $_POST['prerequisites'], $_POST['min_' . $_POST['prerequisites']], $_POST['max_' . $_POST['prerequisites']]);
             }
@@ -402,6 +413,9 @@ switch ($action) {
         else {
             $_SESSION['refresh'] = 1;
             if (isset($_POST['submit_button'])) {
+                //Updating the lp.modified_on
+                $_SESSION['oLP']->set_modified_on();
+                
                 $_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description']);
                 $is_success = true;
             }

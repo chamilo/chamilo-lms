@@ -211,7 +211,7 @@ if ($nbrQuestions) {
                         //echo $actions;
                         echo get_lang($question_class.$label);
                         echo '<br />';
-                        echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
+                        //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                         echo '<br />';
                         showQuestion($id, false, '', '',false, true);                   
                     echo '</p>';                        

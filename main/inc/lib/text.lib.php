@@ -15,7 +15,7 @@
 /**
  * This function strips all html-tags found in the input string and outputs a pure text.
  * Mostly, the function is to be used before language or encoding detection of the input string.
- * @param string $string    The input string with html-tags to be converted to plain text.
+ * @param  string $string    The input string with html-tags to be converted to plain text.
  * @return string            The returned plain text as a result.
  */
 function api_html_to_text($string) {
@@ -37,7 +37,7 @@ function api_html_to_text($string) {
 
 /**
  * Detects encoding of html-formatted text.
- * @param string $string                The input html-formatted text.
+ * @param  string $string                The input html-formatted text.
  * @return string                        Returns the detected encoding.
  */
 function api_detect_encoding_html($string) {
@@ -75,8 +75,8 @@ function api_set_encoding_html(&$string, $encoding) {
  * Returns the title of a html document.
  * @param string $string                The contents of the input document.
  * @param string $input_encoding        The encoding of the input document. If the value is not set, it is detected.
- * @param string $$output_encoding        The encoding of the retrieved title. If the value is not set, the system encoding is assumend.
- * @return string                        The retrieved title, html-entities and extra-whitespace between the words are cleaned.
+ * @param string $$output_encoding      The encoding of the retrieved title. If the value is not set, the system encoding is assumend.
+ * @return string                       The retrieved title, html-entities and extra-whitespace between the words are cleaned.
  */
 function api_get_title_html(&$string, $output_encoding = null, $input_encoding = null) {
     if (@preg_match('/<head.+<title[^>]*>(.*)<\/title>/msi', $string, $matches)) {
@@ -102,8 +102,8 @@ define('_PCRE_XML_ENCODING', '/<\?xml.*encoding=[\'"](.*?)[\'"].*\?>/m');
 /**
  * Detects encoding of xml-formatted text.
  * @param string $string                The input xml-formatted text.
- * @param string $default_encoding        This is the default encoding to be returned if there is no way the xml-text's encoding to be detected. If it not spesified, the system encoding is assumed then.
- * @return string                        Returns the detected encoding.
+ * @param string $default_encoding      This is the default encoding to be returned if there is no way the xml-text's encoding to be detected. If it not spesified, the system encoding is assumed then.
+ * @return string                       Returns the detected encoding.
  * @todo The second parameter is to be eliminated. See api_detect_encoding_html().
  */
 function api_detect_encoding_xml($string, $default_encoding = null) {
@@ -198,11 +198,11 @@ function _api_convert_encoding_xml_callback($matches) {
 
 /**
  * Parses CSV data (one line) into an array. This function is not affected by the OS-locale settings.
- * @param string $string                The input string.
+ * @param string $string                  The input string.
  * @param string $delimiter (optional)    The field delimiter, one character only. The default delimiter character is comma {,).
  * @param string $enclosure (optional)    The field enclosure, one character only. The default enclosure character is quote (").
- * @param string $escape (optional)        The escape character, one character only. The default escape character is backslash (\).
- * @return array                        Returns an array containing the fields read.
+ * @param string $escape (optional)       The escape character, one character only. The default escape character is backslash (\).
+ * @return array                          Returns an array containing the fields read.
  * Note: In order this function to work correctly with UTF-8, limitation for the parameters $delimiter, $enclosure and $escape
  * should be kept. These parameters should be single ASCII characters only. Thus the implementation of this function is faster.
  * @link http://php.net/manual/en/function.str-getcsv.php   (exists as of PHP 5 >= 5.3.0)
@@ -262,12 +262,12 @@ function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape
 /**
  * Reads a line from a file pointer and parses it for CSV fields. This function is not affected by the OS-locale settings.
  * @param resource $handle                The file pointer, it must be valid and must point to a file successfully opened by fopen().
- * @param int $length (optional)        Reading ends when length - 1 bytes have been read, on a newline (which is included in the return value), or on EOF (whichever comes first).
- *                                         If no length is specified, it will keep reading from the stream until it reaches the end of the line.
+ * @param int $length (optional)          Reading ends when length - 1 bytes have been read, on a newline (which is included in the return value), or on EOF (whichever comes first).
+ *                                        If no length is specified, it will keep reading from the stream until it reaches the end of the line.
  * @param string $delimiter (optional)    The field delimiter, one character only. The default delimiter character is comma {,).
  * @param string $enclosure (optional)    The field enclosure, one character only. The default enclosure character is quote (").
- * @param string $escape (optional)        The escape character, one character only. The default escape character is backslash (\).
- * @return array                        Returns an array containing the fields read.
+ * @param string $escape (optional)       The escape character, one character only. The default escape character is backslash (\).
+ * @return array                          Returns an array containing the fields read.
  * Note: In order this function to work correctly with UTF-8, limitation for the parameters $delimiter, $enclosure and $escape
  * should be kept. These parameters should be single ASCII characters only.
  * @link http://php.net/manual/en/function.fgetcsv.php
@@ -325,7 +325,7 @@ function api_contains_asciisvg($html) {
  * Convers a string from camel case into underscore.
  * Works correctly with ASCII strings only, implementation for human-language strings is not necessary.
  * @param string $string                            The input string (ASCII)
- * @return string                                    The converted result string
+ * @return string                                   The converted result string
  */
 function api_camel_case_to_underscore($string) {
     return strtolower(preg_replace('/([a-z])([A-Z])/', "$1_$2", $string));
@@ -336,7 +336,7 @@ function api_camel_case_to_underscore($string) {
  * Works correctly with ASCII strings only, implementation for human-language strings is not necessary.
  * @param string $string                            The input string (ASCII)
  * @param bool $capitalise_first_char (optional)    If true (default), the function capitalises the first char in the result string.
- * @return string                                    The converted result string
+ * @return string                                   The converted result string
  */
 function api_underscore_to_camel_case($string, $capitalise_first_char = true) {
     if ($capitalise_first_char) {
@@ -354,11 +354,11 @@ function _api_camelize($match) {
  * Truncates a string.
  *
  * @author Brouckaert Olivier
- * @param  string $text                    The text to truncate.
- * @param  integer $length                The approximate desired length. The length of the suffix below is to be added to have the total length of the result string.
+ * @param  string $text                  The text to truncate.
+ * @param  integer $length               The approximate desired length. The length of the suffix below is to be added to have the total length of the result string.
  * @param  string $suffix                A suffix to be added as a replacement.
  * @param string $encoding (optional)    The encoding to be used. If it is omitted, the platform character set will be used by default.
- * @param  boolean $middle                If this parameter is true, truncation is done in the middle of the string.
+ * @param  boolean $middle               If this parameter is true, truncation is done in the middle of the string.
  * @return string                        Truncated string, decorated with the given suffix (replacement).
  */
 function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $encoding = null) {
@@ -423,8 +423,8 @@ function make_clickable($string) {
 
 /**
  * @desc This function does some parsing on the text that gets inputted. This parsing can be of any kind
- *         LaTeX notation, Word Censoring, Glossary Terminology (extension will available soon), Musical Notations, ...
- *        The inspiration for this filter function came from Moodle an phpBB who both use a similar approach
+ *       LaTeX notation, Word Censoring, Glossary Terminology (extension will available soon), Musical Notations, ...
+ *       The inspiration for this filter function came from Moodle an phpBB who both use a similar approach.
  * @param $input string. some text
  * @return $output string. some text that contains the parsed elements.
  * @example [tex]\sqrt(2)[/tex]
@@ -480,8 +480,8 @@ function text_filter($input, $filter = true) {
  * Applies parsing for tex commands that are separated by [tex]
  * [/tex] to make it readable for techexplorer plugin.
  * This function should not be accessed directly but should be accesse through the text_filter function
- * @param string $text The text to parse
- * @return string The text after parsing.
+ * @param string $text    The text to parse
+ * @return string         The text after parsing.
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version June 2004
  */
@@ -513,8 +513,8 @@ function _text_parse_glossary($input) {
 }
 
 /**
- * @desc this function makes a valid link to a different tool
- *        This function should not be accessed directly but should be accesse through the text_filter function
+ * @desc This function makes a valid link to a different tool.
+ *       This function should not be accessed directly but should be accesse through the text_filter function
  * @author Patrick Cool <patrick.cool@UGent.be>
  */
 function _text_parse_tool($input) {
@@ -526,7 +526,7 @@ function _text_parse_tool($input) {
 }
 
 /**
- * render LaTeX code into a gif or retrieve a cached version of the gif
+ * Renders LaTeX code into a gif or retrieve a cached version of the gif.
  * @author Patrick Cool <patrick.cool@UGent.be> Ghent University
  */
 function latex_gif_renderer($latex_code) {
@@ -555,9 +555,9 @@ function latex_gif_renderer($latex_code) {
 /**
  * This functions cuts a paragraph
  * i.e cut('Merry Xmas from Lima',13) = "Merry Xmas fr..."
- * @param string the text to "cut"
- * @param int count of chars
- * @param bool    Whether to embed in a <span title="...">...</span>
+ * @param string    The text to "cut"
+ * @param int       Count of chars
+ * @param bool      Whether to embed in a <span title="...">...</span>
  * @return string
  * */
 function cut($text, $maxchar, $embed = false) {
@@ -565,7 +565,7 @@ function cut($text, $maxchar, $embed = false) {
         if ($embed) {
             return '<span title="'.$text.'">'.api_substr($text, 0, $maxchar).'...</span>';
         }
-        return api_substr($text, 0, $maxchar).'...'    ;
+        return api_substr($text, 0, $maxchar).'...';
     }
     return $text;
 }
@@ -573,9 +573,9 @@ function cut($text, $maxchar, $embed = false) {
 /**
  * Show a number as only integers if no decimals, but will show 2 decimals if exist.
  *
- * @param mixed number to convert
- * @param int  decimal points 0=never, 1=if needed, 2=always
- * @return mixed an integer or a float depends on the parameter
+ * @param mixed     Number to convert
+ * @param int       Decimal points 0=never, 1=if needed, 2=always
+ * @return mixed    An integer or a float depends on the parameter
  */
 function float_format($number, $flag = 1) {
     if (is_numeric($number)) {
@@ -595,7 +595,7 @@ function float_format($number, $flag = 1) {
 // TODO: To be checked for correct timezone management.
 /**
  * Function to obtain last week timestamps
- * @return array  times for every day inside week
+ * @return array    Times for every day inside week
  */
 function get_last_week() {
     $week = date('W');
@@ -616,8 +616,8 @@ function get_last_week() {
 
 /**
  * Gets the week from a day
- * @param   string  date in UTC (2010-01-01 12:12:12)
- * @return  int     int with the week number of the year
+ * @param   string   Date in UTC (2010-01-01 12:12:12)
+ * @return  int      Returns an integer with the week number of the year
  */
 function get_week_from_day($date) {
     if (!empty($date)) {
@@ -636,8 +636,8 @@ function get_week_from_day($date) {
 /**
  * Applies parsing the content for tex commands that are separated by [tex]
  * [/tex] to make it readable for techexplorer plugin.
- * @param string $text The text to parse
- * @return string The text after parsing.
+ * @param string $text    The text to parse
+ * @return string         The text after parsing.
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version June 2004
  */
@@ -655,8 +655,8 @@ function api_parse_tex($textext) {
  * Applies parsing for tex commandos that are seperated by [tex]
  * [/tex] to make it readable for techexplorer plugin.
  * This function should not be accessed directly but should be accesse through the text_filter function
- * @param string $text The text to parse
- * @return string The text after parsing.
+ * @param string $text    The text to parse
+ * @return string         The text after parsing.
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version June 2004
  */

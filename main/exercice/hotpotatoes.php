@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *    Code for HotPotatoes integration.
- *    @package chamilo.exercise
- *     @author Istvan Mandak (original author)
+ * Code for HotPotatoes integration.
+ * @package chamilo.exercise
+ * @author Istvan Mandak (original author)
  */
 
 
@@ -51,7 +51,7 @@ $dbTable        = Database::get_course_table(TABLE_DOCUMENT);
 $document_sys_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $uploadPath = '/HotPotatoes_files';
 $finish         = (!empty($_POST['finish']) ? $_POST['finish'] : 0);
-$imgcount        = (!empty($_POST['imgcount']) ? $_POST['imgcount'] : null);
+$imgcount       = (!empty($_POST['imgcount']) ? $_POST['imgcount'] : null);
 $fld            = (!empty($_POST['fld']) ? $_POST['fld'] : null);
 
 // If user is allowed to edit...

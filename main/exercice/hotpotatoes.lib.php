@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *    Code library for HotPotatoes integration.
- *    @package chamilo.exercise
- *     @author Istvan Mandak (original author)
+ * Code library for HotPotatoes integration.
+ * @package chamilo.exercise
+ * @author Istvan Mandak (original author)
  */
 
 $dbTable = Database::get_course_table(TABLE_DOCUMENT); // TODO: This is a global variable with too simple name, conflicts are possible. Better eliminate it. Correct the test unit too.
@@ -13,8 +13,8 @@ $dbTable = Database::get_course_table(TABLE_DOCUMENT); // TODO: This is a global
  * Creates a hotpotato directory.
  *
  * If a directory of that name already exists, don't create any. If a file of that name exists, remove it and create a directory.
- * @param    string    Wanted path
- * @return boolean    Always true so far
+ * @param   string      Wanted path
+ * @return  boolean     Always true so far
  */
 function hotpotatoes_init($base_work_dir) {
     //global $_course, $_user;
@@ -40,9 +40,9 @@ function hotpotatoes_init($base_work_dir) {
 
 /**
  * Gets the title of the quizz file given as parameter.
- * @param    string    File name
- * @param    string    File path
- * @return    string    The exercise title
+ * @param   string    File name
+ * @param   string    File path
+ * @return  string    The exercise title
  */
 function GetQuizName($fname, $fpath) {
 
@@ -69,8 +69,8 @@ function GetQuizName($fname, $fpath) {
 
 /**
  * Gets the comment about a file from the corresponding database record.
- * @param    string    File path
- * @return    string    Comment from the database record
+ * @param   string    File path
+ * @return  string    Comment from the database record
  * Added conditional to the table if is empty.
  */
 function GetComment($path, $course_code = '') {
@@ -94,7 +94,7 @@ function GetComment($path, $course_code = '') {
  * Sets the comment in the database for a particular path.
  * @param    string    File path
  * @param    string    Comment to set
- * @return    string    Result of the database operation (Database::query will output some message directly on error anyway)
+ * @return   string    Result of the database operation (Database::query will output some message directly on error anyway)
  */
 function SetComment($path, $comment) {
     global $dbTable;
@@ -108,7 +108,7 @@ function SetComment($path, $comment) {
 /**
  * Reads the file contents into a string.
  * @param    string    Urlencoded path
- * @return    string    The file contents or false on security error
+ * @return   string    The file contents or false on security error
  */
 function ReadFileCont($full_file_path) {
     if (Security::check_abs_path(dirname($full_file_path).'/', api_get_path(SYS_COURSE_PATH))) {
@@ -127,8 +127,8 @@ function ReadFileCont($full_file_path) {
 /**
  * Writes the file contents into the given filepath.
  * @param    string    Urlencoded path
- * @param     string    The file contents
- * @return  boolean True on success, false on security error
+ * @param    string    The file contents
+ * @return   boolean   True on success, false on security error
  */
 function WriteFileCont($full_file_path, $content) {
     // Check if this is not an attack, trying to get into other directories or something like that.
@@ -149,7 +149,7 @@ function WriteFileCont($full_file_path, $content) {
 /**
  * Gets the name of an img whose path is given (without directories or extensions).
  * @param    string    An image tag (<img src="...." ...>)
- * @return    string    The image file name or an empty string
+ * @return   string    The image file name or an empty string
  */
 function GetImgName($imgtag) {
     // Select src tag from img tag.
@@ -180,7 +180,7 @@ function GetImgName($imgtag) {
 /**
  * Gets the source path of an image tag.
  * @param    string    An image tag
- * @return    string    The image source or ""
+ * @return   string    The image source or ""
  */
 function GetSrcName($imgtag) {
     // Select src tag from img tag.
@@ -198,9 +198,9 @@ function GetSrcName($imgtag) {
 
 /**
  * Gets the image parameters from an image path.
- * @param    string    File name
- * @param    string    File path
- * @param  reference    Reference to a list of image parameters (emptied, then used to return results)
+ * @param    string       File name
+ * @param    string       File path
+ * @param    reference    Reference to a list of image parameters (emptied, then used to return results)
  * @param    reference    Reference to a counter of images (emptied, then used to return results)
  */
 function GetImgParams($fname, $fpath, &$imgparams, &$imgcount) {
@@ -226,7 +226,7 @@ function GetImgParams($fname, $fpath, &$imgparams, &$imgcount) {
 /**
  * Generates a list of hidden fields with the image params given as parameter to this function.
  * @param    array    List of image parameters
- * @return    string    String containing the hidden parameters built from the list given
+ * @return   string   String containing the hidden parameters built from the list given
  */
 function GenerateHiddenList($imgparams) {
     $list = '';
@@ -241,8 +241,8 @@ function GenerateHiddenList($imgparams) {
 /**
  * Searches for a node in the given array.
  * @param    reference    Reference to the array to search
- * @param    string        Node we are looking for in the array
- * @return    mixed        Node name or false if not found
+ * @param    string       Node we are looking for in the array
+ * @return   mixed        Node name or false if not found
  */
 function myarraysearch(&$array, $node) {
     $match = false;
@@ -260,10 +260,10 @@ function myarraysearch(&$array, $node) {
 
 /**
  * Searches an image name into an array.
- * @param    reference    Reference to an array to search
- * @param    string        String to look for
- * @return    mixed            String given if found, false otherwise
- * @uses    myarraysearch    This function is just an additional layer on the myarraysearch() function
+ * @param    reference        Reference to an array to search
+ * @param    string           String to look for
+ * @return   mixed            String given if found, false otherwise
+ * @uses     myarraysearch    This function is just an additional layer on the myarraysearch() function
  */
 function CheckImageName(&$imgparams, $string) {
     $checked = myarraysearch($imgparams, $string);
@@ -273,7 +273,7 @@ function CheckImageName(&$imgparams, $string) {
 /**
  * Replaces an image tag by ???
  * @param    string    The content to replace
- * @return    string    The modified content
+ * @return   string    The modified content
  */
 function ReplaceImgTag($content) {
     $newcontent = $content;
@@ -298,8 +298,8 @@ function ReplaceImgTag($content) {
 /**
  * Fills the folder name up to a certain length with "0".
  * @param    string    Original folder name
- * @param    integer    Length to reach
- * @return    string    Modified folder name
+ * @param    integer   Length to reach
+ * @return   string    Modified folder name
  */
 function FillFolderName($name, $nsize) {
     $str = '';
@@ -313,7 +313,7 @@ function FillFolderName($name, $nsize) {
 /**
  * Generates the HotPotato folder tree.
  * @param    string    Folder path
- * @return    string    Folder name (modified)
+ * @return   string    Folder name (modified)
  */
 function GenerateHpFolder($folder) {
     $filelist = array();
@@ -344,7 +344,7 @@ function GenerateHpFolder($folder) {
 /**
  * Gets the folder name (strips down path).
  * @param    string    Path
- * @return    string    Folder name stripped down
+ * @return   string    Folder name stripped down
  */
 function GetFolderName($fname) {
     $name = explode('/', $fname);
@@ -355,7 +355,7 @@ function GetFolderName($fname) {
 /**
  * Gets the folder path (withouth the name of the folder itself) ?
  * @param    string    Path
- * @return    string    Path stripped down
+ * @return   string    Path stripped down
  */
 function GetFolderPath($fname) {
     $str = '';
@@ -369,7 +369,7 @@ function GetFolderPath($fname) {
 /**
  * Checks if there are subfolders.
  * @param    string    Path
- * @return    integer    1 if a subfolder was found, 0 otherwise
+ * @return   integer   1 if a subfolder was found, 0 otherwise
  */
 function CheckSubFolder($path) {
     $folder = GetFolderPath($path);
@@ -391,10 +391,10 @@ function CheckSubFolder($path) {
 
 /**
  * Hotpotato Garbage Collector
- * @param    string    Path
+ * @param    string     Path
  * @param    integer    Flag
  * @param    integer    User id
- * @return    void    No return value, but echoes results
+ * @return   void       No return value, but echoes results
  */
 function HotPotGCt($folder, $flag, $user_id) {
     // Garbage Collector

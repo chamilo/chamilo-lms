@@ -1,15 +1,14 @@
-<?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Implements the edition of course-session settings
- * @package dokeos.admin
+ * @package chamilo.admin
  */
 // name of the language file that needs to be included
 $language_file='admin';
-
 $cidReset=true;
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 require_once '../inc/lib/sessionmanager.lib.php';
 // setting the section (for the tabs)
 /*$this_section=SECTION_PLATFORM_ADMIN;
@@ -79,9 +78,7 @@ if ($_POST['formSent']) {
 		exit();
 
 	}
-
-}else {
-
+} else {
 	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2 ";
 	$rs = Database::query($sql);
 
@@ -117,20 +114,15 @@ api_display_tool_title($tool_name);
 <table border="0" cellpadding="5" cellspacing="0" width="550">
 
 <?php
-if(!empty($errorMsg))
-{
+if(!empty($errorMsg)) {
 ?>
-
 <tr>
   <td colspan="2">
-
 <?php
 	Display::display_normal_message($errorMsg);
 ?>
-
   </td>
 </tr>
-
 <?php
 }
 ?>
@@ -141,19 +133,13 @@ if(!empty($errorMsg))
 	<option value="0">----- <?php echo get_lang("Choose") ?> -----</option>
 	<option value="0" <?php if(count($arr_infos) == 0) echo 'selected="selected"'; ?>><?php echo get_lang('None') ?></option>
 <?php
-
-foreach($coaches as $enreg)
-{
+foreach($coaches as $enreg) {
 ?>
-
-	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && (is_array($arr_infos) && in_array($enreg['user_id'],$arr_infos))) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
-
+<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && (is_array($arr_infos) && in_array($enreg['user_id'],$arr_infos))) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 <?php
 }
-
 unset($coaches);
 ?>
-
   </select></td>
 </tr>
 <tr>
@@ -161,11 +147,7 @@ unset($coaches);
   <td><button class="save" type="submit" name="name" value="<?php echo get_lang('AssignCoach') ?>"><?php echo get_lang('AssignCoach') ?></button>
 </td>
 </tr>
-
 </table>
-
 </form>
-
 <?php
 Display::display_footer();
-?>

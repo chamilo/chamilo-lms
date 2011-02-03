@@ -11,21 +11,19 @@ $language_file='admin';
 // resetting the course id
 $cidReset=true;
 
-require_once('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // including additonal libraries
 
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-require_once (api_get_path(LIBRARY_PATH).'add_courses_to_session_functions.lib.php');
+require_once api_get_path(LIBRARY_PATH).'add_courses_to_session_functions.lib.php';
 
 
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction (array('search_courses', 'AddCourseToSession', 'search_courses'));
 
-
-
-// setting the section (for the tabs)
+// Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions

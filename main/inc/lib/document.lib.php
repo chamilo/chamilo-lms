@@ -1065,7 +1065,7 @@ class DocumentManager {
     }
 
     /**
-     * Return true if the documentpath have visibility=1 as item_property
+     * Return true if the documentpath have visibility=1 as item_property (you should use the is_visible_by_id)
      *
      * @param string $document_path the relative complete path of the document
      * @param array  $course the _course array info of the document's course
@@ -1079,6 +1079,13 @@ class DocumentManager {
         $session_id = intval($session_id);
         $condition = "AND id_session = $session_id";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
+        
+        //When using hotpotatoes files, new files are generated in the hotpotatoe folder, if user_id=1 does the exam a new html file will be generated: hotpotatoe.html.(user_id).t.html
+        //so we remove that string in order to find correctly the origin file
+        if (strpos($doc_path, 'HotPotatoes_files')) {
+            $doc_path = substr($doc_path, 0, strlen($doc_path) - 8);
+        }
+        
         $sql  = "SELECT visibility FROM $docTable d, $propTable ip " .
                 "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND d.filetype='file' AND locate(concat(path,'/'),'".$doc_path."/')=1";
         $result = Database::query($sql);
@@ -1089,6 +1096,7 @@ class DocumentManager {
             	$is_visible = $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
             }
         }
+     
         //improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:	access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
         //return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
         return $is_visible;

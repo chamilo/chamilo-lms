@@ -974,7 +974,7 @@ if ($show == 'test') {
                     }
                     // prof only
                     if ($is_allowedToEdit) {
-                        $item  = Display::tag('td','<img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /> <a href="showinframes.php?file='.$path.'&cid='.$_course['official_code'].'&uid='.$_user['user_id'].'"'.(!$active?'class="invisible"':'').'>'.$title.'</a> ');
+                        $item  = Display::tag('td','<img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /> <a href="showinframes.php?file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active?'class="invisible"':'').'>'.$title.'</a> ');
                         $item .= Display::tag('td','-');
                                          
                         $actions = '<a href="adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path.'">
@@ -995,7 +995,7 @@ if ($show == 'test') {
                     } else { // student only
                         if ($active == 1) {
                             $nbrActiveTests = $nbrActiveTests +1;
-                            $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&amp;file='.$path.'&amp;cid='.$_course['official_code'].'&amp;uid='.$_user['user_id'].'"'.(!$active?'class="invisible"':'').'">'.$title.'</a>');
+                            $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active?'class="invisible"':'').'">'.$title.'</a>');
                             $item .= Display::tag('td', '');
                             $item .= Display::tag('td', '');
                             $item .= Display::tag('td', '');

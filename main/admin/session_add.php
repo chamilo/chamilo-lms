@@ -256,8 +256,10 @@ if (intval($count_users)<50) {
 
   <td width="40%"></td>
   <td width="60%">
-  <input type="checkbox" name="start_limit" onchange="disable_starttime(this)" <?php if ($year_start=="0000") echo "checked"; ?>/>
-    <?php echo get_lang('DateStartSession');?> 
+  <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" <?php if ($year_start=="0000") echo "checked"; ?>/>
+    <label for="start_limit">
+    <?php echo get_lang('DateStartSession');?>
+    </label> 
  
     <div id="start_date" style="display:none">
        <br />
@@ -319,21 +321,17 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 <?php
 }
 ?>
-  </select>
-  
-  </div>
-  
-    
-
-  
-  </td>
+    </select>  
+    </div>
+    </td>
 </tr>
 <tr>
-  <td width="40%">&nbsp;&nbsp;</td>
-  <td width="60%">
-  <input type="checkbox" name="end_limit" onchange="disable_endtime(this)" <?php if ($year_end=="0000") echo "checked"; ?>/>
-  <?php echo get_lang('DateEndSession') ?>
-  
+    <td width="40%">&nbsp;&nbsp;</td>
+    <td width="60%">
+    <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" <?php if ($year_end=="0000") echo "checked"; ?>/>
+    <label for="end_limit">
+        <?php echo get_lang('DateEndSession') ?>
+    </label>
   <div id="end_date" style="display:none">
   <br />
   

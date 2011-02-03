@@ -119,7 +119,7 @@ switch ($action) {
         $count = 0;
         
         foreach ($course_list as $item) {
-            $list               = new LearnpathList(api_get_user_id(),$item['code']);
+            $list               = new LearnpathList(api_get_user_id(),$item['code'], $session_id);
             $flat_list          = $list->get_flat_list(); 
             $lps[$item['code']] = $flat_list;
             $course_url         = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
@@ -214,7 +214,7 @@ switch ($action) {
         $count = 0;
         
         foreach ($course_list as $item) {    
-            $list               = new LearnpathList(api_get_user_id(),$item['code']);
+            $list               = new LearnpathList(api_get_user_id(),$item['code'],$session_id);
             $flat_list          = $list->get_flat_list();    
             $lps[$item['code']] = $flat_list;
             $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>'_blank'));
@@ -311,7 +311,7 @@ switch ($action) {
         $count = 0;
         
         foreach ($course_list as $item) {    
-            $list               = new LearnpathList(api_get_user_id(),$item['code']);
+            $list               = new LearnpathList(api_get_user_id(),$item['code'],$session_id);
             $flat_list          = $list->get_flat_list();    
             $lps[$item['code']] = $flat_list;
             $item['title']      = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id, array('target'=>'_blank'));

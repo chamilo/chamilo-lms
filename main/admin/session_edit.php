@@ -12,8 +12,6 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 
-
-
 $id = intval($_GET['id']);
 
 $formSent=0;
@@ -183,8 +181,10 @@ unset($Coaches);
 <tr>
   <td width="30%"></td>
   <td width="70%">
-    <input type="checkbox" name="start_limit" onchange="disable_starttime(this)" <?php if ($year_start!="0000") echo "checked"; ?>/>
-    <?php echo get_lang('DateStartSession');?> 
+    <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" <?php if ($year_start!="0000") echo "checked"; ?>/>
+    <label for="start_limit">
+    <?php echo get_lang('DateStartSession');?>
+    </label> 
     <div id="start_date" style="<?php echo ($year_start=="0000") ? "display:none" : "display:block" ; ?>">
        <br />
     
@@ -254,8 +254,10 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++) { ?>
 <tr>
   <td width="30%"></td>
   <td width="70%">
-    <input type="checkbox" name="end_limit" onchange="disable_endtime(this)" <?php if ($year_end!="0000") echo "checked"; ?>/>
-  <?php echo get_lang('DateEndSession') ?>
+    <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" <?php if ($year_end!="0000") echo "checked"; ?>/>
+    <label for="end_limit">
+    <?php echo get_lang('DateEndSession') ?>
+    </label>
   <div id="end_date" style="<?php echo ($year_end=="0000") ? "display:none" : "display:block" ; ?>">
   <br />
   

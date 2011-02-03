@@ -149,6 +149,11 @@ switch ($_GET['action']) {
 
 // POST action handling (uploading mp3, deleting mp3)
 if (isset($_POST['save_audio'])) {
+    
+    //Updating the lp.modified_on
+    $_SESSION['oLP']->set_modified_on();
+                
+                
     // Deleting the audio fragments.
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 9) == 'removemp3') {
@@ -162,6 +167,8 @@ if (isset($_POST['save_audio'])) {
         $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE id IN (".$in.")";
         $result = Database::query($sql);
     }
+    
+                
 
     // Uploading the audio files.
     foreach ($_FILES as $key => $value) {

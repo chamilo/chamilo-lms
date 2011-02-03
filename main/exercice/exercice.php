@@ -561,7 +561,7 @@ if ($show == 'test') {
 		$nbrHpTests = $nbrTests;
 	} else {
 		$nbrHpTests = $nbrActiveTests;
-	}
+	}    
 	$nbrNextTests = $nbrexerc - $nbrHpTests - (($page * $limitExPage));
 
 	echo '<span style="float:right">';
@@ -739,8 +739,7 @@ if ($show == 'test') {
             echo Display::tag('tr',$header_list);
             
             if (!empty($exercise_list))
-            foreach ($exercise_list as $row) {   
-                
+            foreach ($exercise_list as $row) {
                 
                 //echo '<div  id="tabs-'.$i.'">';                
                            
@@ -777,7 +776,7 @@ if ($show == 'test') {
                     //echo '<p>';
                     //echo $session_img;
                     
-                    $url = '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                    
+                    $url = '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" alt="HotPotatoes" /> '.$row['title'].'</a>';                    
                     $item =  Display::tag('td',$url.' '.$session_img);  
                     $exid = $row['id'];
     
@@ -874,12 +873,10 @@ if ($show == 'test') {
                         //show results student
                         $rowi . ' ' . api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question')));
                     }      
-                    
-                    $uid = api_get_user_id();
-                    
-                    //this query might be improved later on by ordering by the new "tms" field rather than by exe_id
+                                        
+                    //This query might be improved later on by ordering by the new "tms" field rather than by exe_id
                     $qry = "SELECT * FROM $TBL_TRACK_EXERCICES
-                            WHERE exe_exo_id = '" . $row['id'] . "' and exe_user_id = '" . $uid . "' AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "'
+                            WHERE exe_exo_id = '" . $row['id'] . "' and exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "'
                             ORDER BY exe_id DESC";
                     $qryres = Database::query($qry);
                     $num    = Database :: num_rows($qryres);
@@ -937,6 +934,78 @@ if ($show == 'test') {
                 echo '</div>';*/
                 
             } // end foreach()
+            
+            
+            //Hot potatoes            
+            
+            if ($is_allowedToEdit) {
+                $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
+                        FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
+                        WHERE   d.id = ip.ref AND ip.tool = '" . TOOL_DOCUMENT . "' AND (d.path LIKE '%htm%')
+                        AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' LIMIT " . (int) $from . "," . (int) ($limitExPage +1); // only .htm or .html files listed
+            } else {
+                $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
+                        FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
+                        WHERE d.id = ip.ref AND ip.tool = '" . TOOL_DOCUMENT . "' AND (d.path LIKE '%htm%')
+                        AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' AND ip.visibility='1' LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
+            }
+    
+            $result = Database::query($sql);
+    
+            while ($row = Database :: fetch_array($result, 'ASSOC')) {
+                $attribute['path'][] = $row['path'];
+                $attribute['visibility'][] = $row['visibility'];
+                $attribute['comment'][] = $row['comment'];
+            }
+            
+            $nbrActiveTests = 0;
+            if (is_array($attribute['path'])) {
+                while (list ($key, $path) = each($attribute['path'])) {
+                    $item = '';
+                    list ($a, $vis) = each($attribute['visibility']);
+                    if (strcmp($vis, "1") == 0) {
+                        $active = 1;
+                    } else {
+                        $active = 0;
+                    }
+                    $title = GetQuizName($path, $documentPath);
+                    if ($title == '') {
+                        $title = basename($path);
+                    }
+                    // prof only
+                    if ($is_allowedToEdit) {
+                        $item  = Display::tag('td','<img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /> <a href="showinframes.php?file='.$path.'&cid='.$_course['official_code'].'&uid='.$_user['user_id'].'"'.(!$active?'class="invisible"':'').'>'.$title.'</a> ');
+                        $item .= Display::tag('td','-');
+                                         
+                        $actions = '<a href="adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path.'">
+                                   <img src="../img/wizard.gif" border="0" title="'.get_lang('Modify').'" alt="'.api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset).'" /></a>';
+                                                
+                        // if active
+                        if ($active) {
+                            $nbrActiveTests = $nbrActiveTests +1;
+                            $actions .= '      <a href="'.$exercicePath.'?'.api_get_cidreq().'&hpchoice=disable&amp;page='.$page.'&amp;file='.$path.'"><img src="../img/visible.gif" border="0" title="'.get_lang('Deactivate').'" alt="'.api_htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset).'" /></a>';
+                        } else { // else if not active
+                            $actions .='    <a href="'.$exercicePath.'?'.api_get_cidreq().'&hpchoice=enable&amp;page='.$page.'&amp;file='.$path.'"><img src="../img/invisible.gif" border="0" title="'.get_lang('Activate').'" alt="'.api_htmlentities(get_lang('Activate'),ENT_QUOTES,$charset).'" /></a>';
+                        }
+                        $actions .= '<a href="'.$exercicePath.'?'.api_get_cidreq().'&amp;hpchoice=delete&amp;file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset).' '.$title."?").'\')) return false;"><img src="../img/delete.png" border="0" title="'.get_lang('Delete').'" alt="'.api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset).'" /></a>';
+                                                
+                        //$actions .='<img src="../img/lp_quiz_na.gif" border="0" title="'.get_lang('NotMarkActivity').'" alt="" />';
+                        $item .= Display::tag('td', $actions);
+                        echo Display::tag('tr',$item);                     
+                    } else { // student only
+                        if ($active == 1) {
+                            $nbrActiveTests = $nbrActiveTests +1;
+                            $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&amp;file='.$path.'&amp;cid='.$_course['official_code'].'&amp;uid='.$_user['user_id'].'"'.(!$active?'class="invisible"':'').'">'.$title.'</a>');
+                            $item .= Display::tag('td', '');
+                            $item .= Display::tag('td', '');
+                            $item .= Display::tag('td', '');
+                            echo Display::tag('tr',$item);
+                        }                        
+                    }
+                }
+            }
+            
+            
             echo '</table>';
             echo '</div>';
         }         

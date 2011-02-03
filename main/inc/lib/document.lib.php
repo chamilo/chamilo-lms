@@ -1109,15 +1109,18 @@ class DocumentManager {
         $condition = "AND id_session = $session_id";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
         $sql  = "SELECT path FROM $docTable d, $propTable ip " .
-                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND d.filetype='file'  AND visibility=0 $condition AND d.id = $id";
+                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND d.filetype='file'  $condition AND d.id = $id";
         $result = Database::query($sql);
+        $is_visible = false;
         if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result);
-            //echo "$row[0] not visible";
-            return false;
+            $row = Database::fetch_array($result,'ASSOC');
+            if ($row['visibility'] == 1) {
+                $is_visible = $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
+            }
         }
         //improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:  access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
-        return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
+        //return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
+        return $is_visible;
     }
 
 

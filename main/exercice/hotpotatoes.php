@@ -48,8 +48,6 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $dbTable		= Database::get_course_table(TABLE_DOCUMENT);
 
 // Setting some variables.
-$baseServDir = $_configuration['root_sys'];
-$baseServUrl = $_configuration['url_append'].'/';
 $document_sys_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $uploadPath = '/HotPotatoes_files';
 $finish 		= (!empty($_POST['finish']) ? $_POST['finish'] : 0);
@@ -65,9 +63,9 @@ if (api_is_allowed_to_edit(null, true)) {
 		// If the directory doesn't exist, create the "HotPotatoes" directory.
 		$doc_id = add_document($_course, '/HotPotatoes_files', 'folder', 0, get_lang('HotPotatoesFiles'));
 		// Update properties in dbase (in any case).
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
+		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
 		// Make invisible (in any case) - why?
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
+		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
 	}
 }
 
@@ -108,21 +106,24 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
 					//if it's a zip, allow zip upload
 					$unzip = 1;
 				}
+                
 				if ($finish == 0) {
 					// Generate new test folder if on first step of file upload.
-					$filename = replace_dangerous_char(trim($_FILES['userFile']['name']), 'strict');
-					$fld = GenerateHpFolder($document_sys_path.$uploadPath.'/');
+					$filename = replace_dangerous_char(trim($_FILES['userFile']['name']), 'strict'); 
+					$fld = GenerateHpFolder($document_sys_path.$uploadPath.'/');                    
+                    $doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
+                    api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());                                    
 					@mkdir($document_sys_path.$uploadPath.'/'.$fld, api_get_permissions_for_new_directories());
 					$doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());                    
 				} else {
 					// It is not the first step... get the filename directly from the system params.
 					$filename = $_FILES['userFile']['name'];
 				}
 
 				/*if (treat_uploaded_file($_FILES['userFile'], $document_sys_path, $uploadPath."/".$fld, $maxFilledSpace, $unzip))*/
-				$allow_output_on_success = false;
-				if (handle_uploaded_document($_course, $_FILES['userFile'], $document_sys_path, $uploadPath.'/'.$fld, $_user['user_id'], null, null, $maxFilledSpace, $unzip, '', $allow_output_on_success)) {
+				$allow_output_on_success = false;        
+				if (handle_uploaded_document($_course, $_FILES['userFile'], $document_sys_path, $uploadPath.'/'.$fld, api_get_user_id(), null, null, $maxFilledSpace, $unzip, '', $allow_output_on_success)) {             
 
 					if ($finish == 2) {
 						$imgparams = $_POST['imgparams'];
@@ -154,24 +155,19 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
 					/*, visibility='v' */
 
 					Database::query($query);
-					api_item_property_update($_course, TOOL_QUIZ, $id, 'QuizAdded', $_user['user_id']);
-
+					api_item_property_update($_course, TOOL_QUIZ, $id, 'QuizAdded', api_get_user_id());                    
 				} else {
-
 					if ($finish == 2) {
 						// delete?
 						//$dialogBox .= get_lang('NoImg');
 					}
 					$finish = 0;	// error
-
 					if (api_failure::get_last_failure() == 'not_enough_space') {
 						$dialogBox .= get_lang('NoSpace');
 					} elseif (api_failure::get_last_failure() == 'php_file_in_zip_file') {
 						$dialogBox .= get_lang('ZipNoPhp');
 					}
-
 				}
-
 				/*		if ($oke==1)
 				{ $enableDocumentParsing=true;  $oke=0;}
 				*/
@@ -190,7 +186,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
 	echo '</div>';
 
 	if ($finish==2) { // If we are in the img upload process.
-	 $dialogBox .= get_lang('ImgNote_st').$imgcount.get_lang('ImgNote_en').'<br />';
+        $dialogBox .= get_lang('ImgNote_st').$imgcount.get_lang('ImgNote_en').'<br />';
 		while (list($key, $string) = each($imgparams)) {
 			$dialogBox .= $string.'; ';
 		}
@@ -235,11 +231,6 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
 		 </div>';
 	echo '<div>'.Display::display_icon('hotpotatoes.jpg', get_lang('HotPotatoes')).'</div>';
 	echo '</div></div>';
-
-?>
-
-<?php
 }
 // Display the footer.
 Display::display_footer();
-?>

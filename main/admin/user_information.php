@@ -8,12 +8,12 @@
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
@@ -44,7 +44,7 @@ $login_as_icon = '';
 if (api_is_platform_admin() || (api_is_session_admin() && $row['6'] == $statusname[STUDENT])) {
         $login_as_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user['user_id'].'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>';
 }
-echo '<div align="right" style="margin-right:4em;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$_GET['user_id'].'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.gif',get_lang('Reporting')).'</a>'.$login_as_icon.'</div>'."\n";
+echo '<div align="right" style="margin-right:4em;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.intval($_GET['user_id']).'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.gif',get_lang('Reporting')).'</a>'.$login_as_icon.'</div>'."\n";
 //getting the user image
 $sysdir_array = UserManager::get_user_picture_path_by_id($user['user_id'],'system',false,true);
 $sysdir = $sysdir_array['dir'];
@@ -69,14 +69,14 @@ echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>'
 echo '<p><b>'.get_lang('SessionList').'</b></p>';
 echo '<blockquote>';
 
-$main_user_table         = Database :: get_main_table(TABLE_MAIN_USER);
-$main_course_table         = Database :: get_main_table(TABLE_MAIN_COURSE);
-$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_session_course     = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session             = Database :: get_main_table(TABLE_MAIN_SESSION);
-$tbl_course             = Database :: get_main_table(TABLE_MAIN_COURSE);
-$tbl_user                     = Database :: get_main_table(TABLE_MAIN_USER);
+$main_user_table            = Database :: get_main_table(TABLE_MAIN_USER);
+$main_course_table          = Database :: get_main_table(TABLE_MAIN_COURSE);
+$main_course_user_table     = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_session_course         = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
+$tbl_course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
+$tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
 
 $user_id = $user['user_id'];
 
@@ -88,14 +88,17 @@ $result = Database::query("SELECT DISTINCT id, name, date_start, date_end ".
 
 $sessions = Database::store_result($result);
 
-// get the list of sessions where the user is subscribed as coach in a course
-$result = Database::query("SELECT DISTINCT id, name, date_start, date_end ".
-    " FROM $tbl_session as session ".
-    " INNER JOIN $tbl_session_course as session_rel_course ".
-    " ON session_rel_course.id_coach = $user_id ".
+/*
+// Get the list of sessions where the user is subscribed as coach in a course
+$sql = "SELECT DISTINCT id, name, date_start, date_end FROM $tbl_session as session ".
+    " INNER JOIN $tbl_session_course_user as session_rel_course_rel_user ".
+    " ON session_rel_course_rel_user.id_user = $user_id AND status = 2 ".
     " AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00') ".
-    " ORDER BY date_start, date_end, name");
+    " ORDER BY date_start, date_end, name";
+
+$result = Database::query($sql);
 $session_is_coach = Database::store_result($result);
+*/
 
 $personal_course_list = array();
 if (count($sessions)>0) {
@@ -110,7 +113,8 @@ if (count($sessions)>0) {
         $personal_course_list = array();
 
         $id_session = $enreg['id'];
-        $personal_course_list_sql = "SELECT distinct course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course_user.id_user = 3,'2', '5') ".
+        $personal_course_list_sql = "SELECT distinct course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t, email, " .
+                "course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF((session_course_user.id_user = 3 AND session_course_user.status=2),'2', '5') ".
             " FROM $tbl_session_course_user as session_course_user INNER JOIN $tbl_course AS course ".
             " ON course.code = session_course_user.course_code AND session_course_user.id_session = $id_session ".
             " INNER JOIN $tbl_session as session ON session_course_user.id_session = session.id ".
@@ -128,7 +132,6 @@ if (count($sessions)>0) {
             }
         }
         foreach ($personal_course_list as $my_course) {
-
             $row = array ();
             $row[] = $my_course['k'];
             $row[] = $my_course['i'];
@@ -143,16 +146,13 @@ if (count($sessions)>0) {
             }
             $row[] = $tools;
             $data[] = $row;
-
         }
-
         echo $enreg['name'];
-        Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => $_GET['user_id']));
+        Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
         echo '<br><br><br>';
 
     }
-}
-else{
+} else {
     echo '<p>'.get_lang('NoSessionsForThisUser').'</p>';
 }
 
@@ -190,11 +190,12 @@ if (Database::num_rows($res) > 0) {
 
     echo '<p><b>'.get_lang('Courses').'</b></p>';
     echo '<blockquote>';
-    Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => $_GET['user_id']));
+    Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
     echo '</blockquote>';
 } else {
     echo '<p>'.get_lang('NoCoursesForThisUser').'</p>';
 }
+
 /**
  * Show the classes in which this user is subscribed
  */
@@ -216,7 +217,7 @@ if (Database::num_rows($res) > 0) {
     }
     echo '<p><b>'.get_lang('Classes').'</b></p>';
     echo '<blockquote>';
-    Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => $_GET['user_id']));
+    Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
     echo '</blockquote>';
 } else {
     echo '<p>'.get_lang('NoClassesForThisUser').'</p>';
@@ -240,7 +241,7 @@ if ($_configuration['multiple_access_urls']) {
         }
         echo '<p><b>'.get_lang('URLList').'</b></p>';
         echo '<blockquote>';
-        Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => $_GET['user_id']));
+        Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
         echo '</blockquote>';
     } else {
         echo '<p>'.get_lang('NoUrlForThisUser').'</p>';

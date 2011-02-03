@@ -715,7 +715,7 @@ class CourseHome {
 					$class = '';
 				}
 
-				$qm_or_amp = strpos($tool['link'], '?') === false ? '?' : '&amp;';
+				$qm_or_amp = strpos($tool['link'], '?') === false ? '?' : '&';
 				// If it's a link, we don't add the cidReq
 				if ($tool['image'] == 'file_html.gif' || $tool['image'] == 'file_html_na.gif') {
 					$tool['link'] = $tool['link'].$qm_or_amp;

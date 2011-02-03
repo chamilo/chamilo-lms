@@ -3488,8 +3488,8 @@ class learnpath {
      * Publishes a learnpath. This basically means show or hide the learnpath
      * on the course homepage
      * Can be used as abstract
-     * @param	integer	Learnpath ID
-     * @param	string	New visibility
+     * @param	integer	Learnpath id
+     * @param	string	New visibility (v/s - visible/invisible)
      */
     public function toggle_publish($lp_id, $set_visibility = 'v') {
         //if ($this->debug > 0) { error_log('New LP - In learnpath::toggle_publish()', 0); }
@@ -3513,18 +3513,17 @@ class learnpath {
         $session_condition = api_get_session_condition($session_id);
 
         $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
-        $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id;
+        $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
         $sql = "SELECT * FROM $tbl_tool where name='$name' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
         $result = Database::query($sql);
         $num = Database :: num_rows($result);
         $row2 = Database :: fetch_array($result);
-        //if ($this->debug > 2) { error_log('New LP - '.$sql.' - '.$num, 0); }
+        //if ($this->debug > 2) { error_log('New LP - '.$sql.' - '.$num, 0); }        
         if (($set_visibility == 'i') && ($num > 0)) {
             $sql = "DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition)";
-        }
-        elseif (($set_visibility == 'v') && ($num == 0)) {
-            $sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool, session_id) VALUES ('$name','newscorm/lp_controller.php?action=view&lp_id=$lp_id','scormbuilder.gif','$v','0','pastillegris.gif',0, $session_id)";
-        } else {
+        } elseif (($set_visibility == 'v') && ($num == 0)) {
+            $sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool, session_id) VALUES ('$name','$link','scormbuilder.gif','$v','0','pastillegris.gif',0, $session_id)";            
+        } else {            
             // Parameter and database incompatible, do nothing.
         }
         $result = Database::query($sql);

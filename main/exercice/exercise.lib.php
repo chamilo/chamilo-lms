@@ -1161,7 +1161,7 @@ function convert_score($score, $weight) {
 }
 
 /**
- * Getting all exercises from a course
+ * Getting all exercises from a course from a session (if a session_id is provided we will show all the exercise)
  * @param   array   course data
  * @param   int     session id
  * @return  array   exercise data
@@ -1177,9 +1177,10 @@ function get_all_exercises($course_info = null, $session_id = 0) {
     }
     //var_dump($session_id);
     if ($session_id == 0) {
-    	$conditions = array('where'=>array('active <> ? AND session_id = ? '=>array('-1',$session_id)), 'order'=>'title');
+    	$conditions = array('where'=>array('active <> ? AND session_id = ? '=>array('-1', $session_id)), 'order'=>'title');
     } else {
-    	$conditions = array('where'=>array('active <> ?'=>'-1'), 'order'=>'title');
+        //All exercises
+    	$conditions = array('where'=>array('active <> ? AND (session_id = 0 OR session_id = ? )' =>array('-1', $session_id)), 'order'=>'title');
     }
     //var_dump($conditions);
     return Database::select('*',$TBL_EXERCICES, $conditions);

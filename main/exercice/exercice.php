@@ -806,7 +806,7 @@ if ($show == 'test') {
                         // Export qti ...                    
                         $actions .= Display::url(Display::return_icon('export_db.png',    'IMS/QTI'),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
                     } else { // not session resource                
-                        $actions .= Display::return_icon('wizard_gray_small.gif', get_lang('ExerciseEditionNotAvailableInSession'));
+                        $actions = Display::return_icon('wizard_gray.gif', get_lang('ExerciseEditionNotAvailableInSession'));
                         $actions .= Display::url(Display::return_icon('cd.gif',   get_lang('CopyExercise')),     '',  array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
                     }
                     

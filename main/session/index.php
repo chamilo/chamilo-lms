@@ -90,7 +90,7 @@ if (!empty($new_session_list)) {
             
                 $course_info   = api_get_course_info($my_course['code']);
                 //Getting all exercises from the current course            
-                $exercise_list = get_all_exercises($course_info);
+                $exercise_list = get_all_exercises($course_info, $my_session_id);
                            
                 //Exercises we skip
                 /*if (empty($exercise_list)) {
@@ -131,6 +131,7 @@ require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';
 $html = '';
 //Final data to be show
 $my_real_array =array();
+
 foreach($final_array as $session_data) {
     //Session name    
 	$html .=Display::tag('h1',$session_data['name']);
@@ -170,14 +171,11 @@ foreach($final_array as $session_data) {
                     $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id,  $my_course_code,$session_id);
                     $my_real_array[]= array('course'=>$course_data['name'], 'exercise'=>$exercise_data['name'],'attempt'=>$counter,'result'=>$score,'note'=>$platform_score,'position'=>$position);
                     $counter++;   
-                    foreach ($my_exercise_result as $data) {    
-                        
-                        //$my_real_array[]= array('session'=>$session_data['name'],'course'=>$course_data['name'], 'exercise'=>$exercise_data['name'],'result'=>$exercise_result['exe_id'])  ;
-                                                     
+                    foreach ($my_exercise_result as $data) {                            
+                        //$my_real_array[]= array('session'=>$session_data['name'],'course'=>$course_data['name'], 'exercise'=>$exercise_data['name'],'result'=>$exercise_result['exe_id'])  ;                                                     
                         $table->setCellContents($row, $column, $data);                        
                         //$table->updateCellAttributes($row, $column, 'align="center"');
-                        $column++;   
-                                          
+                        $column++;        
                     }
                     $row++;
                 }               
@@ -186,8 +184,6 @@ foreach($final_array as $session_data) {
         $html .=$table->toHtml();
     }
 }     
-//echo '<pre>';print_r($my_real_array) ;
-
 echo Display::tag('h1', $session_info['name']);
 
 //All Learnpaths grid settings (First tab, first subtab)
@@ -243,7 +239,6 @@ $extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'gr
 ?>
 <br />
 <script>
-
 function change_session() {
     document.exercise_admin.submit();
 }        

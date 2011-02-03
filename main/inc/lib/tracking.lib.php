@@ -1929,11 +1929,11 @@ class Tracking {
                 $html .= '
                 <tr>
                   <th width="300px">'.get_lang('Course').'</th>
-                  '.Display::tag('th', get_lang('Time')).'
-                  '.Display::tag('th', get_lang('Progress')).'
-                  '.Display::tag('th', get_lang('Score').Display :: return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'))).'
-                  '.Display::tag('th', get_lang('LastConnexion')).'      
-                  '.Display::tag('th', get_lang('Details')).'
+                  '.Display::tag('th', get_lang('Time'),            array('class'=>'head')).'
+                  '.Display::tag('th', get_lang('Progress'),        array('class'=>'head')).'
+                  '.Display::tag('th', get_lang('Score').Display :: return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')),array('class'=>'head')).'
+                  '.Display::tag('th', get_lang('LastConnexion'),   array('class'=>'head')).'      
+                  '.Display::tag('th', get_lang('Details'),         array('class'=>'head')).'
                 </tr>';
               
                 $i = 0;
@@ -1994,16 +1994,15 @@ class Tracking {
                 }                
                 $html .= Display::tag('h2',api_get_session_name($key));
                 $html .= '        
-                <table class="data_table" width="100%">
-                <tr>';
+                <table class="data_table" width="100%">';
                 $html .= '
                     <tr>
                       <th width="300px">'.get_lang('Course').'</th>
-                      '.Display::tag('th', get_lang('Time')).'
-                      '.Display::tag('th', get_lang('Progress')).'
-                      '.Display::tag('th', get_lang('Score').Display :: return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'))).'
-                      '.Display::tag('th', get_lang('LastConnexion')).'      
-                      '.Display::tag('th', get_lang('Details')).'
+                      '.Display::tag('th', get_lang('Time')         , array('class'=>'head')).'
+                      '.Display::tag('th', get_lang('Progress')     , array('class'=>'head')).'
+                      '.Display::tag('th', get_lang('Score').Display :: return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
+                      '.Display::tag('th', get_lang('LastConnexion'), array('class'=>'head')).'      
+                      '.Display::tag('th', get_lang('Details'),       array('class'=>'head')).'
                     </tr>';
                 foreach ($session as $enreg) {               
                     $weighting = 0;

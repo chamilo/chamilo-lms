@@ -318,7 +318,7 @@ switch ($action) {
             foreach($flat_list as $lp_id => $lp_item) {                                                    
                 $temp[$count]['id']= $lp_id;
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
-                Tracking::get_last_connection_date_on_the_course(api_get_user_id(),$item['code'], $session_id, false);
+                $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(),$item['code'], $session_id, false);
                 if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on'], null, date_default_timezone_get());
                     $image = 'new.gif';

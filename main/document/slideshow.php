@@ -18,18 +18,11 @@ $path = Security::remove_XSS($_GET['curdirpath']);
 $pathurl = urlencode($path);
 $slide_id = Security::remove_XSS($_GET['slide_id']);
 
-if(empty($slide_id))
-{
+if(empty($slide_id)) {
 	$edit_slide_id = 1;
-}
-else
-{
+} else {
 	$edit_slide_id = $slide_id;
 }
-
-
-
-
 
 if ($path != '/') {
 	$folder = $path.'/';
@@ -264,6 +257,9 @@ if ($slide_id != 'all') {
 		} else {
 			echo "<a href='slideshow.php?slide_id=0&curdirpath=$pathurl'>";
 		}
+        if ($path == '/') {
+        	$path = '';
+        }
 		echo "<img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags.">";
 		echo '</a>';
 		echo '</td>';

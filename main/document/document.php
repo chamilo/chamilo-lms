@@ -106,6 +106,7 @@ if ($tool_visibility == '0' && $to_group_id == '0' && !($is_allowed_to_edit || $
     api_not_allowed(true);
 }
 
+
 $htmlHeadXtra[] =
 "<script type=\"text/javascript\">
 function confirmation (name)
@@ -215,8 +216,8 @@ if ($to_group_id != 0 && $curdirpath == '/') {
 
 // Check visibility of the current dir path. Don't show anything if not allowed
 
-if (!$is_allowed_to_edit || api_is_coach()) {
-    if (!(DocumentManager::is_visible($curdirpath, $_course, api_get_session_id()))) {
+if (!$is_allowed_to_edit || api_is_coach()) {        
+    if ($curdirpath != '/' && !(DocumentManager::is_visible($curdirpath, $_course, api_get_session_id()))) {
         api_not_allowed();
     }
 }

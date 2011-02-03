@@ -1087,7 +1087,7 @@ class DocumentManager {
         }
         
         $sql  = "SELECT visibility FROM $docTable d, $propTable ip " .
-                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND d.filetype='file' AND locate(concat(path,'/'),'".$doc_path."/')=1";
+                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND locate(concat(path,'/'),'".$doc_path."/')=1";
         $result = Database::query($sql);
         $is_visible = false;
         if (Database::num_rows($result) > 0) {
@@ -1095,8 +1095,7 @@ class DocumentManager {
             if ($row['visibility'] == 1) {
             	$is_visible = $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
             }
-        }
-     
+        }     
         //improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:	access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
         //return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
         return $is_visible;
@@ -1111,13 +1110,12 @@ class DocumentManager {
     public static function is_visible_by_id($id, $course, $session_id = 0) {
         $docTable  = Database::get_course_table(TABLE_DOCUMENT, $course['dbName']);
         $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
-        $id = intval($id);
-
+        $id         = intval($id);
         $session_id = intval($session_id);
-        $condition = "AND id_session = $session_id";
+        $condition  = "AND id_session = $session_id";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
         $sql  = "SELECT path FROM $docTable d, $propTable ip " .
-                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND d.filetype='file'  $condition AND d.id = $id";
+                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND d.id = $id";
         $result = Database::query($sql);
         $is_visible = false;
         if (Database::num_rows($result) > 0) {

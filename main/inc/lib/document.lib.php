@@ -1070,28 +1070,32 @@ class DocumentManager {
      * @param string $document_path the relative complete path of the document
      * @param array  $course the _course array info of the document's course
      */
-    public static function is_visible($doc_path, $course, $session_id = 0) {
+    public static function is_visible($doc_path, $course, $session_id = 0, $file_type = 'file') {
         $docTable  = Database::get_course_table(TABLE_DOCUMENT, $course['dbName']);
         $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
         //note the extra / at the end of doc_path to match every path in the document table that is part of the document path
         $doc_path = Database::escape_string($doc_path);
 
         $session_id = intval($session_id);
-        $condition = "AND id_session = $session_id";
+        $condition = "AND id_session IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
         
         //When using hotpotatoes files, new files are generated in the hotpotatoe folder, if user_id=1 does the exam a new html file will be generated: hotpotatoe.html.(user_id).t.html
         //so we remove that string in order to find correctly the origin file
         if (strpos($doc_path, 'HotPotatoes_files')) {
-            $doc_path = substr($doc_path, 0, strlen($doc_path) - 8);
+            $doc_path = substr($doc_path, 0, strlen($doc_path) - 8);            
+        }
+        
+        if (!in_array($file_type, array('file','folder'))) {
+        	$file_type = 'file';
         }
         
         $sql  = "SELECT visibility FROM $docTable d, $propTable ip " .
-                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND locate(concat(path,'/'),'".$doc_path."/')=1";
+                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND filetype='$file_type' AND locate(concat(path,'/'),'".$doc_path."/')=1";
         $result = Database::query($sql);
         $is_visible = false;
         if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result,'ASSOC');
+            $row = Database::fetch_array($result,'ASSOC');            
             if ($row['visibility'] == 1) {
             	$is_visible = $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
             }
@@ -1107,15 +1111,20 @@ class DocumentManager {
      * @param string $document_path the relative complete path of the document
      * @param array  $course the _course array info of the document's course
      */
-    public static function is_visible_by_id($id, $course, $session_id = 0) {
+    public static function is_visible_by_id($id, $course, $session_id = 0, $file_type = 'file') {
         $docTable  = Database::get_course_table(TABLE_DOCUMENT, $course['dbName']);
         $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
         $id         = intval($id);
         $session_id = intval($session_id);
         $condition  = "AND id_session = $session_id";
+        
+        if (!in_array($file_type, array('file','folder'))) {
+            $file_type = 'file';
+        }
+        
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
         $sql  = "SELECT path FROM $docTable d, $propTable ip " .
-                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND d.id = $id";
+                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND filetype='$file_type' AND d.id = $id";
         $result = Database::query($sql);
         $is_visible = false;
         if (Database::num_rows($result) > 0) {

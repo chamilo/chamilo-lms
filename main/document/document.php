@@ -217,7 +217,7 @@ if ($to_group_id != 0 && $curdirpath == '/') {
 // Check visibility of the current dir path. Don't show anything if not allowed
 
 if (!$is_allowed_to_edit || api_is_coach()) {        
-    if ($curdirpath != '/' && !(DocumentManager::is_visible($curdirpath, $_course, api_get_session_id()))) {
+    if ($curdirpath != '/' && !(DocumentManager::is_visible($curdirpath, $_course, api_get_session_id(),'folder'))) {
         api_not_allowed();
     }
 }

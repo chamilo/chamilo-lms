@@ -603,7 +603,7 @@ Display::display_header(get_lang('MoveUserStats'));
 
 echo '<h1>'.get_lang('MoveUserStats').'</h1>';
 
-echo Display::display_normal_message(get_lang('CompareUserResultsBetweenCoursesAndCoursesInASession',false));
+echo Display::display_normal_message(get_lang('CompareUserResultsBetweenCoursesAndCoursesInASession'),false);
 
 
 // Some pagination

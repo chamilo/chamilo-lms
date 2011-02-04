@@ -582,6 +582,7 @@ function float_format($number, $flag = 1) {
         if (!$number) {
             $result = ($flag == 2 ? '0.00' : '0');
         } else {
+            
             if (floor($number) == $number) {
                 $result = number_format($number, ($flag == 2 ? 2 : 0));
             } else {

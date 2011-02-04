@@ -89,7 +89,6 @@ if($_POST['form_sent']) {
         $elements_posted=array();
     }
     if ($form_sent == 1) {
-        //added a parameter to send emails when registering a user        
         $usergroup->subscribe_courses_to_usergroup($id, $elements_posted);
         header('Location: usergroups.php');
         exit;        

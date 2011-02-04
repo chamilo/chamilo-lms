@@ -6,6 +6,7 @@ $action = $_GET['a'];
 
 require_once '../global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
+require_once $libpath.'array.lib.php';
 
 // 1. Setting variables needed by jqgrid
 
@@ -64,6 +65,8 @@ if ($_REQUEST['oper'] == 'del') {
     $obj->delete($_REQUEST['id']);
 }
 
+
+
 //4. Querying the DB for the elements
 $columns = array();
 switch ($action) {
@@ -81,12 +84,25 @@ switch ($action) {
         }                  
         $result     = Database::select('p.id,p.name, p.description, c.name as career', "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ", array('order' =>"$sidx $sord", 'LIMIT'=> "$start , $limit"));       
     break;
-    case 'get_usergroups':        
-        $columns = array('name', 'description', 'actions');                
+    case 'get_usergroups':
+        $columns = array('name', 'users', 'courses','sessions','actions');
+        $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
+        $new_result = array();
+        if (!empty($result)) {
+            foreach ($result as $group) {            
+                $group['sessions']   = count($obj->get_sessions_by_usergroup($group['id']));
+                $group['courses']    = count($obj->get_courses_by_usergroup($group['id']));
+                $group['users']      = count($obj->get_users_by_usergroup($group['id']));
+                $new_result[]        = $group;
+            }
+            $result = $new_result;
+        }
+        $columns = array('name', 'users', 'courses','sessions');                
         if(!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
-        $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        //Multidimensional sort
+        msort($result, $sidx);
         break;      
     default:    
         exit;            

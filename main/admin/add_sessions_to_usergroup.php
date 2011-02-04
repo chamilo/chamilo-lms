@@ -34,7 +34,7 @@ $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Groups'))
 // Database Table Definitions
 
 // setting the name of the tool
-$tool_name=get_lang('SubscribeSessionsToUser');
+$tool_name=get_lang('SubscribeSessionsToGroup');
 
 $add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){

@@ -38,7 +38,7 @@ class UserGroup extends Model {
      * @return  array   
      */     
     public function get_courses_by_usergroup($id) {        
-        $results = Database::select('*',$this->usergroup_rel_course_table, array('where'=>array('usergroup_id = ?'=>$id)));
+        $results = Database::select('course_id',$this->usergroup_rel_course_table, array('where'=>array('usergroup_id = ?'=>$id)));
         $array = array();
         if (!empty($results)) {    
             foreach($results as $row) {
@@ -54,7 +54,7 @@ class UserGroup extends Model {
      * @return  array   
      */
     public function get_sessions_by_usergroup($id) {
-        $results = Database::select('*',$this->usergroup_rel_session_table, array('where'=>array('usergroup_id = ?'=>$id)));
+        $results = Database::select('session_id',$this->usergroup_rel_session_table, array('where'=>array('usergroup_id = ?'=>$id)));
         $array = array();
         if (!empty($results)) {    
             foreach($results as $row) {
@@ -70,7 +70,7 @@ class UserGroup extends Model {
      * @return  array   with a list of user ids
      */
     public function get_users_by_usergroup($id) {
-        $results = Database::select('*',$this->usergroup_rel_user_table, array('where'=>array('usergroup_id = ?'=>$id)));
+        $results = Database::select('user_id',$this->usergroup_rel_user_table, array('where'=>array('usergroup_id = ?'=>$id)));
         $array = array();
         if (!empty($results)) {    
             foreach($results as $row) {
@@ -85,7 +85,7 @@ class UserGroup extends Model {
      * @param   int user id
      */
     public function get_usergroup_by_user($id) {
-        $results = Database::select('*',$this->usergroup_rel_user_table, array('where'=>array('user_id = ?'=>$id)));
+        $results = Database::select('usergroup_id',$this->usergroup_rel_user_table, array('where'=>array('user_id = ?'=>$id)));
         $array = array();
         if (!empty($results)) {    
             foreach($results as $row) {

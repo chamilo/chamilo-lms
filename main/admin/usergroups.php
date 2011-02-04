@@ -42,12 +42,16 @@ if (isset($_GET['action']) && $_GET['action'] == 'editnote') {
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
-$columns        = array(get_lang('Name'),get_lang('Description'),get_lang('Actions'));
+$columns        = array(get_lang('Name'), get_lang('Users'), get_lang('Courses'), get_lang('Sessions'), get_lang('Actions'));
 
 //Column config
-$column_model   = array(array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
-                        array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
-                        array('name'=>'actions',        'index'=>'actions',     'formatter'=>'action_formatter','width'=>'100',  'align'=>'left'),
+$column_model   = array(
+						array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
+                        //array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
+                        array('name'=>'users',    		'index'=>'users', 		'width'=>'200',  'align'=>'left'),
+                        array('name'=>'courses',    	'index'=>'courses', 	'width'=>'200',  'align'=>'left'),
+                        array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'200',  'align'=>'left'),
+                        array('name'=>'actions',        'index'=>'actions',     'formatter'=>'action_formatter','width'=>'100',  'align'=>'left','sortable'=>'false'),
                        );            
 //Autowidth             
 $extra_params['autowidth'] = 'true';

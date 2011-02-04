@@ -934,7 +934,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		if (api_get_setting('enabled_support_pixlr') == 'true'){
 		?>
 			<a href="create_paint.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
-		   <?php Display::display_icon('new_paint.png', get_lang('Paint').' / '.get_lang('PhotoRetouching')); echo get_lang('Paint').' / '.get_lang('PhotoRetouching'); ?></a>&nbsp;
+		   <?php Display::display_icon('new_paint.png', get_lang('PhotoRetouching')); echo get_lang('PhotoRetouching'); ?></a>&nbsp;
 		<?php
 		}
 		

@@ -21,7 +21,7 @@ $this_section = SECTION_COURSES;
 require_once 'document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
-$nameTools = get_lang('Paint').' / '.get_lang('PhotoRetouching');
+$nameTools = get_lang('PhotoRetouching');
 
 api_protect_course_script();
 api_block_anonymous_users();

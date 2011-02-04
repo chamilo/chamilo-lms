@@ -1028,23 +1028,29 @@ if ($show == 'result') {
                         
 	$table = new SortableTable('quiz_results', 'get_count_exam_results', 'get_exam_results_data');
 	$table->set_additional_parameters($parameters);
-    $secuence = 2;
     
     if ($is_allowedToEdit || $is_tutor) {
-        $secuence = 0;
 		if (api_is_western_name_order()) {
 			$table->set_header(0, get_lang('FirstName'));
 			$table->set_header(1, get_lang('LastName'));    			
 		} else {
 			$table->set_header(0, get_lang('LastName'));
 			$table->set_header(1, get_lang('FirstName'));    			
-		}
+		}		
+		$table->set_header(2, get_lang('Exercice'));
+    	$table->set_header(3, get_lang('Duration'),false);
+    	$table->set_header(4, get_lang('Date'));
+    	$table->set_header(5, get_lang('Score'),false);
+    	$table->set_header(6, get_lang('CorrectTest'), false);   
+    	
+    } else {
+        $table->set_header(0, get_lang('Exercice'));
+    	$table->set_header(1, get_lang('Duration'),false);
+    	$table->set_header(2, get_lang('Date'));
+    	$table->set_header(3, get_lang('Score'),false);
+    	$table->set_header(4, get_lang('Result'), false);   
     }
-	$table->set_header(-$secuence + 2, get_lang('Exercice'));
-	$table->set_header(-$secuence + 3, get_lang('Duration'),false);
-	$table->set_header(-$secuence + 4, get_lang('Date'));
-	$table->set_header(-$secuence + 5, get_lang('Score'),false);
-	$table->set_header(-$secuence + 6, (($is_allowedToEdit||$is_tutor) ? get_lang('CorrectTest') : get_lang('Result')), false);    
+	 
 	$table->display();	
 }
 

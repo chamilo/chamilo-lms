@@ -770,7 +770,7 @@ function get_count_exam_results($exercise_id = null) {
                       AND cuser.course_code=te.exe_cours_id ORDER BY col1, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";*/
         
         $sql="SELECT DISTINCT te.exe_id
-                FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id) INNER JOIN $TBL_TRACK_ATTEMPT_RECORDING re ON(re.exe_id = te.exe_id)
+                FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
                 WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where ";
                 
         //Seems that the $TBL_TRACK_HOTPOTATOES does not have an exercise id that's weird ... we are removing $exercise_where
@@ -801,7 +801,7 @@ function get_count_exam_results($exercise_id = null) {
                 WHERE exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "'
                 ORDER BY exe_cours_id ASC, exe_date DESC";
     }
-    
+
     $resx = Database::query($sql);
     $hpres = Database::query($hpsql);
     
@@ -811,7 +811,7 @@ function get_count_exam_results($exercise_id = null) {
             while ($rowx = Database::fetch_array($resx,'ASSOC')) {
                 $results[] = $rowx;
             }
-            //Special modification to corretly show the pagination
+            //Special modification to show corretly the pagination
             if (is_array($results)) {          
                 if ($_GET['gradebook'] == 'view') {
                     $filter_by_no_revised = true;
@@ -899,7 +899,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 
         $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
                 FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . api_get_course_id()."' $user_id_and $exercise_where 
+                WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . api_get_course_id()."' $user_id_and  
                 ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
 
 
@@ -917,9 +917,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
             AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." $user_id_and $session_id_and AND ce.active <>-1 AND" .
             " orig_lp_id = 0 AND orig_lp_item_id = 0 AND cuser.course_code=te.exe_cours_id ORDER BY col1, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";*/
 
-        $sql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1")." , ce.title as col2, te.exe_result as exresult, " .
-                            "te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
-                            "te.start_date as col4, steps_counter as exstep, exe_user_id as excruid, te.exe_duration as exduration, ce.results_disabled as exdisabled
+        $sql="SELECT ce.title as col0, te.exe_duration as exduration, firstname, lastname, te.exe_result as exresult, te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
+            "te.start_date as col2, steps_counter as exstep, exe_user_id as excruid,  ce.results_disabled as exdisabled
               FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
               WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0  $exercise_where";
 
@@ -985,14 +984,24 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 }
                 $users_array_id[] = $results[$i]['col2'] . $results[$i]['col0'] . $results[$i]['col1'];
             }
-                        
-            $user_first_name = $results[$i]['col0'];
-            $user_last_name = $results[$i]['col1'];
+            if ($is_allowedToEdit || $is_tutor) {      
+                $user_first_name = $results[$i]['col0'];
+                $user_last_name = $results[$i]['col1'];
+                $user = $results[$i]['col0'] . $results[$i]['col1'];
+                $test = $results[$i]['col2'];
+                
+            } else {
+                $user_first_name = $results[$i]['firstname'];
+                $user_last_name = $results[$i]['lastname'];
+                $user = $results[$i]['firstname'] . $results[$i]['lastname'];
+                $test = $results[$i]['col0'];                
+            }
             $user_list_id[] = $results[$i]['excruid'];
             $id = $results[$i]['exid'];   
 
-            $user = $results[$i]['col0'] . $results[$i]['col1'];
-            $test = $results[$i]['col2'];
+            
+            
+           
             $quiz_name_list = $test;
             $dt = api_convert_and_format_date($results[$i]['exweight'], null, date_default_timezone_get());
             $res = $results[$i]['exresult'];
@@ -1009,11 +1018,14 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 
                 if ($is_allowedToEdit || $is_tutor) {
                     $user = $results[$i]['col0'] . $results[$i]['col1'];
+                    $date_value = $results[$i]['col4'];
+                } else {
+                    $date_value = $results[$i]['col2'];
                 }
-                if ($results[$i]['col4'] != "0000-00-00 00:00:00") {
+                if ($date_value != "0000-00-00 00:00:00") {
                     //echo ceil((($results[$i][4] - $results[$i][7]) / 60)) . ' ' . get_lang('MinMinutes');
                     $exe_date_timestamp     = api_strtotime($results[$i]['exdate'], date_default_timezone_get());
-                    $start_date_timestamp   = api_strtotime($results[$i]['col4'], date_default_timezone_get());
+                    $start_date_timestamp   = api_strtotime($date_value, date_default_timezone_get());
 
                     $my_duration = ceil((($exe_date_timestamp - $start_date_timestamp) / 60));
                     if ($my_duration == 1 ) {
@@ -1025,7 +1037,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                         //echo ' ( ' . $results[$i][8] . ' ' . get_lang('Steps') . ' )';
                         $duration_list = ' ( ' . $results[$i]['exstep'] . ' ' . get_lang('Steps') . ' )';
                     }
-                    $add_start_date = api_convert_and_format_date($results[$i]['col4'], null, date_default_timezone_get()) . ' / ';
+                    $add_start_date = api_convert_and_format_date($date_value, null, date_default_timezone_get()) . ' / ';
                 } else {
                     $duration_list = get_lang('NoLogOfDuration');
                     //echo get_lang('NoLogOfDuration');
@@ -1073,7 +1085,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 }
                 $more_details_list = $html_link;
                 if ($is_allowedToEdit || $is_tutor) {
-                    
                     $list_info [] = array($user_first_name,$user_last_name,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
                 } else {
                     $list_info [] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);

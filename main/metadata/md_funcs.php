@@ -415,20 +415,16 @@ function mds_update_xml_and_mdt($mdo, &$xmlDoc, $mda, $eid, &$traceinfo,
 function mdstore($allow_create)
 {
     global $_course; if (!isset($_course)) return;
-
     define('MDS_TABLE', Database::get_course_table(TABLE_METADATA));
-
-    if (!Database::query("SELECT eid FROM " . MDS_TABLE))
-    if ($allow_create)
-        $this->_query("CREATE TABLE " . MDS_TABLE . " (    " .
-                "eid varchar(250) NOT NULL," .      // entry-id, e.g. doc.1
-                "mdxmltext text default ''," .      // MD-text, XML-formatted
-                "md5 char(32) default ''," .        // hash-validator
-                "htmlcache1 text default ''," .     // cached HTML, part 1
-                "htmlcache2 text default ''," .     // cached HTML, part 2
-                "indexabletext text default ''," .  // indexable for search
-                "PRIMARY KEY (eid)           )");
-    else give_up('No metadata store is available for this course.');
+    $this->_query("CREATE TABLE IF NOT EXISTS " . MDS_TABLE . " (    " .
+            "eid varchar(250) NOT NULL," .      // entry-id, e.g. doc.1
+            "mdxmltext text default ''," .      // MD-text, XML-formatted
+            "md5 char(32) default ''," .        // hash-validator
+            "htmlcache1 text default ''," .     // cached HTML, part 1
+            "htmlcache2 text default ''," .     // cached HTML, part 2
+            "indexabletext text default ''," .  // indexable for search
+            "PRIMARY KEY (eid)           )");
+  
 }
 
 function _coldatstart($column, $data)
@@ -445,7 +441,6 @@ function _query($sql, $eid = '', $sep = '')
 {
     if ($eid) $sql .= $sep ? $this->_coldatstart('eid', $eid . $sep) :
         $this->_coldat('eid', $eid);
-
     return Database::query($sql);
 }
 

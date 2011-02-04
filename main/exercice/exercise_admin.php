@@ -112,13 +112,23 @@ $htmlHeadXtra[] = '<script>
      		}
 		}
 
-		function check_per_page_all()
-     	{
+		function check_per_page_all() {
 			if (document.getElementById(\'divtimecontrol\').style.display==\'block\')
 			{
 				document.getElementById(\'divtimecontrol\').style.display=\'none\';
 				document.getElementById(\'enabletimercontroltotalminutes\').value=\'\';
 			}
+		}
+		
+		function check_feedback() {
+			document.getElementById(\'result_disabled_0\').checked = true;
+		}
+		
+		function check_results_disabled() {
+		
+			document.getElementById(\'exerciseType_2\').checked = true;
+			
+			
 		}
                    
 		</script>';

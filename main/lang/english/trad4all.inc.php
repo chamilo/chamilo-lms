@@ -995,4 +995,6 @@ $LearningPaths = "Learning paths";
 $AllLearningPaths = "All learning paths";
 $ByCourse = "By course";
 $MyQCM = "My MCQ";
+$AddACourse = "Add a course";
+$PerWeek = "Per week";
 ?>

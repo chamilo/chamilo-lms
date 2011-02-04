@@ -1361,6 +1361,7 @@ $SessionsInGroup = "Sessions in group";
 $CoursesInGroup = "Courses in group";
 $UsersInGroup = "Users in group";
 $UsersInPlatform = "Users on platform";
+$YouNeedToCreateACareerFirst = "You will have to create a career before you can add promotions (promotions are sub-elements of a career)";
 $OutputBufferingInfo = "Output buffering setting is \"On\" for being enabled or \"Off\" for being disabled. This setting also may be enabled through an integer value (4096 for example) which is the output buffer size.";
 $LoadedExtension = "Extension loaded";
 ?>

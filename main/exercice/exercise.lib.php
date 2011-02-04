@@ -1130,6 +1130,7 @@ function show_score($score, $weight, $show_porcentage = true) {
     if ($show_porcentage) {
         $html = round(($score / ($weight != 0 ? $weight : 1)) * 100, 2) . '% (' . $score_rounded . ' / ' . $weight . ')';	
     } else {            
+        $weight = round($weight, 2);
     	$html = $score_rounded . ' / ' . $weight;
     }
     return $html;	
@@ -1141,9 +1142,7 @@ function show_score($score, $weight, $show_porcentage = true) {
  * @param   float   weight
  * @return  float   the score rounded converted to the new range
  */
-function convert_score($score, $weight) {
-    $html  = '';
-    $score_rounded = $score;     
+function convert_score($score, $weight) {  
     if ($score != '' && $weight != '') {
         $max_note =  api_get_setting('exercise_max_score');
         $min_note =  api_get_setting('exercise_min_score');  
@@ -1154,9 +1153,10 @@ function convert_score($score, $weight) {
            } else {
                $score   = $min_note;
            }
-           $score_rounded  = round($score, 2);          
+                   
         }           
     }
+    $score_rounded  = round($score, 2);  
     return $score_rounded;
 }
 

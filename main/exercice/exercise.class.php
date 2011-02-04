@@ -2416,7 +2416,7 @@ class Exercise {
             
         if ($saved_results) {
             $stat_table 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-            $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . $exeId;
+            $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . floatval($totalScore) . ',exe_weighting = exe_weighting + ' .  floatval($totalWeighting) . ' WHERE exe_id = ' . $exeId;
     		Database::query($sql_update);
         }
         

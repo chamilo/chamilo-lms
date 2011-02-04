@@ -583,7 +583,7 @@ if ($show_results) {
 		$my_total_weight = convert_score($questionWeighting, $total_weighting);       
 
 		echo '<div id="question_score">';
-		echo get_lang('Score')." : $my_total_score/$my_total_weight";        
+		echo get_lang('Score')." : $my_total_score / $my_total_weight";        
         //echo get_lang('Score')." : ".show_score($my_total_score, $total_weighting, false);
 		echo '</div>';
 
@@ -603,7 +603,7 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 			$my_result = float_format($my_result,1);
 			echo $my_result."%";
 		} else {                    
-            echo show_score($totalScore,$totalWeighting,false);
+            echo show_score($totalScore, $totalWeighting, false);
 		}
 		echo '</div>';
 	}

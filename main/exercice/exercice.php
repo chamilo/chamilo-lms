@@ -206,7 +206,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	while ($row = Database :: fetch_array($res, 'ASSOC')) {
 		$tot += $row['marks'];
 	}
-	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '" . intval($tot) . "' WHERE exe_id='" . $id . "'";
+	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '" . floatval($tot) . "' WHERE exe_id='" . $id . "'";
     Database::query($totquery);
          
 	$subject = get_lang('ExamSheetVCC');
@@ -1043,8 +1043,8 @@ if ($show == 'result') {
 	$table->set_header(-$secuence + 2, get_lang('Exercice'));
 	$table->set_header(-$secuence + 3, get_lang('Duration'),false);
 	$table->set_header(-$secuence + 4, get_lang('Date'));
-	$table->set_header(-$secuence + 5, get_lang('Result'),false);
-	$table->set_header(-$secuence + 6, (($is_allowedToEdit||$is_tutor) ? get_lang('CorrectTest') : get_lang('ViewTest')), false);    
+	$table->set_header(-$secuence + 5, get_lang('Score'),false);
+	$table->set_header(-$secuence + 6, (($is_allowedToEdit||$is_tutor) ? get_lang('CorrectTest') : get_lang('Result')), false);    
 	$table->display();	
 }
 

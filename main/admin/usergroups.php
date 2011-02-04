@@ -60,7 +60,7 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
-                    return \'<a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/course_add.gif" title="'.get_lang('AddSession').'"></a>'
+                    return \'<a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img width="22px" src="../img/session_add.png" title="'.get_lang('AddSession').'"></a>'
                     .'<a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/course_add.gif" title="'.get_lang('AddACourse').'"></a>' 
                     .'<a href="add_users_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/add_user_big.gif" title="'.get_lang('AddUsers').'"></a>' 
                     .'<a href="?action=edit&id=\'+options.rowId+\'"><img src="../img/edit.gif" title="'.get_lang('Edit').'" ></a>'                                       

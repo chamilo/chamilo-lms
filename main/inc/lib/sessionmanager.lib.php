@@ -825,8 +825,8 @@ class SessionManager {
 		$month_end=intval($smonth_end);
 		$day_end=intval($sday_end);
 
-		$date_start = "$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-		$date_end = "'$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end)."'";
+		$date_start = $year_start * 10000 + $month_start * 100 + $day_start;
+		$date_end = $year_end * 10000 + $month_end * 100 + $day_end;
 
 		if (empty($name)) {
 			$msg=get_lang('SessionCategoryNameIsRequired');

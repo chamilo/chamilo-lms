@@ -318,7 +318,7 @@ echo '<div align="center">';
     
     <?php
 	//vozMe services
-	
+	/*
 	echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checktext2voice" onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;<img src="../img/file_sound.gif" title="'.get_lang('HelpvozMe').'" alt="'.get_lang('vozMe').'"/>&nbsp;'.get_lang('vozMe').'';
 	echo '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
 	echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
@@ -361,7 +361,7 @@ echo '<div align="center">';
 		echo '<br/>';
 	echo '</form>';
 	echo '</div>';
-
+	*/
 echo '</div>';
 
 Display :: display_footer();

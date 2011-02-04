@@ -75,14 +75,14 @@ class Promotion extends Model {
     function return_form($url, $action = 'add') {
     	$form = new FormValidator('promotion', 'post', $url);
         // Settting the form elements
-        $header = get_lang('add');
+        $header = get_lang('Add');
         if ($action == 'edit') {
         	$header = get_lang('Modify');
         }
         $form->addElement('header', '', $header);
         $form->addElement('hidden', 'id', intval($_GET['id']));
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '100','id' => 'name'));        
-        $form->addElement('html_editor', 'description', get_lang('description'), null);
+        $form->addElement('html_editor', 'description', get_lang('Description'), true, array('ToolbarSet'=>'Forum','Height'=>'150'));
             
         $career = new Career();
         $careers = $career->get_all();

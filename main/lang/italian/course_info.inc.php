@@ -121,4 +121,7 @@ $NewHomeworkEmailAlert = "Manda un'e-mail agli utenti quando viene assegnato un 
 $NewHomeworkEmailAlertEnable = "Abilita l'invio di e-mail agli utenti quando viene creato un nuovo compito";
 $NewHomeworkEmailAlertDisable = "Disabilita l'invio di e-mail agli utenti quando viene creato un nuovo compito";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Mostra l'ultimo passo compiuto e il primo ancora da compiere";
+$AddPicture = "Aggiungi un'immagine";
+$LPAutoLaunch = "Attiva il lancio automatico dei moduli didattici";
+$ConfigLearnpath = "Configura i moduli didattici";
 ?>

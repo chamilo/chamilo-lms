@@ -1364,4 +1364,9 @@ $UsersInPlatform = "Users on platform";
 $YouNeedToCreateACareerFirst = "You will have to create a career before you can add promotions (promotions are sub-elements of a career)";
 $OutputBufferingInfo = "Output buffering setting is \"On\" for being enabled or \"Off\" for being disabled. This setting also may be enabled through an integer value (4096 for example) which is the output buffer size.";
 $LoadedExtension = "Extension loaded";
+$SubscribeGroupToSessions = "Subscribe group to sessions";
+$SubscribeGroupToCourses = "Subscribe group to courses";
+$CompareStats = "Compare stats";
+$EnabledPixlrTitle = "Enable external Pixlr services";
+$EnabledPixlrComment = "Pixlr allow you to edit, adjust and filter your photos with features similar to Photoshop. It is the ideal complement to process images based on bitmaps";
 ?>

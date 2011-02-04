@@ -1366,4 +1366,9 @@ $UsersInPlatform = "Usuarios de la plataforma";
 $YouNeedToCreateACareerFirst = "Se requiere que exista una carrera antes de poder añadir promociones (promociones son sub-elementos de una carrera).";
 $OutputBufferingInfo = "El output buffering (o caché de salida) está a \"On\" cuando activado y a \"Off\" cuando desactivado. Este parámetro también puede ser activado a través de un valor entero (4096, por ejemplo) que suele ser le tamaño de la memoria caché de salida.";
 $LoadedExtension = "Extensión cargada";
+$SubscribeGroupToSessions = "Inscribir grupo en sesiones";
+$SubscribeGroupToCourses = "Inscribir grupo en cursos";
+$CompareStats = "Comparar estadísticas";
+$EnabledPixlrTitle = "Activar los servicios externos de Pixlr";
+$EnabledPixlrComment = "Pixlr le permitirá editar, ajustar y filtrar sus fotografías con prestaciones similares a las de Photoshop. Es el complemento ideal para tratar imágenes basadas en mapas de bits";
 ?>

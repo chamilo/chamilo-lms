@@ -29,4 +29,5 @@ $SessionIdentifier = "Identificatore della sessione";
 $SessionName = "Nome della sessione";
 $SessionCategory = "Categoria di sessione";
 $SessionData = "Dati della sessione";
+$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Il lancio automatico dei moduli didattici è attivo. I corsisti verranno rediretti al modulo appena entrati nel corso.";
 ?>

@@ -369,4 +369,8 @@ $Copy = "Copia";
 $ScoreAverageFromAllAttempts = "Media dl punteggio per tutti i tentativi";
 $DefaultContent = "Genera un contenuto di default";
 $ExerciseEditionNotAvailableInSession = "Non è possibile modificare gli esercizi nel corso di una sessione";
+$UniqueAnswerNoOption = "Risposta unica con \"non so\"";
+$MultipleAnswerTrueFalse = "Risposta multipla (V/F/Non So)";
+$MultipleAnswerCombinationTrueFalse = "Combinazione V/F/Non So";
+$DontKnow = "Non so";
 ?>

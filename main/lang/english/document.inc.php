@@ -268,4 +268,5 @@ $SlowDown = "Slower";
 $Pediaphon = "Use Pediaphon audio services";
 $HelpPediaphon = "Supports text with several thousands characters, in various types of male and female voices (depending on the language). Audio files will be generated and automatically saved to the Chamilo directory in which you are.";
 $FirstSelectALanguage = "Please select a language";
+$RenameAndComment = "Rename and comment";
 ?>

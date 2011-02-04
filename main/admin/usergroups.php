@@ -22,7 +22,16 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => '#','name' => get_lang('Groups'));
+$action = $_GET['action'];
+if ($action == 'add') {
+    $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Groups'));
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+} elseif ($action == 'edit') {
+    $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Groups'));    
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+} else {
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Groups'));
+}
 
 // The header.
 Display::display_header($tool_name);
@@ -94,9 +103,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
     // Settting the form elements
     $form->addElement('header', '', get_lang('Add'));
-    $form->addElement('text', 'name', get_lang('name'), array('size' => '95', 'id' => 'name'));
+    $form->addElement('text', 'name', get_lang('name'), array('size' => '70', 'id' => 'name'));
     //$form->applyFilter('note_title', 'html_filter');
-    $form->addElement('html_editor', 'description', get_lang('Description'), null);
+    $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
     $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
 
     // Setting the rules
@@ -130,8 +139,8 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET[
     // Settting the form elements
     $form->addElement('header', '', get_lang('Modify'));
     $form->addElement('hidden', 'id',intval($_GET['id']));
-    $form->addElement('text', 'name', get_lang('Name'), array('size' => '100'));
-    $form->addElement('html_editor', 'description', get_lang('description'), null);
+    $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
+    $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
     $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
 
     // Setting the defaults

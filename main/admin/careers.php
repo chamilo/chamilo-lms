@@ -24,21 +24,20 @@ $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
-$interbreadcrumb[]=array('url' => 'careers.php','name' => get_lang('Careers'));
+$action = $_GET['action'];
+if ($action == 'add') {
+    $interbreadcrumb[]=array('url' => 'careers.php','name' => get_lang('Careers'));
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+} elseif ($action == 'edit') {
+    $interbreadcrumb[]=array('url' => 'careers.php','name' => get_lang('Careers'));    
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+} else {
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Careers'));
+}
 
 // The header.
 Display::display_header($tool_name);
 
-
-// Tool name
-if (isset($_GET['action']) && $_GET['action'] == 'add') {
-    $tool = 'Add';
-    $interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Career'));
-}
-if (isset($_GET['action']) && $_GET['action'] == 'editnote') {
-    $tool = 'Modify';
-    $interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Career'));
-}
 
 //jqgrid will use this URL to do the selects
 

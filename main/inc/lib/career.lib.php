@@ -79,9 +79,8 @@ class Career extends Model {
         
         $form->addElement('header', '', $header);
         $form->addElement('hidden', 'id',intval($_GET['id']));
-        $form->addElement('text', 'name', get_lang('Name'), array('size' => '100'));
-        $form->addElement('html_editor', 'description', get_lang('description'), null);
-        
+        $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
+        $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
         $status_list = $this->get_status_list();         
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {

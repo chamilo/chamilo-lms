@@ -23,7 +23,18 @@ $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
-$interbreadcrumb[]=array('url' => 'promotions.php','name' => get_lang('Promotions'));
+
+$action = $_GET['action'];
+if ($action == 'add') {
+    $interbreadcrumb[]=array('url' => 'promotions.php','name' => get_lang('Promotions'));
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+} elseif ($action == 'edit') {
+    $interbreadcrumb[]=array('url' => 'promotions.php','name' => get_lang('Promotions'));    
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+} else {
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Promotions'));
+}
+
 
 // The header.
 Display::display_header($tool_name);

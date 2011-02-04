@@ -81,9 +81,8 @@ class Promotion extends Model {
         }
         $form->addElement('header', '', $header);
         $form->addElement('hidden', 'id', intval($_GET['id']));
-        $form->addElement('text', 'name', get_lang('Name'), array('size' => '100','id' => 'name'));        
-        $form->addElement('html_editor', 'description', get_lang('Description'), true, array('ToolbarSet'=>'Forum','Height'=>'150'));
-            
+        $form->addElement('text', 'name', get_lang('Name'), array('size' => '70','id' => 'name'));        
+        $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));       
         $career = new Career();
         $careers = $career->get_all();
         $career_list = array();    

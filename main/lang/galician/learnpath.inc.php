@@ -253,4 +253,10 @@ $ModifyHotPotatoes = "Modificar hotpotatoes";
 $SaveHotpotatoes = "Gardar hotpotatoes";
 $ReturnToLPList = "Voltar ó listado";
 $LpPrerequisiteDescription = "Seleccionando outro itinerario de aprendizaxe coma prerrequisito ocultara o prerrequisito actual ata que o prerrequisito sexa completado (100%)";
+$ExerciseCantBeEditedAfterAddingToTheLP = "NOn é posible editar un exercicio despois de que se agregue a unha lección.";
+$EnableTimeLimits = "Activar límites de dispoñibilidade";
+$PublicationDate = "Data de publicación";
+$UseMaxScore100 = "Usar por defecto 100 como puntuación máxima";
+$EnableLPAutoLaunch = "Activar o despregue automático";
+$DisableLPAutoLaunch = "Desactivar o despregue automático";
 ?>

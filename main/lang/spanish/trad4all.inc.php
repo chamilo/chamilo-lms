@@ -997,4 +997,5 @@ $AllLearningPaths = "Todas las lecciones";
 $ByCourse = "Por curso";
 $AddACourse = "Añadir un curso";
 $PerWeek = "Por semana";
+$PhotoRetouching = "Retoque fotográfico";
 ?>

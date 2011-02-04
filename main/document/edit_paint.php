@@ -108,11 +108,10 @@ Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 		
-		echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&amp;file='.urlencode($dir.$file).$req_gid.'&amp;origin=editpaint">'.Display::return_icon('edit.gif',get_lang('Rename')).get_lang('Rename').', '.get_lang('Comment').'</a>';
+		echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&amp;file='.urlencode($dir.$file).$req_gid.'&amp;origin=editpaint">'.Display::return_icon('edit.gif',get_lang('Rename')).get_lang('Rename').' / '.get_lang('Comment').'</a>';
 echo '</div>';
 
 ///pixlr
-// max size 1 Mb
 $title=$file;//disk name. No sql name because pixlr return this when save
 //$image=urlencode(api_get_path(WEB_COURSE_PATH).$courseDir.$dir.$file);//TODO: only work with public courses. Doesn't remove please
 //

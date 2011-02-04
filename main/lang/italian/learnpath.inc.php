@@ -250,4 +250,9 @@ $SaveHotpotatoes = "Salva hotpotatoes";
 $ReturnToLPList = "Ritorna all'elenco";
 $LpPrerequisiteDescription = "Se un modulo didattico costituisce un prerequisito di un altro, quest'ultimo risulterà invisibile fino al completamento (100%) del primo";
 $ExerciseCantBeEditedAfterAddingToTheLP = "I Quesiti non possono essere modificati dopo esser stati aggiunti ad un modulo didattico";
+$EnableTimeLimits = "Attiva il periodo di disponibilità";
+$PublicationDate = "Data di pubblicazione";
+$UseMaxScore100 = "Usa 100 come punteggio massimo di default";
+$EnableLPAutoLaunch = "Attiva il lancio automatico di un modulo didattico";
+$DisableLPAutoLaunch = "Disattiva il lancio automatico di un modulo didattico";
 ?>

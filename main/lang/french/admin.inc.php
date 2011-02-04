@@ -1366,4 +1366,7 @@ $UsersInPlatform = "Utilisateurs de la plateforme";
 $YouNeedToCreateACareerFirst = "Il est nécessaire de créer une filière avant de pouvoir ajouter des promotions (les promotions sont des sous-éléments d'une filière).";
 $OutputBufferingInfo = "L'output buffering (ou tampon de sortie) est à \"On\" lorsqu'il est activé et à \"Off\" lorsqu'il est désactivé. Ce paramètre peut également être activé au travers d'une valeur entière (4096 par exemple) pour définir la taille du tampon de sortie.";
 $LoadedExtension = "Extension chargée";
+$SubscribeGroupToSessions = "Inscrire le groupe à des sessions";
+$SubscribeGroupToCourses = "Inscrire le groupe à des cours";
+$CompareStats = "Comparer stats";
 ?>

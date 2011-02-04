@@ -997,4 +997,5 @@ $ByCourse = "By course";
 $MyQCM = "My MCQ";
 $AddACourse = "Add a course";
 $PerWeek = "Per week";
+$PhotoRetouching = "Photo retouching";
 ?>

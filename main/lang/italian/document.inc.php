@@ -228,5 +228,39 @@ $FileExistsChangeToSave = "Il nome del file esiste già, scegline uno diverso pe
 $FileSavedAs = "File salvato come";
 $FileExportAs = "File esportato come";
 $UserFolder = "Cartella utente";
+$HelpUsersFolder = "INFORMAZIONI VISIBILI AI SOLI DOCENTI:
+
+Le cartelle individuali contengono cartelle separate per ogni corsista entrato nella sezione Documenti o che abbia inviato dei file attraverso l'editor on-line. In mancanza di queste condizioni non viene creata alcuna cartella individuale. Nel caso dei gruppi, i file inviati attraverso l'editor saranno accessibili dalla sezione Documenti del gruppo stesso.
+
+Le cartelle individuali possono essere rese invisibili agli altri corsisti, esclusi i propreitari; tuttavia - conoscendone l'URL - i singoli file saranno accessibili agli altri.
+
+Se le cartelle individuali sono rese visibili tutti i corsisti potranno vedere il contenuto ma solo il proprietario potrà creare, modificare, eliminare ed effettuare il back.up di documenti, immagini (SVG o PNG) e sotto-cartelle; potrà anche convertire documenti in modelli personali, 
+
+Le cartelli individuali non sono quindi solo un deposito di materiali.
+
+Ricorda che un documento visibile potrà essere copiato da ogni corsista in qualsiasi altra parte, compresi portfolio, social network o all'esterno del corso,";
+$HelpFolderChat = "INFORMAZIONI VISIBILI AI SOLI DOCENTI: Questa cartella contiene il testo di tutte le sessioni di chat. Anche se spesso il loro contenuto non riveste particolare interesse, a volte può essere utile incorporarlo in documenti di lavoro. Senza cambiare l'intera visibilità della cartella (opzione non raccomandata), è possibile rendere visibile il testo di una sola sessione e puntare ad esso.";
+$HelpFolderCertificates = "INFORMAZIONI VISIBILI AI SOLI DOCENTI: La cartella contiene i diversi modelli di certificato creati attraverso la sezione Valutazioni. Si raccomanda di NON rendere visibile la cartella.";
 $DestinationDirectory = "Cartella di destinazione";
+$CreateAudio = "Creare audio";
+$InsertText2Audio = "Immetti il testo da convertire in suono";
+$HelpText2Audio = "Trasforma il testo in voce";
+$BuildMP3 = "Genera un file mp3";
+$Voice = "Voce";
+$Female = "Femminile";
+$Male = "Maschile";
+$GoogleAudio = "Usa i servizi audio di Google";
+$vozMe = "Usa i servizi audio di vozMe";
+$HelpGoogleAudio = "Puoi immettere fino a 100 caratteri e scrivere in diverse lingue. I file generati saranno disponibili nella presente cartella.";
+$HelpvozMe = "Il testo può avere la dimensione di diverse migliaia di caratteri e può essere selezionato il tipo di voce (maschile o femminile). Solo poche lingue sono per ora disponibili e la qualità della voce è limitata. Il file prodotto dovrà essere scaricato da una pagina web indipendente.";
+$SaveMP3 = "Salva il file mp3";
+$Speed = "Velocità";
+$GoFaster = "Più veloce";
+$Fast = "Veloce";
+$Normal = "Normale";
+$Slow = "Lenta";
+$SlowDown = "Più lenta";
+$Pediaphon = "Usa il servizio audio Pediaphon";
+$HelpPediaphon = "I testi immessi possono avere la dimensione di svariate migliaia di caratteri e le voci prodotte possono essere maschile o femminile (a seconda della lingua). I file audio saranno salvati automaticamente nella cartella attuale.";
+$FirstSelectALanguage = "Seleziona prima una lingua";
 ?>

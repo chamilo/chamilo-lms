@@ -114,9 +114,7 @@ echo '</div>';
 ///pixlr
 // max size 1 Mb
 $title=$file;//disk name. No sql name because pixlr return this when save
-
-$image=urlencode(api_get_path(WEB_COURSE_PATH).$courseDir.$dir.$file);//TODO: only work with public courses
-
+//$image=urlencode(api_get_path(WEB_COURSE_PATH).$courseDir.$dir.$file);//TODO: only work with public courses. Doesn't remove please
 //
 $pixlr_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
 $langpixlr  = api_get_language_isocode();
@@ -135,9 +133,57 @@ $target=$target_path;
 $locktarget="true";
 $locktitle="false";
 
+//make temp images
+$temp_folder=api_get_path(SYS_ARCHIVE_PATH).'temp/images';
+if (!file_exists($temp_folder)) {
+    @mkdir($temp_folder, $permissions_for_new_directories, true);//TODO:check $permissions value, now empty;
+   }
+
+//make htaccess with allow from all, and file index.html into temp/images
+$htaccess=api_get_path(SYS_ARCHIVE_PATH).'temp/images/.htacess';
+if (!file_exists($htaccess)) {
+	$htaccess_content="order deny,allow\r\nallow from all";
+	$fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/images/.htaccess', 'w');
+	if ($fp) {
+		fwrite($fp, $htaccess_content);
+		fclose($fp);
+	}
+}
+
+$html_index=api_get_path(SYS_ARCHIVE_PATH).'temp/images/index.html';
+if (!file_exists($html_index)) {	
+	$html_index_content="<html><head></head><body></body></html>";
+	$fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/images/index.html', 'w');
+	if ($fp) {
+		fwrite($fp, $html_index_content);
+		fclose($fp);
+	}
+}
+
+//encript temp name file
+$name_crip=sha1(uniqid());//encript 
+$findext= explode(".", $file);
+$extension= $findext[count($findext)-1];
+$file_crip=$name_crip.'.'.$extension;
+
+//copy file to temp/images directory
+
+$from=$filepath.$file;
+$to=api_get_path(SYS_ARCHIVE_PATH).'temp/images/'.$file_crip;
+copy($from, $to);
+
+//load image to url
+$to_url=api_get_path(WEB_ARCHIVE_PATH).'temp/images/'.$file_crip;
+$image=urlencode($to_url);
+
+//make frame an send image
 
 echo '<iframe style=\'height: 600px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'\'>';
 echo '</iframe>';
+
+//delete temporal file after a time
+//TODO:time counter. Can not be deleted immediately. It is necessary to leave a little time for pixlr.com can be loaded
+//unlink($to);
 
 Display::display_footer();
 ?>

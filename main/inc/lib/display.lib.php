@@ -838,7 +838,7 @@ class Display {
      * @return  string  the js code 
      * 
      */
-    public static function grid_js($div_id, $url, $column_names, $column_model, $extra_params, $data = array(), $formatter = '') {
+    public static function grid_js($div_id, $url, $column_names, $column_model, $extra_params, $data = array(), $formatter = '', $width_fix = false) {
         $obj = new stdClass();
               
         if (!empty($url))
@@ -908,8 +908,14 @@ class Display {
         //Fixing true/false js values that doesn't need the ""
         $json_encode = str_replace(':"true"',':true',$json_encode);
         $json_encode = str_replace(':"false"',':false',$json_encode);
-        
         $json_encode = str_replace('"formatter":"action_formatter"','formatter:action_formatter',$json_encode);
+        
+        if ($width_fix) {
+            //see BT#2020
+            $json .= "$(window).bind('resize', function() {
+        	    $('#".$div_id."').setGridWidth($(window).width() - 150);
+        	}).trigger('resize');";
+        }
               
         //Creating the jqgrid element         
         $json .= '$("#'.$div_id.'").jqGrid(';

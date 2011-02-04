@@ -64,10 +64,10 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
                  }';
 ?>
 <script>
-$(function() {    
+$(function() {
 <?php 
     // grid definition see the $career->display() function
-    echo Display::grid_js('careers',  $url,$columns,$column_model,$extra_params, array(), $action_links);       
+    echo Display::grid_js('careers',  $url,$columns,$column_model,$extra_params, array(), $action_links,true);       
 ?> 
 });
 </script>

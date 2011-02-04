@@ -46,12 +46,12 @@ $columns        = array(get_lang('Name'), get_lang('Users'), get_lang('Courses')
 
 //Column config
 $column_model   = array(
-						array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
+						array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),
                         //array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
-                        array('name'=>'users',    		'index'=>'users', 		'width'=>'200',  'align'=>'left'),
-                        array('name'=>'courses',    	'index'=>'courses', 	'width'=>'200',  'align'=>'left'),
-                        array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'200',  'align'=>'left'),
-                        array('name'=>'actions',        'index'=>'actions',     'formatter'=>'action_formatter','width'=>'100',  'align'=>'left','sortable'=>'false'),
+                        array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
+                        array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
+                        array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
+                        array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false','formatter'=>'action_formatter'),
                        );            
 //Autowidth             
 $extra_params['autowidth'] = 'true';
@@ -68,10 +68,10 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
                  }';
 ?>
 <script>
-$(function() {    
+$(function() {
 <?php 
     // grid definition see the $usergroup>display() function
-    echo Display::grid_js('usergroups',  $url,$columns,$column_model,$extra_params, array(), $action_links);       
+    echo Display::grid_js('usergroups',  $url,$columns,$column_model,$extra_params, array(), $action_links,true);       
 ?> 
 });
 </script>   

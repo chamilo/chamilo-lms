@@ -27,7 +27,8 @@ api_block_anonymous_users(); // Only users who are logged in can proceed.
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
-    
+$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('Course'));
+
 Display :: display_header($nameTools);
 
 $session_id     = intval($_GET['session_id']);

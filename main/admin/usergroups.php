@@ -22,10 +22,10 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[]=array('url' => '#','name' => get_lang('Groups'));
 
 // The header.
 Display::display_header($tool_name);
-
 
 // Tool name
 if (isset($_GET['action']) && $_GET['action'] == 'add') {

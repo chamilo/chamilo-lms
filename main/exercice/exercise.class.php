@@ -1658,7 +1658,8 @@ class Exercise {
      * @return  string  html code
 	 */
 	function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true) {        
-		global $_configuration;        
+		global $_configuration, $feedback_type;   
+		   
         $questionId   = intval($questionId);
 		$exeId        = intval($exeId);        
         $TBL_TRACK_ATTEMPT      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -1673,6 +1674,7 @@ class Exercise {
         $answerType 			= $objQuestionTmp->selectType();
         $quesId 				= $objQuestionTmp->selectId();        
         $extra                  = $objQuestionTmp->extra;
+                 
         //Extra information of the question 
         if (!empty($extra)){
             $extra          = explode(':', $extra);            
@@ -2187,7 +2189,8 @@ class Exercise {
                     break;
             } // end switch Answertype            
             
-            global $origin;            
+            global $origin;   
+                   
             if ($show_result) {
                           
                 if ($from == 'exercise_result') {       

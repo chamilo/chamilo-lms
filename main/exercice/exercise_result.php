@@ -58,7 +58,7 @@ $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 //temp values to move to admin settings
 $dsp_percent = false; //false to display total score as absolute values
 //debug param. 0: no display - 1: debug display
-$debug=1;
+$debug=0;
 if($debug>0){error_log('Entered exercise_result.php: '.print_r($_POST,1));}
 
 // general parameters passed via POST/GET
@@ -153,6 +153,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 }
 
 $exerciseTitle=text_filter($objExercise->selectTitle());
+$feedback_type = $objExercise->feedbacktype;
 
 //show exercise title
 if($origin != 'learnpath') {?>

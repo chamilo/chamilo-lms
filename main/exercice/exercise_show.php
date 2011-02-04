@@ -94,6 +94,7 @@ if (empty($objExercise)) {
 	$objExercise = new Exercise();
     $objExercise->read($exercise_id);
 }
+$feedback_type = $objExercise->feedbacktype;
 
 //If is not valid
 $session_control_key = get_session_time_control_key($exercise_id);

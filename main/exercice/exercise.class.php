@@ -871,8 +871,8 @@ class Exercise {
 		if($type=='full') {
 			// feedback type
 			$radios_feedback = array();
-			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('ExerciseAtTheEndOfTheTest'),'0');
-			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2');
+			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('ExerciseAtTheEndOfTheTest'),'0',array('id' =>'exerciseType_1','onclick' => 'check_feedback()'));
+			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
 			$form -> addGroup($radios_feedback, null, get_lang('FeedbackType'));
 
 			$feedback_option[0]=get_lang('ExerciseAtTheEndOfTheTest');
@@ -906,8 +906,8 @@ class Exercise {
 			}
 
 			$radios_results_disabled = array();
-			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('Yes'),'0');
-			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('No'),'1');
+			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('Yes'), '0', array('id'=>'result_disabled_0'));
+			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('No'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
 			$form -> addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));
 
 			$random = array();

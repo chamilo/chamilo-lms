@@ -183,4 +183,5 @@ $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Ahora puede iden
 $AreYouSureToEditTheUserStatus = "¿Está seguro de querer editar el estatus de usuario?";
 $TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "El tutor solo puede realizar el seguimiento de los alumnos registrados al curso.";
 $TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "El profesor puede calificar evaluar y realizar el seguimiento de todos los alumnos registrados en el curso.";
+$LoginOrEmailAddress = "Nombre de usuario o dirección e-mail";
 ?>

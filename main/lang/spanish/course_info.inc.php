@@ -123,5 +123,5 @@ $NewHomeworkEmailAlertDisable = "Deasactivar el aviso de la creación de una nue
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Mostrar información sobre el último avance temático hecho y el siguiente por hacer.";
 $AddPicture = "Añadir imagen del curso";
 $LPAutoLaunch = "Activar el despliegue automático de lecciones";
-$ConfigLearnpath = "Configurar Lecciones";
+$ConfigLearnpath = "Configurar la herramienta lecciones";
 ?>

@@ -982,4 +982,17 @@ $ExamNotAvailableAtThisTime = "Examen non disponible pour l'instant";
 $LoginOrEmailAddress = "Nom d'utilisateur ou adresse e-mail";
 $Activate = "Activer";
 $Deactivate = "Désactiver";
+$Profile = "Profil";
+$CreatedAt = "Créé à";
+$UpdatedAt = "Mis à jour à";
+$CreatedOn = "Créé le";
+$UpdatedOn = "Mis à jour le";
+$Paint = "Peindre";
+$MyResults = "Mes résultats";
+$LearningPaths = "Parcours";
+$AllLearningPaths = "Tous les parcours";
+$ByCourse = "Par cours";
+$MyQCM = "Mes QCM";
+$AddACourse = "Ajouter un cours";
+$PerWeek = "Par semaine";
 ?>

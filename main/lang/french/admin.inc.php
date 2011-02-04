@@ -1355,4 +1355,15 @@ $SessionsInPlatform = "Sessions non inscrites";
 $FirstLetterSessions = "Première lettre de session";
 $SessionsInPromotion = "Sessions inscrites à cette promotion";
 $SubscribeSessionsToPromotion = "Inscrire les sessions à la promotion";
+$NoEndTime = "Pas de date de fin";
+$SubscribeUsersToGroup = "Inscrire utilisateurs au groupe";
+$SubscribeCoursesToGroup = "Inscrire cours au groupe";
+$SubscribeSessionsToGroup = "Inscrire sessions au groupe";
+$SessionsInGroup = "Sessions du groupe";
+$CoursesInGroup = "Cours du groupe";
+$UsersInGroup = "Utilisateurs du groupe";
+$UsersInPlatform = "Utilisateurs de la plateforme";
+$YouNeedToCreateACareerFirst = "Il est nécessaire de créer une filière avant de pouvoir ajouter des promotions (les promotions sont des sous-éléments d'une filière).";
+$OutputBufferingInfo = "L'output buffering (ou tampon de sortie) est à \"On\" lorsqu'il est activé et à \"Off\" lorsqu'il est désactivé. Ce paramètre peut également être activé au travers d'une valeur entière (4096 par exemple) pour définir la taille du tampon de sortie.";
+$LoadedExtension = "Extension chargée";
 ?>

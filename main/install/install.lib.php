@@ -152,6 +152,7 @@ function detect_browser_language() {
         'ka' => 'georgian',
         'hr' => 'croatian',
         'he' => 'hebrew',
+        'hi' => 'hindi',
         'id' => 'indonesian',
         'it' => 'italian',
         'ko' => 'korean',
@@ -197,7 +198,7 @@ function detect_browser_language() {
 
     $user_agent = strtolower(str_replace('_', '-', $_SERVER['HTTP_USER_AGENT']));
     foreach ($language_index as $code => $language) {
-        if (preg_match("/[[( ]{$code}[;,_-)]/", $user_agent)) {
+        if (@preg_match("/[\[\( ]{$code}[;,_\-\)]/", $user_agent)) {
             if (!empty($system_available_languages[$language])) {
                 return $language;
             }
@@ -1351,7 +1352,7 @@ function display_license_agreement() {
             <p style="font-size:75%"><textarea cols="80" rows="10" readonly><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></textarea></p>
         </td>
         </tr>
-                <tr><td>                    
+                <tr><td>
                     <input type="checkbox" name="accept" id="accept_licence" value="1">
                     <label for="accept_licence"><?php echo get_lang('IAccept'); ?></label>
                     </td></tr>

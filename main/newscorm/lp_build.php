@@ -73,13 +73,9 @@ $is_new = false;
 if ($learnpath_id == 0) {
     $is_new = true;
 
-    $sql = "
-        SELECT id
-        FROM " . $tbl_lp . "
-        ORDER BY id DESC
-        LIMIT 0, 1";
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
+    $sql        = "SELECT id FROM " . $tbl_lp . " ORDER BY id DESC LIMIT 0, 1";
+    $result     = Database::query($sql);
+    $row        = Database::fetch_array($result); 
 
     $learnpath_id = $row['id'];
 }
@@ -117,7 +113,7 @@ $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpa
 // Theme calls.
 $lp_theme_css=$_SESSION['oLP']->get_theme();
 $show_learn_path = true;
-Display::display_header(null, 'Path');
+Display::display_header(get_lang('LearningPath'), 'Path');
 
 //api_display_tool_title($therow['name']);
 

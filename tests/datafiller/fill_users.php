@@ -1,7 +1,7 @@
 <?php //$id$
 /**
  * This script contains a data filling procedure for users
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  *
  */
 /**
@@ -10,7 +10,7 @@
 //require_once '../../main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 /**
- * Loads the data and injects it into the Dokeos database, using the Dokeos
+ * Loads the data and injects it into the Chamilo database, using the Chamilo
  * internal functions.
  * @return  array  List of user IDs for the users that have just been inserted
  */

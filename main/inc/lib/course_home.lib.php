@@ -841,8 +841,11 @@ class CourseHome {
         if (in_array($tool['image'], $already_translated_icons)) {
             $tool_name = Security::remove_XSS(stripslashes($tool['name']));
         } else {
+            /*
+            // The following (slow) code was made in the past for transitional purposes.
+            // We assume that the new language variables Tool* have been already translated.
             $variable = 'Tool'.api_underscore_to_camel_case($tool['name']); // The newly opened language variables.
-            $variable_old = ucfirst($tool['name']);         // The old language variables as a second chance exist.
+            $variable_old = ucfirst($tool['name']);         // The old language variables as a second chance.
             if (api_is_translated($variable)) {
                 $tool_name = get_lang($variable);
             } elseif (api_is_translated($variable_old)) {
@@ -850,6 +853,8 @@ class CourseHome {
             } else {
                 $tool_name = get_lang($variable);
             }
+            */
+            $tool_name = get_lang('Tool'.api_underscore_to_camel_case($tool['name']));
         }
 
         return $tool_name;

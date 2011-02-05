@@ -8492,7 +8492,7 @@ EOD;
     public function scorm_export_to_pdf($lp_id) {
         $lp_id = intval($lp_id);
         $files_to_export = array();
-        $course_data = api_get_course_info($this->cc);
+        $course_data = api_get_course_info($this->cc); 
         if (!empty($course_data)) {
             $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
             require_once api_get_path(LIBRARY_PATH).'document.lib.php';

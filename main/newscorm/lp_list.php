@@ -461,7 +461,7 @@ if (is_array($flat_list)) {
             }
             
             if (api_get_setting('pdf_export_watermark_enable') == 'true') {
-            	  $export_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'"><img src="../img/file_pdf.gif" border="0" title="'.get_lang('ExportToPDF').'" /></a>'; 
+            	  $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'"><img src="../img/file_pdf.gif" border="0" title="'.get_lang('ExportToPDF').'" /></a>'; 
             }
             
             //Checking the "age" of the LP

@@ -76,7 +76,7 @@ class PDF {
             if (!($extension == 'html' || $extension == 'htm')) {
                 return false;
             }        
-            if ($extension == 'html'){
+            if ($extension == 'html') {
                 $filename =basename($filename,'.html');
             } elseif($extension == 'htm'){
                 $filename =basename($filename,'.htm');
@@ -250,8 +250,13 @@ class PDF {
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';   // course path
-            if (file_exists($store_path))
-                $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';
+            if (file_exists($store_path)) {
+                $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';                 
+            } else {
+                $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
+                if (file_exists($store_path))                   
+                    $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';
+            }
         } else {
             $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
             if (file_exists($store_path))                   
@@ -285,7 +290,7 @@ class PDF {
      */
     public function upload_watermark($filename, $source_file, $course_code = null) {        
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
-            $course_info = api_get_course_info($course_code);
+            $course_info = api_get_course_info($course_code);            
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'];   // course path
             $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'pdf_watermark.png';
         } else {
@@ -316,7 +321,7 @@ class PDF {
                     $result = true;
                 }
             } else {
-                $result = @move_uploaded_file($source_file, $course_image);
+                $result = move_uploaded_file($source_file, $course_image);                
             }
         }
         if ($result) {
@@ -328,11 +333,9 @@ class PDF {
      * Returns the default header
      */
     public function get_header($course_code = null) {
-        $header = '';        
+        $header = api_get_setting('pdf_export_watermark_text');        
     	if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
-            $header = api_get_course_setting('pdf_export_watermark_text');                
-        } else {
-        	$header = api_get_setting('pdf_export_watermark_text');
+            $header = api_get_course_setting('pdf_export_watermark_text');                        
         }
         return $header;        
     }
@@ -422,23 +425,27 @@ class PDF {
         $pdf->SetTitle('title');
         $pdf->SetSubject('Exported from Chamilo Documents');
         $pdf->SetKeywords('Chamilo Documents');
-        */       
-               
+        */                      
         $this->pdf->directionality = api_get_text_direction(); // TODO: To be read from the html document.        
         $this->pdf->useOnlyCoreFonts = true;        
         $this->pdf->mirrorMargins = 1;            // Use different Odd/Even headers and footers and mirror margins       
         
         //Adding watermark
-        if (api_get_setting('pdf_export_watermark_enable') == 'true') {
-            $watermark_file = self::get_watermark($course_code);
-            if (!empty($watermark_file)) {
-                //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark
+        if (api_get_setting('pdf_export_watermark_enable') == 'true') {            
+            $watermark_file = self::get_watermark($course_code);            
+            if (!empty($watermark_file)) { 
+                //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark                
                 $this->pdf->SetWatermarkImage($watermark_file);
                 $this->pdf->showWatermarkImage = true;
             }
+            $watermark_text = api_get_setting('pdf_export_watermark_text');
+            if (!empty($watermark_text)) {
+                $this->pdf->SetWatermarkText(strcode2utf($watermark_text));
+                $this->pdf->showWatermarkText = true;
+            }
         }        
         if (empty($this->custom_header)) {
-            self::set_header($course_code);   
+            //self::set_header($course_code);   
         } else {
             $this->pdf->SetHTMLHeader($this->custom_header);	
         }
@@ -451,4 +458,3 @@ class PDF {
         
     }
 }
-?>

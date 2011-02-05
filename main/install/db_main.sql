@@ -392,6 +392,7 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('&#4325;&#4304;&#4320;&#4311;&#4323;&#4314;&#4312;','georgian','ka','georgian',0),
 ('Hrvatski','croatian','hr','croatian',0),
 ('&#1506;&#1489;&#1512;&#1497;&#1514;','hebrew','he','hebrew',0),
+('&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;','hindi','hi','hindi',0),
 ('Bahasa Indonesia','indonesian','id','indonesian',1),
 ('Italiano','italian','it','italian',1),
 ('&#54620;&#44397;&#50612;','korean','ko','korean',0),
@@ -816,7 +817,7 @@ VALUES
 ('course_hide_tools','course_maintenance','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Maintenance',1),
 ('course_hide_tools','course_setting','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'CourseSettings',1),
 ('enabled_support_pixlr',NULL,'radio','Tools','false','EnabledPixlrTitle','EnabledPixlrComment',NULL,NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.13330','DokeosDatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.13586','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 
 UNLOCK TABLES;
@@ -2549,7 +2550,7 @@ CREATE TABLE career (
     description TEXT NOT NULL,
     status INT NOT NULL default '0',
     created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-    updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
+    updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
 
@@ -2558,31 +2559,31 @@ CREATE TABLE promotion (
     name VARCHAR(255) NOT NULL ,
     description TEXT NOT NULL,
     career_id INT NOT NULL,
-    status INT NOT NULL default '0', 
+    status INT NOT NULL default '0',
     created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
     updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
 
 
-CREATE TABLE usergroup ( 
-	id INT NOT NULL AUTO_INCREMENT,	
-	name VARCHAR(255) NOT NULL, 
-	description TEXT NOT NULL,
-	PRIMARY KEY (id)
+CREATE TABLE usergroup (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE usergroup_rel_user    ( 
-	usergroup_id INT NOT NULL, 
-	user_id 	INT NOT NULL 
+CREATE TABLE usergroup_rel_user    (
+    usergroup_id INT NOT NULL,
+    user_id 	INT NOT NULL
 );
 
-CREATE TABLE usergroup_rel_course  ( 
-	usergroup_id INT NOT NULL, 
-	course_id 	INT NOT NULL 
+CREATE TABLE usergroup_rel_course  (
+    usergroup_id INT NOT NULL,
+    course_id 	INT NOT NULL
 );
 
-CREATE TABLE usergroup_rel_session ( 
-	usergroup_id INT NOT NULL, 
-	session_id  INT NOT NULL 
+CREATE TABLE usergroup_rel_session (
+    usergroup_id INT NOT NULL,
+    session_id  INT NOT NULL
 );

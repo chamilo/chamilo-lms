@@ -146,7 +146,9 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.8.8.13330' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.8.8.13586' WHERE variable = 'chamilo_database_version';
+
+INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;', 'hindi', 'hi', 'hindi', 0);
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

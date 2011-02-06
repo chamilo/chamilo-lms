@@ -1,53 +1,21 @@
 <?php
-// $Id: subscribe_user2course.php 19597 2009-04-07 14:38:36Z pcool $
-/*
-==============================================================================
-    Dokeos - elearning and course management software
-
-    Copyright (c) 2004-2009 Dokeos SPRL
-    Copyright (c) 2003 Ghent University (UGent)
-    Copyright (c) 2001 Universite catholique de Louvain (UCL)
-    Copyright (c) Olivier Brouckaert
-
-    For a full list of contributors, see "credits.txt".
-    The full license can be read in "license.txt".
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-
-    See the GNU General Public License for more details.
-
-    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-    Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This script allows platform admins to add users to courses.
 *	It displays a list of users and a list of courses;
 *	you can select multiple users and courses and then click on
 *	'Add to this(these) course(s)'.
 *
-*	@package dokeos.admin
+*	@package chamilo.admin
 * 	@todo use formvalidator for the form
-==============================================================================
 */
 
-/*
-==============================================================================
-        INIT SECTION
-==============================================================================
-*/
+/* INIT SECTION */
 // name of the language file that needs to be included
 $language_file = 'admin';
-
 $cidReset = true;
-
 require ('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;
-
 // including additional libraries
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
@@ -56,13 +24,8 @@ include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
-/*
------------------------------------------------------------
-    Global constants and variables
------------------------------------------------------------
-*/
+/* Global constants and variables */
 
-$users = $_GET['users'];
 $form_sent = 0;
 $first_letter_user = '';
 $first_letter_course = '';
@@ -72,27 +35,16 @@ $users = array();
 $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user 	= Database :: get_main_table(TABLE_MAIN_USER);
 
-/*
------------------------------------------------------------
-    Header
------------------------------------------------------------
-*/
+/* Header */
 $tool_name = get_lang('AddUsersToACourse');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
-
 $htmlHeadXtra[] = '
 <script type="text/javascript">
-
 function validate_filter() {
-
         document.formulaire.form_sent.value=0;
         document.formulaire.submit();
-
 }
-
-
-
 </script>';
 
 // displaying the header
@@ -105,12 +57,7 @@ $form = new FormValidator('subscribe_user2course');
 $form->addElement('header', '', $tool_name);
 $form->display();
 
-/*
-==============================================================================
-        MAIN CODE
-==============================================================================
-*/
-
+/* MAIN CODE */
 
 //checking for extra field with filter on
 $extra_field_list= UserManager::get_extra_fields();
@@ -124,12 +71,7 @@ if (is_array($extra_field_list)) {
     }
 }
 
-
-/*
------------------------------------------------------------
-    React on POSTed request
------------------------------------------------------------
-*/
+/* React on POSTed request */
 if ($_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $users = is_array($_POST['UserList']) ? $_POST['UserList'] : array() ;
@@ -155,11 +97,7 @@ if ($_POST['form_sent']) {
     }
 }
 
-/*
------------------------------------------------------------
-    Display GUI
------------------------------------------------------------
-*/
+/* Display GUI */
 if(empty($first_letter_user)) {
     $sql = "SELECT count(*) as nb_users FROM $tbl_user";
     $result = Database::query($sql);
@@ -274,13 +212,10 @@ if ($_configuration['multiple_access_urls']) {
               ORDER BY course.title";
     }
 }
-
-
 ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
 <?php
-
 if (is_array($extra_field_list)) {
     if (is_array($new_field_list) && count($new_field_list)>0 ) {
         echo '<h3>'.get_lang('FilterUsers').'</h3>';
@@ -305,10 +240,7 @@ if (is_array($extra_field_list)) {
         echo '<br /><br />';
     }
 }
-
 ?>
-
-
  <input type="hidden" name="form_sent" value="1"/>
   <table border="0" cellpadding="5" cellspacing="0" width="100%">
    <tr>
@@ -366,10 +298,5 @@ if (is_array($extra_field_list)) {
  </table>
 </form>
 <?php
-/*
-==============================================================================
-        FOOTER
-==============================================================================
-*/
+/* FOOTER */
 Display :: display_footer();
-?>

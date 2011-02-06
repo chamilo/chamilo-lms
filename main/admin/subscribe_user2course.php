@@ -50,6 +50,9 @@ function validate_filter() {
 // displaying the header
 Display :: display_header($tool_name);
 
+$link_add_group = '<a href="usergroups.php">'.Display::return_icon('multiple.gif',get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>';
+echo '<div class="actions">'.$link_add_group.'</div>';
+
 // displaying the tool title
 // api_display_tool_title($tool_name);
 

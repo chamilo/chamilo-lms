@@ -58,7 +58,7 @@ class PDF {
         //clean styles and javascript document
         $clean_search = array (
             '@<script[^>]*?>.*?</script>@si',
-            '@<style[^>]*?>.*?</style>@siU'
+            '@<style[^>]*?>.*?</style>@si'
             );
             
         //Formatting the pdf
@@ -129,7 +129,6 @@ class PDF {
             if (empty($title)) {
                 $title = $filename; // Here file name is expected to contain ASCII symbols only.
             }                     
-            //var_dump($document_html);
             $this->pdf->WriteHTML($document_html,2);
         }
         

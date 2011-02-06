@@ -374,7 +374,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         	 $url =  PDF::get_watermark($course_code);
             $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
             if ($url != false) {                
-                $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.gif',get_lang('DelImage'), get_lang('DelImage')).'</a>';
+                $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
                 $form->addElement('html', '<a href="'.$url.'">'.$url.' '.$delete_url.'</a>');
             }   
             $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');

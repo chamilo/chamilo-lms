@@ -38,7 +38,7 @@ echo '</div>';
 
 
 $career = new Career();
-$careers = $career->get_all();
+$careers = $career->get_all(array('status = ?'=>1)); //only status =1 
 $column_count = 3;
 $i = 0;
 $grid_js = '';
@@ -52,6 +52,9 @@ if (!empty($careers)) {
         $promotion_array = array();
         if (!empty($promotions)) {            
             foreach($promotions as $promotion_item) {
+                if (!$promotion_item['status']) {
+                    continue; //avoid status = 0
+                }
                 //Getting all sessions from this promotion      
                 $sessions = SessionManager::get_all_sessions_by_promotion($promotion_item['id']); 
                    

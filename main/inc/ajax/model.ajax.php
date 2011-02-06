@@ -76,13 +76,31 @@ switch ($action) {
         	$sidx = 'name';
         }
         $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $new_result = array();
+        foreach($result as $item) {
+            if (!$item['status']) {
+                $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
+            }
+            $new_result[] = $item;
+        } 
+        $result = $new_result;  
+        
     break;
     case 'get_promotions':        
         $columns = array('name', 'career', 'description', 'actions');
         if(!in_array($sidx, $columns)) {
             $sidx = 'name';
         }                  
-        $result     = Database::select('p.id,p.name, p.description, c.name as career', "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ", array('order' =>"$sidx $sord", 'LIMIT'=> "$start , $limit"));       
+        $result     = Database::select('p.id,p.name, p.description, c.name as career, p.status', "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ", array('order' =>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $new_result = array();
+        foreach($result as $item) {
+            if (!$item['status']) {
+                $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
+            }
+            $new_result[] = $item;
+        } 
+        $result = $new_result;      
+        
     break;
     case 'get_usergroups':
         $columns = array('name', 'users', 'courses','sessions','actions');

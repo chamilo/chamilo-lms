@@ -8496,27 +8496,34 @@ EOD;
         if (!empty($course_data)) {
             $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
             require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-            foreach($this->items as $item) {
+            $list = $this->get_flat_ordered_items_list($lp_id);
+            foreach($list as $item_id) {
+                $item = $this->items[$item_id];
                 //Getting documents from a LP with chamilo documents
                 switch ($item->type) {
                     case 'document':
                         $file_data = DocumentManager::get_document_data_by_id($item->path, $this->cc);
                         $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$file_data['path'];
                         if (file_exists($file_path)) {
-                            $files_to_export[] = $file_path;
+                            $files_to_export[] = array('title'=>$item->get_title(),'path'=>$file_path);
                         }
                         break;
                     case 'sco':
                         $file_path = $scorm_path.'/'.$item->path;
                         if (file_exists($file_path)) {
-                            $files_to_export[] = $file_path;
+                            $files_to_export[] = array('title'=>$item->get_title(),'path'=>$file_path);
                         }
+                        break;
+                    case 'dokeos_chapter':
+                    case 'dir':
+                    case 'chapter':
+                        $files_to_export[] = array('title'=>$item->get_title(),'path'=>null);
                         break;
                 }
             }
             require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
             $pdf = new PDF();
-            $result = $pdf->html_to_pdf($files_to_export, $this->name, $this->cc);
+            $result = $pdf->html_to_pdf($files_to_export, $this->name, $this->cc, true);
             return $result;
         }
         return false;

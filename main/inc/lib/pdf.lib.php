@@ -29,12 +29,12 @@ class PDF {
     
     /**
      * Converts an html file to PDF
-     * @param   mixed   could be an html file path or an array with paths example: /var/www/myfile.html or array('/myfile.html','myotherfile.html')
+     * @param   mixed   could be an html file path or an array with paths example: /var/www/myfile.html or array('/myfile.html','myotherfile.html') or even an indexed array with both 'title' and 'path' indexes for each element like array(0=>array('title'=>'Hello','path'=>'file.html'),1=>array('title'=>'Bye','path'=>'file2.html'));
      * @param   string  pdf name   
      * @param   string  course code (if you are using html that are located in the document tool you must provide this) 
      * @return  
      */    
-    public function html_to_pdf($html_file_array, $pdf_name = '', $course_code = null) {
+    public function html_to_pdf($html_file_array, $pdf_name = '', $course_code = null, $print_title = false) {
         
         if (empty($html_file_array)) {
         	return false;
@@ -64,10 +64,33 @@ class PDF {
         //Formatting the pdf
         self::format_pdf($course_code);
                
-        foreach ($html_file_array as $html_file) {            
+        foreach ($html_file_array as $html_file) {
+            $html_title = '';
+            //if the array provided contained subarrays with 'title' entry,
+            // then print the title in the PDF
+            if (is_array($html_file) && isset($html_file['title'])) {
+            	$html_title = $html_file['title'];
+                $html_file = $html_file['path'];
+            } else {
+                //we suppose we've only been sent a file path
+            	$html_title = basename($html_file);
+            }
+            if (empty($html_file) && !empty($html_title)) {
+            	//this is a chapter, print title & skip the rest
+                if ($print_title) {
+                    $this->pdf->WriteHTML('<html><body><h1>'.$html_title.'</h1></body></html>',2);
+                }
+                continue;
+            }
             if (!file_exists($html_file)) {
+                //the file doesn't exist, skip
             	continue;
             }
+            //it's not a chapter but the file exists, print its title
+            if ($print_title) {
+                $this->pdf->WriteHTML('<html><body><h2>'.$html_title.'</h2></body></html>',2);
+            }
+            
             $file_info = pathinfo($html_file);
             $dirname = str_replace("\\", '/', $file_info['dirname']);
             $filename = $file_info['basename'];
@@ -128,7 +151,8 @@ class PDF {
                                                                             // At the moment the title is retrieved from the html document itself.
             if (empty($title)) {
                 $title = $filename; // Here file name is expected to contain ASCII symbols only.
-            }                     
+            }
+
             $this->pdf->WriteHTML($document_html,2);
         }
         

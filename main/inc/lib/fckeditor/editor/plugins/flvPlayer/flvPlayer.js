@@ -472,21 +472,22 @@ Media.prototype.getInnerHTML = function ( objectId )
 
     var s = "" ;
 
-    //Replacing the creation of the SWFObject to the use of the object tag in order to avoid HTMLPurifier conflicts see CT#1297
+/*
+    // Replacing the creation of the SWFObject to the use of the object tag in order to avoid HTMLPurifier conflicts see CT#1297
 
     s+= '<div id="player' + randomnumber + '-parent" style="text-align:	center;' + cssfloat + '">\n';
     s+= '<div style="border-style: none; height: ' + thisHeight + 'px; width:' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220,	220); background-image: url(' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/flvPlayer.gif); background-repeat:no-repeat;	background-position:center;' + cssalign + '">';
     s+= '<script src="' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/swfobject.js" type="text/javascript"></script>\n';
     s+= '<script type="text/javascript">swfobject.registerObject("player' +	randomnumber + '","9.0.98","' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/expressInstall.swf");</script>';
 
-/*	s+= '<object id="player' + randomnumber + '" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" name="player' + randomnumber + '" width="328" height="200">';
-    s+= '<param name="movie" value="' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/mediaplayer.swf" />';
-    s+= '<param name="allowfullscreen" value="true" />';
-    s+= '<param name="allowscriptaccess" value="always" />';
-    s+= '<param name="height" value="' + thisHeight + '" />';
-    s+= '<param name="width" value="' + thisWidth + '" />';
-    s+= '<param name="flashvars" value="file=' + this.url + '"/>';
-*/
+    //s+= '<object id="player' + randomnumber + '" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" name="player' + randomnumber + '" width="328" height="200">';
+    //s+= '<param name="movie" value="' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/mediaplayer.swf" />';
+    //s+= '<param name="allowfullscreen" value="true" />';
+    //s+= '<param name="allowscriptaccess" value="always" />';
+    //s+= '<param name="height" value="' + thisHeight + '" />';
+    //s+= '<param name="width" value="' + thisWidth + '" />';
+    //s+= '<param name="flashvars" value="file=' + this.url + '"/>';
+
     //s+= '<param name="flashvars" value="file=' + this.url + '&image=' +	this.iurl + '" />';
     s+= '<object type="application/x-shockwave-flash" data="' +	oEditor.FCKConfig.PluginsPath + 'flvPlayer/mediaplayer.swf" width="328"	height="200">';
     s+= '<param name="movie" value="' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/mediaplayer.swf" />';
@@ -498,12 +499,10 @@ Media.prototype.getInnerHTML = function ( objectId )
 
     s+= '<param name="flashvars" value="file=' + this.url + '" />';
     s+= '<p><a href="http://get.adobe.com/flashplayer">Get Flash</a> to see	this player.</p>';
-//	s+= '</object>';
     s+= '</object>';
+*/
 
 
-
-    /*
     s += '\n' ;
     s += '<div id="player' + randomnumber + '-parent" style="text-align: center;">\n'; //'<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
     s += '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); ' + cssalign + '">' ;
@@ -684,7 +683,7 @@ Media.prototype.getInnerHTML = function ( objectId )
     s += '</div>\n' ;
     s += '</div>\n' ;
     s += '\n' ;
-    */
+
     return s ;
 } ;
 

@@ -26,57 +26,57 @@ dialog.AddTab( 'Info', FCKLang.DlgInfoTab ) ;
 dialog.AddTab( 'Preview', FCKLang.DlgImgPreview ) ;
 if ( FCKConfig.MediaUpload )
 {
-	dialog.AddTab( 'Upload', FCKLang.DlgLnkUpload ) ;
+    dialog.AddTab( 'Upload', FCKLang.DlgLnkUpload ) ;
 }
 
 // This function is called when a dialog tab has been selected.
 function OnDialogTabChange( tabCode )
 {
-	ShowE( 'divInfo', ( tabCode == 'Info' ) ) ;
-	ShowE( 'divPreview', ( tabCode == 'Preview' ) ) ;
-	ShowE( 'divUpload', ( tabCode == 'Upload' ) ) ;
+    ShowE( 'divInfo', ( tabCode == 'Info' ) ) ;
+    ShowE( 'divPreview', ( tabCode == 'Preview' ) ) ;
+    ShowE( 'divUpload', ( tabCode == 'Upload' ) ) ;
 
-	if ( tabCode == 'Preview' )
-	{
-		UpdatePreview() ;
-	}
-	else
-	{
-		ClearPreview() ;
-	}
+    if ( tabCode == 'Preview' )
+    {
+        UpdatePreview() ;
+    }
+    else
+    {
+        ClearPreview() ;
+    }
 }
 
 function OnDialogModeChange( mode )
 {
-	if ( mode == 'single')
-	{
-		btnBrowse.disabled = false ;
-		btnImgBrowse.disabled = false ;
-		btnLnkBrowse.disabled = true ;
-		txtURL.disabled = false ;
-		txtImgURL.disabled = false ;
-		txtPlaylist.disabled = true ;
-		txtPlaylist.value = '' ;
-		txtURL.style.background = '#ffffff' ;
-		txtImgURL.style.background = '#ffffff' ;
-		txtPlaylist.style.background = 'transparent' ;
-		selDispPlaylist.disabled = true ;
-	}
-	else
-	{
-		btnBrowse.disabled = true ;
-		btnImgBrowse.disabled = true ;
-		btnLnkBrowse.disabled = false ;
-		txtURL.disabled = true ;
-		txtImgURL.disabled = true ;
-		txtPlaylist.disabled = false ;
-		txtURL.value = '' ;
-		txtImgURL.value = '' ;
-		txtURL.style.background = 'transparent' ;
-		txtImgURL.style.background = 'transparent' ;
-		txtPlaylist.style.background = '#ffffff' ;
-		selDispPlaylist.disabled = false ;
-	}
+    if ( mode == 'single')
+    {
+        btnBrowse.disabled = false ;
+        btnImgBrowse.disabled = false ;
+        btnLnkBrowse.disabled = true ;
+        txtURL.disabled = false ;
+        txtImgURL.disabled = false ;
+        txtPlaylist.disabled = true ;
+        txtPlaylist.value = '' ;
+        txtURL.style.background = '#ffffff' ;
+        txtImgURL.style.background = '#ffffff' ;
+        txtPlaylist.style.background = 'transparent' ;
+        selDispPlaylist.disabled = true ;
+    }
+    else
+    {
+        btnBrowse.disabled = true ;
+        btnImgBrowse.disabled = true ;
+        btnLnkBrowse.disabled = false ;
+        txtURL.disabled = true ;
+        txtImgURL.disabled = true ;
+        txtPlaylist.disabled = false ;
+        txtURL.value = '' ;
+        txtImgURL.value = '' ;
+        txtURL.style.background = 'transparent' ;
+        txtImgURL.style.background = 'transparent' ;
+        txtPlaylist.style.background = '#ffffff' ;
+        selDispPlaylist.disabled = false ;
+    }
 }
 
 var oMedia = null ;
@@ -84,275 +84,275 @@ var is_new_flvplayer = true ;
 
 window.onload = function()
 {
-	// Translate the dialog box texts.
-	oEditor.FCKLanguageManager.TranslatePage(document) ;
+    // Translate the dialog box texts.
+    oEditor.FCKLanguageManager.TranslatePage(document) ;
 
-	// Load the selected element information (if any).
-	LoadSelection() ;
+    // Load the selected element information (if any).
+    LoadSelection() ;
 
-	// Show/Hide the "Browse Server" button.
-	GetE('tdBrowse').style.display = FCKConfig.MediaBrowser ? '' : 'none' ;
+    // Show/Hide the "Browse Server" button.
+    GetE('tdBrowse').style.display = FCKConfig.MediaBrowser ? '' : 'none' ;
 
-	// Set the actual uploader URL.
-	if ( FCKConfig.MediaUpload )
-		GetE('frmUpload').action = FCKConfig.MediaUploadURL ;
+    // Set the actual uploader URL.
+    if ( FCKConfig.MediaUpload )
+        GetE('frmUpload').action = FCKConfig.MediaUploadURL ;
 
-	dialog.SetAutoSize( true ) ;
+    dialog.SetAutoSize( true ) ;
 
-	// Activate the "OK" button.
-	dialog.SetOkButton( true ) ;
+    // Activate the "OK" button.
+    dialog.SetOkButton( true ) ;
 }
 
 function getSelectedMovie()
 {
-	var oFakeImage = FCK.Selection.GetSelectedElement() ;
-	var oSel = null ;
-	oMedia = new Media() ;
+    var oFakeImage = FCK.Selection.GetSelectedElement() ;
+    var oSel = null ;
+    oMedia = new Media() ;
 
-	if ( oFakeImage )
-	{
-		if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute( '_fckvideo' ) )
-		{
-			oSel = FCK.GetRealElement( oFakeImage ) ;
-			if ( oSel && oSel.id && oSel.id.match( /^player[0-9]*-parent$/ ) )
-			{
-				for ( var i = 0 ; i < oSel.childNodes.length ; i++ )
-				{
-					if ( oSel.childNodes.item(i).nodeName == "DIV" )
-					{
-						for ( var j = 0 ; j < oSel.childNodes.item(i).childNodes.length ; j++ )
-						{
-							if ( oSel.childNodes.item(i).childNodes.item(j).nodeName == "DIV" &&
-								oSel.childNodes.item(i).childNodes.item(j).id &&
-								oSel.childNodes.item(i).childNodes.item(j).id.match( /^player[0-9]*$/ ) )
-							{
-								for ( var k = 0 ; k < oSel.childNodes.item(i).childNodes.item(j).childNodes.length ; k++ )
-								{
-									if ( oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).nodeName == "DIV" &&
-										oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).id &&
-										oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).id.match( /^player[0-9]*-config$/ ) )
-									{
-										var oC = oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).innerHTML.split(' ') ;
-										for ( var o = 0 ; o < oC.length ; o++ )
-										{
-											var tmp = oC[o].split( '=' ) ;
-											oMedia.setAttribute( tmp[0], tmp[1] ) ;
-										}
-										is_new_flvplayer = false ;
-										break ;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	return oMedia ;
+    if ( oFakeImage )
+    {
+        if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute( '_fckvideo' ) )
+        {
+            oSel = FCK.GetRealElement( oFakeImage ) ;
+            if ( oSel && oSel.id && oSel.id.match( /^player[0-9]*-parent$/ ) )
+            {
+                for ( var i = 0 ; i < oSel.childNodes.length ; i++ )
+                {
+                    if ( oSel.childNodes.item(i).nodeName == "DIV" )
+                    {
+                        for ( var j = 0 ; j < oSel.childNodes.item(i).childNodes.length ; j++ )
+                        {
+                            if ( oSel.childNodes.item(i).childNodes.item(j).nodeName == "DIV" &&
+                                oSel.childNodes.item(i).childNodes.item(j).id &&
+                                oSel.childNodes.item(i).childNodes.item(j).id.match( /^player[0-9]*$/ ) )
+                            {
+                                for ( var k = 0 ; k < oSel.childNodes.item(i).childNodes.item(j).childNodes.length ; k++ )
+                                {
+                                    if ( oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).nodeName == "DIV" &&
+                                        oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).id &&
+                                        oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).id.match( /^player[0-9]*-config$/ ) )
+                                    {
+                                        var oC = oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).innerHTML.split(' ') ;
+                                        for ( var o = 0 ; o < oC.length ; o++ )
+                                        {
+                                            var tmp = oC[o].split( '=' ) ;
+                                            oMedia.setAttribute( tmp[0], tmp[1] ) ;
+                                        }
+                                        is_new_flvplayer = false ;
+                                        break ;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return oMedia ;
 }
 
 function updatePlaylistOption()
 {
-	if ( GetE( 'selDispPlaylist' ).value == "right" || GetE( 'selDispPlaylist' ).value == "below" )
-	{
-		GetE( 'chkPLThumbs' ).disabled = false ;
-		GetE( 'chkPLThumbs' ).checked = true ;
-		GetE( 'txtPLDim' ).disabled = false ;
-		GetE( 'txtPLDim' ).style.background = '#ffffff' ;
-		GetE( 'spanDimText' ).style.display = 'none' ;
-		if ( GetE( 'selDispPlaylist' ).value == "right" )
-		{
-			GetE( 'spanDimWText' ).style.display = '' ;
-			GetE( 'spanDimHText' ).style.display = 'none' ;
-		}
-		else if ( GetE( 'selDispPlaylist' ).value == "below" )
-		{
-			GetE( 'spanDimWText' ).style.display = 'none' ;
-			GetE( 'spanDimHText' ).style.display = '' ;
-		}
-	}
-	else
-	{
-		GetE( 'chkPLThumbs' ).disabled = true ;
-		GetE( 'chkPLThumbs' ).checked = false ;
-		GetE( 'txtPLDim' ).value = "" ;
-		GetE( 'txtPLDim' ).disabled = true ;
-		GetE( 'txtPLDim' ).style.background = 'transparent' ;
-		GetE( 'spanDimText' ).style.display = '' ;
-		GetE( 'spanDimWText' ).style.display = 'none' ;
-		GetE( 'spanDimHText' ).style.display = 'none' ;
-	}
+    if ( GetE( 'selDispPlaylist' ).value == "right" || GetE( 'selDispPlaylist' ).value == "below" )
+    {
+        GetE( 'chkPLThumbs' ).disabled = false ;
+        GetE( 'chkPLThumbs' ).checked = true ;
+        GetE( 'txtPLDim' ).disabled = false ;
+        GetE( 'txtPLDim' ).style.background = '#ffffff' ;
+        GetE( 'spanDimText' ).style.display = 'none' ;
+        if ( GetE( 'selDispPlaylist' ).value == "right" )
+        {
+            GetE( 'spanDimWText' ).style.display = '' ;
+            GetE( 'spanDimHText' ).style.display = 'none' ;
+        }
+        else if ( GetE( 'selDispPlaylist' ).value == "below" )
+        {
+            GetE( 'spanDimWText' ).style.display = 'none' ;
+            GetE( 'spanDimHText' ).style.display = '' ;
+        }
+    }
+    else
+    {
+        GetE( 'chkPLThumbs' ).disabled = true ;
+        GetE( 'chkPLThumbs' ).checked = false ;
+        GetE( 'txtPLDim' ).value = "" ;
+        GetE( 'txtPLDim' ).disabled = true ;
+        GetE( 'txtPLDim' ).style.background = 'transparent' ;
+        GetE( 'spanDimText' ).style.display = '' ;
+        GetE( 'spanDimWText' ).style.display = 'none' ;
+        GetE( 'spanDimHText' ).style.display = 'none' ;
+    }
 }
 
 function LoadSelection()
 {
-	oMedia = new Media() ;
-	oMedia = getSelectedMovie() ;
+    oMedia = new Media() ;
+    oMedia = getSelectedMovie() ;
 
-	GetE( 'rbFileType' ).value = oMedia.fileType ;
-	GetE( 'txtURL' ).value = oMedia.url ;
-	GetE( 'txtPlaylist' ).value = oMedia.purl ;
-	GetE( 'txtImgURL' ).value = oMedia.iurl ;
-	GetE( 'txtWMURL' ).value = oMedia.wmurl ;
-	GetE( 'txtWidth' ).value = oMedia.width.toString().length > 0 ? oMedia.width : 320 ;
-	GetE( 'txtHeight' ).value = oMedia.height.toString().length > 0 ? oMedia.height : 240 ;
-	GetE( 'chkLoop' ).checked = oMedia.loop ;
-	GetE( 'chkAutoplay' ).checked	= oMedia.play ;
-	GetE( 'chkDownload' ).checked = oMedia.downloadable ;
-	GetE( 'chkFullscreen' ).checked = oMedia.fullscreen ;
-	GetE( 'txtBgColor' ).value = oMedia.bgcolor ;
-	GetE( 'txtToolbarColor' ).value = oMedia.toolcolor ;
-	GetE( 'txtToolbarTxtColor' ).value = oMedia.tooltcolor ;
-	GetE( 'txtToolbarTxtRColor' ).value = oMedia.tooltrcolor ;
-	GetE( 'chkShowNavigation' ).checked = oMedia.displayNavigation ;
-	GetE( 'chkShowDigits' ).checked = oMedia.displayDigits ;
-	GetE( 'selAlign' ).value = oMedia.align ;
-	GetE( 'selDispPlaylist' ).value = oMedia.dispPlaylist ;
-	GetE('txtRURL' ).value = oMedia.rurl ;
-	GetE( 'txtPLDim' ).value = oMedia.playlistDim ;
-	GetE( 'chkPLThumbs' ).checked = oMedia.playlistThumbs ;
+    GetE( 'rbFileType' ).value = oMedia.fileType ;
+    GetE( 'txtURL' ).value = oMedia.url ;
+    GetE( 'txtPlaylist' ).value = oMedia.purl ;
+    GetE( 'txtImgURL' ).value = oMedia.iurl ;
+    GetE( 'txtWMURL' ).value = oMedia.wmurl ;
+    GetE( 'txtWidth' ).value = oMedia.width.toString().length > 0 ? oMedia.width : 320 ;
+    GetE( 'txtHeight' ).value = oMedia.height.toString().length > 0 ? oMedia.height : 240 ;
+    GetE( 'chkLoop' ).checked = oMedia.loop ;
+    GetE( 'chkAutoplay' ).checked	= oMedia.play ;
+    GetE( 'chkDownload' ).checked = oMedia.downloadable ;
+    GetE( 'chkFullscreen' ).checked = oMedia.fullscreen ;
+    GetE( 'txtBgColor' ).value = oMedia.bgcolor ;
+    GetE( 'txtToolbarColor' ).value = oMedia.toolcolor ;
+    GetE( 'txtToolbarTxtColor' ).value = oMedia.tooltcolor ;
+    GetE( 'txtToolbarTxtRColor' ).value = oMedia.tooltrcolor ;
+    GetE( 'chkShowNavigation' ).checked = oMedia.displayNavigation ;
+    GetE( 'chkShowDigits' ).checked = oMedia.displayDigits ;
+    GetE( 'selAlign' ).value = oMedia.align ;
+    GetE( 'selDispPlaylist' ).value = oMedia.dispPlaylist ;
+    GetE('txtRURL' ).value = oMedia.rurl ;
+    GetE( 'txtPLDim' ).value = oMedia.playlistDim ;
+    GetE( 'chkPLThumbs' ).checked = oMedia.playlistThumbs ;
 
-	UpdatePreview() ;
+    UpdatePreview() ;
 }
 
 //#### The OK button was hit.
 function Ok()
 {
-	var rbFileTypeVal = "single" ;
-	if ( !GetE( 'rbFileType' ).checked )
-	{
-		rbFileTypeVal = "list" ;
-	}
+    var rbFileTypeVal = "single" ;
+    if ( !GetE( 'rbFileType' ).checked )
+    {
+        rbFileTypeVal = "list" ;
+    }
 
-	if ( rbFileTypeVal == "single" )
-	{
-		if ( GetE( 'txtURL' ).value.length == 0 )
-		{
-			GetE( 'txtURL' ).focus() ;
+    if ( rbFileTypeVal == "single" )
+    {
+        if ( GetE( 'txtURL' ).value.length == 0 )
+        {
+            GetE( 'txtURL' ).focus() ;
 
-			alert( oEditor.FCKLang.DlgFLVPlayerAlertUrl ) ;
-			return false ;
-		}
-	}
+            alert( oEditor.FCKLang.DlgFLVPlayerAlertUrl ) ;
+            return false ;
+        }
+    }
 
-	if ( rbFileTypeVal == "list" )
-	{
-		if ( GetE( 'txtPlaylist' ).value.length == 0 )
-		{
-			GetE( 'txtPlaylist' ).focus() ;
+    if ( rbFileTypeVal == "list" )
+    {
+        if ( GetE( 'txtPlaylist' ).value.length == 0 )
+        {
+            GetE( 'txtPlaylist' ).focus() ;
 
-			alert( oEditor.FCKLang.DlgFLVPlayerAlertPlaylist ) ;
-			return false ;
-		}
-	}
+            alert( oEditor.FCKLang.DlgFLVPlayerAlertPlaylist ) ;
+            return false ;
+        }
+    }
 
-	if ( GetE( 'txtWidth' ).value.length == 0 )
-	{
-		GetE( 'txtWidth' ).focus() ;
+    if ( GetE( 'txtWidth' ).value.length == 0 )
+    {
+        GetE( 'txtWidth' ).focus() ;
 
-		alert( oEditor.FCKLang.DlgFLVPlayerAlertWidth ) ;
-		return false ;
-	}
+        alert( oEditor.FCKLang.DlgFLVPlayerAlertWidth ) ;
+        return false ;
+    }
 
-	if ( GetE( 'txtHeight' ).value.length == 0 )
-	{
-		GetE( 'txtHeight' ).focus() ;
+    if ( GetE( 'txtHeight' ).value.length == 0 )
+    {
+        GetE( 'txtHeight' ).focus() ;
 
-		alert( oEditor.FCKLang.DlgFLVPlayerAlertHeight ) ;
-		return false ;
-	}
+        alert( oEditor.FCKLang.DlgFLVPlayerAlertHeight ) ;
+        return false ;
+    }
 
-	var e = ( oMedia || new Media() ) ;
+    var e = ( oMedia || new Media() ) ;
 
-	UpdateMovie( e ) ;
+    UpdateMovie( e ) ;
 
-	// Replace or insert?
-	if ( !is_new_flvplayer )
-	{
-		var oFakeImage = FCK.Selection.GetSelectedElement() ;
-		var oSel = null ;
-		oMedia = new Media() ;
+    // Replace or insert?
+    if ( !is_new_flvplayer )
+    {
+        var oFakeImage = FCK.Selection.GetSelectedElement() ;
+        var oSel = null ;
+        oMedia = new Media() ;
 
-		if ( oFakeImage )
-		{
-			if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute( '_fckvideo' ) )
-			{
-				oSel = FCK.GetRealElement( oFakeImage ) ;
-				if ( oSel )
-				{
-					oSel = null ;
-					FCK.InsertHtml( e.getInnerHTML() ) ;
-				}
-			}
-		}
-	}
-	else
-	{
-		FCK.InsertHtml( e.getInnerHTML() ) ;
-	}
+        if ( oFakeImage )
+        {
+            if ( oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute( '_fckvideo' ) )
+            {
+                oSel = FCK.GetRealElement( oFakeImage ) ;
+                if ( oSel )
+                {
+                    oSel = null ;
+                    FCK.InsertHtml( e.getInnerHTML() ) ;
+                }
+            }
+        }
+    }
+    else
+    {
+        FCK.InsertHtml( e.getInnerHTML() ) ;
+    }
 
-	return true ;
+    return true ;
 }
 
 function UpdateMovie( e )
 {
-	e.fileType = GetE( 'rbFileType' ).value ;
-	e.url = GetE( 'txtURL' ).value ;
-	e.purl = GetE( 'txtPlaylist' ).value ;
-	e.iurl = GetE( 'txtImgURL' ).value ;
-	e.wmurl = GetE( 'txtWMURL' ).value ;
+    e.fileType = GetE( 'rbFileType' ).value ;
+    e.url = GetE( 'txtURL' ).value ;
+    e.purl = GetE( 'txtPlaylist' ).value ;
+    e.iurl = GetE( 'txtImgURL' ).value ;
+    e.wmurl = GetE( 'txtWMURL' ).value ;
 
-	e.bgcolor = GetE( 'txtBgColor' ).value ;
-	e.toolcolor = GetE( 'txtToolbarColor' ).value ;
-	e.tooltcolor = GetE( 'txtToolbarTxtColor' ).value ;
-	e.tooltrcolor = GetE( 'txtToolbarTxtRColor' ).value ;
-	e.width = ( isNaN( GetE( 'txtWidth' ).value ) ) ? 0 : parseInt( GetE( 'txtWidth' ).value ) ;
-	e.height = ( isNaN( GetE( 'txtHeight' ).value ) ) ? 0 : parseInt( GetE( 'txtHeight' ).value ) ;
-	e.loop = ( GetE( 'chkLoop' ).checked ) ? 'true' : 'false' ;
-	e.play = ( GetE( 'chkAutoplay' ).checked ) ? 'true' : 'false' ;
-	e.downloadable = ( GetE( 'chkDownload' ).checked ) ? 'true' : 'false' ;
-	e.fullscreen = ( GetE( 'chkFullscreen' ).checked ) ? 'true' : 'false' ;
-	e.displayNavigation = ( GetE( 'chkShowNavigation' ).checked ) ? 'true' : 'false' ;
-	e.displayDigits = ( GetE( 'chkShowDigits' ).checked) ? 'true' : 'false' ;
-	e.align = GetE( 'selAlign' ).value ;
-	e.dispPlaylist = GetE( 'selDispPlaylist' ).value ;
+    e.bgcolor = GetE( 'txtBgColor' ).value ;
+    e.toolcolor = GetE( 'txtToolbarColor' ).value ;
+    e.tooltcolor = GetE( 'txtToolbarTxtColor' ).value ;
+    e.tooltrcolor = GetE( 'txtToolbarTxtRColor' ).value ;
+    e.width = ( isNaN( GetE( 'txtWidth' ).value ) ) ? 0 : parseInt( GetE( 'txtWidth' ).value ) ;
+    e.height = ( isNaN( GetE( 'txtHeight' ).value ) ) ? 0 : parseInt( GetE( 'txtHeight' ).value ) ;
+    e.loop = ( GetE( 'chkLoop' ).checked ) ? 'true' : 'false' ;
+    e.play = ( GetE( 'chkAutoplay' ).checked ) ? 'true' : 'false' ;
+    e.downloadable = ( GetE( 'chkDownload' ).checked ) ? 'true' : 'false' ;
+    e.fullscreen = ( GetE( 'chkFullscreen' ).checked ) ? 'true' : 'false' ;
+    e.displayNavigation = ( GetE( 'chkShowNavigation' ).checked ) ? 'true' : 'false' ;
+    e.displayDigits = ( GetE( 'chkShowDigits' ).checked) ? 'true' : 'false' ;
+    e.align = GetE( 'selAlign' ).value ;
+    e.dispPlaylist = GetE( 'selDispPlaylist' ).value ;
 
-	e.rurl = GetE( 'txtRURL' ).value ;
+    e.rurl = GetE( 'txtRURL' ).value ;
 
-	e.playlistDim = GetE( 'txtPLDim' ).value ;
-	e.playlistThumbs = ( GetE( 'chkPLThumbs' ).checked ) ? 'true' : 'false' ;
+    e.playlistDim = GetE( 'txtPLDim' ).value ;
+    e.playlistThumbs = ( GetE( 'chkPLThumbs' ).checked ) ? 'true' : 'false' ;
 }
 
 function BrowseServer()
 {
-	OpenServerBrowser( 'flv', FCKConfig.MediaBrowserURL, FCKConfig.MediaBrowserWindowWidth, FCKConfig.MediaBrowserWindowHeight ) ;
+    OpenServerBrowser( 'flv', FCKConfig.MediaBrowserURL, FCKConfig.MediaBrowserWindowWidth, FCKConfig.MediaBrowserWindowHeight ) ;
 }
 
 function LnkBrowseServer()
 {
-	OpenServerBrowser( 'link', FCKConfig.LinkBrowserURL, FCKConfig.LinkBrowserWindowWidth, FCKConfig.LinkBrowserWindowHeight ) ;
+    OpenServerBrowser( 'link', FCKConfig.LinkBrowserURL, FCKConfig.LinkBrowserWindowWidth, FCKConfig.LinkBrowserWindowHeight ) ;
 }
 
 function Lnk2BrowseServer()
 {
-	OpenServerBrowser( 'link2', FCKConfig.LinkBrowserURL, FCKConfig.LinkBrowserWindowWidth, FCKConfig.LinkBrowserWindowHeight ) ;
+    OpenServerBrowser( 'link2', FCKConfig.LinkBrowserURL, FCKConfig.LinkBrowserWindowWidth, FCKConfig.LinkBrowserWindowHeight ) ;
 }
 
 function img1BrowseServer()
 {
-	OpenServerBrowser( 'img1', FCKConfig.ImageBrowserURL, FCKConfig.ImageBrowserWindowWidth, FCKConfig.ImageBrowserWindowHeight ) ;
+    OpenServerBrowser( 'img1', FCKConfig.ImageBrowserURL, FCKConfig.ImageBrowserWindowWidth, FCKConfig.ImageBrowserWindowHeight ) ;
 }
 
 function img2BrowseServer()
 {
-	OpenServerBrowser( 'img2', FCKConfig.ImageBrowserURL, FCKConfig.ImageBrowserWindowWidth, FCKConfig.ImageBrowserWindowHeight ) ;
+    OpenServerBrowser( 'img2', FCKConfig.ImageBrowserURL, FCKConfig.ImageBrowserWindowWidth, FCKConfig.ImageBrowserWindowHeight ) ;
 }
 
 function OpenServerBrowser( type, url, width, height )
 {
-	sActualBrowser = type ;
-	OpenFileBrowser( url, width, height ) ;
+    sActualBrowser = type ;
+    OpenFileBrowser( url, width, height ) ;
 }
 
 var sActualBrowser ;
@@ -360,528 +360,528 @@ var sActualBrowser ;
 
 function SetUrl( url ) {
 
-	url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
+    url = FCK.GetUrl( url, FCK.SEMI_ABSOLUTE_URL ) ;
 
-	if ( sActualBrowser == 'flv' )
-	{
-		GetE('txtURL').value = url ;
-		GetE('txtWidth').value = 320 ;
-		GetE('txtHeight').value = 240 ;
-	}
-	else if ( sActualBrowser == 'link' )
-	{
-		GetE('txtPlaylist').value = url ;
-	}
-	else if ( sActualBrowser == 'link2' )
-	{
-		GetE('txtRURL').value = url ;
-	}
-	else if ( sActualBrowser == 'img1' )
-	{
-		GetE('txtImgURL').value = url ;
-	}
-	else if ( sActualBrowser == 'img2' )
-	{
-		GetE('txtWMURL').value = url ;
-	}
+    if ( sActualBrowser == 'flv' )
+    {
+        GetE('txtURL').value = url ;
+        GetE('txtWidth').value = 320 ;
+        GetE('txtHeight').value = 240 ;
+    }
+    else if ( sActualBrowser == 'link' )
+    {
+        GetE('txtPlaylist').value = url ;
+    }
+    else if ( sActualBrowser == 'link2' )
+    {
+        GetE('txtRURL').value = url ;
+    }
+    else if ( sActualBrowser == 'img1' )
+    {
+        GetE('txtImgURL').value = url ;
+    }
+    else if ( sActualBrowser == 'img2' )
+    {
+        GetE('txtWMURL').value = url ;
+    }
 
-	UpdatePreview() ;
+    UpdatePreview() ;
 
-	dialog.SetSelectedTab( 'Info' ) ;
+    dialog.SetSelectedTab( 'Info' ) ;
 }
 
 var Media = function ( o )
 {
-	this.fileType = '' ;
-	this.url = '' ;
-	this.purl = '' ;
-	this.iurl = '' ;
-	this.wmurl = '' ;
-	this.width = '' ;
-	this.height = '' ;
-	this.loop = '' ;
-	this.play = '' ;
-	this.downloadable = '' ;
-	this.fullscreen = true ;
-	this.bgcolor = '' ;
-	this.toolcolor = '' ;
-	this.tooltcolor = '' ;
-	this.tooltrcolor = '' ;
-	this.displayNavigation = true ;
-	this.displayDigits = true ;
-	this.align = '' ;
-	this.dispPlaylist = '' ;
-	this.rurl = '' ;
-	this.playlistDim = '' ;
-	this.playlistThumbs = '' ;
+    this.fileType = '' ;
+    this.url = '' ;
+    this.purl = '' ;
+    this.iurl = '' ;
+    this.wmurl = '' ;
+    this.width = '' ;
+    this.height = '' ;
+    this.loop = '' ;
+    this.play = '' ;
+    this.downloadable = '' ;
+    this.fullscreen = true ;
+    this.bgcolor = '' ;
+    this.toolcolor = '' ;
+    this.tooltcolor = '' ;
+    this.tooltrcolor = '' ;
+    this.displayNavigation = true ;
+    this.displayDigits = true ;
+    this.align = '' ;
+    this.dispPlaylist = '' ;
+    this.rurl = '' ;
+    this.playlistDim = '' ;
+    this.playlistThumbs = '' ;
 
-	if ( o )
-		this.setObjectElement( o ) ;
+    if ( o )
+        this.setObjectElement( o ) ;
 } ;
 
 Media.prototype.setObjectElement = function ( e )
 {
-	if ( !e ) return ;
-	this.width = GetAttribute( e, 'width', this.width ) ;
-	this.height = GetAttribute( e, 'height', this.height ) ;
+    if ( !e ) return ;
+    this.width = GetAttribute( e, 'width', this.width ) ;
+    this.height = GetAttribute( e, 'height', this.height ) ;
 } ;
 
 Media.prototype.setAttribute = function( attr, val )
 {
-	if ( val == "true" )
-	{
-		this[attr] = true ;
-	}
-	else if (val == "false" )
-	{
-		this[attr] = false ;
-	}
-	else
-	{
-		this[attr] = val ;
-	}
+    if ( val == "true" )
+    {
+        this[attr] = true ;
+    }
+    else if (val == "false" )
+    {
+        this[attr] = false ;
+    }
+    else
+    {
+        this[attr] = val ;
+    }
 } ;
 
 Media.prototype.getInnerHTML = function ( objectId )
 {
-	var randomnumber = Math.floor( Math.random() * 1000001 ) ;
-	var thisWidth = this.width ;
-	var thisHeight = this.height ;
+    var randomnumber = Math.floor( Math.random() * 1000001 ) ;
+    var thisWidth = this.width ;
+    var thisHeight = this.height ;
 
-	var thisMediaType = "single" ;
-	if ( !GetE( 'rbFileType' ).checked )
-	{
-		thisMediaType = "mpl" ;
-	}
+    var thisMediaType = "single" ;
+    if ( !GetE( 'rbFileType' ).checked )
+    {
+        thisMediaType = "mpl" ;
+    }
 
-	// Align
-	var cssalign = '' ;
-	var cssfloat = '' ;
-	if ( this.align == "center" )
-	{
-		cssalign = 'margin-left: auto;margin-right: auto;' ;
-	}
-	else if ( this.align == "right" )
-	{
-		cssfloat = 'float: right;' ;
-	}
-	else if ( this.align == "left" )
-	{
-		cssfloat = 'float: left;' ;
-	}
+    // Align
+    var cssalign = '' ;
+    var cssfloat = '' ;
+    if ( this.align == "center" )
+    {
+        cssalign = 'margin-left: auto;margin-right: auto;' ;
+    }
+    else if ( this.align == "right" )
+    {
+        cssfloat = 'float: right;' ;
+    }
+    else if ( this.align == "left" )
+    {
+        cssfloat = 'float: left;' ;
+    }
 
-	var s = "" ;
+    var s = "" ;
 
-	//Replacing the creation of the SWFObject to the use of the object tag in order to avoid HTMLPurifier conflicts see CT#1297
+    //Replacing the creation of the SWFObject to the use of the object tag in order to avoid HTMLPurifier conflicts see CT#1297
 
-	s+= '<div id="player' + randomnumber + '-parent" style="text-align:	center;' + cssfloat + '">\n';
-	s+= '<div style="border-style: none; height: ' + thisHeight + 'px; width:' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220,	220); background-image: url(' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/flvPlayer.gif); background-repeat:no-repeat;	background-position:center;' + cssalign + '">';
-	s+= '<script src="' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/swfobject.js" type="text/javascript"></script>\n';
-	s+= '<script type="text/javascript">swfobject.registerObject("player' +	randomnumber + '","9.0.98","' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/expressInstall.swf");</script>';
+    s+= '<div id="player' + randomnumber + '-parent" style="text-align:	center;' + cssfloat + '">\n';
+    s+= '<div style="border-style: none; height: ' + thisHeight + 'px; width:' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220,	220); background-image: url(' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/flvPlayer.gif); background-repeat:no-repeat;	background-position:center;' + cssalign + '">';
+    s+= '<script src="' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/swfobject.js" type="text/javascript"></script>\n';
+    s+= '<script type="text/javascript">swfobject.registerObject("player' +	randomnumber + '","9.0.98","' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/expressInstall.swf");</script>';
 
 /*	s+= '<object id="player' + randomnumber + '" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" name="player' + randomnumber + '" width="328" height="200">';
-	s+= '<param name="movie" value="' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/mediaplayer.swf" />';
-	s+= '<param name="allowfullscreen" value="true" />';
-	s+= '<param name="allowscriptaccess" value="always" />';
-	s+= '<param name="height" value="' + thisHeight + '" />';
-	s+= '<param name="width" value="' + thisWidth + '" />';
-	s+= '<param name="flashvars" value="file=' + this.url + '"/>';
+    s+= '<param name="movie" value="' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/mediaplayer.swf" />';
+    s+= '<param name="allowfullscreen" value="true" />';
+    s+= '<param name="allowscriptaccess" value="always" />';
+    s+= '<param name="height" value="' + thisHeight + '" />';
+    s+= '<param name="width" value="' + thisWidth + '" />';
+    s+= '<param name="flashvars" value="file=' + this.url + '"/>';
 */
-	//s+= '<param name="flashvars" value="file=' + this.url + '&image=' +	this.iurl + '" />';
-	s+= '<object type="application/x-shockwave-flash" data="' +	oEditor.FCKConfig.PluginsPath + 'flvPlayer/mediaplayer.swf" width="328"	height="200">';
-	s+= '<param name="movie" value="' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/mediaplayer.swf" />';
-	s+= '<param name="allowfullscreen" value="true" />';
-	s+= '<param name="allowscriptaccess" value="always" />';
-	s+= '<param name="height" value="' + thisHeight + '" />';
-	s+= '<param name="width" value="' + thisWidth + '" />';
-	//s+= '<param name="flashvars" value="file=' + this.url + '&image=' +	this.iurl + '" />';
+    //s+= '<param name="flashvars" value="file=' + this.url + '&image=' +	this.iurl + '" />';
+    s+= '<object type="application/x-shockwave-flash" data="' +	oEditor.FCKConfig.PluginsPath + 'flvPlayer/mediaplayer.swf" width="328"	height="200">';
+    s+= '<param name="movie" value="' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/mediaplayer.swf" />';
+    s+= '<param name="allowfullscreen" value="true" />';
+    s+= '<param name="allowscriptaccess" value="always" />';
+    s+= '<param name="height" value="' + thisHeight + '" />';
+    s+= '<param name="width" value="' + thisWidth + '" />';
+    //s+= '<param name="flashvars" value="file=' + this.url + '&image=' +	this.iurl + '" />';
 
-	s+= '<param name="flashvars" value="file=' + this.url + '" />';
-	s+= '<p><a href="http://get.adobe.com/flashplayer">Get Flash</a> to see	this player.</p>';
+    s+= '<param name="flashvars" value="file=' + this.url + '" />';
+    s+= '<p><a href="http://get.adobe.com/flashplayer">Get Flash</a> to see	this player.</p>';
 //	s+= '</object>';
-	s+= '</object>';
+    s+= '</object>';
 
 
 
-	/*
-	s += '\n' ;
-	s += '<div id="player' + randomnumber + '-parent" style="text-align: center;">\n'; //'<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
-	s += '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); ' + cssalign + '">' ;
+    /*
+    s += '\n' ;
+    s += '<div id="player' + randomnumber + '-parent" style="text-align: center;">\n'; //'<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
+    s += '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); ' + cssalign + '">' ;
 
-	s += '<script src="' + FCKConfig.ScriptSWFObject + '" type="text/javascript"></script>\n' ;
+    s += '<script src="' + FCKConfig.ScriptSWFObject + '" type="text/javascript"></script>\n' ;
 
-	s += '<div id="player' + randomnumber + '">' ;
-	s += '<a href="http://www.macromedia.com/go/getflashplayer" target="_blank">Get the Flash Player</a> to see this video.' ;
-	// Moved after info - Added width,height,overflow for MSIE7
-	s += '<div id="player' + randomnumber + '-config" style="display: none;visibility: hidden;width: 0px;height:0px;overflow: hidden;">' ;
-	// Save settings
-	for ( var i in this )
-	{
-		if ( !i || !this[i] ) continue ;
-	        if ( !i.match( /(set|get)/ ) )
-	        {
-	        	s += i + "=" + this[i] + " " ;
-        	}
-	}
-	s += '</div>' ;
-	s += '</div>' ;
-	s += '<script type="text/javascript">\n' ;
-	//s += '	//NOTE: FOR LIST OF POSSIBLE SETTINGS GOTO http://www.jeroenwijering.com/extras/readme.html\n' ;
+    s += '<div id="player' + randomnumber + '">' ;
+    s += '<a href="http://www.macromedia.com/go/getflashplayer" target="_blank">Get the Flash Player</a> to see this video.' ;
+    // Moved after info - Added width,height,overflow for MSIE7
+    s += '<div id="player' + randomnumber + '-config" style="display: none;visibility: hidden;width: 0px;height:0px;overflow: hidden;">' ;
+    // Save settings
+    for ( var i in this )
+    {
+        if ( !i || !this[i] ) continue ;
+            if ( !i.match( /(set|get)/ ) )
+            {
+                s += i + "=" + this[i] + " " ;
+            }
+    }
+    s += '</div>' ;
+    s += '</div>' ;
+    s += '<script type="text/javascript">\n' ;
+    //s += '	//NOTE: FOR LIST OF POSSIBLE SETTINGS GOTO http://www.jeroenwijering.com/extras/readme.html\n' ;
 
-	s += '	var s1 = new SWFObject("' + FCKConfig.FlashPlayerVideo + '","' + thisMediaType + '","' + thisWidth + '","' + thisHeight + '","7");\n' ;
+    s += '	var s1 = new SWFObject("' + FCKConfig.FlashPlayerVideo + '","' + thisMediaType + '","' + thisWidth + '","' + thisHeight + '","7");\n' ;
 
-	s += '	s1.addVariable("width","' + thisWidth + '");\n' ;
-	s += '	s1.addVariable("height","' + thisHeight + '");\n' ;
-	s += '	s1.addVariable("autostart","' + this.play + '");\n' ;
+    s += '	s1.addVariable("width","' + thisWidth + '");\n' ;
+    s += '	s1.addVariable("height","' + thisHeight + '");\n' ;
+    s += '	s1.addVariable("autostart","' + this.play + '");\n' ;
 
-	if ( thisMediaType == 'mpl' )
-	{
-		s += '	s1.addVariable("file","' + this.purl + '");\n' ;
-		s += '	s1.addVariable("autoscroll","true");\n' ;
-		s += '	s1.addParam("allowscriptaccess","always");\n' ;
+    if ( thisMediaType == 'mpl' )
+    {
+        s += '	s1.addVariable("file","' + this.purl + '");\n' ;
+        s += '	s1.addVariable("autoscroll","true");\n' ;
+        s += '	s1.addParam("allowscriptaccess","always");\n' ;
 
-		var dispWidth = thisWidth ;
-		var dispHeight = thisHeight ;
-		var dispThumbs = false ;
+        var dispWidth = thisWidth ;
+        var dispHeight = thisHeight ;
+        var dispThumbs = false ;
 
-		if ( this.dispPlaylist != "none" )
-		{
-			if ( this.dispPlaylist == "right" )
-			{
-				if ( this.playlistDim.length > 0 )
-				{
-					dispWidth = thisWidth - this.playlistDim ;
-					if ( this.playlistDim < 100 )
-					{
-						dispThumbs = false ;
-					}
-					else
-					{
-						dispThumbs = true ;
-					}
-				}
-				else
-				{
-					if ( thisWidth >= 550 )
-					{
-						dispWidth = thisWidth - 200 ;
-						dispThumbs = true ;
-					}
-					else if ( thisWidth >= 450 )
-					{
-						dispWidth = thisWidth - 100 ;
-						dispThumbs = false ;
-					}
-					else if ( thisWidth >= 350 )
-					{
-						dispWidth = thisWidth - 50 ;
-						dispThumbs = false ;
-					}
-				}
+        if ( this.dispPlaylist != "none" )
+        {
+            if ( this.dispPlaylist == "right" )
+            {
+                if ( this.playlistDim.length > 0 )
+                {
+                    dispWidth = thisWidth - this.playlistDim ;
+                    if ( this.playlistDim < 100 )
+                    {
+                        dispThumbs = false ;
+                    }
+                    else
+                    {
+                        dispThumbs = true ;
+                    }
+                }
+                else
+                {
+                    if ( thisWidth >= 550 )
+                    {
+                        dispWidth = thisWidth - 200 ;
+                        dispThumbs = true ;
+                    }
+                    else if ( thisWidth >= 450 )
+                    {
+                        dispWidth = thisWidth - 100 ;
+                        dispThumbs = false ;
+                    }
+                    else if ( thisWidth >= 350 )
+                    {
+                        dispWidth = thisWidth - 50 ;
+                        dispThumbs = false ;
+                    }
+                }
 
-				s += '	s1.addVariable("displaywidth","' + dispWidth + '");\n' ;
-			}
-			else if ( this.dispPlaylist == "below" )
-			{
-				dispThumbs = true ;
+                s += '	s1.addVariable("displaywidth","' + dispWidth + '");\n' ;
+            }
+            else if ( this.dispPlaylist == "below" )
+            {
+                dispThumbs = true ;
 
-				if ( this.playlistDim.length > 0 )
-				{
-					dispHeight = thisWidth - this.playlistDim ;
-				}
-				else
-				{
-					if ( thisHeight >= 550 )
-					{
-						dispHeight = thisWidth - 200 ;
-					}
-					else if ( thisHeight >= 450 )
-					{
-						dispHeight = thisHeight - 150 ;
-					}
-					else if ( thisHeight >= 350 )
-					{
-						dispHeight = thisHeight - 100 ;
-					}
-				}
+                if ( this.playlistDim.length > 0 )
+                {
+                    dispHeight = thisWidth - this.playlistDim ;
+                }
+                else
+                {
+                    if ( thisHeight >= 550 )
+                    {
+                        dispHeight = thisWidth - 200 ;
+                    }
+                    else if ( thisHeight >= 450 )
+                    {
+                        dispHeight = thisHeight - 150 ;
+                    }
+                    else if ( thisHeight >= 350 )
+                    {
+                        dispHeight = thisHeight - 100 ;
+                    }
+                }
 
-				s += '	s1.addVariable("displayheight","' + dispHeight + '");\n' ;
-			}
+                s += '	s1.addVariable("displayheight","' + dispHeight + '");\n' ;
+            }
 
-			if ( this.playlistThumbs == "false" )
-			{
-				dispThumbs = false ;
-			}
+            if ( this.playlistThumbs == "false" )
+            {
+                dispThumbs = false ;
+            }
 
-			s += '	s1.addVariable("thumbsinplaylist","' + dispThumbs + '");\n' ;
-		}
+            s += '	s1.addVariable("thumbsinplaylist","' + dispThumbs + '");\n' ;
+        }
 
-		s += '	s1.addVariable("shuffle","false");\n' ;
-		if (this.loop)
-		{
-			s += '	s1.addVariable("repeat","list");\n' ;
-		}
-		else
-		{
-			s += '	s1.addVariable("repeat","' + this.loop + '");\n' ;
-		}
-		s += '	//s1.addVariable("transition","bgfade");\n' ;
-	}
-	else
-	{
-		s += '	s1.addVariable("file","' + this.url + '");\n' ;
-		s += '	s1.addVariable("repeat","' + this.loop + '");\n' ;
-		s += '	s1.addVariable("image","' + this.iurl + '");\n' ;
-	}
+        s += '	s1.addVariable("shuffle","false");\n' ;
+        if (this.loop)
+        {
+            s += '	s1.addVariable("repeat","list");\n' ;
+        }
+        else
+        {
+            s += '	s1.addVariable("repeat","' + this.loop + '");\n' ;
+        }
+        s += '	//s1.addVariable("transition","bgfade");\n' ;
+    }
+    else
+    {
+        s += '	s1.addVariable("file","' + this.url + '");\n' ;
+        s += '	s1.addVariable("repeat","' + this.loop + '");\n' ;
+        s += '	s1.addVariable("image","' + this.iurl + '");\n' ;
+    }
 
-	s += '	s1.addVariable("showdownload","' + this.downloadable + '");\n' ;
-	s += '	s1.addVariable("link","' + this.url + '");\n' ;
-	s += '	s1.addParam("allowfullscreen","' + this.fullscreen + '");\n' ;
-	s += '	s1.addVariable("showdigits","' + this.displayDigits + '");\n' ;
-	s += '	s1.addVariable("shownavigation","' + this.displayNavigation + '");\n' ;
+    s += '	s1.addVariable("showdownload","' + this.downloadable + '");\n' ;
+    s += '	s1.addVariable("link","' + this.url + '");\n' ;
+    s += '	s1.addParam("allowfullscreen","' + this.fullscreen + '");\n' ;
+    s += '	s1.addVariable("showdigits","' + this.displayDigits + '");\n' ;
+    s += '	s1.addVariable("shownavigation","' + this.displayNavigation + '");\n' ;
 
-	// SET THE COLOR OF THE TOOLBAR
-	var colorChoice1 = this.toolcolor ;
-	if ( colorChoice1.length > 0 )
-	{
-		colorChoice1 = colorChoice1.replace( "#", "0x" ) ;
-		s += '	s1.addVariable("backcolor","' + colorChoice1 + '");\n' ;
-	}
-	// SET THE COLOR OF THE TOOLBARS TEXT AND BUTTONS
-	var colorChoice2 = this.tooltcolor ;
-	if ( colorChoice2.length > 0 )
-	{
-		colorChoice2 = colorChoice2.replace( "#", "0x" ) ;
-		s += '	s1.addVariable("frontcolor","' + colorChoice2 + '");\n' ;
-	}
-	//SET COLOR OF ROLLOVER TEXT AND BUTTONS
-	var colorChoice3 = this.tooltrcolor ;
-	if ( colorChoice3.length > 0 )
-	{
-		colorChoice3 = colorChoice3.replace( "#", "0x" ) ;
-		s += '	s1.addVariable("lightcolor","' + colorChoice3 + '");\n' ;
-	}
-	//SET COLOR OF BACKGROUND
-	var colorChoice4 = this.bgcolor ;
-	if ( colorChoice4.length > 0 )
-	{
-		colorChoice4 = colorChoice4.replace( "#", "0x" ) ;
-		s += '	s1.addVariable("screencolor","' + colorChoice4 + '");\n' ;
-	}
+    // SET THE COLOR OF THE TOOLBAR
+    var colorChoice1 = this.toolcolor ;
+    if ( colorChoice1.length > 0 )
+    {
+        colorChoice1 = colorChoice1.replace( "#", "0x" ) ;
+        s += '	s1.addVariable("backcolor","' + colorChoice1 + '");\n' ;
+    }
+    // SET THE COLOR OF THE TOOLBARS TEXT AND BUTTONS
+    var colorChoice2 = this.tooltcolor ;
+    if ( colorChoice2.length > 0 )
+    {
+        colorChoice2 = colorChoice2.replace( "#", "0x" ) ;
+        s += '	s1.addVariable("frontcolor","' + colorChoice2 + '");\n' ;
+    }
+    //SET COLOR OF ROLLOVER TEXT AND BUTTONS
+    var colorChoice3 = this.tooltrcolor ;
+    if ( colorChoice3.length > 0 )
+    {
+        colorChoice3 = colorChoice3.replace( "#", "0x" ) ;
+        s += '	s1.addVariable("lightcolor","' + colorChoice3 + '");\n' ;
+    }
+    //SET COLOR OF BACKGROUND
+    var colorChoice4 = this.bgcolor ;
+    if ( colorChoice4.length > 0 )
+    {
+        colorChoice4 = colorChoice4.replace( "#", "0x" ) ;
+        s += '	s1.addVariable("screencolor","' + colorChoice4 + '");\n' ;
+    }
 
-	s += '	s1.addVariable("logo","' + this.wmurl + '");\n' ;
-	if ( this.rurl.length > 0 )
-	{
-		s += '	s1.addVariable("recommendations","' + this.rurl + '");\n' ;
-	}
+    s += '	s1.addVariable("logo","' + this.wmurl + '");\n' ;
+    if ( this.rurl.length > 0 )
+    {
+        s += '	s1.addVariable("recommendations","' + this.rurl + '");\n' ;
+    }
 
-	//s += '	//s1.addVariable("largecontrols","true");\n' ;
-	//s += '	//s1.addVariable("bufferlength","3");\n' ;
-	//s += '	//s1.addVariable("audio","http://www.jeroenwijering.com/extras/readme.html");\n' ;
+    //s += '	//s1.addVariable("largecontrols","true");\n' ;
+    //s += '	//s1.addVariable("bufferlength","3");\n' ;
+    //s += '	//s1.addVariable("audio","http://www.jeroenwijering.com/extras/readme.html");\n' ;
 
-	s += '	s1.write("player' + randomnumber + '");\n' ;
-	s += '</script>\n' ;
-	s += '</div>\n' ;
-	s += '</div>\n' ;
-	s += '\n' ;
-	*/
-	return s ;
+    s += '	s1.write("player' + randomnumber + '");\n' ;
+    s += '</script>\n' ;
+    s += '</div>\n' ;
+    s += '</div>\n' ;
+    s += '\n' ;
+    */
+    return s ;
 } ;
 
 function SelectColor1()
 {
-	oEditor.FCKDialog.OpenDialog( 'FCKDialog_Color', oEditor.FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 400, 330, SelectBackColor ) ;
+    oEditor.FCKDialog.OpenDialog( 'FCKDialog_Color', oEditor.FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 400, 330, SelectBackColor ) ;
 }
 
 function SelectColor2()
 {
-	oEditor.FCKDialog.OpenDialog( 'FCKDialog_Color', oEditor.FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 400, 330, SelectToolColor ) ;
+    oEditor.FCKDialog.OpenDialog( 'FCKDialog_Color', oEditor.FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 400, 330, SelectToolColor ) ;
 }
 
 function SelectColor3()
 {
-	oEditor.FCKDialog.OpenDialog( 'FCKDialog_Color', oEditor.FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 400, 330, SelectToolTextColor ) ;
+    oEditor.FCKDialog.OpenDialog( 'FCKDialog_Color', oEditor.FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 400, 330, SelectToolTextColor ) ;
 }
 
 function SelectColor4()
 {
-	oEditor.FCKDialog.OpenDialog( 'FCKDialog_Color', oEditor.FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 400, 330, SelectToolTextRColor ) ;
+    oEditor.FCKDialog.OpenDialog( 'FCKDialog_Color', oEditor.FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 400, 330, SelectToolTextRColor ) ;
 }
 
 function SelectBackColor( color )
 {
-	if ( color && color.length > 0 )
-	{
-		GetE( 'txtBgColor' ).value = color ;
-	}
+    if ( color && color.length > 0 )
+    {
+        GetE( 'txtBgColor' ).value = color ;
+    }
 }
 
 function SelectToolColor( color )
 {
-	if ( color && color.length > 0 )
-	{
-		GetE( 'txtToolbarColor' ).value = color ;
-	}
+    if ( color && color.length > 0 )
+    {
+        GetE( 'txtToolbarColor' ).value = color ;
+    }
 }
 
 function SelectToolTextColor( color )
 {
-	if ( color && color.length > 0 )
-	{
-		GetE( 'txtToolbarTxtColor' ).value = color ;
-	}
+    if ( color && color.length > 0 )
+    {
+        GetE( 'txtToolbarTxtColor' ).value = color ;
+    }
 }
 
 function SelectToolTextRColor( color )
 {
-	if ( color && color.length > 0 )
-	{
-		GetE( 'txtToolbarTxtRColor' ).value = color ;
-	}
+    if ( color && color.length > 0 )
+    {
+        GetE( 'txtToolbarTxtRColor' ).value = color ;
+    }
 }
 
 var ePreview ;
 
 function IsValidMedia( oMedia )
 {
-	if ( !oMedia )
-		return false ;
+    if ( !oMedia )
+        return false ;
 
-	var url = oMedia.url ;
-	var purl = oMedia.purl ;
-	var width = oMedia.width ;
-	var height = oMedia.height ;
+    var url = oMedia.url ;
+    var purl = oMedia.purl ;
+    var width = oMedia.width ;
+    var height = oMedia.height ;
 
-	if ( url.length == 0 && purl.length == 0 )
-		return false ;
+    if ( url.length == 0 && purl.length == 0 )
+        return false ;
 
-	if ( isNaN( width ) )
-		return false ;
+    if ( isNaN( width ) )
+        return false ;
 
-	if ( parseInt( width, 10 ) <= 0 )
-		return false ;
+    if ( parseInt( width, 10 ) <= 0 )
+        return false ;
 
-	if ( isNaN( height ) )
-		return false ;
+    if ( isNaN( height ) )
+        return false ;
 
-	if ( parseInt( height, 10 ) <= 0 )
-		return false ;
+    if ( parseInt( height, 10 ) <= 0 )
+        return false ;
 
-	return true ;
+    return true ;
 }
 
 function SetPreviewElement( previewEl )
 {
-	ePreview = previewEl ;
+    ePreview = previewEl ;
 
-	if ( IsValidMedia( oMedia ) )
-		UpdatePreview() ;
+    if ( IsValidMedia( oMedia ) )
+        UpdatePreview() ;
 }
 
 function UpdatePreview()
 {
-	if ( !ePreview )
-		return ;
+    if ( !ePreview )
+        return ;
 
-	while ( ePreview.firstChild )
-		ePreview.removeChild( ePreview.firstChild ) ;
+    while ( ePreview.firstChild )
+        ePreview.removeChild( ePreview.firstChild ) ;
 
-	if ( !oMedia )
-	{
-		var oMedia = new Media() ;
-		UpdateMovie( oMedia ) ;
-	}
+    if ( !oMedia )
+    {
+        var oMedia = new Media() ;
+        UpdateMovie( oMedia ) ;
+    }
 
-	if ( !IsValidMedia( oMedia ) )
-		ePreview.innerHTML = '&nbsp;' ;
-	else
-	{
-		var max_width = 710 ;
-		var max_height = 400 ;
-		var new_size = FCK.ResizeToFit( oMedia.width, oMedia.height, max_width, max_height ) ;
-		oMedia.width = new_size[0] ;
-		oMedia.height = new_size[1] ;
-		oMedia.play = false ;
+    if ( !IsValidMedia( oMedia ) )
+        ePreview.innerHTML = '&nbsp;' ;
+    else
+    {
+        var max_width = 710 ;
+        var max_height = 400 ;
+        var new_size = FCK.ResizeToFit( oMedia.width, oMedia.height, max_width, max_height ) ;
+        oMedia.width = new_size[0] ;
+        oMedia.height = new_size[1] ;
+        oMedia.play = false ;
 
-		code = oMedia.getInnerHTML() ;
-		var start = code.indexOf( 'var s1 = new SWFObject' ) ;
-		if ( start == -1 )
-			return ;
-		var end = code.indexOf( 's1.write' ) ;
-		if ( end == -1 )
-			return ;
-		code = code.substring( start, end ) + 'html = s1.getSWFHTML();' ;
-		var html = '';
-		eval (code) ;
+        code = oMedia.getInnerHTML() ;
+        var start = code.indexOf( 'var s1 = new SWFObject' ) ;
+        if ( start == -1 )
+            return ;
+        var end = code.indexOf( 's1.write' ) ;
+        if ( end == -1 )
+            return ;
+        code = code.substring( start, end ) + 'html = s1.getSWFHTML();' ;
+        var html = '';
+        eval (code) ;
 
-		ePreview.innerHTML = html ;
+        ePreview.innerHTML = html ;
 
-		var margin_left = parseInt( ( max_width - oMedia.width ) / 2, 10 ) ;
-		var margin_top = parseInt( ( max_height - oMedia.height ) / 2, 10 ) ;
+        var margin_left = parseInt( ( max_width - oMedia.width ) / 2, 10 ) ;
+        var margin_top = parseInt( ( max_height - oMedia.height ) / 2, 10 ) ;
 
-		if ( ePreview.currentStyle )
-		{
-			// IE
-			ePreview.style.marginLeft = margin_left ;
-			ePreview.style.marginTop = margin_top ;
-		}
-		else
-		{
-			// Other browsers
-			SetAttribute( ePreview, 'style', 'margin-left: ' + margin_left + 'px; margin-top: ' + margin_top + 'px;' ) ;
-		}
-	}
+        if ( ePreview.currentStyle )
+        {
+            // IE
+            ePreview.style.marginLeft = margin_left ;
+            ePreview.style.marginTop = margin_top ;
+        }
+        else
+        {
+            // Other browsers
+            SetAttribute( ePreview, 'style', 'margin-left: ' + margin_left + 'px; margin-top: ' + margin_top + 'px;' ) ;
+        }
+    }
 }
 
 function ClearPreview()
 {
-	if ( !ePreview )
-		return ;
+    if ( !ePreview )
+        return ;
 
-	while ( ePreview.firstChild )
-		ePreview.removeChild( ePreview.firstChild ) ;
+    while ( ePreview.firstChild )
+        ePreview.removeChild( ePreview.firstChild ) ;
 
-	ePreview.innerHTML = '&nbsp;' ;
+    ePreview.innerHTML = '&nbsp;' ;
 }
 
 function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 {
-	// Remove animation
-	window.parent.Throbber.Hide() ;
-	GetE( 'divUpload' ).style.display  = '' ;
+    // Remove animation
+    window.parent.Throbber.Hide() ;
+    GetE( 'divUpload' ).style.display  = '' ;
 
-	switch ( errorNumber )
-	{
-		case 0 :	// No errors
-			//alert( FCKLang['FileSuccessfullyUploaded'] ) ;
-			break ;
-		case 1 :	// Custom error
-			alert( customMsg ) ;
-			return ;
-		case 101 :	// Custom warning
-			alert( customMsg ) ;
-			break ;
-		case 201 :
-			alert( FCKLang['FileRenamed'] + ' "' + fileName + '".' ) ;
-			break ;
-		case 202 :
-			alert( FCKLang['InvalidFileType'] ) ;
-			return ;
-		case 203 :
-			alert( FCKLang['SecurityError'] ) ;
-			return ;
-		case 500 :
-			alert( FCKLang['ConnectorDisabled'] ) ;
-			break ;
-		default :
-			alert( FCKLang['UploadError'] + errorNumber ) ;
-			return ;
-	}
+    switch ( errorNumber )
+    {
+        case 0 :	// No errors
+            //alert( FCKLang['FileSuccessfullyUploaded'] ) ;
+            break ;
+        case 1 :	// Custom error
+            alert( customMsg ) ;
+            return ;
+        case 101 :	// Custom warning
+            alert( customMsg ) ;
+            break ;
+        case 201 :
+            alert( FCKLang['FileRenamed'] + ' "' + fileName + '".' ) ;
+            break ;
+        case 202 :
+            alert( FCKLang['InvalidFileType'] ) ;
+            return ;
+        case 203 :
+            alert( FCKLang['SecurityError'] ) ;
+            return ;
+        case 500 :
+            alert( FCKLang['ConnectorDisabled'] ) ;
+            break ;
+        default :
+            alert( FCKLang['UploadError'] + errorNumber ) ;
+            return ;
+    }
 
-	OnDialogModeChange( 'single' ) ;
-	sActualBrowser = 'flv' ;
-	SetUrl( fileUrl ) ;
-	GetE('frmUpload').reset() ;
+    OnDialogModeChange( 'single' ) ;
+    sActualBrowser = 'flv' ;
+    SetUrl( fileUrl ) ;
+    GetE('frmUpload').reset() ;
 }
 
 var oUploadAllowedExtRegex = new RegExp( FCKConfig.MediaUploadAllowedExtensions, 'i' ) ;
@@ -889,24 +889,24 @@ var oUploadDeniedExtRegex = new RegExp( FCKConfig.MediaUploadDeniedExtensions, '
 
 function CheckUpload()
 {
-	var sFile = GetE( 'txtUploadFile' ).value ;
+    var sFile = GetE( 'txtUploadFile' ).value ;
 
-	if ( sFile.length == 0 )
-	{
-		alert( FCKLang['UploadSelectFileFirst'] ) ;
-		return false ;
-	}
+    if ( sFile.length == 0 )
+    {
+        alert( FCKLang['UploadSelectFileFirst'] ) ;
+        return false ;
+    }
 
-	if ( ( FCKConfig.MediaUploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
-		( FCKConfig.MediaUploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
-	{
-		OnUploadCompleted( 202 ) ;
-		return false ;
-	}
+    if ( ( FCKConfig.MediaUploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
+        ( FCKConfig.MediaUploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
+    {
+        OnUploadCompleted( 202 ) ;
+        return false ;
+    }
 
-	// Show animation
-	window.parent.Throbber.Show( 100 ) ;
-	GetE( 'divUpload' ).style.display  = 'none' ;
+    // Show animation
+    window.parent.Throbber.Show( 100 ) ;
+    GetE( 'divUpload' ).style.display  = 'none' ;
 
-	return true ;
+    return true ;
 }

@@ -45,12 +45,12 @@ $current_group_name=$current_group['name'];
 
 
 if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
-	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-	$interbreadcrumb[] = array ('url' => '../group/group.php?', 'name' => get_lang('Groups'));
-	$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace').' '.$current_group_name);
-	$name_to_show = explode('/', $name_to_show);	
-	unset ($name_to_show[1]);
-	$name_to_show = implode('/', $name_to_show);	
+    $req_gid = '&amp;gidReq='.$_SESSION['_gid'];
+    $interbreadcrumb[] = array ('url' => '../group/group.php?', 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace').' '.$current_group_name);
+    $name_to_show = explode('/', $name_to_show);
+    unset ($name_to_show[1]);
+    $name_to_show = implode('/', $name_to_show);
 }
 
 $interbreadcrumb[] = array('url' => './document.php?curdirpath='.dirname($header_file).$req_gid, 'name' => get_lang('Documents'));
@@ -64,12 +64,12 @@ $this_section = SECTION_COURSES;
 
 /*
 if (!empty($_GET['nopages'])) {
-	$nopages = Security::remove_XSS($_GET['nopages']);
-	if ($nopages == 1) {
-		require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
-		Display::display_error_message(get_lang('FileNotFound'));
-	}
-	exit;
+    $nopages = Security::remove_XSS($_GET['nopages']);
+    if ($nopages == 1) {
+        require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+        Display::display_error_message(get_lang('FileNotFound'));
+    }
+    exit;
 }
 */
 
@@ -92,7 +92,7 @@ $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' 
 // Only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
 $frameheight = 135;
 if ($is_courseAdmin) {
-	$frameheight = 165;
+    $frameheight = 165;
 }
 
 $file_root = $_course['path'].'/document'.str_replace('%2F', '/', $file);
@@ -102,32 +102,32 @@ $path_info = pathinfo($file_url_sys);
 
 $js_glossary_in_documents = '';
 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
-	$js_glossary_in_documents = '	//	    $(document).ready(function() {
-									$.frameReady(function() {
-								       //  $("<div>I am a div courses</div>").prependTo("body");
-								      }, "top.mainFrame",
-								      { load: [
-								      		{type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
-								            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-								            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
-								      	 ]
-								      }
-								      );
-								    //});';
+    $js_glossary_in_documents = '	//	    $(document).ready(function() {
+                                    $.frameReady(function() {
+                                       //  $("<div>I am a div courses</div>").prependTo("body");
+                                      }, "top.mainFrame",
+                                      { load: [
+                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+                                            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                                            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+                                           ]
+                                      }
+                                      );
+                                    //});';
 } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
-	$js_glossary_in_documents =	'//    $(document).ready(function() {
-								      $.frameReady(function(){
-								       //  $("<div>I am a div courses</div>").prependTo("body");
+    $js_glossary_in_documents =	'//    $(document).ready(function() {
+                                      $.frameReady(function(){
+                                       //  $("<div>I am a div courses</div>").prependTo("body");
 
-								      }, "top.mainFrame",
-								      { load: [
-								      		{type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
-								            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-								            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
-								      	 ]
-								      }
-								      );
-								//   });';
+                                      }, "top.mainFrame",
+                                      { load: [
+                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+                                            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                                            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+                                           ]
+                                      }
+                                      );
+                                //   });';
 }
 
 $htmlHeadXtra[] = '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"></script>';
@@ -135,12 +135,12 @@ $htmlHeadXtra[] = '<script language="javascript" src="'.api_get_path(WEB_LIBRARY
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 <!--
-	var updateContentHeight = function() {
-		HeaderHeight = document.getElementById("header").offsetHeight;
-		FooterHeight = document.getElementById("footer").offsetHeight;
-		docHeight = document.body.clientHeight;
-		document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";
-	};
+    var updateContentHeight = function() {
+        HeaderHeight = document.getElementById("header").offsetHeight;
+        FooterHeight = document.getElementById("footer").offsetHeight;
+        docHeight = document.body.clientHeight;
+        document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";
+    };
 
     function insertIt() {
         var _y = document.getElementById("framediv");
@@ -148,25 +148,25 @@ $htmlHeadXtra[] = '<script type="text/javascript">
         _y.innerHTML = _x
     }
 
-	// Fixes the content height of the frame
-	window.onload = function() {
-		//updateContentHeight();
-		'.$js_glossary_in_documents.'
-	}
+    // Fixes the content height of the frame
+    window.onload = function() {
+        //updateContentHeight();
+        '.$js_glossary_in_documents.'
+    }
 -->
 </script>';
 
 //fix the screen when you try to access a protected course through the url
-$is_allowed_in_course = $_SESSION ['is_allowed_in_course'];   
+$is_allowed_in_course = $_SESSION ['is_allowed_in_course'];
 if($is_allowed_in_course==false){
-	Display::display_header();
-	echo '<div align="center">';
-		Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="javascript:history.back(1)">'.get_lang('BackToPreviousPage').'</a><br />', false);
-	echo '</div>';
-	Display::display_footer();
+    Display::display_header();
+    echo '<div align="center">';
+        Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="javascript:history.back(1)">'.get_lang('BackToPreviousPage').'</a><br />', false);
+    echo '</div>';
+    Display::display_footer();
 die();
 }
-		
+
 //Display::display_header($tool_name, 'User');
 
 Display::display_header('');
@@ -176,9 +176,9 @@ echo '<a href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').
 //echo '<div>';
 echo '<div id="framediv">';
 if (file_exists($file_url_sys)) {
-	echo '<iframe border="0" onload="insertIt();"  frameborder="0" scrolling="auto"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"></iframe>';
+    echo '<iframe border="0" onload="insertIt();"  frameborder="0" scrolling="auto"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"></iframe>';
 } else {
-	echo '<frame name="mainFrame" onload="insertIt();" id="mainFrame" src=showinframes.php?nopages=1 />';
+    echo '<frame name="mainFrame" onload="insertIt();" id="mainFrame" src=showinframes.php?nopages=1 />';
 }
 echo '</div>';
 

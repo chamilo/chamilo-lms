@@ -249,13 +249,9 @@ class PDF {
         $web_path = false;
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
-            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';   // course path
+            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
             if (file_exists($store_path)) {
-                $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';                 
-            } else {
-                $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
-                if (file_exists($store_path))                   
-                    $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';
+                $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';                 
             }
         } else {
             $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path
@@ -274,7 +270,7 @@ class PDF {
     public function delete_watermark($course_code = null) {        
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
-            $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';   // course path            
+            $store_path  = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path            
         } else {
             $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';   // course path              
         }        
@@ -292,7 +288,7 @@ class PDF {
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);            
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'];   // course path
-            $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'pdf_watermark.png';
+            $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';
         } else {
             $store_path = api_get_path(SYS_CODE_PATH).'default_course_document';   // course path	
             $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/'.api_get_current_access_url_id().'_pdf_watermark.png';
@@ -432,15 +428,29 @@ class PDF {
         
         //Adding watermark
         if (api_get_setting('pdf_export_watermark_enable') == 'true') {            
-            $watermark_file = self::get_watermark($course_code);            
-            if (!empty($watermark_file)) { 
+            $watermark_file = self::get_watermark($course_code);      
+                  
+            if ($watermark_file) {                
                 //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark                
                 $this->pdf->SetWatermarkImage($watermark_file);
                 $this->pdf->showWatermarkImage = true;
+            } else {
+                $watermark_file = self::get_watermark(null);      
+                if ($watermark_file) {   
+                    $this->pdf->SetWatermarkImage($watermark_file);
+                    $this->pdf->showWatermarkImage = true;
+                }
             }
-            $watermark_text = api_get_setting('pdf_export_watermark_text');
+            if ($course_code) {
+                $watermark_text = api_get_course_setting('pdf_export_watermark_text');
+                if (empty($watermark_text)) {
+                    $watermark_text = api_get_setting('pdf_export_watermark_text');    
+                }
+            } else {
+                $watermark_text = api_get_setting('pdf_export_watermark_text');
+            }
             if (!empty($watermark_text)) {
-                $this->pdf->SetWatermarkText(strcode2utf($watermark_text));
+                $this->pdf->SetWatermarkText(strcode2utf($watermark_text),0.1);
                 $this->pdf->showWatermarkText = true;
             }
         }        

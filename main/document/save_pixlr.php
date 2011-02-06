@@ -122,10 +122,14 @@ if($currentTool=='document/createpaint'){
 }
 
 
+//delete temporal file
+unlink($_SESSION['temp_realpath_image']);
+
 //Clean sessions and return to Chamilo file list
 unset($_SESSION['paint_dir']);
 unset($_SESSION['paint_file']);
 unset($_SESSION['whereami']);
+unset($_SESSION['temp_realpath_image']);
 
 if (!isset($_SESSION['exit_pixlr'])){
 	$location=api_get_path(WEB_CODE_PATH).'document/document.php';

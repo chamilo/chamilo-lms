@@ -166,23 +166,18 @@ $extension= $findext[count($findext)-1];
 $file_crip=$name_crip.'.'.$extension;
 
 //copy file to temp/images directory
-
 $from=$filepath.$file;
 $to=api_get_path(SYS_ARCHIVE_PATH).'temp/images/'.$file_crip;
 copy($from, $to);
+$_SESSION['temp_realpath_image']=$to;
 
 //load image to url
 $to_url=api_get_path(WEB_ARCHIVE_PATH).'temp/images/'.$file_crip;
 $image=urlencode($to_url);
 
 //make frame an send image
-
 echo '<iframe style=\'height: 600px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'\'>';
 echo '</iframe>';
-
-//delete temporal file after a time
-//TODO:time counter. Can not be deleted immediately. It is necessary to leave a little time for pixlr.com can be loaded
-//unlink($to);
 
 Display::display_footer();
 ?>

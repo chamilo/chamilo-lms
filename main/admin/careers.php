@@ -49,8 +49,8 @@ $columns        = array(get_lang('Name'), get_lang('Description'), get_lang('Act
 //Column config
 $column_model   = array(
                         array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
-                        array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
-                        array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter')
+                        array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
+                        array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
                        );            
 //Autowidth             
 $extra_params['autowidth'] = 'true';
@@ -119,11 +119,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         if ($check) {
             $values = $form->exportValues();
             $career->update_all_promotion_status_by_career_id($values['id'],$values['status']);               
-            $res    = $career->update($values);            
+            $res    = $career->update($values);
             if ($values['status']) {
-                Display::display_confirmation_message(sprintf(get_lang('CareerXArchived'), $values['name']), false);
+                Display::display_confirmation_message(sprintf(get_lang('CareerXUnarchived'), $values['name']), false);
             } else {
-            	Display::display_confirmation_message(sprintf(get_lang('CareerXUnarchived'), $values['name']), false);
+            	Display::display_confirmation_message(sprintf(get_lang('CareerXArchived'), $values['name']), false);
             }
         }
         Security::clear_token();

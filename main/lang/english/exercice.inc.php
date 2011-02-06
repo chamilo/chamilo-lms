@@ -373,4 +373,6 @@ $UniqueAnswerNoOption = "Unique answer with unknown";
 $MultipleAnswerTrueFalse = "Multiple answer true/false/don't know";
 $MultipleAnswerCombinationTrueFalse = "Combination true/false/don't-know";
 $DontKnow = "Don't know";
+$False = "False";
+$DoubtScore = "Don't know";
 ?>

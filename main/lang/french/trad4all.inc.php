@@ -995,4 +995,10 @@ $ByCourse = "Par cours";
 $MyQCM = "Mes QCM";
 $AddACourse = "Ajouter un cours";
 $PerWeek = "Par semaine";
+$PhotoRetouching = "Retouche photo";
+$SeeAll = "Tout voir";
+$SeeOnlyArchived = "Voir éléments archivés";
+$SeeOnlyUnarchived = "Voir éléments non archivés";
+$LatestAttempt = "Dernière tentative";
+$ContactInformationHasNotBeenSent = "Vos détails de contact n'ont pas pu être envoyés. C'est probablement dû à un problème de réseau. Veuillez essayer à nouveau dans quelques secondes. Si le problème persiste, ignorez simplement ce processus d'inscription et cliquez sur l'autre bouton pour passer à l'étape suivante.";
 ?>

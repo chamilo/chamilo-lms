@@ -998,4 +998,9 @@ $MyQCM = "My MCQ";
 $AddACourse = "Add a course";
 $PerWeek = "Per week";
 $PhotoRetouching = "Photo retouching";
+$SeeAll = "See all";
+$SeeOnlyArchived = "See only archived";
+$SeeOnlyUnarchived = "See only unarchived";
+$LatestAttempt = "Latest attempt";
+$ContactInformationHasNotBeenSent = "Your contact information could not be sent. This is probably due to a temporary network problem. Please try again in a few seconds. If the problem remains, ignore this registration process and simply click the button to go to the next step.";
 ?>

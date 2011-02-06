@@ -124,4 +124,5 @@ $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Display the last executed s
 $AddPicture = "Add a picture";
 $LPAutoLaunch = "Enable learning path auto-launch";
 $ConfigLearnpath = "Learning path settings";
+$PDFWaterMarkHeader = "Watermark header in PDF exports";
 ?>

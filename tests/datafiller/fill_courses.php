@@ -9,6 +9,7 @@
  */
 //require_once '../../main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 /**
  * Loads the data and injects it into the Chamilo database, using the Chamilo
  * internal functions.
@@ -24,7 +25,7 @@ function fill_courses() {
     foreach ($courses as $i => $course) {
         //first check that the first item doesn't exist already
     	$output[$i]['line-init'] = $course['title'];
-    	$output[$i]['line-info'] = (create_course($course[)?$res:get_lang('NotInserted'));
+    	$output[$i]['line-info'] = ($res = create_course($course['code'],$course['title'],$course['tutor'],$course['category'],$course['language'],$course['admin_id'],Database::get_database_name_prefix(),$course['expires'],$course['fill'])?$res:get_lang('NotInserted'));
     	$i++;
     }
     return $output;

@@ -17,7 +17,6 @@ $courses[] = array(
     'category' => 'PROJ',
     'language' => 'english',
     'admin_id' => 1,
-    'db_prefix' => $_configuration['db_prefix'],
     'expires' => '2020-09-01 00:00:00',
     'fill' => true,
 );

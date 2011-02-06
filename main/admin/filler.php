@@ -30,8 +30,18 @@ $nameTools = get_lang('DataFiller');
 
 $output = array();
 if (!empty($_GET['fill'])) {
-	require api_get_path('SYS_TEST_PATH').'datafiller/fill_users.php';
-	$output = fill_users();
+    switch ($_GET['fill']) {
+    	case 'users':
+        	require api_get_path('SYS_TEST_PATH').'datafiller/fill_users.php';
+            $output = fill_users();
+            break;
+        case 'courses':
+            require api_get_path('SYS_TEST_PATH').'datafiller/fill_courses.php';
+            $output = fill_courses();
+            break;
+        default:
+            break;
+    }
 }
 
 // Displaying the header
@@ -57,6 +67,7 @@ if (count($output)>0) {
   <div><?php echo get_lang('ThisSectionIsOnlyVisibleOnSourceInstalls');?></div>
   <ul>
     <li><a href="filler.php?fill=users"><?php echo get_lang('FillUsers');?></a></li>
+    <li><a href="filler.php?fill=courses"><?php echo get_lang('FillCourses');?></a></li>
   </ul>
 </div>
 <?php

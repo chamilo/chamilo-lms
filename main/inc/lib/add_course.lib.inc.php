@@ -2254,42 +2254,45 @@ function fill_Db_course($course_db_name, $course_repository, $language, $default
     // FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
 
-    foreach ($default_document_array as $media_type => $array_media) {
-        if ($media_type == 'images') {
-            $path_documents = '/images/gallery/';
-            $course_documents_folder = $sys_course_path.$course_repository.'/document/images/gallery/';
-        }
-        if ($media_type == 'audio') {
-            $path_documents = '/audio/';
-            $course_documents_folder = $sys_course_path.$course_repository.'/document/audio/';
-        }
-        if ($media_type == 'flash') {
-            $path_documents = '/flash/';
-            $course_documents_folder = $sys_course_path.$course_repository.'/document/flash/';
-        }
-        if ($media_type == 'video') {
-            $path_documents = '/video/';
-            $course_documents_folder = $sys_course_path.$course_repository.'/document/video/';
-        }
-        foreach ($array_media as $key => $value) {
-            if ($value['dir'] != '') {
-                $folder_path = substr($value['dir'], 0, strlen($value['dir']) - 1);
-                $temp = explode('/', $folder_path);
-                Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$path_documents".$folder_path."','".$temp[count($temp)-1]."','folder','0')");
-                $image_id = Database :: insert_id();
-                Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
+    if (is_array($default_document_array) && count($default_document_array)>0) {
+        foreach ($default_document_array as $media_type => $array_media) {
+            if ($media_type == 'images') {
+                $path_documents = '/images/gallery/';
+                $course_documents_folder = $sys_course_path.$course_repository.'/document/images/gallery/';
             }
-
-            if ($value['file'] != '') {
-                $temp = explode('/', $value['file']);
-                $file_size = filesize($course_documents_folder.$value['file']);
-                Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$path_documents".$value["file"]."','".$temp[count($temp)-1]."','file','$file_size')");
-                $image_id = Database :: insert_id();
-                Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,1)");
+            if ($media_type == 'audio') {
+                $path_documents = '/audio/';
+                $course_documents_folder = $sys_course_path.$course_repository.'/document/audio/';
+            }
+            if ($media_type == 'flash') {
+                $path_documents = '/flash/';
+                $course_documents_folder = $sys_course_path.$course_repository.'/document/flash/';
+            }
+            if ($media_type == 'video') {
+                $path_documents = '/video/';
+                $course_documents_folder = $sys_course_path.$course_repository.'/document/video/';
+            }
+            if (is_array($array_media) && count($array_media)>0) {
+                foreach ($array_media as $key => $value) {
+                    if ($value['dir'] != '') {
+                        $folder_path = substr($value['dir'], 0, strlen($value['dir']) - 1);
+                        $temp = explode('/', $folder_path);
+                        Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$path_documents".$folder_path."','".$temp[count($temp)-1]."','folder','0')");
+                        $image_id = Database :: insert_id();
+                        Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
+                    }
+        
+                    if ($value['file'] != '') {
+                        $temp = explode('/', $value['file']);
+                        $file_size = filesize($course_documents_folder.$value['file']);
+                        Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$path_documents".$value["file"]."','".$temp[count($temp)-1]."','file','$file_size')");
+                        $image_id = Database :: insert_id();
+                        Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,1)");
+                    }
+                }
             }
         }
     }
-
     if ($fill_with_exemplary_content) {
 
         /*

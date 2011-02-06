@@ -821,7 +821,7 @@ function getRootPath() {
         {
             if(strlen($fileName) > $maxLeng)
             {
-                $fileName = api_substr($fileName, 0, $maxLeng - strlen($indicate)) . $indicate;
+                $fileName = api_substr($fileName, 0, $maxLeng - api_strlen($indicate)) . $indicate;
             }
             return $fileName;
 

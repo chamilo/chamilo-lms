@@ -24,7 +24,7 @@ function fill_users() {
     foreach ($users as $i => $user) {
         //first check that the first item doesn't exist already
     	$output[$i]['line-init'] = $user['firstname'];
-    	$output[$i]['line-info'] = (UserManager::create_user($user['firstname'],$user['lastname'],$user['status'],$user['email'],$user['username'],$user['pass'],null,null,null,null,$user['auth_source'],null,$user['active'])?$res:get_lang('NotInserted'));
+    	$output[$i]['line-info'] = ($res = UserManager::create_user($user['firstname'],$user['lastname'],$user['status'],$user['email'],$user['username'],$user['pass'],null,null,null,null,$user['auth_source'],null,$user['active'])?$res:get_lang('NotInserted'));
     	$i++;
     }
     return $output;

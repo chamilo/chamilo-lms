@@ -594,6 +594,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
                 $added_slash = ($curdirpath == '/') ? '' : '/';
                 $dir_name = $curdirpath.$added_slash.replace_dangerous_char($post_dir_name);
                 $dir_name = disable_dangerous_file($dir_name);
+                $dir_name = str_replace('.', '_', $dir_name);
+                $post_dir_name = str_replace('.', '_', $post_dir_name);
+                
                 $dir_check = $base_work_dir.$dir_name;
                 if (!is_dir($dir_check)) {
                     $created_dir = create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $dir_name, $post_dir_name);

@@ -59,7 +59,7 @@ class Career extends Model {
 	}
     
     public function get_status_list() {
-        return array(CAREER_STATUS_ACTIVE => get_lang('Active'), CAREER_STATUS_INACTIVE => get_lang('Inactive'));
+        return array(CAREER_STATUS_ACTIVE => get_lang('Unarchived'), CAREER_STATUS_INACTIVE => get_lang('Archived'));
     }
     
     /**

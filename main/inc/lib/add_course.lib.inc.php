@@ -631,6 +631,7 @@ function update_Db_course($course_db_name) {
         feedback_type int NOT NULL default 0,
         expired_time int NOT NULL default '0',
         session_id smallint default 0,
+        propagate_neg INT NOT NULL DEFAULT 0,
         PRIMARY KEY (id)
         )" . $charset_clause;
     Database::query($sql);

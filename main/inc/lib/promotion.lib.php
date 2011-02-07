@@ -114,9 +114,10 @@ class Promotion extends Model {
      * Copies the promotion to a new one
      * @param   integer     Promotion ID
      * @param   integer     Career ID, in case we want to change it
+     * @param   boolean     Whether or not to copy the sessions inside 
      * @return  integer     New promotion ID on success, false on failure
      */
-    public function copy($id, $career_id = null) {
+    public function copy($id, $career_id = null, $copy_sessions = false) {
         $promotion = $this->get($id);
         $new = array();
         foreach ($promotion as $key => $val) {
@@ -143,14 +144,16 @@ class Promotion extends Model {
             }
         }
         $pid = $this->save($new);
-        //Now also copy each session of the promotion as a new session and register it inside the promotion
-        require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-        $session_list   = SessionManager::get_all_sessions_by_promotion($id);    
-        if (!empty($session_list)) {
-            foreach($session_list  as $item) {
-                $sid = SessionManager::copy_session($item['id'], true, true);
-                if ($sid != 0) {
-                    SessionManager::suscribe_sessions_to_promotion($pid,array($sid));
+        if ($copy_sessions) {
+            //Now also copy each session of the promotion as a new session and register it inside the promotion
+            require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+            $session_list   = SessionManager::get_all_sessions_by_promotion($id);    
+            if (!empty($session_list)) {
+                foreach($session_list  as $item) {
+                    $sid = SessionManager::copy_session($item['id'], true, true);
+                    if ($sid != 0) {
+                        SessionManager::suscribe_sessions_to_promotion($pid,array($sid));
+                    }
                 }
             }
         }

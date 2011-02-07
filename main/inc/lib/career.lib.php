@@ -104,6 +104,7 @@ class Career extends Model {
     /**
      * Copies the career to a new one
      * @param   integer     Career ID
+     * @param   boolean     Whether or not to copy the promotions inside
      * @return  integer     New career ID on success, false on failure
      */
     public function copy($id, $copy_promotions = false) {

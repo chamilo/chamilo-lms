@@ -114,7 +114,7 @@ switch ($action) {
                 $new_result[]        = $group;
             }
             $result = $new_result;
-        }
+        }        
         $columns = array('name', 'users', 'courses','sessions');                
         if(!in_array($sidx, $columns)) {
             $sidx = 'name';
@@ -125,7 +125,7 @@ switch ($action) {
     default:    
         exit;            
 }
-//echo '<pre>';
+//var_dump($result);
 
 //5. Creating an obj to return a json
 if (in_array($action, array('get_careers','get_promotions','get_usergroups'))) { 
@@ -146,6 +146,6 @@ if (in_array($action, array('get_careers','get_promotions','get_usergroups'))) {
              $i++; 
         }
     } 
-    echo json_encode($responce);       
+    echo json_encode($response);       
 }
 exit;

@@ -550,11 +550,11 @@ class SocialManager extends UserManager {
 
 		// Everybody can create groups
 		if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
-			$create_group_item =  '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateAgroup'),array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='group_add'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('CreateAgroup').'</span></a></li>';
+			$create_group_item =  '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='group_add'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('CreateASocialGroup').'</span></a></li>';
 		} else {
 			// Only admins and teachers can create groups
 			if (api_is_allowed_to_edit(null,true)) {
-				$create_group_item =  '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateAgroup'),array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='group_add'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('CreateAgroup').'</span></a></li>';
+				$create_group_item =  '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='group_add'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('CreateASocialGroup').'</span></a></li>';
 			}
 		}
 
@@ -626,23 +626,30 @@ class SocialManager extends UserManager {
 			//Shared profile
 	        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('my_shared_profile.png',get_lang('ViewMySharedProfile'),array('hspace'=>'6')).'<span class="'.($show=='shared_profile'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('ViewMySharedProfile').'</span></a></li>
 	        	  <li><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('friend.png',get_lang('Friends'),array('hspace'=>'6')).'<span class="'.($show=='friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Friends').'</span></a></li>
-	              <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.png',get_lang('Groups'),array('hspace'=>'6')).'<span class="'.($show=='groups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Groups').'</span></a></li>';
+	              <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.png',get_lang('Groups'),array('hspace'=>'6')).'<span class="'.($show=='groups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('SocialGroups').'</span></a></li>';
 			
 			//Show groups
 	        if (in_array($show,$show_groups)) {					
     			echo $create_group_item;
                 if (api_get_setting('allow_students_to_create_groups_in_social') == 'true' || api_is_platform_admin()) {                        
                     echo '<li><ul>';    
-                    echo '<li class="social-menu-sub-level" style="background:none;padding:0px"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php?view=mygroups">'.Display::return_icon('group.png',get_lang('MyGroups'),array('hspace'=>'6')).'<span class="'.($show=='mygroups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyGroups').'</span></a></li>';
+                    echo '<li class="social-menu-sub-level" style="background:none;padding:0px"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php?view=mygroups">'.Display::return_icon('group.png',get_lang('MySocialGroups'),array('hspace'=>'6')).'<span class="'.($show=='mygroups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MySocialGroups').'</span></a></li>';
                     echo '</ul></li>';
                 }
 			}
 			
+			//Groups
+			$group_class = 'social-menu-text4';
+			if ($show == 'classes') {
+			    $group_class = 'social-menu-text-active';     
+			}
+            echo Display::tag('li', Display::return_icon('group.png',get_lang('MyGroups'),array('hspace'=>'6')).Display::url(Display::tag('span',get_lang('MyGroups'),array('class'=>$group_class)),api_get_path(WEB_PATH).'main/social/usergroups.php'));
+	
+            
+			
 			//Search users and groups
 	        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'),array('hspace'=>'6')).'<span class="'.($show=='search'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Search').'</span></a></li>';
-            
-            echo Display::tag('li', Display::return_icon('group.png',get_lang('Groups'),array('hspace'=>'6')).Display::url(get_lang('MyClasses'),api_get_path(WEB_PATH).'main/social/usergroups.php'));
-			
+            		
 			//My files
 			 echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase_small.png',get_lang('MyFiles'),array('hspace'=>'6')).'<span class="'.($show=='myfiles'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyFiles').'</span></a></li>';	
 	        echo'</ul>

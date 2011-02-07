@@ -30,7 +30,7 @@ echo '<div id="social-content">';
 
 	echo '<div id="social-content-left">';	
 		//this include the social menu div
-		SocialManager::show_social_menu('friends');	
+		SocialManager::show_social_menu('classes');	
 	echo '</div>';
 	echo '<div id="social-content-right">';
 	
@@ -55,6 +55,10 @@ if (!empty($usergroup_list)) {
     foreach($usergroup_list as $group_id) {
     	$data = $usergroup->get($group_id);
         echo Display::tag('div',$data['name']);
+    }
+} else {
+    if (api_is_platform_admin()) {
+        Display::display_normal_message(Display::url(get_lang('CreateAgroup') ,api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'), false);
     }
 }
 echo '</div>';

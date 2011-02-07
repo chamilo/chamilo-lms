@@ -2226,7 +2226,7 @@ class Exercise {
                             }
                         } elseif($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                             if ($origin!='learnpath') {
-                                ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0);
+                                ExerciseShowFunctions::display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,$questionId,0);
                             }                            
                         } elseif($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
                             if ($origin!='learnpath') {

@@ -198,7 +198,7 @@ foreach ($questionList as $questionId) {
 	unset($objQuestionTmp);
 
 	// decide how many columns we want to use to show the results of each type
-	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
+	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION || MULTIPLE_ANSWER_TRUE_FALSE) {
 		$colspan=4;
 	} elseif($answerType == MATCHING || $answerType == FREE_ANSWER) {
 		$colspan=2;
@@ -224,7 +224,7 @@ foreach ($questionList as $questionId) {
 		</td>
 		</tr>
 		<?php
-		if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION ) {
+		if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_TRUE_FALSE) {
 			?>
 				<tr>
 				<td width="5%" valign="top" align="center" nowrap="nowrap">

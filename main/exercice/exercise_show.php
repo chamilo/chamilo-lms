@@ -584,6 +584,10 @@ if ($show_results) {
 		$my_total_weight = convert_score($questionWeighting, $total_weighting);       
 
 		echo '<div id="question_score">';
+	    if ($objExercise->selectPropagateNeg() && $my_total_score < 0) {
+	        $my_total_score = 0;
+	    }  
+	    
 		echo get_lang('Score')." : $my_total_score / $my_total_weight";        
         //echo get_lang('Score')." : ".show_score($my_total_score, $total_weighting, false);
 		echo '</div>';
@@ -599,11 +603,14 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 	if ($show_results) {        
 		echo '<div id="question_score">'.get_lang('YourTotalScore').": ";
         //@todo $dsp_percent who do that and why?
-		if ($dsp_percent) {            
+		if ($dsp_percent) {
 			$my_result = number_format(($totalScore/$totalWeighting)*100,1,'.','');
 			$my_result = float_format($my_result,1);
 			echo $my_result."%";
-		} else {                    
+		} else {          
+		    if ($objExercise->selectPropagateNeg() && $totalScore < 0) {
+		        $totalScore = 0;
+		    }          
             echo show_score($totalScore, $totalWeighting, false);
 		}
 		echo '</div>';

@@ -45,6 +45,10 @@ if ($action == 'delete') {
 	SessionManager::delete_session($idChecked);
 	header('Location: '.api_get_self().'?sort='.$sort);
 	exit();
+} elseif ($action == 'copy') {
+	SessionManager::copy_session($idChecked);
+    header('Location: '.api_get_self().'?sort='.$sort);
+    exit();
 }
 
 $interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
@@ -309,6 +313,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('course_add.gif', get_lang('SubscribeCoursesToSession')); ?></a>
 			<a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a>
 			<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('delete.gif', get_lang('Delete')); ?></a>
+            <a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=copy&idChecked=<?php echo $enreg['id'];?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('copy.gif', get_lang('Copy')); ?></a>
 		  </td>
 		</tr>
 

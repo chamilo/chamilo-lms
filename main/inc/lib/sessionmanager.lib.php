@@ -37,19 +37,22 @@ class SessionManager {
 	  * Create a session
 	  * @author Carlos Vargas from existing code
 	  * @param	string 		name
-	  * @param 	integer		year_start
-	  * @param 	integer		month_start
-	  * @param 	integer		day_start
-	  * @param 	integer		year_end
-	  * @param 	integer		month_end
-	  * @param 	integer		day_end
-	  * @param 	integer		nb_days_acess_before
-	  * @param 	integer		nb_days_acess_after
-	  * @param 	integer		nolimit
-	  * @param 	string		coach_username
-	  * @param 	integer		id_session_category
-	  * @return $id_session;
-	  **/
+	  * @param 	integer		Start year (yyyy)
+	  * @param 	integer		Start month (mm)
+	  * @param 	integer		Start day (dd)
+	  * @param 	integer		End year (yyyy)
+	  * @param 	integer		End month (mm)
+	  * @param 	integer		End day (dd)
+	  * @param 	integer		Number of days that the coach can access the session before the start date
+	  * @param 	integer		Number of days that the coach can access the session after the end date
+	  * @param 	integer		If 1, means there are no date limits
+	  * @param 	mixed		If integer, this is the session coach id, if string, the coach ID will be looked for from the user table
+	  * @param 	integer		ID of the session category in which this session is registered
+      * @param  integer     Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
+      * @param  string      Start limit = true if the start date has to be considered
+      * @param  string      End limit = true if the end date has to be considered
+	  * @return mixed       Session ID on success, error message otherwise
+      **/
 	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true) {		
 		$name= Database::escape_string(trim($sname));
 		$year_start= intval($syear_start);
@@ -115,7 +118,6 @@ class SessionManager {
 			} else {
 				$sql_insert = "INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id,visibility)
 							   VALUES('".$name."','$date_start','$date_end','$id_coach',".api_get_user_id().",".$nb_days_acess_before.", ".$nb_days_acess_after.", ".$id_session_category.", ".$id_visibility.")";
-                              
 				Database::query($sql_insert);
 				$id_session=Database::insert_id();
 
@@ -357,14 +359,11 @@ class SessionManager {
 		//from function parameter
 		$session_visibility = $visibility;
 	   	if (empty($session_visibility)) {
-	   		$session_visibility = $session_info['name'];
 	   		$session_visivility	= $session_info['visibility']; //loaded from DB
 	   		//default status loaded if empty
 			if (empty($session_visivility))
 				$session_visibility = SESSION_VISIBLE_READ_ONLY; // by default readonly 1
 	   	}
-		$session_info = api_get_session_info($id_session);
-		$session_name = $session_info['name'];
 
 	   	//$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
         $sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' ";
@@ -533,9 +532,9 @@ class SessionManager {
      public static function add_courses_to_session ($id_session, $course_list, $empty_courses=true) {
      	// security checks
      	if ($id_session!= strval(intval($id_session))) { return false; }
-	   	foreach($course_list as $intCourse){
-	   		if ($intCourse!= strval(intval($intCourse))) { return false; }
-	   	}
+	   	//foreach($course_list as $intCourse){
+	   	//	if ($intCourse!= strval(intval($intCourse))) { return false; }
+	   	//}
 	   	// initialisation
 		$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1300,12 +1299,65 @@ class SessionManager {
     * @param	int 	session id
     * @param	int 	status
     */
-    function set_session_status($session_id, $status) {
+    public function set_session_status($session_id, $status) {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         $params['visibility'] = $status;
     	Database::update($t, $params, array('id = ?'=>$session_id));
     }
     
-    
-    
+    /**
+     * Copies a session with the same data to a new session. 
+     * The new copy is not assigned to the same promotion. @see suscribe_sessions_to_promotions() for that
+     * @param   int     Session ID
+     * @param   bool    Whether to copy the relationship with courses
+     * @param   bool    Whether to copy the relationship with users
+     * @return  int     The new session ID on success, 0 otherwise
+     * @todo make sure the extra session fields are copied too
+     */
+    public function copy_session($id, $copy_courses=true, $copy_users=true) {
+        $id = (int)$id;
+        $s = self::fetch($id);
+        $s['year_start']    = substr($s['date_start'],0,4);
+        $s['month_start']   = substr($s['date_start'],5,2);
+        $s['day_start']     = substr($s['date_start'],8,2);
+        $s['year_end']      = substr($s['date_end'],0,4);
+        $s['month_end']     = substr($s['date_end'],5,2);
+        $s['day_end']       = substr($s['date_end'],8,2);
+        $sid = self::create_session($s['name'].' '.get_lang('Copy'),
+             $s['year_start'], $s['month_start'], $s['day_start'],
+             $s['year_end'],$s['month_end'],$s['day_end'],
+             $s['nb_days_acess_before_beginning'],$s['nb_days_acess_after_end'],
+             false,(int)$s['id_coach'], $s['session_category_id'],
+             (int)$s['visibility'],true, true);
+        if (!is_numeric($sid)) {
+        	return false;
+        }
+        if ($copy_courses) {
+            // Register courses from the original session to the new session
+            $courses = self::get_course_list_by_session_id($id);
+            $short_courses = array();
+            if (is_array($courses) && count($courses)>0) {
+            	foreach ($courses as $course) {
+            		$short_courses[] = $course['course_code'];
+            	}
+            }
+            $courses = null;
+            $res = self::add_courses_to_session($sid, $short_courses, true);
+            $short_courses = null;
+        }
+        if ($copy_users) {
+            // Register users from the original session to the new session
+            $users = self::get_users_by_session($id);
+            $short_users = array();
+            if (is_array($users) && count($users)>0) {
+                foreach ($users as $user) {
+                    $short_users[] = $user['user_id'];
+                }
+            }
+            $users = null;
+            $res = self::suscribe_users_to_session($sid, $short_users, 1, true, false);
+            $short_users = null;
+        }
+    	return true;
+    }
 }

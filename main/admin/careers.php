@@ -59,7 +59,7 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-                         return \'<a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'"></a> <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\'; 
+                         return \'<a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'"></a> <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a> <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=copy&id=\'+options.rowId+\'"><img title="'.get_lang('Copy').'" src="../img/copy.gif"></a>\'; 
                  }';
 ?>
 <script>
@@ -142,6 +142,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $res = $career->delete(intval($_GET['id']));
     if ($res) {
         Display::display_confirmation_message(get_lang('Deleted'));
+    }
+    $career->display();
+} elseif (isset($_GET['action']) && $_GET['action'] == 'copy') {
+    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        api_not_allowed();
+    }
+    $res = $career->copy($_GET['id']);
+    if ($res) {
+        Display::display_confirmation_message(get_lang('Copied'));
     }
     $career->display();
 } else {

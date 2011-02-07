@@ -111,11 +111,12 @@ class Promotion extends Model {
         return $form;
     }
     /**
-     * Copies the promotions to a new one
+     * Copies the promotion to a new one
      * @param   integer     Promotion ID
+     * @param   integer     Career ID, in case we want to change it
      * @return  integer     New promotion ID on success, false on failure
      */
-    public function copy($id) {
+    public function copy($id, $career_id = null) {
         $promotion = $this->get($id);
         $new = array();
         foreach ($promotion as $key => $val) {
@@ -131,6 +132,11 @@ class Promotion extends Model {
                     $val = api_get_utc_datetime();
                     $new[$key] = $val;
                     break;
+                case 'career_id':
+                    if (!empty($career_id)) {
+                    	$val = (int)$career_id;
+                    }
+                    $new[$key] = $val;
                 default:
                     $new[$key] = $val;
                     break;

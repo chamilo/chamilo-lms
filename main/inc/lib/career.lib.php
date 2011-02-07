@@ -101,5 +101,41 @@ class Career extends Model {
         $form->addRule('name', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
         return $form;
     }
-    
+    /**
+     * Copies the career to a new one
+     * @param   integer     Career ID
+     * @return  integer     New career ID on success, false on failure
+     */
+    public function copy($id) {
+        $career = $this->get($id);
+        $new = array();
+        foreach ($career as $key => $val) {
+            switch ($key) {
+                case 'id':
+                case 'updated_at':
+                    break;
+                case 'name':
+                    $val .= ' '.get_lang('Copy');
+                    $new[$key] = $val;
+                    break;
+                case 'created_at':
+                    $val = api_get_utc_datetime();
+                    $new[$key] = $val;
+                    break;
+                default:
+                    $new[$key] = $val;
+                    break;
+            }
+        }
+        $cid = $this->save($new);
+        //Now also copy each session of the promotion as a new session and register it inside the promotion
+        $promotion = new Promotion();
+        $promo_list   = $promotion->get_all_promotions_by_career_id($id);    
+        if (!empty($promo_list)) {
+            foreach($promo_list  as $item) {
+                $pid = $promotion->copy($item['id'], $cid);
+            }
+        }
+        return $cid;
+    }    
 }

@@ -271,7 +271,7 @@ if (is_array($flat_list)) {
             $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'</td>'."\n";
             */
 
-            $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].'</td>'."\n";
+            $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].'<br />'.(learnpath::is_lp_visible_for_student($id,api_get_user_id())?'':'('.get_lang('LPNotVisibleToStudent').')').'</td>'."\n";
 
             /* Export */
 

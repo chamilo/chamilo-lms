@@ -1999,11 +1999,10 @@ class learnpath {
             // Also check the time availability of the learning path
             if ($is_visible) {
                 $now = str_replace($find,'',api_get_local_time());
-            	if ($now<$from or $now>$to) {
+            	if ((($row['publicated_on']!='0000-00-00 00:00:00') && ($now<$from)) or (($row['expired_on']!='0000-00-00 00:00:00') && ($now>$to))) {
             		$is_visible = false;
             	}
             }
-    
             return $is_visible;
         }
         return false;

@@ -185,14 +185,16 @@ foreach($final_array as $session_data) {
         $html .=$table->toHtml();
     }
 }     
+
+
 echo Display::tag('h1', $session_info['name']);
 
 //All Learnpaths grid settings (First tab, first subtab)
 
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id;
-$columns        = array(get_lang('Date'),get_lang('Course'), get_lang('LearningPath'));
+$columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang('LearningPath'));
 
-$column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'90',  'align'=>'left',  'sortable'=>'false'),
+$column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'100',  'align'=>'left',  'sortable'=>'false'),
                         array('name'=>'course', 'index'=>'course', 'width'=>'500', 'align'=>'left',  'sortable'=>'false'),
                         array('name'=>'lp',     'index'=>'lp',     'width'=>'200', 'align'=>'center','sortable'=>'false'));
                         
@@ -210,10 +212,10 @@ $extra_params_course['autowidth'] = 'true'; //use the width of the parent
                               
 //Per Week grid
 $url_week           = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id;
-$column_week        = array(get_lang('PeriodWeek'), get_lang('Date'), get_lang('Course'), get_lang('LearningPath'));
+$column_week        = array(get_lang('PeriodWeek'), get_lang('PublicationDate'), get_lang('Course'), get_lang('LearningPath'));
 $column_week_model  = array(
                           array('name'=>'week',     'index'=>'week',    'width'=>'80', 'align'=>'left', 'sortable'=>'false'),       
-                          array('name'=>'date',     'index'=>'date',    'width'=>'90', 'align'=>'right','sortable'=>'false'),
+                          array('name'=>'date',     'index'=>'date',    'width'=>'100', 'align'=>'right','sortable'=>'false'),
                           array('name'=>'course',   'index'=>'course',  'width'=>'500','align'=>'left', 'sortable'=>'false'),
                           array('name'=>'lp',       'index'=>'lp',      'width'=>'200','align'=>'center','sortable'=>'false'));
                           

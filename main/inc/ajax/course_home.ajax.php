@@ -140,17 +140,25 @@ switch ($action) {
                 if (strtotime($last_date) < strtotime($lp_date)) {
                     $icons = ' '.Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
                 }
-                $temp[$count]['cell']=array(substr($lp_item['publicated_on'], 0,10), $item['title'], Display::url($lp_item['lp_name'].$icons,$lp_url, array('target'=>'_blank')));
+                
+                if (!empty($lp_item['publicated_on'])) {
+                    $date = substr($lp_item['publicated_on'], 0, 10);
+                } else {
+                    $date = '-';
+                }
+                
+                $temp[$count]['cell']=array($date, $item['title'], Display::url($lp_item['lp_name'].$icons,$lp_url, array('target'=>'_blank')));
                 $count++;     
             }              
         } 
         
         $i =0;
+        $response = new stdClass(); 
         foreach($temp as $key=>$row) {   
             $row = $row['cell'];            
             if ($key >= $start  && $key < ($start + $limit)) {                 
-                $responce->rows[$i]['id']= $key;
-                $responce->rows[$i]['cell']=array($row[0], $row[1], $row[2]);
+                $response->rows[$i]['id']= $key;
+                $response->rows[$i]['cell']=array($row[0], $row[1], $row[2]);
                 $i++;                
             }
         }        
@@ -160,14 +168,14 @@ switch ($action) {
         } else { 
             $total_pages = 0; 
         }         
-        $responce->total    = $total_pages;         
+        $response->total    = $total_pages;         
         if ($page > $total_pages) { 
-            $responce->page= $total_pages;
+            $response->page= $total_pages;
         } else {
-            $responce->page     = $page;	
+            $response->page     = $page;	
         }        
-        $responce->records = $count;    
-        echo json_encode($responce);        
+        $response->records = $count;    
+        echo json_encode($response);        
         break;
         
     case 'session_courses_lp_by_week':
@@ -237,17 +245,22 @@ switch ($action) {
                     $icons = ' '.Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
                 }
                 
-                $temp[$count]['cell']=array(get_week_from_day($lp_item['publicated_on']), substr($lp_item['publicated_on'], 0,10), $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
+                if (!empty($lp_item['publicated_on'])) {
+                    $date = substr($lp_item['publicated_on'], 0, 10);
+                } else {
+                    $date = '-';
+                }
+                $temp[$count]['cell']=array(get_week_from_day($lp_item['publicated_on']), $date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
                 $count++;     
             }              
         } 
-        
-        $i =0;
+        $response = new stdClass(); 
+        $i =0;        
         foreach($temp as $key=>$row) {   
             $row = $row['cell'];            
             if ($key >= $start  && $key < ($start + $limit)) {                 
-                $responce->rows[$i]['id']= $key;
-                $responce->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
+                $response->rows[$i]['id']= $key;
+                $response->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
                 $i++;                
             }
         }
@@ -257,14 +270,14 @@ switch ($action) {
         } else { 
             $total_pages = 0; 
         }         
-        $responce->total    = $total_pages;         
+        $response->total    = $total_pages;         
         if ($page > $total_pages) { 
-            $responce->page= $total_pages;
+            $response->page= $total_pages;
         } else {
-            $responce->page     = $page;    
+            $response->page     = $page;    
         }        
-        $responce->records = $count;    
-        echo json_encode($responce); 
+        $response->records = $count;    
+        echo json_encode($response); 
         break;
         
 
@@ -331,17 +344,22 @@ switch ($action) {
                 if (strtotime($last_date) < strtotime($lp_date)) {
                     $icons = ' '.Display::return_icon($image, get_lang('_title_notification').': '.$label.' - '.$lp_date);                    
                 }
-                $temp[$count]['cell']=array(substr($lp_item['publicated_on'], 0,10), $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
+                if (!empty($lp_item['publicated_on'])) {
+                    $date = substr($lp_item['publicated_on'], 0, 10);
+                } else {
+                    $date = '-';
+                }
+                $temp[$count]['cell']=array($date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
                 $count++;     
             }              
         } 
-        
+        $response = new stdClass(); 
         $i =0;
         foreach($temp as $key=>$row) {   
             $row = $row['cell'];            
             if ($key >= $start  && $key < ($start + $limit)) {                 
-                $responce->rows[$i]['id']= $key;
-                $responce->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
+                $response->rows[$i]['id']= $key;
+                $response->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
                 $i++;                
             }
         }
@@ -351,15 +369,15 @@ switch ($action) {
         } else { 
             $total_pages = 0; 
         }         
-        $responce->total    = $total_pages;         
+        $response->total    = $total_pages;         
         if ($page > $total_pages) { 
-            $responce->page= $total_pages;
+            $response->page= $total_pages;
         } else {
-            $responce->page     = $page;    
+            $response->page     = $page;    
         }        
-        $responce->records = $count; 
+        $response->records = $count; 
         
-        echo json_encode($responce); 
+        echo json_encode($response); 
         break;
 	default:
 		echo '';

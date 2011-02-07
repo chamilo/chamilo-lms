@@ -129,20 +129,20 @@ switch ($action) {
 
 //5. Creating an obj to return a json
 if (in_array($action, array('get_careers','get_promotions','get_usergroups'))) { 
-    $responce = new stdClass();           
-    $responce->page     = $page; 
-    $responce->total    = $total_pages; 
-    $responce->records  = $count; 
+    $response = new stdClass();           
+    $response->page     = $page; 
+    $response->total    = $total_pages; 
+    $response->records  = $count; 
     $i=0;
     if (!empty($result)) {
         foreach($result as $row) {
              //print_r($row);
-             $responce->rows[$i]['id']=$row['id'];
+             $response->rows[$i]['id']=$row['id'];
              $array = array();
              foreach($columns as $col) {
              	$array[] = $row[$col];
              }                   
-             $responce->rows[$i]['cell']=$array;
+             $response->rows[$i]['cell']=$array;
              $i++; 
         }
     } 

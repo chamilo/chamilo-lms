@@ -199,12 +199,10 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-$htmlHeadXtra[] = ' <script type="text/javascript"> 
-                
+$htmlHeadXtra[] = ' <script type="text/javascript">                 
 	function submit_form(obj) {            
 		document.question_pool.submit();
-	}
-		
+	}		
 	</script>';
 Display::display_header($nameTools,'Exercise');
 echo '<h3>'.$nameTools.'</h3>';
@@ -228,7 +226,7 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     foreach($session_list as $item) {
         $session_select_list[$item['id']] = $item['name'];
     }
-    echo get_lang('Session').' : ';
+    echo get_lang('Session').'  ';
     echo Display::select('session_id', $session_select_list, $session_id, array('onchange'=>'submit_form(this);'));
     
     //Course list
@@ -243,7 +241,7 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     	$course_select_list[$item['id']] = $item['title'];
     }    
     
-    echo get_lang('Course').' : ';
+    echo ' '.get_lang('Course').' ';
     echo Display::select('selected_course', $course_select_list, $selected_course, array('onchange'=>'submit_form(this);'));    
     
     if (empty($selected_course) || $selected_course == '-1') {
@@ -265,7 +263,7 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
     
     //Exercise List
-    echo get_lang('Exercice').' :';
+    echo ' '.get_lang('Exercice').' ';
     
     $my_exercise_list = array();
     $my_exercise_list['0']  = get_lang('AllExercises');
@@ -281,7 +279,7 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     
     echo Display::select('exerciseId', $my_exercise_list, $exerciseId, array('onchange'=>'submit_form(this);'), false);
     
-    echo get_lang('Difficulty');    	
+    echo ' '.get_lang('Difficulty').' ';    	
     
     //Difficulty list (only from 1 to 5)                
     echo Display::select('exerciseLevel', array(1=>1,2=>2,3=>3,4=>4,5=>5), $exerciseLevel, array('onchange'=>'submit_form(this);'));
@@ -292,7 +290,7 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     	$new_question_list[$key] = get_lang($item[1]);
     }
     //Answer type list
-    echo get_lang('AnswerType');
+    echo ' '.get_lang('AnswerType').' ';
     echo Display::select('answerType', $new_question_list, $answerType, array('onchange'=>'submit_form(this);'));
     ?>
     <button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Filter') ?></button>

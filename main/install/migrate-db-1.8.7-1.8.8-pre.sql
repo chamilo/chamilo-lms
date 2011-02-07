@@ -146,9 +146,20 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.8.8.13586' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.8.8.13656' WHERE variable = 'chamilo_database_version';
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;', 'hindi', 'hi', 'hindi', 0);
+
+ALTER TABLE session ADD promotion_id INT NOT NULL;
+
+CREATE TABLE career (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL, status INT NOT NULL default '0', created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY (id));
+CREATE TABLE promotion (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL, status INT NOT NULL default '0', career_id INT NOT NULL, created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY(id));
+
+
+CREATE TABLE usergroup ( id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL,PRIMARY KEY (id));
+CREATE TABLE usergroup_rel_user    ( usergroup_id INT NOT NULL, user_id 	INT NOT NULL );
+CREATE TABLE usergroup_rel_course  ( usergroup_id INT NOT NULL, course_id 	INT NOT NULL );
+CREATE TABLE usergroup_rel_session ( usergroup_id INT NOT NULL, session_id  INT NOT NULL );
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
@@ -178,16 +189,5 @@ ALTER TABLE quiz_question ADD COLUMN extra varchar(255) DEFAULT NULL;
 
 INSERT INTO course_setting(variable,value,category) VALUES ('enable_lp_auto_launch',0,'learning_path');
 INSERT INTO course_setting(variable,value,category) VALUES ('pdf_export_watermark_text','','course');
-
-
-CREATE TABLE career (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL, status INT NOT NULL default '0', created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY (id));
-CREATE TABLE promotion (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL, status INT NOT NULL default '0', career_id INT NOT NULL, created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY(id));
-ALTER TABLE session ADD promotion_id INT NOT NULL;
-
-CREATE TABLE usergroup ( id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL,PRIMARY KEY (id));
-
-CREATE TABLE usergroup_rel_user    ( usergroup_id INT NOT NULL, user_id 	INT NOT NULL );
-CREATE TABLE usergroup_rel_course  ( usergroup_id INT NOT NULL, course_id 	INT NOT NULL );
-CREATE TABLE usergroup_rel_session ( usergroup_id INT NOT NULL, session_id  INT NOT NULL );
 
 ALTER TABLE quiz ADD COLUMN propagate_neg INT NOT NULL DEFAULT 0;

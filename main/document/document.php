@@ -349,7 +349,7 @@ TODO:check and delete this code
 if (!$is_certificate_mode) {
     if ($array_len > 1) {
         if (empty($_SESSION['_gid'])) {
-            $url_dir = 'document.php?&curdirpath=/';
+            $url_dir = 'document.php?&amp;curdirpath=/';
             $interbreadcrumb[] = array('url' => $url_dir, 'name' => get_lang('HomeDirectory'));
         }
     }
@@ -360,13 +360,13 @@ $dir_acum = '';
 for ($i = 0; $i < $array_len; $i++) {
 
 
-    $url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
+    $url_dir = 'document.php?&amp;curdirpath='.$dir_acum.$dir_array[$i];
 
     //Max char 80
     $url_to_who = cut($dir_array[$i],80);
 
     if ($is_certificate_mode) {
-        $interbreadcrumb[] = array('url' => $url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
+        $interbreadcrumb[] = array('url' => $url_dir.'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => $url_to_who);
 
     }
     else{
@@ -420,7 +420,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
         $copyfile = $user_folder.basename($clean_get_id);
 
         if (file_exists($copyfile)) {
-            $message = get_lang('CopyAlreadyDone').'</p><p>'.'<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$_GET['curdirpath'].'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$_GET['curdirpath'].'&amp;action=copytomyfiles&amp;id='.$clean_get_id.'&amp;copy=yes">'.get_lang("Yes").'</a></p>';
+            $message = get_lang('CopyAlreadyDone').'</p><p>'.'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'&amp;action=copytomyfiles&amp;id='.$clean_get_id.'&amp;copy=yes">'.get_lang('Yes').'</a></p>';
             if (!isset($_GET['copy'])){
                 Display::display_warning_message($message,false);
             }
@@ -784,14 +784,14 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights){
 
 if ($curdirpath!= '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
 ?>
-    <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath) == '\\') ? '/' : dirname($curdirpath)).$req_gid; ?>">
+    <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&amp;curdirpath=<?php echo urlencode((dirname($curdirpath) == '\\') ? '/' : dirname($curdirpath)).$req_gid; ?>">
         <?php Display::display_icon('folder_up.gif', get_lang('Up')); echo get_lang('Up'); ?></a>&nbsp;
 <?php
 }
 
 if ($is_certificate_mode && $curdirpath != '/certificates') {
 ?>
-    <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath) == '\\') ? '/' : dirname($curdirpath)).$req_gid; ?>">
+    <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&amp;curdirpath=<?php echo urlencode((dirname($curdirpath) == '\\') ? '/' : dirname($curdirpath)).$req_gid; ?>">
         <?php Display::display_icon('folder_up.gif', get_lang('Up')); echo get_lang('Up'); ?></a>&nbsp;
 <?php
 }
@@ -912,7 +912,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     // Create new document
     if (!$is_certificate_mode) {
         ?><br />
-        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>">
             <?php Display::display_icon('filenew.gif', get_lang('CreateDoc')); echo get_lang('CreateDoc'); ?></a>&nbsp;
         <?php
 
@@ -922,7 +922,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 
             if (api_browser_support('svg')){
             ?>
-                <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+                <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>">
                     <?php Display::display_icon('draw_new.png', get_lang('Draw')); echo get_lang('Draw'); ?></a>&nbsp;
             <?php
             }else{
@@ -933,7 +933,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		// Create new paint
 		if (api_get_setting('enabled_support_pixlr') == 'true'){
 		?>
-			<a href="create_paint.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+			<a href="create_paint.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>">
 		   <?php Display::display_icon('new_paint.png', get_lang('PhotoRetouching')); echo get_lang('PhotoRetouching'); ?></a>&nbsp;
 		<?php
 		}
@@ -941,7 +941,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		// Create new audio
 		if (api_get_setting('enabled_text2audio') == 'true'){
 		?>
-			<a href="create_audio.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>">
+			<a href="create_audio.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>">
 		   <?php Display::display_icon('new_text2audio.png', get_lang('CreateAudio')); echo get_lang('CreateAudio'); ?></a>&nbsp;
 		<?php
 		}		
@@ -950,21 +950,21 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     // Create new certificate
     if ($is_certificate_mode) {
 ?>
-    <a href="create_document.php?<?php echo api_get_cidreq(); ?>&dir=<?php echo $curdirpathurl.$req_gid; ?>&certificate=true&<?php echo 'selectcat='.Security::remove_XSS($_GET['selectcat']); ?>">
+    <a href="create_document.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>&amp;certificate=true&amp;<?php echo 'selectcat='.Security::remove_XSS($_GET['selectcat']); ?>">
         <?php Display::display_icon('filenew.gif', get_lang('CreateCertificate')); echo get_lang('CreateCertificate'); ?></a>&nbsp;
 <?php
     }
     // File upload link
     $upload_name = $is_certificate_mode ? get_lang('UploadCertificate') : get_lang('UplUploadDocument');
 ?>
-    <a href="upload.php?<?php echo api_get_cidreq(); ?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>">
+    <a href="upload.php?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo $curdirpathurl.$req_gid; ?>">
         <?php Display::display_icon('submit_file.gif', $upload_name); echo $upload_name; ?></a>&nbsp;
 <?php
 
     // Create directory
     if (!$is_certificate_mode) {
 ?>
-    <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1">
+    <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1">
         <?php Display::display_icon('folder_new.gif', get_lang('CreateDir')); echo get_lang('CreateDir'); ?></a>&nbsp;
 <?php
     }
@@ -985,7 +985,7 @@ if (!is_null($docs_and_folders)) {
 
         //for student does not show icon into other shared folder, and does not show into main path (root)
         if (is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id) && $curdirpath!='/' || api_is_allowed_to_edit() || api_is_platform_admin()) {
-            echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&path='.$curdirpathurl.'">'.Display::return_icon('zip_save.gif', get_lang('Save').' (ZIP)'). get_lang('Save').' (ZIP)</a>&nbsp;';
+            echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&amp;path='.$curdirpathurl.'">'.Display::return_icon('zip_save.gif', get_lang('Save').' (ZIP)'). get_lang('Save').' (ZIP)</a>&nbsp;';
         }
 
     }
@@ -994,7 +994,7 @@ if (!is_null($docs_and_folders)) {
 // Slideshow by Patrick Cool, May 2004
 require 'document_slideshow.inc.php';
 if ($image_present && !isset($_GET['keyword'])  ) {
-    echo '<a href="slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl.'"><img src="../img/images_gallery.gif" border="0" title="'.get_lang('ViewSlideshow').'"/>'.get_lang('ViewSlideshow').'</a>';
+    echo '<a href="slideshow.php?'.api_get_cidreq().'&amp;curdirpath='.$curdirpathurl.'"><img src="../img/images_gallery.gif" border="0" title="'.get_lang('ViewSlideshow').'"/>'.get_lang('ViewSlideshow').'</a>';
 }
 echo '</div>';
 

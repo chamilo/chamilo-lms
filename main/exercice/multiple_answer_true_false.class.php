@@ -55,7 +55,7 @@ class MultipleAnswerTrueFalse extends Question {
         $form -> addElement ('html', '<table><tr>');  
         $renderer = & $form->defaultRenderer();
         $defaults = array();
-        
+        //Extra values True, false,  Dont known
         if (!empty($this->extra)) {
             $scores = explode(':',$this->extra);
         
@@ -101,12 +101,12 @@ class MultipleAnswerTrueFalse extends Question {
 		$correct = 0;
 		if (!empty($this -> id))	{
 			$answer = new Answer($this -> id);
-			$answer->read();
+			$answer->read();			
 			if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
 				$nb_answers = $answer->nbrAnswers;
 			}
 		}
-
+		
 		$form -> addElement('hidden', 'nb_answers');
 		$boxes_names = array();
 
@@ -116,14 +116,14 @@ class MultipleAnswerTrueFalse extends Question {
 		}
         
         // Can be more options        
-        $option_data = Question::readQuestionOption($this->id);                    
+        $option_data = Question::readQuestionOption($this->id);    
+                  
   
 		for ($i = 1 ; $i <= $nb_answers ; ++$i) {
             
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{label} &nbsp;&nbsp;{element}</td>');            
             $answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
-            $answer_number->freeze();
-            
+            $answer_number->freeze();            
             
 			if (is_object($answer)) {               
 				$defaults['answer['.$i.']']     = $answer -> answer[$i];
@@ -132,16 +132,17 @@ class MultipleAnswerTrueFalse extends Question {
       
                 $correct = $answer->correct[$i];
                                 
-                //$this->options
-				$defaults['correct['.$i.']']    = $correct;  
+                $defaults['correct['.$i.']']    = $correct;          
+			
                 $j = 1;             
                 if (!empty($option_data)) {
-                    foreach ($option_data as $id=>$data) {
-                        $form->addElement('radio', 'correct['.$i.']', null, null,$id);
+                    foreach ($option_data as $id=>$data) {                 
+                        $form->addElement('radio', 'correct['.$i.']', null, null, $id);
                         $j++;
                         if ($j == 3) {
                         	break;
                         }
+                       
                     }            
                 }
 			} else {                
@@ -216,12 +217,14 @@ class MultipleAnswerTrueFalse extends Question {
 	function processAnswersCreation($form) {
 		$questionWeighting = $nbrGoodAnswers = 0;
 		$objAnswer        = new Answer($this->id);
-		$nb_answers       = $form->getSubmitValue('nb_answers');        
+		$nb_answers       = $form->getSubmitValue('nb_answers');     
+	 
         $options_count    = $form->getSubmitValue('options_count');        
-                
+            
        
         $correct = array();
         $options = Question::readQuestionOption($this->id);
+        	
         
         if (!empty($options)) {
             foreach ($options as $option_data) {
@@ -230,14 +233,15 @@ class MultipleAnswerTrueFalse extends Question {
                 Question::updateQuestionOption($id, $option_data);
             }
         } else {            
-            for ($i=1 ; $i <= 3 ; $i++) {
+            for ($i=1 ; $i <= 3 ; $i++) {                
         	   $last_id = Question::saveQuestionOption($this->id, $this->options[$i], $i);
                $correct[$i] = $last_id;
             }            
         }
-        
+  
         //Getting quiz_question_options (true, false, doubt) because it's possible that there are more options in the future
         $new_options = Question::readQuestionOption($this->id);
+        
         $sorted_by_position = array();
         foreach($new_options as $item) {
         	$sorted_by_position[$item['position']] = $item;
@@ -272,6 +276,4 @@ class MultipleAnswerTrueFalse extends Question {
         $this -> save();
 	}
 }
-
 endif;
-?>

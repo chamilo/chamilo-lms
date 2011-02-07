@@ -1258,7 +1258,7 @@ abstract class Question
         } else {
             $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION, $db_name);	
         }        
-        $result = Database::select('*', $TBL_EXERCICE_QUESTION_OPTION, array('where'=>array('question_id = ?' =>$question_id), 'order'=>'id'));
+        $result = Database::select('*', $TBL_EXERCICE_QUESTION_OPTION, array('where'=>array('question_id = ?' =>$question_id), 'order'=>'id ASC'));
         return $result;        
     }
 }

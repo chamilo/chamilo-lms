@@ -146,7 +146,11 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.8.8.13656' WHERE variable = 'chamilo_database_version';
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_groups_to_users',NULL,'radio','Platform','true','ShowGroupsToUsersTitle','ShowGroupsToUsersComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_groups_to_users', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_groups_to_users', 'false', 'No');
+
+UPDATE settings_current SET selected_value = '1.8.8.13657' WHERE variable = 'chamilo_database_version';
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;', 'hindi', 'hi', 'hindi', 0);
 

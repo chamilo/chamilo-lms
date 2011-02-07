@@ -14,6 +14,11 @@ require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 
 api_block_anonymous_users();
 
+if (api_get_setting('show_groups_to_users') == 'false') {
+    header('Location: index.php');
+    exit;
+}
+
 $this_section = SECTION_SOCIAL;
 
 //jquery thickbox already called from main/inc/header.inc.php

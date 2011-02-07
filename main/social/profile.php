@@ -483,7 +483,7 @@ if ($show_full_profile) {
     if (count($grid_my_groups) > 0) {
     	echo '<div class="social-box-main1">';
 			echo '<div class="social-box-container2">';
-				echo '<div>'.Display::return_icon('content-post-group1.jpg', get_lang('MyGroups')).'</div>';
+				echo '<div>'.Display::return_icon('content-post-group1.jpg', get_lang('MySocialGroups')).'</div>';
 				echo '<div class="social-box-content2">';
 					echo '<div><h3>'.get_lang('MyGroups').'</h3></div>';
 					$count_groups = 0;

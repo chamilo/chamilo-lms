@@ -722,6 +722,17 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
         api_session_unregister('_real_cid');
         api_session_unregister('_course');
         
+        if (!empty($_SESSION)) {
+                foreach($_SESSION as $key=>$session_item) {
+                if (strpos($key,'lp_autolunch_') === false) {
+                    continue;               
+                } else {
+                    if(isset($_SESSION[$key])) {
+                        api_session_unregister($key);   
+                    }
+                }
+            }   
+        }             
         //Deleting session info 
         if (api_get_session_id()) {                
             api_session_unregister('id_session');

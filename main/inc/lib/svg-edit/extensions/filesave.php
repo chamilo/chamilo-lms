@@ -152,7 +152,7 @@ unset($_SESSION['whereami']);
 echo '<script language="javascript" type="text/javascript">';
 if($suffix!= 'png'){	
 	if($relativeUrlPath==''){$relativeUrlPath='/';};
-	$interbreadcrumb=api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$_course['path'].'&curdirpath='.	urlencode($relativeUrlPath);
+	$interbreadcrumb=api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&amp;curdirpath='.	urlencode($relativeUrlPath);
 	echo 'alert("'.get_lang('FileSavedAs').': '.$title.'");';	
 	echo 'window.top.location.href="'.$interbreadcrumb.'";';//return to current document list
 }else{

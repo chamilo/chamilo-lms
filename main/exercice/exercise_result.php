@@ -303,7 +303,7 @@ foreach ($questionList as $questionId) {
 	}
 
 	// We're inside *one* question. Go through each possible answer for this question
-	$result = $objExercise->manage_answer($exeId, $questionId, $choice,'exercise_result', $exerciseResultCoordinates, true);    
+	$result = $objExercise->manage_answer($exeId, $questionId, $choice,'exercise_result', $exerciseResultCoordinates, true, false, true, $objExercise->selectPropagateNeg());    
     $totalScore        += $result['score'];
     $totalWeighting    += $result['weight'];
     
@@ -313,9 +313,12 @@ if($origin != 'learnpath') {
     echo '<div id="question_score">';
     echo get_lang('YourTotalScore')." ";
 	if ($dsp_percent) {
-	  echo number_format(($totalScore/$totalWeighting)*100,1,'.','')."%";
+        echo number_format(($totalScore/$totalWeighting)*100,1,'.','')."%";
 	} else {
-	  echo float_format($totalScore,1)."/".float_format($totalWeighting,1);
+	    if ($objExercise->selectPropagateNeg() && $totalScore < 0) {
+		    $totalScore = 0;
+        } 
+        echo show_score($totalScore, $totalWeighting, false);
 	}
     echo '</div>';
 	?>

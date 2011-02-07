@@ -39,6 +39,7 @@ class Exercise {
 	public $results_disabled;
   	public $expired_time;    
     public $course;
+    public $propagate_neg;
     
   	
 	/**
@@ -61,6 +62,7 @@ class Exercise {
 		$this->start_time 		= '0000-00-00 00:00:00';
 		$this->results_disabled = 1;
 		$this->expired_time 	= '0000-00-00 00:00:00';
+		$this->propagate_neg    = 0;
         
         if (!empty($course_id)) {
             $this->course_id        =  intval($course_id);
@@ -85,7 +87,7 @@ class Exercise {
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION,$this->course['db_name']);
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-		$sql="SELECT title,description,sound,type,random, random_answers, active, results_disabled, max_attempt,start_time,end_time,feedback_type,expired_time FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
+		$sql="SELECT title,description,sound,type,random, random_answers, active, results_disabled, max_attempt,start_time,end_time,feedback_type,expired_time,propagate_neg FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
 		$result=Database::query($sql);
 
 		// if the exercise has been found
@@ -101,6 +103,7 @@ class Exercise {
 			$this->results_disabled = $object->results_disabled;
 			$this->attempts 		= $object->max_attempt;
 			$this->feedbacktype 	= $object->feedback_type;
+			$this->propagate_neg    = $object->propagate_neg;
 			
 			if ($object->end_time != '0000-00-00 00:00:00') {
 				$this->end_time 		= api_get_local_time($object->end_time); 
@@ -109,6 +112,8 @@ class Exercise {
       			$this->start_time 		= api_get_local_time($object->start_time);
 			}
       		$this->expired_time 	= $object->expired_time; //control time
+      		
+      		
       		
 			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
 			
@@ -283,6 +288,10 @@ class Exercise {
 	function selectNbrQuestions() {
 		return sizeof($this->questionList);
 	}
+	
+    function selectPropagateNeg() {
+		return $this->propagate_neg;
+	}
 
 	/**
      * Selects questions randomly in the question list
@@ -377,7 +386,11 @@ class Exercise {
 	* @param - int The expired time of the quiz
 	*/
 	function updateExpiredTime($expired_time) {
-	$this->expired_time = $expired_time;
+	    $this->expired_time = $expired_time;
+	}
+	
+	function updatePropagateNegative($value) {
+	    $this->propagate_neg = $value;
 	}
 
 	/**
@@ -514,6 +527,7 @@ class Exercise {
 		$random 		= $this->random;
 		$random_answers = $this->random_answers;
 		$active 		= $this->active;
+		$propagate_neg  = $this->propagate_neg;
 		$session_id 	= api_get_session_id();    	
 
 		if ($feedbacktype==1){
@@ -542,6 +556,7 @@ class Exercise {
 						start_time='$start_time',end_time='$end_time',
 						max_attempt='".Database::escape_string($attempts)."',
             			expired_time='".Database::escape_string($expired_time)."',
+            			propagate_neg='".Database::escape_string($propagate_neg)."',
 						results_disabled='".Database::escape_string($results_disabled)."'";
 				}
 			$sql .= " WHERE id='".Database::escape_string($id)."'";
@@ -957,6 +972,9 @@ class Exercise {
 			} else {
 				$diplay = 'block';
 			}
+			
+			$form -> addElement('checkbox', 'propagate_neg',get_lang('PropagetNegativeResult'),null);
+			
 
     		$form -> addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
 
@@ -967,14 +985,17 @@ class Exercise {
 			$expired_date = (int)$this->selectExpiredTime();
 
 			if(($expired_date!='0')) {
-			$form -> addElement('html','<div id="timercontrol" style="display:block;">');
+			    $form -> addElement('html','<div id="timercontrol" style="display:block;">');
 			} else {
-			$form -> addElement('html','<div id="timercontrol" style="display:none;">');
+			    $form -> addElement('html','<div id="timercontrol" style="display:none;">');
 			}
 
 			$form -> addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
 			$form -> addElement('html','</div>');
 			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
+			
+			
+			
 
 			$form -> addElement('html','</div>');  //End advanced setting
 			$form -> addElement('html','</div>');
@@ -1036,6 +1057,7 @@ class Exercise {
 				$defaults['exerciseAttempts'] = $this->selectAttempts();
 				$defaults['exerciseFeedbackType'] = $this->selectFeedbackType();
 				$defaults['results_disabled'] = $this->selectResultsDisabled();
+				$defaults['propagate_neg'] = $this->selectPropagateNeg();
 
 	  			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
 	            	$defaults['enabletimelimit'] = 1;
@@ -1079,7 +1101,7 @@ class Exercise {
 	 * function which process the creation of exercises
 	 * @param FormValidator $form the formvalidator instance
 	 */
-	function processCreation($form,$type='') {
+	function processCreation($form, $type='') {
 
 		$this -> updateTitle($form -> getSubmitValue('exerciseTitle'));
 		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
@@ -1090,6 +1112,8 @@ class Exercise {
 		$this -> updateRandomAnswers($form -> getSubmitValue('randomAnswers'));
 		$this -> updateResultsDisabled($form -> getSubmitValue('results_disabled'));
     	$this -> updateExpiredTime($form -> getSubmitValue('enabletimercontroltotalminutes'));
+    	
+    	$this -> updatePropagateNegative($form -> getSubmitValue('propagate_neg'));
 
 		if($form -> getSubmitValue('enabletimelimit')==1) {
            $start_time = $form -> getSubmitValue('start_time');
@@ -1657,7 +1681,7 @@ class Exercise {
      * @todo    reduce parameters of this function
      * @return  string  html code
 	 */
-	function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true) {        
+	function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true, $propagate_neg = 0) {        
 		global $_configuration, $feedback_type;   
 		   
         $questionId   = intval($questionId);
@@ -2338,9 +2362,13 @@ class Exercise {
                     <?php                    
                     if ($this->type == ALL_ON_ONE_PAGE) {
                         echo '<div id="question_score">';
-                        if($questionScore==-1){
+                        if ($questionScore==-1) {
                             echo get_lang('Score').": 0 /".float_format($questionWeighting);
                         } else {
+
+                            if ($propagate_neg && $questionScore < 0) {
+                    	        $questionScore = 0;
+                    	    }                    	    
                             echo get_lang('Score').": ".float_format($questionScore,1)."/".float_format($questionWeighting,1);
                         }
                         echo '</div>';

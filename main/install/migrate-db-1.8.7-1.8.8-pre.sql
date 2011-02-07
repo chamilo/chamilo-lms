@@ -189,3 +189,5 @@ CREATE TABLE usergroup ( id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT N
 CREATE TABLE usergroup_rel_user    ( usergroup_id INT NOT NULL, user_id 	INT NOT NULL );
 CREATE TABLE usergroup_rel_course  ( usergroup_id INT NOT NULL, course_id 	INT NOT NULL );
 CREATE TABLE usergroup_rel_session ( usergroup_id INT NOT NULL, session_id  INT NOT NULL );
+
+ALTER TABLE quiz ADD COLUMN propagate_neg INT NOT NULL DEFAULT 0;

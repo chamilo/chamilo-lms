@@ -1064,14 +1064,14 @@ function dokeos_void_save_asset(myscore,mymax)
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_scorm(message,priority) {
-    //if(scorm_logs>=priority){
+    if(scorm_logs == 0) {return false;}
     if(scorm_logs>priority){ /* fixed see http://support.chamilo.org/issues/370 */
-    if($("#lp_log_name") && $("#log_content")){
-        $("#log_content").append("SCORM: " + message + "<br/>");
-    }
+        if($("#lp_log_name") && $("#log_content")){
+            $("#log_content").append("SCORM: " + message + "<br/>");
+        }
     }
     params = {
-    msg: "SCORM: " + message,
+        msg: "SCORM: " + message,
         debug: scorm_logs
     };
     $.ajax({

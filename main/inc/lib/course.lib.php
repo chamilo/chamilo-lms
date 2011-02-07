@@ -2805,7 +2805,7 @@ class CourseManager {
 		$table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 		$sql_course = "SELECT id FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res = Database::query($sql_course);
-		$row = Database::fetch_object($res_course);
+		$row = Database::fetch_object($res);
 		if($row != false) {
 			return $row->id;
 		} else {
@@ -2822,6 +2822,12 @@ class CourseManager {
      * $my_course['c'] - visual course code
      * $my_course['k']  - system course code
      * $my_course['db'] - course database
+     * 
+     * @param   array       Course details
+     * @param   integer     Session ID
+     * @param   string      CSS class to apply to course entry
+     * @param   boolean     Whether the session is supposedly accessible now (not in the case it has passed and is in invisible/unaccessible mode)
+     * @return  string      The HTML to be printed for the course entry
      *
      * @version 1.0.3
      * @todo refactor into different functions for database calls | logic | display
@@ -2829,7 +2835,7 @@ class CourseManager {
      * @todo move code for what's new icons to a separate function to clear things up
      * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
      */
-    function get_logged_user_course_html($course, $session_id = 0, $class = 'courses') {
+    function get_logged_user_course_html($course, $session_id = 0, $class = 'courses', $session_accessible = true) {
         global $nosession, $nbDigestEntries, $digest, $thisCourseSysCode, $orderKey;
         $charset = api_get_system_encoding();
     
@@ -2923,21 +2929,24 @@ class CourseManager {
         $result.="\n\t";
         $result .= '<li class="'.$class.'"><div class="coursestatusicons">'.$s_htlm_status_icon.'</div>';
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
-        if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
-            if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
-                if (empty($my_course['id_session'])) {
-                    $my_course['id_session'] = 0;
-                }
-                if ($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start == '0000-00-00') {
-                    $result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.$course_display_title.'</a>';
+        if ($session_accessible) {
+            if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
+                if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
+                    if (empty($my_course['id_session'])) {
+                        $my_course['id_session'] = 0;
+                    }
+                    if ($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start == '0000-00-00') {
+                        $result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.$course_display_title.'</a>';
+                    }
+                } else {
+                    $result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
                 }
             } else {
-                $result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
+                $result .= $course_display_title.'  '.get_lang('CourseClosed');
             }
         } else {
-            $result .= $course_display_title.'  '.get_lang('CourseClosed');
-        }
-    
+        	$result .= $course_display_title;
+        }    
         // Show the course_code and teacher if chosen to display this.
         if (api_get_setting('display_coursecode_in_courselist') == 'true' || api_get_setting('display_teacher_in_courselist') == 'true') {
             $result .= '<br />';

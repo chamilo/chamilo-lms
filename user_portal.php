@@ -343,7 +343,7 @@ if (is_array($courses_tree)) {
                         $allowed_time = strtotime($date_session_start);
                     }
                     if ($session_now > $allowed_time) {
-                        $c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item');
+                        $c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',($session['details']['visibility']==3?false:true));
                         $html_courses_session .= $c[1];
                         $count_courses_session++;
                     }
@@ -360,7 +360,11 @@ if (is_array($courses_tree)) {
 
                         $s = Display :: get_session_title_box($session['details']['id']);
                         $extra_info = (!empty($s['coach']) ? $s['coach'].' | ' : '').$s['dates'];
-                        $session_link = Display::tag('a',$s['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
+                        if ($session['details']['visibility'] == 3) {
+                            $session_link = $s['title'];
+                        } else {
+                            $session_link = Display::tag('a',$s['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
+                        }
                         echo Display::tag('span',$session_link. ' </span> <span style="padding-left: 10px; font-size: 90%; font-weight: normal;">'.$extra_info);
                         if (api_is_platform_admin()) {
                             echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';

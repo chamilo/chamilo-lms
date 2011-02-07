@@ -133,24 +133,22 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 $htmlHeadXtra[] = '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"></script>';
 $htmlHeadXtra[] = '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '
+
+<script type="text/javascript">
 <!--
     var updateContentHeight = function() {
-        HeaderHeight = document.getElementById("header").offsetHeight;
-        FooterHeight = document.getElementById("footer").offsetHeight;
-        docHeight = document.body.clientHeight;
-        document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";
+        //HeaderHeight = document.getElementById("header").offsetHeight;
+        //FooterHeight = document.getElementById("footer").offsetHeight;
+        //document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";        
+        my_iframe = document.getElementById("mainFrame");
+        new_height = my_iframe.contentWindow.document.body.scrollHeight;
+        my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
     };
-
-    function insertIt() {
-        var _y = document.getElementById("framediv");
-        var _x = window.frames[0].document.body.innerHTML;
-        _y.innerHTML = _x
-    }
 
     // Fixes the content height of the frame
     window.onload = function() {
-        //updateContentHeight();
+        updateContentHeight();
         '.$js_glossary_in_documents.'
     }
 -->
@@ -174,13 +172,11 @@ echo "<div align=\"center\">";
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 echo '<a href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a></div>';
 //echo '<div>';
-echo '<div id="framediv">';
 if (file_exists($file_url_sys)) {
-    echo '<iframe border="0" onload="insertIt();"  frameborder="0" scrolling="auto"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"></iframe>';
+    echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"></iframe>';
 } else {
-    echo '<frame name="mainFrame" onload="insertIt();" id="mainFrame" src=showinframes.php?nopages=1 />';
+    echo '<frame border="0" frameborder="0" scrolling="no"  name="mainFrame" id="mainFrame" src=showinframes.php?nopages=1 />';
 }
-echo '</div>';
 
 //echo '</div>';
 

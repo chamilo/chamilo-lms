@@ -893,7 +893,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                       $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
                       AND cuser.course_code=te.exe_cours_id ORDER BY col1, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";*/
         $sql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", ce.title as col2, te.exe_result as exresult , te.exe_weighting as exweight,
-                te.exe_date as exdate, te.exe_id as exid, email as exemail, te.start_date as col4, steps_counter as exstep, exe_user_id as excruid,te.exe_duration as exduration
+                te.exe_date as exdate, te.exe_id as exid, email as exemail, te.start_date as col4, steps_counter as exstep, exe_user_id as excruid,te.exe_duration as exduration, propagate_neg
                 FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
                 WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where ";
 
@@ -917,8 +917,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
             AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." $user_id_and $session_id_and AND ce.active <>-1 AND" .
             " orig_lp_id = 0 AND orig_lp_item_id = 0 AND cuser.course_code=te.exe_cours_id ORDER BY col1, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";*/
 
-        $sql="SELECT ce.title as col0, te.exe_duration as exduration, firstname, lastname, te.exe_result as exresult, te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
-            "te.start_date as col2, steps_counter as exstep, exe_user_id as excruid,  ce.results_disabled as exdisabled
+        $sql="SELECT ce.title as col0, ce.title as col1, te.exe_duration as exduration, firstname, lastname, te.exe_result as exresult, te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
+            "te.start_date as col2, steps_counter as exstep, exe_user_id as excruid,  ce.results_disabled as exdisabled, propagate_neg
               FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
               WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0  $exercise_where";
 
@@ -1051,7 +1051,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 
                 $my_res     = float_format($results[$i]['exresult'],1);
                 $my_total   = float_format($results[$i]['exweight'],1);
-
+                if ($results[$i]['propagate_neg'] && $my_res < 0) {
+                    $my_res = 0;
+                }
                 $ex = show_score($my_res, $my_total);
                 
                 //$result_list = round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ')';

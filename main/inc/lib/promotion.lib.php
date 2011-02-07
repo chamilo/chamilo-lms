@@ -110,4 +110,44 @@ class Promotion extends Model {
         
         return $form;
     }
+    /**
+     * Copies the promotions to a new one
+     * @param   integer     Promotion ID
+     * @return  integer     New promotion ID on success, false on failure
+     */
+    public function copy($id) {
+        $promotion = $this->get($id);
+        $new = array();
+        foreach ($promotion as $key => $val) {
+            switch ($key) {
+            	case 'id':
+                case 'updated_at':
+                    break;
+                case 'name':
+                    $val .= ' '.get_lang('Copy');
+                    $new[$key] = $val;
+                    break;
+                case 'created_at':
+                    $val = api_get_utc_datetime();
+                    $new[$key] = $val;
+                    break;
+                default:
+                    $new[$key] = $val;
+                    break;
+            }
+        }
+        $pid = $this->save($new);
+        //Now also copy each session of the promotion as a new session and register it inside the promotion
+        require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+        $session_list   = SessionManager::get_all_sessions_by_promotion($id);    
+        if (!empty($session_list)) {
+            foreach($session_list  as $item) {
+                $sid = SessionManager::copy_session($item['id'], true, true);
+                if ($sid != 0) {
+                    SessionManager::suscribe_sessions_to_promotion($pid,array($sid));
+                }
+            }
+        }
+    	return $pid;
+    }
 }

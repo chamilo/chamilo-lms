@@ -64,7 +64,7 @@ $extra_params['autowidth'] = 'true'; //use the width of the parent
 $extra_params['height'] = 'auto'; //use the width of the parent
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
-                    return \'<a href="add_sessions_to_promotion.php?id=\'+options.rowId+\'"><img title="'.get_lang('AddSession').'" width="22px" src="../img/session_add.png"></a> <a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'"></a> <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\'; 
+                    return \'<a href="add_sessions_to_promotion.php?id=\'+options.rowId+\'"><img title="'.get_lang('AddSession').'" width="22px" src="../img/session_add.png"></a> <a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'"></a> <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a> <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=copy&id=\'+options.rowId+\'"><img title="'.get_lang('Copy').'" src="../img/copy.gif" alt="'.get_lang('Copy').'"></a>\'; 
                  }';
 
 ?>
@@ -158,7 +158,16 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         Display::display_confirmation_message(get_lang('Deleted'));
     }
     $promotion->display();
+} elseif (isset($_GET['action']) && $_GET['action'] == 'copy') {
+    if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+        api_not_allowed();
+    }
+    $res = $promotion->copy($_GET['id']);
+    if ($res) {
+        Display::display_confirmation_message(get_lang('Copied'));
+    }
+    $promotion->display();
 } else {
-    $promotion->display();   
+    $promotion->display();
 }
 Display::display_footer();

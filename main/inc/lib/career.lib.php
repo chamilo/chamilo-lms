@@ -106,7 +106,7 @@ class Career extends Model {
      * @param   integer     Career ID
      * @return  integer     New career ID on success, false on failure
      */
-    public function copy($id) {
+    public function copy($id, $copy_promotions = false) {
         $career = $this->get($id);
         $new = array();
         foreach ($career as $key => $val) {
@@ -128,12 +128,14 @@ class Career extends Model {
             }
         }
         $cid = $this->save($new);
-        //Now also copy each session of the promotion as a new session and register it inside the promotion
-        $promotion = new Promotion();
-        $promo_list   = $promotion->get_all_promotions_by_career_id($id);    
-        if (!empty($promo_list)) {
-            foreach($promo_list  as $item) {
-                $pid = $promotion->copy($item['id'], $cid);
+        if ($copy_promotions) {
+            //Now also copy each session of the promotion as a new session and register it inside the promotion
+            $promotion = new Promotion();
+            $promo_list   = $promotion->get_all_promotions_by_career_id($id);    
+            if (!empty($promo_list)) {
+                foreach($promo_list  as $item) {
+                    $pid = $promotion->copy($item['id'], $cid);
+                }
             }
         }
         return $cid;

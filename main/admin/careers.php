@@ -148,7 +148,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
-    $res = $career->copy($_GET['id']);
+    $res = $career->copy($_GET['id'], true); //copy career and promotions inside
     if ($res) {
         Display::display_confirmation_message(get_lang('Copied'));
     }

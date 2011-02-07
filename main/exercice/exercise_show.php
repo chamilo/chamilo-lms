@@ -580,8 +580,13 @@ if ($show_results) {
 		</table>
 		<?php
         
+		/*
+		Do not convert question results
 		$my_total_score  = convert_score($questionScore, $total_weighting);
-		$my_total_weight = convert_score($questionWeighting, $total_weighting);       
+		$my_total_weight = convert_score($questionWeighting, $total_weighting);*/
+		
+		$my_total_score  = $questionScore;
+		$my_total_weight = $questionWeighting;       
 
 		echo '<div id="question_score">';
 	    if ($objExercise->selectPropagateNeg() && $my_total_score < 0) {

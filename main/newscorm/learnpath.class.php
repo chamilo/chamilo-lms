@@ -1965,35 +1965,49 @@ class learnpath {
         return $output;
     }
 
+
     /**
-     * This function check if the learnpath is visible for student after the progress of its prerequisite is completed
+     * This function checks if the learnpath is visible for student after the progress of its prerequisite is completed, and considering time availability
      * @param	int		Learnpath id
      * @param	int		Student id
+     * @param   string  Course code (optional)
      * @return	bool	True if
      */
-    public function is_lp_visible_for_student($lp_id, $student_id) {
-
-        $tbl_learnpath = Database :: get_course_table(TABLE_LP_MAIN);
-
-        // Get current prerequisite.
-        $sql = "SELECT prerequisite FROM $tbl_learnpath WHERE id = $lp_id";
+    public function is_lp_visible_for_student($lp_id, $student_id, $course = null) {
+        $lp_id = (int)$lp_id;
+        $course = api_get_course_info($course);
+        $tbl_learnpath = Database :: get_course_table(TABLE_LP_MAIN,$course['dbName']);
+        // Get current prerequisite
+        $sql = "SELECT id, prerequisite, publicated_on, expired_on FROM $tbl_learnpath WHERE id = $lp_id";
         $rs  = Database::query($sql);
-        $row = Database :: fetch_array($rs);
-        $prerequisite = $row['prerequisite'];
-        $is_visible = true;
-        $progress = 0;
-
-        if (!empty($prerequisite)) {
-            $progress = self::get_db_progress($prerequisite,$student_id,'%', '', false, api_get_session_id());
-            $progress = intval($progress);
-            if ($progress < 100) {
-                $is_visible = false;
+        if (Database::num_rows($rs)>0) {
+            $row = Database::fetch_array($rs);
+            $prerequisite = $row['prerequisite'];
+            $find = array(' ','-',':');
+            $from = str_replace($find,'',api_get_local_time($row['publicated_on']));
+            $to = str_replace($find,'',api_get_local_time($row['expired_on']));
+            $is_visible = true;
+            $progress = 0;
+    
+            if (!empty($prerequisite)) {
+                $progress = self::get_db_progress($prerequisite,$student_id,'%', '', false, api_get_session_id());
+                $progress = intval($progress);
+                if ($progress < 100) {
+                    $is_visible = false;
+                }
             }
+            // Also check the time availability of the learning path
+            if ($is_visible) {
+                $now = str_replace($find,'',api_get_local_time());
+            	if ($now<$from or $now>$to) {
+            		$is_visible = false;
+            	}
+            }
+    
+            return $is_visible;
         }
-
-        return $is_visible;
+        return false;
     }
-
     /**
      * Gets a progress bar for the learnpath by counting the number of items in it and the number of items
      * completed so far.

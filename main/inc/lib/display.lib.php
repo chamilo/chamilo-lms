@@ -911,9 +911,14 @@ class Display {
         $json_encode = str_replace('"formatter":"action_formatter"','formatter:action_formatter',$json_encode);
         
         if ($width_fix) {
+            if (is_numeric($width_fix)) {
+                $width_fix = intval($width_fix);
+            } else {
+                $width_fix = '150';
+            }
             //see BT#2020
             $json .= "$(window).bind('resize', function() {
-        	    $('#".$div_id."').setGridWidth($(window).width() - 150);
+        	    $('#".$div_id."').setGridWidth($(window).width() - ".$width_fix.");
         	}).trigger('resize');";
         }
               

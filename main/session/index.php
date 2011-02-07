@@ -193,9 +193,8 @@ echo Display::tag('h1', $session_info['name']);
 
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id;
 $columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang('LearningPath'));
-
-$column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'100',  'align'=>'left',  'sortable'=>'false'),
-                        array('name'=>'course', 'index'=>'course', 'width'=>'500', 'align'=>'left',  'sortable'=>'false'),
+$column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'150',  'align'=>'left',  'sortable'=>'false'),
+                        array('name'=>'course', 'index'=>'course', 'width'=>'400', 'align'=>'left',  'sortable'=>'false'),
                         array('name'=>'lp',     'index'=>'lp',     'width'=>'200', 'align'=>'center','sortable'=>'false'));
                         
 //$extra_params['autowidth'] = 'true'; //use the width of the parent
@@ -208,29 +207,29 @@ $extra_params_course['grouping'] = 'true';
 $extra_params_course['groupingView'] = array('groupField'       => array('course'),
                                              'groupColumnShow'  => array('false'),
                                              'groupText'        => array('<b>'.get_lang('Course').' {0}</b>'));
-$extra_params_course['autowidth'] = 'true'; //use the width of the parent                                          
+//$extra_params_course['autowidth'] = 'true'; //use the width of the parent                                          
                               
 //Per Week grid
 $url_week           = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id;
 $column_week        = array(get_lang('PeriodWeek'), get_lang('PublicationDate'), get_lang('Course'), get_lang('LearningPath'));
-$column_week_model  = array(
-                          array('name'=>'week',     'index'=>'week',    'width'=>'80', 'align'=>'left', 'sortable'=>'false'),       
-                          array('name'=>'date',     'index'=>'date',    'width'=>'100', 'align'=>'right','sortable'=>'false'),
-                          array('name'=>'course',   'index'=>'course',  'width'=>'500','align'=>'left', 'sortable'=>'false'),
-                          array('name'=>'lp',       'index'=>'lp',      'width'=>'200','align'=>'center','sortable'=>'false'));
+$column_week_model  = array (
+                          array('name'=>'week',     'index'=>'week',    'width'=>'80',  'align'=>'left',  'sortable'=>'false'),       
+                          array('name'=>'date',     'index'=>'date',    'width'=>'150', 'align'=>'left', 'sortable'=>'false'),
+                          array('name'=>'course',   'index'=>'course',  'width'=>'400', 'align'=>'left',  'sortable'=>'false'),
+                          array('name'=>'lp',       'index'=>'lp',      'width'=>'200', 'align'=>'center','sortable'=>'false'));
                           
                           
 $extra_params_week['grouping'] = 'true';
 $extra_params_week['groupingView'] = array('groupField'=>array('week'),
                                             'groupColumnShow'=>'false',
                                             'groupText' => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
-$extra_params_week['autowidth'] = 'true'; //use the width of the parent
+//$extra_params_week['autowidth'] = 'true'; //use the width of the parent
 
 //MyQCM grid
 $column_exercise        = array(get_lang('Course'),get_lang('Exercise'), get_lang('Attempts'), get_lang('Result'), get_lang('Score'), get_lang('Position'));
 $column_exercise_model  = array(
-                                array('name'=>'course',     'index'=>'course',    'width'=>'450', 'align'=>'left',  'sortable'=>'true'),
-                                array('name'=>'exercise',   'index'=>'exercise',  'width'=>'250', 'align'=>'left',  'sortable'=>'true'),
+                                array('name'=>'course',     'index'=>'course',    'width'=>'450','align'=>'left',   'sortable'=>'true'),
+                                array('name'=>'exercise',   'index'=>'exercise',  'width'=>'250','align'=>'left',   'sortable'=>'true'),
                                 array('name'=>'attempt',    'index'=>'attempt',   'width'=>'50', 'align'=>'center', 'sortable'=>'true'),
                                 array('name'=>'result',     'index'=>'result',    'width'=>'50', 'align'=>'center', 'sortable'=>'true'),
                                 array('name'=>'note',       'index'=>'note',      'width'=>'50', 'align'=>'center', 'sortable'=>'true'),
@@ -257,9 +256,9 @@ $(function() {
     $( "#sub_tab" ).tabs();     
          
 <?php 
-     echo Display::grid_js('list_default',  $url,           $columns,        $column_model,$extra_params);
-     echo Display::grid_js('list_course',   $url_course,    $columns,        $column_model,$extra_params_course);
-     echo Display::grid_js('list_week',     $url_week,      $column_week,    $column_week_model, $extra_params_week);     
+     echo Display::grid_js('list_default',  $url,           $columns,        $column_model,$extra_params,array(), '');
+     echo Display::grid_js('list_course',   $url_course,    $columns,        $column_model,$extra_params_course,array(),'');
+     echo Display::grid_js('list_week',     $url_week,      $column_week,    $column_week_model, $extra_params_week,array(),'');     
      echo Display::grid_js('exercises',      '',            $column_exercise,$column_exercise_model, $extra_params_exercise, $my_real_array);        
 ?>
 

@@ -1051,7 +1051,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 
                 $my_res     = float_format($results[$i]['exresult'],1);
                 $my_total   = float_format($results[$i]['exweight'],1);
-                if ($results[$i]['propagate_neg'] && $my_res < 0) {
+                if (!$results[$i]['propagate_neg'] && $my_res < 0) {
                     $my_res = 0;
                 }
                 $ex = show_score($my_res, $my_total);

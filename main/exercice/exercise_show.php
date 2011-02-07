@@ -589,7 +589,7 @@ if ($show_results) {
 		$my_total_weight = $questionWeighting;       
 
 		echo '<div id="question_score">';
-	    if ($objExercise->selectPropagateNeg() && $my_total_score < 0) {
+	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
 	        $my_total_score = 0;
 	    }  
 	    
@@ -613,7 +613,7 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 			$my_result = float_format($my_result,1);
 			echo $my_result."%";
 		} else {          
-		    if ($objExercise->selectPropagateNeg() && $totalScore < 0) {
+		    if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
 		        $totalScore = 0;
 		    }          
             echo show_score($totalScore, $totalWeighting, false);

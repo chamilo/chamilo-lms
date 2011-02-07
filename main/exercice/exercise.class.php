@@ -2365,8 +2365,7 @@ class Exercise {
                         if ($questionScore==-1) {
                             echo get_lang('Score').": 0 /".float_format($questionWeighting);
                         } else {
-
-                            if ($propagate_neg && $questionScore < 0) {
+                            if ($propagate_neg == 0 && $questionScore < 0) {
                     	        $questionScore = 0;
                     	    }                    	    
                             echo get_lang('Score').": ".float_format($questionScore,1)."/".float_format($questionWeighting,1);

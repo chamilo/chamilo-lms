@@ -314,8 +314,8 @@ if($origin != 'learnpath') {
     echo get_lang('YourTotalScore')." ";
 	if ($dsp_percent) {
         echo number_format(($totalScore/$totalWeighting)*100,1,'.','')."%";
-	} else {
-	    if ($objExercise->selectPropagateNeg() && $totalScore < 0) {
+	} else {	    
+	    if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
 		    $totalScore = 0;
         } 
         echo show_score($totalScore, $totalWeighting, false);

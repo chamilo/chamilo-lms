@@ -492,9 +492,10 @@ if ($objExercise->selectAttempts() > 0) {
             if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
                 //Showing latest attempt according with task BT#1628
                 $exercise_stat_info = get_all_exercise_results_by_user(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
-                if (!empty($exercise_stat_info )) {
+                if (!empty($exercise_stat_info)) {               
                     $max_exe_id = max(array_keys($exercise_stat_info));
                     $last_attempt_info = $exercise_stat_info[$max_exe_id];
+                    echo Display::div(get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']), array('id'=>'')).'<br />';
                     
                     //echo '<pre>';    //var_dump($last_attempt_info);  
                     if (!empty($last_attempt_info['question_list'])) {               
@@ -509,6 +510,8 @@ if ($objExercise->selectAttempts() > 0) {
                     }                    
                     $score =  show_score($last_attempt_info['exe_result'],$last_attempt_info['exe_weighting']);
                     echo Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
+                    
+                    
                 } else {
                     Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $objExercise->selectAttempts()), false);	
                 }

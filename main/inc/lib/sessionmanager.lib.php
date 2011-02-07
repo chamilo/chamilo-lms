@@ -1358,6 +1358,6 @@ class SessionManager {
             $res = self::suscribe_users_to_session($sid, $short_users, 1, true, false);
             $short_users = null;
         }
-    	return true;
+    	return $sid;
     }
 }

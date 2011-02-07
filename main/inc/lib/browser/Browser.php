@@ -802,7 +802,7 @@
 	     */
 	    protected function checkBrowserFirefox() {
 		    if( stripos($this->_agent,'safari') === false ) {
-				if( preg_match("/Firefox[\/ \(]([^ ;\)]+)/i",$this->_agent,$matches) ) {
+				if( preg_match("/Firefox[\/ \(-]([^ ;\)]+)/i",$this->_agent,$matches) ) {
 					$this->setVersion($matches[1]);
 					$this->setBrowser(self::BROWSER_FIREFOX);
 					return true;
@@ -812,6 +812,11 @@
 					$this->setBrowser(self::BROWSER_FIREFOX);
 					return true;
 				}
+                else if( preg_match("/Namoroka[\/ \(-]([^ ;\)]+)/i",$this->_agent,$matches) ) {
+                    $this->setVersion($matches[1]);
+                    $this->setBrowser(self::BROWSER_FIREFOX);
+                    return true;
+                }
 			}
 		    return false;
 	    }

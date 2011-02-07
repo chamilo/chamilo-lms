@@ -132,19 +132,22 @@ if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR
  	echo '<li>';
 	// Display the who's online of the platform
 	if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR (api_get_setting('showonline', 'users') == 'true' AND $_user['user_id'])) {
-		echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="12px" src="'.api_get_path(WEB_IMG_PATH).'online.png" title="'.get_lang('UsersOnline').'"> '.get_lang('OnLine').' '.$number.'</a>';
+		//echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="12px" src="'.api_get_path(WEB_IMG_PATH).'online.png" title="'.get_lang('UsersOnline').'"> '.get_lang('OnLine').' '.$number.'</a>';
+		echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="13px" src="'.api_get_path(WEB_IMG_PATH).'group.gif" title="'.get_lang('UsersOnline').'"> '.$number.'</a></li>';
 	}
 
 	// Display the who's online for the course
 	if (is_array($_course) AND api_get_setting('showonline', 'course') == 'true' AND isset($_course['sysCode'])) {
-		echo '(<a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.$number_online_in_course.' '.get_lang('InThisCourse').'</a>)';
+		//echo '(<a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.$number_online_in_course.' '.get_lang('InThisCourse').'</a>)';
+		echo '<li>| <a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.Display::return_icon('course.gif', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array('width'=>'13px')).' '.$number_online_in_course.' </a></li>';
 	}
 	
 	// Display the who's online for the session 
 	//if (api_get_setting('use_session_mode') == 'true' && isset($_user['user_id']) && api_is_coach()) {
 	
-	if (api_get_setting('use_session_mode') == 'true' && isset($_user['user_id']) && api_get_session_id() != 0) {		
-	    echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
+	if (api_get_setting('use_session_mode') == 'true' && isset($_user['user_id']) && api_get_session_id() != 0) {
+	    //echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';		
+	    echo '<li>| <a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array('width'=>'13px')).' </a></li>';
 	}
 	
 	echo '</li>';

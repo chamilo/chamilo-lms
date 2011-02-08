@@ -48,9 +48,8 @@ class UniqueAnswerNoOption extends Question {
 		$editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
 
 		//this line define how many question by default appear when creating a choice question
-		$nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 3;  // The previous default value was 2. See task #1759.
-		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
-        
+		$nb_answers  = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 3;  // The previous default value was 2. See task #1759.
+		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0)); 
 
 		/*
 	 		Types of Feedback
@@ -65,7 +64,7 @@ class UniqueAnswerNoOption extends Question {
 		if ($obj_ex->selectFeedbackType()==0) {
 			$comment_title = '<th>'.get_lang('Comment').'</th>';
 		} elseif ($obj_ex->selectFeedbackType()==1) {
-			$editor_config['Width'] = '250';
+			$editor_config['Width']  = '250';
 			$editor_config['Height'] = '110';
 			$comment_title = '<th width="500" >'.get_lang('Comment').'</th>';
 			$feedback_title = '<th width="350px" >'.get_lang('Scenario').'</th>';
@@ -99,14 +98,15 @@ class UniqueAnswerNoOption extends Question {
 
 		$defaults = array();
 		$correct = 0;
-		if(!empty($this -> id)) {
+		
+		if (!empty($this -> id)) {
 			$answer = new Answer($this -> id);
 			$answer -> read();
-			if(count($answer->nbrAnswers)>0 && !$form->isSubmitted()) {
-				$nb_answers = $answer->nbrAnswers;
+			if (count($answer->nbrAnswers)>0 && !$form->isSubmitted()) {
+				$nb_answers = $answer->nbrAnswers;				
 			}
 		}
-		$form -> addElement('hidden', 'nb_answers');
+		
 
 		//Feedback SELECT
         //Not needed right now
@@ -138,50 +138,79 @@ class UniqueAnswerNoOption extends Question {
 		}*/
 
 		$temp_scenario = array();
-        
+	    	    
 		if ($nb_answers < 1) {
 			$nb_answers = 1;
 			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
-		}
-
-		for($i = 1 ; $i <= $nb_answers ; ++$i) {
-			$form -> addElement ('html', '<tr>');                
-			if (is_object($answer)) {
-				if ($answer -> correct[$i]) {
-					$correct = $i;
-				}
-                $answer_result = $answer -> answer[$i];                
-                $weight_result = float_format($answer -> weighting[$i], 1);
-                if ($nb_answers == $i) {
-                    $weight_result = '0';
+		}				
+        if ($_GET['editQuestion']) {
+            
+            //fixing $nb_answers
+            $new_list = array();
+            $count = 1;            
+            if (isset($_POST['lessAnswers'])) {
+                if (!isset($_SESSION['less_answer'])) {
+                    $_SESSION['less_answer'] = $this -> id;
+                    $nb_answers--;
                 }
-                
-				$defaults['answer['.$i.']']    = $answer_result;
-				$defaults['comment['.$i.']']   = $answer -> comment[$i];
-				$defaults['weighting['.$i.']'] = $weight_result;
-
-				$item_list=explode('@@',$answer -> destination[$i]);
-
-				$try       = $item_list[0];
-				$lp        = $item_list[1];
-				$list_dest = $item_list[2];
-				$url       = $item_list[3];
-
-				if ($try==0)
-					$try_result=0;
-				else
-					$try_result=1;
-
-				if ($url==0)
-					$url_result='';
-				else
-					$url_result=$url;
-
-				$temp_scenario['url'.$i]        = $url_result;
-				$temp_scenario['try'.$i]        = $try_result;
-				$temp_scenario['lp'.$i]         = $lp;
-				$temp_scenario['destination'.$i]= $list_dest;
-
+            }
+            for ($k = 1 ; $k <= $nb_answers; ++$k) {
+                if ($answer->position[$k] != '666') {                    
+                    $new_list[$count] = $count;
+                    $count++;
+                }
+            }          
+        } else {
+            for ($k = 1 ; $k <= $nb_answers; ++$k) {                                
+                $new_list[$k] = $k;                
+            }            
+        }
+        
+        $i = 1;
+		//for ($k = 1 ; $k <= $real_nb_answers; $k++) {            
+        foreach ($new_list as $key) {
+            $i = $key;	    
+			$form -> addElement ('html', '<tr>'); 
+		             
+			if (is_object($answer)) {
+			    if($answer->position[$i] == 666) {
+			        //we set nothing			        
+			    } else {			    
+    				if ($answer->correct[$i]) {
+    					$correct = $i;
+    				}
+                    $answer_result = $answer->answer[$i];                
+                    $weight_result = float_format($answer->weighting[$i], 1);
+                    if ($nb_answers == $i) {
+                        $weight_result = '0';
+                    }
+                    
+    				$defaults['answer['.$i.']']    = $answer_result;
+    				$defaults['comment['.$i.']']   = $answer->comment[$i];
+    				$defaults['weighting['.$i.']'] = $weight_result;
+    
+    				$item_list=explode('@@',$answer -> destination[$i]);
+    
+    				$try       = $item_list[0];
+    				$lp        = $item_list[1];
+    				$list_dest = $item_list[2];
+    				$url       = $item_list[3];
+    
+    				if ($try==0)
+    					$try_result=0;
+    				else
+    					$try_result=1;
+    
+    				if ($url==0)
+    					$url_result='';
+    				else
+    					$url_result=$url;
+    
+    				$temp_scenario['url'.$i]        = $url_result;
+    				$temp_scenario['try'.$i]        = $try_result;
+    				$temp_scenario['lp'.$i]         = $lp;
+    				$temp_scenario['destination'.$i]= $list_dest;
+			    }
 
 				/*$pre_list_destination=explode(';',$list_dest);
 				$list_destination=array();
@@ -192,37 +221,20 @@ class UniqueAnswerNoOption extends Question {
 				$defaults['destination'.$i]=$list_destination;
 				*/
 				//$defaults['destination'.$i] = $list_destination;
-			} else {                
-                
-               /* if ($nb_answers == $i) {
-                    $defaults['answer['.$i.']']     = get_lang('DontKnow');
-                    $defaults['weighting['.$i.']']  = 0;
-                        
-                    $temp_scenario['destination'.$i] = array('0');
-                    $temp_scenario['lp'.$i] = array('0');
-                                  
-                } else {               
-                    
-
-    				$temp_scenario['destination'.$i] = array('0');
-    				$temp_scenario['lp'.$i] = array('0');
-    				//$defaults['scenario']
-                }*/
 			}
-    
-            
-            
-
+			
 			$defaults['scenario']=$temp_scenario;
 			$renderer = & $form->defaultRenderer();
 			$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>','html');
 			$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
 			$answer_number->freeze();
-
+			
+          //  $form->addElement('hidden', 'position['.$i.']', $answer->position[$i]);
+        
 			$form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
 			$form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+			//$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
 			if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
 				// feedback
@@ -245,27 +257,35 @@ class UniqueAnswerNoOption extends Question {
 			//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
 			$form->addElement('text', 'weighting['.$i.']', null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0"');
-			$form->addElement('html', '</tr>');            
+			$form->addElement('html', '</tr>');      
+
+            $i++;				
+		}
+		
+		
+		if (empty($this -> id)) {
+		    $form->addElement('hidden', 'new_question', 1);
 		}
         
-        
         //Adding the "I don't know" question answer
-        if(empty($this -> id)) {
+        //if (empty($this -> id)) {
             $i = 666;        
             $form -> addElement ('html', '<tr>'); 
     
             $defaults['answer['.$i.']']     = get_lang('DontKnow');
-            $defaults['weighting['.$i.']']  = 0;        
-            
+            $defaults['weighting['.$i.']']  = 0;
             $defaults['scenario']=$temp_scenario;
             $renderer = & $form->defaultRenderer();
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>','html');
             $answer_number=$form->addElement('text', null,null,'value="-"');
             $answer_number->freeze();
+            
+            $form->addElement('hidden', 'position['.$i.']', '666');
     
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
-            $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);  
+            $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+         
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
        
     
@@ -291,7 +311,7 @@ class UniqueAnswerNoOption extends Question {
             $form->addElement('text', 'weighting['.$i.']', null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="0" readonly="readonly" ');
             $form->addElement ('html', '</tr>');
         
-         }
+         //}
     
        
 		$form -> addElement ('html', '</table>');
@@ -328,16 +348,19 @@ class UniqueAnswerNoOption extends Question {
 		if (!empty($this -> id)) {
 			$form -> setDefaults($defaults);
 		} else {
-			//if ($this -> isContent == 1) {
-				$form -> setDefaults($defaults);
-			//}
-		}
-		$form->setConstants(array('nb_answers' => $nb_answers));
+            $form -> setDefaults($defaults);
+		}		
+		
+		$form->addElement('hidden', 'nb_answers');
+		
+	
+	    $form->setConstants(array('nb_answers' => $nb_answers));
+		
 	}
 
 
 	/**
-	 * abstract function which creates the form to create / edit the answers of the question
+	 * Function which creates the form to create / edit the answers of the question
 	 * @param the formvalidator instance
 	 * @param the answers number to display
 	 */
@@ -347,23 +370,28 @@ class UniqueAnswerNoOption extends Question {
 		$correct = $form -> getSubmitValue('correct');
 		$objAnswer = new Answer($this->id);
 		$nb_answers = $form -> getSubmitValue('nb_answers');
-        
-
-		for ($i=1 ; $i <= $nb_answers ; $i++) {
+		$minus = 1;
+		if ($form -> getSubmitValue('new_question')) {
+		    $minus = 0;    
+		}	
+            
+		for ($i=1 ; $i <= $nb_answers - $minus; $i++) {
+		    $position   = trim($form -> getSubmitValue('position['.$i.']'));
         	$answer     = trim($form -> getSubmitValue('answer['.$i.']'));
             $comment    = trim($form -> getSubmitValue('comment['.$i.']'));
             $weighting  = trim($form -> getSubmitValue('weighting['.$i.']'));
-
-            $scenario= $form -> getSubmitValue('scenario');
-
+            $scenario   = $form -> getSubmitValue('scenario');
+            
+            
+//
             
            	//$list_destination = $form -> getSubmitValue('destination'.$i);
            	//$destination_str = $form -> getSubmitValue('destination'.$i);
 
- 		    $try = $scenario['try'.$i];
-            $lp= $scenario['lp'.$i];
- 			$destination = $scenario['destination'.$i];
- 			$url = trim($scenario['url'.$i]);
+ 		    $try           = $scenario['try'.$i];
+            $lp            = $scenario['lp'.$i];
+ 			$destination   = $scenario['destination'.$i];
+ 			$url           = trim($scenario['url'.$i]);
 
  			/*
  			How we are going to parse the destination value
@@ -387,7 +415,7 @@ class UniqueAnswerNoOption extends Question {
 
         	$goodAnswer= ($correct == $i) ? true : false;
 
-        	if($goodAnswer) {
+        	if ($goodAnswer) {
         		$nbrGoodAnswers++;
         		$weighting = abs($weighting);
         		if($weighting > 0) {
@@ -435,4 +463,3 @@ class UniqueAnswerNoOption extends Question {
 	}
 }
 endif;
-?>

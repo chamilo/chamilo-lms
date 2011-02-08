@@ -163,6 +163,8 @@ Question :: display_type_menu ($objExercise->feedbacktype);
 echo '</div><div style="clear:both;">';
 echo '<div id="message"></div>';
 $token = Security::get_token();
+//deletes a session when using don't know question type (ugly fix)
+unset($_SESSION['less_answer']); 
 
 if ($nbrQuestions) {
     $my_exercise = new Exercise();

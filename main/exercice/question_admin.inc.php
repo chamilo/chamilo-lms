@@ -22,7 +22,7 @@ if(!defined('ALLOWED_TO_INCLUDE')) {
 // INIT QUESTION
 if(isset($_GET['editQuestion'])) {
 	$objQuestion = Question::read ($_GET['editQuestion']);
-	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
+	$action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 
 	if (isset($exerciseId) && !empty($exerciseId)) {
 		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
@@ -33,7 +33,6 @@ if(isset($_GET['editQuestion'])) {
 			//Display::display_warning_message(get_lang('EditingScoreCauseProblemsToExercisesInLP'));
 		}
 	}
-
 } else {
 	$objQuestion = Question :: getInstance($_REQUEST['answerType']);
 	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
@@ -60,12 +59,12 @@ if(is_object($objQuestion)) {
 
 	// form title
 	$form->addElement('header', '', $text.': '.$form_title_extra);
-
+    
 	// question form elements
-	$objQuestion -> createForm ($form,array('Height'=>150));
+	$objQuestion->createForm ($form,array('Height'=>150));
 
 	// answer form elements
-	$objQuestion -> createAnswersForm ($form);
+	$objQuestion->createAnswersForm ($form);
 
 	// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
 	if (!$show_quiz_edition) {
@@ -79,13 +78,13 @@ if(is_object($objQuestion)) {
 	//$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','submitQuestion');
 	
 	// FORM VALIDATION
-	if(isset($_POST['submitQuestion']) && $form->validate()) {
+	if (isset($_POST['submitQuestion']) && $form->validate()) {	    
 
 		// question
-	    $objQuestion -> processCreation($form,$objExercise);
+	    $objQuestion->processCreation($form,$objExercise);
 	    // answers
         
-	    $objQuestion -> processAnswersCreation($form,$nb_answers);
+	    $objQuestion->processAnswersCreation($form,$nb_answers);
 
         // TODO: maybe here is the better place to index this tool, including answers text
 

@@ -23,7 +23,7 @@ $config['ToolbarSets']['Normal'] = array(
     array('Templates'),
 	array('PasteWord'),
 	array('Link'),
-	array('Image','flvPlayer','mimetex','asciimath','asciisvg'),
+	array('Image','EmbedMovies','Flash','MP3','mimetex','asciimath','asciisvg'),
 	array('TableOC'),
 	array('Bold'),
 	array('FitWindow')	

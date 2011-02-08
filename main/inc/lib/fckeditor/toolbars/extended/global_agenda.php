@@ -20,8 +20,8 @@ else{
 $config['ToolbarSets']['Normal'] = array(
 	array('Save','NewPage','Templates','-','PasteWord'),
 	array('Undo','Redo'),
-	array('Link','Image','flvPlayer','TableOC','mimetex','asciimath','asciisvg'),
-	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent'),
+	array('Link','Image','EmbedMovies','Flash','MP3','TableOC','mimetex','asciimath','asciisvg'),
+	array('UnorderedList','OrderedList','Rule'),
 	array('JustifyLeft','JustifyCenter'),
 	array('FontFormat','FontName','Bold','Italic','Underline','TextColor','BGColor'),
 	array('FitWindow')

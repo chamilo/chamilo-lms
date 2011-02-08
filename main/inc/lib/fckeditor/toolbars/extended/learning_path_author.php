@@ -21,7 +21,7 @@ else{
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
     //array('PasteWord'),
-    //array('Link','Image','flvPlayer','mimetex'),
+    //array('Link','Image','EmbedMovies','Flash','MP3','mimetex'),
 	//array('TableOC'),
     //array('OrderedList','Rule'),
     //array('JustifyFull'),

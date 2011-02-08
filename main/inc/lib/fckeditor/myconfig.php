@@ -235,23 +235,28 @@ $config['LoadPlugin'][] = 'wikilink';
 // insertHtml: Plugin for inserting HTML. A single preconfigured snippet; a choice from multiple preconfigured snippets; or manually entered HTML.
 if ((api_get_setting('enabled_insertHtml') == 'true')) {
     $config['LoadPlugin'][] = 'insertHtml';
-}
-    // enter a single snippet (HMTL string) or multiple snippets to choose form (object of description string and HTML string pairs). Or leave empty if you want to show a dialog for the user to enter HTML manually (and not show any default HTML in the dialog textarea)
+
+    // Enter a single snippet (HMTL string) or multiple snippets to choose form (object of description string and HTML string pairs). Or leave empty if you want to show a dialog for the user to enter HTML manually (and not show any default HTML in the dialog textarea)
 
     //$config['insertHtml_snippets'] = { 'ArtGallery': '<embed width="475" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/Art/ArtFlashGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" allowfullscreen="true" flashvars="XMLFile=userfiles/image/ArtGallery/gallery.xml"></embed>', 'PhotoFlowGallery' : '<embed width="700" height="300" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/PhotoFlow/PhotoFlowGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/PhotoFlowGallery/gallery.xml"></embed>', 'StackPhotoGallery' : '<embed width="600" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/StackPhoto/StackPhotoGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/StackPhotoGallery/gallery.xml"></embed>', 'ZenGallery' : '<embed width="550" height="400" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="FlashGallery/Zen/ZenGallery.swf" mediaType="flashGallery" bgcolor="#ffffff" flashvars="XMLFile=userfiles/image/ZenGallery/gallery.xml"></embed>'};// TODO: this $config['insertHtml_snippets'] does not work. See also temporal hack around line 76 insertHtml.js
 
-    // (if no snippets specified the dialog will show anyhow)
+    // (If no snippets are specified the dialog will show up anyhow)
     $config['insertHtml_showDialog'] = true;
 
-    // specify a custom tooltip if you want this to appear when hovering the plugin's toolbar button (e.g. a description of the element being inserted). If no custom tooltip is set 'Insert HTML' will appear, and if available, translated into your language
+    // Specify a custom tooltip if you want this to appear when hovering the plugin's toolbar button (e.g. a description of the element being inserted). If no custom tooltip is set 'Insert HTML' will appear, and if available, translated into your language
     $config['insertHtml_buttonTooltip'] = '';
 
-    // show a textarea in the dialog? The first HTML set with $config['insertHtml_snippets'] will be shown in the textarea by default. If no snippets specified the textarea will show anyhow
+    // Show a textarea in the dialog? The first HTML set with $config['insertHtml_snippets'] will be shown in the textarea by default. If no snippets specified the textarea will show anyhow
     $config['insertHtml_showTextarea']= false;
 
-    // the size of the textarea in the dialog, in px
+    // The size of the textarea in the dialog, in px
     $config['insertHtml_textareaWidth'] = 400;
     $config['insertHtml_textareaHeight'] = 300;
+
+    // The size of the the dialog, in px
+    $config['insertHtml_dialogWidth'] = 475;
+    $config['insertHtml_dialogHeight'] = 475;
+}
 
 /*
  * File manager.

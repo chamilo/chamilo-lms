@@ -13,7 +13,7 @@
     {
         var description, snippet;
 
-        // show snippets to choose from
+        // Show snippets to choose from
         if (typeof(FCKConfig.insertHtml_snippets) == 'object')
         {
             var snippetsDiv, snippetDiv, numberOfSnippets = 0;
@@ -49,19 +49,19 @@
             }
             document.getElementById('content').appendChild(snippetsDiv);
 
-            // load dialog
+            // Load the dialog
         }
 
-        // show textarea
+        // Show the textarea
         if (FCKConfig.insertHtml_showTextarea || !FCKConfig.insertHtml_snippets || !numberOfSnippets)
         {
             insertHtmlTextArea = document.createElement('textarea');
             insertHtmlTextArea.id = 'insertHtmlTextArea';
             document.getElementById('content').appendChild(insertHtmlTextArea);
-            // set the size of the textarea
-            insertHtmlTextArea.style.width = (FCKConfig.insertHtml_textareaWidth || 300) + 'px';
-            insertHtmlTextArea.style.height = (FCKConfig.insertHtml_textareaHeight || 100) + 'px';
-            // load default content
+            // Set the size of the textarea
+            insertHtmlTextArea.style.width = (FCKConfig.insertHtml_textareaWidth || 400) + 'px';
+            insertHtmlTextArea.style.height = (FCKConfig.insertHtml_textareaHeight || 300) + 'px';
+            // Load default content
             if (typeof(FCKConfig.insertHtml_snippets) == 'object')
             {
                 for (description in FCKConfig.insertHtml_snippets)
@@ -73,31 +73,31 @@
             else
             {
                 //snippet = FCKConfig.insertHtml_snippets;//Chamilo replaced by below (by now)
-                snippet = "";//Insert your tex here
+                snippet = ''; // Insert your text here
             }
             insertHtmlTextArea.value = snippet;
         }
 
-        // resize around snippets and/or textarea
-        // for IE this must be done before translating the dialog or the dialog will be to wide; also IE needs an approximate resize before autofitting or the dialog width will be to large
-        if (FCKBrowserInfo.IsIE) dialog.Sizer.ResizeDialog(parseInt(FCKConfig.insertHtml_textareaWidth || 300), parseInt(FCKConfig.insertHtml_textareaHeight || 100) + 130);
+        // Resize around snippets and/or textarea
+        // For IE this must be done before translating the dialog or the dialog will be to wide; also IE needs an approximate resize before autofitting or the dialog width will be to large
+        //if (FCKBrowserInfo.IsIE) dialog.Sizer.ResizeDialog(parseInt(FCKConfig.insertHtml_textareaWidth || 400), parseInt(FCKConfig.insertHtml_textareaHeight || 300) + 130);
         dialog.SetAutoSize(true);
 
-        // recenter dialog
-        setTimeout(function(){ // after a dummy delay, needed for webkit
-            var topWindowSize = FCKTools.GetViewPaneSize(dialog.top.window);
-            dialog.frameElement.style.left = Math.round((topWindowSize.Width - dialog.frameElement.offsetWidth) / 2) + 'px';
-            dialog.frameElement.style.top = Math.round((topWindowSize.Height - dialog.frameElement.offsetHeight) / 2).toString() + 'px';;
-        }, 0);
+        // Recenter the dialog
+        //setTimeout(function(){ // after a dummy delay, needed for webkit
+        //    var topWindowSize = FCKTools.GetViewPaneSize(dialog.top.window);
+        //    dialog.frameElement.style.left = Math.round((topWindowSize.Width - dialog.frameElement.offsetWidth) / 2) + 'px';
+        //    dialog.frameElement.style.top = Math.round((topWindowSize.Height - dialog.frameElement.offsetHeight) / 2).toString() + 'px';;
+        //}, 0);
 
-        // translate the dialog box texts
+        // Translate the dialog box texts
         editorWindow.FCKLanguageManager.TranslatePage(document);
 
-        // activate the "OK" button
+        // Activate the "OK" button
         dialog.SetOkButton(true);
     }
 
-    // dialog's 'ok' button function to insert the Html
+    // Dialog's 'ok' button function to insert the Html
     function Ok()
     {
         if (insertHtmlTextArea.value)
@@ -105,7 +105,7 @@
             editorInstance.InsertHtml(insertHtmlTextArea.value);
             editorWindow.FCKUndo.SaveUndoStep();
 
-            return true; // makes the dialog to close
+            return true; // Makes the dialog to close
         }
     }
 

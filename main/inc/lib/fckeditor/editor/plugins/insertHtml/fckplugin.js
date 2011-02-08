@@ -33,7 +33,7 @@
     {
         if (FCKConfig.insertHtml_showDialog || !FCKConfig.insertHtml_snippets || (FCKConfig.insertHtml_snippets && !FCKConfig.insertHtml_snippets.length))
         {
-            var dialog = new FCKDialogCommand('insertHtml', FCKLang.insertHtml_dialogTitle, FCKPlugins.Items['insertHtml'].Path + 'insertHtml.html', 200, 100);
+            var dialog = new FCKDialogCommand('insertHtml', FCKLang.insertHtml_dialogTitle, FCKPlugins.Items['insertHtml'].Path + 'insertHtml.html', FCKConfig.insertHtml_dialogWidth || 475, FCKConfig.insertHtml_dialogHeight || 475);
             dialog.Execute();
         }
         else

@@ -223,7 +223,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
                 FROM $user_table
-                WHERE username = '".trim(addslashes($login))."'";
+                WHERE username = '".Database::escape_string($login)."'";
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
@@ -277,7 +277,7 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 
                                 //Check if user is an admin
                                 $sql = "SELECT user_id FROM $admin_table
-                                        WHERE user_id = '".trim(addslashes($uData['user_id']))."' LIMIT 1";
+                                        WHERE user_id = '".intval($uData['user_id'])."' LIMIT 1";
                                 $result = Database::query($sql);
 
                                 $my_user_is_admin = false;

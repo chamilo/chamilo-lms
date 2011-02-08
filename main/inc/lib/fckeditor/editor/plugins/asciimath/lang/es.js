@@ -3,20 +3,20 @@
  * asciimath plugin Spanish language file.
  * Encoding: UTF-8.
  *
- * Author: Juan Carlos Ra馻 Trabado
+ * Author: Juan Carlos Ra帽a Trabado
  */
 
-FCKLang["DlgAsciiMath"] = 'Insertar una f髍mula ASCIIMath' ;
+FCKLang["DlgAsciiMath"] = 'Insertar una f贸rmula ASCIIMath' ;
 FCKLang["DlgAsciiMathFormulaEditor"] = 'Editor de ecuaciones' ;
 FCKLang["DlgAsciiMathInput"] = 'Insertar' ;
 FCKLang["DlgAsciiMathClear"] = 'Limpiar' ;
 FCKLang["DlgAsciiMathDelete"] = 'Eliminar' ;
-FCKLang["DlgAsciiMathPreview"] = 'Previsualizaci髇' ;
+FCKLang["DlgAsciiMathPreview"] = 'Previsualizaci贸n' ;
 FCKLang["DlgAsciiMathBasedOn"] = 'Basado en ASCIIMathML por ' ;
-FCKLang["DlgAsciiMathForMoreInfo"] = 'Para m醩 informaci髇 sobre AsciiMathML visite esta p醙ina: ' ;
+FCKLang["DlgAsciiMathForMoreInfo"] = 'Para m谩s informaci贸n sobre AsciiMathML visite esta p谩gina: ' ;
 FCKLang["DlgAsciiMathShowMathML"] = 'Mostrar MathML' ;
-FCKLang["DlgAsciiMathFormulaPreview"] = 'Previsualizaci髇 de la ecuaci髇' ;
-FCKLang["DlgAsciiIncompatibleBrowser"] = 'Su navegador no puede mostrar f髍mulas matem醫icas. Use %s1 o Internet Explorer con el plugin %s2 ' ;
-FCKLang["DlgAsciiMathOldIE"] = 'Su navegador no puede mostrar f髍mulas matem醫icas. Actual韈ese a Internet Explorer 6.0+. Tras esto, tendra que instalar el plugin MathPlayer 2 para Internet Explorer. Para m醩 informaci髇 vea %s' ;
-FCKLang["DlgAsciiMathInstallMathPlayer"] = 'Su navegador no puede mostrar f髍mulas matem醫icas. Necesita instalar el plugin MathPlayer 2 para Internet Explorer. Para m醩 informaci髇 vea %s' ;
-FCKLang["DlgAsciiMathOldMathPlayer"] = 'Su navegador no puede mostrar f髍mulas matem醫icas. Necesita actualizar el plugin MathPlayer para Internet Explorer a la version 2. Para m醩 informaci髇 vea %s' ;
+FCKLang["DlgAsciiMathFormulaPreview"] = 'Previsualizaci贸n de la ecuaci贸n' ;
+FCKLang["DlgAsciiIncompatibleBrowser"] = 'Su navegador no puede mostrar f贸rmulas matem谩ticas. Use %s1 o Internet Explorer con el plugin %s2 ' ;
+FCKLang["DlgAsciiMathOldIE"] = 'Su navegador no puede mostrar f贸rmulas matem谩ticas. Actual铆cese a Internet Explorer 6.0+. Tras esto, tendra que instalar el plugin MathPlayer 2 para Internet Explorer. Para m谩s informaci贸n vea %s' ;
+FCKLang["DlgAsciiMathInstallMathPlayer"] = 'Su navegador no puede mostrar f贸rmulas matem谩ticas. Necesita instalar el plugin MathPlayer 2 para Internet Explorer. Para m谩s informaci贸n vea %s' ;
+FCKLang["DlgAsciiMathOldMathPlayer"] = 'Su navegador no puede mostrar f贸rmulas matem谩ticas. Necesita actualizar el plugin MathPlayer para Internet Explorer a la version 2. Para m谩s informaci贸n vea %s' ;

@@ -643,7 +643,7 @@ function update_Db_course($course_db_name) {
     $sql = "
         CREATE TABLE `".$TABLEQUIZQUESTIONLIST . "` (
         id mediumint unsigned NOT NULL auto_increment,
-        question varchar(511) NOT NULL,
+        question TEXT NOT NULL,
         description text default NULL,
         ponderation float(6,2) NOT NULL default 0,
         position mediumint unsigned NOT NULL default 1,

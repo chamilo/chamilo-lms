@@ -433,6 +433,7 @@ class SystemAnnouncementManager
 	 * @param	int		Whether to send to all teachers (1) or not (0)
 	 * @param	int		Whether to send to all students (1) or not (0)
 	 * @param	string	Language (optional, considered for all languages if left empty)
+     * @return  bool    True if the message was sent or there was no destination matching. False on database or e-mail sending error.
 	 */
 	public static function send_system_announcement_by_email($title, $content, $teacher, $student, $language=null) {
 		global $_user;
@@ -460,8 +461,7 @@ class SystemAnnouncementManager
 		}		
 		$sql .= " AND access_url_id = '".$current_access_url_id."' ";
 		
-		
-		if ($teacher == '0' AND $student == '0') {
+		if ((empty($teacher) or $teacher == '0') AND  (empty($student) or $student == '0')) {
 			return true;
 		}
 		$result = Database::query($sql);

@@ -3,7 +3,7 @@
 
 /**
 *	Exercise class: This class allows to instantiate an object of type Exercise
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Olivier Brouckaert
 * 	@author Julio Montoya Cleaning exercises
 * 	@version $Id: exercise.class.php 22046 2009-07-14 01:45:19Z ivantcholakov $
@@ -1705,8 +1705,7 @@ class Exercise {
             $true_score     = $extra[0];
             $false_score    = $extra[1];
             $doubt_score    = $extra[2];        	
-        }
-        
+        }        
         
         $totalWeighting 		= 0;
         $totalScore				= 0;
@@ -2355,31 +2354,26 @@ class Exercise {
                         </tr>';                    
                     }
                 }
-            if($origin != 'learnpath') { 
+            if ($origin != 'learnpath') { 
             ?>
                 <tr>
                 <td colspan="<?php echo $colspan; ?>" align="left">                    
                     <?php                    
                     if ($this->type == ALL_ON_ONE_PAGE) {
-                        echo '<div id="question_score">';
-                        if ($questionScore==-1) {
-                            echo get_lang('Score').": 0 /".float_format($questionWeighting);
-                        } else {
-                            if ($propagate_neg == 0 && $questionScore < 0) {
-                    	        $questionScore = 0;
-                    	    }                    	    
-                            echo get_lang('Score').": ".float_format($questionScore,1)."/".float_format($questionWeighting,1);
-                        }
+                        echo '<div id="question_score">';                        
+                        if ($propagate_neg == 0 && $questionScore < 0) {
+                	        $questionScore = 0;
+                	    }                    	    
+                        echo get_lang('Score').": ".show_score($questionScore, $questionWeighting,false, false);
+                        
                         echo '</div>';
                     }
                     ?><br />
                 </td>
                 </tr>
                 </table>
-                <?php } ?>
-            <?php
-        }
-        
+                <?php }
+        }        
         unset ($objAnswerTmp);
         $i++;
     
@@ -2445,12 +2439,15 @@ class Exercise {
         }
             
         if ($saved_results) {
-            $stat_table 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+            $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
             $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . floatval($totalScore) . ',exe_weighting = exe_weighting + ' .  floatval($totalWeighting) . ' WHERE exe_id = ' . $exeId;
     		Database::query($sql_update);
         }
-        
-        $return_array = array('score'=>$questionScore, 'weight'=>$questionWeighting);         
+        	
+    	if ($propagate_neg == 0 && $questionScore < 0) {
+    	    $questionScore = 0;
+    	}
+        $return_array = array('score'=>$questionScore, 'weight'=>$questionWeighting);
         return $return_array;
 	} //End function
     

@@ -497,7 +497,6 @@ if ($objExercise->selectAttempts() > 0) {
                     $last_attempt_info = $exercise_stat_info[$max_exe_id];
                     echo Display::div(get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']), array('id'=>'')).'<br />';
                     
-                    //echo '<pre>';    //var_dump($last_attempt_info);  
                     if (!empty($last_attempt_info['question_list'])) {               
                         foreach($last_attempt_info['question_list'] as $question_data) {
                             $question_id = $question_data['question_id'];
@@ -508,7 +507,7 @@ if ($objExercise->selectAttempts() > 0) {
                             echo Display::div(get_lang('Score').' '.$marks, array('id'=>'question_score'));
                         }
                     }                    
-                    $score =  show_score($last_attempt_info['exe_result'],$last_attempt_info['exe_weighting']);
+                    $score =  show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
                     echo Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
                     
                     

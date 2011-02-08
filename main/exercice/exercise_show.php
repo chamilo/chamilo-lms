@@ -12,7 +12,7 @@
  * */
 
 // name of the language file that needs to be included
-$language_file=array('exercice');
+$language_file = array('exercice');
 
 // including additional libraries
 require_once 'exercise.class.php';
@@ -46,7 +46,6 @@ $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-$dsp_percent = false;
 $debug=0;
 
 // General parameters passed via POST/GET
@@ -374,7 +373,7 @@ if ($show_results) {
 			<?php
 			// construction of the Answer object
        
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());            
             //var_dump($question_result);
             $questionScore      = $question_result['score'];
             $totalScore        += $question_result['score'];            
@@ -399,7 +398,7 @@ if ($show_results) {
 			</tr>
 			<?php
 	            
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);                       
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());                       
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
 
@@ -425,7 +424,7 @@ if ($show_results) {
 				</tr>
 			<?php	
             
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];  
 			echo '</table>';
@@ -444,7 +443,7 @@ if ($show_results) {
 			</tr>
 			<?php
                       
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
               
@@ -465,12 +464,12 @@ if ($show_results) {
 
 			<?php
 			
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());            
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
 
 		} elseif ($answerType == MATCHING) {            
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());            
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];			
 			echo '</table>';
@@ -480,7 +479,7 @@ if ($show_results) {
             <tr>
                     <td valign="top" align="center" style="padding-left:0px;" >
                         <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';			
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true);            
+            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());            
             $questionScore  = $question_result['score'];
             $totalScore    += $question_result['score'];
 			echo '</table></td></tr>';            
@@ -592,7 +591,9 @@ if ($show_results) {
 	        $my_total_score = 0;
 	    }  
 	    
-		echo get_lang('Score')." : $my_total_score / $my_total_weight";        
+		//echo get_lang('Score')." : $my_total_score / $my_total_weight";
+		echo get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);    
+		
         //echo get_lang('Score')." : ".show_score($my_total_score, $total_weighting, false);
 		echo '</div>';
 
@@ -606,17 +607,11 @@ if ($show_results) {
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
 	if ($show_results) {        
 		echo '<div id="question_score">'.get_lang('YourTotalScore').": ";
-        //@todo $dsp_percent who do that and why?
-		if ($dsp_percent) {
-			$my_result = number_format(($totalScore/$totalWeighting)*100,1,'.','');
-			$my_result = float_format($my_result,1);
-			echo $my_result."%";
-		} else {          
-		    if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
-		        $totalScore = 0;
-		    }          
-            echo show_score($totalScore, $totalWeighting, false);
-		}
+        $my_total_score_temp = $totalScore; 
+	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
+	        $my_total_score_temp = 0;
+	    }          
+        echo show_score($my_total_score_temp, $totalWeighting, false);	
 		echo '</div>';
 	}
 }

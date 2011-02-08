@@ -22,8 +22,8 @@ else{
 $config['ToolbarSets']['Normal'] = array(
 	array('NewPage','Templates','-','PasteWord'),
 	array('Undo','Redo'),
-	array('Link','Unlink','Image','flvPlayer','TableOC','mimetex','asciimath','asciisvg'),	
-   	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent'),
+	array('Link','Unlink','Image','EmbedMovies','Flash','MP3','TableOC','mimetex','asciimath','asciisvg'),	
+   	array('UnorderedList','OrderedList','Rule'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor'),
 	array('FitWindow')

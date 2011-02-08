@@ -46,7 +46,7 @@ class Answer
 	 * @param 	integer	Question ID that answers belong to
 	 */
 	function Answer($questionId, $course_id = null) {
-		//$this->questionType=$questionType;
+		
 		$this->questionId			= intval($questionId);
 		$this->answer				= array();
 		$this->correct				= array();
@@ -145,17 +145,28 @@ class Answer
 			$order = 'ASC';
 		}
 		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER, $this->course['db_name']);
-		$questionId=$this->questionId;
+		$TBL_QUIZ= Database::get_course_table(TABLE_QUIZ_QUESTION, $this->course['db_name']);
+		$questionId=intval($this->questionId);
+		
+		$sql = "SELECT type FROM $TBL_QUIZ where id = $questionId";
+		$result_question=Database::query($sql);
+		$question_type=Database::fetch_array($result_question);
+		$remove_doubt_answer = ''; //
+	
+		
 		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto " .
-				"FROM $TBL_ANSWER WHERE question_id='".$questionId."' " .
-				"ORDER BY $field $order";
-
-		$result=Database::query($sql);
-
+				"FROM $TBL_ANSWER WHERE question_id='".$questionId."'   " .
+				"ORDER BY $field $order";		
+		$result=Database::query($sql);	
+		
 		$i=1;
-
 		// while a record is found
+		$doubt_data = null;
 		while($object=Database::fetch_object($result)) {
+		    if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && $object->position == 666) {
+		        $doubt_data = $object;
+                continue;
+		    }
 			$this->answer[$i]		= $object->answer;
 			$this->correct[$i]		= $object->correct;
 			$this->comment[$i]		= $object->comment;
@@ -164,7 +175,20 @@ class Answer
 			$this->destination[$i]	= $object->destination;
 			$this->autoId[$i]		= $object->id_auto;
 			$i++;
-		}
+		}		
+		
+		if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {		    
+		    $this->answer[$i]   = $doubt_data->answer;
+			$this->correct[$i]		= $doubt_data->correct;
+			$this->comment[$i]		= $doubt_data->comment;
+			$this->weighting[$i]	= $doubt_data->ponderation;
+			$this->position[$i]		= $doubt_data->position;
+			$this->destination[$i]	= $doubt_data->destination;
+			$this->autoId[$i]		= $doubt_data->id_auto;
+			$i++;		     
+	    }
+	
+		
 		$this->nbrAnswers=$i-1;
 	}
 

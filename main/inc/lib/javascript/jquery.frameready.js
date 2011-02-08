@@ -2,7 +2,7 @@
  *
  * frameReady: Remote function calling for jQuery
  *
- * Version 1.2.0
+ * Version 1.2.1
  *
  * Copyright (c) 2007 Daemach (John Wilson) <daemach@gmail.com>, http://ideamill.synaptrixgroup.com
  * Licensed under the MIT License:
@@ -10,8 +10,9 @@
  *
  *	Credit John Resig and his excellent book for the ready function concepts.
  *
+ * Credit to Mike Alsup for the logging code.
  * ============================================================================================
- * Usage:  	$.frameReady(function (function),target (string)[,options (map/object)]);
+ * Usage: $.frameReady(function (function),target (string)[,options (map)][,callback (function)]);
  *
  * Function: (function/required) An anonymous function to be run within the target frame.
  *
@@ -28,22 +29,25 @@
  *				$("p",top.mainFrame.document).  If false, jQuery will not be loaded automatically
  *				and you must use a context in jquery selectors.
  *
- *			load: (array or object)  jquery is loaded by default. You can pass a single object to
- *				frameReady, or an array of objects that will be loaded and tested in order.  2 types
- *				of files can be loaded.  Scripts	and stylesheets:
+ *		data: (object)  An object to be passed as-is to the target frame.  This is where you pass
+ *			variable data, rather than in a closure.
  *
- *				scripts: {type:"script", src:"/js/myscript.js", id:"_ms", test:"afunction"}
- *				stylesheets: {type:"stylesheet", src:"/css/mycss.css", id:"_ss"}
+ *		load: (object or array of objects)  jquery is loaded by default. You can pass a single object to
+ *			frameReady, or an array of objects that will be loaded and tested in order.  2 types
+ *			of files can be loaded.  Scripts	and stylesheets:
  *
- *					type: (string/required) "script" for script files, "stylesheet" for stylesheets.
- *					src: (string/required)  The source of the file, ie: /js/myscript.js.
- *					id: (string/optional)  An id for the id attribute.  If one isn't provided it
- *						will be generated.
- *					test: (sting/optional) The name of a function that should exist once the script
- *						is loaded properly.  Until this function becomes available, the script will
- *						be considered not ready and no other files will be loaded.  If a test is not
- *						provided, the next file will be loaded immediately.  Tests are not useful
- *						with stylesheets.
+ *			scripts: {type:"script", src:"/js/myscript.js", id:"_ms", test:"afunction"}
+ *			stylesheets: {type:"stylesheet", src:"/css/mycss.css", id:"_ss"}
+ *
+ *				type: (string/required) "script" for script files, "stylesheet" for stylesheets.
+ *				src: (string/required)  The source of the file, ie: /js/myscript.js.
+ *				id: (string/optional)  An id for the id attribute.  If one isn't provided it
+ *					will be generated.
+ *				test: (sting/optional) The name of a function that should exist once the script
+ *					is loaded properly.  Until this function becomes available, the script will
+ *					be considered not ready and no other files will be loaded.  If a test is not
+ *					provided, the next file will be loaded immediately.  Tests are not useful
+ *					with stylesheets.
  *
  *	One gotcha: You must have something other than space characters within the body tags of
  * 	target frame documents for frameReady to work properly.  A single character is enough.
@@ -80,13 +84,27 @@ if (typeof $daemach == "undefined") {
             return;
         } else {
             top.window.console.log([].join.call(arguments,''));
-        }
-    }
-}
+        };
+    };
+    $daemach.time = function() {
+        if (!top.window.console || !top.window.console.time || !$daemach.debug) {
+            return;
+        } else {
+            top.window.console.time([].join.call(arguments,''));
+        };
+    };
+    $daemach.timeEnd = function() {
+        if (!top.window.console || !top.window.console.timeEnd || !$daemach.debug) {
+            return;
+        } else {
+            top.window.console.timeEnd([].join.call(arguments,''));
+        };
+    };
+};
 
 if (typeof $daemach["frameReady"] == "undefined") {
     $daemach["frameReady"] = {};
-}
+};
 
 jQuery.frameReady = function(f,t,r,j) {
 
@@ -109,10 +127,12 @@ jQuery.frameReady = function(f,t,r,j) {
             load: [ {type:"script",id:"_jq", src:jQueryPath, test:"jQuery"} ],
             bLoaded: false,
             loadInit: [],
+            data: {},
             callback: false
         };
         $fr[fn]["target"] = t;
-    }
+    };
+
     var fr = $fr[fn];
     var frs = fr["settings"];
 
@@ -135,11 +155,14 @@ jQuery.frameReady = function(f,t,r,j) {
             if (typeof arg.jquery !== u) {
                 frs.jquery = arg.jquery;
             };
+            if (typeof arg.data !== u) {
+                frs.data = arg.data;
+            };
 
             // if we're not running functions in the remote frame itself, no need for jQuery
             if (!frs.remote || !frs.jquery) {
                 frs.load.pop();
-            }
+            };
 
             if (typeof arg.load !== u) {
                 var bl = true;
@@ -148,18 +171,18 @@ jQuery.frameReady = function(f,t,r,j) {
                         bl = true;
                         for (var h=0;h<frs.load.length;h++){
                             if (frs.load[h].src == arg.load[i].src) { bl=false; };
-                        }
-                        if (bl) { frs.load.push(arg.load[i]); }
-                    }
+                        };
+                        if (bl) { frs.load.push(arg.load[i]); };
+                    };
                 } else if (typeof arg.load == "object") {
                     for (var h=0;h<frs.load.length;h++){
                         if (frs.load[h].src == arg.load.src) { bl=false; };
-                    }
-                    if (bl) { frs.load.push(arg.load); }
-                }
-            }
-        }
-    }
+                    };
+                    if (bl) { frs.load.push(arg.load); };
+                };
+            };
+        };
+    };
 
     if (fr.timer) {
         fr.ready.push(f);
@@ -167,8 +190,8 @@ jQuery.frameReady = function(f,t,r,j) {
         fr.ready=[f];
         if (typeof addEvent !== "undefined"){ addEvent(window,"load",function(){ jQuery.isFrameReady(fn); }); };
         fr.timer = setInterval(function(){ jQuery.isFrameReady(fn); },13);
-    }
-}
+    };
+};
 
 jQuery.isFrameReady = function(fn){
     var u = "undefined";
@@ -196,7 +219,7 @@ jQuery.isFrameReady = function(fn){
                     var _test;
                     try { _test = eval('typeof fx.'+s.test+ ' !== "undefined"'); }
                     catch(ex){ _test = false;}
-                    finally { $d.log(fn, ": Running test for script ",i,". ", (_test || !s.test) ? "Passed.":"Failed."); }
+                    finally { $d.log(fn, ": Running test for script ",i,". ", (_test || !s.test) ? "Passed.":"Failed."); };
 
                     if ((_test || !s.test) && frs.loadInit[i]) {
                         frs.bLoaded = (typeof s.test == u) ? true : _test;
@@ -212,37 +235,40 @@ jQuery.isFrameReady = function(fn){
                                     ele.setAttribute('id', id);
                                     ele.setAttribute('src', s.src);
                                     fd.getElementsByTagName("body")[0].appendChild(ele);
-                                    void(ele);
                                     frs.loadInit[i] = true;
-                                    break
+                                    break;
                                 case "stylesheet" :
                                     $d.log(fn, ": Loading stylesheet "+ i + " (" + s.src + ")");
                                     var ele=fd.createElement('link');
-                                    ele.setAttribute('id', id);
                                     ele.setAttribute('href', s.src);
                                     ele.setAttribute('rel', "stylesheet");
                                     ele.setAttribute('type', "text/css");
                                     fd.getElementsByTagName("body")[0].appendChild(ele);
-                                    void(ele);
                                     frs.loadInit[i] = true;
-                                break
+                                break;
                                 default :
                                     $d.log(fn, ": Script "+i+" has a bad or missing type attribute..." );
-                            }
-                        }
+                            };
+                        };
                         break;
-                    }
-                }
+                    };
+                };
             } else {
                 clearInterval(fr.timer);
                 fr.timer = null;
+                for (i in frs.data){
+                    if (!fx.frData){
+                        fx.frData={};
+                    }
+                    fx.frData[i] = frs.data[i];
+                };
 
                 fr.ready.push(function(){ window.frameReadyUnload = function(root, fn){ $(window).bind("unload",function(){ root.jQuery.frameReady.unload(fn); }); } });
 
                 $d.log(fn, ": Processing function stack:");
                 for (var i=0; i<fr.ready.length;i++){
                     (frs.remote) ? fx.eval("(" + fr.ready[i].toString() + ")()") : fr.ready[i]();
-                }
+                };
 
                 fx.frameReadyUnload(window,fn);
 
@@ -255,17 +281,17 @@ jQuery.isFrameReady = function(fn){
                 if (frs.callback){
                     $d.log(fn, ": Found a callback.  Executing...");
                     frs.callback();
-                }
-            }
-        }
-    }
+                };
+            };
+        };
+    };
 
     $d.log(fn, ":");
-}
+};
 
 jQuery.frameReady.unload = function(fn){
-    $daemach.log("Frame " + fn + " is unloading.  Resetting state.")
+    $daemach.log("Frame " + fn + " is unloading.  Resetting state.");
     $daemach["frameReady"][fn].done = false;
     $daemach["frameReady"][fn]["settings"].bLoaded = false;
     $daemach["frameReady"][fn]["settings"].loadInit = [];
-}
+};

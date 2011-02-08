@@ -54,9 +54,6 @@ $main_user_table 		= Database::get_main_table(TABLE_MAIN_USER);
 $main_admin_table       = Database::get_main_table(TABLE_MAIN_ADMIN);
 $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-
-//temp values to move to admin settings
-$dsp_percent = false; //false to display total score as absolute values
 //debug param. 0: no display - 1: debug display
 $debug=0;
 if($debug>0){error_log('Entered exercise_result.php: '.print_r($_POST,1));}
@@ -303,23 +300,19 @@ foreach ($questionList as $questionId) {
 	}
 
 	// We're inside *one* question. Go through each possible answer for this question
-	$result = $objExercise->manage_answer($exeId, $questionId, $choice,'exercise_result', $exerciseResultCoordinates, true, false, true, $objExercise->selectPropagateNeg());    
-    $totalScore        += $result['score'];
+	$result = $objExercise->manage_answer($exeId, $questionId, $choice,'exercise_result', $exerciseResultCoordinates, true, false, true, $objExercise->selectPropagateNeg());   	
+    $totalScore        += $result['score'];    
     $totalWeighting    += $result['weight'];
     
 } // end huge foreach() block that loops over all questions
 
 if($origin != 'learnpath') {
     echo '<div id="question_score">';
-    echo get_lang('YourTotalScore')." ";
-	if ($dsp_percent) {
-        echo number_format(($totalScore/$totalWeighting)*100,1,'.','')."%";
-	} else {	    
-	    if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
-		    $totalScore = 0;
-        } 
-        echo show_score($totalScore, $totalWeighting, false);
-	}
+    echo get_lang('YourTotalScore')." ";	
+    if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
+	    $totalScore = 0;
+    }     
+    echo show_score($totalScore, $totalWeighting, false);	
     echo '</div>';
 	?>
     <button type="submit" class="save"><?php echo get_lang('Finish');?></button>
@@ -328,18 +321,17 @@ if($origin != 'learnpath') {
 
 // Tracking of results
 
-if ($_configuration['tracking_enabled']) {
-	//	Updates the empty exercise
-	$safe_lp_id = $learnpath_id==''?0:(int)$learnpath_id;
-	$safe_lp_item_id = $learnpath_item_id==''?0:(int)$learnpath_item_id;
-    $safe_lp_item_view_id = $learnpath_item_view_id==''?0:(int)$learnpath_item_view_id;
-	$quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
-	if (api_is_allowed_to_session_edit() ) {
-		update_event_exercice($exeId, $objExercise->selectId(),$totalScore, $totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration);
-	}
+//	Updates the empty exercise
+$safe_lp_id = $learnpath_id==''?0:(int)$learnpath_id;
+$safe_lp_item_id = $learnpath_item_id==''?0:(int)$learnpath_item_id;
+$safe_lp_item_view_id = $learnpath_item_view_id==''?0:(int)$learnpath_item_view_id;
+$quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
+if (api_is_allowed_to_session_edit() ) {
+	update_event_exercice($exeId, $objExercise->selectId(), $totalScore, $totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration);
 }
 
-if($objExercise->results_disabled) {
+
+if ($objExercise->results_disabled) {
 	ob_end_clean();
 	if ($origin != 'learnpath') {
 		Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><a href="exercice.php" />'.get_lang('Back').'</a>',false);
@@ -416,7 +408,7 @@ if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
 			<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
 			<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type"></head>';
 
-		if(count($arrques)>0) {
+		if (count($arrques)>0) {
 			$msg .= '
 			<body><br />
 			<p>'.get_lang('OpenQuestionsAttempted').' :

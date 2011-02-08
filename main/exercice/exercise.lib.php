@@ -1060,14 +1060,13 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     
                     // if the float look like 10.00 we show only 10
     
-                    $my_res     = float_format($results[$i]['exresult'],1);
-                    $my_total   = float_format($results[$i]['exweight'],1);
+                    $my_res     = $results[$i]['exresult'];
+                    $my_total   = $results[$i]['exweight'];
                     if (!$results[$i]['propagate_neg'] && $my_res < 0) {
                         $my_res = 0;
                     }
                     $ex = show_score($my_res, $my_total);
                     
-                    //$result_list = round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ')';
                     $result_list = $ex;
     
                     $html_link = '';
@@ -1132,32 +1131,36 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 }
 
 /**
- * Transform the score with exercise_max_note and exercise_min_score the platform settings
+ * Converts the score with the exercise_max_note and exercise_min_score the platform settings + formats the results using the float_format function
+ * 
  * @param   float   score
  * @param   float   weight
  * @param   bool    show porcentage or not
+ * @param	bool	use or not the platform settings
  * @return  string  an html with the score modified
  */
-function show_score($score, $weight, $show_porcentage = true) {
+function show_score($score, $weight, $show_porcentage = true, $use_platform_settings = true) {
     $html  = '';
     $score_rounded = $score;
      
     $max_note =  api_get_setting('exercise_max_score');
     $min_note =  api_get_setting('exercise_min_score');
     
-    if ($max_note != '' && $min_note != '') {        
-        if (!empty($weight) && intval($weight) != 0) {
-	       $score        = $min_note + ($max_note - $min_note) * $score /$weight;
-        } else {
-           $score          = $min_note;
+    if ($use_platform_settings) {
+        if ($max_note != '' && $min_note != '') {        
+            if (!empty($weight) && intval($weight) != 0) {
+    	       $score        = $min_note + ($max_note - $min_note) * $score /$weight;
+            } else {
+               $score        = $min_note;
+            }
+            $score_rounded  = float_format($score, 1);
+            $weight         = $max_note;
         }
-        $score_rounded  = round($score, 2);
-        $weight         = $max_note;
     }
     if ($show_porcentage) {
-        $html = round(($score / ($weight != 0 ? $weight : 1)) * 100, 2) . '% (' . $score_rounded . ' / ' . $weight . ')';	
+        $html = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1) . '% (' . $score_rounded . ' / ' . $weight . ')';	
     } else {            
-        $weight = round($weight, 2);
+        $weight = float_format($weight, 1);
     	$html = $score_rounded . ' / ' . $weight;
     }
     return $html;	

@@ -42,6 +42,7 @@ class Security {
 	 * @return	bool	True if the path is under the checker, false otherwise
 	 */
 	public static function check_abs_path ($abs_path,$checker_path) {
+		global $_configuration;
 		if (empty($checker_path)) {return false;} //checker path must be set
 
 		$true_path=str_replace("\\", "/", realpath($abs_path));
@@ -49,6 +50,13 @@ class Security {
 		$found = strpos($true_path.'/',$checker_path);
 		if ($found===0) {
 			return true;
+                } else {
+                    //code specific to courses directory stored on other disk
+                    $checker_path = str_replace(api_get_path(SYS_COURSE_PATH),$_configuration['symbolic_course_folder_abs'],$checker_path);
+                    $found = strpos($true_path.'/',$checker_path);
+                    if ($found === 0) {
+                        return true;
+                    }
 		}
         return false;
 	}

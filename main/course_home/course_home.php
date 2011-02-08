@@ -35,7 +35,7 @@ $language_file = 'course_home';
 $use_anonymous = true;
 
 // Inlcuding the global initialization file.
-require '../../main/inc/global.inc.php';
+require dirname(__FILE__).'/../inc/global.inc.php';
 
 // Delete LP sessions
 unset($_SESSION['oLP']);

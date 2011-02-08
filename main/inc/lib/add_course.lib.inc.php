@@ -204,7 +204,7 @@ function prepare_course_repository($course_repository, $course_code) {
     \$cidReq = \"$course_code\";
     \$dbname = \"$course_code\";
 
-    include(\"../../main/course_home/course_home.php\");
+    include(\"".api_get_path(SYS_CODE_PATH)."course_home/course_home.php\");
     ?>");
     fwrite($fd, $string);
     @chmod(api_get_path(SYS_COURSE_PATH).$course_repository . '/index.php',$perm_file);

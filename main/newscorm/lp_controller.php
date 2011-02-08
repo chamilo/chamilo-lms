@@ -197,7 +197,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $action = (!empty($_REQUEST['action']) ? $_REQUEST['action'] : '');
 switch ($action) {
-    
+
     case 'add_item':
 
         if (!$is_allowed_to_edit) {
@@ -215,12 +215,12 @@ switch ($action) {
 
             if (isset($_POST['submit_button']) && !empty($_POST['title'])) {
                 // If a title was sumbitted:
-                
+
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
-                    
+
                 if (isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_POST['post_time']) {
-                   
+
                     // Check post_time to ensure ??? (counter-hacking measure?)
                     require 'lp_add_item.php';
                 } else {
@@ -262,14 +262,14 @@ switch ($action) {
                 require 'lp_add.php';
             } else {
                 $_SESSION['post_time'] = $_REQUEST['post_time'];
-                
-                if (!$_REQUEST['enabletimelimit']) {                	
-                	$_REQUEST['publicated_on'] = null;
+
+                if (!$_REQUEST['enabletimelimit']) {
+                    $_REQUEST['publicated_on'] = null;
                     $_REQUEST['expired_on'] = null;
                 } else {
                     $publicated_on  = $_REQUEST['publicated_on'];
                     $publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
-                    
+
                     $expired_on   = $_REQUEST['expired_on'];
                     $expired_on   = $expired_on['Y'].'-'.$expired_on['F'].'-'.$expired_on['d'].' '.$expired_on['H'].':'.$expired_on['i'].':00';
                 }
@@ -301,23 +301,23 @@ switch ($action) {
             $_SESSION['refresh'] = 1;
             require 'lp_admin_view.php';
         }
-        break;       
-         
+        break;
+
     case 'auto_launch':
-        if (api_get_course_setting('enable_lp_auto_launch')) {  
+        if (api_get_course_setting('enable_lp_auto_launch')) {
             if (!$is_allowed_to_edit) {
                 api_not_allowed(true);
             }
             if ($debug > 0) error_log('New LP - export action triggered', 0);
             if (!$lp_found) { error_log('New LP - No learnpath given for set_autolunch', 0); require 'lp_list.php'; }
-            else {            
-                $_SESSION['oLP']->set_autolunch($_GET['lp_id'], $_GET['status']);            
+            else {
+                $_SESSION['oLP']->set_autolunch($_GET['lp_id'], $_GET['status']);
                 require 'lp_list.php';
                 exit;
             }
         }
     break;
-    
+
     case 'build':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -350,21 +350,21 @@ switch ($action) {
             }
         }
         break;
-        
+
     case 'edit_item':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
-        }        
+        }
         if ($debug > 0) error_log('New LP - edit item action triggered', 0);
 
         if (!$lp_found) { error_log('New LP - No learnpath given for edit item', 0); require 'lp_list.php'; }
         else {
             $_SESSION['refresh'] = 1;
             if (isset($_POST['submit_button']) && !empty($_POST['title'])) {
-                
+
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
-                
+
                 //$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
                 // TODO: mp3 edit
                 $audio = array();
@@ -395,7 +395,7 @@ switch ($action) {
             if (isset($_POST['submit_button'])) {
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
-                
+
                 $_SESSION['refresh'] = 1;
                 $_SESSION['oLP']->edit_item_prereq($_GET['id'], $_POST['prerequisites'], $_POST['min_' . $_POST['prerequisites']], $_POST['max_' . $_POST['prerequisites']]);
             }
@@ -415,7 +415,7 @@ switch ($action) {
             if (isset($_POST['submit_button'])) {
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
-                
+
                 $_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description']);
                 $is_success = true;
             }
@@ -479,7 +479,7 @@ switch ($action) {
         else {
             $result = $_SESSION['oLP']->scorm_export_to_pdf($_GET['lp_id']);
             if (!$result) {
-                require 'lp_list.php';            	
+                require 'lp_list.php';
             }
             exit;
         }
@@ -595,26 +595,26 @@ switch ($action) {
             $_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
             $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
-            $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);            
-                   
+            $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
+
             if (!$_REQUEST['enabletimelimit']) {
-                //there will be always a publication date                   
+                //there will be always a publication date
                 $publicated_on  = $_REQUEST['publicated_on'];
                 $publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
-                
+
                 $expired_on = null;
             } else {
                 $publicated_on  = $_REQUEST['publicated_on'];
                 $publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
-                
+
                 $expired_on   = $_REQUEST['expired_on'];
                 $expired_on   = $expired_on['Y'].'-'.$expired_on['F'].'-'.$expired_on['d'].' '.$expired_on['H'].':'.$expired_on['i'].':00';
-            }            
-            
+            }
+
             $_SESSION['oLP']->set_modified_on();
-            $_SESSION['oLP']->set_publicated_on($publicated_on);                        
+            $_SESSION['oLP']->set_publicated_on($publicated_on);
             $_SESSION['oLP']->set_expired_on($expired_on);
-            
+
 
             if ($_REQUEST['remove_picture']) {
                 $_SESSION['oLP']->delete_lp_image();
@@ -867,7 +867,7 @@ switch ($action) {
                 // Declare variables to be used in lp_stats.php.
                 $lp_id  = $_SESSION['oLP']->get_id();
                 $list   = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
-                $user_id = api_get_user_id();                
+                $user_id = api_get_user_id();
                 header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/?id_session='.api_get_session_id());
             }
             break;

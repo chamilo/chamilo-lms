@@ -32,7 +32,7 @@
         (October 2003)
     2.8    - adapted for new Claroline login procedure
         - ldap package now becomes a standard, in auth/ldap
-    2.7 - uses more standard LDAP field names: mail, sn, givenname
+    2.7 - uses more standard LDAP field names: mail, sn, givenname (or cn)
             instead of mail, preferredsn, preferredgivenname
             there are still
         - code cleanup
@@ -130,7 +130,7 @@ function ldap_find_user_info ($login) {
         //echo "<h3>Unable to connect to LDAP server</h3>";
     }
     //DEBUG: $result["firstname"] = "Jan"; $result["name"] = "De Test"; $result["email"] = "email@ugent.be";
-    $result["firstname"] = $info[0]["givenname"][0];
+    $result["firstname"] = $info[0]["cn"][0];
     $result["name"] = $info[0]["sn"][0];
     $result["email"] = $info[0]["mail"][0];
     $tutor_field = api_get_setting('ldap_filled_tutor_field');
@@ -197,9 +197,11 @@ function ldap_put_user_info_locally($login, $info_array) {
     ------------------------------------------------------------ */
 
     require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+    $language = api_get_setting('platformLanguage');
+    if (empty($language)) { $language = 'english'; }
     $_userId = UserManager::create_user($prenom, $nom, $status,
                      $email, $uname, $password, $official_code,
-                     'english','', '', 'ldap');
+                     $language,'', '', 'ldap');
 
     //echo "new user added to Chamilo, id = $_userId";
 
@@ -433,11 +435,11 @@ function ldap_get_user_data($from, $number_of_items, $column, $direction) {
                 $user[] = $info[$key]['uid'][0];
                 $user[] = $info[$key]['uid'][0];
                 if ($is_western_name_order) {
-                    $user[] = api_convert_encoding($info[$key]['givenname'][0], api_get_system_encoding(), 'UTF-8');
+                    $user[] = api_convert_encoding($info[$key]['cn'][0], api_get_system_encoding(), 'UTF-8');
                     $user[] = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
                 } else {
                     $user[] = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
-                    $user[] = api_convert_encoding($info[$key]['givenname'][0], api_get_system_encoding(), 'UTF-8');
+                    $user[] = api_convert_encoding($info[$key]['cn'][0], api_get_system_encoding(), 'UTF-8');
                 }
                 $user[] = $info[$key]['mail'][0];
                 $outab[] = $info[$key]['eduPersonPrimaryAffiliation'][0]; // Ici "student"
@@ -483,7 +485,7 @@ function ldap_add_user($login) {
 
         for ($key = 0; $key < $info['count']; $key ++) {
             $lastname = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
-            $firstname = api_convert_encoding($info[$key]['givenname'][0], api_get_system_encoding(), 'UTF-8');
+            $firstname = api_convert_encoding($info[$key]['cn'][0], api_get_system_encoding(), 'UTF-8');
             $email = $info[$key]['mail'][0];
             // Get uid from dn
             $dn_array=ldap_explode_dn($info[$key]['dn'],1);

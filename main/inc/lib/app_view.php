@@ -21,12 +21,11 @@ class View {
    	 */
 	public function __construct($toolname = '', $template_path=null) {
 		if (!empty($toolname)) {
-                        if (isset($template_path)) {
-                            $path = $template_path.$toolname.'/';
-                        } else {
-                            $path = api_get_path(SYS_CODE_PATH).$toolname.'/';
-                        }
-
+            if (isset($template_path)) {
+                $path = $template_path.$toolname.'/';
+            } else {
+                $path = api_get_path(SYS_CODE_PATH).$toolname.'/';
+            }
 			if (is_dir($path)) {
 				$this->tool_path = $path;
 			} else {

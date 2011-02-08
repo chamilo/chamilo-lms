@@ -16,7 +16,7 @@ $cidReset = true; // Flag forcing the 'current course' reset
 // including files
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'auth.lib.php';
+require_once api_get_path(LIBRARY_PATH).'auth.lib.php'; 
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'courses_controller.php';
 //require_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
@@ -85,12 +85,12 @@ $ctok = $_SESSION['sec_token'];
 if (isset($_GET['move'])) {
 	if (isset($_GET['course'])) {
 		if ($ctok == $_GET['sec_token']) {
-                        $courses_controller->move_course($_GET['move'], $_GET['course'], $_GET['category']);
+            $courses_controller->move_course($_GET['move'], $_GET['course'], $_GET['category']);
 		}
 	}
 	if (isset($_GET['category']) && !$_GET['course']) {
 		if ($ctok == $_GET['sec_token']) {
-                        $courses_controller->move_category($_GET['move'], $_GET['category']);
+            $courses_controller->move_category($_GET['move'], $_GET['category']);
 		}
 	}
 }
@@ -98,7 +98,7 @@ if (isset($_GET['move'])) {
 // We are moving the course of the user to a different user defined course category (=Sort My Courses).
 if (isset($_POST['submit_change_course_category'])) {
     if ($ctok == $_POST['sec_token']) {
-            $courses_controller->change_course_category($_POST['course_2_edit_category'], $_POST['course_categories']);
+        $courses_controller->change_course_category($_POST['course_2_edit_category'], $_POST['course_categories']);
     }
 }
 
@@ -120,7 +120,7 @@ if ($action == 'deletecoursecategory' && isset($_GET['id'])) {
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_POST['unsubscribe'])) {
 	if ($ctok == $_POST['sec_token']) {
-            $courses_controller->unsubscribe_user_from_course($_POST['unsubscribe']);
+        $courses_controller->unsubscribe_user_from_course($_POST['unsubscribe']);
             //$message = remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
 	}
 }
@@ -128,7 +128,7 @@ if (isset($_POST['unsubscribe'])) {
 // We are creating a new user defined course category (= Create Course Category).
 if (isset($_POST['create_course_category']) && isset($_POST['title_course_category']) && strlen(trim($_POST['title_course_category'])) > 0) {
 	if ($ctok == $_POST['sec_token']) {
-            $courses_controller->add_course_category($_POST['title_course_category']);
+        $courses_controller->add_course_category($_POST['title_course_category']);
 	}
 }
 
@@ -142,25 +142,23 @@ if (isset($_REQUEST['search_course'])) {
 
 // subscribe user to course
 if (isset($_GET['subscribe_course'])) {
-        //if ($ctok == $_GET['sec_token'] || $_POST['token'] == $_GET['sec_token']) {
-                $courses_controller->subscribe_user($_GET['subscribe_course'], $_GET['search_term'], $_GET['category_code']);
-        //}
+    //if ($ctok == $_GET['sec_token'] || $_POST['token'] == $_GET['sec_token']) {
+            $courses_controller->subscribe_user($_GET['subscribe_course'], $_GET['search_term'], $_GET['category_code']);
+    //}
 }
 
 switch ($action) {
-
-        case 'createcoursecategory' :
-                                        $courses_controller->categories_list($action);
-                                        break;
-        case 'deletecoursecategory' :
-	case 'sortmycourses'        :
-                                        $courses_controller->courses_list($action);
-                                        break;
-        case 'subscribe'            :
-                                        $courses_controller->courses_categories($action);
-                                        break;
-        case 'display_courses'      :
-                                        $courses_controller->courses_categories($action, $_GET['category_code']);
-                                        break;
-
+    case 'createcoursecategory' :
+        $courses_controller->categories_list($action);
+        break;
+    case 'deletecoursecategory' :
+    case 'sortmycourses'        :
+        $courses_controller->courses_list($action);
+        break;
+    case 'subscribe'            :
+        $courses_controller->courses_categories($action);
+        break;
+    case 'display_courses'      :
+        $courses_controller->courses_categories($action, $_GET['category_code']);
+        break;
 }

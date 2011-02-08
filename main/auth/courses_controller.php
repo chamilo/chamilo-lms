@@ -40,11 +40,10 @@ class CoursesController { // extends Controller {
             $user_id = api_get_user_id();
 
             //$user_courses = $auth->get_courses_of_user($user_id);
-            $data['user_courses'] = $this->model->get_courses_of_user($user_id);
-            $data['user_course_categories'] = $this->model->get_user_course_categories();
-            $data['courses_in_category'] = $this->model->get_courses_in_category();
-
-            $data['all_user_categories'] = $this->model->get_user_course_categories();
+            $data['user_courses']             = $this->model->get_courses_of_user($user_id);
+            $data['user_course_categories']   = $this->model->get_user_course_categories();
+            $data['courses_in_category']      = $this->model->get_courses_in_category();
+            $data['all_user_categories']      = $this->model->get_user_course_categories();
 
             $data['action'] = $action;
 
@@ -140,7 +139,7 @@ class CoursesController { // extends Controller {
         $browse_course_categories = $this->model->browse_course_categories();
 
         $data['browse_courses_in_category'] = $this->model->search_courses($search_term);
-        $data['browse_course_categories'] = $browse_course_categories;
+        $data['browse_course_categories']   = $browse_course_categories;
 
         $data['search_term'] = $search_term;
 
@@ -157,10 +156,9 @@ class CoursesController { // extends Controller {
         }
 
         $data['user_coursecodes'] = $user_coursecodes;
-
-        $data['message'] = $message;
-        $data['error'] = $error;
-        $data['action'] = 'display_courses';
+        $data['message']    = $message;
+        $data['error']      = $error;
+        $data['action']     = 'display_courses';
 
         // render to the view
         $this->view->set_data($data);

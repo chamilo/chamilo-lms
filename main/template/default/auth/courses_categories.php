@@ -8,7 +8,6 @@
 */
 
 $stok = Security::get_token();
-
 ?>
 <!-- Actions: The menu with the different options in cathe course management -->
 
@@ -98,13 +97,9 @@ $stok = Security::get_token();
                                 }
                             }
                         }
-
-
                     }
+            } 
             ?>
-
-
-            <?php } ?>
 
 
         </div>
@@ -113,14 +108,12 @@ $stok = Security::get_token();
 
     <div id="categories-content-second">
 
-        <?php if (!empty($message)) { Display::display_confirmation_message($message, false); } ?>
-        <?php if (!empty($error)) { Display::display_error_message($error, false); } ?>
-        <?php
+        <?php 
+        if (!empty($message)) { Display::display_confirmation_message($message, false); }         
+        if (!empty($error)) { Display::display_error_message($error, false); } 
 
         if (!empty($search_term)) {
-
-            echo "<p><strong>".get_lang('SearchResultsFor')." ".api_htmlentities($_POST['search_term'], ENT_QUOTES, api_get_system_encoding())."</strong><br />";
-
+            echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
         }
 
         if (!empty($browse_courses_in_category)) {
@@ -131,7 +124,6 @@ $stok = Security::get_token();
                 $tutor_name = $course['tutor'];
                 $creation_date = substr($course['creation_date'],0,10);
                 $count_connections = $course['count_connections'];
-
 
                 $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];   // course path
 
@@ -165,22 +157,17 @@ $stok = Security::get_token();
 
                         // we display the icon to subscribe or the text already subscribed
                         if (!in_array($course['code'], $user_coursecodes)) {
-                                if ($course['subscribe'] == SUBSCRIBE_ALLOWED) {
-                                        echo '<span class="course-link-desc"><a href="'. api_get_self().'?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">'.get_lang('Subscribe').'</a></span>';
-                                }
+                            if ($course['subscribe'] == SUBSCRIBE_ALLOWED) {
+                                    echo '<span class="course-link-desc"><a href="'. api_get_self().'?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">'.get_lang('Subscribe').'</a></span>';
+                            }
                         }
                      echo  '</div>
                     </div>';
             }
-
         } else {
             echo '<div id="course-message">'.get_lang('ThereAreNoCoursesInThisCategory').'</div>';
         }
-
-
         ?>
-
         <div class="clear"></div>
     </div>
-
 </div>

@@ -55,7 +55,7 @@ if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 
 $interbreadcrumb[] = array('url' => './document.php?curdirpath='.dirname($header_file).$req_gid, 'name' => get_lang('Documents'));
 
-$interbreadcrumb[] = array('url' => 'showinframes.php?gid='.$req_gid.'&file='.$header_file, 'name' => $name_to_show);
+$interbreadcrumb[] = array('url' => 'showinframes.php?gid='.$req_gid.'&amp;file='.$header_file, 'name' => $name_to_show);
 
 $file_url_sys = api_get_path(SYS_COURSE_PATH).'document'.$header_file;
 $path_info = pathinfo($file_url_sys);
@@ -173,7 +173,7 @@ $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$head
 echo '<a href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a></div>';
 //echo '<div>';
 if (file_exists($file_url_sys)) {
-    echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1, 10000).'"></iframe>';
+    echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
 } else {
     echo '<frame border="0" frameborder="0" scrolling="no"  name="mainFrame" id="mainFrame" src=showinframes.php?nopages=1 />';
 }

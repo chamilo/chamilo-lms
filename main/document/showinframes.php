@@ -173,7 +173,7 @@ $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$head
 echo '<a href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a></div>';
 //echo '<div>';
 if (file_exists($file_url_sys)) {
-    echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"></iframe>';
+    echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1, 10000).'"></iframe>';
 } else {
     echo '<frame border="0" frameborder="0" scrolling="no"  name="mainFrame" id="mainFrame" src=showinframes.php?nopages=1 />';
 }

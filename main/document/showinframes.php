@@ -130,8 +130,13 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                 //   });';
 }
 
-$htmlHeadXtra[] = '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"></script>';
-$htmlHeadXtra[] = '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+<!--
+    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js\';
+-->
+</script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 
 $htmlHeadXtra[] = '
 

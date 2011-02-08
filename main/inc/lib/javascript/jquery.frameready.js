@@ -94,7 +94,8 @@ jQuery.frameReady = function(f,t,r,j) {
         You must specify the path to your jquery.js file below!
     *************************************************************/
 
-    var jQueryPath = "/main/inc/lib/javascript/jquery.js";
+    //var jQueryPath = "/main/inc/lib/javascript/jquery.js";
+    var jQueryPath = jQueryFrameReadyConfigPath; // Define this configuration parameter before loading this script.
 
     var u = "undefined";
     var $fr = $daemach["frameReady"];

@@ -746,6 +746,14 @@ function get_count_exam_results($exercise_id = null) {
         $exercise_where = ' AND te.exe_exo_id = '.$exercise_id.'  ';
     }
     
+    $hotpotatoe_where = '';
+    if (!empty($_GET['path'])) {
+        $hotpotatoe_path = Database::escape_string($_GET['path']);
+        $hotpotatoe_where .= ' AND exe_name = "'.$hotpotatoe_path.'"  ';
+    }
+         
+    $user_id_hotpotato_and = ' AND exe_user_id = ' . api_get_user_id() . ' ';
+    
     if ($is_allowedToEdit || $is_tutor) {
         $user_id_and = '';
         if (!empty ($_POST['filter_by_user'])) {
@@ -774,14 +782,14 @@ function get_count_exam_results($exercise_id = null) {
                 WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where ";
                 
         //Seems that the $TBL_TRACK_HOTPOTATOES does not have an exercise id that's weird ... we are removing $exercise_where
-        $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
+        $hpsql="SELECT  count(*) as count
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . api_get_course_id() . "' $user_id_and  
+                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . api_get_course_id() . "' $user_id_hotpotato_and  $hotpotatoe_where
                     ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
 
     } else {
         // get only this user's results
-        $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
+        $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';        
 
         /*$sql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", ce.title as extitle, te.exe_result as exresult, " .
                             "te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
@@ -796,60 +804,64 @@ function get_count_exam_results($exercise_id = null) {
             FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
             WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 $exercise_where";
 
-      $hpsql = "SELECT '',exe_name, exe_result , exe_weighting, exe_date
+      $hpsql = "SELECT count(*) as count
                 FROM $TBL_TRACK_HOTPOTATOES
-                WHERE exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "'
+                WHERE exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "' $user_id_hotpotato_and $hotpotatoe_where
                 ORDER BY exe_cours_id ASC, exe_date DESC";
     }
-
-    $resx = Database::query($sql);
-    $hpres = Database::query($hpsql);
     
     $count = 0;
-    if (Database::num_rows($resx) > 0) {
-        if ($is_allowedToEdit || $is_tutor) {
-            while ($rowx = Database::fetch_array($resx,'ASSOC')) {
-                $results[] = $rowx;
+    //Chamilo results
+    if (empty($hotpotatoe_where)) {
+        $resx = Database::query($sql);
+        if (Database::num_rows($resx) > 0) {
+            if ($is_allowedToEdit || $is_tutor) {
+                while ($rowx = Database::fetch_array($resx,'ASSOC')) {
+                    $results[] = $rowx;
+                }
+                //Special modification to show corretly the pagination
+                if (is_array($results)) {          
+                    if ($_GET['gradebook'] == 'view') {
+                        $filter_by_no_revised = true;
+                        $from_gradebook = true;
+                    }
+                    $sizeof = count($results);        
+                    $user_list_id = array ();
+                    $user_last_name = '';
+                    $user_first_name = '';
+                    $quiz_name_list = '';
+                    $duration_list = '';
+                    $date_list = '';
+                    $result_list = '';
+                    $more_details_list = '';
+                    for ($i = 0; $i < $sizeof; $i++) {
+                        $revised = false;                
+                        $sql_exe = 'SELECT exe_id FROM ' . $TBL_TRACK_ATTEMPT_RECORDING . ' WHERE author != "" AND exe_id = ' . Database :: escape_string($results[$i]['exe_id']) .' LIMIT 1';            
+                        $query = Database::query($sql_exe);
+                        if (Database :: num_rows($query) > 0) {
+                            $revised = true;
+                        }
+                        if ($filter_by_not_revised && $revised) {
+                            continue;
+                        }
+                        if ($filter_by_revised && !$revised) {
+                            continue;
+                        }
+                        $count++;           
+                    }
+                }        
+            } else {            
+            	$rowx = Database::fetch_array($resx,'ASSOC');
+                $count = $rowx['count'];
             }
-            //Special modification to show corretly the pagination
-            if (is_array($results)) {          
-                if ($_GET['gradebook'] == 'view') {
-                    $filter_by_no_revised = true;
-                    $from_gradebook = true;
-                }
-                $sizeof = count($results);        
-                $user_list_id = array ();
-                $user_last_name = '';
-                $user_first_name = '';
-                $quiz_name_list = '';
-                $duration_list = '';
-                $date_list = '';
-                $result_list = '';
-                $more_details_list = '';
-                for ($i = 0; $i < $sizeof; $i++) {
-                    $revised = false;                
-                    $sql_exe = 'SELECT exe_id FROM ' . $TBL_TRACK_ATTEMPT_RECORDING . ' WHERE author != "" AND exe_id = ' . Database :: escape_string($results[$i]['exe_id']) .' LIMIT 1';            
-                    $query = Database::query($sql_exe);
-                    if (Database :: num_rows($query) > 0) {
-                        $revised = true;
-                    }
-                    if ($filter_by_not_revised && $revised) {
-                        continue;
-                    }
-                    if ($filter_by_revised && !$revised) {
-                        continue;
-                    }
-                    $count++;           
-                }
-            }        
-        } else {            
-        	$rowx = Database::fetch_array($resx,'ASSOC');
-            $count = $rowx['count'];
         }
-    }
-    if (Database::num_rows($hpres) > 0) {
-        $rowx = Database::fetch_array($hpres,'ASSOC');
-        $count += $rowx['count'];
+    } else {
+        //Hotpotatoes results
+        $hpres = Database::query($hpsql);
+        if (Database::num_rows($hpres) > 0) {
+            $rowx = Database::fetch_array($hpres,'ASSOC');
+            $count += $rowx['count'];
+        }
     }
     return $count;
 }
@@ -865,12 +877,19 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     $session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
     
     $exercise_id = intval($_GET['exerciseId']);
+    
     $exercise_where = '';
     if (!empty($exercise_id)) {
         $exercise_where .= ' AND te.exe_exo_id = '.$exercise_id.'  ';
-    }    
+    }  
+    $hotpotatoe_where = '';
+    if (!empty($_GET['path'])) {
+        $hotpotatoe_path = Database::escape_string($_GET['path']);
+        $hotpotatoe_where .= ' AND exe_name = "'.$hotpotatoe_path.'"  ';
+    }  
     
     if ($is_allowedToEdit || $is_tutor) {
+        
         $user_id_and = '';
         if (!empty ($_POST['filter_by_user'])) {
             if ($_POST['filter_by_user'] == 'all') {
@@ -878,8 +897,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
             } else {
                 $user_id_and = " AND user_id = '" . intval($_POST['filter_by_user']) . "' ";
             }
-        }
-        
+        }        
+            
         if ($_GET['gradebook'] == 'view') {
             $exercise_where_query = ' te.exe_exo_id =ce.id AND ';
         }
@@ -899,15 +918,12 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
 
         $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
                 FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . api_get_course_id()."' $user_id_and  
+                WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . api_get_course_id()."'  $hotpotatoe_where
                 ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
-
-
-
     } else {
         // get only this user's results
         $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
-
+   
         /*$sql="SELECT ".(api_is_western_name_order() ? "firstname as col0, lastname col1" : "lastname as col0, firstname as col1").", ce.title as extitle, te.exe_result as exresult, " .
                     "te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
                     "te.start_date as exstart, steps_counter as exstep, cuser.user_id as excruid, te.exe_duration as exduration, ce.results_disabled as exdisabled
@@ -922,198 +938,196 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
               FROM $TBL_EXERCICES  AS ce INNER JOIN $TBL_TRACK_EXERCICES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
               WHERE te.status != 'incomplete' AND te.exe_cours_id='" . api_get_course_id() . "'  $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0  $exercise_where";
 
-        $hpsql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
+        $hpsql = "SELECT '', '', exe_name, exe_result , exe_weighting, exe_date
                   FROM $TBL_TRACK_HOTPOTATOES
-                  WHERE exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "'
+                  WHERE exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "' $hotpotatoe_where
                   ORDER BY exe_cours_id ASC, exe_date DESC";
-    }
-
-    $column             = intval($column);
-    $from               = intval($from);
-    $number_of_items    = intval($number_of_items);
-    $sql               .= " ORDER BY col$column $direction ";
-    $sql               .= " LIMIT $from, $number_of_items";
-
-    $results = array();
-
-    $resx = Database::query($sql);
-    while ($rowx = Database::fetch_array($resx,'ASSOC')) {
-        $results[] = $rowx;
-    }
+    }   
     
-    $hpresults = getManyResultsXCol($hpsql, 5);
-
-    $list_info = array();
-
-    // Print test results.
-    $lang_nostartdate = get_lang('NoStartDate') . ' / ';    
+    if (empty($hotpotatoe_where)) {
+        $column             = intval($column);
+        $from               = intval($from);
+        $number_of_items    = intval($number_of_items);
+        $sql               .= " ORDER BY col$column $direction ";
+        $sql               .= " LIMIT $from, $number_of_items";
     
-    if (is_array($results)) {
-        $users_array_id = array ();
-        if ($_GET['gradebook'] == 'view') {
-            $filter_by_no_revised = true;
-            $from_gradebook = true;
+        $results = array();
+    
+        $resx = Database::query($sql);
+        while ($rowx = Database::fetch_array($resx,'ASSOC')) {
+            $results[] = $rowx;
         }
-        $sizeof = count($results);
-
-        $user_list_id = array ();
-        $user_last_name = '';
-        $user_first_name = '';
-        $quiz_name_list = '';
-        $duration_list = '';
-        $date_list = '';
-        $result_list = '';
-        $more_details_list = '';
-        for ($i = 0; $i < $sizeof; $i++) {
-            $revised = false;
-            $sql_exe = 'SELECT exe_id FROM ' . $TBL_TRACK_ATTEMPT_RECORDING . ' WHERE author != "" AND exe_id = ' . Database :: escape_string($results[$i]['exid']) .' LIMIT 1';            
-            $query = Database::query($sql_exe);
-            if (Database :: num_rows($query) > 0) {
-                $revised = true;
+    
+        $list_info = array();
+    
+        // Print test results.
+        $lang_nostartdate = get_lang('NoStartDate') . ' / ';    
+        
+        if (is_array($results)) {
+            $users_array_id = array ();
+            if ($_GET['gradebook'] == 'view') {
+                $filter_by_no_revised = true;
+                $from_gradebook = true;
             }
-            if ($filter_by_not_revised && $revised) {
-                continue;
-            }
-            if ($filter_by_revised && !$revised) {
-                continue;
-            }
-            
-            if ($from_gradebook && ($is_allowedToEdit || $is_tutor)) {
-                if (in_array($results[$i]['col2'] . $results[$i]['col0'] . $results[$i]['col1'], $users_array_id)) {
+            $sizeof = count($results);
+    
+            $user_list_id = array ();
+            $user_last_name = '';
+            $user_first_name = '';
+            $quiz_name_list = '';
+            $duration_list = '';
+            $date_list = '';
+            $result_list = '';
+            $more_details_list = '';
+            for ($i = 0; $i < $sizeof; $i++) {
+                $revised = false;
+                $sql_exe = 'SELECT exe_id FROM ' . $TBL_TRACK_ATTEMPT_RECORDING . ' WHERE author != "" AND exe_id = ' . Database :: escape_string($results[$i]['exid']) .' LIMIT 1';            
+                $query = Database::query($sql_exe);
+                if (Database :: num_rows($query) > 0) {
+                    $revised = true;
+                }
+                if ($filter_by_not_revised && $revised) {
                     continue;
                 }
-                $users_array_id[] = $results[$i]['col2'] . $results[$i]['col0'] . $results[$i]['col1'];
-            }
-            if ($is_allowedToEdit || $is_tutor) {      
-                $user_first_name = $results[$i]['col0'];
-                $user_last_name = $results[$i]['col1'];
-                $user = $results[$i]['col0'] . $results[$i]['col1'];
-                $test = $results[$i]['col2'];
+                if ($filter_by_revised && !$revised) {
+                    continue;
+                }
                 
-            } else {
-                $user_first_name = $results[$i]['firstname'];
-                $user_last_name = $results[$i]['lastname'];
-                $user = $results[$i]['firstname'] . $results[$i]['lastname'];
-                $test = $results[$i]['col0'];                
-            }
-            $user_list_id[] = $results[$i]['excruid'];
-            $id = $results[$i]['exid'];   
-
-            
-            
-           
-            $quiz_name_list = $test;
-            $dt = api_convert_and_format_date($results[$i]['exweight'], null, date_default_timezone_get());
-            $res = $results[$i]['exresult'];
-
-            $duration = intval($results[$i]['exduration']);
-            // we filter the results if we have the permission to
-            if (isset ($results[$i]['exdisabled']))
-                $result_disabled = intval($results[$i]['exdisabled']);
-            else
-                $result_disabled = 0;
-
-            if ($result_disabled == 0) {
-                $add_start_date = $lang_nostartdate;
-
-                if ($is_allowedToEdit || $is_tutor) {
+                if ($from_gradebook && ($is_allowedToEdit || $is_tutor)) {
+                    if (in_array($results[$i]['col2'] . $results[$i]['col0'] . $results[$i]['col1'], $users_array_id)) {
+                        continue;
+                    }
+                    $users_array_id[] = $results[$i]['col2'] . $results[$i]['col0'] . $results[$i]['col1'];
+                }
+                if ($is_allowedToEdit || $is_tutor) {      
+                    $user_first_name = $results[$i]['col0'];
+                    $user_last_name = $results[$i]['col1'];
                     $user = $results[$i]['col0'] . $results[$i]['col1'];
-                    $date_value = $results[$i]['col4'];
+                    $test = $results[$i]['col2'];                    
                 } else {
-                    $date_value = $results[$i]['col2'];
+                    $user_first_name = $results[$i]['firstname'];
+                    $user_last_name = $results[$i]['lastname'];
+                    $user = $results[$i]['firstname'] . $results[$i]['lastname'];
+                    $test = $results[$i]['col0'];                
                 }
-                if ($date_value != "0000-00-00 00:00:00") {
-                    //echo ceil((($results[$i][4] - $results[$i][7]) / 60)) . ' ' . get_lang('MinMinutes');
-                    $exe_date_timestamp     = api_strtotime($results[$i]['exdate'], date_default_timezone_get());
-                    $start_date_timestamp   = api_strtotime($date_value, date_default_timezone_get());
-
-                    $my_duration = ceil((($exe_date_timestamp - $start_date_timestamp) / 60));
-                    if ($my_duration == 1 ) {
-                        $duration_list = $my_duration . ' ' . get_lang('MinMinute');
+                $user_list_id[] = $results[$i]['excruid'];
+                $id = $results[$i]['exid'];   
+               
+                $quiz_name_list = $test;
+                $dt = api_convert_and_format_date($results[$i]['exweight'], null, date_default_timezone_get());
+                $res = $results[$i]['exresult'];
+    
+                $duration = intval($results[$i]['exduration']);
+                // we filter the results if we have the permission to
+                if (isset ($results[$i]['exdisabled']))
+                    $result_disabled = intval($results[$i]['exdisabled']);
+                else
+                    $result_disabled = 0;
+    
+                if ($result_disabled == 0) {
+                    $add_start_date = $lang_nostartdate;
+    
+                    if ($is_allowedToEdit || $is_tutor) {
+                        $user = $results[$i]['col0'] . $results[$i]['col1'];
+                        $date_value = $results[$i]['col4'];
                     } else {
-                        $duration_list =  $my_duration. ' ' . get_lang('MinMinutes');
+                        $date_value = $results[$i]['col2'];
                     }
-                    if ($results[$i]['exstep'] > 1) {
-                        //echo ' ( ' . $results[$i][8] . ' ' . get_lang('Steps') . ' )';
-                        $duration_list = ' ( ' . $results[$i]['exstep'] . ' ' . get_lang('Steps') . ' )';
-                    }
-                    $add_start_date = api_convert_and_format_date($date_value, null, date_default_timezone_get()) . ' / ';
-                } else {
-                    $duration_list = get_lang('NoLogOfDuration');
-                    //echo get_lang('NoLogOfDuration');
-                }
-                // Date conversion
-                $date_list = api_get_local_time($results[$i]['col4']). ' / ' . api_get_local_time($results[$i]['exdate']);
-                // there are already a duration test period calculated??
-                //echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
-
-                // if the float look like 10.00 we show only 10
-
-                $my_res     = float_format($results[$i]['exresult'],1);
-                $my_total   = float_format($results[$i]['exweight'],1);
-                if (!$results[$i]['propagate_neg'] && $my_res < 0) {
-                    $my_res = 0;
-                }
-                $ex = show_score($my_res, $my_total);
-                
-                //$result_list = round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ')';
-                $result_list = $ex;
-
-                $html_link = '';
-                if ($is_allowedToEdit || $is_tutor) {
-                    if ($revised) {
-                        $html_link.= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".Display :: return_icon('edit.gif', get_lang('Edit'));
-                        $html_link.= '&nbsp;';
+                    if ($date_value != "0000-00-00 00:00:00") {
+                        //echo ceil((($results[$i][4] - $results[$i][7]) / 60)) . ' ' . get_lang('MinMinutes');
+                        $exe_date_timestamp     = api_strtotime($results[$i]['exdate'], date_default_timezone_get());
+                        $start_date_timestamp   = api_strtotime($date_value, date_default_timezone_get());
+    
+                        $my_duration = ceil((($exe_date_timestamp - $start_date_timestamp) / 60));
+                        if ($my_duration == 1 ) {
+                            $duration_list = $my_duration . ' ' . get_lang('MinMinute');
+                        } else {
+                            $duration_list =  $my_duration. ' ' . get_lang('MinMinutes');
+                        }
+                        if ($results[$i]['exstep'] > 1) {
+                            //echo ' ( ' . $results[$i][8] . ' ' . get_lang('Steps') . ' )';
+                            $duration_list = ' ( ' . $results[$i]['exstep'] . ' ' . get_lang('Steps') . ' )';
+                        }
+                        $add_start_date = api_convert_and_format_date($date_value, null, date_default_timezone_get()) . ' / ';
                     } else {
-                        $html_link.="<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".Display :: return_icon('quiz.gif', get_lang('Qualify'));
-                        $html_link.='&nbsp;';
+                        $duration_list = get_lang('NoLogOfDuration');
+                        //echo get_lang('NoLogOfDuration');
                     }
-                    $html_link.="</a>";
-                    if (api_is_platform_admin() || $is_tutor) {
-                        $html_link.=' <a href="exercice.php?'.api_get_cidreq().'&show=result&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';
-                        $html_link.='&nbsp;';
+                    // Date conversion
+                    $date_list = api_get_local_time($results[$i]['col4']). ' / ' . api_get_local_time($results[$i]['exdate']);
+                    // there are already a duration test period calculated??
+                    //echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
+    
+                    // if the float look like 10.00 we show only 10
+    
+                    $my_res     = float_format($results[$i]['exresult'],1);
+                    $my_total   = float_format($results[$i]['exweight'],1);
+                    if (!$results[$i]['propagate_neg'] && $my_res < 0) {
+                        $my_res = 0;
                     }
-                    if ($is_allowedToEdit) {
-                        if ($filter==2){
-                            $html_link.=' <a href="exercice_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
+                    $ex = show_score($my_res, $my_total);
+                    
+                    //$result_list = round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ')';
+                    $result_list = $ex;
+    
+                    $html_link = '';
+                    if ($is_allowedToEdit || $is_tutor) {
+                        if ($revised) {
+                            $html_link.= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".Display :: return_icon('edit.gif', get_lang('Edit'));
+                            $html_link.= '&nbsp;';
+                        } else {
+                            $html_link.="<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".Display :: return_icon('quiz.gif', get_lang('Qualify'));
+                            $html_link.='&nbsp;';
+                        }
+                        $html_link.="</a>";
+                        if (api_is_platform_admin() || $is_tutor) {
+                            $html_link.=' <a href="exercice.php?'.api_get_cidreq().'&show=result&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';
+                            $html_link.='&nbsp;';
+                        }
+                        if ($is_allowedToEdit) {
+                            if ($filter==2){
+                                $html_link.=' <a href="exercice_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
+                            }
+                        }
+                    } else {
+                        if ($revised) {
+                            $html_link.="<a href='exercise_show.php?".api_get_cidreq()."&id=$id'>" . get_lang('Show') . "</a> ";
+                        } else {
+                            $html_link.='&nbsp;' . get_lang('NoResult');
                         }
                     }
-                } else {
-                    if ($revised) {
-                        $html_link.="<a href='exercise_show.php?".api_get_cidreq()."&id=$id'>" . get_lang('Show') . "</a> ";
+                    $more_details_list = $html_link;
+                    if ($is_allowedToEdit || $is_tutor) {
+                        $list_info [] = array($user_first_name,$user_last_name,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
                     } else {
-                        $html_link.='&nbsp;' . get_lang('NoResult');
+                        $list_info [] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
                     }
                 }
-                $more_details_list = $html_link;
-                if ($is_allowedToEdit || $is_tutor) {
-                    $list_info [] = array($user_first_name,$user_last_name,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
+            }
+        }
+    } else {
+        $hpresults = getManyResultsXCol($hpsql, 6);
+   
+        // Print HotPotatoes test results.
+        if (is_array($hpresults)) {
+            
+            for ($i = 0; $i < sizeof($hpresults); $i++) {
+               
+                $hp_title = GetQuizName($hpresults[$i][2], $documentPath);
+                if ($hp_title == '') {
+                    $hp_title = basename($hpresults[$i][2]);
+                }
+                //$hp_date = api_convert_and_format_date($hpresults[$i][4], null, date_default_timezone_get());
+                $hp_date = api_get_local_time($hpresults[$i][5], null, date_default_timezone_get());
+                $hp_result = round(($hpresults[$i][3] / ($hpresults[$i][4] != 0 ? $hpresults[$i][4] : 1)) * 100, 2).'% ('.$hpresults[$i][3].' / '.$hpresults[$i][4].')';
+                if ($is_allowedToEdit || $is_tutor) {                   
+                    $list_info[] = array($hpresults[$i][0], $hpresults[$i][1], $hp_title, '-',  $hp_date , $hp_result , '-');
                 } else {
-                    $list_info [] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
+                    $list_info[] = array($hp_title, '-', $hp_date , $hp_result , '-');
                 }
             }
         }
-    }
-    
-    
-    // Print HotPotatoes test results.
-    if (is_array($hpresults)) {
-        
-        for ($i = 0; $i < sizeof($hpresults); $i++) {
-            $hp_title = GetQuizName($hpresults[$i][1], $documentPath);
-            if ($hp_title == '') {
-                $hp_title = basename($hpresults[$i][1]);
-            }
-            //$hp_date = api_convert_and_format_date($hpresults[$i][4], null, date_default_timezone_get());
-            $hp_date = api_get_local_time($hpresults[$i][4], null, date_default_timezone_get());
-            $hp_result = round(($hpresults[$i][2] / ($hpresults[$i][3] != 0 ? $hpresults[$i][3] : 1)) * 100, 2).'% ('.$hpresults[$i][2].' / '.$hpresults[$i][3].')';
-            if ($is_allowedToEdit) {
-                $list_info[] = array($hpresults[$i][0], $hp_title, '-', $hp_date , $hp_result , '-');
-            } else {
-                $list_info[] = array($hp_title, '-', $hp_date , $hp_result , '-');
-            }
-        }
-    }
+    }    
     return $list_info;
 }
 

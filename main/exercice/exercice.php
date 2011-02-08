@@ -194,7 +194,8 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 					 WHERE exe_Id='".$id."'";
 		Database::query($totquery);
         */
-		//@todo Why we insert this? 
+		
+		//Saving results in the track recording table
 		$recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment) VALUES
 							  ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
 		Database::query($recording_changes);
@@ -302,8 +303,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 			//Redirect to the reporting
 			header('location: ../mySpace/myStudents.php?origin=' . $origin . '&student=' . $student_id . '&details=true&course=' . $course_id.'&session_id='.$session_id);
 			exit;
-		}
-        
+		}        
 	}
 }
 
@@ -630,7 +630,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 	if ($show == 'result') {
 		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
 	} else {
-		echo '<a href="' . api_get_self() .'?'.api_get_cidreq().'&show=result'.'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
+		//echo '<a href="' . api_get_self() .'?'.api_get_cidreq().'&show=result'.'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
 	}
 }
 
@@ -936,7 +936,7 @@ if ($show == 'test') {
             } // end foreach()
             
             
-            //Hot potatoes            
+            //Hotpotatoes results        
             
             if ($is_allowedToEdit) {
                 $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
@@ -979,6 +979,8 @@ if ($show == 'test') {
                                          
                         $actions = '<a href="adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path.'">
                                    <img src="../img/wizard.gif" border="0" title="'.get_lang('Modify').'" alt="'.api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset).'" /></a>';
+                        
+                        $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&path='.$path.'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
                                                 
                         // if active
                         if ($active) {
@@ -996,16 +998,15 @@ if ($show == 'test') {
                         if ($active == 1) {
                             $nbrActiveTests = $nbrActiveTests +1;
                             $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active?'class="invisible"':'').'">'.$title.'</a>');
+                            $item .= Display::tag('td', '');                            
                             $item .= Display::tag('td', '');
-                            $item .= Display::tag('td', '');
-                            $item .= Display::tag('td', '');
+                            $actions ='<a href="exercice.php?' . api_get_cidreq() . '&show=result&path='.$path.'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
+                            $item .= Display::tag('td', $actions);                            
                             echo Display::tag('tr',$item);
                         }                        
                     }
                 }
             }
-            
-            
             echo '</table>';
             echo '</div>';
         }         
@@ -1025,7 +1026,9 @@ if ($show == 'result') {
     $exercise_id = intval($_GET['exerciseId']);
     if (!empty($exercise_id))
         $parameters['exerciseId'] = $exercise_id;
-                        
+    if (!empty($_GET['path'])) {
+        $parameters['path'] = Security::remove_XSS($_GET['path']);
+    }
 	$table = new SortableTable('quiz_results', 'get_count_exam_results', 'get_exam_results_data');
 	$table->set_additional_parameters($parameters);
     

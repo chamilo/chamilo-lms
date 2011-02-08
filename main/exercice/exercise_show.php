@@ -178,26 +178,26 @@ function showfck(sid,marksid) {
 }
 
 function getFCK(vals,marksid) {
-  var f=document.getElementById('myform');
+	var f=document.getElementById('myform');
 
-  var m_id = marksid.split(',');
-  for(var i=0;i<m_id.length;i++){
-  var oHidn = document.createElement("input");
-			oHidn.type = "hidden";
-			var selname = oHidn.name = "marks_"+m_id[i];
-			var selid = document.forms['marksform_'+m_id[i]].marks.selectedIndex;
-			oHidn.value = document.forms['marksform_'+m_id[i]].marks.options[selid].text;
-			f.appendChild(oHidn);
+	var m_id = marksid.split(',');
+	for(var i=0;i<m_id.length;i++){
+		var oHidn = document.createElement("input");
+		oHidn.type = "hidden";
+		var selname = oHidn.name = "marks_"+m_id[i];
+		var selid = document.forms['marksform_'+m_id[i]].marks.selectedIndex;
+		oHidn.value = document.forms['marksform_'+m_id[i]].marks.options[selid].text;
+		f.appendChild(oHidn);
 	}
 
 	var ids = vals.split(',');
 	for(var k=0;k<ids.length;k++){
-			var oHidden = document.createElement("input");
-			oHidden.type = "hidden";
-			oHidden.name = "comments_"+ids[k];
-			oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
-			oHidden.value = oEditor.GetXHTML(true);
-			f.appendChild(oHidden);
+		var oHidden = document.createElement("input");
+		oHidden.type = "hidden";
+		oHidden.name = "comments_"+ids[k];
+		oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
+		oHidden.value = oEditor.GetXHTML(true);
+		f.appendChild(oHidden);
 	}
 //f.submit();
 }
@@ -225,8 +225,7 @@ if (!empty($track_exercise_info)) {
 				</tr>
 				</table>';
 			}
-		}
-        
+		}        
 	}
 } else {
 	Display::display_warning_message(get_lang('CantViewResults'));
@@ -629,7 +628,7 @@ if (is_array($arrid) && is_array($arrmarks)) {
 
 if ($is_allowedToEdit) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {        
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';	
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$lp_id.'">';
 		echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
@@ -637,7 +636,7 @@ if ($is_allowedToEdit) {
 		echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
 		echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';					
 	} else {
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&action=qualify&filter=2&comments=update&exeid='.$id.'&totalWeighting='.$totalWeighting.'" method="post">';
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&action=qualify&exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&totalWeighting='.$totalWeighting.'" method="post">';
 	}
 	if ($origin!='learnpath' && $origin!='student_progress') {
 		?>

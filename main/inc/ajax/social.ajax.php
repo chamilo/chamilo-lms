@@ -232,4 +232,3 @@ switch ($action) {
 		echo '';	
 }
 exit;
-?>

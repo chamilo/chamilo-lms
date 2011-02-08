@@ -67,10 +67,7 @@ switch ($action) {
 			echo '';
 		}
 	break;
-	
-		
 	default:
 		echo '';
 }
 exit;
-?>

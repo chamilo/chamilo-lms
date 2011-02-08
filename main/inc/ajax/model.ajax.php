@@ -2,14 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 //@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file, is not very well tested yet!
-$action = $_GET['a'];
-
 require_once '../global.inc.php';
+if (api_is_anonymous()) {
+    exit;
+}
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'array.lib.php';
 
 // 1. Setting variables needed by jqgrid
-
+$action= $_GET['a'];
 $page  = intval($_REQUEST['page']); //page
 $limit = intval($_REQUEST['rows']); //quantity of rows
 $sidx  = $_REQUEST['sidx'];         //index to filter         

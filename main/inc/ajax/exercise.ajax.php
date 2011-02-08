@@ -4,6 +4,10 @@
  * Responses to AJAX calls
  */
 require_once '../global.inc.php';
+if (api_is_anonymous()) {
+    exit;
+}
+
 $action = $_REQUEST['a'];
 
 switch ($action) {    
@@ -12,7 +16,7 @@ switch ($action) {
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
         $counter = 1;
         foreach ($new_question_list as $new_order_id) {            
-            Database::update($TBL_QUESTIONS, array('question_order'=>$counter), array('question_id = ? '=>$new_order_id));
+            Database::update($TBL_QUESTIONS, array('question_order'=>$counter), array('question_id = ? '=>intval($new_order_id)));
             $counter++;
         }
         Display::display_confirmation_message(get_lang('Saved'));
@@ -22,4 +26,3 @@ switch ($action) {
 
 }
 exit;
-?>

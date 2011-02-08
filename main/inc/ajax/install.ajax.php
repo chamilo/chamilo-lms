@@ -66,5 +66,3 @@ switch ($action) {
 		echo '';
 }
 exit;
-
-?>

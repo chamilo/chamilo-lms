@@ -35,6 +35,7 @@ FCKPlugin.prototype.Load = function()
         case 'tablecommands':
         case 'ImageManager':
         case 'prompt':
+        case 'tableoneclick':
             // In this case we have to clear the list of available languages.
             this.AvailableLangs = null ;
             this.AvailableLangs = new Array() ;

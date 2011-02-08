@@ -1121,12 +1121,10 @@ abstract class Question
 	 * @param Exercise $objExercise the Exercise instance
 	 */
 	function processCreation ($form, $objExercise) {
-
 		$this -> updateTitle($form->getSubmitValue('questionName'));
 	    $this -> updateDescription($form->getSubmitValue('questionDescription'));
 	    $this -> updateLevel($form->getSubmitValue('questionLevel'));
 	    $this -> save($objExercise -> id);
-
 	    // modify the exercise
 	    $objExercise->addToList($this -> id);
         $objExercise->update_question_positions();

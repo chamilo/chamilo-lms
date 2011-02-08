@@ -50,7 +50,7 @@ class PDF {
             //Converting the string into an array
             $html_file_array = array($html_file_array);
         }
-        
+        $course_data = array();
         if (!empty($course_code)) {
         	$course_data = api_get_course_info($course_code);
         }
@@ -62,7 +62,7 @@ class PDF {
             );
             
         //Formatting the pdf
-        self::format_pdf($course_code);
+        self::format_pdf($course_data);
                
         foreach ($html_file_array as $html_file) {
             $html_title = '';
@@ -348,86 +348,93 @@ class PDF {
         }
         return $result;
     }
+    
     /**
      * Returns the default header
      */
     public function get_header($course_code = null) {
-        $header = api_get_setting('pdf_export_watermark_text');        
+        /*$header = api_get_setting('pdf_export_watermark_text');        
     	if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $header = api_get_course_setting('pdf_export_watermark_text');                        
         }
-        return $header;        
+        return $header;*/        
     }
     
     public function set_footer() {    	 
         $this->pdf->defaultfooterfontsize = 12;   // in pts
         $this->pdf->defaultfooterfontstyle = B;   // blank, B, I, or BI
         $this->pdf->defaultfooterline = 1;        // 1 to include line below header/above footer
-                
+        $platform_name = api_get_setting('Institution');
+        $left_content    = $platform_name;
+        $center_content  = '';
+        $right_content   = '{PAGENO}';
+        
         //@todo remove this and use a simpler way
         $footer = array (
-          'odd' => array (
-            'L' => array (
-              'content' => '',
-              'font-size' => 10,
-              'font-style' => 'B',
-              'font-family' => 'serif',
-              'color'=>'#000000'
-            ),
-            'C' => array (
-              'content' => '',
-              'font-size' => 10,
-              'font-style' => 'B',
-              'font-family' => 'serif',
-              'color'=>'#000000'
-            ),
-            'R' => array (
-              'content' => '{PAGENO}',
-              'font-size' => 10,
-              'font-style' => 'B',
-              'font-family' => 'serif',
-              'color'=>'#000000'
-            ),
-            'line' => 1,
-          ),
-         'even' => array (
-            'L' => array (
-              'content' => '',
-              'font-size' => 10,
-              'font-style' => 'B',
-              'font-family' => 'serif',
-              'color'=>'#000000'
-            ),
-            'C' => array (
-              'content' => '',
-              'font-size' => 10,
-              'font-style' => 'B',
-              'font-family' => 'serif',
-              'color'=>'#000000'
-            ),
-            'R' => array (
-              'content' => '{PAGENO}',
-              'font-size' => 10,
-              'font-style' => 'B',
-              'font-family' => 'serif',
-              'color'=>'#000000'
-            ),
-            'line' => 1,
-          ),
-        );       
-        
+              'odd' => array (
+                'L' => array (
+                  'content' => $left_content,  'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'C' => array (
+                  'content' => $center_content,'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'R' => array (
+                  'content' => $right_content, 'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'line' => 1,
+              ),
+             'even' => array (
+                'L' => array (
+                  'content' => $left_content,  'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'C' => array (
+                  'content' => $center_content,'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'R' => array (
+                  'content' => $right_content, 'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'line' => 1,
+              ),
+            );       
         $this->pdf->SetFooter($footer);      // defines footer for Odd and Even Pages - placed at Outer margin http://mpdf1.com/manual/index.php?tid=151&searchstring=setfooter
     }
     
-    public function set_header($course_code) {
+    
+    public function set_header($course_data) {
     	// $pdf->SetBasePath($basehref); 
                 
         $this->pdf->defaultheaderfontsize = 10;   // in pts
         $this->pdf->defaultheaderfontstyle = BI;   // blank, B, I, or BI
         $this->pdf->defaultheaderline = 1;        // 1 to include line below header/above footer              
         
-        $my_header = self::get_header($course_code);
-        $this->pdf->SetHeader($my_header);// ('{DATE j-m-Y}|{PAGENO}/{nb}|'.$title);       
+        if (!empty($course_data['code'])) {
+            $teacher_list = CourseManager::get_teacher_list_from_course_code($course_data['code']);
+            $teachers = '';
+            foreach($teacher_list as $teacher) {
+                $teachers .=$teacher['firstname'].' '.$teacher['lastname'];
+            }            
+            //$my_header = self::get_header($course_code);        
+            
+            $left_content    = '';
+            $center_content  = '';
+            $right_content   = $teachers;
+        
+            $header = array (
+              'odd' => array (
+                'L' => array (
+                  'content' => $left_content,  'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'C' => array (
+                  'content' => $center_content,'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'R' => array (
+                  'content' => $right_content, 'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'line' => 1,
+              ),
+             'even' => array (
+                'L' => array (
+                  'content' => $left_content,  'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'C' => array (
+                  'content' => $center_content,'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'R' => array (
+                  'content' => $right_content, 'font-size' => 10,'font-style' => 'B','font-family' => 'serif','color'=>'#000000'),
+                'line' => 1,
+              ),
+            );
+            $this->pdf->SetHeader($header);// ('{DATE j-m-Y}|{PAGENO}/{nb}|'.$title);       
+        }               
     }
     
     public function set_custom_header($header) {
@@ -438,7 +445,11 @@ class PDF {
         $this->custom_footer = $footer;
     }
     
-    public function format_pdf($course_code) {
+    public function format_pdf($course_data) {
+        $course_code = null;
+        if (!empty( $course_data)) {    
+            $course_code = $course_data['code'];   
+        }
         
         /*$pdf->SetAuthor('Documents Chamilo');
         $pdf->SetTitle('title');
@@ -478,7 +489,7 @@ class PDF {
             }
         }        
         if (empty($this->custom_header)) {
-            //self::set_header($course_code);   
+            self::set_header($course_data);   
         } else {
             $this->pdf->SetHTMLHeader($this->custom_header);	
         }
@@ -487,7 +498,6 @@ class PDF {
             self::set_footer();    
         } else {
             $this->pdf->SetHTMLFooter($this->custom_footer);	
-        } 
-        
+        }        
     }
 }

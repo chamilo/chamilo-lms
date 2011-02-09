@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+// YW: 20110209: Script depredated? 
 /**
 *	This script allows to manage answers. It is included from the script admin.php
 *	@package dokeos.exercise

@@ -66,7 +66,7 @@ if (isset ($_GET['id'])) {
     // Checks if the field was created in the table Category. It creates it if is neccesary
     $table_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 	if (!Database::query("SELECT wiki_state FROM $table_category")) {
-    	Database::query("ALTER TABLE $table_category ADD `wiki_state` tinyint(3) UNSIGNED NOT NULL default '1';");
+    	Database::query("ALTER TABLE $table_category ADD wiki_state tinyint(3) UNSIGNED NOT NULL default '1';");
     }
 	// Create a new category
 	$action = 'add_category';

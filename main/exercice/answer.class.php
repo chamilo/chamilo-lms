@@ -465,7 +465,7 @@ class Answer
 				"position = '".Database::escape_string($position)."', " .
 				"destination = '".Database::escape_string($destination)."' " .
 				"WHERE id = '".Database::escape_string($position)."' " .
-				"AND question_i` = '".Database::escape_string($questionId)."'";
+				"AND question_i = '".Database::escape_string($questionId)."'";
 
 		Database::query($sql);
 	}

@@ -72,9 +72,11 @@ switch ($action) {
 		if (Database::num_rows($result) > 0 ) {		        
 		    while ($description = Database::fetch_object($result)) {
 			    $descriptions[$description->id] = $description;
-		    }
+		    }		    
             // Function that displays the details of the course description in html.
 		    echo CourseManager::get_details_course_description_html($descriptions, api_get_system_encoding(), false);
+		} else {
+		    echo get_lang('NoDescription');
 		}		
 	    break;    
     /** 

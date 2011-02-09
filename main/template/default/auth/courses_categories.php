@@ -46,7 +46,7 @@ $stok = Security::get_token();
             <form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&hidden_links=<?php echo $hidden_links; ?>">
                 <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                 <input type="hidden" name="search_course" value="1" />
-                <input type="text" size="12" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : Security::remove_XSS($_POST['search_term'])); ?>" />
+                <input type="text" size="12" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
                 &nbsp;<button class="search" type="submit"><?php echo get_lang('_search'); ?></button>
             </form>
 	

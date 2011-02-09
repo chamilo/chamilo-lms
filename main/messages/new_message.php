@@ -4,7 +4,6 @@
 *	@package chamilo.messages
 */
 
-
 /**
 * This script shows a compose area (wysiwyg editor if supported, otherwise
 * a simple textarea) where the user can type a message.

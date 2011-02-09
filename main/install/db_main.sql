@@ -2549,6 +2549,10 @@ CREATE TABLE course_request (
   UNIQUE KEY code (code)
 );
 
+--
+-- Structure for Careers, Promotions and Usergroups
+--
+
 CREATE TABLE career (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL ,
@@ -2592,3 +2596,40 @@ CREATE TABLE usergroup_rel_session (
     usergroup_id INT NOT NULL,
     session_id  INT NOT NULL
 );
+
+
+--
+-- Structure for Mail notifications
+--
+
+CREATE TABLE notification (
+	id 			BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	dest_user_id INT NOT NULL,
+ 	dest_mail 	CHAR(255),
+ 	title 		CHAR(255),
+ 	content 	CHAR(255),
+ 	send_freq 	SMALLINT DEFAULT 1,
+ 	created_at 	DATETIME NOT NULL,
+ 	sent_at 	DATETIME NULL
+);
+
+ALTER TABLE notification ADD index mail_notify_sent_index (sent_at);
+ALTER TABLE notification ADD index mail_notify_freq_index (sent_at, send_freq, created_at);
+
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_invitation',   'MailNotifyInvitation',1,1,'1');
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_message',		 'MailNotifyMessage',1,1,'1');
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_group_message','MailNotifyGroup_message',1,1,'1');
+
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '1', 'AtOnce',1) ";
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '8', 'Daily',2) ";
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '0', 'No',3) ";
+
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '1', 'AtOnce',1) ";
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '8', 'Daily',2) ";
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '0', 'No',3) ";
+
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '1', 'AtOnce',1) ";
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '8', 'Daily',2) ";
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '0', 'No',3) ";
+
+

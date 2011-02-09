@@ -181,8 +181,14 @@ class SocialManager extends UserManager {
 		$row_exist=Database::fetch_array($res_exist,'ASSOC');
 
 		if ($row_exist['count']==0) {
+		    		    
 			$sql='INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content) VALUES('.$user_id.','.$friend_id.','.MESSAGE_STATUS_INVITATION_PENDING.',"'.$current_date.'","'.$message_title.'","'.$message_content.'")';
-			Database::query($sql);
+			Database::query($sql);			
+			
+			require_once api_get_path(LIBRARY_PATH).'notification.lib.php';
+			$notification = new Notification();
+		    $notification->save_invitation_notifications(array($friend_id), $message_title, $message_content);    		
+		    	
 			return true;
 		} else {
 			//invitation already exist

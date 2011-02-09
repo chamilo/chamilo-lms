@@ -249,8 +249,52 @@ if (defined('SYSTEM_INSTALLATION')) {
 
                 }
             }
+            
+            //Adding notifications options
+    
+            $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_invitation',   'mail_notify_invitation',1,1,'at_once') ";
+            $result = Database::query($sql);
+            $id = Database::insert_id();
+                        
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'at_once', 'at_once',1) ";
+            $result = Database::query($sql);
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'daily', 'daily',1) ";
+            $result = Database::query($sql);
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'no', 'no',1) ";
+            $result = Database::query($sql);         
+                
+            
+            $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_message',		 'mail_notify_message',1,1,'at_once')";
+            $result = Database::query($sql);
+            $id = Database::insert_id();
+            
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'at_once', 'at_once',1) ";
+            $result = Database::query($sql);
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'daily', 'daily',1) ";
+            $result = Database::query($sql);
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'no', 'no',1) ";
+            $result = Database::query($sql);
+            
+                        
+            $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_group_message','mail_notify_group_message',1,1,'at_once') ";
+            $result = Database::query($sql);
+            $id = Database::insert_id();
+            
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'at_once', 'at_once',1) ";
+            $result = Database::query($sql);
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'daily', 'daily',1) ";
+            $result = Database::query($sql);
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'no', 'no',1) ";
+            $result = Database::query($sql);
+
+
         }
     }
+    
+    
+
+
+
 
     /* // This fragment of code is not necessary so far.
     // Get the courses databases queries list (c_q_list)

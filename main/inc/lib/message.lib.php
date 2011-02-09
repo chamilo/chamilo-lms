@@ -202,7 +202,8 @@ class MessageManager
 	}
 
 	/**
-	 * Save message for social network
+	 * Sends a message to a user/group
+	 * 
 	 * @param int 	  receiver user id
 	 * @param string  subject
 	 * @param string  content
@@ -216,7 +217,7 @@ class MessageManager
 	 */
 	public static function send_message ($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0, $sent_email = false) {
         global $charset;
-		$table_message = Database::get_main_table(TABLE_MESSAGE);
+		$table_message      = Database::get_main_table(TABLE_MESSAGE);
         $group_id           = intval($group_id);
         $receiver_user_id   = intval($receiver_user_id);
         $parent_id          = intval($parent_id);
@@ -254,10 +255,9 @@ class MessageManager
 					       " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".api_get_utc_datetime()."','$subject','$content','$group_id','$parent_id', '".api_get_utc_datetime()."')";
 				$result = Database::query($query);
 				$inbox_last_id = Database::insert_id();
-			}
-        
+			}        
 
-			// save attachment file for inbox messages
+			// Save attachment file for inbox messages
 			if (is_array($file_attachments)) {
 				$i = 0;
 				foreach ($file_attachments as $file_attach) {
@@ -270,7 +270,7 @@ class MessageManager
 
 			if (empty($group_id)) {
 				//message in outbox for user friend or group
-				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
+				$sql = "INSERT INTO $table_message (user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
 						 " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".api_get_utc_datetime()."','$subject','$content', '$group_id', '$parent_id', '".api_get_utc_datetime()."')";
 				$rs = Database::query($sql);
 				$outbox_last_id = Database::insert_id();
@@ -286,11 +286,21 @@ class MessageManager
 					}
 				}
 			}
-            
-            //@todo sent email process            
-            if ($sent_email) {            	
-            }
-            
+			
+			//Load user settings
+			require_once api_get_path(LIBRARY_PATH).'notification.lib.php';
+			$notification = new Notification();			    
+		    if (empty($group_id)) {
+                $user_id = $receiver_user_id;
+                $notification->save_message_notifications(array($user_id), $subject,$content);                
+		    } else {
+		        $user_list = GroupPortalManager::get_users_by_group($group_id);
+		        $new_user_list = array();		   
+                foreach($user_list  as $user_data) {
+                    $new_user_list []= $user_data['user_id'];
+                }
+                $notification->save_group_notifications($new_user_list, $subject,$content);                     		
+		    }
 			return $result;
         } else {
         	return get_lang('UserDoesNotExist');

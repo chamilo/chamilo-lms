@@ -818,7 +818,7 @@ function add_document($_course, $path, $filetype, $filesize, $title, $comment = 
 	$session_id = api_get_session_id();
 	$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 	$sql = "INSERT INTO $table_document
-	(`path`, `filetype`, `size`, `title`, `comment`, `readonly`, `session_id`)
+	(path, filetype, size, title, comment, readonly, session_id)
 	VALUES ('$path','$filetype','$filesize','".
 	Database::escape_string(htmlspecialchars($title, ENT_QUOTES, api_get_system_encoding()))."', '$comment', $readonly, $session_id)";
 	if (Database::query($sql)) {
@@ -891,7 +891,7 @@ function item_property_update_on_folder($_course, $path, $user_id) {
 			$folder_id = DocumentManager::get_document_id($_course, $newpath);
 
 			if ($folder_id) {
-				$sql = "UPDATE $TABLE_ITEMPROPERTY SET `lastedit_date`='$time',`lastedit_type`='DocumentInFolderUpdated', `lastedit_user_id`='$user_id' WHERE tool='".TOOL_DOCUMENT."' AND ref='$folder_id'";
+				$sql = "UPDATE $TABLE_ITEMPROPERTY SET lastedit_date='$time',lastedit_type='DocumentInFolderUpdated', lastedit_user_id='$user_id' WHERE tool='".TOOL_DOCUMENT."' AND ref='$folder_id'";
 				Database::query($sql);
 			}
 		}
@@ -944,16 +944,16 @@ function set_default_settings($upload_path, $filename, $filetype = 'file') {
 		$filename = substr($filename, 0, -1);
 	}
 
-	// $dbTable already has `backticks`!
-	//$query = "select count(*) as bestaat from `$dbTable` where path='$upload_path/$filename'";
+	// $dbTable already has backticks!
+	//$query = "select count(*) as bestaat from $dbTable where path='$upload_path/$filename'";
 	$query = "select count(*) as bestaat from $dbTable where path='$upload_path/$filename'";
 	$result = Database::query($query);
 	$row = Database::fetch_array($result);
 	if ($row['bestaat'] > 0) {
-		//$query = "update `$dbTable` set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
+		//$query = "update $dbTable set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
 		$query = "update $dbTable set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
 	} else {
-		//$query = "INSERT INTO `$dbTable` (path,visibility,filetype) VALUES('$upload_path/$filename','$default_visibility','$filetype')";
+		//$query = "INSERT INTO $dbTable (path,visibility,filetype) VALUES('$upload_path/$filename','$default_visibility','$filetype')";
 		$query = "INSERT INTO $dbTable (path,visibility,filetype) VALUES('$upload_path/$filename','$default_visibility','$filetype')";
 	}
 	Database::query($query);

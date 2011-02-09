@@ -43,13 +43,13 @@
 */
 
 // regroup table names for maintenance purpose
-$TABLETRACK_OPEN        = $_configuration['statistics_database']."`.`track_e_open";
+$TABLETRACK_OPEN        = $_configuration['statistics_database'].".track_e_open";
 
-$TABLESTATS_PROVIDERS   = $_configuration['statistics_database']."`.`track_c_providers";
-$TABLESTATS_COUNTRIES   = $_configuration['statistics_database']."`.`track_c_countries";
-$TABLESTATS_BROWSERS    = $_configuration['statistics_database']."`.`track_c_browsers";
-$TABLESTATS_OS          = $_configuration['statistics_database']."`.`track_c_os";
-$TABLESTATS_REFERERS    = $_configuration['statistics_database']."`.`track_c_referers";
+$TABLESTATS_PROVIDERS   = $_configuration['statistics_database'].".track_c_providers";
+$TABLESTATS_COUNTRIES   = $_configuration['statistics_database'].".track_c_countries";
+$TABLESTATS_BROWSERS    = $_configuration['statistics_database'].".track_c_browsers";
+$TABLESTATS_OS          = $_configuration['statistics_database'].".track_c_os";
+$TABLESTATS_REFERERS    = $_configuration['statistics_database'].".track_c_referers";
 
 
 /*
@@ -61,7 +61,7 @@ $TABLESTATS_REFERERS    = $_configuration['statistics_database']."`.`track_c_ref
 
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
- * @desc uses `$TABLETRACK_OPEN` to split recorded
+ * @desc uses $TABLETRACK_OPEN to split recorded
      information, to count occurences (for os, provider,...)
      and to increment the number of occurrences of each
      different element into the corresponding tables
@@ -77,7 +77,7 @@ function decodeOpenInfos() {
     // only processed record have to be cleaned
 
     $sql = "SELECT open_id
-                FROM `$TABLETRACK_OPEN`
+                FROM $TABLETRACK_OPEN
                 WHERE open_date <= NOW()
                 ORDER BY open_id DESC
                 LIMIT 1";
@@ -90,7 +90,7 @@ function decodeOpenInfos() {
     //--Providers And Countries-------------------------------------------//
 
      $sql = "SELECT open_remote_host
-                FROM `$TABLETRACK_OPEN`
+                FROM $TABLETRACK_OPEN
                 WHERE   open_remote_host != ''
                 AND     open_id <= '".$processBegin."' ";
     $query = Database::query($sql);
@@ -120,7 +120,7 @@ function decodeOpenInfos() {
     // provider and countries done
     //--Browsers and OS---------------------------------------------------//
     $sql = "SELECT open_agent
-                FROM `$TABLETRACK_OPEN`
+                FROM $TABLETRACK_OPEN
                 WHERE   open_remote_host != ''
                 AND     open_id <= '".$processBegin."' ";
     $query =Database::query( $sql );
@@ -147,7 +147,7 @@ function decodeOpenInfos() {
     //--Referers----------------------------------------------------------//
 
     $sql = "SELECT open_referer
-                FROM `$TABLETRACK_OPEN`
+                FROM $TABLETRACK_OPEN
                 WHERE	open_referer != ''
                 AND 	open_id <= '".$processBegin."' ";
     $query = Database::query( $sql );
@@ -186,7 +186,7 @@ function decodeOpenInfos() {
 function cleanProcessedRecords( $limit ) {
     global $TABLETRACK_OPEN;
     $limit = Database::escape_string($limit);
-    $sql = "UPDATE `".$TABLETRACK_OPEN."`
+    $sql = "UPDATE $TABLETRACK_OPEN
                             SET open_remote_host = '',
                                     open_agent = '',
                                     open_referer =''
@@ -252,20 +252,20 @@ function fillProvidersTable($providers_array) {
     if(is_array($providers_array)) {
         foreach ( $providers_array as $prov=>$number ) {
             $sql = "SELECT counter
-                                    FROM `".$TABLESTATS_PROVIDERS."`
-                                    WHERE `provider` = '".$prov."'";
+                                    FROM ".$TABLESTATS_PROVIDERS."
+                                    WHERE provider = '".$prov."'";
             $res = Database::query($sql);
 
             // if this provider already exists in the DB
             if($row = Database::num_rows($res)) {
                     // update
-                    $sql2 = "UPDATE `".$TABLESTATS_PROVIDERS."`
-                                                    SET `counter` = counter + '$number'
-                                                    WHERE `provider` = '".$prov."'";
+                    $sql2 = "UPDATE $TABLESTATS_PROVIDERS
+                                                    SET counter = counter + '$number'
+                                                    WHERE provider = '".$prov."'";
             } else {
                     // insert
-                    $sql2 = "INSERT INTO `".$TABLESTATS_PROVIDERS."`
-                                            (`provider`,`counter`)
+                    $sql2 = "INSERT INTO $TABLESTATS_PROVIDERS
+                                            (provider,counter)
                                             VALUES ('".$prov."','".$number."')";
             }
             Database::query($sql2);;
@@ -288,7 +288,7 @@ function fillProvidersTable($providers_array) {
 function loadCountries() {
     global $TABLESTATS_COUNTRIES;
     $sql = "SELECT code, country
-                            FROM `".$TABLESTATS_COUNTRIES."`";
+                            FROM $TABLESTATS_COUNTRIES";
     $res = Database::query($sql);
     $i = 0 ;
     if (Database::num_rows($res) > 0){
@@ -351,9 +351,9 @@ function fillCountriesTable($countries_array) {
     if(is_array($countries_array)) {
         foreach ( $countries_array as $country=>$number ) {
 		// update
-		$sql = "UPDATE `".$TABLESTATS_COUNTRIES."`
-						SET `counter` = counter + '$number'
-						WHERE `country` = '".$country."'";
+		$sql = "UPDATE $TABLESTATS_COUNTRIES
+						SET counter = counter + '$number'
+						WHERE country = '".$country."'";
 		Database::query($sql);
 		}
     }
@@ -486,20 +486,20 @@ function fillBrowsersTable($browsers_array) {
     if (is_array($browsers_array)) {
         foreach ( $browsers_array as $browser=>$number ) {
 			$sql = "SELECT counter
-						FROM `".$TABLESTATS_BROWSERS."`
-						WHERE `browser` = '".$browser."'";
+						FROM $TABLESTATS_BROWSERS
+						WHERE browser = '".$browser."'";
 			$res = Database::query($sql);
 
 			// if this provider already exists in the DB
 			if($row = Database::num_rows($res)) {
 				// update
-				$sql2 = "UPDATE `".$TABLESTATS_BROWSERS."`
-								SET `counter` = counter + '$number'
-								WHERE `browser` = '".$browser."'";
+				$sql2 = "UPDATE $TABLESTATS_BROWSERS
+								SET counter = counter + '$number'
+								WHERE browser = '".$browser."'";
 			} else {
 				// insert
-				$sql2 = "INSERT INTO `".$TABLESTATS_BROWSERS."`
-							(`browser`,`counter`)
+				$sql2 = "INSERT INTO $TABLESTATS_BROWSERS
+							(browser,counter)
 							VALUES ('".$browser."','".$number."')";
 			}
 			Database::query($sql2);
@@ -517,20 +517,20 @@ function fillOsTable($os_array) {
     if (is_array($os_array)) {
         foreach ($os_array as $os=>$number) {
 			$sql = "SELECT counter
-						FROM `".$TABLESTATS_OS."`
-						WHERE `os` = '".$os."'";
+						FROM $TABLESTATS_OS
+						WHERE os = '".$os."'";
 			$res = Database::query($sql);
 
 			// if this provider already exists in the DB
 			if($row = Database::num_rows($res)) {
 				// update
-				$sql2 = "UPDATE `".$TABLESTATS_OS."`
-								SET `counter` = counter + '$number'
-								WHERE `os` = '".$os."'";
+				$sql2 = "UPDATE $TABLESTATS_OS
+								SET counter = counter + '$number'
+								WHERE os = '".$os."'";
 			} else {
 				// insert
-				$sql2 = "INSERT INTO `".$TABLESTATS_OS."`
-							(`os`,`counter`)
+				$sql2 = "INSERT INTO $TABLESTATS_OS
+							(os,counter)
 							VALUES ('".$os."','".$number."')";
 			}
 			Database::query($sql2);
@@ -574,20 +574,20 @@ function fillReferersTable($referers_array) {
     if (is_array($referers_array)) {
         foreach ( $referers_array as $referer=>$number ) {
             $sql = "SELECT counter
-                                    FROM `".$TABLESTATS_REFERERS."`
-                                    WHERE `referer` = '".$referer."'";
+                                    FROM $TABLESTATS_REFERERS
+                                    WHERE referer = '".$referer."'";
             $res = Database::query($sql);
 
             // if this provider already exists in the DB
             if($row = Database::num_rows($res)) {
                     // update
-                    $sql2 = "UPDATE `".$TABLESTATS_REFERERS."`
-                                                    SET `counter` = counter + '$number'
-                                                    WHERE `referer` = '".$referer."'";
+                    $sql2 = "UPDATE $TABLESTATS_REFERERS
+                                                    SET counter = counter + '$number'
+                                                    WHERE referer = '".$referer."'";
             } else {
                     // insert
-                    $sql2 = "INSERT INTO `".$TABLESTATS_REFERERS."`
-                                            (`referer`,`counter`)
+                    $sql2 = "INSERT INTO $TABLESTATS_REFERERS
+                                            (referer,counter)
                                             VALUES ('".$referer."','".$number."')";
             }
             Database::query($sql2);

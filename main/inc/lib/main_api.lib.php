@@ -3556,7 +3556,7 @@ function api_get_access_url($id) {
     //$table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $table = 'access_url';
     $database = $_configuration['main_database'];
-    $table_access_url =  "`".$database."`.`".$table."`";
+    $table_access_url =  "".$database.".".$table."";
     $sql = "SELECT url, description, active, created_by, tms
             FROM $table_access_url WHERE id = '$id' ";
     $res = Database::query($sql);

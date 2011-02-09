@@ -120,11 +120,11 @@ class GroupManager {
 						g.session_id,
 						ug.user_id is_member,
 						COUNT(ug2.id) number_of_members
-					FROM ".$table_group." `g`
-					LEFT JOIN ".$table_group_user." `ug`
-					ON `ug`.`group_id` = `g`.`id` AND `ug`.`user_id` = '".$_user['user_id']."'
-					LEFT JOIN ".$table_group_user." `ug2`
-					ON `ug2`.`group_id` = `g`.`id`";
+					FROM ".$table_group." g
+					LEFT JOIN ".$table_group_user." ug
+					ON ug.group_id = g.id AND ug.user_id = '".$_user['user_id']."'
+					LEFT JOIN ".$table_group_user." ug2
+					ON ug2.group_id = g.id";
 
 		} elseif ($my_status_of_user_in_course==STUDENT || $is_student_in_session===true || $_SESSION['studentview'] == 'studentview') {
 						$sql = "SELECT  g.id ,
@@ -138,11 +138,11 @@ class GroupManager {
 						g.session_id,
 						ug.user_id is_member,
 						COUNT(ug2.id) number_of_members
-					FROM ".$table_group." `g`
-					LEFT JOIN ".$table_group_user." `ug`
-					ON `ug`.`group_id` = `g`.`id` AND `ug`.`user_id` = '".$_user['user_id']."'
-					LEFT JOIN ".$table_group_user." `ug2`
-					ON `ug2`.`group_id` = `g`.`id`";
+					FROM ".$table_group." g
+					LEFT JOIN ".$table_group_user." ug
+					ON ug.group_id = g.id AND ug.user_id = '".$_user['user_id']."'
+					LEFT JOIN ".$table_group_user." ug2
+					ON ug2.group_id = g.id";
 		}
 
 		if ($category != null){
@@ -828,9 +828,9 @@ class GroupManager {
 		$sql = "SELECT g.id gid, g.max_student-count(ug.user_id) nbPlaces, g.max_student
 				FROM ".$group_table." g
 				LEFT JOIN  ".$group_user_table." ug
-				ON    `g`.`id` = `ug`.`group_id`
+				ON    g.id = ug.group_id
 				WHERE g.id IN (".implode(',', $group_ids).")
-				GROUP BY (`g`.`id`)
+				GROUP BY (g.id)
 				HAVING (nbPlaces > 0 OR g.max_student = ".MEMBER_PER_GROUP_NO_LIMIT.")
 				ORDER BY nbPlaces DESC";
 		$sql_result = Database::query($sql);
@@ -1043,12 +1043,12 @@ class GroupManager {
 	public static function get_subscribed_users ($group_id) {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
-		$order_clause = api_sort_by_first_name() ? ' ORDER BY `u`.`firstname`, `u`.`lastname`' : ' ORDER BY `u`.`lastname`, `u`.`firstname`';
+		$order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
 		$group_id = Database::escape_string($group_id);
-		$sql = "SELECT `ug`.`id`, `u`.`user_id`, `u`.`lastname`, `u`.`firstname`, `u`.`email`
+		$sql = "SELECT ug.id, u.user_id, u.lastname, u.firstname, u.email
 			FROM ".$table_user." u, ".$table_group_user." ug
-			WHERE `ug`.`group_id`='".$group_id."'
-			AND `ug`.`user_id`=`u`.`user_id`". $order_clause;
+			WHERE ug.group_id='".$group_id."'
+			AND ug.user_id=u.user_id". $order_clause;
 		$db_result = Database::query($sql);
 		$users = array ();
 		while ($user = Database::fetch_object($db_result))
@@ -1072,12 +1072,12 @@ class GroupManager {
 	public static function get_subscribed_tutors ($group_id,$id_only=false) {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
-		$order_clause = api_sort_by_first_name() ? ' ORDER BY `u`.`firstname`, `u`.`lastname`' : ' ORDER BY `u`.`lastname`, `u`.`firstname`';
+		$order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
 		$group_id = Database::escape_string($group_id);
-		$sql = "SELECT `tg`.`id`, `u`.`user_id`, `u`.`lastname`, `u`.`firstname`, `u`.`email`
+		$sql = "SELECT tg.id, u.user_id, u.lastname, u.firstname, u.email
 			FROM ".$table_user." u, ".$table_group_tutor." tg
-			WHERE `tg`.`group_id`='".$group_id."'
-			AND `tg`.`user_id`=`u`.`user_id`".$order_clause;
+			WHERE tg.group_id='".$group_id."'
+			AND tg.user_id=u.user_id".$order_clause;
 		$db_result = Database::query($sql);
 		$users = array ();
 		while ($user = Database::fetch_object($db_result))

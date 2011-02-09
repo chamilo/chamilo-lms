@@ -27,7 +27,7 @@ function update_db_info($action, $old_path, $new_path = '') {
 	if ($action == 'delete') {
 		/*  // RH: metadata, update 2004/08/23
 		    these two lines replaced by new code below:
-        	$query = "DELETE FROM `$dbTable`
+        	$query = "DELETE FROM $dbTable
     		WHERE path='".$old_path."' OR path LIKE '".$old_path."/%'";
         */
         $old_path = Database::escape_string($old_path);
@@ -61,7 +61,7 @@ function update_db_info($action, $old_path, $new_path = '') {
 		//Display::display_normal_message("new_path = $new_path");
 
 		// Older broken version
-		//$query = "UPDATE `$dbTable`
+		//$query = "UPDATE $dbTable
 		//SET path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
 		//WHERE path = '".$old_path."' OR path LIKE '".$old_path."/%'";
 

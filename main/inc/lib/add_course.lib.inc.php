@@ -113,7 +113,7 @@ function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base
         }
 
         if ($_configuration['single_database']) {
-            $query = "SHOW TABLES FROM `".$_configuration['main_database']."` LIKE '".$_configuration['table_prefix'].$keys_course_db_name.$_configuration['db_glue']."%'";
+            $query = "SHOW TABLES FROM ".$_configuration['main_database']." LIKE '".$_configuration['table_prefix'].$keys_course_db_name.$_configuration['db_glue']."%'";
             $result = Database::query($query);
         } else {
             $query = "SHOW DATABASES LIKE '$keys_course_db_name'";
@@ -225,11 +225,12 @@ function update_Db_course($course_db_name) {
     $charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';
 
     if (!$_configuration['single_database']) {
-        Database::query("CREATE DATABASE IF NOT EXISTS `" . $course_db_name . "`" . $charset_clause);
+        Database::query("CREATE DATABASE IF NOT EXISTS " . $course_db_name . "" . $charset_clause);
     }
 
     $course_db_name = $_configuration['table_prefix'].$course_db_name.$_configuration['db_glue'];
 
+    //@todo define the backticks inside those table names directly (instead of adding them afterwards)
     $tbl_course_homepage        = $course_db_name . 'tool';
     $TABLEINTROS                = $course_db_name . 'tool_intro';
 
@@ -816,7 +817,7 @@ function update_Db_course($course_db_name) {
             size int NOT NULL default 0,
             readonly TINYINT UNSIGNED NOT NULL,
             session_id int UNSIGNED NOT NULL default 0,
-            PRIMARY KEY (`id`)
+            PRIMARY KEY (id)
         )" . $charset_clause;
     Database::query($sql);
 
@@ -1017,7 +1018,7 @@ function update_Db_course($course_db_name) {
         )" . $charset_clause;
     Database::query($sql);
 
-    $sql = "ALTER TABLE `".$TABLETOOLCHATCONNECTED . "` ADD INDEX `char_connected_index`(user_id, session_id, to_group_id) ";
+    $sql = "ALTER TABLE `".$TABLETOOLCHATCONNECTED . "` ADD INDEX char_connected_index(user_id, session_id, to_group_id) ";
     Database::query($sql);
 
     /*
@@ -1140,7 +1141,7 @@ function update_Db_course($course_db_name) {
         UNIQUE KEY UN_filename (filename)
         )" . $charset_clause);
 
-    Database::query("ALTER TABLE `$TABLETOOLDROPBOXFILE` ADD INDEX ( `session_id` )");
+    Database::query("ALTER TABLE `$TABLETOOLDROPBOXFILE` ADD INDEX ( session_id )");
 
     Database::query("
         CREATE TABLE `".$TABLETOOLDROPBOXPOST . "` (
@@ -1153,7 +1154,7 @@ function update_Db_course($course_db_name) {
         PRIMARY KEY (file_id,dest_user_id)
         )" . $charset_clause);
 
-    Database::query("ALTER TABLE `$TABLETOOLDROPBOXPOST` ADD INDEX ( `session_id` )");
+    Database::query("ALTER TABLE `$TABLETOOLDROPBOXPOST` ADD INDEX ( session_id )");
 
     Database::query("
         CREATE TABLE `".$TABLETOOLDROPBOXPERSON . "` (

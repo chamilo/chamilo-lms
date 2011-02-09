@@ -96,7 +96,7 @@ $reqdate=$_REQUEST['reqdate'];
             $sql = "SELECT access_tool, count( access_tool )
                         FROM $TABLETRACK_ACCESS
                         WHERE access_tool IS NOT NULL
-                            ".$courseCodeEqualcidIfNeeded."
+                            $courseCodeEqualcidIfNeeded
                         GROUP BY access_tool";
             echo "<tr><td>";
             echo "<tr>
@@ -232,7 +232,7 @@ $reqdate=$_REQUEST['reqdate'];
                     $sql = "SELECT UNIX_TIMESTAMP(access_date)
                             FROM $TABLETRACK_ACCESS
                             WHERE access_tool = '$tool'
-                                ".$courseCodeEqualcidIfNeeded."
+                                $courseCodeEqualcidIfNeeded
                                 AND MONTH(access_date) = MONTH(FROM_UNIXTIME('$reqdate'))
                                 AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY access_date ASC";
@@ -245,7 +245,7 @@ $reqdate=$_REQUEST['reqdate'];
                     $sql = "SELECT UNIX_TIMESTAMP(access_date)
                             FROM $TABLETRACK_ACCESS
                             WHERE access_tool = '$tool'
-                                ".$courseCodeEqualcidIfNeeded."
+                                $courseCodeEqualcidIfNeeded
                                 AND WEEK(access_date) = WEEK(FROM_UNIXTIME('$reqdate'))
                                 AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY access_date ASC";
@@ -258,7 +258,7 @@ $reqdate=$_REQUEST['reqdate'];
                     $sql = "SELECT UNIX_TIMESTAMP(access_date)
                                 FROM $TABLETRACK_ACCESS
                                 WHERE access_tool = '$tool'
-                                    ".$courseCodeEqualcidIfNeeded."
+                                    $courseCodeEqualcidIfNeeded
                                     AND DAYOFYEAR(access_date) = DAYOFYEAR(FROM_UNIXTIME('$reqdate'))
                                     AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY access_date ASC";
@@ -280,11 +280,6 @@ $reqdate=$_REQUEST['reqdate'];
             echo get_lang('NotAllowed');
         }
     }
-
-
-?>
-</table>
-<?php
+echo '</table>';
 // footer
 Display::display_footer();
-?>

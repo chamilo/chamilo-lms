@@ -3529,7 +3529,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 									a.*, i.*
 									FROM ".$TABLEAGENDA." a,
 										 ".$TABLE_ITEMPROPERTY." i
-									WHERE a.id = i.`ref`
+									WHERE a.id = i.ref
 									AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
 									AND i.tool='".TOOL_CALENDAR_EVENT."'
 									AND	( i.to_user_id='".$_user['user_id']."' OR i.to_group_id IN (0, ".implode(", ", $group_memberships).") )

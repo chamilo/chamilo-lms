@@ -704,7 +704,7 @@ function movecatlink($catlinkid) {
 function get_cat($catname) {
     // Get category id (existing or make new).
     $tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
-    $result = Database::query("SELECT `id` FROM ".$tbl_categories." WHERE `category_title`='".addslashes($catname)."'");
+    $result = Database::query("SELECT id FROM ".$tbl_categories." WHERE category_title='".addslashes($catname)."'");
     if (Database::num_rows($result) >= 1 && ($row = Database::fetch_array($result))) {
         return $row['id']; // Several categories with same name: take the first.
     }

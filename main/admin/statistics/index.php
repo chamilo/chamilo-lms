@@ -45,6 +45,7 @@ $tools[$strUsers]['action=logins&amp;type=month'] = get_lang('Logins').' ('.get_
 $tools[$strUsers]['action=logins&amp;type=day'] = get_lang('Logins').' ('.get_lang('PeriodDay').')';
 $tools[$strUsers]['action=logins&amp;type=hour'] = get_lang('Logins').' ('.get_lang('PeriodHour').')';
 $tools[$strUsers]['action=pictures'] = get_lang('CountUsers').' ('.get_lang('UserPicture').')';
+$tools[$strUsers]['action=no_login_users'] = get_lang('StatsUsersDidNotLoginInLastPeriods');
 
 // system ...
 $tools[$strSystem]['action=activities'] = get_lang('ImportantActivities');
@@ -131,6 +132,9 @@ switch ($_GET['action']) {
 		$friends = statistics::get_friends();
 		statistics::print_stats(get_lang('CountFriends'), $friends);
 		break;
+    case 'no_login_users':
+        statistics::print_users_not_logged_in_stats();
+        break;
 }
 
 Display::display_footer();

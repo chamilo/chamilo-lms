@@ -623,4 +623,48 @@ class Statistics {
         }
         return $list_friends;
     }
+    /**
+     * Print the number of users that didn't login for a certain period of time
+     */
+    function print_users_not_logged_in_stats() {
+        global $_configuration;
+        $total_logins = array();
+        $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $current_url_id = api_get_current_access_url_id();
+        $total = self::count_users();
+        if ($_configuration['multiple_access_urls']) {
+            $table_url = ", $access_url_rel_user_table";
+            $where_url = " AND login_user_id=user_id AND access_url_id='".$current_url_id."'";
+        } else {
+            $table_url = '';
+            $where_url='';
+        }
+        $sql[get_lang('Thisday')]    = 
+            "SELECT count(distinct(login_user_id)) AS number ".
+            " FROM $table $table_url ".
+            " WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW() $where_url";
+        $sql[get_lang('Last7days')]  = 
+            "SELECT count(distinct(login_user_id)) AS number ".
+            " FROM $table $table_url ".
+            " WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW() $where_url";
+        $sql[get_lang('Last31days')] = 
+            "SELECT count(distinct(login_user_id)) AS number ".
+            " FROM $table $table_url ".
+            " WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= NOW() $where_url";
+        $sql[sprintf(get_lang('LastXMonths'),6)] = 
+            "SELECT count(distinct(login_user_id)) AS number ".
+            " FROM $table $table_url ".
+            " WHERE DATE_ADD(login_date, INTERVAL 6 MONTH) >= NOW() $where_url";
+        $sql[get_lang('NeverConnected')]      = 
+            "SELECT count(distinct(login_user_id)) AS number ".
+            " FROM $table $table_url WHERE 1=1 $where_url";
+        foreach ($sql as $index => $query) {
+            $res = Database::query($query);
+            $obj = Database::fetch_object($res);
+            $r = $total - $obj->number;
+            $total_logins[$index] = $r < 0 ? 0 : $r;
+        }
+        Statistics::print_stats(get_lang('StatsUsersDidNotLoginInLastPeriods'),$total_logins,false);
+    }
 }

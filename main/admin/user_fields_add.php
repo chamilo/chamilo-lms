@@ -84,17 +84,16 @@ function change_image_user_field (image_value) {
 	}
 }
 
-	function advanced_parameters() {
-			
-			if(document.getElementById(\'options\').style.display == \'none\') {
-				document.getElementById(\'options\').style.display = \'block\';
-				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+function advanced_parameters() {			
+	if(document.getElementById(\'options\').style.display == \'none\') {
+		document.getElementById(\'options\').style.display = \'block\';
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 
-			} else {
-					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-				}
-		}
+	} else {
+		document.getElementById(\'options\').style.display = \'none\';
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+	}
+}
 
 </script>';
 // Database table definitions
@@ -161,15 +160,14 @@ $form->addElement('hidden','fieldid',Security::remove_XSS($_GET['field_id']));
 $form->addElement('text','fieldlabel',get_lang('FieldLabel'));
 $form->applyFilter('fieldlabel','html_filter');
 $form->addRule('fieldlabel', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-$form->addRule('fieldlabel', '', 'maxlength',20);
+$form->addRule('fieldlabel', '', 'maxlength',60);
 //$form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
 
 // Field options possible
 $form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').Display::return_icon('info3.gif', get_lang('FieldPossibleValuesComment'), array('align' => 'absmiddle', 'hspace' => '3px')));
 $form->applyFilter('fieldoptions','trim');
 
-if (is_numeric($_GET['field_id']))
-{
+if (is_numeric($_GET['field_id'])) {
 	$form->addElement('static', 'option_reorder', '', '<a href="user_fields_options.php?field_id='.Security::remove_XSS($_GET['field_id']).'">'.get_lang('ReorderOptions').'</a>');
 }
 
@@ -179,8 +177,7 @@ $form->applyFilter('fielddefaultvalue','trim');
 
 // Set default values (only not empty when editing)
 $defaults = array();
-if (is_numeric($_GET['field_id']))
-{
+if (is_numeric($_GET['field_id'])) {
 	$form_information = UserManager::get_extra_field_information((int)$_GET['field_id']);
 	$defaults['fieldtitle'] = $form_information['field_display_text'];
 	$defaults['fieldlabel'] = $form_information['field_variable'];
@@ -190,14 +187,10 @@ if (is_numeric($_GET['field_id']))
 	$count = 0;
 	// we have to concatenate the options
 	if (count($form_information['options'])>0) {
-		foreach ($form_information['options'] as $option_id=>$option)
-		{
-			if ($count<>0)
-			{
+		foreach ($form_information['options'] as $option_id=>$option) {
+			if ($count<>0) {
 				$defaults['fieldoptions'] = $defaults['fieldoptions'].'; '.$option['option_display_text'];
-			}
-			else
-			{
+			} else {
 				$defaults['fieldoptions'] = $option['option_display_text'];
 			}
 			$count++;
@@ -206,21 +199,21 @@ if (is_numeric($_GET['field_id']))
 }
 
 $form->setDefaults($defaults);
-	if(isset($_GET['field_id']) && !empty($_GET['field_id'])) {
-		$class="save";
-		$text=get_lang('buttonEditUserField');
-	} else { 
-		$class="add";
-		$text=get_lang('buttonAddUserField');
-	}
-	
-$form -> addElement('html','</div>');
+
+if(isset($_GET['field_id']) && !empty($_GET['field_id'])) {
+	$class="save";
+	$text=get_lang('buttonEditUserField');
+} else { 
+	$class="add";
+	$text=get_lang('buttonAddUserField');
+}
+$form->addElement('html','</div>');
+
 // Submit button
 $form->addElement('style_submit_button', 'submit',$text, 'class='.$class.'');
 // Validate form
-if( $form->validate())
-{
-	$check = Security::check_token('post');
+if( $form->validate()) {
+	$check = Security::check_token('post'); 
 	if($check) {
 		$field = $form->exportValues();
 		$fieldlabel = empty($field['fieldlabel'])?$field['fieldtitle']:$field['fieldlabel'];		
@@ -244,7 +237,7 @@ if( $form->validate())
 		header('Location: user_fields.php?action=show_message&message='.urlencode(get_lang('FieldAdded')));
 		exit ();
 	}
-}else{
+} else {
 	if(isset($_POST['submit'])){
 		Security::clear_token();
 	}
@@ -295,4 +288,3 @@ echo '</div>';
 
 // footer
 Display::display_footer();
-?>

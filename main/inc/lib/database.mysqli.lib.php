@@ -648,7 +648,8 @@ class Database {
      * @return int								Returns the number of affected rows on success, and -1 if the last query failed.
      */
     public static function affected_rows($connection = null) {
-        return self::use_default_connection($connection) ? mysqli_affected_rows() : mysqli_affected_rows($connection);
+        global $database_connection;
+        return $database_connection->affected_rows;
     }
 
     /**
@@ -899,7 +900,8 @@ class Database {
      * @comment This should be updated to use ADODB at some point
      */
     public static function insert_id($connection = null) {
-        return self::use_default_connection($connection) ? mysqli::mysqli_insert_id() : mysqli::mysqli_insert_id($connection);
+        global $database_connection;
+        return $database_connection->insert_id;
     }
 
     /**

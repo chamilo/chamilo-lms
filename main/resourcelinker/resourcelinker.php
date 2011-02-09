@@ -621,10 +621,10 @@ if ($content == "Agenda")
 
 	$sql="SELECT agenda.*, toolitemproperties.*
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE `agenda`.`id` = `toolitemproperties`.`ref`
-					AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
-					AND `toolitemproperties`.`to_group_id`='0'
-					AND `toolitemproperties`.`visibility`='1'";
+					WHERE agenda.id = toolitemproperties.ref
+					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
+					AND toolitemproperties.to_group_id='0'
+					AND toolitemproperties.visibility='1'";
 
 	$result = Database::query($sql);
 
@@ -871,7 +871,7 @@ if (($content == "Exercise") or ($content == "HotPotatoes"))
 		$uploadPath = "/HotPotatoes_files";
 		$TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 		$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-		$sql = "SELECT * FROM ".$TBL_DOCUMENT." WHERE (path LIKE '%htm%' OR path LIKE '%html%') AND path LIKE '".$uploadPath."/%/%' ORDER BY `id` ASC";
+		$sql = "SELECT * FROM ".$TBL_DOCUMENT." WHERE (path LIKE '%htm%' OR path LIKE '%html%') AND path LIKE '".$uploadPath."/%/%' ORDER BY id ASC";
 		$result = Database::query($sql);
 		while ($myrow = Database::fetch_array($result))
 		{
@@ -915,7 +915,7 @@ if ($content == "Externallink")
 		<?php
 
 	$tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
-	$sql = "SELECT * FROM `$tbl_categories` ORDER BY display_order ASC";
+	$sql = "SELECT * FROM $tbl_categories ORDER BY display_order ASC";
 	echo $sql;
 	$result = Database::query($sql);
 	while ($row = Database::fetch_array($result))

@@ -4545,6 +4545,7 @@ padding-top:10px;
 }
 .reset_font:hover {
 	border: 1px solid black;
+    cursor: pointer;
 }
 .increase_font {
     font-size: 1.8em;
@@ -4554,6 +4555,7 @@ padding-top:10px;
 }
 .increase_font:hover {
     border: 1px solid black;
+    cursor: pointer;
 }
 .decrease_font {
     font-size: 0.6em;
@@ -4563,4 +4565,5 @@ padding-top:10px;
 }
 .decrease_font:hover {
     border: 1px solid black;
+    cursor: pointer;
 } 

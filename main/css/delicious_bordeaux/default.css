@@ -4063,6 +4063,7 @@ span.form_required  {
 }
 .reset_font:hover {
     border: 1px solid black;
+    cursor: pointer;
 }
 .increase_font {
     font-size: 1.8em;
@@ -4072,6 +4073,7 @@ span.form_required  {
 }
 .increase_font:hover {
     border: 1px solid black;
+    cursor: pointer;
 }
 .decrease_font {
     font-size: 0.6em;
@@ -4081,4 +4083,5 @@ span.form_required  {
 }
 .decrease_font:hover {
     border: 1px solid black;
+    cursor: pointer;
 } 

@@ -8,8 +8,8 @@ Development information
     Display::display_normal_message(print_r($arrLP,1));
 
   DB modifications:
-    ALTER TABLE `lp_item` ADD `terms` TEXT NULL ;
-    ALTER TABLE `lp_item` ADD `search_did` INT(10) NULL
+    ALTER TABLE lp_item ADD terms TEXT NULL ;
+    ALTER TABLE lp_item ADD search_did INT(10) NULL
     -- on every course, so it's pending(TODO):
        -- script to generate it for all courses depending of the type of dokeos intalation(one db or many)
        -- create it when a course is created

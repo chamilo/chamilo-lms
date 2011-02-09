@@ -74,13 +74,13 @@ $reqdate=$_REQUEST['reqdate'];
 <?php
 
 
-    $TABLETRACK_ACCESS = $_configuration['statistics_database']."`.`track_e_access";
+    $TABLETRACK_ACCESS = $_configuration['statistics_database'].".track_e_access";
 
     if(isset($_cid)) //stats for the current course
     {
         // to see stats of one course user must be courseAdmin of this course
         $is_allowedToTrack = $is_courseAdmin;
-        $courseCodeEqualcidIfNeeded = "AND `access_cours_code` = '$_cid'";
+        $courseCodeEqualcidIfNeeded = "AND access_cours_code = '$_cid'";
     }
     else // stats for all courses
     {
@@ -93,11 +93,11 @@ $reqdate=$_REQUEST['reqdate'];
         // list of all tools
         if (!isset($tool))
         {
-            $sql = "SELECT `access_tool`, count( access_tool )
-                        FROM `$TABLETRACK_ACCESS`
-                        WHERE `access_tool` IS NOT NULL
+            $sql = "SELECT access_tool, count( access_tool )
+                        FROM $TABLETRACK_ACCESS
+                        WHERE access_tool IS NOT NULL
                             ".$courseCodeEqualcidIfNeeded."
-                        GROUP BY `access_tool`";
+                        GROUP BY access_tool";
             echo "<tr><td>";
             echo "<tr>
                     <td>
@@ -229,39 +229,39 @@ $reqdate=$_REQUEST['reqdate'];
             {
                 // all days
                 case "month" :
-                    $sql = "SELECT UNIX_TIMESTAMP(`access_date`)
-                            FROM `$TABLETRACK_ACCESS`
-                            WHERE `access_tool` = '$tool'
+                    $sql = "SELECT UNIX_TIMESTAMP(access_date)
+                            FROM $TABLETRACK_ACCESS
+                            WHERE access_tool = '$tool'
                                 ".$courseCodeEqualcidIfNeeded."
-                                AND MONTH(`access_date`) = MONTH(FROM_UNIXTIME('$reqdate'))
-                                AND YEAR(`access_date`) = YEAR(FROM_UNIXTIME('$reqdate'))
-                                ORDER BY `access_date` ASC";
+                                AND MONTH(access_date) = MONTH(FROM_UNIXTIME('$reqdate'))
+                                AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
+                                ORDER BY access_date ASC";
 
                     $days_array = daysTab($sql);
                     makeHitsTable($days_array,$langDay);
                     break;
                 // all days
                 case "week" :
-                    $sql = "SELECT UNIX_TIMESTAMP(`access_date`)
-                            FROM `$TABLETRACK_ACCESS`
-                            WHERE `access_tool` = '$tool'
+                    $sql = "SELECT UNIX_TIMESTAMP(access_date)
+                            FROM $TABLETRACK_ACCESS
+                            WHERE access_tool = '$tool'
                                 ".$courseCodeEqualcidIfNeeded."
-                                AND WEEK(`access_date`) = WEEK(FROM_UNIXTIME('$reqdate'))
-                                AND YEAR(`access_date`) = YEAR(FROM_UNIXTIME('$reqdate'))
-                                ORDER BY `access_date` ASC";
+                                AND WEEK(access_date) = WEEK(FROM_UNIXTIME('$reqdate'))
+                                AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
+                                ORDER BY access_date ASC";
 
                     $days_array = daysTab($sql);
                     makeHitsTable($days_array,$langDay);
                     break;
                 // all hours
                 case "day"  :
-                    $sql = "SELECT UNIX_TIMESTAMP(`access_date`)
-                                FROM `$TABLETRACK_ACCESS`
-                                WHERE `access_tool` = '$tool'
+                    $sql = "SELECT UNIX_TIMESTAMP(access_date)
+                                FROM $TABLETRACK_ACCESS
+                                WHERE access_tool = '$tool'
                                     ".$courseCodeEqualcidIfNeeded."
-                                    AND DAYOFYEAR(`access_date`) = DAYOFYEAR(FROM_UNIXTIME('$reqdate'))
-                                    AND YEAR(`access_date`) = YEAR(FROM_UNIXTIME('$reqdate'))
-                                ORDER BY `access_date` ASC";
+                                    AND DAYOFYEAR(access_date) = DAYOFYEAR(FROM_UNIXTIME('$reqdate'))
+                                    AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
+                                ORDER BY access_date ASC";
 
                     $hours_array = hoursTab($sql,$reqdate);
                     makeHitsTable($hours_array,$langHour);

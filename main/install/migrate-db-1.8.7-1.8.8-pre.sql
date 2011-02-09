@@ -178,8 +178,7 @@ INSERT INTO user_field (field_type, field_variable, field_display_text, field_vi
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_group_message','MailNotifyGroup_message',1,1,'1');
 
 
-
-UPDATE settings_current SET selected_value = '1.8.8.13709' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.8.8.13725' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

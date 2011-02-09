@@ -819,7 +819,7 @@ VALUES
 ('enabled_support_pixlr',NULL,'radio','Tools','false','EnabledPixlrTitle','EnabledPixlrComment',NULL,NULL, 0),
 ('show_groups_to_users',NULL,'radio','Platform','true','ShowGroupsToUsersTitle','ShowGroupsToUsersComment',NULL,NULL, 0),
 ('accessibility_font_resize',NULL,'radio','Platform','false','EnableAccessibilityFontResizeTitle','EnableAccessibilityFontResizeComment',NULL,NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.13709','DokeosDatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.13725','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -2620,16 +2620,16 @@ INSERT INTO user_field (field_type, field_variable, field_display_text, field_vi
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_message',		 'MailNotifyMessage',1,1,'1');
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_group_message','MailNotifyGroup_message',1,1,'1');
 
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '1', 'AtOnce',1) ";
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '8', 'Daily',2) ";
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '0', 'No',3) ";
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '1', 'AtOnce',1);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '8', 'Daily',2);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (6, '0', 'No',3);
 
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '1', 'AtOnce',1) ";
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '8', 'Daily',2) ";
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '0', 'No',3) ";
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '1', 'AtOnce',1);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '8', 'Daily',2);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (7, '0', 'No',3);
 
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '1', 'AtOnce',1) ";
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '8', 'Daily',2) ";
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '0', 'No',3) ";
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '1', 'AtOnce',1);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '8', 'Daily',2);
+INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '0', 'No',3);
 
 

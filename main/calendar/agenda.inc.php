@@ -3413,7 +3413,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day) {
 								WHERE agenda.id = item_property.ref
 								AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 								AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-								AND	( item_property.to_user_id='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
+								AND	( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 								AND item_property.visibility='1'
 								ORDER BY start_date ";
 			} else {

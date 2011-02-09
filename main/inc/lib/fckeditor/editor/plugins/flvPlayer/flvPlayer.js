@@ -1,4 +1,4 @@
-// Reworks and improvements by Ivan Tcholakov, JUL-2009.
+// Reworks and improvements by Ivan Tcholakov, JUL-2009, FEB-2011.
 
 var dialog = window.parent ;
 var oEditor = dialog.InnerDialogLoaded() ;
@@ -19,7 +19,7 @@ FCKLang['SecurityError'] = FCKLang['SecurityError'] ? FCKLang['SecurityError'] :
 FCKLang['ConnectorDisabled'] = FCKLang['ConnectorDisabled'] ? FCKLang['ConnectorDisabled'] : 'The upload feature (connector) is disabled.' ;
 FCKLang['UploadError'] = FCKLang['UploadError'] ? FCKLang['UploadError'] : 'Error on file upload. Error number: ' ;
 
-//#### Dialog Tabs
+// Dialog Tabs
 
 // Set the dialog tabs.
 dialog.AddTab( 'Info', FCKLang.DlgInfoTab ) ;
@@ -216,7 +216,7 @@ function LoadSelection()
     UpdatePreview() ;
 }
 
-//#### The OK button was hit.
+// The OK button was hit.
 function Ok()
 {
     var rbFileTypeVal = "single" ;
@@ -416,7 +416,9 @@ var Media = function ( o )
     this.playlistThumbs = '' ;
 
     if ( o )
+    {
         this.setObjectElement( o ) ;
+    }
 } ;
 
 Media.prototype.setObjectElement = function ( e )
@@ -428,11 +430,11 @@ Media.prototype.setObjectElement = function ( e )
 
 Media.prototype.setAttribute = function( attr, val )
 {
-    if ( val == "true" )
+    if ( val == 'true' )
     {
         this[attr] = true ;
     }
-    else if (val == "false" )
+    else if (val == 'false' )
     {
         this[attr] = false ;
     }
@@ -448,63 +450,32 @@ Media.prototype.getInnerHTML = function ( objectId )
     var thisWidth = this.width ;
     var thisHeight = this.height ;
 
-    var thisMediaType = "single" ;
+    var thisMediaType = 'single' ;
     if ( !GetE( 'rbFileType' ).checked )
     {
-        thisMediaType = "mpl" ;
+        thisMediaType = 'mpl' ;
     }
 
-    // Align
+    // Alignment
     var cssalign = '' ;
     var cssfloat = '' ;
-    if ( this.align == "center" )
+    if ( this.align == 'center' )
     {
         cssalign = 'margin-left: auto;margin-right: auto;' ;
     }
-    else if ( this.align == "right" )
+    else if ( this.align == 'right' )
     {
         cssfloat = 'float: right;' ;
     }
-    else if ( this.align == "left" )
+    else if ( this.align == 'left' )
     {
         cssfloat = 'float: left;' ;
     }
 
-    var s = "" ;
-
-/*
-    // Replacing the creation of the SWFObject to the use of the object tag in order to avoid HTMLPurifier conflicts see CT#1297
-
-    s+= '<div id="player' + randomnumber + '-parent" style="text-align:	center;' + cssfloat + '">\n';
-    s+= '<div style="border-style: none; height: ' + thisHeight + 'px; width:' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220,	220); background-image: url(' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/flvPlayer.gif); background-repeat:no-repeat;	background-position:center;' + cssalign + '">';
-    s+= '<script src="' + oEditor.FCKConfig.PluginsPath + 'flvPlayer/swfobject.js" type="text/javascript"></script>\n';
-    s+= '<script type="text/javascript">swfobject.registerObject("player' +	randomnumber + '","9.0.98","' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/expressInstall.swf");</script>';
-
-    //s+= '<object id="player' + randomnumber + '" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" name="player' + randomnumber + '" width="328" height="200">';
-    //s+= '<param name="movie" value="' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/mediaplayer.swf" />';
-    //s+= '<param name="allowfullscreen" value="true" />';
-    //s+= '<param name="allowscriptaccess" value="always" />';
-    //s+= '<param name="height" value="' + thisHeight + '" />';
-    //s+= '<param name="width" value="' + thisWidth + '" />';
-    //s+= '<param name="flashvars" value="file=' + this.url + '"/>';
-
-    //s+= '<param name="flashvars" value="file=' + this.url + '&image=' +	this.iurl + '" />';
-    s+= '<object type="application/x-shockwave-flash" data="' +	oEditor.FCKConfig.PluginsPath + 'flvPlayer/mediaplayer.swf" width="328"	height="200">';
-    s+= '<param name="movie" value="' + oEditor.FCKConfig.PluginsPath +	'flvPlayer/mediaplayer.swf" />';
-    s+= '<param name="allowfullscreen" value="true" />';
-    s+= '<param name="allowscriptaccess" value="always" />';
-    s+= '<param name="height" value="' + thisHeight + '" />';
-    s+= '<param name="width" value="' + thisWidth + '" />';
-    //s+= '<param name="flashvars" value="file=' + this.url + '&image=' +	this.iurl + '" />';
-
-    s+= '<param name="flashvars" value="file=' + this.url + '" />';
-    s+= '<p><a href="http://get.adobe.com/flashplayer">Get Flash</a> to see	this player.</p>';
-    s+= '</object>';
-*/
-
+    var s = '' ;
 
     s += '\n' ;
-    s += '<div id="player' + randomnumber + '-parent" style="text-align: center;">\n'; //'<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
+    s += '<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
     s += '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); ' + cssalign + '">' ;
 
     s += '<script src="' + FCKConfig.ScriptSWFObject + '" type="text/javascript"></script>\n' ;
@@ -519,13 +490,14 @@ Media.prototype.getInnerHTML = function ( objectId )
         if ( !i || !this[i] ) continue ;
             if ( !i.match( /(set|get)/ ) )
             {
-                s += i + "=" + this[i] + " " ;
+                s += i + '=' + this[i] + ' ' ;
             }
     }
     s += '</div>' ;
     s += '</div>' ;
     s += '<script type="text/javascript">\n' ;
-    //s += '	//NOTE: FOR LIST OF POSSIBLE SETTINGS GOTO http://www.jeroenwijering.com/extras/readme.html\n' ;
+
+    // NOTE: FOR LIST OF POSSIBLE SETTINGS GOTO http://www.jeroenwijering.com/extras/readme.html\n' ;
 
     s += '	var s1 = new SWFObject("' + FCKConfig.FlashPlayerVideo + '","' + thisMediaType + '","' + thisWidth + '","' + thisHeight + '","7");\n' ;
 
@@ -543,9 +515,9 @@ Media.prototype.getInnerHTML = function ( objectId )
         var dispHeight = thisHeight ;
         var dispThumbs = false ;
 
-        if ( this.dispPlaylist != "none" )
+        if ( this.dispPlaylist != 'none' )
         {
-            if ( this.dispPlaylist == "right" )
+            if ( this.dispPlaylist == 'right' )
             {
                 if ( this.playlistDim.length > 0 )
                 {
@@ -580,7 +552,7 @@ Media.prototype.getInnerHTML = function ( objectId )
 
                 s += '	s1.addVariable("displaywidth","' + dispWidth + '");\n' ;
             }
-            else if ( this.dispPlaylist == "below" )
+            else if ( this.dispPlaylist == 'below' )
             {
                 dispThumbs = true ;
 
@@ -607,7 +579,7 @@ Media.prototype.getInnerHTML = function ( objectId )
                 s += '	s1.addVariable("displayheight","' + dispHeight + '");\n' ;
             }
 
-            if ( this.playlistThumbs == "false" )
+            if ( this.playlistThumbs == 'false' )
             {
                 dispThumbs = false ;
             }
@@ -643,28 +615,28 @@ Media.prototype.getInnerHTML = function ( objectId )
     var colorChoice1 = this.toolcolor ;
     if ( colorChoice1.length > 0 )
     {
-        colorChoice1 = colorChoice1.replace( "#", "0x" ) ;
+        colorChoice1 = colorChoice1.replace( '#', '0x' ) ;
         s += '	s1.addVariable("backcolor","' + colorChoice1 + '");\n' ;
     }
     // SET THE COLOR OF THE TOOLBARS TEXT AND BUTTONS
     var colorChoice2 = this.tooltcolor ;
     if ( colorChoice2.length > 0 )
     {
-        colorChoice2 = colorChoice2.replace( "#", "0x" ) ;
+        colorChoice2 = colorChoice2.replace( '#', '0x' ) ;
         s += '	s1.addVariable("frontcolor","' + colorChoice2 + '");\n' ;
     }
-    //SET COLOR OF ROLLOVER TEXT AND BUTTONS
+    // SET COLOR OF ROLLOVER TEXT AND BUTTONS
     var colorChoice3 = this.tooltrcolor ;
     if ( colorChoice3.length > 0 )
     {
-        colorChoice3 = colorChoice3.replace( "#", "0x" ) ;
+        colorChoice3 = colorChoice3.replace( '#', '0x' ) ;
         s += '	s1.addVariable("lightcolor","' + colorChoice3 + '");\n' ;
     }
-    //SET COLOR OF BACKGROUND
+    // SET COLOR OF BACKGROUND
     var colorChoice4 = this.bgcolor ;
     if ( colorChoice4.length > 0 )
     {
-        colorChoice4 = colorChoice4.replace( "#", "0x" ) ;
+        colorChoice4 = colorChoice4.replace( '#', '0x' ) ;
         s += '	s1.addVariable("screencolor","' + colorChoice4 + '");\n' ;
     }
 
@@ -673,10 +645,6 @@ Media.prototype.getInnerHTML = function ( objectId )
     {
         s += '	s1.addVariable("recommendations","' + this.rurl + '");\n' ;
     }
-
-    //s += '	//s1.addVariable("largecontrols","true");\n' ;
-    //s += '	//s1.addVariable("bufferlength","3");\n' ;
-    //s += '	//s1.addVariable("audio","http://www.jeroenwijering.com/extras/readme.html");\n' ;
 
     s += '	s1.write("player' + randomnumber + '");\n' ;
     s += '</script>\n' ;
@@ -744,7 +712,9 @@ var ePreview ;
 function IsValidMedia( oMedia )
 {
     if ( !oMedia )
+    {
         return false ;
+    }
 
     var url = oMedia.url ;
     var purl = oMedia.purl ;
@@ -752,19 +722,29 @@ function IsValidMedia( oMedia )
     var height = oMedia.height ;
 
     if ( url.length == 0 && purl.length == 0 )
+    {
         return false ;
+    }
 
     if ( isNaN( width ) )
+    {
         return false ;
+    }
 
     if ( parseInt( width, 10 ) <= 0 )
+    {
         return false ;
+    }
 
     if ( isNaN( height ) )
+    {
         return false ;
+    }
 
     if ( parseInt( height, 10 ) <= 0 )
+    {
         return false ;
+    }
 
     return true ;
 }
@@ -774,16 +754,22 @@ function SetPreviewElement( previewEl )
     ePreview = previewEl ;
 
     if ( IsValidMedia( oMedia ) )
+    {
         UpdatePreview() ;
+    }
 }
 
 function UpdatePreview()
 {
     if ( !ePreview )
+    {
         return ;
+    }
 
     while ( ePreview.firstChild )
+    {
         ePreview.removeChild( ePreview.firstChild ) ;
+    }
 
     if ( !oMedia )
     {
@@ -792,7 +778,9 @@ function UpdatePreview()
     }
 
     if ( !IsValidMedia( oMedia ) )
+    {
         ePreview.innerHTML = '&nbsp;' ;
+    }
     else
     {
         var max_width = 710 ;
@@ -835,10 +823,14 @@ function UpdatePreview()
 function ClearPreview()
 {
     if ( !ePreview )
+    {
         return ;
+    }
 
     while ( ePreview.firstChild )
+    {
         ePreview.removeChild( ePreview.firstChild ) ;
+    }
 
     ePreview.innerHTML = '&nbsp;' ;
 }
@@ -903,7 +895,7 @@ function CheckUpload()
         return false ;
     }
 
-    // Show animation
+    // Show animation.
     window.parent.Throbber.Show( 100 ) ;
     GetE( 'divUpload' ).style.display  = 'none' ;
 

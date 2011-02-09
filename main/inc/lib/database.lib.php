@@ -397,7 +397,7 @@ class Database {
         instead of constructing them yourself.
 
         Backticks automatically surround the result,
-        e.g. `COURSE_NAME`.`link`
+        e.g. COURSE_NAME.link
         so the queries can look cleaner.
 
         Example:
@@ -518,7 +518,7 @@ class Database {
         $course_code = self::escape_string($course_code);
         $table = self::get_main_table(TABLE_MAIN_COURSE);
         $result = self::generate_abstract_course_field_names(
-            self::fetch_array(self::query("SELECT * FROM $table WHERE `code` = '$course_code'")));
+            self::fetch_array(self::query("SELECT * FROM $table WHERE code = '$course_code'")));
         return $result === false ? array('db_name' => '') : $result;
     }
 

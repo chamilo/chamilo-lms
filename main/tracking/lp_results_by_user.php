@@ -137,7 +137,8 @@ foreach($course_list  as $current_course ) {
 			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'], $course_info['id'], $session_id);
 			//Looping Exercise Attempts
 			foreach($exercise_stats as $stats) {
-				$attempt_result[$exercise['id']]['users'][$stats['exe_user_id']][$stats['exe_id']] = array('exe_result' =>$stats['exe_result'],'exe_weighting' =>$stats['exe_weighting']);
+				//$attempt_result[$exercise['id']]['users'][$stats['exe_user_id']][$stats['exe_id']] = array('exe_result' =>$stats['exe_result'],'exe_weighting' =>$stats['exe_weighting']);
+				$attempt_result[$exercise['id']]['users'][$stats['exe_user_id']][$stats['exe_id']] = $stats;
 				$user_list[$stats['exe_user_id']] = $stats['exe_user_id'];
 			}			
 			$exercise_list_name[$exercise['id']] = $exercise['title'];
@@ -158,11 +159,13 @@ $export_array =  array();
 if (!empty($main_result)) {
     
     $html_result .= '<table  class="data_table">';
-    $html_result .= '<tr><th>'.get_lang('Courses').'</th>';
-    $html_result .= '<th>'.get_lang('LPs').'</th>';
-    $html_result .= '<th>'.get_lang('Exercises').'</th>';
-    $html_result .= '<th>'.get_lang('Users').'</th>';
-    $html_result .= '<th>'.get_lang('Attempts').'</th>';
+    $html_result .= '<tr><th>'.get_lang('Course').'</th>';
+    $html_result .= '<th>'.get_lang('LearningPath').'</th>';
+    $html_result .= '<th>'.get_lang('Exercise').'</th>';
+    $html_result .= '<th>'.get_lang('User').'</th>';
+    $html_result .= '<th>'.get_lang('Attempt').'</th>';
+    $html_result .= '<th>'.get_lang('Date').'</th>';
+    $html_result .= '<th>'.get_lang('Results').'</th>';
     $html_result .= '</tr>';        
     
     foreach ($main_result as $course_code => $lps) {
@@ -175,17 +178,22 @@ if (!empty($main_result)) {
             
             foreach($exercises as $exercise_id => $exercise_data) {
                 $users = $exercise_data['users'];
-                foreach($users as $user_id => $attempts) {            
-                    foreach($attempts as $exe_id => $result) {
+                foreach($users as $user_id => $attempts) {
+                    $attempt = 1;         
+                    foreach($attempts as $exe_id => $attempt_data) {
                         $html_result .= '<tr colspan="">';
                         $html_result .= Display::tag('td', $course_code);
                         $html_result .= Display::tag('td', $lp_list_name[$lp_id]);
                         $html_result .= Display::tag('td', $exercise_list_name[$exercise_id]);
                         $html_result .= Display::tag('td', $user_list_name[$user_id]);
-                        $result = $result['exe_result'].' / '.$result['exe_weighting'];
-                        $html_result .= Display::tag('td', $result);                        
+                        $result = $attempt_data['exe_result'].' / '.$attempt_data['exe_weighting'];
+                        $html_result .= Display::tag('td', $attempt);                        
+                        $html_result .= Display::tag('td', api_get_local_time($attempt_data['exe_date']));
+                        $html_result .= Display::tag('td', $result);
+                                                 
                         $html_result .= '</tr>';
-                        $export_array[]= array($course_code,$lp_list_name[$lp_id], $exercise_list_name[$exercise_id], $user_list_name[$user_id], $result);
+                        $export_array[]= array($course_code, $lp_list_name[$lp_id], $exercise_list_name[$exercise_id], $user_list_name[$user_id], $attempt, api_get_local_time($attempt_data['exe_date']), $result);
+                        $attempt++;
                     }
                 }    
             }   
@@ -217,16 +225,20 @@ function export_complete_report_xls($filename, $array) {
 		$column = 0; //skip the first column (row titles)
 		
 
-		$worksheet->write($line,$column,get_lang('Courses'));
+		$worksheet->write($line,$column,get_lang('Course'));
 		$column++;
-		$worksheet->write($line,$column,get_lang('Lps'));
+		$worksheet->write($line,$column,get_lang('LearningPath'));
 		$column++;
-		$worksheet->write($line,$column,get_lang('Exercises'));
+		$worksheet->write($line,$column,get_lang('Exercise'));
 		$column++;			
-		$worksheet->write($line,$column,get_lang('Users'));
+		$worksheet->write($line,$column,get_lang('User'));
 		$column++;
-		$worksheet->write($line,$column,get_lang('Attempts'));
+		$worksheet->write($line,$column,get_lang('Attempt'));
+		$column++;
+		$worksheet->write($line,$column,get_lang('Date'));
 		$column++;	
+		$worksheet->write($line,$column,get_lang('Results'));
+		$column++;		
 		$line++;		
 		foreach ($array as $row) {
 			$column = 0;

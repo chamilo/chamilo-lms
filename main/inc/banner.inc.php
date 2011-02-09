@@ -486,14 +486,14 @@ if (api_get_setting('show_toolshortcuts') == 'true') {
   	echo '</div>';
 }
 
-if (isset($dokeos_database_connection)) {
+if (isset($database_connection)) {
 	// connect to the main database.
 	// if single database, don't pefix table names with the main database name in SQL queries
 	// (ex. SELECT * FROM `table`)
 	// if multiple database, prefix table names with the course database name in SQL queries (or no prefix if the table is in
 	// the main database)
 	// (ex. SELECT * FROM `table_from_main_db`  -  SELECT * FROM `courseDB`.`table_from_course_db`)
-	Database::select_db($_configuration['main_database'], $dokeos_database_connection);
+	Database::select_db($_configuration['main_database'], $database_connection);
 }
 ?>
 

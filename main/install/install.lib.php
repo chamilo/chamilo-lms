@@ -27,7 +27,7 @@ define('SYSTEM_CONFIG_FILENAME', 	'configuration.dist.php');
  * @author Ivan Tcholakov, 2010;
  */
 function is_already_installed_system() {
-    global $new_version;
+    global $new_version, $_configuration;
 
     if (empty($new_version)) {
         return true; // Must be initialized.
@@ -427,7 +427,7 @@ function get_config_param($param, $updatePath = '') {
             $updateFromConfigFile = 'claroline/inc/conf/claro_main.conf.php';
         } else {
             // Give up recovering.
-            error_log('Could not find config file in '.$updatePath.' in get_config_param()', 0);
+            error_log('Notice: Could not find previous config file at '.$updatePath.'main/inc/conf/configuration.php nor at '.$updatePath.'claroline/inc/conf/claro_main.conf.php in get_config_param(). Will start new config (in '.__FILE__.', line '.__LINE__.')', 0);
             return null;
         }
     }
@@ -1830,15 +1830,15 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
     <tr>
       <td><?php echo get_lang("EncryptMethodUserPass"); ?> :</td>
 
-      <?php if ($installType == 'update'): ?>
+      <?php if ($installType == 'update'){ ?>
       <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php echo $encryptPassForm; ?></td>
-      <?php else: ?>
+      <?php }else{ ?>
       <td>
-        <input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm === 1 ? 'checked="checked" ' : ''; ?>/> <label for="encryptPass0"><?php echo 'md5'; ?></label>
-        <input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo $encryptPassForm == 'sha1' ? '' : 'checked="checked" '; ?>/> <label for="encryptPass1"><?php echo 'sha1'; ?></label>
-        <input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm === 0 ? '' : 'checked="checked" '; ?>/> <label for="encryptPass2"><?php echo get_lang('None'); ?></label>
+        <input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo ($encryptPassForm == 'sha1') ? 'checked="checked" ': ''; ?>/> <label for="encryptPass1"><?php echo 'sha1'; ?></label>
+        <input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm == 1 ? 'checked="checked" ' : ''; ?>/> <label for="encryptPass0"><?php echo 'md5'; ?></label>
+        <input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm === '0' or $encryptPassForm === 0 ? 'checked="checked" ':''; ?>/> <label for="encryptPass2"><?php echo get_lang('None'); ?></label>
       </td>
-      <?php endif; ?>
+      <?php } ?>
     </tr>
 
     <tr>

@@ -128,7 +128,11 @@ if (!empty($course_info)) {
 				}
                 //echo $question_id;
                 //var_dump($question_result.' - '.$quantity_exercises.$main_question_list[$question_id]->weighting);
-				$main_question_list[$question_id]->results =(($question_result / ($quantity_exercises)) ) ; // Score % average
+                if(!empty($quantity_exercises)) {
+				    $main_question_list[$question_id]->results =(($question_result / ($quantity_exercises)) ) ; // Score % average
+                } else {
+                    $main_question_list[$question_id]->results = 0;
+                }
 				$main_question_list[$question_id]->quantity = $quantity_exercises;	
             
 			}

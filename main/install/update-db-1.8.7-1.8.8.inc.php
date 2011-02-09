@@ -252,39 +252,39 @@ if (defined('SYSTEM_INSTALLATION')) {
             
             //Adding notifications options
     
-            $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_invitation',   'mail_notify_invitation',1,1,'at_once') ";
+            $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_invitation',   'MailNotifyInvitation',1,1,'1') ";
             $result = Database::query($sql);
             $id = Database::insert_id();
                         
-            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'at_once', 'at_once',1) ";
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '1', 'AtOnce',1) ";
             $result = Database::query($sql);
-            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'daily', 'daily',1) ";
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '8', 'Daily',2) ";
             $result = Database::query($sql);
-            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'no', 'no',1) ";
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '0', 'No',3) ";
             $result = Database::query($sql);         
                 
             
-            $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_message',		 'mail_notify_message',1,1,'at_once')";
+            $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_message',		 'MailNotifyMessage',1,1,'1')";
             $result = Database::query($sql);
             $id = Database::insert_id();
             
-            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'at_once', 'at_once',1) ";
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '1', 'AtOnce',1) ";
             $result = Database::query($sql);
-            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'daily', 'daily',1) ";
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '8', 'Daily',2) ";
             $result = Database::query($sql);
-            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'no', 'no',1) ";
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '0', 'No',3) ";
             $result = Database::query($sql);
             
                         
-            $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_group_message','mail_notify_group_message',1,1,'at_once') ";
+            $sql = "INSERT INTO $dbNameForm.user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_group_message','MailNotifyGroupMessage',1,1,'1') ";
             $result = Database::query($sql);
             $id = Database::insert_id();
             
-            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'at_once', 'at_once',1) ";
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '1', 'AtOnce',1) ";
             $result = Database::query($sql);
-            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'daily', 'daily',1) ";
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '8', 'Daily',2) ";
             $result = Database::query($sql);
-            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, 'no', 'no',1) ";
+            $sql = "INSERT INTO $dbNameForm.user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '0', 'No',3) ";
             $result = Database::query($sql);
 
 

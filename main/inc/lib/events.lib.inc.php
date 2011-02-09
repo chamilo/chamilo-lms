@@ -680,7 +680,7 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
 }
 
 /**
- * Gets all exercise results (NO Exercises in LPs )from a given exercise id, course, session
+ * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session
  * @param   int     exercise id
  * @param   string  course code
  * @param   int     session id

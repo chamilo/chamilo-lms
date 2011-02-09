@@ -818,8 +818,8 @@ VALUES
 ('course_hide_tools','course_setting','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'CourseSettings',1),
 ('enabled_support_pixlr',NULL,'radio','Tools','false','EnabledPixlrTitle','EnabledPixlrComment',NULL,NULL, 0),
 ('show_groups_to_users',NULL,'radio','Platform','true','ShowGroupsToUsersTitle','ShowGroupsToUsersComment',NULL,NULL, 0),
-('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.13673','DokeosDatabaseVersion','', NULL, NULL, 0);
-
+('accessibility_font_resize',NULL,'radio','Platform','false','EnableAccessibilityFontResizeTitle','EnableAccessibilityFontResizeComment',NULL,NULL, 1),
+('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.13709','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1076,7 +1076,9 @@ VALUES
 ('enabled_support_pixlr','true','Yes'),
 ('enabled_support_pixlr','false','No'),
 ('show_groups_to_users','true','Yes'),
-('show_groups_to_users','false','No');
+('show_groups_to_users','false','No'),
+('accessibility_font_resize', 'true', 'Yes'),
+('accessibility_font_resize', 'false', 'No');
 
 UNLOCK TABLES;
 

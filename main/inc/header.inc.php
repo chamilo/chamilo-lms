@@ -159,8 +159,11 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 </script>
 
 
-
 <?php
+if (api_get_setting('accessibility_font_resize') == 'true') {
+    echo '<script src= "'.api_get_path(WEB_LIBRARY_PATH).'javascript/fontresize.js" type="text/javascript"></script>';
+}
+
 if (isset($htmlHeadXtra) && $htmlHeadXtra) {
     foreach ($htmlHeadXtra as & $this_html_head) {
         echo $this_html_head;

@@ -178,6 +178,11 @@ if (api_is_allowed_to_edit()) {
 		echo "</li>";		
 	}
 }
+if (api_get_setting('accessibility_font_resize') == 'true') {
+	echo '<li class="resize_font">';
+    echo '<span class="decrease_font" title="'.get_lang('DecreaseFontSize').'">A</span> <span class="reset_font" title="'.get_lang('ResetFontSize').'">A</span> <span class="increase_font" title="'.get_lang('IncreaseFontSize').'">A</span>';
+    echo '</li>';
+}
 ?>
 		</ul>
 	</div>

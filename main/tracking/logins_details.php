@@ -80,19 +80,19 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 {
     if( $is_allowedToTrackEverybodyInCourse )
     {
-        $sql = "SELECT `u`.`firstname`,`u`.`lastname`, `u`.`email`
+        $sql = "SELECT u.firstname,u.lastname, u.email
                     FROM $TABLECOURSUSER cu , $TABLEUSER u
-                    WHERE `cu`.`user_id` = `u`.`user_id` AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                        AND `cu`.`course_code` = '$_cid'
-                        AND `u`.`user_id` = '$uInfo'";
+                    WHERE cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                        AND cu.course_code = '$_cid'
+                        AND u.user_id = '$uInfo'";
     }
     else
     {
-        $sql = "SELECT `u`.`firstname`,`u`.`lastname`, `u`.`email`
+        $sql = "SELECT u.firstname,u.lastname, u.email
                     FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-                    WHERE `gu`.`user_id` = `u`.`user_id`
-                        AND `gu`.`group_id` = '$_gid'
-                        AND `u`.`user_id` = '$uInfo'";
+                    WHERE gu.user_id = u.user_id
+                        AND gu.group_id = '$_gid'
+                        AND u.user_id = '$uInfo'";
     }
     $query = Database::query($sql);
     $res = @Database::fetch_array($query);
@@ -153,25 +153,25 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
         switch($period)
         {
             case "month" :
-				$sql = "SELECT `access_date`
+				$sql = "SELECT access_date
                             FROM $TABLETRACK_ACCESS
-                            WHERE `access_user_id` = '$uInfo'
-                            AND `access_cours_code` = '".$_cid."'
-                            AND MONTH(`access_date`) = MONTH( FROM_UNIXTIME('$reqdate') )
-                            AND YEAR(`access_date`) = YEAR(FROM_UNIXTIME('$reqdate'))
-							GROUP BY DAYOFMONTH(`access_date`)
-                            ORDER BY `access_date` ASC";
+                            WHERE access_user_id = '$uInfo'
+                            AND access_cours_code = '".$_cid."'
+                            AND MONTH(access_date) = MONTH( FROM_UNIXTIME('$reqdate') )
+                            AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
+							GROUP BY DAYOFMONTH(access_date)
+                            ORDER BY access_date ASC";
                 $displayedDate = $MonthsLong[date("n", $reqdate)-1].date(" Y", $reqdate);
                  break;
             case "week" :
-				$sql = "SELECT `access_date`
+				$sql = "SELECT access_date
                             FROM $TABLETRACK_ACCESS
-                            WHERE `access_user_id` = '$uInfo'
-                            AND `access_cours_code` = '".$_cid."'
-                            AND WEEK(`access_date`) = WEEK( FROM_UNIXTIME('$reqdate') )
-                            AND YEAR(`access_date`) = YEAR(FROM_UNIXTIME('$reqdate'))
-							GROUP BY DAYOFMONTH(`access_date`)
-                            ORDER BY `access_date` ASC";
+                            WHERE access_user_id = '$uInfo'
+                            AND access_cours_code = '".$_cid."'
+                            AND WEEK(access_date) = WEEK( FROM_UNIXTIME('$reqdate') )
+                            AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
+							GROUP BY DAYOFMONTH(access_date)
+                            ORDER BY access_date ASC";
                 $weeklowreqdate = ($reqdate-(86400*date("w" , $reqdate)));
                 $weekhighreqdate = ($reqdate+(86400*(6-date("w" , $reqdate)) ));
                 $displayedDate = get_lang('From')." ".date("d " , $weeklowreqdate).$MonthsLong[date("n", $weeklowreqdate)-1].date(" Y" , $weeklowreqdate)
@@ -198,15 +198,15 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                     $limit = $results[$j+1];
                 // select all access to tool between displayed date and next displayed date or now() if
                 // displayed date is the last login date
-                $sql = "SELECT `access_tool`, count(`access_tool`)
+                $sql = "SELECT access_tool, count(access_tool)
                             FROM $TABLETRACK_ACCESS
-                            WHERE `access_user_id` = '$uInfo'
-                                AND `access_tool` IS NOT NULL
-                                AND `access_date` > '".$results[$j]."'
-                                AND `access_date` < '".$limit."'
-                                AND `access_cours_code` = '".$_cid."'
-                            GROUP BY `access_tool`
-                            ORDER BY `access_tool` ASC";
+                            WHERE access_user_id = '$uInfo'
+                                AND access_tool IS NOT NULL
+                                AND access_date > '".$results[$j]."'
+                                AND access_date < '".$limit."'
+                                AND access_cours_code = '".$_cid."'
+                            GROUP BY access_tool
+                            ORDER BY access_tool ASC";
                 $results2 = getManyResults2Col($sql);
 
                 if (is_array($results2))

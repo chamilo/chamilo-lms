@@ -46,11 +46,11 @@ td {border-bottom: thin dashed gray;}
 $view = preg_replace('/[^01]/','',$_REQUEST['view']);
 
 $TABLECOURSUSER			= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLETRACK_ACCESS 		= $_configuration['statistics_database']."`.`track_e_access";
-$TABLETRACK_LINKS 		= $_configuration['statistics_database']."`.`track_e_links";
-$TABLETRACK_DOWNLOADS 	= $_configuration['statistics_database']."`.`track_e_downloads";
-$TABLETRACK_LOGIN 		= $_configuration['statistics_database']."`.`track_e_login";
-$TABLETRACK_EXERCICES   = $_configuration['statistics_database']."`.`track_e_exercices";
+$TABLETRACK_ACCESS 		= $_configuration['statistics_database'].".track_e_access";
+$TABLETRACK_LINKS 		= $_configuration['statistics_database'].".track_e_links";
+$TABLETRACK_DOWNLOADS 	= $_configuration['statistics_database'].".track_e_downloads";
+$TABLETRACK_LOGIN 		= $_configuration['statistics_database'].".track_e_login";
+$TABLETRACK_EXERCICES   = $_configuration['statistics_database'].".track_e_exercices";
 
 
 $limitOfDisplayedLogins = 25; // number of logins to display
@@ -99,10 +99,10 @@ if ( $_configuration['tracking_enabled'] )
                 [<a href='".api_get_self()."?view=".$tempView."'>".get_lang('Close')."</a>]
         </td>
     </tr>";
-        $sql = "SELECT `login_date`
-                    FROM `".$TABLETRACK_LOGIN."`
-                    WHERE `login_user_id` = '".$_user['user_id']."'
-                    ORDER BY `login_date` DESC
+        $sql = "SELECT login_date
+                    FROM ".$TABLETRACK_LOGIN."
+                    WHERE login_user_id = '".$_user['user_id']."'
+                    ORDER BY login_date DESC
                     LIMIT ".$limitOfDisplayedLogins."";
         echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('LoginsExplaination')."<br/>";
         $results = getManyResults1Col($sql);
@@ -129,9 +129,9 @@ if ( $_configuration['tracking_enabled'] )
 
 
 
-                $sql = "SELECT `access_tool`, count(access_tool), `access_cours_code`
-                            FROM `".$TABLETRACK_ACCESS."`
-                            WHERE `access_user_id` = '".$_user['user_id']."'".
+                $sql = "SELECT access_tool, count(access_tool), access_cours_code
+                            FROM $TABLETRACK_ACCESS
+                            WHERE access_user_id = '".$_user['user_id']."'".
                                 //AND access_tool IS NOT NULL
                                 "AND access_date > '".$value."'
                                 AND access_date < '".$previousDate."'
@@ -217,11 +217,11 @@ if ( $_configuration['tracking_enabled'] )
             </tr>
         ";
         echo " Ceci est amen  etre dplac vers la page de garde des exercices ";
-        $sql = "SELECT `ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, `te`.`exe_date`
-                    FROM `$TABLECOURSE_EXERCICES` AS ce , `$TABLETRACK_EXERCICES` AS te
-                    WHERE `te`.`exe_user_id` = '".$_user['user_id']."'
-                        AND `te`.`exe_exo_id` = `ce`.`id`
-                    ORDER BY `te`.`exe_cours_id` ASC, `ce`.`title` ASC, `te`.`exe_date`ASC";
+        $sql = "SELECT ce.title, te.exe_result , te.exe_weighting, te.exe_date
+                    FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
+                    WHERE te.exe_user_id = '".$_user['user_id']."'
+                        AND te.exe_exo_id = ce.id
+                    ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
         echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
         $results = getManyResultsXCol($sql,4);

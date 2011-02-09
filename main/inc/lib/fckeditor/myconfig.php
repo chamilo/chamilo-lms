@@ -125,9 +125,13 @@ $config['LoadPlugin'][] = 'fckEmbedMovies';
 // flvPlayer : Adds a dilog for inserting video files (.flv, .mp4), so they to be viewed through a flash-based player.
 $config['LoadPlugin'][] = 'flvPlayer';
 
-// Choosing Flash embedding technique: 'embed', 'object', 'swfobject'
+// Choosing Flash embedding technique:
+// 'embed'	   - <embed> tag is used, this is the oldest way that is still supported by most of the browsers;
+// 'object'    - <object> tag is used, specific for Internet Explorer;
+// 'adobe'     - this is the "adobe way" - <object><embed /></object>, it works very well, but the <object> tag is not XML-compliant;
+// 'swfobject' - this is a technique that uses a special javascript, it works very well if javasripts are not disabled (due to security reasons).
 // This setting works only for the plugin 'flvPlayer' so far.
-$config['FlashEmbeddingMethod'] = 'swfobject' ;
+$config['FlashEmbeddingMethod'] = 'adobe' ;
 
 // youtube : Adds a dilog for inserting YouTube video-streams.
 if (api_get_setting('youtube_for_students') == 'true') {

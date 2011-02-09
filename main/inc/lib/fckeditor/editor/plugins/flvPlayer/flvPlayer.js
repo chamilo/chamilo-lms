@@ -12,6 +12,12 @@ if ( typeof FCKConfig[ 'FlashEmbeddingMethod' ] != 'string' )
 {
     FCKConfig[ 'FlashEmbeddingMethod' ] = 'embed' ;
 }
+if ( FCKConfig[ 'FlashEmbeddingMethod' ] != 'embed' &&
+        FCKConfig[ 'FlashEmbeddingMethod' ] != 'object' &&
+        FCKConfig[ 'FlashEmbeddingMethod' ] != 'adobe' &&
+        FCKConfig[ 'FlashEmbeddingMethod' ] != 'swfobject' ) {
+    FCKConfig[ 'FlashEmbeddingMethod' ] = 'embed' ;
+}
 
 // Set the language direction.
 window.document.dir = FCKLang.Dir ;
@@ -501,15 +507,175 @@ Media.prototype.getInnerHTML = function ( objectId )
     // The player's area.
     s += '<div id="player' + randomnumber + '">' ;
 
-    if (embeddingMethod == 'swfobject')
+    if ( embeddingMethod == 'swfobject' )
     {
         s += '<a href="http://www.macromedia.com/go/getflashplayer" target="_blank">Get the Flash Player</a> to see this video.' ;
 
     }
-    else
-    {
-        // 'embed' method.
 
+    if ( embeddingMethod == 'object' || embeddingMethod == 'adobe' )
+    {
+        var p = '' ; // Parameters.
+        var v = '' ; // Variables.
+
+        s += '<object id="' + thisMediaType + '" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" style="" width="' + thisWidth + '" height="' + thisHeight + '">' ;
+
+        p += '<param name="movie" value="' + FCKConfig.FlashPlayerVideo + '" />' ;
+        p += '<param name="quality" value="high" />' ;
+        p += '<param name="allowfullscreen" value="' + this.fullscreen + '" />' ;
+
+        v += 'width=' + thisWidth + '&amp;' ;
+        v += 'height=' + thisHeight + '&amp;' ;
+        v += 'autostart=' + this.play + '&amp;' ;
+
+        if ( thisMediaType == 'mpl' )
+        {
+            v += 'file=' + this.purl + '&amp;' ;
+            v += 'autoscroll=true&amp;' ;
+            p += 'allowscriptaccess="always" ' ;
+            p += '<param name="allowscriptaccess" value="always" />' ;
+
+            var dispWidth = thisWidth ;
+            var dispHeight = thisHeight ;
+            var dispThumbs = false ;
+
+            if ( this.dispPlaylist != 'none' )
+            {
+                if ( this.dispPlaylist == 'right' )
+                {
+                    if ( this.playlistDim.length > 0 )
+                    {
+                        dispWidth = thisWidth - this.playlistDim ;
+                        if ( this.playlistDim < 100 )
+                        {
+                            dispThumbs = false ;
+                        }
+                        else
+                        {
+                            dispThumbs = true ;
+                        }
+                    }
+                    else
+                    {
+                        if ( thisWidth >= 550 )
+                        {
+                            dispWidth = thisWidth - 200 ;
+                            dispThumbs = true ;
+                        }
+                        else if ( thisWidth >= 450 )
+                        {
+                            dispWidth = thisWidth - 100 ;
+                            dispThumbs = false ;
+                        }
+                        else if ( thisWidth >= 350 )
+                        {
+                            dispWidth = thisWidth - 50 ;
+                            dispThumbs = false ;
+                        }
+                    }
+
+                    v += 'displaywidth=' + dispWidth + '&amp;' ;
+                }
+                else if ( this.dispPlaylist == 'below' )
+                {
+                    dispThumbs = true ;
+
+                    if ( this.playlistDim.length > 0 )
+                    {
+                        dispHeight = thisWidth - this.playlistDim ;
+                    }
+                    else
+                    {
+                        if ( thisHeight >= 550 )
+                        {
+                            dispHeight = thisWidth - 200 ;
+                        }
+                        else if ( thisHeight >= 450 )
+                        {
+                            dispHeight = thisHeight - 150 ;
+                        }
+                        else if ( thisHeight >= 350 )
+                        {
+                            dispHeight = thisHeight - 100 ;
+                        }
+                    }
+
+                    v += 'displayheight=' + dispHeight + '&amp;' ;
+                }
+
+                if ( this.playlistThumbs == 'false' )
+                {
+                    dispThumbs = false ;
+                }
+
+                v += 'thumbsinplaylist=' + dispThumbs + '&amp;' ;
+            }
+
+            v += 'shuffle=false&amp;' ;
+            if (this.loop)
+            {
+                v += 'repeat=list&amp;' ;
+            }
+            else
+            {
+                v += 'repeat=' + this.loop + '&amp;' ;
+            }
+            //v += 'transition=bgfade&amp;' ;
+        }
+        else
+        {
+            v += 'file=' + this.url + '&amp;' ;
+            v += 'repeat=' + this.loop + '&amp;' ;
+            v += 'image=' + this.iurl + '&amp;' ;
+        }
+
+        v += 'showdownload=' + this.downloadable + '&amp;' ;
+        v += 'link=' + this.url + '&amp;' ;
+
+        v += 'showdigits=' + this.displayDigits + '&amp;' ;
+        v += 'shownavigation=' + this.displayNavigation + '&amp;' ;
+
+
+        // SET THE COLOR OF THE TOOLBAR
+        var colorChoice1 = this.toolcolor ;
+        if ( colorChoice1.length > 0 )
+        {
+            colorChoice1 = colorChoice1.replace( '#', '0x' ) ;
+            v += 'backcolor=' + colorChoice1 + '&amp;' ;
+        }
+        // SET THE COLOR OF THE TOOLBARS TEXT AND BUTTONS
+        var colorChoice2 = this.tooltcolor ;
+        if ( colorChoice2.length > 0 )
+        {
+            colorChoice2 = colorChoice2.replace( '#', '0x' ) ;
+            v += 'frontcolor=' + colorChoice2 + '&amp;' ;
+        }
+        // SET COLOR OF ROLLOVER TEXT AND BUTTONS
+        var colorChoice3 = this.tooltrcolor ;
+        if ( colorChoice3.length > 0 )
+        {
+            colorChoice3 = colorChoice3.replace( '#', '0x' ) ;
+            v += 'lightcolor=' + colorChoice3 + '&amp;' ;
+        }
+        // SET COLOR OF BACKGROUND
+        var colorChoice4 = this.bgcolor ;
+        if ( colorChoice4.length > 0 )
+        {
+            colorChoice4 = colorChoice4.replace( '#', '0x' ) ;
+            v += 'screencolor=' + colorChoice4 + '&amp;' ;
+        }
+
+        v += 'logo=' + this.wmurl + '&amp;' ;
+        if ( this.rurl.length > 0 )
+        {
+            v += 'recommendations=' + this.rurl + '&amp;' ;
+        }
+
+        s += p + '<param name="flashvars" value="' + v + '" />' ;
+    }
+
+    if ( embeddingMethod == 'object' || embeddingMethod == 'adobe' )
+    {
         var p = '' ; // Parameters (attributes).
         var v = '' ; // Variables.
 
@@ -670,6 +836,11 @@ Media.prototype.getInnerHTML = function ( objectId )
         }
 
         s += '<embed ' + p + 'flashvars="' + v + '" ></embed>' ;
+    }
+
+    if ( embeddingMethod == 'object' || embeddingMethod == 'adobe' )
+    {
+        s += '</object>' ;
     }
 
     s += '</div>' ;

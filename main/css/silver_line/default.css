@@ -3981,3 +3981,34 @@ span.form_required  {
 	border: 1px solid gray;
 	margin-bottom:5px;
 }
+/* Text resize icons in header */
+.resize_font { /* the canvas */
+    margin: 0 5px 0 5px;
+}
+.reset_font {
+    font-size: 1.2em;
+    color: gray;
+    border: 1px solid white;
+    padding: 2px;
+}
+.reset_font:hover {
+    border: 1px solid black;
+}
+.increase_font {
+    font-size: 1.8em;
+    color: gray;
+    border: 1px solid white;
+    padding: 2px;
+}
+.increase_font:hover {
+    border: 1px solid black;
+}
+.decrease_font {
+    font-size: 0.6em;
+    color: gray;
+    border: 1px solid white;
+    padding: 2px;
+}
+.decrease_font:hover {
+    border: 1px solid black;
+}

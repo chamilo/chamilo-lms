@@ -79,7 +79,7 @@ if (is_allowed_to_edit()) {
 		$querypath = $path;
 	}
 	// Search for all files that are not deleted => visibility != 2
-	$query = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `docs`.`filetype`='file' AND `props`.`visibility`<>'2' AND `props`.`to_group_id`=".$to_group_id."");
+	$query = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  WHERE props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND docs.filetype='file' AND props.visibility<>'2' AND props.to_group_id=".$to_group_id."");
 	// Add tem to the zip file
 	while ($not_deleted_file = Database::fetch_assoc($query)) {
 		$zip_folder->add($sys_course_path.$_course['path'].'/document'.$not_deleted_file['path'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/document'.$remove_dir);
@@ -95,7 +95,7 @@ else {
 	// A big problem: Visible files that are in a hidden folder are included when we do a query for visiblity='v'
 	// So... I do it in a couple of steps:
 	// 1st: Get all files that are visible in the given path
-	$query = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `props`.`visibility`='1' AND `docs`.`filetype`='file' AND `props`.`to_group_id`=".$to_group_id);
+	$query = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props WHERE props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND props.visibility='1' AND docs.filetype='file' AND props.to_group_id=".$to_group_id);
 	// Add them to an array
 	while ($all_visible_files = Database::fetch_assoc($query)) {
 		$all_visible_files_path[] = $all_visible_files['path'];
@@ -105,14 +105,14 @@ else {
 	//print_r($all_visible_files_path);
 	//echo('</pre>');
 	// 2nd: Get all folders that are invisible in the given path
-	$query2 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `props`.`visibility`<>'1' AND `docs`.`filetype`='folder'");
+	$query2 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props WHERE props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$querypath."/%' AND props.visibility<>'1' AND docs.filetype='folder'");
 	// If we get invisible folders, we have to filter out these results from all visible files we found
 	if (Database::num_rows($query2) > 0) {
 		// Add tem to an array
 		while ($invisible_folders = Database::fetch_assoc($query2)) {
 		//3rd: Get all files that are in the found invisible folder (these are "invisible" too)
 			//echo "<br /><br />invisible folders: ".$sys_course_path.$_course['path'].'/document'.$invisible_folders['path'].'<br />';
-			$query3 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$invisible_folders['path']."/%' AND `docs`.`filetype`='file' AND `props`.`visibility`='1'");
+			$query3 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  WHERE props.tool='".TOOL_DOCUMENT."' AND docs.id=props.ref AND docs.path LIKE '".$invisible_folders['path']."/%' AND docs.filetype='file' AND props.visibility='1'");
 			// Add tem to an array
 			while ($files_in_invisible_folder = Database::fetch_assoc($query3)) {
 				$files_in_invisible_folder_path[] = $files_in_invisible_folder['path'];

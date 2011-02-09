@@ -407,6 +407,11 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         if ($values['allow_social_tool'] == 'true') {
             $values['allow_message_tool'] = 'true';
         }
+        // quick patch to avoid gradebook_enable's value to be blanked
+        if ($my_category == 'Gradebook') {
+            $gb = 'false';
+        	$gb = api_get_setting('gradebook_enable');
+        }
 
         // The first step is to set all the variables that have type=checkbox of the category
         // to false as the checkbox that is unchecked is not in the $_POST data and can
@@ -414,6 +419,10 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         // This, however, also means that if the process breaks on the third of five checkboxes, the others
         // will be set to false.
         $r = api_set_settings_category($my_category, 'false', $_configuration['access_url'], array('checkbox', 'radio'));
+        // quick patch to avoid gradebook_enable's value to be blanked
+        if ($my_category == 'Gradebook') {
+            api_set_setting('gradebook_enable', $gb, null, $my_category, $_configuration['access_url']);
+        }
         //$sql = "UPDATE $table_settings_current SET selected_value='false' WHERE category='$my_category' AND type='checkbox'";
         //$result = Database::query($sql);
         // Save the settings.

@@ -616,7 +616,6 @@ Media.prototype.getInnerHTML = function ( objectId )
             }
             else
             {
-                s += '	s1.addVariable("repeat","' + this.loop + '");\n' ;
                 v += 'repeat=' + this.loop + '&amp;' ;
             }
             //v += 'transition=bgfade&amp;' ;

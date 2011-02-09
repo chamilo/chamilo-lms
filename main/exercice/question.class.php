@@ -1184,15 +1184,15 @@ abstract class Question
 			if ($show_quiz_edition) {
                  
 				echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
-				echo '<br>';
-				echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
+				//echo '<br>';
+				//echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
 			} else {
 				$img = pathinfo($img);
 				$img = $img['filename'];
 				echo ''.Display::return_icon($img.'_na.gif',$explanation).'';
-				echo '<br>';
+				//echo '<br>';
                
-				echo ''.$explanation.'';
+				//echo ''.$explanation.'';
 			}
 			echo '</div>';
 			echo '</li>';
@@ -1210,9 +1210,9 @@ abstract class Question
 		} else {
 			echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'), '');
 		}
-		echo '<br>';
-		echo $url;
-		echo get_lang('GetExistingQuestion');
+		//echo '<br>';
+		//echo $url;
+		//echo get_lang('GetExistingQuestion');
 		echo '</a>';
 		echo '</div></li>';
 		echo '</ul>';

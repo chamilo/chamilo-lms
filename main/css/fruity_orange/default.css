@@ -2442,16 +2442,16 @@ button.upload {
     background-image:url(images/button_upload.gif);
 }
 .icon_image_content {
-    width:90px;
+    width:70px;
     cursor:hand;
-    height:9.5em;
+    height:6em;
     text-align: center;
-    padding-right: 5px;
-    padding-left: 5px;
+    padding-right: 10px;
+    padding-left: 0px;
     border: 1px dotted #ccc;
     background-color: #eee;
     margin-right: 0.2em;
-        margin-top: 0.1em;
+    margin-top: 0.1em;
     -moz-border-radius-topleft : 5px;
     -moz-border-radius-bottomright : 5px;
     -moz-border-radius-bottomleft : 5px;

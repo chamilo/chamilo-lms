@@ -97,16 +97,12 @@ EOF;
 }
 
 /*
------------------------------------------------------------
 	Configuration file
------------------------------------------------------------
 */
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 
 /*
------------------------------------------------------------
 	Libraries
------------------------------------------------------------
 */
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -115,13 +111,10 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
 $tool_name = is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');
-
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 /*
------------------------------------------------------------
 	Form
------------------------------------------------------------
 */
 
 /*
@@ -329,15 +322,21 @@ foreach ($extra as $id => $field_details) {
 			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 		case USER_FIELD_TYPE_SELECT:
-			$options = array();
+		    if (in_array($field_details[1], array('mail_notify_invitation', 'mail_notify_message', 'mail_notify_group_message'))) {
+		        $field_details[3] = get_lang($field_details[3]);
+		    }
+			$options = array();			
 			foreach ($field_details[9] as $option_id => $option_details) {
+			    if (in_array($field_details[1], array('mail_notify_invitation', 'mail_notify_message', 'mail_notify_group_message'))) {
+			        $option_details[2] = get_lang($option_details[2]);
+			    }
 				$options[$option_details[1]] = $option_details[2];
 			}
 			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');
 			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
-			$options = array();
+			$options = array();			
 			foreach ($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
@@ -476,16 +475,9 @@ $user_data = array_merge($user_data, $extra_data);
 $form->setDefaults($user_data);
 
 /*
-==============================================================================
 		FUNCTIONS
-==============================================================================
 */
 
-/*
------------------------------------------------------------
-	LOGIC FUNCTIONS
------------------------------------------------------------
-*/
 
 /**
  * Can a user edit his/her profile?
@@ -497,9 +489,7 @@ function is_profile_editable() {
 }
 
 /*
------------------------------------------------------------
 	PRODUCTIONS FUNCTIONS
------------------------------------------------------------
 */
 
 /**

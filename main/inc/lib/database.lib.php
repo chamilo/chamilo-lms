@@ -276,7 +276,7 @@ define('TABLE_THEMATIC','thematic');
 define('TABLE_THEMATIC_PLAN', 'thematic_plan');
 define('TABLE_THEMATIC_ADVANCE','thematic_advance');
 
-
+// Careers, promotions, Usergroups
 define('TABLE_CAREER',      'career');
 define('TABLE_PROMOTION',   'promotion');
 
@@ -285,7 +285,8 @@ define('TABLE_USERGROUP_REL_USER',      'usergroup_rel_user');
 define('TABLE_USERGROUP_REL_COURSE',    'usergroup_rel_course');
 define('TABLE_USERGROUP_REL_SESSION',   'usergroup_rel_session');
 
-
+// Mail notifications
+define('TABLE_NOTIFICATION',               'notification');
 
 /*		DATABASE CLASS
         The class and its methods

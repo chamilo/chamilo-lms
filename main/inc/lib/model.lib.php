@@ -11,14 +11,23 @@ class Model {
     
     var $table;
     var $columns;
+    // var $pk; some day this will be implemented
     
 	public function __construct() {        
 	}
     
     /**
-     * Useful finder
+     * Useful finder - experimental akelos like only use in notification.lib.php send function
      */
-    public function find() {    	
+    public function find($type, $options = null) {
+        switch($type) {
+            case 'all':
+                return self::get_all($options);
+                break;
+            case (is_numeric($type)) :
+                return self::get($type);
+                break;
+        }
     }    
     
     /**
@@ -63,8 +72,8 @@ class Model {
         return $result;
     }
     
-    public function get_all() {
-        return Database::select('*',$this->table);
+    public function get_all($options = null) {        
+        return Database::select('*',$this->table, $options);
     }
     
     /**
@@ -112,17 +121,17 @@ class Model {
      */
     public function update($params) {
         $params = $this->clean_parameters($params);
-        //If the class have the updated at we update the date
+        //If the class has the updated_at field we update the date
         if (in_array('updated_at', $this->columns)) {           
             $params['updated_at'] = api_get_utc_datetime();
         }
-        //If the class have the created at we remove it
+        //If the class has the created_at field then we remove it
         if (in_array('created_at', $this->columns)) {
             unset($params['created_at']);
         }
         
-        if (!empty($params)) {
-            $id = $params['id'];
+        if (!empty($params) && !empty($params['id'])) {
+            $id = intval($params['id']);
             unset($params['id']); //To not overwrite the id 
             if (is_numeric($id)) {
                 $result = Database::update($this->table, $params, array('id = ?'=>$id));        

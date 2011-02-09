@@ -133,7 +133,7 @@ if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR
 	// Display the who's online of the platform
 	if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR (api_get_setting('showonline', 'users') == 'true' AND $_user['user_id'])) {
 		//echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="12px" src="'.api_get_path(WEB_IMG_PATH).'online.png" title="'.get_lang('UsersOnline').'"> '.get_lang('OnLine').' '.$number.'</a>';
-		echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="13px" src="'.api_get_path(WEB_IMG_PATH).'group.gif" title="'.get_lang('UsersOnline').'"> '.$number.'</a></li>';
+		echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="13px" src="'.api_get_path(WEB_IMG_PATH).'members.gif" title="'.get_lang('UsersOnline').'"> '.$number.'</a></li>';
 	}
 
 	// Display the who's online for the course

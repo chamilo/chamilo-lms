@@ -7,6 +7,12 @@ var FCKLang = oEditor.FCKLang ;
 var FCKConfig = oEditor.FCKConfig ;
 var FCKTools = oEditor.FCKTools ;
 
+// Reading the Flash embedding method.
+if ( typeof FCKConfig[ 'FlashEmbeddingMethod' ] != 'string' )
+{
+    FCKConfig[ 'FlashEmbeddingMethod' ] = 'embed' ;
+}
+
 // Set the language direction.
 window.document.dir = FCKLang.Dir ;
 
@@ -120,28 +126,20 @@ function getSelectedMovie()
                 {
                     if ( oSel.childNodes.item(i).nodeName == "DIV" )
                     {
-                        for ( var j = 0 ; j < oSel.childNodes.item(i).childNodes.length ; j++ )
+                        for ( var k = 0 ; k < oSel.childNodes.item(i).childNodes.length ; k++ )
                         {
-                            if ( oSel.childNodes.item(i).childNodes.item(j).nodeName == "DIV" &&
-                                oSel.childNodes.item(i).childNodes.item(j).id &&
-                                oSel.childNodes.item(i).childNodes.item(j).id.match( /^player[0-9]*$/ ) )
+                            if ( oSel.childNodes.item(i).childNodes.item(k).nodeName == "DIV" &&
+                                oSel.childNodes.item(i).childNodes.item(k).id &&
+                                oSel.childNodes.item(i).childNodes.item(k).id.match( /^player[0-9]*-config$/ ) )
                             {
-                                for ( var k = 0 ; k < oSel.childNodes.item(i).childNodes.item(j).childNodes.length ; k++ )
+                                var oC = oSel.childNodes.item(i).childNodes.item(k).innerHTML.split(' ') ;
+                                for ( var o = 0 ; o < oC.length ; o++ )
                                 {
-                                    if ( oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).nodeName == "DIV" &&
-                                        oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).id &&
-                                        oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).id.match( /^player[0-9]*-config$/ ) )
-                                    {
-                                        var oC = oSel.childNodes.item(i).childNodes.item(j).childNodes.item(k).innerHTML.split(' ') ;
-                                        for ( var o = 0 ; o < oC.length ; o++ )
-                                        {
-                                            var tmp = oC[o].split( '=' ) ;
-                                            oMedia.setAttribute( tmp[0], tmp[1] ) ;
-                                        }
-                                        is_new_flvplayer = false ;
-                                        break ;
-                                    }
+                                    var tmp = oC[o].split( '=' ) ;
+                                    oMedia.setAttribute( tmp[0], tmp[1] ) ;
                                 }
+                                is_new_flvplayer = false ;
+                                break ;
                             }
                         }
                     }
@@ -446,6 +444,8 @@ Media.prototype.setAttribute = function( attr, val )
 
 Media.prototype.getInnerHTML = function ( objectId )
 {
+    var embeddingMethod = FCKConfig[ 'FlashEmbeddingMethod' ];
+
     var randomnumber = Math.floor( Math.random() * 1000001 ) ;
     var thisWidth = this.width ;
     var thisHeight = this.height ;
@@ -478,13 +478,16 @@ Media.prototype.getInnerHTML = function ( objectId )
     s += '<div id="player' + randomnumber + '-parent" style="text-align: center;' + cssfloat + '">\n';
     s += '<div style="border-style: none; height: ' + thisHeight + 'px; width: ' + thisWidth + 'px; overflow: hidden; background-color: rgb(220, 220, 220); ' + cssalign + '">' ;
 
-    s += '<script src="' + FCKConfig.ScriptSWFObject + '" type="text/javascript"></script>\n' ;
+    if (embeddingMethod == 'swfobject')
+    {
+        s += '<script src="' + FCKConfig.ScriptSWFObject + '" type="text/javascript"></script>\n' ;
+    }
 
-    s += '<div id="player' + randomnumber + '">' ;
-    s += '<a href="http://www.macromedia.com/go/getflashplayer" target="_blank">Get the Flash Player</a> to see this video.' ;
-    // Moved after info - Added width,height,overflow for MSIE7
-    s += '<div id="player' + randomnumber + '-config" style="display: none;visibility: hidden;width: 0px;height:0px;overflow: hidden;">' ;
-    // Save settings
+    // NOTE: FOR LIST OF POSSIBLE SETTINGS GOTO http://www.jeroenwijering.com/extras/readme.html\n' ;
+
+    // A hidden div containing setting, added width, height, overflow for MSIE7
+    s += '<div id="player' + randomnumber + '-config" style="display: none; visibility: hidden; width: 0px; height: 0px; overflow: hidden;">' ;
+    // Save settings.
     for ( var i in this )
     {
         if ( !i || !this[i] ) continue ;
@@ -494,160 +497,339 @@ Media.prototype.getInnerHTML = function ( objectId )
             }
     }
     s += '</div>' ;
-    s += '</div>' ;
-    s += '<script type="text/javascript">\n' ;
 
-    // NOTE: FOR LIST OF POSSIBLE SETTINGS GOTO http://www.jeroenwijering.com/extras/readme.html\n' ;
+    // The player's area.
+    s += '<div id="player' + randomnumber + '">' ;
 
-    s += '	var s1 = new SWFObject("' + FCKConfig.FlashPlayerVideo + '","' + thisMediaType + '","' + thisWidth + '","' + thisHeight + '","7");\n' ;
-
-    s += '	s1.addVariable("width","' + thisWidth + '");\n' ;
-    s += '	s1.addVariable("height","' + thisHeight + '");\n' ;
-    s += '	s1.addVariable("autostart","' + this.play + '");\n' ;
-
-    if ( thisMediaType == 'mpl' )
+    if (embeddingMethod == 'swfobject')
     {
-        s += '	s1.addVariable("file","' + this.purl + '");\n' ;
-        s += '	s1.addVariable("autoscroll","true");\n' ;
-        s += '	s1.addParam("allowscriptaccess","always");\n' ;
+        s += '<a href="http://www.macromedia.com/go/getflashplayer" target="_blank">Get the Flash Player</a> to see this video.' ;
 
-        var dispWidth = thisWidth ;
-        var dispHeight = thisHeight ;
-        var dispThumbs = false ;
-
-        if ( this.dispPlaylist != 'none' )
-        {
-            if ( this.dispPlaylist == 'right' )
-            {
-                if ( this.playlistDim.length > 0 )
-                {
-                    dispWidth = thisWidth - this.playlistDim ;
-                    if ( this.playlistDim < 100 )
-                    {
-                        dispThumbs = false ;
-                    }
-                    else
-                    {
-                        dispThumbs = true ;
-                    }
-                }
-                else
-                {
-                    if ( thisWidth >= 550 )
-                    {
-                        dispWidth = thisWidth - 200 ;
-                        dispThumbs = true ;
-                    }
-                    else if ( thisWidth >= 450 )
-                    {
-                        dispWidth = thisWidth - 100 ;
-                        dispThumbs = false ;
-                    }
-                    else if ( thisWidth >= 350 )
-                    {
-                        dispWidth = thisWidth - 50 ;
-                        dispThumbs = false ;
-                    }
-                }
-
-                s += '	s1.addVariable("displaywidth","' + dispWidth + '");\n' ;
-            }
-            else if ( this.dispPlaylist == 'below' )
-            {
-                dispThumbs = true ;
-
-                if ( this.playlistDim.length > 0 )
-                {
-                    dispHeight = thisWidth - this.playlistDim ;
-                }
-                else
-                {
-                    if ( thisHeight >= 550 )
-                    {
-                        dispHeight = thisWidth - 200 ;
-                    }
-                    else if ( thisHeight >= 450 )
-                    {
-                        dispHeight = thisHeight - 150 ;
-                    }
-                    else if ( thisHeight >= 350 )
-                    {
-                        dispHeight = thisHeight - 100 ;
-                    }
-                }
-
-                s += '	s1.addVariable("displayheight","' + dispHeight + '");\n' ;
-            }
-
-            if ( this.playlistThumbs == 'false' )
-            {
-                dispThumbs = false ;
-            }
-
-            s += '	s1.addVariable("thumbsinplaylist","' + dispThumbs + '");\n' ;
-        }
-
-        s += '	s1.addVariable("shuffle","false");\n' ;
-        if (this.loop)
-        {
-            s += '	s1.addVariable("repeat","list");\n' ;
-        }
-        else
-        {
-            s += '	s1.addVariable("repeat","' + this.loop + '");\n' ;
-        }
-        s += '	//s1.addVariable("transition","bgfade");\n' ;
     }
     else
     {
-        s += '	s1.addVariable("file","' + this.url + '");\n' ;
-        s += '	s1.addVariable("repeat","' + this.loop + '");\n' ;
-        s += '	s1.addVariable("image","' + this.iurl + '");\n' ;
+        // 'embed' method.
+
+        var p = '' ; // Parameters (attributes).
+        var v = '' ; // Variables.
+
+        p += 'type="application/x-shockwave-flash" ' ;
+        p += 'src="' + FCKConfig.FlashPlayerVideo + '" ' ;
+        p += 'style="" ' ;
+        p += 'id="' + thisMediaType + '" ' ;
+        p += 'name="' + thisMediaType + '" ' ;
+        p += 'quality="high" ' ;
+        p += 'width="' + thisWidth + '" ' ;
+        p += 'height="' + thisHeight + '" ' ;
+        p += 'allowfullscreen="' + this.fullscreen + '" ' ;
+
+        v += 'width=' + thisWidth + '&amp;' ;
+        v += 'height=' + thisHeight + '&amp;' ;
+        v += 'autostart=' + this.play + '&amp;' ;
+
+        if ( thisMediaType == 'mpl' )
+        {
+            v += 'file=' + this.purl + '&amp;' ;
+            v += 'autoscroll=true&amp;' ;
+            p += 'allowscriptaccess="always" ' ;
+
+            var dispWidth = thisWidth ;
+            var dispHeight = thisHeight ;
+            var dispThumbs = false ;
+
+            if ( this.dispPlaylist != 'none' )
+            {
+                if ( this.dispPlaylist == 'right' )
+                {
+                    if ( this.playlistDim.length > 0 )
+                    {
+                        dispWidth = thisWidth - this.playlistDim ;
+                        if ( this.playlistDim < 100 )
+                        {
+                            dispThumbs = false ;
+                        }
+                        else
+                        {
+                            dispThumbs = true ;
+                        }
+                    }
+                    else
+                    {
+                        if ( thisWidth >= 550 )
+                        {
+                            dispWidth = thisWidth - 200 ;
+                            dispThumbs = true ;
+                        }
+                        else if ( thisWidth >= 450 )
+                        {
+                            dispWidth = thisWidth - 100 ;
+                            dispThumbs = false ;
+                        }
+                        else if ( thisWidth >= 350 )
+                        {
+                            dispWidth = thisWidth - 50 ;
+                            dispThumbs = false ;
+                        }
+                    }
+
+                    v += 'displaywidth=' + dispWidth + '&amp;' ;
+                }
+                else if ( this.dispPlaylist == 'below' )
+                {
+                    dispThumbs = true ;
+
+                    if ( this.playlistDim.length > 0 )
+                    {
+                        dispHeight = thisWidth - this.playlistDim ;
+                    }
+                    else
+                    {
+                        if ( thisHeight >= 550 )
+                        {
+                            dispHeight = thisWidth - 200 ;
+                        }
+                        else if ( thisHeight >= 450 )
+                        {
+                            dispHeight = thisHeight - 150 ;
+                        }
+                        else if ( thisHeight >= 350 )
+                        {
+                            dispHeight = thisHeight - 100 ;
+                        }
+                    }
+
+                    v += 'displayheight=' + dispHeight + '&amp;' ;
+                }
+
+                if ( this.playlistThumbs == 'false' )
+                {
+                    dispThumbs = false ;
+                }
+
+                v += 'thumbsinplaylist=' + dispThumbs + '&amp;' ;
+            }
+
+            v += 'shuffle=false&amp;' ;
+            if (this.loop)
+            {
+                v += 'repeat=list&amp;' ;
+            }
+            else
+            {
+                s += '	s1.addVariable("repeat","' + this.loop + '");\n' ;
+                v += 'repeat=' + this.loop + '&amp;' ;
+            }
+            //v += 'transition=bgfade&amp;' ;
+        }
+        else
+        {
+            v += 'file=' + this.url + '&amp;' ;
+            v += 'repeat=' + this.loop + '&amp;' ;
+            v += 'image=' + this.iurl + '&amp;' ;
+        }
+
+        v += 'showdownload=' + this.downloadable + '&amp;' ;
+        v += 'link=' + this.url + '&amp;' ;
+
+        v += 'showdigits=' + this.displayDigits + '&amp;' ;
+        v += 'shownavigation=' + this.displayNavigation + '&amp;' ;
+
+
+        // SET THE COLOR OF THE TOOLBAR
+        var colorChoice1 = this.toolcolor ;
+        if ( colorChoice1.length > 0 )
+        {
+            colorChoice1 = colorChoice1.replace( '#', '0x' ) ;
+            v += 'backcolor=' + colorChoice1 + '&amp;' ;
+        }
+        // SET THE COLOR OF THE TOOLBARS TEXT AND BUTTONS
+        var colorChoice2 = this.tooltcolor ;
+        if ( colorChoice2.length > 0 )
+        {
+            colorChoice2 = colorChoice2.replace( '#', '0x' ) ;
+            v += 'frontcolor=' + colorChoice2 + '&amp;' ;
+        }
+        // SET COLOR OF ROLLOVER TEXT AND BUTTONS
+        var colorChoice3 = this.tooltrcolor ;
+        if ( colorChoice3.length > 0 )
+        {
+            colorChoice3 = colorChoice3.replace( '#', '0x' ) ;
+            v += 'lightcolor=' + colorChoice3 + '&amp;' ;
+        }
+        // SET COLOR OF BACKGROUND
+        var colorChoice4 = this.bgcolor ;
+        if ( colorChoice4.length > 0 )
+        {
+            colorChoice4 = colorChoice4.replace( '#', '0x' ) ;
+            v += 'screencolor=' + colorChoice4 + '&amp;' ;
+        }
+
+        v += 'logo=' + this.wmurl + '&amp;' ;
+        if ( this.rurl.length > 0 )
+        {
+            v += 'recommendations=' + this.rurl + '&amp;' ;
+        }
+
+        s += '<embed ' + p + 'flashvars="' + v + '" ></embed>' ;
     }
 
-    s += '	s1.addVariable("showdownload","' + this.downloadable + '");\n' ;
-    s += '	s1.addVariable("link","' + this.url + '");\n' ;
-    s += '	s1.addParam("allowfullscreen","' + this.fullscreen + '");\n' ;
-    s += '	s1.addVariable("showdigits","' + this.displayDigits + '");\n' ;
-    s += '	s1.addVariable("shownavigation","' + this.displayNavigation + '");\n' ;
+    s += '</div>' ;
 
-    // SET THE COLOR OF THE TOOLBAR
-    var colorChoice1 = this.toolcolor ;
-    if ( colorChoice1.length > 0 )
+    // Generation of a javascript that implements the swfobject embedding method.
+    if (embeddingMethod == 'swfobject')
     {
-        colorChoice1 = colorChoice1.replace( '#', '0x' ) ;
-        s += '	s1.addVariable("backcolor","' + colorChoice1 + '");\n' ;
-    }
-    // SET THE COLOR OF THE TOOLBARS TEXT AND BUTTONS
-    var colorChoice2 = this.tooltcolor ;
-    if ( colorChoice2.length > 0 )
-    {
-        colorChoice2 = colorChoice2.replace( '#', '0x' ) ;
-        s += '	s1.addVariable("frontcolor","' + colorChoice2 + '");\n' ;
-    }
-    // SET COLOR OF ROLLOVER TEXT AND BUTTONS
-    var colorChoice3 = this.tooltrcolor ;
-    if ( colorChoice3.length > 0 )
-    {
-        colorChoice3 = colorChoice3.replace( '#', '0x' ) ;
-        s += '	s1.addVariable("lightcolor","' + colorChoice3 + '");\n' ;
-    }
-    // SET COLOR OF BACKGROUND
-    var colorChoice4 = this.bgcolor ;
-    if ( colorChoice4.length > 0 )
-    {
-        colorChoice4 = colorChoice4.replace( '#', '0x' ) ;
-        s += '	s1.addVariable("screencolor","' + colorChoice4 + '");\n' ;
+        s += '<script type="text/javascript">\n' ;
+        s += '	var s1 = new SWFObject("' + FCKConfig.FlashPlayerVideo + '","' + thisMediaType + '","' + thisWidth + '","' + thisHeight + '","7");\n' ;
+
+        s += '	s1.addVariable("width","' + thisWidth + '");\n' ;
+        s += '	s1.addVariable("height","' + thisHeight + '");\n' ;
+        s += '	s1.addVariable("autostart","' + this.play + '");\n' ;
+
+        if ( thisMediaType == 'mpl' )
+        {
+            s += '	s1.addVariable("file","' + this.purl + '");\n' ;
+            s += '	s1.addVariable("autoscroll","true");\n' ;
+            s += '	s1.addParam("allowscriptaccess","always");\n' ;
+
+            var dispWidth = thisWidth ;
+            var dispHeight = thisHeight ;
+            var dispThumbs = false ;
+
+            if ( this.dispPlaylist != 'none' )
+            {
+                if ( this.dispPlaylist == 'right' )
+                {
+                    if ( this.playlistDim.length > 0 )
+                    {
+                        dispWidth = thisWidth - this.playlistDim ;
+                        if ( this.playlistDim < 100 )
+                        {
+                            dispThumbs = false ;
+                        }
+                        else
+                        {
+                            dispThumbs = true ;
+                        }
+                    }
+                    else
+                    {
+                        if ( thisWidth >= 550 )
+                        {
+                            dispWidth = thisWidth - 200 ;
+                            dispThumbs = true ;
+                        }
+                        else if ( thisWidth >= 450 )
+                        {
+                            dispWidth = thisWidth - 100 ;
+                            dispThumbs = false ;
+                        }
+                        else if ( thisWidth >= 350 )
+                        {
+                            dispWidth = thisWidth - 50 ;
+                            dispThumbs = false ;
+                        }
+                    }
+
+                    s += '	s1.addVariable("displaywidth","' + dispWidth + '");\n' ;
+                }
+                else if ( this.dispPlaylist == 'below' )
+                {
+                    dispThumbs = true ;
+
+                    if ( this.playlistDim.length > 0 )
+                    {
+                        dispHeight = thisWidth - this.playlistDim ;
+                    }
+                    else
+                    {
+                        if ( thisHeight >= 550 )
+                        {
+                            dispHeight = thisWidth - 200 ;
+                        }
+                        else if ( thisHeight >= 450 )
+                        {
+                            dispHeight = thisHeight - 150 ;
+                        }
+                        else if ( thisHeight >= 350 )
+                        {
+                            dispHeight = thisHeight - 100 ;
+                        }
+                    }
+
+                    s += '	s1.addVariable("displayheight","' + dispHeight + '");\n' ;
+                }
+
+                if ( this.playlistThumbs == 'false' )
+                {
+                    dispThumbs = false ;
+                }
+
+                s += '	s1.addVariable("thumbsinplaylist","' + dispThumbs + '");\n' ;
+            }
+
+            s += '	s1.addVariable("shuffle","false");\n' ;
+            if (this.loop)
+            {
+                s += '	s1.addVariable("repeat","list");\n' ;
+            }
+            else
+            {
+                s += '	s1.addVariable("repeat","' + this.loop + '");\n' ;
+            }
+            s += '	//s1.addVariable("transition","bgfade");\n' ;
+        }
+        else
+        {
+            s += '	s1.addVariable("file","' + this.url + '");\n' ;
+            s += '	s1.addVariable("repeat","' + this.loop + '");\n' ;
+            s += '	s1.addVariable("image","' + this.iurl + '");\n' ;
+        }
+
+        s += '	s1.addVariable("showdownload","' + this.downloadable + '");\n' ;
+        s += '	s1.addVariable("link","' + this.url + '");\n' ;
+        s += '	s1.addParam("allowfullscreen","' + this.fullscreen + '");\n' ;
+        s += '	s1.addVariable("showdigits","' + this.displayDigits + '");\n' ;
+        s += '	s1.addVariable("shownavigation","' + this.displayNavigation + '");\n' ;
+
+        // SET THE COLOR OF THE TOOLBAR
+        var colorChoice1 = this.toolcolor ;
+        if ( colorChoice1.length > 0 )
+        {
+            colorChoice1 = colorChoice1.replace( '#', '0x' ) ;
+            s += '	s1.addVariable("backcolor","' + colorChoice1 + '");\n' ;
+        }
+        // SET THE COLOR OF THE TOOLBARS TEXT AND BUTTONS
+        var colorChoice2 = this.tooltcolor ;
+        if ( colorChoice2.length > 0 )
+        {
+            colorChoice2 = colorChoice2.replace( '#', '0x' ) ;
+            s += '	s1.addVariable("frontcolor","' + colorChoice2 + '");\n' ;
+        }
+        // SET COLOR OF ROLLOVER TEXT AND BUTTONS
+        var colorChoice3 = this.tooltrcolor ;
+        if ( colorChoice3.length > 0 )
+        {
+            colorChoice3 = colorChoice3.replace( '#', '0x' ) ;
+            s += '	s1.addVariable("lightcolor","' + colorChoice3 + '");\n' ;
+        }
+        // SET COLOR OF BACKGROUND
+        var colorChoice4 = this.bgcolor ;
+        if ( colorChoice4.length > 0 )
+        {
+            colorChoice4 = colorChoice4.replace( '#', '0x' ) ;
+            s += '	s1.addVariable("screencolor","' + colorChoice4 + '");\n' ;
+        }
+
+        s += '	s1.addVariable("logo","' + this.wmurl + '");\n' ;
+        if ( this.rurl.length > 0 )
+        {
+            s += '	s1.addVariable("recommendations","' + this.rurl + '");\n' ;
+        }
+
+        s += '	s1.write("player' + randomnumber + '");\n' ;
+        s += '</script>\n' ;
     }
 
-    s += '	s1.addVariable("logo","' + this.wmurl + '");\n' ;
-    if ( this.rurl.length > 0 )
-    {
-        s += '	s1.addVariable("recommendations","' + this.rurl + '");\n' ;
-    }
-
-    s += '	s1.write("player' + randomnumber + '");\n' ;
-    s += '</script>\n' ;
     s += '</div>\n' ;
     s += '</div>\n' ;
     s += '\n' ;
@@ -790,18 +972,29 @@ function UpdatePreview()
         oMedia.height = new_size[1] ;
         oMedia.play = false ;
 
-        code = oMedia.getInnerHTML() ;
-        var start = code.indexOf( 'var s1 = new SWFObject' ) ;
-        if ( start == -1 )
-            return ;
-        var end = code.indexOf( 's1.write' ) ;
-        if ( end == -1 )
-            return ;
-        code = code.substring( start, end ) + 'html = s1.getSWFHTML();' ;
-        var html = '';
-        eval (code) ;
+        if ( FCKConfig[ 'FlashEmbeddingMethod' ] == 'swfobject' )
+        {
+            code = oMedia.getInnerHTML() ;
+            var start = code.indexOf( 'var s1 = new SWFObject' ) ;
+            if ( start == -1 )
+            {
+                return ;
+            }
+            var end = code.indexOf( 's1.write' ) ;
+            if ( end == -1 )
+            {
+                return ;
+            }
+            code = code.substring( start, end ) + 'html = s1.getSWFHTML();' ;
+            var html = '';
+            eval (code) ;
 
-        ePreview.innerHTML = html ;
+            ePreview.innerHTML = html ;
+        }
+        else
+        {
+            ePreview.innerHTML = oMedia.getInnerHTML() ;
+        }
 
         var margin_left = parseInt( ( max_width - oMedia.width ) / 2, 10 ) ;
         var margin_top = parseInt( ( max_height - oMedia.height ) / 2, 10 ) ;

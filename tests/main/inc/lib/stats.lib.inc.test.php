@@ -56,7 +56,7 @@ class TestStats extends UnitTestCase {
 	function testdecodeOpenInfos() {  // 3 excepciones
     	//ob_start();
     	global $_course, $TABLETRACK_OPEN, $_configuration;
-    	$TABLETRACK_OPEN        = $_configuration['statistics_database']."`.`track_e_open";
+    	$TABLETRACK_OPEN        = $_configuration['statistics_database'].".track_e_open";
     	$ignore = ignore_user_abort();
       	$res=decodeOpenInfos();
     	//ob_end_clean();
@@ -101,7 +101,7 @@ class TestStats extends UnitTestCase {
 
 	function testfillCountriesTable() {
 		global $TABLESTATS_COUNTRIES,$_configuration;
-		$TABLESTATS_COUNTRIES   = $_configuration['statistics_database']."`.`track_c_countries";
+		$TABLESTATS_COUNTRIES   = $_configuration['statistics_database'].".track_c_countries";
 		$countries_array=array();
 		$res=fillCountriesTable($countries_array);
 		$this->assertTrue(is_null($res));
@@ -140,7 +140,7 @@ class TestStats extends UnitTestCase {
 
 	function testloadCountries() {
 		global $TABLESTATS_COUNTRIES,$_configuration;
-		$TABLESTATS_COUNTRIES   = $_configuration['statistics_database']."`.`track_c_countries";
+		$TABLESTATS_COUNTRIES   = $_configuration['statistics_database'].".track_c_countries";
 		$res=loadCountries();
 		if (!is_null($res)){
 	    	$this->assertTrue(is_array($res));

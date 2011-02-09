@@ -211,7 +211,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         // last 31 days
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
-                    WHERE `access_cours_code` = '$_cid'
+                    WHERE access_cours_code = '$_cid'
                         AND (access_date > DATE_ADD(CURDATE(), INTERVAL -31 DAY))
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
@@ -221,7 +221,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         // last 7 days
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
-                    WHERE `access_cours_code` = '$_cid'
+                    WHERE access_cours_code = '$_cid'
                         AND (access_date > DATE_ADD(CURDATE(), INTERVAL -7 DAY))
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
@@ -231,7 +231,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         // today
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
-                    WHERE `access_cours_code` = '$_cid'
+                    WHERE access_cours_code = '$_cid'
                         AND ( access_date > CURDATE() )
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
@@ -252,11 +252,11 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
         $title_line = get_lang('ToolTitleToolnameColumn').";".get_lang('ToolTitleUsersColumn').";".get_lang('ToolTitleCountColumn')."\n";
 
-        $sql = "SELECT `access_tool`, COUNT(DISTINCT `access_user_id`),count( `access_tool` )
+        $sql = "SELECT access_tool, COUNT(DISTINCT access_user_id),count( access_tool )
                 FROM $TABLETRACK_ACCESS
-                WHERE `access_tool` IS NOT NULL
-                    AND `access_cours_code` = '$_cid'
-                GROUP BY `access_tool`";
+                WHERE access_tool IS NOT NULL
+                    AND access_cours_code = '$_cid'
+                GROUP BY access_tool";
 
         $results = getManyResults3Col($sql);
 
@@ -283,11 +283,11 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
         $tempView[3] = '0';
 
-        $sql = "SELECT `cl`.`title`, `cl`.`url`,count(DISTINCT `sl`.`links_user_id`), count(`cl`.`title`)
+        $sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title)
                     FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
-                    WHERE `sl`.`links_link_id` = `cl`.`id`
-                        AND `sl`.`links_cours_id` = '$_cid'
-                    GROUP BY `cl`.`title`, `cl`.`url`";
+                    WHERE sl.links_link_id = cl.id
+                        AND sl.links_cours_id = '$_cid'
+                    GROUP BY cl.title, cl.url";
 
         $results = getManyResultsXCol($sql,4);
 
@@ -318,10 +318,10 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
         $tempView[4] = '0';
 
-        $sql = "SELECT `down_doc_path`, COUNT(DISTINCT `down_user_id`), COUNT(`down_doc_path`)
+        $sql = "SELECT down_doc_path, COUNT(DISTINCT down_user_id), COUNT(down_doc_path)
                     FROM $TABLETRACK_DOWNLOADS
-                    WHERE `down_cours_id` = '$_cid'
-                    GROUP BY `down_doc_path`";
+                    WHERE down_cours_id = '$_cid'
+                    GROUP BY down_doc_path";
 
         $results = getManyResults3Col($sql);
 

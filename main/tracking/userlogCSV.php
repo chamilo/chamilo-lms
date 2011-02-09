@@ -64,13 +64,13 @@ $TABLEUSER	        		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 
-$TABLETRACK_ACCESS      	= $_configuration['statistics_database']."`.`track_e_access";
-$TABLETRACK_LINKS       	= $_configuration['statistics_database']."`.`track_e_links";
-$TABLETRACK_LOGIN       	= $_configuration['statistics_database']."`.`track_e_login";
-$TABLETRACK_DOWNLOADS   	= $_configuration['statistics_database']."`.`track_e_downloads";
-$TABLETRACK_UPLOADS     	= $_configuration['statistics_database']."`.`track_e_uploads";
-$TABLETRACK_EXERCICES   	= $_configuration['statistics_database']."`.`track_e_exercices";
-$TABLETRACK_HOTPOTATOES		= $_configuration['statistics_database']."`.`track_e_hotpotatoes";
+$TABLETRACK_ACCESS      	= $_configuration['statistics_database'].".track_e_access";
+$TABLETRACK_LINKS       	= $_configuration['statistics_database'].".track_e_links";
+$TABLETRACK_LOGIN       	= $_configuration['statistics_database'].".track_e_login";
+$TABLETRACK_DOWNLOADS   	= $_configuration['statistics_database'].".track_e_downloads";
+$TABLETRACK_UPLOADS     	= $_configuration['statistics_database'].".track_e_uploads";
+$TABLETRACK_EXERCICES   	= $_configuration['statistics_database'].".track_e_exercices";
+$TABLETRACK_HOTPOTATOES		= $_configuration['statistics_database'].".track_e_hotpotatoes";
 
 $TABLECOURSE_LINKS			= Database::get_course_table(TABLE_LINK);
 $TABLECOURSE_WORK       	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -136,12 +136,12 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
             if(api_get_setting('use_session_mode')) {
                 $sql = "SELECT count(user_id)
                             FROM $TABLECOURSUSER
-                            WHERE `course_code` = '$_cid' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
+                            WHERE course_code = '$_cid' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
             }
             else {
                 $sql = "SELECT count(id_user)
                             FROM $tbl_session_course_user
-                            WHERE `course_code` = '$_cid'";
+                            WHERE course_code = '$_cid'";
             }
         }
         else
@@ -149,7 +149,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
             // if user can only track one group : list users of this group
             $sql = "SELECT count(user)
                         FROM $TABLECOURSE_GROUPSUSER
-                        WHERE `group_id` = '$_gid'";
+                        WHERE group_id = '$_gid'";
         }
         $userGroupNb = getOneResult($sql);
         $step = 25; // number of student per page
@@ -186,19 +186,19 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
         if( $is_allowedToTrackEverybodyInCourse )
         {
             // list of users in this course
-            $sql = "SELECT `u`.`user_id`, `u`.`firstname`,`u`.`lastname`
+            $sql = "SELECT u.user_id, u.firstname,u.lastname
                         FROM $TABLECOURSUSER cu , $TABLEUSER u
-                        WHERE `cu`.`user_id` = `u`.`user_id` AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                            AND `cu`.`course_code` = '$_cid'
+                        WHERE cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                            AND cu.course_code = '$_cid'
                         LIMIT $offset,$step";
         }
         else
         {
             // list of users of this group
-            $sql = "SELECT `u`.`user_id`, `u`.`firstname`,`u`.`lastname`
+            $sql = "SELECT u.user_id, u.firstname,u.lastname
                         FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-                        WHERE `gu`.`user_id` = `u`.`user_id`
-                            AND `gu`.`group_id` = '$_gid'
+                        WHERE gu.user_id = u.user_id
+                            AND gu.group_id = '$_gid'
                         LIMIT $offset,$step";
         }
         $list_users = getManyResults3Col($sql);
@@ -224,11 +224,11 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
         else
         {
             // check if user is in the group of this tutor
-            $sql = "SELECT `u`.`firstname`,`u`.`lastname`, `u`.`email`
+            $sql = "SELECT u.firstname,u.lastname, u.email
                         FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-                        WHERE `gu`.`user_id` = `u`.`user_id`
-                            AND `gu`.`group_id` = '$_gid'
-                            AND `u`.`user_id` = '$uInfo'";
+                        WHERE gu.user_id = u.user_id
+                            AND gu.group_id = '$_gid'
+                            AND u.user_id = '$uInfo'";
             $query = Database::query($sql);
             $tracked_user_info = @Database::fetch_assoc($query);
             if(is_array($tracked_user_info)) $tracking_is_accepted = true;

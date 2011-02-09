@@ -38,7 +38,7 @@ td {border-bottom: thin dashed gray;}
 /*]]>*/
 </style>";
 //@todo use Database library
-$TABLETRACK_ACCESS = $_configuration['statistics_database']."`.`track_e_access";
+$TABLETRACK_ACCESS = $_configuration['statistics_database'].".track_e_access";
 Display::display_header($nameTools,"Tracking");
 include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 
@@ -148,61 +148,61 @@ $is_allowedToTrack = $is_courseAdmin;
         {
             // all days
             case "year" :
-                $sql = "SELECT UNIX_TIMESTAMP( `access_date` )
-                            FROM `$TABLETRACK_ACCESS`
-                            WHERE YEAR( `access_date` ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
-                            AND `access_cours_code` = '$_cid'
-                            AND `access_tool` IS NULL ";
+                $sql = "SELECT UNIX_TIMESTAMP( access_date )
+                            FROM $TABLETRACK_ACCESS
+                            WHERE YEAR( access_date ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
+                            AND access_cours_code = '$_cid'
+                            AND access_tool IS NULL ";
                 if($displayType == "month")
                 {
-                    $sql .= "ORDER BY UNIX_TIMESTAMP( `access_date`)";
+                    $sql .= "ORDER BY UNIX_TIMESTAMP( access_date)";
                     $month_array = monthTab($sql);
                     makeHitsTable($month_array,get_lang('PeriodMonth'));
                 }
                 elseif($displayType == "day")
                 {
-                    $sql .= "ORDER BY DAYOFYEAR( `access_date`)";
+                    $sql .= "ORDER BY DAYOFYEAR( access_date)";
                     $days_array = daysTab($sql);
                     makeHitsTable($days_array,get_lang('PeriodDay'));
                 }
                 else // by hours by default
                 {
-                    $sql .= "ORDER BY HOUR( `access_date`)";
+                    $sql .= "ORDER BY HOUR( access_date)";
                     $hours_array = hoursTab($sql);
                     makeHitsTable($hours_array,get_lang('PeriodHour'));
                 }
                 break;
             // all days
             case "month" :
-                $sql = "SELECT UNIX_TIMESTAMP( `access_date` )
-                            FROM `$TABLETRACK_ACCESS`
-                            WHERE MONTH(`access_date`) = MONTH (FROM_UNIXTIME( '$reqdate' ) )
-                            AND YEAR( `access_date` ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
-                            AND `access_cours_code` = '$_cid'
-                            AND `access_tool` IS NULL ";
+                $sql = "SELECT UNIX_TIMESTAMP( access_date )
+                            FROM $TABLETRACK_ACCESS
+                            WHERE MONTH(access_date) = MONTH (FROM_UNIXTIME( '$reqdate' ) )
+                            AND YEAR( access_date ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
+                            AND access_cours_code = '$_cid'
+                            AND access_tool IS NULL ";
                 if($displayType == "day")
                 {
-                    $sql .= "ORDER BY DAYOFYEAR( `access_date`)";
+                    $sql .= "ORDER BY DAYOFYEAR( access_date)";
                     $days_array = daysTab($sql);
                     makeHitsTable($days_array,get_lang('PeriodDay'));
                 }
                 else // by hours by default
                 {
-                    $sql .= "ORDER BY HOUR( `access_date`)";
+                    $sql .= "ORDER BY HOUR( access_date)";
                     $hours_array = hoursTab($sql);
                     makeHitsTable($hours_array,get_lang('PeriodHour'));
                 }
                 break;
             // all hours
             case "day"  :
-                $sql = "SELECT UNIX_TIMESTAMP( `access_date` )
-                            FROM `$TABLETRACK_ACCESS`
-                            WHERE DAYOFMONTH(`access_date`) = DAYOFMONTH(FROM_UNIXTIME( '$reqdate' ) )
-                            AND MONTH(`access_date`) = MONTH (FROM_UNIXTIME( '$reqdate' ) )
-                            AND YEAR( `access_date` ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
-                            AND `access_cours_code` = '$_cid'
-                            AND `access_tool` IS NULL
-                            ORDER BY HOUR( `access_date` )";
+                $sql = "SELECT UNIX_TIMESTAMP( access_date )
+                            FROM $TABLETRACK_ACCESS
+                            WHERE DAYOFMONTH(access_date) = DAYOFMONTH(FROM_UNIXTIME( '$reqdate' ) )
+                            AND MONTH(access_date) = MONTH (FROM_UNIXTIME( '$reqdate' ) )
+                            AND YEAR( access_date ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
+                            AND access_cours_code = '$_cid'
+                            AND access_tool IS NULL
+                            ORDER BY HOUR( access_date )";
                 $hours_array = hoursTab($sql,$reqdate);
                 makeHitsTable($hours_array,get_lang('PeriodHour'));
                 break;

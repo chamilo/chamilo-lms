@@ -46,6 +46,11 @@ $my_style       = $platform_theme;
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
 
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
+    $htmlHeadXtra[] = '<script type="text/javascript">
+<!--
+    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js\';
+-->
+</script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
 }
@@ -169,7 +174,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 
         $time_start_date = api_strtotime($row_dates['start_date'],'UTC');
         $time_exe_date   = api_strtotime($row_dates['exe_date'],'UTC');
-        
+
         $mytime = ((int)$time_exe_date-(int)$time_start_date);
         $score = (float)$row_dates['exe_result'];
         $max_score = (float)$row_dates['exe_weighting'];
@@ -189,10 +194,10 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
         if (Database::num_rows($res_last_attempt) > 0) {
             $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score,total_time = $mytime WHERE id='".$lp_item_view_id."'";
             Database::query($sql_upd_score);
-                   
+
             $update_query = "UPDATE $TBL_TRACK_EXERCICES SET  orig_lp_item_view_id = $lp_item_view_id  WHERE exe_id = ".$safe_exe_id;
             Database::query($update_query);
-        }        
+        }
     }
 
     if (intval($_GET['fb_type']) > 0) {
@@ -384,7 +389,7 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
         <?php if (!empty($_SESSION['oLP']->scorm_debug)) echo 'debugsize = 150;' ?>
         document.getElementById('inner_lp_toc').style.height = innerHauteur - hauteurHaut - 40 - debugsize + "px";
         if (document.getElementById('content_id')) {
-            document.getElementById('content_id').style.height = innerHauteur + 'px';               
+            document.getElementById('content_id').style.height = innerHauteur + 'px';
         }
 
     // Loads the glossary library.

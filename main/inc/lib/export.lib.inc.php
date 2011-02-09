@@ -183,6 +183,7 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 	$num_rows = Database::num_rows($res);
 	$i = 0;
 	while ($i < $num_rows) {
+        //@todo define tablename in database.lib.php
 		$tablename = mysql_tablename($res, $i);
 
 		if ($format == 'PHP') {
@@ -196,7 +197,7 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 		}
 		if ($structure === true) {
 			if ($format == 'PHP' || $format == 'SQL') {
-				fwrite($fp, "DROP TABLE IF EXISTS `$tablename`;");
+				fwrite($fp, "DROP TABLE IF EXISTS $tablename;");
 			}
 			if ($format == 'PHP') {
 				fwrite($fp, "\");\n");
@@ -205,7 +206,7 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 				fwrite($fp, "\nmysql_query(\"");
 			}
 			// requete de creation de la table
-			$query = "SHOW CREATE TABLE `".$tablename."`";
+			$query = "SHOW CREATE TABLE ".$tablename."";
 			$resCreate = Database::query($query);
 			$row = Database::fetch_array($resCreate);
 			$schema = $row[1].';';
@@ -225,11 +226,11 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 				if ($insertComplet === true) {
 					$num_fields = mysql_num_fields($resData);
 					for ($j = 0; $j < $num_fields; $j ++) {
-						$sFieldnames .= "`".mysql_field_name($resData, $j)."`, ";
+						$sFieldnames .= "".mysql_field_name($resData, $j).", ";
 					}
 					$sFieldnames = '('.substr($sFieldnames, 0, -2).')';
 				}
-				$sInsert = "INSERT INTO `$tablename` $sFieldnames values ";
+				$sInsert = "INSERT INTO $tablename $sFieldnames values ";
 				while ($rowdata = Database::fetch_array($resData, 'ASSOC')) {
 					if ($format == 'HTML') {
 						$lesDonnees = "\n\t<tr>\n\t\t<td>".implode("\n\t\t</td>\n\t\t<td>", $rowdata)."\n\t\t</td></tr>";
@@ -499,7 +500,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = '',
 		INSERT INTO course SET ";
 	$csvInsertCourse = "\n";
 	$iniCourse = "[".$exportedCourseId."]\n";
-	$sqlSelectInfoCourse = "Select * from `".$TABLECOURS."` `course` where code = '".$exportedCourseId."' ";
+	$sqlSelectInfoCourse = "Select * from ".$TABLECOURS." course where code = '".$exportedCourseId."' ";
 	$resInfoCourse = Database::query($sqlSelectInfoCourse);
 	$infoCourse = Database::fetch_array($resInfoCourse);
 	for ($noField = 0; $noField < mysql_num_fields($resInfoCourse); $noField ++) {
@@ -556,10 +557,10 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = '',
 		// recup users
 		$sqlUserOfTheCourse = "
 					SELECT
-						`user`.*
-						FROM `".$TABLEUSER."`, `".$TABLECOURSUSER."`
-						WHERE `user`.`user_id`=`".$TABLECOURSUSER."`.`user_id`
-							AND `".$TABLECOURSUSER."`.`course_code`='".$exportedCourseId."'";
+						user.*
+						FROM ".$TABLEUSER.", ".$TABLECOURSUSER."
+						WHERE user.user_id=".$TABLECOURSUSER.".user_id
+							AND ".$TABLECOURSUSER.".course_code='".$exportedCourseId."'";
 		$resUsers = Database::query($sqlUserOfTheCourse);
 		$nbUsers = Database::num_rows($resUsers);
 		if ($nbUsers > 0) {
@@ -643,7 +644,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = '',
 		$sqlAnnounceOfTheCourse = "
 				SELECT
 					*
-					FROM  `".$TABLEANNOUNCEMENT."`
+					FROM  ".$TABLEANNOUNCEMENT."
 					WHERE course_code='".$exportedCourseId."'";
 		$resAnn = Database::query($sqlAnnounceOfTheCourse);
 		$nbFields = mysql_num_fields($resAnn);

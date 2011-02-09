@@ -166,19 +166,12 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('accessibility_font_resize', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('accessibility_font_resize', 'false', 'No');
 
-
-
-CREATE TABLE notification (	id 			BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,	dest_user_id INT NOT NULL, 	dest_mail 	CHAR(255), 	title 		CHAR(255), 	content 	CHAR(255), 	send_freq 	SMALLINT DEFAULT 1, 	created_at 	DATETIME NOT NULL, 	sent_at 	DATETIME NULL);
+CREATE TABLE notification (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,dest_user_id INT NOT NULL, dest_mail CHAR(255),title CHAR(255), content CHAR(255), send_freq SMALLINT DEFAULT 1, created_at DATETIME NOT NULL, sent_at DATETIME NULL);
 
 ALTER TABLE notification ADD index mail_notify_sent_index (sent_at);
 ALTER TABLE notification ADD index mail_notify_freq_index (sent_at, send_freq, created_at);
 
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_invitation',   'MailNotifyInvitation',1,1,'1');
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_message',		 'MailNotifyMessage',1,1,'1');
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_group_message','MailNotifyGroup_message',1,1,'1');
-
-
-UPDATE settings_current SET selected_value = '1.8.8.13725' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.8.8.13739' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

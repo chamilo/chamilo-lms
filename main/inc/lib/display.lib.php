@@ -625,27 +625,52 @@ class Display {
 
 	/**
 	 * This public function displays an icon
-	 * @param string $image the filename of the file (in the main/img/ folder
-	 * @param string $alt_text the alt text (probably a language variable)
-	 * @param array additional attributes (for instance height, width, onclick, ...)
+	 * @param string   The filename of the file (in the main/img/ folder
+	 * @param string   The alt text (probably a language variable)
+	 * @param array    additional attributes (for instance height, width, onclick, ...)
+     * @param integer  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
+     * @return void
 	*/
-	public static function display_icon($image, $alt_text = '', $additional_attributes = array()) {
-		echo self::return_icon($image, $alt_text, $additional_attributes);
+	public static function display_icon($image, $alt_text = '', $additional_attributes = array(), $size=null) {
+		echo self::return_icon($image, $alt_text, $additional_attributes, $size);
 	}
 
 	/**
 	 * This public function returns the htmlcode for an icon
 	 *
-	 * @param string $image the filename of the file (in the main/img/ folder
-	 * @param string $alt_text the alt text (probably a language variable)
-	 * @param array additional attributes (for instance height, width, onclick, ...)
+	 * @param string   The filename of the file (in the main/img/ folder
+	 * @param string   The alt text (probably a language variable)
+	 * @param array    Additional attributes (for instance height, width, onclick, ...)
+     * @param integer  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
+     * @return string  An HTML string of the right <img> tag
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University 2006
      * @author Julio Montoya 2010 Function improved
-	 * @version October 2006
+     * @author Yannick Warnier 2011 Added size handler
+	 * @version Feb 2011
 	*/
-	public static function return_icon($image, $alt_text = '', $additional_attributes = array()) {		
-		return self::img(api_get_path(WEB_IMG_PATH).$image, $alt_text,$additional_attributes);
+	public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size=null) {
+        $code_path = api_get_path(SYS_CODE_PATH);
+        $w_code_path = api_get_path(WEB_CODE_PATH);
+        /*
+        $theme = 'css/'.api_get_visual_theme().'/icons/';
+        $icon = '';
+        $size_extra = '';
+        if (isset($size)) {
+            if (in_array($size,array(16,32,64,128))) {
+            	$size_extra = $size.'/';
+            }
+        }
+        if (is_file($code_path.$theme.$size_extra.$image)) {
+        	$icon = $w_code_path.$theme.$size_extra.$image;
+        } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {
+        	$icon = $w_code_path.'img/icons/'.$size_extra.$image;
+        } else {
+        	$icon = $w_code_path.'img/'.$image;
+        }
+        */
+        $icon = $w_code_path.'img/'.$image;
+        return self::img($icon, $alt_text,$additional_attributes);
 	}
     
     /**

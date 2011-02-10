@@ -121,4 +121,8 @@ $NewHomeworkEmailAlert = "Mandar un correo aos usuarios cando haxa novas tarefas
 $NewHomeworkEmailAlertEnable = "Enviar aviso aos usuarios cando envíen a tarefa";
 $NewHomeworkEmailAlertDisable = "Desactivar aviso aos usuarios cando envíen unha tarefa";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Amosar o último paso aberto e o próximo paso sen finalizar";
+$AddPicture = "Engadir imaxe do curso";
+$LPAutoLaunch = "Activar o despregue automático de leccións";
+$ConfigLearnpath = "Configurar a ferramenta leccións";
+$PDFWaterMarkHeader = "Marca de auga na cabeceira nas exportacións en PDF";
 ?>

@@ -124,4 +124,5 @@ $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Afficher la dernière étap
 $AddPicture = "Ajouter une image de présentation";
 $LPAutoLaunch = "Activer l'auto-démarrage des parcours d'apprentissage";
 $ConfigLearnpath = "Configuration des parcours";
+$PDFWaterMarkHeader = "En-tête en filigranne (exports PDF)";
 ?>

@@ -708,7 +708,7 @@ $Menu = "Menu";
 $BackToUserList = "Back to user list";
 $GraphicNotAvailable = "Graphic not available";
 $BackTo = "Back to";
-$HistoryTrainingSessions = "History training sessions";
+$HistoryTrainingSessions = "Training sessions history";
 $ConversionFailled = "Conversion failled";
 $AlreadyExists = "Already exists";
 $TheNewWordHasBeenAdded = "The new word has been added";
@@ -1003,4 +1003,7 @@ $SeeOnlyArchived = "See only archived";
 $SeeOnlyUnarchived = "See only unarchived";
 $LatestAttempt = "Latest attempt";
 $ContactInformationHasNotBeenSent = "Your contact information could not be sent. This is probably due to a temporary network problem. Please try again in a few seconds. If the problem remains, ignore this registration process and simply click the button to go to the next step.";
+$FileDeleted = "File deleted";
+$MyClasses = "My classes";
+$PublicationDate = "Publication date";
 ?>

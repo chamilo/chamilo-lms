@@ -995,7 +995,16 @@ $MyResults = "Mis resultados";
 $LearningPaths = "Lecciones";
 $AllLearningPaths = "Todas las lecciones";
 $ByCourse = "Por curso";
+$MyQCM = "Mis pruebas";
 $AddACourse = "Añadir un curso";
 $PerWeek = "Por semana";
 $PhotoRetouching = "Retoque fotográfico";
+$SeeAll = "Ver todos";
+$SeeOnlyArchived = "Ver solo archivados";
+$SeeOnlyUnarchived = "Ver solo no archivados";
+$LatestAttempt = "Último intento";
+$ContactInformationHasNotBeenSent = "Su información de contacto no pudió ser enviada. Esto está probablemente debido a un problema de red temporario. Por favor intente de nuevo dentro de unos segundos. Si el problema permanece, ignore este procedimiento de registro y dele clic al butón para el siguiente paso.";
+$FileDeleted = "Archivo eliminado";
+$MyClasses = "Mis clases";
+$PublicationDate = "Fecha de publicación";
 ?>

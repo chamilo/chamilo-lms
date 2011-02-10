@@ -80,7 +80,7 @@ $SocialAddToFriends = "Ajouter à mes contacts";
 $UserNonRegisteredAtTheCourse = "Utilisateur non enregistré dans le cours";
 $ChangeContactGroup = "Changer de groupe de contact";
 $Friend = "Ami";
-$ViewMySharedProfile = "Voir mon profil partagé";
+$ViewMySharedProfile = "Mon profil partagé";
 $UserStatistics = "Statistiques pour cet utilisateur";
 $EditUser = "Modifier cet utilisateur";
 $ViewUser = "Voir cet utilisateur";
@@ -195,4 +195,7 @@ $SeeAllMyGroups = "Voir tous mes groupes";
 $YouAlreadyInviteAllYourContacts = "Vous avez déjà invité tous vos contacts";
 $YouShouldCreateAGroup = "Vous devez créer un groupe";
 $MyFiles = "Mes fichiers";
+$MySocialGroups = "Mes groupes sociaux";
+$SocialGroups = "Groupes sociaux";
+$CreateASocialGroup = "Créer un groupe social";
 ?>

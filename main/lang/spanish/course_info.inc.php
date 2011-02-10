@@ -124,4 +124,5 @@ $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Mostrar información sobre 
 $AddPicture = "Añadir imagen del curso";
 $LPAutoLaunch = "Activar el despliegue automático de lecciones";
 $ConfigLearnpath = "Configurar la herramienta lecciones";
+$PDFWaterMarkHeader = "Cabecera filigrana en exportes PDF";
 ?>

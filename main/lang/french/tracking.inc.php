@@ -282,4 +282,6 @@ $PleaseSelectACourse = "Veuillez sélectionner un cours";
 $StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts = "La moyenne des scores des étudiants est calculée sur base de tous les parcours et toutes les tentatives";
 $AverageScore = "Score moyen";
 $LastConnexionDate = "Date de dernière connexion";
+$QuestionsAreTakenFromLPExercises = "Ces questions ont été passées au sein des parcours d'apprentissage";
+$AllStudentsAttemptsAreConsidered = "Toutes les tentatives sont considérées";
 ?>

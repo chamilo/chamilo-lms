@@ -373,4 +373,6 @@ $UniqueAnswerNoOption = "Respuesta única con no-se";
 $MultipleAnswerTrueFalse = "Respuestas múltiples v/f/no-se";
 $MultipleAnswerCombinationTrueFalse = "Combinación v/f/no-se";
 $DontKnow = "No se";
+$False = "Falso";
+$DoubtScore = "No se";
 ?>

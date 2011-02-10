@@ -1376,4 +1376,13 @@ $PromotionXUnarchived = "La promotion <i>%s</i> a été ré-activée. Cette acti
 $CareerXArchived = "La carrière <i>%s</i> a été archivée. Cette action a pour conséquence de rendre invisibles la carrière, les promotions qui y sont enregistrées et les sessions qui sont enregistrées dans celles-ci. Vous pouvez annuler cette action en la désarchivant.";
 $CareerXUnarchived = "La carrière <i>%s</i> a été ré-activée. Cette action a pour conséquence de rendre visibles la carrière, les promotions qui y sont enregistrées et les sessions qui sont enregistrées dans celles-ci. Vous pouvez annuler cette action en archivant la carrière.";
 $RegistrationByUsersGroups = "Inscription par groupes d'utilisateurs";
+$FillCourses = "Générer des cours";
+$FillSessions = "Générer des sessions";
+$Archived = "Archivé";
+$Unarchived = "Désarchivé";
+$StatsUsersDidNotLoginInLastPeriods = "Non connecté depuis...";
+$LastXMonths = "Derniers %i mois";
+$NeverConnected = "Jamais connecté";
+$EnableAccessibilityFontResizeTitle = "Redimensionnement des caractères";
+$EnableAccessibilityFontResizeComment = "Activer cette option montrera une série d'options de redimensionnement des caractères dans le coin supérieur-droit de votre campus. Celles-ci permettront aux personnes à déficience visuelle de lire leurs contenus de cours plus facilement.";
 ?>

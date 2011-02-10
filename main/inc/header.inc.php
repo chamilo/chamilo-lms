@@ -176,6 +176,22 @@ if (isset($htmlIncHeadXtra) && $htmlIncHeadXtra) {
 }
 // The following include might be subject to a setting proper to the course or platform.
 include api_get_path(LIBRARY_PATH).'javascript/email_links.lib.js.php';
+
+if ($_configuration['multiple_access_urls']) {
+    $access_url_id = api_get_current_access_url_id();
+    if ($access_url_id != -1) {
+        $url_info = api_get_access_url($access_url_id);
+        $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+        $clean_url = replace_dangerous_char($url);
+        $clean_url = str_replace('/', '-', $clean_url);
+        $clean_url .= '/';
+        $homep            = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path               
+        //we create the new dir for the new sites
+        if (!is_file($homep.'favicon.ico')) {
+            echo '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
+        }
+    }
+}
 ?>
 
 </head>

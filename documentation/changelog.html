@@ -126,7 +126,8 @@
 <h3>Known issues</h3>
 <ul>
   <li>Groups (admin only): When a user is subscribed in a Course through a Group and he's also subscribed in the same Course (tradional way), when removing the user from the Group, the user will be also removed from the Course in both levels.</li>
-  <li>Changed "givenname" for "cn" in LDAP queries. This might break some of the previous implementations of this plugin</li>  
+  <li>Changed "givenname" for "cn" in LDAP queries. This might break some of the previous implementations of this plugin</li>
+  <li>If you used split users directories before v1.8.8 in combination with the "My files" feature (if it existed at all at that point), you will probably have a problem now, as the code in the previous version was wrong and was saving the personal portfolio file in another directory than the user's. Sorry about that. If you need professional assistance, see the http://www.chamilo.org/ website under support -> professional support for official providers who could help you. And don't forget to keep a backup. If you don't understand a thing about what I'm talking about, you are probable not concerned by this bug, so don't worry too much.</li>   
 </ul>
 <h3>Deprecated files</h3>
 <ul>

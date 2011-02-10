@@ -234,10 +234,16 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
     // Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
     $_SESSION['loaded_lp_view'] = true;
 
+$display_none = '';
+$margin_left = '282px';
+if (!empty($_GET['embedframe'])) {
+    $display_none = ';display:none;';
+    $margin_left = '0px';
+}
 ?>
 <body dir="<?php echo api_get_text_direction(); ?>">
 <div id="learning_path_main"  style="width:100%;height:100%;" >
-    <div id="learning_path_left_zone" style="float:left;width:280px;height:100%">
+    <div id="learning_path_left_zone" style="float:left;width:280px;height:100%<?php echo $display_none;?>">
 
         <!-- header -->
         <div id="header">
@@ -354,7 +360,7 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
     <!-- end left Zone -->
 
     <!-- right Zone -->
-    <div id="learning_path_right_zone" style="margin-left:282px;height:100%">
+    <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
     <?php
         // hub 26-05-2010 Fullscreen or not fullscreen
         if ($_SESSION['oLP']->mode == 'fullscreen') {

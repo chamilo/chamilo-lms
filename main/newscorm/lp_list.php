@@ -373,12 +373,16 @@ if (is_array($flat_list)) {
                 /* Default view mode settings (fullscreen/embedded) */
                 if ($details['lp_view_mode'] == 'fullscreen') {
                     $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
-                        '<img src="../img/view_fullscreen.gif" border="0" alt="'.get_lang('ViewModeEmbedded').'" title="'.get_lang('ViewModeEmbedded').'"/>' .
+                        '<img src="../img/view_fullscreen.gif" border="0" alt="'.get_lang('ViewModeFullScreen').'" title="'.get_lang('ViewModeFullScreen').'"/>' .
                         '</a>&nbsp;';
-                } else {
+                } elseif ($details['lp_view_mode'] == 'embedded') {
                     $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
-                        '<img src="../img/view_choose.gif" border="0" alt="'.get_lang('ViewModeFullScreen').'" title="'.get_lang('ViewModeFullScreen').'"/>' .
+                        '<img src="../img/view_choose.gif" border="0" alt="'.get_lang('ViewModeEmbedded').'" title="'.get_lang('ViewModeEmbedded').'"/>' .
                         '</a>&nbsp;';
+                } elseif ($details['lp_view_mode'] == 'embedframe') {
+                    $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
+                        '<img src="../img/view_embedframe.gif" border="0" alt="'.get_lang('ViewModeEmbedFrame').'" title="'.get_lang('ViewModeEmbedFrame').'"/>' .
+                        '</a>&nbsp;';                	
                 }
             } else {
                 if ($details['lp_view_mode'] == 'fullscreen')

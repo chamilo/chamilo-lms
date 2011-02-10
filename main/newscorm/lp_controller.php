@@ -812,8 +812,10 @@ switch ($action) {
         $mode = $_REQUEST['mode'];
         if ($mode == 'fullscreen') {
             $_SESSION['oLP']->mode = 'fullscreen';
-        } else {
+        } elseif ($mode == 'embedded') {
             $_SESSION['oLP']->mode = 'embedded';
+        } elseif ($mode == 'embedframe') {
+        	$_SESSION['oLP']->mode = 'embedframe';
         }
         require 'lp_view.php';
         break;

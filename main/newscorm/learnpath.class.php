@@ -4260,7 +4260,9 @@ class learnpath {
             if ($view_mode == 'fullscreen') {
                 $view_mode = 'embedded';
             } elseif ($view_mode == 'embedded') {
-                $view_mode = 'fullscreen';
+                $view_mode = 'embedframe';
+            } elseif ($view_mode == 'embedframe') {
+                $view_mode = 'fullscreen';            	
             }
             $sql = "UPDATE $lp_table SET default_view_mod = '$view_mode' WHERE id = " . $this->get_id();
             $res = Database::query($sql);

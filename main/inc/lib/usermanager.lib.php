@@ -762,9 +762,9 @@ class UserManager
 		$picture_filename = trim($user['picture_uri']);
 
 		if (api_get_setting('split_users_upload_directory') === 'true') {
-			if (!empty($picture_filename)) {
-				$dir = $base.'upload/users/'.substr($picture_filename, 0, 1).'/'.$user_id.'/';
-			} elseif ($preview) {
+			if (!empty($picture_filename) or $preview) {
+//				$dir = $base.'upload/users/'.substr($picture_filename, 0, 1).'/'.$user_id.'/';
+//			} elseif ($preview) {
 				$dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
 			} else {
 				$dir = $base.'upload/users/'.$user_id.'/';

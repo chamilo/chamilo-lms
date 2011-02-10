@@ -411,7 +411,9 @@ if (!empty($_SESSION['_gid'])) {
 if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0) {
 
     $clean_get_id = Security::remove_XSS($_GET['id']);
-    $user_folder  = api_get_path(SYS_CODE_PATH).'upload/users/'.api_get_user_id().'/my_files/';
+    $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system');
+    $user_folder  = $my_path['dir'].'my_files/';
+    $my_path = null;
         if (!file_exists($user_folder)) {
             @mkdir($user_folder, $permissions_for_new_directories, true);
         }

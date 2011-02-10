@@ -73,8 +73,10 @@ if (api_is_in_course()) {
 		$http_www = $_configuration['root_web'].'home/default_platform_document/';
 	} else {
 		// 4. The user is outside courses.
-		$base_work_dir = $_configuration['root_sys'].'main/upload/users/'.api_get_user_id().'/my_files/';
-		$http_www = $_configuration['root_web'].'main/upload/users/'.api_get_user_id().'/my_files/';
+        $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system');
+		$base_work_dir = $my_path['dir'].'my_files/';
+        $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web');
+		$http_www = $my_path['dir'].'my_files/';
 	}
 }
 

@@ -123,7 +123,8 @@
 		else
 		{
 			//my profile
-			$PathChamiloAjaxFileManager='../../../../../../../main/upload/users/'.api_get_user_id().'/my_files/';
+            $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'none');
+			$PathChamiloAjaxFileManager='../../../../../../../main/'.$my_path['dir'].'my_files/';
 		}
 
 	}

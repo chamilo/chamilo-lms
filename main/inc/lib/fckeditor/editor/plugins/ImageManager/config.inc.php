@@ -78,8 +78,10 @@ else
 	else
 	{
 		// 4. The user is outside courses.
-		$IMConfig['base_dir'] = $_configuration['root_sys'].'main/upload/users/'.api_get_user_id().'/my_files/';
-		$IMConfig['base_url'] = $_configuration['root_web'].'main/upload/users/'.api_get_user_id().'/my_files/';
+        $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system');
+		$IMConfig['base_dir'] = $my_path['dir'].'my_files/';
+        $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web');
+		$IMConfig['base_url'] = $my_path['dir'].'my_files/';
 	}
 }
 

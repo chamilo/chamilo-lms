@@ -521,8 +521,10 @@ class FCKeditor
                 $config['BaseHref'] = api_get_path(WEB_PATH).'home/default_platform_document/';
             } else {
                 // 4. The user is outside courses.
-                $config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
-                $config['CreateDocumentDir'] = $relative_path_prefix.'upload/users/'.api_get_user_id().'/my_files/';
+                $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system');
+                $config['CreateDocumentWebDir'] = $my_path['dir'].'my_files/';
+                $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'rel');
+                $config['CreateDocumentDir'] = $my_path['dir'].'my_files/';
                 $config['BaseHref'] = $script_path;
             }
         }

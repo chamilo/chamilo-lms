@@ -34,7 +34,8 @@ if (!empty($_course['path'])) {
 	$is_user_in_group = GroupManager::is_user_in_group($_user['user_id'],$_SESSION['_gid']);
 }
 
-$user_folder = api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
+$my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system');
+$user_folder = $my_path['dir'].'my_files/';
 
 // Sanity checks for Chamilo.
 

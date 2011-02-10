@@ -71,7 +71,8 @@ if (api_is_in_course()) {
 		$Config['UserFilesPath'] = api_get_path(REL_PATH).'home/default_platform_document/';
 	} else {
 		// 4. The user is outside courses.
-		$Config['UserFilesPath'] = api_get_path(REL_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
+        $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'rel');
+		$Config['UserFilesPath'] = $my_path['dir'].'my_files/';
 	}
 }
 

@@ -2710,8 +2710,8 @@ function api_get_language_id($language) {
 }
 
 /**
- * Returns the name of the visual theme to be applied on the current page.
- * The rethurned name depends on platform, course or user -wide settings.
+ * Returns the name of the visual (CSS) theme to be applied on the current page.
+ * The returned name depends on the platform, course or user -wide settings.
  * @return string   The visual theme's name, it is the name of a folder inside .../chamilo/main/css/
  */
 function api_get_visual_theme() {

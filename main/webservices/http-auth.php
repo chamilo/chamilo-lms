@@ -1,5 +1,8 @@
-<?php //$id: $
-
+<?php
+/* For licensing terms, see /license.txt */
+/**
+ * @package chamilo.webservices
+ */
 $realm = 'The batcave';
 
 // Just a random id

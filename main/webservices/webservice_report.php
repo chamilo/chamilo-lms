@@ -6,12 +6,13 @@
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'usermanager.lib.php';
+require_once $libpath.'tracking.lib.php';
 require_once(dirname(__FILE__).'/webservice.php');
 
 /**
  * Web services available for the User module. This class extends the WS class
  */
-class WSUser extends WS {
+class WSReport extends WS {
 
 	/**
 	 * Enables or disables a user
@@ -20,16 +21,12 @@ class WSUser extends WS {
 	 * @param string User id value
 	 * @param int Set to 1 to enable and to 0 to disable
 	 */
-	protected function changeUserActiveState($user_id_field_name, $user_id_value, $state) {
+	protected function get_time_spent_on_platform($user_id_field_name, $user_id_value) {
 		$user_id = $this->getUserId($user_id_field_name, $user_id_value);
 		if($user_id instanceof WSError) {
 			return $user_id;
 		} else {
-			if($state == 0) {
-				UserManager::disable($user_id);
-			} else if($state == 1) {
-				UserManager::enable($user_id);
-			}
+            return Tracking::get_time_spent_on_the_platform($user_id);
 		}
 	}
 
@@ -40,7 +37,7 @@ class WSUser extends WS {
 	 * @param int Set to 1 to enable and to 0 to disable
 	 * @return array Array of results
 	 */
-	protected function changeUsersActiveState($users, $state) {
+	protected function get_time_spent_on_the_course($user_id_field_name, $user_id_value) {
 		$results = array();
 		foreach($users as $user) {
 			$result_tmp = array();

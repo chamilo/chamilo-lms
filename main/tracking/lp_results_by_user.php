@@ -80,7 +80,7 @@ if (!$export_to_xls) {
 	echo '<div class="actions" style ="font-size:10pt;">';
 	if ($global) {
 	    	
-        echo '<div style="float:right"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>' .
+        echo '<div style="float:right"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>' .
                 '<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a></div>';
         
 		$menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('TeacherInterface').'</a>';
@@ -212,18 +212,24 @@ if ($export_to_xls) {
 }
 
 function export_complete_report_xls($filename, $array) {	
-		global $charset, $global, $filter_score;
+        require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+        $header[] = array(get_lang('Course'),get_lang('LearningPath'), get_lang('Exercise'), get_lang('User'),get_lang('Attempt'), get_lang('Date'),get_lang('Results'));
+        if (!empty($array)) {
+            $array = array_merge($header, $array);            
+            Export :: export_table_csv($array, 'reporting_learning_path_details');
+        }
+        exit;
+        /*    
+		global $global, $filter_score;
 		$workbook = new Spreadsheet_Excel_Writer();
 		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
 		$workbook->send($filename);
 		$workbook->setVersion(8); // BIFF8
 		$worksheet =& $workbook->addWorksheet('Report');
-		//$worksheet->setInputEncoding(api_get_system_encoding());
-		$worksheet->setInputEncoding($charset);	
+		$worksheet->setInputEncoding(api_get_system_encoding());		
 		
 		$line = 0;
-		$column = 0; //skip the first column (row titles)
-		
+		$column = 0; //skip the first column (row titles)		
 
 		$worksheet->write($line,$column,get_lang('Course'));
 		$column++;
@@ -251,6 +257,6 @@ function export_complete_report_xls($filename, $array) {
 		$line++;			
 		
 		$workbook->close();
-		exit;
+		exit;*/
 }
 Display :: display_footer();

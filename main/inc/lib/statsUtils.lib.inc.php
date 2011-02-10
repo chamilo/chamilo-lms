@@ -1,41 +1,11 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	This is the statistic utility functions library for Dokeos.
+*	This is the statistic utility functions library for Chamilo.
 *	Include/require it in your code to use its functionality.
-*
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
-
-/*
-==============================================================================
-		FUNCTIONS
-==============================================================================
-*/
-
+/* FUNCTIONS */
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param sql : a sql query (as a string)

@@ -2068,19 +2068,21 @@ class Tracking {
     function show_course_detail($user_id, $course_code, $session_id) {        
         $html = '';
         if (isset($course_code)) {
-            $session_id = intval($session_id);
-            $user_id    = intval($user_id);
-    
-            $course                     = Database::escape_string($course_code);
+            require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+            
+            $user_id                    = intval($user_id);
+            $session_id                 = intval($session_id);
+            $course                     = Database::escape_string($course_code);            
             $course_info                = CourseManager::get_course_information($course);
+            
             $tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
             $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
             $tbl_session_course         = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
             $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-            $tbl_course_lp_view         = Database :: get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
+            $tbl_course_lp_view         = Database :: get_course_table(TABLE_LP_VIEW,   $course_info['db_name']);
             $tbl_course_lp_view_item    = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
-            $tbl_course_lp              = Database :: get_course_table(TABLE_LP_MAIN, $course_info['db_name']);
-            $tbl_course_lp_item         = Database :: get_course_table(TABLE_LP_ITEM, $course_info['db_name']);
+            $tbl_course_lp              = Database :: get_course_table(TABLE_LP_MAIN,   $course_info['db_name']);
+            $tbl_course_lp_item         = Database :: get_course_table(TABLE_LP_ITEM,   $course_info['db_name']);
             $tbl_course_quiz            = Database :: get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);
     
             //get coach and session_name if there is one and if session_mode is activated
@@ -2150,9 +2152,9 @@ class Tracking {
                     </td>
                 </tr><tr>';                
                 
-            $html .= Display::tag('th', get_lang('Learnpath'), array('class'=>'head', 'style'=>'color:#000'));
-            $html .= Display::tag('th', get_lang('Time'), array('class'=>'head', 'style'=>'color:#000'));
-            $html .= Display::tag('th', get_lang('Progress'), array('class'=>'head', 'style'=>'color:#000'));
+            $html .= Display::tag('th', get_lang('Learnpath'),     array('class'=>'head', 'style'=>'color:#000'));
+            $html .= Display::tag('th', get_lang('Time'),          array('class'=>'head', 'style'=>'color:#000'));
+            $html .= Display::tag('th', get_lang('Progress'),      array('class'=>'head', 'style'=>'color:#000'));
             $html .= Display::tag('th', get_lang('LastConnexion'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= '</tr>';
             
@@ -2164,41 +2166,38 @@ class Tracking {
             
             $result_learnpath = Database::query($sql_learnpath);
             if (Database::num_rows($result_learnpath) > 0) {
-                while($learnpath = Database::fetch_array($result_learnpath)) {
-                    //$progress = learnpath :: get_db_progress($learnpath['id'], $user_id, 'abs', $course_info['db_name'], false, $session_id);                        
+                while($learnpath = Database::fetch_array($result_learnpath)) {                       
                     $progress               = Tracking::get_avg_student_progress($user_id, $course, array($learnpath['id']), $session_id);                        
                     $last_connection_in_lp  = Tracking::get_last_connection_time_in_lp($user_id, $course, $learnpath['id'], $session_id);
                     $time_spent_in_lp       = Tracking::get_time_spent_in_lp($user_id, $course, array($learnpath['id']), $session_id);
                     $time_spent_in_lp       = api_time_to_hms($time_spent_in_lp);                            
                                   
-                    $html .= "<tr><td>";
-                    $html .= $learnpath['name'];
-                    $html .= "  </td>
-                            <td align='center'>";
-                    $html .= $time_spent_in_lp;
-                    $html .= "  </td>
-                            <td align='center'>";
+                    $html .= "<tr>";
+                    $html .= Display::tag('td', $learnpath['name']);
+                    $html .= Display::tag('td', $time_spent_in_lp, array('align'=>'center'));
                     if (is_numeric($progress)) {
                         $progress = $progress.'%';
-                    }
-                    $html .= $progress;
-                    $html .= "  </td>
-                            <td align='center' width=180px >";
-                                            
+                    }                    
+                    $html .= Display::tag('td', $progress, array('align'=>'center'));
+                    $last_connection = '-';                                                                
                     if (!empty($last_connection_in_lp)) {
-                        $html .= api_get_utc_datetime($last_connection_in_lp);
-                    } else {
-                        $html .= '-';
+                        $last_connection = api_get_utc_datetime($last_connection_in_lp);
                     }
-                    $html .= "</td></tr>";
+                    $html .= Display::tag('td', $last_connection, array('align'=>'center','width'=>'180px'));
+                    $html .= "</tr>";
                 }
             } else {
-                $html .= '  <tr>
-                            <td colspan="4" align="center">
-                                '.get_lang('NoLearnpath').'
-                            </td>
-                        </tr>';
+                $html .= '<tr>
+                          	<td colspan="4" align="center">
+                            	'.get_lang('NoLearnpath').'
+							</td>
+						  </tr>';
             }
+            
+            $html .='</table><br />
+            <table class="data_table" width="100%">
+                <tr>';     
+                     
                         
             // This code was commented on purpose see BT#924
 
@@ -2206,81 +2205,95 @@ class Tracking {
             $result_visibility_tests = Database::query($sql);
 
             if (Database::result($result_visibility_tests, 0, 'visibility') == 1) {*/
+            
             if (empty($session_id)) {
                 $sql_exercices = "SELECT quiz.title,id, results_disabled FROM ".$tbl_course_quiz." AS quiz WHERE active='1' AND session_id = 0";
             } else {
                 $sql_exercices = "SELECT quiz.title,id, results_disabled FROM ".$tbl_course_quiz." AS quiz WHERE active='1'";
             }
-                $html .= '<tr>
-                    <th class="head" style="color:#000">'.get_lang('Exercices').'</th>
-                    <th class="head" style="color:#000">'.get_lang('Score').'</th>
-                    <th class="head" style="color:#000">'.get_lang('Attempts').'</th>
-                    <th class="head" style="color:#000">'.get_lang('LatestAttempt').'</th>
-                    </tr>';
-                $result_exercices = Database::query($sql_exercices);
-                if (Database::num_rows($result_exercices) > 0) {
-                    while ($exercices = Database::fetch_array($result_exercices)) {
-                        $score = 0;
-                        $weighting = 0;
-                        $exercise_stats = get_all_exercise_results($exercices['id'],$course_info['code'], $session_id);
-                        $attempts = 0;
-                        foreach($exercise_stats as $exercise_stat) {
+            
+            $html .= '<tr>                
+                <th class="head" style="color:#000">'.get_lang('Exercices').'</th>
+                <th class="head" style="color:#000">'.get_lang('Attempts').'</th>                    
+                <th class="head" style="color:#000">'.get_lang('LatestAttempt').'</th>
+                <th class="head" style="color:#000">'.get_lang('Position').'</th>
+                <th class="head" style="color:#000">'.get_lang('BestAttempt').'</th>                                       
+                </tr>';
+            $result_exercices = Database::query($sql_exercices);
+            if (Database::num_rows($result_exercices) > 0) {
+                while ($exercices = Database::fetch_array($result_exercices)) {
+                    $score = $weighting = $attempts = 0;                        
+                    $exercise_stats = get_all_exercise_results($exercices['id'], $course_info['code'], $session_id);
+                    //User attempts we assume the latest item in the loop is the latest attempt
+                    if (!empty($exercise_stats)) {
+                        $best_score = 0;
+                        $best_score_array = array();
+                        foreach($exercise_stats as $exercise_stat) {                        
                             if ($exercise_stat['exe_user_id'] == $user_id) {
-                               $score          = $score + $exercise_stat['exe_result'];
-                               $weighting      = $weighting + $exercise_stat['exe_weighting'];
+                               //Use this to take the average
+                               //$score          = $score + $exercise_stat['exe_result'];
+                               //$weighting      = $weighting + $exercise_stat['exe_weighting'];
+                               
+                               //Getting the best score
+                               if ($score > $best_score ) {
+                                   $best_score = $score;
+                                   $best_score_array = $exercise_stat;
+                               }
+                               //Always getting the latest attempt
+                               $score          = $exercise_stat['exe_result'];
+                               $weighting      = $exercise_stat['exe_weighting'];                               
                                $exe_id         = $exercise_stat['exe_id'];
                                $attempts++;
                             }
-                        }                            
-                        if  ($weighting > 0) {
-                            // i.e 10.50%
-                            $percentage_score = round(($score * 100) / $weighting, 2);
-                        } else {
-                            $percentage_score = 0;
-                        }
-                        $html .= '<tr>
-                                <td>';
-                        $html .= $exercices['title'];
-                        $html .= '</td>';
-                        if ($exercices['results_disabled'] == 0) {
-                            $html .= '<td align="center">';
-                            if ($attempts > 0) {
-                                $html .= $percentage_score.'%';
-                            } else {
-                                $html .= '/';
-                            }
-                            $html .= '</td>';
-                            $html .= '<td align="center">';
-                            $html .=  $attempts;
-                            $html .= '</td>
-                                    <td align="center" width="25">';
-                            if ($attempts > 0) {
-                                $html .= '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
-                            }
-                            $html .= '</td>';
-                        } else {
-                            // we show or not the results if the teacher wants to
-                            $html .= '<td align="center">';
-                            $html .= get_lang('CantShowResults');
-                            $html .= '</td>';
-                            $html .= '<td align="center">';
-                            $html .= ' -- ';
-                            $html .= '</td>
-                                    <td align="center" width="25">';
-                            $html .= ' -- ';
-                            $html .= '</td>';
-                        }
-                        $html .= '</tr>';
+                        }   
                     }
-                } else {
-                    $html .= '<tr><td colspan="4" align="center">'.get_lang('NoEx').'</td></tr>';
+                    
+                    $html .= '<tr>';                                
+                    $html .= Display::tag('td', $exercices['title']);
+                    //Exercise configuration show results
+                    if ($exercices['results_disabled'] == 0) {
+                        $latest_attempt_url = '';
+                        $percentage_score_result  = '-';
+                        $position = '-';
+                        $best_score = '-';
+                        
+                        if ($attempts > 0) {
+                            $latest_attempt_url .= '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
+                            $percentage_score_result = show_score($score, $weighting).' '.$latest_attempt_url;
+                            $my_score = 0;
+                            if (!empty($weighting)) {                           
+                                $my_score = $score/$weighting;
+                            }
+                            $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id);
+                            if (!empty($best_score_array)) {
+                                $best_attempt_url .= '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$best_score_array['exe_id'].'&cidReq='.$course_info['code'].'&id_session='.$session_id.'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
+                                $best_score = show_score($best_score_array['exe_result'], $best_score_array['exe_weighting']).' '.$best_attempt_url;
+                            }
+                            
+                        }             
+                        $html .= Display::tag('td', $attempts,                 array('align'=>'center'));                                          
+                        $html .= Display::tag('td', $percentage_score_result,  array('align'=>'center'));
+                        $html .= Display::tag('td', $position,                 array('align'=>'center'));                            
+                        $html .= Display::tag('td', $best_score,               array('align'=>'center'));
+                        //$html .= Display::tag('td', $latest_attempt_url,       array('align'=>'center', 'width'=>'25'));                           
+                        
+                    } else {
+                        // Exercise configuration NO results
+                        $html .= Display::tag('td', get_lang('CantShowResults'), array('align'=>'center'));  
+                        $html .= Display::tag('td', '--', array('align'=>'center'));                            
+                        $html .= Display::tag('td', '--', array('align'=>'center'));
+                        $html .= Display::tag('td', '--', array('align'=>'center'));
+                        $html .= Display::tag('td', '--', array('align'=>'center'));                            
+                    }
+                    $html .= '</tr>';
                 }
-                $html .= '</table>';
+            } else {
+                $html .= '<tr><td colspan="4" align="center">'.get_lang('NoEx').'</td></tr>';
+            }
+            $html .= '</table>';
         }
         return $html;
     }
-    
-
 }
 
 class TrackingCourseLog {

@@ -606,7 +606,7 @@ function get_last_attempt_date_of_exercise($exe_id) {
 }
 
 /**
- * Gets how many attempts exists by user, exercise
+ * Gets how many attempts exists by user, exercise, learning path
  * @param   int user id
  * @param   int exercise id
  * @param   int lp id
@@ -743,7 +743,13 @@ function get_all_exercise_results_by_user($user_id, $exercise_id, $course_code, 
 }
 
 
-
+/**
+ * Gets all exercise events from a Learning Path within a Course 	nd Session
+ * @param	int		exercise id
+ * @param	string	course_code
+ * @param 	int		session id
+ * @return 	array
+ */
 function get_all_exercise_event_from_lp($exercise_id, $course_code, $session_id = 0) {
     $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);

@@ -1218,8 +1218,8 @@ function get_all_exercises($course_info = null, $session_id = 0) {
 
 /**
  * Gets the position of the score based in a given score (result/weight) and the exe_id
- * @param   float   user score to be compared
- * @param   int     exe id of the exercise (this is necesary becase if 2 students have the same score the one with the minor exe_id will have a best position)
+ * @param   float   user score to be compared attention => score/weight
+ * @param   int     exe id of the exercise (this is necesary because if 2 students have the same score the one with the minor exe_id will have a best position, just to be fair and FIFO)
  * @param   int     exercise id
  * @param   string  course code
  * @param   int     session id
@@ -1231,6 +1231,7 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
     	$session_id = 0;
     }
     $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
+    
     if (empty($user_results)) {
     	return 1;
     } else {
@@ -1238,15 +1239,15 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
         $my_ranking = array();
         foreach($user_results as $result) {
             //print_r($result);
-            if (empty($result['exe_weighting']) || $result['exe_weighting'] == '0.00') {
+            if (empty($result['exe_weighting']) || $result['exe_weighting'] == '0.00') {                
                 $my_ranking[$result['exe_id']] = 0;               
             } else {
                 $my_ranking[$result['exe_id']] = $result['exe_result']/$result['exe_weighting'];
-            }           
-        }    
+            }         
+        }        
         asort($my_ranking);
         $position = count($my_ranking);
-        if (!empty($my_ranking))      
+        if (!empty($my_ranking)) {        
             foreach($my_ranking as $exe_id=>$ranking) {
             	if ($my_score >= $ranking) {
                     if ($my_score == $ranking) {
@@ -1258,6 +1259,7 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
                     }
             	}
             }        
+        }
         return $position;    
     }
 }

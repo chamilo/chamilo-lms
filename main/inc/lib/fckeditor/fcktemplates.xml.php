@@ -32,13 +32,13 @@ $css = loadCSS(api_get_setting('stylesheets'));
 /* This libraries will be loaded in the showinframes.php file
 $js = '';
 if (api_get_setting('show_glossary_in_documents') != 'none') {
-	$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"/>'.PHP_EOL;
-	if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
-		$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"/>';
-	} else {
+    $js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"/>'.PHP_EOL;
+    if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
+        $js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"/>';
+    } else {
     $js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"/>'.PHP_EOL;
-		$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"/>';
-	}
+        $js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"/>';
+    }
 }
 */
 
@@ -55,17 +55,17 @@ echo '<Templates imagesBasePath="">';
 // Load empty template.
 load_empty_template();
 
-if($is_allowed_to_edit){	
-	// Load the templates that were defined by the platform admin.
-	load_platform_templates();	
+if($is_allowed_to_edit){
+    // Load the templates that were defined by the platform admin.
+    load_platform_templates();
 }
 else{
-	// Load student templates.
-	load_student_templates();	
+    // Load student templates.
+    load_student_templates();
 }
 // Load the personal templates.
-	load_personal_templates(api_get_user_id());
-	
+    load_personal_templates(api_get_user_id());
+
 // End the templates node.
 echo '</Templates>';
 
@@ -79,9 +79,9 @@ exit;
  * @return html code for adding a css style <style ...
  */
 function loadCSS($css_name) {
-	$template_css = ' <style type="text/css">'.str_replace('../../img/', api_get_path(REL_CODE_PATH).'img/', file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css')).'</style>';
-	$template_css = str_replace('images/', api_get_path(REL_CODE_PATH).'css/'.$css_name.'/images/', $template_css);
-	return $template_css;
+    $template_css = ' <style type="text/css">'.str_replace('../../img/', api_get_path(REL_CODE_PATH).'img/', file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css')).'</style>';
+    $template_css = str_replace('images/', api_get_path(REL_CODE_PATH).'css/'.$css_name.'/images/', $template_css);
+    return $template_css;
 }
 
 /**
@@ -118,30 +118,30 @@ function s2($var) {
  */
 function load_platform_templates() {
 
-	global $css, $img_dir, $default_course_dir, $js;
+    global $css, $img_dir, $default_course_dir, $js;
 
-	$table_template = Database::get_main_table('system_template');
-	$sql = "SELECT title, image, comment, content FROM $table_template";
-	$result = Database::query($sql);
+    $table_template = Database::get_main_table('system_template');
+    $sql = "SELECT title, image, comment, content FROM $table_template";
+    $result = Database::query($sql);
 
-	$search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');
-	$replace = array($css.$js, $img_dir, api_get_path(REL_PATH), $default_course_dir);
-	$template_thumb = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/';
+    $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');
+    $replace = array($css.$js, $img_dir, api_get_path(REL_PATH), $default_course_dir);
+    $template_thumb = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/';
 
-	while ($row = Database::fetch_array($result)) {
-		$image = empty($row['image']) ? $template_thumb.'empty.gif' : $template_thumb.$row['image'];
+    while ($row = Database::fetch_array($result)) {
+        $image = empty($row['image']) ? $template_thumb.'empty.gif' : $template_thumb.$row['image'];
         $row['content'] = str_replace($search, $replace, $row['content']);
 
-		echo '
-				<Template title="'.s($row['title']).'" image="'.$image.'">
-					<Description>'.s($row['comment']).'</Description>
-					<Html>
-						<![CDATA[
-							    '.$row['content'].'
-						]]>
-					</Html>
-				</Template>';
-	}
+        echo '
+                <Template title="'.s($row['title']).'" image="'.$image.'">
+                    <Description>'.s($row['comment']).'</Description>
+                    <Html>
+                        <![CDATA[
+                                '.$row['content'].'
+                        ]]>
+                    </Html>
+                </Template>';
+    }
 }
 
 /**
@@ -155,68 +155,68 @@ function load_platform_templates() {
  * @since Dokeos 1.8.6 The code already existed but not in a function and a lot less performant.
  */
 function load_personal_templates($user_id = 0) {
-	global $_course;
+    global $_course;
 
-	// the templates that the user has defined are only available inside the course itself
-	if (empty($_course)) {
-		return false;
-	}
+    // the templates that the user has defined are only available inside the course itself
+    if (empty($_course)) {
+        return false;
+    }
 
-	// For which user are we getting the templates?
-	if ($user_id == 0) {
-		$user_id = api_get_user_id();
-	}
+    // For which user are we getting the templates?
+    if ($user_id == 0) {
+        $user_id = api_get_user_id();
+    }
 
-	$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-	$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+    $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
+    $table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 
-	// The sql statement for getting all the user defined templates
-	$sql = "SELECT template.id, template.title, template.description, template.image, template.ref_doc, document.path
-			FROM ".$table_template." template, ".$table_document." document
-			WHERE user_id='".Database::escape_string($user_id)."'
-			AND course_code='".Database::escape_string(api_get_course_id())."'
-			AND document.id = template.ref_doc";
+    // The sql statement for getting all the user defined templates
+    $sql = "SELECT template.id, template.title, template.description, template.image, template.ref_doc, document.path
+            FROM ".$table_template." template, ".$table_document." document
+            WHERE user_id='".Database::escape_string($user_id)."'
+            AND course_code='".Database::escape_string(api_get_course_id())."'
+            AND document.id = template.ref_doc";
 
-	$result_template = Database::query($sql);
+    $result_template = Database::query($sql);
 
-	while ($row = Database::fetch_array($result_template)) {
+    while ($row = Database::fetch_array($result_template)) {
 
-		$row['content'] = file_get_contents(api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row['path']);
-		//$row['content'] = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row['path'];
+        $row['content'] = file_get_contents(api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row['path']);
+        //$row['content'] = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row['path'];
 
-		if (!empty($row['image'])) {
-			$image = api_get_path(WEB_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/'.$row['image'];
-		} else {
-			$image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif';
-		}
+        if (!empty($row['image'])) {
+            $image = api_get_path(WEB_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/'.$row['image'];
+        } else {
+            $image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif';
+        }
 
-		echo '
-				<Template title="'.s2($row['title']).'" image="'.$image.'">
-					<Description>'.s2($row['Description']).'</Description>
-					<Html>
-						<![CDATA[
-							    '.$row['content'].'
-						]]>
-					</Html>
-				</Template>';
-	}
+        echo '
+                <Template title="'.s2($row['title']).'" image="'.$image.'">
+                    <Description>'.s2($row['Description']).'</Description>
+                    <Html>
+                        <![CDATA[
+                                '.$row['content'].'
+                        ]]>
+                    </Html>
+                </Template>';
+    }
 }
 
 function load_empty_template() {
-	global $css, $js;
-	?>
+    global $css, $js;
+    ?>
 <Template title="<?php echo s2('Empty'); ?>" image="<?php echo api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/empty.gif'; ?>">
     <Description></Description>
     <Html>
-	    <![CDATA[
-		   <html>
-		   <head>
-			<?php echo $css; ?>
-			<?php echo $js; ?>
-		   <body></body>
-		   </head>
-		   </html>
-	   ]]>
+        <![CDATA[
+           <html>
+           <head>
+            <?php echo $css; ?>
+            <?php echo $js; ?>
+           <body></body>
+           </head>
+           </html>
+       ]]>
     </Html>
 </Template>
 <?php
@@ -226,8 +226,8 @@ function load_empty_template() {
  * Loads the student templates
  */
 function load_student_templates() {
-	$fckeditor_template_path='/main/inc/lib/fckeditor/editor/dialog/fck_template/images/';
-	?>
+    $fckeditor_template_path='/main/inc/lib/fckeditor/editor/dialog/fck_template/images/';
+    ?>
     <Template title="Image and Title" image="<?php echo api_get_path(WEB_PATH).$fckeditor_template_path.'template1.gif';?>">
         <Description>One main image with a title and text that surround the image.</Description>
         <Html>

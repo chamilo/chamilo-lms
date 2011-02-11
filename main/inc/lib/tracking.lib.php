@@ -2126,72 +2126,15 @@ class Tracking {
             $tbl_course_lp_view_item    = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $course_info['db_name']);
             $tbl_course_lp              = Database :: get_course_table(TABLE_LP_MAIN,   $course_info['db_name']);
             $tbl_course_lp_item         = Database :: get_course_table(TABLE_LP_ITEM,   $course_info['db_name']);
-            $tbl_course_quiz            = Database :: get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);
-    
-            //get coach and session_name if there is one and if session_mode is activated
-      
-            /*
-            if (api_get_setting('use_session_mode') == 'true') {
-                
-                if ($_configuration['multiple_access_urls']) {            
-                    $sql = 'SELECT id_session
-                            FROM '.$tbl_session_course_user.' session_course_user  INNER JOIN '.$tbl_access_rel_session.' a ON(session_course_user.id_session = a.session_id)
-                            WHERE session_course_user.id_user = '.intval($_user['user_id']).'
-                            AND session_course_user.course_code = "'.Database::escape_string($course).'" AND access_url_id = '.api_get_current_access_url_id().'
-                            ORDER BY id_session DESC';
-               
-                } else {
-                    $sql = 'SELECT id_session
-                            FROM '.$tbl_session_course_user.' session_course_user
-                            WHERE session_course_user.id_user = '.intval($_user['user_id']).'
-                            AND session_course_user.course_code = "'.Database::escape_string($course).'"
-                            ORDER BY id_session DESC';  
-                }
-                $rs = Database::query($sql);
-    
-                $row = Database::fetch_array($rs);
-    
-                if ($session_id > 0) {
-                    // get session name and coach of the session
-                    $sql = 'SELECT name, id_coach FROM '.$tbl_session.'
-                            WHERE id='.$session_id;
-                    $rs = Database::query($sql);
-                    $session_name = Database::result($rs, 0, 'name');
-                    $session_coach_id = intval(Database::result($rs, 0, 'id_coach'));
-    
-                    $sql = 'SELECT id_user FROM ' . $tbl_session_course_user . '
-                            WHERE id_session=' . $session_id . '
-                            AND course_code = "' . Database :: escape_string($course) . '" AND status=2';
-                    $rs = Database::query($sql);
-                    $course_coachs = array();
-                    while ($row_coachs = Database::fetch_array($rs)) {
-                        $course_coachs[] = $row_coachs['id_user'];
-                    }
-    
-                    if (!empty($course_coachs)) {
-                        $info_tutor_name = array();
-                        foreach ($course_coachs as $course_coach) {
-                            $coach_infos = UserManager :: get_user_info_by_id($course_coach);
-                            $info_tutor_name[] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
-                        }
-                        $course_info['tutor_name'] = implode(",",$info_tutor_name);
-                    } else if($session_coach_id != 0) {
-                        $coach_info = UserManager :: get_user_info_by_id($session_coach_id);
-                        $course_info['tutor_name'] = api_get_person_name($coach_info['firstname'], $coach_info['lastname']);
-                    }
-                }
-            } // end if (api_get_setting('use_session_mode') == 'true')*/
-    
-            //$tableTitle = $course_info['title'].' | '.get_lang('Coach').' : '.$course_info['tutor_name'].((!empty($session_name)) ? ' | '.get_lang('Session').' : '.$session_name : '');
+            $tbl_course_quiz            = Database :: get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);    
             
             $session_name = api_get_session_name($session_id);
-            $tableTitle = $course_info['title'];
-    
+                            
             $html .='
             <table class="data_table" width="100%">
                 <tr class="tableName">
                     <td colspan="4">
-                        '.Display::tag('h3', $tableTitle).'
+                        '.Display::tag('h3', $course_info['title']).'
                     </td>
                 </tr><tr>';                
                 
@@ -2249,19 +2192,22 @@ class Tracking {
 
             if (Database::result($result_visibility_tests, 0, 'visibility') == 1) {*/
             
-            if (empty($session_id)) {
-                $sql_exercices = "SELECT quiz.title,id, results_disabled FROM ".$tbl_course_quiz." AS quiz WHERE active='1' AND session_id = 0";
-            } else {
-                $sql_exercices = "SELECT quiz.title,id, results_disabled FROM ".$tbl_course_quiz." AS quiz WHERE active='1'";
-            }            
+            //Course details     
             $html .= '<tr>                
                 <th class="head" style="color:#000">'.get_lang('Exercices').'</th>
                 <th class="head" style="color:#000">'.get_lang('Attempts').'</th>                    
                 <th class="head" style="color:#000">'.get_lang('LatestAttempt').'</th>
-                <th class="head" style="color:#000">'.get_lang('Position').'</th>
+                <th class="head" style="color:#000">'.get_lang('Ranking').'</th>
                 <th class="head" style="color:#000">'.get_lang('BestResultInCourse').'</th>                                       
                 </tr>';
+            
+            if (empty($session_id)) {
+                $sql_exercices = "SELECT quiz.title,id, results_disabled FROM ".$tbl_course_quiz." AS quiz WHERE active='1' AND session_id = 0";
+            } else {
+                $sql_exercices = "SELECT quiz.title,id, results_disabled FROM ".$tbl_course_quiz." AS quiz WHERE active='1'";
+            }
             $result_exercices = Database::query($sql_exercices);
+            $to_graph_exercise_result = array();
             if (Database::num_rows($result_exercices) > 0) {
                 while ($exercices = Database::fetch_array($result_exercices)) {
                     $score = $weighting = $attempts = 0;                        
@@ -2269,7 +2215,7 @@ class Tracking {
                     //User attempts we assume the latest item in the loop is the latest attempt
                     if (!empty($exercise_stats)) {
                         //$best_score = 0; $best_score_array = array();
-                        foreach($exercise_stats as $exercise_stat) {                        
+                        foreach($exercise_stats as $exercise_stat) {
                             if ($exercise_stat['exe_user_id'] == $user_id) {
                                 
                                //Always getting the latest attempt
@@ -2289,8 +2235,9 @@ class Tracking {
                                }*/                       
                                $attempts++;
                             }
-                        }   
+                        }
                     }
+                    $to_graph_exercise_result[$exercices['id']] = $exercise_stats;
                     
                     $html .= '<tr>';                                
                     $html .= Display::tag('td', $exercices['title']);
@@ -2302,14 +2249,15 @@ class Tracking {
                         $best_score = '-';
                         
                         $best_score_data = get_best_score($exercices['id'], $course_info['code'], $session_id);     
-                        $best_score      = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);                       
+                        $best_score      = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
+                                               
                         if ($attempts > 0) {
                             $latest_attempt_url .= '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
                             $percentage_score_result = show_score($score, $weighting).' '.$latest_attempt_url;
-                            $my_score = 0;
-                            if (!empty($weighting)) {                           
+                            $my_score = 0;                            
+                            if (!empty($weighting)) {                                                           
                                 $my_score = $score/$weighting;
-                            }
+                            }                            
                             $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id);                            
                         }             
                         $html .= Display::tag('td', $attempts,                 array('align'=>'center'));                                          
@@ -2332,6 +2280,75 @@ class Tracking {
                 $html .= '<tr><td colspan="5" align="center">'.get_lang('NoEx').'</td></tr>';
             }
             $html .= '</table>';
+            
+            
+            require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
+		    require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
+		    require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
+		    
+		    foreach ($to_graph_exercise_result as $exercise_id => $attempts) {
+		        foreach ($attempts as $attempt) {
+		            if (api_get_user_id() == $attempt['exe_user_id']) {
+		                if ($attempt['exe_weighting'] != 0 ) {
+		                    $my_exercise_result[]=  $attempt['exe_result']/$attempt['exe_weighting'];
+		                }		                 
+		            } else {
+		                $exercise_result[]=  $attempt['exe_result']/$attempt['exe_weighting'];   
+		            }		            
+		        }
+		    }
+		    //echo '<pre>'; var_dump($my_exercise_result, $exercise_result);
+		    /*
+            $cache = new pCache();
+            
+            // Dataset definition   
+            $data_set = new pData;  
+            $data_set->AddPoint(array(1,4,-3,2,-3,3,2,1,0,7,4),"Serie1");  
+            $data_set->AddPoint(array(3,3,-4,1,-2,2,1,0,-1,6,3),"Serie2");
+            $data_set->AddPoint(array(3,3,-4,1,-2,2,1,0,-1,6,3),"Serie3");    
+            
+            $data_set->AddAllSeries();  
+            $data_set->SetAbsciseLabelSerie('Serie3');  
+            $data_set->SetSerieName("January","Serie1");  
+            $data_set->SetSerieName("February","Serie2");  
+              
+            
+            // Initialise the graph  
+            $Test = new pChart(700,230);  
+            $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
+            $Test->setGraphArea(50,30,680,200);  
+            $Test->drawFilledRoundedRectangle(7,7,693,223,5,240,240,240);  
+            $Test->drawRoundedRectangle(5,5,695,225,5,230,230,230);  
+            $Test->drawGraphArea(255,255,255,TRUE);  
+            $Test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2,TRUE);     
+            $Test->drawGrid(4,TRUE,230,230,230,50);  
+            
+            // Draw the 0 line  
+            $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);  
+            $Test->drawTreshold(0,143,55,72,TRUE,TRUE);  
+            
+            // Draw the bar graph  
+            $Test->drawBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);  
+            exit;
+            // Finish the graph  
+            $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);   
+            $Test->drawLegend(596,150,$data_set->GetDataDescription(),255,255,255);  
+            $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8); 
+            $Test->drawTitle(50,22,"Example 12",50,50,50,585);
+            $graph_id = uniqid();
+            $cache->WriteToCache($graph_id, $data_set->GetData(), $Test);
+            ob_start();
+            $Test->Stroke();
+            ob_end_clean();
+            
+            $img_file = $cache->GetHash($graph_id, $data_set->GetData());
+            
+            
+            echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
+		
+		    */
+		
+		
         }
         return $html;
     }

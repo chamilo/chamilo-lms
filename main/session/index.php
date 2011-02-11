@@ -165,7 +165,11 @@ foreach($final_array as $session_data) {
                 foreach ($exercise_data['data'] as $exercise_result) {                    
                     $my_exercise_result = array($exercise_data['name'], $exercise_result['exe_id']);
                     $column = 1;   
-                    $platform_score = show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);        
+                    $platform_score = show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);
+                    $my_score = 0;
+                    if(!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0) {                        
+                        $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
+                    }
                     $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id,  $my_course_code,$session_id);
                     $my_real_array[]= array(	'date'        => api_get_local_time($exercise_result['exe_date']), 
                     							'course'      => $course_data['name'], 
@@ -230,7 +234,7 @@ $extra_params_week['groupingView'] = array('groupField'=>array('week'),
 //$extra_params_week['autowidth'] = 'true'; //use the width of the parent
 
 //MyQCM grid
-$column_exercise        = array(get_lang('PublicationDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResultInCourse'), get_lang('Position'));
+$column_exercise        = array(get_lang('PublicationDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResultInCourse'), get_lang('Ranking'));
 $column_exercise_model  = array(
                                 array('name'=>'date',       'index'=>'date',      'width'=>'130','align'=>'left',   'sortable'=>'true'),
                                 array('name'=>'course',     'index'=>'course',    'width'=>'200','align'=>'left',   'sortable'=>'true'),

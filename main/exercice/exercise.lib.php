@@ -1247,6 +1247,9 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
     if (empty($session_id)) {
     	$session_id = 0;
     }
+    if (is_null($my_score)) {
+        return '-';
+    }    
     $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
     $position_data = array();
     if (empty($user_results)) {
@@ -1256,10 +1259,10 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
         $my_ranking = array();
         foreach($user_results as $result) {
             //print_r($result);
-            if (empty($result['exe_weighting']) || $result['exe_weighting'] == '0.00') {                
-                $my_ranking[$result['exe_id']] = 0;               
-            } else {
+            if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
                 $my_ranking[$result['exe_id']] = $result['exe_result']/$result['exe_weighting'];
+            } else {
+                $my_ranking[$result['exe_id']] = 0;
             }         
         }        
         asort($my_ranking);
@@ -1278,6 +1281,7 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
             }        
         }
         $return_value = array('position'=>$position, 'count'=>count($my_ranking)); 
+        //var_dump($my_score, $my_ranking);
         if ($return_string) {
             if (!empty($position) && !empty($my_ranking)) {
                return $position.'/'.count($my_ranking); 
@@ -1296,7 +1300,7 @@ function get_best_score($exercise_id, $course_code, $session_id) {
     $best_score = 0;
     if (!empty($user_results)) {
         foreach($user_results as $result) {
-            if ($result['exe_weighting'] != '') {
+            if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
                 $score = $result['exe_result']/$result['exe_weighting'];
                 if ($score > $best_score) {
                     $best_score = $score;
@@ -1321,7 +1325,7 @@ function get_average_score($exercise_id, $course_code, $session_id) {
     $avg_score = 0;
     if (!empty($user_results)) {        
         foreach($user_results as $result) {
-            if ($result['exe_weighting'] != '') {
+            if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
                 $score = $result['exe_result']/$result['exe_weighting'];
                 $avg_score +=$score;                
             }
@@ -1343,7 +1347,7 @@ function get_average_score_by_course($course_code, $session_id) {
     $avg_score = 0;
     if (!empty($user_results)) {        
         foreach($user_results as $result) {
-            if ($result['exe_weighting'] != '') {                
+            if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) { 
                 $score = $result['exe_result']/$result['exe_weighting'];
                 $avg_score +=$score;                
             }

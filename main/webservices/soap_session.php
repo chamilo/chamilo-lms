@@ -1,11 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ * Configures the WSSession SOAP service
+ * @package chamilo.webservices
+ */
 
 require_once(dirname(__FILE__).'/webservice_session.php');
 require_once(dirname(__FILE__).'/soap.php');
 
-/**
- * Configures the WSSession SOAP service
- */
 $s = WSSoapServer::singleton();
 
 $s->register(

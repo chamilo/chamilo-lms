@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Configures the WSUser SOAP service
+ * Configures the WSReport SOAP service
  * @package chamilo.webservices
  */
-require_once(dirname(__FILE__).'/webservice_user.php');
+require_once(dirname(__FILE__).'/webservice_report.php');
 require_once(dirname(__FILE__).'/soap.php');
 
 /**

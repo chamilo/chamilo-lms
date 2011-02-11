@@ -606,7 +606,7 @@ function get_last_attempt_date_of_exercise($exe_id) {
 }
 
 /**
- * Gets how many attempts exists by user, exercise
+ * Gets how many attempts exists by user, exercise, learning path
  * @param   int user id
  * @param   int exercise id
  * @param   int lp id
@@ -710,6 +710,46 @@ function get_all_exercise_results($exercise_id, $course_code, $session_id = 0) {
 	return $list;
 }
 
+
+
+/**
+ * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session
+ * @param   int     exercise id
+ * @param   string  course code
+ * @param   int     session id
+ * @return  array   with the results
+ * 
+ */
+function get_all_exercise_results_by_course($course_code, $session_id = 0, $get_count = true) {
+	$TABLETRACK_EXERCICES  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$TBL_TRACK_ATTEMPT     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+	$course_code           = Database::escape_string($course_code);
+	
+	$session_id = intval($session_id);
+	$select = '*';
+	if ($get_count) {
+	    $select = 'count(*) as count';    
+	}	
+	$sql = "SELECT $select FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";	
+	$res = Database::query($sql);	
+	if ($get_count) {
+	    $row = Database::fetch_array($res,'ASSOC');	    
+	    return $row['count'];
+	} else {
+    	$list = array();	
+    	while($row = Database::fetch_array($res,'ASSOC')) {	    	   	
+    		$list[$row['exe_id']] = $row;		
+    		$sql = "SELECT * FROM $TBL_TRACK_ATTEMPT WHERE exe_id = {$row['exe_id']}";
+    		$res_question = Database::query($sql);
+    		while($row_q = Database::fetch_array($res_question,'ASSOC')) {
+    			$list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
+    		}		    	    
+        }    
+	    return $list;
+	}
+}
+
+
 /**
  * Gets all exercise results (NO Exercises in LPs) from a given exercise id, course, session
  * @param   int     exercise id
@@ -743,7 +783,13 @@ function get_all_exercise_results_by_user($user_id, $exercise_id, $course_code, 
 }
 
 
-
+/**
+ * Gets all exercise events from a Learning Path within a Course 	nd Session
+ * @param	int		exercise id
+ * @param	string	course_code
+ * @param 	int		session id
+ * @return 	array
+ */
 function get_all_exercise_event_from_lp($exercise_id, $course_code, $session_id = 0) {
     $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);

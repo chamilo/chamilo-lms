@@ -42,7 +42,7 @@ Display::display_header($tool_name);
 // Tool name
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $tool = 'Add';
-    $interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Promotion'));
+    $interbreadcrumb[] = array ('url' => api_get_self(), 'name' => get_lang('Promotion'));    
 }
 if (isset($_GET['action']) && $_GET['action'] == 'edit') {
     $tool = 'Modify';

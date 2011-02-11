@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * @package chamilo.webservices
+ */
 require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'nusoap/nusoap.php';
@@ -140,7 +142,7 @@ $server->register('WSCreateUsers',			// method name
 // Define the method WSCreateUsers
 function WSCreateUsers($params) {
 
-    global $_user, $userPasswordCrypted;
+    global $_user, $userPasswordCrypted, $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -350,7 +352,7 @@ $server->register('WSCreateUser',				// method name
 // Define the method WSCreateUser
 function WSCreateUser($params) {
 
-    global $_user, $userPasswordCrypted;
+    global $_user, $userPasswordCrypted, $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -589,7 +591,7 @@ $server->register('WSCreateUsersPasswordCrypted',						    // method name
 // Define the method WSCreateUsersPasswordCrypted
 function WSCreateUsersPasswordCrypted($params) {
 
-    global $_user, $userPasswordCrypted;
+    global $_user, $userPasswordCrypted, $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -834,7 +836,7 @@ $server->register('WSCreateUserPasswordCrypted',						// method name
 // Define the method WSCreateUserPasswordCrypted
 function WSCreateUserPasswordCrypted($params) {
 
-    global $_user, $userPasswordCrypted;
+    global $_user, $userPasswordCrypted, $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -1889,7 +1891,7 @@ $server->register('WSCreateCourse',			// method name
 // Define the method WSCreateCourse
 function WSCreateCourse($params) {
 
-    global $firstExpirationDelay;
+    global $firstExpirationDelay, $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -1921,7 +1923,7 @@ function WSCreateCourse($params) {
         $extra_list = $course_param['extra'];
 
         // Check whether exits $x_course_code into user_field_values table.
-        $course_id = CourseManager::get_course_id_from_original_id($original_course_id['original_course_id_value'], $original_course_id['original_course_id_name']);
+        $course_id = CourseManager::get_course_id_from_original_id($course_param['original_course_id_value'], $course_param['original_course_id_name']);
         if($course_id > 0) {
             // Check whether course is not active.
             $sql = "SELECT code FROM $table_course WHERE id ='$course_id' AND visibility= '0'";
@@ -2107,7 +2109,7 @@ $server->register('WSCreateCourseByTitle',					// method name
 // Define the method WSCreateCourseByTitle
 function WSCreateCourseByTitle($params) {
 
-    global $firstExpirationDelay;
+    global $firstExpirationDelay, $_configuration;
 
     if(!WSHelperVerifyKey($params)) {
         return -1;
@@ -2326,6 +2328,7 @@ $server->register('WSEditCourse',			// method name
 // Define the method WSEditCourse
 function WSEditCourse($params){
 
+    global $_configuration;
     if(!WSHelperVerifyKey($params)) {
         return -1;
     }
@@ -2528,7 +2531,7 @@ function WSCourseDescription($params) {
     $sql = "SELECT * FROM $t_course_desc";
     $result = Database::query($sql);
 
-    /*$default_titles = array(
+    $default_titles = array(
                             get_lang('GeneralDescription'),
                             get_lang('Objectives'),
                             get_lang('Topics'),
@@ -2536,10 +2539,10 @@ function WSCourseDescription($params) {
                             get_lang('CourseMaterial'),
                             get_lang('HumanAndTechnicalResources'),
                             get_lang('Assessment'),
-                            get_lang('AddCat'));*/
+                            get_lang('AddCat'));
 
     // TODO: Hard-coded Spanish texts.
-    $default_titles = array('Descripcion general', 'Objetivos', 'Contenidos', 'Metodologia', 'Materiales', 'Recursos humanos y tecnicos', 'Evaluacion', 'Apartado');
+    //$default_titles = array('Descripcion general', 'Objetivos', 'Contenidos', 'Metodologia', 'Materiales', 'Recursos humanos y tecnicos', 'Evaluacion', 'Apartado');
 
     for ($x = 1; $x < 9; $x++) {
         $array_course_desc_id[$x] = $x;
@@ -3608,19 +3611,19 @@ function WSUnsubscribeUserFromCourse($params) {
 
         // Get user id from original user id
         $usersList = array();
-        foreach ($original_user_id_values as $row_original_user_list) {
-            $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+        foreach ($original_user_id_values as $key => $row_original_user_id) {
+            $user_id = UserManager::get_user_id_from_original_id($original_user_id_values[$key], $original_user_id_name[$key]);
              if ($user_id == 0) {
                 continue; // user_id doesn't exist.
             } else {
-                $sql = "SELECT user_id FROM $user_table WHERE user_id ='".$row_user[0]."' AND active= '0'";
+                $sql = "SELECT user_id FROM $user_table WHERE user_id ='".$user_id."' AND active= '0'";
                 $resu = Database::query($sql);
                 $r_check_user = Database::fetch_row($resu);
                 if (!empty($r_check_user[0])) {
                     continue; // user_id is not active.
                 }
             }
-            $usersList[] = $row_user[0];
+            $usersList[] = $user_id;
          }
 
         $orig_user_id_value[] = implode(',',$usersList);
@@ -3786,19 +3789,19 @@ function WSSuscribeUsersToSession($params){
         }
 
          $usersList = array();
-         foreach ($original_user_id_values as $row_original_user_list) {
-             $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+         foreach ($original_user_id_values as $key => $row_original_user_list) {
+             $user_id = UserManager::get_user_id_from_original_id($original_user_id_values[$key], $original_user_id_name[$key]);
              if ($user_id == 0) {
                 continue; // user_id doesn't exist.
             } else {
-                $sql = "SELECT user_id FROM $user_table WHERE user_id ='".$row_user[0]."' AND active= '0'";
+                $sql = "SELECT user_id FROM $user_table WHERE user_id ='".$user_id."' AND active= '0'";
                 $resu = Database::query($sql);
                 $r_check_user = Database::fetch_row($resu);
                 if (!empty($r_check_user[0])) {
                     continue; // user_id is not active.
                 }
             }
-            $usersList[] = $row_user[0];
+            $usersList[] = $user_id;
          }
 
         if (empty($usersList)) {
@@ -3977,38 +3980,38 @@ function WSUnsuscribeUsersFromSession($params) {
 
     foreach ($userssessions_params as $usersession_params) {
 
-           $original_session_id_value = $usersession_params['original_session_id_value'];
+        $original_session_id_value = $usersession_params['original_session_id_value'];
         $original_session_id_name = $usersession_params['original_session_id_name'];
         $original_user_id_name = $usersession_params['original_user_id_name'];
         $original_user_id_values = $usersession_params['original_user_id_values'];
-           $orig_session_id_value[] = $original_session_id_value;
+        $orig_session_id_value[] = $original_session_id_value;
         // get session id from original session id
         $sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
         $res_session = Database::query($sql_session);
         $row_session = Database::fetch_row($res_session);
 
-         $id_session = $row_session[0];
+        $id_session = $row_session[0];
 
-         if (Database::num_rows($res_session) < 1) {
+        if (Database::num_rows($res_session) < 1) {
             $results[] = 0;
             continue;
         }
 
-         $usersList = array();
-         foreach ($original_user_id_values as $row_original_user_list) {
-             $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+        $usersList = array();
+        foreach ($original_user_id_values as $key => $row_original_user_list) {
+             $user_id = UserManager::get_user_id_from_original_id($original_user_id_values[$key], $original_user_id_name[$key]);
              if ($user_id == 0) {
                 continue; // user_id doesn't exist.
             } else {
-                $sql = "SELECT user_id FROM $user_table WHERE user_id ='".$row_user[0]."' AND active= '0'";
+                $sql = "SELECT user_id FROM $user_table WHERE user_id ='".$user_id."' AND active= '0'";
                 $resu = Database::query($sql);
                 $r_check_user = Database::fetch_row($resu);
                 if (!empty($r_check_user[0])) {
                     continue; // user_id is not active.
                 }
             }
-            $usersList[] = $row_user[0];
-         }
+            $usersList[] = $user_id;
+        }
 
         if (empty($usersList)) {
             $results[] = 0;

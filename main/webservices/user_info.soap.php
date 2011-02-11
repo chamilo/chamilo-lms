@@ -1,13 +1,12 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
- * This script provides the caller service with a list
- * of courses that have a certain level of visibility
- * on this dokeos portal.
- * It is set to work with the Dokeos module for Drupal:
- * http://drupal.org/project/dokeos
- *
- * See license terms in /dokeos_license.txt
+ * This script provides the caller service with user details.
+ * It is set to work with the Chamilo module for Drupal:
+ * http://drupal.org/project/chamilo
+ * 
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @package chamilo.webservices
  */
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);

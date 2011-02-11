@@ -153,24 +153,28 @@ foreach($final_array as $session_data) {
         $row = 1;
         $column = 0;
         $table->setCellContents($row, $column, $course_data['name']);
-        $column++;*/           
+        $column++;*/      
+        
         if (!empty($course_data['exercises'])) {
             //Exercises            
             foreach ($course_data['exercises'] as $my_exercise_id => $exercise_data) {
+                $best_score_data = get_best_score($my_exercise_id, $my_course_code, $session_id);     
+                $best_score      = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
                 //Exercise results                              
                 $counter = 1;                    
                 foreach ($exercise_data['data'] as $exercise_result) {                    
                     $my_exercise_result = array($exercise_data['name'], $exercise_result['exe_id']);
-                    $column = 1;      
-                    $score          = $exercise_result['exe_result'].' / '.$exercise_result['exe_weighting'];
-                    $platform_score = show_score($exercise_result['exe_result'], $exercise_result['exe_weighting'], false);
-                    if (!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0 ) {                        
-                        $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
-                    } else {
-                    	$my_score = 0;
-                    }
+                    $column = 1;   
+                    $platform_score = show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);        
                     $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id,  $my_course_code,$session_id);
-                    $my_real_array[]= array('course'=>$course_data['name'], 'exercise'=>$exercise_data['name'],'attempt'=>$counter,'result'=>$score,'note'=>$platform_score,'position'=>$position);
+                    $my_real_array[]= array(	'date'        => api_get_local_time($exercise_result['exe_date']), 
+                    							'course'      => $course_data['name'], 
+                    						    'exercise'    => $exercise_data['name'],
+                    						    'attempt'     => $counter,
+                    						    'result'      => $platform_score,
+                    						    'best_result' => $best_score,
+                    						    'position'    => $position
+                                        );
                     $counter++;   
                     foreach ($my_exercise_result as $data) {                            
                         //$my_real_array[]= array('session'=>$session_data['name'],'course'=>$course_data['name'], 'exercise'=>$exercise_data['name'],'result'=>$exercise_result['exe_id'])  ;                                                     
@@ -221,22 +225,23 @@ $column_week_model  = array (
                           
 $extra_params_week['grouping'] = 'true';
 $extra_params_week['groupingView'] = array('groupField'=>array('week'),
-                                            'groupColumnShow'=>'false',
-                                            'groupText' => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
+                                           'groupColumnShow'=>'false',
+                                           'groupText' => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
 //$extra_params_week['autowidth'] = 'true'; //use the width of the parent
 
 //MyQCM grid
-$column_exercise        = array(get_lang('Course'),get_lang('Exercise'), get_lang('Attempts'), get_lang('Result'), get_lang('Score'), get_lang('Position'));
+$column_exercise        = array(get_lang('PublicationDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResultInCourse'), get_lang('Position'));
 $column_exercise_model  = array(
-                                array('name'=>'course',     'index'=>'course',    'width'=>'450','align'=>'left',   'sortable'=>'true'),
-                                array('name'=>'exercise',   'index'=>'exercise',  'width'=>'250','align'=>'left',   'sortable'=>'true'),
-                                array('name'=>'attempt',    'index'=>'attempt',   'width'=>'50', 'align'=>'center', 'sortable'=>'true'),
-                                array('name'=>'result',     'index'=>'result',    'width'=>'50', 'align'=>'center', 'sortable'=>'true'),
-                                array('name'=>'note',       'index'=>'note',      'width'=>'50', 'align'=>'center', 'sortable'=>'true'),
-                                array('name'=>'position',   'index'=>'position',  'width'=>'50', 'align'=>'center', 'sortable'=>'true')
+                                array('name'=>'date',       'index'=>'date',      'width'=>'130','align'=>'left',   'sortable'=>'true'),
+                                array('name'=>'course',     'index'=>'course',    'width'=>'200','align'=>'left',   'sortable'=>'true'),
+                                array('name'=>'exercise',   'index'=>'exercise',  'width'=>'200','align'=>'left',   'sortable'=>'true'),                                
+                                array('name'=>'attempt',    'index'=>'attempt',   'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
+                                array('name'=>'result',     'index'=>'result',    'width'=>'140', 'align'=>'center', 'sortable'=>'true'),
+                                array('name'=>'best_result','index'=>'best_result','width'=>'140','align'=>'center', 'sortable'=>'true'),
+                                array('name'=>'position',   'index'=>'position',  'width'=>'60', 'align'=>'center', 'sortable'=>'true')
                                 );                        
-$extra_params_exercise['grouping'] = 'true';
-$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0}</b>'));
+//$extra_params_exercise['grouping'] = 'true';
+//$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0}</b>'));
 //$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0} - {1} Item(s)</b>'));
    
                                           
@@ -270,13 +275,13 @@ $my_reporting   = Tracking::show_user_progress(api_get_user_id(), $session_id, '
 $my_reporting   .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
 
 //Main headers
-$headers        = array(get_lang('LearningPaths'), get_lang('MyQCM'), get_lang('MyResults'));
+$headers        = array(get_lang('LearningPaths'), get_lang('MyQCM'), get_lang('MyStatistics'));
 //Subheaders
 $sub_header     = array(get_lang('AllLearningPaths'), get_lang('PerWeek'), get_lang('ByCourse'));
 
-//Sub header tab
+//Sub headers data
 $tabs           =  Display::tabs($sub_header, array(Display::grid_html('list_default'), Display::grid_html('list_week'), Display::grid_html('list_course')),'sub_tab');
-//Main tabs
+//Main headers data
 echo Display::tabs($headers, array($tabs, Display::grid_html('exercises'),$my_reporting));
 
 Display :: display_footer();

@@ -287,8 +287,7 @@ if (is_array($list) && count($list) > 0) {
                         $view_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                     } else {
                         //$view_score = ($score == 0 ? '/' : ($maxscore === 0 ? $score : $score . '/' . float_format($maxscore, 1)));
-                        $view_score = show_score($score,$maxscore, false);
-                        
+                        $view_score = show_score($score, $maxscore, false);                        
                     }
                     $output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . get_lang('Attempt') . ' ' . $row['iv_view_count'] . "</td>\n"
                      . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . $view_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';
@@ -308,7 +307,6 @@ if (is_array($list) && count($list) > 0) {
                         } else {
                             $temp[] = ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
                         }
-
                         $temp[] = $time;
                         $csv_content[] = $temp;
                     }
@@ -638,18 +636,18 @@ if (is_array($list) && count($list) > 0) {
                                 $view_score =  Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                             } else {
                                 // Show only float when need it.
-                                $my_score  = float_format( $my_score, 1);
-                                $my_maxscore =float_format($my_maxscore, 1);
+                                //$my_score  = float_format( $my_score, 1);
+                                //$my_maxscore =float_format($my_maxscore, 1);
                                 if ($my_score == 0 ) {
-                                    $view_score = 	'0/'.$my_maxscore;
+                                    //$view_score = 	'0/'.$my_maxscore;
+                                    $view_score = show_score(0, $my_maxscore, false);
                                 } else {
                                     if ($my_maxscore == 0) {
                                         $view_score = $my_score;
                                     } else {
                                         //$view_score = $my_score . '/' . $my_maxscore;
                                         $view_score = show_score($my_score, $my_maxscore, false);
-                                    }
-                                    
+                                    }                                    
                                 }
                                 //$view_score = ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore));
                             }
@@ -676,7 +674,7 @@ if (is_array($list) && count($list) > 0) {
                                     $output .= '<td><a href="../exercice/exercise_show.php?origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
                                 }
                             }
-                             $output .= '</tr>';
+                            $output .= '</tr>';
                             $n++;
                         }
                     }

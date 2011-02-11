@@ -3,6 +3,8 @@
 
 /**
  *	Exercise library
+ *  @todo convert this lib into a static class
+ *  
  * 	shows a question and its answers
  *	@package dokeos.exercise
  * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
@@ -1139,10 +1141,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
  * @param	bool	use or not the platform settings
  * @return  string  an html with the score modified
  */
-function show_score($score, $weight, $show_porcentage = true, $use_platform_settings = true) {
+function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true) {
     $html  = '';
-    $score_rounded = $score;
-     
+    $score_rounded = $score;     
     $max_note =  api_get_setting('exercise_max_score');
     $min_note =  api_get_setting('exercise_min_score');
     
@@ -1152,41 +1153,53 @@ function show_score($score, $weight, $show_porcentage = true, $use_platform_sett
     	       $score        = $min_note + ($max_note - $min_note) * $score /$weight;
             } else {
                $score        = $min_note;
-            }
-            $score_rounded  = float_format($score, 1);
+            }            
             $weight         = $max_note;
         }
-    }
-    if ($show_porcentage) {
+    }    
+    $score_rounded = float_format($score, 1);    
+    $weight = float_format($weight, 1);    
+    if ($show_percentage) {
         $html = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1) . '% (' . $score_rounded . ' / ' . $weight . ')';	
-    } else {            
-        $weight = float_format($weight, 1);
+    } else {    
     	$html = $score_rounded . ' / ' . $weight;
-    }
+    }    
     return $html;	
 }
 
 /**
- * Converts a score to the platform scale 
+ * Converts a numeric value in a percentage example 0.66666 to 66.67 %
+ * @param $value
+ * @return unknown_type
+ */
+function convert_to_percentage($value) {
+    $return = '-';
+    if ($value != '') {
+        $return = float_format($value * 100, 1).' %';
+    }
+    return $return;    
+}
+
+/**
+ * Converts a score/weight values to the platform scale 
  * @param   float   score
  * @param   float   weight
  * @return  float   the score rounded converted to the new range
  */
-function convert_score($score, $weight) {  
-    if ($score != '' && $weight != '') {
-        $max_note =  api_get_setting('exercise_max_score');
-        $min_note =  api_get_setting('exercise_min_score');  
-        if ($max_note != '' && $min_note != '') {
-           
+function convert_score($score, $weight) {
+    $max_note =  api_get_setting('exercise_max_score');
+    $min_note =  api_get_setting('exercise_min_score');  
+          
+    if ($score != '' && $weight != '') {        
+        if ($max_note != '' && $min_note != '') {           
            if (!empty($weight)) {          
-               $score   = $min_note + ($max_note - $min_note) * $score /$weight;
+               $score   = $min_note + ($max_note - $min_note) * $score / $weight;
            } else {
                $score   = $min_note;
-           }
-                   
+           }                   
         }           
-    }
-    $score_rounded  = round($score, 2);  
+    }    
+    $score_rounded  = float_format($score, 1);  
     return $score_rounded;
 }
 
@@ -1217,7 +1230,8 @@ function get_all_exercises($course_info = null, $session_id = 0) {
 }
 
 /**
- * Gets the position of the score based in a given score (result/weight) and the exe_id
+ * Gets the position of the score based in a given score (result/weight) and the exe_id 
+ * (NO Exercises in LPs )
  * @param   float   user score to be compared attention => score/weight
  * @param   int     exe id of the exercise (this is necesary because if 2 students have the same score the one with the minor exe_id will have a best position, just to be fair and FIFO)
  * @param   int     exercise id
@@ -1270,6 +1284,9 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
     }
 }
 
+/*
+ *  Get the best score in a exercise (NO Exercises in LPs )
+ */
 function get_best_score($exercise_id, $course_code, $session_id) { 
     $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
     $best_score_data = array();
@@ -1286,4 +1303,51 @@ function get_best_score($exercise_id, $course_code, $session_id) {
         }
     }
     return $best_score_data;
+}
+
+/**
+ * Get average score (NO Exercises in LPs )
+ * @param 	int		exercise id
+ * @param 	string	course code
+ * @param 	int		session id
+ * @return 
+ */
+function get_average_score($exercise_id, $course_code, $session_id) { 
+    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
+    $avg_score_data = array();    
+    $avg_score = 0;
+    if (!empty($user_results)) {        
+        foreach($user_results as $result) {
+            if ($result['exe_weighting'] != '') {
+                $score = $result['exe_result']/$result['exe_weighting'];
+                $avg_score +=$score;                
+            }
+        }
+        $avg_score = float_format($avg_score / count($user_results), 1);
+    }
+    return $avg_score;
+}
+
+/**
+ * Get average score by score (NO Exercises in LPs )
+ * @param 	int		exercise id
+ * @param 	string	course code
+ * @param 	int		session id
+ * @return 
+ */
+function get_average_score_by_course($course_code, $session_id) { 
+    $user_results = get_all_exercise_results_by_course($course_code, $session_id, false);        
+    $avg_score = 0;
+    if (!empty($user_results)) {        
+        foreach($user_results as $result) {
+            if ($result['exe_weighting'] != '') {                
+                $score = $result['exe_result']/$result['exe_weighting'];
+                $avg_score +=$score;                
+            }
+        }
+        //We asume that all exe_weighting
+        //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
+        $avg_score = convert_to_percentage($avg_score / count($user_results));
+    }
+    return $avg_score;
 }

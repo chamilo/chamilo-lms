@@ -652,15 +652,16 @@ class Display {
 	public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size=null) {
         $code_path = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
-        /*
+        
         $theme = 'css/'.api_get_visual_theme().'/icons/';
         $icon = '';
         $size_extra = '';
         if (isset($size)) {
-            if (in_array($size,array(16,32,64,128))) {
+            if (in_array($size,array(16,22,32,64,128))) {
             	$size_extra = $size.'/';
             }
         }
+
         if (is_file($code_path.$theme.$size_extra.$image)) {
         	$icon = $w_code_path.$theme.$size_extra.$image;
         } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {
@@ -668,8 +669,7 @@ class Display {
         } else {
         	$icon = $w_code_path.'img/'.$image;
         }
-        */
-        $icon = $w_code_path.'img/'.$image;
+
         return self::img($icon, $alt_text,$additional_attributes);
 	}
     

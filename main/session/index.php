@@ -127,7 +127,6 @@ if (!api_is_platform_admin()) {
     }
 }
 
-//print_r($my_session_list); exit;
 require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';
 $html = '';
 //Final data to be show

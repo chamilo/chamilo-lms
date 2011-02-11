@@ -2237,7 +2237,7 @@ class Tracking {
                             }
                         }
                     }
-                    $to_graph_exercise_result[$exercices['id']] = $exercise_stats;
+                    $to_graph_exercise_result[$exercices['id']] = array('title'=>$exercices['title'], 'data'=>$exercise_stats);
                     
                     $html .= '<tr>';                                
                     $html .= Display::tag('td', $exercices['title']);
@@ -2287,68 +2287,105 @@ class Tracking {
 		    require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 		    
 		    foreach ($to_graph_exercise_result as $exercise_id => $attempts) {
-		        foreach ($attempts as $attempt) {
+		        $exercise_title= $attempts['title'];	
+		        $attempts = $attempts['data']; 	        
+		        $my_exercise_result = 0;                
+                $exercise_result = array();
+		        foreach ($attempts as $attempt) {         
 		            if (api_get_user_id() == $attempt['exe_user_id']) {
 		                if ($attempt['exe_weighting'] != 0 ) {
-		                    $my_exercise_result[]=  $attempt['exe_result']/$attempt['exe_weighting'];
+		                    $my_exercise_result = $attempt['exe_result']/$attempt['exe_weighting'];
 		                }		                 
 		            } else {
-		                $exercise_result[]=  $attempt['exe_result']/$attempt['exe_weighting'];   
+		                if ($attempt['exe_weighting'] != 0 ) {		                
+		                    $exercise_result[]=  $attempt['exe_result']/$attempt['exe_weighting'];
+		                }   
 		            }		            
 		        }
+		        
+		        //var_dump($exercise_result,$my_exercise_result);
+    		    
+                $max = 100;
+                $pieces = 5 ;
+                $part = round($max /$pieces);
+                $x_axis = array();
+                $final_array = array();
+                $my_final_array = array();
+                
+                for ($i=1; $i <=$pieces; $i++) {
+                    $min = ($i- 1)*$part;
+                    $max = ($i)*$part;
+                    $x_axis[]= $min." - ".$max;
+                    $count = 0;
+                    foreach($exercise_result as $result) {
+                        $percentage = $result*100;
+                        //echo $percentage.' - '.$min.' - '.$max."<br />";                    
+                        if ($percentage > $min && $percentage <= $max) {
+                            //echo ' is > ';                            
+                            $count++;
+                        }
+                    }                
+                    $final_array[]= $count;
+                    if ($my_exercise_result > $min && $my_exercise_result < $max) {
+                        $my_final_array[] = 1;
+                    } else {
+                      //  $my_final_array[] = 0;
+                    }
+                    
+                } 
+                //var_dump($my_final_array, $final_array); exit;
+                
+                //echo '<pre>'; var_dump($my_exercise_result, $exercise_result,$x_axis);
+            
+                $cache = new pCache();
+                
+                // Dataset definition   
+                $data_set = new pData;  
+                $data_set->AddPoint($final_array,"Serie1");  
+                $data_set->AddPoint($my_final_array,"Serie2");
+                $data_set->AddPoint($x_axis,"Serie3");
+                $data_set->AddAllSeries();  
+                
+                $data_set->SetAbsciseLabelSerie('Serie3');  
+                $data_set->SetSerieName(get_lang('Score'),"Serie1");  
+                $data_set->SetSerieName(get_lang('MyScore'),"Serie2");
+                
+                $data_set->SetXAxisName("Score");                  
+                
+                // Initialise the graph  
+                $Test = new pChart(700,230);  
+    
+                $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
+                $Test->setGraphArea(50,30,680,200);  
+                $Test->drawFilledRoundedRectangle(7,7,693,223,5,240,240,240);  
+                $Test->drawRoundedRectangle(5,5,695,225,5,230,230,230);  
+                $Test->drawGraphArea(255,255,255,TRUE);  
+                $Test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2,TRUE);     
+                $Test->drawGrid(4,TRUE,230,230,230,50);  
+                
+                // Draw the 0 line  
+                $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);  
+                $Test->drawTreshold(0,143,55,72,TRUE,TRUE);  
+                
+                // Draw the bar graph  
+                $data_set->RemoveSerie("Serie3");  
+                $Test->drawBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);  
+                
+                // Finish the graph  
+                $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);   
+                $Test->drawLegend(596,150,$data_set->GetDataDescription(),255,255,255);  
+                $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8); 
+                $Test->drawTitle(50,22,$exercise_title,50,50,50,585);
+                $graph_id = uniqid();
+                $cache->WriteToCache($graph_id, $data_set->GetData(), $Test);
+                ob_start();
+                $Test->Stroke();
+                ob_end_clean();            
+                $img_file = $cache->GetHash($graph_id, $data_set->GetData());
+                $html .= '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';		        
 		    }
-		    //echo '<pre>'; var_dump($my_exercise_result, $exercise_result);
-		    /*
-            $cache = new pCache();
+		    
             
-            // Dataset definition   
-            $data_set = new pData;  
-            $data_set->AddPoint(array(1,4,-3,2,-3,3,2,1,0,7,4),"Serie1");  
-            $data_set->AddPoint(array(3,3,-4,1,-2,2,1,0,-1,6,3),"Serie2");
-            $data_set->AddPoint(array(3,3,-4,1,-2,2,1,0,-1,6,3),"Serie3");    
-            
-            $data_set->AddAllSeries();  
-            $data_set->SetAbsciseLabelSerie('Serie3');  
-            $data_set->SetSerieName("January","Serie1");  
-            $data_set->SetSerieName("February","Serie2");  
-              
-            
-            // Initialise the graph  
-            $Test = new pChart(700,230);  
-            $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
-            $Test->setGraphArea(50,30,680,200);  
-            $Test->drawFilledRoundedRectangle(7,7,693,223,5,240,240,240);  
-            $Test->drawRoundedRectangle(5,5,695,225,5,230,230,230);  
-            $Test->drawGraphArea(255,255,255,TRUE);  
-            $Test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2,TRUE);     
-            $Test->drawGrid(4,TRUE,230,230,230,50);  
-            
-            // Draw the 0 line  
-            $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);  
-            $Test->drawTreshold(0,143,55,72,TRUE,TRUE);  
-            
-            // Draw the bar graph  
-            $Test->drawBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);  
-            exit;
-            // Finish the graph  
-            $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);   
-            $Test->drawLegend(596,150,$data_set->GetDataDescription(),255,255,255);  
-            $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8); 
-            $Test->drawTitle(50,22,"Example 12",50,50,50,585);
-            $graph_id = uniqid();
-            $cache->WriteToCache($graph_id, $data_set->GetData(), $Test);
-            ob_start();
-            $Test->Stroke();
-            ob_end_clean();
-            
-            $img_file = $cache->GetHash($graph_id, $data_set->GetData());
-            
-            
-            echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
-		
-		    */
-		
-		
         }
         return $html;
     }

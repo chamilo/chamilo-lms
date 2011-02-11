@@ -216,7 +216,12 @@ if (isset($_POST['SaveWikiNew']))
 	   else
 	   {
 			$return_message=save_new_wiki();
-			Display::display_confirmation_message($return_message, false);
+			if($return_message==false){				
+				Display::display_error_message(get_lang('NoWikiPageTitle'), false);
+			}
+			else{
+				Display::display_confirmation_message($return_message, false);
+			}
 	   }
 	}
 }

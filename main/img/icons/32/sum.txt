@@ -1,0 +1,19 @@
+new_document 		modif mix nuvola crystal
+new_folder 		modif nuvola
+new_paint	 	modif nuvola
+back_folder 		modif nuvola
+back 			nuvola
+new_sound		modif nuvola
+disk_quota		nuvola
+upload_file		modif mix nuvola crystal
+thumbnails		nuvola
+thumbnails_na		modif nuvola
+pack			nuvola
+slideshow		nuvola
+new_draw		nuvola
+new_draw_na		modif nuvola
+save_pack		nuvola
+settings		nuvola
+edit			nuvola
+draw			nuvola
+paint			nuvola

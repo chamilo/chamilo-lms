@@ -790,14 +790,14 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights){
 if ($curdirpath!= '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
 ?>
     <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&amp;curdirpath=<?php echo urlencode((dirname($curdirpath) == '\\') ? '/' : dirname($curdirpath)).$req_gid; ?>">
-        <?php Display::display_icon('folder_up.gif', get_lang('Up')); echo get_lang('Up'); ?></a>&nbsp;
+        <?php Display::display_icon('folder_up.png', get_lang('Up'),'','32'); ?></a>
 <?php
 }
 
 if ($is_certificate_mode && $curdirpath != '/certificates') {
 ?>
     <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&amp;curdirpath=<?php echo urlencode((dirname($curdirpath) == '\\') ? '/' : dirname($curdirpath)).$req_gid; ?>">
-        <?php Display::display_icon('folder_up.gif', get_lang('Up')); echo get_lang('Up'); ?></a>&nbsp;
+        <?php Display::display_icon('folder_up.png', get_lang('Up'),'','32'); ?></a>
 <?php
 }
 
@@ -916,9 +916,9 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 
     // Create new document
     if (!$is_certificate_mode) {
-        ?><br />
+        ?>
         <a href="create_document.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>">
-            <?php Display::display_icon('filenew.gif', get_lang('CreateDoc')); echo get_lang('CreateDoc'); ?></a>&nbsp;
+            <?php Display::display_icon('new_document.png', get_lang('CreateDoc'),'','32'); ?></a>
         <?php
 
         // Create new draw
@@ -928,10 +928,10 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             if (api_browser_support('svg')){
             ?>
                 <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>">
-                    <?php Display::display_icon('draw_new.png', get_lang('Draw')); echo get_lang('Draw'); ?></a>&nbsp;
+                    <?php Display::display_icon('new_draw.png', get_lang('Draw'),'','32'); ?></a>&nbsp;
             <?php
             }else{
-                Display::display_icon('draw_new_na.png', get_lang('BrowserDontSupportsSVG')); echo get_lang('Draw').'&nbsp;';
+                Display::display_icon('new_draw_na.png', get_lang('BrowserDontSupportsSVG','','32'));
             }
         }
 		
@@ -939,7 +939,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		if (api_get_setting('enabled_support_pixlr') == 'true'){
 		?>
 			<a href="create_paint.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>">
-		   <?php Display::display_icon('new_paint.png', get_lang('PhotoRetouching')); echo get_lang('PhotoRetouching'); ?></a>&nbsp;
+		   <?php Display::display_icon('new_paint.png', get_lang('PhotoRetouching'),'','32'); ?></a>
 		<?php
 		}
 		
@@ -947,7 +947,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		if (api_get_setting('enabled_text2audio') == 'true'){
 		?>
 			<a href="create_audio.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>">
-		   <?php Display::display_icon('new_text2audio.png', get_lang('CreateAudio')); echo get_lang('CreateAudio'); ?></a>&nbsp;
+		   <?php Display::display_icon('new_sound.png', get_lang('CreateAudio'),'','32'); ?></a>
 		<?php
 		}		
     }    
@@ -956,28 +956,28 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     if ($is_certificate_mode) {
 ?>
     <a href="create_document.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>&amp;certificate=true&amp;<?php echo 'selectcat='.Security::remove_XSS($_GET['selectcat']); ?>">
-        <?php Display::display_icon('filenew.gif', get_lang('CreateCertificate')); echo get_lang('CreateCertificate'); ?></a>&nbsp;
+        <?php Display::display_icon('new_document.png', get_lang('CreateCertificate'),'','32'); ?></a>
 <?php
     }
     // File upload link
     $upload_name = $is_certificate_mode ? get_lang('UploadCertificate') : get_lang('UplUploadDocument');
 ?>
     <a href="upload.php?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo $curdirpathurl.$req_gid; ?>">
-        <?php Display::display_icon('submit_file.gif', $upload_name); echo $upload_name; ?></a>&nbsp;
+        <?php Display::display_icon('upload_file.png', $upload_name,'','32'); ?></a>
 <?php
 
     // Create directory
     if (!$is_certificate_mode) {
 ?>
     <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1">
-        <?php Display::display_icon('folder_new.gif', get_lang('CreateDir')); echo get_lang('CreateDir'); ?></a>&nbsp;
+        <?php Display::display_icon('new_folder.png', get_lang('CreateDir'),'','32'); ?></a>
 <?php
     }
     //Show disk quota
     if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id)) {
 ?>
     <a href="quota.php?<?php echo api_get_cidreq(); ?>">
-        <?php Display::display_icon('statistics.gif', get_lang('ShowCourseQuotaUse')); echo get_lang('ShowCourseQuotaUse'); ?></a>&nbsp;
+        <?php Display::display_icon('disk_quota.png', get_lang('ShowCourseQuotaUse'),'','32'); ?></a>
 <?php
     }
 }
@@ -990,7 +990,7 @@ if (!is_null($docs_and_folders)) {
 
         //for student does not show icon into other shared folder, and does not show into main path (root)
         if (is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id) && $curdirpath!='/' || api_is_allowed_to_edit() || api_is_platform_admin()) {
-            echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&amp;path='.$curdirpathurl.'">'.Display::return_icon('zip_save.gif', get_lang('Save').' (ZIP)'). get_lang('Save').' (ZIP)</a>&nbsp;';
+            echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&amp;path='.$curdirpathurl.'">'.Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)','','32').'</a>';
         }
 
     }
@@ -999,7 +999,7 @@ if (!is_null($docs_and_folders)) {
 // Slideshow by Patrick Cool, May 2004
 require 'document_slideshow.inc.php';
 if ($image_present && !isset($_GET['keyword'])  ) {
-    echo '<a href="slideshow.php?'.api_get_cidreq().'&amp;curdirpath='.$curdirpathurl.'"><img src="../img/images_gallery.gif" border="0" title="'.get_lang('ViewSlideshow').'"/>'.get_lang('ViewSlideshow').'</a>';
+    echo '<a href="slideshow.php?'.api_get_cidreq().'&amp;curdirpath='.$curdirpathurl.'">'.Display::return_icon('slideshow.png', get_lang('ViewSlideshow'),'','32').'</a>';
 }
 echo '</div>';
 

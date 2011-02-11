@@ -593,21 +593,21 @@ function show_return($call_from_tool='', $slide_id=0, $is_certificate_mode=false
 	echo '<div class="actions">';
 	if ($is_certificate_mode)
 	{
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview').'</a>';
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'','32').'</a>';
 	}
 	elseif($call_from_tool=='slideshow'){
-		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ViewSlideshow')).get_lang('BackTo').' '.get_lang('ViewSlideshow').'</a>';		
+		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'),'','32').'</a>';		
 	}
 	elseif($call_from_tool=='editdraw'){
-		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
-		echo '<a href="javascript:history.back(1)">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Draw')).get_lang('BackTo').' '.get_lang('Draw').'</a>';
+		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+		echo '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png',get_lang('BackTo').' '.get_lang('Draw'),'','32').'</a>';
 	}
 	elseif($call_from_tool=='editpaint'){
-		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
-		echo '<a href="javascript:history.back(1)">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Paint')).get_lang('BackTo').' '.get_lang('Paint').'</a>';		
+		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+		echo '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png',get_lang('BackTo').' '.get_lang('Paint')).'</a>';		
 	}
 	else{
-		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>&nbsp;';
+		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 	}
 	echo '</div>';
 }

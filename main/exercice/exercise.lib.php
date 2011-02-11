@@ -1142,6 +1142,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
  * @return  string  an html with the score modified
  */
 function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true) {
+    if (is_null($score) && is_null($weight)) {
+        return '-';
+    }
     $html  = '';
     $score_rounded = $score;     
     $max_note =  api_get_setting('exercise_max_score');
@@ -1159,8 +1162,9 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
     }    
     $score_rounded = float_format($score, 1);    
     $weight = float_format($weight, 1);    
-    if ($show_percentage) {
-        $html = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1) . '% (' . $score_rounded . ' / ' . $weight . ')';	
+    if ($show_percentage) {        
+        $parent = '(' . $score_rounded . ' / ' . $weight . ')';
+        $html = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1) . "%  $parent";	
     } else {    
     	$html = $score_rounded . ' / ' . $weight;
     }    

@@ -238,7 +238,7 @@ $column_exercise_model  = array(
                                 array('name'=>'attempt',    'index'=>'attempt',   'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
                                 array('name'=>'result',     'index'=>'result',    'width'=>'140', 'align'=>'center', 'sortable'=>'true'),
                                 array('name'=>'best_result','index'=>'best_result','width'=>'140','align'=>'center', 'sortable'=>'true'),
-                                array('name'=>'position',   'index'=>'position',  'width'=>'50', 'align'=>'center', 'sortable'=>'true')
+                                array('name'=>'position',   'index'=>'position',  'width'=>'60', 'align'=>'center', 'sortable'=>'true')
                                 );                        
 //$extra_params_exercise['grouping'] = 'true';
 //$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0}</b>'));

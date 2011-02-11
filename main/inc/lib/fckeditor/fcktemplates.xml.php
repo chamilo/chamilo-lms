@@ -79,9 +79,14 @@ exit;
  * @return html code for adding a css style <style ...
  */
 function loadCSS($css_name) {
-    $template_css = ' <style type="text/css">'.str_replace('../../img/', api_get_path(REL_CODE_PATH).'img/', file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css')).'</style>';
+    $template_css = file_get_contents(api_get_path(SYS_PATH).'main/css/'.$css_name.'/default.css');
+    $template_css = str_replace('../../img/', api_get_path(REL_CODE_PATH).'img/', $template_css);
     $template_css = str_replace('images/', api_get_path(REL_CODE_PATH).'css/'.$css_name.'/images/', $template_css);
-    return $template_css;
+
+    // Reseting the body's background color to be in white, see Task #1885 and http://www.chamilo.org/en/node/713
+    $template_css .= "\n".'body { background: #fff; } /* Resetting the background. */'."\n";
+
+    return ' <style type="text/css">'.$template_css.'</style>';
 }
 
 /**

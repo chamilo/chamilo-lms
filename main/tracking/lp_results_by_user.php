@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * 
+ * Exercise results from Learning paths
+ * 
+ * @todo implement pagination
+ * 
+ */
 
 $language_file = array ('registration', 'index', 'tracking', 'exercice','survey');
 
@@ -12,15 +19,15 @@ $this_section = SECTION_TRACKING;
 
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
-if(!$is_allowedToTrack) {
+if (!$is_allowedToTrack) {
 	Display :: display_header(null);
 	api_not_allowed();
 	Display :: display_footer();
 }
 
-$export_to_xls = false;
+$export_to_csv = false;
 if (isset($_GET['export'])) {
-	$export_to_xls = true;
+	$export_to_csv = true;
 }
 
 $TBL_EXERCICES			= Database::get_course_table(TABLE_QUIZ_TEST);
@@ -75,7 +82,7 @@ if (!empty($selected_course)) {
     $course_list = array($selected_course); 
 }
 
-if (!$export_to_xls) {
+if (!$export_to_csv) {
 	Display :: display_header(get_lang('Reporting'));
 	echo '<div class="actions" style ="font-size:10pt;">';
 	if ($global) {
@@ -202,24 +209,26 @@ if (!empty($main_result)) {
     $html_result .='</table>';
 }
 
-if (!$export_to_xls) {
+if (!$export_to_csv) {
 	echo $html_result;	
 }
-$filename = 'exam-reporting-'.date('Y-m-d-h:i:s').'.xls';
-if ($export_to_xls) {
-    export_complete_report_xls($filename, $export_array);
+$filename = 'learning_path_results-'.date('Y-m-d-h:i:s').'.xls';
+if ($export_to_csv) {
+    export_complete_report_csv($filename, $export_array);
 	exit;
 }
-
-function export_complete_report_xls($filename, $array) {	
+function export_complete_report_csv($filename, $array) {	
         require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
         $header[] = array(get_lang('Course'),get_lang('LearningPath'), get_lang('Exercise'), get_lang('User'),get_lang('Attempt'), get_lang('Date'),get_lang('Results'));
         if (!empty($array)) {
             $array = array_merge($header, $array);            
-            Export :: export_table_csv($array, 'reporting_learning_path_details');
+            Export :: export_table_csv($array, $filename);
         }
         exit;
         /*    
+         * Too much encoding problems while exporting to XLS, keep it simple 
+         * 
+         * 
 		global $global, $filter_score;
 		$workbook = new Spreadsheet_Excel_Writer();
 		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));

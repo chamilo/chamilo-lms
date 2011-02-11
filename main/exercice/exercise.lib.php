@@ -1225,13 +1225,13 @@ function get_all_exercises($course_info = null, $session_id = 0) {
  * @param   int     session id
  * @return  int     the position of the user between his friends in a course (or course within a session)
  */
-function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0) {
+function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0, $return_string = true) {
     //Getting all exercise results
     if (empty($session_id)) {
     	$session_id = 0;
     }
     $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
-    
+    $position_data = array();
     if (empty($user_results)) {
     	return 1;
     } else {
@@ -1260,6 +1260,30 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
             	}
             }        
         }
-        return $position;    
+        $return_value = array('position'=>$position, 'count'=>count($my_ranking)); 
+        if ($return_string) {
+            if (!empty($position) && !empty($my_ranking)) {
+               return $position.'/'.count($my_ranking); 
+            }
+        }
+        return $return_string;    
     }
+}
+
+function get_best_score($exercise_id, $course_code, $session_id) { 
+    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
+    $best_score_data = array();
+    $best_score = 0;
+    if (!empty($user_results)) {
+        foreach($user_results as $result) {
+            if ($result['exe_weighting'] != '') {
+                $score = $result['exe_result']/$result['exe_weighting'];
+                if ($score > $best_score) {
+                    $best_score = $score;
+                    $best_score_data = $result;
+                }
+            }
+        }
+    }
+    return $best_score_data;
 }

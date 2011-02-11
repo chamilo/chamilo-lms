@@ -2217,7 +2217,7 @@ class Tracking {
                 <th class="head" style="color:#000">'.get_lang('Attempts').'</th>                    
                 <th class="head" style="color:#000">'.get_lang('LatestAttempt').'</th>
                 <th class="head" style="color:#000">'.get_lang('Position').'</th>
-                <th class="head" style="color:#000">'.get_lang('BestAttempt').'</th>                                       
+                <th class="head" style="color:#000">'.get_lang('MyBestAttempt').'</th>                                       
                 </tr>';
             $result_exercices = Database::query($sql_exercices);
             if (Database::num_rows($result_exercices) > 0) {
@@ -2230,6 +2230,12 @@ class Tracking {
                         $best_score_array = array();
                         foreach($exercise_stats as $exercise_stat) {                        
                             if ($exercise_stat['exe_user_id'] == $user_id) {
+                                
+                               //Always getting the latest attempt
+                               $score          = $exercise_stat['exe_result'];
+                               $weighting      = $exercise_stat['exe_weighting'];                               
+                               $exe_id         = $exercise_stat['exe_id'];
+                               
                                //Use this to take the average
                                //$score          = $score + $exercise_stat['exe_result'];
                                //$weighting      = $weighting + $exercise_stat['exe_weighting'];
@@ -2238,11 +2244,7 @@ class Tracking {
                                if ($score > $best_score ) {
                                    $best_score = $score;
                                    $best_score_array = $exercise_stat;
-                               }
-                               //Always getting the latest attempt
-                               $score          = $exercise_stat['exe_result'];
-                               $weighting      = $exercise_stat['exe_weighting'];                               
-                               $exe_id         = $exercise_stat['exe_id'];
+                               }                               
                                $attempts++;
                             }
                         }   

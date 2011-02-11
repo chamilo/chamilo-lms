@@ -11,6 +11,7 @@ require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
       
 $this_section = SECTION_TRACKING;
 $nameTools = get_lang('MyProgress');

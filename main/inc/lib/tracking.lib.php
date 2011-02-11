@@ -1911,18 +1911,17 @@ class Tracking {
         }        
         
         $html  = '';
-        if ($show_courses) {                      
+        if ($show_courses) {                   
             if (!empty($courses)) {
-    
-                $html = '<table class="data_table" width="100%">';
+                $html .= '<table class="data_table" width="100%">';
                 $html .= '<tr class="tableName">
                             <td colspan="6">
-                                <h1>'.get_lang('MyCourses').'</h1>
+                                '.Display::tag('h1', get_lang('MyCourses')).'
                             </td>
                         </tr>';
                 $html .= '
-                <tr>
-                  <th width="300px">'.get_lang('Course').'</th>
+                <tr>                  
+                  '.Display::tag('th', get_lang('Course'),          array('width'=>'300px')).'
                   '.Display::tag('th', get_lang('Time'),            array('class'=>'head')).'
                   '.Display::tag('th', get_lang('Progress'),        array('class'=>'head')).'
                   '.Display::tag('th', get_lang('Score').Display :: return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')),array('class'=>'head')).'
@@ -1976,7 +1975,7 @@ class Tracking {
             }
         }
         
-        //Courses in a session
+        //Session
         if (!empty($course_in_session)) {
             $html .= '<br />';
             $html .= Display::tag('h1',get_lang('Sessions'));
@@ -1988,6 +1987,44 @@ class Tracking {
                     }
                 }                
                 $html .= Display::tag('h2',api_get_session_name($key));
+                
+                $html .= '<table class="data_table" width="100%">';    
+                $html .= '
+                <tr>                  
+                  '.Display::tag('th', get_lang('PublishedExercises'),       array('width'=>'300px')).'
+                  '.Display::tag('th', get_lang('DoneExercises'),            array('class'=>'head')).'
+                  '.Display::tag('th', get_lang('AverageExerciseResult'),    array('class'=>'head')).'                  
+                </tr>';
+                
+
+                $all_exercises = 0;
+                $all_done_exercise = 0;
+                $all_average = 0;
+                
+                $stats_array = array();
+                
+                foreach ($session as $enreg) {    
+                    //All exercises in the course
+                    $exercises      = count(get_all_exercises($enreg, $key));
+                    //Count of user results
+                    $done_exercises = get_all_exercise_results_by_course($enreg['code'], $key);
+                    //Average
+                    $average        = get_average_score_by_course($enreg['code'], $key);
+                    
+                    $all_exercises +=$exercises;
+                    $all_done_exercise +=$done_exercises;
+                    $all_average +=$average;
+                    $stats_array[$enreg['code']] = array('exercises'=>$exercises, 'done_exercises'=>$done_exercises, 'average'=>$average);
+                }         
+                $all_average = $all_average /  count($session);     
+                $html .= Display::tag('td', $all_exercises);
+                $html .= Display::tag('td', $all_done_exercise);
+                $html .= Display::tag('td', convert_to_percentage($all_average));
+                $html .='</table><br />';
+                    
+                
+                $html .= Display::tag('h2',get_lang('CourseList'));
+                
                 $html .= '        
                 <table class="data_table" width="100%">';
                 $html .= '
@@ -2016,20 +2053,19 @@ class Tracking {
                         $html .= '<tr  class="row_even">';
                     }
                     
-                    $html .= Display::tag('td', $enreg['title']);
+                    $html .= Display::tag('td', $enreg['title']);/*
                     //All exercises in the course
                     $exercises = get_all_exercises($enreg, $key);
                     //Count of user results
                     $done_exercises = get_all_exercise_results_by_course($enreg['code'], $key);
-                    //Averaga
-                    $averate = get_average_score_by_course($enreg['code'], $key);
+                    //Average
+                    $average = get_average_score_by_course($enreg['code'], $key);*/
                     
-                    $html .= Display::tag('td', count($exercises));
-                    $html .= Display::tag('td', $done_exercises);
-                    $html .= Display::tag('td', $averate);
-                    
-                    
-                    $html .= Display::tag('td', $time, array('align'=>'center'));                    
+                    $html .= Display::tag('td', $stats_array[$enreg['code']]['exercises']);
+                    $html .= Display::tag('td', $stats_array[$enreg['code']]['done_exercises']);
+                    $html .= Display::tag('td', convert_to_percentage($stats_array[$enreg['code']]['average']));
+                    $html .= Display::tag('td', $time, array('align'=>'center'));
+                                        
                     if (is_numeric($progress)) {
                         $progress = $progress.'%';
                     } else {

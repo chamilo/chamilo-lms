@@ -1204,10 +1204,10 @@ function convert_score($score, $weight) {
 }
 
 /**
- * Getting all exercises from a course from a session (if a session_id is provided we will show all the exercise)
+ * Getting all active exercises from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
  * @param   array   course data
  * @param   int     session id
- * @return  array   exercise data
+ * @return  array   array with exercise data
  */
 function get_all_exercises($course_info = null, $session_id = 0) {
     if(!empty($course_info)) {
@@ -1218,12 +1218,11 @@ function get_all_exercises($course_info = null, $session_id = 0) {
     if ($session_id == -1) {
     	$session_id  = 0;
     }
-    //var_dump($session_id);
     if ($session_id == 0) {
-    	$conditions = array('where'=>array('active <> ? AND session_id = ? '=>array('-1', $session_id)), 'order'=>'title');
+    	$conditions = array('where'=>array('active = ? AND session_id = ? '=>array('1', $session_id)), 'order'=>'title');
     } else {
         //All exercises
-    	$conditions = array('where'=>array('active <> ? AND (session_id = 0 OR session_id = ? )' =>array('-1', $session_id)), 'order'=>'title');
+    	$conditions = array('where'=>array('active = ? AND (session_id = 0 OR session_id = ? )' =>array('1', $session_id)), 'order'=>'title');
     }
     //var_dump($conditions);
     return Database::select('*',$TBL_EXERCICES, $conditions);
@@ -1347,7 +1346,7 @@ function get_average_score_by_course($course_code, $session_id) {
         }
         //We asume that all exe_weighting
         //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
-        $avg_score = convert_to_percentage($avg_score / count($user_results));
+        $avg_score = ($avg_score / count($user_results));
     }
     return $avg_score;
 }

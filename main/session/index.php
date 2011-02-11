@@ -225,12 +225,12 @@ $column_week_model  = array (
                           
 $extra_params_week['grouping'] = 'true';
 $extra_params_week['groupingView'] = array('groupField'=>array('week'),
-                                            'groupColumnShow'=>'false',
-                                            'groupText' => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
+                                           'groupColumnShow'=>'false',
+                                           'groupText' => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
 //$extra_params_week['autowidth'] = 'true'; //use the width of the parent
 
 //MyQCM grid
-$column_exercise        = array(get_lang('PublicationDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResult'), get_lang('Position'));
+$column_exercise        = array(get_lang('PublicationDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResultInCourse'), get_lang('Position'));
 $column_exercise_model  = array(
                                 array('name'=>'date',       'index'=>'date',      'width'=>'130','align'=>'left',   'sortable'=>'true'),
                                 array('name'=>'course',     'index'=>'course',    'width'=>'200','align'=>'left',   'sortable'=>'true'),
@@ -275,7 +275,7 @@ $my_reporting   = Tracking::show_user_progress(api_get_user_id(), $session_id, '
 $my_reporting   .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
 
 //Main headers
-$headers        = array(get_lang('LearningPaths'), get_lang('MyQCM'), get_lang('MyResults'));
+$headers        = array(get_lang('LearningPaths'), get_lang('MyQCM'), get_lang('MyStatistics'));
 //Subheaders
 $sub_header     = array(get_lang('AllLearningPaths'), get_lang('PerWeek'), get_lang('ByCourse'));
 

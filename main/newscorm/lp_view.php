@@ -236,7 +236,7 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
 
 $display_none = '';
 $margin_left = '282px';
-if (!empty($_GET['embedframe'])) {
+if ($_SESSION['oLP']->mode == 'embedframe') {
     $display_none = ';display:none;';
     $margin_left = '0px';
 }

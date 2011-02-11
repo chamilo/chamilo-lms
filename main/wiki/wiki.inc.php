@@ -195,7 +195,7 @@ function make_wiki_link_clickable($input)
 
         if ($input_array[$key-1]=='[[' AND $input_array[$key+1]==']]') //now doubles brackets
         {
-
+		
         /////////// TODO: metawiki
         /*
         if ($session_id==0)
@@ -218,19 +218,17 @@ function make_wiki_link_clickable($input)
 
         */
         /////////
-
+		
             //now full wikilink
-            if (api_strpos($value, "|") !== false)
-             {
-                 $full_link_array=explode("|", $value);
-                $link=trim($full_link_array[0]);
+            if (api_strpos($value, "|") !== false){
+                $full_link_array=explode("|", $value);
+                $link=trim(strip_tags($full_link_array[0]));
                 $title=trim($full_link_array[1]);
-              }
-              else
-              {
-                $link=trim($value);
+            }
+            else{
+                $link=trim(strip_tags($value));
                 $title=trim($value);
-              }
+            }
 
             //if wikilink is homepage
             if($link=='index'){
@@ -443,10 +441,16 @@ function save_new_wiki() {
     } else {
          $page = str_replace(' ','_',$_POST['title']);
     }
-    $_clean['reflink']=Database::escape_string(api_htmlentities($page));
-    $_clean['title']=Database::escape_string(trim($_POST['title']));
+    $_clean['reflink']=Database::escape_string(strip_tags(api_htmlentities($page)));
+    $_clean['title']=Database::escape_string(strip_tags(trim($_POST['title'])));
     $_clean['content']= Database::escape_string($_POST['content']);
-
+	
+	//re-check after strip_tags if the title is empty
+	if(empty($_clean['title']) || empty($_clean['reflink'])){
+        
+		return false;
+	}
+	
     if($_clean['assignment']==2)  {//config by default for individual assignment (students)
 
          $_clean['user_id']=(int)Database::escape_string($assig_user_id);//Identifies the user as a creator, not the teacher who created

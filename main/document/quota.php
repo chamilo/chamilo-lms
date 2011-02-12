@@ -78,11 +78,10 @@ function display_quota($course_quota, $already_consumed_space) {
 	$message .= get_lang('PercentageQuotaInUse') . ': <strong>'.$percentage.'%</strong>.<br />' .
 				get_lang('PercentageQuotaFree') . ': <strong>'.$other_percentage.'%</strong>.<br />';
 
-	$show_percentage = $percentage >= 10 ? '&nbsp;'.$percentage.'%' : '';
-	$message .= '<br /><table cellpadding="" cellspacing="0" height="40"><tr>
-				<td bgcolor="'.$colour.'" width="'.$visual_percentage.'">'.$show_percentage.'</td>
-				<td bgcolor="Silver" width="'.$visual_other_percentage.'">&nbsp;'.$other_percentage.'%</td>
-				</tr></table>';
+	$show_percentage = '&nbsp;'.$percentage.'%';
+    $message .= '<div style="width: 80%; text-align: center; -moz-border-radius: 5px 5px 5px 5px; border: 1px solid #aaa; background-image: url(\''.api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/bg-header4.png\');" class="document-quota-bar">'.
+                '<div style="width:'.$percentage.'%; background-color: #bbb; border-right:3px groove #bbb; -moz-border-radius:5px;">&nbsp;</div>'.
+                '<span style="margin-top: -15px; margin-left:-15px; position: absolute;font-weight:bold;">'.$show_percentage.'</span></div>';
 	echo $message;
 }
 

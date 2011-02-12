@@ -1,3 +1,4 @@
+Pack 48 px and 32 px by Juan Carlos Raña Trabado
 
 new_document 		modif mix nuvola crystal
 new_folder 		modif nuvola
@@ -26,3 +27,8 @@ objective		nuvola
 laptop			nuvola
 teacher			nuvola
 assessment		nuvola
+--
+link			nuvola
+new_link		modif nuvola
+view_tree		nuvola
+view_none		nuvola

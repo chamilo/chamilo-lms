@@ -161,7 +161,7 @@ Display::display_introduction_section(TOOL_LINK);
 
 if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 	echo '<div class="actions">';
-	//echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview')).get_lang('BackToLinksOverview').'</a>';
+	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'','32').'</a>';
 	echo '</div>';
 	if (api_get_setting('search_enabled') == 'true') {
 		if (!extension_loaded('xapian')) {
@@ -381,8 +381,9 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 	echo '<div class="actions">';
 	if (api_is_allowed_to_edit(null, true)) {
 		$urlview = Security::remove_XSS($urlview);
-		echo Display::return_icon('linksnew.gif', get_lang('LinkAdd')).' <a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addlink&amp;category='.(!empty($category) ? $category : '').'&amp;urlview='.$urlview.'">'.get_lang('LinkAdd')."</a>\n";
-		echo Display::return_icon('folder_new.gif', get_lang('CategoryAdd')).' <a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addcategory&amp;urlview='.$urlview.'">'.get_lang('CategoryAdd')."</a>\n";
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addlink&amp;category='.(!empty($category) ? $category : '').'&amp;urlview='.$urlview.'">'.Display::return_icon('new_link.png', get_lang('LinkAdd'),'','32').'</a>';		
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addcategory&amp;urlview='.$urlview.'">'.Display::return_icon('new_folder.png', get_lang('CategoryAdd'),'','32').'</a>';
+			
 		   /* "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
 	}
 	// Making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
@@ -391,16 +392,16 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 	$resultcategories = Database::query($sqlcategories);
 	$aantalcategories = Database::num_rows($resultcategories);
 	if ($aantalcategories > 0) {
-		echo Display::return_icon('remove.gif', $shownone).' <a href="'.api_get_self().'?'.api_get_cidreq().'&urlview=';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&urlview=';
 		for ($j = 1; $j <= $aantalcategories; $j++) {
 			echo '0';
 		}
-		echo '">'.get_lang('shownone').'</a>';
-		echo Display::return_icon('add.gif', $showall).' <a href="'.api_get_self().'?'.api_get_cidreq().'&urlview=';
+		echo '">'.Display::return_icon('view_remove.png', $shownone,'','32').'</a>';
+		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&urlview=';
 		for ($j = 1; $j <= $aantalcategories; $j++) {
 			echo '1';
 		}
-		echo '">'.get_lang('showall').'</a>';
+		echo '">'.Display::return_icon('view_tree.png', $showall,'','32').'</a>';
 	}
 	echo '</div>';
 
@@ -448,7 +449,7 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 				echo '<tr>';
 					echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;">';
 					echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview='.Security::remove_XSS($newurlview).'">';
-					echo '<img src="../img/remove.gif" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).'</a><br />&nbsp;&nbsp;&nbsp;'.$myrow['description'];
+					echo '<img src="../img/icons/22/view_remove.png" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).'</a><br />&nbsp;&nbsp;&nbsp;'.$myrow['description'];
 					echo '</th>';
 					if (api_is_allowed_to_edit(null, true)) {
 						if ($session_id == $myrow['session_id']) {
@@ -469,7 +470,7 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 				echo '<tr>';
 					echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;"><a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview=';
 					echo is_array($view) ? implode('', $view) : $view;
-					echo '"><img src="../img/add.gif" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).$session_img;
+					echo '"><img src="../img/icons/22/view_tree.png" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).$session_img;
 					echo'</a><br />&nbsp;&nbsp;&nbsp;';
 					echo $myrow['description'];
 					if (api_is_allowed_to_edit(null, true)) {

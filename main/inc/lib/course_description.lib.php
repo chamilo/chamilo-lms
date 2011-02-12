@@ -327,15 +327,15 @@ class CourseDescription
 	 */
 	public function get_default_description_icon() {
 		$default_description_icon = array();
-		$default_description_icon[1]= 'edu_miscellaneous.gif';
-		$default_description_icon[2]= 'spire.gif';
-		$default_description_icon[3]= 'kcmdf_big.gif';
-		$default_description_icon[4]= 'misc.gif';
-		$default_description_icon[5]= 'laptop.gif';
-		$default_description_icon[6]= 'personal.gif';
-		$default_description_icon[7]= 'korganizer.gif';
+		$default_description_icon[1]= 'course.png';
+		$default_description_icon[2]= 'objective.png';
+		$default_description_icon[3]= 'topics.png';
+		$default_description_icon[4]= 'strategy.png';
+		$default_description_icon[5]= 'laptop.png';
+		$default_description_icon[6]= 'teacher.png';
+		$default_description_icon[7]= 'assessment.png';
 		//$default_description_icon[8]= 'porcent.png';
-		$default_description_icon[8]= 'ktip.gif';
+		$default_description_icon[8]= 'wizard.png';
 		return $default_description_icon;
 	}
 

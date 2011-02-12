@@ -1,3 +1,4 @@
+
 new_document 		modif mix nuvola crystal
 new_folder 		modif nuvola
 new_paint	 	modif nuvola
@@ -17,3 +18,11 @@ settings		nuvola
 edit			nuvola
 draw			nuvola
 paint			nuvola
+--
+course			nuvola
+wizard			nuvola
+strategy		nuvola
+objective		nuvola
+laptop			nuvola
+teacher			nuvola
+assessment		nuvola

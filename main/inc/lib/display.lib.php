@@ -657,7 +657,7 @@ class Display {
         $icon = '';
         $size_extra = '';
         if (isset($size)) {
-            if (in_array($size,array(16,22,32,64,128))) {
+            if (in_array($size,array(16,22,32,48,64,128))) {
             	$size_extra = $size.'/';
             }
         }

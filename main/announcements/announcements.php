@@ -845,7 +845,7 @@ $announcement_number = Database::num_rows($result);
 	$show_actions = false;
 	if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
 		echo '<div class="actions">';
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('announce_add.gif',get_lang('AddAnnouncement')).get_lang('AddAnnouncement')."</a>";
+		echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'','32')."</a>";
 		$show_actions = true;
 	}
 
@@ -853,7 +853,7 @@ $announcement_number = Database::num_rows($result);
 		if (api_get_group_id() == 0 ) {
 			if (!$show_actions)
 				echo '<div class="actions">';
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('valvesdelete.gif',get_lang('AnnouncementDeleteAll')).get_lang('AnnouncementDeleteAll')."</a>\n";	}	// if announcementNumber > 1
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('delete_announce.png',get_lang('AnnouncementDeleteAll'),'','32')."</a>";	}	// if announcementNumber > 1
 		}
 		if ($show_actions)
 				echo '</div>';
@@ -884,7 +884,7 @@ if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath') {
 			//validation when belongs to a session
 			$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
 
-			echo Display::return_icon('lp_announcement.png', api_convert_and_format_date($myrow['end_date'], DATE_FORMAT_LONG), array('align' => 'absmiddle', 'Width' => '10', 'Height' => '10'))."  <a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title, $length) . "</a>" . $session_img;
+			echo Display::return_icon('announce.png', api_convert_and_format_date($myrow['end_date'], DATE_FORMAT_LONG), array('align' => 'absmiddle', 'Width' => '10', 'Height' => '10'),'16')."  <a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title, $length) . "</a>" . $session_img;
 			echo "</td></tr>";
 		}
 		echo "</table>";

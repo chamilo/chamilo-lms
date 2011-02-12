@@ -19,6 +19,7 @@ settings		nuvola
 edit			nuvola
 draw			nuvola
 paint			nuvola
+folder			nuvola
 --
 course			nuvola
 wizard			nuvola
@@ -32,3 +33,7 @@ link			nuvola
 new_link		modif nuvola
 view_tree		nuvola
 view_none		nuvola
+--
+announce		nuvola
+new_announce		modif nuvola
+delete_announce		modif nuvola

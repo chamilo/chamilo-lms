@@ -28,7 +28,7 @@ $form_style= '
 	width: 200px;
 }
 .convert_button{
-	background: url("../img/scorm.gif") 0px 0px no-repeat;
+	background: url("../img/icons/22/learnpath.png") 0px 0px no-repeat;
 	padding: 2px 0px 2px 22px;
 }
 .sub-form{
@@ -105,7 +105,7 @@ Display :: display_header($nameTools);
 
 ?>
 
-<img src="../img/oogie.gif"><br>
+<img src="../img/mascot.png"><br>
 <span style="color: #ff6434; font-size: 16px; font-family: Arial; margin-left: 10px;"><?php echo get_lang("WelcomeOogieSubtitle");?></span><br>
 
 <?php

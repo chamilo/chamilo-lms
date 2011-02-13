@@ -1,4 +1,4 @@
-Pack 48 px and 32 px by Juan Carlos Raña Trabado
+Pack 48, 32, 22 px by Juan Carlos Raña Trabado
 
 new_document 		modif mix nuvola crystal
 new_folder 		modif nuvola
@@ -37,3 +37,21 @@ view_none		nuvola
 announce		nuvola
 new_announce		modif nuvola
 delete_announce		modif nuvola
+--
+learnpath		nuvola
+new_learnpath		modif nuvola
+import_scorm		modif nuvola
+import_powerpoint	modif crystal
+upload_audio		modif nuvola
+new_learningpaht_object modif nuvola
+build_learnpath		nuvola
+build_learnpath_na	modif nuvola
+add_learnpath_section	modif nuvola
+learnpath_section	modif nuvola
+view_left_right		nuvola
+move_learnpath		modif nuvola
+move_learnpath_na	modif nuvola
+scorms			nuvola
+view_remove.png		nuvola
+view_remove_na.png	modif nuvola
+

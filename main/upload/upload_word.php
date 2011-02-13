@@ -28,7 +28,7 @@ $form_style= '
 	width: 200px;
 }
 .convert_button{
-	background: url("../img/scorm.gif") 0px 0px no-repeat;
+	background: url("../img/icons/22/learnpath.png") 0px 0px no-repeat;
 	padding: 2px 0px 2px 22px;
 }
 #dynamic_div_container{float:left;margin-right:10px;}
@@ -103,7 +103,7 @@ Display :: display_header($nameTools);
 
 ?>
 
-<img src="../img/woogie.gif"><br>
+<img src="../img/mascot.png"><br>
 <span style="color: #5577af; font-size: 16px; font-family: Arial; margin-left: 10px;"><?php echo get_lang("WelcomeWoogieSubtitle");?></span><br>
 
 <?php

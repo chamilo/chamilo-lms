@@ -280,7 +280,7 @@ INSERT INTO course_module VALUES
 (17,'AddedLearnpath','','scormbuilder.gif',0,0,'external'),
 (18,'conference','conference/index.php?type=conference','conf.gif',0,0,'external'),
 (19,'conference','conference/index.php?type=classroom','conf.gif',0,0,'external'),
-(20,'learnpath','newscorm/lp_controller.php','scorm.gif',5,1,'basic'),
+(20,'learnpath','newscorm/lp_controller.php','icons/22/scorms.png',5,1,'basic'),
 (21,'blog','blog/blog.php','blog.gif',1,2,'basic'),
 (22,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
 (23,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),

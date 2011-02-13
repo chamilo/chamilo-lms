@@ -92,14 +92,12 @@ if ($is_allowed_to_edit) {
 
     //include 'content_makers.inc.php';
     echo '<div class="actions">';
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.
-        '<img src="../img/wizard.gif" border="0" align="absmiddle" alt="'.get_lang('_add_learnpath').
-        '">&nbsp;'.get_lang('_add_learnpath').
-        '</a>' .
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('new_learnpath.png', get_lang('_add_learnpath'),'','32').'</a>' .
         str_repeat('&nbsp;', 3).
-        '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/file_zip.gif" border="0" alt="'.get_lang('UploadScorm').'" align="absmiddle">&nbsp;'.get_lang('UploadScorm').'</a>';
+        '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">'.Display::return_icon('import_scorm.png', get_lang('UploadScorm'),'','32').'</a>';
     if (api_get_setting('service_ppt2lp', 'active') == 'true') {
-        echo str_repeat('&nbsp;', 3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="'.get_lang('PowerPointConvert').'" align="absmiddle">&nbsp;'.get_lang('PowerPointConvert').'</a>';
+        echo str_repeat('&nbsp;', 3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">
+		'.Display::return_icon('import_powerpoint.png', get_lang('PowerPointConvert'),'','32').'</a>';
            //echo  str_repeat('&nbsp;', 3).'<a href="../upload/upload_word.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/word.gif" border="0" alt="'.get_lang('WordConvert').'" align="absmiddle">&nbsp;'.get_lang('WordConvert').'</a>';
     }
     echo '</div>';
@@ -214,7 +212,7 @@ if (is_array($flat_list)) {
 
         $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
         $name = Security::remove_XSS($details['lp_name']);
-        $image='<img src="../img/kcmdf.gif" border="0" align="absmiddle" alt="' . $name . '">'."\n";
+        $image='<img src="../img/icons/22/learnpath.png" border="0" align="absmiddle" alt="' . $name . '">'."\n";
         $dsp_line =	'<tr align="center" class="'.$oddclass.'">'."\n" .
             '<td align="left" valign="top">' .
             '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_lp.'">' .
@@ -301,20 +299,20 @@ if (is_array($flat_list)) {
 
             // EDIT LP
             if ($current_session == $details['lp_session']) {
-                $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a>&nbsp;';
+                $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/settings.png" border="0" title="'.get_lang('CourseSettings').'"></a>';
             } else {
-                $dsp_edit_lp = '<img src="../img/edit_na.gif" border="0" title="'.get_lang('_edit_learnpath').'">&nbsp;';
+                $dsp_edit_lp = '<img src="../img/settings_na.png" border="0" title="'.get_lang('CourseSettings').'">&nbsp;';
             }
 
             // BUILD
             if ($current_session == $details['lp_session']) {
                 if ($details['lp_type'] == 1 || $details['lp_type'] == 2) {
-                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/wizard.gif" border="0" title="'.get_lang('Build').'"></a>&nbsp;';
+                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a>&nbsp;';
                 } else {
-                    $dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="'.get_lang('Build').'">&nbsp;';
+                    $dsp_build = '<img src="../img/edit_na.gif" border="0" title="'.get_lang('_edit_learnpath').'">&nbsp;';
                 }
             } else {
-                $dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="'.get_lang('Build').'">&nbsp;';
+                $dsp_build = '<img src="../img/edit_na.gif" border="0" title="'.get_lang('_edit_learnpath').'">&nbsp;';
             }
 
             /* VISIBILITY COMMAND */

@@ -155,7 +155,7 @@ function get_icon_file_name ($type) {
 			break;
 		case 'learnpath':
 		case LINK_LEARNPATH:
-			$icon = 'scorm.gif';
+			$icon = '/icons/22/learnpath.png';
 			break;
 		case 'studentpublication':
 		case LINK_STUDENTPUBLICATION:

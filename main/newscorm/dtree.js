@@ -84,7 +84,7 @@ function dTree(objName) {
 
 	this.icon = {
 
-		root				: '../img/lp.gif',
+		root				: '../img/icons/22/learnpath.png',
 
 		folder			: '../img/folder.gif',
 

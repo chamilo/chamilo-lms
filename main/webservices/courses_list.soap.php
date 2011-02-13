@@ -19,7 +19,7 @@ $server = new soap_server();
 // Initialize WSDL support
 $server->configureWSDL('WSCourseList', 'urn:WSCourseList');
 
-/* Register DokeosWSCourseList function */
+/* Register WSCourseList function */
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
@@ -52,13 +52,13 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWSCourseList',         // method name
+$server->register('WSCourseList',         // method name
     array('username' => 'xsd:string',
           'signature' => 'xsd:string',
           'visibilities' => 'xsd:string'),      // input parameters
     array('return' => 'xsd:Array'),             // output parameters
     'urn:WSCourseList',                         // namespace
-    'urn:WSCourseList#DokeosWSCourseList',      // soapaction
+    'urn:WSCourseList#WSCourseList',      // soapaction
     'rpc',                                      // style
     'encoded',                                  // use
     'This service returns a list of courses'    // documentation
@@ -68,12 +68,12 @@ $server->register('DokeosWSCourseList',         // method name
 /**
  * Get a list of courses (code, url, title, teacher, language) and return to caller
  * Function registered as service. Returns strings in UTF-8.
- * @param string User name in Dokeos
+ * @param string User name in Chamilo
  * @param string Signature (composed of the sha1(username+apikey)
  * @param mixed  Array or string. Type of visibility of course (public, public-registered, private, closed)
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
-function DokeosWSCourseList($username, $signature, $visibilities = 'public') {
+function WSCourseList($username, $signature, $visibilities = 'public') {
     if (empty($username) or empty($signature)) { return -1; }
 
     require_once api_get_path(LIBRARY_PATH).'course.lib.php';

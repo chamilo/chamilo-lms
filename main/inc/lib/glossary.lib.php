@@ -268,13 +268,13 @@ class GlossaryManager {
 		echo '<div class="actions" style="margin-bottom:10px">';
 		if (api_is_allowed_to_edit(null,true))
 		{
-			echo '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add">'.Display::return_icon('filenew.gif',get_lang('TermAddNew')).get_lang('TermAddNew').'</a>';
+			echo '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add">'.Display::return_icon('new_glossary_term.png',get_lang('TermAddNew'),'','32').'</a>';
 		}
 
 		if ((isset($_SESSION['glossary_view']) && $_SESSION['glossary_view'] == 'table') or (!isset($_SESSION['glossary_view']))){
-			echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.Display::return_icon('view_list.gif',get_lang('ListView')).get_lang('ListView').'</a>';
+			echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.Display::return_icon('view_detailed.png',get_lang('ListView'),'','32').'</a>';
 		} else {
-			echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.Display::return_icon('view_table.gif',get_lang('TableView')).get_lang('TableView').'</a>';
+			echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.Display::return_icon('view_text.png',get_lang('TableView'),'','32').'</a>';
 		}
 		echo '</div>';
 		if (!$_SESSION['glossary_view'] OR $_SESSION['glossary_view'] == 'table') {

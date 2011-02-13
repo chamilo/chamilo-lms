@@ -47,7 +47,7 @@ new_learningpaht_object modif nuvola
 build_learnpath		nuvola
 build_learnpath_na	modif nuvola
 add_learnpath_section	modif nuvola
-learnpath_section 	modif nuvola (16 px lp_dokeos_chapter.png into main/img/)
+learnpath_section 	modif nuvola (16 px lp_dokeos_chapter.png and lp_dir.png into main/img/)
 view_left_right		nuvola
 move_learnpath		modif nuvola
 move_learnpath_na	modif nuvola
@@ -56,4 +56,8 @@ view_remove.png		nuvola
 view_remove_na.png	modif nuvola
 export_scorm		modif nuvola
 export_scorm_na		modif nuvola
+--
+new_glossary_term	modif mix nuvola crystal
+view_detailed		nuvola
+view_text		nuvola
 

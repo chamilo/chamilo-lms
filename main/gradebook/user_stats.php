@@ -84,7 +84,7 @@ $actions = '<div class="actions">';
 
 if (isset ($_GET['selectcat'])) {
 	$interbreadcrumb[]= array ('url' => 'gradebook_flatview.php?selectcat=' . Security::remove_XSS($_GET['selectcat']), 'name' => get_lang('FlatView'));
-	$actions.= '<a href=gradebook_flatview.php?selectcat=' .Security::remove_XSS($_GET['selectcat']) . '>' . Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('FlatView')).get_lang('BackTo').' '.get_lang('FlatView').'</a>&nbsp&nbsp';
+	$actions.= '<a href=gradebook_flatview.php?selectcat=' .Security::remove_XSS($_GET['selectcat']) . '>' . Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('FlatView'),'','32').'</a>';
 
 }
 if (isset ($_GET['selecteval'])) {
@@ -94,7 +94,7 @@ if (isset ($_GET['selecteval'])) {
 	));
 	$actions.= '<a href=gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '><img src=../img/lp_leftarrow.gif alt=' . get_lang('BackToEvaluation') . ' align=absmiddle/> ' . get_lang('BackToEvaluation') . '</a>&nbsp&nbsp';
 }
-$actions.= '<a href="' . api_get_self() . '?exportpdf=&userid='.Security::remove_XSS($_GET['userid']).'&selectcat=' . $category[0]->get_id() . '" target="_blank"><img src=../img/file_pdf.gif alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
+$actions.= '<a href="' . api_get_self() . '?exportpdf=&userid='.Security::remove_XSS($_GET['userid']).'&selectcat=' . $category[0]->get_id() . '" target="_blank"><img src=../img/icons/32/pdf.png alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
 $actions.='</div>';
 
 Display :: display_header(get_lang('ResultsPerUser'));

@@ -51,7 +51,8 @@ learnpath_section 	modif nuvola (16 px lp_dokeos_chapter.png and lp_dir.png into
 view_left_right		nuvola
 move_learnpath		modif nuvola
 move_learnpath_na	modif nuvola
-scorms			nuvola
+scorms			nuvola (and 22 px gif version for home page)
+scorms_na		modif nuvola (and 22 px gif version for home page)
 view_remove.png		nuvola
 view_remove_na.png	modif nuvola
 export_scorm		modif nuvola
@@ -71,4 +72,17 @@ settings_na		modif nuvola
 export_excel		modif mix crystal
 exercice_check		modif mix nuvola crystal
 exercice_uncheck	modif mix nuvola crystal
+--------
+statistics		crystal
+percentage		nuvola
+pdf			crystal
+printer			nuvola
+gradebook		crystal (and 22 px gif version for home page)
+gradebook_na		modif crystal (and 22 px gif version for home page)
+empty_evaluation	crystal
+no_empty_evaluation	modif crystal
+new_evaluation		modif crystal
+delete			nuvola
+import_evaluation	modif crystal
+export_evaluation	modif crystal	
 

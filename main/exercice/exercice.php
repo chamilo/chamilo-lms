@@ -583,11 +583,11 @@ if ($show == 'test') {
 
 if ($is_allowedToEdit && $origin != 'learnpath') {
 	if ($_GET['show'] != 'result') {
-		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('more.png', get_lang('NewEx')) . get_lang('NewEx') . '</a>';
-		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('question_add.gif', get_lang('AddQ')) . get_lang('AddQ') . '</a>';
-		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('hotpotatoes_s.png', get_lang('ImportHotPotatoesQuiz')) . get_lang('ImportHotPotatoesQuiz') . '</a>';
+		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_exercice.png', get_lang('NewEx'),'','32').'</a>';
+		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_question.png', get_lang('AddQ'),'','32').'</a>';
+		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'','32').'</a>';
 		// link to import qti2 ...
-		echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_db.png', get_lang('ImportQtiQuiz')) . get_lang('ImportQtiQuiz') . '</a>';
+		echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'),'','32') .'</a>';
 		//echo '<a href="exercice.php?' . api_get_cidreq() . '&show=result&exercise_id='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
 	}
 
@@ -602,9 +602,9 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 				$alt = get_lang('ExportWithoutUserFields');
 				$extra_user_fields = '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
 			}
-			echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
-			echo '<a href="javascript: void(0);" onclick="javascript: document.form1a.submit();">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
-			echo '<a href="javascript: void(0);" onclick="javascript: document.form1b.submit();">' . Display :: return_icon('excel.gif', get_lang('ExportAsXLS')) . get_lang('ExportAsXLS') . '</a>';
+			echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+			echo '<a href="javascript: void(0);" onclick="javascript: document.form1a.submit();">'.Display::return_icon('export_csv.png',get_lang('ExportAsCSV'),'','32').'</a>';
+			echo '<a href="javascript: void(0);" onclick="javascript: document.form1b.submit();">' . Display :: return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a>';
 			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
 			echo '<input type="hidden" name="export_format" value="csv">';
@@ -628,7 +628,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 } else {
 	//Student view
 	if ($show == 'result') {
-		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
+		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
 	} else {
 		//echo '<a href="' . api_get_self() .'?'.api_get_cidreq().'&show=result'.'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
 	}
@@ -655,9 +655,9 @@ if ($show == 'result') {
 				null;
 		}
 		if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
-			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('check.gif', get_lang('ShowCorrectedOnly')).get_lang('ShowCorrectedOnly').'</a>';
+			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_check.png', get_lang('ShowCorrectedOnly'),'','32').'</a>';
 		} else {
-			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('un_check.gif', get_lang('ShowUnCorrectedOnly')).get_lang('ShowUnCorrectedOnly').'</a>';
+			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_uncheck.png', get_lang('ShowUnCorrectedOnly'),'','32').'</a>';
 		}
 		echo $view_result;
 	}
@@ -789,7 +789,7 @@ if ($show == 'test') {
                         //Settings                                                                
                         //$actions  = Display::url(Display::return_icon('edit.gif',get_lang('Edit'), array('width'=>'20px')), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                         
-                        $actions =  Display::url(Display::return_icon('wizard.gif',get_lang('Edit'), array('width'=>'22px')), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
+                        $actions =  Display::url(Display::return_icon('edit.gif',get_lang('Edit')), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
                         
                         $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
                         
@@ -804,9 +804,9 @@ if ($show == 'test') {
                             $actions .= Display::url(Display::return_icon('invisible.gif', get_lang('Activate')) , 'exercice.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);                      
                         }                        
                         // Export qti ...                    
-                        $actions .= Display::url(Display::return_icon('export_db.png',    'IMS/QTI'),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
+                        $actions .= Display::url(Display::return_icon('export_qti2.png','IMS/QTI','','22'),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
                     } else { // not session resource                
-                        $actions = Display::return_icon('wizard_gray.gif', get_lang('ExerciseEditionNotAvailableInSession'));
+                        $actions = Display::return_icon('edit.gif', get_lang('ExerciseEditionNotAvailableInSession'));
                         $actions .= Display::url(Display::return_icon('cd.gif',   get_lang('CopyExercise')),     '',  array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
                     }
                     
@@ -978,7 +978,7 @@ if ($show == 'test') {
                         $item .= Display::tag('td','-');
                                          
                         $actions = '<a href="adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path.'">
-                                   <img src="../img/wizard.gif" border="0" title="'.get_lang('Modify').'" alt="'.api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset).'" /></a>';
+                                   <img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset).'" /></a>';
                         
                         $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&path='.$path.'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
                                                 

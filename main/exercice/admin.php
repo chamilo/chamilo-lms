@@ -430,10 +430,10 @@ if (isset($exerciseId) && !empty($exerciseId)) {
 
 echo '<div class="actions">';
 if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
-    echo Display::return_icon('back.png', get_lang('GoBackToQuestionList')).' '.'<a href="admin.php?exerciseId='.$exerciseId.'">'.get_lang('GoBackToQuestionList').'</a>';
+    echo '<a href="admin.php?exerciseId='.$exerciseId.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
 
-echo Display::return_icon('preview.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
-echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+echo '<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'),'','32').'</a>';
+echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'','32').'</a>';
 
 echo '</div>';
 

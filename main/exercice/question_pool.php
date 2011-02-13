@@ -295,7 +295,7 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     ?>
     <button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Filter') ?></button>
     <?php
-    echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId='.$fromExercise.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
     /*if(!empty($fromExercise)) {
     	echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
     } else {

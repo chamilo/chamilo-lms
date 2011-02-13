@@ -141,13 +141,13 @@ function build_type_icon_tag($kind) {
 function get_icon_file_name ($type) {
 	switch ($type) {
 		case 'cat':
-			$icon = 'gradebook.gif';
+			$icon = 'icons/22/gradebook.png';
 			break;
 		case 'evalempty':
-			$icon = 'empty.gif';
+			$icon = 'icons/22/empty_evaluation.png';
 			break;
 		case 'evalnotempty':
-			$icon = 'gradebook_eval_not_empty.gif';
+			$icon = 'icons/22/no_empty_evaluation.png';
 			break;
 		case 'exercise':
 		case LINK_EXERCISE:
@@ -155,7 +155,7 @@ function get_icon_file_name ($type) {
 			break;
 		case 'learnpath':
 		case LINK_LEARNPATH:
-			$icon = '/icons/22/learnpath.png';
+			$icon = 'icons/22/learnpath.png';
 			break;
 		case 'studentpublication':
 		case LINK_STUDENTPUBLICATION:

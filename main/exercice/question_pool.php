@@ -214,6 +214,13 @@ if (isset($type)) {
 }
 echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:inline;">';
      
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+    /*if(!empty($fromExercise)) {
+    	echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
+    } else {
+    	echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes">'.Display::return_icon('more.png'),get_lang('NewQu').'</a>';
+    }*/
+	 
     if (isset($type)) {
     	echo '<input type="hidden" name="type" value="1">';
     }    
@@ -261,7 +268,9 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     $exercise_list         = get_all_exercises($course_info, $session_id);
     
     echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
-    
+	
+    echo '<br/>';
+	
     //Exercise List
     echo ' '.get_lang('Exercice').' ';
     
@@ -294,14 +303,6 @@ echo '<form name="question_pool" method="GET" action="'.$url.'" style="display:i
     echo Display::select('answerType', $new_question_list, $answerType, array('onchange'=>'submit_form(this);'));
     ?>
     <button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Filter') ?></button>
-    <?php
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
-    /*if(!empty($fromExercise)) {
-    	echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
-    } else {
-    	echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes">'.Display::return_icon('more.png'),get_lang('NewQu').'</a>';
-    }*/
-    ?>
     </form>
 </div>
 <form method="post" action="<?php echo $url.'?'.api_get_cidreq().'&fromExercise='.$fromExercise; ?>" >

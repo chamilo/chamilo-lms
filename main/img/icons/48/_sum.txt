@@ -84,5 +84,7 @@ no_empty_evaluation	modif crystal
 new_evaluation		modif crystal
 delete			nuvola
 import_evaluation	modif crystal
-export_evaluation	modif crystal	
+export_evaluation	modif crystal
+evaluation_rate		modif crystal
+new_online_evaluation	modif nuvola
 

@@ -18,7 +18,8 @@ class DisplayGradebook
                 //Disabling code when course code is null see issue #2705
 				//$header .= '<a href="gradebook_add_user.php?selecteval=' . $evalobj->get_id() . '"><img src="../img/add_user_big.gif" alt="' . get_lang('AddStudent') . '" align="absmiddle" /> ' . get_lang('AddStudent') . '</a>';
 			} elseif (!$evalobj->has_results()) {
-				$header .= '<a href="gradebook_add_result.php?selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '"><img src="../img/filenew.gif" alt="' . get_lang('AddResult') . '" align="absmiddle"/> ' . get_lang('AddResult') . '</a>';
+				$header .= '<a href="gradebook_add_result.php?selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '">
+				'.Display::return_icon('evaluation_rate.png',get_lang('AddResult'),'','32') . '</a>';				
 			}
 			$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&import=">
 			'.Display::return_icon('import_evaluation.png',get_lang('ImportResult'),'','32') . '</a>';			
@@ -60,7 +61,7 @@ class DisplayGradebook
 			$evalinfo .= '<br /><i>' . get_lang('NoResultsInEvaluation') . '</i>';
 		elseif ($scoredisplay->is_custom() && api_get_self() != '/dokeos/main/gradebook/gradebook_statistics.php') {
             if (api_is_allowed_to_edit(null, true)) {    
-                $evalinfo .= '<br /><br /><a href="gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('certificate_list.png'),get_lang('ViewResult'),'','32') . '</a>';
+                $evalinfo .= '<br /><br /><a href="gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('evaluation_rate.png'),get_lang('ViewResult'),'','32') . '</a>';
             }
         }
         
@@ -299,10 +300,10 @@ class DisplayGradebook
                     $cats= Category :: load($selectcat);
                     if ($cats[0]->get_course_code() != null && !$message_resource) {
                         //$header .= '<td><a href="gradebook_add_link.php?'.api_get_cidreq().'&selectcat=' . $catobj->get_id() . '"><img src="../img/link.gif" alt="' . get_lang('MakeLink') . '" align="absmiddle" /> ' . get_lang('MakeLink') . '</a>';
-                        $header .= '<td><a href="gradebook_add_link.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('link.png', get_lang('MakeLink'),'','32').'</a>';
+                        $header .= '<td><a href="gradebook_add_link.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('new_online_evaluation.png', get_lang('MakeLink'),'','32').'</a>';
 
                     } else {
-                        $header .= '<td><a href="gradebook_add_link_select_course.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('link.png', get_lang('MakeLink'),'','32').'</a>';
+                        $header .= '<td><a href="gradebook_add_link_select_course.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('new_online_evaluation.png', get_lang('MakeLink'),'','32').'</a>';
                     }
                 }
 

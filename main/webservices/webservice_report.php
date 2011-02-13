@@ -110,16 +110,16 @@ class WSReport extends WS {
         return $return;
     }
     /**
-     * Gets score obtained in a learning path
+     * Gets progress attained in the given learning path by the given user
      *
      * @param string User id field name
      * @param string User id value
      * @param string Course id field name
      * @param string Course id value
      * @param string Learnpath ID
-     * @return array Array of results
+     * @return double   Between 0 and 100 (% of progress)
      */
-    protected function get_user_learnpath($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
+    protected function get_user_learnpath_progress($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
         if($user_id instanceof WSError) {
             return $user_id;
@@ -133,5 +133,61 @@ class WSReport extends WS {
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
         $lp = new learnpath($course_code, $learnpath_id, $user_id);
         return $lp['progress'];
+    }
+    /**
+     * Gets score obtained in the given learning path by the given user,
+     * assuming there is only one item (SCO) in the learning path
+     *
+     * @param string User id field name
+     * @param string User id value
+     * @param string Course id field name
+     * @param string Course id value
+     * @param string Learnpath ID
+     * @return double   Generally between 0 and 100
+     */
+    protected function get_user_learnpath_score_single_item($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
+        $user_id = $this->getUserId($user_id_field_name, $user_id_value);
+        if($user_id instanceof WSError) {
+            return $user_id;
+        }
+        $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
+        if($course_id instanceof WSError) {
+            return $course_id;
+        } else {
+            $course_code = CourseManager::get_course_code_from_course_id($course_id);
+        }
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+        $lp = new learnpath($course_code, $learnpath_id, $user_id);
+        //return $lp['progress'];
+        return 100;
+    }
+    /**
+     * Gets status obtained in the given learning path by the given user,
+     * assuming there is only one item (SCO) in the learning path
+     *
+     * @param string User id field name
+     * @param string User id value
+     * @param string Course id field name
+     * @param string Course id value
+     * @param string Learnpath ID
+     * @return string "not attempted", "passed", "completed", "failed", "incomplete"
+     */
+    protected function get_user_learnpath_status_single_item($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
+        $user_id = $this->getUserId($user_id_field_name, $user_id_value);
+        if($user_id instanceof WSError) {
+            return $user_id;
+        }
+        $course_id = $this->getCourseId($course_id_field_name, $course_id_value);
+        if($course_id instanceof WSError) {
+            return $course_id;
+        } else {
+            $course_code = CourseManager::get_course_code_from_course_id($course_id);
+        }
+        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+        $lp = new learnpath($course_code, $learnpath_id, $user_id);
+        //return $lp['progress'];
+        return 'failed';
+        //return 'passed';
+        //return 'incomplete';
     }
 }

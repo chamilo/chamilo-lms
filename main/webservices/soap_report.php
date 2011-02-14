@@ -68,19 +68,19 @@ $s->wsdl->addComplexType(
 );
 
 $s->register(
-	'WSReport.GetTimeSpentOnPlatform',
-	array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string'),
+    'WSReport.GetTimeSpentOnPlatform',
+    array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string'),
     array('return' => 'xsd:string')
 );
 
 $s->register(
-	'WSReport.GetTimeSpentOnCourse',
+    'WSReport.GetTimeSpentOnCourse',
     array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string'),
 	array('return' => 'xsd:string')
 );
 
 $s->register(
-	'WSReport.GetTimeSpentOnCourseInSession',
+    'WSReport.GetTimeSpentOnCourseInSession',
     array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string', 'session_id_field_name' => 'xsd:string', 'session_id_value' => 'xsd:string'),
     array('return' => 'xsd:string')
 );
@@ -111,7 +111,12 @@ $s->register(
 
 $s->register(
     'WSReport.GetLearnpathStatusSingleItem',
-    //array('secret_key' => 'xsd:string'),
     array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string', 'learnpath_id' => 'xsd:string'),
     array('return' => 'xsd:string')
+);
+
+$s->register(
+    'WSReport.test',
+    array(),
+	array('return' => 'xsd:string')
 );

@@ -23,7 +23,7 @@ class WSReport extends WS {
 	 * @param string User id value
      * @return array Array of results
 	 */
-	protected function GetTimeSpentOnPlatform($user_id_field_name, $user_id_value) {
+	public function GetTimeSpentOnPlatform($user_id_field_name, $user_id_value) {
 		$user_id = $this->getUserId($user_id_field_name, $user_id_value);
 		if($user_id instanceof WSError) {
 			return $user_id;
@@ -41,7 +41,7 @@ class WSReport extends WS {
      * @param string Course id value
 	 * @return array Array of results
 	 */
-	protected function GetTimeSpentOnCourse($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value) {
+	public function GetTimeSpentOnCourse($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
         if($user_id instanceof WSError) {
             return $user_id;
@@ -64,7 +64,7 @@ class WSReport extends WS {
      * @param string Course id value
      * @return array Array of results
      */
-    protected function GetTimeSpentOnCourseInSession($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $session_id_field_name, $session_id_value) {
+    public function GetTimeSpentOnCourseInSession($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $session_id_field_name, $session_id_value) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
         if($user_id instanceof WSError) {
             return $user_id;
@@ -90,7 +90,7 @@ class WSReport extends WS {
      * @param string Course id value
      * @return array Array of id=>title of learning paths
      */
-    protected function GetLearnpathsByCourse($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $lp_id) {
+    public function GetLearnpathsByCourse($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $lp_id) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
         if($user_id instanceof WSError) {
             return $user_id;
@@ -119,7 +119,7 @@ class WSReport extends WS {
      * @param string Learnpath ID
      * @return double   Between 0 and 100 (% of progress)
      */
-    protected function GetLearnpathProgress($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
+    public function GetLearnpathProgress($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
         if($user_id instanceof WSError) {
             return $user_id;
@@ -145,7 +145,7 @@ class WSReport extends WS {
      * @param string Learnpath ID
      * @return double   Generally between 0 and 100
      */
-    protected function GetLearnpathScoreSingleItem($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
+    public function GetLearnpathScoreSingleItem($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
         if($user_id instanceof WSError) {
             return $user_id;
@@ -173,7 +173,7 @@ class WSReport extends WS {
      * @param string Learnpath ID
      * @return string "not attempted", "passed", "completed", "failed", "incomplete"
      */
-    protected function GetLearnpathStatusSingleItem($secret_key, $user_id_field_name = 'chamilo_user_id', $user_id_value, $course_id_field_name = 'chamilo_course_id', $course_id_value, $learnpath_id) {
+    public function GetLearnpathStatusSingleItem($secret_key, $user_id_field_name = 'chamilo_user_id', $user_id_value, $course_id_field_name = 'chamilo_course_id', $course_id_value, $learnpath_id) {
         return null;
         $verifKey = $this->verifyKey($secret_key);
         if($verifKey instanceof WSError) {
@@ -194,5 +194,8 @@ class WSReport extends WS {
 error_log('Ready to return status for '.$course_code.'-'.$learnpath_id.'-'.$user_id.': '.$lp->items[0]['status']);
             return $lp->items[0]['status'];
         }
+    }
+    public function test() {
+        return 'Hello world!';
     }
 }

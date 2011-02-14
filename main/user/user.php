@@ -332,13 +332,14 @@ if ( api_is_allowed_to_edit(null, true)) {
 	echo "<div class=\"actions\">";
 
 	// the action links
-	$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'&nbsp;'.get_lang('ExportAsCSV').'</a> ';
-	$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('excel.gif', get_lang('ExportAsXLS')).'&nbsp;'.get_lang('ExportAsXLS').'</a> ';
         if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-            $actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a> ';
-            $actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('add_teacher_big.gif', get_lang("SubscribeUserToCourseAsTeacher"))."&nbsp;".get_lang("SubscribeUserToCourseAsTeacher")."</a> ";
+            $actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('new_user.png',get_lang("SubscribeUserToCourse"),'','32').'</a> ';
+            $actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('new_teacher.png', get_lang("SubscribeUserToCourseAsTeacher"),'','32')."</a> ";
         }
-        $actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('group.gif', get_lang("GroupUserManagement"))."&nbsp;".get_lang("GroupUserManagement")."</a>";
+		$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a> ';
+	$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a> ';
+		$actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('group.png', get_lang("GroupUserManagement"),'','32')."</a>";
+		
 	if (api_get_setting('use_session_mode') == 'false') {
 		$actions .= ' <a href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
 	}

@@ -100,3 +100,10 @@ import_calendar		modif crystal (only 32 px)
 calendar_normal		modif crystal (only 32 px)
 calendar_inverse	modif crystal (only 32 px)
 ----
+forum			nuvola
+group			nuvola
+user			modif nuvola
+new_user		modif nuvola
+new_group		modif nuvola
+new_forum		modif nuvola
+new_teacher		modif nuvola

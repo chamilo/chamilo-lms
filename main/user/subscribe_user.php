@@ -633,7 +633,7 @@ $sort_by_first_name = api_sort_by_first_name();
 // Build search-form
 echo '<div class="actions">';
 
-$actions .= '<a href="user.php">'.Display::return_icon('members.gif',get_lang('BackToUserList')).' '.get_lang('BackToUserList').'</a>';
+$actions .= '<a href="user.php">'.Display::return_icon('user.png',get_lang('BackToUserList'),'','32').'</a>';
 if ($_GET['keyword'])
 {
 	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';

@@ -95,7 +95,7 @@ function loadCSS($css_name) {
         '/\n{3,}/m' => "\n\n"               // Removing extra empty lines.
     );
     $template_css = preg_replace(array_keys($regex), $regex, $template_css);
-//var_dump($template_css);
+
     return "\n".'<style type="text/css">'.$template_css.'</style>'."\n";
 }
 

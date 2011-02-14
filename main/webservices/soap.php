@@ -91,6 +91,7 @@ $s->register(
 require_once(dirname(__FILE__).'/soap_user.php');
 require_once(dirname(__FILE__).'/soap_course.php');
 require_once(dirname(__FILE__).'/soap_session.php');
+require_once(dirname(__FILE__).'/soap_report.php');
 
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';

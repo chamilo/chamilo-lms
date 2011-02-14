@@ -87,16 +87,50 @@ function loadCSS($css_name) {
     $template_css .= "\n".'body { background: #fff; } /* Resetting the background. */'."\n";
 
     // Removing system-specific styles and cleaning, see task #1282.
-    $regex = array(
+    $regex1 = array(
         '/\/\*(.+?)\*\//sm' => '',          // Removing comments.
         '/\r\n/m' => "\n",                  // New lines in Unix style.
-        '/\r/m' => "\n",                    // New lines in Unix style.
+        '/\r/m' => "\n"                     // New lines in Unix style.
+    );
+    $template_css = preg_replace(array_keys($regex1), $regex1, $template_css);
+    $template_css = preg_replace('/behavior[^;\{\}]*;/ism', '', $template_css);   // Removing behavior-definition, it is IE-specific.
+    $template_css_array = explode('}', $template_css);
+    if (!empty($template_css_array)) {
+        $deleters = array(
+            '/.*\#.*\{[^\}]*\}/sm',         // Removing css definitions bound to system secific elements (identified by id).
+            '/.*\..*\{[^\}]*\}/sm',         // Removing css definitions bound to classes, we assume them as system secific.
+            // Removing css definitions bound to intractive types of element that teachers most probably don't need.
+            '/.*input.*\{[^\}]*\}/ism',
+            '/.*textarea.*\{[^\}]*\}/ism',
+            '/.*select.*\{[^\}]*\}/ism',
+            '/.*form.*\{[^\}]*\}/ism',
+            '/.*button.*\{[^\}]*\}/ism'
+        );
+        foreach ($template_css_array as $key => & $css_definition) {
+            if (trim($css_definition) == '') {
+                unset($template_css_array[$key]);
+                continue;
+            }
+            $css_definition = trim($css_definition.'}');
+            foreach ($deleters as & $deleter) {
+                if (preg_match($deleter, $css_definition)) {
+                    unset($template_css_array[$key]);
+                }
+            }
+        }
+        $template_css = implode("\n\n", $template_css_array);
+    }
+    $regex2 = array(
         '/[ \t]*\n/m' => "\n",              // Removing trailing whitespace.
         '/\n{3,}/m' => "\n\n"               // Removing extra empty lines.
     );
-    $template_css = preg_replace(array_keys($regex), $regex, $template_css);
+    $template_css = preg_replace(array_keys($regex2), $regex2, $template_css);
 
-    return "\n".'<style type="text/css">'.$template_css.'</style>'."\n";
+    if (trim($template_css) == '') {
+        return '';
+    }
+
+    return "\n".'<style type="text/css">'."\n".$template_css."\n".'</style>'."\n";
 }
 
 /**

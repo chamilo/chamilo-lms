@@ -86,7 +86,17 @@ function loadCSS($css_name) {
     // Reseting the body's background color to be in white, see Task #1885 and http://www.chamilo.org/en/node/713
     $template_css .= "\n".'body { background: #fff; } /* Resetting the background. */'."\n";
 
-    return ' <style type="text/css">'.$template_css.'</style>';
+    // Removing system-specific styles and cleaning, see task #1282.
+    $regex = array(
+        '/\/\*(.+?)\*\//sm' => '',          // Removing comments.
+        '/\r\n/m' => "\n",                  // New lines in Unix style.
+        '/\r/m' => "\n",                    // New lines in Unix style.
+        '/[ \t]*\n/m' => "\n",              // Removing trailing whitespace.
+        '/\n{3,}/m' => "\n\n"               // Removing extra empty lines.
+    );
+    $template_css = preg_replace(array_keys($regex), $regex, $template_css);
+//var_dump($template_css);
+    return "\n".'<style type="text/css">'.$template_css.'</style>'."\n";
 }
 
 /**

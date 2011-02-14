@@ -99,7 +99,7 @@ function loadCSS($css_name) {
         $deleters = array(
             '/.*\#.*\{[^\}]*\}/sm',         // Removing css definitions bound to system secific elements (identified by id).
             '/.*\..*\{[^\}]*\}/sm',         // Removing css definitions bound to classes, we assume them as system secific.
-            // Removing css definitions bound to intractive types of element that teachers most probably don't need.
+            // Removing css definitions bound to intractive types of elements that teachers most probably don't need.
             '/.*input.*\{[^\}]*\}/ism',
             '/.*textarea.*\{[^\}]*\}/ism',
             '/.*select.*\{[^\}]*\}/ism',

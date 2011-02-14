@@ -290,12 +290,11 @@ class WSCourse extends WS {
 	 * List courses
 	 *
 	 * @param string API secret key
-	 * @param string Course id field name. Use "chamilo_course_id" to use internal id
 	 * @param string A list of visibility filter we want to apply
 	 * @return array An array with elements of the form ('id' => 'Course internal id', 'code' => 'Course code', 'title' => 'Course title', 'language' => 'Course language', 'visibility' => 'Course visibility',
 	 * 'category_name' => 'Name of the category of the course', 'number_students' => 'Number of students in the course', 'external_course_id' => 'External course id')
 	 */
-	public function ListCourses($secret_key, $course_id_field_name, $visibility = 'public,public-registered,private,closed') {
+	public function ListCourses($secret_key, $visibility = 'public,public-registered,private,closed') {
 		$verifKey = $this->verifyKey($secret_key);
 		if($verifKey instanceof WSError) {
 			$this->handleError($verifKey);

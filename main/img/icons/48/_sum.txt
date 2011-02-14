@@ -72,7 +72,7 @@ settings_na		modif nuvola
 export_excel		modif mix crystal
 exercice_check		modif mix nuvola crystal
 exercice_uncheck	modif mix nuvola crystal
---------
+--
 statistics		crystal
 percentage		nuvola
 pdf			crystal
@@ -87,4 +87,16 @@ import_evaluation	modif crystal
 export_evaluation	modif crystal
 evaluation_rate		modif crystal
 new_online_evaluation	modif nuvola
-
+--
+month			crystal (only 32 px)
+month_empty		modif crystal (only 32 px)
+7days			crystal (only 32 px)
+1day			crystal (only 32 px)
+calendar		crystal (only 32 px)
+appointments		crystal (only 32 px)
+event			nuvola
+new_event		modif nuvola
+import_calendar		modif crystal (only 32 px)
+calendar_normal		modif crystal (only 32 px)
+calendar_inverse	modif crystal (only 32 px)
+----

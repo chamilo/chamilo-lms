@@ -146,12 +146,17 @@ class Promotion extends Model {
         }
         $pid = $this->save($new);
         if ($copy_sessions) {
-            //Now also copy each session of the promotion as a new session and register it inside the promotion
+            /**
+             * When copying a session we do:
+             * 1. Copy a new session from the source
+             * 2. Copy all courses from the session (no user data, no user list)              
+             */
             require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-            $session_list   = SessionManager::get_all_sessions_by_promotion($id);    
+            $session_list   = SessionManager::get_all_sessions_by_promotion($id); 
+        
             if (!empty($session_list)) {
                 foreach($session_list  as $item) {
-                    $sid = SessionManager::copy_session($item['id'], true, true);
+                    $sid = SessionManager::copy_session($item['id'], true, false, true);
                     if ($sid != 0) {
                         SessionManager::suscribe_sessions_to_promotion($pid,array($sid));
                     }

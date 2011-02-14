@@ -3078,6 +3078,143 @@ class CourseManager {
     
         return $output;
     }
+    
+    /**
+     *
+     
+     * @param	string	source course code
+     * @param 	int		source session id
+     * @param	string	destination course code
+     * @param 	int		destination session id
+     * @return bool	
+     */
+    function copy_course($source_course_code, $source_session_id, $destination_course_code, $destination_session_id) {
+        require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseBuilder.class.php';
+        require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseRestorer.class.php';
+        require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseSelectForm.class.php';
+
+        $course_info = api_get_course_info($source_course_code);
+        
+        if (!empty($course_info)) {
+            $cb = new CourseBuilder('', $course_info);
+		    $course = $cb->build($source_session_id,$source_session_id['code']);		    		
+    		$course_restorer = new CourseRestorer($course);
+    		$course_restorer->restore($destination_course_code, $destination_session_id);
+    		return true;		
+        }
+        return false;
+    }
+    
+    
+    /**
+     * A simpler version of the copy_course, the function creates an empty course
+     * 
+     * @param	string	course title
+     * @param	string	source course code
+     * @param 	int		source session id
+     * @return 	
+     */
+    function copy_course_simple($new_title, $source_course_code, $source_session_id = 0) {
+        $source_course_info = api_get_course_info($source_course_code);        
+        if (!empty($source_course_info)) {
+            $new_course_code = self::generate_nice_next_course_code($source_course_code); 
+            if ($new_course_code) {
+                $new_course_info = self::create_course($new_title, $new_course_code, false);
+                if (!empty($new_course_info['code'])) {                    
+                    $result = self::copy_course($source_course_code, $source_session_id, $new_course_info['code'], 0);
+                    if ($result) {
+                        return $new_course_info;
+                    }                   
+                }
+            }
+        }
+        return false;
+    }
+    
+    
+    
+    /**
+     * Creates a new course code based in given code
+     * 
+     * @param string	wanted code
+     * @example	$wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3
+     * if the course code doest not exist in the DB the same course code will be returned
+     * @return string	wanted unused code
+     */
+	function generate_nice_next_course_code($wanted_code) {
+        require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
+        $course_code_ok = !self::course_code_exists($wanted_code);
+        if (!$course_code_ok) {            
+           $wanted_code = generate_course_code($wanted_code);
+           $table = Database::get_main_table(TABLE_MAIN_COURSE);
+           $wanted_code = Database::escape_string($wanted_code);
+           $sql = "SELECT count(*) as count FROM $table WHERE code LIKE '$wanted_code%'";           
+           $result = Database::query($sql);
+           if (Database::num_rows($result) > 0 ) {
+		       $row = Database::fetch_array($result);
+		       $count = $row['count'] + 1;
+		       $wanted_code = $wanted_code.'_'.$count;
+		       $result = api_get_course_info($wanted_code);
+		       if (empty($result)) {
+		           return $wanted_code;
+		       }
+           }       
+           return false;     
+        }     
+        return $wanted_code;
+    }
+        
+    /**
+     * Creates a course very fast (the function doesn't need a lot of parameters)
+     * 
+     * @param	string	course title
+     * @param	bool	add example content or not
+     * @param	mixed	false if the course was not created, array with the course info
+     * 
+		Coded found in create_course/add_course.php
+		
+     */
+    function create_course($title, $wanted_code  = '', $exemplary_content = false) {
+        require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
+        global $_configuration, $firstExpirationDelay;
+        if (empty($title)) {
+            return false;
+        }        
+        if (empty($wanted_code)) {
+            $wanted_code = $title;    
+            // Check whether the requested course code has already been occupied.       
+            $dbnamelength = strlen($_configuration['db_prefix']);
+            // Ensure the database prefix + database name do not get over 40 characters.
+            $maxlength = 40 - $dbnamelength;
+            $wanted_code = generate_course_code(api_substr($title, 0, $maxlength));            
+        }
+ 
+        // Create the course immediately
+        $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
+
+        if (count($keys)) {
+            $visual_code = $keys['currentCourseCode'];
+            $code        = $keys['currentCourseId'];
+            $db_name     = $keys['currentCourseDbName'];
+            $directory   = $keys['currentCourseRepository'];
+                
+            $code_info   = api_get_course_info($code);
+            if (empty($code_info)) {            
+                $expiration_date = time() + $firstExpirationDelay;
+                prepare_course_repository($directory, $code);
+                update_Db_course($db_name);
+                $pictures_array = fill_course_repository($directory,  $exemplary_content);
+                fill_Db_course($db_name, $directory, $course_language, $pictures_array, $exemplary_content);
+                $course_language = api_get_setting('platformLanguage');
+                $result = register_course($code, $visual_code, $directory, $db_name, '', '', $title, $course_language, api_get_user_id(), $expiration_date);
+                $course_info = api_get_course_info($code);
+                if (!empty($course_info)) {
+                    return $course_info;    
+                }
+            }
+        }
+        return false;            
+    } 
 
     
 } //end class CourseManager

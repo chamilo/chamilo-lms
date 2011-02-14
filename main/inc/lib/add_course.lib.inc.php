@@ -2480,8 +2480,8 @@ function register_course($course_sys_code, $course_screen_code, $course_reposito
         $ok_to_register_course = false;
     }
     if (empty($titular)) {
-        $error_msg[] = 'titular is missing';
-        $ok_to_register_course = false;
+        //$error_msg[] = 'titular is missing';
+        //$ok_to_register_course = false;
     }
     if (empty($title)) {
         $error_msg[] = 'title is missing';
@@ -2511,7 +2511,7 @@ function register_course($course_sys_code, $course_screen_code, $course_reposito
         $titular = addslashes($titular);
 
         // Here we must add 2 fields.
-        $sql = "INSERT INTO ".$TABLECOURSE . " SET
+       $sql = "INSERT INTO ".$TABLECOURSE . " SET
                     code = '".Database :: escape_string($course_sys_code) . "',
                     db_name = '".Database :: escape_string($course_db_name) . "',
                     directory = '".Database :: escape_string($course_repository) . "',

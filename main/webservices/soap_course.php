@@ -181,7 +181,8 @@ $s->register(
 	'WSCourse.ListCourses',
 	array(
 		'secret_key' => 'xsd:string',
-		'course_id_field_name' => 'xsd:string'
+		'course_id_field_name' => 'xsd:string',
+		'visibilities' => 'xsd:string'
 	),
 	array('return' => 'tns:course_array')
 );

@@ -7,8 +7,9 @@ require_once '../inc/conf/configuration.php';
 <div class="results">
 <?php
 $server = $_configuration['root_web'].'main/webservices/';
+$serversys = $_configuration['root_sys'].'main/webservices/';
 //$script = 'registration.soap.php';
-$script = 'courses_list.soap.php';
+$script = $_POST['script'];
 $contact= $server.$script.'?wsdl';
 $client = new nusoap_client($contact);
 $err = $client->getError();
@@ -24,9 +25,25 @@ if (!empty($_POST['function'])) {
   print_r($response);
   echo '#</pre>';
 }
+$list = scandir($serversys);
+$scripts = array();
+foreach ($list as $item) {
+  if (substr($item,0,1) == '.') { continue; }
+  if (substr($item,-8)=='soap.php') {
+    $scripts[] = $item;
+  }
+}
 ?>
 </div>
 <form method="POST" action="">
+<label for="script">Script</label>
+<select name="script">
+<?php 
+foreach ($scripts as $script) {
+  echo '<option value="'.$script.'">'.$script.'</script>';
+}
+?>
+</select><br />
 <label for="function">Function</label>
 <input type="text" name="function" value="<?php echo $_POST['function'];?>"></input><br />
 <label for="param[0]">Param 0</label>

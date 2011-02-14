@@ -1338,6 +1338,7 @@ class Database {
     /**
      * Experimental useful database finder 
      * @todo lot of stuff to do here
+     * @todo known issues, it doesn't work when using LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
     */
     
     public static function select($columns = '*' , $table_name,  $conditions = array(), $type_result = 'all', $option = 'ASSOC') {        
@@ -1379,6 +1380,7 @@ class Database {
     
     /**
      * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC'))
+     * @todo known issues, it doesn't work when using LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
      * @param   array   
      * @todo lot of stuff to do here
     */
@@ -1402,9 +1404,11 @@ class Database {
                             $value_array = Database::escape_string($value_array);
                             $clean_values = "'$value_array'";
                         }
-                        if (!empty($condition) && !empty($clean_values)) {    
-                            $condition = str_replace('?','%s', $condition); //we treat everything as string                
+                        if (!empty($condition) && !empty($clean_values)) {
+                            //$condition = str_replace('%','@percentage@', $condition);  
+                            $condition = str_replace('?','%s', $condition); //we treat everything as string
                             $condition = vsprintf($condition, $clean_values);
+                            //$condition = str_replace('@percentage@','%', $condition);  
                             $where_return .= $condition;                            
                         }
                     }

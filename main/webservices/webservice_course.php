@@ -290,20 +290,27 @@ class WSCourse extends WS {
 	 * List courses
 	 *
 	 * @param string API secret key
-	 * @param string Course id field name. Use "chamilo_course_id" to use internal id
+	 * @param string A list of visibility filter we want to apply
 	 * @return array An array with elements of the form ('id' => 'Course internal id', 'code' => 'Course code', 'title' => 'Course title', 'language' => 'Course language', 'visibility' => 'Course visibility',
 	 * 'category_name' => 'Name of the category of the course', 'number_students' => 'Number of students in the course', 'external_course_id' => 'External course id')
 	 */
-	public function ListCourses($secret_key, $course_id_field_name) {
+	public function ListCourses($secret_key, $visibility = 'public,public-registered,private,closed') {
 		$verifKey = $this->verifyKey($secret_key);
 		if($verifKey instanceof WSError) {
 			$this->handleError($verifKey);
 		} else {
+                        $visibilities = split(',',$visibility);
+                        $vis = array('public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0');
+                        foreach ($visibilities as $p => $visibility) {
+                            $visibilities[$p] = $vis[$visibility];
+                        }
 			$courses_result = array();
 			$category_names = array();
 
 			$courses = CourseManager::get_courses_list();
 			foreach($courses as $course) {
+                                //skip elements that do not match required visibility
+                                if (!in_array($course['visibility'],$visibilities)) { continue; }
 				$course_tmp = array();
 				$course_tmp['id'] = $course['id'];
 				$course_tmp['code'] = $course['code'];

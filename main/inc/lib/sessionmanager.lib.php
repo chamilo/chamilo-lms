@@ -66,8 +66,7 @@ class SessionManager {
 		$id_session_category = intval($id_session_category);
 		$id_visibility   = intval($id_visibility);
 		$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
-        
+		$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);        
     
 		if(is_int($coach_username)) {
 			$id_coach = $coach_username;
@@ -1311,10 +1310,11 @@ class SessionManager {
      * @param   int     Session ID
      * @param   bool    Whether to copy the relationship with courses
      * @param   bool    Whether to copy the relationship with users
+     * @param	bool	New courses will be created
      * @return  int     The new session ID on success, 0 otherwise
      * @todo make sure the extra session fields are copied too
      */
-    public function copy_session($id, $copy_courses=true, $copy_users=true) {
+    public function copy_session($id, $copy_courses=true, $copy_users=true, $create_new_courses = false) {
         $id = (int)$id;
         $s = self::fetch($id);
         $s['year_start']    = substr($s['date_start'],0,4);
@@ -1322,28 +1322,60 @@ class SessionManager {
         $s['day_start']     = substr($s['date_start'],8,2);
         $s['year_end']      = substr($s['date_end'],0,4);
         $s['month_end']     = substr($s['date_end'],5,2);
-        $s['day_end']       = substr($s['date_end'],8,2);
+        $s['day_end']       = substr($s['date_end'],8,2);        
+        $consider_start = true;
+        if ($s['year_start'].'-'.$s['month_start'].'-'.$s['day_start'] == '0000-00-00') {
+            $consider_start = false;
+        }
+        $consider_end = true;
+        if ($s['year_end'].'-'.$s['month_end'].'-'.$s['day_end'] == '0000-00-00') {
+            $consider_end = false;
+        }
+        
         $sid = self::create_session($s['name'].' '.get_lang('Copy'),
              $s['year_start'], $s['month_start'], $s['day_start'],
              $s['year_end'],$s['month_end'],$s['day_end'],
              $s['nb_days_acess_before_beginning'],$s['nb_days_acess_after_end'],
              false,(int)$s['id_coach'], $s['session_category_id'],
-             (int)$s['visibility'],true, true);
+             (int)$s['visibility'],$consider_start, $consider_end);             
         if (!is_numeric($sid)) {
         	return false;
         }
         if ($copy_courses) {
             // Register courses from the original session to the new session
             $courses = self::get_course_list_by_session_id($id);
-            $short_courses = array();
+            
+            $short_courses = $new_short_courses = array();
             if (is_array($courses) && count($courses)>0) {
             	foreach ($courses as $course) {
-            		$short_courses[] = $course['course_code'];
+            		$short_courses[] = $course;
             	}
             }
             $courses = null;
-            $res = self::add_courses_to_session($sid, $short_courses, true);
-            $short_courses = null;
+            //We will copy the current courses of the session to new courses
+            if (!empty($short_courses)) {
+                if ($create_new_courses) {                    
+                    require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+                    //Just in case
+                    if (function_exists('ini_set')) {
+                    	ini_set('memory_limit','256M');
+                    	ini_set('max_execution_time',0);
+                    }                    
+                    foreach($short_courses as $course_data) {
+                        $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('Copy'), $course_data['course_code'], $id);
+                        if ($course_info) {
+                            $new_short_courses[] = $course_info['code'];
+                        }                             
+                    }                    
+                } else {
+                    foreach($short_courses as $course_data) {
+                         $new_short_courses[] = $course_data['code'];
+                    }
+                }
+                $short_courses = $new_short_courses;
+                $res = self::add_courses_to_session($sid, $short_courses, true);
+                $short_courses = null;
+            }
         }
         if ($copy_users) {
             // Register users from the original session to the new session

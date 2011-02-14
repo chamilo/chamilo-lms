@@ -68,25 +68,55 @@ $s->wsdl->addComplexType(
 );
 
 $s->register(
-	'WSReport.get_time_spent_on_platform',
-	array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string'),
-    array('return' => 'tns:user_result_array')
+    'WSReport.GetTimeSpentOnPlatform',
+    array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string'),
+    array('return' => 'xsd:string')
 );
 
 $s->register(
-	'WSReport.get_time_spent_on_course',
+    'WSReport.GetTimeSpentOnCourse',
     array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string'),
-	array('return' => 'tns:user_result_array')
+	array('return' => 'xsd:string')
 );
 
 $s->register(
-	'WSReport.get_time_spent_on_course_in_session',
+    'WSReport.GetTimeSpentOnCourseInSession',
     array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string', 'session_id_field_name' => 'xsd:string', 'session_id_value' => 'xsd:string'),
+    array('return' => 'xsd:string')
+);
+
+$s->register(
+    'WSReport.GetTimeSpentOnLearnpathInCourse',
+    array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string', 'learnpath_id' => 'xsd:string'),
+    array('return' => 'xsd:string')
+);
+
+$s->register(
+    'WSReport.GetLearnpathsByCourse',
+    array('user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string', 'learnpath_id' => 'xsd:string'),
     array('return' => 'tns:user_result_array')
 );
 
 $s->register(
-    'WSReport.get_time_spent_on_learnpath_in_course',
+    'WSReport.GetLearnpathProgress',
+    array('user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string', 'learnpath_id' => 'xsd:string'),
+    array('return' => 'xsd:string')
+);
+
+$s->register(
+    'WSReport.GetLearnpathScoreSingleItem',
+    array('user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string', 'learnpath_id' => 'xsd:string'),
+    array('return' => 'xsd:string')
+);
+
+$s->register(
+    'WSReport.GetLearnpathStatusSingleItem',
     array('secret_key' => 'xsd:string', 'user_id_field_name' => 'xsd:string', 'user_id_value' => 'xsd:string', 'course_id_field_name' => 'xsd:string', 'course_id_value' => 'xsd:string', 'learnpath_id' => 'xsd:string'),
-    array('return' => 'tns:user_result_array')
+    array('return' => 'xsd:string')
+);
+
+$s->register(
+    'WSReport.test',
+    array(),
+	array('return' => 'xsd:string')
 );

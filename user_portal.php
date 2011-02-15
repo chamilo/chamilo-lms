@@ -338,33 +338,30 @@ if (is_array($courses_tree)) {
                 foreach ($session['courses'] as $course) {
                     $is_coach_course = api_is_coach($session['details']['id'], $course['code']);
                     if ($is_coach_course) {
-                        $allowed_time = strtotime($date_session_start) - $days_access_before_beginning;
+                        $allowed_time = api_strtotime($date_session_start) - $days_access_before_beginning;
                     } else {
-                        $allowed_time = strtotime($date_session_start);
-                    }
-                    if ($session_now > $allowed_time) {
-                        $c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',($session['details']['visibility']==3?false:true));
+                        $allowed_time = api_strtotime($date_session_start);
+                    }                    
+                    if ($session_now > $allowed_time) { //read only and accesible  
+                        $c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',true);
+                        //$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',($session['details']['visibility']==3?false:true));
                         $html_courses_session .= $c[1];
                         $count_courses_session++;
                     }
                 }
 
                 if ($count_courses_session > 0) {
-                    //echo '<div class="clear"></div>';
                     echo '<div class="userportal-session-item"><ul class="session_box">';
                         echo '<li class="session_box_title" id="session_'.$session['details']['id'].'" >';
-
-                        //echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
-
                         echo Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
 
                         $s = Display :: get_session_title_box($session['details']['id']);
                         $extra_info = (!empty($s['coach']) ? $s['coach'].' | ' : '').$s['dates'];
-                        if ($session['details']['visibility'] == 3) {
+                        /*if ($session['details']['visibility'] == 3) {
                             $session_link = $s['title'];
-                        } else {
+                        } else {*/
                             $session_link = Display::tag('a',$s['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));
-                        }
+                        //}
                         echo Display::tag('span',$session_link. ' </span> <span style="padding-left: 10px; font-size: 90%; font-weight: normal;">'.$extra_info);
                         if (api_is_platform_admin()) {
                             echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
@@ -373,12 +370,9 @@ if (is_array($courses_tree)) {
                         echo $html_courses_session;
 
                     echo '</ul></div>';
-
                 }
             }
-
         } else {
-
             // All sessions included in.
             if (!empty($category['details'])) {
                 $count_courses_session = 0;

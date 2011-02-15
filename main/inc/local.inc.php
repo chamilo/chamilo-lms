@@ -678,9 +678,9 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
             $_course['extLink']['name']     = $cData['department_name'];
             $_course['categoryCode']        = $cData['faCode'];
             $_course['categoryName']        = $cData['faName'];
-            $_course['visibility']            = $cData['visibility'];
-            $_course['subscribe_allowed']    = $cData['subscribe'];
-            $_course['unubscribe_allowed']    = $cData['unsubscribe'];
+            $_course['visibility']          = $cData['visibility'];
+            $_course['subscribe_allowed']   = $cData['subscribe'];
+            $_course['unubscribe_allowed']  = $cData['unsubscribe'];
 
             api_session_register('_cid');
             api_session_register('_course');
@@ -971,9 +971,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
     }
 
     // requires testing!!!
-
     // check the session visibility
-    if (!empty($is_allowed_in_course)) {
+    if (!empty($is_allowed_in_course)) {        
         $my_session_id = api_get_session_id();
         //if I'm in a session
         //var_dump($is_platformAdmin, $is_courseTutor,api_is_coach());

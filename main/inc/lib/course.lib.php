@@ -2913,7 +2913,7 @@ class CourseManager {
     
         $s_htlm_status_icon = '';
     
-        $s_htlm_status_icon =Display::return_icon('blackboard_blue.png', get_lang('Course'), array('width' => '48px'));
+        $s_htlm_status_icon = Display::return_icon('blackboard_blue.png', get_lang('Course'), array('width' => '48px'));
         /*
         if ($s_course_status == 1) {
             $s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style' => 'width: 11px; height: 11px;'));
@@ -2926,7 +2926,6 @@ class CourseManager {
         }
         */
         // Display course entry.
-        $result.="\n\t";
         $result .= '<li class="'.$class.'"><div class="coursestatusicons">'.$s_htlm_status_icon.'</div>';
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
         if ($session_accessible) {

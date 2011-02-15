@@ -4,6 +4,8 @@
  * Responses to AJAX calls
 */
 $action = $_GET['a'];
+$now    = time();
+
 switch ($action) {
 	case 'set_visibility':
 		require_once '../global.inc.php';
@@ -152,7 +154,20 @@ switch ($action) {
                     $date = '-';
                 }
                 
-                $temp[$count]['cell']=array($date, $item['title'], Display::url($lp_item['lp_name'].$icons,$lp_url, array('target'=>'_blank')));
+                //Checking LP publicated and expired_on dates
+                if (!empty($lp_item['publicated_on']) && $lp_item['publicated_on'] != '0000-00-00 00:00:00') {                        
+                    if ($now < api_strtotime($lp_item['publicated_on'])) {                        
+                        continue;
+                    }
+                }
+                
+                if (!empty($lp_item['expired_on']) && $lp_item['expired_on'] != '0000-00-00 00:00:00') {
+                    if ($now > api_strtotime($lp_item['expired_on'])) {
+                        continue;
+                    }
+                }
+                
+                $temp[$count]['cell']=array($date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
                 $count++;     
             }              
         } 
@@ -254,6 +269,20 @@ switch ($action) {
                 } else {
                     $date = '-';
                 }
+                
+                 //Checking LP publicated and expired_on dates
+                if (!empty($lp_item['publicated_on']) && $lp_item['publicated_on'] != '0000-00-00 00:00:00') {                        
+                    if ($now < api_strtotime($lp_item['publicated_on'])) {                        
+                        continue;
+                    }
+                }
+                
+                if (!empty($lp_item['expired_on']) && $lp_item['expired_on'] != '0000-00-00 00:00:00') {
+                    if ($now > api_strtotime($lp_item['expired_on'])) {
+                        continue;
+                    }
+                }
+                
                 $temp[$count]['cell']=array(get_week_from_day($lp_item['publicated_on']), $date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
                 $count++;     
             }              
@@ -352,6 +381,20 @@ switch ($action) {
                 } else {
                     $date = '-';
                 }
+                
+                 //Checking LP publicated and expired_on dates
+                if (!empty($lp_item['publicated_on']) && $lp_item['publicated_on'] != '0000-00-00 00:00:00') {                        
+                    if ($now < api_strtotime($lp_item['publicated_on'])) {                        
+                        continue;
+                    }
+                }
+                
+                if (!empty($lp_item['expired_on']) && $lp_item['expired_on'] != '0000-00-00 00:00:00') {
+                    if ($now > api_strtotime($lp_item['expired_on'])) {
+                        continue;
+                    }
+                }
+                
                 $temp[$count]['cell']=array($date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
                 $count++;     
             }              

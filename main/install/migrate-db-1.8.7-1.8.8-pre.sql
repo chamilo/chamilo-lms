@@ -171,7 +171,7 @@ CREATE TABLE notification (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,dest_us
 ALTER TABLE notification ADD index mail_notify_sent_index (sent_at);
 ALTER TABLE notification ADD index mail_notify_freq_index (sent_at, send_freq, created_at);
 
-UPDATE settings_current SET selected_value = '1.8.8.13739' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.8.8.13860' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

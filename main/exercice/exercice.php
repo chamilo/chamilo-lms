@@ -655,9 +655,9 @@ if ($show == 'result') {
 				null;
 		}
 		if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
-			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_check.png', get_lang('ShowCorrectedOnly'),'','32').'</a>';
+			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_check.png', get_lang('ShowCorrectedOnly'),'','32').'</a>';
 		} else {
-			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_uncheck.png', get_lang('ShowUnCorrectedOnly'),'','32').'</a>';
+			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_uncheck.png', get_lang('ShowUnCorrectedOnly'),'','32').'</a>';
 		}
 		echo $view_result;
 	}
@@ -806,7 +806,8 @@ if ($show == 'test') {
                         // Export qti ...                    
                         $actions .= Display::url(Display::return_icon('export_qti2.png','IMS/QTI','','22'),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
                     } else { // not session resource                
-                        $actions = Display::return_icon('edit.gif', get_lang('ExerciseEditionNotAvailableInSession'));
+                        $actions = Display::return_icon('edit.gif', get_lang('ExerciseEditionNotAvailableInSession'));                        
+                        $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';                        
                         $actions .= Display::url(Display::return_icon('cd.gif',   get_lang('CopyExercise')),     '',  array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
                     }
                     

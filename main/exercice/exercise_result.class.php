@@ -324,13 +324,12 @@ class ExerciseResult
 		global $charset;
 		$this->_getExercisesReporting($document_path,$user_id,$export_filter, $exercise_id);
 		$filename = 'exercise_results_'.date('YmdGis').'.xls';
-		if(!empty($user_id))
-		{
+		if(!empty($user_id)) {
 			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.xls';
 		}		//build the results
 		require_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php');
 		$workbook = new Spreadsheet_Excel_Writer();
-		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
+		$workbook->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
 		$workbook->setVersion(8); // BIFF8
 
 		$workbook->send($filename);
@@ -358,7 +357,7 @@ class ExerciseResult
 
 		if ($export_user_fields) {
 			//show user fields section with a big th colspan that spans over all fields
-			$extra_user_fields = UserManager::get_extra_fields(0,0,5,'ASC',false);
+			$extra_user_fields = UserManager::get_extra_fields(0,0,5,'ASC',false, 1);
 			//show the fields names for user fields
 			foreach($extra_user_fields as $field) {
 				$worksheet->write($line,$column,api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES, $charset));
@@ -382,12 +381,10 @@ class ExerciseResult
 				$worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
 				$column++;
 			}
-
-			if($export_user_fields) {
+			if ($export_user_fields) {
 				//show user fields data, if any, for this user
-				$user_fields_values = UserManager::get_extra_user_data(intval($row['user_id']),false,false);
-				foreach($user_fields_values as $value)
-				{
+				$user_fields_values = UserManager::get_extra_user_data(intval($row['user_id']),false,false, false, true);				
+				foreach($user_fields_values as $value) {
 					$worksheet->write($line,$column,api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset));
 					$column++;
 				}
@@ -407,4 +404,3 @@ class ExerciseResult
 	}
 }
 endif;
-?>

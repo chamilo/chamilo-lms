@@ -1134,9 +1134,10 @@ class UserManager
 	 * @param	integer	Column on which sorting is made
 	 * @param	string	Sorting direction
 	 * @param	boolean	Optional. Whether we get all the fields or just the visible ones
+	 * @param	int		Optional. Whether we get all the fields with field_filter 1 or 0 or everything
 	 * @return	array	Extra fields details (e.g. $list[2]['type'], $list[4]['options'][2]['title']
 	 */
-	public static function get_extra_fields($from = 0, $number_of_items = 0, $column = 5, $direction = 'ASC', $all_visibility = true) {
+	public static function get_extra_fields($from = 0, $number_of_items = 0, $column = 5, $direction = 'ASC', $all_visibility = true, $field_filter = null) {
 		$fields = array();
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -1149,6 +1150,11 @@ class UserManager
 		$sqlf = "SELECT * FROM $t_uf ";
 		if (!$all_visibility) {
 			$sqlf .= " WHERE field_visible = 1 ";
+		}
+		
+		if (!is_null($field_filter)) {
+		    $field_filter = intval($field_filter);
+            $sqlf .= " WHERE field_filter = $field_filter ";
 		}
 		$sqlf .= " ORDER BY ".$columns[$column]." $sort_direction " ;
 		if ($number_of_items != 0) {

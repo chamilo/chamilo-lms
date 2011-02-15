@@ -30,7 +30,7 @@ class learnpathList {
      * @param	int			Optional session id (otherwise we use api_get_session_id())
      * @return	void
      */
-    function __construct($user_id, $course_code='', $session_id = null) {
+    function __construct($user_id, $course_code='', $session_id = null, $order_by = null) {
 
         if (!empty($course_code)){
             $course_info = api_get_course_info($course_code);
@@ -49,8 +49,11 @@ class learnpathList {
             $session_id = api_get_session_id();
         }
         $condition_session = api_get_session_condition($session_id, false, true);
-
-        $sql = "SELECT * FROM $lp_table $condition_session ORDER BY display_order ASC, name ASC";
+        $order = "ORDER BY display_order ASC, name ASC";
+        if (isset($order_by)) {
+            $order =  Database::parse_conditions(array('order'=>$order_by));            
+        }
+        $sql = "SELECT * FROM $lp_table $condition_session $order";
         $res = Database::query($sql);
         $names = array();
         while ($row = Database::fetch_array($res,'ASSOC')) {
@@ -96,8 +99,6 @@ class learnpathList {
             } else {
                 $row['expired_on'] = '';
             }
-            
-
             $this->list[$row['id']] = array(
                 'lp_type'           => $row['lp_type'],
                 'lp_session'        => $row['session_id'],

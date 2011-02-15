@@ -623,7 +623,7 @@ function get_last_week() {
 function get_week_from_day($date) {
     if (!empty($date)) {
        $time = api_strtotime($date,'UTC');
-       return date('W', $date);
+       return date('W', $time);
     } else {
         return date('W');
     }

@@ -239,9 +239,9 @@ switch ($action) {
         $course_list    = SessionManager::get_course_list_by_session_id($session_id);
                         
         $count = 0;
-        
+        $temp = array();
         foreach ($course_list as $item) {    
-            $list               = new LearnpathList(api_get_user_id(),$item['code'],$session_id);
+            $list               = new LearnpathList(api_get_user_id(),$item['code'], $session_id, 'publicated_on DESC');
             $flat_list          = $list->get_flat_list();    
             $lps[$item['code']] = $flat_list;
             $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>'_blank'));
@@ -271,10 +271,13 @@ switch ($action) {
                 }
                 
                  //Checking LP publicated and expired_on dates
-                if (!empty($lp_item['publicated_on']) && $lp_item['publicated_on'] != '0000-00-00 00:00:00') {                        
+                if (!empty($lp_item['publicated_on']) && $lp_item['publicated_on'] != '0000-00-00 00:00:00') {
+                    $week_data = date('Y', api_strtotime($lp_item['publicated_on'])).' - '.get_week_from_day($lp_item['publicated_on']);                   
                     if ($now < api_strtotime($lp_item['publicated_on'])) {                        
                         continue;
                     }
+                } else {
+                    $week_data = '';
                 }
                 
                 if (!empty($lp_item['expired_on']) && $lp_item['expired_on'] != '0000-00-00 00:00:00') {
@@ -282,11 +285,12 @@ switch ($action) {
                         continue;
                     }
                 }
-                
-                $temp[$count]['cell']=array(get_week_from_day($lp_item['publicated_on']), $date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
+            
+                $temp[$count]['cell'] = array($week_data, $date, $item['title'], Display::url($lp_item['lp_name'].$icons, $lp_url, array('target'=>'_blank')));
                 $count++;     
             }              
-        } 
+        }     
+           
         $response = new stdClass(); 
         $i =0;        
         foreach($temp as $key=>$row) {   

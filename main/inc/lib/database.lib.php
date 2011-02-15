@@ -1384,7 +1384,7 @@ class Database {
      * @param   array   
      * @todo lot of stuff to do here
     */
-    private function parse_conditions($conditions) {  
+    public function parse_conditions($conditions) {  
         if (empty($conditions)) {
         	return '';
         }        

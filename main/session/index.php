@@ -260,9 +260,10 @@ $column_week_model  = array (
                           array('name'=>'course',   'index'=>'course',  'width'=>'400', 'align'=>'left',  'sortable'=>'false'),
                           array('name'=>'lp',       'index'=>'lp',      'width'=>'200', 'align'=>'center','sortable'=>'false'));
                           
-                          
 $extra_params_week['grouping'] = 'true';
-$extra_params_week['groupingView'] = array('groupField'=>array('week'),
+//For more details see http://www.trirand.com/jqgridwiki/doku.php?id=wiki:grouping
+$extra_params_week['groupingView'] = array('groupDataSorted' =>true,
+										   'groupField'=>array('week'),
                                            'groupColumnShow'=>'false',
                                            'groupText' => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
 //$extra_params_week['autowidth'] = 'true'; //use the width of the parent

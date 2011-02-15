@@ -446,8 +446,8 @@ $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook",	"name"
 $interbreadcrumb[] = array ("url" => api_get_self()."?gradebook=$gradebook","name" => $objExercise->selectTitle());
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
-    //$htmlHeadXtra[] = $objExercise->show_lp_javascript();
-        Display :: display_header($nameTools,get_lang('Exercises'));
+    //$htmlHeadXtra[] = $objExercise->show_lp_javascript();    
+    Display :: display_header($nameTools,'Exercises');
     if (!api_is_allowed_to_session_edit() ) {
         Display :: display_warning_message(get_lang('SessionIsReadOnly'));
     }
@@ -534,8 +534,7 @@ if ($limit_time_exists) {
     $exercise_end_time 		= api_strtotime($objExercise->end_time,'UTC');
     $time_now 				= time();
     
-    $permission_to_start = (($time_now - $exercise_start_time) > 0) ? true : false;
-            
+    $permission_to_start = (($time_now - $exercise_start_time) > 0) ? true : false;            
     if ($_SERVER['REQUEST_METHOD'] != 'POST') {
         $exercise_timeover = (($time_now - $exercise_end_time) > 0) ? true : false;        
     }

@@ -806,7 +806,7 @@ if ($show == 'test') {
                         // Export qti ...                    
                         $actions .= Display::url(Display::return_icon('export_qti2.png','IMS/QTI','','22'),        'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
                     } else { // not session resource                
-                        $actions = Display::return_icon('edit.gif', get_lang('ExerciseEditionNotAvailableInSession'));                        
+                        $actions = Display::return_icon('edit_na.gif', get_lang('ExerciseEditionNotAvailableInSession'));                        
                         $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';                        
                         $actions .= Display::url(Display::return_icon('cd.gif',   get_lang('CopyExercise')),     '',  array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));                           
                     }
@@ -853,8 +853,7 @@ if ($show == 'test') {
                         if ($is_actived_time) {
                             $url =  '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';
                         } else {
-                            $url = $row['title'];
-                            $url .='<span class="exam-msg">'.get_lang('ExamNotAvailableAtThisTime').'</span>';
+                            $url = $row['title'];                            
                         }                       
                     } else {
                         $url = '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'">'.$row['title'].'</a>';                       
@@ -884,33 +883,40 @@ if ($show == 'test') {
             
                     //Hide the results
                     $my_result_disabled = $row['results_disabled'];
-                            
+                    
+                    //Time limits are on    
                     if ($time_limits) {
-                        if ($my_result_disabled == 0) {                     
-                            if ($num > 0) {
-                                $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                        // Examn is ready to be taken    
+                        if ($is_actived_time) {                     
+                            if ($my_result_disabled == 0) {                   
+                                if ($num > 0) {
+                                    $row_track = Database :: fetch_array($qryres);                                
+                                    $attempt_text =  get_lang('LatestAttempt') . ' : ';                                
+                                    $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                                } else {
+                                    //$attempt_text =  get_lang('NotAttempted');
+                                    $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                                }                           
                             } else {
-                                $attempt_text =  get_lang('NotAttempted');
-                            }                           
-                        } else {
-                            $attempt_text =  get_lang('CantShowResults');
-                        }
-                    } else {
-                        if ($my_result_disabled == 0) {                         
-                            if ($num > 0) {
-                                $row_track = Database :: fetch_array($qryres);
-                                $percentage = 0;
-                                if ($row_track['exe_weighting'] != 0) {
-                                    $percentage = ($row_track['exe_result'] / $row_track['exe_weighting']) * 100;
-                                }
-                                $attempt_text =  get_lang('Attempted') . ' (' . get_lang('Score') . ': ';
-                                $attempt_text .= sprintf("%1.2f\n", $percentage);
-                                $attempt_text .=  " %)";
-                            } else {
-                                //echo get_lang('WillBeActivated' .' '. $row['start_time']);
-                                $attempt_text =  get_lang('NotAttempted');
+                                $attempt_text =  get_lang('CantShowResults');
                             }
                         } else {
+                            //Examn not ready
+                            //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
+                            $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                        }
+                    } else {
+                        //Normal behaviour
+                        //Show results
+                        if ($my_result_disabled == 0) {                         
+                            if ($num > 0) {
+                                $row_track = Database :: fetch_array($qryres);                                
+                                $attempt_text =  get_lang('LatestAttempt') . ' : ';                                
+                                $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);                                
+                            } else {
+                                $attempt_text =  get_lang('NotAttempted');
+                            }
+                        } else {                            
                             $attempt_text = get_lang('CantShowResults');
                         }
                     }

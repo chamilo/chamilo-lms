@@ -112,6 +112,10 @@ class learnpath {
                 return false;
             }
         }
+
+
+        error_log('CURSO_DB====>'.$course_db);
+
         // Check learnpath ID.
         if (empty($lp_id)) {
             $this->error = 'Learnpath ID is empty';
@@ -219,10 +223,9 @@ class learnpath {
         }
 
         // Initialise items.
-        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM,$course_db);
+        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM, $course_db);
         $sql = "SELECT * FROM $lp_item_table WHERE lp_id = '".$this->lp_id."' ORDER BY parent_item_id, display_order";
         $res = Database::query($sql);
-
         while ($row = Database::fetch_array($res)) {
             $oItem = '';
             //$this->ordered_items[] = $row['id'];
@@ -242,14 +245,13 @@ class learnpath {
                         }
                     }
                     break;
-                case 2:
-
+                case 2:                    
                     require_once 'scorm.class.php';
                     require_once 'scormItem.class.php';
-                    $oItem = new scormItem('db', $row['id']);
+                    $oItem = new scormItem('db', $row['id'], $course_db);
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
-                        $oItem->set_lp_view($this->lp_view_id);
+                        $oItem->set_lp_view($this->lp_view_id, $course_db);
                         $oItem->set_prevent_reinit($this->prevent_reinit);
                         // Don't use reference here as the next loop will make the pointed object change.
                         $this->items[$my_item_id] = $oItem;
@@ -259,12 +261,11 @@ class learnpath {
                         }
                     }
                     break;
-
                 case 1:
 
                 default:
                     require_once 'learnpathItem.class.php';
-                    $oItem = new learnpathItem($row['id'], $user_id);
+                    $oItem = new learnpathItem($row['id'], $user_id, $course_db);
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
                         //$oItem->set_lp_view($this->lp_view_id); // Moved down to when we are sure the item_view exists.
@@ -281,7 +282,9 @@ class learnpath {
 
             // Items is a list of pointers to all items, classified by DB ID, not SCO id.
             if ($row['parent_item_id'] == 0 || empty ($this->items[$row['parent_item_id']])) {
-                $this->items[$row['id']]->set_level(0);
+                if (is_object($this->items[$row['id']])) {
+                  $this->items[$row['id']]->set_level(0);
+                }
             } else {
                 $level = $this->items[$row['parent_item_id']]->get_level() + 1;
                 $this->items[$row['id']]->set_level($level);
@@ -294,9 +297,8 @@ class learnpath {
                     }
                 }
             }
-
             // Get last viewing vars.
-            $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW,$course_db);
+            $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW, $course_db);
             // This query should only return one or zero result.
             $sql = "SELECT * " .
                 "FROM $lp_item_view_table " .
@@ -315,9 +317,12 @@ class learnpath {
                 if ($this->debug > 2) {
                     error_log('New LP - learnpath::__construct() - Got item_view: ' . print_r($row2, true), 0);
                 }
-                $this->items[$row['id']]->set_status($row2['status']);
-                if (empty ($row2['status'])) {
-                    $this->items[$row['id']]->set_status($this->default_status);
+
+                if (is_object($this->items[$row['id']])) {
+                  $this->items[$row['id']]->set_status($row2['status']);
+                  if (empty ($row2['status'])) {
+                      $this->items[$row['id']]->set_status($this->default_status);
+                  }
                 }
                 //$this->attempt = $row['view_count'];
                 //$this->last_item = $row['id'];
@@ -326,7 +331,9 @@ class learnpath {
                 // TODO: If the learnpath has not got attempts activated, always use attempt '1'.
                 //$this->attempt = 1;
                 //$this->last_item = 0;
-                $this->items[$row['id']]->set_status($this->default_status);
+                if (is_object($this->items[$row['id']])) {
+                  $this->items[$row['id']]->set_status($this->default_status);
+                }
                 // Add that row to the lp_item_view table so that we have something to show in the stats page.
                 $sql_ins = "INSERT INTO $lp_item_view_table " .
                     "(lp_item_id, lp_view_id, view_count, status) VALUES " .
@@ -337,7 +344,9 @@ class learnpath {
                 $res_ins = Database::query($sql_ins);
             }
             // Setting the view in the item object.
-            $this->items[$row['id']]->set_lp_view($this->lp_view_id);
+            if (is_object($this->items[$row['id']])) {
+              $this->items[$row['id']]->set_lp_view($this->lp_view_id);
+            }
         }
         $this->ordered_items = $this->get_flat_ordered_items_list($this->get_id(), 0);
         $this->max_ordered_items = 0;

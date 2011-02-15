@@ -36,11 +36,11 @@ function array_unique_dimensional($array) {
  * Sort multidimensional arrays
  * 
  * @param 	array 	unsorted multidimensional array
- * @param 	string	key
+ * @param 	string	key to be sorted
  * @return 	array	result array
- * @author	founded in http://php.net/manual/en/function.sort.php
+ * @author	found in http://php.net/manual/en/function.sort.php
  */
-function msort($array, $id="id") {
+function msort($array, $id='id') {
     if (empty($array)) {
         return $array;
     }

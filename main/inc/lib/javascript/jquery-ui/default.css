@@ -1,5 +1,5 @@
 /*
-	Custom changes for the jquery-ui 
+	Custom changes for the jquery-ui
 */
 
 /*  smoothness */
@@ -21,7 +21,7 @@
 	color: #212121; 
 }
 
-/* Changes the row stile in a table even - odd */
+/* Changes the row style in a table (even, odd) */
 .ui-priority-secondary, .ui-widget-content .ui-priority-secondary,  .ui-widget-header .ui-priority-secondary { opacity: 1; font-weight: normal; background-color: #F2F2F2; }
 .ui-widget-content { background: #FFF; }
 
@@ -36,7 +36,17 @@
     cursor: pointer;
 }
 
+/* Removes the gray background in the jqgrid main/session */
+.ui-widget-header {
+	background: #FFF; 
+}
+
+
+
 /*  cupertino */
 
 
+
 /* ui-lightness */
+
+

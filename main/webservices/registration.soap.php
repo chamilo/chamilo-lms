@@ -1721,13 +1721,23 @@ $server->wsdl->addComplexType(
 );
 
 $server->wsdl->addComplexType(
+  'user_ids_array',
+  'complexType',
+  'array',
+  '',
+  'SOAP-ENC:Array',
+  array(),
+  array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:user_id[]')),'tns:user_id'
+);
+
+$server->wsdl->addComplexType(
     'user_ids',
     'complexType',
     'struct',
     'all',
     '',
     array(
-        'ids' => array('name' => 'user_ids', 'type' => 'tns:user_id[]'),
+        'ids' => array('name' => 'user_ids', 'type' => 'tns:user_ids_array'),
         'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
 );

@@ -3497,9 +3497,9 @@ function WSSubscribeUserToCourse($params) {
             } else {
                 $course_code = CourseManager::get_course_code_from_course_id($course_id);
                 if (!CourseManager::add_user_to_course($user_id, $course_code, $status)) {
-                    $result['result'] = 0;
-                }
+              $result['result'] = 0;
             }
+        }
         }
         $results[] = $result;
     }
@@ -4592,6 +4592,71 @@ function WSListCourses($params) {
 
     return $courses_result;
 
+}
+
+
+/* Get user api key */
+$server->wsdl->addComplexType(
+    'userApiKey',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'chamilo_username' => array('name' => 'chamilo_username', 'type' => 'xsd:string'),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+// Register the method to expose
+$server->register('WSUpdateUserApiKey',				// method name
+    array('userApiKey' => 'tns:userApiKey'),	// input parameters
+    array('return' => 'xsd:string'),		// output parameters
+    'urn:WSRegistration',									// namespace
+    'urn:WSRegistration#WSListCourses',			// soapaction
+    'rpc',													// style
+    'encoded',												// use
+    'This service return user api key'	// documentation
+);
+
+
+function WSUpdateUserApiKey($params) {
+  if(!WSHelperVerifyKey($params)) {
+    return -1;
+  }
+
+  $user_id = UserManager::get_user_id_from_original_id($params['original_user_id_value'], $params['original_user_id_name']);
+  if (!$user_id) {
+    if (!empty($params['chamilo_username'])) {
+      $info = api_get_user_info_from_username($params['chamilo_username']);
+      $user_id = $info['user_id'];
+      // Save new fieldlabel into user_field table.
+      $field_id = UserManager::create_extra_field($params['original_user_id_name'], 1, $params['original_user_id_name'], '');
+      // Save the external system's id into user_field_value table.
+      $res = UserManager::update_extra_field_value($return, $params['original_user_id_name'], $params['original_user_id_value']);
+    }
+    else {
+      return 0;
+    }
+  }
+
+  $list = UserManager::get_api_keys($user_id);
+  $key_id = UserManager::get_api_key_id($user_id, 'dokeos');
+
+  if (isset($list[$key_id])) {
+    $apikey = $list[$key_id];
+  }
+  else {
+    $lastid = UserManager::update_api_key($user_id, 'dokeos');
+    if ($lastid) {
+      $apikeys = UserManager::get_api_keys($user_id);
+      $apikey = $apikeys[$lastid];
+    }
+  }
+  
+  return $apikey;
 }
 
 // Use the request to (try to) invoke the service

@@ -2282,6 +2282,8 @@ class Tracking {
             $html .= '</table>';
             
             
+            //Experimental graphics
+            
             require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
 		    require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
 		    require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
@@ -2289,18 +2291,23 @@ class Tracking {
 		    foreach ($to_graph_exercise_result as $exercise_id => $attempts) {
 		        $exercise_title= $attempts['title'];	
 		        $attempts = $attempts['data']; 	        
-		        $my_exercise_result = 0;                
-                $exercise_result = array();
+		        $my_exercise_result_array = $exercise_result = array();
 		        foreach ($attempts as $attempt) {         
 		            if (api_get_user_id() == $attempt['exe_user_id']) {
 		                if ($attempt['exe_weighting'] != 0 ) {
-		                    $my_exercise_result = $attempt['exe_result']/$attempt['exe_weighting'];
+		                    $my_exercise_result_array[]= $attempt['exe_result']/$attempt['exe_weighting'];
 		                }		                 
 		            } else {
 		                if ($attempt['exe_weighting'] != 0 ) {		                
 		                    $exercise_result[]=  $attempt['exe_result']/$attempt['exe_weighting'];
 		                }   
 		            }		            
+		        }
+		        //Getting best result		        
+		        rsort($my_exercise_result_array);
+		         $my_exercise_result = 0;
+		        if (isset($my_exercise_result_array[0])) {		           		            
+		            $my_exercise_result = $my_exercise_result_array[0] *100;		            
 		        }
 		        
 		        //var_dump($exercise_result,$my_exercise_result);
@@ -2326,10 +2333,11 @@ class Tracking {
                         }
                     }                
                     $final_array[]= $count;
-                    if ($my_exercise_result > $min && $my_exercise_result < $max) {
+                    
+                    if ($my_exercise_result > $min && $my_exercise_result <= $max) {
                         $my_final_array[] = 1;
                     } else {
-                      //  $my_final_array[] = 0;
+                        $my_final_array[] = 0;
                     }
                     
                 } 

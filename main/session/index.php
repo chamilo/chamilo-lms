@@ -220,7 +220,10 @@ foreach($final_array as $session_data) {
     }
 }  
 $my_real_array = msort($my_real_array, 'date','asc');
-$my_real_array = array_merge($new_exercises, $my_real_array);
+
+if (!empty($new_exercises)) {
+    $my_real_array = array_merge($new_exercises, $my_real_array);
+}
 
 echo Display::tag('h1', $session_info['name']);
 

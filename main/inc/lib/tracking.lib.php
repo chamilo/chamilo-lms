@@ -2158,7 +2158,7 @@ class Tracking {
                     $time_spent_in_lp       = Tracking::get_time_spent_in_lp($user_id, $course, array($learnpath['id']), $session_id);
                     $time_spent_in_lp       = api_time_to_hms($time_spent_in_lp);                            
                                   
-                    $html .= "<tr>";
+                    $html .= '<tr class="row_even">';
                     $html .= Display::tag('td', $learnpath['name']);
                     $html .= Display::tag('td', $time_spent_in_lp, array('align'=>'center'));
                     if (is_numeric($progress)) {
@@ -2181,8 +2181,7 @@ class Tracking {
             }
             
             $html .='</table><br />
-            <table class="data_table" width="100%">
-                <tr>';     
+            <table class="data_table" width="100%">';     
                      
                         
             // This code was commented on purpose see BT#924
@@ -2239,8 +2238,11 @@ class Tracking {
                     }
                     $to_graph_exercise_result[$exercices['id']] = array('title'=>$exercices['title'], 'data'=>$exercise_stats);
                     
-                    $html .= '<tr>';                                
+                    $html .= '<tr class="row_even">';
+                    $url = api_get_path(WEB_CODE_PATH)."exercice/exercice_submit.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
+                    $exercices['title'] = Display::url($exercices['title'], $url, array('target'=>'_blank'));
                     $html .= Display::tag('td', $exercices['title']);
+                    
                     //Exercise configuration show results
                     if ($exercices['results_disabled'] == 0) {
                         $latest_attempt_url = '';
@@ -2379,6 +2381,7 @@ class Tracking {
                 $data_set->RemoveSerie("Serie3");  
                 $Test->drawBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);  
                 
+                /*
                 // Finish the graph  
                 $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);   
                 $Test->drawLegend(596,150,$data_set->GetDataDescription(),255,255,255);  
@@ -2390,7 +2393,7 @@ class Tracking {
                 $Test->Stroke();
                 ob_end_clean();            
                 $img_file = $cache->GetHash($graph_id, $data_set->GetData());
-                $html .= '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';		        
+                $html .= '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';	*/	        
 		    }
 		    
             

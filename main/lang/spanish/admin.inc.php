@@ -1384,5 +1384,5 @@ $StatsUsersDidNotLoginInLastPeriods = "No conectados por un tiempo";
 $LastXMonths = "Últimos %i meses";
 $NeverConnected = "Nunca conectados";
 $EnableAccessibilityFontResizeTitle = "Funcionalidad de redimensionamiento de fuentes";
-$EnableAccessibilityFontResizeComment = "Activar esta opción mostrará una serie de opciones de redimensionamiento de fuentes en la parte arriba a la derecha de su campus. Esto permitirá a las personas con problemas de vista leer sus contenidos de cursos más fácilmente.";
+$EnableAccessibilityFontResizeComment = "Activar esta opción mostrará una serie de opciones de redimensionamiento de fuentes en la parte arriba a la derecha de su campus. Esto permitirá a las personas con problemas de vista leer más fácilmente los contenidos de sus cursos.";
 ?>

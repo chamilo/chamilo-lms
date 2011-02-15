@@ -109,8 +109,8 @@ $langItemRemoved = "The learning object has been removed";
 $langConverting = "Converting...";
 $langPpt2lpError = "Error during the conversion of PowerPoint. Please check if there are special characters in the name of your PowerPoint.";
 $langBuild = "Build";
-$langViewModeEmbedded = "View mode: embedded";
-$langViewModeFullScreen = "View mode: fullscreen";
+$langViewModeEmbedded = "Current view mode: embedded";
+$langViewModeFullScreen = "Current view mode: fullscreen";
 $langShowDebug = "Show debug";
 $langHideDebug = "Hide debug";
 $langCantEditDocument = "This document is not editable";
@@ -255,4 +255,5 @@ $PublicationDate = "Publication date";
 $UseMaxScore100 = "Use default maximum score of 100";
 $EnableLPAutoLaunch = "Enable learning path auto-launch";
 $DisableLPAutoLaunch = "Disable learning path auto-launch";
+$ViewModeEmbedFrame = "Current view mode: external embed. Use only for embedding in external sites.";
 ?>

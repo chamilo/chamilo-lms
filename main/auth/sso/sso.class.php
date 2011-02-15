@@ -154,9 +154,12 @@ class sso {
                                 api_session_register('_user');
                                 event_login();
                                 // Redirect to homepage
-                                $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
+                                $protocol = api_get_setting('sso_authentication_protocol');
+                                $master_url = api_get_setting('sso_authentication_domain');
+                                $target = $protocol.$master_url;
+                                $sso_target = isset($target) ? $target : api_get_path(WEB_PATH) .'.index.php';
                                 header('Location: '. $sso_target);
-				exit;
+                                exit;
                             }
                         } else {
                             // user account expired

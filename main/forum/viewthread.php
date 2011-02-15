@@ -142,12 +142,12 @@ if ($my_message<>'PostDeletedSpecial') {
 	if ($origin != 'learnpath') {
 		
 		if ($origin=='group') {
-			echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups')).get_lang('BackTo').' '.get_lang('GroupSpace').'</a>';
-			echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&origin='.$origin.'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
+			echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'','32').'</a>';
+			echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&origin='.$origin.'">'.Display::return_icon('forum.png',get_lang('BackToForum'),'','32').'</a>';
 		}
 		else{
-			echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview')).' '.get_lang('BackToForumOverview').'</a>';	
-			echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
+			echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview'),'','32').'</a>';	
+			echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'">'.Display::return_icon('forum.png',get_lang('BackToForum'),'','32').'</a>';
 		}
 		
 	
@@ -159,7 +159,7 @@ if ($my_message<>'PostDeletedSpecial') {
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
 			//reply link
 			if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
-				echo '<a href="reply.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.Display::return_icon('forumthread_new.gif',get_lang('ReplyToThread')).get_lang('ReplyToThread').'</a>';
+				echo '<a href="reply.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.Display::return_icon('reply_thread.png',get_lang('ReplyToThread'),'','32').'</a>';
 			}
 			//new thread link
 			if ((api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
@@ -167,9 +167,9 @@ if ($my_message<>'PostDeletedSpecial') {
 					echo '&nbsp;&nbsp;';
 /*					if ( isset($_GET['gradebook']) && $_GET['gradebook']!=""){
 						$info_thread=get_thread_information($_GET['thread']);
-						echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.$info_thread['forum_id'].'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'">'.Display::return_icon('forumthread_new.gif', get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+						echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.$info_thread['forum_id'].'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'">'.Display::return_icon('new_thread.png', get_lang('NewTopic'),'','32').'</a>';
 					} else {
-						echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'">'.Display::return_icon('forumthread_new.gif', get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+						echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&origin='.$origin.'">'.Display::return_icon('new_thread.png', get_lang('NewTopic'),'','32').'</a>';
 					} */
 				} else {
 					echo get_lang('ForumLocked');

@@ -333,8 +333,8 @@ if ( api_is_allowed_to_edit(null, true)) {
 
 	// the action links
         if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
-            $actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('new_user.png',get_lang("SubscribeUserToCourse"),'','32').'</a> ';
-            $actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('new_teacher.png', get_lang("SubscribeUserToCourseAsTeacher"),'','32')."</a> ";
+            $actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('user_subscribe_course.png',get_lang("SubscribeUserToCourse"),'','32').'</a> ';
+            $actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('teacher_subscribe_course.png', get_lang("SubscribeUserToCourseAsTeacher"),'','32')."</a> ";
         }
 		$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a> ';
 	$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'','32').'</a> ';

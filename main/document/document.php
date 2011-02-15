@@ -931,7 +931,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                     <?php Display::display_icon('new_draw.png', get_lang('Draw'),'','32'); ?></a>&nbsp;
             <?php
             }else{
-                Display::display_icon('new_draw_na.png', get_lang('BrowserDontSupportsSVG','','32'));
+                Display::display_icon('new_draw_na.png', get_lang('BrowserDontSupportsSVG'),'','32');
             }
         }
 		

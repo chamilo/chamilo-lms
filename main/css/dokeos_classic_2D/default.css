@@ -325,12 +325,11 @@ ul#navigation .student-connect a {
 .session_course_item {
 	/* padding: 0px; */
 	margin: 0px;
+	font-size:135%;
 }
 
 /*
-==============================================================================
 	HEADER STYLES
-==============================================================================
 */
 
 #header {
@@ -1520,6 +1519,9 @@ div.report_section h4 {
 .session_course_item {
 	margin: 0px;
 	margin-bottom:20px;
+}
+.session_course_item .item_closed, .userportal-course-item-title .item_closed {
+     font-size:80%; 
 }
 .session_course_item .courses {
 	margin-bottom: 5px;

@@ -2584,7 +2584,7 @@ class CourseManager {
                     if ($course_visibility != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
                         $course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0&amp;autoreg=1">'.$course['title'].'</a>';
                     } else {
-                        $course_title = $course['title']." ".get_lang('CourseClosed');
+                        $course_title = $course['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
                     }
 
                     echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><span class="userportal-course-item-title">'.$course_title.'</span><br />';
@@ -2756,7 +2756,7 @@ class CourseManager {
             if ($course_visibility != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
                 $course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0">'.$course['title'].'</a>';
             } else {
-                $course_title = $course['title']." ".get_lang('CourseClosed');
+                $course_title = $course['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
             }
             // Start displaying the course block itself.
             echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><span class="userportal-course-item-title">'.$course_title.'</span><br />';
@@ -2942,7 +2942,8 @@ class CourseManager {
                     $result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
                 }
             } else {
-                $result .= $course_display_title.'  '.get_lang('CourseClosed');
+                $result .= $course_display_title.' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
+                ;
             }
         } else {
         	$result .= $course_display_title;

@@ -1459,6 +1459,7 @@ div.report_section h4 {
 .session_course_item {
 	margin: 0px;
 	margin-bottom:20px;
+	font-size:135%;
 }
 .session_course_item .courses {
 	margin-bottom: 5px;

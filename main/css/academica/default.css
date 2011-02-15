@@ -1494,11 +1494,16 @@ div.system_announcement {
 	/* padding: 0px; */
 	margin: 0px;
 	margin-bottom:20px;
+	font-size:135%;
 }
 
 .session_course_item .courses {
 	margin-bottom: 5px;
 	height:35px;
+}
+
+.session_course_item .item_closed, .userportal-course-item-title .item_closed {
+     font-size:80%; 
 }
 
 /* Notebook */

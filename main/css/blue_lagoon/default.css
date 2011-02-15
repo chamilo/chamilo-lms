@@ -307,6 +307,11 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 .session_course_item {
 	/* padding: 0px; */
 	margin: 0px;
+	font-size:135%;
+}
+
+.session_course_item .item_closed, .userportal-course-item-title .item_closed {
+     font-size:80%; 
 }
 /*****************************************************
  *  HEADER STYLES                                    *

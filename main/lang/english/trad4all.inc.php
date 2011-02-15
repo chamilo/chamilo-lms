@@ -1006,4 +1006,10 @@ $ContactInformationHasNotBeenSent = "Your contact information could not be sent.
 $FileDeleted = "File deleted";
 $MyClasses = "My classes";
 $PublicationDate = "Publication date";
+$ItemAdded = "Item added";
+$ItemDeleted = "Item deleted";
+$ItemUpdated = "Item updated";
+$ItemCopied = "Item copied";
+$MyStatistics = "My statistics";
+$FromDateXToDateY = "From %s to %s";
 ?>

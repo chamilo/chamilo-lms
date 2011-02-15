@@ -125,4 +125,6 @@ $AddPicture = "Add a picture";
 $LPAutoLaunch = "Enable learning path auto-launch";
 $ConfigLearnpath = "Learning path settings";
 $PDFWaterMarkHeader = "Watermark header in PDF exports";
+$RedirectToALearningPath = "Redirect to a selected learning path";
+$RedirectToTheLearningPathList = "Redirect to the learning paths list";
 ?>

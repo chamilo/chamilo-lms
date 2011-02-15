@@ -373,4 +373,6 @@ $UniqueAnswerNoOption = "Risposta unica con \"non so\"";
 $MultipleAnswerTrueFalse = "Risposta multipla (V/F/Non So)";
 $MultipleAnswerCombinationTrueFalse = "Combinazione V/F/Non So";
 $DontKnow = "Non so";
+$False = "Falso";
+$DoubtScore = "Non so";
 ?>

@@ -284,4 +284,11 @@ $AverageScore = "Score moyen";
 $LastConnexionDate = "Date de dernière connexion";
 $QuestionsAreTakenFromLPExercises = "Ces questions ont été passées au sein des parcours d'apprentissage";
 $AllStudentsAttemptsAreConsidered = "Toutes les tentatives sont considérées";
+$PublishedExercises = "Exercices disponibles";
+$DoneExercises = "Exercices passés";
+$AverageExerciseResult = "Moyenne des résultats à l'exercice";
+$LPProgress = "Progrès parcours";
+$Ranking = "Position";
+$BestResultInCourse = "Meilleur résultat cours";
+$ExerciseStartDate = "Date publication";
 ?>

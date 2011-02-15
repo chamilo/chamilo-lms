@@ -1206,8 +1206,9 @@ class Database {
      *	for querying. The database parameter is considered not glued,
      *	just plain e.g. COURSE001
      */
-    private static function format_table_name($database, $table) {
-        return '`'.$database.'`.`'.$table.'`';
+    private static function format_table_name($database, $table) {        
+        global $_configuration;
+        return '`'.$database.$_configuration['db_glue'].$table.'`';
     }
 
     /**

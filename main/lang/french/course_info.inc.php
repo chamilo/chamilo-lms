@@ -125,4 +125,6 @@ $AddPicture = "Ajouter une image de présentation";
 $LPAutoLaunch = "Activer l'auto-démarrage des parcours d'apprentissage";
 $ConfigLearnpath = "Configuration des parcours";
 $PDFWaterMarkHeader = "En-tête en filigranne (exports PDF)";
+$RedirectToALearningPath = "Rediriger vers un parcours sélectionné";
+$RedirectToTheLearningPathList = "Rediriger vers la liste des parcours";
 ?>

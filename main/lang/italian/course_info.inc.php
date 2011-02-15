@@ -124,4 +124,5 @@ $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Mostra l'ultimo passo compi
 $AddPicture = "Aggiungi un'immagine";
 $LPAutoLaunch = "Attiva il lancio automatico dei moduli didattici";
 $ConfigLearnpath = "Configura i moduli didattici";
+$PDFWaterMarkHeader = "Filigrana nel PDF esportato";
 ?>

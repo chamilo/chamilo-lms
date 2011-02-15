@@ -3398,7 +3398,7 @@ function search_link() {
 	$return = '';
 
 	if ($origin != 'learnpath') {
-		$return = '<a href="forumsearch.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=search&origin='.$origin.'"> '.Display::return_icon('search.gif', get_lang('Search')).' '.get_lang('Search').'</a>';
+		$return = '<a href="forumsearch.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=search&origin='.$origin.'"> '.Display::return_icon('search.png', get_lang('Search'),'','32').'</a>';
 		if (!empty($_GET['search'])) {
 			$return .= ': '.Security::remove_XSS($_GET['search']).' ';
 			$url = api_get_self().'?';
@@ -4019,7 +4019,7 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
 		 				$post_counter = count($post_list);
 		 				if (is_array($post_list) && count($post_list)>0) {
 		 					$hand_forums.= '<div id="social-thread">';
-			 				$hand_forums.= Display::return_icon('forumthread.gif', get_lang('Thread'));
+			 				$hand_forums.= Display::return_icon('thread.png', get_lang('Thread'),'','32');
 			 				$hand_forums.= '&nbsp;'.Security::remove_XSS($thread['thread_title'], STUDENT);
 			 				$hand_forums.= '</div>';
 

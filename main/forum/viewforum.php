@@ -277,11 +277,11 @@ if (!empty($message)) {
 if ($origin!='learnpath') {
 	echo '<div class="actions">';
 	if ($origin=='group') {
-		echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups')).get_lang('BackTo').' '.get_lang('GroupSpace').'</a>';
+		echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'','32').'</a>';
 	}
 	else{
 		echo '<span style="float:right;">'.search_link().'</span>';
-		echo '<a href="index.php">'.Display::return_icon('back.png',get_lang('BackToForumOverview')).' '.get_lang('BackToForumOverview').'</a>';		
+		echo '<a href="index.php">'.Display::return_icon('back.png',get_lang('BackToForumOverview'),'','32').'</a>';		
 	}
 	// The link should appear when
 	// 1. the course admin is here
@@ -291,10 +291,10 @@ if ($origin!='learnpath') {
 		if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
 			if (!api_is_anonymous()) {
 				if ($my_forum==strval(intval($my_forum))) {
-					echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('forumthread_new.gif',get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+					echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'','32').'</a>';
 				} else {
 					$my_forum=strval(intval($my_forum));
-					echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.$my_forum.$origin_string.'">'.Display::return_icon('forumthread_new.gif',get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
+					echo '<a href="newthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.$my_forum.$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'','32').'</a>';
 				}
 
 			 }

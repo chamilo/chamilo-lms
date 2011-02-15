@@ -271,7 +271,7 @@ INSERT INTO course_module VALUES
 (8,'quiz','exercice/exercice.php','quiz.gif',2,2,'basic'),
 (9,'group','group/group.php','group.gif',3,3,'basic'),
 (10,'course_description','course_description/','info.gif',1,3,'basic'),
-(11,'chat','chat/chat.php','chat.gif',0,0,'external'),
+(11,'chat','chat/chat.php','icons/22/chat.gif',0,0,'external'),
 (12,'dropbox','dropbox/index.php','dropbox.gif',4,2,'basic'),
 (13,'tracking','tracking/courseLog.php','statistics.gif',1,3,'courseadmin'),
 (14,'homepage_link','link/link.php?action=addlink','npage.gif',1,1,'courseadmin'),

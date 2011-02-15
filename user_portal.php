@@ -439,8 +439,8 @@ if (is_array($courses_tree)) {
                     echo '</span>';
 
                     echo '<span style="padding-left: 10px; font-size: 90%; font-weight: normal;">';
-                    echo get_lang('From').' '.$category['details']['date_start'].' '.get_lang('Until').' '.$category['details']['date_end'].'</div>';
-                    echo '</span>';
+                    printf(get_lang('FromDateXToDateY'),$category['details']['date_start'],$category['details']['date_end']);
+                    echo '</span></div>';
 
                     echo $html_sessions;
                     echo '</div>';

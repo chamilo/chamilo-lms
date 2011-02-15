@@ -34,25 +34,25 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 
 	if (strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
 		$parent_dir = dirname($cur_dir_path);
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$parent_dir.'">'.Display::return_icon('back.png', get_lang('BackToWorksList')).' '.get_lang('BackToWorksList').'</a>';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$parent_dir.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'','32').'</a>';
 	} else {
 		if ($_GET['display_tool_options'] == 'true' OR $_GET['display_upload_form'] == 'true') {
 			if ($origin != 'learnpath') {
-				echo '<a href="work.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToWorksList')).' '.get_lang('BackToWorksList').'</a>';
+				echo '<a href="work.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'','32').'</a>';
 			}
 		}
 	}
 	if (!$always_show_tool_options && api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
 		// Create dir
 		if ($cur_dir_path == '/') {
-			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('works_new.gif', get_lang('CreateAssignment')).' '.get_lang('CreateAssignment').' </a>';
+			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('new_work.png', get_lang('CreateAssignment'),'','32').'</a>';
 		}
 		// Options
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;display_tool_options=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('acces_tool.gif', get_lang('EditToolOptions')).' '.get_lang('EditToolOptions').'</a>';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;display_tool_options=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('settings.png', get_lang('EditToolOptions'),'','32').'</a>';
 	}
 
 	if (!$always_show_upload_form && api_is_allowed_to_session_edit(false, true) && (isset($_GET['curdirpath']) && (!empty($_GET['curdirpath']) && $_GET['curdirpath'] != '.') )) {
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;display_upload_form=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('submit_file.gif', get_lang('UploadADocument')).' '.get_lang('UploadADocument').'</a>';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;display_upload_form=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('upload_file.png', get_lang('UploadADocument'),'','32').'</a>';
 	}
 
 	if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath' && api_is_allowed_to_session_edit(false, true)) {
@@ -64,10 +64,10 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		}
 
 		if (empty($curdirpath) or $curdirpath != '.') {
-			$display_output .= '<a href="#">'.Display::return_icon('delete_na.gif', get_lang('Delete')).get_lang('DeleteAllFiles').'</a>';
+			$display_output .= '<a href="#">'.Display::return_icon('delete_na.png', get_lang('Delete'),'','32').'</a>';
 		} else {
 			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;delete=all" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities($message, ENT_QUOTES)).'\')) return false;">'.
-				Display::return_icon('delete.gif', get_lang('Delete')).' '.get_lang('DeleteAllFiles').'</a>';
+				Display::return_icon('delete.png', get_lang('Delete'),'','32').'</a>';
 		}
 		// make all files visible or invisible
 		$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -79,10 +79,10 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 
 			if ($columnStatus['Default'] == 1) {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;make_invisible=all&amp;curdirpath='.$cur_dir_path.'">'.
-					Display::return_icon('visible.gif', get_lang('MakeAllPapersInvisible')).' '.get_lang('MakeAllPapersInvisible')."</a>\n";
+					Display::return_icon('visible.png', get_lang('MakeAllPapersInvisible'),'','32')."</a>\n";
 			} else {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;make_visible=all&amp;curdirpath='.$cur_dir_path.'">'.
-					Display::return_icon('invisible.gif', get_lang('MakeAllPapersVisible')).' '.get_lang('MakeAllPapersVisible')."</a>\n";
+					Display::return_icon('invisible.png', get_lang('MakeAllPapersVisible'),'','32')."</a>\n";
 			}
 		}
 	}
@@ -91,14 +91,14 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		if (empty($curdirpath) or $curdirpath != '.' or $cur_dir_path != '/') {
 			if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without">'.
-					Display::return_icon('un_check.gif', get_lang('ViewUsersWithoutTask')).' '.get_lang('ViewUsersWithoutTask')."</a>\n";
+					Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'','32')."</a>\n";
 			} else {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=with">'.
-					Display::return_icon('check.gif', get_lang('ViewUsersWithTask')).' '.get_lang('ViewUsersWithTask')."</a>\n";
+					Display::return_icon('exercice_check.png', get_lang('ViewUsersWithTask'),'','32')."</a>\n";
 
 				$_SESSION['token'] = time();
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$_SESSION['token'].'">'.
-					Display::return_icon('messagebox_warning.gif', get_lang('ReminderMessage')).' '.get_lang('ReminderMessage')."</a>\n";
+					Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'','32')."</a>";
 			}
 		}
 	}

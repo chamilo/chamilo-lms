@@ -125,5 +125,12 @@ thread				nuvola
 search				nuvola
 new_forum			modif nuvola
 new_thread			modif nuvola
+--
+delete_na			modif nuvola
+warning				nuvola
+new_work			modif nuvola
+work				nuvola
+mail_send			crystal	(only 32 px)
+--
 
 

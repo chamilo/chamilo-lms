@@ -91,6 +91,7 @@ class learnpath {
         $this->encoding = api_get_system_encoding(); // Chamilo 1.8.8: We intend always to use the system encoding.
         // Check params.
         // Check course code.
+        $course_db = '';
         if ($this->debug > 0) {error_log('New LP - In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')', 0); }
         if (empty($course)) {
             $this->error = 'Course code is empty';
@@ -104,10 +105,12 @@ class learnpath {
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $this->cc = $course;
+                $row_course = Database::fetch_array($res); 
+                $course_db = $row_course['db_name'];
             } else {
                 $this->error = 'Course code does not exist in database ('.$sql.')';
                 return false;
-               }
+            }
         }
         // Check learnpath ID.
         if (empty($lp_id)) {
@@ -115,7 +118,7 @@ class learnpath {
             return false;
         } else {
             // TODO: Make it flexible to use any course_code (still using env course code here).
-            $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+            $lp_table = Database::get_course_table(TABLE_LP_MAIN, $course_db);
 
             //$id = Database::escape_integer($id);
             $lp_id = $this->escape_string($lp_id);
@@ -186,7 +189,7 @@ class learnpath {
         //  Get the session condition for learning paths of the base + session.
         $session = api_get_session_condition($session_id);
         // Now get the latest attempt from this user on this LP, if available, otherwise create a new one.
-        $lp_table = Database::get_course_table(TABLE_LP_VIEW);
+        $lp_table = Database::get_course_table(TABLE_LP_VIEW, $course_db);
         // Selecting by view_count descending allows to get the highest view_count first.
         $sql = "SELECT * FROM $lp_table WHERE lp_id = '$lp_id' AND user_id = '$user_id' $session  ORDER BY view_count DESC";
         if ($this->debug > 2) { error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0); }
@@ -216,7 +219,7 @@ class learnpath {
         }
 
         // Initialise items.
-        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
+        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM,$course_db);
         $sql = "SELECT * FROM $lp_item_table WHERE lp_id = '".$this->lp_id."' ORDER BY parent_item_id, display_order";
         $res = Database::query($sql);
 
@@ -293,7 +296,7 @@ class learnpath {
             }
 
             // Get last viewing vars.
-            $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+            $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW,$course_db);
             // This query should only return one or zero result.
             $sql = "SELECT * " .
                 "FROM $lp_item_view_table " .

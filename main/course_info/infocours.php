@@ -241,7 +241,8 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 // LEARNING PATH
 $form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="learnpath" id="learnpath"></a>'.Display::return_icon('kcmdf.gif', get_lang('ConfigLearnpath')).' '.get_lang('ConfigLearnpath').'</div><div style="clear:both;"></div>');
 //Auto launch LP
-$form->addElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('Activate'), 1);
+$form->addElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToALearningPath'), 1);
+$form->addElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToTheLearningPathList'), 2);
 $form->addElement('radio', 'enable_lp_auto_launch', null, get_lang('Deactivate'), 0);
 $form -> addElement('html', $linebreak);
 

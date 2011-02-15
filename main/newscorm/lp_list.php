@@ -451,7 +451,7 @@ if (is_array($flat_list)) {
             
             /* Auto Lunch LP code*/
             $lp_auto_lunch_icon = '';            
-            if (api_get_course_setting('enable_lp_auto_launch')) {                            
+            if (api_get_course_setting('enable_lp_auto_launch') == 1) {                            
                 if ($details['autolaunch'] == 1 && $autolunch_exists == false) {  
                     $autolunch_exists = true;                            
                     $lp_auto_lunch_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=auto_launch&status=0&lp_id='.$id.'">

@@ -856,8 +856,11 @@ class Display {
      * 
      * @param   string  div id
      * @param   string  url where the jqgrid will ask for data (if datatype = json)
-     * @param   array   Visible columns (you should use get_lang). An array in which we place the names of the columns. This is the text that appears in the head of the grid (Header layer). Example: colname   {name:'date',     index:'date',   width:120, align:'right'}, 
-     * @param   array   the column model :  Array which describes the parameters of the columns.This is the most important part of the grid. For a full description of all valid values see colModel API. See the url above.
+     * @param   array   Visible columns (you should use get_lang). An array in which we place the names of the columns. 
+     * 					This is the text that appears in the head of the grid (Header layer). 
+     * 					Example: colname   {name:'date',     index:'date',   width:120, align:'right'}, 
+     * @param   array   the column model :  Array which describes the parameters of the columns.This is the most important part of the grid. 
+     * 					For a full description of all valid values see colModel API. See the url above.
      * @param   array   extra parameters
      * @param   array   data that will be loaded
      * @return  string  the js code 
@@ -895,7 +898,8 @@ class Display {
         if (!empty($extra_params['rowList'])) {
             $obj->rowList     = $extra_params['rowList'];
         }
-        $obj->rowNum = 10;
+        //Sets how many records we want to view in the grid 
+        $obj->rowNum = 20;
         if (!empty($extra_params['rowNum'])) {
             $obj->rowNum     = $extra_params['rowNum'];
         }         

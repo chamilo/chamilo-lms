@@ -40,7 +40,7 @@ function array_unique_dimensional($array) {
  * @return 	array	result array
  * @author	found in http://php.net/manual/en/function.sort.php
  */
-function msort($array, $id='id') {
+function msort($array, $id='id', $order = 'desc') {
     if (empty($array)) {
         return $array;
     }
@@ -49,8 +49,14 @@ function msort($array, $id='id') {
         $lowest_id = 0;
         $index=0;
         foreach ($array as $item) {
-            if ($item[$id]<$array[$lowest_id][$id]) {
-                $lowest_id = $index;
+            if ($order == 'desc') {
+                if ($item[$id]<$array[$lowest_id][$id]) {
+                    $lowest_id = $index;
+                }
+            } else {
+                if ($item[$id]>$array[$lowest_id][$id]) {
+                    $lowest_id = $index;
+                }
             }
             $index++;
         }

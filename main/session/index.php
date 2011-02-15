@@ -16,7 +16,6 @@ require_once $libpath.'course.lib.php';
 require_once $libpath.'sessionmanager.lib.php';
 require_once $libpath.'usermanager.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';
-require_once $libpath.'text.lib.php';
 require_once $libpath.'tracking.lib.php';
 
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
@@ -92,21 +91,23 @@ if (!empty($new_session_list)) {
                 $course_info   = api_get_course_info($my_course['code']);
                 //Getting all exercises from the current course            
                 $exercise_list = get_all_exercises($course_info, $my_session_id);
+                
+                
                            
                 //Exercises we skip
                 /*if (empty($exercise_list)) {
                     continue;
                 } */   
-                $exercise_course_list = array();
+                //$exercise_course_list = array();
                 $course['name'] = $course_info['name'];
                 if (!empty($exercise_list)) {        
-                    foreach($exercise_list as $exercise_item) {                
+                    foreach($exercise_list as $exercise_item) {
+                        //Loading the exercise                
                         $exercise = new Exercise($course_info['real_id']);
                         $exercise->read($exercise_item['id']);                                    
-                        $exercise_course_list[$exercise_item['id']] = $exercise;
+                        //$exercise_course_list[$exercise_item['id']] = $exercise;
                         //Reading all Exercise results by user, exercise_id, code, and session
                         $user_results = get_all_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
-                        
                         $course['exercises'][$exercise_item['id']]['data']['exercise_name'] =  $exercise->exercise;                            
                         $course['exercises'][$exercise_item['id']]['data']['results'] =  $user_results;
                         if ($exercise->start_time == '0000-00-00 00:00:00') {
@@ -123,7 +124,7 @@ if (!empty($new_session_list)) {
         $my_session_list[] =  $my_session_id;      
     }
 }
-
+//echo '<pre>';print_r($final_array);
 //If the requested session does not exist in my list we stop the script
 if (!api_is_platform_admin()) {    
     if (!in_array($session_id, $my_session_list)) {
@@ -134,11 +135,12 @@ if (!api_is_platform_admin()) {
 require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';
 //$html = '';
 //Final data to be show
-$my_real_array =array();
+$my_real_array = $new_exercises = array();
 
 foreach($final_array as $session_data) {
     //Session name    
 	//$html .=Display::tag('h1',$session_data['name']);
+	
     $course_list = $session_data['data'];    
     if (!empty($course_list))     
     foreach ($course_list as $my_course_code=>$course_data) {
@@ -168,6 +170,7 @@ foreach($final_array as $session_data) {
                 
                 foreach($exercise_data as $exercise_item) { 
                     $result_list = $exercise_item['results'];
+                    
                     if (!empty($result_list)) {
                         foreach ($result_list as $exercise_result) {  
                                         
@@ -179,7 +182,8 @@ foreach($final_array as $session_data) {
                                 $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
                             }
                             $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id,  $my_course_code,$session_id);
-                            $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
+                            $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']),
+                            							'status'      => Display::return_icon('moderator_star.png', get_lang('BackTo').' '.get_lang('FlatView'),'','32'), 
                             							'date'        => $exercise_item['start_time'],
                             							'course'      => $course_data['name'], 
                             						    'exercise'    => $exercise_item['exercise_name'],
@@ -198,7 +202,8 @@ foreach($final_array as $session_data) {
                             $row++;*/
                         }
                     } else {
-                       $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
+                       $new_exercises[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
+                       							'status'      => Display::return_icon('star.png', get_lang('New'), '','32'),
                     							'date'        => $exercise_item['start_time'],
                     							'course'      => $course_data['name'], 
                     						    'exercise'    => $exercise_item['exercise_name'],
@@ -213,8 +218,9 @@ foreach($final_array as $session_data) {
         }
         //$html .=$table->toHtml();
     }
-}     
-
+}  
+$my_real_array = msort($my_real_array, 'date','asc');
+$my_real_array = array_merge($new_exercises, $my_real_array);
 
 echo Display::tag('h1', $session_info['name']);
 
@@ -255,16 +261,20 @@ $extra_params_week['groupingView'] = array('groupField'=>array('week'),
 //$extra_params_week['autowidth'] = 'true'; //use the width of the parent
 
 //MyQCM grid
-$column_exercise        = array(get_lang('ExerciseStartDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResultInCourse'), get_lang('Ranking'));
+$column_exercise        = array(get_lang('Status'), get_lang('ExerciseStartDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResultInCourse'), get_lang('Ranking'));
 $column_exercise_model  = array(
+                                array('name'=>'status',     'index'=>'status',    'width'=>'50','align'=>'left',   'sortable'=>'true'),
                                 array('name'=>'date',       'index'=>'date',      'width'=>'130','align'=>'left',   'sortable'=>'true'),
                                 array('name'=>'course',     'index'=>'course',    'width'=>'200','align'=>'left',   'sortable'=>'true'),
                                 array('name'=>'exercise',   'index'=>'exercise',  'width'=>'200','align'=>'left',   'sortable'=>'true'),                                
                                 array('name'=>'attempt',    'index'=>'attempt',   'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
-                                array('name'=>'result',     'index'=>'result',    'width'=>'140', 'align'=>'center', 'sortable'=>'true'),
+                                array('name'=>'result',     'index'=>'result',    'width'=>'120', 'align'=>'center', 'sortable'=>'true'),
                                 array('name'=>'best_result','index'=>'best_result','width'=>'140','align'=>'center', 'sortable'=>'true'),
-                                array('name'=>'position',   'index'=>'position',  'width'=>'60', 'align'=>'center', 'sortable'=>'true')
-                                );                        
+                                array('name'=>'position',   'index'=>'position',  'width'=>'55', 'align'=>'center', 'sortable'=>'true')
+                                );                                
+$extra_params_exercise['height'] = '300';                                                        
+//$extra_params_exercise['sortname'] = 'status';
+//$extra_params_exercise['sortorder'] = 'desc';                                
 //$extra_params_exercise['grouping'] = 'true';
 //$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0}</b>'));
 //$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0} - {1} Item(s)</b>'));
@@ -278,7 +288,7 @@ function change_session() {
 }        
     
 $(function() {    
-    /*Binds a tab id in the url */
+    /* Binds a tab id in the url */
     $("#tabs").bind('tabsselect', function(event, ui) {
             window.location.href=ui.tab;
     });

@@ -2942,8 +2942,7 @@ class CourseManager {
                     $result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
                 }
             } else {
-                $result .= $course_display_title.' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
-                ;
+                $result .= $course_display_title.' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));                
             }
         } else {
         	$result .= $course_display_title;

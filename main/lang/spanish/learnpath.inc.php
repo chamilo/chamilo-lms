@@ -109,8 +109,8 @@ $langItemRemoved = "El item ha sido eliminado";
 $langConverting = "Convirtiendo...";
 $langPpt2lpError = "Error durante la conversión de PowerPoint. Por favor, compruebe si el nombre de su archivo PowerPoint contiene caracteres especiales.";
 $langBuild = "Construir";
-$langViewModeEmbedded = "Vista: embebida";
-$langViewModeFullScreen = "Vista: pantalla completa";
+$langViewModeEmbedded = "Vista actual: embebida";
+$langViewModeFullScreen = "Vista actual: pantalla completa";
 $langShowDebug = "Mostrar debug";
 $langHideDebug = "Ocultar debug";
 $langCantEditDocument = "Este documento no es editable";
@@ -255,4 +255,5 @@ $PublicationDate = "Fecha de publicación";
 $UseMaxScore100 = "Usar por defecto 100 como puntuación máxima";
 $EnableLPAutoLaunch = "Activar el despliegue automático";
 $DisableLPAutoLaunch = "Desactivar el despliegue automático";
+$ViewModeEmbedFrame = "Vista actual: incrustado externo. Solo para uso desde otros sitios.";
 ?>

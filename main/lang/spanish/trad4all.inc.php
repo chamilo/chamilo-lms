@@ -917,12 +917,12 @@ $Letters = "Letras";
 $MaximumOfParticipants = "Número máximo de miembros";
 $ContactInformation = "Información del contacto";
 $PersonName = "Nombre de la persona";
-$CompanyName = "Nombre de su empresa";
-$PersonRole = "Su cargo";
-$HaveYouThePowerToTakeFinancialDecisions = "¿Tienes el poder de tomar decisiones financieras?";
-$CompanyCountry = "País de su empresa";
-$CompanyCity = "Ciudad de su empresa";
-$WhichLanguageWouldYouLikeToUseWhenContactingYou = "¿En qué idioma le gustaría que le contactemos?";
+$CompanyName = "Nombre de la empresa";
+$PersonRole = "Cargo en la empresa";
+$HaveYouThePowerToTakeFinancialDecisions = "¿Tiene la capacidad de tomar decisiones financieras?";
+$CompanyCountry = "País";
+$CompanyCity = "Ciudad";
+$WhichLanguageWouldYouLikeToUseWhenContactingYou = "¿Qué idioma de contacto prefiere?";
 $SendInformation = "Enviar la información";
 $YouMustAcceptLicence = "Debe aceptar la licencia para poder usar este software";
 $SelectOne = "Seleccione uno";
@@ -936,7 +936,7 @@ Si sabemos algo más de usted, que va a gestionar este sistema e-learning, podre
 Cumplimentar este formulario, implica la aceptación de que la asociación Chamilo o sus miembros puedan enviarle información por correo electrónico sobre eventos importantes o actualizaciones en el software Chamilo. Esto ayudará a crecer a la comunidad como una entidad organizada, donde el flujo de información, se haga con respeto permanente a su tiempo y su privacidad.
 
 De cualquier forma, tenga en cuenta que no tiene la obligación de rellenar este formulario. Si desea permanecer en el anonimato, perderemos la oportunidad de ofrecerle todos los privilegios de ser un administrador de portal registrado, pero respetaremos su decisión. Basta con dejar vacío este formulario y hacer clic en \"Siguiente\" para seguir instalando Chamilo.";
-$CompanyActivity = "Actividad de su empresa";
+$CompanyActivity = "Sector";
 $DateUnLock = "Desbloquear fecha";
 $DateLock = "Bloquear fecha";
 $GoToStudentDetails = "Ver detalles del estudiante";
@@ -970,7 +970,7 @@ $ReadTermsAndConditions = "Leer las condiciones del servicio";
 $IAcceptTermsAndConditions = "He leido y acepto las condiciones del servicio";
 $YouHaveToAcceptTermsAndConditions = "Para continuar debe aceptar nuestros términos y condiciones";
 $BrowserDontSupportsSVG = "Su navegador no soporta archivos SVG. Para poder utilizar esta herramienta debe tener instalado un navegador avanzado del tipo: Firefox o Chrome";
-$FillWithExemplaryContent = "Rellenar con contenido de ejemplo";
+$FillWithExemplaryContent = "Incluir contenidos de ejemplo";
 $ToolVideoconference = "Videoconferencia";
 $SelectSVGEditImage = "Selecciones una imagen (svg, png)";
 $OnlyAccessFromYourGroup = "Sólo accesible desde su grupo";

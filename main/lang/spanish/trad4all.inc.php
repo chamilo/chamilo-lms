@@ -1007,4 +1007,10 @@ $ContactInformationHasNotBeenSent = "Su información de contacto no pudió ser e
 $FileDeleted = "Archivo eliminado";
 $MyClasses = "Mis clases";
 $PublicationDate = "Fecha de publicación";
+$ItemAdded = "Elemento añadido";
+$ItemDeleted = "Elemento borrado";
+$ItemUpdated = "Elemento actualizado";
+$ItemCopied = "Elemento copiado";
+$MyStatistics = "Mis estadísticas";
+$FromDateXToDateY = "Del %s al %s";
 ?>

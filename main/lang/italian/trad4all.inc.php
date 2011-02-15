@@ -1002,4 +1002,13 @@ $ByCourse = "Per corso";
 $MyQCM = "Miglioramenti";
 $AddACourse = "Aggiungi un corso";
 $PerWeek = "Settimana";
+$PhotoRetouching = "Fotoritocco";
+$SeeAll = "Vedi tutto";
+$SeeOnlyArchived = "Vedi solo gli archiviati";
+$SeeOnlyUnarchived = "Vedi solo i non archiviati";
+$LatestAttempt = "Ultimo tentativo";
+$ContactInformationHasNotBeenSent = "Le tue informazioni di contatto non possono essere trasmesse, forse per un momentaneo problema di rete. Riprova tra qualche secondo: se i problemi permangono ignora il processo di registrazione e clicca sul pulsante per andare al passaggio successivo.";
+$FileDeleted = "File eliminato";
+$MyClasses = "Le mie classi";
+$PublicationDate = "Data di pubblicazione";
 ?>

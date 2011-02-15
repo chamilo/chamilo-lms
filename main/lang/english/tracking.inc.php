@@ -283,4 +283,11 @@ $AverageScore = "Average score";
 $LastConnexionDate = "Last connexion date";
 $QuestionsAreTakenFromLPExercises = "These questions have been taken from the learning paths";
 $AllStudentsAttemptsAreConsidered = "All students attempts are considered";
+$PublishedExercises = "Exercises available";
+$DoneExercises = "Exercises taken";
+$AverageExerciseResult = "Average exercise result";
+$LPProgress = "Learning path progress";
+$Ranking = "Ranking";
+$BestResultInCourse = "Best result in course";
+$ExerciseStartDate = "Publication date";
 ?>

@@ -108,7 +108,7 @@ $langNewExerciseCreated = "Creouse o novo exercicio.";
 $langItemRemoved = "Eliminouse o elemento";
 $langConverting = "Convertendo...";
 $langPpt2lpError = "Erro durante a conversión do PowerPoint. Verifique se hai caracteres especiais no nome do seu PowerPoint.";
-$langBuild = " \tConstruír";
+$langBuild = "Construír";
 $langViewModeEmbedded = "Vista: embebida";
 $langViewModeFullScreen = "Modo de visión: pantalla chea";
 $langShowDebug = "Mostrar debub";
@@ -259,4 +259,5 @@ $PublicationDate = "Data de publicación";
 $UseMaxScore100 = "Usar por defecto 100 como puntuación máxima";
 $EnableLPAutoLaunch = "Activar o despregue automático";
 $DisableLPAutoLaunch = "Desactivar o despregue automático";
+$ViewModeEmbedFrame = "Vista actual: incrustado externo. Só para uso desde outros sitios.";
 ?>

@@ -144,13 +144,12 @@ class learnpath {
                 $this->modified_on      = $row['modified_on'];
 
                 if ($row['publicated_on'] != '0000-00-00 00:00:00') {
-                    $this->publicated_on    = api_get_local_time($row['publicated_on']);
+                    $this->publicated_on   = $row['publicated_on'];
                 }
 
                 if ($row['expired_on'] != '0000-00-00 00:00:00') {
-                    $this->expired_on     = api_get_local_time($row['expired_on']);
-                }
-
+                    $this->expired_on     = $row['expired_on'];
+                }                
                 if ($this->type == 2) {
                     if ($row['force_commit'] == 1) {
                         $this->force_commit = true;

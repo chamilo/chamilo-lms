@@ -219,8 +219,8 @@ $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
 
 
-$defaults['publicated_on']  = ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on))? $publicated_on : date('Y-m-d 12:00:00');
-$defaults['expired_on']     = ($expired_on   !='0000-00-00 00:00:00' && !empty($expired_on) )? $expired_on : date('Y-m-d 12:00:00',time()+84600);
+$defaults['publicated_on']  = ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on))? api_get_local_time($publicated_on) : date('Y-m-d 12:00:00');
+$defaults['expired_on']     = ($expired_on   !='0000-00-00 00:00:00' && !empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00',time()+84600);
 
 $form->setDefaults($defaults);
 echo '<table><tr><td width="550px">';

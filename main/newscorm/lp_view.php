@@ -68,9 +68,25 @@ $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 </script>';
 
 $_SESSION['oLP']->error = '';
-$lp_type    = $_SESSION['oLP']->get_type();
-$lp_item_id = $_SESSION['oLP']->get_current_item_id();
 
+$now = time();
+
+//Adding visibility reestrinctions
+if (!empty($_SESSION['oLP']->publicated_on) && $_SESSION['oLP']->publicated_on != '0000-00-00 00:00:00') {
+    if ($now < api_strtotime($_SESSION['oLP']->publicated_on)) {
+        api_not_allowed();
+    }    
+}
+
+if (!empty($_SESSION['oLP']->expired_on) && $_SESSION['oLP']->expired_on != '0000-00-00 00:00:00') {
+    if ($now > api_strtotime($_SESSION['oLP']->expired_on)) {
+        api_not_allowed();
+    }    
+}
+
+
+$lp_item_id = $_SESSION['oLP']->get_current_item_id();
+$lp_type    = $_SESSION['oLP']->get_type();
 
 //$lp_item_id = learnpath::escape_string($_GET['item_id']);
 //$_SESSION['oLP']->set_current_item($lp_item_id); // Already done by lp_controller.php.

@@ -108,7 +108,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
             $values = $form->exportValues();       
             $res    = $promotion->save($values);            
             if ($res) {
-                Display::display_confirmation_message(get_lang('Added'));
+                Display::display_confirmation_message(get_lang('ItemAdded'));
             }
         }
         Security::clear_token();
@@ -155,7 +155,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     // Action handling: deleting an obj
     $res = $promotion->delete($_GET['id']);
     if ($res) {
-        Display::display_confirmation_message(get_lang('Deleted'));
+        Display::display_confirmation_message(get_lang('ItemDeleted'));
     }
     $promotion->display();
 } elseif (isset($_GET['action']) && $_GET['action'] == 'copy') {
@@ -164,7 +164,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     }
     $res = $promotion->copy($_GET['id'], null, true);
     if ($res) {
-        Display::display_confirmation_message(get_lang('Copied'));
+        Display::display_confirmation_message(get_lang('ItemCopied'));
     }
     $promotion->display();
 } else {

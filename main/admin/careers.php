@@ -97,7 +97,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
             $values = $form->exportValues();       
             $res    = $career->save($values);            
             if ($res) {
-                Display::display_confirmation_message(get_lang('Added'));
+                Display::display_confirmation_message(get_lang('ItemAdded'));
             }
         }
         Security::clear_token();
@@ -144,7 +144,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     // Action handling: delete
     $res = $career->delete(intval($_GET['id']));
     if ($res) {
-        Display::display_confirmation_message(get_lang('Deleted'));
+        Display::display_confirmation_message(get_lang('ItemDeleted'));
     }
     $career->display();
 } elseif (isset($_GET['action']) && $_GET['action'] == 'copy') {
@@ -153,7 +153,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     }
     $res = $career->copy($_GET['id'], true); //copy career and promotions inside
     if ($res) {
-        Display::display_confirmation_message(get_lang('Copied'));
+        Display::display_confirmation_message(get_lang('ItemCopied'));
     }
     $career->display();
 } else {

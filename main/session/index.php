@@ -106,11 +106,15 @@ if (!empty($new_session_list)) {
                         $exercise_course_list[$exercise_item['id']] = $exercise;
                         //Reading all Exercise results by user, exercise_id, code, and session
                         $user_results = get_all_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
-                        //print_r($user_results);
                         
                         $course['exercises'][$exercise_item['id']]['name'] =  $exercise->exercise;                            
-                        $course['exercises'][$exercise_item['id']]['data'] =  $user_results;      
-                        //print_r($user_results);          
+                        $course['exercises'][$exercise_item['id']]['data'] =  $user_results;
+                        if ($exercise->start_time == '0000-00-00 00:00:00') {
+                            $exercise->start_time  = '-';
+                        } else {
+                            api_get_local_time($exercise->start_time);
+                        }
+                        $course['exercises'][$exercise_item['id']]['start_time'] =  $exercise->start_time;
                     }
                     $final_array[$my_session_id]['data'][$my_course['code']] = $course;        
                 }   
@@ -170,7 +174,8 @@ foreach($final_array as $session_data) {
                         $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
                     }
                     $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id,  $my_course_code,$session_id);
-                    $my_real_array[]= array(	'date'        => api_get_local_time($exercise_result['exe_date']), 
+                    $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
+                    							'date'        => $exercise_data['start_time'],
                     							'course'      => $course_data['name'], 
                     						    'exercise'    => $exercise_data['name'],
                     						    'attempt'     => $counter,
@@ -233,7 +238,7 @@ $extra_params_week['groupingView'] = array('groupField'=>array('week'),
 //$extra_params_week['autowidth'] = 'true'; //use the width of the parent
 
 //MyQCM grid
-$column_exercise        = array(get_lang('PublicationDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResultInCourse'), get_lang('Ranking'));
+$column_exercise        = array(get_lang('ExerciseStartDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResultInCourse'), get_lang('Ranking'));
 $column_exercise_model  = array(
                                 array('name'=>'date',       'index'=>'date',      'width'=>'130','align'=>'left',   'sortable'=>'true'),
                                 array('name'=>'course',     'index'=>'course',    'width'=>'200','align'=>'left',   'sortable'=>'true'),

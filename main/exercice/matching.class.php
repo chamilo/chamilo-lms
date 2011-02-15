@@ -195,8 +195,8 @@ class Matching extends Question {
 			
 		} else {
             // setting the save button here and not in the question class.php            
-            $group[] = FormValidator :: createElement ('style_submit_button', 'lessOptions', get_lang('DelElem'),'style="float:right;" class="minus"');
-            $group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'),'style="float:right;" class="plus"');
+            $group[] = FormValidator :: createElement ('style_submit_button', 'lessOptions', get_lang('DelElem'),'class="minus"');
+            $group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'),' class="plus"');
             $group[] = FormValidator :: createElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 		}
 		

@@ -1213,7 +1213,7 @@ function convert_score($score, $weight) {
  * @param   int     session id
  * @return  array   array with exercise data
  */
-function get_all_exercises($course_info = null, $session_id = 0) {
+function get_all_exercises($course_info = null, $session_id = 0, $check_dates = false) {
     if(!empty($course_info)) {
         $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST,$course_info['db_name']);	
     } else {

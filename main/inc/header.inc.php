@@ -3,12 +3,10 @@
 
 /**
  *  This script displays the Chamilo header.
- *
  *  @package chamilo.include
  */
 
 /*  HEADERS SECTION */
-
 /*
  * HTTP HEADER
  */
@@ -23,7 +21,6 @@ if (api_is_platform_admin()) {
         $_SESSION['page_start_time_execution'] = $starttime;
     }
 }
-
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 //show the X-Powered-By header so that parsers can find it
 global $_configuration;
@@ -62,24 +59,18 @@ $document_language = api_get_language_isocode();
 <head>
 <title>
 <?php
-
 $title_list[] = api_get_setting('siteName');
 $title_list[] = $nameTools;
 $title_list[] = $_course['official_code'];
-
 $title_string = '';
-for($i=0; $i<count($title_list);$i++) {
-    if (!empty($title_list[$i])) {
-        $title_string .=$title_list[$i];
 
-        if (isset($title_list[$i+1])) {
-            $title_string .=' - ';
-        }
-    }
+for($i=0; $i<count($title_list);$i++) {
+    $title_string .=$title_list[$i];
+    if (isset($title_list[$i+1])) {
+        $title_string .=' - ';
+    }    
 }
 echo $title_string;
-
-
 ?>
 </title>
 <style type="text/css" media="screen, projection">
@@ -95,7 +86,7 @@ if ($show_learn_path) {
     $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CSS_PATH).$my_style.'/learnpath.css"/>';
     $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; //will be moved
     $htmlHeadXtra[] = '<script src="dtree.js" type="text/javascript"></script>'; //will be moved
-    }
+}
 
 echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";'."\n";
 echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/course.css";'."\n";
@@ -111,16 +102,14 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 /*<![CDATA[*/
 <?php
   echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/print.css";'."\n";
-
 ?>
-
 /*]]>*/
 </style>
 <script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/jquery.js" type="text/javascript" ></script>
 <script src="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/thickbox.js" type="text/javascript" ></script>
 <link rel="stylesheet" href="<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/thickbox.css" type="text/css" media="projection, screen" />
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />
- <link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/courses.php" title="<?php echo api_htmlentities(get_lang('OtherCourses'), ENT_QUOTES); ?>" />
+<link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/courses.php" title="<?php echo api_htmlentities(get_lang('OtherCourses'), ENT_QUOTES); ?>" />
 <link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/profile.php" title="<?php echo api_htmlentities(get_lang('ModifyProfile'), ENT_QUOTES); ?>" />
 <link href="http://www.chamilo.org/documentation.php" rel="Help" />
 <link href="http://www.chamilo.org/team.php" rel="Author" />
@@ -133,32 +122,21 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 <script type="text/javascript">
 //<![CDATA[
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.
-if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf( 'opera' ) == -1 ) )
-{
-    window.attachEvent( 'onunload', function()
-        {
-            window['__flash__removeCallback'] = function ( instance, name )
-            {
-                try
-                {
-                    if ( instance )
-                    {
+if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf( 'opera' ) == -1 ) ) {
+    window.attachEvent( 'onunload', function() {
+            window['__flash__removeCallback'] = function ( instance, name ) {
+                try {
+                    if ( instance ) {
                         instance[name] = null ;
                     }
-                }
-                catch ( flashEx )
-                {
-
+                } catch ( flashEx ) {
                 }
             } ;
         }
     ) ;
 }
 //]]>
-
 </script>
-
-
 <?php
 if (api_get_setting('accessibility_font_resize') == 'true') {
     echo '<script src= "'.api_get_path(WEB_LIBRARY_PATH).'javascript/fontresize.js" type="text/javascript"></script>';
@@ -193,7 +171,6 @@ if ($_configuration['multiple_access_urls']) {
     }
 }
 ?>
-
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>" <?php
  if (defined('DOKEOS_HOMEPAGE') && DOKEOS_HOMEPAGE)

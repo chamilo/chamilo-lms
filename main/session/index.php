@@ -85,7 +85,7 @@ if (!empty($new_session_list)) {
         	$final_array[$my_session_id]['name'] = $item['session_name'];
             
             //Get all courses by session where I'm subscribed
-            $my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id );            
+            $my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);            
             $course = array();        
             foreach ($my_course_list as $my_course) {
             
@@ -107,14 +107,14 @@ if (!empty($new_session_list)) {
                         //Reading all Exercise results by user, exercise_id, code, and session
                         $user_results = get_all_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
                         
-                        $course['exercises'][$exercise_item['id']]['name'] =  $exercise->exercise;                            
-                        $course['exercises'][$exercise_item['id']]['data'] =  $user_results;
+                        $course['exercises'][$exercise_item['id']]['data']['exercise_name'] =  $exercise->exercise;                            
+                        $course['exercises'][$exercise_item['id']]['data']['results'] =  $user_results;
                         if ($exercise->start_time == '0000-00-00 00:00:00') {
                             $exercise->start_time  = '-';
                         } else {
                             api_get_local_time($exercise->start_time);
                         }
-                        $course['exercises'][$exercise_item['id']]['start_time'] =  $exercise->start_time;
+                        $course['exercises'][$exercise_item['id']]['data']['start_time'] =  $exercise->start_time;
                     }
                     $final_array[$my_session_id]['data'][$my_course['code']] = $course;        
                 }   
@@ -132,20 +132,20 @@ if (!api_is_platform_admin()) {
 }
 
 require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';
-$html = '';
+//$html = '';
 //Final data to be show
 $my_real_array =array();
 
 foreach($final_array as $session_data) {
     //Session name    
-	$html .=Display::tag('h1',$session_data['name']);
+	//$html .=Display::tag('h1',$session_data['name']);
     $course_list = $session_data['data'];    
     if (!empty($course_list))     
     foreach ($course_list as $my_course_code=>$course_data) {
         //Course table        
-        $table = new HTML_Table(array('class' => 'data_table'));
+       /* $table = new HTML_Table(array('class' => 'data_table'));
         $row = 0;
-        $column = 0;
+        $column = 0;*/
         
         //Course headers
         /*$header_names = array(get_lang('Course'),get_lang('Exercise'),get_lang('Attempt'),get_lang('Results'),get_lang('Score'), get_lang('Ranking'));
@@ -165,36 +165,53 @@ foreach($final_array as $session_data) {
                 $best_score      = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
                 //Exercise results                              
                 $counter = 1;                    
-                foreach ($exercise_data['data'] as $exercise_result) {                    
-                    $my_exercise_result = array($exercise_data['name'], $exercise_result['exe_id']);
-                    $column = 1;   
-                    $platform_score = show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);
-                    $my_score = 0;
-                    if(!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0) {                        
-                        $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
-                    }
-                    $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id,  $my_course_code,$session_id);
-                    $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
-                    							'date'        => $exercise_data['start_time'],
+                
+                foreach($exercise_data as $exercise_item) { 
+                    $result_list = $exercise_item['results'];
+                    if (!empty($result_list)) {
+                        foreach ($result_list as $exercise_result) {  
+                                        
+                            $my_exercise_result = array($exercise_item['exercise_name'], $exercise_result['exe_id']);
+                            $column = 1;   
+                            $platform_score = show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);
+                            $my_score = 0;
+                            if(!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0) {                        
+                                $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
+                            }
+                            $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id,  $my_course_code,$session_id);
+                            $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
+                            							'date'        => $exercise_item['start_time'],
+                            							'course'      => $course_data['name'], 
+                            						    'exercise'    => $exercise_item['exercise_name'],
+                            						    'attempt'     => $counter,
+                            						    'result'      => $platform_score,
+                            						    'best_result' => $best_score,
+                            						    'position'    => $position
+                                                );
+                            $counter++;   
+                            /*foreach ($my_exercise_result as $data) {                            
+                                //$my_real_array[]= array('session'=>$session_data['name'],'course'=>$course_data['name'], 'exercise'=>$exercise_data['name'],'result'=>$exercise_result['exe_id'])  ;                                                     
+                                $table->setCellContents($row, $column, $data);                        
+                                //$table->updateCellAttributes($row, $column, 'align="center"');
+                                $column++;        
+                            }
+                            $row++;*/
+                        }
+                    } else {
+                       $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
+                    							'date'        => $exercise_item['start_time'],
                     							'course'      => $course_data['name'], 
-                    						    'exercise'    => $exercise_data['name'],
-                    						    'attempt'     => $counter,
-                    						    'result'      => $platform_score,
-                    						    'best_result' => $best_score,
-                    						    'position'    => $position
+                    						    'exercise'    => $exercise_item['exercise_name'],
+                    						    'attempt'     => '-',
+                    						    'result'      => '-',
+                    						    'best_result' => '-',
+                    						    'position'    => '-'
                                         );
-                    $counter++;   
-                    foreach ($my_exercise_result as $data) {                            
-                        //$my_real_array[]= array('session'=>$session_data['name'],'course'=>$course_data['name'], 'exercise'=>$exercise_data['name'],'result'=>$exercise_result['exe_id'])  ;                                                     
-                        $table->setCellContents($row, $column, $data);                        
-                        //$table->updateCellAttributes($row, $column, 'align="center"');
-                        $column++;        
                     }
-                    $row++;
-                }               
+                }             
             }
         }
-        $html .=$table->toHtml();
+        //$html .=$table->toHtml();
     }
 }     
 

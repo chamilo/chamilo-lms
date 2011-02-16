@@ -973,7 +973,7 @@ class Exercise {
 				$diplay = 'block';
 			}
 			
-			$form -> addElement('checkbox', 'propagate_neg',get_lang('PropagetNegativeResult'),null);
+			$form -> addElement('checkbox', 'propagate_neg',get_lang('PropagateNegativeResults'),null);
 			
 
     		$form -> addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');

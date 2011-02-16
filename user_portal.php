@@ -342,14 +342,16 @@ if (is_array($courses_tree)) {
                     } else {
                         $allowed_time = api_strtotime($date_session_start);
                     }                    
-                    if ($session_now > $allowed_time) { //read only and accesible  
-                        $c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',true);
-                        //$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',($session['details']['visibility']==3?false:true));
-                        $html_courses_session .= $c[1];
+                    if ($session_now > $allowed_time) { //read only and accesible
+                        if (api_get_setting('hide_courses_in_sessions') == 'false') {  
+                            $c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',true);
+                            //$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',($session['details']['visibility']==3?false:true));
+                            $html_courses_session .= $c[1];
+                        }
                         $count_courses_session++;
                     }
                 }
-
+                
                 if ($count_courses_session > 0) {
                     echo '<div class="userportal-session-item"><ul class="session_box">';
                         echo '<li class="session_box_title" id="session_'.$session['details']['id'].'" >';
@@ -367,10 +369,13 @@ if (is_array($courses_tree)) {
                             echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
                         }
                         echo '</li>';
-                        echo $html_courses_session;
-
+                        if (api_get_setting('hide_courses_in_sessions') == 'false') {
+                            echo $html_courses_session;
+                        }
                     echo '</ul></div>';
                 }
+                
+                
             }
         } else {
             // All sessions included in.

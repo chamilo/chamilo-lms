@@ -73,6 +73,13 @@ $exfile = strtolower($exfile[sizeof($exfile) - 1]);
 $exercicePath = substr($exercicePath, 0, strpos($exercicePath, $exfile));
 $exercicePath = $exercicePath . "exercice.php";
 
+
+if ($show == 'result') {    
+    if (empty($_GET['exerciseId']) && empty($_GET['path']) ) {
+       //header('Location: exercice.php?' . api_get_cidreq());
+    }
+}   
+    
 // maximum number of exercises on a same page
 $limitExPage = 50;
 
@@ -381,13 +388,13 @@ if (!empty ($_POST['export_report']) && $_POST['export_report'] == 'export_repor
 		switch ($_POST['export_format']) {
 			case 'xls' :
 				$export = new ExerciseResult();               
-				$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter'],$_POST['exerciseId']);
+				$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter'],$_POST['exerciseId'], $_POST['hotpotato_name']);
 				exit;
 				break;
 			case 'csv' :
 			default :
 				$export = new ExerciseResult();
-				$export->exportCompleteReportCSV($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter'],$_POST['exerciseId']);
+				$export->exportCompleteReportCSV($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter'],$_POST['exerciseId'], $_POST['hotpotato_name']);
 				exit;
 				break;
 		}
@@ -608,7 +615,8 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
 			echo '<input type="hidden" name="export_format" value="csv">';
-            echo '<input type="hidden" name="exerciseId" value="'.intval($_GET['exerciseId']).'">';            
+            echo '<input type="hidden" name="exerciseId" value="'.intval($_GET['exerciseId']).'">';
+            echo '<input type="hidden" name="hotpotato_name" value="'.Security::remove_XSS($_GET['path']).'">';            
             
             if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
                 $filter = 1;
@@ -619,7 +627,8 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 			echo '</form>';
 			echo '<form id="form1b" name="form1b" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '" style="display:inline">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
-			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
+			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';			
+			echo '<input type="hidden" name="hotpotato_name" value="'.Security::remove_XSS($_GET['path']).'">';			
 			echo '<input type="hidden" name="export_format" value="xls">';
             echo '<input type="hidden" name="exerciseId" value="'.intval($_GET['exerciseId']).'">';
 			echo '</form>';
@@ -654,12 +663,14 @@ if ($show == 'result') {
 			default :
 				null;
 		}
-		if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
-			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_check.png', get_lang('ShowCorrectedOnly'),'','32').'</a>';
-		} else {
-			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_uncheck.png', get_lang('ShowUnCorrectedOnly'),'','32').'</a>';
+		if (!empty($_GET['exerciseId'])) {
+    		if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
+    			$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_check.png', get_lang('ShowCorrectedOnly'),'','32').'</a>';
+    		} else {
+    			$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&id_session='.intval($_GET['id_session']).'&exerciseId='.intval($_GET['exerciseId']).'&gradebook='.$gradebook.'" >'.Display :: return_icon('exercice_uncheck.png', get_lang('ShowUnCorrectedOnly'),'','32').'</a>';
+    		}
+    		echo $view_result;
 		}
-		echo $view_result;
 	}
 }
 echo '</div>'; // closing the actions div
@@ -789,7 +800,7 @@ if ($show == 'test') {
                         //Settings                                                                
                         //$actions  = Display::url(Display::return_icon('edit.gif',get_lang('Edit'), array('width'=>'20px')), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                         
-                        $actions =  Display::url(Display::return_icon('edit.gif',get_lang('Edit')), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
+                        $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),array('width' =>'22px')), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
                         
                         $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
                         
@@ -984,9 +995,7 @@ if ($show == 'test') {
                         $item  = Display::tag('td','<img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /> <a href="showinframes.php?file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active?'class="invisible"':'').'>'.$title.'</a> ');
                         $item .= Display::tag('td','-');
                                          
-                        $actions = '<a href="adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path.'">
-                                   <img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset).'" /></a>';
-                        
+                        $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),array('width' =>'22px')), 'adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path);
                         $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&path='.$path.'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
                                                 
                         // if active

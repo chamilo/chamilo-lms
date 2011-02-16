@@ -97,14 +97,25 @@ $personal_course_list = UserManager::get_personal_session_course_list($_user['us
 // Check if a user is enrolled only in one course for going directly to the course after the login.
 if (api_get_setting('go_to_course_after_login') == 'true') {
     if (!isset($_SESSION['coursesAlreadyVisited']) && is_array($personal_course_list) && count($personal_course_list) == 1) {
-
         $key = array_keys($personal_course_list);
         $course_info = $personal_course_list[$key[0]];
-
         $course_directory = $course_info['d'];
         $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
         header('location:'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$id_session);
         exit;
+    } else {
+        if (api_get_setting('hide_courses_in_sessions') == 'true') {
+            //Check sessions
+            $session_list = array();
+            $only_session_id = 0;
+            foreach($personal_course_list as $course_item) {
+                $session_list[$course_item['id_session']] = $course_item;
+                $only_session_id = $course_item['id_session'];
+            }        
+            if (count($session_list) == 1 && !empty($only_session_id)) {            
+                header('Location:'.api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_list[$only_session_id]['id_session']);    
+            }
+        }
     }
 }
 
@@ -342,14 +353,16 @@ if (is_array($courses_tree)) {
                     } else {
                         $allowed_time = api_strtotime($date_session_start);
                     }                    
-                    if ($session_now > $allowed_time) { //read only and accesible  
-                        $c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',true);
-                        //$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',($session['details']['visibility']==3?false:true));
-                        $html_courses_session .= $c[1];
+                    if ($session_now > $allowed_time) { //read only and accesible
+                        if (api_get_setting('hide_courses_in_sessions') == 'false') {  
+                            $c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',true);
+                            //$c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item',($session['details']['visibility']==3?false:true));
+                            $html_courses_session .= $c[1];
+                        }
                         $count_courses_session++;
                     }
                 }
-
+                
                 if ($count_courses_session > 0) {
                     echo '<div class="userportal-session-item"><ul class="session_box">';
                         echo '<li class="session_box_title" id="session_'.$session['details']['id'].'" >';
@@ -367,10 +380,13 @@ if (is_array($courses_tree)) {
                             echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
                         }
                         echo '</li>';
-                        echo $html_courses_session;
-
+                        if (api_get_setting('hide_courses_in_sessions') == 'false') {
+                            echo $html_courses_session;
+                        }
                     echo '</ul></div>';
                 }
+                
+                
             }
         } else {
             // All sessions included in.

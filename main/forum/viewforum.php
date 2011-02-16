@@ -442,7 +442,7 @@ if(is_array($threads)) {
 					$iconnotify = 'send_mail_checked.gif';
 				}
 			}
-			$icon_liststd = 'group.gif';
+			$icon_liststd = 'lp_users.png';
 			if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&origin=".$origin."&amp;action=notify&amp;content=thread&amp;gidReq=".$_SESSION['toolgroup']."&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
 			}

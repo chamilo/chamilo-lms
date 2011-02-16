@@ -327,7 +327,7 @@ function LMSGetValue(param)
          return '';
     }
 
-    //Dokeos does not support this SCO object properties
+    //Chamilo does not support these SCO object properties
 
     if (param == 'cmi.student_preference.text' ||
         param == 'cmi.student_preference.language' ||
@@ -335,6 +335,8 @@ function LMSGetValue(param)
         param == 'cmi.student_preference.audio' ||
         param == 'cmi.student_preference._children' ||
         param == 'cmi.student_data.time_limit_action' ||
+        param == 'cmi.student_demographics.first_name' ||
+        param == 'cmi.student_demographics.last_name' ||
         param == 'cmi.comments' ||
         param == 'cmi.comments_from_lms' ) {
         // the value is not supported

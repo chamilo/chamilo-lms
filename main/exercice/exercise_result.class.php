@@ -90,7 +90,7 @@ class ExerciseResult
 	 * @param	string		The document path (for HotPotatoes retrieval)
 	 * @param	integer		User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
 	 */
-	function _getExercisesReporting($document_path,$user_id=null,$filter=0, $exercise_id = 0) {
+	function _getExercisesReporting($document_path, $user_id=null, $filter=0, $exercise_id = 0, $hotpotato_name = null) {
 		$return = array();
     	$TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
     	$TBL_EXERCISE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -104,26 +104,26 @@ class ExerciseResult
 		$TBL_COURSE_REL_USER 	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         
 
-    	$cid = api_get_course_id();
-    	$user_id = intval($user_id);
-    	$session_id_and = ' AND te.session_id = ' . api_get_session_id() . ' ';
-        $exercise_id = intval($exercise_id);
+    	$cid             = api_get_course_id();
+    	$user_id         = intval($user_id);
+    	$session_id_and  = ' AND te.session_id = ' . api_get_session_id() . ' ';
+        $exercise_id     = intval($exercise_id);        
+        $hotpotato_name   = Database::escape_string($hotpotato_name);
         
         if (!empty($exercise_id)) {
             $session_id_and .= " AND exe_exo_id = $exercise_id ";
         }
         
-		if (empty($user_id)) {			
-			 $sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult , te.exe_weighting as exweight,
+		if (empty($user_id)) {		
+			$sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult , te.exe_weighting as exweight,
                 te.exe_date as exdate, te.exe_id as exid, email as exemail, te.start_date as exstart, steps_counter as exstep, exe_user_id as excruid,te.exe_duration as exduration
                 FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
                 WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and  $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0";
         
-            $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
+            $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", email, tth.exe_name, tth.exe_result , tth.exe_weighting, tth.exe_date
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($cid) . "' 
+                    WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($cid) . "' AND tth.exe_name = '$hotpotato_name'
                     ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
-
 
 		} else {
             $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
@@ -131,32 +131,28 @@ class ExerciseResult
             $sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").", ce.title as extitle, te.exe_result as exresult, " .
                         "te.exe_weighting as exweight, te.exe_date as exdate, te.exe_id as exid, email as exemail, " .
                         "te.start_date as exstart, steps_counter as exstep, exe_user_id as excruid, te.exe_duration as exduration, ce.results_disabled as exdisabled
-                FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
-                WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and $session_id_and AND ce.active <>-1 AND" .
-                " orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
+                        FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                        WHERE te.status != 'incomplete' AND te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and $session_id_and AND ce.active <>-1 AND" .
+                        " orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
         
-            $hpsql = "SELECT '',exe_name, exe_result , exe_weighting, exe_date
+            $hpsql = "SELECT '',exe_name, exe_result , exe_weighting, exe_date 
                             FROM $TBL_TRACK_HOTPOTATOES
-                            WHERE exe_user_id = '" . $user_id . "' AND exe_cours_id = '" . Database :: escape_string($cid) . "'
+                            WHERE exe_user_id = '" . $user_id . "' AND exe_cours_id = '" . Database :: escape_string($cid) . "' AND tth.exe_name = '$hotpotato_name'
                             ORDER BY exe_cours_id ASC, exe_date DESC";
 		}
 
-		$results = array();
-                
+		$results = array();                
 		$resx = Database::query($sql);
 		while ($rowx = Database::fetch_array($resx,'ASSOC')) {
             $results[] = $rowx;
 		}
-      
-
-		//$results	= getManyResultsXCol($sql,9);
-		$hpresults	= getManyResultsXCol($hpsql,8);
-  
-		$NoTestRes = 0;
-		$NoHPTestRes = 0;
-		$j=0;
-
-
+		
+		$hpresults = array();
+		$resx = Database::query($hpsql);
+	    while ($rowx = Database::fetch_array($resx,'ASSOC')) {
+            $hpresults[] = $rowx;
+		}
+ 		
 		if ($filter) {
 			switch ($filter) {
 				case 1 :
@@ -171,7 +167,7 @@ class ExerciseResult
 		}
 
 		//Print the results of tests
-		if(is_array($results)) {
+		if(is_array($results) && empty($hotpotato_name)) {
 			for($i = 0; $i < sizeof($results); $i++) {
 
 				$revised = false;
@@ -186,50 +182,42 @@ class ExerciseResult
 				if ($filter_by_revised && !$revised) continue;
 
 				$return[$i] = array();
-				$id         = $results[$i]['exid'];
-				$mailid     = $results[$i]['exemail'];
-				$userlast   = $results[$i]['userpart1'];
-				$userfirst  = $results[$i]['userpart2'];
-				$test       = $results[$i]['extitle'];
-				$res        = $results[$i]['exresult'];
-                
-				if (empty($user_id)) {
-					$user = $results[$i]['userpart1'];//.$results[$i]['userpart2'];
-					$return[$i]['last_name'] = $user;
-					$return[$i]['first_name'] = $userfirst;
-					$return[$i]['user_id'] = $results[$i]['userid'];
+				//$id         = $results[$i]['exid'];
+				                
+				if (empty($user_id)) {					
+					$return[$i]['last_name']    = $results[$i]['userpart1'];
+					$return[$i]['first_name']   = $results[$i]['userpart2'];
+					$return[$i]['user_id']      = $results[$i]['userid'];
+					$return[$i]['email']        = $results[$i]['exemail'];					
 				}
-				$return[$i]['title'] = $test;
+				$return[$i]['title'] = $results[$i]['extitle'];
 				$return[$i]['time'] = api_convert_and_format_date($results[$i]['exdate'], null, date_default_timezone_get());
-				$return[$i]['result'] = $res;
+				$return[$i]['result'] = $results[$i]['exresult'];
 				$return[$i]['max'] = $results[$i]['exweight'];
-				$j=$i;
 			}
 		}
         
-		$j++;
-		// Print the Result of Hotpotatoes Tests
-		if(is_array($hpresults))
-		{
-			for($i = 0; $i < sizeof($hpresults); $i++)
-			{
-				$return[$j+$i] = array();
-				$title = GetQuizName($hpresults[$i]['exname'],$document_path);
-				if ($title =='')
-				{
-					$title = basename($hpresults[$i]['exname']);
+		
+		// Print the Result of Hotpotatoes Tests	
+		if (is_array($hpresults)) {
+			for($i = 0; $i < sizeof($hpresults); $i++) {
+				$return[$i] = array();				
+				$title = GetQuizName($hpresults[$i]['exe_name'], $document_path);
+				if ($title =='') {
+					$title = basename($hpresults[$i]['exe_name']);
 				}
-				if(empty($user_id))
-				{
-					$return[$j+$i]['user'] = $hpresults[$i]['userpart1'].$hpresults[$i]['userpart2'];
-					$return[$j+$i]['user_id'] = $results[$i]['userid'];
+				if(empty($user_id)) {					
+				    $return[$i]['email'] = $hpresults[$i]['email'];
+					$return[$i]['first_name'] = $hpresults[$i]['userpart2'];
+					$return[$i]['last_name'] = $hpresults[$i]['userpart1'];
+					//$return[$i]['user_id'] = $results[$i]['userid'];
 				}
-				$return[$j+$i]['title'] = $title;
-				$return[$j+$i]['time'] = api_convert_and_format_date($hpresults[$i]['exdate'], null, date_default_timezone_get());
-				$return[$j+$i]['result'] = $hpresults[$i]['exresult'];
-				$return[$j+$i]['max'] = $hpresults[$i]['exweight'];
+				$return[$i]['title'] = $title;
+				$return[$i]['time'] = api_convert_and_format_date($hpresults[$i]['exdate'], null, date_default_timezone_get());
+				$return[$i]['result'] = $hpresults[$i]['exe_result'];
+				$return[$i]['max'] = $hpresults[$i]['exe_weighting'];
 			}
-		}
+		}		
 		$this->results = $return;
 		return true;
 	}
@@ -240,25 +228,25 @@ class ExerciseResult
 	 * @param	boolean		Whether to include user fields or not
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportCSV($document_path='',$user_id=null, $export_user_fields = array(), $export_filter = 0, $exercise_id = 0)
-	{
+	public function exportCompleteReportCSV($document_path='',$user_id=null, $export_user_fields = array(), $export_filter = 0, $exercise_id = 0, $hotpotato_name = null) {
 		global $charset;
-		$this->_getExercisesReporting($document_path,$user_id,$export_filter, $exercise_id);
+		$this->_getExercisesReporting($document_path,$user_id,$export_filter, $exercise_id, $hotpotato_name);
 		$filename = 'exercise_results_'.date('YmdGis').'.csv';
 		if(!empty($user_id)) {
 			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.csv';
 		}
 		$data = '';
-		//build the results
-		//titles
-		if(!empty($this->results[0]['last_name'])) {
+		
+        $data .= get_lang('Email').';';
+			
+        if(!empty($this->results[0]['last_name'])) {
 			$data .= get_lang('LastName').';';
 		}
 		if(!empty($this->results[0]['first_name'])) {
 			$data .= get_lang('FirstName').';';
 		}
         
-		if($export_user_fields) {
+		if ($export_user_fields) {
 			//show user fields section with a big th colspan that spans over all fields
 			$extra_user_fields = UserManager::get_extra_fields(0,0,5,'ASC',false);
 			$num = count($extra_user_fields);
@@ -269,12 +257,14 @@ class ExerciseResult
 		}
 		$data .= get_lang('Title').';';
 		$data .= get_lang('Date').';';
-		$data .= get_lang('Results').';';
-		$data .= get_lang('Weighting').';';
+		$data .= get_lang('Score').';';
+		$data .= get_lang('Total').';';
 		$data .= "\n";
         
 		//results
 		foreach($this->results as $row) {
+		    $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
+		    
 			if(!empty($row['last_name'])) {
 				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
 			}
@@ -285,8 +275,7 @@ class ExerciseResult
 			if($export_user_fields) {
 				//show user fields data, if any, for this user
 				$user_fields_values = UserManager::get_extra_user_data(intval($row['user_id']),false,false);
-				foreach($user_fields_values as $value)
-				{
+				foreach($user_fields_values as $value) {
 					$data .= '"'.str_replace('"','""',api_html_entity_decode(strip_tags($value), ENT_QUOTES, $charset)).'";';
 				}
 			}
@@ -320,9 +309,9 @@ class ExerciseResult
 	 * Exports the complete report as an XLS file
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportXLS($document_path='',$user_id=null, $export_user_fields=array(), $export_filter = 0, $exercise_id=0) {
+	public function exportCompleteReportXLS($document_path='',$user_id=null, $export_user_fields=array(), $export_filter = 0, $exercise_id=0, $hotpotato_name = null) {
 		global $charset;
-		$this->_getExercisesReporting($document_path,$user_id,$export_filter, $exercise_id);
+		$this->_getExercisesReporting($document_path,$user_id,$export_filter, $exercise_id,$hotpotato_name);
 		$filename = 'exercise_results_'.date('YmdGis').'.xls';
 		if(!empty($user_id)) {
 			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.xls';
@@ -347,7 +336,9 @@ class ExerciseResult
 			}
 		}
 
-		if($with_column_user) {
+		if ($with_column_user) {
+		    $worksheet->write($line,$column,get_lang('Email'));
+		    	$column++;
 		   	$worksheet->write($line,$column,get_lang('LastName'));
 				$column++;
 			$worksheet->write($line,$column,get_lang('FirstName'));
@@ -368,14 +359,16 @@ class ExerciseResult
 		$column++;
 		$worksheet->write($line,$column,get_lang('Date'));
 		$column++;
-		$worksheet->write($line,$column,get_lang('Results'));
+		$worksheet->write($line,$column,get_lang('Score'));
 		$column++;
-		$worksheet->write($line,$column,get_lang('Weighting'));
+		$worksheet->write($line,$column,get_lang('Total'));
 		$line++;
 
 		foreach($this->results as $row) {
 			$column = 0;
 			if(!empty($row['last_name']) && !empty($row['first_name'])) {
+			    $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset));
+			    $column++;
 				$worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset));
 				$column++;
 				$worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));

@@ -38,7 +38,7 @@ class CourseBuilder {
 	function CourseBuilder($type='', $course = null) {
 		global $_course;
 		
-		if(!empty($course['official_code'])){
+		if (!empty($course['official_code'])){
 			$_course = $course;
 		}	
 		
@@ -49,6 +49,7 @@ class CourseBuilder {
 		$this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
 		$this->course->encoding = api_get_system_encoding(); //current platform encoding
 		$this->course->db_name  = $_course['dbName'];
+		$this->course->info     = $_course;
 	}
 	/**
 	 * Get the created course

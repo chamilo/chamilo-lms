@@ -51,9 +51,10 @@ class SessionManager {
       * @param  integer     Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
       * @param  string      Start limit = true if the start date has to be considered
       * @param  string      End limit = true if the end date has to be considered
+      * @todo use an array to replace all this parameters or use the model.lib.php ...
 	  * @return mixed       Session ID on success, error message otherwise
       **/
-	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true) {		
+	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true, $fix_name = false) {		
 		$name= Database::escape_string(trim($sname));
 		$year_start= intval($syear_start);
 		$month_start=intval($smonth_start);
@@ -110,11 +111,25 @@ class SessionManager {
 			$msg=get_lang('StartDateShouldBeBeforeEndDate');
 			return $msg;
 		} else {
-			$rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".$name."'");
-			if (Database::num_rows($rs)) {
-				$msg=get_lang('SessionNameAlreadyExists');
-				return $msg;
-			} else {
+		    $ready_to_create = false;
+		    if ($fix_name) {
+		        $name = self::generate_nice_next_session_name($name);		    
+		        if ($name) {
+		            $ready_to_create = true;
+		        } else {
+		            $msg=get_lang('SessionNameAlreadyExists');
+    				return $msg;
+		        }	        
+		    } else {
+    		    $rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".$name."'");
+    			if (Database::num_rows($rs)) {
+    				$msg=get_lang('SessionNameAlreadyExists');
+    				return $msg;
+    			} 
+    			$ready_to_create = true;
+		    }
+			
+			if ($ready_to_create) {
 				$sql_insert = "INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id,visibility)
 							   VALUES('".$name."','$date_start','$date_end','$id_coach',".api_get_user_id().",".$nb_days_acess_before.", ".$nb_days_acess_after.", ".$id_session_category.", ".$id_visibility.")";
 				Database::query($sql_insert);
@@ -129,6 +144,41 @@ class SessionManager {
 			}
 		}
 	}
+	
+	function session_name_exists($session_name) {
+	    $session_name = Database::escape_string($session_name);
+        $result = Database::fetch_array(Database::query("SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." WHERE name = '$session_name' "));
+        return $result['count'] > 0;
+	}
+	
+    /**
+     * Creates a new course code based in given code
+     * 
+     * @param string	wanted code
+     * @example	$wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3
+     * if the course code doest not exist in the DB the same course code will be returned
+     * @return string	wanted unused code
+     */
+	function generate_nice_next_session_name($session_name) {        
+        $session_name_ok = !self::session_name_exists($session_name);        
+        if (!$session_name_ok) {           
+           $table = Database::get_main_table(TABLE_MAIN_SESSION);
+           $session_name = Database::escape_string($session_name);
+           $sql = "SELECT count(*) as count FROM $table WHERE name LIKE '$session_name%'";           
+           $result = Database::query($sql);
+           if (Database::num_rows($result) > 0 ) {
+		       $row = Database::fetch_array($result);
+		       $count = $row['count'] + 1;
+		       $session_name = $session_name.'_'.$count;
+		       $result = self::session_name_exists($session_name);
+		       if (!$result) {
+		           return $session_name;
+		       }		    
+           }
+           return false;     
+        }     
+        return $session_name;
+    }
     
 	/**
 	 * Edit a session
@@ -1337,7 +1387,8 @@ class SessionManager {
              $s['year_end'],$s['month_end'],$s['day_end'],
              $s['nb_days_acess_before_beginning'],$s['nb_days_acess_after_end'],
              false,(int)$s['id_coach'], $s['session_category_id'],
-             (int)$s['visibility'],$consider_start, $consider_end);             
+             (int)$s['visibility'],$consider_start, $consider_end, true);
+        
         if (!is_numeric($sid)) {
         	return false;
         }
@@ -1352,6 +1403,7 @@ class SessionManager {
             	}
             }
             $courses = null;
+            
             //We will copy the current courses of the session to new courses
             if (!empty($short_courses)) {
                 if ($create_new_courses) {                    

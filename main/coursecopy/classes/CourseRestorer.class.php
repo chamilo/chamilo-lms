@@ -60,10 +60,12 @@ class CourseRestorer
 
 	/**
 	 * Restore a course.
-	 * @param string $destination_course_code The code of the Dokeos-course in
-	 * which the resources should be stored. Default: Current Dokeos-course.
+	 * @param 	string 	The code of the Chamilo-course in
+	 * @param	int		The session id
+	 * @param	bool	Course settings are going to be restore?
+	 
 	 */
-	function restore($destination_course_code = '',$session_id = 0) {
+	function restore($destination_course_code = '', $session_id = 0, $update_course_settings = false) {
 		if ($destination_course_code == '') {
 			$course_info = api_get_course_info();
 			$this->course->destination_db = $course_info['dbName'];
@@ -96,7 +98,6 @@ class CourseRestorer
 		$this->course->to_system_encoding();
 
 		if (!empty($session_id)) {
-
 			$this->restore_documents($session_id, $destination_course_code);
 			$this->restore_quizzes($session_id);
 			$this->restore_glossary($session_id);
@@ -118,6 +119,10 @@ class CourseRestorer
 			$this->restore_student_publication();
 			$this->restore_glossary();
 			$this->restore_wiki();
+		}
+		
+		if ($update_course_settings) {
+		    $this->restore_course_settings($destination_course_code);
 		}
 
 
@@ -180,6 +185,27 @@ class CourseRestorer
 					}
 				}
 		}
+	}
+	
+	/**
+	 * Restore only harmless course settings: course_language, visibility, department_name,department_url, subscribe, unsubscribe ,category_code
+	 * 
+	 * @return unknown_type
+	 */
+	function restore_course_settings($destination_course_code) {	    
+	    $origin_course_info = api_get_course_info($destination_course_code);
+	    $course_info = $this->course->info;
+	    $params['course_language'] = $course_info['language'];
+	    $params['visibility']      = $course_info['visibility'];
+	    $params['department_name'] = $course_info['department_name'];
+	    $params['department_url']  = $course_info['department_url'];
+	    
+	    $params['category_code']   = $course_info['categoryCode'];
+	    $params['subscribe']       = $course_info['subscribe_allowed'];
+	    $params['unsubscribe']     = $course_info['unubscribe_allowed'];	
+	  
+	    CourseManager::update_attributes($origin_course_info['real_id'], $params);
+	    
 	}
     
 	/**
@@ -1442,19 +1468,16 @@ class CourseRestorer
 	/**
 	 * restore works
 	 */
-	function restore_student_publication ()
-	{
-		$my_course_id=api_get_course_id();
-		$my_course_info=api_get_course_info($my_course_id);//student_publication_assignment
+	function restore_student_publication() {
 
-		$my_tbl_db_spa_origin=Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT,$my_course_info['dbName']);
-		$my_tbl_db_spa_destination = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT, $this->course->destination_db);
+		$my_tbl_db_spa_origin        = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT, $this->course->db_name);
+		$my_tbl_db_spa_destination   = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT, $this->course->destination_db);
 
-		$my_tbl_db_origin=Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$my_course_info['dbName']);
-		$my_tbl_db_destination = Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $this->course->destination_db);
+		$my_tbl_db_origin            = Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $this->course->db_name);
+		$my_tbl_db_destination       = Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $this->course->destination_db);
 
-		$my_tbl_db_item_property_origin=Database :: get_course_table(TABLE_ITEM_PROPERTY, $my_course_info['dbName']);
-		$my_tbl_db_item_property_destination=Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
+		$my_tbl_db_item_property_origin      = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->db_name);
+		$my_tbl_db_item_property_destination = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
 
 		//query in student publication
 
@@ -1468,8 +1491,8 @@ class CourseRestorer
 		'parent_id,qualificator_id,session_id FROM '.$my_tbl_db_origin.' WHERE filetype="folder" ';
 		//var_dump($query_sql_ini_sp);
 		$destination='../../courses/'.$this->course->destination_path.'/work/';
-		$course_info=api_get_course_info(api_get_course_id());
-		$origin='../../courses/'.$course_info['path'].'/work/';
+		
+		$origin='../../courses/'.$this->course->info['path'].'/work/';
 
 		self::allow_create_all_directory($origin,$destination,false);
 

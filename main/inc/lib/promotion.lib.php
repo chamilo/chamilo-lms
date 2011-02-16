@@ -143,13 +143,14 @@ class Promotion extends Model {
                     $new[$key] = $val;
                     break;
             }
-        }
-        $pid = $this->save($new);
+        }     
+        $pid = false;   
         if ($copy_sessions) {
             /**
              * When copying a session we do:
              * 1. Copy a new session from the source
-             * 2. Copy all courses from the session (no user data, no user list)              
+             * 2. Copy all courses from the session (no user data, no user list) 
+             * 3. Create the promotion           
              */
             require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
             $session_list   = SessionManager::get_all_sessions_by_promotion($id); 
@@ -158,11 +159,14 @@ class Promotion extends Model {
                 foreach($session_list  as $item) {
                     $sid = SessionManager::copy_session($item['id'], true, false, true);
                     if ($sid != 0) {
+                        $pid = $this->save($new);
                         SessionManager::suscribe_sessions_to_promotion($pid,array($sid));
                     }
                 }
             }
-        }
+        } else {
+            $pid = $this->save($new);
+        }        
     	return $pid;
     }
 }

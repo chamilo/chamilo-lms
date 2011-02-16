@@ -1063,9 +1063,12 @@ function api_get_course_info($course_code = null) {
             $_course['extLink'      ]['name'] = $cData['department_name'];
             $_course['categoryCode' ]         = $cData['faCode'         ];
             $_course['categoryName' ]         = $cData['faName'         ];
-            $_course['visibility'   ]         = $cData['visibility'      ];
-            $_course['subscribe_allowed']     = $cData['subscribe'       ];
-            $_course['unubscribe_allowed']    = $cData['unsubscribe'     ];
+            $_course['visibility'   ]         = $cData['visibility'     ];
+            $_course['subscribe_allowed']     = $cData['subscribe'      ];
+            $_course['unubscribe_allowed']    = $cData['unsubscribe'    ];
+            
+            $_course['department_name']       = $cData['department_name'];
+            $_course['department_url']        = $cData['department_url' ];
 
             // The real_id is an integer. It is mandatory for future implementations.
             $_course['real_id'     ]          = $cData['id'              ];

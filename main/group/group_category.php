@@ -186,7 +186,7 @@ Display :: display_header($nameTools, 'Group');
 
 // actions bar
 echo '<div class="actions">';
-echo '<a href="group.php">'.Display::return_icon('back.png', get_lang('BackToGroupList')).' '.get_lang('BackToGroupList').'</a>';
+echo '<a href="group.php">'.Display::return_icon('back.png', get_lang('BackToGroupList'),'','32').'</a>';
 echo '</div>';
 
 $defaults = $category;

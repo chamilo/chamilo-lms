@@ -79,13 +79,13 @@ if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed
 	Display::display_normal_message(get_lang('StudentDeletesHimself'));
 }
 echo '<div class="actions">';
-echo '<a href="group.php">'.Display::return_icon('back.png',get_lang('BackToGroupList')).get_lang('BackToGroupList').'</a>';
+echo '<a href="group.php">'.Display::return_icon('back.png',get_lang('BackToGroupList'),'','32').'</a>';
 /*
  * Edit the group
  */
 if (api_is_allowed_to_edit(false, true) or GroupManager :: is_tutor($_user['user_id'])) {
 	$my_origin = isset($origin) ? $origin : '';
-	echo Display::return_icon('edit.gif', get_lang('EditGroup')).'<a href="group_edit.php?origin=$my_origin">'.get_lang('EditGroup').'</a>';
+	echo '<a href="group_edit.php?origin=$my_origin">'.Display::return_icon('edit.png', get_lang('EditGroup'),'','32').'</a>';
 }
 
 /*
@@ -167,7 +167,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group($_SE
 	if ($current_group['chat_state'] != TOOL_NOT_AVAILABLE) {
 		// Link to the chat area of this group
 		if (api_get_course_setting('allow_open_chat_window')) {
-			$tools .= "<li style=\"display:inline; margin:5px;\"><a href=\"javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."','window_chat_group_".$_SESSION['_cid']."_".$_SESSION['_gid']."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \" >".Display::return_icon('chat.gif', get_lang('Chat'))."&nbsp;".get_lang('Chat')."</a></li>";
+			$tools .= "<li style=\"display:inline; margin:5px;\"><a href=\"javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."','window_chat_group_".$_SESSION['_cid']."_".$_SESSION['_gid']."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \" >".Display::return_icon('chat.png', get_lang('Chat'),'','22')."&nbsp;".get_lang('Chat')."</a></li>";
 		} else {
 			$tools .= "<li style=\"display:inline; margin:5px;\"><a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.gif', get_lang('Chat'))."&nbsp;".get_lang('Chat')."</a></li>";
 		}

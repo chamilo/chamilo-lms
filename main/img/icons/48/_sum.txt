@@ -74,6 +74,7 @@ exercice_check		modif mix nuvola crystal
 exercice_uncheck	modif mix nuvola crystal
 --
 statistics		crystal
+stats			crystal
 percentage		nuvola
 pdf			crystal
 printer			nuvola
@@ -125,12 +126,33 @@ thread				nuvola
 search				nuvola
 new_forum			modif nuvola
 new_thread			modif nuvola
+reply_thread			modif nuvola
 --
 delete_na			modif nuvola
 warning				nuvola
 new_work			modif nuvola
 work				nuvola
 mail_send			crystal	(only 32 px)
+visible				juan carlos
+invisible			juan carlos
 --
+page				crystal
+history				tango
+discuss				crystal
+wiki				nuvola
+what_link_here			modif nuvola
+--
+view_preview			crystal	(only 32 px)
+search				crystal (only 32 px)
+survey				crystal
+new_survey			modif crystal
+clean				tango
+---
+group_summary			modif nuvola
+
+--julio
+start				
+star_green
+
 
 

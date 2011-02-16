@@ -179,7 +179,7 @@ foreach($final_array as $session_data) {
                             }
                             $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id,  $my_course_code,$session_id);
                             $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']),
-                            							'status'      => Display::return_icon('moderator_star.png', get_lang('BackTo').' '.get_lang('FlatView'),'','32'), 
+                            							'status'      => Display::return_icon('quiz.gif', get_lang('Attempted'),'','22'), 
                             							'date'        => $start_date,
                             							'course'      => $course_data['name'], 
                             						    'exercise'    => $exercise_info->exercise,
@@ -207,7 +207,7 @@ foreach($final_array as $session_data) {
                         }
                         $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/exercice_submit.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id", array('target'=>'_blank'));
                         $new_exercises[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
-                       							'status'      => Display::return_icon('star.png', get_lang('New'), '','32'),
+                       							'status'      => Display::return_icon('star.png', get_lang('New'), '','22'),
                     							'date'        => $start_date,
                     							'course'      => $course_data['name'], 
                     						    'exercise'    => $exercise_info->exercise,

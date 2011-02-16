@@ -1258,18 +1258,27 @@ class Display {
                 }
                 $active = true;
             } else {
+                $start = $stop = false;
+                $startt_buffer = $stop_buffer = '';
                 if ($session_info['date_start'] == '0000-00-00') {
                 	$session_info['date_start'] = '';
                 } else {
-                	$session_info['date_start'] = get_lang('From').' '.$session_info['date_start'];
+                    $start = true;
+                    $start_buffer = $session_info['date_start'];
+                    $session_info['date_start'] = get_lang('From').' '.$session_info['date_start'];
                 }
                 if ($session_info['date_end'] == '0000-00-00') {
                     $session_info['date_end'] = '';
                 } else {
+                    $stop = true;
+                    $stop_buffer = $session_info['date_end'];
                 	$session_info['date_end'] = get_lang('Until').' '.$session_info['date_end'];
                 }
-                
-                $session['dates'] = Display::tag('i', $session_info['date_start'].' '.$session_info['date_end']);
+                if ($start && $stop) {
+                	$session['dates'] = Display::tag('i', sprintf(get_lang('FromDateXToDateY'),$start_buffer, $stop_buffer));
+                } else {
+                    $session['dates'] = Display::tag('i', $session_info['date_start'].' '.$session_info['date_end']);
+                }
                 
                 if ( api_get_setting('show_session_coach') === 'true' ) {
                     $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);

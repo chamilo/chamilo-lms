@@ -207,7 +207,7 @@ foreach($final_array as $session_data) {
                         }
                         $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/exercice_submit.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id", array('target'=>'_blank'));
                         $new_exercises[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']), 
-                       							'status'      => Display::return_icon('star.png', get_lang('New'), '','22'),
+                       							'status'      => Display::return_icon('star.png', get_lang('New'), array('width'=>'22')),
                     							'date'        => $start_date,
                     							'course'      => $course_data['name'], 
                     						    'exercise'    => $exercise_info->exercise,

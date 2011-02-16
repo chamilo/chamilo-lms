@@ -71,11 +71,11 @@ class learnpathItem {
 	public function learnpathItem($db_id, $user_id, $course_db = '') {
 		// Get items table.
 		if (self::debug > 0) { error_log('New LP - In learnpathItem constructor: '.$db_id.','.$user_id, 0); }
-		$items_table = Database::get_course_table(TABLE_LP_ITEM);
+		$items_table = Database::get_course_table(TABLE_LP_ITEM, $course_db);
 		$id = (int) $db_id;
 		$sql = "SELECT * FROM $items_table WHERE id = $id";
 		//error_log('New LP - Creating item object from DB: '.$sql, 0);
-		$res = @Database::query($sql);
+		$res = Database::query($sql);
 		if (Database::num_rows($res) < 1) {
 			$this->error = 'Could not find given learnpath item in learnpath_item table';
 			//error_log('New LP - '.$this->error, 0);
@@ -1798,10 +1798,17 @@ class learnpathItem {
 		if (self::debug > 0) { error_log('New LP - In learnpathItem::set_lp_view('.$lp_view_id.')', 0); }
 		if (!empty($lp_view_id) and $lp_view_id = intval(strval($lp_view_id))) {
 	 		$this->view_id = $lp_view_id;
+
+
+      //error_log()
+
 		 	$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW, $course_db);
 		 	// Get the lp_item_view with the highest view_count.
 		 	$sql = "SELECT * FROM $item_view_table WHERE lp_item_id = ".$this->get_id()." " .
 		 			" AND lp_view_id = ".$lp_view_id." ORDER BY view_count DESC";
+
+      error_log('sql9->'.$sql);
+
 		 	if (self::debug > 2) { error_log('New LP - In learnpathItem::set_lp_view() - Querying lp_item_view: '.$sql, 0); }
 		 	$res = Database::query($sql);
 		 	if (Database::num_rows($res) > 0) {
@@ -1822,6 +1829,7 @@ class learnpathItem {
 			 	// Now get the number of interactions for this little guy.
 			 	$item_view_interaction_table = Database::get_course_table(TABLE_LP_IV_INTERACTION, $course_db);
 			 	$sql = "SELECT * FROM $item_view_interaction_table WHERE lp_iv_id = '".$this->db_item_view_id."'";
+        error_log('sql10->'.$sql);
 				$res = Database::query($sql);
 				if ($res !== false) {
 					$this->interactions_count = Database::num_rows($res);
@@ -1831,6 +1839,7 @@ class learnpathItem {
 			 	// Now get the number of objectives for this little guy.
 			 	$item_view_objective_table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE, $course_db);
 			 	$sql = "SELECT * FROM $item_view_objective_table WHERE lp_iv_id = '".$this->db_item_view_id."'";
+        error_log('sql11->'.$sql);
 				$res = Database::query($sql);
 				if ($res !== false) {
 					$this->objectives_count = Database::num_rows($res);

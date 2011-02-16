@@ -113,9 +113,6 @@ class learnpath {
             }
         }
 
-
-        error_log('CURSO_DB====>'.$course_db);
-
         // Check learnpath ID.
         if (empty($lp_id)) {
             $this->error = 'Learnpath ID is empty';
@@ -232,10 +229,10 @@ class learnpath {
             switch ($this->type) {
 
                 case 3: //aicc
-                    $oItem = new aiccItem('db', $row['id']);
+                    $oItem = new aiccItem('db', $row['id'], $course_db);
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
-                        $oItem->set_lp_view($this->lp_view_id);
+                        $oItem->set_lp_view($this->lp_view_id, $course_db);
                         $oItem->set_prevent_reinit($this->prevent_reinit);
                         // Don't use reference here as the next loop will make the pointed object change.
                         $this->items[$my_item_id] = $oItem;
@@ -245,7 +242,7 @@ class learnpath {
                         }
                     }
                     break;
-                case 2:                    
+                case 2:
                     require_once 'scorm.class.php';
                     require_once 'scormItem.class.php';
                     $oItem = new scormItem('db', $row['id'], $course_db);
@@ -254,6 +251,9 @@ class learnpath {
                         $oItem->set_lp_view($this->lp_view_id, $course_db);
                         $oItem->set_prevent_reinit($this->prevent_reinit);
                         // Don't use reference here as the next loop will make the pointed object change.
+
+                        error_log('my_item_id->'.$my_item_id);
+
                         $this->items[$my_item_id] = $oItem;
                         $this->refs_list[$oItem->ref] = $my_item_id;
                         if ($this->debug > 2) {
@@ -345,10 +345,10 @@ class learnpath {
             }
             // Setting the view in the item object.
             if (is_object($this->items[$row['id']])) {
-              $this->items[$row['id']]->set_lp_view($this->lp_view_id);
+              $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_db);
             }
         }
-        $this->ordered_items = $this->get_flat_ordered_items_list($this->get_id(), 0);
+        $this->ordered_items = $this->get_flat_ordered_items_list($this->get_id(), 0, $course_db);
         $this->max_ordered_items = 0;
         foreach ($this->ordered_items as $index => $dummy) {
             if ($index > $this->max_ordered_items && !empty($dummy)) {
@@ -1907,7 +1907,7 @@ class learnpath {
                                     ON item.id = item_view.lp_item_id
                                     AND item_type NOT IN('dokeos_chapter','chapter','dir')
                                 WHERE lp_view_id = " . $view_id . "
-                                AND status IN ('passed','completed','succeeded','browsed','failed')"; echo '<br />';
+                                AND status IN ('passed','completed','succeeded','browsed','failed')"; //echo '<br />';
             $res = Database::query($sql);
             $row = Database :: fetch_array($res);
             $completed = $row[0];
@@ -2605,17 +2605,17 @@ class learnpath {
      * @param	integer	Parent ID of the items to look for
      * @return	mixed	Ordered list of item IDs or false on error
      */
-    public function get_flat_ordered_items_list($lp, $parent = 0) {
+    public function get_flat_ordered_items_list($lp, $parent = 0, $course_db = '') {
         //if ($this->debug > 0) { error_log('New LP - In learnpath::get_flat_ordered_items_list('.$lp.','.$parent.')', 0); }
         $list = array();
         if (empty ($lp)) {
             return false;
         }
-        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM, $course_db);
         $sql = "SELECT * FROM $tbl_lp_item WHERE lp_id = $lp AND parent_item_id = $parent ORDER BY display_order";
         $res = Database::query($sql);
         while ($row = Database :: fetch_array($res)) {
-            $sublist = learnpath :: get_flat_ordered_items_list($lp, $row['id']);
+            $sublist = learnpath :: get_flat_ordered_items_list($lp, $row['id'], $course_db);
             $list[] = $row['id'];
             foreach ($sublist as $item) {
                 $list[] = $item;

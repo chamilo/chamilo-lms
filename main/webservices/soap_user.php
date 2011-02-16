@@ -98,7 +98,7 @@ $s->register(
 		'language' => 'xsd:string',
 		'phone' => 'xsd:string',
 		'expiration_date' => 'xsd:string',
-		'extras' => 'tns:extra_field[]'
+		'extras' => 'tns:extra_field'
 	),
 	array('return' => 'xsd:int')
 );
@@ -123,7 +123,7 @@ $s->wsdl->addComplexType(
 		'language' => array('name' => 'language', 'type' => 'xsd:string'),
 		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
-		'extras' => array('name' => 'extras', 'type' => 'tns:extra_field[]')
+		'extras' => array('name' => 'extras', 'type' => 'tns:extra_field')
 	)
 );
 
@@ -176,7 +176,7 @@ $s->register(
 		'language' => 'xsd:string',
 		'phone' => 'xsd:string',
 		'expiration_date' => 'xsd:string',
-		'extras' => 'tns:extra_field[]'
+		'extras' => 'tns:extra_field'
 	)
 );
 
@@ -199,7 +199,7 @@ $s->wsdl->addComplexType(
 		'language' => array('name' => 'language', 'type' => 'xsd:string'),
 		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
-		'extras' => array('name' => 'extras', 'type' => 'tns:extra_field[]')
+		'extras' => array('name' => 'extras', 'type' => 'tns:extra_field')
 	)
 );
 

@@ -25,7 +25,7 @@ $s->register(
 		'user_id_value' => 'xsd:string',
 		'session_id_field_name' => 'xsd:string',
 		'session_id_value' => 'xsd:string',
-		'extras' => 'tns:extra_field[]'
+		'extras' => 'tns:extra_field'
 	),
 	array('return' => 'xsd:int')
 );
@@ -54,7 +54,7 @@ $s->register(
 		'user_id_value' => 'xsd:string',
 		'session_id_field_name' => 'xsd:string',
 		'session_id_value' => 'xsd:string',
-		'extras' => 'tns:extra_field[]'
+		'extras' => 'tns:extra_field'
 	)
 );
 

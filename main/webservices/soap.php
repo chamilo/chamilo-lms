@@ -71,6 +71,29 @@ $s->wsdl->addComplexType(
 );
 
 $s->wsdl->addComplexType(
+  'extras',
+  'complexType',
+  'struct',
+  'all',
+  '',
+  array(
+          'field_name' => array('name' => 'field_name', 'type' => 'xsd:string'),
+          'field_value' => array('name' => 'field_value', 'type' => 'xsd:string')
+       )
+);
+
+$s->wsdl->addComplexType(
+  'extra_field',
+  'complexType',
+  'array',
+  '',
+  'SOAP-ENC:Array',
+  array(),
+  array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:extras[]')),'tns:extras'
+);
+
+/*
+$s->wsdl->addComplexType(
 	'extra_field',
 	'complexType',
 	'struct',
@@ -81,6 +104,7 @@ $s->wsdl->addComplexType(
 		'field_value' => array('name' => 'field_value', 'type' => 'xsd:string')
 	)
 );
+*/
 
 $s->register(
 	'WS.test',

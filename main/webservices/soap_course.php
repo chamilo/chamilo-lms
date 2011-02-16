@@ -71,7 +71,7 @@ $s->register(
 		'language' => 'xsd:string',
 		'course_id_field_name' => 'xsd:string',
 		'course_id_value' => 'xsd:string',
-		'extras' => 'tns:extra_field[]'
+		'extras' => 'tns:extra_field'
 	),
 	array('return' => 'xsd:int')
 );
@@ -92,7 +92,7 @@ $s->wsdl->addComplexType(
 		'language' => array('name' => 'language', 'type' => 'xsd:string'),
 		'course_id_field_name' => array('name' => 'course_id_field_name', 'type' => 'xsd:string'),
 		'course_id_value' => array('name' => 'course_id_value', 'type' => 'xsd:string'),
-		'extras' => array('name' => 'extras', 'type' => 'tns:extra_field[]')
+		'extras' => array('name' => 'extras', 'type' => 'tns:extra_field')
 	)
 );
 
@@ -144,7 +144,7 @@ $s->register(
 		'subscribe' => 'xsd:int',
 		'unsubscribe' => 'xsd:int',
 		'visual_code' => 'xsd:string',
-		'extras' => 'tns:extra_field[]'
+		'extras' => 'tns:extra_field'
 	)
 );
 

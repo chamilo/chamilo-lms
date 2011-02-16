@@ -162,12 +162,19 @@ class WS {
 			}
 		} else {
 			$course_code = CourseManager::get_course_code_from_original_id($course_id_value, $course_id_field_name);
+      if (!empty($course_code)) {
+        $course_info = CourseManager::get_course_information($course_code);
+        return $course_info['id'];
+      } else {
+        return new WSError(200, "Course not found");
+      }
+      /*
 			if($course_code == 0) {
 				return new WSError(200, "Course not found");
 			} else {
-				$course_info = CourseManager::get_course_information($course_code);
 				return $course_info['id'];
-			}
+			}       
+       */
 		}
 	}
 	

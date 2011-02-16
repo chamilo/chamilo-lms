@@ -90,7 +90,7 @@ class WSReport extends WS {
      * @param string Course id value
      * @return array Array of id=>title of learning paths
      */
-    public function GetLearnpathsByCourse($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $lp_id) {
+    public function GetLearnpathsByCourse($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
         if($user_id instanceof WSError) {
             return $user_id;
@@ -101,11 +101,13 @@ class WSReport extends WS {
         } else {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
+
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-        $list = new LearnpathList($user_id,$course_code);
+        $lp = new LearnpathList($user_id,$course_code);
+        $list = $lp->list;
         $return = array();
         foreach ($list as $id => $item) {
-            $return[] = array('id'=>$id, 'title' => $item);
+            $return[] = array('id'=>$id, 'title' => $item['lp_name']);
         }
         return $return;
     }
@@ -119,7 +121,7 @@ class WSReport extends WS {
      * @param string Learnpath ID
      * @return double   Between 0 and 100 (% of progress)
      */
-    public function GetLearnpathProgress($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
+    public function GetLearnpathProgress($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
         if($user_id instanceof WSError) {
             return $user_id;
@@ -132,8 +134,14 @@ class WSReport extends WS {
         }
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
         $lp = new learnpath($course_code, $learnpath_id, $user_id);
-        return $lp['progress'];
+        $items = $lp->items[$learnpath_id];
+        $return = array(
+          'progress_bar_mode' => $lp->progress_bar_mode,
+          'progress_db' => $lp->progress_db,
+        );
+        return $return;
     }
+    
     /**
      * Gets score obtained in the given learning path by the given user,
      * assuming there is only one item (SCO) in the learning path
@@ -145,7 +153,7 @@ class WSReport extends WS {
      * @param string Learnpath ID
      * @return double   Generally between 0 and 100
      */
-    public function GetLearnpathScoreSingleItem($user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
+    public function GetLearnpathScoreSingleItem($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
         $user_id = $this->getUserId($user_id_field_name, $user_id_value);
         if($user_id instanceof WSError) {
             return $user_id;
@@ -158,8 +166,13 @@ class WSReport extends WS {
         }
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
         $lp = new learnpath($course_code, $learnpath_id, $user_id);
-        //return $lp['progress'];
-        return 100;
+        $return = array(
+          'min_score' => $lp->items[$learnpath_id]->min_score,
+          'max_score' => $lp->items[$learnpath_id]->max_score,
+          'mastery_score' => $lp->items[$learnpath_id]->mastery_score,
+          'current_score' => $lp->items[$learnpath_id]->current_score,
+        );
+        return $return;
     }
     /**
      * Gets status obtained in the given learning path by the given user,
@@ -173,8 +186,7 @@ class WSReport extends WS {
      * @param string Learnpath ID
      * @return string "not attempted", "passed", "completed", "failed", "incomplete"
      */
-    public function GetLearnpathStatusSingleItem($secret_key, $user_id_field_name = 'chamilo_user_id', $user_id_value, $course_id_field_name = 'chamilo_course_id', $course_id_value, $learnpath_id) {
-        return null;
+    public function GetLearnpathStatusSingleItem($secret_key, $user_id_field_name, $user_id_value, $course_id_field_name, $course_id_value, $learnpath_id) {
         $verifKey = $this->verifyKey($secret_key);
         if($verifKey instanceof WSError) {
             $this->handleError($verifKey);
@@ -188,13 +200,14 @@ class WSReport extends WS {
                 return $course_id;
             } else {
                 $course_code = CourseManager::get_course_code_from_course_id($course_id);
-            }
+            }            
             require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
             $lp = new learnpath($course_code, $learnpath_id, $user_id);
-error_log('Ready to return status for '.$course_code.'-'.$learnpath_id.'-'.$user_id.': '.$lp->items[0]['status']);
-            return $lp->items[0]['status'];
+            return $lp->items[$learnpath_id]->status;
         }
     }
+
+
     public function test() {
         return 'Hello world!';
     }

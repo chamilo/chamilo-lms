@@ -2046,7 +2046,7 @@ class CourseManager {
         $sql = "UPDATE $table SET ";
         $i = 0;
         foreach($attributes as $name => $value) {
-            if(!empty($value)) {
+            if($value != '') {
                 if($i > 0) {
                     $sql .= ", ";
                 }
@@ -3098,7 +3098,7 @@ class CourseManager {
             $cb = new CourseBuilder('', $course_info);
 		    $course = $cb->build($source_session_id,$source_session_id['code']);		    		
     		$course_restorer = new CourseRestorer($course);
-    		$course_restorer->restore($destination_course_code, $destination_session_id);
+    		$course_restorer->restore($destination_course_code, $destination_session_id, true);
     		return true;		
         }
         return false;
@@ -3114,7 +3114,7 @@ class CourseManager {
      * @return 	
      */
     function copy_course_simple($new_title, $source_course_code, $source_session_id = 0) {
-        $source_course_info = api_get_course_info($source_course_code);        
+        $source_course_info = api_get_course_info($source_course_code);
         if (!empty($source_course_info)) {
             $new_course_code = self::generate_nice_next_course_code($source_course_code); 
             if ($new_course_code) {
@@ -3143,7 +3143,7 @@ class CourseManager {
 	function generate_nice_next_course_code($wanted_code) {
         require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
         $course_code_ok = !self::course_code_exists($wanted_code);
-        if (!$course_code_ok) {            
+        if (!$course_code_ok) {           
            $wanted_code = generate_course_code($wanted_code);
            $table = Database::get_main_table(TABLE_MAIN_COURSE);
            $wanted_code = Database::escape_string($wanted_code);
@@ -3157,7 +3157,7 @@ class CourseManager {
 		       if (empty($result)) {
 		           return $wanted_code;
 		       }
-           }       
+           }
            return false;     
         }     
         return $wanted_code;

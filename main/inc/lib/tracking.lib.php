@@ -1945,8 +1945,9 @@ class Tracking {
                     } else {
                         $html .= '<tr class="row_even">';
                     }
-                    
-                    $html .= '<td>'.$enreg['title'].'</td>';
+                    $url = api_get_course_url($enreg['code'], $session_id);
+                    $course_url = Display::url($enreg['title'], $url, array('target'=>'_blank'));
+                    $html .= '<td>'.$course_url.'</td>';
                     
                     $html .= '<td align="center">'.$time.'</td>';
                     $html .= '<td align="center">'.$progress.'%</td>';
@@ -2053,7 +2054,10 @@ class Tracking {
                         $html .= '<tr  class="row_even">';
                     }
                     
-                    $html .= Display::tag('td', $enreg['title']);/*
+                    $url = api_get_course_url($enreg['code'], $key);
+                    $course_url = Display::url($enreg['title'], $url, array('target'=>'_blank'));
+                    
+                    $html .= Display::tag('td', $course_url);/*
                     //All exercises in the course
                     $exercises = get_all_exercises($enreg, $key);
                     //Count of user results

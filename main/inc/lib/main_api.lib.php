@@ -909,7 +909,7 @@ function api_get_user_info($user_id = '') {
  * Finds all the information about a user from username instead of user id
  * @param $username (string): the username
  * @return $user_info (array): user_id, lastname, firstname, username, email, ...
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 function api_get_user_info_from_username($username = '') {
     if (empty($username)) { return false; }
@@ -952,7 +952,7 @@ function api_get_course_int_id() {
  * This function relies on api_get_course_info()
  * @param string    The course code - optional (takes it from session if not given)
  * @return string   The directory where the course is located inside the Chamilo "courses" directory
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 function api_get_course_path($course_code = null) {
     $info = !empty($course_code) ? api_get_course_info($course_code) : api_get_course_info();
@@ -1457,7 +1457,7 @@ function api_get_last_failure() {
  * from functions or objects. This strengthens encupsalation principle
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
- * @package dokeos.library
+ * @package chamilo.library
  */
 class api_failure {
 
@@ -4178,7 +4178,7 @@ function api_get_status_of_user_in_course ($user_id, $course_code) {
  *
  * @param string        The course code - optional (takes it from session if not given)
  * @return boolean
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 function api_is_in_course($course_code = null) {
     if (isset($_SESSION['_course']['sysCode'])) {
@@ -4241,7 +4241,7 @@ function api_get_encrypted_password($password, $salt = '') {
 /**
  * Checks whether a secret key is valid
  * @param string $original_key_secret  - secret key from (webservice) client
- * @param string $security_key - security key from dokeos
+ * @param string $security_key - security key from Chamilo
  * @return boolean - true if secret key is valid, false otherwise
  */
 function api_is_valid_secret_key($original_key_secret, $security_key) {
@@ -4825,3 +4825,33 @@ function api_get_jquery_libraries_js($libraries, $include_jquery = true) {
     } 
     return $js;	
 }
+
+
+/**
+ * Returns the course's URL 
+ *
+ * This function relies on api_get_course_info() 
+ * @param 	string  The course code - optional (takes it from session if not given)
+ * @param 	int		The session id  - optional (takes it from session if not given)
+ * @return 	mixed 	The URL of the course or null if something does not work  
+ * @author 	Julio Montoya <gugli100@gmail.com>
+ */
+
+function api_get_course_url($course_code = null, $session_id = null) {
+    $session_url = '';
+    if (empty($course_code)) {
+        $course_info = api_get_course_info();
+    } else {
+        $course_info = api_get_course_info($course_code);
+    }
+    if (empty($session_id)) {
+        if (api_get_session_id() != 0)
+        $session_url = '?id_session='.api_get_session_id();        
+    } else {
+        $session_url = '?id_session='.intval($session_id);
+    }
+    if (!empty($course_info['path'])) {
+        return api_get_path(WEB_COURSE_PATH).$course_info['path'].'/'.$session_url;
+    }
+    return null;
+} 

@@ -55,16 +55,6 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setti
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
 }
 
-// reload window parent when child is closed
-if ($_SESSION['oLP']->mode == 'embedframe' && isset($_GET['dest'])) {
-  $htmlHeadXtra[] = '<script language="javascript" type="text/javascript">
-    function reloadWinParent() {
-      window.opener.location.href = "'.Security::remove_XSS($_GET['dest']).'";
-    }
-    window.onunload = reloadWinParent;
-</script>';
-}
-
 $htmlHeadXtra[] = '<script language="javascript" type="text/javascript">
 $(document).ready(function (){
     $("div#log_content_cleaner").bind("click", function(){

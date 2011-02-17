@@ -51,7 +51,7 @@ learnpath_section 	modif nuvola (16 px lp_dokeos_chapter.png and lp_dir.png into
 view_left_right		nuvola
 move_learnpath		modif nuvola
 move_learnpath_na	modif nuvola
-scorms			nuvola (and 22 px gif version for home page)
+scorms			nuvola 	     (and 22 px gif version for home page)
 scorms_na		modif nuvola (and 22 px gif version for home page)
 view_remove.png		nuvola
 view_remove_na.png	modif nuvola
@@ -78,7 +78,7 @@ stats			crystal
 percentage		nuvola
 pdf			crystal
 printer			nuvola
-gradebook		crystal (and 22 px gif version for home page)
+gradebook		crystal       (and 22 px gif version for home page)
 gradebook_na		modif crystal (and 22 px gif version for home page)
 empty_evaluation	crystal
 no_empty_evaluation	modif crystal
@@ -120,7 +120,8 @@ user_unsubscribe_course		modif nuvola
 teacher_unsubscribe_session	modif nuvola
 session				modif nuvola
 --
-chat				nuvola (and 22 px gif version for home page)
+chat				nuvola       (and 22 px gif version for home page)
+chat_na				modif nuvola (and 22 px gif version for home page)			
 --
 thread				nuvola
 search				nuvola
@@ -156,6 +157,7 @@ blog_tasks
 new_article			modif nuvola
 blog_admin_users		modif nuvola
 blog_admin			modif nuvola (and 22 px gif version for home page)
+blog_admin_na			modif nuvola (and 22 px gif version for home page)
 
 --julio
 star				

@@ -158,6 +158,10 @@ new_article			modif nuvola
 blog_admin_users		modif nuvola
 blog_admin			modif nuvola (and 22 px gif version for home page)
 blog_admin_na			modif nuvola (and 22 px gif version for home page)
+--
+course_progress			modif mix gnome crystal
+--
+mail				crystal
 
 --julio
 star				

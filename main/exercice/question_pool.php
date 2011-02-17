@@ -542,15 +542,13 @@ foreach ($main_question_list as $row) {
                 '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>';
                 //'<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&delete=',$row['id'],'" onclick="javascript:if(!confirm(\'',addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)),'\')) return false;"><img src="../img/delete.gif" border="0" alt="',get_lang('Delete'),'"></a>';
 		} else {
-            //echo $row['level'],'</td>',
-//					'<td><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
 				echo $row['level'],'</td>',
-							'<td align="center"><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'">';
+					 '<td align="center">';
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;copy_question='.$row['id'].'&course_id='.$selected_course.'&fromExercise=',$fromExercise,'">';                
                 echo ' '.Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest'));
                 echo '</a> ';
-				if ($row['session_id'] == $session_id){
-					echo '<img src="../img/view_more_stats.gif" border="0" title="'.get_lang('Reuse').'" alt="'.get_lang('Reuse').'"></a>';
+				if ($row['session_id'] == $session_id) {
+					echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" title="'.get_lang('InsertALinkToThisQuestionInTheExercise').'" alt="'.get_lang('InsertALinkToThisQuestionInTheExercise').'"></a>';
 				}                							
 				
 			}

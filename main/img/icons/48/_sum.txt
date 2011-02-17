@@ -162,6 +162,12 @@ blog_admin_na			modif nuvola (and 22 px gif version for home page)
 course_progress			modif mix gnome crystal
 --
 mail				crystal
+--
+notes				nuvola
+new_note			modif nuvola
+notes_order_by_date_modif	modif crystal (only 32 px)
+notes_order_by_date_new	modif 	modif crystal (only 32 px)
+notes_order_by_title		modif crystal (only 32 px)
 
 --julio
 star				

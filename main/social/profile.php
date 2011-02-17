@@ -298,6 +298,8 @@ if ($show_full_profile) {
 		$extra_information .='<div class="social-profile-info">';
 		$extra_information_value = '';
 		foreach($extra_user_data as $key=>$data) {
+		    //Avoding parameters
+		    if (in_array($key, array('mail_notify_invitation','mail_notify_message', 'mail_notify_group_message' ))) continue;
 			// get display text, visibility and type from user_field table
 			$field_variable = str_replace('extra_','',$key);
 			$sql = "SELECT field_display_text,field_visible,field_type,id FROM $t_uf WHERE field_variable ='$field_variable'";

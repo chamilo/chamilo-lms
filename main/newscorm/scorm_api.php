@@ -44,6 +44,7 @@ if (!is_object($oItem)) {
     exit;
 }
 $autocomplete_when_80pct = 0;
+$user = api_get_user_info();
 header('Content-type: text/javascript');
 /*
  * JavaScript Functions
@@ -184,6 +185,8 @@ olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit();?>';
 <?php echo $oLP->get_items_details_as_js('olms.lms_item_types');?>
 
 olms.asset_timer = 0;
+olms.userfname = '<?php echo str_replace("'","\\'",$user['firstname']); ?>';
+olms.userlname = '<?php echo str_replace("'","\\'",$user['lastname']); ?>';
 
 //Backup for old values
 //var olms.old_score = 0;
@@ -352,9 +355,7 @@ function LMSGetValue(param)
         param == 'cmi.student_demographics.state' ||
         param == 'cmi.student_demographics.street_address' ||
         param == 'cmi.student_demographics.telephone' ||
-        param == 'cmi.student_demographics.years_experience' ||
-        param == 'cmi.student_demographics.first_name' ||
-        param == 'cmi.student_demographics.last_name' ) {
+        param == 'cmi.student_demographics.years_experience' ) {
         // the value is not supported
         olms.G_LastError = G_NotImplementedError  ;
         olms.G_LastErrorString = G_NotImplementedErrorMessage;
@@ -362,9 +363,12 @@ function LMSGetValue(param)
         result = '';
         return result;
     }
-
+    if(param=='cmi.student_demographics.first_name') {
+        result=olms.userfname;
+    }else if(param=='cmi.student_demographics.last_name') {
+        result=olms.userlname;
     // ---- cmi.core._children
-    if(param=='cmi.core._children' || param=='cmi.core_children'){
+    }else if(param=='cmi.core._children' || param=='cmi.core_children'){
         result='entry, exit, lesson_status, student_id, student_name, lesson_location, total_time, credit, lesson_mode, score, session_time';
     }else if(param == 'cmi.core.entry'){
     // ---- cmi.core.entry

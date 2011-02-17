@@ -546,12 +546,13 @@ foreach ($main_question_list as $row) {
 //					'<td><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
 				echo $row['level'],'</td>',
 							'<td align="center"><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'">';
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;copy_question='.$row['id'].'&course_id='.$selected_course.'&fromExercise=',$fromExercise,'">';                
+                echo ' '.Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest'));
+                echo '</a> ';
 				if ($row['session_id'] == $session_id){
 					echo '<img src="../img/view_more_stats.gif" border="0" title="'.get_lang('Reuse').'" alt="'.get_lang('Reuse').'"></a>';
 				}                							
-				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;copy_question='.$row['id'].'&course_id='.$selected_course.'&fromExercise=',$fromExercise,'">';                
-                echo ' '.Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest'));
-                echo '</a>';
+				
 			}
             echo '</td>';
             echo '</tr>';

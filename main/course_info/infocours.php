@@ -117,7 +117,7 @@ $linebreak = '<div class="row"><div class="label"></div><div class="formw" style
 $form = new FormValidator('update_course');
 
 // COURSE SETTINGS
-$form->addElement('html', '<div class="sectiontitle"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="coursesettings" id="coursesettings"></a>'.Display::return_icon('settings.gif', get_lang('CourseSettings')).' '.get_lang('CourseSettings').'</div>');
+$form->addElement('html', '<div class="sectiontitle"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="coursesettings" id="coursesettings"></a>'.Display::return_icon('settings.png', get_lang('CourseSettings'),'','22').' '.get_lang('CourseSettings').'</div>');
 $visual_code=$form->addElement('text', 'visual_code', get_lang('Code'));
 $visual_code->freeze();
 $form->applyFilter('visual_code', 'strtoupper');
@@ -163,7 +163,7 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 
 
 // COURSE ACCESS
-$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="coursesaccess" id="coursesaccess"></a>'.Display::return_icon('course.gif', get_lang('CourseAccess')).' '.get_lang('CourseAccess').'</div>');
+$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="coursesaccess" id="coursesaccess"></a>'.Display::return_icon('course.png', get_lang('CourseAccess'),'','22').' '.get_lang('CourseAccess').'</div>');
 $form->addElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
 $form->addElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $form->addElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
@@ -185,7 +185,7 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 
 
 // EMAIL NOTIFICATIONS
-$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="emailnotifications" id="emailnotifications"></a>'.Display::return_icon('mail.png', get_lang('EmailNotifications')).' '.get_lang('EmailNotifications').'</div>');
+$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="emailnotifications" id="emailnotifications"></a>'.Display::return_icon('mail.png', get_lang('EmailNotifications'),'','22').' '.get_lang('EmailNotifications').'</div>');
 
 $form->addElement('radio', 'email_alert_to_teacher_on_new_user_in_course', get_lang('NewUserEmailAlert'), get_lang('NewUserEmailAlertEnable'), 1);
 $form->addElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null, get_lang('NewUserEmailAlertToTeacharAndTutor'), 2);
@@ -212,7 +212,7 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 
 
 // USER RIGHTS
-$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="userrights" id="userrights"></a>'.Display::return_icon('members.gif', get_lang('UserRights')).' '.get_lang('UserRights').'</div>');
+$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="userrights" id="userrights"></a>'.Display::return_icon('user.png', get_lang('UserRights'),'','22').' '.get_lang('UserRights').'</div>');
 $form->addElement('radio', 'allow_user_edit_agenda', get_lang('AllowUserEditAgenda'), get_lang('AllowUserEditAgendaActivate'), 1);
 $form->addElement('radio', 'allow_user_edit_agenda', null, get_lang('AllowUserEditAgendaDeactivate'), 0);
 $form->addElement('html', $linebreak);
@@ -231,7 +231,7 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 
 
 // CHAT SETTINGS
-$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="chatsettings" id="chatsettings"></a>'.Display::return_icon('chat.gif', get_lang('ConfigChat')).' '.get_lang('ConfigChat').'</div>');
+$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="chatsettings" id="chatsettings"></a>'.Display::return_icon('chat.png', get_lang('ConfigChat'),'','22').' '.get_lang('ConfigChat').'</div>');
 $form->addElement('radio', 'allow_open_chat_window', get_lang('AllowOpenchatWindow'), get_lang('AllowOpenChatWindowActivate'), 1);
 $form->addElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenChatWindowDeactivate'), 0);
 
@@ -239,7 +239,7 @@ $form->addElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenCh
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
 // LEARNING PATH
-$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="learnpath" id="learnpath"></a>'.Display::return_icon('kcmdf.gif', get_lang('ConfigLearnpath')).' '.get_lang('ConfigLearnpath').'</div><div style="clear:both;"></div>');
+$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="learnpath" id="learnpath"></a>'.Display::return_icon('scorms.png', get_lang('ConfigLearnpath'),'','22').' '.get_lang('ConfigLearnpath').'</div><div style="clear:both;"></div>');
 //Auto launch LP
 $form->addElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToALearningPath'), 1);
 $form->addElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToTheLearningPathList'), 2);
@@ -266,7 +266,7 @@ if (is_settings_editable()) {
 
 
 // THEMATIC ADVANCE SETTINGS
-$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="thematicadvance" id="thematicadvance"></a>'.Display::return_icon('course_progress.gif', get_lang('ThematicAdvanceConfiguration')).' '.get_lang('ThematicAdvanceConfiguration').'</div>');
+$form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="thematicadvance" id="thematicadvance"></a>'.Display::return_icon('course_progress.png', get_lang('ThematicAdvanceConfiguration'),'','22').' '.get_lang('ThematicAdvanceConfiguration').'</div>');
 $form->addElement('radio', 'display_info_advance_inside_homecourse', get_lang('InfoAboutAdvanceInsideHomeCourse'), get_lang('DisplayAboutLastDoneAdvance'), 1);
 $form->addElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDone'), 2);
 $form->addElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance'), 3);
@@ -399,15 +399,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
 
 // actions bar
 echo '<div class="actions">';
-echo '<a href="#coursesettings">'.Display::return_icon('settings.gif', get_lang('CourseSettings')).' '.get_lang('CourseSettings').'</a>';
-echo '<a href="#coursesaccess">'.Display::return_icon('course.gif', get_lang('CourseAccess')).' '.get_lang('CourseAccess').'</a>';
-echo '<a href="#emailnotifications">'.Display::return_icon('mail.png', get_lang('EmailNotifications')).' '.get_lang('EmailNotifications').'</a>';
-echo '<a href="#userrights">'.Display::return_icon('members.gif', get_lang('UserRights')).' '.get_lang('UserRights').'</a>';
-echo '<a href="#chatsettings">'.Display::return_icon('chat.gif', get_lang('ConfigChat')).' '.get_lang('ConfigChat').'</a>';
+echo '<a href="#coursesettings">'.Display::return_icon('settings.png', get_lang('CourseSettings'),'','32').'</a>';
+echo '<a href="#coursesaccess">'.Display::return_icon('course.png', get_lang('CourseAccess'),'','32').'</a>';
+echo '<a href="#emailnotifications">'.Display::return_icon('mail.png', get_lang('EmailNotifications'),'','32').'</a>';
+echo '<a href="#userrights">'.Display::return_icon('user.png', get_lang('UserRights'),'','32').'</a>';
+echo '<a href="#chatsettings">'.Display::return_icon('chat.png', get_lang('ConfigChat'),'','32').'</a>';
 if (api_get_setting('allow_course_theme') == 'true') {
-	echo '<a href="#learnpath">'.Display::return_icon('kcmdf.gif', get_lang('ConfigLearnpath')).' '.get_lang('ConfigLearnpath').'</a>';
+	echo '<a href="#learnpath">'.Display::return_icon('scorms.png', get_lang('ConfigLearnpath'),'','32').'</a>';
 }
-echo '<a href="#thematicadvance">'.Display::return_icon('course_progress.gif', get_lang('ThematicAdvanceConfiguration')).' '.get_lang('ThematicAdvanceConfiguration').'</a>';
+echo '<a href="#thematicadvance">'.Display::return_icon('course_progress.png', get_lang('ThematicAdvanceConfiguration'),'','32').'</a>';
 echo '</div>';
 
 // display course picture

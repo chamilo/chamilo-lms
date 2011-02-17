@@ -335,10 +335,26 @@ function LMSGetValue(param)
         param == 'cmi.student_preference.audio' ||
         param == 'cmi.student_preference._children' ||
         param == 'cmi.student_data.time_limit_action' ||
-        param == 'cmi.student_demographics.first_name' ||
-        param == 'cmi.student_demographics.last_name' ||
         param == 'cmi.comments' ||
-        param == 'cmi.comments_from_lms' ) {
+        param == 'cmi.comments_from_lms' ||
+/* The following properties were part of SCORM 1.0 or never implemented at all
+ but seem to react badly to Captivate content producer when not defined */
+        param == 'cmi.student_demographics._children' ||
+        param == 'cmi.student_demographics.city' ||
+        param == 'cmi.student_demographics.class' ||
+        param == 'cmi.student_demographics.company' ||
+        param == 'cmi.student_demographics.country' ||
+        param == 'cmi.student_demographics.experience' ||
+        param == 'cmi.student_demographics.familiar_name' ||
+        param == 'cmi.student_demographics.instructor_name' ||
+        param == 'cmi.student_demographics.title' ||
+        param == 'cmi.student_demographics.native_language' ||
+        param == 'cmi.student_demographics.state' ||
+        param == 'cmi.student_demographics.street_address' ||
+        param == 'cmi.student_demographics.telephone' ||
+        param == 'cmi.student_demographics.years_experience' ||
+        param == 'cmi.student_demographics.first_name' ||
+        param == 'cmi.student_demographics.last_name' ) {
         // the value is not supported
         olms.G_LastError = G_NotImplementedError  ;
         olms.G_LastErrorString = G_NotImplementedErrorMessage;

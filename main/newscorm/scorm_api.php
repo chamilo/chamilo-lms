@@ -15,7 +15,7 @@
  * This script is divided into three sections.
  * The first section (below) is the initialisation part.
  * The second section is the SCORM object part
- * The third section defines the event handlers for Dokeos' internal messaging
+ * The third section defines the event handlers for Chamilo's internal messaging
  * and frames refresh
  */
 
@@ -72,7 +72,7 @@ function APIobject() {
   this.GetDiagnostic=LMSGetDiagnostic;
   this.Terminate=Terminate;  //only in Scorm 1.3
   this.save_asset = lms_save_asset;
-  this.void_save_asset = dokeos_void_save_asset;
+  this.void_save_asset = chamilo_void_save_asset;
 }
 
 // it is not sure that the scos use the above declarations. The following
@@ -161,7 +161,7 @@ olms.interactions = new Array(<?php echo $oItem->get_interactions_js_array();?>)
 olms.item_objectives = new Array();
 olms.info_lms_item=new Array();
 
-// Dokeos internal variables (not SCORM)
+// Chamilo internal variables (not SCORM)
 // olms.saved_lesson_status = 'not attempted';
 olms.lms_lp_id = <?php echo $oLP->get_id();?>;
 olms.lms_item_id = <?php echo $oItem->get_id();?>;
@@ -1031,8 +1031,8 @@ function addListeners(){
     }
     //assign event handlers to objects
     if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
-        logit_lms('Dokeos LP or asset',2);
-        //if this path is a Dokeos learnpath, then start manual save
+        logit_lms('Chamilo LP or asset',2);
+        //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
         addEvent(window,'unload',lms_save_asset,false);
         logit_lms('Added event listener on content_id for unload',2);
@@ -1041,11 +1041,11 @@ function addListeners(){
 }
 
 /**
- * Save a Dokeos learnpath item's time and mark as completed upon
+ * Save a Chamilo learnpath item's time and mark as completed upon
  * leaving it
  */
 function lms_save_asset(){
-    // only for dokeos lps
+    // only for Chamilo lps
     if (olms.execute_stats) {
         olms.execute_stats=false;
     } else {
@@ -1062,13 +1062,13 @@ function lms_save_asset(){
     }
 }
 /**
- * Save a Dokeos learnpath item's time and mark as completed upon leaving it.
+ * Save a Chamilo learnpath item's time and mark as completed upon leaving it.
  * Same function as lms_save_asset() but saves it with empty params
- * to use values set from another side in the database. Only used by Dokeos quizzes.
+ * to use values set from another side in the database. Only used by Chamilo quizzes.
  * Also save the score locally because it hasn't been done through SetValue().
  * Saving the status will be dealt with by the XAJAX function.
  */
-function dokeos_void_save_asset(myscore,mymax)
+function chamilo_void_save_asset(myscore,mymax)
 {
     logit_lms('lms_save_asset',2);
     olms.score = myscore;
@@ -1313,7 +1313,7 @@ function reinit_updatable_vars_list () {
  * (4) refresh the table of contents
  * (5) refresh the progress bar (completion)
  * (6) refresh the message frame
- * @param	integer		Dokeos ID for the current item
+ * @param	integer		Chamilo ID for the current item
  * @param	string		This parameter can be a string specifying the next
  *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item
  */

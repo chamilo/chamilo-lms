@@ -1813,9 +1813,9 @@ if ($_GET['action']=='history' or $_POST['HistoryDifferences'])
                 $lines1 = array(strip_tags($version_old['content'])); //without <> tags
                 $lines2 = array(strip_tags($version_new['content'])); //without <> tags
 
-                $diff = &new Text_Diff($lines1, $lines2);
+                $diff = new Text_Diff($lines1, $lines2);
 
-                $renderer = &new Text_Diff_Renderer_inline();
+                $renderer = new Text_Diff_Renderer_inline();
                 echo '<style>del{background:#fcc}ins{background:#cfc}</style>'.$renderer->render($diff); // Code inline
                 //echo '<div class="diffEqual">'.html_entity_decode($renderer->render($diff)).'</div>'; // Html inline. By now, turned off by problems in comparing pages separated by more than one version
                 echo '</div>';

@@ -86,34 +86,31 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 if ( empty ( $exerciseId ) ) {
     $exerciseId = intval($_GET['exerciseId']);
 }
-if ( empty ( $newQuestion ) )
-{
+if ( empty ( $newQuestion ) ) {
     $newQuestion = $_GET['newQuestion'];
 }
-if ( empty ( $modifyAnswers ) )
-{
+if ( empty ( $modifyAnswers ) ) {
     $modifyAnswers = $_GET['modifyAnswers'];
 }
-if ( empty ( $editQuestion ) )
-{
+if ( empty ( $editQuestion ) ) {
     $editQuestion = $_GET['editQuestion'];
 }
-if ( empty ( $modifyQuestion ) )
-{
+if ( empty ( $modifyQuestion ) ) {
     $modifyQuestion = $_GET['modifyQuestion'];
 }
-if ( empty ( $deleteQuestion ) )
-{
+if ( empty ( $deleteQuestion ) ) {
     $deleteQuestion = $_GET['deleteQuestion'];
 }
-if ( empty ( $questionId ) )
-{
+if ( empty ( $questionId ) ) {
     $questionId = $_SESSION['questionId'];
 }
-if ( empty ( $modifyExercise ) )
-{
+if ( empty ( $modifyExercise ) ) {
     $modifyExercise = $_GET['modifyExercise'];
 }
+
+//Cleaning all incomplete attempts of the admin/teacher to avoid weird problems when changing the exercise settings, number of questions, etc
+
+delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
 
 // get from session
 $objExercise = $_SESSION['objExercise'];

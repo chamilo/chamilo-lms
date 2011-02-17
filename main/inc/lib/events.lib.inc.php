@@ -680,6 +680,28 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
 }
 
 /**
+ * Delete exercise attempts (NO in LP) 
+ * 
+ * @param 	int		user id
+ * @param 	int		exercise id 
+ * @param 	string	course code
+ * @param 	int		session id
+  */
+function delete_all_incomplete_attempts($user_id, $exercise_id, $course_code, $session_id = 0) {
+    $track_e_exercises     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempts        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $user_id         = intval($user_id);
+    $exercise_id     = intval($exercise_id);
+    $course_code     = Database::escape_string($course_code);
+    $session_id      = intval($session_id);
+    if (!empty($user_id) && !empty($exercise_id) && !empty($course_code)) {
+        $sql = "DELETE FROM $track_e_exercises  WHERE exe_user_id = $user_id AND exe_exo_id = $exercise_id AND exe_cours_id = '$course_code' AND session_id = $session_id AND status = 'incomplete' ";
+        $result = Database::query($sql); 
+    }
+    
+}
+
+/**
  * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session
  * @param   int     exercise id
  * @param   string  course code

@@ -295,11 +295,29 @@ function change_session() {
     document.exercise_admin.submit();
 }        
     
-$(function() {    
+$(function() {  
+	//js used when generating images on the fly see function Tracking::show_course_detail()
+    $(".dialog").dialog("destroy");        
+    $(".dialog").dialog({
+            autoOpen: false,
+            show: "blind",                
+            resizable: false,
+            height:300,
+            width:550,
+            modal: true
+     });
+    $(".opener").click(function() {
+        var my_id = $(this).attr('id');
+        var big_image = '#main_graph_' + my_id;
+        $( big_image ).dialog("open");
+        return false;
+    });
+	    
     /* Binds a tab id in the url */
     $("#tabs").bind('tabsselect', function(event, ui) {
-            window.location.href=ui.tab;
+		window.location.href=ui.tab;
     });
+    
     $('#tabs').tabs();
     $( "#sub_tab" ).tabs();     
          

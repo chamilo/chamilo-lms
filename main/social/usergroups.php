@@ -67,4 +67,5 @@ if (!empty($usergroup_list)) {
     }
 }
 echo '</div>';
+echo '</div>';
 Display :: display_footer();

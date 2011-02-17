@@ -2201,7 +2201,8 @@ class Tracking {
                 <th class="head" style="color:#000">'.get_lang('Attempts').'</th>                    
                 <th class="head" style="color:#000">'.get_lang('LatestAttempt').'</th>
                 <th class="head" style="color:#000">'.get_lang('Ranking').'</th>
-                <th class="head" style="color:#000">'.get_lang('BestResultInCourse').'</th>                                       
+                <th class="head" style="color:#000">'.get_lang('BestResultInCourse').'</th>
+                <th class="head" style="color:#000">'.get_lang('Statistics').'</th>                                        
                 </tr>';
             
             if (empty($session_id)) {
@@ -2212,9 +2213,14 @@ class Tracking {
             $result_exercices = Database::query($sql_exercices);
             $to_graph_exercise_result = array();
             if (Database::num_rows($result_exercices) > 0) {
+                
                 while ($exercices = Database::fetch_array($result_exercices)) {
+                    //if ($exercices['id'] != 3) continue;
                     $score = $weighting = $attempts = 0;                        
-                    $exercise_stats = get_all_exercise_results($exercices['id'], $course_info['code'], $session_id);
+                    $exercise_stats      = get_all_exercise_results($exercices['id'], $course_info['code'], $session_id);                    
+                    $best_exercise_stats = get_all_best_exercise_results_by_user($exercices['id'], $course_info['code'], $session_id);
+                   
+                    
                     //User attempts we assume the latest item in the loop is the latest attempt
                     if (!empty($exercise_stats)) {
                         //$best_score = 0; $best_score_array = array();
@@ -2240,7 +2246,7 @@ class Tracking {
                             }
                         }
                     }
-                    $to_graph_exercise_result[$exercices['id']] = array('title'=>$exercices['title'], 'data'=>$exercise_stats);
+                    $to_graph_exercise_result[$exercices['id']] = array('title'=>$exercices['title'], 'data'=>$best_exercise_stats);
                     
                     $html .= '<tr class="row_even">';
                     $url = api_get_path(WEB_CODE_PATH)."exercice/exercice_submit.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
@@ -2265,11 +2271,25 @@ class Tracking {
                                 $my_score = $score/$weighting;
                             }                            
                             $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id);                            
-                        }             
+                        }
+                              
+                        $graph         = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);                        
+                        $normal_graph  = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
+                        
+                        echo Display::div($normal_graph, array('id'=>'main_graph_'.$exercices['id'],'class'=>'dialog', 'style'=>'display:none') );
+                        
+                        if (empty($graph)) {
+                            $graph = '-';
+                        } else {
+                            $graph = Display::url($graph, '#', array('id'=>$exercices['id'],'class'=>'opener'));  
+                        }
+                        
                         $html .= Display::tag('td', $attempts,                 array('align'=>'center'));                                          
                         $html .= Display::tag('td', $percentage_score_result,  array('align'=>'center'));
                         $html .= Display::tag('td', $position,                 array('align'=>'center'));                            
                         $html .= Display::tag('td', $best_score,               array('align'=>'center'));
+                        $html .= Display::tag('td', $graph,                    array('align'=>'center'));
+                        
                         //$html .= Display::tag('td', $latest_attempt_url,       array('align'=>'center', 'width'=>'25'));                           
                         
                     } else {
@@ -2286,122 +2306,284 @@ class Tracking {
                 $html .= '<tr><td colspan="5" align="center">'.get_lang('NoEx').'</td></tr>';
             }
             $html .= '</table>';
-            
-            
-            //Experimental graphics
-            
-            require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-		    require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-		    require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
-		    
-		    foreach ($to_graph_exercise_result as $exercise_id => $attempts) {
-		        $exercise_title= $attempts['title'];	
-		        $attempts = $attempts['data']; 	        
-		        $my_exercise_result_array = $exercise_result = array();
-		        foreach ($attempts as $attempt) {         
-		            if (api_get_user_id() == $attempt['exe_user_id']) {
-		                if ($attempt['exe_weighting'] != 0 ) {
-		                    $my_exercise_result_array[]= $attempt['exe_result']/$attempt['exe_weighting'];
-		                }		                 
-		            } else {
-		                if ($attempt['exe_weighting'] != 0 ) {		                
-		                    $exercise_result[]=  $attempt['exe_result']/$attempt['exe_weighting'];
-		                }   
-		            }		            
-		        }
-		        //Getting best result		        
-		        rsort($my_exercise_result_array);
-		         $my_exercise_result = 0;
-		        if (isset($my_exercise_result_array[0])) {		           		            
-		            $my_exercise_result = $my_exercise_result_array[0] *100;		            
-		        }
-		        
-		        //var_dump($exercise_result,$my_exercise_result);
-    		    
-                $max = 100;
-                $pieces = 5 ;
-                $part = round($max /$pieces);
-                $x_axis = array();
-                $final_array = array();
-                $my_final_array = array();
-                
-                for ($i=1; $i <=$pieces; $i++) {
-                    $min = ($i- 1)*$part;
-                    $max = ($i)*$part;
-                    $x_axis[]= $min." - ".$max;
-                    $count = 0;
-                    foreach($exercise_result as $result) {
-                        $percentage = $result*100;
-                        //echo $percentage.' - '.$min.' - '.$max."<br />";                    
-                        if ($percentage > $min && $percentage <= $max) {
-                            //echo ' is > ';                            
-                            $count++;
-                        }
-                    }                
-                    $final_array[]= $count;
-                    
-                    if ($my_exercise_result > $min && $my_exercise_result <= $max) {
-                        $my_final_array[] = 1;
-                    } else {
-                        $my_final_array[] = 0;
-                    }
-                    
-                } 
-                //var_dump($my_final_array, $final_array); exit;
-                
-                //echo '<pre>'; var_dump($my_exercise_result, $exercise_result,$x_axis);
-            
-                $cache = new pCache();
-                
-                // Dataset definition   
-                $data_set = new pData;  
-                $data_set->AddPoint($final_array,"Serie1");  
-                $data_set->AddPoint($my_final_array,"Serie2");
-                $data_set->AddPoint($x_axis,"Serie3");
-                $data_set->AddAllSeries();  
-                
-                $data_set->SetAbsciseLabelSerie('Serie3');  
-                $data_set->SetSerieName(get_lang('Score'),"Serie1");  
-                $data_set->SetSerieName(get_lang('MyScore'),"Serie2");
-                
-                $data_set->SetXAxisName("Score");                  
-                
-                // Initialise the graph  
-                $Test = new pChart(700,230);  
-    
-                $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
-                $Test->setGraphArea(50,30,680,200);  
-                $Test->drawFilledRoundedRectangle(7,7,693,223,5,240,240,240);  
-                $Test->drawRoundedRectangle(5,5,695,225,5,230,230,230);  
-                $Test->drawGraphArea(255,255,255,TRUE);  
-                $Test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2,TRUE);     
-                $Test->drawGrid(4,TRUE,230,230,230,50);  
-                
-                // Draw the 0 line  
-                $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);  
-                $Test->drawTreshold(0,143,55,72,TRUE,TRUE);  
-                
-                // Draw the bar graph  
-                $data_set->RemoveSerie("Serie3");  
-                $Test->drawBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);  
-                
-                /*
-                // Finish the graph  
-                $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);   
-                $Test->drawLegend(596,150,$data_set->GetDataDescription(),255,255,255);  
-                $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8); 
-                $Test->drawTitle(50,22,$exercise_title,50,50,50,585);
-                $graph_id = uniqid();
-                $cache->WriteToCache($graph_id, $data_set->GetData(), $Test);
-                ob_start();
-                $Test->Stroke();
-                ob_end_clean();            
-                $img_file = $cache->GetHash($graph_id, $data_set->GetData());
-                $html .= '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';	*/	        
-		    }
-		    
-            
         }
+        return $html;
+    }
+    
+    function generate_exercise_result_thumbnail_graph($attempts) {       
+        require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
+	    require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
+	    require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';    
+    
+        $exercise_title = $attempts['title'];	
+        $attempts       = $attempts['data']; 	        
+        $my_exercise_result_array = $exercise_result = array();
+        if (empty($attempts)) {
+            return null;
+        }
+       
+        foreach ($attempts as $attempt) {         
+            if (api_get_user_id() == $attempt['exe_user_id']) {
+                if ($attempt['exe_weighting'] != 0 ) {
+                    $my_exercise_result_array[]= $attempt['exe_result']/$attempt['exe_weighting'];
+                }     
+            } else {
+                if ($attempt['exe_weighting'] != 0 ) {		                
+                    $exercise_result[]=  $attempt['exe_result']/$attempt['exe_weighting'];
+                }   
+            }		            
+        }
+        
+        //Getting best result		        
+        rsort($my_exercise_result_array);        
+        $my_exercise_result = 0;
+        if (isset($my_exercise_result_array[0])) {            	           		            
+            $my_exercise_result = $my_exercise_result_array[0] *100;		            
+        }
+        
+        //var_dump($exercise_result, $my_exercise_result);
+        
+        $max = 100;
+        $pieces = 5 ;
+        $part = round($max / $pieces);
+        $x_axis = array();
+        $final_array = array();
+        $my_final_array = array();
+        
+        for ($i=1; $i <=$pieces; $i++) {
+            $sum = 1;
+            if ($i == 1) {
+                $sum = 0;
+            }
+            $min = ($i-1)*$part + $sum;
+            $max = ($i)*$part;
+            $x_axis[]= $min." - ".$max;
+            $count = 0;
+            foreach($exercise_result as $result) {
+                $percentage = $result*100;
+                //echo $percentage.' - '.$min.' - '.$max."<br />";                    
+                if ($percentage >= $min && $percentage <= $max) {
+                    //echo ' is > ';                            
+                    $count++;
+                }
+            }
+            //echo '<br />';           
+            $final_array[]= $count;
+            
+            if ($my_exercise_result >= $min && $my_exercise_result <= $max) {
+                $my_final_array[] = 1;
+            } else {
+                $my_final_array[] = 0;
+            }                    
+        }
+        
+        //var_dump($my_final_array, $final_array); exit;
+        
+        //Fix to remove the data of the user with my data
+        
+        for($i = 0; $i<=count($my_final_array); $i++) {
+            if (!empty($my_final_array[$i])) {
+                $my_final_array[$i] =  $final_array[$i] + 1; //Add my result                  
+                $final_array[$i] = 0;                
+            }
+        }
+        //var_dump($my_final_array, $final_array); echo '<br />'; 
+        
+        //echo '<pre>'; var_dump($my_exercise_result, $exercise_result,$x_axis);
+               
+        $cache = new pCache();                
+        
+         // Dataset definition   
+        $data_set = new pData();
+        $data_set->AddPoint($final_array,"Serie1");  
+        $data_set->AddPoint($my_final_array,"Serie2");
+        //$data_set->AddPoint($x_axis,"Serie3");
+        $data_set->AddAllSeries();  
+               
+        // Initialise the graph  
+        
+        $main_width  = 80;
+        $main_height = 35;
+        
+        $Test = new pChart($main_width, $main_height);
+        
+        $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);                
+        //$Test->setGraphArea(50,30,680,200);
+        $Test->drawFilledRoundedRectangle(2,2,$main_width-2,$main_height-2,2,230,230,230);
+        $Test->setGraphArea(5,5,$main_width-5,$main_height-5);     
+        $Test->drawGraphArea(255,255,255);  
+        
+        //SCALE_NORMAL, SCALE_START0, SCALE_ADDALLSTART0
+        $Test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALLSTART0, 150,150,150,FALSE,0,1,TRUE);     
+        
+        $Test->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 100);  
+        
+        // Finish the graph                                  
+        $graph_id = 'thumbnail_exercise_result_graph_'.Security::remove_XSS($_GET['course']).'-'.intval($_GET['session_id']).'-'.api_get_user_id();
+        
+        //if ($cache->IsInCache($graph_id, $data_set->GetData())) {
+		if (0) {
+			//if we already created the img
+			//echo 'in cache';
+			$img_file = $cache->GetHash($graph_id,$data_set->GetData());
+        } else {
+            $cache->WriteToCache($graph_id, $data_set->GetData(), $Test);
+            ob_start();
+            $Test->Stroke();
+            ob_end_clean();            
+            $img_file = $cache->GetHash($graph_id, $data_set->GetData());
+        }
+        $html = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
+        return $html;
+    }
+    
+    function generate_exercise_result_graph($attempts) {
+
+        require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
+	    require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
+	    require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
+          
+        $exercise_title = $attempts['title'];	
+        $attempts       = $attempts['data']; 	        
+        $my_exercise_result_array = $exercise_result = array();
+        if (empty($attempts)) {
+            return null;
+        }
+        foreach ($attempts as $attempt) {         
+            if (api_get_user_id() == $attempt['exe_user_id']) {
+                if ($attempt['exe_weighting'] != 0 ) {
+                    $my_exercise_result_array[]= $attempt['exe_result']/$attempt['exe_weighting'];
+                }     
+            } else {
+                if ($attempt['exe_weighting'] != 0 ) {		                
+                    $exercise_result[]=  $attempt['exe_result']/$attempt['exe_weighting'];
+                }   
+            }		            
+        }
+        
+        //Getting best result		        
+        rsort($my_exercise_result_array);        
+        $my_exercise_result = 0;
+        if (isset($my_exercise_result_array[0])) {            	           		            
+            $my_exercise_result = $my_exercise_result_array[0] *100;		            
+        }
+        
+        //var_dump($exercise_result, $my_exercise_result);
+        
+        $max = 100;
+        $pieces = 5 ;
+        $part = round($max / $pieces);
+        $x_axis = array();
+        $final_array = array();
+        $my_final_array = array();
+        
+        for ($i=1; $i <=$pieces; $i++) {
+            $sum = 1;
+            if ($i == 1) {
+                $sum = 0;
+            }
+            $min = ($i-1)*$part + $sum;
+            $max = ($i)*$part;
+            $x_axis[]= $min." - ".$max;
+            $count = 0;
+            foreach($exercise_result as $result) {
+                $percentage = $result*100;
+                //echo $percentage.' - '.$min.' - '.$max."<br />";                    
+                if ($percentage >= $min && $percentage <= $max) {
+                    //echo ' is > ';                            
+                    $count++;
+                }
+            }
+            //echo '<br />';           
+            $final_array[]= $count;
+            
+            if ($my_exercise_result >= $min && $my_exercise_result <= $max) {
+                $my_final_array[] = 1;
+            } else {
+                $my_final_array[] = 0;
+            }                    
+        }
+        
+        //var_dump($my_final_array, $final_array); exit;
+        
+        //Fix to remove the data of the user with my data
+        
+        for($i = 0; $i<=count($my_final_array); $i++) {
+            if (!empty($my_final_array[$i])) {
+                $my_final_array[$i] =  $final_array[$i] + 1; //Add my result                  
+                $final_array[$i] = 0;                
+            }
+        }
+        //var_dump($my_final_array, $final_array); echo '<br />'; 
+        
+        //echo '<pre>'; var_dump($my_exercise_result, $exercise_result,$x_axis);
+        
+        $cache = new pCache();        
+        
+        // Dataset definition   
+        $data_set = new pData();
+        $data_set->AddPoint($final_array,"Serie1");  
+        $data_set->AddPoint($my_final_array,"Serie2");
+        $data_set->AddPoint($x_axis,"Serie3");
+        $data_set->AddAllSeries();  
+        
+        $data_set->SetAbsciseLabelSerie('Serie3');
+        $data_set->SetSerieName(get_lang('Score'),"Serie1");  
+        $data_set->SetSerieName(get_lang('MyResults'),"Serie2");        
+        
+        $data_set->SetXAxisName(get_lang("Score"));                  
+        
+        // Initialise the graph  
+        $main_width  = 500;
+        $main_height = 250;
+        
+        $Test = new pChart($main_width,$main_height);  
+        
+        $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
+        $Test->setGraphArea(50,30, $main_width -20,$main_height -50);  
+        
+        $Test->drawFilledRoundedRectangle(10,10, $main_width- 10,$main_height -10,5,240,240,240);  
+        $Test->drawRoundedRectangle(7,7,$main_width - 7,$main_height  - 7,5,230,230,230);  
+        
+        $Test->drawGraphArea(255,255,255,TRUE);  
+        
+        //SCALE_NORMAL, SCALE_START0, SCALE_ADDALLSTART0
+        $Test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALLSTART0, 150,150,150,TRUE,0,1,TRUE);
+             
+        $Test->drawGrid(4,TRUE,230,230,230,50);  
+        
+        // Draw the 0 line  
+        $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);  
+      //  $Test->drawTreshold(0,143,55,72,TRUE,TRUE);  
+        
+        // Draw the bar graph  
+        $data_set->RemoveSerie("Serie3");  
+        
+        //$Test->drawBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);
+        
+        //$Test->drawStackedBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);
+        $Test->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 100);  
+        
+        
+        // Finish the graph  
+        $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);   
+        $Test->drawLegend($main_width - 120,$main_height -100,$data_set->GetDataDescription(),255,255,255);  
+        $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8); 
+        $Test->drawTitle(180,22,$exercise_title,50,50,50);
+        $graph_id = 'exercise_result_graph'.Security::remove_XSS($_GET['course']).'-'.intval($_GET['session_id']).'-'.api_get_user_id();
+        //if ($cache->IsInCache($graph_id, $data_set->GetData())) {            
+		if (0) {
+			//if we already created the img
+			//echo 'in cache';
+			$img_file = $cache->GetHash($graph_id,$data_set->GetData());
+        } else {
+            $cache->WriteToCache($graph_id, $data_set->GetData(), $Test);
+            ob_start();
+            $Test->Stroke();
+            ob_end_clean();            
+            $img_file = $cache->GetHash($graph_id, $data_set->GetData());            
+        }      
+        $html = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';	
         return $html;
     }
 }

@@ -745,6 +745,13 @@ class Display {
         return self::tag('div', $content, $extra_attributes);        
     }
     
+    /**
+     * Creates a span tag
+     */
+    public static function span($content, $extra_attributes = array()) {      
+        return self::tag('span', $content, $extra_attributes);        
+    }
+    
      /**
      * Displays an HTML input tag
      * 

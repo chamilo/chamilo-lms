@@ -84,9 +84,7 @@ $(function() {
             modal: false
      });
 
-    $(".opener").click(function() {
-        var my_id = this.id;
-        my_id  = my_id.split("delete_");        
+    $(".opener").click(function() {                
         var targetUrl = $(this).attr("href");        
         $( "#dialog-confirm" ).dialog({        
             buttons: {

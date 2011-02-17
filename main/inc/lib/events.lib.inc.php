@@ -710,6 +710,56 @@ function get_all_exercise_results($exercise_id, $course_code, $session_id = 0) {
 	return $list;
 }
 
+/**
+ * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session
+ * @param   int     exercise id
+ * @param   string  course code
+ * @param   int     session id
+ * @return  array   with the results
+ * 
+ */
+function get_all_best_exercise_results_by_user($exercise_id, $course_code, $session_id = 0) {
+	$TABLETRACK_EXERCICES  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$TBL_TRACK_ATTEMPT     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+	$course_code           = Database::escape_string($course_code);
+	$exercise_id           = intval($exercise_id);
+	$session_id            = intval($session_id);
+	
+	$sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";
+	
+	$res = Database::query($sql);
+	$list = array();
+	while($row = Database::fetch_array($res,'ASSOC')) {		
+		$list[$row['exe_id']] = $row;		
+		$sql = "SELECT * FROM $TBL_TRACK_ATTEMPT WHERE exe_id = {$row['exe_id']}";
+		$res_question = Database::query($sql);
+		while($row_q = Database::fetch_array($res_question,'ASSOC')) {
+			$list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
+		}		
+	}
+	/*
+	echo count($list);
+	echo '<br>';
+	echo '<pre>'; print_r($list);*/
+	//Getting the best results of every student	
+	$best_score_return = array();
+	
+	foreach($list as $student_result) {	    
+	    $user_id = $student_result['exe_user_id'];	    
+	    $current_best_score[$user_id] = $student_result['exe_result'];	    
+	    //echo $current_best_score[$user_id].' - '.$best_score_return[$user_id]['exe_result'].'<br />';	    
+	    if ($current_best_score[$user_id] > $best_score_return[$user_id]['exe_result']) {
+	        $best_score_return[$user_id] = $student_result;
+	    }
+	}
+	/*
+	echo count($best_score_return);
+	echo '<pre>'; print_r($best_score_return);*/
+	return $best_score_return;
+}
+
+
+
 
 
 /**

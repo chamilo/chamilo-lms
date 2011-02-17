@@ -282,7 +282,7 @@ INSERT INTO course_module VALUES
 (19,'conference','conference/index.php?type=classroom','conf.gif',0,0,'external'),
 (20,'learnpath','newscorm/lp_controller.php','icons/22/scorms.gif',5,1,'basic'),
 (21,'blog','blog/blog.php','blog.gif',1,2,'basic'),
-(22,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
+(22,'blog_management','blog/blog_admin.php','icons/22/blog_admin.gif',1,2,'courseadmin'),
 (23,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
 (24,'survey','survey/survey_list.php','survey.gif',2,1,'basic'),
 (25,'wiki','wiki/index.php','wiki.gif',2,3,'basic'),

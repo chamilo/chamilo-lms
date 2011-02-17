@@ -147,8 +147,15 @@ search				crystal (only 32 px)
 survey				crystal
 new_survey			modif crystal
 clean				tango
----
+--
 group_summary			modif nuvola
+--
+blog				modif nuvola
+new_blog			modif nuvola
+blog_tasks
+new_article			modif nuvola
+blog_admin_users		modif nuvola
+blog_admin			modif nuvola (and 22 px gif version for home page)
 
 --julio
 star				

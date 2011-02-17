@@ -2175,7 +2175,7 @@ function fill_Db_course($course_db_name, $course_repository, $language, $default
     }
 
     // Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
-    $sql = "INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin','0')";
+    $sql = "INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','icons/22/blog_admin.gif','" . string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin','0')";
     Database::query($sql);
     // end of Smartblogs
 

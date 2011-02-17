@@ -162,14 +162,14 @@ $objExercise -> createForm ($form);
 
 // VALIDATE FORM
 if ($form->validate()) {
-	$objExercise -> processCreation($form);
-	if ($form -> getSubmitValue('edit') == 'true') {
-		header('Location:exercice.php?message=ExerciseEdited&'.api_get_cidreq());
-		exit;
+	$objExercise->processCreation($form);
+	if ($form->getSubmitValue('edit') == 'true') {
+	    $message = 'ExerciseEdited';		
 	} else {
-		header('Location:admin.php?message=ExerciseAdded&exerciseId='.$objExercise->id);
-		exit;
+	    $message = 'ExerciseAdded';		
 	}
+	header('Location:admin.php?message='.$message.'&exerciseId='.$objExercise->id);
+	exit;
 } else {	
     // DISPLAY FORM	 
 	if (isset($_SESSION['gradebook'])) {
@@ -184,7 +184,12 @@ if ($form->validate()) {
 	Display::display_header($nameTools,get_lang('Exercise'));
 	
 	echo '<div class="actions">';
-	echo '<a href="exercice.php?show=test">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+	
+	if ($objExercise->id != 0) {
+	    echo '<a href="admin.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id.'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
+	} else {
+	    echo '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
+	}
 	echo '</div>';	
 	
 	if ($objExercise->feedbacktype==1)

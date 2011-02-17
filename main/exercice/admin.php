@@ -429,6 +429,9 @@ echo '<div class="actions">';
 if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
     echo '<a href="admin.php?exerciseId='.$exerciseId.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'','32').'</a>';
 
+if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) &&  !isset($_GET['editQuestion'])) {
+    echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
+}
 echo '<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'),'','32').'</a>';
 echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'','32').'</a>';
 

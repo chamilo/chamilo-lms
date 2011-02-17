@@ -213,7 +213,7 @@ if (!empty($track_exercise_info)) {
 	// if the results_disabled of the Quiz is 1 when block the script
 	$result_disabled		= $track_exercise_info['results_disabled'];
 	
-	if (!(api_is_platform_admin() || api_is_course_admin()) ) {        
+	if (!(api_is_platform_admin() || api_is_course_admin()) ) {     
 		if ($result_disabled == 1) {
 			//api_not_allowed();
 			$show_results = false;
@@ -224,7 +224,15 @@ if (!empty($track_exercise_info)) {
 				</tr>
 				</table>';
 			}
-		}        
+		} elseif ($result_disabled == 2) {
+		    $show_results = false;		  
+			if ($origin != 'learnpath') {
+				Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);
+				echo '</td>
+				</tr>
+				</table>';
+			}			  
+		}       
 	}
 } else {
 	Display::display_warning_message(get_lang('CantViewResults'));
@@ -494,6 +502,7 @@ if ($show_results) {
 		}
 
 		echo '<table width="100%" border="0" cellspacing="3" cellpadding="0">';
+		
 		if ($is_allowedToEdit) {
 			echo '<tr><td>';
 			$name = "fckdiv".$questionId;

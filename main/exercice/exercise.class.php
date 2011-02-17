@@ -495,13 +495,8 @@ class Exercise {
 	{
 		$this->results_disabled = false;
 	}
-	function updateResultsDisabled($results_disabled)
-	{
-		if ($results_disabled==1){
-			$this->results_disabled = true;
-		} else {
-			$this->results_disabled = false;
-		}
+	function updateResultsDisabled($results_disabled) {
+	    $this->results_disabled = intval($results_disabled);		
 	}
 
 
@@ -900,7 +895,6 @@ class Exercise {
 				// test type
 				$radios = array();
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageOne'),'2','onclick = "check_per_page_one() " ');
-
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageAll'),'1',array('onclick' => 'check_per_page_all()', 'id'=>'OptionPageAll'));
 
 				$form -> addGroup($radios, null, get_lang('QuestionsPerPage'));
@@ -923,6 +917,7 @@ class Exercise {
 			$radios_results_disabled = array();
 			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('Yes'), '0', array('id'=>'result_disabled_0'));
 			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('No'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
+			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
 			$form -> addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));
 
 			$random = array();

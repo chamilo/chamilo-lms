@@ -800,7 +800,7 @@ if ($show == 'test') {
                         //Settings                                                                
                         //$actions  = Display::url(Display::return_icon('edit.gif',get_lang('Edit'), array('width'=>'20px')), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                         
-                        $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),array('width' =>'22px')), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'&edit_questions=1');
+                        $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),array('width' =>'22px')), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
                         
                         $actions .='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
                         

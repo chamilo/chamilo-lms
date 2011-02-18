@@ -4,7 +4,7 @@
 
 /**
 *	File containing the FillBlanks class.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Eric Marguin
 * 	@author Julio Montoya Armas switchable fill in blank option added
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
@@ -199,6 +199,21 @@ class FillBlanks extends Question
         $objAnswer = new answer($this->id);
         $objAnswer->createAnswer($answer,0,'',0,'');
         $objAnswer->save();
+	}
+	
+	function return_header($feedback_type, $counter = null) {
+	    parent::return_header($feedback_type, $counter);
+	    $header = '<table width="100%" border="0" cellspacing="3" cellpadding="3">
+				<tr>
+			<td>&nbsp;</td>
+			</tr>
+			<tr>
+			<td><i><?php echo get_lang("Answer"); ?></i> </td>
+			</tr>
+			<tr>
+			<td>&nbsp;</td>
+			</tr>';
+        return $header;	  
 	}
 }
 

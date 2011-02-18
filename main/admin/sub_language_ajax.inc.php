@@ -22,6 +22,8 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
 	SubLanguageManager::add_file_in_language_directory ($dokeos_path_folder);
 
 	//update variable language
+    //@todo add filter for double quotes, to avoid breaking the string
+    //could be something like preg_replace('/.*[^\\]".*/','\"',api_...) ?
 	$all_file_of_directory[$language_variable]="\"".api_convert_encoding($new_language,$charset,'UTF-8')."\";";
 
 	foreach ($all_file_of_directory as $key_value=>$value_info) {

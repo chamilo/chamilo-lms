@@ -2261,7 +2261,7 @@ function api_not_allowed($print_headers = false) {
         //if the access is not authorized and there is some login information
         // but the cidReq is not found, assume we are missing course data and send the user
         // to the user_portal
-        if ((!headers_sent() or $print_headers) && $origin != 'learnpath') { Display::display_header(''); }
+        if ((!headers_sent() or $print_headers) && $origin != 'learnpath') { Display::display_header(null); }
         echo '<div align="center">';
         Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', false);
         echo '</div>';
@@ -2271,7 +2271,7 @@ function api_not_allowed($print_headers = false) {
     if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
         //only display form and return to the previous URL if there was a course ID included
         if (!empty($user) && !api_is_anonymous()) {
-            if ((!headers_sent() || $print_headers) && $origin != 'learnpath') { Display::display_header(''); }
+            if ((!headers_sent() || $print_headers) && $origin != 'learnpath') { Display::display_header(null); }
             echo '<div align="center">';
             Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', false);
             echo '</div>';
@@ -2284,7 +2284,7 @@ function api_not_allowed($print_headers = false) {
         $form->addElement('password', 'password', get_lang('Password'), array('size' => 17));
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'),'class="login"');
 
-        if ((!headers_sent() || $print_headers) && $origin != 'learnpath') { Display::display_header(''); }
+        if ((!headers_sent() || $print_headers) && $origin != 'learnpath') { Display::display_header(null); }
         Display::display_error_message(get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />', false);
 
         echo '<div class="menu" id="menu" style="float:left">';

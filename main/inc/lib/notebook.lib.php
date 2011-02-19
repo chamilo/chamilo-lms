@@ -166,18 +166,18 @@ class NotebookManager
 		//{
 			if (!api_is_anonymous()) {
 				if (api_get_session_id()==0)
-					echo '<a href="index.php?'.api_get_cidreq().'&amp;action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
+					echo '<a href="index.php?'.api_get_cidreq().'&amp;action=addnote">'.Display::return_icon('new_note.png',get_lang('NoteAddNew'),'','32').'</a>';
 				elseif(api_is_allowed_to_session_edit(false,true)){
-					echo '<a href="index.php?'.api_get_cidreq().'&amp;action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
+					echo '<a href="index.php?'.api_get_cidreq().'&amp;action=addnote">'.Display::return_icon('new_note.png',get_lang('NoteAddNew'),'','32').'</a>';
 				}
 
 			} else {
-				echo '<a href="javascript:void(0)">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
+				echo '<a href="javascript:void(0)">'.Display::return_icon('new_note.png',get_lang('NoteAddNew'),'','32').'</a>';
 			}
 		//}
-		echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=creation_date&amp;direction='.$link_sort_direction.'">'.Display::return_icon('calendar_select.gif',get_lang('OrderByCreationDate')).get_lang('OrderByCreationDate').'</a>';
-		echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=update_date&amp;direction='.$link_sort_direction.'">'.Display::return_icon('calendar_select.gif',get_lang('OrderByModificationDate')).get_lang('OrderByModificationDate').'</a>';
-		echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=title&amp;direction='.$link_sort_direction.'">'.Display::return_icon('comment.gif',get_lang('OrderByTitle')).get_lang('OrderByTitle').'</a>';
+		echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=creation_date&amp;direction='.$link_sort_direction.'">'.Display::return_icon('notes_order_by_date_new.png',get_lang('OrderByCreationDate'),'','32').'</a>';
+		echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=update_date&amp;direction='.$link_sort_direction.'">'.Display::return_icon('notes_order_by_date_mod.png',get_lang('OrderByModificationDate'),'','32').'</a>';
+		echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=title&amp;direction='.$link_sort_direction.'">'.Display::return_icon('notes_order_by_title.png',get_lang('OrderByTitle'),'','32').'</a>';
 		echo '</div>';
 
 		if (!in_array($_SESSION['notebook_view'],array('creation_date','update_date', 'title'))) {

@@ -135,10 +135,18 @@ if ($origin != 'learnpath') {
 <body dir="<?php echo api_get_text_direction(); ?>">
 <?php
 }
+//Hide results
+$show_results     = false;
+$show_only_score  = false;
 
-if ($objExercise->results_disabled) {
-	ob_start();
+if ($objExercise->results_disabled == 0) {
+    $show_results = true;	
 }
+
+if ($objExercise->results_disabled == 2) {
+    $show_only_score = true;
+}
+
 /* DISPLAY AND MAIN PROCESS */
 
 // I'm in a preview mode as course admin. Display the action menu.
@@ -153,31 +161,34 @@ $exerciseTitle=text_filter($objExercise->selectTitle());
 $feedback_type = $objExercise->feedbacktype;
 
 //show exercise title
-if($origin != 'learnpath') {?>
-	<h2><?php echo Display::return_icon('quiz_big.png', get_lang('Result')).' '; echo $exerciseTitle; ?> : <?php echo get_lang("Result"); ?></h2>
-	<?php echo $objExercise->selectDescription(); ?>
-<?php } ?>
-
+if($origin == 'learnpath') { ?>
 	<form method="get" action="exercice.php?<?php echo api_get_cidreq() ?>">
 	<input type="hidden" name="origin" value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
     <input type="hidden" name="learnpath_item_id" value="<?php echo $learnpath_item_id; ?>" />
     <input type="hidden" name="learnpath_item_view_id" value="<?php echo $learnpath_item_view_id; ?>" />
-
 <?php
-
+}
 $i=$totalScore=$totalWeighting=0;
 if($debug>0){error_log ("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
 
-if ($_configuration['tracking_enabled']) {
-	// Create an empty exercise
-	if (api_is_allowed_to_session_edit() )
-		$exeId= create_event_exercice($objExercise->selectId());
+// Create an empty exercise
+if (api_is_allowed_to_session_edit()) {
+    $exeId= create_event_exercice($objExercise->selectId());
 }
 $counter=0;
 
+$user_info   = api_get_user_info(api_get_user_id());     
+if ($show_results || $show_only_score) {
+    echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']));
+}
+
+	     
 // Loop over all question to show results for each of them, one by one
 foreach ($questionList as $questionId) {
+    // destruction of the Question object
+	unset($objQuestionTmp);
+	
 	$counter++;
 	// gets the student choice for this question
 	$choice                = $exerciseResult[$questionId];
@@ -189,134 +200,54 @@ foreach ($questionList as $questionId) {
 	$questionDescription   = $objQuestionTmp->selectDescription();
 	$questionWeighting     = $objQuestionTmp->selectWeighting();
 	$answerType            = $objQuestionTmp->selectType();
-	$quesId                = $objQuestionTmp->selectId(); //added by priya saini
-
-	// destruction of the Question object
-	unset($objQuestionTmp);
-
-	// decide how many columns we want to use to show the results of each type
-	if (in_array($answerType, array(UNIQUE_ANSWER, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, MULTIPLE_ANSWER_TRUE_FALSE, MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE,UNIQUE_ANSWER_NO_OPTION))) {
-		$colspan=4;
-	} elseif($answerType == MATCHING || $answerType == FREE_ANSWER) {
-		$colspan=2;
-	} elseif($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
-		$colspan=4;
-		$rowspan=$nbrAnswers+1;
-	} else {
-		$colspan=1;
-	}
-	// show titles
-	if ($origin != 'learnpath') {?>
-		<table width="100%" border="0" cellpadding="3" cellspacing="2">
-		<tr>
-		<td colspan="<?php echo $colspan; ?>">
-            <div id="question_title" class="sectiontitle">
-			<?php echo get_lang("Question").' '.($counter).' : '.$questionName; ?>
-            </div>
-		</td>
-		</tr>
-		<tr>
-		<td colspan="<?php echo $colspan; ?>">
-			<i><?php echo $questionDescription; ?></i>
-		</td>
-		</tr>
-		<?php
-		if (in_array($answerType, array(UNIQUE_ANSWER, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, MULTIPLE_ANSWER_TRUE_FALSE, MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE,UNIQUE_ANSWER_NO_OPTION))) {
-			?>
-				<tr>
-				<td width="5%" valign="top" align="center" nowrap="nowrap">
-					<i><?php echo get_lang("Choice"); ?></i>
-				</td>
-				<td width="5%"  align="center" nowrap="nowrap">
-					<i><?php echo get_lang("ExpectedChoice"); ?></i>
-				</td>
-				<td width="45%" valign="top">
-					<i><?php echo get_lang("Answer"); ?></i>
-				</td>
-				<?php if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-				<td width="45%" valign="top">
-					<i><?php echo get_lang("Comment"); ?></i>
-				</td>
-				<?php } else { ?>
-					<td>&nbsp;</td>
-				<?php } ?>
-				</tr>
-			<?php
-		} elseif ($answerType == FILL_IN_BLANKS) { ?>
-				<tr>
-				<td>
-					<i><?php echo get_lang("Answer"); ?></i>
-				</td>
-				</tr>
-			<?php
-		} elseif ($answerType == FREE_ANSWER) {
-			?>
-				<tr>
-				<td width="55%">
-					<i><?php echo get_lang("Answer"); ?></i>
-				</td>
-				<?php if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-				<td width="45%" valign="top">
-					<i><?php echo get_lang("Comment"); ?></i>
-				</td>
-				<?php } else { ?>
-					<td>&nbsp;</td>
-				<?php } ?>
-				</tr>
-			<?php
-		} elseif ($answerType == HOT_SPOT) {
-			?>
-				<tr>
-					<td valign="top" colspan="2">
-						<table width="552" border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;">
-							<tr>
-								<td width="152" valign="top">
-									<i><?php echo get_lang("CorrectAnswer"); ?></i><br /><br />
-								</td>
-								<td width="100" valign="top">
-									<i><?php echo get_lang('HotspotHit'); ?></i><br /><br />
-								</td>
-								<?php if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-								<td width="300" valign="top">
-									<i><?php echo get_lang("Comment"); ?></i><br /><br />
-								</td>
-								<?php } else { ?>
-									<td>&nbsp;</td>
-								<?php } ?>
-							</tr>
-			<?php
-		} else { //matching type
-			?>
-				<tr>
-				<td width="50%">
-					<i><?php echo get_lang("ElementList"); ?></i>
-				</td>
-				<td width="50%">
-					<i><?php echo get_lang("CorrespondsTo"); ?></i>
-				</td>
-				</tr>
-			<?php
-		}
+	$quesId                = $objQuestionTmp->selectId();
+	
+	if ($show_results) {
+    	// show titles
+    	if ($origin != 'learnpath') { 
+    		echo $objQuestionTmp->return_header($objExercise->feedbacktype);
+    		if ($answerType == HOT_SPOT) {		    
+    			?>
+    				<tr>
+    					<td valign="top" colspan="2">
+    						<table width="552" border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;">
+    							<tr>
+    								<td width="152" valign="top">
+    									<i><?php echo get_lang("CorrectAnswer"); ?></i><br /><br />
+    								</td>
+    								<td width="100" valign="top">
+    									<i><?php echo get_lang('HotspotHit'); ?></i><br /><br />
+    								</td>
+    								<?php if ($objExercise->feedbacktype != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+    								<td width="300" valign="top">
+    									<i><?php echo get_lang("Comment"); ?></i><br /><br />
+    								</td>
+    								<?php } else { ?>
+    									<td>&nbsp;</td>
+    								<?php } ?>
+    							</tr>
+    			<?php
+    		}
+    	}
 	}
 
 	// We're inside *one* question. Go through each possible answer for this question
-	$result = $objExercise->manage_answer($exeId, $questionId, $choice,'exercise_result', $exerciseResultCoordinates, true, false, true, $objExercise->selectPropagateNeg());   	
+	$result = $objExercise->manage_answer($exeId, $questionId, $choice,'exercise_result', $exerciseResultCoordinates, true, false, $show_results, $objExercise->selectPropagateNeg());   	
     $totalScore        += $result['score'];    
-    $totalWeighting    += $result['weight'];
-    
+    $totalWeighting    += $result['weight'];    
 } // end huge foreach() block that loops over all questions
 
-if($origin != 'learnpath') {
-    echo '<div id="question_score">';
-    echo get_lang('YourTotalScore')." ";	
-    if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
-	    $totalScore = 0;
-    }     
-    echo show_score($totalScore, $totalWeighting, false);	
-    echo '</div>';
-	?>
-    <button type="submit" class="save"><?php echo get_lang('Finish');?></button>
-<?php 
+if ($origin != 'learnpath') {
+    if ($show_results || $show_only_score) {
+        echo '<div id="question_score">';
+        echo get_lang('YourTotalScore')." ";	
+        if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
+    	    $totalScore = 0;
+        }     
+        echo show_score($totalScore, $totalWeighting, false);	
+        echo '</div>';
+    }
+    /* <button type="submit" class="save"><?php echo get_lang('Finish');?></button> */
 }
 
 // Tracking of results
@@ -330,35 +261,18 @@ if (api_is_allowed_to_session_edit() ) {
 	update_event_exercice($exeId, $objExercise->selectId(), $totalScore, $totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration);
 }
 
-
-if ($objExercise->results_disabled) {
-	ob_end_clean();
-	if ($origin != 'learnpath') {
-		Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><a href="exercice.php" />'.get_lang('Back').'</a>',false);
-	} else {
-		Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><br />',false);
-
-		$lp_mode =  $_SESSION['lp_mode'];
-		$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$objExercise->feedbacktype;
-		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
-		echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
-		//record the results in the learning path, using the SCORM interface (API)
-		echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
-		echo '</body></html>';
-	}
+if ($origin != 'learnpath') {
+	Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><a href="exercice.php" />'.get_lang('Back').'</a>',false);
 } else {
-	//show score
-	if ($origin == 'learnpath') {
-		Display::display_normal_message(get_lang('ExerciseFinished'));
-		$lp_mode =  $_SESSION['lp_mode'];
-		$url = '../newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$objExercise->feedbacktype;
-		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
-		echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
+	Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><br />',false);
 
-		//record the results in the learning path, using the SCORM interface (API)
-		echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
-		echo '</body></html>';
-	}
+	$lp_mode =  $_SESSION['lp_mode'];
+	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$objExercise->feedbacktype;
+	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
+	echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
+	//record the results in the learning path, using the SCORM interface (API)
+	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
+	echo '</body></html>';
 }
 
 if ($origin != 'learnpath') {

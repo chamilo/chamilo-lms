@@ -257,18 +257,20 @@ if (!empty ($_GET['student'])) {
 
 	// Actions bar
 	echo '<div class="actions">';
-    echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
+    echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'','32').'</a>';
     
-	echo '<a href="javascript: void(0);" onclick="javascript: window.print();"><img src="../img/printmgr.gif">&nbsp;' . get_lang('Print') . '</a>';
-	echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv"><img src="../img/csv.gif">&nbsp;' . get_lang('ExportAsCSV') . '</a>';
+	echo '<a href="javascript: void(0);" onclick="javascript: window.print();">
+	'.Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
+	echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv">
+	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a>';
 	if (!empty ($info_user['email'])) {
-		$send_mail = Display :: return_icon('send_mail.gif', get_lang('SendMail')) . ' ' . Display :: encrypted_mailto_link($info_user['email'], get_lang('SendMail'));
+		$send_mail = '<a href="mailto:'.$info_user['email'].'">'.Display :: return_icon('mail_send.png', get_lang('SendMail'),'','32').'</a>';
 	} else {
-		$send_mail = Display :: return_icon('send_mail.gif', get_lang('SendMail')) . ' ' . get_lang('SendMail');
+		$send_mail = Display :: return_icon('mail_send_na.png', get_lang('SendMail'),'','32');
 	}
 	echo $send_mail;
 	if (!empty ($_GET['student']) && !empty ($_GET['course'])) { //only show link to connection details if course and student were defined in the URL
-		echo '<a href="access_details.php?student=' . Security :: remove_XSS($_GET['student']) . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">' . Display :: return_icon('statistics.gif', get_lang('AccessDetails')) . ' ' . get_lang('AccessDetails') . '</a>';
+		echo '<a href="access_details.php?student=' . Security :: remove_XSS($_GET['student']) . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">' . Display :: return_icon('statistics.png', get_lang('AccessDetails'),'','32').'</a>';
 	}
 	echo '</div>';
     

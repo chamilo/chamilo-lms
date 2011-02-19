@@ -166,10 +166,12 @@ if ($_GET['studentlist'] == 'false') {
         echo ' | <a href="exams.php?'.api_get_cidreq().'">'.get_lang('ExamTracking').'</a>&nbsp;';*/
 }
 
-echo '&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printmgr.gif', get_lang('Print')).get_lang('Print').'</a>';
+echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
 
 if ($_GET['studentlist'] == 'false') {
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv&studentlist=false">
+	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a>';
+	
 } elseif ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
     $addional_param = '';
     if (isset($_GET['additional_profile_field'])) {
@@ -178,7 +180,8 @@ if ($_GET['studentlist'] == 'false') {
     if (isset($_GET['users_tracking_per_page'])) {
         $users_tracking_per_page= '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
     }
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
+	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'','32').'</a>';
 }
 echo '</div>';
 

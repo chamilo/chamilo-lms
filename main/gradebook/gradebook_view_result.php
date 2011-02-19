@@ -43,6 +43,13 @@ if ($eval[0]->get_category_id() < 0) {
 	$currentcat= Category :: load($eval[0]->get_category_id());
 	//load the result with the evaluation id
 
+if (isset ($_GET['delete_mark'])) {
+    $result = Result :: load($_GET['delete_mark']);  
+    if (!empty( $result[0])) {  
+        $result[0]->delete();
+    }
+}
+
 if (isset ($_GET['selecteval'])) {
 	$allresults= Result :: load(null,null,$select_eval);
 	$iscourse= $currentcat[0]->get_course_code() == null ? 1 : 0;

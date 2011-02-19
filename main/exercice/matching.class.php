@@ -236,8 +236,7 @@ class Matching extends Question {
 		}
 
 		// insert the answers
-		for($i=1 ; $i<=$nb_matches ; ++$i)
-		{
+		for($i=1 ; $i<=$nb_matches ; ++$i) {
 			$position++;
 			$answer = $form -> getSubmitValue('answer['.$i.']');
 			$matches = $form -> getSubmitValue('matches['.$i.']');
@@ -245,11 +244,23 @@ class Matching extends Question {
 			$this -> weighting += $weighting;
 			$objAnswer->createAnswer($answer,$matches,'',$weighting,$position);
 		}
-
 		$objAnswer->save();
 		$this->save();
-
 	}
+	
+		function return_header($feedback_type, $counter = null) {
+	    parent::return_header($feedback_type, $counter);
+	         
+                            echo '<table width="100%" height="71" border="0" cellspacing="3" cellpadding="3" >';
+                            echo '<tr><td colspan="2">&nbsp;</td></tr>';
+                            echo '<tr>
+                                    <td><span style="font-style: italic;">'.get_lang('ElementList').'</span> </td>
+                                    <td><span style="font-style: italic;">'.get_lang('CorrespondsTo').'</span></td>
+                                  </tr>';
+                            echo '<tr><td colspan="2">&nbsp;</td></tr>';
+                    
+		}
+
 
 }
 

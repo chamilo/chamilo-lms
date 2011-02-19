@@ -1218,13 +1218,11 @@ abstract class Question
 		echo '</ul>';
 	}
 
-	static function get_types_information()
-	{
+	static function get_types_information(){
 		return self::$questionTypes;
 	}
 
-	static function updateId()
-	{
+	static function updateId() {
 		return self::$questionTypes;
 	}
     
@@ -1259,6 +1257,16 @@ abstract class Question
         $result = Database::select('*', $TBL_EXERCICE_QUESTION_OPTION, array('where'=>array('question_id = ?' =>$question_id), 'order'=>'id ASC'));
         return $result;        
     }
+    
+	function return_header($feedback_type, $counter = null) {
+	    $counter_label = '';
+	    if (!is_null($counter)) {
+	        $counter = intval($counter);
+	    }	
+	    echo Display::div(get_lang("Question").' '.($counter_label).' : '.$this->question, array('id'=>'question_title', 'class'=>'sectiontitle'));
+	    echo Display::div($this->description, array('id'=>'question_description'));	    
+	}
+	
 }
 endif;
 ?>

@@ -256,4 +256,5 @@ $UseMaxScore100 = "Use default maximum score of 100";
 $EnableLPAutoLaunch = "Enable learning path auto-launch";
 $DisableLPAutoLaunch = "Disable learning path auto-launch";
 $ViewModeEmbedFrame = "Current view mode: external embed. Use only for embedding in external sites.";
+$LPNotVisibleToStudent = "Students cannot see this learning path";
 ?>

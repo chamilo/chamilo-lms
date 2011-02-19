@@ -375,4 +375,6 @@ $MultipleAnswerCombinationTrueFalse = "C. exacte vrai/faux/ne-sais-pas";
 $DontKnow = "Ne sais pas";
 $False = "Faux";
 $DoubtScore = "Ne sais pas";
+$PropagateNegativeResults = "Propager les résultats négatifs entre les questions";
+$InsertALinkToThisQuestionInTheExercise = "Insérer cette question dans l'exercice comme un lien (pas une copie)";
 ?>

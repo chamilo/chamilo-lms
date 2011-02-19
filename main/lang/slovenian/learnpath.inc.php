@@ -249,4 +249,12 @@ $ModifyHotPotatoes = "Spremeni hotpotatoes";
 $SaveHotpotatoes = "Shrani hotpotatoes";
 $ReturnToLPList = "Povratek na seznam";
 $LpPrerequisiteDescription = "Izbira druge učne poti za predzahtevo trenutne učne poti skrije vse obstoječe predzahteve dokler ta ne bo popolnoma (100%) izpolnjena";
+$ExerciseCantBeEditedAfterAddingToTheLP = "Vaje/testa ne morete urejati po vključitvi v učno pot";
+$EnableTimeLimits = "Omogoči omejevanje dostopnosti";
+$PublicationDate = "Datum objave";
+$UseMaxScore100 = "Uporabi privzet največji možni rezultat 100";
+$EnableLPAutoLaunch = "Omogoči samodejni zagon učne poti";
+$DisableLPAutoLaunch = "Onemogoči samodejni zagon učne poti";
+$ViewModeEmbedFrame = "Trenuten način pogleda: zunanji vključen. Uporabite zgolj za vključitev v zunanje strani.";
+$LPNotVisibleToStudent = "Tečajniki ne vidijo te učne poti";
 ?>

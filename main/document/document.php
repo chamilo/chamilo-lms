@@ -956,16 +956,22 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     if ($is_certificate_mode) {
 ?>
     <a href="create_document.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>&amp;certificate=true&amp;<?php echo 'selectcat='.Security::remove_XSS($_GET['selectcat']); ?>">
-        <?php Display::display_icon('new_document.png', get_lang('CreateCertificate'),'','32'); ?></a>
+        <?php Display::display_icon('new_certificate.png', get_lang('CreateCertificate'),'','32'); ?></a>
 <?php
     }
     // File upload link
-    $upload_name = $is_certificate_mode ? get_lang('UploadCertificate') : get_lang('UplUploadDocument');
+	if ($is_certificate_mode) {
+?>
+	<a href="upload.php?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo $curdirpathurl.$req_gid; ?>">
+        <?php Display::display_icon('upload_certificate.png', get_lang('UploadCertificate'),'','32'); ?></a>
+<?php
+	}
+	else{
 ?>
     <a href="upload.php?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo $curdirpathurl.$req_gid; ?>">
-        <?php Display::display_icon('upload_file.png', $upload_name,'','32'); ?></a>
+        <?php Display::display_icon('upload_file.png', get_lang('UplUploadDocument'),'','32'); ?></a>
 <?php
-
+	}
     // Create directory
     if (!$is_certificate_mode) {
 ?>

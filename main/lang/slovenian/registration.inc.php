@@ -183,4 +183,10 @@ $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Sedaj se lahko p
 $AreYouSureToEditTheUserStatus = "Ste prepričani, da želite urediti uporabniški status?";
 $TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "Tutor lahko zgolj sledi napredkom vseh registiranih tečajnikov tega tečaja";
 $TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "Učitelj lahko primerja, ocenjuje in sledi napredku vsakega posameznega tečajnika tega tečaja";
+$LoginOrEmailAddress = "Uporabniško ime ali e-poštni naslov";
+$MailNotifyInvitation = "Obvesti po e-pošti ob prejetem novem povabilu";
+$MailNotifyMessage = "Obvesti po e-pošti ob novem osebnem sporočilu";
+$MailNotifyGroupMessage = "Obvesti preko e-pošte ob novem sporočilu v skupini";
+$AtOnce = "Ob sprejemu";
+$Daily = "Enkrat na dan";
 ?>

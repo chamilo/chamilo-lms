@@ -250,7 +250,8 @@ $DashboardBlocks = "Bloques del panel de control";
 $DashboardList = "Lista del panel de control";
 $YouHaveNotEnabledBlocks = "No ha habilitado ningún bloque";
 $BlocksHaveBeenUpdatedSuccessfully = "Los bloques han sido actualizados";
-$AttendanceSheetDescription = "Las hojas de asistencia le permite reunir las asistencias de sus cursos por grupos. Por ejemplo, podría querer tomar las asistencias de las clases teóricas de manera separada de las de las clases prácticas. En cada entrada mostrarán todos los estudiantes como asistentes por defecto. Es su responsabilidad registrar a los estudiantes que han faltado, haciendo clic en la casilla correspondiente.";
+$AttendanceSheetDescription = "Las listas de asistencia permiten registrar las faltas de asistencia de los estudiantes. En caso de ausencia de un estudiante, el profesor deberá registrarlo manualmente en la casilla correspondiente.
+Es posible crear más de una lista de asistencia por cada curso; así por ejemplo, podrá registrar separadamente la asistencia a las clases teóricas y prácticas.";
 $AttendanceSheetReport = "Reporte de hojas de asistencias";
 $YouDoNotHaveDoneAttendances = "No tiene asistencias";
 $GoToAttendanceCalendarList = "Ir a la vista calendario de las asistencias";

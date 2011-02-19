@@ -256,4 +256,5 @@ $UseMaxScore100 = "Usar por defecto 100 como puntuación máxima";
 $EnableLPAutoLaunch = "Activar el despliegue automático";
 $DisableLPAutoLaunch = "Desactivar el despliegue automático";
 $ViewModeEmbedFrame = "Vista actual: incrustado externo. Solo para uso desde otros sitios.";
+$LPNotVisibleToStudent = "Los alumnos no pueden ver esta lección";
 ?>

@@ -369,4 +369,11 @@ $Copy = "Kopiraj";
 $ScoreAverageFromAllAttempts = "Povprečen rezultat iz vseh poizkusov";
 $DefaultContent = "Generiraj privzeto vsebino";
 $ExerciseEditionNotAvailableInSession = "Iz seje vaje/testa tega tečaja ni mogoče urejati";
+$UniqueAnswerNoOption = "Večkratna izbira z ne-vem";
+$MultipleAnswerTrueFalse = "Večkraten odgovor pravilno/nepravilno/ne-vem";
+$MultipleAnswerCombinationTrueFalse = "Kombinacija pravilno/nepravilno/ne-vem";
+$DontKnow = "Ne vem";
+$False = "Nepravilno";
+$DoubtScore = "Ne vem";
+$PropagateNegativeResults = "Razširi negativne rezultate med vprašanji";
 ?>

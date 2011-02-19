@@ -275,4 +275,17 @@ $TotalNumberOfMessages = "Skupno število sporočil";
 $TotalNumberOfAssignments = "Skupno število nalog/zadolžitev";
 $LastLogins = "Zadnje prijave";
 $AllLogins = "Vse prijave";
+$LPExerciseResultsBySession = "Rezultati vaj/testov učnih poti po sejah";
+$LPQuestionListResults = "Seznam rezultatov vaj/testov učnih poti";
+$PleaseSelectACourse = "Izberite tečaj";
+$StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts = "Povprečen rezultat tečajnika je izračunan na osnovi rezultatov vseh učnih poti in vseh poskusov";
+$AverageScore = "Povprečen rezultat";
+$LastConnexionDate = "Datum zadnje povezave";
+$AllStudentsAttemptsAreConsidered = "Vsi poskusi tečajnikov so upoštevani";
+$PublishedExercises = "Dosegljive vaje/testi";
+$DoneExercises = "Izvajane vaje/testi";
+$AverageExerciseResult = "Povprečen rezultat vaj/testov";
+$LPProgress = "Napredek učne poti";
+$BestResultInCourse = "Najboljši rezultat v tečaju";
+$ExerciseStartDate = "Datum objave";
 ?>

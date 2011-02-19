@@ -84,8 +84,8 @@ class Thematic
 			$thematic[1] = '<a href="index.php?'.api_get_cidreq().'&action=thematic_details&thematic_id='.$thematic[0].$param_gradebook.'">'.Security::remove_XSS($thematic[1], STUDENT).'</a>';
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';
-				$actions .= '<center><a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('info.gif',get_lang('ThematicPlan')).'</a>&nbsp;';
-				$actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('porcent.png',get_lang('ThematicAdvance')).'</a>&nbsp;';
+				$actions .= '<center><a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan.png',get_lang('ThematicPlan'),'','22').'</a>&nbsp;';
+				$actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('lesson_plan_calendar.png',get_lang('ThematicAdvance'),'','22').'</a>&nbsp;';
 
 				if ($thematic[2] > 1) {
 
@@ -908,9 +908,9 @@ class Thematic
 		$default_thematic_plan_titles = array();
 		$default_thematic_plan_titles[1]= get_lang('Objectives');
 		$default_thematic_plan_titles[2]= get_lang('SkillToAcquire');
-		$default_thematic_plan_titles[3]= get_lang('Infrastructure');
-		$default_thematic_plan_titles[4]= get_lang('Methodology');
-		$default_thematic_plan_titles[5]= get_lang('AditionalNotes');
+		$default_thematic_plan_titles[3]= get_lang('Methodology');
+		$default_thematic_plan_titles[4]= get_lang('Infrastructure');		
+		$default_thematic_plan_titles[5]= get_lang('Assessment');
 		$default_thematic_plan_titles[6]= get_lang('Others');
 		return $default_thematic_plan_titles;
 	}
@@ -921,12 +921,12 @@ class Thematic
 	 */
 	public function get_default_thematic_plan_icon() {
 		$default_thematic_plan_icon = array();
-		$default_thematic_plan_icon[1]= 'spire.gif';
-		$default_thematic_plan_icon[2]= 'korganizer.gif';
-		$default_thematic_plan_icon[3]= 'kcmdf_big.gif';
-		$default_thematic_plan_icon[4]= 'misc.gif';
-		$default_thematic_plan_icon[5]= 'ktip.gif';
-		$default_thematic_plan_icon[6]= 'more.png';
+		$default_thematic_plan_icon[1]= 'icons/32/objective.png';
+		$default_thematic_plan_icon[2]= 'icons/32/skills.png';
+		$default_thematic_plan_icon[3]= 'icons/32/strategy.png';
+		$default_thematic_plan_icon[4]= 'icons/32/laptop.png';
+		$default_thematic_plan_icon[5]= 'icons/32/assessment.png';
+		$default_thematic_plan_icon[6]= 'icons/32/wizard.png';
 		return $default_thematic_plan_icon;
 	}
 
@@ -938,9 +938,9 @@ class Thematic
 		$question = array();
 		$question[1]= get_lang('ObjectivesQuestions');
 		$question[2]= get_lang('SkillToAcquireQuestions');
-		$question[3]= get_lang('InfrastructureQuestions');
-		$question[4]= get_lang('MethodologyQuestions');
-		$question[5]= get_lang('AditionalNotesQuestions');
+		$question[3]= get_lang('MethodologyQuestions');
+		$question[4]= get_lang('InfrastructureQuestions');
+		$question[5]= get_lang('AssessmentQuestions');
 		return $question;
 	}
 

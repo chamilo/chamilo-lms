@@ -6,7 +6,7 @@ new_paint	 	modif nuvola
 back_folder 		modif nuvola
 back 			nuvola
 new_sound		modif nuvola
-disk_quota		nuvola
+disk_quota		crystal
 upload_file		modif mix nuvola crystal
 thumbnails		nuvola
 thumbnails_na		modif nuvola
@@ -20,6 +20,8 @@ edit			nuvola
 draw			nuvola
 paint			nuvola
 folder			nuvola
+upload_certificate	modif crystal
+new_certificate		modif crystal
 --
 course			nuvola
 wizard			nuvola
@@ -88,6 +90,8 @@ import_evaluation	modif crystal
 export_evaluation	modif crystal
 evaluation_rate		modif crystal
 new_online_evaluation	modif nuvola
+certificate		modif crystal
+certificate_list	modif crystal
 --
 month			crystal (only 32 px)
 month_empty		modif crystal (only 32 px)
@@ -141,7 +145,7 @@ page				crystal
 history				tango
 discuss				crystal
 wiki				nuvola
-what_link_here			modif nuvola
+what_link_here			crystal
 --
 view_preview			crystal	(only 32 px)
 search				crystal (only 32 px)
@@ -168,10 +172,29 @@ new_note			modif nuvola
 notes_order_by_date_modif	modif crystal (only 32 px)
 notes_order_by_date_new	modif 	modif crystal (only 32 px)
 notes_order_by_title		modif crystal (only 32 px)
+--
+attendance			modif mix nuvola crystal
+new_attendance_list		modif crystal
+attendance_list			modif crystal
+attendance_calendar		modif crystal (only 32 px)
+add_calendar			modif crystal (only 32 px)
+add_event_calendar		modif crystal (only 32 px)
+clean_calendar			modif mix crystal tango (only 32 px)
+--
+lessons_plans			modif mix crystal gnome
+lesson_plan			modif mix crystal gnome
+new_lesson_plan			modif mix nuvola gnome
+calendar_lesson_plans		modif mix crystal gnome (only 32 px)
+skills				nuvola
 
 --julio
 star				
 star_green
+==================
+CONVENTIONS:
+-type: png
+-When some icons are embedded on other icons on the left side, half the size of the largest.
+
 
 
 

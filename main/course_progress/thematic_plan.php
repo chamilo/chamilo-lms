@@ -19,10 +19,10 @@ echo '<div class="actions" style="margin-bottom:30px">';
 ksort($categories);
 foreach ($categories as $id => $title) {
 	if ($i == ADD_THEMATIC_PLAN) {
-		echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_add&thematic_id='.$thematic_id.'&description_type='.$next_description_type.'">'.Display::return_icon($default_thematic_plan_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>';
+		echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_add&thematic_id='.$thematic_id.'&description_type='.$next_description_type.'">'.Display::return_icon($default_thematic_plan_icon[$id], $title,'','32').'</a>';
 		break;
 	} else {
-		echo '<a href="index.php?action=thematic_plan_edit&'.api_get_cidreq().'&description_type='.$id.'&thematic_id='.$thematic_id.'">'.Display::return_icon($default_thematic_plan_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>&nbsp;&nbsp;';
+		echo '<a href="index.php?action=thematic_plan_edit&'.api_get_cidreq().'&description_type='.$id.'&thematic_id='.$thematic_id.'">'.Display::return_icon($default_thematic_plan_icon[$id], $title,'','32').'</a>';
 		$i++;
 	}
 }

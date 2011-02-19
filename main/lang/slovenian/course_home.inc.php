@@ -29,4 +29,5 @@ $SessionIdentifier = "Identifikator seje";
 $SessionName = "Ime seje";
 $SessionCategory = "Kategorije sej";
 $SessionData = "Podatki seje";
+$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Nastavitev samodejnega zagona učne poti je VKLJUČENA. Ko tečajniki dostopijo do tega tečaja, bodo samodejno preusmerjeni v učno pot, ki je označena za samodejni zagon.";
 ?>

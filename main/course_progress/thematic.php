@@ -16,24 +16,24 @@ if (api_is_allowed_to_edit(null, true)) {
 	echo '<div class="actions" style="margin-bottom:30px">';	
 	switch ($action) {		
 		case 'thematic_add' :	
-				echo '<strong>'.Display::return_icon('introduction_add.gif',get_lang('NewThematicSection')).' '.get_lang('NewThematicSection').'</strong>&nbsp;&nbsp;';
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_details">'.Display::return_icon('view_table.gif',get_lang('ThematicDetails')).' '.get_lang('ThematicDetails').'</a>';	
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_list">'.Display::return_icon('view_list.gif',get_lang('ThematicList')).' '.get_lang('ThematicList').'</a>';
+				echo '<a href="index.php?'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ThematicDetails'),'','32').'</a>';
+				//echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_details">'.Display::return_icon('view_table.gif',get_lang('ThematicDetails')).' '.get_lang('ThematicDetails').'</a>';//TODO:delete, no need
+				//echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_list">'.Display::return_icon('view_list.gif',get_lang('ThematicList')).' '.get_lang('ThematicList').'</a>';//TODO:delete, no need
 				break;		
 		case 'thematic_list' :	
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('introduction_add.gif',get_lang('NewThematicSection')).' '.get_lang('NewThematicSection').'</a>';
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_details">'.Display::return_icon('view_table.gif',get_lang('ThematicDetails')).' '.get_lang('ThematicDetails').'</a>';	
-				echo '<strong>'.Display::return_icon('view_list.gif',get_lang('ThematicList')).' '.get_lang('ThematicList').'</strong>&nbsp;&nbsp;';
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'','32').'</a>';
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_details">'.Display::return_icon('view_detailed.png',get_lang('ThematicDetails'),'','32').'</a>';	
+				//echo '<strong>'.Display::return_icon('view_list.gif',get_lang('ThematicList')).' '.get_lang('ThematicList').'</strong>&nbsp;&nbsp;';//TODO:delete, no need
 				break;
 		case 'thematic_details' :		
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('introduction_add.gif',get_lang('NewThematicSection')).' '.get_lang('NewThematicSection').'</a>';
-				echo '<strong>'.Display::return_icon('view_table.gif',get_lang('ThematicDetails')).' '.get_lang('ThematicDetails').'</strong>&nbsp;&nbsp;';	
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_list">'.Display::return_icon('view_list.gif',get_lang('ThematicList')).' '.get_lang('ThematicList').'</a>';
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'','32').'</a>';
+				//echo '<strong>'.Display::return_icon('view_table.gif',get_lang('ThematicDetails')).' '.get_lang('ThematicDetails').'</strong>&nbsp;&nbsp;';////TODO:delete, no need
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_list">'.Display::return_icon('view_text.png',get_lang('ThematicList'),'','32').'</a>';
 				break;
 		default :
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('introduction_add.gif',get_lang('NewThematicSection')).' '.get_lang('NewThematicSection').'</a>';
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_details">'.Display::return_icon('view_table.gif',get_lang('ThematicDetails')).' '.get_lang('ThematicDetails').'</a>';	
-				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_list">'.Display::return_icon('view_list.gif',get_lang('ThematicList')).' '.get_lang('ThematicList').'</a>'; 		
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'','32').'</a>';
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_details">'.Display::return_icon('view_detailed.png',get_lang('ThematicDetails'),'','32').'</a>';	
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_list">'.Display::return_icon('view_text.png',get_lang('ThematicList'),'','32').'</a>'; 		
 	}			
 	echo '</div>';
 }

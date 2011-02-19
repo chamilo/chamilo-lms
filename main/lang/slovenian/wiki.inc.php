@@ -176,4 +176,5 @@ $FProgress = "Napredek";
 $PutATimeLimit = "Nastavi časovno omejitev";
 $StandardTask = "Standardno opravilo";
 $ThePageHasBeenExportedToDocArea = "Stran je bila izvožena v področje dokumentov";
+$CreateAssignmentPage = "Ustvari posebno wiki stran, na kateri učitelj lahko opiše opravilo in ki se avtomatično poveže z wiki stranmi, kjer tečajniki izvajajo zadana opravila. Obe strani, učiteljeva in tečajnikova se kreirata avtomatično. V teh opravilih tečajniki lahko privzeto urejajo in pregledujejo zgolj njihove strani, je pa to možno naknadno tudi spremeniti.";
 ?>

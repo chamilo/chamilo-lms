@@ -114,7 +114,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	
 	if (api_is_allowed_to_edit(null, true)) {		
 		echo '<div class="actions" style="margin-bottom:30px">';
-		echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematic_id.'">'.Display::return_icon('template_add.gif',get_lang('NewThematicAdvance')).' '.get_lang('NewThematicAdvance').'</a>';			
+		echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematic_id.'">'.Display::return_icon('add_calendar_event.png',get_lang('NewThematicAdvance'),'','32').'</a>';			
 		echo '</div>';
 	}
 	

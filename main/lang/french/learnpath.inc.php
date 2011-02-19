@@ -256,4 +256,5 @@ $UseMaxScore100 = "Utiliser un score maximum de 100 par défaut";
 $EnableLPAutoLaunch = "Activer lancement automatique du parcours";
 $DisableLPAutoLaunch = "Désactiver lancement automatique du parcours";
 $ViewModeEmbedFrame = "Vue actuelle: embarquée. Uniquement pour inclusion sur sites externes.";
+$LPNotVisibleToStudent = "Les apprenants ne voient pas ce parcours";
 ?>

@@ -121,4 +121,10 @@ $NewHomeworkEmailAlert = "E-poštno obveščanje uporabnikov ob objavi naloge";
 $NewHomeworkEmailAlertEnable = "Omogoči e-poštno obveščanje uporabnikov ob objavi naloge";
 $NewHomeworkEmailAlertDisable = "Onemogoči e-poštno obveščanje ob objavi naloge";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Prikaži zadnji izvedeni korak in prvega nedokončanega";
+$AddPicture = "Dodaj sliko";
+$LPAutoLaunch = "Omogoči samodejni zagon učne poti";
+$ConfigLearnpath = "Nastavitve učne poti";
+$PDFWaterMarkHeader = "Zaglavje z vodnim žigom v PDF izvozu";
+$RedirectToALearningPath = "Preusmeri na izbrano učno pot";
+$RedirectToTheLearningPathList = "Preusmeri na seznam učnih poti";
 ?>

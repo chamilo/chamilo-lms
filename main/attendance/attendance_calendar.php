@@ -15,12 +15,12 @@ if (isset($_SESSION['gradebook'])) {
 	$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 }
 echo '<div class="actions" style="margin-bottom:30px">';
-echo '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('check.gif',get_lang('AttendanceSheet')).' '.get_lang('AttendanceSheet').'</a>';
+echo '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('attendance_list.png',get_lang('AttendanceSheet'),'','32').'</a>';
 if ($action == 'calendar_add') {
-	echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_up.gif',get_lang('AttendanceCalendarList')).' '.get_lang('GoToAttendanceCalendarList').'</a>';
+	echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'','32').'</a>';
 } else {
-	echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_add.png',get_lang('AddDateAndTime')).' '.get_lang('AddDateAndTime').'</a>';
-	echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDeleteAllDates').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_delete.png',get_lang('CleanCalendar')).' '.get_lang('CleanCalendar').'</a>';
+	echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('add_calendar_event.png',get_lang('AddDateAndTime'),'','32').'</a>';
+	echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDeleteAllDates').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('clean_calendar.png',get_lang('CleanCalendar'),'','32').'</a>';
 }
 echo '</div>';
 

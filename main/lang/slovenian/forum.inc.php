@@ -143,4 +143,5 @@ $ForumcategoryLocked = "Kategorija foruma je zaklenjena";
 $PreviewImage = "Predogled slike";
 $UpdateImage = "Ažuriraj sliko";
 $EnableTimeLimits = "Omogoči časovno omejitev";
+$RemoveSearchResults = "Počisti rezultate iskanja";
 ?>

@@ -1012,4 +1012,5 @@ $ItemUpdated = "Item updated";
 $ItemCopied = "Item copied";
 $MyStatistics = "My statistics";
 $FromDateXToDateY = "From %s to %s";
+$CourseThematicAdvance = "Course progress";
 ?>

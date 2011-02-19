@@ -201,11 +201,10 @@ function getFCK(vals,marksid) {
 //f.submit();
 }
 </script>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td colspan="2">
 <?php
-$show_results = true;
+$show_results           = true;
+$show_only_total_score  = false;
+
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
 	$exerciseTitle			= text_filter($track_exercise_info['title']);
@@ -213,283 +212,149 @@ if (!empty($track_exercise_info)) {
 	// if the results_disabled of the Quiz is 1 when block the script
 	$result_disabled		= $track_exercise_info['results_disabled'];
 	
-	if (!(api_is_platform_admin() || api_is_course_admin()) ) {     
-		if ($result_disabled == 1) {
+	//if (!(api_is_platform_admin() || api_is_course_admin()) ) {    
+		if ($result_disabled == 1) {		    
 			//api_not_allowed();
 			$show_results = false;
 			//Display::display_warning_message(get_lang('CantViewResults'));
 			if ($origin != 'learnpath') {
+			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td colspan="2">';
 				Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);
 				echo '</td>
 				</tr>
 				</table>';
 			}
 		} elseif ($result_disabled == 2) {
-		    $show_results = false;		  
+		    $show_results = false;
+		    $show_only_total_score = true;			  
 			if ($origin != 'learnpath') {
-				Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);
+			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td colspan="2">';
+				Display::display_warning_message(get_lang('ThankYouForPassingTheTest'), false);
 				echo '</td>
 				</tr>
 				</table>';
 			}			  
 		}       
-	}
+	//}
 } else {
 	Display::display_warning_message(get_lang('CantViewResults'));
 	$show_results = false;
-	echo '</td>
-	</tr>
-	</table>';
 }
+
+//var_dump($show_results);
 
 if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 	$show_results = false;
 }
+$html = '';
+if ($show_results || $show_only_total_score) {
+    $user_info   = api_get_user_info($student_id);
+    //Shows exercise header
+    echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date));
+}
 
-if ($show_results) {
-	?>
-	<table width="100%">
-		<tr>
-		<td colspan="2">
-			<h2><?php echo  Display::return_icon('quiz_big.png', get_lang('Result')).' '.$exerciseTitle.' : '.get_lang('Result');?></h2>
-		</td>	
-		</tr>		
-		<tr>
-			<td style="font-weight:bold" width="90px"><?php echo '&nbsp;'.get_lang('User')?> : </td>
-			<td>
-            <?php			
-			$user_info   = api_get_user_info($student_id);
-			echo api_get_person_name($user_info['firstName'], $user_info['lastName']);            	
-			?>            
-            </td>
-        </tr>
-        <tr>         
-            <td style="font-weight:bold" width="90px"><?php echo '&nbsp;'.get_lang('Date')?> : </td>
-            <td>
-            <?php
-            echo api_convert_and_format_date($exercise_date);    
-            ?>            
-            </td>
-		</tr>
-		<?php if (!empty($exerciseDescription)) { ?>
-		<tr>
-			<td style="font-weight:bold" width="10%">
-				<?php echo '&nbsp;'.get_lang("Description").' :'; ?>
-			</td>
-			<td width="90%">			
-			<?php echo $exerciseDescription; ?>
-			</td>
-		</tr>
-		<?php } ?>
-	</table>
-	<br />
-	</table>
-  	<?php
+$i=$totalScore=$totalWeighting=0;
 
-    $i=$totalScore=$totalWeighting=0;
+if($debug>0){error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
 
-    if($debug>0){error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
-    
-    $arrques = array();
-    $arrans = array();
+$arrques = array();
+$arrans  = array();
 
-	$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($student_id)." ";
-	$query = "SELECT attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as attempts
-					INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id
-					INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
-					INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id
-			  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
-			  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
-				//GROUP BY questions.position, attempts.question_id";
+$user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($student_id)." ";
+$query = "SELECT attempts.question_id, answer  from ".$TBL_TRACK_ATTEMPT." as attempts
+				INNER JOIN ".$TBL_TRACK_EXERCICES." as stats_exercices ON stats_exercices.exe_id=attempts.exe_id
+				INNER JOIN ".$TBL_EXERCICE_QUESTION." as quizz_rel_questions ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND quizz_rel_questions.question_id = attempts.question_id
+				INNER JOIN ".$TBL_QUESTIONS." as questions ON questions.id=quizz_rel_questions.question_id
+		  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
+		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
+			//GROUP BY questions.position, attempts.question_id";
 
-	$result =Database::query($query);	
-	$questionList = array();
-	$exerciseResult = array();
-	
-	while ($row = Database::fetch_array($result)) {
-		$questionList[] = $row['question_id'];
-		$exerciseResult[$row['question_id']] = $row['answer'];
-	}
-	
-	//Fixing #2073 Fixing order of questions
-	if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
-		$tempquestionList = explode(',',$track_exercise_info['data_tracking']);
-		if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {
-			$questionList = $tempquestionList;			
-		}		
-	}
-	
-	// for each question
-	$counter=0;
+$result =Database::query($query);	
+$questionList = array();
+$exerciseResult = array();
 
-    $total_weighting = 0;
-    foreach ($questionList as $questionId) {
-        $objQuestionTmp     = Question::read($questionId);
-        $total_weighting  +=$objQuestionTmp->selectWeighting();        
-    }
-            
-	foreach ($questionList as $questionId) {
-		$counter++;		
-		$choice=$exerciseResult[$questionId];
-		// creates a temporary Question object
-		$objQuestionTmp 	= Question::read($questionId);
-		$questionName		= $objQuestionTmp->selectTitle();
-		$questionDescription= $objQuestionTmp->selectDescription();
-		$questionWeighting	= $objQuestionTmp->selectWeighting();
-		$answerType			= $objQuestionTmp->selectType();
-		$quesId 			= $objQuestionTmp->selectId(); //added by priya saini
+while ($row = Database::fetch_array($result)) {
+	$questionList[] = $row['question_id'];
+	$exerciseResult[$row['question_id']] = $row['answer'];
+}
+
+//Fixing #2073 Fixing order of questions
+if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
+	$tempquestionList = explode(',',$track_exercise_info['data_tracking']);
+	if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {
+		$questionList = $tempquestionList;			
+	}		
+}
+
+// for each question
+$counter=0;
+
+$total_weighting = 0;
+foreach ($questionList as $questionId) {
+    $objQuestionTmp     = Question::read($questionId);
+    $total_weighting  +=$objQuestionTmp->selectWeighting();        
+}
         
-
+foreach ($questionList as $questionId) {
+	$counter++;		
+	$choice=$exerciseResult[$questionId];
 		// destruction of the Question object
-		unset($objQuestionTmp);
+	unset($objQuestionTmp);
+	
+	// creates a temporary Question object
+	$objQuestionTmp 	= Question::read($questionId);
+	$questionName		= $objQuestionTmp->selectTitle();
+	$questionDescription= $objQuestionTmp->selectDescription();
+	$questionWeighting	= $objQuestionTmp->selectWeighting();
+	$answerType			= $objQuestionTmp->selectType();
+	$quesId 			= $objQuestionTmp->selectId();	
+	        	
+ 	if ($show_results) { 	    
+	    echo $objQuestionTmp->return_header($feedback_type);
+	}		
+	if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
+        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
+        $questionScore   = $question_result['score'];
+        $totalScore      += $question_result['score'];
+	} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
+		$choice=array();
+        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                       
+        $questionScore   = $question_result['score'];
+        $totalScore     += $question_result['score'];	
+	} elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {	
+        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+        $questionScore   = $question_result['score'];
+        $totalScore     += $question_result['score'];  
+		echo '</table>';
+	} elseif ($answerType == FILL_IN_BLANKS) {
+        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
+        $questionScore   = $question_result['score'];
+        $totalScore     += $question_result['score'];              
 
-		if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
-			$colspan=2;
-		}
-		if($answerType == MATCHING || $answerType == FREE_ANSWER) {
-			$colspan=2;
-		} else {
-			$colspan=2;
-		}
-        
-		echo '<div id="question_title" class="sectiontitle">';
-        echo get_lang("Question").' '.($counter).' : '.$questionName; 
-    	echo '</div>';
-    	echo '<div id="question_description">';
-        echo $questionDescription; 
-    	echo '</div>';
-	 	
-		if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-			?>
-			<table width="100%" border="0" cellspacing="3" cellpadding="3">
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><i><?php echo get_lang("Choice"); ?></i> </td>
-				<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
-				<td><i><?php echo get_lang("Answer"); ?></i></td>
-				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-				<td><i><?php echo get_lang("Comment"); ?></i></td>
-				<?php } else { ?>
-				<td>&nbsp;</td>
-				<?php } ?>
-			</tr>
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<?php
-			// construction of the Answer object
-       
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());            
-            //var_dump($question_result);
-            $questionScore      = $question_result['score'];
-            $totalScore        += $question_result['score'];            
-            //$questionWeighting += $question_result['weight'];
-            
-		 	echo '</table>';
-		} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
-			$choice=array();
-			?>
-			<table width="100%" border="0" cellspacing="3" cellpadding="3">
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><i><?php echo get_lang("Choice"); ?></i> </td>
-				<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
-				<td><i><?php echo get_lang("Answer"); ?></i></td>
-				<td><i><?php echo get_lang("Comment"); ?></i></td>
-			</tr>
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<?php
-	            
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());                       
-            $questionScore  = $question_result['score'];
-            $totalScore    += $question_result['score'];
-
-		 	echo '</table>';
-		} elseif ($answerType == UNIQUE_ANSWER || $answerType ==  UNIQUE_ANSWER_NO_OPTION) {
-			?>
-			<table width="100%" border="0" cellspacing="3" cellpadding="3">
-				<tr>
-				<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td><i><?php echo get_lang("Choice"); ?></i> </td>
-					<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
-					<td><i><?php echo get_lang("Answer"); ?></i></td>
-					<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-					<td><i><?php echo get_lang("Comment"); ?></i></td>
-					<?php } else { ?>
-					<td>&nbsp;</td>
-					<?php } ?>
-				</tr>
-				<tr>
-				<td>&nbsp;</td>
-				</tr>
-			<?php	
-            
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());
-            $questionScore  = $question_result['score'];
-            $totalScore    += $question_result['score'];  
-			echo '</table>';
-
-		} elseif ($answerType == FILL_IN_BLANKS) {
-			?>
-			<table width="100%" border="0" cellspacing="3" cellpadding="3">
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<tr>
-			<td><i><?php echo get_lang("Answer"); ?></i> </td>
-			</tr>
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<?php
-                      
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());
-            $questionScore  = $question_result['score'];
-            $totalScore    += $question_result['score'];
-              
-			echo '</table>';
-		} elseif ($answerType == FREE_ANSWER) {
-            $answer = $str;
-			?>
-			<table width="100%" border="0" cellspacing="3" cellpadding="3">
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-			<tr>
-			<td><i><?php echo get_lang("Answer"); ?></i> </td>
-			</tr>
-			<tr>
-			<td>&nbsp;</td>
-			</tr>
-
-			<?php
-			
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());            
-            $questionScore  = $question_result['score'];
-            $totalScore    += $question_result['score'];
-
-		} elseif ($answerType == MATCHING) {            
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());            
-            $questionScore  = $question_result['score'];
-            $totalScore    += $question_result['score'];			
-			echo '</table>';
-		} elseif ($answerType == HOT_SPOT) {
-			
-			echo '<table width="500" border="0">
-            <tr>
+	} elseif ($answerType == FREE_ANSWER) {
+        $answer = $str;     
+        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
+        $questionScore   = $question_result['score'];
+        $totalScore     += $question_result['score'];
+	} elseif ($answerType == MATCHING) {            
+        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
+        $questionScore   = $question_result['score'];
+        $totalScore     += $question_result['score'];		
+	} elseif ($answerType == HOT_SPOT) {	
+	    if ($show_results) {		
+		    echo '<table width="500" border="0"><tr>
                     <td valign="top" align="center" style="padding-left:0px;" >
-                        <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';			
-            $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, true, $objExercise->selectPropagateNeg());            
-            $questionScore  = $question_result['score'];
-            $totalScore    += $question_result['score'];
+                        <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';
+		}		
+        $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());            
+        $questionScore  = $question_result['score'];
+        $totalScore    += $question_result['score'];
+        
+        if ($show_results) {                
 			echo '</table></td></tr>';            
 		 	echo '<tr>
 				<td colspan="2">'.
@@ -499,7 +364,16 @@ if ($show_results) {
 				</td>
 			</tr>
 			</table><br/>';
-		}
+        }
+	}
+	
+	if ($show_results) {
+	    if ($answerType != HOT_SPOT) {
+	        echo '</table>';
+	    }
+	}
+	
+	if ($show_results) {		    
 
 		echo '<table width="100%" border="0" cellspacing="3" cellpadding="0">';
 		
@@ -552,6 +426,7 @@ if ($show_results) {
 			}
 			echo '</td><td>';
 		}
+		
 		if ($is_allowedToEdit) {
 			if ($answerType == FREE_ANSWER) {
 				$marksname = "marksName".$questionId;
@@ -581,40 +456,43 @@ if ($show_results) {
 				 $questionScore=0;
 			}
 		}
-		?>
-		</td>
-		</tr>
-		</table>
-		<?php
-        
-		/*
-		Do not convert question results
-		$my_total_score  = convert_score($questionScore, $total_weighting);
-		$my_total_weight = convert_score($questionWeighting, $total_weighting);*/
 		
-		$my_total_score  = $questionScore;
-		$my_total_weight = $questionWeighting;       
-
-		echo '<div id="question_score">';
-	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
-	        $my_total_score = 0;
-	    }  
-	    
+    		echo '</td>
+		</tr>
+		</table>';		
+	}
+	
+    
+	/*
+	Do not convert question results
+	$my_total_score  = convert_score($questionScore, $total_weighting);
+	$my_total_weight = convert_score($questionWeighting, $total_weighting);*/
+	
+	$my_total_score  = $questionScore;
+	$my_total_weight = $questionWeighting;   
+	
+    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
+        $my_total_score = 0;
+    }  
+    if ($show_results) {
+	    echo '<div id="question_score">';
 		//echo get_lang('Score')." : $my_total_score / $my_total_weight";
 		echo get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);    
 		
         //echo get_lang('Score')." : ".show_score($my_total_score, $total_weighting, false);
 		echo '</div>';
+    }
 
-		unset($objAnswerTmp);
-		$i++;
-		$totalWeighting+=$questionWeighting;
-        
-	} // end of large foreach on questions
-} //end of condition if $show_results
+	unset($objAnswerTmp);
+	$i++;
 
+	$totalWeighting+=$questionWeighting;
+    
+} // end of large foreach on questions
+
+//Total score
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
-	if ($show_results) {        
+	if ($show_results || $show_only_total_score ) {        
 		echo '<div id="question_score">'.get_lang('YourTotalScore').": ";
         $my_total_score_temp = $totalScore; 
 	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {

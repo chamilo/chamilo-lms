@@ -62,9 +62,9 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	}
 	
 	$form->addElement('html', '<div id="div_datetime_attendance">');
-		if (!empty($calendar_select)) {
-			$form->addElement('select', 'start_date_by_attendance', get_lang('StartDate'), $calendar_select);
-		}
+	if (!empty($calendar_select)) {
+		$form->addElement('select', 'start_date_by_attendance', get_lang('StartDate'), $calendar_select);
+	}
 	$form->addElement('html', '</div>');
 		
 	$form->addElement('html', '</div>');
@@ -77,6 +77,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	
 	$default['start_date_type'] = 1;	
 	$default['custom_start_date'] = date('d-F-Y H:i',api_strtotime(api_get_local_time()));
+	
 	if (!empty($thematic_advance_data)) {
 
 		// set default values
@@ -87,9 +88,9 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 			$default['custom_start_date'] = date('d-F-Y H:i', api_strtotime(api_get_local_time($thematic_advance_data['start_date'])));
 		} else {
 			$default['start_date_type'] = 1;			
-			if (!empty($calendar_select)) {
-				$default['start_date_by_attendance'] = $thematic_advance_data['start_date'];	
-			}			
+			if (!empty($thematic_advance_data['start_date'])) {
+		        $default['start_date_by_attendance'] = api_get_local_time($thematic_advance_data['start_date']);
+			}						
 			$default['attendance_select'] = $thematic_advance_data['attendance_id'];
 		}		
 	}

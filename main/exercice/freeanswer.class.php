@@ -1,28 +1,10 @@
 <?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
-*/
-
-
+/* For licensing terms, see /license.txt */
 /**
 *	File containing the FreeAnswer class.
 *	This class allows to instantiate an object of type FREE_ANSWER,
 *	extending the class question
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Eric Marguin
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
@@ -72,6 +54,22 @@ class FreeAnswer extends Question {
 		$this -> weighting = $form -> getSubmitValue('weighting');
 		$this->save();
 	}
+	
+	function return_header($feedback_type, $counter = null) {
+	    parent::return_header($feedback_type, $counter);
+	    $header = '<table width="100%" border="0" cellspacing="3" cellpadding="3">
+			<tr>
+			<td>&nbsp;</td>
+			</tr>
+			<tr>
+			<td><i><?php echo get_lang("Answer"); ?></i> </td>
+			</tr>
+			<tr>
+			<td>&nbsp;</td>
+			</tr>';				
+        return $header;	  
+	}
+	
 }
 endif;
 ?>

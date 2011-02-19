@@ -1678,6 +1678,8 @@ class Exercise {
 	 */
 	function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true, $propagate_neg = 0) {        
 		global $_configuration, $feedback_type;   
+		
+		$html = '';
 		   
         $questionId   = intval($questionId);
 		$exeId        = intval($exeId);        
@@ -1787,10 +1789,8 @@ class Exercise {
                         } else {
                         	$questionScore  +=  $doubt_score;
                         }
-                   }
-                   //$questionWeighting+=$true_score;                   
-                   $totalScore       +=$true_score;
-                   //echo $studentChoice.' - '.$answerCorrect.' '.$questionScore.' - '.$questionWeighting.'<br />';                                           
+                   }                  
+                   $totalScore       +=$true_score;                                 
                    break;
                 case MULTIPLE_ANSWER :                   
                     if ($from_database) {
@@ -1829,8 +1829,7 @@ class Exercise {
                                              
                         $numAnswer=$objAnswerTmp->selectAutoId($answerId);
                         $studentChoice=$choice[$numAnswer];
-                        //echo $studentChoice.' - '.$answerCorrect.'<br /> ';
-                        
+                       
                         if ($answerCorrect == 1) {
                             if ($studentChoice == 1) { //true value see MultipleAnswerCombinationTrueFalse class
                                 $real_answers[$answerId] = true;
@@ -2102,8 +2101,8 @@ class Exercise {
                     }
                     break;
                     // for matching
-                case MATCHING :                
-                    if ($from_database) {                                    
+                case MATCHING :   
+                    if ($from_database) {                                  
                         $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.$questionId.'" AND correct=0';
                         $res_answer = Database::query($sql_answer);
                         // getting the real answer
@@ -2116,15 +2115,8 @@ class Exercise {
                                               WHERE question_id="'.$questionId.'" AND correct <> 0 ORDER BY id_auto';
             
                         $res_answers = Database::query($sql_select_answer);
-                        if ($show_result) {
-                            echo '<table width="100%" height="71" border="0" cellspacing="3" cellpadding="3" >';
-                            echo '<tr><td colspan="2">&nbsp;</td></tr>';
-                            echo '<tr>
-                                    <td><span style="font-style: italic;">'.get_lang('ElementList').'</span> </td>
-                                    <td><span style="font-style: italic;">'.get_lang('CorrespondsTo').'</span></td>
-                                  </tr>';
-                            echo '<tr><td colspan="2">&nbsp;</td></tr>';
-                        }
+                        
+                   
                         $questionScore = 0;
             
                         while ($a_answers = Database::fetch_array($res_answers)) {        
@@ -2331,13 +2323,14 @@ class Exercise {
             }
         }        
        
-       if ($from == 'exercise_result') {
-            global $colspan;
+       if ($from == 'exercise_result') {            
             // if answer is hotspot. To the difference of exercise_show.php, we use the results from the session (from_db=0)
             // TODO Change this, because it is wrong to show the user some results that haven't been stored in the database yet
             if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
-                    // We made an extra table for the answers
-                    if($origin != 'learnpath') {                        
+                // We made an extra table for the answers
+                 if ($show_result) {
+                    if ($origin != 'learnpath') {
+                                          
                         echo '</table></td></tr>';
                         echo '<tr>
                             <td colspan="2">';
@@ -2346,28 +2339,26 @@ class Exercise {
                         echo '<param name="movie" value="'.api_get_path(WEB_PLUGIN_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id=&from_db=0" />
                                 </object>
                             </td>
-                        </tr>';                    
+                        </tr>';  
+                                          
                     }
-                }
+                 }
+            }
             if ($origin != 'learnpath') { 
-            ?>
-                <tr>
-                <td colspan="<?php echo $colspan; ?>" align="left">                    
-                    <?php                    
+                if ($show_result) {            
+                    echo '</table>'; 
                     if ($this->type == ALL_ON_ONE_PAGE) {
                         echo '<div id="question_score">';                        
                         if ($propagate_neg == 0 && $questionScore < 0) {
                 	        $questionScore = 0;
                 	    }                    	    
-                        echo get_lang('Score').": ".show_score($questionScore, $questionWeighting,false, false);
+                        echo get_lang('Score').": ".show_score($questionScore, $questionWeighting, false, false);
                         
                         echo '</div>';
                     }
-                    ?><br />
-                </td>
-                </tr>
-                </table>
-                <?php }
+                    echo '<br />';
+                }
+            }
         }        
         unset ($objAnswerTmp);
         $i++;
@@ -2587,6 +2578,50 @@ class Exercise {
             $subject = get_lang('ExerciseAttempted');
             $result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
         }
+    }
+    
+    function show_exercise_result_header($user_data, $date = null) {
+        $description = '';
+        if (!empty($this->description)) {
+        	$description = '<tr>
+        		<td style="font-weight:bold" width="10%">
+        			&nbsp;'.get_lang("Description").' :
+        		</td>
+        		<td width="90%">			
+        		'.$this->description.'
+        		</td>
+        	</tr>';
+        }
+        $date_data = '';
+        if (!empty($date)) {
+        	$date_data = '<tr>
+        		<td style="font-weight:bold" width="10%">
+        			&nbsp;'.get_lang("Date").' :
+        		</td>
+        		<td width="90%">			
+        		'.$date.'
+        		</td>
+        	</tr>';
+        }
+        
+        
+        $html = '<table width="100%">
+        	<tr>
+        	<td colspan="2">
+        		<h2>'.Display::return_icon('quiz_big.png', get_lang('Result')).' '.$this->exercise.' : '.get_lang('Result').'</h2>
+        	</td>	
+        	</tr>		
+        	<tr>
+        		<td style="font-weight:bold" width="90px">&nbsp;'.get_lang('User').' : </td>
+        		<td>
+        		'.$user_data.'
+                </td>
+            </tr>            
+            '.$date_data.'
+        	'.$description.'
+        </table>
+        <br />';
+        return $html;
     }
 }
 endif;

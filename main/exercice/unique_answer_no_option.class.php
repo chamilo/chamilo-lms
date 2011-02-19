@@ -449,7 +449,7 @@ class UniqueAnswerNoOption extends Question {
         $comment    = trim($form -> getSubmitValue('comment['.$i.']'));
         $weighting  = trim($form -> getSubmitValue('weighting['.$i.']'));
         $goodAnswer= ($correct == $i) ? true : false;
-        $dest       = '';
+        $dest       = ''; 
             
         $objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i,NULL,NULL,$dest);
         
@@ -459,7 +459,29 @@ class UniqueAnswerNoOption extends Question {
         // sets the total weighting of the question
         $this -> updateWeighting($questionWeighting);
         $this -> save();
-
+	}
+	
+	function return_header($feedback_type, $counter = null) {
+	    parent::return_header($feedback_type, $counter);
+	    $header = '<table width="100%" border="0" cellspacing="3" cellpadding="3">
+			<tr>
+			<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td><i>'.get_lang("Choice").'</i> </td>
+				<td><i>'. get_lang("ExpectedChoice").'</i></td>
+				<td><i>'. get_lang("Answer").'</i></td>';
+				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
+    				$header .= '<td><i>'.get_lang("Comment").'</i></td>';
+				} else { 
+					$header .= '<td>&nbsp;</td>';
+				}
+        $header .= '
+			</tr>
+			<tr>
+			<td>&nbsp;</td>
+			</tr>';
+        return $header;	
 	}
 }
 endif;

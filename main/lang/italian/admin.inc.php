@@ -1388,4 +1388,9 @@ $FillCourses = "Riempi i corsi";
 $FillSessions = "Riempi le sessioni";
 $Archived = "Archiviato";
 $Unarchived = "Ripristinato";
+$StatsUsersDidNotLoginInLastPeriods = "Senza accessi da lungo tempo";
+$LastXMonths = "Ultimi %i mesi";
+$NeverConnected = "Mai collegato";
+$EnableAccessibilityFontResizeTitle = "Accessibilità e ridimensionamento caratteri";
+$EnableAccessibilityFontResizeComment = "Attivando la funzione, in alto a destra dello schermo compariranno i comandi per il ridimensionamento dei caratteri per migliorare l'accessibilità al Campus";
 ?>

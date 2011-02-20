@@ -176,5 +176,5 @@ $FProgress = "Progreso";
 $PutATimeLimit = "Establecer una limitación temporal";
 $StandardTask = "Tarea estándard";
 $ThePageHasBeenExportedToDocArea = "La página ha sido exportada al área de documentos";
-$CreateAssignmentPage = "Esto creará una página wiki especial en la que el profesor describe la tarea, y que automáticamente se vinculará a las páginas wiki donde los estudiantes la realizarán. Tanto las página del docente como la de los estudiantes se crean automáticamente. En este tipo de tareas los estudiantes sólo podrán editar y ver sus páginas, aunque esto puede cambiarse si usted así lo desea.";
+$CreateAssignmentPage = "Esto creará una página wiki especial en la que el profesor describe la tarea, la cual se enlazará automáticamente a las páginas wiki donde los estudiantes la realizarán. Tanto las página del docente como la de los estudiantes se crean automáticamente. En este tipo de tareas los estudiantes sólo podrán editar y ver sus páginas, aunque esto puede cambiarlo si lo desea.";
 ?>

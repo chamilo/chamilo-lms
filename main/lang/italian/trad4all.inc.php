@@ -1011,4 +1011,11 @@ $ContactInformationHasNotBeenSent = "Le tue informazioni di contatto non possono
 $FileDeleted = "File eliminato";
 $MyClasses = "Le mie classi";
 $PublicationDate = "Data di pubblicazione";
+$ItemAdded = "Elemento aggiunto";
+$ItemDeleted = "Elemento eliminato";
+$ItemUpdated = "Elemento modificato";
+$ItemCopied = "Elemento copiato";
+$MyStatistics = "Statistiche";
+$FromDateXToDateY = "Dal %s al %s";
+$CourseThematicAdvance = "Avanzamento nel modulo";
 ?>

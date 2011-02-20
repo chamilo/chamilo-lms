@@ -255,4 +255,6 @@ $PublicationDate = "Data di pubblicazione";
 $UseMaxScore100 = "Usa 100 come punteggio massimo di default";
 $EnableLPAutoLaunch = "Attiva il lancio automatico di un modulo didattico";
 $DisableLPAutoLaunch = "Disattiva il lancio automatico di un modulo didattico";
+$ViewModeEmbedFrame = "Vista attuale: incorporazione (usato per incorporare il modulo in siti esterni)";
+$LPNotVisibleToStudent = "I corsisti non possono vedere il modulo";
 ?>

@@ -171,7 +171,7 @@ $GradebookListOfStudentsCertificates = "Lista de certificados de estudiantes en 
 $NewPresence = "Nueva asistencia";
 $EditPresence = "Editar asistencia";
 $SavedEditPresence = "Guardar asistencia modificada";
-$PresenceSheetFormatExplanation = "Usted debe utilizar la hoja de asistencia que se puede descargar más arriba. Esto hoja de asistencia contiene una lista de todos los participantes en esta capacitación. La primera columna del archivo XLS es el código oficial del candidato, seguido por el apellido y el nombre de pila. Sólo debe cambiar la columna 4 y la nota 0 = ausente, 1 = presente";
+$PresenceSheetFormatExplanation = "Debería utilizar la hoja de asistencia que se puede descargar más arriba. Esta hoja de asistencia contiene una lista de todos los participantes en este curso. La primera columna del archivo XLS es el código oficial del candidato, seguida por el apellido y el nombre. Sólo debe cambiar la columna 4 y la nota 0 = ausente, 1 = presente";
 $ValidatePresenceSheet = "Validar hoja de asistencia";
 $BackTo = "Regresar a";
 $PresenceSheet = "Hoja de asistencia";

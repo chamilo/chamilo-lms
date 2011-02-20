@@ -125,4 +125,6 @@ $AddPicture = "Aggiungi un'immagine";
 $LPAutoLaunch = "Attiva il lancio automatico dei moduli didattici";
 $ConfigLearnpath = "Configura i moduli didattici";
 $PDFWaterMarkHeader = "Filigrana nel PDF esportato";
+$RedirectToALearningPath = "Reindirizza ad uno specifico modulo didattico";
+$RedirectToTheLearningPathList = "Reindirizza all'elenco dei moduli didattici";
 ?>

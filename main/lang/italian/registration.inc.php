@@ -184,4 +184,9 @@ $AreYouSureToEditTheUserStatus = "Sei sicuro di modificare lo stato dell'utente?
 $TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "Il tutor può solo controllare i progressi dei corsisti";
 $TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "Il docente può controllare, valutare i corsisti e assegnarne i diritti";
 $LoginOrEmailAddress = "Nome dell'utente e indirizzo e-mail";
+$MailNotifyInvitation = "Notifica via e-mail la ricezione di nuovi inviti";
+$MailNotifyMessage = "Notifica via e-mail la ricezione di nuovi messaggi personali";
+$MailNotifyGroupMessage = "Notifica via e-mail l'invio di nuovi messaggi al gruppo";
+$AtOnce = "Immediatamente";
+$Daily = "Quotidianamente";
 ?>

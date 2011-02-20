@@ -278,7 +278,7 @@ $ShowOnlineComment = "¿ Mostrar el número de personas que están en línea ?";
 $AllowNameChangeTitle = "¿ Permitir cambiar el nombre en el perfil ?";
 $AllowNameChangeComment = "¿ Permitir al usuario cambiar su nombre y apellidos ?";
 $DefaultDocumentQuotumTitle = "Cuota de espacio por defecto en el servidor para los documentos";
-$DefaultDocumentQuotumComment = "¿ Cuál es la cuota de espacio por defecto en el servidor para la herramienta documentos ? Usted puede cambiar este espacio para un curso específico a través de: administración de la plataforma -> Cursos -> modificar";
+$DefaultDocumentQuotumComment = "¿ Cuál es la cuota de espacio por defecto en el servidor para la herramienta documentos ? Se puede cambiar este espacio para un curso específico a través de: administración de la plataforma -> Cursos -> modificar";
 $ProfileChangesTitle = "Perfil";
 $ProfileChangesComment = "¿Qué parte de su perfil desea que el usuario pueda modificar?";
 $RegistrationRequiredFormsTitle = "Registro: campos obligatorios";
@@ -970,7 +970,7 @@ $RegisterTermsOfSubLanguageForLanguage = "Registrar términos del sub-idioma par
 $AddTermsOfThisSubLanguage = "Añada sus nuevos términos para éste sub-idioma";
 $LoadLanguageFile = "Cargar fichero de idiomas";
 $AllowUseSubLanguageTitle = "Permite definir sub-idiomas";
-$AllowUseSubLanguageComment = "Al activar esta opción, usted podrá definir variaciones para cada término del lenguaje usado para la interfaz de la plataforma, en la forma de un nuevo lenguaje basado en un lenguaje existente.Podrá encontrar esta opción en el menu de idiomas de su página de administración.";
+$AllowUseSubLanguageComment = "Al activar esta opción, podrá definir variaciones para cada término del lenguaje usado para la interfaz de la plataforma, en la forma de un nuevo lenguaje basado en un lenguaje existente.Podrá encontrar esta opción en el menu de idiomas de su página de administración.";
 $AddWordForTheSubLanguage = "Añadir palabras al sub-idioma";
 $TemplateEdited = "Plantilla modificada";
 $SubLanguage = "Sub-idioma";
@@ -978,7 +978,7 @@ $LanguageIsNowVisible = "El idioma ahora es visible";
 $LanguageIsNowHidden = "El idioma ahora no es visible";
 $LanguageDirectoryNotWriteableContactAdmin = "El directorio /main/lang usado en éste portal,no tiene permisos de escritura. Por favor contacte con su administrador";
 $ShowGlossaryInDocumentsTitle = "Mostrar los términos del glosario en los documentos";
-$ShowGlossaryInDocumentsComment = "Desde aquí usted puede configurar la forma de como se añadirán los términos del glosario a los documentos";
+$ShowGlossaryInDocumentsComment = "Desde aquí puede configurar la forma de como se añadirán los términos del glosario a los documentos";
 $ShowGlossaryInDocumentsIsAutomatic = "Automática. Al activar está opción se añadirá un enlace a todos los términos del glosario que se encuentren en el documento.";
 $ShowGlossaryInDocumentsIsManual = "Manual. Al activar está opción, se mostrará un icono en el editor en línea que le permitirá marcar las palabras que desee que enlacen con los términos del glosario.";
 $ShowGlossaryInDocumentsIsNone = "Ninguno. Si activa esta opción, las palabras de sus documentos no se enlazarán con los términos que aparezcan en el glosario.";
@@ -1081,7 +1081,7 @@ $AddTimeLimit = "Añadir límite de tiempo";
 $EditTimeLimit = "Editar límite de tiempo";
 $TheTimeLimitsAreReferential = "El plazo de una categoría es referencial, no afectará a los límites de una sesión de formación";
 $ShowGlossaryInExtraToolsTitle = "Muestra los términos del glosario en las herramientas lecciones(scorm) y ejercicios";
-$ShowGlossaryInExtraToolsComment = "Desde aquí usted puede configurar como añadir  los términos del glosario en herramientas como lecciones(scorm) y ejercicios";
+$ShowGlossaryInExtraToolsComment = "Desde aquí puede configurar como añadir los términos del glosario en herramientas como lecciones y ejercicios";
 $FieldTypeTag = "User tag";
 $SendEmailToAdminTitle = "Aviso por correo electrónico, de la creación de un nuevo curso";
 $SendEmailToAdminComment = "Enviar un correo electrónico al administardor de la plataforma, cada vez que un profesor cree un nuevo curso";
@@ -1306,7 +1306,7 @@ $BigBlueButtonEnableTitle = "Herramienta de videoconferencia BigBlueButton";
 $BigBlueButtonEnableComment = "Seleccione si desea habilitar la herramienta de videoconferencia BigBlueButton. Una vez activada, se mostrará como una herramienta en la página principal todos los curso. Los profesores podrán lanzar una videoconferencia en cualquier momento, pero los alumnos sólo podrán unirse a una ya lanzada.
 Si no dispone de un servidor BigBlueButton, pruebe a 
 <a href=\"http://bigbluebutton.org/\" target=\"_blank\">configurar uno</a> o pida ayuda a los <a href=\"http://www.chamilo.org/en/providers\" target=\"_blank\">proveedores oficiales de Chamilo</a>.
-BigBlueButton es libre (como la libertad *y* la cerveza), pero su instalación requiere un conjunto de habilidades técnicas que no todo el mundo posee. Puede instalarlo por su cuenta o buscar ayuda profesional para que lo haga por usted; pero esta ayuda va a generar cierto costo. En la lógica pura del software libre, nosotros le ofrecemos las herramientas para hacer más fácil su trabajo y le recomendamos profesionales (los proveedores oficiales de Chamilo) que serán capaces de ayudarle.";
+BigBlueButton es libre (como la libertad *y* la cerveza), pero su instalación requiere un conjunto de habilidades técnicas que no todo el mundo posee. Puede instalarlo por su cuenta o buscar ayuda profesional para hacerlo, con el consiguiente costo. En la lógica pura del software libre, nosotros le ofrecemos las herramientas para hacer más fácil su trabajo y le recomendamos profesionales (los proveedores oficiales de Chamilo) que serán capaces de ayudarle.";
 $BigBlueButtonHostTitle = "Servidor BigBlueButton";
 $BigBlueButtonHostComment = "Este es el nombre del servidor donde su servidor BigBlueButton está ejecutándose. Puede ser localhost, una dirección IP (ej., 192.168.14.54) o un nombre de dominio (por ej., my.video.com).";
 $BigBlueButtonSecuritySaltTitle = "Clave de seguridad del servidor BigBlueButton";

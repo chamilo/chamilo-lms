@@ -282,4 +282,13 @@ $PleaseSelectACourse = "Seleziona un corso";
 $StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts = "La media dei punteggi dei corsisti è calcolata sulla base di tutti i tentativi e tutti i moduli";
 $AverageScore = "Punteggio medio";
 $LastConnexionDate = "Data dell'ultimo accesso";
+$QuestionsAreTakenFromLPExercises = "I quesiti sono stati presi dai moduli didattici";
+$AllStudentsAttemptsAreConsidered = "Sono stati presi in considerazione tutti i tentativi dei corsisti";
+$PublishedExercises = "Quesiti disponibili";
+$DoneExercises = "Quesiti prelevati";
+$AverageExerciseResult = "Risultati medi per il quesito";
+$LPProgress = "Avanzamento nei moduli didattici";
+$Ranking = "Graduatoria";
+$BestResultInCourse = "Miglior risultato nel modulo";
+$ExerciseStartDate = "Data di pubblicazione";
 ?>

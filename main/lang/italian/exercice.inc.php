@@ -375,4 +375,7 @@ $MultipleAnswerCombinationTrueFalse = "Combinazione V/F/Non So";
 $DontKnow = "Non so";
 $False = "Falso";
 $DoubtScore = "Non so";
+$PropagateNegativeResults = "Distribuisci i risultati negativi tra i quesiti";
+$InsertALinkToThisQuestionInTheExercise = "Usa il quesito come collegamento (non copiarlo nel Test)";
+$OnlyShowScore = "Mostra solo il punteggio";
 ?>

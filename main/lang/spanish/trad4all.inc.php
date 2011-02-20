@@ -119,7 +119,7 @@ $langAnd = "y";
 $langChoice = "Su selección";
 $langFinish = "Terminar";
 $langCancel = "Cancelar";
-$langNotAllowed = "Usted no está identificado como responsable de este curso";
+$langNotAllowed = "No está identificado como responsable de este curso";
 $langNotLogged = "No ha entrado como usuario de un curso";
 $langManager = "Responsable";
 $langOptional = "Opcional";
@@ -648,7 +648,7 @@ $FieldRequired = "Contenido obligatorio";
 $BookingSystem = "Sistema de reservas";
 $Any = "Cualquiera";
 $SpecificSearchFields = "Campos específicos de búsqueda";
-$SpecificSearchFieldsIntro = "Aquí usted puede definir los campos que quiere usar para indexar el contenido. Cuando esté indexando un elemento podrá agregar uno o más términos en cada campo separados por comas.";
+$SpecificSearchFieldsIntro = "Aquí puede definir los campos que desee usar para indexar el contenido. Cuando esté indexando un elemento podrá agregar uno o más términos en cada campo separados por comas.";
 $AddSpecificSearchField = "Agregar un campo espefífico de búsqueda";
 $SaveSettings = "Guardar configuración";
 $NoParticipation = "No hay participantes";
@@ -862,16 +862,16 @@ $SkillToAcquire = "Competencias a adquirir o desarrollar";
 $InfrastructureQuestions = "¿Qué infraestructura es necesaria para llevar a cabo esta unidad didáctica?";
 $Infrastructure = "Infraestructura";
 $AditionalNotesQuestions = "¿Qué otras cosas se requieren?";
-$DurationInHours = "Horas de duración";
+$DurationInHours = "Horas";
 $ThereAreNoAttendancesInsideCourse = "No hay asistencias dentro del curso";
 $YouMustSelectAtleastAStartDate = "Seleccione al menos una fecha de inicio";
 $EditTematicAdvance = "Editar la temporalización de la programación";
 $AditionalNotes = "Notas adicionales";
 $StartDateFromAnAttendance = "Fecha de inicio a partir de una asistencia";
-$StartDateCustom = "Fecha de inicio personalizado";
+$StartDateCustom = "Fecha de inicio personalizada";
 $StartDateOptions = "Opciones de fecha de inicio";
-$ThematicAdvanceConfiguration = "Configuración de la temporalización de la unidad didáctica";
-$InfoAboutAdvanceInsideHomeCourse = "Información en la página principal del curso del avance en la programación";
+$ThematicAdvanceConfiguration = "Configuración de la herramienta de programaciones didácticas";
+$InfoAboutAdvanceInsideHomeCourse = "Muestra en la página principal del curso información sobre el avance en la programación";
 $DisplayAboutLastDoneAdvance = "Mostrar información sobre el último tema finalizado";
 $DisplayAboutNextAdvanceNotDone = "Mostrar información sobre el siguiente tema a desarrollar";
 $InfoAboutLastDoneAdvance = "Información sobre el último tema finalizado";
@@ -932,7 +932,7 @@ $ContactInformationDescription = "Estimado usuario,
 
 está a punto de instalar una de las mejores plataformas e-learning de código abierto que existen en el mercado. Al igual de muchos otros proyectos de código abierto, Chamilo está respaldado por una amplia comunidad de profesores, estudiantes, desarrolladores y creadores de contenido.
 
-Si sabemos algo más de usted, que va a gestionar este sistema e-learning, podremos dar a conocer a otros que nuestro software lo utiliza y a usted podremos informarle sobre eventos que pueden ser de su interés.
+Si sabemos algo más de quien va a gestionar este sistema e-learning, podremos dar a conocer a otros que nuestro software lo utiliza y a usted podremos informarle sobre eventos que pueden ser de su interés.
 
 Cumplimentar este formulario, implica la aceptación de que la asociación Chamilo o sus miembros puedan enviarle información por correo electrónico sobre eventos importantes o actualizaciones en el software Chamilo. Esto ayudará a crecer a la comunidad como una entidad organizada, donde el flujo de información, se haga con respeto permanente a su tiempo y su privacidad.
 
@@ -1015,4 +1015,5 @@ $ItemCopied = "Elemento copiado";
 $MyStatistics = "Mis estadísticas";
 $FromDateXToDateY = "Del %s al %s";
 $CourseThematicAdvance = "Avance del curso";
+$Clean = "Limpiar";
 ?>

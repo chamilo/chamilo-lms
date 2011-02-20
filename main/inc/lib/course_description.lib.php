@@ -327,7 +327,7 @@ class CourseDescription
 	 */
 	public function get_default_description_icon() {
 		$default_description_icon = array();
-		$default_description_icon[1]= 'course.png';
+		$default_description_icon[1]= 'info.png';
 		$default_description_icon[2]= 'objective.png';
 		$default_description_icon[3]= 'topics.png';
 		$default_description_icon[4]= 'strategy.png';

@@ -20,21 +20,15 @@ $courses_without_category = $courses_in_category[0];
 <!-- Actions: The menu with the different options in cathe course management -->
 <div id="actions" class="actions">
     <?php if ($action != 'subscribe') { ?>
-        &nbsp;<a href="<?php echo api_get_self(); ?>?action=subscribe"><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse'); ?></a>&nbsp;
-    <?php } else { ?>
-        &nbsp;<strong><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse'); ?></strong>&nbsp;
+        &nbsp;<a href="<?php echo api_get_self(); ?>?action=subscribe"><?php echo Display::return_icon('subscribe_course.png', get_lang('SubscribeToCourse'),'','32'); ?></a>
     <?php } ?>
 
     <?php if ($action != 'sortmycourses' && isset($action)) { ?>
-        &nbsp;<a href="<?php echo api_get_self(); ?>?action=sortmycourses"><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses'); ?></a>&nbsp;
-    <?php } else { ?>
-        &nbsp;<strong><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses'); ?></strong>&nbsp;
+        &nbsp;<a href="<?php echo api_get_self(); ?>?action=sortmycourses"><?php echo Display::return_icon('course_move.png', get_lang('SortMyCourses'),'','32'); ?></a>
     <?php } ?>
 
     <?php if ($action != 'createcoursecategory') { ?>
-	&nbsp;<a href="<?php echo api_get_self(); ?>?action=createcoursecategory"><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory'); ?></a>&nbsp;
-    <?php } else { ?>
-        &nbsp;<strong><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory'); ?></strong>&nbsp;
+	&nbsp;<a href="<?php echo api_get_self(); ?>?action=createcoursecategory"><?php echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'),'','32'); ?></a>
     <?php } ?>
 </div>
 
@@ -55,7 +49,7 @@ $courses_without_category = $courses_in_category[0];
                             $icon_title = get_lang('CourseDetails') . ' - ' . $course['title'];
                     ?>
                             <td>                            
-                            <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code'] ?>" title="<?php echo $icon_title ?>" rel="gb_page_center[778]"><?php echo Display::return_icon('synthese_view.gif', $icon_title); ?></a>
+                            <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code'] ?>" title="<?php echo $icon_title ?>" rel="gb_page_center[778]"><?php echo Display::return_icon('info.png', $icon_title, '','22'); ?></a>
                             </td>
                     <?php } ?>
 
@@ -206,7 +200,7 @@ $courses_without_category = $courses_in_category[0];
                                         $icon_title = get_lang('CourseDetails') . ' - ' . $course['title'];
                                 ?>
                                         <td>                                        
-                                        <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code'] ?>" title="<?php echo $icon_title ?>" rel="gb_page_center[778]"><?php echo Display::return_icon('synthese_view.gif', $icon_title) ?></a>
+                                        <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code'] ?>" title="<?php echo $icon_title ?>" rel="gb_page_center[778]"><?php echo Display::return_icon('info.png', $icon_title,'','22') ?></a>
                                         </td>
                                 <?php } ?>
 

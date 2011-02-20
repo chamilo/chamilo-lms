@@ -192,6 +192,7 @@ new_user_calendar		modif crystal nuvola (only 32 px)
 --
 course				nuvola
 course_home			crystal
+course move			modif nuvola
 
 
 --julio

@@ -15,21 +15,15 @@ $stok = Security::get_token();
 
 <div id="actions" class="actions">
     <?php if ($action != 'subscribe') { ?>
-        &nbsp;<a href="<?php echo api_get_self(); ?>?action=subscribe"><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse'); ?></a>&nbsp;
-    <?php } else { ?>
-        &nbsp;<strong><?php echo Display::return_icon('view_more_stats.gif', get_lang('SubscribeToCourse')).' '.get_lang('SubscribeToCourse'); ?></strong>&nbsp;
+        &nbsp;<a href="<?php echo api_get_self(); ?>?action=subscribe"><?php echo Display::return_icon('subscribe_course.png', get_lang('SubscribeToCourse'),'','32'); ?></a>
     <?php } ?>
 
     <?php if ($action != 'sortmycourses' && isset($action)) { ?>
-            &nbsp;<a href="<?php echo api_get_self(); ?>?action=sortmycourses"><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses'); ?></a>&nbsp;
-    <?php } else { ?>
-            &nbsp;<strong><?php echo Display::return_icon('deplacer_fichier.gif', get_lang('SortMyCourses')).' '.get_lang('SortMyCourses'); ?></strong>&nbsp;
+            &nbsp;<a href="<?php echo api_get_self(); ?>?action=sortmycourses"><?php echo Display::return_icon('course_move.png', get_lang('SortMyCourses'),'','32'); ?></a>
     <?php } ?>
 
     <?php if ($action != 'createcoursecategory') { ?>
-	&nbsp;<a href="<?php echo api_get_self(); ?>?action=createcoursecategory"><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory'); ?></a>&nbsp;
-    <?php } else { ?>
-        &nbsp;<strong><?php echo Display::return_icon('folder_new.gif', get_lang('CreateCourseCategory')).' '.get_lang('CreateCourseCategory'); ?></strong>&nbsp;
+	&nbsp;<a href="<?php echo api_get_self(); ?>?action=createcoursecategory"><?php echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'),'','32'); ?></a>
     <?php } ?>
 </div>
 

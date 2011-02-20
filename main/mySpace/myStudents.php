@@ -711,7 +711,7 @@ if ($timezone !== null) {
 					echo '<td align="center">';							
 						if($any_result === true) {											
 							echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student='.$info_user['user_id'].'&details=true&id_session='.Security::remove_XSS($_GET['id_session']).'">';
-							echo '<img src="../img/delete_data.gif" border="0" />';
+							echo Display::return_icon('clean.png',get_lang('Clean'),'','22').'</a>';
 							echo '</a>';
 						}					
 						echo '</td>';						

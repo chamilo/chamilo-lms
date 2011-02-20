@@ -137,12 +137,15 @@ $rs = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 
 
-echo '<div class ="actions"><div align="left" style="float:left;margin-top:2px;" ><a href="javascript:window.back();">'.Display::return_icon('back.png').get_lang('Back').'</a></div>
-	  <div  align="right">
-			<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-			<a href="'.api_get_self().'?export=csv&'.Security::remove_XSS($_SERVER['QUERY_STRING']).'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-		 </div></div>
-	<div class="clear"></div>';
+echo '<div class ="actions">';
+echo '<a href="javascript:window.back();">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
+echo '<a href="javascript: void(0);" onclick="javascript: window.print();">
+'.Display::return_icon('printer.png',get_lang('Print'),'','32').'</a>';
+echo '<a href="'.api_get_self().'?export=csv&'.Security::remove_XSS($_SERVER['QUERY_STRING']).'">
+'.Display::return_icon('export_csv.png',get_lang('ExportAsCSV'),'','32').'</a>';
+echo '</div>';
+
+echo '<div class="clear"></div>';
 
 $session_name = api_get_session_name(api_get_session_id());
 $table_title = ($session_name? get_lang('Session').' : '.$session_name.' | ':'').get_lang('Course').' : '.$_course['title'].' | '.$name;

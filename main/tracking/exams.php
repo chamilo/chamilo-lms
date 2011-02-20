@@ -73,10 +73,13 @@ $form->setDefaults(array('score'=>$filter_score));
 
 if (!$export_to_xls) {
 	Display :: display_header(get_lang('Reporting'));
-	echo '<div class="actions" style ="font-size:10pt;">';
+	echo '<div class="actions">';
 	if ($global) {		
-        echo '<div style="float:right"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>' .
-                '<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a></div>';
+        echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
+		'.Display::return_icon('export_excel.png',get_lang('ExportAsXLS'),'','32').'</a>';
+        echo '<a href="javascript: void(0);" onclick="javascript: window.print()">
+		'.Display::return_icon('printer.png',get_lang('Print'),'','32').'</a>';
+	
 		$menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('TeacherInterface').'</a>';
         if (api_is_platform_admin()) {
 		  $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin">'.get_lang('AdminInterface').'</a>';
@@ -84,8 +87,6 @@ if (!$export_to_xls) {
             $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=coach">'.get_lang('AdminInterface').'</a>';	
         }
 		$menu_items[] = get_lang('ExamTracking');
-        
-        
 		
 		$nb_menu_items = count($menu_items);
 		if($nb_menu_items>1) {
@@ -95,18 +96,17 @@ if (!$export_to_xls) {
 					echo ' | ';
 				}
 			}
-			echo '<br />';
 		}
 	} else {
 	   echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;| 
 		     <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;|&nbsp';
        echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
 		echo ' | '.get_lang('ExamTracking').'';
-         echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a><br /><br />';		
+         echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>';		
 			
 	}	
-    echo '</div>';  
-	echo '<br /><br />';
+	echo '</div>';
+	
 	$form->display();		
 	echo '<h3>'.sprintf(get_lang('FilteringWithScoreX'), $filter_score).'%</h3>';
 }

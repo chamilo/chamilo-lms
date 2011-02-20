@@ -204,20 +204,18 @@ if ($is_drh || $_GET['display'] == 'yourstudents') {
 $nb_menu_items = count($menu_items);
 
 if ($nb_teacher_courses > 0 ) {    
-	echo '<div class="actions" style ="font-size:10pt;">';
-    
-    echo '<div style="float:right">';
-            
+	echo '<div id="actions" class="actions">';
+               
     if (isset($_GET['display']) && ($_GET['display'] == 'useroverview' || $_GET['display'] == 'sessionoverview' || $_GET['display'] == 'courseoverview')) {
         echo '<a href="'.api_get_self().'?display='.$_GET['display'].'&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
     }
-       
-       
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/statistics.gif">&nbsp;'.get_lang('MyStats').'</a>';
-    echo '&nbsp;&nbsp; <a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>';
-    
- 
-    echo '</div>';
+
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
+	Display::return_icon('stats.png', get_lang('MyStats'),'','32').'</a>';	
+    echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
+	Display::return_icon('printer.png', get_lang('Print'),'','32').'</a>';
+
+	
     if (empty($session_id)) {
     	if ($nb_menu_items > 1) {
     		foreach ($menu_items as $key => $item) {
@@ -228,15 +226,15 @@ if ($nb_teacher_courses > 0 ) {
     		}
     	}
     } else {
-    	echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
+    	echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'','32').'</a>';
     }
-	
-	
-	
+		
 	echo '</div>';
 } else {
-	echo '<div class="actions-title" style ="font-size:10pt;">';
-	echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php"><img align="absbottom" src="../img/statistics.gif">&nbsp;'.get_lang('MyStats').'</a> ';
+	echo '<div id="actions" class="actions">';
+	echo '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'
+	.Display::return_icon('stats.png', get_lang('MyStats'),'','32').'</a>';//
+
 	echo '</div>';
 	//Display::display_warning_message(get_lang('HaveNoCourse'));
 }

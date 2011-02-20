@@ -155,7 +155,7 @@ if ($_GET['studentlist'] == 'false') {
 
 } elseif($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
     if (!empty($_GET['from'])) {    
-        echo '&nbsp;<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back')).get_lang('Back').'</a>';
+        echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'','32').'</a>';
     }
     
     /*

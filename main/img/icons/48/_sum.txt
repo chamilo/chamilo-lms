@@ -8,8 +8,8 @@ back 			nuvola
 new_sound		modif nuvola
 disk_quota		crystal
 upload_file		modif mix nuvola crystal
-thumbnails		nuvola
-thumbnails_na		modif nuvola
+thumbnails		crystal
+thumbnails_na		modif crystal
 pack			nuvola
 slideshow		nuvola
 new_draw		nuvola
@@ -193,6 +193,8 @@ new_user_calendar		modif crystal nuvola (only 32 px)
 course				nuvola
 course_home			crystal
 course move			modif nuvola
+--
+blocks				nuvola
 
 
 --julio

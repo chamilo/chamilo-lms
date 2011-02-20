@@ -18,21 +18,18 @@ if(isset($_GET['view']) && in_array($_GET['view'], $views)){
 }
 
 if($dashboard_view == 'list') {
-	$link_blocks_view = '<a href="'.api_get_self().'?view=blocks">'.Display::return_icon('thumbnails.png').get_lang('DashboardBlocks').'</a>';
-	
-	$link_list_view   = Display::return_icon('edit.gif').get_lang('EditBlocks').' ';
+	$link_blocks_view = '<a href="'.api_get_self().'?view=blocks">'.Display::return_icon('blocks.png',get_lang('DashboardBlocks'),'','32');
 	
 } else {
-	$link_blocks_view = Display::return_icon('thumbnails.png').get_lang('DashboardBlocks').'&nbsp;&nbsp;&nbsp;';
-	
-	$link_list_view = '<a href="'.api_get_self().'?view=list">'.Display::return_icon('edit.gif').get_lang('EditBlocks').'</a>';
+	$link_list_view = '<a href="'.api_get_self().'?view=list">'.Display::return_icon('edit.png',get_lang('EditBlocks'),'','32').'</a>';
 }
 
 //
 
 $configuration_link = '';
 if (api_is_platform_admin()) {
-	$configuration_link = '<span style="margin: 0px 0px -17px; padding: 3px 0px 0px; float: right;">'.Display::return_icon('acces_tool.gif').'<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.get_lang('ConfigureDashboardPlugin').'</a></span>';
+	$configuration_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'
+	.Display::return_icon('settings.png',get_lang('ConfigureDashboardPlugin'),'','32').'</a>';
 }
 
 echo '<div class="actions">';

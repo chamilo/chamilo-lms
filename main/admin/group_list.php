@@ -184,7 +184,7 @@ function modify_filter($group_id,$url_params,$row)
 	global $_user;
 	global $_admins_list;
 	if (api_is_platform_admin()) {
-		$result .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_users_to_group.php?id='.$group_id.'">'.Display::return_icon('add_user_big.gif',get_lang('AddUsersToGroup')).'</a>';
+		$result .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_users_to_group.php?id='.$group_id.'">'.Display::return_icon('subscribe_users_social_network.png',get_lang('AddUsersToGroup'),'','22').'</a>';
 		$result .= '<a href="group_edit.php?id='.$group_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
 		$result .= '<a href="group_list.php?action=delete_group&amp;group_id='.$group_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	}
@@ -387,7 +387,7 @@ else
 	echo '<div class="actions" style="width:100%;">';
 	if (api_is_platform_admin()) {
 		echo '<span style="float:right; padding-top:7px;">'.
-			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/group_add.php">'.Display::return_icon('groupadd.gif',get_lang('AddGroups')).get_lang('AddGroups').'</a>'.
+			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/group_add.php">'.Display::return_icon('create_group_social_network.png',get_lang('AddGroups'),'','32').'</a>'.
 			 '</span>';
 	}
 	$form->display();

@@ -195,8 +195,10 @@ course_home			crystal
 course move			modif nuvola
 --
 blocks				nuvola
-
-
+--
+social_network			nuvola
+create_group_social_network	modif nuvola
+add_user_fields			modif nuvola
 --julio
 star				
 star_green

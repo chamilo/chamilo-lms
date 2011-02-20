@@ -628,7 +628,7 @@ function modify_filter($user_id,$url_params,$row) {
 		}*/
 	} else {
 		if ($row['7'] == $statusname[DRH] || UserManager::is_admin($row[0])) {
-			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers')).'</a>&nbsp;&nbsp;';
+			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'),'','22').'</a>';
 			$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		} else if ($row['7'] == $statusname[SESSIONADMIN]) {
@@ -845,7 +845,7 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 	echo '<div class="actions" style="width:100%;">';
 	if (api_is_platform_admin()) {
 		echo '<span style="float:right; padding-top:7px;">'.
-			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('add_user_big.gif',get_lang('AddUsers')).get_lang('AddUsers').'</a>'.
+			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('user_subscribe_course.png',get_lang('AddUsers'),'','32').'</a>'.
 			 '</span>';
 	}
 	$form->display();

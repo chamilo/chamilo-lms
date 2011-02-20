@@ -146,13 +146,13 @@ if (isset ($_user['user_id'])) {
 	// Starting the output
 
 	echo "<div class=\"actions\">";
-	echo "<a href=\"".api_get_self()."?action=view&amp;view=month\">".Display::return_icon('calendar_month.gif', get_lang('MonthView'))." ".get_lang('MonthView')."</a> ";
-	echo "<a href=\"".api_get_self()."?action=view&amp;view=week\">".Display::return_icon('calendar_week.gif', get_lang('WeekView'))." ".get_lang('WeekView')."</a> ";
-	echo "<a href=\"".api_get_self()."?action=view&amp;view=day\">".Display::return_icon('calendar_day.gif', get_lang('DayView'))." ".get_lang('DayView')."</a> ";
+	echo "<a href=\"".api_get_self()."?action=view&amp;view=month\">".Display::return_icon('month.png', get_lang('MonthView'),'','32')."</a>";
+	echo "<a href=\"".api_get_self()."?action=view&amp;view=week\">".Display::return_icon('7days.png', get_lang('WeekView'),'','32')."</a> ";
+	echo "<a href=\"".api_get_self()."?action=view&amp;view=day\">".Display::return_icon('1day.png', get_lang('DayView'),'','32')."</a> ";
 	if (api_get_setting('allow_personal_agenda') == 'true')
 	{
-		echo "<a href=\"".api_get_self()."?action=add_personal_agenda_item\">".Display::return_icon('calendar_personal_add.gif', get_lang('AddPersonalItem'))." ".get_lang('AddPersonalItem')."</a> ";
-		echo "<a href=\"".api_get_self()."?action=view&amp;view=personal\">".Display::return_icon('calendar_personal.gif', get_lang('ViewPersonalItem'))."  ".get_lang('ViewPersonalItem')."</a> ";
+		echo "<a href=\"".api_get_self()."?action=add_personal_agenda_item\">".Display::return_icon('new_user_event.png', get_lang('AddPersonalItem'),'','32')."</a> ";
+		echo "<a href=\"".api_get_self()."?action=view&amp;view=personal\">".Display::return_icon('personal_calendar.png', get_lang('ViewPersonalItem'),'','32')."</a> ";
 	}
 	echo "</div>";
 

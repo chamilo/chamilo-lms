@@ -23,7 +23,7 @@ folder			nuvola
 upload_certificate	modif crystal
 new_certificate		modif crystal
 --
-course			nuvola
+info			nuvola
 wizard			nuvola
 strategy		nuvola
 objective		nuvola
@@ -186,12 +186,21 @@ lesson_plan			modif mix crystal gnome
 new_lesson_plan			modif mix nuvola gnome
 calendar_lesson_plans		modif mix crystal gnome (only 32 px)
 skills				nuvola
+--
+new_user_event			modif crystal nuvola
+new_user_calendar		modif crystal nuvola (only 32 px)
+--
+course				nuvola
+course_home			crystal
+
 
 --julio
 star				
 star_green
+
 ==================
 CONVENTIONS:
+-transparent
 -type: png
 -When some icons are embedded on other icons on the left side, half the size of the largest.
 

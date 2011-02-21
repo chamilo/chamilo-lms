@@ -699,19 +699,19 @@ function get_all_exercise_results($exercise_id, $course_code, $session_id = 0) {
  * 
  */
 function get_all_best_exercise_results_by_user($exercise_id, $course_code, $session_id = 0) {
-	$TABLETRACK_EXERCICES  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	$TBL_TRACK_ATTEMPT     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+	$table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 	$course_code           = Database::escape_string($course_code);
 	$exercise_id           = intval($exercise_id);
 	$session_id            = intval($session_id);
 	
-	$sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";
+	$sql = "SELECT * FROM $table_track_exercises WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";
 	
 	$res = Database::query($sql);
 	$list = array();
 	while($row = Database::fetch_array($res,'ASSOC')) {		
 		$list[$row['exe_id']] = $row;		
-		$sql = "SELECT * FROM $TBL_TRACK_ATTEMPT WHERE exe_id = {$row['exe_id']}";
+		$sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
 		$res_question = Database::query($sql);
 		while($row_q = Database::fetch_array($res_question,'ASSOC')) {
 			$list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
@@ -739,9 +739,6 @@ function get_all_best_exercise_results_by_user($exercise_id, $course_code, $sess
 }
 
 
-
-
-
 /**
  * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session
  * @param   int     exercise id
@@ -751,8 +748,8 @@ function get_all_best_exercise_results_by_user($exercise_id, $course_code, $sess
  * 
  */
 function get_all_exercise_results_by_course($course_code, $session_id = 0, $get_count = true) {
-	$TABLETRACK_EXERCICES  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	$TBL_TRACK_ATTEMPT     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+	$table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 	$course_code           = Database::escape_string($course_code);
 	
 	$session_id = intval($session_id);
@@ -760,7 +757,7 @@ function get_all_exercise_results_by_course($course_code, $session_id = 0, $get_
 	if ($get_count) {
 	    $select = 'count(*) as count';    
 	}	
-	$sql = "SELECT $select FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";	
+	$sql = "SELECT $select FROM $table_track_exercises WHERE status = ''  AND exe_cours_id = '$course_code' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";	
 	$res = Database::query($sql);	
 	if ($get_count) {
 	    $row = Database::fetch_array($res,'ASSOC');	    
@@ -769,7 +766,7 @@ function get_all_exercise_results_by_course($course_code, $session_id = 0, $get_
     	$list = array();	
     	while($row = Database::fetch_array($res,'ASSOC')) {	    	   	
     		$list[$row['exe_id']] = $row;		
-    		$sql = "SELECT * FROM $TBL_TRACK_ATTEMPT WHERE exe_id = {$row['exe_id']}";
+    		$sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
     		$res_question = Database::query($sql);
     		while($row_q = Database::fetch_array($res_question,'ASSOC')) {
     			$list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
@@ -789,20 +786,20 @@ function get_all_exercise_results_by_course($course_code, $session_id = 0, $get_
  * 
  */
 function get_all_exercise_results_by_user($user_id, $exercise_id, $course_code, $session_id = 0) {
-    $TABLETRACK_EXERCICES   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $TBL_TRACK_ATTEMPT      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+	$table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_code = Database::escape_string($course_code);
     $exercise_id = intval($exercise_id);
     $session_id = intval($session_id);
     $user_id    = intval($user_id);
     
-    $sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = $exercise_id AND session_id = $session_id AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND exe_user_id = $user_id  ORDER by exe_id";    
+    $sql = "SELECT * FROM $table_track_exercises WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = $exercise_id AND session_id = $session_id AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND exe_user_id = $user_id  ORDER by exe_id";    
     
     $res = Database::query($sql);
     $list = array();    
     while($row = Database::fetch_array($res,'ASSOC')) {     
         $list[$row['exe_id']] = $row;       
-        $sql = "SELECT * FROM $TBL_TRACK_ATTEMPT WHERE exe_id = {$row['exe_id']}";
+        $sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
         $res_question = Database::query($sql);
         while($row_q = Database::fetch_array($res_question,'ASSOC')) {
             $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
@@ -821,20 +818,20 @@ function get_all_exercise_results_by_user($user_id, $exercise_id, $course_code, 
  * @return 	array
  */
 function get_all_exercise_event_from_lp($exercise_id, $course_code, $session_id = 0) {
-    $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+	$table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_code = Database::escape_string($course_code);
     $exercise_id = intval($exercise_id);
     $session_id = intval($session_id);
     
   
-    $sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id AND orig_lp_id !=0 AND orig_lp_item_id != 0";
+    $sql = "SELECT * FROM $table_track_exercises WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id AND orig_lp_id !=0 AND orig_lp_item_id != 0";
     
     $res = Database::query($sql);
     $list = array();    
     while($row = Database::fetch_array($res,'ASSOC')) {     
         $list[$row['exe_id']] = $row;       
-        $sql = "SELECT * FROM $TBL_TRACK_ATTEMPT WHERE exe_id = {$row['exe_id']}";
+        $sql = "SELECT * FROM $table_track_attempt WHERE exe_id = {$row['exe_id']}";
         $res_question = Database::query($sql);
         while($row_q = Database::fetch_array($res_question,'ASSOC')) {
             $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
@@ -889,8 +886,8 @@ function get_all_exercises_from_lp($lp_id, $course_db) {
  * @return str the comment
  */
 function get_comments($id,$question_id) {
-    $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $sql = "SELECT teacher_comment FROM ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' ORDER by question_id";
+	$table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $sql = "SELECT teacher_comment FROM ".$table_track_attempt." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' ORDER by question_id";
     $sqlres = Database::query($sql);
     $comm = Database::result($sqlres,0,"teacher_comment");
     return $comm;

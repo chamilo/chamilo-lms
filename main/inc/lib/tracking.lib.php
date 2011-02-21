@@ -2404,18 +2404,18 @@ class Tracking {
         $main_width  = 80;
         $main_height = 35;
         
-        $Test = new pChart($main_width, $main_height);
+        $thumbnail_graph = new pChart($main_width, $main_height);
         
-        $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);                
-        //$Test->setGraphArea(50,30,680,200);
-        $Test->drawFilledRoundedRectangle(2,2,$main_width-2,$main_height-2,2,230,230,230);
-        $Test->setGraphArea(5,5,$main_width-5,$main_height-5);     
-        $Test->drawGraphArea(255,255,255);  
+        $thumbnail_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);                
+        //$thumbnail_graph->setGraphArea(50,30,680,200);
+        $thumbnail_graph->drawFilledRoundedRectangle(2,2,$main_width-2,$main_height-2,2,230,230,230);
+        $thumbnail_graph->setGraphArea(5,5,$main_width-5,$main_height-5);     
+        $thumbnail_graph->drawGraphArea(255,255,255);  
         
         //SCALE_NORMAL, SCALE_START0, SCALE_ADDALLSTART0
-        $Test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALLSTART0, 150,150,150,FALSE,0,1,TRUE);     
+        $thumbnail_graph->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALLSTART0, 150,150,150,FALSE,0,1,TRUE);     
         
-        $Test->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 100);  
+        $thumbnail_graph->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 100);  
         
         // Finish the graph                                  
         $graph_id = 'thumbnail_exercise_result_graph_'.Security::remove_XSS($_GET['course']).'-'.intval($_GET['session_id']).'-'.api_get_user_id();
@@ -2426,9 +2426,9 @@ class Tracking {
 			//echo 'in cache';
 			$img_file = $cache->GetHash($graph_id,$data_set->GetData());
         } else {
-            $cache->WriteToCache($graph_id, $data_set->GetData(), $Test);
+            $cache->WriteToCache($graph_id, $data_set->GetData(), $thumbnail_graph);
             ob_start();
-            $Test->Stroke();
+            $thumbnail_graph->Stroke();
             ob_end_clean();            
             $img_file = $cache->GetHash($graph_id, $data_set->GetData());
         }
@@ -2536,39 +2536,39 @@ class Tracking {
         $main_width  = 500;
         $main_height = 250;
         
-        $Test = new pChart($main_width,$main_height);  
+        $main_graph = new pChart($main_width,$main_height);  
         
-        $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
-        $Test->setGraphArea(50,30, $main_width -20,$main_height -50);  
+        $main_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
+        $main_graph->setGraphArea(50,30, $main_width -20,$main_height -50);  
         
-        $Test->drawFilledRoundedRectangle(10,10, $main_width- 10,$main_height -10,5,240,240,240);  
-        $Test->drawRoundedRectangle(7,7,$main_width - 7,$main_height  - 7,5,230,230,230);  
+        $main_graph->drawFilledRoundedRectangle(10,10, $main_width- 10,$main_height -10,5,240,240,240);  
+        $main_graph->drawRoundedRectangle(7,7,$main_width - 7,$main_height  - 7,5,230,230,230);  
         
-        $Test->drawGraphArea(255,255,255,TRUE);  
+        $main_graph->drawGraphArea(255,255,255,TRUE);  
         
         //SCALE_NORMAL, SCALE_START0, SCALE_ADDALLSTART0
-        $Test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALLSTART0, 150,150,150,TRUE,0,1,TRUE);
+        $main_graph->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALLSTART0, 150,150,150,TRUE,0,1,TRUE);
              
-        $Test->drawGrid(4,TRUE,230,230,230,50);  
+        $main_graph->drawGrid(4,TRUE,230,230,230,50);  
         
         // Draw the 0 line  
-        $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);  
-      //  $Test->drawTreshold(0,143,55,72,TRUE,TRUE);  
+        $main_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);  
+      //  $main_graph->drawTreshold(0,143,55,72,TRUE,TRUE);  
         
         // Draw the bar graph  
         $data_set->RemoveSerie("Serie3");  
         
-        //$Test->drawBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);
+        //$main_graph->drawBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);
         
-        //$Test->drawStackedBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);
-        $Test->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 100);  
+        //$main_graph->drawStackedBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);
+        $main_graph->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 100);  
         
         
         // Finish the graph  
-        $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);   
-        $Test->drawLegend($main_width - 120,$main_height -100,$data_set->GetDataDescription(),255,255,255);  
-        $Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8); 
-        $Test->drawTitle(180,22,$exercise_title,50,50,50);
+        $main_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);   
+        $main_graph->drawLegend($main_width - 120,$main_height -100,$data_set->GetDataDescription(),255,255,255);  
+        $main_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8); 
+        $main_graph->drawTitle(180,22,$exercise_title,50,50,50);
         $graph_id = 'exercise_result_graph'.Security::remove_XSS($_GET['course']).'-'.intval($_GET['session_id']).'-'.api_get_user_id();
         //if ($cache->IsInCache($graph_id, $data_set->GetData())) {            
 		if (0) {
@@ -2576,9 +2576,9 @@ class Tracking {
 			//echo 'in cache';
 			$img_file = $cache->GetHash($graph_id,$data_set->GetData());
         } else {
-            $cache->WriteToCache($graph_id, $data_set->GetData(), $Test);
+            $cache->WriteToCache($graph_id, $data_set->GetData(), $main_graph);
             ob_start();
-            $Test->Stroke();
+            $main_graph->Stroke();
             ob_end_clean();            
             $img_file = $cache->GetHash($graph_id, $data_set->GetData());            
         }      

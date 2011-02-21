@@ -35,11 +35,6 @@ function event_open() {
 	global $_configuration;
 	global $TABLETRACK_OPEN;
 
-	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled']) {
-		return 0;
-	}
-
 	// @getHostByAddr($_SERVER['REMOTE_ADDR']) : will provide host and country information
 	// $_SERVER['HTTP_USER_AGENT'] :  will provide browser and os information
 	// $_SERVER['HTTP_REFERER'] : provide information about refering url
@@ -80,10 +75,6 @@ function event_login() {
 	global $_user;
 	global $TABLETRACK_LOGIN;
 
-	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled']) {
-		return 0;
-	}
 	$reallyNow = api_get_utc_datetime();
 	$sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date)
 			VALUES	('".$_user['user_id']."',
@@ -106,10 +97,6 @@ function event_access_course() {
 	global $TABLETRACK_ACCESS;
 	global $TABLETRACK_LASTACCESS; //for "what's new" notification
 
-	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled']){
-		return 0;
-	}
 	$id_session = api_get_session_id();	
 	$reallyNow = api_get_utc_datetime();
 	if ($_user['user_id']) {
@@ -149,8 +136,6 @@ function event_access_course() {
  */
 function event_access_tool($tool, $id_session=0) {
 	global $_configuration;
-	// if tracking is disabled record nothing
-	// if( ! $_configuration['tracking_enabled'] ) return 0; //commented because "what's new" notification must always occur
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_ACCESS;
@@ -170,7 +155,7 @@ function event_access_tool($tool, $id_session=0) {
 	// added for "what's new" notification
 	$pos2 = strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower($_configuration['root_web']."index"));
 	// end "what's new" notification
-	if ($_configuration['tracking_enabled'] && ($pos !== false || $pos2 !== false)) {		
+	if ($pos !== false || $pos2 !== false) {		
 		$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
 					(access_user_id,
 					 access_cours_code,
@@ -214,11 +199,7 @@ function event_access_tool($tool, $id_session=0) {
  */
 function event_download($doc_url) {
 	global $_configuration, $_user, $_cid;
-	$tbl_stats_downloads = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled']) {
-		return 0;
-	}
+	$tbl_stats_downloads = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);	
     $doc_url = Database::escape_string($doc_url);
 
 	$reallyNow = api_get_utc_datetime();
@@ -257,10 +238,7 @@ function event_upload($doc_id) {
 	global $_user;
 	global $_cid;
 	global $TABLETRACK_UPLOADS;
-	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled']) {
-		return 0;
-	}
+	
 	$reallyNow = api_get_utc_datetime();
 	if (isset($_user['user_id']) && $_user['user_id']!='') {
 		$user_id = "'".$_user['user_id']."'";
@@ -293,11 +271,6 @@ function event_upload($doc_id) {
 */
 function event_link($link_id) {
 	global $_configuration, $_user, $TABLETRACK_LINKS;
-
-	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled']) {
-		return 0;
-	}
 	$reallyNow = api_get_utc_datetime();
 	if (isset($_user['user_id']) && $_user['user_id']!='') {
 		$user_id = "'".Database::escape_string($_user['user_id'])."'";
@@ -446,10 +419,6 @@ function create_event_exercice($exo_id) {
  */
 function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0) {
 	global $_configuration;
-	// If tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled']) {
-		return 0;
-	}	
 	$score 	= Database::escape_string($score);
 	$answer = Database::escape_string($answer);
 	$quesId = Database::escape_string($quesId);
@@ -511,10 +480,6 @@ function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0
  */
 function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $coords, $exerciseId = 0) {
 	global $_configuration, $_user;
-	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled']) {
-		return 0;
-	}
 
 	//Validation in case of fraud  with actived control time
     if (!exercise_time_control_is_valid($exerciseId)) {	
@@ -555,12 +520,6 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	$user_id = Database::escape_string($user_id);
 	$course_code = Database::escape_string($course_code);
     
-    // if tracking is disabled record nothing
-    if (!$_configuration['tracking_enabled']) {
-        return 0;
-    }
-    
-
 	if(!isset($timestamp)) {
 		$timestamp = api_get_utc_datetime();
 	}

@@ -1433,8 +1433,7 @@ class Exercise {
 	
 	
 	public function save_stat_track_exercise_info($clock_expired_time = 0, $safe_lp_id = 0, $safe_lp_item_id = 0, $safe_lp_item_view_id = 0, $questionList = array()) {
-		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		error_log('save_stat_track_exercise_info');
+		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);		
 		if (empty($safe_lp_id)) {
 			$safe_lp_id = 0;
 		}		

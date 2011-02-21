@@ -443,7 +443,7 @@ function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0
 		$user_id = api_get_anonymous_id();
 	}
     
-	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT (exe_id, user_id, question_id, answer, marks, course_code, position, tms )
+	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT (exe_id, user_id, question_id, answer, marks, course_code, session_id, position, tms )
 			  VALUES (
 			  ".$exeId.",
 			  ".$user_id.",
@@ -451,6 +451,7 @@ function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0
 			   '".$answer."',
 			   '".$score."',
 			   '".api_get_course_id()."',
+			   '".api_get_session_id()."',
 			   '".$j."',
 			   '".$reallyNow."'
 			  )";
@@ -458,8 +459,8 @@ function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0
 	if (!empty($quesId) && !empty($exeId) && !empty($user_id)) {
 		$res = Database::query($sql);		
 		if (defined('ENABLED_LIVE_EXERCISE_TRACKING')){
-			$TBL_RECORDING = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-			$recording_changes = "INSERT INTO $TBL_RECORDING (exe_id, question_id, marks, insert_date, author) VALUES ('$exeId','$quesId','$score','".api_get_utc_datetime()."','') ";
+			$recording_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+			$recording_changes = "INSERT INTO $recording_table (exe_id, question_id, marks, insert_date, author, session_id) VALUES ('$exeId','$quesId','$score','".api_get_utc_datetime()."','', '".api_get_session_id()."') ";
 			Database::query($recording_changes);			
 		}		
 		return $res;
@@ -479,8 +480,6 @@ function exercise_attempt($score, $answer, $quesId, $exeId, $j, $exercise_id = 0
  * @uses Course code and user_id from global scope $_cid and $_user
  */
 function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $coords, $exerciseId = 0) {
-	global $_configuration, $_user;
-
 	//Validation in case of fraud  with actived control time
     if (!exercise_time_control_is_valid($exerciseId)) {	
 	    $correct = 0;	    
@@ -488,7 +487,7 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
 
 	$tbl_track_e_hotspot = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 	$sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".
-			" VALUES ('" . Database :: escape_string($_user['user_id']) . "'," .
+			" VALUES ('" . api_get_user_id() . "'," .
 			" '" . api_get_course_id() . "', " .
 			" '" . Database :: escape_string($exe_id) . "', " .
 			" '" . Database :: escape_string($question_id) . "'," .
@@ -578,11 +577,11 @@ function get_attempt_count($user_id, $exerciseId, $lp_id, $lp_item_id,$lp_item_v
 	$exerciseId 	= intval($exerciseId);
 	$lp_id 			= intval($lp_id);
 	$lp_item_id 	= intval($lp_item_id);
-    $lp_item_view_id = intval($lp_item_view_id);
+    $lp_item_view_id= intval($lp_item_view_id);
 	
    	$sql = "SELECT count(*) as count FROM $stat_table WHERE exe_exo_id = '$exerciseId'
-            AND exe_user_id 	= '$user_id' AND status 			!= 'incomplete'
-            AND orig_lp_id 		= $lp_id AND orig_lp_item_id = $lp_item_id AND orig_lp_item_view_id = $lp_item_view_id AND exe_cours_id = '".api_get_course_id()."' AND session_id = '" . api_get_session_id() . "'";
+            AND exe_user_id = '$user_id' AND status != 'incomplete'
+            AND orig_lp_id 	= $lp_id AND orig_lp_item_id = $lp_item_id AND orig_lp_item_view_id = $lp_item_view_id AND exe_cours_id = '".api_get_course_id()."' AND session_id = '" . api_get_session_id() . "'";
 
     $query = Database::query($sql);
     if (Database::num_rows($query) > 0 ) {
@@ -601,7 +600,7 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
     
     $track_e_exercises     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $track_attempts        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $TBL_RECORDING         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+    $recording_table       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
     
     $user_id    = intval($user_id);
     $lp_id      = intval($lp_id);
@@ -633,7 +632,7 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
         $sql_delete = "DELETE FROM $track_attempts  WHERE exe_id IN (".implode(',',$exe_list).")";
         $result = Database::query($sql_delete);
         
-        $sql_delete = "DELETE FROM $TBL_RECORDING  WHERE exe_id IN (".implode(',',$exe_list).")";
+        $sql_delete = "DELETE FROM $recording_table  WHERE exe_id IN (".implode(',',$exe_list).")";
         $result = Database::query($sql_delete);        
     }
 }

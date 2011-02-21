@@ -2282,7 +2282,7 @@ class Tracking {
                         } else {
                             $graph = Display::url($graph, '#', array('id'=>$exercices['id'],'class'=>'opener'));  
                         }
-                        var_dump($attempts);
+                        
                         $html .= Display::tag('td', $attempts,                 array('align'=>'center'));                                          
                         $html .= Display::tag('td', $percentage_score_result,  array('align'=>'center'));
                         $html .= Display::tag('td', $position,                 array('align'=>'center'));                            

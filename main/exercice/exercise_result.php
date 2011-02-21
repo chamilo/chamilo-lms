@@ -258,7 +258,7 @@ $safe_lp_item_id = $learnpath_item_id==''?0:(int)$learnpath_item_id;
 $safe_lp_item_view_id = $learnpath_item_view_id==''?0:(int)$learnpath_item_view_id;
 $quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
 if (api_is_allowed_to_session_edit() ) {
-	update_event_exercice($exeId, $objExercise->selectId(), $totalScore, $totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration);
+	update_event_exercice($exeId, $objExercise->selectId(), $totalScore, $totalWeighting, api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$safe_lp_item_view_id, $quizDuration);
 }
 
 if ($origin != 'learnpath') {

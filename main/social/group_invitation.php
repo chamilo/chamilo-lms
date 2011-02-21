@@ -301,7 +301,7 @@ if ($ajax_search) {
 				}
 				//var_dump ($group_friend_list[$group_id]['relation_type']);
 				if ($group_friend_list[$group_id]['relation_type'] == '' ) {
-					$Users[$friend['friend_user_id']]=array('user_id' => $friend['friend_user_id'],  'firstname' =>$friend['firstName'], 'lasttname' => $friend['lastName'], 'username' =>$friend['username'],'group_id'=>$friend_group_id );
+					$Users[$friend['friend_user_id']]=array('user_id' => $friend['friend_user_id'],  'firstname' =>$friend['firstName'], 'lastname' => $friend['lastName'], 'username' =>$friend['username'],'group_id'=>$friend_group_id );
 				}
 			}
 		}
@@ -320,7 +320,6 @@ if ($ajax_search) {
 			}
 		}
 }
-
 if ($add_type == 'multiple') {
 	$link_add_type_unique = '<a href="'.api_get_self().'?id='.$group_id.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
@@ -440,12 +439,12 @@ if(!empty($errorMsg)) {
 		<input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
 		<div id="ajax_list_users_single"></div>
 		<?php
-  	  } else {
+  	  } else {  	      
   	  ?>
   	  <div id="ajax_list_users_multiple">
 	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:290px;">
 		<?php
-		foreach($nosessionUsersList as $enreg) {
+		foreach($nosessionUsersList as $enreg) { 
 		?>
 			<option value="<?php echo $enreg['user_id']; ?>" <?php if(in_array($enreg['user_id'],$UserList)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 		<?php
@@ -472,7 +471,7 @@ if(!empty($errorMsg)) {
 	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" ></button>
 	<br /><br />
   	<?php
-  }
+  }  
   ?>
 	<br /><br /><br /><br /><br />
   </td>
@@ -482,7 +481,7 @@ if(!empty($errorMsg)) {
 <?php
 foreach($sessionUsersList as $enreg) {
 ?>
-	<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['firstname'].' '.$enreg['lastname'].' ('.$enreg['username'].')'; ?></option>
+	<option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 
 <?php
 }

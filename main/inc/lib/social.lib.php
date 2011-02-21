@@ -541,7 +541,7 @@ class SocialManager extends UserManager {
 			$user_id = api_get_user_id();
 		}
 
-		$show_groups      = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list');
+		$show_groups      = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list', 'browse_groups');
 		$show_messages    = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
 
 		// get count unread message and total invitations
@@ -555,6 +555,7 @@ class SocialManager extends UserManager {
 		$total_invitations = (!empty($total_invitations)?' ('.$total_invitations.')':'');
 
 		// Everybody can create groups
+		/*
 		if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
 			$create_group_item =  '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='group_add'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('CreateASocialGroup').'</span></a></li>';
 		} else {
@@ -562,25 +563,19 @@ class SocialManager extends UserManager {
 			if (api_is_allowed_to_edit(null,true)) {
 				$create_group_item =  '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='group_add'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('CreateASocialGroup').'</span></a></li>';
 			}
-		}
+		}*/
 
 		echo '<div class="social-menu">';
 
 	  	if (in_array($show, $show_groups) && !empty($group_id)) {
 			//--- Group image
-
 			$group_info = GroupPortalManager::get_group_data($group_id);
 			$big		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,GROUP_IMAGE_SIZE_BIG);
 			$original	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'',GROUP_IMAGE_SIZE_ORIGINAL);
 
 			echo '<div class="social-content-image">';
-				echo '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';
-
-				if (basename($big['file']) != 'unknown_group.png') {
-					echo '<a class="thickbox" href="'.$original['file'].'"><img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />';
-				} else {
-					echo '<img src='.$big['file'].' class="social-groups-image" /><br /><br />';
-				}
+				echo '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';				
+				echo Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id);
 				if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
 					echo '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/social/group_edit.php?id='.$group_id.'">'.get_lang('EditGroup').'</a></div>';
 				}
@@ -609,7 +604,7 @@ class SocialManager extends UserManager {
 		  	echo '</div>';
 	  	}
 
-		if ($show != 'shared_profile') {
+		if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list','waiting_list','invite_friends'))) {
 			echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
 
 	        echo 	'<div>
@@ -618,7 +613,6 @@ class SocialManager extends UserManager {
 	                        <li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('instant_message.png',get_lang('Messages'),array('hspace'=>'6')).'<span class="'.($show=='messages'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Messages').$count_unread_message.'</span></a></li>';
 
 			if (in_array($show, $show_messages)) {
-
 					echo '<li><ul>';
 						echo '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='messages_compose'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('ComposeMessage').'</span></a></li>';
 						echo '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png', get_lang('Inbox'), array('hspace'=>'6')).'<span class="'.($show=='messages_inbox'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Inbox').'</span></a></li>';						
@@ -635,14 +629,14 @@ class SocialManager extends UserManager {
 	              <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.png',get_lang('SocialGroups'),array('hspace'=>'6')).'<span class="'.($show=='groups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('SocialGroups').'</span></a></li>';
 			
 			//Show groups
-	        if (in_array($show,$show_groups)) {					
+/*	        if (in_array($show,$show_groups)) {					
     			echo $create_group_item;
                 if (api_get_setting('allow_students_to_create_groups_in_social') == 'true' || api_is_platform_admin()) {                        
                     echo '<li><ul>';    
                     echo '<li class="social-menu-sub-level" style="background:none;padding:0px"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php?view=mygroups">'.Display::return_icon('group.png',get_lang('MySocialGroups'),array('hspace'=>'6')).'<span class="'.($show=='mygroups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MySocialGroups').'</span></a></li>';
                     echo '</ul></li>';
                 }
-			}
+			}*/
 			
 			//Groups
 			if (api_get_setting('show_groups_to_users') == 'true') {
@@ -659,12 +653,12 @@ class SocialManager extends UserManager {
 			//My files
 			 echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.Display::return_icon('briefcase_small.png',get_lang('MyFiles'),array('hspace'=>'6')).'<span class="'.($show=='myfiles'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyFiles').'</span></a></li>';	
 	        echo'</ul>
-				  </div>';
-
-	        if (in_array($show, $show_groups) && !empty($group_id)) {
-	        	echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id(), $show);
-	        }
+				  </div>';	     
 		}
+		
+        if (in_array($show, $show_groups) && !empty($group_id)) {
+            echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id(), $show);
+        }
 
         if ($show == 'shared_profile') {
 

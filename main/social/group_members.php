@@ -107,6 +107,9 @@ echo '<div id="social-content">';
 	SocialManager::show_social_menu('member_list',$group_id);
 	echo '</div>';
 	echo '<div id="social-content-right">';
+	
+	     echo '<h2><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h2>';
+	 
 		echo '<div class="social-box-container2">';				
 			echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('MemberList')).'</div>';
 			echo '<div id="div_content_table" class="social-box-content2">';

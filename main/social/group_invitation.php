@@ -339,8 +339,9 @@ if ($add_type == 'multiple') {
 			SocialManager::show_social_menu('invite_friends',$group_id);
 		echo '</div>';
 
-	echo '<div id="social-content-right">';
-
+	echo '<div id="social-content-right">';	
+    echo '<h2><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h2>';
+    
 	if (count($nosessionUsersList) == 0) {
 			$friends = SocialManager::get_friends(api_get_user_id());
 			if ($friends == 0) {

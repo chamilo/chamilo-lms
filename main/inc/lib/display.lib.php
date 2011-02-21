@@ -241,20 +241,9 @@ class Display {
 	 * 				Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
 	 */
 
-	public static function display_sortable_grid($name, $header, $content, $paging_options = array(), $query_vars = null, $form_actions = array(), $vibility_options = true) {
-		if (!class_exists('SortableTable')) {
-			require_once 'sortabletable.class.php';
-		}
-		global $origin;
-		$column =  0;
-		$default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
-		$table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);
-
-		if (is_array($query_vars)) {
-			$table->set_additional_parameters($query_vars);
-		}
-		echo $table->display_simple_grid($vibility_options, $paging_options['hide_navigation']);
-	}
+	public static function display_sortable_grid($name, $header, $content, $paging_options = array(), $query_vars = null, $form_actions = array(), $vibility_options = true, $sort_data = true) {
+	    echo self::return_sortable_grid($name, $header, $content, $paging_options, $query_vars, $form_actions, $vibility_options, $sort_data);		
+	}	
 
 	/**
 	 * Gets a nice grid in html string
@@ -829,8 +818,7 @@ class Display {
         $i = 1;
         foreach ($header_list as $item) {
             
-            $item =self::tag('a', $item, array('href'=>'#'.$id.'-'.$i)); 
-                       
+            $item =self::tag('a', $item, array('href'=>'#'.$id.'-'.$i));
         	$lis .=self::tag('li', $item, $ul_attributes);
             $i++;
         }

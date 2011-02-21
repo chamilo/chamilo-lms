@@ -6,7 +6,7 @@
  *  @todo convert this lib into a static class
  *  
  * 	shows a question and its answers
- *	@package dokeos.exercise
+ *	@package chamilo.exercise
  * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
  * 	@version $Id: exercise.lib.php 22247 2009-07-20 15:57:25Z ivantcholakov $
  */

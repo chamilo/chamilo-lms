@@ -87,7 +87,7 @@ class Exercise {
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION,$this->course['db_name']);
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-		$sql="SELECT title,description,sound,type,random, random_answers, active, results_disabled, max_attempt,start_time,end_time,feedback_type,expired_time,propagate_neg FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
+		$sql="SELECT * FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
 		$result=Database::query($sql);
 
 		// if the exercise has been found
@@ -113,8 +113,6 @@ class Exercise {
 			}
       		$this->expired_time 	= $object->expired_time; //control time
       		
-      		
-      		
 			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
 			
 			$result=Database::query($sql);
@@ -130,7 +128,7 @@ class Exercise {
             //load questions only for exercises of type 'one question per page'
             //this is needed only is there is no questions
             //
-            // @todo not sure were in the code this is used somebody mess with the exercise 
+            // @todo not sure were in the code this is used somebody mess with the exercise tool
             global $_configuration, $questionList;
             if ($this->type == ONE_PER_PAGE && $_configuration['live_exercise_tracking'] && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED')) {
             	//if(empty($_SESSION['questionList']))
@@ -409,8 +407,7 @@ class Exercise {
 			$this->sound=$sound['name'];
 
 			if (@move_uploaded_file($sound['tmp_name'],$audioPath.'/'.$this->sound)) {
-				$query="SELECT 1 FROM $TBL_DOCUMENT "
-            ." WHERE path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
+				$query="SELECT 1 FROM $TBL_DOCUMENT  WHERE path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
 				$result=Database::query($query);
 
 				if(!Database::num_rows($result)) {
@@ -506,7 +503,7 @@ class Exercise {
 	 * @author - Olivier Brouckaert
 	 */
 	function save($type_e='') {
-		global $_course,$_user;
+		global $_course;
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -559,7 +556,7 @@ class Exercise {
 			Database::query($sql);
 
 			// update into the item_property table
-			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizUpdated',$_user['user_id']);
+			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizUpdated',api_get_user_id());
 
             if (api_get_setting('search_enabled')=='true') {
                 $this -> search_engine_edit();
@@ -597,7 +594,7 @@ class Exercise {
 			$this->id=Database::insert_id();
         	// insert into the item_property table
 
-        	api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizAdded',$_user['user_id']);
+        	api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizAdded',api_get_user_id());
 			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
 				$this -> search_engine_save();
 			}
@@ -820,11 +817,11 @@ class Exercise {
 	 * @author - Olivier Brouckaert
 	 */
 	function delete() {
-		global $_course,$_user;
+		global $_course;
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE id='".Database::escape_string($this->id)."'";
 		Database::query($sql);
-		api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizDeleted',$_user['user_id']);
+		api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizDeleted',api_get_user_id());
 
 		if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian') ) {
 			$this -> search_engine_delete();
@@ -987,10 +984,7 @@ class Exercise {
 
 			$form -> addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
 			$form -> addElement('html','</div>');
-			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
-			
-			
-			
+			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));			
 
 			$form -> addElement('html','</div>');  //End advanced setting
 			$form -> addElement('html','</div>');

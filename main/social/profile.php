@@ -451,7 +451,7 @@ if ($show_full_profile) {
 			$url_open  = '<a href="groups.php?id='.$id.'">';
 			$url_close = '</a>';
 			$icon = '';
-			$name = api_strtoupper(cut($result['name'],20,true));
+			$name = cut($result['name'],20,true);
 			if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
 				$icon = Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
 			} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
@@ -464,10 +464,10 @@ if ($show_full_profile) {
 				$count_users_group = $count_users_group.' '.get_lang('Members');
 			}
 			$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
-			$item_name = '<div class="box_shared_profile_group_title">'.$url_open.'<span class="social-groups-text1">'.api_strtoupper($name).'</span>'. $icon.$url_close.'</div>';
+			$item_name = '<div class="box_shared_profile_group_title">'.$url_open.$name.$icon.$url_close.'</div>';
 
 			if ($result['description'] != '') {
-				$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2">'.get_lang('DescriptionGroup').'</span><p class="social-groups-text4">'.cut($result['description'],100,true).'</p></div>';
+				$item_description = '<div class="box_shared_profile_group_description"><p class="social-groups-text4">'.cut($result['description'],100,true).'</p></div>';
 			} else {
 				$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2"></span><p class="social-groups-text4"></p></div>';
 			}

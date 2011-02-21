@@ -2202,7 +2202,7 @@ class Tracking {
                 <th class="head" style="color:#000">'.get_lang('LatestAttempt').'</th>
                 <th class="head" style="color:#000">'.get_lang('Ranking').'</th>
                 <th class="head" style="color:#000">'.get_lang('BestResultInCourse').'</th>
-                <th class="head" style="color:#000">'.get_lang('Statistics').'</th>                                        
+                <th class="head" style="color:#000">'.get_lang('Statistics').' '.Display :: return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>                                        
                 </tr>';
             
             if (empty($session_id)) {
@@ -2256,10 +2256,9 @@ class Tracking {
                     //Exercise configuration show results
                     if ($exercices['results_disabled'] == 0) {
                         $latest_attempt_url = '';
-                        $percentage_score_result  = '-';
-                        $position = '-';
-                        $best_score = '-';
-                        
+                        $best_score = $position = $percentage_score_result  = '-';
+                        $graph = $normal_graph = null;
+                                                
                         $best_score_data = get_best_score($exercices['id'], $course_info['code'], $session_id);     
                         $best_score      = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
                                                
@@ -2270,12 +2269,12 @@ class Tracking {
                             if (!empty($weighting)) {                                                           
                                 $my_score = $score/$weighting;
                             }                            
-                            $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id);                            
+                            $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id);
+                            
+                            $graph         = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);                        
+                            $normal_graph  = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);                            
                         }
-                              
-                        $graph         = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);                        
-                        $normal_graph  = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
-                        
+                                                
                         echo Display::div($normal_graph, array('id'=>'main_graph_'.$exercices['id'],'class'=>'dialog', 'style'=>'display:none') );
                         
                         if (empty($graph)) {
@@ -2283,7 +2282,7 @@ class Tracking {
                         } else {
                             $graph = Display::url($graph, '#', array('id'=>$exercices['id'],'class'=>'opener'));  
                         }
-                        
+                        var_dump($attempts);
                         $html .= Display::tag('td', $attempts,                 array('align'=>'center'));                                          
                         $html .= Display::tag('td', $percentage_score_result,  array('align'=>'center'));
                         $html .= Display::tag('td', $position,                 array('align'=>'center'));                            
@@ -2294,11 +2293,11 @@ class Tracking {
                         
                     } else {
                         // Exercise configuration NO results
-                        $html .= Display::tag('td', get_lang('CantShowResults'), array('align'=>'center'));  
-                        $html .= Display::tag('td', '--', array('align'=>'center'));                            
-                        $html .= Display::tag('td', '--', array('align'=>'center'));
-                        $html .= Display::tag('td', '--', array('align'=>'center'));
-                        $html .= Display::tag('td', '--', array('align'=>'center'));                            
+                        $html .= Display::tag('td', 0, array('align'=>'center'));  
+                        $html .= Display::tag('td', '-', array('align'=>'center'));                            
+                        $html .= Display::tag('td', '-', array('align'=>'center'));
+                        $html .= Display::tag('td', '-', array('align'=>'center'));
+                        $html .= Display::tag('td', '-', array('align'=>'center'));                            
                     }
                     $html .= '</tr>';
                 }

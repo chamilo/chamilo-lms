@@ -140,14 +140,13 @@ if ($is_allowedToEdit) {
 		unset($objQuestionTmp);
 	} elseif($recup && $fromExercise) {
 		// gets an existing question and copies it into a new exercise
+		$objQuestionTmp = Question :: read($recup);
 		
 		// if the question exists
-		if($objQuestionTmp = Question :: read($recup))
-		{
+		if($objQuestionTmp = Question :: read($recup)) {
 			// adds the exercise ID represented by $fromExercise into the list of exercises for the current question
 			$objQuestionTmp->addToList($fromExercise);
 		}
-
 		// destruction of the Question object
 		unset($objQuestionTmp);
 
@@ -548,7 +547,9 @@ foreach ($main_question_list as $row) {
                 echo ' '.Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest'));
                 echo '</a> ';
 				if ($row['session_id'] == $session_id) {
-					echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" title="'.get_lang('InsertALinkToThisQuestionInTheExercise').'" alt="'.get_lang('InsertALinkToThisQuestionInTheExercise').'"></a>';
+				    if ($selected_course == api_get_course_int_id()) {
+					    echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" title="'.get_lang('InsertALinkToThisQuestionInTheExercise').'" alt="'.get_lang('InsertALinkToThisQuestionInTheExercise').'"></a>';
+				    }
 				}                							
 				
 			}

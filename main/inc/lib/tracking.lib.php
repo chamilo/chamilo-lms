@@ -1876,6 +1876,8 @@ class Tracking {
          * @return  string  html code
          */
         function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true) {
+            require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+            
             global $_configuration;
             $tbl_course_user            = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
             $tbl_access_rel_course      = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);

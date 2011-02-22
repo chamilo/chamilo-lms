@@ -1478,7 +1478,11 @@ function get_best_average_score_by_exercise($exercise_id, $course_code, $session
         //We asume that all exe_weighting
         //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
         //$avg_score = ($avg_score / count($user_results));
-        $avg_score = float_format($avg_score / $user_count, 1) * 100;
+        if(!empty($user_count)) {
+            $avg_score = float_format($avg_score / $user_count, 1) * 100;
+        } else {
+            $avg_score = 0;
+        }
     }
     return $avg_score;
 }

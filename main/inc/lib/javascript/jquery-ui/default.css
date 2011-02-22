@@ -41,6 +41,12 @@
 	background: #FFF; 
 }
 
+/* anchor size  */
+
+.ui-widget {
+	font-size:100%;
+}
+
 
 
 /*  cupertino */

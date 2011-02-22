@@ -117,8 +117,8 @@ echo '<div id="social-content">';
 			$groups_newest = array();
 			foreach ($results as $result) {
 				$id = $result['id'];
-				$url_open  = '<a href="groups.php?id='.$id.'"><span class="social-groups-text1">';
-				$url_close = '</span></a>';
+				$url_open  = '<a href="groups.php?id='.$id.'">';
+				$url_close = '</a>';
 				$count_users_group = count(GroupPortalManager::get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER)));
 
 				if ($count_users_group == 1 ) {
@@ -127,7 +127,7 @@ echo '<div id="social-content">';
 					$count_users_group = $count_users_group.' '.get_lang('Members');
 				}
 
-				$result['name'] = $url_open.api_ucwords(cut($result['name'],40,true)).' ('.$count_users_group.') '.$url_close.Display::return_icon('linegroups.jpg','').'<div>'.get_lang('DescriptionGroup').'</div>';
+				$result['name'] = $url_open.api_ucwords(cut($result['name'],40,true)).' ('.$count_users_group.') '.$url_close.Display::return_icon('linegroups.jpg','');
 				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
 				$actions = '<div class="box_description_group_actions" ><a href="groups.php?view=newest">'.get_lang('SeeMore').$url_close.'</div>';
@@ -139,15 +139,15 @@ echo '<div id="social-content">';
 			foreach ($results as $result) {
 				$id = $result['id'];
 
-				$url_open  = '<a href="groups.php?id='.$id.'"><span class="social-groups-text1">';
-				$url_close = '</span></a>';
+				$url_open  = '<a href="groups.php?id='.$id.'">';
+				$url_close = '</a>';
 
 				if ($result['count'] == 1 ) {
 					$result['count'] = $result['count'].' '.get_lang('Member');
 				} else {
 					$result['count'] = $result['count'].' '.get_lang('Members');
 				}
-				$result['name'] = $url_open.api_ucwords(cut($result['name'],40,true)).' ('.$result['count'].') '.$url_close.Display::return_icon('linegroups.jpg').'<div>'.get_lang('DescriptionGroup').'</div>';
+				$result['name'] = $url_open.api_ucwords(cut($result['name'],40,true)).' ('.$result['count'].') '.$url_close.Display::return_icon('linegroups.jpg');
 				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
 				$actions = '<div class="box_description_group_actions" ><a href="groups.php?view=pop">'.get_lang('SeeMore').$url_close.'</div>';

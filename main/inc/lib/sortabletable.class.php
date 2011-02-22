@@ -411,7 +411,7 @@ class SortableTable extends HTML_Table {
 	 * @param bool	 	sort data optionally
 	 * @return string	grid html
 	 */
-	public function display_simple_grid($vibility_options, $hide_navigation = true, $per_page = 0, $sort_data = true) {
+	public function display_simple_grid($visibility_options, $hide_navigation = true, $per_page = 0, $sort_data = true) {
 
 		$empty_table = false;
 		if ($this->get_total_number_of_items() == 0) {
@@ -470,10 +470,10 @@ class SortableTable extends HTML_Table {
 		// i.e: .whoisonline_table_grid_container instead of  .grid_container
 		// where whoisonline is the table's name like drupal's template engine
 
-		if (is_array($vibility_options)) {
+		if (is_array($visibility_options)) {
 			$filter = false; // The 2nd condition of the if will be loaded
 		} else {
-			$filter = $vibility_options !== false;
+			$filter = $visibility_options !== false;
 		}
 
 		$html .= '<div class="'.$this->table_name.'_grid_container">';
@@ -482,7 +482,7 @@ class SortableTable extends HTML_Table {
 				$html .= '<div class="'.$this->table_name.'_grid_item">';
 				$i = 0;
 				foreach ($row as & $element) {
-					if ($filter || $vibility_options[$i]) {
+					if ($filter || $visibility_options[$i]) {
 						$html.='<div class="'.$this->table_name.'_grid_element_'.$i.'">'.$element.'</div>';
 					}
 					$i++;

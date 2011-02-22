@@ -206,11 +206,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	<?php
 	echo '<div style="float:right;">';
 		if (!isset($_GET['id_category'])) {
-			echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>';
+			echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'','32').'</a>';
 		}
 
-		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php?id_category='.intval($_GET['id_category']).'">'.Display::return_icon('view_more_stats.gif',get_lang('AddSessionsInCategories')).get_lang('AddSessionsInCategories').'</a>';
-		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder_document.gif',get_lang('ListSessionCategory')).get_lang('ListSessionCategory').'</a>';
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php?id_category='.intval($_GET['id_category']).'">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'','32').'</a>';
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'','32').'</a>';
 	echo '</div>';
 	?>
 	<form method="POST" action="session_list.php">
@@ -287,7 +287,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		<tr class="<?php echo $i?'row_odd':'row_even'; ?>">
 		  <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>
 	      <td><a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php echo api_htmlentities($enreg['name'],ENT_QUOTES,$charset); ?></a></td>
-	      <td><a href="session_course_list.php?id_session=<?php echo $enreg['id']; ?>"><?php echo $nb_courses.' '.get_lang('Course'); ?></a></td>
+	      <td><a href="session_course_list.php?id_session=<?php echo $enreg['id']; ?>"><?php echo $nb_courses; ?></a></td>
 	      <td><?php echo api_htmlentities($enreg['category_name'],ENT_QUOTES,$charset); ?></td>
 	      <td><?php echo ($enreg['date_start'] != '0000-00-00')? api_htmlentities($enreg['date_start'],ENT_QUOTES,$charset): '-'; ?></td>
 	      <td><?php echo ($enreg['date_end'] != '0000-00-00')?api_htmlentities($enreg['date_end'],ENT_QUOTES,$charset): '-'; ?></td>
@@ -309,8 +309,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
 		  ?></td>
 		  <td>
-			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('add_user_big.gif', get_lang('SubscribeUsersToSession')); ?></a>
-			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('course_add.gif', get_lang('SubscribeCoursesToSession')); ?></a>
+			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('user_subscribe_session.png', get_lang('SubscribeUsersToSession'),'','22'); ?></a>
+			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('courses_to_session.png', get_lang('SubscribeCoursesToSession'),'','22'); ?></a>
 			<a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a>
 			<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('delete.gif', get_lang('Delete')); ?></a>
             <a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=copy&idChecked=<?php echo $enreg['id'];?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('copy.gif', get_lang('Copy')); ?></a>

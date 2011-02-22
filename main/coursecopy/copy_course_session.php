@@ -87,12 +87,12 @@ function display_form() {
 	$sessions = SessionManager::get_sessions_list();
 	
 	// Actions
-	$html .= '<div class="sectiontitle">';
+	$html .= '<div class="actions">';
 	// Link back to the documents overview
-	$html .= '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), array('style' => 'vertical-align:middle')).get_lang('BackTo').' '.get_lang('PlatformAdmin').'</a>';
+	$html .= '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
 	$html .= '</div>';
 
-	$html .= '<div class="row"><div class="form_header">'.get_lang('CopyCourse').'</div></div>';
+	//$html .= '<div class="row"><div class="form_header">'.get_lang('CopyCourse').'</div></div>';
 	$html .= '<form name="formulaire" method="post" action="'.api_get_self().'" >';
 
 	$html .= '<table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">';

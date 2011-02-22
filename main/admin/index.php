@@ -194,7 +194,7 @@ if (api_get_setting('use_session_mode') == 'true') { ?>
         <li><a href="user_move_stats.php"><?php echo get_lang('MoveUserStats'); ?></a></li>
     <?php }
         echo Display::tag('li',Display::url(get_lang('CareersAndPromotions'), 'career_dashboard.php'));
-        echo Display::tag('li',Display::url(get_lang('Groups'), 'usergroups.php'));
+        echo Display::tag('li',Display::url(get_lang('Classes'), 'usergroups.php'));
      ?>
     </ul>
 </div>

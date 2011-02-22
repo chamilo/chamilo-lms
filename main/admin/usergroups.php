@@ -24,13 +24,13 @@ $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $action = $_GET['action'];
 if ($action == 'add') {
-    $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Groups'));
+    $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Groups'));    
+    $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));    
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
 } else {
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Groups'));
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('Classes'));
 }
 
 // The header.
@@ -86,7 +86,7 @@ $(function() {
 </script>   
 <?php
 // Tool introduction
-Display::display_introduction_section(get_lang('Groups'));
+Display::display_introduction_section(get_lang('Classes'));
 
 $usergroup = new UserGroup();
 
@@ -125,7 +125,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $usergroup->display();
     } else {
         echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png').' '.get_lang('Back').'</a>';
+        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -164,7 +164,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET[
         $usergroup->display();
     } else {
         echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png').' '.get_lang('Back').'</a>';
+        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');

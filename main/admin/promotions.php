@@ -64,7 +64,7 @@ $extra_params['autowidth'] = 'true'; //use the width of the parent
 $extra_params['height'] = 'auto'; //use the width of the parent
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
-                    return \'<a href="add_sessions_to_promotion.php?id=\'+options.rowId+\'"><img title="'.get_lang('AddSession').'" width="22px" src="../img/session_add.png"></a> '. 
+                    return \'<a href="add_sessions_to_promotion.php?id=\'+options.rowId+\'"><img title="'.get_lang('SubscribeSessionsToPromotions').'" width="22px" src="../img/icons/22/session_to_promotion.png"></a> '. 
                     '<a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'"></a> '.
                     '<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=copy&id=\'+options.rowId+\'"><img title="'.get_lang('Copy').'" src="../img/copy.gif" alt="'.get_lang('Copy').'"></a> '. 
                     '<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a> \'; 
@@ -118,7 +118,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $promotion->display();
     } else {
         echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png').' '.get_lang('Back').'</a>';
+        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -147,7 +147,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $promotion->display();
     } else {
         echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png').' '.get_lang('Back').'</a>';
+        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'','32').' '.'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');

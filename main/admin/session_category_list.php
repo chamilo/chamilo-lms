@@ -90,7 +90,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$nbr_results = sizeof($Sessions);
 	$tool_name = get_lang('ListSessionCategory');
 	Display::display_header($tool_name);
-	api_display_tool_title($tool_name);
+	//api_display_tool_title($tool_name);
 
     if (!empty($_GET['warn'])) {
         Display::display_warning_message(urldecode($_GET['warn']),false);
@@ -103,8 +103,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	<div class="actions">
 	<?php
 	echo '<div style="float:right;">
-			<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_add.php">'.Display::return_icon('folder_new.gif',get_lang('AddSessionCategory')).get_lang('AddSessionCategory').'</a>
-			<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_list.php">'.Display::return_icon('blackboard_blue.png',get_lang('ListSession'),array('width'=>'24px')).get_lang('ListSession').'</a>	
+			<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_add.php">'.Display::return_icon('new_folder.png',get_lang('AddSessionCategory'),'','32').'</a>
+			<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_list.php">'.Display::return_icon('session.png',get_lang('ListSession'),'','32').'</a>	
 	 	  </div>';
 	?>
 	<form method="POST" action="session_category_list.php">

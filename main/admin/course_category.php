@@ -139,7 +139,7 @@ if($action == 'add' || $action == 'edit')
 {
 	?>
 	<div class="actions">
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>"><?php echo Display::return_icon('folder_up.gif').get_lang("Back"); if(!empty($category)) echo ' ('.Security::remove_XSS($category).')'; ?></a>
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>"><?php echo Display::return_icon('folder_up.png',get_lang("Back"),'','32'); if(!empty($category)) echo ' ('.Security::remove_XSS($category).')'; ?></a>
 	</div>
 
 
@@ -230,12 +230,20 @@ if(!empty($category) && empty($action))
 	$parent_id['parent_id']?$link=' ('.$parent_id['parent_id'].')':$link='';
 	?>
 
-	<a href="<?php echo api_get_self(); ?>?category=<?php echo $parent_id['parent_id']; ?>"><?php echo Display::return_icon('folder_up.gif').get_lang("Back"); if(!empty($parent_id)) echo $link ?></a>
+	<a href="<?php echo api_get_self(); ?>?category=<?php echo $parent_id['parent_id']; ?>"><?php echo Display::return_icon('folder_up.png',get_lang("Back"),'','32'); if(!empty($parent_id)) echo $link ?></a>
 
 	<?php
 }
 ?>
-<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=add"><?php echo Display::return_icon('folder_new.gif').get_lang("AddACategory"); if(!empty($category)) echo ' '.get_lang('Into').' '.Security::remove_XSS($category); ?></a>
+<?php
+if(!empty($category)){
+	$CategoryInto=' '.get_lang('Into').' '.Security::remove_XSS($category);
+}
+else{
+	$CategoryInto='';
+}
+?>
+<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=add"><?php echo Display::return_icon('new_folder.png',get_lang("AddACategory").$CategoryInto,'','32'); ?></a>
 </div>
 <ul>
 

@@ -199,6 +199,18 @@ blocks				nuvola
 social_network			nuvola
 create_group_social_network	modif nuvola
 add_user_fields			modif nuvola
+--
+new_course			modif nuvola
+new_session			modif nuvola
+course_request_pending		modif nuvola
+session_to_category		modif nuvola
+new_promotion			modif nuvola
+promotion			modif nuvola
+new_career			modif gnome
+career				gnome
+session_to_promotion		modif nuvola
+courses_to_session		modif nuvola
+
 --julio
 star				
 star_green

@@ -281,7 +281,14 @@ if(!empty($errorMsg))
 
 <form method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
-<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
+<?php
+echo '<div class="actions">';
+echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
+echo '</div>';
+//echo '<div class=row><div class="form_header">';
+//echo $tool_name;
+//echo '</div></div>';
+?>
 <table border="0" cellpadding="5" cellspacing="0">
 <tr>
   <td nowrap="nowrap" valign="top"><?php echo get_lang('OutputFileType'); ?> :</td>

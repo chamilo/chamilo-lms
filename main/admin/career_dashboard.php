@@ -32,8 +32,9 @@ Display :: display_header($nameTools);
 
 // action links
 echo '<div class="actions" style="margin-bottom:20px">';
-    echo '<a href="careers.php">'.Display::return_icon('filenew.gif',get_lang('Add')).get_lang('Careers').'</a>';
-    echo '<a href="promotions.php">'.Display::return_icon('filenew.gif',get_lang('Add')).get_lang('Promotions').'</a>';  
+	echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
+    echo '<a href="careers.php">'.Display::return_icon('career.png',get_lang('Careers'),'','32').'</a>';
+    echo '<a href="promotions.php">'.Display::return_icon('promotion.png',get_lang('Promotions'),'','32').'</a>';  
 echo '</div>';
 
 

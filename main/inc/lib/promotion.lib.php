@@ -42,9 +42,9 @@ class Promotion extends Model {
 	function display() {
 		// action links
 		echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back')).get_lang('Back').'</a>';
-		echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('filenew.gif',get_lang('Add')).get_lang('Add').'</a>';			
-		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>';			
+        echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
+		echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_promotion.png',get_lang('Add'),'','32').'</a>';			
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'','32').'</a>';			
 		echo '</div>';
         echo Display::grid_html('promotions');  
 	}

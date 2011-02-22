@@ -1260,7 +1260,7 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
    
     foreach($user_list as $user_data) {
         $user_id = $user_data['user_id'];        
-        $best_attempts[$user_id]= get_best_attempt_score_by_user($user_id,$exercise_id,$course_code,$session_id);   
+        $best_attempts[$user_id]= get_best_attempt_by_user($user_id,$exercise_id,$course_code,$session_id);   
     }
 
     $position_data = array();
@@ -1307,7 +1307,7 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
 
 /**
  * Gets the position of the score based in a given score (result/weight) and the exe_id based in all attempts
- * (NO Exercises in LPs ) old funcionality
+ * (NO Exercises in LPs ) old funcionality by attempt
  * @param   float   user score to be compared attention => score/weight
  * @param   int     exe id of the exercise (this is necesary because if 2 students have the same score the one with the minor exe_id will have a best position, just to be fair and FIFO)
  * @param   int     exercise id
@@ -1368,7 +1368,7 @@ function get_exercise_result_ranking_by_attempt($my_score, $my_exe_id, $exercise
  *  Get the best score in a exercise (NO Exercises in LPs )
  */
 
-function get_best_attempt_score($exercise_id, $course_code, $session_id) { 
+function get_best_attempt_in_course($exercise_id, $course_code, $session_id) { 
     $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
     $best_score_data = array();
     $best_score = 0;
@@ -1376,7 +1376,7 @@ function get_best_attempt_score($exercise_id, $course_code, $session_id) {
         foreach($user_results as $result) {
             if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
                 $score = $result['exe_result']/$result['exe_weighting'];
-                if ($score > $best_score) {
+                if ($score >= $best_score) {
                     $best_score = $score;
                     $best_score_data = $result;
                 }
@@ -1389,22 +1389,22 @@ function get_best_attempt_score($exercise_id, $course_code, $session_id) {
 /*
  *  Get the best score in a exercise (NO Exercises in LPs )
  */
-function get_best_attempt_score_by_user($user_id, $exercise_id, $course_code, $session_id) { 
+function get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session_id) { 
     $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
     $best_score_data = array();
     $best_score = 0;
-    if (!empty($user_results)) {
+    if (!empty($user_results)) {       
         foreach($user_results as $result) {
             if ($result['exe_user_id'] != $user_id) continue;
             if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
-                $score = $result['exe_result']/$result['exe_weighting'];
-                if ($score > $best_score) {
+                $score = $result['exe_result']/$result['exe_weighting'];                
+                if ($score >= $best_score) {
                     $best_score = $score;
                     $best_score_data = $result;
                 }
             }
         }
-    }
+    }    
     return $best_score_data;
 }
 

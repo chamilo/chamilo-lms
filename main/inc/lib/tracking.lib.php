@@ -2198,7 +2198,7 @@ class Tracking {
             $html .= '<tr>                
                 <th class="head" style="color:#000">'.get_lang('Exercices').'</th>
                 <th class="head" style="color:#000">'.get_lang('Attempts').'</th>                    
-                <th class="head" style="color:#000">'.get_lang('LatestAttempt').'</th>
+                <th class="head" style="color:#000">'.get_lang('BestAttempt').'</th>
                 <th class="head" style="color:#000">'.get_lang('Ranking').'</th>
                 <th class="head" style="color:#000">'.get_lang('BestResultInCourse').'</th>
                 <th class="head" style="color:#000">'.get_lang('Statistics').' '.Display :: return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>                                        
@@ -2212,39 +2212,14 @@ class Tracking {
             $result_exercices = Database::query($sql_exercices);
             $to_graph_exercise_result = array();
             if (Database::num_rows($result_exercices) > 0) {
-                
+                $score = $weighting = $exe_id = 0;
                 while ($exercices = Database::fetch_array($result_exercices)) {
                     //if ($exercices['id'] != 3) continue;
-                    $score = $weighting = $attempts = 0;                        
-                    $exercise_stats      = get_all_exercise_results($exercices['id'], $course_info['code'], $session_id);                    
-                    $best_exercise_stats = get_all_best_exercise_results_by_user($exercices['id'], $course_info['code'], $session_id);
-                   
-                    
-                    //User attempts we assume the latest item in the loop is the latest attempt
-                    if (!empty($exercise_stats)) {
-                        //$best_score = 0; $best_score_array = array();
-                        foreach($exercise_stats as $exercise_stat) {
-                            if ($exercise_stat['exe_user_id'] == $user_id) {
-                                
-                               //Always getting the latest attempt
-                               $score          = $exercise_stat['exe_result'];
-                               $weighting      = $exercise_stat['exe_weighting'];                               
-                               $exe_id         = $exercise_stat['exe_id'];
-                               
-                               //Use this to take the average
-                               //$score          = $score + $exercise_stat['exe_result'];
-                               //$weighting      = $weighting + $exercise_stat['exe_weighting'];
-                               
-                               //Getting my best score
-                               /*
-                               if ($score > $best_score ) {
-                                   $best_score = $score;
-                                   $best_score_array = $exercise_stat;
-                               }*/                       
-                               $attempts++;
-                            }
-                        }
-                    }
+                    $score = $weighting = $attempts = 0;
+                    //Getting count of attempts by user
+                    $attempts      = count_exercise_attempts_by_user(api_get_user_id(), $exercices['id'], $course_info['code'], $session_id);   
+                    //For graphics                 
+                    $best_exercise_stats = get_best_exercise_results_by_user($exercices['id'], $course_info['code'], $session_id);
                     $to_graph_exercise_result[$exercices['id']] = array('title'=>$exercices['title'], 'data'=>$best_exercise_stats);
                     
                     $html .= '<tr class="row_even">';
@@ -2259,21 +2234,30 @@ class Tracking {
                         $graph = $normal_graph = null;
 
                         //Getting best results 
-                        $best_score_data = get_best_attempt_score($exercices['id'], $course_info['code'], $session_id);     
+                        $best_score_data = get_best_attempt_in_course($exercices['id'], $course_info['code'], $session_id);     
                         $best_score      = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);                       
                                                
                         if ($attempts > 0) {
-                            //$latest_attempt_url .= '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
-                            $latest_attempt_url .= '../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id;
-                            $percentage_score_result = Display::url(show_score($score, $weighting), $latest_attempt_url);
-                            $my_score = 0;                            
-                            if (!empty($weighting)) {                                                           
-                                $my_score = $score/$weighting;
-                            }                            
-                            $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id);
+                            $exercise_stat = get_best_attempt_by_user(api_get_user_id(), $exercices['id'], $course_info['code'], $session_id);                       
+                            if (!empty($exercise_stat)) {
                             
-                            $graph         = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);                        
-                            $normal_graph  = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);                            
+                                //Always getting the BEST attempt
+                                $score          = $exercise_stat['exe_result'];
+                                $weighting      = $exercise_stat['exe_weighting'];                               
+                                $exe_id         = $exercise_stat['exe_id'];
+                                   
+                                //$latest_attempt_url .= '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
+                                $latest_attempt_url .= '../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id;
+                                $percentage_score_result = Display::url(show_score($score, $weighting), $latest_attempt_url);
+                                $my_score = 0;
+                                if (!empty($weighting) && intval($weighting) != 0) {                                                        
+                                    $my_score = $score/$weighting;
+                                }                            
+                                $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id);                                
+                                
+                                $graph         = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);                        
+                                $normal_graph  = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);     
+                            }                       
                         }
                                                 
                         echo Display::div($normal_graph, array('id'=>'main_graph_'.$exercices['id'],'class'=>'dialog', 'style'=>'display:none') );

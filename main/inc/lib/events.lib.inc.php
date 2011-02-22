@@ -671,8 +671,8 @@ function get_all_exercise_results($exercise_id, $course_code, $session_id = 0) {
 	$TABLETRACK_EXERCICES  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$TBL_TRACK_ATTEMPT     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 	$course_code           = Database::escape_string($course_code);
-	$exercise_id = intval($exercise_id);
-	$session_id = intval($session_id);
+	$exercise_id           = intval($exercise_id);
+	$session_id            = intval($session_id);
 	
 	$sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";
 	
@@ -691,7 +691,7 @@ function get_all_exercise_results($exercise_id, $course_code, $session_id = 0) {
 }
 
 /**
- * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session
+ * Gets all exercise BEST results attempts (NO Exercises in LPs ) from a given exercise id, course, session per user
  * @param   int     exercise id
  * @param   string  course code
  * @param   int     session id
@@ -737,6 +737,8 @@ function get_all_best_exercise_results_by_user($exercise_id, $course_code, $sess
 	echo '<pre>'; print_r($best_score_return);*/
 	return $best_score_return;
 }
+
+
 
 
 /**

@@ -2185,8 +2185,7 @@ class Tracking {
             }
             
             $html .='</table><br />
-            <table class="data_table" width="100%">';     
-                     
+            <table class="data_table" width="100%">';
                         
             // This code was commented on purpose see BT#924
 
@@ -2253,8 +2252,6 @@ class Tracking {
                     $exercices['title'] = Display::url($exercices['title'], $url, array('target'=>'_blank'));
                     $html .= Display::tag('td', $exercices['title']);
                     
-                                            
-                    
                     //Exercise configuration show results show results or show only score
                     if ($exercices['results_disabled'] == 0 || $exercices['results_disabled'] == 2) {
                         $latest_attempt_url = '';
@@ -2262,12 +2259,13 @@ class Tracking {
                         $graph = $normal_graph = null;
 
                         //Getting best results 
-                        $best_score_data = get_best_score($exercices['id'], $course_info['code'], $session_id);     
+                        $best_score_data = get_best_attempt_score($exercices['id'], $course_info['code'], $session_id);     
                         $best_score      = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);                       
                                                
                         if ($attempts > 0) {
-                            $latest_attempt_url .= '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
-                            $percentage_score_result = show_score($score, $weighting).' '.$latest_attempt_url;
+                            //$latest_attempt_url .= '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
+                            $latest_attempt_url .= '../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id;
+                            $percentage_score_result = Display::url(show_score($score, $weighting), $latest_attempt_url);
                             $my_score = 0;                            
                             if (!empty($weighting)) {                                                           
                                 $my_score = $score/$weighting;
@@ -2300,7 +2298,7 @@ class Tracking {
                         $html .= Display::tag('td', '-', array('align'=>'center'));                            
                         $html .= Display::tag('td', '-', array('align'=>'center'));
                         $html .= Display::tag('td', '-', array('align'=>'center'));
-                        $html .= Display::tag('td', '-', array('align'=>'center'));                         
+                        $html .= Display::tag('td', '-', array('align'=>'center'));
                     }
                     $html .= '</tr>';
                 }

@@ -155,7 +155,7 @@ foreach($final_array as $session_data) {
         if (!empty($course_data['exercises'])) {
             //Exercises            
             foreach ($course_data['exercises'] as $my_exercise_id => $exercise_data) {
-                $best_score_data = get_best_score($my_exercise_id, $my_course_code, $session_id);     
+                $best_score_data = get_best_attempt_score($my_exercise_id, $my_course_code, $session_id);     
                 $best_score      = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
                 //Exercise results                              
                 $counter = 1;                    

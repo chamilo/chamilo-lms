@@ -1233,9 +1233,9 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_dates = 
 }
 
 /**
- * Gets the position of the score based in a given score (result/weight) and the exe_id 
+ * Gets the position of the score based in a given score (result/weight) and the exe_id based in the user list
  * (NO Exercises in LPs )
- * @param   float   user score to be compared attention => score/weight
+ * @param   float   user score to be compared *attention* $my_score = score/weight and not just the score
  * @param   int     exe id of the exercise (this is necesary because if 2 students have the same score the one with the minor exe_id will have a best position, just to be fair and FIFO)
  * @param   int     exercise id
  * @param   string  course code
@@ -1243,7 +1243,79 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_dates = 
  * @return  int     the position of the user between his friends in a course (or course within a session)
  */
 function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0, $return_string = true) {
-    //Getting all exercise results
+    if (empty($session_id)) {
+    	$session_id = 0;
+    	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+    	$user_list  = UserManager::get_user_list();
+    } else {
+        require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+        $user_list = SessionManager::get_users_by_session($session_id);
+        
+    }
+    //No score given we return 
+    if (is_null($my_score)) {
+        return '-';
+    }   
+    $best_attempts = array(); 
+   
+    foreach($user_list as $user_data) {
+        $user_id = $user_data['user_id'];        
+        $best_attempts[$user_id]= get_best_attempt_score_by_user($user_id,$exercise_id,$course_code,$session_id);   
+    }
+
+    $position_data = array();
+    if (empty($best_attempts)) {
+    	return 1;
+    } else {
+        $position = 1; 
+        $my_ranking = array();
+        foreach($best_attempts as $user_id => $result) {            
+            if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
+                $my_ranking[$user_id] = $result['exe_result']/$result['exe_weighting'];
+            } else {
+                $my_ranking[$user_id] = 0;
+            }         
+        }         
+        //if (!empty($my_ranking)) { 
+            asort($my_ranking);
+            $position = count($my_ranking);
+            if (!empty($my_ranking)) {        
+                foreach($my_ranking as $user_id => $ranking) {
+                	if ($my_score >= $ranking) {
+                        if ($my_score == $ranking) {
+                            $exe_id = $best_attempts[$user_id]['exe_id'];
+                            if ($my_exe_id < $exe_id) {
+                                $position--;
+                            }
+                        } else {           
+                		  $position--;                    
+                        }
+                	}
+                }        
+            }
+        //}
+        $return_value = array('position'=>$position, 'count'=>count($my_ranking)); 
+        //var_dump($my_score, $my_ranking);
+        if ($return_string) {
+            if (!empty($position) && !empty($my_ranking)) {
+               return $position.'/'.count($my_ranking); 
+            }
+        }
+        return $return_value;    
+    }
+}
+
+/**
+ * Gets the position of the score based in a given score (result/weight) and the exe_id based in all attempts
+ * (NO Exercises in LPs ) old funcionality
+ * @param   float   user score to be compared attention => score/weight
+ * @param   int     exe id of the exercise (this is necesary because if 2 students have the same score the one with the minor exe_id will have a best position, just to be fair and FIFO)
+ * @param   int     exercise id
+ * @param   string  course code
+ * @param   int     session id
+ * @return  int     the position of the user between his friends in a course (or course within a session)
+ */
+function get_exercise_result_ranking_by_attempt($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0, $return_string = true) {
     if (empty($session_id)) {
     	$session_id = 0;
     }
@@ -1287,14 +1359,16 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
                return $position.'/'.count($my_ranking); 
             }
         }
-        return $return_string;    
+        return $return_value;    
     }
 }
+
 
 /*
  *  Get the best score in a exercise (NO Exercises in LPs )
  */
-function get_best_score($exercise_id, $course_code, $session_id) { 
+
+function get_best_attempt_score($exercise_id, $course_code, $session_id) { 
     $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
     $best_score_data = array();
     $best_score = 0;
@@ -1311,6 +1385,31 @@ function get_best_score($exercise_id, $course_code, $session_id) {
     }
     return $best_score_data;
 }
+
+/*
+ *  Get the best score in a exercise (NO Exercises in LPs )
+ */
+function get_best_attempt_score_by_user($user_id, $exercise_id, $course_code, $session_id) { 
+    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
+    $best_score_data = array();
+    $best_score = 0;
+    if (!empty($user_results)) {
+        foreach($user_results as $result) {
+            if ($result['exe_user_id'] != $user_id) continue;
+            if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
+                $score = $result['exe_result']/$result['exe_weighting'];
+                if ($score > $best_score) {
+                    $best_score = $score;
+                    $best_score_data = $result;
+                }
+            }
+        }
+    }
+    return $best_score_data;
+}
+
+
+
 
 /**
  * Get average score (NO Exercises in LPs )

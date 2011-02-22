@@ -1249,8 +1249,7 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
     	$user_list  = UserManager::get_user_list();
     } else {
         require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
-        $user_list = SessionManager::get_users_by_session($session_id);
-        
+        $user_list = SessionManager::get_users_by_session($session_id);        
     }
     //No score given we return 
     if (is_null($my_score)) {
@@ -1365,7 +1364,7 @@ function get_exercise_result_ranking_by_attempt($my_score, $my_exe_id, $exercise
 
 
 /*
- *  Get the best score in a exercise (NO Exercises in LPs )
+ *  Get the best attempt in a exercise (NO Exercises in LPs )
  */
 
 function get_best_attempt_in_course($exercise_id, $course_code, $session_id) { 
@@ -1454,6 +1453,32 @@ function get_average_score_by_course($course_code, $session_id) {
         //We asume that all exe_weighting
         //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
         $avg_score = ($avg_score / count($user_results));
+    }
+    return $avg_score;
+}
+
+
+/**
+ * Get average score by score (NO Exercises in LPs )
+ * @param 	int		exercise id
+ * @param 	string	course code
+ * @param 	int		session id
+ * @return 
+ */
+function get_best_average_score_by_exercise($exercise_id, $course_code, $session_id, $user_count) { 
+    $user_results = get_best_exercise_results_by_user($exercise_id, $course_code, $session_id);
+    $avg_score = 0;
+    if (!empty($user_results)) {        
+        foreach($user_results as $result) {
+            if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) { 
+                $score = $result['exe_result']/$result['exe_weighting'];
+                $avg_score +=$score;                
+            }
+        }
+        //We asume that all exe_weighting
+        //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
+        //$avg_score = ($avg_score / count($user_results));
+        $avg_score = float_format($avg_score / $user_count, 1) * 100;
     }
     return $avg_score;
 }

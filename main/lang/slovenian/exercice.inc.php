@@ -376,4 +376,6 @@ $DontKnow = "Ne vem";
 $False = "Nepravilno";
 $DoubtScore = "Ne vem";
 $PropagateNegativeResults = "Razširi negativne rezultate med vprašanji";
+$InsertALinkToThisQuestionInTheExercise = "Uporabi to vprašanje zgolj kot povezavo na vprašanje v testu (ne kopiraj vprašanja)";
+$OnlyShowScore = "Prikaži zgolj rezultat";
 ?>

@@ -281,6 +281,7 @@ $PleaseSelectACourse = "Izberite tečaj";
 $StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts = "Povprečen rezultat tečajnika je izračunan na osnovi rezultatov vseh učnih poti in vseh poskusov";
 $AverageScore = "Povprečen rezultat";
 $LastConnexionDate = "Datum zadnje povezave";
+$QuestionsAreTakenFromLPExercises = "Ta vprašanja so bila prevzeta iz učnih poti";
 $AllStudentsAttemptsAreConsidered = "Vsi poskusi tečajnikov so upoštevani";
 $PublishedExercises = "Dosegljive vaje/testi";
 $DoneExercises = "Izvajane vaje/testi";

@@ -33,4 +33,5 @@ $SurveyAdded = "Vprašalnik je bil dodan";
 $NotebookAdded = "Beležka je bila dodana";
 $NotebookUpdated = "Beležka je bila ažurirana";
 $NotebookDeleted = "Beležka je bila odstranjena";
+$LearnpathUpdated = "Učna pot je bila ažurirana";
 ?>

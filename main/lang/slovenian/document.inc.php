@@ -228,6 +228,13 @@ $FileExistsChangeToSave = "Datoteka s tem imenom že obstaja. Izberite drugo ime
 $FileSavedAs = "Datoteka je bila shranjena kot";
 $FileExportAs = "Datoeka je bila izvožena kot";
 $UserFolder = "Uporabnikova mapa";
+$HelpUsersFolder = "INFORMACIJA, VIDNA ZGOLJ UČITELJEM:<br /><br />
+Mapa uporabnikov vsebuje mapo za vsakega uporabnika, ki je dostopil do nje preko orodja dokumentov ali pa je vanjo poslal dokument preko urejevalnika na platformi. V primeru, da noben od naštetih dogodkov ni nastopil, uporabnikova mapa ni bila kreirana. V primeru skupin, se datoteke poslane preko urejevalnika platforme dodajo mapi skupine, ki je dosegljiva zgolj tečajnikom te skupine.<br /><br />
+Uporabnikova mapa in vsa njena vsebina je privzeto skrita vsem ostalim tečajnikov, vendar vsak tečajnik lahko vidi vsebino svoje mape preko urejevalnika platforme. V primeru, da nek tečajnik pozna naslov datoteke ali mape drugega tečajnika, bo lahko do te vsebine tudi dostopil.<br /><br />
+Če je mapa nekega tečajnika vidna, ostali tečajniki lahko vidijo, kaj ta mapa vsebuje. V tem primeru lahko tečajnik-lastnik mape (iz orodja dokumenti in zgolj za svoje mape/datoteke) ustvari in ureja spletne dokumente, pretvarja dokumente v predloge za osebno rabo, ustvarja in ureja slike v SVG in PNG formatu, pošilja dokumente, kreira mape, premika mape in datoteke, odstranjuje mape in datoteke, prenaša (gor/dol) arhive svojih map.<br /><br />
+Še več, orodje dokumentov je sinhronizirano z upravljalcem datotek urejevalnika besedila platforme, tako da se spremembe v enem izmed njih manifestirajo tudi v drugem.<br /><br />
+Kot taka, uporabniška mapa ni zgolj mesto za odlaganje datotek, temveč postaja upravljalec dokumentov tečajnikov med trajanjem tečaja. In, ne pozabite, da vsak  uporabnik lahko kopira vse datoteke, iz poljubne mape orodja dokumentov (če je, ali pa če ni, lastnik) v lasten portfolij ali osebne dokumente socialnega omrežja, ki mu je omogočen/dostopen.";
+$HelpFolderChat = "INFORMACIJA, VIDNA ZGOLJ UČITELJEM: Ta mapa vsebuje vse seje, ki so bile odprte v klepetu. Čeprav je seje klepeta lahko trivialna, pa je občasno njena vsebina lahko takšna, da lahko služi kot del izobraževalnega procesa, npr. kot dodaten vir, dokument, ... Da bi sejo vključili v vire tečaja brez spremembe vidljivosti te mape, naredite vidno zgolj datoteko in naredite nanjo povezavo iz elementa platforme, kjer boste ta vir uporabili.";
 $HelpFolderCertificates = "INFORMACIJA VIDNA ZGOLJ UČITELJEM:<br /><br />
 Ta mapa vsebuje različne predloge certifikatov, ki se izdajajo kot rezultat uspešnosti izvedbe (dela) učnega procesa.Ni priporočljivo, da to mapo naredite vidno vsem uporabnikom.";
 $DestinationDirectory = "Ciljna mapa";

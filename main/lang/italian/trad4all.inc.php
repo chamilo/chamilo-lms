@@ -1018,4 +1018,5 @@ $ItemCopied = "Elemento copiato";
 $MyStatistics = "Statistiche";
 $FromDateXToDateY = "Dal %s al %s";
 $CourseThematicAdvance = "Avanzamento nel modulo";
+$Clean = "Pulire";
 ?>

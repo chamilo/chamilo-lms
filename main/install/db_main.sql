@@ -2400,6 +2400,17 @@ CREATE TABLE group_rel_user (
 ALTER TABLE group_rel_user ADD INDEX ( group_id );
 ALTER TABLE group_rel_user ADD INDEX ( user_id );
 ALTER TABLE group_rel_user ADD INDEX ( relation_type );
+
+CREATE TABLE group_rel_group (
+	id int NOT NULL AUTO_INCREMENT,
+	group_id int NOT NULL,
+	subgroup_id int NOT NULL,
+	relation_type int NOT NULL,
+	PRIMARY KEY (id)
+);
+ALTER TABLE group_rel_group ADD INDEX ( group_id );
+ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
+ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 --
 -- Table structure for table message attachment
 --

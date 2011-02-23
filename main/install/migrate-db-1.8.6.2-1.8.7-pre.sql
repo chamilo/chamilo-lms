@@ -129,6 +129,11 @@ ALTER TABLE track_e_attempt_recording ADD session_id INT NOT NULL DEFAULT 0;
 ALTER TABLE track_e_attempt_recording ADD INDEX (question_id);
 ALTER TABLE track_e_attempt_recording ADD INDEX (session_id);
 ALTER TABLE track_e_online ADD COLUMN access_url_id INT NOT NULL DEFAULT 1;
+-- Groups can have subgroups
+CREATE TABLE group_rel_group ( id int NOT NULL AUTO_INCREMENT, group_id int NOT NULL, subgroup_id int NOT NULL, relation_type int NOT NULL, PRIMARY KEY (id));
+ALTER TABLE group_rel_group ADD INDEX ( group_id );
+ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
+ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 
 -- xxUSERxx
 

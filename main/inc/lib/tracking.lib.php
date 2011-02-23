@@ -1986,6 +1986,7 @@ class Tracking {
                 $exercise_graph_list = array();
                 $exercise_graph_name_list = array();
                 $session_graph = array();
+                                
                 foreach ($course_in_session as $my_session_id=>$course_list) {
                     $session_name = api_get_session_name($my_session_id);
                     $user_count = count(SessionManager::get_users_by_session($session_id));
@@ -2020,10 +2021,6 @@ class Tracking {
                         }
                     }
                     $html .= Display::tag('h2',api_get_session_name($key));
-                    if (!empty($session_graph[$key])) {
-                        $html .= $session_graph[$my_session_id];
-                    }
-
                     $html .= '<table class="data_table" width="100%">';
                     $html .= '<tr>
                           '.Display::tag('th', get_lang('PublishedExercises'),       array('width'=>'300px')).'
@@ -2054,24 +2051,26 @@ class Tracking {
                     $html .= Display::tag('td', $all_done_exercise);
                     $html .= Display::tag('td', convert_to_percentage($all_average));
                     $html .='</table><br />';
-
+                    
+                    if (!empty($session_graph[$key])) {
+                        $html .= $session_graph[$my_session_id];
+                    }
 
                     $html .= Display::tag('h2',get_lang('CourseList'));
 
+                    $html .= '<table class="data_table" width="100%">';
                     $html .= '
-                <table class="data_table" width="100%">';
-                    $html .= '
-                    <tr>
-                      <th width="300px">'.get_lang('Course').'</th>
-                      '.Display::tag('th', get_lang('PublishedExercises'),array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('DoneExercises'),     array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('AverageExerciseResult'),     array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('Time')         ,     array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('LPProgress')     ,   array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('Score').Display :: return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
-                      '.Display::tag('th', get_lang('LastConnexion'),     array('class'=>'head')).'      
-                      '.Display::tag('th', get_lang('Details'),           array('class'=>'head')).'
-                    </tr>';
+                        <tr>
+                          <th width="300px">'.get_lang('Course').'</th>
+                          '.Display::tag('th', get_lang('PublishedExercises'),array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('DoneExercises'),     array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('AverageExerciseResult'),     array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('Time')         ,     array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('LPProgress')     ,   array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('Score').Display :: return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('LastConnexion'),     array('class'=>'head')).'      
+                          '.Display::tag('th', get_lang('Details'),           array('class'=>'head')).'
+                        </tr>';
                     foreach ($course_list as $enreg) {
                         $weighting = 0;
                         $last_connection       = Tracking :: get_last_connection_date_on_the_course($user_id, $enreg['code'], $key);
@@ -2081,9 +2080,9 @@ class Tracking {
                         $percentage_score      = Tracking :: get_avg_student_score($user_id, $enreg['code'], array(), $key);
 
                         if ($enreg['code'] == $_GET['course'] && $_GET['session_id'] == $key) {
-                            $html .= '<tr  class="row_odd" style="background-color:#FBF09D" >';
+                            $html .= '<tr class="row_odd" style="background-color:#FBF09D" >';
                         } else {
-                            $html .= '<tr  class="row_even">';
+                            $html .= '<tr class="row_even">';
                         }
 
                         $url = api_get_course_url($enreg['code'], $key);
@@ -2114,7 +2113,7 @@ class Tracking {
                             $percentage_score = '0%';
                         }
                         $html .= Display::tag('td', $percentage_score, array('align'=>'center'));
-                        $html .= Display::tag('td', $last_connection, array('align'=>'center'));
+                        $html .= Display::tag('td', $last_connection,  array('align'=>'center'));
 
                         if ($enreg['code'] == $_GET['course'] && $_GET['session_id'] == $key) {
                             $details = '<a href="#">';
@@ -2123,10 +2122,8 @@ class Tracking {
                             $details = '<a href="'.api_get_self().'?course='.$enreg['code'].'&session_id='.$key.$extra_params.'">';
                             $details .=Display::return_icon('2rightarrow.gif', get_lang('Details'));
                         }
-                        $details .= '</a>';
-                         
+                        $details .= '</a>';                         
                         $html .= Display::tag('td', $details, array('align'=>'center'));
-
                         $i = $i ? 0 : 1;
                         $html .= '</tr>';
                     }
@@ -2310,11 +2307,11 @@ class Tracking {
 
                         } else {
                             // Exercise configuration NO results
-                            $html .= Display::tag('td', $attempts,                 array('align'=>'center'));
-                            $html .= Display::tag('td', '-', array('align'=>'center'));
-                            $html .= Display::tag('td', '-', array('align'=>'center'));
-                            $html .= Display::tag('td', '-', array('align'=>'center'));
-                            $html .= Display::tag('td', '-', array('align'=>'center'));
+                            $html .= Display::tag('td', $attempts,    array('align'=>'center'));
+                            $html .= Display::tag('td', '-',          array('align'=>'center'));
+                            $html .= Display::tag('td', '-',          array('align'=>'center'));
+                            $html .= Display::tag('td', '-',          array('align'=>'center'));
+                            $html .= Display::tag('td', '-',          array('align'=>'center'));
                         }
                         $html .= '</tr>';
                     }
@@ -2326,7 +2323,13 @@ class Tracking {
             return $html;
         }
 
-
+        /**
+         * Generates an histogram
+         * 
+         * @param 	array	list of exercise names
+         * @param 	array	my results 0 to 100
+         * @param 	array	average scores 0-100
+         */
         function generate_session_exercise_graph($names, $my_results, $average) {
             require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
             require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
@@ -2343,23 +2346,23 @@ class Tracking {
             $data_set->AddPoint($names,		"Serie3");
             $data_set->AddAllSeries();
             $data_set->SetAbsciseLabelSerie('Serie3');
-            $data_set->SetSerieName(get_lang('MyScore'),"Serie1");
-            $data_set->SetSerieName(get_lang('Average'),"Serie2");
+            $data_set->SetSerieName(get_lang('MyResults'),"Serie1");
+            $data_set->SetSerieName(get_lang('AverageScore'),"Serie2");
 
             //$data_set->SetXAxisName(get_lang("Exercises"));
             $data_set->SetYAxisName(get_lang("Percentage"));
             $data_set->SetYAxisUnit("%");
 
             // Initialise the graph
-            $main_width  = 800;
-            $main_height = 430;
+            $main_width    = 820;
+            $main_height   = 440;
             $y_label_angle = 35;
             $data_set->RemoveSerie("Serie3");
             $graph = new pChart($main_width, $main_height);
             //$graph->setFixedScale(0,100);
 
             $graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-            $graph->setGraphArea(80,30,$main_width-110,$main_height-110);
+            $graph->setGraphArea(75,50,$main_width-140, $main_height-120);
             $graph->drawFilledRoundedRectangle(7,7,$main_width-7,$main_height-7,5,240,240,240);
             $graph->drawRoundedRectangle(5,5,$main_width-5,$main_height -5,5,230,230,230);
             $graph->drawGraphArea(255,255,255,TRUE);
@@ -2379,9 +2382,9 @@ class Tracking {
 
             // Finish the graph
             $graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-            $graph->drawLegend($main_width - 100,30,$data_set->GetDataDescription(),255,255,255);
-            $graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);
-            $graph->drawTitle(50,22,'',50,50,50,$main_width-200);
+            $graph->drawLegend($main_width - 130,50,$data_set->GetDataDescription(),255,255,255);
+            $graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',11);
+            $graph->drawTitle(50, 30, get_lang('ExercisesInTimeProgressChart'), 50,50,50,$main_width-110, true);
 
             // $main_graph = new pChart($main_width,$main_height);
 
@@ -2401,7 +2404,13 @@ class Tracking {
             $html = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
             return $html;
         }
+        
+        /**
+         * 
+         * Returns a thumbnail of the function generate_exercise_result_graph
+         * @param 	array attempts 	
 
+         */
         function generate_exercise_result_thumbnail_graph($attempts) {
             require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
             require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
@@ -2435,9 +2444,9 @@ class Tracking {
 
             //var_dump($exercise_result, $my_exercise_result);
 
-            $max = 100;
-            $pieces = 5 ;
-            $part = round($max / $pieces);
+            $max     = 100;
+            $pieces  = 5 ;
+            $part    = round($max / $pieces);
             $x_axis = array();
             $final_array = array();
             $my_final_array = array();
@@ -2528,7 +2537,11 @@ class Tracking {
             $html = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
             return $html;
         }
-
+        
+        /**
+         * Generates a big graph with the number of best results
+         * @param	array	
+         */
         function generate_exercise_result_graph($attempts) {
 
             require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';

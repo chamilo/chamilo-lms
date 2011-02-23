@@ -179,7 +179,7 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back')).get_lang('Back').'</a>';       
+echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';       
 echo '</div>';
 
 echo '<div class="row"><div class="form_header">'.$tool_name.' '.$data['name'].'</div></div><br/>'; ?>

@@ -290,4 +290,7 @@ $LPProgress = "Learning path progress";
 $Ranking = "Ranking";
 $BestResultInCourse = "Best result in course";
 $ExerciseStartDate = "Publication date";
+$OnlyBestResultsPerStudent = "In case of multiple attempts, only shows the best result of each student";
+$BestAttempt = "Best attempt";
+$ExercisesInTimeProgressChart = "Progress of own exercises results over time, against learners average";
 ?>

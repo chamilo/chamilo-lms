@@ -285,10 +285,13 @@ $LastConnexionDate = "Fecha de la última conexión";
 $QuestionsAreTakenFromLPExercises = "Estas preguntas han sido tomadas en las lecciones";
 $AllStudentsAttemptsAreConsidered = "Todos los intentos de los estudiantes son tomados en cuenta";
 $PublishedExercises = "Ejercicios disponibles";
-$DoneExercises = "Ejercicios tomados";
+$DoneExercises = "Ejercicios realizados";
 $AverageExerciseResult = "Resultados promedios ejercicio";
 $LPProgress = "Progreso de lecciones";
 $Ranking = "Clasificación";
 $BestResultInCourse = "Mejor resultado del curso";
 $ExerciseStartDate = "Fecha publicación";
+$OnlyBestResultsPerStudent = "En caso de intentos múltiples, solo muestra el mejor resultado por alumno";
+$BestAttempt = "Mejor intento";
+$ExercisesInTimeProgressChart = "Progreso de resultados de ejercicios propios en el tiempo frente al promedio de alumnos";
 ?>

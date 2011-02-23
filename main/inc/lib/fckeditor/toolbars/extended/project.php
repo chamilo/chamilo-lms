@@ -25,8 +25,8 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Undo','Redo'),
 	array('Link','Image','EmbedMovies','Flash','MP3','TableOC','mimetex','asciimath'),
 	array('UnorderedList','OrderedList','Rule'),
-	array('JustifyLeft','JustifyCenter','JustifyFull'),
-	array('FontFormat','FontName','FontSize','Bold','Italic','TextColor'),
+	array('JustifyLeft','JustifyCenter','JustifyFull'),	
+	array('FontFormat','FontName','Bold','Italic','Underline','TextColor','BGColor','Source'),
 	array('FitWindow')
 );
 

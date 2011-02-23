@@ -82,9 +82,14 @@ function validate_text_empty (str,msg) {
 }
 
 jQuery(document).ready(function() {
- 
+ 	/* Binds a tab id in the url */
+    $("#tab_browse").bind("tabsselect", function(event, ui) {
+		window.location.href=ui.tab;
+    });
 	$("#tabs").tabs();
 	$("#tab_browse").tabs();
+	
+
 
    var valor = "'.$anchor.'";
 
@@ -125,8 +130,6 @@ function hide_icon_edit(element_html)  {
 }
 
 </script>';
-
-//$htmlHeadXtra[] = '<style> #tabs{position:relative;} </style>';
 
 
 $allowed_views = array('mygroups','newest','pop');

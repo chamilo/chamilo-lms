@@ -2721,7 +2721,6 @@ class UserManager
 	 * @return array
 	 */
 	public static function get_all_user_tags($tag, $field_id = 0, $from = 0, $number_of_items = 10) {
-		// database table definition
 
 		$user_table 			= Database::get_main_table(TABLE_MAIN_USER);
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
@@ -2745,7 +2744,10 @@ class UserManager
 		$result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)> 0) {
-			while ($row = Database::fetch_array($result,'ASSOC')) {
+			while ($row = Database::fetch_array($result,'ASSOC')) {			    
+			    if (isset($return[$row['user_id']]) && !empty($return[$row['user_id']]['tag'])) {
+			        $row['tag'] .=', '.$return[$row['user_id']]['tag'];  
+			    }
 				$return[$row['user_id']] = $row;
 			}
 		}
@@ -2791,7 +2793,7 @@ class UserManager
 		$res = Database::query($sql);
 		if (Database::num_rows($res)> 0) {
 			while ($row = Database::fetch_array($res,'ASSOC')) {
-				if (!in_array($row['user_id'], $return)) {
+				if (!in_array($row['user_id'], array_keys($return))) {
 					$return[$row['user_id']] = $row;
 				}
 			}

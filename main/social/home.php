@@ -126,11 +126,10 @@ echo '<div id="social-content">';
 				} else {
 					$count_users_group = $count_users_group.' '.get_lang('Members');
 				}
-
-				$result['name'] = $url_open.api_ucwords(cut($result['name'],40,true)).' ('.$count_users_group.') '.$url_close.Display::return_icon('linegroups.jpg','');
+				$result['name'] = $url_open.api_ucwords(cut($result['name'],40,true)).$url_close.Display::span('<br />'.$count_users_group,array('class'=>'box_description_group_member'));
 				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
-				$actions = '<div class="box_description_group_actions" ><a href="groups.php?view=newest">'.get_lang('SeeMore').$url_close.'</div>';
+				$actions = '<div class="box_description_group_actions" ><a href="groups.php?#tab_browse-2">'.get_lang('SeeMore').$url_close.'</div>';
 				$groups_newest[]= array($url_open.$result['picture_uri'].$url_close, $result['name'], cut($result['description'],120,true).$actions);
 			}
 
@@ -146,22 +145,22 @@ echo '<div id="social-content">';
 					$result['count'] = $result['count'].' '.get_lang('Member');
 				} else {
 					$result['count'] = $result['count'].' '.get_lang('Members');
-				}
-				$result['name'] = $url_open.api_ucwords(cut($result['name'],40,true)).' ('.$result['count'].') '.$url_close.Display::return_icon('linegroups.jpg');
+				}				
+				$result['name'] = $url_open.api_ucwords(cut($result['name'],40,true)).$url_close.Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
 				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
-				$actions = '<div class="box_description_group_actions" ><a href="groups.php?view=pop">'.get_lang('SeeMore').$url_close.'</div>';
+				$actions = '<div class="box_description_group_actions" ><a href="groups.php?#tab_browse-3">'.get_lang('SeeMore').$url_close.'</div>';
 				$groups_pop[]= array($url_open.$result['picture_uri'].$url_close, $result['name'], cut($result['description'],120,true).$actions);
 			}
 
 			if (count($groups_newest) > 0) {
-				echo '<div class="social-groups-home-title">'.api_strtoupper(get_lang('Newest')).'</div>';
+				echo '<div class="social-groups-home-title">'.get_lang('Newest').'</div>';
 				Display::display_sortable_grid('home_group', array(), $groups_newest, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
 				echo '<br />';
 			}
 
 			if (count($groups_pop) > 0) {
-				echo '<div class="social-groups-home-title">'.api_strtoupper(get_lang('Popular')).'</div>';
+				echo '<div class="social-groups-home-title">'.get_lang('Popular').'</div>';
 				Display::display_sortable_grid('home_group', array(), $groups_pop, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 			}
 

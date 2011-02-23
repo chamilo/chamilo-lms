@@ -51,7 +51,7 @@ echo '<div id="social-content">';
 		if ($query != '') {
 			if (isset($query) && $query!='') {		
 				//get users from tags
-				$users = UserManager::get_all_user_tags($query, 0, 0, 5);	
+				$users  = UserManager::get_all_user_tags($query, 0, 0, 5);
 				$groups = GroupPortalManager::get_all_group_tags($query);
 				
 				if (empty($users) && empty($groups)) {
@@ -59,8 +59,7 @@ echo '<div id="social-content">';
 				}
 						
 				$results = array();
-				if (is_array($users) && count($users)> 0) {
-					
+				if (is_array($users) && count($users)> 0) {					
 					echo '<h2>'.get_lang('Users').'</h2>';			
 					foreach($users as $user) {
 						$picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'],80);

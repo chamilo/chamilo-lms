@@ -1169,7 +1169,7 @@ FCKDocumentProcessor_CreateFakeImage = function( fakeClass, realElement )
     // Setting width and height for relevant types of fake images.
     if ( fakeClass == 'FCK__Video' && realElement.nodeName.IEquals( 'div' ) )
     {
-        // Specific to flv player, SWFObject attaching technique.
+        // Specific to the flv player.
         for ( var i = 0; i < realElement.childNodes.length; i++ )
         {
             if ( realElement.childNodes[i].nodeName.IEquals( 'div' ) )
@@ -1244,7 +1244,7 @@ FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
 // Fake image support for flv video files.
 FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
     {
-        // For flv player, SWFObject attaching tecnique.
+        // For the flv player.
         var divs = document.getElementsByTagName( 'div' ) ;
         var div;
         var i = divs.length - 1 ;
@@ -1605,7 +1605,7 @@ FCK.IsVideo = function ( tag )
         }
     }
 
-    // This is for the specific flv player and SWFObject technique for attaching multimedia.
+    // This is for the flv player.
     if ( tag.nodeName.IEquals( 'div' ) )
     {
         if ( tag.id )
@@ -1630,7 +1630,7 @@ FCK.GetVideoType = function ( img )
         return false ;
     }
 
-    // This is for the specific flv player and SWFObject technique for attaching multimedia.
+    // This is for the flv player.
     if ( tag.nodeName.IEquals( 'div' ) )
     {
         if ( tag.id )

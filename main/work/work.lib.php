@@ -800,7 +800,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 						//$qualification_string = '<b style="color:blue">'.get_lang('Qualification').': '.$work->qualification.'</b>';
 						$qualification_string = '<b style="color:blue">'.$work->qualification.'</b>';
 					}
-					if (defined('ASSIGNMENT_EXPIRES') && (ASSIGNMENT_EXPIRES < convert_date_to_number($work->sent_date))) {
+					if (defined('ASSIGNMENT_EXPIRES') && (ASSIGNMENT_EXPIRES < api_strtotime($work->sent_date))) {
 						$add_string = ' <b style="color:red">'.get_lang('Expired').'</b>';
 					}
 				}

@@ -1132,30 +1132,32 @@ if ($is_special > 0) {
 	$is_special = true; //we are in a folder
 	define('IS_ASSIGNMENT', 1);
 	$sql = Database::query('SELECT * FROM '.$TSTDPUBASG.' WHERE publication_id = '.intval($publication['id']).' LIMIT 1');
-	$homework = Database::fetch_array($sql);
+	$homework = Database::fetch_array($sql,'ASSOC');
 	$has_expired = $has_ended = false;
-	$has_expiry_date = true;
+	$has_expiry_date = false;
 
 	if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
-		$time_now		= convert_date_to_number(api_get_local_time());
+		$time_now		= time();
 		
 		if ($homework['expires_on'] != '0000-00-00 00:00:00') {
-			$time_expires 	= convert_date_to_number(api_get_local_time($homework['expires_on']));
-			$difference 	= $time_expires - $time_now;					
-			if ($difference < 0)			
+			$time_expires 	= api_strtotime($homework['expires_on']);
+			$difference 	= $time_expires - $time_now;								
+			if ($difference < 0) {			
 				$has_expired = true;
+				$has_expiry_date = true;
+			}
 		}
 		if ($homework['ends_on'] != '0000-00-00 00:00:00') {
-			$time_ends 		= convert_date_to_number(api_get_local_time($homework['ends_on']));
-			$difference2 	= $time_ends - $time_now;				
-			if ($difference2 < 0) {
+			$time_ends 		= api_strtotime($homework['ends_on']);
+			$difference2 	= $time_ends - $time_now;							
+			if ($difference2 < 0) {			    
 				$has_ended = true;
 			}
 		}
 		if ($homework['expires_on'] == '0000-00-00 00:00:00') {
 			$has_expiry_date = false;
 		}
-		if (!$has_expiry_date) {
+		if ($has_expiry_date) {
 			//@todo fix me
 			define('ASSIGNMENT_EXPIRES', $time_expires);
 		}

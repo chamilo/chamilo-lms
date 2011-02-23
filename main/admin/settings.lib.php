@@ -180,15 +180,15 @@ function handle_stylesheets() {
         if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             $is_style_changeable = true;
             echo '<div class="actions" id="stylesheetuploadlink">';
-            Display::display_icon('theme_add.gif');
-            echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
+            	Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'','32');
+            	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
             echo '</div>';
         }
     } else {
         $is_style_changeable = true;
         echo '<div class="actions" id="stylesheetuploadlink">';
-        Display::display_icon('theme_add.gif');
-        echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
+			Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'','32');
+        	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
         echo '</div>';
     }
 
@@ -571,7 +571,7 @@ function handle_search() {
 function handle_templates() {
     if ($_GET['action'] != 'add') {
         echo '<div class="actions" style="margin-left: 1px;">';
-        echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('template_add.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
+        echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'),'','32').'</a>';
         echo '</div>';
     }
 
@@ -680,7 +680,7 @@ function get_template_data($from, $number_of_items, $column, $direction) {
  */
 function actions_filter($id) {
     $return = '<a href="settings.php?category=Templates&amp;action=edit&amp;id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-    $return .= '<a href="settings.php?category=Templates&amp;action=delete&amp;id='.Security::remove_XSS($id).'" onclick="javascript:if(!confirm('."'".get_lang('ConfirmYourChoice')."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+    $return .= '<a href="settings.php?category=Templates&amp;action=delete&amp;id='.Security::remove_XSS($id).'" onClick="javascript:if(!confirm('."'".get_lang('ConfirmYourChoice')."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
     return $return;
 }
 
@@ -830,7 +830,7 @@ function add_edit_template() {
 
                // Display a feedback message.
                Display::display_confirmation_message(get_lang('TemplateAdded'));
-               echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('template_add.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
+               echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'),'','32').'</a>';
            } else {
                $content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
                $sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."', content = '".$content_template."'";

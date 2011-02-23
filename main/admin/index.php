@@ -126,7 +126,7 @@ if (api_is_platform_admin()) { ?>
 </div>
 
 <div class="admin_section">
-    <h4><?php Display::display_icon('settings.gif', get_lang('Platform')); ?> <?php echo api_ucfirst(get_lang('Platform')); ?></h4>
+    <h4><?php Display::display_icon('settings.png', get_lang('Platform')); ?> <?php echo api_ucfirst(get_lang('Platform')); ?></h4>
     <ul>
         <li><a href="settings.php"><?php echo get_lang('DokeosConfigSettings') ?></a></li>
         <li><a href="special_exports.php"><?php echo get_lang('SpecialExports') ?></a></li>

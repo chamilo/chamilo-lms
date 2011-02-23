@@ -20,8 +20,8 @@ edit			nuvola
 draw			nuvola
 paint			nuvola
 folder			nuvola
-upload_certificate	modif crystal
-new_certificate		modif crystal
+upload_certificate	modif gnome
+new_certificate		modif gnome
 --
 info			nuvola
 wizard			nuvola
@@ -90,8 +90,8 @@ import_evaluation	modif crystal
 export_evaluation	modif crystal
 evaluation_rate		modif crystal
 new_online_evaluation	modif nuvola
-certificate		modif crystal
-certificate_list	modif crystal
+certificate		gnome
+certificate_list	modif gnome
 --
 month			crystal (only 32 px)
 month_empty		modif crystal (only 32 px)

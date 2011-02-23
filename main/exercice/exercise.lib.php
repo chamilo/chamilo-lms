@@ -1297,7 +1297,9 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
         //var_dump($my_score, $my_ranking);
         if ($return_string) {
             if (!empty($position) && !empty($my_ranking)) {
-               return $position.'/'.count($my_ranking); 
+               $return_value = $position.'/'.count($my_ranking); 
+            } else {
+                $return_value = '-';
             }
         }
         return $return_value;    

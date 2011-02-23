@@ -1931,7 +1931,6 @@ class Tracking {
                   '.Display::tag('th', get_lang('Details'),         array('class'=>'head')).'
                 </tr>';
 
-                    $i = 0;
                     foreach ($courses as $enreg) {
                         $weighting = 0;
 
@@ -1971,7 +1970,6 @@ class Tracking {
                         }
                         $html .= '</a>';
                         $html .= '</td></tr>';
-                        $i = $i ? 0 : 1;
                     }
                     $html .= '</table>';
                 }
@@ -2062,14 +2060,14 @@ class Tracking {
                     $html .= '
                         <tr>
                           <th width="300px">'.get_lang('Course').'</th>
-                          '.Display::tag('th', get_lang('PublishedExercises'),array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('DoneExercises'),     array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('AverageExerciseResult'),     array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('Time')         ,     array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('LPProgress')     ,   array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('PublishedExercises'),    array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('DoneExercises'),         array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('AverageExerciseResult'), array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('Time')         ,         array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('LPProgress')     ,       array('class'=>'head')).'
                           '.Display::tag('th', get_lang('Score').Display :: return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('LastConnexion'),     array('class'=>'head')).'      
-                          '.Display::tag('th', get_lang('Details'),           array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('LastConnexion'),         array('class'=>'head')).'      
+                          '.Display::tag('th', get_lang('Details'),               array('class'=>'head')).'
                         </tr>';
                     foreach ($course_list as $enreg) {
                         $weighting = 0;
@@ -2085,7 +2083,7 @@ class Tracking {
                             $html .= '<tr class="row_even">';
                         }
 
-                        $url = api_get_course_url($enreg['code'], $key);
+                        $url        = api_get_course_url($enreg['code'], $key);
                         $course_url = Display::url($enreg['title'], $url, array('target'=>'_blank'));
 
                         $html .= Display::tag('td', $course_url);/*
@@ -2124,7 +2122,6 @@ class Tracking {
                         }
                         $details .= '</a>';                         
                         $html .= Display::tag('td', $details, array('align'=>'center'));
-                        $i = $i ? 0 : 1;
                         $html .= '</tr>';
                     }
                     $html .= '</table>';

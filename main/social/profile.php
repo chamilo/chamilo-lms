@@ -215,6 +215,7 @@ $_SESSION['social_user_id'] = intval($user_id);
 /**
  * Display
  */
+
 Display :: display_header($nametool);
 
 //Setting some course info

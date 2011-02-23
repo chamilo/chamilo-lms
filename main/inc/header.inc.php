@@ -48,6 +48,23 @@ if (isset($httpHeadXtra) && $httpHeadXtra) {
 // Get language iso-code for this page - ignore errors
 $document_language = api_get_language_isocode();
 
+$course_title = $_course['name'];
+$title_list[] = api_get_setting('siteName');
+if (!empty($course_title)) {
+    $title_list[] = $course_title;
+}
+if ($nameTools != '') {
+    $title_list[] = $nameTools;
+}
+
+$title_string = '';
+for($i=0; $i<count($title_list);$i++) {
+    $title_string .=$title_list[$i];
+    if (isset($title_list[$i+1])) {
+        $title_string .=' - ';
+    }    
+}
+
 /*
  * HTML HEADER
  */
@@ -59,18 +76,7 @@ $document_language = api_get_language_isocode();
 <head>
 <title>
 <?php
-$title_list[] = api_get_setting('siteName');
-$title_list[] = $nameTools;
-$title_list[] = $_course['official_code'];
-$title_string = '';
-
-for($i=0; $i<count($title_list);$i++) {
-    $title_string .=$title_list[$i];
-    if (isset($title_list[$i+1])) {
-        $title_string .=' - ';
-    }    
-}
-echo $title_string;
+echo Security::remove_XSS($title_string);
 ?>
 </title>
 <style type="text/css" media="screen, projection">

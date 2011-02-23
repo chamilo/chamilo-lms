@@ -28,7 +28,7 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('Course'));
 
-Display :: display_header($nameTools);
+Display :: display_header(get_lang('Session'));
 
 $session_id     = intval($_GET['session_id']);
 if (empty($session_id)) {

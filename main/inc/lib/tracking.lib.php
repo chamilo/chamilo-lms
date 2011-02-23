@@ -2036,7 +2036,8 @@ class Tracking {
                         //All exercises in the course @todo change for a real count
                         $exercises          = count(get_all_exercises($enreg, $key));
                         //Count of user results
-                        $done_exercises     = get_all_exercise_results_by_course($enreg['code'], $key);
+                        //$done_exercises     = get_best_exercise_results_by_course($enreg['code'], $key);
+                        $done_exercises     = get_count_exercises_attempted_by_course($enreg['code'], $key);
                         //Average
                         $average            = get_average_score_by_course($enreg['code'], $key);
 

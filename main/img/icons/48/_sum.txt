@@ -17,11 +17,15 @@ new_draw_na		modif nuvola
 save_pack		nuvola
 settings		nuvola
 edit			nuvola
+edit_na			modif nuvola
+move			nuvola
+move_na			modif nuvola
 draw			nuvola
 paint			nuvola
 folder			nuvola
 upload_certificate	modif gnome
 new_certificate		modif gnome
+certificate_na		modif gnome
 --
 info			nuvola
 wizard			nuvola
@@ -220,6 +224,8 @@ platform			chamilo
 languages			crystal
 tools				nuvola
 stylesheets			nuvola
+upload_stylesheets		modif nuvola
+new_template			modif crystal
 security			nuvola
 ldap				nuvola
 plugins				crystal

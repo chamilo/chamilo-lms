@@ -498,7 +498,7 @@ if ($show_full_profile) {
 
 					if ($i > $max_numbers_of_group) {
 						if (api_get_user_id() == $user_id) {
-							echo '<div class="box_shared_profile_group_actions"><a href="groups.php?view=mygroups">'.get_lang('SeeAllMyGroups').'</a></div>';
+							echo '<div class="box_shared_profile_group_actions"><a href="groups.php?#tab_browse-1">'.get_lang('SeeAllMyGroups').'</a></div>';
 						} else {
 							echo '<div class="box_shared_profile_group_actions"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php?view=mygroups&height=390&width=610&&user_id='.$user_id.'" class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAllMyGroups').'</a></div>';
 						}

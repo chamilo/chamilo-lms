@@ -21,11 +21,11 @@
 	color: #212121; 
 }
 
-/* Changes the row style in a table (even, odd) */
+/* jqgrid: Changes the row style in a table (even, odd) */
 .ui-priority-secondary, .ui-widget-content .ui-priority-secondary,  .ui-widget-header .ui-priority-secondary { opacity: 1; font-weight: normal; background-color: #F2F2F2; }
 .ui-widget-content { background: #FFF; }
 
-/* Changing anchors in a jqgrid see main/session/ */
+/* jqgrid: Changing anchors colors see main/session/ */
 
 .ui-widget-content a {
     color: #3757F7;
@@ -36,18 +36,21 @@
     cursor: pointer;
 }
 
-/* Removes the gray background in the jqgrid main/session */
+/* Removes the gray background in the jqgrid main/session/index.php */
 .ui-widget-header {
 	background: #FFF; 
 }
 
-/* anchor size  */
+/* tabs: anchor size otherwise anchors will have a bigger font size */
 
 .ui-widget {
 	font-size:100%;
 }
 
-
+/* tabs: removing a lot of padding */
+.ui-tabs .ui-tabs-panel {
+	padding: 10px;
+}
 
 /*  cupertino */
 

@@ -237,7 +237,6 @@ if ($group_id != 0 ) {
 }
 
 echo '<div id="social-content">';
-
 	echo '<div id="social-content-left">';
 		//this include the social menu div
 		if ($group_id != 0 ) {

@@ -240,9 +240,7 @@ if (!empty($auto_lunch)) {
     }
 }
 
-//Display::display_header($course_title, 'Home');
-Display::display_header('', get_lang('Home'));
-
+Display::display_header(null, 'Home');
 
 
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);

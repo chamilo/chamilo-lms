@@ -2051,7 +2051,7 @@ class Tracking {
                     $html .='</table><br />';
                     
                     if (!empty($session_graph[$key])) {
-                        $html .= $session_graph[$my_session_id];
+                        $html .= Display::div($session_graph[$my_session_id], array('id'=>'session_graph_'.$key,'class'=>'chart-session', 'style'=>'position:relative; text-align: center;') );
                     }
 
                     $html .= Display::tag('h2',get_lang('CourseList'));

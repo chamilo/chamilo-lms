@@ -477,20 +477,26 @@ function store_new_agenda_item() {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function display_courseadmin_links() {
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_personal_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('platform_event.png', get_lang('AgendaAdd'),'','32')."</a>";
 
 }
 
 function display_student_links() {
-	if ($_SESSION['sort'] == 'DESC') {
-		echo "<a href='".api_get_self()."?sort=asc&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_up.gif',get_lang('AgendaSortChronologicallyUp')).' '.get_lang("AgendaSortChronologicallyUp")."</a>";
-	} else {
-		echo "<a href='".api_get_self()."?sort=desc&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_down.gif',get_lang('AgendaSortChronologicallyDown')).' '.get_lang("AgendaSortChronologicallyDown")."</a>";
-	}
+	
+	
 	if ($_SESSION['view'] <> 'month') {
-		echo "<a href=\"".api_get_self()."?action=view&amp;view=month\"><img src=\"../img/calendar_month.gif\" border=\"0\" alt=\"".get_lang('MonthView')."\" /> ".get_lang('MonthView')."</a>";
-	} else {
-		echo "<a href=\"".api_get_self()."?action=view&amp;view=list\"><img src=\"../img/calendar_select.gif\" border=\"0\" alt=\"".get_lang('ListView')."\" /> ".get_lang('ListView')."</a>";
+		echo '<a href="'.api_get_self().'?action=view&amp;view=month">'.
+		Display::return_icon('month_empty.png',get_lang('MonthView'),'','32').'</a>';
+		if ($_SESSION['sort'] == 'DESC') {
+			echo '<a href="'.api_get_self().'?sort=asc&amp;origin='.Security::remove_XSS($_GET['origin']).'">'.Display::return_icon('calendar_normal.png',get_lang('AgendaSortChronologicallyUp'),'','32').'</a>';
+		}
+		else {
+			echo '<a href="'.api_get_self().'?sort=desc&amp;origin='.Security::remove_XSS($_GET['origin']).'">'.Display::return_icon('calendar_inverse.png',get_lang('AgendaSortChronologicallyDown'),'','32').'</a>';
+		}
+	}
+	else {		
+		echo '<a href="'.api_get_self().'?action=view&amp;view=list">'.Display::return_icon('appointments.png', get_lang('ListView'),'','32').'</a>';
+
 	}
 }
 /**
@@ -770,7 +776,7 @@ function display_agenda_items()
     	// the icons. If the message is sent to one or more specific users/groups
     	// we add the groups icon
     	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
-    	Display::display_icon('calendar_global.png', get_lang('Agenda'));
+    	Display::display_icon('agenda.png', get_lang('Agenda'),'','22');
     	/*if ($myrow['to_group_id']!=='0') {
     		echo Display::return_icon('group.gif', get_lang('AllUsersOfThePlatform'));
     	}*/

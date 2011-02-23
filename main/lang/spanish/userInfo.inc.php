@@ -198,4 +198,5 @@ $MyFiles = "Mis archivos";
 $MySocialGroups = "Mis grupos sociales";
 $SocialGroups = "Grupos sociales";
 $CreateASocialGroup = "Crear un grupo social";
+$EditMembersList = "Editar lista de miembros";
 ?>

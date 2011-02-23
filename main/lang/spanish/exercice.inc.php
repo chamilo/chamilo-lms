@@ -377,4 +377,5 @@ $False = "Falso";
 $DoubtScore = "No se";
 $PropagateNegativeResults = "Propagar los resultados negativos entre preguntas";
 $InsertALinkToThisQuestionInTheExercise = "Insertar esta pregunta en el ejercicio como un vínculo (no una copia)";
+$OnlyShowScore = "Mostrar solo el resultado";
 ?>

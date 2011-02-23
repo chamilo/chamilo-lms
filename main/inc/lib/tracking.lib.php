@@ -1941,7 +1941,6 @@ class Tracking {
                         $percentage_score      = Tracking :: get_avg_student_score($user_id, $enreg['code'], array());
                         $last_connection       = Tracking :: get_last_connection_date_on_the_course($user_id, $enreg['code']);
 
-
                         if ($enreg['code'] == $_GET['course'] && empty($_GET['session_id'])) {
                             $html .= '<tr class="row_odd" style="background-color:#FBF09D">';
                         } else {
@@ -2341,13 +2340,13 @@ class Tracking {
             $data_set = new pData();
 
             // Dataset definition
-            $data_set->AddPoint($my_results,"Serie1");
-            $data_set->AddPoint($average,	"Serie2");
-            $data_set->AddPoint($names,		"Serie3");
+            $data_set->AddPoint($average,	 "Serie1");
+            $data_set->AddPoint($my_results, "Serie2");
+            $data_set->AddPoint($names,		 "Serie3");
             $data_set->AddAllSeries();
             $data_set->SetAbsciseLabelSerie('Serie3');
-            $data_set->SetSerieName(get_lang('MyResults'),"Serie1");
-            $data_set->SetSerieName(get_lang('AverageScore'),"Serie2");
+            $data_set->SetSerieName(get_lang('AverageScore'),"Serie1");
+            $data_set->SetSerieName(get_lang('MyResults'),	 "Serie2");
 
             //$data_set->SetXAxisName(get_lang("Exercises"));
             $data_set->SetYAxisName(get_lang("Percentage"));

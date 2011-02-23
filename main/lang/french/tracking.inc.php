@@ -291,4 +291,7 @@ $LPProgress = "Progrès parcours";
 $Ranking = "Position";
 $BestResultInCourse = "Meilleur résultat cours";
 $ExerciseStartDate = "Date publication";
+$OnlyBestResultsPerStudent = "En cas de tentatives multiples, montre seulement le meilleur résultat de chaque étudiant";
+$BestAttempt = "Meilleure tentative";
+$ExercisesInTimeProgressChart = "Progrès des résultats aux exercices, face au résultat moyen des apprenants";
 ?>

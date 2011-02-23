@@ -1010,4 +1010,6 @@ $ItemUpdated = "Élément mis à jour";
 $ItemCopied = "Élément copié";
 $MyStatistics = "Mes statistiques";
 $FromDateXToDateY = "Du %s au %s";
+$CourseThematicAdvance = "Journal de classe";
+$Clean = "Nettoyer";
 ?>

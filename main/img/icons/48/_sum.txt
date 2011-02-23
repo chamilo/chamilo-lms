@@ -210,6 +210,26 @@ new_career			modif gnome
 career				gnome
 session_to_promotion		modif nuvola
 courses_to_session		modif nuvola
+class				modif mix gnome nuvola
+new_class			modif mix gnome nuvola
+user_to_class			modif mix gnome nuvola
+session_to_class		modif mix gnome nuvola
+course_to_class			modif mix gnome nuvola
+--
+platform			chamilo
+languages			crystal
+tools				nuvola
+stylesheets			nuvola
+security			nuvola
+ldap				nuvola
+plugins				crystal
+template			crystal
+timezone			nuvola
+tuning				nuvola
+html_editor			gnome			
+--
+platform_event			modif nuvola
+agenda				nuvola
 
 --julio
 star				

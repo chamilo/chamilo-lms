@@ -540,22 +540,22 @@ if (!empty($_GET['action']) && $_GET['action'] == 'stored') {
 }
 
 // The action images.
-$action_images['platform']      = 'logo.gif';
-$action_images['course']        = 'course.gif';
-$action_images['tools']         = 'reference.gif';
-$action_images['user']          = 'students.gif';
-$action_images['gradebook']     = 'gradebook_eval_not_empty.gif';
-$action_images['ldap']          = 'loginmanager.gif';
-$action_images['security']      = 'passwordprotected.gif';
-$action_images['languages']     = 'languages.gif';
-$action_images['tuning']        = 'tuning.gif';
-$action_images['plugins']       = 'plugin.gif';
-$action_images['stylesheets']   = 'theme.gif';
-$action_images['templates']     = 'template.gif';
-$action_images['search']        = 'search.gif';
-$action_images['editor']        = 'html.png';
-$action_images['timezones']     = 'timezones.png';
-$action_images['extra']     	= 'more.png';
+$action_images['platform']      = 'platform.png';
+$action_images['course']        = 'course.png';
+$action_images['tools']         = 'tools.png';
+$action_images['user']          = 'user.png';
+$action_images['gradebook']     = 'gradebook.png';
+$action_images['ldap']          = 'ldap.png';
+$action_images['security']      = 'security.png';
+$action_images['languages']     = 'languages.png';
+$action_images['tuning']        = 'tuning.png';
+$action_images['plugins']       = 'plugins.png';
+$action_images['stylesheets']   = 'stylesheets.png';
+$action_images['templates']     = 'template.png';
+$action_images['search']        = 'search.png';
+$action_images['editor']        = 'html_editor.png';
+$action_images['timezones']     = 'timezone.png';
+$action_images['extra']     	= 'wizard.png';
 
 // Grabbing the categories.
 //$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
@@ -564,12 +564,12 @@ $resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 
 echo "\n<div class=\"actions\">";
 //while ($row = Database::fetch_array($resultcategories))
 foreach ($resultcategories as $row) {
-    echo "\n\t<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category']))).api_ucfirst(get_lang($row['category']))."</a>";
+    echo "\n\t<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category'])),'','32')."</a>";
 }
-echo "\n\t<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], api_ucfirst(get_lang('Plugins'))).api_ucfirst(get_lang('Plugins'))."</a>";
-echo "\n\t<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], api_ucfirst(get_lang('Stylesheets'))).api_ucfirst(get_lang('Stylesheets'))."</a>";
-echo "\n\t<a href=\"".api_get_self()."?category=Templates\">".Display::return_icon($action_images['templates'], api_ucfirst(get_lang('Templates'))).api_ucfirst(get_lang('Templates'))."</a>";
-echo "\n\t<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], api_ucfirst(get_lang('Search'))).api_ucfirst(get_lang('Search'))."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], api_ucfirst(get_lang('Search')),'','32')."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], api_ucfirst(get_lang('Stylesheets')),'','32')."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=Templates\">".Display::return_icon($action_images['templates'], api_ucfirst(get_lang('Templates')),'','32')."</a>";
+echo "\n\t<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], api_ucfirst(get_lang('Plugins')),'','32')."</a>";
 echo "\n</div>";
 
 if (!empty($_GET['category'])) {

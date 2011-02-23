@@ -29,7 +29,7 @@ class UserGroup extends Model {
         echo '<div class="actions">';
        	echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
 	   //echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back')).get_lang('Back').'</a>';       
-        echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('filenew.gif',get_lang('Add')).get_lang('Add').'</a>';                     
+        echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_class.png',get_lang('langAddClasses'),'','32').'</a>';   
         echo '</div>';   
         echo Display::grid_html('usergroups');  
     } 

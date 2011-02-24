@@ -369,23 +369,23 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
     // If document is read only *or* we're in a session and the document
     // is from a non-session context, hide the edition capabilities
     if ($is_read_only /*or ($session_id!=$cur_ses)*/) {
-        $modify_icons = Display::return_icon('edit_na.gif', get_lang('Modify'));
+        $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'),'',22);
         $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),array(), 22);
         $modify_icons .= '&nbsp;'.Display::return_icon('move.png', get_lang('Move'),array(), 22);
         if(api_is_allowed_to_edit() || api_is_platform_admin()){
-            $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'_na.gif', get_lang('VisibilityCannotBeChanged'));
+            $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'_na.png', get_lang('VisibilityCannotBeChanged'),'',22);
         }
     } else {
         if ($is_certificate_mode) {
-            $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'"><img src="../img/edit.png" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
+            $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
         } else {
             if($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
-                $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.png" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
+                $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
 			}
 			elseif($extension=='png' || $extension=='jpg' || $extension=='jpeg' || $extension=='bmp' || $extension=='gif' ||$extension=='pxd' && api_get_setting('enabled_support_pixlr') == 'true'){
-                $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.png" border="0" title="'.get_lang('Modify').'" alt="" /></a>';			
+                $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';		
             }else{
-                $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.png" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
+                $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
             }
         }
 
@@ -410,7 +410,7 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
         } else {
             $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$req_gid.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
             if(api_is_allowed_to_edit() || api_is_platform_admin()){
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
+                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'">'.Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'),'',22).'</a>';
             }
         }
     }
@@ -419,7 +419,7 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
     if ($type == 'file' && ($extension == 'html' || $extension == 'htm')) {
         if ($is_template == 0) {
             if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] != '/certificates') || !isset($_GET['curdirpath'])) {
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;add_as_template='.$id.$req_gid.'&amp;'.$sort_params.'">'.Display::return_icon('wizard.gif', get_lang('AddAsTemplate'),array(), 22).'</a>';
+                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;add_as_template='.$id.$req_gid.'&amp;'.$sort_params.'">'.Display::return_icon('wizard.png', get_lang('AddAsTemplate'),array(), 22).'</a>';
             }
             if (isset($_GET['curdirpath']) && $_GET['curdirpath']=='/certificates') {//allow attach certificate to course
                 $visibility_icon_certificate='nocertificate';
@@ -435,14 +435,17 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
                 if (isset($_GET['selectcat'])) {
                     $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']).'&amp;set_certificate='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon_certificate.'.png" border="0" title="'.$certificate.'" alt="" /></a>';
                     if ($is_preview) {
-                        $modify_icons .= '&nbsp;<a target="_blank"  href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;set_preview='.$id.$req_gid.'&amp;'.$sort_params.'" ><img src="../img/search.gif" border="0" title="'.$preview.'" alt="" /></a>';
+                        $modify_icons .= '&nbsp;<a target="_blank"  href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;set_preview='.$id.$req_gid.'&amp;'.$sort_params.'" >'.
+						Display::return_icon('preview_view.png', $preview,'',22).'</a>';
                     }
                 }
             }
-        } else {
-            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;remove_as_template='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/wizard_gray_small.gif" border="0" title="'.get_lang('RemoveAsTemplate').'" alt=""'.get_lang('RemoveAsTemplate').'" /></a>';
         }
-        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&id='.$id.'">'.Display::return_icon('file_pdf.gif', get_lang('Export2PDF'),array(), 22).'</a>';
+		else{
+            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;remove_as_template='.$id.$req_gid.'&amp;'.$sort_params.'">'.
+			Display::return_icon('preview_view_na.png', get_lang('RemoveAsTemplate'),'',22).'</a>';
+		}
+        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&id='.$id.'">'.Display::return_icon('pdf.png', get_lang('Export2PDF'),array(), 22).'</a>';
     }
 
     return $modify_icons;

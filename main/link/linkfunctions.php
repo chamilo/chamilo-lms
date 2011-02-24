@@ -566,16 +566,16 @@ function showlinksofcategory($catid) {
                 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=editlink&amp;category='.(!empty($category) ? $category : '').'&amp;id='.$myrow[0].'&amp;urlview='.$urlview.'" title="'.get_lang('Modify').'">'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';
                 // DISPLAY MOVE UP COMMAND only if it is not the top link.
                 if ($i != 1) {
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview='.$urlview.'&amp;up=', $myrow[0], '" title="'.get_lang('Up').'">'.Display::return_icon('up.gif', get_lang('Up'),array(), 22).'', "</a>\n";
+                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview='.$urlview.'&amp;up=', $myrow[0], '" title="'.get_lang('Up').'">'.Display::return_icon('up.png', get_lang('Up'),array(), 22).'', "</a>\n";
                 } else {
-                    echo '<img src="'.api_get_path(WEB_IMG_PATH).'up_na.gif" border="0" alt="'.get_lang('Up').'"/>';
+                    echo Display::return_icon('up.png', get_lang('Up'),array(), 22).'</a>';
                 }
 
                 // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
                 if ($i < $numberoflinks) {
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview='.$urlview.'&amp;down='.$myrow[0].'" title="'.get_lang('Down').'">'.Display::return_icon('down.gif', get_lang('Down'),array(), 22).'', "</a>\n";
+                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview='.$urlview.'&amp;down='.$myrow[0].'" title="'.get_lang('Down').'">'.Display::return_icon('down.png', get_lang('Down'),array(), 22).'', "</a>\n";
                 } else {
-                    echo '<img src="'.api_get_path(WEB_IMG_PATH).'down_na.gif" border="0" alt="'.get_lang('Down').'"/>';
+                    echo Display::return_icon('down_na.png', get_lang('Down'),array(), 22).'', "</a>\n";
                 }
 
                 if ($myrow['visibility'] == '1') {
@@ -605,21 +605,23 @@ function showcategoryadmintools($categoryid) {
     global $urlview;
     global $aantalcategories;
     global $catcounter;
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=editcategory&amp;id='.$categoryid.'&amp;urlview='.$urlview.'" title='.get_lang('Modify').'"><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').'"/></a>';
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=deletecategory&amp;id=', $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript: if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;\">", '<img src="../img/delete.gif" border="0" alt="', get_lang('Delete'), '"/></a>';
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=editcategory&amp;id='.$categoryid.'&amp;urlview='.$urlview.'" title='.get_lang('Modify').'">'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=deletecategory&amp;id=', $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript: if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;\">",
+	Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
 
     // DISPLAY MOVE UP COMMAND only if it is not the top link.
     if ($catcounter != 1) {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;catmove=true&amp;up=', $categoryid, '&amp;urlview='.$urlview.'" title="'.get_lang('Up').'"><img src="../img/up.gif" border="0" alt="'.get_lang('Up').'"/>', "</a>\n";
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;catmove=true&amp;up=', $categoryid, '&amp;urlview='.$urlview.'" title="'.get_lang('Up').'">'.Display::return_icon('up.png', get_lang('Up'),array(), 22).'</a>';
     } else {
-        echo '<img src="'.api_get_path(WEB_IMG_PATH).'up_na.gif" border="0" alt="'.get_lang('Up').'"/>';
+        echo Display::return_icon('up_na.png', get_lang('Up'),array(), 22).'</a>';
     }
 
     // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
     if ($catcounter < $aantalcategories) {
-        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;catmove=true&amp;down='.$categoryid.'&amp;urlview='.$urlview.'"><img src="../img/down.gif" border="0" alt="'.get_lang('Down').'"/>', "</a>\n";
+        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;catmove=true&amp;down='.$categoryid.'&amp;urlview='.$urlview.'">
+		'.Display::return_icon('down.png', get_lang('Down'),array(), 22).'</a>';
     } else {
-        echo '<img src="'.api_get_path(WEB_IMG_PATH).'down_na.gif" border="0" alt="'.get_lang('Down').'"/>';
+        echo Display::return_icon('down_na.png', get_lang('Down'),array(), 22).'</a>';
     }
     $catcounter ++;
 }

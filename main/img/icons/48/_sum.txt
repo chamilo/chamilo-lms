@@ -1,4 +1,4 @@
-Pack and modif 48, 32, 22, 16 px by Juan Carlos Raña Trabado
+Pack and modif icons 48, 32, 22, 16 px by Juan Carlos Raña Trabado
 
 new_document 		modif mix nuvola crystal
 new_folder 		modif nuvola
@@ -236,17 +236,13 @@ html_editor			gnome
 --
 platform_event			modif nuvola
 agenda				nuvola
+--
+up				crystal (only 22 px)
+down				crystal (only 22 px)
+up_na				modif crystal (only 22 px)
+down_na				modif crystal (only 22 px)
+wizard_na			modif nuvola
 
 --julio
 star				
 star_green
-
-==================
-CONVENTIONS:
--transparent
--type: png
--When some icons are embedded on other icons on the left side, half the size of the largest.
-
-
-
-

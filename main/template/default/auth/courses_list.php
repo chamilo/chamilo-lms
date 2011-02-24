@@ -9,10 +9,7 @@
 
 // Acces rights: anonymous users can't do anything usefull here.
 api_block_anonymous_users();
-
-
 $stok = Security::get_token();
-
 $courses_without_category = $courses_in_category[0];
 
 ?>
@@ -20,7 +17,7 @@ $courses_without_category = $courses_in_category[0];
 <!-- Actions: The menu with the different options in cathe course management -->
 <div id="actions" class="actions">
     <?php if ($action != 'subscribe') { ?>
-        &nbsp;<a href="<?php echo api_get_self(); ?>?action=subscribe"><?php echo Display::return_icon('subscribe_course.png', get_lang('SubscribeToCourse'),'','32'); ?></a>
+        &nbsp;<a href="<?php echo api_get_self(); ?>?action=subscribe"><?php echo Display::return_icon('user_subscribe_course.png', get_lang('SubscribeToCourse'),'','32'); ?></a>
     <?php } ?>
 
     <?php if ($action != 'sortmycourses' && isset($action)) { ?>

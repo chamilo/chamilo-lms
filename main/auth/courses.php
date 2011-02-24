@@ -128,16 +128,16 @@ if (isset($_POST['unsubscribe'])) {
 // We are creating a new user defined course category (= Create Course Category).
 if (isset($_POST['create_course_category']) && isset($_POST['title_course_category']) && strlen(trim($_POST['title_course_category'])) > 0) {
 	if ($ctok == $_POST['sec_token']) {
-        $courses_controller->add_course_category($_POST['title_course_category']);
+        $courses_controller->add_course_category($_POST['title_course_category']);        
 	}
 }
 
 // search courses
 if (isset($_REQUEST['search_course'])) {
-        //echo "<p><strong>".get_lang('SearchResultsFor')." ".api_htmlentities($_POST['search_term'], ENT_QUOTES, api_get_system_encoding())."</strong><br />";
-        if ($ctok == $_REQUEST['sec_token']) {
-            $courses_controller->search_courses($_REQUEST['search_term']);
-        }
+    //echo "<p><strong>".get_lang('SearchResultsFor')." ".api_htmlentities($_POST['search_term'], ENT_QUOTES, api_get_system_encoding())."</strong><br />";
+    if ($ctok == $_REQUEST['sec_token']) {
+        $courses_controller->search_courses($_REQUEST['search_term']);
+    }
 }
 
 // subscribe user to course

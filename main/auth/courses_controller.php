@@ -201,8 +201,8 @@ class CoursesController { // extends Controller {
         $message = '';
         if ($result) { $message = get_lang("CourseCategoryStored"); }
         else { $error = get_lang('ACourseCategoryWithThisNameAlreadyExists');}
-        $action = 'createcoursecategory';
-        $this->categories_list($action, $message, $error);
+        $action = 'sortmycourses';
+        $this->courses_list($action, $message);
     }
 
     /**

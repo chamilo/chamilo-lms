@@ -882,7 +882,8 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         // Last edit date
         $last_edit_date = $id['lastedit_date'];
         $last_edit_date = api_get_local_time($last_edit_date, null, date_default_timezone_get());
-        $display_date = date_to_str_ago($last_edit_date).'<br /><span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';
+        //$display_date = date_to_str_ago($last_edit_date).'<br /><span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';
+        $display_date = date_to_str_ago($last_edit_date);
         $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
         // Admins get an edit column
         if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder($_user['user_id'], $curdirpath, $current_session_id)) {

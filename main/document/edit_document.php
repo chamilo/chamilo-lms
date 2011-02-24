@@ -143,7 +143,7 @@ $html_editor_config = array(
 	'BaseHref' =>  api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
 );
 
-$is_allowed_to_edit = is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder($_user['user_id'], $dir, $current_session_id);
+$is_allowed_to_edit = is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
 
 $use_document_title = api_get_setting('use_document_title') == 'true';
 $noPHP_SELF = true;
@@ -318,8 +318,8 @@ if ($is_allowed_to_edit) {
 						if (!is_dir($filepath.'css')) {
 							mkdir($filepath.'css', api_get_permissions_for_new_directories());
 							$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id'], null, null, null, null, $current_session_id);
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'], null, null, null, null, $current_session_id);
+							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(), null, null, null, null, $current_session_id);
+							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(), null, null, null, null, $current_session_id);
 						}
 
 						if (!is_file($filepath.'css/frames.css')) {
@@ -428,11 +428,9 @@ $readonly = Database::result($rs, 0, 'readonly');
 $doc_id = Database::result($rs, 0, 'id');
 
 // Owner
-$sql = 'SELECT insert_user_id FROM '.Database::get_course_table(TABLE_ITEM_PROPERTY).'
-		WHERE tool LIKE "document"
-		AND ref='.intval($doc_id);
-$rs = Database::query($sql);
-$owner_id = Database::result($rs, 0, 'insert_user_id');
+$document_info  = api_get_item_property_info(api_get_course_int_id(),'document', $doc_id);
+$owner_id       = $document_info['insert_user_id'];
+$last_edit_date = $document_info['lastedit_date'];
 
 
 if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid'] )) {
@@ -482,7 +480,15 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 
 	if (!$group_document && !is_my_shared_folder($_user['user_id'], $my_cur_dir_path, $current_session_id)) {
 		$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$docId).'">'.get_lang('AddMetadata').'</a>';
+
+		//Updated on field
+		$last_edit_date = api_get_local_time($last_edit_date, null, date_default_timezone_get());
+        $display_date = date_to_str_ago($last_edit_date).'<br /><span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';
+        
 		$form->addElement('static', null, get_lang('Metadata'), $metadata_link);
+		
+        
+		$form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
 	}
 
 	$form->addElement('textarea', 'newComment', get_lang('Comment'), 'rows="3" style="width:300px;"');

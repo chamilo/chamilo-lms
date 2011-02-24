@@ -2567,7 +2567,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  */
-function api_get_item_property_id ($course_code, $tool, $ref) {
+function api_get_item_property_id($course_code, $tool, $ref) {
 
     $course_info    = api_get_course_info($course_code);
     $tool           = Database::escape_string($tool);
@@ -2583,6 +2583,29 @@ function api_get_item_property_id ($course_code, $tool, $ref) {
         $item_property_id = $row['id'];
     }
     return $item_property_id;
+}
+
+/**
+ * Gets item property data from tool of a course id
+ * @param int    	course id
+ * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
+ * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ */
+function api_get_item_property_info($course_id, $tool, $ref) {
+
+    $course_info    = api_get_course_info_by_id($course_id);
+    $tool           = Database::escape_string($tool);
+    $ref            = intval($ref);
+
+    // Definition of tables.
+    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+    $sql = "SELECT * FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = $ref ";
+    $rs  = Database::query($sql);    
+    $row = array();
+    if (Database::num_rows($rs) > 0) {
+        $row = Database::fetch_array($rs,'ASSOC');   
+    }
+    return $row;
 }
 
 

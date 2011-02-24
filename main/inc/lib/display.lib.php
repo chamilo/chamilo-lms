@@ -646,11 +646,11 @@ class Display {
         $icon = '';
         $size_extra = '';
         if (isset($size)) {
+            $size = intval($size);
             if (in_array($size,array(16,22,32,48,64,128))) {
-            	$size_extra = $size.'/';
+            	$size_extra = $size.'/';            	
             }
         }
-
         if (is_file($code_path.$theme.$size_extra.$image)) {
         	$icon = $w_code_path.$theme.$size_extra.$image;
         } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {

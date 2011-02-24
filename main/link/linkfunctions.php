@@ -563,28 +563,29 @@ function showlinksofcategory($catid) {
         if (api_is_allowed_to_edit(null, true)) {
             if ($session_id == $myrow['session_id']) {
 
-                echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=editlink&amp;category='.(!empty($category) ? $category : '').'&amp;id='.$myrow[0].'&amp;urlview='.$urlview.'" title="'.get_lang('Modify').'"><img src="../img/edit.gif" border="0" alt="', get_lang('Modify'), '" /></a>';
-                echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=deletelink&amp;id=', $myrow[0], '&amp;urlview=', $urlview, "\" onclick=\"javascript: if(!confirm('".get_lang('LinkDelconfirm')."')) return false;\" title=\"".get_lang('Delete').'"><img src="../img/delete.gif" border="0" alt="', get_lang('Delete'), '" /></a>';
+                echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=editlink&amp;category='.(!empty($category) ? $category : '').'&amp;id='.$myrow[0].'&amp;urlview='.$urlview.'" title="'.get_lang('Modify').'">'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';
                 // DISPLAY MOVE UP COMMAND only if it is not the top link.
                 if ($i != 1) {
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview='.$urlview.'&amp;up=', $myrow[0], '" title="'.get_lang('Up').'"><img src="../img/up.gif" border="0" alt="'.get_lang('Up').'"/>', "</a>\n";
+                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview='.$urlview.'&amp;up=', $myrow[0], '" title="'.get_lang('Up').'">'.Display::return_icon('up.gif', get_lang('Up'),array(), 22).'', "</a>\n";
                 } else {
                     echo '<img src="'.api_get_path(WEB_IMG_PATH).'up_na.gif" border="0" alt="'.get_lang('Up').'"/>';
                 }
 
                 // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
                 if ($i < $numberoflinks) {
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview='.$urlview.'&amp;down='.$myrow[0].'" title="'.get_lang('Down').'"><img src="../img/down.gif" border="0" alt="'.get_lang('Down').'"/>', "</a>\n";
+                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview='.$urlview.'&amp;down='.$myrow[0].'" title="'.get_lang('Down').'">'.Display::return_icon('down.gif', get_lang('Down'),array(), 22).'', "</a>\n";
                 } else {
                     echo '<img src="'.api_get_path(WEB_IMG_PATH).'down_na.gif" border="0" alt="'.get_lang('Down').'"/>';
                 }
 
                 if ($myrow['visibility'] == '1') {
-                    echo '<a href="link.php?'.api_get_cidreq().'&amp;action=invisible&amp;id='.$myrow[0].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Hide').'"><img src="../img/visible.gif" border="0" /></a>';
+                    echo '<a href="link.php?'.api_get_cidreq().'&amp;action=invisible&amp;id='.$myrow[0].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Hide').'">'.Display::return_icon('visible.png', get_lang('Hide'),array(), 22).'</a>';
                 }
                 if ($myrow['visibility'] == '0') {
-                     echo '<a href="link.php?'.api_get_cidreq().'&amp;action=visible&amp;id='.$myrow[0].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Show').'"><img src="../img/invisible.gif" border="0" /></a>';
+                     echo ' <a href="link.php?'.api_get_cidreq().'&amp;action=visible&amp;id='.$myrow[0].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Show').'">'.Display::return_icon('invisible.png', get_lang('Show'),array(), 22).'</a>';
                 }
+                echo ' <a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=deletelink&amp;id=', $myrow[0], '&amp;urlview=', $urlview, "\" onclick=\"javascript: if(!confirm('".get_lang('LinkDelconfirm')."')) return false;\" title=\"".get_lang('Delete').'">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
+                                
             } else {
                 echo get_lang('EditionNotAvailableFromSession');
             }

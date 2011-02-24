@@ -820,7 +820,7 @@ VALUES
 ('show_groups_to_users',NULL,'radio','Platform','true','ShowGroupsToUsersTitle','ShowGroupsToUsersComment',NULL,NULL, 0),
 ('accessibility_font_resize',NULL,'radio','Platform','false','EnableAccessibilityFontResizeTitle','EnableAccessibilityFontResizeComment',NULL,NULL, 1),
 ('hide_courses_in_sessions',NULL,'radio', 'Platform','false','HideCoursesInSessionsTitle',	'HideCoursesInSessionsComment','platform',NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.13860','DokeosDatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.13997','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -2429,6 +2429,7 @@ CREATE TABLE session_category (
     name varchar(100) default NULL,
     date_start date default NULL,
     date_end date default NULL,
+	access_url_id INT NOT NULL default 1,
   PRIMARY KEY  (id)
 );
 

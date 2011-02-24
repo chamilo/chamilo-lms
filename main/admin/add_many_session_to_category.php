@@ -91,9 +91,6 @@ $formSent=0;
 $errorMsg = $firstLetterCourse = $firstLetterSession='';
 $CourseList=$SessionList=array();
 $courses=$sessions=array();
-$noPHP_SELF=true;
-
-
 $Categoryid = intval($_POST['CategorySessionId']);
 
 if ($_POST['formSent']) {
@@ -131,7 +128,6 @@ Display::display_header($tool_name);
 
 echo '<div class="row"><div class="form_header">'.$tool_name.' </div></div><br />';
 
-// *******************
 $where ='';
 $rows_category_session = array();
 if((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category']) ) {
@@ -142,9 +138,7 @@ if((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GE
 	$rows_category_session = Database::store_result($result);
 }
 
-$sql = "SELECT id, name  FROM $tbl_session_category ORDER BY name";
-$result=Database::query($sql);
-$rows_session_category = Database::store_result($result);
+$rows_session_category = SessionManager::get_all_session_category();
 
 $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
 $result=Database::query($sql);
@@ -298,8 +292,5 @@ function valide(){
 
 </script>
 <?php
-/*
-		FOOTER
-*/
+/*		FOOTER	*/
 Display::display_footer();
-?>

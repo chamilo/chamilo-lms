@@ -108,7 +108,6 @@ if (!empty($return)) {
 <div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
 
 <table border="0" cellpadding="5" cellspacing="0" width="650">
-
 <tr>
   <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
   <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); else echo api_htmlentities($infos['name'],ENT_QUOTES,$charset); ?>"></td>
@@ -117,7 +116,6 @@ if (!empty($return)) {
   <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
   <td width="70%"><select name="id_coach" style="width:250px;">
 	<option value="">----- <?php echo get_lang('Choose') ?> -----</option>
-
 <?php
 foreach($Coaches as $enreg) {
 ?>
@@ -125,16 +123,10 @@ foreach($Coaches as $enreg) {
 <?php
 }
 unset($Coaches);
+$Categories = SessionManager::get_all_session_category();
 ?>
   </select></td>
 </tr>
-<?php
-	$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-	//$access_url_id = api_get_current_access_url_id();
-	$sql = 'SELECT id, name FROM '.$tbl_session_category.' ORDER BY name ASC';
-	$result = Database::query($sql);
-	$Categories = Database::store_result($result);
-?>
 <tr>
   <td width="30%"><?php echo get_lang('SessionCategory') ?></td>
   <td width="70%">
@@ -146,8 +138,6 @@ unset($Coaches);
 	</select>
   </td>
 </tr>
-
-
 <tr>
     <td>
         &nbsp;
@@ -396,4 +386,3 @@ function disable_starttime(select) {
 </script>
 <?php
 Display::display_footer();
-?>

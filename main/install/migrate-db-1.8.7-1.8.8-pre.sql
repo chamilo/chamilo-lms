@@ -88,9 +88,6 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('hide_courses_in_sessions','true','Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('hide_courses_in_sessions','false','No');
 
-
-
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('pdf_export_watermark_text',		NULL,'textfield',	'Platform',	'',		'PDFExportWatermarkTextTitle','PDFExportWatermarkTextComment','platform',NULL, 	1);
 
 ALTER TABLE personal_agenda ADD PRIMARY KEY (id);
@@ -159,7 +156,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_group
 
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;', 'hindi', 'hi', 'hindi', 0);
 
-ALTER TABLE session ADD promotion_id INT NOT NULL;
+ALTER TABLE session ADD COLUMN promotion_id INT NOT NULL;
 
 CREATE TABLE career (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL, status INT NOT NULL default '0', created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY (id));
 CREATE TABLE promotion (id INT NOT NULL AUTO_INCREMENT,	name VARCHAR(255) NOT NULL, description TEXT NOT NULL, status INT NOT NULL default '0', career_id INT NOT NULL, created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY(id));
@@ -178,7 +175,9 @@ CREATE TABLE notification (id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,dest_us
 ALTER TABLE notification ADD index mail_notify_sent_index (sent_at);
 ALTER TABLE notification ADD index mail_notify_freq_index (sent_at, send_freq, created_at);
 
-UPDATE settings_current SET selected_value = '1.8.8.13860' WHERE variable = 'chamilo_database_version';
+ALTER TABLE session_category ADD COLUMN access_url_id INT NOT NULL default 1;
+
+UPDATE settings_current SET selected_value = '1.8.8.13997' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

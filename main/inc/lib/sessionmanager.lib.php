@@ -891,8 +891,9 @@ class SessionManager {
 			$msg=get_lang('StartDateShouldBeBeforeEndDate');
 			return $msg;
 		}
-        $sql = "INSERT INTO $tbl_session_category(name, date_start, date_end)
-        VALUES('".Database::escape_string($name)."','$date_start','$date_end')";
+		$access_url_id = api_get_current_access_url_id();
+        $sql = "INSERT INTO $tbl_session_category (name, date_start, date_end, access_url_id)
+        		VALUES('".Database::escape_string($name)."','$date_start','$date_end', '$access_url_id')";
         Database::query($sql);
         $id_session=Database::insert_id();
         // add event to system log
@@ -900,7 +901,6 @@ class SessionManager {
         $user_id = api_get_user_id();
         event_system(LOG_SESSION_CATEGORY_CREATE, LOG_SESSION_CATEGORY_ID, $id_session, $time, $user_id);
         return $id_session;
-
 	}
 
 	/**
@@ -1062,6 +1062,7 @@ class SessionManager {
         }
 		return $return_array;
 	}
+	
 	/**
 	 * Get the session category information by id
 	 * @param string session category ID
@@ -1075,6 +1076,24 @@ class SessionManager {
 		$num = Database::num_rows($result);
 		if ($num>0){
 			return Database::fetch_array($result);
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Get all session categories (filter by access_url_id)
+	 * @return mixed false if the session category does not exist, array if the session category exists
+	 */
+	public static function get_all_session_category() {
+		$id = intval($id);
+		$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+		$id = api_get_current_access_url_id();
+		$sql = 'SELECT * FROM '.$tbl_session_category.' WHERE access_url_id ="'.$id.'" ORDER BY name ASC';
+		$result = Database::query($sql);		
+		if (Database::num_rows($result) > 0 ){
+		    $data = Database::store_result($result,'ASSOC');
+		    return $data;
 		} else {
 			return false;
 		}

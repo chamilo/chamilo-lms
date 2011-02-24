@@ -66,10 +66,14 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$from = $page * $limit;
 	//if user is crfp admin only list its sessions
 	if(!api_is_platform_admin()) {
-		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
+		$where .= (empty($_REQUEST['keyword']) ? "" : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
+	} else {
+		$where .= (empty($_REQUEST['keyword']) ? "" : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
 	}
-	else {
-		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
+	if (empty($where)) {
+	    $where = " WHERE access_url_id = ".api_get_current_access_url_id()." ";
+	} else {
+	    $where .= " AND access_url_id = ".api_get_current_access_url_id()." ";
 	}
 
 	$query = "SELECT sc.*, (select count(id) FROM $tbl_session WHERE session_category_id = sc.id) as nbr_session
@@ -78,8 +82,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	 			ORDER BY $sort $order
 	 			LIMIT $from,".($limit+1);
 
-	$query_rows = "SELECT count(*) as total_rows
-				FROM $tbl_session_category sc $where ";
+	$query_rows = "SELECT count(*) as total_rows FROM $tbl_session_category sc $where ";
 
 	$order = ($order == 'ASC')? 'DESC': 'ASC';
 	$result_rows = Database::query($query_rows);
@@ -87,6 +90,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$num = $recorset['total_rows'];
 	$result = Database::query($query);
 	$Sessions = Database::store_result($result);
+	
 	$nbr_results = sizeof($Sessions);
 	$tool_name = get_lang('ListSessionCategory');
 	Display::display_header($tool_name);

@@ -1260,6 +1260,99 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
         }
     } ;
 
+// Getting the corresponding real element.
+FCK.GetRealElement = function( fakeElement )
+    {
+        var e = FCKTempBin.Elements[ fakeElement.getAttribute('_fckrealelement') ] ;
+
+        if ( fakeElement.getAttribute('_fckflash') )
+        {
+            if ( fakeElement.style.width.length > 0 )
+                    e.width = FCKTools.ConvertStyleSizeToHtml( fakeElement.style.width ) ;
+
+            if ( fakeElement.style.height.length > 0 )
+                    e.height = FCKTools.ConvertStyleSizeToHtml( fakeElement.style.height ) ;
+        }
+
+        // Added by Ivan Tcholakov, February 2011.
+        else if ( fakeElement.getAttribute('_fckvideo') )
+        {
+            // Resizing a movie according to its fake image size.
+            // The user can resize the fake image on IE and Firefox.
+            if ( e.nodeName.IEquals( 'div' ) )
+            {
+                if ( e.id )
+                {
+                    if ( e.id.match( /^player[0-9]*-parent$/ )
+                        && typeof FCKConfig[ 'FlashEmbeddingMethod' ] == 'string'
+                        && FCKConfig[ 'FlashEmbeddingMethod' ] != 'swfobject' ) // Resizing does not work with SWFObject embedding technique.
+                    {
+                        try
+                        {
+                            var width = fakeElement.width ;
+                            var height = fakeElement.height ;
+                            if ( fakeElement.style.width ) {
+                                width = fakeElement.style.width ;
+                            }
+                            if ( fakeElement.style.height ) {
+                                height = fakeElement.style.height ;
+                            }
+                            width = parseInt( width, 10 ) - 2 ;
+                            height = parseInt( height, 10 ) - 2 ;
+                            if ( width > 0 && height > 0 )
+                            {
+                                width = width.toString() ;
+                                height = height.toString() ;
+
+                                width = parseInt( width, 10 ) ;
+                                height = parseInt( height, 10 ) ;
+                                if ( width > 0 && height > 0 )
+                                {
+                                    var divs = e.getElementsByTagName( 'div' ) ;
+                                    if ( typeof divs[ 1 ] != 'undefined' )
+                                    {
+                                        var div = divs[ 1 ] ;
+                                        if ( div.id && div.id.match( /^player[0-9]*-config$/ ) )
+                                        {
+                                            // This is the hidden div element that contains the movie's settings.
+                                            var config = div.innerHTML ;
+                                            var w ;
+                                            var h ;
+                                            if ( ( w = config.match( /width=([0-9]*)/ ) ) && ( h = config.match( /height=([0-9]*)/ ) ) )
+                                            {
+                                                w = parseInt( w[ 1 ], 10 );
+                                                h = parseInt( h[ 1 ] , 10 );
+                                                if ( Math.abs( width - w ) > 2 || Math.abs( height - h ) > 2 )
+                                                {
+                                                    width = width.toString() ;
+                                                    height = height.toString() ;
+                                                    var s = e.innerHTML ;
+                                                    // Replacements for div, object, end embed tags.
+                                                    s = s.replace( /width\s*:\s*[0-9]+/ig , 'width: ' + width ) ;
+                                                    s = s.replace( /height\s*:\s*[0-9]+/ig , 'height: ' + height ) ;
+                                                    s = s.replace( /width=[0-9]+/ig , 'width=' + width ) ;
+                                                    s = s.replace( /height=[0-9]+/ig , 'height=' + height ) ;
+                                                    s = s.replace( /width="[0-9]+"/ig , 'width="' + width + '"' ) ;
+                                                    s = s.replace( /height="[0-9]+"/ig , 'height="' + height + '"' ) ;
+                                                    e.innerHTML = s ;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch ( ex ) { }
+                    }
+                }
+            }
+        }
+        //
+
+        return e ;
+    } ;
+
+
 
 /*
  **************************************************************************************

@@ -2417,3 +2417,28 @@ ALTER TABLE block ADD UNIQUE(path);
 
 INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(1, 'dashboard', 'Dashboard', 0, 0);
 INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(11, 'timezone', 'Timezone', 0, 0);
+CREATE TABLE `reports_keys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `course` varchar(64) DEFAULT NULL,
+  `tool_id` int(11) DEFAULT NULL,
+  `child_id` int(11) DEFAULT NULL,
+  `child_name` varchar(64) DEFAULT NULL,
+  `subchild_id` int(11) DEFAULT NULL,
+  `subchild_name` varchar(64) DEFAULT NULL,
+  `subsubchild_id` int(11) DEFAULT NULL,
+  `subsubchild_name` varchar(64) DEFAULT NULL,
+  `link` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `course` (`course`),
+  KEY `course_2` (`course`,`tool_id`,`child_id`,`subchild_id`,`subsubchild_id`));
+
+CREATE TABLE `reports_values` (
+  `key_id` int(11) NOT NULL,
+  `uid` int(11) DEFAULT NULL,
+  `session_id` int(11) DEFAULT NULL,
+  `attempt` int(11) DEFAULT NULL,
+  `score` decimal(5,3) DEFAULT NULL,
+  `progress` int(11) DEFAULT NULL,
+  `time` int(11) DEFAULT NULL,
+  KEY `uid` (`uid`),
+  PRIMARY KEY (`key_id`,`uid`,`session_id`, `attempt`));

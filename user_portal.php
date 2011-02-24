@@ -377,7 +377,7 @@ if (is_array($courses_tree)) {
                         //}
                         echo Display::tag('span',$session_link. ' </span> <span style="padding-left: 10px; font-size: 90%; font-weight: normal;">'.$extra_info);
                         if (api_is_platform_admin()) {
-                            echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
+                            echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a></div>';
                         }
                         echo '</li>';
                         if (api_get_setting('hide_courses_in_sessions') == 'false') {
@@ -423,13 +423,14 @@ if (is_array($courses_tree)) {
                         //$html_sessions .= Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
                         $html_sessions .= Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
 
-                        $html_sessions .=  '<span>' . $s['title']. ' </span> ';
+                        $session_link = Display::tag('a',$s['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/?session_id='.$session['details']['id']));                        
+                        $html_sessions .=  '<span>' . $session_link. ' </span> ';
                         $html_sessions .=  '<span style="padding-left: 10px; font-size: 90%; font-weight: normal;">';
                         $html_sessions .=  (!empty($s['coach']) ? $s['coach'].' | ' : '').$s['dates'];
                         $html_sessions .=  '</span>';
 
                         if (api_is_platform_admin()) {
-                            $html_sessions .=  '<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
+                            $html_sessions .=  '<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a></div>';
                         }
 
                         $html_sessions .= '</li>';
@@ -447,23 +448,23 @@ if (is_array($courses_tree)) {
                     echo Display::return_icon('folder_blue.png', get_lang('SessionCategory'), array('width'=>'48px', 'align' => 'absmiddle'));
 
                     if (api_is_platform_admin()) {
-                        echo'<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
+                        echo'<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(),22).'</a></div>';
                     }
 
                     echo '<span id="session_category_title">';
                     echo $category['details']['name'];
                     echo '</span>';
 
-                    echo '<span style="padding-left: 10px; font-size: 90%; font-weight: normal;">';
-                    printf(get_lang('FromDateXToDateY'),$category['details']['date_start'],$category['details']['date_end']);
+                    echo '<span style="padding-left: 10px; font-size: 90%; font-weight: normal;">';                    
+                    if ($category['details']['date_end'] != '0000-00-00') {
+                        printf(get_lang('FromDateXToDateY'),$category['details']['date_start'],$category['details']['date_end']);
+                    }
                     echo '</span></div>';
 
                     echo $html_sessions;
                     echo '</div>';
                 }
             }
-
-
         }
     }
 }

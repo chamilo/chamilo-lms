@@ -2233,7 +2233,7 @@ class CourseManager {
                     $data .= '</a> ';
                     //edit
                     $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;description_id='.$description->id.'">';
-                    $data .= Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'));
+                    $data .= Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'), 22);
                     $data .= '</a> ';
                 }
                 $data .= $description->title;
@@ -2574,7 +2574,7 @@ class CourseManager {
                     echo '<div class="userportal-course-item">';
 
                     if (api_is_platform_admin()) {
-                        echo '<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a>';
+                        echo '<div style="float: right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), 22).'</a>';
                         if ($course['status'] == COURSEMANAGER) {
                             //echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px;'));
                         }
@@ -2720,7 +2720,7 @@ class CourseManager {
             echo '<div class="userportal-course-item">';
     
             if (api_is_platform_admin()) {
-                echo   '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a>';
+                echo   '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'),22).'</a>';
                 if ($course['status'] == COURSEMANAGER) {
                     //echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style'=>'width: 11px; height: 11px;'));
                 }
@@ -3057,7 +3057,8 @@ class CourseManager {
                 $session_category_id = CourseManager::get_session_category_id_by_session_id($my_course['id_session']);
                 $session['category'] = $sessioncoach['name'];
                 if ($my_course['date_start'] == '0000-00-00') {
-                    $session['dates'] = get_lang('WithoutTimeLimits');
+                    //$session['dates'] = get_lang('WithoutTimeLimits');
+                    $session['dates'] = '';
                     if (api_get_setting('show_session_coach') === 'true') {
                         $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
                     }

@@ -41,6 +41,8 @@ define('TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION', 'shared_survey_question_optio
 define('TABLE_MAIN_TEMPLATES', 				'templates');
 define('TABLE_MAIN_SYSTEM_TEMPLATE', 		'system_template');
 define('TABLE_MAIN_OPENID_ASSOCIATION', 	'openid_association');
+define('TABLE_MAIN_REPORTS_KEYS',			'reports_keys');
+define('TABLE_MAIN_REPORTS_VALUES', 			'reports_values');
 
 // Gradebook
 define('TABLE_MAIN_GRADEBOOK_CATEGORY', 	'gradebook_category');

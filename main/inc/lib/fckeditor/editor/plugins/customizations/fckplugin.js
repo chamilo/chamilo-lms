@@ -1279,7 +1279,8 @@ FCK.GetRealElement = function( fakeElement )
         {
             // Resizing a movie according to its fake image size.
             // The user can resize the fake image on IE and Firefox.
-            if ( e.nodeName.IEquals( 'div' ) )
+            if ( !FCKBrowserInfo.IsIE               // This feature has been temporarily disabled for IE, additional tricky changes are needed.
+                && e.nodeName.IEquals( 'div' ) )
             {
                 if ( e.id )
                 {

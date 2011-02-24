@@ -236,12 +236,15 @@ html_editor			gnome
 --
 platform_event			modif nuvola
 agenda				nuvola
---
+--------------------------------------------------------
 up				crystal (only 22 px)
 down				crystal (only 22 px)
 up_na				modif crystal (only 22 px)
 down_na				modif crystal (only 22 px)
 wizard_na			modif nuvola
+lock				crystal (only 32 px)
+unlock				crystal (only 32 px)
+platform_init			crystal
 
 --julio
 star				

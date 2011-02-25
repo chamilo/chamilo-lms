@@ -1,16 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This file is responsible for  passing requested documents to the browser.
-*	Html files are parsed to fix a few problems with URLs,
-*	but this code will hopefully be replaced soon by an Apache URL
-*	rewrite mechanism.
-*
-*	@package chamilo.document
-*/
+ * This file is responsible for  passing requested documents to the browser.
+ * Html files are parsed to fix a few problems with URLs,
+ * but this code will hopefully be replaced soon by an Apache URL
+ * rewrite mechanism.
+ *
+ * @package chamilo.document
+ */
 
 /*
-		MAIN CODE
+        MAIN CODE
 */
 
 session_cache_limiter('public');
@@ -37,21 +37,21 @@ $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
 
 if (! isset($_course)) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/'.$doc_url;
 
 //if the rewrite rule asks for a directory, we redirect to the document explorer
 if (is_dir($full_file_name)) {
-	//remove last slash if present
-	//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url;
-	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
-	while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
-	//create the path
-	$document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
-	//redirect
-	header('Location: '.$document_explorer);
+    //remove last slash if present
+    //$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url;
+    //mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
+    while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
+    //create the path
+    $document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
+    //redirect
+    header('Location: '.$document_explorer);
 }
 
 $tbl_forum_attachment 	= Database::get_course_table(TABLE_FORUM_ATTACHMENT);
@@ -61,7 +61,7 @@ $tbl_forum_post 	= Database::get_course_table(TABLE_FORUM_POST);
 event_download($doc_url);
 
 $sql='SELECT thread_id, forum_id,filename FROM '.$tbl_forum_post.'  f  INNER JOIN '.$tbl_forum_attachment.' a
-  	  ON a.post_id=f.post_id WHERE path LIKE BINARY "'.$doc_url.'"';
+        ON a.post_id=f.post_id WHERE path LIKE BINARY "'.$doc_url.'"';
 
 $result = Database::query($sql);
 $row    = Database::fetch_array($result);
@@ -71,7 +71,7 @@ $forum_forum_visibility  = api_get_item_visibility(api_get_course_info($course_c
 
 if ($forum_thread_visibility==1 && $forum_forum_visibility==1) {
     if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/')) {
-	   DocumentManager::file_send_for_download($full_file_name,TRUE, $row['filename']);
+       DocumentManager::file_send_for_download($full_file_name,TRUE, $row['filename']);
     }
 }
 exit;

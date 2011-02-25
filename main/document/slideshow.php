@@ -247,8 +247,8 @@ if ($slide_id != 'all') {
 
 		echo '<table align="center" border="0" cellspacing="10">';
 		echo '<tr>';
-		echo '<td align="center" style="font-size: xx-large; font-weight: bold;">';
-		echo $row['title'];
+		echo '<td align="center">';
+		echo Display::tag('h1',$row['title']);
 		echo '</td>';
 		echo '</tr>';
 		echo '<tr>';

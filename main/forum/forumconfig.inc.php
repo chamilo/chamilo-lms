@@ -1,4 +1,4 @@
-<?php  
+<?php
 /* For licensing terms, see /license.txt */
 
 /**
@@ -12,7 +12,7 @@
 
 
 /*
-	Database Variables
+    Database Variables
 */
 $table_categories 		= Database :: get_course_table(TABLE_FORUM_CATEGORY);
 $table_forums 			= Database :: get_course_table(TABLE_FORUM);
@@ -27,7 +27,7 @@ $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 
 /*
-	Constants
+    Constants
 */
 define('TOOL_FORUM_CATEGORY','forum_category');
 //define('TOOL_FORUM','forum'); defined in main_api
@@ -36,8 +36,8 @@ define('TOOL_FORUM_POST','forum_post');
 define('TOOL_FORUM_ATTACH','forum_attachment');
 define('TOOL_FORUM_THREAD_QUALIFY','forum_thread_qualify');
 /*
-	Some configuration settings
-	(these can go to the dokeos config settings afterwards)
+    Some configuration settings
+    (these can go to the dokeos config settings afterwards)
 */
 // if this setting is true then an I-frame will be displayed when replying
 $forum_setting['show_thread_iframe_on_reply']=true;
@@ -49,4 +49,4 @@ $forum_setting['allow_sticky']=true;
 // when this setting is true there will be a column that displays the latest post (date and poster) of the given forum. This requires quite some sql statements that
 // might slow down the page with the fora.
 // note: I'm currently investigating how it would be possible to increase the performance of this part.
-$forum_setting['show_last_post']=false; 
+$forum_setting['show_last_post']=false;

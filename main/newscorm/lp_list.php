@@ -299,20 +299,21 @@ if (is_array($flat_list)) {
 
             // EDIT LP
             if ($current_session == $details['lp_session']) {
-                $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/settings.png" border="0" title="'.get_lang('CourseSettings').'"></a>';
+                $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.Display::return_icon('settings.png', get_lang('CourseSettings'),'','22').'</a>';
+				
             } else {
-                $dsp_edit_lp = '<img src="../img/settings_na.png" border="0" title="'.get_lang('CourseSettings').'">&nbsp;';
+                $dsp_edit_lp = Display::return_icon('settings_na.png', get_lang('CourseSettings'),'','22');
             }
 
             // BUILD
             if ($current_session == $details['lp_session']) {
                 if ($details['lp_type'] == 1 || $details['lp_type'] == 2) {
-                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a>&nbsp;';
+                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'">'.Display::return_icon('edit.png', get_lang('_edit_learnpath'),'','22').'</a>';
                 } else {
-                    $dsp_build = '<img src="../img/edit_na.gif" border="0" title="'.get_lang('_edit_learnpath').'">&nbsp;';
+                    $dsp_build = Display::return_icon('edit_na.png', get_lang('_edit_learnpath'),'','22');
                 }
             } else {
-                $dsp_build = '<img src="../img/edit_na.gif" border="0" title="'.get_lang('_edit_learnpath').'">&nbsp;';
+                $dsp_build = Display::return_icon('edit_na.png', get_lang('_edit_learnpath'),'','22');
             }
 
             /* VISIBILITY COMMAND */
@@ -320,13 +321,9 @@ if (is_array($flat_list)) {
             // Session test not necessary if we want to show base course learning paths inside the session (see http://support.chamilo.org/projects/chamilo-18/wiki/Tools_and_sessions).
             //if ($current_session == $details['lp_session']) {
                 if ($details['lp_visibility'] == 0) {
-                    $dsp_visible =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">" .
-                        "<img src=\"../img/invisible.gif\" border=\"0\" title=\"".get_lang('Show')."\" />" .
-                        "</a>";
+                    $dsp_visible =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">".Display::return_icon('invisible.png', get_lang('Show'),'','22')."</a>";                        
                 } else {
-                    $dsp_visible =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0'>" .
-                        "<img src=\"../img/visible.gif\" border=\"0\" title=\"".get_lang('Hide')."\" />" .
-                        "</a>";
+                    $dsp_visible =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0'>" .Display::return_icon('visible.png', get_lang('Hide'),'','22')."</a>";
                 }
             //} else {
             //	$dsp_visible = '<img src="../img/invisible.gif" border="0" title="'.get_lang('Show').'" />';
@@ -337,15 +334,13 @@ if (is_array($flat_list)) {
             if ($current_session == $details['lp_session']) {
                 if ($details['lp_published'] == "i") {
                     $dsp_publish =	"<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=v\">" .
-                        "<img src=\"../img/invisible_LP_list.gif\" border=\"0\" title=\"".get_lang('_publish')."\" />" .
-                        "</a>";
+					Display::return_icon('lp_publish_na.png', get_lang('_publish'),'','22')."</a>";
+                        
                 } else {
-                    $dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .
-                        "<img src=\"../img/visible_LP_list.gif\" border=\"0\" title=\"".get_lang('_no_publish')."\" />" .
-                        "</a>";
+                    $dsp_publish =	"<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_publish&new_status=i'>" .Display::return_icon('lp_publish.png', get_lang('_no_publish'),'','22')."</a>";
                 }
             } else {
-                $dsp_publish = '<img src="../img/invisible_LP_list.gif" border="0" title="'.get_lang('_no_publish').'" />';
+                $dsp_publish = Display::return_icon('lp_publish_na.png', get_lang('_no_publish'),'','22');
             }
 
             /*  MULTIPLE ATTEMPTS */
@@ -353,15 +348,13 @@ if (is_array($flat_list)) {
             if ($current_session == $details['lp_session']) {
                 if ($details['lp_prevent_reinit'] == 1) {
                     $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
-                        '<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang('AllowMultipleAttempts').'"/>' .
-                        '</a>&nbsp;';
+                        Display::return_icon('reload_na.png', get_lang('AllowMultipleAttempts'),'','22').'</a>';
                 } else {
                     $dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
-                        '<img src="../img/kaboodleloop.gif" border="0" alt="Prevent reinit" title="'.get_lang('PreventMultipleAttempts').'"/>' .
-                        '</a>&nbsp;';
+                        Display::return_icon('reload.png', get_lang('PreventMultipleAttempts'),'','22').'</a>';
                 }
             } else {
-                $dsp_reinit = '<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang('AllowMultipleAttempts').'"/>';
+                $dsp_reinit = Display::return_icon('reload_na.png', get_lang('AllowMultipleAttempts'),'','22');
             }
 
             /* FUll screen VIEW */
@@ -371,22 +364,21 @@ if (is_array($flat_list)) {
                 /* Default view mode settings (fullscreen/embedded) */
                 if ($details['lp_view_mode'] == 'fullscreen') {
                     $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
-                        '<img src="../img/view_fullscreen.gif" border="0" alt="'.get_lang('ViewModeFullScreen').'" title="'.get_lang('ViewModeFullScreen').'"/>' .
-                        '</a>&nbsp;';
+                        Display::return_icon('view_fullscreen.png', get_lang('ViewModeFullScreen'),'','22').'</a>';
                 } elseif ($details['lp_view_mode'] == 'embedded') {
                     $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
-                        '<img src="../img/view_choose.gif" border="0" alt="'.get_lang('ViewModeEmbedded').'" title="'.get_lang('ViewModeEmbedded').'"/>' .
-                        '</a>&nbsp;';
+                         Display::return_icon('view_left_right.png', get_lang('ViewModeEmbedded'),'','22').'</a>';
                 } elseif ($details['lp_view_mode'] == 'embedframe') {
                     $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
-                        '<img src="../img/view_embedframe.gif" border="0" alt="'.get_lang('ViewModeEmbedFrame').'" title="'.get_lang('ViewModeEmbedFrame').'"/>' .
-                        '</a>&nbsp;';                	
+                        Display::return_icon('view_nofullscreen.png', get_lang('ViewModeEmbedFrame'),'','22').'</a>';              	
                 }
             } else {
-                if ($details['lp_view_mode'] == 'fullscreen')
-                    $dsp_default_view = '<img src="../img/view_fullscreen_na.gif" border="0" alt="'.get_lang('ViewModeEmbedded').'" title="'.get_lang('ViewModeEmbedded').'"/>';
-                else
-                    $dsp_default_view = '<img src="../img/view_choose_na.gif" border="0" alt="'.get_lang('ViewModeEmbedded').'" title="'.get_lang('ViewModeFullScreen').'"/>';
+                if ($details['lp_view_mode'] == 'fullscreen'){				
+                    $dsp_default_view = Display::return_icon('view_fullscreen_na.png', get_lang('ViewModeEmbedded'),'','22');
+				}
+				else{
+                    $dsp_default_view = Display::return_icon('view_left_right_na.png', get_lang('ViewModeEmbedded'),'','22');
+				}
             }
 
             /* Increase SCORM recording */
@@ -407,12 +399,10 @@ if (is_array($flat_list)) {
             if ($test_mode == 'test' or api_is_platform_admin()) {
                 if ($details['lp_scorm_debug'] == 1) {
                     $dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
-                        '<img src="../img/bug.gif" border="0" alt="'.get_lang("HideDebug").'" title="'.get_lang("HideDebug").'"/>' .
-                        '</a>';
+                        Display::return_icon('bug.png', get_lang('HideDebug'),'','22').'</a>';
                 }else{
                     $dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
-                        '<img src="../img/bug_gray.gif" border="0" alt="'.get_lang("ShowDebug").'" title="'.get_lang("ShowDebug").'"/>' .
-                        '</a>';
+					Display::return_icon('bug_na.png', get_lang('ShowDebug'),'','22').'</a>';
                 }
              }
 
@@ -421,10 +411,9 @@ if (is_array($flat_list)) {
             if ($current_session == $details['lp_session']) {
                 $dsp_delete = "<a href=\"lp_controller.php?".api_get_cidreq()."&action=delete&lp_id=$id\" " .
                 "onclick=\"javascript: return confirmation('".addslashes($name)."');\">" .
-                "<img src=\"../img/delete.gif\" border=\"0\" title=\"".get_lang('_delete_learnpath')."\" />" .
-                "</a>";
+				Display::return_icon('delete.png', get_lang('_delete_learnpath'),'','22').'</a>';
             } else {
-                $dsp_delete = '<img src="../img/delete_na.gif" border="0" title="'.get_lang('_delete_learnpath').'" />';
+                $dsp_delete = Display::return_icon('delete_na.png', get_lang('_delete_learnpath'),'','22');
             }
 
              /* Export */
@@ -463,7 +452,8 @@ if (is_array($flat_list)) {
             }
             
             if (api_get_setting('pdf_export_watermark_enable') == 'true') {
-            	  $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'"><img src="../img/file_pdf.gif" border="0" title="'.get_lang('ExportToPDF').'" /></a>'; 
+            	  $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">
+				  '.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'','22').'</a>';
             }
             
             //Checking the "age" of the LP
@@ -478,25 +468,22 @@ if (is_array($flat_list)) {
             if ($current_session == 0) {
 
                 if ($details['lp_display_order'] == 1 && $max != 1) {
-                    $dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">' .
-                        '<img src="../img/arrow_down_0.gif" border="0" alt="'.get_lang('MoveDown').'" title="'.get_lang('MoveDown').'"/>' .
-                        '</a><img src="../img/blanco.png" border="0" alt="" title="" /></td>';
+                    $dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">
+                         '.Display::return_icon('down.png', get_lang('MoveDown'),'','22').'</a>					
+						<img src="../img/blanco.png" border="0" alt="" title="" /></td>';
                 }
                 elseif ($current == $max-1 && $max != 1) {
-                    $dsp_order .= '<td><img src="../img/blanco.png" border="0" alt="" title="" /><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">' .
-                        '<img src="../img/arrow_up_0.gif" border="0" alt="'.get_lang('MoveUp').'" title="'.get_lang('MoveUp').'"/>' .
-                        '</a></td>';
+                    $dsp_order .= '<td><img src="../img/blanco.png" border="0" alt="" title="" /><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">
+					'.Display::return_icon('up.png', get_lang('MoveUp'),'','22').'</a></td>';
                 }
                 elseif ($max == 1) {
                     $dsp_order = '<td></td>';
                 }
                 else {
                     $dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">' .
-                        '<img src="../img/arrow_down_0.gif" border="0" alt="'.get_lang('MoveDown').'" title="'.get_lang('MoveDown').'"/>' .
-                        '</a>&nbsp;';
+                        Display::return_icon('down.png', get_lang('MoveDown'),'','22').'</a>';
                     $dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">' .
-                        '<img src="../img/arrow_up_0.gif" border="0" alt="'.get_lang('MoveUp').'" title="'.get_lang('MoveUp').'"/>' .
-                        '</a></td>';
+                        Display::return_icon('up.png', get_lang('MoveUp'),'','22').'</a></td>';
                 }
             }
         } // end if ($is_allowedToEdit)

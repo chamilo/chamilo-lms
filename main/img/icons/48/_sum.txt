@@ -108,7 +108,7 @@ new_event		modif nuvola
 import_calendar		modif crystal (only 32 px)
 calendar_normal		modif crystal (only 32 px)
 calendar_inverse	modif crystal (only 32 px)
-----
+--
 forum				nuvola
 group				nuvola
 user				modif nuvola
@@ -245,7 +245,21 @@ wizard_na			modif nuvola
 lock				crystal (only 32 px)
 unlock				crystal (only 32 px)
 platform_init			crystal
+reload				nuvola
+reload_na			modif nuvola
+fill				nuvola
+accept				nuvola
+view_nofullscr			nuvola
+view_fullscreen			nuvola
+view_fullscreen_na		modif nuvola
+view_left_right_na		modif nuvola
+lp_publish			crystal (only 22 px)
+lp_publish_na			modif crystal (only 22 px)
+bug				crystal
+bug_na				modif crystal
 
+
+			
 --julio
 star				
 star_green

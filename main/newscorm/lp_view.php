@@ -84,9 +84,20 @@ if (!empty($_SESSION['oLP']->expired_on) && $_SESSION['oLP']->expired_on != '000
     }    
 }
 
-
 $lp_item_id = $_SESSION['oLP']->get_current_item_id();
 $lp_type    = $_SESSION['oLP']->get_type();
+$lp_id      = intval($_GET['lp_id']);
+
+// Check if the learning path is visible for student - (LP requisites) 
+if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
+    api_not_allowed();
+}     
+
+//Checking visibility (eye icon)
+$visibility = api_get_item_visibility(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id(), api_get_session_id());
+if (intval($visibility) == 0 ) {
+     api_not_allowed();
+}
 
 //$lp_item_id = learnpath::escape_string($_GET['item_id']);
 //$_SESSION['oLP']->set_current_item($lp_item_id); // Already done by lp_controller.php.
@@ -171,7 +182,7 @@ foreach($list as $toc) {
 
 $autostart = 'true';
 // Update status, total_time from lp_item_view table when you finish the exercises in learning path.
-if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
+if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp_item_id'])) {
     global $src;
     $_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
     $TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
@@ -179,7 +190,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
     $TBL_LP_VIEW            = Database::get_course_table(TABLE_LP_VIEW);
     $TBL_LP_ITEM            = Database::get_course_table(TABLE_LP_ITEM);
     $safe_item_id           = Database::escape_string($_GET['lp_item_id']);
-    $safe_id                = Database::escape_string($_GET['lp_id']);
+    $safe_id                = $lp_id;
     $safe_exe_id            = intval($_REQUEST['exeId']);
 
     if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
@@ -219,7 +230,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
     if (intval($_GET['fb_type']) > 0) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
-        $src = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?id='.Security::remove_XSS($_REQUEST['exeId']).'&origin=learnpath&learnpath_id='.Security::remove_XSS($_GET['lp_id']).'&learnpath_item_id='.Security::remove_XSS($_GET['lp_id']).'&fb_type='.Security::remove_XSS($_GET['fb_type']);
+        $src = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?id='.Security::remove_XSS($_REQUEST['exeId']).'&origin=learnpath&learnpath_id='.$lp_id.'&learnpath_item_id='.$lp_id.'&fb_type='.Security::remove_XSS($_GET['fb_type']);
     }
     $autostart = 'false';
 }

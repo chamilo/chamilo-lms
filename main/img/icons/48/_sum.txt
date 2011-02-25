@@ -257,8 +257,8 @@ lp_publish			crystal (only 22 px)
 lp_publish_na			modif crystal (only 22 px)
 bug				crystal
 bug_na				modif crystal
-
-
+test_results			crystal
+duplicate_test			modif nuvola
 			
 --julio
 star				

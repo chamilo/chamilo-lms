@@ -1579,7 +1579,6 @@ function get_thread_users_details($thread_id, $db_name = null) {
         $orderby = 'ORDER BY user.lastname, user.firstname';
     }
 
-
     if (api_get_session_id()) {
         $session_info = api_get_session_info(api_get_session_id());
         $user_to_avoid = "'".$session_info['id_coach']."', '".$session_info['session_admin_id']."'";
@@ -1617,7 +1616,6 @@ function get_thread_users_details($thread_id, $db_name = null) {
  * @todo     this function need to be improved
  * @version octubre 2008, dokeos 1.8
  */
-
 function get_thread_users_qualify($thread_id, $db_name = null) {
     $t_posts = Database :: get_course_table(TABLE_FORUM_POST, (empty($db_name)?null:$db_name));
     $t_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY, (empty($db_name)?null:$db_name));
@@ -1678,7 +1676,6 @@ function get_thread_users_qualify($thread_id, $db_name = null) {
  * @todo     i'm a horrible function fix me
  * @version octubre 2008, dokeos 1.8
  */
-
 function get_thread_users_not_qualify($thread_id, $db_name = null) {
     $t_posts = Database :: get_course_table(TABLE_FORUM_POST, (empty($db_name)?null:$db_name));
     $t_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY, (empty($db_name)?null:$db_name));
@@ -1859,7 +1856,7 @@ function store_thread($values) {
 
         //add option gradebook qualify
 
-        if(isset($values['thread_qualify_gradebook']) && 1==$values['thread_qualify_gradebook']) {
+        if (isset($values['thread_qualify_gradebook']) && 1==$values['thread_qualify_gradebook']) {
             //add function gradebook
             $coursecode=api_get_course_id();
             $resourcetype=5;
@@ -1872,7 +1869,7 @@ function store_thread($values) {
             //is_resource_in_course_gradebook($course_code, $resource_type, $resource_id);
             add_resource_to_course_gradebook($coursecode,$resourcetype,$resourceid,$resourcename,$weigthqualify,$maxqualify,$resourcedescription,$date,0,api_get_session_id());
 
-            }
+        }
 
         api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"ForumThreadAdded", api_get_user_id());
         // if the forum properties tell that the posts have to be approved we have to put the whole thread invisible
@@ -2380,8 +2377,6 @@ function store_reply($values) {
 
         // update the forum
         api_item_property_update($_course, TOOL_FORUM, $values['forum_id'],"NewMessageInForum", api_get_user_id());
-
-
 
         if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit(null,true)) {
             $message.='<br />'.get_lang('MessageHasToBeApproved').'<br />';
@@ -3129,7 +3124,6 @@ function move_post_form() {
     // setting the rules
     $form->addRule('thread', get_lang('ThisFieldIsRequired'), 'required');
 
-
     // The validation or display
     if( $form->validate() ) {
        $values = $form->exportValues();
@@ -3226,7 +3220,6 @@ function store_move_thread($values) {
     // change the thread table: setting the forum_id to the new forum
     $sql="UPDATE $table_threads SET forum_id='".Database::escape_string($_POST['forum'])."' WHERE thread_id='".Database::escape_string($_POST['thread_id'])."'";
     $result=Database::query($sql);
-
 
     // changing all the posts of the thread: setting the forum_id to the new forum
     $sql="UPDATE $table_posts SET forum_id='".Database::escape_string($_POST['forum'])."' WHERE thread_id='".Database::escape_string($_POST['thread_id'])."'";
@@ -3429,38 +3422,38 @@ function add_forum_attachment_file($file_comment,$last_id) {
     }
 
     if (!empty($upload_ok)) {
-            $courseDir   = $_course['path'].'/upload/forum';
-            $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $updir = $sys_course_path.$courseDir;
+        $courseDir   = $_course['path'].'/upload/forum';
+        $sys_course_path = api_get_path(SYS_COURSE_PATH);
+        $updir = $sys_course_path.$courseDir;
 
-            // Try to add an extension to the file if it hasn't one
-            $new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
-            // user's file name
-            $file_name =$_FILES['user_upload']['name'];
+        // Try to add an extension to the file if it hasn't one
+        $new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+        // user's file name
+        $file_name =$_FILES['user_upload']['name'];
 
-            if (!filter_extension($new_file_name))  {
-                Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
-            } else {
-                $new_file_name = uniqid('');
-                $new_path=$updir.'/'.$new_file_name;
-                $result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-                $safe_file_comment	= Database::escape_string($file_comment);
-                $safe_file_name		= Database::escape_string($file_name);
-                $safe_new_file_name = Database::escape_string($new_file_name);
-                $last_id = intval($last_id);
-                // Storing the attachments if any
-                if ($result) {
-                    $sql="INSERT INTO $agenda_forum_attachment(filename, comment, path, post_id, size)
-                          VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$last_id', '".intval($_FILES['user_upload']['size'])."' )";
-                    $result=Database::query($sql);
-                    $message.=' / '.get_lang('FileUploadSucces').'<br />';
+        if (!filter_extension($new_file_name))  {
+            Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+        } else {
+            $new_file_name = uniqid('');
+            $new_path=$updir.'/'.$new_file_name;
+            $result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
+            $safe_file_comment	= Database::escape_string($file_comment);
+            $safe_file_name		= Database::escape_string($file_name);
+            $safe_new_file_name = Database::escape_string($new_file_name);
+            $last_id = intval($last_id);
+            // Storing the attachments if any
+            if ($result) {
+                $sql="INSERT INTO $agenda_forum_attachment(filename, comment, path, post_id, size)
+                      VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$last_id', '".intval($_FILES['user_upload']['size'])."' )";
+                $result=Database::query($sql);
+                $message.=' / '.get_lang('FileUploadSucces').'<br />';
 
-                    $last_id_file=Database::insert_id();
-                    api_item_property_update($_course, TOOL_FORUM_ATTACH, $last_id_file ,'ForumAttachmentAdded', api_get_user_id());
+                $last_id_file=Database::insert_id();
+                api_item_property_update($_course, TOOL_FORUM_ATTACH, $last_id_file ,'ForumAttachmentAdded', api_get_user_id());
 
-                }
             }
         }
+    }
 }
 
 /**
@@ -4038,7 +4031,7 @@ function get_all_post_from_user($user_id, $course_db) {
                      }
                      $i++;
                  }
-                $forum_results .='<div id="social-forum">';
+                 $forum_results .='<div id="social-forum">';
                  $forum_results .='<div class="clear"></div><br />';
                  $forum_results .='<div id="social-forum-title">'.
                                      Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum['forum_title'], STUDENT).

@@ -602,9 +602,9 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
     $track_attempts        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $recording_table       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
     
-    $user_id    = intval($user_id);
-    $lp_id      = intval($lp_id);
-    $session_id = intval($session_id);
+    $user_id               = intval($user_id);
+    $lp_id                 = intval($lp_id);
+    $session_id            = intval($session_id);
     
     //make sure we have the exact lp_view_id
     $sqlview       = "SELECT id FROM $lp_view_table WHERE user_id = $user_id AND lp_id = $lp_id AND session_id = $session_id ";                    
@@ -618,14 +618,14 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
     $sql_delete = "DELETE FROM $lp_view_table  WHERE user_id = $user_id AND lp_id= $lp_id AND session_id= $session_id ";
     $result = Database::query($sql_delete);
     
-    $select_all_attempts = "SELECT exe_id FROM $track_e_exercises WHERE exe_user_id = $user_id AND session_id= $session_id  AND exe_cours_id = '{$course['id']}' AND orig_lp_id = $lp_id";    
+    $select_all_attempts = "SELECT exe_id FROM $track_e_exercises WHERE exe_user_id = $user_id AND session_id= $session_id  AND exe_cours_id = '{$course['code']}' AND orig_lp_id = $lp_id";    
     $result    = Database::query($select_all_attempts);
     $exe_list = array();
     while ($row = Database::fetch_array($result, 'ASSOC')) {
     	$exe_list[] = $row['exe_id'];
     }    
     
-    if (!empty($exe_list) && is_array($exe_list) && count($exe_list) > 1) {        
+    if (!empty($exe_list) && is_array($exe_list) && count($exe_list) > 0) {        
         $sql_delete = "DELETE FROM $track_e_exercises  WHERE exe_id IN (".implode(',',$exe_list).")";
         $result = Database::query($sql_delete);
         
@@ -638,7 +638,7 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
 }
 
 /**
- * Delete exercise attempts (NO in LP) 
+ * Delete all exercise attempts (included in LP or not) 
  * 
  * @param 	int		user id
  * @param 	int		exercise id 
@@ -646,17 +646,16 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
  * @param 	int		session id
   */
 function delete_all_incomplete_attempts($user_id, $exercise_id, $course_code, $session_id = 0) {
-    $track_e_exercises     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_attempts        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $user_id         = intval($user_id);
-    $exercise_id     = intval($exercise_id);
-    $course_code     = Database::escape_string($course_code);
-    $session_id      = intval($session_id);
+    $track_e_exercises    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempts       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $user_id              = intval($user_id);
+    $exercise_id          = intval($exercise_id);
+    $course_code          = Database::escape_string($course_code);
+    $session_id           = intval($session_id);
     if (!empty($user_id) && !empty($exercise_id) && !empty($course_code)) {
         $sql = "DELETE FROM $track_e_exercises  WHERE exe_user_id = $user_id AND exe_exo_id = $exercise_id AND exe_cours_id = '$course_code' AND session_id = $session_id AND status = 'incomplete' ";
         $result = Database::query($sql); 
-    }
-    
+    }    
 }
 
 /**
@@ -744,7 +743,7 @@ function get_all_exercise_results_by_user($user_id, $exercise_id, $course_code, 
     $session_id = intval($session_id);
     $user_id    = intval($user_id);
     
-    $sql = "SELECT * FROM $table_track_exercises WHERE status = ''  AND exe_user_id = $user_id AND exe_cours_id = '$course_code' AND exe_exo_id = $exercise_id AND session_id = $session_id AND orig_lp_id = 0 AND orig_lp_item_id = 0   ORDER by exe_id";    
+    $sql = "SELECT * FROM $table_track_exercises WHERE status = '' AND exe_user_id = $user_id AND exe_cours_id = '$course_code' AND exe_exo_id = $exercise_id AND session_id = $session_id AND orig_lp_id = 0 AND orig_lp_item_id = 0   ORDER by exe_id";    
     
     $res = Database::query($sql);
     $list = array();    

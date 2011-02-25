@@ -2960,13 +2960,13 @@ class TrackingCourseLog {
         $return = '<form action="courseLog.php" method="get" name="additional_profile_field_form" id="additional_profile_field_form">';
 
         // the select field with the additional user profile fields (= this is where we select the field of which we want to see
-        // the information the users have entered or selected.
+        // the information the users have entered or selected.        
         $return .= '<select name="additional_profile_field">';
         $return .= '<option value="-">'.get_lang('SelectFieldToAdd').'</option>';
 
         foreach ($extra_fields as $key=>$field) {
-            // show only extra fields that are visible, added by J.Montoya
-            if ($field[6]==1) {
+            // show only extra fields that are visible + and can be filtered, added by J.Montoya
+            if ($field[6]==1 && $field[8] == 1) {
                 if ($field[0] == $_GET['additional_profile_field'] ) {
                     $selected = 'selected="selected"';
                 } else {

@@ -456,18 +456,16 @@ if ($_GET['studentlist'] == 'false') {
     
     $course_info = api_get_course_info(api_get_course_id());
     $course_name = get_lang('Course').' '.$course_info['name'];
-
     
     if (api_get_session_id()) {
         echo '<h2>'.get_lang('Session').' '.api_get_session_name(api_get_session_id()).' | '.$course_name.'</h2>';
     } else {
         echo '<h2>'.get_lang('Course').' '.$course_info['name'].'</h2>';
-    }
-    
-    echo TrackingCourseLog::display_additional_profile_fields();
-    
-    
-    
+    }    
+    $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
+    if (!empty($extra_field_select)) {
+        echo $extra_field_select;
+    }              
     $form -> display();
     // END : form to remind inactives susers
 

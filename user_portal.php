@@ -31,7 +31,7 @@ define('SCRIPTVAL_NoTimeLimit', 6);
 // End 'don't change' section
 
 // Language files that should be included.
-$language_file = array('courses', 'index');
+$language_file = array('courses', 'index','admin');
 
 $cidReset = true; /* Flag forcing the 'current course' reset,
                     as we're not inside a course anymore  */
@@ -470,15 +470,12 @@ if (is_array($courses_tree)) {
 }
 
 echo '</div>'; // End of content section.
+
 // Register whether full admin or null admin course
 // by course through an array dbname x user status.
 api_session_register('status');
 
 /* RIGHT MENU */
-
-echo '    <div id="menu-wrapper">';
-echo '    <div id="menu" class="menu">';
-// api_display_language_form(); // Moved to the profile page.
 
 $show_menu = false;
 $show_create_link = false;
@@ -506,34 +503,27 @@ if (isset($toolsList) && is_array($toolsList) && isset($digest)) {
     $show_menu = true;
 }
 
-echo '<div class="menusection">';
-
-echo '<span class="menusectioncaption">'.get_lang('Profile').'</span>';
-
 //Always show the user image
-
 $img_array = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', true, true);
 $no_image = false;
 if ($img_array['file'] == 'unknown.jpg') {
     $no_image = true;
 }
 $img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
-echo '<div class="clear"></div>';
+$profile_content ='<div class="clear"></div>';
+$profile_content .='<div id="social_widget">';
 
-echo '<div id="social_widget">';
-
-echo '  <div id="social_widget_image">';
+$profile_content .= '  <div id="social_widget_image">';
 if (api_get_setting('allow_social_tool') == 'true') {
     if (!$no_image) {
-        echo '<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
+        $profile_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
     } else {
-        echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+        $profile_content .='<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
     }
 } else {
-    echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+    $profile_content .='<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
 }
-echo '</div>';
-
+$profile_content .= ' </div>';
 
 //  @todo Add a platform setting to add the user image.
 if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
@@ -556,57 +546,56 @@ if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_mes
     if ($number_of_new_messages > 0) {
         $cant_msg = ' ('.$number_of_new_messages.')';
     }
-    //<h2 class="message-title">'.get_lang('Messages').'</h2>
-    echo '<div class="clear"></div>';
-    echo '<div class="message-content"><ul class="menulist">';
+    $profile_content .= '<div class="clear"></div>';
+    $profile_content .= '<div class="message-content"><ul class="menulist">';
     $link = '';
     if (api_get_setting('show_tabs', 'social') == 'true') {
         $link = '?f=social';
     }
-    echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a></li>';
-    echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Compose').' </a></li>';
-    //echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" class="message-body">'.get_lang('EditMyProfile').' </a><br />';
+    $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a></li>';
+    $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Compose').' </a></li>';
+    
+    if ($total_invitations == 0) {
+        $total_invitations = '';
+    } else {
+       $total_invitations = ' ('.$total_invitations.')';
+    }
+    $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' '.$total_invitations.' </a></li>';
 
-    //if ($total_invitations > 0) {
-        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$total_invitations.') </a></li>';
-    //}
-
-    echo '</ul>';
-    echo '</div>';
+    $profile_content .= '</ul>';
+    $profile_content .= '</div>';      
 }
-echo '</div>'; // End
 
-    echo '</div>';
-echo '</div>'; // End of menu
-
-echo '    <div id="menu" class="menu">';
-
-echo '<div class="menusection">';
-echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
-
+//Profile content
+echo show_right_block(get_lang('Profile'), $profile_content);
 
 // My account section.
 if ($show_menu) {
-    echo '<ul class="menulist">';
+    $my_account_content .= '<ul class="menulist">';
     if ($show_create_link) {
-        Display :: display_create_course_link();
+        $my_account_content .= '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
     }
     if ($show_course_link) {
         if (!api_is_drh()) {
-            Display :: display_edit_course_list_links();
-            Display :: display_history_course_session();
+            $my_account_content .=  '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
+               if (api_get_setting('use_session_mode') == 'true') {
+                if (isset($_GET['history']) && intval($_GET['history']) == 1) {
+                    $my_account_content .=  '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+                } else {
+                    $my_account_content .=  '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
+                }
+            }
         } else {
-            Display :: display_dashboard_link();
+             $my_account_content .=  '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
         }
     }
-    if ($show_digest_link) {
-        Display :: display_digest($toolsList, $digest, $orderKey, $courses);
+    if ($show_digest_link) {    
+       $my_account_content .= Display :: display_digest($toolsList, $digest, $orderKey, $courses);
     }
-    echo '</ul>';
+    $my_account_content .= '</ul>';
 }
 
-echo '</div>'; // Close menusection.
-
+echo show_right_block(get_lang('MenuUser'), $my_account_content);
 
 // Deleting the myprofile link.
 if (api_get_setting('allow_social_tool') == 'true') {
@@ -615,35 +604,32 @@ if (api_get_setting('allow_social_tool') == 'true') {
 
 // Main navigation section.
 // Tabs that are deactivated are added here.
-if (!empty($menu_navigation)) {
-    echo '<div class="menusection">';
-    echo '<span class="menusectioncaption">'.get_lang('MainNavigation').'</span>';
-    echo '<ul class="menulist">';
+if (!empty($menu_navigation)) {    
+    $main_navigation_content .= '<ul class="menulist">';    
     foreach ($menu_navigation as $section => $navigation_info) {
         $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
-        echo '<li'.$current.'>';
-        echo '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
-        echo '</li>';
+        $main_navigation_content .= '<li'.$current.'>';
+        $main_navigation_content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
+        $main_navigation_content .= '</li>';
     }
-    echo '</ul>';
-    echo '</div>';
+    $main_navigation_content .= '</ul>';
+    echo show_right_block(get_lang('MainNavigation'), $main_navigation_content);    
 }
 
 // Plugins for the my courses menu.
-if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu'])) {
-    echo '<div class="note">';
-    echo '<div id="plugin-mycourses_menu">';
+if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu'])) {    
+    ob_start();
     api_plugin('mycourses_menu');
-    echo '</div>';
+    $plugin_content = ob_get_contents();
+    ob_end_clean();
+    echo show_right_block(get_lang(''), $plugin_content);
 }
 
 if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_course()) {
-    echo '<div class="menusection">';
-    echo '<span class="menusectioncaption">'.get_lang('Booking').'</span>';
-    echo '<ul class="menulist">';
-    echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
-    echo '</ul>';
-    echo '</div>';
+    $booking_content .='<ul class="menulist">';
+    $booking_content .='<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
+    $booking_content .='</ul>';    
+    echo show_right_block(get_lang('Booking'), $booking_content);
 }
 
 // Deleting the session_id.
@@ -654,20 +640,49 @@ if (api_get_setting('search_enabled') == 'true') {
     echo '<div class="searchbox">';
     $search_btn = get_lang('Search');
     $search_text_default = get_lang('YourTextHere');
-echo <<<EOD
-<br />
-<form action="main/search/" method="post">
-&nbsp;&nbsp;<input type="text" id="query" size="15" name="query" value="" />
-&nbsp;&nbsp;<button class="save" type="submit" name="submit" value="$search_btn"/>$search_btn </button>
-</form>
-EOD;
-    echo '</div>';
+    $search_content = '<br />
+    	<form action="main/search/" method="post">
+    	<input type="text" id="query" size="15" name="query" value="" />
+    	<button class="save" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
+    	</form></div>';    
+    echo show_right_block(get_lang('Search'), $search_content);  
 }
-echo '<div class="clear"></div>';
-echo '</div>'; // End of menu
 
+if (api_get_setting('show_groups_to_users') == 'true') {
+    
+    require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
+    $usergroup = new Usergroup();
+    $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
+    $classes = '';
+    if (!empty($usergroup_list)) {      
+        foreach($usergroup_list as $group_id) {
+        	$data = $usergroup->get($group_id);
+        	$data['name'] = Display::url($data['name'], api_get_path(WEB_PATH).'classes.php?id='.$data['id']);
+            $classes .= Display::tag('li', $data['name']);
+        }                 
+    }  
+    if (api_is_platform_admin()) {
+        $classes .= Display::tag('li',  Display::url(get_lang('AddClasses') ,api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'));
+    }        
+    
+    if (!empty($classes)) {
+        $classes = Display::tag('ul', $classes, array('class'=>'menulist'));  
+        echo show_right_block(get_lang('Classes'), $classes);
+    }
+}
 echo '</div>'; // End of menu wrapper
 
-
+function show_right_block($title, $content) {    
+    $html = '';
+    $html.= '<div id="menu-wrapper">';
+        $html.= '<div id="menu" class="menu">';    
+            $html.= '<div class="menusection">';
+                $html.= '<span class="menusectioncaption">'.$title.'</span>';        
+                $html.= $content;
+            $html.= '</div>';        
+        $html.= '</div>';
+    $html.= '</div>';    
+    return $html;
+}
 // Footer
 Display :: display_footer();

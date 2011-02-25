@@ -639,6 +639,7 @@ class SocialManager extends UserManager {
 			}*/
 			
 			//Groups
+			/*
 			if (api_get_setting('show_groups_to_users') == 'true') {
     			$group_class = 'social-menu-text4';
     			if ($show == 'classes') {
@@ -646,7 +647,7 @@ class SocialManager extends UserManager {
     			}
                 echo Display::tag('li', Display::return_icon('group.png',get_lang('MyGroups'),array('hspace'=>'6')).Display::url(Display::tag('span',get_lang('MyGroups'),array('class'=>$group_class)),api_get_path(WEB_PATH).'main/social/usergroups.php'));
 			}            
-			
+			*/
 			//Search users and groups
 	        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('zoom.png',get_lang('Search'),array('hspace'=>'6')).'<span class="'.($show=='search'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Search').'</span></a></li>';
             		

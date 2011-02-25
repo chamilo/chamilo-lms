@@ -984,35 +984,30 @@ class Display {
             } 
         });  */    	
     }
-    /**
-     * Display create course link
-     *
-     */
-    function display_create_course_link() {
-        echo '<li><a href="main/create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
-    }
-    
+
     
     /**
      * Display dashboard link
      *
      */
-    function display_dashboard_link() {
+    /*function display_dashboard_link() {
         echo '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
-    }
+    }*/
     
     /**
      * Display edit course list links
      *
      */
-    function display_edit_course_list_links() {
+    
+    /*function display_edit_course_list_links() {
         echo '<li><a href="main/auth/courses.php">'.get_lang('CourseManagement').'</a></li>';
-    }
+    }*/
     
     /**
      * Show history sessions
      *
      */
+    /*
     function display_history_course_session() {
         if (api_get_setting('use_session_mode') == 'true') {
             if (isset($_GET['history']) && intval($_GET['history']) == 1) {
@@ -1021,7 +1016,7 @@ class Display {
                 echo '<li><a href="user_portal.php?history=1">'.get_lang('HistoryTrainingSessions').'</a></li>';
             }
         }
-    }
+    }*/
     /**
      * Returns the "what's new" icon notifications
      *
@@ -1153,41 +1148,42 @@ class Display {
      * @version 1.0
      */
     function display_digest($toolsList, $digest, $orderKey, $courses) {
+        $html = '';
         if (is_array($digest) && (CONFVAL_showExtractInfo == SCRIPTVAL_UnderCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both)) {
             // // // LEVEL 1 // // //
             reset($digest);
-            echo "<br /><br />\n";
+            $html .= "<br /><br />\n";
             while (list($key1) = each($digest)) {
                 if (is_array($digest[$key1])) {
                     // // // Title of LEVEL 1 // // //
-                    echo "<strong>\n";
+                    $html .= "<strong>\n";
                     if ($orderKey[0] == 'keyTools') {
                         $tools = $key1;
-                        echo $toolsList[$key1]['name'];
+                        $html .= $toolsList[$key1]['name'];
                     } elseif ($orderKey[0] == 'keyCourse') {
                         $courseSysCode = $key1;
-                        echo "<a href=\"", api_get_path(WEB_COURSE_PATH), $courses[$key1]['coursePath'], "\">", $courses[$key1]['courseCode'], "</a>\n";
+                        $html .= "<a href=\"".api_get_path(WEB_COURSE_PATH). $courses[$key1]['coursePath']. "\">".$courses[$key1]['courseCode']. "</a>\n";
                     } elseif ($orderKey[0] == 'keyTime') {
-                        echo api_convert_and_format_date($digest[$key1], DATE_FORMAT_LONG, date_default_timezone_get());
+                        $html .= api_convert_and_format_date($digest[$key1], DATE_FORMAT_LONG, date_default_timezone_get());
                     }
-                    echo "</strong>\n";
+                    $html .= "</strong>\n";
                     // // // End Of Title of LEVEL 1 // // //
                     // // // LEVEL 2 // // //
                     reset($digest[$key1]);
                     while (list ($key2) = each($digest[$key1])) {
                         // // // Title of LEVEL 2 // // //
-                        echo "<p>\n", "\n";
+                        $html .= "<p>\n". "\n";
                         if ($orderKey[1] == 'keyTools') {
                             $tools = $key2;
-                            echo $toolsList[$key2][name];
+                            $html .= $toolsList[$key2][name];
                         } elseif ($orderKey[1] == 'keyCourse') {
                             $courseSysCode = $key2;
-                            echo "<a href=\"", api_get_path(WEB_COURSE_PATH), $courses[$key2]['coursePath'], "\">", $courses[$key2]['courseCode'], "</a>\n";
+                            $html .= "<a href=\"". api_get_path(WEB_COURSE_PATH). $courses[$key2]['coursePath']. "\">". $courses[$key2]['courseCode']. "</a>\n";
                         } elseif ($orderKey[1] == 'keyTime') {
-                            echo api_convert_and_format_date($key2, DATE_FORMAT_LONG, date_default_timezone_get());
+                            $html .= api_convert_and_format_date($key2, DATE_FORMAT_LONG, date_default_timezone_get());
                         }
-                        echo "\n";
-                        echo "</p>";
+                        $html .= "\n";
+                        $html .= "</p>";
                         // // // End Of Title of LEVEL 2 // // //
                         // // // LEVEL 3 // // //
                         reset($digest[$key1][$key2]);
@@ -1204,17 +1200,18 @@ class Display {
                             // // // LEVEL 4 (data) // // //
                             reset($digest[$key1][$key2][$key3]);
                             while (list ($key4, $dataFromCourse) = each($digest[$key1][$key2][$key3])) {
-                                echo $level3title, ' &ndash; ', api_substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT);
+                                $html .= $level3title. ' &ndash; '. api_substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT);
                                 //adding ... (three dots) if the texts are too large and they are shortened
                                 if (api_strlen($dataFromCourse) >= CONFVAL_NB_CHAR_FROM_CONTENT) {
-                                    echo '...';
+                                    $html .= '...';
                                 }
                             }
-                            echo "<br />\n";
+                            $html .= "<br />\n";
                         }
                     }
                 }
             }
+            return $html;
         }
     } // End function display_digest
     /**

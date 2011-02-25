@@ -97,11 +97,15 @@ class SubLanguageManager {
      /**
      * Add file in sub-language directory and add header(tag php)
      * @param String The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
-     * @return void()
+     * @return bool
      */
-   public static function add_file_in_language_directory ($system_path_file) {
-   		file_put_contents($system_path_file,'<?php'.PHP_EOL);
-   }
+    public static function add_file_in_language_directory ($system_path_file) {
+        $return_value = false;
+        if (file_exists($system_path_file) && is_writable($system_path_file)) {
+            $return_value  = file_put_contents($system_path_file,'<?php'.PHP_EOL);
+        }
+        return $return_value;
+    }
      /**
      * Write in file of sub-language
      * @param String The path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
@@ -109,13 +113,20 @@ class SubLanguageManager {
      * @param String The language variable
      * @return void()
      */
-   public static function write_data_in_file ($path_file,$new_sub_language,$variable_sub_language) {
+    public static function write_data_in_file($path_file, $new_sub_language, $variable_sub_language) {
+        $return_value = false;
    		$new_data=$variable_sub_language.'='.$new_sub_language;
-   		$g_open_file = fopen($path_file, "a");
-   		if (fwrite($g_open_file, $new_data.PHP_EOL) === false) {
-   			//not allow to write
+   		$resource = @fopen($path_file, "a");
+   		if (file_exists($path_file) && $resource) {
+   		    if (fwrite($resource, $new_data.PHP_EOL) === false) {
+   			    //not allow to write
+   			    $return_value = false;
+   		    } else {
+   		        $return_value = true;    
+   		    }   		    
+   		    fclose($resource);
    		}
-   		fclose($g_open_file);
+   		return $return_value;
    }
      /**
      * Add directory for sub-language

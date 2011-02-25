@@ -177,7 +177,6 @@ if (!api_is_allowed_to_edit(null,true) AND $current_forum['allow_edit']==0) {
     }
 }
 
-
 // action links
 if ($origin!='learnpath') {
     echo '<div class="actions">';
@@ -195,7 +194,7 @@ if ($origin!='learnpath') {
 /*
     Display Forum Category and the Forum information
 */
-echo "<table class=\"forum_table\" width='100%'>\n";
+echo "<table class=\"forum_table\" width=\"100%\">\n";
 // the forum category
 echo "<tr><th class=\"forum_head\" colspan=\"2\">";
 echo '<a href="viewforum.php?&origin='.$origin.'&forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a><br />';
@@ -212,21 +211,21 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
 
     $option_chek=isset($values['thread_qualify_gradebook'])?$values['thread_qualify_gradebook']:null;// values 1 or 0
     if ( 1== $option_chek ) {
-            $id=$values['thread_id'];
-            $title_gradebook=$values['calification_notebook_title'];
-            $value_calification=$values['numeric_calification'];
-            $weight_calification=$values['weight_calification'];
-            $description="";
-            $session_id=api_get_session_id();
-            $link_id=is_resource_in_course_gradebook(api_get_course_id(),5,$id,$session_id);
-            if (!$link_id) {
-                add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,api_get_session_id());
-            } else {
-                Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
-            }
-
+        $id=$values['thread_id'];
+        $title_gradebook=stripslashes($values['calification_notebook_title']);
+        $value_calification=$values['numeric_calification'];
+        $weight_calification=$values['weight_calification'];
+        $description='';
+        $session_id=api_get_session_id();
+        $link_id=is_resource_in_course_gradebook(api_get_course_id(),5,$id,$session_id);
+        if (!$link_id) {
+            add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,api_get_session_id());
+        } else {
+            Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
+        }
     }
 }
+
 // footer
 if ($origin!='learnpath') {
     Display :: display_footer();

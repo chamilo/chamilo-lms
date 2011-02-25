@@ -208,7 +208,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
                 $session_displayed = '';
             }
             echo '<thead>';
-            echo '<tr><th class="forum_head" colspan="5">';
+            echo '<tr><th class="forum_head" colspan="6">';
             echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a>'. $session_img .'<br />';
 
             if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;') {
@@ -232,7 +232,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 
             // step 4: the interim headers (for the forum)
             echo '<tr class="forum_header">';
-            echo "<td colspan=\"2\">".get_lang('Forum')."</td>";
+            echo "<td ></td>";
+            echo "<td ></td>";             
+            echo "<td >".get_lang('Forum')."</td>";
             echo "<td>".get_lang('Topics')."</td>";
             echo "<td>".get_lang('Posts')."</td>";
             echo "<td>".get_lang('LastPosts')."</td>";
@@ -313,8 +315,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
                         if ($show_forum) {
                             $form_count++;
                             $mywhatsnew_post_info=isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']]: null;
-                            echo '<tr class="forum">';
-
+                            
+                            $forum_image = '';
                             // Showing the image
                             if(!empty($forum['forum_image'])) {
 
@@ -327,11 +329,16 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
                                         //limit display width and height to 100px
                                         $img_attributes = 'width="100" height="100"';
                                     }
-                                    echo "<img src=\"$image_path\" $img_attributes>";
-                                }
-                            }
+                                    $forum_image =  "<img src=\"$image_path\" $img_attributes>";                                 
+                                } else {
+                                    $forum_image = '';
+                                }                               
+                            }    
+                            echo "<td width=\"20\">";   
+                            echo $forum_image;
                             echo "</td>";
-                            echo "<td width=\"20\">";
+                                                        
+                            echo "<td width=\"20\">";                            
 
                             if ($forum['forum_of_group']!=='0') {
                                 if (is_array($mywhatsnew_post_info) and !empty($mywhatsnew_post_info)) {
@@ -345,7 +352,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
                                 } else {
                                     echo icon('../img/forum.gif');
                                 }
-                            }
+                            }                            
                             echo "</td>";
 
                             //validacion when belongs to a session

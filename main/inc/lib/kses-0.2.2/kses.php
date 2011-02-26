@@ -34,6 +34,50 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$kses_allowedentitynames = array(
+    'nbsp',    'iexcl',  'cent',    'pound',  'curren', 'yen',
+    'brvbar',  'sect',   'uml',     'copy',   'ordf',   'laquo',
+    'not',     'shy',    'reg',     'macr',   'deg',    'plusmn',
+    'acute',   'micro',  'para',    'middot', 'cedil',  'ordm',
+    'raquo',   'iquest', 'Agrave',  'Aacute', 'Acirc',  'Atilde',
+    'Auml',    'Aring',  'AElig',   'Ccedil', 'Egrave', 'Eacute',
+    'Ecirc',   'Euml',   'Igrave',  'Iacute', 'Icirc',  'Iuml',
+    'ETH',     'Ntilde', 'Ograve',  'Oacute', 'Ocirc',  'Otilde',
+    'Ouml',    'times',  'Oslash',  'Ugrave', 'Uacute', 'Ucirc',
+    'Uuml',    'Yacute', 'THORN',   'szlig',  'agrave', 'aacute',
+    'acirc',   'atilde', 'auml',    'aring',  'aelig',  'ccedil',
+    'egrave',  'eacute', 'ecirc',   'euml',   'igrave', 'iacute',
+    'icirc',   'iuml',   'eth',     'ntilde', 'ograve', 'oacute',
+    'ocirc',   'otilde', 'ouml',    'divide', 'oslash', 'ugrave',
+    'uacute',  'ucirc',  'uuml',    'yacute', 'thorn',  'yuml',
+    'quot',    'amp',    'lt',      'gt',     'apos',   'OElig',
+    'oelig',   'Scaron', 'scaron',  'Yuml',   'circ',   'tilde',
+    'ensp',    'emsp',   'thinsp',  'zwnj',   'zwj',    'lrm',
+    'rlm',     'ndash',  'mdash',   'lsquo',  'rsquo',  'sbquo',
+    'ldquo',   'rdquo',  'bdquo',   'dagger', 'Dagger', 'permil',
+    'lsaquo',  'rsaquo', 'euro',    'fnof',   'Alpha',  'Beta',
+    'Gamma',   'Delta',  'Epsilon', 'Zeta',   'Eta',    'Theta',
+    'Iota',    'Kappa',  'Lambda',  'Mu',     'Nu',     'Xi',
+    'Omicron', 'Pi',     'Rho',     'Sigma',  'Tau',    'Upsilon',
+    'Phi',     'Chi',    'Psi',     'Omega',  'alpha',  'beta',
+    'gamma',   'delta',  'epsilon', 'zeta',   'eta',    'theta',
+    'iota',    'kappa',  'lambda',  'mu',     'nu',     'xi',
+    'omicron', 'pi',     'rho',     'sigmaf', 'sigma',  'tau',
+    'upsilon', 'phi',    'chi',     'psi',    'omega',  'thetasym',
+    'upsih',   'piv',    'bull',    'hellip', 'prime',  'Prime',
+    'oline',   'frasl',  'weierp',  'image',  'real',   'trade',
+    'alefsym', 'larr',   'uarr',    'rarr',   'darr',   'harr',
+    'crarr',   'lArr',   'uArr',    'rArr',   'dArr',   'hArr',
+    'forall',  'part',   'exist',   'empty',  'nabla',  'isin',
+    'notin',   'ni',     'prod',    'sum',    'minus',  'lowast',
+    'radic',   'prop',   'infin',   'ang',    'and',    'or',
+    'cap',     'cup',    'int',     'sim',    'cong',   'asymp',
+    'ne',      'equiv',  'le',      'ge',     'sub',    'sup',
+    'nsub',    'sube',   'supe',    'oplus',  'otimes', 'perp',
+    'sdot',    'lceil',  'rceil',   'lfloor', 'rfloor', 'lang',
+    'rang',    'loz',    'spades',  'clubs',  'hearts', 'diams',
+);
+
 /**
  * Filters content and keeps only allowable HTML elements.
  *
@@ -641,43 +685,128 @@ function kses_normalize_entities($string)
 
     // Change back the allowed entities in our entity whitelist
 
-    $string = preg_replace('/&amp;([A-Za-z][A-Za-z0-9]{0,19});/',
-                         '&\\1;', $string);
-    $string = preg_replace('/&amp;#0*([0-9]{1,5});/e',
-                         'kses_normalize_entities2("\\1")', $string);
-    $string = preg_replace('/&amp;#([Xx])0*(([0-9A-Fa-f]{2}){1,2});/',
-                         '&#\\1\\2;', $string);
+    $string = preg_replace_callback('/&amp;([A-Za-z]{2,8});/', 'kses_named_entities', $string);
+    $string = preg_replace_callback('/&amp;#(0*[0-9]{1,7});/', 'kses_normalize_entities2', $string);
+    $string = preg_replace_callback('/&amp;#[Xx](0*[0-9A-Fa-f]{1,6});/', 'kses_normalize_entities3', $string);
 
     return $string;
 }
 
 /**
+ * Callback for kses_normalize_entities() regular expression.
+ *
+ * This function only accepts valid named entity references, which are finite,
+ * case-sensitive, and highly scrutinized by HTML and XML validators.
+ *
+ * @since 3.0.0
+ *
+ * @param array $matches preg_replace_callback() matches array
+ * @return string Correctly encoded entity
+ */
+function kses_named_entities($matches) {
+    global $kses_allowedentitynames;
+
+    if ( empty($matches[1]) )
+        return '';
+
+    $i = $matches[1];
+    return ( ( ! in_array($i, $kses_allowedentitynames) ) ? "&amp;$i;" : "&$i;" );
+}
+
+/**
+ * Callback for kses_normalize_entities() regular expression.
+ *
  * This function helps kses_normalize_entities() to only accept 16 bit values
  * and nothing more for &#number; entities.
  *
- * @param int $i
- * @return string
+ * @access private
+ *
+ * @param array $matches preg_replace_callback() matches array
+ * @return string Correctly encoded entity
  */
-function kses_normalize_entities2($i)
-{
-    return (($i > 65535) ? "&amp;#$i;" : "&#$i;");
+function kses_normalize_entities2($matches) {
+    if ( empty($matches[1]) )
+        return '';
+
+    $i = $matches[1];
+    if (kses_valid_unicode($i)) {
+        $i = str_pad(ltrim($i,'0'), 3, '0', STR_PAD_LEFT);
+        $i = "&#$i;";
+    } else {
+        $i = "&amp;#$i;";
+    }
+
+    return $i;
 }
 
 /**
- * This function decodes numeric HTML entities (&#65; and &#x41;). It doesn't
- * do anything with other entities like &auml;, but we don't need them in the
- * URL protocol whitelisting system anyway.
+ * Callback for kses_normalize_entities() for regular expression.
  *
- * @param string $string
- * @return string
+ * This function helps kses_normalize_entities() to only accept valid Unicode
+ * numeric entities in hex form.
+ *
+ * @access private
+ *
+ * @param array $matches preg_replace_callback() matches array
+ * @return string Correctly encoded entity
+ */
+function kses_normalize_entities3($matches) {
+    if ( empty($matches[1]) )
+        return '';
+
+    $hexchars = $matches[1];
+    return ( ( ! kses_valid_unicode(hexdec($hexchars)) ) ? "&amp;#x$hexchars;" : '&#x'.ltrim($hexchars,'0').';' );
+}
+
+/**
+ * Helper function to determine if a Unicode value is valid.
+ *
+ * @param int $i Unicode value
+ * @return bool true if the value was a valid Unicode number
+ */
+function kses_valid_unicode($i) {
+    return ( $i == 0x9 || $i == 0xa || $i == 0xd ||
+            ($i >= 0x20 && $i <= 0xd7ff) ||
+            ($i >= 0xe000 && $i <= 0xfffd) ||
+            ($i >= 0x10000 && $i <= 0x10ffff) );
+}
+
+/**
+ * Convert all entities to their character counterparts.
+ *
+ * This function decodes numeric HTML entities (&#65; and &#x41;). It doesn't do
+ * anything with other entities like &auml;, but we don't need them in the URL
+ * protocol whitelisting system anyway.
+ *
+ * @param string $string Content to change entities
+ * @return string Content after decoded entities
  */
 function kses_decode_entities($string)
 {
-    $string = preg_replace('/&#([0-9]+);/e', 'chr("\\1")', $string);
-    $string = preg_replace('/&#[Xx]([0-9A-Fa-f]+);/e', 'chr(hexdec("\\1"))',
-                         $string);
+    $string = preg_replace_callback('/&#([0-9]+);/', '_kses_decode_entities_chr', $string);
+    $string = preg_replace_callback('/&#[Xx]([0-9A-Fa-f]+);/', '_kses_decode_entities_chr_hexdec', $string);
 
     return $string;
+}
+
+/**
+ * Regex callback for kses_decode_entities()
+ *
+ * @param array $match preg match
+ * @return string
+ */
+function _kses_decode_entities_chr( $match ) {
+    return chr( $match[1] );
+}
+
+/**
+ * Regex callback for kses_decode_entities()
+ *
+ * @param array $match preg match
+ * @return string
+ */
+function _kses_decode_entities_chr_hexdec( $match ) {
+    return chr( hexdec( $match[1] ) );
 }
 
 /**

@@ -48,12 +48,6 @@
 function kses($string, $allowed_html, $allowed_protocols =
                array('http', 'https', 'ftp', 'news', 'nntp', 'telnet',
                      'gopher', 'mailto'))
-###############################################################################
-# This function makes sure that only the allowed HTML element names, attribute
-# names and attribute values plus only sane HTML entities will occur in
-# $string. You have to remove any slashes from PHP's magic quotes before you
-# call this function.
-###############################################################################
 {
   $string = kses_no_null($string);
   $string = kses_js_entities($string);
@@ -61,7 +55,7 @@ function kses($string, $allowed_html, $allowed_protocols =
   $string = kses_hook($string);
   $allowed_html_fixed = kses_array_lc($allowed_html);
   return kses_split($string, $allowed_html_fixed, $allowed_protocols);
-} # function kses
+}
 
 
 /**
@@ -71,12 +65,9 @@ function kses($string, $allowed_html, $allowed_protocols =
  * @return string
  */
 function kses_hook($string)
-###############################################################################
-# You add any kses hooks here.
-###############################################################################
 {
   return $string;
-} # function kses_hook
+}
 
 /**
  * This function returns kses' version number.
@@ -84,12 +75,9 @@ function kses_hook($string)
  * @return string
  */
 function kses_version()
-###############################################################################
-# This function returns kses' version number.
-###############################################################################
 {
   return '0.2.2';
-} # function kses_version
+}
 
 
 /**
@@ -102,19 +90,16 @@ function kses_version()
  * @return string
  */
 function kses_split($string, $allowed_html, $allowed_protocols)
-###############################################################################
-# This function searches for HTML tags, no matter how malformed. It also
-# matches stray ">" characters.
-###############################################################################
+
 {
-  return preg_replace('%(<'.   # EITHER: <
-                      '[^>]*'. # things that aren't >
-                      '(>|$)'. # > or end of string
-                      '|>)%e', # OR: just a >
+  return preg_replace('%(<'.   // EITHER: <
+                      '[^>]*'. // things that aren't >
+                      '(>|$)'. // > or end of string
+                      '|>)%e', // OR: just a >
                       "kses_split2('\\1', \$allowed_html, ".
                       '$allowed_protocols)',
                       $string);
-} # function kses_split
+}
 
 /**
  * This function does a lot of work. It rejects some very malformed things
@@ -128,22 +113,16 @@ function kses_split($string, $allowed_html, $allowed_protocols)
  * @return string
  */
 function kses_split2($string, $allowed_html, $allowed_protocols)
-###############################################################################
-# This function does a lot of work. It rejects some very malformed things
-# like <:::>. It returns an empty string, if the element isn't allowed (look
-# ma, no strip_tags()!). Otherwise it splits the tag into an element and an
-# attribute list.
-###############################################################################
 {
   $string = kses_stripslashes($string);
 
   if (substr($string, 0, 1) != '<')
     return '&gt;';
-    # It matched a ">" character
+    // It matched a ">" character
 
   if (!preg_match('%^<\s*(/\s*)?([a-zA-Z0-9]+)([^>]*)>?$%', $string, $matches))
     return '';
-    # It's seriously malformed
+    // It's seriously malformed
 
   $slash = trim($matches[1]);
   $elem = $matches[2];
@@ -151,15 +130,15 @@ function kses_split2($string, $allowed_html, $allowed_protocols)
 
   if (!@isset($allowed_html[strtolower($elem)]))
     return '';
-    # They are using a not allowed HTML element
+    // They are using a not allowed HTML element
 
   if ($slash != '')
     return "<$slash$elem>";
-  # No attributes are allowed for closing elements
+  // No attributes are allowed for closing elements
 
   return kses_attr("$slash$elem", $attrlist, $allowed_html,
                    $allowed_protocols);
-} # function kses_split2
+}
 
 /**
  * This function removes all attributes, if none are allowed for this element.
@@ -176,32 +155,24 @@ function kses_split2($string, $allowed_html, $allowed_protocols)
  * @return string
  */
 function kses_attr($element, $attr, $allowed_html, $allowed_protocols)
-###############################################################################
-# This function removes all attributes, if none are allowed for this element.
-# If some are allowed it calls kses_hair() to split them further, and then it
-# builds up new HTML code from the data that kses_hair() returns. It also
-# removes "<" and ">" characters, if there are any left. One more thing it
-# does is to check if the tag has a closing XHTML slash, and if it does,
-# it puts one in the returned code as well.
-###############################################################################
 {
-# Is there a closing XHTML slash at the end of the attributes?
+// Is there a closing XHTML slash at the end of the attributes?
 
   $xhtml_slash = '';
   if (preg_match('%\s/\s*$%', $attr))
     $xhtml_slash = ' /';
 
-# Are any attributes allowed at all for this element?
+// Are any attributes allowed at all for this element?
 
   if (@count($allowed_html[strtolower($element)]) == 0)
     return "<$element$xhtml_slash>";
 
-# Split it
+// Split it
 
   $attrarr = kses_hair($attr, $allowed_protocols);
 
-# Go through $attrarr, and save the allowed attributes for this element
-# in $attr2
+// Go through $attrarr, and save the allowed attributes for this element
+// in $attr2
 
   $attr2 = '';
 
@@ -209,18 +180,18 @@ function kses_attr($element, $attr, $allowed_html, $allowed_protocols)
   {
     if (!@isset($allowed_html[strtolower($element)]
                             [strtolower($arreach['name'])]))
-      continue; # the attribute is not allowed
+      continue; // the attribute is not allowed
 
     $current = $allowed_html[strtolower($element)]
                             [strtolower($arreach['name'])];
 
     if (!is_array($current))
       $attr2 .= ' '.$arreach['whole'];
-    # there are no checks
+    // there are no checks
 
     else
     {
-    # there are some checks
+    // there are some checks
       $ok = true;
       foreach ($current as $currkey => $currval)
         if (!kses_check_attr_val($arreach['value'], $arreach['vless'],
@@ -228,16 +199,16 @@ function kses_attr($element, $attr, $allowed_html, $allowed_protocols)
         { $ok = false; break; }
 
       if ($ok)
-        $attr2 .= ' '.$arreach['whole']; # it passed them
-    } # if !is_array($current)
-  } # foreach
+        $attr2 .= ' '.$arreach['whole']; // it passed them
+    } // if !is_array($current)
+  } // foreach
 
-# Remove any "<" or ">" characters
+// Remove any "<" or ">" characters
 
   $attr2 = preg_replace('/[<>]/', '', $attr2);
 
   return "<$element$attr2$xhtml_slash>";
-} # function kses_attr
+}
 
 /**
  * This function does a lot of work. It parses an attribute list into an array
@@ -252,28 +223,20 @@ function kses_attr($element, $attr, $allowed_html, $allowed_protocols)
  * @return array
  */
 function kses_hair($attr, $allowed_protocols)
-###############################################################################
-# This function does a lot of work. It parses an attribute list into an array
-# with attribute data, and tries to do the right thing even if it gets weird
-# input. It will add quotes around attribute values that don't have any quotes
-# or apostrophes around them, to make it easier to produce HTML code that will
-# conform to W3C's HTML specification. It will also remove bad URL protocols
-# from attribute values.
-###############################################################################
 {
   $attrarr = array();
   $mode = 0;
   $attrname = '';
 
-# Loop through the whole attribute list
+// Loop through the whole attribute list
 
   while (strlen($attr) != 0)
   {
-    $working = 0; # Was the last operation successful?
+    $working = 0; // Was the last operation successful?
 
     switch ($mode)
     {
-      case 0: # attribute name, href for instance
+      case 0: // attribute name, href for instance
 
         if (preg_match('/^([-a-zA-Z]+)/', $attr, $match))
         {
@@ -284,16 +247,16 @@ function kses_hair($attr, $allowed_protocols)
 
         break;
 
-      case 1: # equals sign or valueless ("selected")
+      case 1: // equals sign or valueless ("selected")
 
-        if (preg_match('/^\s*=\s*/', $attr)) # equals sign
+        if (preg_match('/^\s*=\s*/', $attr)) // equals sign
         {
           $working = 1; $mode = 2;
           $attr = preg_replace('/^\s*=\s*/', '', $attr);
           break;
         }
 
-        if (preg_match('/^\s+/', $attr)) # valueless
+        if (preg_match('/^\s+/', $attr)) // valueless
         {
           $working = 1; $mode = 0;
           $attrarr[] = array
@@ -306,10 +269,10 @@ function kses_hair($attr, $allowed_protocols)
 
         break;
 
-      case 2: # attribute value, a URL after href= for instance
+      case 2: // attribute value, a URL after href= for instance
 
         if (preg_match('/^"([^"]*)"(\s+|$)/', $attr, $match))
-         # "value"
+         // "value"
         {
           // MDL-2684 - kses stripping CSS styles that it thinks look like protocols
           if ($attrname == 'style') {
@@ -329,7 +292,7 @@ function kses_hair($attr, $allowed_protocols)
         }
 
         if (preg_match("/^'([^']*)'(\s+|$)/", $attr, $match))
-         # 'value'
+         // 'value'
         {
           $thisval = kses_bad_protocol($match[1], $allowed_protocols);
 
@@ -344,7 +307,7 @@ function kses_hair($attr, $allowed_protocols)
         }
 
         if (preg_match("%^([^\s\"']+)(\s+|$)%", $attr, $match))
-         # value
+         // value
         {
           $thisval = kses_bad_protocol($match[1], $allowed_protocols);
 
@@ -353,24 +316,24 @@ function kses_hair($attr, $allowed_protocols)
                          'value' => $thisval,
                          'whole' => "$attrname=\"$thisval\"",
                          'vless' => 'n');
-                         # We add quotes to conform to W3C's HTML spec.
+                         // We add quotes to conform to W3C's HTML spec.
           $working = 1; $mode = 0;
           $attr = preg_replace("%^[^\s\"']+(\s+|$)%", '', $attr);
         }
 
         break;
-    } # switch
+    } // switch
 
-    if ($working == 0) # not well formed, remove and try again
+    if ($working == 0) // not well formed, remove and try again
     {
       $attr = kses_html_error($attr);
       $mode = 0;
     }
-  } # while
+  } // while
 
   if ($mode == 1)
-  # special case, for when the attribute list ends with a valueless
-  # attribute like "selected"
+  // special case, for when the attribute list ends with a valueless
+  // attribute like "selected"
     $attrarr[] = array
                   ('name'  => $attrname,
                    'value' => '',
@@ -378,7 +341,7 @@ function kses_hair($attr, $allowed_protocols)
                    'vless' => 'y');
 
   return $attrarr;
-} # function kses_hair
+}
 
 /**
  * This function performs different checks for attribute values. The currently
@@ -392,39 +355,34 @@ function kses_hair($attr, $allowed_protocols)
  * @return bool
  */
 function kses_check_attr_val($value, $vless, $checkname, $checkvalue)
-###############################################################################
-# This function performs different checks for attribute values. The currently
-# implemented checks are "maxlen", "minlen", "maxval", "minval" and "valueless"
-# with even more checks to come soon.
-###############################################################################
 {
   $ok = true;
 
   switch (strtolower($checkname))
   {
     case 'maxlen':
-    # The maxlen check makes sure that the attribute value has a length not
-    # greater than the given value. This can be used to avoid Buffer Overflows
-    # in WWW clients and various Internet servers.
+    // The maxlen check makes sure that the attribute value has a length not
+    // greater than the given value. This can be used to avoid Buffer Overflows
+    // in WWW clients and various Internet servers.
 
       if (strlen($value) > $checkvalue)
         $ok = false;
       break;
 
     case 'minlen':
-    # The minlen check makes sure that the attribute value has a length not
-    # smaller than the given value.
+    // The minlen check makes sure that the attribute value has a length not
+    // smaller than the given value.
 
       if (strlen($value) < $checkvalue)
         $ok = false;
       break;
 
     case 'maxval':
-    # The maxval check does two things: it checks that the attribute value is
-    # an integer from 0 and up, without an excessive amount of zeroes or
-    # whitespace (to avoid Buffer Overflows). It also checks that the attribute
-    # value is not greater than the given value.
-    # This check can be used to avoid Denial of Service attacks.
+    // The maxval check does two things: it checks that the attribute value is
+    // an integer from 0 and up, without an excessive amount of zeroes or
+    // whitespace (to avoid Buffer Overflows). It also checks that the attribute
+    // value is not greater than the given value.
+    // This check can be used to avoid Denial of Service attacks.
 
       if (!preg_match('/^\s{0,6}[0-9]{1,6}\s{0,6}$/', $value))
         $ok = false;
@@ -433,8 +391,8 @@ function kses_check_attr_val($value, $vless, $checkname, $checkvalue)
       break;
 
     case 'minval':
-    # The minval check checks that the attribute value is a positive integer,
-    # and that it is not smaller than the given value.
+    // The minval check checks that the attribute value is a positive integer,
+    // and that it is not smaller than the given value.
 
       if (!preg_match('/^\s{0,6}[0-9]{1,6}\s{0,6}$/', $value))
         $ok = false;
@@ -443,18 +401,18 @@ function kses_check_attr_val($value, $vless, $checkname, $checkvalue)
       break;
 
     case 'valueless':
-    # The valueless check checks if the attribute has a value
-    # (like <a href="blah">) or not (<option selected>). If the given value
-    # is a "y" or a "Y", the attribute must not have a value.
-    # If the given value is an "n" or an "N", the attribute must have one.
+    // The valueless check checks if the attribute has a value
+    // (like <a href="blah">) or not (<option selected>). If the given value
+    // is a "y" or a "Y", the attribute must not have a value.
+    // If the given value is an "n" or an "N", the attribute must have one.
 
       if (strtolower($checkvalue) != $vless)
         $ok = false;
       break;
-  } # switch
+  } // switch
 
   return $ok;
-} # function kses_check_attr_val
+}
 
 /**
  * This function removes all non-allowed protocols from the beginning of
@@ -467,25 +425,19 @@ function kses_check_attr_val($value, $vless, $checkname, $checkvalue)
  * @return string
  */
 function kses_bad_protocol($string, $allowed_protocols)
-###############################################################################
-# This function removes all non-allowed protocols from the beginning of
-# $string. It ignores whitespace and the case of the letters, and it does
-# understand HTML entities. It does its work in a while loop, so it won't be
-# fooled by a string like "javascript:javascript:alert(57)".
-###############################################################################
 {
   $string = kses_no_null($string);
-  $string = preg_replace('/([^\xc3-\xcf])\xad+/', '\\1', $string); # deals with Opera "feature" -- moodle utf8 fix
+  $string = preg_replace('/([^\xc3-\xcf])\xad+/', '\\1', $string); // deals with Opera "feature" -- moodle utf8 fix
   $string2 = $string.'a';
 
   while ($string != $string2)
   {
     $string2 = $string;
     $string = kses_bad_protocol_once($string, $allowed_protocols);
-  } # while
+  } // while
 
   return $string;
-} # function kses_bad_protocol
+}
 
 /**
  * This function removes any NULL characters in $string.
@@ -494,15 +446,12 @@ function kses_bad_protocol($string, $allowed_protocols)
  * @return string
  */
 function kses_no_null($string)
-###############################################################################
-# This function removes any NULL characters in $string.
-###############################################################################
 {
   $string = preg_replace('/\0+/', '', $string);
   $string = preg_replace('/(\\\\0)+/', '', $string);
 
   return $string;
-} # function kses_no_null
+}
 
 
 /**
@@ -514,14 +463,9 @@ function kses_no_null($string)
  * @return string
  */
 function kses_stripslashes($string)
-###############################################################################
-# This function changes the character sequence  \"  to just  "
-# It leaves all other slashes alone. It's really weird, but the quoting from
-# preg_replace(//e) seems to require this.
-###############################################################################
 {
   return preg_replace('%\\\\"%', '"', $string);
-} # function kses_stripslashes
+}
 
 
 /**
@@ -531,9 +475,6 @@ function kses_stripslashes($string)
  * @return array
  */
 function kses_array_lc($inarray)
-###############################################################################
-# This function goes through an array, and changes the keys to all lower case.
-###############################################################################
 {
   $outarray = array();
 
@@ -546,11 +487,11 @@ function kses_array_lc($inarray)
     {
       $outkey2 = strtolower($inkey2);
       $outarray[$outkey][$outkey2] = $inval2;
-    } # foreach $inval
-  } # foreach $inarray
+    } // foreach $inval
+  } // foreach $inarray
 
   return $outarray;
-} # function kses_array_lc
+}
 
 /**
  * This function removes the HTML JavaScript entities found in early versions of
@@ -559,13 +500,9 @@ function kses_array_lc($inarray)
  * @param string $string
  */
 function kses_js_entities($string)
-###############################################################################
-# This function removes the HTML JavaScript entities found in early versions of
-# Netscape 4.
-###############################################################################
 {
   return preg_replace('%&\s*\{[^}]*(\}\s*;?|$)%', '', $string);
-} # function kses_js_entities
+}
 
 /**
  * This function deals with parsing errors in kses_hair(). The general plan is
@@ -576,14 +513,9 @@ function kses_js_entities($string)
  * @return string
  */
 function kses_html_error($string)
-###############################################################################
-# This function deals with parsing errors in kses_hair(). The general plan is
-# to remove everything to and including some whitespace, but it deals with
-# quotes and apostrophes as well.
-###############################################################################
 {
   return preg_replace('/^("[^"]*("|$)|\'[^\']*(\'|$)|\S)*\s*/', '', $string);
-} # function kses_html_error
+}
 
 /**
  * This function searches for URL protocols at the beginning of $string, while
@@ -594,10 +526,6 @@ function kses_html_error($string)
  * @return string
  */
 function kses_bad_protocol_once($string, $allowed_protocols)
-###############################################################################
-# This function searches for URL protocols at the beginning of $string, while
-# handling whitespace and HTML entities.
-###############################################################################
 {
     $string2 = preg_split('/:|&#58;|&#x3a;/i', $string, 2);
     if(isset($string2[1]) && !preg_match('%/\?%',$string2[0]))
@@ -605,7 +533,7 @@ function kses_bad_protocol_once($string, $allowed_protocols)
         $string = kses_bad_protocol_once2($string2[0],$allowed_protocols).trim($string2[1]);
     }
     return $string;
-} # function kses_bad_protocol_once
+}
 
 /**
  * This function processes URL protocols, checks to see if they're in the white-
@@ -616,16 +544,12 @@ function kses_bad_protocol_once($string, $allowed_protocols)
  * @return string
  */
 function kses_bad_protocol_once2($string, $allowed_protocols)
-###############################################################################
-# This function processes URL protocols, checks to see if they're in the white-
-# list or not, and returns different data depending on the answer.
-###############################################################################
 {
   $string2 = kses_decode_entities($string);
   $string2 = preg_replace('/\s/', '', $string2);
   $string2 = kses_no_null($string2);
   $string2 = preg_replace('/\xad+/', '', $string2);
-   # deals with Opera "feature"
+   // deals with Opera "feature"
   $string2 = strtolower($string2);
 
   $allowed = false;
@@ -640,7 +564,7 @@ function kses_bad_protocol_once2($string, $allowed_protocols)
     return "$string2:";
   else
     return '';
-} # function kses_bad_protocol_once2
+}
 
 /**
  * This function normalizes HTML entities. It will convert "AT&T" to the correct
@@ -650,16 +574,12 @@ function kses_bad_protocol_once2($string, $allowed_protocols)
  * @return string
  */
 function kses_normalize_entities($string)
-###############################################################################
-# This function normalizes HTML entities. It will convert "AT&T" to the correct
-# "AT&amp;T", "&#00058;" to "&#58;", "&#XYZZY;" to "&amp;#XYZZY;" and so on.
-###############################################################################
 {
 # Disarm all entities by converting & to &amp;
 
   $string = str_replace('&', '&amp;', $string);
 
-# Change back the allowed entities in our entity whitelist
+// Change back the allowed entities in our entity whitelist
 
   $string = preg_replace('/&amp;([A-Za-z][A-Za-z0-9]{0,19});/',
                          '&\\1;', $string);
@@ -669,7 +589,7 @@ function kses_normalize_entities($string)
                          '&#\\1\\2;', $string);
 
   return $string;
-} # function kses_normalize_entities
+}
 
 /**
  * This function helps kses_normalize_entities() to only accept 16 bit values
@@ -679,13 +599,9 @@ function kses_normalize_entities($string)
  * @return string
  */
 function kses_normalize_entities2($i)
-###############################################################################
-# This function helps kses_normalize_entities() to only accept 16 bit values
-# and nothing more for &#number; entities.
-###############################################################################
 {
   return (($i > 65535) ? "&amp;#$i;" : "&#$i;");
-} # function kses_normalize_entities2
+}
 
 /**
  * This function decodes numeric HTML entities (&#65; and &#x41;). It doesn't
@@ -696,17 +612,12 @@ function kses_normalize_entities2($i)
  * @return string
  */
 function kses_decode_entities($string)
-###############################################################################
-# This function decodes numeric HTML entities (&#65; and &#x41;). It doesn't
-# do anything with other entities like &auml;, but we don't need them in the
-# URL protocol whitelisting system anyway.
-###############################################################################
 {
   $string = preg_replace('/&#([0-9]+);/e', 'chr("\\1")', $string);
   $string = preg_replace('/&#[Xx]([0-9A-Fa-f]+);/e', 'chr(hexdec("\\1"))',
                          $string);
 
   return $string;
-} # function kses_decode_entities
+}
 
 ?>

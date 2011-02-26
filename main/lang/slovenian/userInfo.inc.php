@@ -198,4 +198,5 @@ $MyFiles = "Moje datoteke";
 $MySocialGroups = "Moje socialne skupine";
 $SocialGroups = "Socialne skupine";
 $CreateASocialGroup = "Ustvari socialno skupino";
+$EditMembersList = "Uredi seznam članov";
 ?>

@@ -477,7 +477,7 @@ function store_new_agenda_item() {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function display_courseadmin_links() {
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('platform_event.png', get_lang('AgendaAdd'),'','32')."</a>";
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('new_platform_event.png', get_lang('AgendaAdd'),'','32')."</a>";
 
 }
 
@@ -776,7 +776,7 @@ function display_agenda_items()
     	// the icons. If the message is sent to one or more specific users/groups
     	// we add the groups icon
     	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
-    	Display::display_icon('agenda.png', get_lang('Agenda'),'','22');
+    	Display::display_icon('platform_event.png', get_lang('GlobalEvent'),'','22');
     	/*if ($myrow['to_group_id']!=='0') {
     		echo Display::return_icon('group.gif', get_lang('AllUsersOfThePlatform'));
     	}*/

@@ -58,8 +58,8 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 	//});
 
  	$("td .make_visible_and_invisible").click(function () {
-		make_visible="visible.gif";
-		make_invisible="invisible.gif";
+		make_visible="visible.png";
+		make_invisible="invisible.png";
 		id_link_tool=$(this).attr("id");
 		id_img_link_tool="img"+id_link_tool;
 		path_name_of_imglinktool=$("#"+id_img_link_tool).attr("src");
@@ -70,7 +70,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		my_image_tool=link_tool_info[link_tool_info.length-1];
 
 
-		if (my_image_tool=="visible.gif") {
+		if (my_image_tool=="visible.png") {
 			path_name_of_imglinktool=path_name_of_imglinktool.replace(make_visible,make_invisible);
 			my_visibility=0;
 		} else {
@@ -91,7 +91,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 
 				$("#"+id_img_link_tool).attr("src",path_name_of_imglinktool);
 
-				if (my_image_tool=="visible.gif") {
+				if (my_image_tool=="visible.png") {
 					$("#"+id_img_link_tool).attr("alt","'.get_lang('MakeAvailable', '').'");
 					$("#"+id_img_link_tool).attr("title","'.get_lang('MakeAvailable', '').'");
 				} else {
@@ -245,9 +245,9 @@ while ($row = Database::fetch_array($result_select)) {
 	$row_td[] = $row['dokeos_folder'];
 
 	if ($row['english_name'] == $row_lang['selected_value']){
-		$setplatformlanguage = Display::return_icon('links.gif', get_lang('CurrentLanguagesPortal'));
+		$setplatformlanguage = Display::return_icon('languages.png', get_lang('CurrentLanguagesPortal'),'',22);
 	} else {
-		$setplatformlanguage = "<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault'))."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('link_na.gif',get_lang('SetLanguageAsDefault'))."</a>";
+		$setplatformlanguage = "<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault'))."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('languages_na.png',get_lang('SetLanguageAsDefault'),'',22)."</a>";
 	}
 	if (api_get_setting('allow_use_sub_language')=='true') {
 
@@ -255,7 +255,7 @@ while ($row = Database::fetch_array($result_select)) {
 
 		if ($verified_if_is_sub_language===false) {
 			$verified_if_is_father=SubLanguageManager::check_if_language_is_father($row['id']);
-			$allow_use_sub_language = "&nbsp;<a href='sub_language_add.php?action=definenewsublanguage&id=".$row['id']."'>".Display::return_icon('mas.gif', get_lang('CreateSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";
+			$allow_use_sub_language = "&nbsp;<a href='sub_language_add.php?action=definenewsublanguage&id=".$row['id']."'>".Display::return_icon('new_language.png', get_lang('CreateSubLanguage'),array(),22)."</a>";
 			if ($verified_if_is_father===true) {
 				//$allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".$row['id']."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";
 				$allow_add_term_sub_language='';
@@ -274,10 +274,10 @@ while ($row = Database::fetch_array($result_select)) {
 		$allow_add_term_sub_language='';
 	}
 	if ($row['available'] == 1) {
-		$row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'),array('id'=>'imglinktool_'.$row['id']))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
+		$row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.png', get_lang('MakeUnavailable'),array('id'=>'imglinktool_'.$row['id']),22)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'),'',22)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
 		//$row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='javascript:void(0)'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'),array('id'=>'imglinktool_'.$row['id']))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language;
 	} else {
-		$row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.gif', get_lang('MakeAvailable'),array('id'=>'imglinktool_'.$row['id']))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
+		$row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.png', get_lang('MakeAvailable'),array('id'=>'imglinktool_'.$row['id']),22)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'),'',22)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
 		//$row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='javascript:void(0)'>".Display::return_icon('invisible.gif', get_lang('MakeAvailable'),array('id'=>'imglinktool_'.$row['id']))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language;
 	}
 

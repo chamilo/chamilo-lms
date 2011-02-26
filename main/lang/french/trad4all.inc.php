@@ -1012,4 +1012,7 @@ $MyStatistics = "Mes statistiques";
 $FromDateXToDateY = "Du %s au %s";
 $CourseThematicAdvance = "Journal de classe";
 $Clean = "Nettoyer";
+$MailNotifyInvitation = "Avertir par mail de la réception d'une invitation";
+$MailNotifyMessage = "Avertir par mail de la réception d'un message";
+$MailNotifyGroupMessage = "Avertir par mail de la réception d'un message de groupe";
 ?>

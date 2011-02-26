@@ -289,4 +289,7 @@ $AverageExerciseResult = "Povprečen rezultat vaj/testov";
 $LPProgress = "Napredek učne poti";
 $BestResultInCourse = "Najboljši rezultat v tečaju";
 $ExerciseStartDate = "Datum objave";
+$OnlyBestResultsPerStudent = "V primeru večih poskusov, prikaži zgolj najboljši rezultat posameznega tečajnika";
+$BestAttempt = "Najboljši poizkus";
+$ExercisesInTimeProgressChart = "Napredek v rezultatih vaj/testov preko časa proti povprečju vseh tečajnikov";
 ?>

@@ -66,7 +66,7 @@ $courses_without_category = $courses_in_category[0];
                     <table><tr><td>
                     <?php if ($key > 0) { ?>
                             <a href="courses.php?action=<?php echo $action; ?>&amp;move=up&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                            <?php echo Display::display_icon('up.gif', get_lang('Up')) ?>
+                            <?php echo Display::display_icon('up.png', get_lang('Up'),'',22) ?>
                             </a>
                     <?php } ?>
                     </td>
@@ -90,7 +90,7 @@ $courses_without_category = $courses_in_category[0];
                             </td>
                     <?php } else { ?>
                             <td rowspan="2" valign="middle"><a href="courses.php?action=<?php echo $action; ?>&amp;edit=<?php echo $course['code']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                            <?php echo Display::display_icon('edit.gif', get_lang('Edit')); ?>
+                            <?php echo Display::display_icon('edit.png', get_lang('Edit'),'',22); ?>
                             </a></td>
                     <?php } ?>
 
@@ -102,7 +102,7 @@ $courses_without_category = $courses_in_category[0];
                                 <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())) ?>')) return false;">
                                 <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                                 <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-                                <input type="image" name="unsub" style="border-color:#fff" src="<?php echo api_get_path(WEB_IMG_PATH).'delete.gif'; ?>" title="<?php echo get_lang('_unsubscribe') ?>"  alt="<?php echo get_lang('_unsubscribe'); ?>" /></form>
+                                <input type="image" name="unsub" style="border-color:#fff" src="<?php echo api_get_path(WEB_IMG_PATH).'/icons/22/unsubscribe_course.png'; ?>" title="<?php echo get_lang('_unsubscribe') ?>"  alt="<?php echo get_lang('_unsubscribe'); ?>" /></form>
                       <?php } else {
                                 echo get_lang('UnsubscribeNotAllowed');
 
@@ -116,7 +116,7 @@ $courses_without_category = $courses_in_category[0];
                     </tr><tr><td>
                     <?php if ($key < $number_of_courses - 1) { ?>
                             <a href="courses.php?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                            <?php echo Display::display_icon('down.gif', get_lang('Down')); ?>
+                            <?php echo Display::display_icon('down.png', get_lang('Down'),'',22); ?>
                             </a>
                     <?php } ?>
                     </td></tr></table>
@@ -156,18 +156,18 @@ $courses_without_category = $courses_in_category[0];
                             <td>
                             <?php if ($row['id'] != $user_course_categories[0]['id']) { ?>
                                     <a href="courses.php?action=<?php echo $action ?>&amp;move=up&amp;category=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                                    <?php echo Display::return_icon('up.gif', get_lang('Up')); ?>
+                                    <?php echo Display::return_icon('up.png', get_lang('Up'),'',22); ?>
                                     </a>
                             <?php } ?>
                             </td>
                             <td rowspan="2">
                             <a href="courses.php?action=sortmycourses&amp;categoryid=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>#category<?php echo $row['id']; ?>">
-                            <?php echo Display::display_icon('edit.gif', get_lang('Edit')); ?>
+                            <?php echo Display::display_icon('edit.png', get_lang('Edit'),'',22); ?>
                             </a>
                             </td>
                             <td rowspan=\"2\">
                             <a href="courses.php?action=deletecoursecategory&amp;id=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                            <?php echo Display::display_icon('delete.gif', get_lang('Delete'), array('onclick' => "javascript: if (!confirm('".addslashes(api_htmlentities(get_lang("CourseCategoryAbout2bedeleted"), ENT_QUOTES, api_get_system_encoding()))."')) return false;")) ?>
+                            <?php echo Display::display_icon('delete.png', get_lang('Delete'), array('onclick' => "javascript: if (!confirm('".addslashes(api_htmlentities(get_lang("CourseCategoryAbout2bedeleted"), ENT_QUOTES, api_get_system_encoding()))."')) return false;"),22) ?>
                             </a>
                             </td>
                             </tr>
@@ -175,7 +175,7 @@ $courses_without_category = $courses_in_category[0];
                             <td>
                             <?php if ($row['id'] != $user_course_categories[$max_category_key - 1]['id']) { ?>
                                     <a href="courses.php?action=<?php echo $action; ?>&amp;move=down&amp;category=<?php echo $row['id']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                                    <?php echo Display::return_icon('down.gif', get_lang('Down')); ?>
+                                    <?php echo Display::return_icon('down.png', get_lang('Down'),'',22); ?>
                                     </a>
                             <?php } ?>
                             </td>
@@ -217,7 +217,7 @@ $courses_without_category = $courses_in_category[0];
                                 <table><tr><td>
                                 <?php if ($key > 0) { ?>
                                         <a href="courses.php?action=<?php echo $action; ?>&amp;move=up&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                                        <?php echo Display::display_icon('up.gif', get_lang('Up')); ?>
+                                        <?php echo Display::display_icon('up.png', get_lang('Up'),'',22); ?>
                                         </a>
                                 <?php } ?>
                                 </td>
@@ -241,7 +241,7 @@ $courses_without_category = $courses_in_category[0];
 
                                 <?php } else { ?>
                                         <td rowspan="2" valign="middle"><a href="courses.php?action=<?php echo $action; ?>&amp;edit=<?php echo $course['code']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                                        <?php echo Display::display_icon('edit.gif', get_lang('Edit')); ?>
+                                        <?php echo Display::display_icon('edit.png', get_lang('Edit'),'',22); ?>
                                         </a></td>
                                 <?php } ?>
                                 <td rowspan="2" valign="top" class="invisible">
@@ -252,7 +252,7 @@ $courses_without_category = $courses_in_category[0];
                                                         <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding()))?>')) return false">
                                                         <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                                                         <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-                                                        <input type="image" name="unsub" style="border-color:#fff" src="<?php echo api_get_path(WEB_IMG_PATH); ?>delete.gif" title="<?php echo get_lang('_unsubscribe') ?>"  alt="<?php echo get_lang('_unsubscribe') ?>" /></form>
+                                                        <input type="image" name="unsub" style="border-color:#fff" src="<?php echo api_get_path(WEB_IMG_PATH); ?>icons/22/unsubscribe_course.png" title="<?php echo get_lang('_unsubscribe') ?>"  alt="<?php echo get_lang('_unsubscribe') ?>" /></form>
                                   <?php } else {
                                                 echo get_lang('UnsubscribeNotAllowed');
                                         }
@@ -264,7 +264,7 @@ $courses_without_category = $courses_in_category[0];
                                 </tr><tr><td>
                                 <?php if ($key < $number_of_courses - 1) { ?>
                                         <a href="courses.php?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                                        <?php echo Display::display_icon('down.gif', get_lang('Down')); ?>
+                                        <?php echo Display::display_icon('down.png', get_lang('Down'),'',22); ?>
                                         </a>
                                 <?php } ?>
                                 </td></tr></table>

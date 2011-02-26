@@ -291,4 +291,7 @@ $LPProgress = "Avanzamento nei moduli didattici";
 $Ranking = "Graduatoria";
 $BestResultInCourse = "Miglior risultato nel modulo";
 $ExerciseStartDate = "Data di pubblicazione";
+$OnlyBestResultsPerStudent = "In caso di tentativi multipli mostra solo il risultato migliore di ogni corsista";
+$BestAttempt = "Miglior risultato";
+$ExercisesInTimeProgressChart = "Avanzamento progressivo dei propri risultati nei test rispetto alla media dei corsisti";
 ?>

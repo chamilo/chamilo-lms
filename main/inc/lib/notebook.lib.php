@@ -216,8 +216,8 @@ class NotebookManager
 			echo '</div>';
 			echo '<div class="sectioncomment">'.$row['description'].'</div>';
 			echo '<div>';
-			echo '<a href="'.api_get_self().'?action=editnote&amp;notebook_id='.$row['notebook_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-			echo '<a href="'.api_get_self().'?action=deletenote&amp;notebook_id='.$row['notebook_id'].'" onclick="return confirmation(\''.$row['title'].'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+			echo '<a href="'.api_get_self().'?action=editnote&amp;notebook_id='.$row['notebook_id'].'">'.Display::return_icon('edit.png', get_lang('Edit'),'',22).'</a>';
+			echo '<a href="'.api_get_self().'?action=deletenote&amp;notebook_id='.$row['notebook_id'].'" onclick="return confirmation(\''.$row['title'].'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
 			echo '</div>';
 		}
 		//return $return;

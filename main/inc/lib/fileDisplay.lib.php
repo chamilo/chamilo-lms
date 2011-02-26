@@ -77,11 +77,11 @@ function choose_image($file_name)
         $image['video'     ] = 'film.gif';
         $image['excel'     ] = 'excel.gif';
         $image['compressed'] = 'file_zip.gif';
-        $image['code'      ] = 'file_txt.gif';
+        $image['code'      ] = 'icons/22/mime_code.png';
         $image['acrobat'   ] = 'file_pdf.gif';
         $image['powerpoint'] = 'powerpoint.gif';
         $image['flash'     ] = 'file_flash.gif';
-        $image['text'      ] = 'file_txt.gif';
+        $image['text'      ] = 'icons/22/mime_text.png';
         $image['oo_writer' ] = 'file_oo_writer.gif';
         $image['oo_calc'   ] = 'file_oo_calc.gif';
         $image['oo_impress'] = 'file_oo_impress.gif';

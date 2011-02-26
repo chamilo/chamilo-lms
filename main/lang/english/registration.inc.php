@@ -184,9 +184,6 @@ $AreYouSureToEditTheUserStatus = "Are you sure to edit the user status?";
 $TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "The tutor can only keep track of all progress of users registered to the course.";
 $TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "The teacher can qualify, evaluate and keep track of all students enrolled in the course.";
 $LoginOrEmailAddress = "User name or e-mail address";
-$MailNotifyInvitation = "Notify by mail on new invitation received";
-$MailNotifyMessage = "Notify by mail on new personal message received";
-$MailNotifyGroupMessage = "Notify by mail on new message received in group";
 $AtOnce = "Upon reception";
 $Daily = "Once a day";
 ?>

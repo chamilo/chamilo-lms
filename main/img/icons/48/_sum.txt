@@ -234,7 +234,7 @@ timezone			nuvola
 tuning				nuvola
 html_editor			gnome			
 --
-platform_event			modif nuvola
+new_platform_event		modif mix crystal chamilo
 agenda				nuvola
 --------------------------------------------------------
 up				crystal (only 22 px)
@@ -266,7 +266,14 @@ briefcase			modif tango
 new_dropbox_message		tango
 unsubscribe_course		modif nuvola
 unsubscribe_course_na		modif nuvola
-			
+mime_text			crystal
+mime_code			crystal
+rate_work			modif mix crystal nuvola
+user_event			modif mix crystal nuvola
+platform_event			modif mix crystal nuvola chamilo
+languages_na			modif crystal
+new_language			modif crystal
+		
 --julio
 star				
 star_green

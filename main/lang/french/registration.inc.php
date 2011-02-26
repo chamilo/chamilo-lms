@@ -184,9 +184,6 @@ $AreYouSureToEditTheUserStatus = "Voulez-vous vraiment modifier le statut de l'u
 $TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "Le tuteur peut seulement suivre le progrès des autres utilisateurs inscrits à ce cours.";
 $TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "Le formateur peut qualifier, évaluer et suivre tous les étudiants inscrits dans le cours.";
 $LoginOrEmailAddress = "Nom d'utilisateur ou adresse e-mail";
-$MailNotifyInvitation = "Avertir par mail de la réception d'une invitation";
-$MailNotifyMessage = "Avertir par mail de la réception d'un message";
-$MailNotifyGroupMessage = "Avertir par mail de la réception d'un message de groupe";
 $AtOnce = "À la réception";
 $Daily = "Une fois par jour";
 ?>

@@ -679,8 +679,8 @@ function get_template_data($from, $number_of_items, $column, $direction) {
  * @since Dokeos 1.8.6
  */
 function actions_filter($id) {
-    $return = '<a href="settings.php?category=Templates&amp;action=edit&amp;id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-    $return .= '<a href="settings.php?category=Templates&amp;action=delete&amp;id='.Security::remove_XSS($id).'" onClick="javascript:if(!confirm('."'".get_lang('ConfirmYourChoice')."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+    $return = '<a href="settings.php?category=Templates&amp;action=edit&amp;id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.png', get_lang('Edit'),'',22).'</a>';
+    $return .= '<a href="settings.php?category=Templates&amp;action=delete&amp;id='.Security::remove_XSS($id).'" onClick="javascript:if(!confirm('."'".get_lang('ConfirmYourChoice')."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
     return $return;
 }
 

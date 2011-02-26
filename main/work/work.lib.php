@@ -43,6 +43,10 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		}
 	}
 	if (!$always_show_tool_options && api_is_allowed_to_edit(null, true) && $origin != 'learnpath') {
+		
+		if (empty($curdirpath)) {
+			$display_output .= '<a href="work.php?">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'','32').'</a>';
+		}
 		// Create dir
 		if ($cur_dir_path == '/') {
 			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('new_work.png', get_lang('CreateAssignment'),'','32').'</a>';
@@ -387,7 +391,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 	$table_header[] = array(get_lang('Date'), true);
 
 	if ($origin != 'learnpath') {
-		$table_header[] = array(get_lang('Modify'), false);
+		$table_header[] = array(get_lang('Actions'), false);
 		$table_header[] = array('RealDate', true);
 	}
 
@@ -710,8 +714,8 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$dirtext = '';
 			}
 
-			$icon = '<img src="../img/works.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Assignment').'" title="'.get_lang('Assignment').'" />';
-
+			$icon = Display::return_icon('work.png', get_lang('Assignment'),array(), 22);
+			
 			if (!empty($display_edit_form) && isset($clean_edit_dir) && $clean_edit_dir == $mydir) {
 				$row[] = $icon;
 				$row[] = '<span class="invisible" style="display:none">'.$dir.'</span>'.$form_folder->toHtml(); // form to edit the directory's name
@@ -730,7 +734,8 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$show_as_icon = get_work_id($mydir); //true or false
 				if ($show_as_icon) {
 					if (is_allowed_to_edit()) {
-						$zip='<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&gradebook='.$gradebook.'&action=downloadfolder&path=/'.$mydir.'"><img src="../img/zip_save.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" width="17" height="17"/></a>';
+						$zip='<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&gradebook='.$gradebook.'&action=downloadfolder&path=/'.$mydir.'">
+						'.Display::return_icon('save_pack.png', get_lang('Save'),array('style' => 'float:right;'), 22).'</a>';
 					}
 					$row[] = $zip.'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br />'.$cant_files.' '.$text_file.$dirtext;
 				} else {
@@ -751,8 +756,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 			if ($origin != 'learnpath') {
 				if ($is_allowed_to_edit) {
-					$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
-						'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir.'">'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';
+					$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir.'">'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';						
 					$action .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$mydir.'&delete2='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('DirDelete').'"  >'.Display::return_icon('delete.png',get_lang('DirDelete'),'',22).'</a>';
 					$row[] = $action;
 				} else {
@@ -808,7 +812,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$url = implode('/', array_map('rawurlencode', explode('/', $work->url)));
 
 				$row[] = '<a href="download.php?file='.$url.'">'.build_document_icon_tag('file', substr(basename($work->url), 13)).'</a>';
-				$row[] = '<a href="download.php?file='.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
+				$row[] = '<a href="download.php?file='.$url.'"'.$class.'>'.Display::return_icon('save.png', get_lang('Save'),array('style' => 'float:right;'), 22).' '.$work->title.'</a><br />'.$work->description;
 				$row[] = display_user_link_work($row2['insert_user_id'], $work->author); // $work->author;
 				$row[] = $qualification_string;
 			
@@ -816,20 +820,20 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$row[] = date_to_str_ago($work_sent_date_local).$add_string.'<br /><span class="dropbox_date">'.api_format_date($work_sent_date_local).'</span>';
 
 				if ($is_allowed_to_edit) {
-					$action = '';
-					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
+					$action = '';	
+					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('rate_work.png', get_lang('CorrectAndRate'),array(), 22).'</a>';					
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.png', get_lang('WorkDelete'),'',22).'</a>';
-					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;move='.$work->id.'" title="'.get_lang('Move').'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="'.get_lang('Move').'" /></a>';
+					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;move='.$work->id.'" title="'.get_lang('Move').'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
 					if ($work->accepted == '1') {
-						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_invisible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Invisible').'" ><img src="../img/visible.gif" alt="'.get_lang('Invisible').'" title="'.get_lang('Invisible').'"></a>';
+						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_invisible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Invisible').'" >'.Display::return_icon('visible.png', get_lang('Invisible'),array(), 22).'</a>';
 					} else {
-						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_visible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Visible').'" ><img src="../img/invisible.gif" alt="'.get_lang('Visible').'"  title="'.get_lang('Visible').'"></a>';
+						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_visible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Visible').'" >'.Display::return_icon('invisible.png', get_lang('Visible'),array(), 22).'</a>';
 					}
 					$row[] = $action;
 				// the user that is not course admin can only edit/delete own document
 				} elseif ($row2['insert_user_id'] == $_user['user_id']) {
-					$action = '';
-					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif"  alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
+					$action = '';					
+					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  >'.Display::return_icon('edit.png', get_lang('Modify'),array(), 22).'</a>';					
 					if (api_get_course_setting('student_delete_own_publication') == 1) {
 						$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('WorkDelete').'"  >'.Display::return_icon('delete.png',get_lang('WorkDelete'),'',22).'</a>';
 					}

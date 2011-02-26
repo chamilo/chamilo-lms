@@ -35,6 +35,8 @@
  */
 
 /**
+ * Filters content and keeps only allowable HTML elements.
+ *
  * This function makes sure that only the allowed HTML element names, attribute
  * names and attribute values plus only sane HTML entities will occur in
  * $string. You have to remove any slashes from PHP's magic quotes before you
@@ -72,7 +74,7 @@ function kses_hook($string)
 /**
  * This function returns kses' version number.
  *
- * @return string
+ * @return string KSES Version Number
  */
 function kses_version()
 {
@@ -84,32 +86,49 @@ function kses_version()
  * This function searches for HTML tags, no matter how malformed.
  * It also matches stray ">" characters.
  *
- * @param string $string
- * @param string $allowed_html
- * @param array $allowed_protocols
- * @return string
+ * @param string $string Content to filter
+ * @param array $allowed_html Allowed HTML elements
+ * @param array $allowed_protocols Allowed protocols to keep
+ * @return string Content with fixed HTML tags
  */
 function kses_split($string, $allowed_html, $allowed_protocols)
 {
-    return preg_replace('%(<'.   // EITHER: <
-                      '[^>]*'. // things that aren't >
-                      '(>|$)'. // > or end of string
-                      '|>)%e', // OR: just a >
-                      "kses_split2('\\1', \$allowed_html, ".
-                      '$allowed_protocols)',
-                      $string);
+    global $pass_allowed_html, $pass_allowed_protocols;
+    $pass_allowed_html = $allowed_html;
+    $pass_allowed_protocols = $allowed_protocols;
+    return preg_replace_callback( '%((<!--.*?(-->|$))|(<[^>]*(>|$)|>))%', '_kses_split_callback', $string );
 }
 
 /**
- * This function does a lot of work. It rejects some very malformed things
- * like <:::>. It returns an empty string, if the element isn't allowed (look
- * ma, no strip_tags()!). Otherwise it splits the tag into an element and an
- * attribute list.
+ * Callback for kses_split.
  *
- * @param string $string
- * @param string $allowed_html
- * @param array $allowed_protocols
- * @return string
+ * @access private
+ */
+function _kses_split_callback( $match )
+{
+    global $pass_allowed_html, $pass_allowed_protocols;
+    return kses_split2( $match[1], $pass_allowed_html, $pass_allowed_protocols );
+}
+
+/**
+ * Callback for kses_split for fixing malformed HTML tags.
+ *
+ * This function does a lot of work. It rejects some very malformed things like
+ * <:::>. It returns an empty string, if the element isn't allowed (look ma, no
+ * strip_tags()!). Otherwise it splits the tag into an element and an attribute
+ * list.
+ *
+ * After the tag is split into an element and an attribute list, it is run
+ * through another filter which will remove illegal attributes and once that is
+ * completed, will be returned.
+ *
+ * @access private
+ * @uses kses_attr()
+ *
+ * @param string $string Content to filter
+ * @param array $allowed_html Allowed HTML elements
+ * @param array $allowed_protocols Allowed protocols to keep
+ * @return string Fixed HTML element
  */
 function kses_split2($string, $allowed_html, $allowed_protocols)
 {
@@ -155,17 +174,18 @@ function kses_split2($string, $allowed_html, $allowed_protocols)
 
 /**
  * This function removes all attributes, if none are allowed for this element.
- * If some are allowed it calls kses_hair() to split them further, and then it
- * builds up new HTML code from the data that kses_hair() returns. It also
- * removes "<" and ">" characters, if there are any left. One more thing it
- * does is to check if the tag has a closing XHTML slash, and if it does,
- * it puts one in the returned code as well.
  *
- * @param string $element
- * @param string $attr
- * @param string $allowed_html
- * @param array $allowed_protocols
- * @return string
+ * If some are allowed it calls kses_hair() to split them further, and then
+ * it builds up new HTML code from the data that kses_hair() returns. It also
+ * removes "<" and ">" characters, if there are any left. One more thing it does
+ * is to check if the tag has a closing XHTML slash, and if it does, it puts one
+ * in the returned code as well.
+ *
+ * @param string $element HTML element/tag
+ * @param string $attr HTML attributes from HTML element to closing HTML element tag
+ * @param array $allowed_html Allowed HTML elements
+ * @param array $allowed_protocols Allowed protocols to keep
+ * @return string Sanitized HTML element
  */
 function kses_attr($element, $attr, $allowed_html, $allowed_protocols)
 {
@@ -248,9 +268,9 @@ function kses_attr($element, $attr, $allowed_html, $allowed_protocols)
  * conform to W3C's HTML specification. It will also remove bad URL protocols
  * from attribute values.
  *
- * @param string $attr
- * @param array $allowed_protocols
- * @return array
+ * @param string $attr Attribute list from HTML element to closing HTML element tag
+ * @param array $allowed_protocols Allowed protocols to keep
+ * @return array List of attributes after parsing
  */
 function kses_hair($attr, $allowed_protocols)
 {
@@ -374,15 +394,16 @@ function kses_hair($attr, $allowed_protocols)
 }
 
 /**
- * This function performs different checks for attribute values. The currently
- * implemented checks are "maxlen", "minlen", "maxval", "minval" and "valueless"
- * with even more checks to come soon.
+ * This function performs different checks for attribute values.
  *
- * @param string $value
- * @param string $vless
- * @param string $checkname
- * @param string $checkvalue
- * @return bool
+ * The currently implemented checks are "maxlen", "minlen", "maxval", "minval"
+ * and "valueless" with even more checks to come soon.
+ *
+ * @param string $value Attribute value
+ * @param string $vless Whether the value is valueless. Use 'y' or 'n'
+ * @param string $checkname What $checkvalue is checking for.
+ * @param mixed $checkvalue What constraint the value should pass
+ * @return bool Whether check passes
  */
 function kses_check_attr_val($value, $vless, $checkname, $checkvalue)
 {
@@ -452,9 +473,9 @@ function kses_check_attr_val($value, $vless, $checkname, $checkvalue)
  * understand HTML entities. It does its work in a while loop, so it won't be
  * fooled by a string like "javascript:javascript:alert(57)".
  *
- * @param string $string
- * @param array $$allowed_protocols
- * @return string
+ * @param string $string Content to filter bad protocols from
+ * @param array $allowed_protocols Allowed protocols to keep
+ * @return string Filtered content
  */
 function kses_bad_protocol($string, $allowed_protocols)
 {
@@ -493,8 +514,8 @@ function kses_no_null($string)
  * It leaves all other slashes alone. It's really weird, but the quoting from
  * preg_replace(//e) seems to require this.
  *
- * @param string $string
- * @return string
+ * @param string $string String to strip slashes
+ * @return string Fixed strings with quoted slashes
  */
 function kses_stripslashes($string)
 {
@@ -505,8 +526,8 @@ function kses_stripslashes($string)
 /**
  * This function goes through an array, and changes the keys to all lower case.
  *
- * @param array $inarray
- * @return array
+ * @param array $inarray Unfiltered array
+ * @return array Fixed array with all lowercase keys
  */
 function kses_array_lc($inarray)
 {
@@ -531,6 +552,7 @@ function kses_array_lc($inarray)
  * This function removes the HTML JavaScript entities found in early versions of Netscape 4.
  *
  * @param string $string
+ * @return string
  */
 function kses_js_entities($string)
 {
@@ -538,7 +560,8 @@ function kses_js_entities($string)
 }
 
 /**
- * This function deals with parsing errors in kses_hair().
+ * This function handles parsing errors in kses_hair().
+ *
  * The general plan is to remove everything to and including some whitespace,
  * but it deals with quotes and apostrophes as well.
  *
@@ -556,9 +579,9 @@ function kses_html_error($string)
  * This function searches for URL protocols at the beginning of $string, while
  * handling whitespace and HTML entities.
  *
- * @param string $string
- * @param string $allowed_protocols
- * @return string
+ * @param string $string Content to check for bad protocols
+ * @param string $allowed_protocols Allowed protocols
+ * @return string Sanitized content
  */
 function kses_bad_protocol_once($string, $allowed_protocols)
 {
@@ -576,9 +599,11 @@ function kses_bad_protocol_once($string, $allowed_protocols)
  * This function processes URL protocols, checks to see if they're in the
  * white-list or not, and returns different data depending on the answer.
  *
- * @param string $string
- * @param string $allowed_protocols
- * @return string
+ * @access private
+ *
+ * @param string $string URI scheme to check against the whitelist
+ * @param string $allowed_protocols Allowed protocols
+ * @return string Sanitized content
  */
 function kses_bad_protocol_once2($string, $allowed_protocols)
 {
@@ -608,8 +633,8 @@ function kses_bad_protocol_once2($string, $allowed_protocols)
  * This function normalizes HTML entities. It will convert "AT&T" to the correct
  * "AT&amp;T", "&#00058;" to "&#58;", "&#XYZZY;" to "&amp;#XYZZY;" and so on.
  *
- * @param string $string
- * @return string
+ * @param string $string Content to normalize entities
+ * @return string Content with normalized entities
  */
 function kses_normalize_entities($string)
 {

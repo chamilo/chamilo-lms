@@ -122,7 +122,7 @@ $allowed_tags_student['div'] =  array();
 $allowed_tags_student['div']['align'] =  array();
 $allowed_tags_student['div']['class'] =  array();
 $allowed_tags_student['div']['id'] =  array();
-#$allowed_tags_student['div']['style'] =  array(); //filtered out for security (see kses security report)
+$allowed_tags_student['div']['style'] =  array();
 // DL
 $allowed_tags_student['dl'] =  array();
 // DT
@@ -151,7 +151,7 @@ $allowed_tags_student['font'] =  array();
 $allowed_tags_student['font']['color'] =  array();
 $allowed_tags_student['font']['face'] =  array();
 $allowed_tags_student['font']['size'] =  array();
-//$allowed_tags_student['font']['style'] =  array(); //filtered out for security (see kses security report)
+$allowed_tags_student['font']['style'] =  array();
 // FORM
 /*
 $allowed_tags_student['form'] =  array();
@@ -359,20 +359,20 @@ $allowed_tags_student['q']['cite'] =  array();
 // S
 $allowed_tags_student['s'] =  array();
 // SPAN
-$allowed_tags_student['span'] =  array();//style
-#$allowed_tags_student['span']['style'] =  array(); //filtered out for security (see kses security report)
+$allowed_tags_student['span'] =  array();
+$allowed_tags_student['span']['style'] =  array();
 // STRIKE
 $allowed_tags_student['strike'] =  array();
 // STRONG
 $allowed_tags_student['strong'] =  array();
-// STYLE  //filtered out for security (see kses security report)
-#$allowed_tags_student['style'] =  array();
-#$allowed_tags_student['style']['type'] =  array();
-#$allowed_tags_student['style']['media'] =  array();
+// STYLE
+$allowed_tags_student['style'] =  array();
+$allowed_tags_student['style']['type'] =  array();
+$allowed_tags_student['style']['media'] =  array();
 
-#$allowed_tags_student_full_page['style'] =  array();
-#$allowed_tags_student_full_page['style']['type'] =  array();
-#$allowed_tags_student_full_page['style']['media'] =  array();
+$allowed_tags_student_full_page['style'] =  array();
+$allowed_tags_student_full_page['style']['type'] =  array();
+$allowed_tags_student_full_page['style']['media'] =  array();
 // SUB
 $allowed_tags_student['sub'] =  array();
 // SUP

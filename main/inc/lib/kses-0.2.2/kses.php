@@ -81,8 +81,8 @@ function kses_version()
 
 
 /**
- * This function searches for HTML tags, no matter how malformed. It also
- * matches stray ">" characters.
+ * This function searches for HTML tags, no matter how malformed.
+ * It also matches stray ">" characters.
  *
  * @param string $string
  * @param string $allowed_html
@@ -118,6 +118,20 @@ function kses_split2($string, $allowed_html, $allowed_protocols)
     if (substr($string, 0, 1) != '<')
         return '&gt;';
     // It matched a ">" character
+
+    if (preg_match('%^<!--(.*?)(-->)?$%', $string, $matches)) {
+        $string = str_replace(array('<!--', '-->'), '', $matches[1]);
+        while ( $string != $newstring = kses($string, $allowed_html, $allowed_protocols) )
+            $string = $newstring;
+        if ( $string == '' )
+            return '';
+        // prevent multiple dashes in comments
+        $string = preg_replace('/--+/', '-', $string);
+        // prevent three dashes closing a comment
+        $string = preg_replace('/-$/', '', $string);
+        return "<!--{$string}-->";
+    }
+    // Allow HTML comments
 
     if (!preg_match('%^<\s*(/\s*)?([a-zA-Z0-9]+)([^>]*)>?$%', $string, $matches))
         return '';
@@ -158,7 +172,7 @@ function kses_attr($element, $attr, $allowed_html, $allowed_protocols)
     // Is there a closing XHTML slash at the end of the attributes?
 
     $xhtml_slash = '';
-    if (preg_match('%\s/\s*$%', $attr))
+    if (preg_match('%\s*/\s*$%', $attr))
         $xhtml_slash = ' /';
 
     // Are any attributes allowed at all for this element?
@@ -183,6 +197,8 @@ function kses_attr($element, $attr, $allowed_html, $allowed_protocols)
 
         $current = $allowed_html[strtolower($element)]
                               [strtolower($arreach['name'])];
+        if ($current == '')
+            continue; // the attribute is not allowed
 
         if (!is_array($current))
             $attr2 .= ' '.$arreach['whole'];
@@ -210,6 +226,8 @@ function kses_attr($element, $attr, $allowed_html, $allowed_protocols)
 }
 
 /**
+ * Builds an attribute list from string containing attributes.
+ *
  * This function does a lot of work. It parses an attribute list into an array
  * with attribute data, and tries to do the right thing even if it gets weird
  * input. It will add quotes around attribute values that don't have any quotes
@@ -270,7 +288,7 @@ function kses_hair($attr, $allowed_protocols)
 
             case 2: // attribute value, a URL after href= for instance
 
-                if (preg_match('/^"([^"]*)"(\s+|$)/', $attr, $match))
+                if (preg_match('%^"([^"]*)"(\s+|/?$)%', $attr, $match))
                     // "value"
                 {
                     // MDL-2684 - kses stripping CSS styles that it thinks look like protocols
@@ -290,7 +308,7 @@ function kses_hair($attr, $allowed_protocols)
                     break;
                 }
 
-                if (preg_match("/^'([^']*)'(\s+|$)/", $attr, $match))
+                if (preg_match("%^'([^']*)'(\s+|/?$)%", $attr, $match))
                     // 'value'
                 {
                     $thisval = kses_bad_protocol($match[1], $allowed_protocols);
@@ -305,7 +323,7 @@ function kses_hair($attr, $allowed_protocols)
                     break;
                 }
 
-                if (preg_match("%^([^\s\"']+)(\s+|$)%", $attr, $match))
+                if (preg_match("%^([^\s\"']+)(\s+|/?$)%", $attr, $match))
                     // value
                 {
                     $thisval = kses_bad_protocol($match[1], $allowed_protocols);
@@ -414,6 +432,8 @@ function kses_check_attr_val($value, $vless, $checkname, $checkvalue)
 }
 
 /**
+ * Sanitize string from bad protocols.
+ *
  * This function removes all non-allowed protocols from the beginning of
  * $string. It ignores whitespace and the case of the letters, and it does
  * understand HTML entities. It does its work in a while loop, so it won't be
@@ -454,6 +474,8 @@ function kses_no_null($string)
 
 
 /**
+ * Strips slashes from in front of quotes.
+ *
  * This function changes the character sequence  \"  to just  "
  * It leaves all other slashes alone. It's really weird, but the quoting from
  * preg_replace(//e) seems to require this.
@@ -477,12 +499,12 @@ function kses_array_lc($inarray)
 {
     $outarray = array();
 
-    foreach ($inarray as $inkey => $inval)
+    foreach ( (array) $inarray as $inkey => $inval)
     {
         $outkey = strtolower($inkey);
         $outarray[$outkey] = array();
 
-        foreach ($inval as $inkey2 => $inval2)
+        foreach ( (array) $inval as $inkey2 => $inval2)
         {
             $outkey2 = strtolower($inkey2);
             $outarray[$outkey][$outkey2] = $inval2;
@@ -493,8 +515,7 @@ function kses_array_lc($inarray)
 }
 
 /**
- * This function removes the HTML JavaScript entities found in early versions of
- * Netscape 4.
+ * This function removes the HTML JavaScript entities found in early versions of Netscape 4.
  *
  * @param string $string
  */
@@ -504,9 +525,9 @@ function kses_js_entities($string)
 }
 
 /**
- * This function deals with parsing errors in kses_hair(). The general plan is
- * to remove everything to and including some whitespace, but it deals with
- * quotes and apostrophes as well.
+ * This function deals with parsing errors in kses_hair().
+ * The general plan is to remove everything to and including some whitespace,
+ * but it deals with quotes and apostrophes as well.
  *
  * @param string $string
  * @return string
@@ -517,6 +538,8 @@ function kses_html_error($string)
 }
 
 /**
+ * Sanitizes content from bad protocols and other characters.
+ *
  * This function searches for URL protocols at the beginning of $string, while
  * handling whitespace and HTML entities.
  *
@@ -526,7 +549,7 @@ function kses_html_error($string)
  */
 function kses_bad_protocol_once($string, $allowed_protocols)
 {
-    $string2 = preg_split('/:|&#58;|&#x3a;/i', $string, 2);
+    $string2 = preg_split('/:|&#0*58;|&#x0*3a;/i', $string, 2);
     if(isset($string2[1]) && !preg_match('%/\?%',$string2[0]))
     {
         $string = kses_bad_protocol_once2($string2[0],$allowed_protocols).trim($string2[1]);
@@ -535,8 +558,10 @@ function kses_bad_protocol_once($string, $allowed_protocols)
 }
 
 /**
- * This function processes URL protocols, checks to see if they're in the white-
- * list or not, and returns different data depending on the answer.
+ * Callback for kses_bad_protocol_once() regular expression.
+ *
+ * This function processes URL protocols, checks to see if they're in the
+ * white-list or not, and returns different data depending on the answer.
  *
  * @param string $string
  * @param string $allowed_protocols
@@ -551,7 +576,7 @@ function kses_bad_protocol_once2($string, $allowed_protocols)
     $string2 = strtolower($string2);
 
     $allowed = false;
-    foreach ($allowed_protocols as $one_protocol)
+    foreach ( (array) $allowed_protocols as $one_protocol)
         if (strtolower($one_protocol) == $string2)
         {
             $allowed = true;
@@ -565,6 +590,8 @@ function kses_bad_protocol_once2($string, $allowed_protocols)
 }
 
 /**
+ * Converts and fixes HTML entities.
+ *
  * This function normalizes HTML entities. It will convert "AT&T" to the correct
  * "AT&amp;T", "&#00058;" to "&#58;", "&#XYZZY;" to "&amp;#XYZZY;" and so on.
  *

@@ -71,8 +71,8 @@ class HTMLPurifier
 
     protected $strategy, $generator;
 
-	/**allow set user status*/
-	 public $my_user_status;
+    /**allow set user status*/
+     public $my_user_status;
 
     /**
      * Resultant HTMLPurifier_Context of last run purification. Is an array
@@ -88,43 +88,43 @@ class HTMLPurifier
      *                The parameter can also be any type that
      *                HTMLPurifier_Config::create() supports.
      */
-    public function __construct($config = null,$user_status) {
+    public function __construct($config = null, $user_status) {
 /*
         $this->config = HTMLPurifier_Config::create($config);
 
-        $this->strategy     = new HTMLPurifier_Strategy_Core();
+        $this->strategy = new HTMLPurifier_Strategy_Core();
 */
-    	global $charset;
-		if ($user_status==COURSEMANAGERLOWSECURITY) {
-			//non initialize object htmlpurifier
-			$this->my_user_status=COURSEMANAGERLOWSECURITY;
-		} else {
-			$config = HTMLPurifier_Config::createDefault();
-			$config->set('Core.Encoding',$charset);
-			$config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
-	
-			if ($user_status==STUDENT) {
-				global $tag_student,$attribute_student;//$tag_student
-		   		$config->set('HTML.SafeEmbed',true);
-		   		$config->set('HTML.SafeObject',true);
-				$config->set('Filter.YouTube', true);
-		   		$config->set('HTML.AllowedElements',$tag_student);
-				$config->set('HTML.AllowedAttributes',$attribute_student);
-			} elseif ($user_status==COURSEMANAGER) {
-				//activate in configuration setting
-				global $tag_teacher,$attribute_teacher;
-		   		$config->set('HTML.SafeEmbed',true);
-				$config->set('Filter.YouTube', true);
-		   		$config->set('HTML.AllowedElements',$tag_teacher);
-				$config->set('HTML.AllowedAttributes', $attribute_teacher);
-			} else {
-				global $tag_anonymous,$attribute_anonymous;
-		   		$config->set('HTML.AllowedElements', $tag_anonymous);
-				$config->set('HTML.AllowedAttributes',$attribute_anonymous);
-			}
-			$config->set('HTML.TidyLevel', 'light');
-        	$this->config = HTMLPurifier_Config::create($config);
-        	$this->strategy     = new HTMLPurifier_Strategy_Core();
+        global $charset;
+        if ($user_status == COURSEMANAGERLOWSECURITY) {
+            //non initialize object htmlpurifier
+            $this->my_user_status = COURSEMANAGERLOWSECURITY;
+        } else {
+            $config = HTMLPurifier_Config::createDefault();
+            $config->set('Core.Encoding', $charset);
+            $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
+
+            if ($user_status == STUDENT) {
+                global $tag_student, $attribute_student;
+                $config->set('HTML.SafeEmbed', true);
+                $config->set('HTML.SafeObject', true);
+                $config->set('Filter.YouTube', true);
+                $config->set('HTML.AllowedElements', $tag_student);
+                $config->set('HTML.AllowedAttributes', $attribute_student);
+            } elseif ($user_status == COURSEMANAGER) {
+                //activate in configuration setting
+                global $tag_teacher, $attribute_teacher;
+                $config->set('HTML.SafeEmbed', true);
+                $config->set('Filter.YouTube', true);
+                $config->set('HTML.AllowedElements', $tag_teacher);
+                $config->set('HTML.AllowedAttributes', $attribute_teacher);
+            } else {
+                global $tag_anonymous,$attribute_anonymous;
+                $config->set('HTML.AllowedElements', $tag_anonymous);
+                $config->set('HTML.AllowedAttributes', $attribute_anonymous);
+            }
+            $config->set('HTML.TidyLevel', 'light');
+            $this->config = HTMLPurifier_Config::create($config);
+            $this->strategy = new HTMLPurifier_Strategy_Core();
         }
 
     }
@@ -149,10 +149,10 @@ class HTMLPurifier
      * @return Purified HTML
      */
     public function purify($html, $config = null) {
-	
-	if ($this->my_user_status==COURSEMANAGERLOWSECURITY) {
-			return $html;
-		} else {
+
+    if ($this->my_user_status==COURSEMANAGERLOWSECURITY) {
+            return $html;
+        } else {
 
         // :TODO: make the config merge in, instead of replace
         $config = $config ? HTMLPurifier_Config::create($config) : $this->config;
@@ -228,7 +228,7 @@ class HTMLPurifier
         $html = HTMLPurifier_Encoder::convertFromUTF8($html, $config, $context);
         $this->context =& $context;
         return $html;
-	}
+    }
     }
 
     /**
@@ -238,17 +238,17 @@ class HTMLPurifier
      * @return Array of purified HTML
      */
     public function purifyArray($array_of_html, $config = null) {
- 		if ($this->my_user_status==COURSEMANAGERLOWSECURITY) {
-			return $array_of_html;
-		} else {
-	        $context_array = array();
-	        foreach ($array_of_html as $key => $html) {
-	            $array_of_html[$key] = $this->purify($html, $config);
-	            $context_array[$key] = $this->context;
-	        }
-	        $this->context = $context_array;
-	        return $array_of_html;
- 		}
+         if ($this->my_user_status==COURSEMANAGERLOWSECURITY) {
+            return $array_of_html;
+        } else {
+            $context_array = array();
+            foreach ($array_of_html as $key => $html) {
+                $array_of_html[$key] = $this->purify($html, $config);
+                $context_array[$key] = $this->context;
+            }
+            $this->context = $context_array;
+            return $array_of_html;
+         }
     }
 
     /**

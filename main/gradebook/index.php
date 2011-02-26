@@ -821,11 +821,11 @@ if ($category != '0') {
 			$visibility_icon= ($cats[0]->is_visible() == 0) ? 'invisible' : 'visible';
 			$visibility_command= ($cats[0]->is_visible() == 0) ? 'set_visible' : 'set_invisible';
 			echo '<div class="actions" align="right">';
-			$modify_icons= '<a  href="gradebook_edit_cat.php?editcat=' . $cats[0]->get_id() . ' &amp;cidReq='.$cats[0]->get_course_code().'"><img src="../img/edit.gif" border="0" title="' . get_lang('EditCategory') . '" alt="'.get_lang('EditCategory').'" />'.get_lang('EditCategory').'</a>';
-			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $cats[0]->get_id() . '&amp;selectcat=0&amp;cidReq='.$cats[0]->get_course_code().'" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('DeleteAll') . '" alt="'.get_lang('DeleteAll').'" />'.get_lang('DeleteAll').'</a>';
-			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $cats[0]->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 "><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="'.get_lang('Visible').'" />'.get_lang('Visible').'</a>';
-			$opt_cat_descrip1 = strip_tags($opt_cat_descrip);
-			echo '<div  align="left" style="float:left"><img  src="../img/info3.gif" border="0" title="' . $opt_cat_descrip1 . '" alt="'.$opt_cat_descrip1.'" /> '.$op_cat_weight.' '.'&nbsp;&nbsp;'.$opt_cat_cert_min.'&nbsp;&nbsp;'.$opt_cat_descrip.'</div>';
+			$modify_icons= '<a  href="gradebook_edit_cat.php?editcat=' . $cats[0]->get_id() . ' &amp;cidReq='.$cats[0]->get_course_code().'">'.Display::return_icon('edit.png', get_lang('EditCategory'),'','22').'</a>';
+			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $cats[0]->get_id() . '&amp;selectcat=0&amp;cidReq='.$cats[0]->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'','22').'</a>';
+			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $cats[0]->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'','22').'</a>';
+					$opt_cat_descrip1 = strip_tags($opt_cat_descrip);
+			echo '<div  align="left" style="float:left">'.Display::return_icon('info.png', $opt_cat_descrip1,'','22').'</a>'.$op_cat_weight.' '.'&nbsp;&nbsp;'.$opt_cat_cert_min.'&nbsp;&nbsp;'.$opt_cat_descrip.'</div>';
 			echo $modify_icons;
 			echo '</div>';
 		} else	{

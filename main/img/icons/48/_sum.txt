@@ -259,6 +259,13 @@ bug				crystal
 bug_na				modif crystal
 test_results			crystal
 duplicate_test			modif nuvola
+save				nuvola
+save_folder_zip			modif nuvola
+open_in_new_window		nuvola
+briefcase			modif tango
+new_dropbox_message		tango
+unsubscribe_course		modif nuvola
+unsubscribe_course_na		modif nuvola
 			
 --julio
 star				

@@ -35,11 +35,11 @@ if ($action == 'thematic_plan_list') {
 			echo '<div class="sectiontitle" >';			
 				//delete
 				echo '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&thematic_id='.$thematic_plan['thematic_id'].'&action=thematic_plan_delete&description_type='.$thematic_plan['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
-				echo Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'));
+				echo Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'),22);
 				echo '</a> ';								
 				//edit
 				echo '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&thematic_id='.$thematic_plan['thematic_id'].'&action=thematic_plan_edit&description_type='.$thematic_plan['description_type'].'">';
-				echo Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'));
+				echo Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),22);
 				echo '</a> ';
 				echo Security::remove_XSS($thematic_plan['title'], STUDENT);	
 			echo '</div>';

@@ -85,7 +85,7 @@ echo '<a href="group.php">'.Display::return_icon('back.png',get_lang('BackToGrou
  */
 if (api_is_allowed_to_edit(false, true) or GroupManager :: is_tutor($_user['user_id'])) {
 	$my_origin = isset($origin) ? $origin : '';
-	echo '<a href="group_edit.php?origin=$my_origin">'.Display::return_icon('edit.png', get_lang('EditGroup'),'','32').'</a>';
+	echo '<a href="group_edit.php?origin=$my_origin">'.Display::return_icon('settings.png', get_lang('EditGroup'),'','32').'</a>';
 }
 
 /*

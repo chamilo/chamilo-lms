@@ -935,7 +935,7 @@ if ($display_form) {
 	if (empty($_SESSION['toolgroup'])) {
 		echo '	<div class="row">
 					<div class="label">'.
-						Display::return_icon('group.gif', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle')).'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('SentTo').'</a>
+						Display::return_icon('group.png', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle'),22).'<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.get_lang('SentTo').'</a>
 					</div>
 					<div class="formw">';
 		if (isset($_GET['id']) && is_array($to)) {
@@ -1370,12 +1370,12 @@ if ($display_announcement_list && !$surveyid) {
 
 				/* SHOW MOD/DEL/VIS FUNCTIONS */
 				echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">",
-						Display::return_icon('edit.gif', get_lang('Edit')),
+						Display::return_icon('edit.png', get_lang('Edit'),'',22),
 						"</a>";
 
 				if (api_is_allowed_to_edit(false,true)) {
 					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">",
-						Display::return_icon('delete.gif', get_lang('Delete')),
+						Display::return_icon('delete.png', get_lang('Delete'),'',22),
 						"</a>";
 				}
 
@@ -1388,7 +1388,7 @@ if ($display_announcement_list && !$surveyid) {
 				}
 
 				echo 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?Security::remove_XSS($_GET['origin']):'')."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
-						Display::return_icon($image_visibility.'.gif', $alt_visibility)."</a>";
+						Display::return_icon($image_visibility.'.png', $alt_visibility,'',22)."</a>";
 
 				// DISPLAY MOVE UP COMMAND only if it is not the top announcement
 				if ($iterator != 1) {
@@ -1423,7 +1423,7 @@ if ($display_announcement_list && !$surveyid) {
 					echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
 
 					if (api_is_allowed_to_edit()) {
-						echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
+						echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a><br />';
 					}
 				}
 

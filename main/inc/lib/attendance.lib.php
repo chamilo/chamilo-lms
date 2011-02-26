@@ -115,8 +115,8 @@ class Attendance
 			$attendance[3] = '<center>'.$attendance[3].'</center>';
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';
-				$actions .= '<center><a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>&nbsp;';
-				$actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a></center>';
+				$actions .= '<center><a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
+				$actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a></center>';
 				$attendances[] = array($attendance[0], $attendance[1], $attendance[2], $attendance[3],$actions);
 			} else {
 				$attendance[0] = '&nbsp;';

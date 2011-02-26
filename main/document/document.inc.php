@@ -113,7 +113,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
         // Build download link (icon)
         $forcedownload_link = ($filetype == 'folder') ? api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&amp;path='.$url_path.$req_gid : api_get_self().'?'.api_get_cidreq().'&amp;action=download&amp;id='.$url_path.$req_gid;
         // Folder download or file download?
-        $forcedownload_icon = ($filetype == 'folder') ? 'folder_zip.gif' : 'filesave.gif';
+        $forcedownload_icon = ($filetype == 'folder') ? 'save_pack.png' : 'save.png';
         // Prevent multiple clicks on zipped folder download
         $prevent_multiple_click = ($filetype == 'folder') ? " onclick=\"javascript: if(typeof clic_$dbl_click_id == 'undefined' || !clic_$dbl_click_id) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"":'';
     }
@@ -184,16 +184,16 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
                 {
                     if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link))|| preg_match('/shared_folder_session_'.$current_session_id.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) || api_is_allowed_to_edit() || api_is_platform_admin())
                     {
-                        $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array('height'=>'16', 'width' => '16')).'</a>';
+                        $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array(),22).'</a>';
                     }
                 }
                 elseif(!preg_match('/shared_folder/', urldecode($forcedownload_link)) || api_is_allowed_to_edit() || api_is_platform_admin())
                 {
-                    $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array('height'=>'16', 'width' => '16')).'</a>';
+                    $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array(),22).'</a>';
                 }
             }
         } else {
-            $force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array('height'=>'16', 'width' => '16')).'</a>';
+            $force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array(),22).'</a>';
         }
 
         //copy files to users myfiles
@@ -202,12 +202,12 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 
             if($filetype == 'file')
             {
-                $copy_to_myfiles='<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase_small.png', get_lang('CopyToMyFiles'), array('height'=>'16', 'width' => '16')).'&nbsp;&nbsp;</a>';
+                $copy_to_myfiles='<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(),22).'&nbsp;&nbsp;</a>';
             }
         }
 
         if ($is_browser_viewable_file) {
-            $open_in_new_window_link = '<a href="'.$www.str_replace('%2F', '/',$url_path).'?'.api_get_cidreq().'" style="float:right"'.$prevent_multiple_click.' target="_blank">'.Display::return_icon('open_in_new_window_small.png', get_lang('OpenInANewWindow'), array('height'=>'16', 'width' => '16')).'&nbsp;&nbsp;</a>';
+            $open_in_new_window_link = '<a href="'.$www.str_replace('%2F', '/',$url_path).'?'.api_get_cidreq().'" style="float:right"'.$prevent_multiple_click.' target="_blank">'.Display::return_icon('open_in_new_window.png', get_lang('OpenInANewWindow'), array(),22).'&nbsp;&nbsp;</a>';
         }
 
         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link;
@@ -406,7 +406,8 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
 
         if ($is_certificate_mode) {
             $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
-            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'&selectcat='.$gradebook_category.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
+            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'&selectcat='.$gradebook_category.'">'.
+			Display::return_icon($visibility_icon.'.png', get_lang('Move'),array(), 22).'</a>';			
         } else {
             $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$req_gid.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
             if(api_is_allowed_to_edit() || api_is_platform_admin()){

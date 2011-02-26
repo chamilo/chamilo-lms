@@ -89,19 +89,19 @@ class Thematic
 
 				if ($thematic[2] > 1) {
 
-					$actions .= '<a href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
+					$actions .= '<a href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('up.png', get_lang('Up'),'',22).'</a>';
 				} else {
-					$actions .= Display::return_icon('up_na.gif','&nbsp;');
+					$actions .= Display::return_icon('up_na.png','&nbsp;','',22);
 
 				}
 				if ($thematic[2] < self::get_max_thematic_item()) {
-					$actions .= '<a href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('down.gif',get_lang('Down')).'</a>';
+					$actions .= '<a href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('down.png',get_lang('Down'),'',22).'</a>';
 				} else {
-					$actions .= Display::return_icon('down_na.gif','&nbsp;');
+					$actions .= Display::return_icon('down_na.png','&nbsp;','',22);
 				}
 
-				$actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>&nbsp;';
-				$actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a></center>';
+				$actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
+				$actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a></center>';
 				$thematics[] = array($thematic[0], $thematic[1], $actions);
 			}
 		}
@@ -354,8 +354,8 @@ class Thematic
 			$thematic_advance[1] = api_format_date($thematic_advance[1], DATE_TIME_FORMAT_LONG);
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';
-				$actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>&nbsp;';
-				$actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a></center>';
+				$actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
+				$actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a></center>';
 				$data[] = array($i, $thematic_advance[1], $thematic_advance[2], $thematic_advance[3], $actions);
 			}
 			$i++;

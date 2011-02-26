@@ -285,7 +285,7 @@ class GlossaryManager {
 			$table->set_header(3, get_lang('CreationDate'), false);
 			$table->set_header(4, get_lang('UpdateDate'), false);
 			if (api_is_allowed_to_edit(null,true)) {
-				$table->set_header(5, get_lang('Actions'), false, 'width=80px');
+				$table->set_header(5, get_lang('Actions'), false, 'width=90px');
 				$table->set_column_filter(5, array('GlossaryManager','actions_filter'));
 			}
 			$table->display();
@@ -430,29 +430,29 @@ class GlossaryManager {
 		if (empty($_GET['glossary_column'])) {
 			if ($row[0] > 1) {
 
-				$return .= '<a href="'.api_get_self().'?action=moveup&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
+				$return .= '<a href="'.api_get_self().'?action=moveup&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'">'.Display::return_icon('up.png', get_lang('Up'),'',22).'</a>';
 			}
 			else
 			{
-				$return .= Display::return_icon('up_na.gif','&nbsp;');
+				$return .= Display::return_icon('up_na.png','&nbsp;','',22);
 
 			}
 			if ($row[0] < $_SESSION['max_glossary_display'])
 			{
-				$return .= '<a href="'.api_get_self().'?action=movedown&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'">'.Display::return_icon('down.gif',get_lang('Down')).'</a>';
+				$return .= '<a href="'.api_get_self().'?action=movedown&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'">'.Display::return_icon('down.png',get_lang('Down'),'',22).'</a>';
 			}
 			else
 			{
-				$return .= Display::return_icon('down_na.gif','&nbsp;');
+				$return .= Display::return_icon('down_na.png','&nbsp;','',22);
 
 			}
 		}
-		$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'&msg=edit">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
+		$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'&msg=edit">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
 
 		$glossary_data = GlossaryManager::get_glossary_information($row[5]);
 		$glossary_term = $glossary_data['glossary_title'];
 
-		$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+		$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
 		return $return;
 	}
 

@@ -89,18 +89,18 @@ class HTMLPurifier
      *                HTMLPurifier_Config::create() supports.
      */
     public function __construct($config = null, $user_status) {
-/*
+        /*
         $this->config = HTMLPurifier_Config::create($config);
 
         $this->strategy = new HTMLPurifier_Strategy_Core();
-*/
-        global $charset;
+        */
+
         if ($user_status == COURSEMANAGERLOWSECURITY) {
             //non initialize object htmlpurifier
             $this->my_user_status = COURSEMANAGERLOWSECURITY;
         } else {
             $config = HTMLPurifier_Config::createDefault();
-            $config->set('Core.Encoding', $charset);
+            $config->set('Core.Encoding', api_get_system_encoding());
             $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
 
             if ($user_status == STUDENT) {
@@ -150,7 +150,7 @@ class HTMLPurifier
      */
     public function purify($html, $config = null) {
 
-    if ($this->my_user_status==COURSEMANAGERLOWSECURITY) {
+    if ($this->my_user_status == COURSEMANAGERLOWSECURITY) {
             return $html;
         } else {
 
@@ -238,7 +238,7 @@ class HTMLPurifier
      * @return Array of purified HTML
      */
     public function purifyArray($array_of_html, $config = null) {
-         if ($this->my_user_status==COURSEMANAGERLOWSECURITY) {
+         if ($this->my_user_status == COURSEMANAGERLOWSECURITY) {
             return $array_of_html;
         } else {
             $context_array = array();

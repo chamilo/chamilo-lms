@@ -267,6 +267,8 @@ function kses_attr($element, $attr, $allowed_html, $allowed_protocols)
  * or apostrophes around them, to make it easier to produce HTML code that will
  * conform to W3C's HTML specification. It will also remove bad URL protocols
  * from attribute values.
+ * It also reduces duplicate attributes by using the
+ * attribute defined first (foo='bar' foo='baz' will result in foo='bar').
  *
  * @param string $attr Attribute list from HTML element to closing HTML element tag
  * @param array $allowed_protocols Allowed protocols to keep
@@ -277,6 +279,7 @@ function kses_hair($attr, $allowed_protocols)
     $attrarr = array();
     $mode = 0;
     $attrname = '';
+    $uris = array('xmlns', 'profile', 'href', 'src', 'cite', 'classid', 'codebase', 'data', 'usemap', 'longdesc', 'action');
 
     // Loop through the whole attribute list
 
@@ -309,11 +312,9 @@ function kses_hair($attr, $allowed_protocols)
                 if (preg_match('/^\s+/', $attr)) // valueless
                 {
                     $working = 1; $mode = 0;
-                    $attrarr[] = array
-                        ('name'  => $attrname,
-                         'value' => '',
-                         'whole' => $attrname,
-                         'vless' => 'y');
+                    if(FALSE === array_key_exists($attrname, $attrarr)) {
+                        $attrarr[$attrname] = array ('name' => $attrname, 'value' => '', 'whole' => $attrname, 'vless' => 'y');
+                    }
                     $attr = preg_replace('/^\s+/', '', $attr);
                 }
 
@@ -328,14 +329,14 @@ function kses_hair($attr, $allowed_protocols)
                     if ($attrname == 'style') {
                         $thisval = $match[1];
                     } else {
-                        $thisval = kses_bad_protocol($match[1], $allowed_protocols);
+                        $thisval = $match[1];
+                        if ( in_array(strtolower($attrname), $uris) )
+                            $thisval = kses_bad_protocol($thisval, $allowed_protocols);
                     }
 
-                    $attrarr[] = array
-                        ('name'  => $attrname,
-                         'value' => $thisval,
-                         'whole' => "$attrname=\"$thisval\"",
-                         'vless' => 'n');
+                    if(FALSE === array_key_exists($attrname, $attrarr)) {
+                        $attrarr[$attrname] = array ('name' => $attrname, 'value' => $thisval, 'whole' => "$attrname=\"$thisval\"", 'vless' => 'n');
+                    }
                     $working = 1; $mode = 0;
                     $attr = preg_replace('/^"[^"]*"(\s+|$)/', '', $attr);
                     break;
@@ -344,13 +345,13 @@ function kses_hair($attr, $allowed_protocols)
                 if (preg_match("%^'([^']*)'(\s+|/?$)%", $attr, $match))
                     // 'value'
                 {
-                    $thisval = kses_bad_protocol($match[1], $allowed_protocols);
+                    $thisval = $match[1];
+                    if ( in_array(strtolower($attrname), $uris) )
+                        $thisval = kses_bad_protocol($thisval, $allowed_protocols);
 
-                    $attrarr[] = array
-                        ('name'  => $attrname,
-                         'value' => $thisval,
-                         'whole' => "$attrname='$thisval'",
-                         'vless' => 'n');
+                    if(FALSE === array_key_exists($attrname, $attrarr)) {
+                        $attrarr[$attrname] = array ('name' => $attrname, 'value' => $thisval, 'whole' => "$attrname='$thisval'", 'vless' => 'n');
+                    }
                     $working = 1; $mode = 0;
                     $attr = preg_replace("/^'[^']*'(\s+|$)/", '', $attr);
                     break;
@@ -359,13 +360,13 @@ function kses_hair($attr, $allowed_protocols)
                 if (preg_match("%^([^\s\"']+)(\s+|/?$)%", $attr, $match))
                     // value
                 {
-                    $thisval = kses_bad_protocol($match[1], $allowed_protocols);
+                    $thisval = $match[1];
+                    if ( in_array(strtolower($attrname), $uris) )
+                        $thisval = kses_bad_protocol($thisval, $allowed_protocols);
 
-                    $attrarr[] = array
-                        ('name'  => $attrname,
-                         'value' => $thisval,
-                         'whole' => "$attrname=\"$thisval\"",
-                         'vless' => 'n');
+                    if(FALSE === array_key_exists($attrname, $attrarr)) {
+                        $attrarr[$attrname] = array ('name' => $attrname, 'value' => $thisval, 'whole' => "$attrname=\"$thisval\"", 'vless' => 'n');
+                    }
                     // We add quotes to conform to W3C's HTML spec.
                     $working = 1; $mode = 0;
                     $attr = preg_replace("%^[^\s\"']+(\s+|$)%", '', $attr);
@@ -381,14 +382,10 @@ function kses_hair($attr, $allowed_protocols)
         }
     } // while
 
-    if ($mode == 1)
+    if ($mode == 1 && FALSE === array_key_exists($attrname, $attrarr))
         // special case, for when the attribute list ends with a valueless
         // attribute like "selected"
-        $attrarr[] = array
-                  ('name'  => $attrname,
-                   'value' => '',
-                   'whole' => $attrname,
-                   'vless' => 'y');
+        $attrarr[$attrname] = array ('name' => $attrname, 'value' => '', 'whole' => $attrname, 'vless' => 'y');
 
     return $attrarr;
 }

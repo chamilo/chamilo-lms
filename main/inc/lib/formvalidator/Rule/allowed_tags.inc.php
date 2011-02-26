@@ -519,27 +519,27 @@ $allowed_tags_teachers['span'] =  array();
 $allowed_tags_teachers['span']['style'] =  array();
 
 foreach ($allowed_tags_student as $student_index =>$student_value) {
-	if (count($allowed_tags_student[$student_index])==0) {
-		$tag_student[]=$student_index;
-	} else {
-		$tag_student[]=$student_index;
-		foreach ($allowed_tags_student[$student_index] as $my_student_attribute_index => $my_student_value_index) {
-			$attribute_student[]=$student_index.'.'.$my_student_attribute_index;
-		}
-	}
+    if (count($allowed_tags_student[$student_index])==0) {
+        $tag_student[]=$student_index;
+    } else {
+        $tag_student[]=$student_index;
+        foreach ($allowed_tags_student[$student_index] as $my_student_attribute_index => $my_student_value_index) {
+            $attribute_student[]=$student_index.'.'.$my_student_attribute_index;
+        }
+    }
 }
 
 $tag_teacher=$tag_student;
 $attribute_teacher=$attribute_student;
 foreach ($allowed_tags_teachers as $teacher_index =>$teacher_value) {
-	if (count($allowed_tags_teachers[$teacher_index])==0) {
-		$tag_teacher[]=$teacher_index;
-	} else {
-		$tag_teacher[]=$teacher_index;
-		foreach ($allowed_tags_teachers[$teacher_index] as $my_teacher_attribute_index => $my_teacher_value_index) {
-			$attribute_teacher[]=$teacher_index.'.'.$my_teacher_attribute_index;
-		}
-	}
+    if (count($allowed_tags_teachers[$teacher_index])==0) {
+        $tag_teacher[]=$teacher_index;
+    } else {
+        $tag_teacher[]=$teacher_index;
+        foreach ($allowed_tags_teachers[$teacher_index] as $my_teacher_attribute_index => $my_teacher_value_index) {
+            $attribute_teacher[]=$teacher_index.'.'.$my_teacher_attribute_index;
+        }
+    }
 }
 
 $allowed_tags_teacher_full_page = $allowed_tags_student_full_page;

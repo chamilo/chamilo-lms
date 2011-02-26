@@ -469,12 +469,12 @@ function kses_bad_protocol_once($string, $allowed_protocols)
 # handling whitespace and HTML entities.
 ###############################################################################
 {
-    $string2 = preg_split('/:|&#58;|&#x3a;/i', $string, 2);
-    if(isset($string2[1]) && !preg_match('%/\?%',$string2[0]))
-    {
-        $string = kses_bad_protocol_once2($string2[0],$allowed_protocols).trim($string2[1]);
-    }
-    return $string;
+	$string2 = preg_split('/:|&#58;|&#x3a;/i', $string, 2);
+	if(isset($string2[1]) && !preg_match('%/\?%',$string2[0]))
+	{
+		$string = kses_bad_protocol_once2($string2[0],$allowed_protocols).trim($string2[1]);
+	}
+	return $string;
 } # function kses_bad_protocol_once
 
 

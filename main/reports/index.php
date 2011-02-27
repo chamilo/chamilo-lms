@@ -28,7 +28,7 @@ $this_section = SECTION_REPORTS;
 $tool_name=get_lang('Reports');
 
 // Displaying the header
-foreach (array('jquery-1.4.2.min.js','jquery-ui-1.8.5.custom.min.js', 'jquery.ba-bbq.min.js', 'jquery.validate.js', 'jquery.form.js', 'jquery.form.wizard.js') as $js)
+foreach (array('jquery.js','jquery-ui-1.8.5.custom.min.js', 'jquery.ba-bbq.min.js', 'jquery.validate.js', 'jquery.form.js', 'jquery.form.wizard.js') as $js)
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$js.'" type="text/javascript" language="javascript"></script>'."\n";
 
 
@@ -107,6 +107,7 @@ Display::display_header($tool_name);
 ?>
 		<div id="reportsBuilderWizard">
 			<h3>Reports Builder</h3>
+			<div id='wizardContent'>
 			<p>Please fill the following from to build your report.
 			<hr />
 			<h5 id="status"></h5>
@@ -155,6 +156,7 @@ Display::display_header($tool_name);
 					<select name="format" id="format">
 						<option value="html">html</option>
 						<option value="csv">csv</option>
+						<option value="sql">sql</option>
 					</select><br />
 				</span>
 				</div>
@@ -164,22 +166,36 @@ Display::display_header($tool_name);
 				</div>
 			</form>
 			<hr />
-			
+			</div>
+			<div id="wizardShowButton">
+				Show Wizard
+			</div>		
 			<p id="data"></p>
 
 		</div>
 
+
+		<div id="result">
+		</div>
     <script type="text/javascript">
 			$(function(){
+				$("#wizardShowButton").hide();
+				$("#wizardShowButton").click(function() {
+					$("#wizardContent").show();
+					$("#wizardShowButton").hide();
+				});
 				$("#reportsBuilderWizardForm").formwizard({ 
 				 	formPluginEnabled: true,
 				 	validationEnabled: true,
 				 	focusFirstInput : true,
 				 	formOptions :{
-						success: function(data){$("#status").fadeTo(500,1,function(){ $(this).html("You are now registered!").fadeTo(5000, 0); })},
+						success: function(data){
+		                                        $("#wizardContent").hide();
+                		                        $("#wizardShowButton").show();
+							$("#result").html(data); 
+						},
 						beforeSubmit: function(data){$("#data").html("data sent to the server: " + $.param(data));},
-						dataType: 'json',
-						resetForm: true
+						resetForm: false
 				 	}	
 				 }
 				);

@@ -1,0 +1,59 @@
+<?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$Announcement = "Duyurular";
+$langAnnEmpty = "Duyuru listesi temizlendi";
+$AnnouncementModified = "Duyuru değiştirildi";
+$AnnouncementAdded = "Duyuru eklendi";
+$AnnouncementDeleted = "Duyuru silindi";
+$AnnouncementPublishedOn = "Yayınlanma tarihi";
+$AddAnnouncement = "Duyuru olarak ekle";
+$langContent = "İçerik";
+$AnnouncementDeleteAll = "Duyurular listesini temizle";
+$professorMessage = "Dersin hocasından mesaj";
+$langEmailSent = " kayıtlı öğrencilere epostalandı";
+$EmailOption = "Bu duyuruyu kayıtlı öğrencilere epostayla gönder";
+$langOn = "tarih";
+$langRegUser = "sitenin kayıtlı kullanıcıları";
+$langUnvalid = "eposta adresi yok veya geçersiz";
+$langModifAnn = "Bu duyuruyu değiştir";
+$langModify = "düzenle";
+$langDelete = "sil";
+$langTitle = "Başlık";
+$langHelp = "yardım";
+$langOk = "Tamam";
+$langAddIntro = "Giriş metni ekle";
+$langBackList = "Listeye dön";
+$langSelMess = "Bazı kullanıcılara uyarılar";
+$EmailTitle = "Epostanın konusu";
+$langUserlist = "Gurup ve kullanıcı listesi";
+$langSelectedUsers = "Seçilen kullanıcılar";
+$langSubmit = "Onayla";
+$langPleaseEnterMessage = "Mesaj metni yazmalısınız.";
+$langPleaseSelectUsers = "Lütfen kullanıcı seçin";
+$Teachersubject = "Öğrencilerine mesaj yolla";
+$langMessages = "Mesajlar";
+$langMessageToSelectedUsers = "Seçilen kullanıcılara mesaj";
+$langIntroText = "Mesaj göndermek için, önünde G harfi bulunan kullanıcı guruplarını veya soldaki listeden kullanıcıları seçin lütfen.";
+$langDown = "aşağı";
+$langMsgSent = "Mesajınız seçilen kullanıcılara gönderildi.";
+$langSelUser = "seçilen kullanıcı";
+$langMessageToSelectedGroups = "Seçilen gruplara mesaj";
+$langSelectedGroups = "seçilen gruplar";
+$langMsg = "Mesajlar";
+$langYes = "evet";
+$MsgText = "Mesaj";
+$AnnouncementDeletedAll = "Mesajların hepsi silindi";
+$AnnouncementMoved = "Mesaj taşındı.";
+$NoAnnouncements = "Herhangi bir duyuru bulunmuyor.";
+$SelectEverybody = "Herkesi seç";
+$SelectedUsersGroups = "seçilen kullanıcı grupları";
+$LearnerMessage = "Bir öğrenciden mesaj";
+$TitleIsRequired = "Başlık gerekli";
+$AnnounceSentByEmail = "E-posta ile gönderilen duyuru";
+$AnnounceSentToUserSelection = "Seçili kullanıcılara gönderilmiş duyuru";
+$SendAnnouncement = "Duyuruyu gönder";
+$ModifyAnnouncement = "Duyuruyu düzenle";
+$ButtonPublishAnnouncement = "Duyuruyu gönder";
+?>

@@ -1,0 +1,63 @@
+<?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langOnlineConference = "Konferans";
+$langWash = "Temizle";
+$langReset = "Sıfırla";
+$langSave = "Mesaj gönder";
+$langRefresh = "Yenile";
+$langIsNowInYourDocDir = " belge ara�larınızdadır. <br /><B>Bu dosya <u>g�r�n�r</u></B>";
+$langCopyFailed = "Yazdırma işlemi tamamlanamadı";
+$langTypeMessage = "Lütfen mesajınızı yazınız!";
+$langConfirmReset = "Bütün mesajlari silmek istiyormusunuz?";
+$langHasResetChat = "Sohbet'i temizledi.";
+$langNoOnlineConference = "Şu anda herhangi bir konferans bulunmuyor...";
+$langMediaFile = "Canlı ses veya resim akışı";
+$langContentFile = "Sunum";
+$langListOfParticipants = "Katılanların listesi";
+$langYourPicture = "Resminiz";
+$langOnlineDescription = "Konferans Açıklaması";
+$langOnlyCheckForImportantQuestion = "Bu kutuyu sadece ÖNEMLİ bir soru soracağınız zaman işaretleyin lütfen !";
+$langQuestion = "soru";
+$langClearList = "Listeyi temizle";
+$langWhiteBoard = "Beyaz Tahta";
+$langTextEditorDefault = "<h2>Kelime İşlemci</h2>MS Word dosyasından kesip buraya yapıştırın ve düzenleyin. Katılımcılar değişiklikleri canlı olarak izleyecektir.";
+$langStreaming = "Veri akışı";
+$langStreamURL = "Veri akışı URL";
+$langStreamType = "Veri akış türü";
+$langLinkName = "Bağlantı ismi";
+$langLinkURL = "Bağlantı URL";
+$langWelcomeToOnlineConf = "<b>Canlı Konferansa Hoşgeldiniz</b>";
+$langNoLinkAvailable = "Kullanılabilir bağlantı bulunmuyor";
+$langChat_reset_by = "sohbeti sıfırla";
+$OrFile = "Veya dosya";
+$langCallSent = "Sohbet isteğiniz gönderildi, cevap bekleniyor.";
+$langChatDenied = "Çağrınız kabul edilmedi.";
+$Send = "Mesaj gönder";
+$Connected = "Sohbete Katılanlar";
+$Think = "Düşün";
+$BigGrin = "Büyük sırıtma";
+$Amazing = "Şaşırtıcı";
+$Confused = "Kafası karışık";
+$Cool = "Sakin";
+$Surprised = "Hayret etmek";
+$Hand = "Selam";
+$Wink = "Göz kırpmak";
+$Neutral = "Nötr";
+$Angry = "Kızgın";
+$Avid = "İstekli";
+$Redface = "Utanmak";
+$Sad = "Üzgün";
+$Silence = "Sessizlik";
+$Silenced = "Sessiz";
+$Smile = "Gülüş";
+$Exclamation = "Bağırma";
+$Arrow = "Ok";
+$Question = "Soru";
+$Idea = "Fikir";
+$AskPermissionSpeak = "Konuşmak için izin iste";
+$GiveTheFloorTo = "Odayı ver";
+$Pause = "Durdurma";
+$Stop = "Dur";
+?>

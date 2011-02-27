@@ -1,0 +1,59 @@
+<?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
+$LearningPath = "Kurs yolu";
+$LevelUp = "level up";
+$AddIt = "Add it";
+$MainCategory = "main category";
+$lang_delete_added_resources = "Delete added resources";
+$AddToLinks = "Add to the course links";
+$DontAdd = "do not add";
+$lang_show_all_added_resources = "Show all added resources";
+$ResourcesAdded = "Added new resources";
+$BackTo = "Geri dön";
+$ExternalResources = "External resources";
+$CourseResources = "Course resources";
+$ExternalLink = "External link";
+$DropboxAdd = "Add the dropbox page to this chapter.";
+$AddAssignmentPage = "Add the upload assignment page to this chapter.";
+$Exercise = "Test";
+$Link = "Bağlantı";
+$AdValvas = "Ad Valvas";
+$Document = "Belge";
+$ShowDelete = "Göster / Sil";
+$IntroductionText = "Giriş Yazısı";
+$CourseDescription = "Ders Açiklaması";
+$Groups = "Gruplar";
+$Users = "Kullanıcılar";
+$IntroductionTextAdd = "Bu bölüme açıklama içeren bir sayfa ekle";
+$CourseDescriptionAdd = "Bu bölüme ders açıklyaması içeren bir sayfa ekle";
+$GroupsAdd = "Bu bölüme grup sayfası ekle";
+$UsersAdd = "Bu bölüme kullanıcı sayfası ekle";
+$ExportableCourseResources = "Dışarı gönderilebilir ders kaynakları";
+$DokeosRelatedCourseMaterial = "Chamilo ile ilişkili ders kaynakları";
+$LinkTarget = "Bağlantının Hedefi";
+$SameWindow = "Aynı pencerede";
+$NewWindow = "Yeni bir pencerede";
+$StepDeleted1 = "This";
+$StepDeleted2 = "item was deleted in that tool.";
+$Modify = "düzenle";
+$Chapter = "Bölüm";
+$NoAgendaItems = "Herhangi bir kay&#305;t bulunmuyor.";
+$AgendaAdd = "Yeni bir etkinlik ekle";
+$UserGroupFilter = "Grup/Kullanıcılar filtresi";
+$AgendaSortChronologicallyUp = "Artan";
+$ShowCurrent = "Geçerli ayın etkinliklerini göster";
+$ModifyCalendarItem = "Etkinlik düzenle";
+$ItemTitle = "Etkinlik başlığı";
+$Detail = "Detay";
+$EditSuccess = "Etkinlik düzenlendi";
+$AddCalendarItem = "Yeni bir etkinlik ekle";
+$AddAnn = "Duyuru ekle";
+$ForumAddNewTopic = "Forum: yeni başlık ekle";
+$ForumEditTopic = "Forum: başlık düzenle";
+$ExerciseAnswers = "Alıştırma: cevaplar";
+$ForumReply = "Forum: cevapla";
+$AgendaSortChronologicallyDown = "Azalan";
+?>

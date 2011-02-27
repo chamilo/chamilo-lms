@@ -23,7 +23,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Link','Image','EmbedMovies','Flash','MP3','TableOC','mimetex','asciimath','asciisvg'),
 	array('UnorderedList','OrderedList','Rule'),
 	array('JustifyLeft','JustifyCenter'),
-	array('FontFormat','FontName','Bold','Italic','Underline','TextColor','BGColor','Source'
+	array('FontFormat','FontName','Bold','Italic','Underline','TextColor','BGColor','Source'),
 	array('FitWindow')
 );
 

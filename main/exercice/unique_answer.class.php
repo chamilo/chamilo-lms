@@ -394,6 +394,32 @@ class UniqueAnswer extends Question {
 			</tr>';
         return $header;	
 	}
+  function create_answer($id, $question_id, $answer_title, $comment, $score = 0, $correct = 0) {
+    $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
+    $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+    $position = 1;
+    $question_id = filter_var($question_id,FILTER_SANITIZE_NUMBER_INT);
+    $score = filter_var($score,FILTER_SANITIZE_NUMBER_FLOAT);
+    $correct = filter_var($correct,FILTER_SANITIZE_NUMBER_INT);
+    // Get the max position
+    $sql = "SELECT max(position) as max_position FROM $tbl_quiz_answer "
+          ." WHERE question_id = $question_id";
+    $rs_max  = Database::query($sql);
+    $row_max = Database::fetch_object($rs_max);
+    $position = $row_max->max_position + 1;
+    // Insert a new answer
+    $sql = "INSERT INTO $tbl_quiz_answer "
+    ."(id, question_id,answer,correct,comment,ponderation,position,destination)"
+    ."VALUES ($id,$question_id,'".Database::escape_string($answer_title)."',"
+    ."$correct,'".Database::escape_string($comment)."',$score,$position, "
+    ." '0@@0@@0@@0')";
+    $rs = Database::query($sql);
+    if ($correct) {
+        $sql = "UPDATE $tbl_quiz_question "
+        ." SET ponderation = (ponderation + $score) WHERE id = ".$question_id;
+        $rs = Database::query($sql, __FILE__, __LINE__);
+    }
+  }
 }
 endif;
 ?>

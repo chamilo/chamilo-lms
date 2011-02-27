@@ -263,6 +263,15 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 		$menu_navigation['dashboard'] = $possible_tabs['dashboard'];
 	}
 
+	// Reports
+	if (/*api_get_setting('show_tabs', 'reports') == 'true'*/ true) { // FIXME add settings (need upgrade script)
+		if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
+			$navigation['reports'] = $possible_tabs['reports'];
+		}
+	} else{
+		$menu_navigation['reports'] = $possible_tabs['reports'];
+	}
+
 	// Administration
 	if (api_is_platform_admin(true)) {
 		if (api_get_setting('show_tabs', 'platform_administration') == 'true') {

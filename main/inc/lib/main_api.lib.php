@@ -113,6 +113,7 @@ define('SECTION_MYGRADEBOOK', 'mygradebook');
 define('SECTION_TRACKING','session_my_space');
 define('SECTION_SOCIAL', 'social');
 define('SECTION_DASHBOARD', 'dashboard');
+define('SECTION_REPORTS', 'reports');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');

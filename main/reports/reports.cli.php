@@ -22,7 +22,9 @@ $longopts = array(
 	'session:',
 	'attempt:',
 	'uid:',
-	'key:');
+	'key:',
+	'addDBKeys',
+	'build');
 
 $options = getopt("", $longopts);
 
@@ -32,6 +34,12 @@ if (array_key_exists('help', $options))
 	echo "help message\n";
 else if (array_key_exists('clearAll', $options)) {
 	reports_clearAll();
+	echo Database::error();
+} else if (array_key_exists('build', $options)) {
+	reports_build();
+	echo Database::error();
+} else if (array_key_exists('addDBKeys', $options)) {
+	reports_addDBKeys();
 	echo Database::error();
 } else if (array_key_exists('addValue', $options)) {
 	reports_addValue($options['key'], $options['session'], $options['uid'],

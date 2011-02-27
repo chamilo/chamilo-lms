@@ -123,6 +123,7 @@ class HTMLPurifier
                 $config->set('HTML.AllowedAttributes', $attribute_anonymous);
             }
             $config->set('HTML.TidyLevel', 'light');
+            $config->set('CSS.AllowTricky', true); // We need the css definition display: none;
             $this->config = HTMLPurifier_Config::create($config);
             $this->strategy = new HTMLPurifier_Strategy_Core();
         }

@@ -1295,7 +1295,6 @@ abstract class Question
               ." (question,ponderation,position,type,level) "
               ." VALUES('".Database::escape_string($question_name)."',"
               ." $max_score , $max_position, $type, $level)";
-        error_log($sql);
         $rs = Database::query($sql);
         // Get the question ID
         $question_id = Database::get_last_insert_id();
@@ -1309,7 +1308,6 @@ abstract class Question
         $sql = "INSERT INTO $tbl_quiz_rel_question "
               ."(question_id,exercice_id,question_order)"
               ." VALUES($question_id, $quiz_id, $max_order)";
-        error_log($sql);
         $rs = Database::query($sql);
         return $question_id;
     }

@@ -123,6 +123,26 @@ class GroupPortalManager
 		}
 		return $data;
 	}
+  /**
+   * Gets a list of all group
+   * @param id of a group to not include
+   * @return array : id => name
+   **/
+  public static function get_groups_list($without_this_one = NULL )
+  {
+    $where='';
+    if ( isset($without_this_one) && (intval($without_this_one) == $without_this_one) ) {
+      $where = "WHERE id <> $without_this_one"; 
+    }
+		$table	= Database :: get_main_table(TABLE_MAIN_GROUP);
+		$sql = "SELECT id, name FROM $table $where order by name";
+		$res = Database::query($sql);
+		$list = array ();
+		while ($item = Database::fetch_assoc($res)) {
+			$list[$item['id']] = $item['name'];
+		}
+		return $list;
+	}
 
 	/**
 	 * Gets the group data
@@ -142,6 +162,53 @@ class GroupPortalManager
 		}
 		return $item;
 	}
+
+  /**
+   * Set a parent group
+   * @param group_id
+   * @param parent_group, if 0, we delete the parent_group association
+   * @param relation_type
+   * @return true or false
+   **/ 
+  public static function set_parent_group($group_id, $parent_group_id, $relation_type = 1){
+    $table = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+    $group_id = intval($group_id);
+    $parent_group_id = intval($parent_group_id);
+    if ($parent_group_id == 0) {
+      $sql = "DELETE FROM $table WHERE subgroup_id = $group_id";
+    } 
+    else {
+      $sql = "SELECT group_id FROM $table WHERE subgroup_id = $group_id";
+      $res = Database::query($sql);
+      if (Database::num_rows($res)==0) {
+        $sql = "INSERT INTO $table  SET group_id = $parent_group_id, subgroup_id = $group_id, relation_type = $relation_type";
+      } else {
+        $sql = "UPDATE $table SET group_id = $parent_group_id, relation_type = $relation_type  WHERE subgroup_id = $group_id"; 
+      }
+    }
+    $res = Database::query($sql);
+    return($res);
+  }
+  /**
+   * Get the parent group
+   * @param group_id
+   * @param relation_type
+   * @return int parent_group_id or false
+   **/
+  public static function get_parent_group($group_id, $relation_type=1){
+    $table = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+    $group_id=intval($group_id);
+    $parent_group_id=intval($parent_group_id);
+    $sql = "SELECT group_id FROM $table WHERE subgroup_id = $group_id";
+    $res = Database::query($sql);
+    if (Database::num_rows($res)==0) {
+      return 0;
+    }
+    else {
+      $arr = Database::fetch_assoc($res);
+      return $arr['group_id'];
+    }
+  }
 
 	/**
 	 * Gets the tags from a given group

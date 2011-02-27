@@ -214,215 +214,231 @@ if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
 		}
 	}
 
-	if ((isset($_POST['login']) && isset($_POST['password']))) {
-		// $login && $password are given to log in
-		$login = $_POST['login'];
-		$password = $_POST['password'];
+	//IF cas is activated and user isn't logged in	
+	if (api_get_setting('cas_activate') == 'true') { 
+		$cas_activated = true;
+	} else {
+		$cas_activated = false;
+	}
 
-	    //lookup the user in the main database
-		$user_table = Database::get_main_table(TABLE_MAIN_USER);
-	    $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
-	            FROM $user_table
-	            WHERE username = '".trim(addslashes($login))."'";
-	    $result = Database::query($sql);
+	$cas_login=false;
+	if ($cas_activated  AND !isset($_user['user_id']) and !isset($_POST['login'])  && !$logout) { 
+		require_once(api_get_path(SYS_PATH).'main/auth/cas/authcas.php');
+		$cas_login = cas_is_authenticated();
+	}
+  if ( ( isset($_POST['login']) AND  isset($_POST['password']) ) OR ($cas_login) )  {
+    // $login && $password are given to log in
+    if ( $cas_login  && empty($_POST['login']) ) {
+      $login = $cas_login;
+    } else {
+      $login = $_POST['login'];
+      $password = $_POST['password'];
+    }
 
-		if (Database::num_rows($result) > 0) {
-	        $uData = Database::fetch_array($result);
+    //lookup the user in the main database
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
+    $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
+      FROM $user_table
+      WHERE username = '".trim(addslashes($login))."'";
+    $result = Database::query($sql);
 
-	        if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
-	            //the authentification of this user is managed by Chamilo itself
-	            $password = trim(stripslashes($password));
-	            // determine if the password needs to be encrypted before checking
-	            // $userPasswordCrypted is set in an external configuration file
+    if (Database::num_rows($result) > 0) {
+      $uData = Database::fetch_array($result);
 
-	            /*if ($userPasswordCrypted) {
-	            	$password = md5($password);
-	            } */
-	            if (api_get_setting('allow_terms_conditions')=='true') {
-	                if (isset($_POST['password']) && isset($_SESSION['info_current_user'][2]) && $_POST['password']==$_SESSION['info_current_user'][2]) {
-	                	$password=$_POST['password'];
-	                } else {
-	               		$password = api_get_encrypted_password($password);
-	                }
-	            } else {
-	            	$password = api_get_encrypted_password($password);
-	            }
-				if (api_get_setting('allow_terms_conditions')=='true') {
-			       if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
-						$temp_user_id = $uData['user_id'];
-						$term_and_condition_status=api_check_term_condition($temp_user_id);//false or true
-						if ($term_and_condition_status===false) {
-							$_SESSION['update_term_and_condition']=array(true,$temp_user_id);
-							$_SESSION['info_current_user']=array(true,$login,$password);
-							header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php');
-					    	exit;
-						} else {
-							unset($_SESSION['update_term_and_condition']);
-							unset($_SESSION['info_current_user']);
-						}
+      if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
+        //the authentification of this user is managed by Chamilo itself
+        $password = trim(stripslashes($password));
+        // determine if the password needs to be encrypted before checking
+        // $userPasswordCrypted is set in an external configuration file
 
-					}
-				}
+              /*if ($userPasswordCrypted) {
+                $password = md5($password);
+              } */
+        if (api_get_setting('allow_terms_conditions')=='true') {
+          if (isset($_POST['password']) && isset($_SESSION['info_current_user'][2]) && $_POST['password']==$_SESSION['info_current_user'][2]) {
+            $password=$_POST['password'];
+          } else {
+            $password = api_get_encrypted_password($password);
+          }
+        } else {
+          $password = api_get_encrypted_password($password);
+        }
+        if (api_get_setting('allow_terms_conditions')=='true') {
+          if ($password == $uData['password'] AND (trim($login) == $uData['username']) OR $cas_login ) {
+            $temp_user_id = $uData['user_id'];
+            $term_and_condition_status=api_check_term_condition($temp_user_id);//false or true
+            if ($term_and_condition_status===false) {
+              $_SESSION['update_term_and_condition']=array(true,$temp_user_id);
+              $_SESSION['info_current_user']=array(true,$login,$password);
+              header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php');
+              exit;
+            } else {
+              unset($_SESSION['update_term_and_condition']);
+              unset($_SESSION['info_current_user']);
+            }
 
-	           // Check the user's password
-	            if ($password == $uData['password'] AND (trim($login) == $uData['username'])) {
-	            	// Check if the account is active (not locked)
-	            	if ($uData['active']=='1') {
-	            		// Check if the expiration date has not been reached
-	            		if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
-	            			global $_configuration;
+          }
+        }
 
-	            			if ($_configuration['multiple_access_urls']) {
-								$admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
+        // Check the user's password
+        if ( ($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {
+          // Check if the account is active (not locked)
+          if ($uData['active']=='1') {
+            // Check if the expiration date has not been reached
+            if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
+              global $_configuration;
 
-	            				//Check if user is an admin
-								$sql = "SELECT user_id FROM $admin_table
-							            WHERE user_id = '".trim(addslashes($uData['user_id']))."' LIMIT 1";
-							    $result = Database::query($sql);
+              if ($_configuration['multiple_access_urls']) {
+                $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
-							    $my_user_is_admin = false;
-							    if (Database::num_rows($result) > 0) {
-									$my_user_is_admin = true;
-							    }
+                //Check if user is an admin
+                $sql = "SELECT user_id FROM $admin_table
+                  WHERE user_id = '".trim(addslashes($uData['user_id']))."' LIMIT 1";
+                $result = Database::query($sql);
 
-								// This user is subscribed in these sites => $my_url_list
-					            $my_url_list = api_get_access_url_from_user($uData['user_id']);
+                $my_user_is_admin = false;
+                if (Database::num_rows($result) > 0) {
+                  $my_user_is_admin = true;
+                }
 
-					            //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
-								//Getting the current access_url_id of the platform
-	                			$current_access_url_id = api_get_current_access_url_id();
+                // This user is subscribed in these sites => $my_url_list
+                $my_url_list = api_get_access_url_from_user($uData['user_id']);
 
-					            if ($my_user_is_admin === false) {
+                //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
+                //Getting the current access_url_id of the platform
+                $current_access_url_id = api_get_current_access_url_id();
 
-	                				if (is_array($my_url_list) && count($my_url_list)>0 ){
-	                					// the user have the permissions to enter at this site
-	                					if (in_array($current_access_url_id, $my_url_list)) {
-	                						$_user['user_id'] = $uData['user_id'];
-											api_session_register('_user');
-											event_login();
-	                					} else {
-		                					$loginFailed = true;
-											api_session_unregister('_uid');
-											header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-											exit;
-	                					}
-	                				} else {
-	                					$loginFailed = true;
-										api_session_unregister('_uid');
-										header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-										exit;
-	                				}
-					            } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
-					            	//var_dump($current_access_url_id, $my_url_list); exit;
-					            	if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
-					            		$_user['user_id'] = $uData['user_id'];
-										api_session_register('_user');
-										event_login();
-					            	} else {
-					            		//This means a secondary admin wants to login so we check as he's a normal user
-					            		if (in_array($current_access_url_id, $my_url_list)) {
-	                						$_user['user_id'] = $uData['user_id'];
-											api_session_register('_user');
-											event_login();
-	                					} else {
-		                					$loginFailed = true;
-											api_session_unregister('_uid');
-											header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-											exit;
-	                					}
-					            	}
-					            }
-	            			} else {
-	            				$_user['user_id'] = $uData['user_id'];
-								api_session_register('_user');
-								event_login();
-	            			}
-	            		} else {
-							$loginFailed = true;
-							api_session_unregister('_uid');
-							header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
-							exit;
-	            		}
-	            	} else {
-						$loginFailed = true;
-						api_session_unregister('_uid');
-						header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
-						exit;
-	            	}
-	            } else {
-	            	// login failed: username or password incorrect
-	                $loginFailed = true;
-	                api_session_unregister('_uid');
-	                header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
-	                exit;
-	            }
+                if ($my_user_is_admin === false) {
 
-	            if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id']) {
-	                //first login for a not self registred
-	                //e.g. registered by a teacher
-	                //do nothing (code may be added later)
-	            }
-			} elseif (!empty($extAuthSource[$uData['auth_source']]['login']) && file_exists($extAuthSource[$uData['auth_source']]['login'])) {
-	             /*
-	              * Process external authentication
-	              * on the basis of the given login name
-	              */
-	             $loginFailed = true;  // Default initialisation. It could
-	                                   // change after the external authentication
-	             $key = $uData['auth_source']; //'ldap','shibboleth'...
-	            /* >>>>>>>> External authentication modules <<<<<<<<< */
-				// see configuration.php to define these
-	            include_once($extAuthSource[$key]['login']);
-	            /* >>>>>>>> External authentication modules <<<<<<<<< */
-	        } else { // no standard Chamilo login - try external authentification
-	        	//huh... nothing to do... we shouldn't get here
-	        	error_log('Chamilo Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
-	        }
-		    if (!empty($_SESSION['request_uri'])) {
-	  	        $req = $_SESSION['request_uri'];
-	  	        unset($_SESSION['request_uri']);
-	  	        header('location: '.$req);
-		    } else {
-		    	if (isset($param)) {
-		    		header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login').$param);
-		    	} else {
-		    		// here is the main redirect of a *normal* login page in Chamilo
-		    		header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login'));
-		    	}
-		    }
-	    } else {
-	    	// login failed, Database::num_rows($result) <= 0
-	        $loginFailed = true;  // Default initialisation. It could
-	                              // change after the external authentication
+                  if (is_array($my_url_list) && count($my_url_list)>0 ){
+                    // the user have the permissions to enter at this site
+                    if (in_array($current_access_url_id, $my_url_list)) {
+                      $_user['user_id'] = $uData['user_id'];
+                      api_session_register('_user');
+                      event_login();
+                    } else {
+                      $loginFailed = true;
+                      api_session_unregister('_uid');
+                      header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+                      exit;
+                    }
+                  } else {
+                    $loginFailed = true;
+                    api_session_unregister('_uid');
+                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+                    exit;
+                  }
+                } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
+                  //var_dump($current_access_url_id, $my_url_list); exit;
+                  if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
+                    $_user['user_id'] = $uData['user_id'];
+                    api_session_register('_user');
+                    event_login();
+                  } else {
+                    //This means a secondary admin wants to login so we check as he's a normal user
+                    if (in_array($current_access_url_id, $my_url_list)) {
+                      $_user['user_id'] = $uData['user_id'];
+                      api_session_register('_user');
+                      event_login();
+                    } else {
+                      $loginFailed = true;
+                      api_session_unregister('_uid');
+                      header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+                      exit;
+                    }
+                  }
+                }
+              } else {
+                $_user['user_id'] = $uData['user_id'];
+                api_session_register('_user');
+                event_login();
+              }
+            } else {
+              $loginFailed = true;
+              api_session_unregister('_uid');
+              header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
+              exit;
+            }
+          } else {
+            $loginFailed = true;
+            api_session_unregister('_uid');
+            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
+            exit;
+          }
+        } else {
+          // login failed: username or password incorrect
+          $loginFailed = true;
+          api_session_unregister('_uid');
+          header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
+          exit;
+        }
 
-	        /*
-	         * In this section:
-	         * there is no entry for the $login user in the Chamilo
-	         * database. This also means there is no auth_source for the user.
-	         * We let all external procedures attempt to add him/her
-	         * to the system.
-	         *
-	         * Process external login on the basis
-	         * of the authentication source list
-	         * provided by the configuration settings.
-	         * If the login succeeds, for going further,
-	         * Chamilo needs the $_user['user_id'] variable to be
-	         * set and registered in the session. It's the
-	         * responsability of the external login script
-	         * to provide this $_user['user_id'].
-	         */
+        if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id']) {
+          //first login for a not self registred
+          //e.g. registered by a teacher
+          //do nothing (code may be added later)
+        }
+      } elseif (!empty($extAuthSource[$uData['auth_source']]['login']) && file_exists($extAuthSource[$uData['auth_source']]['login'])) {
+        /*
+         * Process external authentication
+         * on the basis of the given login name
+         */
+        $loginFailed = true;  // Default initialisation. It could
+        // change after the external authentication
+        $key = $uData['auth_source']; //'ldap','shibboleth'...
+        /* >>>>>>>> External authentication modules <<<<<<<<< */
+        // see configuration.php to define these
+        include_once($extAuthSource[$key]['login']);
+        /* >>>>>>>> External authentication modules <<<<<<<<< */
+      } else { // no standard Chamilo login - try external authentification
+        //huh... nothing to do... we shouldn't get here
+        error_log('Chamilo Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
+      }
+      if (!empty($_SESSION['request_uri'])) {
+        $req = $_SESSION['request_uri'];
+        unset($_SESSION['request_uri']);
+        header('location: '.$req);
+      } else {
+        if (isset($param)) {
+          header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login').$param);
+        } else {
+          // here is the main redirect of a *normal* login page in Chamilo
+          header('location: '.api_get_path(WEB_PATH).api_get_setting('page_after_login'));
+        }
+      }
+    } else {
+      // login failed, Database::num_rows($result) <= 0
+      $loginFailed = true;  // Default initialisation. It could
+      // change after the external authentication
 
-	        if (isset($extAuthSource) && is_array($extAuthSource)) {
-	            foreach($extAuthSource as $thisAuthSource) {
-	            	if (!empty($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
-	                	include_once($thisAuthSource['newUser']);
-	            	} else {
-		            	error_log('Chamilo Authentication file '. $thisAuthSource['newUser']. ' could not be found - this might prevent your system from using the authentication process in the user creation process',0);
-	            	}
-	            }
-	        } //end if is_array($extAuthSource)
-	    } //end else login failed
-	} elseif (api_get_setting('sso_authentication')==='true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
+      /*
+       * In this section:
+       * there is no entry for the $login user in the Chamilo
+       * database. This also means there is no auth_source for the user.
+       * We let all external procedures attempt to add him/her
+       * to the system.
+       *
+       * Process external login on the basis
+       * of the authentication source list
+       * provided by the configuration settings.
+       * If the login succeeds, for going further,
+       * Chamilo needs the $_user['user_id'] variable to be
+       * set and registered in the session. It's the
+       * responsability of the external login script
+       * to provide this $_user['user_id'].
+       */
+
+      if (isset($extAuthSource) && is_array($extAuthSource)) {
+        foreach($extAuthSource as $thisAuthSource) {
+          if (!empty($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
+            include_once($thisAuthSource['newUser']);
+          } else {
+            error_log('Chamilo Authentication file '. $thisAuthSource['newUser']. ' could not be found - this might prevent your system from using the authentication process in the user creation process',0);
+          }
+        }
+      } //end if is_array($extAuthSource)
+    } //end else login failed
+  } elseif (api_get_setting('sso_authentication')==='true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
 		/**
 		 * TODO:
 		 * - Implement user interface for api_get_setting('sso_authentication')

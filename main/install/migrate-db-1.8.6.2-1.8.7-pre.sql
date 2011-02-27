@@ -85,6 +85,24 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_user
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_link_bug_notification', NULL, 'radio', 'Platform', 'true', 'ShowLinkBugNotificationTitle', 'ShowLinkBugNotificationComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_link_bug_notification', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_link_bug_notification', 'false', 'No');
+-- CAS
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('cas_activate', NULL, 'radio', 'CAS', 'false', 'CasMainActivateTitle', 'CasMainActivateComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) values ('cas_activate', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) values ('cas_activate', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('cas_server', NULL, 'textfield', 'CAS', '', 'CasMainServerTitle', 'CasMainServerComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('cas_server_uri', NULL, 'textfield', 'CAS', '', 'CasMainServerURITitle', 'CasMainServerURIComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('cas_port', NULL, 'textfield', 'CAS', '', 'CasMainPortTitle', 'CasMainPortComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('cas_protocol', NULL, 'radio', 'CAS', '', 'CasMainProtocolTitle', 'CasMainProtocolComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) values ('cas_protocol', 'CAS1', 'CAS1Text');
+INSERT INTO settings_options (variable, value, display_text) values ('cas_protocol', 'CAS2', 'CAS2Text');
+INSERT INTO settings_options (variable, value, display_text) values ('cas_protocol', 'SAML', 'SAMLText');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('cas_add_user_activate', NULL, 'radio', 'CAS', '', 'CasUserAddActivateTitle', 'CasUserAddActivateComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) values ('cas_add_user_activate', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) values ('cas_add_user_activate', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('cas_add_user_login_attr', NULL, 'textfield', 'CAS', '', 'CasUserAddLoginAttributeTitle', 'CasUserAddLoginAttributeComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('cas_add_user_email_attr', NULL, 'textfield', 'CAS', '', 'CasUserAddEmailAttributeTitle', 'CasUserAddEmailAttributeComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('cas_add_user_firstname_attr', NULL, 'textfield', 'CAS', '', 'CasUserAddFirstnameAttributeTitle', 'CasUserAddFirstnameAttributeComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('cas_add_user_lastname_attr', NULL, 'textfield', 'CAS', '', 'CasUserAddLastnameAttributeTitle', 'CasUserAddLastnameAttributeComment', NULL, NULL, 0);
 
 ALTER TABLE gradebook_score_display ADD category_id int NOT NULL DEFAULT 0;
 ALTER TABLE gradebook_score_display ADD INDEX (category_id);
@@ -111,6 +129,11 @@ ALTER TABLE track_e_attempt_recording ADD session_id INT NOT NULL DEFAULT 0;
 ALTER TABLE track_e_attempt_recording ADD INDEX (question_id);
 ALTER TABLE track_e_attempt_recording ADD INDEX (session_id);
 ALTER TABLE track_e_online ADD COLUMN access_url_id INT NOT NULL DEFAULT 1;
+-- Groups can have subgroups
+CREATE TABLE group_rel_group ( id int NOT NULL AUTO_INCREMENT, group_id int NOT NULL, subgroup_id int NOT NULL, relation_type int NOT NULL, PRIMARY KEY (id));
+ALTER TABLE group_rel_group ADD INDEX ( group_id );
+ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
+ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 
 -- xxUSERxx
 

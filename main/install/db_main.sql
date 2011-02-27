@@ -762,7 +762,17 @@ VALUES
 ('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
 ('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 1),
 ('show_link_bug_notification', NULL, 'radio', 'Platform', 'true', 'ShowLinkBugNotificationTitle', 'ShowLinkBugNotificationComment', NULL, NULL, 0),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.11571','DokeosDatabaseVersion','',NULL,NULL,0);
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.11571','DokeosDatabaseVersion','',NULL,NULL,0),
+('cas_activate', NULL, 'radio', 'CAS', 'false', 'CasMainActivateTitle', 'CasMainActivateComment', NULL, NULL, 0),
+('cas_server', NULL, 'textfield', 'CAS', '', 'CasMainServerTitle', 'CasMainServerComment', NULL, NULL, 0),
+('cas_server_uri', NULL, 'textfield', 'CAS', '', 'CasMainServerURITitle', 'CasMainServerURIComment', NULL, NULL, 0),
+('cas_port', NULL, 'textfield', 'CAS', '', 'CasMainPortTitle', 'CasMainPortComment', NULL, NULL, 0),
+('cas_protocol', NULL, 'radio', 'CAS', '', 'CasMainProtocolTitle', 'CasMainProtocolComment', NULL, NULL, 0),
+('cas_add_user_activate', NULL, 'radio', 'CAS', '', 'CasUserAddActivateTitle', 'CasUserAddActivateComment', NULL, NULL, 0),
+('cas_add_user_login_attr', NULL, 'textfield', 'CAS', '', 'CasUserAddLoginAttributeTitle', 'CasUserAddLoginAttributeComment', NULL, NULL, 0),
+('cas_add_user_email_attr', NULL, 'textfield', 'CAS', '', 'CasUserAddEmailAttributeTitle', 'CasUserAddEmailAttributeComment', NULL, NULL, 0),
+('cas_add_user_firstname_attr', NULL, 'textfield', 'CAS', '', 'CasUserAddFirstnameAttributeTitle', 'CasUserAddFirstnameAttributeComment', NULL, NULL, 0),
+('cas_add_user_lastname_attr', NULL, 'textfield', 'CAS', '', 'CasUserAddLastnameAttributeTitle', 'CasUserAddLastnameAttributeComment', NULL, NULL, 0);
 
 
 UNLOCK TABLES;
@@ -976,7 +986,15 @@ VALUES
 ('allow_user_course_subscription_by_course_admin', 'true', 'Yes'),
 ('allow_user_course_subscription_by_course_admin', 'false', 'No'),
 ('show_link_bug_notification', 'true', 'Yes'),
-('show_link_bug_notification', 'false', 'No');
+('show_link_bug_notification', 'false', 'No'),
+('cas_activate', 'true', 'Yes'),
+('cas_activate', 'false', 'No'),
+('cas_protocol', 'CAS1', 'CAS1Text'),
+('cas_protocol', 'CAS2', 'CAS2Text'),
+('cas_protocol', 'SAML', 'SAMLText'),
+('cas_add_user_activate', 'true', 'Yes'),
+('cas_add_user_activate', 'false', 'No');
+
 
 UNLOCK TABLES;
 
@@ -2382,6 +2400,17 @@ CREATE TABLE group_rel_user (
 ALTER TABLE group_rel_user ADD INDEX ( group_id );
 ALTER TABLE group_rel_user ADD INDEX ( user_id );
 ALTER TABLE group_rel_user ADD INDEX ( relation_type );
+
+CREATE TABLE group_rel_group (
+	id int NOT NULL AUTO_INCREMENT,
+	group_id int NOT NULL,
+	subgroup_id int NOT NULL,
+	relation_type int NOT NULL,
+	PRIMARY KEY (id)
+);
+ALTER TABLE group_rel_group ADD INDEX ( group_id );
+ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
+ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 --
 -- Table structure for table message attachment
 --

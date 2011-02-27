@@ -263,7 +263,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$message = str_replace("#url#", $url, $mess);
 	$mess = $message;
 	$headers = " MIME-Version: 1.0 \r\n";
-	$headers .= "User-Agent: Dokeos/1.6";
+	$headers .= "User-Agent: Chamilo/1.8";
 	$headers .= "Content-Transfer-Encoding: 7bit";
 	$headers .= 'From: ' . $from_name . ' <' . $from . '>' . "\r\n";
 	$headers = "From:$from_name\r\nReply-to: $to";
@@ -595,7 +595,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'','32').'</a>';
 		// link to import qti2 ...
 		echo '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'),'','32') .'</a>';
-		//echo '<a href="exercice.php?' . api_get_cidreq() . '&show=result&exercise_id='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
+        echo '<a href="upload_exercise.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'),'','32') .'</a>';
 	}
 
 	// the actions for the statistics

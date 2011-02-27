@@ -2616,6 +2616,38 @@ class Exercise {
         <br />';
         return $html;
     }
+  /**
+   * Create a quiz from quiz data
+   * @param string  Title
+   * @param int     Time before it expires (in minutes)
+   * @param int     Type of exercise
+   * @param int     Whether it's randomly picked questions (1) or not (0)
+   * @param int     Whether the exercise is visible to the user (1) or not (0)
+   * @param int     Whether the results are show to the user (0) or not (1)
+   * @param int     Maximum number of attempts (0 if no limit)
+   * @param int     Feedback type
+   * @return    int New exercise ID
+   */
+  function create_quiz ($title, $expired_time = 0, $type = 2, $random = 0, $active = 1, $results_disabled = 0, $max_attempt = 0, $feedback = 3) {
+    $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
+    $expired_time = filter_var($expired_time,FILTER_SANITIZE_NUMBER_INT);
+    $type = filter_var($type,FILTER_SANITIZE_NUMBER_INT);
+    $random = filter_var($random,FILTER_SANITIZE_NUMBER_INT);
+    $active = filter_var($active,FILTER_SANITIZE_NUMBER_INT);
+    $results_disabled = filter_var($results_disabled,FILTER_SANITIZE_NUMBER_INT);
+    $max_attempt = filter_var($max_attempt,FILTER_SANITIZE_NUMBER_INT);
+    $feedback = filter_var($feedback,FILTER_SANITIZE_NUMBER_INT);
+    $sid = api_get_session_id();
+    // Save a new quiz
+    $sql = "INSERT INTO $tbl_quiz (title,type,random,active,results_disabled, ".
+     "max_attempt,start_time,end_time,feedback_type,expired_time, session_id) ".
+     " VALUES('".Database::escape_string($title)."',$type,$random,$active, ".
+     "$results_disabled,$max_attempt,'','',$feedback,$expired_time,$sid)";
+    $rs = Database::query($sql);
+    $quiz_id = Database::get_last_insert_id();
+    return $quiz_id;
+  }
+
 }
 endif;
 ?>

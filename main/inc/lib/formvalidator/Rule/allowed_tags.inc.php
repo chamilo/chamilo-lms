@@ -567,7 +567,7 @@ $allowed_tags_teacher['body']['vlink'] = array();
 
 // ALLOWED HTML FOR TEACHERS FOR HTMLPURIFIER
 // TODO: This section is to be checked for removal.
-
+/*
 // noscript
 $allowed_tags_teachers['noscript'] = array();
 
@@ -592,49 +592,33 @@ $allowed_tags_teachers['body']['vlink'] = array();
 
 $allowed_tags_teachers['span'] = array();
 $allowed_tags_teachers['span']['style'] = array();
-
+*/
 
 $allowed_tags_teacher_full_page = $allowed_tags_student_full_page;
 
 
 // HTMLPURIFIER-COMPATIBLE SETTINGS
 
+function & kses_to_htmlpurifier($allowed_tags) {
+    $result[0] = array();
+    $result[1] = array();
+    foreach ($allowed_tags as $key1 => & $value1) {
+        $result[0][] = $key1;
+        if (count($value1) > 0) {
+            foreach ($value1 as $key2 => & $value2) {
+                $result[1][] = $key1.'.'.$key2;
+            }
+        }
+    }
+    return $result;
+}
+
 // INIT GLOBAL ARRAYS FOR HTMLPURIFIER
 
 global $tag_student, $attribute_student, $tag_teacher, $attribute_teacher, $tag_anonymous, $attribute_anonymous;
 
-// In choose is STUDENT
-$tag_student = array();
-$attribute_student = array();
+list($tag_student, $attribute_student) = kses_to_htmlpurifier(array_merge($allowed_tags_student, $allowed_tags_student_full_page));
+list($tag_teacher, $attribute_teacher) = kses_to_htmlpurifier(array_merge($allowed_tags_teacher, $allowed_tags_teacher_full_page));
 
-// In choose is COURSEMANAGER
-$tag_teacher = array();
-$attribute_teacher = array();
-
-// In choose is ANONYMOUS
 $tag_anonymous = array();
 $attribute_anonymous = array();
-
-foreach ($allowed_tags_student as $student_index => $student_value) {
-    if (count($allowed_tags_student[$student_index]) == 0) {
-        $tag_student[] = $student_index;
-    } else {
-        $tag_student[] = $student_index;
-        foreach ($allowed_tags_student[$student_index] as $my_student_attribute_index => $my_student_value_index) {
-            $attribute_student[] = $student_index.'.'.$my_student_attribute_index;
-        }
-    }
-}
-
-$tag_teacher = $tag_student;
-$attribute_teacher = $attribute_student;
-foreach ($allowed_tags_teachers as $teacher_index => $teacher_value) {
-    if (count($allowed_tags_teachers[$teacher_index]) == 0) {
-        $tag_teacher[] = $teacher_index;
-    } else {
-        $tag_teacher[] = $teacher_index;
-        foreach ($allowed_tags_teachers[$teacher_index] as $my_teacher_attribute_index => $my_teacher_value_index) {
-            $attribute_teacher[] = $teacher_index.'.'.$my_teacher_attribute_index;
-        }
-    }
-}

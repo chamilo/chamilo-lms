@@ -597,9 +597,18 @@ $allowed_tags_teachers['span']['style'] = array();
 $allowed_tags_teacher_full_page = $allowed_tags_student_full_page;
 
 
+// ALLOWED HTML FOR ANONYMOUS USERS
+
+$allowed_tags_anonymous = $allowed_tags_student;
+$allowed_tags_anonymous_full_page = $allowed_tags_student_full_page;
+// Add restrictions here.
+unset($allowed_tags_anonymous['embed']);
+unset($allowed_tags_anonymous['object']);
+
+
 // HTMLPURIFIER-COMPATIBLE SETTINGS
 
-function & kses_to_htmlpurifier($allowed_tags) {
+function kses_to_htmlpurifier($allowed_tags) {
     $result[0] = array();
     $result[1] = array();
     foreach ($allowed_tags as $key1 => & $value1) {
@@ -613,12 +622,8 @@ function & kses_to_htmlpurifier($allowed_tags) {
     return $result;
 }
 
-// INIT GLOBAL ARRAYS FOR HTMLPURIFIER
-
 global $tag_student, $attribute_student, $tag_teacher, $attribute_teacher, $tag_anonymous, $attribute_anonymous;
 
 list($tag_student, $attribute_student) = kses_to_htmlpurifier(array_merge($allowed_tags_student, $allowed_tags_student_full_page));
 list($tag_teacher, $attribute_teacher) = kses_to_htmlpurifier(array_merge($allowed_tags_teacher, $allowed_tags_teacher_full_page));
-
-$tag_anonymous = array();
-$attribute_anonymous = array();
+list($tag_anonymous, $attribute_anonymous) = kses_to_htmlpurifier(array_merge($allowed_tags_anonymous, $allowed_tags_anonymous_full_page));

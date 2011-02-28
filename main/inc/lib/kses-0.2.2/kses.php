@@ -86,6 +86,11 @@ $kses_allowedentitynames = array(
  * $string. You have to remove any slashes from PHP's magic quotes before you
  * call this function.
  *
+ * The default allowed protocols are 'http', 'https', 'ftp', 'news',
+ * 'nntp', 'telnet', 'gopher', 'mailto'.
+ * This covers all common link protocols, except for 'javascript' which should not
+ * be allowed for untrusted users.
+ *
  * @param string $string
  * @param string $allowed_html
  * @param array $allowed_protocols

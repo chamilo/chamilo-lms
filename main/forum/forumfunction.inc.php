@@ -784,7 +784,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
                 echo $key.'='.$value.'&amp;';
             }
         }
-        echo 'action=invisible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.icon('../img/visible.gif',get_lang('MakeInvisible')).'</a>';
+        echo 'action=invisible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.Display::return_icon('visible.png',get_lang('MakeInvisible'), array(), 22).'</a>';
     }
     if ($current_visibility_status=='0') {
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&';
@@ -793,7 +793,7 @@ function display_visible_invisible_icon($content, $id, $current_visibility_statu
                 echo $key.'='.$value.'&amp;';
             }
         }
-        echo 'action=visible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.icon('../img/invisible.gif',get_lang('MakeVisible')).'</a>';
+        echo 'action=visible&amp;content='.$content.'&amp;id='.$id.'&gradebook='.$gradebook.'&amp;origin='.$origin.'">'.Display::return_icon('invisible.png',get_lang('MakeVisible'), array(), 22).'</a>';
     }
 }
 
@@ -817,7 +817,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
                 echo $key.'='.$value.'&amp;';
             }
         }
-        echo 'action=unlock&amp;content='.$content.'&amp;id='.$id.'">'.icon('../img/lock.gif',get_lang('Unlock')).'</a>';
+        echo 'action=unlock&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('lock.png',get_lang('Unlock'), array(), 22).'</a>';
     }
     if ($current_lock_status=='0') {
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&';
@@ -826,7 +826,7 @@ function display_lock_unlock_icon($content, $id, $current_lock_status, $addition
                 echo $key.'='.$value.'&amp;';
             }
         }
-        echo 'action=lock&amp;content='.$content.'&amp;id='.$id.'">'.icon('../img/unlock.gif',get_lang('Lock')).'</a>';
+        echo 'action=lock&amp;content='.$content.'&amp;id='.$id.'">'.Display::return_icon('unlock.png',get_lang('Lock'), array(), 22).'</a>';
     }
 }
 
@@ -858,16 +858,16 @@ function display_up_down_icon($content, $id, $list) {
         }
     }
     if ($position>1) {
-        $return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveUp').'">'.Display::return_icon('up.gif',get_lang('MoveUp')).'</a>';
+        $return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveUp').'">'.Display::return_icon('up.png',get_lang('MoveUp'), array(), 22).'</a>';
     } else {
-        $return_value=Display::return_icon('up_na.gif','-');
+        $return_value=Display::return_icon('up_na.png','-', array(), 22);
     }
 
     if ($position<$total_items) {
-        $return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" >'.Display::return_icon('down.gif',get_lang('MoveDown')).'</a>';
+        $return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" >'.Display::return_icon('down.png',get_lang('MoveDown'), array(), 22).'</a>';
     } else {
 
-       $return_value.=Display::return_icon('down_na.gif','-');
+       $return_value.=Display::return_icon('down_na.png','-', array(), 22);
     }
     echo $return_value;
 }
@@ -1477,28 +1477,7 @@ function get_posts($thread_id) {
     return $post_list;
 }
 
-/**
- * This function return the html syntax for the image
- *
- * @param $image_url The url of the image (absolute or relative)
- * @param $alt The alt text (when the images cannot be displayed). http://www.w3.org/TR/html4/struct/objects.html#adef-alt
- * @param $title The title of the image. Most browsers display this as 'tool tip'. http://www.w3.org/TR/html4/struct/global.html#adef-title
- * @return string url image
- * @todo this is the same as the Display::xxx function, so it can be removed => all calls have to be changed also
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version february 2006, dokeos 1.8
- */
-function icon($image_url,$alt='',$title='') {
-    if ($title=='') {
-        $title=$alt;
-    }
-    return '<img src="'.$image_url.'" alt="'.$alt.'" title="'.$title.'" />';
-}
-
-/**************************************************************************
-                    NEW TOPIC FUNCTIONS
-**************************************************************************/
+//                    NEW TOPIC FUNCTIONS
 
 /**
  * This function retrieves all the information of a post

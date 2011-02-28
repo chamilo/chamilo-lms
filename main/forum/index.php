@@ -208,7 +208,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
                 $session_displayed = '';
             }
             echo '<thead>';
-            echo '<tr><th class="forum_head" colspan="6">';
+            echo '<tr><th class="forum_head" colspan="5">';
             echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a>'. $session_img .'<br />';
 
             if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;') {
@@ -218,8 +218,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 
             echo '<th style="vertical-align: top;" align="center" >';
             if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($session_id)!=0)) {
-                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=edit&amp;content=forumcategory&amp;id=".intval($forum_category['cat_id'])."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
-                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=delete&amp;content=forumcategory&amp;id=".intval($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=edit&amp;content=forumcategory&amp;id=".intval($forum_category['cat_id'])."\">".Display::return_icon('edit.png',get_lang('Edit'), array(), 22)."</a>";
+                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=delete&amp;content=forumcategory&amp;id=".intval($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'), array(), 22)."</a>";
                 display_visible_invisible_icon('forumcategory', prepare4display($forum_category['cat_id']), prepare4display($forum_category['visibility']));
                 display_lock_unlock_icon('forumcategory',prepare4display($forum_category['cat_id']), prepare4display($forum_category['locked']));
                 display_up_down_icon('forumcategory',prepare4display($forum_category['cat_id']), $forum_categories_list);
@@ -231,8 +231,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
             if (!empty($forums_in_category)) {
 
             // step 4: the interim headers (for the forum)
-            echo '<tr class="forum_header">';
-            echo "<td ></td>";
+            echo '<tr class="forum_header">';            
             echo "<td ></td>";             
             echo "<td >".get_lang('Forum')."</td>";
             echo "<td>".get_lang('Topics')."</td>";
@@ -248,19 +247,19 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
             $forum_count=0;
 
 
-                foreach ($forum_list as $key=>$forum) {
-                    // Here we clean the whatnew_post_info array a little bit because to display the icon we
-                    // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
-                    if (!empty($whatsnew_post_info)) {
-                        if (is_array(isset($whatsnew_post_info[$forum['forum_id']])?$whatsnew_post_info[$forum['forum_id']]:null)) {
-                            foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array) {
-                                if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id]))	{
-                                    unset($whatsnew_post_info[$forum['forum_id']][$key_thread_id]);
-                                    unset($_SESSION['whatsnew_post_info'][$forum['forum_id']][$key_thread_id]);
-                                }
+            foreach ($forum_list as $key=>$forum) {
+                // Here we clean the whatnew_post_info array a little bit because to display the icon we
+                // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
+                if (!empty($whatsnew_post_info)) {
+                    if (is_array(isset($whatsnew_post_info[$forum['forum_id']])?$whatsnew_post_info[$forum['forum_id']]:null)) {
+                        foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array) {
+                            if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id]))	{
+                                unset($whatsnew_post_info[$forum['forum_id']][$key_thread_id]);
+                                unset($_SESSION['whatsnew_post_info'][$forum['forum_id']][$key_thread_id]);
                             }
                         }
                     }
+                }
 
 
                     // note: this can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
@@ -317,6 +316,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
                             $mywhatsnew_post_info=isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']]: null;
                             
                             $forum_image = '';
+                            
+                            echo "<td width=\"20\">";  
+                            
                             // Showing the image
                             if(!empty($forum['forum_image'])) {
 
@@ -332,27 +334,25 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
                                     $forum_image =  "<img src=\"$image_path\" $img_attributes>";                                 
                                 } else {
                                     $forum_image = '';
-                                }                               
-                            }    
-                            echo "<td width=\"20\">";   
-                            echo $forum_image;
-                            echo "</td>";
-                                                        
-                            echo "<td width=\"20\">";                            
-
-                            if ($forum['forum_of_group']!=='0') {
-                                if (is_array($mywhatsnew_post_info) and !empty($mywhatsnew_post_info)) {
-                                    echo icon('../img/forumgroupnew.gif');
-                                } else {
-                                    echo icon('../img/forumgroup.gif', get_lang('GroupForum'));
                                 }
-                            } else {
-                                if (is_array($mywhatsnew_post_info) and !empty($mywhatsnew_post_info)) {
-                                    echo icon('../img/forum.gif', get_lang('Forum'));
+                                echo $forum_image;
+                                                                                                       
+                            } else {                                    
+                                if ($forum['forum_of_group']!=='0') {
+                                    if (is_array($mywhatsnew_post_info) and !empty($mywhatsnew_post_info)) {
+                                        echo Display::return_icon('forumgroupnew.gif');
+                                    } else {
+                                        echo Display::return_icon('forumgroup.gif', get_lang('GroupForum'));
+                                    }
                                 } else {
-                                    echo icon('../img/forum.gif');
-                                }
-                            }                            
+                                    if (is_array($mywhatsnew_post_info) and !empty($mywhatsnew_post_info)) {
+                                        echo Display::return_icon('forum.gif', get_lang('Forum'));
+                                    } else {
+                                        echo Display::return_icon('forum.gif');
+                                    }
+                                }                            
+                            }
+                            
                             echo "</td>";
 
                             //validacion when belongs to a session
@@ -403,8 +403,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
                             echo "</td>";
                             echo "<td nowrap=\"nowrap\" align=\"center\">";
                             if (api_is_allowed_to_edit(false,true) && !($forum['session_id']==0 && intval($session_id)!=0)) {
-                                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
-                                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
+                                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".Display::return_icon('edit.png',get_lang('Edit'), array(), 22)."</a>";
+                                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'), array(), 22)."</a>";
                                 display_visible_invisible_icon('forum',$forum['forum_id'], $forum['visibility']);
                                 display_lock_unlock_icon('forum',$forum['forum_id'], $forum['locked']);
                                 display_up_down_icon('forum',$forum['forum_id'], $forums_in_category);
@@ -418,7 +418,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
                             }
 
                             if (!api_is_anonymous()  && api_is_allowed_to_session_edit(false,true) ) {
-                                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=notify&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
+                                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=notify&amp;content=forum&amp;id=".$forum['forum_id']."\">".Display::return_icon($iconnotify, get_lang('NotifyMe'))."</a>";
                             }
                             echo "</td>";
                             echo "</tr>";

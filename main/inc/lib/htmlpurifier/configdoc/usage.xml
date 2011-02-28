@@ -6,6 +6,7 @@
   </file>
   <file name="HTMLPurifier/Lexer.php">
    <line>81</line>
+   <line>284</line>
   </file>
   <file name="HTMLPurifier/Lexer/DirectLex.php">
    <line>53</line>
@@ -39,6 +40,11 @@
  <directive id="CSS.AllowedProperties">
   <file name="HTMLPurifier/CSSDefinition.php">
    <line>275</line>
+  </file>
+ </directive>
+ <directive id="CSS.ForbiddenProperties">
+  <file name="HTMLPurifier/CSSDefinition.php">
+   <line>289</line>
   </file>
  </directive>
  <directive id="Cache.DefinitionImpl">
@@ -103,9 +109,17 @@
    <line>87</line>
   </file>
  </directive>
- <directive id="Output.Newline">
+ <directive id="Core.NormalizeNewlines">
   <file name="HTMLPurifier/Generator.php">
    <line>101</line>
+  </file>
+  <file name="HTMLPurifier/Lexer.php">
+   <line>266</line>
+  </file>
+ </directive>
+ <directive id="Output.Newline">
+  <file name="HTMLPurifier/Generator.php">
+   <line>102</line>
   </file>
  </directive>
  <directive id="HTML.BlockWrapper">
@@ -135,12 +149,12 @@
  </directive>
  <directive id="HTML.ForbiddenElements">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>337</line>
+   <line>342</line>
   </file>
  </directive>
  <directive id="HTML.ForbiddenAttributes">
   <file name="HTMLPurifier/HTMLDefinition.php">
-   <line>338</line>
+   <line>343</line>
   </file>
  </directive>
  <directive id="HTML.Trusted">
@@ -148,7 +162,7 @@
    <line>202</line>
   </file>
   <file name="HTMLPurifier/Lexer.php">
-   <line>258</line>
+   <line>271</line>
   </file>
   <file name="HTMLPurifier/HTMLModule/Image.php">
    <line>27</line>
@@ -210,7 +224,12 @@
  </directive>
  <directive id="Core.ConvertDocumentToFragment">
   <file name="HTMLPurifier/Lexer.php">
-   <line>267</line>
+   <line>282</line>
+  </file>
+ </directive>
+ <directive id="Core.RemoveProcessingInstructions">
+  <file name="HTMLPurifier/Lexer.php">
+   <line>303</line>
   </file>
  </directive>
  <directive id="URI.">
@@ -334,6 +353,11 @@
   </file>
   <file name="HTMLPurifier/HTMLModule/Name.php">
    <line>13</line>
+  </file>
+ </directive>
+ <directive id="HTML.FlashAllowFullScreen">
+  <file name="HTMLPurifier/AttrTransform/SafeParam.php">
+   <line>37</line>
   </file>
  </directive>
  <directive id="Core.EscapeInvalidChildren">

@@ -234,13 +234,40 @@ class Security {
      * Filtering for XSS is very easily done by using the htmlentities() function.
      * This kind of filtering prevents JavaScript snippets to be understood as such.
      * @param	mixed	The variable to filter for XSS, this params can be a string or an array (example : array(x,y))
-     * @param   integer The user status,constant allowed(STUDENT,COURSEMANAGER,ANONYMOUS,COURSEMANAGERLOWSECURITY)
+     * @param   integer The user status,constant allowed (STUDENT, COURSEMANAGER, ANONYMOUS, COURSEMANAGERLOWSECURITY)
      * @return	mixed	Filtered string or array
      */
-    public static function remove_XSS ($var,$user_status=ANONYMOUS) {
+    public static function remove_XSS ($var, $user_status = ANONYMOUS) {
+        if ($user_status == COURSEMANAGERLOWSECURITY) {
+            return $var;  // No filtering.
+        }
         static $purifier = array();
         if (!isset($purifier[$user_status])) {
-            $purifier[$user_status] = new HTMLPurifier(null, $user_status);
+            $config = HTMLPurifier_Config::createDefault();
+            $config->set('Core.Encoding', api_get_system_encoding());
+            $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
+            $config->set('HTML.TidyLevel', 'light');
+            $config->set('CSS.AllowTricky', true); // We need the css definition display: none;
+            if ($user_status == STUDENT) {
+                global $tag_student, $attribute_student;
+                $config->set('HTML.SafeEmbed', true);
+                $config->set('HTML.SafeObject', true);
+                $config->set('Filter.YouTube', true);
+                $config->set('HTML.AllowedElements', $tag_student);
+                $config->set('HTML.AllowedAttributes', $attribute_student);
+            } elseif ($user_status == COURSEMANAGER) {
+                global $tag_teacher, $attribute_teacher;
+                $config->set('HTML.SafeEmbed', true);
+                $config->set('HTML.SafeObject', true);
+                $config->set('Filter.YouTube', true);
+                $config->set('HTML.AllowedElements', $tag_teacher);
+                $config->set('HTML.AllowedAttributes', $attribute_teacher);
+            } else {
+                global $tag_anonymous,$attribute_anonymous;
+                $config->set('HTML.AllowedElements', $tag_anonymous);
+                $config->set('HTML.AllowedAttributes', $attribute_anonymous);
+            }
+            $purifier[$user_status] = new HTMLPurifier($config);
         }
         if (is_array($var)) {
             return $purifier[$user_status]->purifyArray($var);

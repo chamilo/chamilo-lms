@@ -4952,26 +4952,38 @@ class learnpath {
                 $return .= '<p class="lp_title">' . $row['title'] . '</p>';
                 //$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';
                 //$return .= '<hr />';
-                if ($row['item_type'] == TOOL_DOCUMENT) {
-                    $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-                    $sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE id = " . Database :: escape_string($row['path']);
-                    $result = Database::query($sql_doc);
-                    $path_file = Database :: result($result, 0, 0);
-                    $path_parts = pathinfo($path_file);
-                    // TODO: Correct the following naive comparisons, also, htm extension is missing.
-                    if (in_array($path_parts['extension'], array (
-                            'html',
-                            'txt',
-                            'png',
-                            'jpg',
-                            'JPG',
-                            'jpeg',
-                            'JPEG',
-                            'gif',
-                            'swf'
-                        ))) {
-                        $return .= $this->display_document($row['path'], true, true);
-                    }
+                switch ($row['item_type']) {
+                    case TOOL_QUIZ:
+                        if (!empty($row['path'])) {
+                            require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
+                            $exercise = new Exercise();
+                            $exercise->read($row['path']);  
+                            // $exercise_url = api_get_path(WEB_CODE_PATH).'exercice/admin.php?exerciseId='.$exercise->id.'&'.api_get_cidReq().'&id_session='.api_get_session_id();           
+                            $return     .=$exercise->description.'<br />';
+                            //$return     .=Display::url($exercise_url, $exercise_url).'<br />';*/
+                        }
+                        break;
+                    case TOOL_DOCUMENT:
+                        $tbl_doc      = Database :: get_course_table(TABLE_DOCUMENT);
+                        $sql_doc      = "SELECT path FROM " . $tbl_doc . " WHERE id = " . Database :: escape_string($row['path']);
+                        $result       = Database::query($sql_doc);
+                        $path_file    = Database :: result($result, 0, 0);
+                        $path_parts   = pathinfo($path_file);
+                        // TODO: Correct the following naive comparisons, also, htm extension is missing.
+                        if (in_array($path_parts['extension'], array (
+                                'html',
+                                'txt',
+                                'png',
+                                'jpg',
+                                'JPG',
+                                'jpeg',
+                                'JPEG',
+                                'gif',
+                                'swf'
+                            ))) {
+                            $return .= $this->display_document($row['path'], true, true);
+                        }
+                        break;
                 }
                 $return .= '</div>';
             }

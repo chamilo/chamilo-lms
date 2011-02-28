@@ -114,6 +114,7 @@ class HTMLPurifier
                 //activate in configuration setting
                 global $tag_teacher, $attribute_teacher;
                 $config->set('HTML.SafeEmbed', true);
+                $config->set('HTML.SafeObject', true);
                 $config->set('Filter.YouTube', true);
                 $config->set('HTML.AllowedElements', $tag_teacher);
                 $config->set('HTML.AllowedAttributes', $attribute_teacher);
@@ -124,7 +125,9 @@ class HTMLPurifier
             }
             $config->set('HTML.TidyLevel', 'light');
             $config->set('CSS.AllowTricky', true); // We need the css definition display: none;
+
             $this->config = HTMLPurifier_Config::create($config);
+
             $this->strategy = new HTMLPurifier_Strategy_Core();
         }
 

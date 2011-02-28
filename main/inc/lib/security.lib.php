@@ -247,7 +247,8 @@ class Security {
             $config->set('Core.Encoding', api_get_system_encoding());
             $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
             $config->set('HTML.TidyLevel', 'light');
-            $config->set('CSS.AllowTricky', true); // We need the css definition display: none;
+            $config->set('Core.ConvertDocumentToFragment', false);
+            $config->set('Core.RemoveProcessingInstructions', true);
             if ($user_status == STUDENT) {
                 global $tag_student, $attribute_student;
                 $config->set('HTML.SafeEmbed', true);
@@ -267,6 +268,10 @@ class Security {
                 $config->set('HTML.AllowedElements', $tag_anonymous);
                 $config->set('HTML.AllowedAttributes', $attribute_anonymous);
             }
+            $config->set('CSS.AllowImportant', true);
+            $config->set('CSS.AllowTricky', true); // We need the css definition display: none;
+            $config->set('CSS.Proprietary', true);
+            $config->set('HTML.FlashAllowFullScreen', true);
             $purifier[$user_status] = new HTMLPurifier($config);
         }
         if (is_array($var)) {

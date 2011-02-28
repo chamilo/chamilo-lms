@@ -17,9 +17,17 @@
 
 // ALLOWED HTML FOR STUDENTS
 
-// ADDRESS
+// address
 $allowed_tags_student['address'] = array();
-// APPLET
+$allowed_tags_student['address']['class'] = array();
+$allowed_tags_student['address']['dir'] = array();
+$allowed_tags_student['address']['id'] = array();
+$allowed_tags_student['address']['lang'] = array();
+$allowed_tags_student['address']['style'] = array();
+$allowed_tags_student['address']['title'] = array();
+$allowed_tags_student['address']['xml:lang'] = array();
+
+// applet
 /*
 $allowed_tags_student['applet'] = array();
 $allowed_tags_student['applet']['codebase'] = array();
@@ -28,7 +36,7 @@ $allowed_tags_student['applet']['name'] = array();
 $allowed_tags_student['applet']['alt'] = array();
 */
 
-// AREA
+// area
 /*
 $allowed_tags_student['area'] = array();
 $allowed_tags_student['area']['shape'] = array();
@@ -36,7 +44,8 @@ $allowed_tags_student['area']['coords'] = array();
 $allowed_tags_student['area']['href'] = array();
 $allowed_tags_student['area']['alt'] = array();
 */
-// A
+
+// a
 $allowed_tags_student['a'] = array();
 $allowed_tags_student['a']['class'] = array();
 $allowed_tags_student['a']['id'] = array();
@@ -45,32 +54,41 @@ $allowed_tags_student['a']['title'] = array();
 $allowed_tags_student['a']['rel'] = array();
 $allowed_tags_student['a']['rev'] = array();
 $allowed_tags_student['a']['name'] = array();
-// ABBR
+
+// abbr
 $allowed_tags_student['abbr'] = array();
 $allowed_tags_student['abbr']['title'] = array();
-// ACRONYM
+
+// acronym
 $allowed_tags_student['acronym'] = array();
 $allowed_tags_student['acronym']['title'] = array();
-// B
+
+// b
 $allowed_tags_student['b'] = array();
 $allowed_tags_student['b']['class'] = array();
 $allowed_tags_student['b']['id'] = array();
-// BASE
+
+// base
 /*
 $allowed_tags_student['base'] = array();
 $allowed_tags_student['base']['href'] = array();*/
-// BASEFONT
+
+// basefont
 $allowed_tags_student['basefont'] = array();
 $allowed_tags_student['basefont']['size'] = array();
-// BDO
+
+// bdo
 $allowed_tags_student['bdo'] = array();
 $allowed_tags_student['bdo']['dir'] = array();
-// BIG
+
+// big
 $allowed_tags_student['big'] = array();
-// BLOCKQUOTE
+
+// blockquote
 $allowed_tags_student['blockquote'] = array();
 $allowed_tags_student['blockquote']['cite'] = array();
-// BODY
+
+// body
 $allowed_tags_student_full_page['body'] = array();
 $allowed_tags_student_full_page['body']['alink'] = array();
 $allowed_tags_student_full_page['body']['background'] = array();
@@ -78,68 +96,81 @@ $allowed_tags_student_full_page['body']['bgcolor'] = array();
 $allowed_tags_student_full_page['body']['link'] = array();
 $allowed_tags_student_full_page['body']['text'] = array();
 $allowed_tags_student_full_page['body']['vlink'] = array();
-// BR
+
+// br
 $allowed_tags_student['br'] = array();
-// BUTTON
+
+// button
 /*
 $allowed_tags_student['button'] = array();
 $allowed_tags_student['button']['disabled'] = array();
 $allowed_tags_student['button']['name'] = array();
 $allowed_tags_student['button']['type'] = array();
 $allowed_tags_student['button']['value'] = array(); */
-// CAPTION
+
+// caption
 $allowed_tags_student['caption'] = array();
 $allowed_tags_student['caption']['align'] = array();
-// CODE
+
+// code
 $allowed_tags_student['code'] = array();
-// COL
+
+// col
 $allowed_tags_student['col'] = array();
 $allowed_tags_student['col']['align'] = array();
 //$allowed_tags_student['col']['char'] = array();
 $allowed_tags_student['col']['charoff'] = array();
 $allowed_tags_student['col']['valign'] = array();
 $allowed_tags_student['col']['width'] = array();
-// DEL
+
+// del
 $allowed_tags_student['del'] = array();
 //$allowed_tags_student['del']['datetime'] = array();
-// DD
+
+// dd
 $allowed_tags_student['dd'] = array();
-// DIV
+
+// div
 $allowed_tags_student['div'] = array();
 $allowed_tags_student['div']['align'] = array();
 $allowed_tags_student['div']['class'] = array();
 $allowed_tags_student['div']['id'] = array();
 $allowed_tags_student['div']['style'] = array();
-// DL
+
+// dl
 $allowed_tags_student['dl'] = array();
-// DT
+
+// dt
 $allowed_tags_student['dt'] = array();
-// EM
+
+// em
 $allowed_tags_student['em'] = array();
-// EMBED
+
+// embed
 $allowed_tags_student['embed'] = array();
 $allowed_tags_student['embed']['height'] = array();
 $allowed_tags_student['embed']['width'] = array();
 $allowed_tags_student['embed']['type'] = array();
 //$allowed_tags_student['embed']['quality'] = array();
 $allowed_tags_student['embed']['src'] = array();
-
 $allowed_tags_student['embed']['flashvars'] = array();
 $allowed_tags_student['embed']['allowscriptaccess'] = array();
 //$allowed_tags_student['embed']['allowfullscreen'] = array();
 //$allowed_tags_student['embed']['bgcolor'] = array();
 //$allowed_tags_student['embed']['pluginspage'] = array();
 
-// FIELDSET
+// fieldset
 /*
 $allowed_tags_student['fieldset'] = array(); */
-// FONT
+
+// font
 $allowed_tags_student['font'] = array();
 $allowed_tags_student['font']['color'] = array();
 $allowed_tags_student['font']['face'] = array();
 $allowed_tags_student['font']['size'] = array();
 $allowed_tags_student['font']['style'] = array();
-// FORM
+
+// form
 /*
 $allowed_tags_student['form'] = array();
 $allowed_tags_student['form']['action'] = array();
@@ -149,7 +180,8 @@ $allowed_tags_student['form']['enctype'] = array();
 $allowed_tags_student['form']['method'] = array();
 $allowed_tags_student['form']['name'] = array();
 $allowed_tags_student['form']['target'] = array();*/
-// FRAME
+
+// frame
 $allowed_tags_student_full_page['frame'] = array();
 $allowed_tags_student_full_page['frame']['frameborder'] = array();
 $allowed_tags_student_full_page['frame']['longsesc'] = array();
@@ -159,44 +191,53 @@ $allowed_tags_student_full_page['frame']['name'] = array();
 $allowed_tags_student_full_page['frame']['noresize'] = array();
 $allowed_tags_student_full_page['frame']['scrolling'] = array();
 $allowed_tags_student_full_page['frame']['src'] = array();
-// FRAMESET
+
+// frameset
 $allowed_tags_student_full_page['frameset'] = array();
 $allowed_tags_student_full_page['frameset']['cols'] = array();
 $allowed_tags_student_full_page['frameset']['rows'] = array();
-// HEAD
+
+// head
 $allowed_tags_student_full_page['head'] = array();
 $allowed_tags_student_full_page['head']['profile'] = array();
-// H1
+
+// h1
 $allowed_tags_student['h1'] = array();
 $allowed_tags_student['h1']['align'] = array();
 $allowed_tags_student['h1']['class'] = array();
 $allowed_tags_student['h1']['id'] = array();
-// H2
+
+// h2
 $allowed_tags_student['h2'] = array();
 $allowed_tags_student['h2']['align'] = array();
 $allowed_tags_student['h2']['class'] = array();
 $allowed_tags_student['h2']['id'] = array();
-// H3
+
+// h3
 $allowed_tags_student['h3'] = array();
 $allowed_tags_student['h3']['align'] = array();
 $allowed_tags_student['h3']['class'] = array();
 $allowed_tags_student['h3']['id'] = array();
-// H4
+
+// h4
 $allowed_tags_student['h4'] = array();
 $allowed_tags_student['h4']['align'] = array();
 $allowed_tags_student['h4']['class'] = array();
 $allowed_tags_student['h4']['id'] = array();
-// H5
+
+// h5
 $allowed_tags_student['h5'] = array();
 $allowed_tags_student['h5']['align'] = array();
 $allowed_tags_student['h5']['class'] = array();
 $allowed_tags_student['h5']['id'] = array();
-// H6
+
+// h6
 $allowed_tags_student['h6'] = array();
 $allowed_tags_student['h6']['align'] = array();
 $allowed_tags_student['h6']['class'] = array();
 $allowed_tags_student['h6']['id'] = array();
-// HR
+
+// hr
 $allowed_tags_student['hr'] = array();
 $allowed_tags_student['hr']['align'] = array();
 $allowed_tags_student['hr']['noshade'] = array();
@@ -204,12 +245,15 @@ $allowed_tags_student['hr']['size'] = array();
 $allowed_tags_student['hr']['width'] = array();
 $allowed_tags_student['hr']['class'] = array();
 $allowed_tags_student['hr']['id'] = array();
-// HTML
+
+// html
 $allowed_tags_student_full_page['html'] = array();
 $allowed_tags_student_full_page['html']['xmlns'] = array();
-// I
+
+// i
 $allowed_tags_student['i'] = array();
-// IFRAME
+
+// iframe
 /*
 $allowed_tags_student['iframe'] = array();
 $allowed_tags_student['iframe']['align'] = array();
@@ -222,7 +266,8 @@ $allowed_tags_student['iframe']['name'] = array();
 $allowed_tags_student['iframe']['scrolling'] = array();
 $allowed_tags_student['iframe']['src'] = array();
 $allowed_tags_student['iframe']['width'] = array();*/
-// IMG
+
+// img
 $allowed_tags_student['img'] = array();
 $allowed_tags_student['img']['alt'] = array();
 $allowed_tags_student['img']['align'] = array();
@@ -235,7 +280,8 @@ $allowed_tags_student['img']['src'] = array();
 //$allowed_tags_student['img']['usemap'] = array();
 $allowed_tags_student['img']['vspace'] = array();
 $allowed_tags_student['img']['width'] = array();
-// INPUT
+
+// input
 /*
 $allowed_tags_student['input'] = array();
 $allowed_tags_student['input']['accept'] = array();
@@ -251,24 +297,30 @@ $allowed_tags_student['input']['src'] = array();
 $allowed_tags_student['input']['type'] = array();
 $allowed_tags_student['input']['value'] = array();
 */
-// INS
+
+// ins
 $allowed_tags_student['ins'] = array();
 //$allowed_tags_student['ins']['datetime'] = array();
 $allowed_tags_student['ins']['cite'] = array();
-// KBD
+
+// kbd
 $allowed_tags_student['kbd'] = array();
-// LABEL
+
+// label
 /*
 $allowed_tags_student['label'] = array();
 $allowed_tags_student['label']['for'] = array();
 */
-// LEGEND
+
+// legend
 /*
 $allowed_tags_student['legend'] = array();
 $allowed_tags_student['legend']['align'] = array();*/
-// LI
+
+// li
 $allowed_tags_student['li'] = array();
-// LINK
+
+// link
 $allowed_tags_student_full_page['link'] = array();
 $allowed_tags_student_full_page['link']['charset'] = array();
 $allowed_tags_student_full_page['link']['href'] = array();
@@ -278,22 +330,27 @@ $allowed_tags_student_full_page['link']['rel'] = array();
 $allowed_tags_student_full_page['link']['rev'] = array();
 $allowed_tags_student_full_page['link']['target'] = array();
 $allowed_tags_student_full_page['link']['type'] = array();
-// MAP
+
+// map
 /*
 $allowed_tags_student['map'] = array();
 $allowed_tags_student['map']['id'] = array();
 $allowed_tags_student['map']['name'] = array();*/
-// MENU
+
+// menu
 $allowed_tags_student['menu'] = array();
-// META
+
+// meta
 $allowed_tags_student_full_page['meta'] = array();
 $allowed_tags_student_full_page['meta']['content'] = array();
 $allowed_tags_student_full_page['meta']['http-equiv'] = array();
 $allowed_tags_student_full_page['meta']['name'] = array();
 $allowed_tags_student_full_page['meta']['scheme'] = array();
-// NOFRAMES
+
+// noframes
 $allowed_tags_student_full_page['noframes'] = array();
-// OBJECT
+
+// object
 $allowed_tags_student['object'] = array();
 //$allowed_tags_student['object']['align'] = array();
 //$allowed_tags_student['object']['archive'] = array();
@@ -311,48 +368,60 @@ $allowed_tags_student['object']['type'] = array();
 //$allowed_tags_student['object']['usemap'] = array();
 //$allowed_tags_student['object']['vspace'] = array();
 $allowed_tags_student['object']['width'] = array();
-// OL
+
+// ol
 $allowed_tags_student['ol'] = array();
 $allowed_tags_student['ol']['compact'] = array();
 $allowed_tags_student['ol']['start'] = array();
 $allowed_tags_student['ol']['type'] = array();
-// OPTGROUP
+
+// optgroup
 /*
 $allowed_tags_student['optgroup'] = array();
 $allowed_tags_student['optgroup']['label'] = array();
 $allowed_tags_student['optgroup']['disabled'] = array();*/
-// OPTION
+
+// option
 /*
 $allowed_tags_student['option'] = array();
 $allowed_tags_student['option']['disabled'] = array();
 $allowed_tags_student['option']['label'] = array();
 $allowed_tags_student['option']['selected'] = array();
 $allowed_tags_student['option']['value'] = array();*/
-// P
+
+// p
 $allowed_tags_student['p'] = array();
 $allowed_tags_student['p']['align'] = array();
-// PARAM
+
+// param
 $allowed_tags_student['param'] = array();
 $allowed_tags_student['param']['name'] = array();
 //$allowed_tags_student['param']['type'] = array();
 $allowed_tags_student['param']['value'] = array();
 //$allowed_tags_student['param']['valuetype'] = array();
-// PRE
+
+// pre
 $allowed_tags_student['pre'] = array();
 $allowed_tags_student['pre']['width'] = array();
-// Q
+
+// q
 $allowed_tags_student['q'] = array();
 $allowed_tags_student['q']['cite'] = array();
-// S
+
+// s
 $allowed_tags_student['s'] = array();
-// SPAN
+
+// span
 $allowed_tags_student['span'] = array();
 $allowed_tags_student['span']['style'] = array();
-// STRIKE
+
+// strike
 $allowed_tags_student['strike'] = array();
-// STRONG
+
+// strong
 $allowed_tags_student['strong'] = array();
-// STYLE
+
+// style
 $allowed_tags_student['style'] = array();
 $allowed_tags_student['style']['type'] = array();
 $allowed_tags_student['style']['media'] = array();
@@ -360,11 +429,14 @@ $allowed_tags_student['style']['media'] = array();
 $allowed_tags_student_full_page['style'] = array();
 $allowed_tags_student_full_page['style']['type'] = array();
 $allowed_tags_student_full_page['style']['media'] = array();
-// SUB
+
+// sub
 $allowed_tags_student['sub'] = array();
-// SUP
+
+// sup
 $allowed_tags_student['sup'] = array();
-// TABLE
+
+// table
 $allowed_tags_student['table'] = array();
 $allowed_tags_student['table']['align'] = array();
 $allowed_tags_student['table']['bgcolor'] = array();
@@ -375,13 +447,15 @@ $allowed_tags_student['table']['frame'] = array();
 $allowed_tags_student['table']['rules'] = array();
 $allowed_tags_student['table']['summary'] = array();
 $allowed_tags_student['table']['width'] = array();
-// TBODY
+
+// tbody
 $allowed_tags_student['tbody'] = array();
 $allowed_tags_student['tbody']['align'] = array();
 //$allowed_tags_student['tbody']['char'] = array();
 $allowed_tags_student['tbody']['charoff'] = array();
 $allowed_tags_student['tbody']['valign'] = array();
-// TD
+
+// td
 $allowed_tags_student['td'] = array();
 $allowed_tags_student['td']['abbr'] = array();
 $allowed_tags_student['td']['align'] = array();
@@ -397,7 +471,8 @@ $allowed_tags_student['td']['rowspan'] = array();
 //$allowed_tags_student['td']['scope'] = array();
 $allowed_tags_student['td']['valign'] = array();
 $allowed_tags_student['td']['width'] = array();
-// TEXTAREA
+
+// textarea
 /*
 $allowed_tags_student['textarea'] = array();
 $allowed_tags_student['textarea']['cols'] = array();
@@ -405,13 +480,15 @@ $allowed_tags_student['textarea']['rows'] = array();
 $allowed_tags_student['textarea']['disabled'] = array();
 $allowed_tags_student['textarea']['name'] = array();
 $allowed_tags_student['textarea']['readonly'] = array();*/
-// TFOOT
+
+// tfoot
 $allowed_tags_student['tfoot'] = array();
 $allowed_tags_student['tfoot']['align'] = array();
 //$allowed_tags_student['tfoot']['char'] = array();
 $allowed_tags_student['tfoot']['charoff'] = array();
 $allowed_tags_student['tfoot']['valign'] = array();
-// TH
+
+// th
 $allowed_tags_student['th'] = array();
 $allowed_tags_student['th']['abbr'] = array();
 $allowed_tags_student['th']['align'] = array();
@@ -427,38 +504,48 @@ $allowed_tags_student['th']['rowspan'] = array();
 //$allowed_tags_student['th']['scope'] = array();
 $allowed_tags_student['th']['valign'] = array();
 $allowed_tags_student['th']['width'] = array();
-// THEAD
+
+// thead
 $allowed_tags_student['thead'] = array();
 $allowed_tags_student['thead']['align'] = array();
 //$allowed_tags_student['thead']['char'] = array();
 $allowed_tags_student['thead']['charoff'] = array();
 $allowed_tags_student['thead']['valign'] = array();
-// TITLE
+
+// title
 /*
 $allowed_tags_student['title'] = array();*/
-// TR
+
+// tr
 $allowed_tags_student['tr'] = array();
 $allowed_tags_student['tr']['align'] = array();
 $allowed_tags_student['tr']['bgcolor'] = array();
 //$allowed_tags_student['tr']['char'] = array();
 $allowed_tags_student['tr']['charoff'] = array();
 $allowed_tags_student['tr']['valign'] = array();
-// TT
+
+// tt
 $allowed_tags_student['tt'] = array();
-// U
+
+// u
 $allowed_tags_student['u'] = array();
-// UL
+
+// ul
 $allowed_tags_student['ul'] = array();
-// VAR
+
+// var
 $allowed_tags_student['var'] = array();
+
 
 // ALLOWED HTML FOR TEACHERS
 
 // Allow all HTML allowed for students
 $allowed_tags_teacher = $allowed_tags_student;
-// NOSCRIPT
+
+// noscript
 $allowed_tags_teacher['noscript'] = array();
-// SCRIPT
+
+// script
 $allowed_tags_teacher['script'] = array();
 $allowed_tags_teacher['script']['type'] = array();
 
@@ -468,7 +555,7 @@ $allowed_tags_teacher['html']['xmlns'] = array();
 $allowed_tags_teacher['head'] = array();
 $allowed_tags_teacher['head']['profile'] = array();
 
-// BODY
+// body
 $allowed_tags_teacher['body'] = array();
 $allowed_tags_teacher['body']['alink'] = array();
 $allowed_tags_teacher['body']['background'] = array();
@@ -479,11 +566,12 @@ $allowed_tags_teacher['body']['vlink'] = array();
 
 
 // ALLOWED HTML FOR TEACHERS FOR HTMLPURIFIER
+// TODO: This section is to be checked for removal.
 
-
-// NOSCRIPT
+// noscript
 $allowed_tags_teachers['noscript'] = array();
-// SCRIPT
+
+// script
 $allowed_tags_teachers['script'] = array();
 $allowed_tags_teachers['script']['type'] = array();
 
@@ -493,7 +581,7 @@ $allowed_tags_teachers['html']['xmlns'] = array();
 $allowed_tags_teachers['head'] = array();
 $allowed_tags_teachers['head']['profile'] = array();
 
-// BODY
+// body
 $allowed_tags_teachers['body'] = array();
 $allowed_tags_teachers['body']['alink'] = array();
 $allowed_tags_teachers['body']['background'] = array();

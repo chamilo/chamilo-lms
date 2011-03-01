@@ -19,7 +19,6 @@
 
 // a
 $allowed_tags_student['a'] = array();
-$allowed_tags_student['a']['accesskey'] = array();
 $allowed_tags_student['a']['class'] = array();
 $allowed_tags_student['a']['dir'] = array();
 $allowed_tags_student['a']['id'] = array();
@@ -29,7 +28,6 @@ $allowed_tags_student['a']['name'] = array();
 $allowed_tags_student['a']['rel'] = array();
 $allowed_tags_student['a']['rev'] = array();
 $allowed_tags_student['a']['style'] = array();
-$allowed_tags_student['a']['tabindex'] = array();
 $allowed_tags_student['a']['target'] = array();
 $allowed_tags_student['a']['title'] = array();
 $allowed_tags_student['a']['xml:lang'] = array();
@@ -97,12 +95,6 @@ $allowed_tags_student['b']['xml:lang'] = array();
 $allowed_tags_student_full_page['base'] = array();
 $allowed_tags_student_full_page['base']['href'] = array();
 $allowed_tags_student_full_page['base']['target'] = array();
-*/
-
-// basefont
-/*
-$allowed_tags_student['basefont'] = array();
-$allowed_tags_student['basefont']['size'] = array();
 */
 
 // bdo
@@ -467,11 +459,13 @@ $allowed_tags_student['p'] = array();
 $allowed_tags_student['p']['align'] = array();
 
 // param
+/*
 $allowed_tags_student['param'] = array();
 $allowed_tags_student['param']['name'] = array();
 //$allowed_tags_student['param']['type'] = array();
 $allowed_tags_student['param']['value'] = array();
 //$allowed_tags_student['param']['valuetype'] = array();
+*/
 
 // pre
 $allowed_tags_student['pre'] = array();
@@ -495,10 +489,6 @@ $allowed_tags_student['strike'] = array();
 $allowed_tags_student['strong'] = array();
 
 // style
-$allowed_tags_student['style'] = array();
-$allowed_tags_student['style']['type'] = array();
-$allowed_tags_student['style']['media'] = array();
-
 $allowed_tags_student_full_page['style'] = array();
 $allowed_tags_student_full_page['style']['type'] = array();
 $allowed_tags_student_full_page['style']['media'] = array();
@@ -586,8 +576,7 @@ $allowed_tags_student['thead']['charoff'] = array();
 $allowed_tags_student['thead']['valign'] = array();
 
 // title
-/*
-$allowed_tags_student['title'] = array();*/
+$allowed_tags_student_full_page['title'] = array();
 
 // tr
 $allowed_tags_student['tr'] = array();
@@ -700,6 +689,10 @@ function convert_kses_to_htmlpurifier($allowed_tags) {
 
 global $allowed_html_student, $allowed_html_teacher, $allowed_html_anonymous;
 
-$allowed_html_student = convert_kses_to_htmlpurifier(array_merge($allowed_tags_student, $allowed_tags_student_full_page));
-$allowed_html_teacher = convert_kses_to_htmlpurifier(array_merge($allowed_tags_teacher, $allowed_tags_teacher_full_page));
-$allowed_html_anonymous = convert_kses_to_htmlpurifier(array_merge($allowed_tags_anonymous, $allowed_tags_anonymous_full_page));
+// TODO: Support for full-page tags is needed for HTMLPurifier.
+//$allowed_html_student = convert_kses_to_htmlpurifier(array_merge($allowed_tags_student, $allowed_tags_student_full_page));
+//$allowed_html_teacher = convert_kses_to_htmlpurifier(array_merge($allowed_tags_teacher, $allowed_tags_teacher_full_page));
+//$allowed_html_anonymous = convert_kses_to_htmlpurifier(array_merge($allowed_tags_anonymous, $allowed_tags_anonymous_full_page));
+$allowed_html_student = convert_kses_to_htmlpurifier(array_merge($allowed_tags_student));
+$allowed_html_teacher = convert_kses_to_htmlpurifier(array_merge($allowed_tags_teacher));
+$allowed_html_anonymous = convert_kses_to_htmlpurifier(array_merge($allowed_tags_anonymous));

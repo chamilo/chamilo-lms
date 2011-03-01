@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This page defines all HTML-tages and their attributes that are allowed in
  * Chamilo. 2 arrays are defined, one contains the allowed HTML for students and
@@ -11,6 +12,8 @@
  * - for each of the attributes allowed in the tag, there should be a line like
  *    $allowed_tags_XXXX['tagname']['attributename'] = array();
  * - please keep the content of this file alphabetically structured
+ *
+ * @link http://www.w3schools.com/tags/
  */
 
 // KSES-COMPATIBLE SETTINGS
@@ -62,24 +65,6 @@ $allowed_tags_student['address']['style'] = array();
 $allowed_tags_student['address']['title'] = array();
 $allowed_tags_student['address']['xml:lang'] = array();
 
-// applet
-/*
-$allowed_tags_student['applet'] = array();
-$allowed_tags_student['applet']['codebase'] = array();
-$allowed_tags_student['applet']['code'] = array();
-$allowed_tags_student['applet']['name'] = array();
-$allowed_tags_student['applet']['alt'] = array();
-*/
-
-// area
-/*
-$allowed_tags_student['area'] = array();
-$allowed_tags_student['area']['shape'] = array();
-$allowed_tags_student['area']['coords'] = array();
-$allowed_tags_student['area']['href'] = array();
-$allowed_tags_student['area']['alt'] = array();
-*/
-
 // b
 $allowed_tags_student['b'] = array();
 $allowed_tags_student['b']['class'] = array();
@@ -91,11 +76,16 @@ $allowed_tags_student['b']['title'] = array();
 $allowed_tags_student['b']['xml:lang'] = array();
 
 // base
-/*
 $allowed_tags_student_full_page['base'] = array();
 $allowed_tags_student_full_page['base']['href'] = array();
 $allowed_tags_student_full_page['base']['target'] = array();
-*/
+
+// basefont (IE only)
+$allowed_tags_student['basefont'] = array();
+$allowed_tags_student['basefont']['face'] = array();
+$allowed_tags_student['basefont']['color'] = array();
+$allowed_tags_student['basefont']['id'] = array();
+$allowed_tags_student['basefont']['size'] = array();
 
 // bdo
 $allowed_tags_student['bdo'] = array();
@@ -151,14 +141,6 @@ $allowed_tags_student['br']['id'] = array();
 $allowed_tags_student['br']['style'] = array();
 $allowed_tags_student['br']['title'] = array();
 
-// button
-/*
-$allowed_tags_student['button'] = array();
-$allowed_tags_student['button']['disabled'] = array();
-$allowed_tags_student['button']['name'] = array();
-$allowed_tags_student['button']['type'] = array();
-$allowed_tags_student['button']['value'] = array(); */
-
 // caption
 $allowed_tags_student['caption'] = array();
 $allowed_tags_student['caption']['align'] = array();
@@ -169,6 +151,25 @@ $allowed_tags_student['caption']['lang'] = array();
 $allowed_tags_student['caption']['style'] = array();
 $allowed_tags_student['caption']['title'] = array();
 $allowed_tags_student['caption']['xml:lang'] = array();
+
+// center
+$allowed_tags_student['center'] = array();
+$allowed_tags_student['center']['class'] = array();
+$allowed_tags_student['center']['dir'] = array();
+$allowed_tags_student['center']['id'] = array();
+$allowed_tags_student['center']['lang'] = array();
+$allowed_tags_student['center']['style'] = array();
+$allowed_tags_student['center']['title'] = array();
+
+// cite
+$allowed_tags_student['cite'] = array();
+$allowed_tags_student['cite']['class'] = array();
+$allowed_tags_student['cite']['dir'] = array();
+$allowed_tags_student['cite']['id'] = array();
+$allowed_tags_student['cite']['lang'] = array();
+$allowed_tags_student['cite']['style'] = array();
+$allowed_tags_student['cite']['title'] = array();
+$allowed_tags_student['cite']['xml:lang'] = array();
 
 // code
 $allowed_tags_student['code'] = array();
@@ -183,17 +184,51 @@ $allowed_tags_student['code']['xml:lang'] = array();
 // col
 $allowed_tags_student['col'] = array();
 $allowed_tags_student['col']['align'] = array();
-//$allowed_tags_student['col']['char'] = array();
-$allowed_tags_student['col']['charoff'] = array();
+$allowed_tags_student['col']['class'] = array();
+$allowed_tags_student['col']['dir'] = array();
+$allowed_tags_student['col']['id'] = array();
+$allowed_tags_student['col']['lang'] = array();
+$allowed_tags_student['col']['span'] = array();
+$allowed_tags_student['col']['style'] = array();
+$allowed_tags_student['col']['title'] = array();
 $allowed_tags_student['col']['valign'] = array();
 $allowed_tags_student['col']['width'] = array();
+$allowed_tags_student['col']['xml:lang'] = array();
 
-// del
-$allowed_tags_student['del'] = array();
-//$allowed_tags_student['del']['datetime'] = array();
+// colgroup
+$allowed_tags_student['colgroup'] = array();
+$allowed_tags_student['colgroup']['align'] = array();
+$allowed_tags_student['colgroup']['class'] = array();
+$allowed_tags_student['colgroup']['dir'] = array();
+$allowed_tags_student['colgroup']['id'] = array();
+$allowed_tags_student['colgroup']['lang'] = array();
+$allowed_tags_student['colgroup']['span'] = array();
+$allowed_tags_student['colgroup']['style'] = array();
+$allowed_tags_student['colgroup']['title'] = array();
+$allowed_tags_student['colgroup']['valign'] = array();
+$allowed_tags_student['colgroup']['width'] = array();
+$allowed_tags_student['colgroup']['xml:lang'] = array();
 
 // dd
 $allowed_tags_student['dd'] = array();
+$allowed_tags_student['dd']['class'] = array();
+$allowed_tags_student['dd']['dir'] = array();
+$allowed_tags_student['dd']['id'] = array();
+$allowed_tags_student['dd']['lang'] = array();
+$allowed_tags_student['dd']['style'] = array();
+$allowed_tags_student['dd']['title'] = array();
+$allowed_tags_student['dd']['xml:lang'] = array();
+
+// del
+$allowed_tags_student['del'] = array();
+$allowed_tags_student['del']['cite'] = array();
+$allowed_tags_student['del']['class'] = array();
+$allowed_tags_student['del']['dir'] = array();
+$allowed_tags_student['del']['id'] = array();
+$allowed_tags_student['del']['lang'] = array();
+$allowed_tags_student['del']['style'] = array();
+$allowed_tags_student['del']['title'] = array();
+$allowed_tags_student['del']['xml:lang'] = array();
 
 // div
 $allowed_tags_student['div'] = array();
@@ -346,27 +381,16 @@ $allowed_tags_student['img']['src'] = array();
 $allowed_tags_student['img']['vspace'] = array();
 $allowed_tags_student['img']['width'] = array();
 
-// input
-/*
-$allowed_tags_student['input'] = array();
-$allowed_tags_student['input']['accept'] = array();
-$allowed_tags_student['input']['align'] = array();
-$allowed_tags_student['input']['alt'] = array();
-$allowed_tags_student['input']['checked'] = array();
-$allowed_tags_student['input']['disabled'] = array();
-$allowed_tags_student['input']['maxlength'] = array();
-$allowed_tags_student['input']['name'] = array();
-$allowed_tags_student['input']['readonly'] = array();
-$allowed_tags_student['input']['size'] = array();
-$allowed_tags_student['input']['src'] = array();
-$allowed_tags_student['input']['type'] = array();
-$allowed_tags_student['input']['value'] = array();
-*/
-
 // ins
 $allowed_tags_student['ins'] = array();
-//$allowed_tags_student['ins']['datetime'] = array();
 $allowed_tags_student['ins']['cite'] = array();
+$allowed_tags_student['ins']['class'] = array();
+$allowed_tags_student['ins']['dir'] = array();
+$allowed_tags_student['ins']['id'] = array();
+$allowed_tags_student['ins']['lang'] = array();
+$allowed_tags_student['ins']['style'] = array();
+$allowed_tags_student['ins']['title'] = array();
+$allowed_tags_student['ins']['xml:lang'] = array();
 
 // kbd
 $allowed_tags_student['kbd'] = array();

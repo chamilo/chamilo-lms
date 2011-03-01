@@ -260,12 +260,14 @@ class Security {
                 $config->set('HTML.SafeEmbed', true);
                 $config->set('HTML.SafeObject', true);
                 $config->set('Filter.YouTube', true);
+                $config->set('HTML.FlashAllowFullScreen', true);
             } elseif ($user_status == COURSEMANAGER) {
                 global $allowed_html_teacher;
                 $config->set('HTML.Allowed', $allowed_html_teacher);
                 $config->set('HTML.SafeEmbed', true);
                 $config->set('HTML.SafeObject', true);
                 $config->set('Filter.YouTube', true);
+                $config->set('HTML.FlashAllowFullScreen', true);
             } else {
                 global $allowed_html_anonymous;
                 $config->set('HTML.Allowed', $allowed_html_anonymous);
@@ -273,7 +275,6 @@ class Security {
             $config->set('CSS.AllowImportant', true);
             $config->set('CSS.AllowTricky', true); // We need the css definition display: none;
             $config->set('CSS.Proprietary', true);
-            $config->set('HTML.FlashAllowFullScreen', true);
             $purifier[$user_status] = new HTMLPurifier($config);
         }
         if (is_array($var)) {

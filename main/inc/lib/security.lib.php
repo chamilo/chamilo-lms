@@ -243,30 +243,32 @@ class Security {
         }
         static $purifier = array();
         if (!isset($purifier[$user_status])) {
+            $cache_dir = api_get_path(SYS_ARCHIVE_PATH).'Serializer';
+            if (!file_exists($cache_dir)) {
+                mkdir($cache_dir, 0777);
+            }
             $config = HTMLPurifier_Config::createDefault();
+            $config->set('Cache.SerializerPath', $cache_dir);
             $config->set('Core.Encoding', api_get_system_encoding());
             $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
             $config->set('HTML.TidyLevel', 'light');
             $config->set('Core.ConvertDocumentToFragment', false);
             $config->set('Core.RemoveProcessingInstructions', true);
             if ($user_status == STUDENT) {
-                global $tag_student, $attribute_student;
+                global $allowed_html_student;
+                $config->set('HTML.Allowed', $allowed_html_student);
                 $config->set('HTML.SafeEmbed', true);
                 $config->set('HTML.SafeObject', true);
                 $config->set('Filter.YouTube', true);
-                $config->set('HTML.AllowedElements', $tag_student);
-                $config->set('HTML.AllowedAttributes', $attribute_student);
             } elseif ($user_status == COURSEMANAGER) {
-                global $tag_teacher, $attribute_teacher;
+                global $allowed_html_teacher;
+                $config->set('HTML.Allowed', $allowed_html_teacher);
                 $config->set('HTML.SafeEmbed', true);
                 $config->set('HTML.SafeObject', true);
                 $config->set('Filter.YouTube', true);
-                $config->set('HTML.AllowedElements', $tag_teacher);
-                $config->set('HTML.AllowedAttributes', $attribute_teacher);
             } else {
-                global $tag_anonymous,$attribute_anonymous;
-                $config->set('HTML.AllowedElements', $tag_anonymous);
-                $config->set('HTML.AllowedAttributes', $attribute_anonymous);
+                global $allowed_html_anonymous;
+                $config->set('HTML.Allowed', $allowed_html_anonymous);
             }
             $config->set('CSS.AllowImportant', true);
             $config->set('CSS.AllowTricky', true); // We need the css definition display: none;

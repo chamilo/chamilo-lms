@@ -681,22 +681,25 @@ unset($allowed_tags_anonymous['object']);
 
 // HTMLPURIFIER-COMPATIBLE SETTINGS
 
-function kses_to_htmlpurifier($allowed_tags) {
-    $result[0] = array();
-    $result[1] = array();
+function convert_kses_to_htmlpurifier($allowed_tags) {
+    $allowed_html = array();
     foreach ($allowed_tags as $key1 => & $value1) {
         $result[0][] = $key1;
         if (count($value1) > 0) {
+            $attr = array();
             foreach ($value1 as $key2 => & $value2) {
-                $result[1][] = $key1.'.'.$key2;
+                $attr[] = $key2;
             }
+            $allowed_html[] = $key1.'['.implode('|', $attr).']';
+        } else {
+            $allowed_html[] = $key1;
         }
     }
-    return $result;
+    return implode(',', $allowed_html);
 }
 
-global $tag_student, $attribute_student, $tag_teacher, $attribute_teacher, $tag_anonymous, $attribute_anonymous;
+global $allowed_html_student, $allowed_html_teacher, $allowed_html_anonymous;
 
-list($tag_student, $attribute_student) = kses_to_htmlpurifier(array_merge($allowed_tags_student, $allowed_tags_student_full_page));
-list($tag_teacher, $attribute_teacher) = kses_to_htmlpurifier(array_merge($allowed_tags_teacher, $allowed_tags_teacher_full_page));
-list($tag_anonymous, $attribute_anonymous) = kses_to_htmlpurifier(array_merge($allowed_tags_anonymous, $allowed_tags_anonymous_full_page));
+$allowed_html_student = convert_kses_to_htmlpurifier(array_merge($allowed_tags_student, $allowed_tags_student_full_page));
+$allowed_html_teacher = convert_kses_to_htmlpurifier(array_merge($allowed_tags_teacher, $allowed_tags_teacher_full_page));
+$allowed_html_anonymous = convert_kses_to_htmlpurifier(array_merge($allowed_tags_anonymous, $allowed_tags_anonymous_full_page));

@@ -256,18 +256,18 @@ class Security {
             $config->set('Core.RemoveProcessingInstructions', true);
             if ($user_status == STUDENT) {
                 global $allowed_html_student;
-                $config->set('HTML.Allowed', $allowed_html_student);
                 $config->set('HTML.SafeEmbed', true);
                 $config->set('HTML.SafeObject', true);
                 $config->set('Filter.YouTube', true);
                 $config->set('HTML.FlashAllowFullScreen', true);
+                $config->set('HTML.Allowed', $allowed_html_student);
             } elseif ($user_status == COURSEMANAGER) {
                 global $allowed_html_teacher;
-                $config->set('HTML.Allowed', $allowed_html_teacher);
                 $config->set('HTML.SafeEmbed', true);
                 $config->set('HTML.SafeObject', true);
                 $config->set('Filter.YouTube', true);
                 $config->set('HTML.FlashAllowFullScreen', true);
+                $config->set('HTML.Allowed', $allowed_html_teacher);
             } else {
                 global $allowed_html_anonymous;
                 $config->set('HTML.Allowed', $allowed_html_anonymous);

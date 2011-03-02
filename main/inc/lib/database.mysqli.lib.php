@@ -691,10 +691,10 @@ class Database {
             ? new mysqli('p:'.$parameters['server'], $parameters['username'], $parameters['password'])
             : new mysqli($parameters['server'], $parameters['username'], $parameters['password']);
         if ($database_connection->connect_errno) {
-        	error_log($database_connection->connect_errno());
+            error_log($database_connection->connect_errno());
             return false;
         } else {
-        	return true;
+            return true;
         }
     }
 
@@ -923,7 +923,7 @@ class Database {
      * @result	mixed		One cell of the result, or FALSE on error
      */
     public static function result(&$resource, $row, $field = '') {
-        if (self::num_rows($resource) > 0) { 
+        if (self::num_rows($resource) > 0) {
             if (!empty($field)) {
                 $r = mysqli_data_seek($resource, $row);
                 return $r[$field];
@@ -1317,88 +1317,88 @@ class Database {
     /*
         New useful DB functions
     */
-   
+
     /**
-     * Experimental useful database insert 
+     * Experimental useful database insert
      * @todo lot of stuff to do here
      */
     public static function insert($table_name, $attributes) {
         if (empty($attributes) || empty($table_name)) {
-            return false;        	
+            return false;
         }
         $filtred_attributes = array();
         foreach($attributes as $key => $value) {
-            $filtred_attributes[$key] = "'".self::escape_string($value)."'"; 
+            $filtred_attributes[$key] = "'".self::escape_string($value)."'";
         }
         $params = array_keys($filtred_attributes); //@todo check if the field exists in the table we should use a describe of that table
         $values = array_values($filtred_attributes);
-        if (!empty($params) && !empty($values)) {        
-            $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';        
+        if (!empty($params) && !empty($values)) {
+            $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';
             $result = self::query($sql);
-            return  self::get_last_insert_id();             
+            return  self::get_last_insert_id();
         }
         return false;
     }
-    
+
     /**
-     * Experimental useful database finder 
+     * Experimental useful database finder
      * @todo lot of stuff to do here
     */
-    
-    public static function select($columns = '*' , $table_name,  $conditions = array(), $type_result = 'all', $option = 'ASSOC') {        
-    	$conditions = self::parse_conditions($conditions); 
-        
-        //@todo we could do a describe here to check the columns ...       
+
+    public static function select($columns = '*' , $table_name,  $conditions = array(), $type_result = 'all', $option = 'ASSOC') {
+        $conditions = self::parse_conditions($conditions);
+
+        //@todo we could do a describe here to check the columns ...
         $clean_columns = '';
         if (is_array($columns)) {
-        	$clean_columns = implode(',', $columns);
+            $clean_columns = implode(',', $columns);
         } else {
-        	if ($columns == '*') {
-        		$clean_columns = '*';
-        	} else {
-        		$clean_columns = (string)$columns;
-        	}
+            if ($columns == '*') {
+                $clean_columns = '*';
+            } else {
+                $clean_columns = (string)$columns;
+            }
         }
-        
-             
+
+
          $sql    = "SELECT $clean_columns FROM $table_name $conditions";
-      
-               
-        
-        $result = self::query($sql);        
-        $array = array();        
-        //if (self::num_rows($result) > 0 ) {        
-        if ($type_result == 'all') {  
+
+
+
+        $result = self::query($sql);
+        $array = array();
+        //if (self::num_rows($result) > 0 ) {
+        if ($type_result == 'all') {
             while ($row = self::fetch_array($result, $option)) {
                 if (isset($row['id'])) {
                     $array[$row['id']] = $row;
                 } else {
-                	$array[] = $row;
-                }                    
-            }         
+                    $array[] = $row;
+                }
+            }
         } else {
-        	$array = self::fetch_array($result, $option);
+            $array = self::fetch_array($result, $option);
         }
         return $array;
     }
-    
+
     /**
      * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC'))
-     * @param   array   
+     * @param   array
      * @todo lot of stuff to do here
     */
-    private function parse_conditions($conditions) {  
+    private function parse_conditions($conditions) {
         if (empty($conditions)) {
-        	return '';
-        }        
-        $return_value = '';     
-        foreach ($conditions as $type_condition => $condition_data) {    
-            $type_condition = strtolower($type_condition);        
+            return '';
+        }
+        $return_value = '';
+        foreach ($conditions as $type_condition => $condition_data) {
+            $type_condition = strtolower($type_condition);
              switch($type_condition) {
-                case 'where':                    
-                    foreach ($condition_data as $condition => $value_array) {                     
+                case 'where':
+                    foreach ($condition_data as $condition => $value_array) {
                         if (is_array($value_array)) {
-                            $clean_values = array();                            
+                            $clean_values = array();
                             foreach($value_array as $item) {
                                 $item = Database::escape_string($item);
                                 $clean_values[]= "'$item'";
@@ -1407,28 +1407,28 @@ class Database {
                             $value_array = Database::escape_string($value_array);
                             $clean_values = "'$value_array'";
                         }
-                        if (!empty($condition) && !empty($clean_values)) {    
-                            $condition = str_replace('?','%s', $condition); //we treat everything as string                
+                        if (!empty($condition) && !empty($clean_values)) {
+                            $condition = str_replace('?','%s', $condition); //we treat everything as string
                             $condition = vsprintf($condition, $clean_values);
-                            $where_return .= $condition;                            
+                            $where_return .= $condition;
                         }
                     }
                     if (!empty($where_return)) {
-                        $return_value = " WHERE $where_return" ;	
+                        $return_value = " WHERE $where_return" ;
                     }
                 break;
                 case 'order':
                     $order_array = explode(' ', $condition_data);
-                    
+
                     if (!empty($order_array)) {
                         if (count($order_array) > 1) {
                             $order_array[0] = self::escape_string($order_array[0]);
                             if (!empty($order_array[1])) {
                                 $order_array[1] = strtolower($order_array[1]);
                                 $order = 'desc';
-                            	if (in_array($order_array[1], array('desc', 'asc'))) {
-                            		$order = $order_array[1];
-                            	}
+                                if (in_array($order_array[1], array('desc', 'asc'))) {
+                                    $order = $order_array[1];
+                                }
                             }
                             $return_value .= ' ORDER BY '.$order_array[0].'  '.$order;
                         }  else {
@@ -1436,9 +1436,9 @@ class Database {
                         }
                     }
                 break;
-                
+
                 case 'limit':
-                    $limit_array = explode(',', $condition_data);                    
+                    $limit_array = explode(',', $condition_data);
                     if (!empty($limit_array)) {
                         if (count($limit_array) > 1) {
                             $return_value .= ' LIMIT '.intval($limit_array[0]).' , '.intval($limit_array[1]);
@@ -1447,62 +1447,62 @@ class Database {
                         }
                     }
                 break;
-                
-            } 
+
+            }
         }
-        return $return_value;       
+        return $return_value;
     }
-    
+
     private function parse_where_conditions($coditions){
-    	return self::parse_conditions(array('where'=>$coditions));
+        return self::parse_conditions(array('where'=>$coditions));
     }
-    
+
     /**
-     * Experimental useful database update 
+     * Experimental useful database update
      * @todo lot of stuff to do here
      */
     public static function delete($table_name, $where_conditions) {
-        $result = false;                
+        $result = false;
         $where_return = self::parse_where_conditions($where_conditions);
         $sql    = "DELETE FROM $table_name $where_return ";
-        $result = self::query($sql);        
-        $affected_rows = self::affected_rows();  	          
-        //@todo should return affected_rows for 
+        $result = self::query($sql);
+        $affected_rows = self::affected_rows();
+        //@todo should return affected_rows for
         return $affected_rows;
-    }   
-   
-    
+    }
+
+
     /**
-     * Experimental useful database update 
+     * Experimental useful database update
      * @todo lot of stuff to do here
      */
     public static function update($table_name, $attributes, $where_conditions = array()) {
-         
+
         if (!empty($table_name) && !empty($attributes)) {
             $update_sql = '';
             //Cleaning attributes
-            $count = 1;            
+            $count = 1;
             foreach ($attributes as $key=>$value) {
                 $value = self::escape_string($value);
-            	$update_sql .= "$key = '$value' ";
+                $update_sql .= "$key = '$value' ";
                 if ($count < count($attributes)) {
-                	$update_sql.=', ';
+                    $update_sql.=', ';
                 }
                 $count++;
             }
-            if (!empty($update_sql)) {  
+            if (!empty($update_sql)) {
                 //Parsing and cleaning the where conditions
                 $where_return = self::parse_where_conditions($where_conditions);
-                $sql    = "UPDATE $table_name SET $update_sql $where_return ";    
+                $sql    = "UPDATE $table_name SET $update_sql $where_return ";
                 //echo $sql; exit;
                 $result = self::query($sql);
-                $affected_rows = self::affected_rows(); 
+                $affected_rows = self::affected_rows();
                 return $affected_rows;
-            }                
+            }
         }
         return false;
     }
-    
+
      /*
         DEPRECATED METHODS
     */
@@ -1521,6 +1521,6 @@ class Database {
         global $database_connection;
         return $database_connection->insert_id($database_connection);
     }
-    
+
 }
 //end class Database

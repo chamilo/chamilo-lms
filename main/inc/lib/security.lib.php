@@ -1,26 +1,28 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
-* This is the security library for Chamilo.
-*
-* This library is based on recommendations found in the PHP5 Certification
-* Guide published at PHP|Architect, and other recommendations found on
-* http://www.phpsec.org/
-* The principles here are that all data is tainted (most scripts of Chamilo are
-* open to the public or at least to a certain public that could be malicious
-* under specific circumstances). We use the white list approach, where as we
-* consider that data can only be used in the database or in a file if it has
-* been filtered.
-*
-* For session fixation, use ...
-* For session hijacking, use get_ua() and check_ua()
-* For Cross-Site Request Forgeries, use get_token() and check_tocken()
-* For basic filtering, use filter()
-* For files inclusions (using dynamic paths) use check_rel_path() and check_abs_path()
-*
-* @package chamilo.library
-* @author Yannick Warnier <ywarnier@beeznest.org>
-*/
+ * This is the security library for Chamilo.
+ *
+ * This library is based on recommendations found in the PHP5 Certification
+ * Guide published at PHP|Architect, and other recommendations found on
+ * http://www.phpsec.org/
+ * The principles here are that all data is tainted (most scripts of Chamilo are
+ * open to the public or at least to a certain public that could be malicious
+ * under specific circumstances). We use the white list approach, where as we
+ * consider that data can only be used in the database or in a file if it has
+ * been filtered.
+ *
+ * For session fixation, use ...
+ * For session hijacking, use get_ua() and check_ua()
+ * For Cross-Site Request Forgeries, use get_token() and check_tocken()
+ * For basic filtering, use filter()
+ * For files inclusions (using dynamic paths) use check_rel_path() and check_abs_path()
+ *
+ * @package chamilo.library
+ * @author Yannick Warnier <ywarnier@beeznest.org>
+ */
+
 /**
  * Security class
  *
@@ -272,8 +274,9 @@ class Security {
                 global $allowed_html_anonymous;
                 $config->set('HTML.Allowed', $allowed_html_anonymous);
             }
+            $config->set('Attr.EnableID', true); // We need it for example for the flv player (ids of surrounding div-tags have to be preserved).
             $config->set('CSS.AllowImportant', true);
-            $config->set('CSS.AllowTricky', true); // We need the css definition display: none;
+            $config->set('CSS.AllowTricky', true); // We need for the flv player the css definition display: none;
             $config->set('CSS.Proprietary', true);
             $purifier[$user_status] = new HTMLPurifier($config);
         }

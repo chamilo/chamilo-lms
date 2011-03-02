@@ -904,6 +904,10 @@ $allowed_tags_teacher['noscript'] = array();
 $allowed_tags_teacher['script'] = array();
 $allowed_tags_teacher['script']['type'] = array();
 
+// TODO:
+// 1. The tags <html>, <head>, <body> should not be allowed for document fragments.
+// 2. To be checked whether HTMLPurifier "silently" passes these tags.
+
 $allowed_tags_teacher['html'] = array();
 $allowed_tags_teacher['html']['xmlns'] = array();
 
@@ -949,7 +953,7 @@ function convert_kses_to_htmlpurifier($allowed_tags) {
             $allowed_html[] = $key1;
         }
     }
-    return implode(',', $allowed_html);
+    return implode(",\n", $allowed_html);
 }
 
 global $allowed_html_student, $allowed_html_teacher, $allowed_html_anonymous;

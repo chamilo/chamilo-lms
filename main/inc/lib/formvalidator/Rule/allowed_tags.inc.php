@@ -603,13 +603,11 @@ $allowed_tags_student['p']['title'] = array();
 $allowed_tags_student['p']['xml:lang'] = array();
 
 // param
-/*
 $allowed_tags_student['param'] = array();
 $allowed_tags_student['param']['name'] = array();
 //$allowed_tags_student['param']['type'] = array();
 $allowed_tags_student['param']['value'] = array();
 //$allowed_tags_student['param']['valuetype'] = array();
-*/
 
 // pre
 $allowed_tags_student['pre'] = array();

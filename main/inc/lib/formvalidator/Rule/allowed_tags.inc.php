@@ -300,7 +300,7 @@ $allowed_tags_student['embed']['type'] = array();
 $allowed_tags_student['embed']['src'] = array();
 $allowed_tags_student['embed']['flashvars'] = array();
 $allowed_tags_student['embed']['allowscriptaccess'] = array();
-//$allowed_tags_student['embed']['allowfullscreen'] = array();
+$allowed_tags_student['embed']['allowfullscreen'] = array();
 //$allowed_tags_student['embed']['bgcolor'] = array();
 //$allowed_tags_student['embed']['pluginspage'] = array();
 

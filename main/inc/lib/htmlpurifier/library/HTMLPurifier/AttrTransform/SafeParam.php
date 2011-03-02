@@ -29,12 +29,15 @@ class HTMLPurifier_AttrTransform_SafeParam extends HTMLPurifier_AttrTransform
             // application/x-shockwave-flash
             // Keep this synchronized with Injector/SafeObject.php
             case 'allowScriptAccess':
+            case 'allowscriptaccess':
                 $attr['value'] = 'never';
                 break;
             case 'allowNetworking':
+            case 'allownetworking':
                 $attr['value'] = 'internal';
                 break;
             case 'allowFullScreen':
+            case 'allowfullscreen':
                 if ($config->get('HTML.FlashAllowFullScreen')) {
                     $attr['value'] = ($attr['value'] == 'true') ? 'true' : 'false';
                 } else {

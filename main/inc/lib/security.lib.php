@@ -254,6 +254,7 @@ class Security {
                 mkdir($cache_dir, 0777);
             }
             $config = HTMLPurifier_Config::createDefault();
+            //$config->set('Cache.DefinitionImpl', null); // Enable this line for testing purposes, for turning off caching. Don't forget to disable this line later!
             $config->set('Cache.SerializerPath', $cache_dir);
             $config->set('Core.Encoding', api_get_system_encoding());
             $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');

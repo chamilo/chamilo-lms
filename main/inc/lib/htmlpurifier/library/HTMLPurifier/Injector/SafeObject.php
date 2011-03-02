@@ -16,6 +16,9 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
     protected $addParam = array(
         'allowScriptAccess' => 'never',
         'allowNetworking' => 'internal',
+        'allowscriptaccess' => 'never',
+        'allownetworking' => 'internal',
+
     );
     protected $allowedParam = array(
         'wmode' => true,
@@ -23,6 +26,7 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
         'flashvars' => true,
         'src' => true,
         'allowFullScreen' => true, // if omitted, assume to be 'false'
+        'allowfullscreen' => true, // if omitted, assume to be 'false'
     );
 
     public function prepare($config, $context) {

@@ -8,6 +8,11 @@ class HTMLPurifier_AttrTransform_SafeEmbed extends HTMLPurifier_AttrTransform
         $attr['allowscriptaccess'] = 'never';
         $attr['allownetworking'] = 'internal';
         $attr['type'] = 'application/x-shockwave-flash';
+
+        if (!$config->get('HTML.FlashAllowFullScreen') || !$attr['allowfullscreen'] == 'true') {
+            unset($attr['allowfullscreen']);
+        }
+
         return $attr;
     }
 }

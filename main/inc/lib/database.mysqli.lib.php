@@ -1235,7 +1235,7 @@ class Database {
      * @return string	Returns the filtered string as a result.
      */
     private static function remove_XSS(& $var) {
-        return class_exists('Security') && class_exists('HTMLPurifier') ? Security::remove_XSS($var) : api_htmlentities($var, ENT_QUOTES);
+        return class_exists('Security') ? Security::remove_XSS($var) : @htmlspecialchars($var, ENT_QUOTES, api_get_system_encoding());
     }
 
     /**

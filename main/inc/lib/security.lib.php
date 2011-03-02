@@ -245,6 +245,10 @@ class Security {
         }
         static $purifier = array();
         if (!isset($purifier[$user_status])) {
+            if (!class_exists('HTMLPurifier')) {
+                // Lazy loading.
+                require api_get_path(LIBRARY_PATH).'htmlpurifier/library/HTMLPurifier.auto.php';
+            }
             $cache_dir = api_get_path(SYS_ARCHIVE_PATH).'Serializer';
             if (!file_exists($cache_dir)) {
                 mkdir($cache_dir, 0777);

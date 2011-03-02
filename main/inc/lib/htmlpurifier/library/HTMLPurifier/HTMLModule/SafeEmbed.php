@@ -11,23 +11,20 @@ class HTMLPurifier_HTMLModule_SafeEmbed extends HTMLPurifier_HTMLModule
     public function setup($config) {
 
         $max = $config->get('HTML.MaxImgLength');
-        $attr = array(
+        $embed = $this->addElement(
+            'embed', 'Inline', 'Empty', 'Common',
+            array(
                 'src*' => 'URI#embedded',
                 'type' => 'Enum#application/x-shockwave-flash',
                 'width' => 'Pixels#' . $max,
                 'height' => 'Pixels#' . $max,
                 'allowscriptaccess' => 'Enum#never',
                 'allownetworking' => 'Enum#internal',
+                'allowfullscreen' => 'Enum#true,false',
                 'flashvars' => 'Text',
-                'wmode' => 'Enum#window,transparent,opaque',
+                'wmode' => 'Enum#window',
                 'name' => 'ID',
-        );
-        if ($config->get('HTML.FlashAllowFullScreen')) {
-            $attr['allowfullscreen'] = 'Enum#true,false';
-        }
-
-        $embed = $this->addElement(
-            'embed', 'Inline', 'Empty', 'Common', $attr
+            )
         );
         $embed->attr_transform_post[] = new HTMLPurifier_AttrTransform_SafeEmbed();
 

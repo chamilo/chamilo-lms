@@ -10,7 +10,7 @@ class HTMLPurifier_AttrTransform_SafeEmbed extends HTMLPurifier_AttrTransform
         $attr['type'] = 'application/x-shockwave-flash';
 
         if (!$config->get('HTML.FlashAllowFullScreen') || !$attr['allowfullscreen'] == 'true') {
-            unset($attr['allowfullscreen']);
+            unset($attr['allowfullscreen']); // if omitted, assume to be 'false'
         }
 
         return $attr;

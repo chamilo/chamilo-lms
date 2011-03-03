@@ -406,16 +406,7 @@ if (is_array($flat_list)) {
                 }
              }
 
-             /* DELETE COMMAND */
-
-            if ($current_session == $details['lp_session']) {
-                $dsp_delete = "<a href=\"lp_controller.php?".api_get_cidreq()."&action=delete&lp_id=$id\" " .
-                "onclick=\"javascript: return confirmation('".addslashes($name)."');\">" .
-				Display::return_icon('delete.png', get_lang('_delete_learnpath'),'','22').'</a>';
-            } else {
-                $dsp_delete = Display::return_icon('delete_na.png', get_lang('_delete_learnpath'),'','22');
-            }
-
+       
              /* Export */
 
             if ($details['lp_type'] == 1) {
@@ -456,8 +447,15 @@ if (is_array($flat_list)) {
 				  '.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'','22').'</a>';
             }
             
-            //Checking the "age" of the LP
-            //icons here
+            /* DELETE COMMAND */
+
+            if ($current_session == $details['lp_session']) {
+                $dsp_delete = "<a href=\"lp_controller.php?".api_get_cidreq()."&action=delete&lp_id=$id\" " .
+                "onclick=\"javascript: return confirmation('".addslashes($name)."');\">" .
+				Display::return_icon('delete.png', get_lang('_delete_learnpath'),'','22').'</a>';
+            } else {
+                $dsp_delete = Display::return_icon('delete_na.png', get_lang('_delete_learnpath'),'','22');
+            }
             
             
                         
@@ -488,7 +486,7 @@ if (is_array($flat_list)) {
             }
         } // end if ($is_allowedToEdit)
         
-        echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_edit_lp.$dsp_delete.$dsp_disk.$lp_auto_lunch_icon.$export_icon.$dsp_order.$dsp_edit_close;
+        echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_edit_lp.$dsp_disk.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
 
         echo "</tr>\n";
         $current ++; //counter for number of elements treated

@@ -80,13 +80,13 @@ if (!empty($gradebook) && $gradebook=='view') {
 }
 
 $current_forum_category=get_forum_categories($_GET['forumcategory']);
-$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => $nameTools);
+$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => $nameTools);
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => prepare4display($current_forum_category['cat_title']));
 
 
 if (!empty($_GET['action']) && !empty($_GET['content'])) {
     if ($_GET['action']=='add' && $_GET['content']=='forum' ) {
-        $interbreadcrumb[] = array ("url" => api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum', 'name' => get_lang('AddForum'));
+        $interbreadcrumb[] = array ("url" => api_get_self().'?'.api_get_cidreq().'&amp;action=add&amp;content=forum', 'name' => get_lang('AddForum'));
     }
 }
 
@@ -125,8 +125,8 @@ echo '<span style="float:right;">'.search_link().'</span>';
 echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview'),'','32').'</a>';
 if (api_is_allowed_to_edit(false,true)) {
     //echo '<a href="'.api_get_self().'?forumcategory='.$_GET['forumcategory'].'&amp;action=add&amp;content=forumcategory">'.get_lang('AddForumCategory').'</a> | ';
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum"> '.Display::return_icon('new_forum.png', get_lang('AddForum'),'','32').'</a>';
-    //echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('new_forum.png', get_lang('AddForum'),'','32').'</a>';
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=add&amp;content=forum"> '.Display::return_icon('new_forum.png', get_lang('AddForum'),'','32').'</a>';
+    //echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;action=add&amp;content=forum">'.Display::return_icon('new_forum.png', get_lang('AddForum'),'','32').'</a>';
 }
 echo '</div>';
 
@@ -193,14 +193,14 @@ if ($action_forums!='add') {
     echo '<thead>';
     echo "<tr><th class=\"forum_head\" ".(api_is_allowed_to_edit(null,true)?"colspan='5'":"colspan='6'").">";
 
-    echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a>'. $session_img .'<br />';
+    echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&amp;forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a>'. $session_img .'<br />';
 
     echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 
     if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($my_session)!=0)) {
         echo '<th style="vertical-align: top;" align="center" >';
-        echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forumcategory&amp;id=".$forum_category['cat_id']."\">".Display::return_icon('edit.png',get_lang('Edit'), array(), 22)."</a>";
-        echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forumcategory&amp;amp;id=".$forum_category['cat_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'), array(), 22)."</a>";
+        echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forumcategory&amp;id=".$forum_category['cat_id']."\">".Display::return_icon('edit.png',get_lang('Edit'), array(), 22)."</a>";
+        echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forumcategory&amp;amp;id=".$forum_category['cat_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteForumCategory'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'), array(), 22)."</a>";
         display_visible_invisible_icon('forumcategory', $forum_category['cat_id'], $forum_category['visibility'], array("forumcategory"=>$_GET['forumcategory']));
         display_lock_unlock_icon('forumcategory',$forum_category['cat_id'], $forum_category['locked'], array("forumcategory"=>$_GET['forumcategory']));
         display_up_down_icon('forumcategory',$forum_category['cat_id'], $forum_categories_list);
@@ -297,7 +297,7 @@ if ($action_forums!='add') {
                     $my_all_groups_forum_name=isset($all_groups[$forum['forum_of_group']]['name']) ? $all_groups[$forum['forum_of_group']]['name'] : null;
                     $my_all_groups_forum_id=isset($all_groups[$forum['forum_of_group']]['id']) ? $all_groups[$forum['forum_of_group']]['id'] : null;
                     $group_title=api_substr($my_all_groups_forum_name,0,30);
-                    $forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$my_all_groups_forum_id.'" class="forum_group_link">'.get_lang('GoTo').' '.$group_title.'</a>)';
+                    $forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.$my_all_groups_forum_id.'" class="forum_group_link">'.get_lang('GoTo').' '.$group_title.'</a>)';
                 }
                 else
                 {
@@ -310,7 +310,7 @@ if ($action_forums!='add') {
                 } else {
                     $session_displayed = '';
                 }
-                echo "<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>";
+                echo "<td><a href=\"viewforum.php?".api_get_cidreq()."&amp;forum=".$forum['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>";
 
                 //$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
                 // the number of topics and posts
@@ -334,8 +334,8 @@ if ($action_forums!='add') {
                 echo "<td NOWRAP align='center'>";
 
                 if (api_is_allowed_to_edit(false,true) && !($forum['session_id']==0 && intval(isset($_SESSION['id_session'])?$_SESSION['id_session']:null)!=0)) {
-                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".Display::return_icon('edit.png',get_lang('Edit'), array(), 22)."</a>";
-                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'), array(), 22)."</a>";
+                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".Display::return_icon('edit.png',get_lang('Edit'), array(), 22)."</a>";
+                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteForum'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'), array(), 22)."</a>";
                     display_visible_invisible_icon('forum',$forum['forum_id'], $forum['visibility'], array("forumcategory"=>$_GET['forumcategory']));
                     display_lock_unlock_icon('forum',$forum['forum_id'], $forum['locked'], array("forumcategory"=>$_GET['forumcategory']));
                     display_up_down_icon('forum',$forum['forum_id'], $forums_in_category);

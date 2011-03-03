@@ -89,7 +89,7 @@ if(is_object($objQuestion)) {
         // TODO: maybe here is the better place to index this tool, including answers text
 
 	    // redirect
-	    if($objQuestion -> type != HOT_SPOT)
+	    if($objQuestion -> type != HOT_SPOT && $objQuestion -> type !=  HOT_SPOT_DELINEATION)
 	    	echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'"</script>';
 	    else
 	    	echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'"</script>';

@@ -191,8 +191,7 @@ if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 		// reads question data
 		if($editQuestion) {
 			// question not found
-			if(!$objQuestion = Question::read($editQuestion))
-			{
+			if(!$objQuestion = Question::read($editQuestion)) {
 				die(get_lang('QuestionNotFound'));
 			}
 			// saves the object into the session
@@ -460,7 +459,7 @@ if ($newQuestion || $editQuestion) {
 	$type = $_REQUEST['answerType'];    
 	?><input type="hidden" name="Type" value="<?php echo $type; ?>" />
 	<?php
-    require 'question_admin.inc.php';
+   require 'question_admin.inc.php';
 }
 
 if(isset($_GET['hotspotadmin'])) {

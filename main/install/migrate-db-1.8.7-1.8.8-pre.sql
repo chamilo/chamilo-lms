@@ -211,3 +211,5 @@ INSERT INTO course_setting(variable,value,category) VALUES ('enable_lp_auto_laun
 INSERT INTO course_setting(variable,value,category) VALUES ('pdf_export_watermark_text','','course');
 
 ALTER TABLE quiz ADD COLUMN propagate_neg INT NOT NULL DEFAULT 0;
+ALTER TABLE quiz_answer MODIFY COLUMN hotspot_type ENUM('square','circle','poly','delineation','oar');
+

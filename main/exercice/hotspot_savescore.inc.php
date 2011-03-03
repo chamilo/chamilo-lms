@@ -56,4 +56,3 @@ $result = Database::query($sql);
 // Save insert id into session if users changes answer.
 $insert_id = Database::insert_id();
 $_SESSION['exerciseResult'][$questionId]['ids'][$answerOrderId] = $insert_id;
-?>

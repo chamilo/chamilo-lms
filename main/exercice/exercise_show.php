@@ -26,8 +26,7 @@ require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
-
-if ( empty ( $origin ) ) {
+if (empty($origin) ) {
     $origin = $_REQUEST['origin'];
 }
 
@@ -46,10 +45,8 @@ $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-$debug=0;
-
 // General parameters passed via POST/GET
-if($debug>0) { error_log('Entered exercise_result.php: '.print_r($_POST,1)); }
+if($debug) { error_log('Entered exercise_result.php: '.print_r($_POST,1)); }
 
 if ( empty ( $formSent ) ) {            $formSent       = $_REQUEST['formSent']; }
 if ( empty ( $exerciseResult ) ) {      $exerciseResult = $_SESSION['exerciseResult'];}
@@ -245,8 +242,6 @@ if (!empty($track_exercise_info)) {
 	$show_results = false;
 }
 
-//var_dump($show_results);
-
 if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 	$show_results = false;
 }
@@ -298,7 +293,7 @@ foreach ($questionList as $questionId) {
     $objQuestionTmp     = Question::read($questionId);
     $total_weighting  +=$objQuestionTmp->selectWeighting();        
 }
-        
+
 foreach ($questionList as $questionId) {
 	$counter++;		
 	$choice=$exerciseResult[$questionId];
@@ -345,7 +340,7 @@ foreach ($questionList as $questionId) {
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];		
 	} elseif ($answerType == HOT_SPOT) {	
-	    if ($show_results) {		
+	    if ($show_results) {
 		    echo '<table width="500" border="0"><tr>
                     <td valign="top" align="center" style="padding-left:0px;" >
                         <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';
@@ -365,8 +360,156 @@ foreach ($questionList as $questionId) {
 			</tr>
 			</table><br/>';
         }
+	} else if($answerType == HOT_SPOT_DELINEATION) {
+	        
+            $question_result  = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), 'database');
+                        
+            $questionScore    = $question_result['score'];
+            $totalScore      += $question_result['score'];
+       
+            $final_overlap    = $question_result['extra']['final_overlap'];
+            $final_missing    = $question_result['extra']['final_missing'];
+            $final_excess     = $question_result['extra']['final_excess'];
+            
+            $overlap_color    = $question_result['extra']['overlap_color'];
+            $missing_color    = $question_result['extra']['missing_color'];
+            $excess_color     = $question_result['extra']['excess_color'];
+            
+            $threadhold1      = $question_result['extra']['threadhold1'];            
+            $threadhold2      = $question_result['extra']['threadhold2'];
+            $threadhold3      = $question_result['extra']['threadhold3'];
+            
+	   
+	        if ($show_results) {	
+	    
+        	    if ($overlap_color) {
+        			$overlap_color='green';
+        	    } else {
+        			$overlap_color='red';
+        	    }
+        	    
+        		if ($missing_color) {
+        			$missing_color='green';
+        	    } else {
+        			$missing_color='red';
+        	    }
+        		if ($excess_color) {
+        			$excess_color='green';
+        	    } else {
+        			$excess_color='red';
+        	    }
+        	    
+        	    
+        	    if (!is_numeric($final_overlap)) {
+            	    $final_overlap = 0;
+        	    }
+        	    
+        	    if (!is_numeric($final_missing)) {
+        	    	$final_missing = 0;
+        	    }
+        	    if (!is_numeric($final_excess)) {
+        	    	$final_excess = 0;
+        	    }
+        	    
+        	    if ($final_excess>100) {
+        	    	$final_excess = 100;
+        	    }
+            
+            
+        		$table_resume='<table class="data_table">		
+        		<tr class="row_odd" >
+        		<td></td>
+        		<td ><b>'.get_lang('Requirements').'</b></td>
+        		<td><b>'.get_lang('YourAnswer').'</b></td>
+        		</tr>
+        									
+        		<tr class="row_even">
+        		<td><b>'.get_lang('Overlap').'</b></td>
+        		<td>'.get_lang('Min').' '.$threadhold1.'</td>
+        			<td><div style="color:'.$overlap_color.'">'.(($final_overlap < 0)?0:intval($final_overlap)).'</div></td>
+        		</tr>
+        				
+        		<tr>
+        			<td><b>'.get_lang('Excess').'</b></td>
+        			<td>'.get_lang('Max').' '.$threadhold2.'</td>
+        			<td><div style="color:'.$excess_color.'">'.(($final_excess < 0)?0:intval($final_excess)).'</div></td>
+        		</tr>
+        				 
+        		<tr class="row_even">
+        			<td><b>'.get_lang('Missing').'</b></td>
+        			<td>'.get_lang('Max').' '.$threadhold3.'</td>
+        			<td><div style="color:'.$missing_color.'">'.(($final_missing < 0)?0:intval($final_missing)).'</div></td>
+        		</tr></table>';
+        							
+        		if ($answerType!= HOT_SPOT_DELINEATION) {
+        			$item_list=explode('@@',$destination);
+        			//print_R($item_list);
+        			$try = $item_list[0];
+        			$lp = $item_list[1];
+        			$destinationid= $item_list[2];
+        			$url=$item_list[3];
+        			$table_resume='';
+        		} else {
+        			if ($next==0) {
+        				$try = $try_hotspot;
+        				$lp = $lp_hotspot;
+        				$destinationid= $select_question_hotspot;
+        				$url=$url_hotspot;
+        			} else {
+        				//show if no error
+        				//echo 'no error';
+        				$comment=$answerComment=$objAnswerTmp->selectComment($nbrAnswers);	
+        				$answerDestination=$objAnswerTmp->selectDestination($nbrAnswers);
+        			}
+        		} 
+        	
+        		echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
+        		//<p style="text-align:center">
+        		if ($answerType == HOT_SPOT_DELINEATION) {			
+        			if ($organs_at_risk_hit>0) {
+        				$message='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';				
+        				$message.='<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
+        			} else {
+        				$message='<p>'.get_lang('YourDelineation').'</p>';
+        				$message.=$table_resume;	
+        				$message.='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+        			}
+        			$message.='<p>'.$comment.'</p>';	
+        			echo $message;
+        			
+        			// by default we assume that the answer is ok but if the final answer after calculating the area in hotspot delineation =0 then update  
+        			if ($final_answer==0) {
+        				//update_exercise_attempt(0, 0,$questionId,$exeId, 0 ); //we do not update the user_id 
+        				//update_event_exercice($exeId, )
+        			}
+        			
+        		} else {
+        			echo '<p>'.$comment.'</p>';
+        		}
+        		//echo '<a onclick="self.parent.tb_remove();" href="#" style="float:right;">'.get_lang('Close').'</a>';
+        
+        		
+        		//showing the score	
+         		$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+        		$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
+        		$questionScore= mysql_result($resfree,0,"marks");
+        		$totalScore+=$questionScore;        		
+        		 			?>
+        		 			</table>
+        		 		</td></tr>
+        		 		<?php        		 		
+        		 	echo '<tr>
+        				<td colspan="2">
+        					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="350">
+        						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" />
+        							
+        					</object>
+        				</td>
+        			</tr>
+        			</table>';
+	        }
 	}
-	
+
 	if ($show_results) {
 	    if ($answerType != HOT_SPOT) {
 	        echo '</table>';
@@ -455,9 +598,8 @@ foreach ($questionList as $questionId) {
 			if ($questionScore==-1) {
 				 $questionScore=0;
 			}
-		}
-		
-    		echo '</td>
+		}		
+    	echo '</td>
 		</tr>
 		</table>';		
 	}

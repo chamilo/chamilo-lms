@@ -10,11 +10,11 @@ function validateFlashVar(counter, lang_1, lang_2)
 	return true;
 	//alert(counter);
 	//alert(flashVar);
-
+	
 	if(counter != flashVar)
 	{
 		alert(lang_1 + counter + lang_2);
-
+		
 		return false;
 	}
 	else
@@ -36,20 +36,20 @@ function updateFlashVar()
  * @param   int     ID of the area (square or ellipse)
  * @param   int     Whether the answer is correct or not
  * @param   int     X-coordinate (horizontal) of the answer point
- * @param   int     Y-coordinate (vertical) of the answer point
+ * @param   int     Y-coordinate (vertical) of the answer point 
  */
 function saveHotspot(question_id, hotspot_id, answer, hotspot_x, hotspot_y)
 {
 	newHotspot = document.createElement("input");
 	newHotspot.type = "hidden";
 	newHotspot.name = "hotspot["+question_id+"]["+hotspot_id+"]";
-	newHotspot.value = hotspot_x + ";" + hotspot_y;
+	newHotspot.value = hotspot_x + ";" + hotspot_y;	
 	document.frm_exercise.appendChild(newHotspot);
-
+	
 	newHotspot = document.createElement("input");
 	newHotspot.type = "hidden";
 	newHotspot.name = "choice["+question_id+"]["+hotspot_id+"]";
-	newHotspot.value = answer;
+	newHotspot.value = answer;	
 	document.frm_exercise.appendChild(newHotspot);
 }
 /*
@@ -67,11 +67,11 @@ function saveDelineationUserAnswer(question_id, hotspot_id, answer, coordinates)
 	newHotspot.name = "hotspot["+question_id+"]["+hotspot_id+"]";
 	newHotspot.value = coordinates;
 	document.frm_exercise.appendChild(newHotspot);
-
+	
 	newHotspot = document.createElement("input");
 	newHotspot.type = "hidden";
 	newHotspot.name = "choice["+question_id+"]["+hotspot_id+"]";
-	newHotspot.value = answer;
+	newHotspot.value = answer;	
 	document.frm_exercise.appendChild(newHotspot);
 }
 
@@ -91,6 +91,12 @@ function saveDelineationHotspot(question_id, hotspot_id, coordinates)
 {
 	document.frm_exercise["hotspot_coordinates["+hotspot_id+"]"].value = coordinates;
 	document.frm_exercise["hotspot_type["+hotspot_id+"]"].value = "delineation";
+}
+
+function saveOARHotspot(question_id, hotspot_id, coordinates)
+{
+	document.frm_exercise["hotspot_coordinates["+hotspot_id+"]"].value = coordinates;
+	document.frm_exercise["hotspot_type["+hotspot_id+"]"].value = "oar";
 }
 function jsdebug(debug_string)
 {

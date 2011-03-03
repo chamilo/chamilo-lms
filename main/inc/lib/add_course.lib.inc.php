@@ -670,7 +670,7 @@ function update_Db_course($course_db_name) {
         ponderation float(6,2) NOT NULL default 0,
         position mediumint unsigned NOT NULL default 1,
         hotspot_coordinates text,
-        hotspot_type enum('square','circle','poly','delineation') default NULL,
+        hotspot_type enum('square','circle','poly','delineation','oar') default NULL,
         destination text NOT NULL,
         id_auto int NOT NULL AUTO_INCREMENT,   
         PRIMARY KEY (id, question_id),

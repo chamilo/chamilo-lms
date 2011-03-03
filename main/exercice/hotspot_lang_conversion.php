@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 //error_log(__FILE__);
 /**
-*	Hotspot languae conversion
-*	@package dokeos.exercise
+*	Hotspot language conversion
+*	@package chamilo.exercise
 * 	@author
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */

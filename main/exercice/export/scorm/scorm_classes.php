@@ -88,6 +88,14 @@ class ScormQuestion extends Question
 				$this->answer = new ScormAnswerMultipleChoice($this->id, false);
                 $this->answer->questionJSId = $this->js_id;
 				break;
+            case HOT_SPOT_ORDER:
+				$this->answer = new ScormAnswerHotspot($this->id); 
+                $this->answer->questionJSId = $this->js_id;
+				break;
+			case HOT_SPOT_DELINEATION:
+				$this->answer = new ScormAnswerHotspot($this->id); 
+                $this->answer->questionJSId = $this->js_id;
+				break;
 			default :
 				$this->answer = null;
                 $this->answer->questionJSId = $this->js_id;

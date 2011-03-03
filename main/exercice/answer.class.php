@@ -503,7 +503,6 @@ class Answer
 					'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 		}
 		$sql = api_substr($sql,0,-1);
-        
 		Database::query($sql);
 
 		// moves $new_* arrays

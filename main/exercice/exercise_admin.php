@@ -102,21 +102,23 @@ $htmlHeadXtra[] = '<script>
 		    }
 	    }  	
       	
-     	function check_per_page_one()
-     	{
-     		if (document.getElementById(\'divtimecontrol\').style.display==\'none\')
-     		{
+     	function check_per_page_one() {
+     		if (document.getElementById(\'divtimecontrol\').style.display==\'none\') {
+     		
      			document.getElementById(\'divtimecontrol\').style.display=\'block\';
      			document.getElementById(\'divtimecontrol\').display=block;
      			document.getElementById(\'timecontrol\').display=none;
      		}
+     		document.getElementById(\'exerciseType_0\').checked=true;
 		}
 
 		function check_per_page_all() {
-			if (document.getElementById(\'divtimecontrol\').style.display==\'block\')
-			{
+			if (document.getElementById(\'divtimecontrol\').style.display==\'block\') {
 				document.getElementById(\'divtimecontrol\').style.display=\'none\';
 				document.getElementById(\'enabletimercontroltotalminutes\').value=\'\';
+			}
+			if (document.getElementById(\'exerciseType_1\').checked) {
+				document.getElementById(\'exerciseType_0\').checked = true;
 			}
 		}
 		
@@ -124,10 +126,12 @@ $htmlHeadXtra[] = '<script>
 			document.getElementById(\'result_disabled_0\').checked = true;
 		}
 		
-		function check_results_disabled() {
+		function check_direct_feedback() {
+			document.getElementById(\'option_page_one\').checked = true;
+		}
 		
-			document.getElementById(\'exerciseType_2\').checked = true;
-			
+		function check_results_disabled() {		
+			document.getElementById(\'exerciseType_2\').checked = true;			
 			
 		}
                    

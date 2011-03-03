@@ -304,7 +304,7 @@ class ExerciseShowFunctions {
         <tr>
         <td width="5%" align="center">
         <?php   
-        //var_dump($studentChoice);
+
         $question = new MultipleAnswerCombinationTrueFalse();
         
         if (isset($question->options[$studentChoice])) {
@@ -357,5 +357,6 @@ class ExerciseShowFunctions {
         <?php } ?>
         </tr>
         <?php
-    }       
+    }
+
 }

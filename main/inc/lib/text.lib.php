@@ -672,3 +672,42 @@ function _text_parse_texexplorer($textext) {
     */
     return $textext;
 }
+
+/**
+ * This function splits the string into words and then joins them back together again one by one.  
+ * Example: "Test example of a long string" 
+ * 			substrwords(5) = Test ... *  
+ * @param string 
+ * @param int the max number of character
+ * @param string how the string will be end 
+ * @return a reduce string
+ */
+
+function substrwords($text,$maxchar,$end='...')
+{
+	if(strlen($text)>$maxchar)
+	{
+		$words=explode(" ",$text);
+		$output = '';
+		$i=0;
+		while(1)
+		{
+			$length = (strlen($output)+strlen($words[$i]));
+			if($length>$maxchar)
+			{
+				break;
+			}
+			else
+			{
+				$output = $output." ".$words[$i];
+				$i++;
+			};
+		};
+	}
+	else
+	{
+		$output = $text;
+		return $output;
+	}
+	return $output.$end;
+}

@@ -40,7 +40,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 	$answerType    = $objQuestionTmp->selectType();
 	$pictureName   = $objQuestionTmp->selectPicture();
 
-	if ($answerType != HOT_SPOT) {
+	if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
 		// Question is not a hotspot
         
 		if (!$only_questions) {
@@ -452,7 +452,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		} else {
 			return($s);
 		}
-	} elseif ($answerType == HOT_SPOT) {
+	} elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
 		// Question is a HOT_SPOT        
         //checking document/images visibility
         if (api_is_platform_admin() || api_is_course_admin()) {
@@ -495,6 +495,15 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			}
 		}
 		$answer_list .= '</dl></div>';
+		
+		if ($answerType == HOT_SPOT_DELINEATION) {
+			$answer_list='';
+			$swf_file = 'hotspot_delineation_user';
+			$swf_height = 405;			
+		} else {
+			$swf_file = 'hotspot_user';
+			$swf_height = 436;
+		}
 
 		if (!$only_questions) {
             if ($show_title) {
@@ -631,8 +640,9 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
 						// Check to see if the version meets the requirements for playback
 						if (hasReqestedVersion) {  // if we\'ve detected an acceptable version
-						    var oeTags = \'<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_user.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" width="560" height="436">\'
-										+ \'<param name="movie" value="../plugin/hotspot/hotspot_user.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" />\'
+						    var oeTags = \'<object type="application/x-shockwave-flash" data="../plugin/hotspot/'.$swf_file.'?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" width="600" height="'.$swf_height.'">\'
+						    			+ \'<param name="wmode" value="transparent">\'
+										+ \'<param name="movie" value="../plugin/hotspot/'.$swf_file.'?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" />\'
 										+ \'<\/object>\';
 						    document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
 						} else {  // flash is too old or we can\'t detect the plugin
@@ -652,7 +662,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 	echo '</table><br />';
 	return $nbrAnswers;
 }
-
 
 function get_exercise_track_exercise_info($exe_id) {
 	$TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
@@ -1074,21 +1083,21 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                     $html_link = '';
                     if ($is_allowedToEdit || $is_tutor) {
                         if ($revised) {
-                            $html_link.= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".Display :: return_icon('edit.gif', get_lang('Edit'));
+                            $html_link.= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".Display :: return_icon('edit.png', get_lang('Edit'), array(), 22);
                             $html_link.= '&nbsp;';
                         } else {
                             $html_link.="<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".Display :: return_icon('quiz.gif', get_lang('Qualify'));
                             $html_link.='&nbsp;';
                         }
-                        $html_link.="</a>";
-                        if (api_is_platform_admin() || $is_tutor) {
-                            $html_link.=' <a href="exercice.php?'.api_get_cidreq().'&show=result&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';
-                            $html_link.='&nbsp;';
-                        }
+                        $html_link.="</a>";                     
                         if ($is_allowedToEdit) {
                             if ($filter==2){
                                 $html_link.=' <a href="exercice_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
                             }
+                        }
+                        if (api_is_platform_admin() || $is_tutor) {
+                            $html_link.=' <a href="exercice.php?'.api_get_cidreq().'&show=result&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';
+                            $html_link.='&nbsp;';
                         }
                     } else {
                         if ($revised) {

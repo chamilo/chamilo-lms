@@ -1,6 +1,5 @@
 <?php //$id:$
 /* For licensing terms, see /license.txt */
-//error_log(__FILE__);
 /**
 *	This file generates the ActionScript variables code used by the HotSpot .swf
 *	@package dokeos.exercise
@@ -13,8 +12,8 @@ include('question.class.php');
 include('answer.class.php');
 include('../inc/global.inc.php');
 // set vars
-$questionId    = $_GET['modifyAnswers'];
-$objQuestion = Question::read($questionId);
+$questionId    = intval($_GET['modifyAnswers']);
+$objQuestion   = Question::read($questionId);
 
 $TBL_ANSWERS   = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $documentPath  = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -25,9 +24,9 @@ $pictureSize   = getimagesize($picturePath.'/'.$objQuestion->selectPicture());
 $pictureWidth  = $pictureSize[0];
 $pictureHeight = $pictureSize[1];
 
-$courseLang = $_course['language'];
-$courseCode = $_course['sysCode'];
-$coursePath = $_course['path'];
+$courseLang    = $_course['language'];
+$courseCode    = $_course['sysCode'];
+$coursePath    = $_course['path'];
 
 // Query db for answers
 //$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS WHERE question_id = '$questionId' ORDER BY id";
@@ -42,32 +41,38 @@ $nmbrTries = 0;
 $answers=$_SESSION['tmp_answers'];
 $nbrAnswers = count($answers['answer']);
 
-for($i=1;$i <= $nbrAnswers;$i++)
-{
+for($i=1;$i <= $nbrAnswers;$i++) {
    	$output .= "&hotspot_".$i."=true";
 	$output .= "&hotspot_".$i."_answer=".$answers['answer'][$i];
+	
+	if ($answer_type==HOT_SPOT_DELINEATION) {	
+		if ($i==1)
+			$output .= "&hotspot_".$i."_type=delineation"; 
+		else
+			$output .= "&hotspot_".$i."_type=oar";
+	} else {
+		// Square or rectancle
+		if ($answers['hotspot_type'][$i] == 'square' )
+		{
+			$output .= "&hotspot_".$i."_type=square";
+		}
 
-	// Square or rectancle
-	if ($answers['hotspot_type'][$i] == 'square' )
-	{
-		$output .= "&hotspot_".$i."_type=square";
-	}
+		// Circle or ovale
+		if ($answers['hotspot_type'][$i] == 'circle')
+		{
+			$output .= "&hotspot_".$i."_type=circle";
+		}
 
-	// Circle or ovale
-	if ($answers['hotspot_type'][$i] == 'circle')
-	{
-		$output .= "&hotspot_".$i."_type=circle";
-	}
-
-	// Polygon
-	if ($answers['hotspot_type'][$i] == 'poly')
-	{
-		$output .= "&hotspot_".$i."_type=poly";
-	}
-	// Delineation
-	if ($answers['hotspot_type'][$i] == 'delineation')
-	{
-		$output .= "&hotspot_".$i."_type=delineation";
+		// Polygon
+		if ($answers['hotspot_type'][$i] == 'poly')
+		{
+			$output .= "&hotspot_".$i."_type=poly";
+		}
+		/*// Delineation
+		if ($answers['hotspot_type'][$i] == 'delineation')
+		{
+			$output .= "&hotspot_".$i."_type=delineation";
+		}*/
 	}
 
 	// This is a good answer, count + 1 for nmbr of clicks
@@ -81,11 +86,9 @@ for($i=1;$i <= $nbrAnswers;$i++)
 
 // Generate empty
 $i++;
-for ($i; $i <= 12; $i++)
-{
+for ($i; $i <= 12; $i++) {
 	$output .= "&hotspot_".$i."=false";
 }
 
 // Output
 echo $output."&nmbrTries=".$nmbrTries."&done=done";
-?>

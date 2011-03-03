@@ -32,7 +32,8 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
     function get_allowed_tags($mode)
     {
         // Include the allowed tags.
-        include(dirname(__FILE__).'/allowed_tags.inc.php');
+        //include(dirname(__FILE__).'/allowed_tags.inc.php');
+        global $allowed_tags_student, $allowed_tags_student_full_page, $allowed_tags_teacher, $allowed_tags_teacher_full_page;
         switch($mode)
         {
             case NO_HTML:
@@ -42,13 +43,13 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
                 return $allowed_tags_student;
                 break;
             case STUDENT_HTML_FULLPAGE:
-                return array_merge($allowed_tags_student,$allowed_tags_student_full_page);
+                return array_merge($allowed_tags_student, $allowed_tags_student_full_page);
                 break;
             case TEACHER_HTML:
                 return $allowed_tags_teacher;
                 break;
             case TEACHER_HTML_FULLPAGE:
-                return array_merge($allowed_tags_teacher,$allowed_tags_teacher_full_page);
+                return array_merge($allowed_tags_teacher, $allowed_tags_teacher_full_page);
                 break;
             default:
                 return array();

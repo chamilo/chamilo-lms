@@ -482,7 +482,7 @@ if ($_GET['studentlist'] == 'false') {
     if (count($a_students) > 0) {
 
         if ($export_csv) {
-            $csv_content[] = array();
+            $csv_content = array();
         }
 
         $all_datas = array();
@@ -559,10 +559,9 @@ if ($_GET['studentlist'] == 'false') {
         if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
             $csv_headers[] = get_lang('AdditionalProfileField');
         }
-        ob_end_clean();
-        array_unshift($csv_content, $csv_headers); // Adding headers before the content.
-        
-        Export :: export_table_csv($csv_content, 'reporting_student_list');
+        ob_end_clean();        
+        array_unshift($csv_content, $csv_headers); // Adding headers before the content.        
+        Export::export_table_csv($csv_content, 'reporting_student_list');
         exit;
     }
 } elseif($_GET['studentlist'] == 'resources') {

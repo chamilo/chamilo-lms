@@ -37,7 +37,7 @@ $nameTools = get_lang('ToolForum');
 $origin = '';
 if (isset($_GET['origin'])) {
     $origin =  Security::remove_XSS($_GET['origin']);
-    $origin_string = '&origin='.$origin;
+    $origin_string = '&amp;origin='.$origin;
 }
 
 /* Including necessary files */
@@ -86,14 +86,14 @@ if ($origin=='group') {
     $group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
     $interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
     $interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
-    $interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
-    $interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&gradebook=".$gradebook."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => $current_thread['thread_title']);
+    $interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
+    $interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&amp;gradebook=".$gradebook."&amp;forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => $current_thread['thread_title']);
     $interbreadcrumb[]=array("url" => "javascript: void(0);","name" => get_lang('Reply'));
 } else {
     $interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook","name" => $nameTools);
     $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
-    $interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
-    $interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&gradebook=".$gradebook."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => $current_thread['thread_title']);
+    $interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
+    $interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&amp;gradebook=".$gradebook."&amp;forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => $current_thread['thread_title']);
     $interbreadcrumb[]=array("url" => "javascript: void(0);","name" => get_lang('Reply'));
 }
 /* Resource Linker */
@@ -142,14 +142,14 @@ if ($origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
     if ($origin=='group') {
-        echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'','32').'</a>';
+        echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'','32').'</a>';
     }
     else{
         echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview'),'','32').'</a>';
 
     }
-    echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin='.$origin.'">'.Display::return_icon('forum.png',get_lang('BackToForum'),'','32').'</a>';
-    echo '<a href="viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin='.$origin.'">'.Display::return_icon('thread.png',get_lang('BackToThread'),'','32').'</a>';
+    echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin='.$origin.'">'.Display::return_icon('forum.png',get_lang('BackToForum'),'','32').'</a>';
+    echo '<a href="viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin='.$origin.'">'.Display::return_icon('thread.png',get_lang('BackToThread'),'','32').'</a>';
 
     echo '</div>';
 } else {

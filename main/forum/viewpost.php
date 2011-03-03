@@ -63,7 +63,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 if ($origin=='learnpath') {
     include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
 } else {
-    $interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
+    $interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => $nameTools);
     $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum_category['cat_title']));
     $interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($_GET['search'])),"name" => prepare4display($current_forum['forum_title']));
 
@@ -108,10 +108,10 @@ if ($message <> 'PostDeletedSpecial') { // in this case the first and only post 
     /* Action Links */
 
     echo '<div style="float:right;">';
-    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;search='.Security::remove_XSS(urlencode($_GET['search']));
-    echo $my_url.'&amp;view=flat&origin='.$origin.'">'.get_lang('FlatView').'</a> | ';
-    echo $my_url.'&amp;view=threaded&origin='.$origin.'">'.get_lang('ThreadedView').'</a> | ';
-    echo $my_url.'&amp;view=nested&origin='.$origin.'">'.get_lang('NestedView').'</a>';
+    $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;search='.Security::remove_XSS(urlencode($_GET['search']));
+    echo $my_url.'&amp;view=flat&amp;origin='.$origin.'">'.get_lang('FlatView').'</a> | ';
+    echo $my_url.'&amp;view=threaded&amp;origin='.$origin.'">'.get_lang('ThreadedView').'</a> | ';
+    echo $my_url.'&amp;view=nested&amp;origin='.$origin.'">'.get_lang('NestedView').'</a>';
     $my_url = null;
     echo '</div>';
     // The reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
@@ -120,13 +120,13 @@ if ($message <> 'PostDeletedSpecial') { // in this case the first and only post 
         // The link should only appear when the user is logged in or when anonymous posts are allowed.
         if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
             //reply link
-            echo '<a href="reply.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
+            echo '<a href="reply.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&amp;origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
 
             //new thread link
             if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
                 if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
                     echo '&nbsp;&nbsp;';
-                    /*echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('new_thread.png','','','32').'</a>';*/
+                    /*echo '<a href="newthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('new_thread.png','','','32').'</a>';*/
                 } else {
                     echo get_lang('ForumLocked');
                 }

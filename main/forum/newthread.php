@@ -98,13 +98,13 @@ if ($origin=='group') {
     $group_properties  = GroupManager :: get_group_properties($session_toolgroup);
     $interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
     $interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$session_toolgroup, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
-    $interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$session_toolgroup."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
-    $interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
+    $interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$session_toolgroup."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
+    $interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
 } else {
     $interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook","name" => $nameTools);
     $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
-    $interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
-    $interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
+    $interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
+    $interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
 }
 
 /* Resource Linker */
@@ -170,12 +170,12 @@ echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
 
 if ($origin=='group') {
-    echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'','32').'</a>';
+    echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'','32').'</a>';
 }
 else{
     echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview'),'','32').'</a>';
 }
-echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&origin=group">'.Display::return_icon('forum.png',get_lang('BackToForum'),'','32').'</a>';
+echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin=group">'.Display::return_icon('forum.png',get_lang('BackToForum'),'','32').'</a>';
 echo '</div>';
 
 /* Display Forum Category and the Forum information */

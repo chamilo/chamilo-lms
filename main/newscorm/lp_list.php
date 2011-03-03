@@ -178,30 +178,34 @@ if (is_array($flat_list)) {
         }        
         
         if (!$is_allowed_to_edit) {
+            
             $time_limits = false;                  
             if ($details['expired_on'] != '' && $details['expired_on'] != '0000-00-00 00:00:00') {
                 $time_limits = true;  
-            }            
+            }
             
-            if (empty($details['created_on'])  && empty($details['modified_on'])   ) {
-                //This is an old LP (from a migration) so we do nothing
+            //This is an old LP (from a migration) so we do nothing
+            if ( (empty($details['created_on']) ||  $details['created_on'] == '0000-00-00 00:00:00') && (empty($details['modified_on']) || $details['modified_on'] == '0000-00-00 00:00:00')) {
                 $time_limits = false;
             }
      
             if ($time_limits) {
                 // check if start time
-                $start_time = api_strtotime($details['publicated_on'],'UTC');                
-                $end_time   = api_strtotime($details['expired_on'],'UTC');                                      
-                $now        = time();          
-                $is_actived_time = false;                
+                if (!empty($details['publicated_on']) && $details['publicated_on'] != '0000-00-00 00:00:00' &&
+                    !empty($details['expired_on'])    && $details['expired_on'] != '0000-00-00 00:00:00') { 
+                    $start_time = api_strtotime($details['publicated_on'],'UTC');                
+                    $end_time   = api_strtotime($details['expired_on'],'UTC');                                      
+                    $now        = time();          
+                    $is_actived_time = false;                
+                                        
+                    if ($now > $start_time && $end_time > $now ) {
+                        $is_actived_time = true;
+                    }
                                     
-                if ($now > $start_time && $end_time > $now ) {
-                    $is_actived_time = true;
+                    if (!$is_actived_time) {
+                    	continue;
+                    }                
                 }
-                                
-                if (!$is_actived_time) {
-                	continue;
-                }                
             }
             
         }

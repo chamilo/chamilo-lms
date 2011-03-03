@@ -3194,18 +3194,22 @@ function store_move_thread($values) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function prepare4display($input='') {
+function prepare4display($input = '') {
+    static $search;
+    if (!isset($search)) {
+        $search = html_filter($_POST['search_term']); // No html at all.
+    }
     $highlightcolors = array('yellow', '#33CC33','#3399CC', '#9999FF', '#33CC33');
     if (!is_array($input)) {
-        if (!empty($_GET['search'])) {
-            if (strstr($_GET['search'],'+')) {
-                $search_terms = explode('+',$_GET['search']);
+        if (!empty($search)) {
+            if (strstr($search, '+')) {
+                $search_terms = explode('+', $search);
             } else  {
-                $search_terms[] = trim($_GET['search']);
+                $search_terms[] = trim($search);
             }
             $counter = 0;
-            foreach ($search_terms as $key=>$search_term) {
-                $input = str_replace(trim($search_term),'<span style="background-color: '.$highlightcolors[$counter].'">'.trim($search_term).'</span>',$input);
+            foreach ($search_terms as $key => $search_term) {
+                $input = api_preg_replace('/'.preg_quote(trim($search_term)).'/i', '<span style="background-color: '.$highlightcolors[$counter].'">$0</span>', $input);
                 $counter++;
             }
         }
@@ -3213,8 +3217,8 @@ function prepare4display($input='') {
         //change this to COURSEMANAGERLOWSECURITY or COURSEMANAGER to lower filtering and allow more styles (see comments of Security::remove_XSS() method to learn about other levels)
         return Security::remove_XSS($input, STUDENT);
     } else {
-        $returnarray=array_walk($input, 'api_html_entity_decode');
-        $returnarray=array_walk($input, 'stripslashes');
+        $returnarray = array_walk($input, 'api_html_entity_decode');
+        $returnarray = array_walk($input, 'stripslashes');
         return $returnarray;
     }
 }
@@ -3228,26 +3232,26 @@ function prepare4display($input='') {
 function forum_search() {
     global $origin;
 
-    // initiate the object
-    $form = new FormValidator('forumsearch','post','forumsearch.php?origin='.$origin.'');
+    // Initialize the object.
+    $form = new FormValidator('forumsearch', 'post', 'forumsearch.php?origin='.$origin.'');
 
-    // settting the form elements
+    // Settting the form elements.
     $form->addElement('header', '', get_lang('ForumSearch'));
-    $form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles" id="search_title"');
+    $form->addElement('text', 'search_term', get_lang('SearchTerm'), 'class="input_titles" id="search_title"');
     $form->applyFilter('search_term', 'html_filter');
     $form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation')/*, $dissertation[$_GET['opleidingsonderdeelcode']]['code']*/);
     $form->addElement('style_submit_button', null, get_lang('Search'), 'class="search"');
 
-    // setting the rules
+    // Setting the rules.
     $form->addRule('search_term', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('search_term', get_lang('TooShort'),'minlength',3);
+    $form->addRule('search_term', get_lang('TooShort'), 'minlength', 3);
 
-    // The validation or display
+    // The validation or display.
     if( $form->validate() ) {
        $values = $form->exportValues();
        $form->setDefaults($values);
        $form->display();
-       // display the search results
+       // Display the search results.
        display_forum_search_results(stripslashes($values['search_term']));
     } else {
         $form->display();
@@ -3269,15 +3273,15 @@ function display_forum_search_results($search_term) {
     $table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
 
-    $gradebook=Security::remove_XSS($_GET['gradebook']);
-    // defining the search strings as an array
-    if (strstr($search_term,'+')) {
-        $search_terms = explode('+',$search_term);
+    $gradebook = Security::remove_XSS($_GET['gradebook']);
+    // Defining the search strings as an array.
+    if (strstr($search_term, '+')) {
+        $search_terms = explode('+', $search_term);
     } else  {
         $search_terms[] = $search_term;
     }
 
-    // search restriction
+    // Search restriction.
     foreach ($search_terms as $key => $value) {
         $search_restriction[] = "(posts.post_title LIKE '%".Database::escape_string(trim($value))."%'
                                     OR posts.post_text LIKE '%".Database::escape_string(trim($value))."%')";
@@ -3287,24 +3291,24 @@ function display_forum_search_results($search_term) {
                 WHERE ".implode(' AND ',$search_restriction)."
                 GROUP BY posts.post_id";
 
-    // getting all the information of the forum categories
-    $forum_categories_list=get_forum_categories();
+    // Getting all the information of the forum categories.
+    $forum_categories_list = get_forum_categories();
 
-    // getting all the information of the forums
-    $forum_list=get_forums();
+    // Getting all the information of the forums.
+    $forum_list = get_forums();
 
     $result = Database::query($sql);
-    while ($row = Database::fetch_array($result,'ASSOC')) {
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
         $display_result = false;
         /*
-            we only show it when
+            We only show it when
             1. forum cateogory is visible
             2. forum is visible
             3. thread is visible (to do)
             4. post is visible
         */
-        if (!api_is_allowed_to_edit(null,true)) {
-            if ($forum_categories_list[$row['forum_id']['forum_category']]['visibility'] == '1'  AND $forum_list[$row['forum_id']]['visibility'] == '1' AND $row['visible'] == '1') {
+        if (!api_is_allowed_to_edit(null, true)) {
+            if ($forum_categories_list[$row['forum_id']['forum_category']]['visibility'] == '1' AND $forum_list[$row['forum_id']]['visibility'] == '1' AND $row['visible'] == '1') {
                 $display_result = true;
             }
         } else {
@@ -3312,15 +3316,15 @@ function display_forum_search_results($search_term) {
         }
 
         if ($display_result) {
-            $search_results_item = '<li><a href="viewforumcategory.php?forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'&amp;origin='.$origin.'&amp;search='.urlencode($search_term).'">'.$forum_categories_list[$row['forum_id']['forum_category']]['cat_title'].'</a> > ';
-            $search_results_item .= '<a href="viewforum.php?forum='.$row['forum_id'].'&amp;origin='.$origin.'&amp;search='.urlencode($search_term).'">'.$forum_list[$row['forum_id']]['forum_title'].'</a> > ';
-            //$search_results_item .= '<a href="">THREAD</a> > ';
-            $search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;thread='.$row['thread_id'].'&amp;search='.urlencode($search_term).'">'.$row['post_title'].'</a>';
+            $search_results_item = '<li><a href="viewforumcategory.php?forumcategory='.$forum_list[$row['forum_id']]['forum_category'].'&amp;origin='.$origin.'&amp;search='.urlencode($search_term).'">'.prepare4display($forum_categories_list[$row['forum_id']['forum_category']]['cat_title']).'</a> &gt; ';
+            $search_results_item .= '<a href="viewforum.php?forum='.$row['forum_id'].'&amp;origin='.$origin.'&amp;search='.urlencode($search_term).'">'.prepare4display($forum_list[$row['forum_id']]['forum_title']).'</a> &gt; ';
+            //$search_results_item .= '<a href="">THREAD</a> &gt; ';
+            $search_results_item .= '<a href="viewthread.php?forum='.$row['forum_id'].'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;thread='.$row['thread_id'].'&amp;search='.urlencode($search_term).'">'.prepare4display($row['post_title']).'</a>';
             $search_results_item .= '<br />';
             if (api_strlen($row['post_title']) > 200 ) {
-                $search_results_item .= api_substr(strip_tags($row['post_title']),0,200).'...';
+                $search_results_item .= prepare4display(api_substr(strip_tags($row['post_title']), 0, 200)).'...';
             } else {
-                $search_results_item .= $row['post_title'];
+                $search_results_item .= prepare4display($row['post_title']);
             }
             $search_results_item .= '</li>';
             $search_results[] = $search_results_item;
@@ -3328,7 +3332,7 @@ function display_forum_search_results($search_term) {
     }
     echo '<div class="row"><div class="form_header">'.count($search_results).' '.get_lang('ForumSearchResults').'</div></div>';
     echo '<ol>';
-    if($search_results)	{
+    if ($search_results) {
         echo implode($search_results);
     }
     echo '</ol>';

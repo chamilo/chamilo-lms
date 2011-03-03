@@ -343,7 +343,7 @@ class Display {
 	 * @param bool	Filter (true) or not (false)
 	 * @return void
 	 */
-	public static function display_normal_message ($message, $filter = true) {
+	public static function display_normal_message($message, $filter = true) {
 		if ($filter) {
 			// Filter message
 			$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());

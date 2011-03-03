@@ -177,7 +177,13 @@ ALTER TABLE notification ADD index mail_notify_freq_index (sent_at, send_freq, c
 
 ALTER TABLE session_category ADD COLUMN access_url_id INT NOT NULL default 1;
 
-UPDATE settings_current SET selected_value = '1.8.8.13997' WHERE variable = 'chamilo_database_version';
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enable_quiz_scenario', NULL,'radio','Course','false','EnableQuizScenarioTitle','EnableQuizScenarioComment',NULL,NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_quiz_scenario', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_quiz_scenario', 'false', 'No');
+
+UPDATE settings_current SET category='Search' WHERE variable='search_enable';
+
+UPDATE settings_current SET selected_value = '1.8.8.14082' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

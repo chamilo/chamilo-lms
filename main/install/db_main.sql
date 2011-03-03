@@ -742,7 +742,7 @@ VALUES
 ('show_glossary_in_documents', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInDocumentsTitle', 'ShowGlossaryInDocumentsComment', NULL, NULL,1),
 ('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL,0),
 ('course_create_active_tools','enable_search','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Search',0),
-('search_enabled',NULL,'radio','Tools','false','EnableSearchTitle','EnableSearchComment',NULL,NULL,1),
+('search_enabled',NULL,'radio','Search','false','EnableSearchTitle','EnableSearchComment',NULL,NULL,1),
 ('search_prefilter_prefix',NULL, NULL,'Search','','SearchPrefilterPrefix','SearchPrefilterPrefixComment',NULL,NULL,0),
 ('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL,1),
 ('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1),
@@ -789,7 +789,7 @@ VALUES
 ('exercise_min_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMinScoreTitle',			'ExerciseMinScoreComment','platform',NULL, 	1),
 ('exercise_max_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMaxScoreTitle',			'ExerciseMaxScoreComment','platform',NULL, 	1),
 ('show_users_folders',				NULL,'radio',		'Tools',	'true',	'ShowUsersFoldersTitle','ShowUsersFoldersComment',NULL,NULL, 0),
-('show_default_folders',				NULL,'radio',		'Tools',	'true',	'ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0),
+('show_default_folders',			NULL,'radio',		'Tools',	'true',	'ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0),
 ('show_chat_folder',				NULL,'radio',		'Tools',	'true',	'ShowChatFolderTitle','ShowChatFolderComment',NULL,NULL, 0),
 ('enabled_text2audio',				NULL,'radio',		'Tools',	'false',	'Text2AudioTitle','Text2AudioComment',NULL,NULL, 0),
 ('course_hide_tools','course_description','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'CourseDescription', 1),
@@ -820,7 +820,8 @@ VALUES
 ('show_groups_to_users',NULL,'radio','Platform','true','ShowGroupsToUsersTitle','ShowGroupsToUsersComment',NULL,NULL, 0),
 ('accessibility_font_resize',NULL,'radio','Platform','false','EnableAccessibilityFontResizeTitle','EnableAccessibilityFontResizeComment',NULL,NULL, 1),
 ('hide_courses_in_sessions',NULL,'radio', 'Platform','false','HideCoursesInSessionsTitle',	'HideCoursesInSessionsComment','platform',NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.13997','DokeosDatabaseVersion','', NULL, NULL, 0);
+('enable_quiz_scenario',  NULL,'radio','Course','false','EnableQuizScenarioTitle','EnableQuizScenarioComment',NULL,NULL, 1),
+('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.14082','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1081,7 +1082,9 @@ VALUES
 ('accessibility_font_resize', 'true', 'Yes'),
 ('accessibility_font_resize', 'false', 'No'),
 ('hide_courses_in_sessions','true','Yes'),
-('hide_courses_in_sessions','false','No');
+('hide_courses_in_sessions','false','No'),
+('enable_quiz_scenario', 'true', 'Yes'),
+('enable_quiz_scenario', 'false', 'No');
 
 UNLOCK TABLES;
 

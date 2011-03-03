@@ -598,8 +598,8 @@ class Exercise {
         	// insert into the item_property table
 
         	api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizAdded',api_get_user_id());
-			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
-				$this -> search_engine_save();
+			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {			    
+                $this -> search_engine_save();
 			}
 		}
 
@@ -882,7 +882,9 @@ class Exercise {
 			// feedback type
 			$radios_feedback = array();
 			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('ExerciseAtTheEndOfTheTest'),'0',array('id' =>'exerciseType_0', 'onclick' => 'check_feedback()'));
-			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('DirectFeedback'),'1',array('id' =>'exerciseType_1' , 'onclick' => 'check_direct_feedback()'));
+			if (api_get_setting('enable_quiz_scenario') == 'true') {
+			    $radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('DirectFeedback'),'1',array('id' =>'exerciseType_1' , 'onclick' => 'check_direct_feedback()'));
+			}
 			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
 			
 			
@@ -1106,11 +1108,10 @@ class Exercise {
 		$this -> setRandom($form -> getSubmitValue('randomQuestions'));
 		$this -> updateRandomAnswers($form -> getSubmitValue('randomAnswers'));
 		$this -> updateResultsDisabled($form -> getSubmitValue('results_disabled'));
-    	$this -> updateExpiredTime($form -> getSubmitValue('enabletimercontroltotalminutes'));
-    	
+    	$this -> updateExpiredTime($form -> getSubmitValue('enabletimercontroltotalminutes'));    	
     	$this -> updatePropagateNegative($form -> getSubmitValue('propagate_neg'));
 
-		if($form -> getSubmitValue('enabletimelimit')==1) {
+		if ($form -> getSubmitValue('enabletimelimit')==1) {
            $start_time = $form -> getSubmitValue('start_time');
            $this->start_time = $start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
            $end_time = $form -> getSubmitValue('end_time');
@@ -1120,7 +1121,7 @@ class Exercise {
            $this->end_time = '0000-00-00 00:00:00';
         }
 
-		if($form -> getSubmitValue('enabletimercontrol') == 1) {
+		if ($form -> getSubmitValue('enabletimercontrol') == 1) {
 		   $expired_total_time = $form -> getSubmitValue('enabletimercontroltotalminutes');
 		   if ($this->expired_time == 0) {
 			   $this->expired_time = $expired_total_time;
@@ -1129,7 +1130,7 @@ class Exercise {
 			$this->expired_time = 0;
 		}
 
-		if($form -> getSubmitValue('randomAnswers') == 1) {
+		if ($form -> getSubmitValue('randomAnswers') == 1) {
            $this->random_answers=1;
     	} else {
            $this->random_answers=0;
@@ -1139,15 +1140,16 @@ class Exercise {
 	}
 
 	function search_engine_save() {
+	    
 		if ($_POST['index_document'] != 1) {
 			return;
 		}
 
 		$course_id = api_get_course_id();
 
-		require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
-		require_once(api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php');
-		require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+		require_once api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php';
+		require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
+		require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
 		$specific_fields = get_specific_field_list();
 		$ic_slide = new IndexableChunk();
@@ -1187,7 +1189,7 @@ class Exercise {
 	    $di->addChunk($ic_slide);
 
 	    //index and return search engine document id
-	    $did = $di->index();
+	    $did = $di->index();	
 	    if ($did) {
 		    // save it to db
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
@@ -1196,7 +1198,6 @@ class Exercise {
 		    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id, $did);
 		    Database::query($sql);
 	    }
-
     }
 
     function search_engine_edit() {
@@ -1266,7 +1267,8 @@ class Exercise {
                     $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id, $did);
                     Database::query($sql);
                 }
-
+            } else {
+                $this->search_engine_save();
             }
         }
 

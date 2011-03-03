@@ -150,7 +150,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'false', 'No');
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_groups_to_users',NULL,'radio','Platform','true','ShowGroupsToUsersTitle','ShowGroupsToUsersComment',NULL,NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_groups_to_users',NULL,'radio','Platform','false','ShowGroupsToUsersTitle','ShowGroupsToUsersComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_groups_to_users', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_groups_to_users', 'false', 'No');
 

@@ -3209,7 +3209,7 @@ function prepare4display($input = '') {
             }
             $counter = 0;
             foreach ($search_terms as $key => $search_term) {
-                $input = api_preg_replace('/'.preg_quote(trim($search_term)).'/i', '<span style="background-color: '.$highlightcolors[$counter].'">$0</span>', $input);
+                $input = api_preg_replace('/'.preg_quote(trim($search_term), '/').'/i', '<span style="background-color: '.$highlightcolors[$counter].'">$0</span>', $input);
                 $counter++;
             }
         }

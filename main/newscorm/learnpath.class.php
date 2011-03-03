@@ -1397,8 +1397,10 @@ class learnpath {
         require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
         $terms = get_specific_field_values_list_by_prefix($prefix, $this->cc, TOOL_LEARNPATH, $this->lp_id);
         $prefix_terms = array();
-        foreach ($terms as $term) {
-            $prefix_terms[] = $term['value'];
+        if (!empty($terms)) {
+            foreach ($terms as $term) {
+                $prefix_terms[] = $term['value'];
+            }
         }
         return $prefix_terms;
     }
@@ -3882,7 +3884,7 @@ class learnpath {
         $items_table = Database :: get_course_table(TABLE_LP_ITEM);
         // TODO: Make query secure agains XSS : use member attr instead of post var.
         $lp_id = intval($_POST['lp_id']);
-        $sql = "SELECT * FROM $items_table WHERE lp_id = $lp_id";
+        $sql = "SELECT * FROM $items_table WHERE lp_id = $lp_id"; 
         $result = Database::query($sql);
         $di = new DokeosIndexer();
 
@@ -3892,6 +3894,7 @@ class learnpath {
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp_id, $lp_item['id']);
 
+            //echo $sql; echo '<br>';
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
 
@@ -3901,7 +3904,7 @@ class learnpath {
                 $doc = $di->get_document($se_ref['search_did']);
 
                 $xapian_terms = xapian_get_doc_terms($doc, $prefix);
-                //var_dump($xapian_terms);
+  
                 $xterms = array ();
                 foreach ($xapian_terms as $xapian_term) {
                     $xterms[] = substr($xapian_term['name'], 1);
@@ -3921,8 +3924,10 @@ class learnpath {
                 }
                 $di->getDb()->replace_document((int) $se_ref['search_did'], $doc);
                 $di->getDb()->flush();
+            } else {
+                //@todo What we should do here?
             }
-        }
+        }        
         return true;
     }
 

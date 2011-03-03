@@ -3,11 +3,12 @@
 
 /**
  * Script to draw the results from a query
- * @package: chamilo.learnpath
- * @author: Diego Escalante Urrelo <diegoe@gmail.com>
- * @author: Marco Antonio Villegas Vega <marvil07@gmail.com>
+ * @package chamilo.learnpath
+ * @author Diego Escalante Urrelo <diegoe@gmail.com>
+ * @author Marco Antonio Villegas Vega <marvil07@gmail.com>
+ * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixing
+ * 
  */
-
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require api_get_path(LIBRARY_PATH).'search/search_widget.php';
 require api_get_path(LIBRARY_PATH).'search/DokeosQuery.php';
@@ -138,13 +139,14 @@ if (count($blocks) > 0) {
     $additional_parameters = array (
         'mode' => $mode,
         'action' => 'search',
-        'query' => $_REQUEST['query'],
+        'query' => Security::remove_XSS($_REQUEST['query']),
     );
     $get_params = '';
     foreach ($specific_fields as $specific_field) {
         if (isset($_REQUEST[ 'sf_'. $specific_field['code'] ])) {
             $values = $_REQUEST[ 'sf_'. $specific_field['code'] ];
-            $additional_parameters[ 'sf_'. $specific_field['code'] ] = $values;
+            //Sortable additional_parameters doesn't accept multi dimensional arrays
+            //$additional_parameters[ 'sf_'. $specific_field['code'] ] = $values;
             foreach ( $values as $value ) {
                 $get_params .= '&sf_' . $specific_field['code'] .'[]='. $value;
             }
@@ -152,6 +154,7 @@ if (count($blocks) > 0) {
         }
     }
     $additional_parameters['operator'] = $op;
+    
     $s->additional_parameters = $additional_parameters;
 
     if ($mode == 'default') {

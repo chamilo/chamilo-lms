@@ -6,6 +6,10 @@
  */
 
 $language_file[] = 'admin';
+
+// Resetting the course id.
+$cidReset = true;
+
 // including necessary libraries
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
@@ -40,8 +44,8 @@ $form->addElement('text','field_name',get_lang('FieldName'));
 $form->applyFilter('field_name','html_filter');
 $form->applyFilter('field_name','trim');
 $form->addRule('field_name', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('fieldname', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-$form->addRule('fieldname', '', 'maxlength',20);
+$form->addRule('field_name', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
+$form->addRule('field_name', '', 'maxlength',20);
 
 // Set default values (only not empty when editing)
 $defaults = array();
@@ -51,7 +55,7 @@ if (is_numeric($_REQUEST['field_id'])) {
 }
 $form->setDefaults($defaults);
 // Submit button
-$form->addElement('submit', 'submit', get_lang('Add'));
+$form->addElement('style_submit_button', 'submit', get_lang('Add'),'class="add"');
 
 // Validate form
 if ($form->validate()) {

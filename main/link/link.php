@@ -165,7 +165,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 	echo '</div>';
 	if (api_get_setting('search_enabled') == 'true') {
 		if (!extension_loaded('xapian')) {
-			Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
+			Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));
 		}
 	}
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing

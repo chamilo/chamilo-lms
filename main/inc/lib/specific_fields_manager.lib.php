@@ -149,20 +149,19 @@ function get_specific_field_values_list_by_prefix($prefix, $course_code, $tool_i
  * @param string $value specific field value
  */
 function add_specific_field_value($id_specific_field, $course_id, $tool_id, $ref_id, $value) {
-  $table_sf_values = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
-  $value = trim($value);
-  if (empty($value)) {
-    return FALSE;
-  }
-  $sql = 'INSERT INTO %s(id, course_code, tool_id, ref_id, field_id, value) VALUES(NULL, \'%s\', \'%s\', %s, %s, \'%s\')';
-  $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id, $id_specific_field, Database::escape_string($value));
-  $result = Database::query($sql);
-  if ($result) {
-    return Database::insert_id();
-  }
-  else {
-    return FALSE;
-  }
+    $table_sf_values = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $value = trim($value);
+    if (empty($value)) {
+        return false;
+    }
+    $sql = 'INSERT INTO %s(id, course_code, tool_id, ref_id, field_id, value) VALUES(NULL, \'%s\', \'%s\', %s, %s, \'%s\')';
+    $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id, $id_specific_field, Database::escape_string($value));
+    $result = Database::query($sql);
+    if ($result) {
+        return Database::insert_id();
+    } else {
+        return false;
+    }
 }
 
 /**

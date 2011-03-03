@@ -26,8 +26,8 @@ define('XAPIAN_DB', api_get_path(SYS_PATH).'searchdb/');
 function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extra = array(), $count_type = 0) {
 
     try {
-        if (!is_object($db)) {
-            $db = new XapianDatabase(XAPIAN_DB);
+        if (!is_object($db)) {            
+            $db = new XapianDatabase(XAPIAN_DB);            
         }
 
         // Build subqueries from $extra array. Now only used by tags search filter on search widget
@@ -103,10 +103,9 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extr
         }
 
         return array($count, $results);
-    }
-    catch (Exception $e) {
-     display_xapian_error($e->getMessage());
-     return NULL;
+    } catch (Exception $e) {        
+        display_xapian_error($e->getMessage());
+        return NULL;
     }
 }
 
@@ -245,5 +244,4 @@ function xapian_join_queries($query1, $query2=NULL, $op='or') {
     }
     $display_message=get_lang('Error').' : '. $message_error;
     Display::display_error_message($display_message);
- }
-?>
+}

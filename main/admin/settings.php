@@ -147,7 +147,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     $default_values = array();
     foreach ($settings as $row) {
         // Settings to avoid
-        $rows_to_avoid = array('search_enabled', 'gradebook_enable');
+        $rows_to_avoid = array('gradebook_enable');
         if (in_array($row['variable'], $rows_to_avoid)) { continue; }
 
         $anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
@@ -259,7 +259,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 $result = Database::query($sql);
                 $group = array ();
                 while ($rowkeys = Database::fetch_array($result)) {
-                     if ($rowkeys['variable'] == 'course_create_active_tools' && $rowkeys['subkey'] == 'enable_search') { continue; }
+                     //if ($rowkeys['variable'] == 'course_create_active_tools' && $rowkeys['subkey'] == 'enable_search') { continue; }
 
                      // Profile tab option should be hidden when the social tool is enabled.
                      if (api_get_setting('allow_social_tool') == 'true') {
@@ -575,10 +575,8 @@ echo "\n</div>";
 if (!empty($_GET['category'])) {
     switch ($_GET['category']) {
         case 'Plugins':
-
             // Displaying the extensions: Plugins.
             // This will be available to all the sites (access_urls).
-
             if (isset($_POST['submit_dashboard_plugins'])) {
                 $affected_rows = DashboardManager::store_dashboard_plugins($_POST);
                 if ($affected_rows) {
@@ -590,13 +588,11 @@ if (!empty($_GET['category'])) {
                     Display :: display_confirmation_message(get_lang('DashboardPluginsHaveBeenUpdatedSucesslly'));
                 }
             }
-
             handle_plugins();
             DashboardManager::handle_dashboard_plugins();
 
             break;
         case 'stylesheets':
-
             // Displaying the extensions: Stylesheets.
             handle_stylesheets();
             break;
@@ -613,5 +609,4 @@ if (!empty($_GET['category'])) {
 }
 
 /* FOOTER */
-
 Display :: display_footer();

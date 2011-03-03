@@ -6,6 +6,9 @@
  * @package chamilo.admin
  */
 $language_file[] = 'admin';
+// Resetting the course id.
+$cidReset = true;
+
 // Including some necessary chamilo files
 require_once '../inc/global.inc.php';
 
@@ -17,6 +20,7 @@ $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAd
 $interbreadcrumb[] = array ('url' => 'specific_fields.php', 'name' => get_lang('SpecificSearchFields'));
 
 $libpath = api_get_path(LIBRARY_PATH);
+
 require_once $libpath.'sortabletable.class.php';
 include_once $libpath.'specific_fields_manager.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';

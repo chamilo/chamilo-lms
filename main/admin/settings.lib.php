@@ -290,7 +290,6 @@ function handle_stylesheets() {
 
     //echo '</select><br />';
     echo '</select>&nbsp;&nbsp;';
-    //var_dump($list_of_names);
     if ($is_style_changeable){
         echo '<button class="save" type="submit" name="submit_stylesheets"> '.get_lang('SaveSettings').' </button></form>';
     }
@@ -563,8 +562,7 @@ function handle_search() {
     
 
     if ($form->validate()) {
-        $formvalues = $form->exportValues();
-        var_dump($formvalues);
+        $formvalues = $form->exportValues();        
         $r = api_set_settings_category('Search', 'false', $_configuration['access_url']);
         // Save the settings.
         foreach ($formvalues as $key => $value) {
@@ -576,8 +574,6 @@ function handle_search() {
         $form->display();
         echo '</div>';
     }
-
-
 }
 
 /**

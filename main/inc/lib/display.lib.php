@@ -454,6 +454,27 @@ class Display {
 		*/
 		echo $message.'</div>';
 	}
+	/**
+	 * Returns a div html string with 
+	 */
+	public function return_message($message, $type='normal', $filter = true) {
+	    if ($filter) {
+	        $message = Security::remove_XSS($message);
+	    }
+        switch($type) {
+            case 'warning':
+	           $class = 'warning-message';
+            case 'error':
+               $class = 'error-message';
+            case 'normal':
+                $class = '';
+            case 'confirmation-message':
+                $class = '';        
+            default:
+                $class = 'normal-message';         
+            return self::div($message, array('class'=>$class));
+	   }   
+	}
 
 	/**
 	 * Returns an encrypted mailto hyperlink

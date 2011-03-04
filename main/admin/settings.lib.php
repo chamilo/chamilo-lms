@@ -525,9 +525,19 @@ function handle_search() {
         }
     }
     $form->addGroup($group, 'search_enabled', get_lang('SearchEnabledComment'), '<br />', false);
-    $default_values['search_enabled'] = $search_enabled;
-        
+    
     $search_enabled = api_get_setting('search_enabled');
+    
+    if ($form->validate()) {
+        $formvalues = $form->exportValues();
+        $r = api_set_settings_category('Search', 'false', $_configuration['access_url']);
+        // Save the settings.
+        foreach ($formvalues as $key => $value) {
+            $result = api_set_setting($key, $value, null, null);
+        }
+        $search_enabled = $formvalues['search_enabled'];
+        Display::display_confirmation_message($SettingsStored);
+    }
 
     if ($search_enabled == 'true') {
     
@@ -554,26 +564,19 @@ function handle_search() {
         $group = array();
         $form->addElement('select', 'search_prefilter_prefix', get_lang('SearchPrefilterPrefix'), $sf_values, '');
         $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
+        
+        //$form->addElement('html', Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php' ));
+        //admin/specific_fields.php
     }
+    $default_values['search_enabled'] = $search_enabled;
 
     //$form->addRule('search_show_unlinked_results', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('style_submit_button', 'submit', get_lang('Save'),'class="save"');
-    $form->setDefaults($default_values);
+    $form->setDefaults($default_values);    
     
-
-    if ($form->validate()) {
-        $formvalues = $form->exportValues();        
-        $r = api_set_settings_category('Search', 'false', $_configuration['access_url']);
-        // Save the settings.
-        foreach ($formvalues as $key => $value) {
-            $result = api_set_setting($key, $value, null, null);
-        }
-        Display::display_confirmation_message($SettingsStored);
-    } else {
-        echo '<div id="search-options-form">';
-        $form->display();
-        echo '</div>';
-    }
+    echo '<div id="search-options-form">';
+    $form->display();
+    echo '</div>';
 }
 
 /**

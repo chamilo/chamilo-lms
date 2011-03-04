@@ -581,9 +581,32 @@ function handle_search() {
     echo '</div>';
     
     if ($search_enabled == 'true') {
-        require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+        require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';        
+        $xapian_path = api_get_path(SYS_PATH).'searchdb';
         
-        $xapian_path = api_get_path(SYS_PATH).'searchdb';   
+        /*
+        @todo Test the Xapian connection
+        if (extension_loaded('xapian')) {
+            require_once 'xapian.php';
+            try {               
+                $db = new XapianDatabase($xapian_path.'/');
+            } catch (Exception $e) {        
+                var_dump($e->getMessage());            
+            }
+            
+            require_once api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php';
+            require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
+            require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
+            
+            $indexable = new IndexableChunk();
+            $indexable->addValue("content", 'Test');
+            
+            $di = new DokeosIndexer();            
+            $di->connectDb(NULL, NULL, 'english');
+            $di->addChunk($indexable);
+            $did = $di->index();
+        }
+        */
         
         $xapian_loaded      = Display::return_icon('bullet_green.gif', get_lang('Ok'));
         $dir_exists         = Display::return_icon('bullet_green.gif', get_lang('Ok'));

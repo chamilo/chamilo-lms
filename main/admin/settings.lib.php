@@ -538,7 +538,8 @@ function handle_search() {
         $search_enabled = $formvalues['search_enabled'];
         Display::display_confirmation_message($SettingsStored);
     }
-
+    $specific_fields = get_specific_field_list();
+    
     if ($search_enabled == 'true') {
     
         // Search_show_unlinked_results.
@@ -556,7 +557,7 @@ function handle_search() {
         // Search_prefilter_prefix.
         $form->addElement('header', null, get_lang('SearchPrefilterPrefix'));
         //$form->addElement('label', null, get_lang('SearchPrefilterPrefixComment'));
-        $specific_fields = get_specific_field_list();
+        
         $sf_values = array();
         foreach ($specific_fields as $sf) {
            $sf_values[$sf['code']] = $sf['name'];
@@ -566,8 +567,9 @@ function handle_search() {
         $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
         
         //$form->addElement('html', Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php' ));
-        //admin/specific_fields.php
+        //admin/specific_fields.php        
     }
+
     $default_values['search_enabled'] = $search_enabled;
 
     //$form->addRule('search_show_unlinked_results', get_lang('ThisFieldIsRequired'), 'required');
@@ -577,6 +579,43 @@ function handle_search() {
     echo '<div id="search-options-form">';
     $form->display();
     echo '</div>';
+    
+    if ($search_enabled == 'true') {
+        require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+        
+        $xapian_path = api_get_path(SYS_PATH).'searchdb';   
+        
+        $xapian_loaded      = Display::return_icon('bullet_green.gif', get_lang('Ok'));
+        $dir_exists         = Display::return_icon('bullet_green.gif', get_lang('Ok'));
+        $dir_is_writable    = Display::return_icon('bullet_green.gif', get_lang('Ok'));
+        
+        $specific_fields_exists = Display::return_icon('bullet_green.gif', get_lang('Ok'));
+        
+        if (empty($specific_fields)) {
+            $specific_fields_exists = Display::return_icon('bullet_red.gif', get_lang('Error'));
+        }
+        
+        if (!extension_loaded('xapian')) {
+            $xapian_loaded = Display::return_icon('bullet_red.gif', get_lang('Error'));
+        }
+        if (!is_dir($xapian_path)) {
+            $dir_exists = Display::return_icon('bullet_red.gif', get_lang('Error'));
+        }
+        if (!is_writable($xapian_path)) {
+            $dir_is_writable = Display::return_icon('bullet_red.gif', get_lang('Error'));   
+        }
+        
+        $data[] = array(get_lang('XapianModuleInstalled'),$xapian_loaded);
+        $data[] = array(get_lang('DirectoryExists').' - '.$xapian_path,$dir_exists);
+        $data[] = array(get_lang('IsWritable').' - '.$xapian_path,$dir_is_writable);
+        $data[] = array(get_lang('SpecificSearchFieldsAvailable') ,$specific_fields_exists);
+        
+        
+        $table = new SortableTableFromArray($data);
+        $table->set_header(0,get_lang('Setting'), false);
+        $table->set_header(1,get_lang('Value'), false);
+        echo  $table->display();
+    }    
 }
 
 /**

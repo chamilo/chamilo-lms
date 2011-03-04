@@ -1,8 +1,8 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Search widget. Shows the search screen contents.
- * @package dokeos.search
+ * @package chamilo.search
  */
 require_once dirname(__FILE__) . '/IndexableChunk.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -76,8 +76,10 @@ function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix='') {
         }
         //sorting the array of terms
         $temp = array();
-        foreach ($sf_term_array as $key => $value) {
-            $temp[trim(stripslashes($value['name']))] = $key;
+        if (!empty($sf_term_array)) {
+            foreach ($sf_term_array as $key => $value) {
+                $temp[trim(stripslashes($value['name']))] = $key;
+            }
         }
         $temp = array_flip($temp);
         unset($sf_term_array);

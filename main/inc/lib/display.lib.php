@@ -63,12 +63,13 @@ class Display {
 
 	/**
 	 *	Display simple html header of table.
+	 *  @deprecated
 	 */
-	public static function display_table_header() {
+	/*public static function display_table_header() {
 		$bgcolor = 'bgcolor="white"';
 		echo '<table border="0" cellspacing="0" cellpadding="4" width="85%"><tbody>';
 		return $bgcolor;
-	}
+	}*/
 
 	/**
 	 *	Display html header of table with several options.
@@ -81,6 +82,7 @@ class Display {
 	 *	@param column_header, array with the header elements.
 	 *	@author Roan Embrechts
 	 *	@version 1.01
+	 *  @todo remove this function, is only use in user.php
 	 *	@return return type string, bgcolor
 	 */
 	public static function display_complex_table_header($properties, $column_header) {
@@ -120,6 +122,7 @@ class Display {
 	 *	@param $bgcolor the background colour for the table
 	 *	@param $table_row an array with the row elements
 	 *	@param $is_alternating true: the row colours alternate, false otherwise
+	 *  @todo remove this function, is only use in user.php
 	 */
 	public static function display_table_row($bgcolor, $table_row, $is_alternating = true) {
 		echo '<tr '.$bgcolor.'>';
@@ -135,46 +138,8 @@ class Display {
 			}
 		}
 		return $bgcolor;
-	}
+	}	
 
-	/**
-	 *	Displays a table row.
-	 *	This public function has more options and is easier to extend than display_table_row()
-	 *
-	 *	@param $properties, array with properties:
-	 *	["bgcolor"] - the background colour for the table
-	 *	["is_alternating"] - true: the row colours alternate, false otherwise
-	 *	["align_row"] - an array with, per cell, left|center|right
-	 *	@todo add valign property
-	 */
-	public static function display_complex_table_row($properties, $table_row) {
-		$bgcolor = $properties['bgcolor'];
-		$is_alternating = $properties['is_alternating'];
-		$align_row = $properties['align_row'];
-		echo '<tr '.$bgcolor.'>';
-		$number_cells = count($table_row);
-		for ($i = 0; $i < $number_cells; $i++) {
-			$cell_data = $table_row[$i];
-			$cell_align = $align_row[$i];
-			echo '<td align="'.$cell_align.'">'.$cell_data.'</td>';
-		}
-		echo "</tr>\n";
-		if ($is_alternating) {
-			if ($bgcolor == 'bgcolor="'.HTML_WHITE.'"') {
-				$bgcolor = 'bgcolor="'.DOKEOSLIGHTGREY.'"';
-			} elseif ($bgcolor == 'bgcolor="'.DOKEOSLIGHTGREY.'"') {
-				$bgcolor = 'bgcolor="'.HTML_WHITE.'"';
-			}
-		}
-		return $bgcolor;
-	}
-
-	/**
-	 *	Displays html footer of table
-	 */
-	public static function display_table_footer() {
-		echo '</tbody></table>';
-	}
 
 	/**
 	 * Displays a table
@@ -857,7 +822,19 @@ class Display {
     }
     
     /**
-     * Displays the html needed by the grid_js function
+     * In order to display a grid using jqgrid you have to:
+     * @example
+     * After your Display::display_header function you have to add the nex javascript code:     * 
+     * <script>  
+     *      echo Display::grid_js('my_grid_name',  $url,$columns, $column_model, $extra_params,array()); // for more information of this function check the grid_js() function
+     * </script>
+     * //Then you have to call the grid_html
+     * echo Display::grid_html('my_grid_name');
+     * As you can see both function use the same "my_grid_name" this is very important otherwise nothing will work
+     * 
+     * @param   string  the div id, this value must be the same with the first parameter of Display::grid_js()
+     * @return  string  html
+     * 
      */
     public static function grid_html($div_id){
     	$table  = self::tag('table','',array('id'=>$div_id));
@@ -1004,6 +981,27 @@ class Display {
                 groupText : ['<b>Week {0} - {1} Item(s)</b>']
             } 
         });  */    	
+    }
+    
+    public static function table($headers, $rows) {
+        /*
+        require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';
+        $table = new HTML_Table(array('class' => 'data_table'));
+        $row = 0;
+        $column = 0;
+        
+        //Course headers        
+        foreach ($headers as $item) {
+            $table->setHeaderContents($row, $column, $item);
+            $column++;
+        }        
+        $row = 1;
+        $column = 0;
+        foreach($rows as $content) {        
+            $table->setCellContents($row, $column, $content);
+            $column++;
+        }              
+        return $table->toHtml();*/
     }
 
     

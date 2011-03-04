@@ -1217,12 +1217,12 @@ class CourseManager {
         }
 
         $course_code = Database::escape_string($course_code);
-
-        $sql_result = Database::query("SELECT *
+		$sql = "SELECT *
                 FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course
                 LEFT JOIN ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." course_user
                 ON course.code = course_user.course_code
-                WHERE course.target_course_code = '$real_course_code' AND course_user.user_id = '$user_id' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." ");
+                WHERE course.target_course_code = '$real_course_code' AND course_user.user_id = '$user_id' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+        $sql_result = Database::query($sql);
 
         while ($result = Database::fetch_array($sql_result)) {
             $result_array[] = $result;

@@ -101,28 +101,31 @@ abstract class XapianIndexer {
      */
     function index() {
       try {
-        foreach ($this->chunks as $chunk) {
-            $doc = new XapianDocument();
-            $this->indexer->set_document($doc);
-
-            foreach ($chunk->terms as $term) {
-                /* FIXME: think of getting weight */
-                $doc->add_term($term['flag'] . $term['name'], 1);
+        if (!empty($this->chunks)) {
+            foreach ($this->chunks as $chunk) {
+                $doc = new XapianDocument();
+                $this->indexer->set_document($doc);
+                if (!empty($chunk->terms)) {
+                    foreach ($chunk->terms as $term) {
+                        /* FIXME: think of getting weight */
+                        $doc->add_term($term['flag'] . $term['name'], 1);
+                    }
+                }
+    
+                // free-form index all data array (title, content, etc)
+                if (!empty($chunk->data)) {
+                    foreach ($chunk->data as $key => $value) {
+                        $this->indexer->index_text($value, 1);
+                    }
+                }    
+                $doc->set_data($chunk->xapian_data, 1);    
+                $did = $this->db->add_document($doc);
+    
+                //write to disk
+                $this->db->flush();
+    
+                return $did;
             }
-
-            // free-form index all data array (title, content, etc)
-            foreach ($chunk->data as $key => $value) {
-                $this->indexer->index_text($value, 1);
-            }
-
-            $doc->set_data($chunk->xapian_data, 1);
-
-            $did = $this->db->add_document($doc);
-
-            //write to disk
-            $this->db->flush();
-
-            return $did;
         }
       }
       catch (Exception $e) {

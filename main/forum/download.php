@@ -66,8 +66,8 @@ $sql='SELECT thread_id, forum_id,filename FROM '.$tbl_forum_post.'  f  INNER JOI
 $result = Database::query($sql);
 $row    = Database::fetch_array($result);
 
-$forum_thread_visibility = api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM_THREAD,$row['thread_id']);
-$forum_forum_visibility  = api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM,$row['forum_id']);
+$forum_thread_visibility = api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM_THREAD,$row['thread_id'], api_get_session_id());
+$forum_forum_visibility  = api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM,$row['forum_id'], api_get_session_id());
 
 if ($forum_thread_visibility==1 && $forum_forum_visibility==1) {
     if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/')) {

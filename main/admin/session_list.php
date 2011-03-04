@@ -311,9 +311,9 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		  <td>
 			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('user_subscribe_session.png', get_lang('SubscribeUsersToSession'),'','22'); ?></a>
 			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('courses_to_session.png', get_lang('SubscribeCoursesToSession'),'','22'); ?></a>
-			<a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a>
-			<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('delete.gif', get_lang('Delete')); ?></a>
-            <a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=copy&idChecked=<?php echo $enreg['id'];?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('copy.gif', get_lang('Copy')); ?></a>
+			<a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a>
+            <a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=copy&idChecked=<?php echo $enreg['id'];?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('copy.gif', get_lang('Copy'), array(), 22); ?></a>
+            <a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('delete.png', get_lang('Delete'), array(), 22); ?></a>
 		  </td>
 		</tr>
 

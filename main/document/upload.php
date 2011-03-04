@@ -40,14 +40,13 @@ $language_file = array('document','gradebook');
 require_once '../inc/global.inc.php';
 
 // Including additional libraries
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once 'document.inc.php';
 
 // Adding extra javascript to the form
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
 $htmlHeadXtra[] = '<script type="text/javascript">
 
 function check_unzip() {
@@ -71,94 +70,35 @@ function advanced_parameters() {
 			document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 			}
 	}
-
 function setFocus(){
 	$("#title_file").focus();
 	}
 	$(document).ready(function () {
  	 setFocus();
-	});
+	});	
 </script>';
 
-/**
- * Obtains the text inside the file with the right parser
- */
-function get_text_content($doc_path, $doc_mime) {
-	// TODO: review w$ compatibility
-
-	// Use usual exec output lines array to store stdout instead of a temp file
-	// because we need to store it at RAM anyway before index on DokeosIndexer object
-	$ret_val = null;
-	switch ($doc_mime) {
-		case 'text/plain':
-			$handle = fopen($doc_path, 'r');
-			$output = array(fread($handle, filesize($doc_path)));
-			fclose($handle);
-			break;
-		case 'application/pdf':
-			exec("pdftotext $doc_path -", $output, $ret_val);
-			break;
-		case 'application/postscript':
-			$temp_file = tempnam(sys_get_temp_dir(), 'chamilo');
-			exec("ps2pdf $doc_path $temp_file", $output, $ret_val);
-			if ($ret_val !== 0) { // shell fail, probably 127 (command not found)
-				return false;
-			}
-			exec("pdftotext $temp_file -", $output, $ret_val);
-			unlink($temp_file);
-			//var_dump($output);
-			break;
-		case 'application/msword':
-			exec("catdoc $doc_path", $output, $ret_val);
-			//var_dump($output);
-			break;
-		case 'text/html':
-			exec("html2text $doc_path", $output, $ret_val);
-			break;
-		case 'text/rtf':
-			// Note: correct handling of code pages in unrtf
-			// on debian lenny unrtf v0.19.2 can not, but unrtf v0.20.5 can
-			exec("unrtf --text $doc_path", $output, $ret_val);
-			if ($ret_val == 127) { // command not found
-				return false;
-			}
-			// Avoid index unrtf comments
-			if (is_array($output) && count($output) > 1) {
-				$parsed_output = array();
-				foreach ($output as & $line) {
-					if (!preg_match('/^###/', $line, $matches)) {
-						if (!empty($line)) {
-							$parsed_output[] = $line;
-						}
-					}
-				}
-				$output = $parsed_output;
-			}
-			break;
-		case 'application/vnd.ms-powerpoint':
-			exec("catppt $doc_path", $output, $ret_val);
-			break;
-		case 'application/vnd.ms-excel':
-			exec("xls2csv -c\" \" $doc_path", $output, $ret_val);
-			break;
-	}
-
-	$content = '';
-	if (!is_null($ret_val)) {
-		if ($ret_val !== 0) { // shell fail, probably 127 (command not found)
-			return false;
-		}
-	}
-	if (isset($output)) {
-		foreach ($output as & $line) {
-			$content .= $line."\n";
-		}
-		return $content;
-	}
-	else {
-		return false;
-	}
-}
+$htmlHeadXtra[] = "
+<script type=\"text/javascript\">
+$(function () {
+    $('#file_upload').fileUploadUI({
+        uploadTable:   $('#files'),
+        downloadTable: $('#files'),
+        buildUploadRow: function (files, index) {
+            return $('<tr><td>' + files[index].name + '<\/td>' +
+                    '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
+                    '<td class=\"file_upload_cancel\">' +
+                    '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' +
+                    '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +
+                    '<\/button><\/td><\/tr>');
+        },
+        buildDownloadRow: function (file) {
+            return $('<tr><td>' + file.name + '<\/td><\/tr>');
+        }
+    });    
+    $('#tabs').tabs();
+});
+</script>";
 
 // Variables
 
@@ -184,17 +124,17 @@ if (!DocumentManager::get_document_id($_course, $path)) {
 }
 
 // This needs cleaning!
-if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') { // If the group id is set, check if the user has the right to be here
+if (api_get_group_id()) { // If the group id is set, check if the user has the right to be here
 	// Needed for group related stuff
 	require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 	// Get group info
-	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
+	$group_properties = GroupManager::get_group_properties(api_get_group_id());
 	$noPHP_SELF = true;
 
-	if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'], $_SESSION['_gid'])) { // Only courseadmin or group members allowed
-		$to_group_id = $_SESSION['_gid'];
-		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-		$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace'));
+	if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'], api_get_group_id())) { // Only courseadmin or group members allowed
+		$to_group_id = api_get_group_id();
+		$req_gid = '&amp;gidReq='.api_get_group_id();
+		$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.api_get_group_id(), 'name' => get_lang('GroupSpace'));
 	} else {
 		api_not_allowed(true);
 	}
@@ -218,13 +158,8 @@ if ($is_certificate_array[0] == 'certificates') {
 	$is_certificate_mode = true;
 }
 
-// If we want to unzip a file, we need the library
-if (isset($_POST['unzip']) && $_POST['unzip'] == 1) {
-	require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
-}
-
 // Variables
-$max_filled_space = DocumentManager::get_course_quota();
+//$max_filled_space = DocumentManager::get_course_quota();
 
 // Title of the tool
 if ($to_group_id != 0) { // Add group name after for group documents
@@ -243,6 +178,7 @@ if ($is_certificate_mode) {
 	$interbreadcrumb[] = array('url' => './document.php?curdirpath='.urlencode($path).$req_gid, 'name'=> get_lang('Documents'));
 }
 
+
 $this_section = SECTION_COURSES;
 
 // Display the header
@@ -251,182 +187,12 @@ Display::display_header($nameTools, 'Doc');
 /*	Here we do all the work */
 
 // User has submitted a file
-if (isset($_FILES['user_upload'])) {
-	//echo('<pre>');
-	//print_r($_FILES['user_upload']);
-	//echo('</pre>');
-
-	$upload_ok = process_uploaded_file($_FILES['user_upload']);
-	if ($upload_ok) {
-		// File got on the server without problems, now process it
-		$new_path = handle_uploaded_document($_course, $_FILES['user_upload'], $base_work_dir, $_POST['curdirpath'], $_user['user_id'], $to_group_id, $to_user_id, $max_filled_space, $_POST['unzip'], $_POST['if_exists']);
-
-		$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
-		$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
-
-		if ($new_path && ($new_comment || $new_title)) {
-			if (($docid = DocumentManager::get_document_id($_course, $new_path))) {
-				$table_document = Database::get_course_table(TABLE_DOCUMENT);
-				$ct = '';
-				if ($new_comment) $ct .= ", comment='$new_comment'";
-				if ($new_title)   $ct .= ", title='$new_title'";
-				Database::query("UPDATE $table_document SET".substr($ct, 1)." WHERE id = '$docid'");
-			}
-		}
-		// Showing message when sending zip files
-		if ($new_path === true && $_POST['unzip'] == 1) {
-			Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />', false);
-		}
-
-		if ((api_get_setting('search_enabled') == 'true') && ($docid = DocumentManager::get_document_id($_course, $new_path))) {
-			$table_document = Database::get_course_table(TABLE_DOCUMENT);
-			$result = Database::query("SELECT * FROM $table_document WHERE id = '$docid' LIMIT 1");
-			if (Database::num_rows($result) == 1) {
-				$row = Database::fetch_array($result);
-				$doc_path = api_get_path(SYS_COURSE_PATH).$courseDir.$row['path'];
-				//TODO: mime_content_type is deprecated, fileinfo php extension is enabled by default as of PHP 5.3.0
-				// now versions of PHP on Debian testing(5.2.6-5) and Ubuntu(5.2.6-2ubuntu) are lower, so wait for a while
-				$doc_mime = mime_content_type($doc_path);
-				//echo $doc_mime;
-				//TODO: more mime types
-				$allowed_mime_types = array('text/plain', 'application/pdf', 'application/postscript', 'application/msword', 'text/html', 'text/rtf', 'application/vnd.ms-powerpoint', 'application/vnd.ms-excel');
-
-				// mime_content_type does not detect correctly some formats that are going to be supported for index, so an extensions array is used by the moment
-				if (empty($doc_mime)) {
-					$allowed_extensions = array('ppt', 'pps', 'xls');
-					$extensions = preg_split("/[\/\\.]/", $doc_path) ;
-					$doc_ext = strtolower($extensions[count($extensions) - 1]);
-					if (in_array($doc_ext, $allowed_extensions)) {
-						switch ($doc_ext) {
-							case 'ppt':
-							case 'pps':
-								$doc_mime = 'application/vnd.ms-powerpoint';
-								break;
-							case 'xls':
-								$doc_mime = 'application/vnd.ms-excel';
-								break;
-						}
-					}
-				}
-
-				if (in_array($doc_mime, $allowed_mime_types) && isset($_POST['index_document']) && $_POST['index_document']) {
-					$file_title = $row['title'];
-					$file_content = get_text_content($doc_path, $doc_mime);
-					$courseid = api_get_course_id();
-					$lang = isset($_POST['language']) ? Database::escape_string($_POST['language']) : 'english';
-
-					require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
-					require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
-
-					$ic_slide = new IndexableChunk();
-					$ic_slide->addValue('title', $file_title);
-					$ic_slide->addCourseId($courseid);
-					$ic_slide->addToolId(TOOL_DOCUMENT);
-					$xapian_data = array(
-						SE_COURSE_ID => $courseid,
-						SE_TOOL_ID => TOOL_DOCUMENT,
-						SE_DATA => array('doc_id' => (int)$docid),
-						SE_USER => (int)api_get_user_id(),
-					);
-					$ic_slide->xapian_data = serialize($xapian_data);
-					$di = new DokeosIndexer();
-					$di->connectDb(null, null, $lang);
-
-					$specific_fields = get_specific_field_list();
-
-					// process different depending on what to do if file exists
-					/**
-					 * FIXME: Find a way to really verify if the file had been
-					 * overwriten. Now all work is done at
-					 * handle_uploaded_document() and it's difficult to verify it
-					 */
-					if (!empty($_POST['if_exists']) && $_POST['if_exists'] == 'overwrite') {
-						// overwrite the file on search engine
-						// actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one
-
-						// Get search_did
-						$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-						$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
-						$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_DOCUMENT, $docid);
-						$res = Database::query($sql);
-
-						if (Database::num_rows($res) > 0) {
-							$se_ref = Database::fetch_array($res);
-							$di->remove_document((int)$se_ref['search_did']);
-							$all_specific_terms = '';
-							foreach ($specific_fields as $specific_field) {
-								delete_all_specific_field_value($courseid, $specific_field['id'], TOOL_DOCUMENT, $docid);
-								// Update search engine
-								$sterms = trim($_REQUEST[$specific_field['code']]);
-								$all_specific_terms .= ' '. $sterms;
-								$sterms = explode(',', $sterms);
-								foreach ($sterms as $sterm) {
-									$sterm = trim($sterm);
-									if (!empty($sterm)) {
-										$ic_slide->addTerm($sterm, $specific_field['code']);
-										add_specific_field_value($specific_field['id'], $courseid, TOOL_DOCUMENT, $docid, $value);
-									}
-								}
-							}
-							// Add terms also to content to make terms findable by probabilistic search
-							$file_content = $all_specific_terms .' '. $file_content;
-							$ic_slide->addValue('content', $file_content);
-							$di->addChunk($ic_slide);
-							// Index and return a new search engine document id
-							$did = $di->index();
-							if ($did) {
-								// update the search_did on db
-								$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-								$sql = 'UPDATE %s SET search_did=%d WHERE id=%d LIMIT 1';
-								$sql = sprintf($sql, $tbl_se_ref, (int)$did, (int)$se_ref['id']);
-								Database::query($sql);
-							}
-
-						}
-					} else {
-						// Add all terms
-						$all_specific_terms = '';
-						foreach ($specific_fields as $specific_field) {
-							if (isset($_REQUEST[$specific_field['code']])) {
-								$sterms = trim($_REQUEST[$specific_field['code']]);
-								$all_specific_terms .= ' '. $sterms;
-								if (!empty($sterms)) {
-									$sterms = explode(',', $sterms);
-									foreach ($sterms as $sterm) {
-										$ic_slide->addTerm(trim($sterm), $specific_field['code']);
-										add_specific_field_value($specific_field['id'], $courseid, TOOL_DOCUMENT, $docid, $sterm);
-									}
-								}
-							}
-						}
-						// Add terms also to content to make terms findable by probabilistic search
-						$file_content = $all_specific_terms .' '. $file_content;
-						$ic_slide->addValue('content', $file_content);
-						$di->addChunk($ic_slide);
-						// Index and return search engine document id
-						$did = $di->index();
-						if ($did) {
-							// Save it to db
-							$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-							$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
-								VALUES (NULL , \'%s\', \'%s\', %s, %s)';
-							$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_DOCUMENT, $docid, $did);
-							Database::query($sql);
-						}
-					}
-				}
-			}
-		}
-
-		// Check for missing images in html files
-		$missing_files = check_for_missing_files($base_work_dir.$new_path);
-		if ($missing_files) {
-			// Show a form to upload the missing files
-			Display::display_normal_message(build_missing_files_form($missing_files, $_POST['curdirpath'], $_FILES['user_upload']['name']), false);
-		}
-	}
+if (!empty($_FILES)) {    
+    DocumentManager::upload_document($_FILES, $_POST['curdirpath'], $_POST['title'], $_POST['comment'], $_POST['unzip'], $_POST['if_exists'], $_POST['index_document'], true);
 }
 
+// @todo remove this  submit_image ???
+/*
 // Missing images are submitted
 if (isset($_POST['submit_image'])) {
 	$number_of_uploaded_images = count($_FILES['img_file']['name']);
@@ -444,7 +210,9 @@ if (isset($_POST['submit_image'])) {
 		item_property_update_on_folder($_course, $_POST['curdirpath'], $_user['user_id']);
 	}
 }
-
+*/
+//@todo keep it simple this page should only upload files!
+/*
 // They want to create a directory
 if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
 	$added_slash = ($path=='/') ? '' : '/';
@@ -456,13 +224,13 @@ if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
 	} else {
 		display_error(get_lang('CannotCreateDir'));
 	}
-}
+}*/
 
 // Tracking not needed here?
 //event_access_tool(TOOL_DOCUMENT);
 
 /* They want to create a new directory */
-
+/*
 if (isset($_GET['createdir'])) {
 	// create the form that asks for the directory name
 	$new_folder_text = '<form action="'.api_get_self().'" method="POST">';
@@ -475,7 +243,7 @@ if (isset($_GET['createdir'])) {
 	//Display::display_normal_message($new_folder_text, false);
 
 	echo create_dir_form();
-}
+}*/
 
 // Actions
 echo '<div class="actions">';
@@ -488,9 +256,10 @@ if ($is_certificate_mode) {
 }
 
 // Link to create a folder
+/*
 if (!isset($_GET['createdir']) && !is_my_shared_folder($_user['user_id'], $path, api_get_session_id()) && !$is_certificate_mode) {
 	echo '<a href="'.api_get_self().'?path='.$path.'&amp;createdir=1">'.Display::return_icon('new_folder.png', get_lang('CreateDir'),'','32').'</a>';
-}
+}*/
 echo '</div>';
 
 // Form to select directory
@@ -501,9 +270,8 @@ if (!$is_certificate_mode) {
 
 $form = new FormValidator('upload', 'POST', api_get_self(), '', 'enctype="multipart/form-data"');
 $form->addElement('hidden', 'curdirpath', $path);
-$form->addElement('file', 'user_upload', get_lang('File'), 'id="user_upload" size="45"');
+$form->addElement('file', 'file', get_lang('File'), 'id="user_upload" size="45"');
 $form->addElement('html', '<div class="row" style="font-size:smaller;font-style:italic;"><div class="label">&nbsp;</div><div class="formw">'.get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.(round(DocumentManager::get_course_quota()/1000000)-round(documents_total_space($_course)/1000000)).' M</div></div>');
-
 if (api_get_setting('use_document_title') == 'true') {
 	$form->addElement('text', 'title', get_lang('Title'), array('size' => '20', 'style' => 'width:300px', 'id' => 'title_file'));
 	$form->addElement('textarea', 'comment', get_lang('Comment'), 'wrap="virtual" style="width:300px;"');
@@ -542,6 +310,7 @@ $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename')
 // Close the java script and avoid the footer up
 $form -> addElement('html', '</div>');
 
+
 // Button send document
 $form->addElement('style_submit_button', 'submitDocument', get_lang('SendDocument'), 'class="upload"');
 $form->add_real_progress_bar('DocumentUpload', 'user_upload');
@@ -550,7 +319,19 @@ $defaults = array('index_document' => 'checked="checked"');
 
 $form->setDefaults($defaults);
 
-$form->display();
+$simple_form = $form->return_form();
 
+// Multiple uploads
+$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php';
+$multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
+$multiple_form .=  '<form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="curdirpath" value="'.$path.'" />    
+    <input type="file" name="file" multiple>
+    <button>Upload</button>
+    <div>'.get_lang('UploadFiles').'</div>
+</form>';
+$multiple_form  .='<table id="files"></table>';
+$headers = array(get_lang('Simple') , get_lang('Multiple'));
+echo Display::tabs($headers, array($simple_form, $multiple_form ),'tabs');
 // Footer
 Display::display_footer();

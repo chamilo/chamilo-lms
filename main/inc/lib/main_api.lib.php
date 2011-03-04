@@ -4839,12 +4839,12 @@ function api_get_jquery_libraries_js($libraries, $include_jquery = true) {
         $js .= '<script src="'.$js_path.'jqgrid/js/i18n/grid.locale-'.$languaje.'.js" type="text/javascript" language="javascript"></script>'; 
         $js .= '<script src="'.$js_path.'jqgrid/js/jquery.jqGrid.min.js" type="text/javascript" language="javascript"></script>';
     }
-    
-    
-    
-    if (in_array('jquery-ui',$libraries)) {
+        
+    if (in_array('jquery-upload',$libraries)) {
         //Adding default CSS changes of the jquery-ui themes for Chamilo in order to preserve the original jquery-ui css
-        $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/default.css" type="text/css">';
+        $js .= '<script src="'.$js_path.'jquery-upload/jquery.fileupload.js" type="text/javascript" language="javascript"></script>'; 
+        $js .= '<script src="'.$js_path.'jquery-upload/jquery.fileupload-ui.js" type="text/javascript" language="javascript"></script>';
+        $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-upload/jquery.fileupload-ui.css" type="text/css">';        
     } 
     return $js;	
 }

@@ -1048,8 +1048,8 @@ function move_up_down($content, $direction, $id) {
  * @version february 2006, dokeos 1.8
  */
 function class_visible_invisible($current_visibility_status) {
-    if ($current_visibility_status=='0') {
-        return "class='invisible'";
+    if ($current_visibility_status == '0') {
+        return 'class="invisible"';
     }
 }
 

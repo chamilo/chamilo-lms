@@ -659,12 +659,27 @@ class Display {
      * @author Julio Montoya 2010
      */
     public static function img($image_path, $alt_text = '', $additional_attributes = array()) {
+
+        // Sanitizing the parameter $image_path
+        $image_path = htmlspecialchars(trim($image_path)); // No html code is allowed.
+        if (strpos($image_path, '?') !== false) {
+            // We allow static images only, query strings are forbidden here.
+            $image_path = '';
+        }
+        if (($pos = strpos($image_path, ':')) !== false) {
+            // Protocol has been specified, let's check it.
+            $protocol = substr($image_path, 0, $pos + 3);
+            if (strcasecmp($protocol, 'http://') != 0 && strcasecmp($protocol, 'https://') != 0) {
+                // Allowed protocols: http:// , https://
+                $image_path = '';
+            }
+        }
+
         $attribute_list = '';
         // alt text = the image name if there is none provided (for XHTML compliance)
         if ($alt_text == '') {
             $alt_text = basename($image_path);
         }
-        $image_path = Security::remove_XSS($image_path);
 
         $additional_attributes['src'] = $image_path;
 

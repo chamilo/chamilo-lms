@@ -3197,7 +3197,11 @@ function store_move_thread($values) {
 function prepare4display($input = '') {
     static $search;
     if (!isset($search)) {
-        $search = html_filter($_POST['search_term']); // No html at all.
+        if (isset($_POST['search_term'])) {
+            $search = html_filter($_POST['search_term']); // No html at all.
+        } elseif (isset($_GET['search'])) {
+            $search = html_filter($_GET['search']);
+        }
     }
     $highlightcolors = array('yellow', '#33CC33','#3399CC', '#9999FF', '#33CC33');
     if (!is_array($input)) {

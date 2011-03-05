@@ -3350,12 +3350,13 @@ function search_link() {
         if (!empty($_GET['search'])) {
             $return .= ': '.Security::remove_XSS($_GET['search']).' ';
             $url = api_get_self().'?';
+            $url_parameter = array();
             foreach ($_GET as $key => $value) {
                 if ($key != 'search') {
                     $url_parameter[] = Security::remove_XSS($key).'='.Security::remove_XSS($value);
                 }
             }
-            $url = $url.implode('&amp;',$url_parameter);
+            $url = $url.implode('&amp;', $url_parameter);
             $return .= '<a href="'.$url.'">'.Display::return_icon('delete.gif', get_lang('RemoveSearchResults')).'</a>';
         }
     }

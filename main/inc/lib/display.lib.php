@@ -668,9 +668,14 @@ class Display {
         }
         if (($pos = strpos($image_path, ':')) !== false) {
             // Protocol has been specified, let's check it.
-            $protocol = substr($image_path, 0, $pos + 3);
-            if (strcasecmp($protocol, 'http://') != 0 && strcasecmp($protocol, 'https://') != 0) {
-                // Allowed protocols: http:// , https://
+            if (strpos($image_path, ':', $pos + 1) === false) {
+                $protocol = substr($image_path, 0, $pos + 3);
+                if (strcasecmp($protocol, 'http://') != 0 && strcasecmp($protocol, 'https://') != 0) {
+                    // Allowed protocols: http:// , https://
+                    $image_path = '';
+                }
+            } else {
+                // Protocol should be specified only once.
                 $image_path = '';
             }
         }

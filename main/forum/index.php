@@ -202,7 +202,7 @@ if (is_array($forum_categories_list)) {
         }
         echo '<thead>';
         echo '<tr><th class="forum_head" colspan="5">';
-        echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&amp;forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a>'. $session_img .'<br />';
+        echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&amp;forumcategory='.strval(intval($forum_category['cat_id'])).'" '.class_visible_invisible(strval(intval($forum_category['visibility']))).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a>'. $session_img .'<br />';
 
         if ($forum_category['cat_comment'] != '' && trim($forum_category['cat_comment']) != '&nbsp;') {
             echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
@@ -213,9 +213,9 @@ if (is_array($forum_categories_list)) {
         if (api_is_allowed_to_edit(false, true) && !($forum_category['session_id'] == 0 && intval($session_id) != 0)) {
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=edit&amp;content=forumcategory&amp;id='.intval($forum_category['cat_id']).'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>';
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=delete&amp;content=forumcategory&amp;id='.intval($forum_category['cat_id'])."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteForumCategory'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), 22).'</a>';
-            display_visible_invisible_icon('forumcategory', prepare4display($forum_category['cat_id']), prepare4display($forum_category['visibility']));
-            display_lock_unlock_icon('forumcategory', prepare4display($forum_category['cat_id']), prepare4display($forum_category['locked']));
-            display_up_down_icon('forumcategory', prepare4display($forum_category['cat_id']), $forum_categories_list);
+            display_visible_invisible_icon('forumcategory', strval(intval($forum_category['cat_id'])), strval(intval($forum_category['visibility'])));
+            display_lock_unlock_icon('forumcategory', strval(intval($forum_category['cat_id'])), strval(intval($forum_category['locked'])));
+            display_up_down_icon('forumcategory', strval(intval($forum_category['cat_id'])), $forum_categories_list);
         }
         echo '</th>';
         echo '</tr>';

@@ -58,6 +58,11 @@ if (is_array($reports_template[$_REQUEST['type']])) {
 
 if ($_REQUEST['format'] == 'html') {
 	echo '<table border="1">'; // FIXME style
+	$nfields = mysql_num_fields($result);
+	echo '<tr>';
+	for ($i=0; $i < $nfields; $i++)
+		echo '<th>'.mysql_field_name($result, $i).'</th>';
+	echo '</tr>';
 	while ($row = Database::fetch_row($result)) {
 		echo '<tr>';
 		foreach ($row as $col)
@@ -66,6 +71,10 @@ if ($_REQUEST['format'] == 'html') {
 	}
 	echo '</table>';
 } else if ($_REQUEST['format'] == 'csv') {
+	$nfields = mysql_num_fields($result);
+	for ($i=0; $i < $nfields; $i++)
+		echo mysql_field_name($result, $i).',';
+	echo "\n";
 	while ($row = Database::fetch_row($result)) {
 		foreach ($row as $col)
 			echo $col.',';  // fixme

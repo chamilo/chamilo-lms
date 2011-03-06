@@ -58,5 +58,11 @@ function reports_template_exercicesMultiCourses_getSQL() {
 			' k'.$key.
 			' on k'.$key.'.key_id = '.$column['kid'].
 				' and k'.$key.'.uid = u.user_id ';
+	$query .= ' group by ';
+	foreach ($columns as $key => $column) // grouping attempt
+		$query .= 'k'.$key.'.attempt, ';
+	$query = substr($query, 0, -2); // removing last ', ';
+
+
 	return $query;
 }

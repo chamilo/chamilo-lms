@@ -65,7 +65,7 @@ function handle_forum_and_forumcategories() {
         if ($action_forum_cat == 'edit' && $get_id || $post_submit_forum) {
             $inputvalues = get_forums(strval(intval($get_id))); // Note: This has to be cleaned first.
         } else {
-            $inputvalues = '';
+            $inputvalues = array();
         }
         show_add_forum_form($inputvalues);
     }
@@ -158,7 +158,7 @@ function show_add_forumcategory_form($inputvalues = array()) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function show_add_forum_form($inputvalues=array()) {
+function show_add_forum_form($inputvalues = array()) {
     global $_course;
 
     $gradebook = Security::remove_XSS($_GET['gradebook']);
@@ -175,7 +175,7 @@ function show_add_forum_form($inputvalues=array()) {
     $form->addElement('header', '', $form_title.$session_header);
 
     // We have a hidden field if we are editing.
-    if (is_array($inputvalues)) {
+    if (!empty($inputvalues) && is_array($inputvalues)) {
         $my_forum_id = isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
         $form->addElement('hidden', 'forum_id', $my_forum_id);
     }
@@ -324,7 +324,7 @@ function show_add_forum_form($inputvalues=array()) {
     $form->addRule('forum_category', get_lang('ThisFieldIsRequired'), 'required');
 
     // Settings the defaults.
-    if (!is_array($inputvalues)) {
+    if (empty($inputvalues) || !is_array($inputvalues)) {
         $defaults['allow_anonymous_group']['allow_anonymous'] = 0;
         $defaults['students_can_edit_group']['students_can_edit'] = 0;
         $defaults['approval_direct_group']['approval_direct'] = 0;

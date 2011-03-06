@@ -661,24 +661,7 @@ class Display {
     public static function img($image_path, $alt_text = '', $additional_attributes = array()) {
 
         // Sanitizing the parameter $image_path
-        $image_path = htmlspecialchars(trim($image_path)); // No html code is allowed.
-        if (strpos($image_path, '?') !== false) {
-            // We allow static images only, query strings are forbidden here.
-            $image_path = '';
-        }
-        if (($pos = strpos($image_path, ':')) !== false) {
-            // Protocol has been specified, let's check it.
-            if (strpos($image_path, ':', $pos + 1) === false) {
-                $protocol = substr($image_path, 0, $pos + 3);
-                if (strcasecmp($protocol, 'http://') != 0 && strcasecmp($protocol, 'https://') != 0) {
-                    // Allowed protocols: http:// , https://
-                    $image_path = '';
-                }
-            } else {
-                // Protocol should be specified only once.
-                $image_path = '';
-            }
-        }
+        $image_path = Security::filter_img_path($image_path);
 
         $attribute_list = '';
         // alt text = the image name if there is none provided (for XHTML compliance)

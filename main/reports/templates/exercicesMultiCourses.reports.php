@@ -38,7 +38,9 @@ function reports_template_exercicesMultiCourses_getSQL() {
 		'r.child_name as test from '.
 		Database::get_main_table(TABLE_MAIN_REPORTS_KEYS).' r, '.
 		Database::get_main_table(TABLE_MAIN_COURSE).' c '.
-		'where r.course_id=c.id order by r.course_id, r.child_name');
+		'where r.course_id=c.id and r.tool_id='.
+		reports_getToolId(TOOL_QUIZ).
+		' order by r.course_id, r.child_name');
 	if (Database::num_rows($columns) == 0)
 		die('<b>'.get_lang('no data found').'</b>');
 	$query = 'select u.lastname Name, u.firstname Firstname';

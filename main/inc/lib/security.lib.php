@@ -36,6 +36,7 @@
  */
 class Security {
     public static $clean = array();
+
     /**
      * Checks if the absolute path (directory) given is really under the
      * checker path (directory)
@@ -43,25 +44,26 @@ class Security {
      * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
      * @return	bool	True if the path is under the checker, false otherwise
      */
-    public static function check_abs_path ($abs_path,$checker_path) {
+    public static function check_abs_path($abs_path, $checker_path) {
         global $_configuration;
-        if (empty($checker_path)) {return false;} //checker path must be set
+        if (empty($checker_path)) { return false; } // The checker path must be set.
 
-        $true_path=str_replace("\\", "/", realpath($abs_path));
+        $true_path = str_replace("\\", '/', realpath($abs_path));
 
-        $found = strpos($true_path.'/',$checker_path);
-        if ($found===0) {
+        $found = strpos($true_path.'/', $checker_path);
+        if ($found === 0) {
             return true;
-                } else {
-                    //code specific to courses directory stored on other disk
-                    $checker_path = str_replace(api_get_path(SYS_COURSE_PATH),$_configuration['symbolic_course_folder_abs'],$checker_path);
-                    $found = strpos($true_path.'/',$checker_path);
-                    if ($found === 0) {
-                        return true;
-                    }
+        } else {
+            // Code specific to courses directory stored on other disk.
+            $checker_path = str_replace(api_get_path(SYS_COURSE_PATH), $_configuration['symbolic_course_folder_abs'], $checker_path);
+            $found = strpos($true_path.'/', $checker_path);
+            if ($found === 0) {
+                return true;
+            }
         }
         return false;
     }
+
     /**
      * Checks if the relative path (directory) given is really under the
      * checker path (directory)
@@ -69,20 +71,21 @@ class Security {
      * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
      * @return	bool	True if the path is under the checker, false otherwise
      */
-    public static function check_rel_path ($rel_path,$checker_path) {
-        if (empty($checker_path)){return false;} //checker path must be set
-        $current_path = getcwd(); //no trailing slash
-        if (substr($rel_path,-1,1)!='/') {
+    public static function check_rel_path($rel_path, $checker_path) {
+        if (empty($checker_path)) { return false; } // The checker path must be set.
+        $current_path = getcwd(); // No trailing slash.
+        if (substr($rel_path, -1, 1) != '/') {
             $rel_path = '/'.$rel_path;
         }
         $abs_path = $current_path.$rel_path;
-        $true_path=str_replace("\\", "/", realpath($abs_path));
-        $found = strpos($true_path.'/',$checker_path);
-        if ($found===0) {
+        $true_path=str_replace("\\", '/', realpath($abs_path));
+        $found = strpos($true_path.'/', $checker_path);
+        if ($found === 0) {
             return true;
         }
         return false;
     }
+
     /**
      * Filters dangerous filenames (*.php[.]?* and .htaccess) and returns it in
      * a non-executable form (for PHP and htaccess, this is still vulnerable to
@@ -90,17 +93,18 @@ class Security {
      * @param   string  Unfiltered filename
      * @param   string  Filtered filename
      */
-    public static function filter_filename ($filename) {
-        require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+    public static function filter_filename($filename) {
+        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         return disable_dangerous_file($filename);
     }
+
     /**
      * This function checks that the token generated in get_token() has been kept (prevents
      * Cross-Site Request Forgeries attacks)
      * @param	string	The array in which to get the token ('get' or 'post')
      * @return	bool	True if it's the right token, false otherwise
      */
-    public static function check_token ($array='post') {
+    public static function check_token($array = 'post') {
         switch ($array) {
             case 'get':
                 if (isset($_SESSION['sec_token']) && isset($_GET['sec_token']) && $_SESSION['sec_token'] === $_GET['sec_token']) {
@@ -118,27 +122,30 @@ class Security {
                 }
                 return false;
         }
-        return false; //just in case, don't let anything slip
+        return false; // Just in case, don't let anything slip.
     }
+
     /**
      * Checks the user agent of the client as recorder by get_ua() to prevent
      * most session hijacking attacks.
      * @return	bool	True if the user agent is the same, false otherwise
      */
-    public static function check_ua () {
+    public static function check_ua() {
         if (isset($_SESSION['sec_ua']) and $_SESSION['sec_ua'] === $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed']) {
             return true;
         }
         return false;
     }
+
     /**
      * Clear the security token from the session
      * @return void
      */
-    public static function clear_token () {
+    public static function clear_token() {
         $_SESSION['sec_token'] = null;
         unset($_SESSION['sec_token']);
     }
+
     /**
      * This function sets a random token to be included in a form as a hidden field
      * and saves it into the user's session. Returns an HTML form element
@@ -148,12 +155,13 @@ class Security {
      * Check the token with check_token()
      * @return	string	Hidden-type input ready to insert into a form
      */
-    public static function get_HTML_token () {
-        $token = md5(uniqid(rand(),TRUE));
-        $string = '<input type="hidden" name="sec_token" value="'.$token.'"/>';
+    public static function get_HTML_token() {
+        $token = md5(uniqid(rand(), TRUE));
+        $string = '<input type="hidden" name="sec_token" value="'.$token.'" />';
         $_SESSION['sec_token'] = $token;
         return $string;
     }
+
     /**
      * This function sets a random token to be included in a form as a hidden field
      * and saves it into the user's session.
@@ -163,20 +171,22 @@ class Security {
      * Check the token with check_token()
      * @return	string	Token
      */
-    public static function get_token () {
-        $token = md5(uniqid(rand(),TRUE));
+    public static function get_token() {
+        $token = md5(uniqid(rand(), TRUE));
         $_SESSION['sec_token'] = $token;
         return $token;
     }
+
     /**
      * Gets the user agent in the session to later check it with check_ua() to prevent
      * most cases of session hijacking.
      * @return void
      */
-    public static function get_ua () {
-        $_SESSION['sec_ua_seed'] = uniqid(rand(),TRUE);
+    public static function get_ua() {
+        $_SESSION['sec_ua_seed'] = uniqid(rand(), TRUE);
         $_SESSION['sec_ua'] = $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed'];
     }
+
     /**
      * This function filters a variable to the type given, with the options given
      * @param	mixed	The variable to be filtered
@@ -184,12 +194,12 @@ class Security {
      * @param	array	Additional options
      * @return	bool	True if variable was filtered and added to the current object, false otherwise
      */
-    public static function filter ($var,$type='string',$options=array()) {
-        //This function is not finished! Do not use!
+    public static function filter($var, $type = 'string', $options = array()) {
+        // This function has not been finished! Do not use!
         $result = false;
-        //get variable name and value
+        // Get variable name and value.
         $args = func_get_args();
-        $names =array_keys($args);
+        $names = array_keys($args);
         $name = $names[0];
         $value = $args[$name];
         switch ($type) {
@@ -209,28 +219,30 @@ class Security {
                 $result = Database::escape_string($var);
                 break;
             case 'array':
-                //an array variable shouldn't be given to the filter
+                // An array variable shouldn't be given to the filter.
                 return false;
             default:
                 return false;
         }
         if (!empty($option['save'])) {
-            $this->clean[$name]=$result;
+            $this->clean[$name] = $result;
         }
         return $result;
     }
+
     /**
      * This function returns a variable from the clean array. If the variable doesn't exist,
      * it returns null
      * @param	string	Variable name
      * @return	mixed	Variable or NULL on error
      */
-    public static function get ($varname) {
+    public static function get($varname) {
         if (isset(self::$clean[$varname])) {
             return self::$clean[$varname];
         }
         return NULL;
     }
+
     /**
      * This function tackles the XSS injections.
      * Filtering for XSS is very easily done by using the htmlentities() function.
@@ -239,7 +251,7 @@ class Security {
      * @param   integer The user status,constant allowed (STUDENT, COURSEMANAGER, ANONYMOUS, COURSEMANAGERLOWSECURITY)
      * @return	mixed	Filtered string or array
      */
-    public static function remove_XSS ($var, $user_status = ANONYMOUS) {
+    public static function remove_XSS($var, $user_status = ANONYMOUS) {
         if ($user_status == COURSEMANAGERLOWSECURITY) {
             return $var;  // No filtering.
         }

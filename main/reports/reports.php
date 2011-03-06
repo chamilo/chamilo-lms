@@ -57,19 +57,29 @@ if (is_array($reports_template[$_REQUEST['type']])) {
 }
 
 if ($_REQUEST['format'] == 'html') {
-	echo '<table border="1">'; // FIXME style
+	echo '<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$("#reportsData").dataTable();
+			} );
+		</script>';
+	echo '<table id="reportsData" class="display">'; // FIXME style
 	$nfields = mysql_num_fields($result);
-	echo '<tr>';
+	echo '<thead><tr>';
 	for ($i=0; $i < $nfields; $i++)
 		echo '<th>'.mysql_field_name($result, $i).'</th>';
-	echo '</tr>';
+	echo '</tr></thead><tbody>';
 	while ($row = Database::fetch_row($result)) {
 		echo '<tr>';
 		foreach ($row as $col)
 			echo '<td>'.$col.'</td>'; 
-		echo '</tr>';
+		echo "</tr>\n";
+		echo '<tr>';
+		foreach ($row as $col)
+			echo '<td>'.$col.'</td>'; 
+		echo "</tr>\n";
+
 	}
-	echo '</table>';
+	echo '</tbody></table>';
 } else if ($_REQUEST['format'] == 'csv') {
 	$nfields = mysql_num_fields($result);
 	for ($i=0; $i < $nfields; $i++)

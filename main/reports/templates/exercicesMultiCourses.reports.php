@@ -38,7 +38,7 @@ function reports_template_exercicesMultiCourses_getSQL() {
 	$columns = Database::query('select r.id as kid, c.title as course, r.child_name as test from reports_keys r, course c where r.course_id=c.id order by r.course_id, r.child_name');
 	if (Database::num_rows($columns) == 0)
 		die('<b>'.get_lang('no data found').'</b>');
-	$query = 'select u.user_id, u.lastname, u.firstname ';
+	$query = 'select u.lastname, u.firstname ';
 	$columns = Database::store_result($columns);
 	foreach ($columns as $key => $column)
 		$query .= ', avg(k'.$key.'.score) as `'.$column['course'].'-'.$column['test'].'` '; // FIXME function

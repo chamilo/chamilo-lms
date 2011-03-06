@@ -29,7 +29,7 @@ $this_section = SECTION_REPORTS;
 $tool_name=get_lang('Reports');
 
 // Displaying the header
-foreach (array('jquery.js','jquery-ui-1.8.5.custom.min.js', 'jquery.ba-bbq.min.js', 'jquery.validate.js', 'jquery.form.js', 'jquery.form.wizard.js') as $js)
+foreach (array('jquery.js','jquery-ui-1.8.5.custom.min.js', 'jquery.ba-bbq.min.js', 'jquery.validate.js', 'jquery.form.js', 'jquery.form.wizard.js', 'jquery.dataTables.min.js') as $js)
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$js.'" type="text/javascript" language="javascript"></script>'."\n";
 
 
@@ -101,6 +101,8 @@ $htmlHeadXtra[] = '    <style type="text/css">
 					overflow : auto;
 			}
 		</style>';
+
+$htmlCSSXtra[] = 'dataTable.css';
 
 reports_loadTemplates();
 

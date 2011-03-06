@@ -73,11 +73,6 @@ if ($_REQUEST['format'] == 'html') {
 		foreach ($row as $col)
 			echo '<td>'.$col.'</td>'; 
 		echo "</tr>\n";
-		echo '<tr>';
-		foreach ($row as $col)
-			echo '<td>'.$col.'</td>'; 
-		echo "</tr>\n";
-
 	}
 	echo '</tbody></table>';
 } else if ($_REQUEST['format'] == 'csv') {

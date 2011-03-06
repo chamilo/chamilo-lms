@@ -122,6 +122,13 @@ if (empty($my_style)) {
 echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";'."\n";
 echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/course.css";'."\n";
 
+// enabling page to load extra css from correct theme 
+if (isset($htmlCSSXtra) && $htmlCSSXtra) {
+	foreach ($htmlCSSXtra as & $css) 
+		echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/'.$css.'";'."\n";
+	
+}
+
 if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 	echo 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } ';
 }

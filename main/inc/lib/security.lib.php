@@ -303,4 +303,47 @@ class Security {
             return $purifier[$user_status]->purify($var);
         }
     }
+
+    /**
+     * This method provides specific protection (against XSS and other kinds of attacks) for static images (icons) used by the system.
+     * Image paths are supposed to be given by programmers - people who know what they do, anyway, this method encourages
+     * a safe practice for generating icon paths, without using heavy solutions based on HTMLPurifier for example.
+     * @param string $img_path          The input path of the image, it could be relative or absolute URL.
+     * @return string                   Returns sanitized image path or an empty string when the image path is not secure.
+     * @author Ivan Tcholakov, March 2011
+     */
+    public static function filter_img_path($image_path) {
+        static $allowed_extensions = array('png', 'gif', 'jpg', 'jpeg');
+        $image_path = htmlspecialchars(trim($image_path)); // No html code is allowed.
+        // We allow static images only, query strings are forbidden.
+        if (strpos($image_path, '?') !== false) {
+            return '';
+        }
+        if (($pos = strpos($image_path, ':')) !== false) {
+            // Protocol has been specified, let's check it.
+            if (stripos($image_path, 'javascript:') !== false) {
+                // Javascript everywhere in the path is not allowed.
+                return '';
+            }
+            // We allow only http: and https: protocols for now.
+            //if (!preg_match('/^https?:\/\//i', $image_path)) {
+            //    return '';
+            //}
+            if (stripos($image_path, 'http://') !== 0 && stripos($image_path, 'https://') !== 0) {
+                return '';
+            }
+        }
+        // We allow file extensions for images only.
+        //if (!preg_match('/.+\.(png|gif|jpg|jpeg)$/i', $image_path)) {
+        //    return '';
+        //}
+        if (($pos = strrpos($image_path, '.')) !== false) {
+            if (!in_array(strtolower(substr($image_path, $pos + 1)), $allowed_extensions)) {
+                return '';
+            }
+        } else {
+            return '';
+        }
+        return $image_path;
+    }
 }

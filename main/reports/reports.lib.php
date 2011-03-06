@@ -9,6 +9,16 @@ $reports_modules = array();
 
 $reports_enabled_modules = array('quiz');
 
+$reports_enabled_templates = array('exercicesMultiCourses');
+
+
+// load templates 
+function reports_loadTemplates() {
+	global $reports_enabled_templates, $reports_template;
+	foreach ($reports_enabled_templates as $t)
+		require_once 'templates/'.$t.'.reports.php';
+}
+
 
 // clear all reporting data
 function reports_clearAll() {

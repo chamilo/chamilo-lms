@@ -27,6 +27,10 @@ $this_section = SECTION_REPORTS;
 // setting the name of the tool
 $tool_name=get_lang('Reports');
 
+// loading templates
+reports_loadTemplates();
+
+// outputing a link to csv file instead of outputing csv data directly
 if ($_REQUEST['format'] == 'csv')  {
 	// converting post vars to get uri
 	$params = '';
@@ -35,26 +39,16 @@ if ($_REQUEST['format'] == 'csv')  {
 		if ($key != 'format')
 			$kv[] = $key.'='.urlencode($value);
 	$query_string = join("&", $kv);
-	echo '<a href="reports.php?format=downloadcsv&'.$query_string.'">download file</a>';
+	die('<a href="reports.php?format=downloadcsv&'.$query_string.'">download file</a>');
 } else if ($_REQUEST['format'] == 'downloadcsv') {
 	header('content-type: application/csv'); // fixme
 	$_REQUEST['format'] = 'csv';
 }
 
-if ($_REQUEST['type'] == "exercicesMultiCourses") {
-	// foreach quiz
-	$result = array();
-	// fixme database name
-	$columns = Database::query('select r.id as kid, c.title as course, r.child_name as test from reports_keys r, course c where r.course_id=c.id order by r.course_id, r.child_name');
-	if (Database::num_rows($columns) == 0)
-		die('<b>'.get_lang('no data found').'</b>');
-	$query = 'select u.user_id, u.lastname, u.firstname ';
-	$columns = Database::store_result($columns);
-	foreach ($columns as $key => $column)
-		$query .= ', avg(k'.$key.'.score) as `'.$column['course'].'-'.$column['test'].'` '; // FIXME function
-	$query .= ' from user u ';
-	foreach ($columns as $key => $column) // fixme sessions
-		$query .= 'left outer join reports_values k'.$key.' on k'.$key.'.key_id = '.$column['kid'].' and k'.$key.'.uid = u.user_id ';
+
+
+if (is_array($reports_template[$_REQUEST['type']])) {
+	$query = $reports_template[$_REQUEST['type']]['getSQL']();
 	if ($_REQUEST['format'] == 'sql')
 		die($query);
 	$result = Database::query($query);

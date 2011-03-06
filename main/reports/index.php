@@ -12,6 +12,7 @@
 $language_file = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook'); // FIXME
 $cidReset = true;
 
+
 // including files 
 require_once '../inc/global.inc.php';
 require_once 'reports.lib.php';
@@ -101,6 +102,7 @@ $htmlHeadXtra[] = '    <style type="text/css">
 			}
 		</style>';
 
+reports_loadTemplates();
 
 Display::display_header($tool_name);
 
@@ -117,39 +119,16 @@ Display::display_header($tool_name);
 					<span class="font_normal_07em_black">Please choose between the different type of reports</span><br />
 					<label for="type">Report Type</label><br />
 					<select class="input_field_12em link required" name="type" id="type">
-						<option value="exercicesMultiCourses">Result of each test per student</option>
-						<option value="courseTime">Time spend by students within courses</option>
+<?php
+foreach($reports_template as $key => $value)
+	echo '<option value="'.$key.'">'.$value['description'].'</option>';
+?>
 					</select><br />
 				</span>
-				<span id="exercicesMultiCourses" class="step">
-					<span class="font_normal_07em_black">Result of each test per student</span><br />
-
-					<label for="scoremin">Score min</label><br />
-					<input class="input_field_25em" name="scoremin" id="scoremin" value="0"><br />
-					<label for="scoremax">Score max</label><br />
-					<input class="input_field_25em" name="scoremax" id="scoremax" value="0"><br />
-					<label for="tattempt">How to treat Attempts</label><br />
-					<select name="tattempt" id="tattempt">
-						<option value="first">take only the first one</option>
-						<option value="last">take only the last one</option>
-						<option value="average">take the average value</option>
-						<option value="min">take the minimum value</option>
-						<option value="max">take the maximum value</option>
-					</select><br />
-					<label name="gcourses">Do you want to group quiz per courses</label><br />
-					<select name="gcourses" id="gcourses">
-						<option value="nogroup">Do not group</option>
-						<option value="average">group and take the average value</option>
-						<option value="min">group and take the minimum value</option>
-						<option value="max">group and take the maximum value</option>
-					</select></br>
-					<input type="hidden" class="link" value="format" />
-				</span>
-				<span id="courseTime" class="step">
-					FIXME<br />
-
-					<input type="hidden" class="link" value="format" />
-				</span>
+<?php
+foreach($reports_template as $key => $value)
+	echo $value['wizard'];
+?>
 				<span id="format" class="step submit_step">
 					<span class="font_normal_07em_black">Format</span><br />
 

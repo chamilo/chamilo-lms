@@ -39,12 +39,13 @@ $htmlHeadXtra[] = '    <style type="text/css">
 				padding : 1em;
 				width : 500px;
 				border-style: solid;
+				border-color: #0daee4;
 			}
 
 			#fieldWrapper {
 			}
 
-			#demoNavigation {
+			#wizardNavigation {
 				margin-top : 0.5em;
 				margin-right : 1em;
 				text-align: right;
@@ -98,7 +99,11 @@ $htmlHeadXtra[] = '    <style type="text/css">
 			}
 			
 			#data {
-					overflow : auto;
+				overflow : auto;
+				display: none;
+			}
+			#result {
+				padding-top: 15px;
 			}
 		</style>';
 
@@ -141,7 +146,7 @@ foreach($reports_template as $key => $value)
 					</select><br />
 				</span>
 				</div>
-				<div id="demoNavigation"> 							
+				<div id="wizardNavigation"> 							
 					<input class="navigation_button" id="back" value="Back" type="reset" />
 					<input class="navigation_button" id="next" value="Next" type="submit" />
 				</div>

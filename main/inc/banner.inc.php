@@ -265,7 +265,7 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 
 	// Reports
 	if (api_get_setting('show_tabs', 'reports') == 'true') {
-		if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
+		if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin()) && Rights::hasRight('show_tabs:reports')) {
 			$navigation['reports'] = $possible_tabs['reports'];
 		}
 	} else{

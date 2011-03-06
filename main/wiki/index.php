@@ -278,11 +278,11 @@ if ($_GET['view'])
             if($current_row['assignment']==1)
             {
                 Display::display_normal_message(get_lang('EditAssignmentWarning'));
-                $icon_assignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
+                $icon_assignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',22);
             }
             elseif($current_row['assignment']==2)
             {
-                $icon_assignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
+                $icon_assignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'),'',22);
                 if((api_get_user_id()==$current_row['user_id'])==false)
                 {
                     if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
@@ -380,12 +380,12 @@ echo '<td>';
         // page action: enable or disable the adding of new pages
         if (check_addnewpagelock()==0)
         {
-            $protect_addnewpage= '<img src="../img/wiki/lockadd.png" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
+            $protect_addnewpage= '<img src="../img/on.png" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
             $lock_unlock_addnew='unlockaddnew';
         }
         else
         {
-            $protect_addnewpage= '<img src="../img/wiki/unlockadd.png" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" width="8" height="8" />';
+            $protect_addnewpage= '<img src="../img/off.png" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" width="8" height="8" />';
             $lock_unlock_addnew='lockaddnew';
         }
     }
@@ -615,15 +615,15 @@ if ($_GET['action']=='usercontrib')
             //get type assignment icon
             if($obj->assignment==1)
             {
-                $ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+                $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',22);
             }
             elseif ($obj->assignment==2)
             {
-                $ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+                $ShowAssignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',22);
             }
             elseif ($obj->assignment==0)
             {
-                $ShowAssignment='<img src="../img/wiki/trans.gif" />';
+                $ShowAssignment='<img src="../img/px_transparent.gif" />';
             }
 
             $row = array ();
@@ -691,15 +691,15 @@ if ($_GET['action']=='mostchanged')
             //get type assignment icon
             if($obj->assignment==1)
             {
-                $ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+                $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',22);
             }
             elseif ($obj->assignment==2)
             {
-                $ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentWork').'" />';
+                $ShowAssignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',22);
             }
             elseif ($obj->assignment==0)
             {
-                $ShowAssignment='<img src="../img/wiki/trans.gif" />';
+                $ShowAssignment='<img src="../img/px_transparent.gif" />';
             }
 
             $row = array ();
@@ -745,15 +745,15 @@ if ($_GET['action']=='mvisited')
             //get type assignment icon
             if($obj->assignment==1)
             {
-                $ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+                $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',22);
             }
             elseif ($obj->assignment==2)
             {
-                $ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+                $ShowAssignment=$ShowAssignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',22);
             }
             elseif ($obj->assignment==0)
             {
-                $ShowAssignment='<img src="../img/wiki/trans.gif" />';
+                $ShowAssignment='<img src="../img/px_transparent.gif" />';
             }
 
             $row = array ();
@@ -886,15 +886,15 @@ if ($_GET['action']=='orphaned')
             //fix assignment icon
             if($row['assignment']==1)
             {
-                $ShowAssignment='<img src="../img/wiki/assignment.png" />';
+                $ShowAssignment=Display::return_icon('wiki_assignment.png','','',22);
             }
             elseif ($row['assignment']==2)
             {
-                $ShowAssignment='<img src="../img/wiki/works.png" />';
+                $ShowAssignment=Display::return_icon('wiki_work.png','','',22);
             }
             elseif ($row['assignment']==0)
             {
-                $ShowAssignment='<img src="../img/wiki/trans.gif" />';
+                $ShowAssignment='<img src="../img/px_transparent.gif" />';
             }
 
             echo '<li>'.$ShowAssignment.'<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.api_htmlentities(urlencode($row['reflink'])).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($row['title']).'</a></li>';
@@ -1037,15 +1037,15 @@ if ($_GET['action']=='links')
 
                 if($row['assignment']==1)
                 {
-                    $ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+                    $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',22);
                 }
                 elseif ($row['assignment']==2)
                 {
-                    $ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+                    $ShowAssignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',22);
                 }
                 elseif ($row['assignment']==0)
                 {
-                    $ShowAssignment='<img src="../img/wiki/trans.gif" />';
+                    $ShowAssignment='<img src="../img/px_transparent.gif" />';
                 }
 
         //fix Title to reflink (link Main Page)
@@ -1104,15 +1104,15 @@ if ($_GET['action']=='links')
                 //get type assignment icon
                 if($obj->assignment==1)
                 {
-                    $ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+                    $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',22);
                 }
                 elseif ($obj->assignment==2)
                 {
-                    $ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+                    $ShowAssignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',22);
                 }
                 elseif ($obj->assignment==0)
                 {
-                    $ShowAssignment='<img src="../img/wiki/trans.gif" />';
+                    $ShowAssignment='<img src="../img/px_transparent.gif" />';
                 }
 
                 $row = array ();
@@ -1272,11 +1272,11 @@ if ($_GET['action']=='edit')
         if($row['assignment']==1)
         {
             Display::display_normal_message(get_lang('EditAssignmentWarning'));
-            $icon_assignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
+            $icon_assignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',22);
         }
         elseif($row['assignment']==2)
         {
-            $icon_assignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
+            $icon_assignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'),'',22);
             if((api_get_user_id()==$row['user_id'])==false)
             {
                 if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
@@ -1461,7 +1461,7 @@ if ($_GET['action']=='edit')
                     echo '<div id="options" style="display:none; margin: 20px;" >';
 
                     //task
-                    echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checktask" onclick="javascript: if(this.checked){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" title="'.get_lang('DefineTask').'" alt="'.get_lang('DefineTask').'"/>'.get_lang('DescriptionOfTheTask').'';
+                    echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checktask" onclick="javascript: if(this.checked){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;'.Display::return_icon('wiki_task.png', get_lang('DefineTask'),'',22).' '.get_lang('DescriptionOfTheTask').'';
                     echo '&nbsp;&nbsp;&nbsp;<span id="msg_error4" style="display:none;color:red"></span>';
                     echo '<div id="option4" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 
@@ -1669,11 +1669,11 @@ if ($_GET['action']=='history' or $_POST['HistoryDifferences'])
 
         if($KeyAssignment==1)
         {
-            $icon_assignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
+            $icon_assignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',22);
         }
         elseif($KeyAssignment==2)
         {
-            $icon_assignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
+            $icon_assignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'),'',22);
         }
 
 
@@ -1850,10 +1850,10 @@ if ($_GET['action']=='recentchanges') {
 
     if ( api_is_allowed_to_session_edit(false,true) ) {
         if (check_notify_all()==1) {
-            $notify_all= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('FullNotifyByEmail').'" alt="'.get_lang('FullNotifyByEmail').'" style="vertical-align:middle;" />'.get_lang('NotNotifyChanges');
+            $notify_all= Display::return_icon('messagebox_info.png', get_lang('NotifyByEmail'),'',22).' '.get_lang('NotNotifyChanges');
             $lock_unlock_notify_all='unlocknotifyall';
         } else {
-            $notify_all= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('FullCancelNotifyByEmail').'" alt="'.get_lang('FullCancelNotifyByEmail').'"  style="vertical-align:middle;"/>'.get_lang('NotifyChanges');
+            $notify_all=Display::return_icon('mail.png', get_lang('CancelNotifyByEmail'),'',22).' '.get_lang('NotifyChanges');
             $lock_unlock_notify_all='locknotifyall';
         }
 
@@ -1891,25 +1891,25 @@ if ($_GET['action']=='recentchanges') {
             //get type assignment icon
             if($obj->assignment==1)
             {
-                $ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+                $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',22);
             }
             elseif ($obj->assignment==2)
             {
-                $ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+                $ShowAssignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',22);
             }
             elseif ($obj->assignment==0)
             {
-                $ShowAssignment='<img src="../img/wiki/trans.gif" />';
+                $ShowAssignment='<img src="../img/px_transparent.gif" />';
             }
 
             //get icon task
             if (!empty($obj->task))
             {
-                $icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('StandardTask').'" alt="'.get_lang('StandardTask').'" />';
+                $icon_task=Display::return_icon('wiki_task.png', get_lang('StandardTask'),'',22);
             }
             else
             {
-                $icon_task='<img src="../img/wiki/trans.gif" />';
+                $icon_task='<img src="../img/px_transparent.gif" />';
             }
 
 
@@ -1973,25 +1973,25 @@ if ($_GET['action']=='allpages')
             //get type assignment icon
             if($obj->assignment==1)
             {
-                $ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+                $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',22);
             }
             elseif ($obj->assignment==2)
             {
-                $ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+                $ShowAssignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',22);
             }
             elseif ($obj->assignment==0)
             {
-                $ShowAssignment='<img src="../img/wiki/trans.gif" />';
+                $ShowAssignment='<img src="../img/px_transparent.gif" />';
             }
 
             //get icon task
             if (!empty($obj->task))
             {
-                $icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('StandardTask').'" alt="'.get_lang('StandardTask').'" />';
+                $icon_task=Display::return_icon('wiki_task.png', get_lang('StandardTask'),'',22);
             }
             else
             {
-                $icon_task='<img src="../img/wiki/trans.gif" />';
+                $icon_task='<img src="../img/px_transparent.gif" />';
             }
 
             $row = array ();
@@ -2002,10 +2002,10 @@ if ($_GET['action']=='allpages')
 
             if(api_is_allowed_to_edit(false,true)|| api_is_platform_admin())
             {
-                $showdelete=' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=delete&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"><img src="../img/delete.gif" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'" />';
+                $showdelete=' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=delete&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('delete.png', get_lang('Delete'),'',22);
             }
             if (api_is_allowed_to_session_edit(false,true) )
-            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=edit&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"><img src="../img/lp_quiz.png" title="'.get_lang('EditPage').'" alt="'.get_lang('EditPage').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=discuss&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'"><img src="../img/comment_bubble.gif" title="'.get_lang('Discuss').'" alt="'.get_lang('Discuss').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=history&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"><img src="../img/history.gif" title="'.get_lang('History').'" alt="'.get_lang('History').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=links&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"><img src="../img/lp_link.png" title="'.get_lang('LinksPages').'" alt="'.get_lang('LinksPages').'" /></a>'.$showdelete;
+            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=edit&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('edit.png', get_lang('EditPage'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=discuss&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('discuss.png', get_lang('Discuss'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=history&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('history.png', get_lang('History'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=links&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('what_link_here.png', get_lang('LinksPages'),'',22).'</a>'.$showdelete;
             $rows[] = $row;
         }
 
@@ -2016,7 +2016,7 @@ if ($_GET['action']=='allpages')
         $table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', true);
         $table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', true);
         if (api_is_allowed_to_session_edit(false,true) )
-        $table->set_header(4,get_lang('Actions'), true, array ('style' => 'width:100px;'));
+        $table->set_header(4,get_lang('Actions'), true, array ('style' => 'width:130px;'));
         $table->display();
     }
 }
@@ -2053,11 +2053,11 @@ if ($_GET['action']=='discuss')
     //mode assignment: previous to show  page type
     if($row['assignment']==1)
         {
-        $icon_assignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
+        $icon_assignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',22);
         }
     elseif($row['assignment']==2)
     {
-        $icon_assignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
+        $icon_assignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'),'',22);
     }
 
 
@@ -2074,13 +2074,13 @@ if ($_GET['action']=='discuss')
             {
                 if (check_addlock_discuss()==1)
                 {
-                    $addlock_disc= '<img src="../img/wiki/unlock.gif" title="'.get_lang('UnlockDiscussExtra').'" alt="'.get_lang('UnlockDiscussExtra').'" />';
+                    $addlock_disc= Display::return_icon('unlock.png', get_lang('UnlockDiscussExtra'),'',22);
                     $lock_unlock_disc='unlockdisc';
                 }
 
                 else
                 {
-                    $addlock_disc= '<img src="../img/wiki/lock.gif" title="'.get_lang('LockDiscussExtra').'" alt="'.get_lang('LockDiscussExtra').'" />';
+                    $addlock_disc= Display::return_icon('lock.png', get_lang('LockDiscussExtra'),'',22);
                     $lock_unlock_disc='lockdisc';
                 }
             }
@@ -2101,12 +2101,12 @@ if ($_GET['action']=='discuss')
                         //$visibility_disc= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HideDiscussExtra').'" alt="'.get_lang('HideDiscussExtra').'" />';
 
                     //}
-                    $visibility_disc= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowDiscussExtra').'" alt="'.get_lang('ShowDiscussExtra').'" />';
+                    $visibility_disc= Display::return_icon('visible.png', get_lang('ShowDiscussExtra'),'',22);
                     $hide_show_disc='hidedisc';
                 }
                 else
                 {
-                    $visibility_disc= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HideDiscussExtra').'" alt="'.get_lang('HideDiscussExtra').'" />';
+                    $visibility_disc= Display::return_icon('invisible.png', get_lang('HideDiscussExtra'),'',22);
                     $hide_show_disc='showdisc';
                 }
             }
@@ -2120,12 +2120,12 @@ if ($_GET['action']=='discuss')
             {
                 if (check_ratinglock_discuss()==1)
                 {
-                    $ratinglock_disc= '<img src="../img/wiki/rating.png" title="'.get_lang('UnlockRatingDiscussExtra').'" alt="'.get_lang('UnlockRatingDiscussExtra').'" />';
+                    $ratinglock_disc= Display::return_icon('star.png', get_lang('UnlockRatingDiscussExtra'),'',22);
                     $lock_unlock_rating_disc='unlockrating';
                 }
                 else
                 {
-                    $ratinglock_disc= '<img src="../img/wiki/rating_na.gif" title="'.get_lang('LockRatingDiscussExtra').'" alt="'.get_lang('LockRatingDiscussExtra').'" />';
+                    $ratinglock_disc= Display::return_icon('star_na.png', get_lang('LockRatingDiscussExtra'),'',22);
                     $lock_unlock_rating_disc='lockrating';
                 }
             }
@@ -2137,12 +2137,12 @@ if ($_GET['action']=='discuss')
             //discussion action: email notification
             if (check_notify_discuss($page)==1)
             {
-                $notify_disc= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyDiscussByEmail').'" alt="'.get_lang('NotifyDiscussByEmail').'" />';
+                $notify_disc= Display::return_icon('messagebox_info.png', get_lang('NotifyDiscussByEmail'),'',22);
                 $lock_unlock_notify_disc='unlocknotifydisc';
             }
             else
             {
-                $notify_disc= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyDiscussByEmail').'" alt="'.get_lang('CancelNotifyDiscussByEmail').'" />';
+                $notify_disc= Display::return_icon('mail.png', get_lang('CancelNotifyDiscussByEmail'),'',22);
                 $lock_unlock_notify_disc='locknotifydisc';
             }
             echo '<span style="float:right">';
@@ -2285,37 +2285,37 @@ if ($_GET['action']=='discuss')
                 $p_score=$row['p_score'];
                 switch($p_score){
                 case  0:
-                $imagerating='<img src="../img/wiki/rating/stars_0.gif"/>';
+                $imagerating='<img src="../img/rating/stars_0.gif"/>';
                 break;
                 case  1:
-                $imagerating='<img src="../img/wiki/rating/stars_5.gif"/>';
+                $imagerating='<img src="../img/rating/stars_5.gif"/>';
                 break;
                 case  2:
-                $imagerating='<img src="../img/wiki/rating/stars_10.gif"/>';
+                $imagerating='<img src="../img/rating/stars_10.gif"/>';
                 break;
                 case  3:
-                $imagerating='<img src="../img/wiki/rating/stars_15.gif"/>';
+                $imagerating='<img src="../img/rating/stars_15.gif"/>';
                 break;
                 case  4:
-                $imagerating='<img src="../img/wiki/rating/stars_20.gif"/>';
+                $imagerating='<img src="../img/rating/stars_20.gif"/>';
                 break;
                 case  5:
-                $imagerating='<img src="../img/wiki/rating/stars_25.gif"/>';
+                $imagerating='<img src="../img/rating/stars_25.gif"/>';
                 break;
                 case  6:
-                $imagerating='<img src="../img/wiki/rating/stars_30.gif"/>';
+                $imagerating='<img src="../img/rating/stars_30.gif"/>';
                 break;
                 case  7:
-                $imagerating='<img src="../img/wiki/rating/stars_35.gif"/>';
+                $imagerating='<img src="../img/rating/stars_35.gif"/>';
                 break;
                 case  8:
-                $imagerating='<img src="../img/wiki/rating/stars_40.gif"/>';
+                $imagerating='<img src="../img/rating/stars_40.gif"/>';
                 break;
                 case  9:
-                $imagerating='<img src="../img/wiki/rating/stars_45.gif"/>';
+                $imagerating='<img src="../img/rating/stars_45.gif"/>';
                 break;
                 case  10:
-                $imagerating='<img src="../img/wiki/rating/stars_50.gif"/>';
+                $imagerating='<img src="../img/rating/stars_50.gif"/>';
                 break;
             }
 

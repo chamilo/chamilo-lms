@@ -273,7 +273,10 @@ user_event			modif mix crystal nuvola
 platform_event			modif mix crystal nuvola chamilo
 languages_na			modif crystal
 new_language			modif crystal
-		
---julio
-star				
-star_green
+export_to_documents		modif nuvola
+messagebox_info			crystal (only 32 px)
+wiki_task			modif nuvola
+wiki_work			modif nuvola
+wiki_assignment			modif nuvola
+star				crystal			
+star_green			modif crystal

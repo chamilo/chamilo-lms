@@ -589,7 +589,8 @@ return true;
         //task
         echo '<div>&nbsp;</div>';
         echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;">';
-        echo '<input type="checkbox" value="1" name="checktask" onclick="javascript: if(this.checked){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" title="'.get_lang('DefineTask').'" alt="'.get_lang('DefineTask').'"/>'.get_lang('DescriptionOfTheTask').'';
+        echo '<input type="checkbox" value="1" name="checktask" onclick="javascript: if(this.checked){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;
+		'.Display::return_icon('wiki_task.png', get_lang('DefineTask'),'',22).' '.get_lang('DescriptionOfTheTask').'';
         echo '&nbsp;&nbsp;&nbsp;<span id="msg_error4" style="display:none;color:red"></span>';
         echo '<div id="option4" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 
@@ -806,18 +807,18 @@ function display_wiki_entry($newtitle)
     //assignment mode: identify page type
     if($row['assignment']==1)
     {
-        $icon_assignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDescExtra').'" alt="'.get_lang('AssignmentDescExtra').'" />';
+        $icon_assignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',22);
     }
     elseif($row['assignment']==2)
     {
-        $icon_assignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
+        $icon_assignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',22);
     }
 
     //task mode
 
     if (!empty($row['task']))
     {
-        $icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('StandardTask').'" alt="'.get_lang('StandardTask').'" />';
+        $icon_task=Display::return_icon('wiki_task.png', get_lang('StandardTask'),'',22);
     }
 
     //Show page. Show page to all users if isn't hide page. Mode assignments: if student is the author, can view
@@ -830,16 +831,16 @@ function display_wiki_entry($newtitle)
         {
             if (check_protect_page()==1)
             {
-                $protect_page= '<img src="../img/wiki/lock.gif" title="'.get_lang('PageLockedExtra').'" alt="'.get_lang('PageLockedExtra').'" />';
+				$protect_page= Display::return_icon('lock.png', get_lang('PageLockedExtra'),'',22);
                 $lock_unlock_protect='unlock';
             }
             else
             {
-                $protect_page= '<img src="../img/wiki/unlock.gif" title="'.get_lang('PageUnlockedExtra').'" alt="'.get_lang('PageUnlockedExtra').'" />';
+                $protect_page= Display::return_icon('unlock.png', get_lang('PageUnlockedExtra'),'',22);
                 $lock_unlock_protect='lock';
             }
         }
-        echo '<span style="float:right;padding:4px 3px 4px 3px;">';
+        echo '<span style="float:right;">';
         echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_protect.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$protect_page.'</a>';
         echo '</span>';
 
@@ -853,17 +854,18 @@ function display_wiki_entry($newtitle)
                 //{
                 //
                 // }
-                $visibility_page= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowPageExtra').'" alt="'.get_lang('ShowPageExtra').'" />';
+                $visibility_page= Display::return_icon('visible.png', get_lang('ShowPageExtra'),'',22);
                 $lock_unlock_visibility='invisible';
 
             }
             else
             {
-                $visibility_page= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HidePageExtra').'" alt="'.get_lang('HidePageExtra').'" />';
+
+				$visibility_page= Display::return_icon('invisible.png', get_lang('HidePageExtra'),'',22);
                 $lock_unlock_visibility='visible';
             }
         }
-        echo '<span style="float:right;padding:4px 3px 4px 3px;">';
+        echo '<span style="float:right;">';
         echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_visibility.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$visibility_page.'</a>';
         echo '</span>';
 
@@ -871,15 +873,14 @@ function display_wiki_entry($newtitle)
         if (api_is_allowed_to_session_edit())
         {
             if (check_notify_page($page)==1) {
-                $notify_page= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyByEmail').'" alt="'.get_lang('NotifyByEmail').'" />';
+                $notify_page= Display::return_icon('messagebox_info.png', get_lang('NotifyByEmail'),'',22);
                 $lock_unlock_notify_page='unlocknotify';
             } else {
-                $notify_page= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyByEmail').'" alt="'.get_lang('CancelNotifyByEmail').'" />';
+				$notify_page= Display::return_icon('mail.png', get_lang('CancelNotifyByEmail'),'',22);
                 $lock_unlock_notify_page='locknotify';
-
             }
         }
-        echo '<span style="float:right;padding:4px 3px 4px 3px;">';
+        echo '<span style="float:right;">';
         echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_notify_page.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$notify_page.'</a>';
         echo '</span>';
 
@@ -902,19 +903,19 @@ function display_wiki_entry($newtitle)
         echo '<form name="form_export2PDF" method="post" action="index.php">';
         echo '<input type="hidden" name="action" value="export_to_pdf">';
         echo '<input type="hidden" name="wiki_id" value="'.$row['id'].'">';
-        echo '<input type="image" src="../img/wiki/wexport2pdf.gif" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none; margin-top: -6px">';
+        echo '<input type="image" src="../img/icons/22/pdf.png" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none; margin-top: -9px">';
         echo '</form>';
         echo '</span>';
 
         //page action: copy last version to doc area
         if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
         {
-            echo '<span style="float:right;padding-top:5px;">';
+            echo '<span style="float:right;">';
             echo '<form name="form_export2DOC" method="post" action="index.php" >';
             echo '<input type=hidden name="export2DOC" value="export2doc">';
             echo '<input type=hidden name="titleDOC" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
             echo '<input type=hidden name="contentDOC" value="'.api_htmlentities($content, ENT_QUOTES, $charset).'">';
-            echo '<input type="image" src="../img/wiki/wexport2doc.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'" style=" border:none; margin-top: -6px">';
+            echo '<input type="image" src="../img/icons/22/export_to_documents.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'" style=" border:none; margin-top: -6px">';
             echo '</form>';
             echo '</span>';
         }
@@ -932,8 +933,8 @@ function display_wiki_entry($newtitle)
         }
         </script>
         <?php
-        echo '<span style="float:right; padding:4px 3px 4px 3px; cursor: pointer;">';
-        echo '<img src="../img/wiki/wprint.gif" title="'.get_lang('Print').'" alt="'.get_lang('Print').'" onclick="javascript: goprint();">';
+        echo '<span style="float:right; cursor: pointer;">';		
+			echo Display::return_icon('printer.png', get_lang('Print'),array('onclick' => "javascript: goprint();"),'22');
         echo '</span>';
 
 
@@ -2051,15 +2052,15 @@ function display_wiki_search_results($search_term, $search_content=0)
             //get type assignment icon
             if($obj->assignment==1)
             {
-                $ShowAssignment='<img src="../img/wiki/assignment.png" title="'.get_lang('AssignmentDesc').'" alt="'.get_lang('AssignmentDesc').'" />';
+                $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',22);
             }
             elseif ($obj->assignment==2)
             {
-                $ShowAssignment='<img src="../img/wiki/works.png" title="'.get_lang('AssignmentWork').'" alt="'.get_lang('AssignmentWork').'" />';
+                $ShowAssignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',22);
             }
             elseif ($obj->assignment==0)
             {
-                $ShowAssignment='<img src="../img/wiki/trans.gif" />';
+                $ShowAssignment='<img src="../img/px_transparent.gif" />';
             }
 
             $row = array ();
@@ -2070,9 +2071,10 @@ function display_wiki_search_results($search_term, $search_content=0)
 
             if(api_is_allowed_to_edit(false,true)|| api_is_platform_admin())
             {
-                $showdelete=' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=delete&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'"><img src="../img/delete.gif" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'" />';
+                $showdelete=' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=delete&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('delete.png', get_lang('Delete'),'',22);
             }
-            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=edit&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'"><img src="../img/lp_quiz.png" title="'.get_lang('EditPage').'" alt="'.get_lang('EditPage').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=discuss&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"><img src="../img/comment_bubble.gif" title="'.get_lang('Discuss').'" alt="'.get_lang('Discuss').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=history&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"><img src="../img/history.gif" title="'.get_lang('History').'" alt="'.get_lang('History').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=links&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'"><img src="../img/lp_link.png" title="'.get_lang('LinksPages').'" alt="'.get_lang('LinksPages').'" /></a>'.$showdelete;
+            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=edit&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('edit.png', get_lang('EditPage'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=discuss&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">
+			'.Display::return_icon('discuss.png', get_lang('Discuss'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=history&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('history.png', get_lang('History'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=links&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('what_link_here.png', get_lang('LinksPages'),'',22).'</a>'.$showdelete;
 
             $rows[] = $row;
         }
@@ -2084,7 +2086,7 @@ function display_wiki_search_results($search_term, $search_content=0)
         $table->set_header(1,get_lang('Title'), false);
         $table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', false);
         $table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', false);
-        $table->set_header(4,get_lang('Actions'), false, array ('style' => 'width:100px;'));
+        $table->set_header(4,get_lang('Actions'), false, array ('style' => 'width:130px;'));
 
         $table->display();
     }

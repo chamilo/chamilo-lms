@@ -95,11 +95,25 @@ if (api_is_in_group()) {
 	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
 }
 
-$file = $_GET['file'];
-//echo('file: '.$file.'<br />');
-$doc = basename($file);
-//echo('doc: '.$doc.'<br />');
-$dir = Security::remove_XSS($_GET['curdirpath']);
+if (isset($_GET['id'])) {
+    $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
+    if (empty($document_data)) {
+        api_not_allowed();
+    }
+    $document_id = $document_data['id'];    
+    $dir = dirname($document_data['path']);
+    $parent_id  = DocumentManager::get_document_id(api_get_course_info(), $dir);
+    
+    $dir_original =  $dir;
+    $file = $document_data['path'];
+    $doc = basename($file);
+    $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);    
+} else {
+    $dir = Security::remove_XSS($_GET['curdirpath']);    
+    $dir_original = $dir;
+    $file = $_GET['file'];
+    $doc = basename($file);    
+}
 
 //I'm in the certification module?
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
@@ -183,7 +197,7 @@ if (!empty($_SESSION['_gid'])) {
 	$group_document = true;
 	$noPHP_SELF = true;
 }
-$my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);
+
 if (!$is_certificate_mode)
 	$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($my_cur_dir_path).$req_gid, "name"=> get_lang('Documents'));
 else
@@ -327,8 +341,8 @@ if ($is_allowed_to_edit) {
 							if (file_exists(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css')) {
 								copy(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css', $filepath.'css/frames.css');
 								$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], null, null, null, null, $current_session_id);
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'], null, null, null, null, $current_session_id);
+								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), null, null, null, null, $current_session_id);
+								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(), null, null, null, null, $current_session_id);
 							}
 						}
 
@@ -337,11 +351,15 @@ if ($is_allowed_to_edit) {
 						if ($document_id) {
 							$file_size = filesize($filepath.$filename.'.'.$extension);
 							update_existing_document($_course, $document_id, $file_size, $read_only_flag);
-							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id'], null, null, null, null, $current_session_id);
+							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', api_get_user_id(), null, null, null, null, $current_session_id);
 							// Update parent folders
-							item_property_update_on_folder($_course, $dir,$_user['user_id']);
-							$dir = substr($dir, 0, -1);
-							header('Location: document.php?curdirpath='.urlencode($dir));
+							item_property_update_on_folder($_course, $dir, api_get_user_id());
+							$dir_modified = substr($dir, 0, -1);
+							//header('Location: document.php?id='.urlencode($dir));
+							
+							$my_id = DocumentManager::get_document_id($_course, $dir_modified);
+							header('Location: document.php?id='.$my_id);
+							
 							exit ();
 						} else {
 							//$msgError = get_lang('Impossible');
@@ -359,7 +377,6 @@ if ($is_allowed_to_edit) {
 					}
 				}
 			} else {
-
 				if (is_file($filepath.$filename.'.'.$extension)) {
 					$file_size = filesize($filepath.$filename.'.'.$extension);
 					$document_id = DocumentManager::get_document_id($_course, $file);
@@ -433,10 +450,9 @@ $owner_id       = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];
 
 
-if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid'] )) {
-	$get_cur_path = Security::remove_XSS($_GET['curdirpath']);
-	$get_file = Security::remove_XSS($_GET['file']);
-	$action = api_get_self().'?sourceFile='.urlencode($file_name).'&curdirpath='.urlencode($get_cur_path).'&file='.urlencode($get_file).'&doc='.urlencode($doc);
+if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id() )) {
+	$get_cur_path = $dir;	
+	$action = api_get_self().'?sourceFile='.urlencode($file_name).'&id='.$document_data['id'];
 	$form = new FormValidator('formEdit', 'post', $action);
 
 	// Form title
@@ -478,16 +494,13 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 		}
 	}
 
-	if (!$group_document && !is_my_shared_folder($_user['user_id'], $my_cur_dir_path, $current_session_id)) {
+	if (!$group_document && !is_my_shared_folder(api_get_user_id(), $my_cur_dir_path, $current_session_id)) {
 		$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$docId).'">'.get_lang('AddMetadata').'</a>';
 
 		//Updated on field
 		$last_edit_date = api_get_local_time($last_edit_date, null, date_default_timezone_get());
-        $display_date = date_to_str_ago($last_edit_date).'<br /><span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';
-        
+        $display_date = date_to_str_ago($last_edit_date).'<br /><span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';        
 		$form->addElement('static', null, get_lang('Metadata'), $metadata_link);
-		
-        
 		$form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
 	}
 
@@ -495,7 +508,7 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 	/*
 	$renderer = $form->defaultRenderer();
 	*/
-	if ($owner_id == $_user['user_id'] || api_is_platform_admin()) {
+	if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
 		$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
 		$checked =& $form->addElement('checkbox', 'readonly', get_lang('ReadOnly'));
 		if ($readonly == 1) {
@@ -507,8 +520,6 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 		$form->addElement('style_submit_button', 'submit', get_lang('SaveCertificate'), 'class="save"');
 	else
 		$form->addElement('style_submit_button','submit',get_lang('SaveDocument'), 'class="save"');
-
-
 
 	$defaults['filename'] = $filename;
 	$defaults['extension'] = $extension;
@@ -524,7 +535,7 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 	/*
 	$form->addElement('html', '<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
 	*/
-	if (isset($_REQUEST['curdirpath']) && $_GET['curdirpath']=='/certificates') {
+	if (isset($_REQUEST['curdirpath']) && $dir =='/certificates') {
 		$all_information_by_create_certificate=DocumentManager::get_all_info_to_certificate();
 		$str_info='';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
@@ -532,10 +543,8 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 		}
 		$create_certificate=get_lang('CreateCertificateWithTags');
 		Display::display_normal_message($create_certificate.': <br /><br />'.$str_info,false);
-	}
-	
-	show_return($call_from_tool, $slide_id, $is_certificate_mode);
-	///
+	}	
+	show_return($parent_id, $dir_original, $call_from_tool, $slide_id, $is_certificate_mode);
 	if($extension=='svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
 		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
 	}
@@ -593,27 +602,21 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {
 }
 
 //return button back to
-function show_return($call_from_tool='', $slide_id=0, $is_certificate_mode=false) {
-	$path = Security::remove_XSS($_GET['curdirpath']);
+function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_certificate_mode=false) {	
 	$pathurl = urlencode($path);
 	echo '<div class="actions">';
-	if ($is_certificate_mode)
-	{
+	if ($is_certificate_mode) {
 		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'','32').'</a>';
-	}
-	elseif($call_from_tool=='slideshow'){
+	} elseif($call_from_tool=='slideshow') {
 		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'),'','32').'</a>';		
-	}
-	elseif($call_from_tool=='editdraw'){
+	} elseif($call_from_tool=='editdraw') {
 		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 		echo '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png',get_lang('BackTo').' '.get_lang('Draw'),'','32').'</a>';
-	}
-	elseif($call_from_tool=='editpaint'){
+	} elseif($call_from_tool=='editpaint'){
 		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 		echo '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png',get_lang('BackTo').' '.get_lang('Paint')).'</a>';		
-	}
-	else{
-		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+	} else {
+		echo '<a href="document.php?action=exit_slideshow&id='.$document_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 	}
 	echo '</div>';
 }

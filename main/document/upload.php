@@ -82,8 +82,8 @@ $htmlHeadXtra[] = "
 <script type=\"text/javascript\">
 $(function () {
     $('#file_upload').fileUploadUI({
-        uploadTable:   $('#files'),
-        downloadTable: $('#files'),
+        uploadTable:   $('.files'),
+        downloadTable: $('.files'),
         buildUploadRow: function (files, index) {
             return $('<tr><td>' + files[index].name + '<\/td>' +
                     '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
@@ -93,7 +93,7 @@ $(function () {
                     '<\/button><\/td><\/tr>');
         },
         buildDownloadRow: function (file) {
-            return $('<tr><td>' + file.name + '<\/td><\/tr>');
+            return $('<tr><td>' + file.name + '<\/td> <td>' + file.size + '<\/td>  <td>' + file.result + '<\/td> <\/tr>');
         }
     });    
     $('#tabs').tabs();
@@ -310,8 +310,7 @@ $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename')
 // Close the java script and avoid the footer up
 $form -> addElement('html', '</div>');
 
-
-// Button send document
+// Button upload document
 $form->addElement('style_submit_button', 'submitDocument', get_lang('SendDocument'), 'class="upload"');
 $form->add_real_progress_bar('DocumentUpload', 'user_upload');
 
@@ -321,7 +320,20 @@ $form->setDefaults($defaults);
 
 $simple_form = $form->return_form();
 
-// Multiple uploads
+echo '
+<style>
+
+.files {
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.files td {
+    padding: 3px 10px 3px 0;
+}
+
+</style>
+';
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php';
 $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
 $multiple_form .=  '<form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
@@ -330,8 +342,9 @@ $multiple_form .=  '<form id="file_upload" action="'.$url.'" method="POST" encty
     <button>Upload</button>
     <div>'.get_lang('UploadFiles').'</div>
 </form>';
-$multiple_form  .='<table id="files"></table>';
+$multiple_form  .='<table class="files"></table>';
 $headers = array(get_lang('Simple') , get_lang('Multiple'));
 echo Display::tabs($headers, array($simple_form, $multiple_form ),'tabs');
+
 // Footer
 Display::display_footer();

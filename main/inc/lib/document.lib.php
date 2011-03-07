@@ -7,7 +7,6 @@
  *	and eliminate code duplication fro group documents, scorm documents, main documents.
  *	Include/require it in your code to use its functionality.
  *
- *	@version 1.1, January 2005
  *	@package chamilo.library
  */
 
@@ -999,10 +998,12 @@ class DocumentManager {
         $course_info = api_get_course_info($course_code);
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
         $id = intval($id);
-        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE id  = $id";
+        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE id  = $id ";
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
-            $row = Database::fetch_array($result,'ASSOC');
+            $row = Database::fetch_array($result,'ASSOC');      
+            //Public document URL       
+            $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq'.$course_code.'&id='.$id;
             return $row;
         }
         return false;
@@ -1116,14 +1117,15 @@ class DocumentManager {
         $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
         $id         = intval($id);
         $session_id = intval($session_id);
-        $condition  = "AND id_session = $session_id";
+        //$condition  = "AND id_session = $session_id";
+        $condition = "AND id_session IN  ('$session_id', '0') ";
         
         if (!in_array($file_type, array('file','folder'))) {
             $file_type = 'file';
         }
         
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
-        $sql  = "SELECT path FROM $docTable d, $propTable ip " .
+        $sql  = "SELECT visibility FROM $docTable d, $propTable ip " .
                 "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND filetype='$file_type' AND d.id = $id";
         $result = Database::query($sql);
         $is_visible = false;
@@ -1801,35 +1803,44 @@ class DocumentManager {
         $pdf->html_to_pdf($file_path, $document_data['title'], $course_code);
     }
     
+    /**
+     * Uploads a document
+     * 
+     * @param $files
+     * @param $path
+     * @param $title
+     * @param $comment
+     * @param $unzip
+     * @param $if_exists overwrite, rename or warn if exists (default)
+     * @param $index_document
+     * @param $show_output
+     * @return unknown_type
+     */
     public function upload_document($files, $path, $title = '', $comment = '', $unzip = 0, $if_exists = '', $index_document = false, $show_output = false) {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         //If we want to unzip a file, we need the library
-        if (isset($unzip) && $unzip == 1) {
+        if (isset($unzip) && intval($unzip) == 1) {
             require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
-        }
-        
+        }        
         $max_filled_space = self::get_course_quota();
-        $course_info = api_get_course_info();
-        
-        $courseDir = $course_info['path'].'/document';
-        $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $base_work_dir = $sys_course_path.$courseDir;
+        $course_info      = api_get_course_info();        
+        $courseDir        = $course_info['path'].'/document';
+        $sys_course_path  = api_get_path(SYS_COURSE_PATH);
+        $base_work_dir    = $sys_course_path.$courseDir;
              
         if (isset($files['file'])) {
-            //echo('<pre>');
-        
-            //echo('</pre>');
-                
             $upload_ok = process_uploaded_file($files['file']);
             if ($upload_ok) {
                 // File got on the server without problems, now process it
                 $new_path = handle_uploaded_document($course_info, $files['file'], $base_work_dir, $path, api_get_user_id(), api_get_group_id(), null, $max_filled_space, $unzip, $if_exists, $show_output);
         
                 $new_comment = isset($title) ? trim($comment) : '';
-                $new_title = isset($title) ? trim($title) : '';
+                $new_title   = isset($title) ? trim($title) : '';
+                
+                $docid = DocumentManager::get_document_id($course_info, $new_path);
         
                 if ($new_path && ($new_comment || $new_title)) {
-                    if (($docid = DocumentManager::get_document_id($course_info, $new_path))) {
+                    if (!empty($docid)) {
                         $table_document = Database::get_course_table(TABLE_DOCUMENT);
                         $ct = '';
                         if ($new_comment) $ct .= ", comment='$new_comment'";
@@ -1837,12 +1848,14 @@ class DocumentManager {
                         Database::query("UPDATE $table_document SET ".substr($ct, 1)." WHERE id = $docid");
                     }
                 }
+                
                 // Showing message when sending zip files
-                if ($new_path === true && $unzip == 1) {
-                    //Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />', false);                    
+                if ($new_path === true && $unzip == 1 && $show_output) {                    
+                    Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />', false);                    
                 }
-        
-                if ((api_get_setting('search_enabled') == 'true') && ($docid = DocumentManager::get_document_id($course_info, $new_path))) {
+                
+                //@todo move this code somewhere else a.k.a Rework search module
+                if ((api_get_setting('search_enabled') == 'true') && $index_document && !empty($docid)) {
                     $table_document = Database::get_course_table(TABLE_DOCUMENT);
                     $result = Database::query("SELECT * FROM $table_document WHERE id = '$docid' LIMIT 1");
                     if (Database::num_rows($result) == 1) {
@@ -1986,12 +1999,18 @@ class DocumentManager {
         
                 // Check for missing images in html files
                 $missing_files = check_for_missing_files($base_work_dir.$new_path);
-                if ($missing_files) {
+                if ($missing_files && $show_output) {
                     // Show a form to upload the missing files
-                    //Display::display_normal_message(build_missing_files_form($missing_files, $path, $files['file']['name']), false);
+                    Display::display_normal_message(build_missing_files_form($missing_files, $path, $files['file']['name']), false);
+                }
+                
+                if (!empty($docid) && is_numeric($docid)) {
+                    $document_data = self::get_document_data_by_id($docid, $course_info['code']);
+                    return $document_data;
                 }
             }
         }
+        return false;
     }
 
     /**

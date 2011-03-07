@@ -18,13 +18,11 @@ if(isset($_GET['view']) && in_array($_GET['view'], $views)){
 }
 
 if($dashboard_view == 'list') {
-	$link_blocks_view = '<a href="'.api_get_self().'?view=blocks">'.Display::return_icon('blocks.png',get_lang('DashboardBlocks'),'','32');
+	$link_blocks_view = '<a href="'.api_get_self().'?view=blocks">'.Display::return_icon('blocks.png',get_lang('DashboardBlocks'),'','32').'</a>';
 	
 } else {
 	$link_list_view = '<a href="'.api_get_self().'?view=list">'.Display::return_icon('edit.png',get_lang('EditBlocks'),'','32').'</a>';
 }
-
-//
 
 $configuration_link = '';
 if (api_is_platform_admin()) {

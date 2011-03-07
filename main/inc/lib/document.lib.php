@@ -1220,15 +1220,14 @@ class DocumentManager {
        * return all content to replace and all content to be replace
        */
       function get_all_info_to_certificate () {
-
         global $charset, $dateFormatLong;
         $info_list	= array();
-          $user_id	= api_get_user_id();
-          $course_id	= api_get_course_id();
+        $user_id	= api_get_user_id();
+        $course_id	= api_get_course_id();
 
         //info portal
         $organization_name = api_get_setting('Institution');
-        $portal_name = api_get_setting('siteName');
+        $portal_name       = api_get_setting('siteName');
 
         //info extra user data
         $extra_user_info_data = UserManager::get_extra_user_data($user_id,false,false);
@@ -2043,7 +2042,6 @@ class DocumentManager {
                 }
                 exec("pdftotext $temp_file -", $output, $ret_val);
                 unlink($temp_file);
-                //var_dump($output);
                 break;
             case 'application/msword':
                 exec("catdoc $doc_path", $output, $ret_val);

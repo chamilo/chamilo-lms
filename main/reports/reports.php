@@ -65,13 +65,19 @@ if ($_REQUEST['format'] == 'html') {
 	echo '<table id="reportsData" class="display">'; // FIXME style
 	$nfields = mysql_num_fields($result);
 	echo '<thead><tr>';
-	for ($i=0; $i < $nfields; $i++)
-		echo '<th>'.mysql_field_name($result, $i).'</th>';
+	for ($i=0; $i < $nfields; $i++)	
+		if (substr(mysql_field_name($result, $i), -5, 5) != '_link')
+			echo '<th>'.mysql_field_name($result, $i).'</th>';
 	echo '</tr></thead><tbody>';
-	while ($row = Database::fetch_row($result)) {
+	while ($row = Database::fetch_assoc($result)) {
 		echo '<tr>';
-		foreach ($row as $col)
-			echo '<td>'.$col.'</td>'; 
+		foreach ($row as $colName => $colValue)
+			if (substr($colName, -5, 5) != '_link'){ // ignore links
+				if (array_key_exists($colName.'_link', $row)) // link is defined
+					echo '<td><a href="'.$row[$colName.'_link'].'">'.$colValue.'</a></td>'; 
+				else
+					echo '<td>'.$colValue.'</td>';
+			} 
 		echo "</tr>\n";
 	}
 	echo '</tbody></table>';
@@ -81,8 +87,9 @@ if ($_REQUEST['format'] == 'html') {
 		echo mysql_field_name($result, $i).',';
 	echo "\n";
 	while ($row = Database::fetch_row($result)) {
-		foreach ($row as $col)
-			echo $col.',';  // fixme
+		foreach ($row as $colName => $colValue)
+			if (substr($colName, -5, 5) != '_link') // ignore links
+				echo $colValue.',';  // fixme
 		echo "\n";
 	}
 } else die('format unknown');

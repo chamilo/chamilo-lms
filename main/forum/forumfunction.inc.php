@@ -2020,8 +2020,8 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     if (!empty($form_values)) {
         $defaults['post_title'] = prepare4display($form_values['post_title']);
         $defaults['post_text'] = prepare4display($form_values['post_text']);
-        $defaults['post_notification'] = prepare4display($form_values['post_notification']);
-        $defaults['thread_sticky'] = prepare4display($form_values['thread_sticky']);
+        $defaults['post_notification'] = strval(intval($form_values['post_notification']));
+        $defaults['thread_sticky'] = strval(intval($form_values['thread_sticky']));
     }
 
     // If we are quoting a message we have to retrieve the information of the post we are quoting so that

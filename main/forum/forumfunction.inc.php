@@ -3179,44 +3179,43 @@ function store_move_thread($values) {
 }
 
 /**
- * Prepares a string or an array of strings for display by stripping slashes
- * @param mixed	String or array of strings
- * @return mixed String or array of strings
+ * Prepares a string for displaying by highlighting the search results inside, if any.
+ * @param string $input    The input string.
+ * @return string          The same string with highlighted hits inside.
  *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version february 2006, dokeos 1.8
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, February 2006 - the initial version.
+ * @author Ivan Tcholakov, March 2011 - adaptation for Chamilo LMS.
  */
-function prepare4display($input = '') {
+function prepare4display($input) {
+    static $highlightcolors = array('yellow', '#33CC33', '#3399CC', '#9999FF', '#33CC33');
     static $search;
+
     if (!isset($search)) {
         if (isset($_POST['search_term'])) {
             $search = html_filter($_POST['search_term']); // No html at all.
         } elseif (isset($_GET['search'])) {
             $search = html_filter($_GET['search']);
+        } else {
+            $search = '';
         }
     }
-    $highlightcolors = array('yellow', '#33CC33','#3399CC', '#9999FF', '#33CC33');
-    if (!is_array($input)) {
-        if (!empty($search)) {
-            if (strstr($search, '+')) {
-                $search_terms = explode('+', $search);
-            } else  {
-                $search_terms[] = trim($search);
-            }
-            $counter = 0;
-            foreach ($search_terms as $key => $search_term) {
-                $input = api_preg_replace('/'.preg_quote(trim($search_term), '/').'/i', '<span style="background-color: '.$highlightcolors[$counter].'">$0</span>', $input);
-                $counter++;
-            }
+
+    if (!empty($search)) {
+        if (strstr($search, '+')) {
+            $search_terms = explode('+', $search);
+        } else  {
+            $search_terms[] = trim($search);
         }
-        //return api_html_entity_decode(stripslashes($input));
-        //change this to COURSEMANAGERLOWSECURITY or COURSEMANAGER to lower filtering and allow more styles (see comments of Security::remove_XSS() method to learn about other levels)
-        return Security::remove_XSS($input, STUDENT);
-    } else {
-        $returnarray = array_walk($input, 'api_html_entity_decode');
-        $returnarray = array_walk($input, 'stripslashes');
-        return $returnarray;
+        $counter = 0;
+        foreach ($search_terms as $key => $search_term) {
+            $input = api_preg_replace('/'.preg_quote(trim($search_term), '/').'/i', '<span style="background-color: '.$highlightcolors[$counter].'">$0</span>', $input);
+            $counter++;
+        }
     }
+
+    // TODO: Security should be implemented outside this function.
+    // Change this to COURSEMANAGERLOWSECURITY or COURSEMANAGER to lower filtering and allow more styles (see comments of Security::remove_XSS() method to learn about other levels).
+    return Security::remove_XSS($input, STUDENT);
 }
 
 /**

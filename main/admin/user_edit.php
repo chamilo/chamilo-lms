@@ -239,6 +239,7 @@ if (!$user_data['platform_admin']) {
 
 
 // EXTRA FIELDS
+
 $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
 foreach ($extra as $id => $field_details) {
 	if ($field_details[6] == 0) {
@@ -265,11 +266,21 @@ foreach ($extra as $id => $field_details) {
 			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
 			break;
 		case USER_FIELD_TYPE_SELECT:
-			$options = array();
-			foreach ($field_details[9] as $option_id => $option_details) {
-				$options[$option_details[1]] = $option_details[2];
-			}
-			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');
+            $get_lang_variables = false;
+            if (in_array($field_details[1], array('mail_notify_message','mail_notify_invitation', 'mail_notify_group_message'))) {
+                $get_lang_variables = true;
+            }
+            $options = array();
+            foreach($field_details[9] as $option_id => $option_details) {
+                if ($get_lang_variables) {
+                    $option_details[2] = get_lang($option_details[2]);
+                }
+                $options[$option_details[1]] = $option_details[2];
+            }
+            if ($get_lang_variables) {
+                $field_details[3] = get_lang($field_details[3]);
+            }
+            $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');		
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();

@@ -64,32 +64,58 @@ if ($_REQUEST['format'] == 'html') {
 		</script>';
 	echo '<table id="reportsData" class="display">'; // FIXME style
 	$nfields = mysql_num_fields($result);
+	$columns = array();	
+	$columns_islink = array();
 	echo '<thead><tr>';
-	for ($i=0; $i < $nfields; $i++)	
-		if (substr(mysql_field_name($result, $i), -5, 5) != '_link')
-			echo '<th>'.mysql_field_name($result, $i).'</th>';
+	for ($i=0; $i < $nfields; $i++)	{
+		$columns[$i] = mysql_field_name($result, $i);
+		if (substr($columns[$i], -5, 5) != '_link') {
+			$column_islink[$i] = false;
+			echo '<th>'.$columns[$i].'</th>';
+		} else 
+			$columns_islink[$i] = true;
+	}
+
+	// checking resolving link column id
+	$columns_flip = array_flip($columns);
+	$columns_link = array();
+	for ($i=0; $i < $nfields; $i++)
+		if ($column_islink[$i] == false && array_key_exists($columns[$i].'_link', $columns_flip))
+			$columns_link[$i] = $columns_flip[$columns[$i].'_link'];
+		else
+			$columns_link[$i] = '';
+	error_log("result1: ".$nfields);
 	echo '</tr></thead><tbody>';
-	while ($row = Database::fetch_assoc($result)) {
+	while ($row = Database::fetch_row($result)) {
 		echo '<tr>';
-		foreach ($row as $colName => $colValue)
-			if (substr($colName, -5, 5) != '_link'){ // ignore links
-				if (array_key_exists($colName.'_link', $row)) // link is defined
-					echo '<td><a href="'.$row[$colName.'_link'].'">'.$colValue.'</a></td>'; 
+		for ($i = 0; $i<$nfields; $i++)
+			if (!$columns_islink[$i]){ // ignore links
+				if ($columns_link[$i] != '') // link is defined
+					echo '<td><a href="'.$row[$columns_link[$i]].'">'.$row[$i].'</a></td>'; 
 				else
-					echo '<td>'.$colValue.'</td>';
-			} 
+					echo '<td>'.$row[$i].'</td>';
+			}
 		echo "</tr>\n";
 	}
 	echo '</tbody></table>';
 } else if ($_REQUEST['format'] == 'csv') {
 	$nfields = mysql_num_fields($result);
-	for ($i=0; $i < $nfields; $i++)
-		echo mysql_field_name($result, $i).',';
+	$columns = array();	
+	$columns_islink = array();
+	for ($i=0; $i < $nfields; $i++)	{
+		$columns[$i] = mysql_field_name($result, $i);
+		if (substr($columns[$i], -5, 5) != '_link') {
+			$column_islink[$i] = false;
+			echo $columns[$i].',';
+		} else 
+			$columns_islink[$i] = true;
+	}
+
 	echo "\n";
 	while ($row = Database::fetch_row($result)) {
-		foreach ($row as $colName => $colValue)
-			if (substr($colName, -5, 5) != '_link') // ignore links
-				echo $colValue.',';  // fixme
+		for ($i = 0; $i<$nfields; $i++)
+			if (!$columns_islink[$i]) // ignore links
+				echo $row[$i].',';  // fixme
 		echo "\n";
 	}
 } else die('format unknown');

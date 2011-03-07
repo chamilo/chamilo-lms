@@ -179,14 +179,16 @@ if (is_array($flat_list)) {
         
         if (!$is_allowed_to_edit) {
             
-            $time_limits = false;                  
-            if ($details['expired_on'] != '' && $details['expired_on'] != '0000-00-00 00:00:00') {
-                $time_limits = true;  
-            }
+            $time_limits = false;
             
-            //This is an old LP (from a migration) so we do nothing
+            //This is an old LP (from a migration 1.8.7) so we do nothing
             if ( (empty($details['created_on']) ||  $details['created_on'] == '0000-00-00 00:00:00') && (empty($details['modified_on']) || $details['modified_on'] == '0000-00-00 00:00:00')) {
                 $time_limits = false;
+            }
+            
+            //Checking if expired_on is ON
+            if ($details['expired_on'] != '' && $details['expired_on'] != '0000-00-00 00:00:00') {
+                $time_limits = true;  
             }
      
             if ($time_limits) {
@@ -206,10 +208,8 @@ if (is_array($flat_list)) {
                     	continue;
                     }                
                 }
-            }
-            
-        }
-        
+            }            
+        }        
 
         $counter++;
         if (($counter % 2) == 0) { $oddclass = 'row_odd'; } else { $oddclass = 'row_even'; }

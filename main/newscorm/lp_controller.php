@@ -646,7 +646,7 @@ switch ($action) {
                     }
                 }        
             }
-            require 'lp_list.php';
+            require 'lp_build.php';
         }
         break;
 

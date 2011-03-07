@@ -193,7 +193,7 @@ if ($action_forums!='add') {
     echo '<thead>';
     echo "<tr><th class=\"forum_head\" ".(api_is_allowed_to_edit(null,true)?"colspan='5'":"colspan='6'").">";
 
-    echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&amp;forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a>'. $session_img .'<br />';
+    echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&amp;forumcategory='.strval(intval($forum_category['cat_id'])).'" '.class_visible_invisible(strval(intval($forum_category['visibility']))).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a>'. $session_img .'<br />';
 
     echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 

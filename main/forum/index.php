@@ -362,7 +362,7 @@ if (is_array($forum_categories_list)) {
                         }
                         $forum['forum_of_group'] == 0 ? $groupid = '' : $groupid = $forum['forum_of_group'];
 
-                        echo '<td><a href="viewforum.php?'.api_get_cidreq().'&amp;gidReq='.intval($groupid).'&amp;forum='.intval($forum['forum_id']).'" '.class_visible_invisible(prepare4display($forum['visibility'])).'>';
+                        echo '<td><a href="viewforum.php?'.api_get_cidreq().'&amp;gidReq='.intval($groupid).'&amp;forum='.intval($forum['forum_id']).'" '.class_visible_invisible(strval(intval($forum['visibility']))).'>';
 
                         //Forum title
                         echo prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />';

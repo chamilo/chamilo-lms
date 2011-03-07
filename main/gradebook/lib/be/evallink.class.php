@@ -23,7 +23,7 @@ abstract class EvalLink extends AbstractLink
 		return $eval->has_results();
     }
 
-    public function calc_score($stud_id = null) {
+    public function calc_score($stud_id = null) {        
     	$eval = $this->get_evaluation();
 		return $eval->calc_score($stud_id);
     }

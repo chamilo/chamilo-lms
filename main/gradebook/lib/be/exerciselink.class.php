@@ -102,19 +102,15 @@ class ExerciseLink extends AbstractLink
     		$course_code_exe = $this->get_course_code();
     		$sql .= ' AND exe_cours_id="'.$course_code_exe.'" AND exe_user_id = '."'".$stud_id."'";
     	}
-
-		$sql .= ' ORDER BY exe_id DESC';
+		$sql .= ' ORDER BY exe_id DESC';		
 		$scores = Database::query($sql);
-
     	if (isset($stud_id)) {
     		// for 1 student
-
     		if ($data=Database::fetch_array($scores)) {
     			return array ($data['exe_result'], $data['exe_weighting']);
        		} else {
-       			 return null;
+                return null;
        		}
-
     	} else {// all students -> get average
     		// normal way of getting the info
 

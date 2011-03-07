@@ -834,33 +834,45 @@ if ($category != '0') {
 			$cats_course = Category :: load ($category_id, null, null, null, null, null, false);
 			$alleval_course= $cats_course[0]->get_evaluations($stud_id,true);
 			$alllink_course= $cats_course[0]->get_links($stud_id,true);
+			
 			$evals_links = array_merge($alleval_course, $alllink_course);
 			$item_value=0;
 			$item_total=0;
+			
 			for ($count=0; $count < count($evals_links); $count++) {
-						$item = $evals_links[$count];
-						$score = $item->calc_score($stud_id);
+				$item = $evals_links[$count];
+				$score = $item->calc_score($stud_id);
 
-						$score_denom=($score[1]==0) ? 1 : $score[1];
-						$item_value+=$score[0]/$score_denom*$item->get_weight();
-						$item_total+=$item->get_weight();
-			}
+				$score_denom=($score[1]==0) ? 1 : $score[1];
+				$item_value+=$score[0]/$score_denom*$item->get_weight();
+				$item_total+=$item->get_weight();
+			}			
 			$item_value = number_format($item_value, 2, '.', ' ');
+			/*
 			$cattotal = Category :: load($category_id);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
-			$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
-
+			
+			//Overwritten the old total with the real total of the gradebook if the line below is deleted, then when a user doesn't finish a test the total will be different from the real total 
+			$scoretotal[1] = $item_total;		
+			
+			//$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
 			$my_score_in_gradebook =  round($scoretotal[0],2);
-			//show certificate
-			$certificate_min_score=$cats[0]->get_certificate_min_score();
+			*/
+			//Show certificate			
+			$certificate_min_score=$cats[0]->get_certificate_min_score();	
+			$scoredisplay = ScoreDisplay :: instance();
+			$scoretotal_display = $scoredisplay->display_score($scoretotal,SCORE_DIV_PERCENT);		
+			
 			if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
-				$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id().'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/logo.gif" />'.get_lang('Certificates').'</a>&nbsp;'.get_lang('langTotal').': '.$scoretotal_display;
+				$url  = api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id();
+				//$certificates.= '<img src="'.api_get_path(WEB_CODE_PATH) . 'img/logo.gif" />'.get_lang('Certificates').'</a>&nbsp;<strong>'.get_lang('Total').': '.$scoretotal_display.'</strong>';
+				$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 48), $url, array('target'=>'_blank'));
 				echo '<div class="actions" align="right">';
 				echo $certificates;
 				echo '</div>';
 			}
 		} //end hack
-		DisplayGradebook :: display_header_gradebook($cats[0], 0, $category_id, $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
+		DisplayGradebook::display_header_gradebook($cats[0], 0, $category_id, $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
 	}
 } else {
 //this is the root category
@@ -869,9 +881,7 @@ if ($category != '0') {
 
 if (api_is_allowed_to_edit(null, true)) {
 /*
------------------------------------------------------------
 	Introduction section (teacher edit)
------------------------------------------------------------
 */
 
 	// Tool introduction
@@ -888,8 +898,7 @@ if (api_is_allowed_to_edit(null, true)) {
 		}
 	}
 }
-if($first_time==1 && api_is_allowed_to_edit(null,true))
-{
+if($first_time==1 && api_is_allowed_to_edit(null,true)) {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
 } else {
 	$gradebooktable->display();

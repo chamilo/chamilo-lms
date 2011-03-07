@@ -137,10 +137,11 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 	// Add extension to files without one (if possible)
 	$uploaded_file['name'] = add_ext_on_mime($uploaded_file['name'], $uploaded_file['type']);
 	$current_session_id = api_get_session_id();
+	
 	// Check if there is enough space to save the file
 	if (!enough_space($uploaded_file['size'], $maxFilledSpace)) {
-	    if ($output){
-		  Display::display_error_message(get_lang('UplNotEnoughSpace'));
+	    if ($output) {	        
+            Display::display_error_message(get_lang('UplNotEnoughSpace'));
 		}
 		return false;
 	}

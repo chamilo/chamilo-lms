@@ -216,13 +216,10 @@ class HTMLPurifier_HTMLModuleManager
             }
         }
 
-        // add proprietary module (this gets special treatment because
-        // it is completely removed from doctypes, etc.)
+        // custom modules
         if ($config->get('HTML.Proprietary')) {
             $modules[] = 'Proprietary';
         }
-
-        // add SafeObject/Safeembed modules
         if ($config->get('HTML.SafeObject')) {
             $modules[] = 'SafeObject';
         }

@@ -959,7 +959,6 @@ $SearchDatabaseCreateError = "Failed to create the search database";
 $SearchDatabaseCorruptError = "The search database has suffered corruption";
 $SearchNetworkTimeoutError = "Connection timed out while communicating with the remote search database";
 $SearchOtherXapianError = "Error in search engine";
-$SearchXapianModuleNotInstaled = "The Xapian search module is not installed";
 $FieldRemoved = "Field removed";
 $TheNewSubLanguageHasBeenAdded = "The new sub-language has been added";
 $DeleteSubLanguage = "Delete sub-language";
@@ -1157,7 +1156,7 @@ $StudentsInformationsGraph = "Students report chart";
 $Timezones = "Timezones";
 $TimeSpentOnThePlatformLastWeekByDay = "Time spent on the platform last week, by day";
 $GraphicNotAvailable = "Chart not available";
-$AttendancesFaults = "Non-attendance";
+$AttendancesFaults = "Not attended";
 $Minutes = "Minutes";
 $SystemStatus = "System status";
 $IsWritable = "Is writable";
@@ -1383,4 +1382,11 @@ $LastXMonths = "Last %i months";
 $NeverConnected = "Never connected";
 $EnableAccessibilityFontResizeTitle = "Font resize accessibility feature";
 $EnableAccessibilityFontResizeComment = "Enable this option to show a set of font resize options on the top-right side of your campus. This will allow visually impaired to read their course contents more easily.";
+$GlobalEvent = "Platform event";
+$SearchEnabledTitle = "Fulltext search";
+$SearchEnabledComment = "This feature allows you to index most of the documents uploaded to your portal, then provide a search feature for users.<br />
+This feature will not index documents that have already been uploaded, so it is important to enable (if wanted) at the beginning of your implementation.<br />
+Once enabled, a search box will appear in the courses list of every user. Searching for a specific term will bring a list of corresponding documents, exercises or forum topics, filtered depending on the availability of these contents to the user.";
+$SpecificSearchFieldsAvailable = "Available custom search fields";
+$XapianModuleInstalled = "Xapian module installed";
 ?>

@@ -959,7 +959,6 @@ $SearchDatabaseCreateError = "Impossible de créer la base de données de recher
 $SearchDatabaseCorruptError = "La base de données de recherches a été corrompue";
 $SearchNetworkTimeoutError = "La connexion a expiré lors de la communication avec la base de données de recherches distante";
 $SearchOtherXapianError = "Erreur dans le moteur de recherche";
-$SearchXapianModuleNotInstaled = "Le module de recherche Xapian n'est pas installé";
 $FieldRemoved = "Champ supprimé";
 $TheNewSubLanguageHasBeenAdded = "Le nouveau sous-langage a été ajouté";
 $DeleteSubLanguage = "Supprimer le sous-langage";

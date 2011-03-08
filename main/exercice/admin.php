@@ -191,8 +191,7 @@ if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 		// reads question data
 		if($editQuestion) {
 			// question not found
-			if(!$objQuestion = Question::read($editQuestion))
-			{
+			if(!$objQuestion = Question::read($editQuestion)) {
 				die(get_lang('QuestionNotFound'));
 			}
 			// saves the object into the session
@@ -460,7 +459,7 @@ if ($newQuestion || $editQuestion) {
 	$type = $_REQUEST['answerType'];    
 	?><input type="hidden" name="Type" value="<?php echo $type; ?>" />
 	<?php
-    require 'question_admin.inc.php';
+   require 'question_admin.inc.php';
 }
 
 if(isset($_GET['hotspotadmin'])) {
@@ -478,7 +477,7 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 			Display::display_confirmation_message(get_lang('ExerciseEdited'));
 	}
 	if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
-        Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
+        Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));
 	}
 	$form -> display ();
 	echo '<br />';

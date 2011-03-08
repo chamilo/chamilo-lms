@@ -137,9 +137,12 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 	// Add extension to files without one (if possible)
 	$uploaded_file['name'] = add_ext_on_mime($uploaded_file['name'], $uploaded_file['type']);
 	$current_session_id = api_get_session_id();
+	
 	// Check if there is enough space to save the file
 	if (!enough_space($uploaded_file['size'], $maxFilledSpace)) {
-		Display::display_error_message(get_lang('UplNotEnoughSpace'));
+	    if ($output) {	        
+            Display::display_error_message(get_lang('UplNotEnoughSpace'));
+		}
 		return false;
 	}
 
@@ -150,7 +153,9 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 	}
 	// We can only unzip ZIP files (no gz, tar,...)
 	elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploaded_file['name']))) {
-		Display::display_error_message(get_lang('UplNotAZip')." ".get_lang('PleaseTryAgain'));
+	    if ($output) {	
+            Display::display_error_message(get_lang('UplNotAZip')." ".get_lang('PleaseTryAgain'));
+	    }
 		return false;
 	} else {
 		// Clean up the name, only ASCII characters should stay. (and strict)
@@ -158,7 +163,9 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 		// No "dangerous" files
 		$clean_name = disable_dangerous_file($clean_name);
 		if (!filter_extension($clean_name)) {
-			Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+		    if ($output){
+                Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+		    }
 			return false;
 		} else {
 			// Extension is good
@@ -175,7 +182,9 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 			$where_to_save = $base_work_dir.$upload_path;
 			// At least if the directory doesn't exist, tell so
 			if (!is_dir($where_to_save)) {
-				Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+			    if ($output){
+				    Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+				}
 				return false;
 			}
 			//echo '<br />where to save = '.$where_to_save;
@@ -223,11 +232,15 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course, $upload_path, $user_id);
 							// Display success message to user
-							Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />'.$file_path, false);
+							if ($output){
+                                Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />'.$file_path, false);
+							}
 							return $file_path;
 						}
 					} else {
-						Display::display_error_message(get_lang('UplUnableToSaveFile'));
+					    if ($output){
+						  Display::display_error_message(get_lang('UplUnableToSaveFile'));
+					    }
 						return false;
 					}
 					break;
@@ -264,7 +277,9 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 				// Only save the file if it doesn't exist or warn user if it does exist
 				default:
 					if (file_exists($store_path)) {
-						Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
+					    if ($output){
+						  Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
+						}
 					} else {
 						if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
 							chmod($store_path, $files_perm);
@@ -283,7 +298,9 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 							}
 							return $file_path;
 						} else {
-							Display::display_error_message(get_lang('UplUnableToSaveFile'));
+						    if ($output){
+                                Display::display_error_message(get_lang('UplUnableToSaveFile'));
+							}
 							return false;
 						}
 					}

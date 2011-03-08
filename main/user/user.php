@@ -17,7 +17,7 @@
 *	@todo convert normal table display to display function (refactor virtual course display function)
 *	@todo display table functions need support for align and valign (e.g. to center text in cells) (this is now possible)
 *	@author Roan Embrechts, refactoring + virtual courses support
-*	@author Julio Montoya Armas Several fixes
+*	@author Julio Montoya Armas, Several fixes
 *	@package chamilo.user
 */
 
@@ -277,7 +277,7 @@ function show_users_in_virtual_courses() {
 			}
 			Display::display_table_row(null, $table_row, true);
 		}
-		Display::display_table_footer();
+		echo '</tbody></table>';
 	}
 }
 
@@ -307,28 +307,18 @@ if (isset($message)) {
 	Display::display_confirmation_message($message);
 }
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/*		MAIN CODE*/
 
 //statistics
 event_access_tool(TOOL_USER);
-/*
---------------------------------------
-	Setting the permissions for this page
---------------------------------------
-*/
+/*	Setting the permissions for this page */
 $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) && $_configuration['tracking_enabled'];
 
 
 // Tool introduction
 Display::display_introduction_section(TOOL_USER, 'left');
 
-
 if ( api_is_allowed_to_edit(null, true)) {
-
 	echo "<div class=\"actions\">";
 
 	// the action links
@@ -365,9 +355,7 @@ if (1) // platform setting api_get_setting('subscribe_user_by_coach') {
 
 
 /*
---------------------------------------
 	DISPLAY USERS LIST
---------------------------------------
 	Also shows a "next page" button if there are
 	more than 50 users.
 
@@ -383,9 +371,7 @@ if (CourseManager::has_virtual_courses_from_code($course_id, $user_id)) {
 }
 
 /*
-==============================================================================
 		DISPLAY LIST OF USERS
-==============================================================================
 */
 /**
  *  * Get the users to display on the current page.
@@ -655,13 +641,10 @@ if (api_get_setting('allow_user_headings') == 'true' && $is_courseAdmin && api_i
 }
 
 //User list of the virtual courses linked to this course.
-//show_users_in_virtual_courses($is_allowed_to_track);
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+show_users_in_virtual_courses($is_allowed_to_track);
+
+/*		FOOTER  */
 if ($origin != 'learnpath') {
 	Display::display_footer();
 }

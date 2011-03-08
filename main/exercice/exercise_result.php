@@ -54,8 +54,6 @@ $main_user_table 		= Database::get_main_table(TABLE_MAIN_USER);
 $main_admin_table       = Database::get_main_table(TABLE_MAIN_ADMIN);
 $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-//debug param. 0: no display - 1: debug display
-$debug=0;
 if($debug>0){error_log('Entered exercise_result.php: '.print_r($_POST,1));}
 
 // general parameters passed via POST/GET
@@ -66,7 +64,6 @@ if ( empty ( $learnpath_item_view_id ) ) {  $learnpath_item_view_id = intval($_R
 if ( empty ( $formSent ) ) {                $formSent               = $_REQUEST['formSent'];}
 if ( empty ( $exerciseResult ) ) {          $exerciseResult         = $_SESSION['exerciseResult'];}
 if ( empty ( $exerciseResultCoordinates)){  $exerciseResultCoordinates = $_SESSION['exerciseResultCoordinates'];}
-
 if ( empty ( $questionId ) ) {              $questionId             = $_REQUEST['questionId'];}
 if ( empty ( $choice ) ) {                  $choice                 = $_REQUEST['choice'];}
 if ( empty ( $questionNum ) ) {             $questionNum            = $_REQUEST['questionNum'];}
@@ -77,13 +74,13 @@ if ( empty ( $exerciseType ) ) {            $exerciseType           = $_REQUEST[
 
 //@todo There should be some doc about this settings
 $_configuration['live_exercise_tracking'] = false;
-if($_configuration['live_exercise_tracking']) define('ENABLED_LIVE_EXERCISE_TRACKING',1);
+if ($_configuration['live_exercise_tracking']) define('ENABLED_LIVE_EXERCISE_TRACKING',1);
 
-if($_configuration['live_exercise_tracking'] && $exerciseType == 1){
+if ($_configuration['live_exercise_tracking'] && $exerciseType == 1){
 	$_configuration['live_exercise_tracking'] = false;
 }
 $arrques = array();
-$arrans = array();
+$arrans  = array();
 
 // set admin name as person who sends the results e-mail (lacks policy about whom should really send the results)
 
@@ -97,7 +94,7 @@ $url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&s
 
  // if the above variables are empty or incorrect, we don't have any result to show, so stop the script
 if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise)) {
-    if ($debug) {error_log('Exit exercise result'); error_log('$exerciseResult:'.print_r($exerciseResult,1)); error_log('$questionList:'.print_r($questionList,1));error_log('$objExercise:'.print_r($objExercise,1));}
+    if ($debug) {error_log('Exit exercise result'); error_log('$exerciseResult: '.print_r($exerciseResult,1)); error_log('$questionList:'.print_r($questionList,1));error_log('$objExercise:'.print_r($objExercise,1));}
 	header('Location: exercice.php');
 	exit();
 }
@@ -152,8 +149,8 @@ if ($objExercise->results_disabled == 2) {
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '<div class="actions">';
-	echo Display::return_icon('back.png', get_lang('GoBackToQuestionList')).'<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('GoBackToQuestionList').'</a>';
-	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+	echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'), array(), 32).'</a>';
+	echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
 	echo '</div>';
 }
 
@@ -182,7 +179,6 @@ $user_info   = api_get_user_info(api_get_user_id());
 if ($show_results || $show_only_score) {
     echo $exercise_header = $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']));
 }
-
 	     
 // Loop over all question to show results for each of them, one by one
 foreach ($questionList as $questionId) {
@@ -202,11 +198,14 @@ foreach ($questionList as $questionId) {
 	$answerType            = $objQuestionTmp->selectType();
 	$quesId                = $objQuestionTmp->selectId();
 	
+	//this variable commes from exercise_submit_modal.php
+	$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$quesId]; 
+	
 	if ($show_results) {
     	// show titles
     	if ($origin != 'learnpath') { 
     		echo $objQuestionTmp->return_header($objExercise->feedbacktype);
-    		if ($answerType == HOT_SPOT) {		    
+    		if ($answerType == HOT_SPOT) {
     			?>
     				<tr>
     					<td valign="top" colspan="2">
@@ -232,10 +231,11 @@ foreach ($questionList as $questionId) {
 	}
 
 	// We're inside *one* question. Go through each possible answer for this question
-	$result = $objExercise->manage_answer($exeId, $questionId, $choice,'exercise_result', $exerciseResultCoordinates, true, false, $show_results, $objExercise->selectPropagateNeg());   	
+	$result = $objExercise->manage_answer($exeId, $questionId, $choice,'exercise_result', $exerciseResultCoordinates, true, false, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);   	
     $totalScore        += $result['score'];    
     $totalWeighting    += $result['weight'];    
-} // end huge foreach() block that loops over all questions
+} // end foreach() block that loops over all questions
+
 
 if ($origin != 'learnpath') {
     if ($show_results || $show_only_score) {
@@ -284,9 +284,9 @@ if ($origin != 'learnpath') {
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 $user_info	= UserManager::get_user_info_by_id(api_get_user_id());
 
-$firstName 	=  $user_info['firstname'];
-$lastName 	=  $user_info['lastname'];
-$mail 		=  $user_info['email'];
+$firstName 	= $user_info['firstname'];
+$lastName 	= $user_info['lastname'];
+$mail 		= $user_info['email'];
 $coursecode = api_get_course_id();
 $courseName = $_SESSION['_course']['name'];
 

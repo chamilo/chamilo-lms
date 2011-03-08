@@ -214,4 +214,56 @@ $CreateFolder = "Criar uma pasta";
 $HelpDefaultDirDocuments = "Este diretório contém arquivos predefinidos. Pode eliminar ou adicionar novos arquivos, mas se um arquivo está oculto quando é inserido num documento, os usuários não serão capazes de o visualizar nesse documento. Ao inserir um arquivo num documento, certifique-se primeiro que se encontra visível. Os diretórios podem permanecer ocultos.";
 $HelpSharedFolder = "Este diretório contém os arquivos que os usuários enviaram para um curso através do editor (não realizarado a partir da ferramenta de grupos). Por predefinição, serão visíveis para qualquer instrutor, mas estará oculto para outros usuários (desde que não visiveis aos arquivos diretamente). Se tornar o directório de um usuário visível, todos os outros usuários poderão visualizar o seu conteúdo.";
 $TemplateImage = "Imagem do modelo";
+$MoveElement = "Mover elemento";
+$CertificateName = "Nome";
+$CopyToMyFiles = "Copiar para minha área de arquivos privados";
+$Export2PDF = "Exportar para o formato PDF";
+$ResourceShared = "Recurso compartilhado";
+$CopyAlreadyDone = "Há um arquivo com o mesmo nome em sua área de arquivos privados. Você quer substituí-lo?";
+$CopyFailed = "Cópia falhou";
+$CopyMade = "A cópia foi realizada";
+$OverwritenFile = "Arquivo substituído";
+$Draw = "Desenhar";
+$FileExistsChangeToSave = "Existe um arquivo com este nome, escolha outro para salvar sua imagem.";
+$FileSavedAs = "Arquivo salvo como";
+$FileExportAs = "Arquivo exportado como";
+$UserFolder = "Pasta do usuário";
+$HelpUsersFolder = "INFORMAÇÃO VISÍVEL SOMENTE POR PROFESSORES:
+
+A pasta de usuários contém uma pasta para cada usuário que tenha acessado, através da ferramenta de documentos, ou quando qualquer arquivo foi enviado no curso através do editor online. Se nenhuma circunstância ocorreu, então nenhuma pasta do usuário terá sido criada. No caso dos grupos, os arquivos enviados através do editor serão adicionados na pasta de cada grupo, que apenas são acessíveis por alunos deste grupo.
+
+A pasta de usuários e cada uma das pastas internas ficarão ocultas por padrão para todos os alunos, mas cada aluno poderá ver o conteúdo do seu diretório através do editor online. No entanto, se um aluno sabe o endereço de um arquivo ou pasta de outro aluno, ele pode ser capaz de acessá-lo.
+
+Se a pasta de um aluno é visível, outros alunos podem ver o que ele contém. Neste caso, o aluno que possui a pasta também pode (a partir da ferramenta de documentos e só na sua pasta): criar e editar documentos web, converter um documento em um modelo para uso pessoal, criar e editar desenhos em formatos SVG e PNG, enviar documentos, criar pastas, mover pastas e arquivos, apagar pastas e arquivos, fazer backup e download de sua pasta.
+
+Além disso, a ferramenta de documentos é sincronizada com o gerenciador de arquivos do editor online, as alterações em documentos a partir de qualquer um desses vai afetar ambos.
+
+Como tal, a pasta de usuário não é apenas um local para depósito de arquivos, torna-se um completo gestor dos documentos de alunos durante o curso. Além disso, lembre-se que qualquer usuário pode copiar um arquivo que é visível a partir de qualquer pasta na ferramenta de documentos (seja ele dono ou não) para seus portfólios e documentos pessoais da área de redes sociais, que estará disponível para ele e para uso em outros cursos.";
+$HelpFolderChat = "INFORMAÇÃO VISÍVEL SOMENTE POR PROFESSORES: Esta pasta contém todas as sessões que foram abertas no chat. Embora a sessões de chat muitas vezes são triviais, outras podem ser realmente interessante e digna de ser incorporada como um documento de trabalho adicional. Para fazer isso sem alterar a visibilidade desta pasta, torne o arquivo visível e vincule-o de onde considerar adequada. Não é recomendável tornar esta pasta visível a todos.";
+$HelpFolderCertificates = "INFORMAÇÃO VISÍVEL SOMENTE POR PROFESSORES: 
+
+Esta pasta contém vários modelos de certificados que foram criados para a ferramenta de classificação. Não é recomendável tornar esta pasta visível a todos.";
+$DestinationDirectory = "Pasta de destino";
+$CreateAudio = "Crie o áudio";
+$InsertText2Audio = "Digite o texto que você deseja converter para um arquivo de áudio";
+$HelpText2Audio = "Converta seu texto em fala";
+$BuildMP3 = "Construir MP3";
+$Voice = "Voz";
+$Female = "Mulher";
+$Male = "Homem";
+$GoogleAudio = "Usar serviços de áudio do Google";
+$vozMe = "Usar o serviço de áudio do vozMe";
+$HelpGoogleAudio = "Suporta até 100 caracteres em uma ampla variedade de idiomas. Os arquivos são gerados e salvos automaticamente para o diretório Chamilo onde você está atualmente.";
+$HelpvozMe = "Suporta o texto de vários milhares personagens de pessoas, você também pode selecionar o tipo de voz, masculina ou feminina. Ele funciona com menos idiomas e a qualidade do áudio é menor. Finalmente, você tem que baixar os arquivos manualmente a partir de uma nova janela.";
+$SaveMP3 = "Salvar MP3";
+$Speed = "Velocidade";
+$GoFaster = "Mais rápido";
+$Fast = "Rápido";
+$Normal = "Normal";
+$Slow = "Devagar";
+$SlowDown = "Mais devagar";
+$Pediaphon = "Usar o serviço de áudio da Pediaphon";
+$HelpPediaphon = "Suporta o texto com milhares de caracteres em vários tipos de vozes masculinas e femininas (dependendo do idioma). Os arquivos de áudio serão gerados e salvos automaticamente para o diretório Chamilo em que você está.";
+$FirstSelectALanguage = "Por favor, selecione um idioma";
+$RenameAndComment = "Renomear e comentar";
 ?>

@@ -72,14 +72,27 @@ $form->addRule('question_type_hidden', get_lang('InvalidQuestionType'), 'validqu
 
 if ($form->validate()) {
 	$values = $form->exportValues();
-	//echo 'form validates';
-	//print_r($values);
 
 	foreach (Question::$questionTypes as $question_type_id => $question_type_class_and_name) {
 		if (get_lang($question_type_class_and_name[1]) == $values['question_type_hidden']) {
 			$answer_type = $question_type_id;
 		}
 	}
+	
+	// check feedback_type from current exercise for type of question delineation
+	$exercise_id = intval($values['exercice']);	
+	$sql = "SELECT feedback_type FROM $tbl_exercices WHERE id = '$exercise_id'";
+	$rs_feedback_type = Database::query($sql,__FILE__,__LINE__);
+	$row_feedback_type = Database::fetch_row($rs_feedback_type);
+	$feedback_type = $row_feedback_type[0];
+	
+	// if question type does not belong to self-evaluation (immediate feedback) it'll send an error
+	if (($answer_type == HOT_SPOT_DELINEATION && $feedback_type != 1) || 
+		($feedback_type == 1 && ($answer_type != HOT_SPOT_DELINEATION && $answer_type != UNIQUE_ANSWER))) {
+		header('Location: question_create.php?'.api_get_cidreq().'&error=true');
+		exit;		
+	}
+	
 	header('Location: admin.php?exerciseId='.$values['exercice'].'&newQuestion=yes&isContent='.$values['is_content'].'&answerType='.$answer_type);
 	exit;
 } else {
@@ -110,21 +123,21 @@ $pictures_question_types[3] = 'fill_in_blanks.gif';
 $pictures_question_types[4] = 'matching.gif';
 $pictures_question_types[5] = 'open_answer.gif';
 $pictures_question_types[6] = 'hotspot.gif';
+$pictures_question_types[8] = 'hotspot_delineation.gif';
 $pictures_question_types[9] = 'mcmac.gif';
 $pictures_question_types[10] = 'mcuao.gif';
 $pictures_question_types[11] = 'mcmao.gif';
 $pictures_question_types[12] = 'mcmaco.gif';
 
 foreach (Question::$questionTypes as $key=>$value) {
-	?>
-	ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],addslashes(get_lang($value[1])),array('height'=>'40px;', 'style' => 'vertical-align:top; cursor:hand;')); ?></td><td><span class="thistext" style="cursor:hand"><?php echo addslashes(get_lang($value[1])); ?></span><br/><sub><?php /*echo addslashes(get_lang($value[1].'Comment'));*/ ?></sub></td></tr></table>','');
-	<?php
+	if ($key != HOT_SPOT_DELINEATION ) { // DELINEATION hide
+		?>
+		ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],addslashes(get_lang($value[1])),array('height'=>'40px;', 'style' => 'vertical-align:top; cursor:hand;')); ?></td><td><span class="thistext" style="cursor:hand"><?php echo addslashes(get_lang($value[1])); ?></span><br/><sub><?php /*echo addslashes(get_lang($value[1].'Comment'));*/ ?></sub></td></tr></table>','');
+		<?php
+	}
 }
 ?>
 </script>
-
-
-
 <?php
 function check_question_type($parameter) {
 	foreach (Question::$questionTypes as $key=>$value) {
@@ -137,5 +150,3 @@ function check_question_type($parameter) {
 		return false;
 	}
 }
-
-?>

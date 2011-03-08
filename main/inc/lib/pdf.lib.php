@@ -305,7 +305,11 @@ class PDF {
     }
     
     /**
-     * Uploads the pdf watermark 
+     * Uploads the pdf watermark in the main/default_course_document directory or in the course directory
+     * @param	string	filename
+     * @param	string	path of the file
+     * @param	string	course code
+     * @return 	mixed	web path of the file if sucess, false otherwise
      */
     public function upload_watermark($filename, $source_file, $course_code = null) {        
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {

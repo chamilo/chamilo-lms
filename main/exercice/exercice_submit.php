@@ -17,7 +17,7 @@
 * 	the administrator
 *	@package chamilo.exercise
 * 	@author Olivier Brouckaert
-* 	@author Julio Montoya multiple fill in blank option added (2008) and Cleaning exercises (2010)
+* 	@author Julio Montoya multiple fill in blank option added (2008) and Cleaning exercises (2010), Adding hotspot delineation support (2011)
 */
 
 require_once 'exercise.class.php';
@@ -25,8 +25,7 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once 'exercise.lib.php';
 
-// debug var. Set to 0 to hide all debug display. Set to 1 to display debug messages.
-$debug = 0;
+//$debug = 1; //debug value is set in the exercise.class.php file
 
 // name of the language file that needs to be included
 $language_file = 'exercice';
@@ -34,6 +33,8 @@ $language_file = 'exercice';
 require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
+
+if($debug) { error_log('Entered exercise_submit.php: '.print_r($_POST,1)); }
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
@@ -80,6 +81,9 @@ if (empty ($formSent)) {
 if (empty ($exerciseResult)) {
     $exerciseResult = $_REQUEST['exerciseResult'];
 }
+if (empty ($exerciseResultCoordinates)) {
+	$exerciseResultCoordinates = $_REQUEST['exerciseResultCoordinates'];
+}
 if (empty ($exerciseType)) {
     $exerciseType = $_REQUEST['exerciseType'];
 }
@@ -108,39 +112,6 @@ if ($buttonCancel) {
     // returns to the exercise list
     header("Location: exercice.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
     exit;
-}
-
-if ($origin == 'builder') {    
-    /* Clears the exercise session */    
-    if ($debug) {error_log('origin = builder'); };
-    if (isset ($_SESSION['objExercise'])) {
-        api_session_unregister('objExercise');
-        unset ($objExercise);
-    }
-    if (isset ($_SESSION['objQuestion'])) {
-        api_session_unregister('objQuestion');
-        unset ($objQuestion);
-    }
-    if (isset ($_SESSION['objAnswer'])) {
-        api_session_unregister('objAnswer');
-        unset ($objAnswer);
-    }
-    if (isset ($_SESSION['questionList'])) {
-        api_session_unregister('questionList');
-        unset ($questionList);
-    }
-    if (isset ($_SESSION['newquestionList'])) {
-        api_session_unregister('newquestionList');
-        unset ($newquestionList);
-    }
-    if (isset ($_SESSION['exerciseResult'])) {
-        api_session_unregister('exerciseResult');
-        unset ($exerciseResult);
-    }
-    if (isset ($_SESSION['exerciseResultCoordinates'])) {
-        api_session_unregister('exerciseResultCoordinates');
-        unset ($exerciseResultCoordinates);
-    } 
 }
 
 $safe_lp_id             = ($learnpath_id == '')             ? 0 : $learnpath_id;
@@ -307,7 +278,7 @@ if ($_configuration['live_exercise_tracking'] && $objExercise->type == ONE_PER_P
 
 // if the user has submitted the form
 
-if ($formSent && isset($_POST)) {    
+if ($formSent && isset($_POST)) {
     if ($debug > 0) { error_log('$formSent was set'); }
 
     // Initializing
@@ -319,16 +290,17 @@ if ($formSent && isset($_POST)) {
     //Only for hotspot
     if (!isset($choice) && isset($_REQUEST['hidden_hotspot_id'])) {
         $hotspot_id = (int)($_REQUEST['hidden_hotspot_id']);
-        $choice = array($hotspot_id => '');
+        $choice     = array($hotspot_id => '');
     }
     // if the user has answered at least one question
     if (is_array($choice)) {
-        if ($debug > 0) {if ($debug > 0) { error_log('$choice is an array'); } }	
+        if ($debug) { error_log('$choice is an array '.print_r($choice, 1)); } 	
         // Also store hotspot spots in the session ($exerciseResultCoordinates
         // will be stored in the session at the end of this script)
 
         if (isset ($_POST['hotspot'])) {
-            $exerciseResultCoordinates = $_POST['hotspot'];               
+            $exerciseResultCoordinates = $_POST['hotspot'];
+            if ($debug) { error_log('$_POST[hotspot] data '.print_r($exerciseResultCoordinates, 1)); }     
         }        	
         if ($exerciseType == ALL_ON_ONE_PAGE) {
             // $exerciseResult receives the content of the form.
@@ -338,7 +310,7 @@ if ($formSent && isset($_POST)) {
             // gets the question ID from $choice. It is the key of the array
             list ($key) = array_keys($choice);
             // if the user didn't already answer this question
-            if (!isset ($exerciseResult[$key])) {
+            if (!isset($exerciseResult[$key])) {
                 // stores the user answer into the array
                 $exerciseResult[$key] = $choice[$key];
                 //saving each question
@@ -351,6 +323,7 @@ if ($formSent && isset($_POST)) {
                     $choice = $exerciseResult[$questionId];                    
                     if (isset($exe_id)) {
                     	//Manage the question and answer attempts
+                       if ($debug > 0) { error_log('manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
                     	$objExercise->manage_answer($exe_id, $questionId, $choice,'exercise_show',$exerciseResultCoordinates, true, false,false);
                     }
                     //END of saving and qualifying
@@ -366,11 +339,11 @@ if ($formSent && isset($_POST)) {
 
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
 
-    if ($exerciseType == ALL_ON_ONE_PAGE || $questionNum >= $nbrQuestions) {
-        if ($debug > 0) { error_log('Redirecting to exercise_result.php - Remove debug option to let this happen'); }
+    if ($exerciseType == ALL_ON_ONE_PAGE || $questionNum >= $nbrQuestions) {        
         if ( api_is_allowed_to_session_edit() ) {
             // goes to the script that will show the result of the exercise
-            if ($exerciseType == ALL_ON_ONE_PAGE) {                
+            if ($exerciseType == ALL_ON_ONE_PAGE) {
+            if ($debug) { error_log('Exercise ALL_ON_ONE_PAGE -> Redirecting to exercise_result.php'); }             
                 header("Location: exercise_result.php?exerciseType=$exerciseType&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
                 exit;
             } else {
@@ -378,19 +351,24 @@ if ($formSent && isset($_POST)) {
                     //Verify if the current test is fraudulent
                     if (exercise_time_control_is_valid($exerciseId)) {
                     	$sql_exe_result = "";                    	
+                        if ($debug) { error_log('exercise_time_control_is_valid is valid'); }
                     } else {
                     	$sql_exe_result = ", exe_result = 0";
+                        if ($debug) { error_log('exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
                     }
                     //Clean incomplete - @todo why setting to blank the data_tracking?
                     //$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . api_get_utc_datetime() . "' $sql_exe_result " . ' WHERE exe_id = ' . Database::escape_string($exe_id);
                     $update_query = "UPDATE $stat_table SET  status = '', exe_date = '".api_get_utc_datetime() ."' , orig_lp_item_view_id = '$safe_lp_item_view_id' $sql_exe_result  WHERE exe_id = ".$exe_id;
-                    if ($debug) {error_log($update_query);};
+                    
+                    if ($debug) { error_log('Updating track_e_exercises '.$update_query); }                    
                     Database::query($update_query);
-                }
+                }                
+                if ($debug) { error_log('Redirecting to exercise_show.php'); }
                 header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$safe_lp_id&learnpath_item_id=$safe_lp_item_id&learnpath_item_view_id=$safe_lp_item_view_id");
                 exit;
             }            
         } else {
+            if ($debug) { error_log('Redirecting to exercice_submit.php'); }
             header("Location: exercice_submit.php?exerciseId=$exerciseId");
             exit;            
         }
@@ -585,14 +563,14 @@ if (!empty ($error)) {
                 // if it is not the right question, goes to the next loop iteration
                 if ($questionNum != $i) {
                     continue;
-                } else {
-                    if ($objQuestionTmp->selectType() == HOT_SPOT) {
+                } else {                    
+                    if ($objQuestionTmp->selectType() == HOT_SPOT || $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION) {
                         $number_of_hotspot_questions++;
                     }
                     break;
                 }
             } else {
-                if ($objQuestionTmp->selectType() == HOT_SPOT) {
+                if ($objQuestionTmp->selectType() == HOT_SPOT || $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION) {
                     $number_of_hotspot_questions++;
                 }
             }
@@ -655,7 +633,7 @@ if (!empty ($error)) {
 	        }
 	    }    
 	    // end foreach()
-	    echo $objExercise->show_button($nbrQuestions, $questionNum);     
+	    echo $objExercise->show_button($nbrQuestions, $questionNum, $exerciseId);     
 	    echo '</table>
 	            </td>
 	            </tr>

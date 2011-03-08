@@ -959,7 +959,6 @@ $SearchDatabaseCreateError = "Napaka pri kreiranju iskalne podatkovne baze";
 $SearchDatabaseCorruptError = "Iskalna podatkovna baza je utrpela poškodbe";
 $SearchNetworkTimeoutError = "Čas za povezavo z zunanjo iskalno podatkovno bazo je potekel";
 $SearchOtherXapianError = "Napaka v iskalnem modulu";
-$SearchXapianModuleNotInstaled = "Xapian iskalni modul ni nameščen";
 $FieldRemoved = "Polje je bilo odstranjeno";
 $TheNewSubLanguageHasBeenAdded = "Nov pod-jezik je bil dodan";
 $DeleteSubLanguage = "Odstrani pod-jezik";

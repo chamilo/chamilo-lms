@@ -1,4 +1,4 @@
-INSTALL
+INSTALLATION 
 
 On Debian Lenny
   Base install
@@ -17,24 +17,23 @@ On Debian Lenny
 
 On Ubuntu 8.10
 
-DOKEOS 1.8.5 + XAPIAN in Ubuntu 8.10
+Chamilo 1.8.8 + XAPIAN in Ubuntu 10.10
 
- 1. Execute  dokeos_main_corp.sql
- 2. Go to main/admin/settings.php?category=Tools and add the search params
-   Full-text search feature
- 3. Add specific fields in main/admin/specific_fields.php
- 4. Add specific search field i.e. Author, Body part, Technology, Topic
- 5. Install php5 + xapian
-    apt-get  install php5-xapian
- 6. Install 
+1. Activate the search module setting in main/admin/settings.php?category=Search
+2. Go to main/admin/specific_fields.php and Specific fields (Those are text fields that will be add in documents, exercises, links in order to index data)
+ 	i.e i.e. Author, Body part, Technology, Topic
+3. Go to main/admin/settings.php?category=Search and set a Specific field by default
+4. Install the Xapian module for PHP5 
+	sudo apt-get install php5-xapian
+5. Install the imagemagick modules
     sudo apt-get install imagemagick
     sudo apt-get install php5-imagick 
-
- 7. On  Dokeos root
-    mkdir searchdb
-    chmod 777 searchdb
- 8.  Useful xapian development tools
-    apt-get install xapian-doc xapian-tools
- 9. Restart Apache
- 10. Create a course and 2 LP for testing
- 11. Edit the LPs created and add/edit the specific fields (i.e. Author, Body part, Technology, Topic)
+6. In Chamilo root
+	mkdir searchdb
+    sudo chmod 777 searchdb
+7.  Useful Xapian development tools
+    sudo apt-get install xapian-doc xapian-tools
+8. Restart Apache
+9. Create a course and 2 *new* Learning paths for testing
+10.Edit the LPs created and add/edit the specific fields (i.e. Author, Body part, Technology, Topic)
+11.Go to the 

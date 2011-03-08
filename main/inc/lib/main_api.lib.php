@@ -1635,7 +1635,7 @@ function api_get_session_image($session_id, $status_id) {
     $session_img = '';
     if ((int)$status_id != 5) { //check whether is not a student
         if ($session_id > 0) {
-            $session_img = "&nbsp;".Display::return_icon('star.png', get_lang('SessionSpecificResource'), array('align' => 'absmiddle'));
+            $session_img = "&nbsp;&nbsp;".Display::return_icon('star.png', get_lang('SessionSpecificResource'), array('align' => 'absmiddle'), 22);
         }
     }
     return $session_img;
@@ -4801,7 +4801,8 @@ function api_get_jquery_ui_js($include_jqgrid = false) {
 }
 
 /**
- * Returns the jquery library js headers 
+ * Returns the jquery library js and css headers 
+ * 
  * @param   array   list of jquery libraries supported jquery-ui, jqgrid 
  * @param   bool    add the jquery library
  * @return  string  html tags
@@ -4816,15 +4817,16 @@ function api_get_jquery_libraries_js($libraries, $include_jquery = true) {
         $js .= api_get_jquery_js();
     }
     
-    if (in_array('jquery-ui',$libraries)) {
+    //jquery-ui js and css
+    if (in_array('jquery-ui', $libraries)) {
         //Jquery ui
         $theme      = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
         $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.css" type="text/css">';
         $js .= '<script src="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.min.js" type="text/javascript" language="javascript"></script>';
     }
     
-    //Grid js
-    if (in_array('jqgrid',$libraries)) { 
+    //jqgrid js and css
+    if (in_array('jqgrid', $libraries)) { 
         $languaje   = 'en';
         $platform_isocode = strtolower(api_get_language_isocode());
          
@@ -4840,12 +4842,18 @@ function api_get_jquery_libraries_js($libraries, $include_jquery = true) {
         $js .= '<script src="'.$js_path.'jqgrid/js/jquery.jqGrid.min.js" type="text/javascript" language="javascript"></script>';
     }
     
+    //Document multiple upload funcionality
+    if (in_array('jquery-upload',$libraries)) {
+        $js .= '<script src="'.$js_path.'jquery-upload/jquery.fileupload.js" type="text/javascript" language="javascript"></script>'; 
+        $js .= '<script src="'.$js_path.'jquery-upload/jquery.fileupload-ui.js" type="text/javascript" language="javascript"></script>';
+        $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-upload/jquery.fileupload-ui.css" type="text/css">';        
+    }
     
-    
+    //jquery-ui css changes for Chamilo
     if (in_array('jquery-ui',$libraries)) {
         //Adding default CSS changes of the jquery-ui themes for Chamilo in order to preserve the original jquery-ui css
         $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/default.css" type="text/css">';
-    } 
+    }
     return $js;	
 }
 

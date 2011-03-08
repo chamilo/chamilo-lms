@@ -228,10 +228,14 @@ $Categories = SessionManager::get_all_session_category();
   <td width="40%"><?php echo get_lang('SessionCategory') ?></td>
   <td width="60%">
   	<select name="session_category" value="true" style="width:250px;">
-		<option value="0"><?php get_lang('None'); ?></option>
-		<?php foreach($Categories as $Rows): ?>
+		<option value="0"><?php get_lang('None'); ?></option>		
+		<?php 
+		  if (!empty($Categories)) {
+		      foreach($Categories as $Rows) { ?>
 		<option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $id_session_category) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
-		<?php endforeach; ?>
+		<?php }
+		  }
+		?>
 	</select>
   </td>
 </tr>

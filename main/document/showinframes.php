@@ -27,27 +27,39 @@
 
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $noPHP_SELF = true;
 $header_file = Security::remove_XSS($_GET['file']);
-$path_array = explode('/', str_replace('\\', '/', $header_file));
-$path_array = array_map('urldecode', $path_array);
-$header_file = implode('/', $path_array);
-$nameTools = $header_file;
+$document_id = intval($_GET['id']);
 
-$name_to_show = cut($header_file, 80);
+//Generate path 
+if ($document_id) {
+    $course_code = api_get_course_id();    
+    if (!empty($course_code)) {
+        $document_data = DocumentManager::get_document_data_by_id($document_id, $course_code);
+        $header_file   = $document_data['path'];
+        $name_to_show  = cut($document_data['title'],80); 
+    }
+} else {    
+    $path_array = explode('/', str_replace('\\', '/', $header_file));
+    $path_array = array_map('urldecode', $path_array);
+    $header_file = implode('/', $path_array);
+    $nameTools = $header_file;
+    $name_to_show = cut($header_file, 80);    
+}
 
-$current_group = GroupManager :: get_group_properties($_SESSION['_gid']);
+
+$group_id = api_get_group_id();
+$current_group = GroupManager :: get_group_properties($group_id);
 $current_group_name=$current_group['name'];
 
-
-
-if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
-    $req_gid = '&amp;gidReq='.$_SESSION['_gid'];
+if (isset($group_id) && $group_id != '') {
+    $req_gid = '&amp;gidReq='.$group_id;
     $interbreadcrumb[] = array ('url' => '../group/group.php?', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace').' '.$current_group_name);
+    $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$current_group_name);
     $name_to_show = explode('/', $name_to_show);
     unset ($name_to_show[1]);
     $name_to_show = implode('/', $name_to_show);

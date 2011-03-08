@@ -94,14 +94,14 @@ function display_advanced_search_form () {
 $(document).ready(function() {
 
     var select_val = $("#input_select_extra_data").val();
-
-    if (select_val != 0) {
-        document.getElementById(\'extra_data_text\').style.display="block";
-        document.getElementById(\'input_extra_text\').value = "";
-    } else {
-        document.getElementById(\'extra_data_text\').style.display="none";
+    if ( document.getElementById(\'extra_data_text\')) {
+        if (select_val != 0) {
+            document.getElementById(\'extra_data_text\').style.display="block";
+            document.getElementById(\'input_extra_text\').value = "";
+        } else {
+            document.getElementById(\'extra_data_text\').style.display="none";
+        }
     }
-
 });
 
 </script>';
@@ -601,17 +601,9 @@ function modify_filter($user_id,$url_params,$row) {
 
 	if (api_is_platform_admin()) {
 		if (!$user_is_anonymous) {
-			$result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
+			$result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), 22).'</a>&nbsp;';
 		} else {
-				$result .= Display::return_icon('edit_na.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
-		}
-		if ($delete_user_available) {
-			if ($row[0] != $_user['user_id'] && !$user_is_anonymous) {
-				// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-				$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-			} else {
-				$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
-			}
+				$result .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), 22).'</a>&nbsp;';
 		}
 	}
 	if ($is_admin) {
@@ -620,6 +612,7 @@ function modify_filter($user_id,$url_params,$row) {
 	} else {
 		$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));
 	}
+	
 
 	// actions for assigning sessions, courses or users
 	if (api_is_session_admin()) {
@@ -635,6 +628,18 @@ function modify_filter($user_id,$url_params,$row) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}
 	}
+	
+    if (api_is_platform_admin()) {
+       if ($delete_user_available) {
+            if ($row[0] != $_user['user_id'] && !$user_is_anonymous) {
+                // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
+                $result .= ' <a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), 22).'</a>';
+            } else {
+                $result .= Display::return_icon('delete_na.png', get_lang('Delete'), array(), 22);
+            }
+        }
+    }
+    
 
 	return $result;
 }

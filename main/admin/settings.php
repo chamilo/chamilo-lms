@@ -18,7 +18,7 @@ if (isset($_GET['category']) && $_GET['category'] == 'Templates') {
 } else if(isset($_GET['category']) && $_GET['category'] == 'Gradebook') {
     $language_file = array('admin', 'gradebook');
 } else {
-    $language_file = 'admin';
+    $language_file = array('admin', 'document');
 }
 
 // Resetting the course id.
@@ -147,7 +147,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     $default_values = array();
     foreach ($settings as $row) {
         // Settings to avoid
-        $rows_to_avoid = array('search_enabled', 'gradebook_enable');
+        $rows_to_avoid = array('gradebook_enable');
         if (in_array($row['variable'], $rows_to_avoid)) { continue; }
 
         $anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
@@ -259,7 +259,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 $result = Database::query($sql);
                 $group = array ();
                 while ($rowkeys = Database::fetch_array($result)) {
-                     if ($rowkeys['variable'] == 'course_create_active_tools' && $rowkeys['subkey'] == 'enable_search') { continue; }
+                     //if ($rowkeys['variable'] == 'course_create_active_tools' && $rowkeys['subkey'] == 'enable_search') { continue; }
 
                      // Profile tab option should be hidden when the social tool is enabled.
                      if (api_get_setting('allow_social_tool') == 'true') {
@@ -386,22 +386,22 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
     $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
     $form->addElement('html', '</div>');
 
-    $form->setDefaults($default_values);
-    
+    $form->setDefaults($default_values);    
 
-
+    $message = array();
     if ($form->validate()) {
         $values = $form->exportValues();
-        
-        
         $pdf_export_watermark_path = $_FILES['pdf_export_watermark_path'];
-    
-        if (!empty($pdf_export_watermark_path['name'])) {        
-            $pdf_export_watermark_path_result = PDF::upload_watermark($pdf_export_watermark_path['name'], $pdf_export_watermark_path['tmp_name']);        
+            
+        if (isset($pdf_export_watermark_path) && !empty($pdf_export_watermark_path['name'])) {       
+            $pdf_export_watermark_path_result = PDF::upload_watermark($pdf_export_watermark_path['name'], $pdf_export_watermark_path['tmp_name']);  
+            if ($pdf_export_watermark_path_result) {
+                $message['confirmation'][] = get_lang('UplUploadSucceeded');
+            } else {                
+                $message['warning'][] = get_lang('UplUnableToSaveFile').' '.get_lang('Folder').': '.api_get_path(SYS_CODE_PATH).'default_course_document';
+            }
             unset($update_values['pdf_export_watermark_path']);
         }
-        
-        
 
         // Set true for allow_message_tool variable if social tool is actived.
         if ($values['allow_social_tool'] == 'true') {
@@ -519,25 +519,15 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_VARIABLE, $variable, $time, $user_id);
             }
         }
-
-        header('Location: settings.php?action=stored&category='.Security::remove_XSS($_GET['category']));
-        exit;
+        //header('Location: settings.php?action=stored&category='.Security::remove_XSS($_GET['category']).'&message='.$message);
+        //exit;
     }
 }
 
 // Including the header (banner).
 Display :: display_header($tool_name);
 
-if ($watermark_deleted) {    
-    Display :: display_normal_message(get_lang('FileDeleted'));
-}
 
-//api_display_tool_title($tool_name);
-
-// Displaying the message that the settings have been stored.
-if (!empty($_GET['action']) && $_GET['action'] == 'stored') {
-    Display :: display_confirmation_message(get_lang('SettingsStored'));
-}
 
 // The action images.
 $action_images['platform']      = 'platform.png';
@@ -561,24 +551,43 @@ $action_images['extra']     	= 'wizard.png';
 //$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
 //$resultcategories = Database::query($selectcategories);
 $resultcategories = api_get_settings_categories(array('stylesheets', 'Plugins', 'Templates', 'Search'));
-echo "\n<div class=\"actions\">";
+echo "<div class=\"actions\">";
 //while ($row = Database::fetch_array($resultcategories))
 foreach ($resultcategories as $row) {
-    echo "\n\t<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category'])),'','32')."</a>";
+    echo "<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category'])),'','32')."</a>";
 }
-echo "\n\t<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], api_ucfirst(get_lang('Search')),'','32')."</a>";
-echo "\n\t<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], api_ucfirst(get_lang('Stylesheets')),'','32')."</a>";
-echo "\n\t<a href=\"".api_get_self()."?category=Templates\">".Display::return_icon($action_images['templates'], api_ucfirst(get_lang('Templates')),'','32')."</a>";
-echo "\n\t<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], api_ucfirst(get_lang('Plugins')),'','32')."</a>";
-echo "\n</div>";
+echo "<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], api_ucfirst(get_lang('Search')),'','32')."</a>";
+echo "<a href=\"".api_get_self()."?category=stylesheets\">".Display::return_icon($action_images['stylesheets'], api_ucfirst(get_lang('Stylesheets')),'','32')."</a>";
+echo "<a href=\"".api_get_self()."?category=Templates\">".Display::return_icon($action_images['templates'], api_ucfirst(get_lang('Templates')),'','32')."</a>";
+echo "<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], api_ucfirst(get_lang('Plugins')),'','32')."</a>";
+echo "</div>";
+
+
+if ($watermark_deleted) {    
+    Display :: display_normal_message(get_lang('FileDeleted'));
+}
+
+//api_display_tool_title($tool_name);
+
+// Displaying the message that the settings have been stored.
+if (isset($form) && $form->validate()) {
+    
+    Display::display_confirmation_message(get_lang('SettingsStored'));
+    if (is_array($message)) {
+        foreach($message as $type => $content) {
+            foreach($content as $msg) {
+                echo Display::return_message($msg, $type);
+            }
+        }
+    }
+}
+
 
 if (!empty($_GET['category'])) {
     switch ($_GET['category']) {
         case 'Plugins':
-
             // Displaying the extensions: Plugins.
             // This will be available to all the sites (access_urls).
-
             if (isset($_POST['submit_dashboard_plugins'])) {
                 $affected_rows = DashboardManager::store_dashboard_plugins($_POST);
                 if ($affected_rows) {
@@ -590,13 +599,11 @@ if (!empty($_GET['category'])) {
                     Display :: display_confirmation_message(get_lang('DashboardPluginsHaveBeenUpdatedSucesslly'));
                 }
             }
-
             handle_plugins();
             DashboardManager::handle_dashboard_plugins();
 
             break;
         case 'stylesheets':
-
             // Displaying the extensions: Stylesheets.
             handle_stylesheets();
             break;
@@ -613,5 +620,4 @@ if (!empty($_GET['category'])) {
 }
 
 /* FOOTER */
-
 Display :: display_footer();

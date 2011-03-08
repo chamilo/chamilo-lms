@@ -19,6 +19,7 @@ class HTMLPurifier_AttrTransform_SafeParam extends HTMLPurifier_AttrTransform
 
     public function __construct() {
         $this->uri = new HTMLPurifier_AttrDef_URI(true); // embedded
+        $this->wmode = new HTMLPurifier_AttrDef_Enum(array('window', 'opaque', 'transparent'));
     }
 
     public function transform($attr, $config, $context) {
@@ -28,13 +29,23 @@ class HTMLPurifier_AttrTransform_SafeParam extends HTMLPurifier_AttrTransform
             // application/x-shockwave-flash
             // Keep this synchronized with Injector/SafeObject.php
             case 'allowScriptAccess':
+            case 'allowscriptaccess':
                 $attr['value'] = 'never';
                 break;
             case 'allowNetworking':
+            case 'allownetworking':
                 $attr['value'] = 'internal';
                 break;
+            case 'allowFullScreen':
+            case 'allowfullscreen':
+                if ($config->get('HTML.FlashAllowFullScreen')) {
+                    $attr['value'] = ($attr['value'] == 'true') ? 'true' : 'false';
+                } else {
+                    $attr['value'] = 'false';
+                }
+                break;
             case 'wmode':
-                $attr['value'] = 'window';
+                $attr['value'] = $this->wmode->validate($attr['value'], $config, $context);
                 break;
             case 'movie':
             case 'src':

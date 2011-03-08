@@ -558,10 +558,8 @@ if (!empty($keyword))
 else
 */
 
-if (isset ($_GET['studentoverview'])) {
-    
-    //@todo this code also seems to be deprecated ...
-    
+if (isset ($_GET['studentoverview'])) {    
+    //@todo this code also seems to be deprecated ...    
 	$cats= Category :: load($category);
 	$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
 	$allcat= array ();
@@ -588,13 +586,14 @@ if (isset ($_GET['studentoverview'])) {
 		$pdf->ezStream();
 		exit;
 		}
-	} elseif (!empty($_GET['export_certificate'])) {
-		$user_id = strval(intval($_GET['user']));
-	if (!api_is_allowed_to_edit(true,true)) {
-		$user_id = api_get_user_id();
-	}
+} elseif (!empty($_GET['export_certificate'])) {
+    
+    $user_id = strval(intval($_GET['user']));
+    if (!api_is_allowed_to_edit(true,true)) {
+      $user_id = api_get_user_id();
+    }
 
-	$category = Category :: load($category); //hack replace $category = Category :: load ($_GET['cat_id']); to get de course name in certificates
+    $category = Category :: load($category); //hack replace $category = Category :: load ($_GET['cat_id']); to get de course name in certificates
 
 	if ($category[0]->is_certificate_available($user_id)) {
 		$user= get_user_info_from_id($user_id);
@@ -616,77 +615,74 @@ if (isset ($_GET['studentoverview'])) {
 		$certif_text = str_replace("\\n","\n",$certif_text);
 		$date = date('d/m/Y',time());
 
-			$path_info= UserManager::get_user_picture_path_by_id($user_id,'system',true);
+		$path_info= UserManager::get_user_picture_path_by_id($user_id,'system',true);
 
-			$path_directory_user_certificate=$path_info['dir'].'certificate/';
+		$path_directory_user_certificate=$path_info['dir'].'certificate/';
 
-			if (!is_dir($path_info['dir'])) {
-				mkdir($path_info['dir'],0777);
-			}
-			if (!is_dir($path_directory_user_certificate)) {
-				mkdir($path_directory_user_certificate,0777);
-			}
-			if (is_dir($path_directory_user_certificate)) {
-				$user_id = api_get_user_id();
-				$cat_id  = intval($_GET['cat_id']);
-				$name=md5($user_id.$cat_id);
+		if (!is_dir($path_info['dir'])) {
+			mkdir($path_info['dir'],0777);
+		}
+		if (!is_dir($path_directory_user_certificate)) {
+			mkdir($path_directory_user_certificate,0777);
+		}
+		if (is_dir($path_directory_user_certificate)) {
+			$user_id = api_get_user_id();
+			$cat_id  = intval($_GET['cat_id']);
+			$name=md5($user_id.$cat_id);
 
-				//generate document HTML
-				$course_id = api_get_course_id();
-				$content_html = DocumentManager::replace_user_info_into_html($course_id);
+			//generate document HTML
+			$course_id = api_get_course_id();
+			$content_html = DocumentManager::replace_user_info_into_html($course_id);
+			$new_content=explode('</head>',$content_html);
 
+			if ($new_content[0]!='') {
 
-				$new_content=explode('</head>',$content_html);
-
-
-				if ($new_content[0]!='') {
-
-					$new_content_html=$new_content[1];
-					$my_path_certificate=$path_directory_user_certificate.$name.'.html';
+				$new_content_html=$new_content[1];
+				$my_path_certificate=$path_directory_user_certificate.$name.'.html';
 
 
-					$path_image=api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
-					$new_content_html=str_replace('../images/gallery',$path_image,$new_content_html);
+				$path_image=api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
+				$new_content_html=str_replace('../images/gallery',$path_image,$new_content_html);
 
-					$path_image_in_default_course=api_get_path(WEB_CODE_PATH).'default_course_document';
-					$new_content_html=str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);
+				$path_image_in_default_course=api_get_path(WEB_CODE_PATH).'default_course_document';
+				$new_content_html=str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);
 
-					$new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
+				$new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
 
-					//add print header
-					$print= '
-					<style media="print" type="text/css">
-						#imprimir {
-						visibility:hidden;
-						}
-					</style>';
-					$print .='<a href="javascript:window.print();" style="float:right; padding:4px;" id="imprimir"><img src="'.api_get_path(WEB_CODE_PATH).'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
-
-					//add header
-					$new_content_html=$new_content[0].$print.'</head>'.$new_content_html;
-
-					if ($cat_id=strval(intval($cat_id))) {
-						if (UserManager::is_user_certified($cat_id,$user_id)===true){
-							header('Content-Type: text/html; charset='. $charset);
-							echo $new_content_html;
-
-							exit;
-						} else {
-							$my_new_content_html=$new_content_html;
-							$my_new_content_html=mb_convert_encoding($my_new_content_html,'UTF-8',$charset);
-							file_put_contents($my_path_certificate,$my_new_content_html);
-							header('Content-Type: text/html; charset='. $charset);
-							echo $new_content_html;
-						}
-						$path_certificate='/'.$name.'.html';
-						update_user_info_about_certificate($cat_id,$user_id,$path_certificate);
-						exit;
+				//add print header
+				$print= '
+				<style media="print" type="text/css">
+					#imprimir {
+					visibility:hidden;
 					}
-				} else {
-					Display :: display_reduced_header();
-					Display :: display_warning_message(get_lang('NoCertificateAvailable'));
+				</style>';
+				$print .='<a href="javascript:window.print();" style="float:right; padding:4px;" id="imprimir"><img src="'.api_get_path(WEB_CODE_PATH).'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+
+				//add header
+				$new_content_html=$new_content[0].$print.'</head>'.$new_content_html;
+
+				if ($cat_id=strval(intval($cat_id))) {
+					if (UserManager::is_user_certified($cat_id,$user_id)===true){
+						header('Content-Type: text/html; charset='. $charset);
+						echo $new_content_html;
+
+						exit;
+					} else {
+						$my_new_content_html=$new_content_html;
+						$my_new_content_html=mb_convert_encoding($my_new_content_html,'UTF-8',$charset);
+						file_put_contents($my_path_certificate,$my_new_content_html);
+						header('Content-Type: text/html; charset='. $charset);
+						echo $new_content_html;
+					}
+					$path_certificate='/'.$name.'.html';
+					update_user_info_about_certificate($cat_id,$user_id,$path_certificate);
+					exit;
 				}
+			} else {
+				Display :: display_reduced_header();
+				Display :: display_warning_message(get_lang('NoCertificateAvailable'));
 			}
+		}
 
 		/*$pdf= new Cezpdf('a4','landscape');
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
@@ -708,7 +704,10 @@ if (isset ($_GET['studentoverview'])) {
 		$pdf->ezStream();*/
 	}
 	exit;
-} else { //in any other case (no search, no pdf), print the available gradebooks
+} else {
+    //Student view
+    
+    //in any other case (no search, no pdf), print the available gradebooks
     // Important note: loading a category will actually load the *contents* of
     // this category. This means that, to show the categories of a course,
     // we have to show the root category and show its subcategories that
@@ -727,8 +726,7 @@ if (isset ($_GET['studentoverview'])) {
 
 		//hack for delete a gradebook from inside course
 		$clean_deletecat=Security::remove_XSS($_GET['deletecat']);
-		if (!empty($clean_deletecat))
-		{
+		if (!empty($clean_deletecat)) {
 			exit;
 		}
 		//end hack
@@ -766,13 +764,13 @@ if (isset ($_GET['studentoverview'])) {
     //with this fix the teacher only can view 1 gradebook
 	//$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
     if (api_is_platform_admin()) {
-            $stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
+        $stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
     } else {
     	$stud_id= api_get_user_id();
     }
-	$allcat= $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
-	$alleval= $cats[0]->get_evaluations($stud_id);
-	$alllink= $cats[0]->get_links($stud_id);
+	$allcat  = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
+	$alleval = $cats[0]->get_evaluations($stud_id);
+	$alllink = $cats[0]->get_links($stud_id);
     //whether we found a category or not, we now have a category object with
     // empty or full subcats
 }
@@ -834,33 +832,46 @@ if ($category != '0') {
 			$cats_course = Category :: load ($category_id, null, null, null, null, null, false);
 			$alleval_course= $cats_course[0]->get_evaluations($stud_id,true);
 			$alllink_course= $cats_course[0]->get_links($stud_id,true);
+			
 			$evals_links = array_merge($alleval_course, $alllink_course);
 			$item_value=0;
 			$item_total=0;
+			
 			for ($count=0; $count < count($evals_links); $count++) {
-						$item = $evals_links[$count];
-						$score = $item->calc_score($stud_id);
+				$item = $evals_links[$count];
+				$score = $item->calc_score($stud_id);
 
-						$score_denom=($score[1]==0) ? 1 : $score[1];
-						$item_value+=$score[0]/$score_denom*$item->get_weight();
-						$item_total+=$item->get_weight();
-			}
+				$score_denom=($score[1]==0) ? 1 : $score[1];
+				$item_value+=$score[0]/$score_denom*$item->get_weight();
+				$item_total+=$item->get_weight();
+			}			
 			$item_value = number_format($item_value, 2, '.', ' ');
+			
 			$cattotal = Category :: load($category_id);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
-			$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
-
+			/*
+			//Overwritten the old total with the real total of the gradebook if the line below is deleted, then when a user doesn't finish a test the total will be different from the real total 
+			$scoretotal[1] = $item_total;					
+			//$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).' ('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');			
+			*/
+			
+			//Do not remove this the gradebook/lib/fe/gradebooktable.class.php file load this variable as a global 		
 			$my_score_in_gradebook =  round($scoretotal[0],2);
-			//show certificate
-			$certificate_min_score=$cats[0]->get_certificate_min_score();
+			
+			//Show certificate			
+			$certificate_min_score=$cats[0]->get_certificate_min_score();	
+			$scoredisplay = ScoreDisplay :: instance();
+			$scoretotal_display = $scoredisplay->display_score($scoretotal,SCORE_DIV_PERCENT);
 			if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
-				$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id().'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/logo.gif" />'.get_lang('Certificates').'</a>&nbsp;'.get_lang('langTotal').': '.$scoretotal_display;
+				$url  = api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id();
+				//$certificates.= '<img src="'.api_get_path(WEB_CODE_PATH) . 'img/logo.gif" />'.get_lang('Certificates').'</a>&nbsp;<strong>'.get_lang('Total').': '.$scoretotal_display.'</strong>';
+				$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 48), $url, array('target'=>'_blank'));
 				echo '<div class="actions" align="right">';
 				echo $certificates;
 				echo '</div>';
 			}
 		} //end hack
-		DisplayGradebook :: display_header_gradebook($cats[0], 0, $category_id, $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
+		DisplayGradebook::display_header_gradebook($cats[0], 0, $category_id, $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
 	}
 } else {
 //this is the root category
@@ -869,9 +880,7 @@ if ($category != '0') {
 
 if (api_is_allowed_to_edit(null, true)) {
 /*
------------------------------------------------------------
 	Introduction section (teacher edit)
------------------------------------------------------------
 */
 
 	// Tool introduction
@@ -888,8 +897,7 @@ if (api_is_allowed_to_edit(null, true)) {
 		}
 	}
 }
-if($first_time==1 && api_is_allowed_to_edit(null,true))
-{
+if($first_time==1 && api_is_allowed_to_edit(null,true)) {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
 } else {
 	$gradebooktable->display();

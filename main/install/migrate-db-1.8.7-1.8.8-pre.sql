@@ -150,7 +150,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_support_pixlr', 'false', 'No');
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_groups_to_users',NULL,'radio','Platform','true','ShowGroupsToUsersTitle','ShowGroupsToUsersComment',NULL,NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_groups_to_users',NULL,'radio','Platform','false','ShowGroupsToUsersTitle','ShowGroupsToUsersComment',NULL,NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_groups_to_users', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_groups_to_users', 'false', 'No');
 
@@ -177,7 +177,13 @@ ALTER TABLE notification ADD index mail_notify_freq_index (sent_at, send_freq, c
 
 ALTER TABLE session_category ADD COLUMN access_url_id INT NOT NULL default 1;
 
-UPDATE settings_current SET selected_value = '1.8.8.13997' WHERE variable = 'chamilo_database_version';
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enable_quiz_scenario', NULL,'radio','Course','false','EnableQuizScenarioTitle','EnableQuizScenarioComment',NULL,NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_quiz_scenario', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_quiz_scenario', 'false', 'No');
+
+UPDATE settings_current SET category='Search' WHERE variable='search_enable';
+
+UPDATE settings_current SET selected_value = '1.8.8.14082' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
@@ -211,3 +217,5 @@ INSERT INTO course_setting(variable,value,category) VALUES ('enable_lp_auto_laun
 INSERT INTO course_setting(variable,value,category) VALUES ('pdf_export_watermark_text','','course');
 
 ALTER TABLE quiz ADD COLUMN propagate_neg INT NOT NULL DEFAULT 0;
+ALTER TABLE quiz_answer MODIFY COLUMN hotspot_type ENUM('square','circle','poly','delineation','oar');
+

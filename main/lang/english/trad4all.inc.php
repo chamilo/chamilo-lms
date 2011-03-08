@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Delete all created attendances";
+$SearchXapianModuleNotInstalled = "The Xapian search module is not installed";
 $Title = "Title";
 $By = "By";
 $UsersOnline = "Users online";
@@ -36,7 +37,7 @@ $Up = "Up";
 $Theme = "Graphical theme";
 $TheListIsEmpty = "Empty";
 $langUniqueSelect = "Multiple choice";
-$CreateCategory = "Create folder";
+$CreateCategory = "Create category";
 $SendFile = "Upload document";
 $SaveChanges = "Save changes";
 $SearchTerm = "Search term";
@@ -1018,4 +1019,8 @@ $Clean = "Clean";
 $MailNotifyInvitation = "Notify by mail on new invitation received";
 $MailNotifyMessage = "Notify by mail on new personal message received";
 $MailNotifyGroupMessage = "Notify by mail on new message received in group";
+$ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField = "Click on the box below to select files from your computer (you can use CTRL + clic to select various files at a time), or drag and drop some files from your desktop directly over the box below. The system will handle the rest!";
+$Simple = "Simple";
+$Multiple = "Multiple";
+$UploadFiles = "Clic or drag and drop files here to upload them";
 ?>

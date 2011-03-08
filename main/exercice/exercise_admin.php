@@ -102,21 +102,23 @@ $htmlHeadXtra[] = '<script>
 		    }
 	    }  	
       	
-     	function check_per_page_one()
-     	{
-     		if (document.getElementById(\'divtimecontrol\').style.display==\'none\')
-     		{
+     	function check_per_page_one() {
+     		if (document.getElementById(\'divtimecontrol\').style.display==\'none\') {
+     		
      			document.getElementById(\'divtimecontrol\').style.display=\'block\';
      			document.getElementById(\'divtimecontrol\').display=block;
      			document.getElementById(\'timecontrol\').display=none;
      		}
+     		document.getElementById(\'exerciseType_0\').checked=true;
 		}
 
 		function check_per_page_all() {
-			if (document.getElementById(\'divtimecontrol\').style.display==\'block\')
-			{
+			if (document.getElementById(\'divtimecontrol\').style.display==\'block\') {
 				document.getElementById(\'divtimecontrol\').style.display=\'none\';
 				document.getElementById(\'enabletimercontroltotalminutes\').value=\'\';
+			}
+			if (document.getElementById(\'exerciseType_1\').checked) {
+				document.getElementById(\'exerciseType_0\').checked = true;
 			}
 		}
 		
@@ -124,10 +126,12 @@ $htmlHeadXtra[] = '<script>
 			document.getElementById(\'result_disabled_0\').checked = true;
 		}
 		
-		function check_results_disabled() {
+		function check_direct_feedback() {
+			document.getElementById(\'option_page_one\').checked = true;
+		}
 		
-			document.getElementById(\'exerciseType_2\').checked = true;
-			
+		function check_results_disabled() {		
+			document.getElementById(\'exerciseType_2\').checked = true;			
 			
 		}
                    
@@ -150,15 +154,15 @@ $objExercise = new Exercise();
 
 //INIT FORM
 if(isset($_GET['exerciseId'])) {
-	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.$_GET['exerciseId']);
-	$objExercise -> read (intval($_GET['exerciseId']));
-	$form -> addElement ('hidden','edit','true');
+	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId']));
+	$objExercise->read($_GET['exerciseId']);
+	$form->addElement('hidden','edit','true');
 } else {
 	$form = new FormValidator('exercise_admin','post',api_get_self().'?'.api_get_cidreq());
-	$form -> addElement ('hidden','edit','false');
+	$form->addElement('hidden','edit','false');
 }
 
-$objExercise -> createForm ($form);
+$objExercise->createForm ($form);
 
 // VALIDATE FORM
 if ($form->validate()) {
@@ -195,8 +199,8 @@ if ($form->validate()) {
 	if ($objExercise->feedbacktype==1)
 		Display::display_normal_message(get_lang('DirectFeedbackCantModifyTypeQuestion'));
 		
-	if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
-		Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
+	if (api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
+		Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));
 	}
 
 	// to hide the exercise description

@@ -953,7 +953,6 @@ $SearchDatabaseCreateError = "Създаването на база данни з
 $SearchDatabaseCorruptError = "Базата данни за търсене е повредена.";
 $SearchNetworkTimeoutError = "Проблем във връзката към претърсваната база данни.";
 $SearchOtherXapianError = "Грешка в търсещата машина.";
-$SearchXapianModuleNotInstaled = "Системният модул за търсене Xapian не е инсталиран.";
 $FieldRemoved = "Полето е премахнато.";
 $TheNewSubLanguageHasBeenAdded = "Добавен е нов специализиран език.";
 $DeleteSubLanguage = "Изтриване на специализиран език";

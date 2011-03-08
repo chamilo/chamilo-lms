@@ -72,7 +72,7 @@ class learnpath {
     public $lp_view_session_id =0; // The specific view might be bound to a session.
 
     public $prerequisite = 0;
-    public $use_max_score = 100; //Should work as usual
+    public $use_max_score = 1; // 1 or 0
 
     public $created_on      = '';
     public $modified_on     = '';
@@ -143,6 +143,7 @@ class learnpath {
                 $this->preview_image    = $row['preview_image'];
                 $this->author           = $row['author'];
                 $this->lp_session_id    = $row['session_id'];
+                $this->use_max_score    = $row['use_max_score'];                
 
                 $this->created_on       = $row['created_on'];
                 $this->modified_on      = $row['modified_on'];
@@ -1397,8 +1398,10 @@ class learnpath {
         require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
         $terms = get_specific_field_values_list_by_prefix($prefix, $this->cc, TOOL_LEARNPATH, $this->lp_id);
         $prefix_terms = array();
-        foreach ($terms as $term) {
-            $prefix_terms[] = $term['value'];
+        if (!empty($terms)) {
+            foreach ($terms as $term) {
+                $prefix_terms[] = $term['value'];
+            }
         }
         return $prefix_terms;
     }
@@ -3882,7 +3885,7 @@ class learnpath {
         $items_table = Database :: get_course_table(TABLE_LP_ITEM);
         // TODO: Make query secure agains XSS : use member attr instead of post var.
         $lp_id = intval($_POST['lp_id']);
-        $sql = "SELECT * FROM $items_table WHERE lp_id = $lp_id";
+        $sql = "SELECT * FROM $items_table WHERE lp_id = $lp_id"; 
         $result = Database::query($sql);
         $di = new DokeosIndexer();
 
@@ -3892,6 +3895,7 @@ class learnpath {
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp_id, $lp_item['id']);
 
+            //echo $sql; echo '<br>';
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
 
@@ -3901,7 +3905,7 @@ class learnpath {
                 $doc = $di->get_document($se_ref['search_did']);
 
                 $xapian_terms = xapian_get_doc_terms($doc, $prefix);
-                //var_dump($xapian_terms);
+  
                 $xterms = array ();
                 foreach ($xapian_terms as $xapian_term) {
                     $xterms[] = substr($xapian_term['name'], 1);
@@ -3921,8 +3925,10 @@ class learnpath {
                 }
                 $di->getDb()->replace_document((int) $se_ref['search_did'], $doc);
                 $di->getDb()->flush();
+            } else {
+                //@todo What we should do here?
             }
-        }
+        }        
         return true;
     }
 
@@ -4050,18 +4056,13 @@ class learnpath {
     public function set_use_max_score($use_max_score = 1) {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_use_max_score()', 0);
-        }
-        if ($use_max_score) {
-            $use_max_score = 1;
-        } else {
-            $use_max_score = 0;
-        }
-
-        $this->use_max_score = $this->escape_string($use_max_score);
+        }        
+        $use_max_score = intval($use_max_score);
+        $this->use_max_score = $use_max_score;
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET use_max_score = '" . $this->use_max_score . "' WHERE id = '$lp_id'";
-
+        
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new use_max_score : ' . $this->use_max_score, 0);
         }
@@ -4952,26 +4953,38 @@ class learnpath {
                 $return .= '<p class="lp_title">' . $row['title'] . '</p>';
                 //$return .= '<p class="lp_text">' . ((trim($row['description']) == '') ? 'no description' : stripslashes($row['description'])) . '</p>';
                 //$return .= '<hr />';
-                if ($row['item_type'] == TOOL_DOCUMENT) {
-                    $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
-                    $sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE id = " . Database :: escape_string($row['path']);
-                    $result = Database::query($sql_doc);
-                    $path_file = Database :: result($result, 0, 0);
-                    $path_parts = pathinfo($path_file);
-                    // TODO: Correct the following naive comparisons, also, htm extension is missing.
-                    if (in_array($path_parts['extension'], array (
-                            'html',
-                            'txt',
-                            'png',
-                            'jpg',
-                            'JPG',
-                            'jpeg',
-                            'JPEG',
-                            'gif',
-                            'swf'
-                        ))) {
-                        $return .= $this->display_document($row['path'], true, true);
-                    }
+                switch ($row['item_type']) {
+                    case TOOL_QUIZ:
+                        if (!empty($row['path'])) {
+                            require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
+                            $exercise = new Exercise();
+                            $exercise->read($row['path']);  
+                            // $exercise_url = api_get_path(WEB_CODE_PATH).'exercice/admin.php?exerciseId='.$exercise->id.'&'.api_get_cidReq().'&id_session='.api_get_session_id();           
+                            $return     .=$exercise->description.'<br />';
+                            //$return     .=Display::url($exercise_url, $exercise_url).'<br />';*/
+                        }
+                        break;
+                    case TOOL_DOCUMENT:
+                        $tbl_doc      = Database :: get_course_table(TABLE_DOCUMENT);
+                        $sql_doc      = "SELECT path FROM " . $tbl_doc . " WHERE id = " . Database :: escape_string($row['path']);
+                        $result       = Database::query($sql_doc);
+                        $path_file    = Database :: result($result, 0, 0);
+                        $path_parts   = pathinfo($path_file);
+                        // TODO: Correct the following naive comparisons, also, htm extension is missing.
+                        if (in_array($path_parts['extension'], array (
+                                'html',
+                                'txt',
+                                'png',
+                                'jpg',
+                                'JPG',
+                                'jpeg',
+                                'JPEG',
+                                'gif',
+                                'swf'
+                            ))) {
+                            $return .= $this->display_document($row['path'], true, true);
+                        }
+                        break;
                 }
                 $return .= '</div>';
             }

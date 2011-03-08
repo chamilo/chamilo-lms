@@ -375,6 +375,7 @@ $MultipleAnswerCombinationTrueFalse = "Combination true/false/don't-know";
 $DontKnow = "Don't know";
 $False = "False";
 $DoubtScore = "Don't know";
+$HotSpotDelineation = "Hotspot delineation";
 $PropagateNegativeResults = "Propagate negative results between questions";
 $InsertALinkToThisQuestionInTheExercise = "Use this question in the test as a link (not a copy)";
 $OnlyShowScore = "Show the score only";

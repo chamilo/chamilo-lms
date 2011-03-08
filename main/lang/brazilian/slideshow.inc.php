@@ -19,4 +19,6 @@ $lang_next_slide = "Próxima imagem";
 $lang_image = "Imagem";
 $lang_of = "de";
 $lang_view_slideshow = "Ver Galeria de Imagens";
+$FirstSlide = "Primeiro slide";
+$LastSlide = "Último slide";
 ?>

@@ -465,10 +465,9 @@ class Category implements GradebookItem
 				}
 			}
 		}
-
 		if (!empty($evals)) {
 			foreach ($evals as $eval) {
-				$evalres = $eval->calc_score ($stud_id);
+				$evalres = $eval->calc_score($stud_id);
 				if (isset($evalres) && $eval->get_weight() != 0) {
 					$evalweight = $eval->get_weight();
 					$rescount++;
@@ -477,10 +476,9 @@ class Category implements GradebookItem
 				}
 			}
 		}
-			
 		if (!empty($links)) {
-			foreach ($links as $link) {
-				$linkres = $link->calc_score ($stud_id);
+			foreach ($links as $link) {			    
+				$linkres = $link->calc_score($stud_id);				
 				if (isset($linkres) && $link->get_weight() != 0) {
 					$linkweight     = $link->get_weight();
 					$link_res_denom = ($linkres[1]==0) ? 1 : $linkres[1];
@@ -490,13 +488,11 @@ class Category implements GradebookItem
 				}
 			}
 		}
-
 		if ($rescount == 0) {
 			return null;
 		} else {
 			return array ($ressum, $weightsum);
 		}
-
 	}
 
 	/**
@@ -1067,7 +1063,7 @@ class Category implements GradebookItem
 
 		// no links in root or course independent categories
 		if ($this->id == 0) {
-			;
+			
 		}
 		// 1 student $stud_id
  		elseif (isset($stud_id)) {

@@ -84,7 +84,7 @@ if($modifyIn)
         $weighting=unserialize($weighting);
 
 	}
-	elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER)
+	elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER || $answerType == HOT_SPOT_DELINEATION)
     {
         $color=unserialize($color);
         $reponse=unserialize($reponse);

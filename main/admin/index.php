@@ -64,8 +64,7 @@ if (api_is_platform_admin()) {
                 <button class="search" type="submit"> <?php echo get_lang('Search'); ?></button>
             </form>
         </div>
-    <ul>
-        <!-- <li><a href="user_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li> -->
+    <ul>        
         <li><a href="user_list.php"><?php echo get_lang('UserList'); ?></a></li>
         <li><a href="user_add.php"><?php echo get_lang('AddUsers'); ?></a></li>
         <li><a href="user_export.php"><?php echo get_lang('ExportUserListXMLCSV'); ?></a></li>
@@ -179,8 +178,7 @@ if (api_get_setting('use_session_mode') == 'true') { ?>
             <button class="search" type="submit"><?php echo get_lang('Search'); ?></button>
         </form>
     </div>
-    <ul>
-        <!--  <li><a href="session_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li> -->
+    <ul>        
         <li><a href="session_list.php"><?php echo get_lang('ListSession'); ?></a></li>
         <li><a href="session_category_list.php"><?php echo get_lang('ListSessionCategory'); ?></a></li>
         <li><a href="session_add.php"><?php echo get_lang('AddSession'); ?></a></li>

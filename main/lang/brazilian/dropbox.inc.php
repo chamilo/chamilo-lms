@@ -31,6 +31,7 @@ $MailingBackToDropbox = "(voltar para a janela principal da caixa de documentos 
 $MailingConfirmSend = "Enviar conteúdo dos arquivos para destinos individuais ?";
 $MailingSend = "Enviar conteúdo dos arquivos";
 $MailingNotYetSent = "O conteúdo dos arquivos ainda não foram enviados...";
+$$MailingExamine = "Examinar discussão";
 $MailingInSelect = "---E-mail---";
 $MailingAsUsername = "Envio por e-mail";
 $FileDeleted = "O arquivo selecionado foi removido da caixa de documentos compartilhados.";

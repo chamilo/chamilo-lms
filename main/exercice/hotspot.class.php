@@ -89,8 +89,41 @@ class HotSpot extends Question {
 	function processAnswersCreation ($form) {
 		// nothing
 	}
+}
+
+class HotSpotDelineation extends HotSpot {
+
+	static $typePicture = 'hotspot_delineation.gif';
+	static $explanationLangVar = 'HotspotDelineation';
+
+	function HotSpotDelineation(){
+		parent::question();
+		$this -> type = HOT_SPOT_DELINEATION;
+
+	}
+	
+	function createForm ($form) {
+		parent::createForm ($form);
+	
+	}
+
+	function processCreation ($form, $objExercise) {
+		$file_info = $form -> getSubmitValue('imageUpload');
+		parent::processCreation ($form, $objExercise);
+	}
+	
+	function createAnswersForm ($form) {
+		parent::createAnswersForm ($form);
+    	// nothing
+
+	}
+
+	function processAnswersCreation ($form) {
+		parent::processAnswersCreation ($form);
+		// nothing
+
+	}
 
 }
 
 endif;
-?>

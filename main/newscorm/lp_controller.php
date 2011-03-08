@@ -633,7 +633,7 @@ switch ($action) {
                 $specific_fields = get_specific_field_list();
                 foreach ($specific_fields as $specific_field) {
                     $_SESSION['oLP']->set_terms_by_prefix($_REQUEST[$specific_field['code']], $specific_field['code']);
-                    $new_values = explode(',', trim($_REQUEST[$specific_field['code']]));
+                    $new_values = explode(',', trim($_REQUEST[$specific_field['code']]));                    
                     if (!empty($new_values)) {
                         array_walk($new_values, 'trim');
                         delete_all_specific_field_value(api_get_course_id(), $specific_field['id'], TOOL_LEARNPATH, $_SESSION['oLP']->lp_id);
@@ -644,10 +644,9 @@ switch ($action) {
                             }
                         }
                     }
-                }
+                }        
             }
-
-            require 'lp_list.php';
+            require 'lp_build.php';
         }
         break;
 

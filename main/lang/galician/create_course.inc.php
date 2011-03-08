@@ -137,4 +137,17 @@ $CourseRequestPageForApproval = "Pode validar a solicitude en:";
 $PleaseActivateCourseValidationFeature = "A \"validación do curso\" non está activa. Para utilizar esta ferramenta actívea usando o parámetro %s";
 $CourseRequestLegalNote = "A información desta solicitude de formación considerase como confidencial, polo que só pode ser usada como procedemento de apertura dun novo curso dentro do noso portal. Non deberá ser revelada a terceiros.";
 $CourseRequestAskInfoEmailSubject = "%s Solicitude de información %s";
+$CourseRequestAskInfoEmailText = "Recibimos a súa solicitude para a creación dun curso con código%. Antes de considerar a súa aprobación necesitamos alguna información adicional. \N\nPor facor, realice unha breve descrición do contido do curso, os obxectivos e os alumnos ou outro tipo de usuarios que vaian participar. Se é o seu caso, mencione o nome da institución ou órgano da cal vostede fixo a solicitude.";
+$CourseRequestAcceptedEmailSubject = "%s A petición do curso %s foi aprobada";
+$CourseRequestAcceptedEmailText = "A súa solicitude do curso %s foi aprobada. Un novo curso %s foi creado e vostede quedou inscrito nel como profesor. \n\nPoderá acceder ao curso creado dende: %s";
+$CourseRequestRejectedEmailSubject = "%s A solicitude do curso %s foi rexeitada";
+$CourseRequestRejectedEmailText = "Lamentamos informarlle que a solicitude do curso %s ben de ser rexeitada debido a que non se axusta aos nosos termos e condicións.";
+$CourseCreationFailed = "O curso non foi creado debido a un erro interno.";
+$CourseRequestCreationFailed = "A solicitude do curso non se creou debido a un erro interno.";
+$CourseRequestEdit = "Editar unha solicitude de curso";
+$CourseRequestHasNotBeenFound = "A solicitude de curso á que quere acceder non se encontrou ou non existe.";
+$Accept = "Aceptar";
+$Reject = "Rexeitar";
+$CourseRequestUpdateFailed = "A solicitude do curso %s non foi actualizada debido a un erro interno.";
+$CourseRequestUpdated = "A solicitude do curso %s foi actualizada.";
 ?>

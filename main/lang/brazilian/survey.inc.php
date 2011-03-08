@@ -202,4 +202,6 @@ $BackToSurvey = "Voltar ao questionário";
 $UpdateInformation = "Atualizar informação";
 $PleaseFillSurvey = "Por favor, preencha o questionário";
 $ReportingOverview = "Visualizar relatório";
+$ThereAreNotQuestionsForthisSurvey = "Não existem perguntas para esta enquete";
+$Multipleresponse = "Múltiplas alternativas";
 ?>

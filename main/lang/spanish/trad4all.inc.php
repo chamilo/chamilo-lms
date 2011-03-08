@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Eliminar todas las asistencias creadas";
+$SearchXapianModuleNotInstalled = "El modulo Xapian de PHP no está configurado en su servidor, póngase en contacto con su administrador";
 $Title = "Título";
 $By = "Publicado por";
 $UsersOnline = "Usuarios en línea";

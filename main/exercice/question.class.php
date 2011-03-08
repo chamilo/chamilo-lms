@@ -57,6 +57,7 @@ abstract class Question
 							MATCHING => 					array('matching.class.php' , 		'Matching'),
 							FREE_ANSWER => 					array('freeanswer.class.php' , 		'FreeAnswer'),
 							HOT_SPOT => 					array('hotspot.class.php' , 		'HotSpot'),
+							HOT_SPOT_DELINEATION => 		array('hotspot.class.php' , 'HotspotDelineation'),
 							MULTIPLE_ANSWER_COMBINATION =>	array('multiple_answer_combination.class.php' , 'MultipleAnswerCombination'),
                             UNIQUE_ANSWER_NO_OPTION =>      array('unique_answer_no_option.class.php' ,   'UniqueAnswerNoOption'),
                             MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php' , 'MultipleAnswerTrueFalse'),
@@ -660,6 +661,18 @@ abstract class Question
 				$sql="INSERT INTO $TBL_ANSWERS (id , question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type ) VALUES ('1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
 				Database::query($sql);
             }
+            
+			if ($type == HOT_SPOT_DELINEATION ) {
+				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
+				$sql="INSERT INTO $TBL_ANSWERS (id , question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type ) VALUES ('1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
+				api_sql_query($sql,__FILE__,__LINE__);
+				
+				//$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
+				//$sql="INSERT INTO $TBL_ANSWERS (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('2', '".Database::escape_string($this->id)."', '', NULL , '', NULL , '1', '0;0|0|0', 'noerror')";
+				//api_sql_query($sql,__FILE__,__LINE__);		
+				
+			}
+			
 
             if (api_get_setting('search_enabled')=='true') {
                 if ($exerciseId != 0) {
@@ -1041,7 +1054,7 @@ abstract class Question
 
 		//$radios_results_enabled[]=$test;
 		// question level
-
+		//@todo move levles into a table
 		$select_level = array (1,2,3,4,5);
 		//$radios_results_enabled[] =
 		foreach($select_level as $val) {
@@ -1155,7 +1168,10 @@ abstract class Question
 		if (!isset($feedbacktype)) $feedbacktype=0;
 		if ($feedbacktype==1) {
 			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
-			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]);
+			//$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]);
+			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION]);  
+		} else {
+			unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
 		}
 
 		//blocking edition

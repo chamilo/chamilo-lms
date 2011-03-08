@@ -206,8 +206,8 @@ $form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array(
 $form->addElement('html','</div>');            
 
 if (api_is_platform_admin()) {
-    $form->addElement('checkbox', 'use_max_score', get_lang('UseMaxScore100'));
-    $defaults['use_max_score'] = 1;
+    $form->addElement('checkbox', 'use_max_score', get_lang('UseMaxScore100'));    
+    $defaults['use_max_score'] = $_SESSION['oLP']->use_max_score;
 }
 
 

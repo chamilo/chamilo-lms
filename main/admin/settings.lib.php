@@ -290,7 +290,6 @@ function handle_stylesheets() {
 
     //echo '</select><br />';
     echo '</select>&nbsp;&nbsp;';
-    //var_dump($list_of_names);
     if ($is_style_changeable){
         echo '<button class="save" type="submit" name="submit_stylesheets"> '.get_lang('SaveSettings').' </button></form>';
     }
@@ -502,49 +501,33 @@ function is_style($style) {
 function handle_search() {
     global $SettingsStored, $_configuration;
 
+    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
+    require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
     $search_enabled = api_get_setting('search_enabled');
-    $settings = api_get_settings('Search');
-
-    if ($search_enabled !== 'true' || count($settings) < 1) {
-        Display::display_error_message(get_lang('SearchFeatureNotEnabledComment'));
-        return;
-    }
-
-    require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
-
+    
     $form = new FormValidator('search-options', 'post', api_get_self().'?category=Search');
+        
     $renderer = & $form->defaultRenderer();
     $renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
     $renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
-
-    // Search_show_unlinked_results.
-    $form->addElement('header', null, get_lang('SearchShowUnlinkedResultsTitle'));
-    $form->addElement('label', null, get_lang('SearchShowUnlinkedResultsComment'));
-    $values = get_settings_options('search_show_unlinked_results');
+    
+    $values = get_settings_options('search_enabled');   
+    $form->addElement('header', null, get_lang('SearchEnabledTitle'));    
+     
     $group = array ();
-    foreach ($values as $key => $value) {
-        $element = & $form->createElement('radio', 'search_show_unlinked_results', '', get_lang($value['display_text']), $value['value']);
-        $group[] = $element;
+    if (is_array($values)) {
+        foreach ($values as $key => $value) {
+            $element = & $form->createElement('radio', 'search_enabled', '', get_lang($value['display_text']), $value['value']);
+            if ($hide_element) {
+                $element->freeze();
+            }
+            $group[] = $element;
+        }
     }
-    $form->addGroup($group, 'search_show_unlinked_results', get_lang('SearchShowUnlinkedResultsComment'), '<br />', false);
-    $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
-
-    // Search_prefilter_prefix.
-    $form->addElement('header', null, get_lang('SearchPrefilterPrefix'));
-    $form->addElement('label', null, get_lang('SearchPrefilterPrefixComment'));
-    $specific_fields = get_specific_field_list();
-    $sf_values = array();
-    foreach ($specific_fields as $sf) {
-       $sf_values[$sf['code']] = $sf['name'];
-    }
-    $group = array();
-    $form->addElement('select', 'search_prefilter_prefix', get_lang('SearchPrefilterPrefix'), $sf_values, '');
-    $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
-
-    //$form->addRule('search_show_unlinked_results', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('style_submit_button', 'search-options-save', get_lang('Ok'));
-    $form->setDefaults($default_values);
-
+    $form->addGroup($group, 'search_enabled', get_lang('SearchEnabledComment'), '<br />', false);
+    
+    $search_enabled = api_get_setting('search_enabled');
+    
     if ($form->validate()) {
         $formvalues = $form->exportValues();
         $r = api_set_settings_category('Search', 'false', $_configuration['access_url']);
@@ -552,13 +535,110 @@ function handle_search() {
         foreach ($formvalues as $key => $value) {
             $result = api_set_setting($key, $value, null, null);
         }
-
-        Display :: display_confirmation_message($SettingsStored);
-    } else {
-        echo '<div id="search-options-form">';
-        $form->display();
-        echo '</div>';
+        $search_enabled = $formvalues['search_enabled'];
+        Display::display_confirmation_message($SettingsStored);
     }
+    $specific_fields = get_specific_field_list();
+    
+    if ($search_enabled == 'true') {
+    
+        // Search_show_unlinked_results.
+        $form->addElement('header', null, get_lang('SearchShowUnlinkedResultsTitle'));
+        //$form->addElement('label', null, get_lang('SearchShowUnlinkedResultsComment'));
+        $values = get_settings_options('search_show_unlinked_results');
+        $group = array ();
+        foreach ($values as $key => $value) {
+            $element = & $form->createElement('radio', 'search_show_unlinked_results', '', get_lang($value['display_text']), $value['value']);
+            $group[] = $element;
+        }
+        $form->addGroup($group, 'search_show_unlinked_results', get_lang('SearchShowUnlinkedResultsComment'), '<br />', false);
+        $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
+    
+        // Search_prefilter_prefix.
+        $form->addElement('header', null, get_lang('SearchPrefilterPrefix'));
+        //$form->addElement('label', null, get_lang('SearchPrefilterPrefixComment'));
+        
+        $sf_values = array();
+        foreach ($specific_fields as $sf) {
+           $sf_values[$sf['code']] = $sf['name'];
+        }
+        $group = array();
+        $form->addElement('select', 'search_prefilter_prefix', get_lang('SearchPrefilterPrefix'), $sf_values, '');
+        $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
+        
+        //$form->addElement('html', Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php' ));
+        //admin/specific_fields.php        
+    }
+
+    $default_values['search_enabled'] = $search_enabled;
+
+    //$form->addRule('search_show_unlinked_results', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addElement('style_submit_button', 'submit', get_lang('Save'),'class="save"');
+    $form->setDefaults($default_values);    
+    
+    echo '<div id="search-options-form">';
+    $form->display();
+    echo '</div>';
+    
+    if ($search_enabled == 'true') {
+        require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';        
+        $xapian_path = api_get_path(SYS_PATH).'searchdb';
+        
+        /*
+        @todo Test the Xapian connection
+        if (extension_loaded('xapian')) {
+            require_once 'xapian.php';
+            try {               
+                $db = new XapianDatabase($xapian_path.'/');
+            } catch (Exception $e) {        
+                var_dump($e->getMessage());            
+            }
+            
+            require_once api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php';
+            require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
+            require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
+            
+            $indexable = new IndexableChunk();
+            $indexable->addValue("content", 'Test');
+            
+            $di = new DokeosIndexer();            
+            $di->connectDb(NULL, NULL, 'english');
+            $di->addChunk($indexable);
+            $did = $di->index();
+        }
+        */
+        
+        $xapian_loaded      = Display::return_icon('bullet_green.gif', get_lang('Ok'));
+        $dir_exists         = Display::return_icon('bullet_green.gif', get_lang('Ok'));
+        $dir_is_writable    = Display::return_icon('bullet_green.gif', get_lang('Ok'));
+        
+        $specific_fields_exists = Display::return_icon('bullet_green.gif', get_lang('Ok'));
+        
+        if (empty($specific_fields)) {
+            $specific_fields_exists = Display::return_icon('bullet_red.gif', get_lang('Error'));
+        }
+        
+        if (!extension_loaded('xapian')) {
+            $xapian_loaded = Display::return_icon('bullet_red.gif', get_lang('Error'));
+        }
+        if (!is_dir($xapian_path)) {
+            $dir_exists = Display::return_icon('bullet_red.gif', get_lang('Error'));
+        }
+        if (!is_writable($xapian_path)) {
+            $dir_is_writable = Display::return_icon('bullet_red.gif', get_lang('Error'));   
+        }
+        
+        $data[] = array(get_lang('XapianModuleInstalled'),$xapian_loaded);
+        $data[] = array(get_lang('DirectoryExists').' - '.$xapian_path,$dir_exists);
+        $data[] = array(get_lang('IsWritable').' - '.$xapian_path,$dir_is_writable);
+        $data[] = array(get_lang('SpecificSearchFieldsAvailable') ,$specific_fields_exists);
+        
+        
+        $table = new SortableTableFromArray($data);
+        $table->set_header(0,get_lang('Setting'), false);
+        $table->set_header(1,get_lang('Value'), false);
+        echo  $table->display();
+    }    
 }
 
 /**

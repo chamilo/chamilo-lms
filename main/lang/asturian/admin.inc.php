@@ -959,7 +959,6 @@ $SearchDatabaseCreateError = "Nun pudo criase una base de datos";
 $SearchDatabaseCorruptError = "Detectáronse fallos graves na base de datos";
 $SearchNetworkTimeoutError = "Tiempu espiráu mientres se coneutaba a una base de datos remota";
 $SearchOtherXapianError = "Hebo un fallu rellacionáu col motor d'indexáu";
-$SearchXapianModuleNotInstaled = "El módulo xapian de php nun ta configuráu nel to sirvidor, ponte en contautu col to alminitrador";
 $FieldRemoved = "Campu desaniciáu";
 $TheNewSubLanguageHasBeenAdded = "La subllingua foi criada";
 $DeleteSubLanguage = "Desaniciar subllingua";

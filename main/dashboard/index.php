@@ -63,5 +63,3 @@ switch ($action) {
 	default :	
 		$dashboard_controller->display();
 }
-
-?>

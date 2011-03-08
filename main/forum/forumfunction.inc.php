@@ -2503,12 +2503,12 @@ function store_edit_post($values) {
     $table_threads 	= Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
 
-    $gradebook=Security::remove_XSS($_GET['gradebook']);
+    $gradebook = Security::remove_XSS($_GET['gradebook']);
     // First we check if the change affects the thread and if so we commit the changes (sticky and post_title=thread_title are relevant).
     //if (array_key_exists('is_first_post_of_thread',$values)  AND $values['is_first_post_of_thread']=='1') {
     $sql = "UPDATE $table_threads SET thread_title='".Database::escape_string(stripslashes($values['post_title']))."',
                 thread_sticky='".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."'," .
-                "thread_title_qualify='".Database::escape_string(stripslashes($values['calification_notebook_title']))."'," .
+                "thread_title_qualify='".Database::escape_string(Security::remove_XSS(stripslashes($values['calification_notebook_title'])))."'," .
                 "thread_qualify_max='".Database::escape_string($values['numeric_calification'])."',".
                 "thread_weight='".Database::escape_string($values['weight_calification'])."'".
                 " WHERE thread_id='".Database::escape_string($values['thread_id'])."'";
@@ -2516,8 +2516,8 @@ function store_edit_post($values) {
     Database::query($sql);
     //}
     // Update the post_title and the post_text.
-    $sql = "UPDATE $table_posts SET post_title='".Database::escape_string(stripslashes($values['post_title']))."',
-                post_text='".Database::escape_string(stripslashes($values['post_text']))."',
+    $sql = "UPDATE $table_posts SET post_title='".Database::escape_string(Security::remove_XSS(stripslashes($values['post_title'])))."',
+                post_text='".Database::escape_string(Security::remove_XSS(stripslashes($values['post_text'])))."',
                 post_notification='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
                 WHERE post_id='".Database::escape_string($values['post_id'])."'";
     Database::query($sql);

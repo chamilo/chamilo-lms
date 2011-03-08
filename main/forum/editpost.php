@@ -114,10 +114,10 @@ if ($origin == 'group') {
 
 /* Resource Linker */
 
-if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resources')) {
-    $_SESSION['formelements']=$_POST;
-    $_SESSION['origin']=$_SERVER['REQUEST_URI'];
-    $_SESSION['breadcrumbs']=$interbreadcrumb;
+if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Resources')) {
+    $_SESSION['formelements'] = $_POST;
+    $_SESSION['origin'] = $_SERVER['REQUEST_URI'];
+    $_SESSION['breadcrumbs'] = $interbreadcrumb;
     header('Location: ../resourcelinker/resourcelinker.php');
 }
 $table_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -177,11 +177,11 @@ if ($origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
     if ($origin == 'group') {
-        echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'','32').'</a>';
+        echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Groups'), '', '32').'</a>';
     } else {
-        echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview'),'','32' ).'</a>';
+        echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', '32').'</a>';
     }
-    echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin='.$origin.'">'.Display::return_icon('forum.png',get_lang('BackToForum'),'','32').'</a>';
+    echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;origin='.$origin.'">'.Display::return_icon('forum.png', get_lang('BackToForum'), '', '32').'</a>';
     echo '</div>';
 }
 
@@ -205,12 +205,12 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
     $option_chek = isset($values['thread_qualify_gradebook']) ? $values['thread_qualify_gradebook'] : null; // values 1 or 0
     if (1 == $option_chek) {
         $id = $values['thread_id'];
-        $title_gradebook = stripslashes($values['calification_notebook_title']);
+        $title_gradebook = Security::remove_XSS(stripslashes($values['calification_notebook_title']));
         $value_calification = $values['numeric_calification'];
         $weight_calification = $values['weight_calification'];
         $description = '';
         $session_id = api_get_session_id();
-        $link_id = is_resource_in_course_gradebook(api_get_course_id(), 5, $id,$session_id);
+        $link_id = is_resource_in_course_gradebook(api_get_course_id(), 5, $id, $session_id);
         if (!$link_id) {
             add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook, $weight_calification, $value_calification, $description, time(), 1, api_get_session_id());
         } else {

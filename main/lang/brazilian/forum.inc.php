@@ -140,4 +140,8 @@ $BackToForum = "Voltar ao fórum";
 $BackToForumOverview = "Voltar a visão geral do fórum";
 $BackToThread = "Voltar a discussão";
 $ForumcategoryLocked = "Categoria de fórum Bloqueado";
+$PreviewImage = "Preview da imagem";
+$UpdateImage = "Update da imagem";
+$EnableTimeLimits = "Ativar limite de tempo";
+$RemoveSearchResults = "Limpar o resultado da pesquisa";
 ?>

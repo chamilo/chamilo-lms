@@ -25,4 +25,9 @@ $Authoring = "Autoria";
 $Administration = "Administração";
 $IntroductionTextUpdated = "Mensagem inicial atualizada";
 $IntroductionTextDeleted = "Texto de introdução apagado";
+$SessionIdentifier = "Identificador da sessão";
+$SessionName = "Nome da sessao";
+$SessionCategory = "Categorias das sessões";
+$SessionData = "Dados da sessão";
+$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Configura o auto-iniciar da Rota de Aprendizagem para ON . Quando os estudantes acessarem um curso, eles serão automaticamente redirecionados para a Rota de Aprendizagem marcada como inicialização automática.";
 ?>

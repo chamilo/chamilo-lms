@@ -81,4 +81,7 @@ $SessionCategory = "Sessão da categoria";
 $Expand = "Expandir";
 $Collapse = "Agrupar";
 $CourseDetails = "Detalhes do Curso";
+$GroupPendingInvitations = "Convites pendentes do grupo";
+$Compose = "Escrever mensagem";
+$ThereAreNoCoursesInThisCategory = "Não há nenhum curso nesta categoria";
 ?>

@@ -959,7 +959,6 @@ $SearchDatabaseCreateError = "No se pudo crear una base de datos";
 $SearchDatabaseCorruptError = "Se detectó graves errores en la base de datos";
 $SearchNetworkTimeoutError = "Tiempo expirado mientras se conectaba a una base de datos remota";
 $SearchOtherXapianError = "Se ha producido un error relacionado al motor de indexación";
-$SearchXapianModuleNotInstaled = "El modulo xapian de php no está configurado en su servidor,póngase en contacto con su administrador";
 $FieldRemoved = "Campo removido";
 $TheNewSubLanguageHasBeenAdded = "El sub-idioma ha sido creado";
 $DeleteSubLanguage = "Eliminar sub-idioma";
@@ -1385,4 +1384,5 @@ $LastXMonths = "Últimos %i meses";
 $NeverConnected = "Nunca conectados";
 $EnableAccessibilityFontResizeTitle = "Funcionalidad de redimensionamiento de fuentes";
 $EnableAccessibilityFontResizeComment = "Activar esta opción mostrará una serie de opciones de redimensionamiento de fuentes en la parte arriba a la derecha de su campus. Esto permitirá a las personas con problemas de vista leer más fácilmente los contenidos de sus cursos.";
+$GlobalEvent = "Evento de la plataforma";
 ?>

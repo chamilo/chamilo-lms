@@ -175,4 +175,6 @@ $Feedback3 = "Terceira mensagem";
 $FProgress = "Progresso";
 $PutATimeLimit = "Fixe um prazo";
 $StandardTask = "Tarefa Padrão";
+$ThePageHasBeenExportedToDocArea = "A página foi exportada para a ferramenta documentos";
+$CreateAssignmentPage = "Isto irá criar uma página especial wiki em que o professor pode descrever uma tarefa e que será automaticamente vinculada às páginas wiki onde os alunos realizaram a tarefa. Tanto a do professor e as páginas dos alunos são criadas automaticamente. Nessas tarefas, o aluno só pode editar e visualizar as páginas dele, mas isso pode ser mudado facilmente se for preciso.";
 ?>

@@ -48,4 +48,9 @@ $langSaveLink = "Salvar link";
 $langSaveCategory = "Salvar pasta";
 $BackToLinksOverview = "Voltar à lista de links";
 $AddTargetOfLinkOnHomepage = "Selecione o \"alvo\" no qual o link será visto na página principal do curso";
+$Url = "URL";
+$LinkOpenSelf = "Abrir na mesma página";
+$LinkOpenBlank = "Abrir em outra página";
+$LinkOpenParent = "Open parent";
+$LinkOpenTop = "Open top";
 ?>

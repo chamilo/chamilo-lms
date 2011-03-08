@@ -116,4 +116,6 @@ $FailedConectionDatabase = "A conexão com o banco de dados falhou. Isto é devi
 $EncryptMethodUserPass = "Método de encriptação";
 $UpgradeFromDokeos16x = "Atualizar a partir do Chamilo 1.6.x";
 $UpgradeFromDokeos18x = "Atualizar a partir do Chamilo 1.8.x";
+$SuggestionOnlyToEnableCSSUploadFeature = "Sugestão somente se você desejar ativar o recurso de upload de arquivos CSS";
+$SuggestionOnlyToEnableSubLanguageFeature = "Sugestão somente se você desejar ativar o recurso de sub-linguagem";
 ?>

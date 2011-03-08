@@ -201,6 +201,11 @@ $OogieBadExtension = "Por favor envie apenas documentos de apresentação. Exten
 $WoogieBadExtension = "Por favor envie somente documentos de texto. A extensão .doc, .docx ou .odt";
 $ShowAudioRecorder = "Exibir gravador de áudio";
 $SearchFeatureNotEnabledComment = "A possibilidade de procura por texto completo não está habilitada no Chamilo. Por favor entre em contato com o administrador do Chamilo.";
+$SearchFeatureSearchExplanation = "Para pesquisar no banco de dados do curso, por favor, use a seguinte sintaxe:
+   term tag:tag_name -exclude +include \"exact phrase\"
+Por exemplo:
+   carro tag:caminhão -ferrari +ford \"alto consumo\".
+Isto irá mostrar todos os resultados para 'carro' a palavra marcada como \"caminhão\", não incluindo a palavra 'ferrari', mas incluindo a palavra 'Ford' e frase exata \"alto consumo\".";
 $ViewLearningPath = "Visualizar Rota de Aprendizagem";
 $SearchFeatureDocumentTagsIfIndexing = "Etiquetas para acrescentar ao documento, para o caso de indexação";
 $ReturnToLearningPaths = "Voltar à Rota de aprendizagem";
@@ -244,4 +249,16 @@ $AddAssignmentToCourse = "Acrescentar tarefa ao curso";
 $AddForumToCourse = "Acrescentar fórum ao curso";
 $SaveAudioAndOrganization = "Salvar áudio e organização";
 $UploadOnlyMp3Files = "Envie somente arquivos no formato MP3";
+$ModifyHotPotatoes = "Modificar hotpotatoes";
+$SaveHotpotatoes = "Salvar hotpotatoes";
+$ReturnToLPList = "Retornar para a lista";
+$LpPrerequisiteDescription = "Selecionando uma outra Rota de Aprendizagem como pré-requisito será escondida a condição atual de progresso, até o pré-requisito está totalmente concluído (100%)";
+$ExerciseCantBeEditedAfterAddingToTheLP = "O exercício não pode ser editado depois de ser adicionado a uma Rota de Aprendizagem";
+$EnableTimeLimits = "Ativar limites de disponibilidade";
+$PublicationDate = "Data de publicação";
+$UseMaxScore100 = "Usar a pontuação máxima padrão de 100";
+$EnableLPAutoLaunch = "Ativar o início automático de rota de aprendizagem";
+$DisableLPAutoLaunch = "Desativar o início automático de Rota de Aprendizagem";
+$ViewModeEmbedFrame = "Modo de exibição atual: Embed externo. Use somente para incorporação em sites externos.";
+$LPNotVisibleToStudent = "Estudantes não podem visualizar estar rota de aprendizagem";
 ?>

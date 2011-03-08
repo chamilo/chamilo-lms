@@ -175,4 +175,15 @@ $User = "Usuário";
 $LostPass = "Esqueceu sua senha?";
 $EnterEmailUserAndWellSendYouPassword = "Insira seu nome de usuário e endereço de e-mail registrado e nós (re)enviaremos sua senha.";
 $NoUserAccountWithThisEmailAddress = "Não existe nenhuma conta de usuário cadastrada com este email.";
+$CouldNotResetPassword = "Não foi possível redefinir a senha";
+$WithTheFollowingSettings = "com as seguintes configurações:";
+$YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Sua conta no %s acabou de ser aprovada por um dos nossos administradores.";
+$HaveFun = "Divirta-se,";
+$YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Agora você pode efetuar o acesso ao %s usando o login e senha que você forneceu.";
+$AreYouSureToEditTheUserStatus = "Você realmente deseja alterar o status do usuário?";
+$TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "O professor pode acompanhar todo o progresso do curso somente dos usuários registrados no curso.";
+$TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "O professor pode qualificar, avaliar e acompanhar todos os usuários matrículados no cursos.";
+$LoginOrEmailAddress = "Nome de usuário ou endereço de email";
+$AtOnce = "até a admissão";
+$Daily = "Diariamente";
 ?>

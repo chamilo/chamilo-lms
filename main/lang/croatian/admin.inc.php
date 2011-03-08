@@ -501,7 +501,6 @@ $SearchDatabaseCreateError = "Kreiranje baze podataka nije uspješno";
 $SearchDatabaseCorruptError = "Detektirana je korupcija baze podataka";
 $SearchNetworkTimeoutError = "Vrijeme čekanja je isteklo prilikom komunikacije sa udaljenom bazom podataka";
 $SearchOtherXapianError = "Pogreška u pretraživanju";
-$SearchXapianModuleNotInstaled = "Xapian modul nije instaliran";
 $TheNewSubLanguageHasBeenAdded = "Novi Zamjenski jezik je dodan";
 $DeleteSubLanguage = "Obriši Zamjenski jezik";
 $CreateSubLanguageForLanguage = "Izradi Zamjenski jezik za ovaj jezik";

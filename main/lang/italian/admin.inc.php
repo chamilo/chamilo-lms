@@ -959,7 +959,6 @@ $SearchDatabaseCreateError = "Non è stato possibile creare il database di indic
 $SearchDatabaseCorruptError = "Il database di indicizzazione è corrotto";
 $SearchNetworkTimeoutError = "Errore di timeout nella connessione al database remoto di indicizzazione";
 $SearchOtherXapianError = "Errore nel motore di ricerca";
-$SearchXapianModuleNotInstaled = "Il modulo Xapian non risulta installato";
 $FieldRemoved = "Campo eliminato";
 $TheNewSubLanguageHasBeenAdded = "La nuova articolazione della lingua è stata aggiunta";
 $DeleteSubLanguage = "Elimina articolazione della lingua";

@@ -216,4 +216,16 @@ $HelpSharedFolder = "Este directorio contén os arquivos que os estudantes (e Vd
 $TemplateImage = "Imaxe da plantilla";
 $MoveElement = "Mover";
 $CertificateName = "Nome do certificado";
+$CopyToMyFiles = "Copiar na miña área persoal de arquivos";
+$Export2PDF = "Exportar en formato PDF";
+$ResourceShared = "Recurso compartido";
+$CopyAlreadyDone = "Hai un arquivo co mesmo nome na súa área persoal de arquivos de usuario. Desexa reemplazalo?";
+$CopyFailed = "Copia fallida";
+$CopyMade = "Copia realizada";
+$OverwritenFile = "Arquivo reemplazado";
+$Draw = "Debuxar";
+$FileExistsChangeToSave = "Este nome de arquivo xa existe, escolla outro para gardar a súa imaxe.";
+$FileSavedAs = "Arquivo gardado como";
+$FileExportAs = "Arquivo exportado como";
+$UserFolder = "Cartafol de usuario";
 ?>

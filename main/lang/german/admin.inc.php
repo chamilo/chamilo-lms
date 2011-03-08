@@ -959,7 +959,6 @@ $SearchDatabaseCreateError = "Fehler beim Erstellen der Datenbank";
 $SearchDatabaseCorruptError = "Korrupte Datenbank gefunden";
 $SearchNetworkTimeoutError = "Timeout beim Zugriff auf externe Datenbank";
 $SearchOtherXapianError = "Fehler in der Suchfunktion";
-$SearchXapianModuleNotInstaled = "Xapian-Modul ist nicht installiert";
 $FieldRemoved = "Feld entfernt";
 $TheNewSubLanguageHasBeenAdded = "Die neue Untersprache wurde hinzugefügt";
 $DeleteSubLanguage = "Untersprache löschen";

@@ -125,4 +125,6 @@ $AddPicture = "Engadir imaxe do curso";
 $LPAutoLaunch = "Activar o despregue automático de leccións";
 $ConfigLearnpath = "Configurar a ferramenta leccións";
 $PDFWaterMarkHeader = "Marca de auga na cabeceira nas exportacións en PDF";
+$RedirectToALearningPath = "Redirixir a un itinerairo seleccionado";
+$RedirectToTheLearningPathList = "Redirixir á lista de itinerarios";
 ?>

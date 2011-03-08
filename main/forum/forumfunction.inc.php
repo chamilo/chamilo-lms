@@ -188,7 +188,7 @@ function show_add_forum_form($inputvalues = array()) {
 
     //$form->applyFilter('forum_comment', 'html_filter');
     // Dropdown list: Forum categories
-    $forum_categories=get_forum_categories();
+    $forum_categories = get_forum_categories();
     foreach ($forum_categories as $key => $value) {
         $forum_categories_titles[$value['cat_id']] = $value['cat_title'];
     }
@@ -237,7 +237,6 @@ function show_add_forum_form($inputvalues = array()) {
     $group[] =& HTML_QuickForm::createElement('radio', 'approval_direct', null, get_lang('Approval'), 1);
     $group[] =& HTML_QuickForm::createElement('radio', 'approval_direct', null, get_lang('Direct'), 0);
     //$form->addGroup($group, 'approval_direct_group', get_lang('ApprovalDirect'), '&nbsp;');
-
 
     // This is for vertical.
     //$form->addElement('radio', 'allow_attachments', get_lang('AllowAttachments'), get_lang('Yes'), 1);
@@ -420,8 +419,8 @@ function show_edit_forumcategory_form($inputvalues = array()) {
 
     // Setting the default values.
     $defaultvalues['forum_category_id'] = $inputvalues['cat_id'];
-    $defaultvalues['forum_category_title'] = prepare4display($inputvalues['cat_title']);
-    $defaultvalues['forum_category_comment'] = prepare4display($inputvalues['cat_comment']);
+    $defaultvalues['forum_category_title'] = $inputvalues['cat_title'];
+    $defaultvalues['forum_category_comment'] = $inputvalues['cat_comment'];
     $form->setDefaults($defaultvalues);
 
     // Setting the rules.
@@ -465,16 +464,16 @@ function store_forumcategory($values) {
     $new_max = $row['sort_max'] + 1;
     $session_id = api_get_session_id();
 
-    $clean_cat_title = Database::escape_string(stripslashes($values['forum_category_title']));
+    $clean_cat_title = Database::escape_string(Security::remove_XSS(stripslashes($values['forum_category_title'])));
 
     if (isset($values['forum_category_id'])) { // Storing after edition.
-        $sql = "UPDATE ".$table_categories." SET cat_title='".$clean_cat_title."', cat_comment='".Database::escape_string(stripslashes($values['forum_category_comment']))."' WHERE cat_id='".Database::escape_string($values['forum_category_id'])."'";
+        $sql = "UPDATE ".$table_categories." SET cat_title='".$clean_cat_title."', cat_comment='".Database::escape_string(Security::remove_XSS(stripslashes($values['forum_category_comment'])))."' WHERE cat_id='".Database::escape_string($values['forum_category_id'])."'";
         Database::query($sql);
         $last_id = Database::insert_id();
         api_item_property_update(api_get_course_info(), TOOL_FORUM_CATEGORY, $values['forum_category_id'], 'ForumCategoryUpdated', api_get_user_id());
         $return_message = get_lang('ForumCategoryEdited');
     } else {
-        $sql = "INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order, session_id) VALUES ('".$clean_cat_title."','".Database::escape_string(stripslashes($values['forum_category_comment']))."','".Database::escape_string($new_max)."','".Database::escape_string($session_id)."')";
+        $sql = "INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order, session_id) VALUES ('".$clean_cat_title."','".Database::escape_string(Security::remove_XSS(stripslashes($values['forum_category_comment'])))."','".Database::escape_string($new_max)."','".Database::escape_string($session_id)."')";
         Database::query($sql);
         $last_id = Database::insert_id();
         if ($last_id > 0) {

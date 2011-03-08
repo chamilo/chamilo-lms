@@ -109,7 +109,7 @@ $last_href 	= 'viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove
 $prev_href	= 'viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$prev_id];
 $next_href	= 'viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$next_id];
 
-echo '<center>';
+echo '<center style="margin-top: 10px; margin-bottom: 10px;">';
 //go to: first and previous
 if ((int)$current_id > 0)
 {

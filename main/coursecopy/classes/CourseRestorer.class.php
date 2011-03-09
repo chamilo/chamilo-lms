@@ -233,9 +233,14 @@ class CourseRestorer
 		    		if (!is_dir($path.'document/'.$new)) {
 						$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document',$new,basename($new),$visibility);
 		    		}
-		    	}
-
-				if ($document->file_type == DOCUMENT) {
+                    
+		    	} elseif ($document->file_type == DOCUMENT) {
+                    if (!is_dir($path.dirname($document->path))) {
+                        $visibility = $document->item_properties[0]['visibility'];
+                        $new        = substr($document->path, 8);
+                        // This code fixes the possibility for a file without a directory entry to be 
+                        $created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document',$new,basename($new),$visibility,true);
+                    }
 					if (file_exists($path.$document->path)) {
 
 						switch ($this->file_option) {

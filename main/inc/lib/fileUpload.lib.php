@@ -1035,11 +1035,14 @@ function search_img_from_html($html_file) {
  * @param array $_course current course information
  * @param int $user_id current user id
  * @param string $desiredDirName complete path of the desired name
+ * @param  string   The visible name of the directory
+ * @param  int  Visibility (0 for invisible, 1 for visible, 2 for deleted)
  * @return string actual directory name if it succeeds,
  *         boolean false otherwise
  */
 function create_unexisting_directory($_course, $user_id, $to_group_id, $to_user_id, $base_work_dir, $desired_dir_name, $title = null, $visibility = '') {
 	$nb = '';
+    // add numerical suffix to directory if another one of the same number already exists
 	while (file_exists($base_work_dir.$desired_dir_name.$nb)) {
 		$nb += 1;
 	}

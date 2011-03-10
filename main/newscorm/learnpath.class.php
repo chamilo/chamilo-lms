@@ -6112,7 +6112,7 @@ class learnpath {
                 $form->addElement('hidden', 'title');
             }
 
-            $parent_select = & $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_chapter_form" style="width:37%;" id="Parent" onchange="javascript: load_cbo(this.value);"');
+            $parent_select = & $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_chapter_form" style="width:37%;" id="idParent" onchange="javascript: load_cbo(this.value);"');
 
             foreach ($arrHide as $key => $value) {
                 $parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
@@ -6337,7 +6337,7 @@ class learnpath {
             }
         }
 
-        $parent_select = & $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" style="width:40%;" onchange="javascript: load_cbo(this.value);"');
+        $parent_select = & $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" id="idParent" style="width:40%;" onchange="javascript: load_cbo(this.value);"');
         $my_count=0;
         foreach ($arrHide as $key => $value) {
             if ($my_count!=0) {
@@ -7071,20 +7071,8 @@ class learnpath {
      *
      * @return string
      */
-    public function create_js() {
-        $return = '<script language="javascript" type="text/javascript">' . "\n";
-        $return .= 'function load_cbo(id){' . "\n";
-        $return .= "var cbo = document.getElementById('idPosition');\n";
-        $return .= 'for(var i = cbo.length - 1; i > 0; i--)';
-        $return .= 'cbo.options[i] = null;' . "\n";
-        $return .= 'var k=0;' . "\n";
-        $return .= 'for(var i = 1; i <= child_name[id].length; i++){' . "\n";
-        $return .= '  cbo.options[i] = new Option(child_name[id][i-1], child_value[id][i-1]);' . "\n";
-        $return .= 'k=i;';
-        $return .= '}' . "\n\n";
-        $return .= 'if( typeof cbo != "undefined" ) {cbo.options[k].selected = true;}';
-        $return .= '}';
-        $return .= 'var child_name = new Array();' . "\n";
+    public function get_js_dropdown_array() {
+        $return = 'var child_name = new Array();' . "\n";
         $return .= 'var child_value = new Array();' . "\n\n";
         $return .= 'child_name[0] = new Array();' . "\n";
         $return .= 'child_value[0] = new Array();' . "\n\n";
@@ -7129,7 +7117,6 @@ class learnpath {
             }
             $return .= "\n";
         }
-        $return .= '</script>' . "\n";
         return $return;
     }
 

@@ -30,8 +30,27 @@ include 'resourcelinker.inc.php';
 $language_file = 'learnpath';
 
 /* Header and action code */
-
-$htmlHeadXtra[] = $_SESSION['oLP']->create_js();
+$htmlHeadXtra[] = '<script type="text/javascript">'.
+$_SESSION['oLP']->get_js_dropdown_array() .
+'function load_cbo(id){' ."\n" .
+  'if (!id) {return false;}'.
+  'var cbo = document.getElementById(\'idPosition\');' .
+  'for(var i = cbo.length - 1; i > 0; i--) {' .
+    'cbo.options[i] = null;' .
+ '}' ."\n" .
+  'var k=0;' .
+  'for(var i = 1; i <= child_name[id].length; i++){' ."\n" .
+  '  cbo.options[i] = new Option(child_name[id][i-1], child_value[id][i-1]);' ."\n" .
+  '  k=i;' ."\n" .
+  '}' ."\n" .
+  'cbo.options[k].selected = true;'."\n" .
+'}'."\n" .
+'$().ready(function() {'."\n" .
+  'if ($(\'#idPosition\')) {'."\n" .
+    'if(\'parent is\'+$(\'#idParent\').val()) {'.
+      'load_cbo($(\'#idParent\').val());'."\n" .
+  '}}'."\n" .
+'});</script>'."\n" ;
 
 /* Constants and variables */
 

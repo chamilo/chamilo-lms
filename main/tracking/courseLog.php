@@ -483,6 +483,8 @@ if ($_GET['studentlist'] == 'false') {
 
         if ($export_csv) {
             $csv_content = array();
+            //override the SortableTable "per page" limit if CSV
+            $_GET['users_tracking_per_page'] = 1000000;
         }
 
         $all_datas = array();

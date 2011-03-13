@@ -375,7 +375,10 @@ $MultipleAnswerCombinationTrueFalse = "C. exacte vrai/faux/ne-sais-pas";
 $DontKnow = "Ne sais pas";
 $False = "Faux";
 $DoubtScore = "Ne sais pas";
+$HotSpotDelineation = "Délinéation sur image";
 $PropagateNegativeResults = "Propager les résultats négatifs entre les questions";
 $InsertALinkToThisQuestionInTheExercise = "Insérer cette question dans l'exercice comme un lien (pas une copie)";
 $OnlyShowScore = "Montrer le score uniquement";
+$ImportExcelQuiz = "Importer un exercice via Excel";
+$DownloadExcelTemplate = "Télécharger le modèle Excel";
 ?>

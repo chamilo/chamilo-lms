@@ -375,7 +375,10 @@ $MultipleAnswerCombinationTrueFalse = "Combinación v/f/no-se";
 $DontKnow = "No se";
 $False = "Falso";
 $DoubtScore = "No se";
+$HotSpotDelineation = "Delineación hotspot";
 $PropagateNegativeResults = "Propagar los resultados negativos entre preguntas";
 $InsertALinkToThisQuestionInTheExercise = "Insertar esta pregunta en el ejercicio como un vínculo (no una copia)";
 $OnlyShowScore = "Mostrar solo el resultado";
+$ImportExcelQuiz = "Importar ejercicio via Excel";
+$DownloadExcelTemplate = "Descargar plantilla Excel";
 ?>

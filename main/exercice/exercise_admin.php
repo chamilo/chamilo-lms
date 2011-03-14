@@ -162,7 +162,7 @@ if(isset($_GET['exerciseId'])) {
 	$form->addElement('hidden','edit','false');
 }
 
-$objExercise->createForm ($form);
+$objExercise->createForm($form);
 
 // VALIDATE FORM
 if ($form->validate()) {

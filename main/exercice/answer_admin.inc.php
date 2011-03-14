@@ -1310,14 +1310,12 @@ if($modifyAnswers)
 </form>
 
 <?php
-        }
-        elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER)
-        {
+        } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
             if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is HOT_SPOT'."<br />\n";}
             $hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
             						"#4271B5",
 									"#FE8E16",
-									"#3B3B3B",
+									"#45C7F0",
 									"#BCD631",
 									"#D63173",
 									"#D7D7D7",
@@ -1326,7 +1324,7 @@ if($modifyAnswers)
 									"#4F9242",
 									"#F4EB24",
 									"#ED2024",
-									"#45C7F0",
+									"#3B3B3B",
 									"#F7BDE2");
 ?>
 

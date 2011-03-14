@@ -104,7 +104,7 @@ class ExerciseShowFunctions {
 		$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
 	            						"#4271B5",
 										"#FE8E16",
-										"#3B3B3B",
+										"#45C7F0",
 										"#BCD631",
 										"#D63173",
 										"#D7D7D7",
@@ -113,7 +113,7 @@ class ExerciseShowFunctions {
 										"#4F9242",
 										"#F4EB24",
 										"#ED2024",
-										"#45C7F0",
+										"#3B3B3B",
 										"#F7BDE2");
 		?>
 		<tr>

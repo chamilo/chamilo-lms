@@ -35,55 +35,6 @@ Display::display_header($nameTools,'Doc');
 
 /*	FUNCTIONS */
 
-/**
- *	Here we count 1 kilobyte = 1000 byte, 12 megabyte = 1000 kilobyte.
- */
-function display_quota($course_quota, $already_consumed_space) {
-	$course_quota_m = round($course_quota / 1000000);
-	$already_consumed_space_m = round($already_consumed_space / 1000000);
-	
-	
-	$message = get_lang('MaximumAllowedQuota') . ' <strong>'.$course_quota_m.' megabyte</strong>.<br />';
-	$message .= get_lang('CourseCurrentlyUses') . ' <strong>' . $already_consumed_space_m . ' megabyte</strong>.<br />';	
-	
-	
-	$percentage = $already_consumed_space / $course_quota * 100;
-	
-	$percentage = round($percentage, 1);	
-
-	$other_percentage = $percentage < 100 ? 100 - $percentage : 0;
-
-	// Decide where to place percentage in graph
-	if ($percentage >= 50) {
-		$text_in_filled = '&nbsp;'.$other_percentage.'%';
-		$text_in_unfilled = '';
-	} else {
-		$text_in_unfilled = '&nbsp;'.$other_percentage.'%';
-		$text_in_filled = '';
-	}
-
-	// Decide the background colour of the graph
-	if ($percentage < 65) {
-		$colour = '#00BB00';		// Safe - green
-	} elseif ($percentage < 90) {
-		$colour = '#ffd400';		// Filling up - yelloworange
-	} else {
-		$colour = '#DD0000';		// Full - red
-	}
-
-	// This is used for the table width: a table of only 100 pixels looks too small
-	$visual_percentage = 4 * $percentage;
-	$visual_other_percentage = 4 * $other_percentage;
-
-	$message .= get_lang('PercentageQuotaInUse') . ': <strong>'.$percentage.'%</strong>.<br />' .
-				get_lang('PercentageQuotaFree') . ': <strong>'.$other_percentage.'%</strong>.<br />';
-
-	$show_percentage = '&nbsp;'.$percentage.'%';
-    $message .= '<div style="width: 80%; text-align: center; -moz-border-radius: 5px 5px 5px 5px; border: 1px solid #aaa; background-image: url(\''.api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/bg-header4.png\');" class="document-quota-bar">'.
-                '<div style="width:'.$percentage.'%; background-color: #bbb; border-right:3px groove #bbb; -moz-border-radius:5px;">&nbsp;</div>'.
-                '<span style="margin-top: -15px; margin-left:-15px; position: absolute;font-weight:bold;">'.$show_percentage.'</span></div>';
-	echo $message;
-}
 
 // Actions
 echo '<div class="actions">';
@@ -95,13 +46,13 @@ echo '</div>';
 $course_quota = DocumentManager::get_course_quota();
 
 // Setting the full path
-$full_path = $baseWorkDir.$courseDir;
+//$full_path = $baseWorkDir.$courseDir;
 
 // Calculating the total space
-$already_consumed_space = documents_total_space($_course);
+$already_consumed_space = DocumentManager::documents_total_space($_course);
 
 // Displaying the quota
-display_quota($course_quota, $already_consumed_space);
+DocumentManager::display_quota($course_quota, $already_consumed_space);
 
 // Display the footer
 Display::display_footer();

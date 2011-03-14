@@ -232,7 +232,6 @@ if (!$is_allowed_to_edit && api_is_coach()) {
 
 /*	Constants and variables */
 
-$course_quota = DocumentManager::get_course_quota();
 $current_session_id = api_get_session_id();
 
 
@@ -1069,11 +1068,24 @@ if (count($docs_and_folders) > 1) {
     if ($is_allowed_to_edit || $group_member_with_upload_rights) {
         $form_actions = array();
         $form_action['delete'] = get_lang('Delete');
-        $table->set_form_actions($form_action, 'path');
+        $table->set_form_actions($form_action, 'path');        
     }
 }
 
 $table->display();
+
+if (count($docs_and_folders) > 1) {
+    if ($is_allowed_to_edit || $group_member_with_upload_rights) {
+        // Getting the course quota
+        $course_quota = DocumentManager::get_course_quota();
+                
+        // Calculating the total space
+        $already_consumed_space = DocumentManager::documents_total_space($_course);
+        
+        // Displaying the quota
+        DocumentManager::display_simple_quota($course_quota, $already_consumed_space);       
+    }
+}
 if (!empty($table_footer)) {
     echo $table_footer;
 }

@@ -11,6 +11,8 @@
  *	@todo test and reorganise
  */
 
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+
 /**
  * Changes the file name extension from .php to .phps
  * Useful for securing a site.
@@ -139,7 +141,7 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 	$current_session_id = api_get_session_id();
 	
 	// Check if there is enough space to save the file
-	if (!enough_space($uploaded_file['size'], $maxFilledSpace)) {
+	if (!DocumentManager::enough_space($uploaded_file['size'], $maxFilledSpace)) {
 	    if ($output) {	        
             Display::display_error_message(get_lang('UplNotEnoughSpace'));
 		}
@@ -334,27 +336,6 @@ function enough_size($file_size, $dir, $max_dir_space) {
 	return true;
 }
 
-/**
- * Checks if there is enough place to add a file on a directory
- * on the base of a maximum directory size allowed
- *
- * @author Bert Vanderkimpen
- * @param  int file_size size of the file in byte
- * @param array $_course
- * @param  int max_dir_space maximum size
- * @return boolean true if there is enough space, false otherwise
- *
- * @see enough_space() uses  documents_total_space() function
- */
-function enough_space($file_size, $max_dir_space) {
-	if ($max_dir_space) {
-		$already_filled_space = documents_total_space();
-		if (($file_size + $already_filled_space) > $max_dir_space) {
-			return false;
-		}
-	}
-	return true;
-}
 
 /**
  * Computes the size already occupied by a directory and is subdirectories
@@ -393,33 +374,6 @@ function dir_total_space($dir_path) {
 	return $sumSize;
 }
 
-/**
- * Calculates the total size of all documents in a course
- *
- * @author Bert vanderkimpen
- * @param  int $to_group_id (to calculate group document space)
- * @return int total size
- */
-function documents_total_space($to_group_id = '0') {
-	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-
-	$sql = "SELECT SUM(size)
-	FROM  ".$TABLE_ITEMPROPERTY."  AS props, ".$TABLE_DOCUMENT."  AS docs
-	WHERE docs.id = props.ref
-	AND props.tool = '".TOOL_DOCUMENT."'
-	AND props.to_group_id='".$to_group_id."'
-	AND props.visibility <> 2";
-
-	$result = Database::query($sql);
-
-	if ($result && Database::num_rows($result) != 0) {
-		$row = Database::fetch_row($result);
-		return $row[0];
-	} else {
-		return 0;
-	}
-}
 
 /**
  * Tries to add an extension to files without extension
@@ -705,7 +659,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 		$real_filesize += $this_content['size'];
 	}
 
-	if (!enough_space($real_filesize, $max_filled_space)) {
+	if (!DocumentManager::enough_space($real_filesize, $max_filled_space)) {
 		Display::display_error_message(get_lang('UplNotEnoughSpace'));
 		return false;
 	}

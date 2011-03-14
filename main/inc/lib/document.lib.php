@@ -2094,5 +2094,127 @@ class DocumentManager {
             return false;
         }
     }
+    
+    
+    /**
+     * Calculates the total size of all documents in a course
+     *
+     * @author Bert vanderkimpen
+     * @param  int $to_group_id (to calculate group document space)
+     * @return int total size
+     */
+    function documents_total_space($to_group_id = '0') {
+        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+    
+        $sql = "SELECT SUM(size)
+        FROM  ".$TABLE_ITEMPROPERTY."  AS props, ".$TABLE_DOCUMENT."  AS docs
+        WHERE docs.id = props.ref
+        AND props.tool = '".TOOL_DOCUMENT."'
+        AND props.to_group_id='".$to_group_id."'
+        AND props.visibility <> 2";
+    
+        $result = Database::query($sql);
+    
+        if ($result && Database::num_rows($result) != 0) {
+            $row = Database::fetch_row($result);
+            return $row[0];
+        } else {
+            return 0;
+        }
+    }
+    
+    
+    /**
+     *  Here we count 1 kilobyte = 1000 byte, 12 megabyte = 1000 kilobyte.
+     */
+    function display_quota($course_quota, $already_consumed_space) {
+        $course_quota_m = round($course_quota / 1000000);
+        $already_consumed_space_m = round($already_consumed_space / 1000000);
+        
+        
+        $message = get_lang('MaximumAllowedQuota') . ' <strong>'.$course_quota_m.' megabyte</strong>.<br />';
+        $message .= get_lang('CourseCurrentlyUses') . ' <strong>' . $already_consumed_space_m . ' megabyte</strong>.<br />';    
+        
+        
+        $percentage = $already_consumed_space / $course_quota * 100;
+        
+        $percentage = round($percentage, 1);    
+    
+        $other_percentage = $percentage < 100 ? 100 - $percentage : 0;
+    
+        // Decide where to place percentage in graph
+        if ($percentage >= 50) {
+            $text_in_filled = '&nbsp;'.$other_percentage.'%';
+            $text_in_unfilled = '';
+        } else {
+            $text_in_unfilled = '&nbsp;'.$other_percentage.'%';
+            $text_in_filled = '';
+        }
+    
+        // Decide the background colour of the graph
+        if ($percentage < 65) {
+            $colour = '#00BB00';        // Safe - green
+        } elseif ($percentage < 90) {
+            $colour = '#ffd400';        // Filling up - yelloworange
+        } else {
+            $colour = '#DD0000';        // Full - red
+        }
+    
+        // This is used for the table width: a table of only 100 pixels looks too small
+        $visual_percentage = 4 * $percentage;
+        $visual_other_percentage = 4 * $other_percentage;
+    
+        $message .= get_lang('PercentageQuotaInUse') . ': <strong>'.$percentage.'%</strong>.<br />' .
+                    get_lang('PercentageQuotaFree') . ': <strong>'.$other_percentage.'%</strong>.<br />';
+    
+        $show_percentage = '&nbsp;'.$percentage.'%';
+        $message .= '<div style="width: 80%; text-align: center; -moz-border-radius: 5px 5px 5px 5px; border: 1px solid #aaa; background-image: url(\''.api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/bg-header4.png\');" class="document-quota-bar">'.
+                    '<div style="width:'.$percentage.'%; background-color: #bbb; border-right:3px groove #bbb; -moz-border-radius:5px;">&nbsp;</div>'.
+                    '<span style="margin-top: -15px; margin-left:-15px; position: absolute;font-weight:bold;">'.$show_percentage.'</span></div>';
+        echo $message;
+    }
+    
+    
+    /**
+     * Display the document quota in a simple way
+     * 
+     *  Here we count 1 kilobyte = 1000 byte, 12 megabyte = 1000 kilobyte.
+     */
+    function display_simple_quota($course_quota, $already_consumed_space) {
+        $course_quota_m = round($course_quota / 1000000);
+        $already_consumed_space_m = round($already_consumed_space / 1000000, 2);        
+        $percentage = $already_consumed_space / $course_quota * 100;        
+        $percentage = round($percentage, 1);                    
+        //$message = "You are currently using %s (%s) of your %s.";
+        $message = get_lang('YouAreCurrentlyUsingXOfYourX');       
+        $message = sprintf($message, $already_consumed_space_m.' MB',$percentage.'%',$course_quota_m.' MB');
+        echo Display::div($message, array('style'=>'font-weight:bold; color:   #006633   ; text-align:center'));
+    }
+    
+    
+    /**
+     * Checks if there is enough place to add a file on a directory
+     * on the base of a maximum directory size allowed
+     *
+     * @author Bert Vanderkimpen
+     * @param  int file_size size of the file in byte
+     * @param array $_course
+     * @param  int max_dir_space maximum size
+     * @return boolean true if there is enough space, false otherwise
+     *
+     * @see enough_space() uses  documents_total_space() function
+     */
+    function enough_space($file_size, $max_dir_space) {
+        if ($max_dir_space) {
+            $already_filled_space = self::documents_total_space();
+            if (($file_size + $already_filled_space) > $max_dir_space) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }
 //end class DocumentManager

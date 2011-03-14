@@ -971,13 +971,6 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         <?php Display::display_icon('new_folder.png', get_lang('CreateDir'),'','32'); ?></a>
 <?php
     }
-    //Show disk quota
-    if (!$is_certificate_mode && !is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
-?>
-    <a href="quota.php?<?php echo api_get_cidreq(); ?>">
-        <?php Display::display_icon('disk_quota.png', get_lang('ShowCourseQuotaUse'),'','32'); ?></a>
-<?php
-    }
 }
 
 if (!is_null($docs_and_folders)) {

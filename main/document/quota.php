@@ -11,6 +11,7 @@
  */
 
 // Name of the language file that needs to be included
+exit;
 $language_file = 'document';
 
 // Including the global dokeos file

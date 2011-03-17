@@ -120,7 +120,6 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 <link href="http://www.chamilo.org/documentation.php" rel="Help" />
 <link href="http://www.chamilo.org/team.php" rel="Author" />
 <link href="http://www.chamilo.org" rel="Copyright" />
-<link rel="shortcut icon" href="<?php echo api_get_path(WEB_PATH); ?>favicon.ico" type="image/x-icon" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 <meta name="Generator" content="<?php echo $_configuration['software_name'].' '.substr($_configuration['system_version'],0,1);?>">
 <script src= "<?php echo api_get_path(WEB_LIBRARY_PATH);?>javascript/jquery.menu.js" type="text/javascript"></script>
@@ -161,6 +160,7 @@ if (isset($htmlIncHeadXtra) && $htmlIncHeadXtra) {
 // The following include might be subject to a setting proper to the course or platform.
 include api_get_path(LIBRARY_PATH).'javascript/email_links.lib.js.php';
 
+$favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
 if ($_configuration['multiple_access_urls']) {
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1) {
@@ -171,11 +171,12 @@ if ($_configuration['multiple_access_urls']) {
         $clean_url .= '/';
         $homep            = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path               
         //we create the new dir for the new sites
-        if (!is_file($homep.'favicon.ico')) {
-            echo '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
+        if (is_file($homep.'favicon.ico')) {
+            $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
         }
     }
 }
+echo $favico;
 ?>
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>" <?php

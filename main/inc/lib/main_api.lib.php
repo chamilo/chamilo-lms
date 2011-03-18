@@ -1035,9 +1035,9 @@ function api_get_cidreq() {
 function api_get_course_info($course_code = null) {
     if (!empty($course_code)) {
         //global $_course;var_dump($_course);
-        $course_code = Database::escape_string($course_code);
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $course_code        = Database::escape_string($course_code);
+        $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
+        $course_cat_table   = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql = "SELECT course.*, course_category.code faCode, course_category.name faName
                  FROM $course_table
                  LEFT JOIN $course_cat_table
@@ -1047,31 +1047,31 @@ function api_get_course_info($course_code = null) {
         $_course = array();
         if (Database::num_rows($result) > 0) {
             global $_configuration;
-            $cData = Database::fetch_array($result);
-            $_course['id'           ]         = $cData['code'           ];
-            $_course['code'         ]         = $cData['code'           ];
-            $_course['name'         ]         = $cData['title'          ];
-            $_course['official_code']         = $cData['visual_code'    ]; // Use in echo statements.
-            $_course['sysCode'      ]         = $cData['code'           ]; // Use as key in db.
-            $_course['path'         ]         = $cData['directory'      ]; // Use as key in path.
-            $_course['dbName'       ]         = $cData['db_name'        ]; // Use as key in db list.
-            $_course['db_name'      ]         = $cData['db_name'];         // 
-            $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // Use in all queries.
-            $_course['titular'      ]         = $cData['tutor_name'     ];
-            $_course['language'     ]         = $cData['course_language'];
-            $_course['extLink'      ]['url' ] = $cData['department_url' ];
-            $_course['extLink'      ]['name'] = $cData['department_name'];
-            $_course['categoryCode' ]         = $cData['faCode'         ];
-            $_course['categoryName' ]         = $cData['faName'         ];
-            $_course['visibility'   ]         = $cData['visibility'     ];
-            $_course['subscribe_allowed']     = $cData['subscribe'      ];
-            $_course['unubscribe_allowed']    = $cData['unsubscribe'    ];
+            $course_data = Database::fetch_array($result);
+            $_course['id'           ]         = $course_data['code'           ];
+            $_course['code'         ]         = $course_data['code'           ];
+            $_course['name'         ]         = $course_data['title'          ];
+            $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
+            $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
+            $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
+            $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
+            $_course['db_name'      ]         = $course_data['db_name'];         // 
+            $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
+            $_course['titular'      ]         = $course_data['tutor_name'     ];
+            $_course['language'     ]         = $course_data['course_language'];
+            $_course['extLink'      ]['url' ] = $course_data['department_url' ];
+            $_course['extLink'      ]['name'] = $course_data['department_name'];
+            $_course['categoryCode' ]         = $course_data['faCode'         ];
+            $_course['categoryName' ]         = $course_data['faName'         ];
+            $_course['visibility'   ]         = $course_data['visibility'     ];
+            $_course['subscribe_allowed']     = $course_data['subscribe'      ];
+            $_course['unubscribe_allowed']    = $course_data['unsubscribe'    ];
             
-            $_course['department_name']       = $cData['department_name'];
-            $_course['department_url']        = $cData['department_url' ];
+            $_course['department_name']       = $course_data['department_name'];
+            $_course['department_url']        = $course_data['department_url' ];
 
             // The real_id is an integer. It is mandatory for future implementations.
-            $_course['real_id'     ]          = $cData['id'              ];
+            $_course['real_id'     ]          = $course_data['id'              ];
         }
         return $_course;
     }
@@ -1100,31 +1100,31 @@ function api_get_course_info_by_id($id = null) {
         $_course = array();
         if (Database::num_rows($result) > 0) {
             global $_configuration;
-            $cData = Database::fetch_array($result);
+            $course_data = Database::fetch_array($result);
 
-            $_course['id'           ]         = $cData['code'           ];
+            $_course['id'           ]         = $course_data['code'           ];
             // Added
-            $_course['code'         ]         = $cData['code'           ];
-            $_course['name'         ]         = $cData['title'          ];
-            $_course['official_code']         = $cData['visual_code'    ]; // Use in echo statements.
-            $_course['sysCode'      ]         = $cData['code'           ]; // Use as key in db.
-            $_course['path'         ]         = $cData['directory'      ]; // Use as key in path.
-            $_course['dbName'       ]         = $cData['db_name'        ]; // Use as key in db list.
-            $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // Use in all queries.
-            $_course['titular'      ]         = $cData['tutor_name'     ];
-            $_course['language'     ]         = $cData['course_language'];
-            $_course['extLink'      ]['url' ] = $cData['department_url' ];
-            $_course['extLink'      ]['name'] = $cData['department_name'];
-            $_course['categoryCode' ]         = $cData['faCode'         ];
-            $_course['categoryName' ]         = $cData['faName'         ];
+            $_course['code'         ]         = $course_data['code'           ];
+            $_course['name'         ]         = $course_data['title'          ];
+            $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
+            $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
+            $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
+            $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
+            $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
+            $_course['titular'      ]         = $course_data['tutor_name'     ];
+            $_course['language'     ]         = $course_data['course_language'];
+            $_course['extLink'      ]['url' ] = $course_data['department_url' ];
+            $_course['extLink'      ]['name'] = $course_data['department_name'];
+            $_course['categoryCode' ]         = $course_data['faCode'         ];
+            $_course['categoryName' ]         = $course_data['faName'         ];
 
-            $_course['visibility'   ]         = $cData['visibility'      ];
-            $_course['subscribe_allowed']     = $cData['subscribe'       ];
-            $_course['unubscribe_allowed']    = $cData['unsubscribe'     ];
+            $_course['visibility'   ]         = $course_data['visibility'      ];
+            $_course['subscribe_allowed']     = $course_data['subscribe'       ];
+            $_course['unubscribe_allowed']    = $course_data['unsubscribe'     ];
 
-            $_course['real_id'      ]         = $cData['id'              ];
-            $_course['db_name'      ]         = $cData['db_name'         ];
-            $_course['title'        ]         = $cData['title'           ];
+            $_course['real_id'      ]         = $course_data['id'              ];
+            $_course['db_name'      ]         = $course_data['db_name'         ];
+            $_course['title'        ]         = $course_data['title'           ];
 
         }
         return $_course;

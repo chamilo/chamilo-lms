@@ -1003,7 +1003,7 @@ class DocumentManager {
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result,'ASSOC');      
             //Public document URL       
-            $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq'.$course_code.'&id='.$id;
+            $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq='.$course_code.'&id='.$id;
             return $row;
         }
         return false;
@@ -2005,7 +2005,7 @@ class DocumentManager {
                         Display::display_normal_message(build_missing_files_form($missing_files, $path, $files['file']['name']), false);
                     }
                     
-                    if (!empty($docid) && is_numeric($docid)) {
+                    if (!empty($docid) && is_numeric($docid)) {                        
                         $document_data = self::get_document_data_by_id($docid, $course_info['code']);
                         return $document_data;
                     }

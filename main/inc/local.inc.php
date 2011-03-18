@@ -657,30 +657,31 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
         $result = Database::query($sql);
 
         if (Database::num_rows($result)>0) {
-            $cData = Database::fetch_array($result);
+            $course_data = Database::fetch_array($result);
             //@TODO real_cid should be cid, for working with numeric course id
-            $_real_cid                      = $cData['id'];
+            $_real_cid                      = $course_data['id'];
 
-            $_cid                           = $cData['code'];
+            $_cid                           = $course_data['code'];
             $_course = array();
-            $_course['real_id']             = $cData['id'];
-            $_course['id']                  = $cData['code']; //auto-assigned integer
-            $_course['name']                = $cData['title'];
-            $_course['official_code']       = $cData['visual_code']; // use in echo
-            $_course['sysCode']             = $cData['code']; // use as key in db
-            $_course['path']                = $cData['directory']; // use as key in path
-            $_course['dbName']              = $cData['db_name']; // use as key in db list
-            $_course['db_name']             = $cData['db_name']; // 
-            $_course['dbNameGlu']           = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
-            $_course['titular']             = $cData['tutor_name'];
-            $_course['language']            = $cData['course_language'];
-            $_course['extLink']['url' ]     = $cData['department_url'];
-            $_course['extLink']['name']     = $cData['department_name'];
-            $_course['categoryCode']        = $cData['faCode'];
-            $_course['categoryName']        = $cData['faName'];
-            $_course['visibility']          = $cData['visibility'];
-            $_course['subscribe_allowed']   = $cData['subscribe'];
-            $_course['unubscribe_allowed']  = $cData['unsubscribe'];
+            $_course['real_id']             = $course_data['id'];
+            $_course['id']                  = $course_data['code']; //auto-assigned integer
+            $_course['code']                = $course_data['code']; 
+            $_course['name']                = $course_data['title'];
+            $_course['official_code']       = $course_data['visual_code']; // use in echo
+            $_course['sysCode']             = $course_data['code']; // use as key in db
+            $_course['path']                = $course_data['directory']; // use as key in path
+            $_course['dbName']              = $course_data['db_name']; // use as key in db list
+            $_course['db_name']             = $course_data['db_name']; // 
+            $_course['dbNameGlu']           = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // use in all queries
+            $_course['titular']             = $course_data['tutor_name'];
+            $_course['language']            = $course_data['course_language'];
+            $_course['extLink']['url' ]     = $course_data['department_url'];
+            $_course['extLink']['name']     = $course_data['department_name'];
+            $_course['categoryCode']        = $course_data['faCode'];
+            $_course['categoryName']        = $course_data['faName'];
+            $_course['visibility']          = $course_data['visibility'];
+            $_course['subscribe_allowed']   = $course_data['subscribe'];
+            $_course['unubscribe_allowed']  = $course_data['unsubscribe'];
 
             api_session_register('_cid');
             api_session_register('_course');

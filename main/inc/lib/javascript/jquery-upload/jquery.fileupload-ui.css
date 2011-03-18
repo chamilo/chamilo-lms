@@ -9,7 +9,7 @@
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  width: 200px;
+  width: 350px;
   height: 30px;
   line-height: 30px;
   background: palegreen;
@@ -17,7 +17,7 @@
 }
 
 .file_upload_small {
-  width: 200px;
+  width: 350px;
   height: 30px;
   line-height: 30px;
   font-size: auto;

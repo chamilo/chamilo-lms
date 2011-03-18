@@ -226,7 +226,13 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 ?>
 <body>
 <div id="learning_path_main"  style="width:100%;height:100%;" >
-    <div id="learning_path_left_zone" style="float:left;width:280px;height:100%">
+    <?php
+  if ($_SESSION['oLP']->get_hide_toc_frame()==1 and !api_is_allowed_to_edit()) {?>
+    <div id="learning_path_left_zone" style="float:left;width:280px;height:100%;display:none">
+  <?php
+  }else{?>
+    <div id="learning_path_left_zone" style="float:left;width:280px;height:100%;">
+<?php }?> 
 
 		<!-- header -->
 		<div id="header">
@@ -343,7 +349,14 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
     <!-- end left Zone -->
 
     <!-- right Zone -->
+    <?php
+  if (($_SESSION['oLP']->get_hide_toc_frame()==1) && !api_is_allowed_to_edit() ) {?>
+	<div id="learning_path_right_zone" style="height:100%">
+  <?php } else {?>
 	<div id="learning_path_right_zone" style="margin-left:282px;height:100%">
+  <?php } ?>
+
+
 	<?php
 		// hub 26-05-2010 Fullscreen or not fullscreen
 		if($_SESSION['oLP']->mode == 'fullscreen') {

@@ -249,4 +249,6 @@ $ModifyHotPotatoes = "Modify hotpotatoes";
 $SaveHotpotatoes = "Save hotpotatoes";
 $ReturnToLPList = "Return to list";
 $LpPrerequisiteDescription = "Selecting another learning path as a prerequisite will hide the current prerequisite until the one in prerequisite is fully completed (100%)";
+$HideTocFrame = "Hide the table of content";
+
 ?>

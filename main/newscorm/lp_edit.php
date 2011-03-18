@@ -174,7 +174,7 @@ $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
 $form->setDefaults($defaults);
 echo '<table><tr><td width="550px">';
 	$form -> display();
-if ($_SESSION['oLP']->get_hide_toc_frame() == 0  ){
+if ($_SESSION['oLP']->get_hide_toc_frame() == 1  ){
   $display_img='none';
 }
 else{

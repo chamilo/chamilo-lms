@@ -2188,7 +2188,7 @@ class DocumentManager {
         $percentage = round($percentage, 1);                    
         //$message = "You are currently using %s (%s) of your %s.";
         $message = get_lang('YouAreCurrentlyUsingXOfYourX');       
-        $message = sprintf($message, $already_consumed_space_m.' MB',$percentage.'%',$course_quota_m.' MB');
+        $message = sprintf($message, $already_consumed_space_m, $percentage.'%',$course_quota_m.' ');
         echo Display::div($message, array('style'=>'font-weight:bold; color:   #006633   ; text-align:center'));
     }
     

@@ -43,7 +43,14 @@ $my_style       = $platform_theme;
 
 /*  Header  */
 
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
+// Se incluye la libreria en el lp_controller.php
+// $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link  src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/cupertino/jquery-ui-1.8.7.custom.css" type="text/css" rel="Stylesheet" />';
+$htmlHeadXtra[] = '<script  src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/cupertino/jquery-ui-1.8.7.custom.min.js" type="text/javascript" language="javascript"></script>';
+
+// se incluye la librería para el mini panel
+$htmlHeadXtra[] = '<script  src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
+
 
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
     $htmlHeadXtra[] = '<script type="text/javascript">
@@ -53,8 +60,8 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setti
 </script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
-}
 
+}
 $htmlHeadXtra[] = '<script language="javascript" type="text/javascript">
 $(document).ready(function (){
     $("div#log_content_cleaner").bind("click", function(){
@@ -275,12 +282,12 @@ if ($_SESSION['oLP']->mode == 'embedframe') {
         <!-- header -->
         <div id="header">
             <div id="learning_path_header" style="font-size:14px;">
-                <table>
+                <table >
                     <tr>
-                        <td>
+                        <td >
                             <a href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
                         </td>
-                        <td>
+                        <td >
                             <a class="link" href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
                             <?php echo get_lang('CourseHomepageLink'); ?></a>
                         </td>

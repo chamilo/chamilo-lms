@@ -204,7 +204,6 @@ class GlossaryManager {
 	 * @return mixed   Array(glossary_id,glossary_title,glossary_comment,glossary_display_order) or false on error
 	 *
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
-	 * @version januari 2009, dokeos 1.8.6
 	 */
 	function get_glossary_information($glossary_id) {
 		// Database table definition
@@ -214,7 +213,7 @@ class GlossaryManager {
 		$sql = "SELECT 	g.glossary_id 		AS glossary_id,
 						g.name 				AS glossary_title,
 						g.description 		AS glossary_comment,
-						g.display_order		AS glossary_display_order
+						g.display_order		AS glossary_display_order, session_id 
 				   FROM $t_glossary g
 				   WHERE g.glossary_id = '".intval($glossary_id)."' ";
 		$result = Database::query($sql);
@@ -261,13 +260,12 @@ class GlossaryManager {
 	function display_glossary($view = 'table') {
 		// This function should always be called with the corresponding
 		// parameter for view type. Meanwhile, use this cheap trick.
-		if (empty ($_SESSION['glossary_view'])) {
+		if (empty($_SESSION['glossary_view'])) {
 			$_SESSION['glossary_view'] = $view;
 		}
 		// action links
 		echo '<div class="actions" style="margin-bottom:10px">';
-		if (api_is_allowed_to_edit(null,true))
-		{
+		if (api_is_allowed_to_edit(null,true)) {
 			echo '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add">'.Display::return_icon('new_glossary_term.png',get_lang('TermAddNew'),'','32').'</a>';
 		}
 
@@ -325,7 +323,7 @@ class GlossaryManager {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 		$session_id = intval($session_id);
-		$sql_filter = api_get_session_condition($session_id);
+		$sql_filter = api_get_session_condition($session_id, true, true);
 		$sql = "SELECT count(glossary_id) as total FROM $t_glossary ".
 		          " WHERE 1=1 $sql_filter";
 		$res = Database::query($sql);
@@ -343,7 +341,8 @@ class GlossaryManager {
 	 * @param string  Whether to sort in ascending (ASC) or descending (DESC)
 	 * @return unknown
 	 *
-	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
+	 * @author Patrick Cool <patrick.cool@ugent.be>
+	 * @author Julio Montoya fixing this function, adding intvals
 	 * @version januari 2009, dokeos 1.8.6
 	 */
 	function get_glossary_data($from, $number_of_items, $column, $direction) {
@@ -359,9 +358,15 @@ class GlossaryManager {
 		}
 
 		//condition for the session
-		$session_id = api_get_session_id();
-		$condition_session = api_get_session_condition($session_id);
-
+		$session_id         = api_get_session_id();
+		$condition_session  = api_get_session_condition($session_id, true, true);
+        $column             = intval($column);
+        if (!in_array($direction,array('DESC', 'ASC'))) {
+            $direction          = 'DESC';
+        }        
+        $from               = intval($from);
+        $number_of_items    = intval($number_of_items);
+        
 		$sql = "SELECT
 					glossary.display_order 	as col0,
 					glossary.name 			as col1,
@@ -375,7 +380,7 @@ class GlossaryManager {
 				AND tool = '".TOOL_GLOSSARY."' $condition_session";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
-
+        
 		$res = Database::query($sql);
 
 		$return = array();
@@ -422,37 +427,36 @@ class GlossaryManager {
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function actions_filter($glossary_id,$url_params,$row) {
+	function actions_filter($glossary_id, $url_params, $row) {
 		if (!$_SESSION['max_glossary_display'] OR $_SESSION['max_glossary_display'] == '') {
 			$_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
 		}
 
 		if (empty($_GET['glossary_column'])) {
 			if ($row[0] > 1) {
-
 				$return .= '<a href="'.api_get_self().'?action=moveup&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'">'.Display::return_icon('up.png', get_lang('Up'),'',22).'</a>';
-			}
-			else
-			{
+			} else {
 				$return .= Display::return_icon('up_na.png','&nbsp;','',22);
-
 			}
-			if ($row[0] < $_SESSION['max_glossary_display'])
-			{
+			
+			if ($row[0] < $_SESSION['max_glossary_display']) {
 				$return .= '<a href="'.api_get_self().'?action=movedown&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'">'.Display::return_icon('down.png',get_lang('Down'),'',22).'</a>';
-			}
-			else
-			{
+			} else {
 				$return .= Display::return_icon('down_na.png','&nbsp;','',22);
 
 			}
 		}
 		$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'&msg=edit">'.Display::return_icon('edit.png',get_lang('Edit'),'',22).'</a>';
-
-		$glossary_data = GlossaryManager::get_glossary_information($row[5]);
+		$glossary_data = GlossaryManager::get_glossary_information($row[5]);		
 		$glossary_term = $glossary_data['glossary_title'];
 
 		$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>';
+		
+		if (api_is_allowed_to_edit(null, true)) {
+		    if ($glossary_data['session_id'] != api_get_session_id()) {
+		        $return  = get_lang('EditionNotAvailableFromSession');
+		    }
+		}
 		return $return;
 	}
 
@@ -466,8 +470,7 @@ class GlossaryManager {
 	 */
 	function javascript_glossary() {
 		return "<script type=\"text/javascript\">
-				function confirmation (name)
-				{
+				function confirmation (name) {
 					if (confirm(\" ". get_lang("TermConfirmDelete") ." \"+ name + \" ?\"))
 						{return true;}
 					else

@@ -520,7 +520,7 @@ class Tracking {
          * @param    bool        Returns an array of the type [sum_score, num_score] if set to true
          * @return     string         Value (number %) Which represents a round integer explain in got in 3.
          */
-        public static function get_avg_student_score($student_id, $course_code, $lp_ids=array(), $session_id = null, $return_array = false) {
+        public static function get_avg_student_score($student_id, $course_code, $lp_ids=array(), $session_id = null, $return_array = false, $get_only_latest_attempt_results = false) {
 
             // get global tables names
             $course_table               = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -543,19 +543,18 @@ class Tracking {
                 // Compose a filter based on optional learning paths list given
 
                 $condition_lp = "";
-                if(count($lp_ids) > 0) {
+                if (count($lp_ids) > 0) {
                     $condition_lp =" AND id IN(".implode(',',$lp_ids).") ";
-                }
+                }                
 
                 // Compose a filter based on optional session id
                 $condition_session = "";
-                if (isset($session_id)) {
-                    $session_id = intval($session_id);
-                    if (count($lp_ids) > 0) {
-                        $condition_session = " AND session_id = $session_id ";
-                    } else {
-                        $condition_session = " WHERE session_id = $session_id ";
-                    }
+                
+                $session_id = intval($session_id);
+                if (count($lp_ids) > 0) {
+                    $condition_session = " AND session_id = $session_id ";
+                } else {
+                    $condition_session = " WHERE session_id = $session_id ";
                 }
 
                 // Check the real number of LPs corresponding to the filter in the
@@ -566,26 +565,23 @@ class Tracking {
                 } else {
                     $sql = "SELECT DISTINCT(id), use_max_score FROM $lp_table WHERE 1 $condition_lp ";
                 }
-
-                $res_row_lp = Database::query($sql);
+                
+                $res_row_lp   = Database::query($sql);
                 $count_row_lp = Database::num_rows($res_row_lp);
+                
                 $lp_list = $use_max_score = array();
-
                 while ($row_lp = Database::fetch_array($res_row_lp)) {
                     $lp_list[]                     = $row_lp['id'];
                     $use_max_score[$row_lp['id']]  = $row_lp['use_max_score'];
-                }
+                }                
 
-                // Init local variables that will be used through the calculation
-                $lp_scorm_score_total = 0;
+                // Init local variables that will be used through the calculation                
                 $lp_scorm_result_score_total = 0;
-
-                $lp_scorm_loop=0;
-                $lp_count = 0;
-                $progress = 0;
+                $progress                    = 0;
 
                 // prepare filter on users
                 $condition_user1 = "";
+                
                 if (is_array($student_id)) {
                     array_walk($student_id,'intval');
                     $condition_user1 =" AND user_id IN (".implode(',',$student_id).") ";
@@ -593,17 +589,19 @@ class Tracking {
                     $condition_user1 =" AND user_id = '$student_id' ";
                 }
 
-                if ($count_row_lp>0 && !empty($student_id)) {
+                if ($count_row_lp > 0 && !empty($student_id)) {
 
-                    // Get all views through learning paths filter
+                    // Getting latest LP result for a student
+                    
                     //@todo problem when a  course have more than 1500 users
-                    $sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id  FROM $lp_view_table ".
-                        "WHERE lp_id IN (".implode(',',$lp_list).") $condition_user1 AND session_id= $session_id GROUP BY lp_id,user_id";
-                    //var_dump(          $sql              );
+                    $sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id  FROM $lp_view_table
+                            WHERE lp_id IN (".implode(',',$lp_list).") $condition_user1 AND session_id = $session_id GROUP BY lp_id, user_id";
+                    //var_dump($sql);
                     $rs_last_lp_view_id = Database::query($sql);
                     $global_count_item = 0;
                     $global_result = 0;
-
+                    $list = array();
+                    
                     if (Database::num_rows($rs_last_lp_view_id) > 0) {
                         // Cycle through each line of the results (grouped by lp_id, user_id)
                         while ($row_lp_view = Database::fetch_array($rs_last_lp_view_id)) {
@@ -612,26 +610,53 @@ class Tracking {
                             $progress   = $row_lp_view['progress'];
                             $lp_id      = $row_lp_view['lp_id'];
                             $user_id    = $row_lp_view['user_id'];
-
-                            // For the currently analysed view, get the score and
-                            // max_score of each item if it is a sco or a TOOL_QUIZ
-                            $sql_max_score = "SELECT lp_iv.score as score,lp_i.max_score, lp_iv.max_score as max_score_item_view, lp_i.path, lp_i.item_type, lp_i.id as iid".
-                                  " FROM $lp_item_view_table as lp_iv INNER JOIN $lp_item_table as lp_i ".
-                                  " ON lp_i.id = lp_iv.lp_item_id ".
-                                  " AND (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') ".
-                                  " WHERE lp_view_id='$lp_view_id'";
-                            //echo $sql_max_score; echo '<br />';
-
-                            $res_max_score = Database::query($sql_max_score);
+                            
+                            //Getting 
+                            
+                            if ($get_only_latest_attempt_results) {
+                            //if (1) {
+                                //Getting lp_items done by the user
+                                $sql  = "SELECT DISTINCT lp_item_id FROM $lp_item_view_table WHERE lp_view_id = $lp_view_id ORDER BY lp_item_id";
+                                $res_lp_item = Database::query($sql);
+                                
+                                while ($row_lp_item = Database::fetch_array($res_lp_item,'ASSOC')) {
+                                    $my_lp_item_id = $row_lp_item['lp_item_id'];
+                                    
+                                    //Getting the most recent attempt 
+                                    $sql = "SELECT lp_iv.score as score,lp_i.max_score, lp_iv.max_score as max_score_item_view, lp_i.path, lp_i.item_type, lp_i.id as iid
+                                            FROM $lp_item_view_table as lp_iv INNER JOIN $lp_item_table as lp_i ON lp_i.id = lp_iv.lp_item_id AND (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') 
+                                            WHERE lp_item_id = $my_lp_item_id AND lp_view_id = $lp_view_id ORDER BY view_count DESC LIMIT 1";
+                                    $res_lp_item_result = Database::query($sql);
+                                    
+                                    
+                                    while ($row_max_score = Database::fetch_array($res_lp_item_result,'ASSOC')) {
+                                        $list[]= $row_max_score;       
+                                    }                                      
+                                }
+                            } else {
+                                // For the currently analysed view, get the score and
+                                // max_score of each item if it is a sco or a TOOL_QUIZ
+                                $sql_max_score = "SELECT lp_iv.score as score,lp_i.max_score, lp_iv.max_score as max_score_item_view, lp_i.path, lp_i.item_type, lp_i.id as iid
+                                                  FROM $lp_item_view_table as lp_iv INNER JOIN $lp_item_table as lp_i ON lp_i.id = lp_iv.lp_item_id AND (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') 
+                                                  WHERE lp_view_id = $lp_view_id ";
+                                //echo $sql_max_score; echo '<br />';
+                
+                                $res_max_score = Database::query($sql_max_score);
+                               
+                                while ($row_max_score = Database::fetch_array($res_max_score,'ASSOC')) {
+                                    $list[]= $row_max_score;       
+                                }
+                            }
+                            //var_dump($list);
+                            
                             $count_total_loop = 0;
-                            $num_rows_max_score = Database::num_rows($res_max_score);
-
+                            
                             // Go through each scorable element of this view
                             $count_items = 0;
                             $lp_partial_total = 0;
                             $score_of_scorm_calculate = 0;
-
-                            while ($row_max_score = Database::fetch_array($res_max_score,'ASSOC')) {
+                            
+                            foreach ($list as $row_max_score) {
                                 $max_score              = $row_max_score['max_score'];  //Came from the original lp_item
                                 $max_score_item_view    = $row_max_score['max_score_item_view']; //Came from the lp_item_view
                                 $score                  = $row_max_score['score'];
@@ -663,13 +688,9 @@ class Tracking {
                                     $item_path  = $row_max_score['path'];
                                     // Get last attempt to this exercise  through
                                     // the current lp for the current user
-                                    $sql_last_attempt = "SELECT exe_id FROM $tbl_stats_exercices ".
-                                   " WHERE exe_exo_id = '$item_path' ".
-                                   " AND exe_user_id = '$user_id' ".
-                                    // " AND orig_lp_id = '$lp_id' ". //lp_id is already defined by the item_id
-                                   " AND orig_lp_item_id = '$item_id' ".
-                                   " AND exe_cours_id = '$course_code' AND session_id = $session_id".
-                                   " ORDER BY exe_date DESC limit 1";
+                                    $sql_last_attempt = "SELECT exe_id FROM $tbl_stats_exercices 
+                                        WHERE exe_exo_id = '$item_path' AND exe_user_id = $user_id AND orig_lp_item_id = $item_id AND exe_cours_id = '$course_code' AND session_id = $session_id 
+                                        ORDER BY exe_date DESC limit 1";
                                      
                                     $result_last_attempt = Database::query($sql_last_attempt);
                                     $num = Database :: num_rows($result_last_attempt);
@@ -680,21 +701,19 @@ class Tracking {
                                         // the max_scores of all questions that it was
                                         // made of (we need to make this call dynamic
                                         // because of random questions selection)
-                                        $sql = "SELECT SUM(t.ponderation) as maxscore ".
-                                       " FROM ( SELECT distinct question_id, marks, ponderation ".
-                                       " FROM $tbl_stats_attempts AS at " .
-                                       " INNER JOIN  $tbl_quiz_questions AS q ".
-                                       " ON (q.id = at.question_id) ".
-                                       " WHERE exe_id ='$id_last_attempt' ) AS t";
+                                        $sql = "SELECT SUM(t.ponderation) as maxscore FROM 
+                                                ( SELECT distinct question_id, marks, ponderation FROM $tbl_stats_attempts AS at INNER JOIN  $tbl_quiz_questions AS q ON (q.id = at.question_id) 
+                                                  WHERE exe_id ='$id_last_attempt' ) AS t";
                                         $res_max_score_bis = Database::query($sql);
                                         $row_max_score_bis = Database :: fetch_array($res_max_score_bis);
                                         if (!empty($row_max_score_bis['maxscore'])) {
                                             $max_score = $row_max_score_bis['maxscore'];
                                         }
                                         if (!empty($max_score)) {
-                                            $lp_scorm_result_score_total += ($score/$max_score);
-                                            $lp_partial_total  += ($score/$max_score);
-                                            $current_value = $score/$max_score;
+                                            $lp_scorm_result_score_total += $score/$max_score;
+                                            $lp_partial_total            += $score/$max_score;
+                                            $current_value                = $score/$max_score;
+                                            //echo $score.' '.$max_score.'<br />';
                                         }
                                     } else {
                                         //$lp_scorm_result_score_total += 0;
@@ -711,6 +730,8 @@ class Tracking {
                                 }
 
                             } //end while
+                            
+                            
                             $global_count_item +=$count_items;
                             //echo 'lp_view '.$lp_view_id.' - $count_items '.$count_items.' lp partiual '.$lp_partial_total.' <br />';
 

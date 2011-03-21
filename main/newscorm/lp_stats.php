@@ -7,10 +7,10 @@
  * This script must be included by lp_controller.php to get basic initialisation
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
+ * @todo clean this file like the exercise files J.M
  */
 
 require_once 'learnpath.class.php';
-//require_once 'scorm.class.php';
 require_once 'resourcelinker.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
@@ -32,8 +32,10 @@ $session_condition = api_get_session_condition($session_id);
 //$list = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
 //$user_id = $_user['user_id'];
 
+//When origin is not set that means that the lp_stats are viewed from the "man running" icon
 if (!isset($origin))
     $origin = '';
+//Origin = tracking means that teachers see that info in the Reporting tool
 if ($origin != 'tracking') {
     //$w = $tablewidth -20;
     $htmlHeadXtra[] = '<style type="text/css" media="screen, projection">
@@ -58,10 +60,9 @@ $extend_all_link = '';
 $extend_all = 0;
 if ($origin == 'tracking') {
     $url_suffix = '&session_id='.$session_id.'&course=' . Security::remove_XSS($_GET['course']) . '&student_id=' . $student_id . '&lp_id=' . Security::remove_XSS($_GET['lp_id']) . '&origin=' . Security::remove_XSS($_GET['origin']).$from_link;
-} else {
-    $url_suffix = '';
+} else {    
+    $url_suffix = '&lp_id=' . $lp_id;
 }
-
 if (!empty ($_GET['extend_all'])) {
     $extend_all_link = '<a href="' . api_get_self() . '?action=stats' . $url_suffix . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="'.get_lang('HideAllAttempts').'"></a>';
     $extend_all = 1;
@@ -83,8 +84,7 @@ $TBL_LP_VIEW = Database :: get_course_table(TABLE_LP_VIEW);
 $tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION);
-$sql = "SELECT max(view_count) FROM $TBL_LP_VIEW " .
-    "WHERE lp_id = $lp_id AND user_id = '" . $user_id . "' $session_condition";
+$sql = "SELECT max(view_count) FROM $TBL_LP_VIEW WHERE lp_id = $lp_id AND user_id = '" . $user_id . "' $session_condition";
 $res = Database::query($sql);
 $view = '';
 $num = 0;
@@ -120,11 +120,10 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
 
     if (Database::num_rows($res_path) > 0) {
         if ($origin != 'tracking') {
-            $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '"   AND status <> "incomplete"  AND exe_user_id="' . (int)api_get_user_id() . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '"  AND session_id = '.$session_id.' ORDER BY exe_date';
+            $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '"   AND status <> "incomplete"  AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '"  AND session_id = '.$session_id.' ORDER BY exe_date';
         } else {
             $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '"   AND status <> "incomplete"  AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '"  AND session_id = '.$session_id.' ORDER BY exe_date';
         }
-            $sql_attempts;
     }
 }
 
@@ -217,7 +216,6 @@ if (is_array($list) && count($list) > 0) {
                 $title = Security::remove_XSS($title);
                 $output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4" class="content"><div class="mystatus">' . $title . "</div></td>\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td><td class="content"></td>' . "\n" . "</tr>\n";
             }
-
             $counter++;
 
             do {
@@ -691,8 +689,9 @@ if (is_array($list) && count($list) > 0) {
         }
     }
 }
-
-if (!empty($a_my_id)) {
+//var_dump($a_my_id);
+//NOT Extend all "left green cross"
+if (!empty($a_my_id)) {    
     $my_studen_id = 0;
     $my_course_id = '';
     if ($origin == 'tracking') {
@@ -701,19 +700,27 @@ if (!empty($a_my_id)) {
     } else {
         $my_studen_id = intval(api_get_user_id());
         $my_course_id = Database::escape_string(api_get_course_id());
-    }
-    $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id, api_get_session_id());    
+    }   
+    //var_dump($my_studen_id, $my_course_id,$a_my_id);     
+    if (isset($_GET['extend_attempt']))  {
+        //"Right green cross" extended        
+        $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id, api_get_session_id(), false, false);
+    } else {         
+        //"Left green cross" extended
+        $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id, api_get_session_id(), false, true);
+    }   
 } else {
-    if ($origin == 'tracking') {
-        $my_studen_id = $student_id;
-        $my_course_id = Database::escape_string($_GET['course']);
-        if (!empty($my_studen_id) && !empty($my_course_id)) {
-            $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, array(intval($_GET['lp_id'])), api_get_session_id());
+    // Extend all "left green cross"    
+    if ($origin == 'tracking') {         
+        $my_course_id = Database::escape_string($_GET['course']);       
+    //    var_dump($student_id, $my_course_id );
+        if (!empty($student_id) && !empty($my_course_id)) {
+            $total_score = Tracking::get_avg_student_score($student_id, $my_course_id, array(intval($_GET['lp_id'])), api_get_session_id(), false, false);            
         } else {
             $total_score = 0;
         }
     } else {
-        $total_score = 0;
+        $total_score = Tracking::get_avg_student_score(api_get_user_id(), api_get_course_id(), array(intval($_GET['lp_id'])), api_get_session_id(), false, false);        
     }
 }
 
@@ -738,10 +745,10 @@ if (($counter % 2) == 0) {
     $oddclass = 'row_even';
 }
 
-if (empty($extend_all)) {
+//if (empty($extend_all)) {
     $output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . '<td colspan="4"><div class="mystatus"><i>' . get_lang('AccomplishedStepsTotal') . "</i></div></td>\n"
              . '<td colspan="2"></td>' . "\n" . '<td colspan="2"><div class="mystatus" align="center">' . $final_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $total_time . '</div></td><td></td>' . "\n" . "</tr>\n";
-}
+//}
 
 $output .= "</table></td></tr></table>";
 

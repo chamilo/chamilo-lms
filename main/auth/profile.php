@@ -267,7 +267,7 @@ if (api_get_setting('extended_profile') == 'true') {
 
 		//	MY PRODUCTIONS
 		$form->addElement('file', 'production', get_lang('MyProductions'));
-		if ($production_list = UserManager::build_production_list($_user['user_id'], '', true)) {
+		if ($production_list = UserManager::build_production_list(api_get_user_id(), '', true)) {
 			$form->addElement('static', 'productions_list', null, $production_list);
 		}
 		//	MY PERSONAL OPEN AREA
@@ -525,7 +525,7 @@ function upload_user_production($user_id) {
  */
 function check_user_password($password){
 	global $_user;
-	$user_id = $_user['user_id'];
+	$user_id = api_get_user_id();
 	if ($user_id != strval(intval($user_id)) || empty($password)) { return false; }
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$password = api_get_encrypted_password($password);
@@ -541,7 +541,7 @@ function check_user_password($password){
  */
 function check_user_email($email){
 	global $_user;
-	$user_id = $_user['user_id'];
+	$user_id = api_get_user_id();
 	if ($user_id != strval(intval($user_id)) || empty($email)) { return false; }
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND email='".$email."'";
@@ -608,24 +608,24 @@ if ($form->validate()) {
 	}
 
 	// upload picture if a new one is provided
-	if ($_FILES['picture']['size']) {
-		if ($new_picture = UserManager::update_user_picture($_user['user_id'], $_FILES['picture']['name'], $_FILES['picture']['tmp_name'])) {
+	if ($_FILES['picture']['size']) {	 
+		if ($new_picture = UserManager::update_user_picture(api_get_user_id(), $_FILES['picture']['name'], $_FILES['picture']['tmp_name'])) {
 			$user_data['picture_uri'] = $new_picture;
-			$_SESSION['image_uploaded'] = 'success';
+			$_SESSION['image_uploaded'] = 'success';			
 		}
 	}
 	// remove existing picture if asked
 	elseif (!empty($user_data['remove_picture'])) {
-		UserManager::delete_user_picture($_user['user_id']);
+		UserManager::delete_user_picture(api_get_user_id());
 		$user_data['picture_uri'] = '';
 	}
 	
 	//Remove production	
 	if (is_array($user_data['remove_production'])) {
 		foreach (array_keys($user_data['remove_production']) as $production) {
-			UserManager::remove_user_production($_user['user_id'], urldecode($production));
+			UserManager::remove_user_production(api_get_user_id(), urldecode($production));
 		}
-		if ($production_list = UserManager::build_production_list($_user['user_id'], true, true)) {			
+		if ($production_list = UserManager::build_production_list(api_get_user_id(), true, true)) {			
 			$form->insertElementBefore($form->createElement('static', null, null, $production_list), 'productions_list');
 		}
 		$form->removeElement('productions_list');
@@ -635,7 +635,7 @@ if ($form->validate()) {
 
 	// upload production if a new one is provided
 	if ($_FILES['production']['size']) {
-		$res = upload_user_production($_user['user_id']);
+		$res = upload_user_production(api_get_user_id());
 		if (!$res) {
 			//it's a bit excessive to assume the extension is the reason why upload_user_production() returned false, but it's true in most cases
 			$filtered_extension = true;
@@ -695,7 +695,7 @@ if ($form->validate()) {
 		// remove trailing , from the query we have so far
 		$sql = rtrim($sql, ',');
 	}
-	$sql .= " WHERE user_id  = '".$_user['user_id']."'";
+	$sql .= " WHERE user_id  = '".api_get_user_id()."'";
 	Database::query($sql);
 
 	// User tag process
@@ -711,7 +711,7 @@ if ($form->validate()) {
 	if (is_array($extras) && count($extras)> 0) {
 		foreach ($extras as $key => $value) {
 			//3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
-			$myres = UserManager::update_extra_field_value($_user['user_id'], $key, $value);
+			$myres = UserManager::update_extra_field_value(api_get_user_id(), $key, $value);
 		}
 	}
 

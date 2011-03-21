@@ -13,11 +13,7 @@ if (api_get_setting('allow_message_tool')!='true'){
 }
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
-
-/*
-		HEADER
-*/
-//jquery thickbox already called from main/inc/header.inc.php
+/*		HEADER  */
 
 if ($_REQUEST['f']=='social') {
 	$this_section = SECTION_SOCIAL;

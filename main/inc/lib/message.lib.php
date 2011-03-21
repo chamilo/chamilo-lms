@@ -175,7 +175,7 @@ class MessageManager
 				$message[1] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.GetFullUserName($result[1]).'</a>';
 				$message[2] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[2]).'</a>';
 				$message[4] = '<a onclick="reply_to_messages(\'show\','.$result[0].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
-						  '&nbsp;&nbsp;<a onclick="delete_one_message('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+						  '&nbsp;&nbsp;<a onclick="delete_one_message('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
 				if($result[4]==1) {
 					$class = 'class = "unread"';
@@ -189,7 +189,7 @@ class MessageManager
 				$message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.GetFullUserName(($result[1])).'</a>';;
 				$message[2] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.$result[2].'</a>';
 				$message[4] = '<a href="new_message.php?re_id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
-						  '&nbsp;&nbsp;<a delete_one_message('.$result[0].') href="inbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+						  '&nbsp;&nbsp;<a delete_one_message('.$result[0].') href="inbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'">'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>';
 			}
 			$message[3] = $result[3]; //date stays the same
 			foreach($message as $key => $value) {
@@ -634,7 +634,7 @@ class MessageManager
 				$message[1] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.GetFullUserName($result[4]).'</a>';
 				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[2]).'</a>';
 					$message[3] = $result[3]; //date stays the same
-				$message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+				$message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
 				$link = '';
 				if ($_GET['f']=='social') {
@@ -643,7 +643,7 @@ class MessageManager
 				$message[1] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.GetFullUserName($result[4]).'</a>';
 				$message[2] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a>';
 					$message[3] = $result[3]; //date stays the same
-				$message[4] = '<a href="outbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+				$message[4] = '<a href="outbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>';
 			}
 
 			foreach($message as $key => $value) {
@@ -712,7 +712,7 @@ class MessageManager
 		$row[5] = Security::remove_XSS($row[5]);
 
 		$message_content =  '
-		<table class="message_view_table">
+		<table>
 		    <tr>
 		      <td width=10>&nbsp; </td>
 		      <td vAlign=top width="100%">
@@ -745,29 +745,29 @@ class MessageManager
 
 		 $message_content .='</tr>
 		              <tr>
-		              <td>'.get_lang('Date').'&nbsp; '.$row[4].'</TD>
+		              <td>'.get_lang('Date').'&nbsp; '.$row[4].'</td>
 		              </tr>
 		            </tr>
 		        </table>
 		        <br />
-		        <table height=209 width="100%" bgColor=#ffffff>
+		        <table height=209 width="100%">
 		            <tr>
 		              <td vAlign=top class="view-message-content">'.str_replace("\\","",$row[6]).'</td>
 		            </tr>
 		        </table>
 		        <div id="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>
-		        <div class=HT style="padding-bottom: 5px">';
+		        <div style="padding-bottom: 5px">';
 		    $social_link = '';
 		    if ($_GET['f'] == 'social') {
 		    	$social_link = 'f=social';
 		    }
 		    if ($source == 'outbox') {
-		    	$message_content .= '<a href="outbox.php?'.$social_link.'">'.Display::return_icon('back.png',get_lang('ReturnToOutbox')).get_lang('ReturnToOutbox').'</a> &nbsp';
+		    	$message_content .= '<a href="outbox.php?'.$social_link.'">'.Display::return_icon('back.png',get_lang('ReturnToOutbox')).'</a> &nbsp';
 		    } else {
-		    	$message_content .= '<a href="inbox.php?'.$social_link.'">'.Display::return_icon('back.png',get_lang('ReturnToInbox')).get_lang('ReturnToInbox').'</a> &nbsp';
-		    	$message_content .= '<a href="new_message.php?re_id='.$message_id.'&'.$social_link.'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).get_lang('ReplyToMessage').'</a> &nbsp';
+		    	$message_content .= '<a href="inbox.php?'.$social_link.'">'.Display::return_icon('back.png',get_lang('ReturnToInbox')).'</a> &nbsp';
+		    	$message_content .= '<a href="new_message.php?re_id='.$message_id.'&'.$social_link.'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a> &nbsp';
 		    }
-			$message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('DeleteMessage').'</a>&nbsp';
+			$message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>&nbsp';
 
 			$message_content .='</div></td>
 		      <td width=10></td>
@@ -807,7 +807,7 @@ class MessageManager
 				$band=1;
 		echo '<div class=actions>';
 		echo '<a onclick="close_and_open_outbox()" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',api_xml_http_response_encode(get_lang('BackToOutbox'))).api_xml_http_response_encode(get_lang('BackToOutbox')).'</a>';
-		echo '<a onclick="delete_one_message_outbox('.$row[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',api_xml_http_response_encode(get_lang('DeleteMessage'))).api_xml_http_response_encode(get_lang('DeleteMessage')).'</a>';
+		echo '<a onclick="delete_one_message_outbox('.$row[0].')" href="javascript:void(0)"  >'.Display::return_icon('delete.png',api_xml_http_response_encode(get_lang('DeleteMessage'))).api_xml_http_response_encode(get_lang('DeleteMessage')).'</a>';
 		echo '</div><br />';
 		echo '
 		<table class="message_view_table" >
@@ -1067,15 +1067,13 @@ class MessageManager
 			$rs_file = Database::query($sql);
 			if (Database::num_rows($rs_file) > 0) {
 				$attach_icon = Display::return_icon('attachment.gif');
-
 				$archiveURL=api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';
-
 				while ($row_file = Database::fetch_array($rs_file)) {
 					$archiveFile= $row_file['path'];
 					$filename 	= $row_file['filename'];
 					$filesize 	= format_file_size($row_file['size']);
 					$filecomment= $row_file['comment'];
-					$links_attach_file[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>&nbsp;('.$filesize.')'.(!empty($filecomment)?'&nbsp;-&nbsp;'.$filecomment:'');
+					$links_attach_file[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>&nbsp;('.$filesize.')'.(!empty($filecomment)?'&nbsp;-&nbsp;<i>'.$filecomment.'</i>':'');
 				}
 			}
 		}

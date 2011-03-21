@@ -28,7 +28,7 @@ function reports_template_courseTime_getSQL() {
 	// fetch data
 	$query = 'select u.lastname Name, u.firstname Firstname';
 	foreach ($columns as $key => $column)
-		$query .= ', '.$function.'(k'.$key.'.time) as `'.
+		$query .= ', sec_to_time(k'.$key.'.time) as `'.
 				$column['course'].'` '; 
 	$query .= ' from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
 	foreach ($columns as $key => $column) // fixme sessions

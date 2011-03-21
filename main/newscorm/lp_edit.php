@@ -96,6 +96,8 @@ if ($lp_prox != 'local') {
 $content_proximity_select->addOption(get_lang('Local'), 'local');
 $content_proximity_select->addOption(get_lang('Remote'), 'remote');
 
+//Hide toc frame
+$hide_toc_frame = &$form->addElement('checkbox', 'hide_toc_frame', get_lang('HideTocFrame'),'', array('onclick' => '$("#lp_layout_column").toggle()' ));
 
 if (api_get_setting('allow_course_theme') == 'true') {
 	$mycourselptheme=api_get_course_setting('allow_learning_path_theme');
@@ -156,6 +158,7 @@ $origin_select -> setSelected($s_selected_origin);
 $encoding_select -> setSelected($s_selected_encoding);
 $defaults['lp_name'] = Security::remove_XSS($_SESSION['oLP']->get_name());
 $defaults['lp_author'] = Security::remove_XSS($_SESSION['oLP']->get_author());
+$defaults['hide_toc_frame'] = Security::remove_XSS($_SESSION['oLP']->get_hide_toc_frame());
 
 // prerequisites
 $form->addElement('html', '<div class="row"><div class="label">'.get_lang('Prerequisites').'</div><div class="formw">'.$_SESSION['oLP']->display_lp_prerequisites_list().'</div></div>');
@@ -171,6 +174,12 @@ $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
 $form->setDefaults($defaults);
 echo '<table><tr><td width="550px">';
 	$form -> display();
-echo '</td><td valign="top"><img src="../img/course_setting_layout.png" /></td></tr></table>';
+if ($_SESSION['oLP']->get_hide_toc_frame() == 1  ){
+  $display_img='none';
+}
+else{
+  $display_img='block';
+}
+echo '</td><td id="lp_layout_column" style="display:'.$display_img.'"valign="top"><img src="../img/course_setting_layout.png" /></td></tr></table>';
 
 Display::display_footer();

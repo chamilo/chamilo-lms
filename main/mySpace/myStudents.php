@@ -557,8 +557,11 @@ if ($timezone !== null) {
 				<?php echo get_lang('Time'); Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?>
 			</th>
 			<th>
-				<?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('LPTestScore'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>
+				<?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('LPTestScore'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>			
 			</th>
+			<th>
+                <?php echo get_lang('LatestScore'); Display :: display_icon('info3.gif', get_lang('LPLatestTestScore'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>
+            </th>
 		  	<th>
 				<?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
 			</th>
@@ -590,6 +593,7 @@ if ($timezone !== null) {
 			get_lang('Learnpath', ''),
 			get_lang('Time', ''),
 			get_lang('Score', ''),
+			get_lang('LatestScore', ''),
 			get_lang('Progress', ''),
 			get_lang('LastConnexion', '')
 		);
@@ -639,6 +643,8 @@ if ($timezone !== null) {
 				// Quizz in lp                
 				$score = Tracking :: get_avg_student_score($student_id, $course_code, array($lp_id),$session_id);
                 
+				// Latest exercise results in a LP                
+                $score_latest = Tracking :: get_avg_student_score($student_id, $course_code, array($lp_id),$session_id, false, true);
 
 				if ($i % 2 == 0) $css_class = "row_odd";
 				else $css_class = "row_even";
@@ -650,63 +656,51 @@ if ($timezone !== null) {
 					api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset),
 					api_time_to_hms($total_time),
 					$score . '%',
+					$score_latest . '%',
 					$progress.'%',
 					$start_time
-				);
-?>
-					<tr class="<?php echo $css_class;?>">
-						<td>
-							<?php echo stripslashes($lp_name); ?>
-						</td>
-						<td align="center">
-						<?php echo api_time_to_hms($total_time) ?>
-						</td>
-						<td align="center">
-							<?php
+				);				
 
+			    echo '<tr class="'.$css_class.'">';					
+					
+				echo Display::tag('td', stripslashes($lp_name));
+				echo Display::tag('td', api_time_to_hms($total_time), array('align'=>'center'));
+				
 				if (!is_null($score)) {
 					if (is_numeric($score)) { 
-                        echo $score.'%';
-                    } else { 
-                        // if result == '-' means that the LP does not have exercises if result is 0 means the LP have an exercise
-                        echo $score ;
+                        $score = $score.'%';
                     }
 				}
+				echo Display::tag('td', $score, array('align'=>'center'));
+				
+			    if (!is_null($score_latest)) {
+                    if (is_numeric($score_latest)) { 
+                        $score_latest = $score_latest.'%';
+                    }
+                }				
+				echo Display::tag('td', $score_latest, array('align'=>'center'));							
 				 
 				if (is_numeric($progress)) {						
 					$progress = $progress.'%';
 				} else {
 					$progress = '-';
 				}
-?>
-						</td>
-						<td align="center">
-							<?php echo $progress; ?>
-						</td>
-						<td align="center">
-							<?php
 				
-					//Do not change with api_convert_and_format_date, because this value came from the lp_item_view table 
-					//which implies several other changes not a priority right now	
-                    echo $start_time;							
+				echo Display::tag('td', $progress, array('align'=>'center'));
+			    //Do not change with api_convert_and_format_date, because this value came from the lp_item_view table 
+                //which implies several other changes not a priority right now  
+				echo Display::tag('td', $start_time, array('align'=>'center'));            
 				
-?>
-						</td>
-						<td align="center">
-							<?php
+
 				if ($any_result === true) {
 					$from = '';
 					if ($from_myspace) {
 						$from ='&from=myspace';
 					}
-?>
-					<a href="lp_tracking.php?course=<?php echo Security::remove_XSS($_GET['course']).$from; ?>&origin=<?php echo Security::remove_XSS($_GET['origin']) ?>&lp_id=<?php echo $learnpath['id']?>&student_id=<?php echo $info_user['user_id'] ?>&session_id=<?php echo $session_id ?>">
-						<img src="../img/2rightarrow.gif" border="0" />
-					</a>
-					<?php
+					$link = Display::url('<img src="../img/2rightarrow.gif" border="0" />','lp_tracking.php?course='.Security::remove_XSS($_GET['course']).$from.'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student_id='.$info_user['user_id'].'&session_id='.$session_id);
+                    echo Display::tag('td', $link, array('align'=>'center'));
 				}
-				echo '</td>';
-				
+		
 				if (api_is_course_admin()) {					
 					echo '<td align="center">';							
 						if($any_result === true) {											
@@ -716,8 +710,7 @@ if ($timezone !== null) {
 						}					
 						echo '</td>';						
 					echo '</tr>';
-				}
-				
+				}				
 				$data_learnpath[$i][] = $lp_name;
 				$data_learnpath[$i][] = $progress . '%';
 				$i++;
@@ -726,7 +719,7 @@ if ($timezone !== null) {
 			echo '<tr><td colspan="6">'.get_lang('NoLearnpath').'</td></tr>';
 		}
 ?>
-				</table>
+    </table>
 
 	<!-- line about exercises -->
 			<table class="data_table">
@@ -744,7 +737,6 @@ if ($timezone !== null) {
 			get_lang('Score'),
 			get_lang('Attempts')
 		);
-
 
 		$t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST, $info_course['db_name']);
 		$sql_exercices = "SELECT quiz.title,id

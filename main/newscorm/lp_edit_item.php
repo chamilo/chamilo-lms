@@ -55,7 +55,8 @@ function InnerDialogLoaded()
 };
 
 </script>';
-$htmlHeadXtra[] = $_SESSION['oLP']->create_js();
+
+//$htmlHeadXtra[] = $_SESSION['oLP']->create_js();
 
 /* Constants and variables */
 

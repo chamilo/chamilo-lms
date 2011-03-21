@@ -7,7 +7,7 @@
 $language_file=array('exercice');
 require_once '../inc/global.inc.php';
 api_protect_course_script(false);
-require_once api_get_path(INCLUDE_PATH) . 'reduced_header.inc.php';
+require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
 $dbg_local = 0;
@@ -26,7 +26,6 @@ if (empty($exerciseResultCoordinates)) {
 if (empty($origin)) {
     $origin = Security::remove_XSS($_REQUEST['origin']);
 }
-
 // if origin is learnpath
 if (empty ($learnpath_id)) {
 	$learnpath_id = Security::remove_XSS($_REQUEST['learnpath_id']);

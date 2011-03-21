@@ -1474,6 +1474,10 @@ class Exercise {
 	}	
 	
 	public function show_button($nbrQuestions, $questionNum, $exerciseId) {
+	    global $origin, $learnpath_id,$learnpath_item_id;
+	    $nbrQuestions = intval($nbrQuestions);
+	    $exerciseId   = intval($exerciseId);
+	     
 		$html = '';
 	    $html =  '<div style="margin-top:-10px;">';	
 	    $confirmation_alert = $this->type == 1? " onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\" ":"";	    
@@ -1483,11 +1487,18 @@ class Exercise {
 	    if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {
 	        $submit_btn = '';
 	        $html .='<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.js" type="text/javascript"></script>';
+	        $html .='<style type="text/css" media="all">@import "' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css";</style>';	        
 	        $html .='<style type="text/css" media="all">@import "' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css";</style>';
-	        
+            $html .= api_get_jquery_ui_js();
+            $html .='
+            <script>
+            $(function() {
+                $(".button").button();
+            });
+            </script>';
 	        //$html .='<br /><a href="exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&origin='.$origin.'&hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&exerciseId='.$exerciseId.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox button" id="validationButton">';
 	        $html .='<a href="exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&origin='.$origin.'&hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&exerciseId='.$exerciseId.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox button" id="validationButton">';
-	        $html .= get_lang('ValidateAnswer').'</a></button>';
+	        $html .= get_lang('ValidateAnswer').'</a>';
 		    $html .='<br />';
 	        
 	    } else {	    	

@@ -66,6 +66,7 @@ $TBL_REPONSES 			= Database :: get_course_table(TABLE_QUIZ_ANSWER);
 if (empty ($origin)) {
     $origin = $_REQUEST['origin'];
 }
+
 if (empty ($learnpath_id)) {
     $learnpath_id = intval($_REQUEST['learnpath_id']);
 }

@@ -773,6 +773,7 @@ VALUES
 ('cas_add_user_email_attr', NULL, 'textfield', 'CAS', '', 'CasUserAddEmailAttributeTitle', 'CasUserAddEmailAttributeComment', NULL, NULL, 0),
 ('cas_add_user_firstname_attr', NULL, 'textfield', 'CAS', '', 'CasUserAddFirstnameAttributeTitle', 'CasUserAddFirstnameAttributeComment', NULL, NULL, 0),
 ('cas_add_user_lastname_attr', NULL, 'textfield', 'CAS', '', 'CasUserAddLastnameAttributeTitle', 'CasUserAddLastnameAttributeComment', NULL, NULL, 0),
+('use_custom_pages',NULL,'radio','Platform','false','UseCustomPages','useCustomPagesComment','platform',NULL,0),
 ('student_page_after_login', NULL, 'textfield', 'Platform', '', 'StudentPageAfterLoginTitle', 'StudentPageAfterLoginComment', NULL, NULL, 0),
 ('teacher_page_after_login', NULL, 'textfield', 'Platform', '', 'TeacherPageAfterLoginTitle', 'TeacherPageAfterLoginComment', NULL, NULL, 0),
 ('DRH_page_after_login', NULL, 'textfield', 'Platform', '', 'DRHPageAfterLoginTitle', 'DRHPageAfterLoginComment', NULL, NULL, 0),
@@ -997,7 +998,9 @@ VALUES
 ('cas_protocol', 'CAS2', 'CAS2Text'),
 ('cas_protocol', 'SAML', 'SAMLText'),
 ('cas_add_user_activate', 'true', 'Yes'),
-('cas_add_user_activate', 'false', 'No');
+('cas_add_user_activate', 'false', 'No'),
+('use_custom_pages','true','Yes'),
+('use_custom_pages','false','No');
 
 
 UNLOCK TABLES;

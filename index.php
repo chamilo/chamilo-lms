@@ -32,6 +32,8 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once 'main/chat/chat_functions.lib.php';
 
+require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
+
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
 $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
 
@@ -123,6 +125,15 @@ else {
 	event_open();
 }
 
+// Custom pages
+if (api_get_setting('use_custom_pages') == 'true') {
+	if (api_get_user_id()) {
+		CustomPages::displayPage('index-logged');
+	}
+	else {
+		CustomPages::displayPage('index-unlogged');
+	}
+}
 // the header
 Display::display_header(get_lang('Homepage'));
 

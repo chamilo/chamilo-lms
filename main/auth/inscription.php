@@ -48,6 +48,10 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 	}
 }
 
+// Custom pages
+if (api_get_setting('use_custom_pages') == 'true') {
+	CustomPages::displayPage('registration');
+}
 $tool_name = get_lang('Registration',null,(!empty($_POST['language'])?$_POST['language']:$_user['language']));
 Display :: display_header($tool_name);
 

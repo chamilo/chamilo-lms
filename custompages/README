@@ -1,0 +1,7 @@
+CustomPages looks for alternatives in this directory, and displays them if present. The user-provided custom pages must exactly be named as such :
+
+- index-logged.php for the general landing page before login
+- index-unlogged.php for the general landing page when already logged-in
+- registration.php for the registration form
+- lostpassword.php for the password recovery form
+- lostpassword-feedback.php for the password recovery feedback page

@@ -1270,6 +1270,8 @@ $ErrorReadingZip = "Erreur de lecture du fichier ZIP";
 $ErrorStylesheetFilesExtensionsInsideZip = "Les seules extensions acceptées pour les fichiers contenus dans le ZIP sont jpg, jpeg, png, gif et css.";
 $MyTextHere = "Introduisez votre texte ici...";
 $FieldTypeSocialProfile = "Lien réseau social";
+$UseCustomPages = "Utiliser des pages d'acceuil personnalis&eacute;es";
+$UseCustomPagesComment = "Permet &agrave; l'administrateur de la plateforme de remplacer certaines pages en fournissant une alternative dans le r&eacute;pertoire /custompages/. Voyez le fichier README dans ce r&eacute;pertoire pour plus de d&eacute;tails.";
 $StudentPageAfterLoginTitle = "Page à montrer pour les étudiants une fois authentifiés";
 $StudentPageAfterLoginComment = "Laisser vide pour le comportement normal de chamilo.";
 $TeacherPageAfterLoginTitle =  "Page à montrer pour les professeurs une fois authentifiés";
@@ -1278,5 +1280,4 @@ $DRHPageAfterLoginTitle =  "Page à montrer pour les DRH une fois authentifiés"
 $DRHPageAfterLoginComment = "Laisser vide pour le comportement normal de chamilo.";
 $SessionAdminPageAfterLoginTitle = "Page à montrer pour les adminsitrateurs de sessions une fois authentifiés";
 $SessionAdminPageAfterLoginComment = "Laisser vide pour le comportement normal de chamilo.";
-
 ?>

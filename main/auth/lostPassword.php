@@ -22,6 +22,17 @@ require_once api_get_path(LIBRARY_PATH).'login.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
+// Custom pages
+// Had to move the form handling in here, because otherwise there would already be some display output.
+if (api_get_setting('use_custom_pages') == 'true') {
+	if (isset ($_GET['reset']) && isset ($_GET['id'])) {
+		$msg = Login::reset_password($_GET["reset"], $_GET["id"], true);
+		CustomPages::displayPage('lostpassword-feedback');
+	}
+	else {
+		CustomPages::displayPage('lostpassword');
+	}
+}
 $tool_name = get_lang('LostPassword');
 Display :: display_header($tool_name);
 
@@ -38,7 +49,7 @@ echo $tool_name;
 echo '</div>';
 
 if (isset ($_GET['reset']) && isset ($_GET['id'])) {
-	$msg = Login::reset_password($_GET["reset"], $_GET["id"], true);
+	//$msg = Login::reset_password($_GET["reset"], $_GET["id"], true);
 	$msg1= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
 	echo '<br /><br /><div class="actions" >'.$msg1.'</div>';
 

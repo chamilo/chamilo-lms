@@ -35,7 +35,7 @@ if(!$is_allowedToEdit){
 
 $interbreadcrumb[]= array ('url' => 'exercice.php'.'?show=result','name' => get_lang('Exercices'));
 $interbreadcrumb[]= array ('url' => 'exercice.php'.'?show=result&amp;filter=2','name' => get_lang('StudentScore'));
-$interbreadcrumb[]= array ('url' => 'exercice_history.php'.'?exe_id='.intval($_GET['exe_id']), 'name' => get_lang('Details'));
+$interbreadcrumb[]= array ('url' => 'exercise_history.php'.'?exe_id='.intval($_GET['exe_id']), 'name' => get_lang('Details'));
 
 $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCICES			= Database::get_course_table(TABLE_QUIZ_TEST);

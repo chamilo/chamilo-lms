@@ -1092,7 +1092,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                         $html_link.="</a>";                     
                         if ($is_allowedToEdit) {
                             if ($filter==2){
-                                $html_link.=' <a href="exercice_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
+                                $html_link.=' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
                             }
                         }
                         if (api_is_platform_admin() || $is_tutor) {

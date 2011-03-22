@@ -155,7 +155,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$from 		       = $_SESSION['_user']['mail'];
 	$from_name         = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
 	$url		       = api_get_path(WEB_CODE_PATH) . 'exercice/exercice.php?' . api_get_cidreq() . '&show=result';	
-	$total_weighting   = $_REQUEST['totalWeighting'];
+	//$total_weighting   = $_REQUEST['totalWeighting'];
 
 	$my_post_info      = array();
 	$post_content_id   = array();

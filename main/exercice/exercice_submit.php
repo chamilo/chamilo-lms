@@ -64,9 +64,8 @@ $TBL_REPONSES 			= Database :: get_course_table(TABLE_QUIZ_ANSWER);
 // General parameters passed via POST/GET
 
 if (empty ($origin)) {
-    $origin = $_REQUEST['origin'];
+    $origin = Security::remove_XSS($_REQUEST['origin']);
 }
-
 if (empty ($learnpath_id)) {
     $learnpath_id = intval($_REQUEST['learnpath_id']);
 }
@@ -156,6 +155,7 @@ $current_timestamp 		= time();
 
 //Getting track exercise info
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id);
+
 if ($debug) {error_log('$objExercise->get_stat_track_exercise_info function called::  '.print_r($exercise_stat_info, 1)); };
 
 /*
@@ -543,6 +543,7 @@ if ($time_control) {
 if ($origin != 'learnpath') {
    echo '<div id="highlight-plugin" class="glossary-content">';
 }
+
 if (!empty ($error)) {
     Display :: display_error_message($error, false);
 } else {
@@ -558,7 +559,7 @@ if (!empty ($error)) {
     if (!strcmp($questionList[0], '') === 0) {
         foreach ($questionList as $questionId) {
             $i++;
-            $objQuestionTmp = Question :: read($questionId);
+            $objQuestionTmp = Question::read($questionId);
             // for sequential exercises
             if ($exerciseType == ONE_PER_PAGE) {
                 // if it is not the right question, goes to the next loop iteration
@@ -602,6 +603,7 @@ if (!empty ($error)) {
 		//Show list of questions
 	    $i = 1;    
 	    foreach ($questionList as $questionId) {
+	       
 	        // for sequential exercises
 	        if ($exerciseType == ONE_PER_PAGE) {
 	            // if it is not the right question, goes to the next loop iteration
@@ -613,7 +615,7 @@ if (!empty ($error)) {
 	                    // if the user has already answered this question
 	                    if (isset ($exerciseResult[$questionId])) {
 	                        // construction of the Question object
-	                        $objQuestionTmp = Question :: read($questionId);
+	                        $objQuestionTmp = Question::read($questionId);
 	                        $questionName = $objQuestionTmp->selectTitle();
 	                        // destruction of the Question object
 	                        unset ($objQuestionTmp);
@@ -642,7 +644,12 @@ if (!empty ($error)) {
 }
 if ($objExercise->type == ONE_PER_PAGE) {	
   	if (empty($exercise_stat_info)) {
-  		$objExercise->save_stat_track_exercise_info($clock_expired_time, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $questionList);
+        $total_weight = 0; 	    
+  	    foreach($questionList as $question_id) {
+  	        $objQuestionTmp = Question::read($questionId);  	        
+  	        $total_weight += floatval($objQuestionTmp->weighting);
+  	    }
+  		$objExercise->save_stat_track_exercise_info($clock_expired_time, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $questionList, $total_weight);
     }
 }
 if ($origin != 'learnpath') {

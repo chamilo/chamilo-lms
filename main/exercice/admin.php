@@ -459,28 +459,14 @@ if ($newQuestion || $editQuestion) {
 	$type = $_REQUEST['answerType'];    
 	?><input type="hidden" name="Type" value="<?php echo $type; ?>" />
 	<?php
+	
    require 'question_admin.inc.php';
 }
 
-if(isset($_GET['hotspotadmin'])) {
+if (isset($_GET['hotspotadmin'])) {
 	require 'hotspot_admin.inc.php';
 }
 if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
-	require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?exerciseId='.$_GET['exerciseId']);
-	$form -> addElement ('hidden','edit','true');
-	//$objExercise -> createForm ($form,'simple');
-
-	if($form -> validate()) {
-		$objExercise -> processCreation($form,'simple');
-		if($form -> getSubmitValue('edit') == 'true')
-			Display::display_confirmation_message(get_lang('ExerciseEdited'));
-	}
-	if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
-        Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));
-	}
-	$form -> display ();
-	echo '<br />';
 	// question list management
 	require 'question_list_admin.inc.php';
 }

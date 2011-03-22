@@ -55,39 +55,32 @@ class ExerciseShowFunctions {
 	 * @return void
 	 */
 	function display_free_answer($answer,$id,$questionId) {
-        global $feedback_type;        
+        global $feedback_type;
         if (empty($id)) {
-            ?>
-        	       <tr>
-        <td width="55%">
-            <?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
-        </td>
-    <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
-   <td width="45%">
-    <?php echo get_lang('notCorrectedYet');?>
-
-   </td>
-   <?php } else { ?>
-        <td>&nbsp;</td>
-    <?php } ?>
-        </tr>
-        
-        <?php 
-        } else {		
-		?>
-			<tr>
-			<td>
-				<?php if (!empty($answer)) {echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY));} ?>
-			</td>
-			<?php if(!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {?>
-	        <td>
-	        <?php
-	        $comm = get_comments($id,$questionId);
-	        ?>
-	        </td>
-	    	<?php }?>
-	    </tr>
-	    <?php
+            echo '<tr>';            
+            echo Display::tag('td',nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)), array('width'=>'55%'));            
+            echo '</tr>';
+            if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
+                echo '<tr>';
+                echo Display::tag('td',get_lang('notCorrectedYet'), array('width'=>'45%'));            
+                echo '</tr>';       
+            } else {
+                echo '<tr><td>&nbsp;</td></tr>';
+            }
+        } else {
+            echo '<tr>';
+            echo '<td>';		
+		    if (!empty($answer)) {
+		        echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY));
+		    }
+		    echo '</td>';
+			
+			if(!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                echo '<td>';
+	            $comm = get_comments($id,$questionId);
+	            echo '</td>';
+			}
+			echo '</tr>';
         }
 	}
 

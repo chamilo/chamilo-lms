@@ -653,14 +653,14 @@ if (is_array($arrid) && is_array($arrmarks)) {
 if ($is_allowedToEdit) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {        
 		echo ' <form name="myform" id="myform" action="exercice.php?show=result&exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
-		echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';	
+		//echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$lp_id.'">';
 		echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
 		echo '<input type = "hidden" name="student_id"       value="'.$student_id.'">';
 		echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
 		echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';					
 	} else {
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&action=qualify&exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&totalWeighting='.$totalWeighting.'" method="post">';
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&action=qualify&exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'" method="post">';
 	}
 	if ($origin!='learnpath' && $origin!='student_progress') {
 		?>

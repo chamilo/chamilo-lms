@@ -23,40 +23,31 @@ if(!api_is_allowed_to_edit(null,true)) {
 	api_not_allowed(true);
 }
 
-$htmlHeadXtra[] = '<script>
-
-		function advanced_parameters()
-		{
-			if(document.getElementById(\'options\').style.display == \'none\')
-			{
+$htmlHeadXtra[] = '<script type="text/javascript">
+		function advanced_parameters() {
+			if(document.getElementById(\'options\').style.display == \'none\') {
 				document.getElementById(\'options\').style.display = \'block\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-
 			} else {
-
 				document.getElementById(\'options\').style.display = \'none\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 			}
 		}
 
-		function FCKeditor_OnComplete( editorInstance )
-		{
-			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name ))
-			   {
+		function FCKeditor_OnComplete( editorInstance ) {
+			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
 			      HideFCKEditorByInstanceName (editorInstance.Name);
 			   }
 		}
 
-		function HideFCKEditorByInstanceName ( editorInstanceName )
-		{
+		function HideFCKEditorByInstanceName ( editorInstanceName ) {
 			if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" )
 			{
 			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
 			}
 		}
 		
-		function show_media()
-		{
+		function show_media() {
 			var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
 				if(my_display== \'none\' || my_display == \'\')
 				{
@@ -68,8 +59,7 @@ $htmlHeadXtra[] = '<script>
 				}
 		}
 
-		function timelimit()
-		{
+		function timelimit() {
 			if(document.getElementById(\'options2\').style.display == \'none\')
 			{
 				document.getElementById(\'options2\').style.display = \'block\';
@@ -78,22 +68,18 @@ $htmlHeadXtra[] = '<script>
 			}
 		}
 
-		function feedbackselection()
-		{
+		function feedbackselection() {
 			var index = document.exercise_admin.exerciseFeedbackType.selectedIndex;
 
-			if (index == \'1\') 
-			{
+			if (index == \'1\') {
 				document.exercise_admin.exerciseType[1].checked=true;
 				document.exercise_admin.exerciseType[0].disabled=true;
-
 			} else {
 				document.exercise_admin.exerciseType[0].disabled=false;
 			}
 		}
               
-	    function option_time_expired()
-	    {
+	    function option_time_expired() {
 		    if(document.getElementById(\'timercontrol\').style.display == \'none\')
 		    {
 		      document.getElementById(\'timercontrol\').style.display = \'block\';
@@ -166,12 +152,13 @@ $objExercise->createForm($form);
 
 // VALIDATE FORM
 if ($form->validate()) {
-	$objExercise->processCreation($form);
+	$objExercise->processCreation($form);	
 	if ($form->getSubmitValue('edit') == 'true') {
 	    $message = 'ExerciseEdited';		
 	} else {
 	    $message = 'ExerciseAdded';		
 	}
+	api_session_unregister('objExercise');
 	header('Location:admin.php?message='.$message.'&exerciseId='.$objExercise->id);
 	exit;
 } else {	

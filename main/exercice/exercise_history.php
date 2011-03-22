@@ -51,12 +51,12 @@ Display::display_header($nameTools,get_lang('Exercise'));
 		}
 	}
 
-//event_access_tool(TOOL_QUIZ);
+echo '<div class="actions">';
+echo '<a href="exercice.php?' . api_get_cidreq() . '&show=result&filter=2">' . Display :: return_icon('back.png', get_lang('BackToResultList'),'','32').'</a>';
+echo '</div>';
 
 ?>
-<div class="actions">
-<a href="exercice.php?cidReq=<?php echo Security::remove_XSS($_GET['cidReq']) ?>&show=result&filter=2"><img src="../img/back.png"/><?php echo get_lang('BackToResultList') ?></a>
-</div>
+
 <table class="data_table">
 		 <tr class="row_odd">
 		  <th><?php echo get_lang('Question'); ?></th>

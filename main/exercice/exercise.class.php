@@ -1444,8 +1444,17 @@ class Exercise {
 		return $new_array;
 	}
 	
-	
-	public function save_stat_track_exercise_info($clock_expired_time = 0, $safe_lp_id = 0, $safe_lp_item_id = 0, $safe_lp_item_view_id = 0, $questionList = array()) {
+	/**
+	 * Saves a test attempt
+	 * 
+	 * @param int  clock_expired_time
+	 * @param int  lp id
+	 * @param int  lp item id
+	 * @param int  lp item_view id
+	 * @param array question list
+
+	 */
+	public function save_stat_track_exercise_info($clock_expired_time = 0, $safe_lp_id = 0, $safe_lp_item_id = 0, $safe_lp_item_view_id = 0, $questionList = array(), $weight) {
 		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);		
 		if (empty($safe_lp_id)) {
 			$safe_lp_id = 0;
@@ -1464,11 +1473,11 @@ class Exercise {
        		$sql_fields_values = "";
         }		
         if ($this->type == ONE_PER_PAGE) {
-            $sql = "INSERT INTO $track_exercises($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
-                    VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "','" . api_get_utc_datetime() . "',$safe_lp_id,$safe_lp_item_id)";
+            $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status,session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting)
+                    VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "', '" . api_get_utc_datetime() . "', '$safe_lp_id', '$safe_lp_item_id', '$weight' )";
         } else {
             $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
-                    VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . api_get_utc_datetime() . "',$safe_lp_id,$safe_lp_item_id)";
+                    VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . api_get_utc_datetime() . "', '$safe_lp_id', '$safe_lp_item_id' , '$weight' )";
         }
         Database::query($sql);
 	}	
@@ -2918,7 +2927,7 @@ class Exercise {
             
         if ($saved_results) {
             $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-            $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . floatval($totalScore) . ',exe_weighting = exe_weighting + ' .  floatval($totalWeighting) . ' WHERE exe_id = ' . $exeId;
+            $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . floatval($totalScore) . ' WHERE exe_id = ' . $exeId;
     		Database::query($sql_update);
         }
         	

@@ -389,7 +389,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
         $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),array(), 22);
         $modify_icons .= '&nbsp;'.Display::return_icon('move.png', get_lang('Move'),array(), 22);
         if (api_is_allowed_to_edit() || api_is_platform_admin()){
-            $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'_na.png', get_lang('VisibilityCannotBeChanged'),'',22);
+            $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'),'',22);
         }
     } else {
         if ($is_certificate_mode) {

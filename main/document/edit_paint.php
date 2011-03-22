@@ -5,8 +5,9 @@
  *	This file allows creating new svg and png documents with an online editor.
  *
  *	@package chamilo.document
+ *  @todo used the document_id instead of the curdirpath
  *
- * @author Juan Carlos Raña Trabado
+ * @author Juan Carlos Raï¿½a Trabado
  * @since 30/january/2011
 */
 
@@ -22,7 +23,6 @@ $this_section = SECTION_COURSES;
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
-//
 api_protect_course_script();
 api_block_anonymous_users();
 
@@ -39,7 +39,6 @@ if($_SESSION['paint_dir']=='/'){
 }
 $_SESSION['paint_file']=basename(Security::remove_XSS($_GET['file']));
 
-//
 $get_file = Security::remove_XSS($_GET['file']);
 
 $file = basename($get_file);
@@ -135,8 +134,8 @@ $locktitle="false";
 //make temp images
 $temp_folder=api_get_path(SYS_ARCHIVE_PATH).'temp/images';
 if (!file_exists($temp_folder)) {
-    @mkdir($temp_folder, $permissions_for_new_directories, true);//TODO:check $permissions value, now empty;
-   }
+    @mkdir($temp_folder, api_get_permissions_for_new_directories(), true);//TODO:check $permissions value, now empty;
+}
 
 //make htaccess with allow from all, and file index.html into temp/images
 $htaccess=api_get_path(SYS_ARCHIVE_PATH).'temp/images/.htacess';
@@ -174,10 +173,9 @@ $_SESSION['temp_realpath_image']=$to;
 //load image to url
 $to_url=api_get_path(WEB_ARCHIVE_PATH).'temp/images/'.$file_crip;
 $image=urlencode($to_url);
-
+$pixlr_url = 'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle;
+ 
 //make frame an send image
-echo '<iframe style=\'height: 600px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'\'>';
+echo '<iframe style="height: 600px; width: 100%;" scrolling="no" frameborder="0" src="'.$pixlr_url.'">';
 echo '</iframe>';
-
 Display::display_footer();
-?>

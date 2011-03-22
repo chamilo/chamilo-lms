@@ -563,9 +563,14 @@ function handle_search() {
            $sf_values[$sf['code']] = $sf['name'];
         }
         $group = array();
-        $form->addElement('select', 'search_prefilter_prefix', get_lang('SearchPrefilterPrefix'), $sf_values, '');
-        $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
-        
+        if (empty($sf_values)) {
+            $url =  Display::div(Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php'), array('class'=>'sectioncomment'));
+            $form->addElement('html', get_lang('SearchPrefilterPrefix'));         
+            $form->addElement('html', $url);    
+        } else {
+            $form->addElement('select', 'search_prefilter_prefix', get_lang('SearchPrefilterPrefix'), $sf_values, '');
+            $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
+        }
         //$form->addElement('html', Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php' ));
         //admin/specific_fields.php        
     }
@@ -608,14 +613,13 @@ function handle_search() {
         }
         */
         
-        $xapian_loaded      = Display::return_icon('bullet_green.gif', get_lang('Ok'));
-        $dir_exists         = Display::return_icon('bullet_green.gif', get_lang('Ok'));
-        $dir_is_writable    = Display::return_icon('bullet_green.gif', get_lang('Ok'));
-        
+        $xapian_loaded          = Display::return_icon('bullet_green.gif', get_lang('Ok'));
+        $dir_exists             = Display::return_icon('bullet_green.gif', get_lang('Ok'));
+        $dir_is_writable        = Display::return_icon('bullet_green.gif', get_lang('Ok'));        
         $specific_fields_exists = Display::return_icon('bullet_green.gif', get_lang('Ok'));
         
         if (empty($specific_fields)) {
-            $specific_fields_exists = Display::return_icon('bullet_red.gif', get_lang('Error'));
+            $specific_fields_exists = Display::return_icon('bullet_red.gif', get_lang('AddSpecificSearchField'));
         }
         
         if (!extension_loaded('xapian')) {

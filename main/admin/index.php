@@ -35,7 +35,6 @@ $tool_name = get_lang('PlatformAdmin');
 // Displaying the header
 Display::display_header($nameTools);
 
-
 if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php')) {
         Display::display_normal_message(get_lang('InstallDirAccessibleSecurityThreat'));
@@ -115,9 +114,7 @@ if (api_is_platform_admin()) { ?>
         <li><a href="course_category.php"><?php echo get_lang('AdminCategories'); ?></a></li>
         <li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
         <li><a href="course_user_import.php"><?php echo get_lang('ImportUsersToACourse'); ?></a></li>
-    <?php if (api_get_setting('search_enabled') == 'true') { ?>
-        <li><a href="specific_fields.php"><?php echo get_lang('SpecificSearchFields'); ?></a></li>
-    <?php }
+    <?php 
     if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) { ?>
         <li><a href="ldap_import_students.php"><?php echo get_lang('ImportLDAPUsersIntoCourse'); ?></a></li>
     <?php } ?>

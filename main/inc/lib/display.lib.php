@@ -241,7 +241,7 @@ class Display {
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }
-        return $table->display_simple_grid($visibility_options, $paging_options['hide_navigation'], $paging_options['per_page'], $sort_data);
+        return $table->display_simple_grid($visibility_options, $paging_options['hide_navigation'], $default_items_per_page, $sort_data);
     }
 
     /**

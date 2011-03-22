@@ -513,8 +513,7 @@ if ($group_id != 0 ) {
         	   		if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
     	        	    $create_group_item =  '<a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).get_lang('CreateASocialGroup').'</a>';
     	        	    $my_group_content = $create_group_item. $my_group_content;
-        	        } else {
-        	           
+        	        } else {        	           
     	            	if (api_is_allowed_to_edit(null,true)) {
     	            	    $create_group_item =  '<a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).get_lang('CreateASocialGroup').'</a>';
     	        	        $my_group_content = $create_group_item. $my_group_content;

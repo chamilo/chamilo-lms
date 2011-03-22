@@ -117,7 +117,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
 		$user_list = who_is_online_in_this_course($_user['user_id'], api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
 	} else {
-		$user_list = who_is_online(api_get_setting('time_limit_whosonline'));
+		$user_list = who_is_online(api_get_setting('time_limit_whosonline'));		
 	}
 
 	$total = count($user_list);
@@ -133,8 +133,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 			/*
 			if ($_GET['id'] == '') {
 				echo '<p><a class="refresh" href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
-			}*/
-			
+			}*/			
 		} else {
 			echo '<div class="actions-title">';
 			echo get_lang('UsersOnLineList');
@@ -145,21 +144,42 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	if ($user_list) {
 		if (!isset($_GET['id'])) {
 			if (api_get_setting('allow_social_tool') == 'true') {
-				echo '<div id="social-content-right">';
-				
+				echo '<div id="social-content-right">';				
 				echo '<div class="social-box-container2">';
 				//this include the social menu div
 				if (!api_is_anonymous()) {
 					echo UserManager::get_search_form($_GET['q']);
 				}
 			}			
+			
+            //@todo move these style tag in the main/css
+            echo '
+            <style> 
+            .online_grid_item {
+                float:left;
+                margin:10px;
+                text-align:center;    
+            }
+            .online_grid_element_0 {    
+                width: 100px; 
+                height: 100px; 
+                overflow: hidden; 
+                
+            }
+            /* input values to crop the image: top, right, bottom, left */
+            .online_grid_element_0 img{
+                 width: 200px;
+                 margin: -10px 0 0 -50px;
+                  /* height: 150px; */ 
+            }
+            </style>';
+            
 			SocialManager::display_user_list($user_list);
 			
 			if (api_get_setting('allow_social_tool') == 'true') {
 				echo '</div>';
 				echo '</div>';
-			}
-			
+			}			
 		} else {
 			//individual user information - also displays header info
 			SocialManager::display_individual_user(Security::remove_XSS($_GET['id']));
@@ -170,16 +190,11 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 		echo get_lang('UsersOnLineList');
 		echo '</div>';
 	}
-
-
 } else {
 	Display::display_header(get_lang('UsersOnLineList'));
 	Display::display_error_message(get_lang('AccessNotAllowed'));
 }
-
 $referer = empty($_GET['referer']) ? 'index.php' : api_htmlentities(strip_tags($_GET['referer']), ENT_QUOTES);
 
-/*
-		FOOTER
-*/
+/*	FOOTER  */
 Display::display_footer();

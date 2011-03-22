@@ -157,12 +157,11 @@ function who_is_online($valid, $friends = false) {
 			}
 		}
 	}
-	/*
+	
+	
 	//This query will show all registered users. Only for dev purposes.
-	$query = "SELECT DISTINCT u.user_id as login_user_id, login_date
-	FROM ".$track_online_table ."  e , $table_user u
-	GROUP by u.user_id  ORDER BY picture_uri DESC";
-	*/
+	//$query = "SELECT DISTINCT u.user_id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u GROUP by u.user_id  ORDER BY picture_uri DESC";
+	
 	$result = @Database::query($query);
 	//@todo why we dont believe in db query results?
 	if (count($result)>0) {

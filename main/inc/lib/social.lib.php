@@ -792,28 +792,29 @@ class SocialManager extends UserManager {
 					$url = '#';
 				}
 				$image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
-
-				$friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_MEDIUM );
+                
+                if ($image_array['file'] == 'unknown.jpg') {
+                    $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg'; 
+                } else {
+                    $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL );    
+                }                
+				
 				// reduce image
 				$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
 
 				$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" class="social-home-users-online" alt="'.$name.'" src="'.$friends_profile['file'].'"></a>';
-				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name(cut($user_info['firstName'],15), cut($user_info['lastName'],15)).'</a>';
-/*
-				if (api_get_setting('show_email_addresses') == 'true') {
-					$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
-				}*/
+				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.(cut($user_info['firstName'],16)).'<br />'.cut($user_info['lastName'],18).'</a>';
+
 				$user_anonymous = api_get_anonymous_id();
 				$table_data[] = $table_row;
 			}
 			$table_header[] = array(get_lang('UserPicture'), false, 'width="90"');
-			///$table_header[] = array(get_lang('Name'), true);
-			//$table_header[] = array(get_lang('LastName'), true);
-
+			
 			if (api_get_setting('show_email_addresses') == 'true') {
-				$table_header[] = array(get_lang('Email'), true);
+				//$table_header[] = array(get_lang('Email'), true);
 			}
-			Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 10), $extra_params, array(),'grid');
+			echo Display::return_sortable_grid('online', $table_header, $table_data, array('per_page' => 20));
+			//Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 10), $extra_params, array(),'grid');
 		}
 	}
 	/**

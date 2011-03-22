@@ -557,10 +557,10 @@ if ($timezone !== null) {
 				<?php echo get_lang('Time'); Display :: display_icon('info3.gif', get_lang('TotalTimeByCourse'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?>
 			</th>
 			<th>
-				<?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('LPTestScore'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>			
+				<?php echo get_lang('AverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInAllAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>			
 			</th>
 			<th>
-                <?php echo get_lang('LatestScore'); Display :: display_icon('info3.gif', get_lang('LPLatestTestScore'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>
+                <?php echo get_lang('LatestAttemptAverageScore'); Display :: display_icon('info3.gif', get_lang('AverageIsCalculatedBasedInTheLatestAttempts'), array ( 'align' => 'absmiddle', 'hspace' => '3px')); ?>
             </th>
 		  	<th>
 				<?php echo get_lang('Progress'); Display :: display_icon('info3.gif', get_lang('LPProgressScore'), array ('align' => 'absmiddle','hspace' => '3px')); ?>
@@ -592,7 +592,7 @@ if ($timezone !== null) {
 		$csv_content[] = array (
 			get_lang('Learnpath', ''),
 			get_lang('Time', ''),
-			get_lang('Score', ''),
+			get_lang('AverageScore', ''),
 			get_lang('LatestScore', ''),
 			get_lang('Progress', ''),
 			get_lang('LastConnexion', '')

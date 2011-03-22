@@ -92,6 +92,25 @@ define("CONFVAL_limitPreviewTo", SCRIPTVAL_NewEntriesOfTheDayOfLastLogin);
 $personal_course_list = UserManager::get_personal_session_course_list($_user['user_id']);
 
 // check if a user is enrolled only in one course for going directly to the course after the login
+$user_status = $_user['status'];
+$tes = api_get_setting('student_page_after_login');
+if ( $user_status == STUDENT && !api_get_setting('student_page_after_login') == '' ){
+  header('Location: '.api_get_setting('student_page_after_login'));
+  exit();
+}
+if ( $user_status == COURSEMANAGER && !api_get_setting('teacher_page_after_login') == '' ){
+  header('Location: '.api_get_setting('teacher_page_after_login'));
+  exit();
+}
+if ( $user_status == DRH && !api_get_setting('drh_page_after_login') == '' ){
+  header('Location: '.api_get_setting('student_page_after_login'));
+  exit();
+}
+if ( $user_status == SESSIONADMIN && !api_get_setting('sessionadmin_page_after_login') == '' ){
+  header('Location: '.api_get_setting('student_page_after_login'));
+  exit();
+}
+
 if (api_get_setting('go_to_course_after_login') == 'true') {
 	if (!isset($_SESSION['coursesAlreadyVisited']) && is_array($personal_course_list) && count($personal_course_list) == 1) {
 

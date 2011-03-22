@@ -1270,4 +1270,13 @@ $ErrorReadingZip = "Erreur de lecture du fichier ZIP";
 $ErrorStylesheetFilesExtensionsInsideZip = "Les seules extensions acceptées pour les fichiers contenus dans le ZIP sont jpg, jpeg, png, gif et css.";
 $MyTextHere = "Introduisez votre texte ici...";
 $FieldTypeSocialProfile = "Lien réseau social";
+$StudentPageAfterLoginTitle = "Page à montrer pour les étudiants une fois authentifiés";
+$StudentPageAfterLoginComment = "Laisser vide pour le comportement normal de chamilo.";
+$TeacherPageAfterLoginTitle =  "Page à montrer pour les professeurs une fois authentifiés";
+$TeacherPageAfterLoginComment = "Laisser vide pour le comportement normal de chamilo.";
+$DRHPageAfterLoginTitle =  "Page à montrer pour les DRH une fois authentifiés";
+$DRHPageAfterLoginComment = "Laisser vide pour le comportement normal de chamilo.";
+$SessionAdminPageAfterLoginTitle = "Page à montrer pour les adminsitrateurs de sessions une fois authentifiés";
+$SessionAdminPageAfterLoginComment = "Laisser vide pour le comportement normal de chamilo.";
+
 ?>

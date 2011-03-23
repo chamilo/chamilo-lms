@@ -17,6 +17,7 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
+require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
 
 // Load terms & conditions from the current lang
 if (api_get_setting('allow_terms_conditions') == 'true') {

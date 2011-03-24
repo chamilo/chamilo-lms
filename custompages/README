@@ -3,5 +3,6 @@ CustomPages looks for alternatives in this directory, and displays them if prese
 - index-logged.php for the general landing page before login
 - index-unlogged.php for the general landing page when already logged-in
 - registration.php for the registration form
+- registration-feedback.php for the registration success feedback
 - lostpassword.php for the password recovery form
 - lostpassword-feedback.php for the password recovery feedback page

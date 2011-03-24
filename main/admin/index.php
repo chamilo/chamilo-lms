@@ -176,6 +176,7 @@ if(api_is_platform_admin()) {
 	      echo '<li><a href="filler.php">'.get_lang('DataFiller').'</a></li>';
       }
 	  ?>
+	  <li><a href="event_type.php"><?php print  get_lang('events_title') ?></a></li>
 	 </ul>
 	</div>
 

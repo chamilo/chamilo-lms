@@ -674,4 +674,59 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	$res = Database::query($sql);
 	return true;
 }
+
+function eventType_getAll($etId) {
+	$etId = intval($etId);
+	
+	$sql = 'SELECT * FROM '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE).' et
+	LEFT JOIN '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_MESSAGE).' em ON em.event_type_id = et.id
+	WHERE em.language_id = 18
+	';
+	
+	$eventsTypes = Database::store_result(Database::query($sql));
+	// echo $sql;
+	return $eventsTypes;
+}
+
+function eventType_getUsers($etId) {
+	$etId = intval($etId);
+	
+	$sql = 'SELECT user.* FROM '.Database::get_main_table(TABLE_MAIN_USER).' user
+	JOIN '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_REL_USER).' relUser ON relUser.user_id = user.user_id
+	JOIN '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE).' et ON relUser.event_type_id = et.id
+	WHERE et.id = '.$etId.'
+	';
+	
+	$eventsTypes = Database::store_result(Database::query($sql));
+	
+	return $eventsTypes;
+}
+
+function eventType_mod($etId,$users,$message) {
+	$etId = intval($etId);
+	
+	$sql = 'DELETE FROM '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_REL_USER).'
+	WHERE event_type_id = '.$etId.'
+	';
+	
+	Database::query($sql);
+	
+	foreach($users as $user) {
+		$sql = 'INSERT INTO '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_REL_USER).'
+		(user_id,event_type_id)
+		VALUES('.intval($user).','.$etId.')
+		';
+		
+		Database::query($sql);
+	}
+	
+	$sql = 'UPDATE '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_MESSAGE).'
+	SET message = "'.Database::escape_string($message).'"
+	WHERE event_type_id = '.$etId.'
+	';
+	
+	
+	Database::query($sql);
+}
+
 ?>

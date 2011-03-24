@@ -13,6 +13,7 @@
 * @todo convert queries to use Database API
 */
 /*	   INIT SECTION */
+$language_file = array('admin','events');
 
 // REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
 $TABLETRACK_LOGIN 		= $_configuration['statistics_database'].".track_e_login";
@@ -675,17 +676,22 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	return true;
 }
 
-function eventType_getAll($etId) {
+function eventType_getAll($etId=0) {
 	$etId = intval($etId);
 	
 	$sql = 'SELECT * FROM '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE).' et
-	LEFT JOIN '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_MESSAGE).' em ON em.event_type_id = et.id
-	WHERE em.language_id = 18
-	';
+	LEFT JOIN '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_MESSAGE).' em ON em.event_type_id = et.id';
+	//WHERE em.language_id = 10
+	//';
 	
 	$eventsTypes = Database::store_result(Database::query($sql));
 	// echo $sql;
-	return $eventsTypes;
+	$to_return = array(); 
+	foreach ($eventsTypes as $et){
+		$et['name'] = get_lang($et['name']);
+		$to_return[] = $et;
+	}
+	return $to_return;
 }
 
 function eventType_getUsers($etId) {

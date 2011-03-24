@@ -1,4 +1,4 @@
-﻿<?php // $Id: course_list.php 21855 2009-07-07 18:26:10Z juliomontoya $
+<?php // $Id: course_list.php 21855 2009-07-07 18:26:10Z juliomontoya $
 /* For licensing terms, see /license.txt */
 /**
  * This script shows a list of courses and allows searching for courses codes
@@ -79,31 +79,28 @@ Display::display_header($tool_name);
 	
 	function showEventTypes(data) {
 		$.each(data,function(ind,item) {
-				addOption($('#eventList'),item.id,item.name);
+				addOption($('#eventList'),item.event_type_id,item.name);
 			}
 		);
 	}
 	
 	function getCurrentEventTypeInd() {
-		var ind = false;
-	
-		$.each(eventTypes,function(i,data)
+		var ind=false;
+		$.each(eventTypes,function(i,item)
 			{
-				if(data.id == $('#eventList option:selected').first().attr('value')) {
-					ind = i;
-					
+				if(item.event_type_id == $('#eventList option:selected').first().attr('value')) {
+					ind=i;
 					return false;
 				}
 			}
 		)
-		
 		return ind;
 	}
 	
 	function showEventType() {
 		eInd = getCurrentEventTypeInd();
 		
-		$('#eventId').attr('value',eventTypes[eInd].id);
+		$('#eventId').attr('value',eventTypes[eInd].event_type_id);
 		$('#eventName').attr('value',eventTypes[eInd].name);
 		$('#eventNameTitle').text(eventTypes[eInd].name);
 		$('#eventMessage').text(eventTypes[eInd].message);		

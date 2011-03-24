@@ -2478,3 +2478,26 @@ CREATE TABLE `reports_values` (
   `time` int(11) DEFAULT NULL,
   KEY `uid` (`uid`),
   PRIMARY KEY (`key_id`,`uid`,`session_id`, `attempt`));
+
+--
+-- Table structure for event alert sending
+--
+CREATE TABLE IF NOT EXISTS `event_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+  );
+CREATE TABLE IF NOT EXISTS `event_type_message` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_type_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `message` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+    );
+CREATE TABLE IF NOT EXISTS `user_rel_event_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `event_type_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+      );
+INSERT INTO `event_type` VALUES (1, 'course_deleted'),(2,'course_created'),(3,'user_deleted'),(4,'user_created'), (5, 'session_created'), (6,'session_deleted'), (7,'session_category_created'),(8,'session_category_deleted'),(9,'settings_changed'),(10,'user_subscribed'), (11,'user_unsubscribed');

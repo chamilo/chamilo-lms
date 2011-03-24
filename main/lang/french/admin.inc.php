@@ -1280,4 +1280,6 @@ $DRHPageAfterLoginTitle =  "Page à montrer pour les DRH une fois authentifiés"
 $DRHPageAfterLoginComment = "Laisser vide pour le comportement normal de chamilo.";
 $SessionAdminPageAfterLoginTitle = "Page à montrer pour les adminsitrateurs de sessions une fois authentifiés";
 $SessionAdminPageAfterLoginComment = "Laisser vide pour le comportement normal de chamilo.";
+$events_title = 'Gestion des évenements';
+
 ?>

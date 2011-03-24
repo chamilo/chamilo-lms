@@ -110,6 +110,10 @@ define('TABLE_MAIN_LEGAL', 'legal');
 // Dashboard blocks plugin
 define('TABLE_MAIN_BLOCK', 'block');
 
+define('TABLE_MAIN_EVENT_TYPE','event_type');
+define('TABLE_MAIN_EVENT_TYPE_MESSAGE','event_type_message');
+define('TABLE_MAIN_EVENT_TYPE_REL_USER','user_rel_event_type');
+
 // Statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 	'track_e_lastaccess');
 define('TABLE_STATISTIC_TRACK_E_ACCESS', 		'track_e_access');
@@ -992,6 +996,9 @@ class Database {
 				echo $info;
 			}
 		}
+		if(mysql_error()) {
+			error_log($query."\n".mysql_error());
+		}error_log($query);
 		return $result;
 	}
 

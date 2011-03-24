@@ -104,7 +104,7 @@ Display::display_header($tool_name);
 		$('#eventName').attr('value',eventTypes[eInd].name);
 		$('#eventNameTitle').text(eventTypes[eInd].name);
 		$('#eventMessage').text(eventTypes[eInd].message);		
-		ajax({action:"getEventTypeUsers","id":eventTypes[eInd].id},function(data) {
+		ajax({action:"getEventTypeUsers","id":eventTypes[eInd].event_type_id},function(data) {
 				removeAllOption($('#usersSubList'));
 				
 				refreshUsersList();

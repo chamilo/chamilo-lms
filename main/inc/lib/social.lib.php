@@ -803,7 +803,7 @@ class SocialManager extends UserManager {
 				$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
 
 				$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" class="social-home-users-online" alt="'.$name.'" src="'.$friends_profile['file'].'"></a>';
-				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.(cut($user_info['firstName'],16)).'<br />'.cut($user_info['lastName'],18).'</a>';
+				$table_row[] = '<a href="'.$url.'">'.(cut($user_info['firstName'],16)).'<br />'.cut($user_info['lastName'],18).'</a>';
 
 				$user_anonymous = api_get_anonymous_id();
 				$table_data[] = $table_row;

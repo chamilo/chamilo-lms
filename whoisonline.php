@@ -150,32 +150,8 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 				if (!api_is_anonymous()) {
 					echo UserManager::get_search_form($_GET['q']);
 				}
-			}			
-			
-            //@todo move these style tag in the main/css
-            echo '
-            <style> 
-            .online_grid_item {
-                float:left;
-                margin:10px;
-                text-align:center;    
-            }
-            .online_grid_element_0 {    
-                width: 100px; 
-                height: 100px; 
-                overflow: hidden; 
-                
-            }
-            /* input values to crop the image: top, right, bottom, left */
-            .online_grid_element_0 img{
-                 width: 200px;
-                 margin: -10px 0 0 -50px;
-                  /* height: 150px; */ 
-            }
-            </style>';
-            
-			SocialManager::display_user_list($user_list);
-			
+			}
+			SocialManager::display_user_list($user_list);			
 			if (api_get_setting('allow_social_tool') == 'true') {
 				echo '</div>';
 				echo '</div>';

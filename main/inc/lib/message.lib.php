@@ -710,49 +710,51 @@ class MessageManager
 				$band=1;
 
 		$row[5] = Security::remove_XSS($row[5]);
+		
+		$from_user = UserManager::get_user_info_by_id($row[1]);
+		$name = api_get_person_name($from_user['firstname'], $from_user['lastname']);
+		$user_image = UserManager::get_picture_user($row[1], $from_user['picture_uri'],80);
+		$user_image = Display::img($user_image['file'], $name, array('title'=>$name));		
 
-		$message_content =  '
-		<table>
+		$message_content =  '<table>
 		    <tr>
-		      <td width=10>&nbsp; </td>
-		      <td vAlign=top width="100%">
+		      <td width="10px">&nbsp; </td>
+		      <td width="100%">
 		      	<table>
 		            <tr>
-		              <td width="100%">
+		              <td valign="top" width="100%">
 		               <h1>'.str_replace("\\","",$row[5]).'</h1>
-		              </td>
-		              <tr>';
-			if (api_get_setting('allow_social_tool') == 'true') {
-				$user_image = '';
-				/*	@todo add user image
-				$user_image = UserManager::get_user_picture_path_by_id($row[1],'web', true,false);
-				$user_image = UserManager::get_picture_user($row[1], $user_image['file'],'40');
-				$user_image = '<img src="'.$user_image['file'].'" style="'.$user_image['style'].'" >';
-				*/
-				if ($source == 'outbox') {
-					$message_content .='<td>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b> </TD>';
-				} else {
-					$message_content .='<td>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b> </TD>';
-				}
-
-			} else {
-				if ($source == 'outbox') {
-					$message_content .='<td>'.get_lang('From').'&nbsp;'.GetFullUserName($row[1]).'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row[2]).'</b> </TD>';
-				} else {
-					$message_content .='<td>'.get_lang('From').'&nbsp;'.GetFullUserName($row[1]).'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b> </TD>';
-				}
-			}
+		              </td>';
+		if (api_get_setting('allow_social_tool') == 'true') {
+            $message_content .='<td width="100%">'.$user_image.'</td>';
+        }
+                      
+        $message_content .='<tr>';
+    	if (api_get_setting('allow_social_tool') == 'true') {	
+    		if ($source == 'outbox') {
+    			$message_content .='<td>'.get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b> </td>';
+    		} else {
+    			$message_content .='<td>'.get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b> </td>';
+    		}    
+    	} else {
+    		if ($source == 'outbox') {
+    			$message_content .='<td>'.get_lang('From').'&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row[2]).'</b> </td>';
+    		} else {
+    			$message_content .='<td>'.get_lang('From').'&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b> </td>';
+    		}
+    	}
 
 		 $message_content .='</tr>
 		              <tr>
 		              <td>'.get_lang('Date').'&nbsp; '.$row[4].'</td>
 		              </tr>
 		            </tr>
-		        </table>
+		        </table>		        
 		        <br />
+		        <hr style="color:#ddd" />
 		        <table height=209 width="100%">
 		            <tr>
-		              <td vAlign=top class="view-message-content">'.str_replace("\\","",$row[6]).'</td>
+		              <td valign=top class="view-message-content">'.str_replace("\\","",$row[6]).'</td>
 		            </tr>
 		        </table>
 		        <div id="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>

@@ -62,18 +62,25 @@ echo '<div id="social-content">';
 				if (is_array($users) && count($users)> 0) {					
 					echo '<h2>'.get_lang('Users').'</h2>';			
 					foreach($users as $user) {
-						$picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'],80);
+					    
+					    if (empty($user['picture_uri'])) {
+                            $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg'; 
+                        } else {
+                            $picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'], 80, USER_IMAGE_SIZE_ORIGINAL );    
+                        }
+						//$picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'],'', USER_IMAGE_SIZE_ORIGINAL);
 						$url_open = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'].'">';
 						$url_close ='</a>';
 						$img = $url_open.'<img src="'.$picture['file'].'" />'.$url_close;
 						$user['firstname'] = $url_open.$user['firstname'].$url_close;
-						$user['lastname'] = $url_open.$user['lastname'].$url_close;						
-						$results[] = array($img, $user['firstname'],$user['lastname'], $user['tag']);			
+						$user['lastname'] = $url_open.$user['lastname']. $url_close;						
+						$results[] = array($img, $user['firstname'], $user['lastname'], $user['tag']);			
 					}					
 					echo '<div class="social-box-container2">';
 					echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Users')).'</div>';
+            
 					echo '<div id="div_content_table" class="social-box-content2">';				
-						Display::display_sortable_grid('search_user', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
+						Display::display_sortable_grid('online', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
 					echo '</div>';
 					echo '</div>';						
 				}	

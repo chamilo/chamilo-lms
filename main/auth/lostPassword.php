@@ -26,7 +26,43 @@ require_once api_get_path(LIBRARY_PATH).'custompages.lib.php';
 // Custom pages
 // Had to move the form handling in here, because otherwise there would already be some display output.
 if (api_get_setting('use_custom_pages') == 'true') {
-	if (isset ($_GET['reset']) && isset ($_GET['id'])) {
+	if (isset ($_POST['user']) && isset ($_POST['email'])) {
+		$user = $_POST['user'];
+		$email = $_POST['email'];
+
+		$condition = '';
+		if (!empty($email)) {
+			$condition = " AND LOWER(email) = '".Database::escape_string($email)."' ";
+		}
+
+		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+		$query = " SELECT user_id AS uid, lastname AS lastName, firstname AS firstName,
+					username AS loginName, password, email, status AS status,
+					official_code, phone, picture_uri, creator_id
+					FROM ".$tbl_user."
+					WHERE ( username = '".Database::escape_string($user)."' $condition ) ";
+
+		$result 	= Database::query($query);
+		$num_rows 	= Database::num_rows($result);
+
+		if ($result && $num_rows > 0) {
+			if ($num_rows > 1) {
+				$by_username = false; // more than one user
+				while ($data = Database::fetch_array($result)) {
+					$user[] = $data;
+				}
+			} else {
+				$by_username = true; // single user (valid user + email)
+				$user = Database::fetch_array($result);
+			}
+			if ($userPasswordCrypted != 'none') {
+				Login::handle_encrypted_password($user, $by_username);
+			} else {
+				Login::send_password_to_user($user, $by_username);
+			}
+		} else {
+			Display::display_error_message(get_lang('NoUserAccountWithThisEmailAddress'));
+		}
 		$msg = Login::reset_password($_GET["reset"], $_GET["id"], true);
 		CustomPages::displayPage('lostpassword-feedback');
 	}

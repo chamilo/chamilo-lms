@@ -95,19 +95,19 @@ $personal_course_list = UserManager::get_personal_session_course_list($_user['us
 $user_status = $_user['status'];
 $tes = api_get_setting('student_page_after_login');
 if ( $user_status == STUDENT && !api_get_setting('student_page_after_login') == '' ){
-  header('Location: '.api_get_setting('student_page_after_login'));
+  header('Location: '.html_entity_decode(api_get_setting('student_page_after_login')));
   exit();
 }
 if ( $user_status == COURSEMANAGER && !api_get_setting('teacher_page_after_login') == '' ){
-  header('Location: '.api_get_setting('teacher_page_after_login'));
+  header('Location: '.html_entity_decode(api_get_setting('teacher_page_after_login')));
   exit();
 }
 if ( $user_status == DRH && !api_get_setting('drh_page_after_login') == '' ){
-  header('Location: '.api_get_setting('student_page_after_login'));
+  header('Location: '.html_entity_decode(api_get_setting('student_page_after_login')));
   exit();
 }
 if ( $user_status == SESSIONADMIN && !api_get_setting('sessionadmin_page_after_login') == '' ){
-  header('Location: '.api_get_setting('student_page_after_login'));
+  header('Location: '.html_entity_decode(api_get_setting('student_page_after_login')));
   exit();
 }
 

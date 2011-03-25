@@ -137,8 +137,8 @@ echo '<div id="social-content">';
 	echo '<div id="'.$id_content_right.'">';
 			if (api_get_setting('allow_social_tool') == 'true'){
 				echo '<div class="social-box-container2">';				
-				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Outbox')).'</div>';
-				echo '<div id="div_content_table" class="social-box-content2">';
+				//echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Outbox')).'</div>';
+				//echo '<div id="div_content_table" class="social-box-content2">';
 			}	
 			//MAIN CONTENT
 			if ($_REQUEST['action']=='delete') {
@@ -167,8 +167,8 @@ echo '<div id="social-content">';
 				outbox_display();
 			}
 			if (api_get_setting('allow_social_tool') == 'true'){
-				echo '</div>';
-				echo '</div>';
+				//echo '</div>';
+				//echo '</div>';
 			}
 	echo '</div>';	
 

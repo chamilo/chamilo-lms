@@ -322,8 +322,8 @@ echo '<div id="social-content" >';
 		//MAIN CONTENT
 		if (api_get_setting('allow_social_tool') == 'true'){
 			echo '<div class="social-box-container2">';				
-			echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('ComposeMessage')).'</div>';
-			echo '<div id="div_content_table" class="social-box-content2">';
+			//echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('ComposeMessage')).'</div>';
+			//echo '<div id="div_content_table" class="social-box-content2">';
 		}
 		if (!isset($_POST['compose'])) {
 			if(isset($_GET['re_id'])) {
@@ -366,10 +366,6 @@ echo '<div id="social-content" >';
 					Display::display_error_message(get_lang('ErrorSendingMessage'));
 				}
 			}
-		}
-		if (api_get_setting('allow_social_tool') == 'true'){
-			echo '</div>';
-			echo '</div>';
 		}
 	echo '</div>';
 

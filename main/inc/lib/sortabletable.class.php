@@ -181,7 +181,7 @@ class SortableTable extends HTML_Table {
 			$params['prevImg']       = Display :: return_icon('action_prev.png', get_lang('PreviousPage'), $icon_attributes);
 			$params['nextImg']       = Display :: return_icon('action_next.png', get_lang('NextPage'), $icon_attributes);
 			$params['firstPageText'] = Display :: return_icon('action_first.png', get_lang('FirstPage'), $icon_attributes);
-			$params['lastPageText']  =  Display :: return_icon('action_last.png', get_lang('LastPage'), $icon_attributes);
+			$params['lastPageText']  = Display :: return_icon('action_last.png', get_lang('LastPage'), $icon_attributes);
 			$params['firstPagePre']  = '';
 			$params['lastPagePre']   = '';
 			$params['firstPagePost'] = '';
@@ -215,21 +215,27 @@ class SortableTable extends HTML_Table {
 		}
 		$html = '';
 		if (!$empty_table) {
-			$form = $this->get_page_select_form();
-			$nav = $this->get_navigation_html();
-			$html = '<table style="width:100%;">';
-			$html .= '<tr>';
-			$html .= '<td style="width:25%;">';
-			$html .= $form;
-			$html .= '</td>';
-			$html .= '<td style="text-align:center;">';
-			$html .= $this->get_table_title();
-			$html .= '</td>';
-			$html .= '<td style="text-align:right;width:25%;">';
-			$html .= $nav;
-			$html .= '</td>';
-			$html .= '</tr>';
-			$html .= '</table>';
+			$form  = $this->get_page_select_form();
+			$nav   = $this->get_navigation_html();
+			
+			//Only show pagination info when there are items to paginate		
+
+            if ($this->total_number_of_items > $this->default_items_per_page) {
+    			$html  = '<table style="width:100%;">';
+    			$html .= '<tr>';
+    			$html .= '<td style="width:25%;">';
+    			$html .= $form;
+    			$html .= '</td>';
+    			$html .= '<td style="text-align:center;">';
+    			$html .= $this->get_table_title();
+    			$html .= '</td>';
+    			$html .= '<td style="text-align:right;width:25%;">';
+    			$html .= $nav;
+    			$html .= '</td>';
+    			$html .= '</tr>';
+    			$html .= '</table>';
+            }
+			
 			if (count($this->form_actions) > 0) {
 				$html .= '<script language="JavaScript" type="text/javascript">
 																/*<![CDATA[*/

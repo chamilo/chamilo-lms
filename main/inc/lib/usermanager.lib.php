@@ -148,7 +148,8 @@ class UserManager
 			// add event to system log
 			$time = time();
 			$user_id_manager = api_get_user_id();
-			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, $time, $user_id_manager);
+			$user_info = api_get_user_info($return);
+			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, $time, $user_id_manager,null,$user_info);
 
 		} else {
 			//echo "false - failed" ;
@@ -293,7 +294,7 @@ class UserManager
 		// add event to system log
 		$time = time();
 		$user_id_manager = api_get_user_id();
-		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, $time, $user_id_manager);
+		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, $time, $user_id_manager,null,$user_info);
 
 		return true;
 	}

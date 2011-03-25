@@ -13,7 +13,7 @@
 * @todo convert queries to use Database API
 */
 /*	   INIT SECTION */
-$language_file = array('admin','events');
+$language_file[] = 'events';
 
 // REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
 $TABLETRACK_LOGIN 		= $_configuration['statistics_database'].".track_e_login";
@@ -625,7 +625,7 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
  * @param	integer	User ID (defaults to null)
  * @param	string	Course code (defaults to null)
  */
-function event_system($event_type, $event_value_type, $event_value, $timestamp = null, $user_id=null, $course_code=null)
+function event_system($event_type, $event_value_type, $event_value, $timestamp = null, $user_id=null, $course_code=null, $notification_infos=array())
 {
 	global $_configuration;
 	global $_user;
@@ -673,7 +673,54 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 					'$event_value_type',
 					'$event_value')";
 	$res = Database::query($sql);
+	
+	//Sending notofications to users
+	global $language_file;
+
+	//prepare message
+	$message = get_event_message($event_type);
+	$mail_body=$message;
+	if ( is_array($notification_infos) ){
+		foreach ($notification_infos as $variable => $value) {
+			$mail_body = str_replace('%'.$variable.'%',$value,$mail_body);
+		}
+	}
+
+	//prepare mail common variables
+	$subject = get_lang($event_type);
+	if ( $event_type == 'user_created' ){
+		$subject = "Création d'un utilisateur";
+	}
+	$mail_subject = '['.api_get_setting('siteName').'] '.$subject;
+	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+	$email_admin = api_get_setting('emailAdministrator');
+	$emailfromaddr = api_get_setting('emailAdministrator');
+	$emailfromname = api_get_setting('siteName');
+
+	//Send mail to all subscribed users
+	$users_arr = get_users_subscribed_to_event($event_type);
+	foreach ($users_arr as $user) {
+		$recipient_name = api_get_person_name($user['firstname'], $user['lastname']);
+		$email = $user['email'];
+			@api_mail($recipient_name, $email, $mail_subject, $mail_body, $sender_name, $email_admin);
+	}
 	return true;
+}
+
+function get_event_message($event_name){
+	$event_name = Database::escape_string($event_name);
+	$sql = 'SELECT m.message FROM '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE).' e,'
+		.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_MESSAGE).' m
+		WHERE m.event_type_id = e.id '.
+		"AND e.name = '$event_name'";
+
+	$res = Database::store_result(Database::query($sql));
+
+	if ( isset($res[0]['message']) ) {
+		return $res[0]['message'];
+	}else {
+		return '';
+	}
 }
 
 function eventType_getAll($etId=0) {
@@ -692,6 +739,18 @@ function eventType_getAll($etId=0) {
 		$to_return[] = $et;
 	}
 	return $to_return;
+}
+
+function get_users_subscribed_to_event($event_name){
+	$event_name = Database::escape_string($event_name);
+	$sql = 'SELECT u.* FROM '. Database::get_main_table(TABLE_MAIN_USER).' u,'
+						.Database::get_main_table(TABLE_MAIN_EVENT_TYPE).' e,'
+						.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_REL_USER).' ue
+			WHERE ue.user_id = u.user_id
+			AND e.name = \''.$event_name.'\'
+			AND e.id = ue.event_type_id';
+
+	return Database::store_result(Database::query($sql));
 }
 
 function eventType_getUsers($etId) {

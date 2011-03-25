@@ -9,9 +9,7 @@
 * @package chamilo.auth
 */
 
-/**
- * Init section
- */
+/*  Init section  */
 
 // Language files that should be included.
 $language_file = array('registration', 'messages', 'userInfo');

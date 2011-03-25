@@ -136,17 +136,17 @@ if (!empty($curDirPath)) {
 /* CURRENT DIRECTORY */
 
 echo	'<tr>';
-echo	'<th>'.get_lang('Title').'</th>'."\n" .
-        '<th>'.get_lang('Progress')."</th>\n";
+echo	'<th width="40%">'.get_lang('Title').'</th>'.
+        '<th>'.get_lang('Progress')."</th>";
 if ($is_allowed_to_edit) {
-    echo '<th>'.get_lang('CourseSettings')."</th>\n" .
+    //echo '<th>'.get_lang('CourseSettings')."</th>\n" .
         // Export now is inside "Edit"
         //'<th>'.get_lang('ExportShort')."</th>\n" .
-        '<th>'.get_lang('AuthoringOptions')."</th>\n";
+    echo    '<th>'.get_lang('AuthoringOptions')."</th>";
 
     // Only available for not session mode.
     if ($current_session == 0) {
-        echo'<th>'.get_lang('Move')."</th>\n";
+        echo'<th>'.get_lang('Move')."</th>";
     }
 }
 echo '</tr>';
@@ -216,12 +216,17 @@ if (is_array($flat_list)) {
 
         $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
         $name = Security::remove_XSS($details['lp_name']);
-        $image='<img src="../img/icons/22/learnpath.png" border="0" align="absmiddle" alt="' . $name . '">'."\n";
-        $dsp_line =	'<tr align="center" class="'.$oddclass.'">'."\n" .
+        if ($is_allowed_to_edit) {
+            $dsp_desc = '<em>'.$details['lp_maker'].'</em>  &nbsp;'.$details['lp_proximity'].'<br />'.(learnpath::is_lp_visible_for_student($id,api_get_user_id())?'':'('.get_lang('LPNotVisibleToStudent').')');
+            $extra = '<br /><font color="#999"><i>'.$dsp_desc .'</i></font>';
+        }
+        
+        $image='<img src="../img/icons/22/learnpath.png" border="0" align="absmiddle" alt="' . $name . '">';
+        $dsp_line =	'<tr align="center" class="'.$oddclass.'">'.
             '<td align="left" valign="top">' .
             '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_lp.'">' .
-        $image . '</a></div><a href="'.$url_start_lp.'">' . $name . '</a>' . $session_img .
-            "</td>\n";
+        $image . '</a></div><a href="'.$url_start_lp.'">' . $name . '</a>' . $session_img .$extra.
+            "</td>";
         //$dsp_desc='<td>'.$details['lp_desc'].'</td>'."\n";
         $dsp_desc = '';
 
@@ -251,13 +256,10 @@ if (is_array($flat_list)) {
         $lp_theme_css = $mystyle;
 
         if ($display_progress_bar) {            
-            $dsp_progress = '<td width="140px">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</td>';
+            $dsp_progress = '<td width="140px"><div style="width:140px">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</div></td>';
         } else {
-            $dsp_progress = '<td width="140px" style="padding-top:1em;">'.learnpath::get_db_progress($id, api_get_user_id(), 'both','',false, api_get_session_id()).'</td>';
-        }
-        
-        //
-  
+            $dsp_progress = '<td width="140px" style="padding-top:1em;"><div style="width:140px">'.learnpath::get_db_progress($id, api_get_user_id(), 'both','',false, api_get_session_id()).'</div></td>';
+        }   
 
         if ($is_allowed_to_edit) {
 
@@ -273,7 +275,7 @@ if (is_array($flat_list)) {
             $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'</td>'."\n";
             */
 
-            $dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].'<br />'.(learnpath::is_lp_visible_for_student($id,api_get_user_id())?'':'('.get_lang('LPNotVisibleToStudent').')').'</td>'."\n";
+            //$dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].'<br />'.(learnpath::is_lp_visible_for_student($id,api_get_user_id())?'':'('.get_lang('LPNotVisibleToStudent').')').'</td>'."\n";
 
             /* Export */
 
@@ -303,8 +305,7 @@ if (is_array($flat_list)) {
 
             // EDIT LP
             if ($current_session == $details['lp_session']) {
-                $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.Display::return_icon('settings.png', get_lang('CourseSettings'),'','22').'</a>';
-				
+                $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.Display::return_icon('settings.png', get_lang('CourseSettings'),'','22').'</a>';				
             } else {
                 $dsp_edit_lp = Display::return_icon('settings_na.png', get_lang('CourseSettings'),'','22');
             }

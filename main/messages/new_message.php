@@ -95,8 +95,16 @@ function add_image_form() {
 		}
 	}
 }
+</script>
 
-</script>';
+<style>
+div.row div.label {
+    width:15%;
+}
+div.row div.formw {
+    width:80%;
+}
+</style>';
 
 $nameTools = get_lang('ComposeMessage');
 

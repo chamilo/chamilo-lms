@@ -41,7 +41,16 @@ function hide_icon_edit(element_html)  {
 	ident="#edit_image";
 	$(ident).hide();
 }
-</script>';
+</script>
+
+<style>
+div.row div.label {
+    width:15%;
+}
+div.row div.formw {
+    width:80%;
+}
+</style>';
 
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 
@@ -114,16 +123,8 @@ echo '<div id="social-content">';
 		//show the action menu
 		SocialManager::show_social_menu('group_add');
 	echo '</div>';
-	echo '<div id="social-content-right">';
-	echo '<div class="social-box-container2">';				
-	echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Groups')).'</div>';
-	echo '<div id="div_content_table" class="social-box-content2">';
-	
-		$form->display();
-	echo '</div>';
-	echo '</div>';
-	echo '</div>';
+	echo '<div id="social-content-right">';	
+    $form->display();	
+    echo '</div>';
 echo '</div>';
-
 Display :: display_footer();
-?>

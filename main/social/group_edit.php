@@ -41,7 +41,16 @@ function hide_icon_edit(element_html)  {
 	ident="#edit_image";
 	$(ident).hide();
 }
-</script>';
+</script>
+
+<style>
+div.row div.label {
+    width:15%;
+}
+div.row div.formw {
+    width:80%;
+}
+</style>';
 
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
 $tool_name = get_lang('GroupEdit');
@@ -170,17 +179,11 @@ echo '<div id="social-content">';
 	//this include the social menu div
 	SocialManager::show_social_menu('group_edit',$group_id);
 	echo '</div>';
-	echo '<div id="social-content-right">';
-		echo '<div class="social-box-container2">';				
-		echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('GroupEdit')).'</div>';
-			echo '<div id="div_content_table" class="social-box-content2">';
+	echo '<div id="social-content-right">';			
 				echo '<table><tr><td>';
 				// Display form
 				$form->display();
-				echo '</td></tr></table>';
-			echo '</div>';
-		echo '</div>';
-		
+				echo '</td></tr></table>';		
 	echo '</div>';
 echo '</div>';
 

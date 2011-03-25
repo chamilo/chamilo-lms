@@ -144,9 +144,9 @@ if (count($friends) == 0 ) {
 	      <tr>
 			<td height="153" valign="top">
 				<?php
-				echo '<div class="social-box-container2">';
-				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Friends')).'</div>';
-				echo '<div id="div_content_table" class="social-box-content2">';
+				
+				
+				
 				
 		
 					
@@ -156,7 +156,9 @@ if (count($friends) == 0 ) {
 					$number_friends = count($friends);
 					$j=0;
 					echo '<div id ="social-content-right">';
-					$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
+					//echo '<div id="div_content_table" class="rounded_div" style="width:90%">';
+					
+					$friend_html.= '<table class="rounded_div" width="95%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
 					for ($k=0;$k<$number_friends;$k++) {
 						$friend_html.='<tr><td valign="top">';
 					
@@ -174,9 +176,10 @@ if (count($friends) == 0 ) {
 						$friend_html.='</td></tr>';
 					}
 					$friend_html.='<br/></table>';
-					echo '</div>';
+					
+					
 					echo $friend_html;
-				echo '</div>';
+				
 				echo '</div>';
 				?>
 			</td>

@@ -112,15 +112,13 @@ echo '<div id="social-content">';
 	echo '</div>';
 
 	echo '<div id="social-content-right">';
-	///////////////////
-			echo '<div class="social-box-container2">';				
-			
-		/////////////	
-		if (! empty($show_message)){
+	
+        echo '<div class="rounded_div" style="width:90%">';
+    
+		if (!empty($show_message)) {
 			Display :: display_normal_message($show_message);
-		}
-		echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Invitations')).'</div>';
-			echo '<div id="div_content_table" class="social-box-content2">';		
+		}		
+				
 		echo '<div id="id_response" align="center">&nbsp;</div>';
 		$list_get_invitation=array();
 		$user_id = api_get_user_id();
@@ -133,15 +131,13 @@ echo '<div id="social-content">';
 		$total_invitations = $number_loop + count($list_get_invitation_sent) + count($pending_invitations);
 		
 		if ($total_invitations == 0 && count($_GET) <= 0) {
-			echo '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
-		} 
-		
+			echo '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a><br /><br />';
+		} 		
 		
 		if ($number_loop != 0) {
 			echo '<h2>'.get_lang('InvitationReceived').'</h2>';	
 			
-			foreach ($list_get_invitation as $invitation) { 
-				
+			foreach ($list_get_invitation as $invitation) { 				
 				$sender_user_id = $invitation['user_sender_id']
 				?>
 				<div id="<?php echo 'id_'.$sender_user_id ?>" class="invitation_confirm">
@@ -151,8 +147,7 @@ echo '<div id="social-content">';
 				        $user_info	= api_get_user_info($sender_user_id);
 				        $title 		= Security::remove_XSS($invitation['title']);	        
 				        $content 	= Security::remove_XSS($invitation['content']);
-				        $date		= $invitation['send_date'];  
-				                        
+				        $date		= $invitation['send_date'];  				                        
 				    ?>	   	
 					<table cellspacing="0" border="0">
 					<tbody>
@@ -183,9 +178,10 @@ echo '<div id="social-content">';
 				<?php
 			}
 		}
+		
 		echo '<div class="clear"></div>';
 		
-		if (count($list_get_invitation_sent) > 0 ){	
+		if (count($list_get_invitation_sent) > 0 ) {	
 			echo '<h2>'.get_lang('InvitationSent').'</h2>';
 			foreach ($list_get_invitation_sent as $invitation) { 
 				$sender_user_id = $invitation['user_receiver_id'];?>

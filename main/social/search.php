@@ -76,17 +76,12 @@ echo '<div id="social-content">';
 						$user['lastname'] = $url_open.$user['lastname']. $url_close;						
 						$results[] = array($img, $user['firstname'], $user['lastname'], $user['tag']);			
 					}					
-					echo '<div class="social-box-container2">';
-					echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Users')).'</div>';
-            
-					echo '<div id="div_content_table" class="social-box-content2">';				
+					
+					echo '<div id="div_content_table" class="rounded_div">';				
 						Display::display_sortable_grid('online', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
-					echo '</div>';
-					echo '</div>';						
-				}	
-				
-				
-				
+					echo '</div>';											
+				}
+								
 				//get users from tags
 				if (is_array($results) && count($results) > 0) {
 					foreach ($results as $result) {
@@ -168,9 +163,9 @@ echo '<div id="social-content">';
 						//$grid_groups[]= array('', $data);									
 					}		
 				}
-				echo '<div class="social-box-container2">';									
+				    //echo '<div class="social-box-container2">';									
 						Display::display_sortable_grid('mygroups', array(), $grid_groups, array('hide_navigation'=>true, 'per_page' => 5), $query_vars,  false, array(true,true,true,true,true));		
-					echo '</div>';
+					//echo '</div>';
 				
 			}		
 		} else {

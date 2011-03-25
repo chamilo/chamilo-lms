@@ -251,15 +251,16 @@ SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_pro
 echo '  </div>';
 
 echo '  <div id="social-content-right">';
-echo '    <div class="social-box-main1">';
-echo '      <div class="social-box-left">';
-echo '        <div>'.Display::return_icon('boxmygroups.jpg', get_lang('Profile')).'</div>';
-echo '          <div class="social-box-content1">';
+
+
+
+echo '      <div class="rounded_div" style="width:300px">';
+
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
-	echo '            <div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
+	echo '<div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
 } else {
 	//--- Basic Information
-	echo '            <div><h3>'.get_lang('Profile').'</h3></div>';
+	echo '<div><h3>'.get_lang('Profile').'</h3></div>';
 }
 
 if ($show_full_profile) {
@@ -360,17 +361,13 @@ if ($show_full_profile) {
 	if (!empty($extra_information_value)) echo $extra_information;
 }
 
-echo '  </div>'; // close div tag .social-box-content1
 
-echo '</div>';	// close div tag .social-box-left
+echo '</div>';	// close div tag rounded 
 
 
 if ($show_full_profile) {
 
-	echo '<div class="social-box-left">';
-	echo '<div>'.Display::return_icon('boxmygroups.jpg', get_lang('SocialFriend')).'</div>';
-	echo '<div class="social-box-content1">';
-
+	echo '<div class="rounded_div" style="width:288px">';	
 	$list_path_friends= $list_path_normal_friends = $list_path_parents = array();
 
 	//SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
@@ -431,12 +428,10 @@ if ($show_full_profile) {
 		$friend_html.= '</div>'; // close div friend-header
 	}
 	$friend_html.= '</div>';
-	echo $friend_html;
-	echo '</div>';
-	echo '</div>';
+	echo $friend_html;	
 }
 
-echo '</div>'; // close div tag .social-box-main1
+echo '</div>'; // close div tag rounded 
 
 if ($show_full_profile) {
 
@@ -484,40 +479,29 @@ if ($show_full_profile) {
 	}
 
     if (count($grid_my_groups) > 0) {
-    	echo '<div class="social-box-main1">';
-			echo '<div class="social-box-container2">';
-				echo '<div>'.Display::return_icon('content-post-group1.jpg', get_lang('MySocialGroups')).'</div>';
-				echo '<div class="social-box-content2">';
-					echo '<div><h3>'.get_lang('MyGroups').'</h3></div>';
-					$count_groups = 0;
-					if (count($results) == 1 ) {
-						$count_groups = count($results).' '.get_lang('Group');
+		echo '<div class="rounded_div" style="width:90%">';
+				echo '<div><h3>'.get_lang('MyGroups').'</h3></div>';
+				$count_groups = 0;
+				if (count($results) == 1 ) {
+					$count_groups = count($results).' '.get_lang('Group');
+				} else {
+					$count_groups = count($results).' '.get_lang('Groups');
+				}
+				echo '<div>'.$count_groups.'</div>';
+				if ($i > $max_numbers_of_group) {
+					if (api_get_user_id() == $user_id) {
+						echo '<div class="box_shared_profile_group_actions"><a href="groups.php?#tab_browse-1">'.get_lang('SeeAllMyGroups').'</a></div>';
 					} else {
-						$count_groups = count($results).' '.get_lang('Groups');
+						echo '<div class="box_shared_profile_group_actions"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php?view=mygroups&height=390&width=610&&user_id='.$user_id.'" class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAllMyGroups').'</a></div>';
 					}
-					echo '<div>'.$count_groups.'</div>';
-
-					if ($i > $max_numbers_of_group) {
-						if (api_get_user_id() == $user_id) {
-							echo '<div class="box_shared_profile_group_actions"><a href="groups.php?#tab_browse-1">'.get_lang('SeeAllMyGroups').'</a></div>';
-						} else {
-							echo '<div class="box_shared_profile_group_actions"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php?view=mygroups&height=390&width=610&&user_id='.$user_id.'" class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAllMyGroups').'</a></div>';
-						}
-					}
-
-	    			Display::display_sortable_grid('shared_profile_mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
-				echo '</div>';
-			echo '</div>';
-		echo '</div>';
+				}
+    			Display::display_sortable_grid('shared_profile_mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
+		echo '</div>';		
 	}
 
 	// COURSES LIST
-
-	if ( is_array($list) ) {
-		echo '<div class="social-box-main1">';
-			echo '<div class="social-box-container2">';
-				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('MyCourses')).'</div>';
-				echo '<div class="social-box-content2">';
+	if ( is_array($list) ) {		
+			echo '<div class="rounded_div" style="width:90%">';			
 					echo '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';
 					echo '<div class="social-content-training">';
 					//Courses whithout sessions
@@ -538,24 +522,19 @@ if ($show_full_profile) {
 						} elseif ( !empty($value[2]) ) { //if there is a session but it is not active
 							$listInactives[] = $value;
 						}
-					}
-					echo '</div>';
-				echo '</div>';
-			echo '</div>';
-		echo '</div>';
+					}				
+			echo '</div>';		
 	}
 	// user feeds
 	$user_feeds = SocialManager::get_user_feeds($user_id);
 	if (!empty($user_feeds )) {
-		echo '<div class="social-box-main1">';
-			echo '<div class="social-box-container2">';
-				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('RSSFeeds')).'</div>';
+		echo '<div class="rounded_div">';
 				echo '<div class="social-box-content2">';
 					echo '<div><h3>'.get_lang('RSSFeeds').'</h3></div>';
 	    			echo '<div class="social-content-training">'.$user_feeds.'</div>';
 	    			//echo '<div class="clear"></div>';
 				echo '</div>';
-			echo '</div>';
+			
 		echo '</div>';
 	}
 
@@ -671,7 +650,7 @@ if ($show_full_profile) {
 		echo '</div>';
 		echo '</div>';
 	}
-	echo '</div>'; // close div tag .social-box-main
+	
 }
 echo '</div>'; // close div tag .socialContentRight
 echo '<form id="id_reload" name="id_reload" action="profile.php">&nbsp;</form>';

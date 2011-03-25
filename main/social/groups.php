@@ -305,7 +305,7 @@ if ($group_id != 0 ) {
 	echo '<div class="clear"></div>';
 
 	//-- Show message groups
-	echo '<div class="messages" style="width:720px">';
+	echo '<div class="messages" style="width:700px">';
 		if (GroupPortalManager::is_group_member($group_id)) {
 			//echo '<h3>'.get_lang('Topics').'</h3>';		
 			
@@ -349,8 +349,7 @@ if ($group_id != 0 ) {
 					}					 	
 				}
 				//if (count($members) > $min_count_members) {
-					//More link
-					
+					//More link					
 				//}   
 				//$member_content .= '</div>';						
     		}		

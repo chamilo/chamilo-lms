@@ -153,8 +153,6 @@ echo '<div id="social-content">';
 					MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
 				}
 				$delete_list_id=array();
-				
-				
 				outbox_display();
 				
 			} elseif ($_REQUEST['action']=='deleteone') {

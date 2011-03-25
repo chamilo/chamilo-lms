@@ -3052,6 +3052,7 @@ a.read {
 	height: auto;
 	margin: 0 8px 15px 15px;
 	padding: 16px 12px 5px;
+	width:90%;
 }
 
 .popular_grid_element_0 {
@@ -3082,6 +3083,7 @@ a.read {
 	height: auto;
 	margin: 0 8px 15px 15px;
 	padding: 16px 12px 5px;
+    width:90%;
 }
 
 .newest_grid_element_1 {
@@ -3112,6 +3114,7 @@ a.read {
 	height: auto;
 	margin: 0 8px 15px 15px;
 	padding: 16px 12px 5px;
+    width:90%;
 }
 
 .box_description_group_member {
@@ -3639,7 +3642,7 @@ div.image-social-content center.friend {
 #social-content-right {
 	height:auto;
 	overflow:hidden;	
-	width:79%;
+	width:700px;
 }
 
 .social-content-image {
@@ -4426,4 +4429,24 @@ span.form_required  {
 }
 .online_grid_element_1, .online_grid_element_2 {    
     font-size:10px;
+}
+
+.rounded_div {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 11px 11px 11px 11px;
+    
+    -webkit-border-radius: 11px 11px 11px 11px;
+    -opera-border-radius: 11px 11px 11px 11px;
+    -moz-border-radius: 11px 11px 11px 11px;
+    
+    box-shadow: 0 4px 18px #C8C8C8;
+    -webkit-box-shadow: 0 4px 18px #C8C8C8;
+    -opera-box-shadow: 0 4px 18px #C8C8C8;
+    -moz-box-shadow: 0 4px 18px #C8C8C8;
+    
+    float: left;
+    height: auto;
+    margin: 10px 8px 15px 15px;
+    padding: 16px 12px 5px;
 }

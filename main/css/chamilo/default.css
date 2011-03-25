@@ -3233,6 +3233,7 @@ a.read {
 	height: auto;
 	margin: 0 8px 15px 15px;
 	padding: 16px 12px 5px;
+	width:90%;
 }
 
 .popular_grid_element_0 {
@@ -3263,6 +3264,7 @@ a.read {
 	height: auto;
 	margin: 0 8px 15px 15px;
 	padding: 16px 12px 5px;
+	width:90%;
 }
 
 .newest_grid_element_1 {
@@ -3293,6 +3295,7 @@ a.read {
 	height: auto;
 	margin: 0 8px 15px 15px;
 	padding: 16px 12px 5px;
+	width:90%;
 }
 
 .box_description_group_member {
@@ -3832,7 +3835,7 @@ div.image-social-content center.friend {
     height:auto;
     overflow:hidden;
     float:left;
-
+	 width:700px;
 }
 
 .social-content-image {
@@ -4039,17 +4042,17 @@ div.image-social-content center.friend {
     overflow:hidden;
 }
 .social-box-left {
-    width:345px;
+    width:340px;
     float:left;
     height:auto;
     margin:0px;
 }
 
 .social-box-right {
-    width:300px;
+    width:280px;
     float:left;
     height:auto;
-    margin-left:10px;
+    margin-left:18px;
     overflow:hidden;
 }
 .social-box-container1 {
@@ -4072,7 +4075,7 @@ div.image-social-content center.friend {
     width:700px;
 }
 .social-box-container2 {
-    width:700px;
+    //width:648px;
     height:auto;
     overflow:hidden;
     margin-bottom:20px;
@@ -4664,4 +4667,25 @@ padding-top:10px;
 
 .progresstext {
     text-align:center;
+}
+
+
+.rounded_div {
+	background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 11px 11px 11px 11px;
+    
+    -webkit-border-radius: 11px 11px 11px 11px;
+    -opera-border-radius: 11px 11px 11px 11px;
+    -moz-border-radius: 11px 11px 11px 11px;
+    
+    box-shadow: 0 4px 18px #C8C8C8;
+    -webkit-box-shadow: 0 4px 18px #C8C8C8;
+    -opera-box-shadow: 0 4px 18px #C8C8C8;
+    -moz-box-shadow: 0 4px 18px #C8C8C8;
+    
+    float: left;
+    height: auto;
+    margin: 10px 8px 15px 15px;
+    padding: 16px 12px 5px;
 }

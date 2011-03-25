@@ -357,7 +357,6 @@ if ($add_type == 'multiple') {
 		Display::display_footer();
 		exit;
 	}
-
 ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $group_id; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
@@ -399,9 +398,8 @@ if ($add_type=='multiple') {
 if(!empty($errorMsg)) {
 	Display::display_error_message($errorMsg); //main API
 }
-	echo '<div class="social-box-container2">';
-	echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('SubscribeUsersToGroup')).'</div>';
-		echo '<div id="div_content_table" class="social-box-content2">';
+	echo '<div class="social-box-container2">';	
+		
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
@@ -515,8 +513,7 @@ if (is_array($members) && count($members)>0) {
 	echo '<span class="social-groups-text1"><strong>'.get_lang('UsersAlreadyInvited').'</strong></span>';
 	Display::display_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
 }
-			echo '</div>';//end  class social-box-content2
-		echo '</div>';// end class social-box-container2
+		
 	echo '</div>'; // end layout right
 
 echo '</div>'; //
@@ -613,14 +610,8 @@ function makepost(select){
 
 }
 -->
-
 </script>
 <?php
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/* 		FOOTER */
 Display::display_footer();
-?>

@@ -1,11 +1,4 @@
-<?php // $Id: course_list.php 21855 2009-07-07 18:26:10Z juliomontoya $
-/* For licensing terms, see /license.txt */
-/**
- * This script shows a list of courses and allows searching for courses codes
- * and names
- * @package chamilo.admin
- */
-/*	INIT SECTION	*/
+<?php
 
 // name of the language file that needs to be included
 $language_file = array('admin','events');
@@ -18,6 +11,7 @@ $action = isset($_POST['action'])?$_POST['action']:null;
 $eventId = isset($_POST['eventId'])?$_POST['eventId']:null;
 $eventUsers = isset($_POST['eventUsers'])?$_POST['eventUsers']:null;
 $eventMessage = isset($_POST['eventMessage'])?$_POST['eventMessage']:null;
+$eventSubject = isset($_POST['eventSubject'])?$_POST['eventSubject']:null;
 
 if($action == 'modEventType') {
 	if($eventUsers) {
@@ -27,11 +21,13 @@ if($action == 'modEventType') {
 		$users = array();
 	}
 	
-	eventType_mod($eventId,$users,$eventMessage);
+	eventType_mod($eventId,$users,$eventMessage,$eventSubject);
 	// echo mysql_error();
 	header('location: event_type.php');
 	exit;
 }
+
+$ets = eventType_getAll();
 
 $tool_name = get_lang('events_title');
 
@@ -44,7 +40,7 @@ Display::display_header($tool_name);
 
 <script language="javascript">
 	var usersList;
-	var eventTypes;
+	var eventTypes = <?php print json_encode($ets) ?>;
 
 	$(document).ready(function(){
 		ajax({action:"getUsers"},function(data) {
@@ -52,11 +48,11 @@ Display::display_header($tool_name);
 			}
 		);
 		
-		ajax({action:"getEventTypes"},function(data) {
-				eventTypes = data;
-				showEventTypes(data);
-			}
-		);
+		// ajax({action:"getEventTypes"},function(data) {
+				// eventTypes = data;
+				// showEventTypes(data);
+			// }
+		// );
 	});
 
 	function ajax(params,func) {
@@ -77,34 +73,38 @@ Display::display_header($tool_name);
 		);
 	}
 	
-	function showEventTypes(data) {
-		$.each(data,function(ind,item) {
-				addOption($('#eventList'),item.event_type_id,item.name);
-			}
-		);
-	}
+	// function showEventTypes(data) {
+		// $.each(data,function(ind,item) {
+				// addOption($('#eventList'),item.id,item.name);
+			// }
+		// );
+	// }
 	
 	function getCurrentEventTypeInd() {
 		var ind=false;
 		$.each(eventTypes,function(i,item)
 			{
-				if(item.event_type_id == $('#eventList option:selected').first().attr('value')) {
+				if(item.id == $('#eventList option:selected').first().attr('value')) {
 					ind=i;
 					return false;
 				}
-			}
+			}	
 		)
+		
 		return ind;
 	}
 	
 	function showEventType() {
 		eInd = getCurrentEventTypeInd();
 		
-		$('#eventId').attr('value',eventTypes[eInd].event_type_id);
+		$('#eventId').attr('value',eventTypes[eInd].id);
 		$('#eventName').attr('value',eventTypes[eInd].name);
-		$('#eventNameTitle').text(eventTypes[eInd].name);
-		$('#eventMessage').text(eventTypes[eInd].message);		
-		ajax({action:"getEventTypeUsers","id":eventTypes[eInd].event_type_id},function(data) {
+		$('#eventNameTitle').text(eventTypes[eInd].nameLangVar);
+		$('#eventMessage').text(eventTypes[eInd].message);
+		$('#eventSubject').attr('value',eventTypes[eInd].subject);
+		$('#descLangVar').text(eventTypes[eInd].descLangVar);
+				
+		ajax({action:"getEventTypeUsers","id":eventTypes[eInd].id},function(data) {
 				removeAllOption($('#usersSubList'));
 				
 				refreshUsersList();
@@ -182,7 +182,15 @@ Display::display_header($tool_name);
 	</tr>
 	<tr>
 		<td>
-			<select multiple="1" id="eventList" onChange="showEventType()"></select>
+			<select multiple="1" id="eventList" onChange="showEventType()">
+				<?php
+					
+					foreach($ets as $et) {
+						print '<option value="'.$et['id'].'">'.$et['nameLangVar'].'</option>';
+					}
+					
+				?>
+			</select>
 		</td>
 		<td>
 			<select multiple="1" id="usersList"></select>
@@ -207,7 +215,17 @@ Display::display_header($tool_name);
 	<input type="hidden" name="eventId" id="eventId" />
 	<input type="hidden" name="eventUsers" id="eventUsers" />
 	<input type="hidden" id="eventName" />
-
+	
+	<br />
+	
+	<div id="descLangVar">
+	</div>
+	<br />
+	
+	<label for="eventSubject"><h4><?php print get_lang('events_labelSubject'); ?></h4></label>
+	<input type="text" id="eventSubject" name="eventSubject" />
+	<br /><br />
+	<label for="eventMessage"><h4><?php print get_lang('events_labelMessage'); ?></h4></label>
 	<textarea cols="100" rows="10" name="eventMessage" id="eventMessage">
 	
 	</textarea>

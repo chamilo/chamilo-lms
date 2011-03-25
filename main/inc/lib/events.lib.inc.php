@@ -678,7 +678,7 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	global $language_file;
 
 	//prepare message
-	$message = get_event_message($event_type);
+	list($message, $subject) = get_event_message_and_subject($event_type);
 	$mail_body=$message;
 	if ( is_array($notification_infos) ){
 		foreach ($notification_infos as $variable => $value) {
@@ -687,10 +687,12 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	}
 
 	//prepare mail common variables
-	$subject = get_lang($event_type);
-	if ( $event_type == 'user_created' ){
-		$subject = "Création d'un utilisateur";
+	if(!$subject) {
+		$subject = get_lang($event_type);
 	}
+	// if ( $event_type == 'user_created' ){
+		// $subject = "Création d'un utilisateur";
+	// }
 	$mail_subject = '['.api_get_setting('siteName').'] '.$subject;
 	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 	$email_admin = api_get_setting('emailAdministrator');
@@ -707,35 +709,46 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	return true;
 }
 
-function get_event_message($event_name){
+function get_event_message_and_subject($event_name){
 	$event_name = Database::escape_string($event_name);
-	$sql = 'SELECT m.message FROM '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE).' e,'
+	$sql = 'SELECT m.message, m.subject FROM '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE).' e,'
 		.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_MESSAGE).' m
 		WHERE m.event_type_id = e.id '.
 		"AND e.name = '$event_name'";
 
-	$res = Database::store_result(Database::query($sql));
+	$res = Database::store_result(Database::query($sql),'ASSOC');
 
+	$ret = array();
+	
 	if ( isset($res[0]['message']) ) {
-		return $res[0]['message'];
+		$ret[0] = $res[0]['message'];
 	}else {
-		return '';
+		$ret[0] = '';
 	}
+	
+	if ( isset($res[0]['subject']) ) {
+		$ret[1] = $res[0]['subject'];
+	}else {
+		$ret[1] = '';
+	}
+	
+	return $ret;
 }
 
 function eventType_getAll($etId=0) {
 	$etId = intval($etId);
 	
-	$sql = 'SELECT * FROM '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE).' et
+	$sql = 'SELECT et.id, et.name, et.desc_lang_var, et.name_lang_var, em.message,em.subject FROM '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE).' et
 	LEFT JOIN '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_MESSAGE).' em ON em.event_type_id = et.id';
 	//WHERE em.language_id = 10
 	//';
 	
-	$eventsTypes = Database::store_result(Database::query($sql));
+	$eventsTypes = Database::store_result(Database::query($sql),'ASSOC');
 	// echo $sql;
 	$to_return = array(); 
 	foreach ($eventsTypes as $et){
-		$et['name'] = get_lang($et['name']);
+		$et['nameLangVar'] = get_lang($et['name_lang_var']);
+		$et['descLangVar'] = get_lang($et['desc_lang_var']);
 		$to_return[] = $et;
 	}
 	return $to_return;
@@ -750,7 +763,7 @@ function get_users_subscribed_to_event($event_name){
 			AND e.name = \''.$event_name.'\'
 			AND e.id = ue.event_type_id';
 
-	return Database::store_result(Database::query($sql));
+	return Database::store_result(Database::query($sql),'ASSOC');
 }
 
 function eventType_getUsers($etId) {
@@ -762,12 +775,12 @@ function eventType_getUsers($etId) {
 	WHERE et.id = '.$etId.'
 	';
 	
-	$eventsTypes = Database::store_result(Database::query($sql));
+	$eventsTypes = Database::store_result(Database::query($sql),'ASSOC');
 	
 	return $eventsTypes;
 }
 
-function eventType_mod($etId,$users,$message) {
+function eventType_mod($etId,$users,$message,$subject) {
 	$etId = intval($etId);
 	
 	$sql = 'DELETE FROM '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_REL_USER).'
@@ -786,7 +799,8 @@ function eventType_mod($etId,$users,$message) {
 	}
 	
 	$sql = 'UPDATE '.Database::get_main_table(TABLE_MAIN_EVENT_TYPE_MESSAGE).'
-	SET message = "'.Database::escape_string($message).'"
+	SET message = "'.Database::escape_string($message).'",
+	subject = "'.Database::escape_string($subject).'"
 	WHERE event_type_id = '.$etId.'
 	';
 	

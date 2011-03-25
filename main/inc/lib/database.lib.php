@@ -998,7 +998,8 @@ class Database {
 		}
 		if(mysql_error()) {
 			error_log($query."\n".mysql_error());
-		}error_log($query);
+		}
+		// error_log($query);
 		return $result;
 	}
 

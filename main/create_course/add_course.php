@@ -46,11 +46,24 @@ if ($course_validation_feature) {
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#title").focus();
-}
-$(window).load(function () {
-  setFocus();
-});
+    $("#title").focus();
+    }
+    $(window).load(function () {
+      setFocus();
+    });
+    
+    
+    function advanced_parameters() {
+        if(document.getElementById(\'options\').style.display == \'none\') {
+            document.getElementById(\'options\').style.display = \'block\';
+            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+        } else {
+            document.getElementById(\'options\').style.display = \'none\';
+            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+        }
+    }
+    
+    
 </script>';
 
 $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'name' => get_lang('MyCourses'));
@@ -93,6 +106,16 @@ $form->applyFilter('category_code', 'html_filter');
 CourseManager::select_and_sort_categories($categories_select);
 $form->addElement('static', null, null, get_lang('TargetFac'));
 
+
+$form -> addElement('html','<div class="row">
+    <div class="label">&nbsp;</div>
+    <div class="formw">
+        <a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
+    </div>
+    </div>');
+
+$form -> addElement('html','<div id="options" style="display:none">');
+
 // Course code.
 $form->add_textfield('wanted_code', get_lang('Code'), false, array('size' => '$maxlength', 'maxlength' => $maxlength));
 $form->applyFilter('wanted_code', 'html_filter');
@@ -128,6 +151,8 @@ $form->applyFilter('select_language', 'html_filter');
 // Exemplary content checkbox.
 $form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));
 
+
+
 if ($course_validation_feature) {
 
     // A special URL to terms and conditions that is set in the platform settings page.
@@ -158,8 +183,9 @@ if ($course_validation_feature) {
         $link_terms_and_conditions .= get_lang('ReadTermsAndConditions').'</a></div></div>';
         $form->addElement('html', $link_terms_and_conditions);
     }
-
 }
+
+$form -> addElement('html','</div>');
 
 // Submit button.
 $form->addElement('style_submit_button', null, $course_validation_feature ? get_lang('CreateThisCourseRequest') : get_lang('CreateCourseArea'), 'class="add"');
@@ -277,11 +303,11 @@ if ($form->validate()) {
     }
 
 } else {
-    // Display the form.
-    $form->display();
     if (!$course_validation_feature) {
         Display::display_normal_message(get_lang('Explanation'));
-    }
+    }    
+    // Display the form.
+    $form->display();    
 }
 
 // Footer

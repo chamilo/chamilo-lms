@@ -31,7 +31,7 @@ class Notification extends Model {
     
     var $table;
     var $columns = array('id','dest_user_id','dest_mail','title','content','send_freq','created_at','sent_at');
-    var $max_content_length = 255;
+    var $max_content_length = 254; //Max lenght of the notification.content field
     var $debug = true;
     
 	public function __construct() {
@@ -42,8 +42,9 @@ class Notification extends Model {
         $notifications = $this->find('all',array('where'=>array('sent_at IS NULL AND send_freq = ?'=>$frec)));
         if (!empty($notifications)) {
             foreach($notifications as $item_to_send) {
-                //Sending email
-                api_send_mail($item_to_send['dest_mail'], $item_to_send['title'], $item_to_send['content']);
+                //Sending email                                
+                //$name = api_get_person_name($user_info['firstname'], $user_info['lastname']);                                  
+                api_mail_html($item_to_send['dest_mail'], $item_to_send['dest_mail'], $item_to_send['title'], $item_to_send['content']);                    
                 if ($this->debug) { error_log('Sending message to: '.$item_to_send['dest_mail']); }
                 //Updating
                 $item_to_send['sent_at'] = api_get_utc_datetime();
@@ -70,8 +71,9 @@ class Notification extends Model {
                         break;
                     case NOTIFY_MESSAGE_AT_ONCE:                        
                         $user_info = api_get_user_info($user_id);
-                        if (!empty($user_info['mail'])) {
-                            api_send_mail($user_info['mail'], $title, cut($content, $this->max_content_length));
+                        if (!empty($user_info['mail'])) {                            
+                            $name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
+                            api_mail_html($name, $user_info['mail'], $title, $content);
                         }
                         $params['sent_at']       = api_get_utc_datetime();
                     default:    			        
@@ -107,7 +109,8 @@ class Notification extends Model {
                     case NOTIFY_INVITATION_AT_ONCE:                        
                         $user_info = api_get_user_info($user_id);
                         if (!empty($user_info['mail'])) {
-                            api_send_mail($user_info['mail'], $title, cut($content, $this->max_content_length));
+                            $name = api_get_person_name($user_info['firstname'], $user_info['lastname']);                            
+                            api_mail_html($name, $user_info['mail'], $title, $content);
                         }
                         $params['sent_at']       = api_get_utc_datetime();    
                     default:    			        
@@ -148,7 +151,8 @@ class Notification extends Model {
                     case NOTIFY_GROUP_AT_ONCE:                        
                         $user_info = api_get_user_info($user_id);
                         if (!empty($user_info['mail'])) {
-                            api_send_mail($user_info['mail'], $subject, cut($content,150));
+                            $name = api_get_person_name($user_info['firstname'], $user_info['lastname']);                            
+                            api_mail_html($name, $user_info['mail'], $title, $content);
                         }
                         $params['sent_at']       = api_get_utc_datetime();
                     default:    			        
@@ -157,7 +161,7 @@ class Notification extends Model {
                 	    $params['dest_user_id']  = $user_id;
                 	    $params['dest_mail']     = $user_info['mail'];
                 	    $params['title']         = $subject;
-                	    $params['content']       = cut($content,150);
+                	    $params['content']       = cut($content,$this->max_content_length);
                 	    $params['send_freq']     = $extra_data['mail_notify_group_message'];                    	    			 
                 	    $this->save($params);
                 	    break;	   

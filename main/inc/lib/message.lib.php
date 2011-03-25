@@ -215,7 +215,7 @@ class MessageManager
      * @param bool    sent an email or not (@todo)
 	 * @return bool
 	 */
-	public static function send_message ($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0, $sent_email = false) {
+	public static function send_message($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0, $sent_email = false) {
         global $charset;
 		$table_message      = Database::get_main_table(TABLE_MESSAGE);
         $group_id           = intval($group_id);
@@ -294,10 +294,10 @@ class MessageManager
                 $user_id = $receiver_user_id;
                 $notification->save_message_notifications(array($user_id), $subject,$content);                
 		    } else {
-		        $user_list = GroupPortalManager::get_users_by_group($group_id);
+		        $user_list = GroupPortalManager::get_users_by_group($group_id, false, array(),0, 1000);
 		        $new_user_list = array();		   
-                foreach($user_list  as $user_data) {
-                    $new_user_list []= $user_data['user_id'];
+                foreach($user_list as $user_data) {
+                    $new_user_list[]= $user_data['user_id'];
                 }
                 $notification->save_group_notifications($new_user_list, $subject,$content);                     		
 		    }

@@ -44,7 +44,6 @@
       $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
       $('#learning_path_main  #control').css({width: "120px", height: "32px", opacity: "0.4", zindex: "-1", position: "absolute", top: "0px", left:"15px"});
       $('#learning_path_main  #control').draggable({ iframeFix: true, stack: "#learning_path_right_zone" });
-      $('.ui-draggable .buttons').css('backgroundImage','url(../img/hideback.png)');
     },function(){
       $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
       $('#learning_path_right_zone').css('marginLeft','290px');

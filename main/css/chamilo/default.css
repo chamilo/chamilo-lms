@@ -1346,11 +1346,12 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     min-height: 30px;
     border-width: 1px;
     border-style: solid;
-    -moz-border-radius: 10px;
-    border: 1px solid #4171B5;
+    -moz-border-radius: 10px;    
     padding: 6px;
     color: #00407F;
-    background-color: #E5EDF9;
+	background-color: #EAF8FE;
+    border: 1px solid #CDE6F5;	
+    background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
 }
 .warning-message {
     position: relative;
@@ -1361,12 +1362,11 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     -moz-border-radius: 10px;
     padding: 6px;
     border: 1px solid #FFB30F;
-    color: #000;
-    background-color: #FFEFA7;
+    color: #000;    
     min-height: 30px;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
 }
-.confirmation-message {
-    background-color:#CAF0C7;
+.confirmation-message {    
     border-color:#1F8323;
     -moz-border-radius: 10px;
     color:#1F8323;
@@ -1377,6 +1377,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     border-style: solid;
     padding:6px;
     min-height: 30px;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #CAF0C7;
 }
 .error-message {
     position: relative;
@@ -1387,9 +1388,9 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     -moz-border-radius: 10px;
     padding: 6px;
     border: 1px solid #FF0000;
-    color: #440000;
-    background-color: #FFD1D1;
+    color: #440000;    
     min-height: 30px;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
 }
 .confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link {
     position: absolute;
@@ -1582,17 +1583,36 @@ span.form_error {
     padding-left:5px;
 }   /* header cell in data table in tools */
 .data_table {
-    border-collapse: collapse;
+    /*border-collapse: collapse;
     width: 100%;
-    padding: 5px;
+    padding: 5px;*/
+	
+	  border-collapse: collapse;
+    border-spacing: 0;
+	
+	  border: 1px solid #DDDDDD;
+    font-size: 12px;
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+	
 }
 .data_table th {
-    padding-right: 12px;
+    /*padding-right: 12px;
     border: 1px solid gray;
-    background-color: #E5EDF9;
+    background-color: #E5EDF9;*/
+	
+	  border-bottom: 1px solid #DDDDDD;
+    line-height: normal;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: middle;
+	background-color: #F2F2F2;
+	
 }
 .data_table tr.row_odd {
-    background-color: #F2F2F2;
+    //background-color: #F2F2F2;
+	background-color: #FBFBFB;
 }
 .data_table tr.row_odd:hover, .data_table tr.row_even:hover {
     background-color: #E5EDF9;
@@ -1601,11 +1621,18 @@ span.form_error {
     background-color: #fff;
 }
 .data_table td {
+	/*
     padding: 5px;
     vertical-align: top;
     border-bottom: 1px solid #b0b0b0;
     border-right: 1px dotted #e1e1e1;
-    border-left: 1px dotted #e1e1e1;
+    border-left: 1px dotted #e1e1e1;*/	
+	border-bottom: 1px solid #DDDDDD;
+    line-height: normal;
+    /*padding: 8px 10px; */
+	padding: 6px;
+    text-align: left;
+    vertical-align: middle;
 }
 /* admin page tool list definitions */
 .tool_list dt {

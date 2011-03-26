@@ -952,6 +952,12 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	border-right: 2px solid #fff;
 	border-left: 2px solid #fff;
 }
+
+.data_table_pagination {
+	width:100%;
+	margin-top: 8px;	
+}
+
 /*  sections in the page */
 .sectiontitle {
 	background: url('images/headertables.jpg') repeat-x top center;

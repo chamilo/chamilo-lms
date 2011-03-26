@@ -1349,6 +1349,12 @@ span.form_error {
 	border: 1px solid gray;
 	background-color: #ffffcc;
 }
+
+.data_table_pagination {
+	width:100%;
+	margin-top: 8px;	
+}
+
 /* admin page tool list definitions */
 .tool_list dt {
 	font-weight: bold;

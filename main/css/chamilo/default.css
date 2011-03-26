@@ -1581,16 +1581,19 @@ span.form_error {
     font-weight:bold;
     text-align:left;
     padding-left:5px;
-}   /* header cell in data table in tools */
+}
+
+/* header cell in data table in tools */
 .data_table {
     /*border-collapse: collapse;
     width: 100%;
     padding: 5px;*/
+    margin-top: 8px;
 	
-	  border-collapse: collapse;
+	border-collapse: collapse;
     border-spacing: 0;
 	
-	  border: 1px solid #DDDDDD;
+	border: 1px solid #DDDDDD;
     font-size: 12px;
     margin-bottom: 15px;
     text-align: left;
@@ -1602,16 +1605,14 @@ span.form_error {
     border: 1px solid gray;
     background-color: #E5EDF9;*/
 	
-	  border-bottom: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
     line-height: normal;
     padding: 8px 10px;
     text-align: left;
     vertical-align: middle;
-	background-color: #F2F2F2;
-	
+	background-color: #F2F2F2;	
 }
 .data_table tr.row_odd {
-    //background-color: #F2F2F2;
 	background-color: #FBFBFB;
 }
 .data_table tr.row_odd:hover, .data_table tr.row_even:hover {
@@ -1634,6 +1635,12 @@ span.form_error {
     text-align: left;
     vertical-align: middle;
 }
+
+.data_table_pagination {
+	width:100%;
+	margin-top: 8px;	
+}
+
 /* admin page tool list definitions */
 .tool_list dt {
     font-weight: bold;

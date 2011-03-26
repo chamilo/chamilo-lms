@@ -990,6 +990,12 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	border-right: 1px dotted #e1e1e1;
 	border-left: 1px dotted #e1e1e1;
 }
+
+.data_table_pagination {
+	width:100%;
+	margin-top: 8px;	
+}
+
 /*  sections in the page */
 .sectiontitle {
 	background-color: #EFEFEF;

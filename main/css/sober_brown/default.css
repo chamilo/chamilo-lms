@@ -1349,6 +1349,12 @@ span.form_error {
     border-right: 1px dotted #e1e1e1;
     border-left: 1px dotted #e1e1e1;
 }
+
+.data_table_pagination {
+	width:100%;
+	margin-top: 8px;	
+}
+
 /* admin page tool list definitions */
 .tool_list dt {
     font-weight: bold;

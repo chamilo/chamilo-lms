@@ -218,10 +218,10 @@ class SortableTable extends HTML_Table {
 			$form  = $this->get_page_select_form();
 			$nav   = $this->get_navigation_html();
 			
-			//Only show pagination info when there are items to paginate		
-
-            if ($this->total_number_of_items > $this->default_items_per_page) {
-    			$html  = '<table style="width:100%;">';
+			//Only show pagination info when there are items to paginate	
+	
+            if ($this->get_total_number_of_items() > $this->default_items_per_page) {
+    			$html  = '<table class="data_table_pagination">';
     			$html .= '<tr>';
     			$html .= '<td style="width:25%;">';
     			$html .= $form;
@@ -272,9 +272,13 @@ class SortableTable extends HTML_Table {
 				$html .= $form;
 			}
 			$html .= '</td>';
-			$html .= '<td style="text-align:right;">';
-			$html .= $nav;
-			$html .= '</td>';
+			
+			if ($this->get_total_number_of_items() > $this->default_items_per_page) {
+    			$html .= '<td style="text-align:right;">';
+    			$html .= $nav;
+    			$html .= '</td>';
+			}
+			
 			$html .= '</tr>';
 			$html .= '</table>';
 			if (count($this->form_actions) > 0) {

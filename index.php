@@ -189,7 +189,7 @@ if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['in
             $home_top_temp = file_get_contents($home.'home_top.html');
         }
     }
-    if (trim($home_top_temp) == '') {
+    if (trim($home_top_temp) == '' && api_is_platform_admin()) {
         $home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
     }
     $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);

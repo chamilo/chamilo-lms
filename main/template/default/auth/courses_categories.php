@@ -27,7 +27,15 @@ $stok = Security::get_token();
             &nbsp;<a href="<?php echo api_get_self(); ?>?action=sortmycourses"><?php echo Display::return_icon('course_move.png', get_lang('SortMyCourses'),'','32'); ?></a>
     <?php } ?>
 
-  
+        <span id="categories-search">
+            <form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&hidden_links=<?php echo $hidden_links; ?>">
+            <label for="search_term"><?php echo get_lang('SearchCourse'); ?></label>
+                <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
+                <input type="hidden" name="search_course" value="1" />
+                <input type="text" size="12" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
+                &nbsp;<button class="search" type="submit"><?php echo get_lang('_search'); ?></button>
+            </form>
+        </span>
 </div>
 
 <?php 
@@ -38,17 +46,6 @@ $stok = Security::get_token();
 
 <div id="categories-content" >
     <div id="categories-content-first">
-        <div id="categories-search">
-            <p><strong><?php echo get_lang('SearchCourse'); ?></strong><br />
-            <form class="course_list" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&hidden_links=<?php echo $hidden_links; ?>">
-                <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-                <input type="hidden" name="search_course" value="1" />
-                <input type="text" size="12" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
-                &nbsp;<button class="search" type="submit"><?php echo get_lang('_search'); ?></button>
-            </form>
-	
-        </div>
-
         <div id="categories-list">
 
             <?php if (!empty($browse_course_categories)) {
@@ -134,23 +131,19 @@ $stok = Security::get_token();
                 echo '<div class="categories-block-course">
                         <div class="categories-content-course">
 
+                            <div class="categories-course-description">
+                                <div class="course-block-title">'.strtoupper($title).'</div>
+                                <div>'.get_lang('Teacher').'</div><div class="course-block-teacher">'.$tutor_name.'</div>
+                                <div>'.get_lang('CreationDate').'</div><div class="course-block-date">'.api_format_date($creation_date,DATE_FORMAT_SHORT).'</div>
+                            </div>
                             <div class="categories-course-picture">
                                 <img src="'.$course_medium_image.'" />
                             </div>
-                            <div class="categories-course-description">
-                                <div class="course-block-text"><strong>'.strtoupper($title).'</strong></div>
-                                <div class="course-block-text"><strong>'.get_lang('Teacher').':</strong><br />'.$tutor_name.'</div>
-                                <div class="course-block-text"><strong>'.get_lang('CreationDate').':</strong><br />'.$creation_date.'</div>
-                                <div class="course-block-text"><strong>'.get_lang('ConnectionsLastMonth').':</strong> '.$count_connections.'</div>
-                            </div>
+                            <div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>
 
                         </div>
                         <div style="clear:both;"></div>
                         <div class="categories-course-links">';
-
-                        if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                            echo '<span class="course-link-desc"><a href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">'.get_lang('CourseDetails').'</a></span>';
-                        }
 
                         // we display the icon to subscribe or the text already subscribed
                         if (!in_array($course['code'], $user_coursecodes)) {
@@ -158,6 +151,10 @@ $stok = Security::get_token();
                                     echo '<span class="course-link-desc"><a href="'. api_get_self().'?action=subscribe_course&sec_token='.$stok.'&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code.'">'.get_lang('Subscribe').'</a></span>';
                             }
                         }
+                        if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
+                            echo '<span class="course-link-desc"><a href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">'.get_lang('CourseDetails').'</a></span>';
+                        }
+
                      echo  '</div>
                     </div>';
             }

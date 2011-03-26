@@ -473,8 +473,7 @@ class Auth
         while ($row = Database::fetch_array($result)) {
                 $row['registration_code'] = !empty($row['registration_code']);
                 $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
-                $lastmonth = mktime(0, 0, 0, date("m")-1, date("d"), date("Y"));
-                $count_connections_last_moth = Tracking::get_count_connections_on_the_course($row['code'], 0, $lastmonth);
+                $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time()-(30*86400)));
                 $courses[] = array(
                                     'code' => $row['code'],
                                     'directory' => $row['directory'],
@@ -487,7 +486,7 @@ class Auth
                                     'registration_code' => $registration_code,
                                     'creation_date' => $row['creation_date'],
                                     'count_users' => $count_users,
-                                    'count_connections' => $count_connections_last_moth
+                                    'count_connections' => $count_connections_last_month
                                   );
         }
 
@@ -540,8 +539,7 @@ class Auth
 
                 $row['registration_code'] = !empty($row['registration_code']);
                 $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
-                $lastmonth = mktime(0, 0, 0, date("m")-1, date("d"), date("Y"));
-                $count_connections_last_moth = Tracking::get_count_connections_on_the_course($row['code'], 0, $lastmonth);
+                $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time()-(30*86400)));
                 $courses[] = array(
                                     'code' => $row['code'],
                                     'directory' => $row['directory'],
@@ -554,7 +552,7 @@ class Auth
                                     'registration_code' => $registration_code,
                                     'creation_date' => $row['creation_date'],
                                     'count_users' => $count_users,
-                                    'count_connections' => $count_connections_last_moth
+                                    'count_connections' => $count_connections_last_month
                                   );
                    // $courses[] = array('code' => $row['code'], 'directory' => $row['directory'], 'db' => $row['db_name'], 'visual_code' => $row['visual_code'], 'title' => $row['title'], 'tutor' => $row['tutor_name'], 'subscribe' => $row['subscribe'], 'unsubscribe' => $row['unsubscribe']);
             }

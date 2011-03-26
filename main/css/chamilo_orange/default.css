@@ -1161,8 +1161,18 @@ input.liteoption {
     vertical-align: top;
     border: 1px solid #264269;
     border-collapse: collapse;
+    background-color: #fff;
+}
+#agenda_list .days_week_selected {
+    height: 40px;
+    width: 12%;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
     background-color: #f5f5f5;
 }
+
 #agenda_list .days_weekend {
     height: 40px;
     width: 12%;
@@ -1586,7 +1596,7 @@ span.form_error {
 	border-bottom: 1px solid #DDDDDD;
     line-height: normal;
     padding: 8px 10px;
-    text-align: left;
+    text-align: center;
     vertical-align: middle;
 	background-color: #F2F2F2;	
 }

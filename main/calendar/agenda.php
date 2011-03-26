@@ -293,6 +293,12 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	}
 }
 
+
+if ($_GET['view'] == 'month' || $_SESSION['view'] == 'month' ) {
+    
+} else {
+    
+
 echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
 	  	<tr>';
 
@@ -302,9 +308,9 @@ if (empty($_GET['origin']) or $_GET['origin']!='learnpath') {
 	// the small calendar
 	$MonthName = $MonthsLong[$select_month -1];
 	$agenda_items=get_calendar_items($select_month,$select_year);
-	if (api_get_setting('display_mini_month_calendar') == 'true') {
-		display_minimonthcalendar($agenda_items, $select_month,$select_year, $MonthName);
-	}
+	if (api_get_setting('display_mini_month_calendar') == 'true') {	   
+        display_minimonthcalendar($agenda_items, $select_month,$select_year, $MonthName);	   
+	}	
 	echo '<br />';
 	if (api_get_setting('display_upcoming_events') == 'true') {
 		display_upcoming_events();
@@ -318,6 +324,7 @@ echo '<td valign="top">';
 echo '<div class="sort" style="float:left">';
 echo '</div>';
 
+}
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true) )) {
 		
 	switch ($_GET['action']) {
@@ -393,8 +400,6 @@ echo '&nbsp;</td></tr></table>';
 		FOOTER
 */
 // The footer is displayed only if we are not in the learnpath
-if ($_GET['origin'] != 'learnpath')
-{
+if ($_GET['origin'] != 'learnpath') {
 	Display::display_footer();
 }
-?>

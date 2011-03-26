@@ -119,7 +119,8 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 			if(!isset($items[$agendaday][$item['start_date']])) {
 				$items[$agendaday][$item['start_date']] = '';
 			}
-			$items[$agendaday][$item['start_date']] .= "".get_lang('StartTimeWindow')."&nbsp;<i>".$time."</i>"."&nbsp;-&nbsp;".get_lang("EndTimeWindow")."&nbsp;<i>".$end_time."</i>&nbsp;";
+			$items[$agendaday][$item['start_date']] .= "<i>".$time."</i>"."&nbsp;-&nbsp;<i>".$end_time."</i>&nbsp;";
+			$item['title'] = '<strong>'.$item['title'].'</strong>';
 			$items[$agendaday][$item['start_date']] .= '<br />'."<a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br /> ";
 			$items[$agendaday][$item['start_date']] .= '<br/>';
 		}
@@ -165,7 +166,7 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 
 	echo '<table id="agenda_list">'.'<tr>';
 	echo '<th width="10%"><a href="'.$backwardsURL.'">'.Display::return_icon('action_prev.png',get_lang('Previous')).'</a></th>';
-	echo '<th width="80%" colspan="5">'.$monthName." ".$year.'</th>';
+	echo '<th width="80%" colspan="5"><br /><h3>'.$monthName." ".$year.'</h3></th>';
 	echo '<th width="10%"><a href="'.$forewardsURL.'">'.Display::return_icon('action_next.png',get_lang('Next')).'</a></th>';
 	echo '</tr>';
 
@@ -183,10 +184,10 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 				$curday = 1;
 			}
 			if (($curday > 0) && ($curday <= $numberofdays[$month])) {
-				$bgcolor = $ii < 5 ? $class = "class=\"days_week\" style=\"width:10%;\"" : $class = "class=\"days_weekend\" style=\"width:10%;\"";
+				$bgcolor = $ii < 5 ? $class = 'class="days_week" style="height:122px;width:10%;"' : $class = 'class="days_weekend" style="width:10%;"';
 				$dayheader = "<b>$curday</b><br />";
 				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
-					$dayheader = "<b>$curday - ".get_lang('Today')."</b><br />";
+					$dayheader = "<b>$curday</b><br />";
 					$class = "class=\"days_today\" style=\"width:10%;\"";
 				}
 				echo "<td ".$class.">", "".$dayheader;
@@ -239,22 +240,17 @@ function display_myminimonthcalendar($agendaitems, $month, $year, $monthName) {
 			{
 				$curday = 1;
 			}
-			if (($curday > 0) && ($curday <= $numberofdays[$month]))
-			{
-				$bgcolor = $ii < 5 ? $class = "class=\"days_week\"" : $class = "class=\"days_weekend\"";
+			if (($curday > 0) && ($curday <= $numberofdays[$month])) {
+				$bgcolor = $ii < 5 ? $class = 'class="days_week"' : $class = 'class="days_weekend"';
 				$dayheader = "$curday";
-				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon']))
-				{
+				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
 					$dayheader = "$curday";
 					$class = "class=\"days_today\"";
 				}
 				echo "<td ".$class.">";
-				if (!empty($agendaitems[$curday]))
-				{
+				if (!empty($agendaitems[$curday])) {
 					echo "<a href=\"".api_get_self()."?action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."\">".$dayheader."</a>";
-				}
-				else
-				{
+				} else {
 					echo $dayheader;
 				}
 				// "a".$dayheader." <span class=\"agendaitem\">".$agendaitems[$curday]."</span>";
@@ -576,8 +572,8 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
 	}
 	// 2. creating the SQL statement for getting the personal agenda items in WEEK view
-	if ($type == "week_view") // we are in week view
-	{
+	// we are in week view
+	if ($type == "week_view") {
 		$start_end_day_of_week = calculate_start_end_of_week($week, $year);
 		$start_day = $start_end_day_of_week['start']['day'];
 		$start_month = $start_end_day_of_week['start']['month'];

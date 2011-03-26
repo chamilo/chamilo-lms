@@ -491,7 +491,7 @@ function display_student_links() {
 			echo '<a href="'.api_get_self().'?sort=asc&amp;origin='.Security::remove_XSS($_GET['origin']).'">'.Display::return_icon('calendar_normal.png',get_lang('AgendaSortChronologicallyUp'),'','32').'</a>';
 		}
 		else {
-			echo '<a href="'.api_get_self().'?sort=desc&amp;origin='.Security::remove_XSS($_GET['origin']).'">'.Display::return_icon('calendar_inverse.png',get_lang('AgendaSortChronologicallyDown'),'','32').'</a>';
+			echo '<a href="'.api_get_self().'?sort=desc&amp;origin='.Security::remove_XSS($_GET['origin']).'"> '.Display::return_icon('calendar_inverse.png',get_lang('AgendaSortChronologicallyDown'),'','32').'</a>';
 		}
 	}
 	else {		

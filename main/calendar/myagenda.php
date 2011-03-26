@@ -156,31 +156,32 @@ if (isset ($_user['user_id'])) {
 	}
 	echo "</div>";
 
-	echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
-	echo "<tr>";
-	// output: the small calendar item on the left and the view / add links
-	echo "<td width=\"220\" valign=\"top\">";
+
 	$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
 	$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 	if (api_get_setting('allow_personal_agenda') == 'true') {
 		$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 	}
-	display_myminimonthcalendar($agendaitems, $month, $year, $monthName);
-
-	echo "</td>";
-	// the divider
-	// OlivierB : the image has a white background, which causes trouble if the portal has another background color. Image should be transparent. ----> echo "<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>";
-	echo "<td width=\"20\">&nbsp;</td>";
-	// the main area: day, week, month view
-	echo "<td valign=\"top\">";
-	
+	if ($process != 'month_view') {
+	    echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
+    	echo "<tr>";
+    	// output: the small calendar item on the left and the view / add links
+    	echo "<td width=\"220\" valign=\"top\">";
+	    display_myminimonthcalendar($agendaitems, $month, $year, $monthName);
+	    echo "</td>";
+    	// the divider
+    	// OlivierB : the image has a white background, which causes trouble if the portal has another background color. Image should be transparent. ----> echo "<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>";
+    	echo "<td width=\"20\">&nbsp;</td>";
+    	// the main area: day, week, month view
+    	echo "<td valign=\"top\">";   
+	}
+		
 	switch ($process) {
 		case 'month_view' :
 			$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 			
-			if (api_get_setting("allow_personal_agenda") == "true")
-			{
+			if (api_get_setting("allow_personal_agenda") == "true") {
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 			}
 			display_mymonthcalendar($agendaitems, $month, $year, array(), $monthName);
@@ -229,6 +230,7 @@ if (isset ($_user['user_id'])) {
 			break;
 	}
 }
-echo '</td></tr></table>';
+if ($process != 'month_view') {
+    echo '</td></tr></table>';
+}
 Display :: display_footer();
-?>

@@ -331,18 +331,16 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName) {
 			{
 				$curday = 1;
 			}
-			if (($curday > 0) && ($curday <= $numberofdays[$month]))
-			{
+			if (($curday > 0) && ($curday <= $numberofdays[$month])) {
 				$bgcolor = $ii < 5 ? $class="class=\"days_week\"" : $class="class=\"days_weekend\"";
 				$dayheader = "$curday";
-				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon']))
-				{
+				if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
 					$dayheader = "$curday";
 					$class = "class=\"days_today\"";
-				}
+				}	
+				
 				echo "<td ".$class.">";
-				if (!empty($agendaitems[$curday]))
-				{
+				if (!empty($agendaitems[$curday])) {
 					$month_curday = array();
 					$items_curday = $agendaitems[$curday][$curday];
 
@@ -359,17 +357,13 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName) {
 					} else {
 						echo $dayheader;
 					}
-				}
-				else
-				{
+				} else {
 					echo $dayheader;
 				}
 				// "a".$dayheader." <span class=\"agendaitem\">".$agendaitems[$curday]."</span>";
 				echo "</td>";
 				$curday ++;
-			}
-			else
-			{
+			} else {
 				echo "<td>&nbsp;</td>";
 			}
 		}
@@ -389,7 +383,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName) {
 function display_monthcalendar($month, $year) {
 	global $MonthsLong;
 	global $DaysShort;
-	global $origin;
+	global $origin;	
 
 	// Grabbing all the calendar items for this year and storing it in a array + my personal calendar events if exist and if enabled
 	$data = get_calendar_items($month,$year);
@@ -403,16 +397,16 @@ function display_monthcalendar($month, $year) {
   	//Start the week on monday
 	$startdayofweek = $dayone['wday']<>0 ? ($dayone['wday']-1) : 6;
 
-	$backwardsURL = api_get_self()."?".api_get_cidreq()."&amp;origin=$origin&amp;month=".($month==1 ? 12 : $month-1)."&amp;year=".($month==1 ? $year-1 : $year);
-	$forewardsURL = api_get_self()."?".api_get_cidreq()."&amp;origin=$origin&amp;month=".($month==12 ? 1 : $month+1)."&amp;year=".($month==12 ? $year+1 : $year);
+	$backwardsURL = api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&origin=$origin&amp;month=".($month==1 ? 12 : $month-1)."&amp;year=".($month==1 ? $year-1 : $year);
+	$forewardsURL = api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&origin=$origin&amp;month=".($month==12 ? 1 : $month+1)."&amp;year=".($month==12 ? $year+1 : $year);
 
 	$maand_array_maandnummer=$month-1;
 
 	echo '<table id="agenda_list">';
 	echo '<tr>';
-	echo '<th width="10%"><a href="'.$backwardsURL.'">'.Display::return_icon('action_prev.png',get_lang('Previous')).'</a></th>';
-	echo '<th width="80%" colspan="5">'.$MonthsLong[$maand_array_maandnummer].' '.$year.'</th>';
-	echo '<th width="10%"><a href="'.$forewardsURL.'"> '.Display::return_icon('action_next.png',get_lang('Next')).'</a></th>';
+	echo '<th width="10%"><a href="'.$backwardsURL.'">'.Display::return_icon('action_prev.png',get_lang('Previous'), array(), 32).'</a></th>';
+	echo '<th width="80%" colspan="5"><br /><h3>'.$MonthsLong[$maand_array_maandnummer].' '.$year.'</h3></th>';
+	echo '<th width="10%"><a href="'.$forewardsURL.'"> '.Display::return_icon('action_next.png',get_lang('Next'), array(), 32).'</a></th>';
 	echo '</tr>';
 
 	echo '<tr>';
@@ -463,16 +457,18 @@ function display_monthcalendar($month, $year) {
 										$personal_end	= '</div>';
 									}
 									$dayheader.= $personal_start;
-
+                                                    
+									$value['title'] = Display::tag('strong',$value['title']);
+									
 									if ($value['end_date']=='0000-00-00 00:00:00') {
 										$dayheader .= '<br />'.get_lang('Work').'<br />';
 										$dayheader .= $value['title'];
 										$dayheader .= '<br/>';
 									} else {
 										if ($value['calendar_type'] == 'personal') {
-											$dayheader .= '<br />'.get_lang('StartTimeWindow').'&nbsp;<i>'.$start_time.'</i>&nbsp;</i>';
+											$dayheader .= '<br /><i>'.$start_time.'</i>&nbsp;</i>';
 										} else {
-											$dayheader .= '<br />'.get_lang('StartTimeWindow').'&nbsp;<i>'.$start_time.'</i>&nbsp;-&nbsp;'.get_lang('EndTimeWindow').'&nbsp;<i>'.$end_time.'&nbsp;</i>';
+											$dayheader .= '<br /><i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
 										}
 										$dayheader .= '<br />';
 										$dayheader .= $value['title'];
@@ -493,9 +489,13 @@ function display_monthcalendar($month, $year) {
 					//var_dump($dayheader);
 
 					if (($curday==$today['mday']) && ($year ==$today['year'])&&($month == $today['mon'])) {
-						echo '<td class="days_today"'.$bgcolor.' style="height:80px;width:10%">'.$dayheader;
+						echo '<td class="days_today"'.$bgcolor.' style="height:122px;width:10%">'.$dayheader;
 	      			} else {
-						echo '<td class="days_week" '.$bgcolor.' style="height:80px;width:10%">'.$dayheader;
+	      			    $class = 'days_week';
+	      			    if (!is_numeric($dayheader)) {
+	      			        $class = 'days_week_selected';
+	      			    }	      			    
+						echo '<td class="'.$class.'" '.$bgcolor.' style="height:122px;width:10%">'.$dayheader;						
 					}
 					echo '</td>';
 		      		$curday++;
@@ -1501,14 +1501,6 @@ function display_courseadmin_links() {
 function display_student_links()
 {
 	global $show;
-	if ($_SESSION['sort'] == 'DESC')
-	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_normal.png',get_lang('AgendaSortChronologicallyUp'),'','32')."</a> ";
-	}
-	else
-	{
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=desc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_inverse.png',get_lang('AgendaSortChronologicallyDown'),'','32')."</a> ";
-	}
 
 	// showing the link to show all items or only those of the current month
 	if ($_SESSION['show']=="showcurrent")
@@ -1523,11 +1515,21 @@ function display_student_links()
 	if ($_SESSION['view'] <> 'month')
 	{
 		echo "<a href=\"".api_get_self()."?action=view&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=month\">".Display::return_icon('month_empty.png', get_lang('MonthView'),'','32')."</a> ";
+    	if ($_SESSION['sort'] == 'DESC')
+    	{
+    		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_normal.png',get_lang('AgendaSortChronologicallyUp'),'','32')."</a> ";
+    	}
+    	else
+    	{
+    		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=desc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>". Display::return_icon('calendar_inverse.png',get_lang('AgendaSortChronologicallyDown'),'','32')."</a> ";
+    	}
 	}
 	else
 	{
 		echo "<a href=\"".api_get_self()."?action=view&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list\">".Display::return_icon('appointments.png', get_lang('ListView'),'','32')."</a> ";
 	}
+	
+
 }
 
 

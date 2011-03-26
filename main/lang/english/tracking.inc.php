@@ -185,7 +185,7 @@ $AverageAssignments = "Assignments";
 $Print = "Print";
 $StudentDetails = "Learner details";
 $StudentDetailsInCourse = "Learner details in training";
-$Learnpaths = "Courses";
+$Learnpaths = "Learning paths";
 $OtherTools = "OTI (Online Training Interaction) settings report";
 $DetailsStudentInCourse = "Learner details in training";
 $CourseTitle = "Training";
@@ -293,4 +293,7 @@ $ExerciseStartDate = "Publication date";
 $OnlyBestResultsPerStudent = "In case of multiple attempts, only shows the best result of each student";
 $BestAttempt = "Best attempt";
 $ExercisesInTimeProgressChart = "Progress of own exercises results over time, against learners average";
+$AverageIsCalculatedBasedInAllAttempts = "Average is calculated based on all test attempts";
+$AverageIsCalculatedBasedInTheLatestAttempts = "Average is calculated based on the latest attempts";
+$LatestAttemptAverageScore = "Latest attempt average score";
 ?>

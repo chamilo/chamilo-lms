@@ -1384,4 +1384,9 @@ $LastXMonths = "Derniers %i mois";
 $NeverConnected = "Jamais connecté";
 $EnableAccessibilityFontResizeTitle = "Redimensionnement des caractères";
 $EnableAccessibilityFontResizeComment = "Activer cette option montrera une série d'options de redimensionnement des caractères dans le coin supérieur-droit de votre campus. Celles-ci permettront aux personnes à déficience visuelle de lire leurs contenus de cours plus facilement.";
+$GlobalEvent = "Évènement global";
+$SearchEnabledTitle = "Recherche full-text";
+$SearchEnabledComment = "Cette fonctionnalité vous permet d'indexer la plupart des documents envoyés sur votre portail, et ainsi fournir à vos utilisateurs une fonctionnalité complète de recherche de contenus.<br />
+Cette fonctionnalité n'indexera pas les documents qui ont déjà été envoyés, c'est pourquoi il est important de l'activer au début d'une implémentarion.<br />
+Une fois activée, une boîte de recherche apparaîtra dans la liste de cours des utilisateurs. La recherche sur un terme spécifique générera une liste des documents, exercices ou sujets de forum correspondants, filtrés selon la disponibilité de ces contenus pour les utilisateurs.";
 ?>

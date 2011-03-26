@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Supprimer toutes les présences créées";
+$SearchXapianModuleNotInstalled = "Le module de recherche Xapian n'est pas installé";
 $Title = "Titre";
 $By = "Par";
 $UsersOnline = "Utilisateurs en ligne";
@@ -1004,6 +1005,7 @@ $ContactInformationHasNotBeenSent = "Vos détails de contact n'ont pas pu être 
 $FileDeleted = "Fichier supprimé";
 $MyClasses = "Mes classes";
 $PublicationDate = "Date de publication";
+$CorrectAndRate = "Corriger et qualifier";
 $ItemAdded = "Élément ajouté";
 $ItemDeleted = "Élément supprimé";
 $ItemUpdated = "Élément mis à jour";
@@ -1015,4 +1017,8 @@ $Clean = "Nettoyer";
 $MailNotifyInvitation = "Avertir par mail de la réception d'une invitation";
 $MailNotifyMessage = "Avertir par mail de la réception d'un message";
 $MailNotifyGroupMessage = "Avertir par mail de la réception d'un message de groupe";
+$ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField = "Cliquez sur la boîte ci-dessous pour sélectionner des fichiers depuis votre ordinateur (vous pouvez utiliser CTRL + click pour sélectionner plusieurs fichiers à la fois), ou cliquez-déplacez des fichiers depuis votre bureau directement sur la boîte ci-dessous. Le système s'occupera du reste!";
+$Simple = "Simple";
+$Multiple = "Multiple";
+$UploadFiles = "Cliquez-déplacez des fichiers ici pour les envoyer au serveur";
 ?>

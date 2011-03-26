@@ -4117,44 +4117,49 @@ span.form_required  {
 }
 
 #categories-content-first {
-    border:1pt solid #ccc;
     width:290px;
     padding:10px;
     float:left;
 }
 
 #categories-search {
-    border:1pt solid #ccc;
     padding:10px;
     text-align:center;
     height:105px;
+    float: right;
 }
 
 #categories-list {
-    border:1pt solid #ccc;
     padding:25px;
     margin-top:10px;
     font-size:11pt;
 }
 
 #categories-content-second {
-    border:1pt solid #ccc;
     margin-left: 315px;
     padding:5px;
     margin-top:5px;
 }
 
 .categories-block-course {
-    border:1pt solid #ccc;
-    width:246px;
-    height:180px;
-    margin:5px;
+    -moz-border-radius-topleft:8px;
+    -moz-border-radius-topright:8px;
+    -webkit-border-top-left-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    -moz-box-shadow:0 -1px 10px 2px #CCCCCC;
+    -Webkit-box-shadow: 0 -1px 10px 2px  #CCCCCC;
+    box-shadow: 0 -1px 10px 2px #CCCCCC;
+    border:1px solid #CCCCCC;
     float:left;
-    padding:5px;
+    margin:10px;
+    padding:9px;
+    width:240px;
+    min-height:132px;
 }
 
 .categories-course-picture {
-    border:1pt solid #ccc;
     width:75px;
     height:75px;
     float:left;
@@ -4166,12 +4171,12 @@ span.form_required  {
 }
 
 .categories-course-description {
-    border:1pt solid #ccc;
     margin-left:80px;
+    font-family:arial;
+    font-size:11px;
 }
 
 .categories-course-links {
-    border:1pt solid #ccc;
     margin-top:5px;
     height: 40px;
 }

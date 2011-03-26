@@ -3438,20 +3438,32 @@ span.form_required  {
 
 #categories-content-first {
     width:290px;
-    padding:10px;
+    padding:5px;
     float:left;
 }
 
 #categories-search {
-    padding:10px;
     text-align:center;
-    height:105px;
+    height:55px;
     float: right;
 }
 
 #categories-list {
+    -moz-border-radius-topleft:8px;
+    -moz-border-radius-topright:8px;
+    -webkit-border-top-left-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    -moz-box-shadow:0 -1px 10px 2px #CCCCCC;
+    -Webkit-box-shadow: 0 -1px 10px 2px  #CCCCCC;
+    box-shadow: 0 -1px 10px 2px #CCCCCC;
+    border:1px solid #CCCCCC;
+    float:left;
+    margin:10px;
+    width:240px;
+    min-height:132px;
     padding:25px;
-    margin-top:10px;
     font-size:11pt;
 }
 
@@ -3475,32 +3487,96 @@ span.form_required  {
     float:left;
     margin:10px;
     padding:9px;
-    width:240px;
-    min-height:132px;
+    width:220px;
+    min-height:180px;
+    color: #BBBBBB;
 }
 
 .categories-course-picture {
-    width:75px;
-    height:75px;
+    width:95px;
+    height:95px;
     float:left;
+    -moz-border-radius-topleft:4px;
+    -moz-border-radius-topright:4px;
+    -webkit-border-top-left-radius: 4px;
+    -webkit-border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    -moz-box-shadow:0 -1px 5px 2px #CCCCCC;
+    -Webkit-box-shadow: 0 -1px 5px 2px  #CCCCCC;
+    box-shadow: 0 -1px 5px 2px #CCCCCC;
+    margin-left: 8px;
 }
 
 .categories-course-picture img {
-    width: 75px;
-    height: 75px;
+    width: 95px;
+    height: 95px;
+    background-color: #eeeeee;
 }
 
 .categories-course-description {
-    margin-left:80px;
+    margin-left:10px;
     font-family:arial;
     font-size:11px;
+    margin-bottom: 10px;
+}
+
+.categories-course-description .course-block-title {
+    font-family: arial;
+    font-size: large;
+    margin-bottom: 10px;
+    color: #222222;
+}
+.categories-course-description .course-block-teacher {
+    font-size: large;
+    font-style: italic;
+    text-align: right;
+    color: #444444;
+}
+.categories-course-description .course-block-date {
+    font-size: large;
+    font-style: italic;
+    text-align: right;
+    color: #444444;
+}
+.course-block-popularity {
+    width: 90px;
+    margin-left:120px;
+    font-size: x-small;
+    font-style: italic;
+    text-align: right;
+    background-color: #eeeeee;
+    min-height:95px;
+    padding-right: 5px;
+    -moz-border-radius-topleft:4px;
+    -moz-border-radius-topright:4px;
+    -webkit-border-top-left-radius: 4px;
+    -webkit-border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    -moz-box-shadow:0 -1px 5px 2px #CCCCCC;
+    -Webkit-box-shadow: 0 -1px 5px 2px  #CCCCCC;
+    box-shadow: 0 -1px 5px 2px #CCCCCC;
+}
+.course-block-popularity-score {
+    font-size: x-large;
+    text-align: center;
+    color: #000000;
+    padding-top: 10px;
 }
 
 .categories-course-links {
     margin-top:5px;
-    height: 40px;
+    height: 25px;
 }
 
+.course-link-desc a {
+text-decoration:underline;
+}
+
+.course-link-desc span {
+padding-top:10px;
+}
 
 .attendance-users-table td {
 	height:66px;

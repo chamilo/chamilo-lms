@@ -184,7 +184,7 @@ if ($maxCourse > 0) {
     $toolsList['valvas']['path'] = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq=';
 }
 
-echo '    <div class="maincontent" id="maincontent">'; // Start of content for logged in users.
+echo '<div class="maincontent" id="maincontent">'; // Start of content for logged in users.
 // Plugins for the my courses main area.
 echo '<div id="plugin-mycourses_main">';
 api_plugin('mycourses_main');
@@ -384,9 +384,7 @@ if (is_array($courses_tree)) {
                             echo $html_courses_session;
                         }
                     echo '</ul></div>';
-                }
-                
-                
+                } 
             }
         } else {
             // All sessions included in.
@@ -469,7 +467,10 @@ if (is_array($courses_tree)) {
     }
 }
 
-echo '</div>'; // End of content section.
+echo '</div>'; // End of content main-section
+
+
+
 
 // Register whether full admin or null admin course
 // by course through an array dbname x user status.
@@ -477,7 +478,7 @@ api_session_register('status');
 
 /* RIGHT MENU */
 
-$show_menu = false;
+$show_menu        = false;
 $show_create_link = false;
 $show_course_link = false;
 $show_digest_link = false;
@@ -510,20 +511,20 @@ if ($img_array['file'] == 'unknown.jpg') {
     $no_image = true;
 }
 $img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
-$profile_content ='<div class="clear"></div>';
+
 $profile_content .='<div id="social_widget">';
 
-$profile_content .= '  <div id="social_widget_image">';
+$profile_content .= '<div id="social_widget_image">';
 if (api_get_setting('allow_social_tool') == 'true') {
     if (!$no_image) {
-        $profile_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
+        $profile_content .='<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
     } else {
         $profile_content .='<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
     }
 } else {
     $profile_content .='<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
 }
-$profile_content .= ' </div>';
+$profile_content .= ' </div></div>';
 
 //  @todo Add a platform setting to add the user image.
 if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
@@ -566,6 +567,7 @@ if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_mes
     $profile_content .= '</div>';      
 }
 
+echo '<div id="menu-wrapper">';
 //Profile content
 echo show_right_block(get_lang('Profile'), $profile_content);
 
@@ -622,7 +624,7 @@ if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu']))
     api_plugin('mycourses_menu');
     $plugin_content = ob_get_contents();
     ob_end_clean();
-    echo show_right_block(get_lang(''), $plugin_content);
+    echo show_right_block('', $plugin_content);
 }
 
 if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_course()) {
@@ -671,15 +673,14 @@ if (api_get_setting('show_groups_to_users') == 'true') {
 echo '</div>'; // End of menu wrapper
 
 function show_right_block($title, $content) {    
-    $html = '';
-    $html.= '<div id="menu-wrapper">';
-        $html.= '<div id="menu" class="menu">';    
+   
+        $html= '<div id="menu" class="menu">';    
             $html.= '<div class="menusection">';
                 $html.= '<span class="menusectioncaption">'.$title.'</span>';        
                 $html.= $content;
             $html.= '</div>';        
         $html.= '</div>';
-    $html.= '</div>';    
+   
     return $html;
 }
 // Footer

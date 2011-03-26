@@ -219,9 +219,83 @@ if (!$page_included) {
 }
 echo '</div>';
 
+
+echo '<div class="menu-wrapper">';
+if (!api_is_anonymous()) {
+    //  @todo move all this in a class/function
+    if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+        
+        //Always show the user image
+        $img_array = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', true, true);
+        $no_image = false;
+        if ($img_array['file'] == 'unknown.jpg') {
+            $no_image = true;
+        }
+        $img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
+        
+        $profile_content .='<div id="social_widget">';
+        
+        $profile_content .= '<div id="social_widget_image">';
+        if (api_get_setting('allow_social_tool') == 'true') {
+            if (!$no_image) {
+                $profile_content .='<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
+            } else {
+                $profile_content .='<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+            }
+        } else {
+            $profile_content .='<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+        }
+        $profile_content .= ' </div></div>';
+    
+        require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+        require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+        require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
+    
+        // New messages.
+        $number_of_new_messages             = MessageManager::get_new_messages();
+        // New contact invitations.
+        $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+    
+        // New group invitations sent by a moderator.
+        $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION, false);
+        $group_pending_invitations = count($group_pending_invitations);
+    
+        $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
+        $cant_msg  = '';
+        if ($number_of_new_messages > 0) {
+            $cant_msg = ' ('.$number_of_new_messages.')';
+        }
+        $profile_content .= '<div class="clear"></div>';
+        $profile_content .= '<div class="message-content"><ul class="menulist">';
+        $link = '';
+        if (api_get_setting('show_tabs', 'social') == 'true') {
+            $link = '?f=social';
+        }
+        $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a></li>';
+        $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Compose').' </a></li>';
+        
+        if ($total_invitations == 0) {
+            $total_invitations = '';
+        } else {
+           $total_invitations = ' ('.$total_invitations.')';
+        }
+        $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' '.$total_invitations.' </a></li>';
+    
+        $profile_content .= '</ul>';
+        $profile_content .= '</div>';      
+    }
+    
+    //Profile content
+    echo show_right_block(get_lang('Profile'), $profile_content);
+}
+
+
+
 // Display right menu: language form, login section + useful weblinks.
 echo '<div class="menu" id="menu">';
 display_anonymous_right_menu();
+echo '</div>';
+
 echo '</div>';
 
 /* Footer */
@@ -826,3 +900,19 @@ function get_courses_of_user($user_id) {
     }
     return $courses;
 }
+
+
+function show_right_block($title, $content) {    
+    $html = '';
+  
+        $html.= '<div id="menu" class="menu">';    
+            $html.= '<div class="menusection">';
+                $html.= '<span class="menusectioncaption">'.$title.'</span>';        
+                $html.= $content;
+            $html.= '</div>';        
+        $html.= '</div>';
+   
+    return $html;
+}
+
+

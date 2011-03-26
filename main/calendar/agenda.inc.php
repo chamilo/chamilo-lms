@@ -3386,13 +3386,14 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day) {
 	foreach ($courses_dbs as $key => $array_course_info) {
 		//echo $array_course_info['db'];
 		//databases of the courses
-		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info['db']);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info['db']);
+		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info['db_name']);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info['db_name']);
 
 		// getting all the groups of the user for the current course
-		$group_memberships = GroupManager :: get_group_ids($array_course_info['db'], $_user['user_id']);
+		$group_memberships = GroupManager :: get_group_ids($array_course_info['db_name'], api_get_user_id());
+		$course_user_status = CourseManager::get_user_in_course_status(api_get_user_id(), $array_course_info['code']);
 		// if the user is administrator of that course we show all the agenda items
-		if ($array_course_info['status'] == '1') {
+		if ($course_user_status == '1') {
 			//echo "course admin";
 			$sqlquery = "SELECT
 							DISTINCT agenda.*, item_property.*
@@ -3461,7 +3462,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day) {
 			//$URL = $_configuration['root_web'].$mycours["dir"]."/";
 			$URL = api_get_path(WEB_PATH).'main/calendar/agenda.php?cidReq='.urlencode($array_course_info["code"])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 
-			$items[$halfhour][] .= "<i>".$hours.":".$minutes."</i> <a href=\"$URL\" title=\"".$array_course_info['name']."\">".$agenda_link."</a>  ".$item['title']."<br />";
+			$items[$halfhour][] .= "<i>".$hours.":".$minutes."</i> <a href=\"$URL\" title=\"".$array_course_info['title']."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}
 	}
 
@@ -3504,14 +3505,16 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 	// get agenda-items for every course
 	foreach ($courses_dbs as $key => $array_course_info) {
 		//databases of the courses
-		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db"]);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db"]);
+		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db_name"]);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db_name"]);
 
 		// getting all the groups of the user for the current course
-		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
+		$group_memberships = GroupManager :: get_group_ids($array_course_info["db_name"], api_get_user_id());
+		
+		$user_course_status = CourseManager::get_user_in_course_status(api_get_user_id(),$array_course_info["code"]);
 
 		// if the user is administrator of that course we show all the agenda items
-		if ($array_course_info['status'] == '1') {
+		if ($user_course_status == '1') {
 			//echo "course admin";
 			$sqlquery = "SELECT
 							DISTINCT a.*, i.*
@@ -3571,7 +3574,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 
 			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			//Display the events in agenda
-			$items[$agendaday][$item['start_date']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$agenda_link."</a>";
+			$items[$agendaday][$item['start_date']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["title"]."\">".$agenda_link."</a>";
 			$items[$agendaday][$item['start_date']] .= "<div>".$item['title']."</div><br>";
 		}
 	}

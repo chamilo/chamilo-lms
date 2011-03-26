@@ -115,12 +115,15 @@ if (!empty($_GET['action']) && $_GET['action'] == "delete" AND $_GET['id']) {
 }
 
 // OUTPUT
-if (isset ($_user['user_id'])) {
+if (isset($_user['user_id'])) {
 	// getting all the courses that this user is subscribed to
-	$courses_dbs = get_all_courses_of_user();
-	if (!is_array($courses_dbs)) {
+	//$courses_dbs = get_all_courses_of_user();
+	$my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
+	
+	print_r($course_list);
+	if (!is_array($my_course_list)) {
 		// this is for the special case if the user has no courses (otherwise you get an error)
-		$courses_dbs = array ();
+		$my_course_list = array();
 	}
 	// setting and/or getting the year, month, day, week
 	$today = getdate();
@@ -156,8 +159,7 @@ if (isset ($_user['user_id'])) {
 	}
 	echo "</div>";
 
-
-	$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
+	$agendaitems = get_myagendaitems($my_course_list, $month, $year);
 	$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 	if (api_get_setting('allow_personal_agenda') == 'true') {
 		$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
@@ -178,7 +180,7 @@ if (isset ($_user['user_id'])) {
 		
 	switch ($process) {
 		case 'month_view' :
-			$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
+			$agendaitems = get_myagendaitems($my_course_list, $month, $year);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 			
 			if (api_get_setting("allow_personal_agenda") == "true") {
@@ -187,7 +189,7 @@ if (isset ($_user['user_id'])) {
 			display_mymonthcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
 		case 'week_view' :
-			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);			
+			$agendaitems = get_week_agendaitems($my_course_list, $month, $year, $week);			
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
 			if (api_get_setting("allow_personal_agenda") == "true") {
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
@@ -195,7 +197,7 @@ if (isset ($_user['user_id'])) {
 			display_weekcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
 		case 'day_view' :
-			$agendaitems = get_day_agendaitems($courses_dbs, $month, $year, $day);					
+			$agendaitems = get_day_agendaitems($my_course_list, $month, $year, $day);					
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");			
 			if (api_get_setting('allow_personal_agenda') == 'true') {
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");

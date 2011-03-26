@@ -220,7 +220,7 @@ class CourseManager {
      */
     public static function get_user_in_course_status($user_id, $course_code) {
         $result = Database::fetch_array(Database::query(
-            "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+            "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
             WHERE course_code = '".Database::escape_string($course_code)."' AND user_id = ".Database::escape_string($user_id))
         );
         return $result['status'];

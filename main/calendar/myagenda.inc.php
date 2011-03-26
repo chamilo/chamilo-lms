@@ -47,20 +47,20 @@ $setting_agenda_link = 'coursecode'; // valid values are coursecode and icon
  *	This function retrieves all the agenda items of all the courses the user is subscribed to
  */
 function get_myagendaitems($courses_dbs, $month, $year) {
-	global $_user;
 	global $_configuration;
 	global $setting_agenda_link;
 
-	$items = array ();
+	$items = array();
 	// get agenda-items for every course
 	foreach ($courses_dbs as $key => $array_course_info) {
 		//databases of the courses
-		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db"]);
-		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db"]);
+		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db_name"]);
+		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db_name"]);
 
-		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
+		$group_memberships = GroupManager :: get_group_ids($array_course_info["db_name"], api_get_user_id());
+		$course_user_status = CourseManager::get_user_in_course_status(api_get_user_id(), $array_course_info["code"]);
 		// if the user is administrator of that course we show all the agenda items
-		if ($array_course_info['status'] == '1') {
+		if ($course_user_status == '1') {
 			//echo "course admin";
 			$sqlquery = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 							FROM ".$TABLEAGENDA." agenda,
@@ -84,7 +84,7 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 								AND MONTH(agenda.start_date)='".$month."'
 								AND YEAR(agenda.start_date)='".$year."'
 								AND ip.tool='".TOOL_CALENDAR_EVENT."'
-								AND	( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+								AND	( ip.to_user_id='".api_get_user_id()."' OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 								AND ip.visibility='1'
 								ORDER BY start_date ";
 			} else {
@@ -95,21 +95,20 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 								AND MONTH(agenda.start_date)='".$month."'
 								AND YEAR(agenda.start_date)='".$year."'
 								AND ip.tool='".TOOL_CALENDAR_EVENT."'
-								AND ( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')
+								AND ( ip.to_user_id='".api_get_user_id()."' OR ip.to_group_id='0')
 								AND ip.visibility='1'
 								ORDER BY start_date ";
 				}
 		}
-
 		$result = Database::query($sqlquery);
 		while ($item = Database::fetch_array($result)) {
 			$agendaday = date("j",strtotime($item['start_date']));
 			if(!isset($items[$agendaday])) {
 				$items[$agendaday]=array();
 			}
-			$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
+			$time     = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
 			$end_time = api_convert_and_format_date($item['end_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
-			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL      = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			if ($setting_agenda_link == 'coursecode') {
 				$title=$array_course_info['title'];
 				$agenda_link = api_substr($title, 0, 14);
@@ -125,6 +124,7 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 			$items[$agendaday][$item['start_date']] .= '<br/>';
 		}
 	}
+
 	// sorting by hour for every day
 	$agendaitems = array ();
 	while (list ($agendaday, $tmpitems) = each($items)) {
@@ -136,9 +136,6 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 			$agendaitems[$agendaday] .= $val;
 		}
 	}
-
-
-	//print_r($agendaitems);
 	return $agendaitems;
 }
 /**
@@ -164,7 +161,7 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
-	echo '<table id="agenda_list">'.'<tr>';
+	echo '<table id="agenda_list"><tr>';
 	echo '<th width="10%"><a href="'.$backwardsURL.'">'.Display::return_icon('action_prev.png',get_lang('Previous')).'</a></th>';
 	echo '<th width="80%" colspan="5"><br /><h3>'.$monthName." ".$year.'</h3></th>';
 	echo '<th width="10%"><a href="'.$forewardsURL.'">'.Display::return_icon('action_next.png',get_lang('Next')).'</a></th>';
@@ -190,7 +187,7 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 					$dayheader = "<b>$curday</b><br />";
 					$class = "class=\"days_today\" style=\"width:10%;\"";
 				}
-				echo "<td ".$class.">", "".$dayheader;
+				echo "<td ".$class.">".$dayheader;
 				if (!empty($agendaitems[$curday])) {
 					echo "<span class=\"agendaitem\">".$agendaitems[$curday]."</span>";
 				}
@@ -275,7 +272,6 @@ function display_myminimonthcalendar($agendaitems, $month, $year, $monthName) {
  */
 function show_new_personal_item_form($id = "") {
 	global $year, $MonthsLong;
-	global $_user;
 
 	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 
@@ -297,7 +293,7 @@ function show_new_personal_item_form($id = "") {
 	}
 
 	if ($id != "") {
-		$sql = "SELECT date, title, text FROM ".$tbl_personal_agenda." WHERE user='".intval($_user['user_id'])."' AND id='".$id."'";
+		$sql = "SELECT date, title, text FROM ".$tbl_personal_agenda." WHERE user='".intval(api_get_user_id())."' AND id='".$id."'";
 		$result = Database::query($sql);
 		$aantal = Database::num_rows($result);
 		if ($aantal != 0) {
@@ -473,7 +469,6 @@ function show_new_personal_item_form($id = "") {
  * @param int is the id this param is optional, but is necessary if the item require be edited
  */
 function store_personal_item($day, $month, $year, $hour, $minute, $title, $content, $id = "") {
-	global $_user;
 
 	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 
@@ -490,11 +485,11 @@ function store_personal_item($day, $month, $year, $hour, $minute, $title, $conte
 
 	if ($id != "")
 	{ // we are updating
-		$sql = "UPDATE ".$tbl_personal_agenda." SET user='".$_user['user_id']."', title='".$title."', text='".$content."', date='".$date."' WHERE id='".$id."'";
+		$sql = "UPDATE ".$tbl_personal_agenda." SET user='".api_get_user_id()."', title='".$title."', text='".$content."', date='".$date."' WHERE id='".$id."'";
 	}
 	else
 	{ // we are adding a new item
-		$sql = "INSERT INTO $tbl_personal_agenda (user, title, text, date) VALUES ('".$_user['user_id']."','$title', '$content', '$date')";
+		$sql = "INSERT INTO $tbl_personal_agenda (user, title, text, date) VALUES ('".api_get_user_id()."','$title', '$content', '$date')";
 	}
 	$result = Database::query($sql);
 }
@@ -502,11 +497,10 @@ function store_personal_item($day, $month, $year, $hour, $minute, $title, $conte
  * This function finds all the courses (also those of sessions) of the user and returns an array containing the
  * database name of the courses.
  * Xritten by Noel Dieschburg <noel.dieschburg@dokeos.com>
+ * @todo remove this function and use the CourseManager get_courses_list_by_user_id
  */
 
 function get_all_courses_of_user() {
-        global $_user;
-
         $TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_course     = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -515,19 +509,18 @@ function get_all_courses_of_user() {
         $sql_select_courses = "SELECT c.code k, c.visual_code  vc, c.title i, c.tutor_name t,
                                       c.db_name db, c.directory dir, '5' as status
                                 FROM $TABLECOURS c, $tbl_session_course_user srcu
-                                WHERE srcu.id_user='".$_user['user_id']."'
+                                WHERE srcu.id_user='".api_get_user_id()."'
                                 AND c.code=srcu.course_code
                                 UNION
                                SELECT c.code k, c.visual_code  vc, c.title i, c.tutor_name t,
                                       c.db_name db, c.directory dir, cru.status status
                                 FROM $TABLECOURS c, $TABLECOURSUSER cru
-                                WHERE cru.user_id='".$_user['user_id']."'
+                                WHERE cru.user_id='".api_get_user_id()."'
                                 AND c.code=cru.course_code";
         $result = Database::query($sql_select_courses);
-        while ($row = Database::fetch_array($result))
-        {
-                // we only need the database name of the course
-                $courses[] = array ("db" => $row['db'], "code" => $row['k'], "visual_code" => $row['vc'], "title" => $row['i'], "directory" => $row['dir'], "status" => $row['status']);
+        while ($row = Database::fetch_array($result)) {
+            // we only need the database name of the course
+            $courses[] = array ("db" => $row['db'], "code" => $row['k'], "visual_code" => $row['vc'], "title" => $row['i'], "directory" => $row['dir'], "status" => $row['status']);
         }
         return $courses;
  }
@@ -540,8 +533,6 @@ function get_all_courses_of_user() {
  * database name of the courses.
  */
 function get_courses_of_user() {
-	global $_user;
-
 	$TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql_select_courses = "SELECT course.code k, course.visual_code  vc,
@@ -549,7 +540,7 @@ function get_courses_of_user() {
 			                        FROM    $TABLECOURS       course,
 											$TABLECOURSUSER   course_rel_user
 			                        WHERE course.code = course_rel_user.course_code
-			                        AND   course_rel_user.user_id = '".$_user['user_id']."'";
+			                        AND   course_rel_user.user_id = '".api_get_user_id()."'";
 	$result = Database::query($sql_select_courses);
 	while ($row = Database::fetch_array($result))
 	{
@@ -562,14 +553,13 @@ function get_courses_of_user() {
  * This function retrieves all the personal agenda items and add them to the agenda items found by the other functions.
  */
 function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year = "", $week = "", $type) {
-	global $_user;
 	global $_configuration;
 
 	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 	// 1. creating the SQL statement for getting the personal agenda items in MONTH view
 	if ($type == "month_view" or $type == "") // we are in month view
 	{
-		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
+		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".api_get_user_id()."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
 	}
 	// 2. creating the SQL statement for getting the personal agenda items in WEEK view
 	// we are in week view
@@ -584,7 +574,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 		// in sql statements you have to use year-month-day for date calculations
 		$start_filter = $start_year."-".$start_month."-".$start_day." 00:00:00";
 		$end_filter = $end_year."-".$end_month."-".$end_day." 23:59:59";
-		$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."'
+		$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".api_get_user_id()."'
 								AND date>='".$start_filter."' AND date<='".$end_filter."'";
 	}
 	// 3. creating the SQL statement for getting the personal agenda items in DAY view
@@ -593,7 +583,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 		// we could use mysql date() function but this is only available from 4.1 and higher
 		$start_filter = $year."-".$month."-".$day." 00:00:00";
 		$end_filter = $year."-".$month."-".$day." 23:59:59";
-		$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
+		$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".api_get_user_id()."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
 	}
 	//echo "day:".$day."/";
 	//echo "month:".$month."/";
@@ -654,7 +644,6 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 
 		}
 	}
-	//print_r($agendaitems);
 	return $agendaitems;
 }
 /**
@@ -855,8 +844,6 @@ function show_simple_personal_agenda($user_id) {
  * does not belong to him/her
  */
 function delete_personal_agenda($id) {
-	global $_user;
-
 	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 
 	if ($id != strval(intval($id))) {
@@ -865,12 +852,12 @@ function delete_personal_agenda($id) {
 
 	if ($id <> '')
 	{
-		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
+		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".api_get_user_id()."' AND id='".$id."'";
 		$result = Database::query($sql);
 		$aantal = Database::num_rows($result);
 		if ($aantal <> 0)
 		{
-			$sql = "DELETE FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
+			$sql = "DELETE FROM ".$tbl_personal_agenda." WHERE user='".api_get_user_id()."' AND id='".$id."'";
 			$result = Database::query($sql);
 		}
 	}

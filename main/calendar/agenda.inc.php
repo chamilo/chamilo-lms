@@ -3096,23 +3096,21 @@ function get_agendaitems($month, $year) {
 	return $agendaitems;
 }
 
-function display_upcoming_events()
-{
-	echo '<b>'.get_lang('UpcomingEvent').'</b><br />';
+function display_upcoming_events() {
+	
 	$number_of_items_to_show = (int)api_get_setting('number_of_upcoming_events');
 
 	//databases of the courses
 	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
 	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-    $mycourse = api_get_course_info();
-    $myuser = api_get_user_info();
+    $mycourse   = api_get_course_info();
+    $myuser     = api_get_user_info();
     $session_id = api_get_session_id();
 
 
 	$group_memberships = GroupManager :: get_group_ids($mycourse['dbName'], $myuser['user_id']);
 	// if the user is administrator of that course we show all the agenda items
-	if (api_is_allowed_to_edit(false,true))
-	{
+	if (api_is_allowed_to_edit(false,true)) {
 		//echo "course admin";
 		$sqlquery = "SELECT
 						DISTINCT agenda.*, item_property.*
@@ -3161,13 +3159,15 @@ function display_upcoming_events()
 	}
 	$result = Database::query($sqlquery);
 	$counter = 0;
-	while ($item = Database::fetch_array($result,'ASSOC'))
-	{
-		if ($counter < $number_of_items_to_show)
-		{
-			echo $item['start_date'],' - ',$item['title'],'<br />';
-			$counter++;
-		}
+	
+	if (Database::num_rows($result) > 0 ) {
+    	echo '<h4>'.get_lang('UpcomingEvent').'</h4><br />';    	
+    	while ($item = Database::fetch_array($result,'ASSOC')) {
+    		if ($counter < $number_of_items_to_show) {
+    			echo $item['start_date'],' - ',$item['title'],'<br />';
+    			$counter++;
+    		}
+    	}
 	}
 }
 /**

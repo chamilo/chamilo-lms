@@ -52,10 +52,14 @@
 	padding: 10px;
 }
 
+/* Set the selected tab background to white */
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+   background-color:#fff;
+}
+
+
+
 /*  cupertino */
 
 
-
 /* ui-lightness */
-
-

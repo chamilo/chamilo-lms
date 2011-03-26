@@ -648,23 +648,21 @@ if (api_get_setting('search_enabled') == 'true') {
     echo show_right_block(get_lang('Search'), $search_content);  
 }
 
-if (api_get_setting('show_groups_to_users') == 'true') {
-    
+if (api_get_setting('show_groups_to_users') == 'true') {   
     require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
     $usergroup = new Usergroup();
     $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
     $classes = '';
-    if (!empty($usergroup_list)) {      
+    if (!empty($usergroup_list)) {
         foreach($usergroup_list as $group_id) {
         	$data = $usergroup->get($group_id);
-        	$data['name'] = Display::url($data['name'], api_get_path(WEB_PATH).'classes.php?id='.$data['id']);
+        	$data['name'] = Display::url($data['name'], api_get_path(WEB_CODE_PATH).'user/classes.php?id='.$data['id']);
             $classes .= Display::tag('li', $data['name']);
-        }                 
-    }  
+        }
+    }    
     if (api_is_platform_admin()) {
         $classes .= Display::tag('li',  Display::url(get_lang('AddClasses') ,api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'));
-    }        
-    
+    }    
     if (!empty($classes)) {
         $classes = Display::tag('ul', $classes, array('class'=>'menulist'));  
         echo show_right_block(get_lang('Classes'), $classes);

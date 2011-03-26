@@ -5,9 +5,9 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-$language_file = array('userInfo');
+$language_file = array('userInfo','admin');
 $cidReset=true;
-require_once './main/inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 
@@ -38,7 +38,7 @@ if (!empty($usergroup_list)) {
     }
 } else {
     if (api_is_platform_admin()) {
-        Display::display_normal_message(Display::url(get_lang('CreateAClass') ,api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'), false);
+        Display::display_normal_message(Display::url(get_lang('AddClasses') ,api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'), false);
     }
 }
 

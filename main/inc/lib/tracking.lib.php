@@ -246,20 +246,22 @@ class Tracking {
     }
 
     /**
-     * Get count connections on the course
+     * Get count of the connections to the course during a specified period
      * @param   string  Course code
      * @param   int     Session id (optional)
-     * @param   int     number of month (optional)
+     * @param   int     Datetime from which to collect data (defaults to 0)
+     * @param   int     Datetime to which to collect data (defaults to now)
      * @return  int     count connections
      */
-    public static function get_count_connections_on_the_course($course_code, $session_id = 0, $month = null) {
+    public static function get_course_connections_count($course_code, $session_id = 0, $start = 0, $stop = null) {
 
         // protect data
         $month_filter = '';
-        if (isset($month)) {
-            $month = intval($month);
-            $month_filter = " AND MONTH(login_course_date)= $month ";
+        if ($start < 0) { $start = 0; }
+        if (!isset($stop) or ($stop < 0)) {
+            $stop = api_get_utc_datetime();
         }
+        $month_filter = " AND login_course_date > '$start' AND login_course_date < '$stop' ";
 
         $course_code = Database::escape_string($course_code);
         $session_id  = intval($session_id);

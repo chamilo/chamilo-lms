@@ -1021,4 +1021,8 @@ $Clean = "Limpiar";
 $MailNotifyInvitation = "Notificación por correo de nuevas invitaciones recibidas";
 $MailNotifyMessage = "Notificación por correo de nuevo mensaje personal";
 $MailNotifyGroupMessage = "Notificación por correo de nuevos mensajes recibidos en grupos";
+$ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField = "Haga clic en la caja abajo para seleccionar ficheros desde su computadora (puede usar CTRL + clic para seleccionar varios ficheros a la vez), o haga arrastrar y soltar de algunos ficheros de su escritorio directamente sobre la caja. El sistema se encargará del resto!";
+$Simple = "Simple";
+$Multiple = "Múltiple";
+$UploadFiles = "Arrastrar y soltar ficheros aquí para subirlos";
 ?>

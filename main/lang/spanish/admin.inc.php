@@ -1385,4 +1385,10 @@ $NeverConnected = "Nunca conectados";
 $EnableAccessibilityFontResizeTitle = "Funcionalidad de redimensionamiento de fuentes";
 $EnableAccessibilityFontResizeComment = "Activar esta opción mostrará una serie de opciones de redimensionamiento de fuentes en la parte arriba a la derecha de su campus. Esto permitirá a las personas con problemas de vista leer más fácilmente los contenidos de sus cursos.";
 $GlobalEvent = "Evento de la plataforma";
+$SearchEnabledTitle = "Búsqueda full-text";
+$SearchEnabledComment = "Esta funcionalidad permite la indexación de la mayoría de los documentos subidos a su portal, y a través de esto provee la funcionalidad de búsqueda para los usuarios.<br />
+Esta funcionalidad no indexa los documentos que ya estuvieron subidos anteriormente, por lo que es importante (si deseado) de activarla al inicio de su implementación.<br />
+Una vez activada, una caja de búsqueda aparecerá en la lista de cursos de cada usuario. Buscar un término específico trae una lista de documentos, ejercicios o temas de foro correspondientes, filtrados dependiendo de su disponibilidad para el usuario.";
+$SpecificSearchFieldsAvailable = "Campos de búsqueda personalizados disponibles";
+$XapianModuleInstalled = "Módulo Xapian instalado";
 ?>

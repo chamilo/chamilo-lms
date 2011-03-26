@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+// @todo refactor this script, create a class that manage the jqgrid requests
 /**
  * Responses to AJAX calls
 */
@@ -104,6 +105,7 @@ switch ($action) {
         	$sord = 'desc';
         }        
         $session_id  = intval($_REQUEST['session_id']);
+        $course_id   = intval($_REQUEST['course_id']);
         
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
@@ -116,16 +118,21 @@ switch ($action) {
             if (!in_array($session_id, $my_session_list)) {
             	break;
             }
-        }
-        
+        }        
                         
-        if(!$sidx) $sidx =1;
+        if(!$sidx) $sidx = 1;
         
         $start = $limit*$page - $limit;         
         $course_list    = SessionManager::get_course_list_by_session_id($session_id);        
         $count = 0;
         
         foreach ($course_list as $item) {
+            if (isset($course_id) && !empty($course_id)) {
+                if ($course_id != $item['id']) {
+                    continue;
+                }
+            }
+        
             $list               = new LearnpathList(api_get_user_id(),$item['code'], $session_id);
             $flat_list          = $list->get_flat_list(); 
             $lps[$item['code']] = $flat_list;
@@ -215,8 +222,10 @@ switch ($action) {
         $sord  = $_REQUEST['sord'];    //asc or desc
         if (!in_array($sord, array('asc','desc'))) {
             $sord = 'desc';
-        }        
+        }
+                
         $session_id  = intval($_REQUEST['session_id']);
+        $course_id   = intval($_REQUEST['course_id']);
         
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
@@ -241,6 +250,12 @@ switch ($action) {
         $count = 0;
         $temp = array();
         foreach ($course_list as $item) {    
+            if (isset($course_id) && !empty($course_id)) {
+                if ($course_id != $item['id']) {
+                    continue;
+                }
+            }
+            
             $list               = new LearnpathList(api_get_user_id(),$item['code'], $session_id, 'publicated_on DESC');
             $flat_list          = $list->get_flat_list();    
             $lps[$item['code']] = $flat_list;
@@ -337,6 +352,7 @@ switch ($action) {
             $sord = 'desc';
         }        
         $session_id  = intval($_REQUEST['session_id']);
+        $course_id   = intval($_REQUEST['course_id']);
         
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
@@ -359,7 +375,13 @@ switch ($action) {
                         
         $count = 0;
         
-        foreach ($course_list as $item) {    
+        foreach ($course_list as $item) {   
+            if (isset($course_id) && !empty($course_id)) {
+                if ($course_id != $item['id']) {
+                    continue;
+                }
+            }
+             
             $list               = new LearnpathList(api_get_user_id(),$item['code'],$session_id);
             $flat_list          = $list->get_flat_list();    
             $lps[$item['code']] = $flat_list;

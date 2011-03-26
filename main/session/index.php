@@ -28,9 +28,10 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jquery_ui_js(true);
 $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('Course'));
 
-Display :: display_header(get_lang('Session'));
+Display::display_header(get_lang('Session'));
 
-$session_id     = intval($_GET['session_id']);
+$session_id = intval($_GET['session_id']);
+$course_id  = intval($_GET['course_id']);
 if (empty($session_id)) {
 	api_not_allowed();
 }
@@ -38,8 +39,6 @@ if (empty($session_id)) {
 $session_info   = SessionManager::fetch($session_id);
 $session_list   = SessionManager::get_sessions_by_coach(api_get_user_id());
 $course_list    = SessionManager::get_course_list_by_session_id($session_id);
-
-$course_select = array();
 
 $session_select = array();
 foreach ($session_list as $item) {
@@ -54,7 +53,6 @@ if (count($session_select) > 1) {
     $defaults['session_id'] = $session_id;
     $form->setDefaults($defaults);
     $form->display();
-    //if ($form->validate()) {}        
 }
 
 //Listing LPs from all courses
@@ -98,6 +96,7 @@ if (!empty($new_session_list)) {
                 } */   
                 //$exercise_course_list = array();
                 $course['name'] = $course_info['name'];
+                $course['id']   = $course_info['real_id'];
                 if (!empty($exercise_list)) {        
                     foreach($exercise_list as $exercise_item) {
                         //Loading the exercise                
@@ -133,9 +132,15 @@ foreach($final_array as $session_data) {
     //Session name    
 	//$html .=Display::tag('h1',$session_data['name']);
 	
-    $course_list = $session_data['data'];    
-    if (!empty($course_list))     
-    foreach ($course_list as $my_course_code=>$course_data) {
+    $my_course_list = $session_data['data'];    
+    if (!empty($my_course_list))     
+    foreach ($my_course_list as $my_course_code=>$course_data) {
+        //echo '<pre>';        print_r($course_data);
+        if (isset($course_id) && !empty($course_id)) {
+            if ($course_id != $course_data['id']) {
+                continue;
+            }
+        }
         //Course table        
        /* $table = new HTML_Table(array('class' => 'data_table'));
         $row = 0;
@@ -228,12 +233,29 @@ $my_real_array = msort($my_real_array, 'date','asc');
 if (!empty($new_exercises)) {
     $my_real_array = array_merge($new_exercises, $my_real_array);
 }
+$back_url = '';
+if (!empty($course_id)) {
+    $back_url = Display::url(Display::return_icon('back.png',get_lang('back.png')), api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_id);
+}
+echo Display::tag('h1', $back_url.' '.$session_info['name']);
+// All courses
 
-echo Display::tag('h1', $session_info['name']);
+//echo '<pre>';print_r($course_list);
+$new_course_list = array();
+if (!empty($course_list)) {
+    foreach($course_list as $course_data) {
+        $course_data['title'] = Display::url($course_data['title'], api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_id.'&course_id='.$course_data['id'].'#tabs-2');
+        $new_course_list[] = array('title'=>$course_data['title']); 
+    }
+}
 
 //All Learnpaths grid settings (First tab, first subtab)
-
-$url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id;
+$columns_courses        = array(get_lang('Title'));
+$column_model_courses   = array(array('name'=>'title',  'index'=>'title',   'width'=>'150',  'align'=>'left',  'sortable'=>'false'),                               
+                                );
+$extra_params_courses['autowidth'] = 'true'; //use the width of the parent                             
+                        
+$url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
 $columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang('LearningPath'));
 $column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'150',  'align'=>'left',  'sortable'=>'false'),
                         array('name'=>'course', 'index'=>'course', 'width'=>'400', 'align'=>'left',  'sortable'=>'false'),
@@ -244,7 +266,7 @@ $column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'150
 //$extra_params['altRows'] = 'true'; //zebra style
                         
 //Per course grid settings
-$url_course             = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_course&session_id='.$session_id;
+$url_by_course = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_course&session_id='.$session_id.'&course_id='.$course_id;
 $extra_params_course['grouping'] = 'true';
 $extra_params_course['groupingView'] = array('groupField'       => array('course'),
                                              'groupColumnShow'  => array('false'),
@@ -252,7 +274,7 @@ $extra_params_course['groupingView'] = array('groupField'       => array('course
 //$extra_params_course['autowidth'] = 'true'; //use the width of the parent                                          
                               
 //Per Week grid
-$url_week           = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id;
+$url_week           = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id.'&course_id='.$course_id;
 $column_week        = array(get_lang('PeriodWeek'), get_lang('PublicationDate'), get_lang('Course'), get_lang('LearningPath'));
 $column_week_model  = array (
                           array('name'=>'week',     'index'=>'week',    'width'=>'80',  'align'=>'left',  'sortable'=>'false'),       
@@ -271,14 +293,14 @@ $extra_params_week['groupingView'] = array('groupDataSorted' =>true,
 //MyQCM grid
 $column_exercise        = array(get_lang('Status'), get_lang('ExerciseStartDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResultInCourse'), get_lang('Ranking'));
 $column_exercise_model  = array(
-                                array('name'=>'status',     'index'=>'status',    'width'=>'50','align'=>'left',   'sortable'=>'true'),
-                                array('name'=>'date',       'index'=>'date',      'width'=>'130','align'=>'left',   'sortable'=>'true'),
-                                array('name'=>'course',     'index'=>'course',    'width'=>'200','align'=>'left',   'sortable'=>'true'),
-                                array('name'=>'exercise',   'index'=>'exercise',  'width'=>'200','align'=>'left',   'sortable'=>'true'),                                
-                                array('name'=>'attempt',    'index'=>'attempt',   'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
-                                array('name'=>'result',     'index'=>'result',    'width'=>'120', 'align'=>'center', 'sortable'=>'true'),
+                                array('name'=>'status',     'index'=>'status',     'width'=>'50', 'align'=>'left',   'sortable'=>'true'),
+                                array('name'=>'date',       'index'=>'date',       'width'=>'130','align'=>'left',   'sortable'=>'true'),
+                                array('name'=>'course',     'index'=>'course',     'width'=>'200','align'=>'left',   'sortable'=>'true'),
+                                array('name'=>'exercise',   'index'=>'exercise',   'width'=>'200','align'=>'left',   'sortable'=>'true'),                                
+                                array('name'=>'attempt',    'index'=>'attempt',    'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
+                                array('name'=>'result',     'index'=>'result',     'width'=>'120','align'=>'center', 'sortable'=>'true'),
                                 array('name'=>'best_result','index'=>'best_result','width'=>'140','align'=>'center', 'sortable'=>'true'),
-                                array('name'=>'position',   'index'=>'position',  'width'=>'55', 'align'=>'center', 'sortable'=>'true')
+                                array('name'=>'position',   'index'=>'position',   'width'=>'55', 'align'=>'center', 'sortable'=>'true')
                                 );                                
 $extra_params_exercise['height'] = '300';                                                        
 //$extra_params_exercise['sortname'] = 'status';
@@ -286,7 +308,6 @@ $extra_params_exercise['height'] = '300';
 //$extra_params_exercise['grouping'] = 'true';
 //$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0}</b>'));
 //$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0} - {1} Item(s)</b>'));
-   
                                           
 ?>
 <br />
@@ -323,9 +344,11 @@ $(function() {
     $( "#sub_tab" ).tabs();     
          
 <?php 
+
      //Displays js code to use a jqgrid
+     echo Display::grid_js('courses',       '',             $columns_courses,$column_model_courses,$extra_params_courses,$new_course_list);
      echo Display::grid_js('list_default',  $url,           $columns,        $column_model,$extra_params,array(), '');
-     echo Display::grid_js('list_course',   $url_course,    $columns,        $column_model,$extra_params_course,array(),'');
+     echo Display::grid_js('list_course',   $url_by_course, $columns,        $column_model,$extra_params_course,array(),'');
      echo Display::grid_js('list_week',     $url_week,      $column_week,    $column_week_model, $extra_params_week,array(),'');     
      echo Display::grid_js('exercises',      '',            $column_exercise,$column_exercise_model, $extra_params_exercise, $my_real_array);        
 ?>
@@ -338,13 +361,14 @@ $my_reporting   = Tracking::show_user_progress(api_get_user_id(), $session_id, '
 $my_reporting   .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
 
 //Main headers
-$headers        = array(get_lang('LearningPaths'), get_lang('MyQCM'), get_lang('MyStatistics'));
+$headers        = array(get_lang('Courses'), get_lang('LearningPaths'), get_lang('MyQCM'), get_lang('MyStatistics'));
 //Subheaders
 $sub_header     = array(get_lang('AllLearningPaths'), get_lang('PerWeek'), get_lang('ByCourse'));
 
 //Sub headers data
-$tabs           =  Display::tabs($sub_header, array(Display::grid_html('list_default'), Display::grid_html('list_week'), Display::grid_html('list_course')),'sub_tab');
+$lp_tabs           =  Display::tabs($sub_header, array(Display::grid_html('list_default'), Display::grid_html('list_week'), Display::grid_html('list_course')),'sub_tab');
+$courses_tab       =  Display::grid_html('courses');
 //Main headers data
-echo Display::tabs($headers, array($tabs, Display::grid_html('exercises'),$my_reporting));
+echo Display::tabs($headers, array($courses_tab, $lp_tabs, Display::grid_html('exercises'), $my_reporting));
 
 Display :: display_footer();

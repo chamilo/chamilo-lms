@@ -563,16 +563,15 @@ function handle_search() {
            $sf_values[$sf['code']] = $sf['name'];
         }
         $group = array();
-        if (empty($sf_values)) {
-            $url =  Display::div(Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php'), array('class'=>'sectioncomment'));
-            $form->addElement('html', get_lang('SearchPrefilterPrefix'));         
-            $form->addElement('html', $url);    
+        $url =  Display::div(Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php'), array('class'=>'sectioncomment'));
+        if (empty($sf_values)) {            
+            $form->addElement('html', get_lang('SearchPrefilterPrefix'));
         } else {
             $form->addElement('select', 'search_prefilter_prefix', get_lang('SearchPrefilterPrefix'), $sf_values, '');
+            
             $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
-        }
-        //$form->addElement('html', Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php' ));
-        //admin/specific_fields.php        
+        }   
+        $form->addElement('html', $url);                
     }
 
     $default_values['search_enabled'] = $search_enabled;
@@ -635,8 +634,7 @@ function handle_search() {
         $data[] = array(get_lang('XapianModuleInstalled'),$xapian_loaded);
         $data[] = array(get_lang('DirectoryExists').' - '.$xapian_path,$dir_exists);
         $data[] = array(get_lang('IsWritable').' - '.$xapian_path,$dir_is_writable);
-        $data[] = array(get_lang('SpecificSearchFieldsAvailable') ,$specific_fields_exists);
-        
+        $data[] = array(get_lang('SpecificSearchFieldsAvailable') ,$specific_fields_exists);        
         
         $table = new SortableTableFromArray($data);
         $table->set_header(0,get_lang('Setting'), false);

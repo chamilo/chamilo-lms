@@ -1623,7 +1623,7 @@ span.form_error {
 	background-color: #F2F2F2;	
 }
 .data_table tr.row_odd {
-	background-color: #FBFBFB;
+	background-color: #F9F9F9;
 }
 .data_table tr.row_odd:hover, .data_table tr.row_even:hover {
     background-color: #E5EDF9;

@@ -96,37 +96,36 @@ class quiz_processor extends search_processor {
      * Get learning path information
      */
     private function get_information($course_id, $exercise_id) {
-        $exercise_table = Database::get_course_table_from_code($course_id, TABLE_QUIZ_TEST);
-        $item_property_table = Database::get_course_table_from_code($course_id, TABLE_ITEM_PROPERTY);
-		$exercise_id = Database::escape_string($exercise_id);
-        $sql = "SELECT * FROM $exercise_table
-        		WHERE id = $exercise_id
-				LIMIT 1";
-        $dk_result = Database::query ($sql);
-
-        //actually author isn't saved on exercise tool, but prepare for when it's ready
-        $sql = "SELECT insert_user_id
-          FROM       $item_property_table
-          WHERE      ref = $doc_id
-                     AND tool = '". TOOL_DOCUMENT ."'
-          LIMIT 1";
-
-        $name = '';
-        if ($row = Database::fetch_array ($dk_result)) {
-            // Get the image path
-            $thumbnail = api_get_path(WEB_PATH) . 'main/img/quiz.gif';
-            $image = $thumbnail; //FIXME: use big images
-            $name = $row['title'];
-            // get author
-            $author = '';
-            $item_result = Database::query ($sql);
-            if ($item_result !== FALSE && $row = Database::fetch_array ($item_result)) {
-                $user_data = api_get_user_info($row['insert_user_id']);
-                $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
+        $course_information     = api_get_course_info($course_id);
+        if (!empty($course_information)) {
+            $exercise_table         = Database::get_course_table(TABLE_QUIZ_TEST,     $course_information['db_name']);
+            $item_property_table    = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_information['db_name']);
+    		$exercise_id            = intval($exercise_id);
+            $sql                    = "SELECT * FROM $exercise_table WHERE id = $exercise_id LIMIT 1";
+            $dk_result              = Database::query($sql);
+    
+            //actually author isn't saved on exercise tool, but prepare for when it's ready
+            $sql = "SELECT insert_user_id FROM $item_property_table
+                    WHERE ref = $doc_id AND tool = '". TOOL_DOCUMENT ."'
+                    LIMIT 1";
+    
+            $name = '';
+            if ($row = Database::fetch_array ($dk_result)) {
+                // Get the image path
+                $thumbnail = api_get_path(WEB_PATH) . 'main/img/quiz.gif';
+                $image = $thumbnail; //FIXME: use big images
+                $name = $row['title'];
+                // get author
+                $author = '';
+                $item_result = Database::query($sql);
+                if ($item_result !== FALSE && $row = Database::fetch_array ($item_result)) {
+                    $user_data = api_get_user_info($row['insert_user_id']);
+                    $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
+                }
             }
+            return array($thumbnail, $image, $name, $author);
+        } else {
+            return array();
         }
-
-        return array($thumbnail, $image, $name, $author);
     }
 }
-?>

@@ -86,27 +86,32 @@ class link_processor extends search_processor {
      * Get document information
      */
     private function get_information($course_id, $link_id) {
-        $item_property_table = Database::get_course_table_from_code($course_id, TABLE_ITEM_PROPERTY);
-		$link_id = Database::escape_string($link_id);
-        $sql = "SELECT insert_user_id FROM $item_property_table
-          		WHERE ref = $link_id AND tool = '". TOOL_LINK ."'
-          		LIMIT 1";
-
-        $name = get_lang('Links');
-        $url = api_get_path(WEB_PATH) . 'main/link/link.php?cidReq=%s';
-        $url = sprintf($url, $course_id);
-        // Get the image path
-        $thumbnail = api_get_path(WEB_CODE_PATH) .'img/link.gif';
-        $image = $thumbnail; //FIXME: use big images
-        // get author
-        $author = '';
-        $item_result = Database::query ($sql);
-        if ($row = Database::fetch_array ($item_result)) {
-	        $user_data = api_get_user_info($row['insert_user_id']);
-	        $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
+        $course_information     = api_get_course_info($course_id);
+        if (!empty($course_information)) {            
+            $item_property_table    = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_information['db_name']);            
+        
+    		$link_id = Database::escape_string($link_id);
+            $sql = "SELECT insert_user_id FROM $item_property_table
+              		WHERE ref = $link_id AND tool = '". TOOL_LINK ."'
+              		LIMIT 1";
+    
+            $name = get_lang('Links');
+            $url = api_get_path(WEB_PATH) . 'main/link/link.php?cidReq=%s';
+            $url = sprintf($url, $course_id);
+            // Get the image path
+            $thumbnail = api_get_path(WEB_CODE_PATH) .'img/link.gif';
+            $image = $thumbnail; //FIXME: use big images
+            // get author
+            $author = '';
+            $item_result = Database::query ($sql);
+            if ($row = Database::fetch_array ($item_result)) {
+    	        $user_data = api_get_user_info($row['insert_user_id']);
+    	        $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
+            }
+    
+            return array($thumbnail, $image, $name, $author, $url);
+        } else {
+            return array();
         }
-
-        return array($thumbnail, $image, $name, $author, $url);
     }
 }
-?>

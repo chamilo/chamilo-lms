@@ -749,6 +749,7 @@ if ($show == 'test') {
             }
             echo Display::tag('tr',$header_list);
             
+            $count = 0;
             if (!empty($exercise_list))
             foreach ($exercise_list as $row) {
                 
@@ -840,19 +841,7 @@ if ($show == 'test') {
                     //$attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
                     
                     //$item .=  Display::tag('td',$attempts);
-                    $item .=  Display::tag('td',$number_of_questions);
-                    $item .=  Display::tag('td',$actions);    
-                    
-                    //Special buttons
-                    /*
-                    echo '<div class="operations">';
-                        echo Display::url(Display::return_icon('quiz.gif',get_lang('Questions'), array('width'=>'22px'))." ".get_lang('Questions'),'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
-                        echo ' ';      
-                        echo Display::url(Display::return_icon('preview.gif',get_lang('Preview'), array('width'=>'22px'))." ".get_lang('Preview'), 'exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id']);
-                        echo ' ';
-                        echo Display::url(Display::return_icon('show_test_results.gif',get_lang('Results'), array('width'=>'22px'))." ".get_lang('Results'), 'exercice.php?'.api_get_cidreq().'&show=result&exerciseId='.$row['id']);
-                    echo '</div>';*/
-                    echo  Display::tag('tr',$item);
+                    $item .=  Display::tag('td',$number_of_questions);           
                 } else {
                      
                     // Student only
@@ -943,14 +932,16 @@ if ($show == 'test') {
                     }
                     $item .=  Display::tag('td', $attempt_text);                    
                     //See results
-                    $actions ='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';                    
-                    $item .=  Display::tag('td', $actions);
-                                     
-                    echo Display::tag('tr',$item);                  
-                }
-                /*echo '</p>';
-                echo '</div>';*/
-                
+                    $actions ='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
+                }                
+                $class = 'row_even';
+                if ($count % 2) {
+                    $class = 'row_odd';
+                }                                        
+                $item .=  Display::tag('td', $actions);                    
+                echo Display::tag('tr',$item, array('class'=>$class));
+                       
+                $count++;
             } // end foreach()
             
             

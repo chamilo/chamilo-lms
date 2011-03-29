@@ -1497,39 +1497,30 @@ function display_courseadmin_links() {
 /**
 * The links that allows the student AND course administrator to show all agenda items and sort up/down
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Julio Montoya removing options, changing to a simple agenda tool
 */
-function display_student_links()
-{
+function display_student_links() {
 	global $show;
 
 	// showing the link to show all items or only those of the current month
-	if ($_SESSION['show']=="showcurrent")
-	{
+	/*
+	if ($_SESSION['show']=="showcurrent") {
 		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showall&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar.png', get_lang("ShowAllEvents"),'','32')."</a> ";
-	}
-	else
-	{
+	} else {
 		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showcurrent&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('month.png', get_lang("ShowCurrent"),'','32')."</a>";
-	}
+	}*/
 
 	if ($_SESSION['view'] <> 'month')
 	{
 		echo "<a href=\"".api_get_self()."?action=view&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=month\">".Display::return_icon('month_empty.png', get_lang('MonthView'),'','32')."</a> ";
-    	if ($_SESSION['sort'] == 'DESC')
-    	{
+/*    	if ($_SESSION['sort'] == 'DESC') {
     		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_normal.png',get_lang('AgendaSortChronologicallyUp'),'','32')."</a> ";
-    	}
-    	else
-    	{
+    	} else {
     		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=desc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>". Display::return_icon('calendar_inverse.png',get_lang('AgendaSortChronologicallyDown'),'','32')."</a> ";
-    	}
+    	}*/
+	} else {
+		echo "<a href=\"".api_get_self()."?action=view&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list\">".Display::return_icon('week.png', get_lang('ListView'),'','32')."</a> ";
 	}
-	else
-	{
-		echo "<a href=\"".api_get_self()."?action=view&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list\">".Display::return_icon('appointments.png', get_lang('ListView'),'','32')."</a> ";
-	}
-	
-
 }
 
 
@@ -2183,9 +2174,6 @@ function display_agenda_items($select_month, $select_year) {
     			echo '<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=edit&amp;id_attach='.$attachment_list['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
 	    		echo Display::return_icon('edit.png', get_lang('ModifyCalendarItem'),'',22)."</a>";
 
-    			echo "<a href=\"".$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
-	    		echo Display::return_icon('delete.png', get_lang('Delete'),'',22)."&nbsp;</a>";
-
     			echo '<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=announce" title="'.get_lang("AddAnnouncement").'">';
     			echo Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), array (),22)."</a> ";
 
@@ -2199,6 +2187,10 @@ function display_agenda_items($select_month, $select_year) {
 					$next_action = 1;
 	    		}
     			echo 	'<a href="'.$mylink.api_get_cidreq().'&amp;sort=asc&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;action=showhide&amp;next_action='.$next_action.'" title="'.$text_visibility.'">'.Display::return_icon($image_visibility.'.png', $text_visibility,'',22).'</a> ';
+    			
+    			echo "<a href=\"".$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
+                echo Display::return_icon('delete.png', get_lang('Delete'),'',22)."&nbsp;</a>";
+                
 			}
 
 	    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
@@ -2822,7 +2814,7 @@ function show_add_form($id = '') {
 					</div>
 					<div class="formw">
 	<div id="err_title" style="display:none;color:red"></div>
-						<input type="text" id="agenda_title" size="60" name="title" value="';
+						<input type="text" id="agenda_title" size="50" name="title" value="';
 						if (isset($title)) echo $title;
 	echo				'" />
 					</div>
@@ -2877,23 +2869,17 @@ function show_add_form($id = '') {
 
 	// File attachment
 	echo '	<div class="row">
-				<div class="label">
-					<a href="javascript://" onclick="return plus_attachment();"><span id="plus"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AddAnAttachment').'</span></a>
+				<div class="label">					
 				</div>
 				<div class="formw">
-					<table id="options" style="display: none;">
+					<table id="options">
 					<tr>
 						<td colspan="2">
-					        <label for="file_name">'.get_lang('FileName').'&nbsp;</label>
-					        <input type="file" name="user_upload"/>
+					        <label for="file_name">'.get_lang('AddAnAttachment').'&nbsp;</label>
+					        <input type="file" name="user_upload"/>					        
+					         '.get_lang('FileComment').' <input name="file_comment" type="text" size="20" />
 					    </td>
-					 </tr>
-					 <tr>
-					    <td colspan="2">
-					    	<label for="comment">'.get_lang('FileComment').'</label><br />
-					    	<textarea name="file_comment" rows ="4" cols = "34" ></textarea>
-					    </td>
-				    </tr>
+					 </tr>			
 			    </table>
 			 </div>
 			</div>';
@@ -2904,9 +2890,14 @@ function show_add_form($id = '') {
     {
 	echo '	<div class="row">
 				<div class="label">
-					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('RepeatEvent').'</span></a>
+					
 				</div>
-				<div class="formw">';
+				<div class="formw">
+				<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">
+                       <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('RepeatEvent').'</span>
+                    </a>
+				
+				';
 ?>
 					<table id="options2" style="display: none;">
 					<tr>

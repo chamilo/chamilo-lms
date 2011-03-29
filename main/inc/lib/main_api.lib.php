@@ -3811,7 +3811,7 @@ function api_add_setting($val, $var, $sk = null, $type = 'textfield', $c = null,
  */
 function api_is_course_visible_for_user($userid = null, $cid = null) {
     if ($userid == null) {
-        $userid = $_SESSION['_user']['user_id'];
+        $userid = api_get_user_id();
     }
     if (empty($userid) || strval(intval($userid)) != $userid) {
         if (api_is_anonymous()) {
@@ -3948,7 +3948,8 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
 
                 $result = Database::query($sql);
 
-                if ($row = Database::fetch_array($result)) {
+                //if ($row = Database::fetch_array($result)) {
+                if (Database::num_rows($result) > 0 ) {
                     $_courseUser['role'] = 'Professor';
                     $is_courseMember = true;
                     $is_courseTutor = true;

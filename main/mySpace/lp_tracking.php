@@ -88,52 +88,14 @@ div.description {
 	font-size: 10px;
 	color: Silver;
 }
-
-.data_table {
-	border-collapse: collapse;
-}
-.data_table th {
-	padding-right: 0px;
-	border: 1px  solid gray;
-	background-color: #eef;
-}
-.data_table tr.row_odd {
-	background-color: #fafafa;
-}
-.data_table tr.row_odd:hover, .data_table tr.row_even:hover {
-	background-color: #f0f0f0;
-}
-.data_table tr.row_even {
-	background-color: #fff;
-}
-.data_table td {
-	padding: 5px;
-	vertical-align: top;
-	border-bottom: 1px solid #b1b1b1;
-	border-right: 1px dotted #e1e1e1;
-	border-left: 1px dotted #e1e1e1;
-}
-
-.margin_table {
-	margin-left : 3px;
-	width: 80%;
-}
-.margin_table td.title {
-	background-color: #ffff99;
-}
-.margin_table td.content {
-	background-color: #ddddff;
-}
 </style>';
 
 Display :: display_header($nameTools);
 
 $lp_id = intval($_GET['lp_id']);
 
-$sql = 'SELECT name
-	FROM '.Database::get_course_table(TABLE_LP_MAIN, $_course['db_name']).'
-	WHERE id='.Database::escape_string($lp_id);
-$rs = Database::query($sql);
+$sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN, $_course['db_name']).'	WHERE id='.$lp_id;
+$rs  = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 
 

@@ -136,7 +136,7 @@ if (!empty($curDirPath)) {
 /* CURRENT DIRECTORY */
 
 echo	'<tr>';
-echo	'<th width="40%">'.get_lang('Title').'</th>'.
+echo	'<th width="70%">'.get_lang('Title').'</th>'.
         '<th>'.get_lang('Progress')."</th>";
 if ($is_allowed_to_edit) {
     //echo '<th>'.get_lang('CourseSettings')."</th>\n" .
@@ -145,9 +145,9 @@ if ($is_allowed_to_edit) {
     echo    '<th>'.get_lang('AuthoringOptions')."</th>";
 
     // Only available for not session mode.
-    if ($current_session == 0) {
+    /*if ($current_session == 0) {
         echo'<th>'.get_lang('Move')."</th>";
-    }
+    }*/
 }
 echo '</tr>';
 
@@ -256,9 +256,9 @@ if (is_array($flat_list)) {
         $lp_theme_css = $mystyle;
 
         if ($display_progress_bar) {            
-            $dsp_progress = '<td width="140px"><div style="width:140px">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</div></td>';
+            $dsp_progress = '<td><div style="width:125px">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</div></td>';
         } else {
-            $dsp_progress = '<td width="140px" style="padding-top:1em;"><div style="width:140px">'.learnpath::get_db_progress($id, api_get_user_id(), 'both','',false, api_get_session_id()).'</div></td>';
+            $dsp_progress = '<td style="padding-top:1em;"><div style="width:125px">'.learnpath::get_db_progress($id, api_get_user_id(), 'both','',false, api_get_session_id()).'</div></td>';
         }   
 
         if ($is_allowed_to_edit) {
@@ -469,31 +469,27 @@ if (is_array($flat_list)) {
             // Only active while session mode is not active
 
             if ($current_session == 0) {
-
                 if ($details['lp_display_order'] == 1 && $max != 1) {
-                    $dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">
+                    $dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">
                          '.Display::return_icon('down.png', get_lang('MoveDown'),'','22').'</a>					
-						<img src="../img/blanco.png" border="0" alt="" title="" /></td>';
-                }
-                elseif ($current == $max-1 && $max != 1) {
-                    $dsp_order .= '<td><img src="../img/blanco.png" border="0" alt="" title="" /><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">
-					'.Display::return_icon('up.png', get_lang('MoveUp'),'','22').'</a></td>';
-                }
-                elseif ($max == 1) {
-                    $dsp_order = '<td></td>';
-                }
-                else {
-                    $dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">' .
+						<img src="../img/blanco.png" border="0" alt="" title="" />';
+                } elseif ($current == $max-1 && $max != 1) {
+                    $dsp_order .= '<img src="../img/blanco.png" border="0" alt="" title="" /><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">
+					'.Display::return_icon('up.png', get_lang('MoveUp'),'','22').'</a>';
+                } elseif ($max == 1) {
+                    $dsp_order = '';
+                } else {
+                    $dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">' .
                         Display::return_icon('down.png', get_lang('MoveDown'),'','22').'</a>';
                     $dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">' .
-                        Display::return_icon('up.png', get_lang('MoveUp'),'','22').'</a></td>';
+                        Display::return_icon('up.png', get_lang('MoveUp'),'','22').'</a>';
                 }
             }
         } // end if ($is_allowedToEdit)
         
         echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_edit_lp.$dsp_disk.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
 
-        echo "</tr>\n";
+        echo "</tr>";
         $current ++; //counter for number of elements treated
     } // end foreach ($flat_list)
     // TODO: Erint some user-friendly message if counter is still = 0 to tell nothing can be displayd yet.

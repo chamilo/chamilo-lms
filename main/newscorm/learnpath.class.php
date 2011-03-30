@@ -2056,8 +2056,7 @@ class learnpath {
             $progress_height = '16';
         $size = str_replace('%', '', $percentage);
 
-        $output =
-            '<table border="0" cellpadding="0" cellspacing="0"><tr><td>' .
+        $output ='<div style="width:135px">' .
             '<img id="progress_img_limit_left" src="' . $css_path . 'bar_1.gif" width="1" height="' . $progress_height . '">' .
             '<img id="progress_img_full" src="' . $css_path . 'bar_1u.gif" width="' . $size * $factor . 'px" height="' . $progress_height . '" id="full_portion">' .
             '<img id="progress_img_limit_middle" src="' . $css_path . 'bar_1m.gif" width="1" height="' . $progress_height . '">';
@@ -2068,7 +2067,7 @@ class learnpath {
             $output .= '<img id="progress_img_empty" src="' . $css_path . 'bar_1r.gif" width="0" height="' . $progress_height . '" id="empty_portion">';
         }
 
-        $output .= '<img id="progress_bar_img_limit_right" src="' . $css_path . 'bar_1.gif" width="1" height="' . $progress_height . '"></td></tr></table>' .
+        $output .= '<img id="progress_bar_img_limit_right" src="' . $css_path . 'bar_1.gif" width="1" height="' . $progress_height . '"></div>' .
         '<div class="progresstext" id="progress_text">' . $text . '</div>';
 
         return $output;

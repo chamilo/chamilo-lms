@@ -73,7 +73,13 @@ if (!empty ($_GET['extend_all'])) {
 if ($origin != 'tracking') {
     $output .= "<tr><td><h2>" . get_lang('ScormMystatus') . "</h2></td></tr>";
 }
-$output .= "<tr><td>&nbsp;</td></tr>" . "<tr><td>" . "<table border='0' class='data_table'><tr>\n" . '<td width="16">' . $extend_all_link . '</td>' . '<td colspan="4" class="title"><div class="mystatusfirstrow">' . get_lang('ScormLessonTitle') . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormStatus') . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormScore') . "</div></td>\n" . '<td colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormTime') . "</div></td><td class='title'><div class='mystatusfirstrow'>" .get_lang('Actions') . "</div></td></tr>\n";
+$output .= '<tr><td>&nbsp;</td></tr><tr><td><table border="0" class="data_table"><tr>'.
+            '<th width="16">' . $extend_all_link . '</td>' .
+            '<th colspan="4" class="title"><div class="mystatusfirstrow">' . get_lang('ScormLessonTitle') . "</div></td>" .
+            '<th colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormStatus') . "</div></td>" .
+            '<th colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormScore') . "</div></td>" . 
+            '<th colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormTime') . "</div></td>".
+            '<th class="title"><div class="mystatusfirstrow">'.get_lang('Actions') . '</div></td></tr>';
 
 // Going through the items using the $items[] array instead of the database order ensures
 // we get them in the same order as in the imsmanifest file, which is rather random when using
@@ -207,14 +213,14 @@ if (is_array($list) && count($list) > 0) {
             }
             $title = $row['mytitle'];
 
-            if (empty ($title)) {
+            if (empty($title)) {
                 $title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
             }
-
+            
             if ($row['item_type'] != 'dokeos_chapter') {
                 $correct_test_link = '-';
                 $title = Security::remove_XSS($title);
-                $output .= "<tr class='$oddclass'>\n" . "<td>$extend_link</td>\n" . '<td colspan="4" class="content"><div class="mystatus">' . $title . "</div></td>\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td>' . "\n" . '<td colspan="2" class="content"></td><td class="content"></td>' . "\n" . "</tr>\n";
+                $output .= "<tr class='$oddclass'>" . "<td>$extend_link</td>" . '<td colspan="4" class="content"><div class="mystatus">' . $title . "</div></td>" . '<td colspan="2" class="content"></td>'.'<td colspan="2" class="content"></td>'.'<td colspan="2" class="content"></td><td class="content"></td>' . "</tr>";
             }
             $counter++;
 
@@ -249,7 +255,6 @@ if (is_array($list) && count($list) > 0) {
                     $maxscore = $row['mymaxscore'];
                 } else {
                     if ($row['item_type'] == 'sco') {
-
                         if (!empty ($row['myviewmaxscore']) && $row['myviewmaxscore'] > 0) {
                             $maxscore = $row['myviewmaxscore'];
                         }
@@ -287,8 +292,8 @@ if (is_array($list) && count($list) > 0) {
                         //$view_score = ($score == 0 ? '/' : ($maxscore === 0 ? $score : $score . '/' . float_format($maxscore, 1)));
                         $view_score = show_score($score, $maxscore, false);                        
                     }
-                    $output .= "<tr class='$oddclass'>\n" . "<td></td>\n" . "<td>$extend_attempt_link</td>\n" . '<td colspan="3">' . get_lang('Attempt') . ' ' . $row['iv_view_count'] . "</td>\n"
-                     . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . $view_score . "</div></td>\n" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';
+                    $output .= "<tr class='$oddclass'>" . "<td></td>" . "<td>$extend_attempt_link</td>" . '<td colspan="3">' . get_lang('Attempt') . ' ' . $row['iv_view_count'] . "</td>"
+                     . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . $view_score . "</div></td>" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';
 
                     if (!empty($export_csv)) {
                         $temp = array ();
@@ -330,9 +335,9 @@ if (is_array($list) && count($list) > 0) {
                             }
                             $student_response = implode(',',$content_student_response);
                         }
-                        $output .= "<tr class='$oddclass'>\n" . '<td></td>' . "\n" . '<td></td>' . "\n" . '<td>&nbsp;</td>' . "\n" . '<td>' . $interaction['order_id'] . '</td>' . "\n" . '<td>' . $interaction['id'] . '</td>' . "\n"
-                         . '<td colspan="2">' . $interaction['type'] . "</td>\n"
-                         . '<td>' . $student_response . "</td>\n" . '<td>' . $interaction['result'] . "</td>\n" . '<td>' . $interaction['latency'] . "</td>\n" . '<td>' . $interaction['time'] . "</td>\n<td></td>\n</tr>\n";
+                        $output .= "<tr class='$oddclass'>" . '<td></td>' . '<td></td>' .'<td>&nbsp;</td>' . '<td>' . $interaction['order_id'] . '</td>' .'<td>' . $interaction['id'] . '</td>'
+                         . '<td colspan="2">' . $interaction['type'] . "</td>"
+                         . '<td>' . $student_response . "</td>" . '<td>' . $interaction['result'] . "</td>" . '<td>' . $interaction['latency'] . "</td>" . '<td>' . $interaction['time'] . "</td><td></td></tr>";
                         $counter++;
                     }
                     $list2 = learnpath :: get_iv_objectives_array($row['iv_id']);
@@ -342,9 +347,9 @@ if (is_array($list) && count($list) > 0) {
                         } else {
                             $oddclass = 'row_even';
                         }
-                        $output .= "<tr class='$oddclass'>\n" . '<td></td>' . "\n" . '<td></td>' . "\n" . '<td>&nbsp;</td>' . "\n" . '<td>' . $interaction['order_id'] . '</td>' . "\n" . '<td colspan="2">' . $interaction['objective_id'] . '</td>' . "\n" .
+                        $output .= "<tr class='$oddclass'>" . '<td></td>' . '<td></td>'.'<td>&nbsp;</td>' .'<td>' . $interaction['order_id'] . '</td>'. '<td colspan="2">' . $interaction['objective_id'] . '</td>'.
                         '<td colspan="2">' . $interaction['status'] . "</td>\n" .
-                        '<td>' . $interaction['score_raw'] . "</td>\n" . '<td>' . $interaction['score_max'] . "</td>\n" . '<td>' . $interaction['score_min'] . "</td>\n<td></td>\n</tr>\n";
+                        '<td>' . $interaction['score_raw'] . "</td>" . '<td>' . $interaction['score_max'] . "</td>" . '<td>' . $interaction['score_min'] . "</td><td></td></tr>";
                         $counter++;
                     }
                 }
@@ -352,10 +357,10 @@ if (is_array($list) && count($list) > 0) {
 
         } elseif ($num > 0) {
             $row = Database :: fetch_array($result);
-            $my_id = $row['myid'];
-            $my_lp_id = $row['mylpid'];
-            $my_lp_view_id = $row['mylpviewid'];
-            $my_path = $row['path'];
+            $my_id          = $row['myid'];
+            $my_lp_id       = $row['mylpid'];
+            $my_lp_view_id  = $row['mylpviewid'];
+            $my_path        = $row['path'];
 
             $result_disabled_ext_all = false;
 
@@ -398,11 +403,6 @@ if (is_array($list) && count($list) > 0) {
             if ($inter_num > 1) {
                 $extend_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="'.get_lang('ExtendAttemptView').'" title="'.get_lang('ExtendAttemptView').'"  border="0"></a>';
             }
-            if (($counter % 2) == 0) {
-                $oddclass = 'row_odd';
-            } else {
-                $oddclass = 'row_even';
-            }
             $lesson_status = $row['mystatus'];
             $score = $row['myscore'];
             $subtotal_time = $row['mytime'];
@@ -414,7 +414,7 @@ if (is_array($list) && count($list) > 0) {
             //$time_for_total = $subtotal_time;
             //$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
             $scoIdentifier = $row['myid'];
-            $title = $row['mytitle'];
+            $title         = $row['mytitle'];
 
             // Selecting the exe_id from stats attempts tables in order to look the max score value.
             if ($origin != 'tracking') {
@@ -532,17 +532,17 @@ if (is_array($list) && count($list) > 0) {
 
                 $title = Security::remove_XSS($title);
                 if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {
-                    $output .= "<tr class='$oddclass' >\n" . "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' .$title. '</div></td>' . "\n";
+                    $output .= "<tr class='$oddclass' >" . "<td>$extend_link</td>" . '<td colspan="4"><div class="mystatus">' .$title. '</div></td>';
                     $output .= '<td colspan="2">&nbsp;</td><td colspan="2">&nbsp;</td><td colspan="2">&nbsp;</td><td>'.$correct_test_link.'</td></tr>';
-                    $output .= "</tr>\n";
+                    $output .= "</tr>";
                 } else {
                     if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_ext_lp_id']) && $_GET['my_ext_lp_id'] == $my_id)) {
-                        $output .= "<tr class='$oddclass' >\n";
+                        $output .= "<tr class='$oddclass'>";
                     } else {
-                        $output .= "<tr class='$oddclass'>\n";
+                        $output .= "<tr class='$oddclass'>";
                     }
-                    $output .= "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' .$title. '</div></td>' . "\n";
-                    $output .= '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">';
+                    $output .= "<td>$extend_link</td>\n" . '<td colspan="4"><div class="mystatus">' .$title. '</div></td>';
+                    $output .= '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>" . '<td colspan="2"><div class="mystatus" align="center">';
                      if ($row['item_type'] == 'quiz') {
                          if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                             $output .= Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
@@ -553,8 +553,8 @@ if (is_array($list) && count($list) > 0) {
                      } else {
                         $output .= ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));
                      }
-                     $output .= "</div></td>\n" . '<td colspan="2"><div class="mystatus">' . $time . "</div></td><td>$correct_test_link</td>\n";
-                     $output .= "</tr>\n";
+                     $output .= "</div></td>" . '<td colspan="2"><div class="mystatus">' . $time . "</div></td><td>$correct_test_link</td>";
+                     $output .= "</tr>";
                 }
 
                 if (!empty($export_csv)) {
@@ -563,13 +563,11 @@ if (is_array($list) && count($list) > 0) {
                     $temp[] = api_html_entity_decode($my_lesson_status, ENT_QUOTES);
 
                     if ($row['item_type'] == 'quiz') {
-
                         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                             $temp[] =  '/';
                         } else {
                             $temp[] = ($score == 0 ? '0/'.$maxscore : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
                         }
-
                     } else {
                         $temp[] = ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
                     }
@@ -599,9 +597,9 @@ if (is_array($list) && count($list) > 0) {
                     } else {
                         $oddclass = 'row_even';
                     }
-                    $output .= "<tr class='$oddclass'>\n" . '<td></td>' . "\n" . '<td></td>' . "\n" . '<td>&nbsp;</td>' . "\n" . '<td>' . $interaction['order_id'] . '</td>' . "\n" . '<td colspan="2">' . $interaction['objective_id'] . '</td>' . "\n" .
-                    '<td colspan="2">' . $interaction['status'] . "</td>\n" .
-                    '<td>' . $interaction['score_raw'] . "</td>\n" . '<td>' . $interaction['score_max'] . "</td>\n" . '<td>' . $interaction['score_min'] . "</td>\n<td></td>\n</tr>\n";
+                    $output .= "<tr class='$oddclass'>" . '<td></td>' . '<td></td>' . '<td>&nbsp;</td>' . '<td>' . $interaction['order_id'] . '</td>'.'<td colspan="2">' . $interaction['objective_id'] . '</td>'.
+                    '<td colspan="2">' . $interaction['status'] . "</td>" .
+                    '<td>' . $interaction['score_raw'] . "</td>" . '<td>' . $interaction['score_max'] . "</td>" . '<td>' . $interaction['score_min'] . "</td>\n<td></td>\n</tr>";
                     $counter++;
                 }
             }

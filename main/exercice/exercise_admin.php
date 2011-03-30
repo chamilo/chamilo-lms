@@ -126,10 +126,10 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#exercise_title").focus();
+    $("#exercise_title").focus();
 }
 $(document).ready(function () {
-  setFocus();
+    setFocus();
 });
 </script>';
 
@@ -158,8 +158,9 @@ if ($form->validate()) {
 	} else {
 	    $message = 'ExerciseAdded';		
 	}
+	$exercise_id = $objExercise->id;
 	api_session_unregister('objExercise');
-	header('Location:admin.php?message='.$message.'&exerciseId='.$objExercise->id);
+	header('Location:admin.php?message='.$message.'&exerciseId='.$exercise_id);
 	exit;
 } else {	
     // DISPLAY FORM	 

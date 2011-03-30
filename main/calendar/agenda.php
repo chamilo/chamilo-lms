@@ -240,8 +240,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                 $safe_file_comment = Security::remove_XSS($_POST['file_comment']);
 
 				$id = agenda_add_item($course_info,$safe_title,$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$safe_file_comment);
-                if(!empty($_POST['repeat']))
-                {
+                if (!empty($_POST['repeat'])) {
                 	$end_y = intval($_POST['repeat_end_year']);
                     $end_m = intval($_POST['repeat_end_month']);
                     $end_d = intval($_POST['repeat_end_day']);
@@ -251,7 +250,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			}
 			break;
 		case 'edit':
-			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id']) ) ) ) {
+			if( !(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
 				// a coach can only delete an element belonging to his session
 				if ($_POST['submit_event']) {		
 					$my_id_attach = (int)$_REQUEST['id_attach'];
@@ -277,8 +276,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		case "announce": 		
 			//copying the agenda item into an announcement
 			$id=(int)$_GET['id'];
-			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
-			{ // a coach can only delete an element belonging to his session
+			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id))) { 
+			    // a coach can only delete an element belonging to his session
 				$ann_id = store_agenda_item_as_announcement($id);
 				$tool_group_link = (isset($_SESSION['toolgroup'])?'&toolgroup='.$_SESSION['toolgroup']:'');
 				Display::display_normal_message(get_lang('CopiedAsAnnouncement').'&nbsp;<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
@@ -385,7 +384,7 @@ if (!$_GET['action'] || $_GET['action']=='showall'  || $_GET['action']=='showcur
             if(!empty($_GET['agenda_id'])) {
                 display_one_agenda_item($_GET['agenda_id']);
             } else {
-			   display_agenda_items($select_month, $select_year);
+			  display_agenda_items($select_month, $select_year);
             }
 		} else {
 			display_monthcalendar($select_month, $select_year);

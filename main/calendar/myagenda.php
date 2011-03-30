@@ -159,11 +159,13 @@ if (isset($_user['user_id'])) {
 	}
 	echo "</div>";
 
-	$agendaitems = get_myagendaitems($my_course_list, $month, $year);
+	$agendaitems = get_myagendaitems($my_course_list, $month, $year);	
 	$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
+	
 	if (api_get_setting('allow_personal_agenda') == 'true') {
 		$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 	}
+	
 	if ($process != 'month_view') {
 	    echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
     	echo "<tr>";
@@ -180,12 +182,6 @@ if (isset($_user['user_id'])) {
 		
 	switch ($process) {
 		case 'month_view' :
-			$agendaitems = get_myagendaitems($my_course_list, $month, $year);
-			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
-			
-			if (api_get_setting("allow_personal_agenda") == "true") {
-				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
-			}
 			display_mymonthcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
 		case 'week_view' :

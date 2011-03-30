@@ -106,8 +106,8 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 			if(!isset($items[$agendaday])) {
 				$items[$agendaday]=array();
 			}
-			$time     = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
-			$end_time = api_convert_and_format_date($item['end_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
+			$time     = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT);
+			$end_time = api_convert_and_format_date($item['end_date'], TIME_NO_SEC_FORMAT);
 			$URL      = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			if ($setting_agenda_link == 'coursecode') {
 				$title=$array_course_info['title'];

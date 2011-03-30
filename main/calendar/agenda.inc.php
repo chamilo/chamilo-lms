@@ -444,8 +444,8 @@ function display_monthcalendar($month, $year) {
 								if ($month == $month_start_date) {
 									$some_content = true;
 
-									$start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
-									$end_time 	= api_convert_and_format_date($value['end_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
+									$start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT);
+									$end_time 	= api_convert_and_format_date($value['end_date'], TIME_NO_SEC_FORMAT);
 
 									//Setting a personal event to green
 									$personal_start =  $personal_end = '';
@@ -1087,8 +1087,8 @@ function store_new_agenda_item() {
  * @return	integer		New announcement item's ID
  */
 function store_agenda_item_as_announcement($item_id){
-	$table_agenda = Database::get_course_table(TABLE_AGENDA);
-	$table_ann = Database::get_course_table(TABLE_ANNOUNCEMENT);
+	$table_agenda  = Database::get_course_table(TABLE_AGENDA);
+	$table_ann     = Database::get_course_table(TABLE_ANNOUNCEMENT);
 	//check params
 	if(empty($item_id) or $item_id != strval(intval($item_id))){return -1;}
 	//get the agenda item
@@ -1096,16 +1096,16 @@ function store_agenda_item_as_announcement($item_id){
 	$item_id=Database::escape_string($item_id);
 	$sql = "SELECT * FROM $table_agenda WHERE id = '".$item_id."'";
 	$res = Database::query($sql);
-	if(Database::num_rows($res)>0){
+	if (Database::num_rows($res)>0) {
 		$row = Database::fetch_array($res);
 		//we have the agenda event, copy it
 		//get the maximum value for display order in announcement table
 		$sql_max = "SELECT MAX(display_order) FROM $table_ann";
 		$res_max = Database::query($sql_max);
 		$row_max = Database::fetch_array($res_max);
-		$max = intval($row_max[0])+1;
+		$max = intval($row_max[0])+1;		
 		//build the announcement text
-		$content = $row['start_date']." - ".$row['end_date']."\n".$row['content'];
+		$content = api_get_local_time($row['start_date'])." - ".api_get_local_time($row['end_date'])."\n".$row['content'];
 		//insert announcement
         $session_id = api_get_session_id();
 		$sql_ins = "INSERT INTO $table_ann (title,content,end_date,display_order,session_id) " .
@@ -1583,25 +1583,29 @@ function get_agenda_item($id)
 * 2. store the groups/users who this message is meant for in the item_property table
 * 3. modify the attachments (if needed)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Julio Montoya Adding UTC support
 */
-function store_edited_agenda_item($id_attach,$file_comment)
-{
-	global $_user, $_course;
+function store_edited_agenda_item($id_attach,$file_comment) {
+	global $_course;
 
 	// database definitions
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	// STEP 1: editing the calendar_event table
 	// 1.a.  some filtering of the input data
-	$id=(int)$_POST['id'];
-	$title=strip_tags(trim($_POST['title'])); // no html allowed in the title
-	$content=trim($_POST['content']);
-	$start_date=(int)$_POST['fyear']."-".(int)$_POST['fmonth']."-".(int)$_POST['fday']." ".(int)$_POST['fhour'].":".(int)$_POST['fminute'].":00";
-	$end_date=(int)$_POST['end_fyear']."-".(int)$_POST['end_fmonth']."-".(int)$_POST['end_fday']." ".(int)$_POST['end_fhour'].":".(int)$_POST['end_fminute'].":00";
-	$to=$_POST['selectedform'];
+	$id            = (int)$_POST['id'];
+	$title         = strip_tags(trim($_POST['title'])); // no html allowed in the title
+	$content       = trim($_POST['content']);
+	$start_date    = (int)$_POST['fyear']."-".(int)$_POST['fmonth']."-".(int)$_POST['fday']." ".(int)$_POST['fhour'].":".(int)$_POST['fminute'].":00";
+	$end_date      = (int)$_POST['end_fyear']."-".(int)$_POST['end_fmonth']."-".(int)$_POST['end_fday']." ".(int)$_POST['end_fhour'].":".(int)$_POST['end_fminute'].":00";
+	$to            = $_POST['selectedform'];
+	
+	$start_date    = api_get_utc_datetime($start_date);
+	$end_date      = api_get_utc_datetime($end_date);
+	
 	// 1.b. the actual saving in calendar_event table
-	$edit_result=save_edit_agenda_item($id,$title,$content,$start_date,$end_date);
-
+	$edit_result  = save_edit_agenda_item($id, $title, $content, $start_date, $end_date);
+	 
 	if (empty($id_attach)) {
 		add_agenda_attachment_file($file_comment,$id);
 	} else {
@@ -1609,8 +1613,7 @@ function store_edited_agenda_item($id_attach,$file_comment)
 	}
 
 	// step 2: editing the item_propery table (=delete all and add the new destination users/groups)
-	if ($edit_result=true)
-	{
+	if ($edit_result=true) {
 		// 2.a. delete everything for the users
 		$sql_delete="DELETE FROM ".$TABLE_ITEM_PROPERTY." WHERE ref='$id' AND tool='".TOOL_CALENDAR_EVENT."'";
 
@@ -1620,25 +1623,21 @@ function store_edited_agenda_item($id_attach,$file_comment)
 		{
 			$send_to=separate_users_groups($to);
 			// storing the selected groups
-			if (is_array($send_to['groups']))
-			{
+			if (is_array($send_to['groups'])) {
 				foreach ($send_to['groups'] as $group)
 				{
-					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'], $group,'',$start_date, $end_date);
+					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", api_get_user_id(), $group,'',$start_date, $end_date);
 				}
 			}
 			// storing the selected users
-			if (is_array($send_to['users']))
-			{
-				foreach ($send_to['users'] as $user)
-				{
-					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'],'',$user, $start_date,$end_date);
+			if (is_array($send_to['users'])) {
+				foreach ($send_to['users'] as $user) {
+					api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", api_get_user_id(),'',$user, $start_date,$end_date);
 				}
 			}
-		}
-		else // the message is sent to everyone, so we set the group to 0
-		{
-			api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", $_user['user_id'], '','',$start_date,$end_date);
+		} else {
+		    // the message is sent to everyone, so we set the group to 0
+			api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id,"AgendaModified", api_get_user_id(), '','',$start_date,$end_date);
 		}
 
 	} //if ($edit_result=true)
@@ -1648,8 +1647,8 @@ function store_edited_agenda_item($id_attach,$file_comment)
 
 	// return the message;
 	Display::display_confirmation_message(get_lang("EditSuccess"));
-
 }
+
 
 /**
 * This function stores the Agenda Item in the table calendar_event and updates the item_property table also (after an edit)
@@ -1686,23 +1685,18 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date) {
 function delete_agenda_item($id) {
 	global $_course;
 	$id=Database::escape_string($id);
-	if (api_is_allowed_to_edit(false,true)  OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
-	{
-		if (!empty($_GET['id']) && isset($_GET['action']) && $_GET['action']=="delete")
-		{
+	if (api_is_allowed_to_edit(false,true)  OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) {
+		if (!empty($_GET['id']) && isset($_GET['action']) && $_GET['action']=="delete") {
 		    $t_agenda     = Database::get_course_table(TABLE_AGENDA);
             $t_agenda_r   = Database::get_course_table(TABLE_AGENDA_REPEAT);
             $id=intval($_GET['id']);
             $sql = "SELECT * FROM $t_agenda_r WHERE cal_id = $id";
             $res = Database::query($sql);
-            if(Database::num_rows($res)>0)
-            {
+            if(Database::num_rows($res)>0) {
             	$sql_children = "SELECT * FROM $t_agenda WHERE parent_event_id = $id";
                 $res_children = Database::query($sql_children);
-                if(Database::num_rows($res_children)>0)
-                {
-                    while ($row_child = Database::fetch_array($res_children))
-                    {
+                if(Database::num_rows($res_children)>0) {
+                    while ($row_child = Database::fetch_array($res_children)) {
                         api_item_property_update($_course,TOOL_CALENDAR_EVENT,$row_child['id'],'delete',api_get_user_id());
                     }
                 }
@@ -1779,7 +1773,8 @@ function display_agenda_items($select_month, $select_year) {
     $select_year  = intval($select_year);
 	// this is to make a difference between showing everything (all months) or only the current month)
 	// $show_all_current is a part of the sql statement
-	if ($_SESSION['show']!=='showall') {
+	//if ($_SESSION['show']!=='showall') {
+    if (!empty($select_month) && !empty($select_year)) {
 		$show_all_current			=" AND MONTH(start_date)=$select_month AND year(start_date)=$select_year";
 		$show_all_current_personal	=" AND MONTH(date)=$select_month AND year(date)=$select_year";
 
@@ -1797,7 +1792,7 @@ function display_agenda_items($select_month, $select_year) {
 		$show_all_current_personal = '';
         $start = time();
         $stop = mktime(0,0,0,1,1,2038);//by default, set year to maximum for mktime()
-	}
+	}	
 
 	// by default we use the id of the current user. The course administrator can see the agenda of other users by using the user / group filter
 	$user_id=$_user['user_id'];
@@ -2036,8 +2031,6 @@ function display_agenda_items($select_month, $select_year) {
 		}
 	}
 
-
-
 	//Check global agenda events	*/
 	$table_agenda_system = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 	global $_configuration;
@@ -2056,20 +2049,18 @@ function display_agenda_items($select_month, $select_year) {
 	}
 
 
-    //while($myrow = Database::fetch_array($result)) {
    	foreach ($my_events as $myrow) {
     	$is_repeated = !empty($myrow['parent_event_id']);
 	    echo '<table class="data_table">';
-        /*
-        		display: the month bar
-         */
-        // Make the month bar appear only once.
-        $myrow["start_date"] = api_get_local_time($myrow["start_date"], null, date_default_timezone_get());
+        /* display: the month bar */
+        // Make the month bar appear only once.        
+        $myrow["start_date"] = api_get_local_time($myrow["start_date"]);
+        
         if ($month_bar != api_format_date($myrow["start_date"], "%m%Y")) {
             $month_bar = api_format_date($myrow["start_date"], "%m%Y");
             //Showing month header
 			echo '<tr><td class="agenda_month_divider" colspan="3" valign="top">';
-			echo api_format_date($myrow["start_date"], "%B %Y");
+			echo '<h3>'.api_format_date($myrow["start_date"], "%B %Y").'</h3>';
 			echo '</td></tr>';
 		}
 
@@ -2115,7 +2106,6 @@ function display_agenda_items($select_month, $select_year) {
     		echo '</span>';
     	} else {
     		Display::display_icon('platform_event.png', get_lang('Platform'),'',22);//TODO:check whether this still works
-
     		echo '<span style="padding-left:5px; font-size:130%; ">';
     		echo $myrow['title'];
     		echo '</span>';
@@ -2155,7 +2145,7 @@ function display_agenda_items($select_month, $select_year) {
     	if ($myrow['calendar_type'] == 'course') {
     		if ($myrow['end_date']<>'0000-00-00 00:00:00') {
     			echo get_lang('EndTimeWindow').": ";
-    			echo api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get());
+    			echo api_convert_and_format_date($myrow['end_date']);
     		}
     	}
     	echo '</td>';
@@ -2357,32 +2347,25 @@ function display_one_agenda_item($agenda_id)
 	  --------------------------------------------------*/
 	echo "<tr>";
 
-	$myrow["start_date"] = api_get_local_time($myrow["start_date"], null, date_default_timezone_get());
+	$myrow["start_date"] = api_get_local_time($myrow["start_date"]);
 
 	// highlight: if a date in the small calendar is clicked we highlight the relevant items
 	$db_date = (int)api_format_date($myrow["start_date"], "%d").intval(api_format_date($myrow["start_date"], "%m")).api_format_date($myrow["start_date"], "%Y");
-    if ($_GET["day"].$_GET["month"].$_GET["year"] <>$db_date)
-	{
-		if ($myrow['visibility']=='0')
-		{
+    if ($_GET["day"].$_GET["month"].$_GET["year"] <>$db_date) {
+		if ($myrow['visibility']=='0') {
 			$style="data_hidden";
 			$stylenotbold="datanotbold_hidden";
 			$text_style="text_hidden";
-		}
-		else
-		{
+		} else {
 			$style="data";
 			$stylenotbold="datanotbold";
 			$text_style="text";
 		}
-	}
-	else
-	{
+	} else {
 		$style="datanow";
 		$stylenotbold="datanotboldnow";
 		$text_style="textnow";
 	}
-
 
 	echo "<th>";
 
@@ -2393,8 +2376,7 @@ function display_one_agenda_item($agenda_id)
 	// we add the groups icon
 	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
 	echo Display::return_icon('agenda.png','&nbsp;','',22);
-	if ($myrow['to_group_id']!=='0')
-	{
+	if ($myrow['to_group_id']!=='0') {
 		echo Display::return_icon('group.png','&nbsp;','',22);
 	}
 	echo $myrow['title'];
@@ -2413,18 +2395,17 @@ function display_one_agenda_item($agenda_id)
 		    		echo '</th></tr>';
 				}
 	}
-	/*--------------------------------------------------
-	 			DISPLAY: the title
-	  --------------------------------------------------*/
+	
+	/*-DISPLAY: the title */
 	echo "<tr class='row_odd'>";
 	echo "<td>".get_lang("StartTime").": ";
 	echo api_format_date($myrow['start_date']);
 	echo "</td>";
 	echo "<td>".get_lang("EndTime").": ";
-	echo api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get());
+	echo api_convert_and_format_date($myrow['end_date']);
 	echo "</td>";
 
-	/*--------------------------------------------------
+	/*-
 		DISPLAY: edit delete button (course admin only)
 	  --------------------------------------------------*/
 	$export_icon = '../img/export.png';
@@ -2579,11 +2560,13 @@ function show_add_form($id = '') {
 		$content= $item_2_edit['content'];
 
 		// start date
+		$item_2_edit['start_date'] = api_get_local_time($item_2_edit['start_date']);
 		list($datepart, $timepart) = split(" ", $item_2_edit['start_date']);
-		list($year, $month, $day) = explode("-", $datepart);
+		list($year, $month, $day)  = explode("-", $datepart);
 		list($hours, $minutes, $seconds) = explode(":", $timepart);
 
 		// end date
+		$item_2_edit['end_date'] = api_get_local_time($item_2_edit['end_date']);
 		list($datepart, $timepart) = split(" ", $item_2_edit['end_date']);
 		list($end_year, $end_month, $end_day) = explode("-", $datepart);
 		list($end_hours, $end_minutes, $end_seconds) = explode(":", $timepart);
@@ -3069,7 +3052,7 @@ function get_agendaitems($month, $year) {
 	{
 		$agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
 		$agendaday = intval($agendaday_string);
-		$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
+		$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT);
 		$URL = $root_url.'main/calendar/agenda.php?cidReq='.$mycourse['id']."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 		$items[$agendaday][$item['start_time']] .= '<i>'.$time.'</i> <a href="'.$URL.'" title="'.$mycourse['name'].'">'.$mycourse['official_code'].'</a> '.$item['title'].'<br />';
 	}
@@ -3116,11 +3099,9 @@ function display_upcoming_events() {
 						ORDER BY start_date ";
 	}
 	// if the user is not an administrator of that course
-	else
-	{
+	else  {
 		//echo "GEEN course admin";
-		if (is_array($group_memberships) and count($group_memberships)>0)
-		{
+		if (is_array($group_memberships) and count($group_memberships)>0) {
 			$sqlquery = "SELECT
 							agenda.*, item_property.*
 							FROM ".$TABLEAGENDA." agenda,
@@ -3132,9 +3113,7 @@ function display_upcoming_events() {
 							AND agenda.start_date > NOW()
 							AND session_id = '".$session_id."'
 							ORDER BY start_date ";
-		}
-		else
-		{
+		} else {
 			$sqlquery = "SELECT
 							agenda.*, item_property.*
 							FROM ".$TABLEAGENDA." agenda,
@@ -3155,12 +3134,13 @@ function display_upcoming_events() {
     	echo '<h4>'.get_lang('UpcomingEvent').'</h4><br />';    	
     	while ($item = Database::fetch_array($result,'ASSOC')) {
     		if ($counter < $number_of_items_to_show) {
-    			echo $item['start_date'],' - ',$item['title'],'<br />';
+    			echo api_get_local_time($item['start_date']),' - ',$item['title'],'<br />';
     			$counter++;
     		}
     	}
 	}
 }
+
 /**
  * This function calculates the startdate of the week (monday)
  * and the enddate of the week (sunday)
@@ -3432,7 +3412,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day) {
 		while ($item = Database::fetch_array($result)) {
 			// in the display_daycalendar function we use $i (ranging from 0 to 47) for each halfhour
 			// we want to know for each agenda item for this day to wich halfhour it must be assigned
-			$item['start_date'] = api_get_local_time($item['start_date'], null, date_default_timezone_get());
+			$item['start_date'] = api_get_local_time($item['start_date']);
 
 			list ($datepart, $timepart) = split(" ", $item['start_date']);
 			list ($year, $month, $day) = explode("-", $datepart);
@@ -3472,8 +3452,6 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day) {
  * Return agenda items of the week
  */
 function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
-	//var_dump( $month, $year, $week );
-	global $_user;
 	global $_configuration;
 	global $setting_agenda_link;
 
@@ -3529,7 +3507,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 									WHERE a.id = i.ref
 									AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
 									AND i.tool='".TOOL_CALENDAR_EVENT."'
-									AND	( i.to_user_id='".$_user['user_id']."' OR i.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+									AND	( i.to_user_id='".api_get_user_id()."' OR i.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 									AND i.visibility='1'
 									ORDER BY a.start_date";
 			} else {
@@ -3540,7 +3518,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 									WHERE a.id = i.ref
 									AND a.start_date>='".$start_filter."' AND a.start_date<='".$end_filter."'
 									AND i.tool='".TOOL_CALENDAR_EVENT."'
-									AND ( i.to_user_id='".$_user['user_id']."' OR i.to_group_id='0')
+									AND ( i.to_user_id='".api_get_user_id()."' OR i.to_group_id='0')
 									AND i.visibility='1'
 									ORDER BY a.start_date";
 			}
@@ -3554,7 +3532,8 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 		while ($item = Database::fetch_array($result)) {
 			$agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
 			$agendaday = intval($agendaday_string);
-			$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
+			$start_time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT);
+			$end_time    = api_convert_and_format_date($item['end_date'], TIME_NO_SEC_FORMAT);
 
 			if ($setting_agenda_link == 'coursecode') {
 				$title=$array_course_info['title'];
@@ -3565,7 +3544,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 
 			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			//Display the events in agenda
-			$items[$agendaday][$item['start_date']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["title"]."\">".$agenda_link."</a>";
+			$items[$agendaday][$item['start_date']] .= "<i>$start_time - $end_time</i> <a href=\"$URL\" title=\"".$array_course_info["title"]."\">".$agenda_link."</a>";
 			$items[$agendaday][$item['start_date']] .= "<div>".$item['title']."</div><br>";
 		}
 	}
@@ -4298,50 +4277,46 @@ function add_year($timestamp,$num=1)
  * @param   int     Parent id (optional)
  * @return  int     The new item's DB ID
  */
-function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date,$to=array(), $parent_id=null,$file_comment='')
-{
-	global $_course;
+function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date,$to=array(), $parent_id=null,$file_comment='') {	
     $user_id    = api_get_user_id();
 
     // database table definitions
-    $t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
+    $t_agenda                = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
     $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
     $item_property 			 = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-    // some filtering of the input data
-    $content=stripslashes($content);
-	$title=Database::escape_string($title);
-	$content = Database::escape_string($content);
+    // some filtering of the input data    
+	$title      = Database::escape_string($title);
+	$content    = Database::escape_string($content);
+	$db_start_date = api_get_utc_datetime($db_start_date);
     $start_date = Database::escape_string($db_start_date);
-    $end_date   = Database::escape_string($db_end_date);
-    isset($_SESSION['id_session'])?$id_session=intval($_SESSION['id_session']):$id_session=null;
-    // store in the table calendar_event
+    
+    $db_end_date = api_get_utc_datetime($db_end_date);
+    $end_date   = Database::escape_string($db_end_date);    
+    $id_session = api_get_session_id();
 
     // check if exists in calendar_event table and if it is not deleted!
     $sql = "SELECT * FROM $t_agenda agenda, $item_property item_property
-    			WHERE agenda.title='$title'
-    			AND agenda.content = '$content'
-    			AND agenda.start_date = '$start_date'
-    			AND agenda.end_date = '$end_date' ".(!empty($parent_id)? "
-    			AND agenda.parent_event_id = '$parent_id'":"")."
-    			AND agenda.session_id = '$id_session'
-    			AND item_property.tool = '".TOOL_CALENDAR_EVENT."'
+    			WHERE agenda.title   ='$title'
+    			AND agenda.content           = '$content'
+    			AND agenda.start_date        = '$start_date'
+    			AND agenda.end_date          = '$end_date' ".(!empty($parent_id)? "
+    			AND agenda.parent_event_id   = '$parent_id'":"")."
+    			AND agenda.session_id        = '$id_session'
+    			AND item_property.tool       = '".TOOL_CALENDAR_EVENT."'
     			AND item_property.ref = agenda.id
-    			AND item_property.visibility <> 2
-    			";
+    			AND item_property.visibility <> 2";
     $result = Database::query($sql);
     $count = Database::num_rows($result);
     if ($count > 0) {
     	return false;
     }
 
-    $sql = "INSERT INTO ".$t_agenda."
-                            (title,content, start_date, end_date".(!empty($parent_id)?',parent_event_id':'').", session_id)
-                            VALUES
-                            ('".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id)?','.((int)$parent_id):'').", '".$id_session."')";
+    $sql = "INSERT INTO ".$t_agenda." (title,content, start_date, end_date".(!empty($parent_id)?',parent_event_id':'').", session_id)
+            VALUES('".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id)?','.((int)$parent_id):'').", '".$id_session."')";
 
-    $result = Database::query($sql) or die (Database::error());
-    $last_id=Database::insert_id();
+    $result  = Database::query($sql) or die (Database::error());
+    $last_id = Database::insert_id();
 
     // add a attachment file in agenda
 
@@ -4353,19 +4328,15 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     {
         $send_to=separate_users_groups($to);
         // storing the selected groups
-        if (is_array($send_to['groups']))
-        {
-            foreach ($send_to['groups'] as $group)
-            {
+        if (is_array($send_to['groups'])) {
+            foreach ($send_to['groups'] as $group) {
                 api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, $group,0,$start_date, $end_date);
                 $done = true;
             }
         }
         // storing the selected users
-        if (is_array($send_to['users']))
-        {
-            foreach ($send_to['users'] as $user)
-            {
+        if (is_array($send_to['users'])) {
+            foreach ($send_to['users'] as $user) {
                 api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id,0,$user, $start_date,$end_date);
                 $done = true;
             }
@@ -4389,7 +4360,6 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
  *
  */
 function delete_attachment_file($id_attach) {
-
 	global $_course;
 	$agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
 	$id_attach=Database::escape_string($id_attach);
@@ -4400,7 +4370,7 @@ function delete_attachment_file($id_attach) {
 	// update item_property
 	api_item_property_update($_course, 'calendar_event_attachment', $id_attach ,'AgendaAttachmentDeleted', api_get_user_id());
 	if (!empty($result)) {
-	Display::display_confirmation_message(get_lang("AttachmentFileDeleteSuccess"));
+	   Display::display_confirmation_message(get_lang("AttachmentFileDeleteSuccess"));
 	}
 }
 
@@ -4414,8 +4384,8 @@ function add_agenda_attachment_file($file_comment,$last_id) {
 
 	global $_course;
 	$agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
+	$last_id = intval($last_id);
 	// Storing the attachments
-
     if(!empty($_FILES['user_upload']['name'])) {
 		$upload_ok = process_uploaded_file($_FILES['user_upload']);
 	}
@@ -4442,7 +4412,7 @@ function add_agenda_attachment_file($file_comment,$last_id) {
 				// Storing the attachments if any
 				if ($result) {
 					$sql='INSERT INTO '.$agenda_table_attachment.'(filename,comment, path,agenda_id,size) '.
-						 "VALUES ( '".$safe_file_name."', '".$safe_file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".$_FILES['user_upload']['size']."' )";
+						 "VALUES ( '".$safe_file_name."', '".$safe_file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".intval($_FILES['user_upload']['size'])."' )";
 					$result=Database::query($sql);
 					$message.=' / '.get_lang('FileUploadSucces').'<br />';
 
@@ -4459,7 +4429,7 @@ function add_agenda_attachment_file($file_comment,$last_id) {
  * @param int Agenda Id
  *  @param int attachment file Id
  */
-function edit_agenda_attachment_file($file_comment,$agenda_id,$id_attach) {
+function edit_agenda_attachment_file($file_comment, $agenda_id, $id_attach) {
 
 	global $_course;
 	$agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
@@ -4492,10 +4462,9 @@ function edit_agenda_attachment_file($file_comment,$agenda_id,$id_attach) {
 				$safe_id_attach = (int)$id_attach;
 				// Storing the attachments if any
 				if ($result) {
-					$sql="UPDATE $agenda_table_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', agenda_id = '$safe_agenda_id', size ='".$_FILES['user_upload']['size']."'
+					$sql="UPDATE $agenda_table_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', agenda_id = '$safe_agenda_id', size ='".intval($_FILES['user_upload']['size'])."'
 						   WHERE id = '$safe_id_attach'";
 					$result=Database::query($sql);
-
 					api_item_property_update($_course, 'calendar_event_attachment', $safe_id_attach ,'AgendaAttachmentUpdated', api_get_user_id());
 
 				}
@@ -4513,31 +4482,30 @@ function edit_agenda_attachment_file($file_comment,$agenda_id,$id_attach) {
  * @param 	string  a comment about a attachment file into agenda
  * @return  boolean False if error, True otherwise
  */
-function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$file_comment='')
-{
+function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$file_comment='') {
 	$t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
     $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);
-    //$sql = "SELECT title, content, UNIX_TIMESTAMP(start_date) as sd, UNIX_TIMESTAMP(end_date) as ed FROM $t_agenda WHERE id = $orig_id";
+
     $sql = 'SELECT title, content, start_date as sd, end_date as ed FROM '. $t_agenda.' WHERE id ="'.Database::escape_string($orig_id).'" ';
     $res = Database::query($sql);
     if(Database::num_rows($res)!==1){return false;}
     $row = Database::fetch_array($res);
-    //$orig_start = $row['sd'];
-    $orig_start = mktime(substr($row['sd'],11,2),substr($row['sd'],14,2),substr($row['sd'],17,2),substr($row['sd'],5,2),substr($row['sd'],8,2),substr($row['sd'],0,4));
-    //$orig_end   = $row['ed'];
-    $orig_end   = mktime(substr($row['ed'],11,2),substr($row['ed'],14,2),substr($row['ed'],17,2),substr($row['ed'],5,2),substr($row['ed'],8,2),substr($row['ed'],0,4));
-    $diff = $orig_end - $orig_start;
-    $orig_title = $row['title'];
-    $orig_content = $row['content'];
-    $now = time();
-    $type = Database::escape_string($type);
-    $end = (int) $end;
-    if(1<=$end && $end<=500)
-    {
+    $orig_start = api_strtotime(api_get_local_time($row['sd']));
+    //$orig_start = mktime(substr($row['sd'],11,2),substr($row['sd'],14,2),substr($row['sd'],17,2),substr($row['sd'],5,2),substr($row['sd'],8,2),substr($row['sd'],0,4));
+    $orig_end   = api_strtotime(api_get_local_time($row['ed']));
+    //$orig_end   = mktime(substr($row['ed'],11,2),substr($row['ed'],14,2),substr($row['ed'],17,2),substr($row['ed'],5,2),substr($row['ed'],8,2),substr($row['ed'],0,4));
+        
+    $diff           = $orig_end - $orig_start;
+    $orig_title     = $row['title'];
+    $orig_content   = $row['content'];
+    $now            = time();
+    $type           = Database::escape_string($type);
+    $end            = intval($end);
+    
+    if (1<=$end && $end<=500) {
     	//we assume that, with this type of value, the user actually gives a count of repetitions
         //and that he wants us to calculate the end date with that (particularly in case of imports from ical)
-        switch($type)
-        {
+        switch($type) {
             case 'daily':
                 $end = $orig_start + (86400*$end);
                 break;
@@ -4558,30 +4526,25 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$fil
                 break;
         }
     }
-    if($end > $now
-        && in_array($type,array('daily','weekly','monthlyByDate','monthlyByDay','monthlyByDayR','yearly')))
-    {
-       $sql = "INSERT INTO $t_agenda_r (cal_id, cal_type, cal_end)" .
-            " VALUES ($orig_id,'$type',$end)";
+    
+    if ($end > $now
+        && in_array($type,array('daily','weekly','monthlyByDate','monthlyByDay','monthlyByDayR','yearly'))) {
+       $sql = "INSERT INTO $t_agenda_r (cal_id, cal_type, cal_end) VALUES ('$orig_id','$type',$end)";
        $res = Database::query($sql);
-        switch($type)
-        {
+        switch($type) {
             case 'daily':
-                for($i = $orig_start + 86400; ($i <= $end); $i += 86400)
-                {
+                for($i = $orig_start + 86400; ($i <= $end); $i += 86400) {
                     $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $orig_dest, $orig_id,$file_comment);
                 }
                 break;
             case 'weekly':
-                for($i = $orig_start + 604800; ($i <= $end); $i += 604800)
-                {
+                for($i = $orig_start + 604800; ($i <= $end); $i += 604800) {
                     $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i+$diff), $orig_dest, $orig_id,$file_comment);
                 }
                 break;
             case 'monthlyByDate':
                 $next_start = add_month($orig_start);
-                while($next_start <= $end)
-                {
+                while($next_start <= $end) {
                     $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $orig_dest, $orig_id,$file_comment);
                     $next_start = add_month($next_start);
                 }
@@ -4594,8 +4557,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$fil
                 break;
             case 'yearly':
                 $next_start = add_year($orig_start);
-                while($next_start <= $end)
-                {
+                while($next_start <= $end) {
                     $res = agenda_add_item($course_info, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start+$diff), $orig_dest, $orig_id,$file_comment);
                     $next_start = add_year($next_start);
                 }
@@ -4628,7 +4590,6 @@ function agenda_import_ical($course_info,$file) {
 
     $ve = $ical->getComponent(VEVENT);
 
-
     $ttitle	= $ve->getProperty('summary');
     $title	= api_convert_encoding($ttitle,$charset,'UTF-8');
 
@@ -4660,8 +4621,8 @@ function agenda_import_ical($course_info,$file) {
 
 
     //echo $start_date.' - '.$end_date;
-    $organizer	= $ve->getProperty('organizer');
-    $attendee 	= $ve->getProperty('attendee');
+    $organizer	 = $ve->getProperty('organizer');
+    $attendee 	 = $ve->getProperty('attendee');
     $course_name = $ve->getProperty('location');
     //insert the event in our database
     //var_dump($title,$desc,$start_date,$end_date);
@@ -4672,20 +4633,19 @@ function agenda_import_ical($course_info,$file) {
     	$trans = array('DAILY'=>'daily','WEEKLY'=>'weekly','MONTHLY'=>'monthlyByDate','YEARLY'=>'yearly');
         $freq = $trans[$repeat['FREQ']];
         $interval = $repeat['INTERVAL'];
-        if(isset($repeat['UNTIL']) && is_array($repeat['UNTIL']))
-        {
+        if(isset($repeat['UNTIL']) && is_array($repeat['UNTIL'])) {
             $until = mktime(23,59,59,$repeat['UNTIL']['month'],$repeat['UNTIL']['day'],$repeat['UNTIL']['year']);
             $res = agenda_add_repeat_item($course_info,$id,$freq,$until,$_POST['selectedform']);
         }
         //TODO: deal with count
-        if(!empty($repeat['COUNT']))
-        {
+        if(!empty($repeat['COUNT'])) {
             $count = $repeat['COUNT'];
             $res = agenda_add_repeat_item($course_info,$id,$freq,$count,$_POST['selectedform']);
         }
     }
     return true;
 }
+
 /**
  * This function retrieves one personal agenda item returns it.
  * @param	array	The array containing existing events. We add to this array.
@@ -4701,10 +4661,10 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 
 	$tbl_global_agenda= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 
-	$month=Database::escape_string($month);
-	$year=Database::escape_string($year);
-	$week=Database::escape_string($week);
-	$day=Database::escape_string($day);
+	$month = Database::escape_string($month);
+	$year  = Database::escape_string($year);
+	$week  = Database::escape_string($week);
+	$day   = Database::escape_string($day);
 	// 1. creating the SQL statement for getting the personal agenda items in MONTH view
 
 	global $_configuration;

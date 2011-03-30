@@ -411,6 +411,7 @@ class survey_manager {
 		if (Database::num_rows($res) === 0) {
 			return true;
 		}
+		$new_survey_id = intval($new_survey_id);
 
 		while($row = Database::fetch_array($res, 'ASSOC')){
 			$sql1 = 'INSERT INTO '.$table_survey_question_group.' (name,description,survey_id) VALUES (\''.Database::escape_string($row['name']).'\',\''.Database::escape_string($row['description']).'\',\''.$new_survey_id.'\')';
@@ -799,7 +800,7 @@ class survey_manager {
 	 * @version February 2007
 	 *
 	 * @todo editing of a shared question
-	 */
+	 */ 
 	function save_shared_question($form_content, $survey_data) {
 		global $_course;
 
@@ -1129,6 +1130,7 @@ class survey_manager {
 	 */
 	function delete_all_survey_answers($survey_id) {
 		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
+		$survey_id = intval($survey_id);
 		Database::query('DELETE FROM '.$table_survey_answer.' WHERE survey_id='.$survey_id);
 		return true;
 	}
@@ -1369,14 +1371,14 @@ class survey_question {
 			$message = survey_manager::save_question($form_content);
 
 			if ($message == 'QuestionAdded' || $message == 'QuestionUpdated' ) {
-				$sql='SELECT COUNT(*) FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION).' WHERE survey_id = '.(int)$_GET['survey_id'];
+				$sql='SELECT COUNT(*) FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION).' WHERE survey_id = '.intval($_GET['survey_id']);
 				$res = Database :: fetch_array (Database::query($sql));
 
 				if ($config['survey']['debug']) {
 					Display :: display_header();
-					Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.get_lang('Survey').'</a>', false);
+					Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="survey.php?survey_id='.intval($_GET['survey_id']).'">'.get_lang('Survey').'</a>', false);
 				} else {
-					header('Location:survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'&message='.$message);
+					header('Location:survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message);
 					exit();
 				}
 			} else {
@@ -1386,7 +1388,7 @@ class survey_question {
 					$_SESSION['temp_sys_message'] = $message;
 					$_SESSION['temp_answers'] = $form_content['answers'];
 					$_SESSION['temp_values'] = $form_content['values'];
-					header('location:question.php?'.api_get_cidreq().'&question_id='.Security::remove_XSS($_GET['question_id']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'');
+					header('location:question.php?'.api_get_cidreq().'&question_id='.intval($_GET['question_id']).'&survey_id='.intval($_GET['survey_id']).'&action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'');
 				}
 			}
 		}
@@ -1444,7 +1446,7 @@ class survey_question {
 	 * @version January 2007
 	 */
 	function render_question($form_content) {
-		$this->html = '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.Security::remove_XSS($_GET['survey_id']).'">';
+		$this->html = '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.intval($_GET['survey_id']).'">';
 		echo $this->html;
 	}
 }
@@ -2897,7 +2899,7 @@ class SurveyUtil {
 	 */
 	function display_complete_report_row($possible_options, $answers_of_user, $user, $questions, $display_extra_user_fields = false) {
 		global $survey_data;
-
+        $user = Security::remove_XSS($user);
 		$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		echo '<tr>';
 		if ($survey_data['anonymous'] == 0) {
@@ -4027,8 +4029,7 @@ class SurveyUtil {
 
 		// Coach can see that only if the survey is in his session
 		if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
-			$return .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.png', get_lang('Edit'),'',22).'</a>';
-			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>&nbsp;';
+			$return .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.png', get_lang('Edit'),'',22).'</a>';			
 			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean.png', get_lang('EmptySurvey'),'','22').'</a>&nbsp;';
 		}
 		//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
@@ -4036,6 +4037,9 @@ class SurveyUtil {
 		$return .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'),'','22').'</a>&nbsp;';
 		$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('mail_send.png', get_lang('Publish'),'','22').'</a>&nbsp;';
 		$return .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('stats.png', get_lang('Reporting'),'','22').'</a>';
+		if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
+            $return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'),'',22).'</a>&nbsp;';		    
+		}
 		return $return;
 	}
 
@@ -4142,6 +4146,7 @@ class SurveyUtil {
 	 * @return unknown
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @author Julio Montoya <gugli100@gmail.com>, Beeznest - Adding intvals 
 	 * @version January 2007
 	 */
 	function get_survey_data($from, $number_of_items, $column, $direction) {
@@ -4153,6 +4158,12 @@ class SurveyUtil {
 		if ($search_restriction) {
 			$search_restriction = ' AND '.$search_restriction;
 		}
+		$from = intval($from);
+		$number_of_items = intval($number_of_items);
+		$column = intval($column);
+		if (!in_array(strtolower($direction), array('asc', 'desc'))) {
+		    $direction = 'asc';
+		}		
 
 		// Condition for the session
 		$session_id = api_get_session_id();
@@ -4176,8 +4187,7 @@ class SurveyUtil {
 				 , $table_user user
 				 WHERE survey.author = user.user_id
 				 $search_restriction
-				 $condition_session
-				 ";
+				 $condition_session ";
 		$sql .= " GROUP BY survey.survey_id";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
@@ -4207,13 +4217,9 @@ class SurveyUtil {
 	}
 
 	function get_survey_data_for_coach($from, $number_of_items, $column, $direction) {
-		//echo '<pre>';
-		//echo '----------------';
 		require_once api_get_path(LIBRARY_PATH).'surveymanager.lib.php';
 		$survey_tree = new SurveyTree();
 		$last_version_surveys = $survey_tree->get_last_children_from_branch($survey_tree->surveylist);
-		//echo '----------------';
-		//print_r($last_version_surveys);
 		$list = array();
 		foreach ($last_version_surveys as & $survey) {
 			$list[]=$survey['id'];
@@ -4223,6 +4229,13 @@ class SurveyUtil {
 		} else {
 			$list_condition = '';
 		}
+		
+	    $from = intval($from);
+        $number_of_items = intval($number_of_items);
+        $column = intval($column);
+        if (!in_array(strtolower($direction), array('asc', 'desc'))) {
+            $direction = 'asc';
+        }       
 
 		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -4270,11 +4283,11 @@ class SurveyUtil {
 		global $_course;
 
 		// Database table definitions
-		$table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+		$table_survey_question   = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
-		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
-		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
-		$table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
+		$table_survey_answer     = Database :: get_course_table(TABLE_SURVEY_ANSWER);
+		$table_survey 			 = Database :: get_course_table(TABLE_SURVEY);
+		$table_user 			 = Database :: get_main_table(TABLE_MAIN_USER);
 		$all_question_id = array();
 
 		$sql = 'SELECT question_id from '.$table_survey_question;

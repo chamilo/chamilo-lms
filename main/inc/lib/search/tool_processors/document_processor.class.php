@@ -58,42 +58,46 @@ class document_processor extends search_processor {
      * Get document information
      */
     private function get_information($course_id, $doc_id) {
-        $doc_table = Database::get_course_table_from_code($course_id, TABLE_DOCUMENT);
-        $item_property_table = Database::get_course_table_from_code($course_id, TABLE_ITEM_PROPERTY);
-		$doc_id = Database::escape_string($doc_id);
-        $sql = "SELECT *
-          FROM       $doc_table
-          WHERE      $doc_table.id = $doc_id
-          LIMIT 1";
-        $dk_result = Database::query ($sql);
-
-        $sql = "SELECT insert_user_id
-          FROM       $item_property_table
-          WHERE      ref = $doc_id
-                     AND tool = '". TOOL_DOCUMENT ."'
-          LIMIT 1";
-
-        $name = '';
-        if ($row = Database::fetch_array ($dk_result)) {
-            $name = $row['title'];
-            $url = api_get_path(WEB_PATH) . 'courses/%s/document%s';
-            $url = sprintf($url, api_get_course_path($course_id), $row['path']);
-            // Get the image path
-            include_once api_get_path(LIBRARY_PATH). 'fileDisplay.lib.php';
-            $icon = choose_image(basename($row['path']));
-            $thumbnail = api_get_path(WEB_CODE_PATH) .'img/'. $icon;
-            $image = $thumbnail;
-            //FIXME: use big images
-            // get author
-            $author = '';
-            $item_result = Database::query ($sql);
-            if ($row = Database::fetch_array ($item_result)) {
-                $user_data = api_get_user_info($row['insert_user_id']);
-                $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
-            }
+        $course_information     = api_get_course_info($course_id);
+        if (!empty($course_information)) {
+            $item_property_table    = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_information['db_name']);
+            $doc_table              = Database::get_course_table(TABLE_DOCUMENT, $course_information['db_name']);               
+            
+    		$doc_id = Database::escape_string($doc_id);
+            $sql = "SELECT *
+              FROM       $doc_table
+              WHERE      $doc_table.id = $doc_id
+              LIMIT 1";
+            $dk_result = Database::query ($sql);
+    
+            $sql = "SELECT insert_user_id
+              FROM       $item_property_table
+              WHERE      ref = $doc_id
+                         AND tool = '". TOOL_DOCUMENT ."'
+              LIMIT 1";
+    
+            $name = '';
+            if ($row = Database::fetch_array ($dk_result)) {
+                $name = $row['title'];
+                $url = api_get_path(WEB_PATH) . 'courses/%s/document%s';
+                $url = sprintf($url, api_get_course_path($course_id), $row['path']);
+                // Get the image path
+                include_once api_get_path(LIBRARY_PATH). 'fileDisplay.lib.php';
+                $icon = choose_image(basename($row['path']));
+                $thumbnail = api_get_path(WEB_CODE_PATH) .'img/'. $icon;
+                $image = $thumbnail;
+                //FIXME: use big images
+                // get author
+                $author = '';
+                $item_result = Database::query ($sql);
+                if ($row = Database::fetch_array ($item_result)) {
+                    $user_data = api_get_user_info($row['insert_user_id']);
+                    $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
+                }
+            }    
+            return array($thumbnail, $image, $name, $author, $url); // FIXME: is it posible to get an author here?
+        } else {
+            return array();
         }
-
-        return array($thumbnail, $image, $name, $author, $url); // FIXME: is it posible to get an author here?
     }
 }
-?>

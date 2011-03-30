@@ -158,9 +158,9 @@ class SortableTable extends HTML_Table {
 		$this->total_number_of_items               = -1;
 		$this->get_total_number_function           = $get_total_number_function;
 		$this->get_data_function                   = $get_data_function;
-		$this->column_filters                      = array ();
-		$this->form_actions                        = array ();
-		$this->checkbox_name                         = null;
+		$this->column_filters                      = array();
+		$this->form_actions                        = array();
+		$this->checkbox_name                       = null;
 		$this->td_attributes = array ();
 		$this->th_attributes = array ();
 		$this->other_tables = array();
@@ -838,7 +838,7 @@ class SortableTableFromArray extends SortableTable {
 	 * @param int $default_column
 	 * @param int $default_items_per_page
 	 */
-	public function __construct ($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename') {
+	public function __construct($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename') {
 		parent :: __construct ($tablename, null, null, $default_column, $default_items_per_page);
 		$this->table_data = $table_data;
 	}
@@ -847,7 +847,7 @@ class SortableTableFromArray extends SortableTable {
 	 * Get table data to show on current page
 	 * @see SortableTable#get_table_data
 	 */
-	public function get_table_data ($from = 1, $sort = true) {
+	public function get_table_data($from = 1, $sort = true) {
 		if ($sort) {
 			$content = TableSort :: sort_table($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC);
 		} else {

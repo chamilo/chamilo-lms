@@ -27,16 +27,17 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extr
 
     try {
         if (!is_object($db)) {            
-            $db = new XapianDatabase(XAPIAN_DB);            
+            $db = new XapianDatabase(XAPIAN_DB);
         }
 
         // Build subqueries from $extra array. Now only used by tags search filter on search widget
         $subqueries = array();
         foreach ($extra as $subquery) {
-          if (!empty($subquery)) {
-            $subqueries[] = new XapianQuery($subquery);
-          }
+            if (!empty($subquery)) {
+                $subqueries[] = new XapianQuery($subquery);
+            }
         }
+        
 
         $query = NULL;
         $enquire = new XapianEnquire($db);
@@ -49,42 +50,52 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extr
           $query_parser->set_database($db);
           $query_parser->set_stemming_strategy(XapianQueryParser::STEM_SOME);
           $query_parser->add_boolean_prefix('courseid', XAPIAN_PREFIX_COURSEID);
-          $query_parser->add_boolean_prefix('toolid', XAPIAN_PREFIX_TOOLID);
+          $query_parser->add_boolean_prefix('toolid',   XAPIAN_PREFIX_TOOLID);
           $query = $query_parser->parse_query($query_string);
-          $query = new XapianQuery(XapianQuery::OP_AND, array_merge($subqueries, array($query)));
-        }
-        else {
-          $query = new XapianQuery(XapianQuery::OP_OR, $subqueries);
+          $final_array = array_merge($subqueries, array($query));          
+          $query = new XapianQuery(XapianQuery::OP_AND, $final_array);          
+        } else {
+            $query = new XapianQuery(XapianQuery::OP_OR, $subqueries);
         }
 
         $enquire->set_query($query);
+        
         $matches = $enquire->get_mset((int)$start, (int)$length);
+        
+        
 
         $specific_fields = get_specific_field_list();
 
         $results = array();
         $i = $matches->begin();
+        
+          // Display the results.
+        //echo $matches->get_matches_estimated().'results found';
+      
+        
         $count = 0;
-        while (!$i->equals($matches->end())) {
-          $count++;
-          $document = $i->get_document();
-          if (is_object($document)) {
-          	// process one item terms
-          	$courseid_terms = xapian_get_doc_terms($document, XAPIAN_PREFIX_COURSEID);
-            $results[$count]['courseid'] = substr($courseid_terms[0]['name'], 1);
-            $toolid_terms = xapian_get_doc_terms($document, XAPIAN_PREFIX_TOOLID);
-            $results[$count]['toolid'] = substr($toolid_terms[0]['name'], 1);
-
-            // process each specific field prefix
-            foreach ($specific_fields as $specific_field) {
-            	$results[$count]['sf-'.$specific_field['code']] = xapian_get_doc_terms($document, $specific_field['code']);
-        	}
-
-            // rest of data
-          	$results[$count]['xapian_data'] = unserialize($document->get_data());
-            $results[$count]['score'] = ($i->get_percent());
-          }
-          $i->next();
+        
+        while (!$i->equals($matches->end())) {                
+            $count++;    
+            $document = $i->get_document();
+            
+            if (is_object($document)) {
+                // process one item terms
+                $courseid_terms = xapian_get_doc_terms($document, XAPIAN_PREFIX_COURSEID);
+                $results[$count]['courseid'] = substr($courseid_terms[0]['name'], 1);
+                $toolid_terms = xapian_get_doc_terms($document, XAPIAN_PREFIX_TOOLID);
+                $results[$count]['toolid'] = substr($toolid_terms[0]['name'], 1);
+                
+                // process each specific field prefix
+                foreach ($specific_fields as $specific_field) {
+                    $results[$count]['sf-'.$specific_field['code']] = xapian_get_doc_terms($document, $specific_field['code']);
+                }
+                
+                // rest of data
+                $results[$count]['xapian_data'] = unserialize($document->get_data());
+                $results[$count]['score'] = ($i->get_percent());
+            }
+            $i->next();
         }
 
         switch ($count_type) {
@@ -101,7 +112,6 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extr
             $count = $matches->get_matches_estimated();
             break;
         }
-
         return array($count, $results);
     } catch (Exception $e) {        
         display_xapian_error($e->getMessage());

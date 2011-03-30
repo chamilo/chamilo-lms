@@ -139,39 +139,41 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
             <input type="hidden" name="type" value="'. $type .'"/>
             <input type="hidden" name="tablename_page_nr" value="1" />
           	'.$submit_button1.'
-            <br /><br />
-            <span class="search-links-box">'. $thesaurus_icon . $advanced_options .'&nbsp;</span>
+            <br /><br />';
+    $list = get_specific_field_list();
+    if(!empty($list)) {        
+        $form = '<span class="search-links-box">'. $advanced_options .'&nbsp;</span>
             <div id="tags" class="tags" style="display:'. $display_thesaurus .';">
                 <div class="search-help-box">'. $help .'</div>
                 <table>
-                <tr>
-            ';
-    $form .= format_specific_fields_selects($sf_terms, $op);
-    $or_checked = '';
-    $and_checked = '';
-    if ($op == 'or') {
-        $or_checked = 'checked="checked"';
-    } else if ($op == 'and') {
-        $and_checked = 'checked="checked"';
+                <tr>';
+        $form .= format_specific_fields_selects($sf_terms, $op);
+        $or_checked = '';
+        $and_checked = '';
+        if ($op == 'or') {
+            $or_checked = 'checked="checked"';
+        } else if ($op == 'and') {
+            $and_checked = 'checked="checked"';
+        }
+        $form .= '
+                    </tr>
+                    <tr>
+                        <td id="operator-select">
+                            '. get_lang('SearchCombineSearchWith') .':<br />
+                            <input type="radio" class="search-operator" name="operator" value="or" '. $or_checked .'>'. api_strtoupper(get_lang('Or')) .'</input>
+                            <input type="radio" class="search-operator" name="operator" value="and" '. $and_checked .'>'. api_strtoupper(get_lang('And')) .'</input>
+                        </td>
+                        <td></td>
+                        <td>
+                            <br />
+                          '.$reset_button.'
+                            '. $submit_button2.'
+                        </td>
+                    </tr>
+                    </table>
+                </div>';
     }
-    $form .= '
-                </tr>
-                <tr>
-                    <td id="operator-select">
-                        '. get_lang('SearchCombineSearchWith') .':<br />
-                        <input type="radio" class="search-operator" name="operator" value="or" '. $or_checked .'>'. api_strtoupper(get_lang('Or')) .'</input>
-                        <input type="radio" class="search-operator" name="operator" value="and" '. $and_checked .'>'. api_strtoupper(get_lang('And')) .'</input>
-                    </td>
-                    <td></td>
-                    <td>
-                        <br />
-                      '.$reset_button.'
-                        '. $submit_button2.'
-                    </td>
-                </tr>
-                </table>
-            </div>
-        </form>
+        $form .='</form>
         <br style="clear: both;"/>
              ';
     return $form;
@@ -198,6 +200,7 @@ function search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, 
 	if (isset($_GET['action']) && strcmp(trim($_GET['action']),'search')===0) {
 		$action='index.php';
 	}
+	
     $form = '
         <form id="dokeos_search" action="'. $action .'" method="GET">
             <input type="text" id="query" name="query" size="40" />
@@ -205,61 +208,66 @@ function search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, 
             <input type="hidden" name="type" value="'. $type .'"/>
             <input type="hidden" name="tablename_page_nr" value="1" />
             <input type="submit" id="submit" value="'. get_lang("Search") .'" />
-            <br /><br />
-            <span class="search-links-box">'. $thesaurus_icon . $advanced_options .'&nbsp;</span>
-            <div id="tags" class="tags" style="display:'. $display_thesaurus .';">
-                <div class="search-help-box">'. $help .'</div>
-                <table>
-                <tr>';
-
-    if (!is_null($prefilter_prefix)) {
-        //sorting the array of terms
-        $temp = array();
-        foreach ($sf_terms[$prefilter_prefix] as $key => $value) {
-            $temp[trim(stripslashes($value['name']))] = $key;
-        }
-        $temp = array_flip($temp);
-        unset($sf_term_array);
-        natcasesort($temp);
-        $sf_term_array = $temp;
-
-        // get specific field name
-        $sf_value = get_specific_field_list(array( 'code' => "'$prefilter_prefix'" ));
-        $sf_value = array_shift($sf_value);
-        $form .= '<label class="sf-select-multiple-title" for="sf_'. $prefix .'[]">'.$icons_for_search_terms[$prefix].' '.$sf_value['name'].'</label><br />';
-
-        $form .= format_one_specific_field_select($prefilter_prefix, $sf_term_array, $op, 'id="prefilter"');
-        $form .= format_specific_fields_selects($sf_terms, $op, $prefilter_prefix);
-    } else {
-        $form .= format_specific_fields_selects($sf_terms, $op);
-    }
-    $or_checked = '';
-    $and_checked = '';
-    if ($op == 'or') {
-        $or_checked = 'checked="checked"';
-    } else if ($op == 'and') {
-        $and_checked = 'checked="checked"';
-    }
-    $form .= '
-                </tr>
-                <tr>
-                    <td id="operator-select">
-                        '. get_lang('SearchCombineSearchWith') .':<br />
-                        <input type="radio" class="search-operator" name="operator" value="or" '. $or_checked .'>'. api_strtoupper(get_lang('Or')) .'</input>
-                        <input type="radio" class="search-operator" name="operator" value="and" '. $and_checked .'>'. api_strtoupper(get_lang('And')) .'</input>
-                    </td>
-                    <td></td>
-                    <td>
-                        <br />
-                        <input class="lower-submit" type="submit" value="'. get_lang('Search') .'" />
-                        <input type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />
-                    </td>
-                </tr>
-                </table>
-            </div>
+            <br /><br />';
+        $list = get_specific_field_list();
+        if(!empty($list)) {
+            $form .=' <span class="search-links-box">'. $thesaurus_icon . $advanced_options .'&nbsp;</span>
+                    <div id="tags" class="tags" style="display:'. $display_thesaurus .';">
+                        <div class="search-help-box">'. $help .'</div>
+                        <table>
+                        <tr>';
+            if (!is_null($prefilter_prefix)) {
+                //sorting the array of terms
+                $temp = array();
+                foreach ($sf_terms[$prefilter_prefix] as $key => $value) {
+                    $temp[trim(stripslashes($value['name']))] = $key;
+                }
+                $temp = array_flip($temp);
+                unset($sf_term_array);
+                natcasesort($temp);
+                $sf_term_array = $temp;
+        
+                // get specific field name
+                $sf_value = get_specific_field_list(array( 'code' => "'$prefilter_prefix'" ));
+                $sf_value = array_shift($sf_value);
+                $form .= '<label class="sf-select-multiple-title" for="sf_'. $prefix .'[]">'.$icons_for_search_terms[$prefix].' '.$sf_value['name'].'</label><br />';
+        
+                $form .= format_one_specific_field_select($prefilter_prefix, $sf_term_array, $op, 'id="prefilter"');
+                $form .= format_specific_fields_selects($sf_terms, $op, $prefilter_prefix);
+            } else {
+                $form .= format_specific_fields_selects($sf_terms, $op);
+            }
+            
+            
+            $or_checked = '';
+            $and_checked = '';
+            if ($op == 'or') {
+                $or_checked = 'checked="checked"';
+            } else if ($op == 'and') {
+                $and_checked = 'checked="checked"';
+            }    
+            $form .= '
+                        </tr>
+                        <tr>
+                            <td id="operator-select">
+                                '. get_lang('SearchCombineSearchWith') .':<br />
+                                <input type="radio" class="search-operator" name="operator" value="or" '. $or_checked .'>'. api_strtoupper(get_lang('Or')) .'</input>
+                                <input type="radio" class="search-operator" name="operator" value="and" '. $and_checked .'>'. api_strtoupper(get_lang('And')) .'</input>
+                            </td>
+                            <td></td>
+                            <td>
+                                <br />
+                                <input class="lower-submit" type="submit" value="'. get_lang('Search') .'" />
+                                <input type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />
+                            </td>
+                        </tr>
+                        </table>
+                    </div>';
+        }    
+       $form .= '
         </form>
-        <br style="clear: both;"/>
-             ';
+        <br style="clear: both;"/>';
+    
     return $form;
 }
 

@@ -76,31 +76,43 @@ foreach ($specific_fields as $specific_field) {
                 }
             }
         }
+    } else {
+        $sf_terms_for_code = xapian_get_all_terms(1000, $specific_field['code']);        
+        foreach ($sf_terms_for_code as $term) {
+            if (!empty($term)) {
+                $term_array[] = dokeos_get_boolean_query($term['name']); // Here name includes prefix.
+            }
+        }
     }
 }
 
 // Get right group of terms to show on multiple select.
 $fixed_queries = array();
 $course_filter = NULL;
-if ( ($cid=api_get_course_id()) != -1 ) {
+if ( ($cid=api_get_course_id()) != -1 ) {    
     // Results only from actual course.
     $course_filter = dokeos_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
 }
-if (count($term_array)) {
+
+if (count($term_array)) {    
     $fixed_queries = dokeos_join_queries($term_array, null, $op);
+    
     if ($course_filter != NULL) {
         $fixed_queries = dokeos_join_queries($fixed_queries, $course_filter, 'and');
     }
 } else {
-    if (!empty($query)) {
+    if (!empty($query)) {        
         $fixed_queries = array($course_filter);
     }
 }
+
+//var_dump($fixed_queries);
 
 list($count, $results) = dokeos_query_query(api_convert_encoding($query, 'UTF-8', $charset), 0, 1000, $fixed_queries);
 
 // Prepare blocks to show.
 $blocks = array();
+
 if ($count > 0) {
     foreach ($results as $result) {
         // Fill the result array.
@@ -122,10 +134,8 @@ if ($count > 0) {
                 $a_prefix .'<img src="'.$result['thumbnail'].'" />'. $a_sufix .'<br />'.$title.'<br />'.$result['author'],
             );
         } else {
-            $title = '<div style="text-align:left;">'. $a_prefix . $result['title']. $a_sufix .(!empty($result['author']) ? $result['author'] : '').'<div>';
-            $blocks[] = array(
-                $title,
-            );
+            $title = '<div style="text-align:left;">'. $a_prefix . $result['title']. $a_sufix .(!empty($result['author']) ? ' '.$result['author'] : '').'<div>';
+            $blocks[] = array($title);
         }
     }
 }
@@ -158,7 +168,7 @@ if (count($blocks) > 0) {
     $s->additional_parameters = $additional_parameters;
 
     if ($mode == 'default') {
-      $s->set_header(0, get_lang(ucfirst(TOOL_SEARCH)));
+        $s->set_header(0, get_lang(ucfirst(TOOL_SEARCH)), false);
     }
 
     $search_link = '<a href="%ssearch/index.php?mode=%s&action=search&query=%s%s">';

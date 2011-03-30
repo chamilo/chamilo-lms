@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 require_once 'xapian.php';
 require_once dirname(__FILE__) . '/../IndexableChunk.class.php';
 
@@ -59,21 +61,19 @@ abstract class XapianIndexer {
             $path = api_get_path(SYS_PATH).'searchdb/';
 
         try {
-          $this->db = new XapianWritableDatabase($path, $dbMode);
-          $this->indexer = new XapianTermGenerator();
+            $this->db = new XapianWritableDatabase($path, $dbMode);
+            $this->indexer = new XapianTermGenerator();
 
-          if (!in_array($lang, $this->xapian_languages())) {
-            $lang = 'english';
-          }
-
-          $this->stemmer = new XapianStem($lang);
-          $this->indexer->set_stemmer($this->stemmer);
-
-          return $this->db;
-        }
-        catch (Exception $e) {
-          Display::display_error_message($e->getMessage());
-          return 1;
+            if (!in_array($lang, $this->xapian_languages())) {
+                $lang = 'english';
+            }
+            $this->stemmer = new XapianStem($lang);
+            $this->indexer->set_stemmer($this->stemmer);
+            
+            return $this->db;
+        } catch (Exception $e) {
+            Display::display_error_message($e->getMessage());
+            return 1;
         }
     }
 
@@ -100,39 +100,37 @@ abstract class XapianIndexer {
      * @return integer  New Xapian document ID or NULL upon failure
      */
     function index() {
-      try {
-        if (!empty($this->chunks)) {
-            foreach ($this->chunks as $chunk) {
-                $doc = new XapianDocument();
-                $this->indexer->set_document($doc);
-                if (!empty($chunk->terms)) {
-                    foreach ($chunk->terms as $term) {
-                        /* FIXME: think of getting weight */
-                        $doc->add_term($term['flag'] . $term['name'], 1);
+        try {
+            if (!empty($this->chunks)) {                
+                foreach ($this->chunks as $chunk) {
+                    $doc = new XapianDocument();
+                    $this->indexer->set_document($doc);
+                    if (!empty($chunk->terms)) {
+                        foreach ($chunk->terms as $term) {
+                            /* FIXME: think of getting weight */
+                            $doc->add_term($term['flag'] . $term['name'], 1);
+                        }
                     }
+        
+                    // free-form index all data array (title, content, etc)
+                    if (!empty($chunk->data)) {
+                        foreach ($chunk->data as $key => $value) {
+                            $this->indexer->index_text($value, 1);
+                        }
+                    }    
+                    $doc->set_data($chunk->xapian_data, 1);    
+                    $did = $this->db->add_document($doc);
+        
+                    //write to disk
+                    $this->db->flush();
+        
+                    return $did;
                 }
-    
-                // free-form index all data array (title, content, etc)
-                if (!empty($chunk->data)) {
-                    foreach ($chunk->data as $key => $value) {
-                        $this->indexer->index_text($value, 1);
-                    }
-                }    
-                $doc->set_data($chunk->xapian_data, 1);    
-                $did = $this->db->add_document($doc);
-    
-                //write to disk
-                $this->db->flush();
-    
-                return $did;
             }
+        } catch (Exception $e) {
+            Display::display_error_message($e->getMessage());
+            exit(1);
         }
-      }
-      catch (Exception $e) {
-        Display::display_error_message($e->getMessage());
-        exit(1);
-      }
-
     }
 
     /**
@@ -204,16 +202,16 @@ abstract class XapianIndexer {
      * @param int   did     Xapian::docid
      */
     function remove_document($did) {
-      if ($this->db == NULL) {
-        $this->connectDb();
-      }
-      if (is_numeric($did) && $did>0) {
-          $doc = $this->get_document($did);
-          if ($doc !== FALSE) {
-              $this->db->delete_document($did);
-              $this->db->flush();
-          }
-      }
+        if ($this->db == NULL) {
+            $this->connectDb();
+        }
+        if (is_numeric($did) && $did>0) {
+            $doc = $this->get_document($did);
+            if ($doc !== FALSE) {
+                $this->db->delete_document($did);
+                $this->db->flush();
+            }
+        }
     }
 
     /**
@@ -295,4 +293,3 @@ abstract class XapianIndexer {
         unset($this->stemmer);
     }
 }
-?>

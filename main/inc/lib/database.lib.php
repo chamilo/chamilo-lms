@@ -441,17 +441,19 @@ class Database {
      *
      * @param string $course_code
      * @param string $table the name of the table
+     * @todo this function should be deprecated use api_get_course_info() and then get_course_table() 
      */
     public static function get_course_table_from_code($course_code, $table) {
         $course_table = self::get_main_table(TABLE_MAIN_COURSE);
         $course_cat_table = self::get_main_table(TABLE_MAIN_CATEGORY);
-        $result = self::fetch_array(self::query(
-            "SELECT $course_table.db_name, $course_cat_table.code
+        $sql = "SELECT $course_table.db_name, $course_cat_table.code
             FROM $course_table
                 LEFT JOIN $course_cat_table
                     ON $course_table.category_code =  $course_cat_table.code
             WHERE $course_table.code = '$course_code'
-            LIMIT 1"));
+            LIMIT 1"; 
+       
+        $result = self::fetch_array(self::query($sql));
         return sprintf("%s.%s", $result[0], $table);
     }
 

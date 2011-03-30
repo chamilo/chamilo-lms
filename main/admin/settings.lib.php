@@ -564,11 +564,10 @@ function handle_search() {
         }
         $group = array();
         $url =  Display::div(Display::url(get_lang('AddSpecificSearchField'), 'specific_fields.php'), array('class'=>'sectioncomment'));
-        if (empty($sf_values)) {            
+        if (empty($sf_values)) {    
             $form->addElement('html', get_lang('SearchPrefilterPrefix'));
         } else {
-            $form->addElement('select', 'search_prefilter_prefix', get_lang('SearchPrefilterPrefix'), $sf_values, '');
-            
+            $form->addElement('select', 'search_prefilter_prefix', get_lang('SearchPrefilterPrefix'), $sf_values, '');            
             $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
         }   
         $form->addElement('html', $url);                
@@ -617,29 +616,56 @@ function handle_search() {
         $dir_is_writable        = Display::return_icon('bullet_green.gif', get_lang('Ok'));        
         $specific_fields_exists = Display::return_icon('bullet_green.gif', get_lang('Ok'));
         
+        //Testing specific fields
         if (empty($specific_fields)) {
             $specific_fields_exists = Display::return_icon('bullet_red.gif', get_lang('AddSpecificSearchField'));
         }
-        
+        //Testing xapian extension 
         if (!extension_loaded('xapian')) {
             $xapian_loaded = Display::return_icon('bullet_red.gif', get_lang('Error'));
         }
+        //Testing xapian searchdb path
         if (!is_dir($xapian_path)) {
             $dir_exists = Display::return_icon('bullet_red.gif', get_lang('Error'));
         }
+        //Testing xapian searchdb path is writable
         if (!is_writable($xapian_path)) {
             $dir_is_writable = Display::return_icon('bullet_red.gif', get_lang('Error'));   
         }
-        
+               
         $data[] = array(get_lang('XapianModuleInstalled'),$xapian_loaded);
         $data[] = array(get_lang('DirectoryExists').' - '.$xapian_path,$dir_exists);
         $data[] = array(get_lang('IsWritable').' - '.$xapian_path,$dir_is_writable);
-        $data[] = array(get_lang('SpecificSearchFieldsAvailable') ,$specific_fields_exists);        
-        
+        $data[] = array(get_lang('SpecificSearchFieldsAvailable') ,$specific_fields_exists);
+
+        echo Display::tag('h3', get_lang('Settings'));
         $table = new SortableTableFromArray($data);
-        $table->set_header(0,get_lang('Setting'), false);
-        $table->set_header(1,get_lang('Value'), false);
-        echo  $table->display();
+        $table->set_header(0, get_lang('Setting'), false);
+        $table->set_header(1, get_lang('Status'), false);
+        echo  $table->display();    
+       
+        //@todo windows support
+        if (api_is_windows_os() == false) {
+            $list_of_programs = array('pdftotext','ps2pdf', 'catdoc','html2text','unrtf', 'catppt', 'xls2csv');
+            
+            foreach($list_of_programs as $program) {
+                $output = null;
+                exec("which $program", $output, $ret_val);
+                $icon = Display::return_icon('bullet_red.gif', get_lang('NotInstalled'));
+                if (!empty($output[0])) {
+                    $icon = Display::return_icon('bullet_green.gif', get_lang('Installed'));    
+                }
+                $data2[]= array($program, $output[0], $icon);             
+            }            
+            echo Display::tag('h3', get_lang('ProgramsNeededToConvertFiles'));
+            $table = new SortableTableFromArray($data2);
+            $table->set_header(0, get_lang('Program'), false);
+            $table->set_header(1, get_lang('Path'), false);
+            $table->set_header(2, get_lang('Status'), false);
+            echo  $table->display();
+        } else {
+            Display::display_warning_message(get_lang('YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool'));
+        }
     }    
 }
 

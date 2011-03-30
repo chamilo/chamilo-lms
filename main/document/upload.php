@@ -191,60 +191,6 @@ if (!empty($_FILES)) {
     DocumentManager::upload_document($_FILES, $_POST['curdirpath'], $_POST['title'], $_POST['comment'], $_POST['unzip'], $_POST['if_exists'], $_POST['index_document'], true);
 }
 
-// @todo remove this  submit_image ???
-/*
-// Missing images are submitted
-if (isset($_POST['submit_image'])) {
-	$number_of_uploaded_images = count($_FILES['img_file']['name']);
-	//if images are uploaded
-	if ($number_of_uploaded_images > 0) {
-		// We could also create a function for this, I'm not sure...
-		// Create a directory for the missing files
-		$img_directory = str_replace('.', '_', $_POST['related_file'].'_files');
-		$missing_files_dir = create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $img_directory);
-		// Put the uploaded files in the new directory and get the paths
-		$paths_to_replace_in_file = move_uploaded_file_collection_into_directory($_course, $_FILES['img_file'], $base_work_dir, $missing_files_dir, $_user['user_id'], $to_group_id, $to_user_id, $max_filled_space);
-		// Open the html file and replace the paths
-		replace_img_path_in_html_file($_POST['img_file_path'], $paths_to_replace_in_file, $base_work_dir.$_POST['related_file']);
-		// Update parent folders
-		item_property_update_on_folder($_course, $_POST['curdirpath'], $_user['user_id']);
-	}
-}
-*/
-//@todo keep it simple this page should only upload files!
-/*
-// They want to create a directory
-if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
-	$added_slash = ($path=='/') ? '' : '/';
-	$dir_name = $path.$added_slash.replace_dangerous_char($_POST['dirname']);
-	$created_dir = create_unexisting_directory($_course, $_user['user_id'], $to_group_id, $to_user_id, $base_work_dir, $dir_name, $_POST['dirname']);
-	if ($created_dir) {
-		Display::display_confirmation_message(get_lang('DirCr'), false);
-		$path = $created_dir;
-	} else {
-		display_error(get_lang('CannotCreateDir'));
-	}
-}*/
-
-// Tracking not needed here?
-//event_access_tool(TOOL_DOCUMENT);
-
-/* They want to create a new directory */
-/*
-if (isset($_GET['createdir'])) {
-	// create the form that asks for the directory name
-	$new_folder_text = '<form action="'.api_get_self().'" method="POST">';
-	$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$path.'"/>';
-	$new_folder_text .= get_lang('NewDir') .' ';
-	$new_folder_text .= '<input type="text" name="dirname"/>';
-	$new_folder_text .= '<button type="submit" class="save" name="create_dir">'.get_lang('CreateFolder').'</button>';
-	$new_folder_text .= '</form>';
-	// Show the form
-	//Display::display_normal_message($new_folder_text, false);
-
-	echo create_dir_form();
-}*/
-
 // Actions
 echo '<div class="actions">';
 
@@ -290,17 +236,17 @@ $form->addElement('checkbox', 'unzip', get_lang('Options'), get_lang('Uncompress
 
 if (api_get_setting('search_enabled') == 'true') {
 	//TODO: include language file
-	$supported_formats = 'Supported formats for index: Text plain, PDF, Postscript, MS Word, HTML, RTF, MS Power Point';
-	$form -> addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>');
-	$form -> addElement('html', '<br /><div class="row">');
-	$form -> addElement('html', '<div class="label">'.get_lang('SearchFeatureDocumentLanguage').'</div>');
-	$form -> addElement('html', '<div class="formw">'.api_get_languages_combo().'</div>');
-	$form -> addElement('html', '</div><div class="sub-form">');
+	$supported_formats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
+	$form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>');
+	$form->addElement('html', '<br /><div class="row">');
+	$form->addElement('html', '<div class="label">'.get_lang('SearchFeatureDocumentLanguage').'</div>');
+	$form->addElement('html', '<div class="formw">'.api_get_languages_combo().'</div>');
+	$form->addElement('html', '</div><div class="sub-form">');
 	$specific_fields = get_specific_field_list();
 	foreach ($specific_fields as $specific_field) {
-		$form -> addElement('text', $specific_field['code'], $specific_field['name'].' : ');
+		$form->addElement('text', $specific_field['code'], $specific_field['name'].' : ');
 	}
-	$form -> addElement('html', '</div>');
+	$form->addElement('html', '</div>');
 }
 
 $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
@@ -320,9 +266,7 @@ $form->setDefaults($defaults);
 
 $simple_form = $form->return_form();
 
-echo '
-<style>
-
+echo '<style>
 .files {
     border-collapse: collapse;
     margin-top: 10px;
@@ -331,9 +275,7 @@ echo '
 .files td {
     padding: 3px 10px 3px 0;
 }
-
-</style>
-';
+</style>';
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php';
 $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
 $multiple_form .=  '<form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">

@@ -15,8 +15,8 @@
 #submit {
     background-image: url('/main/img/search-lense.gif');
     background-repeat: no-repeat;
-    background-position: 0px -1px;
-    padding-left:18px;
+    background-position: 0px 3px;
+    padding-left:28px;
 }
 .lower-submit {
     float:right;
@@ -39,4 +39,52 @@
 }
 #operator-select {
     padding-right: 0.9em;
+}
+
+
+
+
+.doc_table {
+    width: 30%;
+    text-align: left;
+}
+.doc_img {
+    border: 1px solid black;
+    padding: 1px solid white;
+    background: white;
+}
+.doc_img,
+.doc_img img {
+    width: 120px;
+}
+.doc_text,
+.doc_title {
+    padding-left: 10px;
+    vertical-align: top;
+}
+.doc_title {
+    font-size: large;
+    font-weight: bold;
+    height: 2em;
+}
+.data_table {
+    text-align:center;
+}
+.cls {
+    clear:both
+}
+#search-results-container {
+    width: 940px;
+    border: 1px solid #979797;
+    position: relative;
+    background-image: url('/main/img/search_background_bar.jpg');
+    background-repeat: repeat-x
+}
+#mode-selector {
+    width: 100px;
+    padding: 4px;    
+    top: 0px;
+    z-index: 9;
+	float:left;
+	height:15px;
 }

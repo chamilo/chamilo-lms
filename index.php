@@ -220,7 +220,7 @@ if (!$page_included) {
 echo '</div>';
 
 
-echo '<div class="menu-wrapper">';
+echo '<div id="menu-wrapper">';
 if (!api_is_anonymous()) {
     //  @todo move all this in a class/function
     if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {

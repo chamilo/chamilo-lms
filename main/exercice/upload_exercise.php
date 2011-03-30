@@ -69,12 +69,6 @@ function lp_upload_quiz_actions() {
     $lp_id = Security::remove_XSS($_GET['lp_id']);
     $return = "";
     $return .= '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'','32').'</a>';
-    $return .= '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_exercice.png', get_lang('NewEx'),'','32').'</a>';
-    $return .= '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_question.png', get_lang('AddQ'),'','32').'</a>';
-    $return .= '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'','32').'</a>';
-    // link to import qti2 ...
-    $return .= '<a href="qti2.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'),'','32') .'</a>';
-    $return .= '<a href="upload_exercise.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'),'','32') .'</a>';
     return $return;
 }
 
@@ -94,9 +88,9 @@ function lp_upload_quiz_main() {
  $lp_id = Security::remove_XSS($_GET['lp_id']);
 
  $form = new FormValidator('upload', 'POST', api_get_self() . '?' . api_get_cidreq() . '&lp_id=' . $lp_id, '', 'enctype="multipart/form-data"');
- $form->addElement('html', '<div><h3>' .Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'),array('style'=>'margin-bottom:-2px;'),32). get_lang('ImportExcelQuiz') . '</h3><div><input type="file" name="user_upload_quiz" id="user_upload_quiz_id" size="20" /></div></div>');
+ $form->addElement('html', '<div><h3>' .Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), array('style'=>'margin-bottom:-2px;'),32). get_lang('ImportExcelQuiz') . '</h3><div><input type="file" name="user_upload_quiz" id="user_upload_quiz_id" size="20" /></div></div>');
  //button send document
- $form->addElement('style_submit_button', 'submit_upload_quiz', get_lang('Validate'), 'class="upload"');
+ $form->addElement('style_submit_button', 'submit_upload_quiz', get_lang('Send'), 'class="upload"');
  $form->setDefaults($defaults);
 
   // Display the upload field

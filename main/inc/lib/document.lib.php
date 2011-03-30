@@ -19,19 +19,9 @@ define('DISK_QUOTA_FIELD', 'disk_quota'); //name of the database field
 /** default quota for the course documents folder */
 define('DEFAULT_DOCUMENT_QUOTA', api_get_setting('default_document_quotum'));
 
-/* VARIABLES */
-
-$sys_course_path = api_get_path(SYS_COURSE_PATH);
-$baseServDir = api_get_path(SYS_PATH);
-$baseServUrl = $_configuration['url_append'].'/';
-$baseWorkDir = $sys_course_path.(!empty($courseDir) ? $courseDir : '');
-
-/*		DocumentManager CLASS
-        the class and its functions */
-
-class DocumentManager {
-
-    private function __construct() {
+class DocumentManager {    
+    
+    private function __construct() {        
 
     }
 
@@ -75,7 +65,7 @@ class DocumentManager {
             'ai' => 'application/postscript',
             'aif' => 'audio/x-aiff',
             'aifc' => 'audio/x-aiff',
-               'aiff' => 'audio/x-aiff',
+            'aiff' => 'audio/x-aiff',
             'asf' => 'video/x-ms-asf',
             'asc' => 'text/plain',
             'au' => 'audio/basic',
@@ -982,7 +972,7 @@ class DocumentManager {
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result);
-            return $row[0];
+            return intval($row[0]);
         }
         return false;
     }
@@ -1805,14 +1795,14 @@ class DocumentManager {
     /**
      * Uploads a document
      * 
-     * @param $files
-     * @param $path
-     * @param $title
-     * @param $comment
-     * @param $unzip
-     * @param $if_exists overwrite, rename or warn if exists (default)
-     * @param $index_document
-     * @param $show_output
+     * @param array     the $_FILES variable 
+     * @param string    $path
+     * @param string    title
+     * @param string    comment
+     * @param int       unzip or not the file
+     * @param int       if_exists overwrite, rename or warn if exists (default)
+     * @param bool      index document (search xapian module)
+     * @param bool      print html messages
      * @return unknown_type
      */
     public function upload_document($files, $path, $title = '', $comment = '', $unzip = 0, $if_exists = '', $index_document = false, $show_output = false) {
@@ -1823,9 +1813,9 @@ class DocumentManager {
         }        
         $max_filled_space = self::get_course_quota();
         $course_info      = api_get_course_info();        
-        $courseDir        = $course_info['path'].'/document';
+        $course_dir        = $course_info['path'].'/document';
         $sys_course_path  = api_get_path(SYS_COURSE_PATH);
-        $base_work_dir    = $sys_course_path.$courseDir;
+        $base_work_dir    = $sys_course_path.$course_dir;
              
         if (isset($files['file'])) {
             $upload_ok = process_uploaded_file($files['file']);
@@ -1861,7 +1851,7 @@ class DocumentManager {
                         $result = Database::query("SELECT * FROM $table_document WHERE id = '$docid' LIMIT 1");
                         if (Database::num_rows($result) == 1) {
                             $row = Database::fetch_array($result);
-                            $doc_path = api_get_path(SYS_COURSE_PATH).$courseDir.$row['path'];
+                            $doc_path = api_get_path(SYS_COURSE_PATH).$course_dir.$row['path'];
                             //TODO: mime_content_type is deprecated, fileinfo php extension is enabled by default as of PHP 5.3.0
                             // now versions of PHP on Debian testing(5.2.6-5) and Ubuntu(5.2.6-2ubuntu) are lower, so wait for a while
                             $doc_mime = mime_content_type($doc_path);
@@ -1890,8 +1880,8 @@ class DocumentManager {
                             //@todo move this nightmare in a search controller or something like that!!! J.M
                              
                             if (in_array($doc_mime, $allowed_mime_types) && isset($index_document) && $index_document) {
-                                $file_title = $row['title'];
-                                $file_content = self::get_text_content($doc_path, $doc_mime);
+                                $file_title = $row['title'];                  
+                                $file_content = self::get_text_content($doc_path, $doc_mime);                         
                                 $courseid = api_get_course_id();
                                 $lang = isset($_POST['language']) ? Database::escape_string($_POST['language']) : 'english';
             
@@ -1904,14 +1894,18 @@ class DocumentManager {
                                 $ic_slide->addToolId(TOOL_DOCUMENT);
                                 $xapian_data = array(
                                     SE_COURSE_ID => $courseid,
-                                    SE_TOOL_ID => TOOL_DOCUMENT,
-                                    SE_DATA => array('doc_id' => (int)$docid),
-                                    SE_USER => (int)api_get_user_id(),
+                                    SE_TOOL_ID   => TOOL_DOCUMENT,
+                                    SE_DATA      => array('doc_id' => $docid), 
+                                    SE_USER      => api_get_user_id(),
                                 );
+                                
+                                var_dump($xapian_data);
+                                echo '<pre>';
+                                
                                 $ic_slide->xapian_data = serialize($xapian_data);
                                 $di = new DokeosIndexer();
-                                $di->connectDb(null, null, $lang);
-            
+                                $return = $di->connectDb(null, null, $lang);
+                                   
                                 $specific_fields = get_specific_field_list();
             
                                 // process different depending on what to do if file exists
@@ -1928,11 +1922,12 @@ class DocumentManager {
                                     $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
                                     $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
                                     $sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_DOCUMENT, $docid);
+                              
                                     $res = Database::query($sql);
             
                                     if (Database::num_rows($res) > 0) {
                                         $se_ref = Database::fetch_array($res);
-                                        $di->remove_document((int)$se_ref['search_did']);
+                                        $di->remove_document($se_ref['search_did']);
                                         $all_specific_terms = '';
                                         foreach ($specific_fields as $specific_field) {
                                             delete_all_specific_field_value($courseid, $specific_field['id'], TOOL_DOCUMENT, $docid);
@@ -1950,18 +1945,19 @@ class DocumentManager {
                                         }
                                         // Add terms also to content to make terms findable by probabilistic search
                                         $file_content = $all_specific_terms .' '. $file_content;
+                                        
                                         $ic_slide->addValue('content', $file_content);
                                         $di->addChunk($ic_slide);
                                         // Index and return a new search engine document id
                                         $did = $di->index();
+                                        var_dump($did);
                                         if ($did) {
                                             // update the search_did on db
                                             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
                                             $sql = 'UPDATE %s SET search_did=%d WHERE id=%d LIMIT 1';
                                             $sql = sprintf($sql, $tbl_se_ref, (int)$did, (int)$se_ref['id']);
                                             Database::query($sql);
-                                        }
-            
+                                        }            
                                     }
                                 } else {
                                     // Add all terms

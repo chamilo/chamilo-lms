@@ -144,20 +144,20 @@ echo '<div class="actions">'.$survey_actions.'</div>';
 
 if ($survey_data['survey_type'] == 0) {
 	echo '<div class="actionsbig">';
-	echo '<a style="padding-left:0px;" href="question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$survey_id.'">'.Display::return_icon('yesno.gif', get_lang('YesNo')).'<br/>'.get_lang('YesNo').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$survey_id.'">'.Display::return_icon('mcua.gif', get_lang('UniqueSelect')).'<br />'.get_lang('UniqueSelect').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multipleresponse&amp;survey_id='.$survey_id.'">'.Display::return_icon('mcma.gif', get_lang('MultipleResponse')).'<br />'.get_lang('MultipleResponse').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=open&amp;survey_id='.$survey_id.'">'.Display::return_icon('open_answer.gif', get_lang('Open')).'<br />'.get_lang('Open').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=dropdown&amp;survey_id='.$survey_id.'">'.Display::return_icon('dropdown.gif', get_lang('Dropdown')).'<br />'.get_lang('Dropdown').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=percentage&amp;survey_id='.$survey_id.'">'.Display::return_icon('percentagequestion.gif', get_lang('Percentage')).'<br />'.get_lang('Percentage').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=score&amp;survey_id='.$survey_id.'">'.Display::return_icon('scorequestion.gif', get_lang('Score')).'<br />'.get_lang('Score').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=comment&amp;survey_id='.$survey_id.'">'.Display::return_icon('commentquestion.gif', get_lang('Comment')).'<br />'.get_lang('Comment').'</a>';
-	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=pagebreak&amp;survey_id='.$survey_id.'">'.Display::return_icon('page_end.gif', get_lang('Pagebreak')).'<br />'.get_lang('Pagebreak').'</a>';
+	echo '<a style="padding-left:0px;" href="question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$survey_id.'">'.Display::return_icon('yesno.gif', get_lang('YesNo')).'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$survey_id.'">'.Display::return_icon('mcua.gif', get_lang('UniqueSelect')).'<br /></a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=multipleresponse&amp;survey_id='.$survey_id.'">'.Display::return_icon('mcma.gif', get_lang('MultipleResponse')).'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=open&amp;survey_id='.$survey_id.'">'.Display::return_icon('open_answer.gif', get_lang('Open')).'<br /></a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=dropdown&amp;survey_id='.$survey_id.'">'.Display::return_icon('dropdown.gif', get_lang('Dropdown')).'<br /></a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=percentage&amp;survey_id='.$survey_id.'">'.Display::return_icon('percentagequestion.gif', get_lang('Percentage')).'<br /></a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=score&amp;survey_id='.$survey_id.'">'.Display::return_icon('scorequestion.gif', get_lang('Score')).'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=comment&amp;survey_id='.$survey_id.'">'.Display::return_icon('commentquestion.gif', get_lang('Comment')).'</a>';
+	echo '<a href="question.php?'.api_get_cidreq().'&amp;action=add&type=pagebreak&amp;survey_id='.$survey_id.'">'.Display::return_icon('page_end.gif', get_lang('Pagebreak')).'</a>';
 	echo '</div>';
 } else {
 	echo '<div class="actionsbig">';
 	//echo '<a href="group.php?'.api_get_cidreq().'&amp;action=add&amp;survey_id='.$survey_id.'"><img src="../img/yesno.gif" /><br />'.get_lang('Add groups').'</a></div>';
-	echo '<a style="padding-left:0px;" href="question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$survey_id.'"><img src="../img/yesno.gif" />'.get_lang('PersonalityQuestion').'</a></div>';
+	echo '<a style="padding-left:0px;" href="question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$survey_id.'"><img src="../img/yesno.gif" /></a></div>';
 	echo '</div>';
 }
 

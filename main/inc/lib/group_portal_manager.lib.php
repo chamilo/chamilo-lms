@@ -209,6 +209,53 @@ class GroupPortalManager
       return $arr['group_id'];
     }
   }
+  public static function get_subgroups($root, $level){
+    $t_group = Database::get_main_table(TABLE_MAIN_GROUP);
+    $t_rel_group = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+    $select_part = "SELECT ";
+    $cond_part='';
+    for ($i=1; $i <= $level; $i++) { 
+      $g_number=$i;
+      $rg_number=$i-1;
+      if ( $i == $level) { 
+        $select_part .= "g$i.id as id_$i, g$i.name as name_$i ";
+      } else {
+        $select_part .="g$i.id as id_$i, g$i.name name_$i, ";
+      }
+      if ($i == 1){
+        $cond_part .= "FROM $t_group g1 JOIN $t_rel_group rg0 on g1.id = rg0.subgroup_id and rg0.group_id = $root "; 
+      }else {
+        $cond_part .= "LEFT JOIN $t_rel_group rg$rg_number on g$rg_number.id = rg$rg_number.group_id ";
+        $cond_part .= "LEFT JOIN $t_group g$g_number on rg$rg_number.subgroup_id = g$g_number.id ";
+      }
+    }
+    $sql = $select_part.' '. $cond_part;
+    $res = Database::query($sql);
+    $toreturn = array();
+
+    while ($item = Database::fetch_assoc($res)) { 
+      echo "<pre>";
+        print_r($item);
+      echo "</pre>";
+      
+      foreach ($item as $key => $value ){
+        if ($key == 'id_1') {
+          $toreturn[$value]['name'] = $item['name_1'];
+        } else {
+          $temp =  explode('_',$key);
+          echo "ppp : $index_key - $string_key ppp";
+          $index_key = $temp[1];
+          $string_key = $temp[0];
+          $previous_key = $string_key.'_'.$index_key-1;
+          if ( $string_key == 'id' && isset($item[$key]) ) {
+            echo $previous_key;
+            $toreturn[$item[$previous_key]]['hrms'][$index_key]['name'] = $item['name_'.$index_id];
+          }
+        }
+      }
+    }
+      return $toreturn;
+  }
 
 	/**
 	 * Gets the tags from a given group

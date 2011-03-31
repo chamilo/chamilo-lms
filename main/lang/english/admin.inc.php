@@ -1303,4 +1303,8 @@ $DRHPageAfterLoginTitle =  "After login page for DRH";
 $DRHPageAfterLoginComment = "Leave blank for chamilo default page after login.";
 $SessionAdminPageAfterLoginTitle = "After login page for session admin";
 $SessionAdminPageAfterLoginComment = "Leave blank for chamilo default page after login.";
+$event_title = 'Events notifications manager';
+$GroupParentship = 'Parent group';
+$NoParentship = 'No parent group';
+
 ?>

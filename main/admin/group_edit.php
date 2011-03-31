@@ -79,17 +79,18 @@ if (strlen($group_data['picture_uri']) > 0) {
 	$form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
 }
 
-
-// Status
-$status = array();
+//Group Parentship
 $groups = array();
 $groups = GroupPortalManager::get_groups_list($group_id);
 $groups[0] = get_lang('NoParentship');
 $group_data['parent_group'] = GroupPortalManager::get_parent_group($group_id);
+$form->addElement('select', 'parent_group', get_lang('GroupParentship'), $groups, array());
+
+
+// Status
+$status = array();
 $status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
 $status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
-
-$form->addElement('select', 'parent_group', get_lang('GroupParentship'), $groups, array());
 $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
 
 // Submit button

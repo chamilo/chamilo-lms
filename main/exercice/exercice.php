@@ -118,7 +118,7 @@ if (empty ($file)) {
 }
 $learnpath_id       = intval($_REQUEST['learnpath_id']);
 $learnpath_item_id  = intval($_REQUEST['learnpath_item_id']);
-$page               = intval($_REQUEST['page']);
+$page               = abs(intval($_REQUEST['page']));
 
 if ($origin == 'learnpath') {
 	$show = 'result';
@@ -574,16 +574,16 @@ if ($show == 'test') {
 	echo '<span style="float:right">';
 	//show pages navigation link for previous page
 	if ($page) {
-		echo "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&amp;page=" . ($page -1) . "\">" . Display :: return_icon('previous.gif') . get_lang('PreviousPage') . "</a> | ";
+		echo "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&amp;page=" . ($page -1) . "\">" . Display :: return_icon('action_prev.png') . get_lang('PreviousPage') . "</a> | ";
 	} elseif ($nbrExercises + $nbrNextTests > $limitExPage) {
-		echo Display :: return_icon('previous.gif') . get_lang('PreviousPage') . " | ";
+		echo Display :: return_icon('action_prev_na.png') . get_lang('PreviousPage') . " | ";
 	}
 
 	//show pages navigation link for previous page
 	if ($nbrExercises + $nbrNextTests > $limitExPage) {
-		echo "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&amp;page=" . ($page +1) . "\">" . get_lang("NextPage") . Display :: return_icon('next.gif') . "</a>";
+		echo "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&amp;page=" . ($page +1) . "\">" . get_lang("NextPage") . Display :: return_icon('action_next.png') . "</a>";
 	} elseif ($page) {
-		echo get_lang('NextPage') . Display :: return_icon('next.gif');
+		echo get_lang('NextPage') . Display :: return_icon('action_next_na.png');
 	}
 	echo '</span>';
 }
@@ -832,9 +832,9 @@ if ($show == 'test') {
                     $random_label = '';                    
                     if ($row['random'] > 0) {
                        $random_label = ' ('.get_lang('Random').') ';
-                       $number_of_questions = $row['random'] . ' ' . api_strtolower(get_lang(($row['random'] > 1 ? 'Questions' : 'Question'))) .$random_label;
+                       $number_of_questions = $row['random'] . ' ' . api_strtolower(get_lang(($row['random'] > 1  ? 'Questions' : 'Question'))) .$random_label;
                     } else {                    
-                       $number_of_questions = $rowi . ' ' . api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question')));
+                       $number_of_questions = $rowi . ' ' . api_strtolower(get_lang(($rowi > 1 || $rowi == 0 ? 'Questions' : 'Question')));
                     }                
      
                     //Attempts                    

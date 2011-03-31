@@ -7,6 +7,9 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
+$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$tool_name = get_lang('events_title');
+
 $action = isset($_POST['action'])?$_POST['action']:null;
 $eventId = isset($_POST['eventId'])?$_POST['eventId']:null;
 $eventUsers = isset($_POST['eventUsers'])?$_POST['eventUsers']:null;
@@ -29,7 +32,6 @@ if($action == 'modEventType') {
 
 $ets = eventType_getAll();
 
-$tool_name = get_lang('events_title');
 
 $ajaxPath = api_get_path(WEB_CODE_PATH).'inc/ajax/events.ajax.php';
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';

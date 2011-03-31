@@ -3,12 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@author Thomas Depraetere
- *	@author Hugues Peeters
- *	@author Christophe Gesche
- *	@author Sebastien Piraux
- *	@author Toon Keppens (Vi-Host.net)
- *
  *	@package chamilo.tracking
  */
 
@@ -57,8 +51,8 @@ require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
-require api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
+require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
@@ -88,28 +82,25 @@ $TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_
 $TABLETRACK_LINKS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
 $TABLETRACK_DOWNLOADS   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 $TABLETRACK_ACCESS_2    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-$TABLETRACK_EXERCISES 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TABLETRACK_EXERCISES 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSE_LINKS      = Database::get_course_table(TABLE_LINK);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
-$TABLEQUIZ = Database :: get_course_table(TABLE_QUIZ_TEST);
-
-$tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
-$tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+$table_user             = Database::get_main_table(TABLE_MAIN_USER);
+$TABLEQUIZ              = Database::get_course_table(TABLE_QUIZ_TEST);
+$tbl_learnpath_main     = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_learnpath_item     = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_learnpath_view     = Database::get_course_table(TABLE_LP_VIEW);
+$tbl_learnpath_item_view= Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
-      $interbreadcrumb[] = array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
+    $interbreadcrumb[] = array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
     $interbreadcrumb[] = array('url' => '../admin/session_list.php','name' => get_lang('SessionList'));
     $interbreadcrumb[] = array('url' => '../admin/resume_session.php?id_session='.$_SESSION['id_session'], 'name' => get_lang('SessionOverview'));
 }
 
 $view = (isset($_REQUEST['view']) ? $_REQUEST['view'] : '');
-
-
 $nameTools = get_lang('Tracking');
 
 // Display the header.
@@ -136,6 +127,7 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
     // Fetching only the user that are loaded NOT ALL user in the portal.
     $additional_user_profile_info = TrackingCourseLog::get_addtional_profile_information_of_field_by_user($_GET['additional_profile_field'],$user_array);
 }
+
 
 /* MAIN CODE */
 
@@ -286,9 +278,9 @@ if ($_GET['studentlist'] == 'false') {
     echo '<div class="report_section">
             <h4>'.Display::return_icon('forum.gif', get_lang('Forum')).get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a></h4>
             <table class="data_table">';
-    $count_number_of_posts_by_course = Tracking :: count_number_of_posts_by_course($course_code, $session_id);
-    $count_number_of_forums_by_course = Tracking :: count_number_of_forums_by_course($course_code, $session_id);
-    $count_number_of_threads_by_course = Tracking :: count_number_of_threads_by_course($course_code, $session_id);
+    $count_number_of_posts_by_course    = Tracking :: count_number_of_posts_by_course($course_code, $session_id);
+    $count_number_of_forums_by_course   = Tracking :: count_number_of_forums_by_course($course_code, $session_id);
+    $count_number_of_threads_by_course  = Tracking :: count_number_of_threads_by_course($course_code, $session_id);
     if ($export_csv) {
         $csv_content[] = array(get_lang('Forum'), '');
         $csv_content[] = array(get_lang('ForumForumsNumber', ''), $count_number_of_forums_by_course);
@@ -463,10 +455,11 @@ if ($_GET['studentlist'] == 'false') {
         echo '<h2>'.get_lang('Course').' '.$course_info['name'].'</h2>';
     }    
     $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
+    
     if (!empty($extra_field_select)) {
         echo $extra_field_select;
     }              
-    $form -> display();
+    $form->display();
     // END : form to remind inactives susers
 
     if ($export_csv) {
@@ -501,27 +494,23 @@ if ($_GET['studentlist'] == 'false') {
 
         $table->set_additional_parameters($parameters);
 
-        $table -> set_header(0, get_lang('OfficialCode'), false, 'align="center"');
+        $table->set_header(0, get_lang('OfficialCode'), false, 'align="center"');
         if ($is_western_name_order) {
-            $table -> set_header(1, get_lang('FirstName'), false, 'align="center"');
-            $table -> set_header(2, get_lang('LastName'), false, 'align="center"');
+            $table->set_header(1, get_lang('FirstName'), false, 'align="center"');
+            $table->set_header(2, get_lang('LastName'), false, 'align="center"');
         } else {
-            $table -> set_header(1, get_lang('LastName'), false, 'align="center"');
-            $table -> set_header(2, get_lang('FirstName'), false, 'align="center"');
+            $table->set_header(1, get_lang('LastName'), false, 'align="center"');
+            $table->set_header(2, get_lang('FirstName'), false, 'align="center"');
         }
-        $table -> set_header(3, get_lang('TrainingTime'), false);
-        $table -> set_header(4, get_lang('CourseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
-        $table -> set_header(5, get_lang('Score').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
-        $table -> set_header(6, get_lang('Student_publication'), false);
-        $table -> set_header(7, get_lang('Messages'), false);
-        $table -> set_header(8, get_lang('FirstLogin'), false, 'align="center"');
-        $table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');
-        //if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-            $table -> set_header(10, get_lang('AdditionalProfileField'), false);
-        /*} else {
-            $table -> set_header(10, ,false);
-        }*/
-        $table -> set_header(11, get_lang('Details'), false);
+        $table->set_header(3, get_lang('TrainingTime'), false);
+        $table->set_header(4, get_lang('CourseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        $table->set_header(5, get_lang('Score').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        $table->set_header(6, get_lang('Student_publication'), false);
+        $table->set_header(7, get_lang('Messages'), false);
+        $table->set_header(8, get_lang('FirstLogin'), false, 'align="center"');
+        $table->set_header(9, get_lang('LatestLogin'), false, 'align="center"');
+        $table->set_header(10, get_lang('AdditionalProfileField'), false);
+        $table->set_header(11, get_lang('Details'), false);        
         $table->display();
 
     } else {
@@ -576,7 +565,7 @@ if ($_GET['studentlist'] == 'false') {
     $form->addElement('text', 'keyword', get_lang('keyword'));
     $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
     echo '<div class="actions">';
-        $form->display();
+    $form->display();
     echo '</div>';
 
     $table = new SortableTable('resources', array('TrackingCourseLog', 'count_item_resources'), array('TrackingCourseLog', 'get_item_resources_data'), 5, 20, 'DESC');
@@ -596,7 +585,6 @@ if ($_GET['studentlist'] == 'false') {
     $table->set_header(4, get_lang('Document'), false);
     $table->set_header(5, get_lang('Date'), true, 'width=160px');
     $table->display();
-
 }
 
 Display::display_footer();

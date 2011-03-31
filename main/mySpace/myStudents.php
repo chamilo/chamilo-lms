@@ -297,7 +297,8 @@ if (!empty ($_GET['student'])) {
 		$nb_courses++;
 		$avg_student_progress = Tracking::get_avg_student_progress($info_user['user_id'], $course_id, array(), $session_id);
 		//the score inside the Reporting table
-		$avg_student_score = Tracking::get_avg_student_score($info_user['user_id'], $course_id, array(), $session_id);	
+		$avg_student_score = Tracking::get_avg_student_score($info_user['user_id'], $course_id, array(), $session_id);
+		//var_dump($avg_student_score);	
 	}
 	$avg_student_progress = round($avg_student_progress, 2);
 	
@@ -641,13 +642,13 @@ if ($timezone !== null) {
 				if (!empty($total_time)) $any_result = true;
 			
 				// Quizz in lp                
-				$score = Tracking :: get_avg_student_score($student_id, $course_code, array($lp_id),$session_id);
-                
+				$score = Tracking::get_avg_student_score($student_id, $course_code, array($lp_id),$session_id);
+							                
 				// Latest exercise results in a LP                
                 $score_latest = Tracking :: get_avg_student_score($student_id, $course_code, array($lp_id),$session_id, false, true);
 
-				if ($i % 2 == 0) $css_class = "row_odd";
-				else $css_class = "row_even";
+				if ($i % 2 == 0) $css_class = "row_even";
+				else $css_class = "row_odd";
 		
 				$i++;
 				
@@ -712,8 +713,7 @@ if ($timezone !== null) {
 					echo '</tr>';
 				}				
 				$data_learnpath[$i][] = $lp_name;
-				$data_learnpath[$i][] = $progress . '%';
-				$i++;
+				$data_learnpath[$i][] = $progress . '%';				
 			}
 		} else {
 			echo '<tr><td colspan="6">'.get_lang('NoLearnpath').'</td></tr>';
@@ -758,7 +758,7 @@ if ($timezone !== null) {
 					$count_attempts
 				);
 
-				if ($i % 2 == 0) $css_class = 'row_odd';
+				if ($i % 2) $css_class = 'row_odd';
 				else $css_class = 'row_even';
 
 				echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
@@ -768,7 +768,7 @@ if ($timezone !== null) {
 				if ($count_attempts > 0) {
 					echo $score_percentage . '%';
 				} else {
-					echo '/';
+					echo '-';
 					$score_percentage = 0;
 				}
 
@@ -983,8 +983,7 @@ if ($timezone !== null) {
 				foreach ($courses as $course_code) {
 					if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
 						$course_info = CourseManager :: get_course_information($course_code);
-
-						
+												
 						$time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($info_user['user_id'], $course_code, $session_id));
 						
 						// get average of faults in attendances by student	 						 			
@@ -1041,8 +1040,7 @@ if ($timezone !== null) {
 							$scoretotal_display
 						);
 						
-						echo '
-								<tr>
+						echo '<tr>
 									<td align="right">'.$course_info['title'].'</td>
 									<td align="right">'.$time_spent_on_course .'</td>									
 									<td align="right">'.$progress.'</td>											
@@ -1150,9 +1148,5 @@ if ($export_csv) {
 	Export :: export_table_csv($csv_content, 'reporting_student');
 	exit;
 }
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER  */
 Display :: display_footer();

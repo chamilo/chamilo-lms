@@ -245,8 +245,56 @@ if (defined('SYSTEM_INSTALLATION')) {
                                 error_log('Error in '.$query.': '.Database::error());
                             }
                         }
-                    }
+                    }                    
+                    
+                    $table_lp_item_view = $row_course['db_name'].".lp_item_view";
+                    $table_lp_view = $row_course['db_name'].".lp_view";
+                    $table_lp_item = $row_course['db_name'].".lp_item";                                     
 
+                    if ($singleDbForm) {
+                        $table_lp_item_view = "$prefix{$row_course['db_name']}_lp_item_view";
+                        $table_lp_view = "$prefix{$row_course['db_name']}_lp_view";
+                        $table_lp_item = "$prefix{$row_course['db_name']}_lp_item";                                              
+                    }                    
+                    
+                    // Filling the track_e_exercices.orig_lp_item_view_id field  in order to have better traceability in exercises included in a LP see #3188
+                                     
+                    $query = "SELECT DISTINCT path as exercise_id, lp_item_id, lp_view_id, user_id, v.lp_id 
+                              FROM $table_lp_item_view iv INNER JOIN  $table_lp_view v  ON v.id = iv.lp_view_id INNER JOIN $table_lp_item i ON  i.id = lp_item_id
+                              WHERE item_type = 'quiz'";
+                    $result = Database::query($query);
+                    
+                    if (Database::num_rows($result) > 0) {
+                        while ($row = Database::fetch_array($result,'ASSOC')) {                            
+                            $sql = "SELECT exe_id FROM $dbNameForm.track_e_exercices 
+                                    WHERE exe_user_id = {$row['user_id']} AND 
+                                    exe_cours_id = '{$row_course['code']}' AND 
+                                    exe_exo_id = {$row['exercise_id']}  AND
+                                    orig_lp_id = {$row['lp_id']}  AND 
+                                    orig_lp_item_id = {$row['lp_item_id']} ";
+                            $sub_result = Database::query($sql);
+                            $exe_list = array();
+                            while ($sub_row = Database::fetch_array($sub_result,'ASSOC')) {
+                                $exe_list[] = $sub_row['exe_id'];             
+                            }
+                            
+                            $sql = "SELECT iv.id, iv.view_count
+                                      FROM $table_lp_item_view iv INNER JOIN  $table_lp_view v  ON v.id = iv.lp_view_id INNER JOIN $table_lp_item i ON  i.id = lp_item_id
+                                      WHERE item_type = 'quiz' AND user_id =  {$row['user_id']} AND path = {$row['exercise_id']} ";
+                            $sub_result = Database::query($sql);
+                            $lp_item_view_id_list = array();
+                            while ($sub_row = Database::fetch_array($sub_result,'ASSOC')) {
+                                $lp_item_view_id_list[] = $sub_row['id'];             
+                            } 
+                            $i = 0;
+                            foreach($exe_list as $exe_id) {       
+                                $lp_item_view_id = $lp_item_view_id_list[$i];                         
+                                $update = "UPDATE $dbNameForm.track_e_exercices SET orig_lp_item_view_id  = '$lp_item_view_id' WHERE exe_id = $exe_id ";                                
+                                Database::query($update);                                
+                                $i++;
+                            }                            
+                        }            
+                    }
                 }
             }
             

@@ -109,7 +109,7 @@ function lp_upload_quiz_main() {
  * Handles a given Excel spreadsheets as in the template provided
  */
 function lp_upload_quiz_action_handling() {
-    global $charset, $_course, $_user, $debug;
+    global $_course, $debug;
     if (!isset($_POST['submit_upload_quiz'])) {
         return;
     }
@@ -122,7 +122,7 @@ function lp_upload_quiz_action_handling() {
     // Read the Excel document
     $data = new Spreadsheet_Excel_Reader();
     // Set output Encoding.
-    $data->setOutputEncoding($charset);
+    $data->setOutputEncoding(api_get_system_encoding());
     // Reading the xls document.
     $data->read($_FILES['user_upload_quiz']['tmp_name']);
     // Variables
@@ -219,7 +219,8 @@ function lp_upload_quiz_action_handling() {
         $feedback = 3;
         // Quiz object
         $quiz_object = new Exercise();
-        $quiz_id = $quiz_object->create_quiz($quiz_title, $expired_time, $type, $random, $active, $results, $max_attempt, $feedback);
+        
+        $quiz_id = $quiz_object->create_quiz(utf8_encode($quiz_title), $expired_time, $type, $random, $active, $results, $max_attempt, $feedback);
         // insert into the item_property table
         api_item_property_update($_course, TOOL_QUIZ, $quiz_id, 'QuizAdded', api_get_user_id());
         // Import questions
@@ -227,7 +228,7 @@ function lp_upload_quiz_action_handling() {
             // Create questions
             $question_title = $question[$i][2]; // Question name
             if ($question_title != '') {
-                $question_id = Question::create_question($quiz_id, $question_title);
+                $question_id = Question::create_question($quiz_id, utf8_encode($question_title));
             }
             $unique_answer = new UniqueAnswer();
             if (is_array($new_answer[$i])) {
@@ -248,7 +249,7 @@ function lp_upload_quiz_action_handling() {
                         $comment = $feedback_false_list[$i][2];
                     }
                     // Create answer
-                    $unique_answer->create_answer($id, $question_id, $answer, $comment, $score, $correct);
+                    $unique_answer->create_answer($id, $question_id, utf8_encode($answer), utf8_encode($comment), $score, $correct);
                     $id++;
                 }
             }
@@ -279,7 +280,7 @@ function lp_upload_quiz_action_handling() {
             $previous = $_SESSION['oLP']->select_previous_item_id();
             $parent = 0;
             // Add a Quiz as Lp Item
-            $_SESSION['oLP']->add_item($parent, $previous, TOOL_QUIZ, $quiz_id, $quiz_title, '');
+            $_SESSION['oLP']->add_item($parent, $previous, TOOL_QUIZ, $quiz_id, utf8_encode($quiz_title), '');
             // Redirect to home page for add more content
             header('location: ../newscorm/lp_controller.php?' . api_get_cidreq() . '&action=add_item&type=step&lp_id=' . Security::remove_XSS($_GET['lp_id']).'&session_id='.api_get_session_id());
         } else {

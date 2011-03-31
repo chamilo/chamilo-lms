@@ -13,7 +13,12 @@
 * @todo convert queries to use Database API
 */
 /*	   INIT SECTION */
-$language_file[] = 'events';
+if (is_array($language_file)) { 
+	$language_file[] = 'events';
+}
+else {
+	$language_file = array($laguage_file, 'events');
+}
 
 // REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
 $TABLETRACK_LOGIN 		= $_configuration['statistics_database'].".track_e_login";

@@ -13,12 +13,6 @@
 * @todo convert queries to use Database API
 */
 /*	   INIT SECTION */
-if (is_array($language_file)) { 
-	$language_file[] = 'events';
-}
-else {
-	$language_file = array($laguage_file, 'events');
-}
 
 // REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
 $TABLETRACK_LOGIN 		= $_configuration['statistics_database'].".track_e_login";
@@ -692,12 +686,9 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	}
 
 	//prepare mail common variables
-	if(!$subject) {
-		$subject = get_lang($event_type);
+	if(empty($subject)) {
+		$subject = $event_type;
 	}
-	// if ( $event_type == 'user_created' ){
-		// $subject = "Création d'un utilisateur";
-	// }
 	$mail_subject = '['.api_get_setting('siteName').'] '.$subject;
 	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 	$email_admin = api_get_setting('emailAdministrator');

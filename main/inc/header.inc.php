@@ -94,8 +94,9 @@ if ($show_learn_path) {
     $htmlHeadXtra[] = '<script src="dtree.js" type="text/javascript"></script>'; //will be moved
 }
 
-echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";'."\n";
-echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/course.css";'."\n";
+echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css";';
+echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/course.css";';
+echo '@import "'.api_get_path(WEB_CSS_PATH).'base.css";';
 
 if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
     echo 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } ';

@@ -57,7 +57,6 @@ $TBL_LP_ITEM_VIEW 			= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 $TBL_LP_ITEM 				= Database :: get_course_table(TABLE_LP_ITEM);
 $TBL_LP_VIEW 				= Database :: get_course_table(TABLE_LP_VIEW);
 
-
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
 // picture path
@@ -73,16 +72,12 @@ $exfile = strtolower($exfile[sizeof($exfile) - 1]);
 $exercicePath = substr($exercicePath, 0, strpos($exercicePath, $exfile));
 $exercicePath = $exercicePath . "exercice.php";
 
-
 if ($show == 'result') {    
     if (empty($_GET['exerciseId']) && empty($_GET['path']) ) {
        //header('Location: exercice.php?' . api_get_cidreq());
     }
 }   
     
-// maximum number of exercises on a same page
-$limitExPage = 50;
-
 // Clear the exercise session
 if (isset ($_SESSION['objExercise'])) {
 	api_session_unregister('objExercise');
@@ -118,7 +113,10 @@ if (empty ($file)) {
 }
 $learnpath_id       = intval($_REQUEST['learnpath_id']);
 $learnpath_item_id  = intval($_REQUEST['learnpath_item_id']);
-$page               = abs(intval($_REQUEST['page']));
+$page               = intval($_REQUEST['page']);
+if ($page < 0) {
+    $page = 1;
+}
 
 if ($origin == 'learnpath') {
 	$show = 'result';
@@ -148,18 +146,19 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
     $lp_item_id        = $track_exercise_info['orig_lp_item_id'];
     $lp_item_view_id   = $track_exercise_info['orig_lp_item_view_id'];
     
-	$user_info         = api_get_user_info($student_id);	
-	$student_email 	   = $user_info['mail'];
+    // Teacher data    
+    $teacher_info      = api_get_user_info(api_get_user_id());
     
-	//Teacher data?
-	$from 		       = $_SESSION['_user']['mail'];
-	$from_name         = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
+	$user_info         = api_get_user_info($student_id);	
+	$student_email 	   = $user_info['mail'];    
+	$from 		       = $teacher_info['mail'];
+	$from_name         = api_get_person_name($teacher_info['firstname'], $teacher_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 	$url		       = api_get_path(WEB_CODE_PATH) . 'exercice/exercice.php?' . api_get_cidreq() . '&show=result';	
-	//$total_weighting   = $_REQUEST['totalWeighting'];
 
 	$my_post_info      = array();
 	$post_content_id   = array();
 	$comments_exist    = false;
+	
 	foreach ($_POST as $key_index=>$key_value) {
 		$my_post_info  = explode('_',$key_index);
 		$post_content_id[]=$my_post_info[1];
@@ -189,18 +188,8 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 		$result =Database::query($sql);
 		$ques_name = Database::result($result,0,"question");
 
-		$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks',teacher_comment = '$my_comments' WHERE question_id = '".$my_questionid."' AND exe_id='".$id."'";
+		$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks',teacher_comment = '$my_comments' WHERE question_id = ".$my_questionid." AND exe_id=".$id;
 		Database::query($query);
-        //Not necessary to update the weight
-        /*
-		$qry = 'SELECT sum(marks) as tot FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$id;
-		$res = Database::query($qry);
-		$tot = Database::result($res,0,'tot');                
-		//updating also the total weight
-		$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".intval($tot)."', exe_weighting = '".Database::escape_string($total_weighting)."'
-					 WHERE exe_Id='".$id."'";
-		Database::query($totquery);
-        */
 		
 		//Saving results in the track recording table
 		$recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment) VALUES
@@ -214,9 +203,11 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	while ($row = Database :: fetch_array($res, 'ASSOC')) {
 		$tot += $row['marks'];
 	}
-	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '" . floatval($tot) . "' WHERE exe_id='" . $id . "'";
+	
+	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '" . floatval($tot) . "' WHERE exe_id=" . $id;
     Database::query($totquery);
-         
+    
+    //@todo move this somewhere else
 	$subject = get_lang('ExamSheetVCC');
 	$htmlmessage = '<html>' .
 	'<head>' .
@@ -269,42 +260,13 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$headers = "From:$from_name\r\nReply-to: $to";
 	@api_mail_html($student_email, $student_email, $subject, $mess, $from_name, $from);
     
-    //Updating LP score here
-    
-	if (in_array($origin, array ('tracking_course','user_course','correct_exercise_in_lp'))) {
-        
-        /*
-         * We do not need this because lp_item_view_id comes to the rescue 
-         * 
-		//Checking if this is the lastest attempt
-		$sql = "SELECT exe_id FROM $TBL_TRACK_EXERCICES
-				WHERE exe_user_id = '" . Database :: escape_string($_POST['student_id']) . "' AND exe_cours_id = '" . api_get_course_id() . "' AND orig_lp_id = '$lp_item_id' AND orig_lp_item_id =  '$lp_item_view_id'  AND session_id =  '" . api_get_session_id() . "' AND status = ''
-				ORDER BY exe_id DESC LIMIT 1 ";
-		$res_view_count = Database::query($sql);
-		$res_view_count = Database :: fetch_row($res_view_count);
-		$my_view_count =  intval($res_view_count[0]);
-
-		//Update lp_item_view if this attempts is the latest
-		$sql = "SELECT MAX(view_count) FROM $TBL_LP_ITEM_VIEW
-				WHERE lp_item_id = '" . (int) $lp_item_view_id . "' AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "')";
-		$res_max_view_count = Database::query($sql);
-		$row_max_view_count = Database :: fetch_row($res_max_view_count);
-		$max_view_count =  intval($row_max_view_count[0]);
-
-		//Only update if is the last attempt
-		if ($my_view_count == $_GET['exeid']) {
-			// update score and total_time from last attempt when you qualify the exercise in Learning path detail
-			$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . intval($tot) . "' WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
-			    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "') AND view_count = '$max_view_count'";
-			Database::query($sql_update_score);
-		}*/        
+    //Updating LP score here    
+	if (in_array($origin, array ('tracking_course','user_course','correct_exercise_in_lp'))) {   
         $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . intval($tot) . "' WHERE id = " .$lp_item_view_id;
         Database::query($sql_update_score);
-
 		if ($origin == 'tracking_course') {
 			//Redirect to the course detail in lp
             header('location: exercise.php?course=' . Security :: remove_XSS($_GET['course']));            
-			//header('location: ../mySpace/lp_tracking.php?course=' . api_get_course_id() . '&origin=' . $origin . '&my_lp_id=' . $lp_item_id . '&lp_id=' . $lp_id . '&student_id=' . $student_id.'&extend_attempt=1&from='.Security::remove_XSS($_GET['from']));
 			exit;
 		} else {
 			//Redirect to the reporting
@@ -526,66 +488,62 @@ if ($is_allowedToEdit) {
 }
 
 // Actions div bar
-echo '<div class="actions">';
+if ($is_allowedToEdit) {
+    echo '<div class="actions">';
+} elseif ($show == 'result') {
+    echo '<div class="actions">';
+}
+
+
+// Selects $limit exercises at the same time
+// maximum number of exercises on a same page
+$limit = 50;
 
 // Display the next and previous link if needed
-// Selects $limitExPage exercises at the same time
-$from = $page * $limitExPage;
-$sql = "SELECT count(id) FROM $TBL_EXERCICES";
-$res = Database::query($sql);
-list ($nbrexerc) = Database :: fetch_array($res);
+$from = $page * $limit;
 HotPotGCt($documentPath, 1, api_get_user_id());
 
 //condition for the session
 $session_id         = api_get_session_id();
 $condition_session  = api_get_session_condition($session_id,true,true);
 
-if ($show == 'test') {
-    
+if ($show == 'test') {    
     // Only for administrators
     if ($is_allowedToEdit) {
-        $sql = "SELECT id, title, type, active, description, results_disabled, session_id, start_time, end_time, random, max_attempt FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
-        $result = Database::query($sql);   
+        $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ";
+        $sql = "SELECT * FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT ".$from."," .$limit;
     } else { 
         // Only for students
-        $sql = "SELECT id, title, type, description, results_disabled, session_id, start_time, end_time , max_attempt FROM $TBL_EXERCICES WHERE active='1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
-        $result = Database::query($sql);
+        $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE active = '1' $condition_session ";
+        $sql = "SELECT id, title, type, description, results_disabled, session_id, start_time, end_time, max_attempt FROM $TBL_EXERCICES WHERE active='1' $condition_session ORDER BY title LIMIT ".$from."," .$limit;
     }
-        
-	$nbrExercises = Database :: num_rows($result);
-
+    $result = Database::query($sql);        
+	$exercises_count = Database :: num_rows($result);
+	
+	$result_total = Database::query($total_sql);
+	$total_exercises  = 0;    
+	
+	if (Database :: num_rows($result_total)) {    
+        $result_total = Database::fetch_array($result_total);
+        $total_exercises = $result_total['count'];
+	}
+    
 	//get HotPotatoes files (active and inactive)
-	$res = Database::query("SELECT * FROM $TBL_DOCUMENT WHERE path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'");
-	$nbrTests = Database :: num_rows($res);	
-	$res = Database::query("SELECT * FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-    						WHERE d.id = ip.ref  AND ip.tool = '" . TOOL_DOCUMENT . "'
-    						AND d.path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'
-    						AND ip.visibility='1'");
-	$nbrActiveTests = Database :: num_rows($res);
-
 	if ($is_allowedToEdit) {
-		//if user is allowed to edit, also show hidden HP tests
-		$nbrHpTests = $nbrTests;
+	   $res = Database::query("SELECT * FROM $TBL_DOCUMENT WHERE path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'");
+	   $hp_count = Database :: num_rows($res);
 	} else {
-		$nbrHpTests = $nbrActiveTests;
-	}    
-	$nbrNextTests = $nbrexerc - $nbrHpTests - (($page * $limitExPage));
-
-	echo '<span style="float:right">';
-	//show pages navigation link for previous page
-	if ($page) {
-		echo "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&amp;page=" . ($page -1) . "\">" . Display :: return_icon('action_prev.png') . get_lang('PreviousPage') . "</a> | ";
-	} elseif ($nbrExercises + $nbrNextTests > $limitExPage) {
-		echo Display :: return_icon('action_prev_na.png') . get_lang('PreviousPage') . " | ";
-	}
-
-	//show pages navigation link for previous page
-	if ($nbrExercises + $nbrNextTests > $limitExPage) {
-		echo "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&amp;page=" . ($page +1) . "\">" . get_lang("NextPage") . Display :: return_icon('action_next.png') . "</a>";
-	} elseif ($page) {
-		echo get_lang('NextPage') . Display :: return_icon('action_next_na.png');
-	}
-	echo '</span>';
+    	$res = Database::query("SELECT * FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
+                                WHERE d.id = ip.ref  AND ip.tool = '" . TOOL_DOCUMENT . "'
+                                AND d.path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'
+                                AND ip.visibility='1'");
+       $hp_count = Database :: num_rows($res);    
+	}  
+	
+	$total = $total_exercises + $hp_count;
+	//echo $total.' ' .$total_exercises.' '.$hp_count.' '.$from.' '.$limit.' '.$total/$limit.' '.ceil($total/$limit);
+	
+	
 }
 
 if ($is_allowedToEdit && $origin != 'learnpath') {
@@ -673,7 +631,32 @@ if ($show == 'result') {
 		}
 	}
 }
-echo '</div>'; // closing the actions div
+
+if ($is_allowedToEdit) {
+    echo '</div>'; // closing the actions div
+} elseif ($show == 'result') {
+    echo '</div>'; // closing the actions div
+}
+
+if ($show == 'test') {  
+    if ($total > $limit) {
+        echo '<div style="float:right;height:20px;">';
+        //show pages navigation link for previous page
+        if ($page) {
+            echo "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&amp;page=" . ($page -1) . "\">" . Display :: return_icon('action_prev.png', get_lang('PreviousPage'))."</a>";
+        } elseif ($total_exercises + $hp_count > $limit) {
+            echo Display :: return_icon('action_prev_na.png', get_lang('PreviousPage'));
+        }
+            
+        //show pages navigation link for previous page
+        if ($total_exercises > $from + $limit ||  $hp_count > $from + $limit ) {
+            echo ' '."<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&amp;page=" . ($page +1) . "\">" .Display::return_icon('action_next.png', get_lang('NextPage')) . "</a>";
+        } elseif ($page) {
+            echo ' '.Display :: return_icon('action_next_na.png', get_lang('NextPage'));
+        }
+        echo '</div>';
+    }
+}
 
 if ($show == 'test') {
     ?>    
@@ -724,7 +707,7 @@ if ($show == 'test') {
     if (!empty($exercise_list)) {
         
         //echo '<div id="exercise_tabs" class="tabs-left">';
-        echo '<div>';
+        echo '<div style="float:left;width:100%">';
         //echo Display::tag('ul', $lis);
     
         /*  Listing exercises  */
@@ -778,7 +761,7 @@ if ($show == 'test') {
                 if ($is_allowedToEdit) {
                                     
                     //Showing exercise title
-                    $row['title']=text_filter($row['title']);
+                    $row['title']= text_filter($row['title']);
                     //echo Display::tag('h1',$row['title']);                             
                      
                     if ($session_id == $row['session_id']) {
@@ -787,9 +770,13 @@ if ($show == 'test') {
                     }                                  
                     //echo '<p>';
                     //echo $session_img;
-                    
-                    $url = '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" alt="HotPotatoes" /> '.$row['title'].'</a>';                    
-                    $item =  Display::tag('td',$url.' '.$session_img);  
+                    if ($row['active'] == 0) {
+                        $title = Display::tag('font', $row['title'],array('style'=>'color:grey'));
+                    } else {
+                        $title = $row['title'];
+                    }
+                    $url = '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" alt="HotPotatoes" /> '.$title.'</a>';                    
+                    $item =  Display::tag('td', $url.' '.$session_img);  
                     $exid = $row['id'];
     
                     //count number exercice - teacher
@@ -951,20 +938,20 @@ if ($show == 'test') {
                 $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
                         FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
                         WHERE   d.id = ip.ref AND ip.tool = '" . TOOL_DOCUMENT . "' AND (d.path LIKE '%htm%')
-                        AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' LIMIT " . (int) $from . "," . (int) ($limitExPage +1); // only .htm or .html files listed
+                        AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' LIMIT " .$from . "," .$limit; // only .htm or .html files listed
             } else {
                 $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
                         FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
                         WHERE d.id = ip.ref AND ip.tool = '" . TOOL_DOCUMENT . "' AND (d.path LIKE '%htm%')
-                        AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' AND ip.visibility='1' LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
+                        AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' AND ip.visibility='1' LIMIT " .$from . "," .$limit;
             }
-    
+            
             $result = Database::query($sql);
     
             while ($row = Database :: fetch_array($result, 'ASSOC')) {
-                $attribute['path'][] = $row['path'];
-                $attribute['visibility'][] = $row['visibility'];
-                $attribute['comment'][] = $row['comment'];
+                $attribute['path'][]        = $row['path'];
+                $attribute['visibility'][]  = $row['visibility'];
+                $attribute['comment'][]     = $row['comment'];
             }
             
             $nbrActiveTests = 0;
@@ -1018,7 +1005,9 @@ if ($show == 'test') {
             echo '</div>';
         }         
     } else {
+        echo '<div style="float:left;width:100%">';
         echo Display::display_warning_message(get_lang('NoExercises'));
+        echo '</div>';
     }
     Display :: display_footer();    
     exit;

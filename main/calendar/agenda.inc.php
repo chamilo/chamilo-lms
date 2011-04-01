@@ -59,7 +59,7 @@ $(document).ready(function () {
 */
 function get_calendar_items($month, $year) {
 
-	global $_user, $_course;
+	global $_course;
 	global $is_allowed_to_edit;
 	global $select_month, $select_year;
 	$month	= Database::escape_string($month);
@@ -75,7 +75,7 @@ function get_calendar_items($month, $year) {
         $month_last_day = mktime(0,0,0,1,1,$year+1)-1;
     }
 
-	$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
+	$group_memberships=GroupManager::get_group_ids($_course['dbName'], api_get_user_id());
     $repeats = array();
 
 	//$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
@@ -105,7 +105,7 @@ function get_calendar_items($month, $year) {
 	}
 
 	// by default we use the id of the current user. The course administrator can see the agenda of other users by using the user / group filter
-	$user_id=$_user['user_id'];
+	$user_id=api_get_user_id();
 	if ($_SESSION['user']!==null) {
 		$user_id=intval($_SESSION['user']);
 	}
@@ -214,7 +214,7 @@ function get_calendar_items($month, $year) {
 				$session_condition
 				ORDER BY start_date ".$_SESSION['sort'];
 		} else {
-			if ($_user['user_id']) {
+			if (api_get_user_id()) {
 				$sql="SELECT
 					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
@@ -1013,7 +1013,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 * @return integer the id of the last added agenda item
 */
 function store_new_agenda_item() {
-	global $_user, $_course;
+	global $_course;
 	$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
     $t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
 
@@ -1044,19 +1044,19 @@ function store_new_agenda_item() {
 		// storing the selected groups
 		if (is_array($send_to['groups'])) {
 			foreach ($send_to['groups'] as $group) {
-				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'], $group,'',$start_date, $end_date);
+				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", api_get_user_id(), $group,'',$start_date, $end_date);
 			}
 		}
 		// storing the selected users
 		if (is_array($send_to['users'])) {
 			foreach ($send_to['users'] as $user) {
-				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'],'',$user, $start_date,$end_date);
+				api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", api_get_user_id(),'',$user, $start_date,$end_date);
 			}
 		}
 	}
 	else // the message is sent to everyone, so we set the group to 0
 	{
-		api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", $_user['user_id'], '','',$start_date,$end_date);
+		api_item_property_update($_course, TOOL_CALENDAR_EVENT, $last_id,"AgendaAdded", api_get_user_id(), '','',$start_date,$end_date);
 	}
 	// storing the resources
 	store_resources($_SESSION['source_type'],$last_id);
@@ -1509,18 +1509,21 @@ function display_student_links() {
 	} else {
 		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;action=showcurrent&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('month.png', get_lang("ShowCurrent"),'','32')."</a>";
 	}*/
-
-	if ($_SESSION['view'] <> 'month')
-	{
-		echo "<a href=\"".api_get_self()."?action=view&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=month\">".Display::return_icon('month_empty.png', get_lang('MonthView'),'','32')."</a> ";
+	
+    $day_url = '&month='.intval($_GET['month']).'&year='.intval($_GET['year']);
+	if ($_SESSION['view'] <> 'month') {	    
+		echo "<a href=\"".api_get_self()."?action=view".$day_url."&toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=month\">".Display::return_icon('month_empty.png', get_lang('MonthView'),'','32')."</a> ";
 /*    	if ($_SESSION['sort'] == 'DESC') {
     		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>".Display::return_icon('calendar_normal.png',get_lang('AgendaSortChronologicallyUp'),'','32')."</a> ";
     	} else {
     		echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=desc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;origin=".Security::remove_XSS($_GET['origin'])."'>". Display::return_icon('calendar_inverse.png',get_lang('AgendaSortChronologicallyDown'),'','32')."</a> ";
     	}*/
 	} else {
-		echo "<a href=\"".api_get_self()."?action=view&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list\">".Display::return_icon('week.png', get_lang('ListView'),'','32')."</a> ";
-	}
+		echo "<a href=\"".api_get_self()."?action=view".$day_url."&toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list\">".Display::return_icon('week.png', get_lang('ListView'),'','32')."</a> ";
+	}	
+	$day_url = '&month='.date('m').'&year='.date('Y').'&view='.Security::remove_XSS($_GET['view']);
+	$today_url = api_get_self()."?action=view".$day_url."&toolgroup=".Security::remove_XSS($_GET['toolgroup']);
+	echo Display::url(get_lang('Today'), $today_url );
 }
 
 
@@ -1757,8 +1760,8 @@ function display_agenda_items($select_month, $select_year) {
 	//not used in the function
 	//global $DaysShort, $DaysLong, $MonthsLong;
 	//global $is_courseAdmin;
-	//global $dateFormatLong, $timeNoSecFormat,$charset, $_user, $_course;
-	global $charset, $_user, $_course;
+	//global $dateFormatLong, $timeNoSecFormat,$charset,  $_course;
+	global $charset, $_course;
 
 	// getting the group memberships
 	$group_memberships = GroupManager::get_group_ids($_course['dbName'],api_get_user_id());
@@ -1795,7 +1798,7 @@ function display_agenda_items($select_month, $select_year) {
 	}	
 
 	// by default we use the id of the current user. The course administrator can see the agenda of other users by using the user / group filter
-	$user_id=$_user['user_id'];
+	$user_id=api_get_user_id();
 	if ($_SESSION['user']!==null) {
 		$user_id=intval($_SESSION['user']);
 	}
@@ -1969,7 +1972,7 @@ function display_agenda_items($select_month, $select_year) {
 				$session_condition
 				ORDER BY start_date ".$_SESSION['sort'];
 		} else {
-			if ($_user['user_id']) {
+			if (api_get_user_id()) {
 				$sql="SELECT
 					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
@@ -2288,15 +2291,13 @@ function get_attachment($agenda_id) {
 * Displays only 1 agenda item. This is used when an agenda item is added to the learning path.
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function display_one_agenda_item($agenda_id)
-{
+function display_one_agenda_item($agenda_id) {
 	global $TABLEAGENDA;
 	global $TABLE_ITEM_PROPERTY;
 	global $select_month, $select_year;
 	global $DaysShort, $DaysLong, $MonthsLong;
 	global $is_courseAdmin;
 	global $dateFormatLong, $timeNoSecFormat, $charset;
-	global $_user;
 	//echo "displaying agenda items";
 
 
@@ -2974,7 +2975,6 @@ function show_add_form($id = '') {
 }
 
 function get_agendaitems($month, $year) {
-	global $_user;
 	global $_configuration;
 
 	$items = array ();
@@ -2985,7 +2985,7 @@ function get_agendaitems($month, $year) {
 	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
 	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
-	$group_memberships = GroupManager :: get_group_ids(Database::get_current_course_database(), $_user['user_id']);
+	$group_memberships = GroupManager :: get_group_ids(Database::get_current_course_database(), api_get_user_id());
 	// if the user is administrator of that course we show all the agenda items
 	if (api_is_allowed_to_edit(false,true)) {
 		//echo "course admin";
@@ -3016,7 +3016,7 @@ function get_agendaitems($month, $year) {
 							AND MONTH(agenda.start_date)='".$month."'
 							AND YEAR(agenda.start_date)='".$year."'
 							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-							AND	( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+							AND	( item_property.to_user_id='".api_get_user_id()."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 							AND item_property.visibility='1'
 							ORDER BY start_date ";
 		}
@@ -3030,7 +3030,7 @@ function get_agendaitems($month, $year) {
 							AND MONTH(agenda.start_date)='".$month."'
 							AND YEAR(agenda.start_date)='".$year."'
 							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-							AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
+							AND ( item_property.to_user_id='".api_get_user_id()."' OR item_property.to_group_id='0')
 							AND item_property.visibility='1'
 							ORDER BY start_date ";
 		}
@@ -3346,7 +3346,6 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
  * Show the monthcalender of the given month
  */
 function get_day_agendaitems($courses_dbs, $month, $year, $day) {
-	global $_user;
 	global $_configuration;
 	global $setting_agenda_link;
 
@@ -3388,7 +3387,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day) {
 								WHERE agenda.id = item_property.ref
 								AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 								AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-								AND	( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+								AND	( item_property.to_user_id='".api_get_user_id()."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 								AND item_property.visibility='1'
 								ORDER BY start_date ";
 			} else {
@@ -3399,7 +3398,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day) {
 								WHERE agenda.id = item_property.ref
 								AND DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 								AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-								AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
+								AND ( item_property.to_user_id='".api_get_user_id()."' OR item_property.to_group_id='0')
 								AND item_property.visibility='1'
 								ORDER BY start_date ";
 			}
@@ -4657,7 +4656,7 @@ function agenda_import_ical($course_info,$file) {
  * @return 	array	The results of the database query, or null if not found
  */
 function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "", $week = "", $type) {
-	global $_user, $_configuration;
+	global $_configuration;
 
 	$tbl_global_agenda= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 

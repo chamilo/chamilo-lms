@@ -222,10 +222,15 @@ if (is_array($flat_list)) {
         }
         
         $image='<img src="../img/icons/22/learnpath.png" border="0" align="absmiddle" alt="' . $name . '">';
+        
+        $my_title = $name;
+        if ($details['lp_visibility'] == 0 ) {
+            $my_title = Display::tag('font', $name, array('style'=>'color:grey'));
+        }
         $dsp_line =	'<tr align="center" class="'.$oddclass.'">'.
             '<td align="left" valign="top">' .
             '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_lp.'">' .
-        $image . '</a></div><a href="'.$url_start_lp.'">' . $name . '</a>' . $session_img .$extra.
+        $image . '</a></div><a href="'.$url_start_lp.'">' . $my_title . '</a>' . $session_img .$extra.
             "</td>";
         //$dsp_desc='<td>'.$details['lp_desc'].'</td>'."\n";
         $dsp_desc = '';

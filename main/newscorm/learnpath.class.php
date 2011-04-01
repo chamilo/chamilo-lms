@@ -2685,12 +2685,12 @@ class learnpath {
             // TODO: Complete this.
             $icon_name = array (
                 'not attempted' => '../img/notattempted.gif',
-                'incomplete'    => '../img/incomplete.gif',
-                'failed'        => '../img/failed.gif',
-                'completed'     => '../img/completed.gif',
+                'incomplete'    => '../img/incomplete.png',
+                'failed'        => '../img/delete.png',
+                'completed'     => '../img/completed.png',
                 'passed'        => '../img/passed.gif',
                 'succeeded'     => '../img/succeeded.gif',
-                'browsed'       => '../img/completed.gif'
+                'browsed'       => '../img/completed.png',
             );
 
             $style = 'scorm_item';
@@ -2749,11 +2749,11 @@ class learnpath {
             $count = Database :: num_rows($result);
             if ($item['type'] == 'quiz') {
                 if ($item['status'] == 'completed') {
-                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='12' height='12' />";
+                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14'  />";
                 }
             } else {
                 if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dokeos_module' && $item['type'] != 'dir') {
-                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='12' height='12' />";
+                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14' />";
                 }
             }
 

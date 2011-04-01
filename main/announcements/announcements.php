@@ -105,7 +105,6 @@ if (!empty($_POST['addresources'])) {
 event_access_tool(TOOL_ANNOUNCEMENT);
 
 
-
 /*	POST TO	*/
 
 $safe_emailTitle = $_POST['emailTitle'];
@@ -170,16 +169,14 @@ $htmlHeadXtra[] = AnnouncementManager::to_javascript();
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#emailTitle").focus();
+    $("#emailTitle").focus();
 }
 $(document).ready(function () {
   setFocus();
 });
 </script>';
 
-/*
-	Filter user/group
-*/
+/*	Filter user/group */
 
 if(!empty($_GET['toolgroup'])){
 	if($_GET['toolgroup'] == strval(intval($_GET['toolgroup']))){ //check is integer
@@ -191,10 +188,7 @@ if(!empty($_GET['toolgroup'])){
 	api_session_register("toolgroup");
 }
 
-
-/*
-	Sessions
-*/
+/*	Sessions */
 
 $ctok = $_SESSION['sec_token'];
 $stok = Security::get_token();
@@ -235,19 +229,7 @@ if (!empty($_SESSION['toolgroup'])){
 	$group_properties  = GroupManager :: get_group_properties($_clean_toolgroup);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_clean_toolgroup, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
-} else {
-	/*
-	if($surveyid) {
-		$interbreadcrumb[] = array ("url" => "../survey/survey_list.php?cidReq=$cidReq", "name" => get_lang('ToolSurvey'));
-		$nameTools = get_lang('PublishSurvey');
-	} else {
-		$nameTools = get_lang('ToolAnnouncement');
-		$nameTools12 = get_lang('PublishSurvey');
-	}
-	*/
 }
-
-
 
 /*
 	Learning path & css
@@ -271,9 +253,7 @@ if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 // inserting an anchor (top) so one can jump back to the top of the page
 echo "<a name=\"top\"></a>";
 
-/*
-		ACTION HANDLING
-*/
+/*		ACTION HANDLING*/
 
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 /*
@@ -417,12 +397,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 				Database::query("UPDATE $tbl_announcement " .
 						"SET display_order = '$thisAnnouncementOrder' " .
 						"WHERE id =  '$nextAnnouncementId.'");
-
 				break;
 			}
-
 			// STEP 1 : FIND THE ORDER OF THE ANNOUNCEMENT
-
 			if ($announcementId == $thisAnnouncementId) {
 				$thisAnnouncementOrder = $announcementOrder;
 				$thisAnnouncementOrderFound = true;
@@ -680,7 +657,6 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		}	// isset
 
 		// UNSET VARIABLES
-//		unset_session_resources();
 		unset($form_elements);
 		$_SESSION['formelements']=null;
 
@@ -692,23 +668,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		unset($content_to_modify);
 		unset($title_to_modify);
 
-		/*if($_REQUEST['publish_survey']) {
-
-		 $surveyid=$_REQUEST['surveyid'];
-		 $cidReq = $_REQUEST['cidReq'];
-		 ?>
-		<script>
-			window.location.href="../survey/survey_list.php?<?php echo  api_get_cidreq(); ?>&published=published&surveyid=<?php echo Security::remove_XSS($_REQUEST['publish_survey']); ?>";
-		</script>
-		<?php
-		}*/
 	}	// if $submit Announcement
 }
 
-
-/*
-	Tool introduction
-*/
+/*  	Tool introduction  */
 
 if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 	//api_display_tool_title($nameTools);
@@ -716,9 +679,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 }
 
 
-/*
-		MAIN SECTION
-*/
+/*		MAIN SECTION    */
 
 /* DISPLAY LEFT COLUMN */
 
@@ -750,7 +711,6 @@ if(api_is_allowed_to_edit(false,true))  {
 	}
 } else {
 	// students only get to see the visible announcements
-
 		if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 			$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
 
@@ -830,8 +790,6 @@ if(api_is_allowed_to_edit(false,true))  {
 				}
 			}
 		}
-
-
 }
 
 $result = Database::query($sql);
@@ -841,23 +799,22 @@ $announcement_number = Database::num_rows($result);
 		ADD ANNOUNCEMENT / DELETE ALL
 */
 
-//if (!$surveyid) {
-	$show_actions = false;
-	if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
-		echo '<div class="actions">';
-		echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'','32')."</a>";
-		$show_actions = true;
-	}
+$show_actions = false;
+if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
+	echo '<div class="actions">';
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'','32')."</a>";
+	$show_actions = true;
+}
 
-	if (api_is_allowed_to_edit() && $announcement_number > 1) {
-		if (api_get_group_id() == 0 ) {
-			if (!$show_actions)
-				echo '<div class="actions">';
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('delete_announce.png',get_lang('AnnouncementDeleteAll'),'','32')."</a>";	}	// if announcementNumber > 1
-		}
-		if ($show_actions)
-				echo '</div>';
-//}
+if (api_is_allowed_to_edit() && $announcement_number > 1) {
+	if (api_get_group_id() == 0 ) {
+		if (!$show_actions)
+			echo '<div class="actions">';
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('delete_announce.png',get_lang('AnnouncementDeleteAll'),'','32')."</a>";	}	// if announcementNumber > 1
+	}
+	if ($show_actions)
+			echo '</div>';
+
 
 if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath') {
 	echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
@@ -868,28 +825,32 @@ if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath') {
 /*
 		ANNOUNCEMENTS LIST
 */
-//if (!$surveyid) {
-	if ($display_title_list) {
-		echo "<table>";
-		while ($myrow = Database::fetch_array($result)) {
-			$title = $myrow['title'];
-			$title = Security::remove_XSS($title);
-			echo "<tr>";
-			echo "<td width=\"15%\">";
-			if ($myrow['visibility']==0) {
-				$class="class=\"invisible\"";
-			} else {
-				$class="";
-			}
-			//validation when belongs to a session
-			$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
 
-			echo Display::return_icon('announce.png', api_convert_and_format_date($myrow['end_date'], DATE_FORMAT_LONG), array('align' => 'absmiddle', 'Width' => '10', 'Height' => '10'),'16')."  <a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title, $length) . "</a>" . $session_img;
-			echo "</td></tr>";
+if ($display_title_list) {
+	echo "<table>";
+	while ($myrow = Database::fetch_array($result)) {
+		$title = $myrow['title'];
+		$title = Security::remove_XSS($title);
+		
+		if ($myrow['visibility']==0) {
+			$class="class=\"invisible\"";
+		} else {
+			$class="";
 		}
-		echo "</table>";
-	} // end $display_title_list
-//}
+		//validation when belongs to a session
+		$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
+
+		$title_td ="<a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title, $length) . "</a>" . $session_img;
+		$title_td = Display::tag('td', $title_td, array('width'=>'75%'));
+		
+		$date = api_convert_and_format_date($myrow['end_date'], DATE_FORMAT_SHORT);
+		$date_td = Display::tag('td', $date, array('class'=>'announcements_datum', 'width'=>'50%'));
+		
+		echo Display::tag('tr', $title_td.$date_td);
+		
+	}
+	echo "</table>";
+} // end $display_title_list
 
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 	echo   "</td>";
@@ -1006,26 +967,7 @@ if ($display_form) {
 		}
 
 	}
-/*
-	if ($surveyid) {
-		echo '	<div class="row">
-					<div class="label">
-						'.get_lang('EmailAddress').'
-					</div>
-					<div class="formw">
-						<input type="text" name="emailsAdd" value="'.Security::remove_XSS($emails_add).'" size="52">(Comma separated for multiple)
-					</div>
-				</div>';
-		echo '	<div class="row">
-					<div class="label">
-						'.get_lang('OnlyThoseAddresses').'
-					</div>
-					<div class="formw">
-						<input type="checkbox" name="onlyThoseMails">
-					</div>
-				</div>';
-	}
-*/
+
 	// the announcement title
 	echo '	<div class="row">
 				<div id="msg_error" style="display:none;color:red;margin-left:20%"></div>
@@ -1089,9 +1031,7 @@ if ($display_form) {
 			    </table>
 			 </div>
 			</div>';
-
-
-
+	
 	echo'<br />';
 	if (empty($_SESSION['toolgroup'])) {
 		echo '<input type="hidden" name="submitAnnouncement" value="OK">';
@@ -1235,9 +1175,7 @@ if ($display_announcement_list && !$surveyid) {
 					ORDER BY display_order DESC";
 
 			} else {
-
 				if ($_user['user_id']) {
-
 					if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 						$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR (ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')) ";
 					} else {
@@ -1273,18 +1211,15 @@ if ($display_announcement_list && !$surveyid) {
 						AND announcement.session_id IN(0,".api_get_session_id().")";
 				}
 			}
-
 	}
 
 	$result		= Database::query($sql);
 	$num_rows 	= Database::num_rows($result);
 
-/*
-		DISPLAY: NO ITEMS
-*/
+/*		DISPLAY: NO ITEMS */
 
 	if ($num_rows == 0) {
-		echo get_lang('NoAnnouncements');;
+		Display::display_warning_message(get_lang('NoAnnouncements'));
 	}
 
 	$iterator = 1;

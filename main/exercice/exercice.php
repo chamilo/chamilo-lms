@@ -968,6 +968,12 @@ if ($show == 'test') {
                     if ($title == '') {
                         $title = basename($path);
                     }
+                    
+                    $class = 'row_even';
+                    if ($count % 2) {
+                        $class = 'row_odd';
+                    }
+                        
                     // prof only
                     if ($is_allowedToEdit) {
                         $item  = Display::tag('td','<img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /> <a href="showinframes.php?file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active?'class="invisible"':'').'>'.$title.'</a> ');
@@ -987,7 +993,7 @@ if ($show == 'test') {
                                                 
                         //$actions .='<img src="../img/lp_quiz_na.gif" border="0" title="'.get_lang('NotMarkActivity').'" alt="" />';
                         $item .= Display::tag('td', $actions);
-                        echo Display::tag('tr',$item);                     
+                        echo Display::tag('tr',$item, array('class'=>$class));                     
                     } else { // student only
                         if ($active == 1) {
                             $nbrActiveTests = $nbrActiveTests +1;
@@ -996,9 +1002,10 @@ if ($show == 'test') {
                             $item .= Display::tag('td', '');
                             $actions ='<a href="exercice.php?' . api_get_cidreq() . '&show=result&path='.$path.'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
                             $item .= Display::tag('td', $actions);                            
-                            echo Display::tag('tr',$item);
+                            echo Display::tag('tr',$item, array('class'=>$class));
                         }                        
                     }
+                    $count ++;
                 }
             }
             echo '</table>';

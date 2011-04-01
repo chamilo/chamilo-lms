@@ -248,6 +248,7 @@ if (is_array($list) && count($list) > 0) {
                 $lesson_status = $row['mystatus'];
                 $score = $row['myscore'];
                 $time_for_total = $row['mytime'];
+                
                 $time = learnpathItem :: get_scorm_time('js', $row['mytime']);
                 $type;
                 $scoIdentifier = $row['myid'];
@@ -257,8 +258,7 @@ if (is_array($list) && count($list) > 0) {
                     if ($row['item_type'] == 'sco') {
                         if (!empty ($row['myviewmaxscore']) && $row['myviewmaxscore'] > 0) {
                             $maxscore = $row['myviewmaxscore'];
-                        }
-                        elseif ($row['myviewmaxscore'] === '') {
+                        } elseif ($row['myviewmaxscore'] === '') {
                             $maxscore = 0;
                         } else {
                             $maxscore = $row['mymaxscore'];
@@ -275,11 +275,11 @@ if (is_array($list) && count($list) > 0) {
                     $color = 'black';
                 }
                 $mylanglist = array (
-                    'completed' => 'ScormCompstatus',
-                    'incomplete' => 'ScormIncomplete',
-                    'failed' => 'ScormFailed',
-                    'passed' => 'ScormPassed',
-                    'browsed' => 'ScormBrowsed',
+                    'completed'     => 'ScormCompstatus',
+                    'incomplete'    => 'ScormIncomplete',
+                    'failed'        => 'ScormFailed',
+                    'passed'        => 'ScormPassed',
+                    'browsed'       => 'ScormBrowsed',
                     'not attempted' => 'ScormNotAttempted'
                 );
 
@@ -290,7 +290,16 @@ if (is_array($list) && count($list) > 0) {
                         $view_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                     } else {
                         //$view_score = ($score == 0 ? '/' : ($maxscore === 0 ? $score : $score . '/' . float_format($maxscore, 1)));
-                        $view_score = show_score($score, $maxscore, false);                        
+                        if ($row['item_type'] == 'sco') {
+                            if ($maxscore == 0 ) {
+                                $view_score = $score;    
+                            } else {
+                                $view_score = show_score($score, $maxscore, false);
+                            }
+                            
+                        } else {
+                            $view_score = show_score($score, $maxscore, false);
+                        }                        
                     }
                     $output .= "<tr class='$oddclass'>" . "<td></td>" . "<td>$extend_attempt_link</td>" . '<td colspan="3">' . get_lang('Attempt') . ' ' . $row['iv_view_count'] . "</td>"
                      . '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">' . $view_score . "</div></td>" . '<td colspan="2"><div class="mystatus">'.$time.'</div></td><td></td></tr>';

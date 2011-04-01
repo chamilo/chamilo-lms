@@ -264,7 +264,7 @@ class MySpace {
 
 		if ($_GET['export'] == 'options') {
 			// get all the defined extra fields
-			$extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC', false);
+			$extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC', false, 1);
 
 			// creating the form with all the defined extra fields
 			$form = new FormValidator('exportextrafields', 'post', api_get_self()."?view=".Security::remove_XSS($_GET['view']).'&display='.Security::remove_XSS($_GET['display']).'&export='.Security::remove_XSS($_GET['export']));

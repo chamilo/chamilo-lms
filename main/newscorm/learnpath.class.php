@@ -2671,7 +2671,7 @@ class learnpath {
             }
 
         }
-        $html .= '<div id="inner_lp_toc" class="inner_lp_toc">' . "\n";
+        $html .= '<div id="inner_lp_toc" class="inner_lp_toc">';
         require_once 'resourcelinker.inc.php';
 
         // Temporary variables.
@@ -2685,12 +2685,12 @@ class learnpath {
             // TODO: Complete this.
             $icon_name = array (
                 'not attempted' => '../img/notattempted.gif',
-                'incomplete' => '../img/incomplete.gif',
-                'failed' => '../img/failed.gif',
-                'completed' => '../img/completed.gif',
-                'passed' => '../img/passed.gif',
-                'succeeded' => '../img/succeeded.gif',
-                'browsed' => '../img/completed.gif'
+                'incomplete'    => '../img/incomplete.gif',
+                'failed'        => '../img/failed.gif',
+                'completed'     => '../img/completed.gif',
+                'passed'        => '../img/passed.gif',
+                'succeeded'     => '../img/succeeded.gif',
+                'browsed'       => '../img/completed.gif'
             );
 
             $style = 'scorm_item';
@@ -2732,10 +2732,7 @@ class learnpath {
                 //$html .= '<a href="" onClick="top.load_item('.$item['id'].',\''.$url.'\');return false;">'.$title.'</a>' ;
 
                 //<img align="absbottom" width="13" height="13" src="../img/lp_document.png">&nbsp;background:#aaa;
-                $html .= '<a href="" onClick="switch_item(' .
-                $mycurrentitemid . ',' .
-                $item['id'] . ');' .
-                'return false;" >' . stripslashes($title) . '</a>';
+                $html .= '<a href="" onClick="switch_item(' .$mycurrentitemid . ',' .$item['id'] . ');' .'return false;" >' . stripslashes($title) . '</a>';
             } elseif ($item['type'] == 'dokeos_module' || $item['type'] == 'dokeos_chapter') {
                 $html .= "<img align='absbottom' width='13' height='13' src='../img/lp_dokeos_module.png'>&nbsp;" . stripslashes($title);
             } elseif ($item['type'] == 'dir') {
@@ -2768,7 +2765,7 @@ class learnpath {
 
             $color_counter++;
         }
-        $html .= "</div>\n";
+        $html .= "</div>";
         return $html;
     }
 

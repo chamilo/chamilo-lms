@@ -7,9 +7,9 @@ define ('REPORTS_PROGRESS_COMPLETED', 1);
 
 $reports_modules = array();
 
-$reports_enabled_modules = array('quiz','course');
+$reports_enabled_modules = array('quiz','course','scorm');
 
-$reports_enabled_templates = array('exercicesMultiCourses', 'courseTime');
+$reports_enabled_templates = array('exercicesMultiCourses', 'courseTime','scorm');
 
 
 // load templates 

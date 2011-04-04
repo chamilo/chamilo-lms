@@ -181,11 +181,13 @@ if(!empty($OkMsg)) {
 	<select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
 		<option value="0" ></option>
 		<?php
-		foreach($rows_session_category as $category) {
-			if($category['id'] == $Categoryid)
-  				echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
-  			else
-  				echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
+		if (!empty($rows_session_category)) {
+    		foreach($rows_session_category as $category) {
+    			if($category['id'] == $Categoryid)
+      				echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
+      			else
+      				echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
+    		}
 		}
   		?>
   	</select>

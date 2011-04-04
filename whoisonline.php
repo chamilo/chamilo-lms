@@ -94,6 +94,17 @@ function hide_display_message () {
 		$("#txt_area_invite").val("");
 	}
 }
+       
+function show_icon_edit(element_html) { 
+    ident="#edit_image";
+    $(ident).show();
+}       
+
+function hide_icon_edit(element_html)  {
+    ident="#edit_image";
+    $(ident).hide();
+}       
+        
 </script>';
 
 if ($_GET['chatid'] != '') {

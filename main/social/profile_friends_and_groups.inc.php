@@ -3,6 +3,9 @@
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 require_once '../inc/global.inc.php';
+
+api_block_anonymous_users();
+
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
@@ -61,7 +64,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 				$url_open  = '<a href="groups.php?id='.$id.'">';
 				$url_close = '</a>';
 				$icon = '';					
-				$name = api_strtoupper(cut($result['name'],20,true));				
+				$name = cut($result['name'],20,true);				
 				if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {		 	
 					$icon = Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
 				} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
@@ -74,7 +77,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 					$count_users_group = $count_users_group.' '.get_lang('Members');
 				}										
 				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
-				$item_name = '<div class="box_shared_profile_group_title">'.$url_open.'<span class="social-groups-text1">'.api_xml_http_response_encode(api_strtoupper($name)).'</span>'. $icon.$url_close.'</div>';
+				$item_name = '<div class="box_shared_profile_group_title">'.$url_open.api_xml_http_response_encode($name). $icon.$url_close.'</div>';
 				$item_description = '';
 				if (!empty($result['description'])) { 				
 					$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2">'.api_xml_http_response_encode(get_lang('Description')).'</span><p class="social-groups-text4">'.cut(api_xml_http_response_encode($result['description']),120,true).'</p></div>';
@@ -88,8 +91,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 				$grid_my_groups[]= array($item_name,$url_open.$result['picture_uri'].$url_close, $item_description.$item_actions);
 				$i++;					
 			}
-		}
-			    
+		}			    
 	    if (count($grid_my_groups) > 0) {	
 			echo '<div style="margin-top:20px">';
 				echo '<div><h3>'.get_lang('MyGroups').'</h3></div>';

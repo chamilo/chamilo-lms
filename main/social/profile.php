@@ -460,18 +460,17 @@ if ($show_full_profile) {
 				$count_users_group = $count_users_group.' '.get_lang('Members');
 			}
 			$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
-			$item_name = '<div class="box_shared_profile_group_title">'.$url_open.$name.$icon.$url_close.'</div>';
+			$item_name = $url_open.$name.$icon.$url_close;
 
 			if ($result['description'] != '') {
-				$item_description = '<div class="box_shared_profile_group_description"><p class="social-groups-text4">'.cut($result['description'],100,true).'</p></div>';
+				//$item_description = '<div class="box_shared_profile_group_description"><p class="social-groups-text4">'.cut($result['description'],100,true).'</p></div>';
 			} else {
-				$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2"></span><p class="social-groups-text4"></p></div>';
+				//$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2"></span><p class="social-groups-text4"></p></div>';
 			}
-
-			$result['picture_uri'] = '<div class="box_shared_profile_group_image"><img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" /></div>';
+			//$result['picture_uri'] = '<div class="box_shared_profile_group_image"><img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" /></div>';
 			$item_actions = '';
 			if (api_get_user_id() == $user_id) {
-				$item_actions = '<div class="box_shared_profile_group_actions"><a href="groups.php?id='.$id.'">'.get_lang('SeeMore').$url_close.'</div>';
+				//$item_actions = '<div class="box_shared_profile_group_actions"><a href="groups.php?id='.$id.'">'.get_lang('SeeMore').$url_close.'</div>';
 			}
 			$grid_my_groups[]= array($item_name,$url_open.$result['picture_uri'].$url_close, $item_description.$item_actions);
 			$i++;
@@ -495,8 +494,17 @@ if ($show_full_profile) {
 						echo '<div class="box_shared_profile_group_actions"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php?view=mygroups&height=390&width=610&&user_id='.$user_id.'" class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAllMyGroups').'</a></div>';
 					}
 				}
-    			Display::display_sortable_grid('shared_profile_mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
-		echo '</div>';		
+    			//Display::display_sortable_grid('shared_profile_mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
+    			$total = count($grid_my_groups);
+    			$i = 1;
+    			foreach($grid_my_groups as $group) {
+    			    echo $group[0];    			    
+    			    if ($i < $total) {
+    			        echo ', ';
+    			    }
+    			    $i++;
+    			}
+		echo '<br /><br /></div>';		
 	}
 
 	// COURSES LIST
@@ -556,41 +564,38 @@ if ($show_full_profile) {
 		$count_pending_invitations = count($pending_invitations);
 	}
 
-	echo '<div class="social-box-main1">';
+	echo '<div class="social-box-main1">';	
 
 	if (!empty($production_list) || !empty($file_list) || $count_pending_invitations > 0) {
-		echo '<div class="social-box-left">';
+		
 		//Pending invitations
 		if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
-			if ($count_pending_invitations > 0) {
-				echo '<div>'.Display::return_icon('boxmygroups.jpg',get_lang('PendingInvitations')).'</div>';
-				echo '<div class="social-box-content1">';
+			if ($count_pending_invitations > 0) {				
+				echo '<div class="rounded_div" style="width:280px">';
 				echo '<div><h3>'.get_lang('PendingInvitations').'</h3></div>';
 				for ($i=0;$i<$count_pending_invitations;$i++) {
 					$user_invitation_id = $pending_invitations[$i]['user_sender_id'];
 					echo '<div id="dpending_'.$user_invitation_id.'" class="friend_invitations">';
-					echo '<div style="float:left;width:60px;" >';
-					echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
-					echo '</div>';
-
-					echo '<div style="padding-left:70px;">';
-					$user_info = api_get_user_info($user_invitation_id);
-					echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_invitation_id.'">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</a>';
-					echo '<br />';
-					echo ' '.(substr($pending_invitations[$i]['content'],0,50));
-					echo '<br />';
-					echo '<a id="btn_accepted_'.$user_invitation_id.'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
-					echo '<div id="id_response">&nbsp;</div>';
-					echo '</div>';
-					echo '</div>';
-					echo '<div class="clear"></div>';
+    					echo '<div style="float:left;width:60px;" >';
+    					   echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
+    					echo '</div>';
+    
+    					echo '<div style="padding-left:70px;">';
+        					$user_invitation_info = api_get_user_info($user_invitation_id);
+        					echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_invitation_id.'">'.api_get_person_name($user_invitation_info['firstname'], $user_invitation_info['lastname']).'</a>';
+        					echo '<br />';
+        					echo ' '.(substr($pending_invitations[$i]['content'],0,50));
+        					echo '<br />';
+        					echo '<a id="btn_accepted_'.$user_invitation_id.'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
+        					echo '<div id="id_response">&nbsp;</div>';
+					    echo '</div>';
+				    echo '</div>';								
 				}
-				echo '</div>';
+				echo '</div>';      				
 			}
 		}
-
-		echo '<div>'.Display::return_icon('boxmygroups.jpg',get_lang('MyProductions')).'</div>';
-		echo '<div class="social-box-content1">';
+				
+		echo '<div class="rounded_div" style="width:280px">';
 		//--Productions
 		$production_list =  UserManager::build_production_list($user_id);
 		if (!empty($production_list )) {
@@ -600,56 +605,55 @@ if ($show_full_profile) {
 			echo '</div>';
 		}
 		// Images uploaded by course
-
 		if (!empty($file_list)) {
 			echo '<div><h3>'.get_lang('ImagesUploaded').'</h3></div>';
 			echo '<div class="social-content-information">';
 			echo $file_list;
 			echo '</div>';
 		}
-		echo '</div>'; // close div tag .social-box-content1
-		echo '</div>';	// close div tag .social-box-left
+		echo '</div>'; // close div tag .social-box-content1		
 	}
+	
+	 
 	if (!empty($user_info['competences']) || !empty($user_info['diplomas']) || !empty($user_info['openarea']) || !empty($user_info['teach']) ) {
-		echo '<div class="social-box-left">';
-		echo '<div>'.Display::return_icon('boxmygroups.jpg',get_lang('MoreInformation')).'</div>';
-		echo '<div class="social-box-content1">';
+		
+		echo '<div class="rounded_div" style="width:280px">';
 		echo '<div><h3>'.get_lang('MoreInformation').'</h3></div>';
-		echo '<div class="social-content-competences">';
-		$cut_size = 220;
-		if (!empty($user_info['competences'])) {
-			echo '<br />';
-			echo '<div class="social-background-content" style="width:100%;">';
-			echo '<div class="social-actions-message"><strong>'.get_lang('MyCompetences').'</strong></div>';
-			echo '<div class="social-profile-extended">'.$user_info['competences'].'</div>';
-			echo '</div>';
-			echo '<br />';
-		}
-		if (!empty($user_info['diplomas'])) {
-			echo '<div class="social-background-content" style="width:100%;" >';
-			echo '<div class="social-actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div>';
-			echo '<div class="social-profile-extended">'.$user_info['diplomas'].'</div>';
-			echo '</div>';
-			echo '<br />';
-		}
-		if (!empty($user_info['openarea'])) {
-			echo '<div class="social-background-content" style="width:100%;" >';
-			echo '<div class="social-actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div>';
-			echo '<div class="social-profile-extended">'.$user_info['openarea'].'</div>';
-			echo '</div>';
-			echo '<br />';
-		}
-		if (!empty($user_info['teach'])) {
-			echo '<div class="social-background-content" style="width:100%;" >';
-			echo '<div class="social-actions-message"><strong>'.get_lang('MyTeach').'</strong></div>';
-			echo '<div class="social-profile-extended">'.$user_info['teach'].'</div>';
-			echo '</div>';
-			echo '<br />';
-		}
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
+		
+    		$cut_size = 220;
+    		if (!empty($user_info['competences'])) {
+    			echo '<br />';
+    			echo '<div class="social-background-content" style="width:100%;">';
+    			echo '<div class="social-actions-message"><strong>'.get_lang('MyCompetences').'</strong></div>';
+    			echo '<div class="social-profile-extended">'.$user_info['competences'].'</div>';
+    			echo '</div>';
+    			echo '<br />';
+    		}
+    		if (!empty($user_info['diplomas'])) {
+    			echo '<div class="social-background-content" style="width:100%;" >';
+    			echo '<div class="social-actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div>';
+    			echo '<div class="social-profile-extended">'.$user_info['diplomas'].'</div>';
+    			echo '</div>';
+    			echo '<br />';
+    		}
+    		if (!empty($user_info['openarea'])) {
+    			echo '<div class="social-background-content" style="width:100%;" >';
+    			echo '<div class="social-actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div>';
+    			echo '<div class="social-profile-extended">'.$user_info['openarea'].'</div>';
+    			echo '</div>';
+    			echo '<br />';
+    		}
+    		if (!empty($user_info['teach'])) {
+    			echo '<div class="social-background-content" style="width:100%;" >';
+    			echo '<div class="social-actions-message"><strong>'.get_lang('MyTeach').'</strong></div>';
+    			echo '<div class="social-profile-extended">'.$user_info['teach'].'</div>';
+    			echo '</div>';
+    			echo '<br />';
+    		}				
+		
+		echo '</div>';     
 	}
+	
 	
 }
 echo '</div>'; // close div tag .socialContentRight

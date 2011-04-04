@@ -1945,7 +1945,7 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     $my_action  = isset($_GET['action']) ? $_GET['action'] : '';
     $my_post    = isset($_GET['post'])   ? $_GET['post'] : '';
     $my_gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : '';
-    $form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($my_forum).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($my_thread).'&amp;post='.Security::remove_XSS($my_post).'&amp;action='.Security::remove_XSS($my_action).'&amp;origin='.$origin);
+    $form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($my_forum).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($my_thread).'&post='.Security::remove_XSS($my_post).'&action='.Security::remove_XSS($my_action).'&origin='.$origin);
     $form->setConstants(array('forum' => '5'));
 
     $form->addElement('header', '', $text);
@@ -2249,8 +2249,7 @@ function current_qualify_of_thread($thread_id, $session_id) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function store_reply($values) {
-    global $_user;
+function store_reply($values) {    
     global $_course;
     global $current_forum;
     global $origin;
@@ -2260,7 +2259,7 @@ function store_reply($values) {
     $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
 
     $gradebook = Security::remove_XSS($_GET['gradebook']);
-    $post_date = date('Y-m-d H:i:s');
+    $post_date = api_get_utc_datetime();
 
     if ($current_forum['approval_direct_post']=='1' && !api_is_allowed_to_edit(null, true)) {
         $visible = 0; // The post has not been approved yet.
@@ -2282,8 +2281,8 @@ function store_reply($values) {
                         '".Database::escape_string(isset($values['post_text']) ? (api_html_entity_decode($values['post_text'])) : null)."',
                         '".Database::escape_string($values['thread_id'])."',
                         '".Database::escape_string($values['forum_id'])."',
-                        '".Database::escape_string($_user['user_id'])."',
-                        '".Database::escape_string($post_date)."',
+                        '".api_get_user_id()."',
+                        '".$post_date."',
                         '".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."',
                         '".Database::escape_string(isset($values['post_parent_id'])?$values['post_parent_id']:null)."',
                         '".Database::escape_string($visible)."')";
@@ -2325,7 +2324,7 @@ function store_reply($values) {
         }
 
         // Update the thread.
-        update_thread($values['thread_id'], $new_post_id,$post_date);
+        update_thread($values['thread_id'], $new_post_id, $post_date);
 
         // Update the forum.
         api_item_property_update($_course, TOOL_FORUM, $values['forum_id'], 'NewMessageInForum', api_get_user_id());
@@ -2350,13 +2349,11 @@ function store_reply($values) {
         session_unregister('breadcrumbs');
         session_unregister('addedresource');
         session_unregister('addedresourceid');
-
-        Display :: display_confirmation_message($message,false);
+        Display::display_confirmation_message($message,false);
 
     } else {
         Display::display_error_message(get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'));
     }
-
 }
 
 /**
@@ -3812,7 +3809,6 @@ function get_notifications_of_user($user_id = 0, $force = false) {
  */
 function count_number_of_post_in_thread($thread_id) {
     $table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
-
     $sql = "SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."' ";
     $result = Database::query($sql);
     return count(Database::store_result($result));
@@ -3820,19 +3816,22 @@ function count_number_of_post_in_thread($thread_id) {
 
 /**
  * This function counts the number of post inside a thread user
- * @param 	int Thread ID
- * @param 	int User ID
+ * @param 	int thread ID
+ * @param 	int user ID
  * @return	int the number of post inside a thread user
- * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>,
- * @version octubre 2008, dokeos 1.8
  */
 function count_number_of_post_for_user_thread($thread_id, $user_id) {
-    $table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
+    $table_posts 	= Database::get_course_table(TABLE_FORUM_POST);
 
-    $sql = "SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."'
-            AND poster_id = '".Database::escape_string($user_id)."' ";
+    $sql = "SELECT count(*) as count FROM $table_posts WHERE thread_id=".Database::escape_string($thread_id)."
+            AND poster_id = ".Database::escape_string($user_id)." AND visible = 1 ";
     $result = Database::query($sql);
-    return count(Database::store_result($result));
+    $count = 0;
+    if (Database::num_rows($result) > 0) {
+        $count = Database::fetch_array($result);        
+        $count = $count['count'];
+    }    
+    return $count;
 }
 
 /**

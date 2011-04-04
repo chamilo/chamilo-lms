@@ -354,7 +354,11 @@ class SocialManager extends UserManager {
 	        $rss = @fetch_rss($url);
 	        $i = 1;
 			if (!empty($rss->items)) {
-				$res .= '<h2>'.$rss->channel['title'].'</h2>';
+			    $icon_rss = '';
+			    if (!empty($feed)) {
+                    $icon_rss = Display::url(Display::return_icon('rss.png', '', array(), 32), Security::remove_XSS($feed['rssfeeds']), array('target'=>'_blank'));
+                }
+				$res .= '<h2>'.$rss->channel['title'].''.$icon_rss.'</h2>';
 	        	$res .= '<div class="social-rss-channel-items">';
 		        foreach ($rss->items as $item) {
 		            if ($limit>=0 and $i>$limit) {break;}

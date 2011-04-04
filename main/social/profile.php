@@ -536,13 +536,11 @@ if ($show_full_profile) {
 	}
 	// user feeds
 	$user_feeds = SocialManager::get_user_feeds($user_id);
-	if (!empty($user_feeds )) {
-		echo '<div class="rounded_div">';
-				echo '<div class="social-box-content2">';
-					echo '<div><h3>'.get_lang('RSSFeeds').'</h3></div>';
-	    			echo '<div class="social-content-training">'.$user_feeds.'</div>';
-	    			//echo '<div class="clear"></div>';
-				echo '</div>';			
+	if (!empty($user_feeds)) {
+		echo '<div class="rounded_div" style="width:90%">';				
+			echo '<div><h3>'.get_lang('RSSFeeds').'</h3></div>';
+			echo '<div class="social-content-training">'.$user_feeds.'</div>';
+	
 		echo '</div>';
 	}
 

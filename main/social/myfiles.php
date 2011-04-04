@@ -40,26 +40,25 @@ function denied_friend (element_input) {
 	});
 }
 function register_friend(element_input) {
- if(confirm("'.get_lang('AddToFriends').'")) {
-		name_button=$(element_input).attr("id");
-		name_div_id="id_"+name_button.substring(13);
-		user_id=name_div_id.split("_");
-		user_friend_id=user_id[1];
-		 $.ajax({
-			contentType: "application/x-www-form-urlencoded",
-			beforeSend: function(objeto) {
-			$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-			type: "POST",
-			url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
-			data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
-			success: function(datos) {  $("div#"+name_div_id).hide("slow");
-				$("form").submit()
-			}
-		});
- }
+    if(confirm("'.get_lang('AddToFriends').'")) {
+    	name_button=$(element_input).attr("id");
+    	name_div_id="id_"+name_button.substring(13);
+    	user_id=name_div_id.split("_");
+    	user_friend_id=user_id[1];
+    	 $.ajax({
+    		contentType: "application/x-www-form-urlencoded",
+    		beforeSend: function(objeto) {
+    		$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
+    		type: "POST",
+    		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
+    		data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
+    		success: function(datos) {  $("div#"+name_div_id).hide("slow");
+    			$("form").submit()
+    		}
+    	});
+    }
 }
 	
-
 function show_icon_edit(element_html) {	
 	ident="#edit_image";
 	$(ident).show();
@@ -104,7 +103,6 @@ $language_variable = get_lang('PendingInvitations');
 $language_comment  = get_lang('SocialInvitesComment');
 
 echo '<div id="social-content">';
-
 	echo '<div id="social-content-left">';	
 		//this include the social menu div
 		SocialManager::show_social_menu('myfiles');
@@ -112,15 +110,7 @@ echo '<div id="social-content">';
 
 	echo '<div id="social-content-right>';
 		echo '<a href=""></a>';//TODO: hack and delete this line
-		echo '</br>';
-				echo '<div class="social-box-container2">';				
-				echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('MyFiles')).'</div>';
-					echo '<div id="div_content_table" class="social-box-content2">';				
-						echo '<table><tr><td><iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:450px; width:655px; float:left"></iframe></td></tr></table>';			
-                    echo '</div>';
-				echo '</div>';
-		echo '</div>';
+		echo '</br>';								
+        echo '<table><tr><td><iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:450px; width:655px; float:left"></iframe></td></tr></table>';
 	echo '</div>';
-
 Display::display_footer();
-?>

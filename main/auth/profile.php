@@ -472,9 +472,7 @@ if (is_profile_editable()) {
 $user_data = array_merge($user_data, $extra_data);
 $form->setDefaults($user_data);
 
-/*
-		FUNCTIONS
-*/
+/*		FUNCTIONS   */
 
 
 /**
@@ -546,11 +544,8 @@ function check_user_email($email){
 	$result = Database::query($sql_password);
 	return Database::num_rows($result) != 0;
 }
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+
+/*		MAIN CODE */
 $filtered_extension = false;
 $update_success = false;
 $upload_picture_success = false;
@@ -730,11 +725,7 @@ if ($form->validate()) {
 	//}
 //}
 
-/*
-==============================================================================
-		MAIN DISPLAY SECTION
-==============================================================================
-*/
+/*  		MAIN DISPLAY SECTION  */
 // the header
 Display::display_header(get_lang('ModifyProfile'));
 
@@ -815,17 +806,14 @@ $big_image_width = $big_image_size[0];
 $big_image_height = $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
 
-
 if (api_get_setting('allow_social_tool') == 'true') {
 	echo '<div id="social-content">';
-
 		echo '<div id="social-content-left">';
 		SocialManager::show_social_menu('home', null, $user_id, $show_full_profile);
 		echo '</div>';
 
 		echo '<div id="social-content-right">';					
-			echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Profile')).'</div>';
-			echo '<div id="div_content_table" class="social-box-content2">';
+			
 			echo '<table><tr><td>';
 				echo '<div id="social-content-online">';
 					if (api_get_setting('extended_profile') == 'true') {
@@ -836,15 +824,10 @@ if (api_get_setting('allow_social_tool') == 'true') {
 							echo '<a href="profile.php?type=reduced'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</span></a>';
 						}
 					}
-				echo '</div>';
-				
+				echo '</div>';				
 				$form->display();
-			echo '</td></tr></table>';	
-			echo '</div>';
-		echo '</div>';
+			echo '</td></tr></table>';		
 	echo '</div>';
-
-
 } else {
 	// Style position:absolute has been removed for Opera-compatibility.
 	//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
@@ -858,6 +841,4 @@ if (api_get_setting('allow_social_tool') == 'true') {
 	echo '</div>';
 	$form->display();
 }
-
-
 Display :: display_footer();

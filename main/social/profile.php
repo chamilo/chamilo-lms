@@ -252,8 +252,6 @@ echo '  </div>';
 
 echo '  <div id="social-content-right">';
 
-
-
 echo '      <div class="rounded_div" style="width:300px">';
 
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
@@ -265,6 +263,7 @@ if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
 
 if ($show_full_profile) {
 	echo '<div class="social-profile-info">';
+	echo '<dl>';
 	echo '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'	</dd>';
 	if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
 		echo '<dt>'.get_lang('Name').'</dt><dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';
@@ -282,6 +281,7 @@ if ($show_full_profile) {
 	echo '<dl>';
 	if (!empty($user_info['username']))
 		echo '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'</dd>';
+	echo '</dl>';
 	echo '</div>';
 }
 
@@ -295,7 +295,7 @@ if ($show_full_profile) {
 	$extra_user_data = UserManager::get_extra_user_data($user_id);
 	$extra_information = '';
 	if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
-		$extra_information = '<br />';
+		
 		$extra_information .= '<div><h3>'.get_lang('ExtraInformation').'</h3></div>';
 		$extra_information .='<div class="social-profile-info">';
 		$extra_information_value = '';
@@ -355,7 +355,7 @@ if ($show_full_profile) {
 		if (!empty($extra_information_value)) {
 			$extra_information .= $extra_information_value;
 		}
-		$extra_information .= '</div>';
+		$extra_information .= '</div>'; //social-profile-info
 	}
 	// 	if there are information to show
 	if (!empty($extra_information_value)) echo $extra_information;
@@ -382,7 +382,7 @@ if ($show_full_profile) {
 	if ($number_friends != 0) {
 		$friend_html.= '<div><h3>'.get_lang('SocialFriend').'</h3></div>';
 		$friend_html.= '<div id="friend-container" class="social-friend-container">';
-		$friend_html.= '<div id="friend-header" >';
+		$friend_html.= '<div id="friend-header">';
 
 		if ($number_friends == 1) {
 			$friend_html.= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friend').'</div>';
@@ -500,30 +500,31 @@ if ($show_full_profile) {
 	}
 
 	// COURSES LIST
-	if ( is_array($list) ) {		
-			echo '<div class="rounded_div" style="width:90%">';			
-					echo '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';
-					echo '<div class="social-content-training">';
-					//Courses whithout sessions
-					$old_user_category = 0;
-					$i=1;
-					foreach($list as $key=>$value) {
-						if ( empty($value[2]) ) { //if out of any session
-							echo $value[1];
-							echo '<div id="social_content'.$i.'" style="background : #EFEFEF; padding:0px; ">';
-							echo '</div>';
-							$i++;
-						}
-					}
-					$listActives = $listInactives = $listCourses = array();
-					foreach ( $list as $key=>$value ) {
-						if ( $value['active'] ) { //if the session is still active (as told by get_logged_user_course_html())
-							$listActives[] = $value;
-						} elseif ( !empty($value[2]) ) { //if there is a session but it is not active
-							$listInactives[] = $value;
-						}
-					}				
-			echo '</div>';		
+	if ( is_array($list) ) {
+		echo '<div class="rounded_div" style="width:90%">';			
+			echo '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';
+			echo '<div class="social-content-training">';
+			//Courses whithout sessions
+			$old_user_category = 0;
+			$i=1;
+			foreach($list as $key=>$value) {
+				if ( empty($value[2]) ) { //if out of any session
+					echo $value[1];
+					echo '<div id="social_content'.$i.'" style="background : #EFEFEF; padding:0px; ">';
+					echo '</div>';
+					$i++;
+				}
+			}
+			$listActives = $listInactives = $listCourses = array();
+			foreach ( $list as $key=>$value ) {
+				if ( $value['active'] ) { //if the session is still active (as told by get_logged_user_course_html())
+					$listActives[] = $value;
+				} elseif ( !empty($value[2]) ) { //if there is a session but it is not active
+					$listInactives[] = $value;
+				}
+			}
+			echo '</div>';				
+		echo '</div>';
 	}
 	// user feeds
 	$user_feeds = SocialManager::get_user_feeds($user_id);
@@ -533,8 +534,7 @@ if ($show_full_profile) {
 					echo '<div><h3>'.get_lang('RSSFeeds').'</h3></div>';
 	    			echo '<div class="social-content-training">'.$user_feeds.'</div>';
 	    			//echo '<div class="clear"></div>';
-				echo '</div>';
-			
+				echo '</div>';			
 		echo '</div>';
 	}
 

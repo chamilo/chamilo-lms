@@ -55,6 +55,7 @@ class PDF {
         	$course_data = api_get_course_info($course_code);
         }
         
+        
         //clean styles and javascript document
         $clean_search = array (
             '@<script[^>]*?>.*?</script>@si',
@@ -70,7 +71,7 @@ class PDF {
             // then print the title in the PDF
             if (is_array($html_file) && isset($html_file['title'])) {
             	$html_title = $html_file['title'];
-                $html_file = $html_file['path'];
+                $html_file  = $html_file['path'];
             } else {
                 //we suppose we've only been sent a file path
             	$html_title = basename($html_file);
@@ -81,11 +82,13 @@ class PDF {
                     $this->pdf->WriteHTML('<html><body><h1>'.$html_title.'</h1></body></html>',2);
                 }
                 continue;
-            }
+            } 
+          
             if (!file_exists($html_file)) {
                 //the file doesn't exist, skip
             	continue;
             }
+       
             //it's not a chapter but the file exists, print its title
             if ($print_title) {
                 $this->pdf->WriteHTML('<html><body><h2>'.$html_title.'</h2></body></html>',2);
@@ -97,13 +100,13 @@ class PDF {
             $filename =str_replace('_',' ',$filename);
             $extension = $file_info['extension'];        
             if (!($extension == 'html' || $extension == 'htm')) {
-                return false;
+                continue;
             }        
             if ($extension == 'html') {
                 $filename =basename($filename,'.html');
             } elseif($extension == 'htm'){
                 $filename =basename($filename,'.htm');
-            }
+            }          
             
             $document_html = @file_get_contents($html_file);
             $document_html = preg_replace($clean_search, '', $document_html);   

@@ -16,7 +16,7 @@ if (isset($rows)){
         } else {
             $style = "";
             $post_en = $row['post_parent_id'];
-            $url_post = '<a href="javascript:;" onclick="javascript:hidecontent(\'#post'.$row['post_parent_id'].'\')"> '.get_lang('ViewComentPost').'</a> ';
+            //$url_post = '<a href="javascript:;" onclick="javascript:hidecontent(\'#post'.$row['post_parent_id'].'\')"> '.get_lang('ViewComentPost').'</a> ';
         }
 
         if ($row['user_id']=='0') {

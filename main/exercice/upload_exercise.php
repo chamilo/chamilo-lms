@@ -3,6 +3,7 @@
 /**
  * 	Upload quiz: This script shows the upload quiz feature
  *  Initial work by Isaac flores on Nov 4 of 2010
+ *  Encoding fixes Julio Montoya 
  * 	@package chamilo.exercise
  */
 // Language files that should be included
@@ -25,7 +26,7 @@ require_once '../newscorm/learnpathItem.class.php';
 // Security check
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 if (!$is_allowed_to_edit) {
- api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 // setting the tabs
@@ -88,11 +89,12 @@ function lp_upload_quiz_main() {
  $lp_id = Security::remove_XSS($_GET['lp_id']);
 
  $form = new FormValidator('upload', 'POST', api_get_self() . '?' . api_get_cidreq() . '&lp_id=' . $lp_id, '', 'enctype="multipart/form-data"');
- $form->addElement('html', '<div><h3>' .Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), array('style'=>'margin-bottom:-2px;'),32). get_lang('ImportExcelQuiz') . '</h3><div><input type="file" name="user_upload_quiz" id="user_upload_quiz_id" size="20" /></div></div>');
+ $form->addElement('html', '<div><h3>' .Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), array('style'=>'margin-bottom:-2px;'),32). get_lang('ImportExcelQuiz') . '</h3></div>');
+ 
+ $form->addElement('file', 'user_upload_quiz', '');
  //button send document
  $form->addElement('style_submit_button', 'submit_upload_quiz', get_lang('Send'), 'class="upload"');
- $form->setDefaults($defaults);
-
+ 
   // Display the upload field
   echo '<table style="text-align: left; width: 100%;" border="0" cellpadding="2"cellspacing="2"><tbody><tr>';
   echo '<td style="vertical-align: top; width: 25%;">';
@@ -283,6 +285,7 @@ function lp_upload_quiz_action_handling() {
             $_SESSION['oLP']->add_item($parent, $previous, TOOL_QUIZ, $quiz_id, utf8_encode($quiz_title), '');
             // Redirect to home page for add more content
             header('location: ../newscorm/lp_controller.php?' . api_get_cidreq() . '&action=add_item&type=step&lp_id=' . Security::remove_XSS($_GET['lp_id']).'&session_id='.api_get_session_id());
+            exit;
         } else {
             //  header('location: exercice.php?' . api_get_cidreq());	
             echo '<script>window.location.href = "admin.php?'.api_get_cidReq().'&exerciseId='.$quiz_id.'&session_id='.api_get_session_id().'"</script>';

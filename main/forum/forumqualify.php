@@ -3,6 +3,7 @@
 
 /**
  * 	@package chamilo.forum
+ *  @todo fix all this qualify files avoid including files, use classes POO jmontoya 
  */
 
 // name of the language file that needs to be included
@@ -221,13 +222,11 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 
 $userinf=api_get_user_info(api_get_user_id());
 if ($allowed_to_edit) {
-    //echo "<strong>".get_lang('QualifyThread')."</strong>";
-    //echo "<br />";
     $current_thread=get_thread_information($_GET['thread']);
     $userid=(int)$_GET['user_id'];
     $threadid=$current_thread['thread_id'];
     //show current qualify in my form
-    $qualify=current_qualify_of_thread($threadid,api_get_session_id());
+    $qualify=current_qualify_of_thread($threadid, api_get_session_id());
     //show max qualify in my form
     $max_qualify=show_qualify('2',$_GET['cidReq'],$_GET['forum'],$userid,$threadid);
     require_once 'forumbody.inc.php';
@@ -248,6 +247,7 @@ if ($allowed_to_edit) {
     $user_id_thread = (int)$_GET['user_id'];
     $opt=Database::escape_string($_GET['type']);
     $qualify_historic = get_historical_qualify($user_id_thread, $threadid, $opt);
+    
     $counter= count($qualify_historic);
     $act_qualify = $_REQUEST['idtextqualify'];
     if ($counter>0) {

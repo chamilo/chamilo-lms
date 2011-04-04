@@ -24,11 +24,7 @@ $output = <<<EOF
         <tr>
 EOF;
 
-$output .= '
-            <td width="40%" class="forum-thread-header">'.get_lang('User').'&nbsp;:</td >
-            <td width="60%" class="forum-thread-body"><div align="left">'.get_name_user_by_id($userid).'</div></td>
-        </tr>
-        <tr>
+$output .= '            
             <td width="40%" class="forum-thread-header">'.get_lang('Thread').'&nbsp;:</td >
             <td  width="60%" class="forum-thread-body">
                 <div align="left">'.$current_thread['thread_title'].'</div>

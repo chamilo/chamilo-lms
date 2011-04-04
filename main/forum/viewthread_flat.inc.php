@@ -83,11 +83,11 @@ if (isset($current_thread['thread_id'])){
             if( isset($_GET['gradebook'])){
                 if ($increment>0 && $user_status!=1 ) {
                     $info_thread=get_thread_information($clean_thread_id);
-                    echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$info_thread['forum_id']."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&amp;user_id=".$row['poster_id']."&amp;origin=".$origin."&amp;idtextqualify=".$current_qualify_thread."&amp;gradebook=".Security::remove_XSS($_GET['gradebook'])."\" >".icon('new_test_small.gif',get_lang('Qualify'))."</a>";
+                    echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$info_thread['forum_id']."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&amp;user_id=".$row['poster_id']."&amp;origin=".$origin."&amp;idtextqualify=".$current_qualify_thread."&amp;gradebook=".Security::remove_XSS($_GET['gradebook'])."\" >".Display::return_icon('quiz.gif',get_lang('Qualify'))."</a> ";
                  }
             } else {
                 if ($increment>0 && $user_status!=1 ) {
-                    echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&amp;user_id=".$row['poster_id']."&amp;origin=".$origin."&amp;idtextqualify=".$current_qualify_thread."\" >".icon('new_test_small.gif',get_lang('Qualify'))."</a>";
+                    echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&amp;user_id=".$row['poster_id']."&amp;origin=".$origin."&amp;idtextqualify=".$current_qualify_thread."\" >".Display::return_icon('new_test_small.gif',get_lang('Qualify'))."</a>";
                 }
             }
         }

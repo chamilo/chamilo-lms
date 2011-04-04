@@ -101,6 +101,8 @@ if (isset($_POST['idtextqualify'])) {
 }
 
 $result = get_statistical_information($current_thread['thread_id'], $_GET['user_id'], $_GET['cidReq']);
+
+
 if($userinf['status']!='1') {
     echo '<div class="forum-qualification-input-box">';
     require_once 'forumbody.inc.php';

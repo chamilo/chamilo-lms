@@ -26,23 +26,20 @@ if (isset($_GET['origin'])) {
 }
 
 // including additional library scripts
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+
 //require_once (api_get_path(LIBRARY_PATH).'resourcelinker.lib.php');
 $nameTools=get_lang('ToolForum');
 
-/*
-    Including necessary files
-*/
+/*     Including necessary files */
 
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
                                         $(document).ready(function(){ $(\'.hide-me\').slideUp() });
                                     function hidecontent(content){ $(content).slideToggle(\'normal\'); }
                                     </script>';
-/*
-        MAIN DISPLAY SECTION
-*/
+/*         MAIN DISPLAY SECTION */
 /*
     Retrieving forum and forum categorie information
 */
@@ -53,10 +50,9 @@ $current_thread=get_thread_information($_GET['thread']); // note: this has to be
 $current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
+
 /*
------------------------------------------------------------
     Header and Breadcrumbs
------------------------------------------------------------
 */
 if (isset($_SESSION['gradebook'])){
     $gradebook=	$_SESSION['gradebook'];
@@ -219,7 +215,7 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
     echo '<span>'.prepare4display($current_thread['thread_comment']).'</span>';
     echo "</table>";
 
-    include_once('viewpost.inc.php');
+    include_once 'viewpost.inc.php';
 } // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
 
 
@@ -247,6 +243,7 @@ if ($allowed_to_edit) {
         $return_message = get_lang('QualificationCanNotBeGreaterThanMaxScore');
         Display :: display_error_message($return_message,false);
     }
+    
     // show qualifications history
     $user_id_thread = (int)$_GET['user_id'];
     $opt=Database::escape_string($_GET['type']);
@@ -292,9 +289,7 @@ if ($allowed_to_edit) {
     api_not_allowed();
 }
 
-/*
-        FOOTER
-*/
+/*         FOOTER   */
 if ($origin!='learnpath') {
     Display :: display_footer();
 }

@@ -47,7 +47,6 @@ require_once 'forumfunction.inc.php';
 
 // javascript
 $htmlHeadXtra[] = '<script>
-
         function advanced_parameters() {
             if(document.getElementById(\'id_qualify\').style.display == \'none\') {
                 document.getElementById(\'id_qualify\').style.display = \'block\';
@@ -106,12 +105,13 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Reso
     $_SESSION['origin']        = $_SERVER['REQUEST_URI'];
     $_SESSION['breadcrumbs']   = $interbreadcrumb;
     header('Location: ../resourcelinker/resourcelinker.php');
+    exit;
 }
 
 /* Header */
 
 if ($origin == 'learnpath') {
-    include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+    include api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give an empty string.
     Display :: display_header('');
@@ -164,17 +164,17 @@ if ($origin != 'learnpath') {
 
 /* Display Forum Category and the Forum information */
 
-echo "<table class=\"data_table\" width=\"100%\">\n";
+echo "<table class=\"data_table\" width=\"100%\">";
 
 // The forum category
-echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">";
+echo "<tr><th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">";
 echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
 
 if (!empty ($current_forum_category['cat_title'])) {
     echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])." - </span>";
 }
-echo "</th>\n";
-echo "\t</tr>\n";
+echo "</th>";
+echo "</tr>";
 echo '</table>';
 
 // The form for the reply

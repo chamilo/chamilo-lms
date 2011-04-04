@@ -106,16 +106,6 @@ if ($is_allowed_to_edit) {
 echo '<table width="100%" border="0" cellspacing="2" class="data_table">';
 $is_allowed_to_edit ? $colspan = 9 : $colspan = 3;
 
-/*
-if ($curDirName) { // If the $curDirName is empty, we're in the root point and we can't go to a parent dir.
-    ?>
-    <!-- parent dir -->
-    <a href="<?php echo api_get_self().'?'.api_get_cidreq().'&openDir='.$cmdParentDir.'&subdirs=yes'; ?>">
-    <img src="../img/parent.gif" border="0" align="absbottom" hspace="5" alt="parent" />
-    <?php echo get_lang('Up'); ?></a>&nbsp;
-    <?php
-}
-*/
 if (!empty($curDirPath)) {
     if (substr($curDirPath, 1, 1) == '/') {
         $tmpcurDirPath=substr($curDirPath,1,strlen($curDirPath));
@@ -136,18 +126,16 @@ if (!empty($curDirPath)) {
 /* CURRENT DIRECTORY */
 
 echo	'<tr>';
-echo	'<th width="70%">'.get_lang('Title').'</th>'.
-        '<th>'.get_lang('Progress')."</th>";
+echo	'<th width="50%">'.get_lang('Title').'</th>';
+        
 if ($is_allowed_to_edit) {
-    //echo '<th>'.get_lang('CourseSettings')."</th>\n" .
-        // Export now is inside "Edit"
-        //'<th>'.get_lang('ExportShort')."</th>\n" .
-    echo    '<th>'.get_lang('AuthoringOptions')."</th>";
+    echo    '<th>'.get_lang('StartDate').'</th>';
+    echo    '<th>'.get_lang('EndDate').'</th>';
+}
+echo '<th>'.get_lang('Progress')."</th>";
 
-    // Only available for not session mode.
-    /*if ($current_session == 0) {
-        echo'<th>'.get_lang('Move')."</th>";
-    }*/
+if ($is_allowed_to_edit) {
+    echo    '<th>'.get_lang('AuthoringOptions')."</th>";
 }
 echo '</tr>';
 
@@ -176,21 +164,19 @@ if (is_array($flat_list)) {
         if (!$is_allowed_to_edit && !learnpath::is_lp_visible_for_student($id, api_get_user_id())) {
             continue;
         }        
-        
-        if (!$is_allowed_to_edit) {
-            
-            $time_limits = false;
-            
+        $start_time =  $end_time = '';
+        if (!$is_allowed_to_edit) {           
+            $time_limits = false;  
+                      
             //This is an old LP (from a migration 1.8.7) so we do nothing
-            if ( (empty($details['created_on']) ||  $details['created_on'] == '0000-00-00 00:00:00') && (empty($details['modified_on']) || $details['modified_on'] == '0000-00-00 00:00:00')) {
+            if ((empty($details['created_on']) ||  $details['created_on'] == '0000-00-00 00:00:00') && (empty($details['modified_on']) || $details['modified_on'] == '0000-00-00 00:00:00')) {
                 $time_limits = false;
             }
             
             //Checking if expired_on is ON
             if ($details['expired_on'] != '' && $details['expired_on'] != '0000-00-00 00:00:00') {
                 $time_limits = true;  
-            }
-     
+            }            
             if ($time_limits) {
                 // check if start time
                 if (!empty($details['publicated_on']) && $details['publicated_on'] != '0000-00-00 00:00:00' &&
@@ -208,9 +194,18 @@ if (is_array($flat_list)) {
                     	continue;
                     }                
                 }
-            }            
-        }        
-
+            }
+            $start_time =  $end_time = '';         
+        } else {
+            if (!empty($details['publicated_on'])) {
+                $start_time = api_get_local_time($details['publicated_on']);
+            }
+            if (!empty($details['expired_on'])) {                
+                $end_time   = api_get_local_time($details['expired_on']);   
+            }
+        } 
+          
+            
         $counter++;
         if (($counter % 2) == 0) { $oddclass = 'row_odd'; } else { $oddclass = 'row_even'; }
 
@@ -234,7 +229,6 @@ if (is_array($flat_list)) {
             "</td>";
         //$dsp_desc='<td>'.$details['lp_desc'].'</td>'."\n";
         $dsp_desc = '';
-
         $dsp_export = '';
         $dsp_edit = '';
         $dsp_build = '';
@@ -434,8 +428,7 @@ if (is_array($flat_list)) {
             } else {
                 $dsp_disk =
                     //"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
-                    "<img src=\"../img/cd_gray.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
-                    //"</a>" .
+                    "<img src=\"../img/cd_gray.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .                    //"</a>" .
                     "";
             }
             
@@ -465,8 +458,7 @@ if (is_array($flat_list)) {
 				Display::return_icon('delete.png', get_lang('_delete_learnpath'),'','22').'</a>';
             } else {
                 $dsp_delete = Display::return_icon('delete_na.png', get_lang('_delete_learnpath'),'','22');
-            }
-            
+            }           
             
                         
             /* COLUMN ORDER	 */
@@ -490,9 +482,15 @@ if (is_array($flat_list)) {
                         Display::return_icon('up.png', get_lang('MoveUp'),'','22').'</a>';
                 }
             }
+            if ($is_allowed_to_edit) {
+                $start_time = Display::tag('td', $start_time);                
+                $end_time   = Display::tag('td', $end_time);            
+            } else {                  
+                $start_time  = $end_time= '';                
+            }            
         } // end if ($is_allowedToEdit)
         
-        echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_edit_lp.$dsp_disk.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
+        echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_disk.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
 
         echo "</tr>";
         $current ++; //counter for number of elements treated

@@ -129,9 +129,6 @@ if (!api_is_platform_admin()) {
 $my_real_array = $new_exercises = array();
 $now = time();
 foreach($final_array as $session_data) {
-    //Session name    
-	//$html .=Display::tag('h1',$session_data['name']);
-	
     $my_course_list = $session_data['data'];    
     if (!empty($my_course_list))     
     foreach ($my_course_list as $my_course_code=>$course_data) {
@@ -141,21 +138,6 @@ foreach($final_array as $session_data) {
                 continue;
             }
         }
-        //Course table        
-       /* $table = new HTML_Table(array('class' => 'data_table'));
-        $row = 0;
-        $column = 0;*/
-        
-        //Course headers
-        /*$header_names = array(get_lang('Course'),get_lang('Exercise'),get_lang('Attempt'),get_lang('Results'),get_lang('Score'), get_lang('Ranking'));
-        foreach ($header_names as $item) {
-            $table->setHeaderContents($row, $column, $item);
-            $column++;
-        }        
-        $row = 1;
-        $column = 0;
-        $table->setCellContents($row, $column, $course_data['name']);
-        $column++;*/      
         
         if (!empty($course_data['exercises'])) {
             //Exercises            
@@ -193,14 +175,7 @@ foreach($final_array as $session_data) {
                             						    'best_result' => $best_score,
                             						    'position'    => $position
                                                 );
-                            $counter++;   
-                            /*foreach ($my_exercise_result as $data) {                            
-                                //$my_real_array[]= array('session'=>$session_data['name'],'course'=>$course_data['name'], 'exercise'=>$exercise_data['name'],'result'=>$exercise_result['exe_id'])  ;                                                     
-                                $table->setCellContents($row, $column, $data);                        
-                                //$table->updateCellAttributes($row, $column, 'align="center"');
-                                $column++;        
-                            }
-                            $row++;*/
+                            $counter++;
                         }
                     } else {
                         //We check the date validation of the exercise if the user can make it
@@ -225,7 +200,6 @@ foreach($final_array as $session_data) {
                 }             
             }
         }
-        //$html .=$table->toHtml();
     }
 }  
 $my_real_array = msort($my_real_array, 'date','asc');
@@ -237,8 +211,25 @@ $back_url = '';
 if (!empty($course_id)) {
     $back_url = Display::url(Display::return_icon('back.png',get_lang('back.png')), api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_id);
 }
+
+$start = $end = '';
+if (!empty($session_info['date_start']) && $session_info['date_start'] != '0000-00-00') {
+    $start = api_convert_and_format_date($session_info['date_start'], DATE_FORMAT_SHORT);    
+    $start_only = get_lang('From').' '.$session_info['date_start'];
+}
+if (!empty($session_info['date_start']) && $session_info['date_end'] != '0000-00-00') {
+    $end = api_convert_and_format_date($session_info['date_end'], DATE_FORMAT_SHORT);
+    $end_only = get_lang('Until').' '.$session_info['date_end'];       
+}
+
+if (!empty($start) && !empty($end)) {
+    $dates = Display::tag('i', sprintf(get_lang('FromDateXToDateY'),$start, $end));
+} else {
+    $dates = Display::tag('i', $start_only.' '.$end_only);
+}
+
 echo Display::tag('h1', $back_url.' '.$session_info['name']);
-// All courses
+echo $dates.'<br />';
 
 //echo '<pre>';print_r($course_list);
 $new_course_list = array();
@@ -371,4 +362,4 @@ $courses_tab       =  Display::grid_html('courses');
 //Main headers data
 echo Display::tabs($headers, array($courses_tab, $lp_tabs, Display::grid_html('exercises'), $my_reporting));
 
-Display :: display_footer();
+Display::display_footer();

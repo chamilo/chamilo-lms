@@ -436,9 +436,9 @@ if (is_array($courses_tree)) {
                     foreach ($session['courses'] as $course) {
                         $is_coach_course = api_is_coach($session['details']['id'], $course['code']);
                         if ($is_coach_course) {
-                            $allowed_time = strtotime($date_session_start) - $days_access_before_beginning;
+                            $allowed_time = api_strtotime($date_session_start) - $days_access_before_beginning;
                         } else {
-                            $allowed_time = strtotime($date_session_start);
+                            $allowed_time = api_strtotime($date_session_start);
                         }
                         if ($session_now > $allowed_time) {
                             $c = CourseManager :: get_logged_user_course_html($course, $session['details']['id'], 'session_course_item');

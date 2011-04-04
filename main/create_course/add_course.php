@@ -117,7 +117,8 @@ $form -> addElement('html','<div class="row">
 $form -> addElement('html','<div id="options" style="display:none">');
 
 // Course code.
-$form->add_textfield('wanted_code', get_lang('Code'), false, array('size' => '$maxlength', 'maxlength' => $maxlength));
+$form->add_textfield('wanted_code', get_lang('Code'), '', array('size' => $maxlength, 'maxlength' => $maxlength));
+$form->addElement('static', null, null, get_lang('OnlyLettersAndNumbers'));
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
 if ($course_validation_feature) {

@@ -2984,10 +2984,9 @@ div#friend-container {
 }
 div.image_friend_network {
     float:left;
-    border:1px solid #CCCCCC;
+    /* border:1px solid #CCCCCC; */
     margin:2px;
     padding:4px;
-
     height:125px;
     width:82px;
     z-index:5;
@@ -3783,7 +3782,7 @@ a.unread {
 
 div.image-social-content {
     float:left;
-    border:1px dotted #ccc;
+    /*border:1px dotted #ccc;*/
     margin:2px;
     padding: 8px 4px 4px 4px;
     background: #ffffff;

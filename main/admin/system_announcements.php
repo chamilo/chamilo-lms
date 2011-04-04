@@ -135,7 +135,7 @@ if ($action_todo) {
 
     $form = new FormValidator('system_announcement');
     $form->addElement('header', '', $form_title);
-    $form->add_textfield('title', get_lang('Title'));
+    $form->add_textfield('title', get_lang('Title'), true, array('size'=>'60px'));
     $language_list = api_get_languages();
     $language_list_with_keys = array();
     $language_list_with_keys['all'] = get_lang('All');
@@ -143,7 +143,7 @@ if ($action_todo) {
         $language_list_with_keys[$language_list['folder'][$i]] = $language_list['name'][$i];
     }
 
-    $form->addElement('select', 'lang',get_lang('Language'),$language_list_with_keys);
+    $form->addElement('select', 'lang',get_lang('Language'), $language_list_with_keys);
     if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
         $form->addElement('textarea', 'content', get_lang('Content'));
     } else {

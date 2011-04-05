@@ -157,7 +157,7 @@ class Promotion extends Model {
         
             if (!empty($session_list)) {
                 foreach($session_list  as $item) {
-                    $sid = SessionManager::copy_session($item['id'], true, false, true);
+                    $sid = SessionManager::copy_session($item['id'], true, false, true, true);                    
                     if ($sid != 0) {
                         $pid = $this->save($new);
                         SessionManager::suscribe_sessions_to_promotion($pid,array($sid));

@@ -85,7 +85,8 @@ class Quiz extends Resource
 	 * @param int $type
 	 * @param int $active
 	 */
-	function Quiz($id, $title, $description, $random, $type, $active, $media, $attempts = 0, $results_disabled = 0, $access_condition = null, $start_time = '0000-00-00 00:00:00', $end_time = '0000-00-00 00:00:00', $feedback_type = 0, $random_answers = 0, $expired_time = 0)
+	function Quiz($id, $title, $description, $random, $type, $active, $media, $attempts = 0, $results_disabled = 0, $access_condition = null, 
+	             $start_time = '0000-00-00 00:00:00', $end_time = '0000-00-00 00:00:00', $feedback_type = 0, $random_answers = 0, $expired_time = 0, $session_id = 0)
 	{
 		parent::Resource($id, RESOURCE_QUIZ);
 		$this->title = $title;
@@ -104,6 +105,7 @@ class Quiz extends Resource
 		$this->feedback_type = $feedback_type;
 		$this->random_answers = $random_answers; 
 		$this->expired_time = $expired_time;
+		$this->session_id = $session_id;
 	}
 	/**
 	 * Add a question to this Quiz

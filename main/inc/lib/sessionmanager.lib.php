@@ -8,7 +8,7 @@
 
 /* LIBRARIES */
 require_once 'display.lib.php';
-require_once(dirname(__FILE__).'/course.lib.php');
+require_once 'course.lib.php';
 
 /**
 *	This class provides methods for sessions management.
@@ -54,20 +54,20 @@ class SessionManager {
       * @todo use an array to replace all this parameters or use the model.lib.php ...
 	  * @return mixed       Session ID on success, error message otherwise
       **/
-	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true, $fix_name = false) {		
-		$name= Database::escape_string(trim($sname));
-		$year_start= intval($syear_start);
-		$month_start=intval($smonth_start);
-		$day_start=intval($sday_start);
-		$year_end=intval($syear_end);
-		$month_end=intval($smonth_end);
-		$day_end=intval($sday_end);
+	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after, $nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true, $fix_name = false) {		
+		$name                 = Database::escape_string(trim($sname));
+		$year_start           = intval($syear_start);
+		$month_start          = intval($smonth_start);
+		$day_start            = intval($sday_start);
+		$year_end             = intval($syear_end);
+		$month_end            = intval($smonth_end);
+		$day_end              = intval($sday_end);
 		$nb_days_acess_before = intval($snb_days_acess_before);
-		$nb_days_acess_after = intval($snb_days_acess_after);
-		$id_session_category = intval($id_session_category);
-		$id_visibility   = intval($id_visibility);
-		$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);        
+		$nb_days_acess_after  = intval($snb_days_acess_after);
+		$id_session_category  = intval($id_session_category);
+		$id_visibility        = intval($id_visibility);
+		$tbl_user		      = Database::get_main_table(TABLE_MAIN_USER);
+		$tbl_session	      = Database::get_main_table(TABLE_MAIN_SESSION);        
     
 		if(is_int($coach_username)) {
 			$id_coach = $coach_username;
@@ -133,14 +133,21 @@ class SessionManager {
 				$sql_insert = "INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id,visibility)
 							   VALUES('".$name."','$date_start','$date_end','$id_coach',".api_get_user_id().",".$nb_days_acess_before.", ".$nb_days_acess_after.", ".$id_session_category.", ".$id_visibility.")";
 				Database::query($sql_insert);
-				$id_session=Database::insert_id();
+				$session_id = Database::insert_id();
+				
+				//Adding to the correct URL				
+				require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';				
+                
+                $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+                $access_url_id = api_get_current_access_url_id();
+                UrlManager::add_session_to_url($session_id,$access_url_id);            
 
 				// add event to system log
 				$time = time();
 				$user_id = api_get_user_id();
-				event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $id_session, $time, $user_id);
+				event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, $time, $user_id);
 
-				return $id_session;
+				return $session_id;
 			}
 		}
 	}
@@ -1383,8 +1390,16 @@ class SessionManager {
      * @return  int     The new session ID on success, 0 otherwise
      * @todo make sure the extra session fields are copied too
      */
-    public function copy_session($id, $copy_courses=true, $copy_users=true, $create_new_courses = false) {
-        $id = (int)$id;
+    /**
+     * @param $id
+     * @param $copy_courses
+     * @param $copy_users
+     * @param $create_new_courses
+     * @param $set_exercises_lp_invisible
+     * @return unknown_type
+     */
+    public function copy_session($id, $copy_courses=true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false) {
+        $id = intval($id);
         $s = self::fetch($id);
         $s['year_start']    = substr($s['date_start'],0,4);
         $s['month_start']   = substr($s['date_start'],5,2);
@@ -1408,9 +1423,10 @@ class SessionManager {
              false,(int)$s['id_coach'], $s['session_category_id'],
              (int)$s['visibility'],$consider_start, $consider_end, true);
         
-        if (!is_numeric($sid)) {
+        if (!is_numeric($sid) || empty($sid)) {
         	return false;
         }
+        
         if ($copy_courses) {
             // Register courses from the original session to the new session
             $courses = self::get_course_list_by_session_id($id);
@@ -1432,9 +1448,25 @@ class SessionManager {
                     	ini_set('memory_limit','256M');
                     	ini_set('max_execution_time',0);
                     }                    
-                    foreach($short_courses as $course_data) {
-                        $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('Copy'), $course_data['course_code'], $id);
+                    foreach ($short_courses as $course_data) {
+                        $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('Copy'), $course_data['course_code'], $id, $sid);
                         if ($course_info) {
+                            //By default new elements are invisible
+                            if ($set_exercises_lp_invisible) {     
+                                                           
+                                require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+                                $list       = new LearnpathList('', $course_info['code'], $sid);
+                                $flat_list  = $list->get_flat_list(); 
+                                if (!empty($flat_list)) {                               
+                                    foreach($flat_list as $lp_id => $data) { 
+                                        api_item_property_update($course_info, TOOL_LEARNPATH, $lp_id, 'invisible', api_get_user_id(), 0 ,0, $sid);
+                                        api_item_property_update($course_info, TOOL_LEARNPATH, $lp_id, 'invisible', api_get_user_id(), 0 ,0);
+                                    }
+                                }
+                                $quiz_table   = Database::get_course_table(TABLE_QUIZ_TEST, $course_info['db_name']);
+                                $sql = "UPDATE $quiz_table SET active = 0 ";
+                                $result=Database::query($sql);                                
+                            }
                             $new_short_courses[] = $course_info['code'];
                         }                             
                     }                    

@@ -107,8 +107,9 @@ class CourseCopyLearnpath extends Resource {
 	 * @param string $visibility
 	 * @param array  $items
 	 */
-	function CourseCopyLearnpath($id,$type,$name,$path,$ref,$description,$content_local,$default_encoding,$default_view_mode,$prevent_reinit,$force_commit,$content_maker,$display_order,$js_lib,$content_license,$debug,$visibility, $author, $preview_image, $items)
-	{
+	function CourseCopyLearnpath($id,$type,$name, $path,$ref,$description,$content_local,$default_encoding,$default_view_mode,$prevent_reinit,$force_commit,
+	                             $content_maker, $display_order,$js_lib,$content_license,$debug, $visibility, $author, $preview_image,
+	                             $use_max_score, $autolunch, $created_on, $modified_on, $publicated_on, $expired_on, $session_id, $items) {
 		parent::Resource($id,RESOURCE_LEARNPATH);
 		$this->lp_type = $type;
 		$this->name = $name;
@@ -126,6 +127,14 @@ class CourseCopyLearnpath extends Resource {
 		$this->content_license = $content_license;
 		$this->debug = $debug;
 		$this->visibility=$visibility;
+		
+		$this->use_max_score=$use_max_score;
+		$this->autolunch=$autolunch;
+		$this->created_on=$created_on;
+		$this->modified_on=$modified_on;
+		$this->publicated_on=$publicated_on;
+		$this->expired_on=$expired_on;
+		$this->session_id=$session_id;	
 		
 		$this->author= $author;
 		$this->preview_image= $preview_image;
@@ -159,4 +168,3 @@ class CourseCopyLearnpath extends Resource {
 		echo $this->name;
 	}
 }
-?>

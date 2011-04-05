@@ -3097,9 +3097,9 @@ class CourseManager {
         
         if (!empty($course_info)) {
             $cb = new CourseBuilder('', $course_info);
-		    $course = $cb->build($source_session_id,$source_session_id['code']);		    		
+		    $course = $cb->build($source_session_id, $source_course_code, true);		    		
     		$course_restorer = new CourseRestorer($course);
-    		$course_restorer->restore($destination_course_code, $destination_session_id, true);
+    		$course_restorer->restore($destination_course_code, $destination_session_id, true, true);
     		return true;		
         }
         return false;
@@ -3114,14 +3114,14 @@ class CourseManager {
      * @param 	int		source session id
      * @return 	
      */
-    function copy_course_simple($new_title, $source_course_code, $source_session_id = 0) {
+    function copy_course_simple($new_title, $source_course_code, $source_session_id = 0, $destination_session_id = 0) {
         $source_course_info = api_get_course_info($source_course_code);
         if (!empty($source_course_info)) {
             $new_course_code = self::generate_nice_next_course_code($source_course_code); 
             if ($new_course_code) {
                 $new_course_info = self::create_course($new_title, $new_course_code, false);
                 if (!empty($new_course_info['code'])) {                    
-                    $result = self::copy_course($source_course_code, $source_session_id, $new_course_info['code'], 0);
+                    $result = self::copy_course($source_course_code, $source_session_id, $new_course_info['code'], $destination_session_id);
                     if ($result) {
                         return $new_course_info;
                     }                   

@@ -3,7 +3,7 @@
 
 /**
 *	@package chamilo.admin
-* 	@todo use formvalidator for the form
+* 	@todo use formvalidator for the form, remove all the select harcoded values
 */
 
 // name of the language file that needs to be included
@@ -123,20 +123,9 @@ if ($_POST['formSent']) {
         $nolimit = 1;
     } else {
     	$nolimit = null;
-    }
-    
+    }    
 	$return = SessionManager::create_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit, $end_limit);
 
-	global $_configuration;
-	require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
-	if ($_configuration['multiple_access_urls']) {
-		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		$access_url_id = api_get_current_access_url_id();
-		UrlManager::add_session_to_url($return,$access_url_id);
-	} else {
-		// we are filling by default the access_url_rel_session table
-		UrlManager::add_session_to_url($return,1);
-	}
 	if ($return == strval(intval($return))) {
 		// integer => no error on session creation
 		header('Location: add_courses_to_session.php?id_session='.$return.'&add=true&msg=');
@@ -156,10 +145,6 @@ $tool_name = get_lang('AddSession');
 
 //display the header
 Display::display_header($tool_name);
-
-// display the tool title
-// api_display_tool_title($tool_name);
-
 
 if (!empty($return)) {
 	Display::display_error_message($return,false);

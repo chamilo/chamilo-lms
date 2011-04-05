@@ -268,7 +268,7 @@ function save_wiki() {
 
     // cleaning the variables
     $_clean['page_id']		= Database::escape_string($_POST['page_id']);
-    $_clean['reflink']		= Database::escape_string(trim(api_htmlentities($_POST['reflink'])));
+    $_clean['reflink']		= Database::escape_string(trim($_POST['reflink'])); 
     $_clean['title']		= Database::escape_string(trim($_POST['title']));
     $_clean['content']		= Database::escape_string($_POST['content']);
     $_clean['user_id']		= api_get_user_id();
@@ -277,9 +277,6 @@ function save_wiki() {
     $_clean['progress']		= Database::escape_string($_POST['progress']);
     $_clean['version']		= intval($_POST['version']) + 1 ;
     $_clean['linksto'] 		= links_to($_clean['content']); //and check links content
-
-
-
 
     $dtime = date( "Y-m-d H:i:s" );
     $session_id = api_get_session_id();
@@ -336,6 +333,7 @@ function save_wiki() {
 
     $sql = "INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip, session_id)
             VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."', '".Database::escape_string($session_id)."')";
+
 
     $result	= Database::query($sql);
     $Id 	= Database::insert_id();
@@ -738,6 +736,7 @@ return true;
 /**
 * This function displays a wiki entry
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+* @author Juan Carlos Raña Trabado
 * @return html code
 **/
 function display_wiki_entry($newtitle)
@@ -773,8 +772,8 @@ function display_wiki_entry($newtitle)
     $sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.Database::escape_string($pageMIX).'" AND '.$tbl_wiki.'.session_id='.$session_id.' AND '.$tbl_wiki.'.'.$groupfilter.' '.$filter.' ORDER BY id DESC';
     $result=Database::query($sql);
     $row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
-
-    //update visits
+	
+	//update visits
     if($row['id'])
     {
         $sql='UPDATE '.$tbl_wiki.' SET hits=(hits+1) WHERE id='.$row['id'].'';

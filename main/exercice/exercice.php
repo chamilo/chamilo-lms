@@ -722,9 +722,9 @@ if ($show == 'test') {
             $i=1;
             echo '<table class="data_table">';
             if ($is_allowedToEdit) {
-                $headers = array(get_lang('ExerciseName'),get_lang('QuantityQuestions'), get_lang('Actions'));
+                $headers = array(get_lang('ExerciseName'), get_lang('QuantityQuestions'), get_lang('Actions'));
             } else {
-            	$headers = array(get_lang('ExerciseName'), get_lang('Attempts'), get_lang('Status'), get_lang('Actions'));
+            	$headers = array(get_lang('ExerciseName'), get_lang('Status'), get_lang('Results'));
             }
             $header_list = '';
             foreach($headers as $header) {
@@ -850,10 +850,12 @@ if ($show == 'test') {
                     //$attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
                     
                     //$item .=  Display::tag('td',$attempts);
-                    $item .=  Display::tag('td', $number_of_questions);           
+                    $item .=  Display::tag('td', $number_of_questions);
+                        
                 } else {
                      
-                    // Student only
+                    // --- Student only
+                    
                     
                     $row['title'] = text_filter($row['title']);                 
     
@@ -922,8 +924,7 @@ if ($show == 'test') {
                             if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
                                 $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
                             } else {
-                                //$attempt_text = get_lang('ExamNotAvailableAtThisTime');  
-                                
+                                //$attempt_text = get_lang('ExamNotAvailableAtThisTime');                                
                                 if ($row['start_time'] != '0000-00-00 00:00:00') { 
                                     $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
                                 }
@@ -949,18 +950,25 @@ if ($show == 'test') {
                         }
                     }
                     
-                    //User Attempts    
+                    //User Attempts
+                    /*    
                     if (empty($row['max_attempt'])) {
-                        $item .=  Display::tag('td',$num);     
+                        //$item .=  Display::tag('td',$num);     
                     } else {
                         if (empty($num)) {
-                        	$num = 0;
+                        	$num = '';
                         }
-                        $item .=  Display::tag('td',$num.' / '.$row['max_attempt']);                        
+                        //$item .=  Display::tag('td',$num.' / '.$row['max_attempt']);                        
+                    }*/
+                    
+                    if (empty($num)) {
+                            $num = '';
                     }
-                    $item .=  Display::tag('td', $attempt_text);                    
+                        
+                    $item .=  Display::tag('td', $attempt_text);
+                                     
                     //See results
-                    $actions ='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
+                    $actions =' '.$num.' <a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">   '.Display::return_icon('show_test_results.gif', get_lang('Results')).' </a>';
                 }                
                 $class = 'row_even';
                 if ($count % 2) {
@@ -1040,7 +1048,7 @@ if ($show == 'test') {
                             $nbrActiveTests = $nbrActiveTests +1;
                             $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active?'class="invisible"':'').'">'.$title.'</a>');
                             $item .= Display::tag('td', '');                            
-                            $item .= Display::tag('td', '');
+                            //$item .= Display::tag('td', '');
                             $actions ='<a href="exercice.php?' . api_get_cidreq() . '&show=result&path='.$path.'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
                             $item .= Display::tag('td', $actions);                            
                             echo Display::tag('tr',$item, array('class'=>$class));

@@ -40,8 +40,7 @@ $form->addElement('select', 'question_type', get_lang('QuestionType'), $question
 
 // the question types (jquery form element)
 $form->addElement('hidden', 'question_type_hidden', get_lang('QuestionType'), array('id'=>'question_type_hidden'));
-$form->addElement('static','','<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>
-							<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.customselect.js" type="text/javascript"></script>');
+$form->addElement('static','','<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.customselect.js" type="text/javascript"></script>');
 $form->addElement('static','select_question_type', get_lang('QuestionType'),'<div id="questiontypes"></div>');
 
 //session id

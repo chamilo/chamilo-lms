@@ -26,7 +26,6 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // Additional javascript
 $htmlHeadXtra[] = NotebookManager::javascript_notebook();
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
 $("#note_title").focus();

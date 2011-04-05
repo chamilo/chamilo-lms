@@ -123,7 +123,6 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                    
 		</script>';
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
     $("#exercise_title").focus();

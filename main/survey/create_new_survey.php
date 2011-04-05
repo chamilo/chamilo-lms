@@ -33,7 +33,6 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 		function advanced_parameters() {
 			if(document.getElementById(\'options\').style.display == \'none\') {
@@ -46,7 +45,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 		}
 
 		function setFocus(){
-		$("#surveycode_title").focus();
+		  $("#surveycode_title").focus();
 		}
 		$(document).ready(function () {
 		  setFocus();

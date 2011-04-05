@@ -854,10 +854,9 @@ class MessageManager
 	 * @param int group id
 	 */
 	public static function display_messages_for_group($group_id) {
-
 		global $my_group_role;
-
 		$rows = self::get_messages_by_group($group_id);
+		 
 		$rows = self::calculate_children($rows);
 		$group_info = GroupPortalManager::get_group_data($group_id);
 		$current_user_id = api_get_user_id();
@@ -981,14 +980,104 @@ class MessageManager
 
 		return $html_messages;
 	}
+	
 
+    /**
+     * Displays messages of a group with nested view
+     * @param int group id
+     */
+    public static function display_title_messages_for_group($group_id) {
+        global $my_group_role;
+        $rows = self::get_messages_by_group($group_id);             
+        $rows = self::calculate_children($rows);
+        $group_info = GroupPortalManager::get_group_data($group_id);
+        $current_user_id = api_get_user_id();
+        $topics_per_page = 5;
+        $items_per_page = 3;
+        $count_items = 0;
+        $html_messages = '';
+        $query_vars = array('id'=>$group_id,'topics_page_nr'=>0);
+
+        if (is_array($rows) && count($rows)> 0) {
+
+            // prepare array for topics with its items
+            $topics = array();
+            $x = 0;
+            foreach ($rows as $index=>$value) {
+                if (empty($value['parent_id'])) {
+                    $x = $index;
+                    $topics[$x] = $value;
+                } else {
+                    $topics[$x]['items'][] = $value;
+                }
+            }
+            uasort($topics,array('MessageManager','order_desc_date'));
+
+            $param_names = array_keys($_GET);
+            $array_html = array();
+            foreach ($topics as $index => $topic) {
+                $html = '';
+                // topics
+                $indent = 0;
+                $user_sender_info = UserManager::get_user_info_by_id($topic['user_sender_id']);
+                $files_attachments = self::get_links_message_attachment_files($topic['id']);
+                $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
+
+                $html .= '<div class="rounded_div" style="width:620px">';           
+                    
+                        $html .= '<a href="#" class="head" id="head_'.$topic['id'].'">';
+                        $html .= '<span class="message-group-title-topic">'.(((isset($_GET['anchor_topic']) && $_GET['anchor_topic'] == 'topic_'.$topic['id']) || in_array('items_'.$topic['id'].'_page_nr',$param_names))?Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align: middle')):
+                                    Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align: middle'))).'
+                                    '.Security::remove_XSS($topic['title']).'</span>';
+                        $html .= '</a>';
+
+                        if ($topic['send_date']!=$topic['update_date']) {
+                            if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00' ) {
+                                $html .= '<span class="message-group-date" > ('.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).')</span>';
+                            }
+                        } else {
+                            $html .= '<span class="message-group-date"> <i>'.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</i></span>';
+                        }
+
+                        $html .= '<div id="topic_'.$topic['id'].'" >';
+                            $html .= '<a name="topic_'.$topic['id'].'"></a>';
+                            $html.= '<div style="margin-bottom:10px">';
+                                $html.= '<div id="message-reply-link" style="margin-right:10px">
+                                         <a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($_GET['items_page_nr']).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
+
+                                if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
+                                    $html.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($_GET['items_page_nr']).'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
+                                }
+                                $html.= '</div>';
+                                $html.= '<br />';
+                                    $image_path = UserManager::get_user_picture_path_by_id($topic['user_sender_id'], 'web', false, true);                           $image_repository = $image_path['dir'];
+                                    $existing_image = $image_path['file'];
+                                $html.= '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="44" height="44" title="'.$name.'" />&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';
+                                $html.= '<div class="message-group-content">'.$topic['content'].'</div>';
+                                $html.= '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';
+                            $html.= '</div>';
+                $html .= '</div>';                
+                $html .= '</div>'; //rounded_div
+                
+                $array_html[] = array($html);
+            }
+            // grids for items and topics  with paginations
+
+            //$html_messages .= '<div class="social-box-container2">';
+            $html_messages .= Display::return_sortable_grid('topics', array(), $array_html, array('hide_navigation'=>false, 'per_page' => $topics_per_page), $query_vars, false, array(true, true, true,false), false);
+            //$html_messages .= '</div>';
+        }
+
+        return $html_messages;
+    }
+
+	
 	/**
 	 * Add children to messages by id is used for nested view messages
 	 * @param array  rows of messages
 	 * @return array new list adding the item children
 	 */
 	public static function calculate_children($rows) {
-
 		foreach($rows as $row) {
 			$rows_with_children[$row["id"]]=$row;
 			$rows_with_children[$row["parent_id"]]["children"][]=$row["id"];

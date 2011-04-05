@@ -1348,65 +1348,38 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 /*****************************************************
  *  DISPLAY MESSAGES	                             *
  *****************************************************/
-/* normal and erro message-box */
-.normal-message {
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    min-height: 30px;
-    border-width: 1px;
-    border-style: solid;
-    -moz-border-radius: 10px;    
-    padding: 6px;
-    color: #00407F;
-	background-color: #EAF8FE;
+.normal-message {    
+    color: #00407F;	
     border: 1px solid #CDE6F5;	
     background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
 }
-.warning-message {
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-width: 1px;
-    border-style: solid;
-    -moz-border-radius: 10px;
-    padding: 6px;
+.warning-message {    
     border: 1px solid #FFB30F;
     color: #000;    
-    min-height: 30px;
 	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
 }
-.confirmation-message {    
-    border-color:#1F8323;
-    -moz-border-radius: 10px;
+.confirmation-message {
+	border: 1px solid #1F8323;
     color:#1F8323;
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-width: 1px;
-    border-style: solid;
-    padding:6px;
-    min-height: 30px;
 	background: url("images/background_message.png") repeat-x scroll 0 0 #CAF0C7;
 }
-.error-message {
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-width: 1px;
-    border-style: solid;
-    -moz-border-radius: 10px;
-    padding: 6px;
+.error-message {        
     border: 1px solid #FF0000;
-    color: #440000;    
-    min-height: 30px;
+    color: #440000;
 	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
 }
-.confirmation-message .bottom-link, .error-message .bottom-link, .normal-message .bottom-link, .warning-message .bottom-link {
-    position: absolute;
-    bottom: 0.2em;
-    right: 0.5em;
+.confirmation-message, .error-message, .normal-message, .warning-message {
+	min-height: 30px;
+	position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;	
+    -moz-border-radius: 10px;
+    border-radius: 10px;    
+	border-width: 1px;
+    border-style: solid;
+	padding:6px;	
 }
+
 /* New training */
 .bottom-link {
     border: 2px outset;

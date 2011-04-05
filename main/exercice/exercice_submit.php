@@ -39,7 +39,6 @@ if($debug) { error_log('Entered exercise_submit.php: '.print_r($_POST,1)); }
 // Notice for unauthorized people.
 api_protect_course_script(true);
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/glossary.js" type="text/javascript" language="javascript"></script>'; //Glossary

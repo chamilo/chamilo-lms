@@ -35,7 +35,6 @@ $nameTools=get_lang('ToolForum');
 
 /*     Including necessary files */
 
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
                                         $(document).ready(function(){ $(\'.hide-me\').slideUp() });
                                     function hidecontent(content){ $(content).slideToggle(\'normal\'); }

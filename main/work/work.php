@@ -86,7 +86,6 @@ $ctok = $_SESSION['sec_token'];
 $stok = Security::get_token();
 
 $htmlHeadXtra[] = to_javascript_work();
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
 $("#work_title").focus();

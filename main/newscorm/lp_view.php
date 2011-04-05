@@ -44,7 +44,6 @@ $my_style       = $platform_theme;
 /*  Header  */
 
 // Se incluye la libreria en el lp_controller.php
-// $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
 
 $htmlHeadXtra[] = api_get_jquery_ui_js(); //jQuery-UI
 

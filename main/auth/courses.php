@@ -28,9 +28,6 @@ if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
 	$htmlHeadXtra[] = '<script type="text/javascript">' .
 				  	  'var GB_ROOT_DIR = "'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/"' .
 				  	  '</script>';
-
-	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>';
-
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/AJS.js" type="text/javascript" language="javascript"></script>';
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/AJS_fx.js" type="text/javascript" language="javascript"></script>';
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/gb_scripts.js" type="text/javascript" language="javascript"></script>';

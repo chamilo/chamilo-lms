@@ -31,7 +31,6 @@ require_once 'linkfunctions.php';
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
 	for (i=0;i<$(".actions").length;i++) {

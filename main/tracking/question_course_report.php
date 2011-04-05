@@ -43,7 +43,6 @@ $global = true;
 
 $course_list = $course_select_list = array();
 $course_select_list[0] = get_lang('None');
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
 $htmlHeadXtra[] = '
 <script type="text/javascript">

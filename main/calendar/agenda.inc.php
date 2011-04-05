@@ -35,7 +35,6 @@ $MonthsLong = api_get_months_long();
 */
 
 $htmlHeadXtra[] = to_javascript();
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
 $("#agenda_title").focus();

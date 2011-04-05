@@ -26,7 +26,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // User permissions
 api_protect_admin_script();
 
-$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 textarea = "";
 num_characters_permited = 255;

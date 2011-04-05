@@ -30,11 +30,11 @@ class learnpathList {
      * @param	int			Optional session id (otherwise we use api_get_session_id())
      * @return	void
      */
-    function __construct($user_id, $course_code='', $session_id = null, $order_by = null) {
+    function __construct($user_id, $course_code = '', $session_id = null, $order_by = null) {
 
         if (!empty($course_code)){
             $course_info = api_get_course_info($course_code);
-            $lp_table = Database::get_course_table(TABLE_LP_MAIN, $course_info['dbName']);
+            $lp_table = Database::get_course_table(TABLE_LP_MAIN, $course_info['db_name']);
         } else {
             $course_code = api_get_course_id();
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
@@ -54,6 +54,7 @@ class learnpathList {
             $order =  Database::parse_conditions(array('order'=>$order_by));            
         }
         $sql = "SELECT * FROM $lp_table $condition_session $order";
+        error_log($sql);
         $res = Database::query($sql);
         $names = array();
         while ($row = Database::fetch_array($res,'ASSOC')) {

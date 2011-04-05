@@ -43,7 +43,6 @@ if ($course_validation_feature) {
     require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 }
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
     $("#title").focus();

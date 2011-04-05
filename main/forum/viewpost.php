@@ -26,7 +26,6 @@ $nameTools = get_lang('ToolForum');
 require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
 $htmlHeadXtra[] = '<script language="javascript">
                                         $(document).ready(function(){ $(\'.hide-me\').slideUp() });
                                     function hidecontent(content){ $(content).slideToggle(\'normal\'); }

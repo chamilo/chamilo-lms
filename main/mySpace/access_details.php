@@ -172,7 +172,6 @@ if (isset($_GET['origin']) && strcmp($_GET['origin'], 'tracking_course') === 0) 
 	$interbreadcrumb[] = array ("url" => "javascript: void(0);", "name" => get_lang("Details"));
 }
 
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function load_results(type) {
         $.ajax({

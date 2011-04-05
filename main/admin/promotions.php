@@ -35,7 +35,6 @@ if ($action == 'add') {
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Promotions'));
 }
 
-
 // The header.
 Display::display_header($tool_name);
 
@@ -75,8 +74,7 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
 $(function() { 
     <?php 
          echo Display::grid_js('promotions',  $url,$columns,$column_model,$extra_params,array(), $action_links, true);       
-    ?> 
-
+    ?>
 });
 </script>   
 <?php
@@ -117,8 +115,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         Security::clear_token();
         $promotion->display();
     } else {
-        echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
+        echo '<div class="actions">';        
+        echo Display::url(Display::return_icon('back.png',get_lang('Back'),'','32'), api_get_self());
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -146,8 +144,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         Security::clear_token();
         $promotion->display();
     } else {
-        echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'','32').' '.'</a>';
+        echo '<div class="actions">';        
+        echo Display::url(Display::return_icon('back.png',get_lang('Back'),'','32'), api_get_self());
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');

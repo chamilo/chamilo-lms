@@ -28,7 +28,6 @@ $language_file = 'forum';
 // Including the global initialization file.
 require '../inc/global.inc.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
     $(document).ready(function(){ $(\'.hide-me\').slideUp() });
     function hidecontent(content){ $(content).slideToggle(\'normal\'); }

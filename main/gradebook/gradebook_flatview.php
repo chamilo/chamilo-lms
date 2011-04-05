@@ -27,8 +27,6 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
 	exit;
 }
 
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-
 $interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1', 'name' => get_lang('ToolGradebook'));
 
 $showeval = isset($_POST['showeval']) ? '1' : '0';

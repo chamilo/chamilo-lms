@@ -11,13 +11,12 @@
 
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#category_title").focus();
+    $("#category_title").focus();
 }
 $(document).ready(function () {
-  setFocus();
+    setFocus();
 });
 </script>';
 

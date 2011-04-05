@@ -30,7 +30,6 @@ get_notifications_of_user();
 
 /* Javascript */
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
     $("#forum_title").focus();

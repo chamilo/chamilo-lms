@@ -1,4 +1,4 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.social
@@ -183,25 +183,20 @@ $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function add_user (code, content) {
-
 	// document.getElementById("user_to_add").value = "";
 	//document.getElementById("ajax_list_users_single").innerHTML = "";
-
 	destination = document.getElementById("destination_users");
-
 	for (i=0;i<destination.length;i++) {
 		if(destination.options[i].text == content) {
 				return false;
 		}
 	}
-
 	destination.options[destination.length] = new Option(content,code);
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
 
 }
-function remove_item(origin)
-{
+function remove_item(origin) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
 			origin.options[i]=null;
@@ -398,8 +393,7 @@ if ($add_type=='multiple') {
 if(!empty($errorMsg)) {
 	Display::display_error_message($errorMsg); //main API
 }
-	echo '<div class="social-box-container2">';	
-		
+	
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
@@ -483,7 +477,6 @@ foreach($sessionUsersList as $enreg) {
 
 <?php
 }
-
 unset($sessionUsersList);
 ?>
 
@@ -504,7 +497,6 @@ unset($sessionUsersList);
 //current group members
 $members = GroupPortalManager::get_users_by_group($group_id, false, array(GROUP_USER_PERMISSION_PENDING_INVITATION));
 if (is_array($members) && count($members)>0) {
-
 	foreach ($members as &$member) {
 		$image_path = UserManager::get_user_picture_path_by_id($member['user_id'], 'web', false, true);
 		$picture = UserManager::get_picture_user($member['user_id'], $image_path['file'],80);
@@ -512,19 +504,14 @@ if (is_array($members) && count($members)>0) {
 	}
 	echo '<span class="social-groups-text1"><strong>'.get_lang('UsersAlreadyInvited').'</strong></span>';
 	Display::display_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
-}
-		
+}		
 	echo '</div>'; // end layout right
-
-echo '</div>'; //
-
-
+echo '</div>';
 ?>
 
 <script type="text/javascript">
 <!--
-function moveItem(origin , destination){
-
+function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
 			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
@@ -534,7 +521,6 @@ function moveItem(origin , destination){
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-
 }
 
 function sortOptions(options) {
@@ -599,19 +585,16 @@ function loadUsersInSelect(select){
 	}
 }
 
-function makepost(select){
-
+function makepost(select) {
 	var options = select.options;
 	var ret = "";
 	for (i = 0 ; i<options.length ; i++)
 		ret = ret + options[i].value +'::'+options[i].text+";;";
-
 	return ret;
 
 }
 -->
 </script>
 <?php
-
 /* 		FOOTER */
 Display::display_footer();

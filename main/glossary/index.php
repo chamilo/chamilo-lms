@@ -25,13 +25,12 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // Additional javascripts.
 $htmlHeadXtra[] = GlossaryManager::javascript_glossary();
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#glossary_title").focus();
+    $("#glossary_title").focus();
 }
 $(document).ready(function () {
-  setFocus();
+    setFocus();
 });
 </script>';
 // setting the tool constants

@@ -49,7 +49,6 @@ if (isset($_POST['sent_http_request'])) {
 	}
 	exit;
 }
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
 

@@ -22,7 +22,6 @@ if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete
 	$delete_user_available = false;
 }
 
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 function load_course_list (div_course,my_user_id) {
 	 $.ajax({

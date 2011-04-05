@@ -18,7 +18,6 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 // user permissions
 api_protect_admin_script();
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function change_image_user_field (image_value) {
 	

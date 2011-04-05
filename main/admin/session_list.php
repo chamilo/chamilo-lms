@@ -25,8 +25,7 @@ $htmlHeadXtra[] = '<script language="javascript">
 						}
 					}
 				}
-				</script>
-		';
+				</script>';
 
 $tbl_session			= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_category	= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -161,7 +160,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id
 			 $where ";
 
-//filtering the session list by access_url
+    //filtering the session list by access_url
+    
 	if ($_configuration['multiple_access_urls']) {
 		$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 		$access_url_id = api_get_current_access_url_id();
@@ -293,7 +293,6 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	      <td><?php echo ($enreg['date_end'] != '0000-00-00')?api_htmlentities($enreg['date_end'],ENT_QUOTES,$charset): '-'; ?></td>
 	      <td><?php echo $user_link; ?></td>
 		  <td><?php
-
 		  switch (intval($enreg['visibility'])) {
 				case SESSION_VISIBLE_READ_ONLY: //1
 					echo get_lang('ReadOnly');
@@ -305,8 +304,6 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 					echo api_ucfirst(get_lang('Invisible'));
 				break;
 		  }
-
-
 		  ?></td>
 		  <td>
 			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('user_subscribe_session.png', get_lang('SubscribeUsersToSession'),'','22'); ?></a>
@@ -316,44 +313,30 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
             <a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('delete.png', get_lang('Delete'), array(), 22); ?></a>
 		  </td>
 		</tr>
-
 		<?php
 			$i=$i ? 0 : 1;
 			$x++;
 		}
-
 		unset($sessions);
-
 		?>
-
 		</table>
-
 		<br />
-
 		<div align="left">
-
 		<?php
 
 		if($num>$limit) {
-		if($page)
-			{
+		if($page) {
 			?>
-
 			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
-
 			<?php
-			}
-			else
-			{
+			} else {
 				echo get_lang('Previous');
 			}
 			?>
-
 			|
 
 			<?php
-			if($nbr_results > $limit)
-			{
+			if($nbr_results > $limit) {
 			?>
 
 			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
@@ -366,7 +349,6 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			}
 		}
 		?>
-
 		</div>
 
 		<br />
@@ -381,4 +363,3 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 <?php
 }
 Display::display_footer();
-?>

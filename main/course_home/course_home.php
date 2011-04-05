@@ -41,7 +41,6 @@ require dirname(__FILE__).'/../inc/global.inc.php';
 unset($_SESSION['oLP']);
 unset($_SESSION['lpobject']);
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] ='<script type="text/javascript">
 $(document).ready(function() {
 	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");

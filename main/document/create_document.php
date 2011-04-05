@@ -17,10 +17,8 @@ require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
-function InnerDialogLoaded()
-{
+function InnerDialogLoaded() {
 	/*
 	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
 	return B.ClickFrame();

@@ -537,21 +537,13 @@ if (isset($_REQUEST['load_ajax'])) {
     exit;
 }
 
-
-
-
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
-
 $htmlHeadXtra[]='<style type="text/css" media="all">@import "'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css";</style>';
-
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 
    function moveto (unique_id, user_id) {
         var session_id = document.getElementById(unique_id).options[document.getElementById(unique_id).selectedIndex].value;
-
-
          $.ajax({
             contentType: "application/x-www-form-urlencoded",
             beforeSend: function(objeto) {

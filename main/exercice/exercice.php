@@ -722,9 +722,9 @@ if ($show == 'test') {
             $i=1;
             echo '<table class="data_table">';
             if ($is_allowedToEdit) {
-                $headers = array(get_lang('ExerciseName'),get_lang('QuantityQuestions'), get_lang('Actions'));
+                $headers = array(get_lang('ExerciseName'), get_lang('QuantityQuestions'), get_lang('Actions'));
             } else {
-            	$headers = array(get_lang('ExerciseName'), get_lang('Attempts'), get_lang('Status'), get_lang('Actions'));
+            	$headers = array(get_lang('ExerciseName'), get_lang('Status'), get_lang('Results'));
             }
             $header_list = '';
             foreach($headers as $header) {
@@ -743,18 +743,40 @@ if ($show == 'test') {
                 $session_img = api_get_session_image($row['session_id'], $_user['status']);
                 
                 $time_limits = false;                            
-                if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
+                if ($row['start_time'] != '0000-00-00 00:00:00' || $row['end_time'] != '0000-00-00 00:00:00') {
                     $time_limits = true;    
                 }                        
                 if ($time_limits) {
                     // check if start time
-                    $start_time = api_strtotime($row['start_time'],'UTC');
-                    $end_time   = api_strtotime($row['end_time'],'UTC');                                      
-                    $now        = time();
-                    $is_actived_time = false;                    
-                    if ($now > $start_time && $end_time > $now ) {
-                        $is_actived_time = true;
+                    $start_time = false;
+                    if ($row['start_time'] != '0000-00-00 00:00:00') {
+                        $start_time = api_strtotime($row['start_time'],'UTC');
                     }
+                    $end_time = false;
+                    if ($row['end_time'] != '0000-00-00 00:00:00') {
+                        $end_time   = api_strtotime($row['end_time'],'UTC');  
+                    }                                    
+                    $now        = time();
+                    $is_actived_time = false;
+                    
+                    //If both "clocks" are enable
+                    if ($start_time && $end_time) {                  
+                        if ($now > $start_time && $end_time > $now ) {
+                            $is_actived_time = true;
+                        }
+                    } else {
+                        //we check the start and end
+                        if ($start_time) {
+                            if ($now > $start_time) {
+                               $is_actived_time = true;
+                            }
+                        }
+                        if ($end_time) {
+                            if ($end_time > $now ) {
+                               $is_actived_time = true;
+                            }
+                        }
+                    }                    
                 }                
                       
                 // Teacher only
@@ -828,10 +850,12 @@ if ($show == 'test') {
                     //$attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
                     
                     //$item .=  Display::tag('td',$attempts);
-                    $item .=  Display::tag('td',$number_of_questions);           
+                    $item .=  Display::tag('td', $number_of_questions);
+                        
                 } else {
                      
-                    // Student only
+                    // --- Student only
+                    
                     
                     $row['title'] = text_filter($row['title']);                 
     
@@ -881,16 +905,34 @@ if ($show == 'test') {
                                     $attempt_text =  get_lang('LatestAttempt') . ' : ';                                
                                     $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
                                 } else {
-                                    //$attempt_text =  get_lang('NotAttempted');
-                                    $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                                    if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
+                                        $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                                    } else {
+                                        if ($row['start_time'] != '0000-00-00 00:00:00') { 
+                                            $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
+                                        }
+                                        if ($row['end_time'] != '0000-00-00 00:00:00') {
+                                            $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));     
+                                        } 
+                                    }
                                 }                           
                             } else {
                                 $attempt_text =  get_lang('CantShowResults');
                             }
                         } else {
-                            //Examn not ready
-                            //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
-                            $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                            //Quiz not ready
+                            if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
+                                $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                            } else {
+                                //$attempt_text = get_lang('ExamNotAvailableAtThisTime');                                
+                                if ($row['start_time'] != '0000-00-00 00:00:00') { 
+                                    $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
+                                }
+                                if ($row['end_time'] != '0000-00-00 00:00:00') {
+                                    $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));     
+                                } 
+                                
+                            }
                         }
                     } else {
                         //Normal behaviour
@@ -908,18 +950,25 @@ if ($show == 'test') {
                         }
                     }
                     
-                    //User Attempts    
+                    //User Attempts
+                    /*    
                     if (empty($row['max_attempt'])) {
-                        $item .=  Display::tag('td',$num);     
+                        //$item .=  Display::tag('td',$num);     
                     } else {
                         if (empty($num)) {
-                        	$num = 0;
+                        	$num = '';
                         }
-                        $item .=  Display::tag('td',$num.' / '.$row['max_attempt']);                        
+                        //$item .=  Display::tag('td',$num.' / '.$row['max_attempt']);                        
+                    }*/
+                    
+                    if (empty($num)) {
+                            $num = '';
                     }
-                    $item .=  Display::tag('td', $attempt_text);                    
+                        
+                    $item .=  Display::tag('td', $attempt_text);
+                                     
                     //See results
-                    $actions ='<a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
+                    $actions =' '.$num.' <a href="exercice.php?' . api_get_cidreq() . '&show=result&exerciseId='.$row['id'].'">   '.Display::return_icon('show_test_results.gif', get_lang('Results')).' </a>';
                 }                
                 $class = 'row_even';
                 if ($count % 2) {
@@ -999,7 +1048,7 @@ if ($show == 'test') {
                             $nbrActiveTests = $nbrActiveTests +1;
                             $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active?'class="invisible"':'').'">'.$title.'</a>');
                             $item .= Display::tag('td', '');                            
-                            $item .= Display::tag('td', '');
+                            //$item .= Display::tag('td', '');
                             $actions ='<a href="exercice.php?' . api_get_cidreq() . '&show=result&path='.$path.'">' . Display :: return_icon('show_test_results.gif', get_lang('Results')).'</a>';
                             $item .= Display::tag('td', $actions);                            
                             echo Display::tag('tr',$item, array('class'=>$class));

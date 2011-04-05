@@ -3148,7 +3148,7 @@ function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
 }
 
 // TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.
-function copy_folder_course_session($pathname, $base_path_document,$session_id,$course_info, $document) {
+function copy_folder_course_session($pathname, $base_path_document, $session_id, $course_info, $document) {
     $table = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
     $session_id = intval($session_id);
     // Check whether directory already exists.
@@ -4811,7 +4811,7 @@ function api_get_jquery_ui_js($include_jqgrid = false) {
  */
 function api_get_jquery_libraries_js($libraries, $include_jquery = true) {
     $js = '';
-    $js_path   =  api_get_path(WEB_LIBRARY_PATH).'javascript/';    
+    $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';    
 
     if ($include_jquery) {
         //Jquery
@@ -4821,7 +4821,7 @@ function api_get_jquery_libraries_js($libraries, $include_jquery = true) {
     //jquery-ui js and css
     if (in_array('jquery-ui', $libraries)) {
         //Jquery ui
-        $theme      = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
+        $theme = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
         $js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.css" type="text/css">';
         $js .= '<script src="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-1.8.7.custom.min.js" type="text/javascript" language="javascript"></script>';
     }

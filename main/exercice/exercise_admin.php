@@ -59,14 +59,22 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 				}
 		}
 
-		function timelimit() {
-			if(document.getElementById(\'options2\').style.display == \'none\')
-			{
-				document.getElementById(\'options2\').style.display = \'block\';
+		function activate_start_date() {
+			if(document.getElementById(\'start_date_div\').style.display == \'none\') {
+				document.getElementById(\'start_date_div\').style.display = \'block\';
 			} else {
-				document.getElementById(\'options2\').style.display = \'none\';
+				document.getElementById(\'start_date_div\').style.display = \'none\';
 			}
 		}
+		
+		function activate_end_date() {
+            if(document.getElementById(\'end_date_div\').style.display == \'none\') {
+                document.getElementById(\'end_date_div\').style.display = \'block\';
+            } else {
+                document.getElementById(\'end_date_div\').style.display = \'none\';
+            }
+        }
+        
 
 		function feedbackselection() {
 			var index = document.exercise_admin.exerciseFeedbackType.selectedIndex;
@@ -123,7 +131,6 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                    
 		</script>';
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
     $("#exercise_title").focus();
@@ -203,6 +210,6 @@ if ($form->validate()) {
 			$form->freeze();
 		}	
 	}
-	$form -> display ();
+	$form->display();
 }
 Display::display_footer();

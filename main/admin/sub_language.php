@@ -11,7 +11,6 @@ require_once api_get_path(LIBRARY_PATH).'array.lib.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
 

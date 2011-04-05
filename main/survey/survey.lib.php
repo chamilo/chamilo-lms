@@ -16,10 +16,9 @@ $config['survey']['debug'] = false;
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 		function setFocus(){
-		$("#search_title").focus();
+		  $("#search_title").focus();
 		}
 		$(document).ready(function () {
 		  setFocus();

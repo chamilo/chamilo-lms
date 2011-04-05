@@ -20,6 +20,7 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once 'Glossary.class.php';
 require_once 'wiki.class.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 define('FILE_SKIP', 1);
@@ -65,7 +66,7 @@ class CourseRestorer
 	 * @param	bool	Course settings are going to be restore?
 	 
 	 */
-	function restore($destination_course_code = '', $session_id = 0, $update_course_settings = false) {
+	function restore($destination_course_code = '', $session_id = 0, $update_course_settings = false, $respect_base_content = false) {
 		if ($destination_course_code == '') {
 			$course_info = api_get_course_info();
 			$this->course->destination_db = $course_info['dbName'];
@@ -99,9 +100,9 @@ class CourseRestorer
 
 		if (!empty($session_id)) {
 			$this->restore_documents($session_id, $destination_course_code);
-			$this->restore_quizzes($session_id);
+			$this->restore_quizzes($session_id, $respect_base_content);
 			$this->restore_glossary($session_id);
-			$this->restore_learnpaths($session_id);
+			$this->restore_learnpaths($session_id, $respect_base_content);
 			$this->restore_links($session_id);
 			$this->restore_course_descriptions($session_id);
 			$this->restore_wiki($session_id);
@@ -338,7 +339,7 @@ class CourseRestorer
 										$course_info = api_get_course_info($destination_course_code);
 										$path_title = '/'.$new_base_foldername.'/'.$document_path[2];
 
-										copy_folder_course_session($basedir_dest_path, $base_path_document,$session_id,$course_info, $document);
+										copy_folder_course_session($basedir_dest_path, $base_path_document, $session_id, $course_info, $document);
 
 										copy($course_path.$document->path, $dest_document_path);                                        
                                         
@@ -898,7 +899,7 @@ class CourseRestorer
 	/**
 	 * Restore Quiz
 	 */
-	function restore_quizzes($session_id = 0) {
+	function restore_quizzes($session_id = 0, $respect_base_content = false) {
 		if ($this->course->has_resources(RESOURCE_QUIZ)) {
 			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST, $this->course->destination_db);
 			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION, $this->course->destination_db);
@@ -907,21 +908,27 @@ class CourseRestorer
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
 				$doc = '';
 				if (strlen($quiz->media) > 0) {
-					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->media]->is_restored())
-					{
+					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->media]->is_restored()) {
 						$sql = "SELECT path FROM ".$table_doc." WHERE id = ".$resources[RESOURCE_DOCUMENT][$quiz->media]->destination_id;
 						$doc = Database::query($sql);
 						$doc = Database::fetch_object($doc);
 						$doc = str_replace('/audio/', '', $doc->path);
 					}
 				}
-				if ($id != -1) {
-
-					$condition_session = "";
-    				if (!empty($session_id)) {
-    					$session_id = intval($session_id);
-    					$condition_session = " , session_id = '$session_id' ";
-    				}
+				if ($id != -1) {				   
+                    if ($respect_base_content) {
+                        $my_session_id = $quiz->session_id; 
+                        if (!empty($quiz->session_id)) {
+                            $my_session_id = $session_id;
+                        }
+                        $condition_session = " , session_id = '$my_session_id' ";
+                    } else {
+    					$condition_session = "";
+        				if (!empty($session_id)) {
+        					$session_id = intval($session_id);
+        					$condition_session = " , session_id = '$session_id' ";
+    				    }
+                    }
 
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
 					$quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($quiz->description, $this->course->code, $this->course->destination_path);
@@ -935,8 +942,8 @@ class CourseRestorer
 						"', active = '".$quiz->active.
 						"', sound = '".Database::escape_string($doc).
 						"', max_attempt = ".(int)$quiz->attempts.
-						", results_disabled = ".(int)$quiz->results_disabled.
-						", access_condition = '".$quiz->access_condition.
+						",  results_disabled = ".(int)$quiz->results_disabled.
+						",  access_condition = '".$quiz->access_condition.
 						"', start_time = '".$quiz->start_time.
 						"', end_time = '".$quiz->end_time.
 						"', feedback_type = ".(int)$quiz->feedback_type.
@@ -1260,25 +1267,32 @@ class CourseRestorer
 	/**
 	 * Restore learnpaths
 	 */
-	function restore_learnpaths($session_id = 0)
+	function restore_learnpaths($session_id = 0, $respect_base_content = false)
 	{
 		if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
-			$table_main 	= Database::get_course_table(TABLE_LP_MAIN, $this->course->destination_db);
-			$table_item 	= Database::get_course_table(TABLE_LP_ITEM, $this->course->destination_db);
-			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST, $this->course->destination_db);
+			$table_main 	= Database::get_course_table(TABLE_LP_MAIN,  $this->course->destination_db);
+			$table_item 	= Database::get_course_table(TABLE_LP_ITEM,  $this->course->destination_db);
+			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST,$this->course->destination_db);
 
 			$resources = $this->course->resources;
-
 
 			$origin_path = $this->course->backup_path.'/upload/learning_path/images/';
 			$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
 
 			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
 
-				$condition_session = "";
-				if (!empty($session_id)) {
-					$session_id = intval($session_id);
-					$condition_session = " , session_id = '$session_id' ";
+				$condition_session = "";				  
+				if (!empty($session_id)) {			    
+                    if ($respect_base_content) {
+                        $my_session_id = $lp->session_id; 
+                        if (!empty($lp->session_id)) {
+                            $my_session_id = $session_id;
+                        }
+                        $condition_session = " , session_id = '$my_session_id' ";                        
+                    } else {
+                        $session_id = intval($session_id);
+                        $condition_session = " , session_id = '$session_id' ";  
+                    }					
 				}
 
 				//Adding the author's image
@@ -1296,23 +1310,29 @@ class CourseRestorer
 				}
 
 				$sql = "INSERT INTO ".$table_main." SET " .
-						"lp_type = '".$lp->lp_type."', " .
-						"name = '".Database::escape_string($lp->name)."', " .
-						"path = '".Database::escape_string($lp->path)."', " .
-						"ref = '".$lp->ref."', " .
-						"description = '".Database::escape_string($lp->description)."', " .
-						"content_local = '".Database::escape_string($lp->content_local)."', " .
-						"default_encoding = '".Database::escape_string($lp->default_encoding)."', " .
-						"default_view_mod = '".Database::escape_string($lp->default_view_mod)."', " .
-						"prevent_reinit = '".Database::escape_string($lp->prevent_reinit)."', " .
-						"force_commit = '".Database::escape_string($lp->force_commit)."', " .
-						"content_maker = '".Database::escape_string($lp->content_maker)."', " .
-						"display_order = '".Database::escape_string($lp->display_order)."', " .
-						"js_lib= '".Database::escape_string($lp->js_lib)."', " .
-						"content_license= '".Database::escape_string($lp->content_license)."', " .
-						"author= '".Database::escape_string($lp->author)."', " .
-						"preview_image= '".Database::escape_string($lp->preview_image)."', " .
-						"debug= '".Database::escape_string($lp->debug)."' $condition_session ";
+						"lp_type            = '".$lp->lp_type."', " .
+						"name               = '".Database::escape_string($lp->name)."', " .
+						"path               = '".Database::escape_string($lp->path)."', " .
+						"ref                = '".$lp->ref."', " .
+						"description        = '".Database::escape_string($lp->description)."', " .
+						"content_local      = '".Database::escape_string($lp->content_local)."', " .
+						"default_encoding   = '".Database::escape_string($lp->default_encoding)."', " .
+						"default_view_mod   = '".Database::escape_string($lp->default_view_mod)."', " .
+						"prevent_reinit     = '".Database::escape_string($lp->prevent_reinit)."', " .
+						"force_commit       = '".Database::escape_string($lp->force_commit)."', " .
+						"content_maker      = '".Database::escape_string($lp->content_maker)."', " .
+						"display_order      = '".Database::escape_string($lp->display_order)."', " .
+						"js_lib             = '".Database::escape_string($lp->js_lib)."', " .
+						"content_license    = '".Database::escape_string($lp->content_license)."', " .
+						"author             = '".Database::escape_string($lp->author)."', " .
+						"preview_image      = '".Database::escape_string($lp->preview_image)."', " .
+        				"use_max_score      = '".Database::escape_string($lp->use_max_score)."', " .
+        				"autolunch          = '".Database::escape_string($lp->autolunch)."', " .
+        				"created_on         = '".Database::escape_string($lp->created_on)."', " .
+        				"modified_on        = '".Database::escape_string($lp->modified_on)."', " .
+        				"publicated_on      = '".Database::escape_string($lp->publicated_on)."', " .
+				        "expired_on         = '".Database::escape_string($lp->expired_on)."', " .
+						"debug              = '".Database::escape_string($lp->debug)."' $condition_session ";
 
 				Database::query($sql);
 

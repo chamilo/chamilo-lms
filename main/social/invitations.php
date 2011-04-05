@@ -113,7 +113,7 @@ echo '<div id="social-content">';
 
 	echo '<div id="social-content-right">';
 	
-        echo '<div class="rounded_div" style="width:90%">';
+        
     
 		if (!empty($show_message)) {
 			Display :: display_normal_message($show_message);
@@ -238,14 +238,6 @@ echo '<div id="social-content">';
 			Display::display_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
 		}
 	echo '</div>';
-	
-	///////////7
-	echo '</div>';
-	echo '</div>';
-	
-	////////////7
-	
+	echo '</div>';	
 echo '</div>';
-
 Display::display_footer();
-?>

@@ -248,7 +248,7 @@ if ($_GET['view'])
     if ($_GET['action']=='restorepage')
     {
         //Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher
-        if(($current_row['reflink']=='index' || $current_row['reflink']=='' || $current_row['assignment']==1) && (!api_is_allowed_to_edit(false,true) && $_clean['group_id']==0))
+        if(($current_row['reflink']=='index' || $current_row['reflink']=='' || $current_row['assignment']==1) && (!api_is_allowed_to_edit(false,true) && intval($_GET['group_id'])==0))
         {
             Display::display_normal_message(get_lang('OnlyEditPagesCourseManager'));
         }
@@ -259,9 +259,9 @@ if ($_GET['view'])
             //check if is a wiki group
             if($current_row['group_id']!=0)
             {
-                //Only teacher, platform admin and group members can edit a wiki group
-                if(api_is_allowed_to_edit(false,true) || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid']))
-                {
+				//Only teacher, platform admin and group members can edit a wiki group
+				if(api_is_allowed_to_edit(false,true) || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],intval($_GET['group_id'])))
+				{
                     $PassEdit=true;
                 }
                 else
@@ -1213,7 +1213,6 @@ if ($_GET['action']=='edit')
 
     $_clean['group_id']=(int)$_SESSION['_gid'];
 
-
     $sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.Database::escape_string($page).'" AND '.$tbl_wiki.'.'.$groupfilter.$condition_session.' ORDER BY id DESC';
      $result=Database::query($sql);
     $row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
@@ -1242,7 +1241,7 @@ if ($_GET['action']=='edit')
     }
 
     //Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher. And users in groups
-    if(($row['reflink']=='index' || $row['reflink']=='' || $row['assignment']==1) && (!api_is_allowed_to_edit(false,true) && $_clean['group_id']==0))
+    if(($row['reflink']=='index' || $row['reflink']=='' || $row['assignment']==1) && (!api_is_allowed_to_edit(false,true) && intval($_GET['group_id'])==0))
     {
         Display::display_error_message(get_lang('OnlyEditPagesCourseManager'));
     }
@@ -1254,7 +1253,7 @@ if ($_GET['action']=='edit')
         if($_clean['group_id']!=0)
         {
             //Only teacher, platform admin and group members can edit a wiki group
-            if(api_is_allowed_to_edit(false,true) || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid']))
+            if(api_is_allowed_to_edit(false,true) || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],intval($_GET['group_id'])))
             {
                 $PassEdit=true;
             }
@@ -2151,7 +2150,7 @@ if ($_GET['action']=='discuss')
 
             echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.api_htmlentities($row['title']);
 
-            echo ' ('.get_lang('MostRecentVersionBy').' <a href="../user/userInfo.php?uInfo='.$lastuserinfo['user_id'].'">'.api_htmlentities(api_get_person_name($lastuserinfo['firstname'], $lastuserinfo['lastname'])).'</a> '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read avg score
+            echo ' ('.get_lang('MostRecentVersionBy').' <a href="../user/userInfo.php?uInfo='.$lastuserinfo['user_id'].'">'.api_htmlentities(api_get_person_name($lastuserinfo['firstname'], $lastuserinfo['lastname'])).'</a> '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read average score
 
             echo '</div>';
 

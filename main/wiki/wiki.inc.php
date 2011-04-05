@@ -885,20 +885,6 @@ function display_wiki_entry($newtitle)
 
         //page action: export to pdf
         echo '<span style="float:right;padding-top:5px;">';
-        // Modified by Ivan Tcholakov, 28-JAN-2010.
-        //echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">';
-
-        /*echo '<form name="form_export2PDF" method="post" action="export_mpdf.php" target="_blank, fullscreen">';
-        //
-        echo '<input type=hidden name="titlePDF" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
-        $clean_pdf_content=trim(preg_replace("/\[\[|\]\]/", " ", $content));
-        $array_clean_pdf_content= explode('|', $clean_pdf_content);
-        $clean_pdf_content= $array_clean_pdf_content[1];
-        echo '<input type=hidden name="contentPDF" value="'.api_htmlentities($clean_pdf_content, ENT_QUOTES, $charset).'">';
-        echo '<input type="image" src="../img/wiki/wexport2pdf.gif" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none; margin-top: -6px">';
-        echo '</form>';
-        echo '</span>';*/
-
         echo '<form name="form_export2PDF" method="post" action="index.php">';
         echo '<input type="hidden" name="action" value="export_to_pdf">';
         echo '<input type="hidden" name="wiki_id" value="'.$row['id'].'">';
@@ -1763,7 +1749,9 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
     $exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
     $exportFile = replace_dangerous_char($wikiTitle, 'strict') . $groupPart;
 
-    $wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
+    $clean_wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
+	$array_clean_wikiContents= explode('|', $clean_wikiContents);
+    $wikiContents= $array_clean_wikiContents[1];
 
     $wikiContents = str_replace('{CONTENT}', $wikiContents, $template);
 
@@ -1791,7 +1779,15 @@ function export_to_pdf($id, $course_code) {
     require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
     $data        = get_wiki_data($id);
+	
+	
     $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
+	
+	//clean wiki links
+	$clean_pdf_content=trim(preg_replace("/\[\[|\]\]/", " ", $content_pdf));
+    $array_clean_pdf_content= explode('|', $clean_pdf_content);
+    $content_pdf= $array_clean_pdf_content[1];
+		
     $title_pdf   = api_html_entity_decode($data['title'], ENT_QUOTES, api_get_system_encoding());
 
     $title_pdf   = api_utf8_encode($title_pdf, api_get_system_encoding());

@@ -548,7 +548,8 @@ class Exercise {
 						random_answers='".Database::escape_string($random_answers)."',
 						active='".Database::escape_string($active)."',
 						feedback_type='".Database::escape_string($feedbacktype)."',
-						start_time='$start_time',end_time='$end_time',
+						start_time    = '$start_time',
+						end_time      = '$end_time',
 						max_attempt='".Database::escape_string($attempts)."',
             			expired_time='".Database::escape_string($expired_time)."',
             			propagate_neg='".Database::escape_string($propagate_neg)."',
@@ -562,7 +563,7 @@ class Exercise {
 			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizUpdated',api_get_user_id());
 
             if (api_get_setting('search_enabled')=='true') {
-                $this -> search_engine_edit();
+                $this->search_engine_edit();
             }
 
 		} else {// creates a new exercise
@@ -599,7 +600,7 @@ class Exercise {
 
         	api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizAdded',api_get_user_id());
 			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {			    
-                $this -> search_engine_save();
+                $this->search_engine_save();
 			}
 		}
 
@@ -827,7 +828,7 @@ class Exercise {
 		api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizDeleted',api_get_user_id());
 
 		if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian') ) {
-			$this -> search_engine_delete();
+			$this->search_engine_delete();
 		}
 	}
 
@@ -848,10 +849,10 @@ class Exercise {
 		}
 		$form->addElement('header', '', $form_title);
 		// title
-		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName'),'class="input_titles" id="exercise_title"');
+		$form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'),'class="input_titles" id="exercise_title"');
 		//$form->applyFilter('exerciseTitle','html_filter');
 
-		$form -> addElement('html','<div class="row">
+		$form->addElement('html','<div class="row">
 		<div class="label"></div>
 		<div class="formw" style="height:50px">
 			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'</span></a>
@@ -863,12 +864,12 @@ class Exercise {
 			$editor_config = array_merge($editor_config, $type);
 		}
 
-		$form -> addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" >');
-		$form -> add_html_editor('exerciseDescription', get_lang('langExerciseDescription'), false, false, $editor_config);
-		$form -> addElement ('html','</div>');
+		$form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" >');
+		$form->add_html_editor('exerciseDescription', get_lang('langExerciseDescription'), false, false, $editor_config);
+		$form->addElement ('html','</div>');
 
 
-		$form -> addElement('html','<div class="row">
+		$form->addElement('html','<div class="row">
 			<div class="label">&nbsp;</div>
 			<div class="formw">
 				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
@@ -876,7 +877,7 @@ class Exercise {
 			</div>');
 
 		// Random questions
-		$form -> addElement('html','<div id="options" style="display:none">');
+		$form->addElement('html','<div id="options" style="display:none">');
 
 		if($type=='full') {
 	
@@ -896,13 +897,13 @@ class Exercise {
                 $radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
                 $form->addGroup($radios_feedback, null, get_lang('FeedbackType'));
             
-			    //$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
+			    //$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
 				// test type
 				$radios = array();
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageOne'),'2',array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageAll'),'1',array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
 				
-				$form -> addGroup($radios, null, get_lang('QuestionsPerPage'));
+				$form->addGroup($radios, null, get_lang('QuestionsPerPage'));
 			} else {
 				// if is Directfeedback but has not questions we can allow to modify the question type
 				if ($this->selectNbrQuestions() == 0) {
@@ -917,16 +918,16 @@ class Exercise {
                     $form->addGroup($radios_feedback, null, get_lang('FeedbackType'));
                     
 				    
-					//$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
+					//$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
 					// test type
 					$radios = array();
 					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
 					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
-					$form -> addGroup($radios, null, get_lang('ExerciseType'));
+					$form->addGroup($radios, null, get_lang('ExerciseType'));
 				} else {
 					//we force the options to the DirectFeedback exercisetype
-					$form -> addElement('hidden', 'exerciseFeedbackType',EXERCISE_FEEDBACK_TYPE_DIRECT);
-					$form -> addElement('hidden', 'exerciseType',ONE_PER_PAGE);
+					$form->addElement('hidden', 'exerciseFeedbackType',EXERCISE_FEEDBACK_TYPE_DIRECT);
+					$form->addElement('hidden', 'exerciseType',ONE_PER_PAGE);
 				}
 			}
 
@@ -934,7 +935,7 @@ class Exercise {
 			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('Yes'), '0', array('id'=>'result_disabled_0'));
 			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('No'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
 			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
-			$form -> addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));
+			$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));
 
 			$random = array();
 			$option=array();
@@ -945,38 +946,44 @@ class Exercise {
 			$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option);
 			$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
 			//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
-			$form -> addGroup($random,null,get_lang('RandomQuestions'),'<br />');
+			$form->addGroup($random,null,get_lang('RandomQuestions'),'<br />');
 
 			//random answers
 			$radios_random_answers = array();
 			$radios_random_answers[] = FormValidator :: createElement ('radio', 'randomAnswers', null, get_lang('Yes'),'1');
 			$radios_random_answers[] = FormValidator :: createElement ('radio', 'randomAnswers', null, get_lang('No'),'0');
-			$form -> addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
+			$form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
 
 			//Attempts
 			$attempt_option=range(0,10);
 			$attempt_option[0]=get_lang('Infinite');
 
-			$form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option);
+			$form->addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option);
 
-			$form -> addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');
-		  	$var= Exercise::selectTimeLimit();
-
-			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
-				$form -> addElement('html','<div id="options2" style="display:block;">');
+			$form->addElement('checkbox', 'activate_start_date_check',get_lang('EnableStartTime'),null, array('onclick' => 'activate_start_date()'));			
+			
+		  	$var = Exercise::selectTimeLimit();
+			if (($this->start_time!='0000-00-00 00:00:00'))
+				$form->addElement('html','<div id="start_date_div" style="display:block;">');
 			else
-				$form -> addElement('html','<div id="options2" style="display:none;">');
+				$form->addElement('html','<div id="start_date_div" style="display:none;">');
 
-	    	//$form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
-	    	//$form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));
-	   		$form->addElement('datepicker', 'start_time', get_lang('ExeStartTime'), array('form_name'=>'exercise_admin'), 5);
-			$form->addElement('datepicker', 'end_time', get_lang('ExeEndTime'), array('form_name'=>'exercise_admin'), 5);
+	   		$form->addElement('datepicker', 'start_time', '', array('form_name'=>'exercise_admin'), 5);
+	   		
+            $form->addElement('html','</div>');
+	   		              
+	   		$form->addElement('checkbox', 'activate_end_date_check',  get_lang('EnableEndTime'),  null,array('onclick' => 'activate_end_date()'));
+	   		if (($this->end_time!='0000-00-00 00:00:00'))
+                $form->addElement('html','<div id="end_date_div" style="display:block;">');
+            else
+                $form->addElement('html','<div id="end_date_div" style="display:none;">');
+                
+			$form->addElement('datepicker', 'end_time', '', array('form_name'=>'exercise_admin'), 5);
 
-     		//$form -> addElement('select', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlMinutes'),$time_minutes_option);
-      		$form -> addElement('html','</div>');
+     		//$form->addElement('select', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlMinutes'),$time_minutes_option);
+      		$form->addElement('html','</div>');
 
-
-      		$check_option=$this -> selectType();
+      		$check_option=$this->selectType();
 
 			if ($check_option==1 && isset($_GET['exerciseId'])) {
 				$diplay = 'none';
@@ -984,101 +991,103 @@ class Exercise {
 				$diplay = 'block';
 			}
 			
-			$form -> addElement('checkbox', 'propagate_neg',get_lang('PropagateNegativeResults'),null);
+			$form->addElement('checkbox', 'propagate_neg',get_lang('PropagateNegativeResults'),null);
 			
-
-    		$form -> addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
+    		$form->addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
 
 			//Timer control
 			$time_hours_option = range(0,12);
 			$time_minutes_option = range(0,59);
-			$form -> addElement('checkbox', 'enabletimercontrol',get_lang('EnableTimerControl'),null,array('onclick' =>'option_time_expired()','id'=>'enabletimercontrol','onload'=>'check_load_time()'));
+			$form->addElement('checkbox', 'enabletimercontrol',get_lang('EnableTimerControl'),null,array('onclick' =>'option_time_expired()','id'=>'enabletimercontrol','onload'=>'check_load_time()'));
 			$expired_date = (int)$this->selectExpiredTime();
 
 			if(($expired_date!='0')) {
-			    $form -> addElement('html','<div id="timercontrol" style="display:block;">');
+			    $form->addElement('html','<div id="timercontrol" style="display:block;">');
 			} else {
-			    $form -> addElement('html','<div id="timercontrol" style="display:none;">');
+			    $form->addElement('html','<div id="timercontrol" style="display:none;">');
 			}
 
-			$form -> addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
-			$form -> addElement('html','</div>');
-			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));			
+			$form->addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
+			$form->addElement('html','</div>');
+			//$form->addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));			
+			
+			
+		    $defaults = array();
 
-			$form -> addElement('html','</div>');  //End advanced setting
-			$form -> addElement('html','</div>');
+            if (api_get_setting('search_enabled') === 'true') {
+                require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 
-	        $defaults = array();
+                $form->addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
+                $form->addElement ('html','<br /><div class="row">');
+                $form->addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
+                $form->addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
+                $form->addElement ('html','</div><div class="sub-form">');
 
-	        if (api_get_setting('search_enabled') === 'true') {
-	            require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+                $specific_fields = get_specific_field_list();
+                foreach ($specific_fields as $specific_field) {
+                    $form->addElement ('text', $specific_field['code'], $specific_field['name']);
+                    $filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $this->id, 'tool_id' => '\''. TOOL_QUIZ .'\'');
+                    $values = get_specific_field_values_list($filter, array('value'));
+                    if ( !empty($values) ) {
+                        $arr_str_values = array();
+                        foreach ($values as $value) {
+                            $arr_str_values[] = $value['value'];
+                        }
+                        $defaults[$specific_field['code']] = implode(', ', $arr_str_values);
+                    }
+                }
+                $form->addElement ('html','</div>');
+            }
 
-	            $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
-	            $form -> addElement ('html','<br /><div class="row">');
-	            $form -> addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
-	            $form -> addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
-	            $form -> addElement ('html','</div><div class="sub-form">');
-
-	            $specific_fields = get_specific_field_list();
-	            foreach ($specific_fields as $specific_field) {
-	                $form -> addElement ('text', $specific_field['code'], $specific_field['name']);
-	                $filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $this->id, 'tool_id' => '\''. TOOL_QUIZ .'\'');
-	                $values = get_specific_field_values_list($filter, array('value'));
-	                if ( !empty($values) ) {
-	                    $arr_str_values = array();
-	                    foreach ($values as $value) {
-	                        $arr_str_values[] = $value['value'];
-	                    }
-	                    $defaults[$specific_field['code']] = implode(', ', $arr_str_values);
-	                }
-	            }
-	            $form -> addElement ('html','</div>');
-	        }
+			$form->addElement('html','</div>');  //End advanced setting
+			$form->addElement('html','</div>');
 		}
 
 		// submit
 		isset($_GET['exerciseId'])?$text=get_lang('ModifyExercise'):$text=get_lang('ProcedToQuestions');
-		$form -> addElement('html', '<br /><br />');
-		$form -> addElement('style_submit_button', 'submitExercise', $text, 'class="save"');
+		$form->addElement('html', '<br /><br />');
+		$form->addElement('style_submit_button', 'submitExercise', $text, 'class="save"');
 
-		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');
+		$form->addRule('exerciseTitle', get_lang('GiveExerciseName'), 'required');
 		if($type=='full') {
 			// rules
-			$form -> addRule ('exerciseAttempts', get_lang('Numeric'), 'numeric');
-			$form -> addRule ('start_time', get_lang('InvalidDate'), 'date');
-	        $form -> addRule ('end_time', get_lang('InvalidDate'), 'date');
-	        $form -> addRule(array ('start_time', 'end_time'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
+			$form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
+			$form->addRule('start_time', get_lang('InvalidDate'), 'date');
+	        $form->addRule('end_time', get_lang('InvalidDate'), 'date');
+	        //$form->addRule(array ('start_time', 'end_time'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
 		}
 
 		// defaults
-		if($type=='full') {
-			if($this -> id > 0) {
-				if ($this -> random > $this->selectNbrQuestions()) {
+		if ($type=='full') {
+			if($this->id > 0) {
+				if ($this->random > $this->selectNbrQuestions()) {
 					$defaults['randomQuestions'] =  $this->selectNbrQuestions();
 				} else {
-					$defaults['randomQuestions'] = $this -> random;
+					$defaults['randomQuestions'] = $this->random;
 				}
 				$defaults['randomAnswers'] = $this ->selectRandomAnswers();
-				$defaults['exerciseType'] = $this -> selectType();
-				$defaults['exerciseTitle'] = $this -> selectTitle();
-				$defaults['exerciseDescription'] = $this -> selectDescription();
+				$defaults['exerciseType'] = $this->selectType();
+				$defaults['exerciseTitle'] = $this->selectTitle();
+				$defaults['exerciseDescription'] = $this->selectDescription();
 				$defaults['exerciseAttempts'] = $this->selectAttempts();
 				$defaults['exerciseFeedbackType'] = $this->selectFeedbackType();
 				$defaults['results_disabled'] = $this->selectResultsDisabled();
 				$defaults['propagate_neg'] = $this->selectPropagateNeg();
 
-	  			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
-	            	$defaults['enabletimelimit'] = 1;
+	  			if (($this->start_time!='0000-00-00 00:00:00'))
+	            	$defaults['activate_start_date_check'] = 1;
+            	if ($this->end_time!='0000-00-00 00:00:00')
+                    $defaults['activate_end_date_check'] = 1;
 
-			    $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00')? $this -> start_time : date('Y-m-d 12:00:00');
-	        	$defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00',time()+84600);
+			    $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00')? $this->start_time : date('Y-m-d 12:00:00');
+	        	$defaults['end_time']   = ($this->end_time!='0000-00-00 00:00:00')?$this->end_time : date('Y-m-d 12:00:00',time()+84600);
 
 				//Get expired time
-				if($this -> expired_time != '0') {
-				$defaults['enabletimercontrol'] = 1;
-				$defaults['enabletimercontroltotalminutes'] = $this -> expired_time;
+				if($this->expired_time != '0') {
+    				$defaults['enabletimercontrol'] = 1;
+    				$defaults['enabletimercontroltotalminutes'] = $this->expired_time;
 				} else {
-				$defaults['enabletimercontroltotalminutes'] = 0;
+				    $defaults['enabletimercontroltotalminutes'] = 0;
 				}
 
 			} else {
@@ -1091,18 +1100,18 @@ class Exercise {
 				$defaults['results_disabled'] = 0;
 
 				$defaults['start_time'] = date('Y-m-d 12:00:00');
-				$defaults['end_time'] = date('Y-m-d 12:00:00',time()+84600);
+				$defaults['end_time']   = date('Y-m-d 12:00:00',time()+84600);
 			}
 		} else {
-			$defaults['exerciseTitle'] = $this -> selectTitle();
-			$defaults['exerciseDescription'] = $this -> selectDescription();
+			$defaults['exerciseTitle'] = $this->selectTitle();
+			$defaults['exerciseDescription'] = $this->selectDescription();
 		}
 
         if (api_get_setting('search_enabled') === 'true') {
             $defaults['index_document'] = 'checked="checked"';
         }
 
-		$form -> setDefaults($defaults);
+		$form->setDefaults($defaults);
 	}
 
 	/**
@@ -1111,29 +1120,33 @@ class Exercise {
 	 */
 	function processCreation($form, $type='') {
 
-		$this -> updateTitle($form -> getSubmitValue('exerciseTitle'));
-		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
-		$this -> updateAttempts($form -> getSubmitValue('exerciseAttempts'));
-		$this -> updateFeedbackType($form -> getSubmitValue('exerciseFeedbackType'));
-		$this -> updateType($form -> getSubmitValue('exerciseType'));
-		$this -> setRandom($form -> getSubmitValue('randomQuestions'));
-		$this -> updateRandomAnswers($form -> getSubmitValue('randomAnswers'));
-		$this -> updateResultsDisabled($form -> getSubmitValue('results_disabled'));
-    	$this -> updateExpiredTime($form -> getSubmitValue('enabletimercontroltotalminutes'));    	
-    	$this -> updatePropagateNegative($form -> getSubmitValue('propagate_neg'));
+		$this->updateTitle($form->getSubmitValue('exerciseTitle'));
+		$this->updateDescription($form->getSubmitValue('exerciseDescription'));
+		$this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
+		$this->updateFeedbackType($form->getSubmitValue('exerciseFeedbackType'));
+		$this->updateType($form->getSubmitValue('exerciseType'));
+		$this->setRandom($form->getSubmitValue('randomQuestions'));
+		$this->updateRandomAnswers($form->getSubmitValue('randomAnswers'));
+		$this->updateResultsDisabled($form->getSubmitValue('results_disabled'));
+    	$this->updateExpiredTime($form->getSubmitValue('enabletimercontroltotalminutes'));    	
+    	$this->updatePropagateNegative($form->getSubmitValue('propagate_neg'));
 
-		if ($form -> getSubmitValue('enabletimelimit')==1) {
-           $start_time = $form -> getSubmitValue('start_time');
-           $this->start_time = $start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
-           $end_time = $form -> getSubmitValue('end_time');
-           $this->end_time = $end_time['Y'].'-'.$end_time['F'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00';
+		if ($form->getSubmitValue('activate_start_date_check') == 1) {
+           $start_time = $form->getSubmitValue('start_time');
+           $this->start_time = $start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';           
     	} else {
-           $this->start_time = '0000-00-00 00:00:00';
-           $this->end_time = '0000-00-00 00:00:00';
+           $this->start_time = '0000-00-00 00:00:00';           
         }
+        
+	    if ($form->getSubmitValue('activate_end_date_check') == 1) {
+           $end_time = $form->getSubmitValue('end_time');
+           $this->end_time = $end_time['Y'].'-'.$end_time['F'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00';
+        } else {           
+           $this->end_time   = '0000-00-00 00:00:00';
+        }        
 
-		if ($form -> getSubmitValue('enabletimercontrol') == 1) {
-		   $expired_total_time = $form -> getSubmitValue('enabletimercontroltotalminutes');
+		if ($form->getSubmitValue('enabletimercontrol') == 1) {
+		   $expired_total_time = $form->getSubmitValue('enabletimercontroltotalminutes');
 		   if ($this->expired_time == 0) {
 			   $this->expired_time = $expired_total_time;
 		   }
@@ -1141,23 +1154,20 @@ class Exercise {
 			$this->expired_time = 0;
 		}
 
-		if ($form -> getSubmitValue('randomAnswers') == 1) {
+		if ($form->getSubmitValue('randomAnswers') == 1) {
            $this->random_answers=1;
     	} else {
            $this->random_answers=0;
         }
-
-		$this -> save($type);
+		$this->save($type);
 	}
 
-	function search_engine_save() {
-	    
+	function search_engine_save() {	    
 		if ($_POST['index_document'] != 1) {
 			return;
 		}
-
 		$course_id = api_get_course_id();
-
+		
 		require_once api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php';
 		require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
 		require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';

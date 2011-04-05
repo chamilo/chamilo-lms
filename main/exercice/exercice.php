@@ -743,18 +743,40 @@ if ($show == 'test') {
                 $session_img = api_get_session_image($row['session_id'], $_user['status']);
                 
                 $time_limits = false;                            
-                if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
+                if ($row['start_time'] != '0000-00-00 00:00:00' || $row['end_time'] != '0000-00-00 00:00:00') {
                     $time_limits = true;    
                 }                        
                 if ($time_limits) {
                     // check if start time
-                    $start_time = api_strtotime($row['start_time'],'UTC');
-                    $end_time   = api_strtotime($row['end_time'],'UTC');                                      
-                    $now        = time();
-                    $is_actived_time = false;                    
-                    if ($now > $start_time && $end_time > $now ) {
-                        $is_actived_time = true;
+                    $start_time = false;
+                    if ($row['start_time'] != '0000-00-00 00:00:00') {
+                        $start_time = api_strtotime($row['start_time'],'UTC');
                     }
+                    $end_time = false;
+                    if ($row['end_time'] != '0000-00-00 00:00:00') {
+                        $end_time   = api_strtotime($row['end_time'],'UTC');  
+                    }                                    
+                    $now        = time();
+                    $is_actived_time = false;
+                    
+                    //If both "clocks" are enable
+                    if ($start_time && $end_time) {                  
+                        if ($now > $start_time && $end_time > $now ) {
+                            $is_actived_time = true;
+                        }
+                    } else {
+                        //we check the start and end
+                        if ($start_time) {
+                            if ($now > $start_time) {
+                               $is_actived_time = true;
+                            }
+                        }
+                        if ($end_time) {
+                            if ($end_time > $now ) {
+                               $is_actived_time = true;
+                            }
+                        }
+                    }                    
                 }                
                       
                 // Teacher only
@@ -828,7 +850,7 @@ if ($show == 'test') {
                     //$attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
                     
                     //$item .=  Display::tag('td',$attempts);
-                    $item .=  Display::tag('td',$number_of_questions);           
+                    $item .=  Display::tag('td', $number_of_questions);           
                 } else {
                      
                     // Student only
@@ -881,16 +903,35 @@ if ($show == 'test') {
                                     $attempt_text =  get_lang('LatestAttempt') . ' : ';                                
                                     $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
                                 } else {
-                                    //$attempt_text =  get_lang('NotAttempted');
-                                    $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                                    if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
+                                        $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                                    } else {
+                                        if ($row['start_time'] != '0000-00-00 00:00:00') { 
+                                            $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
+                                        }
+                                        if ($row['end_time'] != '0000-00-00 00:00:00') {
+                                            $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));     
+                                        } 
+                                    }
                                 }                           
                             } else {
                                 $attempt_text =  get_lang('CantShowResults');
                             }
                         } else {
-                            //Examn not ready
-                            //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
-                            $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                            //Quiz not ready
+                            if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
+                                $attempt_text =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                            } else {
+                                //$attempt_text = get_lang('ExamNotAvailableAtThisTime');  
+                                
+                                if ($row['start_time'] != '0000-00-00 00:00:00') { 
+                                    $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
+                                }
+                                if ($row['end_time'] != '0000-00-00 00:00:00') {
+                                    $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));     
+                                } 
+                                
+                            }
                         }
                     } else {
                         //Normal behaviour

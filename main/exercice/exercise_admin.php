@@ -59,14 +59,22 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 				}
 		}
 
-		function timelimit() {
-			if(document.getElementById(\'options2\').style.display == \'none\')
-			{
-				document.getElementById(\'options2\').style.display = \'block\';
+		function activate_start_date() {
+			if(document.getElementById(\'start_date_div\').style.display == \'none\') {
+				document.getElementById(\'start_date_div\').style.display = \'block\';
 			} else {
-				document.getElementById(\'options2\').style.display = \'none\';
+				document.getElementById(\'start_date_div\').style.display = \'none\';
 			}
 		}
+		
+		function activate_end_date() {
+            if(document.getElementById(\'end_date_div\').style.display == \'none\') {
+                document.getElementById(\'end_date_div\').style.display = \'block\';
+            } else {
+                document.getElementById(\'end_date_div\').style.display = \'none\';
+            }
+        }
+        
 
 		function feedbackselection() {
 			var index = document.exercise_admin.exerciseFeedbackType.selectedIndex;
@@ -202,6 +210,6 @@ if ($form->validate()) {
 			$form->freeze();
 		}	
 	}
-	$form -> display ();
+	$form->display();
 }
 Display::display_footer();

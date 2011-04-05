@@ -512,9 +512,17 @@ if ($limit_time_exists) {
     $exercise_end_time 		= api_strtotime($objExercise->end_time,'UTC');
     $time_now 				= time();
     
-    $permission_to_start = (($time_now - $exercise_start_time) > 0) ? true : false;            
+    if ($objExercise->start_time != '0000-00-00 00:00:00') {
+        $permission_to_start = (($time_now - $exercise_start_time) > 0) ? true : false;
+    } else {
+        $permission_to_start = true;
+    }         
     if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-        $exercise_timeover = (($time_now - $exercise_end_time) > 0) ? true : false;        
+        if ($objExercise->end_time != '0000-00-00 00:00:00') {
+            $exercise_timeover = (($time_now - $exercise_end_time) > 0) ? true : false;
+        } else {
+            $exercise_timeover = false;
+        }        
     }
     
     if (!$permission_to_start || $exercise_timeover) {

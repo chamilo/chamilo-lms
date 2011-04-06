@@ -183,7 +183,9 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_qui
 
 UPDATE settings_current SET category='Search' WHERE variable='search_enable';
 
-UPDATE settings_current SET selected_value = '1.8.8.14082' WHERE variable = 'chamilo_database_version';
+INSERT INTO settings_options (variable, value, display_text) VALUES ('homepage_view', 'activity_big', 'HomepageViewActivityBig');
+
+UPDATE settings_current SET selected_value = '1.8.8.14269' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

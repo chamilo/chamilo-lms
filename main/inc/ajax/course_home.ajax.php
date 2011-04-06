@@ -16,7 +16,17 @@ switch ($action) {
 			$tool_info = api_get_tool_information($tool_id);
 			$tool_visibility   = $tool_info['visibility'];
 			$tool_image        = $tool_info['image'];
-			$new_image         = str_replace('.gif','_na.gif',$tool_image);
+			if (api_get_setting('homepage_view') != 'activity_big') {			
+                $new_image         = api_get_path(WEB_IMG_PATH).str_replace('.gif','_na.gif',$tool_image);
+                $tool_image        = api_get_path(WEB_IMG_PATH).$tool_image;    
+			} else {
+			    $tool_image        = $tool_info['image'];
+			    $tool_image        = (substr($tool_info['image'], 0, strpos($tool_info['image'], '.'))).'.png';
+                $new_image         = str_replace('.png','_na.png',$tool_image);  
+                $new_image         = api_get_path(WEB_IMG_PATH).'icons/64/'.$new_image;
+                $tool_image        = api_get_path(WEB_IMG_PATH).'icons/64/'.$tool_image;            
+			}
+			
 			$requested_image   = ($tool_visibility == 0 ) ? $tool_image : $new_image;
 			$requested_clase   = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
 			$requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';

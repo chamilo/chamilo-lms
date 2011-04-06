@@ -108,7 +108,7 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 <style type="text/css" media="print">
 /*<![CDATA[*/
 <?php
-  echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/print.css";'."\n";
+  echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/print.css";';
 ?>
 /*]]>*/
 </style>

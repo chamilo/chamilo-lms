@@ -119,21 +119,21 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	
 <?php
 			$my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
-			CourseHome::show_tools_category($my_list, 'vertical_activity');
+			CourseHome::show_tools_category($my_list);
 ?>	
 	</div>
 	<div class="courseadminview-activity-3col">
 		<span class="viewcaption"><?php echo get_lang('Interaction'); ?></span>		
 <?php
 			$my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
-			CourseHome::show_tools_category($my_list, 'vertical_activity');
+			CourseHome::show_tools_category($my_list);
 ?>	
 	</div>
 	<div class="courseadminview-activity-3col">
 		<span class="viewcaption"><?php echo get_lang('Administration'); ?></span>	
 <?php
 			$my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATEFORM);
-			CourseHome::show_tools_category($my_list, 'vertical_activity');
+			CourseHome::show_tools_category($my_list);
 ?>
 	</div>
 <?php
@@ -155,7 +155,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 		<div class="Authoringview">
 <?php
 				$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
-				CourseHome::show_tools_category($my_list, 'vertical_activity');
+				CourseHome::show_tools_category($my_list);
 ?>
 		</div>		
 <?php
@@ -188,8 +188,8 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 			}
 			$i++;
 		}
-		CourseHome::show_tools_category($my_list1, 'vertical_activity');
-		CourseHome::show_tools_category($my_list2, 'vertical_activity');
+		CourseHome::show_tools_category($my_list1);
+		CourseHome::show_tools_category($my_list2);
         echo '</div>';
 	}
 }

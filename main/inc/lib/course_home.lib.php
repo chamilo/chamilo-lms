@@ -588,8 +588,9 @@ class CourseHome {
      * @param array List of tools as returned by get_tools_category()
      * @return void
      */
-    public static function show_tools_category($all_tools_list, $theme = 'activity') {
+    public static function show_tools_category($all_tools_list) {
         global $_user;
+        $theme = api_get_setting('homepage_view');
         if ($theme == 'vertical_activity') {
             //ordering by get_lang name
             $order_tool_list = array();
@@ -679,7 +680,7 @@ class CourseHome {
                     $tool['link'] = $web_code_path.$tool['link'];
                 }
                 if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
-                      $class = 'class="invisible"';
+                      $class = 'invisible';
                       $info = pathinfo($tool['image']);
                       $basename = basename($tool['image'], '.'.$info['extension']); // $file is set to "index"
                     $tool['image'] = $basename.'_na.'.$info['extension'];
@@ -694,22 +695,35 @@ class CourseHome {
                 } else {
                     $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq();
                 }
-
-                if (strpos($tool['name'],'visio_') !== false) {
-                    $toollink =  '<a id="tooldesc_'.$tool["id"].'"  ' . $class . ' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
-                    $my_tool_link =  '<a id="istooldesc_'.$tool["id"].'"  ' . $class . ' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
-
-                } elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
-                    $toollink =  '<a id="tooldesc_'.$tool["id"].'" ' . $class . ' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
-                    $my_tool_link= '<a id="istooldesc_'.$tool["id"].'" ' . $class . ' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
+                
+                $tool_link_params = array();
+                
+                if (strpos($tool['name'],'visio_') !== false) {                    
+                    $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"], 
+                                              'href'    => '"javascript: void(0);"',
+                                              'class'   => $class,
+                                              'onclick' => 'javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
+                                              'target'  =>  $tool['target']);
+                } elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {                                        
+                    $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"],
+                                              'class'   => $class, 
+                                              'href'    => 'javascript: void(0);',
+                                              'onclick' => 'javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
+                                              'target'  =>  $tool['target']);
                 } else {
-                    if (count(explode('type=classroom',$tool['link'])) == 2 || count(explode('type=conference', $tool['link'])) == 2) {
-                        $toollink =  '<a id="tooldesc_'.$tool["id"].'" ' . $class . ' href="' . $tool['link'] . '" target="_blank">';
-                        $my_tool_link =  '<a id="istooldesc_'.$tool["id"].'" ' . $class . ' href="' . $tool['link'] . '" target="_blank">';
+                    if (count(explode('type=classroom',$tool['link'])) == 2 || count(explode('type=conference', $tool['link'])) == 2) {                        
+                        $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"], 
+                                                  'href'    => $tool['link'],
+                                                  'class'   => $class,
+                                                  'target'  =>  '_blank');
+                        
 
-                    } else {
-                        $toollink =  '<a id="tooldesc_'.$tool["id"].'" ' . $class . ' href="' . htmlspecialchars($tool['link']) . '" target="' . $tool['target'] . '">';
-                        $my_tool_link =  '<a id="istooldesc_'.$tool["id"].'" ' . $class . ' href="' . htmlspecialchars($tool['link']) . '" target="' . $tool['target'] . '">';
+                    } else {                        
+                        $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"], 
+                                                  'href'    => htmlspecialchars($tool['link']),
+                                                  'class'   => $class,
+                                                  'target'  => $tool['target']);
+                        
                     }
                 }                
                 $tool_name = self::translate_tool_name($tool);
@@ -717,10 +731,14 @@ class CourseHome {
 
                 // Validacion when belongs to a session
                 $session_img = api_get_session_image($tool['session_id'], $_user['status']);
+                $item['url_params'] = $tool_link_params;
+                $item['icon']       = Display::url($icon, $tool_link_params['href'], $tool_link_params);
+                $item['tool']       = $tool;
+                $item['name']       = $tool_name;            
                 
-                $item['icon']   = $toollink.$icon.'</a>';
-                $item['link']   = $my_tool_link.$tool_name.$session_img.'</a>';
-                $item['id']     = $tool['image'];
+                $tool_link_params['id'] = 'is'.$tool_link_params['id'];
+                $item['link']       = Display::url($tool_name.$session_img, $tool_link_params['href'], $tool_link_params);                
+                
                 
                 $items[] = $item;               
 
@@ -729,12 +747,12 @@ class CourseHome {
         }
         
         $i = 0;
-        
-        //$theme = 'activity_big';     
+         
         if (!empty($items))    
         foreach($items as $item) {         
             switch($theme) {
                 case 'activity_big':
+                    $data = '';
                     if ($i == 0) {
                          echo '<table width="100%">';
                     }                    
@@ -742,10 +760,11 @@ class CourseHome {
                         echo '<tr valign="top">';
                     }                                  
                     echo '<td width="33%">';
-                        echo $item['extra']; 
-                        echo $item['visibility'];
-                        echo $item['icon'];
-                        echo $item['link'];                                              
+                        $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
+                        $image = Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), 64);
+                        $data .= Display::url($image , $item['url_params']['href'], $item['url_params']);
+                        $data .=Display::div($item['visibility'].$item['extra'].$item['link'], array('class'=>'content'));
+                        echo Display::div($data, array('class'=>'big_icon'));
                     echo '</td>';
                     
                     if ($i % 3 == 2) {

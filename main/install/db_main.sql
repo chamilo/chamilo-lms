@@ -821,7 +821,7 @@ VALUES
 ('accessibility_font_resize',NULL,'radio','Platform','false','EnableAccessibilityFontResizeTitle','EnableAccessibilityFontResizeComment',NULL,NULL, 1),
 ('hide_courses_in_sessions',NULL,'radio', 'Platform','false','HideCoursesInSessionsTitle',	'HideCoursesInSessionsComment','platform',NULL, 1),
 ('enable_quiz_scenario',  NULL,'radio','Course','false','EnableQuizScenarioTitle','EnableQuizScenarioComment',NULL,NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.14082','DokeosDatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.14269','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -862,6 +862,7 @@ VALUES
 ('homepage_view','2column','HomepageView2column'),
 ('homepage_view','3column','HomepageView3column'),
 ('homepage_view','vertical_activity','HomepageViewVerticalActivity'),
+('homepage_view','activity_big','HomepageViewActivityBig'),
 ('show_toolshortcuts','true','Yes'),
 ('show_toolshortcuts','false','No'),
 ('allow_group_categories','true','Yes'),

@@ -66,10 +66,10 @@ $(document).ready(function() {
 			data: "id=" + my_tool_id + "&sent_http_request=1",
 			success: function(data) {
 				eval("var info=" + data);
-				new_current_tool_image = "'.api_get_path(WEB_IMG_PATH).'" + info.image;
+				new_current_tool_image = info.image; 
 				new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
 				//eyes
-				$("#" + tool_id).attr("src", new_current_view);
+				$("#" + tool_id).attr("src", new_current_view); 
 				//tool
 				$("#toolimage_" + my_tool_id).attr("src", new_current_tool_image);
 				//clase
@@ -270,8 +270,7 @@ Display::display_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 if ($show_autolunch_lp_warning) {    
     Display::display_warning_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'));
 }
-if (api_get_setting('homepage_view') == 'activity') {
-    //require 'activity_big.php';
+if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_view') == 'activity_big') {
 	require 'activity.php';
 } elseif (api_get_setting('homepage_view') == '2column') {
 	require '2column.php';

@@ -13,3 +13,16 @@ input.maininput:focus {
     box-shadow:0 0 0px #fff;
 	border:none;	
 }
+
+.big_icon {
+	width:205px;
+	padding:10px;
+}
+
+.big_icon img {
+     margin:0 auto 0 auto;	
+}
+
+.courseadminview .big_icon a {
+	font-size:12px; 
+}

@@ -1691,11 +1691,12 @@ div.admin_section {
     float: left;
     padding: 5px;
     margin: 10px 20px;
-    min-height:200px;
+    min-height:234px;
 }
 
 div.admin_section h4 {
-    margin: 0;
+    margin: 5px 0px 5px 5px;
+	padding: 0px 0px 5px 0px;
     border-bottom: 1px solid #E1E1E0;
     width: 100%;
 }

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *    This is the tracking library for Dokeos.
+ *    This is the tracking library for Chamilo
  *    Include/require it in your code to use its functionality.
  *
  *    @package chamilo.library
@@ -164,6 +164,7 @@ class Tracking {
         }
         return false;
     }
+    
 
     /**
      * Get first user's connection date on the course
@@ -1725,7 +1726,7 @@ class Tracking {
             while ($row_type=Database::fetch_array($rs_type)) {
                 $lp_list[] = $row_type['id'];
                 if ($row_type['lp_type']==1) {
-                    //lp dokeos
+                    //lp chamilo
 
                     $sql = "SELECT id FROM $lp_view_table  WHERE user_id = '".intval($user_id)."' and lp_id='".$row_type['id']."'";
                     $rs_last_lp_view_id = Database::query($sql);

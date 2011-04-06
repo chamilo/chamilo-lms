@@ -9,7 +9,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook'); // FIXME
+$language_file = array('reportlib');
 $cidReset = true;
 
 // including files 
@@ -30,6 +30,26 @@ $tool_name=get_lang('Reports');
 // loading templates
 reports_loadTemplates();
 
+// "Link" type
+if ($_REQUEST['format'] == 'link') {
+	// converting post vars to get uri
+	$params = '';
+	$kv = array();
+	foreach ($_POST as $key => $value)
+		if ($key != 'format')
+			$kv[] = $key.'='.urlencode($value);
+	$query_string = join("&", $kv);
+	die('<a href="reports.php?format=directlink&'.$query_string.'">'.get_lang('ReportTypeLink').'</a>');
+}
+
+if ($_REQUEST['format'] == 'directlink') {
+	foreach (array('jquery.js', 'jquery.dataTables.min.js') as $js)
+		$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$js.'" type="text/javascript" language="javascript"></script>'."\n";
+
+	$htmlCSSXtra[] = 'dataTable.css';
+	Display::display_header($tool_name);
+}
+
 // outputing a link to csv file instead of outputing csv data directly
 if ($_REQUEST['format'] == 'csv')  {
 	// converting post vars to get uri
@@ -39,9 +59,19 @@ if ($_REQUEST['format'] == 'csv')  {
 		if ($key != 'format')
 			$kv[] = $key.'='.urlencode($value);
 	$query_string = join("&", $kv);
-	die('<a href="reports.php?format=downloadcsv&'.$query_string.'">download file</a>');
+	die('<a href="reports.php?format=downloadcsv&'.$query_string.'">'.get_lang('DownloadFile').'</a>');
 } else if ($_REQUEST['format'] == 'downloadcsv') {
-	header('content-type: application/csv'); // fixme
+	if ((strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) && (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') == false)) {
+		header("Pragma: must-revalidate");
+		header("Cache-Control: must-revalidate");
+		header("Content-type: application/vnd.ms-excel");
+	}
+	else {
+		header("Content-type: text/csv");
+	}
+	$date = date("Y-m-d");
+	$filename = "reporting-$date.csv";
+	header("Content-Disposition: attachment; filename=$filename");
 	$_REQUEST['format'] = 'csv';
 }
 
@@ -53,10 +83,10 @@ if (is_array($reports_template[$_REQUEST['type']])) {
 		die($query);
 	$result = Database::query($query);
 } else {
-	die('<b>'.get_lang('error while building your report').'</b>');
+	die('<b>'.get_lang('ErrorWhileBuildingReport').'</b>');
 }
 
-if ($_REQUEST['format'] == 'html') {
+if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 	echo '<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 				$("#reportsData").dataTable();
@@ -64,6 +94,9 @@ if ($_REQUEST['format'] == 'html') {
 		</script>';
 	echo '<table id="reportsData" class="display">'; // FIXME style
 	$nfields = mysql_num_fields($result);
+	if (mysql_num_rows($result) == 0) {
+		die(get_lang('NoDataAvailable'));
+	}
 	$columns = array();	
 	$columns_islink = array();
 	echo '<thead><tr>';
@@ -98,6 +131,9 @@ if ($_REQUEST['format'] == 'html') {
 		echo "</tr>\n";
 	}
 	echo '</tbody></table>';
+	if ($_REQUEST['format'] == 'directlink') {
+		Display::display_footer();
+	}
 } else if ($_REQUEST['format'] == 'csv') {
 	$nfields = mysql_num_fields($result);
 	$columns = array();	
@@ -118,6 +154,6 @@ if ($_REQUEST['format'] == 'html') {
 				echo $row[$i].',';  // fixme
 		echo "\n";
 	}
-} else die('format unknown');
+} else die(get_lang('UnknownFormat'));
 
 ?>

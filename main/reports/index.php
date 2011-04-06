@@ -9,7 +9,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook'); // FIXME
+$language_file = array('reportlib');
 $cidReset = true;
 
 
@@ -105,6 +105,9 @@ $htmlHeadXtra[] = '    <style type="text/css">
 			#result {
 				padding-top: 15px;
 			}
+			select.link, select.link:hover {
+				color: black;
+			}
 		</style>';
 
 $htmlCSSXtra[] = 'dataTable.css';
@@ -115,16 +118,15 @@ Display::display_header($tool_name);
 
 ?>
 		<div id="reportsBuilderWizard">
-			<h3>Reports Builder</h3>
+			<h3><?php get_lang('Reports'); ?></h3>
 			<div id='wizardContent'>
-			<p>Please fill the following from to build your report.
-			<hr />
+			<p><?php echo get_lang('PleaseFillFormToBuildReport'); ?></p>
 			<h5 id="status"></h5>
 			<form id="reportsBuilderWizardForm" method="post" action="reports.php" class="bbq">
 				<div id="fieldWrapper">
 				<span class="step" id="first">
-					<span class="font_normal_07em_black">Please choose between the different type of reports</span><br />
-					<label for="type">Report Type</label><br />
+					<span class="font_normal_07em_black"><?php echo get_lang('PleaseChooseReportType'); ?></span><br />
+					<label for="type"><?php echo get_lang('ReportType'); ?></label><br />
 					<select class="input_field_12em link required" name="type" id="type">
 <?php
 foreach($reports_template as $key => $value)
@@ -137,24 +139,25 @@ foreach($reports_template as $key => $value)
 	echo $value['wizard'];
 ?>
 				<span id="format" class="step submit_step">
-					<span class="font_normal_07em_black">Format</span><br />
+					<span class="font_normal_07em_black"><?php echo get_lang('ReportFormat'); ?></span><br />
 
 					<select name="format" id="format">
-						<option value="html">html</option>
-						<option value="csv">csv</option>
-						<option value="sql">sql</option>
+						<option value="html">HTML</option>
+						<option value="csv">CSV</option>
+						<option value="sql">SQL</option>
+						<option value="link"><?php echo get_lang('ReportTypeLink'); ?></option>
 					</select><br />
 				</span>
 				</div>
 				<div id="wizardNavigation"> 							
-					<input class="navigation_button" id="back" value="Back" type="reset" />
-					<input class="navigation_button" id="next" value="Next" type="submit" />
+					<input class="navigation_button" id="back" value="<?php echo get_lang('Back'); ?>" type="reset" />
+					<input class="navigation_button" id="next" value="<?php echo get_lang('Next'); ?>" type="submit" />
 				</div>
 			</form>
 			<hr />
 			</div>
 			<div id="wizardShowButton">
-				Show Wizard
+				<?php echo get_lang('ShowWizard'); ?>
 			</div>		
 			<p id="data"></p>
 

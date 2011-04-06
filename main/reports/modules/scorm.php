@@ -95,7 +95,7 @@ function reports_modules_scorm_scoVal($scorm, $key_id) {
 			' and lpiv.lp_view_id = lpv.id');
 }
 
-function reports_modules_scorm_objectiveVal($scorm, $key_id) {
+function reports_modules_scorm_objVal($scorm, $key_id) {
 	return array('type'=> 'sql', 'sql' => 
 			'select '.$key_id.', lpv.user_id as uid, '.
 			'lpv.session_id, lpiv.view_count as attempt, '.

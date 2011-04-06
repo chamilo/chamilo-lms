@@ -3100,11 +3100,11 @@ a.read {
 	-opera-box-shadow: 0 4px 18px #C8C8C8;
 	-moz-box-shadow: 0 4px 18px #C8C8C8;
 	
-	float: left;
-	height: auto;
-	margin: 0 8px 15px 15px;
-	padding: 16px 12px 5px;
-    width:90%;
+    float: left;
+    height: 88px;
+    margin: 0 8px 15px 15px;
+    padding: 16px 12px 5px;
+    width:600px;
 }
 
 .box_description_group_member {
@@ -3115,8 +3115,6 @@ a.read {
 .mygroups_grid_element_1 {
     width:600px;
     height:100px;
-    padding-left:10px;
-    padding-right:10px;
     overflow:hidden;
 }
 

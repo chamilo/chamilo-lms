@@ -270,12 +270,10 @@ if ($group_id != 0 ) {
 	}
 
 	// details about the current group
-	echo '<div class="head_group">';
-    
+	echo '<div class="head_group">';    
 		echo '<div id="social-group-details">';
 				//Group's title
 				echo '<h2><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h2>';
-
 				//Group's description
 				echo '<div class="social-group-details-info">'.$group_info['description'].'</div>';
 				echo '<div class="social-group-details-info"><a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a></div>';
@@ -288,14 +286,12 @@ if ($group_id != 0 ) {
 						echo get_lang('ThisIsACloseGroup');
 					}
 				echo '</div>';
-
 				if (!empty($relation_group_title)) {
 					echo '<div class="social-group-details-info">';
 					echo '<span>'.get_lang('StatusInThisGroup').' : </span>';
 					echo $relation_group_title;
 					echo '</div>';
 				}
-
 				//Group's tags
 				if (!empty($tags)) {
 					echo '<div id="social-group-details-info"><span>'.get_lang('Tags').' : </span>'.$tags.'</div>';
@@ -306,8 +302,7 @@ if ($group_id != 0 ) {
 
 	//-- Show message groups
 	echo '<div class="messages" style="width:700px">';
-		if (GroupPortalManager::is_group_member($group_id)) {
-			//echo '<h3>'.get_lang('Topics').'</h3>';		
+		if (GroupPortalManager::is_group_member($group_id)) {	
 			
 			$content = MessageManager::display_messages_for_group($group_id);
 			if (empty($content)) {			
@@ -500,7 +495,8 @@ if ($group_id != 0 ) {
 		}
 
 		// Display groups (newest, mygroups, pop)
-		echo '<div class="social-box-container2">';
+	
+		
 	   	if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 	   		$view_group = $_GET['view'];
 
@@ -518,7 +514,6 @@ if ($group_id != 0 ) {
     	        	        $my_group_content = $create_group_item. $my_group_content;
     	            	}
         	        }
-
 	        		break;
 	        	case 'newest' :
 	        		if (count($grid_newest_groups) > 0) {
@@ -532,7 +527,6 @@ if ($group_id != 0 ) {
 	        		break;
 	        	default :
 	        		if (count($grid_pop_groups) > 0) {
-						//echo '<h2>'.get_lang('Popular').'</h2>';
 						$popular_content = Display::return_sortable_grid('popular', array(), $grid_pop_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 					}
 					if (api_is_platform_admin() || api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
@@ -542,41 +536,29 @@ if ($group_id != 0 ) {
 					}
 	        		break;
 	   		}
-	   	} else {
-	        if (count($grid_my_groups) > 0) {	            
-	        	//echo '<h2>'.get_lang('MyGroups').'</h2>';
+	   	} else {	   	    
+	        if (count($grid_my_groups) > 0) {
 	        	$my_group_content = Display::return_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));           
 	        }
    	        if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
+                $create_group_item =  '<a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).get_lang('CreateASocialGroup').'</a>';
+                $my_group_content = $create_group_item. $my_group_content;
+            } else {
+                if (api_is_allowed_to_edit(null,true)) {
                     $create_group_item =  '<a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).get_lang('CreateASocialGroup').'</a>';
                     $my_group_content = $create_group_item. $my_group_content;
-            } else {
-                    if (api_is_allowed_to_edit(null,true)) {
-                        $create_group_item =  '<a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('group_add.png',get_lang('CreateASocialGroup'),array('hspace'=>'6','style'=>'float:left')).get_lang('CreateASocialGroup').'</a>';
-                        $my_group_content = $create_group_item. $my_group_content;
-                    }
+                }
             }
-			if (count($grid_newest_groups) > 0) {					
-				//echo '<h2>'.get_lang('Newest').'</h2>';
-				$newest_content = Display::return_sortable_grid('newest', array(), $grid_newest_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
+			if (count($grid_newest_groups) > 0) {
+				$newest_content  = Display::return_sortable_grid('mygroups', array(), $grid_newest_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
 			}
 			if (count($grid_pop_groups) > 0) {
-				//echo '<div class="social-groups-text3">'.get_lang('Popular').'</div>';
-				//echo '<h2>'.get_lang('Popular').'</h2>';
-				$popular_content = Display::return_sortable_grid('popular', array(), $grid_pop_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
+				$popular_content = Display::return_sortable_grid('mygroups', array(), $grid_pop_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 			}
-			if (api_is_platform_admin() || api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
-				if (empty($grid_my_groups)  && empty($grid_newest_groups)  && empty($grid_pop_groups) ) {
-					//echo '<a href="group_add.php">'.get_lang('YouShouldCreateAGroup').'</a>';
-				}
-			}
-	   	}
-	   	
-	   	$headers = array(get_lang('MyGroups'), get_lang('Newest'), get_lang('Popular'));
-	   	
-		echo Display::tabs($headers, array($my_group_content, $newest_content, $popular_content),'tab_browse');		
-		echo '</div>';
-}
+	   	}	   	
+	   	$headers = array(get_lang('MyGroups'), get_lang('Newest'), get_lang('Popular'));	   	
+		echo Display::tabs($headers, array($my_group_content, $newest_content, $popular_content),'tab_browse');
+    }
 	echo '</div>';
 echo '</div>';
 Display :: display_footer();

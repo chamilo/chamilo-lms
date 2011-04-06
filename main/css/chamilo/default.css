@@ -3281,10 +3281,10 @@ a.read {
 	-moz-box-shadow: 0 4px 18px #C8C8C8;
 	
 	float: left;
-	height: auto;
+	height: 88px;
 	margin: 0 8px 15px 15px;
 	padding: 16px 12px 5px;
-	width:90%;
+	width:600px;
 }
 
 .box_description_group_member {
@@ -3294,9 +3294,7 @@ a.read {
 
 .mygroups_grid_element_1 {
     width:600px;
-    height:100px;
-    padding-left:10px;
-    padding-right:10px;
+    height:100px;    
     overflow:hidden;
 }
 
@@ -3305,11 +3303,12 @@ a.read {
 }
 
 .box_description_group_title {
-    float:right;width:80%;
+    float:right;
+	width:530px;
 }
 .box_description_group_content {
     float:right;
-    width:80%;
+    width:530px;
     margin-top:5px;
     /* height:45px;*/
     font-family:Verdana, Geneva, sans-serif;
@@ -3318,7 +3317,7 @@ a.read {
 }
 .box_description_group_actions {
     float:right;
-    width:80%;
+    width:530px;
     text-align:right;
     margin-top:4px;
     margin-right:4px;

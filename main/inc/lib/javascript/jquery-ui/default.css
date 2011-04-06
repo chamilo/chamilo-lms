@@ -51,7 +51,10 @@
 
 /* Removes the gray background in the jqgrid main/session/index.php */
 .ui-widget-header {
-	background: #FFF; 
+	background: #FFF;
+	border: none;
+	border-bottom: 1px solid #ccc;
+	border-radius:0px;
 }
 
 /* tabs: anchor size otherwise anchors will have a bigger font size */

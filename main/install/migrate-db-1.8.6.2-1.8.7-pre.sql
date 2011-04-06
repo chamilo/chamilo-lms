@@ -196,3 +196,5 @@ ALTER TABLE student_publication MODIFY COLUMN description TEXT DEFAULT NULL;
 ALTER TABLE student_publication ADD COLUMN user_id INTEGER  NOT NULL AFTER session_id;
 INSERT INTO course_setting(variable,value,category) VALUES ('email_alert_students_on_new_homework',0,'work');
 ALTER TABLE lp ADD COLUMN hide_toc_frame TINYINT NOT NULL DEFAULT 0;
+
+alter table lp_item_view modify column suspend_data longtext;

@@ -1284,7 +1284,7 @@ function update_Db_course($courseDbName, $language = null)
 		"total_time		int unsigned not null default 0," . //after how many seconds did he close it?
 		"score			float unsigned not null default 0," . //score returned by SCORM or other techs
 		"status			char(32) not null default 'not attempted'," . //status for this item (SCORM)
-		"suspend_data	text null default ''," .
+		"suspend_data	longtext null default ''," .
 		"lesson_location text null default ''," .
 		"core_exit		varchar(32) not null default 'none'," .
 		"max_score		varchar(8) default ''" .

@@ -793,16 +793,11 @@ if ($timezone !== null) {
 		} else {
 			echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
 		}
+		echo '</table>';
+				
+	    // line about other tools
+		echo '<table class="data_table">';
 		
-?>
-					</table>
-
-	<!-- line about other tools -->
-			<table class="data_table">
-	<tr>
-		<td>
-			<?php
-
 		$csv_content[] = array ();
 		$nb_assignments 		= Tracking::count_student_assignments($student_id, $course_code, $session_id);
 		$messages 				= Tracking::count_student_messages($student_id, $course_code, $session_id);
@@ -880,13 +875,9 @@ if ($timezone !== null) {
 			</td>
 		</tr>
 		</table>
-	
-	</table>
-	<br />
-<?php
 
-	} else {
-		
+<?php
+	} else {		
 		$courses_in_session = array ();
 		if (!api_is_platform_admin(true) && $_user['status'] != DRH) {
 			// courses followed by user where we are coach
@@ -1054,27 +1045,20 @@ if ($timezone !== null) {
 							echo '<td align="center" width="10"><a href="'.api_get_self().'?student='.$info_user['user_id'].'&details=true&course='.$course_info['code'].'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
 						}
 						echo '</tr>';
-					}
-	
+					}	
 				}
 			} else {
-					echo "<tr><td colspan='5'>".get_lang('NoCourse')."</td></tr>";
+                echo "<tr><td colspan='5'>".get_lang('NoCourse')."</td></tr>";
 			}
-			echo '</table>'; 
-												
+			echo '</table>';					
 		}
 	} //end of else !empty($details)
-?>
 	
-<?php
-
+    /* @todo this code seems to be NOT used jmontoya
 	if (!empty ($_GET['details']) && $_GET['origin'] != 'tracking_course' && $_GET['origin'] != 'user_course') {
-?>
-
-		<br /><br />
-<?php
-
+        echo '<br /><br />';
 	}
+	
 	if (!empty ($_GET['exe_id'])) {
 		$t_q = Database :: get_course_table(TABLE_QUIZ_TEST, $info_course['db_name']);
 		$t_qq = Database :: get_course_table(TABLE_QUIZ_QUESTION, $info_course['db_name']);
@@ -1140,6 +1124,7 @@ if ($timezone !== null) {
 		}
 		echo "</table>";
 	}
+	*/
 	//YW - commented out because it doesn't seem to be used
 	//$header = array_merge($headerLearnpath,$headerExercices,$headerProductions);
 }

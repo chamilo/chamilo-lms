@@ -3309,5 +3309,49 @@ class UserManager
 		$icon_link = $pieces['scheme'].'://'.$pieces['host'].'/favicon.ico';
 		return $icon_link;
 	}
+	
+    /**
+     * 
+     * @param int   student id
+     * @param int   years
+     * @param bool  show warning_message
+     * @param bool  return_timestamp
 
+     */    
+    public static function delete_inactive_student($student_id, $years = 2, $warning_message = false, $return_timestamp = false) {
+        $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $sql = 'SELECT login_date FROM ' . $tbl_track_login . ' WHERE login_user_id = ' . intval($student_id) . ' ORDER BY login_date DESC LIMIT 0,1';
+        if (empty($years)) {
+            $years = 1;
+        }
+        $inactive_time = $years * 31536000;  //1 year
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs)>0) {
+            if ($last_login_date = Database::result($rs, 0, 0)) {
+                $last_login_date = api_get_local_time($last_login_date, null, date_default_timezone_get());
+                if ($return_timestamp) {
+                    return api_strtotime($last_login_date);
+                } else {
+                    if (!$warning_message) {
+                        return api_format_date($last_login_date, DATE_FORMAT_SHORT);
+                    } else {
+                        $timestamp = api_strtotime($last_login_date);
+                        $currentTimestamp = time();
+                
+                        //If the last connection is > than 7 days, the text is red
+                        //345600 = 7 days in seconds 63072000= 2 ans
+                    
+                     // if ($currentTimestamp - $timestamp > 184590 )
+                        if ($currentTimestamp - $timestamp > $inactive_time && UserManager::delete_user($student_id )) {
+                            Display :: display_normal_message(get_lang('UserDeleted'));                    
+                                //avec validation:  
+                                //  $result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$student_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';                       
+                            echo '<p>','id',$student_id ,':',$last_login_date,'</p>';                
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

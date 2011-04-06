@@ -113,35 +113,28 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	}
 ?>
 	<div class="courseadminview">
-		<span class="viewcaption"><?php echo get_lang('Authoring'); ?></span>
-		<table width="100%">
+		<span class="viewcaption"><?php echo get_lang('Authoring'); ?></span>		
 <?php
 			$my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
 			CourseHome::show_tools_category($my_list);
 ?>
-		</table>
 	</div>
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang('Interaction'); ?></span>
-		<table width="100%">
 <?php
         $my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
         $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
         $my_list = array_merge($my_list,$list2);
         CourseHome::show_tools_category($my_list);
 ?>
-		</table>
 	</div>
 	<div class="courseadminview">
-		<span class="viewcaption"><?php echo get_lang('Administration'); ?></span>
-		<table width="100%">
+		<span class="viewcaption"><?php echo get_lang('Administration'); ?></span>		
 <?php
         $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATEFORM);
         CourseHome::show_tools_category($my_list);
-?>
-		</table>
+?>	
 	</div>
-
 <?php
 } elseif (api_is_coach()) {
 
@@ -159,12 +152,10 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	}
 ?>
 		<div class="Authoringview">
-			<table width="100%">
 <?php
 				$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
 				CourseHome::show_tools_category($my_list);
 ?>
-			</table>
 		</div>
 <?php
 
@@ -175,12 +166,9 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	if (count($my_list) > 0) {
 ?>
 	<div class="Authoringview">
-
-		<table width="100%">
 <?php
 			CourseHome::show_tools_category($my_list);
 ?>
-		</table>
 	</div>
 <?php
 	}

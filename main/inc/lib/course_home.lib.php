@@ -614,10 +614,11 @@ class CourseHome {
         $is_platform_admin  = api_is_platform_admin();
         
         $i = 0;
+        $items = array();
         if (isset($all_tools_list)) {
-            $lnk = '';
-            if ($theme == 'vertical_activity') echo '<ul>';
+            $lnk = '';            
             foreach ($all_tools_list as & $tool) {
+                $item = array();
 
                 if ($tool['image'] == 'scormbuilder.gif') {
                     // display links to lp only for current session
@@ -633,22 +634,11 @@ class CourseHome {
 
                 if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
                     continue;
-                }
-                if ($theme == 'activity') {
-                    if (!($i % 2)) {
-                        echo '<tr valign="top">';
-                    }
-                } elseif ($theme == 'vertical_activity') {
-                    echo '<li>';
-                }
+                } 
 
                 // This part displays the links to hide or remove a tool.
                 // These links are only visible by the course manager.
                 unset($lnk);
-
-                if ($theme == 'activity') {
-                    echo '<td width="50%">';
-                }
 
                 if ($is_allowed_to_edit && !api_is_coach()) {
 
@@ -663,7 +653,7 @@ class CourseHome {
                         $lnk[] = $link;
                     }
                     if (!empty($tool['adminlink'])) {
-                        echo '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+                        $item['extra'] = '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
                     }
                 }
 
@@ -677,11 +667,11 @@ class CourseHome {
                 if (isset($lnk) && is_array($lnk)) {
                     foreach ($lnk as $this_link) {
                         if (empty($tool['adminlink'])) {
-                            echo '<a class="make_visible_and_invisible"  href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
+                            $item['visibility'] .=  '<a class="make_visible_and_invisible"  href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
                         }
                     }
                 } else {
-                    echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+                    $item['visibility'] .=  '&nbsp;&nbsp;&nbsp;&nbsp;';
                 }
 
                 // NOTE : Table contains only the image file name, not full path
@@ -721,40 +711,88 @@ class CourseHome {
                         $toollink =  '<a id="tooldesc_'.$tool["id"].'" ' . $class . ' href="' . htmlspecialchars($tool['link']) . '" target="' . $tool['target'] . '">';
                         $my_tool_link =  '<a id="istooldesc_'.$tool["id"].'" ' . $class . ' href="' . htmlspecialchars($tool['link']) . '" target="' . $tool['target'] . '">';
                     }
-                }
-                
+                }                
                 $tool_name = self::translate_tool_name($tool);
                 $icon = Display::return_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']));
 
                 // Validacion when belongs to a session
                 $session_img = api_get_session_image($tool['session_id'], $_user['status']);
                 
-                echo $toollink; //<a>
-                echo $icon;
-                echo '</a> ';
+                $item['icon']   = $toollink.$icon.'</a>';
+                $item['link']   = $my_tool_link.$tool_name.$session_img.'</a>';
+                $item['id']     = $tool['image'];
                 
-                echo $my_tool_link; //<a>                
-                echo $tool_name.$session_img;
-                echo '</a>';
-                
-                if ($theme == 'activity') {
-                    echo '</td>';
-                    if ($i % 2) {
-                        echo '</tr>';
-                    }
-                } elseif($theme == 'vertical_activity') {
-                    echo '</li>';
-                }
+                $items[] = $item;               
+
                 $i++;
             } // end of foreach
         }
-        if ($theme == 'activity') {
-            if ($i % 2) {
-                echo '<td width=\"50%\">&nbsp;</td></tr>';
-            }
-        } elseif($theme == 'vertical_activity') {
-            echo '</ul>';
-        }
+        
+        $i = 0;
+        
+        //$theme = 'activity_big';     
+        if (!empty($items))    
+        foreach($items as $item) {         
+            switch($theme) {
+                case 'activity_big':
+                    if ($i == 0) {
+                         echo '<table width="100%">';
+                    }                    
+                    if ($i % 3 == 0) {
+                        echo '<tr valign="top">';
+                    }                                  
+                    echo '<td width="33%">';
+                        echo $item['extra']; 
+                        echo $item['visibility'];
+                        echo $item['icon'];
+                        echo $item['link'];                                              
+                    echo '</td>';
+                    
+                    if ($i % 3 == 2) {
+                        echo '</tr>';
+                    }
+                    if ($i == count($items) -1) {
+                        echo '</table>';
+                    }               
+                    break;
+                case 'activity':  
+                    if ($i == 0) {
+                         echo '<table width="100%">';
+                    }                    
+                    if (!($i % 2)) {
+                        echo '<tr valign="top">';
+                    }                                        
+                    echo '<td width="50%">';
+                        echo $item['extra']; 
+                        echo $item['visibility'];
+                        echo $item['icon'];
+                        echo $item['link'];                        
+                    echo '</td>';                    
+                    if ($i % 2) {
+                        echo '</tr>';
+                    }
+                    if ($i == count($items) -1) {
+                        echo '</table>';
+                    }               
+                    break;
+                case 'vertical_activity':
+                    if ($i == 0) {
+                        echo '<ul>';
+                    }                    
+                    echo '<li>';
+                        echo $item['extra']; 
+                        echo $item['visibility'];
+                        echo $item['icon'];
+                        echo $item['link'];  
+                    echo '</li>';
+                    
+                    if ($i == count($items) -1) {
+                        echo '</ul>';
+                    }
+                    break;    
+            }   
+            $i++;         
+        }        
     }
 
     /**

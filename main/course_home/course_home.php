@@ -271,6 +271,7 @@ if ($show_autolunch_lp_warning) {
     Display::display_warning_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'));
 }
 if (api_get_setting('homepage_view') == 'activity') {
+    //require 'activity_big.php';
 	require 'activity.php';
 } elseif (api_get_setting('homepage_view') == '2column') {
 	require '2column.php';

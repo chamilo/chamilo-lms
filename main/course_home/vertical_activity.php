@@ -120,28 +120,22 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 <?php
 			$my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
 			CourseHome::show_tools_category($my_list, 'vertical_activity');
-?>
-	
+?>	
 	</div>
 	<div class="courseadminview-activity-3col">
-		<span class="viewcaption"><?php echo get_lang('Interaction'); ?></span>
-		
+		<span class="viewcaption"><?php echo get_lang('Interaction'); ?></span>		
 <?php
 			$my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
 			CourseHome::show_tools_category($my_list, 'vertical_activity');
-?>
-	
+?>	
 	</div>
 	<div class="courseadminview-activity-3col">
-		<span class="viewcaption"><?php echo get_lang('Administration'); ?></span>
-	
+		<span class="viewcaption"><?php echo get_lang('Administration'); ?></span>	
 <?php
 			$my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATEFORM);
 			CourseHome::show_tools_category($my_list, 'vertical_activity');
 ?>
 	</div>
-	
-
 <?php
 } elseif (api_is_coach()) {
 
@@ -159,12 +153,10 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	}
 ?>
 		<div class="Authoringview">
-			<table width="100%">
 <?php
 				$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
 				CourseHome::show_tools_category($my_list, 'vertical_activity');
 ?>
-			</table>
 		</div>		
 <?php
 
@@ -173,39 +165,32 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 } else {
 	$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
 	if (count($my_list) > 0) {
-?>
-	<div class="course-student-view-activity-3col">
-<?php
+        echo '<div class="course-student-view-activity-3col">';
+		//ordering by get_lang name
+		$order_tool_list = array();
+		foreach($my_list as $key=>$new_tool) {
+			$tool_name = CourseHome::translate_tool_name($new_tool);
+			$order_tool_list [$key]= $tool_name;
+		}		
+		natsort($order_tool_list);		
+		$my_temp_tool_array = array();
+		foreach($order_tool_list as $key=>$new_tool) {
+			$my_temp_tool_array[] = $my_list[$key];
+		}
+		$my_list = $my_temp_tool_array;
 
-			//ordering by get_lang name
-			$order_tool_list = array();
-			foreach($my_list as $key=>$new_tool) {
-				$tool_name = CourseHome::translate_tool_name($new_tool);
-				$order_tool_list [$key]= $tool_name;
-			}		
-			natsort($order_tool_list);		
-			$my_temp_tool_array = array();
-			foreach($order_tool_list as $key=>$new_tool) {
-				$my_temp_tool_array[] = $my_list[$key];
+		$i = 0;
+		foreach($my_list as $new_tool) {
+			if ($i >= 10) {
+				$my_list2[] = $new_tool;
+			} else {
+				$my_list1[] = $new_tool;
 			}
-			$my_list = $my_temp_tool_array;
-
-			$i = 0;
-			foreach($my_list as $new_tool) {
-				if ($i >= 10) {
-					$my_list2[] = $new_tool;
-				} else {
-					$my_list1[] = $new_tool;
-				}
-				$i++;
-			}
-			CourseHome::show_tools_category($my_list1, 'vertical_activity');
-			CourseHome::show_tools_category($my_list2, 'vertical_activity');
-			
-			
-?>		
-	</div>
-<?php
+			$i++;
+		}
+		CourseHome::show_tools_category($my_list1, 'vertical_activity');
+		CourseHome::show_tools_category($my_list2, 'vertical_activity');
+        echo '</div>';
 	}
 }
 ?>

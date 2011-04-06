@@ -268,7 +268,7 @@ function save_wiki() {
 
     // cleaning the variables
     $_clean['page_id']		= Database::escape_string($_POST['page_id']);
-    $_clean['reflink']		= Database::escape_string(trim(api_htmlentities($_POST['reflink'])));
+    $_clean['reflink']		= Database::escape_string(trim($_POST['reflink'])); 
     $_clean['title']		= Database::escape_string(trim($_POST['title']));
     $_clean['content']		= Database::escape_string($_POST['content']);
     $_clean['user_id']		= api_get_user_id();
@@ -277,9 +277,6 @@ function save_wiki() {
     $_clean['progress']		= Database::escape_string($_POST['progress']);
     $_clean['version']		= intval($_POST['version']) + 1 ;
     $_clean['linksto'] 		= links_to($_clean['content']); //and check links content
-
-
-
 
     $dtime = date( "Y-m-d H:i:s" );
     $session_id = api_get_session_id();
@@ -336,6 +333,7 @@ function save_wiki() {
 
     $sql = "INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip, session_id)
             VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."', '".Database::escape_string($session_id)."')";
+
 
     $result	= Database::query($sql);
     $Id 	= Database::insert_id();
@@ -738,6 +736,7 @@ return true;
 /**
 * This function displays a wiki entry
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+* @author Juan Carlos Raña Trabado
 * @return html code
 **/
 function display_wiki_entry($newtitle)
@@ -773,8 +772,8 @@ function display_wiki_entry($newtitle)
     $sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.Database::escape_string($pageMIX).'" AND '.$tbl_wiki.'.session_id='.$session_id.' AND '.$tbl_wiki.'.'.$groupfilter.' '.$filter.' ORDER BY id DESC';
     $result=Database::query($sql);
     $row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
-
-    //update visits
+	
+	//update visits
     if($row['id'])
     {
         $sql='UPDATE '.$tbl_wiki.' SET hits=(hits+1) WHERE id='.$row['id'].'';
@@ -886,20 +885,6 @@ function display_wiki_entry($newtitle)
 
         //page action: export to pdf
         echo '<span style="float:right;padding-top:5px;">';
-        // Modified by Ivan Tcholakov, 28-JAN-2010.
-        //echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">';
-
-        /*echo '<form name="form_export2PDF" method="post" action="export_mpdf.php" target="_blank, fullscreen">';
-        //
-        echo '<input type=hidden name="titlePDF" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
-        $clean_pdf_content=trim(preg_replace("/\[\[|\]\]/", " ", $content));
-        $array_clean_pdf_content= explode('|', $clean_pdf_content);
-        $clean_pdf_content= $array_clean_pdf_content[1];
-        echo '<input type=hidden name="contentPDF" value="'.api_htmlentities($clean_pdf_content, ENT_QUOTES, $charset).'">';
-        echo '<input type="image" src="../img/wiki/wexport2pdf.gif" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none; margin-top: -6px">';
-        echo '</form>';
-        echo '</span>';*/
-
         echo '<form name="form_export2PDF" method="post" action="index.php">';
         echo '<input type="hidden" name="action" value="export_to_pdf">';
         echo '<input type="hidden" name="wiki_id" value="'.$row['id'].'">';
@@ -1764,7 +1749,9 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
     $exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
     $exportFile = replace_dangerous_char($wikiTitle, 'strict') . $groupPart;
 
-    $wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
+    $clean_wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
+	$array_clean_wikiContents= explode('|', $clean_wikiContents);
+    $wikiContents= $array_clean_wikiContents[1];
 
     $wikiContents = str_replace('{CONTENT}', $wikiContents, $template);
 
@@ -1792,7 +1779,15 @@ function export_to_pdf($id, $course_code) {
     require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
     $data        = get_wiki_data($id);
+	
+	
     $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
+	
+	//clean wiki links
+	$clean_pdf_content=trim(preg_replace("/\[\[|\]\]/", " ", $content_pdf));
+    $array_clean_pdf_content= explode('|', $clean_pdf_content);
+    $content_pdf= $array_clean_pdf_content[1];
+		
     $title_pdf   = api_html_entity_decode($data['title'], ENT_QUOTES, api_get_system_encoding());
 
     $title_pdf   = api_utf8_encode($title_pdf, api_get_system_encoding());

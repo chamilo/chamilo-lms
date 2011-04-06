@@ -7,3 +7,9 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:none;
 	background-color:white;
 }
+
+/* Fixes the FB input*/
+input.maininput:focus {
+    box-shadow:0 0 0px #fff;
+	border:none;	
+}

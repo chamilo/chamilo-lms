@@ -34,7 +34,7 @@ body
 
 #xEditingArea
 {
-	border: #696969 1px solid;
+	border: #ccc 1px solid;
 }
 
 .SourceField
@@ -110,7 +110,7 @@ body
 
 .TB_SideBorder
 {
-	background-color: #696969;
+	background-color: #ccc;
 }
 
 .TB_Expand, .TB_Collapse

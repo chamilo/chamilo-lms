@@ -81,6 +81,12 @@ function get_tabs() {
 			$navigation['reports']['title'] = get_lang('Reports');
 	}
 
+	// Custom tabs
+	for ($i = 1; $i<=3; $i++) 
+		if (api_get_setting('custom_tab_'.$i.'_name') && api_get_setting('custom_tab_'.$i.'_url')) {
+			$navigation['custom_tab_'.$i]['url'] = api_get_setting('custom_tab_'.$i.'_url');
+			$navigation['custom_tab_'.$i]['title'] = api_get_setting('custom_tab_'.$i.'_name');
+		}
 
 	// Platform administration
 	if (api_is_platform_admin(true)) {

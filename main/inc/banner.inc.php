@@ -272,6 +272,14 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 		$menu_navigation['reports'] = $possible_tabs['reports'];
 	}
 
+	// Custom tabs
+	for ($i=1;$i<=3;$i++)
+		if (api_get_setting('show_tabs', 'custom_tab_'.$i) == 'true') {
+			$navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
+		} else{
+			$menu_navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
+		}
+
 	// Administration
 	if (api_is_platform_admin(true)) {
 		if (api_get_setting('show_tabs', 'platform_administration') == 'true') {

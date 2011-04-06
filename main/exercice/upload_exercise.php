@@ -123,7 +123,7 @@ function lp_upload_quiz_action_handling() {
     // Read the Excel document
     $data = new Spreadsheet_Excel_Reader();
     // Set output Encoding.
-    $data->setOutputEncoding('UTF-8');
+    $data->setOutputEncoding(api_get_system_encoding());
     // Reading the xls document.
     $data->read($_FILES['user_upload_quiz']['tmp_name']);
  
@@ -256,8 +256,7 @@ function lp_upload_quiz_action_handling() {
                 }
             }
         }
-        
-           var_dump($data->sheets[0]);exit;
+
         if (isset($_SESSION['lpobject'])) {
             if ($debug > 0) {
                 error_log('New LP - SESSION[lpobject] is defined', 0);

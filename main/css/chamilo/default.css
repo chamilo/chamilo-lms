@@ -728,7 +728,7 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
     /*height: 10em;*/	 /* Do not change this value */
     overflow:hidden;
     width: 100%;
-    padding-bottom:10px;
+    padding-bottom:20px;
 }
 /* Sticky footer*/
 .push {

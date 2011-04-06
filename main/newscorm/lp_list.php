@@ -212,7 +212,7 @@ if (is_array($flat_list)) {
         $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
         $name = Security::remove_XSS($details['lp_name']);
         if ($is_allowed_to_edit) {
-            $dsp_desc = '<em>'.$details['lp_maker'].'</em>  &nbsp;'.$details['lp_proximity'].'<br />'.(learnpath::is_lp_visible_for_student($id,api_get_user_id())?'':'('.get_lang('LPNotVisibleToStudent').')');
+            $dsp_desc = '<em>'.$details['lp_maker'].'</em>  &nbsp;'.$details['lp_proximity'].' '.(learnpath::is_lp_visible_for_student($id, api_get_user_id())?'':' - ('.get_lang('LPNotVisibleToStudent').')');
             $extra = '<br /><font color="#999"><i>'.$dsp_desc .'</i></font>';
         }
         

@@ -9,7 +9,7 @@ $reports_modules = array();
 
 $reports_enabled_modules = array('quiz','course','scorm');
 
-$reports_enabled_templates = array('exercicesMultiCourses', 'courseTime','scorm');
+$reports_enabled_templates = array('exercicesMultiCourses', 'courseTime');
 
 
 // load templates 

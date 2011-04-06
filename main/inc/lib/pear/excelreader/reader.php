@@ -167,6 +167,7 @@ class Spreadsheet_Excel_Reader
      */
     var $_defaultEncoding;
 
+
     /**
      * Default number format
      *
@@ -386,8 +387,8 @@ class Spreadsheet_Excel_Reader
             if($this->_ole->error == 1) {
             // bad file
                 //die('The filename ' . $sFileName . ' is not readable');
-				Display::display_header('');
-				Display::display_error_message(get_lang('XLSFileNotValid'));
+                Display::display_header('');
+                Display::display_error_message(get_lang('XLSFileNotValid'));
                 Display::display_footer();
                 exit;
             }
@@ -465,7 +466,7 @@ class Spreadsheet_Excel_Reader
         $length = ord($this->data[$pos+2]) | ord($this->data[$pos+3])<<8;
 
         while ($code != SPREADSHEET_EXCEL_READER_TYPE_EOF) {
-            switch ($code) {
+            switch ($code) {  
                 case SPREADSHEET_EXCEL_READER_TYPE_SST:
                     //echo "Type_SST\n";
                      $spos = $pos + 4;
@@ -562,7 +563,9 @@ class Spreadsheet_Excel_Reader
 
                                                          }
                                                 }
-                                                $retstr = ($asciiEncoding) ? $retstr : $this->_encodeUTF16($retstr);
+                                                //We check the string before send it check the _encodeUTF16
+                                                //$retstr = ($asciiEncoding) ? $retstr : $this->_encodeUTF16($retstr); 
+                                                $retstr = ($asciiEncoding) ? $this->_encodeUTF16($retstr, true) : $this->_encodeUTF16($retstr);
 //                                              echo "Str $i = $retstr\n";
                                         if ($richString){
                                                   $spos += 4 * $formattingRuns;
@@ -1050,19 +1053,30 @@ class Spreadsheet_Excel_Reader
         }
         return $value;
     }
-
-    function _encodeUTF16($string)
-    {
-        $result = $string;
+    
+    /* 
+     * Function modified by jmontoya in order to fix a problem with encoding in excels 
+     * */
+    function _encodeUTF16($string, $check = false) {
+        //var_dump($this->_defaultEncoding.' '.$this->_encoderFunction.' '.$from);        
+        if ($check) {
+            $from = api_detect_encoding($string);
+            $string = api_convert_encoding($string, $this->_defaultEncoding, $from);
+            return $string;    
+        }
+        $string =  api_convert_encoding($string, $this->_defaultEncoding, 'UTF-16LE');
+        return $string;
+        /*
         if ($this->_defaultEncoding){
             switch ($this->_encoderFunction){
                 case 'iconv' :     $result = iconv('UTF-16LE', $this->_defaultEncoding, $string);
                                 break;
-                case 'mb_convert_encoding' :     $result = mb_convert_encoding($string, $this->_defaultEncoding, 'UTF-16LE' );
+                case 'iconv' :     $result = mb_convert_encoding($string, $this->_defaultEncoding, $this->_defaultEncoding2 );
                                 break;
             }
         }
         return $result;
+        */
     }
 
     function _GetInt4d($data, $pos)
@@ -1074,6 +1088,62 @@ class Spreadsheet_Excel_Reader
         }
         return $value;
     }
+    
+    function _CodePageNumberToName($codePage = '1252')
+    {
+        switch ($codePage) {
+            case 367:   return 'ASCII';     break;  //  ASCII
+            case 437:   return 'CP437';     break;  //  OEM US
+            case 720:   throw new Exception('Code page 720 not supported.');
+                                            break;  //  OEM Arabic
+            case 737:   return 'CP737';     break;  //  OEM Greek
+            case 775:   return 'CP775';     break;  //  OEM Baltic
+            case 850:   return 'CP850';     break;  //  OEM Latin I
+            case 852:   return 'CP852';     break;  //  OEM Latin II (Central European)
+            case 855:   return 'CP855';     break;  //  OEM Cyrillic
+            case 857:   return 'CP857';     break;  //  OEM Turkish
+            case 858:   return 'CP858';     break;  //  OEM Multilingual Latin I with Euro
+            case 860:   return 'CP860';     break;  //  OEM Portugese
+            case 861:   return 'CP861';     break;  //  OEM Icelandic
+            case 862:   return 'CP862';     break;  //  OEM Hebrew
+            case 863:   return 'CP863';     break;  //  OEM Canadian (French)
+            case 864:   return 'CP864';     break;  //  OEM Arabic
+            case 865:   return 'CP865';     break;  //  OEM Nordic
+            case 866:   return 'CP866';     break;  //  OEM Cyrillic (Russian)
+            case 869:   return 'CP869';     break;  //  OEM Greek (Modern)
+            case 874:   return 'CP874';     break;  //  ANSI Thai
+            case 932:   return 'CP932';     break;  //  ANSI Japanese Shift-JIS
+            case 936:   return 'CP936';     break;  //  ANSI Chinese Simplified GBK
+            case 949:   return 'CP949';     break;  //  ANSI Korean (Wansung)
+            case 950:   return 'CP950';     break;  //  ANSI Chinese Traditional BIG5
+            case 1200:  return 'UTF-16LE';  break;  //  UTF-16 (BIFF8)
+            case 1250:  return 'CP1250';    break;  //  ANSI Latin II (Central European)
+            case 1251:  return 'CP1251';    break;  //  ANSI Cyrillic
+            case 0:                                 //  CodePage is not always correctly set when the xls file was saved by Apple's Numbers program
+            case 1252:  return 'CP1252';    break;  //  ANSI Latin I (BIFF4-BIFF7)
+            case 1253:  return 'CP1253';    break;  //  ANSI Greek
+            case 1254:  return 'CP1254';    break;  //  ANSI Turkish
+            case 1255:  return 'CP1255';    break;  //  ANSI Hebrew
+            case 1256:  return 'CP1256';    break;  //  ANSI Arabic
+            case 1257:  return 'CP1257';    break;  //  ANSI Baltic
+            case 1258:  return 'CP1258';    break;  //  ANSI Vietnamese
+            case 1361:  return 'CP1361';    break;  //  ANSI Korean (Johab)
+            case 10000: return 'MAC';       break;  //  Apple Roman
+            case 32768: return 'MAC';       break;  //  Apple Roman
+            case 32769: throw new Exception('Code page 32769 not supported.');
+                                            break;  //  ANSI Latin I (BIFF2-BIFF3)
+            case 65001: return 'UTF-8';     break;  //  Unicode (UTF-8)
+        }
+    }
+    
+    function _GetInt2d($data, $pos)
+    {
+        return ord($data[$pos]) | (ord($data[$pos + 1]) << 8);
+    }
+        
+
+    
+
 
 }
 

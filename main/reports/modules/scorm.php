@@ -99,7 +99,7 @@ function reports_modules_scorm_objVal($scorm, $key_id) {
 	return array('type'=> 'sql', 'sql' => 
 			'select '.$key_id.', lpv.user_id as uid, '.
 			'lpv.session_id, lpiv.view_count as attempt, '.
-			'lpivo.score_row as score, '.
+			'lpivo.score_raw as score, '.
 			'(case lpivo.status '.
 				'when "incomplete" then 0 '.
 				'when "completed" then 1 '.
@@ -118,7 +118,7 @@ function reports_modules_scorm_objVal($scorm, $key_id) {
 			' lpivo '.
 			' where lpv.lp_id = '.$scorm['child_id'].
 			' and lpiv.lp_item_id = '.$scorm['subchild_id'].
-			' and lpivo.objective_id = '.$scorm['subsubchild_name'].
+			' and lpivo.objective_id = "'.$scorm['subsubchild_name'].'" '.
 			' and lpiv.lp_view_id = lpv.id'.
 			' and lpivo.lp_iv_id=lpiv.id');
 }

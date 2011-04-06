@@ -98,6 +98,19 @@ function event_login()
 					FROM_UNIXTIME(".$reallyNow.")		 
 					)";
 	$res = Database::query($sql);
+	// autoSubscribe
+	$user_status = $_user['status'];
+	$user_status = $_user['status']  == SESSIONADMIN ? 'sessionadmin' : 
+			$_user['status'] == COURSEMANAGER ? 'teacher' :
+			$_user['status'] == DRH ? 'DRH' :
+			'student';
+	$autoSubscribe = api_get_setting($user_status.'_autosubscribe');
+	if ($autoSubscribe) {
+		$autoSubscribe = explode('|', $autoSubscribe);
+		foreach ($autoSubscribe as $code) 
+			CourseManager::subscribe_user($_user['user_id'], $code);
+	}
+
 }
 
 /**

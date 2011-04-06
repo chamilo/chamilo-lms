@@ -1280,6 +1280,15 @@ $DRHPageAfterLoginTitle =  "Page à montrer pour les DRH une fois authentifiés"
 $DRHPageAfterLoginComment = "Laisser vide pour le comportement normal de chamilo.";
 $SessionAdminPageAfterLoginTitle = "Page à montrer pour les adminsitrateurs de sessions une fois authentifiés";
 $SessionAdminPageAfterLoginComment = "Laisser vide pour le comportement normal de chamilo.";
+$StudentAutosubscribeTitle = "Inscrire automatiquement les étudiants aux cours suivants";
+$StudentAutosubscribeComment = "Codes de cours séparé par '|'";
+$TeacherAutosubscribeTitle = "Inscrire automatiquement les professeurs aux cours suivants";
+$TeacherAutosubscribeComment = "Codes de cours séparé par '|'";
+$DRHAutosubscribeTitle = "Inscrire automatiquement les DRH aux cours suivants";
+$DRHAutosubscribeComment = "Codes de cours séparé par '|'";
+$SessionadminAutosubscribeTitle = "Inscrire automatiquement les administrateurs de session aux cours suivants";
+$SessionadminAutosubscribeComment = "Codes de cours séparé par '|'";
+
 $events_title = 'Gestion des évenements';
 $GroupParentship = 'Groupe parent';
 $NoParentship = 'Aucun groupe parent';

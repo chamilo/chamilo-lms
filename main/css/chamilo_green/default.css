@@ -723,11 +723,11 @@ margin-top:0;
     /*height: 10em;*/	 /* Do not change this value */
     overflow:hidden;
     width: 100%;
-    padding-bottom:20px;
+    padding-bottom:18px;
 }
 /* Sticky footer*/
 .push {
-    height: 10em; /* Very important */
+    height: 9em; /* Very important */
 }
 #footer .copyright {
     float: right;

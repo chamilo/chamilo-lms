@@ -541,9 +541,6 @@ float:left; /* important for ieX*/
     margin: 11px 0px 0px 0px ;
 }
 
-
-
-
 #header3  a {
     -moz-background-clip:border;
     -moz-background-inline-policy:continuous;
@@ -571,14 +568,14 @@ float:left; /* important for ieX*/
 }
 
 #current a {
-background:transparent url(images/tab_left-active.gif) no-repeat scroll left top;
-color:#FFFFFF;
-cursor:pointer;
-float:left;
-height:25px;
-padding-left:9px;
-padding-right:2px;
-text-decoration:none;
+	background:transparent url(images/tab_left-active.gif) no-repeat scroll left top;
+	color:#FFFFFF;
+	cursor:pointer;
+	float:left;
+	height:25px;
+	padding-left:9px;
+	padding-right:2px;
+	text-decoration:none;
 }
 
 #header3 li {
@@ -586,16 +583,16 @@ float:left;
 }
 
 #current {
-background:transparent url(images/tab_center-active.gif) no-repeat scroll right top;;
-color:#FFFFFF;
-cursor:pointer;
-display:block;
-float:left;
-height:20px;
-overflow:hidden;
-padding-bottom:6px;
-margin-right:-3px;
-margin-right:3px;
+	background:transparent url(images/tab_center-active.gif) no-repeat scroll right top;;
+	color:#FFFFFF;
+	cursor:pointer;
+	display:block;
+	float:left;
+	height:20px;
+	overflow:hidden;
+	padding-bottom:6px;
+	margin-right:-3px;
+	margin-right:3px;
 }
 
 #current #tab_active {
@@ -720,11 +717,11 @@ margin-top:0;
     /*height: 10em;*/	 /* Do not change this value */
     overflow:hidden;
     width: 100%;
-    padding-bottom:20px;
+    padding-bottom:18px;
 }
 /* Sticky footer*/
 .push {
-    height: 10em; /* Do not change this value */
+    height: 9em; /* Do not change this value */
 }
 #footer .copyright {
     float: right;

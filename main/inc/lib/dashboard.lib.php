@@ -368,27 +368,30 @@ class DashboardManager
 				$filename_controller = $path.'.class.php';			
 				$dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';	
 				require_once $dashboard_plugin_path.$filename_controller;
-				$obj_block = new $controller_class($user_id);
-				
-				// check if user is allowed to see the block
-				if (method_exists($obj_block, 'is_block_visible_for_user')) {					
-					$is_block_visible_for_user = $obj_block->is_block_visible_for_user($user_id);					
-					if (!$is_block_visible_for_user) continue;
-				}
-
-				echo '<tr>';
-					// checkboxes
-					self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
-
-					echo '<td>'.$block['name'].'</td>';
-					echo '<td>'.$block['description'].'</td>';
-					echo '<td><center>
-							<select name="columns['.$block['id'].']">
-							<option value="1" '.($user_block_data[$block['id']]['column']==1?'selected':'').' >1</option>
-							<option value="2" '.($user_block_data[$block['id']]['column']==2?'selected':'').' >2</option>
-							</select></center>
-						  </td>';
-				echo '</tr>';
+				if (class_exists($controller_class)) {
+				    $obj_block = new $controller_class($user_id);    				
+    				
+    				// check if user is allowed to see the block
+    				if (method_exists($obj_block, 'is_block_visible_for_user')) {					
+    					$is_block_visible_for_user = $obj_block->is_block_visible_for_user($user_id);					
+    					if (!$is_block_visible_for_user) continue;
+    				}
+    				
+    				echo '<tr>';
+                    // checkboxes
+                    self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
+                    echo '<td>'.$block['name'].'</td>';
+                    echo '<td>'.$block['description'].'</td>';
+                    echo '<td><center>
+                            <select name="columns['.$block['id'].']">
+                            <option value="1" '.($user_block_data[$block['id']]['column']==1?'selected':'').' >1</option>
+                            <option value="2" '.($user_block_data[$block['id']]['column']==2?'selected':'').' >2</option>
+                            </select></center>
+                          </td>';
+                    echo '</tr>';    				
+				} else {
+			         echo Display::tag('tr',  Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));	    
+				}				
 			}
 
 			echo '</table>';

@@ -92,12 +92,7 @@ if($dashboard_view == 'blocks') {
 	// block dashboard list
 	if (isset($success)) {		
 		Display::display_confirmation_message(get_lang('BlocksHaveBeenUpdatedSuccessfully'));		
-	}
-	
+	}	
 	$user_id = api_get_user_id();
-	DashboardManager::display_user_dashboard_list($user_id);
-	
+	DashboardManager::display_user_dashboard_list($user_id);	
 }
-
-
-?>

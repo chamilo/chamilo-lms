@@ -1,12 +1,61 @@
 /**
  * Common CSS for all themes
  */
+
+* {
+    outline :none;
+}
+input, select, textarea {
+    -moz-border-radius:5px;    
+    -webkit-border-radius:5px;  
+    -border-radius:5px;
+    -x-system-font:none;
+    border:1px solid #CCCCCC;
+    color:#666666;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:120%;
+    font-size-adjust:none;
+    font-stretch:normal;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
+    padding:5px;
+}
+
+select, textarea {
+    color : #000;
+    border: 1px solid #000;
+}
+input.checkbox {
+    border-width: 0;
+	border-radius:5px;
+    -moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	-opera-border-radius:5px;
+    
+    border:1px solid #E1E1E0;
+}
+select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
+    cursor: pointer;
+    font-size: 12px;
+    -moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+    border:1px solid #E1E1E0;
+}
+
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     border: 1px solid #849FB3;
     box-shadow: 0 0 5px #C9D2D9;
 	background-image:none;
 	background-color:white;
+    -moz-border-radius:5px;
+	-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
 }
+
 
 /* Fixes the FB input*/
 input.maininput:focus {
@@ -14,6 +63,7 @@ input.maininput:focus {
 	border:none;	
 }
 
+/* Big icons course home page styles */ 
 .big_icon {
 	width:205px;
 	padding:10px;
@@ -25,4 +75,30 @@ input.maininput:focus {
 
 .courseadminview .big_icon a {
 	font-size:12px; 
+}
+
+/* Fixes the administration block section */
+.admin_section div {	
+	margin: 5px 0 14px 5px;
+    margin-left: 39px;
+}
+
+.rounded_div {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #E5E5E5;
+        
+    -webkit-border-radius: 11px 11px 11px 11px;
+    -opera-border-radius: 11px 11px 11px 11px;
+    -moz-border-radius: 11px 11px 11px 11px;
+	border-radius: 11px 11px 11px 11px;
+        
+    -webkit-box-shadow: 0 4px 18px #C8C8C8;
+    -opera-box-shadow: 0 4px 18px #C8C8C8;
+    -moz-box-shadow: 0 4px 18px #C8C8C8;
+	box-shadow: 0 4px 18px #C8C8C8;
+    
+    float: left;
+    height: auto;
+    margin: 10px 8px 15px 15px;
+    padding: 16px 12px 5px;
 }

@@ -26,13 +26,6 @@ body {
     margin: 0 auto -9em; /* Do not change this value */
 }
 
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
 #outerframe {
     position: relative;  /* do not remove, fixes a bug in IE */
     background-color: #fff;
@@ -45,12 +38,6 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /* End hide from IE5-mac */
 
 #main {
-/*
-    -moz-border-image:url(images/bg-main.png) 5 5 5 5;
-    -webkit-border-image:url(images/bg-main.png) 5 5 5 5;
-    -o-border-image:url(images/bg-main.png) 5 5 5 5;
-    -xv-border-image:url(images/bg-main.png) 5 5 5 5;
-*/
     border:2px solid #ddd;
     position: relative; /* to avoid the IE peekabo bug*/
     margin: 0px auto;
@@ -69,9 +56,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 
 
 /*
------------------------------------------------------------------------------
 Side-Menu Slider (JQuery) see banner.inc.php
------------------------------------------------------------------------------
 */
 ul#navigation {
     position: fixed;
@@ -171,7 +156,7 @@ ul#navigation .user-online a {
 }
 
 /* Other colors for other tabs in the earth tones */
-    ul#navigation .user-connect a {
+ul#navigation .user-connect a {
     -moz-border-radius:8px 0 0 8px;
     -moz-box-shadow:0 2px 2px #000000;
     background-color:#fac97a ;
@@ -298,7 +283,6 @@ img {
 }
 p, blockquote, ol, ul {
     font-size: 12px;
-
 }
 
 h1 {
@@ -338,37 +322,8 @@ a:active {
     font-family:Tahoma, Geneva, sans-serif;
     text-decoration: none;
     color : #3757f7;
+}
 
-}
-select, textarea {
-    color : #000;
-    border: 1px solid #000;
-}
-input.checkbox {
-    border-width: 0;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
-select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
-    cursor:	pointer;
-    font-size: 12px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
-input[text] {
-    font-size: 12px;
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    border:1px solid #E1E1E0;
-}
 /* user_portal course status icon */
 .coursestatusicons {
     border: 0px solid #000;
@@ -522,11 +477,10 @@ input[text] {
 
 #header3 a:hover {
     color:#fffc00D;
-
 }
 
 #header3 li {
-float:left; /* important for ieX*/
+    float:left; /* important for ieX*/
 }
 #header3 li a span:hover {
     color:#fffc00;
@@ -567,14 +521,14 @@ float:left; /* important for ieX*/
 }
 
 #current a {
-background:transparent url(images/tab_left-active.gif) no-repeat scroll left top;
-color:#FFFFFF;
-cursor:pointer;
-float:left;
-height:25px;
-padding-left:9px;
-padding-right:2px;
-text-decoration:none;
+	background:transparent url(images/tab_left-active.gif) no-repeat scroll left top;
+	color:#FFFFFF;
+	cursor:pointer;
+	float:left;
+	height:25px;
+	padding-left:9px;
+	padding-right:2px;
+	text-decoration:none;
 }
 
 #header3 li {
@@ -582,16 +536,16 @@ float:left;
 }
 
 #current {
-background:transparent url(images/tab_center-active.gif) no-repeat scroll right top;;
-color:#FFFFFF;
-cursor:pointer;
-display:block;
-float:left;
-height:20px;
-overflow:hidden;
-padding-bottom:6px;
-margin-right:-3px;
-margin-right:3px;
+	background:transparent url(images/tab_center-active.gif) no-repeat scroll right top;;
+	color:#FFFFFF;
+	cursor:pointer;
+	display:block;
+	float:left;
+	height:20px;
+	overflow:hidden;
+	padding-bottom:6px;
+	margin-right:-3px;
+	margin-right:3px;
 }
 
 #current #tab_active {
@@ -1717,7 +1671,6 @@ div.admin_section h4 {
     -moz-border-radius-topleft:5px;
     -moz-border-radius-topright:5px;
     border:1px solid #E1E1E0;
-
 }
 
 .user_course_category {
@@ -3097,31 +3050,6 @@ input.arrowl {
 
 
 /* UI improvements for 1.8.6.2 this should be move to the chamilo theme and reproduce in all CSS*/
-
-* {
-    outline :none;
-}
-input, select, textarea {
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
-    -x-system-font:none;
-    border:1px solid #CCCCCC;
-    color:#666666;
-    font-family:Arial,Helvetica,sans-serif;
-    font-size:120%;
-    font-size-adjust:none;
-    font-stretch:normal;
-    font-style:normal;
-    font-variant:normal;
-    font-weight:normal;
-    line-height:normal;
-    padding:5px;
-}
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-    background-image:url(images/shadow.gif);
-}
 .independent_course_item a {
     font-size:135%;
 }
@@ -3173,7 +3101,6 @@ a.read {
     -moz-border-radius-topleft:8px;
     -moz-border-radius-topright:8px;
     background:#EEE none repeat scroll 0 0;
-
     margin: 20px 0px 20px 0px;
 }
 
@@ -3202,68 +3129,6 @@ a.read {
 .groups_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 .groups_grid_element_1 { width:100px; float:left; text-align:left;	margin-bottom:5px;}
 .groups_grid_element_2 { width:150px; float:left;}
-
-/*POPULAR GROUP*/
-
-.popular_grid_item {
-	background: none repeat scroll 0 0 #FFFFFF;
-	border: 1px solid #E5E5E5;
-	border-radius: 11px 11px 11px 11px;
-	
-	-webkit-border-radius: 11px 11px 11px 11px;
-	-opera-border-radius: 11px 11px 11px 11px;
-	-moz-border-radius: 11px 11px 11px 11px;
-	
-	box-shadow: 0 4px 18px #C8C8C8;
-	-webkit-box-shadow: 0 4px 18px #C8C8C8;
-	-opera-box-shadow: 0 4px 18px #C8C8C8;
-	-moz-box-shadow: 0 4px 18px #C8C8C8;
-	
-	float: left;
-	height: auto;
-	margin: 0 8px 15px 15px;
-	padding: 16px 12px 5px;
-	width:90%;
-}
-
-.popular_grid_element_0 {
-	width:600px;
-    height:98px;
-    padding-left:10px;
-    padding-right:10px;
-    overflow:hidden;
-}
-
-/*NEWEST GROUP*/
-
-.newest_grid_item {
-	background: none repeat scroll 0 0 #FFFFFF;
-	border: 1px solid #E5E5E5;
-	border-radius: 11px 11px 11px 11px;
-	
-	-webkit-border-radius: 11px 11px 11px 11px;
-	-opera-border-radius: 11px 11px 11px 11px;
-	-moz-border-radius: 11px 11px 11px 11px;
-	
-	box-shadow: 0 4px 18px #C8C8C8;
-	-webkit-box-shadow: 0 4px 18px #C8C8C8;
-	-opera-box-shadow: 0 4px 18px #C8C8C8;
-	-moz-box-shadow: 0 4px 18px #C8C8C8;
-	
-	float: left;
-	height: auto;
-	margin: 0 8px 15px 15px;
-	padding: 16px 12px 5px;
-	width:90%;
-}
-
-.newest_grid_element_1 {
-    width:600px;
-    height:98x;
-    padding-left:10px;
-    padding-right:10px;
-    overflow:hidden;
-}
 
 /*MY GROUPS*/
 
@@ -3492,7 +3357,7 @@ a.read {
  *  MESSAGE TOOL                           *
  **********************************************/
 
- #inbox-wrapper {
+#inbox-wrapper {
     width:100%;
 }
 #inbox {
@@ -4771,26 +4636,3 @@ padding-top:10px;
 .progresstext {
     text-align:center;
 }
-
-
-.rounded_div {
-	background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #E5E5E5;
-    border-radius: 11px 11px 11px 11px;
-    
-    -webkit-border-radius: 11px 11px 11px 11px;
-    -opera-border-radius: 11px 11px 11px 11px;
-    -moz-border-radius: 11px 11px 11px 11px;
-    
-    box-shadow: 0 4px 18px #C8C8C8;
-    -webkit-box-shadow: 0 4px 18px #C8C8C8;
-    -opera-box-shadow: 0 4px 18px #C8C8C8;
-    -moz-box-shadow: 0 4px 18px #C8C8C8;
-    
-    float: left;
-    height: auto;
-    margin: 10px 8px 15px 15px;
-    padding: 16px 12px 5px;
-}
-
-

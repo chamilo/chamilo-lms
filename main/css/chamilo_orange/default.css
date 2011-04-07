@@ -4736,23 +4736,3 @@ padding-top:10px;
 .progresstext {
     text-align:center;
 }
-
-.rounded_div {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #E5E5E5;
-    border-radius: 11px 11px 11px 11px;
-    
-    -webkit-border-radius: 11px 11px 11px 11px;
-    -opera-border-radius: 11px 11px 11px 11px;
-    -moz-border-radius: 11px 11px 11px 11px;
-    
-    box-shadow: 0 4px 18px #C8C8C8;
-    -webkit-box-shadow: 0 4px 18px #C8C8C8;
-    -opera-box-shadow: 0 4px 18px #C8C8C8;
-    -moz-box-shadow: 0 4px 18px #C8C8C8;
-    
-    float: left;
-    height: auto;
-    margin: 10px 8px 15px 15px;
-    padding: 16px 12px 5px;
-}

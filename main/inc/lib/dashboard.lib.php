@@ -48,27 +48,29 @@ class DashboardManager
 
 		// We display all the possible enabled or disabled plugins
 		foreach ($possibleplugins as $testplugin) {
-			$plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
+			$plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";			
 			$plugin_info = array();
-			if (file_exists($plugin_info_file)) {
+			if (file_exists($plugin_info_file) && is_readable($plugin_info_file)) {
 				$plugin_info = parse_info_file($plugin_info_file);
-			}
-
-			// change index to lower case
-			$plugin_info = array_change_key_case($plugin_info);
-
-			echo '<tr>';
-				self::display_dashboard_plugin_checkboxes($testplugin);
-				for ($i = 0 ; $i < count($table_cols); $i++) {
-					if (isset($plugin_info[strtolower($table_cols[$i])])) {
-			    		echo '<td>';
-			    			echo $plugin_info[$table_cols[$i]];
-			    		echo '</td>';
-			    	} else {
-			    		echo '<td>&nbsp;</td>';
-			    	}
-				}
-			echo '</tr>';
+    
+    			// change index to lower case
+    			$plugin_info = array_change_key_case($plugin_info);
+    
+    			echo '<tr>';
+    				self::display_dashboard_plugin_checkboxes($testplugin);
+    				for ($i = 0 ; $i < count($table_cols); $i++) {
+    					if (isset($plugin_info[strtolower($table_cols[$i])])) {
+    			    		echo '<td>';
+    			    			echo $plugin_info[$table_cols[$i]];
+    			    		echo '</td>';
+    			    	} else {
+    			    		echo '<td></td>';
+    			    	}
+    				}
+    			echo '</tr>';
+            } else {
+                echo Display::tag('tr',  Display::tag('td', get_lang('CheckFilePermissions').' '.Security::remove_XSS($plugin_info_file) , array('colspan'=>'3')));
+            }
 		}
 		
 		// display all disabled block data

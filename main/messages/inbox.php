@@ -122,10 +122,10 @@ Display::display_header('');
 $social_parameter = '';
 
 if ($_GET['f']=='social' || api_get_setting('allow_social_tool') == 'true') {
-	$social_parameter = '?f=social';
+	$social_parameter = '?f=social';	
 } else {
-	//comes from normal profile
-	
+    
+	//Comes from normal profile	
 	echo '<div class="actions">';
 	if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
 		echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
@@ -156,13 +156,20 @@ echo '<div id="social-content">';
 		$id_content_right = 'social-content-right';
 		echo '<div id="social-content-left">';	
 			//this include the social menu div
-			SocialManager::show_social_menu('messages_inbox');
+			SocialManager::show_social_menu('messages');
 		echo '</div>';		
 	}
 
 	echo '<div id="'.$id_content_right.'">';
-			if (api_get_setting('allow_social_tool') == 'true'){
+	
+			if (api_get_setting('allow_social_tool') == 'true') {
+			    
 				echo '<div class="social-box-container2">';				
+				echo '<div class="actions">';				
+    				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
+                    echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';                        
+				echo '</div>';
+								
 				//echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Inbox')).'</div>';
 				//echo '<div id="div_content_table" class="social-box-content2">';
 			}	
@@ -180,10 +187,9 @@ echo '<div id="social-content">';
 				inbox_display();
 			}
 			if (api_get_setting('allow_social_tool') == 'true'){
+				echo '</div>';				
 				//echo '</div>';
-				//echo '</div>';
-			}
-			
+			}			
 	echo '</div>';	
 echo '</div>';
 

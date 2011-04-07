@@ -15,7 +15,7 @@
  * @author Patrick Cool, main author, completely rewritten
  * @author René Haentjens, added CSV file import (October 2004)
  * @package chamilo.link
- * @todo improve organisation, tables should come from database library
+ * @todo improve organisation, tables should come from database library, use formvalidator
  * @todo Needs serious rewriting here. This doesn't make sense
  */
 
@@ -162,11 +162,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 	echo '<div class="actions">';
 	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'','32').'</a>';
 	echo '</div>';
-	if (api_get_setting('search_enabled') == 'true') {
-		if (!extension_loaded('xapian')) {
-			Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));
-		}
-	}
+		
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
 	// has been submitted yet, hence !isset($submit_link)
 	if (($_GET['action'] == 'addlink' || $_GET['action'] == 'editlink') && empty($_POST['submitLink'])) {
@@ -255,7 +251,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 					<div class="label">
 						'.get_lang('AddTargetOfLinkOnHomepage').'
 					</div>
-					<div class="formw" >
+					<div class="formw">
 						<select  name="target_link" id="target_link">';
         $targets = array('_self'=>get_lang('LinkOpenSelf'),'_blank'=>get_lang('LinkOpenBlank'),'_parent'=>get_lang('LinkOpenParent'),'_top'=>get_lang('LinkOpenTop'));
 		foreach ($targets as $target_id => $target) {
@@ -268,11 +264,11 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		echo '        </select>
 					</div>
 				</div>';
-
+ 
 		if (api_get_setting('search_enabled') == 'true') {
 			require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 			$specific_fields = get_specific_field_list();
-
+            
 			echo '	<div class="row">
 						<div class="label">
 							'.get_lang('SearchFeatureDoIndexLink').'?
@@ -282,8 +278,6 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						</div>';
 
 			foreach ($specific_fields as $specific_field) {
-				// Author : <input name="A" type="text" />
-
 				$default_values = '';
 				if ($_GET['action'] == 'editlink') {
 					$filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => Security::remove_XSS($_GET['id']), 'tool_id' => '\''. TOOL_LINK .'\'');
@@ -304,11 +298,10 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 								<input name="%s" type="text" value="%s"/>
 							</div>
 						</div>';
-
+				
 				echo sprintf($sf_textbox, $specific_field['name'], $specific_field['code'], $default_values);
 			}
-		}
-
+		}		
 		echo '	<div class="row">
 					<div class="label">
 					</div>
@@ -316,8 +309,9 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						<button class="save" type="Submit" name="submitLink" value="OK">'.get_lang('SaveLink').'</button>
 					</div>
 				</div>';
-
+		echo '</div>';
 		echo '</form>';
+		
 	} elseif(($_GET['action'] == 'addcategory' || $_GET['action'] == 'editcategory') && !$submit_category) {
 		echo '<div class="row">';
 		if ($_GET['action'] == 'addcategory') {
@@ -327,7 +321,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 			echo '<div class="form_header">'.get_lang('CategoryMod').'</div>';
 			$my_cat_title = get_lang('CategoryMod');
 		}
-		echo "</div>\n\n";
+		echo "</div>";
 		echo '<form method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
 		if ($_GET['action'] == 'editcategory') {
 			echo '<input type="hidden" name="id" value="'.$id.'" />';
@@ -358,7 +352,6 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						<button class="save" type="submit" name="submitCategory">'.$my_cat_title.' </button>
 					</div>
 				</div>';
-
 		echo "</form>";
 	}
 }

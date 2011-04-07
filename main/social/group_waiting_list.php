@@ -11,21 +11,6 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
-//jquery thickbox already called from main/inc/header.inc.php
-
-$htmlHeadXtra[] = '<script type="text/javascript">
-		
-function show_icon_edit(element_html) {	
-	ident="#edit_image";
-	$(ident).show();
-}		
-
-function hide_icon_edit(element_html)  {
-	ident="#edit_image";
-	$(ident).hide();
-}		
-		
-</script>';
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));

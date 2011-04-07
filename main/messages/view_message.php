@@ -8,7 +8,7 @@ $language_file = array('registration','messages','userInfo');
 $cidReset= true;
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
-if (api_get_setting('allow_message_tool')!='true'){
+if (api_get_setting('allow_message_tool')!='true') {
 	api_not_allowed();
 }
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
@@ -70,8 +70,7 @@ echo '<div id="social-content">';
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 		$id_content_right = 'social-content-right';
 		echo '<div id="social-content-left">';	
-			//this include the social menu div
-			
+			//this include the social menu div			
 			SocialManager::show_social_menu($show_menu);
 		echo '</div>';				
 	}
@@ -91,11 +90,10 @@ echo '<div id="social-content">';
 			api_not_allowed();
 		}
 	if (api_get_setting('allow_social_tool') == 'true'){
-		//echo '</div>';
+		echo '</div>';
 		//echo '</div>';
 	}
 	echo '</div>';
-
 echo '</div>';
 
 /*		FOOTER */

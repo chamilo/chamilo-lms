@@ -5,43 +5,34 @@
 * {
     outline :none;
 }
-input, select, textarea {
+input {
     -moz-border-radius:5px;    
     -webkit-border-radius:5px;  
-    -border-radius:5px;
+    border-radius:5px;
     -x-system-font:none;
     border:1px solid #CCCCCC;
     color:#666666;
     font-family:Arial,Helvetica,sans-serif;
-    font-size:120%;
-    font-size-adjust:none;
-    font-stretch:normal;
-    font-style:normal;
-    font-variant:normal;
-    font-weight:normal;
+    font-size:120%;   
     line-height:normal;
     padding:5px;
 }
 
 select, textarea {
-    color : #000;
-    border: 1px solid #000;
+	border:1px solid #CCCCCC;
+    padding:5px;
+	-moz-border-radius:5px;    
+    -webkit-border-radius:5px;  
+    border-radius:5px;
+    color:#666666;
 }
-input.checkbox {
-    border-width: 0;
-	border-radius:5px;
-    -moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	-opera-border-radius:5px;
-    
-    border:1px solid #E1E1E0;
-}
+
 select, input[type=checkbox], input[type=radio], input[type=button], input[type=submit] {
     cursor: pointer;
     font-size: 12px;
     -moz-border-radius:5px;
 	-webkit-border-radius:5px;
-	border-radius:5px;
+	-border-radius:5px;
     border:1px solid #E1E1E0;
 }
 

@@ -59,22 +59,10 @@ function register_friend(element_input) {
 		});
  }
 }
-	
-
-function show_icon_edit(element_html) {	
-	ident="#edit_image";
-	$(ident).show();
-}		
-
-function hide_icon_edit(element_html)  {
-	ident="#edit_image";
-	$(ident).hide();
-}		
-		
 
 </script>';
-api_block_anonymous_users();
 
+api_block_anonymous_users();
 Display :: display_header($tool_name, 'Groups');
 
 // easy links
@@ -112,14 +100,12 @@ echo '<div id="social-content">';
 	echo '</div>';
 
 	echo '<div id="social-content-right">';
-	
-        
     
 		if (!empty($show_message)) {
 			Display :: display_normal_message($show_message);
 		}		
-				
-		echo '<div id="id_response" align="center">&nbsp;</div>';
+		
+		echo '<div id="id_response" align="center"></div>';
 		$list_get_invitation=array();
 		$user_id = api_get_user_id();
 		
@@ -137,7 +123,7 @@ echo '<div id="social-content">';
 		if ($number_loop != 0) {
 			echo '<h2>'.get_lang('InvitationReceived').'</h2>';	
 			
-			foreach ($list_get_invitation as $invitation) { 				
+			foreach ($list_get_invitation as $invitation) {				
 				$sender_user_id = $invitation['user_sender_id']
 				?>
 				<div id="<?php echo 'id_'.$sender_user_id ?>" class="invitation_confirm">
@@ -177,13 +163,12 @@ echo '<div id="social-content">';
 				</div>
 				<?php
 			}
-		}
-		
-		echo '<div class="clear"></div>';
+		}		
+
 		
 		if (count($list_get_invitation_sent) > 0 ) {	
 			echo '<h2>'.get_lang('InvitationSent').'</h2>';
-			foreach ($list_get_invitation_sent as $invitation) { 
+			foreach ($list_get_invitation_sent as $invitation) {
 				$sender_user_id = $invitation['user_receiver_id'];?>
 				<div id="<?php echo 'id_'.$sender_user_id ?>" class="invitation_confirm">
 				   	<?php 
@@ -237,7 +222,7 @@ echo '<div id="social-content">';
 			}
 			Display::display_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
 		}
+		
 	echo '</div>';
-	echo '</div>';	
 echo '</div>';
 Display::display_footer();

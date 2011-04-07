@@ -17,21 +17,6 @@ require_once '../inc/lib/xajax/xajax.inc.php';
 
 api_block_anonymous_users();
 
-//jquery thickbox already called from main/inc/header.inc.php
-
-$htmlHeadXtra[] = '<script type="text/javascript">
-
-function show_icon_edit(element_html) {
-	ident="#edit_image";
-	$(ident).show();
-}
-
-function hide_icon_edit(element_html)  {
-	ident="#edit_image";
-	$(ident).hide();
-}
-
-</script>';
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_users');

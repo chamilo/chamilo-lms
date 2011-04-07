@@ -39,8 +39,8 @@ if (isset($_REQUEST['user_friend']) ) {
 			 		 <br /><span style="color:red">*</span><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br />
 			 		 <input id="txt_subject_id" type="text" style="width:400px;"><br/>
 			   		 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br />
-			   		 <textarea id="txt_area_invite" rows="3" cols="60"></textarea>			   		 
-			   		 <div><span style="color:red">*</span><?php echo get_lang('FieldRequired') ?></div>
+			   		 <textarea id="txt_area_invite" rows="3" cols="60"></textarea>		   		 			   		 
+			   		 <br />
 			   		 <br />
 			   		 <button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>			   		 
 		   		 </div>

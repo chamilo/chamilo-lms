@@ -130,15 +130,16 @@ echo '<div id="social-content">';
 		$id_content_right = 'social-content-right';
 		echo '<div id="social-content-left">';	
 			//this include the social menu div
-			SocialManager::show_social_menu('messages_outbox');
+			SocialManager::show_social_menu('messages');
 		echo '</div>';			
 	}
 	
 	echo '<div id="'.$id_content_right.'">';
-			if (api_get_setting('allow_social_tool') == 'true'){
-				echo '<div class="social-box-container2">';				
-				//echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Outbox')).'</div>';
-				//echo '<div id="div_content_table" class="social-box-content2">';
+			if (api_get_setting('allow_social_tool') == 'true') {
+				echo '<div class="social-box-container2">';         
+                echo '<div class="actions">';              
+                echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
+                echo '</div>';
 			}	
 			//MAIN CONTENT
 			if ($_REQUEST['action']=='delete') {
@@ -165,17 +166,11 @@ echo '<div id="social-content">';
 				outbox_display();
 			}
 			if (api_get_setting('allow_social_tool') == 'true'){
-				//echo '</div>';
+				echo '</div>';
 				//echo '</div>';
 			}
-	echo '</div>';	
-
+	echo '</div>';
 echo '</div>';
 
-
-
-/*
-		FOOTER
-*/
+/*		FOOTER */
 Display::display_footer();
-?>

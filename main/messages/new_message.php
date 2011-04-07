@@ -34,17 +34,15 @@ $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 $htmlHeadXtra[]='
 <script language="javascript">
 function validate(form,list) {
-	if(list.selectedIndex<0)
-	{
+	if(list.selectedIndex<0) {
     	alert("Please select someone to send the message to.")
     	return false
-	}
-	else
+	} else {
     	return true
+    }
 }
 
 </script>';
-//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
@@ -87,7 +85,7 @@ function add_image_form() {
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
 	//document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.api_get_path(WEB_CODE_PATH).'img/delete.gif\"></a>";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"28\" />&nbsp;<input type=\"text\" name=\"legend[]\" size=\"28\" /></a>";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<input type=\"text\" name=\"legend[]\" size=\"20\" />";
 	if (filepaths.childNodes.length == 6) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
@@ -108,9 +106,7 @@ div.row div.formw {
 
 $nameTools = get_lang('ComposeMessage');
 
-/*
-		FUNCTIONS
-*/
+/*		FUNCTIONS */
 
 /**
 * Shows the compose area + a list of users to select from.
@@ -211,8 +207,8 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form->addElement('html','<div class="row"><div class="label">'.get_lang('FilesAttachment').'</div><div class="formw">
 				<span id="filepaths">
 				<div id="filepath_1">
-				<input type="file" name="attach_1"  size="28" />
-				<input type="text" name="legend[]" size="28" />
+				<input type="file" name="attach_1"  size="20" />
+				<input type="text" name="legend[]" size="20" />
 				</div></span></div></div>');
 		$form->addElement('html','<div class="row"><div class="formw"><span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')</div></div>');
 	}
@@ -276,9 +272,7 @@ if ($_GET['f']=='social') {
 
 Display::display_header('');
 
-
 $group_id = intval($_REQUEST['group_id']);
-
 
 if ($group_id != 0) {
 	echo '<div class=actions>';
@@ -287,7 +281,7 @@ if ($group_id != 0) {
 	echo '</div>';
 } else {
 	if ($_GET['f']=='social') {
-
+                
 
 	} else {
 		echo '<div class=actions>';
@@ -298,13 +292,11 @@ if ($group_id != 0) {
 			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
 		}
 		echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
-
 		echo '</div>';
 	}
-
 }
 
-echo '<div id="social-content" >';
+echo '<div id="social-content">';
 	$id_content_right = '';
 	//LEFT COLUMN
 	if (api_get_setting('allow_social_tool') != 'true') {
@@ -319,17 +311,20 @@ echo '<div id="social-content" >';
 	} else {
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 		echo '<div id="social-content-left">';
-			//this include the social menu div
-			SocialManager::show_social_menu('messages_compose');
+		//this include the social menu div
+		SocialManager::show_social_menu('messages');
 		echo '</div>';
 		$id_content_right = 'social-content-right';
 	}
 
 	echo '<div id="'.$id_content_right.'">';
-
+	
 		//MAIN CONTENT
 		if (api_get_setting('allow_social_tool') == 'true'){
-			echo '<div class="social-box-container2">';				
+			echo '<div class="social-box-container2">';			
+            echo '<div class="actions">';              
+            echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
+            echo '</div>';
 			//echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('ComposeMessage')).'</div>';
 			//echo '<div id="div_content_table" class="social-box-content2">';
 		}
@@ -376,12 +371,7 @@ echo '<div id="social-content" >';
 			}
 		}
 	echo '</div>';
-
 echo '</div>';
 
-/*
-		FOOTER
-*/
+/*		FOOTER */
 Display::display_footer();
-
-?>

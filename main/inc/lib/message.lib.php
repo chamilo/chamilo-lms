@@ -150,7 +150,7 @@ class MessageManager
 		$sql_result = Database::query($sql_query);
 		$i = 0;
 		$message_list = array ();
-		while ($result = Database::fetch_row($sql_result)) {
+		while ($result = Database::fetch_row($sql_result)) {		    
 			if ($request===true) {
 				$message[0] = '<input type="checkbox" value='.$result[0].' name="id[]">';
 			 } else {
@@ -171,8 +171,8 @@ class MessageManager
 				$message[2] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[3]).'</a>';
 				$message[3] = '<a onclick="reply_to_messages(\'show\','.$result[0].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a onclick="delete_one_message('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>';
-			} else {
-				if($result[3]==1) {
+			} else {			    
+				if($result[4]==1) {
 					$class = 'class = "unread"';
 				} else {
 					$class = 'class = "read"';
@@ -745,8 +745,8 @@ class MessageManager
 		              <td valign=top class="view-message-content">'.str_replace("\\","",$row[6]).'</td>
 		            </tr>
 		        </table>
-		        <div id="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>
-		        <div style="padding-bottom: 5px">';
+		        <div id="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>
+		        <div style="padding: 15px 0px 5px 0px">';
 		    $social_link = '';
 		    if ($_GET['f'] == 'social') {
 		    	$social_link = 'f=social';
@@ -1269,19 +1269,19 @@ function outbox_display() {
 	if (isset ($_REQUEST['action'])) {
 		switch ($_REQUEST['action']) {
 			case 'delete' :
-			$number_of_selected_messages = count($_POST['id']);
-			if ($number_of_selected_messages!=0) {
-				foreach ($_POST['id'] as $index => $message_id) {
-					MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
-				}
-			}
-			Display::display_normal_message(api_xml_http_response_encode($success),false);
-			break;
+    			$number_of_selected_messages = count($_POST['id']);
+    			if ($number_of_selected_messages!=0) {
+    				foreach ($_POST['id'] as $index => $message_id) {
+    					MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
+    				}
+    			}
+    			Display::display_normal_message(api_xml_http_response_encode($success),false);
+    			break;
 			case 'deleteone' :
-			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
-			Display::display_confirmation_message(api_xml_http_response_encode($success),false);
-			echo '<br/>';
-			break;
+    			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
+    			Display::display_confirmation_message(api_xml_http_response_encode($success),false);
+                echo '<br/>';
+			 break;
 		}
 	}
 

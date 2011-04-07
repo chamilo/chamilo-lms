@@ -2522,3 +2522,17 @@ CREATE TABLE `user_rel_event_type` (
 INSERT INTO `event_type` VALUES (1, 'course_deleted','courseDeletedTitle','courseDeletedComment'),(2,'course_created','courseCreatedTitle','courseCreatedComment'),(3,'user_deleted','userDeletedTitle','userDeletedComment'),(4,'user_created','userCreatedTitle','userCreatedComment'), (5, 'session_created','sessionCreatedTitle','sessionCreatedComment'), (6,'session_deleted','sessionDeletedTitle','sessionDeletedComment'), (7,'session_category_created','sessionCategoryCreatedTitle','sessionCategoryCreatedComment'),(8,'session_category_deleted','sessionCategoryDeletedTitle','sessionCategoryDeletedComment'),(9,'settings_changed','settingsChangedTitle','settingsChangedComment'),(10,'user_subscribed','userSubscribedTitle','userSubscribedComment'), (11,'user_unsubscribed','userUnsubscribedTitle','userUnsubscribedComment');
 
 INSERT INTO `event_type_message` (`id`,`event_type_id`, `language_id`, `message`,`subject`) VALUES (1,4,10,'Bonjour, \r\n\r\nL\'utilisateur %username% (%firstname% %lastname%) a été créé.\r\nEmail : %mail%\r\n\r\nBien à vous.',''),(2,1,10,'Delete formation',''),(3,2,10,'Create formation',''),(4,3,10,'Bonjour, \r\n\r\nL\'utilisateur %username% (%firstname% %lastname%) a été supprimé.\r\n\r\nBien à vous.',''),(6,5,10,'Create session test',''),(7,6,10,'Delete session',''),(8,7,10,'Create category session',''),(9,8,10,'Delete category session',''),(10,9,10,'Change setting',''),(11,10,10,'Subscribe',''),(12,11,10,'Unsubscribe','');
+
+--
+-- Table structure for LP custom storage API
+--
+DROP TABLE IF EXISTS stored_value;
+CREATE TABLE stored_values (
+	user_id INT NOT NULL,
+	sco_id INT NOT NULL,
+	course_id CHAR(40) NOT NULL,
+	sv_key CHAR(64) NOT NULL,
+	sv_value TEXT NOT NULL
+);
+ALTER TABLE stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
+ALTER TABLE stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);

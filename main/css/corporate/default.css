@@ -132,7 +132,7 @@ input[type=button], input[type=submit] {
 
 #header3 a {
 	float:left;
-	background:url(../../img/dokeosgrey/tab_left.gif) no-repeat left top;
+	background:url(images/tab_left.gif) no-repeat left top;
 	text-decoration:none;
 	cursor: pointer;
 	color: #333;
@@ -142,14 +142,14 @@ input[type=button], input[type=submit] {
 }
 #header3 li a:hover {
 	float:left;
-	background:url(../../img/dokeosgrey/tab_left_hover.gif) no-repeat left top;
+	background:url(images/tab_left_hover.gif) no-repeat left top;
 	text-decoration:none;
 	cursor: pointer;
 }
 #header3 li a span {
 	float:left;
 	display:block;
-	background:url(../../img/dokeosgrey/tab_right.gif) no-repeat right top;
+	background:url(images/tab_right.gif) no-repeat right top;
 	color:#333;
 	cursor: pointer;
 	padding-right: 10px;
@@ -159,19 +159,19 @@ input[type=button], input[type=submit] {
 #header3 li a:hover span {
 	float:left;
 	display:block;
-	background:url(../../img/dokeosgrey/tab_right_hover.gif) no-repeat right top;
+	background:url(images/tab_right_hover.gif) no-repeat right top;
 	color:#333;
 	cursor: pointer;
 }
 #header3 #current a {
 	float:left;
-	background:url(../../img/dokeosgrey/tab_left_active.gif) no-repeat left top;
+	background:url(images/tab_left_active.gif) no-repeat left top;
 	text-decoration:none;
 }
 #header3 #current a span {
 	float:left;
 	display:block;
-	background:url(../../img/dokeosgrey/tab_right_active.gif) no-repeat right top;
+	background:url(images/tab_right_active.gif) no-repeat right top;
 }
 
 #header3 #logout {

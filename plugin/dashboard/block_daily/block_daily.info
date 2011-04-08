@@ -1,0 +1,6 @@
+name = "Diário Eletrônico"
+controller = "BlockDaily"
+description = "Acesso ao diário eletrônico"
+package = Dashboard
+version = 1.0 
+author = Marco Antonio Firmino de Sousa

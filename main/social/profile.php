@@ -16,6 +16,7 @@ require_once api_get_path(LIBRARY_PATH).'array.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 $user_id = api_get_user_id();
+
 $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
@@ -23,6 +24,9 @@ $this_section = SECTION_SOCIAL;
 //I'm your friend? I can see your profile?
 if (isset($_GET['u'])) {
 	$user_id 	= (int) Database::escape_string($_GET['u']);
+	if (api_is_anonymous($user_id, true)) {
+	    api_not_allowed();
+	}
 	// It's me!
 	if (api_get_user_id() != $user_id) {
 		$user_info	= UserManager::get_user_info_by_id($user_id);
@@ -60,8 +64,6 @@ require_once $libpath.'formvalidator/FormValidator.class.php';
 require_once $libpath.'magpierss/rss_fetch.inc';
 
 api_block_anonymous_users();
-
-//jquery thickbox already called from main/inc/header.inc.php
 
 $htmlHeadXtra[] = '
 <script type="text/javascript">

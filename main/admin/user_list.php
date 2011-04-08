@@ -94,9 +94,11 @@ $(document).ready(function() {
 
     var select_val = $("#input_select_extra_data").val();
     if ( document.getElementById(\'extra_data_text\')) {
+    
         if (select_val != 0) {
             document.getElementById(\'extra_data_text\').style.display="block";
-            document.getElementById(\'input_extra_text\').value = "";
+            if (document.getElementById(\'input_extra_text\')) 
+                document.getElementById(\'input_extra_text\').value = "";
         } else {
             document.getElementById(\'extra_data_text\').style.display="none";
         }

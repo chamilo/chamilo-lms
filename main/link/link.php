@@ -26,20 +26,19 @@ $language_file = array('link', 'admin');
 
 // Including libraries
 require_once '../inc/global.inc.php';
-require_once 'linkfunctions.php';
+require_once api_get_path(LIBRARY_PATH).'link.lib.php';
 
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
 $htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready( function() {
-	for (i=0;i<$(".actions").length;i++) {
-		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
-			$(".actions:eq("+i+")").hide();
-		}
-	}
- } );
-
+    $(document).ready( function() {
+    	for (i=0;i<$(".actions").length;i++) {
+    		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
+    			$(".actions:eq("+i+")").hide();
+    		}
+    	}
+     } );
  </script>';
 
 // @todo change the $_REQUEST into $_POST or $_GET

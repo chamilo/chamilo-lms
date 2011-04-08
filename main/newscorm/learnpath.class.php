@@ -2879,6 +2879,7 @@ class learnpath {
             if (in_array($lp_item_type, array('quiz', 'document', 'link', 'forum', 'thread', 'student_publication'))) {
                 $lp_type = 1;
             }
+            
             // Now go through the specific cases to get the end of the path.
 
             // @todo Use constants instead of int values.
@@ -2889,38 +2890,47 @@ class learnpath {
                     } else {
                         require_once 'resourcelinker.inc.php';
                         $file = rl_get_resource_link_for_learnpath(api_get_course_id(), $this->get_id(), $item_id);
-
-                        // check how much attempts of a exercise exits in lp
-                        $lp_item_id = $this->get_current_item_id();
-                        $lp_view_id = $this->get_view_id();
-                        $prevent_reinit = $this->items[$this->current]->get_prevent_reinit();
-                        $list = $this->get_toc();
-                        $type_quiz = false;
-
-                        foreach ($list as $toc) {
-                            if ($toc['id'] == $lp_item_id && ($toc['type'] == 'quiz')) {
-                                $type_quiz = true;
+                        
+                            //CEV CHANGE
+                        if ($lp_item_type == 'link') {
+                            require_once api_get_path(LIBRARY_PATH).'link.lib.php';
+                            if (is_youtube_link($file)) {
+                                $src  = get_youtube_video_id($file);                                
+                                $file = 'embed.php?type=youtube&src='.$src;
                             }
-                        }
-
-                        if ($type_quiz) {
-                            $lp_item_id = Database :: escape_string($lp_item_id);
-                            $lp_view_id = Database :: escape_string($lp_view_id);
-                            $sql = "SELECT count(*) FROM $lp_item_view_table WHERE lp_item_id='" . (int) $lp_item_id . "' AND lp_view_id ='" . (int) $lp_view_id . "' AND status='completed'";
-                            $result = Database::query($sql);
-                            $row_count = Database :: fetch_row($result);
-                            $count_item_view = (int) $row_count[0];
-                            $not_multiple_attempt = 0;
-                            if ($prevent_reinit === 1 && $count_item_view > 0) {
-                                $not_multiple_attempt = 1;
+                        } else {
+                            // check how much attempts of a exercise exits in lp
+                            $lp_item_id = $this->get_current_item_id();
+                            $lp_view_id = $this->get_view_id();
+                            $prevent_reinit = $this->items[$this->current]->get_prevent_reinit();
+                            $list = $this->get_toc();
+                            $type_quiz = false;
+    
+                            foreach ($list as $toc) {
+                                if ($toc['id'] == $lp_item_id && ($toc['type'] == 'quiz')) {
+                                    $type_quiz = true;
+                                }
                             }
-                            $file .= '&not_multiple_attempt=' . $not_multiple_attempt;
-                        }
-
-                        $tmp_array = explode('/', $file);
-                        $document_name = $tmp_array[count($tmp_array) - 1];
-                        if (strpos($document_name, '_DELETED_')) {
-                            $file = 'blank.php?error=document_deleted';
+    
+                            if ($type_quiz) {
+                                $lp_item_id = Database :: escape_string($lp_item_id);
+                                $lp_view_id = Database :: escape_string($lp_view_id);
+                                $sql = "SELECT count(*) FROM $lp_item_view_table WHERE lp_item_id='" . (int) $lp_item_id . "' AND lp_view_id ='" . (int) $lp_view_id . "' AND status='completed'";
+                                $result = Database::query($sql);
+                                $row_count = Database :: fetch_row($result);
+                                $count_item_view = (int) $row_count[0];
+                                $not_multiple_attempt = 0;
+                                if ($prevent_reinit === 1 && $count_item_view > 0) {
+                                    $not_multiple_attempt = 1;
+                                }
+                                $file .= '&not_multiple_attempt=' . $not_multiple_attempt;
+                            }
+    
+                            $tmp_array = explode('/', $file);
+                            $document_name = $tmp_array[count($tmp_array) - 1];
+                            if (strpos($document_name, '_DELETED_')) {
+                                $file = 'blank.php?error=document_deleted';
+                            }
                         }
                     }
                     break;

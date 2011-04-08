@@ -750,7 +750,9 @@ may be inherited in some browsers from other 'a' element styles (if any) on the 
 
     width:200px;
     float: right;
-    min-height: 150px;
+    min-height: 80px;	
+    border:1px solid #E1E1E0;    
+    padding:5px 10px 0;
 }
 
 .menucaption {
@@ -943,7 +945,7 @@ this lets the navigation menu appear to the left:
 #formLogin input {
     font-size: 13px;
     margin: 4px 6px;
-    padding-left:5px;
+    padding:6px;
     -moz-border-radius-bottomleft:5px;
     -moz-border-radius-bottomright:5px;
     -moz-border-radius-topleft:5px;
@@ -3325,22 +3327,6 @@ a.read {
     background-image:url(../../img/boxmygroupscontent.jpg);
     background-repeat:repeat-y;
     overflow:hidden;
-}
-
-#menu {
-    -moz-border-radius: 10px; border: 1px solid #e1e1e0;
-    -webkit-border-radius: 10px; border: 1px solid #e1e1e0;
-    -opera-border-radius: 10px; border: 1px solid #e1e1e0;
-
-    border:1px solid #E1E1E0;
-    float:right;
-    margin-bottom:0;
-    margin-right:10px;
-    margin-top:20px;
-    min-height:150px;
-    padding:5px 10px 0;
-    width:200px;
-
 }
 
 /* INVITATIONS */

@@ -76,19 +76,20 @@ $_SESSION['oLP']->error = '';
 
 $now = time();
 
-//Adding visibility reestrinctions
-if (!empty($_SESSION['oLP']->publicated_on) && $_SESSION['oLP']->publicated_on != '0000-00-00 00:00:00') {
-    if ($now < api_strtotime($_SESSION['oLP']->publicated_on)) {
-        api_not_allowed();
-    }    
+if (!api_is_allowed_to_edit(null, true)) {
+    //Adding visibility reestrinctions
+    if (!empty($_SESSION['oLP']->publicated_on) && $_SESSION['oLP']->publicated_on != '0000-00-00 00:00:00') {
+        if ($now < api_strtotime($_SESSION['oLP']->publicated_on)) {
+            api_not_allowed();
+        }    
+    }
+    
+    if (!empty($_SESSION['oLP']->expired_on) && $_SESSION['oLP']->expired_on != '0000-00-00 00:00:00') {
+        if ($now > api_strtotime($_SESSION['oLP']->expired_on)) {
+            api_not_allowed();
+        }    
+    }
 }
-
-if (!empty($_SESSION['oLP']->expired_on) && $_SESSION['oLP']->expired_on != '0000-00-00 00:00:00') {
-    if ($now > api_strtotime($_SESSION['oLP']->expired_on)) {
-        api_not_allowed();
-    }    
-}
-
 $lp_item_id = $_SESSION['oLP']->get_current_item_id();
 $lp_type    = $_SESSION['oLP']->get_type();
 $lp_id      = intval($_GET['lp_id']);
@@ -100,7 +101,7 @@ if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student
 
 //Checking visibility (eye icon)
 $visibility = api_get_item_visibility(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id(), api_get_session_id());
-if (intval($visibility) == 0 ) {
+if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0 ) {
      api_not_allowed();
 }
 

@@ -11,18 +11,20 @@
 */
 
 // name of the language file that needs to be included
-$language_file = array ('course_description', 'pedaSuggest', 'userInfo', 'admin', 'agenda','tracking');
+$language_file = array ('course_description', 'course_info', 'pedaSuggest', 'userInfo', 'admin', 'agenda','tracking', 'trad4all');
 
 // including files 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
+require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 require_once 'attendance_controller.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
 
 // current section
 $this_section = SECTION_COURSES;
@@ -31,9 +33,15 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // get actions
-$actions = array('attendance_list', 'attendance_sheet_list', 'attendance_sheet_add', 'attendance_add', 'attendance_edit', 'attendance_delete', 'attendance_delete_select');
+$actions = array('attendance_list', 'attendance_sheet_list', 'attendance_sheet_print', 'attendance_sheet_add', 'attendance_add', 'attendance_edit', 'attendance_delete', 'attendance_delete_select');
 $actions_calendar = array('calendar_list', 'calendar_add', 'calendar_edit', 'calendar_delete', 'calendar_all_delete');
 $action  = 'attendance_list';
+
+$course_id = '';
+if (isset($_GET['cidReq'])){
+    $course_id = $_GET['cidReq'];
+}
+
 if (isset($_GET['action']) && (in_array($_GET['action'],$actions) || in_array($_GET['action'],$actions_calendar))) {
 	$action = $_GET['action'];
 }
@@ -181,10 +189,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance_delete_select') {
 // distpacher actions to controller
 
 switch ($action) {	
-	case 'attendance_list'		:	
+	case 'attendance_list':	
         $attendance_controller->attendance_list();
 		break;
-	case 'attendance_add'		:
+	case 'attendance_add':
         if (api_is_allowed_to_edit(null, true)) {
             $attendance_controller->attendance_add();
         } else {
@@ -203,9 +211,12 @@ switch ($action) {
         $attendance_controller->attendance_delete($attendance_id);
         } else { api_not_allowed();}
 		 break;									
-	case 'attendance_sheet_list'	:	
+	case 'attendance_sheet_list':	
         $attendance_controller->attendance_sheet($action, $attendance_id, $student_id);
 		break;
+    case 'attendance_sheet_print':
+        $attendance_controller->attendance_sheet_print($action, $attendance_id, $student_id, $course_id);
+        break;
 	case 'attendance_sheet_add' 	:	
         if (api_is_allowed_to_edit(null, true)) {
         $attendance_controller->attendance_sheet($action, $attendance_id);
@@ -215,8 +226,10 @@ switch ($action) {
     case 'unlock_attendance'        :
         if (api_is_allowed_to_edit(null, true)) {       
         $attendance_controller->lock_attendance($action, $attendance_id);
-        } else { api_not_allowed();}
-        break;		
+        } else { 
+            api_not_allowed();
+        }
+        break;		  
 	case 'calendar_add'  		:
 	case 'calendar_edit' 		:
 	case 'calendar_all_delete' 	:

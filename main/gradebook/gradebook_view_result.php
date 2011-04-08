@@ -175,145 +175,143 @@ if (isset ($_GET['import'])) {
 	}
 }
 if (isset ($_GET['export'])) {
-$interbreadcrumb[]= array (
-	'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),
-	'name' => get_lang('ViewResult'
-));
-$export_result_form= new DataForm(DataForm :: TYPE_EXPORT, 'export_result_form', null, api_get_self() . '?export=&selecteval=' . $_GET['selecteval'], '_blank');
-if (!$export_result_form->validate()) {
-	Display :: display_header(get_lang('Export'));
-}
-
-if ($export_result_form->validate()) {
-	$export= $export_result_form->exportValues();
-	$file_type= $export['file_type'];
-	$filename= 'export_results_' . gmdate('Y-m-d_H-i-s');
-	$results= Result :: load(null, null, Security::remove_XSS($_GET['selecteval']));
-	$data= array (); //when file type is csv, add a header to the output file
-	if ($file_type == 'csv') {
-		$alldata[]= array (
-			'username',
-			'official_code',
-			'lastname',
-			'firstname',
-			'score',
-			'date'
-		);
-	}
-
-	// export results to pdf file
-	if ($file_type == 'pdf') {
-		$number_decimals = api_get_setting('gradebook_number_decimals');
-		$datagen = new ResultsDataGenerator ($eval[0],$allresults);
-
-		// set headers pdf
-		!empty($_user['official_code'])? $officialcode=$_user['official_code'].' - ':'';
-
-		$h1 = array(get_lang('Teacher'),$officialcode.$_user['firstName'].', '.$_user['lastName']);
-		$h2 = array(get_lang('Score'),$eval[0]->get_max());
-		$h3 = array(get_lang('Course'),$_course['name']);
-		$h4 = array(get_lang('Weight'),$eval[0]->get_weight());
-		$h5 = array(get_lang('Session'),api_get_session_name(api_get_session_id()));
-		$date = date('d-m-Y H:i:s', time());
-		$h6 = array(get_lang('DateTime'),api_convert_and_format_date($date, "%d/%m/%Y %H:%M"));
-		$header_pdf = array($h1, $h2, $h3, $h4, $h5, $h6);
-
-		// set footer pdf
-		$f1 = '<hr />'.get_lang('Drh');
-		$f2 = '<hr />'.get_lang('Teacher');
-		$f3 = '<hr />'.get_lang('Date');
-		$footer_pdf = array($f1, $f2, $f3);
-
-		// set title pdf
-		$title_pdf = $eval[0]->get_name();
-
-		// set headers data table
-		$head_ape_name = '';
-		if (api_is_western_name_order()) {
-            $head_ape_name = get_lang('FirstName').', '.get_lang('LastName');			
-		} else {
-			$head_ape_name = get_lang('LastName').', '.get_lang('FirstName');
-		}
-	
-		if ($number_decimals == null) {
-			$head_letter = get_lang('Letters');
-		}
-		$head_table = array(
-							array('#',3),
-							array(get_lang('Code'),12),
-							array($head_ape_name, 40),
-							array(get_lang('Score'),12),
-							array($head_letter,15)							
-						);
-        
-        $head_display_score = '';
-        $scoredisplay = ScoreDisplay :: instance();
-        if ($scoredisplay->is_custom()) {
-            $head_display_score = get_lang('Display');
-            $head_table[] = array($head_display_score,15);
-        }
-        
-		// get data table
-		if (api_sort_by_first_name()) {
-			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true, true);
-		} else {
-			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null, true, true);
-		}
-		$data_table = array();
-		foreach ($data_array as $data) {
-			$result = array();
-			$user_info = api_get_user_info($data['id']);
-			$result[] = $user_info['username'];
-			if (api_is_western_name_order()) {
-                $result[] = $user_info['firstname'].', '.$user_info['lastname'];                				
-			} else {
-				$result[] = $user_info['lastname'].', '.$user_info['firstname'];
-			}
+    $interbreadcrumb[]= array ('url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),'name' => get_lang('ViewResult'));
+    
+    $export_result_form= new DataForm(DataForm :: TYPE_EXPORT, 'export_result_form', null, api_get_self() . '?export=&selecteval=' . $_GET['selecteval'], '_blank');
+    if (!$export_result_form->validate()) {
+    	Display :: display_header(get_lang('Export'));
+    }
+    
+    if ($export_result_form->validate()) {
+    	$export= $export_result_form->exportValues();
+    	$file_type= $export['file_type'];
+    	$filename= 'export_results_' . gmdate('Y-m-d_H-i-s');
+    	$results= Result :: load(null, null, Security::remove_XSS($_GET['selecteval']));
+    	$data= array (); //when file type is csv, add a header to the output file
+    	if ($file_type == 'csv') {
+    		$alldata[]= array (
+    			'username',
+    			'official_code',
+    			'lastname',
+    			'firstname',
+    			'score',
+    			'date'
+    		);
+    	}
+    
+    	// export results to pdf file
+    	if ($file_type == 'pdf') {
+    		$number_decimals = api_get_setting('gradebook_number_decimals');
+    		$datagen = new ResultsDataGenerator ($eval[0],$allresults);
+    
+    		// set headers pdf
+    		!empty($_user['official_code'])? $officialcode=$_user['official_code'].' - ':'';
+    
+    		$h1 = array(get_lang('Teacher'),$officialcode.$_user['firstName'].', '.$_user['lastName']);
+    		$h2 = array(get_lang('Score'),$eval[0]->get_max());
+    		$h3 = array(get_lang('Course'),$_course['name']);
+    		$h4 = array(get_lang('Weight'),$eval[0]->get_weight());
+    		$h5 = array(get_lang('Session'),api_get_session_name(api_get_session_id()));
+    		$date = date('d-m-Y H:i:s', time());
+    		$h6 = array(get_lang('DateTime'),api_convert_and_format_date($date, "%d/%m/%Y %H:%M"));
+    		$header_pdf = array($h1, $h2, $h3, $h4, $h5, $h6);
+    
+    		// set footer pdf
+    		$f1 = '<hr />'.get_lang('Drh');
+    		$f2 = '<hr />'.get_lang('Teacher');
+    		$f3 = '<hr />'.get_lang('Date');
+    		$footer_pdf = array($f1, $f2, $f3);
+    
+    		// set title pdf
+    		$title_pdf = $eval[0]->get_name();
+    
+    		// set headers data table
+    		$head_ape_name = '';
+    		if (api_is_western_name_order()) {
+                $head_ape_name = get_lang('FirstName').', '.get_lang('LastName');			
+    		} else {
+    			$head_ape_name = get_lang('LastName').', '.get_lang('FirstName');
+    		}
+    	
+    		if ($number_decimals == null) {
+    			$head_letter = get_lang('Letters');
+    		}
+    		$head_table = array(
+    							array('#',3),
+    							array(get_lang('Code'),12),
+    							array($head_ape_name, 40),
+    							array(get_lang('Score'),12),
+    							array($head_letter,15)							
+    						);
             
-            if (empty($data['score']) && !is_numeric($data['score'])) {
-                $result[] = get_lang('DidNotTakeTheExamAcronym');
-            } else {
-                $result[] = $data['score']; 
-            }
-            if (empty($data['scoreletter']) && !is_numeric($data['score'])) {
-                $result[] = get_lang('DidNotTakeTheExam');
-            } else {
-                if ($number_decimals == null) {
-                    $result[] = api_strtoupper(get_lang('Literal'.$data['scoreletter']));
-                } else {
-                    $result[] = '';
-                }
-            }           
+            $head_display_score = '';
+            $scoredisplay = ScoreDisplay :: instance();
             if ($scoredisplay->is_custom()) {
-                $result[] = $data['display'];
+                $head_display_score = get_lang('Display');
+                $head_table[] = array($head_display_score,15);
             }
-			$data_table[] = $result;
-		}        
-		export_pdf_with_html($head_table, $data_table, $header_pdf, $footer_pdf, $title_pdf);
-	}
-
-	// export results to xml or csv file
-	foreach ($results as $result) {
-		$userinfo= get_user_info_from_id($result->get_user_id());
-		$data['username']= $userinfo['username']; //$result->get_user_id();
-		$data['official_code']= $userinfo['official_code'];
-		$data['lastname']= $userinfo['lastname'];
-		$data['firstname']= $userinfo['firstname'];
-		$data['score']= $result->get_score();
-		$data['date'] = api_format_date($result->get_date(), "%d/%m/%Y %R");
-		$alldata[]= $data;
-	}
-
-	switch ($file_type) {
-		case 'xml' :
-			Export :: export_table_xml($alldata, $filename, 'Result', 'XMLResults');
-			exit;
-			break;
-		case 'csv' :
-			Export :: export_table_csv($alldata, $filename);
-			exit;
-			break;
-		}
+            
+    		// get data table
+    		if (api_sort_by_first_name()) {
+    			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true, true);
+    		} else {
+    			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null, true, true);
+    		}
+    		$data_table = array();
+    		foreach ($data_array as $data) {
+    			$result = array();
+    			$user_info = api_get_user_info($data['id']);
+    			$result[] = $user_info['username'];
+    			if (api_is_western_name_order()) {
+                    $result[] = $user_info['firstname'].', '.$user_info['lastname'];                				
+    			} else {
+    				$result[] = $user_info['lastname'].', '.$user_info['firstname'];
+    			}
+                
+                if (empty($data['score']) && !is_numeric($data['score'])) {
+                    $result[] = get_lang('DidNotTakeTheExamAcronym');
+                } else {
+                    $result[] = $data['score']; 
+                }
+                if (empty($data['scoreletter']) && !is_numeric($data['score'])) {
+                    $result[] = get_lang('DidNotTakeTheExam');
+                } else {
+                    if ($number_decimals == null) {
+                        $result[] = api_strtoupper(get_lang('Literal'.$data['scoreletter']));
+                    } else {
+                        $result[] = '';
+                    }
+                }           
+                if ($scoredisplay->is_custom()) {
+                    $result[] = $data['display'];
+                }
+    			$data_table[] = $result;
+    		}        
+    		export_pdf_with_html($head_table, $data_table, $header_pdf, $footer_pdf, $title_pdf);
+    	}
+    
+    	// export results to xml or csv file
+    	foreach ($results as $result) {
+    		$userinfo= get_user_info_from_id($result->get_user_id());
+    		$data['username']= $userinfo['username']; //$result->get_user_id();
+    		$data['official_code']= $userinfo['official_code'];
+    		$data['lastname']= $userinfo['lastname'];
+    		$data['firstname']= $userinfo['firstname'];
+    		$data['score']= $result->get_score();
+    		$data['date'] = api_format_date($result->get_date(), "%d/%m/%Y %R");
+    		$alldata[]= $data;
+    	}
+    
+    	switch ($file_type) {
+    		case 'xml' :
+    			Export :: export_table_xml($alldata, $filename, 'Result', 'XMLResults');
+    			exit;
+    			break;
+    		case 'csv' :
+    			Export :: export_table_csv($alldata, $filename);
+    			exit;
+    			break;
+    	}
 	}
 }
 if (isset ($_GET['resultdelete'])) {
@@ -327,18 +325,18 @@ if (isset ($_POST['action'])) {
 	if ($number_of_selected_items == '0') {
 		Display :: display_warning_message(get_lang('NoItemsSelected'),false);
 	} else {
-	switch ($_POST['action']) {
-		case 'delete' :
-			$number_of_deleted_results= 0;
-			foreach ($_POST['id'] as $indexstr) {
-				$result= Result :: load($indexstr);
-				$result[0]->delete();
-				$number_of_deleted_results++;
-			}
-			header('Location: gradebook_view_result.php?massdelete=&selecteval=' .Security::remove_XSS($_GET['selecteval']));
-			exit;
-			break;
-		}
+        switch ($_POST['action']) {
+    		case 'delete' :
+    			$number_of_deleted_results= 0;
+    			foreach ($_POST['id'] as $indexstr) {
+    				$result= Result :: load($indexstr);
+    				$result[0]->delete();
+    				$number_of_deleted_results++;
+    			}
+    			header('Location: gradebook_view_result.php?massdelete=&selecteval=' .Security::remove_XSS($_GET['selecteval']));
+    			exit;
+    			break;
+    	}
 	}
 } // TODO - what if selecteval not set ?
 
@@ -370,8 +368,9 @@ if (isset ($_GET['print'])) {
 
 	echo print_table($newarray, $header_names,get_lang('ViewResult'), $eval[0]->get_name());
 	exit;
-} else
+} else {
 	$resulttable= new ResultTable($eval[0], $allresults, $iscourse, $addparams);
+}
 	$htmlHeadXtra[]= '<script type="text/javascript">
 function confirmationuser ()
 {
@@ -394,18 +393,13 @@ if (isset ($_GET['deleteall'])) {
 	exit;
 }
 if ((!isset ($_GET['export'])) && (!isset ($_GET['import']))) {
-
 	if (!isset($_GET['selectcat'])) {
 		$interbreadcrumb[]= array (
 		'url' => $_SESSION['gradebook_dest'].'?selectcat=' .$currentcat[0]->get_id(),
 		'name' => get_lang('Details')
 		  );
 	}
-	$interbreadcrumb[]= array (
-	'url' => 'gradebook_view_result.php'.'?selecteval='.Security::remove_XSS($_GET['selecteval']),
-	'name' => get_lang('ViewResult'
-	));
-
+	$interbreadcrumb[]= array ('url' => 'gradebook_view_result.php'.'?selecteval='.Security::remove_XSS($_GET['selecteval']),'name' => get_lang('ViewResult'));
 	Display :: display_header('');
 }
 if (isset ($_GET['addresultnostudents'])) {
@@ -431,15 +425,12 @@ if (isset ($_GET['deleteresult'])) {
 if (isset ($_GET['editallresults'])) {
 	Display :: display_confirmation_message(get_lang('AllResultsEdited'),false);
 }
-
 if (isset ($_GET['importok'])) {
 	Display :: display_confirmation_message(get_lang('FileUploadComplete'),false);
 }
-
 if (isset ($_GET['importnofile'])) {
 	Display :: display_warning_message(get_lang('ImportNoFile'),false);
 }
-
 if (isset ($_GET['incorrectdata'])) {
 	Display :: display_warning_message(get_lang('IncorrectData'),false);
 }
@@ -458,7 +449,6 @@ if (isset ($_GET['overwritemax'])) {
 if (isset ($_GET['importoverwritescore'])) {
 	Display :: display_confirmation_message(get_lang('ImportOverWriteScore') . ' ' . $_GET['importoverwritescore']);
 }
-
 if (isset ($_GET['import_user_error'])) {
 	$userinfo= get_user_info_from_id($_GET['import_user_error']);
 	Display :: display_warning_message(get_lang('UserInfoDoesNotMatch') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']));
@@ -466,28 +456,27 @@ if (isset ($_GET['import_user_error'])) {
 if (isset ($_GET['allresdeleted'])) {
 	Display :: display_confirmation_message(get_lang('AllResultDeleted'));
 }
-
 if (isset ($_GET['import_score_error'])) {
 	$userinfo= get_user_info_from_id($_GET['import_score_error']);
 	Display :: display_warning_message(get_lang('ScoreDoesNotMatch') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']));
 }
 if ($file_type == null) { //show the result header
-		if (isset ($export_result_form) && !(isset ($edit_res_form))) {
-		echo '<div class ="normal-message">';
-		echo $export_result_form->display();
-		echo '</div>';
-		DisplayGradebook :: display_header_result($eval[0], $currentcat[0]->get_id(), 1);
-} else {
-		if (isset ($import_result_form)){
-			echo '<div class ="normal-message">';
-			echo $import_result_form->display();
-			echo '</div>';
-		}
-		if (isset ($edit_res_form)) {
-			Display :: display_normal_message($edit_res_form->toHtml(),false);
-		}
-		DisplayGradebook :: display_header_result($eval[0], $currentcat[0]->get_id(), 1);
-	}
-	$resulttable->display();
-	Display :: display_footer();
+    if (isset ($export_result_form) && !(isset ($edit_res_form))) {
+    	//echo '<div class ="normal-message">';
+    	echo $export_result_form->display();
+    	//echo '</div>';
+    	DisplayGradebook :: display_header_result($eval[0], $currentcat[0]->get_id(), 1);
+    } else {
+    	if (isset ($import_result_form)){
+    		echo '<div class ="normal-message">';
+    		echo $import_result_form->display();
+    		echo '</div>';
+    	}
+    	if (isset ($edit_res_form)) {
+    		Display :: display_normal_message($edit_res_form->toHtml(),false);
+    	}
+    	DisplayGradebook :: display_header_result($eval[0], $currentcat[0]->get_id(), 1);
+    }
+    $resulttable->display();
+    Display :: display_footer();
 }

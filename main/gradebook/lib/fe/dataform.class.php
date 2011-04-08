@@ -45,7 +45,7 @@ class DataForm extends FormValidator {
 
 	protected function build_pdf_export_form() {
 		$renderer =& $this->defaultRenderer();
-		$renderer->setElementTemplate('<span>{element}</span> ');
+		$renderer->setElementTemplate('<span>{element}</span>');
 		$this->addElement('static','label','',get_lang('ChooseOrientation'));
 		$this->addElement('radio', 'orientation', null, get_lang('Portrait'), 'portrait');
 		$this->addElement('radio', 'orientation', null, get_lang('Landscape'), 'landscape');
@@ -57,7 +57,7 @@ class DataForm extends FormValidator {
 
 
 	protected function build_export_form() {
-		$this->addElement('header','label',get_lang('ChooseFormat'));
+		$this->addElement('header','label', get_lang('ChooseFormat'));
 		$this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
 		$this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
 		$this->addElement('radio', 'file_type', null, 'PDF (Portable Document Format)', 'pdf');

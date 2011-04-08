@@ -188,7 +188,7 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form->addElement('hidden','parent_id',$message_id);
 	}
 
-	$form->add_textfield('title', get_lang('Title'),true ,array('size' => 59));
+	$form->add_textfield('title', get_lang('Subject'),true ,array('size' => 54));
 
 	$form->add_html_editor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
 	//$form->addElement('textarea','content', get_lang('Message'), array('cols' => 75,'rows'=>8));
@@ -257,9 +257,8 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form->display();
 	}
 }
-/*
-		MAIN SECTION
-*/
+
+/* MAIN SECTION */
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
@@ -369,6 +368,9 @@ echo '<div id="social-content">';
 					Display::display_error_message(get_lang('ErrorSendingMessage'));
 				}
 			}
+		}
+		if (api_get_setting('allow_social_tool') == 'true'){
+            echo '</div>';		    
 		}
 	echo '</div>';
 echo '</div>';

@@ -99,7 +99,27 @@ if (is_array($reports_template[$_REQUEST['type']])) {
 if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 	echo '<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				$("#reportsData").dataTable();
+
+				$("#reportsData").dataTable({
+					"oLanguage":
+						{
+							"sProcessing":   "Traitement en cours...",
+							"sLengthMenu":   "Afficher _MENU_ éléments",
+							"sZeroRecords":  "Aucun élément à afficher",
+							"sInfo":         "Affichage de l'."'".'élement _START_ à _END_ sur _TOTAL_ éléments",
+							"sInfoEmpty":    "Affichage de l'."'".'élement 0 à 0 sur 0 éléments",
+							"sInfoFiltered": "(filtré de _MAX_ éléments au total)",
+							"sInfoPostFix":  "",
+							"sSearch":       "Rechercher :",
+							"sUrl":          "",
+							"oPaginate": {
+								"sFirst":    "Premier",
+								"sPrevious": "Précédent",
+								"sNext":     "Suivant",
+								"sLast":     "Dernier"
+							}
+						}
+				});
 			} );
 		</script>';
 	echo '<table id="reportsData" class="display">'; // FIXME style

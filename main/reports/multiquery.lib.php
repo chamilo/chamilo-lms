@@ -13,7 +13,7 @@ function multiquery_query($array) {
 
 		// fields
 		$result[$i]['num_fields'] = mysql_num_fields($result[$i]['mysql']);
-		for ($j = 0; $j < $result[$i]['num_fields']; $i++) {
+		for ($j = 0; $j < $result[$i]['num_fields']; $j++) {
 			$name = mysql_field_name($result[$i]['mysql'], $j);
 			$result['field'][$field]['query']=$i;
 			$result['field'][$field]['name']=$name;
@@ -32,6 +32,7 @@ function multiquery_query($array) {
 
 	$result['num_rows'] = $numberOfResult;
 	$result['num_fields'] = $field;
+
 	return $result;
 }
 
@@ -51,8 +52,9 @@ function multiquery_fetch_row(&$mq_h) {
 	$result = array();
 	$pos = 0;
 	for ($i = 0; $i < $mq_h['num_queries']; $i++) {
-		$row = mysql_fetch_row($mq_hi[$i]['mysql']);
-		for ($j = 0; $j < $row; $j++) {
+		$row = mysql_fetch_row($mq_h[$i]['mysql']);
+		if (!$row) return false; // last line
+		for ($j = 0; $j < sizeof($row); $j++) {
 			$result[$pos] = $row[$j];
 			$pos++;
 		}

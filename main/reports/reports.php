@@ -85,14 +85,13 @@ if (is_array($reports_template[$_REQUEST['type']])) {
 	if ($_REQUEST['format'] == 'sql')
 		die(var_export($query, true));
 
-	$result = &multiquery_query($query);
+	$result = multiquery_query($query);
 	
 
 	// check number of result
 	$numberOfResult = multiquery_num_rows($result);
 	if ($numberOfResult == 0) 
 		die(get_lang('NoDataAvailable'));
-	
 } else {
 	die('<b>'.get_lang('ErrorWhileBuildingReport').'</b>');
 }

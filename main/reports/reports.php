@@ -15,6 +15,7 @@ $cidReset = true;
 // including files 
 require_once '../inc/global.inc.php';
 require_once 'reports.lib.php';
+require_once 'multiquery.lib.php';
 
 // protect script
 api_block_anonymous_users();
@@ -79,9 +80,19 @@ if ($_REQUEST['format'] == 'csv')  {
 
 if (is_array($reports_template[$_REQUEST['type']])) {
 	$query = $reports_template[$_REQUEST['type']]['getSQL']();
+	if (! is_array($query))
+		$query = array($query);
 	if ($_REQUEST['format'] == 'sql')
-		die($query);
-	$result = Database::query($query);
+		die(var_export($query, true));
+
+	$result = &multiquery_query($query);
+	
+
+	// check number of result
+	$numberOfResult = multiquery_num_rows($result);
+	if ($numberOfResult == 0) 
+		die(get_lang('NoDataAvailable'));
+	
 } else {
 	die('<b>'.get_lang('ErrorWhileBuildingReport').'</b>');
 }
@@ -93,15 +104,14 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 			} );
 		</script>';
 	echo '<table id="reportsData" class="display">'; // FIXME style
-	$nfields = mysql_num_fields($result);
-	if (mysql_num_rows($result) == 0) {
-		die(get_lang('NoDataAvailable'));
-	}
+
+	// counting fields
+	$nfields = multiquery_num_fields($result);
 	$columns = array();	
 	$columns_islink = array();
 	echo '<thead><tr>';
 	for ($i=0; $i < $nfields; $i++)	{
-		$columns[$i] = mysql_field_name($result, $i);
+		$columns[$i] = multiquery_field_name($result, $i);
 		if (substr($columns[$i], -5, 5) != '_link') {
 			$column_islink[$i] = false;
 			echo '<th>'.$columns[$i].'</th>';
@@ -119,7 +129,7 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 			$columns_link[$i] = '';
 	error_log("result1: ".$nfields);
 	echo '</tr></thead><tbody>';
-	while ($row = Database::fetch_row($result)) {
+	while ($row = multiquery_fetch_row($result)) {
 		echo '<tr>';
 		for ($i = 0; $i<$nfields; $i++)
 			if (!$columns_islink[$i]){ // ignore links

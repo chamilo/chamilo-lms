@@ -127,7 +127,6 @@ if ($_REQUEST['format'] == 'html' || $_REQUEST['format'] == 'directlink') {
 			$columns_link[$i] = $columns_flip[$columns[$i].'_link'];
 		else
 			$columns_link[$i] = '';
-	error_log("result1: ".$nfields);
 	echo '</tr></thead><tbody>';
 	while ($row = multiquery_fetch_row($result)) {
 		echo '<tr>';

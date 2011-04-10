@@ -305,9 +305,14 @@ return menu;}});};var fileUploadElemIds=new Array();function addMoreFile()
 {cancelFileUpload(elementId);});$(newFileUpload).show();return false;};function cancelFileUpload(elementId)
 {$('div#TB_window #'+elementId).parent().parent().remove();while($('div#TB_window #fileUploadBody tr').length<2)
 {addMoreFile();}
-return false;};function uploadFile(elementId)
-{var ext=getFileExtension($('#'+elementId).val());if(ext=='')
-{alert(noFileSelected);return false;}
+return false;};
+function uploadFile(elementId)
+{
+	var ext=getFileExtension($('#'+elementId).val());
+	var only_name_file=$('#'+elementId).val();// hack for Chamilo
+	//if(ext==''){alert(noFileSelected);return false;}
+	if(ext=='' && only_name_file!=''){alert(noFileSelected+'\n\n'+ only_name_file);return false;}// Chamilo replace the above line
+
 var supportedExts=supportedUploadExts.split(",");var isSupportedExt=false;for(i in supportedExts)
 {if(typeof(supportedExts[i])=='string')
 {isSupportedExt=true;break;}}

@@ -34,7 +34,7 @@
 	define('LBL_SIZE', 'Tama&ntilde;o');
 	define('LBL_MODIFIED', 'Modificado el');
 		//File Information
-	define('LBL_FILE_INFO', 'Informaci&oacute;n del archivo:');
+	define('LBL_FILE_INFO', 'Información del archivo:');
 	define('LBL_FILE_NAME', 'Nombre:');
 	define('LBL_FILE_CREATED', 'Creado:');
 	define('LBL_FILE_MODIFIED', 'Modificado:');
@@ -43,9 +43,9 @@
 	define('LBL_FILE_WRITABLE', '&iquest;Escribible?');
 	define('LBL_FILE_READABLE', '&iquest;Legible?');
 		//Folder Information
-	define('LBL_FOLDER_INFO', 'Informaci&oacute;n de la carpeta');
+	define('LBL_FOLDER_INFO', 'Información de la carpeta');
 	define('LBL_FOLDER_PATH', 'Carpeta:');
-	define('LBL_CURRENT_FOLDER_PATH', 'Situaci&oacute;n actual de la carpeta:');
+	define('LBL_CURRENT_FOLDER_PATH', 'Situación actual de la carpeta:');
 	define('LBL_FOLDER_CREATED', 'Creada:');
 	define('LBL_FOLDER_MODIFIED', 'Modificada:');
 	define('LBL_FOLDER_SUDDIR', 'Subcarpetas:');
@@ -55,7 +55,7 @@
 	define('LBL_FOLDER_ROOT', 'Carpeta principal');
 		//Preview
 	define('LBL_PREVIEW', 'Previsualizar');
-	define('LBL_CLICK_PREVIEW', 'Haga clic aqu&iacute; para previsualizarlo.');
+	define('LBL_CLICK_PREVIEW', 'Haga clic aquí para previsualizarlo.');
 	//Buttons
 	define('LBL_BTN_SELECT', 'Seleccionar');
 	define('LBL_BTN_CANCEL', 'Cancelar');
@@ -75,10 +75,10 @@
 	define('PAGINATION_PREVIOUS', 'Anterior');
 	define('PAGINATION_LAST', 'Ultimo');
 	define('PAGINATION_FIRST', 'Primero');
-	define('PAGINATION_ITEMS_PER_PAGE', 'Mostrar %s elementos por p&aacute;gina');
+	define('PAGINATION_ITEMS_PER_PAGE', 'Mostrar %s elementos por página');
 	define('PAGINATION_GO_PARENT', 'Ir a la carpeta superior');
 	//System
-	define('SYS_DISABLED', 'Permiso denegado: el sistema est&aacute; deshabilitado.');
+	define('SYS_DISABLED', 'Permiso denegado: el sistema está deshabilitado.');
 
 	//Cut
 	define('ERR_NOT_DOC_SELECTED_FOR_CUT', 'No hay seleccionado un documento para cortar.');
@@ -101,12 +101,12 @@
 	define('LBL_SEARCH', 'Buscar');
 	define('LBL_SEARCH_NAME', 'Nombre de archivo (Completo/Parcial):');
 	define('LBL_SEARCH_FOLDER', 'Buscar en:');
-	define('LBL_SEARCH_QUICK', 'B&uacute;squeda r&aacute;pida');
-	define('LBL_SEARCH_MTIME', 'Fecha de modificaci&oacute;n del archivo (Rango):');
+	define('LBL_SEARCH_QUICK', 'Búsqueda rápida');
+	define('LBL_SEARCH_MTIME', 'Fecha de modificación del archivo (Rango):');
 	define('LBL_SEARCH_SIZE', 'Tama&ntilde;o del archivo:');
 	define('LBL_SEARCH_ADV_OPTIONS', 'opciones avanzadas');
 	define('LBL_SEARCH_FILE_TYPES', 'Tipos de archivo:');
-	define('SEARCH_TYPE_EXE', 'Aplicaci&oacute;n');
+	define('SEARCH_TYPE_EXE', 'Aplicación');
 
 	define('SEARCH_TYPE_IMG', 'Imagen');
 	define('SEARCH_TYPE_ARCHIVE', 'Archivo');
@@ -125,7 +125,7 @@
 	define('SEARCH_TYPE_XML', 'XML');
 	define('SEARCH_ALL_FILE_TYPES', 'Todos los tipos de archivos');
 	define('LBL_SEARCH_RECURSIVELY', 'Buscar en todos:');
-	define('LBL_RECURSIVELY_YES', 'S&iacute;');
+	define('LBL_RECURSIVELY_YES', 'Sí');
 	define('LBL_RECURSIVELY_NO', 'No');
 	define('BTN_SEARCH', 'Buscar');
 	//thickbox
@@ -162,40 +162,40 @@
 	define('ERR_NOT_FILE_SELECTED', 'Por favor, seleccione un archivo.');
 	define('ERR_NOT_DOC_SELECTED', 'Ho hay seleccionado un documento para eliminar.');
 	define('ERR_DELTED_FAILED', 'No se pueden eliminar los documentos seleccionados.');
-	define('ERR_FOLDER_PATH_NOT_ALLOWED', 'El path de la carpeta no est&aacute; permitido.');
+	define('ERR_FOLDER_PATH_NOT_ALLOWED', 'El path de la carpeta no está permitido.');
 		//class manager
 	define('ERR_FOLDER_NOT_FOUND', 'No se ha podido localizar la carpeta especificada: ');
 		//rename
 	define('ERR_RENAME_FORMAT', 'Por favor, introduzca un nombre que solamente contenga letras, numeros, espacios, guiones o subrayado.');
 	define('ERR_RENAME_EXISTS', 'Ya existe una carpeta con este nombre.');
 	define('ERR_RENAME_FILE_NOT_EXISTS', 'El archivo/carpeta no existe.');
-	define('ERR_RENAME_FAILED', 'No se puede renombrar, por favor int&eacute;ntelo de nuevo.');
+	define('ERR_RENAME_FAILED', 'No se puede renombrar, por favor inténtelo de nuevo.');
 	define('ERR_RENAME_EMPTY', 'Por favor, introduzca un nombre.');
 	define('ERR_NO_CHANGES_MADE', 'No se han producido cambios.');
 	define('ERR_RENAME_FILE_TYPE_NOT_PERMITED', 'No tiene permiso para cambiar este tipo de archivos.');
 		//folder creation
 	define('ERR_FOLDER_FORMAT', 'Por favor, introduzca un nombre que solamente contenga letras, numeros, espacios, guiones o subrayado.');
 	define('ERR_FOLDER_EXISTS', 'ya existe una carpeta con este nombre.');
-	define('ERR_FOLDER_CREATION_FAILED', 'No se puede crear la carpeta, por favor int&eacute;ntelo de nuevo.');
+	define('ERR_FOLDER_CREATION_FAILED', 'No se puede crear la carpeta, por favor inténtelo de nuevo.');
 	define('ERR_FOLDER_NAME_EMPTY', 'Por favor, introduzca un nombre.');
-	define('FOLDER_FORM_TITLE', 'Creaci&oacute;n de carpetas');
-	define('FOLDER_LBL_TITLE', 'T&iacute;tulo:');
+	define('FOLDER_FORM_TITLE', 'Creación de carpetas');
+	define('FOLDER_LBL_TITLE', 'Título:');
 	define('FOLDER_LBL_CREATE', 'Crear carpeta');
 	//New File
-	define('NEW_FILE_FORM_TITLE', 'Formulario de Creaci&oacute;n de archivos');
+	define('NEW_FILE_FORM_TITLE', 'Formulario de Creación de archivos');
 	define('NEW_FILE_LBL_TITLE', 'Nombre de archivo:');
 	define('NEW_FILE_CREATE', 'Crear archivo');
 		//file upload
 	define('ERR_FILE_NAME_FORMAT', 'Por favor, introduzca un nombre que solamente contenga letras, numeros, espacios, guiones o subrayado.');
-	define('ERR_FILE_NOT_UPLOADED', 'No ha sido seleccionado un archivo para ser enviado.');
+	define('ERR_FILE_NOT_UPLOADED', 'Por favor, antes de enviar seleccione un archivo.');
 	define('ERR_FILE_TYPE_NOT_ALLOWED', 'No tiene permiso para enviar este tipo de archivos.');
 	define('ERR_FILE_MOVE_FAILED', 'Error al mover el archivo.');
-	define('ERR_FILE_NOT_AVAILABLE', 'El archivo no est&aacute; disponible.');
+	define('ERR_FILE_NOT_AVAILABLE', 'El archivo no está disponible.');
 	define('ERROR_FILE_TOO_BID', 'Archivo demasiado largo. (max: %s)');
-	define('FILE_FORM_TITLE', 'Env&iacute;o de archivos');
+	define('FILE_FORM_TITLE', 'Envío de archivos');
 	define('FILE_LABEL_SELECT', 'Seleccionar:');
-	define('FILE_LBL_MORE', 'A&ntilde;adir m&aacute;s archivos para enviar');
-	define('FILE_CANCEL_UPLOAD', 'Cancelar el env&iacute;o del archivo');
+	define('FILE_LBL_MORE', 'A&ntilde;adir más archivos para enviar');
+	define('FILE_CANCEL_UPLOAD', 'Cancelar el envío del archivo');
 	define('FILE_LBL_UPLOAD', 'Enviar');
 
 	//file download
@@ -213,20 +213,20 @@
 	define('TIP_UNSELECT_ALL', 'No seleccionar todo');
 	//WARNING
 	define('WARNING_DELETE', 'Seguro que quiere eliminar los documentos seleccionados?');
-	define('WARNING_IMAGE_EDIT', 'Por favor, seleccione una imagen para su edici&oacute;n.');
-	define('WARNING_NOT_FILE_EDIT', 'por favor, seleccione un archivo para su edici&oacute;n.');
+	define('WARNING_IMAGE_EDIT', 'Por favor, seleccione una imagen para su edición.');
+	define('WARNING_NOT_FILE_EDIT', 'por favor, seleccione un archivo para su edición.');
 	define('WARING_WINDOW_CLOSE', 'Seguro que quiere cerrar la ventana?');
 	//Preview
-	define('PREVIEW_NOT_PREVIEW', 'No est&aacute; disponible la previsualizaci&oacute;n.');
+	define('PREVIEW_NOT_PREVIEW', 'No está disponible la previsualización.');
 	define('PREVIEW_OPEN_FAILED', 'No es posible abrir el archivo.');
 	define('PREVIEW_IMAGE_LOAD_FAILED', 'No es posible cargar la imagen');
 
 	//Login
-	define('LOGIN_PAGE_TITLE', 'Formulario de autentificaci&oacute;n del gestor avanzado de ficheros');
-	define('LOGIN_FORM_TITLE', 'Formulario de autentificaci&oacute;n');
+	define('LOGIN_PAGE_TITLE', 'Formulario de autentificación del gestor avanzado de ficheros');
+	define('LOGIN_FORM_TITLE', 'Formulario de autentificación');
 	define('LOGIN_USERNAME', 'Nombre de usuario:');
 	define('LOGIN_PASSWORD', 'Contrase&ntilde;a:');
-	define('LOGIN_FAILED', 'Nombre de usuario o contrase&ntilde;a no v&aacute;lidos.');
+	define('LOGIN_FAILED', 'Nombre de usuario o contrase&ntilde;a no válidos.');
 
 
 	//88888888888   Below for Image Editor   888888888888888888888
@@ -235,14 +235,14 @@
 
 		//General
 		define('IMG_GEN_IMG_NOT_EXISTS', 'La imagen no existe');
-		define('IMG_WARNING_LOST_CHANAGES', 'Todos los cambios de la imagen que no se hayan guardado se perder&aacute;n. &iquest; Est&aacute; seguro de querer continuar?');
-		define('IMG_WARNING_REST', 'Todos los cambios de la imagen que no se hayan guardado se perder&aacute;n. Seguro que quiere restaurar?');
+		define('IMG_WARNING_LOST_CHANAGES', 'Todos los cambios de la imagen que no se hayan guardado se perderán. &iquest; Está seguro de querer continuar?');
+		define('IMG_WARNING_REST', 'Todos los cambios de la imagen que no se hayan guardado se perderán. Seguro que quiere restaurar?');
 		define('IMG_WARNING_EMPTY_RESET', 'Hasta ahora no se han realizado cambios en la imagen');
 		define('IMG_WARING_WIN_CLOSE', 'Seguro que quiere cerrar la ventana?');
 		define('IMG_WARNING_UNDO', 'Seguro que quiere restaurar la imagen al estado anterior?');
 		define('IMG_WARING_FLIP_H', 'Seguro que quiere voltear horizontalmente la imagen?');
 		define('IMG_WARING_FLIP_V', 'Seguro que quiere voltear verticalmente la imagen?');
-		define('IMG_INFO', 'Informaci&oacute;n de la imagen');
+		define('IMG_INFO', 'Información de la imagen');
 
 		//Mode
 			define('IMG_MODE_RESIZE', 'Cambiar tama&ntilde;o:');
@@ -276,14 +276,14 @@
 			define('IMG_LBL_ROOT_FOLDER', 'Carpeta principal');
 		//Editor
 		//Save as
-		define('IMG_NEW_NAME_COMMENTS', 'Por favor, no incluya la extensi&oacute;n de la imagen.');
+		define('IMG_NEW_NAME_COMMENTS', 'Por favor, no incluya la extensión de la imagen.');
 		define('IMG_SAVE_AS_ERR_NAME_INVALID', 'Por favor, introduzca un nombre que solamente contenga letras, numeros, espacios, guiones o subrayado.');
 		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', 'No hay seleccionado una carpeta de destino.');
 		define('IMG_SAVE_AS_FOLDER_NOT_FOUND', 'La carpeta de destino no existe.');
 		define('IMG_SAVE_AS_NEW_IMAGE_EXISTS', 'Ya existe una imagen con el mismo nombre.');
 
 		//Save
-		define('IMG_SAVE_EMPTY_PATH', 'Path de imagen vac&iacute;o.');
+		define('IMG_SAVE_EMPTY_PATH', 'Path de imagen vacío.');
 		define('IMG_SAVE_NOT_EXISTS', 'la imagen no existe.');
 		define('IMG_SAVE_PATH_DISALLOWED', 'No tiene permiso para acceder a este archivo.');
 		define('IMG_SAVE_UNKNOWN_MODE', 'Modo de imagen desconocido');
@@ -293,28 +293,28 @@
 		define('IMG_SAVE_BACKUP_FAILED', 'No se puede hacer backup con la imagen original.');
 		define('IMG_SAVE_ROTATE_FAILED', 'No se puede rotar la imagen.');
 		define('IMG_SAVE_FLIP_FAILED', 'No se puede voltear la imagen.');
-		define('IMG_SAVE_SESSION_IMG_OPEN_FAILED', 'No  se puede abrir la imagen desde la sesi&oacute;n.');
+		define('IMG_SAVE_SESSION_IMG_OPEN_FAILED', 'No  se puede abrir la imagen desde la sesión.');
 		define('IMG_SAVE_IMG_OPEN_FAILED', 'No se puede abrir la imagen');
 
 
 		//UNDO
 		define('IMG_UNDO_NO_HISTORY_AVAIALBE', 'No hay cambios que deshacer.');
 		define('IMG_UNDO_COPY_FAILED', 'No se puede restaurar la imagen.');
-		define('IMG_UNDO_DEL_FAILED', 'No se puede eliminar la imagen de sesi&oacute;n');
+		define('IMG_UNDO_DEL_FAILED', 'No se puede eliminar la imagen de sesión');
 
 	//88888888888   Above for Image Editor   888888888888888888888
 
 	//88888888888   Session   888888888888888888888
-		define('SESSION_PERSONAL_DIR_NOT_FOUND', 'No se puede encontrar la carpeta dedicada que deber&iacute;a haber sido creada bajo la carpeta de sesi&oacute;n');
-		define('SESSION_COUNTER_FILE_CREATE_FAILED', 'No se puede abrir un archivo contador de sesi&oacute;n.');
-		define('SESSION_COUNTER_FILE_WRITE_FAILED', 'No se puede escribir el archivo contador de sesi&oacute;n.');
+		define('SESSION_PERSONAL_DIR_NOT_FOUND', 'No se puede encontrar la carpeta dedicada que debería haber sido creada bajo la carpeta de sesión');
+		define('SESSION_COUNTER_FILE_CREATE_FAILED', 'No se puede abrir un archivo contador de sesión.');
+		define('SESSION_COUNTER_FILE_WRITE_FAILED', 'No se puede escribir el archivo contador de sesión.');
 	//88888888888   Session   888888888888888888888
 
 	//88888888888   Below for Text Editor   888888888888888888888
 		define('TXT_FILE_NOT_FOUND', 'El archivo no ha sido encontrado.');
-		define('TXT_EXT_NOT_SELECTED', 'Por favor, seleccione una extensi&oacute;n de archivo');
+		define('TXT_EXT_NOT_SELECTED', 'Por favor, seleccione una extensión de archivo');
 		define('TXT_DEST_FOLDER_NOT_SELECTED', 'Por favor, seleccione una carpeta de destino');
-		define('TXT_UNKNOWN_REQUEST', 'Petici&oacute;n desconocida.');
+		define('TXT_UNKNOWN_REQUEST', 'Petición desconocida.');
 		define('TXT_DISALLOWED_EXT', 'Tiene permiso para editar/a&ntilde; este tipo de archivos.');
 		define('TXT_FILE_EXIST', 'El archivo ya existe.');
 		define('TXT_FILE_NOT_EXIST', 'No ha sido encontrado ninguno.');

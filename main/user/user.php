@@ -312,7 +312,7 @@ if (isset($message)) {
 //statistics
 event_access_tool(TOOL_USER);
 /*	Setting the permissions for this page */
-$is_allowed_to_track = ($is_courseAdmin || $is_courseTutor) && $_configuration['tracking_enabled'];
+$is_allowed_to_track = ($is_courseAdmin || $is_courseTutor);
 
 
 // Tool introduction

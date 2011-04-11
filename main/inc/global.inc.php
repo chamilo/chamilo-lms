@@ -517,7 +517,7 @@ $text_dir = api_get_text_direction();
 
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 
-if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']) && isset($_user)) {
+if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
     $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);

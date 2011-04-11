@@ -88,7 +88,7 @@ $reqdate=$_REQUEST['reqdate'];
         $is_allowedToTrack = $is_platformAdmin;
         $courseCodeEqualcidIfNeeded = "";
     }
-    if( $is_allowedToTrack && $_configuration['tracking_enabled'])
+    if( $is_allowedToTrack)
     {
         // list of all tools
         if (!isset($tool))
@@ -268,17 +268,8 @@ $reqdate=$_REQUEST['reqdate'];
                     break;
             }
         }
-    }
-    else // not allowed to track
-    {
-        if(!$_configuration['tracking_enabled'])
-        {
-            echo $langTrackingDisabled;
-        }
-        else
-        {
-            echo get_lang('NotAllowed');
-        }
+    } else { // not allowed to track
+        echo get_lang('NotAllowed');
     }
 echo '</table>';
 // footer

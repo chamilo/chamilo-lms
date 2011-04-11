@@ -1994,23 +1994,23 @@ class UserManager
 	 * @param integer $user_id
 	 * @return array  list of statuses (session_id-course_code => status)
 	 */
-	public static function get_courses_list_by_session ($user_id, $session_id) {
+	public static function get_courses_list_by_session($user_id, $session_id) {
 		// Database Table Definitions
 		$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-		$user_id = intval($user_id);
+		$user_id    = intval($user_id);
 		$session_id = intval($session_id);
 		//we filter the courses from the URL
 		$join_access_url=$where_access_url='';
 		global $_configuration;
 		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
-			if($access_url_id!=-1) {
-				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-				$join_access_url= " ,  $tbl_url_course url_rel_course ";
-				$where_access_url=" AND access_url_id = $access_url_id AND  url_rel_course.course_code = scu.course_code";
+			if ($access_url_id != -1) {
+				$tbl_url_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+				$join_access_url= " ,  $tbl_url_session url_rel_session ";
+				$where_access_url=" AND access_url_id = $access_url_id AND url_rel_session.session_id = $session_id ";
 			}
 		}
 
@@ -2020,37 +2020,28 @@ class UserManager
 		$courses = array();
 
 		// this query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
-		$personal_course_list_sql = "SELECT distinct scu.course_code as code
-									FROM $tbl_session_course_user as scu
-									$join_access_url
-									WHERE scu.id_user = $user_id
-									AND scu.id_session = $session_id
-									$where_access_url
+		$personal_course_list_sql = "SELECT DISTINCT scu.course_code as code FROM $tbl_session_course_user as scu $join_access_url
+									WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
 									ORDER BY code";
+	
 		$course_list_sql_result = Database::query($personal_course_list_sql);
 
-		if (Database::num_rows($course_list_sql_result)>0) {
+		if (Database::num_rows($course_list_sql_result) > 0) {
 			while ($result_row = Database::fetch_array($course_list_sql_result)) {
 				$result_row['status'] = 5;
-				if (!in_array($result_row['code'],$courses)) {
+				if (!in_array($result_row['code'], $courses)) {
 					$personal_course_list[] = $result_row;
 					$courses[] = $result_row['code'];
 				}
 			}
-		}
+		}		
 
-		if(api_is_allowed_to_create_course()) {
-			$personal_course_list_sql = "SELECT DISTINCT scu.course_code as code
-										FROM $tbl_session_course_user as scu, $tbl_session as s
-										$join_access_url
-										WHERE s.id = $session_id
-										AND scu.id_session = s.id
-										AND ((scu.id_user=$user_id AND scu.status=2) OR s.id_coach=$user_id)
+		if (api_is_allowed_to_create_course()) {
+			$personal_course_list_sql = "SELECT DISTINCT scu.course_code as code FROM $tbl_session_course_user as scu, $tbl_session as s $join_access_url
+										WHERE s.id = $session_id AND scu.id_session = s.id AND ((scu.id_user=$user_id AND scu.status=2) OR s.id_coach = $user_id)
 										$where_access_url
-										ORDER BY code";
-
-
-				$course_list_sql_result = Database::query($personal_course_list_sql);
+										ORDER BY code";										  
+            $course_list_sql_result = Database::query($personal_course_list_sql);
 
 			if (Database::num_rows($course_list_sql_result)>0) {
 				while ($result_row = Database::fetch_array($course_list_sql_result)) {

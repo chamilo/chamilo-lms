@@ -3,6 +3,7 @@
 // include this file to have access to all backend classes
 // @author Bert Steppé
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+define ('LIMIT', 1000);
 require_once 'be/gradebookitem.class.php';
 require_once 'be/category.class.php';
 require_once 'be/evaluation.class.php';

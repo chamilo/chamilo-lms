@@ -72,8 +72,7 @@ $title[0]=get_lang('StatsOfCourse')." : ".$_course['official_code'];
 
 // check if uid is prof of this group
 
-if($is_allowedToTrack && $_configuration['tracking_enabled'])
-{
+if ($is_allowedToTrack) {
     // show all : view must be equal to the sum of all view values (1024+512+...+64)
     // show none : less than the tiniest value
     /*echo "<div>
@@ -463,18 +462,6 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     echo api_html_entity_decode($title_line, ENT_COMPAT);
     echo api_html_entity_decode($line, ENT_COMPAT);
     exit;
-
-
-}
-// not allowed
-else
-{
-    if(!$_configuration['tracking_enabled'])
-    {
-        echo get_lang('TrackingDisabled');
-    }
-    else
-    {
-        api_not_allowed();
-    }
+} else {
+    api_not_allowed();
 }

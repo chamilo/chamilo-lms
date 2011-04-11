@@ -761,9 +761,9 @@ class CourseHome {
                     }                                  
                     echo '<td width="33%">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
-                        $image = Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), 64);
+                        $image = Display::tag('center', Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), 64));
                         $data .= Display::url($image , $item['url_params']['href'], $item['url_params']);
-                        $data .=Display::div($item['visibility'].$item['extra'].$item['link'], array('class'=>'content'));
+                        $data .= Display::tag('center', Display::div($item['visibility'].$item['extra'].$item['link'], array('class'=>'content')));
                         echo Display::div($data, array('class'=>'big_icon'));
                     echo '</td>';
                     

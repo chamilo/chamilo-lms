@@ -60,15 +60,10 @@ include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 Display::display_header($nameTools,"Tracking");
 api_display_tool_title($nameTools);
 
-/*
-==============================================================================
-		MAIN SECTION
-==============================================================================
-*/
-if ( $_configuration['tracking_enabled'] )
-{
-        // show all : view must be equal to the sum of all view values (1024+512+...+64)
-        // show none : 0
+/*		MAIN SECTION */
+
+// show all : view must be equal to the sum of all view values (1024+512+...+64)
+// show none : 0
 
         echo "
 <table width=\"100%\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\">
@@ -277,12 +272,5 @@ if ( $_configuration['tracking_enabled'] )
         ";
     }
     */
-    echo "\n</table>";
-}
-else
-{
-    echo get_lang('TrackingDisabled');
-}
-
+    echo "</table>";
 Display::display_footer();
-?>

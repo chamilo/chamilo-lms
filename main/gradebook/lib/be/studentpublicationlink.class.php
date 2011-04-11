@@ -101,9 +101,8 @@ class StudentPublicationLink extends AbstractLink
 
 		$sql = "SELECT id,url FROM $tbl_grade_links WHERE has_properties != '' AND filetype='folder' AND session_id = ".api_get_session_id()."";
 		$result = Database::query($sql);
-
 		while ($data=Database::fetch_array($result)) {
-			$cats[] = array ($data['id'], $data['url']);
+			$cats[] = array ($data['id'], basename($data['url']));
 		}
 		$cats=isset($cats) ? $cats : array();
 		return $cats;

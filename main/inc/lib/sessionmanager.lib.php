@@ -302,16 +302,18 @@ class SessionManager {
 		$tbl_session_rel_course_rel_user=	Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session_rel_user=				Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_user = 						Database::get_main_table(TABLE_MAIN_USER);
+		$tbl_url_session                  = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+		
 		global $_user;
 		if(is_array($id_checked)) {
-			$id_checked=Database::escape_string(implode(',',$id_checked));
+			$id_checked = Database::escape_string(implode(',',$id_checked));
 		} else {
-			$id_checked=intval($id_checked);
+			$id_checked = intval($id_checked);
 		}
 
 		if (!api_is_platform_admin() && !$from_ws) {
 			$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_checked;
-			$rs = Database::query($sql);
+			$rs  = Database::query($sql);
 			if (Database::result($rs,0,0)!=$_user['user_id']) {
 				api_not_allowed(true);
 			}
@@ -320,6 +322,7 @@ class SessionManager {
 		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session IN($id_checked)");
 		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($id_checked)");
 		Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session IN($id_checked)");
+		Database::query("DELETE FROM $tbl_url_session WHERE session_id IN($id_checked)");
 
 		// delete extra session fields
 		$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);

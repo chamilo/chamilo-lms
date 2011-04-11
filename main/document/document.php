@@ -751,8 +751,9 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
 
 
 /*	GET ALL DOCUMENT DATA FOR CURDIRPATH */
-if(isset($_GET['keyword']) && !empty($_GET['keyword'])){
+if(isset($_GET['keyword']) && !empty($_GET['keyword'])) {
     $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=true);
+    
 }else{
     $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=false);
 }
@@ -803,43 +804,43 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
     $sortable_data = array();
 
     //while (list($key, $id) = each($docs_and_folders)) {
-    foreach($docs_and_folders as $key=>$id) {
+    foreach ($docs_and_folders as $key=>$id) {
         $row = array();
 
         // If the item is invisible, wrap it in a span with class invisible
-        $invisibility_span_open = ($id['visibility'] == 0) ? '<span class="invisible">' : '';
+        $invisibility_span_open  = ($id['visibility'] == 0) ? '<span class="invisible">' : '';
         $invisibility_span_close = ($id['visibility'] == 0) ? '</span>' : '';
         // Size (or total size of a directory)
         $size = $id['filetype'] == 'folder' ? get_total_folder_size($id['path'], $is_allowed_to_edit) : $id['size'];
-        /*
+        
         // Get the title or the basename depending on what we're using
         if ($use_document_title == 'true' && $id['title'] != '') {
             $document_name = $id['title'];
         } else {
             $document_name = basename($id['path']);
-        }*/
+        }
         // Data for checkbox
         if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
             $row[] = $id['path'];
         }
 
         // Hide HotPotatoes Certificates and all css folders
-        if($id['path']=='/HotPotatoes_files' || $id['path']=='/certificates' || basename($id['path'])=='css'){
+        if ($id['path']=='/HotPotatoes_files' || $id['path']=='/certificates' || basename($id['path'])=='css'){
             continue;
         }
 
         //Admin setting for Hide/Show the folders of all users
-        if(api_get_setting('show_users_folders') == 'false' && ($id['path']=='/shared_folder' || strstr($id['path'], 'shared_folder_session_'))){
+        if (api_get_setting('show_users_folders') == 'false' && ($id['path']=='/shared_folder' || strstr($id['path'], 'shared_folder_session_'))){
             continue;
         }
 
         //Admin setting for Hide/Show Default folders to all users
-        if(api_get_setting('show_default_folders') == 'false' && ($id['path']=='/images' || $id['path']=='/flash' || $id['path']=='/audio' || $id['path']=='/video')){
+        if (api_get_setting('show_default_folders') == 'false' && ($id['path']=='/images' || $id['path']=='/flash' || $id['path']=='/audio' || $id['path']=='/video')){
             continue;
         }
 
         //Admin setting for Hide/Show chat history folder
-        if(api_get_setting('show_chat_folder') == 'false' && $id['path']=='/chat_files'){
+        if (api_get_setting('show_chat_folder') == 'false' && $id['path']=='/chat_files'){
             continue;
         }
 
@@ -889,8 +890,8 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $row[] = $last_edit_date;
         $row[] = $size;
         $total_size = $total_size + $size;
-        //@todo wtf is that?
-        if ((isset ($_GET['keyword']) && search_keyword($document_name, $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
+
+        if ((isset($_GET['keyword']) && search_keyword($document_name, $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {            
             $sortable_data[] = $row;
         }
     }
@@ -914,15 +915,13 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         <?php
 
         // Create new draw
-        if (api_get_setting('enabled_support_svg') == 'true'){
-
-
-            if (api_browser_support('svg')){
+        if (api_get_setting('enabled_support_svg') == 'true') {
+            if (api_browser_support('svg')) {
             ?>
                 <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>">
-                    <?php Display::display_icon('new_draw.png', get_lang('Draw'),'','32'); ?></a>&nbsp;
+            <?php Display::display_icon('new_draw.png', get_lang('Draw'),'','32'); ?></a>&nbsp;
             <?php
-            }else{
+            } else {
                 Display::display_icon('new_draw_na.png', get_lang('BrowserDontSupportsSVG'),'','32');
             }
         }
@@ -957,8 +956,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 	<a href="upload.php?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo $curdirpathurl.$req_gid; ?>">
         <?php Display::display_icon('upload_certificate.png', get_lang('UploadCertificate'),'','32'); ?></a>
 <?php
-	}
-	else{
+	} else {
 ?>
     <a href="upload.php?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo $curdirpathurl.$req_gid; ?>">
         <?php Display::display_icon('upload_file.png', get_lang('UplUploadDocument'),'','32'); ?></a>
@@ -983,7 +981,6 @@ if (!is_null($docs_and_folders)) {
         if (is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id) && $curdirpath!='/' || api_is_allowed_to_edit() || api_is_platform_admin()) {
             echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=downloadfolder&amp;path='.$curdirpathurl.'">'.Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)','','32').'</a>';
         }
-
     }
 }
 

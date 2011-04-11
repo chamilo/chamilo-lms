@@ -252,23 +252,16 @@ function login_user($user_id) {
 	$uidReset = false;
 
 	if ($user_id) { // a uid is given (log in succeeded)
-		if ($_configuration['tracking_enabled']) {
-			$sql_query = "SELECT user.*, a.user_id is_admin,
-				UNIX_TIMESTAMP(login.login_date) login_date
-				FROM $main_user_table
-				LEFT JOIN $main_admin_table a
-				ON user.user_id = a.user_id
-				LEFT JOIN $track_e_login_table login
-				ON user.user_id = login.login_user_id
-				WHERE user.user_id = '".$user_id."'
-				ORDER BY login.login_date DESC LIMIT 1";
-		} else {
-			$sql_query = "SELECT user.*, a.user_id is_admin
-				FROM $main_user_table
-				LEFT JOIN $main_admin_table a
-				ON user.user_id = a.user_id
-				WHERE user.user_id = '".$user_id."'";
-		}
+
+		$sql_query = "SELECT user.*, a.user_id is_admin,
+			UNIX_TIMESTAMP(login.login_date) login_date
+			FROM $main_user_table
+			LEFT JOIN $main_admin_table a
+			ON user.user_id = a.user_id
+			LEFT JOIN $track_e_login_table login
+			ON user.user_id = login.login_user_id
+			WHERE user.user_id = '".$user_id."'
+			ORDER BY login.login_date DESC LIMIT 1";		
 
 		$sql_result = Database::query($sql_query);
 

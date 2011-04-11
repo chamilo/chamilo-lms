@@ -135,8 +135,8 @@
 	var counts = {'new_file':1};
 	var thickbox = {'width':'<?php echo CONFIG_THICKBOX_MAX_WIDTH; ?>', 
 									'height':'<?php echo CONFIG_THICKBOX_MAX_HEIGHT; ?>',
-									'next':'<img src="theme/default/images/next.gif" title="<?php echo THICKBOX_NEXT; ?>" style="float:right;">',
-									'previous':'<img src="theme/default/images/prev.gif" title="<?php echo THICKBOX_PREVIOUS; ?>" style="float:left">',
+									'next':'<img src="theme/default/images/next.png" title="<?php echo THICKBOX_NEXT; ?>" style="float:right;">',
+									'previous':'<img src="theme/default/images/prev.png" title="<?php echo THICKBOX_PREVIOUS; ?>" style="float:left">',
 									'close':'<img src="theme/default/images/flagno.png"title="<?php echo THICKBOX_CLOSE; ?>"><?php echo THICKBOX_CLOSE; ?>' 
 		
 	};
@@ -347,11 +347,10 @@ $(document).ready(
 					);
 				</script>
 				<?php
-			}else 
-			{
+			} else {
 				include_once(CONFIG_URL_LIST_LISTING);
 			}
-	      	 ?>
+	      	?>
       </div> 
       
       <div id="leftCol">
@@ -746,13 +745,13 @@ $(document).ready(
   </div>
   <div id="contextMenu" style="display:none">
   	<ul>
-  		<li><a href="#" class="contentMenuItem" id="menuSelect"><?php echo MENU_SELECT; ?></a></li>
+  		<li><a href="#" class="contentMenuItem"  id="menuSelect"><?php echo MENU_SELECT; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuPreview"><?php echo MENU_PREVIEW; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuDownload"><?php echo MENU_DOWNLOAD; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuRename"><?php echo MENU_RENAME; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuEdit"><?php echo MENU_EDIT; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuCut"><?php echo MENU_CUT; ?></a></li>
-  		<li><a href="#" class="contentMenuItem" id="menuCopy"><?php echo MENU_COPY; ?></a></li>
+  		<li><a href="#" class="contentMenuItem"  id="menuCopy"><?php echo MENU_COPY; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuPaste"><?php echo MENU_PASTE; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuDelete"><?php echo MENU_DELETE; ?></a></li>
   		<li><a href="#" class="contentMenuItem"  id="menuPlay"><?php echo MENU_PLAY; ?></a></li>

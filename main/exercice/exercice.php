@@ -781,6 +781,23 @@ if ($show == 'test') {
                       
                 // Teacher only
                 if ($is_allowedToEdit) {
+                    
+                
+                    
+                    $show_quiz_edition = true;
+                
+                    $table_lp_item    = Database::get_course_table(TABLE_LP_ITEM);
+                    $sql="SELECT max_score FROM $table_lp_item
+                          WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($row['id'])."'";
+                    $result = Database::query($sql);
+                    if (Database::num_rows($result) > 0) {
+                        $show_quiz_edition = false;
+                    }
+                    
+                    $lp_blocked = '';
+                    if (!$show_quiz_edition) {
+                        $lp_blocked = Display::tag('font', '<i>'.get_lang('AddedToALP').'</i>', array('style'=>'color:grey'));
+                    }                    
                                     
                     //Showing exercise title
                     $row['title']= text_filter($row['title']);
@@ -789,15 +806,16 @@ if ($show == 'test') {
                     if ($session_id == $row['session_id']) {
                         //Settings                                                                
                         //echo Display::url(Display::return_icon('settings.png',get_lang('Edit'), array('width'=>'22px'))." ".get_lang('Edit'), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
-                    }                                  
+                    }       
+                                               
                     //echo '<p>';
                     //echo $session_img;
                     if ($row['active'] == 0) {
-                        $title = Display::tag('font', $row['title'],array('style'=>'color:grey'));
+                        $title = Display::tag('font', $row['title'], array('style'=>'color:grey'));
                     } else {
                         $title = $row['title'];
                     }
-                    $url = '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" alt="HotPotatoes" /> '.$title.'</a>';                    
+                    $url = '<a href="exercice_submit.php?'.api_get_cidreq().$myorigin.$mylpid.$myllpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>'.$lp_blocked;                    
                     $item =  Display::tag('td', $url.' '.$session_img);  
                     $exid = $row['id'];
     
@@ -852,13 +870,10 @@ if ($show == 'test') {
                     //$item .=  Display::tag('td',$attempts);
                     $item .=  Display::tag('td', $number_of_questions);
                         
-                } else {
-                     
+                } else {                     
                     // --- Student only
+                    $row['title'] = text_filter($row['title']);    
                     
-                    
-                    $row['title'] = text_filter($row['title']);                 
-    
                     // if time is actived show link to exercise
                     if ($time_limits) {                 
                         if ($is_actived_time) {
@@ -874,7 +889,7 @@ if ($show == 'test') {
                     $item =  Display::tag('td',$url.' '.$session_img);  
                            
                     //count number exercise questions
-                    $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . $row['id'] . "'";
+                    $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = ".$row['id'];
                     $sqlresult  = Database::query($sqlquery);
                     $rowi       = Database::result($sqlresult, 0);
                     
@@ -887,7 +902,7 @@ if ($show == 'test') {
                                         
                     //This query might be improved later on by ordering by the new "tms" field rather than by exe_id
                     $qry = "SELECT * FROM $TBL_TRACK_EXERCICES
-                            WHERE exe_exo_id = '" . $row['id'] . "' and exe_user_id = '" . api_get_user_id() . "' AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "'
+                            WHERE exe_exo_id = ".$row['id']." AND exe_user_id = " . api_get_user_id() . " AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "'
                             ORDER BY exe_id DESC";
                     $qryres = Database::query($qry);
                     $num    = Database :: num_rows($qryres);

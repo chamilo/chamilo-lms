@@ -103,70 +103,61 @@ $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices')
 
 $my_msg = 'No change.';
 
-if($action == 'mark'){
-	if (!empty($_POST['score']) AND $_POST['score'] < $obj_question->selectWeighting() AND $_POST['score'] >= 0){
-
+if ($action == 'mark') {
+	if (!empty($_POST['score']) AND $_POST['score'] < $obj_question->selectWeighting() AND $_POST['score'] >= 0) {
 		//mark the user mark into the database using something similar to the following function:
-		global $_configuration;
 
-		if($_configuration['tracking_enabled'])
-		{
-			$exercise_table = Database::get_statistic_table('track_e_exercices');
-			#$tbl_learnpath_user = Database::get_course_table('learnpath_user');
-			#global $origin, $tbl_learnpath_user, $learnpath_id, $learnpath_item_id;
-			$sql = "SELECT * FROM $exercise_table
-				WHERE exe_user_id = '".Database::escape_string($my_usr)."' AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = '".Database::escape_string($my_exe)."'
-				ORDER BY exe_date DESC";
+		$exercise_table = Database::get_statistic_table('track_e_exercices');
+		#$tbl_learnpath_user = Database::get_course_table('learnpath_user');
+		#global $origin, $tbl_learnpath_user, $learnpath_id, $learnpath_item_id;
+		$sql = "SELECT * FROM $exercise_table
+			WHERE exe_user_id = '".Database::escape_string($my_usr)."' AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = '".Database::escape_string($my_exe)."'
+			ORDER BY exe_date DESC";
+		#echo $sql;
+		$res = Database::query($sql);
+		if(Database::num_rows($res)>0){
+			$row = Database::fetch_array($res);
+			//@todo Check that just summing past score and the new free answer mark doesn't come up
+			// with a score higher than the possible score for that exercise
+			$my_score = $row['exe_result'] + $_POST['score'];
+			$sql = "UPDATE $exercise_table SET exe_result = '$my_score'
+				WHERE exe_id = '".$row['exe_id']."'";
 			#echo $sql;
 			$res = Database::query($sql);
-			if(Database::num_rows($res)>0){
-				$row = Database::fetch_array($res);
-				//@todo Check that just summing past score and the new free answer mark doesn't come up
-				// with a score higher than the possible score for that exercise
-				$my_score = $row['exe_result'] + $_POST['score'];
-				$sql = "UPDATE $exercise_table SET exe_result = '$my_score'
-					WHERE exe_id = '".$row['exe_id']."'";
-				#echo $sql;
-				$res = Database::query($sql);
-				$my_msg = get_lang('MarkIsUpdated');
-			}else{
-				$my_score = $_POST['score'];
-				$reallyNow = time();
-				$sql = "INSERT INTO $exercise_table
-						  (
-						   exe_user_id,
-						   exe_cours_id,
-						   exe_exo_id,
-						   exe_result,
-						   exe_weighting,
-						   exe_date
-						  )
-
-						  VALUES
-						  (
-						   '".Database::escape_string($my_usr)."',
-						   '".Database::escape_string($my_cid)."',
-						   '".Database::escape_string($my_exe)."',
-						   '".Database::escape_string($my_score)."',
-						   '".Database::escape_string($obj_question->selectWeighting())."',
-						   FROM_UNIXTIME(".$reallyNow.")
-						  )";
-				#if ($origin == 'learnpath')
-				#{
-				#	if ($user_id == "NULL")
-				#	{
-				#		$user_id = '0';
-				#	}
-				#	$sql2 = "update $tbl_learnpath_user set score='$score' where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
-				#	$res2 = Database::query($sql2);
-				#}
-				$res = Database::query($sql);
-				$my_msg = get_lang('MarkInserted');
-			}
-			//Database::query($sql);
-			//return 0;
+			$my_msg = get_lang('MarkIsUpdated');
+		}else{
+			$my_score = $_POST['score'];
+			$reallyNow = time();
+			$sql = "INSERT INTO $exercise_table (
+					   exe_user_id,
+					   exe_cours_id,
+					   exe_exo_id,
+					   exe_result,
+					   exe_weighting,
+					   exe_date
+					  ) VALUES (
+					   '".Database::escape_string($my_usr)."',
+					   '".Database::escape_string($my_cid)."',
+					   '".Database::escape_string($my_exe)."',
+					   '".Database::escape_string($my_score)."',
+					   '".Database::escape_string($obj_question->selectWeighting())."',
+					   FROM_UNIXTIME(".$reallyNow.")
+					  )";
+			#if ($origin == 'learnpath')
+			#{
+			#	if ($user_id == "NULL")
+			#	{
+			#		$user_id = '0';
+			#	}
+			#	$sql2 = "update $tbl_learnpath_user set score='$score' where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
+			#	$res2 = Database::query($sql2);
+			#}
+			$res = Database::query($sql);
+			$my_msg = get_lang('MarkInserted');
 		}
-	}else{
+		//Database::query($sql);
+		//return 0;		
+	} else {
 		$my_msg .= get_lang('TotalScoreTooBig');
 	}
 }

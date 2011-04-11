@@ -50,17 +50,12 @@ $jscript2run = '';
  * @return	void
  */
 function save_scores($file, $score) {
-	global $_configuration, $origin,
-		$_user, $_cid,
+	global $origin, $_user, $_cid,
 		$TABLETRACK_HOTPOTATOES;
 	// if tracking is disabled record nothing
 	$weighting = 100; // 100%
 	$reallyNow = time();
 	$date = date("Y-m-d H:i:s", $reallyNow);
-
-	if (!$_configuration['tracking_enabled']) {
-		return 0;
-	}
 
 	if ($_user['user_id']) {
 		$user_id = $_user['user_id'];

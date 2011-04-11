@@ -585,22 +585,15 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
     {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-        if ($_configuration['tracking_enabled']) {
-            $sql = "SELECT user.*, a.user_id is_admin, UNIX_TIMESTAMP(login.login_date) login_date
-                     FROM $user_table
-                     LEFT JOIN $admin_table a
-                     ON user.user_id = a.user_id
-                     LEFT JOIN ".$_configuration['statistics_database'].".track_e_login login
-                     ON user.user_id  = login.login_user_id
-                     WHERE user.user_id = '".$_user['user_id']."'
-                     ORDER BY login.login_date DESC LIMIT 1";
-        } else {
-            $sql = "SELECT user.*, a.user_id is_admin
-                    FROM $user_table
-                    LEFT JOIN $admin_table a
-                    ON user.user_id = a.user_id
-                    WHERE user.user_id = '".$_user['user_id']."'";
-        }
+       
+        $sql = "SELECT user.*, a.user_id is_admin, UNIX_TIMESTAMP(login.login_date) login_date
+                 FROM $user_table
+                 LEFT JOIN $admin_table a
+                 ON user.user_id = a.user_id
+                 LEFT JOIN ".$_configuration['statistics_database'].".track_e_login login
+                 ON user.user_id  = login.login_user_id
+                 WHERE user.user_id = '".$_user['user_id']."'
+                 ORDER BY login.login_date DESC LIMIT 1";    
 
         $result = Database::query($sql);
 
@@ -707,7 +700,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
                 }
             }
 
-            if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
+            if (!isset($_SESSION['login_as'])) {
                 //We add a new record in the course tracking table
                 $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
                 $time = api_get_datetime();
@@ -760,7 +753,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
             list($_SESSION['session_name']) = Database::fetch_array($rs);
         }
 
-        if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
+        if (!isset($_SESSION['login_as'])) {
 
             $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
                if (isset($_configuration['session_lifetime'])) {

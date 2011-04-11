@@ -1,4 +1,4 @@
-<?php // $Id: userInfo.php 20951 2009-05-23 19:07:59Z ivantcholakov $
+<?php
 /* For licensing terms, see /license.txt	*/
 
 /**
@@ -56,13 +56,10 @@ if ($tool_info['visibility'] == 1 ) {
 	$interbreadcrumb[] = array ('url' => 'user.php', 'name' => get_lang('Users'));
 } 
 
-if ($origin != 'learnpath')
-{ //so we are not in learnpath tool
+if ($origin != 'learnpath') { //so we are not in learnpath tool
 	Display :: display_header($nameTools, "User");
 	$origin = Security::remove_XSS($_GET['origin']);
-}
-else
-{
+} else {
 ?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH);?>css/default.css" /> <?php
 }
 
@@ -100,22 +97,14 @@ $userIdViewer = $_user['user_id']; // id fo the user currently online
 
 $allowedToEditContent = ($userIdViewer == $userIdViewed) || $is_platformAdmin;
 $allowedToEditDef = api_is_allowed_to_edit(null, true);
-$is_allowedToTrack = api_is_allowed_to_edit(null, true) && $_configuration['tracking_enabled'];
+$is_allowedToTrack = api_is_allowed_to_edit(null, true);
 
 // Library connection
 require_once ("userInfoLib.php");
 
-/*
-==============================================================================
-	   FUNCTIONS
-==============================================================================
-*/
+/* 	   FUNCTIONS */
 
-/*
-==============================================================================
-	   COMMANDS SECTION
-==============================================================================
-*/
+/* 	   COMMANDS SECTION */
 
 $displayMode = "viewContentList";
 $removeDef =  Security::remove_XSS($_GET['removeDef']);
@@ -619,4 +608,3 @@ elseif ($displayMode == "viewContentEdit") {
 //echo "<div class=\"actions\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
 /*		FOOTER	*/
 Display :: display_footer();
-?>

@@ -172,10 +172,23 @@ api_display_tool_title($tool_name);
 	</td>
 </tr>
 
+<?php 
+require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
+global $_configuration;
+if ($_configuration['multiple_access_urls']) {
+    echo '<tr><td>';   
+    echo get_lang('URL');    
+    echo '</td>';
+    echo '<td>';
+    $url_list = UrlManager::get_access_url_from_session($id_session);
+    foreach($url_list as $url_data) {
+        echo $url_data['url'].'<br />';
+    }        
+    echo '</td></tr>';
+}
+?>
 </table>
-
 <br />
-
 <!--List of courses -->
 <table class="data_table" width="100%">
 <tr>

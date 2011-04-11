@@ -3,13 +3,12 @@
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 set_time_limit(0);
-define ('LIMIT',10);
 
 /**
  * Table to display flat view (all evaluations and links for all students)
  * @author Stijn Konings
- * @author Bert Steppé (refactored, optimised)
- * @author Julio Montoya Armas Gradebook Graphics
+ * @author Bert Steppé  - (refactored, optimised)
+ * @author Julio Montoya Armas - Gradebook Graphics
  */
 class FlatViewTable extends SortableTable
 {
@@ -400,45 +399,39 @@ class FlatViewTable extends SortableTable
 		}
 		if ($this->limit_enabled && $totalitems > LIMIT) {
 	      	$calcprevious = LIMIT;
-			$header .= '<div class="normal-message">'
-						.'<table style="width: 100%; text-align: left; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'
+			$header .= '<table style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'
 						.'<tbody>'
 						.'<tr>';
 
 			// previous X
-	      	$header .= '<td style="width:40%;">';
+	      	$header .= '<td style="width:100%;">';
 	      	if ($this->offset >= LIMIT) {
 	      		$header .= '<a href="'.api_get_self()
 	      							.'?selectcat='.Security::remove_XSS($_GET['selectcat'])
 	      							.'&offset='.(($this->offset)-LIMIT)
 									.(isset($_GET['search'])?'&search='.Security::remove_XSS($_GET['search']):'').'">'
-	      					.'<img src="../img/lp_leftarrow.gif" alt="'.get_lang('Previous').'/" />'
-	      					.get_lang('Previous').' '.$calcprevious . ' ' . get_lang('Evaluations')
+	      					.Display::return_icon('action_prev.png', get_lang('PreviousPage'), array(), 32)	      					
 	      					.'</a>';
 	      	} else {
-	      		$header .= '<img src="../img/lp_leftarrow.gif" alt="'.get_lang('Previous').' ' . get_lang('Evaluations').'/" />'.get_lang('Previous').' ' . get_lang('Evaluations');
+	      		$header .= Display::return_icon('action_prev_na.png', get_lang('PreviousPage'), array(), 32);
 	      	}
-	      	$header .= '</td>';
-	      	// 'glue'
-	      	$header .= '<td style="width:20%;"></td>';
+	      	$header .= ' ';
 			// next X
 	      	$calcnext = (($this->offset+(2*LIMIT)) > $totalitems) ?
 	      					($totalitems-(LIMIT+$this->offset)) : LIMIT;
-      		$header .= '<td style="text-align: right; width: 40%;">';
+      		
       		if ($calcnext > 0) {
 	      		$header .= '<a href="'.api_get_self()
 	      							.'?selectcat='.Security::remove_XSS($_GET['selectcat'])
 	      							.'&offset='.($this->offset+LIMIT)
 	      							.(isset($_GET['search'])?'&search='.Security::remove_XSS($_GET['search']):'').'">'
-	      					.get_lang('Next').' '.$calcnext . ' '.get_lang('Evaluations')
-	      					.'<img src="../img/lp_rightarrow.gif" alt="'.get_lang('Next').'/" />'
+	      					.Display::return_icon('action_next.png', get_lang('NextPage'), array(), 32)
 	      					.'</a>';
       		} else {
-  				$header .= get_lang('Next').' '.get_lang('Evaluations').'<img src="../img/lp_rightarrow.gif" alt="'.get_lang('Next').'/" />';
-
+      		    $header .= Display::return_icon('action_next_na.png', get_lang('NextPage'), array(), 32);
       		}
       		$header .= '</td>';
-	      	$header .= '</tr></tbody></table></div>';
+	      	$header .= '</tbody></table>';
 			echo $header;
 		}
 

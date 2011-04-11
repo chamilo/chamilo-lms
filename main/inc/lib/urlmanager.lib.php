@@ -603,6 +603,18 @@ class UrlManager
 		$url_list = Database::store_result($result);
 		return $url_list;
 	}
+	
+   public static function get_access_url_from_session($session_id) {
+        $table_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $table_url  = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
+        $sql = "SELECT url, access_url_id FROM $table_url_rel_session url_rel_session INNER JOIN $table_url u
+                ON (url_rel_session.access_url_id = u.id)
+                WHERE session_id = ".Database::escape_string($session_id);
+        $result = Database::query($sql);
+        $url_list = Database::store_result($result);
+        return $url_list;
+    }
+    
 
 	/**
 	 *

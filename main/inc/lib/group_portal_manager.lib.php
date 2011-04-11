@@ -17,6 +17,7 @@ define('GROUP_USER_PERMISSION_PENDING_INVITATION'	,'3'); 	//   When an admin/mod
 define('GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER'	,'4'); // an user joins a group
 define('GROUP_USER_PERMISSION_MODERATOR'	,'5'); // a moderator
 define('GROUP_USER_PERMISSION_ANONYMOUS'	,'6'); // an anonymous user
+define('GROUP_USER_PERMISSION_HRM', '7'); // a human resources manager
 
 
 define('GROUP_IMAGE_SIZE_ORIGINAL',	1);
@@ -350,7 +351,7 @@ class GroupPortalManager
 			$num = intval($num);
 		}
 		// only show admins and readers
-		$where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";
+		$where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
 		$sql = "SELECT count(user_id) as count, g.picture_uri, g.name, g.description, g.id
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
@@ -993,7 +994,7 @@ class GroupPortalManager
 			$user_id = api_get_user_id();
 		}
 		$user_role	= GroupPortalManager::get_user_group_role($user_id, $group_id);
-		if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR, GROUP_USER_PERMISSION_READER))) {
+		if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_HRM))) {
 			return true;
 		} else {
 			return false;
@@ -1068,6 +1069,14 @@ class GroupPortalManager
 				}
 				$links .=  '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
 				break;
+			case GROUP_USER_PERMISSION_HRM:
+				$relation_group_title = get_lang('IamAHRM');
+				$links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('compose_message.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('NewTopic').'</span></a></li>';
+				$links .=  '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('message_list.png', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MessageList').'</span></a></li>';
+				$links .=  '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
+				$links .=  '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('member_list.png', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MemberList').'</span></a></li>';
+				$links .=  '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.	Display::return_icon('delete_data.gif', get_lang('LeaveGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+				break;
 			default:
 				//$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('JoinGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('JoinGroup').'</a></span></li>';
 			break;
@@ -1089,7 +1098,7 @@ class GroupPortalManager
 				foreach($members as $member) {
 					if ($i > $min_count_members) break;
 					// if is a member
-					if (in_array($member['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {
+					if (in_array($member['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR,GROUP_USER_PERMISSION_HRM))) {
 						//add icons
 						if ($member['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
 							$icon= Display::return_icon('admin_star.png', get_lang('Admin'));

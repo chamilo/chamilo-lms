@@ -1329,5 +1329,6 @@ $CustomTab3URLComment = "";
 $event_title = 'Events notifications manager';
 $GroupParentship = 'Parent group';
 $NoParentship = 'No parent group';
-
+$HumanResourcesManager = "Human resources manager";
+$IamAHRM = "I am a human resources manager";
 ?>

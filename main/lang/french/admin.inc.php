@@ -1306,4 +1306,6 @@ $CustomTab3URLComment = "";
 $events_title = 'Gestion des évenements';
 $GroupParentship = 'Groupe parent';
 $NoParentship = 'Aucun groupe parent';
+$HumanResourcesManager = "Gestionnaire des ressources humaines";
+$IamAHRM = "Je suis un gestionnaire des ressources humaines";
 ?>

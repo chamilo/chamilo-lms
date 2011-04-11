@@ -55,7 +55,7 @@ function search_users($needle,$type,$relation_type) {
 		// get user_id from relation type and group id
 		$sql = "SELECT user_id FROM $tbl_group_rel_user
 				WHERE group_id = '$group_id'
-				AND relation_type IN (".GROUP_USER_PERMISSION_ADMIN.",".GROUP_USER_PERMISSION_READER.",".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_MODERATOR.") ";
+				AND relation_type IN (".GROUP_USER_PERMISSION_ADMIN.",".GROUP_USER_PERMISSION_READER.",".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_MODERATOR.", ".GROUP_USER_PERMISSION_HRM.") ";
 		$res = Database::query($sql);
 		$user_ids = array();
 		if (Database::num_rows($res) > 0) {
@@ -313,7 +313,7 @@ if ($ajax_search) {
 		// get user_id from relation type and group id
 		$sql = "SELECT user_id FROM $tbl_group_rel_user
 				WHERE group_id = '$id'
-				AND relation_type IN (".GROUP_USER_PERMISSION_ADMIN.",".GROUP_USER_PERMISSION_READER.",".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_MODERATOR.") ";
+				AND relation_type IN (".GROUP_USER_PERMISSION_ADMIN.",".GROUP_USER_PERMISSION_READER.",".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_MODERATOR.", ".GROUP_USER_PERMISSION_HRM.") ";
 		$res = Database::query($sql);
 		$user_ids = array();
 		if (Database::num_rows($res) > 0) {
@@ -392,6 +392,7 @@ if ($add_type == 'multiple') {
 <option value="<?php echo GROUP_USER_PERMISSION_ADMIN ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_ADMIN)?'selected=selected':'') ?> > <?php echo get_lang('Admin') ?></option>
 <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_PENDING_INVITATION)?'selected=selected':'') ?> > <?php echo get_lang('Reader') ?></option>
 <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_MODERATOR)?'selected=selected':'') ?> > <?php echo get_lang('Moderator') ?></option>
+<option value="<?php echo GROUP_USER_PERMISSION_HRM ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_HRM)?'selected=selected':'') ?> > <?php echo get_lang('HumanResourcesManager') ?></option>
 </select>
 
 <?php

@@ -2070,19 +2070,18 @@ function display_wiki_search_results($search_term, $search_content=0)
             }
             $row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=edit&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('edit.png', get_lang('EditPage'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=discuss&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">
 			'.Display::return_icon('discuss.png', get_lang('Discuss'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=history&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('history.png', get_lang('History'),'',22).'</a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=links&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('what_link_here.png', get_lang('LinksPages'),'',22).'</a>'.$showdelete;
-
+		
             $rows[] = $row;
         }
 
         $table = new SortableTableFromArrayConfig($rows,1,10,'SearchPages_table','','','ASC');
-        $table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id'])));
+        $table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id']),'mode_table'=>'yes2','search_term'=>$search_term, 'search_content'=>$search_content));
 
-        $table->set_header(0,get_lang('Type'), false, array ('style' => 'width:30px;'));
-        $table->set_header(1,get_lang('Title'), false);
-        $table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', false);
-        $table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', false);
+        $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
+        $table->set_header(1,get_lang('Title'), true);
+        $table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', true);
+        $table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', true);
         $table->set_header(4,get_lang('Actions'), false, array ('style' => 'width:130px;'));
-
         $table->display();
     }
     else

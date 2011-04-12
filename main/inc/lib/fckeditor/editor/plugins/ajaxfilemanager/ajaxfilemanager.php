@@ -151,7 +151,8 @@
 	var warningCopyPaste = '<?php echo WARNING_COPY_PASTE; ?>';
 	var warningDel = '<?php echo WARNING_DELETE; ?>';
 	var warningNotDocSelected = '<?php echo ERR_NOT_DOC_SELECTED; ?>';
-	var noFileSelected = '<?php echo ERR_NOT_FILE_SELECTED; ?>';
+	//var noFileSelected = '<?php //echo ERR_NOT_FILE_SELECTED; ?>';// Chamilo
+	var noFileSelected = '<?php echo TXT_EXT_NOT_SELECTED; ?>';// Chamilo	
     var unselectAllText = '<?php echo TIP_UNSELECT_ALL; ?>';
     var selectAllText = '<?php echo TIP_SELECT_ALL; ?>';
 	var action = '<?php echo $sessionAction->getAction(); ?>';

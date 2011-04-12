@@ -162,7 +162,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group($_SE
 	}
 	if ($current_group['wiki_state'] != TOOL_NOT_AVAILABLE) {
 		// Link to the wiki area of this group
-		$tools .= '<li style="display:inline; margin:5px;"><a href="../wiki/index.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('wiki.gif', get_lang('GroupWiki')).'&nbsp;'.get_lang('GroupWiki').'</a></li>';
+		$tools .= '<li style="display:inline; margin:5px;"><a href="../wiki/index.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'&amp;action=show&amp;title=index&amp;session_id='.api_get_session_id().'&amp;group_id='.$current_group['id'].'">'.Display::return_icon('wiki.gif', get_lang('GroupWiki')).'&nbsp;'.get_lang('GroupWiki').'</a></li>';
 	}
 	if ($current_group['chat_state'] != TOOL_NOT_AVAILABLE) {
 		// Link to the chat area of this group
@@ -212,7 +212,7 @@ echo '</ul>';
 	}
 	if ($current_group['wiki_state'] == TOOL_PUBLIC) {
 		// Link to the wiki area of this group
-		$tools .= '<li style="display:inline; margin:5px;"><a href="../wiki/index.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'">'.Display::return_icon('wiki.gif', get_lang('GroupWiki')).'&nbsp;'.get_lang('GroupWiki').'</a></li>';
+		$tools .= '<li style="display:inline; margin:5px;"><a href="../wiki/index.php?'.api_get_cidreq().'&amp;toolgroup='.$current_group['id'].'&amp;action=show&amp;title=index&amp;session_id='.api_get_session_id().'&amp;group_id='.$current_group['id'].'">'.Display::return_icon('wiki.gif', get_lang('GroupWiki')).'&nbsp;'.get_lang('GroupWiki').'</a></li>';		
 	}
 	if ($current_group['chat_state'] == TOOL_PUBLIC ) {
 		// Link to the chat area of this group

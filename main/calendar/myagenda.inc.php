@@ -46,8 +46,7 @@ $setting_agenda_link = 'coursecode'; // valid values are coursecode and icon
 /**
  *	This function retrieves all the agenda items of all the courses the user is subscribed to
  */
-function get_myagendaitems($courses_dbs, $month, $year) {
-	global $_configuration;
+function get_myagendaitems($courses_dbs, $month, $year) {	
 	global $setting_agenda_link;
 
 	$items = array();
@@ -101,7 +100,8 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 				}
 		}
 		$result = Database::query($sqlquery);
-		while ($item = Database::fetch_array($result)) {
+		$my_list = array();
+		while ($item = Database::fetch_array($result, 'ASSOC')) {
 			$agendaday = date("j",strtotime($item['start_date']));
 			if(!isset($items[$agendaday])) {
 				$items[$agendaday]=array();
@@ -117,14 +117,14 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 				$agenda_link = api_substr($title, 0, 14);
 			} else {
 				$agenda_link = Display::return_icon('course_home.gif');
-				}
+			}
 			if(!isset($items[$agendaday][$item['start_date']])) {
 				$items[$agendaday][$item['start_date']] = '';
 			}
 			$items[$agendaday][$item['start_date']] .= "<i>$time</i> $end_time &nbsp;";
 			$item['title'] = '<strong>'.$item['title'].'</strong>';
 			$items[$agendaday][$item['start_date']] .= '<br />'."<a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br /> ";
-			$items[$agendaday][$item['start_date']] .= '<br/>';
+			$items[$agendaday][$item['start_date']] .= '<br/>';				
 		}
 	}
 
@@ -138,7 +138,7 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 		while (list ($key, $val) = each($tmpitems)) {
 			$agendaitems[$agendaday] .= $val;
 		}
-	}
+	}	
 	return $agendaitems;
 }
 /**

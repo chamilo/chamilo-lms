@@ -2798,9 +2798,7 @@ function add_year($timestamp,$num=1)
  * @param   int     Parent id (optional)
  * @return  int     The new item's DB ID
  */
-function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date, $to=array(), $parent_id=null)
-{
-  global $_course;
+function agenda_add_item($title, $content, $db_start_date, $db_end_date) {
     $user_id    = api_get_user_id();
     $t_agenda   = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 
@@ -2812,72 +2810,20 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     $start_date = Database::escape_string($db_start_date);
     
     $db_end_date = api_get_utc_datetime($db_end_date);
-    $end_date   = Database::escape_string($db_end_date);   
-    
-
-    isset($_SESSION['id_session'])?$id_session=intval($_SESSION['id_session']):$id_session=null;
-    // store in the table calendar_event
+    $end_date   = Database::escape_string($db_end_date);       
 
     // check if exists in calendar_event table
-    $sql = "SELECT * FROM $t_agenda WHERE title='$title' AND content = '$content' AND start_date = '$start_date'
-    		AND end_date = '$end_date' ".(!empty($parent_id)? "AND parent_event_id = '$parent_id'":"");
+    $sql = "SELECT * FROM $t_agenda WHERE title='$title' AND content = '$content' AND start_date = '$start_date' AND end_date = '$end_date' ";
     $result = Database::query($sql);
-    $count = Database::num_rows($result);
+    $count  = Database::num_rows($result);
     if ($count > 0) {
     	return false;
     }
+    $sql = "INSERT INTO $t_agenda (title,content, start_date, end_date, access_url_id)
+			VALUES ('".$title."','".$content."', '".$start_date."','".$end_date."', '".api_get_current_access_url_id()."')";
 
-	global $_configuration;
-	$current_access_url_id = 1;
-	if ($_configuration['multiple_access_urls']) {
-		$current_access_url_id = api_get_current_access_url_id();
-	}
-
-    $sql = "INSERT INTO ".$t_agenda." (title,content, start_date, end_date, access_url_id)
-			VALUES ('".$title."','".$content."', '".$start_date."','".$end_date."', '".$current_access_url_id."')";
-
-    $result = Database::query($sql) or die (Database::error());
-    $last_id=Database::insert_id();
-
-    // add a attachment file in agenda
-
-   // add_agenda_attachment_file($file_comment,$last_id);
-
-    // store in last_tooledit (first the groups, then the users
-    $done = false;
-
-   //(This part of this code is not been used)
-   /* if ((!is_null($to))or (!empty($_SESSION['toolgroup']))) // !is_null($to): when no user is selected we send it to everyone
-    {
-        $send_to=separate_users_groups($to);
-        // storing the selected groups
-        if (is_array($send_to['groups']))
-        {
-            foreach ($send_to['groups'] as $group)
-            {
-                api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, $group,'',$start_date, $end_date);
-                $done = true;
-            }
-        }
-        // storing the selected users
-        if (is_array($send_to['users']))
-        {
-            foreach ($send_to['users'] as $user)
-            {
-                api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id,'',$user, $start_date,$end_date);
-                $done = true;
-            }
-        }
-    }
-
-    if(!$done) // the message is sent to everyone, so we set the group to 0
-    {
-        api_item_property_update($course_info, TOOL_CALENDAR_EVENT, $last_id, "AgendaAdded", $user_id, $start_date,$end_date);
-    }
-    // storing the resources
-    if (!empty($_SESSION['source_type']) && !empty($last_id)) {
-    //store_resources($_SESSION['source_type'],$last_id);
-    }*/
+    $result = Database::query($sql);
+    $last_id = Database::insert_id();
     return $last_id;
 }
 /**

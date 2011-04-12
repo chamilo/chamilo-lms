@@ -121,11 +121,13 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
 
 $document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());
 if (empty($document_data)) {
-    api_not_allowed();
+    $document_id  = $parent_id =  0;
+    $path = '/';    
+} else {
+    $document_id    = $document_data['id'];
+    $path           = $document_data['path'];
+    $parent_id      = DocumentManager::get_document_id(api_get_course_info(), dirname($path));
 }
-$document_id    = $document_data['id'];
-$path           = $document_data['path'];
-$parent_id      = DocumentManager::get_document_id(api_get_course_info(), dirname($path));
 
 // This needs cleaning!
 if (api_get_group_id()) { 

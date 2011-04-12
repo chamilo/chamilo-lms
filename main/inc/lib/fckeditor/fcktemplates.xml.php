@@ -260,10 +260,12 @@ function load_empty_template() {
         <![CDATA[
            <html>
            <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
             <?php echo $css; ?>
             <?php echo $js; ?>
-           <body></body>
            </head>
+           <body  dir="<?php echo api_get_text_direction(); ?>">
+           </body>
            </html>
        ]]>
     </Html>

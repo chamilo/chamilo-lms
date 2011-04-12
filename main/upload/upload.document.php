@@ -98,9 +98,8 @@ if(isset($_FILES['user_upload']))
 	}
 }
 //missing images are submitted
-if(isset($_POST['submit_image']))
-{
-	$number_of_uploaded_images = count($_FILES['img_file']['name']);
+if(isset($_POST['submit_image'])) {
+	$number_of_uploaded_images = count($_FILES['img_file']['name']);	
 	//if images are uploaded
 	if ($number_of_uploaded_images > 0)
 	{

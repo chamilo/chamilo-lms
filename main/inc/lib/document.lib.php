@@ -561,7 +561,6 @@ class DocumentManager {
                 }
 
                 //Checking disponibility in a session
-                //var_dump($my_repeat_ids);
                 foreach($my_repeat_ids as $id) {
                      foreach($doc_list as $row ) {
                         if ($id == $row['id']) {
@@ -1899,8 +1898,7 @@ class DocumentManager {
                                     SE_USER      => api_get_user_id(),
                                 );
                                 
-                                var_dump($xapian_data);
-                                echo '<pre>';
+                                //var_dump($xapian_data); echo '<pre>';
                                 
                                 $ic_slide->xapian_data = serialize($xapian_data);
                                 $di = new DokeosIndexer();
@@ -1950,7 +1948,7 @@ class DocumentManager {
                                         $di->addChunk($ic_slide);
                                         // Index and return a new search engine document id
                                         $did = $di->index();
-                                        var_dump($did);
+                                        //var_dump($did);
                                         if ($did) {
                                             // update the search_did on db
                                             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
@@ -1994,12 +1992,12 @@ class DocumentManager {
                         }
                     }
             
-                    // Check for missing images in html files
+                    /*// Check for missing images in html files
                     $missing_files = check_for_missing_files($base_work_dir.$new_path);
                     if ($missing_files && $show_output) {
                         // Show a form to upload the missing files
                         Display::display_normal_message(build_missing_files_form($missing_files, $path, $files['file']['name']), false);
-                    }
+                    }*/
                     
                     if (!empty($docid) && is_numeric($docid)) {                        
                         $document_data = self::get_document_data_by_id($docid, $course_info['code']);
@@ -2041,7 +2039,6 @@ class DocumentManager {
                 break;
             case 'application/msword':
                 exec("catdoc $doc_path", $output, $ret_val);
-                //var_dump($output);
                 break;
             case 'text/html':
                 exec("html2text $doc_path", $output, $ret_val);

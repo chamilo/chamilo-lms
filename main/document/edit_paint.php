@@ -48,6 +48,8 @@ $filename=$temp_file[0];
 $nameTools = get_lang('EditDocument') . ': '.$filename;
 $dir = Security::remove_XSS($_GET['curdirpath']);
 
+$document_id = DocumentManager::get_document_id(api_get_course_info(), $get_file);
+
 $courseDir   = $_course['path'].'/document';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -107,8 +109,8 @@ Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 		
-		echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&amp;file='.urlencode($dir.$file).$req_gid.'&amp;origin=editpaint">'.Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comment'  ),'','32').'</a>';
-echo '</div>';
+		echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&amp;origin=editpaint">'.Display::return_icon('edit.png', get_lang('Rename').'/'.get_lang('Comment'  ),'','32').'</a>';
+echo '</div>'; 
 
 ///pixlr
 $title=$file;//disk name. No sql name because pixlr return this when save

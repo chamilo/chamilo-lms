@@ -349,15 +349,17 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
     } else {
         $req_gid = '';
     }
-    $document_id = $document_data['id'];
+    $document_id            = $document_data['id'];
     
-    
-    $type = $document_data['filetype'];
-    $path = $document_data['path'];
-    $parent_id   = DocumentManager::get_document_id(api_get_course_info(), dirname($path));
-    $visibility= $document_data['visibility'];
-    $is_read_only= $document_data['readonly'];
-    $curdirpath = dirname($document_data['path']);
+    $type                   = $document_data['filetype'];
+    $visibility             = $document_data['visibility'];
+    $is_read_only           = $document_data['readonly'];
+    $path                   = $document_data['path'];
+    $parent_id              = DocumentManager::get_document_id(api_get_course_info(), dirname($path));    
+    $curdirpath             = dirname($document_data['path']);
+    $is_certificate_mode    = DocumentManager::is_certificate_mode($path);
+    $curdirpath             = urlencode($curdirpath);
+    $extension              = pathinfo($path, PATHINFO_EXTENSION);
     
     // Build URL-parameters for table-sorting
     $sort_params = array();
@@ -374,59 +376,98 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
         $sort_params[] = 'direction='.Security::remove_XSS($_GET['direction']);
     }
     $sort_params = implode('&amp;', $sort_params);
-    $visibility_icon = ($visibility == 0) ? 'invisible' : 'visible';
+    $visibility_icon    = ($visibility == 0) ? 'invisible' : 'visible';
     $visibility_command = ($visibility == 0) ? 'set_visible' : 'set_invisible';
-    $curdirpath = urlencode($curdirpath);
-
-    $is_certificate_mode = DocumentManager::is_certificate_mode($path);
-    $modify_icons = '';
-    $cur_ses = api_get_session_id();
-    $extension = pathinfo($path, PATHINFO_EXTENSION);
+        
+    $modify_icons = '';    
+    
     // If document is read only *or* we're in a session and the document
     // is from a non-session context, hide the edition capabilities
-    if ($is_read_only /*or ($session_id!=$cur_ses)*/) {
-        $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'),'',22);
-        $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),array(), 22);
-        $modify_icons .= '&nbsp;'.Display::return_icon('move.png', get_lang('Move'),array(), 22);
-        if (api_is_allowed_to_edit() || api_is_platform_admin()){
-            $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'),'',22);
-        }
-    } else {
-        if ($is_certificate_mode) {
-            //$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
-            $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
-            
-        } else {
-            if($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
+    if ($is_read_only /*or ($session_id!=api_get_session_id())*/) {        
+        if (api_is_course_admin() || api_is_platform_admin()) {
+            if($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
                 $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
-			} elseif($extension=='png' || $extension=='jpg' || $extension=='jpeg' || $extension=='bmp' || $extension=='gif' ||$extension=='pxd' && api_get_setting('enabled_support_pixlr') == 'true'){
-                $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';		
+            } elseif($extension=='png' || $extension=='jpg' || $extension=='jpeg' || $extension=='bmp' || $extension=='gif' ||$extension=='pxd' && api_get_setting('enabled_support_pixlr') == 'true'){
+                $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';       
             } else {
                 $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
             }
-        }
-
-        if ($is_certificate_mode) {
-            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'&amp;move='.$document_id.$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
-            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'&selectcat='.$gradebook_category.'">'.
-			Display::return_icon($visibility_icon.'.png', get_lang('Move'),array(), 22).'</a>';			
         } else {
-            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'&amp;move='.$document_id.$req_gid.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
-            if(api_is_allowed_to_edit() || api_is_platform_admin()){
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'">'.Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'),'',22).'</a>';
+            $modify_icons  = Display::return_icon('edit_na.png', get_lang('Modify'),'',22);
+        }
+        $modify_icons .= '&nbsp;'.Display::return_icon('move_na.png', get_lang('Move'),array(), 22);
+        if (api_is_allowed_to_edit() || api_is_platform_admin()) {
+            $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'),'',22);
+        }
+        $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),array(), 22);
+    } else {
+        
+        if ($is_certificate_mode) {
+            //$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+            $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';            
+        } else {
+            if (api_get_session_id()) {
+                if ($document_data['session_id'] == api_get_session_id()) {  
+                    if ($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
+                        $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+                    } elseif($extension=='png' || $extension=='jpg' || $extension=='jpeg' || $extension=='bmp' || $extension=='gif' ||$extension=='pxd' && api_get_setting('enabled_support_pixlr') == 'true'){
+                        $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';       
+                    } else {
+                        $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+                    }   
+                } else {
+                    $modify_icons .= '&nbsp;'.Display::return_icon('edit_na.png', get_lang('Edit'),array(), 22).'</a>';
+                    
+                }
+            } else {
+                if($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
+                    $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+    			} elseif($extension=='png' || $extension=='jpg' || $extension=='jpeg' || $extension=='bmp' || $extension=='gif' ||$extension=='pxd' && api_get_setting('enabled_support_pixlr') == 'true'){
+                    $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';		
+                } else {
+                    $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+                }
+            }
+        }
+        if ($is_certificate_mode) {
+            //$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'&amp;move='.$document_id.$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
+            $modify_icons .= '&nbsp;'.Display::return_icon('move_na.png', get_lang('Move'),array(), 22).'</a>';
+            $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'.png', get_lang('Move'),array(), 22).'</a>';
+            
+            //$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'&selectcat='.$gradebook_category.'">'.
+			Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'),array(), 22).'</a>';			
+        } else {
+            if (api_get_session_id()) {
+                if ($document_data['session_id'] == api_get_session_id()) {                       
+                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'&amp;move='.$document_id.$req_gid.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
+                } else {
+                    $modify_icons .= '&nbsp;'.Display::return_icon('move_na.png', get_lang('Move'),array(), 22).'</a>';                        
+                }    
+            } else {
+                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'&amp;move='.$document_id.$req_gid.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
+            }
+            if (api_is_allowed_to_edit() || api_is_platform_admin()) {                
+                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'">'.Display::return_icon($visibility_icon.'.png', get_lang('ChangeVisibility'),'',22).'</a>';
             }
         }        
         if (in_array($path, array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates'))) {
             $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'),array(), 22);
         } else {
-
-            if (isset($_GET['curdirpath']) && $_GET['curdirpath']=='/certificates' && DocumentManager::get_default_certificate_id(api_get_course_id())==$id) {
+            if (isset($_GET['curdirpath']) && $_GET['curdirpath']=='/certificates' && DocumentManager::get_default_certificate_id(api_get_course_id())==$id) {                
                 $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'delete_certificate_id='.$id.'&selectcat='.$gradebook_category.' " onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
             } else {
                 if ($is_certificate_mode) {
                     $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'&selectcat='.$gradebook_category.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
                 } else {
-                    $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
+                    if (api_get_session_id()) {
+                        if ($document_data['session_id'] == api_get_session_id()) {                        
+                            $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
+                        } else {
+                            $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'),array(), 22);                            
+                        }
+                    } else {                
+                        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');">'.Display::return_icon('delete.png', get_lang('Delete'),array(), 22).'</a>';
+                    }
                 }
             }
         }        
@@ -676,13 +717,11 @@ function is_my_shared_folder($user_id, $path, $current_session_id) {
     $main_user_shared_folder = '/shared_folder\/sf_user_'.$user_id.'\//';//for security does not remove the last slash
     $main_user_shared_folder_session='/shared_folder_session_'.$current_session_id.'\/sf_user_'.$user_id.'\//';//for security does not remove the last slash
 
-    if(preg_match($main_user_shared_folder, $clean_path)){
+    if (preg_match($main_user_shared_folder, $clean_path)){
         return true;
-    }
-    elseif(preg_match($main_user_shared_folder_session, $clean_path)){
+    } elseif(preg_match($main_user_shared_folder_session, $clean_path)) {
         return true;
-    }
-    else{
+    } else {        
         return false;
     }
 }
@@ -721,5 +760,3 @@ function is_browser_viewable($file_extension) {
     }
     return $result;
 }
-
-?>

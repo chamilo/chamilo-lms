@@ -109,6 +109,7 @@ $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
 $noPHP_SELF = true;
 
+/*
 // What's the current path?
 if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
 	$path = $_GET['curdirpath'];
@@ -116,15 +117,19 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
 	$path = $_POST['curdirpath'];
 } else {
 	$path = '/';
-}
+}*/
 
-// Check the path: if the path is not found (no document id), set the path to /
-if (!DocumentManager::get_document_id($_course, $path)) {
-	$path = '/';
+$document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());
+if (empty($document_data)) {
+    api_not_allowed();
 }
+$document_id    = $document_data['id'];
+$path           = $document_data['path'];
+$parent_id      = DocumentManager::get_document_id(api_get_course_info(), dirname($path));
 
 // This needs cleaning!
-if (api_get_group_id()) { // If the group id is set, check if the user has the right to be here
+if (api_get_group_id()) { 
+    // If the group id is set, check if the user has the right to be here
 	// Needed for group related stuff
 	require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 	// Get group info
@@ -138,7 +143,9 @@ if (api_get_group_id()) { // If the group id is set, check if the user has the r
 	} else {
 		api_not_allowed(true);
 	}
-} elseif ($is_allowed_to_edit || is_my_shared_folder($_user['user_id'], $path,api_get_session_id())) { // Admin for "regular" upload, no group documents. And check if is my shared folder
+} elseif ($is_allowed_to_edit || is_my_shared_folder(api_get_user_id(), $path, api_get_session_id())) {
+     
+    // Admin for "regular" upload, no group documents. And check if is my shared folder
 	$to_group_id = 0;
 	$req_gid = '';
 } else { // No course admin and no group member...
@@ -175,7 +182,7 @@ if (isset($_REQUEST['certificate'])) {
 if ($is_certificate_mode) {
 	$interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 } else {
-	$interbreadcrumb[] = array('url' => './document.php?curdirpath='.urlencode($path).$req_gid, 'name'=> get_lang('Documents'));
+	$interbreadcrumb[] = array('url' => './document.php?id='.$document_id.$req_gid, 'name'=> get_lang('Documents'));
 }
 
 
@@ -193,12 +200,11 @@ if (!empty($_FILES)) {
 
 // Actions
 echo '<div class="actions">';
-
 // Link back to the documents overview
 if ($is_certificate_mode) {
-	echo '<a href="document.php?curdirpath='.$path.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'','32').'</a>';
+	echo '<a href="document.php?id='.$document_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'','32').'</a>';
 } else {
-	echo '<a href="document.php?curdirpath='.$path.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+	echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 }
 
 // Link to create a folder
@@ -215,6 +221,7 @@ if (!$is_certificate_mode) {
 }
 
 $form = new FormValidator('upload', 'POST', api_get_self(), '', 'enctype="multipart/form-data"');
+$form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('file', 'file', get_lang('File'), 'id="user_upload" size="45"');
 $form->addElement('html', '<div class="row" style="font-size:smaller;font-style:italic;"><div class="label">&nbsp;</div><div class="formw">'.get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.(round(DocumentManager::get_course_quota()/1000000)-round(DocumentManager::documents_total_space($_course)/1000000)).' M</div></div>');

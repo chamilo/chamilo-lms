@@ -813,7 +813,7 @@ function add_document($_course, $path, $filetype, $filesize, $title, $comment = 
  */
 function update_existing_document($_course, $document_id, $filesize, $readonly = 0) {
 	$document_table = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-	$sql = "UPDATE $document_table SET size = '$filesize' , readonly = '$readonly' WHERE id='$document_id'";
+	$sql = "UPDATE $document_table SET size = '$filesize' , readonly = '$readonly' WHERE id = $document_id";
 	if (Database::query($sql)) {
 		return true;
 	} else {
@@ -1355,26 +1355,28 @@ function check_for_missing_files($file) {
 function build_missing_files_form($missing_files, $upload_path, $file_name) {
 	// Do we need a / or not?
 	$added_slash = ($upload_path == '/') ? '' : '/';
+	$folder_id      = DocumentManager::get_document_id(api_get_course_info(), $upload_path);   
 	// Build the form
-	$form .= "<p><strong>".get_lang('MissingImagesDetected')."</strong></p>\n"
-		."<form method=\"post\" action=\"".api_get_self()."\" enctype=\"multipart/form-data\">\n"
+	$form .= "<p><strong>".get_lang('MissingImagesDetected')."</strong></p>"
+		."<form method=\"post\" action=\"".api_get_self()."\" enctype=\"multipart/form-data\">"
 		// Related_file is the path to the file that has missing images
-		."<input type=\"hidden\" name=\"related_file\" value=\"".$upload_path.$added_slash.$file_name."\" />\n"
-		."<input type=\"hidden\" name=\"upload_path\" value=\"".$upload_path."\" />\n"
-		."<table border=\"0\">\n";
+		."<input type=\"hidden\" name=\"related_file\" value=\"".$upload_path.$added_slash.$file_name."\" />"
+		."<input type=\"hidden\" name=\"upload_path\" value=\"".$upload_path."\" />"
+		."<input type=\"hidden\" name=\"id\" value=\"".$folder_id."\" />"
+		."<table border=\"0\">";
 	foreach ($missing_files as & $this_img_file_path) {
-		$form .= "<tr>\n"
-			."<td>".basename($this_img_file_path)." : </td>\n"
+		$form .= "<tr>"
+			."<td>".basename($this_img_file_path)." : </td>"
 			."<td>"
 			."<input type=\"file\" name=\"img_file[]\"/>"
 			."<input type=\"hidden\" name=\"img_file_path[]\" value=\"".$this_img_file_path."\" />"
-			."</td>\n"
-			."</tr>\n";
+			."</td>"
+			."</tr>";
 	}
-	$form .= "</table>\n"
+	$form .= "</table>"
 		."<button type='submit' name=\"cancel_submit_image\" value=\"".get_lang('Cancel')."\" class=\"cancel\">".get_lang('Cancel')."</button>"
 		."<button type='submit' name=\"submit_image\" value=\"".get_lang('Ok')."\" class=\"save\">".get_lang('Ok')."</button>"
-		."</form>\n";
+		."</form>";
 	return $form;
 }
 

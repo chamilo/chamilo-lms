@@ -96,18 +96,19 @@ if (api_is_in_group()) {
 }
 
 if (isset($_GET['id'])) {
-    $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
+    $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());    
     if (empty($document_data)) {
         api_not_allowed();
     }
-    $document_id = $document_data['id'];    
-    $dir = dirname($document_data['path']);
-    $parent_id  = DocumentManager::get_document_id(api_get_course_info(), $dir);
+    $document_id    = $document_data['id'];
+    $file           = $document_data['path'];
+    $parent_id      = DocumentManager::get_document_id(api_get_course_info(), dirname($file));    
+    $dir            = dirname($document_data['path']);    
+    $dir_original   =  $dir;
     
-    $dir_original =  $dir;
-    $file = $document_data['path'];
-    $doc = basename($file);
+    $doc            = basename($file);
     $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);    
+    
 } else {
     $dir = Security::remove_XSS($_GET['curdirpath']);    
     $dir_original = $dir;
@@ -122,12 +123,9 @@ $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 $call_from_tool = Security::remove_XSS($_GET['origin']);
 $slide_id = Security::remove_XSS($_GET['origin_opt']);
 
-//echo('dir: '.$dir.'<br />');
 $file_name = $doc;
-//echo('file_name: '.$file_name.'<br />');
 
 $baseServDir = api_get_path(SYS_COURSE_PATH);
-$baseServUrl = $_configuration['url_append'].'/';
 $courseDir   = $_course['path'].'/document';
 $baseWorkDir = $baseServDir.$courseDir;
 $group_document = false;
@@ -222,27 +220,14 @@ if (!is_allowed_to_edit()) {
 	Step 2. React on POST data
 	(Step 1 see below) */
 
-if (isset($_POST['newComment'])) {
-	// Fixing the path if it is wrong
-	$commentPath 	= str_replace('//', '/', Database::escape_string(Security::remove_XSS($_POST['commentPath'])));
-	$newComment 	= trim(Database::escape_string($_POST['newComment'])); // Remove spaces
-	$newTitle 		= trim(Database::escape_string($_POST['newTitle'])); // Remove spaces
-	// Check whether there is already a database record for this file
-	$result = Database::query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'");
-	while ($row = Database::fetch_array($result, 'ASSOC')) {
-		$attribute['path'      ] = $row['path' ];
-		$attribute['comment'   ] = $row['title'];
-	}
-	// Determine the correct query to the DB,
-	// new code always keeps document in database
-	$query = "UPDATE $dbTable
-				SET comment='".$newComment."', title='".$newTitle."'
-				WHERE path	LIKE BINARY '".$commentPath."'";
-	Database::query($query);
-	$oldComment = $newComment;
-	$oldTitle = $newTitle;
+if (isset($_POST['comment'])) {
+	// Fixing the path if it is wrong	
+	$comment 	     = trim(Database::escape_string($_POST['comment']));
+	$title 		     = trim(Database::escape_string($_POST['title'])); 
+	$query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."' WHERE id = ".$document_id;
+	Database::query($query);	
 	$comments_updated = get_lang('ComMod');
-	$info_message = get_lang('fileModified');
+	$info_message     = get_lang('fileModified');
 }
 
 /*	Code to change the name
@@ -251,7 +236,6 @@ if (isset($_POST['newComment'])) {
 
 if (isset($_POST['renameTo'])) {
 	$info_message = change_name($baseWorkDir, $_GET['sourceFile'], $_POST['renameTo'], $dir, $doc);
-	//assume name change was successful
 }
 
 /*	Code to change the comment
@@ -259,7 +243,7 @@ if (isset($_POST['renameTo'])) {
 
 /** TODO: Check whether this code is still used **/
 /* Search the old comment */  // RH: metadata: added 'id,'
-$result = Database::query("SELECT id,comment,title FROM $dbTable WHERE path LIKE BINARY '$dir$doc'");
+$result = Database::query("SELECT id, comment, title FROM $dbTable WHERE id = ".$document_id);
 
 /*
 // Debug info - enable on temporary needs only.
@@ -271,8 +255,8 @@ Display::display_normal_message($message);
 
 while ($row = Database::fetch_array($result, 'ASSOC')) {
 	$oldComment = $row['comment'];
-	$oldTitle = $row['title'];
-	$docId = $row['id'];  // RH: metadata
+	$oldTitle   = $row['title'];
+	$docId      = $row['id'];  // RH: metadata
 }
 
 /*	WYSIWYG HTML EDITOR - Program Logic */
@@ -281,10 +265,8 @@ if ($is_allowed_to_edit) {
 	if ($_POST['formSent'] == 1) {
 		if (isset($_POST['renameTo'])) {
 			$_POST['filename'] = disable_dangerous_file($_POST['renameTo']);
-
 			$extension = explode('.', $_POST['filename']);
 			$extension = $extension[sizeof($extension) - 1];
-
 			$_POST['filename'] = str_replace('.'.$extension, '', $_POST['filename']);
 		}
 
@@ -296,22 +278,27 @@ if ($is_allowed_to_edit) {
 		if (!strstr($content, '/css/frames.css')) {
 			$content=str_replace('</title></head>', '</title><link rel="stylesheet" href="../css/frames.css" type="text/css" /></head>', $content);
 		}
+		/*
         if (!ctype_alnum($_POST['extension'])) {
             header('Location: document.php?msg=WeirdExtensionDeniedInPost');
             exit ();
-	    }
+	    }*/
         $extension = $_POST['extension'];
 		$file = $dir.$filename.'.'.$extension;
 		$read_only_flag = $_POST['readonly'];
 		$read_only_flag = empty($read_only_flag) ? 0 : 1;
-
+				
 		$show_edit = $_SESSION['showedit'];
-		//unset($_SESSION['showedit']);
 		api_session_unregister('showedit');
 
 		if (empty($filename)) {
 			$msgError = get_lang('NoFileName');
-		} else {
+		} else {		    
+		    if ($document_data['filetype'] == 'file') {
+                $file_size = filesize($filepath.$filename.'.'.$extension);
+		    } else {
+		        $file_size = filesize($filepath.$filename);		        
+		    }		    
 			if ($read_only_flag == 0) {
 				if (!empty($content)) {
 					if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
@@ -348,8 +335,7 @@ if ($is_allowed_to_edit) {
 
 						// "WHAT'S NEW" notification: update table item_property
 						$document_id = DocumentManager::get_document_id($_course, $file);
-						if ($document_id) {
-							$file_size = filesize($filepath.$filename.'.'.$extension);
+						if ($document_id) {							
 							update_existing_document($_course, $document_id, $file_size, $read_only_flag);
 							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', api_get_user_id(), null, null, null, null, $current_session_id);
 							// Update parent folders
@@ -367,35 +353,15 @@ if ($is_allowed_to_edit) {
 					} else {
 						$msgError = get_lang('Impossible');
 					}
-				} else {
-					if (is_file($filepath.$filename.'.'.$extension)) {
-						$file_size = filesize($filepath.$filename.'.'.$extension);
-						$document_id = DocumentManager::get_document_id($_course, $file);
-						if ($document_id) {
-							update_existing_document($_course, $document_id, $file_size, $read_only_flag);
-						}
+				} else {					
+					if ($document_id) {
+                        update_existing_document($_course, $document_id, $file_size, $read_only_flag);					
 					}
 				}
 			} else {
-				if (is_file($filepath.$filename.'.'.$extension)) {
-					$file_size = filesize($filepath.$filename.'.'.$extension);
-					$document_id = DocumentManager::get_document_id($_course, $file);
-
-					if ($document_id) {
-						update_existing_document($_course, $document_id, $file_size, $read_only_flag);
-					}
-				}
-
-				if (empty($document_id)) { // or if is a folder
-					$folder = $_POST['file_path'];
-					$document_id = DocumentManager::get_document_id($_course, $folder);
-
-					if (DocumentManager::is_folder($_course, $document_id)) {
-						if ($document_id) {
-							update_existing_document($_course, $document_id, $file_size, $read_only_flag);
-						}
-					}
-				}
+                if ($document_id) {
+                    update_existing_document($_course, $document_id, $file_size, $read_only_flag);
+                }				
 			}
 		}
 	}
@@ -449,7 +415,6 @@ $document_info  = api_get_item_property_info(api_get_course_int_id(),'document',
 $owner_id       = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];
 
-
 if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id() )) {
 	$get_cur_path = $dir;	
 	$action = api_get_self().'?sourceFile='.urlencode($file_name).'&id='.$document_data['id'];
@@ -469,8 +434,8 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 	$form->addElement('hidden', 'origin_opt');
 
 	if ($use_document_title) {
-		$form->add_textfield('newTitle', get_lang('Title'));
-		$defaults['newTitle'] = $oldTitle;
+		$form->add_textfield('title', get_lang('Title'));
+		$defaults['title'] = $oldTitle;
 	} else {
 		$form->addElement('hidden', 'renameTo');
 	}
@@ -504,7 +469,7 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 		$form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
 	}
 
-	$form->addElement('textarea', 'newComment', get_lang('Comment'), 'rows="3" style="width:300px;"');
+	$form->addElement('textarea', 'comment', get_lang('Comment'), 'rows="3" style="width:300px;"');
 	/*
 	$renderer = $form->defaultRenderer();
 	*/
@@ -526,7 +491,7 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 	$defaults['file_path'] = Security::remove_XSS($_GET['file']);
 	$defaults['commentPath'] = $file;
 	$defaults['renameTo'] = $file_name;
-	$defaults['newComment'] = $oldComment;
+	$defaults['comment'] = $oldComment;
 	$defaults['origin'] = Security::remove_XSS($_GET['origin']);
 	$defaults['origin_opt'] = Security::remove_XSS($_GET['origin_opt']);
 
@@ -605,16 +570,17 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {
 function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_certificate_mode=false) {	
 	$pathurl = urlencode($path);
 	echo '<div class="actions">';
+	
 	if ($is_certificate_mode) {
 		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'','32').'</a>';
 	} elseif($call_from_tool=='slideshow') {
 		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'),'','32').'</a>';		
 	} elseif($call_from_tool=='editdraw') {
 		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
-		echo '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png',get_lang('BackTo').' '.get_lang('Draw'),'','32').'</a>';
+		echo '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Draw'), array(), 32).'</a>';
 	} elseif($call_from_tool=='editpaint'){
-		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
-		echo '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png',get_lang('BackTo').' '.get_lang('Paint')).'</a>';		
+		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), array(), '32').'</a>';
+		echo '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('BackTo').' '.get_lang('Paint'), array(), 32).'</a>';		
 	} else {
 		echo '<a href="document.php?action=exit_slideshow&id='.$document_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 	}

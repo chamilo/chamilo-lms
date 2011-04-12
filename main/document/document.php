@@ -69,7 +69,11 @@ DocumentManager::create_directory_certificate_in_course($course_id);
 
 //Hack in order to use document.php?id=X 
 if (isset($_GET['id'])) {
-    $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
+    $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());    
+    $parent_id     = DocumentManager::get_document_id(api_get_course_info(), dirname($document_data['path']));
+    if (!$parent_id) {
+        $parent_id = 0; 
+    }
     //@todo replace all 
     $_GET['curdirpath'] = $document_data['path'];    
 }
@@ -208,7 +212,8 @@ require_once $lib_path.'fileUpload.lib.php';
 
 // Check the path
 // If the path is not found (no document id), set the path to /
-if (!DocumentManager::get_document_id($_course, $curdirpath)) {
+$document_id = DocumentManager::get_document_id($_course, $curdirpath);
+if (!$document_id) {
     $curdirpath = '/';
     // Urlencoded version
     $curdirpathurl = '%2F';
@@ -218,7 +223,7 @@ if ($to_group_id != 0 && $curdirpath == '/') {
     $curdirpath = $group_properties['directory'];
     $curdirpathurl = urlencode($group_properties['directory']);
 }
-
+$current_folder_id = $document_id;
 
 // Check visibility of the current dir path. Don't show anything if not allowed
 //@todo check this validation for coaches
@@ -231,13 +236,12 @@ if (!$is_allowed_to_edit && api_is_coach()) {
 }
 
 /*	Constants and variables */
-
 $current_session_id = api_get_session_id();
 
 
 /*	Create shared folders */
 
-if($current_session_id==0){
+if ($current_session_id==0) {
     //Create shared folder. Necessary for courses recycled. Allways session_id should be zero. Allway should be created from a base course, never from a session.
     if (!file_exists($base_work_dir.'/shared_folder')) {
         $usf_dir_title = get_lang('UserFolders');
@@ -314,9 +318,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'download') {
 
 // Download a folder
 if (isset($_GET['action']) && $_GET['action'] == 'downloadfolder' && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
-
     //filter when I am into shared folder, I can donwload only my shared folder
-
     if(is_any_user_shared_folder($_GET['path'],$current_session_id)){
         if(is_my_shared_folder(api_get_user_id(), $_GET['path'], $current_session_id) || api_is_allowed_to_edit() || api_is_platform_admin()){
             require 'downloadfolder.inc.php';
@@ -752,12 +754,10 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
 
 /*	GET ALL DOCUMENT DATA FOR CURDIRPATH */
 if(isset($_GET['keyword']) && !empty($_GET['keyword'])) {
-    $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=true);
-    
-}else{
+    $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=true);    
+} else {
     $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, $search=false);
 }
-
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
 if ($folders === false) {
     $folders = array();
@@ -775,13 +775,12 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights){
     $form->display();
     echo '</span>';
 }
-/* GO TO PARENT DIRECTORY */
 
+/* GO TO PARENT DIRECTORY */
 if ($curdirpath!= '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
-?>
-    <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&amp;curdirpath=<?php echo urlencode((dirname($curdirpath) == '\\') ? '/' : dirname($curdirpath)).$req_gid; ?>">
-        <?php Display::display_icon('folder_up.png', get_lang('Up'),'','32'); ?></a>
-<?php
+    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'">';
+    echo Display::display_icon('folder_up.png', get_lang('Up'),'','32');
+    echo '</a>';
 }
 
 if ($is_certificate_mode && $curdirpath != '/certificates') {
@@ -792,7 +791,6 @@ if ($is_certificate_mode && $curdirpath != '/certificates') {
 }
 
 if (isset($docs_and_folders) && is_array($docs_and_folders)) {
-
     //echo('<pre>');
     //print_r($docs_and_folders);
     //echo('</pre>');
@@ -804,43 +802,43 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
     $sortable_data = array();
 
     //while (list($key, $id) = each($docs_and_folders)) {
-    foreach ($docs_and_folders as $key=>$id) {
+    foreach ($docs_and_folders as $key => $document_data) {
         $row = array();
 
         // If the item is invisible, wrap it in a span with class invisible
-        $invisibility_span_open  = ($id['visibility'] == 0) ? '<span class="invisible">' : '';
-        $invisibility_span_close = ($id['visibility'] == 0) ? '</span>' : '';
+        $invisibility_span_open  = ($document_data['visibility'] == 0) ? '<span class="invisible">' : '';
+        $invisibility_span_close = ($document_data['visibility'] == 0) ? '</span>' : '';
         // Size (or total size of a directory)
-        $size = $id['filetype'] == 'folder' ? get_total_folder_size($id['path'], $is_allowed_to_edit) : $id['size'];
+        $size = $document_data['filetype'] == 'folder' ? get_total_folder_size($document_data['path'], $is_allowed_to_edit) : $document_data['size'];
         
         // Get the title or the basename depending on what we're using
-        if ($use_document_title == 'true' && $id['title'] != '') {
-            $document_name = $id['title'];
+        if ($use_document_title == 'true' && $document_data['title'] != '') {
+            $document_name = $document_data['title'];
         } else {
-            $document_name = basename($id['path']);
+            $document_name = basename($document_data['path']);
         }
         // Data for checkbox
         if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
-            $row[] = $id['path'];
+            $row[] = $document_data['path'];
         }
 
         // Hide HotPotatoes Certificates and all css folders
-        if ($id['path']=='/HotPotatoes_files' || $id['path']=='/certificates' || basename($id['path'])=='css'){
+        if ($document_data['path']=='/HotPotatoes_files' || $document_data['path']=='/certificates' || basename($document_data['path'])=='css'){
             continue;
         }
 
         //Admin setting for Hide/Show the folders of all users
-        if (api_get_setting('show_users_folders') == 'false' && ($id['path']=='/shared_folder' || strstr($id['path'], 'shared_folder_session_'))){
+        if (api_get_setting('show_users_folders') == 'false' && ($document_data['path']=='/shared_folder' || strstr($document_data['path'], 'shared_folder_session_'))){
             continue;
         }
 
         //Admin setting for Hide/Show Default folders to all users
-        if (api_get_setting('show_default_folders') == 'false' && ($id['path']=='/images' || $id['path']=='/flash' || $id['path']=='/audio' || $id['path']=='/video')){
+        if (api_get_setting('show_default_folders') == 'false' && ($document_data['path']=='/images' || $document_data['path']=='/flash' || $document_data['path']=='/audio' || $document_data['path']=='/video')){
             continue;
         }
 
         //Admin setting for Hide/Show chat history folder
-        if (api_get_setting('show_chat_folder') == 'false' && $id['path']=='/chat_files'){
+        if (api_get_setting('show_chat_folder') == 'false' && $document_data['path']=='/chat_files'){
             continue;
         }
 
@@ -848,42 +846,40 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $user_link = '';
 
         if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
-            if (!empty($id['insert_user_id'])) {
-                $user_info = UserManager::get_user_info_by_id($id['insert_user_id']);
+            if (!empty($document_data['insert_user_id'])) {
+                $user_info = UserManager::get_user_info_by_id($document_data['insert_user_id']);
                 $user_name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
-                $user_link = '<div class="document_owner">'.get_lang('Owner').': '.display_user_link_document($id['insert_user_id'], $user_name).'</div>';
+                $user_link = '<div class="document_owner">'.get_lang('Owner').': '.display_user_link_document($document_data['insert_user_id'], $user_name).'</div>';
             }
         }
 
         // Icons (clickable)
-        //$row[]= build_document_icon_tag($id['filetype'],$id['path']);
-        $row[] = create_document_link($id,  true);
+        $row[] = create_document_link($document_data,  true);
 
         // Validacion when belongs to a session
-        $session_img = api_get_session_image($id['session_id'], $_user['status']);
+        $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
 
         // Document title with hyperlink        
-        $row[] = create_document_link($id).$session_img.'<br />'.$invisibility_span_open.nl2br(htmlspecialchars($id['comment'],ENT_QUOTES,$charset)).$invisibility_span_close.$user_link;
+        $row[] = create_document_link($document_data).$session_img.'<br />'.$invisibility_span_open.'<i>'.nl2br(htmlspecialchars($document_data['comment'],ENT_QUOTES,$charset)).'</i>'.$invisibility_span_close.$user_link;
 
         // Comments => display comment under the document name
-        //$row[] = $invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
         $display_size = format_file_size($size);
         $row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close;
 
         // Last edit date
-        $last_edit_date = $id['lastedit_date'];
+        $last_edit_date = $document_data['lastedit_date'];
         $last_edit_date = api_get_local_time($last_edit_date, null, date_default_timezone_get());
         //$display_date = date_to_str_ago($last_edit_date).'<br /><span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';
         $display_date = date_to_str_ago($last_edit_date);
         $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
         // Admins get an edit column
         if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $current_session_id)) {
-            $is_template = isset($id['is_template']) ? $id['is_template'] : false;
+            $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
             // If readonly, check if it the owner of the file or if the user is an admin
-            if ($id['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {
-                $edit_icons = build_edit_icons($id, $key, $is_template, 0);
-            } else {
-                $edit_icons = build_edit_icons($curdirpath, $id['filetype'], $id['path'], $id['visibility'], $key, $is_template, $id['readonly']);
+            if ($document_data['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {                
+                $edit_icons = build_edit_icons($document_data, $key, $is_template, 0);
+            } else {          
+                $edit_icons = build_edit_icons($document_data, $key, $is_template, $document_data['readonly']);
             }
             $row[] = $edit_icons;
         }
@@ -952,15 +948,11 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     }
     // File upload link
 	if ($is_certificate_mode) {
-?>
-	<a href="upload.php?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo $curdirpathurl.$req_gid; ?>">
-        <?php Display::display_icon('upload_certificate.png', get_lang('UploadCertificate'),'','32'); ?></a>
-<?php
+        echo '<a href="upload.php?'.api_get_cidreq().'&id='.$current_folder_id.$req_gid.'">';
+        echo Display::display_icon('upload_certificate.png', get_lang('UploadCertificate'),'','32').'</a>';
 	} else {
-?>
-    <a href="upload.php?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo $curdirpathurl.$req_gid; ?>">
-        <?php Display::display_icon('upload_file.png', get_lang('UplUploadDocument'),'','32'); ?></a>
-<?php
+        echo '<a href="upload.php?'.api_get_cidreq().'&id='.$current_folder_id.$req_gid.'">';
+        echo Display::display_icon('upload_file.png', get_lang('UplUploadDocument'),'','32').'</a>';
 	}
     // Create directory
     if (!$is_certificate_mode) {

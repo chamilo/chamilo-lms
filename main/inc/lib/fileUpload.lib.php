@@ -787,10 +787,12 @@ function filter_extension(&$filename) {
  */
 function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0) {
 	$session_id = api_get_session_id();
+	$readonly = intval($readonly);
+	$comment = Database::escape_string($comment);
+	
 	$table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-	$sql = "INSERT INTO $table_document
-	(path, filetype, size, title, comment, readonly, session_id)
-	VALUES ('$path','$filetype','$filesize','".
+	$sql = "INSERT INTO $table_document (path, filetype, size, title, comment, readonly, session_id)
+	        VALUES ('$path','$filetype','$filesize','".
 	Database::escape_string(htmlspecialchars($title, ENT_QUOTES, api_get_system_encoding()))."', '$comment', $readonly, $session_id)";
 	if (Database::query($sql)) {
 		//display_message("Added to database (id ".Database::insert_id().")!");
@@ -813,6 +815,9 @@ function add_document($_course, $path, $filetype, $filesize, $title, $comment = 
  */
 function update_existing_document($_course, $document_id, $filesize, $readonly = 0) {
 	$document_table = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+	$document_id = intval($document_id);
+	$filesize = intval($filesize);
+	$readonly = intval($readonly);
 	$sql = "UPDATE $document_table SET size = '$filesize' , readonly = '$readonly' WHERE id = $document_id";
 	if (Database::query($sql)) {
 		return true;
@@ -899,7 +904,8 @@ function set_default_settings($upload_path, $filename, $filetype = 'file') {
 	if (!$default_visibility) {
 		$default_visibility = 'v';
 	}
-
+	$filetype = Database::escape_string($filetype);
+	
 	$upload_path = str_replace('\\', '/', $upload_path);
 	$upload_path = str_replace('//', '/', $upload_path);
 
@@ -922,7 +928,7 @@ function set_default_settings($upload_path, $filename, $filetype = 'file') {
 	$row = Database::fetch_array($result);
 	if ($row['bestaat'] > 0) {
 		//$query = "update $dbTable set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
-		$query = "update $dbTable set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
+		$query = "UPDATE $dbTable SET path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
 	} else {
 		//$query = "INSERT INTO $dbTable (path,visibility,filetype) VALUES('$upload_path/$filename','$default_visibility','$filetype')";
 		$query = "INSERT INTO $dbTable (path,visibility,filetype) VALUES('$upload_path/$filename','$default_visibility','$filetype')";

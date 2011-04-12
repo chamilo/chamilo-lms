@@ -8,7 +8,9 @@
 
 $language_file = array('registration', 'admin');
 $cidReset = true;
-include '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
+
+api_protect_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';

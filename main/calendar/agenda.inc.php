@@ -166,10 +166,8 @@ function get_calendar_items($month, $year) {
 				$session_condition
 				GROUP BY ip.ref
 				ORDER BY start_date ".$_SESSION['sort'];
-		}
-		// A.3 you are a course admin without any group or user filter
+		} // A.3 you are a course admin without any group or user filter
 		else {
-
 			// A.3.a you are a course admin without user or group filter but WITH studentview
 			// => see all the messages of all the users and groups without editing possibilities
 			if ($_GET['isStudentView']=='true') {
@@ -375,6 +373,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName) {
 /**
 * show the calender of the given month
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Julio Montoya - adding some nice styles
 * @param integer $month: the integer value of the month we are viewing
 * @param integer $year: the 4-digit year indication e.g. 2005
 * @return html code
@@ -385,7 +384,7 @@ function display_monthcalendar($month, $year) {
 	global $origin;	
 
 	// Grabbing all the calendar items for this year and storing it in a array + my personal calendar events if exist and if enabled
-	$data = get_calendar_items($month,$year);
+	$data = get_calendar_items($month, $year);
 
 	//Handle leap year
 	$numberofdays = array(0,31,28,31,30,31,30,31,31,30,31,30,31);
@@ -424,7 +423,6 @@ function display_monthcalendar($month, $year) {
 		  		if (($curday == -1) && ($ii==$startdayofweek)) {
 		    		$curday = 1;
 				}
-
 				if (($curday>0)&&($curday<=$numberofdays[$month])) {
 
 					$bgcolor = $ii<5 ? 'class="row_odd"' : 'class="row_even"';
@@ -433,7 +431,8 @@ function display_monthcalendar($month, $year) {
 					if (key_exists($curday, $data)) {
 						foreach ($data[$curday] as $key=>$agenda_item) {
 
-							$dayheader 	= "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
+							//$day_url = "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
+							$dayheader = Display::div($curday, array('class'=>'agenda_day'));
 							$some_content = false;
 							foreach ($agenda_item as $key=>$value) {
 
@@ -444,56 +443,61 @@ function display_monthcalendar($month, $year) {
 									$some_content = true;
 
 									$start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT);
-									$end_time 	= api_convert_and_format_date($value['end_date'], TIME_NO_SEC_FORMAT);
-
+									$end_time = '';
+									if (!empty($value['end_date'])  && $value['end_date'] != '0000-00-00 00:00:00') {
+									   $end_time 	= api_convert_and_format_date($value['end_date'],   DATE_TIME_FORMAT_LONG);
+									}						
+									switch($value['calendar_type']) {
+									    case 'personal':
+									        $bg_color = '#58E24C';
+									        $subtitle = get_lang('MyAgenda');
+									        $time = '<i>'.$start_time.'</i>&nbsp;';
+									        break;
+									    case 'global':
+                                            $bg_color = '#FD553D';           
+                                            if (!empty($end_time)) {                                 
+                                                $time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
+                                            } else {
+                                                $time = '<i>'.$start_time.'</i>&nbsp;';    
+                                            }
+                                            $subtitle = get_lang('GlobalEvent');
+                                            break;
+									    case 'course':
+                                            $bg_color = '#FFF';
+                                            $subtitle = get_lang('Course');
+									        if (!empty($end_time)) {                                 
+                                                $time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
+                                            } else {
+                                                $time = '<i>'.$start_time.'</i>&nbsp;';    
+                                            }
+                                            break;
+                                        /*case 'work':
+                                            $bg_color = '#FDAC3D';
+                                            $subtitle = get_lang('Work');
+                                            $time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
+                                            break;*/      
+									    default:
+									        //$time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
+									        break;				            
+									}
 									//Setting a personal event to green
-									$personal_start =  $personal_end = '';
-									if ($value['calendar_type'] == 'personal') {
-										$personal_start = '<div style="color:green;">'.get_lang('MyAgenda');
-										$personal_end	= '</div>';
-									} elseif ($value['calendar_type'] == 'global') {
-										$personal_start = '<div style="color:red;">'.get_lang('GlobalEvent');
-										$personal_end	= '</div>';
-									}
-									$dayheader.= $personal_start;
-                                                    
-									$value['title'] = Display::tag('strong',$value['title']);
-									
-									if ($value['end_date']=='0000-00-00 00:00:00') {
-										$dayheader .= '<br />'.get_lang('Work').'<br />';
-										$dayheader .= $value['title'];
-										$dayheader .= '<br/>';
-									} else {
-										if ($value['calendar_type'] == 'personal') {
-											$dayheader .= '<br /><i>'.$start_time.'</i>&nbsp;</i>';
-										} else {
-											$dayheader .= '<br /><i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
-										}
-										$dayheader .= '<br />';
-										$dayheader .= $value['title'];
-										$dayheader .= '<br/>';
-									}
-									$dayheader .= $personal_end;
-								} else {
-									//$dayheader=$curday;
+									$dayheader.= '<div class="rounded_div_agenda" style="background-color:'.$bg_color.';">';
+								                                                    
+									$value['title'] = Display::tag('strong', $value['title']);									
+									$dayheader .= $time.' - '.$subtitle.'<br />'.$value['title'];
+									$dayheader .= '</div>';
 								}
 							}
 							//Do not show links with no content
 							if (!$some_content) {
 								$dayheader = $curday;
 							}
-
 						}
 					}
-					//var_dump($dayheader);
-
 					if (($curday==$today['mday']) && ($year ==$today['year'])&&($month == $today['mon'])) {
 						echo '<td class="days_today"'.$bgcolor.' style="height:122px;width:10%">'.$dayheader;
 	      			} else {
-	      			    $class = 'days_week';
-	      			    if (!is_numeric($dayheader)) {
-	      			        $class = 'days_week_selected';
-	      			    }	      			    
+	      			    $class = 'days_week';	      	      			    
 						echo '<td class="'.$class.'" '.$bgcolor.' style="height:122px;width:10%">'.$dayheader;						
 					}
 					echo '</td>';
@@ -2974,8 +2978,6 @@ function show_add_form($id = '') {
 }
 
 function get_agendaitems($month, $year) {
-	global $_configuration;
-
 	$items = array ();
 	$month = Database::escape_string($month);
 	$year = Database::escape_string($year);
@@ -3037,22 +3039,12 @@ function get_agendaitems($month, $year) {
 
 	$mycourse = api_get_course_info();
     $result = Database::query($sqlquery);
-    global $_configuration;
-   	$root_url = $_configuration['root_web'];
-	if ($_configuration['multiple_access_urls']) {
-		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1 ) {
-			$url = api_get_access_url($access_url_id);
-			$root_url = $url['url'];
-		}
-	}
-
-	while ($item = Database::fetch_array($result))
-	{
+    
+	while ($item = Database::fetch_array($result)) {
 		$agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
 		$agendaday = intval($agendaday_string);
 		$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT);
-		$URL = $root_url.'main/calendar/agenda.php?cidReq='.$mycourse['id']."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+		$URL = api_get_path(WEB_CODE_PATH).'calendar/agenda.php?cidReq='.$mycourse['id']."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 		$items[$agendaday][$item['start_time']] .= '<i>'.$time.'</i> <a href="'.$URL.'" title="'.$mycourse['name'].'">'.$mycourse['official_code'].'</a> '.$item['title'].'<br />';
 	}
 
@@ -3345,7 +3337,6 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
  * Show the monthcalender of the given month
  */
 function get_day_agendaitems($courses_dbs, $month, $year, $day) {
-	global $_configuration;
 	global $setting_agenda_link;
 
 	$items = array ();
@@ -3427,9 +3418,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day) {
 			} else {
 				$agenda_link = Display::return_icon('course_home.png','&nbsp;','',22);
 			}
-
-			//$URL = $_configuration['root_web'].$mycours["dir"]."/";
-			$URL = api_get_path(WEB_PATH).'main/calendar/agenda.php?cidReq='.urlencode($array_course_info["code"])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL = api_get_path(WEB_CODE_PATH).'calendar/agenda.php?cidReq='.urlencode($array_course_info["code"])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 
 			$items[$halfhour][] .= "<i>".$hours.":".$minutes."</i> <a href=\"$URL\" title=\"".$array_course_info['title']."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}
@@ -3450,7 +3439,6 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day) {
  * Return agenda items of the week
  */
 function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
-	global $_configuration;
 	global $setting_agenda_link;
 
 	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
@@ -3540,7 +3528,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 				$agenda_link = Display::return_icon('course_home.png','&nbsp;','',22);
 			}
 
-			$URL = $_configuration['root_web']."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			//Display the events in agenda
 			$items[$agendaday][$item['start_date']] .= "<i>$start_time - $end_time</i> <a href=\"$URL\" title=\"".$array_course_info["title"]."\">".$agenda_link."</a>";
 			$items[$agendaday][$item['start_date']] .= "<div>".$item['title']."</div><br>";
@@ -4275,7 +4263,7 @@ function add_year($timestamp,$num=1)
  * @param   int     Parent id (optional)
  * @return  int     The new item's DB ID
  */
-function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date,$to=array(), $parent_id=null,$file_comment='') {	
+function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date, $to = array(), $parent_id = null, $file_comment='') {	
     $user_id    = api_get_user_id();
 
     // database table definitions
@@ -4288,9 +4276,10 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 	$content    = Database::escape_string($content);
 	$db_start_date = api_get_utc_datetime($db_start_date);
     $start_date = Database::escape_string($db_start_date);
-    
-    $db_end_date = api_get_utc_datetime($db_end_date);
-    $end_date   = Database::escape_string($db_end_date);    
+    if (!empty($db_end_date)) {
+        $db_end_date = api_get_utc_datetime($db_end_date);        
+    }    
+    $end_date   = Database::escape_string($db_end_date);
     $id_session = api_get_session_id();
 
     // check if exists in calendar_event table and if it is not deleted!
@@ -4309,11 +4298,10 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     if ($count > 0) {
     	return false;
     }
-
     $sql = "INSERT INTO ".$t_agenda." (title,content, start_date, end_date".(!empty($parent_id)?',parent_event_id':'').", session_id)
             VALUES('".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id)?','.((int)$parent_id):'').", '".$id_session."')";
-
-    $result  = Database::query($sql) or die (Database::error());
+    
+    $result  = Database::query($sql);
     $last_id = Database::insert_id();
 
     // add a attachment file in agenda
@@ -4665,7 +4653,6 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 	$day   = Database::escape_string($day);
 	// 1. creating the SQL statement for getting the personal agenda items in MONTH view
 
-	global $_configuration;
 	$current_access_url_id = 1;
 	if ($_configuration['multiple_access_urls']) {
 		$current_access_url_id = api_get_current_access_url_id();
@@ -4717,18 +4704,19 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		$minute = $agendatime[1];
 		$second = $agendatime[2];
 		// if the student has specified a course we a add a link to that course
-		if ($item['course'] <> "") {
-			$url = $_configuration['root_web']."main/admin/agenda.php?cidReq=".urlencode($item['course'])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+		if ($item['course'] <> "") {	
+			$url = api_get_path(WEB_CODE_PATH)."admin/agenda.php?cidReq=".urlencode($item['course'])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$course_link = "<a href=\"$url\" title=\"".$item['course']."\">".$item['course']."</a>";
 		} else {
 			$course_link = "";
 		}
 		// Creating the array that will be returned. If we have week or month view we have an array with the date as the key
 		// if we have a day_view we use a half hour as index => key 33 = 16h30
-		if ($type !== "day_view") // This is the array construction for the WEEK or MONTH view
-		{
+		if ($type !== "day_view") {
+		    // This is the array construction for the WEEK or MONTH view
+		    
 			//Display the Agenda global in the tab agenda (administrator)
-			$agendaitems[$day] .= "".get_lang('StartTimeWindow')."&nbsp;<i>$hour:$minute</i>&nbsp;-&nbsp;";
+			$agendaitems[$day] .= "<i>$hour:$minute</i>&nbsp;-&nbsp;";
 			$agendaitems[$day] .= "<b>".get_lang('GlobalEvent')."</b>";
 			$agendaitems[$day] .= "<div>".$item['title']."</div><br>";
 		} else {
@@ -4740,7 +4728,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 			//$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> <b>".get_lang('Evento Global'). ":  </b><a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
 			if (!is_array($agendaitems[$halfhour]))
 	        	$content = $agendaitems[$halfhour];
-			$agendaitems[$halfhour] = $content."<div><i>$hour:$minute</i> <b>".get_lang('GlobalEvent'). ":  </b>".$item['title']."</div>";
+			    $agendaitems[$halfhour] = $content."<div><i>$hour:$minute</i> <b>".get_lang('GlobalEvent'). ":  </b>".$item['title']."</div>";
 		}
 	}
 	//print_r($agendaitems);

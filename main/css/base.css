@@ -90,10 +90,10 @@ input.maininput:focus {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #E5E5E5;
         
-    -webkit-border-radius: 11px 11px 11px 11px;
-    -opera-border-radius: 11px 11px 11px 11px;
-    -moz-border-radius: 11px 11px 11px 11px;
-	border-radius: 11px 11px 11px 11px;
+    -webkit-border-radius: 11px;
+    -opera-border-radius: 11px;
+    -moz-border-radius: 11px;
+    border-radius: 11px;
         
     -webkit-box-shadow: 0 4px 18px #C8C8C8;
     -opera-box-shadow: 0 4px 18px #C8C8C8;
@@ -265,4 +265,30 @@ padding-top:10px;
 
 .attendance-calendar-table td {
     height:66px;
+}
+
+
+.rounded_div_agenda {
+	background: none repeat scroll 0 0 #FFFFFF;
+        
+    -webkit-border-radius: 11px;
+    -opera-border-radius: 11px;
+    -moz-border-radius: 11px;
+    border-radius: 11px;
+        
+    -webkit-box-shadow: 0 4px 18px #C8C8C8;
+    -opera-box-shadow: 0 4px 18px #C8C8C8;
+    -moz-box-shadow: 0 4px 18px #C8C8C8;
+    box-shadow: 0 4px 18px #C8C8C8;
+    
+    float: left;
+    height: auto;
+    margin: 10px 8px 15px 15px;
+    padding: 8px;
+	width: 80%;
+}
+
+.agenda_day {
+	float:left;
+	margin:5px;    
 }

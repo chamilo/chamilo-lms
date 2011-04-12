@@ -295,11 +295,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 if ($_GET['view'] == 'month' || $_SESSION['view'] == 'month' ) {
     
-} else {
-    
+} else {    
 
-echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
-	  	<tr>';
+    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
 
 // THE LEFT PART
 if (empty($_GET['origin']) or $_GET['origin']!='learnpath') {
@@ -324,8 +322,7 @@ echo '<div class="sort" style="float:left">';
 echo '</div>';
 
 }
-if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true) )) {
-		
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true) )) {		
 	switch ($_GET['action']) {
 		case 'importical' :
 			if (isset($_POST['ical_submit'])) {
@@ -378,13 +375,13 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 }
 
 // this is for students and whenever the courseaministrator has not chosen any action. It is in fact the default behaviour
-if (!$_GET['action'] || $_GET['action']=='showall'  || $_GET['action']=='showcurrent' || $_GET['action']=="view") {
+if (!$_GET['action'] || $_GET['action']=='showall'  || $_GET['action']=='showcurrent' || $_GET['action']=="view") {    
 	if ($_GET['origin'] != 'learnpath') {
 		if (!$_SESSION['view'] || $_SESSION['view'] <> 'month') {
             if(!empty($_GET['agenda_id'])) {
                 display_one_agenda_item($_GET['agenda_id']);
             } else {
-			  display_agenda_items($select_month, $select_year);
+                display_agenda_items($select_month, $select_year);
             }
 		} else {
 			display_monthcalendar($select_month, $select_year);

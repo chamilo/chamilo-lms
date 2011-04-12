@@ -1006,6 +1006,7 @@ $ContactInformationHasNotBeenSent = "Vaših kontaktnih informacij ni mogoče odp
 $FileDeleted = "Datoteka je bila odstranjena";
 $MyClasses = "Moji razredi";
 $PublicationDate = "Datum objave";
+$CorrectAndRate = "Popravi in oceni";
 $ItemAdded = "Element dodan";
 $ItemDeleted = "Element je bil odstranjen";
 $ItemUpdated = "Element je bil ažuriran";

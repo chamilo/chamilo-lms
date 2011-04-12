@@ -287,6 +287,7 @@ $PublishedExercises = "Dosegljive vaje/testi";
 $DoneExercises = "Izvajane vaje/testi";
 $AverageExerciseResult = "Povprečen rezultat vaj/testov";
 $LPProgress = "Napredek učne poti";
+$Ranking = "Rangiraj";
 $BestResultInCourse = "Najboljši rezultat v tečaju";
 $ExerciseStartDate = "Datum objave";
 $OnlyBestResultsPerStudent = "V primeru večih poskusov, prikaži zgolj najboljši rezultat posameznega tečajnika";

@@ -381,4 +381,9 @@ $InsertALinkToThisQuestionInTheExercise = "Use this question in the test as a li
 $OnlyShowScore = "Show the score only";
 $ImportExcelQuiz = "Import quiz from Excel";
 $DownloadExcelTemplate = "Download the Excel Template";
+$ExerciseWillBeActivatedFromXToY = "Exercise will be activated from %s to %s";
+$EnableStartTime = "Enable start time";
+$EnableEndTime = "Enable end time";
+$ExerciseAvailableFromX = "Exercise available from %s";
+$ExerciseAvailableUntilX = "Exercise available until %s";
 ?>

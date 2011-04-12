@@ -375,7 +375,10 @@ $MultipleAnswerCombinationTrueFalse = "Kombinacija pravilno/nepravilno/ne-vem";
 $DontKnow = "Ne vem";
 $False = "Nepravilno";
 $DoubtScore = "Ne vem";
+$HotSpotDelineation = "Označevanje vročih točk";
 $PropagateNegativeResults = "Razširi negativne rezultate med vprašanji";
 $InsertALinkToThisQuestionInTheExercise = "Uporabi to vprašanje zgolj kot povezavo na vprašanje v testu (ne kopiraj vprašanja)";
 $OnlyShowScore = "Prikaži zgolj rezultat";
+$ImportExcelQuiz = "Uvozi vajo/test iz Excel-a";
+$DownloadExcelTemplate = "Naloži predlogo iz Excel-a";
 ?>

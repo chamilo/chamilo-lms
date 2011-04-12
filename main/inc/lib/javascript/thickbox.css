@@ -46,7 +46,7 @@
 	color:#000000;
 	display:none;	
 	text-align:left;  
-    background-color: #34393A;
+    background-color: #fff;
 			
 	box-shadow:0 0 90px 5px #000;
     -moz-box-shadow:0 0 90px 5px #000;
@@ -79,15 +79,11 @@
     float:left;
 }
 #TB_closeWindow{
-  
-
-  
-      height: 29px;
+	height: 29px;
     padding: 8px 10px 10px 0;
     position: absolute;
     right: -28px;
-    top: -28px;
-	
+    top: -28px;	
 }
 #TB_closeAjaxWindow{
   padding:7px 10px 5px 0;
@@ -110,7 +106,7 @@
 	overflow:auto;
 	text-align:left;
 	line-height:1.4em;
-	background-color: #ccc;
+	background-color: #fff;
 }
 #TB_ajaxContent.TB_modal{
   padding:15px;

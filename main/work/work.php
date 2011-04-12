@@ -537,15 +537,15 @@ if (!empty($_REQUEST['new_dir'])) {
 				require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
 				require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 				$course = isset($course_info) ? $course_info : null;
-				$date = api_get_utc_datetime();
+				$date = time();
 				$title = Security::remove_XSS($_POST['new_dir']);
 				if (!empty($_POST['type1'])) {
-					$date = api_get_utc_datetime(get_date_from_select('expires'));
+					$date = get_date_from_select('expires');
 					$title = sprintf(get_lang('HandingOverOfTaskX'),Security::remove_XSS($_POST['new_dir']));
 				}
 				$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.substr(Security::remove_XSS($dir_name_sql), 1).'" >'.Security::remove_XSS($_POST['new_dir']).'</a> - '.Security::remove_XSS($_POST['description']);
 				
-				$agenda_id = agenda_add_item($course, $title, $content, $date, $date, array('GROUP:'.$toolgroup), 0);
+				$agenda_id = agenda_add_item($course, $title, $content, $date, '', array('GROUP:'.$toolgroup), 0);
 			}
 			$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
 									   "url         = '".Database::escape_string($dir_name_sql)."',
@@ -583,12 +583,12 @@ if (!empty($_REQUEST['new_dir'])) {
 			if (!empty($_POST['type1']) || !empty($_POST['type2'])) {
 
 				$enable_calification = isset($_POST['enable_calification']) ? (int)$_POST['enable_calification'] : null;
-				$sql_add_homework = "INSERT INTO $TSTDPUBASG SET " .
-														   "expires_on         = '".((isset($_POST['type1']) && $_POST['type1']==1) ? api_get_utc_datetime(get_date_from_select('expires')) : '0000-00-00 00:00:00'). "',
-													        ends_on        = '".((isset($_POST['type2']) && $_POST['type2']==1) ? api_get_utc_datetime(get_date_from_select('ends')) : '0000-00-00 00:00:00')."',
-										                    add_to_calendar  = '$agenda_id',
-										                    enable_qualification = '".$enable_calification."',
-										                    publication_id = '".$id."'";
+				$sql_add_homework = "INSERT INTO $TSTDPUBASG SET
+    								    expires_on         = '".((isset($_POST['type1']) && $_POST['type1']==1) ? api_get_utc_datetime(get_date_from_select('expires')) : '0000-00-00 00:00:00'). "',
+    							        ends_on        = '".((isset($_POST['type2']) && $_POST['type2']==1) ? api_get_utc_datetime(get_date_from_select('ends')) : '0000-00-00 00:00:00')."',
+    				                    add_to_calendar  = '$agenda_id',
+    				                    enable_qualification = '".$enable_calification."',
+    				                    publication_id = '".$id."'";
 				Database::query($sql_add_homework);
 
 				$sql_add_publication = "UPDATE ".$work_table." SET "."has_properties  = ".Database::insert_id().", view_properties = 1 ".' where id = '.$id;
@@ -596,12 +596,12 @@ if (!empty($_REQUEST['new_dir'])) {
 
 			} else {
 
-				$sql_add_homework = "INSERT INTO $TSTDPUBASG SET " .
-														   "expires_on     = '0000-00-00 00:00:00',
-													        ends_on        = '0000-00-00 00:00:00',
-										                    add_to_calendar  = '$agenda_id',
-										                    enable_qualification = '".(isset($_POST['enable_calification'])?(int)$_POST['enable_calification']:'')."',
-										                    publication_id = '".$id."'";
+				$sql_add_homework = "INSERT INTO $TSTDPUBASG SET 
+    								    expires_on     = '0000-00-00 00:00:00',
+    							        ends_on        = '0000-00-00 00:00:00',
+    				                    add_to_calendar  = '$agenda_id',
+    				                    enable_qualification = '".(isset($_POST['enable_calification'])?(int)$_POST['enable_calification']:'')."',
+    				                    publication_id = '".$id."'";
 				Database::query($sql_add_homework);
 
 				$sql_add_publication = "UPDATE ".$work_table." SET "."has_properties  = ".Database::insert_id().", view_properties = 0 ".' where id = '.$id;
@@ -623,7 +623,7 @@ if (!empty($_REQUEST['new_dir'])) {
 
 			// end features
 
-			if(api_get_course_setting('email_alert_students_on_new_homework') == 1) {
+			if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
 				send_email_on_homework_creation(api_get_course_id());
 			}
 

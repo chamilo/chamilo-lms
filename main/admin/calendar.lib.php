@@ -474,12 +474,11 @@ function display_student_links() {
 		Display::return_icon('month_empty.png',get_lang('MonthView'),'','32').'</a>';
 		if ($_SESSION['sort'] == 'DESC') {
 			echo '<a href="'.api_get_self().'?sort=asc&amp;origin='.Security::remove_XSS($_GET['origin']).'">'.Display::return_icon('calendar_normal.png',get_lang('AgendaSortChronologicallyUp'),'','32').'</a>';
-		}
-		else {
-			echo '<a href="'.api_get_self().'?sort=desc&amp;origin='.Security::remove_XSS($_GET['origin']).'"> '.Display::return_icon('calendar_inverse.png',get_lang('AgendaSortChronologicallyDown'),'','32').'</a>';
+		} else {
+			//echo '<a href="'.api_get_self().'?sort=desc&amp;origin='.Security::remove_XSS($_GET['origin']).'"> '.Display::return_icon('calendar_inverse.png',get_lang('AgendaSortChronologicallyDown'),'','32').'</a>';
 		}
 	} else {		
-		echo '<a href="'.api_get_self().'?action=view&amp;view=list">'.Display::return_icon('appointments.png', get_lang('ListView'),'','32').'</a>';
+		echo '<a href="'.api_get_self().'?action=view&amp;view=list">'.Display::return_icon('week.png', get_lang('ListView'),'','32').'</a>';
 
 	}
 }

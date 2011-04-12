@@ -107,8 +107,11 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 				$items[$agendaday]=array();
 			}
 			$time     = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT);
-			$end_time = api_convert_and_format_date($item['end_date'], DATE_TIME_FORMAT_LONG);
-			$URL      = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$end_time = '';
+			if ($item['end_date'] != '0000-00-00 00:00:00') {
+                $end_time = '&nbsp;-&nbsp;<i>'.api_convert_and_format_date($item['end_date'], DATE_TIME_FORMAT_LONG).'</i>';
+			}
+			$URL      = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday";
 			if ($setting_agenda_link == 'coursecode') {
 				$title=$array_course_info['title'];
 				$agenda_link = api_substr($title, 0, 14);
@@ -118,7 +121,7 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 			if(!isset($items[$agendaday][$item['start_date']])) {
 				$items[$agendaday][$item['start_date']] = '';
 			}
-			$items[$agendaday][$item['start_date']] .= "<i>".$time."</i>"."&nbsp;-&nbsp;<i>".$end_time."</i>&nbsp;";
+			$items[$agendaday][$item['start_date']] .= "<i>$time</i> $end_time &nbsp;";
 			$item['title'] = '<strong>'.$item['title'].'</strong>';
 			$items[$agendaday][$item['start_date']] .= '<br />'."<a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br /> ";
 			$items[$agendaday][$item['start_date']] .= '<br/>';

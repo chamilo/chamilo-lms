@@ -4703,6 +4703,14 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		$hour = $agendatime[0];
 		$minute = $agendatime[1];
 		$second = $agendatime[2];
+		
+		
+		$start_time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT);
+		$end_time = '';
+		if ($item['end_date'] != '0000-00-00 00:00:00') {
+            $end_time = ' - '.api_convert_and_format_date($item['end_date'], DATE_TIME_FORMAT_LONG);
+		}
+		
 		// if the student has specified a course we a add a link to that course
 		if ($item['course'] <> "") {	
 			$url = api_get_path(WEB_CODE_PATH)."admin/agenda.php?cidReq=".urlencode($item['course'])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
@@ -4716,7 +4724,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		    // This is the array construction for the WEEK or MONTH view
 		    
 			//Display the Agenda global in the tab agenda (administrator)
-			$agendaitems[$day] .= "<i>$hour:$minute</i>&nbsp;-&nbsp;";
+			$agendaitems[$day] .= "<i>$start_time $end_time</i>&nbsp;-&nbsp;";
 			$agendaitems[$day] .= "<b>".get_lang('GlobalEvent')."</b>";
 			$agendaitems[$day] .= "<div>".$item['title']."</div><br>";
 		} else {

@@ -29,15 +29,14 @@ $tool_name= get_lang('SubscribeCoursesToSession');
 
 $id_session=intval($_GET['id_session']);
 
-if(!api_is_platform_admin())
-{
+if (!api_is_platform_admin()) {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
 	$rs = Database::query($sql);
-	if(Database::result($rs,0,0)!=$_user['user_id'])
-	{
+	if(Database::result($rs,0,0)!= api_get_user_id()) {
 		api_not_allowed(true);
 	}
 }
+
 /*
 	Libraries
 */
@@ -153,33 +152,26 @@ echo "<a name=\"top\"></a>";
 //setting the default year and month
 $select_year = '';
 $select_month = '';
-if(!empty($_GET['year']))
-{
+if(!empty($_GET['year'])) {
 	$select_year = (int)$_GET['year'];
 }
-if(!empty($_GET['month']))
-{
+if(!empty($_GET['month'])) {
 	$select_month = (int)$_GET['month'];
 }
-if (empty($select_year) && empty($select_month))
-{
+if (empty($select_year) && empty($select_month)) {
 	$today = getdate();
 	$select_year = $today['year'];
 	$select_month = $today['mon'];
 }
 
 echo '<div class="actions">';
-if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
-{
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) {
 	display_student_links();
 	display_courseadmin_links();
 }
 
 echo '</div><br /><br />';
-
-
-echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">'
-		. '<tr>';
+echo '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
 
 // THE LEFT PART
 if (empty($_GET['origin']) or $_GET['origin']!='learnpath') {
@@ -204,28 +196,27 @@ echo '<div class="sort" style="float:right">';
 
 echo '</div>';
 if (api_is_allowed_to_edit(false,true)) {
-	switch ($_GET['action'])
-	{
+	switch ($_GET['action']) {
 		case "add":
             if(!empty($_POST['ical_submit'])) {
                 $course_info = api_get_course_info();
-                agenda_import_ical($course_info,$_FILES['ical_import']);                
+                agenda_import_ical($course_info, $_FILES['ical_import']);                
                 display_agenda_items();
             } elseif ($_POST['submit_event']) {
 
-		     $course_info = api_get_course_info();
+		        $course_info = api_get_course_info();
 			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
                 $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
-
+                
 				$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$_POST['file_comment']);
-
+/*
                 if(!empty($_POST['repeat'])) {
                 	$end_y = intval($_POST['repeat_end_year']);
                     $end_m = intval($_POST['repeat_end_month']);
                     $end_d = intval($_POST['repeat_end_day']);
                     $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
                     $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,null,$_POST['file_comment']);
-                }                
+                }*/                
 				display_agenda_items();
 			} else {
 				show_add_form();
@@ -235,14 +226,14 @@ if (api_is_allowed_to_edit(false,true)) {
 		case "edit":
 			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id']) ) ) )
 			{ // a coach can only delete an element belonging to his session
-				if ($_POST['submit_event'])
-				{		$my_id_attach = (int)$_REQUEST['id_attach'];
-						$my_file_comment = Database::escape_string($_REQUEST['file_comment']);
-						store_edited_agenda_item($my_id_attach,$my_file_comment);
-						display_agenda_items();
+				if ($_POST['submit_event']) {		
+			        $my_id_attach = (int)$_REQUEST['id_attach'];
+					$my_file_comment = Database::escape_string($_REQUEST['file_comment']);
+					store_edited_agenda_item($my_id_attach,$my_file_comment);
+					display_agenda_items();
 				} else {
-						$id=(int)$_GET['id'];
-						show_add_form($id);
+					$id=(int)$_GET['id'];
+					show_add_form($id);
 				}
 			} else {
 				display_agenda_items();
@@ -296,28 +287,18 @@ if (api_is_allowed_to_edit(false,true)) {
 }
 
 // this is for students and whenever the courseaministrator has not chosen any action. It is in fact the default behaviour
-if (!$_GET['action'] OR $_GET['action']=="showall"  OR $_GET['action']=="showcurrent" OR $_GET['action']=="view")
-{
-	if ($_GET['origin'] != 'learnpath')
-	{
-		if (!$_SESSION['view'] OR $_SESSION['view'] <> 'month')
-		{
-            if(!empty($_GET['agenda_id']))
-            {
+if (!$_GET['action'] OR $_GET['action']=="showall"  OR $_GET['action']=="showcurrent" OR $_GET['action']=="view") {
+	if ($_GET['origin'] != 'learnpath') {
+		if (!$_SESSION['view'] OR $_SESSION['view'] <> 'month') {
+            if(!empty($_GET['agenda_id'])) {
                  display_one_agenda_item((int)$_GET['agenda_id']);
-            }
-            else
-            {
+            } else {
 			     display_agenda_items();
             }
-		}
-        else
-        {
+		} else {
 			display_monthcalendar($select_month, $select_year);
 		}
-	}
-	else
-	{
+	} else {
 		display_one_agenda_item((int)$_GET['agenda_id']);
 	}
 }
@@ -330,4 +311,3 @@ echo "&nbsp;</td></tr></table>";
 if ($_GET['origin'] != 'learnpath') {
 	Display::display_footer();
 }
-?>

@@ -1389,4 +1389,13 @@ $SearchEnabledTitle = "Recherche full-text";
 $SearchEnabledComment = "Cette fonctionnalité vous permet d'indexer la plupart des documents envoyés sur votre portail, et ainsi fournir à vos utilisateurs une fonctionnalité complète de recherche de contenus.<br />
 Cette fonctionnalité n'indexera pas les documents qui ont déjà été envoyés, c'est pourquoi il est important de l'activer au début d'une implémentarion.<br />
 Une fois activée, une boîte de recherche apparaîtra dans la liste de cours des utilisateurs. La recherche sur un terme spécifique générera une liste des documents, exercices ou sujets de forum correspondants, filtrés selon la disponibilité de ces contenus pour les utilisateurs.";
+$SpecificSearchFieldsAvailable = "Champs de recherche personnalisables disponibles";
+$XapianModuleInstalled = "Module Xapian installé";
+$ProgramsNeededToConvertFiles = "Programmes nécessaires pour indexer des fichiers de formats externes";
+$YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool = "Vous utilisez Chamilo sur une plateforme Windows. Lamentablement, il est impossible de convertir les documents sur cette architecture pour pouvoir ensuite les indexer et lancer des recherches sur leur contenu.";
+$HideCoursesInSessionsTitle = "Cacher les cours dans les sessions";
+$HideCoursesInSessionsComment = "Lorsque les sessions apparaîssent sur la page des cours, cacher la liste des cours au sein des sessions (seulement montrer les cours au sein de l'écran spécifique aux sessions).";
+$ShowGroupsToUsersTitle = "Montrer les classes aux apprenants";
+$ShowGroupsToUsersComment = "Montrer les classes aux utilisateurs. La fonctionnalité de classes permet d'inscrire/désinscrir des goupes d'utilisateurs à une session ou un cours directement, réduisant ainsi la charge administrative pour les inscriptions. Lorsque cette fonctionnalité est sélectionnée, les utilisateurs peuvent voir à quelle classe ils appartiennent à partir de leur interface de réseau social.";
+$HomepageViewActivityBig = "Vue activité élargie (style iPad)";
 ?>

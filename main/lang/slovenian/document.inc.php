@@ -260,4 +260,5 @@ $Pediaphon = "Uporabi Pediaphon avdio storitve";
 $HelpPediaphon = "Podpira besedilo do nekaj 1000 znakov in različne vrste moških in ženskih glasov, odvisno od izbranega jezika. Generirane zvočne datoteke se samodejno prenesejo v trenutno Chamilo mapo.";
 $FirstSelectALanguage = "Izberite jezik";
 $RenameAndComment = "Preimenuj in komentiraj";
+$YouAreCurrentlyUsingXOfYourX = "Trenutno uporabljate %s (%s) od vaših (%s).";
 ?>

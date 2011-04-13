@@ -1392,4 +1392,8 @@ $LastXMonths = "Ultimi %i mesi";
 $NeverConnected = "Mai collegato";
 $EnableAccessibilityFontResizeTitle = "Accessibilità e ridimensionamento caratteri";
 $EnableAccessibilityFontResizeComment = "Attivando la funzione, in alto a destra dello schermo compariranno i comandi per il ridimensionamento dei caratteri per migliorare l'accessibilità al Campus";
+$GlobalEvent = "Evento del Campus virtuale";
+$SearchEnabledTitle = "Ricerca a testo completo";
+$SpecificSearchFieldsAvailable = "Campi disponibili per la ricerca personalizzata";
+$XapianModuleInstalled = "Modulo Xapian installato";
 ?>

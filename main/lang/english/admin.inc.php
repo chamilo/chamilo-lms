@@ -1389,4 +1389,13 @@ This feature will not index documents that have already been uploaded, so it is 
 Once enabled, a search box will appear in the courses list of every user. Searching for a specific term will bring a list of corresponding documents, exercises or forum topics, filtered depending on the availability of these contents to the user.";
 $SpecificSearchFieldsAvailable = "Available custom search fields";
 $XapianModuleInstalled = "Xapian module installed";
+$ProgramsNeededToConvertFiles = "Programs needed to convert files";
+$YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool = "You are using Chamilo in a Windows platform, sadly you can't convert documents in order to search the content using this tool";
+$HideCoursesInSessionsTitle = "Hide courses list in sessions";
+$HideCoursesInSessionsComment = "When showing the session block in your courses page, hide the list of courses inside that session (only show them inside the specific session screen).";
+$ShowGroupsToUsersTitle = "Show classes to users";
+$ShowGroupsToUsersComment = "Show the classes to users. Classes are a feature that allow you to register/unregister groups of users into a session or a course directly, reducing the administrative hassle. When you pick this option, learners will be able to see in which class they are through their social network interface.";
+$HomepageViewActivityBig = "Big activity view (Ipad style)";
+$EnableNanogongTitle = "Activate recorder - voice player Nanogong";
+$EnableNanogongComment = "Nanongong is a recorder - voice player that allows you to record your voice and send it to the platform or download it into your hard drive. It also lets you play what you recorded. The students only need a microphone and speakers, and accept the load applet when first loaded. It is very useful for language learners to hear his voice after listening the correct pronunciation proposed by teacher in another wav or mp3 voice file.";
 ?>

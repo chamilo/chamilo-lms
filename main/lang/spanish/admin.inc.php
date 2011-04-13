@@ -1391,4 +1391,13 @@ Esta funcionalidad no indexa los documentos que ya estuvieron subidos anteriorme
 Una vez activada, una caja de búsqueda aparecerá en la lista de cursos de cada usuario. Buscar un término específico trae una lista de documentos, ejercicios o temas de foro correspondientes, filtrados dependiendo de su disponibilidad para el usuario.";
 $SpecificSearchFieldsAvailable = "Campos de búsqueda personalizados disponibles";
 $XapianModuleInstalled = "Módulo Xapian instalado";
+$ProgramsNeededToConvertFiles = "Programas necesarios para indexar archivos de formatos ajenos";
+$YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool = "Está usando Chamilo en una plataforma Windows. Lamenablemente, no puede convertir los documentos para indexarlos usando esta herramienta.";
+$HideCoursesInSessionsTitle = "Esconder cursos en lista de sesiones";
+$HideCoursesInSessionsComment = "Cuando muestra los bloques de sesiones en la página de cursos, esconder la lista de cursos dentro de la sesión (solo mostrarlos en la página específica de sesión).";
+$ShowGroupsToUsersTitle = "Mostrar las clases a los usuarios";
+$ShowGroupsToUsersComment = "Mostrar las clases a los usuarios. Las clases son una funcionalidad que permite subscribir/desuscribir grupos de usuarios dentro de una sesión o un curso directamente, reduciendo el trabajo administrativo. Cuando activa esta opción, los alumnos pueden ver de que clase forman parte, a través de su interfaz de red social.";
+$HomepageViewActivityBig = "Grande vista actividad (estilo iPad)";
+$EnableNanogongTitle = "Activar el grabador - reproductor de voz Nanogong";
+$EnableNanogongComment = "Nanogong es un grabador - reproductor de voz que le permite grabar su voz y enviarla a la plataforma o descargarla en su disco duro. También permite reproducir la grabación. Los estudiantes sólo necesitan un micrófono y unos altavoces, y aceptar la carga del applet cuando se cargue por primera vez. Es muy útil para que los estudiantes de idiomas puedan oir su voz después de oir la correcta pronunciación propuesta por el profesor en otro archivo wav o mp3.";
 ?>

@@ -100,7 +100,7 @@ $main_course_table 	= Database :: get_main_table(TABLE_MAIN_COURSE);
 $work_table 		= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 $iprop_table 		= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $TSTDPUBASG			= Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-$t_gradebook_link 	= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+//$t_gradebook_link 	= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_course_user	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user			= Database :: get_main_table(TABLE_MAIN_USER);
 $table_session		= Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -675,8 +675,13 @@ if (!empty($_REQUEST['delete2'])) {
 	}
 	$sql2 = "DELETE FROM $TSTDPUBASG WHERE publication_id ='$delete_2'";
 	$result2 = Database::query($sql2);
-	$sql3 = "DELETE FROM $t_gradebook_link WHERE course_code='$course_code' AND ref_id='$delete_2'";
-	$result3 = Database::query($sql3);
+	/*$sql3 = "DELETE FROM $t_gradebook_link WHERE course_code='$course_code' AND ref_id='$delete_2'";
+	$result3 = Database::query($sql3);*/	
+    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+    $link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $delete_2, api_get_session_id());
+    if ($link_id !== false) {
+        remove_resource_from_course_gradebook($link_id);
+    }
 }
 
 /*	Move file form request */

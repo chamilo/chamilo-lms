@@ -80,9 +80,14 @@ function handle_forum_and_forumcategories() {
 
         for ($i = 0; $i < count($list_threads); $i++) {
             $messaje = delete_forum_forumcategory_thread('thread', $list_threads[$i]['thread_id']);
-            $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+            /*$table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
             $sql_link = 'DELETE FROM '.$table_link.' WHERE ref_id='.$list_threads[$i]['thread_id'].' and type=5 and course_code="'.api_get_course_id().'";';
-            Database::query($sql_link);
+            Database::query($sql_link);*/            
+            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+            $link_id = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($list_threads[$i]['thread_id']), api_get_session_id());
+            if ($link_id !== false) {
+                remove_resource_from_course_gradebook($link_id);
+            }
         }
         $return_message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']);
         Display::display_confirmation_message($return_message, false);

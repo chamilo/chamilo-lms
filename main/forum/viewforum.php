@@ -142,8 +142,14 @@ if (($my_action == 'lock' OR $my_action == 'unlock') AND isset($_GET['content'])
 if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true)) {
     $message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']); // Note: This has to be cleaned first.
     // Delete link
-    $sql_link = 'DELETE FROM '.$table_link.' WHERE ref_id='.intval($_GET['id']).' and type=5 and course_code="'.api_get_course_id().'";';
-    Database::query($sql_link);
+    
+    /*$sql_link = 'DELETE FROM '.$table_link.' WHERE ref_id='.intval($_GET['id']).' and type=5 and course_code="'.api_get_course_id().'";';
+    Database::query($sql_link);*/    
+    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+    $link_id = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($_GET['id']), api_get_session_id());
+    if ($link_id !== false) {
+        remove_resource_from_course_gradebook($link_id);
+    }
 }
 // Moving.
 if ($my_action == 'move' AND isset($_GET['thread']) AND api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true)) {

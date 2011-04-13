@@ -382,8 +382,8 @@ event_access_tool(TOOL_QUIZ);
 // Tool introduction
 Display :: display_introduction_section(TOOL_QUIZ);
 
-HotPotGCt($documentPath, 1, $_user['user_id']);
-$tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+HotPotGCt($documentPath, 1, api_get_user_id() );
+
 // only for administrator
 
 if ($is_allowedToEdit) {
@@ -396,18 +396,12 @@ if ($is_allowedToEdit) {
 			if ($check) {
 				switch ($choice) {
 					case 'delete' : // deletes an exercise
-						$objExerciseTmp->delete();
-						//delete link of exercise of gradebook tool
-						$sql = 'SELECT gl.id FROM ' . $tbl_grade_link . ' gl WHERE gl.type="1" AND gl.ref_id="' . $exerciseId . '";';
-						$result = Database::query($sql);
-						$row = Database :: fetch_array($result, 'ASSOC');
-						//see
-						if (!empty($row['id'])) {
-	                 		$link = LinkFactory :: load($row['id']);
-	                     		if ($link[0] != null) {
-	                            	$link[0]->delete();
-	                     		}
-	           			}
+						$objExerciseTmp->delete();						
+						require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+						$link_id = is_resource_in_course_gradebook(api_get_course_id(), 1 , $exerciseId, api_get_session_id());
+						if ($link_id !== false) {
+						    remove_resource_from_course_gradebook($link_id);
+						}
 						Display :: display_confirmation_message(get_lang('ExerciseDeleted'));
 						break;
 					case 'enable' : // enables an exercise

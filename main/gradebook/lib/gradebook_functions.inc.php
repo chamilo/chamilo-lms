@@ -300,6 +300,26 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
     $row = Database::fetch_array($res);
     return $row['id'];
 }
+
+/**
+ * Remove a resource from the unique gradebook of a given course
+ * @param    int     Link/Resource ID
+ * @return   bool    false on error, true on success
+ */
+function get_resource_from_course_gradebook($link_id) {
+    if ( empty($link_id) ) { return false; }
+    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
+    // TODO find the corresponding category (the first one for this course, ordered by ID)
+    $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+    $sql = "SELECT * FROM $l WHERE id = ".(int)$link_id;
+    $res = Database::query($sql);
+    $row = array();
+    if (Database::num_rows($res) > 0) {
+        $row = Database::fetch_array($res, 'ASSOC');
+    }
+    return $row;
+}
+
 /**
  * Remove a resource from the unique gradebook of a given course
  * @param    int     Link/Resource ID

@@ -626,7 +626,12 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 							}
 							//if($_POST['qualification']['qualification']!='')
 							Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
-							Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'');
+							
+							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+                            $link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $row['id'], api_get_session_id());
+                            if ($link_id !== false) {
+                                Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string((float)$_POST['weight']['weight'])."'".' WHERE id = '.$link_id);    
+                            }						
 
 						    //we are changing the current work and we want add them into gradebook
 							if (isset($_POST['make_calification']) && $_POST['make_calification'] == 1) {
@@ -658,7 +663,6 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 								Database::query($sql);
 							}
 							Display::display_confirmation_message(get_lang('FolderEdited'));
-
 						} else {
 							Display::display_warning_message(get_lang('FileExists'));
 						}
@@ -722,11 +726,21 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$row[] = '<span class="invisible" style="display:none">'.$dir.'</span>'.$form_folder->toHtml(); // form to edit the directory's name
 			} else {
 				$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$mydir.'">'.$icon.'</a>';
-				$tbl_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+				
 				$add_to_name = '';
-				$sql = "SELECT weight FROM ". $tbl_gradebook_link ." WHERE type='3' AND ref_id= '".$id2."'";
-				$result = Database::query($sql);
-				$count = Database::num_rows($result);
+				/*
+				$tbl_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+				$sql = "SELECT weight FROM ". $tbl_gradebook_link ." WHERE type='3' AND ref_id= '".$id2."'";				
+                $result = Database::query($sql);
+                $count = Database::num_rows($result);
+                */
+			    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+                $link_id = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id2 , api_get_session_id());
+                $count  = 0;
+                if ($link_id !== false) {
+                   $gradebook_data = get_resource_from_course_gradebook($link_id);
+                   $count = $gradebook_data['weight'];                   
+                }				
 				if ($count > 0) {
 					$add_to_name = ' / <span style="color:blue">'.get_lang('IncludedInEvaluation').'</span>';
 				} else {

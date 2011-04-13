@@ -899,18 +899,25 @@ class learnpath {
         api_item_property_update(api_get_course_info(), TOOL_LEARNPATH, $this->lp_id, 'delete', api_get_user_id());
 
         require_once '../gradebook/lib/be.inc.php';
-        $tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        // Delete link of gradebook tool.
-        $sql = 'SELECT gl.id FROM ' . $tbl_grade_link . ' gl WHERE gl.type="4" AND gl.ref_id="' . $id . '";';
+        
+        // Delete link of gradebook tool
+        //$tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        /*$sql = 'SELECT gl.id FROM ' . $tbl_grade_link . ' gl WHERE gl.type="4" AND gl.ref_id="' . $id . '";';
         $result = Database::query($sql);
-        $row = Database :: fetch_array($result, 'ASSOC');
+        $row = Database :: fetch_array($result, 'ASSOC');*/
 
         // Fixing gradebook link deleted see #5229.
+        /*
         if (!empty($row['id'])) {
                $link = LinkFactory :: load($row['id']);
             if ($link[0] != null) {
                    $link[0]->delete();
             }
+        }*/        
+        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+        $link_id = is_resource_in_course_gradebook(api_get_course_id(), 4 , $id, api_get_session_id());
+        if ($link_id !== false) {
+            remove_resource_from_course_gradebook($link_id);
         }
 
         if (api_get_setting('search_enabled') == 'true') {

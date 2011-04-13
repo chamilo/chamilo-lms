@@ -1033,4 +1033,14 @@ $OnlyLettersAndNumbers = "Solo letras (a-z) y nǔmeros (0-9)";
 $CheckFilePermissions = "Verificar permisos de ficheros";
 $AddedToALP = "Añadido a una lección";
 $NotAvailable = "No disponible";
+$NanogongNoApplet = "No se puede encontrar el applet Nanogong";
+$NanogongRecordBeforeSave = "Antes de intentar enviar el archivo debe realizar la grabación";
+$NanogongGiveTitle = "No ha dado un nombre al archivo";
+$NanogongFailledToSubmit = "No se ha podido enviar la grabación";
+$NanogongSubmitted = "La grabación ha sido enviada";
+$RecordMyVoice = "Grabar mi voz";
+$PressRecordButton = "Para iniciar la grabación pulse el botón rojo";
+$VoiceRecord = "Grabación de voz";
+$BrowserNotSupportNanogongSend = "Su navegador no permite enviar su grabación a la plataforma, aunque sí podrá guardarla el el disco de su ordenador y enviarla más tarde. Para tener todas las prestaciones, le recomendamos usar navegadores avanzados como Firefox o Chrome.";
+$FileExistRename = "Ya existe un archivo con el mismo nombre. Por favor, de un nuevo nombre al archivo.";
 ?>

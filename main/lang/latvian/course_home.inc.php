@@ -30,4 +30,5 @@ $SessionName = "Sesijas nosaukums";
 $SessionCategory = "Sesijas kategorijas";
 $SessionData = "Sesiju dati";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Apmācības automātiskās palaišanas iestatījums ir IESLĒGTS. <br>Kad studenti atvērs šo kursu, tie tiks automātiski virzīti apmācības procesā.";
+$ToolSearch = "Meklēt";
 ?>

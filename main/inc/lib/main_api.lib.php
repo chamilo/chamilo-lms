@@ -4724,15 +4724,16 @@ function api_get_template($path_type = 'rel') {
 }
 
 /**
- * Check browser support for svg files
- ** This function check if the users browser support a file format
+ * Check browser support for type files
+ ** This function check if the users browser support a file format or return the current browser and major ver when $format=check_browser
  * @param string $format
- * @return bool
  *
+ * @return bool, or return text array if $format=check_browser
+ * 
  * @author Juan Carlos Raña Trabado
  */
  
-function api_browser_support($format) {
+function api_browser_support($format="") {
     require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
     $browser = new Browser();
     //print_r($browser);
@@ -4756,6 +4757,10 @@ function api_browser_support($format) {
 		else {
 			return false;
 		}		
+	}
+	elseif($format=="check_browser"){
+		$array_check_browser=array($current_browser, $current_majorver);		
+		return $array_check_browser;
 	}
 	else{
 		return false;

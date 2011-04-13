@@ -821,7 +821,8 @@ VALUES
 ('accessibility_font_resize',NULL,'radio','Platform','false','EnableAccessibilityFontResizeTitle','EnableAccessibilityFontResizeComment',NULL,NULL, 1),
 ('hide_courses_in_sessions',NULL,'radio', 'Platform','false','HideCoursesInSessionsTitle',	'HideCoursesInSessionsComment','platform',NULL, 1),
 ('enable_quiz_scenario',  NULL,'radio','Course','false','EnableQuizScenarioTitle','EnableQuizScenarioComment',NULL,NULL, 1),
-('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.14269','DokeosDatabaseVersion','', NULL, NULL, 0);
+('enable_nanogong',NULL,'radio','Tools','false','EnableNanogongTitle','EnableNanogongComment',NULL,NULL, 0),
+('chamilo_database_version',NULL,'textfield',NULL, '1.8.8.14270','DokeosDatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1085,7 +1086,9 @@ VALUES
 ('hide_courses_in_sessions','true','Yes'),
 ('hide_courses_in_sessions','false','No'),
 ('enable_quiz_scenario', 'true', 'Yes'),
-('enable_quiz_scenario', 'false', 'No');
+('enable_quiz_scenario', 'false', 'No'),
+('enable_nanogong','true','Yes'),
+('enable_nanogong','false','No');
 
 UNLOCK TABLES;
 

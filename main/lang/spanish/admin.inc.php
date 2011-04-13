@@ -1398,4 +1398,6 @@ $HideCoursesInSessionsComment = "Cuando muestra los bloques de sesiones en la p�
 $ShowGroupsToUsersTitle = "Mostrar las clases a los usuarios";
 $ShowGroupsToUsersComment = "Mostrar las clases a los usuarios. Las clases son una funcionalidad que permite subscribir/desuscribir grupos de usuarios dentro de una sesión o un curso directamente, reduciendo el trabajo administrativo. Cuando activa esta opción, los alumnos pueden ver de que clase forman parte, a través de su interfaz de red social.";
 $HomepageViewActivityBig = "Grande vista actividad (estilo iPad)";
+$EnableNanogongTitle = "Activar el grabador - reproductor de voz Nanogong";
+$EnableNanogongComment = "Nanogong es un grabador - reproductor de voz que le permite grabar su voz y enviarla a la plataforma o descargarla en su disco duro. También permite reproducir la grabación. Los estudiantes sólo necesitan un micrófono y unos altavoces, y aceptar la carga del applet cuando se cargue por primera vez. Es muy útil para que los estudiantes de idiomas puedan oir su voz después de oir la correcta pronunciación propuesta por el profesor en otro archivo wav o mp3.";
 ?>

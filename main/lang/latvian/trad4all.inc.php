@@ -861,5 +861,7 @@ $NewThematicSection = "Jauna tematiskā sekcija";
 $DeleteAllThematics = "Dzēst visus tematiskos elementus";
 $ThematicDetailsDescription = "Sīkāka informācija par plānoto aktivitāšu tematiem un to progresu. Lai norādītu tēmu par pabeigtu, izvēlēties datumu hronoloģisko secību, un sistēma parādīs visus iepriekšējos datumus kā pabeigtus.";
 $SkillToAcquireQuestions = "Kādām prasmēm ir jābūt, šis tematiskās sekcijas beigās";
+$SkillToAcquire = "Prasmes, kas jāiegūst";
+$InfrastructureQuestions = "Kāda infrastruktūra (plāns) ir nepieciešama, lai sasniegtu šī uzdevuma mērķus";
 $DurationInHours = "Norises ilgums stundās";
 ?>

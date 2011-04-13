@@ -928,7 +928,15 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 			<a href="create_paint.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>">
 		   <?php Display::display_icon('new_paint.png', get_lang('PhotoRetouching'),'','32'); ?></a>
 		<?php
-		}
+		}		
+		
+		// Record new audio
+		if (api_get_setting('enable_nanogong') == 'true'){
+		?>
+			<a href="record_audio.php?<?php echo api_get_cidreq(); ?>&amp;dir=<?php echo $curdirpathurl.$req_gid; ?>">
+		   	<?php Display::display_icon('new_recording.png', get_lang('RecordMyVoice'),'',32); ?></a>
+		<?php
+		}		
 		
 		// Create new audio
 		if (api_get_setting('enabled_text2audio') == 'true'){

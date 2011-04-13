@@ -26,6 +26,8 @@ folder			nuvola
 upload_certificate	modif gnome
 new_certificate		modif gnome
 certificate_na		modif gnome
+new_recording		exquisite + nuvola
+microphone		exquisite
 --
 info			nuvola
 wizard			nuvola

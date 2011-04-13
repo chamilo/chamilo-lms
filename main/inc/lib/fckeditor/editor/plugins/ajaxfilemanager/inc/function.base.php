@@ -6,7 +6,8 @@
      * @since 22/April/2007
      *
      */
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "config.php");
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "config.php";
+
 /**
  * force to ensure existence of stripos
  */
@@ -23,17 +24,14 @@ if (!function_exists("stripos"))
      * @param array $excls specify those unwanted query string
      * @return string
      */
-    function getCurrentUrl($excls=array())
-    {
+    function getCurrentUrl($excls=array()) {
         $output = $_SERVER['PHP_SELF'];
         $count = 1;
-        foreach($_GET as $k=>$v)
-        {
-            if(array_search($k, $excls) ===false)
-            {
+        foreach($_GET as $k=>$v) {
+            if(array_search($k, $excls) ===false) {
+                $v = api_htmlentities(Security::remove_XSS($v));      
                 $strAppend = "&";
-                if($count == 1)
-                {
+                if($count == 1) {
                     $strAppend = "?";
                     $count++;
                 }
@@ -42,20 +40,20 @@ if (!function_exists("stripos"))
         }
         return $output;
     }
-
-/**
- * print out an array
- *
- * @param array $array
- */
-function displayArray($array, $comments="")
-{
-    echo "<pre>";
-    echo $comments;
-    print_r($array);
-    echo $comments;
-    echo "</pre>";
-}
+    
+    /**
+     * print out an array
+     *
+     * @param array $array
+     */
+    function displayArray($array, $comments="")
+    {
+        echo "<pre>";
+        echo $comments;
+        print_r($array);
+        echo $comments;
+        echo "</pre>";
+    }
 
 
 
@@ -116,20 +114,16 @@ function displayArray($array, $comments="")
         }
     }
 
-
-
-
-
-/**
- *  transform file relative path to absolute path
- * @param  string $value the path to the file
- * @return string
- */
-function relToAbs($value)
-{
-    return backslashToSlash(preg_replace("/(\\\\)/","\\", getRealPath($value)));
-
-}
+    /**
+     *  transform file relative path to absolute path
+     * @param  string $value the path to the file
+     * @return string
+     */
+    function relToAbs($value)
+    {
+        return backslashToSlash(preg_replace("/(\\\\)/","\\", getRealPath($value)));
+    
+    }
 
     function getRelativeFileUrl($value, $relativeTo)
     {
@@ -144,85 +138,87 @@ function relToAbs($value)
             $output  = $urlprefix . substr($value, strlen($wwwroot)) . $urlsuffix;
         }
     }
-/**
- * replace slash with backslash
- *
- * @param string $value the path to the file
- * @return string
- */
-function slashToBackslash($value) {
-    return str_replace("/", DIRECTORY_SEPARATOR, $value);
-}
-
-/**
- * replace backslash with slash
- *
- * @param string $value the path to the file
- * @return string
- */
-function backslashToSlash($value) {
-    return str_replace(DIRECTORY_SEPARATOR, "/", $value);
-}
-
-/**
- * removes the trailing slash
- *
- * @param string $value
- * @return string
- */
-function removeTrailingSlash($value) {
-    if(preg_match('@^.+/$@i', $value))
-    {
-        $value = substr($value, 0, strlen($value)-1);
+    
+    /**
+     * replace slash with backslash
+     *
+     * @param string $value the path to the file
+     * @return string
+     */
+    function slashToBackslash($value) {
+        return str_replace("/", DIRECTORY_SEPARATOR, $value);
     }
-    return $value;
-}
-
-/**
- * append a trailing slash
- *
- * @param string $value
- * @return string
- */
-function addTrailingSlash($value)
-{
-    if(preg_match('@^.*[^/]{1}$@i', $value))
-    {
-        $value .= '/';
+    
+    /**
+     * replace backslash with slash
+     *
+     * @param string $value the path to the file
+     * @return string
+     */
+    function backslashToSlash($value) {
+        return str_replace(DIRECTORY_SEPARATOR, "/", $value);
     }
-    return $value;
-}
-
-/**
- * transform a file path to user friendly
- *
- * @param string $value
- * @return string
- */
-function transformFilePath($value) {
-    $rootPath = addTrailingSlash(backslashToSlash(getRealPath(CONFIG_SYS_ROOT_PATH)));
-    $value = addTrailingSlash(backslashToSlash(getRealPath($value)));
-    if(!empty($rootPath) && ($i = strpos($value, $rootPath)) !== false)
-    {
-        $value = ($i == 0?substr($value, strlen($rootPath)):"/");
-    }
-    $value = prependSlash($value);
-    return $value;
-}
-/**
- * prepend slash
- *
- * @param string $value
- * @return string
- */
-function prependSlash($value)
-{
-        if (($value && $value[0] != '/') || !$value )
+    
+    /**
+     * removes the trailing slash
+     *
+     * @param string $value
+     * @return string
+     */
+    function removeTrailingSlash($value) {
+        if(preg_match('@^.+/$@i', $value))
         {
-            $value = "/" . $value;
+            $value = substr($value, 0, strlen($value)-1);
         }
         return $value;
-}
+    }
+    
+    /**
+     * append a trailing slash
+     *
+     * @param string $value
+     * @return string
+     */
+    function addTrailingSlash($value)
+    {
+        if(preg_match('@^.*[^/]{1}$@i', $value))
+        {
+            $value .= '/';
+        }
+        return $value;
+    }
+
+    /**
+     * transform a file path to user friendly
+     *
+     * @param string $value
+     * @return string
+     */
+    function transformFilePath($value) {
+        $rootPath = addTrailingSlash(backslashToSlash(getRealPath(CONFIG_SYS_ROOT_PATH)));
+        $value = addTrailingSlash(backslashToSlash(getRealPath($value)));
+        if(!empty($rootPath) && ($i = strpos($value, $rootPath)) !== false)
+        {
+            $value = ($i == 0?substr($value, strlen($rootPath)):"/");
+        }
+        $value = prependSlash($value);
+        return $value;
+    }
+    
+    /**
+     * prepend slash
+     *
+     * @param string $value
+     * @return string
+     */
+    function prependSlash($value)
+    {
+            if (($value && $value[0] != '/') || !$value )
+            {
+                $value = "/" . $value;
+            }
+            return $value;
+    }
 
 
     function writeInfo($data, $die = false)
@@ -238,26 +234,25 @@ function prependSlash($value)
 
     }
 
-/**
- * no cachable header
- */
-function addNoCacheHeaders() {
-    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-    header("Cache-Control: no-store, no-cache, must-revalidate");
-    header("Cache-Control: post-check=0, pre-check=0", false);
-    header("Pragma: no-cache");
-}
+    /**
+     * no cachable header
+     */
+    function addNoCacheHeaders() {
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+        header("Cache-Control: no-store, no-cache, must-revalidate");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
+    }
+    
     /**
      * add extra query stiring to a url
      * @param string $baseUrl
      * @param string $extra the query string added to the base url
      */
-    function appendQueryString($baseUrl, $extra)
-    {
+    function appendQueryString($baseUrl, $extra) {
         $output = $baseUrl;
-        if(!empty($extra))
-        {
+        if(!empty($extra)) {
             if(strpos($baseUrl, "?") !== false)
             {
                 $output .= "&" . $extra;
@@ -275,18 +270,16 @@ function addNoCacheHeaders() {
      * @param array $excluded
      * @return string
      */
-    function makeQueryString($excluded=array())
-    {
+    function makeQueryString($excluded=array()) {
         $output = '';
         $count = 1;
-        foreach($_GET as $k=>$v)
-        {
-            if(array_search($k, $excluded) === false)
-            {
+        foreach($_GET as $k=>$v) {
+            if (array_search($k, $excluded) === false) {
+                $v = api_htmlentities(Security::remove_XSS($v));                
                 $output .= ($count>1?'&':'') . ($k . "=" . $v);
                 $count++;
             }
-        }
+        }        
         return $output;
     }
     /**
@@ -379,18 +372,19 @@ function addNoCacheHeaders() {
         return $outputs;
 
     }
-/**
- * turn to absolute path from relative path
- *
- * @param string $value
- * @return string
- */
-function getAbsPath($value) {
-    if (substr($value, 0, 1) == "/")
-        return slashToBackslash(DIR_AJAX_ROOT . $value);
-
-    return slashToBackslash(dirname(__FILE__) . "/" . $value);
-}
+    
+    /**
+     * turn to absolute path from relative path
+     *
+     * @param string $value
+     * @return string
+     */
+    function getAbsPath($value) {
+        if (substr($value, 0, 1) == "/")
+            return slashToBackslash(DIR_AJAX_ROOT . $value);
+    
+        return slashToBackslash(dirname(__FILE__) . "/" . $value);
+    }
 
     /**
      * get file/folder base name
@@ -411,59 +405,60 @@ function getAbsPath($value) {
         }
     }
 
-function myRealPath($path) {
+    function myRealPath($path) {
 
         if(strpos($path, ':/') !== false)
         {
             return $path;
         }
-    // check if path begins with "/" ie. is absolute
-    // if it isnt concat with script path
-
-    if (strpos($path,"/") !== 0 ) {
-        $base=dirname($_SERVER['SCRIPT_FILENAME']);
-        $path=$base."/".$path;
-    }
-
-    // canonicalize
-    $path=explode('/', $path);
-    $newpath=array();
-    for ($i=0; $i<sizeof($path); $i++) {
-        if ($path[$i]==='' || $path[$i]==='.') continue;
-           if ($path[$i]==='..') {
-              array_pop($newpath);
-              continue;
+        // check if path begins with "/" ie. is absolute
+        // if it isnt concat with script path
+    
+        if (strpos($path,"/") !== 0 ) {
+            $base=dirname($_SERVER['SCRIPT_FILENAME']);
+            $path=$base."/".$path;
         }
-        array_push($newpath, $path[$i]);
+    
+        // canonicalize
+        $path=explode('/', $path);
+        $newpath=array();
+        for ($i=0; $i<sizeof($path); $i++) {
+            if ($path[$i]==='' || $path[$i]==='.') continue;
+               if ($path[$i]==='..') {
+                  array_pop($newpath);
+                  continue;
+            }
+            array_push($newpath, $path[$i]);
+        }
+        $finalpath="/".implode('/', $newpath);
+    
+        clearstatcache();
+        // check then return valid path or filename
+        if (file_exists($finalpath)) {
+            return ($finalpath);
+        }
+        else return FALSE;
     }
-    $finalpath="/".implode('/', $newpath);
-
-    clearstatcache();
-    // check then return valid path or filename
-    if (file_exists($finalpath)) {
-        return ($finalpath);
-    }
-    else return FALSE;
-}
-    /**
-     * calcuate realpath for a relative path
-     *
-     * @param string $value a relative path
-     * @return string absolute path of the input
-     */
- function getRealPath($value)
- {
-         $output = '';
-      if(($path = realpath($value)) && $path != $value)
-      {
-          $output = $path;
-      }else
-      {
-          $output = myRealPath($value);
-      }
-      return $output;
-
- }
+    
+        /**
+         * calcuate realpath for a relative path
+         *
+         * @param string $value a relative path
+         * @return string absolute path of the input
+         */
+     function getRealPath($value)
+     {
+             $output = '';
+          if(($path = realpath($value)) && $path != $value)
+          {
+              $output = $path;
+          }else
+          {
+              $output = myRealPath($value);
+          }
+          return $output;
+    
+     }
     /**
      * get file url
      *
@@ -1071,19 +1066,14 @@ function getRootPath() {
       }
   }
 
-  function getCurrentFolderPath()
-  {
-          $folderPathIndex = 'path';
-          $lastVisitedFolderPathIndex = 'ajax_last_visited_folder';
-        if(isset($_GET[$folderPathIndex]) && file_exists($_GET[$folderPathIndex]) && !is_file($_GET[$folderPathIndex]) )
-        {
-            $currentFolderPath = $_GET[$folderPathIndex];
-        }
-        elseif(isset($_SESSION[$lastVisitedFolderPathIndex]) && file_exists($_SESSION[$lastVisitedFolderPathIndex]) && !is_file($_SESSION[$lastVisitedFolderPathIndex]))
-        {
+    function getCurrentFolderPath() {
+        $folderPathIndex = 'path';
+        $lastVisitedFolderPathIndex = 'ajax_last_visited_folder';
+        if(isset($_GET[$folderPathIndex]) && file_exists($_GET[$folderPathIndex]) && !is_file($_GET[$folderPathIndex]) ) {
+            $currentFolderPath = api_htmlentities(Security::remove_XSS($_GET[$folderPathIndex]));
+        } elseif(isset($_SESSION[$lastVisitedFolderPathIndex]) && file_exists($_SESSION[$lastVisitedFolderPathIndex]) && !is_file($_SESSION[$lastVisitedFolderPathIndex])) {
             $currentFolderPath = $_SESSION[$lastVisitedFolderPathIndex];
-        }else
-        {
+        } else {
             $currentFolderPath = CONFIG_SYS_DEFAULT_PATH;
         }
 
@@ -1097,69 +1087,67 @@ function getRootPath() {
         {
             die(ERR_FOLDER_NOT_FOUND . $currentFolderPath);
         }
-  }
-
-       if(!function_exists("imagerotate"))
-        {
-            function imagerotate($src_img, $angle, $bicubic=false)
-            {
-    // convert degrees to radians
-
-    $angle =  (360 - $angle) + 180;
-    $angle = deg2rad($angle);
-
-    $src_x = imagesx($src_img);
-    $src_y = imagesy($src_img);
-
-    $center_x = floor($src_x/2);
-    $center_y = floor($src_y/2);
-
-    $rotate = imagecreatetruecolor($src_x, $src_y);
-    imagealphablending($rotate, false);
-    imagesavealpha($rotate, true);
-
-    $cosangle = cos($angle);
-    $sinangle = sin($angle);
-
-    for ($y = 0; $y < $src_y; $y++) {
-      for ($x = 0; $x < $src_x; $x++) {
-    // rotate...
-    $old_x = (($center_x-$x) * $cosangle + ($center_y-$y) * $sinangle)
-      + $center_x;
-    $old_y = (($center_y-$y) * $cosangle - ($center_x-$x) * $sinangle)
-      + $center_y;
-
-    if ( $old_x >= 0 && $old_x < $src_x
-         && $old_y >= 0 && $old_y < $src_y ) {
-      if ($bicubic) {
-        $sY  = $old_y + 1;
-        $siY  = $old_y;
-        $siY2 = $old_y - 1;
-        $sX  = $old_x + 1;
-        $siX  = $old_x;
-        $siX2 = $old_x - 1;
-
-        $c1 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX, $siY2));
-        $c2 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX, $siY));
-        $c3 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX2, $siY2));
-        $c4 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX2, $siY));
-
-        $r = ($c1['red']  + $c2['red']  + $c3['red']  + $c4['red']  ) << 14;
-        $g = ($c1['green'] + $c2['green'] + $c3['green'] + $c4['green']) << 6;
-        $b = ($c1['blue']  + $c2['blue']  + $c3['blue']  + $c4['blue'] ) >> 2;
-        $a = ($c1['alpha']  + $c2['alpha']  + $c3['alpha']  + $c4['alpha'] ) >> 2;
-        $color = imagecolorallocatealpha($src_img, $r,$g,$b,$a);
-      } else {
-        $color = imagecolorat($src_img, $old_x, $old_y);
-      }
-    } else {
-          // this line sets the background colour
-      $color = imagecolorallocatealpha($src_img, 255, 255, 255, 127);
     }
-    imagesetpixel($rotate, $x, $y, $color);
-      }
-    }
-    return $rotate;
+
+    if(!function_exists("imagerotate")) {
+        function imagerotate($src_img, $angle, $bicubic=false) {
+        // convert degrees to radians
+    
+        $angle =  (360 - $angle) + 180;
+        $angle = deg2rad($angle);
+    
+        $src_x = imagesx($src_img);
+        $src_y = imagesy($src_img);
+    
+        $center_x = floor($src_x/2);
+        $center_y = floor($src_y/2);
+    
+        $rotate = imagecreatetruecolor($src_x, $src_y);
+        imagealphablending($rotate, false);
+        imagesavealpha($rotate, true);
+    
+        $cosangle = cos($angle);
+        $sinangle = sin($angle);
+    
+        for ($y = 0; $y < $src_y; $y++) {
+          for ($x = 0; $x < $src_x; $x++) {
+        // rotate...
+        $old_x = (($center_x-$x) * $cosangle + ($center_y-$y) * $sinangle)
+          + $center_x;
+        $old_y = (($center_y-$y) * $cosangle - ($center_x-$x) * $sinangle)
+          + $center_y;
+    
+        if ( $old_x >= 0 && $old_x < $src_x
+             && $old_y >= 0 && $old_y < $src_y ) {
+          if ($bicubic) {
+            $sY  = $old_y + 1;
+            $siY  = $old_y;
+            $siY2 = $old_y - 1;
+            $sX  = $old_x + 1;
+            $siX  = $old_x;
+            $siX2 = $old_x - 1;
+    
+            $c1 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX, $siY2));
+            $c2 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX, $siY));
+            $c3 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX2, $siY2));
+            $c4 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX2, $siY));
+    
+            $r = ($c1['red']  + $c2['red']  + $c3['red']  + $c4['red']  ) << 14;
+            $g = ($c1['green'] + $c2['green'] + $c3['green'] + $c4['green']) << 6;
+            $b = ($c1['blue']  + $c2['blue']  + $c3['blue']  + $c4['blue'] ) >> 2;
+            $a = ($c1['alpha']  + $c2['alpha']  + $c3['alpha']  + $c4['alpha'] ) >> 2;
+            $color = imagecolorallocatealpha($src_img, $r,$g,$b,$a);
+          } else {
+            $color = imagecolorat($src_img, $old_x, $old_y);
+          }
+        } else {
+              // this line sets the background colour
+          $color = imagecolorallocatealpha($src_img, 255, 255, 255, 127);
+        }
+        imagesetpixel($rotate, $x, $y, $color);
+          }
+        }
+        return $rotate;
 /*                $src_x = @imagesx($src_img);
                 $src_y = @imagesy($src_img);
                 if ($angle == 180)
@@ -1222,40 +1210,39 @@ function getRootPath() {
                 return $rotate;*/
             }
         }
-/**
-* check if a folder is allowed to shown on the search 'look in' list
-* @param string $folderName
-* @return string
-* @author Juan Carlos Raña Trabado
-*/
-function hideFolderName($folderName)
-{
-    //hidden files and folders deleted by Chamilo. Hidde folders css, hotpotatoes, chat
-    $deleted_by_chamilo='_DELETED_';
-    $css_folder_chamilo='css';
-    $hotpotatoes_folder_chamilo='HotPotatoes_files';
-    $chat_files_chamilo='chat_files';
-    $thumbs_folder='.thumbs';
-    $certificates_chamilo='certificates';
-
-    //hidden directory of the group if the user is not a member of the group
-    $group_folder='_groupdocs';
-
-    //show group's directory only if I'm member
-    $show_doc_group=true;
-    if(ereg($group_folder, $folderName))
-    {
-        $show_doc_group=false;
-        if($is_user_in_group)
+            
+    /**
+    * check if a folder is allowed to shown on the search 'look in' list
+    * @param string $folderName
+    * @return string
+    * @author Juan Carlos Raña Trabado
+    */
+    function hideFolderName($folderName) {
+        //hidden files and folders deleted by Chamilo. Hidde folders css, hotpotatoes, chat
+        $deleted_by_chamilo='_DELETED_';
+        $css_folder_chamilo='css';
+        $hotpotatoes_folder_chamilo='HotPotatoes_files';
+        $chat_files_chamilo='chat_files';
+        $thumbs_folder='.thumbs';
+        $certificates_chamilo='certificates';
+    
+        //hidden directory of the group if the user is not a member of the group
+        $group_folder='_groupdocs';
+    
+        //show group's directory only if I'm member
+        $show_doc_group=true;
+        if(ereg($group_folder, $folderName))
         {
-            $show_doc_group=true;
+            $show_doc_group=false;
+            if($is_user_in_group)
+            {
+                $show_doc_group=true;
+            }
         }
-    }
+    
+        if(!ereg($deleted_by_chamilo, $folderName) && !ereg($css_folder_chamilo, $folderName) && !ereg($hotpotatoes_folder_chamilo, $folderName) && !ereg($chat_files_chamilo, $folderName) && !ereg($certificates_chamilo, $folderName) && !ereg($thumbs_folder, $folderName) && $show_doc_group==true)
+        {
+            return substr($folderName,strpos($folderName, '-'),strlen($folderName)); //hide the firsts numbers
+        }
 
-    if(!ereg($deleted_by_chamilo, $folderName) && !ereg($css_folder_chamilo, $folderName) && !ereg($hotpotatoes_folder_chamilo, $folderName) && !ereg($chat_files_chamilo, $folderName) && !ereg($certificates_chamilo, $folderName) && !ereg($thumbs_folder, $folderName) && $show_doc_group==true)
-    {
-        return substr($folderName,strpos($folderName, '-'),strlen($folderName)); //hide the firsts numbers
     }
-
-}
-?>

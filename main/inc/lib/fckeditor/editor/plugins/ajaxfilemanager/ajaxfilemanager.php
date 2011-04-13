@@ -44,7 +44,7 @@
 		switch($_GET['view']) {
 			case 'detail':
 			case 'thumbnail':
-				$view = $_GET['view'];
+				$view = Security::remove_XSS($_GET['view']);
 				break;
 			default:
 				$view = CONFIG_DEFAULT_VIEW;
@@ -52,6 +52,7 @@
 	} else {
 		$view = CONFIG_DEFAULT_VIEW;
 	}    
+	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" debug="true" xml:lang="<?php echo CONFIG_LANG_DEFAULT; ?>" lang="<?php echo CONFIG_LANG_DEFAULT; ?>"><!--  hack fon lang default Chamilo -->
@@ -80,10 +81,10 @@
 			oEditor = window.parent.InnerDialogLoaded() ;
 		}
 		//end hack
-	}
-	var globalSettings = {'upload_init':false};
-	var queryString = '<?php echo makeQueryString(array('path')); ?>';
-	var paths = {'root':'<?php echo addTrailingSlash(backslashToSlash(CONFIG_SYS_ROOT_PATH)); ?>', 'root_title':'<?php echo LBL_FOLDER_ROOT; ?>'};
+	}	
+	var globalSettings = {'upload_init':false};		
+	var queryString = '<?php echo makeQueryString(array('path')); ?>';	
+	var paths = {'root':'<?php echo addTrailingSlash(backslashToSlash(CONFIG_SYS_ROOT_PATH)); ?>', 'root_title':'<?php echo LBL_FOLDER_ROOT; ?>'};	
 	
 	<!-- Chamilo hack for breadcrumb into shared folders -->
 	var shared_folder = '<?php echo get_lang('UserFolders');?>';
@@ -158,9 +159,10 @@
 	var searchRequired = false;
 	var supporedPreviewExts = '<?php echo CONFIG_VIEWABLE_VALID_EXTS; ?>'; 
 	var supportedUploadExts = '<?php echo CONFIG_UPLOAD_VALID_EXTS; ?>'
-	var elementId = <?php  echo (!empty($_GET['elementId'])?"'" . $_GET['elementId'] . "'":'null'); ?>;
+	var elementId = <?php  echo (!empty($_GET['elementId'])?"'" . Security::remove_XSS($_GET['elementId']) . "'":'null'); ?>;
 	var files = {};
-$(document).ready(
+	
+    $(document).ready(
 	function()
 	{
 		jQuery(document).bind('keypress', function(event) {
@@ -203,9 +205,8 @@ $(document).ready(
 		//addMoreFile();
 
 	} );
-
-	
 </script>
+
 <?php
 	if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY_SEPARATOR . 'for_' . CONFIG_EDITOR_NAME . ".js")
 	{

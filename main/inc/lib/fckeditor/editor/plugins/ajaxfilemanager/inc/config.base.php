@@ -11,11 +11,9 @@
 	 * @since 31/December/2008
 	 */
 
-
-//error_reporting(E_ALL);
-//error_reporting(E_ALL ^ E_NOTICE);
-
-
+    
+    //error_reporting(E_ALL);
+    //error_reporting(E_ALL ^ E_NOTICE);
 
 	//Access Control Setting
 	/**
@@ -242,5 +240,3 @@
 	define('CONFIG_LANG_DEFAULT', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['language']) && file_exists(DIR_LANG . secureFileName($_GET['language']) . '.php')?secureFileName($_GET['language']):$langajaxfilemanager)); //change it to be your language file base name, such en
 	// Language text direction.
 	define('CONFIG_LANG_TEXT_DIRECTION_DEFAULT', in_array(CONFIG_LANG_DEFAULT, array('ar', 'prs', 'he', 'ps', 'fa')) ? 'rtl' : 'ltr');
-
-?>

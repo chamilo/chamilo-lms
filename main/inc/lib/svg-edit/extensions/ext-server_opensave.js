@@ -19,11 +19,10 @@ svgEditor.addExtension("server_opensave", {
 		svgEditor.setCustomHandlers({
 			save: function(win, data) {
 				var svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" + data; // Chamilo add encoding="UTF-8"
-				
+
 				var title = svgCanvas.getDocumentTitle();
 				//var filename = title.replace(/[^a-z0-9\.\_\-]+/gi, '_');//Chamilo replace by below  
-				var filename =title;//Chamilo TODO:check if the filter through filesave.php is enough
-				
+				var filename =title;//Chamilo TODO:check if the filter through filesave.php is enough				
 				var form = $('<form>').attr({
 					method: 'post',
 					action: save_svg_action,
@@ -61,8 +60,7 @@ svgEditor.addExtension("server_opensave", {
 					
 					var title = svgCanvas.getDocumentTitle();
 					//var filename = title.replace(/[^a-z0-9\.\_\-]+/gi, '_');//Chamilo replace by below 
-					var filename =title;//Chamilo TODO:check if the filter through filesave.php is enough	
-					
+					var filename =title;//Chamilo TODO:check if the filter through filesave.php is enough
 					
 					var form = $('<form>').attr({
 						method: 'post',

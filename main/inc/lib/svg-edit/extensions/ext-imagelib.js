@@ -9,8 +9,21 @@
 
 svgEditor.addExtension("imagelib", function() {
 	//Chamilo change library title and index.html by index.php
+	
+	var uiStrings = svgEditor.uiStrings;
+	
+	$.extend(uiStrings, {
+		imagelib: {
+			select_lib: 'Select an image library',
+			show_list: 'Show library list',
+			import_single: 'Import single',
+			import_multi: 'Import multiple',
+			open: 'Open as new document'
+		}
+	});
+
 	var img_libs = [{
-			name: 'Local library',
+			name: 'Local library (local)',
 			url: 'extensions/imagelib/index.php',
 			//description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
 			description: 'Course gallery'
@@ -26,7 +39,7 @@ svgEditor.addExtension("imagelib", function() {
 			url: 'extensions/imagelib/users.php',
 			//description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
 			description: 'Personal gallery'
-		}, 
+		},		
 		{
 			name: 'IAN Symbol Libraries',
 			url: 'http://ian.umces.edu/symbols/catalog/svgedit/album_chooser.php',
@@ -41,7 +54,6 @@ svgEditor.addExtension("imagelib", function() {
 	}
 	
 	function importImage(url) {
-		
 		var newImage = svgCanvas.addSvgElementFromJson({
 			"element": "image",
 			"attr": {
@@ -63,9 +75,10 @@ svgEditor.addExtension("imagelib", function() {
 	var cur_meta;
 	var tranfer_stopped = false;
 	var pending = {};
+	
 	//Juan Carlos Raña Trabado hack for Chamilo add window.top. on the bottom line to run into a frame
-	 window.top.window.addEventListener("message", function(evt) {
-						 
+	window.top.window.addEventListener("message", function(evt) {							 
+												 
 		// Receive postMessage data
 		var response = evt.data;
 		
@@ -104,7 +117,9 @@ svgEditor.addExtension("imagelib", function() {
 				
 				pending[cur_meta.id] = cur_meta;
 				
-				var message = 'Retrieving "' + (cur_meta.name || 'file') + '"...';
+				var name = (cur_meta.name || 'file');
+				
+				var message = uiStrings.notification.retrieving.replace('%s', name);
 				
 				if(mode != 'm') {
 					$.process_cancel(message, function() {
@@ -161,7 +176,6 @@ svgEditor.addExtension("imagelib", function() {
 		switch (mode) {
 			case 's':
 				// Import one
-
 				if(svg_str) {
 					svgCanvas.importSvgString(response);
 				} else if(img_str) {
@@ -250,11 +264,11 @@ svgEditor.addExtension("imagelib", function() {
 				overflow: 'auto'
 			}).insertAfter('#lib_framewrap');
 			
-			submit = $('<button disabled>Import selected-</button>').appendTo('#imgbrowse').click(function() {
+			submit = $('<button disabled>Import selected</button>').appendTo('#imgbrowse').click(function() {
 				$.each(multi_arr, function(i) {
 					var type = this[0];
 					var data = this[1];
-					if(type == 'svg') {						
+					if(type == 'svg') {
 						svgCanvas.importSvgString(data);
 					} else {
 						importImage(data);
@@ -277,13 +291,14 @@ svgEditor.addExtension("imagelib", function() {
 	}
 
 	function showBrowser() {
+
 		var browser = $('#imgbrowse');
 		if(!browser.length) {
 			$('<div id=imgbrowse_holder><div id=imgbrowse class=toolbar_button>\
 			</div></div>').insertAfter('#svg_docprops');
 			browser = $('#imgbrowse');
 
-			var all_libs = 'Select an image library';
+			var all_libs = uiStrings.imagelib.select_lib;
 
 			var lib_opts = $('<ul id=imglib_opts>').appendTo(browser);
 			var frame = $('<iframe/>').prependTo(browser).hide().wrap('<div id=lib_framewrap>');
@@ -295,7 +310,7 @@ svgEditor.addExtension("imagelib", function() {
 				width: '100%'
 			});
 			
-			var cancel = $('<button>Cancel</button>').appendTo(browser).click(function() {
+			var cancel = $('<button>' + uiStrings.common.cancel + '</button>').appendTo(browser).click(function() {
 				$('#imgbrowse_holder').hide();
 			}).css({
 				position: 'absolute',
@@ -305,15 +320,19 @@ svgEditor.addExtension("imagelib", function() {
 			
 			var leftBlock = $('<span>').css({position:'absolute',top:5,left:10}).appendTo(browser);
 			
-			var back = $('<button>Show libraries</button>').appendTo(leftBlock).click(function() {
+			var back = $('<button hidden>' + uiStrings.imagelib.show_list + '</button>').appendTo(leftBlock).click(function() {
 				frame.attr('src', 'about:blank').hide();
 				lib_opts.show();
 				header.text(all_libs);
+				back.hide();
 			}).css({
 				'margin-right': 5
-			});
+			}).hide();
 			
-			var type = $('<select><option value=s>Import single</option><option value=m>Import multiple</option><option value=o>Open as new document</option></select>').appendTo(leftBlock).change(function() {
+			var type = $('<select><option value=s>' + 
+			uiStrings.imagelib.import_single + '</option><option value=m>' +
+			uiStrings.imagelib.import_multi + '</option><option value=o>' +
+			uiStrings.imagelib.open + '</option></select>').appendTo(leftBlock).change(function() {
 				mode = $(this).val();
 				switch (mode) {
 					case 's':
@@ -337,6 +356,7 @@ svgEditor.addExtension("imagelib", function() {
 					frame.attr('src', opts.url).show();
 					header.text(opts.name);
 					lib_opts.hide();
+					back.show();
 				}).append('<span>' + opts.description + '</span>');
 			});
 			

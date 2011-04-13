@@ -101,6 +101,7 @@ if (!empty($_GET['sort']) and ($allow_individual_calendar_status=="show")) {
 // 4. filter user or group
 if (!empty($_GET['user']) or !empty($_GET['group'])) {
 	$_SESSION['user']=(int)$_GET['user'];
+	
 	$_SESSION['group']=(int)$_GET['group'];
 }
 if ((!empty($_GET['user']) and $_GET['user']=="none") or (!empty($_GET['group']) and $_GET['group']=="none")) {
@@ -114,11 +115,12 @@ if (!$is_courseAdmin){
 		api_session_register('toolgroup');
 	}
 }
-	//It comes from the group tools. If it's define it overwrites $_SESSION['group']
+//It comes from the group tools. If it's define it overwrites $_SESSION['group']
+/*
 if (!empty($_GET['isStudentView']) and $_GET['isStudentView']=="false") {
 	api_session_unregister("user");
 	api_session_unregister("group");
-}
+}*/
 
 $htmlHeadXtra[] = to_javascript();
 

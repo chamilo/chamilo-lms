@@ -207,7 +207,7 @@ if (isset($_user['user_id'])) {
 			show_new_personal_item_form();
 			break;
 		case 'store_personal_agenda_item' :
-			store_personal_item($_POST['frm_day'], $_POST['frm_month'], $_POST['frm_year'], $_POST['frm_hour'], $_POST['frm_minute'], $_POST['frm_title'], $_POST['frm_content'], (int)$_GET['id']);
+			store_personal_item($_POST['frm_day'], $_POST['frm_month'], $_POST['frm_year'], $_POST['frm_hour'], $_POST['frm_minute'], $_POST['frm_title'], $_POST['frm_content'], $_GET['id']);
 			if ($_GET['id']) {
 				echo '<br />';
 				Display :: display_normal_message(get_lang("PeronalAgendaItemEdited"));

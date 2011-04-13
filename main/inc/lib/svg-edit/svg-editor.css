@@ -1,6 +1,13 @@
 ﻿body {
-	background: #D8D8D8;
+	background: #D0D0D0;
 }
+
+#browser-not-supported {
+        font-size: 0.8em;
+        font-family: Verdana, Helvetica, Arial;
+        color: #000000;
+}
+
 
 #svg_editor * {
 	transform-origin: 0 0;
@@ -96,12 +103,21 @@
 }
 
 
-#ruler_x canvas {
+#ruler_x canvas:first-child {
 	margin-left: -16px;
+}
+
+#ruler_x canvas {
+	float: left;
 }
 
 #ruler_y canvas {
 	margin-top: -16px;
+}
+
+#ruler_x > div, 
+#ruler_y > div {
+	overflow: hidden;
 }
 
 
@@ -152,6 +168,11 @@
 	cursor: pointer;
 	margin-right: 5px;
 	padding-top: 4px
+}
+
+#svg_editor #linkLabel > svg {
+	height: 20px;
+	padding-top: 4px;
 }
 
 #color_tools .icon_label > * {
@@ -214,7 +235,7 @@
 #svg_editor #sidepanel_handle {
 	display: inline-block;
 	position: absolute;
-	background-color: #D8D8D8;
+	background-color: #D0D0D0;
 	font-weight: bold;
 	left: 0px;
 	top: 40%;
@@ -243,7 +264,7 @@
 	padding: 0px;
 	padding-left: 2px;
 	padding-right: 2px;
-	width: 123px;
+	width: 125px;
 	height: 20px;
 	border-right: 1px solid #FFFFFF;
 	border-bottom: 1px solid #FFFFFF;
@@ -397,7 +418,7 @@
 	z-index: 12;
 	background: #E8E8E8;
 	position: relative;
-	width: 200px;
+	width: 230px;
 	padding: 5px;
 	-moz-box-shadow: #555 1px 1px 4px;
 	-webkit-box-shadow: #555 1px 1px 4px;
@@ -464,9 +485,7 @@
 	top: 2px;
 	height: 72px;
 	border-bottom: none;
-	/* Ideally this should be auto (makes scrollbar if needed), but currently hides 
-	the .dropdown lists.
-/*	overflow: auto;*/
+	overflow: auto;
 }
 
 #svg_editor #tools_left {
@@ -476,7 +495,7 @@
 	top: 75px;
 	left: 0;
 	padding-left: 2px;
-	background: #D8D8D8; /* Needed so flyout icons don't appear on the left */
+	background: #D0D0D0; /* Needed so flyout icons don't appear on the left */
 	z-index: 4;
 }
 
@@ -497,7 +516,7 @@
 	stroke: none;
 }
 
-#workarea.wireframe #canvasBackground rect {
+#workarea.wireframe #canvasBackground > rect {
 	fill: #FFF !important;
 }
 
@@ -511,9 +530,10 @@
 
 #cur_context_panel {
 	position: absolute;
-	top: 70px;
-	left: -10px;
-	right: -2px;
+	top: 77px;
+	left: 40px;
+	right: 0;
+	line-height: 22px;
 	overflow: auto;
 	border: 1px solid #777;
 	border-bottom: none;
@@ -650,7 +670,7 @@ span.zoom_tool {
 	background: #FFC;
 }
 
-#font_family_dropdown li {
+#font_family_dropdown-list li {
 	font-size: 1.4em;
 }
 
@@ -766,7 +786,7 @@ span.zoom_tool {
 	display: none;
 	background: #E8E8E8;
 	height: 350px;
-	z-index: 4;
+	z-index: 5;
 }
 
 #svg_editor .tools_flyout {
@@ -893,7 +913,7 @@ span.zoom_tool {
 
 #tools_top .dropdown .icon_label {
 	border: 1px solid transparent;
-	margin-top: 3px;
+/*	margin-top: 3px;*/
 	height: auto;
 }
 

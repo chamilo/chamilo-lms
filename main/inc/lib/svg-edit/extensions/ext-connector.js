@@ -251,7 +251,7 @@ svgEditor.addExtension("Connector", function(S) {
 		
 		svgCanvas.groupSelectedElements = function() {
 			svgCanvas.removeFromSelection($(conn_sel).toArray());
-			gse();
+			return gse.apply(this, arguments);
 		}
 		
 		var mse = svgCanvas.moveSelectedElements;
@@ -305,7 +305,6 @@ svgEditor.addExtension("Connector", function(S) {
 			type: "mode",
 			icon: "images/cut.png",
 			title: "Connect two objects",
-			key: "Shift+3",
 			includeWith: {
 				button: '#tool_line',
 				isDefault: false,

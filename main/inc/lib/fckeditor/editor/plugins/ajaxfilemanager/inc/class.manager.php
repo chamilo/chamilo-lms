@@ -141,10 +141,7 @@ class manager
 		if($calculateSubdir && !file_exists($this->currentFolderPath))
 		{
 			die(ERR_FOLDER_NOT_FOUND . $this->currentFolderPath);
-		}
-
-
-	
+		}			
 	}
 	
 	function setSessionAction(&$session)

@@ -10,44 +10,38 @@
 	 * @since 31/December/2008
 	 */
 
-	include ('../../../../../../inc/global.inc.php'); // Integrating with Chamilo
+	include '../../../../../../inc/global.inc.php'; // Integrating with Chamilo
 	api_block_anonymous_users();// from Chamilo
 
-	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
+	require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php";
 	//$session->gc(); // Disabled for integration with Chamilo
-	require_once(CLASS_SESSION_ACTION);
+	require_once CLASS_SESSION_ACTION;
 	$sessionAction = new SessionAction();	
-	if(CONFIG_LOAD_DOC_LATTER)
-	{
+	
+	if (CONFIG_LOAD_DOC_LATTER) {
 		$fileList = array();
 		$folderInfo = array('path'=>getCurrentFolderPath());
-	}else 
-	{
+	} else {
 		require_once(CLASS_MANAGER);
-
-	
 		$manager = new manager();
 		$manager->setSessionAction($sessionAction);
 		$fileList = $manager->getFileList();
 		$folderInfo = $manager->getFolderInfo();		
 	}
-	if(CONFIG_SYS_THUMBNAIL_VIEW_ENABLE)
-	{
+	
+	if(CONFIG_SYS_THUMBNAIL_VIEW_ENABLE) {
 	$views = array(
 		'detail'=>LBL_BTN_VIEW_DETAILS,
 		'thumbnail'=>LBL_BTN_VIEW_THUMBNAIL,
 	);		
-	}else 
-	{
-	$views = array(
-		'detail'=>LBL_BTN_VIEW_DETAILS,
-	);		
+	} else {
+	   $views = array(
+		  'detail'=>LBL_BTN_VIEW_DETAILS,
+    	);		
 	}
 
-	if(!empty($_GET['view']))
-	{
-		switch($_GET['view'])
-		{
+	if(!empty($_GET['view'])) {
+		switch($_GET['view']) {
 			case 'detail':
 			case 'thumbnail':
 				$view = $_GET['view'];
@@ -55,11 +49,9 @@
 			default:
 				$view = CONFIG_DEFAULT_VIEW;
 		}
-	}else 
-	{
+	} else {
 		$view = CONFIG_DEFAULT_VIEW;
-	}
-
+	}    
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" debug="true" xml:lang="<?php echo CONFIG_LANG_DEFAULT; ?>" lang="<?php echo CONFIG_LANG_DEFAULT; ?>"><!--  hack fon lang default Chamilo -->
@@ -238,16 +230,11 @@ $(document).ready(
   		</dl>
         <br />
     	<div id="viewList">
-    	
-    	
-    			<label><?php echo LBL_BTN_VIEW_OPTIONS; ?></label>
-                
+    			<label><?php echo LBL_BTN_VIEW_OPTIONS; ?></label>                
 					<?php
-						foreach($views as $k=>$v)
-						{
+						foreach($views as $k=>$v) {
 							?>
-							<input type="radio" name="view"  class="radio" onclick="return changeView(this);" value="<?php echo $k; ?>" <?php echo ($k==$view?'checked':''); ?>> <?php echo $v; ?> &nbsp;&nbsp;
-							
+							<input type="radio" name="view"  class="radio" onclick="return changeView(this);" value="<?php echo $k; ?>" <?php echo ($k==$view?'checked':''); ?>> <?php echo $v; ?> &nbsp;&nbsp;							
 							<?php
 						}
 					?></div>
@@ -255,8 +242,7 @@ $(document).ready(
 					<li><a href="#" id="actionRefresh" onclick="return windowRefresh();"><span><?php echo LBL_ACTION_REFRESH; ?></span></a></li>
 					<li><a href="#" id="actionSelectAll" class="check_all" onclick="return checkAll(this);"><span><?php echo LBL_ACTION_SELECT_ALL; ?></span></a></li>
 					<?php 
-						if(CONFIG_OPTIONS_DELETE)
-						{
+						if (CONFIG_OPTIONS_DELETE) {
 							?>
 							<li><a href="#" id="actionDelete" onclick="return deleteDocuments();"><span><?php echo LBL_ACTION_DELETE; ?></span></a></li>
 							<?php
@@ -530,11 +516,7 @@ $(document).ready(
 
           </tr>	                	
           	</tbody>
-</table>
-
-
-
-       	
+</table>       	
         <p class="searchButtons">
         	<span class="left" id="linkClose" style="display:none">
                   <!-- comment these lines while integrating into Chamilo -->
@@ -542,20 +524,14 @@ $(document).ready(
         	</span>
         	<span class="right" id="linkSearch">
         		<input type="button" value="<?php echo BTN_SEARCH; ?>" onclick="return search();" class="search_button">
-        	</span>
-        	
+        	</span>        	
         </p>
-        </fieldset>
-  
-      </div>
-      
+        </fieldset>  
+      </div>      
       <div class="clear"></div>
-    </div>
-		
-  
+    </div>  
   </div>
-  <div class="clear"></div>
-  
+  <div class="clear"></div>  
   <div id="ajaxLoading" style="display:none"><img class="ajaxLoadingImg" src="theme/<?php echo CONFIG_THEME_NAME; ?>/images/ajaxLoading.gif" /></div>
   <div id="winUpload" style="display:none">
   	<div class="jqmContainer">
@@ -626,9 +602,7 @@ $(document).ready(
 	  			<tr>
 	  				<th><label><?php echo FOLDER_LBL_TITLE; ?></label></th>
 	  				<td><input type="text" name="new_folder" id="new_folder" value="" class="input"></td>
-	  			</tr>    		
-	
-				
+	  			</tr>				
 	  		</tbody>
 	  		<tfoot>
 	  			<tr>
@@ -739,9 +713,7 @@ $(document).ready(
   			</tr>
   		</tbody>
   	</table>
-  		</div>  	
-
-
+  		</div> 
   	</div>
   </div>
   <div id="contextMenu" style="display:none">

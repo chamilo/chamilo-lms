@@ -229,6 +229,7 @@ function display_user_link_work($user_id, $name = '') {
 
 /**
 * converts 2008-10-06 12:45:00 to timestamp
+* @deprecated any calls found 
 */
 function convert_date_to_number($default) {
 	// 2008-10-12 00:00:00 ---to--> 12345672218 (timestamp)

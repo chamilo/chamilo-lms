@@ -121,6 +121,7 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
 		$action='index.php';
 	}
 	$navigator_info = api_get_navigator();
+	
 	if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 		$submit_button1	= '<input type="submit" id="submit" value="'. get_lang('Search') .'" />';
 		$submit_button2 = '<input class="lower-submit" type="submit" value="'. get_lang('Search') .'" />';
@@ -131,8 +132,7 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
         $reset_button 	= '<button class="save"   type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />'. get_lang('SearchResetKeywords') .'</button> ';
 	}
 
-    $form = '
-        <form id="dokeos_search" action="'. $action .'" method="GET">
+    $form = '<form id="dokeos_search" action="'. $action .'" method="GET">
             <input type="text" id="query" name="query" size="40" value="'.stripslashes(Security::remove_XSS($_REQUEST['query'])).'" />
             <input type="hidden" name="mode" value="'. $mode .'"/>
             <input type="hidden" name="type" value="'. $type .'"/>
@@ -140,8 +140,9 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
           	'.$submit_button1.'
             <br /><br />';
     $list = get_specific_field_list();
-    if(!empty($list)) {        
-        $form = '<span class="search-links-box">'. $advanced_options .'&nbsp;</span>
+    
+    if(!empty($list)) {         
+        $form .= '<span class="search-links-box">'. $advanced_options .'&nbsp;</span>
             <div id="tags" class="tags" style="display:'. $display_thesaurus .';">
                 <div class="search-help-box">'. $help .'</div>
                 <table>
@@ -154,8 +155,7 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
         } else if ($op == 'and') {
             $and_checked = 'checked="checked"';
         }
-        $form .= '
-                    </tr>
+        $form .= '</tr>
                     <tr>
                         <td id="operator-select">
                             '. get_lang('SearchCombineSearchWith') .':<br />
@@ -172,9 +172,8 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
                     </table>
                 </div>';
     }
-        $form .='</form>
-        <br style="clear: both;"/>
-             ';
+    $form .='</form>
+    <br style="clear: both;"/>';
     return $form;
 }
 
@@ -275,14 +274,15 @@ function search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, 
  */
 function display_search_form($action, $show_thesaurus, $sf_terms, $op) {
     $type = (!empty($_REQUEST['type'])? htmlentities($_REQUEST['type']): 'normal');
+    
     switch ($type) {
-    case 'prefilter':
-        $prefilter_prefix = api_get_setting('search_prefilter_prefix');
-        $form = search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, $prefilter_prefix);
-        break;
-    case 'normal':
-    default:
-        $form = search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op);
+        case 'prefilter':
+            $prefilter_prefix = api_get_setting('search_prefilter_prefix');
+            $form = search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, $prefilter_prefix);
+            break;
+        case 'normal':
+        default:
+            $form = search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op);
     }
 
     // show built form

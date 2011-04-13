@@ -1,6 +1,6 @@
-name = "Diário Eletrônico"
+name = "Gradebook & Attendances"
 controller = "BlockDaily"
-description = "Acesso ao diário eletrônico"
+description = "Access to attendances in a Gradebook"
 package = Dashboard
 version = 1.0 
 author = Marco Antonio Firmino de Sousa

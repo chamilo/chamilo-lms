@@ -46,8 +46,7 @@ $setting_agenda_link = 'coursecode'; // valid values are coursecode and icon
 /**
  *	This function retrieves all the agenda items of all the courses the user is subscribed to
  */
-function get_myagendaitems($courses_dbs, $month, $year) {
-	global $_configuration;
+function get_myagendaitems($courses_dbs, $month, $year) {	
 	global $setting_agenda_link;
 
 	$items = array();
@@ -101,7 +100,8 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 				}
 		}
 		$result = Database::query($sqlquery);
-		while ($item = Database::fetch_array($result)) {
+		$my_list = array();
+		while ($item = Database::fetch_array($result, 'ASSOC')) {
 			$agendaday = date("j",strtotime($item['start_date']));
 			if(!isset($items[$agendaday])) {
 				$items[$agendaday]=array();
@@ -117,14 +117,14 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 				$agenda_link = api_substr($title, 0, 14);
 			} else {
 				$agenda_link = Display::return_icon('course_home.gif');
-				}
+			}
 			if(!isset($items[$agendaday][$item['start_date']])) {
 				$items[$agendaday][$item['start_date']] = '';
 			}
 			$items[$agendaday][$item['start_date']] .= "<i>$time</i> $end_time &nbsp;";
 			$item['title'] = '<strong>'.$item['title'].'</strong>';
 			$items[$agendaday][$item['start_date']] .= '<br />'."<a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br /> ";
-			$items[$agendaday][$item['start_date']] .= '<br/>';
+			$items[$agendaday][$item['start_date']] .= '<br/>';				
 		}
 	}
 
@@ -138,7 +138,7 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 		while (list ($key, $val) = each($tmpitems)) {
 			$agendaitems[$agendaday] .= $val;
 		}
-	}
+	}	
 	return $agendaitems;
 }
 /**
@@ -315,6 +315,7 @@ function show_new_personal_item_form($id = "") {
 
 	// we construct the default time and date data (used if we are not editing a personal agenda item)
 	$today = getdate();
+	
 	$day = $today['mday'];
 	$month = $today['mon'];
 	$year = $today['year'];
@@ -331,7 +332,7 @@ function show_new_personal_item_form($id = "") {
 	}
 
 	if ($id != "") {
-		$sql = "SELECT date, title, text FROM ".$tbl_personal_agenda." WHERE user='".intval(api_get_user_id())."' AND id='".$id."'";
+		$sql = "SELECT date, title, text FROM ".$tbl_personal_agenda." WHERE user='".api_get_user_id()."' AND id='".$id."'";
 		$result = Database::query($sql);
 		$aantal = Database::num_rows($result);
 		if ($aantal != 0) {
@@ -426,24 +427,17 @@ function show_new_personal_item_form($id = "") {
 	echo '<!-- time: hour -->';
 	echo get_lang("Time").': ';
 	echo '<select name="frm_hour">';
-	for ($i = 1; $i <= 24; $i ++)
-	{
+	for ($i = 1; $i <= 24; $i ++) {
 		// values have to have double digits
-		if ($i <= 9)
-		{
+		if ($i <= 9) {
 			$value = "0".$i;
-		}
-		else
-		{
+		} else {
 			$value = $i;
 		}
 		// the current hour is indicated with [] around the hour
-		if ($hours == $value)
-		{
+		if ($hours == $value) {
 			echo '<option value='.$value.' selected>'.$value.'</option>';
-		}
-		else
-		{
+		} else {
 			echo '<option value='.$value.'> '.$value.' </option>';
 		}
 	}
@@ -471,21 +465,23 @@ function show_new_personal_item_form($id = "") {
 	echo '</div>';
 	// ********** The text field ********** \\
 	echo '<div class="formw">';
-			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+	
+	require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 
-			$oFCKeditor = new FCKeditor('frm_content') ;
+	$oFCKeditor = new FCKeditor('frm_content') ;
 
-			$oFCKeditor->Width		= '80%';
-			$oFCKeditor->Height		= '200';
+	$oFCKeditor->Width		= '80%';
+	$oFCKeditor->Height		= '200';
 
-			if(!api_is_allowed_to_edit(null,true)) {
-				$oFCKeditor->ToolbarSet = 'AgendaStudent';
-			} else {
-				$oFCKeditor->ToolbarSet = 'Agenda';
-			}
-			$oFCKeditor->Value		= $content;
-			$return =	$oFCKeditor->CreateHtml();
-			echo $return;
+	if(!api_is_allowed_to_edit(null,true)) {
+		$oFCKeditor->ToolbarSet = 'AgendaStudent';
+	} else {
+		$oFCKeditor->ToolbarSet = 'Agenda';
+	}
+	$oFCKeditor->Value		= $content;
+	$return =	$oFCKeditor->CreateHtml();
+	echo $return;
+	
 	echo '</div>';
 	// ********** The Submit button********** \\
 	echo '<div>';
@@ -493,8 +489,8 @@ function show_new_personal_item_form($id = "") {
 	echo '</div>';
 	echo '</div>';
 	echo '</form>';
-
 }
+
 /**
  * This function shows all the forms that are needed form adding/editing a new personal agenda item
  * @param date is the time in day
@@ -512,25 +508,27 @@ function store_personal_item($day, $month, $year, $hour, $minute, $title, $conte
 
 	//constructing the date
 	$date = $year."-".$month."-".$day." ".$hour.":".$minute.":00";
-
+	
+    if (!empty($date)) {
+        $date = api_get_utc_datetime($date);
+    }
+    
 	$date = Database::escape_string($date);
 	$title = Database::escape_string($title);
 	$content = Database::escape_string($content);
 	if ($id != strval(intval($id))) {
 		return false; //potential SQL injection
 	}
-
-
-	if ($id != "")
-	{ // we are updating
+	if ($id != "") { 
+	    // we are updating
 		$sql = "UPDATE ".$tbl_personal_agenda." SET user='".api_get_user_id()."', title='".$title."', text='".$content."', date='".$date."' WHERE id='".$id."'";
-	}
-	else
-	{ // we are adding a new item
+	} else { 
+	    // we are adding a new item
 		$sql = "INSERT INTO $tbl_personal_agenda (user, title, text, date) VALUES ('".api_get_user_id()."','$title', '$content', '$date')";
 	}
 	$result = Database::query($sql);
 }
+
 /**
  * This function finds all the courses (also those of sessions) of the user and returns an array containing the
  * database name of the courses.
@@ -715,13 +713,20 @@ function show_personal_agenda() {
 
 	// starting the table output
 	echo '<table class="data_table">';
+	
+	$th = Display::tag('th', get_lang('Title'));
+    $th .= Display::tag('th', get_lang('Content'));
+    $th .= Display::tag('th', get_lang('StartTimeWindow'));
+    $th .= Display::tag('th', get_lang('Modify'));
+    
+    echo Display::tag('tr', $th);
 
 	if (Database::num_rows($result) > 0) {
 		while ($myrow = Database::fetch_array($result)) {
 			/* 	display: the month bar		*/
 			if ($month_bar != date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]))) {
 				$month_bar = date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]));
-				echo "<tr><th class=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."</th></tr>";
+				//echo "<tr><th class=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."</th></tr>";
 			}
 			// highlight: if a date in the small calendar is clicked we highlight the relevant items
 			$db_date = (int) date("d", strtotime($myrow["date"])).date("n", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]));
@@ -733,52 +738,47 @@ function show_personal_agenda() {
 				$text_style = "text";
 			}
 
-			/*	display: the title	*/
-
+			
 			echo "<tr>";
-			echo '<td class="'.$style.'" colspan="2">';
+			
+			echo '<td>';
+			/*   display: the title  */
 			echo $myrow['title'];
-			echo "</td>";
-			echo "</tr>";
+			echo "</td>";		
 
-			/*--------------------------------------------------
-			 			display: date and time
-			  --------------------------------------------------*/
-			echo "<tr>";
-			echo '<td class="'.$style.'">';
+			         // display: the content
+            $content = $myrow['text'];
+            $content = make_clickable($content);
+            $content = text_filter($content);
+            echo "<td>";
+            echo $content;
+            echo "</td>";
+            
+
+            //display: date and time			
+			echo '<td>';
 			// adding an internal anchor
-			echo "<a name=\"".$myrow["id"]."\"></a>";
-			echo date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
-			echo strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"]));
+			/*echo "<a name=\"".$myrow["id"]."\"></a>";
+			echo date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";*/
+			$myrow["date"] = api_get_local_time($myrow["date"]);
+			echo api_format_date($myrow["date"], DATE_TIME_FORMAT_LONG);
 			echo "</td>";
-			echo '<td></td>'; //remove when enabling ical
+			//echo '<td></td>'; //remove when enabling ical
             //echo '<td class="'.$style.'">';
 			//echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a>';
 			//echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a>';
 			//echo '<a class="ical_export" href="ical_export.php?type=personal&id='.$myrow['id'].'&class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a>';
 			//echo "</td>";
-			echo "</tr>";
+			//echo "</tr>";
 
-			/*--------------------------------------------------
-			 			display: the content
-			  --------------------------------------------------*/
-			$content = $myrow['text'];
-			$content = make_clickable($content);
-			$content = text_filter($content);
-			echo "<tr><td class=\"".$text_style."\" colspan='2'>";
-			echo $content;
-			echo "</td></tr>";
-			/*--------------------------------------------------
-			 			display: the edit / delete icons
-			  --------------------------------------------------*/
-			echo "<tr><td class=\"".$text_style."\" colspan='2'>";
-			echo "<a href=\"myagenda.php?action=edit_personal_agenda_item&amp;id=".$myrow['id']."\">".Display::return_icon('edit.gif', get_lang('Edit'))."</a>";
-			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
+
+			/* display: the edit / delete icons */
+			echo "<td>";
+			echo "<a href=\"myagenda.php?action=edit_personal_agenda_item&amp;id=".$myrow['id']."\">".Display::return_icon('edit.png', get_lang('Edit'), array(), 22)."</a> ";
+			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), 22)."</a>";
 			echo "</td></tr>";
 		}
-	}
-	else
-	{
+	} else {
 		echo '<tr><td colspan="2">'.get_lang('NoAgendaItems').'</td></tr>';
 	}
 	echo "</table>";

@@ -16,8 +16,7 @@ class SystemAnnouncementManager
 	 * @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
 	 * @param int $id The identifier of the announcement to display
 	 */
-	public static function display_announcements($visible, $id = -1)
-	{
+	public static function display_announcements($visible, $id = -1) {
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);		
 		
@@ -32,16 +31,8 @@ class SystemAnnouncementManager
 			case VISIBLE_TEACHER :
 				$sql .= " AND visible_teacher = 1 ";
 				break;
-		}
-		
-		global $_configuration;
-		$current_access_url_id = 1;
-		if ($_configuration['multiple_access_urls']) {
-			$current_access_url_id = api_get_current_access_url_id();
-		}
-		$sql .= " AND access_url_id = '$current_access_url_id' ";
-		
-		
+		}	
+		$sql .= " AND access_url_id = ".api_get_current_access_url_id()." ";
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
 		
 		$announcements = Database::query($sql);
@@ -62,7 +53,7 @@ class SystemAnnouncementManager
 					} else {
 						$show_url = 'news_list.php#'.$announcement->id;
 					}
-					$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, date_default_timezone_get());					
+			        $display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, date_default_timezone_get());					
 					echo '<a name="'.$announcement->id.'"></a>
 						<div class="system_announcement">
 							<div class="system_announcement_title"><a name="ann'.$announcement->id.'" href="'.$show_url.'">'.$announcement->title.'</a></div><div class="system_announcement_date">'.$display_date.'</div>
@@ -130,7 +121,7 @@ class SystemAnnouncementManager
 			echo '</table>';
 			echo '<table align="center" border="0" width="900px">';			
 			while ($announcement = Database::fetch_object($announcements)) {
-				$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, date_default_timezone_get());
+				$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG);
 				echo '<tr><td>';
 				echo '<a name="'.$announcement->id.'"></a>
 						<div class="system_announcement">
@@ -259,25 +250,24 @@ class SystemAnnouncementManager
 	 * @param int    Whether to send an e-mail to all users (1) or not (0)
 	 * @return bool  True on success, false on failure
 	 */
-	public static function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail=0)
-	{
+	public static function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail = 0, $add_to_calendar = false ) {
 		$a_dateS = explode(' ',$date_start);
 		$a_arraySD = explode('-',$a_dateS[0]);
 		$a_arraySH = explode(':',$a_dateS[1]);
-		$date_start = array_merge($a_arraySD,$a_arraySH);
+		$date_start_to_compare = array_merge($a_arraySD,$a_arraySH);
 
 		$a_dateE = explode(' ',$date_end);
 		$a_arrayED = explode('-',$a_dateE[0]);
 		$a_arrayEH = explode(':',$a_dateE[1]);
-		$date_end = array_merge($a_arrayED,$a_arrayEH);
+		$date_end_to_compare = array_merge($a_arrayED,$a_arrayEH);
 
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
-		if (!checkdate($date_start[1], $date_start[2], $date_start[0])) {
+		if (!checkdate($date_start_to_compare[1], $date_start_to_compare[2], $date_start_to_compare[0])) {
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
 			return false;
 		}
-		if (($date_end[1] || $date_end[2] || $date_end[0]) && !checkdate($date_end[1], $date_end[2], $date_end[0])) {
+		if (($date_end_to_compare[1] || $date_end_to_compare[2] || $date_end_to_compare[0]) && !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
 		}
@@ -285,8 +275,10 @@ class SystemAnnouncementManager
 			Display::display_normal_message(get_lang('InvalidTitle'));
 			return false;
 		}
-		$start = $date_start[0]."-".$date_start[1]."-".$date_start[2]." ".$date_start[3].":".$date_start[4].":".$date_start[5];
-		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
+		
+		$start    = api_get_utc_datetime($date_start);
+		$end      = api_get_utc_datetime($date_end);		
+		
 		$title = Database::escape_string($title);
 		$content = Database::escape_string($content);
 
@@ -311,6 +303,10 @@ class SystemAnnouncementManager
 		if ($res === false) {
 			Debug::log_s(mysql_error());
 			return false;
+		}		
+		if ($add_to_calendar) {
+		    require_once 'calendar.lib.php';
+		    $agenda_id = agenda_add_item($title, $content, $date_start, $date_end);
 		}
 		return true;
 	}
@@ -323,24 +319,25 @@ class SystemAnnouncementManager
 	 * @param array $date_end : end date of announcement (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
 	 * @return	bool	True on success, false on failure
 	 */
-	public static function update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0,$lang=null, $send_mail=0)
-	{
+	public static function update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0,$lang=null, $send_mail=0) {
 		$a_dateS = explode(' ',$date_start);
 		$a_arraySD = explode('-',$a_dateS[0]);
 		$a_arraySH = explode(':',$a_dateS[1]);
-		$date_start = array_merge($a_arraySD,$a_arraySH);
+		$date_start_to_compare = array_merge($a_arraySD,$a_arraySH);
 
 		$a_dateE = explode(' ',$date_end);
 		$a_arrayED = explode('-',$a_dateE[0]);
 		$a_arrayEH = explode(':',$a_dateE[1]);
-		$date_end = array_merge($a_arrayED,$a_arrayEH);
+		$date_end_to_compare = array_merge($a_arrayED,$a_arrayEH);
+		
 		$langsql = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		if (!checkdate($date_start[1], $date_start[2], $date_start[0])) {
+		
+		if (!checkdate($date_start_to_compare[1], $date_start_to_compare[2], $date_start_to_compare[0])) {
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
 			return false;
 		}
-		if (($date_end[1] || $date_end[2] || $date_end[0]) && !checkdate($date_end[1], $date_end[2], $date_end[0])) {
+		if (($date_end_to_compare[1] || $date_end_to_compare[2] || $date_end_to_compare[0]) && !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
 		}
@@ -348,8 +345,9 @@ class SystemAnnouncementManager
 			Display::display_normal_message(get_lang('InvalidTitle'));
 			return false;
 		}
-		$start = $date_start[0]."-".$date_start[1]."-".$date_start[2]." ".$date_start[3].":".$date_start[4].":".$date_start[5];
-		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
+	    $start    = api_get_utc_datetime($date_start);
+        $end      = api_get_utc_datetime($date_end);
+        
 		$title = Database::escape_string($title);
 		$content = Database::escape_string($content);
 
@@ -357,15 +355,9 @@ class SystemAnnouncementManager
 		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
 		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
 		
-		global $_configuration;
-		$current_access_url_id = 1;
-		if ($_configuration['multiple_access_urls']) {
-			$current_access_url_id = api_get_current_access_url_id();
-		}
-		
 		$id = intval($id);
 		$sql = "UPDATE ".$db_table." SET lang=$langsql,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
-		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' , access_url_id = '".$current_access_url_id."'  WHERE id='".$id."'";
+		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' , access_url_id = '".api_get_current_access_url_id()."'  WHERE id = ".$id;
 
 		if ($send_mail==1) {
 			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang);
@@ -385,7 +377,7 @@ class SystemAnnouncementManager
 	public static function delete_announcement($id) {
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
-		$sql = "DELETE FROM ".$db_table." WHERE id='".$id."'";
+		$sql = "DELETE FROM ".$db_table." WHERE id =".$id;
 		$res = Database::query($sql);
 		if ($res === false) {
 			Debug::log_s(mysql_error());
@@ -401,7 +393,7 @@ class SystemAnnouncementManager
 	public static function get_announcement($id) {
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
-		$sql = "SELECT * FROM ".$db_table." WHERE id='".$id."'";
+		$sql = "SELECT * FROM ".$db_table." WHERE id = ".$id;
 		$announcement = Database::fetch_object(Database::query($sql));
 		return $announcement;
 	}

@@ -2231,3 +2231,15 @@ FCKEvents.prototype.FireEvent = function( eventName, params )
 
     return bReturnValue ;
 }
+
+// See http://dev.ckeditor.com/ticket/6322
+if (parseInt( navigator.userAgent.toLowerCase().match( /msie (\d+)/ )[1], 10 ) >= 9) {
+    // For IE9 or higher.
+    FCKTools.RegisterDollarFunction = function( targetWindow )
+    {
+        targetWindow.$ = function( id )
+        {
+            return targetWindow.document.getElementById( id ) ;
+        } ;
+    }
+}

@@ -79,7 +79,7 @@ class manager
 
 		}elseif(isset($_GET[$this->folderPathIndex]) && file_exists($_GET[$this->folderPathIndex]) && !is_file($_GET[$this->folderPathIndex]) )
 		{
-			$this->currentFolderPath = $_GET[$this->folderPathIndex];
+			$this->currentFolderPath = api_htmlentities(Security::remove_XSS($_GET[$this->folderPathIndex]));
 		}
 		elseif(isset($_SESSION[$this->lastVisitedFolderPathIndex]) && file_exists($_SESSION[$this->lastVisitedFolderPathIndex]) && !is_file($_SESSION[$this->lastVisitedFolderPathIndex]))
 		{
@@ -141,10 +141,7 @@ class manager
 		if($calculateSubdir && !file_exists($this->currentFolderPath))
 		{
 			die(ERR_FOLDER_NOT_FOUND . $this->currentFolderPath);
-		}
-
-
-	
+		}			
 	}
 	
 	function setSessionAction(&$session)

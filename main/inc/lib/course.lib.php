@@ -2468,25 +2468,18 @@ class CourseManager {
 
         // redimension image to 85x85
         if ($result) {
-
             $max_size_for_picture = 85;
-
             if (!class_exists('image')) {
                 require_once api_get_path(LIBRARY_PATH).'image.lib.php';
             }
-
             $medium = new image($course_image);
-
-            $picture_infos = api_getimagesize($course_image);
+            $picture_infos = api_getimagesize($course_image);            
             if ($picture_infos[0] > $max_size_for_picture) {
-                $thumbwidth = $max_size_for_picture;
-                $new_height = $max_size_for_picture; //round(($thumbwidth / $picture_infos[0]) * $picture_infos[1]);
-                //if ($new_height > $max_size_for_picture) { $new_height = $thumbwidth;}
-                $medium->resize($thumbwidth, $new_height, 0, true);
+                $width = 100000;
+                $height = $max_size_for_picture;
+                $medium->resize($width, $height, 0);
             }
-
             $rs = $medium->send_image('PNG', $store_path.'/course-pic85x85.png');
-
         }
 
         return $result;

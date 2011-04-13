@@ -46,11 +46,11 @@
 	color:#000000;
 	display:none;	
 	text-align:left;  
-    background-color: #34393A;
+    background-color: #fff;
 			
-	box-shadow:0 0 90px 5px #000;
-    -moz-box-shadow:0 0 90px 5px #000;
-    -webkit-box-shadow: 0 0 90px #000;  
+	box-shadow:0 0 50px 5px #999;
+    -moz-box-shadow:0 0 50px 5px #999;
+    -webkit-box-shadow: 0 0 50px 5px #999;  
 	
 	top:50%;
 	left:50%;
@@ -79,15 +79,11 @@
     float:left;
 }
 #TB_closeWindow{
-  
-
-  
-      height: 29px;
+	height: 29px;
     padding: 8px 10px 10px 0;
     position: absolute;
     right: -28px;
-    top: -28px;
-	
+    top: -28px;	
 }
 #TB_closeAjaxWindow{
   padding:7px 10px 5px 0;
@@ -101,16 +97,26 @@
   margin-bottom:1px;
 }
 #TB_title{
-  background-color:#e8e8e8;
-  height:27px;
+    -moz-border-radius-topleft:8px;
+    -moz-border-radius-topright:8px;
+	
+    -webkit-border-radius-topleft:8px;
+    -webkit-border-radius-topright:8px;
+	
+	-opera-border-radius-topleft:8px;
+    -opera-border-radius-topright:8px;
+	
+	-border-radius-topleft:8px;
+    -border-radius-topright:8px;
+    background-color:#e8e8e8;
+    height:27px;
 }
-#TB_ajaxContent {
+#TB_ajaxContent {	
 	clear:both;
 	padding:2px 15px 15px 15px;
 	overflow:auto;
 	text-align:left;
-	line-height:1.4em;
-	background-color: #ccc;
+	line-height:1.4em;	
 }
 #TB_ajaxContent.TB_modal{
   padding:15px;
@@ -118,7 +124,7 @@
 #TB_ajaxContent p{
   padding:5px 0px 5px 0px;
 }
-#TB_load{
+#TB_load {
   position: fixed;
   display:none;
   height:13px;

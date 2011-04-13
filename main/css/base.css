@@ -283,12 +283,27 @@ padding-top:10px;
     
     float: left;
     height: auto;
-    margin: 10px 8px 15px 15px;
+    margin: 2px 4px 15px;
     padding: 8px;
-	width: 80%;
+	width: 85%;
 }
 
 .agenda_day {
 	float:left;
-	margin:5px;    
+	margin:5px 5px 10px 5px;    
+	width:100%;
+}
+
+
+a.tag {
+    background-color: #E0EAF1;
+    border-bottom: 1px solid #3E6D8E;
+    border-right: 1px solid #7F9FB6;
+    color: #3E6D8E;
+    font-size: 90%;
+    line-height: 2.4;
+    margin: 2px 2px 2px 0;
+    padding: 3px 4px;
+    text-decoration: none;
+    white-space: nowrap;
 }

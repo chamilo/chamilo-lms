@@ -105,7 +105,7 @@ if (isset ($_GET['action']) && $_GET['action'] == 'add') {
     $values['action'] = 'add';
     // Set default time window: NOW -> NEXT WEEK
     $values['start'] = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()));
-    $values['end'] = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()) + (7 * 24 * 60 * 60));
+    $values['end']   = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()) + (7 * 24 * 60 * 60));
     $action_todo = true;
 }
 
@@ -116,8 +116,8 @@ if (isset ($_GET['action']) && $_GET['action'] == 'edit') {
     $values['id'] 				= $announcement->id;
     $values['title'] 			= $announcement->title;
     $values['content']			= $announcement->content;
-    $values['start'] 			= $announcement->date_start;
-    $values['end'] 				= $announcement->date_end;
+    $values['start'] 			= api_get_local_time($announcement->date_start);
+    $values['end'] 				= api_get_local_time($announcement->date_end);
     $values['visible_teacher'] 	= $announcement->visible_teacher;
     $values['visible_student'] 	= $announcement->visible_student ;
     $values['visible_guest'] 	= $announcement->visible_guest ;
@@ -153,10 +153,12 @@ if ($action_todo) {
     $form->addElement('checkbox', 'visible_teacher', get_lang('Visible'), get_lang('Teacher'));
     $form->addElement('checkbox', 'visible_student', null, get_lang('Student'));
     $form->addElement('checkbox', 'visible_guest', null, get_lang('Guest'));
+    
     $form->addElement('hidden', 'id');
-    $form->addElement('checkbox', 'send_mail', get_lang('SendMail'));
+    $form->addElement('checkbox', 'send_mail', get_lang('SendMail'));    
 
     if (isset($_REQUEST['action']) && $_REQUEST['action']=='add') {
+        $form->addElement('checkbox', 'add_to_calendar', get_lang('AddToCalendar'));
         $text=get_lang('AddNews');
         $class='add';
         $form->addElement('hidden', 'action','add');
@@ -191,7 +193,7 @@ if ($action_todo) {
         }
         switch ($values['action']) {
             case 'add':
-                if (SystemAnnouncementManager::add_announcement($values['title'], $values['content'], $values['start'], $values['end'], $values['visible_teacher'], $values['visible_student'], $values['visible_guest'], $values['lang'], $values['send_mail'])) {
+                if (SystemAnnouncementManager::add_announcement($values['title'], $values['content'], $values['start'], $values['end'], $values['visible_teacher'], $values['visible_student'], $values['visible_guest'], $values['lang'], $values['send_mail'], $values['add_to_calendar'])) {
                     Display :: display_confirmation_message(get_lang('AnnouncementAdded'));
                 } else {
                     $show_announcement_list = false;
@@ -229,14 +231,14 @@ if ($show_announcement_list) {
         $row = array();
         $row[] = $announcement->id;
         $row[] = Display::return_icon(($announcement->visible ? 'accept.png' : 'exclamation.png'), ($announcement->visible ? get_lang('AnnouncementAvailable') : get_lang('AnnouncementNotAvailable')));
-        $row[] = api_convert_and_format_date($announcement->date_start, null, date_default_timezone_get());
-        $row[] = api_convert_and_format_date($announcement->date_end, null, date_default_timezone_get());
+        $row[] = api_convert_and_format_date($announcement->date_start);
+        $row[] = api_convert_and_format_date($announcement->date_end);
         $row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_TEACHER."&amp;action=". ($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_teacher  ? 'visible.gif' : 'invisible.gif'), get_lang('show_hide'))."</a>";
         $row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_STUDENT."&amp;action=". ($announcement->visible_student  ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_student  ? 'visible.gif' : 'invisible.gif'), get_lang('show_hide'))."</a>";
         $row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_GUEST."&amp;action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest  ? 'visible.gif' : 'invisible.gif'), get_lang('show_hide'))."</a>";
         $row[] = $announcement->title;
         $row[] = $announcement->lang;
-        $row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.gif', get_lang('Edit'))."</a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
+        $row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.png', get_lang('Edit'), array(), 22)."</a> <a href=\"?action=delete&id=".$announcement->id."\"  onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), 22)."</a>";
         $announcement_data[] = $row;
     }
     $table = new SortableTableFromArray($announcement_data);
@@ -255,7 +257,5 @@ if ($show_announcement_list) {
     $table->set_form_actions($form_actions);
     $table->display();
 }
-
 /* FOOTER */
-
 Display :: display_footer();

@@ -323,10 +323,10 @@ if ($show_full_profile) {
 						$tag_tmp = array();
 						foreach ($user_tags as $tags) {
 							//$tag_tmp[] = $tags['tag'];
-							$tag_tmp[] = '<a href="'.api_get_path(WEB_PATH).'main/social/search.php?q='.$tags['tag'].'">'.$tags['tag'].'</a>';
+							$tag_tmp[] = '<a class="tag" href="'.api_get_path(WEB_PATH).'main/social/search.php?q='.$tags['tag'].'">'.$tags['tag'].'</a>';
 						}
 						if (is_array($user_tags) && count($user_tags)>0) {
-							$extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt><dd>'.implode(', ',$tag_tmp).'</dd>';
+							$extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt><dd>'.implode('', $tag_tmp).'</dd>';
 						}
 					} elseif ($field_type == USER_FIELD_TYPE_SOCIAL_PROFILE) {
 						$icon_path = UserManager::get_favicon_from_url($data);

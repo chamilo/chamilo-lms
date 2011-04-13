@@ -197,18 +197,12 @@ echo '<div class="sort" style="float:right">';
 echo '</div>';
 if (api_is_allowed_to_edit(false,true)) {
 	switch ($_GET['action']) {
-		case "add":
-            if(!empty($_POST['ical_submit'])) {
-                $course_info = api_get_course_info();
-                agenda_import_ical($course_info, $_FILES['ical_import']);                
-                display_agenda_items();
-            } elseif ($_POST['submit_event']) {
-
-		        $course_info = api_get_course_info();
+		case "add":            
+            if ($_POST['submit_event']) {		        
 			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
                 $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
                 
-				$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$_POST['file_comment']);           
+				$id = agenda_add_item($_POST['title'],$_POST['content'],$event_start,$event_stop);           
 				display_agenda_items();
 			} else {
 				show_add_form();

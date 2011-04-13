@@ -96,8 +96,8 @@ class Diagnoser
         // General Functions
 
         $version = phpversion();
-        $status = $version > '5.2' ? self :: STATUS_OK : self :: STATUS_ERROR;
-        $array[] = $this->build_setting($status, '[PHP]', 'phpversion()', 'http://www.php.net/manual/en/function.phpversion.php', phpversion(), '>= 5.2', null, get_lang('PHPVersionInfo'));
+        $status = $version > '5.0' ? self :: STATUS_OK : self :: STATUS_ERROR;
+        $array[] = $this->build_setting($status, '[PHP]', 'phpversion()', 'http://www.php.net/manual/en/function.phpversion.php', phpversion(), '>= 5.0', null, get_lang('PHPVersionInfo'));
 
         $setting = ini_get('output_buffering');
         $req_setting = 1;

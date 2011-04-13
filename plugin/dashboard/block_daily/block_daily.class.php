@@ -75,10 +75,9 @@ class BlockDaily extends Block {
 		$content = '';
 		$data_table = '';
 		$content = $this->get_content_html();
-		$html = '
-		            <li class="widget color-green" id="intro">
+		$html = '<li class="widget color-green" id="intro">
 		                <div class="widget-head">
-		                    <h3>'.get_lang('DailyElectronic').'</h3>
+		                    <h3>'.get_lang('GradebookAndAttendances').'</h3>
 		                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
 		                </div>
 		                <div class="widget-content">

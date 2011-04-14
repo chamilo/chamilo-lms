@@ -651,9 +651,9 @@ function display_user_link_document($user_id, $name) {
  * @return string	html-output text for the form
  */
 function create_dir_form() {
-
+    global $document_id;
     $new_folder_text = '<form action="'.api_get_self().'" method="post">';
-    $new_folder_text .= '<input type="hidden" name="curdirpath" value="'.Security::remove_XSS($_GET['curdirpath']).'" />';
+    $new_folder_text .= '<input type="hidden" name="dir_id" value="'.$document_id.'" />';
 
     // Form title
     $new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateDir').'</div></div>';

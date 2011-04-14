@@ -25,20 +25,24 @@ $nameTools = get_lang('PhotoRetouching');
 
 api_protect_course_script();
 api_block_anonymous_users();
-if (api_get_setting('enabled_support_paint') == 'false'){
-	api_not_allowed(true);
-}
-if (!isset($_GET['dir'])){
+if (api_get_setting('enabled_support_paint') == 'false') {
 	api_not_allowed(true);
 }
 
+if (!isset($_GET['id'])) {
+    api_not_allowed(true);
+}
 
-$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
+$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
+$document_id = $document_data['id'];
+$dir = $document_data['path'];
+
+//$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 //path for pixlr save
 $_SESSION['paint_dir']=Security::remove_XSS($_GET['dir']);
-if($_SESSION['paint_dir']=='/'){
+if ($_SESSION['paint_dir']=='/'){
 	$_SESSION['paint_dir']='';
 }
 $_SESSION['paint_file']=get_lang('NewImage');
@@ -107,8 +111,6 @@ if (isset ($group)) {
 	// Copied from document.php
 	$dir_array = explode('/', $dir);
 	$array_len = count($dir_array);
-	
-	
 	$dir_acum = '';
 	for ($i = 0; $i < $array_len; $i++) {
 		$url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
@@ -125,7 +127,7 @@ if (isset ($group)) {
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 echo '</div>';
 
 ///pixlr

@@ -123,8 +123,7 @@ $langpixlr = isset($pixlr_code_translation_table[$langpixlr]) ? $pixlredit_code_
 $loc=$langpixlr;// deprecated ?? TODO:check pixlr read user browser
 
 $exit_path=api_get_path(WEB_CODE_PATH).'document/exit_pixlr.php';
-$_SESSION['exit_pixlr']= Security::remove_XSS($dir);
-$exit=$exit_path;
+$_SESSION['exit_pixlr']= Security::remove_XSS($parent_id);
 
 $referrer="Chamilo";
 
@@ -176,7 +175,7 @@ $_SESSION['temp_realpath_image']=$to;
 //load image to url
 $to_url=api_get_path(WEB_ARCHIVE_PATH).'temp/images/'.$file_crip;
 $image=urlencode($to_url);
-$pixlr_url = 'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle;
+$pixlr_url = 'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle;
  
 //make frame an send image
 echo '<iframe style="height: 600px; width: 100%;" scrolling="no" frameborder="0" src="'.$pixlr_url.'">';

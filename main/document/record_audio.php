@@ -28,14 +28,16 @@ $nameTools = get_lang('VoiceRecord');
 api_protect_course_script();
 api_block_anonymous_users();
 
-if (!isset($_GET['dir'])){
-	api_not_allowed(true);
+if (!isset($_GET['id'])) {
+    api_not_allowed(true);
 }
 
-$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
+$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
+$document_id = $document_data['id'];
+$dir = $document_data['path'];
+
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-//////////////////////////////////
 // Please, do not modify this dirname formatting
 
 if (strstr($dir, '..')) {
@@ -73,14 +75,14 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
 			api_not_allowed(true);
 		}
 	}
-	$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
+	$interbreadcrumb[] = array ("url" => "./document.php?id=".$document_id.$req_gid, "name" => get_lang('Documents'));
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
 
 
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder($_user['user_id'], Security::remove_XSS($_GET['dir']),api_get_session_id()))) {
+if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir),api_get_session_id()))) {
 	api_not_allowed(true);
 }
 
@@ -128,7 +130,7 @@ if (isset ($group)) {
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 echo '</div>';
 
 echo '<br/>';
@@ -194,22 +196,16 @@ echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/
 	//echo '<param name="Start" value="true" />';// the applet will start playing the file from SoundFileURL after loading (default false)
 	
 echo '</applet>';
-
 //check browser support and load form
 $array_browser=api_browser_support('check_browser');
 
-if ($array_browser[0]=="Internet Explorer"){
-	
-	echo '<div style="width:210px; background-color:#FFEFA7">'.get_lang('BrowserNotSupportNanogongSend').'</div>';
-	
-}
-else{   
+if ($array_browser[0]=="Internet Explorer") {	
+	echo '<div style="width:210px; background-color:#FFEFA7">'.get_lang('BrowserNotSupportNanogongSend').'</div>';	
+} else {   
 	echo '<form name="form_nanogong">';	
 		echo '<input type="text" id="audio_title">';
 		echo '<input type="button" value="'.get_lang('Save').'" onClick="submitVoice()" />';
 	echo '</form>';
 }
-
 echo '</div>';
 Display :: display_footer();
-?>

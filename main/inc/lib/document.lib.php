@@ -995,6 +995,7 @@ class DocumentManager {
      *
      * @param array $_course
      * @param string $path
+     * @todo load parent_id
      * @return int id of document / false if no doc found
      */
     public static function get_document_data_by_id($id, $course_code) {
@@ -1004,12 +1005,13 @@ class DocumentManager {
         }
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
         $id = intval($id);
-        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE id  = $id ";
+        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE id = $id ";
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result,'ASSOC');      
             //Public document URL       
             $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq='.$course_code.'&id='.$id;
+            $row['parent_id']  = self::get_document_id($course_info, dirname($row['path']));                       
             return $row;
         }
         return false;

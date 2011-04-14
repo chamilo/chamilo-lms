@@ -27,25 +27,19 @@ function InnerDialogLoaded() {
 	var isIE  = (navigator.appVersion.indexOf(\'MSIE\') != -1) ? true : false ;
 	var EditorFrame = null ;
 
-	if ( !isIE )
-	{
+	if ( !isIE ) {
 		EditorFrame = window.frames[0] ;
-	}
-	else
-	{
+	} else {
 		// For this dynamic page window.frames[0] enumerates frames in a different order in IE.
 		// We need a sure method to locate the frame that contains the online editor.
-		for ( var i = 0, n = window.frames.length ; i < n ; i++ )
-		{
-			if ( window.frames[i].location.toString().indexOf(\'InstanceName=content\') != -1 )
-			{
+		for ( var i = 0, n = window.frames.length ; i < n ; i++ ) {
+			if ( window.frames[i].location.toString().indexOf(\'InstanceName=content\') != -1 ) {
 				EditorFrame = window.frames[i] ;
 			}
 		}
 	}
 
-	if ( !EditorFrame )
-	{
+	if ( !EditorFrame ) {
 		return null ;
 	}
 
@@ -58,22 +52,19 @@ function InnerDialogLoaded() {
 	var use_document_title='.api_get_setting('use_document_title').';
 	var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
 
-	function launch_templates()
-	{
+	function launch_templates() {
 		//document.getElementById(\'frmModel\').style.display="block";
 		//document.getElementById(\'content___Frame\').width=\'70%\';
 		//window.frames[0].FCKToolbarItems.GetItem("Template").Click;
 	}
 
-	function FCKeditor_OnComplete( editorInstance )
-	{
+	function FCKeditor_OnComplete( editorInstance ) {
 		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
 		document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 	}
 
-	function check_for_title()
-	{
-		if(temp){
+	function check_for_title() {
+		if (temp) {
 			// This functions shows that you can interact directly with the editor area
 			// DOM. In this way you have the freedom to do anything you want with it.
 
@@ -134,31 +125,29 @@ function InnerDialogLoaded() {
 		temp=true;
 	}
 
-	function trim(s)
-	{
-	 while(s.substring(0,1) == \' \') {
-	  s = s.substring(1,s.length);
-	 }
-	 while(s.substring(s.length-1,s.length) == \' \') {
-	  s = s.substring(0,s.length-1);
-	 }
-	 return s;
+	function trim(s) {
+        while(s.substring(0,1) == \' \') {
+            s = s.substring(1,s.length);
+        }
+        while(s.substring(s.length-1,s.length) == \' \') {
+            s = s.substring(0,s.length-1);
+        }
+        return s;
 	}
 
-	function check_if_still_empty()
-	{
-		if(trim(document.getElementById(\'filename\').value) != "")
-		{
+	function check_if_still_empty() {
+		if(trim(document.getElementById(\'filename\').value) != "") {
 			document.getElementById(\'title_edited\').value = "true";
 		}
 	}
 
-	function setFocus(){
-	$("#document_title").focus();
-		}
+	function setFocus() {
+	   $("#document_title").focus();
+    }
+    
 	$(window).load(function () {
-	  setFocus();
-	    });
+        setFocus();
+    });
 </script>';
 
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -178,7 +167,16 @@ $nameTools = get_lang('CreateDocument');
 
 /*	Constants and variables */
 
-$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
+//$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
+$document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());    
+if (empty($document_data)) {
+    $dir = '/';
+    $folder_id = 0;
+} else {
+    $folder_id = $document_data['id'];
+    $dir = $document_data['path'];
+}
+//$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
 
 /*	MAIN CODE */
 
@@ -208,8 +206,7 @@ if ($dir[strlen($dir) - 1] != '/') {
 $doc_tree= explode('/', $dir);
 $count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
 // Level correction for group documents.
-if (!empty($group_properties['directory']))
-{
+if (!empty($group_properties['directory'])) {
 	$count_dir = $count_dir > 0 ? $count_dir - 1 : 0;
 }
 $relative_url = '';
@@ -302,8 +299,8 @@ if (isset($_REQUEST['certificate'])) {//added condition for certicate in gradebo
 $renderer = & $form->defaultRenderer();
 
 // Hidden element with current directory
-$form->addElement('hidden', 'dir');
-$default['dir'] = $dir;
+$form->addElement('hidden', 'id');
+$default['id'] = $folder_id;
 // Filename
 
 $form->addElement('hidden', 'title_edited', 'false', 'id="title_edited"');
@@ -424,19 +421,19 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $_GET['dir'
 			$escaped_folders = array();			
 			foreach ($folders as $key => & $val) {
 				//Hide some folders
-				if($val=='/HotPotatoes_files' || $val=='/certificates' || basename($val)=='css'){			
+				if ($val=='/HotPotatoes_files' || $val=='/certificates' || basename($val)=='css'){			
 				 continue;
 				}
 				//Admin setting for Hide/Show the folders of all users		
-				if(api_get_setting('show_users_folders') == 'false' && (strstr($val, '/shared_folder') || strstr($val, 'shared_folder_session_'))){	
+				if (api_get_setting('show_users_folders') == 'false' && (strstr($val, '/shared_folder') || strstr($val, 'shared_folder_session_'))){	
 					continue;
 				}
 				//Admin setting for Hide/Show Default folders to all users
-				if(api_get_setting('show_default_folders') == 'false' && ($val=='/images' || $val=='/flash' || $val=='/audio' || $val=='/video' || strstr($val, '/images/gallery') || $val=='/video/flv')){
+				if (api_get_setting('show_default_folders') == 'false' && ($val=='/images' || $val=='/flash' || $val=='/audio' || $val=='/video' || strstr($val, '/images/gallery') || $val=='/video/flv')){
 					continue;
 				}
 				//Admin setting for Hide/Show chat history folder
-				if(api_get_setting('show_chat_folder') == 'false' && $val=='/chat_files'){
+				if (api_get_setting('show_chat_folder') == 'false' && $val=='/chat_files'){
 					continue;
 				}				
 					
@@ -464,19 +461,19 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $_GET['dir'
 		if (is_array($folders)) {
 			foreach ($folders as & $folder) {
 				//Hide some folders
-				if($folder=='/HotPotatoes_files' || $folder=='/certificates' || basename($folder)=='css'){			
+				if ($folder=='/HotPotatoes_files' || $folder=='/certificates' || basename($folder)=='css'){			
 				 continue;
 				}
 				//Admin setting for Hide/Show the folders of all users		
-				if(api_get_setting('show_users_folders') == 'false' && (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))){	
+				if (api_get_setting('show_users_folders') == 'false' && (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))){	
 					continue;
 				}
 				//Admin setting for Hide/Show Default folders to all users
-				if(api_get_setting('show_default_folders') == 'false' && ($folder=='/images' || $folder=='/flash' || $folder=='/audio' || $folder=='/video' || strstr($folder, '/images/gallery') || $folder=='/video/flv')){
+				if (api_get_setting('show_default_folders') == 'false' && ($folder=='/images' || $folder=='/flash' || $folder=='/audio' || $folder=='/video' || strstr($folder, '/images/gallery') || $folder=='/video/flv')){
 					continue;
 				}
 				//Admin setting for Hide/Show chat history folder
-				if(api_get_setting('show_chat_folder') == 'false' && $folder=='/chat_files'){
+				if (api_get_setting('show_chat_folder') == 'false' && $folder=='/chat_files'){
 					continue;
 				}			
 				
@@ -611,7 +608,7 @@ if ($form->validate()) {
 			$selectcat = '';
 			if (isset($_REQUEST['selectcat']))
 				$selectcat = "&selectcat=".Security::remove_XSS($_REQUEST['selectcat']);
-			header('Location: document.php?curdirpath='.urlencode($dir).$selectcat);
+			header('Location: document.php?id='.$folder_id.$selectcat);
 			exit ();
 		} else {
 			Display :: display_header($nameTools, 'Doc');

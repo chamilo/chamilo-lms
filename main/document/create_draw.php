@@ -28,18 +28,23 @@ $nameTools = get_lang('Draw');
 api_protect_course_script();
 api_block_anonymous_users();
 
-if (!isset($_GET['dir'])){
+if (!isset($_GET['id'])) {
 	api_not_allowed(true);
 }
+
+$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
+$document_id   = $document_data['id'];
+$dir           = $document_data['path'];
+
 /*	Constants and variables */
 
 //path for svg-edit save
-$_SESSION['draw_dir']=Security::remove_XSS($_GET['dir']);
-if($_SESSION['draw_dir']=='/'){
-	$_SESSION['draw_dir']='';
+$_SESSION['draw_dir'] = Security::remove_XSS($dir);
+if ($_SESSION['draw_dir']=='/'){
+    $_SESSION['draw_dir']='';
 }
 
-$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
+$dir = isset($dir) ? Security::remove_XSS($dir) : Security::remove_XSS($_POST['dir']);
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 // Please, do not modify this dirname formatting
@@ -80,13 +85,13 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
 	}
 }
 
-$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
+$interbreadcrumb[] = array ("url" => "./document.php?id=".$parent_id.$req_gid, "name" => get_lang('Documents'));
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
 
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($_GET['dir']), api_get_session_id()))) {
+if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir), api_get_session_id()))) {
 	api_not_allowed(true);
 }
 
@@ -130,11 +135,10 @@ if (isset ($group)) {
 		}
 		$dir_acum .= $dir_array[$i].'/';
 	}
-//
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 echo '</div>';
 
 if (api_browser_support('svg')){

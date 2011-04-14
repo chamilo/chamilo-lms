@@ -41,7 +41,7 @@ $dir = $document_data['path'];
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 //path for pixlr save
-$_SESSION['paint_dir']=Security::remove_XSS($_GET['dir']);
+$_SESSION['paint_dir']=Security::remove_XSS($dir);
 if ($_SESSION['paint_dir']=='/'){
 	$_SESSION['paint_dir']='';
 }
@@ -85,14 +85,14 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
 		}
 }
 
-$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
+$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($dir).$req_gid, "name" => get_lang('Documents'));
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
 
 
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder($_user['user_id'], Security::remove_XSS($_GET['dir']),api_get_session_id()))) {
+if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder($_user['user_id'], Security::remove_XSS($dir),api_get_session_id()))) {
 	api_not_allowed(true);
 }
 
@@ -142,19 +142,11 @@ $langpixlr = isset($pixlr_code_translation_table[$langpixlr]) ? $pixlredit_code_
 $loc=$langpixlr;// deprecated ?? TODO:check pixlr read user browser
 
 $exit_path=api_get_path(WEB_CODE_PATH).'document/exit_pixlr.php';
-$_SESSION['exit_pixlr']= Security::remove_XSS($_GET['dir']);
-$exit=$exit_path;
-
+$_SESSION['exit_pixlr']= Security::remove_XSS($dir);
 $referrer="Chamilo";
-
 $target_path=api_get_path(WEB_CODE_PATH).'document/save_pixlr.php';
 $target=$target_path;
-
 $locktarget="true";
 $locktitle="false";
-
-
-echo '<iframe style=\'height: 600px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'\'>';
+echo '<iframe style=\'height: 600px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'\'>';
 echo '</iframe>';
-
-?>

@@ -6,7 +6,7 @@
  *
  *	@package chamilo.document
  *
- * @author Juan Carlos Raña Trabado
+ * @author Juan Carlos Raï¿½a Trabado
  * @since 30/january/2011
 */
 
@@ -131,7 +131,7 @@ unset($_SESSION['paint_file']);
 unset($_SESSION['whereami']);
 unset($_SESSION['temp_realpath_image']);
 
-if (!isset($_SESSION['exit_pixlr'])){
+if (!isset($_SESSION['exit_pixlr'])) {
 	$location=api_get_path(WEB_CODE_PATH).'document/document.php';
 	echo '<script>window.parent.location.href="'.$location.'"</script>';					 
 	api_not_allowed(true);
@@ -142,5 +142,3 @@ else{
 	echo '<script>window.parent.location.href="'.$location.'"</script>';
 	unset($_SESSION['exit_pixlr']);
 }
-
-?>

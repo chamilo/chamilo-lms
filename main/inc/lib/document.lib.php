@@ -999,6 +999,9 @@ class DocumentManager {
      */
     public static function get_document_data_by_id($id, $course_code) {
         $course_info = api_get_course_info($course_code);
+        if (empty($course_info)) {
+            return false;
+        }
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
         $id = intval($id);
         $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE id  = $id ";
@@ -1300,32 +1303,32 @@ class DocumentManager {
         * @return void()
         */
         function create_directory_certificate_in_course ($course_id) {
-
-            global $_course;
-            global $_user;
-            $to_group_id=0;
-            $to_user_id=null;
-            $course_dir   = $_course['path']."/document/";
-            $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $base_work_dir=$sys_course_path.$course_dir;
-            $base_work_dir_test=$base_work_dir.'certificates';
-            $dir_name='/certificates';
-            $post_dir_name=get_lang('CertificatesFiles');
-            $visibility_command='invisible';
-            if (!is_dir($base_work_dir_test)) {
-                $created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$post_dir_name);
-                $update_id=DocumentManager::get_document_id_of_directory_certificate();
-                api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, $_user['user_id']);
-            }
+            $course_info = api_get_course_info($course_id); 
+            if (!empty($course_info)) {
+                $to_group_id=0;
+                $to_user_id=null;
+                $course_dir   = $course_info['path']."/document/";
+                $sys_course_path = api_get_path(SYS_COURSE_PATH);
+                $base_work_dir=$sys_course_path.$course_dir;
+                $base_work_dir_test=$base_work_dir.'certificates';
+                $dir_name='/certificates';
+                $post_dir_name=get_lang('CertificatesFiles');
+                $visibility_command='invisible';
+                if (!is_dir($base_work_dir_test)) {
+                    $created_dir = create_unexisting_directory($course_info, api_get_user_id() ,$to_group_id,$to_user_id,$base_work_dir,$dir_name,$post_dir_name);
+                    $update_id=DocumentManager::get_document_id_of_directory_certificate();
+                    api_item_property_update($course_info, TOOL_DOCUMENT, $update_id, $visibility_command, api_get_user_id());
+                }
+            }        
         }
+        
         /**
          * Get the document id of the directory certificate
          * @param string The course id
          * @return int The document id of the directory certificate
          */
         function get_document_id_of_directory_certificate () {
-            global $_course;
-              $tbl_document=Database::get_course_table(TABLE_DOCUMENT);
+            $tbl_document=Database::get_course_table(TABLE_DOCUMENT);
             $sql='SELECT id FROM '.$tbl_document.' WHERE path="/certificates" ';
             $rs=Database::query($sql);
             $row=Database::fetch_array($rs);

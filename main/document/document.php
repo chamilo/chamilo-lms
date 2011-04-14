@@ -60,12 +60,12 @@ $(document).ready( function() {
  } );
  </script>';
 // Session
+/*
 if (isset($_GET['id_session'])) {
     $_SESSION['id_session'] = intval($_GET['id_session']);
-}
+}*/
 // Create directory certificates
-$course_id = api_get_course_id();
-DocumentManager::create_directory_certificate_in_course($course_id);
+DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 
 //Hack in order to use document.php?id=X 
 if (isset($_GET['id'])) {
@@ -78,12 +78,36 @@ if (isset($_GET['id'])) {
     $_GET['curdirpath'] = $document_data['path'];    
 }
 
+
+// What's the current path?
+// We will verify this a bit further down
+if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
+    $curdirpath = Security::remove_XSS($_GET['curdirpath']);
+} elseif (isset($_POST['curdirpath']) && $_POST['curdirpath'] != '') {
+    $curdirpath = Security::remove_XSS($_POST['curdirpath']);
+} else {
+    $curdirpath = '/';
+}
+$curdirpathurl = urlencode($curdirpath);
+
+
+
+// Check the path
+// If the path is not found (no document id), set the path to /
+$document_id = DocumentManager::get_document_id($_course, $curdirpath);
+if (!$document_id) {
+    $curdirpath = '/';
+    // Urlencoded version
+    $curdirpathurl = '%2F';
+}
+$current_folder_id = $document_id;
+
+
 // Show preview
 if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isset($_GET['set_preview']) && $_GET['set_preview'] == strval(intval($_GET['set_preview']))) {
     if (isset($_GET['set_preview'])) {
-        // Generate document HTML
-        $course_id = api_get_course_id();
-        $content_html = DocumentManager::replace_user_info_into_html($course_id);
+        // Generate document HTML        
+        $content_html = DocumentManager::replace_user_info_into_html(api_get_course_id());
 
         $new_content_html = $content_html;
 
@@ -133,16 +157,7 @@ function confirmation (name) {
     - some need defining before inclusion of libraries
 */
 
-// What's the current path?
-// We will verify this a bit further down
-if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
-    $curdirpath = Security::remove_XSS($_GET['curdirpath']);
-} elseif (isset($_POST['curdirpath']) && $_POST['curdirpath'] != '') {
-    $curdirpath = Security::remove_XSS($_POST['curdirpath']);
-} else {
-    $curdirpath = '/';
-}
-$curdirpathurl = urlencode($curdirpath);
+
 
 // I'm in the certification module?
 $is_certificate_mode = DocumentManager::is_certificate_mode($curdirpath);
@@ -210,20 +225,13 @@ require_once $lib_path.'document.lib.php';
 require_once $lib_path.'tablesort.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
 
-// Check the path
-// If the path is not found (no document id), set the path to /
-$document_id = DocumentManager::get_document_id($_course, $curdirpath);
-if (!$document_id) {
-    $curdirpath = '/';
-    // Urlencoded version
-    $curdirpathurl = '%2F';
-}
+
 // If they are looking at group documents they can't see the root
 if ($to_group_id != 0 && $curdirpath == '/') {
     $curdirpath = $group_properties['directory'];
     $curdirpathurl = urlencode($group_properties['directory']);
 }
-$current_folder_id = $document_id;
+
 
 // Check visibility of the current dir path. Don't show anything if not allowed
 //@todo check this validation for coaches
@@ -237,6 +245,7 @@ if (!$is_allowed_to_edit && api_is_coach()) {
 
 /*	Constants and variables */
 $current_session_id = api_get_session_id();
+
 
 
 /*	Create shared folders */
@@ -535,10 +544,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
             }
             require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
             if (DocumentManager::delete_document($_course, $_GET['delete'], $base_work_dir)) {
-                if ( isset($_GET['delete_certificate_id']) && $_GET['delete_certificate_id'] == strval(intval($_GET['delete_certificate_id']))) {
-                    $course_id = api_get_course_id();
+                if ( isset($_GET['delete_certificate_id']) && $_GET['delete_certificate_id'] == strval(intval($_GET['delete_certificate_id']))) {                    
                     $default_certificate_id = $_GET['delete_certificate_id'];
-                    DocumentManager::remove_attach_certificate($course_id, $default_certificate_id);
+                    DocumentManager::remove_attach_certificate(api_get_course_id(), $default_certificate_id);
                 }
                 Display::display_confirmation_message(get_lang('DocDeleted'));
             } else {

@@ -36,35 +36,27 @@ require_once '../inc/global.inc.php';
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 
-function InnerDialogLoaded()
-{
+function InnerDialogLoaded() {
 	/*
 	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
 	return B.ClickFrame();
 	*/
-
 	var isIE  = (navigator.appVersion.indexOf(\'MSIE\') != -1) ? true : false ;
 	var EditorFrame = null ;
 
-	if ( !isIE )
-	{
+	if ( !isIE ) {
 		EditorFrame = window.frames[0] ;
-	}
-	else
-	{
+	} else {
 		// For this dynamic page window.frames[0] enumerates frames in a different order in IE.
 		// We need a sure method to locate the frame that contains the online editor.
-		for ( var i = 0, n = window.frames.length ; i < n ; i++ )
-		{
-			if ( window.frames[i].location.toString().indexOf(\'InstanceName=content\') != -1 )
-			{
+		for ( var i = 0, n = window.frames.length ; i < n ; i++ ) {
+			if ( window.frames[i].location.toString().indexOf(\'InstanceName=content\') != -1 ) {
 				EditorFrame = window.frames[i] ;
 			}
 		}
 	}
 
-	if ( !EditorFrame )
-	{
+	if ( !EditorFrame ) {
 		return null ;
 	}
 
@@ -72,11 +64,9 @@ function InnerDialogLoaded()
 	return B.ClickFrame();
 };
 
-function FCKeditor_OnComplete( editorInstance )
-{
+function FCKeditor_OnComplete( editorInstance) {
 	document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 }
-
 </script>';
 
 $_SESSION['whereami'] = 'document/create';
@@ -122,7 +112,6 @@ $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 //Call from
 $call_from_tool = Security::remove_XSS($_GET['origin']);
 $slide_id = Security::remove_XSS($_GET['origin_opt']);
-
 $file_name = $doc;
 
 $baseServDir = api_get_path(SYS_COURSE_PATH);
@@ -567,7 +556,8 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {
 }
 
 //return button back to
-function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_certificate_mode=false) {	
+function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_certificate_mode=false) {
+    global $parent_id;	
 	$pathurl = urlencode($path);
 	echo '<div class="actions">';
 	
@@ -576,13 +566,13 @@ function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_c
 	} elseif($call_from_tool=='slideshow') {
 		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'),'','32').'</a>';		
 	} elseif($call_from_tool=='editdraw') {
-		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+		echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 		echo '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Draw'), array(), 32).'</a>';
 	} elseif($call_from_tool=='editpaint'){
-		echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), array(), '32').'</a>';
+		echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), array(), '32').'</a>';
 		echo '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('BackTo').' '.get_lang('Paint'), array(), 32).'</a>';		
 	} else {
-		echo '<a href="document.php?action=exit_slideshow&id='.$document_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+		echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 	}
 	echo '</div>';
 }

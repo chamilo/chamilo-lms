@@ -6,7 +6,7 @@
  *
  *	@package chamilo.document
  *
- * @author Juan Carlos Raña Trabado
+ * @author Juan Carlos Raï¿½a Trabado
  * @since 25/september/2010
 */
 
@@ -69,24 +69,24 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
-		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-		$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
-		$noPHP_SELF = true;
-		$to_group_id = $_SESSION['_gid'];
-		$group = GroupManager :: get_group_properties($to_group_id);
-		$path = explode('/', $dir);
-		if ('/'.$path[1] != $group['directory']) {
-			api_not_allowed(true);
-		}
+	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
+	$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
+	$noPHP_SELF = true;
+	$to_group_id = $_SESSION['_gid'];
+	$group = GroupManager :: get_group_properties($to_group_id);
+	$path = explode('/', $dir);
+	if ('/'.$path[1] != $group['directory']) {
+		api_not_allowed(true);
 	}
-	$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
+}
+
+$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
 
-
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder($_user['user_id'], Security::remove_XSS($_GET['dir']),api_get_session_id()))) {
+if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($_GET['dir']), api_get_session_id()))) {
 	api_not_allowed(true);
 }
 
@@ -148,11 +148,8 @@ if (api_browser_support('svg')){
 	//editor
 	echo '<iframe style=\'height: 550px; width: 100%;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?lang='.$langsvgedit.'\'>';
 	echo '</iframe>';
-
-}else{
-	
+} else {	
 	Display::display_error_message(get_lang('BrowserDontSupportsSVG'));
 }
 
 Display :: display_footer();
-?>

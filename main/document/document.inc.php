@@ -345,7 +345,7 @@ function build_document_icon_tag($type, $path) {
 //function build_edit_icons($document_data, $curdirpath, $type, $path, $visibility, $id, $is_template, $is_read_only = 0, $session_id = 0) {
 function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, $session_id = 0) {
     if (isset($_SESSION['_gid'])) {
-        $req_gid = '&amp;gidReq='.$_SESSION['_gid'];
+        $req_gid = '&gidReq='.$_SESSION['_gid'];
     } else {
         $req_gid = '';
     }
@@ -383,12 +383,12 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
     
     // If document is read only *or* we're in a session and the document
     // is from a non-session context, hide the edition capabilities
-    if ($is_read_only /*or ($session_id!=api_get_session_id())*/) {        
+    if ($is_read_only /*or ($session_id!=api_get_session_id())*/) {     
         if (api_is_course_admin() || api_is_platform_admin()) {
             if($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
-                $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+                $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
             } elseif($extension=='png' || $extension=='jpg' || $extension=='jpeg' || $extension=='bmp' || $extension=='gif' ||$extension=='pxd' && api_get_setting('enabled_support_pixlr') == 'true'){
-                $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';       
+                $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';       
             } else {
                 $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
             }
@@ -403,27 +403,25 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
     } else {
         
         if ($is_certificate_mode) {
-            //$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
             $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';            
         } else {
             if (api_get_session_id()) {
                 if ($document_data['session_id'] == api_get_session_id()) {  
                     if ($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
-                        $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+                        $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
                     } elseif($extension=='png' || $extension=='jpg' || $extension=='jpeg' || $extension=='bmp' || $extension=='gif' ||$extension=='pxd' && api_get_setting('enabled_support_pixlr') == 'true'){
-                        $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';       
+                        $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';       
                     } else {
                         $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
-                    }   
+                    }
                 } else {
-                    $modify_icons .= '&nbsp;'.Display::return_icon('edit_na.png', get_lang('Edit'),array(), 22).'</a>';
-                    
+                    $modify_icons .= '&nbsp;'.Display::return_icon('edit_na.png', get_lang('Edit'),array(), 22).'</a>';                    
                 }
             } else {
-                if($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
-                    $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
-    			} elseif($extension=='png' || $extension=='jpg' || $extension=='jpeg' || $extension=='bmp' || $extension=='gif' ||$extension=='pxd' && api_get_setting('enabled_support_pixlr') == 'true'){
-                    $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';		
+                if ($extension=='svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
+                    $modify_icons = '<a href="edit_draw.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
+                } elseif($extension=='png' || $extension=='jpg' || $extension=='jpeg' || $extension=='bmp' || $extension=='gif' ||$extension=='pxd' && api_get_setting('enabled_support_pixlr') == 'true'){
+                    $modify_icons = '<a href="edit_paint.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';       
                 } else {
                     $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';
                 }
@@ -479,7 +477,6 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
         }        
     }
 
-    //$extension = pathinfo($path, PATHINFO_EXTENSION);//already load above
     if ($type == 'file' && ($extension == 'html' || $extension == 'htm')) {
         if ($is_template == 0) {
             if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] != '/certificates') || !isset($_GET['curdirpath'])) {
@@ -510,7 +507,6 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
 		}
         $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&id='.$id.'">'.Display::return_icon('pdf.png', get_lang('Export2PDF'),array(), 22).'</a>';
     }
-
     return $modify_icons;
 }
 

@@ -97,12 +97,10 @@ $document_id = DocumentManager::get_document_id($_course, $curdirpath);
 
 if (!$document_id) {    
     $document_id = DocumentManager::get_document_id(api_get_course_info(), $curdirpath);
-    $curdirpath = '/';
-    // Urlencoded version
-    $curdirpathurl = '%2F';
 }
+
 $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
-$parent_id = DocumentManager::get_document_id(api_get_course_info(), dirname($document_data['path']));
+$parent_id     = DocumentManager::get_document_id(api_get_course_info(), dirname($document_data['path']));
 if (!$parent_id) {
     $parent_id = 0; 
 }    

@@ -722,6 +722,7 @@ function show_personal_agenda() {
     echo Display::tag('tr', $th);
 
 	if (Database::num_rows($result) > 0) {
+	    $counter = 0; 
 		while ($myrow = Database::fetch_array($result)) {
 			/* 	display: the month bar		*/
 			if ($month_bar != date("m", strtotime($myrow["date"])).date("Y", strtotime($myrow["date"]))) {
@@ -738,8 +739,12 @@ function show_personal_agenda() {
 				$text_style = "text";
 			}
 
-			
-			echo "<tr>";
+		    $class = 'row_even';
+            if ($counter % 2) {
+                $class = 'row_odd'; 
+            }
+            
+			echo '<tr class="'.$class.'">';
 			
 			echo '<td>';
 			/*   display: the title  */
@@ -777,6 +782,7 @@ function show_personal_agenda() {
 			echo "<a href=\"myagenda.php?action=edit_personal_agenda_item&amp;id=".$myrow['id']."\">".Display::return_icon('edit.png', get_lang('Edit'), array(), 22)."</a> ";
 			echo "<a href=\"".api_get_self()."?action=delete&amp;id=".$myrow['id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'), array(), 22)."</a>";
 			echo "</td></tr>";
+			$counter++;
 		}
 	} else {
 		echo '<tr><td colspan="2">'.get_lang('NoAgendaItems').'</td></tr>';

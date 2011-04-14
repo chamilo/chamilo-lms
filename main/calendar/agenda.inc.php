@@ -1188,12 +1188,8 @@ function separate_users_groups($to) {
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return array
 */
-function sent_to($tool, $id)
-{
-	global $_course;
-
+function sent_to($tool, $id) {
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
 	$tool=Database::escape_string($tool);
 	$id=Database::escape_string($id);
 
@@ -1236,77 +1232,53 @@ function sent_to($tool, $id)
 *				groups (resp. users) who have received this message.
 * @return html
 */
-function sent_to_form($sent_to_array)
-{
+function sent_to_form($sent_to_array) {
 	// we find all the names of the groups
 	$group_names=get_course_groups();
-
 	count($sent_to_array);
-
 	// we count the number of users and the number of groups
-	if (isset($sent_to_array['users']))
-	{
+	if (isset($sent_to_array['users'])) {
 		$number_users=count($sent_to_array['users']);
-	}
-	else
-	{
+	} else {
 		$number_users=0;
 	}
-	if (isset($sent_to_array['groups']))
-	{
+	if (isset($sent_to_array['groups'])) {
 		$number_groups=count($sent_to_array['groups']);
-	}
-	else
-	{
+	} else {
 		$number_groups=0;
 	}
 	$total_numbers=$number_users+$number_groups;
 
 	// starting the form if there is more than one user/group
-	if ($total_numbers >1)
-	{
-	$output="<select name=\"sent to\">";
-	$output.="<option>".get_lang("SentTo")."</option>";
-	// outputting the name of the groups
-	if (is_array($sent_to_array['groups']))
-		{
-		foreach ($sent_to_array['groups'] as $group_id)
-			{
-			$output.="<option value=\"\">G: ".$group_names[$group_id]['name']."</option>";
-			}
-		}
-	if (isset($sent_to_array['users']))
-	{
-		if (is_array($sent_to_array['users']))
-			{
-			foreach ($sent_to_array['users'] as $user_id)
-				{
-				$user_info=api_get_user_info($user_id);
-				$output.="<option value=\"\">".api_get_person_name($user_info['firstName'], $user_info['lastName'])."</option>";
-				}
-			}
-	}
-
-	// ending the form
-	$output.="</select>";
-	}
-	else // there is only one user/group
-	{
-		if (is_array($sent_to_array['users']))
-		{
+	if ($total_numbers >1) {    	
+    	//$output.="<option>".get_lang("SentTo")."</option>";
+    	// outputting the name of the groups
+    	if (is_array($sent_to_array['groups'])) {
+    		foreach ($sent_to_array['groups'] as $group_id) {
+    			$output.="G: ".$group_names[$group_id]['name']."<br />";
+            }
+        }
+    	if (isset($sent_to_array['users'])) {
+    		if (is_array($sent_to_array['users'])) {
+    			foreach ($sent_to_array['users'] as $user_id) {
+    				$user_info=api_get_user_info($user_id);
+    				$output.=" ".api_get_person_name($user_info['firstName'], $user_info['lastName'])."<br />";
+                }
+            }
+    	}    
+	} else {
+	    // there is only one user/group
+		if (is_array($sent_to_array['users'])) {
 			$user_info=api_get_user_info($sent_to_array['users'][0]);
 			echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
 		}
-		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0)
-		{
+		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0) {
 			$group_id=$sent_to_array['groups'][0];
 			echo $group_names[$group_id]['name'];
 		}
-		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]==0)
-		{
+		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]==0) {
 			echo get_lang("Everybody");
 		}
-		//.$sent_to_array['groups'][0];
 	}
 
 	echo $output;
@@ -1396,9 +1368,6 @@ function show_user_group_filter_form()
 
 	$option.= "</optgroup>";
 	echo $option;
-
-	global $_course;
-
 	// Users
 	echo "<optgroup label=\"".get_lang("Users")."\">";
 	$user_list=get_course_users();
@@ -1417,9 +1386,7 @@ function show_user_group_filter_form()
 * This tools loads all the users and all the groups who have received a specific item (in this case an agenda item)
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function load_edit_users($tool, $id)
-{
-	global $_course;
+function load_edit_users($tool, $id) {
 	$tool=Database::escape_string($tool);
 	$id=Database::escape_string($id);
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -1996,6 +1963,7 @@ function display_agenda_items($select_month, $select_year) {
 		}
 	} // you are a student
 
+	
 	//echo "<pre>".$sql."</pre>";
 	$result			= Database::query($sql);
 	$number_items	= Database::num_rows($result);
@@ -2032,7 +2000,7 @@ function display_agenda_items($select_month, $select_year) {
 	
 	if (empty($_SESSION['user']) && empty($_SESSION['group'])) {
 
-    	//Check global agenda events	*/
+    	//Check global agenda events
     	$table_agenda_system = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
     	$current_access_url_id = api_get_current_access_url_id();
     	
@@ -2066,8 +2034,7 @@ function display_agenda_items($select_month, $select_year) {
             }
         }
         
-        echo Display::tag('tr', $th);
-            
+        echo Display::tag('tr', $th); 
        	foreach ($my_events as $myrow) {
         	$is_repeated = !empty($myrow['parent_event_id']);	      
             // Make the month bar appear only once.        
@@ -2079,9 +2046,13 @@ function display_agenda_items($select_month, $select_year) {
     			echo '<h3>'.api_format_date($myrow["start_date"], "%B %Y").'</h3>';
     			echo '</td></tr>';*/
     		}
-    
+    		
+    		$class = 'row_even';
+            if ($counter % 2) {
+                $class = 'row_odd'; 
+            }
             /*	display: the icon, title, destinees of the item	*/
-        	echo '<tr>';
+        	echo '<tr class="'.$class.'">';
     
         	// highlight: if a date in the small calendar is clicked we highlight the relevant items
         	$db_date = (int)api_format_date($myrow["start_date"], "%d").intval(api_format_date($myrow["start_date"], "%m")).api_format_date($myrow["start_date"], "%Y");
@@ -2135,22 +2106,21 @@ function display_agenda_items($select_month, $select_year) {
                 $full_file_name = 'download.php?file='.$realname;
                 echo Display::return_icon('attachment.gif',get_lang('Attachment'));
                 echo '<a href="'.$full_file_name.'"> '.$user_filename.'</a>';
-                echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
-                if (api_is_allowed_to_edit()) {
+                 if (api_is_allowed_to_edit()) {
                     echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a><br />';
                 }
+                echo '<br /><span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';           
             }
             echo '</td>';
             
     		if ($myrow['calendar_type'] == 'course') {
     	    	// the message has been sent to
     	    	echo "<td>";
-    	    	$sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
+    	    	$sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);    	    	
     	    	$sent_to_form = sent_to_form($sent_to);
     	    	if ($myrow['to_group_id']!=='0') {
                     echo ' '.Display::return_icon('group.png', get_lang('ItemForUserSelection'),'',22);
-    	    	}
-    	    	
+    	    	}    	    	
     	    	echo $sent_to_form;
     	    	echo '</td>';
     		} elseif ($myrow['calendar_type'] == 'personal') {
@@ -2210,12 +2180,8 @@ function display_agenda_items($select_month, $select_year) {
     		    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('printer.png', get_lang('Print'),'',22).'</a>&nbsp;';
     	    	echo '</td>';
     		}
-    		
-    	
-        
-    	    
     
-            /*     	display: the added resources         */
+            //Display: the added resources
         	if (check_added_resources("Agenda", $myrow["id"])) {
         		echo '<tr>';
         		echo '<td colspan="3">';

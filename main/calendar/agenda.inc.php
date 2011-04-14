@@ -442,32 +442,23 @@ function display_monthcalendar($month, $year) {
 
 									$start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT);
 									$end_time = '';
-									if (!empty($value['end_date'])  && $value['end_date'] != '0000-00-00 00:00:00') {
-									   $end_time 	= api_convert_and_format_date($value['end_date'],   DATE_TIME_FORMAT_LONG);
-									}						
+									if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
+									   $end_time 	= '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'],DATE_TIME_FORMAT_LONG);
+									}		
+									$time = '<i>'.$start_time.'</i>&nbsp;'.$end_time;
+													
 									switch($value['calendar_type']) {
 									    case 'personal':
 									        $bg_color = '#58E24C';
-									        $subtitle = get_lang('MyAgenda');
-									        $time = '<i>'.$start_time.'</i>&nbsp;';
+									        $subtitle = get_lang('MyAgenda');									
 									        break;
 									    case 'global':
-                                            $bg_color = '#FD553D';           
-                                            if (!empty($end_time)) {                                 
-                                                $time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
-                                            } else {
-                                                $time = '<i>'.$start_time.'</i>&nbsp;';    
-                                            }
+                                            $bg_color = '#FD553D';                                            
                                             $subtitle = get_lang('GlobalEvent');
                                             break;
 									    case 'course':
                                             $bg_color = '#FFF';
-                                            $subtitle = get_lang('Course');
-									        if (!empty($end_time)) {                                 
-                                                $time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
-                                            } else {
-                                                $time = '<i>'.$start_time.'</i>&nbsp;';    
-                                            }
+                                            $subtitle = get_lang('Course');                                            
                                             break;
                                         /*case 'work':
                                             $bg_color = '#FDAC3D';
@@ -4592,8 +4583,6 @@ function agenda_import_ical($course_info,$file) {
  * @return 	array	The results of the database query, or null if not found
  */
 function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "", $week = "", $type) {
-	global $_configuration;
-
 	$tbl_global_agenda= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 
 	$month = Database::escape_string($month);
@@ -4601,11 +4590,8 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 	$week  = Database::escape_string($week);
 	$day   = Database::escape_string($day);
 	// 1. creating the SQL statement for getting the personal agenda items in MONTH view
-
-	$current_access_url_id = 1;
-	if ($_configuration['multiple_access_urls']) {
-		$current_access_url_id = api_get_current_access_url_id();
-	}
+	
+	$current_access_url_id = api_get_current_access_url_id();	
 
 	if ($type == "month_view" or $type == "") {
 		// We are in month view
@@ -4638,6 +4624,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 	$result = Database::query($sql);
 
 	while ($item = Database::fetch_array($result)) {
+	    
 		// we break the date field in the database into a date and a time part
 		$agenda_db_date = explode(" ", $item['start_date']);
 		$date = $agenda_db_date[0];
@@ -4652,6 +4639,13 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		$hour = $agendatime[0];
 		$minute = $agendatime[1];
 		$second = $agendatime[2];
+		
+	      
+	    if ($type == 'month_view') {
+	        $item['calendar_type'] = 'global';
+            $agendaitems[$day][] = $item;
+            continue;
+        }       
 		
 		
 		$start_time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT);

@@ -193,6 +193,7 @@ function search_language_term($term, $search_in_variable = true , $search_in_eng
 				if (is_array($variable_value)) {
 					continue;
 				}
+				
 				if (is_array($variable_value))
 					echo $lang_file;
 				$founded = false;

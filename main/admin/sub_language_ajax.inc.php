@@ -6,7 +6,6 @@ require_once 'sub_language.class.php';
 /*
  * search a term and return description from a glossary
  */
-global $charset;
 
 $new_language		= Security::remove_XSS($_REQUEST['new_language']);
 $language_variable	= Security::remove_XSS($_REQUEST['variable_language']);
@@ -21,14 +20,14 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
 	$path_folder             = api_get_path(SYS_LANG_PATH).$all_data_of_language['dokeos_folder'].'/'.$file_language;
 	$all_file_of_directory   = SubLanguageManager::get_all_language_variable_in_file($path_folder);
 	
-	$return_value            = SubLanguageManager::add_file_in_language_directory ($path_folder);
+	$return_value            = SubLanguageManager::add_file_in_language_directory($path_folder);
 	//update variable language
     //@todo add filter for double quotes, to avoid breaking the string
     //could be something like preg_replace('/.*[^\\]".*/','\"',api_...) ?
-	$all_file_of_directory[$language_variable]="\"".api_convert_encoding($new_language,$charset,'UTF-8')."\";";
+	$all_file_of_directory[$language_variable]="\"".api_convert_encoding($new_language, api_get_system_encoding(),'UTF-8')."\";";
     $result_array = array();
+    
 	foreach ($all_file_of_directory as $key_value=>$value_info) {
-	    //echo $path_folder.' '.$value_info.' '.$key_value;
 		$result_array[$key_value] = SubLanguageManager::write_data_in_file($path_folder, $value_info, $key_value);
 	}
 	$variables_with_problems = '';

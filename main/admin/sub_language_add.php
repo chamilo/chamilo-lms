@@ -83,10 +83,11 @@ function check_if_language_exist ($original_name,$english_name,$isocode,$sublang
 		$has_error=true;
 		$message_information['english_name']=true;
 	}
+	/*
 	if ($count_isocode==1) {
 		$has_error=true;
 		$message_information['isocode']=true;
-	}
+	}*/
 	if ($has_error===true) {
 		$message_information['execute_add']=false;
 	}

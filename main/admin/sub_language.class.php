@@ -91,7 +91,7 @@ class SubLanguageManager {
 	        $var = trim($var); $val = trim($val);
 	        $res_list[$var] = $val;
 	    }
-			return $res_list;
+        return $res_list;
    }
 
      /**
@@ -99,11 +99,9 @@ class SubLanguageManager {
      * @param String The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      * @return bool
      */
-    public static function add_file_in_language_directory ($system_path_file) {
-        $return_value = false;
-        if (file_exists($system_path_file) && is_writable($system_path_file)) {
-            $return_value  = file_put_contents($system_path_file,'<?php'.PHP_EOL);
-        }
+    public static function add_file_in_language_directory($system_path_file) {
+        $return_value = false;        
+        $return_value  = @file_put_contents($system_path_file,'<?php'.PHP_EOL);
         return $return_value;
     }
      /**

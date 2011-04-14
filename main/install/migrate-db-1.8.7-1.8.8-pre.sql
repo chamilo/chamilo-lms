@@ -189,7 +189,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_nanogong', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enable_nanogong', 'false', 'No');
 
-UPDATE settings_current SET selected_value = '1.8.8.14270' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.8.8.14358' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;

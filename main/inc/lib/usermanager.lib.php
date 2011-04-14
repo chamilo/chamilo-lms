@@ -2734,12 +2734,14 @@ class UserManager
 
 		$result = Database::query($sql);
 		$return = array();
-		if (Database::num_rows($result)> 0) {
-			while ($row = Database::fetch_array($result,'ASSOC')) {			    
+		if (Database::num_rows($result) > 0) {
+			while ($row = Database::fetch_array($result,'ASSOC')) {
 			    if (isset($return[$row['user_id']]) && !empty($return[$row['user_id']]['tag'])) {
-			        $row['tag'] .=', '.$return[$row['user_id']]['tag'];  
+			        $row['tag'] = $return[$row['user_id']]['tag'].' '.Display::url($row['tag'] , api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'] , array('class'=>'tag'));  
+			    } else {
+			        $row['tag'] = Display::url($row['tag'], api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'],   array('class'=>'tag'));
 			    }
-				$return[$row['user_id']] = $row;
+			    $return[$row['user_id']] = $row;				
 			}
 		}
 

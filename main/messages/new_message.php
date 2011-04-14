@@ -48,20 +48,19 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready(function (){
-
-      		$("#users").fcbkcomplete({
-	            json_url: "'.api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users",
-	            cache: false,
-	            filter_case: true,
-	            filter_hide: true,
-	            complete_text:"'.get_lang('StartToType').'",
-				firstselected: true,
-	            //onremove: "testme",
-				//onselect: "testme",
-	            filter_selected: true,
-	            newel: true
-          	});
+$(document).ready(function () {
+    $("#users").fcbkcomplete({
+        json_url: "'.api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users",
+        cache: false,
+        filter_case: false,
+        filter_hide: true,
+        complete_text:"'.get_lang('StartToType').'",
+    	firstselected: true,
+        //onremove: "testme",
+    	//onselect: "testme",
+        filter_selected: true,
+        newel: true
+    });
 });
 
 var counter_image = 1;

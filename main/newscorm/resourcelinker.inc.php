@@ -18,11 +18,14 @@
 $use_anonymous = true;
 
 require_once 'back_compat.inc.php';
-include api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php';
-if(!empty($_course['language'])){
-    include api_get_path(SYS_CODE_PATH).'lang/'.$_course['language'].'/resourcelinker.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php';
+if (!empty($_course['language'])){
+    $resource_linker_file =  api_get_path(SYS_CODE_PATH).'lang/'.$_course['language'].'/resourcelinker.inc.php';
+    if (file_exists($resource_linker_file)) {
+        require_once $resource_linker_file;
+    }
 }
-include '../exercice/hotpotatoes.lib.php';
+require_once '../exercice/hotpotatoes.lib.php';
 
 /* FUNCTIONS */
 

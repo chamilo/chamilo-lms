@@ -335,6 +335,24 @@ function api_get_language_isocode($language = null, $default_code = 'en') {
 }
 
 /**
+ * Gets language isocode column from the language table
+ * 
+ * @return array    An array with the current isocodes
+ *  
+ * */
+function api_get_platform_isocodes() {
+    $iso_code = array();
+    $sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." ORDER BY isocode ");
+    if (Database::num_rows($sql_result)) {
+        while ($row = Database::fetch_array($sql_result)) {;
+            $iso_code[] = trim($row['isocode']);
+        }
+    }    
+    return $iso_code;
+}
+
+
+/**
  * Gets text direction according to the given language.
  * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g 'arabic', 'english', ...).
  * ISO-codes are acceptable too ('ar', 'en', ...). If $language is omitted, interface language is assumed then.

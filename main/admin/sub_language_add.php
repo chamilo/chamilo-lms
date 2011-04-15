@@ -47,6 +47,7 @@ function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_av
 	$sql='INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id) VALUES ("'.$original_name.'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
 	Database::query($sql);
 }
+
 /**
  * Check if language exists
  * @param   string  Original language name (Occitan, Wallon, Vlaams)
@@ -61,17 +62,17 @@ function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_av
  * @todo This function is not transaction-safe and should probably be included
  *       inside the add_sub_language function.
  */
-function check_if_language_exist ($original_name,$english_name,$isocode,$sublanguage_available) {
+function check_if_language_exist ($original_name, $english_name, $isocode, $sublanguage_available) {
 	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 	$sql_original_name='SELECT count(*) AS count_original_name FROM '.$tbl_admin_languages.' WHERE original_name="'.Database::escape_string($original_name).'" ';
 	$sql_english_name='SELECT count(*) AS count_english_name FROM '.$tbl_admin_languages.' WHERE english_name="'.Database::escape_string($english_name).'" ';
-	$sql_isocode='SELECT count(*) AS count_isocode FROM '.$tbl_admin_languages.' WHERE isocode="'.Database::escape_string($isocode).'" ';
+	//$sql_isocode='SELECT count(*) AS count_isocode FROM '.$tbl_admin_languages.' WHERE isocode="'.Database::escape_string($isocode).'" ';
 	$rs_original_name=Database::query($sql_original_name);
 	$rs_english_name=Database::query($sql_english_name);
-	$rs_isocode=Database::query($sql_isocode);
+	//$rs_isocode=Database::query($sql_isocode);
 	$count_original_name=Database::result($rs_original_name,0,'count_original_name');
 	$count_english_name=Database::result($rs_english_name,0,'count_english_name');
-	$count_isocode=Database::result($rs_isocode,0,'count_isocode');
+	//$count_isocode=Database::result($rs_isocode,0,'count_isocode');
 	$has_error=false;
 	$message_information=array();
 
@@ -83,11 +84,14 @@ function check_if_language_exist ($original_name,$english_name,$isocode,$sublang
 		$has_error=true;
 		$message_information['english_name']=true;
 	}
-	/*
-	if ($count_isocode==1) {
+	
+	$iso_list = api_get_platform_isocodes();
+	$iso_list = array_values($iso_list);
+	
+	if (!in_array($isocode, $iso_list)) {
 		$has_error=true;
 		$message_information['isocode']=true;
-	}*/
+	}	
 	if ($has_error===true) {
 		$message_information['execute_add']=false;
 	}
@@ -247,12 +251,11 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 			Display::display_error_message(get_lang('AlreadyExists').' "'.get_lang('EnglishName').'" '.'('.$english_name.')');
 		}
 		if ($index_information=='isocode') {
-			Display::display_error_message(get_lang('AlreadyExists').' "'.get_lang('PlatformCharsetTitle').'" '.'('.$isocode.')');
+			Display::display_error_message(get_lang('CodeDoesNotExists').': '.$isocode.'');
 		}
 		if ($index_information=='execute_add' && $value_information===true) {
 			$allow_insert_info=true;
 		}
-
 	}
 
 	if (strlen($original_name)>0 && strlen($english_name)>0 && strlen($isocode)>0) {

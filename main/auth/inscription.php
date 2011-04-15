@@ -400,8 +400,7 @@ if ($form->validate()) {
     // Added by Ivan Tcholakov, 06-MAR-2008.
     if (empty($values['official_code'])) {
         $values['official_code'] =  api_strtoupper($values['username']);
-    }
-    //
+    } 
 
     // creating a new user
     $user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri);
@@ -418,16 +417,15 @@ if ($form->validate()) {
             }
         }
     }
-
+    
     // Register extra fields
     $extras = array();
     foreach ($values as $key => $value) {
         if (substr($key, 0, 6) == 'extra_') { //an extra field
             $extras[substr($key,6)] = $value;
-        } else {
-            $sql .= " $key = '".Database::escape_string($value)."',";
         }
     }
+    
     //update the extra fields
     $count_extra_field = count($extras);
     if ($count_extra_field > 0) {
@@ -464,8 +462,7 @@ if ($form->validate()) {
 
         // if there is a default duration of a valid account then we have to change the expiration_date accordingly
         if (api_get_setting('account_valid_duration') != '') {
-            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
-                        SET expiration_date='registration_date+1' WHERE user_id='".$user_id."'";
+            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET expiration_date='registration_date+1' WHERE user_id='".$user_id."'";
             Database::query($sql);
         }
 

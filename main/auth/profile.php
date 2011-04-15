@@ -569,6 +569,7 @@ if (!empty($_SESSION['change_email'])) {
 	$upload_production_success = ($_SESSION['production_uploaded'] == 'success');
 	unset($_SESSION['production_uploaded']);
 }
+    
 
 if ($form->validate()) {
 
@@ -623,8 +624,7 @@ if ($form->validate()) {
 		}
 		$form->removeElement('productions_list');
 		$file_deleted = true;
-	}
-	
+	}	
 
 	// upload production if a new one is provided
 	if ($_FILES['production']['size']) {
@@ -649,6 +649,23 @@ if ($form->validate()) {
 		$user_data['openid'] = 'http://'.$my_user_openid;
 	}
 	$extras = array();
+    
+	//Only update values that are request by the "profile" setting
+	$profile_list = api_get_setting('profile');
+		
+	$available_values_to_modify = array();
+	
+	foreach($profile_list as $key => $status) {	    
+	    if ($status == 'true') {
+            if ($key == 'name') {
+               $available_values_to_modify[] = 'firstname';
+               $available_values_to_modify[] = 'lastname'; 
+            } else {
+    	       $available_values_to_modify[] = $key;
+    	    } 
+	    }
+	}	
+	
 	// build SQL query
 	$sql = "UPDATE $table_user SET";
 	unset($user_data['api_key_generate']);
@@ -670,24 +687,26 @@ if ($form->validate()) {
 				$extras[$new_key] = $value;
 			}
 		} else {
-			$sql .= " $key = '".Database::escape_string($value)."',";
+		    if (in_array($key, $available_values_to_modify)) {	
+                $sql .= " $key = '".Database::escape_string($value)."',";
+		    }		    
 		}
 	}
 
 	//changue email
-	if (isset($changeemail) && !isset($password) ) {
+	if (isset($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
 		$sql .= " email = '".Database::escape_string($changeemail)."' ";
-	} elseif (isset($password) && isset($changeemail)) {
+	} elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {
 		$sql .= " email = '".Database::escape_string($changeemail)."', ";
 		$password = api_get_encrypted_password($password);
 		$sql .= " password = '".Database::escape_string($password)."'";
-	} elseif (isset($password) && !isset($changeemail)) {
+	} elseif (isset($password) && !isset($changeemail) && in_array('password', $available_values_to_modify)) {
 		$password = api_get_encrypted_password($password);
 		$sql .= " password = '".Database::escape_string($password)."'";
 	} else {
 		// remove trailing , from the query we have so far
 		$sql = rtrim($sql, ',');
-	}
+	}	
 	$sql .= " WHERE user_id  = '".api_get_user_id()."'";
 	Database::query($sql);
 

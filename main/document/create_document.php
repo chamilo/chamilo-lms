@@ -176,6 +176,7 @@ if (empty($document_data)) {
     $folder_id = $document_data['id'];
     $dir = $document_data['path'];
 }
+
 //$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
 
 /*	MAIN CODE */
@@ -242,7 +243,7 @@ if (!is_dir($filepath)) {
 
 //I'm in the certification module?
 $is_certificate_mode = false;
-$is_certificate_array = explode('/',$_GET['dir']);
+$is_certificate_array = explode('/',$dir);
 array_shift($is_certificate_array);
 if ($is_certificate_array[0]=='certificates') {
 	$is_certificate_mode = true;
@@ -261,7 +262,7 @@ if (!$is_certificate_mode) {
 			api_not_allowed(true);
 		}
 	}
-	$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
+	$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($dir).$req_gid, "name" => get_lang('Documents'));
 } else {
 	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
@@ -269,7 +270,7 @@ if (!$is_certificate_mode) {
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder($_user['user_id'], Security::remove_XSS($_GET['dir']),api_get_session_id()))) {
+if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder($_user['user_id'], Security::remove_XSS($dir),api_get_session_id()))) {
 	api_not_allowed(true);
 }
 
@@ -285,7 +286,7 @@ if (isset ($group)) {
 }
 
 // Create a new form
-$form = new FormValidator('create_document','post',api_get_self().'?dir='.Security::remove_XSS(urlencode($_GET['dir'])).'&selectcat='.Security::remove_XSS($_GET['selectcat']));
+$form = new FormValidator('create_document','post',api_get_self().'?dir='.Security::remove_XSS(urlencode($dir)).'&selectcat='.Security::remove_XSS($_GET['selectcat']));
 
 // form title
 $form->addElement('header', '', $nameTools);
@@ -409,7 +410,7 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 // If we are not in the certificates creation, display a folder chooser for the
 // new document created 
 
-if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $_GET['dir'], $current_session_id)) {
+if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $current_session_id)) {
 	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 	//$parent_select -> addOption(get_lang('HomeDirectory'), '/');
 	$parent_select = $form->addElement('select', 'curdirpath', get_lang('DestinationDirectory'));
@@ -592,7 +593,7 @@ if ($form->validate()) {
 		if ($document_id) {
 			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id, null, null, null, $current_session_id);
 			// Update parent folders
-			item_property_update_on_folder($_course, $_GET['dir'], $_user['user_id']);
+			item_property_update_on_folder($_course, $dir, $_user['user_id']);
 			$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
 			$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
 			if ($new_comment || $new_title) {
@@ -667,9 +668,9 @@ if ($form->validate()) {
 	echo '<div class="actions">';
 	// link back to the documents overview
 	if ($is_certificate_mode)
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'','32').'</a>';
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'','32').'</a>';
 	else
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'','32').'</a>';
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'','32').'</a>';
 	echo '</div>';
 	$form->display();
 	Display :: display_footer();

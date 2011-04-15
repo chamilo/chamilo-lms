@@ -95,6 +95,7 @@ $curdirpathurl = urlencode($curdirpath);
 // If the path is not found (no document id), set the path to /
 $document_id = DocumentManager::get_document_id($_course, $curdirpath);
 
+
 if (!$document_id) {    
     $document_id = DocumentManager::get_document_id(api_get_course_info(), $curdirpath);
 }

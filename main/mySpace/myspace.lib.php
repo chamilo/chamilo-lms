@@ -1818,4 +1818,280 @@ class MySpace {
 		xml_parser_free($parser);
 		return $users;
 	}
+	
+	
+	
+
+	
+	
+	
+	
+}
+
+
+
+
+    
+function cev_get_stats($user_id, $course_code, $start_date = null, $end_date = null) {
+    // Database table definitions
+    $tbl_track_course   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $tbl_main       = Database :: get_main_table(TABLE_MAIN_COURSE);
+
+    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database::escape_string($course_code).'";';
+    $result = Database::query($sql_query, __FILE__, __LINE__);
+    $row_query = Database::fetch_array($result, 'ASSOC');
+    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
+    $COMILLA_SIMPLE = "'";
+    $strg_sd    = "";
+    $strg_ed    = "";
+    if ($start_date != null && $end_date != null){
+        $end_date = cev_add_day_to( $end_date );
+        $strg_sd = 'AND login_course_date BETWEEN ' . $COMILLA_SIMPLE . $start_date  . $COMILLA_SIMPLE . ' AND '  . $COMILLA_SIMPLE . $end_date . $COMILLA_SIMPLE;
+        $strg_ed = 'AND logout_course_date BETWEEN ' . $COMILLA_SIMPLE . $start_date  . $COMILLA_SIMPLE . ' AND '  . $COMILLA_SIMPLE . $end_date . $COMILLA_SIMPLE;
+    }    
+    $sql = 'SELECT SEC_TO_TIME(avg(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
+        SEC_TO_TIME(sum(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
+        count(user_id) as times
+        FROM ' . $tbl_track_course . '
+        WHERE user_id = ' . intval($user_id) . '
+        AND course_code = "' . Database::escape_string($course_true) . '" '.$strg_sd.' '.$strg_ed.' '.'
+        ORDER BY login_course_date ASC';
+
+    $rs = Database::query($sql, __FILE__, __LINE__);
+    $result = array();
+
+    if ($row = Database::fetch_array($rs)) {
+
+        $foo_avg    = $row['avrg'];
+        $foo_total  = $row['total'];
+        $foo_times  = $row['times'];
+        $result = array('avg' => $foo_avg, 'total' => $foo_total, 'times' => $foo_times);
+    }
+    return $result;
+}
+
+function cev_add_day_to( $end_date ){
+    $foo_date = strtotime( $end_date );
+    $foo_date = strtotime(" +1 day", $foo_date);
+    $foo_date = date("Y-m-d", $foo_date);
+    return $foo_date;
+}
+
+
+/**
+ * Gets the connections to a course as an array of login and logout time
+ *
+ * @param unknown_type $user_id
+ * @param unknown_type $course_code
+ * @author Jorge Frisancho Jibaja
+ * @version CEV OCT-22- 2010
+ * @return unknown
+ */
+function get_connections_to_course_by_date($user_id, $course_code, $start_date, $end_date) {
+    // Database table definitions
+    $tbl_track_course   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $tbl_main       = Database :: get_main_table(TABLE_MAIN_COURSE);
+
+    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database::escape_string($course_code).'";';
+    $result = Database::query($sql_query, __FILE__, __LINE__);
+    $row_query = Database::fetch_array($result, 'ASSOC');
+    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
+    $COMILLA_SIMPLE = "'";
+
+    $end_date = cev_add_day_to( $end_date );
+    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
+        WHERE user_id = ' . intval($user_id) . '
+        AND course_code = "' . Database::escape_string($course_true) . '"
+        AND login_course_date BETWEEN ' . $COMILLA_SIMPLE . $start_date  . $COMILLA_SIMPLE . ' AND '  . $COMILLA_SIMPLE . $end_date . $COMILLA_SIMPLE . '
+        AND logout_course_date BETWEEN ' . $COMILLA_SIMPLE . $start_date  . $COMILLA_SIMPLE . ' AND '  . $COMILLA_SIMPLE . $end_date  . $COMILLA_SIMPLE . '
+        ORDER BY login_course_date ASC';
+
+    $rs = Database::query($sql, __FILE__, __LINE__);
+    $connections = array();
+
+    while ($row = Database::fetch_array($rs)) {
+
+        $login_date = $row['login_course_date'];
+        $logout_date = $row['logout_course_date'];
+
+        $timestamp_login_date = strtotime($login_date);
+        $timestamp_logout_date = strtotime($logout_date);
+
+        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
+    }
+    return $connections;
+}
+
+/**
+ * conver an sql result to an array
+ *
+ * @param unknown_type $sql_result
+ * @author Jorge Frisancho Jibaja
+ * @version CEV OCT-22- 2010
+ * @return array
+ */
+function cev_convert_to_array($sql_result){
+    $result_to_print = '<table>';
+    foreach ($sql_result as $key => $data) {
+            $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
+    }
+    $result_to_print .= '</table>';
+    $result_to_print = array("result"=>$result_to_print);
+    return $result_to_print;
+}
+
+/**
+ * converter an array to a table in html
+ *
+ * @param array $sql_result
+ * @author Jorge Frisancho Jibaja
+ * @version CEV OCT-22- 2010
+ * @return string
+ */
+function cev_convert_to_string($sql_result){
+    $result_to_print = '<table>';
+    if (!empty($sql_result)) {
+        foreach ($sql_result as $key => $data) {
+                $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
+        }
+    }
+    $result_to_print .= '</table>';
+    return $result_to_print;
+}
+
+
+/**
+ * This function draw the graphic to be displayed on the user view as an image
+ *
+ * @param array $sql_result
+ * @param string $start_date
+ * @param string $end_date
+ * @param string $type
+ * @author Jorge Frisancho Jibaja
+ * @version CEV OCT-22- 2010
+ * @return string
+ */
+function cev_grapher($sql_result, $start_date, $end_date, $type = "") {
+    require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
+    require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
+    require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
+
+    if (empty($start_date)) { $start_date =""; }
+    if (empty($end_date)) { $end_date =""; }
+    if ($type == ""){ $type = 'day'; }
+    $main_year  = $main_month_year = $main_day = array();
+    // get last 8 days/months
+    $last_days      = 5;
+    $last_months    = 3;
+    for ($i = $last_days; $i >= 0; $i--) {
+        $main_day[date ('d-m-Y', mktime () - $i * 3600 * 24)] = 0;
+    }
+    for ($i = $last_months; $i >= 0; $i--) {
+        $main_month_year[date ('m-Y', mktime () - $i * 30 * 3600 * 24)] = 0;
+    }
+
+    $i = 0;
+    if (is_array($sql_result) && count($sql_result) > 0) {
+        foreach ($sql_result as $key => $data) {
+            //creating the main array
+            $main_month_year[date('m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
+            $main_day[date('d-m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
+            if ($i > 500) {
+                    break;
+            }
+            $i++;
+        }
+
+        switch ($type) {
+            case 'day':
+                $main_date = $main_day;
+                break;
+            case 'month':
+                $main_date = $main_month_year;
+                break;
+            case 'year':
+                $main_date = $main_year;
+                break;
+        }
+
+        // the nice graphics :D
+        $labels = array_keys($main_date);
+        if (count($main_date) == 1) {
+            $labels = $labels[0];
+            $main_date = $main_date[$labels];
+        }
+
+        $data_set = new pData();
+        $data_set->AddPoint($main_date, 'Q');
+        if (count($main_date)!= 1) {
+            $data_set->AddPoint($labels, 'Date');
+        }
+        $data_set->AddAllSeries();
+        $data_set->RemoveSerie('Date');
+        $data_set->SetAbsciseLabelSerie('Date');
+        $data_set->SetYAxisName(get_lang('Minutes', ''));
+        $graph_id = api_get_user_id().'AccessDetails'.api_get_course_id().$start_date.$end_date.$type;
+        $data_set->AddAllSeries();
+
+        $cache = new pCache();
+        // the graph id
+        $data = $data_set->GetData();
+
+        if ($cache->IsInCache($graph_id, $data_set->GetData())) {
+        //if (0) {
+            //if we already created the img
+            //  echo 'in cache';
+            $img_file = $cache->GetHash($graph_id, $data_set->GetData());
+        } else {
+            // if the image does not exist in the archive/ folder
+            // Initialise the graph
+            $test = new pChart(760, 230);
+
+            //which schema of color will be used
+            $quant_resources = count($data[0]) - 1;
+            // Adding the color schemma
+            $test->loadColorPalette(api_get_path(LIBRARY_PATH).'pchart/palette/default.txt');
+
+            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
+            $test->setGraphArea(70, 30, 680, 200);
+            $test->drawFilledRoundedRectangle(7, 7, 693, 223, 5, 240, 240, 240);
+            $test->drawRoundedRectangle(5, 5, 695, 225, 5, 230, 230, 230);
+            $test->drawGraphArea(255, 255, 255, TRUE);
+            $test->drawScale($data_set->GetData(), $data_set->GetDataDescription(), SCALE_START0, 150, 150, 150, TRUE, 0, 0);
+            $test->drawGrid(4, TRUE, 230, 230, 230, 50);
+            $test->setLineStyle(2);
+            // Draw the 0 line
+            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 6);
+            $test->drawTreshold(0, 143, 55, 72, TRUE, TRUE);
+
+            if (count($main_date) == 1) {
+                    //Draw a graph
+                    echo '<strong>'.$labels.'</strong><br/>';
+                    $test->drawBarGraph($data_set->GetData(), $data_set->GetDataDescription(), TRUE);
+            } else {
+                    //Draw the line graph
+                    $test->drawLineGraph($data_set->GetData(), $data_set->GetDataDescription());
+                    $test->drawPlotGraph($data_set->GetData(), $data_set->GetDataDescription(), 3, 2, 255, 255, 255);
+            }
+
+            // Finish the graph
+            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
+
+            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 10);
+            $test->drawTitle(60, 22, get_lang('AccessDetails', ''), 50, 50, 50, 585);
+
+            //------------------
+            //echo 'not in cache';
+            $cache->WriteToCache($graph_id, $data_set->GetData(), $test);
+            ob_start();
+            $test->Stroke();
+            ob_end_clean();
+            $img_file = $cache->GetHash($graph_id, $data_set->GetData());
+        }
+        $foo_img = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
+        return $foo_img;
+    } else {
+        $foo_img = api_convert_encoding('<div id="messages" class="warning-message">'.get_lang('GraphicNotAvailable').'</div>','UTF-8');
+        return $foo_img;
+    }
 }

@@ -1831,12 +1831,12 @@ class DocumentManager {
         }        
         $max_filled_space = self::get_course_quota();
         $course_info      = api_get_course_info();        
-        $course_dir        = $course_info['path'].'/document';
+        $course_dir       = $course_info['path'].'/document';
         $sys_course_path  = api_get_path(SYS_COURSE_PATH);
         $base_work_dir    = $sys_course_path.$course_dir;
              
         if (isset($files['file'])) {
-            $upload_ok = process_uploaded_file($files['file']);
+            $upload_ok = process_uploaded_file($files['file'], $show_output);
          
             if ($upload_ok) {
                 // File got on the server without problems, now process it

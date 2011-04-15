@@ -58,7 +58,7 @@
 
 /*		INIT SECTION */
 
-$language_file = array('exercice', 'work', 'document', 'admin' );
+$language_file = array('exercice', 'work', 'document', 'admin');
 
 require_once '../inc/global.inc.php';
 
@@ -88,10 +88,10 @@ $stok = Security::get_token();
 $htmlHeadXtra[] = to_javascript_work();
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#work_title").focus();
+    $("#work_title").focus();
 }
 $(document).ready(function () {
-  setFocus();
+    setFocus();
 });
 </script>';
 
@@ -504,11 +504,7 @@ if (!empty($_REQUEST['new_dir'])) {
 	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
-
-	function get_date_from_select($prefix) {
-		return $_POST[$prefix.'_year'].'-'.two_digits($_POST[$prefix.'_month']).'-'.two_digits($_POST[$prefix.'_day']).' '.two_digits($_POST[$prefix.'_hour']).':'.two_digits($_POST[$prefix.'_minute']).':00';
-	}
-
+	
 	$fexpire = get_date_from_select('expires');
 	$fend 	 = get_date_from_select('ends');
 
@@ -875,8 +871,14 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 
 			// Transform any .php file in .phps fo security
 			$new_file_name = php2phps($new_file_name);
-			//filter extension
-			if (!filter_extension($new_file_name)) {
+			
+			$filesize = filesize($_FILES['file']['tmp_name']);
+			
+			if (empty($filesize)) { 
+			    Display :: display_error_message(get_lang('UplUploadFailed'));
+                $succeed = false;
+		    } elseif (!filter_extension($new_file_name)) {
+                //filter extension
 				Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 				$succeed = false;
 			} else {
@@ -1207,7 +1209,7 @@ if ($is_course_member) {
 		}
 
 		//require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-		require_once (api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
+		require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
 		$form = new FormValidator('form', 'POST', api_get_self() . "?curdirpath=" . rtrim(Security :: remove_XSS($cur_dir_path),'/') . "&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin", '', 'enctype="multipart/form-data"');
 
@@ -1308,7 +1310,6 @@ if ($is_course_member) {
 		$form->setDefaults($defaults);
 		//$form->addRule('file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 		$form->display();
-
 	}
 
 
@@ -1487,40 +1488,4 @@ if (!$display_upload_form && !$display_tool_options) {
 if ($origin != 'learnpath') {
 	//we are not in the learning path tool
 	Display :: display_footer();
-}
-
-
-/*	Some functions */
-
-function make_select($name, $values, $checked = '') {
-	$output = '<select name="'.$name.'" id="'.$name.'">';
- 	foreach($values as $key => $value) {
- 		$output .= '<option value="'.$key.'" '.(($checked==$key) ? 'selected="selected"' : '').'>'.$value.'</option>';
- 	}
- 	$output .= '</select>';
- 	return $output;
-}
-
-function make_checkbox($name, $checked = '') {
-	return '<input type="checkbox" value="1" name="'.$name.'" '.((!empty($checked))?'checked="checked"':'').'/>';
-}
-
-function draw_date_picker($prefix, $default = '') {
-	//$default = 2008-10-01 10:00:00
-	if (empty($default)) {
-		//$default = date('Y-m-d H:i:s');		
-		$default = api_get_local_time();
-	}
-	$parts = split(' ', $default);
-	list($d_year, $d_month, $d_day) = split('-', $parts[0]);
-	list($d_hour, $d_minute) = split(':', $parts[1]);
-
-	$minute = range(10, 59);
-	array_unshift($minute, '00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
-	$date_form = make_select($prefix.'_day', array_combine(range(1, 31), range(1, 31)), $d_day);
-	$date_form .= make_select($prefix.'_month', array_combine(range(1, 12), api_get_months_long()), $d_month);
-	$date_form .= make_select($prefix.'_year', array($d_year => $d_year, $d_year + 1 => $d_year + 1), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
-	$date_form .= make_select($prefix.'_hour', array_combine(range(0, 23), range(0, 23)), $d_hour).' : ';
-	$date_form .= make_select($prefix.'_minute', $minute, $d_minute);
-	return $date_form;
 }

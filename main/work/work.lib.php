@@ -1638,3 +1638,43 @@ function is_work_exist_by_url($url) {
 		return false;
 	}
 }
+
+
+
+
+function make_select($name, $values, $checked = '') {
+    $output = '<select name="'.$name.'" id="'.$name.'">';
+    foreach($values as $key => $value) {
+        $output .= '<option value="'.$key.'" '.(($checked==$key) ? 'selected="selected"' : '').'>'.$value.'</option>';
+    }
+    $output .= '</select>';
+    return $output;
+}
+
+function make_checkbox($name, $checked = '') {
+    return '<input type="checkbox" value="1" name="'.$name.'" '.((!empty($checked))?'checked="checked"':'').'/>';
+}
+
+function draw_date_picker($prefix, $default = '') {
+    //$default = 2008-10-01 10:00:00
+    if (empty($default)) {
+        //$default = date('Y-m-d H:i:s');       
+        $default = api_get_local_time();
+    }
+    $parts = split(' ', $default);
+    list($d_year, $d_month, $d_day) = split('-', $parts[0]);
+    list($d_hour, $d_minute) = split(':', $parts[1]);
+
+    $minute = range(10, 59);
+    array_unshift($minute, '00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
+    $date_form = make_select($prefix.'_day', array_combine(range(1, 31), range(1, 31)), $d_day);
+    $date_form .= make_select($prefix.'_month', array_combine(range(1, 12), api_get_months_long()), $d_month);
+    $date_form .= make_select($prefix.'_year', array($d_year => $d_year, $d_year + 1 => $d_year + 1), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
+    $date_form .= make_select($prefix.'_hour', array_combine(range(0, 23), range(0, 23)), $d_hour).' : ';
+    $date_form .= make_select($prefix.'_minute', $minute, $d_minute);
+    return $date_form;
+}
+
+function get_date_from_select($prefix) {
+    return $_POST[$prefix.'_year'].'-'.two_digits($_POST[$prefix.'_month']).'-'.two_digits($_POST[$prefix.'_day']).' '.two_digits($_POST[$prefix.'_hour']).':'.two_digits($_POST[$prefix.'_minute']).':00';
+}

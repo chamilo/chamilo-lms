@@ -4,13 +4,13 @@
  * Responses to AJAX calls for the document upload 
  */
 require_once '../global.inc.php';
-if (api_is_anonymous()){
+if (api_is_anonymous()) {
     exit;
 }
 if(!empty($_FILES)) {
     require_once api_get_path(LIBRARY_PATH).'document.lib.php';
     require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-    $result = DocumentManager::upload_document($_FILES, $_POST['curdirpath'], '', '', 0, 'overwrite');
+    $result = DocumentManager::upload_document($_FILES, $_POST['curdirpath'], '', '', 0, 'overwrite', false, false);
     $file = $_FILES['file'];    
     $json = array();
     $json['name'] = Display::url(api_htmlentities($file['name']), $result['url'], array('target'=>'_blank'));

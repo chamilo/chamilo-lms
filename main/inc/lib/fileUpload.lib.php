@@ -86,27 +86,54 @@ function get_document_title($name) {
  * @param array $uploaded_file ($_FILES)
  * @return true if upload succeeded
  */
-function process_uploaded_file($uploaded_file) {
+function process_uploaded_file($uploaded_file, $show_output = true) {
 	// Checking the error code sent with the file upload.
 	switch ($uploaded_file['error']) {
 		case 1:
 			// The uploaded file exceeds the upload_max_filesize directive in php.ini.
-			Display::display_error_message(get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize'));
+			if ($show_output)
+                Display::display_error_message(get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize'));
 			return false;
 		case 2:
 			// The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
 			// Not used at the moment, but could be handy if we want to limit the size of an upload (e.g. image upload in html editor).
-			Display::display_error_message(get_lang('UplExceedMaxPostSize'). round($_POST['MAX_FILE_SIZE']/1024) .' KB');
+			$max_file_size = intval($_POST['MAX_FILE_SIZE']);
+			if ($show_output) {
+                Display::display_error_message(get_lang('UplExceedMaxPostSize'). round($max_file_size/1024) .' KB');
+			}
 			return false;
 		case 3:
 			// The uploaded file was only partially uploaded.
-			Display::display_error_message(get_lang('UplPartialUpload').' '.get_lang('PleaseTryAgain'));
+		    if ($show_output) {
+			     Display::display_error_message(get_lang('UplPartialUpload').' '.get_lang('PleaseTryAgain'));
+		    }
 			return false;
 		case 4:
 			// No file was uploaded.
-			Display::display_error_message(get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'));
+		    if ($show_output) {
+			     Display::display_error_message(get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'));
+		    }
 			return false;
 	}
+		
+	if (!file_exists($uploaded_file['tmp_name'])) {
+	    // No file was uploaded.
+	    if ($show_output) {
+            Display::display_error_message(get_lang('UplUploadFailed'));
+	    }
+        return false;
+	}	
+    if (file_exists($uploaded_file['tmp_name'])) {
+        $filesize = filesize($uploaded_file['tmp_name']);
+        if (empty($filesize)) {
+            // No file was uploaded.
+            if ($show_output) {
+                Display::display_error_message(get_lang('UplUploadFailed'));
+            }
+            return false;
+        }        
+    }    
+	
 	// case 0: default: We assume there is no error, the file uploaded with success.
 	return true;
 }

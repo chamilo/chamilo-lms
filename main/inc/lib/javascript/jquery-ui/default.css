@@ -73,6 +73,10 @@
    background-color:#fff;
 }
 
+/* Calendary day fix */
+.ui-datepicker-calendar .ui-state-default {
+	height:15px;
+}
 
 
 /*  cupertino */

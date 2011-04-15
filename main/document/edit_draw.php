@@ -35,6 +35,8 @@ if (empty($document_data)) {
     $parent_id      = DocumentManager::get_document_id(api_get_course_info(), $dir);
 }
 
+$dir= str_replace('\\', '/',$dir);//and urlencode each url $curdirpath (hack clean $curdirpath under Windows - Bug #3261)
+
 /* Constants & Variables */
 $current_session_id=api_get_session_id();
 //path for svg-edit save

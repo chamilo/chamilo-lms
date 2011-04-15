@@ -103,7 +103,7 @@ class Dropbox_Work {
 		$this->title = $title;
 		$this->description = $description;
 		$this->author = api_get_person_name($_user['firstName'], $_user['lastName']);
-		$this->last_upload_date = date('Y-m-d H:i:s', time());
+		$this->last_upload_date = api_get_utc_datetime();
 
 		// Check if object exists already. If it does, the old object is used
 		// with updated information (authors, descriptio, upload_date)
@@ -286,17 +286,13 @@ class Dropbox_SentWork extends Dropbox_Work
 
 		// Insert data in dropbox_post and dropbox_person table for each recipient
 		foreach ($this->recipients as $rec) {
-			$sql = "INSERT INTO ".$dropbox_cnf['tbl_post']."
-				(file_id, dest_user_id, session_id)
+			$sql = "INSERT INTO ".$dropbox_cnf['tbl_post']." (file_id, dest_user_id, session_id)
 				VALUES ('".Database::escape_string($this->id)."', '".Database::escape_string($rec['id'])."', ".intval($_SESSION['id_session']).")";
 	        $result = Database::query($sql);	// If work already exists no error is generated
 
 			// Insert entries into person table
-			$sql = "INSERT INTO ".$dropbox_cnf['tbl_person']."
-				(file_id, user_id)
-				VALUES ('".Database::escape_string($this->id)."'
-						, '".Database::escape_string($rec['id'])."'
-						)";
+			$sql = "INSERT INTO ".$dropbox_cnf['tbl_person']." (file_id, user_id)
+				    VALUES ('".Database::escape_string($this->id)."', '".Database::escape_string($rec['id'])."')";
 
         	// Do not add recipient in person table if mailing zip or just upload.
 			if (!$justSubmit) {

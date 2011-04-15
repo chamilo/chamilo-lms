@@ -958,7 +958,7 @@ function feedback($array) {
 */
 function format_feedback($feedback) {
 	$output .= display_user_link_work($feedback['author_user_id']);
-	$output .= '&nbsp;&nbsp;['.$feedback['feedback_date'].']<br />';
+	$output .= '&nbsp;&nbsp;'.api_convert_and_format_date($feedback['feedback_date'], DATE_TIME_FORMAT_LONG).'<br />';
 	$output .= '<div style="padding-top:6px">'.nl2br($feedback['feedback']).'</div><hr size="1" noshade/><br />';
 	return $output;
 }
@@ -998,10 +998,8 @@ function feedback_form() {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function store_feedback()
-{
-	global $dropbox_cnf;
-	global $_user;
+function store_feedback() {
+	global $dropbox_cnf;	
 
 	if (!is_numeric($_GET['id'])) {
 		return get_lang('FeedbackError');
@@ -1011,7 +1009,7 @@ function store_feedback()
 		return get_lang('PleaseTypeText');
 	} else {
 		$sql="INSERT INTO ".$dropbox_cnf['tbl_feedback']." (file_id, author_user_id, feedback, feedback_date) VALUES
-				('".Database::escape_string($_GET['id'])."','".Database::escape_string($_user['user_id'])."','".Database::escape_string($_POST['feedback'])."',NOW())";
+				('".Database::escape_string($_GET['id'])."','".api_get_user_id()."','".Database::escape_string($_POST['feedback'])."', '".api_get_utc_datetime()."')";
 		Database::query($sql);
 		return get_lang('DropboxFeedbackStored');
 	}

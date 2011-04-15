@@ -802,7 +802,7 @@ function date_to_str_ago($date) {
 /**
  * Converts a date to the right timezone and localizes it in the format given as an argument
  * @param mixed The time to be converted
- * @param mixed Format to be used
+ * @param mixed Format to be used (TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG)
  * @param string Timezone to be converted from. If null, UTC will be assumed.
  * @return string Converted and localized date
  *

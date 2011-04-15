@@ -25,7 +25,7 @@ $this_section = SECTION_SOCIAL;
 if (isset($_GET['u'])) {
 	$user_id 	= (int) Database::escape_string($_GET['u']);
 	if (api_is_anonymous($user_id, true)) {
-	    api_not_allowed();
+	    api_not_allowed(true);
 	}
 	// It's me!
 	if (api_get_user_id() != $user_id) {
@@ -33,7 +33,7 @@ if (isset($_GET['u'])) {
 		$show_full_profile = false;
 		if (!$user_info) {
 			// user does no exist !!
-			api_not_allowed();
+			api_not_allowed(true);
 		} else {
 			//checking the relationship between me and my friend
 			$my_status= SocialManager::get_relation_between_contacts(api_get_user_id(), $user_id);

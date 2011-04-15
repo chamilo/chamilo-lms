@@ -1933,7 +1933,7 @@ function api_display_tool_title($title_element) {
  */
 function api_display_tool_view_option() {
 
-    if (api_get_setting('student_view_enabled') != 'true') {
+    if (api_get_setting('student_view_enabled') != 'true') { 
         return '';
     }
 
@@ -1947,13 +1947,13 @@ function api_display_tool_view_option() {
         return '';
     }
 
-    // Uncomment to remove student view link from document view page
+    /*// Uncomment to remove student view link from document view page
     if (strpos($_SERVER['REQUEST_URI'], 'document/headerpage.php') !== false) {
         $sourceurl = str_replace('document/headerpage.php', 'document/showinframes.php', $_SERVER['REQUEST_URI']);
         //showinframes doesn't handle student view anyway...
         //return '';
         $is_framed = true;
-    }
+    }*/
 
     // Uncomment to remove student view link from document view page
     if (strpos($_SERVER['REQUEST_URI'], 'newscorm/lp_header.php') !== false) {

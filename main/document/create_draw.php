@@ -28,10 +28,6 @@ $nameTools = get_lang('Draw');
 api_protect_course_script();
 api_block_anonymous_users();
 
-if (!isset($_GET['id'])) {
-	api_not_allowed(true);
-}
-
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
 $document_id   = $document_data['id'];
 $dir           = $document_data['path'];

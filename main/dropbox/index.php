@@ -220,7 +220,7 @@ if (!isset($_POST['feedback']) && (strstr($_POST['action'], 'move_received') OR
 
 // Store Feedback
 
-if ($_POST['feedback']) {
+if (isset($_POST['feedback'])) {
 	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}

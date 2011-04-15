@@ -1005,11 +1005,11 @@ function store_feedback() {
 		return get_lang('FeedbackError');
 	}
 
-	if ($_POST['feedback'] == '') {
+	if (empty($_POST['feedback'])) {
 		return get_lang('PleaseTypeText');
 	} else {
 		$sql="INSERT INTO ".$dropbox_cnf['tbl_feedback']." (file_id, author_user_id, feedback, feedback_date) VALUES
-				('".Database::escape_string($_GET['id'])."','".api_get_user_id()."','".Database::escape_string($_POST['feedback'])."', '".api_get_utc_datetime()."')";
+				('".intval($_GET['id'])."','".api_get_user_id()."','".Database::escape_string($_POST['feedback'])."', '".api_get_utc_datetime()."')";
 		Database::query($sql);
 		return get_lang('DropboxFeedbackStored');
 	}

@@ -81,10 +81,11 @@ class UserManager
 		// database table definition
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
-		// default langauge
-		if ($language == '') {
-			$language = api_get_setting('platformLanguage');
-		}
+    	//Checking the user language
+        $languages = api_get_languages();   
+        if (!in_array($language, $languages['folder'])) {
+            $language = api_get_setting('platformLanguage');
+        }
 
 		if ($_user['user_id']) {
 			$creator_id = intval($_user['user_id']);
@@ -341,6 +342,14 @@ class UserManager
 		if ($user_id != strval(intval($user_id))) return false;
 		if ($user_id === false) return false;
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+		
+		//Checking the user language
+        $languages = api_get_languages();   
+        if (!in_array($language, $languages['folder'])) {
+            $language = api_get_setting('platformLanguage');
+        }
+		
+        
 		$sql = "UPDATE $table_user SET
 				lastname='".Database::escape_string($lastname)."',
 				firstname='".Database::escape_string($firstname)."',

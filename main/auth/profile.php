@@ -649,6 +649,12 @@ if ($form->validate()) {
 		$user_data['openid'] = 'http://'.$my_user_openid;
 	}
 	$extras = array();
+	
+	//Checking the user language
+	$languages = api_get_languages();   
+    if (!in_array($user_data['language'], $languages['folder'])) {
+        $user_data['language'] = api_get_setting('platformLanguage');
+    }
     
 	//Only update values that are request by the "profile" setting
 	$profile_list = api_get_setting('profile');
@@ -664,8 +670,9 @@ if ($form->validate()) {
     	       $available_values_to_modify[] = $key;
     	    } 
 	    }
-	}	
+	}
 	
+
 	// build SQL query
 	$sql = "UPDATE $table_user SET";
 	unset($user_data['api_key_generate']);

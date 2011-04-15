@@ -390,9 +390,7 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
 											   . '&search='.Security::remove_XSS($_POST['keyword']));
 	exit;
 }
-// --------------------------------------------------------------------------------
-// -                       DISPLAY HEADERS AND MESSAGES                           -
-// --------------------------------------------------------------------------------
+// DISPLAY HEADERS AND MESSAGES                           -
 
 if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 	if (isset ($_GET['studentoverview'])) {
@@ -465,9 +463,7 @@ if (isset ($warning_message)) {
 if (isset ($move_form)) {
 	Display :: display_normal_message($move_form->toHtml(),false);
 }
-// --------------------------------------------------------------------------------
-// -                        LOAD DATA & DISPLAY TABLE                             -
-// --------------------------------------------------------------------------------
+// LOAD DATA & DISPLAY TABLE                             -
 $is_platform_admin= api_is_platform_admin();
 $is_course_admin= api_is_allowed_to_create_course();
 //load data for category, evaluation and links

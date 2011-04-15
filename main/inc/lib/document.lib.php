@@ -1227,8 +1227,7 @@ class DocumentManager {
       /**
        * return all content to replace and all content to be replace
        */
-      function get_all_info_to_certificate () {
-        global $charset, $dateFormatLong;
+    function get_all_info_to_certificate() {
         $info_list	= array();
         $user_id	= api_get_user_id();
         $course_id	= api_get_course_id();
@@ -1237,23 +1236,23 @@ class DocumentManager {
         $organization_name = api_get_setting('Institution');
         $portal_name       = api_get_setting('siteName');
 
-        //info extra user data
-        $extra_user_info_data = UserManager::get_extra_user_data($user_id,false,false);
+        //Extra user data information
+        $extra_user_info_data = UserManager::get_extra_user_data($user_id, false, false, false, true);
 
-        //info student
-        $user_info 	= api_get_user_info($user_id);
-        $first_name = $user_info['firstname'];
-        $last_name 	= $user_info['lastname'];
-        $official_code = $user_info['official_code'];
+        //Student information
+        $user_info 	    = api_get_user_info($user_id);
+        $first_name     = $user_info['firstname'];
+        $last_name 	    = $user_info['lastname'];
+        $official_code  = $user_info['official_code'];
 
-        //info teacher
+        //Teacher information
         $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_id);
         $teacher_info = api_get_user_info($info_teacher_id);
         $teacher_first_name = $teacher_info['firstname'];
         $teacher_last_name = $teacher_info['lastname'];
 
         // info gradebook certificate
-        $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id,$user_id);
+        $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id, $user_id);        
 
         $date_certificate = $info_grade_certificate['created_at'];
         $date_long_certificate = '';
@@ -1265,10 +1264,11 @@ class DocumentManager {
         $info_to_replace_in_content_html = array($first_name,$last_name,$organization_name,$portal_name,$teacher_first_name,$teacher_last_name, $official_code, $date_long_certificate);
         $info_to_be_replaced_in_content_html= array('((user_firstname))','((user_lastname))','((gradebook_institution))',
                                                     '((gradebook_sitename))','((teacher_firstname))','((teacher_lastname))','((official_code))','((date_certificate))');
-
-        foreach ($extra_user_info_data as $key_extra=>$value_extra) {
-            $info_to_be_replaced_in_content_html[]='(('.strtolower($key_extra).'))';
-            $info_to_replace_in_content_html[]=$value_extra;
+        if (!empty($extra_user_info_data)) {
+            foreach ($extra_user_info_data as $key_extra=>$value_extra) {                  
+                $info_to_be_replaced_in_content_html[]='(('.strtolower($key_extra).'))';
+                $info_to_replace_in_content_html[]=$value_extra;
+            }
         }
         $info_list[]=$info_to_be_replaced_in_content_html;
         $info_list[]=$info_to_replace_in_content_html;

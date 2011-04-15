@@ -100,7 +100,7 @@ function process_uploaded_file($uploaded_file) {
 			return false;
 		case 3:
 			// The uploaded file was only partially uploaded.
-			Display::display_error_message(get_lang('$UplPartialUpload').' '.get_lang('PleaseTryAgain'));
+			Display::display_error_message(get_lang('UplPartialUpload').' '.get_lang('PleaseTryAgain'));
 			return false;
 		case 4:
 			// No file was uploaded.

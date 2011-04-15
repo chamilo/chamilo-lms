@@ -31,29 +31,66 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
+// Protection
+api_protect_course_script();
+
 $noPHP_SELF = true;
 $header_file = Security::remove_XSS($_GET['file']);
 $document_id = intval($_GET['id']);
 
-//Generate path 
-if ($document_id) {
-    $course_code = api_get_course_id();    
-    if (!empty($course_code)) {
-        $document_data = DocumentManager::get_document_data_by_id($document_id, $course_code);
-        $header_file   = $document_data['path'];
-        $name_to_show  = cut($document_data['title'],80); 
-    }
-} else {    
-    $path_array = explode('/', str_replace('\\', '/', $header_file));
-    $path_array = array_map('urldecode', $path_array);
-    $header_file = implode('/', $path_array);
-    $nameTools = $header_file;
-    $name_to_show = cut($header_file, 80);    
+$course_info = api_get_course_info();
+$course_code = api_get_course_id(); 
+
+if (empty($course_info)) {
+    api_not_allowed(true);
 }
 
+//Generate path 
+if (!$document_id) {
+    $document_id = DocumentManager::get_document_id($course_info, $header_file);
+}
+$document_data = DocumentManager::get_document_data_by_id($document_id, $course_code);
+
+if (empty($document_data)) {
+    api_not_allowed(true);
+}
+
+$header_file  = $document_data['path'];
+$name_to_show = cut($header_file, 80);
+
+$path_array = explode('/', str_replace('\\', '/', $header_file));
+$path_array = array_map('urldecode', $path_array);
+$header_file = implode('/', $path_array);
+
+$file = Security::remove_XSS(urldecode($document_data['path']));
+
+$file_root = $course_info['path'].'/document'.str_replace('%2F', '/', $file);
+$file_url_sys = api_get_path(SYS_COURSE_PATH).$file_root;
+$file_url_web = api_get_path(WEB_COURSE_PATH).$file_root;
+
+if (!file_exists($file_url_sys)) {
+    api_not_allowed(true);
+}
+
+if (is_dir($file_url_sys)) {
+    api_not_allowed(true);
+}
+
+//fix the screen when you try to access a protected course through the url
+$is_allowed_in_course = $_SESSION ['is_allowed_in_course'];
+
+if ($is_allowed_in_course == false) {
+    api_not_allowed(true);
+}
+
+//Check user visibility
+$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id());
+if (!api_is_allowed_to_edit() && !$is_visible) {
+    api_not_allowed(true);
+}
 
 $group_id = api_get_group_id();
-$current_group = GroupManager :: get_group_properties($group_id);
+$current_group = GroupManager::get_group_properties($group_id);
 $current_group_name=$current_group['name'];
 
 if (isset($group_id) && $group_id != '') {
@@ -66,52 +103,24 @@ if (isset($group_id) && $group_id != '') {
 }
 
 $interbreadcrumb[] = array('url' => './document.php?curdirpath='.dirname($header_file).$req_gid, 'name' => get_lang('Documents'));
-
 $interbreadcrumb[] = array('url' => 'showinframes.php?gid='.$req_gid.'&amp;file='.$header_file, 'name' => $name_to_show);
 
-$file_url_sys = api_get_path(SYS_COURSE_PATH).'document'.$header_file;
-$path_info = pathinfo($file_url_sys);
 $this_section = SECTION_COURSES;
-
-
-/*
-if (!empty($_GET['nopages'])) {
-    $nopages = Security::remove_XSS($_GET['nopages']);
-    if ($nopages == 1) {
-        require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
-        Display::display_error_message(get_lang('FileNotFound'));
-    }
-    exit;
-}
-*/
-
 $_SESSION['whereami'] = 'document/view';
-
 $nameTools = get_lang('Documents');
-$file = Security::remove_XSS(urldecode($_GET['file']));
 
 /*	Main section */
-
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 //header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 header('Last-Modified: Wed, 01 Jan 2100 00:00:00 GMT');
-
 header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
-
 $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' - '.$file;
-
 // Only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
 $frameheight = 135;
 if ($is_courseAdmin) {
     $frameheight = 165;
 }
-
-$file_root = $_course['path'].'/document'.str_replace('%2F', '/', $file);
-$file_url_sys = api_get_path(SYS_COURSE_PATH).$file_root;
-$file_url_web = api_get_path(WEB_COURSE_PATH).$file_root;
-$path_info = pathinfo($file_url_sys);
-
 $js_glossary_in_documents = '';
 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
     $js_glossary_in_documents = '	//	    $(document).ready(function() {
@@ -170,16 +179,6 @@ $htmlHeadXtra[] = '
 -->
 </script>';
 
-//fix the screen when you try to access a protected course through the url
-$is_allowed_in_course = $_SESSION ['is_allowed_in_course'];
-if($is_allowed_in_course==false){
-    Display::display_header();
-    echo '<div align="center">';
-        Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="javascript:history.back(1)">'.get_lang('BackToPreviousPage').'</a><br />', false);
-    echo '</div>';
-    Display::display_footer();
-die();
-}
 
 //Display::display_header($tool_name, 'User');
 
@@ -187,13 +186,5 @@ Display::display_header('');
 echo "<div align=\"center\">";
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 echo '<a href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a></div>';
-//echo '<div>';
-if (file_exists($file_url_sys)) {
-    echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
-} else {
-    echo '<frame border="0" frameborder="0" scrolling="no"  name="mainFrame" id="mainFrame" src=showinframes.php?nopages=1 />';
-}
-
-//echo '</div>';
-
+echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
 Display::display_footer();

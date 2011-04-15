@@ -978,8 +978,8 @@ class DocumentManager {
      * @param string $path
      * @return int id of document / false if no doc found
      */
-    public static function get_document_id($_course, $path) {
-        $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+    public static function get_document_id($course_info, $path) {
+        $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
         $path = Database::escape_string($path);
         $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path LIKE BINARY '$path'";
         $result = Database::query($sql);
@@ -1099,14 +1099,14 @@ class DocumentManager {
         	$file_type = 'file';
         }
         
-        $sql  = "SELECT visibility FROM $docTable d, $propTable ip " .
-                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND filetype='$file_type' AND locate(concat(path,'/'),'".$doc_path."/')=1";
+        $sql  = "SELECT visibility FROM $docTable d, $propTable ip WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND filetype='$file_type' AND locate(concat(path,'/'),'".$doc_path."/')=1";
+        
         $result = Database::query($sql);
         $is_visible = false;
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result,'ASSOC');            
             if ($row['visibility'] == 1) {
-            	$is_visible = $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
+            	$is_visible = $_SESSION['is_allowed_in_course'] || api_is_platform_admin();
             }
         }     
         //improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:	access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
@@ -1117,7 +1117,8 @@ class DocumentManager {
         /**
      * return true if the documentpath have visibility=1 as item_property
      *
-     * @param string $document_path the relative complete path of the document
+     * @param   int     document id
+     * @param   array   course info
      * @param array  $course the _course array info of the document's course
      */
     public static function is_visible_by_id($id, $course, $session_id = 0, $file_type = 'file') {
@@ -1133,14 +1134,13 @@ class DocumentManager {
         }
         
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
-        $sql  = "SELECT visibility FROM $docTable d, $propTable ip " .
-                "WHERE d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND filetype='$file_type' AND d.id = $id";
+        $sql  = "SELECT visibility FROM $docTable d, $propTable ip WHERE d.id = ip.ref AND ip.tool='".TOOL_DOCUMENT."' $condition AND filetype='$file_type' AND d.id = $id";
         $result = Database::query($sql);
         $is_visible = false;
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result,'ASSOC');
             if ($row['visibility'] == 1) {
-                $is_visible = $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
+                $is_visible = $_SESSION['is_allowed_in_course'] || api_is_platform_admin();
             }
         }
         //improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:  access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.

@@ -1175,7 +1175,7 @@ class DocumentManager {
       * @param string The course id
       * @return int The default certificate id
       */
-     function get_default_certificate_id ($course_id) {
+     function get_default_certificate_id($course_id) {
          $tbl_category=Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
          $session_id=api_get_session_id();
          if ($session_id==0 || is_null($session_id)) {
@@ -1185,8 +1185,7 @@ class DocumentManager {
          } else {
              $sql_session='';
          }
-         $sql='SELECT document_id FROM '.$tbl_category.'
-         WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
+         $sql='SELECT document_id FROM '.$tbl_category.' WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
          $rs=Database::query($sql);
          $row=Database::fetch_array($rs);
          return $row['document_id'];
@@ -1197,37 +1196,34 @@ class DocumentManager {
       * @param string The course id
       * @return string The html content of the certificate
       */
-      function replace_user_info_into_html($course_id) {
-          global $_course;
-
+    function replace_user_info_into_html($course_id, $is_preview = false) {
           $course_info = api_get_course_info($course_id);
-          $tbl_document=Database::get_course_table(TABLE_DOCUMENT,$course_info['dbName']);
+          $tbl_document=Database::get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
           $document_id=self::get_default_certificate_id($course_id);
 
-          $sql='SELECT path FROM '.$tbl_document.' WHERE id="'.Database::escape_string($document_id).'" ';
+          $sql = 'SELECT path FROM '.$tbl_document.' WHERE id="'.Database::escape_string($document_id).'" ';
 
-          $rs=Database::query($sql);
+          $rs = Database::query($sql);
           $new_content = '';
           if (Database::num_rows($rs)) {
               $row=Database::fetch_array($rs);
               $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
 
-              if (is_file($filepath)) {
-                  $my_content_html=file_get_contents($filepath);
-              }
-            $all_user_info=self::get_all_info_to_certificate();
+            if (is_file($filepath)) {
+                $my_content_html=file_get_contents($filepath);
+            }
+            $all_user_info=self::get_all_info_to_certificate($is_preview);
             $info_to_be_replaced_in_content_html=$all_user_info[0];
             $info_to_replace_in_content_html=$all_user_info[1];
-            $new_content=str_replace($info_to_be_replaced_in_content_html,$info_to_replace_in_content_html,$my_content_html);
-          }
-
-          return $new_content;
-      }
+            $new_content=str_replace($info_to_be_replaced_in_content_html,$info_to_replace_in_content_html, $my_content_html);
+        }
+        return $new_content;
+    }
 
       /**
        * return all content to replace and all content to be replace
        */
-    function get_all_info_to_certificate() {
+    function get_all_info_to_certificate($is_preview = false) {
         $info_list	= array();
         $user_id	= api_get_user_id();
         $course_id	= api_get_course_id();
@@ -1259,7 +1255,11 @@ class DocumentManager {
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);
         }
-
+                
+        if ($is_preview) {
+            $date_long_certificate = api_convert_and_format_date(api_get_utc_datetime());
+        }
+        
         //replace content
         $info_to_replace_in_content_html = array($first_name,$last_name,$organization_name,$portal_name,$teacher_first_name,$teacher_last_name, $official_code, $date_long_certificate);
         $info_to_be_replaced_in_content_html= array('((user_firstname))','((user_lastname))','((gradebook_institution))',

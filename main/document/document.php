@@ -112,7 +112,7 @@ $current_folder_id = $document_id;
 if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isset($_GET['set_preview']) && $_GET['set_preview'] == strval(intval($_GET['set_preview']))) {
     if (isset($_GET['set_preview'])) {
         // Generate document HTML        
-        $content_html = DocumentManager::replace_user_info_into_html(api_get_course_id());
+        $content_html = DocumentManager::replace_user_info_into_html(api_get_course_id(), true);
 
         $new_content_html = $content_html;
 

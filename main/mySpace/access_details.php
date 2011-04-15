@@ -1,8 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This is the tracking library for Dokeos.
-*	Include/require it in your code to use its functionality.
+*	This is the tracking library for Chamilo.
 *
 *	@package chamilo.library
 *

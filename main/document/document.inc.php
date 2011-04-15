@@ -400,8 +400,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
             $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'),'',22);
         }
         $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),array(), 22);
-    } else {
-        
+    } else {        
         if ($is_certificate_mode) {
             $modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('edit.png', get_lang('Modify'),'',22).'</a>';            
         } else {
@@ -431,8 +430,6 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
             //$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'&amp;move='.$document_id.$req_gid.'&selectcat='.$gradebook_category.'">'.Display::return_icon('move.png', get_lang('Move'),array(), 22).'</a>';
             $modify_icons .= '&nbsp;'.Display::return_icon('move_na.png', get_lang('Move'),array(), 22).'</a>';
             $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'.png', get_lang('Move'),array(), 22).'</a>';
-            
-            //$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'&selectcat='.$gradebook_category.'">'.
 			Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'),array(), 22).'</a>';			
         } else {
             if (api_get_session_id()) {
@@ -450,7 +447,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
 				}else{
 					$tip_visibility=get_lang('Hide');
 				}
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'">'.Display::return_icon($visibility_icon.'.png', $tip_visibility,'',22).'</a>';
+                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'&'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'">'.Display::return_icon($visibility_icon.'.png', $tip_visibility,'',22).'</a>';
 
             }
         }        

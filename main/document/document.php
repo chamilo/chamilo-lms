@@ -632,7 +632,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
 
     /*	VISIBILITY COMMANDS */
     //Only teacher
-    if($is_allowed_to_edit){
+    if ($is_allowed_to_edit) {
         if ((isset($_GET['set_invisible']) && !empty($_GET['set_invisible'])) || (isset($_GET['set_visible']) && !empty($_GET['set_visible'])) && $_GET['set_visible'] != '*' && $_GET['set_invisible'] != '*') {
             // Make visible or invisible?
             if (isset($_GET['set_visible'])) {
@@ -649,7 +649,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
                         api_not_allowed();
                     }
                 }                
-                if(DocumentManager::check_readonly($_course, api_get_user_id(), '', $update_id)) {
+                if (DocumentManager::check_readonly($_course, api_get_user_id(), '', $update_id)) {
                     api_not_allowed();
                 }
             }

@@ -353,7 +353,7 @@ class GroupManager {
 	 * @param string $course_code Default is current course
 	 * @return integer              - number of groups deleted.
 	 */
-	public static function delete_groups ($group_ids, $course_code = null) {
+	public static function delete_groups($group_ids, $course_code = null) {
 		$course_db = '';
 		if ($course_code != null) {
 			$course = Database :: get_course_info($course_code);
@@ -372,9 +372,10 @@ class GroupManager {
 		$forum_topic_table 		= Database :: get_course_table(TABLE_FORUM_POST, $course_db);
 
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
+		$group_ids = array_map('intval',$group_ids);
 
-		if(api_is_course_coach())
-		{ //a coach can only delete courses from his session
+		if (api_is_course_coach()) { 
+		    //a coach can only delete courses from his session
 			for($i=0 ; $i<count($group_ids) ; $i++)
 			{
 				if(!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i]))
@@ -797,11 +798,10 @@ class GroupManager {
 	 */
 	public static function fill_groups ($group_ids) {
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
+		$group_ids = array_map('intval',$group_ids);
 
-		if(api_is_course_coach())
-		{
-			for($i=0 ; $i<count($group_ids) ; $i++)
-			{
+		if (api_is_course_coach()) {
+			for($i=0 ; $i<count($group_ids) ; $i++) {
 				if(!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i]))
 				{
 					array_splice($group_ids,$i,1);
@@ -961,13 +961,12 @@ class GroupManager {
 		if (!$user_id > 0)
 			return false;
 		$table_group = Database :: get_course_table(TABLE_GROUP);
-		$group_id=(int)$group_id;
-		if (isset($group_id)) {
-			$group_id = Database::escape_string($group_id);
+		$group_id= intval($group_id);
+		if (isset($group_id)) {			
 			$sql = 'SELECT  self_registration_allowed FROM '.$table_group.' WHERE id = "'.$group_id.'" ';
 			$db_result = Database::query($sql);
 			$db_object = Database::fetch_object($db_result);
-		return $db_object->self_registration_allowed == 1 && self :: can_user_subscribe($user_id, $group_id);
+		    return $db_object->self_registration_allowed == 1 && self :: can_user_subscribe($user_id, $group_id);
 		} else {
 			return false;
 		}
@@ -1159,25 +1158,20 @@ class GroupManager {
 	 */
 	public static function unsubscribe_all_users ($group_ids) {
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
-		if( count($group_ids) > 0)
-		{
-
-			if(api_is_course_coach())
-			{
-				for($i=0 ; $i<count($group_ids) ; $i++)
-				{
+		$group_ids = array_map('intval',$group_ids);
+		if( count($group_ids) > 0) {
+			if(api_is_course_coach()) {
+				for($i=0 ; $i<count($group_ids) ; $i++) {
 					if(!api_is_element_in_the_session(TOOL_GROUP,$group_ids[$i]))
 					{
 						array_splice($group_ids,$i,1);
 						$i--;
 					}
 				}
-				if(count($group_ids)==0)
-				{
+				if(count($group_ids)==0) {
 					return false;
 				}
 			}
-
 			$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 			$sql = 'DELETE FROM '.$table_group_user.' WHERE group_id IN ('.implode(',', $group_ids).')';
 			$result = Database::query($sql);

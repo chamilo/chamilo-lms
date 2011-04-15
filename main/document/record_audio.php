@@ -180,7 +180,7 @@ echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/
 	// echo '<param name="ShowSaveButton" value="false" />'; //you can save in local computer | (default true)
 	//echo '<param name="ShowSpeedButton" value="false" />'; // default true
 	//echo '<param name="ShowAudioLevel" value="false" />'; //  it displays the audiometer | (default true)
-	//echo '<param name="ShowTime" value="false" />'; // default true
+	echo '<param name="ShowTime" value="true" />'; // default false
 	//echo '<param name="Color" value="#C0E0FF" />'; // default #FFFFFF
 	//echo '<param name="StartTime" value="10.5" />';
 	//echo '<param name="EndTime" value="65" />';	
@@ -188,8 +188,6 @@ echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/
 	//echo '<param name="SamplingRate" value="32000" />';//Quality for ImaADPCM (low 8000, medium 11025, normal 22050, hight 44100) OR Quality for Speex (low 8000, medium 16000, normal 32000, hight 44100) | (default 44100)
 	//echo '<param name="MaxDuration" value="60" />';
 	//echo '<param name="SoundFileURL" value="http://somewhere.com/mysoundfile.wav" />';//load a file |(default "")
-	////
-	//echo '<param name="Start" value="true" />';// the applet will start playing the file from SoundFileURL after loading (default false)
 	
 echo '</applet>';
 //check browser support and load form

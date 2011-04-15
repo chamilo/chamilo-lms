@@ -746,7 +746,8 @@ function is_browser_viewable($file_extension) {
     static $allowed_extensions = array(
         'htm', 'html', 'xhtml', 'gif', 'jpg', 'jpeg', 'png', 'pdf', 'swf', 'mp3', 'mp4', 'ogg', 'ogx', 'oga', 'ogv', 'svg',
         'txt', 'log',
-        'mpg', 'mpeg'
+        'mpg', 'mpeg',
+		'wav'
     );
     if (!($result = in_array($file_extension, $allowed_extensions))) { // Assignment + a logical check.
         return false;

@@ -186,5 +186,20 @@ Display::display_header('');
 echo "<div align=\"center\">";
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 echo '<a href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a></div>';
-echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
+
+$pathinfo =pathinfo($header_file);
+if ($pathinfo['extension']=='wav'){
+	echo '<div align="center">';
+		echo '<br/>';
+		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';
+			echo '<param name="SoundFileURL" value="'.$file_url_web.'" />';
+			echo '<param name="ShowSaveButton" value="false" />';
+			echo '<param name="ShowTime" value="true" />';
+			echo '<param name="ShowRecordButton" value="false" />';
+		echo '</applet>';
+	echo '</div>';
+}
+else{
+	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
+}
 Display::display_footer();

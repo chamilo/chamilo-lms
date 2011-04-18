@@ -449,15 +449,15 @@ function display_monthcalendar($month, $year) {
 													
 									switch($value['calendar_type']) {
 									    case 'personal':
-									        $bg_color = '#58E24C';
+									        $bg_color = '#ABD1E7';
 									        $subtitle = get_lang('MyAgenda');									
 									        break;
 									    case 'global':
-                                            $bg_color = '#FD553D';                                            
+                                            $bg_color = '#FF8589';                                            
                                             $subtitle = get_lang('GlobalEvent');
                                             break;
 									    case 'course':
-                                            $bg_color = '#FFF';
+                                            $bg_color = '#97EF9C';
                                             $subtitle = get_lang('Course');                                            
                                             break;
                                         /*case 'work':

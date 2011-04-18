@@ -1359,10 +1359,7 @@ class Database {
             }
         }
 
-
-         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
-
-
+        $sql    = "SELECT $clean_columns FROM $table_name $conditions";
 
         $result = self::query($sql);
         $array = array();
@@ -1391,11 +1388,14 @@ class Database {
         if (empty($conditions)) {
             return '';
         }
-        $return_value = '';
-        foreach ($conditions as $type_condition => $condition_data) {
+        $return_value = '';    
+        foreach ($conditions as $type_condition => $condition_data) {       
+            if ($condition_data == false) {
+                continue;
+            }
             $type_condition = strtolower($type_condition);
-             switch($type_condition) {
-                case 'where':
+            switch($type_condition) {
+                case 'where':                    
                     foreach ($condition_data as $condition => $value_array) {
                         if (is_array($value_array)) {
                             $clean_values = array();
@@ -1418,12 +1418,11 @@ class Database {
                     if (!empty($where_return)) {
                         $return_value = " WHERE $where_return" ;
                     }
-                break;
+                    break;
                 case 'order':
                     $order_array = explode(' ', $condition_data);
-
                     if (!empty($order_array)) {
-                        if (count($order_array) > 1) {
+                        if (count($order_array) > 1 && !empty($order_array[0])) {                            
                             $order_array[0] = self::escape_string($order_array[0]);
                             if (!empty($order_array[1])) {
                                 $order_array[1] = strtolower($order_array[1]);
@@ -1434,11 +1433,10 @@ class Database {
                             }
                             $return_value .= ' ORDER BY '.$order_array[0].'  '.$order;
                         }  else {
-                            $return_value .= ' ORDER BY '.$order_array[0].' DESC ';
+                            $return_value .= ' ORDER BY '.$order_array[0].' DESC ';                            
                         }
-                    }
-                break;
-
+                    }                    
+                    break;
                 case 'limit':
                     $limit_array = explode(',', $condition_data);
                     if (!empty($limit_array)) {
@@ -1448,8 +1446,7 @@ class Database {
                             $return_value .= ' LIMIT '.intval($limit_array[0]);
                         }
                     }
-                break;
-
+                    break;
             }
         }
         return $return_value;

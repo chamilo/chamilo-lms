@@ -27,8 +27,8 @@ class Promotion extends Model {
      * @param   int     career id
      * @return  array   results
      */
-    public function get_all_promotions_by_career_id($career_id) {        
-        return Database::select('*', $this->table, array('where'=>array('career_id = ?'=>$career_id)));
+    public function get_all_promotions_by_career_id($career_id, $order = false) {        
+        return Database::select('*', $this->table, array('where'=>array('career_id = ?'=>$career_id),'order' =>$order));
     }
     
     public function get_status_list() {

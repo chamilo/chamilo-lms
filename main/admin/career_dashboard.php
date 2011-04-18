@@ -30,25 +30,52 @@ $interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('Car
 
 Display :: display_header($nameTools);
 
-// action links
-echo '<div class="actions" style="margin-bottom:20px">';
-	echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
-    echo '<a href="careers.php">'.Display::return_icon('career.png',get_lang('Careers'),'','32').'</a>';
-    echo '<a href="promotions.php">'.Display::return_icon('promotion.png',get_lang('Promotions'),'','32').'</a>';  
-echo '</div>';
 
+
+$form = new FormValidator('filter_form','GET', api_get_self());
 
 $career = new Career();
-$careers = $career->get_all(array('status = ?'=>1)); //only status =1 
+
+$condition = array('status = ?' => 1);
+if ($form->validate()) {
+    $data = $form->getSubmitValues(); 
+    $filter = intval($data['filter']);   
+    if (!empty($filter)) {
+        $condition = array('status = ? AND id = ? ' => array(1, $filter));
+    }
+}
+
+$careers = $career->get_all(array('status = ?' => 1)); //only status =1
+$career_select_list = array();
+$career_select_list[0] = ' -- '.get_lang('Select').' --';
+foreach ($careers as $item) {    
+    $career_select_list[$item['id']] = $item['name'];
+}
+
+$form->addElement('select', 'filter', get_lang('Career'), $career_select_list);
+$form->addElement('style_submit_button', 'submit', get_lang('Filter'), 'class="search"');
+
+
+// action links
+echo '<div class="actions" style="margin-bottom:20px">';
+    echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'','32').'</a>';
+    echo '<a href="careers.php">'.Display::return_icon('career.png',get_lang('Careers'),'','32').'</a>';
+    echo '<a href="promotions.php">'.Display::return_icon('promotion.png',get_lang('Promotions'),'','32').'</a>'; 
+echo '</div>';
+
+$form->display();
+
+$careers = $career->get_all($condition); //only status =1
+
 $column_count = 3;
 $i = 0;
 $grid_js = '';
 $career_array = array();
 if (!empty($careers)) {
-    foreach($careers as $career_item) {        
+    foreach($careers as $career_item) {   
         $promotion = new Promotion();
         //Getting all promotions
-        $promotions = $promotion->get_all_promotions_by_career_id($career_item['id']);
+        $promotions = $promotion->get_all_promotions_by_career_id($career_item['id'], 'name DESC');        
         $career_content = '';        
         $promotion_array = array();
         if (!empty($promotions)) {            

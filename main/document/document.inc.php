@@ -193,7 +193,7 @@ function create_document_link($document_data, $show_as_icon = false) {
         if ($filetype == 'folder') {
             if (api_is_allowed_to_edit() || api_is_platform_admin() || api_get_setting('students_download_folders') == 'true') {
                 //filter when I am into shared folder, I can show for donwload only my shared folder
-                if(is_shared_folder($_GET['curdirpath'],$current_session_id)) {
+                if (is_shared_folder($_GET['curdirpath'],$current_session_id)) {
                     if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link))|| preg_match('/shared_folder_session_'.$current_session_id.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) || api_is_allowed_to_edit() || api_is_platform_admin()) {
                         $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array(),22).'</a>';
                     }
@@ -206,18 +206,25 @@ function create_document_link($document_data, $show_as_icon = false) {
         }
 
         //copy files to users myfiles
-        if(api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0){
-            $copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&curdirpath='.$_GET['curdirpath'].'&amp;action=copytomyfiles&amp;id='.$url_path.$req_gid :api_get_self().'?'.api_get_cidreq();
+        if (api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0){
+            $copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&amp;action=copytomyfiles&amp;id='.$url_path.$req_gid :api_get_self().'?'.api_get_cidreq();
 
-            if($filetype == 'file') {
+            if ($filetype == 'file') {
                 $copy_to_myfiles='<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(),22).'&nbsp;&nbsp;</a>';
             }
         }
+        
+        $pdf_icon = '';
+        $extension = pathinfo($path, PATHINFO_EXTENSION);          
+        if (!api_is_allowed_to_edit() && api_get_setting('students_export2pdf') == 'true' && $filetype == 'file' && in_array($extension, array('html','htm'))) {            
+            $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&id='.$document_data['id'].'">'.Display::return_icon('pdf.png', get_lang('Export2PDF'),array(), 22).'</a> ';
+        } 
+        
         if ($is_browser_viewable_file) {
             $open_in_new_window_link = '<a href="'.$www.str_replace('%2F', '/',$url_path).'?'.api_get_cidreq().'" style="float:right"'.$prevent_multiple_click.' target="_blank">'.Display::return_icon('open_in_new_window.png', get_lang('OpenInANewWindow'), array(),22).'&nbsp;&nbsp;</a>';
         }
 
-        return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link;
+        return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html.$copy_to_myfiles.$open_in_new_window_link.$pdf_icon;
         //end copy files to users myfiles
     } else {
         if(preg_match('/shared_folder/', urldecode($url)) && preg_match('/shared_folder$/', urldecode($url))==false && preg_match('/shared_folder_session_'.$current_session_id.'$/', urldecode($url))==false){

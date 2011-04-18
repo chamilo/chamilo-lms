@@ -1161,7 +1161,7 @@ function update_toc(update_action,update_id,change_ids)
                        olms.lms_next_item = update_id;
                        olms.lms_previous_item = update_id;
                     }
-                    myelem.attr('class',"scorm_item_highlight");
+                    myelem.attr('class',"scorm_item_highlight"); 
                     break;
                 case 'not attempted':
                     if( myelemimg.attr('src') != '../img/notattempted.gif') {
@@ -1170,32 +1170,32 @@ function update_toc(update_action,update_id,change_ids)
                     }
                     break;
                 case 'incomplete':
-                    if( myelemimg.attr('src') != '../img/incomplete.gif') {
-                        myelemimg.attr('src','../img/incomplete.gif');
+                    if( myelemimg.attr('src') != '../img/incomplete.png') {
+                        myelemimg.attr('src','../img/incomplete.png');
                         myelemimg.attr('alt','i');
                     }
                     break;
                 case 'completed':
-                    if( myelemimg.attr('src') != '../img/completed.gif') {
-                        myelemimg.attr('src','../img/completed.gif');
+                    if( myelemimg.attr('src') != '../img/completed.png') {
+                        myelemimg.attr('src','../img/completed.png');
                         myelemimg.attr('alt','c');
                     }
                     break;
                 case 'failed':
-                    if( myelemimg.attr('src') != '../img/failed.gif') {
-                        myelemimg.attr('src','../img/failed.gif');
+                    if( myelemimg.attr('src') != '../img/delete.png') {
+                        myelemimg.attr('src','../img/delete.png');
                         myelemimg.attr('alt','f');
                     }
                     break;
                 case 'passed':
-                    if( myelemimg.attr('src') != '../img/completed.gif' && myelemimg.attr('alt') != 'passed') {
-                        myelemimg.attr('src','../img/completed.gif');
+                    if( myelemimg.attr('src') != '../img/completed.png' && myelemimg.attr('alt') != 'passed') {
+                        myelemimg.attr('src','../img/completed.png');
                         myelemimg.attr('alt','p');
                     }
                     break;
                 case 'browsed':
-                    if( myelemimg.attr('src') != '../img/completed.gif' && myelemimg.attr('alt') != 'browsed') {
-                        myelemimg.attr('src','../img/completed.gif');
+                    if( myelemimg.attr('src') != '../img/completed.png' && myelemimg.attr('alt') != 'browsed') {
+                        myelemimg.attr('src','../img/completed.png');
                         myelemimg.attr('alt','b');
                     }
                     break;

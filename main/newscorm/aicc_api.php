@@ -487,32 +487,32 @@ function update_toc(update_action,update_id)
                     }
                     break;
                 case 'incomplete':
-                    if(myelemimg.src != '../img/incomplete.gif'){
-                        myelemimg.src = "../img/incomplete.gif";
+                    if(myelemimg.src != '../img/incomplete.png'){
+                        myelemimg.src = "../img/incomplete.png";
                         myelemimg.alt = "incomplete";
                     }
                     break;
                 case 'completed':
-                    if(myelemimg.src != '../img/completed.gif'){
-                        myelemimg.src = "../img/completed.gif";
+                    if(myelemimg.src != '../img/completed.png'){
+                        myelemimg.src = "../img/completed.png";
                         myelemimg.alt = "completed";
                     }
                     break;
                 case 'failed':
-                    if(myelemimg.src != '../img/failed.gif'){
-                        myelemimg.src = "../img/failed.gif";
+                    if(myelemimg.src != '../img/failed.png'){
+                        myelemimg.src = "../img/failed.png";
                         myelemimg.alt = "failed";
                     }
                     break;
                 case 'passed':
-                    if(myelemimg.src != '../img/completed.gif' && myelemimg.alt != 'passed'){
-                        myelemimg.src = "../img/completed.gif";
+                    if(myelemimg.src != '../img/completed.png' && myelemimg.alt != 'passed'){
+                        myelemimg.src = "../img/completed.png";
                         myelemimg.alt = "passed";
                     }
                     break;
                 case 'browsed':
-                    if(myelemimg.src != '../img/completed.gif' && myelemimg.alt != 'browsed'){
-                        myelemimg.src = "../img/completed.gif";
+                    if(myelemimg.src != '../img/completed.png' && myelemimg.alt != 'browsed'){
+                        myelemimg.src = "../img/completed.png";
                         myelemimg.alt = "browsed";
                     }
                     break;

@@ -2695,8 +2695,8 @@ class learnpath {
                 'incomplete'    => '../img/incomplete.png',
                 'failed'        => '../img/delete.png',
                 'completed'     => '../img/completed.png',
-                'passed'        => '../img/passed.gif',
-                'succeeded'     => '../img/succeeded.gif',
+                'passed'        => '../img/passed.png',
+                'succeeded'     => '../img/succeeded.png',
                 'browsed'       => '../img/completed.png',
             );
 

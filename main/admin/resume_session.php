@@ -98,18 +98,16 @@ if (!empty($_GET['warn'])) {
     Display::display_warning_message(urldecode($_GET['warn']));
 }
 
-api_display_tool_title($tool_name);
+
+echo Display::tag('h2', $session['name']);
+echo Display::tag('h3', $tool_name);
 ?>
 <!-- General properties -->
 <table class="data_table" width="100%">
 <tr>
   <th colspan="2"><?php echo get_lang('GeneralProperties'); ?>
-  	<a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a></th>
+  	<a href="session_edit.php?page=resume_session.php&id=<?php echo $id_session; ?>"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a></th>
   </th>
-</tr>
-<tr>
-	<td><?php echo get_lang('SessionName');?> :</td>
-	<td><?php echo $session['name'] ?></td>
 </tr>
 <tr>
 	<td><?php echo get_lang('GeneralCoach'); ?> :</td>
@@ -193,7 +191,7 @@ if ($_configuration['multiple_access_urls']) {
 <table class="data_table" width="100%">
 <tr>
   <th colspan="4"><?php echo get_lang('CourseList'); ?>
-  	<a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a></th>
+  	<a href="add_courses_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a></th>
   </th>
 </tr>
 <tr>
@@ -263,8 +261,8 @@ else {
 			<td>
                 <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>   
 				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;                
-				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>
-				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>
+				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.png', get_lang('Edit'), '', 22).'</a>
+				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
 			</td>
 		</tr>';
 	}
@@ -278,7 +276,7 @@ else {
 <table class="data_table" width="100%">
 <tr>
   <th colspan="4"><?php echo get_lang('UserList'); ?>
-  	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a></th>
+  	<a href="add_users_to_session.php?page=resume_session.php&id_session=<?php echo $id_session; ?>"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), 22); ?></a></th>
   </th>
 </tr>
 </tr>
@@ -322,4 +320,3 @@ else {
 <?php
 // footer
 Display :: display_footer();
-?>

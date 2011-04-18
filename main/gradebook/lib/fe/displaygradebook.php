@@ -9,28 +9,33 @@ class DisplayGradebook
 	* @param $shownavbar 1=show navigation bar
 	* @param $forpdf only output for pdf file
 	*/
-	function display_header_result($evalobj, $selectcat, $shownavbar) {
-		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+	function display_header_result($evalobj, $selectcat, $page) {
+		$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		if (api_is_allowed_to_edit(null, true)) {
 			$header = '<div class="actions">';
-			$header .= '<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat=' . $selectcat . '">'. Display::return_icon(('back.png'),get_lang('FolderView'),'','32').'</a>';
-			if ($evalobj->get_course_code() == null) {
-                //Disabling code when course code is null see issue #2705
-				//$header .= '<a href="gradebook_add_user.php?selecteval=' . $evalobj->get_id() . '"><img src="../img/add_user_big.gif" alt="' . get_lang('AddStudent') . '" align="absmiddle" /> ' . get_lang('AddStudent') . '</a>';
-			} elseif (!$evalobj->has_results()) {
-				$header .= '<a href="gradebook_add_result.php?selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '">
-				'.Display::return_icon('evaluation_rate.png',get_lang('AddResult'),'','32') . '</a>';				
+			
+			if ($page != 'statistics') {
+			    $header .= '<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat=' . $selectcat . '">'. Display::return_icon(('back.png'),get_lang('FolderView'),'','32').'</a>';
+    			if ($evalobj->get_course_code() == null) {
+                    //Disabling code when course code is null see issue #2705
+    				//$header .= '<a href="gradebook_add_user.php?selecteval=' . $evalobj->get_id() . '"><img src="../img/add_user_big.gif" alt="' . get_lang('AddStudent') . '" align="absmiddle" /> ' . get_lang('AddStudent') . '</a>';
+    			} elseif (!$evalobj->has_results()) {
+    				$header .= '<a href="gradebook_add_result.php?selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '">
+    				'.Display::return_icon('evaluation_rate.png',get_lang('AddResult'),'','32') . '</a>';				
+    			}
+    			$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&import=">
+    			'.Display::return_icon('import_evaluation.png',get_lang('ImportResult'),'','32') . '</a>';			
+    			if ($evalobj->has_results()) {
+    				$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&export=">'.Display::return_icon('export_evaluation.png',get_lang('ExportResult'),'','32') . '</a>';
+    				$header .= '<a href="gradebook_edit_result.php?selecteval=' . $evalobj->get_id() .'">'.Display::return_icon('edit.png',get_lang('EditResult'),'','32').'</a>';
+    				
+    				$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&deleteall=" onclick="return confirmationall();">'.Display::return_icon('delete.png',get_lang('DeleteResult'),'','32').'</a>';
+    			}
+    			
+    			$header .= '<a href="' . api_get_self() . '?print=&selecteval=' . $evalobj->get_id() . '" target="_blank">'.Display::return_icon('printer.png',get_lang('Print'),'','32').'</a>';
+			} else {
+			    $header .= '<a href="gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('back.png'),get_lang('FolderView'),'','32') . '</a>';
 			}
-			$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&import=">
-			'.Display::return_icon('import_evaluation.png',get_lang('ImportResult'),'','32') . '</a>';			
-			if ($evalobj->has_results()) {
-				$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&export=">'.Display::return_icon('export_evaluation.png',get_lang('ExportResult'),'','32') . '</a>';
-				$header .= '<a href="gradebook_edit_result.php?selecteval=' . $evalobj->get_id() .'">'.Display::return_icon('edit.png',get_lang('EditResult'),'','32').'</a>';
-				
-				$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&deleteall=" onclick="return confirmationall();">'.Display::return_icon('delete.png',get_lang('DeleteResult'),'','32').'</a>';
-			}
-			$header .= '<a href="' . api_get_self() . '?print=&selecteval=' . $evalobj->get_id() . '" target="_blank">
-			'.Display::return_icon('printer.png',get_lang('Print'),'','32').'</a>';
 			$header .= '</div>';
 		}
 		if ($evalobj->is_visible() == '1') {
@@ -54,21 +59,24 @@ class DisplayGradebook
 		} else {
 			$course= get_course_name_from_code($evalobj->get_course_code());
 		}
-
+    
 		$evalinfo= '<table width="100%" border="0"><tr><td>';
 		$evalinfo .= get_lang('EvaluationName') . ' :<b> ' . $evalobj->get_name() . ' </b>(' . api_format_date($evalobj->get_date()).' )<br />' . get_lang('Course') . ' :<b> ' . $course . '</b><br>' . get_lang('Weight') . ' :<b> ' . $evalobj->get_weight() . '</b><br>' . get_lang('QualificationNumeric') . ' :<b> ' . $evalobj->get_max() . '</b><br>' . $description . get_lang('Visible') . ' :<b> ' . $visible . '</b><br>' . $average;
-		if (!$evalobj->has_results())
+		if (!$evalobj->has_results()) {
 			$evalinfo .= '<br /><i>' . get_lang('NoResultsInEvaluation') . '</i>';
-		elseif ($scoredisplay->is_custom() && api_get_self() != '/dokeos/main/gradebook/gradebook_statistics.php') {
-            if (api_is_allowed_to_edit(null, true)) {    
-                $evalinfo .= '<br /><br /><a href="gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('evaluation_rate.png'),get_lang('ViewResult'),'','32') . '</a>';
+		} elseif ($scoredisplay->is_custom() && api_get_self() != '/dokeos/main/gradebook/gradebook_statistics.php') {
+            if (api_is_allowed_to_edit(null, true)) {
+                if ($page != 'statistics') {    
+                    //$evalinfo .= '<br /><br /><a href="gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('evaluation_rate.png'),get_lang('ViewResult'),'','32') . '</a>';
+                }
             }
         }
-        
-        if (api_is_allowed_to_edit(null, true)) {
-            $evalinfo .= '<a href="gradebook_statistics.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('statistics.png'),get_lang('ViewStatistics'),'','32').'</a>';
+        if ($page != 'statistics') {    
+            if (api_is_allowed_to_edit(null, true)) {
+                $evalinfo .= '<br /><a href="gradebook_statistics.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('statistics.png'),get_lang('ViewStatistics'),'','32').'</a>';
+            }
         }
-            $evalinfo .= '</td><td><img style="float:right; position:relative;" src="../img/tutorial.gif"></img></td></table>';
+        $evalinfo .= '</td><td><img style="float:right; position:relative;" src="../img/tutorial.gif"></img></td></table>';
         
 		Display :: display_normal_message($evalinfo,false);
 		echo $header;

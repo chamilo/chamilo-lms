@@ -16,11 +16,6 @@ require_once '../inc/lib/xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
-$xajax = new xajax();
-
-//$xajax->debugOn();
-$xajax->registerFunction('search');
-
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -41,7 +36,6 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function add_user_to_session (code, content) {
@@ -80,12 +74,27 @@ function validate_filter() {
 
 $form_sent  = 0;
 $errorMsg   = '';
-$sessions=array();
+$sessions   = array();
+
+$extra_field_list= UserManager::get_extra_fields();
+$new_field_list = array();
+if (is_array($extra_field_list)) {
+    foreach ($extra_field_list as $extra_field) {
+        //if is enabled to filter and is a "<select>" field type
+        if ($extra_field[8]==1 && $extra_field[2]==4 ) {
+            $new_field_list[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
+        }
+    }
+}
+
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
-if($_POST['form_sent']) {
+$first_letter_user = '';
+if ($_POST['form_sent']) {
     $form_sent              = $_POST['form_sent'];    
-    $elements_posted        = $_POST['elements_in_name'];     
+    $elements_posted        = $_POST['elements_in_name'];
+    $first_letter_user      = $_POST['firstLetterUser'];
+         
     if (!is_array($elements_posted)) {
         $elements_posted=array();
     }
@@ -96,6 +105,38 @@ if($_POST['form_sent']) {
         exit;        
     }
 }
+
+
+//Filter by Extra Fields
+$use_extra_fields = false;
+if (is_array($extra_field_list)) {
+    if (is_array($new_field_list) && count($new_field_list)>0 ) {
+        $result_list=array();
+        foreach ($new_field_list as $new_field) {
+            $varname = 'field_'.$new_field['variable'];
+            if (Usermanager::is_extra_field_available($new_field['variable'])) {
+                if (isset($_POST[$varname]) && $_POST[$varname]!='0') {
+                    $use_extra_fields = true;
+                    $extra_field_result[]= Usermanager::get_extra_user_data_by_value($new_field['variable'], $_POST[$varname]);
+                }
+            }
+        }
+    }
+}
+
+if ($use_extra_fields) {
+    $final_result = array();
+    if (count($extra_field_result)>1) {
+        for($i=0;$i<count($extra_field_result)-1;$i++) {
+            if (is_array($extra_field_result[$i+1])) {
+                $final_result  = array_intersect($extra_field_result[$i],$extra_field_result[$i+1]);
+            }
+        }
+    } else {
+        $final_result = $extra_field_result[0];
+    }
+}
+//var_dump($final_result);
 $data       = $usergroup->get($id);
 $list_in    = $usergroup->get_users_by_usergroup($id);
 
@@ -103,13 +144,23 @@ $order = array('lastname');
 if (api_is_western_name_order()) {
     $order = array('firstname');	
 }
-$user_list  = UserManager::get_user_list(array(),$order);
+
+if (!empty($first_letter_user)) {    
+    $user_list = UserManager::get_user_list_like(array('firstname'=>$first_letter_user), $order);
+} else {
+    $user_list  = UserManager::get_user_list(array(),$order);
+}
 
 //api_display_tool_title($tool_name.' ('.$session_info['name'].')');
 $elements_not_in = $elements_in = array();
 
 if (!empty($user_list)) {
     foreach($user_list as $item) {
+        if ($use_extra_fields) {
+            if (!in_array($item['user_id'], $final_result)) {
+                continue;
+            }
+        }
         if ($item['status'] == 6 ) continue; //avoid anonymous users
         $person_name = api_get_person_name($item['firstname'], $item['lastname']);        
         if (in_array($item['user_id'], $list_in)) {                        
@@ -120,66 +171,8 @@ if (!empty($user_list)) {
     }
 }
 
-
-$ajax_search = $add_type == 'unique' ? true : false;
-
-//checking for extra field with filter on
-
-function search($needle,$type) {
-    global $tbl_user,$elements_in;
-    $xajax_response = new XajaxResponse();
-    $return = '';
-    if (!empty($needle) && !empty($type)) {
-
-        // xajax send utf8 datas... datas in db can be non-utf8 datas
-        $charset = api_get_system_encoding();
-        $needle  = Database::escape_string($needle);
-        $needle  = api_convert_encoding($needle, $charset, 'utf-8');
-
-        if ($type == 'single') {
-            // search users where username or firstname or lastname begins likes $needle
-          /*  $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-                    WHERE (username LIKE "'.$needle.'%"
-                    OR firstname LIKE "'.$needle.'%"
-                OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"   AND user.status<>'.DRH.''.
-                $order_clause.
-                ' LIMIT 11';*/
-        } else {
-            $list = UserManager::get_user_list_like(array('firstname'=>$needle));
-        }     
-        $i=0;        
-        if ($type=='single') {
-            /*
-            while ($user = Database :: fetch_array($rs)) {
-                $i++;
-                if ($i<=10) {
-                    $person_name = api_get_person_name($user['firstname'], $user['lastname']);
-                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
-                } else {
-                    $return .= '...<br />';
-                }
-            }
-            $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));*/
-        } else {
-            $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
-            
-            foreach ($list as $item ) {
-                if ($item['status'] == 6 ) continue; //avoid anonymous users
-                if (!in_array($item['user_id'], array_keys($elements_in))) {       
-                    $person_name = api_get_person_name($item['firstname'], $item['lastname']);   
-                    $return .= '<option value="'.$item['user_id'].'">'.$person_name.'</option>';
-                }
-            }
-            $return .= '</select>';
-            $xajax_response -> addAssign('ajax_list_multiple','innerHTML',api_utf8_encode($return));
-        }
-    }
-    return $xajax_response;
-}
-$xajax -> processRequests();
-
+$add_type == 'unique' ? true : false;
 Display::display_header($tool_name);
-
 if ($add_type == 'multiple') {
     $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
@@ -189,12 +182,12 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back')).get_lang('Back').'</a>';       
+echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), 32).'</a>';       
 echo '</div>';
 
 echo '<div class="row"><div class="form_header">'.$tool_name.' '.$data['name'].'</div></div><br/>'; ?>
 
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
 
 <?php
 if ($add_type=='multiple') {
@@ -243,10 +236,10 @@ if(!empty($errorMsg)) {
 <tr>
 <td align="center">
 <?php echo get_lang('FirstLetterSessions'); ?> :
-     <select name="firstLetterUser" onchange = "xajax_search(this.value,'multiple')" >
+     <select name="firstLetterUser" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
       <option value = "%">--</option>
       <?php
-        echo Display :: get_alphabet_options();
+        echo Display :: get_alphabet_options($first_letter_user);
       ?>
      </select>
 </td>
@@ -255,21 +248,8 @@ if(!empty($errorMsg)) {
 <?php } ?>
 <tr>
   <td align="center">
-  <div id="content_source">
-      <?php           
-      if (!($add_type=='multiple')) {        
-        ?>
-        <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
-        <div id="ajax_list_users_single"></div>
-        <?php
-      } else {               
-      ?>
-      <div id="ajax_list_multiple">
-        <?php echo Display::select('elements_not_in_name',$elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?> 
-      </div>
-    <?php
-      }
-     ?>
+  <div id="content_source">      
+        <?php echo Display::select('elements_not_in_name', $elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
   </div>
   </td>
   <td width="10%" valign="middle" align="center">

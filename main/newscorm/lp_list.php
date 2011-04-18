@@ -129,8 +129,8 @@ echo	'<tr>';
 echo	'<th width="50%">'.get_lang('Title').'</th>';
         
 if ($is_allowed_to_edit) {
-    echo    '<th>'.get_lang('StartDate').'</th>';
-    echo    '<th>'.get_lang('EndDate').'</th>';
+    echo    '<th>'.get_lang('PublicationDate').'</th>';
+    echo    '<th>'.get_lang('ExpirationDate').'</th>';
 }
 echo '<th>'.get_lang('Progress')."</th>";
 

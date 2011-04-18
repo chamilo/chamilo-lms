@@ -153,7 +153,7 @@ class CourseBuilder {
 	        	$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size FROM '.$table_doc.' d, '.$table_prop.' p 
 	        	        WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 '.$session_condition.' ORDER BY path';
 			}
-
+ 
 			$db_result = Database::query($sql);
 			while ($obj = Database::fetch_object($db_result)) {
 				$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
@@ -167,7 +167,7 @@ class CourseBuilder {
         		$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path  NOT LIKE \'/images/gallery%\' AND d.session_id = 0 ORDER BY path';
 	        else
 	        	$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size  FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND d.session_id = 0 ORDER BY path';
-
+ 
 			$db_result = Database::query($sql);
 			while ($obj = Database::fetch_object($db_result)) {
 				$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);

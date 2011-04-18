@@ -842,7 +842,7 @@ class ImageManager
 					//@todo make this str to functions
 					$base_dir = substr($path, 0, strpos($path,'/document/')+9); //
 					$new_dir  = substr($fullpath, strlen($base_dir),-1); //
-					$created_dir = create_unexisting_directory($_course, api_get_user_id(),0,0, $base_dir, $new_dir,$newDir);
+					$created_dir = create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), 0,0, $base_dir, $new_dir,$newDir);
 					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
 					$current_session_id = api_get_session_id();
 					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),null,null,null,null,$current_session_id);

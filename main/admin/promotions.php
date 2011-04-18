@@ -165,7 +165,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     }
     $res = $promotion->copy($_GET['id'], null, true);
     if ($res) {
-        Display::display_confirmation_message(get_lang('ItemCopied'));
+        Display::display_confirmation_message(get_lang('ItemCopied').' - '.get_lang('ExerciseAndLPsAreInvisibleInTheNewCourse'));
     }
     $promotion->display();
 } else {

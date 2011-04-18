@@ -97,7 +97,7 @@ else if ($action == "upload")
 	/*==== creation of /videoconf ====*/
 	if (!is_dir($destPath))
 	{
-		$result = create_unexisting_directory($_course,$user_id,0,NULL,$coursePath,VIDEOCONF_UPLOAD_PATH);
+		$result = create_unexisting_directory($_course,$user_id, api_get_session_id(), 0,NULL,$coursePath,VIDEOCONF_UPLOAD_PATH);
 		if (!$result)
 		{
 			if ($debug>0) error_log("Can't create ".$destPath." folder",0);

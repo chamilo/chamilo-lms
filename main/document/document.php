@@ -262,7 +262,7 @@ if ($current_session_id==0) {
         $usf_dir_name = '/shared_folder';
         $to_group_id = 0;
         $visibility = 0;
-        create_unexisting_directory($_course, api_get_user_id(), $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
+        create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
     }
     // Create dynamic user shared folder
     if (!file_exists($base_work_dir.'/shared_folder/sf_user_'.api_get_user_id())) {
@@ -270,7 +270,7 @@ if ($current_session_id==0) {
             $usf_dir_name = '/shared_folder/sf_user_'.api_get_user_id();
             $to_group_id = 0;
             $visibility = 1;
-            create_unexisting_directory($_course, api_get_user_id(), $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
+            create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
     }
 } else {
         //Create shared folder session
@@ -279,7 +279,7 @@ if ($current_session_id==0) {
             $usf_dir_name = '/shared_folder_session_'.$current_session_id;
             $to_group_id = 0;
             $visibility = 0;
-            create_unexisting_directory($_course, api_get_user_id(), $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
+            create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
         }
         //Create dynamic user shared folder into a shared folder session
         if (!file_exists($base_work_dir.'/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id())) {
@@ -287,7 +287,7 @@ if ($current_session_id==0) {
             $usf_dir_name = '/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id();
             $to_group_id = 0;
             $visibility = 1;
-            create_unexisting_directory($_course, api_get_user_id(), $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
+            create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), $to_group_id, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
         }
 }
 
@@ -609,7 +609,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
                 
                 $dir_check = $base_work_dir.$dir_name;
                 if (!is_dir($dir_check)) {
-                    $created_dir = create_unexisting_directory($_course, api_get_user_id(), $to_group_id, $to_user_id, $base_work_dir, $dir_name, $post_dir_name);
+                    $created_dir = create_unexisting_directory($_course, api_get_user_id(), api_get_session_id(), $to_group_id, $to_user_id, $base_work_dir, $dir_name, $post_dir_name);
                     if ($created_dir) {
                         Display::display_confirmation_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>', false);
                         // Uncomment if you want to enter the created dir

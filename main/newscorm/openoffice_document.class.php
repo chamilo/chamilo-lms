@@ -51,7 +51,7 @@ abstract class OpenofficeDocument extends learnpath {
         // Create the directory.
         $this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
-        $this->created_dir = create_unexisting_directory($_course, $_user['user_id'], 0, 0, $this->base_work_dir, $dir_name);
+        $this->created_dir = create_unexisting_directory($_course, $_user['user_id'], api_get_session_id(), 0, 0, $this->base_work_dir, $dir_name);
 
         $ppt2lp_host = api_get_setting('service_ppt2lp', 'host');
 

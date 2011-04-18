@@ -1455,8 +1455,7 @@ class SessionManager {
                         $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('Copy'), $course_data['course_code'], $id, $sid);
                         if ($course_info) {
                             //By default new elements are invisible
-                            if ($set_exercises_lp_invisible) {     
-                                                           
+                            if ($set_exercises_lp_invisible) {    
                                 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
                                 $list       = new LearnpathList('', $course_info['code'], $sid);
                                 $flat_list  = $list->get_flat_list(); 

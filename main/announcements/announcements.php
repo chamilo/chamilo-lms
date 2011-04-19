@@ -1248,12 +1248,10 @@ if ($display_announcement_list && !$surveyid) {
                 $ths .= Display::tag('th', get_lang('Modify'));
         }
         
-    	echo Display::tag('tr', $ths);
-    
-    	$displayed = array();
-    
-    	while ($myrow = Database::fetch_array($result)) {
-    
+    	echo Display::tag('tr', $ths);    
+    	$displayed = array();    
+    	
+    	while ($myrow = Database::fetch_array($result)) {    
     		if (!in_array($myrow['id'], $displayed)) {
     			$title		 = $myrow['title'];
     			$content	 = $myrow['content'];
@@ -1261,15 +1259,9 @@ if ($display_announcement_list && !$surveyid) {
     			$content     = make_clickable($content);
     			$content     = text_filter($content);
     
-    			/* DATE */
-    
-    			$last_post_datetime = $myrow['end_date'];
-    
-    			list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
-    			list($year, $month, $day) = explode("-", $last_post_date);
-    			list($hour, $min) = explode(":", $last_post_time);
-    			$announceDate = mktime((int)$hour, (int)$min, 0, (int)$month, (int)$day, (int)$year);
-    
+    			/* DATE */    
+    			$last_post_datetime = $myrow['end_date'];    
+    		
     			// the styles
     			if ($myrow['visibility']=='0') {
     				$style='invisible';
@@ -1301,15 +1293,14 @@ if ($display_announcement_list && !$surveyid) {
                         $attachment .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a><br />';
                     }*/
                 }
-                
+                /* TITLE */
     		    $title = Display::url($title.$attachment_icon, '?action=view&id='.$myrow['id']);
-    			/* TITLE */			
                 echo Display::tag('td', Security::remove_XSS($title), array('class' => $style));
                 
                 //echo Display::tag('td', Security::remove_XSS($content).$attachment);
     			
                  // User or group icon
-                 $sent_to_icon = '';
+                $sent_to_icon = '';
                 if ($myrow['to_group_id']!== '0' and $myrow['to_group_id']!== 'NULL') {
                     $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
                 }
@@ -1324,7 +1315,7 @@ if ($display_announcement_list && !$surveyid) {
     			
     			echo Display::tag('td', $sent_to_icon.$sent_to_form);			
     			echo Display::tag('td', api_get_person_name($user_info['firstName'], $user_info['lastName']));			
-                echo Display::tag('td', api_convert_and_format_date($last_post_datetime));
+                echo Display::tag('td', api_convert_and_format_date($myrow['end_date'], DATE_FORMAT_LONG));
     						
     
     			/* RESOURCES */

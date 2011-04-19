@@ -135,20 +135,22 @@ class AnnouncementManager  {
     	
     		echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">";
     		echo "<tr class=\"data\"><td><h2>" . $title . "</h2></td></tr>";
-    		echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($last_post_datetime) . "</td></tr>";
+    		    		
     		echo "<tr class=\"text\"><td>$content</td></tr>";
+    		
+    		echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($result['end_date'], DATE_FORMAT_LONG) . "</td></tr>";
+            echo "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " . api_convert_and_format_date($last_post_datetime, DATE_TIME_FORMAT_LONG) . "</td></tr>";
+            
     		echo "<tr><td>";
-    	      $attachment_list = AnnouncementManager::get_attachment($announcement_id);
+    	    $attachment_list = AnnouncementManager::get_attachment($announcement_id);
         
             if (count($attachment_list)>0) {
                 $realname=$attachment_list['path'];
                 $user_filename=$attachment_list['filename'];
                 $full_file_name = 'download.php?file='.$realname;
-                echo '<br/>';
-                echo '<br/>';
+                echo '<br/>';                
                 echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-                echo '<a href="'.$full_file_name.'';
-                echo ' "> '.$user_filename.' </a>';
+                echo '<a href="'.$full_file_name.' "> '.$user_filename.' </a>';
                 echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
             }
             echo '</td></tr>';

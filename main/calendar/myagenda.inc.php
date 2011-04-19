@@ -496,7 +496,7 @@ function show_new_personal_item_form($id = "") {
 	echo '</div>';
 	// ********** The Submit button********** \\
 	echo '<div>';
-	echo '<button type="submit" class="add" name="Submit" value="'.get_lang('AddEvent').'" >'.get_lang('AddEvent').'</button>';
+	echo '<br /><button type="submit" class="add" name="Submit" value="'.get_lang('AddEvent').'" >'.get_lang('AddEvent').'</button>';
 	echo '</div>';
 	echo '</div>';
 	echo '</form>';

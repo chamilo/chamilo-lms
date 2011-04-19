@@ -844,7 +844,7 @@ if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 	echo '<div class="actions" style="width:100%;">';
 	if (api_is_platform_admin()) {
 		echo '<span style="float:right; padding-top:7px;">'.
-			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('user_subscribe_course.png',get_lang('AddUsers'),'','32').'</a>'.
+			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('new_user.png',get_lang('AddUsers'),'','32').'</a>'.
 			 '</span>';
 	}
 	$form->display();

@@ -188,7 +188,7 @@ $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$head
 echo '<a href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a></div>';
 
 $pathinfo =pathinfo($header_file);
-if ($pathinfo['extension']=='wav'){
+if ($pathinfo['extension']=='wav' && api_get_setting('enable_nanogong') == 'true'){
 	echo '<div align="center">';
 		echo '<br/>';
 		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';

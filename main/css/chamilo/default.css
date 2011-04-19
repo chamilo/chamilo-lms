@@ -43,14 +43,18 @@ body {
     margin: 0px auto;
     width: 90%;
     min-height: 320px;
-    padding:12px;
+    padding:13px;
+	
+	-moz-border-radius:0px 0px 10px 10px;
+	border-radius:0px 0px 10px 10px;
+	
+    box-shadow: 3px 3px 10px #ddd;
+	-moz-box-shadow: 3px 3px 10px #ddd;
+	
 
 }
 .item {
-    -moz-border-radius-bottomleft:5px;
-    -moz-border-radius-bottomright:5px;
-    -moz-border-radius-topleft:5px;
-    -moz-border-radius-topright:5px;
+    -moz-border-radius:5px;
     border:1px solid #E1E1E0;
 }
 

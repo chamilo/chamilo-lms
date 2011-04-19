@@ -1025,7 +1025,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                 $id = $results[$i]['exid'];   
                
                 $quiz_name_list = $test;
-                $dt = api_convert_and_format_date($results[$i]['exweight'], null, date_default_timezone_get());
+                $dt = api_convert_and_format_date($results[$i]['exweight']);
                 $res = $results[$i]['exresult'];
     
                 $duration = intval($results[$i]['exduration']);
@@ -1040,14 +1040,14 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
     
                     if ($is_allowedToEdit || $is_tutor) {
                         $user = $results[$i]['col0'] . $results[$i]['col1'];
-                        $date_value = $results[$i]['col4'];
+                        $start_date = $results[$i]['col4'];
                     } else {
-                        $date_value = $results[$i]['col2'];
+                        $start_date = $results[$i]['col2'];
                     }
-                    if ($date_value != "0000-00-00 00:00:00") {
-                        //echo ceil((($results[$i][4] - $results[$i][7]) / 60)) . ' ' . get_lang('MinMinutes');
-                        $exe_date_timestamp     = api_strtotime($results[$i]['exdate'], date_default_timezone_get());
-                        $start_date_timestamp   = api_strtotime($date_value, date_default_timezone_get());
+                    
+                    if ($start_date != "0000-00-00 00:00:00") {
+                        $start_date_timestamp   = api_strtotime($start_date);
+                        $exe_date_timestamp     = api_strtotime($results[$i]['exdate']);                        
     
                         $my_duration = ceil((($exe_date_timestamp - $start_date_timestamp) / 60));
                         if ($my_duration == 1 ) {
@@ -1059,13 +1059,17 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                             //echo ' ( ' . $results[$i][8] . ' ' . get_lang('Steps') . ' )';
                             $duration_list = ' ( ' . $results[$i]['exstep'] . ' ' . get_lang('Steps') . ' )';
                         }
-                        $add_start_date = api_convert_and_format_date($date_value, null, date_default_timezone_get()) . ' / ';
+                        //$add_start_date = api_convert_and_format_date($start_date) . ' / ';
                     } else {
                         $duration_list = get_lang('NoLogOfDuration');
                         //echo get_lang('NoLogOfDuration');
                     }
                     // Date conversion
-                    $date_list = api_get_local_time($results[$i]['col4']). ' / ' . api_get_local_time($results[$i]['exdate']);
+                    if ($is_allowedToEdit || $is_tutor) {                        
+                        $date_list = api_get_local_time($results[$i]['col4']). ' / ' . api_get_local_time($results[$i]['exdate']);
+                    } else {                        
+                        $date_list = api_get_local_time($results[$i]['col2']). ' / ' . api_get_local_time($results[$i]['exdate']);
+                    }
                     // there are already a duration test period calculated??
                     //echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
     
@@ -1108,9 +1112,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction) {
                     }
                     $more_details_list = $html_link;
                     if ($is_allowedToEdit || $is_tutor) {
-                        $list_info [] = array($user_first_name,$user_last_name,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
+                        $list_info[] = array($user_first_name,$user_last_name,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
                     } else {
-                        $list_info [] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
+                        $list_info[] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
                     }
                 }
             }

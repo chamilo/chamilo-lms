@@ -79,13 +79,13 @@ $now = time();
 if (!api_is_allowed_to_edit(null, true)) {
     //Adding visibility reestrinctions
     if (!empty($_SESSION['oLP']->publicated_on) && $_SESSION['oLP']->publicated_on != '0000-00-00 00:00:00') {
-        if ($now < api_strtotime($_SESSION['oLP']->publicated_on)) {
+        if ($now < api_strtotime($_SESSION['oLP']->publicated_on, 'UTC')) {
             api_not_allowed();
         }    
     }
     
     if (!empty($_SESSION['oLP']->expired_on) && $_SESSION['oLP']->expired_on != '0000-00-00 00:00:00') {
-        if ($now > api_strtotime($_SESSION['oLP']->expired_on)) {
+        if ($now > api_strtotime($_SESSION['oLP']->expired_on, 'UTC')) {            
             api_not_allowed();
         }    
     }

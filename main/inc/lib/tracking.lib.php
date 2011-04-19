@@ -867,8 +867,7 @@ class Tracking {
          * @param     int         Learning path id
          * @return     int         Total time
          */
-        public static function get_last_connection_time_in_lp($student_id, $course_code, $lp_id, $session_id=0) {
-
+        public static function get_last_connection_time_in_lp($student_id, $course_code, $lp_id, $session_id = 0) {
             $course = CourseManager :: get_course_information($course_code);
             $student_id = intval($student_id);
             $lp_id = intval($lp_id);
@@ -1944,11 +1943,12 @@ class Tracking {
             }
 
             $rs = Database::query($sql);
-            while($row = Database :: fetch_array($rs)) {
+            while ($row = Database :: fetch_array($rs)) {
                 $course_in_session[$row['session_id']][$row['course_code']] = CourseManager::get_course_information($row['course_code']);
             }
 
             $html  = '';
+            //Courses list
             if ($show_courses) {
                 if (!empty($courses)) {
                     $html .= '<table class="data_table" width="100%">';
@@ -2046,20 +2046,23 @@ class Tracking {
                         $session_graph[$my_session_id] = self::generate_session_exercise_graph($exercise_graph_name_list, $user_results, $exercise_graph_list);
                     }
                 }
-
+                
+                $html .= '<table class="data_table" width="100%">';
+                $html .= '<tr>
+                      '.Display::tag('th', get_lang('Session'),                  array('width'=>'300px')).'
+                      '.Display::tag('th', get_lang('PublishedExercises'),       array('width'=>'300px')).'
+                      '.Display::tag('th', get_lang('DoneExercises'),            array('class'=>'head')).'
+                      '.Display::tag('th', get_lang('AverageExerciseResult'),    array('class'=>'head')).'
+                      '.Display::tag('th', get_lang('Details'),                  array('class'=>'head')).'                        
+                      </tr>';
+                
                 foreach ($course_in_session as $key => $course_list) {
                     if (isset($session_id) && !empty($session_id)) {
                         if ($session_id != $key) {
                             continue;
                         }
-                    }
-                    $html .= Display::tag('h2',api_get_session_name($key));
-                    $html .= '<table class="data_table" width="100%">';
-                    $html .= '<tr>
-                          '.Display::tag('th', get_lang('PublishedExercises'),       array('width'=>'300px')).'
-                          '.Display::tag('th', get_lang('DoneExercises'),            array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('AverageExerciseResult'),    array('class'=>'head')).'                  
-                	      </tr>';
+                    }                   
+       
                     $all_exercises = 0;
                     $all_done_exercise = 0;
                     $all_average = 0;
@@ -2080,18 +2083,39 @@ class Tracking {
                         $all_average       += $average;
                         $stats_array[$enreg['code']] = array('exercises'=>$exercises, 'done_exercises'=>$done_exercises, 'average'=>$average);
                     }
+                    
                     $all_average = $all_average /  count($course_list);
+                    
+                    if (isset($_GET['session_id']) && $key == $_GET['session_id']) {
+                        $html .= '<tr style="background-color:#FBF09D">';
+                    } else {
+                        $html .= '<tr>';
+                    }
+                    
+                    $html .= Display::tag('td', api_get_session_name($key));
                     $html .= Display::tag('td', $all_exercises);
                     $html .= Display::tag('td', $all_done_exercise);
                     $html .= Display::tag('td', convert_to_percentage($all_average));
-                    $html .='</table><br />';
                     
-                    if (!empty($session_graph[$key])) {
-                        $html .= Display::div($session_graph[$my_session_id], array('id'=>'session_graph_'.$key,'class'=>'chart-session', 'style'=>'position:relative; text-align: center;') );
+                                     
+                    if (isset($_GET['session_id']) && $key == $_GET['session_id']) {
+                        $icon = Display::url(Display::return_icon('2rightarrow_na.gif', get_lang('Details')), '?session_id='.$key);
+                    } else {
+                        $icon = Display::url(Display::return_icon('2rightarrow.gif', get_lang('Details')), '?session_id='.$key);
                     }
-
-                    $html .= Display::tag('h2',get_lang('CourseList'));
-
+                    $html .= Display::tag('td', $icon);                    
+                    $html .= '</tr>';                                   
+                }                
+                $html .='</table><br />';                
+                
+                //Checking selected session
+                
+                if (isset($_GET['session_id'])) {
+                    $key = intval($_GET['session_id']);
+                    $html .= Display::tag('h2',api_get_session_name($key).' - '.get_lang('CourseList'));
+                    
+                    $course_list = $course_in_session[$key];
+    
                     $html .= '<table class="data_table" width="100%">';
                     $html .= '
                         <tr>
@@ -2101,40 +2125,45 @@ class Tracking {
                           '.Display::tag('th', get_lang('AverageExerciseResult'), array('class'=>'head')).'
                           '.Display::tag('th', get_lang('Time')         ,         array('class'=>'head')).'
                           '.Display::tag('th', get_lang('LPProgress')     ,       array('class'=>'head')).'
-                          '.Display::tag('th', get_lang('Score').Display :: return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
+                          '.Display::tag('th', get_lang('Score').Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')), array('class'=>'head')).'
                           '.Display::tag('th', get_lang('LastConnexion'),         array('class'=>'head')).'      
                           '.Display::tag('th', get_lang('Details'),               array('class'=>'head')).'
                         </tr>';
+                    
                     foreach ($course_list as $enreg) {
+                        
+                        //All exercises in the course @todo change for a real count
+                        $exercises          = count(get_all_exercises($enreg, $key));
+                        //Count of user results
+                        //$done_exercises     = get_best_exercise_results_by_course($enreg['code'], $key);
+                        $done_exercises     = get_count_exercises_attempted_by_course($enreg['code'], $key);
+                        //Average
+                        $average            = get_average_score_by_course($enreg['code'], $key);
+           
+                        $stats_array[$enreg['code']] = array('exercises'=>$exercises, 'done_exercises'=>$done_exercises, 'average'=>$average);
+                        
                         $weighting = 0;
                         $last_connection       = Tracking :: get_last_connection_date_on_the_course($user_id, $enreg['code'], $key);
                         $progress              = Tracking :: get_avg_student_progress($user_id, $enreg['code'],array(), $key);
                         $total_time_login      = Tracking :: get_time_spent_on_the_course($user_id, $enreg['code'], $key);
                         $time                  = api_time_to_hms($total_time_login);
                         $percentage_score      = Tracking :: get_avg_student_score($user_id, $enreg['code'], array(), $key);
-
+    
                         if ($enreg['code'] == $_GET['course'] && $_GET['session_id'] == $key) {
                             $html .= '<tr class="row_odd" style="background-color:#FBF09D" >';
                         } else {
                             $html .= '<tr class="row_even">';
                         }
-
+    
                         $url        = api_get_course_url($enreg['code'], $key);
                         $course_url = Display::url($enreg['title'], $url, array('target'=>'_blank'));
-
-                        $html .= Display::tag('td', $course_url);/*
-                        //All exercises in the course
-                        $exercises = get_all_exercises($enreg, $key);
-                        //Count of user results
-                        $done_exercises = get_all_exercise_results_by_course($enreg['code'], $key);
-                        //Average
-                        $average = get_average_score_by_course($enreg['code'], $key);*/
-
+    
+                        $html .= Display::tag('td', $course_url);
                         $html .= Display::tag('td', $stats_array[$enreg['code']]['exercises']);
                         $html .= Display::tag('td', $stats_array[$enreg['code']]['done_exercises']);
                         $html .= Display::tag('td', convert_to_percentage($stats_array[$enreg['code']]['average']));
                         $html .= Display::tag('td', $time, array('align'=>'center'));
-
+    
                         if (is_numeric($progress)) {
                             $progress = $progress.'%';
                         } else {
@@ -2148,7 +2177,7 @@ class Tracking {
                         }
                         $html .= Display::tag('td', $percentage_score, array('align'=>'center'));
                         $html .= Display::tag('td', $last_connection,  array('align'=>'center'));
-
+    
                         if ($enreg['code'] == $_GET['course'] && $_GET['session_id'] == $key) {
                             $details = '<a href="#">';
                             $details .=Display::return_icon('2rightarrow_na.gif', get_lang('Details'));
@@ -2160,9 +2189,15 @@ class Tracking {
                         $html .= Display::tag('td', $details, array('align'=>'center'));
                         $html .= '</tr>';
                     }
-                    $html .= '</table>';
+                    $html .= '</table>'; 
+                    
+                    if (!empty($session_graph[$key])) {
+                        $html .= Display::div($session_graph[$my_session_id], array('id'=>'session_graph_'.$key,'class'=>'chart-session', 'style'=>'position:relative; text-align: center;') );
+                    }     
+                    
+                    
                 }
-            }
+            }            
             return $html;
         }
 
@@ -2196,15 +2231,11 @@ class Tracking {
 
                 $session_name = api_get_session_name($session_id);
 
-                $html .='
-            <table class="data_table" width="100%">
-                <tr class="tableName">
-                    <td colspan="4">
-                        '.Display::tag('h3', $course_info['title']).'
-                    </td>
-                </tr><tr>';                
-
-                $html .= Display::tag('th', get_lang('Learnpath'),     array('class'=>'head', 'style'=>'color:#000'));
+                $html .='<table class="data_table" width="100%">
+                         <tr class="tableName">
+                            <td colspan="4">'.Display::tag('h3', $course_info['title']).'</td>
+                         </tr><tr>';
+                $html .= Display::tag('th', get_lang('Learnpaths'),     array('class'=>'head', 'style'=>'color:#000'));
                 $html .= Display::tag('th', get_lang('Time'),          array('class'=>'head', 'style'=>'color:#000'));
                 $html .= Display::tag('th', get_lang('Progress'),      array('class'=>'head', 'style'=>'color:#000'));
                 $html .= Display::tag('th', get_lang('LastConnexion'), array('class'=>'head', 'style'=>'color:#000'));
@@ -2233,7 +2264,7 @@ class Tracking {
                         $html .= Display::tag('td', $progress, array('align'=>'center'));
                         $last_connection = '-';
                         if (!empty($last_connection_in_lp)) {
-                            $last_connection = api_get_utc_datetime($last_connection_in_lp);
+                            $last_connection = api_convert_and_format_date($last_connection_in_lp, DATE_TIME_FORMAT_LONG);
                         }
                         $html .= Display::tag('td', $last_connection, array('align'=>'center','width'=>'180px'));
                         $html .= "</tr>";
@@ -2247,7 +2278,7 @@ class Tracking {
                 }
 
                 $html .='</table><br />
-            <table class="data_table" width="100%">';
+                         <table class="data_table" width="100%">';
 
                 // This code was commented on purpose see BT#924
 
@@ -2321,13 +2352,13 @@ class Tracking {
                                     $normal_graph  = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
                                 }
                             }
-
+                                                        
                             echo Display::div($normal_graph, array('id'=>'main_graph_'.$exercices['id'],'class'=>'dialog', 'style'=>'display:none') );
 
                             if (empty($graph)) {
                                 $graph = '-';
                             } else {
-                                $graph = Display::url($graph, '#', array('id'=>$exercices['id'],'class'=>'opener'));
+                                $graph = Display::url($graph, '#', array('id'=>$exercices['id'], 'class'=>'opener'));
                             }
 
                             $html .= Display::tag('td', $attempts,                 array('align'=>'center'));
@@ -2335,7 +2366,6 @@ class Tracking {
                             $html .= Display::tag('td', $position,                 array('align'=>'center'));
                             $html .= Display::tag('td', $best_score,               array('align'=>'center'));
                             $html .= Display::tag('td', $graph,                    array('align'=>'center'));
-
                             //$html .= Display::tag('td', $latest_attempt_url,       array('align'=>'center', 'width'=>'25'));
 
                         } else {

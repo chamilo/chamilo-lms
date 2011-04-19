@@ -348,7 +348,7 @@ $(function() {
 </script>
 
 <?php 
-$my_reporting   = Tracking::show_user_progress(api_get_user_id(), $session_id, '&session_id='.$session_id.'#tabs-3', false);
+$my_reporting   = Tracking::show_user_progress(api_get_user_id(), $session_id, '&session_id='.$session_id.'#tabs-4', false);
 $my_reporting   .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
 
 //Main headers

@@ -634,7 +634,7 @@ if ($timezone !== null) {
 				$start_time = Tracking::get_last_connection_time_in_lp($student_id, $course_code, $lp_id, $session_id);
                 
                 if (!empty($start_time)) {
-                    $start_time = api_get_utc_datetime($start_time );
+                    $start_time = api_convert_and_format_date($start_time, DATE_TIME_FORMAT_LONG);
                 } else {
                     $start_time =  '-';
                 }

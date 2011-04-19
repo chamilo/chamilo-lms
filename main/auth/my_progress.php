@@ -18,6 +18,29 @@ $nameTools = get_lang('MyProgress');
 
 api_block_anonymous_users();
 
+$htmlHeadXtra[] = api_get_jquery_ui_js();
+$htmlHeadXtra[] = '
+<script language="javascript">
+$(function() {
+    $(".dialog").dialog("destroy");        
+    $(".dialog").dialog({
+            autoOpen: false,
+            show: "blind",                
+            resizable: false,
+            height:300,
+            width:550,
+            modal: true
+     });     
+
+    $(".opener").click(function() {
+        var my_id = $(this).attr(\'id\'); 
+        var big_image = \'#main_graph_\' + my_id;
+        $( big_image ).dialog("open");
+        return false;
+    });
+});
+</script>';
+
 Display :: display_header($nameTools);
 
 // Database table definitions

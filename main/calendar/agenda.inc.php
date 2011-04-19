@@ -1225,8 +1225,8 @@ function sent_to($tool, $id) {
 */
 function sent_to_form($sent_to_array) {
 	// we find all the names of the groups
-	$group_names=get_course_groups();
-	count($sent_to_array);
+	$group_names = get_course_groups();	
+	
 	// we count the number of users and the number of groups
 	if (isset($sent_to_array['users'])) {
 		$number_users=count($sent_to_array['users']);
@@ -1238,15 +1238,17 @@ function sent_to_form($sent_to_array) {
 	} else {
 		$number_groups=0;
 	}
-	$total_numbers=$number_users+$number_groups;
-
+	$total_numbers = $number_users + $number_groups;
+	
 	// starting the form if there is more than one user/group
-	if ($total_numbers >1) {    	
+	if ($total_numbers > 1 ) {    	
     	//$output.="<option>".get_lang("SentTo")."</option>";
     	// outputting the name of the groups
     	if (is_array($sent_to_array['groups'])) {
     		foreach ($sent_to_array['groups'] as $group_id) {
-    			$output.="G: ".$group_names[$group_id]['name']."<br />";
+    		    if (isset($group_names[$group_id]['name'])) {
+                    $output.= $group_names[$group_id]['name']."<br />";
+    		    }
             }
         }
     	if (isset($sent_to_array['users'])) {
@@ -2014,15 +2016,16 @@ function display_agenda_items($select_month, $select_year) {
         $th .= Display::tag('th', get_lang('Content'));
         $th .= Display::tag('th', get_lang('SentTo'));
         $th .= Display::tag('th', get_lang('StartTimeWindow'));
-        $th .= Display::tag('th', get_lang('EndTimeWindow'));
-        
+        $th .= Display::tag('th', get_lang('EndTimeWindow'));        
         
         //if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) && $myrow['calendar_type'] == 'course' ) {
         if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
-            if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) ) {
+            if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id']))) {
                 // a coach can only delete an element belonging to his session
                 $th .= Display::tag('th', get_lang('Modify'));
             }
+        } else {
+            $th .= Display::tag('th', get_lang('Detail'));
         }
         
         echo Display::tag('tr', $th); 
@@ -2135,14 +2138,16 @@ function display_agenda_items($select_month, $select_year) {
         	echo '</td>';
     
         	// attachment list
-    	    $attachment_list=get_attachment($myrow['id']);
-    
+    	    $attachment_list = get_attachment($myrow['id']);
+    	    
+            echo '<td align="center">';
+            
             /*Display: edit delete button (course admin only) */
     		if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) && $myrow['calendar_type'] == 'course') {
-        		if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) ) {
+        		if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id']))) {
         			// a coach can only delete an element belonging to his session
     				$mylink = api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;id='.$myrow['id'].'&amp;';
-    	    		echo '<td align="center">';
+    	    	
     	    		// edit
         			echo '<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=edit&amp;id_attach='.$attachment_list['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
     	    		echo Display::return_icon('edit.png', get_lang('ModifyCalendarItem'),'',22)."</a>";
@@ -2169,28 +2174,28 @@ function display_agenda_items($select_month, $select_year) {
     	    	//echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
     	    	//echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
     		    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('printer.png', get_lang('Print'),'',22).'</a>&nbsp;';
-    	    	echo '</td>';
+    	    
     		}
     
             //Display: the added resources
         	if (check_added_resources("Agenda", $myrow["id"])) {
-        		echo '<tr>';
-        		echo '<td colspan="3">';
         		echo "<i>".get_lang("AddedResources")."</i><br/>";
         		if ($myrow['visibility']==0) {
         			$addedresource_style="invisible";
         		}
         		display_added_resources("Agenda", $myrow["id"], $addedresource_style);
-        		echo "</td></tr>";
     	   	}
         	$event_list.=$myrow['id'].',';
         	$counter++;
             
-            echo '<td colspan="3">';
+            
             if ($is_repeated) {
             	echo get_lang('RepeatedEvent'),' <a href="',api_get_self(),'?',api_get_cidreq(),'&amp;agenda_id=',$myrow['parent_event_id'],'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a>';
             }
+            
             echo '</td>';
+            
+            
         	echo "</tr>";
         	
         } // end while ($myrow=Database::fetch_array($result))

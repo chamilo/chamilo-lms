@@ -161,40 +161,36 @@ echo '<div id="social-content">';
 	}
 
 	echo '<div id="'.$id_content_right.'">';
-	
-			if (api_get_setting('allow_social_tool') == 'true') {
-			    
-				echo '<div class="social-box-container2">';				
-				echo '<div class="actions">';				
-    				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
-                    echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';                        
-				echo '</div>';
-								
-				//echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Inbox')).'</div>';
-				//echo '<div id="div_content_table" class="social-box-content2">';
-			}	
-			//MAIN CONTENT
-			if (!isset($_GET['del_msg'])) {	
-				inbox_display();
-			} else {
-				$num_msg = intval($_POST['total']);
-				for ($i=0;$i<$num_msg;$i++) {
-					if($_POST[$i]) {
-						//the user_id was necesarry to delete a message??
-						MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
-					}
-				}
-				inbox_display();
-			}
-			if (api_get_setting('allow_social_tool') == 'true'){
-				echo '</div>';				
-				//echo '</div>';
-			}			
+    
+    if (api_get_setting('allow_social_tool') == 'true') {
+        
+    	echo '<div class="social-box-container2">';				
+    	echo '<div class="actions">';				
+    		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
+            echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';                        
+    	echo '</div>';
+    					
+    	//echo '<div>'.Display::return_icon('content-post-group1.jpg',get_lang('Inbox')).'</div>';
+    	//echo '<div id="div_content_table" class="social-box-content2">';
+    }	
+    //MAIN CONTENT
+    if (!isset($_GET['del_msg'])) {
+    	inbox_display();
+    } else {
+    	$num_msg = intval($_POST['total']);
+    	for ($i=0;$i<$num_msg;$i++) {
+    		if($_POST[$i]) {
+    			//the user_id was necesarry to delete a message??
+    			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
+    		}
+    	}
+    	inbox_display();
+    }
+    if (api_get_setting('allow_social_tool') == 'true'){
+    	echo '</div>';				
+    	//echo '</div>';
+    }			
 	echo '</div>';	
 echo '</div>';
-
-/*
-		FOOTER
-*/
 
 Display::display_footer();

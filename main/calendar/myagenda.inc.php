@@ -211,15 +211,15 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
                         
                         switch($value['calendar_type']) {
                             case 'personal':
-                                $bg_color = '#ABD1E7';
+                                $bg_color = '#D0E7F4';
                                 $subtitle = get_lang('MyAgenda');                                
                                 break;
                             case 'global':
-                                $bg_color = '#FF8589';
+                                $bg_color = '#FFBC89';
                                 $subtitle = get_lang('GlobalEvent');
                                 break;
                             case 'course':
-                                $bg_color = '#97EF9C';
+                                $bg_color = '#CAFFAA';
                                 $subtitle = get_lang('Course');                                
                                 break;
                             default:

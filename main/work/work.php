@@ -747,25 +747,63 @@ else {
 			api_not_allowed();
 		}
 		if ($delete == 'all' && api_is_allowed_to_edit(null, true)) {
-
-			$queryString1 = "SELECT url FROM ".$work_table."";
-			$queryString2 = "DELETE FROM  ".$work_table."";
-			$queryString3 = "DELETE FROM  ".$TSTDPUBASG. "";
-
+			
+		    $path = $currentCourseRepositorySys;
+		    $t_agenda   = Database::get_course_table(TABLE_AGENDA);
+		    
+		    $sql = "SELECT id, url, filetype FROM  ".$work_table." WHERE session_id = ".api_get_session_id().' ORDER BY url DESC'; // do not change the "order by", otherwise the work assignments will not be renamed
+		    $result = Database::query($sql);
+		    
+		    while($row = Database::fetch_array($result)) {
+		        $url = $row['url'];
+		        //Deleting works		        
+                $delete_query = "DELETE FROM  ".$work_table." WHERE id  = ".$row['id'];
+                Database::query($delete_query);
+                
+                //Deleting agenda calendar for that work assignment
+                $sql_agenda = "SELECT add_to_calendar FROM  ".$TSTDPUBASG." WHERE publication_id = ".$row['id'];
+                
+                $rs_agenda = Database::query($sql_agenda);                
+                while ($row_agenda = Database::fetch_array($rs_agenda)) {
+                    if (!empty($row_agenda['add_to_calendar'])) {
+                        $delete_agenda = "DELETE FROM  ".$t_agenda." WHERE id = ".$row_agenda['add_to_calendar'];                        
+                        Database::query($delete_agenda);
+                    }                    
+                }                
+                //Deleting the work assignment
+                $delete_query = "DELETE FROM  ".$TSTDPUBASG. " WHERE publication_id = ".$row['id'];
+                Database::query($delete_query);
+                
+                if ($row['filetype'] == 'folder') {
+                    $url = 'work'.$url;
+                }                
+                
+                if (api_get_setting('permanently_remove_deleted_files') == 'true') {
+                    if (file_exists($path.$url)) {                        
+                        rmdirr($path.$url);
+                    }
+                } else {
+                    if ($row['filetype'] == 'folder') {
+                        $new_file = $path.'work/DELETED_'.basename($url);    
+                    } else {
+                        $new_file = $path.dirname($url).'/DELETED_'.basename($url);
+                    }                    
+                    rename($path.$url, $new_file);
+                }                             
+		    }			
+/*
 			$sql_agenda = "SELECT add_to_calendar FROM ".$TSTDPUBASG." WHERE add_to_calendar <> 0";
 			$rs_agenda = Database::query($sql_agenda);
 			$t_agenda   = Database::get_course_table(TABLE_AGENDA);
 			while ($row_agenda=Database::fetch_array($rs_agenda)) {
 				$deleteagenda = "DELETE FROM  ".$t_agenda." WHERE id='".$row_agenda['add_to_calendar']."'";
 				$rsdeleteagenda = Database::query($deleteagenda);
-
 			}
-
-			$result1 = Database::query($queryString1);
+			
 			$result2 = Database::query($queryString2);
 			$result3 = Database::query($queryString3);
 
-			$path = $currentCourseRepositorySys.'work/';
+			
 			$d = dir($path);
 
 			if (api_get_setting('permanently_remove_deleted_files') == 'true') {
@@ -779,7 +817,7 @@ else {
 					$new_file = 'DELETED_'.$entry;
 					rename($path.$entry, $path.$new_file);
 				}
-			}
+			}*/			
 		} else {
             $file_deleted = false;
 			//Get the author ID for that document from the item_property table

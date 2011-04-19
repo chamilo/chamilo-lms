@@ -60,7 +60,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	}
 
 	if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath' && api_is_allowed_to_session_edit(false, true)) {
-		// delete all files
+		// Delete all files
 		if (api_get_setting('permanently_remove_deleted_files') == 'true'){
 			$message = get_lang('ConfirmYourChoiceDeleteAllfiles');
 		} else {

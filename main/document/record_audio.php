@@ -144,7 +144,7 @@ function submitVoice() {
 	//path, url and filename
 	var filename = document.getElementById("audio_title").value+".wav";	
 	var filename = filename.replace(/\s/g, "_");//replace spaces by _
-	//var filename =encodeURIComponent(filename);//TODO:implement encode here and decode into receiver.php	
+	var filename = encodeURIComponent(filename);//TODO:implement a good encode into receiver.php	
 	var filepath="<?php echo urlencode($filepath); ?>";
 	var dir="<?php echo urlencode($dir); ?>";	
 	var urlnanogong="../inc/lib/nanogong/receiver.php?filename="+filename+"&filepath="+filepath+"&dir="+dir;	

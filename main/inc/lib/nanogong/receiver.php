@@ -21,14 +21,16 @@ if (!isset($_GET['filename']) || !isset($_GET['filepath']) || !isset($_GET['dir'
 if (!is_uploaded_file($_FILES['voicefile']['tmp_name'])) exit;
 
 //clean
-$filename=$_GET['filename'];//TODO: decode when encode the source url 
+$filename=$_GET['filename'];
+$filename=urldecode($filename);//TODO: implement a good for record_audio.php encodeURIComponent
 $filepath=urldecode($_GET['filepath']);
 $dir=urldecode($_GET['dir']);
 
-$filename=trim($_GET['filename']);
-$filename=Security::remove_XSS($filename);
-$filename=Database::escape_string($filename);
-replace_dangerous_char($filename, $strict = 'loose');// or strict
+$filename = trim($_GET['filename']);
+$filename = Security::remove_XSS($filename);
+$filename = Database::escape_string($filename);
+$filename = replace_dangerous_char($filename, $strict = 'loose');// or strict
+$filename = disable_dangerous_file($filename);
 
 //
 $documentPath = $filepath.$filename;

@@ -326,13 +326,24 @@ function show_new_personal_item_form($id = "") {
 	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 
 	// we construct the default time and date data (used if we are not editing a personal agenda item)
-	$today = getdate();
+	//$today = getdate();
 	
+	$current_date = api_strtotime(api_get_local_time());
+	
+	$year = date('Y', $current_date);
+	$month = date('m', $current_date);
+	$day = date('d', $current_date);	
+	$hours = date('H', $current_date);	
+	$minutes = date('i', $current_date);
+	
+	//echo date('Y', $current_date);
+	/*
 	$day = $today['mday'];
 	$month = $today['mon'];
 	$year = $today['year'];
 	$hours = $today['hours'];
-	$minutes = $today['minutes'];
+	$minutes = $today['minutes'];*/
+
 	$content=stripslashes($content);
 	$title=stripslashes($title);
 	// if an $id is passed to this function this means we are editing an item
@@ -348,12 +359,14 @@ function show_new_personal_item_form($id = "") {
 		$result = Database::query($sql);
 		$aantal = Database::num_rows($result);
 		if ($aantal != 0) {
-			$row	= Database::fetch_array($result);
+			$row	= Database::fetch_array($result);			
+			$row['date'] = api_get_local_time($row['date']);
 			$year 	= substr($row['date'], 0, 4);
 			$month 	= substr($row['date'], 5, 2);
 			$day 	= substr($row['date'], 8, 2);
 			$hours 	= substr($row['date'], 11, 2);
 			$minutes= substr($row['date'], 14, 2);
+			
 			$title 	= $row['title'];
 			$content= $row['text'];
 		} else {
@@ -361,13 +374,13 @@ function show_new_personal_item_form($id = "") {
 		}
 	}
 
-	echo '<form method="post" action="myagenda.php?action=add_personal_agenda_item&amp;id='.$id.'" name="newedit_form">';
+	echo '<form method="post" action="myagenda.php?action=add_personal_agenda_item&id='.$id.'" name="newedit_form">';
 	echo '<div id="newedit_form">';
-	echo '<div class="title">';
+	echo '<h2>';
 	echo ($_GET['action'] == 'edit_personal_agenda_item') ? get_lang("ModifyPersonalCalendarItem") : get_lang("AddPersonalCalendarItem");
-	echo '</div>';
+	echo '</h2>';
 	echo '<div>';
-	echo '<!-- date: 1 -> 31 -->';
+
 	echo '<br/>';
 	echo ''.get_lang("Date").':	';
 
@@ -375,24 +388,17 @@ function show_new_personal_item_form($id = "") {
 	echo '<select name="frm_day">';
 	// small loop for filling all the dates
 	// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-	for ($i = 1; $i <= 31; $i ++)
-	{
+	for ($i = 1; $i <= 31; $i ++) {
 		// values have to have double digits
-		if ($i <= 9)
-		{
+		if ($i <= 9){
 			$value = "0".$i;
-		}
-		else
-		{
+		} else {
 			$value = $i;
 		}
 		// the current day is indicated with [] around the date
-		if ($value == $day)
-		{
+		if ($value == $day) {
 			echo '<option value='.$value.' selected>'.$i.'</option>';
-		}
-		else
-		{
+		} else {
 			echo '<option value='.$value.'>'.$i.'</option>';
 		}
 	}
@@ -400,24 +406,17 @@ function show_new_personal_item_form($id = "") {
 	// ********** The form containing the months (jan->dec) ********** \\
 	echo '<!-- month: january -> december -->';
 	echo '<select name="frm_month">';
-	for ($i = 1; $i <= 12; $i ++)
-	{
+	for ($i = 1; $i <= 12; $i ++) {
 		// values have to have double digits
-		if ($i <= 9)
-		{
+		if ($i <= 9) {
 			$value = "0".$i;
-		}
-		else
-		{
+		} else {
 			$value = $i;
 		}
 		// the current month is indicated with [] around the month name
-		if ($value == $month)
-		{
+		if ($value == $month) {
 			echo '<option value='.$value.' selected>'.$MonthsLong[$i -1].'</option>';
-		}
-		else
-		{
+		} else {
 			echo '<option value='.$value.'>'.$MonthsLong[$i -1].'</option>';
 		}
 	}
@@ -476,9 +475,9 @@ function show_new_personal_item_form($id = "") {
 	echo ''.get_lang('Title').' : <input type="text" name="frm_title" size="50" value="'.$title.'" />';
 	echo '</div>';
 	// ********** The text field ********** \\
-	echo '<div class="formw">';
+	echo '<br /><div class="formw">';
 	
-	require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+	require_once api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php";
 
 	$oFCKeditor = new FCKeditor('frm_content') ;
 
@@ -524,19 +523,18 @@ function store_personal_item($day, $month, $year, $hour, $minute, $title, $conte
     if (!empty($date)) {
         $date = api_get_utc_datetime($date);
     }
-    
+        
 	$date = Database::escape_string($date);
 	$title = Database::escape_string($title);
 	$content = Database::escape_string($content);
-	if ($id != strval(intval($id))) {
-		return false; //potential SQL injection
-	}
-	if ($id != "") { 
+	$id = intval($id);
+	
+	if (!empty($id)) { 
 	    // we are updating
-		$sql = "UPDATE ".$tbl_personal_agenda." SET user='".api_get_user_id()."', title='".$title."', text='".$content."', date='".$date."' WHERE id='".$id."'";
+		$sql = "UPDATE ".$tbl_personal_agenda." SET user='".api_get_user_id()."', title='".$title."', text='".$content."', date='".$date."' WHERE id= ".$id;
 	} else { 
 	    // we are adding a new item
-		$sql = "INSERT INTO $tbl_personal_agenda (user, title, text, date) VALUES ('".api_get_user_id()."','$title', '$content', '$date')";
+		$sql = "INSERT INTO $tbl_personal_agenda (user, title, text, date) VALUES ('".api_get_user_id()."','$title', '$content', '$date')";		
 	}
 	$result = Database::query($sql);
 }
@@ -764,14 +762,13 @@ function show_personal_agenda() {
                 $class = 'row_odd'; 
             }
             
-			echo '<tr class="'.$class.'">';
-			
+			echo '<tr class="'.$class.'">';			
 			echo '<td>';
 			/*   display: the title  */
 			echo $myrow['title'];
 			echo "</td>";		
 
-			         // display: the content
+			// display: the content
             $content = $myrow['text'];
             $content = make_clickable($content);
             $content = text_filter($content);
@@ -785,6 +782,7 @@ function show_personal_agenda() {
 			// adding an internal anchor
 			/*echo "<a name=\"".$myrow["id"]."\"></a>";
 			echo date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";*/
+			
 			$myrow["date"] = api_get_local_time($myrow["date"]);
 			echo api_format_date($myrow["date"], DATE_TIME_FORMAT_LONG);
 			echo "</td>";

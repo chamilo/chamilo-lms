@@ -99,7 +99,8 @@ if ($_SESSION['view']) {
 if (!empty($_GET['action']) && $_GET['action'] == 'add_personal_agenda_item' and !$_POST['Submit']) {
 	$process = "add_personal_agenda_item";
 }
-if (!empty($_GET['action']) && $_GET['action'] == "add_personal_agenda_item" and $_POST['Submit']) {
+
+if (!empty($_REQUEST['action']) && $_REQUEST['action'] == "add_personal_agenda_item" and $_POST['Submit']) {
 	$process = "store_personal_agenda_item";
 }
 // 5. edit personal agenda
@@ -178,7 +179,7 @@ if (isset($_user['user_id'])) {
     	// the main area: day, week, month view
     	echo "<td valign=\"top\">";   
 	}
-		
+	
 	switch ($process) {
 		case 'month_view' :
 			display_mymonthcalendar($agendaitems, $month, $year, array(), $monthName);

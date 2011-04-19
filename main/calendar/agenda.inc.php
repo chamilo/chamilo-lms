@@ -432,8 +432,7 @@ function display_monthcalendar($month, $year) {
 							//$day_url = "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
 							$dayheader = Display::div($curday, array('class'=>'agenda_day'));
 							$some_content = false;
-							foreach ($agenda_item as $key=>$value) {
-							    
+							foreach ($agenda_item as $key=>$value) {						    
 
 								$month_start_date = (int)substr($value['start_date'],5,2);
 								$start_time = api_convert_and_format_date($value['start_date']);

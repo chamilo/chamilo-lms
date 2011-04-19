@@ -331,3 +331,11 @@ button:hover {
     border:1px solid #ccc;	
 }
 
+/* Makes the course elements more readable */ 
+.userportal-course-item{
+	padding:15px;
+}
+
+.session_course_item {
+    padding: 6px 0px 6px 5px ;
+}

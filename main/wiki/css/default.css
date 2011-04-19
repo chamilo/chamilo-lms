@@ -67,13 +67,13 @@
 
 	#menuwiki {
 		float:left;
-		border-top: 1px solid #cccccc;
-		border-right: 1px solid #cccccc;
-		border-bottom: 1px solid #cccccc;
-		border-left: 1px solid #cccccc;
-		margin-bottom: 10px;
-		padding: 10px;
+		border: 2px solid #cccccc;
+		margin-right: 10px;
+		padding: 2px;
 		background-color: #efefef;
+		width:74px;
+		height:30px;
+		overflow:hidden;
 	}
 
 	#menuwiki li{
@@ -82,7 +82,6 @@
 
 	#mainwiki {
 		border-left: 1px solid #cccccc;
-		margin-left:240px;
 		padding-left:10px;
 	}
 

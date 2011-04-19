@@ -282,3 +282,4 @@ wiki_work			modif nuvola
 wiki_assignment			modif nuvola
 star				crystal			
 star_green			modif crystal
+menu				nuvola

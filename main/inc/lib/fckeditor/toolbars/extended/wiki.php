@@ -25,10 +25,11 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Undo','Redo'),
 	array('Wikilink','Link','Image','EmbedMovies','Flash','MP3','TableOC','mimetex','asciimath','asciisvg'),
 	array('UnorderedList','OrderedList','Rule'),
-	array('JustifyLeft','JustifyCenter','JustifyFull'),
-	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor'),
+	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
+	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor','Source'),
 	array('FitWindow')
 );
+
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.

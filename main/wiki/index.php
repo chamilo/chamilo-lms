@@ -358,18 +358,38 @@ if ($_GET['action']=='discuss' && $_POST['Submit']) {
 echo "<div id='wikiwrapper'>";
 
 /** Actions bar (= action of the wiki tool, not of the page)**/
+
+//dynamic wiki menu
+?>
+<script>
+function menu_wiki(){
+ if(document.getElementById("menuwiki").style.width=="160px"){
+	var w=74;
+	var b=2;
+	var h=30;
+ }
+ else{
+	 var w=160;
+	 var b=1;
+	 var h=160;
+ }
+
+document.getElementById("menuwiki").style.width=w+"px";
+document.getElementById("menuwiki").style.height=h+"px";
+document.getElementById("menuwiki").style.border=b+"px solid #cccccc";
+
+}
+</script>
+
+<?php
+
 echo '<div id="menuwiki">';
-echo '<table width="210">';
-echo '<tr>';
-echo '<td>';
-    echo get_lang('Menu');
-echo '</td>';
-echo '</tr>';
-echo '<tr>';
-echo '<td>';
+
+echo '&nbsp;<a href="javascript:void(0)" onClick="menu_wiki()">'.Display::return_icon('menu.png',get_lang('Menu'),'','32').'</a>&nbsp;';
+echo '<a href="index.php?cidReq='.$_course[id].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.Display::return_icon('wiki.png',get_lang('HomeWiki'),'','32').'</a>';//
+
     ///menu home
-    echo '<ul><li style="list-style-image: url(../img/home.png)"
-    ><a href="index.php?cidReq='.$_course[id].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('show').'>'.get_lang('HomeWiki').'</a></li>';
+    echo '<ul>';
     if ( api_is_allowed_to_session_edit(false,true) ) {
         //menu add page
         echo '<li><a href="index.php?cidReq='.$_course[id].'&action=addnew&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('addnew').'>'.get_lang('AddNew').'</a> ';
@@ -408,9 +428,7 @@ echo '<td>';
     echo '<li><a href="index.php?action=more&amp;title='.api_htmlentities(urlencode($page)).'"'.is_active_navigation_tab('more').'>'.get_lang('More').'</a></li>';
 
     echo '</ul>';
-echo '</td>';
-echo '</tr>';
-echo '</table>';
+
 echo '</div>';
 
 
@@ -420,6 +438,8 @@ MAIN WIKI AREA
 -----------------------------------------------------------
 */
 
+
+
 echo "<div id='mainwiki'>";
 /** menuwiki (= actions of the page, not of the wiki tool) **/
 if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recentchanges', 'deletewiki', 'more', 'mactiveusers', 'mvisited', 'mostchanged', 'orphaned', 'wanted')))
@@ -427,7 +447,7 @@ if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recen
     echo "<div class='actions'>";
 
     //menu show page
-    echo '<a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('showpage').'>'.Display::return_icon('page.png',get_lang('ShowThisPage'),'','32').'</a>';
+    echo '&nbsp;&nbsp;<a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('showpage').'>'.Display::return_icon('page.png',get_lang('ShowThisPage'),'','32').'</a>';
 
     if (api_is_allowed_to_session_edit(false,true) ) {
         //menu edit page
@@ -1156,7 +1176,7 @@ if ($_GET['action']=='addnew')
     }
 
     echo '<div class="actions">'.get_lang('AddNew').'</div>';
-
+	echo '<br/>';
     //first, check if page index was created. chektitle=false
     if (checktitle('index'))
     {
@@ -1436,7 +1456,9 @@ if ($_GET['action']=='edit')
                 //previous checking for concurrent editions
                 if($row['is_editing']==0)
                 {
+					echo '<div style="z-index:0">';
                     Display::display_normal_message(get_lang('WarningMaxEditingTime'));
+					echo '</div>';
 
                     $time_edit = date("Y-m-d H:i:s");
                     $sql='UPDATE '.$tbl_wiki.' SET is_editing="'.$_user['user_id'].'", time_edit="'.$time_edit.'" WHERE id="'.$row['id'].'"';
@@ -1926,7 +1948,7 @@ if ($_GET['action']=='recentchanges') {
             $row[] = api_get_local_time($obj->dtime, null, date_default_timezone_get());
             $row[] = $ShowAssignment.$icon_task;
             $row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&amp;view='.$obj->id.'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
-             $row[] = $obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');
+            $row[] = $obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');
             $row[] = $obj->user_id <> 0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a>' : get_lang('Anonymous').' ('.api_htmlentities($obj->user_ip).')';
             $rows[] = $row;
         }

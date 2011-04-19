@@ -16,10 +16,12 @@ class AnnouncementManager  {
 	 * @param	int session id
 	 * @return	array html with the content and count of announcements or false otherwise
 	 */
-	public static function get_all_annoucement_by_course($course_db, $session = 0) {
+	public static function get_all_annoucement_by_course($course_db, $session_id = 0) {
 		if (empty($course_db)) {
 			return false;
 		}
+		$session_id = intval($session_id);
+		
 		$tbl_announcement	= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db['db_name']);
 		$tbl_item_property  = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
 		/*
@@ -35,7 +37,7 @@ class AnnouncementManager  {
 				FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 				WHERE announcement.id = toolitemproperties.ref
 				AND toolitemproperties.tool='announcement'				
-				AND announcement.session_id  = '$session'
+				AND announcement.session_id  = '$session_id'
 				ORDER BY display_order DESC";
 		$rs = Database::query($sql);
 		$num_rows = Database::num_rows($rs);
@@ -679,8 +681,7 @@ class AnnouncementManager  {
 		  if (restore) selObj.selectedIndex=0;
 		}
 		//-->
-		</script>
-		";
+		</script>";
 	}
 	
 	
@@ -999,9 +1000,9 @@ class AnnouncementManager  {
 	
 	public static function get_attachment($announcement_id) {
 		$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-		$announcement_id=Database::escape_string($announcement_id);
+		$announcement_id= intval($announcement_id);
 		$row=array();
-		$sql = 'SELECT id,path, filename,comment FROM '. $tbl_announcement_attachment.' WHERE announcement_id = '.(int)$announcement_id.'';
+		$sql = 'SELECT id,path, filename,comment FROM '. $tbl_announcement_attachment.' WHERE announcement_id = '.$announcement_id.'';
 		$result=Database::query($sql);
 		if (Database::num_rows($result)!=0) {
 			$row = Database::fetch_array($result,'ASSOC');
@@ -1108,9 +1109,9 @@ class AnnouncementManager  {
 	public static function delete_announcement_attachment_file($id) {
 		global $_course;
 		$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-		$id=Database::escape_string($id);
-		$sql="DELETE FROM $tbl_announcement_attachment WHERE id = $id";
-		$result=Database::query($sql);
+		$id = intval($id);
+		$sql = "DELETE FROM $tbl_announcement_attachment WHERE id = $id";
+		$result = Database::query($sql);
 		// update item_property
 		//api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());
 	}

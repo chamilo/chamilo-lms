@@ -2746,13 +2746,20 @@ class CourseManager {
     
             // Show a hyperlink to the course, unless the course is closed and user is not course admin.
             $course_visibility = $course['visibility'];
+            $course_title_url = '';
             if ($course_visibility != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
-                $course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0">'.$course['title'].'</a>';
+                $course_title_url = api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0';
+                $course_title = Display::url($course['title'], $course_title_url);
+                
             } else {
                 $course_title = $course['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
             }
+            if (!empty($course_title_url)) {
+                $status_icon = Display::url($status_icon, $course_title_url);
+            }
             // Start displaying the course block itself.
             echo '<div style="float: left; margin-right: 10px;">'.$status_icon.'</div><span class="userportal-course-item-title">'.$course_title.'</span><br />';
+            
             if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                 echo $course_display_code;
             }
@@ -2903,9 +2910,7 @@ class CourseManager {
     
         $s_course_status = $my_course['status'];
         $is_coach = api_is_coach($my_course['id_session'],$course['code']);
-    
-        $s_htlm_status_icon = '';
-    
+            
         $s_htlm_status_icon = Display::return_icon('blackboard_blue.png', get_lang('Course'), array('width' => '48px'));
         /*
         if ($s_course_status == 1) {
@@ -2919,8 +2924,10 @@ class CourseManager {
         }
         */
         // Display course entry.
-        $result .= '<li class="'.$class.'"><div class="coursestatusicons">'.$s_htlm_status_icon.'</div>';
+        
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
+        $session_url = '';
+        $session_title = '';
         if ($session_accessible) {
             if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
                 if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
@@ -2928,17 +2935,27 @@ class CourseManager {
                         $my_course['id_session'] = 0;
                     }
                     if ($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start == '0000-00-00') {
-                        $result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.$course_display_title.'</a>';
+                        $session_url = api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'];
+                        $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.$course_display_title.'</a>';
                     }
                 } else {
-                    $result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
+                    $session_url   = api_get_path(WEB_COURSE_PATH).$course_directory.'/';
+                    $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
                 }
             } else {
-                $result .= $course_display_title.' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));                
+                $session_title = $course_display_title.' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));                
             }
         } else {
-        	$result .= $course_display_title;
-        }    
+        	$session_title = $course_display_title;
+        }
+        
+        if (!empty($session_url)) {
+            $s_htlm_status_icon = Display::url($s_htlm_status_icon, $session_url);
+        }
+        
+        $result .= '<li class="'.$class.'"><div class="coursestatusicons">'.$s_htlm_status_icon.'</div>';
+        $result .= $session_title;
+        
         // Show the course_code and teacher if chosen to display this.
         if (api_get_setting('display_coursecode_in_courselist') == 'true' || api_get_setting('display_teacher_in_courselist') == 'true') {
             $result .= '<br />';

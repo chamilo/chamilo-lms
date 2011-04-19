@@ -16,10 +16,12 @@ class AnnouncementManager  {
 	 * @param	int session id
 	 * @return	array html with the content and count of announcements or false otherwise
 	 */
-	public static function get_all_annoucement_by_course($course_db, $session = 0) {
+	public static function get_all_annoucement_by_course($course_db, $session_id = 0) {
 		if (empty($course_db)) {
 			return false;
 		}
+		$session_id = intval($session_id);
+		
 		$tbl_announcement	= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db['db_name']);
 		$tbl_item_property  = Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db['db_name']);
 		/*
@@ -35,7 +37,7 @@ class AnnouncementManager  {
 				FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 				WHERE announcement.id = toolitemproperties.ref
 				AND toolitemproperties.tool='announcement'				
-				AND announcement.session_id  = '$session'
+				AND announcement.session_id  = '$session_id'
 				ORDER BY display_order DESC";
 		$rs = Database::query($sql);
 		$num_rows = Database::num_rows($rs);
@@ -119,22 +121,44 @@ class AnnouncementManager  {
 							AND toolitemproperties.visibility='1'";
 		}
 		$sql_result = Database::query($sql_query);
-		$result		= Database::fetch_array($sql_result);
-	
-		if ($result !== false) { // A sanity check.
-			$title		 = $result['title'];
-			$content	 = $result['content'];
-			$content     = make_clickable($content);
-			$content     = text_filter($content);
-			$last_post_datetime = $result['insert_date'];// post time format  datetime de mysql
-			list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
+		if (Database::num_rows($sql_result) > 0 ) {
+    		$result		= Database::fetch_array($sql_result);
+    	
+    		if ($result !== false) { // A sanity check.
+    			$title		 = $result['title'];
+    			$content	 = $result['content'];
+    			$content     = make_clickable($content);
+    			$content     = text_filter($content);
+    			$last_post_datetime = $result['insert_date'];// post time format  datetime de mysql
+    			list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
+    		}
+    	
+    		echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">";
+    		echo "<tr class=\"data\"><td><h2>" . $title . "</h2></td></tr>";
+    		    		
+    		echo "<tr class=\"text\"><td>$content</td></tr>";
+    		
+    		echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($result['end_date'], DATE_FORMAT_LONG) . "</td></tr>";
+            echo "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " . api_convert_and_format_date($last_post_datetime, DATE_TIME_FORMAT_LONG) . "</td></tr>";
+            
+    		echo "<tr><td>";
+    	    $attachment_list = AnnouncementManager::get_attachment($announcement_id);
+        
+            if (count($attachment_list)>0) {
+                $realname=$attachment_list['path'];
+                $user_filename=$attachment_list['filename'];
+                $full_file_name = 'download.php?file='.$realname;
+                echo '<br/>';                
+                echo Display::return_icon('attachment.gif',get_lang('Attachment'));
+                echo '<a href="'.$full_file_name.' "> '.$user_filename.' </a>';
+                echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+            }
+            echo '</td></tr>';
+                        
+    		echo "</table>";
+		} else {
+		    api_not_allowed();
 		}
-	
-		echo "<table height=\"100\" width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">";
-		echo "<tr class=\"data\"><td>" . $title . "</td></tr>";
-		echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()) . "</td></tr>";
-		echo "<tr class=\"text\"><td>$content</td></tr>";
-		echo "</table>";
 	}	
 	
 		
@@ -659,8 +683,7 @@ class AnnouncementManager  {
 		  if (restore) selObj.selectedIndex=0;
 		}
 		//-->
-		</script>
-		";
+		</script>";
 	}
 	
 	
@@ -774,24 +797,22 @@ class AnnouncementManager  {
 		}
 	
 	
-		function selectAll(cbList,bSelect,showwarning)
-		{
+		function selectAll(cbList, bSelect, showwarning) {
 	
 			if (document.getElementById('emailTitle').value==''){
 				document.getElementById('msg_error').innerHTML='".get_lang('FieldRequired')."';
 				document.getElementById('msg_error').style.display='block';
 				document.getElementById('emailTitle').focus();
-			}else {
+			} else {			
 				if (cbList.length <	1) {
 					if (!confirm(\"".get_lang('Send2All')."\")) {
 						return false;
 					}
-				}
+				}				
 				for	(var i=0; i<cbList.length; i++)
-				cbList[i].selected = cbList[i].checked = bSelect;
+				cbList[i].selected = cbList[i].checked = bSelect;				
 				document.f1.submit();
-			}
-	
+			}	
 		}
 	
 		function reverseAll(cbList)
@@ -836,8 +857,7 @@ class AnnouncementManager  {
 	*/
 	public static function sent_to_form($sent_to_array) {
 		// we find all the names of the groups
-		$group_names = self::get_course_groups();
-		count($sent_to_array);
+		$group_names = self::get_course_groups();		
 	
 		// we count the number of users and the number of groups
 		if (isset($sent_to_array['users'])) {
@@ -850,11 +870,11 @@ class AnnouncementManager  {
 		} else {
 				$number_groups=0;
 		}
-		$total_numbers=$number_users+$number_groups;
+		$total_numbers = $number_users + $number_groups;
 	
 		// starting the form if there is more than one user/group
 		
-		if ($total_numbers >1) {
+		if ($total_numbers > 1 ) {
 			$output="<select name=\"sent to\">";
 			$output.="<option>".get_lang("SentTo")."</option>";
 			// outputting the name of the groups
@@ -878,19 +898,18 @@ class AnnouncementManager  {
 			// there is only one user/group
 			if (isset($sent_to_array['users']) and is_array($sent_to_array['users'])) {
 				$user_info = api_get_user_info($sent_to_array['users'][0]);
-				echo api_get_person_name($user_info['firstname'], $user_info['lastname']);
+				$output = api_get_person_name($user_info['firstname'], $user_info['lastname']);
 			}
 			if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and isset($sent_to_array['groups'][0]) and $sent_to_array['groups'][0]!==0) {
 				$group_id=$sent_to_array['groups'][0];
-				echo "&nbsp;".$group_names[$group_id]['name'];
+				$output .= "&nbsp;".$group_names[$group_id]['name'];
 			}
 			if (empty($sent_to_array['groups']) and empty($sent_to_array['users'])) {
-				echo "&nbsp;".get_lang('Everybody');
+				$output .= "&nbsp;".get_lang('Everybody');
 			}
 		}	
-		if(!empty($output))
-		{
-			echo $output;
+		if (!empty($output)) {
+			return $output;
 		}
 	}
 	
@@ -983,9 +1002,9 @@ class AnnouncementManager  {
 	
 	public static function get_attachment($announcement_id) {
 		$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-		$announcement_id=Database::escape_string($announcement_id);
+		$announcement_id= intval($announcement_id);
 		$row=array();
-		$sql = 'SELECT id,path, filename,comment FROM '. $tbl_announcement_attachment.' WHERE announcement_id = '.(int)$announcement_id.'';
+		$sql = 'SELECT id,path, filename,comment FROM '. $tbl_announcement_attachment.' WHERE announcement_id = '.$announcement_id.'';
 		$result=Database::query($sql);
 		if (Database::num_rows($result)!=0) {
 			$row = Database::fetch_array($result,'ASSOC');
@@ -1092,9 +1111,9 @@ class AnnouncementManager  {
 	public static function delete_announcement_attachment_file($id) {
 		global $_course;
 		$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-		$id=Database::escape_string($id);
-		$sql="DELETE FROM $tbl_announcement_attachment WHERE id = $id";
-		$result=Database::query($sql);
+		$id = intval($id);
+		$sql = "DELETE FROM $tbl_announcement_attachment WHERE id = $id";
+		$result = Database::query($sql);
 		// update item_property
 		//api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());
 	}

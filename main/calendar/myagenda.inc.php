@@ -105,8 +105,14 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 		
 		while ($item = Database::fetch_array($result, 'ASSOC')) {
 			$agendaday = date("j",strtotime($item['start_date']));
+			
+			$url  = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&day=$agendaday&month=$month&year=$year#$agendaday";
+		    $url  = Display::url($array_course_info["title"], $url);
+			
+			$item['url'] = $url;			
 			$item['calendar_type'] = 'course';
 			$my_list[$agendaday][] = $item;
+			/*
 			
 			if(!isset($items[$agendaday])) {
 				$items[$agendaday]=array();
@@ -116,7 +122,7 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 			if ($item['end_date'] != '0000-00-00 00:00:00') {
                 $end_time = '&nbsp;-&nbsp;<i>'.api_convert_and_format_date($item['end_date'], DATE_TIME_FORMAT_LONG).'</i>';
 			}
-			$URL      = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday";
+			
 			if ($setting_agenda_link == 'coursecode') {
 				$title=$array_course_info['title'];
 				$agenda_link = api_substr($title, 0, 14);
@@ -129,7 +135,7 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 			$items[$agendaday][$item['start_date']] .= "<i>$time</i> $end_time &nbsp;";
 			$item['title'] = '<strong>'.$item['title'].'</strong>';
 			$items[$agendaday][$item['start_date']] .= '<br />'."<a href=\"$URL\" title=\"".Security::remove_XSS($array_course_info['title'])."\">".$agenda_link."</a>  ".Security::remove_XSS($item['title'])."<br /> ";
-			$items[$agendaday][$item['start_date']] .= '<br/>';					
+			$items[$agendaday][$item['start_date']] .= '<br/>';*/					
 		}
 	}
 
@@ -146,7 +152,7 @@ function get_myagendaitems($courses_dbs, $month, $year) {
 	}	
 	//var_dump($agendaitems, $my_list);
 	return $my_list;
-	return $agendaitems;
+	//return $agendaitems;
 }
 /**
  * Show the monthcalender of the given month
@@ -207,8 +213,7 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
                         if (!empty($value['end_date']) && $value['end_date'] != '0000-00-00 00:00:00') {
                            $end_time    = '-&nbsp;<i>'.api_convert_and_format_date($value['end_date'], DATE_TIME_FORMAT_LONG);
                         }       
-                        $time = '<i>'.$start_time.'</i>&nbsp;'.$end_time;
-                        
+                        $time = '<i>'.$start_time.'</i>&nbsp;'.$end_time;                        
                         switch($value['calendar_type']) {
                             case 'personal':
                                 $bg_color = '#D0E7F4';
@@ -220,7 +225,7 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
                                 break;
                             case 'course':
                                 $bg_color = '#CAFFAA';
-                                $subtitle = get_lang('Course');                                
+                                $subtitle = get_lang('Course').' '.$value['url'];                                
                                 break;
                             default:
                                 //$time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';

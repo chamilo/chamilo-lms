@@ -433,6 +433,7 @@ function display_monthcalendar($month, $year) {
 							$dayheader = Display::div($curday, array('class'=>'agenda_day'));
 							$some_content = false;
 							foreach ($agenda_item as $key=>$value) {
+							    
 
 								$month_start_date = (int)substr($value['start_date'],5,2);
 								$start_time = api_convert_and_format_date($value['start_date']);
@@ -459,12 +460,7 @@ function display_monthcalendar($month, $year) {
 									    case 'course':
                                             $bg_color = '#CAFFAA'; 
                                             $subtitle = get_lang('Course');                                            
-                                            break;
-                                        /*case 'work':
-                                            $bg_color = '#FDAC3D';
-                                            $subtitle = get_lang('Work');
-                                            $time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
-                                            break;*/      
+                                            break;              
 									    default:
 									        //$time = '<i>'.$start_time.'</i>&nbsp;-&nbsp;<i>'.$end_time.'&nbsp;</i>';
 									        break;				            

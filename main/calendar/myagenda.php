@@ -152,8 +152,7 @@ if (isset($_user['user_id'])) {
 	echo "<a href=\"".api_get_self()."?action=view&amp;view=month\">".Display::return_icon('month.png', get_lang('MonthView'),'','32')."</a>";
 	echo "<a href=\"".api_get_self()."?action=view&amp;view=week\">".Display::return_icon('7days.png', get_lang('WeekView'),'','32')."</a> ";
 	echo "<a href=\"".api_get_self()."?action=view&amp;view=day\">".Display::return_icon('1day.png', get_lang('DayView'),'','32')."</a> ";
-	if (api_get_setting('allow_personal_agenda') == 'true')
-	{
+	if (api_get_setting('allow_personal_agenda') == 'true') {
 		echo "<a href=\"".api_get_self()."?action=add_personal_agenda_item\">".Display::return_icon('new_user_event.png', get_lang('AddPersonalItem'),'','32')."</a> ";
 		echo "<a href=\"".api_get_self()."?action=view&amp;view=personal\">".Display::return_icon('personal_calendar.png', get_lang('ViewPersonalItem'),'','32')."</a> ";
 	}

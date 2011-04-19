@@ -787,8 +787,10 @@ else {
                         $new_file = $path.'work/DELETED_'.basename($url);    
                     } else {
                         $new_file = $path.dirname($url).'/DELETED_'.basename($url);
-                    }                    
-                    rename($path.$url, $new_file);
+                    }              
+                    if (file_exists($path.$url)) {      
+                        rename($path.$url, $new_file);
+                    }
                 }                             
 		    }			
 /*

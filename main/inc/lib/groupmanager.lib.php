@@ -1437,10 +1437,8 @@ class GroupManager {
 	*/
 	public static function filter_only_students ($user_array_in) {
 		$user_array_out = array ();
-		foreach ($user_array_in as $this_user)
-		{
-			if ($this_user['status'] == STUDENT && $this_user['tutor_id'] == 0)
-			{
+		foreach ($user_array_in as $this_user) {		    
+			if ($this_user['status_rel'] == STUDENT && $this_user['tutor_id'] == 0) {
 				$user_array_out[] = $this_user;
 			}
 		}

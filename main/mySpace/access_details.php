@@ -9,6 +9,7 @@
 * @param integer $user_id the user id
 * @param string $course_code the course code
 * @author Julio Montoya <gugli100@gmail.com>
+* @author Jorge Frisancho Jibaja - select between dates
 * 
 */
 
@@ -30,6 +31,7 @@ $this_section = SECTION_TRACKING;
 /* MAIN */
 $user_id = intval($_REQUEST['student']);
 $session_id = intval($_GET['id_session']);
+$type = Security::remove_XSS($_REQUEST['type']);
 $course_code = Security::remove_XSS($_REQUEST['course']);
 $connections = MySpace::get_connections_to_course($user_id, $course_code, $session_id);
 
@@ -173,14 +175,14 @@ api_display_tool_title(get_lang('DetailsStudentInCourse'));
 ?>
 <div id="cev_results_header" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 <div id="cev_cont" class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-<strong><?php echo (get_lang('User').': '.api_get_person_name($main_user_info['firstName'], $main_user_info['lastName']).'</strong> <br /> <strong>'.get_lang('Course').': </strong>'.$course_code)?></div>
+<?php echo '<strong>'.get_lang('User').': '.api_get_person_name($main_user_info['firstName'], $main_user_info['lastName']).'</strong> <br /> <strong>'.get_lang('Course').': </strong>'.$course_code; ?></div>
 <br />
 <form action="javascript:get(document.getElementById('myform'));" name="myform" id="myform">
 <div id="cev_cont_header">
-    <p> Seleccione una rango de fechas para su consulta </p>
-    <label for="from">Desde</label>
+    <p><?php echo get_lang('SelectADateRange')?></p>
+    <label for="to"><?php echo get_lang('From')?></label>
     <input type="text" id="date_from" name="from"/>
-    <label for="to">Hasta</label>
+    <label for="to"><?php echo get_lang('Until')?></label>
     <input type="text" id="date_to" name="to"/>
 </div><br /><br />
 </form>
@@ -188,7 +190,7 @@ api_display_tool_title(get_lang('DetailsStudentInCourse'));
 </div><br />
 
 <div id="cev_results" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-    <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"> Informaci&oacute;n Basica</div><br />
+    <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"><?php echo get_lang('Statistics'); ?></div><br />
     <div id="cev_cont_stats">
         <?php
         if ($result_to_print != "")  {
@@ -197,10 +199,10 @@ api_display_tool_title(get_lang('DetailsStudentInCourse'));
             $foo_stats          .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
             $foo_stats          .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';            
             echo $foo_stats;
+        } else {
+            echo Display::display_warning_message(get_lang('NoDataAvailable'));
         }
-        else{
-            echo ('<div id="messages" class="warning-message"> No se encontro informaci&oacute;n habilitada del usuario </div>');
-        }?>
+        ?>
     </div><br />
 </div><br />
 
@@ -220,8 +222,9 @@ api_display_tool_title(get_lang('DetailsStudentInCourse'));
         if ($result_to_print != "")  {
             echo $result_to_print;
         } else {
-            echo ('<div id="messages" class="warning-message"> No se encontro informaci&oacute;n habilitada del usuario </div>');
-        }?>
+            Display::display_warning_message(get_lang('NoDataAvailable'));
+        }        
+        ?>
     </div>
     <?php
     if ($result_to_print != "")  {
@@ -231,6 +234,5 @@ api_display_tool_title(get_lang('DetailsStudentInCourse'));
     }?>
     </div>
 </div><br />
-
 <?php
 Display:: display_footer();

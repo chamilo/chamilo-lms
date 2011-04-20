@@ -2019,8 +2019,8 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
         // the graph id
         $data = $data_set->GetData();
 
-        if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-        //if (0) {
+        //if ($cache->IsInCache($graph_id, $data_set->GetData())) {
+        if (0) {
             //if we already created the img
             //  echo 'in cache';
             $img_file = $cache->GetHash($graph_id, $data_set->GetData());
@@ -2058,9 +2058,8 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
 
             // Finish the graph
             $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
-
-            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 10);
-            $test->drawTitle(60, 22, get_lang('AccessDetails', ''), 50, 50, 50, 585);
+            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 10);            
+            $test->drawTitle(60, 22, get_lang('AccessDetails'), 50, 50, 50, 585);
 
             //------------------
             //echo 'not in cache';

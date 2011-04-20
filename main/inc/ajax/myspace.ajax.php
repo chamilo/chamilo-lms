@@ -3,6 +3,9 @@
 /**
  * Responses to AJAX calls
  */
+
+$language_file = array ('tracking');
+
 require_once '../global.inc.php';
 $action = $_GET['a'];
 
@@ -11,7 +14,7 @@ require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 
 switch ($action) {
     case 'access_detail':
-        $user_id        = Security::remove_XSS($_REQUEST['student']);
+        $user_id        = intval($_REQUEST['student']);
         $course_code    = Security::remove_XSS($_REQUEST['course']);
         $type           = Security::remove_XSS($_REQUEST['type']);
         $range          = Security::remove_XSS($_REQUEST['range']);
@@ -48,9 +51,9 @@ switch ($action) {
             $db['stats']        = $foo_stats;
             $db['graph_result'] = grapher($sql_result, $start_date, $end_date);
         } else {
-            $db['result']       = '<div class="warning-message"> No se encontro informaci&oacute;n habilitada del usuario </div>';
-            $db['graph_result'] = '<div class="warning-message"> No se encontro informaci&oacute;n habilitada del usuario </div>';
-            $db['stats']        = '<div class="warning-message"> No se encontro informaci&oacute;n registrada para este rango </div>';
+            $db['result']       = Display::return_message(get_lang('NoDataAvailable'), 'warning');
+            $db['graph_result'] = Display::return_message(get_lang('NoDataAvailable'), 'warning');
+            $db['stats']        = Display::return_message(get_lang('NoDataAvailable'), 'warning');
         }        
         header('Cache-Control: no-cache');
         echo json_encode($db); // requires: PHP >= 5.2.0, PECL json >= 1.2.0

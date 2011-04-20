@@ -1231,7 +1231,7 @@ function sent_to_form($sent_to_array) {
 		$number_groups=0;
 	}
 	$total_numbers = $number_users + $number_groups;
-	
+	$output = array();
 	// starting the form if there is more than one user/group
 	if ($total_numbers > 1 ) {    	
     	//$output.="<option>".get_lang("SentTo")."</option>";
@@ -1239,7 +1239,7 @@ function sent_to_form($sent_to_array) {
     	if (is_array($sent_to_array['groups'])) {
     		foreach ($sent_to_array['groups'] as $group_id) {
     		    if (isset($group_names[$group_id]['name'])) {
-                    $output.= $group_names[$group_id]['name']."<br />";
+                    $output[]= $group_names[$group_id]['name'];
     		    }
             }
         }
@@ -1247,7 +1247,7 @@ function sent_to_form($sent_to_array) {
     		if (is_array($sent_to_array['users'])) {
     			foreach ($sent_to_array['users'] as $user_id) {
     				$user_info=api_get_user_info($user_id);
-    				$output.=" ".api_get_person_name($user_info['firstName'], $user_info['lastName'])."<br />";
+    				$output[] = api_get_person_name($user_info['firstName'], $user_info['lastName']);
                 }
             }
     	}    
@@ -1255,18 +1255,21 @@ function sent_to_form($sent_to_array) {
 	    // there is only one user/group
 		if (is_array($sent_to_array['users'])) {
 			$user_info=api_get_user_info($sent_to_array['users'][0]);
-			echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
+			$output[]= api_get_person_name($user_info['firstName'], $user_info['lastName']);
 		}
 		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0) {
 			$group_id=$sent_to_array['groups'][0];
-			echo $group_names[$group_id]['name'];
+			$output[]= $group_names[$group_id]['name'];
 		}
 		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]==0) {
-			echo get_lang("Everybody");
+			$output[]= get_lang("Everybody");
 		}
 	}
 
-	echo $output;
+    if (!empty($output)) {
+        $output = implode(', ', $output);
+        return $output;
+    }
 }
 
 

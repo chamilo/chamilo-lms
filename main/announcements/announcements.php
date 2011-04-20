@@ -1243,14 +1243,13 @@ if ($display_announcement_list && !$surveyid) {
     	echo '<table width="100%" class="data_table">';
     	
         $ths = Display::tag('th', get_lang('Title'));
-        //$ths .= Display::tag('th', get_lang('Content'));
-        
+        //$ths .= Display::tag('th', get_lang('Content'));        
         $ths .= Display::tag('th', get_lang('By') );
         //$ths .= Display::tag('th', get_lang('AnnouncementPublishedOn') );    
         $ths .= Display::tag('th', get_lang('LastUpdateDate') );
-        if (api_is_allowed_to_edit() OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id']))         
+        if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id']))         
                  OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-                $ths .= Display::tag('th', get_lang('SentTo'));
+                //$ths .= Display::tag('th', get_lang('SentTo'));
                 $ths .= Display::tag('th', get_lang('Modify'));
         }
         
@@ -1259,7 +1258,13 @@ if ($display_announcement_list && !$surveyid) {
     	
     	while ($myrow = Database::fetch_array($result, 'ASSOC')) {    
     		if (!in_array($myrow['id'], $displayed)) {
-    			$title		 = $myrow['title'];
+    		    $sent_to_icon = '';
+		       // the email icon
+                if ($myrow['email_sent'] == '1') {
+                    $sent_to_icon = ' '.Display::return_icon('email.gif', get_lang('AnnounceSentByEmail'));
+                }
+                
+    			$title		 = $myrow['title'].$sent_to_icon;
     			$content	 = $myrow['content'];
     
     			$content     = make_clickable($content);
@@ -1294,19 +1299,7 @@ if ($display_announcement_list && !$surveyid) {
                 
                 //echo Display::tag('td', Security::remove_XSS($content).$attachment);
     			
-                 // User or group icon
-                $sent_to_icon = '';
-                if ($myrow['to_group_id']!== '0' and $myrow['to_group_id']!== 'NULL') {
-                    $sent_to_icon = Display::return_icon('group.gif', get_lang('AnnounceSentToUserSelection'));
-                }
-                // the email icon
-                if ($myrow['email_sent'] == '1') {
-                    $sent_to_icon .= Display::return_icon('email.gif', get_lang('AnnounceSentByEmail'));
-                }
-    
-    			$sent_to		= AnnouncementManager::sent_to('announcement', $myrow['id']);
-    			$sent_to_form	= AnnouncementManager::sent_to_form($sent_to);
-    			$user_info		= api_get_user_info($myrow['insert_user_id']);
+                $user_info		= api_get_user_info($myrow['insert_user_id']);
     						
     			echo Display::tag('td', api_get_person_name($user_info['firstName'], $user_info['lastName']));			
                 echo Display::tag('td', api_convert_and_format_date($myrow['insert_date'], DATE_TIME_FORMAT_LONG));                			
@@ -1322,13 +1315,10 @@ if ($display_announcement_list && !$surveyid) {
     			*/
     			// we can edit if : we are the teacher OR the element belongs to the session we are coaching OR the option to allow users to edit is on
     			$modify_icons = '';
-    			if (api_is_allowed_to_edit() OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id'])) 
+    			if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $myrow['id'])) 
     			     OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
     
-    				/* SHOW MOD/DEL/VIS FUNCTIONS */
-    				$modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">".
-    						Display::return_icon('edit.png', get_lang('Edit'),'',22).
-    						"</a>";
+    				$modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">".Display::return_icon('edit.png', get_lang('Edit'),'',22)."</a>";
     				if ($myrow['visibility']==1) {
     					$image_visibility="visible";
     					$alt_visibility=get_lang('Hide');
@@ -1350,15 +1340,14 @@ if ($display_announcement_list && !$surveyid) {
     				} else {
     				    $modify_icons .=    Display::return_icon('down_na.gif', get_lang('Down'));
     				}
-    
-    			     if (api_is_allowed_to_edit(false,true)) {
+    				    
+    			    if (api_is_allowed_to_edit(false,true)) {
                         $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
                             Display::return_icon('delete.png', get_lang('Delete'),'',22).
                             "</a>";
-                    }                    
-                    echo Display::tag('td', $sent_to_icon.$sent_to_form);
-                    echo Display::tag('td', $modify_icons);    
+                    }    	 
     				$iterator ++;
+    				echo Display::tag('td', $modify_icons);
     			}
     			echo "</tr>";
     		}

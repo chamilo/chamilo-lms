@@ -49,7 +49,8 @@ CREATE TABLE '.Database::get_main_table(TABLE_MAIN_REPORTS_VALUES).' (
   `attempt` int(11) NOT NULL,
   `score` decimal(5,3) DEFAULT NULL,
   `progress` int(11) DEFAULT NULL,
-  `time` int(11) DEFAULT NULL)');
+  `time` int(11) DEFAULT NULL,
+  `ts` datetime DEFAULT NULL)');
 }
 
 function reports_addDBKeys() {
@@ -124,7 +125,7 @@ function reports_addKey($course_id, $tool_id,
 
 // add a value
 function reports_addValue($key, $session, $uid, $attempt, $score, 
-			  $progress, $time) {
+			  $progress, $time, $ts) {
 	Database::query('INSERT into '.
 		Database::get_main_table(TABLE_MAIN_REPORTS_VALUES).
 		' (key_id, uid, session_id, attempt, score, '.
@@ -135,7 +136,8 @@ function reports_addValue($key, $session, $uid, $attempt, $score,
 		($attempt == '' ? '-1' : $attempt).', '.
 		($score == '' ? 'NULL' : $score).', '.
 		($progress == '' ? 'NULL' : $progress).', '.
-		($time == '' ? 'NULL' : $time).')');
+		($time == '' ? 'NULL' : $time).', '.
+		($ts == '' ? 'NULL' : $ts).')');
 }
 
 // add a value using a sub query warning take care about the order of the fields
@@ -143,7 +145,7 @@ function reports_addValueQuery($query) {
 	Database::query('INSERT into '.
 		Database::get_main_table(TABLE_MAIN_REPORTS_VALUES).
 		' (key_id, uid, session_id, attempt, score, '.
-		'progress, time) ('.$query.')');
+		'progress, time, ts) ('.$query.')');
 }
 
 // return tools ID (parametre is a constant from main_api
@@ -206,7 +208,8 @@ function reports_automaticAdd($keys_query, $values_query_function) {
 				  array_key_exists('attempt', $values['static'][$j]) ? $values['static'][$j]['attempt'] : '',
 				  array_key_exists('score', $values['static'][$j]) ? $values['static'][$j]['score'] : '',
 				  array_key_exists('progress', $values['static'][$j]) ? $values['static'][$j]['progress'] : '',
-				  array_key_exists('time', $values['static'][$j]) ? $values['static'][$j]['time'] : '');
+				  array_key_exists('time', $values['static'][$j]) ? $values['static'][$j]['time'] : '',
+				  array_key_exists('ts', $values['static'][$j]) ? $values['static'][$j]['ts'] : '');
 		else
 			reports_addValueQuery($values['sql']);
 	}

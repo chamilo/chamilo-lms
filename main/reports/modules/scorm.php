@@ -66,7 +66,7 @@ function reports_modules_scorm_packageVal($scorm, $key_id) {
 			'select '.$key_id.', user_id as uid, '.
 			'session_id, view_count as attempt, null as score, '.
 			'progress as progress, '.
-			'null as time from '.
+			'null as time, null as ts from '.
 			Database::get_course_table(TABLE_LP_VIEW, $scorm['course_db']).
 			' where lp_id = '.$scorm['child_id']);
 }
@@ -85,7 +85,7 @@ function reports_modules_scorm_scoVal($scorm, $key_id) {
 				'when "not attempted" then 5 '.
 				'else 6 '.
 			'end) as progress, '.
-			'lpiv.total_time as time from '.
+			'lpiv.total_time as time, null as ts from '.
 			Database::get_course_table(TABLE_LP_VIEW, $scorm['course_db']).
 			' lpv, '.
 			Database::get_course_table(TABLE_LP_ITEM_VIEW, $scorm['course_db']).
@@ -109,7 +109,7 @@ function reports_modules_scorm_objVal($scorm, $key_id) {
 				'when "not attempted" then 5 '.
 				'else 6 '.
 			'end) as progress, '.
-			'null as time from '.
+			'null as time, null as ts from '.
 			Database::get_course_table(TABLE_LP_VIEW, $scorm['course_db']).
 			' lpv, '.
 			Database::get_course_table(TABLE_LP_ITEM_VIEW, $scorm['course_db']).

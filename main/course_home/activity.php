@@ -131,13 +131,17 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang('Administration'); ?></span>		
 <?php
+        $theme = api_get_setting('homepage_view');
+        $rows = false;
+        if ($theme  == 'activity_big') {
+            $rows = 4;
+        }
         $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATEFORM);
-        CourseHome::show_tools_category($my_list);
+        CourseHome::show_tools_category($my_list, $rows);
 ?>	
 	</div>
 <?php
 } elseif (api_is_coach()) {
-
 	if (api_get_setting('show_session_data') == 'true' && $id_session > 0) {
 ?>
 		<div class="courseadminview">
@@ -164,12 +168,8 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 } else {
 	$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
 	if (count($my_list) > 0) {
-?>
-	<div class="Authoringview">
-<?php
-			CourseHome::show_tools_category($my_list);
-?>
-	</div>
-<?php
+        echo '<div class="Authoringview">';
+        CourseHome::show_tools_category($my_list);
+        echo '</div>'; 
 	}
 }

@@ -411,8 +411,8 @@ class CourseHome {
 
     public static function get_tools_category($course_tool_category) {
         global $_user;
-        $web_code_path = api_get_path(WEB_CODE_PATH);
-        $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
+        $web_code_path      = api_get_path(WEB_CODE_PATH);
+        $course_tool_table  = Database::get_course_table(TABLE_TOOL_LIST);
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $is_platform_admin = api_is_platform_admin();
         $all_tools_list = array();
@@ -462,7 +462,7 @@ class CourseHome {
         //Get the list of hidden tools - this might imply performance slowdowns
         // if the course homepage is loaded many times, so the list of hidden
         // tools might benefit from a shared memory storage later on
-        $list = api_get_settings('Tools','list',api_get_current_access_url_id());
+        $list = api_get_settings('Tools','list', api_get_current_access_url_id());
         $hide_list = array();
         $check = false;
         foreach ($list as $line) {
@@ -559,17 +559,10 @@ class CourseHome {
 
                     // Get blog members
                     if ($is_platform_admin) {
-                        $sql_blogs = "
-                            SELECT * FROM " . $tbl_blogs_rel_user . " blogs_rel_user
-                            WHERE blog_id = " . $blog_id;
+                        $sql_blogs = "SELECT * FROM $tbl_blogs_rel_user blogs_rel_user WHERE blog_id =" . $blog_id;
                     } else {
-                        $sql_blogs = "
-                            SELECT * FROM " . $tbl_blogs_rel_user . " blogs_rel_user
-                            WHERE
-                                blog_id = " . $blog_id . " AND
-                                user_id = " . api_get_user_id();
+                        $sql_blogs = "SELECT * FROM $tbl_blogs_rel_user blogs_rel_user WHERE blog_id =" . $blog_id . " AND user_id = " . api_get_user_id();
                     }
-
                     $result_blogs = Database::query($sql_blogs);
 
                     if (Database::num_rows($result_blogs) > 0) {
@@ -586,9 +579,10 @@ class CourseHome {
     /**
      * Displays the tools of a certain category.
      * @param array List of tools as returned by get_tools_category()
+     * @param   int rows 
      * @return void
      */
-    public static function show_tools_category($all_tools_list) {
+    public static function show_tools_category($all_tools_list, $rows = false) {
         global $_user;
         $theme = api_get_setting('homepage_view');
         if ($theme == 'vertical_activity') {
@@ -753,13 +747,23 @@ class CourseHome {
             switch($theme) {
                 case 'activity_big':
                     $data = '';
+                    
                     if ($i == 0) {
                          echo '<table width="100%">';
-                    }                    
-                    if ($i % 3 == 0) {
+                    }
+                    $row_per = 33;
+                    $mod = 3;                    
+                    if (isset($rows) && is_numeric($rows)) {
+                        $row_per = 25;
+                        $mod = $rows;          
+                    }
+                    $mod_result = $mod - 1;
+                    
+                    if ($i % $mod == 0) {
                         echo '<tr valign="top">';
-                    }                                  
-                    echo '<td width="33%">';
+                    }
+                                              
+                    echo '<td width="'.$row_per.'%">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
                         $image = Display::tag('center', Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), 64));
                         $data .= Display::url($image , $item['url_params']['href'], $item['url_params']);
@@ -767,7 +771,7 @@ class CourseHome {
                         echo Display::div($data, array('class'=>'big_icon'));
                     echo '</td>';
                     
-                    if ($i % 3 == 2) {
+                    if ($i % $mod == $mod_result) {
                         echo '</tr>';
                     }
                     if ($i == count($items) -1) {

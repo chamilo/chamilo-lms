@@ -1077,14 +1077,15 @@ function store_agenda_item_as_announcement($item_id){
 	$table_agenda  = Database::get_course_table(TABLE_AGENDA);
 	$table_ann     = Database::get_course_table(TABLE_ANNOUNCEMENT);
 	//check params
-	if(empty($item_id) or $item_id != strval(intval($item_id))){return -1;}
+	if(empty($item_id) or $item_id != strval(intval($item_id))) {return -1;}
 	//get the agenda item
 
-	$item_id=Database::escape_string($item_id);
-	$sql = "SELECT * FROM $table_agenda WHERE id = '".$item_id."'";
+	$item_id = Database::escape_string($item_id);
+	$sql = "SELECT * FROM $table_agenda WHERE id = ".$item_id;
 	$res = Database::query($sql);
 	if (Database::num_rows($res)>0) {
 		$row = Database::fetch_array($res);
+		
 		//we have the agenda event, copy it
 		//get the maximum value for display order in announcement table
 		$sql_max = "SELECT MAX(display_order) FROM $table_ann";
@@ -1092,13 +1093,13 @@ function store_agenda_item_as_announcement($item_id){
 		$row_max = Database::fetch_array($res_max);
 		$max = intval($row_max[0])+1;		
 		//build the announcement text
-		$content = api_get_local_time($row['start_date'])." - ".api_get_local_time($row['end_date'])."\n".$row['content'];
+		$content = $row['content'];
 		//insert announcement
         $session_id = api_get_session_id();
 		$sql_ins = "INSERT INTO $table_ann (title,content,end_date,display_order,session_id) " .
 					"VALUES ('".Database::escape_string($row['title'])."','".Database::escape_string($content)."','".Database::escape_string($row['end_date'])."','$max','$session_id')";
 		$res_ins = Database::query($sql_ins);
-		if($res > 0) {
+		if ($res > 0) {
 			$ann_id = Database::insert_id();
 			//Now also get the list of item_properties rows for this agenda_item (calendar_event)
 			//and copy them into announcement item_properties
@@ -1108,7 +1109,7 @@ function store_agenda_item_as_announcement($item_id){
 			if(Database::num_rows($res_props)>0) {
 				while($row_props = Database::fetch_array($res_props)) {
 					//insert into announcement item_property
-					$time = date("Y-m-d H:i:s", time());
+					$time = api_get_utc_datetime();
 					$sql_ins_props = "INSERT INTO $table_props " .
 							"(tool, insert_user_id, insert_date, " .
 							"lastedit_date, ref, lastedit_type," .
@@ -2005,11 +2006,10 @@ function display_agenda_items($select_month, $select_year) {
     //DISPLAY: NO ITEMS
     if (empty($my_events)) {
         echo Display::display_warning_message(get_lang('NoAgendaItems'));
-    } else { 	
+    } else {
         echo '<table class="data_table">';
         $th = Display::tag('th', get_lang('Title'));
-        $th .= Display::tag('th', get_lang('Content'));
-        $th .= Display::tag('th', get_lang('SentTo'));
+        //$th .= Display::tag('th', get_lang('Content'));        
         $th .= Display::tag('th', get_lang('StartTimeWindow'));
         $th .= Display::tag('th', get_lang('EndTimeWindow'));        
         
@@ -2017,13 +2017,15 @@ function display_agenda_items($select_month, $select_year) {
         if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
             if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id']))) {
                 // a coach can only delete an element belonging to his session
+                //$th .= Display::tag('th', get_lang('SentTo'));
                 $th .= Display::tag('th', get_lang('Modify'));
             }
         } else {
-            $th .= Display::tag('th', get_lang('Detail'));
+            //$th .= Display::tag('th', get_lang('Detail'));
         }
         
         echo Display::tag('tr', $th); 
+        
        	foreach ($my_events as $myrow) {
         	$is_repeated = !empty($myrow['parent_event_id']);	      
             // Make the month bar appear only once.        
@@ -2060,86 +2062,58 @@ function display_agenda_items($select_month, $select_year) {
         		$stylenotbold="datanotboldnow";
         		$text_style="textnow";
         	}
-    
-        	echo "<td>";
-        	// adding an internal anchor
-        	//echo "<a name=\"".(int)api_format_date($myrow["start_date"], "%d")."\"></a>";
-        	// the icons. If the message is sent to one or more specific users/groups
-        	// we add the groups icon
-        	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
-        	if ($myrow['calendar_type'] == 'course') {
-        		//Display::display_icon('event.png', get_lang('Course'),'',22);
-        		if ($myrow['to_group_id']!=='0') {
-        			//echo Display::return_icon('group.png', get_lang('ItemForUserSelection'),'',22);
-        		}    		
-        		echo $myrow['title'];    		
-        	} elseif ($myrow['calendar_type'] == 'personal') {
-        		//Display::display_icon('user_event.png', get_lang('Personal'),'',22);
-        		echo $myrow['title'];    		
-        	} else {
-        		//Display::display_icon('platform_event.png', get_lang('Platform'),'',22);//TODO:check whether this still works    		
-        		echo $myrow['title'];    		
-        	}
-        	echo '</td>';   	
         	
-        	$content = $myrow['content'];
-            $content = make_clickable($content);
-            $content = text_filter($content);
-            
-            echo '<td>';
-            echo $content;
-            // show attachment list
-            if (!empty($attachment_list)) {
-                $realname=$attachment_list['path'];
-                $user_filename=$attachment_list['filename'];
-                $full_file_name = 'download.php?file='.$realname;
-                echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-                echo '<a href="'.$full_file_name.'"> '.$user_filename.'</a>';
-                 if (api_is_allowed_to_edit()) {
-                    echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a><br />';
-                }
-                echo '<br /><span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';           
-            }
-            echo '</td>';
-            
-    		if ($myrow['calendar_type'] == 'course') {
-    	    	// the message has been sent to
-    	    	echo "<td>";
-    	    	$sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);    	    	
-    	    	$sent_to_form = sent_to_form($sent_to);
-    	    	if ($myrow['to_group_id']!=='0') {
-                    echo ' '.Display::return_icon('group.png', get_lang('ItemForUserSelection'),'',22);
-    	    	}    	    	
-    	    	echo $sent_to_form;
-    	    	echo '</td>';
-    		} elseif ($myrow['calendar_type'] == 'personal') {
-    			echo '<td>'.get_lang('Personal').'</td>';
-    		} elseif ($myrow['calendar_type'] == 'global') {
-    			echo '<td>'.get_lang('GlobalEvent').'</td>';
-    		}
-    
-            /*	display: the title	*/
-    
+            //Title
+        	echo "<td>";
+        	$attach_icon = '';
+        	if (!empty($attachment_list)) {
+                $attach_icon = ' '.Display::return_icon('attachment.gif',get_lang('Attachment'));
+        	}  
+        	$agenda_url = api_get_path(WEB_CODE_PATH).'calendar/agenda.php?agenda_id='.$myrow['id'];  	
+        	echo Display::url($myrow['title'].$attach_icon, $agenda_url); 
+        	echo '</td>';   	
+        	    
+            //Start date    
         	echo '<td>';
         	echo api_format_date($myrow['start_date']);
         	echo '</td>';    
         	
+        	//End date
             echo '<td>';    
         	if ($myrow['calendar_type'] == 'course') {
         		if ($myrow['end_date']<>'0000-00-00 00:00:00') {    
         			echo api_convert_and_format_date($myrow['end_date']);
         		}
         	}
-        	echo '</td>';
-    
+        	echo '</td>';        	
+        	
         	// attachment list
-    	    $attachment_list = get_attachment($myrow['id']);
-    	    
-            echo '<td align="center">';
+            $attachment_list = get_attachment($myrow['id']);
+            
+            /*
+            if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {    
+                echo "<td>";
+                if ($myrow['calendar_type'] == 'course') {
+                    // the message has been sent to                        
+                    $sent_to = sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);             
+                    $sent_to_form = sent_to_form($sent_to);
+                    if ($myrow['to_group_id']!=='0') {
+                        echo ' '.Display::return_icon('group.png', get_lang('ItemForUserSelection'),'',22);
+                    }               
+                    echo $sent_to_form;                        
+                } elseif ($myrow['calendar_type'] == 'personal') {
+                    echo get_lang('Personal');
+                } elseif ($myrow['calendar_type'] == 'global') {
+                    echo get_lang('GlobalEvent');
+                }
+                echo '</td>';
+       	    } */           
             
             /*Display: edit delete button (course admin only) */
     		if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) && $myrow['calendar_type'] == 'course') {
-        		if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id']))) {
+        		if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id']))) {                    
+                    
+                    echo '<td align="center">';
         			// a coach can only delete an element belonging to his session
     				$mylink = api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;id='.$myrow['id'].'&amp;';
     	    	
@@ -2161,17 +2135,26 @@ function display_agenda_items($select_month, $select_year) {
     	    		}
         			echo '<a href="'.$mylink.api_get_cidreq().'&amp;sort=asc&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;action=showhide&amp;next_action='.$next_action.'" title="'.$text_visibility.'">'.Display::return_icon($image_visibility.'.png', $text_visibility,'',22).'</a> ';    			
         			echo "<a href=\"".$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
-                    echo Display::return_icon('delete.png', get_lang('Delete'),'',22)."&nbsp;</a>";                
+                    echo Display::return_icon('delete.png', get_lang('Delete'),'',22)."&nbsp;</a>";                                                        
     			}
-    
+    			    
     	    	$mylink = 'ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'];
     			//echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
     	    	//echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
     	    	//echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
-    		    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('printer.png', get_lang('Print'),'',22).'</a>&nbsp;';
-    	    
+    		    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('printer.png', get_lang('Print'),'',22).'</a>&nbsp;';    		      
+    		} else {
+    		    
+                if ($is_repeated && (api_is_allowed_to_edit(false,true))) {
+                    echo '<td align="center">';
+                    echo get_lang('RepeatedEvent'),' <a href="',api_get_self(),'?',api_get_cidreq(),'&amp;agenda_id=',$myrow['parent_event_id'],'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a>';
+                    echo '</td>';                  
+                }
+                      
     		}
-    
+    		
+    		
+    /*
             //Display: the added resources
         	if (check_added_resources("Agenda", $myrow["id"])) {
         		echo "<i>".get_lang("AddedResources")."</i><br/>";
@@ -2181,12 +2164,11 @@ function display_agenda_items($select_month, $select_year) {
         		display_added_resources("Agenda", $myrow["id"], $addedresource_style);
     	   	}
         	$event_list.=$myrow['id'].',';
+      */  	
+        	
         	$counter++;
             
-            
-            if ($is_repeated) {
-            	echo get_lang('RepeatedEvent'),' <a href="',api_get_self(),'?',api_get_cidreq(),'&amp;agenda_id=',$myrow['parent_event_id'],'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a>';
-            }
+       
             
             echo '</td>';
             
@@ -2241,16 +2223,11 @@ function display_one_agenda_item($agenda_id) {
 	global $DaysShort, $DaysLong, $MonthsLong;
 	global $is_courseAdmin;
 	global $dateFormatLong, $timeNoSecFormat, $charset;
-	//echo "displaying agenda items";
-
 
 	// getting the name of the groups
-	$group_names=get_course_groups();
-
-	/*--------------------------------------------------
-			CONSTRUCT THE SQL STATEMENT
-	  --------------------------------------------------*/
-	$agenda_id = Database::escape_string($agenda_id);
+	$group_names = get_course_groups();
+	
+	$agenda_id = intval($agenda_id);
 
 	$sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
@@ -2258,7 +2235,7 @@ function display_one_agenda_item($agenda_id) {
 					AND ip.tool='".TOOL_CALENDAR_EVENT."'
 					AND ip.visibility='1'
 					AND agenda.id='$agenda_id'";
-	$result=Database::query($sql) or die(Database::error());
+	$result=Database::query($sql);
 	$number_items=Database::num_rows($result);
 	$myrow=Database::fetch_array($result); // there should be only one item so no need for a while loop
 
@@ -2276,8 +2253,7 @@ function display_one_agenda_item($agenda_id) {
 	/*--------------------------------------------------
 			DISPLAY: NO ITEMS
 	  --------------------------------------------------*/
-	if ($number_items==0)
-	{
+	if ($number_items==0) {
 		echo "<table id=\"data_table\" class=\"data_table\"><tr><td>".get_lang("NoAgendaItems")."</td></tr></table>";
 	}
 
@@ -2310,7 +2286,6 @@ function display_one_agenda_item($agenda_id) {
 		$stylenotbold="datanotboldnow";
 		$text_style="textnow";
 	}
-
 	echo "<th>";
 
 	// adding an internal anchor
@@ -2360,8 +2335,7 @@ function display_one_agenda_item($agenda_id) {
 		if (!$repeat && api_is_allowed_to_edit(false,true))	{
 			// edit
 			$mylink = api_get_self()."?".api_get_cidreq()."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;id=".$myrow['id'];
-			if (!empty($_GET['agenda_id']))
-			{
+			if (!empty($_GET['agenda_id'])) {
 				// rather ugly hack because the id parameter is already set above but below we set it again
 				$mylink .= '&amp;agenda_id='.Security::remove_XSS($_GET['agenda_id']).'&amp;id='.Security::remove_XSS($_GET['agenda_id']);
 			}
@@ -2402,6 +2376,23 @@ function display_one_agenda_item($agenda_id) {
     echo '<td '.(api_is_allowed_to_edit()?'colspan="3"':'colspan="2"'). '>';
     echo $content;
     echo '</td></tr>';
+    
+    echo '<tr class="row_even" ><td colspan="2">';
+    $attachment_list = get_attachment($agenda_id);
+    
+    if (!empty($attachment_list)) {
+        $realname=$attachment_list['path'];
+        $user_filename=$attachment_list['filename'];
+        $full_file_name = 'download.php?file='.$realname;
+        echo Display::return_icon('attachment.gif',get_lang('Attachment'));
+        echo '<a href="'.$full_file_name.'"> '.$user_filename.'</a>';
+         if (api_is_allowed_to_edit()) {
+            echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a><br />';
+        }
+        echo '<br /><span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';           
+    }
+    echo '</td></tr>';
+    
 
 	/*--------------------------------------------------
 	 			DISPLAY: the added resources

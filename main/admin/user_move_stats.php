@@ -352,7 +352,7 @@ if (isset($_REQUEST['load_ajax'])) {
                                 $dir_name = substr($parent_data['url'], 1);
                                 $created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);
                                 $created_dir = '/'.$created_dir;                                
-                                
+                                $now = api_get_utc_datetime();
                                 //Creating directory                                
                                 $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION . " SET " .         
                                        "url         = '".$created_dir."',
@@ -362,7 +362,7 @@ if (isset($_REQUEST['load_ajax'])) {
                                        active       = '0',
                                        accepted     = '1',
                                        filetype     = 'folder',                                   
-                                       sent_date    = NOW(),
+                                       sent_date    = '".$now."',
                                        qualification    = '".$parent_data['qualification'] ."',
                                        parent_id    = '',
                                        qualificator_id  = '',

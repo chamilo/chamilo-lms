@@ -129,17 +129,16 @@ class AnnouncementManager  {
     			$content	 = $result['content'];
     			$content     = make_clickable($content);
     			$content     = text_filter($content);
-    			$last_post_datetime = $result['insert_date'];// post time format  datetime de mysql
-    			list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
+    			$last_post_datetime = $result['insert_date'];// post time format  datetime de mysql    			
     		}
     	
     		echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">";
-    		echo "<tr class=\"data\"><td><h2>" . $title . "</h2></td></tr>";
+    		echo "<tr><td><h2>" . $title . "</h2></td></tr>";
     		    		
     		echo "<tr class=\"text\"><td>$content</td></tr>";
     		
-    		echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($result['end_date'], DATE_FORMAT_LONG) . "</td></tr>";
-            echo "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " . api_convert_and_format_date($last_post_datetime, DATE_TIME_FORMAT_LONG) . "</td></tr>";
+    		//echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " .api_convert_and_format_date($result['end_date'], DATE_FORMAT_LONG). "</td></tr>";
+            echo "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " .api_convert_and_format_date($last_post_datetime, DATE_TIME_FORMAT_LONG). "</td></tr>";
             
     		echo "<tr><td>";
     	    $attachment_list = AnnouncementManager::get_attachment($announcement_id);
@@ -182,9 +181,9 @@ class AnnouncementManager  {
 		$emailTitle = Database::escape_string($emailTitle);
 		$newContent = Database::escape_string($newContent);
 		$order = intval($order);
-	
+	    $now = api_get_utc_datetime();
 		// store in the table announcement
-		$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".api_get_session_id();
+		$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = '$now', display_order ='$order', session_id=".api_get_session_id();
 		$result = Database::query($sql);
 		if ($result === false) {
 			return false;
@@ -234,9 +233,11 @@ class AnnouncementManager  {
 		$emailTitle = Database::escape_string($emailTitle);
 		$newContent = Database::escape_string($newContent);
 		$order = intval($order);
+		
+		$now = api_get_utc_datetime();
 	
 		// store in the table announcement
-		$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".api_get_session_id();
+		$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = '$now', display_order ='$order', session_id=".api_get_session_id();
 		$result = Database::query($sql);
 		if ($result === false) {
 			return false;

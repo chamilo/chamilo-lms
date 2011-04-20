@@ -278,7 +278,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		case "announce": 		
 			//copying the agenda item into an announcement
 			$id=(int)$_GET['id'];
-			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id))) { 
+			if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id))) { 
 			    // a coach can only delete an element belonging to his session
 				$ann_id = store_agenda_item_as_announcement($id);
 				$tool_group_link = (isset($_SESSION['toolgroup'])?'&toolgroup='.$_SESSION['toolgroup']:'');
@@ -297,8 +297,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 if ($_GET['view'] == 'month' || $_SESSION['view'] == 'month' ) {
     
-} else {    
-
+} else {
     echo '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
 
 // THE LEFT PART

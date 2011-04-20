@@ -12,6 +12,8 @@ $use_anonymous = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 //session
 if(isset($_GET['id_session'])) {
 	$_SESSION['id_session'] = intval($_GET['id_session']);
@@ -22,29 +24,23 @@ $this_section=SECTION_COURSES;
 //error_reporting(E_ALL);
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
-/*   			ACCESS RIGHTS 		*/
-// notice for unauthorized people.
-api_protect_course_script();
-
-/*
-	Resource linker (Patrick Cool, march 2004)
-*/
+/* 	Resource linker (Patrick Cool, march 2004) */
 
 $_SESSION['source_type'] = 'Agenda';
 require_once '../resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
-if (!empty($addresources)) // When the "Add Resource" button is clicked we store all the form data into a session
-{
-$form_elements= array ('day'=>Security::remove_XSS($_POST['fday']), 'month'=>Security::remove_XSS($_POST['fmonth']), 'year'=>Security::remove_XSS($_POST['fyear']), 'hour'=>Security::remove_XSS($_POST['fhour']), 'minutes'=>Security::remove_XSS($_POST['fminute']),
-						'end_day'=>Security::remove_XSS($_POST['end_fday']), 'end_month'=>Security::remove_XSS($_POST['end_fmonth']), 'end_year'=>Security::remove_XSS($_POST['end_fyear']), 'end_hours'=>Security::remove_XSS($_POST['end_fhour']), 'end_minutes'=>Security::remove_XSS($_POST['end_fminute']),
-						'title'=>Security::remove_XSS(stripslashes($_POST['title'])), 'content'=>Security::remove_XSS(stripslashes($_POST['content'])), 'id'=>Security::remove_XSS($_POST['id']), 'action'=>Security::remove_XSS($_POST['action']), 'to'=>Security::remove_XSS($_POST['selectedform']));
-$_SESSION['formelements']=$form_elements;
-// this is to correctly handle edits
-if($id){$action="edit";}
-//print_r($form_elements);
-header('Location: '.api_get_path(WEB_CODE_PATH)."resourcelinker/resourcelinker.php?source_id=1&action=$action&id=$id&originalresource=no");
-exit;
+if (!empty($addresources)) {
+    // When the "Add Resource" button is clicked we store all the form data into a session
+    $form_elements= array ('day'=>Security::remove_XSS($_POST['fday']), 'month'=>Security::remove_XSS($_POST['fmonth']), 'year'=>Security::remove_XSS($_POST['fyear']), 'hour'=>Security::remove_XSS($_POST['fhour']), 'minutes'=>Security::remove_XSS($_POST['fminute']),
+    						'end_day'=>Security::remove_XSS($_POST['end_fday']), 'end_month'=>Security::remove_XSS($_POST['end_fmonth']), 'end_year'=>Security::remove_XSS($_POST['end_fyear']), 'end_hours'=>Security::remove_XSS($_POST['end_fhour']), 'end_minutes'=>Security::remove_XSS($_POST['end_fminute']),
+    						'title'=>Security::remove_XSS(stripslashes($_POST['title'])), 'content'=>Security::remove_XSS(stripslashes($_POST['content'])), 'id'=>Security::remove_XSS($_POST['id']), 'action'=>Security::remove_XSS($_POST['action']), 'to'=>Security::remove_XSS($_POST['selectedform']));
+    $_SESSION['formelements']=$form_elements;
+    // this is to correctly handle edits
+    if($id){$action="edit";}
+    //print_r($form_elements);
+    header('Location: '.api_get_path(WEB_CODE_PATH)."resourcelinker/resourcelinker.php?source_id=1&action=$action&id=$id&originalresource=no");
+    exit;
 }
 
 if (!empty($_GET['view'])) {
@@ -73,7 +69,7 @@ if (!empty($_GET['action']) and $_GET['action']=="showcurrent") {
 if (!empty($_GET['action']) and $_GET['action']=="showall") {
 	$_SESSION['show']="showall";
 }
-
+/*
 // 2. sorting order (ASC or DESC)
 if (empty($_GET['sort']) and empty($_SESSION['sort'])) {
 	$_SESSION['sort']="DESC";
@@ -83,7 +79,7 @@ if (!empty($_GET['sort']) and $_GET['sort']=="asc") {
 }
 if (!empty($_GET['sort']) and $_GET['sort']=="desc") {
 	$_SESSION['sort']="DESC";
-}
+}*/
 
 // 3. showing or hiding the send-to-specific-groups-or-users form
 $setting_allow_individual_calendar=true;
@@ -202,6 +198,11 @@ if(!empty($_GET['year'])) {
 if(!empty($_GET['month'])) {
 	$select_month = (int)$_GET['month'];
 }
+
+if(!empty($_GET['day'])) {
+    $select_day = (int)$_GET['day'];
+}
+
 if (empty($select_year) && empty($select_month)) {
 	$today = getdate();
 	$select_year = $today['year'];
@@ -270,8 +271,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			break;
 		case "showhide":
 			$id=(int)$_GET['id'];
-			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
-			{ // a coach can only delete an element belonging to his session
+			if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) ) {
+			     // a coach can only delete an element belonging to his session			   
 				showhide_agenda_item($id);
 			}
 			break;
@@ -305,9 +306,9 @@ if (empty($_GET['origin']) or $_GET['origin']!='learnpath') {
 	echo '<td width="220" height="19" valign="top">';
 	// the small calendar
 	$MonthName = $MonthsLong[$select_month -1];
-	$agenda_items=get_calendar_items($select_month,$select_year);
+	$agenda_items=get_calendar_items($select_month, $select_year);
 	if (api_get_setting('display_mini_month_calendar') == 'true') {	   
-        display_minimonthcalendar($agenda_items, $select_month,$select_year, $MonthName);	   
+        display_minimonthcalendar($agenda_items, $select_month, $select_year, $MonthName);	   
 	}	
 	echo '<br />';
 	if (api_get_setting('display_upcoming_events') == 'true') {
@@ -345,7 +346,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			}
 			break;
 		case 'edit' :
-			if ( !(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
+			if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
 				if ($_POST['submit_event']) {
 					display_agenda_items($select_month, $select_year);
 				} else {
@@ -381,8 +382,11 @@ if (!$_GET['action'] || $_GET['action']=='showall'  || $_GET['action']=='showcur
 		if (!$_SESSION['view'] || $_SESSION['view'] <> 'month') {
             if(!empty($_GET['agenda_id'])) {
                 display_one_agenda_item($_GET['agenda_id']);
-            } else {
-                display_agenda_items($select_month, $select_year);
+            } else {                
+                $select_day;
+                $MonthName = $MonthsLong[$select_month -1];               
+                echo Display::tag('h2', $select_day.' '.$MonthName.' '.$select_year);
+                display_agenda_items($select_month, $select_year, $select_day);
             }
 		} else {
 			display_monthcalendar($select_month, $select_year);

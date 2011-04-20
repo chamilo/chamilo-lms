@@ -1088,7 +1088,7 @@ if ($display_announcement_list && !$surveyid) {
 
 	$group_memberships = GroupManager::get_group_ids($_course['dbName'],api_get_user_id());
 
-	if (api_is_allowed_to_edit(false,true)) {
+	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 		// A.1. you are a course admin with a USER filter
 		// => see only the messages of this specific user + the messages of the group (s)he is member of.
 		if (!empty($_SESSION['user'])) {

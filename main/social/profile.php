@@ -59,6 +59,7 @@ if (isset($_GET['u'])) {
 $libpath = api_get_path(LIBRARY_PATH);
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
+
 require_once $libpath.'course.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';
 require_once $libpath.'magpierss/rss_fetch.inc';

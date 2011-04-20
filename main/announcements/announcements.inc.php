@@ -100,25 +100,35 @@ class AnnouncementManager  {
 	
 		$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
 		$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-	
-		if (api_get_user_id() != 0) {
-			$sql_query = "	SELECT announcement.*, toolitemproperties.*
-							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-							WHERE announcement.id = toolitemproperties.ref
-							AND announcement.id = '$announcement_id'
-							AND toolitemproperties.tool='announcement'
-							AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id='0')
-							AND toolitemproperties.visibility='1'
-							ORDER BY display_order DESC";
-	
+	    
+		if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+		  $sql_query = "  SELECT announcement.*, toolitemproperties.*
+                            FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+                            WHERE announcement.id = toolitemproperties.ref
+                            AND announcement.id = '$announcement_id'
+                            AND toolitemproperties.tool='announcement'
+                            AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id='0')                            
+                            ORDER BY display_order DESC";   
 		} else {
-			$sql_query = "	SELECT announcement.*, toolitemproperties.*
-							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-							WHERE announcement.id = toolitemproperties.ref
-							AND announcement.id = '$announcement_id'
-							AND toolitemproperties.tool='announcement'
-							AND toolitemproperties.to_group_id='0'
-							AND toolitemproperties.visibility='1'";
+    		if (api_get_user_id() != 0) {
+    			$sql_query = "	SELECT announcement.*, toolitemproperties.*
+    							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+    							WHERE announcement.id = toolitemproperties.ref
+    							AND announcement.id = '$announcement_id'
+    							AND toolitemproperties.tool='announcement'
+    							AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id='0')
+    							AND toolitemproperties.visibility='1'
+    							ORDER BY display_order DESC";
+    	
+    		} else {
+    			$sql_query = "	SELECT announcement.*, toolitemproperties.*
+    							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
+    							WHERE announcement.id = toolitemproperties.ref
+    							AND announcement.id = '$announcement_id'
+    							AND toolitemproperties.tool='announcement'
+    							AND toolitemproperties.to_group_id='0'
+    							AND toolitemproperties.visibility='1'";
+    		}
 		}
 		$sql_result = Database::query($sql_query);
 		if (Database::num_rows($sql_result) > 0 ) {

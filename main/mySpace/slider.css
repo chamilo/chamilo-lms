@@ -1,0 +1,57 @@
+div#cev_cont_results
+{
+        margin: 0;
+        padding-left:18px;
+        padding-right:18px;
+}
+div#cev_cont_header
+{
+        margin: 0;
+        padding-left:18px;
+        padding-right:18px;
+}
+div#cev_cont_stats
+{
+        margin: 0;
+        padding-left:18px;
+        padding-right:18px;
+}
+div.slider 
+{
+    overflow: hidden; 
+    display: none;
+    line-height: 20px;
+}
+
+div#cev_cont .ui-tabs-nav .ui-helper-reset .ui-helper-clearfix .ui-widget-header .ui-corner-all
+{
+        margin: 0;
+        padding-left:18px;
+        padding-right:18px;
+}
+
+div.slider_menu a
+{
+    color: #3757F7;
+    font-size: 13px;
+}
+
+/**
+ * Not required, for styling only
+ */
+
+div#slider_wrapper
+{
+    width: 500px;
+}
+
+div.title
+{
+    font-weight: bold;
+}
+
+div.slider p
+{
+    padding: 0 0 1em 0;
+    margin: 0;
+}

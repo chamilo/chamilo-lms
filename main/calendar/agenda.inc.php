@@ -1246,7 +1246,7 @@ function sent_to_form($sent_to_array) {
     	if (isset($sent_to_array['users'])) {
     		if (is_array($sent_to_array['users'])) {
     			foreach ($sent_to_array['users'] as $user_id) {
-    				$user_info=api_get_user_info($user_id);
+    				$user_info= api_get_user_info($user_id);
     				$output[] = api_get_person_name($user_info['firstName'], $user_info['lastName']);
                 }
             }
@@ -1254,11 +1254,11 @@ function sent_to_form($sent_to_array) {
 	} else {
 	    // there is only one user/group
 		if (is_array($sent_to_array['users'])) {
-			$user_info=api_get_user_info($sent_to_array['users'][0]);
+			$user_info = api_get_user_info($sent_to_array['users'][0]);
 			$output[]= api_get_person_name($user_info['firstName'], $user_info['lastName']);
 		}
 		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0) {
-			$group_id=$sent_to_array['groups'][0];
+			$group_id = $sent_to_array['groups'][0];
 			$output[]= $group_names[$group_id]['name'];
 		}
 		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]==0) {
@@ -1266,8 +1266,11 @@ function sent_to_form($sent_to_array) {
 		}
 	}
 
-    if (!empty($output)) {
-        $output = implode(', ', $output);
+    if (!empty($output)) {        
+        $output = array_filter($output);        
+        if (count($output) > 0) {
+            $output = implode(', ', $output);
+        }
         return $output;
     }
 }
@@ -2287,8 +2290,6 @@ function display_one_agenda_item($agenda_id) {
 	echo "<table id=\"data_table\" class=\"data_table\">";
 
 	// DISPLAY : the icon, title, destinees of the item
-	
-
 	$myrow["start_date"] = api_get_local_time($myrow["start_date"]);
 
 	// highlight: if a date in the small calendar is clicked we highlight the relevant items
@@ -2320,19 +2321,10 @@ function display_one_agenda_item($agenda_id) {
 	if ($myrow['to_group_id']!=='0') {
 		echo Display::return_icon('group.png','&nbsp;','',22);
 	}
-	//if ($myrow['visibility']==1) {
 	echo ' '.$myrow['title'];
-	echo "</h2>";
-	
+	echo "</h2>";	
 	echo "<tr>";
-
-	// the message has been sent to
-	echo "<th>".get_lang("SentTo").": ";
-	$sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
-	$sent_to_form=sent_to_form($sent_to);
-	echo $sent_to_form;
-	echo "</th>";
-	
+		
 	if (api_is_allowed_to_edit(false,true)) {
 		if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id']))) {
 		    
@@ -2342,7 +2334,7 @@ function display_one_agenda_item($agenda_id) {
             $export_icon_low = '../img/export_low_fade.png';
             $export_icon_high = '../img/export_high_fade.png';
             
-            echo '<th>';
+            echo '<th style="text-align:right">';
             if (!$repeat && api_is_allowed_to_edit(false,true)) {
                 // edit
                 $mylink = api_get_self()."?".api_get_cidreq()."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;id=".$myrow['id'];
@@ -2403,10 +2395,11 @@ function display_one_agenda_item($agenda_id) {
     echo $content;
     echo '</td></tr>';
     
-    echo '<tr class="row_even" ><td colspan="2">';
+    
     $attachment_list = get_attachment($agenda_id);
     
     if (!empty($attachment_list)) {
+        echo '<tr class="row_even"><td colspan="2">';    
         $realname=$attachment_list['path'];
         $user_filename=$attachment_list['filename'];
         $full_file_name = 'download.php?file='.$realname;
@@ -2415,10 +2408,19 @@ function display_one_agenda_item($agenda_id) {
          if (api_is_allowed_to_edit()) {
             echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a><br />';
         }
-        echo '<br /><span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';           
+        echo '<br /><span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+        echo '</td></tr>';           
     }
-    echo '</td></tr>';
     
+    
+    
+    // the message has been sent to
+    echo '<tr>';
+    echo "<td class='announcements_datum'>".get_lang("SentTo").": ";
+    $sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
+    $sent_to_form=sent_to_form($sent_to);
+    echo $sent_to_form;
+    echo "</td></tr>";
     
     if ($repeat) {
         echo '<tr>';
@@ -2426,13 +2428,10 @@ function display_one_agenda_item($agenda_id) {
         echo get_lang('RepeatedEvent').' <a href="',api_get_self(),'?',api_get_cidreq(),'&agenda_id=',$repeat_id,'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a>';
         echo '</td>';
         echo '</tr>';
-    }  
-    
+    }   
     
 
-	/*--------------------------------------------------
-	 			DISPLAY: the added resources
-	  --------------------------------------------------*/
+	/* DISPLAY: the added resources */
 	if (check_added_resources("Agenda", $myrow["id"])) {
 		echo "<tr><td colspan='3'>";
 		echo "<i>".get_lang("AddedResources")."</i><br/>";
@@ -2449,8 +2448,6 @@ function display_one_agenda_item($agenda_id) {
 		"</tr>",
 		"</table>";
 }
-
-
 
 
 /**

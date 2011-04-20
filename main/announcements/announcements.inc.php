@@ -142,9 +142,33 @@ class AnnouncementManager  {
 			$content     = make_clickable($content);
 			$content     = text_filter($content);			    			
 		    	
-    		echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">";
-    		echo "<tr><td><h2>".$title."</h2></td></tr>";    		    		
-    		echo "<tr class=\"text\"><td>$content</td></tr>";    		
+    		echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
+    		echo "<tr><td><h2>".$title."</h2></td></tr>";   		
+    		
+    		
+    		if (api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+    		    $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$announcement_id."\">".Display::return_icon('edit.png', get_lang('Edit'),'',22)."</a>";
+                if ($myrow['visibility']==1) {
+                    $image_visibility="visible";
+                    $alt_visibility=get_lang('Hide');
+                } else {
+                    $image_visibility="invisible";
+                    $alt_visibility=get_lang('Visible');
+                }
+                global $stok;
+                
+    		    $modify_icons .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?Security::remove_XSS($_GET['origin']):'')."&action=showhide&id=".$announcement_id."&sec_token=".$stok."\">".
+                            Display::return_icon($image_visibility.'.png', $alt_visibility,'',22)."</a>";    		    		
+                    
+                if (api_is_allowed_to_edit(false,true)) {
+                    $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$announcement_id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
+                        Display::return_icon('delete.png', get_lang('Delete'),'',22).
+                        "</a>";
+                }                            
+                echo "<tr><th style='text-align:right'>$modify_icons</th></tr>";
+    		}
+    		
+    		echo "<tr><td>$content</td></tr>";       		
     		//echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " .api_convert_and_format_date($result['end_date'], DATE_FORMAT_LONG). "</td></tr>";
             echo "<tr><td class=\"announcements_datum\">" . get_lang('LastUpdateDate') . " : " .api_convert_and_format_date($result['insert_date'], DATE_TIME_FORMAT_LONG). "</td></tr>";
             
@@ -157,10 +181,11 @@ class AnnouncementManager  {
             $sent_to_form   = self::sent_to_form($sent_to);
             echo Display::tag('td', get_lang('SentTo').' : '.$sent_to_form, array('class'=>'announcements_datum'));            
             
-    		echo "<tr><td>";
+    		
     	    $attachment_list = self::get_attachment($announcement_id);
         
             if (count($attachment_list)>0) {
+                echo "<tr><td>";
                 $realname=$attachment_list['path'];
                 $user_filename=$attachment_list['filename'];
                 $full_file_name = 'download.php?file='.$realname;
@@ -168,9 +193,8 @@ class AnnouncementManager  {
                 echo Display::return_icon('attachment.gif',get_lang('Attachment'));
                 echo '<a href="'.$full_file_name.' "> '.$user_filename.' </a>';
                 echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
-            }
-            echo '</td></tr>';
-                        
+                echo '</td></tr>';
+            }           
     		echo "</table>";
 		} else {
 		    api_not_allowed();
@@ -923,10 +947,14 @@ class AnnouncementManager  {
 				$output[]= "&nbsp;".get_lang('Everybody');
 			}
 		}
-		if (!empty($output)) {
-		    $output = implode(', ', $output);
-			return $output;
-		}
+		
+	    if (!empty($output)) {        
+            $output = array_filter($output);        
+            if (count($output) > 0) {
+                $output = implode(', ', $output);
+            }
+            return $output;
+        }   
 	}
 	
 	

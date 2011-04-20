@@ -2452,8 +2452,8 @@ class Tracking {
             // $main_graph = new pChart($main_width,$main_height);
 
             $graph_id = 'generate_session_exercise_graph'.Security::remove_XSS($_GET['course']).'-'.intval($_GET['session_id']).'-'.api_get_user_id();
-            //if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-            if (0) {
+            if ($cache->IsInCache($graph_id, $data_set->GetData())) {
+            //if (0) {
                 //if we already created the img
                 //echo 'in cache';
                 $img_file = $cache->GetHash($graph_id,$data_set->GetData());
@@ -2585,8 +2585,8 @@ class Tracking {
             // Finish the graph
             $graph_id = 'thumbnail_exercise_result_graph_'.Security::remove_XSS($_GET['course']).'-'.intval($_GET['session_id']).'-'.api_get_user_id();
 
-            //if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-            if (0) {
+            if ($cache->IsInCache($graph_id, $data_set->GetData())) {
+            //if (0) {
                 //if we already created the img
                 //echo 'in cache';
                 $img_file = $cache->GetHash($graph_id,$data_set->GetData());
@@ -2739,8 +2739,8 @@ class Tracking {
             $main_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
             $main_graph->drawTitle(180,22,$exercise_title,50,50,50);
             $graph_id = 'exercise_result_graph'.Security::remove_XSS($_GET['course']).'-'.intval($_GET['session_id']).'-'.api_get_user_id();
-            //if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-            if (0) {
+            if ($cache->IsInCache($graph_id, $data_set->GetData())) {
+            //if (0) {
                 //if we already created the img
                 //echo 'in cache';
                 $img_file = $cache->GetHash($graph_id,$data_set->GetData());

@@ -2019,8 +2019,8 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
         // the graph id
         $data = $data_set->GetData();
 
-        //if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-        if (0) {
+        if ($cache->IsInCache($graph_id, $data_set->GetData())) {
+        //if (0) {
             //if we already created the img
             //  echo 'in cache';
             $img_file = $cache->GetHash($graph_id, $data_set->GetData());

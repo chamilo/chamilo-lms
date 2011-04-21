@@ -16,7 +16,7 @@ $users[] = array(
     'lastname' => 'Warnier',
     'status' => 1,
     'auth_source' => 'platform',
-    'email' => 'yannick.warnier@testdokeos.com',
+    'email' => 'yannick.warnier@example.com',
     'creator_id' => 1,
     'active' => 1,
 );
@@ -27,7 +27,7 @@ $users[] = array(
     'lastname' => 'Mosquera Guardamino',
     'status' => 1,
     'auth_source' => 'platform',
-    'email' => 'michela.mosquera@testdokeos.com',
+    'email' => 'michela.mosquera@example.com',
     'creator_id' => 1,
     'active' => 1,
 );
@@ -38,7 +38,7 @@ $users[] = array(
     'lastname' => 'Lanoix',
     'status' => 5,
     'auth_source' => 'platform',
-    'email' => 'michel.lanoix@testdokeos.com',
+    'email' => 'michel.lanoix@example.com',
     'creator_id' => 1,
     'active' => 1
 );
@@ -50,7 +50,7 @@ $users[] = array(
     'lastname' => 'Montoya',
     'status' => 1,
     'auth_source' => 'platform',
-    'email' => 'julio.montoya@beeznest.com',
+    'email' => 'julio.montoya@example.com',
     'creator_id' => 1,
     'active' => 1
 );

@@ -404,7 +404,7 @@
 
         foreach ($data_array['users_in_course'] as $user) {
             $result = array();
-            $user_info = api_get_user_info($data['id']);
+            $user_info = api_get_user_info($user['id']);
 
         // $result['official_code'] = $user['official_code'];
             $result['fullname'] = $user['firstname']." ".$user['lastname'];

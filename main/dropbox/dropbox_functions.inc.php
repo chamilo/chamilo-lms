@@ -152,9 +152,9 @@ function delete_category($action, $id) {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function display_move_form($part, $id, $target = array()) {
+function display_move_form($part, $id, $target = array(), $extra_params) {
 	echo '<div class="row"><div class="form_header">'.get_lang('MoveFileTo').'</div></div>';
-	echo '<form name="form1" method="post" action="'.api_get_self().'?view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&view='.Security::remove_XSS($_GET['view']).'">';
+	echo '<form name="form1" method="post" action="'.api_get_self().'?view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&view='.Security::remove_XSS($_GET['view']).'&'.$extra_params.'">';
 	echo '<input type="hidden" name="id" value="'.Security::remove_XSS($id).'">';
 	echo '<input type="hidden" name="part" value="'.Security::remove_XSS($part).'">';
 	echo '
@@ -458,7 +458,7 @@ function display_add_form() {
 	global $_user, $is_courseAdmin, $is_courseTutor, $course_info, $origin, $dropbox_unid;
 
 	$token = Security::get_token();
-	$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+	$dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
 	?>
 	<form method="post" action="index.php?view_received_category=<?php echo Security::remove_XSS($_GET['view_received_category']); ?>&view_sent_category=<?php echo Security::remove_XSS($_GET['view_sent_category']); ?>&view=<?php echo Security::remove_XSS($_GET['view']); ?>&<?php echo "origin=$origin"."&".api_get_cidreq(); ?>" enctype="multipart/form-data" onsubmit="javascript: return checkForm(this);">
 
@@ -504,27 +504,29 @@ function display_add_form() {
 	<?php
 
 	//list of all users in this course and all virtual courses combined with it
-	if (isset($_SESSION['id_session'])){
+	if (api_get_session_id()) {
+	    
 		$complete_user_list_for_dropbox = array();
 		if (api_get_setting('dropbox_allow_student_to_student')=='true' || $_user['status'] != STUDENT) {
-			$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], true, $_SESSION['id_session']);
+			$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], true, api_get_session_id());
 		}
-		$complete_user_list2 = CourseManager :: get_coach_list_from_course_code($course_info['code'], $_SESSION['id_session']);
+		$complete_user_list2 = CourseManager::get_coach_list_from_course_code($course_info['code'], api_get_session_id());
 		$complete_user_list_for_dropbox = array_merge($complete_user_list_for_dropbox, $complete_user_list2);
 	} else {
-		if(api_get_setting('dropbox_allow_student_to_student')=='true' || $_user['status'] != STUDENT) {
-			$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], true, $_SESSION['id_session']);
+		if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {		    
+			$complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], false, api_get_session_id());
 		} else {
-			$complete_user_list_for_dropbox = CourseManager :: get_teacher_list_from_course_code($course_info['code']);
+			$complete_user_list_for_dropbox = CourseManager :: get_teacher_list_from_course_code($course_info['code'], false);
 		}
 	}
-
-	foreach ($complete_user_list_for_dropbox as $k => $e) {
-	    $complete_user_list_for_dropbox[$k] = $e + array('lastcommafirst' => api_get_person_name($e['firstname'], $e['lastname']));
-	}
-
-	$complete_user_list_for_dropbox = TableSort::sort_table($complete_user_list_for_dropbox, 'lastcommafirst');
-
+	
+    if (!empty($complete_user_list_for_dropbox)) {
+    	foreach ($complete_user_list_for_dropbox as $k => $e) {
+    	    $complete_user_list_for_dropbox[$k] = $e + array('lastcommafirst' => api_get_person_name($e['firstname'], $e['lastname']));
+    	}
+    	$complete_user_list_for_dropbox = TableSort::sort_table($complete_user_list_for_dropbox, 'lastcommafirst');
+    }
+    
 	?>
 
 				<select name="recipients[]" size="
@@ -977,7 +979,7 @@ function feedback_form() {
 
 	// we now check if the other users have not delete this document yet. If this is the case then it is useless to see the
 	// add feedback since the other users will never get to see the feedback.
-	$sql = "SELECT * FROM ".$dropbox_cnf['tbl_person']." WHERE file_id='".Database::escape_string($_GET['id'])."'";
+	$sql = "SELECT * FROM ".$dropbox_cnf['tbl_person']." WHERE file_id = ".intval($_GET['id']);
 	$result = Database::query($sql);
 	$number_users_who_see_file = Database::num_rows($result);
 	if ($number_users_who_see_file > 1) {
@@ -985,7 +987,7 @@ function feedback_form() {
 		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea>';
 		$return .= '<input type="hidden" name="sec_token" value="'.$token.'"/>';
 		$return .= '<br /><button type="submit" class="add" name="store_feedback" value="'.get_lang('Ok').'"
-					onclick="javascript: document.form_tablename.attributes.action.value = document.location;">'.get_lang('AddComment').'</button>';
+					onclick="javascript: document.form_dropbox.attributes.action.value = document.location;">'.get_lang('AddComment').'</button>';
 	} else {
 		$return .= get_lang('AllUsersHaveDeletedTheFileAndWillNotSeeFeedback');
 	}

@@ -990,8 +990,7 @@ class CourseManager {
     public static function get_user_list_from_course_code($course_code, $with_session = true, $session_id = 0, $limit = '', $order_by = '') {
         global $_configuration;
         // variable initialisation
-        $session_id 	= intval($session_id);
-        $users			= array();
+        $session_id 	= intval($session_id);        
         $course_code 	= Database::escape_string($course_code);
         $where 			= array();
 
@@ -1036,30 +1035,33 @@ class CourseManager {
         if ($_configuration['multiple_access_urls']) {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
-        }
-
+        }        
         $sql .= ' '.$order_by.' '.$limit;
 
         $rs = Database::query($sql);
-
-        while ($user = Database::fetch_array($rs)) {
-            //$user_info = Database::get_user_info_from_id($user['user_id']);
-            $user_info = $user;
-            $user_info['status'] = $user['status'];
-
-            if (isset($user['role'])) {
-                $user_info['role'] = $user['role'];
+        $users          = array();
+        
+        if (Database::num_rows($rs)) {
+            while ($user = Database::fetch_array($rs)) {
+                //$user_info = Database::get_user_info_from_id($user['user_id']);
+                $user_info = $user;
+                $user_info['status'] = $user['status'];
+    
+                if (isset($user['role'])) {
+                    $user_info['role'] = $user['role'];
+                }
+                if (isset($user['tutor_id'])) {
+                    $user_info['tutor_id'] = $user['tutor_id'];
+                }
+    
+                if (!empty($session_id)) {
+                    $user_info['status_session'] = $user['status_session'];
+                }
+    
+                $users[$user['user_id']] = $user_info;
             }
-            if (isset($user['tutor_id'])) {
-                $user_info['tutor_id'] = $user['tutor_id'];
-            }
-
-            if (!empty($session_id)) {
-                $user_info['status_session'] = $user['status_session'];
-            }
-
-            $users[$user['user_id']] = $user_info;
         }
+        
         return $users;
     }
 

@@ -32,6 +32,7 @@ $filename = Database::escape_string($filename);
 $filename = replace_dangerous_char($filename, $strict = 'loose');// or strict
 $filename = disable_dangerous_file($filename);
 
+$title= str_replace('_',' ',$filename);
 //
 $documentPath = $filepath.$filename;
 
@@ -44,7 +45,7 @@ if (!file_exists($documentPath)){
 	$groupId=$_SESSION['_gid'];
 	$file_size = filesize($documentPath);
 	$relativeUrlPath=$dir;		
-	$doc_id = add_document($_course, $relativeUrlPath.$filename, 'file', filesize($documentPath), $filename);
+	$doc_id = add_document($_course, $relativeUrlPath.$filename, 'file', filesize($documentPath), $title);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
 
 }

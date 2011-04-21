@@ -196,7 +196,7 @@ function delete_test_course($course_code = 'TESTCOURSE') {
 	
 	if ($handle = opendir($path)) {
 		while (false !== ($file = readdir($handle))) {
-			if (strpos($file,$code)!==false) {
+			if (strpos($file,$course_code)!==false) {
 				if (is_dir($path.'/'.$file)) {
 					rmdirr($path.'/'.$file);
 				}

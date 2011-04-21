@@ -9,7 +9,6 @@ $language_file = array('agenda','group');
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 
-// setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -21,11 +20,9 @@ if(isset($_GET['id_session'])) {
 
 $this_section=SECTION_COURSES;
 
-//error_reporting(E_ALL);
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
-/* 	Resource linker (Patrick Cool, march 2004) */
-
+/* 	Resource linker */
 $_SESSION['source_type'] = 'Agenda';
 require_once '../resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -59,27 +56,7 @@ require_once 'agenda.inc.php';
 			3. showing or hiding the send-to-specific-groups-or-users form
 			4. filter user or group
 */
-// 1. show all or show current month?
-if (!$_SESSION['show']) {
-	$_SESSION['show']="showall";
-}
-if (!empty($_GET['action']) and $_GET['action']=="showcurrent") {
-	$_SESSION['show']="showcurrent";
-}
-if (!empty($_GET['action']) and $_GET['action']=="showall") {
-	$_SESSION['show']="showall";
-}
-/*
-// 2. sorting order (ASC or DESC)
-if (empty($_GET['sort']) and empty($_SESSION['sort'])) {
-	$_SESSION['sort']="DESC";
-}
-if (!empty($_GET['sort']) and $_GET['sort']=="asc") {
-	$_SESSION['sort']="ASC";
-}
-if (!empty($_GET['sort']) and $_GET['sort']=="desc") {
-	$_SESSION['sort']="DESC";
-}*/
+
 
 // 3. showing or hiding the send-to-specific-groups-or-users form
 $setting_allow_individual_calendar=true;
@@ -119,7 +96,6 @@ if (!empty($_GET['isStudentView']) and $_GET['isStudentView']=="false") {
 }*/
 
 $htmlHeadXtra[] = to_javascript();
-
 $htmlHeadXtra[] = user_group_filter_javascript();
 // this loads the javascript that is needed for the date popup selection
 $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" language=\"javascript\"></script>";
@@ -167,27 +143,15 @@ $tbl_group      		= Database::get_course_table(TABLE_GROUP);
 $tbl_groupUser  		= Database::get_course_table(TABLE_GROUP_USER);
 $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-
-
-/*   			ACCESS RIGHTS
-*/
+/*   			ACCESS RIGHTS*/
 // permission stuff - also used by loading from global in agenda.inc.php
 $is_allowed_to_edit = api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
 
-/*   			TITLE
-*/
-// Displaying the title of the tool
-//api_display_tool_title($nameTools);
 
 // Tool introduction
 Display::display_introduction_section(TOOL_CALENDAR_EVENT);
 
-// insert an anchor (top) so one can jump back to the top of the page
-echo '<a name="top"></a>';
-
-/*
-		MAIN SECTION
-*/
+/*		MAIN SECTION*/
 
 //setting the default year and month
 $select_year = '';
@@ -203,10 +167,14 @@ if(!empty($_GET['day'])) {
     $select_day = (int)$_GET['day'];
 }
 
-if (empty($select_year) && empty($select_month)) {
+if (empty($select_year)) {
 	$today = getdate();
-	$select_year = $today['year'];
-	$select_month = $today['mon'];
+	$select_year = $today['year'];	
+}
+
+if (empty($select_month)) {
+    $today = getdate();
+    $select_month = $today['mon'];
 }
 
 echo '<div class="actions">';
@@ -296,34 +264,32 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 }
 
 
-if ($_GET['view'] == 'month' || $_SESSION['view'] == 'month' ) {
-    
-} else {
+$agenda_items = get_calendar_items($select_month, $select_year);
+
+if ($_SESSION['view'] != 'month') {
     echo '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
-
-// THE LEFT PART
-if (empty($_GET['origin']) or $_GET['origin']!='learnpath') {
-	echo '<td width="220" height="19" valign="top">';
-	// the small calendar
-	$MonthName = $MonthsLong[$select_month -1];
-	$agenda_items=get_calendar_items($select_month, $select_year);
-	if (api_get_setting('display_mini_month_calendar') == 'true') {	   
-        display_minimonthcalendar($agenda_items, $select_month, $select_year, $MonthName);	   
-	}	
-	echo '<br />';
-	if (api_get_setting('display_upcoming_events') == 'true') {
-		display_upcoming_events();
-	}
-	echo '</td>';
-	echo '<td width="20" background="../img/verticalruler.gif">&nbsp;</td>';
+    
+    // THE LEFT PART
+    if (empty($_GET['origin']) or $_GET['origin']!='learnpath') {
+    	echo '<td width="220" height="19" valign="top">';
+    	// the small calendar    	
+    	if (api_get_setting('display_mini_month_calendar') == 'true') {	   
+            display_minimonthcalendar($agenda_items, $select_month, $select_year);	   
+    	}	
+    	echo '<br />';
+    	if (api_get_setting('display_upcoming_events') == 'true') {
+    		display_upcoming_events();
+    	}
+    	echo '</td>';
+    	echo '<td width="20" background="../img/verticalruler.gif">&nbsp;</td>';
+    }
+    
+    // THE RIGHT PART
+    echo '<td valign="top">';
+    echo '<div class="sort" style="float:left">';
+    echo '</div>';
 }
 
-// THE RIGHT PART
-echo '<td valign="top">';
-echo '<div class="sort" style="float:left">';
-echo '</div>';
-
-}
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true) )) {		
 	switch ($_GET['action']) {
 		case 'importical' :
@@ -333,14 +299,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					display_ical_import_form();
 					break;
 				}
-		        display_agenda_items($select_month, $select_year);
+		        display_agenda_items($agenda_items, $select_day);
 		    } else {
 		    	display_ical_import_form();
 		    }
 		    break;
 		case 'add' :
 			if ($_POST['submit_event']) {
-				display_agenda_items($select_month, $select_year);
+				display_agenda_items($agenda_items, $select_day);
 			} else {
 				show_add_form();
 			}
@@ -348,48 +314,43 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		case 'edit' :
 			if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
 				if ($_POST['submit_event']) {
-					display_agenda_items($select_month, $select_year);
+					display_agenda_items($agenda_items, $select_day);
 				} else {
 					$id=(int)$_GET['id'];
 					show_add_form($id);
 				}
 			} else {
-				display_agenda_items($select_month, $select_year);
+				display_agenda_items($agenda_items, $select_day);
 			}
-			break;
-		case 'delete':
-			display_agenda_items($select_month, $select_year);
 			break;
 		case 'showhide':
 			if(!empty($_GET['agenda_id'])) {
 				 display_one_agenda_item((int)$_GET['agenda_id']);
 			} else {
-				display_agenda_items($select_month, $select_year);
+				display_agenda_items($agenda_items, $select_day);
 			}
 			break;
+        case 'delete':
+        case 'delete_attach':    
 		case 'announce': 		
-			display_agenda_items($select_month, $select_year);
-			break;
-		case 'delete_attach': 	
-			display_agenda_items($select_month, $select_year);
+			display_agenda_items($agenda_items, $select_day);
 			break;
 	}
 }
 
 // this is for students and whenever the courseaministrator has not chosen any action. It is in fact the default behaviour
-if (!$_GET['action'] || $_GET['action']=='showall'  || $_GET['action']=='showcurrent' || $_GET['action']=="view") {    
-	if ($_GET['origin'] != 'learnpath') {
-		if (!$_SESSION['view'] || $_SESSION['view'] <> 'month') {
-            if(!empty($_GET['agenda_id'])) {
-                display_one_agenda_item($_GET['agenda_id']);
-            } else {                
-                $select_day;
-                $MonthName = $MonthsLong[$select_month -1];               
-                echo Display::tag('h2', $select_day.' '.$MonthName.' '.$select_year);
-                display_agenda_items($select_month, $select_year, $select_day);
-            }
+if (!$_GET['action'] || $_GET['action']=="view") {    
+	if ($_GET['origin'] != 'learnpath') {	    
+		if ($_SESSION['view'] == 'month') {
+		    display_monthcalendar($select_month, $select_year, $agenda_items);            
 		} else {
-			display_monthcalendar($select_month, $select_year);
+		  if(!empty($_GET['agenda_id'])) {
+                display_one_agenda_item($_GET['agenda_id']);
+            } else {
+                $month_name = $MonthsLong[$select_month -1];               
+                echo Display::tag('h2', $select_day.' '.$month_name.' '.$select_year);
+                display_agenda_items($agenda_items, $select_day);
+            }
 		}
 	} else {
 		display_one_agenda_item((int)$_GET['agenda_id']);

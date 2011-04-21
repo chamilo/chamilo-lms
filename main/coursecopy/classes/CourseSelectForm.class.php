@@ -17,6 +17,7 @@ class CourseSelectForm
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
 	function display_form($course, $hidden_fields = null, $avoid_serialize=false) {
+        global $charset;
 		$resource_titles[RESOURCE_EVENT] 				= get_lang('Events');
 		$resource_titles[RESOURCE_ANNOUNCEMENT] 		= get_lang('Announcements');
 		$resource_titles[RESOURCE_DOCUMENT] 			= get_lang('Documents');

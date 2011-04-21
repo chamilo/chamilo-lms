@@ -423,32 +423,33 @@ if (isset($_GET['action']) && $_GET['action'] == 'copytomyfiles' && api_get_sett
     $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system');
     $user_folder  = $my_path['dir'].'my_files/';
     $my_path = null;
-        if (!file_exists($user_folder)) {
-            @mkdir($user_folder, $permissions_for_new_directories, true);
+    if (!file_exists($user_folder)) {
+        $perm = api_get_permissions_for_new_directories();
+        @mkdir($user_folder, $perm, true);
+    }
+
+    $file = $sys_course_path.$_course['path'].'/document'.$clean_get_id;
+    $copyfile = $user_folder.basename($clean_get_id);
+
+    if (file_exists($copyfile)) {
+        $message = get_lang('CopyAlreadyDone').'</p><p>'.'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'&amp;action=copytomyfiles&amp;id='.$clean_get_id.'&amp;copy=yes">'.get_lang('Yes').'</a></p>';
+        if (!isset($_GET['copy'])){
+            Display::display_warning_message($message,false);
         }
-
-        $file = $sys_course_path.$_course['path'].'/document'.$clean_get_id;
-        $copyfile = $user_folder.basename($clean_get_id);
-
-        if (file_exists($copyfile)) {
-            $message = get_lang('CopyAlreadyDone').'</p><p>'.'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'">'.get_lang("No").'</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$curdirpath.'&amp;action=copytomyfiles&amp;id='.$clean_get_id.'&amp;copy=yes">'.get_lang('Yes').'</a></p>';
-            if (!isset($_GET['copy'])){
-                Display::display_warning_message($message,false);
-            }
-            if (Security::remove_XSS($_GET['copy']) == 'yes'){
-                if (!copy($file, $copyfile)) {
-                    Display::display_error_message(get_lang('CopyFailed'));
-                } else {
-                    Display::display_confirmation_message(get_lang('OverwritenFile'));
-                }
-            }
-        } else {
+        if (Security::remove_XSS($_GET['copy']) == 'yes'){
             if (!copy($file, $copyfile)) {
                 Display::display_error_message(get_lang('CopyFailed'));
             } else {
-                Display::display_confirmation_message(get_lang('CopyMade'));
+                Display::display_confirmation_message(get_lang('OverwritenFile'));
             }
         }
+    } else {
+        if (!copy($file, $copyfile)) {
+            Display::display_error_message(get_lang('CopyFailed'));
+        } else {
+            Display::display_confirmation_message(get_lang('CopyMade'));
+        }
+    }
 }
 
 //START ACTION MENU

@@ -87,6 +87,8 @@ class SimpleSocket extends SimpleStickyError {
      */
     function SimpleSocket($host, $port, $timeout, $block_size = 255) {
         $this->SimpleStickyError();
+        $error_number = 0;
+        $error = '';
         if (! ($this->_handle = $this->_openSocket($host, $port, $error_number, $error, $timeout))) {
             $this->_setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
             return;

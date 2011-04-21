@@ -38,6 +38,7 @@ class SimpleShell {
      */
     function execute($command) {
         $this->_output = false;
+        $ret = null;
         exec($command, $this->_output, $ret);
         return $ret;
     }

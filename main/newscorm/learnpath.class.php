@@ -5098,28 +5098,36 @@ class learnpath {
     public function display_resources() {
         global $_course; // TODO: Don't use globals.
 
-        $return .= '<div class="sectiontitle">' . get_lang('CreateNewStep') . '</div>';
-        $return .= '<div class="sectioncomment"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . '<img title="Nuevo documento" src="../img/new_doc.gif" alt="Nuevo documento"/> ' . get_lang('NewDocument') . '</a></div>'; // TODO: A hardcoded Spanish text is here.
-        $return .= '<div class="sectiontitle">' . get_lang('UseAnExistingResource') . '</div>';
-        $return .= '<div class="sectioncomment">';
+        /*$return .= '<div class="sectiontitle">' . get_lang('CreateNewStep') . '</div>';
+        $return .= '<div class="sectioncomment"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . '<img title="Nuevo documento" src="../img/new_doc.gif" alt="Nuevo documento"/> ' . get_lang('NewDocument') . '</a></div>';
+        $return .= '<div class="sectiontitle">' . get_lang('UseAnExistingResource') . '</div>';*/
+        
+        $new_document = Display::return_message(Display::url(get_lang('NewDocument') , api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id));
 
-        /* Get all the docs. */
-        $return .= $this->get_documents();
+        //Get all the docs
+        $documents = $this->get_documents();
 
-        /* Get all the exercises. */
-        $return .= $this->get_exercises();
+        //Get all the exercises
+        $exercises = $this->get_exercises();
 
-        /* Get all the links. */
-        $return .= $this->get_links();
+        // Get all the links
+        $links = $this->get_links();
 
-        /* Get al the student publications. */
-        $return .= $this->get_student_publications();
+        //Get al the student publications
+        $works = $this->get_student_publications();
 
-        /* Get al the forums. */
-        $return .= $this->get_forums();
+        //Get al the forums
+        $forums = $this->get_forums();
 
-        $return .= '</div>';
-
+        $headers = array( Display::return_icon('new_doc.png', get_lang('NewDocument'), array(), 64),
+                                Display::return_icon('folder_document.png', get_lang('Documents'), array(), 64), 
+                                Display::return_icon('quiz.png', get_lang('Exercises'), array(), 64),
+                                Display::return_icon('links.png', get_lang('Links'), array(), 64),
+                                Display::return_icon('works.png', get_lang('Works'), array(), 64),
+                                Display::return_icon('forum.png', get_lang('Forums'), array(), 64),
+                                );
+        
+        echo Display::tabs($headers, array($new_document, $documents, $exercises, $links, $works, $forums), 'resource_tab');
         return $return;
     }
 
@@ -7404,7 +7412,7 @@ class learnpath {
         $added_slash = ($path == '/') ? '' : '/';
 
         //condition for the session
-        $current_session_id = api_get_session_id();
+        $current_session_id = api_get_session_id(); 
         $condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '{$_course[id]}')))";
 
         $sql_doc = "SELECT docs.*
@@ -7414,12 +7422,10 @@ class learnpath {
                         AND docs.path NOT LIKE '%_DELETED_%'
                         AND last.tool = '".TOOL_DOCUMENT."' $condition_session ORDER BY docs.path ASC";
 
-        //$sql_doc = "SELECT * FROM $tbl_doc WHERE path NOT LIKE '%_DELETED_%' ORDER BY path ASC";
-
         $res_doc = Database::query($sql_doc);
 
-        $return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '>'.Display::return_icon('folder_document.gif',get_lang('Documents'),array('style'=>'margin-right:5px;', 'height' => '16px')).' '. get_lang('Documents') . '</div>';
-        $return .= '<div class="lp_resource_elements" id="resDoc">';
+        //$return = '<div class="lp_resource_header"' ." onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '>'.Display::return_icon('folder_document.gif',get_lang('Documents'),array('style'=>'margin-right:5px;', 'height' => '16px')).' '. get_lang('Documents') . '</div>';
+        $return = '<div class="lp_resource" id="resDoc">';
         $resources = Database::store_result($res_doc);
         $resources_sorted = array();
 
@@ -7448,13 +7454,11 @@ class learnpath {
             } else {
                 eval ('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');
             }
-
         }
         $return .= $this->write_resources_tree($resources_sorted);
         if (Database :: num_rows($res_doc) == 0) {
             $return .= '<div class="lp_resource_element">' . get_lang('NoDocuments') . '</div>';
         }
-
         $return .= '</div>';
         return $return;
     }
@@ -7536,21 +7540,14 @@ class learnpath {
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 
-        $sql_quiz = "
-                    SELECT *
-                    FROM " . $tbl_quiz . "
-                    WHERE active<>'-1' $condition_session
-                    ORDER BY title ASC";
-
-        $sql_hot = "SELECT * FROM " . $tbl_doc . " " .
-        " WHERE path LIKE '" . $uploadPath . "/%/%htm%'  $condition_session " .
-        " ORDER BY id ASC";
+        $sql_quiz = "SELECT * FROM " . $tbl_quiz . " WHERE active<>'-1' $condition_session ORDER BY title ASC";
+        $sql_hot = "SELECT * FROM $tbl_doc WHERE path LIKE '" . $uploadPath . "/%/%htm%'  $condition_session ORDER BY id ASC";
 
         $res_quiz = Database::query($sql_quiz);
         $res_hot = Database::query($sql_hot);
 
-        $return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' ><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.gif" style="margin-right:5px;" title="" />' . get_lang('Quiz') . '</div>';
-        $return .= '<div class="lp_resource_elements" id="resExercise">';
+        //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resExercise').style.display == 'block') {document.getElementById('resExercise').style.display = 'none';} else {document.getElementById('resExercise').style.display = 'block';}\"" . ' ><img align="left" alt="" src="../img/lp_' . TOOL_QUIZ . '.gif" style="margin-right:5px;" title="" />' . get_lang('Quiz') . '</div>';
+        $return .= '<div class="lp_resource" id="resExercise">';
 
         while ($row_hot = Database :: fetch_array($res_hot)) {
             $return .= '<div class="lp_resource_element">';
@@ -7593,8 +7590,8 @@ class learnpath {
         $sql_link = "SELECT * FROM $tbl_link $condition_session ORDER BY title ASC";
         $res_link = Database::query($sql_link);
 
-        $return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_LINK . '.gif" style="margin-right:5px;" title="" />' . get_lang('Links') . '</div>';
-        $return .= '<div class="lp_resource_elements" id="resLink">';
+        //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_LINK . '.gif" style="margin-right:5px;" title="" />' . get_lang('Links') . '</div>';
+        $return .= '<div class="lp_resource" id="resLink">';
 
         while ($row_link = Database :: fetch_array($res_link)) {
             $return .= '<div class="lp_resource_element">';
@@ -7627,8 +7624,8 @@ class learnpath {
         $condition_session = api_get_session_condition($session_id, false);
         $sql_student = "SELECT * FROM $tbl_student  $condition_session ORDER BY title ASC";
         $res_student = Database::query($sql_student);
-        $return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.gif" style="margin-right:5px;" title="" />' . get_lang('Student_publication') . '</div>';
-        $return .= '<div class="lp_resource_elements" id="resStudent">';
+        //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.gif" style="margin-right:5px;" title="" />' . get_lang('Student_publication') . '</div>';
+        $return .= '<div class="lp_resource" id="resStudent">';
         $return .= '<div class="lp_resource_element">';
         $return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
         $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
@@ -7642,8 +7639,8 @@ class learnpath {
      * @return string
      */
     public function get_forums() {
-        include '../forum/forumfunction.inc.php';
-        include '../forum/forumconfig.inc.php';
+        require_once '../forum/forumfunction.inc.php';
+        require_once '../forum/forumconfig.inc.php';
         global $table_forums, $table_threads, $table_posts, $table_item_property, $table_users;
         $table_forums = Database :: get_course_table(TABLE_FORUM);
         $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
@@ -7652,8 +7649,8 @@ class learnpath {
         $table_users = Database :: get_main_table(TABLE_MAIN_USER);
         $a_forums = get_forums();
 
-        $return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . '><img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />' . get_lang('Forums') . '</div>';
-        $return .= '<div class="lp_resource_elements"  style="border:1px solid #999999;" id="forums">';
+        //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('forums').style.display == 'block') {document.getElementById('forums').style.display = 'none';} else {document.getElementById('forums').style.display = 'block';}\"" . '><img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />' . get_lang('Forums') . '</div>';
+        $return .= '<div class="lp_resource" id="forums">';
 
         foreach ($a_forums as $forum) {
             $return .= '<div class="lp_resource_element">';
@@ -7668,8 +7665,7 @@ class learnpath {
                                             document.getElementById("forum_"+forum_id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'add.gif";
                                         }
                                     }
-                                    </script>
-                                    ';
+                                    </script>';
 
             if (!empty($forum['forum_id'])) {
             $return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';

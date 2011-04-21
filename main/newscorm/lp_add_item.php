@@ -33,6 +33,8 @@ $language_file = 'learnpath';
 
 /* Header and action code */
 
+
+
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 
@@ -136,6 +138,7 @@ $_SESSION['oLP']->get_js_dropdown_array() .
 '});'."\n" .
 '</script>';
         
+$htmlHeadXtra[] =  api_get_jquery_ui_js(); //jQuery
 
 /* Constants and variables */
 
@@ -221,7 +224,6 @@ $suredel = trim(get_lang('AreYouSureToDelete'));
 //$suredelstep = trim(get_lang('AreYouSureToDeleteSteps'));
 ?>
 <script type='text/javascript'>
-/* <![CDATA[ */
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
     str=str.replace(/\\"/g,'"');
@@ -229,18 +231,17 @@ function stripslashes(str) {
     str=str.replace(/\\0/g,'\0');
     return str;
 }
-function confirmation(name)
-{
+function confirmation(name) {
     name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?"))
-    {
+    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
+$(function() {;
+    $('#resource_tab').tabs();
+});
 </script>
 <?php
 

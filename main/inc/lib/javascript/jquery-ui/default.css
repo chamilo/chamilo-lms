@@ -78,11 +78,23 @@
 	height:15px;
 }
 
+/* LP add items */
+#resource_tab.ui-tabs .ui-tabs-nav {
+    height: 77px;
+}
+
+#resource_tab.ui-tabs .ui-tabs-nav li {
+    height: 75px;
+	border:1px solid #ccc;
+	 
+}
+
+#resource_tab.ui-tabs-nav li {
+    
+}
+
 
 /*  cupertino */
 
 
 /* ui-lightness */
-
- * 
- */

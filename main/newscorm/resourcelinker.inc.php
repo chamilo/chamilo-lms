@@ -1697,7 +1697,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
             $link .= '';
             break;
         case TOOL_COURSE_DESCRIPTION:
-            $link .= $main_dir_path.'course_description?origin='.$learnpath;
+            $link .= $main_dir_path.'course_description?origin=learnpath';
             break;
         case TOOL_GROUP:
             $link .= $main_dir_path.'group/group.php?origin='.$origin;

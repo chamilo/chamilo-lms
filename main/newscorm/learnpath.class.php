@@ -5128,7 +5128,7 @@ class learnpath {
                                 );
         
         echo Display::tabs($headers, array($new_document, $documents, $exercises, $links, $works, $forums), 'resource_tab');
-        return $return;
+        return true;
     }
 
     /**

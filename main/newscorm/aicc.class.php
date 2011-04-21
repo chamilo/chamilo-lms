@@ -764,7 +764,7 @@ class aicc extends learnpath {
         $sec = $null;
         $f = @file_get_contents($f);
         $f = api_convert_encoding($f, api_get_system_encoding(), $this->config_encoding);
-        $f = preg_split('/\r?\n/', $s);
+        $f = preg_split('/\r?\n/', $f);
         for ($i = 0; $i < @count($f); $i++) {
             $newsec = 0;
             $w = @trim($f[$i]);

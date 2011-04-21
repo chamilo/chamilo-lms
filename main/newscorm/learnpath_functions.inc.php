@@ -234,7 +234,6 @@ function movemodule($direction, $id) {
             Database::query($sql1);
             Database::query($sql2);
             unset ($this_cat_order);
-            unset ($this_cat_id);
             unset ($next_cat_order);
             unset ($next_cat_id);
             break;
@@ -286,7 +285,7 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
         $sql = "INSERT INTO $tbl_learnpath_chapter
                         (lp_id, chapter_name, chapter_description, display_order)
                         VALUES ('".domesticate($learnpath_id)."',
-                        '".domesticate(htmlspecialchars($chapter_name))."',
+                        '".domesticate(htmlspecialchars($name))."',
                         '".domesticate(htmlspecialchars($chapter_description))."',
                         $new_order )";
         $result = Database::query($sql);
@@ -296,10 +295,9 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
         $id = Database :: insert_id();
     } elseif ($type === 'item') {
         $sql = "INSERT INTO $tbl_learnpath_item
-                        (parent_item_id, item_type, item_id, display_order)
+                        (parent_item_id, item_type, display_order)
                         VALUES ('".domesticate($parent_id)."',
-                        '".domesticate(htmlspecialchars($item_type))."',
-                        '".domesticate(htmlspecialchars($item_id))."',
+                        '".domesticate(htmlspecialchars($type))."',
                         $new_order )";
         $result = Database::query($sql);
         if ($result === false) {
@@ -557,7 +555,7 @@ function display_all_learnpath() {
         if (is_allowed_to_edit()) {
             echo "<td bgcolor=\"$color2\" align=center><a href='learnpath_handler.php?lp_id={$row['lp_id']}&action=add&type=learnpathcategory'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src='../img/0.gif' width='13' height='13' border='0' title='$lang_add_learnpath_chapter_to_path'></a></td>";
             echo "<td bgcolor=\"$color2\" align=center><a href='".api_get_self()."?action=editpath&id=".$row['lp_id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/edit.gif\" border=\"0\" title=\"$lang_edit_learnpath\"></a></td>";
-            echo "<td bgcolor=\"$color2\" align=center><a href='".api_get_self()."?action=deletepath&id=".$row['lp_id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath\" onclick=\"javascript: return confirmation('".$row2['learnpath_name']."');\"></a></td>";
+            echo "<td bgcolor=\"$color2\" align=center><a href='".api_get_self()."?action=deletepath&id=".$row['lp_id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath\" onclick=\"javascript: return confirmation('".$row['learnpath_name']."');\"></a></td>";
             $id = $row['lp_id'];
             $sql2 = "SELECT * FROM $tbl_learnpath_main where lp_id=$id";
             $result2 = Database::query($sql2);
@@ -1167,7 +1165,7 @@ function exporttofile($filename, $LPname, $LPid, $content) {
  */
 function export_exercise($item_id) {
 
-    global $expdir, $_course, $_configuration, $_SESSION, $_SERVER, $language_interface, $langExerciseNotFound, $langQuestion, $langOk;
+    global $expdir, $_course, $_configuration, $_SESSION, $_SERVER, $language_interface, $langExerciseNotFound, $langQuestion, $langOk, $origin, $questionNum;
 
     $exerciseId = $item_id;
 
@@ -1188,23 +1186,18 @@ function export_exercise($item_id) {
     /* Clears the exercise session */
     if (isset ($_SESSION['objExercise'])) {
         api_session_unregister('objExercise');
-        unset ($objExercise);
     }
     if (isset ($_SESSION['objQuestion'])) {
         api_session_unregister('objQuestion');
-        unset ($objQuestion);
     }
     if (isset ($_SESSION['objAnswer'])) {
         api_session_unregister('objAnswer');
-        unset ($objAnswer);
     }
     if (isset ($_SESSION['questionList'])) {
         api_session_unregister('questionList');
-        unset ($questionList);
     }
     if (isset ($_SESSION['exerciseResult'])) {
         api_session_unregister('exerciseResult');
-        unset ($exerciseResult);
     }
 
     // If the object is not in the session:
@@ -1214,7 +1207,7 @@ function export_exercise($item_id) {
 
         $sql = "SELECT title,description,sound,type,random,active FROM $TBL_EXERCISES WHERE id='$exerciseId'";
         // If the specified exercise doesn't exist or is disabled:
-        if (!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit && ($origin != 'learnpath'))) {
+        if (!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !api_is_allowed_to_edit() && ($origin != 'learnpath'))) {
             die($langExerciseNotFound);
         }
 
@@ -1357,21 +1350,25 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
     require_once api_get_path(LIBRARY_PATH).'database.lib.php';
     //$tbl_learnpath_item     = Database::get_course_learnpath_item_table();
 
-    include_once 'exercise.class.php';
-    include_once 'question.class.php';
-    include_once 'answer.class.php';
-    include_once 'exercise.lib.php';
+    $libp = api_get_path(SYS_CODE_PAH);
+    include_once $libp.'exercice/exercise.class.php';
+    include_once $libp.'question.class.php';
+    include_once $libp.'answer.class.php';
+    include_once $libp.'exercise.lib.php';
 
-    include_once '../lang/english/announcements.inc.php'; //this line is here only for $langPubl in announcements
-    include_once '../lang/'.$language_interface.'/announcements.inc.php'; //this line is here only for $langPubl in announcements
-    include_once '../lang/english/course_description.inc.php'; //this line is here only for $langThisCourseDescriptionIsEmpty
-    include_once '../lang/'.$language_interface.'/course_description.inc.php'; //				 -||-
-    include_once '../lang/english/resourcelinker.inc.php';
-    include_once '../lang/'.$language_interface.'/resourcelinker.inc.php';
-    include_once '../lang/english/learnpath.inc.php';
-    include_once '../lang/'.$language_interface.'/learnpath.inc.php';
-    include_once '../lang/english/exercice.inc.php';
-    include_once '../lang/'.$language_interface.'/exercice.inc.php';
+    $langLasting = '';//avoid code parser warning
+    include_once $libp.'lang/english/announcements.inc.php'; //this line is here only for $langPubl in announcements
+    include_once $libp.'lang/'.$language_interface.'/announcements.inc.php'; //this line is here only for $langPubl in announcements
+    include_once $libp.'lang/english/agenda.inc.php'; //this line is here only for $langLasting
+    include_once $libp.'lang/'.$language_interface.'/agenda.inc.php'; //this line is here only for $langLasting
+    include_once $libp.'lang/english/course_description.inc.php'; //this line is here only for $langThisCourseDescriptionIsEmpty
+    include_once $libp.'lang/'.$language_interface.'/course_description.inc.php'; //				 -||-
+    include_once $libp.'lang/english/resourcelinker.inc.php';
+    include_once $libp.'lang/'.$language_interface.'/resourcelinker.inc.php';
+    include_once $libp.'lang/english/learnpath.inc.php';
+    include_once $libp.'lang/'.$language_interface.'/learnpath.inc.php';
+    include_once $libp.'lang/english/exercice.inc.php';
+    include_once $libp.'lang/'.$language_interface.'/exercice.inc.php';
 
     include_once '../resourcelinker/resourcelinker.inc.php';
 
@@ -1470,7 +1467,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
                 if ($myrow['duration'] == '') {
                     $expcontent .= "<br />";
                 } else {
-                    $expcontent .= " / ".$lang_lasting." ".$myrow['duration']."<br />";
+                    $expcontent .= " / ".$langLasting." ".$myrow['duration']."<br />"; //langLasting comes from lang/x/agenda.inc.php
                 }
                 // 3.2.5 Write the title.
                 $expcontent .= $myrow['title'];

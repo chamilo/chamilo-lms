@@ -242,7 +242,7 @@ class CourseRestorer
 		    		if (!empty($document->title))  {
 		    		    $title      = $document->title;
 		    		} else {
-		    		    $title      = basename($new);
+		    		    $title      = basename($document->path);
 		    		}
 		    		$new        = substr($document->path, 8);
 

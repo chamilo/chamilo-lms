@@ -33,6 +33,7 @@ if (($refine != 0) && ($refine != 1)) { $refine = 0; }
 // $lim_start set in search_function.php file
 settype($limite,'integer');
 if (($limite != 10) && ($limite != 30) && ($limite != 100)) { $limite = SEARCH_DEFAULT_LIMIT; }
+$limit_start = 0;
 settype($limit_start,'integer');
 if (isset($limit_start)) { $limit_start = $limite * floor($limit_start / $limite); }
 if (($browse != 0) && ($browse != 1)) { $browse = 0; }
@@ -53,7 +54,7 @@ $timer = new phpdigTimer('html');
 $timer->start('All');
 
 // init variables
-global $phpdig_words_chars;
+global $phpdig_words_chars,$maxweight;
 settype($maxweight,'integer');
 $ignore = '';
 $ignore_common = '';

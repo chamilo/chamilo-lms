@@ -156,7 +156,7 @@ if ($ereg) {
     return $string;
 }
 else {
-    return $result;
+    return null;
 }
 }
 
@@ -169,7 +169,7 @@ if (!isset($phpdigEncode[$encoding])) {
 }
 // exceptions
 if ($encoding == 'iso-8859-1') {
-    $chaine = str_replace('Æ','ae',str_replace('æ','ae',$chaine));
+    $chaine = str_replace('ï¿½','ae',str_replace('ï¿½','ae',$chaine));
 }
 return( strtr( $chaine,$phpdigEncode[$encoding]['str'],$phpdigEncode[$encoding]['tr']) );
 }
@@ -217,7 +217,7 @@ foreach($subststrings as $encoding => $subststring) {
 }
 
 //=================================================
-//epure a string from all non alnum words (words can contain &__&ßðþ character)
+//epure a string from all non alnum words (words can contain &__&ï¿½ï¿½ï¿½ character)
 function phpdigEpureText($text,$min_word_length=2,$encoding=PHPDIG_ENCODING) {
 global $phpdig_words_chars;
 
@@ -225,7 +225,7 @@ $text = phpdigStripAccents(strtolower ($text));
 //no-latin upper to lowercase - now islandic
 switch (PHPDIG_ENCODING) {
    case 'iso-8859-1':
-   $text = strtr( $text,'ÐÞ','ðþ');
+   $text = strtr( $text,'ï¿½ï¿½','ï¿½ï¿½');
    break;
 }
 

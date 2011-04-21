@@ -106,7 +106,7 @@ $originalHdrInfo = $hdrInfo;
 
 function slurpmanifest()
 {
-    global $baseWorkDir, $workWith, $sdisub, $mfContents, $xht_doc;
+    global $baseWorkDir, $workWith, $sdisub, $mfContents, $xht_doc, $charset;
     $fmff = $baseWorkDir .'/'. $workWith . '/' . MFFNAME . $sdisub . MFFDEXT;
     if (file_exists($fmff))
     {
@@ -236,7 +236,7 @@ elseif ($smo == get_lang('Import'))
     function store_md_and_traverse_subitems($mfdocId, $level, $counter,
             $contextElem, $treeElem, $parentElem)
     {
-        global $_user, $xht_doc, $mdStore, $mdObj, $sdisub;
+        global $_user, $xht_doc, $mdStore, $mdObj, $sdisub, $charset;
 
         //  $contextElem -> @identifier, metadata/lom
         //  $treeElem ->    title, items

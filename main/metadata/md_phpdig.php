@@ -157,7 +157,7 @@ function index_words($site_id, $path, $file, $first_words, $keywords)
         Database::query("INSERT INTO " . PHPDIG_DB_PREFIX .
             "engine (spider_id,key_id,weight) VALUES ($spider_id,$key_id,$w)");
     }
-
+    global $charset;
     echo '<tr><td>', htmlspecialchars($file, ENT_QUOTES, $charset), '</td><td>(spider_id ',
         $spider_id, '):</td><td align="right">', count($keywords), ' kwds, ',
         $new , ' new</td></tr>', "\n";

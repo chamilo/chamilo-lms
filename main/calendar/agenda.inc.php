@@ -1783,54 +1783,35 @@ function display_agenda_items($agenda_items, $day = false) {
     }
     
     if ($_GET['sort'] == 'asc') {
-        $sort = 'desc';
+        $sort_inverse = 'desc';
+        $sort = 'asc';
     }  else {
-        $sort = 'asc';    
+        $sort_inverse = 'asc';
+        $sort = 'desc';    
     }
     
     if ($_GET['col'] == 'end') {    
         $sort_item = 'end_date_tms';
+        $col = 'end';        
     } else {
         $sort_item = 'start_date_tms';
+        $col = 'start';
     }
-    
-    //Ordering 
-    //var_dump($agenda_items);
-    
-    /*$ordering_array = array();
-    foreach ($agenda_items as $item) {
-        $date = intval(api_strtotime($item['start_date']));
-        if ($sort_item == 'end') {
-            if (!empty($item['end_date'] && ))
-            $date = intval(api_strtotime($item['end_date']));    
-        }
-        $ordering_array[$date] = $item;        
-    }
-    
-    if ($sort == 'ASC') {
-        krsort($ordering_array);    
-    } else {
-        ksort($ordering_array);
-    }*/
-    
+
     $agenda_items = msort($agenda_items, $sort_item, $sort);
-    
-    //var_dump($sort_item);
-  	//$agenda_items = $ordering_array;
   	
     //DISPLAY: NO ITEMS
     if (empty($agenda_items)) {
         echo Display::display_warning_message(get_lang('NoAgendaItems'));
-    } else {
-                
+    } else {                
         echo '<table class="data_table">';
         $th = Display::tag('th', get_lang('Title'));
         //$th .= Display::tag('th', get_lang('Content'));
         
         $url = api_get_self().'?'.api_get_cidreq().'&month='.intval($_GET['month']).'&year='.intval($_GET['year']).'&day='.intval($_GET['day']); 
     
-        $th .= Display::tag('th', Display::url(get_lang('StartTimeWindow'), $url.'&sort='.$sort.'&col=start'));
-        $th .= Display::tag('th', Display::url(get_lang('EndTimeWindow'), $url.'&sort='.$sort.'&col=end'));
+        $th .= Display::tag('th', Display::url(get_lang('StartTimeWindow'), $url.'&sort='.$sort_inverse.'&col=start'));
+        $th .= Display::tag('th', Display::url(get_lang('EndTimeWindow'), $url.'&sort='.$sort_inverse.'&col=end'));
         
         if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
             if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id']))) {
@@ -1906,40 +1887,40 @@ function display_agenda_items($agenda_items, $day = false) {
         		if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id']))) {
                     
         			// a coach can only delete an element belonging to his session
-    				$mylink = api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;id='.$myrow['id'].'&amp;';
+    				$mylink = api_get_self().'?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'&id='.$myrow['id'].'&sort='.$sort.'&col='.$col.'&';
     	    	
     	    		// edit
-        			echo '<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=edit&amp;id_attach='.$attachment_list['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
+        			echo '<a href="'.$mylink.api_get_cidreq()."&toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&action=edit&id_attach='.$attachment_list['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
     	    		echo Display::return_icon('edit.png', get_lang('ModifyCalendarItem'),'',22)."</a>";
     
-        			echo '<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=announce" title="'.get_lang("AddAnnouncement").'">';
+        			echo '<a href="'.$mylink.api_get_cidreq()."&toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&action=announce" title="'.get_lang("AddAnnouncement").'">';
         			echo Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), array (),22)."</a> ";
     
-    	    		if ($myrow['visibility']==1) {
-    	    			$image_visibility="visible";
-    					$text_visibility=get_lang("Hide");
+    	    		if ($myrow['visibility'] == 1) {
+    	    			$image_visibility = "visible";
+    					$text_visibility = get_lang("Hide");
     					$next_action = 0;
     	    		} else {
-    	    			$image_visibility="invisible";
-    					$text_visibility=get_lang("Show");
+    	    			$image_visibility = "invisible";
+    					$text_visibility = get_lang("Show");
     					$next_action = 1;
     	    		}
-        			echo '<a href="'.$mylink.api_get_cidreq().'&amp;sort=asc&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;action=showhide&amp;next_action='.$next_action.'" title="'.$text_visibility.'">'.Display::return_icon($image_visibility.'.png', $text_visibility,'',22).'</a> ';    			
-        			echo "<a href=\"".$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
+        			echo '<a href="'.$mylink.api_get_cidreq().'&toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&action=showhide&next_action='.$next_action.'" title="'.$text_visibility.'">'.Display::return_icon($image_visibility.'.png', $text_visibility,'',22).'</a> ';    			
+        			echo "<a href=\"".$mylink.api_get_cidreq()."&toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
                     echo Display::return_icon('delete.png', get_lang('Delete'),'',22)."&nbsp;</a>";       
                                                                      
     			}
     			    
-    	    	$mylink = 'ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'];
-    			//echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
-    	    	//echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
-    	    	//echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
+    	    	$mylink = 'ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'];
+    			//echo '<a class="ical_export" href="'.$mylink.'&class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
+    	    	//echo '<a class="ical_export" href="'.$mylink.'&class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
+    	    	//echo '<a class="ical_export" href="'.$mylink.'&class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
     		    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('printer.png', get_lang('Print'),'',22).'</a>&nbsp;';
     		    echo '</td>';    		      
     		} else {    		    
                 if ($is_repeated && (api_is_allowed_to_edit(false,true)) || (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) ) {
                     echo '<td align="center">';
-                    echo get_lang('RepeatedEvent'),' <a href="',api_get_self(),'?',api_get_cidreq(),'&amp;agenda_id=',$myrow['parent_event_id'],'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a>';
+                    echo get_lang('RepeatedEvent'),' <a href="',api_get_self(),'?',api_get_cidreq(),'&agenda_id=',$myrow['parent_event_id'],'" alt="',get_lang('RepeatedEventViewOriginalEvent'),'">',get_lang('RepeatedEventViewOriginalEvent'),'</a>';
                     echo '</td>';                  
                 }    
                  
@@ -2102,7 +2083,7 @@ function display_one_agenda_item($agenda_id) {
             echo '<th style="text-align:right">';
             if (!$repeat && api_is_allowed_to_edit(false,true)) {
                 // edit
-                $mylink = api_get_self()."?".api_get_cidreq()."&amp;origin=".Security::remove_XSS($_GET['origin'])."&amp;id=".$myrow['id'];
+                $mylink = api_get_self()."?".api_get_cidreq()."&origin=".Security::remove_XSS($_GET['origin'])."&id=".$myrow['id'];
                 if (!empty($_GET['agenda_id'])) {
                     // rather ugly hack because the id parameter is already set above but below we set it again
                     $mylink .= '&agenda_id='.Security::remove_XSS($_GET['agenda_id']).'&id='.Security::remove_XSS($_GET['agenda_id']);
@@ -2117,16 +2098,16 @@ function display_one_agenda_item($agenda_id) {
                 
                 echo '<a href="'.$mylink.'&action=showhide&next_action='.$next_action.'">'.Display::return_icon($image_visibility.'.png', get_lang('Visible'),'',22).'</a>';
                 
-                echo    "<a href=\"".$mylink."&amp;action=edit\">",
+                echo    "<a href=\"".$mylink."&action=edit\">",
                         Display::return_icon('edit.png', get_lang('ModifyCalendarItem'),'',22), "</a>",
-                        "<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
+                        "<a href=\"".$mylink."&action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\">",
                         Display::return_icon('delete.png', get_lang('Delete'),'',22),"</a>";
                         
             }
-            $mylink = 'ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'];
-            //echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
-            //echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
-            //echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
+            $mylink = 'ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'];
+            //echo '<a class="ical_export" href="'.$mylink.'&class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
+            //echo '<a class="ical_export" href="'.$mylink.'&class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
+            //echo '<a class="ical_export" href="'.$mylink.'&class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
             echo '<a href="javascript: void(0);" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('printer.png', get_lang('Print'),'',22).'</a>&nbsp;';
             echo "</th>";               
         }
@@ -2171,7 +2152,7 @@ function display_one_agenda_item($agenda_id) {
         echo Display::return_icon('attachment.gif',get_lang('Attachment'));
         echo '<a href="'.$full_file_name.'"> '.$user_filename.'</a>';
          if (api_is_allowed_to_edit()) {
-            echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a><br />';
+            echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'&action=delete_attach&id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'),'',22).'</a><br />';
         }
         echo '<br /><span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
         echo '</td></tr>';           
@@ -2320,7 +2301,7 @@ function show_add_form($id = '') {
 
 	<!-- START OF THE FORM  -->
 
-	<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
+	<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].api_get_cidreq()."&sort=asc&toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
 	<input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
 	<input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
 	<input type="hidden" name="id_attach" value="<?php echo Security::remove_XSS($_REQUEST['id_attach']); ?>" />
@@ -2410,7 +2391,7 @@ function show_add_form($id = '') {
 				</select>
 
 				<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
-				&nbsp;<?php echo get_lang('StartTime').": \n"; ?>&nbsp;
+				&nbsp;<?php echo get_lang('StartTime').": "; ?>&nbsp;
 					<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
 						<!-- <option value="--">--</option> -->
 						<?php
@@ -2488,7 +2469,7 @@ function show_add_form($id = '') {
 								} ?>
 						</select>
 					<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
-					&nbsp;<?php echo get_lang('EndTime').": \n"; ?>&nbsp;
+					&nbsp;<?php echo get_lang('EndTime').": "; ?>&nbsp;
 
 						<select name="end_fhour">
 							<!-- <option value="--">--</option> -->
@@ -2773,7 +2754,7 @@ function get_agendaitems($month, $year) {
 		$agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
 		$agendaday = intval($agendaday_string);
 		$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT);
-		$URL = api_get_path(WEB_CODE_PATH).'calendar/agenda.php?cidReq='.$mycourse['id']."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+		$URL = api_get_path(WEB_CODE_PATH).'calendar/agenda.php?cidReq='.$mycourse['id']."&day=$agendaday&month=$month&year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 		$items[$agendaday][$item['start_time']] .= '<i>'.$time.'</i> <a href="'.$URL.'" title="'.$mycourse['name'].'">'.$mycourse['official_code'].'</a> '.$item['title'].'<br />';
 	}
 
@@ -2926,8 +2907,8 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	// we are loading all the calendar items of all the courses for today
 	echo "<table class=\"data_table\">";
 	// the forward and backwards url
-	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=day&amp;day=".date("j", $previousday)."&amp;month=".date("n", $previousday)."&amp;year=".date("Y", $previousday);
-	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=day&amp;day=".date("j", $nextday)."&amp;month=".date("n", $nextday)."&amp;year=".date("Y", $nextday);
+	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($_GET['courseCode'])."&action=view&view=day&day=".date("j", $previousday)."&month=".date("n", $previousday)."&year=".date("Y", $previousday);
+	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($_GET['courseCode'])."&action=view&view=day&day=".date("j", $nextday)."&month=".date("n", $nextday)."&year=".date("Y", $nextday);
 	// The title row containing the day
 	echo "<tr>", "<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>", "<th>";
 	echo $DaysLong[$day_of_the_week]." ".date("j", $today)." ".$MonthsLong[date("n", $today) - 1]." ".date("Y", $today);
@@ -3006,8 +2987,8 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	$timestamp_last_date_of_week = $today + ((7 - $day_of_the_week) * 24 * 60 * 60); // timestamp of the sunday of this week
 	*/
 
-	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=week&amp;week=". ($week_number -1);
-	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=week&amp;week=". ($week_number +1);
+	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($_GET['courseCode'])."&action=view&view=week&week=". ($week_number -1);
+	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&courseCode=".Security::remove_XSS($_GET['courseCode'])."&action=view&view=week&week=". ($week_number +1);
 
 	echo '<table class="data_table">';
 	// The title row containing the the week information (week of the year (startdate of week - enddate of week)
@@ -3147,7 +3128,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day) {
 			} else {
 				$agenda_link = Display::return_icon('course_home.png','&nbsp;','',22);
 			}
-			$URL = api_get_path(WEB_CODE_PATH).'calendar/agenda.php?cidReq='.urlencode($array_course_info["code"])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL = api_get_path(WEB_CODE_PATH).'calendar/agenda.php?cidReq='.urlencode($array_course_info["code"])."&day=$day&month=$month&year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 
 			$items[$halfhour][] .= "<i>".$hours.":".$minutes."</i> <a href=\"$URL\" title=\"".$array_course_info['title']."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}
@@ -3257,7 +3238,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
 				$agenda_link = Display::return_icon('course_home.png','&nbsp;','',22);
 			}
 
-			$URL = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL = api_get_path(WEB_CODE_PATH)."calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&day=$agendaday&month=$month&year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			//Display the events in agenda
 			$items[$agendaday][$item['start_date']] .= "<i>$start_time - $end_time</i> <a href=\"$URL\" title=\"".$array_course_info["title"]."\">".$agenda_link."</a>";
 			$items[$agendaday][$item['start_date']] .= "<div>".$item['title']."</div><br>";
@@ -4444,7 +4425,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		
 		// if the student has specified a course we a add a link to that course
 		if ($item['course'] <> "") {	
-			$url = api_get_path(WEB_CODE_PATH)."admin/agenda.php?cidReq=".urlencode($item['course'])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$url = api_get_path(WEB_CODE_PATH)."admin/agenda.php?cidReq=".urlencode($item['course'])."&day=$day&month=$month&year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			$course_link = "<a href=\"$url\" title=\"".$item['course']."\">".$item['course']."</a>";
 		} else {
 			$course_link = "";
@@ -4464,7 +4445,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 			if ($agendatime['1'] >= '30') {
 				$halfhour = $halfhour +1;
 			}
-			//$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> <b>".get_lang('Evento Global'). ":  </b><a href=\"myagenda.php?action=view&amp;view=personal&amp;day=$day&amp;month=$month&amp;year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
+			//$agendaitems[$halfhour] .= "<div><i>$hour:$minute</i> <b>".get_lang('Evento Global'). ":  </b><a href=\"myagenda.php?action=view&view=personal&day=$day&month=$month&year=$year&amp;id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
 			if (!is_array($agendaitems[$halfhour]))
 	        	$content = $agendaitems[$halfhour];
 			    $agendaitems[$halfhour] = $content."<div><i>$hour:$minute</i> <b>".get_lang('GlobalEvent'). ":  </b>".$item['title']."</div>";
@@ -4476,7 +4457,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 
 function display_ical_import_form() {
 	echo '<div class="row"><div class="form_header">'.get_lang('ICalFileImport').'</div></div>';
-	echo '<form enctype="multipart/form-data"  action="'.api_get_self().'?origin='.Security::remove_XSS($_GET['origin']).'&amp;action='.Security::remove_XSS($_GET['action']).'" method="post" name="frm_import_ical">';
+	echo '<form enctype="multipart/form-data"  action="'.api_get_self().'?origin='.Security::remove_XSS($_GET['origin']).'&action='.Security::remove_XSS($_GET['action']).'" method="post" name="frm_import_ical">';
 	echo '<div class="row">
 				<div class="label">
 					<span class="form_required">*</span> '.get_lang('ICalFileImport').'

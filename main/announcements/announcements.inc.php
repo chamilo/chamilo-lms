@@ -148,7 +148,7 @@ class AnnouncementManager  {
     		
     		if (api_is_allowed_to_edit(false,true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
     		    $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$announcement_id."\">".Display::return_icon('edit.png', get_lang('Edit'),'',22)."</a>";
-                if ($myrow['visibility']==1) {
+                if ($result['visibility'] == 1) {
                     $image_visibility="visible";
                     $alt_visibility=get_lang('Hide');
                 } else {

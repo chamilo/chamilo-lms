@@ -1331,14 +1331,14 @@ if ($display_announcement_list && !$surveyid) {
     
     				// DISPLAY MOVE UP COMMAND only if it is not the top announcement
     				if ($iterator != 1) {
-    					$modify_icons .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&up=".$myrow["id"]."&sec_token=".$stok."\">".Display::return_icon('up.gif', get_lang('Up'))."</a>";
+    					$modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&up=".$myrow["id"]."&sec_token=".$stok."\">".Display::return_icon('up.gif', get_lang('Up'))."</a>";
     				} else {
-    				    $modify_icons .=    Display::return_icon('up_na.gif', get_lang('Up'));
+    				    $modify_icons .= Display::return_icon('up_na.gif', get_lang('Up'));
     				}    
     				if ($iterator < $bottomAnnouncement) {
-    					$modify_icons .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&down=".$myrow["id"]."&sec_token=".$stok."\">".Display::return_icon('down.gif', get_lang('Down'))."</a>";
+    					$modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&down=".$myrow["id"]."&sec_token=".$stok."\">".Display::return_icon('down.gif', get_lang('Down'))."</a>";
     				} else {
-    				    $modify_icons .=    Display::return_icon('down_na.gif', get_lang('Down'));
+    				    $modify_icons .= Display::return_icon('down_na.gif', get_lang('Down'));
     				}
     				    
     			    if (api_is_allowed_to_edit(false,true)) {

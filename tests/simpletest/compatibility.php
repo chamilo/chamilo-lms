@@ -21,6 +21,7 @@ class SimpleTestCompatibility {
      */
     function copy($object) {
         if (version_compare(phpversion(), '5') >= 0) {
+            $copy = null;
             eval('$copy = clone $object;');
             return $copy;
         }

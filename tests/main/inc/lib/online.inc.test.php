@@ -10,45 +10,6 @@ class TestOnline extends UnitTestCase {
         $this->UnitTestCase('Online (chat) library - main/inc/lib/online.inc.test.php');
     }
 
-	function testchatcall() {
-		global $_user, $_cid;
-		$webpath=api_get_path(WEB_CODE_PATH);
-		$message=get_lang('YouWereCalled').' : '.GetFullUserName($row['chatcall_user_id'],'').'<br>'.get_lang('DoYouAccept')
-							."<p>"
-				."<a href=\"".$webpath."chat/chat.php?cidReq=".$_cid."&origin=whoisonlinejoin\">"
-				. get_lang("Yes")
-				."</a>"
-				."&nbsp;&nbsp;|&nbsp;&nbsp;"
-				."<a href=\"".api_get_path(WEB_PATH)."webchatdeny.php\">"
-				. get_lang("No")
-				."</a>"
-				."</p>";
-		$res=chatcall();
-
-		if (!empty($message)) {
-			$this->assertTrue(is_string($message));
-			//var_dump($message);
-		} else {
-			$this->assertTrue(is_bool($message));
-			//var_dump($message);
-		}
-	}
-
-	function testGetFullUserName() {
-		$uid = 1;
-		//$uid = Database::escape_string($uid);
-		$res=GetFullUserName($uid);
-		$str = $lastname."&nbsp;".$firstname;
-		if(!empty($str)){
-		$this->assertTrue(is_string($str));
-		//var_dump($str);
-
-		} else {
-			$this->assertTrue(is_null($str));
-			//var_dump($str);
-		}
-	}
-
 	function testLoginCheck() {
 		global $_course;
 		$uid=1;
